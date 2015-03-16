@@ -29,6 +29,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.vendor');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -1283,16 +1284,16 @@ goog.style.installStyles = function(stylesString, opt_node) {
     styleSheet = doc.createStyleSheet();
     goog.style.setStyles(styleSheet, stylesString);
   } else {
-    var head = dh.getElementsByTagNameAndClass('head')[0];
+    var head = dh.getElementsByTagNameAndClass(goog.dom.TagName.HEAD)[0];
 
     // In opera documents are not guaranteed to have a head element, thus we
     // have to make sure one exists before using it.
     if (!head) {
-      var body = dh.getElementsByTagNameAndClass('body')[0];
-      head = dh.createDom('head');
+      var body = dh.getElementsByTagNameAndClass(goog.dom.TagName.BODY)[0];
+      head = dh.createDom(goog.dom.TagName.HEAD);
       body.parentNode.insertBefore(head, body);
     }
-    styleSheet = dh.createDom('style');
+    styleSheet = dh.createDom(goog.dom.TagName.STYLE);
     // NOTE(user): Setting styles after the style element has been appended
     // to the head results in a nasty Webkit bug in certain scenarios. Please
     // refer to https://bugs.webkit.org/show_bug.cgi?id=26307 for additional
@@ -1904,7 +1905,7 @@ goog.style.getFontSize = function(el) {
   // rendered in its parent's (i.e., our target element's) font size. This is
   // the definition of CSS's font size attribute.
   var sizeElement = goog.dom.createDom(
-      'span',
+      goog.dom.TagName.SPAN,
       {'style': 'visibility:hidden;position:absolute;' +
             'line-height:0;padding:0;margin:0;border:0;height:1em;'});
   goog.dom.appendChild(el, sizeElement);
@@ -1983,13 +1984,13 @@ goog.style.getScrollbarWidth = function(opt_className) {
   // forces scrollbars to appear on it.
   // Using overflow:scroll does not work consistently with scrollbars that
   // are styled with ::-webkit-scrollbar.
-  var outerDiv = goog.dom.createElement('div');
+  var outerDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   if (opt_className) {
     outerDiv.className = opt_className;
   }
   outerDiv.style.cssText = 'overflow:auto;' +
       'position:absolute;top:0;width:100px;height:100px';
-  var innerDiv = goog.dom.createElement('div');
+  var innerDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.style.setSize(innerDiv, '200px', '200px');
   outerDiv.appendChild(innerDiv);
   goog.dom.appendChild(goog.dom.getDocument().body, outerDiv);

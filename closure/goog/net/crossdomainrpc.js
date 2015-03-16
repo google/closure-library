@@ -68,6 +68,7 @@ goog.provide('goog.net.CrossDomainRpc');
 
 goog.require('goog.Uri');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
@@ -287,7 +288,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
 
   // find a style sheet if not on IE, which will attempt to save style sheet
   if (goog.userAgent.GECKO) {
-    var links = document.getElementsByTagName('link');
+    var links = document.getElementsByTagName(goog.dom.TagName.LINK);
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
       // find a link which is on the same domain as this page
@@ -301,7 +302,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
     }
   }
 
-  var images = document.getElementsByTagName('img');
+  var images = document.getElementsByTagName(goog.dom.TagName.IMG);
   for (var i = 0; i < images.length; i++) {
     var image = images[i];
     // find a link which is on the same domain as this page
@@ -416,7 +417,7 @@ goog.net.CrossDomainRpc.prototype.sendRequest =
     function(uri, opt_method, opt_params, opt_headers) {
   // create request frame
   var requestFrame = this.requestFrame_ = /** @type {!HTMLIFrameElement} */ (
-      document.createElement('iframe'));
+      document.createElement(goog.dom.TagName.IFRAME));
   var requestId = goog.net.CrossDomainRpc.nextRequestId_++;
   requestFrame.id = goog.net.CrossDomainRpc.REQUEST_MARKER_ + '-' + requestId;
   if (!goog.net.CrossDomainRpc.debugMode_) {
@@ -798,7 +799,7 @@ goog.net.CrossDomainRpc.sendResponse =
           data.substring(chunkStart) :
           data.substring(chunkStart, chunkEnd);
 
-      var responseFrame = document.createElement('iframe');
+      var responseFrame = document.createElement(goog.dom.TagName.IFRAME);
       responseFrame.src = dummyUri +
           goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +
           goog.net.CrossDomainRpc.CHUNK_PREFIX_ + chunk;
@@ -826,7 +827,7 @@ goog.net.CrossDomainRpc.sendResponse =
  */
 goog.net.CrossDomainRpc.createResponseInfo_ =
     function(dummyUri, numChunks, isDataJson, status, headers) {
-  var responseInfoFrame = document.createElement('iframe');
+  var responseInfoFrame = document.createElement(goog.dom.TagName.IFRAME);
   document.body.appendChild(responseInfoFrame);
   responseInfoFrame.src = dummyUri +
       goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +

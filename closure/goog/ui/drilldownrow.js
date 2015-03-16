@@ -62,6 +62,7 @@ goog.provide('goog.ui.DrilldownRow');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
@@ -243,7 +244,7 @@ goog.ui.DrilldownRow.prototype.createDom = function() {
  * @override
  */
 goog.ui.DrilldownRow.prototype.canDecorate = function(node) {
-  return node.tagName == 'TR';
+  return node.tagName == goog.dom.TagName.TR;
 };
 
 
@@ -425,7 +426,7 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
       goog.getCssName('goog-drilldown-expanded') :
       goog.getCssName('goog-drilldown-collapsed'));
   // Default mouse event handling:
-  var toggler = fragment.getElementsByTagName('div')[0];
+  var toggler = fragment.getElementsByTagName(goog.dom.TagName.DIV)[0];
   var key = selfObj.getHandler().listen(toggler, 'click', function(event) {
     selfObj.setExpanded(!selfObj.isExpanded());
   });
@@ -497,7 +498,7 @@ goog.ui.DrilldownRow.prototype.isVisible_ = function() {
 goog.ui.DrilldownRow.createRowNode_ = function(html, doc) {
   // Note: this may be slow.
   var tableHtml = '<table>' + html + '</table>';
-  var div = doc.createElement('div');
+  var div = doc.createElement(goog.dom.TagName.DIV);
   div.innerHTML = tableHtml;
   return div.firstChild.rows[0];
 };

@@ -30,6 +30,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
@@ -632,7 +633,7 @@ goog.ui.Component.prototype.isInDocument = function() {
  * implementation is to set this.element_ = div.
  */
 goog.ui.Component.prototype.createDom = function() {
-  this.element_ = this.dom_.createElement('div');
+  this.element_ = this.dom_.createElement(goog.dom.TagName.DIV);
 };
 
 

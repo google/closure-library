@@ -286,7 +286,7 @@ goog.ui.Prompt.prototype.createDom = function() {
   if (this.rows_ == 1) {
     // If rows == 1 then use an input element.
     this.userInputEl_ = /** @type {!HTMLInputElement} */
-        (this.getDomHelper().createDom('input', attrs));
+        (this.getDomHelper().createDom(goog.dom.TagName.INPUT, attrs));
     this.userInputEl_.type = goog.dom.InputType.TEXT;
     if (this.cols_) {
       this.userInputEl_.size = this.cols_;
@@ -294,7 +294,7 @@ goog.ui.Prompt.prototype.createDom = function() {
   } else {
     // If rows > 1 then use a textarea.
     this.userInputEl_ = /** @type {!HTMLInputElement} */
-        (this.getDomHelper().createDom('textarea', attrs));
+        (this.getDomHelper().createDom(goog.dom.TagName.TEXTAREA, attrs));
     this.userInputEl_.rows = this.rows_;
     if (this.cols_) {
       this.userInputEl_.cols = this.cols_;
@@ -304,7 +304,7 @@ goog.ui.Prompt.prototype.createDom = function() {
   this.userInputEl_.id = this.inputElementId_;
   var contentEl = this.getContentElement();
   contentEl.appendChild(this.getDomHelper().createDom(
-      'div', {'style': 'overflow: auto'}, this.userInputEl_));
+      goog.dom.TagName.DIV, {'style': 'overflow: auto'}, this.userInputEl_));
 };
 
 

@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.editor.AbstractDialogTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -257,7 +258,7 @@ function testBasicLayout() {
   mockCtrl.$replayAll();
 
   // create some dialog content
-  var content = goog.dom.createDom('div', null, 'The Content');
+  var content = goog.dom.createDom(goog.dom.TagName.DIV, null, 'The Content');
   builder.setTitle('The Title')
       .setContent(content)
       .addOkButton('The OK Button')

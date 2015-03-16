@@ -882,7 +882,7 @@ goog.dom.safeHtmlToNode = function(html) {
  * @private
  */
 goog.dom.safeHtmlToNode_ = function(doc, html) {
-  var tempDiv = doc.createElement('div');
+  var tempDiv = doc.createElement(goog.dom.TagName.DIV);
   if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
     goog.dom.safe.setInnerHtml(tempDiv,
         goog.html.SafeHtml.concat(goog.html.SafeHtml.create('br'), html));
@@ -919,7 +919,7 @@ goog.dom.htmlToDocumentFragment = function(htmlString) {
  * @private
  */
 goog.dom.htmlToDocumentFragment_ = function(doc, htmlString) {
-  var tempDiv = doc.createElement('div');
+  var tempDiv = doc.createElement(goog.dom.TagName.DIV);
   if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
     tempDiv.innerHTML = '<br>' + htmlString;
     tempDiv.removeChild(tempDiv.firstChild);
@@ -988,7 +988,7 @@ goog.dom.isCss1CompatMode_ = function(doc) {
  * the behavior is inconsistent:
  *
  * <pre>
- *   var a = document.createElement('br');
+ *   var a = document.createElement(goog.dom.TagName.BR);
  *   a.appendChild(document.createTextNode('foo'));
  *   a.appendChild(document.createTextNode('bar'));
  *   console.log(a.childNodes.length);  // 2
@@ -1641,7 +1641,7 @@ goog.dom.getOuterHtml = function(element) {
     return element.outerHTML;
   } else {
     var doc = goog.dom.getOwnerDocument(element);
-    var div = doc.createElement('div');
+    var div = doc.createElement(goog.dom.TagName.DIV);
     div.appendChild(element.cloneNode(true));
     return div.innerHTML;
   }

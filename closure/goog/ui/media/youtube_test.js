@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.YoutubeTest');
 goog.setTestOnly('goog.ui.media.YoutubeTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Youtube');
@@ -24,7 +25,7 @@ var youtube;
 var control;
 var YOUTUBE_VIDEO_ID = 'dMH0bHeiRNg';
 var YOUTUBE_URL = 'http://www.youtube.com/watch?v=' + YOUTUBE_VIDEO_ID;
-var parent = goog.dom.createElement('div');
+var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   var model = new goog.ui.media.YoutubeModel(
@@ -38,7 +39,7 @@ function tearDown() {
 
 function testBasicRendering() {
   control.render(parent);
-  var el = goog.dom.getElementsByTagNameAndClass('div',
+  var el = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.Youtube.CSS_CLASS, parent);
   assertEquals(1, el.length);
   assertEquals(YOUTUBE_URL, control.getDataModel().getUrl());
@@ -157,18 +158,18 @@ function testCreatingModel() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var preview = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
       parent);
   assertEquals(1, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass('div',
+  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.FlashObject.CSS_CLASS);
   assertEquals(0, flash.length);
 }
@@ -177,18 +178,18 @@ function testCreatingDomOnSelectedState() {
   control.render(parent);
   control.setSelected(true);
   var preview = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.media.Youtube.CSS_CLASS + '-preview',
       parent);
   assertEquals(0, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass('div',
+  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }
@@ -198,31 +199,31 @@ function testSettingSelectedStateAfterRender() {
   control.setSelected(true);
 
   var preview = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.media.Youtube.CSS_CLASS + '-preview',
       parent);
   assertEquals(0, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass('div',
+  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 
   control.setSelected(false);
 
   var preview = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
       parent);
   assertEquals(1, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
@@ -230,13 +231,13 @@ function testSettingSelectedStateAfterRender() {
   // setting select as false doesn't actually remove the flash movie from
   // the DOM tree, which means that setting selected to true won't actually
   // restart the movie. TODO(user): fix this.
-  var flash = goog.dom.getElementsByTagNameAndClass('div',
+  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 
   control.setSelected(true);
 
-  var flash = goog.dom.getElementsByTagNameAndClass('div',
+  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }

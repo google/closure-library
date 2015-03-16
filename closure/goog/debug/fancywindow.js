@@ -31,6 +31,7 @@ goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
@@ -90,7 +91,7 @@ goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
         logel.scrollHeight - (logel.scrollTop + logel.offsetHeight) <= 100;
 
     for (var i = 0; i < this.outputBuffer.length; i++) {
-      var div = this.dh_.createDom('div', 'logmsg');
+      var div = this.dh_.createDom(goog.dom.TagName.DIV, 'logmsg');
       goog.dom.safe.setInnerHtml(div, this.outputBuffer[i]);
       logel.appendChild(div);
     }
@@ -149,9 +150,9 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
   for (var i = 0; i < loggers.length; i++) {
     var logger = loggers[i];
     var curlevel = logger.getLevel() ? logger.getLevel().name : 'INHERIT';
-    var div = dh.createDom('div', {},
+    var div = dh.createDom(goog.dom.TagName.DIV, {},
         this.getDropDown_('sel' + logger.getName(), curlevel),
-        dh.createDom('span', {}, logger.getName() || '(root)'));
+        dh.createDom(goog.dom.TagName.SPAN, {}, logger.getName() || '(root)'));
     el.appendChild(div);
   }
 
@@ -169,17 +170,17 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
  */
 goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
   var dh = this.dh_;
-  var sel = dh.createDom('select', {'id': id});
+  var sel = dh.createDom(goog.dom.TagName.SELECT, {'id': id});
   var levels = goog.debug.Logger.Level.PREDEFINED_LEVELS;
   for (var i = 0; i < levels.length; i++) {
     var level = levels[i];
-    var option = dh.createDom('option', {}, level.name);
+    var option = dh.createDom(goog.dom.TagName.OPTION, {}, level.name);
     if (selected == level.name) {
       option.selected = true;
     }
     sel.appendChild(option);
   }
-  sel.appendChild(dh.createDom('option',
+  sel.appendChild(dh.createDom(goog.dom.TagName.OPTION,
       {'selected': selected == 'INHERIT'}, 'INHERIT'));
   return sel;
 };

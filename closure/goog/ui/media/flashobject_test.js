@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.media.FlashObjectTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -34,12 +35,12 @@ var domHelper = control.createLooseMock(goog.dom.DomHelper);
 // TODO(user): mocking window.document throws exceptions in FF2. find out how
 // to mock it.
 var documentHelper = {body: control.createLooseMock(goog.dom.DomHelper)};
-var element = goog.dom.createElement('div');
+var element = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   control.$resetAll();
   domHelper.getDocument().$returns(documentHelper).$anyTimes();
-  domHelper.createElement('div').$returns(element).$anyTimes();
+  domHelper.createElement(goog.dom.TagName.DIV).$returns(element).$anyTimes();
   documentHelper.body.appendChild(element).$anyTimes();
 }
 
@@ -331,7 +332,7 @@ function testPropagatesEventsConsistently() {
 function testEventsGetsSinked() {
   var called = false;
   var flash = new goog.ui.media.FlashObject(FLASH_URL);
-  var parent = goog.dom.createElement('div');
+  var parent = goog.dom.createElement(goog.dom.TagName.DIV);
   flash.render(parent);
 
   goog.events.listen(parent, goog.events.EventType.CLICK, function(e) {

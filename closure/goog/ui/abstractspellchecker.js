@@ -43,6 +43,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.dom.selection');
 goog.require('goog.events');
@@ -472,7 +473,7 @@ goog.ui.AbstractSpellChecker.prototype.ignoreWord = function(word) {
  */
 goog.ui.AbstractSpellChecker.prototype.editWord_ = function(el, old) {
   var input = this.getDomHelper().createDom(
-      'input', {'type': goog.dom.InputType.TEXT, 'value': old});
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT, 'value': old});
   var w = goog.style.getSize(el).width;
 
   // Minimum width to ensure there's always enough room to type.
@@ -790,7 +791,7 @@ goog.ui.AbstractSpellChecker.prototype.createWordElement = function(
   }
 
   var el = /** @type {!HTMLSpanElement} */
-      (this.getDomHelper().createDom('span', parameters, word));
+      (this.getDomHelper().createDom(goog.dom.TagName.SPAN, parameters, word));
   goog.a11y.aria.setRole(el, 'menuitem');
   goog.a11y.aria.setState(el, 'haspopup', true);
   this.registerWordElement(word, el);

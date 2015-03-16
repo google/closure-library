@@ -15,12 +15,13 @@
 goog.provide('goog.string.linkifyTest');
 goog.setTestOnly('goog.string.linkifyTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.string.linkify');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 
-var div = document.createElement('div');
+var div = document.createElement(goog.dom.TagName.DIV);
 
 function assertLinkify(comment, input, expected) {
   assertEquals(

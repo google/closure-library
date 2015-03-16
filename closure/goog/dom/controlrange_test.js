@@ -143,7 +143,7 @@ function testRemoveContents() {
     return;
   }
 
-  var img = goog.dom.createDom('IMG');
+  var img = goog.dom.createDom(goog.dom.TagName.IMG);
   img.src = logo.src;
 
   var div = goog.dom.getElement('test1');

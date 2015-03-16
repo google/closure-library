@@ -50,6 +50,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -370,7 +371,8 @@ goog.ui.SliderBase.prototype.getCssClass = goog.abstractMethod;
 goog.ui.SliderBase.prototype.createDom = function() {
   goog.ui.SliderBase.superClass_.createDom.call(this);
   var element =
-      this.getDomHelper().createDom('div', this.getCssClass(this.orientation_));
+      this.getDomHelper().createDom(goog.dom.TagName.DIV,
+                                    this.getCssClass(this.orientation_));
   this.decorateInternal(element);
 };
 

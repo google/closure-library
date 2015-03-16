@@ -21,6 +21,7 @@ goog.provide('goog.module.ModuleLoaderTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.module.ModuleLoader');
@@ -93,7 +94,7 @@ testCase.tearDown = function() {
 
   // Remove all the fake scripts.
   var scripts = goog.array.clone(
-      document.getElementsByTagName('SCRIPT'));
+      document.getElementsByTagName(goog.dom.TagName.SCRIPT));
   for (var i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);
@@ -167,7 +168,7 @@ function testLoadDebugModuleAThenB() {
     assertLoaded('modB');
 
     var scripts = goog.array.clone(
-        document.getElementsByTagName('SCRIPT'));
+        document.getElementsByTagName(goog.dom.TagName.SCRIPT));
     var seenLastScriptOfModuleA = false;
     for (var i = 0; i < scripts.length; i++) {
       var uri = scripts[i].src;

@@ -16,6 +16,7 @@ goog.provide('goog.testing.mockmatchersTest');
 goog.setTestOnly('goog.testing.mockmatchersTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
@@ -177,10 +178,10 @@ function testIsArray() {
 
 function testIsArrayLike() {
   var nodeList = (function() {
-    var div = document.createElement('div');
-    div.appendChild(document.createElement('p'));
-    div.appendChild(document.createElement('p'));
-    return div.getElementsByTagName('div');
+    var div = document.createElement(goog.dom.TagName.DIV);
+    div.appendChild(document.createElement(goog.dom.TagName.P));
+    div.appendChild(document.createElement(goog.dom.TagName.P));
+    return div.getElementsByTagName(goog.dom.TagName.DIV);
   })();
 
   assertTrue(matchers.isArrayLike.matches([]));

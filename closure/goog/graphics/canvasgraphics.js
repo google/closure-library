@@ -22,6 +22,7 @@
 goog.provide('goog.graphics.CanvasGraphics');
 
 
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 goog.require('goog.graphics.AbstractGraphics');
 goog.require('goog.graphics.CanvasEllipseElement');
@@ -163,11 +164,11 @@ goog.graphics.CanvasGraphics.prototype.popElementTransform = function() {
  * @override
  */
 goog.graphics.CanvasGraphics.prototype.createDom = function() {
-  var element = this.dom_.createDom('div',
+  var element = this.dom_.createDom(goog.dom.TagName.DIV,
       {'style': 'position:relative;overflow:hidden'});
   this.setElementInternal(element);
 
-  this.canvas_ = this.dom_.createDom('canvas');
+  this.canvas_ = this.dom_.createDom(goog.dom.TagName.CANVAS);
   element.appendChild(this.canvas_);
 
   /**
@@ -418,7 +419,6 @@ goog.graphics.CanvasGraphics.prototype.drawElement = function(element) {
 
   this.popElementTransform();
 };
-
 
 
 /**

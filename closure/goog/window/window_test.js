@@ -16,6 +16,7 @@ goog.provide('goog.windowTest');
 goog.setTestOnly('goog.windowTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.labs.userAgent.platform');
@@ -40,7 +41,7 @@ var stubs = new goog.testing.PropertyReplacer();
 
 function setUpPage() {
   var anchors = goog.dom.getElementsByTagNameAndClass(
-      'div', 'goog-like-link');
+      goog.dom.TagName.DIV, 'goog-like-link');
   for (var i = 0; i < anchors.length; i++) {
     goog.events.listen(
         anchors[i], 'click',
@@ -234,7 +235,7 @@ function testOpenIosBlank() {
     }
   };
   stubs.replace(window.document, 'createElement', function(name) {
-    if (name == 'a') {
+    if (name == goog.dom.TagName.A) {
       return element;
     }
     return null;
@@ -277,7 +278,7 @@ function testOpenIosBlankNoreferrer() {
     }
   };
   stubs.replace(window.document, 'createElement', function(name) {
-    if (name == 'a') {
+    if (name == goog.dom.TagName.A) {
       return element;
     }
     return null;

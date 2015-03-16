@@ -20,6 +20,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Coordinate');
@@ -96,7 +97,7 @@ function testSetValue() {
 function testGetSetContent() {
   assertEquals('Content must have expected value', 'Item',
       item.getContent());
-  item.setContent(goog.dom.createDom('div', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.DIV, 'foo', 'Foo'));
   assertEquals('Content must be an element', goog.dom.NodeType.ELEMENT,
       item.getContent().nodeType);
   assertHTMLEquals('Content must be the expected element',
@@ -111,7 +112,7 @@ function testGetSetCaption() {
   assertTrue('Caption must be a string', goog.isString(item.getCaption()));
   assertEquals('Caption must have expected value', 'Hello, world!',
       item.getCaption());
-  item.setContent(goog.dom.createDom('div', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.DIV, 'foo', 'Foo'));
   assertTrue('Caption must be a string', goog.isString(item.getCaption()));
   assertEquals('Caption must have expected value', 'Foo',
       item.getCaption());
@@ -121,7 +122,7 @@ function testGetSetContentAfterCreateDom() {
   item.createDom();
   assertEquals('Content must have expected value', 'Item',
       item.getContent());
-  item.setContent(goog.dom.createDom('div', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.DIV, 'foo', 'Foo'));
   assertEquals('Content must be an element', goog.dom.NodeType.ELEMENT,
       item.getContent().nodeType);
   assertHTMLEquals('Content must be the expected element',
@@ -137,7 +138,7 @@ function testGetSetCaptionAfterCreateDom() {
   assertTrue('Caption must be a string', goog.isString(item.getCaption()));
   assertEquals('Caption must have expected value', 'Hello, world!',
       item.getCaption());
-  item.setContent(goog.dom.createDom('div', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.DIV, 'foo', 'Foo'));
   assertTrue('Caption must be a string', goog.isString(item.getCaption()));
   assertEquals('Caption must have expected value', 'Foo',
       item.getCaption());
@@ -262,7 +263,7 @@ function testGetSetContentForItemWithCheckBox() {
   assertTrue('Item must still have checkbox structure',
       item.getRenderer().hasCheckBoxStructure(item.getElement()));
 
-  item.setContent(goog.dom.createDom('span', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, 'foo', 'Foo'));
   assertEquals('getContent() must return element',
       goog.dom.NodeType.ELEMENT, item.getContent().nodeType);
   assertTrue('Item must still have checkbox structure',
@@ -289,7 +290,7 @@ function testGetSetCaptionForItemWithCheckBox() {
   assertTrue('Item must still have checkbox structure',
       item.getRenderer().hasCheckBoxStructure(item.getElement()));
 
-  item.setContent(goog.dom.createDom('span', 'foo', 'Foo'));
+  item.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, 'foo', 'Foo'));
   assertEquals('getCaption() must return text content', 'Foo',
       item.getCaption());
   assertTrue('Item must still have checkbox structure',
@@ -304,7 +305,7 @@ function testGetSetCaptionForItemWithCheckBox() {
 
 function testGetSetCaptionForItemWithAccelerators() {
   var contentArr = [];
-  contentArr.push(goog.dom.createDom('span',
+  contentArr.push(goog.dom.createDom(goog.dom.TagName.SPAN,
       goog.getCssName('goog-menuitem-accel'), 'Ctrl+1'));
   contentArr.push(goog.dom.createTextNode('Hello'));
   item.setCaption(contentArr);
@@ -312,7 +313,8 @@ function testGetSetCaptionForItemWithAccelerators() {
       item.getCaption());
 
   item.setCaption([
-    goog.dom.createDom('span', goog.getCssName('goog-menuitem-accel'), 'Ctrl+1')
+    goog.dom.createDom(goog.dom.TagName.SPAN,
+                       goog.getCssName('goog-menuitem-accel'), 'Ctrl+1')
   ]);
   assertEquals('getCaption() must return empty string', '',
       item.getCaption());
@@ -323,7 +325,7 @@ function testGetSetCaptionForItemWithAccelerators() {
 
 function testGetSetCaptionForItemWithMnemonics() {
   var contentArr = [];
-  contentArr.push(goog.dom.createDom('span',
+  contentArr.push(goog.dom.createDom(goog.dom.TagName.SPAN,
       goog.getCssName('goog-menuitem-mnemonic-hint'), 'H'));
   contentArr.push(goog.dom.createTextNode('ello'));
   item.setCaption(contentArr);
@@ -332,9 +334,9 @@ function testGetSetCaptionForItemWithMnemonics() {
 
   contentArr = [];
   contentArr.push(goog.dom.createTextNode('Hello'));
-  contentArr.push(goog.dom.createDom('span',
+  contentArr.push(goog.dom.createDom(goog.dom.TagName.SPAN,
       goog.getCssName('goog-menuitem-mnemonic-separator'), '(',
-      goog.dom.createDom('span',
+      goog.dom.createDom(goog.dom.TagName.SPAN,
           goog.getCssName('goog-menuitem-mnemonic-hint'), 'J'), ')'));
   item.setCaption(contentArr);
   assertEquals('getCaption() must not return the paranethetical mnemonic',
@@ -496,7 +498,8 @@ function testDecorateCheckableItemTemplate() {
   assertTrue('Item must have checkbox structure',
       item.getRenderer().hasCheckBoxStructure(item.getElement()));
   assertEquals('Item must have exactly one checkbox structure', 1,
-      goog.dom.getElementsByTagNameAndClass('div', 'goog-menuitem-checkbox',
+      goog.dom.getElementsByTagNameAndClass(
+          goog.dom.TagName.DIV, 'goog-menuitem-checkbox',
           item.getElement()).length);
   assertFalse('Item must not be checked', item.isChecked());
 }
@@ -519,7 +522,8 @@ function testDecorateCheckedItemTemplate() {
   assertTrue('Item must have checkbox structure',
       item.getRenderer().hasCheckBoxStructure(item.getElement()));
   assertEquals('Item must have exactly one checkbox structure', 1,
-      goog.dom.getElementsByTagNameAndClass('div', 'goog-menuitem-checkbox',
+      goog.dom.getElementsByTagNameAndClass(
+          goog.dom.TagName.DIV, 'goog-menuitem-checkbox',
           item.getElement()).length);
   assertTrue('Item must be checked', item.isChecked());
 }

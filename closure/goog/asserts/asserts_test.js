@@ -18,6 +18,7 @@ goog.setTestOnly('goog.assertsTest');
 goog.require('goog.asserts');
 goog.require('goog.asserts.AssertionError');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -146,7 +147,7 @@ function testElement() {
   assertThrows(goog.partial(goog.asserts.assertElement, 'foo'));
   assertThrows(goog.partial(goog.asserts.assertElement,
       goog.dom.createTextNode('foo')));
-  var elem = goog.dom.createElement('div');
+  var elem = goog.dom.createElement(goog.dom.TagName.DIV);
   assertEquals(elem, goog.asserts.assertElement(elem));
 }
 

@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.AutoCompleteValues');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -95,7 +96,8 @@ function testFilter() {
   menu.addItem(new goog.ui.MenuItem('Photos'));
   menu.addItem(new goog.ui.MenuItem([
     goog.dom.createTextNode('Work'),
-    goog.dom.createDom('span', goog.ui.MenuItem.ACCELERATOR_CLASS, 'W')
+    goog.dom.createDom(goog.dom.TagName.SPAN,
+                       goog.ui.MenuItem.ACCELERATOR_CLASS, 'W')
   ]));
 
   menu.render(sandbox);

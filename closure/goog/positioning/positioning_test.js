@@ -23,6 +23,7 @@ goog.provide('goog.positioningTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
@@ -1122,12 +1123,12 @@ function testPositionAtAnchorWithOverflowScrollOffsetParent() {
   var scrollbarWidth = goog.style.getScrollbarWidth();
   window.scrollTo(testAreaOffset.x, testAreaOffset.y);
 
-  var overflowDiv = goog.dom.createElement('div');
+  var overflowDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   overflowDiv.style.overflow = 'scroll';
   overflowDiv.style.position = 'relative';
   goog.style.setSize(overflowDiv, 200 /* width */, 100 /* height */);
 
-  var anchor = goog.dom.createElement('div');
+  var anchor = goog.dom.createElement(goog.dom.TagName.DIV);
   anchor.style.position = 'absolute';
   goog.style.setSize(anchor, 50 /* width */, 50 /* height */);
   goog.style.setPosition(anchor, 300 /* left */, 300 /* top */);
@@ -1195,12 +1196,12 @@ function testPositionAtAnchorWithOverflowHiddenParent() {
   var testAreaOffset = goog.style.getPageOffset(testArea);
   window.scrollTo(testAreaOffset.x, testAreaOffset.y);
 
-  var overflowDiv = goog.dom.createElement('div');
+  var overflowDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   overflowDiv.style.overflow = 'hidden';
   overflowDiv.style.position = 'relative';
   goog.style.setSize(overflowDiv, 200 /* width */, 100 /* height */);
 
-  var anchor = goog.dom.createElement('div');
+  var anchor = goog.dom.createElement(goog.dom.TagName.DIV);
   anchor.style.position = 'absolute';
   goog.style.setSize(anchor, 50 /* width */, 50 /* height */);
   goog.style.setPosition(anchor, 300 /* left */, 300 /* top */);
@@ -1264,7 +1265,7 @@ function testPositionAtAnchorWithOverflowHiddenParent() {
 }
 
 function createPopupDiv(width, height) {
-  var popupDiv = goog.dom.createElement('div');
+  var popupDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   popupDiv.style.position = 'absolute';
   goog.style.setSize(popupDiv, width, height);
   goog.style.setPosition(popupDiv, 0 /* left */, 250 /* top */);

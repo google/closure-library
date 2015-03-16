@@ -24,6 +24,8 @@
 goog.provide('goog.string');
 goog.provide('goog.string.Unicode');
 
+goog.require('goog.dom.TagName');
+
 
 /**
  * @define {boolean} Enables HTML escaping of lowercase letter "e" which helps
@@ -713,9 +715,9 @@ goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
   var seen = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
   var div;
   if (opt_document) {
-    div = opt_document.createElement('div');
+    div = opt_document.createElement(goog.dom.TagName.DIV);
   } else {
-    div = goog.global.document.createElement('div');
+    div = goog.global.document.createElement(goog.dom.TagName.DIV);
   }
   // Match as many valid entity characters as possible. If the actual entity
   // happens to be shorter, it will still work as innerHTML will return the

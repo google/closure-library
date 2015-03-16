@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.PicasaTest');
 goog.setTestOnly('goog.ui.media.PicasaTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
@@ -27,7 +28,7 @@ var PICASA_USERNAME = 'username';
 var PICASA_ALBUM = 'albumname';
 var PICASA_URL = 'http://picasaweb.google.com/' + PICASA_USERNAME + '/' +
     PICASA_ALBUM;
-var parent = goog.dom.createElement('div');
+var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   picasa = new goog.ui.media.PicasaAlbum();
@@ -44,7 +45,7 @@ function tearDown() {
 function testBasicRendering() {
   control.render(parent);
   var el = goog.dom.getElementsByTagNameAndClass(
-      'div', goog.ui.media.PicasaAlbum.CSS_CLASS, parent);
+      goog.dom.TagName.DIV, goog.ui.media.PicasaAlbum.CSS_CLASS, parent);
   assertEquals(1, el.length);
   assertEquals(PICASA_URL, control.getDataModel().getUrl());
 }
@@ -91,13 +92,13 @@ function testCreatingModel() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.PicasaAlbum.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
   var flash = goog.dom.getElementsByTagNameAndClass(
-      'div', goog.ui.media.FlashObject.CSS_CLASS, parent);
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }
 

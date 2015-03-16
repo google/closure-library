@@ -16,6 +16,7 @@ goog.provide('goog.ui.TooltipTest');
 goog.setTestOnly('goog.ui.TooltipTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
@@ -79,7 +80,7 @@ function setUp() {
       '<p id="second">Secondary target</p>';
 
   tt = new goog.ui.Tooltip(undefined, undefined, dom);
-  tt.setElement(dom.createDom('div', {id: 'popup',
+  tt.setElement(dom.createDom(goog.dom.TagName.DIV, {id: 'popup',
     style: 'visibility:hidden'},
   'Hello'));
   clock = new goog.testing.MockClock(true);
@@ -263,9 +264,10 @@ function testDispose() {
 function testNested() {
   var ttNested;
   tt.getElement().appendChild(dom.createDom(
-      'span', {id: 'nested'}, 'Goodbye'));
+      goog.dom.TagName.SPAN, {id: 'nested'}, 'Goodbye'));
   ttNested = new goog.ui.Tooltip(undefined, undefined, dom);
-  ttNested.setElement(dom.createDom('div', {id: 'nestedPopup'}, 'hi'));
+  ttNested.setElement(dom.createDom(goog.dom.TagName.DIV,
+                                    {id: 'nestedPopup'}, 'hi'));
   tt.setShowDelayMs(100);
   tt.setHideDelayMs(50);
   ttNested.setShowDelayMs(75);

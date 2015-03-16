@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.eventsTest');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -124,11 +125,11 @@ function tearDownPage() {
       continue;
     }
     goog.dom.appendChild(input,
-        goog.dom.createDom('label', null,
-            goog.dom.createDom('input',
+        goog.dom.createDom(goog.dom.TagName.LABEL, null,
+            goog.dom.createDom(goog.dom.TagName.INPUT,
                 {'id': type, 'type': goog.dom.InputType.CHECKBOX}),
             type,
-            goog.dom.createDom('br')));
+            goog.dom.createDom(goog.dom.TagName.BR)));
     goog.events.listen(testButton, type, function(e) {
       if (goog.dom.getElement(e.type).checked) {
         e.preventDefault();

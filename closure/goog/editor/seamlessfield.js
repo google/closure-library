@@ -421,7 +421,7 @@ goog.editor.SeamlessField.prototype.inheritBlendedCSS = function() {
   }
   var field = this.getElement();
   var head = goog.dom.getDomHelper(field).getElementsByTagNameAndClass(
-      'head')[0];
+      goog.dom.TagName.HEAD)[0];
   if (head) {
     // We created this <head>, and we know the only thing we put in there
     // is a <style> block.  So it's safe to blow away all the children

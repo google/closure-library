@@ -26,6 +26,7 @@ goog.provide('goog.editor.seamlessfield_test');
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.SeamlessField');
@@ -429,7 +430,7 @@ function createSeamlessIframe() {
   // NOTE(nicksantos): This is a reimplementation of
   // TR_EditableUtil.getIframeAttributes, but untangled for tests, and
   // specifically with what we need for blended mode.
-  return goog.dom.createDom('IFRAME',
+  return goog.dom.createDom(goog.dom.TagName.IFRAME,
       { 'frameBorder': '0', 'style': 'padding:0;' });
 }
 

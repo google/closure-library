@@ -876,7 +876,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       return;
     }
     var doc = goog.global.document;
-    var scripts = doc.getElementsByTagName('script');
+    var scripts = doc.getElementsByTagName('SCRIPT');
     // Search backwards since the current script is in almost all cases the one
     // that has base.js.
     for (var i = scripts.length - 1; i >= 0; --i) {
@@ -1903,7 +1903,7 @@ goog.globalEval = function(script) {
       goog.global.eval(script);
     } else {
       var doc = goog.global.document;
-      var scriptElt = doc.createElement('script');
+      var scriptElt = doc.createElement('SCRIPT');
       scriptElt.type = 'text/javascript';
       scriptElt.defer = false;
       // Note(user): can't use .innerHTML since "t('<test>')" will fail and

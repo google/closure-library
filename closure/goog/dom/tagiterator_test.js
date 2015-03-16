@@ -17,6 +17,7 @@ goog.setTestOnly('goog.dom.TagIteratorTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagIterator');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.TagWalkType');
 goog.require('goog.iter');
 goog.require('goog.iter.StopIteration');
@@ -427,8 +428,8 @@ function testSpliceRemoveFirstTextNode() {
     if (node.nodeType == 3 && node.data == 'hello') {
       i.splice();
     }
-    if (node.nodeName == 'EM') {
-      i.splice(goog.dom.createDom('I', null, node.childNodes));
+    if (node.nodeName == goog.dom.TagName.EM) {
+      i.splice(goog.dom.createDom(goog.dom.TagName.I, null, node.childNodes));
     }
   });
 
@@ -443,9 +444,9 @@ function testSpliceReplaceFirstTextNode() {
 
   goog.iter.forEach(it, function(node, dummy, i) {
     if (node.nodeType == 3 && node.data == 'hello') {
-      i.splice(goog.dom.createDom('EM', null, 'HELLO'));
-    } else if (node.nodeName == 'EM') {
-      i.splice(goog.dom.createDom('I', null, node.childNodes));
+      i.splice(goog.dom.createDom(goog.dom.TagName.EM, null, 'HELLO'));
+    } else if (node.nodeName == goog.dom.TagName.EM) {
+      i.splice(goog.dom.createDom(goog.dom.TagName.I, null, node.childNodes));
     }
   });
 
@@ -459,7 +460,8 @@ function testSpliceReplaceSingleNode() {
   it = new goog.dom.TagIterator(testDiv.firstChild);
 
   goog.iter.forEach(it, function(node, dummy, i) {
-    i.splice(goog.dom.createDom('link'), goog.dom.createDom('img'));
+    i.splice(goog.dom.createDom(goog.dom.TagName.LINK),
+             goog.dom.createDom(goog.dom.TagName.IMG));
   });
 
   goog.testing.dom.assertHtmlMatches('<link><img>', testDiv.innerHTML);
@@ -484,8 +486,8 @@ function testSpliceMiddleNode() {
   it = new goog.dom.TagIterator(testDiv);
 
   goog.iter.forEach(it, function(node, dummy, i) {
-    if (node.nodeName == 'B') {
-      i.splice(goog.dom.createDom('IMG'));
+    if (node.nodeName == goog.dom.TagName.B) {
+      i.splice(goog.dom.createDom(goog.dom.TagName.IMG));
     }
   });
 
@@ -498,8 +500,8 @@ function testSpliceMiddleNodeReversed() {
   it = new goog.dom.TagIterator(testDiv, true);
 
   goog.iter.forEach(it, function(node, dummy, i) {
-    if (node.nodeName == 'B') {
-      i.splice(goog.dom.createDom('IMG'));
+    if (node.nodeName == goog.dom.TagName.B) {
+      i.splice(goog.dom.createDom(goog.dom.TagName.IMG));
     }
   });
 
@@ -512,8 +514,8 @@ function testSpliceMiddleNodeAtEndTag() {
   it = new goog.dom.TagIterator(testDiv);
 
   goog.iter.forEach(it, function(node, dummy, i) {
-    if (node.tagName == 'B' && i.isEndTag()) {
-      i.splice(goog.dom.createDom('IMG'));
+    if (node.tagName == goog.dom.TagName.B && i.isEndTag()) {
+      i.splice(goog.dom.createDom(goog.dom.TagName.IMG));
     }
   });
 
@@ -527,10 +529,10 @@ function testSpliceMultipleNodes() {
 
   goog.iter.forEach(it, function(node, dummy, i) {
     var replace = null;
-    if (node.nodeName == 'STRONG') {
-      replace = goog.dom.createDom('B', null, node.childNodes);
-    } else if (node.nodeName == 'EM') {
-      replace = goog.dom.createDom('I', null, node.childNodes);
+    if (node.nodeName == goog.dom.TagName.STRONG) {
+      replace = goog.dom.createDom(goog.dom.TagName.B, null, node.childNodes);
+    } else if (node.nodeName == goog.dom.TagName.EM) {
+      replace = goog.dom.createDom(goog.dom.TagName.I, null, node.childNodes);
     }
     if (replace) {
       i.splice(replace);
@@ -548,10 +550,10 @@ function testSpliceMultipleNodesAtEnd() {
 
   goog.iter.forEach(it, function(node, dummy, i) {
     var replace = null;
-    if (node.nodeName == 'STRONG' && i.isEndTag()) {
-      replace = goog.dom.createDom('B', null, node.childNodes);
-    } else if (node.nodeName == 'EM' && i.isEndTag()) {
-      replace = goog.dom.createDom('I', null, node.childNodes);
+    if (node.nodeName == goog.dom.TagName.STRONG && i.isEndTag()) {
+      replace = goog.dom.createDom(goog.dom.TagName.B, null, node.childNodes);
+    } else if (node.nodeName == goog.dom.TagName.EM && i.isEndTag()) {
+      replace = goog.dom.createDom(goog.dom.TagName.I, null, node.childNodes);
     }
     if (replace) {
       i.splice(replace);
@@ -569,10 +571,10 @@ function testSpliceMultipleNodesReversed() {
 
   goog.iter.forEach(it, function(node, dummy, i) {
     var replace = null;
-    if (node.nodeName == 'STRONG') {
-      replace = goog.dom.createDom('B', null, node.childNodes);
-    } else if (node.nodeName == 'EM') {
-      replace = goog.dom.createDom('I', null, node.childNodes);
+    if (node.nodeName == goog.dom.TagName.STRONG) {
+      replace = goog.dom.createDom(goog.dom.TagName.B, null, node.childNodes);
+    } else if (node.nodeName == goog.dom.TagName.EM) {
+      replace = goog.dom.createDom(goog.dom.TagName.I, null, node.childNodes);
     }
     if (replace) {
       i.splice(replace);

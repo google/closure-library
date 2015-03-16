@@ -105,7 +105,7 @@ goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   }
 
   // input[type=image] are not included in the elements collection
-  var inputs = form.getElementsByTagName('input');
+  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
   for (var input, i = 0; input = inputs[i]; i++) {
     if (input.form == form &&
         input.type.toLowerCase() == goog.dom.InputType.IMAGE) {
@@ -171,7 +171,7 @@ goog.dom.forms.hasFileInput = function(form) {
  */
 goog.dom.forms.setDisabled = function(el, disabled) {
   // disable all elements in a form
-  if (el.tagName == 'FORM') {
+  if (el.tagName == goog.dom.TagName.FORM) {
     var els = el.elements;
     for (var i = 0; el = els[i]; i++) {
       goog.dom.forms.setDisabled(el, disabled);
