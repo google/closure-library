@@ -188,7 +188,7 @@ function testWebKitList() {
     goog.dom.Range.createFromNodeContents(ul).select();
 
     FORMATTER.fixSafariLists_();
-    var childULs = ul.getElementsByTagName('ul');
+    var childULs = ul.getElementsByTagName(goog.dom.TagName.UL);
     assertEquals('UL should have one child UL',
         1, childULs.length);
     tearDownListAndBlockquoteTests();
@@ -539,7 +539,7 @@ function tearDownFontSizeTests() {
  * Asserts that the text nodes set up by setUpFontSizeTests() have had their
  * font sizes changed as described by sizeChangesMap.
  * @param {string} msg Assertion error message.
- * @param {Object<string, number|null>} sizeChangesMap Maps the text content
+ * @param {Object<string,?number>} sizeChangesMap Maps the text content
  *     of a text node to be measured to its expected font size in pixels, or
  *     null if that text node should not be present in the document (i.e.
  *     because it was split into two). Only the text nodes that have changed
@@ -777,7 +777,8 @@ function testConvertBreaksToDivsKeepsP() {
   HELPER.select('three', 0);
   FORMATTER.convertBreaksToDivs_();
   assertEquals('There should still be a <p> tag',
-               1, FIELDMOCK.getElement().getElementsByTagName('p').length);
+               1, FIELDMOCK.getElement().getElementsByTagName(
+                   goog.dom.TagName.P).length);
   var html = FIELDMOCK.getElement().innerHTML.toLowerCase();
   assertNotBadBrElements(html);
   assertNotContains('There should not be empty <div> elements',
@@ -1123,7 +1124,7 @@ function testScrubImagesRemovesCustomAttributes() {
     'tabIndexSet': '0'};
   attrs[goog.HASH_CODE_PROPERTY_] = '0';
   goog.dom.appendChild(fieldElem,
-      goog.dom.createDom('img', attrs));
+      goog.dom.createDom(goog.dom.TagName.IMG, attrs));
 
   setUpRealField();
 

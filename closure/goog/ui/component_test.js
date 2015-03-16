@@ -278,7 +278,7 @@ function testDecorate() {
 
 function testDecorate_AllowDetached_NotInDocument() {
   goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
-  var element = document.createElement('div');
+  var element = document.createElement(goog.dom.TagName.DIV);
   component.decorate(element);
   assertFalse('Component should not call enterDocument when decorated ' +
       'with an element that is not in the document.',
@@ -288,7 +288,7 @@ function testDecorate_AllowDetached_NotInDocument() {
 
 function testDecorate_AllowDetached_InDocument() {
   goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
-  var element = document.createElement('div');
+  var element = document.createElement(goog.dom.TagName.DIV);
   sandbox.appendChild(element);
   component.decorate(element);
   assertTrue('Component should call enterDocument when decorated ' +
@@ -499,7 +499,7 @@ function testMakeIdsWithObject() {
 function testGetElementByFragment() {
   component.render(sandbox);
 
-  var element = component.dom_.createDom('DIV', {
+  var element = component.dom_.createDom(goog.dom.TagName.DIV, {
     id: component.makeId('foo')
   }, 'Hello');
   sandbox.appendChild(element);
@@ -765,10 +765,10 @@ function testMovingChildrenUsingAddChildAt() {
   var b = new goog.ui.Component();
   var c = new goog.ui.Component();
   var d = new goog.ui.Component();
-  a.setElementInternal(goog.dom.createElement('a'));
-  b.setElementInternal(goog.dom.createElement('b'));
-  c.setElementInternal(goog.dom.createElement('c'));
-  d.setElementInternal(goog.dom.createElement('d'));
+  a.setElementInternal(goog.dom.createElement(goog.dom.TagName.A));
+  b.setElementInternal(goog.dom.createElement(goog.dom.TagName.B));
+  c.setElementInternal(goog.dom.createElement(goog.dom.TagName.C));
+  d.setElementInternal(goog.dom.createElement(goog.dom.TagName.D));
 
   a.setId('a');
   b.setId('b');
@@ -807,9 +807,9 @@ function testAddChildAfterDomCreatedDoesNotEnterDocument() {
   var parent = new goog.ui.Component();
   var child = new goog.ui.Component();
 
-  var nestedDiv = goog.dom.createDom('div');
+  var nestedDiv = goog.dom.createDom(goog.dom.TagName.DIV);
   parent.setElementInternal(
-      goog.dom.createDom('div', undefined, nestedDiv));
+      goog.dom.createDom(goog.dom.TagName.DIV, undefined, nestedDiv));
   parent.render();
 
   // Now add a child, whose DOM already exists. This happens, for example,
@@ -831,9 +831,9 @@ function testAddChildAfterDomManuallyInserted() {
   var parent = new goog.ui.Component();
   var child = new goog.ui.Component();
 
-  var nestedDiv = goog.dom.createDom('div');
+  var nestedDiv = goog.dom.createDom(goog.dom.TagName.DIV);
   parent.setElementInternal(
-      goog.dom.createDom('div', undefined, nestedDiv));
+      goog.dom.createDom(goog.dom.TagName.DIV, undefined, nestedDiv));
   parent.render();
 
   // This sequence is weird, but some people do it instead of just manually

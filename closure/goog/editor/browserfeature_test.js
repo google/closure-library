@@ -17,6 +17,7 @@ goog.setTestOnly('goog.editor.BrowserFeatureTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
@@ -63,12 +64,12 @@ function testLeavesPWhenRemovingLists() {
       'LEAVES_P_WHEN_REMOVING_LISTS incorrect for ' +
       navigator.userAgent,
       goog.editor.BrowserFeature.LEAVES_P_WHEN_REMOVING_LISTS,
-      !!root.getElementsByTagName('p').length);
+      !!root.getElementsByTagName(goog.dom.TagName.P).length);
 }
 
 function testActiveElement() {
   var root = goog.dom.getElement('root');
-  var div = goog.dom.createElement('div');
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   root.appendChild(div);
   div.tabIndex = 0;
   div.focus();

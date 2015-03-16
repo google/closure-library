@@ -22,6 +22,7 @@
 goog.provide('goog.dom.iframe');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
@@ -105,13 +106,14 @@ goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
   if (opt_styles instanceof goog.html.SafeStyle) {
     opt_styles = goog.html.SafeStyle.unwrap(opt_styles);
   }
-  return /** @type {!HTMLIFrameElement} */ (domHelper.createDom('iframe', {
-    'frameborder': 0,
-    // Since iframes are inline elements, we must align to bottom to
-    // compensate for the line descent.
-    'style': goog.dom.iframe.STYLES_ + (opt_styles || ''),
-    'src': goog.dom.iframe.BLANK_SOURCE
-  }));
+  return /** @type {!HTMLIFrameElement} */ (
+      domHelper.createDom(goog.dom.TagName.IFRAME, {
+        'frameborder': 0,
+        // Since iframes are inline elements, we must align to bottom to
+        // compensate for the line descent.
+        'style': goog.dom.iframe.STYLES_ + (opt_styles || ''),
+        'src': goog.dom.iframe.BLANK_SOURCE
+      }));
 };
 
 

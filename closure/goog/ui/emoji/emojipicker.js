@@ -26,7 +26,7 @@
 
 goog.provide('goog.ui.emoji.EmojiPicker');
 
-goog.require('goog.log');
+goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.TabPane');
@@ -413,7 +413,6 @@ goog.ui.emoji.EmojiPicker.prototype.setProgressiveRender =
 };
 
 
-
 /**
  * Adjusts the number of rows to be the maximum row count out of all the emoji
  * groups, in order to prevent jitter in switching among the tabs.
@@ -455,7 +454,7 @@ goog.ui.emoji.EmojiPicker.prototype.loadImages = function() {
  * @suppress {deprecated} Using deprecated goog.ui.TabPane.
  */
 goog.ui.emoji.EmojiPicker.prototype.createDom = function() {
-  this.setElementInternal(this.getDomHelper().createDom('div'));
+  this.setElementInternal(this.getDomHelper().createDom(goog.dom.TagName.DIV));
 
   if (this.autoSizeByColumnCount_) {
     this.adjustNumRowsIfNecessary_();
@@ -469,7 +468,7 @@ goog.ui.emoji.EmojiPicker.prototype.createDom = function() {
   if (this.emoji_.length > 1) {
     // Give the tabpane a div to use as its content element, since tabpane
     // overwrites the CSS class of the element it's passed
-    var div = this.getDomHelper().createDom('div');
+    var div = this.getDomHelper().createDom(goog.dom.TagName.DIV);
     this.getElement().appendChild(div);
     this.tabPane_ = new goog.ui.TabPane(div,
                                         this.tabLocation_,

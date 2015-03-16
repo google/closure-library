@@ -18,6 +18,7 @@ goog.require('goog.async.nextTick');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
@@ -222,7 +223,7 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
     callbackCalled = true;
   });
 
-  var frame = document.getElementsByTagName('iframe')[0];
+  var frame = document.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
   frame.contentWindow.postMessage('bogus message',
       window.location.protocol + '//' + window.location.host);
 

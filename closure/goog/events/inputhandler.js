@@ -40,6 +40,7 @@ goog.provide('goog.events.InputHandler.EventType');
 
 goog.require('goog.Timer');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -84,7 +85,7 @@ goog.events.InputHandler = function(element) {
   // WebKit before version 531 did not support input events for textareas.
   var emulateInputEvents = goog.userAgent.IE ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('531') &&
-          element.tagName == 'TEXTAREA');
+          element.tagName == goog.dom.TagName.TEXTAREA);
 
   /**
    * @type {goog.events.EventHandler<!goog.events.InputHandler>}

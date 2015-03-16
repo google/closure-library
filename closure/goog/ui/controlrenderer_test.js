@@ -20,6 +20,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.style');
@@ -935,7 +936,7 @@ function testSetContentTextNode() {
 function testSetContentElementNode() {
   sandbox.innerHTML = 'Hello, world!';
   controlRenderer.setContent(sandbox,
-      goog.dom.createDom('div', {id: 'foo'}, 'Foo'));
+      goog.dom.createDom(goog.dom.TagName.DIV, {id: 'foo'}, 'Foo'));
   assertEquals('Element must have one child', 1,
       sandbox.childNodes.length);
   assertEquals('Child must be an element node', goog.dom.NodeType.ELEMENT,
@@ -947,7 +948,7 @@ function testSetContentElementNode() {
 function testSetContentArray() {
   sandbox.innerHTML = 'Hello, world!';
   controlRenderer.setContent(sandbox,
-      ['Hello, ', goog.dom.createDom('b', null, 'world'), '!']);
+      ['Hello, ', goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!']);
   assertEquals('Element must have three children', 3,
       sandbox.childNodes.length);
   assertEquals('1st child must be a text node', goog.dom.NodeType.TEXT,
@@ -962,8 +963,8 @@ function testSetContentArray() {
 
 function testSetContentNodeList() {
   sandbox.innerHTML = 'Hello, world!';
-  var div = goog.dom.createDom('div', null, 'Hello, ',
-      goog.dom.createDom('b', null, 'world'), '!');
+  var div = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello, ',
+      goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!');
   controlRenderer.setContent(sandbox, div.childNodes);
   assertEquals('Element must have three children', 3,
       sandbox.childNodes.length);

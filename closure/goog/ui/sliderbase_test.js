@@ -18,6 +18,7 @@ goog.setTestOnly('goog.ui.SliderBaseTest');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -124,8 +125,8 @@ function setUp() {
   mockClock = new goog.testing.MockClock(true);
 
   var oneThumbElem = goog.dom.createDom(
-      'div', {'id': 'oneThumbSlider'},
-      goog.dom.createDom('span', {'id': 'thumb'}));
+      goog.dom.TagName.DIV, {'id': 'oneThumbSlider'},
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'thumb'}));
   sandBox.appendChild(oneThumbElem);
   oneThumbSlider = new OneThumbSlider();
   oneThumbSlider.decorate(oneThumbElem);
@@ -136,10 +137,10 @@ function setUp() {
       });
 
   var twoThumbElem = goog.dom.createDom(
-      'div', {'id': 'twoThumbSlider'},
-      goog.dom.createDom('div', {'id': 'rangeHighlight'}),
-      goog.dom.createDom('span', {'id': 'valueThumb'}),
-      goog.dom.createDom('span', {'id': 'extentThumb'}));
+      goog.dom.TagName.DIV, {'id': 'twoThumbSlider'},
+      goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'rangeHighlight'}),
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'valueThumb'}),
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'extentThumb'}));
   sandBox.appendChild(twoThumbElem);
   twoThumbSlider = new TwoThumbSlider();
   twoThumbSlider.decorate(twoThumbElem);
@@ -149,13 +150,13 @@ function setUp() {
         twoChangeEventCount++;
       });
 
-  var sandBoxRtl = goog.dom.createDom('div',
+  var sandBoxRtl = goog.dom.createDom(goog.dom.TagName.DIV,
       {'dir': 'rtl', 'style': 'position:absolute;'});
   sandBox.appendChild(sandBoxRtl);
 
   var oneThumbElemRtl = goog.dom.createDom(
-      'div', {'id': 'oneThumbSliderRtl'},
-      goog.dom.createDom('span', {'id': 'thumbRtl'}));
+      goog.dom.TagName.DIV, {'id': 'oneThumbSliderRtl'},
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'thumbRtl'}));
   sandBoxRtl.appendChild(oneThumbElemRtl);
   oneThumbSliderRtl = new OneThumbSlider();
   oneThumbSliderRtl.enableFlipForRtl(true);
@@ -166,10 +167,10 @@ function setUp() {
       });
 
   var twoThumbElemRtl = goog.dom.createDom(
-      'div', {'id': 'twoThumbSliderRtl'},
-      goog.dom.createDom('div', {'id': 'rangeHighlightRtl'}),
-      goog.dom.createDom('span', {'id': 'valueThumbRtl'}),
-      goog.dom.createDom('span', {'id': 'extentThumbRtl'}));
+      goog.dom.TagName.DIV, {'id': 'twoThumbSliderRtl'},
+      goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'rangeHighlightRtl'}),
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'valueThumbRtl'}),
+      goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'extentThumbRtl'}));
   sandBoxRtl.appendChild(twoThumbElemRtl);
   twoThumbSliderRtl = new TwoThumbSlider();
   twoThumbSliderRtl.enableFlipForRtl(true);
@@ -615,7 +616,7 @@ function testMouseWheelEventHandlerEnable() {
 
   // Test that mouse wheel handling can be disabled before rendering a slider.
   var wheelDisabledElem = goog.dom.createDom(
-      'div', {}, goog.dom.createDom('span'));
+      goog.dom.TagName.DIV, {}, goog.dom.createDom(goog.dom.TagName.SPAN));
   var wheelDisabledSlider = new OneThumbSlider();
   wheelDisabledSlider.setHandleMouseWheel(false);
   wheelDisabledSlider.decorate(wheelDisabledElem);

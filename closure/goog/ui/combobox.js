@@ -26,6 +26,7 @@ goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
@@ -207,14 +208,14 @@ goog.ui.ComboBox.prototype.useDropdownArrow_ = false;
  * @override
  */
 goog.ui.ComboBox.prototype.createDom = function() {
-  this.input_ = this.getDomHelper().createDom('input', {
+  this.input_ = this.getDomHelper().createDom(goog.dom.TagName.INPUT, {
     name: this.fieldName_,
     type: goog.dom.InputType.TEXT,
     autocomplete: 'off'
   });
-  this.button_ = this.getDomHelper().createDom('span',
+  this.button_ = this.getDomHelper().createDom(goog.dom.TagName.SPAN,
       goog.getCssName('goog-combobox-button'));
-  this.setElementInternal(this.getDomHelper().createDom('span',
+  this.setElementInternal(this.getDomHelper().createDom(goog.dom.TagName.SPAN,
       goog.getCssName('goog-combobox'), this.input_, this.button_));
   if (this.useDropdownArrow_) {
     goog.dom.setTextContent(this.button_, '\u25BC');
@@ -983,7 +984,8 @@ goog.ui.ComboBoxItem.prototype.setFormatFromToken = function(token) {
       var domHelper = this.getDomHelper();
       this.setContent([
         domHelper.createTextNode(caption.substr(0, index)),
-        domHelper.createDom('b', null, caption.substr(index, token.length)),
+        domHelper.createDom(goog.dom.TagName.B, null,
+                            caption.substr(index, token.length)),
         domHelper.createTextNode(caption.substr(index + token.length))
       ]);
     }

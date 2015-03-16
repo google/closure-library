@@ -19,6 +19,7 @@ goog.require('goog.cssom');
 goog.require('goog.cssom.iframe.style');
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
@@ -82,9 +83,9 @@ function recursivelyListCssProperties(el) {
 }
 
 function testMatchCssSelector() {
-  var container = document.createElement('div');
+  var container = document.createElement(goog.dom.TagName.DIV);
   container.className = 'container';
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   x = el;
   el.id = 'mydiv';
   el.className = 'colorful foo';
@@ -150,7 +151,7 @@ function makeIframeDocument(iframe) {
 function testCopyCss() {
   for (var i = 1; i <= 4; i++) {
     var sourceElement = document.getElementById('source' + i);
-    var newFrame = document.createElement('iframe');
+    var newFrame = document.createElement(goog.dom.TagName.IFRAME);
     newFrame.allowTransparency = true;
     sourceElement.parentNode.insertBefore(newFrame,
                                           sourceElement.nextSibling);
@@ -199,7 +200,7 @@ function testCopyBackgroundContext() {
   var cssText = goog.cssom.iframe.style.getElementContext(testDiv,
                                                           null,
                                                           true);
-  var iframe = document.createElement('iframe');
+  var iframe = document.createElement(goog.dom.TagName.IFRAME);
   var ancestor = document.getElementById('backgroundTest-ancestor-1');
   ancestor.parentNode.insertBefore(iframe, ancestor.nextSibling);
   iframe.style.width = '100%';
@@ -232,7 +233,7 @@ function testCopyBackgroundContext() {
 
 function testCopyBackgroundContextFromIframe() {
   var testDiv = document.getElementById('backgroundTest');
-  var iframe = document.createElement('iframe');
+  var iframe = document.createElement(goog.dom.TagName.IFRAME);
   iframe.allowTransparency = true;
   iframe.style.position = 'absolute';
   iframe.style.top = '5px';

@@ -29,6 +29,7 @@ goog.provide('goog.net.ChannelRequest.Error');
 
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
@@ -838,7 +839,6 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
 };
 
 
-
 /**
  * Returns the next chunk of a chunk-encoded response. This is not standard
  * HTTP chunked encoding because browsers don't expose the chunk boundaries to
@@ -937,7 +937,7 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.trident_.parentWindow['rpcClose'] =
       goog.bind(this.onTridentDone_, this, false);
 
-  var div = this.trident_.createElement('div');
+  var div = this.trident_.createElement(goog.dom.TagName.DIV);
   this.trident_.parentWindow.document.body.appendChild(div);
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
   this.channelDebug_.tridentChannelRequest('GET',

@@ -16,6 +16,7 @@ goog.provide('goog.structsTest');
 goog.setTestOnly('goog.structsTest');
 
 goog.require('goog.array');
+goog.require('goog.dom.TagName');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');  // needed for filter
@@ -53,7 +54,7 @@ var node;
 
 
 function addNode() {
-  node = document.createElement('span');
+  node = document.createElement(goog.dom.TagName.SPAN);
   getTestElement().appendChild(node);
 }
 
@@ -506,7 +507,7 @@ function testFilterNodeList() {
   function f(v, i, col2) {
     assertEquals(col, col2);
     assertEquals('number', typeof i);
-    return v.tagName == 'P';
+    return v.tagName == goog.dom.TagName.P;
   }
   assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f)));
@@ -519,7 +520,7 @@ function testFilterNodeList2() {
     assertEquals(col, col2);
     assertEquals('number', typeof i);
     assertEquals(THIS_OBJ, this);
-    return v.tagName == 'P';
+    return v.tagName == goog.dom.TagName.P;
   }
   assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f, THIS_OBJ)));

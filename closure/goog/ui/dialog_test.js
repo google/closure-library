@@ -43,7 +43,7 @@ var stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
-  bodyChildElement = document.createElement('div');
+  bodyChildElement = document.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(bodyChildElement);
   dialog = new goog.ui.Dialog();
   var buttons = new goog.ui.Dialog.ButtonSet();
@@ -57,7 +57,7 @@ function setUp() {
   dialog.setButtonSet(buttons);
   dialog.setVisible(true);
 
-  decorateTarget = goog.dom.createDom('div');
+  decorateTarget = goog.dom.createDom(goog.dom.TagName.DIV);
   document.body.appendChild(decorateTarget);
 
   // Reset global flags to their defaults.
@@ -80,7 +80,8 @@ function testCrossFrameFocus() {
   }
   dialog.setVisible(false);
   var iframeWindow = goog.dom.getElement('f').contentWindow;
-  var iframeInput = iframeWindow.document.getElementsByTagName('input')[0];
+  var iframeInput = iframeWindow.document.getElementsByTagName(
+      goog.dom.TagName.INPUT)[0];
   dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   var dialogElement = dialog.getElement();
   var focusCounter = 0;
@@ -123,7 +124,8 @@ function testNoTitleClose() {
  * @return {boolean} Whether a goog.ui.Dialog.EventType.SELECT was dispatched.
  */
 function checkSelectDispatchedOnButtonClick(disableButton) {
-  var aButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[0];
+  var aButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[0];
   assertNotEquals(aButton, null);
   aButton.disabled = disableButton;
   var wasCalled = false;
@@ -146,7 +148,8 @@ function testDisabledButtonClicksDontDispatchSelectEvents() {
 }
 
 function testEnterKeyDispatchesDefaultSelectEvents() {
-  var okButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[1];
+  var okButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[1];
   assertNotEquals(okButton, null);
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };
@@ -164,7 +167,8 @@ function testEnterKeyDispatchesDefaultSelectEvents() {
 }
 
 function testEnterKeyOnDisabledDefaultButtonDoesNotDispatchSelectEvents() {
-  var okButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[1];
+  var okButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[1];
   okButton.focus();
 
   var callRecorder = goog.testing.recordFunction();
@@ -390,8 +394,9 @@ function testShiftTabAtTopSetsUpWrapAndDoesNotPreventPropagation() {
 }
 
 function testButtonsWithContentsDispatchSelectEvents() {
-  var aButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[0];
-  var aSpan = document.createElement('SPAN');
+  var aButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[0];
+  var aSpan = document.createElement(goog.dom.TagName.SPAN);
   aButton.appendChild(aSpan);
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };

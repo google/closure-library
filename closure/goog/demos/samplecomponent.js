@@ -19,6 +19,7 @@
 goog.provide('goog.demos.SampleComponent');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -90,7 +91,7 @@ goog.demos.SampleComponent.prototype.changeColor_ = function() {
  * @override
  */
 goog.demos.SampleComponent.prototype.createDom = function() {
-  this.decorateInternal(this.dom_.createElement('div'));
+  this.decorateInternal(this.dom_.createElement(goog.dom.TagName.DIV));
 };
 
 

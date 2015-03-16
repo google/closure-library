@@ -19,6 +19,7 @@
 goog.provide('goog.net.xpc.DirectTransportTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
@@ -86,12 +87,12 @@ function setUpPage() {
   TransportTypes = goog.net.xpc.TransportTypes;
 
   // Show debug log
-  var debugDiv = document.createElement('debugDiv');
+  var debugDiv = document.createElement(goog.dom.TagName.DEBUGDIV);
   document.body.appendChild(debugDiv);
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msgElm = goog.dom.createDom('div');
+    var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
@@ -118,7 +119,7 @@ function tearDown() {
 
 
 function createIframe() {
-  peerIframe = document.createElement('iframe');
+  peerIframe = document.createElement(goog.dom.TagName.IFRAME);
   peerIframe.id = PEER_IFRAME_ID;
   document.body.insertBefore(peerIframe, document.body.firstChild);
 }

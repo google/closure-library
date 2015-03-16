@@ -403,11 +403,11 @@ function makeField(id, opt_tag) {
  */
 function helpTestSplit_(offset, firstHalfString, secondHalfString, isAppend,
     opt_goToBody) {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<b>begin bold<i>italic</i>end bold</b>';
   document.body.appendChild(node);
 
-  var italic = node.getElementsByTagName('i')[0].firstChild;
+  var italic = node.getElementsByTagName(goog.dom.TagName.I)[0].firstChild;
 
   var splitFn = isAppend ?
       goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_ :
@@ -465,7 +465,7 @@ function testSplitDomAndAppend() {
 
 
 function testSplitDomAtElement() {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -480,7 +480,7 @@ function testSplitDomAtElement() {
 
 
 function testSplitDomAtElementStart() {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -495,7 +495,7 @@ function testSplitDomAtElementStart() {
 
 
 function testSplitDomAtChildlessElement() {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -510,7 +510,7 @@ function testSplitDomAtChildlessElement() {
 }
 
 function testReplaceWhiteSpaceWithNbsp() {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   var textNode = document.createTextNode('');
   node.appendChild(textNode);
 

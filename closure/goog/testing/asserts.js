@@ -15,6 +15,7 @@ goog.provide('goog.testing.JsUnitException');
 goog.provide('goog.testing.asserts');
 goog.provide('goog.testing.asserts.ArrayLike');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.stacktrace');
 
 // TODO(user): Copied from JsUnit with some small modifications, we should
@@ -1155,7 +1156,7 @@ goog.testing.asserts.contains_ = function(container, contained) {
 };
 
 var standardizeHTML = function(html) {
-  var translator = document.createElement('DIV');
+  var translator = document.createElement(goog.dom.TagName.DIV);
   translator.innerHTML = html;
 
   // Trim whitespace from result (without relying on goog.string)
@@ -1171,7 +1172,7 @@ var standardizeHTML = function(html) {
  * @return {string} Normalized CSS value.
  */
 var standardizeCSSValue = function(propertyName, value) {
-  var styleDeclaration = document.createElement('DIV').style;
+  var styleDeclaration = document.createElement(goog.dom.TagName.DIV).style;
   styleDeclaration[propertyName] = value;
   return styleDeclaration[propertyName];
 };

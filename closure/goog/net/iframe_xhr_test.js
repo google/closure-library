@@ -19,6 +19,7 @@ goog.require('goog.Timer');
 goog.require('goog.debug.Console');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.net.IframeIo');
 goog.require('goog.net.XhrIo');
@@ -123,7 +124,7 @@ testCase.addNewTest('testResults', function() {
   }
 
   assertEquals('There should be no iframes left', 0,
-      document.getElementsByTagName('iframe').length);
+      document.getElementsByTagName(goog.dom.TagName.IFRAME).length);
 });
 
 

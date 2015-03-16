@@ -15,6 +15,7 @@
 goog.provide('goog.testing.PropertyReplacerTest');
 goog.setTestOnly('goog.testing.PropertyReplacerTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
@@ -201,7 +202,7 @@ function testHasKey() {
   assertFalse('document, invalid key', f(document, 'no such key'));
   assertTrue('document.body', f(document, 'body'));
 
-  var div = document.createElement('div');
+  var div = document.createElement(goog.dom.TagName.DIV);
   assertFalse('div, invalid key', f(div, 'no such key'));
   assertTrue('div.className', f(div, 'className'));
   div['a'] = 0;
@@ -228,7 +229,7 @@ function testHasKey() {
 
 // Test PropertyReplacer with DOM objects' built in attributes.
 function testDomBuiltInAttributes() {
-  var div = document.createElement('div');
+  var div = document.createElement(goog.dom.TagName.DIV);
   div.id = 'old-id';
 
   var stubs = new goog.testing.PropertyReplacer();
@@ -248,7 +249,7 @@ function testDomBuiltInAttributes() {
 
 // Test PropertyReplacer with DOM objects' custom attributes.
 function testDomCustomAttributes() {
-  var div = document.createElement('div');
+  var div = document.createElement(goog.dom.TagName.DIV);
   div.attr1 = 'old';
 
   var stubs = new goog.testing.PropertyReplacer();

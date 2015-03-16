@@ -19,6 +19,7 @@ goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.async.Deferred');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
@@ -55,7 +56,7 @@ function setUpPage() {
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msgElm = goog.dom.createDom('div');
+    var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
@@ -86,7 +87,7 @@ function checkSameDomainIframeAccess() {
 
 
 function create1x1Iframe(iframeId, src) {
-  var iframeAccessChecker = goog.dom.createElement('IFRAME');
+  var iframeAccessChecker = goog.dom.createElement(goog.dom.TagName.IFRAME);
   iframeAccessChecker.id = iframeAccessChecker.name = iframeId;
   iframeAccessChecker.style.width = iframeAccessChecker.style.height = '1px';
   iframeAccessChecker.src = src;

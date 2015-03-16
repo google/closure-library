@@ -208,7 +208,7 @@ function testSetEnabled() {
 function testSetFormatFromToken() {
   var item = new goog.ui.ComboBoxItem('ABc');
   item.setFormatFromToken('b');
-  var div = goog.dom.createDom('div');
+  var div = goog.dom.createDom(goog.dom.TagName.DIV);
   new goog.ui.ControlRenderer().setContent(div, item.getContent());
   assertTrue(div.innerHTML == 'A<b>B</b>c' || div.innerHTML == 'A<B>B</B>c');
 }

@@ -19,6 +19,7 @@
 /** @suppress {extraProvide} */
 goog.provide('goog.stringTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -522,8 +523,8 @@ function testHtmlUnescapeEntitiesWithDocument() {
   var documentMock = {
     createElement: mockControl.createFunctionMock('createElement')
   };
-  var divMock = document.createElement('div');
-  documentMock.createElement('div').$returns(divMock);
+  var divMock = document.createElement(goog.dom.TagName.DIV);
+  documentMock.createElement(goog.dom.TagName.DIV).$returns(divMock);
   mockControl.$replayAll();
 
   var html = '&lt;a&b&gt;';

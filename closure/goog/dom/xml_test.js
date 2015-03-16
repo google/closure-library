@@ -15,6 +15,7 @@
 goog.provide('goog.dom.xmlTest');
 goog.setTestOnly('goog.dom.xmlTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.xml');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -77,7 +78,7 @@ function testMaxSizeInIE() {
 
 function testSetAttributes() {
   var xmlElement = goog.dom.xml.createDocument().createElement('root');
-  var domElement = document.createElement('div');
+  var domElement = document.createElement(goog.dom.TagName.DIV);
   var attrs = {
     name: 'test3',
     title: 'A title',

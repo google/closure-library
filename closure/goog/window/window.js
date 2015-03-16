@@ -19,6 +19,7 @@
 
 goog.provide('goog.window');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -119,7 +120,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // opens new URL in the same window. The workout around is to create an "A"
     // element and send a click event to it.
     // Notice that the "A" tag does NOT have to be added to the DOM.
-    var a = parentWin.document.createElement('a');
+    var a = parentWin.document.createElement(goog.dom.TagName.A);
     a.setAttribute('href', href);
     a.setAttribute('target', target);
     if (opt_options['noreferrer']) {

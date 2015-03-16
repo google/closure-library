@@ -244,7 +244,7 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
   // hidden.
   if (!this.bgEl_) {
     this.bgEl_ = this.getDomHelper().createDom(
-        'div', goog.getCssName(this.getCssClass(), 'bg'));
+        goog.dom.TagName.DIV, goog.getCssName(this.getCssClass(), 'bg'));
     goog.style.setElementShown(this.bgEl_, false);
   }
 };
@@ -257,7 +257,8 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
 goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
   // Creates tab catcher element.
   if (!this.tabCatcherElement_) {
-    this.tabCatcherElement_ = this.getDomHelper().createElement('span');
+    this.tabCatcherElement_ = this.getDomHelper().createElement(
+        goog.dom.TagName.SPAN);
     goog.style.setElementShown(this.tabCatcherElement_, false);
     goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
     this.tabCatcherElement_.style.position = 'absolute';

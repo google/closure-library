@@ -313,14 +313,15 @@ goog.ui.HsvPalette.prototype.createDom = function() {
   this.swatchElement = dom.createDom(goog.dom.TagName.DIV,
       goog.getCssName(this.className, 'swatch'));
 
-  this.inputElement = dom.createDom('input', {
+  this.inputElement = dom.createDom(goog.dom.TagName.INPUT, {
     'class': goog.getCssName(this.className, 'input'),
     'aria-label': goog.ui.HsvPalette.MSG_HSV_PALETTE_HEX_COLOR_,
     'type': goog.dom.InputType.TEXT,
     'dir': 'ltr'
   });
 
-  var labelElement = dom.createDom('label', null, this.inputElement);
+  var labelElement = dom.createDom(goog.dom.TagName.LABEL, null,
+                                   this.inputElement);
 
   var element = dom.createDom(goog.dom.TagName.DIV,
       this.className + noalpha,

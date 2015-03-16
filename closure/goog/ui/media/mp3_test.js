@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.Mp3Test');
 goog.setTestOnly('goog.ui.media.Mp3Test');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
@@ -24,7 +25,7 @@ goog.require('goog.ui.media.Mp3');
 var mp3;
 var control;
 var MP3_URL = 'http://www.shellworld.net/~davidsky/surf-oxy.mp3';
-var parent = goog.dom.createElement('div');
+var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   mp3 = goog.ui.media.Mp3.getInstance();
@@ -42,7 +43,7 @@ function tearDown() {
 function testBasicRendering() {
   control.render(parent);
   var el = goog.dom.getElementsByTagNameAndClass(
-      'div', goog.ui.media.Mp3.CSS_CLASS, parent);
+      goog.dom.TagName.DIV, goog.ui.media.Mp3.CSS_CLASS, parent);
   assertEquals(1, el.length);
 }
 
@@ -55,7 +56,7 @@ function testParsingUrl() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.Mp3.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);

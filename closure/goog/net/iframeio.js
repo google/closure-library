@@ -141,6 +141,7 @@ goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -328,8 +329,8 @@ goog.net.IframeIo.getNextName_ = function() {
  */
 goog.net.IframeIo.getForm_ = function() {
   if (!goog.net.IframeIo.form_) {
-    goog.net.IframeIo.form_ =
-        /** @type {!HTMLFormElement} */(goog.dom.createDom('form'));
+    goog.net.IframeIo.form_ = /** @type {!HTMLFormElement} */ (
+        goog.dom.createDom(goog.dom.TagName.FORM));
     goog.net.IframeIo.form_.acceptCharset = 'utf-8';
 
     // Hide the form and move it off screen
@@ -355,7 +356,7 @@ goog.net.IframeIo.getForm_ = function() {
 goog.net.IframeIo.addFormInputs_ = function(form, data) {
   var helper = goog.dom.getDomHelper(form);
   goog.structs.forEach(data, function(value, key) {
-    var inp = helper.createDom('input',
+    var inp = helper.createDom(goog.dom.TagName.INPUT,
         {'type': goog.dom.InputType.HIDDEN, 'name': key, 'value': value});
     form.appendChild(inp);
   });
@@ -896,7 +897,7 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     }
 
     // Fix text areas, since importNode won't clone changes to the value
-    var textareas = this.form_.getElementsByTagName('textarea');
+    var textareas = this.form_.getElementsByTagName(goog.dom.TagName.TEXTAREA);
     for (var i = 0, n = textareas.length; i < n; i++) {
       // The childnodes represent the initial child nodes for the text area
       // appending a text node essentially resets the initial value ready for
@@ -916,11 +917,13 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     doc.body.appendChild(clone);
 
     // Fix select boxes, importNode won't override the default value
-    var selects = this.form_.getElementsByTagName('select');
-    var clones = clone.getElementsByTagName('select');
+    var selects = this.form_.getElementsByTagName(goog.dom.TagName.SELECT);
+    var clones = clone.getElementsByTagName(goog.dom.TagName.SELECT);
     for (var i = 0, n = selects.length; i < n; i++) {
-      var selectsOptions = selects[i].getElementsByTagName('option');
-      var clonesOptions = clones[i].getElementsByTagName('option');
+      var selectsOptions = selects[i].getElementsByTagName(
+          goog.dom.TagName.OPTION);
+      var clonesOptions = clones[i].getElementsByTagName(
+          goog.dom.TagName.OPTION);
       for (var j = 0, m = selectsOptions.length; j < m; j++) {
         clonesOptions[j].selected = selectsOptions[j].selected;
       }
@@ -930,8 +933,8 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     // attribute for <input type="file"> nodes, which results in an empty
     // upload if the clone is submitted.  Check, and if the clone failed, submit
     // using the original form instead.
-    var inputs = this.form_.getElementsByTagName('input');
-    var inputClones = clone.getElementsByTagName('input');
+    var inputs = this.form_.getElementsByTagName(goog.dom.TagName.INPUT);
+    var inputClones = clone.getElementsByTagName(goog.dom.TagName.INPUT);
     for (var i = 0, n = inputs.length; i < n; i++) {
       if (inputs[i].type == goog.dom.InputType.FILE) {
         if (inputs[i].value != inputClones[i].value) {
@@ -1196,7 +1199,8 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
   }
 
   this.iframe_ = /** @type {!HTMLIFrameElement} */(
-      goog.dom.getDomHelper(this.form_).createDom('iframe', iframeAttributes));
+      goog.dom.getDomHelper(this.form_).createDom(
+          goog.dom.TagName.IFRAME, iframeAttributes));
 
   var s = this.iframe_.style;
   s.visibility = 'hidden';
