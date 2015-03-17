@@ -2407,7 +2407,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
       return ctr;
     }
     /**
-     * @this {*}
+     * @this {Object}
      * @return {?}
      */
     var wrappedCtr = function() {
