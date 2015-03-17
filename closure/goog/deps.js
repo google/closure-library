@@ -932,7 +932,7 @@ goog.addDependency('string/newlines_test.js', ['goog.string.newlinesTest'], ['go
 goog.addDependency('string/parser.js', ['goog.string.Parser'], [], false);
 goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string'], false);
 goog.addDependency('string/path_test.js', ['goog.string.pathTest'], ['goog.string.path', 'goog.testing.jsunit'], false);
-goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], ['goog.dom.TagName'], false);
+goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], [], false);
 goog.addDependency('string/string_test.js', ['goog.stringTest'], ['goog.dom.TagName', 'goog.functions', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.testing.MockControl', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], [], false);
 goog.addDependency('string/stringbuffer_test.js', ['goog.string.StringBufferTest'], ['goog.string.StringBuffer', 'goog.testing.jsunit'], false);
@@ -993,7 +993,7 @@ goog.addDependency('style/transition.js', ['goog.style.transition', 'goog.style.
 goog.addDependency('style/transition_test.js', ['goog.style.transitionTest'], ['goog.style', 'goog.style.transition', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('test_module.js', ['goog.test_module'], ['goog.test_module_dep'], true);
 goog.addDependency('test_module_dep.js', ['goog.test_module_dep'], [], true);
-goog.addDependency('testing/asserts.js', ['goog.testing.JsUnitException', 'goog.testing.asserts', 'goog.testing.asserts.ArrayLike'], ['goog.dom.TagName', 'goog.testing.stacktrace'], false);
+goog.addDependency('testing/asserts.js', ['goog.testing.JsUnitException', 'goog.testing.asserts', 'goog.testing.asserts.ArrayLike'], ['goog.testing.stacktrace'], false);
 goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.array', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument'], false);
 goog.addDependency('testing/async/mockcontrol_test.js', ['goog.testing.async.MockControlTest'], ['goog.async.Deferred', 'goog.testing.MockControl', 'goog.testing.asserts', 'goog.testing.async.MockControl', 'goog.testing.jsunit'], false);

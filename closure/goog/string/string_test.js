@@ -524,7 +524,7 @@ function testHtmlUnescapeEntitiesWithDocument() {
     createElement: mockControl.createFunctionMock('createElement')
   };
   var divMock = document.createElement(goog.dom.TagName.DIV);
-  documentMock.createElement(goog.dom.TagName.DIV).$returns(divMock);
+  documentMock.createElement('div').$returns(divMock);
   mockControl.$replayAll();
 
   var html = '&lt;a&b&gt;';
