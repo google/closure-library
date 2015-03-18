@@ -214,7 +214,7 @@ goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
 
 /**
  * The Trident instance if the request is using Trident.
- * @type {ActiveXObject}
+ * @type {Object}
  * @private
  */
 goog.net.ChannelRequest.prototype.trident_ = null;
