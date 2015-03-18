@@ -87,6 +87,7 @@ goog.testing.MockClock = function(opt_autoInstall) {
   if (opt_autoInstall) {
     this.install();
   }
+  goog.testing.MockClock.nextId = 1; // TODO(b/19729551): Remove
 };
 goog.inherits(goog.testing.MockClock, goog.Disposable);
 
@@ -101,7 +102,15 @@ goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT = 20;
 
 
 /**
- * Count of the number of timeouts made.
+ * ID to use for next timeout.  Timeout IDs must never be reused, even across
+ * MockClock instances.
+ * @public {number}
+ */
+goog.testing.MockClock.nextId = Math.round(Math.random() * 10000);
+
+
+/**
+ * Count of the number of timeouts made by this instance.
  * @type {number}
  * @private
  */
@@ -245,6 +254,8 @@ goog.testing.MockClock.prototype.reset = function() {
   this.timeoutsMade_ = 0;
   this.timeoutDelay_ = 0;
 
+  goog.testing.MockClock.nextId = 1; // TODO(b/19729551): Remove
+
   this.fireResetEvent();
 };
 
@@ -359,7 +370,9 @@ goog.testing.MockClock.prototype.getCurrentTime = function() {
  *     cleared.
  */
 goog.testing.MockClock.prototype.isTimeoutSet = function(timeoutKey) {
-  return timeoutKey <= this.timeoutsMade_ && !this.deletedKeys_[timeoutKey];
+  return timeoutKey < goog.testing.MockClock.nextId &&
+      timeoutKey >= goog.testing.MockClock.nextId - this.timeoutsMade_ &&
+      !this.deletedKeys_[timeoutKey];
 };
 
 
@@ -485,9 +498,10 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
         '(24.8 days) cause timeouts to be fired ' +
         'immediately in most browsers, except for IE.');
   }
-  this.timeoutsMade_ = this.timeoutsMade_ + 1;
-  this.scheduleFunction_(this.timeoutsMade_, funcToCall, millis, false);
-  return this.timeoutsMade_;
+  this.timeoutsMade_++;
+  this.scheduleFunction_(goog.testing.MockClock.nextId, funcToCall, millis,
+      false);
+  return goog.testing.MockClock.nextId++;
 };
 
 
@@ -502,9 +516,10 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
 goog.testing.MockClock.prototype.setInterval_ =
     function(funcToCall, opt_millis) {
   var millis = opt_millis || 0;
-  this.timeoutsMade_ = this.timeoutsMade_ + 1;
-  this.scheduleFunction_(this.timeoutsMade_, funcToCall, millis, true);
-  return this.timeoutsMade_;
+  this.timeoutsMade_++;
+  this.scheduleFunction_(goog.testing.MockClock.nextId, funcToCall, millis,
+      true);
+  return goog.testing.MockClock.nextId++;
 };
 
 
