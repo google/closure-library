@@ -494,7 +494,7 @@ function testMozRequestAnimationFrame() {
 
 function testClearBeforeSet() {
   var clock = new goog.testing.MockClock(true);
-  var expectedId = 1;
+  var expectedId = goog.testing.MockClock.nextId;
   window.clearTimeout(expectedId);
 
   var fn = goog.testing.recordFunction();
