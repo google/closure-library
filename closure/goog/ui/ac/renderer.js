@@ -259,6 +259,13 @@ goog.ui.ac.Renderer.prototype.anchorElement_;
 
 
 /**
+ * The anchor element to position the rendered autocompleter against.
+ * @protected {Element|undefined}
+ */
+goog.ui.ac.Renderer.prototype.target_;
+
+
+/**
  * The element on which to base the width of the autocomplete.
  * @type {Node}
  * @private
@@ -735,7 +742,7 @@ goog.ui.ac.Renderer.prototype.getAutoPosition = function() {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getTarget = function() {
-  return this.target_;
+  return this.target_ || null;
 };
 
 
