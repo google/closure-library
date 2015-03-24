@@ -120,7 +120,7 @@ goog.ui.InputDatePicker.prototype.getPopupDatePicker = function() {
 /**
  * Returns the selected date, if any.  Compares the dates from the date picker
  * and the input field, causing them to be synced if different.
- * @return {goog.date.Date?} The selected date, if any.
+ * @return {goog.date.DateTime} The selected date, if any.
  */
 goog.ui.InputDatePicker.prototype.getDate = function() {
 
@@ -144,7 +144,7 @@ goog.ui.InputDatePicker.prototype.getDate = function() {
 
 /**
  * Sets the selected date.  See goog.ui.PopupDatePicker.setDate().
- * @param {goog.date.Date?} date The date to set.
+ * @param {goog.date.Date} date The date to set.
  */
 goog.ui.InputDatePicker.prototype.setDate = function(date) {
   this.popupDatePicker_.setDate(date);
@@ -199,7 +199,7 @@ goog.ui.InputDatePicker.prototype.setInputValueAsDate_ = function(date) {
 /**
  * Gets the input element value and attempts to parse it as a date.
  *
- * @return {goog.date.Date?} The date object is returned if the parse
+ * @return {goog.date.DateTime} The date object is returned if the parse
  *      is successful, null is returned on failure.
  * @private
  */
