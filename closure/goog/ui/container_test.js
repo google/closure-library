@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.ContainerTest');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -245,11 +246,12 @@ goog.inherits(ListContainer, goog.ui.Container);
 /** @override */
 ListContainer.prototype.createDom = function() {
   ListContainer.superClass_.createDom.call(this);
-  var ul = this.getDomHelper().createDom('ul');
+  var ul = this.getDomHelper().createDom(goog.dom.TagName.UL);
   this.forEachChild(function(child) {
     child.createDom();
     var childEl = child.getElement();
-    ul.appendChild(this.getDomHelper().createDom('li', {}, childEl));
+    ul.appendChild(
+        this.getDomHelper().createDom(goog.dom.TagName.LI, {}, childEl));
   }, this);
   this.getContentElement().appendChild(ul);
 };
@@ -334,7 +336,7 @@ function testHandleKeyEvent_childlessContainersIgnoreKeyEvents() {
 function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
   keyContainer = new KeyHandlingContainer();
   keyContainer.render();
-  keyContainer.setKeyEventTarget(goog.dom.createDom('div'));
+  keyContainer.setKeyEventTarget(goog.dom.createDom(goog.dom.TagName.DIV));
   keyContainer.setVisible(true);
 
   keyContainer.handleKeyEvent(new goog.events.Event());
