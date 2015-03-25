@@ -868,18 +868,18 @@ goog.date.Date.prototype.getTime = function() {
 
 
 /**
- * @return {goog.date.weekDay} The day of week, US style. 0 = Sun, 6 = Sat.
+ * @return {number} The day of week, US style. 0 = Sun, 6 = Sat.
  */
 goog.date.Date.prototype.getDay = function() {
-  return /** @type {goog.date.weekDay} */ (this.date.getDay());
+  return this.date.getDay();
 };
 
 
 /**
- * @return {number} The day of week, ISO style. 0 = Mon, 6 = Sun.
+ * @return {goog.date.weekDay} The day of week, ISO style. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getIsoWeekday = function() {
-  return (this.getDay() + 6) % 7;
+  return /** @type {goog.date.weekDay} */ ((this.getDay() + 6) % 7);
 };
 
 
@@ -917,11 +917,11 @@ goog.date.Date.prototype.getUTCDate = function() {
 
 
 /**
- * @return {goog.date.weekDay} The day of week according to universal time,
- *     US style. 0 = Sun, 1 = Mon, 6 = Sat.
+ * @return {number} The day of week according to universal time, US style.
+ *     0 = Sun, 1 = Mon, 6 = Sat.
  */
 goog.date.Date.prototype.getUTCDay = function() {
-  return /** @type {goog.date.weekDay} */ (this.date.getDay());
+  return this.date.getDay();
 };
 
 
@@ -942,11 +942,11 @@ goog.date.Date.prototype.getUTCMinutes = function() {
 
 
 /**
- * @return {number} The day of week according to universal time, ISO style.
- *     0 = Mon, 6 = Sun.
+ * @return {goog.date.weekDay} The day of week according to universal time, ISO
+ *     style. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getUTCIsoWeekday = function() {
-  return (this.date.getUTCDay() + 6) % 7;
+  return /** @type {goog.date.weekDay} */ ((this.date.getUTCDay() + 6) % 7);
 };
 
 
