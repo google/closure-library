@@ -1,5 +1,5 @@
 // Copyright 2006-2008, The Google Caja project.
-// Modifications Copyright 2009 The Closure Library Authors. All Rights Reserved.
+// Modifications Copyright 2009 The Closure Library Authors.
 // All Rights Reserved
 
 /**
@@ -42,11 +42,13 @@
  * @supported IE6, IE7, IE8, FF1.5, FF2, FF3, Chrome 3.0, Safari and Opera 10.
  */
 
+goog.provide('goog.string.html');
 goog.provide('goog.string.html.HtmlParser');
 goog.provide('goog.string.html.HtmlParser.EFlags');
 goog.provide('goog.string.html.HtmlParser.Elements');
 goog.provide('goog.string.html.HtmlParser.Entities');
 goog.provide('goog.string.html.HtmlSaxHandler');
+
 
 
 /**
@@ -62,15 +64,15 @@ goog.string.html.HtmlParser = function() {
 /**
  * HTML entities that are encoded/decoded.
  * TODO(user): use {@code goog.string.htmlEncode} instead.
- * @enum {string}
+ * @type {!Object.<string, string>}
  */
 goog.string.html.HtmlParser.Entities = {
-  lt: '<',
-  gt: '>',
-  amp: '&',
-  nbsp: '\xA0',
-  quot: '"',
-  apos: '\''
+  'lt': '<',
+  'gt': '>',
+  'amp': '&',
+  'nbsp': '\u00a0',
+  'quot': '"',
+  'apos': '\''
 };
 
 
@@ -90,7 +92,7 @@ goog.string.html.HtmlParser.EFlags = {
 
 /**
  * A map of element to a bitmap of flags it has, used internally on the parser.
- * @type {Object<string, number>}
+ * @type {Object<string,number>}
  */
 goog.string.html.HtmlParser.Elements = {
   'a': 0,
@@ -300,10 +302,10 @@ goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
     // interpreters are inconsistent in whether a group that matches nothing
     // is null, undefined, or the empty string.
     ('(?:' +
-       '([a-z][a-z-]*)' +                   // attribute name
-       ('(' +                               // optionally followed
-          '\\s*=\\s*' +
-          ('(' +
+    '([a-z][a-z-]*)' +                   // attribute name
+    ('(' +                               // optionally followed
+    '\\s*=\\s*' +
+    ('(' +
              // A double quoted string.
              '\"[^\"]*\"' +
              // A single quoted string.
@@ -317,10 +319,10 @@ goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
              '|[^>\"\'\\s]*' +
              ')'
              ) +
-          ')'
-          ) + '?' +
-       ')'
-       ) +
+    ')'
+    ) + '?' +
+    ')'
+    ) +
     // End of tag captured in group 3.
     '|(/?>)' +
     // Don't capture cruft
@@ -418,9 +420,9 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
             (goog.string.html.HtmlParser.EFlags.CDATA |
              goog.string.html.HtmlParser.EFlags.RCDATA))) {
           if (htmlLower === null) {
-            htmlLower = goog.string.html.toLowerCase (htmlText);
+            htmlLower = goog.string.html.toLowerCase(htmlText);
           } else {
-           htmlLower = htmlLower.substring(
+            htmlLower = htmlLower.substring(
                 htmlLower.length - htmlText.length);
           }
           var dataEnd = htmlLower.indexOf('</' + tagName);
@@ -448,7 +450,7 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
       } else if (m[3]) {  // Tag.
         openTag = !m[2];
         inTag = true;
-        tagName = goog.string.html.toLowerCase (m[3]);
+        tagName = goog.string.html.toLowerCase(m[3]);
         eflags = goog.string.html.HtmlParser.Elements.hasOwnProperty(tagName) ?
             goog.string.html.HtmlParser.Elements[tagName] : void 0;
       } else if (m[4]) {  // Text.
@@ -553,11 +555,12 @@ goog.string.html.toLowerCase = function(str) {
 };
 
 
+
 /**
  * An interface to the {@code goog.string.html.HtmlParser} visitor, that gets
  * called while the HTML is being parsed.
  *
- * @constructor
+ * @interface
  */
 goog.string.html.HtmlSaxHandler = function() {
 };
