@@ -71,6 +71,60 @@ goog.require('goog.uri.utils.StandardQueryParam');
  * @struct
  */
 goog.Uri = function(opt_uri, opt_ignoreCase) {
+  /**
+   * Scheme such as "http".
+   * @private {string}
+   */
+  this.scheme_ = '';
+
+  /**
+   * User credentials in the form "username:password".
+   * @private {string}
+   */
+  this.userInfo_ = '';
+
+  /**
+   * Domain part, e.g. "www.google.com".
+   * @private {string}
+   */
+  this.domain_ = '';
+
+  /**
+   * Port, e.g. 8080.
+   * @private {?number}
+   */
+  this.port_ = null;
+
+  /**
+   * Path, e.g. "/tests/img.png".
+   * @private {string}
+   */
+  this.path_ = '';
+
+  /**
+   * The fragment without the #.
+   * @private {string}
+   */
+  this.fragment_ = '';
+
+  /**
+   * Whether or not this Uri should be treated as Read Only.
+   * @private {boolean}
+   */
+  this.isReadOnly_ = false;
+
+  /**
+   * Whether or not to ignore case when comparing query params.
+   * @private {boolean}
+   */
+  this.ignoreCase_ = false;
+
+  /**
+   * Object representing query data.
+   * @private {!goog.Uri.QueryData}
+   */
+  this.queryData_;
+
   // Parse in the uri string
   var m;
   if (opt_uri instanceof goog.Uri) {
@@ -125,78 +179,6 @@ goog.Uri.preserveParameterTypesCompatibilityFlag = false;
  * @type {string}
  */
 goog.Uri.RANDOM_PARAM = goog.uri.utils.StandardQueryParam.RANDOM;
-
-
-/**
- * Scheme such as "http".
- * @type {string}
- * @private
- */
-goog.Uri.prototype.scheme_ = '';
-
-
-/**
- * User credentials in the form "username:password".
- * @type {string}
- * @private
- */
-goog.Uri.prototype.userInfo_ = '';
-
-
-/**
- * Domain part, e.g. "www.google.com".
- * @type {string}
- * @private
- */
-goog.Uri.prototype.domain_ = '';
-
-
-/**
- * Port, e.g. 8080.
- * @type {?number}
- * @private
- */
-goog.Uri.prototype.port_ = null;
-
-
-/**
- * Path, e.g. "/tests/img.png".
- * @type {string}
- * @private
- */
-goog.Uri.prototype.path_ = '';
-
-
-/**
- * Object representing query data.
- * @type {!goog.Uri.QueryData}
- * @private
- */
-goog.Uri.prototype.queryData_;
-
-
-/**
- * The fragment without the #.
- * @type {string}
- * @private
- */
-goog.Uri.prototype.fragment_ = '';
-
-
-/**
- * Whether or not this Uri should be treated as Read Only.
- * @type {boolean}
- * @private
- */
-goog.Uri.prototype.isReadOnly_ = false;
-
-
-/**
- * Whether or not to ignore case when comparing query params.
- * @type {boolean}
- * @private
- */
-goog.Uri.prototype.ignoreCase_ = false;
 
 
 /**
@@ -1063,16 +1045,31 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  */
 goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
   /**
+   * The map containing name/value or name/array-of-values pairs.
+   * May be null if it requires parsing from the query string.
+   *
+   * We need to use a Map because we cannot guarantee that the key names will
+   * not be problematic for IE.
+   *
+   * @private {goog.structs.Map<string, !Array<*>>}
+   */
+  this.keyMap_ = null;
+
+  /**
+   * The number of params, or null if it requires computing.
+   * @private {?number}
+   */
+  this.count_ = null;
+
+  /**
    * Encoded query string, or null if it requires computing from the key map.
-   * @type {?string}
-   * @private
+   * @private {?string}
    */
   this.encodedQuery_ = opt_query || null;
 
   /**
    * If true, ignore the case of the parameter name in #get.
-   * @type {boolean}
-   * @private
+   * @private {boolean}
    */
   this.ignoreCase_ = !!opt_ignoreCase;
 };
@@ -1155,26 +1152,6 @@ goog.Uri.QueryData.createFromKeysValues = function(
   }
   return queryData;
 };
-
-
-/**
- * The map containing name/value or name/array-of-values pairs.
- * May be null if it requires parsing from the query string.
- *
- * We need to use a Map because we cannot guarantee that the key names will
- * not be problematic for IE.
- *
- * @private {goog.structs.Map<string, !Array<*>>}
- */
-goog.Uri.QueryData.prototype.keyMap_ = null;
-
-
-/**
- * The number of params, or null if it requires computing.
- * @type {?number}
- * @private
- */
-goog.Uri.QueryData.prototype.count_ = null;
 
 
 /**
