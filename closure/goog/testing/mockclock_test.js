@@ -370,12 +370,40 @@ function testTickZero() {
 function testReset() {
   var clock = new goog.testing.MockClock(true);
 
-  setTimeout(function() {
+  var id = setTimeout(function() {
     fail('Timeouts should be cleared after a reset');
   }, 0);
 
   clock.reset();
   clock.tick(999999);
+
+  var calls = 0;
+  setTimeout(function() { calls++; }, 10);
+  clearTimeout(id);
+  clock.tick(100);
+  assertEquals('New timeout should still run after clearing from before reset',
+      1, calls);
+
+  clock.uninstall();
+}
+
+
+function testNewClockWithOldTimeoutId() {
+  var clock = new goog.testing.MockClock(true);
+
+  var id = setTimeout(function() {
+    fail('Timeouts should be cleared after uninstall');
+  }, 0);
+
+  clock.uninstall();
+  clock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  setTimeout(function() { calls++; }, 10);
+  clearTimeout(id);
+  clock.tick(100);
+  assertEquals('Timeout should still run after cancelling from old clock',
+      1, calls);
   clock.uninstall();
 }
 
