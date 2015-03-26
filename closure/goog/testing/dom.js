@@ -222,7 +222,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
  */
 goog.testing.dom.getExpectedText_ = function(node) {
   // Strip off the browser specifications.
-  return node.nodeValue.match(/^(\[\[.+\]\])?(.*)/)[2];
+  return node.nodeValue.match(/^(\[\[.+\]\])?([\s\S]*)/)[2];
 };
 
 
