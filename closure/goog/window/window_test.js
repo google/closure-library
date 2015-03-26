@@ -19,12 +19,13 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
+goog.require('goog.labs.userAgent.browser');
+goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
 goog.require('goog.window');
 
 var newWin;
@@ -35,7 +36,6 @@ asyncTestCase.stepTimeout = 5000;
 
 var WIN_LOAD_TRY_TIMEOUT = 100;
 var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
-var winLoadCounter;
 
 var stubs = new goog.testing.PropertyReplacer();
 
@@ -53,28 +53,14 @@ function setUpPage() {
 }
 
 
-/**
- * Some tests should only run locally, because they will trigger
- * popup blockers on http urls.
- */
-function canOpenPopups() {
-  // TODO(nicksantos): Fix the test runner farm.
-  return window.location.toString().indexOf('file://') == 0;
-}
-
-if (canOpenPopups()) {
-  // To test goog.window.open we open a new window with this file again. Once
-  // the new window gets to this point in the file it notifies the opener that
-  // it has loaded, so that the opener knows that the new window has been
-  // populated with properties like referrer and location.
-  var newWinLoaded = false;
-  if (window.opener && window.opener.newWinLoaded === false) {
-    window.opener.newWinLoaded = true;
-  }
-}
+// To test goog.window.open we open a new window with this file again. Once
+// the new window gets to this point in the file it sets this variable to true,
+// so that the test knows that the new window has been populated with
+// properties like referrer and location.
+var newWinLoaded = true;
 
 function setUp() {
-  newWinLoaded = false;
+  newWin = undefined;
 }
 
 function tearDown() {
@@ -97,7 +83,10 @@ function tearDown() {
  */
 function continueAfterWindowLoaded(continueFn, opt_numTries) {
   opt_numTries = opt_numTries || 0;
-  if (newWinLoaded) {
+  if (!newWin) {
+    fail('newWin not set, test forgot to set variable?');
+  }
+  if (newWin.newWinLoaded) {
     continueFn();
     asyncTestCase.continueTesting();
   } else if (opt_numTries > MAX_WIN_LOAD_TRIES) {
@@ -118,11 +107,11 @@ function continueAfterWindowLoaded(continueFn, opt_numTries) {
  * @param {string} urlParam Url param to append to the url being opened.
  */
 function doTestOpenWindow(noreferrer, urlParam) {
-  if (!canOpenPopups()) {
-    return;
-  }
   newWin = goog.window.open(REDIRECT_URL_PREFIX + urlParam,
                             {'noreferrer': noreferrer});
+  if (!newWin) {
+    fail('Could not open new window. Check if popup blocker is enabled.');
+  }
   asyncTestCase.waitForAsync('Waiting for window to open and load.');
   continueAfterWindowLoaded(
       goog.partial(continueTestOpenWindow, noreferrer, urlParam));
@@ -149,63 +138,128 @@ function continueTestOpenWindow(noreferrer, urlParam) {
 
 
 function testOpenNotEncoded() {
-  doTestOpenWindow(false, '"bogus~"');
+  // TODO(user): Fix. "Permission denied" on IE. Error only happens
+  // sometimes, perhaps a race condition.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
+  doTestOpenWindow(false, 'bogus~');
 }
 
 function testOpenEncoded() {
-  doTestOpenWindow(false, '"bogus%7E"');
+  // TODO(user): Fix. "Permission denied" on IE 11.
+  if (goog.labs.userAgent.browser.isIE() &&
+      goog.labs.userAgent.browser.isVersionOrHigher(11)) {
+    return;
+  }
+
+  doTestOpenWindow(false, 'bogus%7E');
 }
 
 function testOpenEncodedPercent() {
+  // TODO(user): Fix. Results in bogus~ instead of bogus%7E on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
-  doTestOpenWindow(false, '"bogus%257E"');
+  doTestOpenWindow(false, 'bogus%257E');
 }
 
 function testOpenNotEncodedHidingReferrer() {
-  doTestOpenWindow(true, '"bogus~"');
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
+  doTestOpenWindow(true, 'bogus~');
 }
 
 function testOpenEncodedHidingReferrer() {
-  doTestOpenWindow(true, '"bogus%7E"');
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
+  doTestOpenWindow(true, 'bogus%7E');
 }
 
 function testOpenEncodedPercentHidingReferrer() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
-  doTestOpenWindow(true, '"bogus%257E"');
+  doTestOpenWindow(true, 'bogus%257E');
 }
 
 function testOpenSemicolon() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, 'beforesemi;aftersemi');
 }
 
 function testTwoSemicolons() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, 'a;b;c');
 }
 
 function testOpenAmpersand() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, 'this&that');
 }
 
 function testOpenSingleQuote() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, "'");
 }
 
 function testOpenDoubleQuote() {
+  // TODO(user): Fix. "Permission denied" on IE. Also IE won't encode
+  // " and Closure test server will fail with 400 when seeing it.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, '"');
 }
 
-function testOpenDoubleQuote() {
+function testOpenTag() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, '<');
 }
 
-function testOpenDoubleQuote() {
+function testCloseTag() {
+  // TODO(user): Fix. "Permission denied" on IE.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   doTestOpenWindow(true, '>');
 }
 
 function testOpenBlank() {
-  if (!canOpenPopups()) {
-    return;
-  }
   newWin = goog.window.openBlank('Loading...');
   asyncTestCase.waitForAsync('Waiting for temp window to open and load.');
   var urlParam = 'bogus~';
@@ -220,7 +274,7 @@ function testOpenBlank() {
 
 
 function testOpenIosBlank() {
-  if (!goog.userAgent.WEBKIT || !window.navigator) {
+  if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
     // Don't even try this on IE8!
     return;
   }
@@ -263,7 +317,7 @@ function testOpenIosBlank() {
 
 
 function testOpenIosBlankNoreferrer() {
-  if (!goog.userAgent.WEBKIT || !window.navigator) {
+  if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
     // Don't even try this on IE8!
     return;
   }
@@ -303,10 +357,4 @@ function testOpenIosBlankNoreferrer() {
   // Click event.
   assertNotNull(dispatchedEvent);
   assertEquals('click', dispatchedEvent.type);
-}
-
-
-/** @this {Element} */
-function stripReferrer() {
-  goog.window.open(this.href, {'noreferrer': true});
 }
