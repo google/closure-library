@@ -387,12 +387,18 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
  * others.
  * @param {string} htmlPattern The pattern to match.
  * @param {string} actual The html to check.
+ * @param {boolean=} opt_strictAttributes If false, attributes that appear in
+ *     htmlPattern must be in actual, but actual can have attributes not
+ *     present in htmlPattern. If true, htmlPattern and actual must have the
+ *     same set of attributes. Default is false.
  */
-goog.testing.dom.assertHtmlMatches = function(htmlPattern, actual) {
+goog.testing.dom.assertHtmlMatches = function(htmlPattern, actual,
+    opt_strictAttributes) {
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.innerHTML = actual;
 
-  goog.testing.dom.assertHtmlContentsMatch(htmlPattern, div);
+  goog.testing.dom.assertHtmlContentsMatch(
+      htmlPattern, div, opt_strictAttributes);
 };
 
 
