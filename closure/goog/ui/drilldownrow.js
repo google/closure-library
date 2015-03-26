@@ -64,6 +64,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
+goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.ui.Component');
@@ -88,17 +89,16 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
   // Initialize instance variables.
 
   var html;
-  if (properties.html instanceof goog.html.SafeHtml) {
-    html = goog.html.SafeHtml.unwrap(properties.html);
-  } else if (!properties.html) {
-    html = '';
+  if (!goog.isDefAndNotNull(properties.html)) {
+    html = goog.html.SafeHtml.EMPTY;
   } else {
+    goog.asserts.assert(properties.html instanceof goog.html.SafeHtml);
     html = properties.html;
   }
   /**
    * String of HTML to initialize the DOM structure for the table row.
    * Should have the form '<tr attr="etc">Row contents here</tr>'.
-   * @type {string}
+   * @type {!goog.html.SafeHtml}
    * @private
    */
   this.html_ = html;
@@ -131,9 +131,6 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
 goog.inherits(goog.ui.DrilldownRow, goog.ui.Component);
 
 
-// TODO(user): Change DrilldownRowProperties to not accept html as string
-// once users are moved over to unsafeCreate(). Then remove from file from
-// Conformance innerHTML whitelist.
 /**
  * Used to define properties for a new DrilldownRow. Properties can contain:
  *   loaded: initializes the isLoaded property, defaults to true.
@@ -146,7 +143,7 @@ goog.inherits(goog.ui.DrilldownRow, goog.ui.Component);
  * @typedef {{
  *   loaded: (boolean|undefined),
  *   expanded: (boolean|undefined),
- *   html: (string|!goog.html.SafeHtml|undefined),
+ *   html: (!goog.html.SafeHtml|undefined),
  *   decorator: (Function|undefined)
  * }}
  */
@@ -197,7 +194,10 @@ goog.ui.DrilldownRow.unsafeCreate = function(opt_properties, opt_domHelper) {
  * these properties can be set so it doesn't emit warnings.
  */
 goog.ui.DrilldownRow.sampleProperties = {
-  html: '<tr><td>Sample</td><td>Sample</td></tr>',
+  html: goog.html.SafeHtml.create(goog.dom.TagName.TR, {},
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, 'Sample'),
+          goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, 'Sample'))),
   loaded: true,
   decorator: function(selfObj, handler) {
     // When the mouse is hovering, add CSS class goog-drilldown-hover.
@@ -490,16 +490,16 @@ goog.ui.DrilldownRow.prototype.isVisible_ = function() {
  * Create and return a TR element from HTML that looks like
  * "<tr> ... </tr>".
  *
- * @param {string} html for one row.
+ * @param {!goog.html.SafeHtml} html for one row.
  * @param {Document} doc object to hold the Element.
  * @return {Element} table row node created from the HTML.
  * @private
  */
 goog.ui.DrilldownRow.createRowNode_ = function(html, doc) {
   // Note: this may be slow.
-  var tableHtml = '<table>' + html + '</table>';
+  var tableHtml = goog.html.SafeHtml.create(goog.dom.TagName.TABLE, {}, html);
   var div = doc.createElement(goog.dom.TagName.DIV);
-  div.innerHTML = tableHtml;
+  goog.dom.safe.setInnerHtml(div, tableHtml);
   return div.firstChild.rows[0];
 };
 
