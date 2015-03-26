@@ -30,6 +30,8 @@ goog.provide('goog.ui.Popup.ViewPortPosition');
 
 goog.require('goog.math.Box');
 goog.require('goog.positioning.AbsolutePosition');
+/** @suppress {extraRequire} */
+goog.require('goog.positioning.AbstractPosition');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.ClientPosition');
