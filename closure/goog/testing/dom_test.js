@@ -432,3 +432,10 @@ function testAssertHtmlMatches() {
   });
   assertContains('Text should match', e.message);
 }
+
+
+function testAssertHtmlMatchesWithSvgAttributes() {
+  goog.testing.dom.assertHtmlMatches(
+      '<svg height="10px"></svg>',
+      '<svg height="10px"></svg>');
+}

@@ -523,8 +523,9 @@ goog.testing.dom.assertAttributesEqual_ = function(errorSuffix,
         actualAttribute);
     assertEquals('Expected attribute ' + expectedName +
         ' has a different value ' + errorSuffix,
-        expectedValue,
-        goog.testing.dom.getAttributeValue_(actualElem, actualAttribute.name));
+        String(expectedValue),
+        String(goog.testing.dom.getAttributeValue_(
+            actualElem, actualAttribute.name)));
   }
 
   if (strictAttributes) {
