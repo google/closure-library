@@ -19,7 +19,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
-goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
@@ -107,8 +106,12 @@ function continueAfterWindowLoaded(continueFn, opt_numTries) {
  * @param {string} urlParam Url param to append to the url being opened.
  */
 function doTestOpenWindow(noreferrer, urlParam) {
+  // TODO(user): target is set because goog.window.open() will currently
+  // allow it to be undefined, which in IE seems to result in the same window
+  // being reused, instead of a new one being created. If goog.window.open()
+  // is fixed to use "_self" by default then target can be removed here.
   newWin = goog.window.open(REDIRECT_URL_PREFIX + urlParam,
-                            {'noreferrer': noreferrer});
+                            {'noreferrer': noreferrer, 'target': '_self'});
   if (!newWin) {
     fail('Could not open new window. Check if popup blocker is enabled.');
   }
@@ -138,125 +141,53 @@ function continueTestOpenWindow(noreferrer, urlParam) {
 
 
 function testOpenNotEncoded() {
-  // TODO(user): Fix. "Permission denied" on IE. Error only happens
-  // sometimes, perhaps a race condition.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(false, 'bogus~');
 }
 
 function testOpenEncoded() {
-  // TODO(user): Fix. "Permission denied" on IE 11.
-  if (goog.labs.userAgent.browser.isIE() &&
-      goog.labs.userAgent.browser.isVersionOrHigher(11)) {
-    return;
-  }
-
   doTestOpenWindow(false, 'bogus%7E');
 }
 
 function testOpenEncodedPercent() {
-  // TODO(user): Fix. Results in bogus~ instead of bogus%7E on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
   doTestOpenWindow(false, 'bogus%257E');
 }
 
 function testOpenNotEncodedHidingReferrer() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, 'bogus~');
 }
 
 function testOpenEncodedHidingReferrer() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, 'bogus%7E');
 }
 
 function testOpenEncodedPercentHidingReferrer() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
   doTestOpenWindow(true, 'bogus%257E');
 }
 
 function testOpenSemicolon() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, 'beforesemi;aftersemi');
 }
 
 function testTwoSemicolons() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, 'a;b;c');
 }
 
 function testOpenAmpersand() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, 'this&that');
 }
 
 function testOpenSingleQuote() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, "'");
 }
 
 function testOpenDoubleQuote() {
-  // TODO(user): Fix. "Permission denied" on IE. Also IE won't encode
-  // " and Closure test server will fail with 400 when seeing it.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, '"');
 }
 
 function testOpenTag() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
   doTestOpenWindow(true, '<');
-}
-
-function testCloseTag() {
-  // TODO(user): Fix. "Permission denied" on IE.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  doTestOpenWindow(true, '>');
 }
 
 function testOpenBlank() {
