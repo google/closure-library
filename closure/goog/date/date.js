@@ -477,6 +477,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
  * @param {number=} opt_minutes Minutes.
  * @param {number=} opt_seconds Seconds.
  * @constructor
+ * @struct
  * @final
  */
 goog.date.Interval = function(opt_years, opt_months, opt_days, opt_hours,
@@ -748,6 +749,7 @@ goog.date.Interval.prototype.add = function(interval) {
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @constructor
+ * @struct
  * @see goog.date.DateTime
  */
 goog.date.Date = function(opt_year, opt_month, opt_date) {
@@ -1328,6 +1330,7 @@ goog.date.Date.compare = function(date1, date2) {
  * @param {number=} opt_seconds Seconds, 0 - 61.
  * @param {number=} opt_milliseconds Milliseconds, 0 - 999.
  * @constructor
+ * @struct
  * @extends {goog.date.Date}
  */
 goog.date.DateTime = function(opt_year, opt_month, opt_date, opt_hours,
