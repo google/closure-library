@@ -57,11 +57,27 @@ global.goog = {};
  * @param {string} src The script source.
  * @return {boolean} True if the script was imported, false otherwise.
  */
-global.CLOSURE_IMPORT_SCRIPT = function(src) {
+global.CLOSURE_IMPORT_SCRIPT = function(src, opt_sourceText) {
   // Sources are always expressed relative to closure's base.js, but
   // require() is always relative to the current source.
-  require('./../' + src);
+  if (opt_sourceText === undefined) {
+      require('./../' + src);
+  } else {
+      eval(opt_sourceText);
+  }
   return true;
+};
+
+
+/**
+ * Loads a file when using Closure's goog.require() API with goog.modules.
+ *
+ * @param {string} src The file source.
+ * @return {string} The file contents.
+ */
+
+global.CLOSURE_LOAD_FILE_SYNC = function(src) {
+  return fs.readFileSync(path.resolve(__dirname,'..', src), { encoding: "utf-8" });
 };
 
 
