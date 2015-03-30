@@ -16,6 +16,7 @@ goog.provide('goog.ui.NativeButtonRendererTest');
 goog.setTestOnly('goog.ui.NativeButtonRendererTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.testing.ExpectedFailures');
@@ -61,7 +62,8 @@ function testCreateDom() {
   button.setValue('foo');
   var element = renderer.createDom(button);
   assertNotNull('Element must not be null', element);
-  assertEquals('Element must be a button', 'BUTTON', element.tagName);
+  assertEquals('Element must be a button',
+      goog.dom.TagName.BUTTON, element.tagName);
   assertSameElements('Button element must have expected class name',
       ['goog-button'], goog.dom.classlist.get(element));
   assertFalse('Button element must be enabled', element.disabled);

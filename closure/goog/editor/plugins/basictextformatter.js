@@ -1181,8 +1181,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
         }
       }
 
-      var bqThatNeedsDummyDiv =
-          bq || goog.dom.getAncestorByTagNameAndClass(parent, 'BLOCKQUOTE');
+      var bqThatNeedsDummyDiv = bq || goog.dom.getAncestorByTagNameAndClass(
+          parent, goog.dom.TagName.BLOCKQUOTE);
       if (bqThatNeedsDummyDiv) {
         endDiv = dh.createDom(goog.dom.TagName.DIV, {style: 'height:0'});
         goog.dom.appendChild(bqThatNeedsDummyDiv, endDiv);

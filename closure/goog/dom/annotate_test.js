@@ -126,7 +126,7 @@ function testAnnotateTermsInTable() {
   assertEquals('pig', spans[0].innerHTML);
   assertEquals('gy', spans[0].nextSibling.nodeValue);
   assertEquals('pig', spans[1].innerHTML);
-  assertEquals('I', spans[1].parentNode.tagName);
+  assertEquals(goog.dom.TagName.I, spans[1].parentNode.tagName);
 }
 
 function testAnnotateTermsWithClassExclusions() {
