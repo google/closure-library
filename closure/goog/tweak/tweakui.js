@@ -528,7 +528,8 @@ goog.tweak.EntriesPanel.prototype.createEntryElem_ = function(entry) {
       goog.tweak.TweakUi.ENTRY_CSS_CLASSES_;
   // Containers should not use label tags or else all descendent inputs will be
   // connected on desktop browsers.
-  var containerNodeName = isGroupEntry ? 'span' : 'label';
+  var containerNodeName = isGroupEntry ?
+      goog.dom.TagName.SPAN : goog.dom.TagName.LABEL;
   var ret = dh.createDom(goog.dom.TagName.DIV, classes,
       dh.createDom(containerNodeName, {
         // Make the hover text the description.

@@ -910,7 +910,7 @@ function testNormalizeNode() {
   assertEquals(1, div.firstChild.childNodes.length);
   assertEquals('12', div.firstChild.firstChild.nodeValue);
   assertEquals('bc', div.lastChild.nodeValue);
-  assertEquals('BR', div.lastChild.previousSibling.tagName);
+  assertEquals(goog.dom.TagName.BR, div.lastChild.previousSibling.tagName);
 }
 
 function testDeepestPoint() {

@@ -88,7 +88,8 @@ goog.dom.annotate.MAX_RECURSION_ = 200;
  * The node types whose descendants should not be affected by annotation.
  * @private {Array<string>}
  */
-goog.dom.annotate.NODES_TO_SKIP_ = ['SCRIPT', 'STYLE', 'TEXTAREA'];
+goog.dom.annotate.NODES_TO_SKIP_ = [
+  goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE, goog.dom.TagName.TEXTAREA];
 
 
 /**

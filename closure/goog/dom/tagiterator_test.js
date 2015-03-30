@@ -65,47 +65,47 @@ function testBasicHTML() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
-        assertStartTag('A');
+        assertStartTag(goog.dom.TagName.A);
         break;
       case 3:
         assertTextNode('T');
         break;
       case 4:
-        assertStartTag('B');
+        assertStartTag(goog.dom.TagName.B);
         assertEquals('Depth at <B> should be 3', 3, it.depth);
         break;
       case 5:
         assertTextNode('e');
         break;
       case 6:
-        assertEndTag('B');
+        assertEndTag(goog.dom.TagName.B);
         break;
       case 7:
         assertTextNode('xt');
         break;
       case 8:
-        assertEndTag('A');
+        assertEndTag(goog.dom.TagName.A);
         break;
       case 9:
-        assertStartTag('SPAN');
+        assertStartTag(goog.dom.TagName.SPAN);
         break;
       case 10:
-        assertEndTag('SPAN');
+        assertEndTag(goog.dom.TagName.SPAN);
         break;
       case 11:
-        assertStartTag('P');
+        assertStartTag(goog.dom.TagName.P);
         break;
       case 12:
         assertTextNode('Text');
         break;
       case 13:
-        assertEndTag('P');
+        assertEndTag(goog.dom.TagName.P);
         break;
       case 14:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         assertEquals('Depth at end should be 0', 0, it.depth);
         break;
       default:
@@ -122,29 +122,29 @@ function testSkipTag() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
-        assertStartTag('A');
+        assertStartTag(goog.dom.TagName.A);
         it.skipTag();
         break;
       case 3:
-        assertStartTag('SPAN');
+        assertStartTag(goog.dom.TagName.SPAN);
         break;
       case 4:
-        assertEndTag('SPAN');
+        assertEndTag(goog.dom.TagName.SPAN);
         break;
       case 5:
-        assertStartTag('P');
+        assertStartTag(goog.dom.TagName.P);
         break;
       case 6:
         assertTextNode('Text');
         break;
       case 7:
-        assertEndTag('P');
+        assertEndTag(goog.dom.TagName.P);
         break;
       case 8:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         assertEquals('Depth at end should be 0', 0, it.depth);
         break;
       default:
@@ -162,29 +162,29 @@ function testRestartTag() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
-        assertStartTag('A');
+        assertStartTag(goog.dom.TagName.A);
         it.skipTag();
         break;
       case 3:
-        assertStartTag('SPAN');
+        assertStartTag(goog.dom.TagName.SPAN);
         break;
       case 4:
-        assertEndTag('SPAN');
+        assertEndTag(goog.dom.TagName.SPAN);
         break;
       case 5:
-        assertStartTag('P');
+        assertStartTag(goog.dom.TagName.P);
         break;
       case 6:
         assertTextNode('Text');
         break;
       case 7:
-        assertEndTag('P');
+        assertEndTag(goog.dom.TagName.P);
         break;
       case 8:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         assertEquals('Depth at end should be 0', 0, it.depth);
 
         // Do them all again, starting after this element.
@@ -209,30 +209,30 @@ function testSkipTagReverse() {
     pos--;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         assertEquals('Depth at end should be 0', 0, it.depth);
         break;
       case 2:
-        assertEndTag('A');
+        assertEndTag(goog.dom.TagName.A);
         it.skipTag();
         break;
       case 3:
-        assertStartTag('SPAN');
+        assertStartTag(goog.dom.TagName.SPAN);
         break;
       case 4:
-        assertEndTag('SPAN');
+        assertEndTag(goog.dom.TagName.SPAN);
         break;
       case 5:
-        assertStartTag('P');
+        assertStartTag(goog.dom.TagName.P);
         break;
       case 6:
         assertTextNode('Text');
         break;
       case 7:
-        assertEndTag('P');
+        assertEndTag(goog.dom.TagName.P);
         break;
       case 8:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         break;
       default:
         throw goog.iter.StopIteration;
@@ -249,30 +249,30 @@ function testUnclosedLI() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('UL');
+        assertStartTag(goog.dom.TagName.UL);
         break;
       case 2:
-        assertStartTag('LI');
+        assertStartTag(goog.dom.TagName.LI);
         assertEquals('Depth at <LI> should be 2', 2, it.depth);
         break;
       case 3:
         assertTextNode('Not');
         break;
       case 4:
-        assertEndTag('LI');
+        assertEndTag(goog.dom.TagName.LI);
         break;
       case 5:
-        assertStartTag('LI');
+        assertStartTag(goog.dom.TagName.LI);
         assertEquals('Depth at second <LI> should be 2', 2, it.depth);
         break;
       case 6:
         assertTextNode('Closed');
         break;
       case 7:
-        assertEndTag('LI');
+        assertEndTag(goog.dom.TagName.LI);
         break;
       case 8:
-        assertEndTag('UL');
+        assertEndTag(goog.dom.TagName.UL);
         assertEquals('Depth at end should be 0', 0, it.depth);
         break;
       default:
@@ -289,31 +289,31 @@ function testReversedUnclosedLI() {
     pos--;
     switch (pos) {
       case 1:
-        assertStartTag('UL');
+        assertStartTag(goog.dom.TagName.UL);
         assertEquals('Depth at start should be 0', 0, it.depth);
         break;
       case 2:
-        assertStartTag('LI');
+        assertStartTag(goog.dom.TagName.LI);
         break;
       case 3:
         assertTextNode('Not');
         break;
       case 4:
-        assertEndTag('LI');
+        assertEndTag(goog.dom.TagName.LI);
         assertEquals('Depth at <LI> should be 2', 2, it.depth);
         break;
       case 5:
-        assertStartTag('LI');
+        assertStartTag(goog.dom.TagName.LI);
         break;
       case 6:
         assertTextNode('Closed');
         break;
       case 7:
-        assertEndTag('LI');
+        assertEndTag(goog.dom.TagName.LI);
         assertEquals('Depth at second <LI> should be 2', 2, it.depth);
         break;
       case 8:
-        assertEndTag('UL');
+        assertEndTag(goog.dom.TagName.UL);
         break;
       default:
         throw goog.iter.StopIteration;
@@ -329,13 +329,13 @@ function testConstrained() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
         assertTextNode('text');
         break;
       case 3:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         break;
     }
   });
@@ -351,13 +351,13 @@ function testUnconstrained() {
     pos++;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
         assertTextNode('text');
         break;
       case 3:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         break;
     }
   });
@@ -392,13 +392,13 @@ function testReverseConstrained() {
     pos--;
     switch (pos) {
       case 1:
-        assertStartTag('DIV');
+        assertStartTag(goog.dom.TagName.DIV);
         break;
       case 2:
         assertTextNode('text');
         break;
       case 3:
-        assertEndTag('DIV');
+        assertEndTag(goog.dom.TagName.DIV);
         break;
     }
   });

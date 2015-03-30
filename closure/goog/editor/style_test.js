@@ -45,16 +45,16 @@ var $text = goog.dom.createTextNode;
 
 function setUpGetNodeFunctions() {
   parentNode = $dom(
-      'p', {id: 'parentNode'},
-      childNode1 = $dom('div', null,
+      goog.dom.TagName.P, {id: 'parentNode'},
+      childNode1 = $dom(goog.dom.TagName.DIV, null,
           gChildWsNode1 = $text(' \t\r\n'),
           gChildTextNode1 = $text('Child node'),
           gChildNbspNode1 = $text('\u00a0'),
           gChildMixedNode1 = $text('Text\n plus\u00a0')),
-      childNode2 = $dom('div', null,
+      childNode2 = $dom(goog.dom.TagName.DIV, null,
           gChildWsNode2a = $text(''),
           gChildWsNode2b = $text(' ')),
-      childNode3 = $dom('div', null,
+      childNode3 = $dom(goog.dom.TagName.DIV, null,
           gChildTextNode3a = $text('I am a grand child'),
           gChildWsNode3 = $text('   \t  \r   \n'),
           gChildTextNode3b = $text('I am also a grand child')));
@@ -87,7 +87,7 @@ function tearDownGetNodeFunctions() {
 function testIsDisplayBlock() {
   assertTrue('Body is block style',
       goog.editor.style.isDisplayBlock(document.body));
-  var tableNode = $dom('table');
+  var tableNode = $dom(goog.dom.TagName.TABLE);
   assertFalse('Table is not block style',
       goog.editor.style.isDisplayBlock(tableNode));
 }
@@ -98,8 +98,8 @@ function testIsDisplayBlock() {
  * false when it is not
  */
 function testIsContainer() {
-  var tableNode = $dom('table');
-  var liNode = $dom('li');
+  var tableNode = $dom(goog.dom.TagName.TABLE);
+  var liNode = $dom(goog.dom.TagName.LI);
   var textNode = $text('I am text');
   document.body.appendChild(textNode);
 

@@ -16,6 +16,7 @@ goog.provide('goog.ui.ColorPaletteTest');
 goog.setTestOnly('goog.ui.ColorPaletteTest');
 
 goog.require('goog.color');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ColorPalette');
 
@@ -135,7 +136,7 @@ function testRender() {
 
   var elem = samplePalette.getElement();
   assertNotNull(elem);
-  assertEquals('DIV', elem.tagName);
+  assertEquals(goog.dom.TagName.DIV, elem.tagName);
   assertEquals('goog-palette', elem.className);
 
   var table = elem.firstChild;

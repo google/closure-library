@@ -671,7 +671,7 @@ function testSomeSet2() {
 }
 
 function testSomeNodeList() {
-  var tagName = 'P';
+  var tagName = goog.dom.TagName.P;
   var col = getAll();
   function f(v, i, col2) {
     assertEquals(col, col2);
@@ -685,7 +685,7 @@ function testSomeNodeList() {
 
 function testSomeNodeList2() {
   var THIS_OBJ = {};
-  var tagName = 'P';
+  var tagName = goog.dom.TagName.P;
   var col = getAll();
   function f(v, i, col2) {
     assertEquals(col, col2);
