@@ -167,6 +167,8 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.safe');
+/** @suppress {extraRequire} */
+goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
