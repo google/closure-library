@@ -39,7 +39,10 @@
 
 goog.provide('goog.ui.PopupMenu');
 
+goog.require('goog.events');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.MenuAnchoredPosition');
@@ -178,6 +181,54 @@ goog.ui.PopupMenu.prototype.attach = function(
   if (this.isInDocument()) {
     this.attachEvent_(target);
   }
+
+  // Add a listener for keyboard actions on the menu.
+  var handler = goog.partial(this.onMenuKeyboardAction_, element);
+  if (this.getElement()) {
+    this.getHandler().listen(this.getElement(), goog.events.EventType.KEYDOWN,
+        handler);
+  }
+};
+
+
+/**
+ * Handles keyboard actions on the PopupMenu, according to
+ * http://www.w3.org/WAI/PF/aria-practices/#menubutton.
+ *
+ * <p>If the ESC key is pressed, the menu is hidden (which is handled by
+ * this.onAction_), and the focus is returned to the element whose click event
+ * triggered opening of the menu.
+ *
+ * <p>If the SPACE or ENTER keys are pressed, the highlighted menu item's
+ * listeners are fired.
+ *
+ * @param {Element} element Element whose click event triggered the menu.
+ * @param {goog.events.BrowserEvent} e The key down event.
+ * @private
+ */
+goog.ui.PopupMenu.prototype.onMenuKeyboardAction_ = function(element, e) {
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
+    element.focus();
+    return;
+  }
+  var highlightedItem = this.getItemAt(this.getHighlightedIndex());
+  var targetElement = highlightedItem.getElement();
+  // Create an event to pass to the menu item's listener.
+  var event = new goog.events.BrowserEvent(e.getBrowserEvent(), targetElement);
+  event.target = targetElement;
+  // If an item is highlighted and the user presses the SPACE/ENTER key, the
+  // event target is the menu rather than the menu item, so we manually fire
+  // the listener of the correct menu item.
+  if (e.keyCode == goog.events.KeyCodes.SPACE ||
+      e.keyCode == goog.events.KeyCodes.ENTER) {
+    goog.events.fireListeners(targetElement,
+        goog.events.EventType.KEYDOWN, false, event);
+  }
+  // After activating a menu item the PopupMenu should be hidden (already
+  // implemented in this.onAction_ for ENTER/MOUSEDOWN).
+  if (e.keyCode == goog.events.KeyCodes.SPACE) {
+    this.hide();
+  }
 };
 
 
@@ -268,13 +319,17 @@ goog.ui.PopupMenu.prototype.getAttachedElement = function() {
 
 
 /**
- * Attaches an event listener to a target
+ * Attaches two event listeners to a target. One with corresponding event type,
+ * and one with the KEYDOWN event type for accessibility purposes.
  * @param {?Object} target The target to attach an event to.
  * @private
  */
 goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
   this.getHandler().listen(
       target.element_, target.eventType_, this.onTargetClick_);
+  this.getHandler().listen(
+      target.element_, goog.events.EventType.KEYDOWN,
+      this.onTargetKeyboardAction_);
 };
 
 
@@ -501,11 +556,40 @@ goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
 
 
 /**
- * Handles a browser event on one of the popup targets
+ * Handles a browser click event on one of the popup targets.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
  */
 goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
+  this.onTargetActivation_(e);
+};
+
+
+/**
+ * Handles a KEYDOWN browser event on one of the popup targets.
+ * @param {goog.events.BrowserEvent} e The browser event.
+ * @private
+ */
+goog.ui.PopupMenu.prototype.onTargetKeyboardAction_ = function(e) {
+  if (e.keyCode == goog.events.KeyCodes.SPACE ||
+      e.keyCode == goog.events.KeyCodes.ENTER ||
+      e.keyCode == goog.events.KeyCodes.DOWN) {
+    this.onTargetActivation_(e);
+  }
+  // If the popupmenu is opened using the DOWN key, the focus should be on the
+  // first menu item.
+  if (e.keyCode == goog.events.KeyCodes.DOWN) {
+    this.highlightFirst();
+  }
+};
+
+
+/**
+ * Handles a browser event on one of the popup targets.
+ * @param {goog.events.BrowserEvent} e The browser event.
+ * @private
+ */
+goog.ui.PopupMenu.prototype.onTargetActivation_ = function(e) {
   var keys = this.targets_.getKeys();
   for (var i = 0; i < keys.length; i++) {
     var target = /** @type {!Object} */(this.targets_.get(keys[i]));

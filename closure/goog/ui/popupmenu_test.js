@@ -18,16 +18,20 @@ goog.setTestOnly('goog.ui.PopupMenuTest');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.positioning.Corner');
 goog.require('goog.style');
+goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.PopupMenu');
 
 var anchor;
+var menu;
+var menuitem;
 
 // Event handler
 var handler;
@@ -37,9 +41,11 @@ var popup;
 
 function setUp() {
   anchor = goog.dom.getElement('popup-anchor');
+  menu = goog.dom.getElement('menu');
+  menuitem1 = goog.dom.getElement('menuitem_1');
+  menuitem3 = goog.dom.getElement('menuitem_3');
   handler = new goog.events.EventHandler();
   popup = new goog.ui.PopupMenu();
-  popup.render();
 }
 
 function tearDown() {
@@ -81,6 +87,7 @@ function assertTarget(target, expectedElement, expectedTargetCorner,
  * Test menu receives BEFORE_SHOW event before it's displayed.
  */
 function testBeforeShowEvent() {
+  popup.render();
   var target = popup.createAttachTarget(anchor);
   popup.attach(anchor);
 
@@ -131,6 +138,7 @@ function testBeforeShowEvent() {
  * Test the behavior of {@link PopupMenu.isAttachTarget}.
  */
 function testIsAttachTarget() {
+  popup.render();
   // Before 'attach' is called.
   assertFalse('Menu should not be attached to the element',
       popup.isAttachTarget(anchor));
@@ -180,6 +188,7 @@ function testCreateAttachTarget() {
  * Tests the behavior of {@link PopupMenu.getAttachTarget}.
  */
 function testGetAttachTarget() {
+  popup.render();
   // Before the menu is attached to the anchor.
   var target = popup.getAttachTarget(anchor);
   assertTrue('Not expecting a target before the element is attach to the menu',
@@ -202,6 +211,7 @@ function testGetAttachTarget() {
 }
 
 function testSmallViewportSliding() {
+  popup.render();
   popup.getElement().style.position = 'absolute';
   popup.getElement().style.outline = '1px solid blue';
   var item = new goog.ui.MenuItem('Test Item');
@@ -310,4 +320,89 @@ function testSmallViewportSliding() {
       'Popup in wrong position: small size, leftward pos, with target corner',
       new goog.math.Coordinate(24, 24),
       goog.style.getPosition(popup.getElement()));
+}
+
+
+/**
+ * Tests that the menu is shown if the SPACE or ENTER keys are pressed, and that
+ * none of the menu items are highlighted (PopupMenu.highlightedIndex == -1).
+ */
+function testKeyboardEventsShowMenu() {
+  popup.decorate(menu);
+  popup.attach(anchor);
+  popup.hide();
+  assertFalse(popup.isVisible());
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.SPACE);
+  assertTrue(popup.isVisible());
+  assertEquals(-1, popup.getHighlightedIndex());
+  popup.hide();
+  assertFalse(popup.isVisible());
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.ENTER);
+  assertTrue(popup.isVisible());
+  assertEquals(-1, popup.getHighlightedIndex());
+}
+
+
+/**
+ * Tests that the menu is shown and the first item is highlighted if the DOWN
+ * key is pressed.
+ */
+function testDownKey() {
+  popup.decorate(menu);
+  popup.attach(anchor);
+  popup.hide();
+  assertFalse(popup.isVisible());
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  assertTrue(popup.isVisible());
+  assertEquals(0, popup.getHighlightedIndex());
+}
+
+
+/**
+ * Tests activation of menu items by keyboard.
+ */
+function testMenuItemKeyboardActivation() {
+  popup.decorate(menu);
+  popup.attach(anchor);
+  // Check that if the ESC key is pressed the focus is on
+  // the anchor element.
+  goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.ESC);
+  assertEquals(anchor, document.activeElement);
+
+  var menuitemListenerFired = false;
+  function onMenuitemAction(event) {
+    if (event.keyCode == goog.events.KeyCodes.SPACE ||
+        event.keyCode == goog.events.KeyCodes.ENTER) {
+      menuitemListenerFired = true;
+    }
+  };
+  handler.listen(menuitem1,
+      goog.events.EventType.KEYDOWN,
+      onMenuitemAction);
+  // Simulate opening a menu using the DOWN key, and pressing the SPACE/ENTER
+  // key in order to activate the first menuitem.
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SPACE);
+  assertTrue(menuitemListenerFired);
+  menuitemListenerFired = false;
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.ENTER);
+  assertTrue(menuitemListenerFired);
+  // Make sure the menu item's listener doesn't fire for any key.
+  menuitemListenerFired = false;
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SHIFT);
+  assertFalse(menuitemListenerFired);
+
+  // Simulate opening menu and moving down to the third menu item using the
+  // DOWN key, and then activating it using the SPACE key.
+  menuitemListenerFired = false;
+  handler.listen(menuitem3,
+      goog.events.EventType.KEYDOWN,
+      onMenuitemAction);
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SPACE);
+  assertTrue(menuitemListenerFired);
 }
