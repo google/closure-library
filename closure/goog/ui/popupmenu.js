@@ -350,7 +350,7 @@ goog.ui.PopupMenu.prototype.detachAll = function() {
 
 /**
  * Detaches a menu from a given element.
- * @param {!Element} element Element whose click event should trigger the menu.
+ * @param {?Element} element Element whose click event should trigger the menu.
  */
 goog.ui.PopupMenu.prototype.detach = function(element) {
   if (!this.isAttachTarget(element)) {
@@ -398,7 +398,7 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
 
 /**
  * Show the menu using given positioning object.
- * @param {!goog.positioning.AbstractPosition} position The positioning
+ * @param {?goog.positioning.AbstractPosition} position The positioning
  *     instance.
  * @param {goog.positioning.Corner=} opt_menuCorner The corner of the menu to be
  *     positioned.
@@ -557,7 +557,7 @@ goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
 
 /**
  * Handles a browser click event on one of the popup targets.
- * @param {!goog.events.BrowserEvent} e The browser event.
+ * @param {?goog.events.BrowserEvent} e The browser event.
  * @private
  */
 goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
