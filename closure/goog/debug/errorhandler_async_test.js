@@ -15,16 +15,19 @@
 goog.provide('goog.debug.ErrorHandlerAsyncTest');
 goog.setTestOnly('goog.debug.ErrorHandlerAsyncTest');
 
+goog.require('goog.Promise');
 goog.require('goog.debug.ErrorHandler');
-goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var testCase = new goog.testing.AsyncTestCase(document.title);
+
+/** @type {!goog.promise.Resolver} */
+var resolver;
+var testCase = new goog.testing.TestCase(document.title);
 
 testCase.setUpPage = function() {
-  this.waitForAsync('setUpPage');
-  this.stepTimeout = 5 * 1000;
+  resolver = goog.Promise.withResolver();
 
   this.oldTimeout = window.setTimeout;
   this.oldInterval = window.setInterval;
@@ -64,7 +67,7 @@ testCase.onException = function(e) {
   this.exceptions.push(e);
   if (this.timeoutHit && this.intervalHit &&
       (!this.testingReqAnimFrame || this.animFrameHit)) {
-    this.continueTesting();
+    resolver.resolve();
   }
 };
 
@@ -90,31 +93,33 @@ testCase.animFrame = function() {
 };
 
 testCase.addNewTest('testResults', function() {
-  var timeoutHit, intervalHit, animFrameHit;
+  return resolver.promise.then(function() {
+    var timeoutHit, intervalHit, animFrameHit;
 
-  for (var i = 0; i < this.exceptions.length; ++i) {
-    switch (this.exceptions[i]) {
-      case this.timeOut: timeoutHit = true; break;
-      case this.interval: intervalHit = true; break;
-      case this.animFrame: animFrameHit = true; break;
+    for (var i = 0; i < this.exceptions.length; ++i) {
+      switch (this.exceptions[i]) {
+        case this.timeOut: timeoutHit = true; break;
+        case this.interval: intervalHit = true; break;
+        case this.animFrame: animFrameHit = true; break;
+      }
     }
-  }
 
-  assertTrue('timeout exception not received', timeoutHit);
-  assertTrue('timeout not called', this.timeoutHit);
-  assertTrue('interval exception not received', intervalHit);
-  assertTrue('interval not called', this.intervalHit);
-  if (this.testingReqAnimFrame) {
-    assertTrue('anim frame exception not received', animFrameHit);
-    assertTrue('animFrame not called', this.animFrameHit);
-  }
+    assertTrue('timeout exception not received', timeoutHit);
+    assertTrue('timeout not called', this.timeoutHit);
+    assertTrue('interval exception not received', intervalHit);
+    assertTrue('interval not called', this.intervalHit);
+    if (this.testingReqAnimFrame) {
+      assertTrue('anim frame exception not received', animFrameHit);
+      assertTrue('animFrame not called', this.animFrameHit);
+    }
 
-  if (!goog.userAgent.WEBKIT) {
-    var expectedRethrownCount = this.testingReqAnimFrame ? 3 : 2;
-    assertEquals(
-        expectedRethrownCount + ' exceptions should have been rethrown',
-        expectedRethrownCount, this.errors);
-  }
+    if (!goog.userAgent.WEBKIT) {
+      var expectedRethrownCount = this.testingReqAnimFrame ? 3 : 2;
+      assertEquals(
+          expectedRethrownCount + ' exceptions should have been rethrown',
+          expectedRethrownCount, this.errors);
+    }
+  }, null, this);
 });
 
 // Standalone Closure Test Runner.
