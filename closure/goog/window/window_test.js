@@ -19,6 +19,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
@@ -104,14 +105,21 @@ function continueAfterWindowLoaded(continueFn, opt_numTries) {
  * is hidden if requested and the url is properly encoded/decoded.
  * @param {boolean} noreferrer Whether to test the noreferrer option.
  * @param {string} urlParam Url param to append to the url being opened.
+ * @param {boolean} encodeUrlParam_opt Whether to percent-encode urlParam. This
+ *     is needed because IE will not encode it automatically like other browsers
+ *     browser and the Closure test server will 400 on certain characters in
+ *     the URL (like '<' and '"').
  */
-function doTestOpenWindow(noreferrer, urlParam) {
+function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
+  if (encodeUrlParam_opt) {
+    urlParam = encodeURIComponent(urlParam);
+  }
   // TODO(user): target is set because goog.window.open() will currently
   // allow it to be undefined, which in IE seems to result in the same window
   // being reused, instead of a new one being created. If goog.window.open()
-  // is fixed to use "_self" by default then target can be removed here.
+  // is fixed to use "_blank" by default then target can be removed here.
   newWin = goog.window.open(REDIRECT_URL_PREFIX + urlParam,
-                            {'noreferrer': noreferrer, 'target': '_self'});
+                            {'noreferrer': noreferrer, 'target': '_blank'});
   if (!newWin) {
     fail('Could not open new window. Check if popup blocker is enabled.');
   }
@@ -183,11 +191,20 @@ function testOpenSingleQuote() {
 }
 
 function testOpenDoubleQuote() {
-  doTestOpenWindow(true, '"');
+  if (goog.labs.userAgent.browser.isIE()) {
+    doTestOpenWindow(true, '"', true);
+  } else {
+    doTestOpenWindow(true, '"', false);
+  }
+
 }
 
 function testOpenTag() {
-  doTestOpenWindow(true, '<');
+  if (goog.labs.userAgent.browser.isIE()) {
+    doTestOpenWindow(true, '<', true);
+  } else {
+    doTestOpenWindow(true, '<', false);
+  }
 }
 
 function testOpenBlank() {
