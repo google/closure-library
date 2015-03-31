@@ -211,7 +211,7 @@ goog.ui.PopupMenu.prototype.onMenuKeyboardAction_ = function(element, e) {
     element.focus();
     return;
   }
-  var highlightedItem = this.getItemAt(this.getHighlightedIndex());
+  var highlightedItem = this.getChildAt(this.getHighlightedIndex());
   var targetElement = highlightedItem.getElement();
   // Create an event to pass to the menu item's listener.
   var event = new goog.events.BrowserEvent(e.getBrowserEvent(), targetElement);
