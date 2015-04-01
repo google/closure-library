@@ -654,7 +654,9 @@ goog.async.Deferred.prototype.fire_ = function() {
           this.result_ = res = ret;
         }
 
-        if (goog.Thenable.isImplementedBy(res)) {
+        if (goog.Thenable.isImplementedBy(res) ||
+            (typeof goog.global['Promise'] === 'function' &&
+            res instanceof goog.global['Promise'])) {
           isNewlyBlocked = true;
           this.blocked_ = true;
         }
