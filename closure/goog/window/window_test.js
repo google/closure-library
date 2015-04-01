@@ -15,6 +15,7 @@
 goog.provide('goog.windowTest');
 goog.setTestOnly('goog.windowTest');
 
+goog.require('goog.Promise');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
@@ -23,21 +24,17 @@ goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.window');
 
 var newWin;
 var REDIRECT_URL_PREFIX = 'window_test.html?runTests=';
-var asyncTestCase =
-    goog.testing.AsyncTestCase.createAndInstall(document.title);
-asyncTestCase.stepTimeout = 5000;
-
 var WIN_LOAD_TRY_TIMEOUT = 100;
 var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
 
 var stubs = new goog.testing.PropertyReplacer();
+
 
 function setUpPage() {
   var anchors = goog.dom.getElementsByTagNameAndClass(
@@ -54,14 +51,15 @@ function setUpPage() {
 
 
 // To test goog.window.open we open a new window with this file again. Once
-// the new window gets to this point in the file it sets this variable to true,
-// so that the test knows that the new window has been populated with
-// properties like referrer and location.
+// the new window parses this file it sets this variable to true, indicating
+// that the parent test may check window properties like referrer and location.
 var newWinLoaded = true;
+
 
 function setUp() {
   newWin = undefined;
 }
+
 
 function tearDown() {
   if (newWin) {
@@ -72,43 +70,45 @@ function tearDown() {
 
 
 /**
- * Uses setTimeout to keep checking if a new window has been loaded, and once
- * it has, calls the given continuation function and then calls
- * asyncTestCase.continueTesting() to resume the flow of the test.
- * @param {Function} continueFn Continuation function to be called when the
- *     new window has loaded.
- * @param {number=} opt_numTries Number of times this method has checked if
- *     the window has loaded, to prevent getting in an endless setTimeout
- *     loop. (Used internally, callers should omit.)
+ * Uses setTimeout to poll a new window for the "newWinLoaded" variable, which
+ * is set once the JavaScript is evaluated in that window.
+ *
+ * @param {Window} win
+ * @return {!goog.Promise<!Window>} Promise for a window that resolves once the
+ *     window has loaded.
  */
-function continueAfterWindowLoaded(continueFn, opt_numTries) {
-  opt_numTries = opt_numTries || 0;
-  if (!newWin) {
-    fail('newWin not set, test forgot to set variable?');
-  }
-  if (newWin.newWinLoaded) {
-    continueFn();
-    asyncTestCase.continueTesting();
-  } else if (opt_numTries > MAX_WIN_LOAD_TRIES) {
-    fail('Window did not load after maximum number of checks.');
-    asyncTestCase.continueTesting();
-  } else {
-    setTimeout(goog.partial(continueAfterWindowLoaded,
-                            continueFn, ++opt_numTries),
-               WIN_LOAD_TRY_TIMEOUT);
-  }
+function waitForTestWindow(win) {
+  return new goog.Promise(function(resolve, reject) {
+    var checkWindow = function(numTries) {
+      if (!win) {
+        fail('Could not open new window. Check if popup blocker is enabled.');
+      }
+      if (numTries > MAX_WIN_LOAD_TRIES) {
+        fail('Window did not load after maximum number of checks.');
+      }
+
+      if (win.newWinLoaded) {
+        resolve(win);
+      } else {
+        window.setTimeout(checkWindow, WIN_LOAD_TRY_TIMEOUT);
+      }
+    };
+    checkWindow(0);
+  });
 }
 
 
 /**
- * Helper to kick off a test that opens a window and checks that the referrer
- * is hidden if requested and the url is properly encoded/decoded.
+ * Opens a window and then verifies that the new window has the expected
+ * properties.
+ *
  * @param {boolean} noreferrer Whether to test the noreferrer option.
  * @param {string} urlParam Url param to append to the url being opened.
  * @param {boolean} encodeUrlParam_opt Whether to percent-encode urlParam. This
  *     is needed because IE will not encode it automatically like other browsers
  *     browser and the Closure test server will 400 on certain characters in
  *     the URL (like '<' and '"').
+ * @return {!goog.Promise} Promise that resolves once the test is complete.
  */
 function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
   if (encodeUrlParam_opt) {
@@ -120,104 +120,103 @@ function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
   // is fixed to use "_blank" by default then target can be removed here.
   newWin = goog.window.open(REDIRECT_URL_PREFIX + urlParam,
                             {'noreferrer': noreferrer, 'target': '_blank'});
-  if (!newWin) {
-    fail('Could not open new window. Check if popup blocker is enabled.');
-  }
-  asyncTestCase.waitForAsync('Waiting for window to open and load.');
-  continueAfterWindowLoaded(
-      goog.partial(continueTestOpenWindow, noreferrer, urlParam));
+
+  return waitForTestWindow(newWin).then(function(win) {
+    verifyWindow(win, noreferrer, urlParam);
+  });
 }
 
 
 /**
- * Helper callback to do asserts after the window opens.
+ * Asserts that a newly created window has the correct parameters.
+ *
+ * @param {Window} win
  * @param {boolean} noreferrer Whether the noreferrer option is being tested.
  * @param {string} urlParam Url param appended to the url being opened.
  */
-function continueTestOpenWindow(noreferrer, urlParam) {
+function verifyWindow(win, noreferrer, urlParam) {
   if (noreferrer) {
     assertEquals('Referrer should have been stripped',
-                 '', newWin.document.referrer);
+                 '', win.document.referrer);
   }
 
-  var newWinUrl = decodeURI(newWin.location);
+  var winUrl = decodeURI(win.location);
   var expectedUrlSuffix = decodeURI(urlParam);
   assertTrue('New window href should have ended with <' + expectedUrlSuffix +
-      '> but was <' + newWinUrl + '>',
-      goog.string.endsWith(newWinUrl, expectedUrlSuffix));
+      '> but was <' + winUrl + '>',
+      goog.string.endsWith(winUrl, expectedUrlSuffix));
 }
 
 
 function testOpenNotEncoded() {
-  doTestOpenWindow(false, 'bogus~');
+  return doTestOpenWindow(false, 'bogus~');
 }
 
+
 function testOpenEncoded() {
-  doTestOpenWindow(false, 'bogus%7E');
+  return doTestOpenWindow(false, 'bogus%7E');
 }
+
 
 function testOpenEncodedPercent() {
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
-  doTestOpenWindow(false, 'bogus%257E');
+  return doTestOpenWindow(false, 'bogus%257E');
 }
+
 
 function testOpenNotEncodedHidingReferrer() {
-  doTestOpenWindow(true, 'bogus~');
+  return doTestOpenWindow(true, 'bogus~');
 }
 
+
 function testOpenEncodedHidingReferrer() {
-  doTestOpenWindow(true, 'bogus%7E');
+  return doTestOpenWindow(true, 'bogus%7E');
 }
+
 
 function testOpenEncodedPercentHidingReferrer() {
   // Intent of url is to pass %7E to the server, so it was encoded to %257E .
-  doTestOpenWindow(true, 'bogus%257E');
+  return doTestOpenWindow(true, 'bogus%257E');
 }
+
 
 function testOpenSemicolon() {
-  doTestOpenWindow(true, 'beforesemi;aftersemi');
+  return doTestOpenWindow(true, 'beforesemi;aftersemi');
 }
+
 
 function testTwoSemicolons() {
-  doTestOpenWindow(true, 'a;b;c');
+  return doTestOpenWindow(true, 'a;b;c');
 }
+
 
 function testOpenAmpersand() {
-  doTestOpenWindow(true, 'this&that');
+  return doTestOpenWindow(true, 'this&that');
 }
+
 
 function testOpenSingleQuote() {
-  doTestOpenWindow(true, "'");
+  return doTestOpenWindow(true, "'");
 }
+
 
 function testOpenDoubleQuote() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    doTestOpenWindow(true, '"', true);
-  } else {
-    doTestOpenWindow(true, '"', false);
-  }
-
+  return doTestOpenWindow(true, '"', goog.labs.userAgent.browser.isIE());
 }
+
 
 function testOpenTag() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    doTestOpenWindow(true, '<', true);
-  } else {
-    doTestOpenWindow(true, '<', false);
-  }
+  return doTestOpenWindow(true, '<', goog.labs.userAgent.browser.isIE());
 }
+
 
 function testOpenBlank() {
   newWin = goog.window.openBlank('Loading...');
-  asyncTestCase.waitForAsync('Waiting for temp window to open and load.');
   var urlParam = 'bogus~';
-
-  var continueFn = function() {
-    newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
-    continueAfterWindowLoaded(
-        goog.partial(continueTestOpenWindow, false, urlParam));
-  };
-  setTimeout(continueFn, 100);
+  newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
+  return waitForTestWindow(newWin).then(function() {
+    verifyWindow(newWin, false, urlParam);
+  });
 }
 
 
