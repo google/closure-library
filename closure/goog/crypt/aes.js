@@ -84,6 +84,13 @@ goog.crypt.Aes = function(key) {
    */
   this.temp_ = [[], [], [], []];
 
+  /**
+   * The key schedule.
+   * @type {!Array<!Array<number>>}
+   * @private
+   */
+  this.keySchedule_;
+
   this.keyExpansion_();
 };
 
@@ -552,14 +559,6 @@ goog.crypt.Aes.prototype.rotWord_ = function(w) {
 
   return w;
 };
-
-
-/**
- * The key schedule.
- * @type {!Array<!Array<number>>}
- * @private
- */
-goog.crypt.Aes.prototype.keySchedule_;
 
 
 /**
