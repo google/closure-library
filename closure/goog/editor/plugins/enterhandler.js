@@ -584,7 +584,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
 
   // Delete the current selection if it's is non-collapsed.
   // Although this is redundant in FF, it's necessary for Safari
-  if (!range.isCollapsed()) {
+  if (range && !range.isCollapsed()) {
     var shouldDelete = true;
     // Opera selects the <br> in an empty block if there is no text node
     // preceding it. To preserve inline formatting when pressing [enter] inside
