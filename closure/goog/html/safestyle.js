@@ -42,7 +42,7 @@ goog.require('goog.string.TypedString');
  * is immutable; hence only a default instance corresponding to the empty string
  * can be obtained via constructor invocation.
  *
- * A SafeStyle's string representation ({@link #getSafeStyleString()}) can
+ * A SafeStyle's string representation ({@link #getTypedStringValue()}) can
  * safely:
  * <ul>
  *   <li>Be interpolated as the entire content of a *quoted* HTML style
