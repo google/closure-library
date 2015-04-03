@@ -22,7 +22,6 @@
 goog.provide('goog.net.BulkLoaderHelper');
 
 goog.require('goog.Disposable');
-goog.require('goog.log');
 
 
 
