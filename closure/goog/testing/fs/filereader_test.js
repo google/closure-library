@@ -15,220 +15,158 @@
 goog.provide('goog.testing.fs.FileReaderTest');
 goog.setTestOnly('goog.testing.fs.FileReaderTest');
 
-goog.require('goog.Timer');
-goog.require('goog.async.Deferred');
+goog.require('goog.Promise');
+goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileReader');
-goog.require('goog.fs.FileSaver');
-goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.object');
+goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.fs.FileReader');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var file, deferredReader;
+
+var EventType = goog.fs.FileReader.EventType;
+var ReadyState = goog.fs.FileReader.ReadyState;
+
+
+/** @type {!goog.testing.fs.File} */
+var file;
+
+
+/** @type {!goog.testing.fs.FileReader} */
+var reader;
+
+
+/** @type {!goog.testing.events.EventObserver} */
+var observer;
+
+
+/** @const */
 var hasArrayBuffer = goog.isDef(goog.global.ArrayBuffer);
 
+
 function setUp() {
+  var observedEvents = [];
   var fs = new goog.testing.fs.FileSystem();
   var fileEntry = fs.getRoot().createDirectorySync('foo').createFileSync('bar');
+
   file = fileEntry.fileSync();
   file.setDataInternal('test content');
 
-  deferredReader = new goog.async.Deferred();
-  goog.Timer.callOnce(
-      goog.bind(deferredReader.callback, deferredReader,
-          new goog.testing.fs.FileReader()));
+  reader = new goog.testing.fs.FileReader();
+
+  // Observe all file events fired by the FileReader.
+  observer = new goog.testing.events.EventObserver();
+  goog.events.listen(reader, goog.object.getValues(EventType), observer);
 }
 
-function testRead() {
-  deferredReader.
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.INIT)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(readAsText)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_START)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_END)).
-      addCallback(goog.partial(checkResult, file.toString())).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.DONE)).
-      addBoth(continueTesting);
-  waitForAsync('testRead');
+
+function tearDown() {
+  goog.dispose(reader);
 }
+
+
+function testRead() {
+  assertEquals(ReadyState.INIT, reader.getReadyState());
+  assertUndefined(reader.getResult());
+
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(reader, EventType.LOAD_END, resolve);
+    reader.readAsText(file);
+    assertEquals(ReadyState.LOADING, reader.getReadyState());
+  }).then(function(result) {
+    assertEquals(file.toString(), reader.getResult());
+
+    assertEquals(ReadyState.DONE, reader.getReadyState());
+    assertArrayEquals([
+      EventType.LOAD_START,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+  });
+}
+
 
 function testReadAsArrayBuffer() {
   if (!hasArrayBuffer) {
     // Skip if array buffer is not supported
     return;
   }
-  deferredReader.
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.INIT)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(readAsArrayBuffer)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_START)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_END)).
-      addCallback(goog.partial(checkResult, file.toArrayBuffer())).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.DONE)).
-      addBoth(continueTesting);
-  waitForAsync('testReadAsArrayBuffer');
+
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(reader, EventType.LOAD_END, resolve);
+    reader.readAsArrayBuffer(file);
+    assertEquals(ReadyState.LOADING, reader.getReadyState());
+  }).then(function(result) {
+    assertElementsEquals(file.toArrayBuffer(), reader.getResult());
+
+    assertEquals(ReadyState.DONE, reader.getReadyState());
+    assertArrayEquals([
+      EventType.LOAD_START,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+  });
 }
+
 
 function testReadAsDataUrl() {
-  deferredReader.
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.INIT)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(readAsDataUrl)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_START)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_END)).
-      addCallback(goog.partial(checkResult, file.toDataUrl())).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.DONE)).
-      addBoth(continueTesting);
-  waitForAsync('testReadAsDataUrl');
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(reader, EventType.LOAD_END, resolve);
+    reader.readAsDataUrl(file);
+    assertEquals(ReadyState.LOADING, reader.getReadyState());
+  }).then(function(result) {
+    assertEquals(file.toDataUrl(), reader.getResult());
+
+    assertEquals(ReadyState.DONE, reader.getReadyState());
+    assertArrayEquals([
+      EventType.LOAD_START,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD,
+      EventType.LOAD_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+  });
 }
+
 
 function testAbort() {
-  deferredReader.
-      addCallback(goog.partial(readAsText)).
-      addCallback(function(reader) { reader.abort(); }).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(waitForError, goog.fs.Error.ErrorCode.ABORT)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.ABORT)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.LOADING)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileReader.EventType.LOAD_END)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileReader.ReadyState.DONE)).
-      addCallback(goog.partial(checkResult, undefined)).
-      addBoth(continueTesting);
-  waitForAsync('testAbort');
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(reader, EventType.LOAD_END, resolve);
+    reader.readAsText(file);
+    assertEquals(ReadyState.LOADING, reader.getReadyState());
+    reader.abort();
+  }).then(function(result) {
+    assertUndefined(reader.getResult());
+
+    assertEquals(ReadyState.DONE, reader.getReadyState());
+    assertArrayEquals([
+      EventType.ERROR,
+      EventType.ABORT,
+      EventType.LOAD_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+  });
 }
+
 
 function testAbortBeforeRead() {
-  deferredReader.
-      addCallback(function(reader) { reader.abort(); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(function(calledErrback) {
-        assertTrue(calledErrback);
-      }).
-      addBoth(continueTesting);
-  waitForAsync('testAbortBeforeRead');
+  var err = assertThrows(function() {
+    reader.abort();
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
+
 
 function testReadDuringRead() {
-  deferredReader.
-      addCallback(goog.partial(readAsText)).
-      addCallback(goog.partial(readAsText)).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(assertTrue).
-      addBoth(continueTesting);
-  waitForAsync('testReadDuringRead');
-}
-
-function continueTesting(result) {
-  asyncTestCase.continueTesting();
-  if (result instanceof Error) {
-    throw result;
-  }
-}
-
-function waitForAsync(msg) {
-  asyncTestCase.waitForAsync(msg);
-}
-
-function waitForEvent(type, target) {
-  var d = new goog.async.Deferred();
-  goog.events.listenOnce(target, type, goog.bind(d.callback, d, target));
-  return d;
-}
-
-function waitForError(type, target) {
-  var d = new goog.async.Deferred();
-  goog.events.listenOnce(
-      target, goog.fs.FileReader.EventType.ERROR, function(e) {
-        assertEquals(type, target.getError().code);
-        d.callback(target);
-      });
-  return d;
-}
-
-function readAsText(reader) {
-  reader.readAsText(file);
-}
-
-function readAsArrayBuffer(reader) {
-  reader.readAsArrayBuffer(file);
-}
-
-function readAsDataUrl(reader) {
-  reader.readAsDataUrl(file);
-}
-
-function readAndWait(reader) {
-  readAsText(reader);
-  return waitForEvent(goog.fs.FileSaver.EventType.LOAD_END, reader);
-}
-
-function checkResult(expectedResult, reader) {
-  checkEquals(expectedResult, reader.getResult());
-}
-
-function checkEquals(a, b) {
-  if (hasArrayBuffer &&
-      a instanceof ArrayBuffer && b instanceof ArrayBuffer) {
-    assertEquals(a.byteLength, b.byteLength);
-    var viewA = new Uint8Array(a);
-    var viewB = new Uint8Array(b);
-    for (var i = 0; i < a.byteLength; i++) {
-      assertEquals(viewA[i], viewB[i]);
-    }
-  } else {
-    assertEquals(a, b);
-  }
-}
-
-function checkReadyState(expectedState, reader) {
-  assertEquals(expectedState, reader.getReadyState());
+  var err = assertThrows(function() {
+    reader.readAsText(file);
+    reader.readAsText(file);
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
