@@ -19,6 +19,7 @@
 
 goog.provide('goog.module.ModuleLoaderTest');
 
+goog.require('goog.Promise');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -29,7 +30,6 @@ goog.require('goog.module.ModuleManager');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
@@ -46,13 +46,10 @@ var moduleLoader = null;
 var moduleManager = null;
 var stubs = new goog.testing.PropertyReplacer();
 
-var testCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
-testCase.stepTimeout = 5 * 1000; // 5 seconds
-
 var EventType = goog.module.ModuleLoader.EventType;
 var observer;
 
-testCase.setUp = function() {
+function setUp() {
   modA1Loaded = false;
   modA2Loaded = false;
   modB1Loaded = false;
@@ -64,8 +61,7 @@ testCase.setUp = function() {
   moduleLoader = new goog.module.ModuleLoader();
   observer = new goog.testing.events.EventObserver();
 
-  goog.events.listen(
-      moduleLoader, goog.object.getValues(EventType), observer);
+  goog.events.listen(moduleLoader, goog.object.getValues(EventType), observer);
 
   moduleManager.setLoader(moduleLoader);
   moduleManager.setAllModuleInfo({
@@ -80,10 +76,11 @@ testCase.setUp = function() {
   assertNotLoaded('modA');
   assertNotLoaded('modB');
   assertFalse(modA1Loaded);
-};
+}
 
-testCase.tearDown = function() {
+function tearDown() {
   stubs.reset();
+  goog.dispose(moduleLoader);
 
   // Ensure that the module manager was created.
   assertNotNull(goog.module.ModuleManager.getInstance());
@@ -100,31 +97,40 @@ testCase.tearDown = function() {
       goog.dom.removeNode(scripts[i]);
     }
   }
-};
+}
 
 function testLoadModuleA() {
-  testCase.waitForAsync('wait for module A load');
-  moduleManager.execOnLoad('modA', function() {
-    testCase.continueTesting();
-    assertLoaded('modA');
-    assertNotLoaded('modB');
-    assertTrue(modA1Loaded);
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modA', function() {
+      assertLoaded('modA');
+      assertNotLoaded('modB');
+      assertTrue(modA1Loaded);
 
-    assertEquals('EVALUATE_CODE',
-        0, observer.getEvents(EventType.EVALUATE_CODE).length);
-    assertEquals('REQUEST_SUCCESS',
+      // The code is not evaluated immediately, but only after a browser yield.
+      assertEquals('EVALUATE_CODE',
+          0, observer.getEvents(EventType.EVALUATE_CODE).length);
+      assertEquals('REQUEST_SUCCESS',
+          1, observer.getEvents(EventType.REQUEST_SUCCESS).length);
+      assertArrayEquals(
+          ['modA'], observer.getEvents(EventType.REQUEST_SUCCESS)[0].moduleIds);
+      assertEquals('REQUEST_ERROR',
+          0, observer.getEvents(EventType.REQUEST_ERROR).length);
+      resolve();
+    });
+  }).then(function() {
+    assertEquals('EVALUATE_CODE after tick',
+        1, observer.getEvents(EventType.EVALUATE_CODE).length);
+    assertEquals('REQUEST_SUCCESS after tick',
         1, observer.getEvents(EventType.REQUEST_SUCCESS).length);
-    assertArrayEquals(
-        ['modA'], observer.getEvents(EventType.REQUEST_SUCCESS)[0].moduleIds);
-    assertEquals('REQUEST_ERROR',
+    assertEquals('REQUEST_ERROR after tick',
         0, observer.getEvents(EventType.REQUEST_ERROR).length);
   });
 }
 
 function testLoadModuleB() {
-  testCase.waitForAsync('wait for module B load');
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
     assertTrue(modA1Loaded);
@@ -132,10 +138,10 @@ function testLoadModuleB() {
 }
 
 function testLoadDebugModuleA() {
-  testCase.waitForAsync('wait for module A load');
   moduleLoader.setDebugMode(true);
-  moduleManager.execOnLoad('modA', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modA', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertNotLoaded('modB');
     assertTrue(modA1Loaded);
@@ -143,10 +149,10 @@ function testLoadDebugModuleA() {
 }
 
 function testLoadDebugModuleB() {
-  testCase.waitForAsync('wait for module B load');
   moduleLoader.setDebugMode(true);
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
     assertTrue(modA1Loaded);
@@ -160,10 +166,10 @@ function testLoadDebugModuleAThenB() {
     'modA': ['testdata/modA_2.js', 'testdata/modA_1.js'],
     'modB': ['testdata/modB_1.js']
   });
-  testCase.waitForAsync('wait for module B load');
   moduleLoader.setDebugMode(true);
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
 
@@ -183,20 +189,18 @@ function testLoadDebugModuleAThenB() {
 
 function testSourceInjection() {
   moduleLoader.setSourceUrlInjection(true);
-  assertSourceInjection();
+  return assertSourceInjection();
 }
 
 function testSourceInjectionViaDebugMode() {
   moduleLoader.setDebugMode(true);
-  assertSourceInjection();
+  return assertSourceInjection();
 }
 
 function assertSourceInjection() {
-  testCase.waitForAsync('wait for module B load');
-
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
-
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertTrue(!!throwErrorInModuleB);
 
     var ex = assertThrows(function() {
@@ -302,19 +306,19 @@ function testErrback() {
   // Modules will throw an exception if this boolean is set to true.
   modA1Loaded = true;
 
-  var errorHandler = function() {
-    testCase.continueTesting();
-    assertNotLoaded('modA');
-  };
-  moduleManager.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
-      errorHandler);
+  return new goog.Promise(function(resolve, reject) {
+    var errorHandler = function() {
+      assertNotLoaded('modA');
+      resolve();
+    };
+    moduleManager.registerCallback(
+        goog.module.ModuleManager.CallbackType.ERROR,
+        errorHandler);
 
-  moduleManager.execOnLoad('modA', function() {
-    fail('modA should not load successfully');
+    moduleManager.execOnLoad('modA', function() {
+      fail('modA should not load successfully');
+    });
   });
-
-  testCase.waitForAsync('wait for the error callback');
 }
 
 function testPrefetchThenLoadModuleA() {
@@ -323,9 +327,9 @@ function testPrefetchThenLoadModuleA() {
     fail('modA should not be reloaded');
   });
 
-  testCase.waitForAsync('wait for module A load');
-  moduleManager.execOnLoad('modA', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modA', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertEquals('REQUEST_SUCCESS',
         1, observer.getEvents(EventType.REQUEST_SUCCESS).length);
@@ -342,9 +346,9 @@ function testPrefetchThenLoadModuleB() {
     fail('modA and modB should not be reloaded');
   });
 
-  testCase.waitForAsync('wait for module B load');
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
     assertEquals('REQUEST_SUCCESS',
@@ -361,9 +365,9 @@ function testPrefetchThenLoadModuleB() {
 function testPrefetchModuleAThenLoadModuleB() {
   moduleManager.prefetchModule('modA');
 
-  testCase.waitForAsync('wait for module A load');
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
     assertEquals('REQUEST_SUCCESS',
@@ -378,9 +382,9 @@ function testPrefetchModuleAThenLoadModuleB() {
 }
 
 function testLoadModuleBThenPrefetchModuleA() {
-  testCase.waitForAsync('wait for module A load');
-  moduleManager.execOnLoad('modB', function() {
-    testCase.continueTesting();
+  return new goog.Promise(function(resolve, reject) {
+    moduleManager.execOnLoad('modB', resolve);
+  }).then(function() {
     assertLoaded('modA');
     assertLoaded('modB');
     assertEquals('REQUEST_SUCCESS',
