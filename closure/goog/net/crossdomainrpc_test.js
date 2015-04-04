@@ -15,15 +15,12 @@
 goog.provide('goog.net.CrossDomainRpcTest');
 goog.setTestOnly('goog.net.CrossDomainRpcTest');
 
+goog.require('goog.Promise');
 goog.require('goog.log');
-goog.require('goog.log.Level');
 goog.require('goog.net.CrossDomainRpc');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 
 function print(o) {
   if (Object.prototype.toSource) {
@@ -46,34 +43,27 @@ function print(o) {
 
 
 function testNormalRequest() {
-  var start = new Date();
-  goog.net.CrossDomainRpc.send(
-      'crossdomainrpc_test_response.html',
-      goog.partial(continueTestNormalRequest, start),
-      'POST',
-      {xyz: '01234567891123456789'}
-  );
-
-  asyncTestCase.waitForAsync('testNormalRequest');
-}
-
-function continueTestNormalRequest(start, e) {
-  asyncTestCase.continueTesting();
-  if (e.target.status < 300) {
-    var elapsed = new Date() - start;
-    var responseData = eval(e.target.responseText);
-    goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-                 elapsed + 'ms: [' + responseData.result.length + '] ' +
-                     print(responseData));
-    assertEquals(16 * 1024, responseData.result.length);
-    assertEquals(e.target.status, 123);
-    assertEquals(e.target.responseHeaders.a, 1);
-    assertEquals(e.target.responseHeaders.b, '2');
-  } else {
-    goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-                 print(e));
-    fail();
-  }
+  var start = goog.now();
+  return new goog.Promise(function(resolve, reject) {
+    goog.net.CrossDomainRpc.send(
+        'crossdomainrpc_test_response.html',
+        resolve, 'POST', {xyz: '01234567891123456789'});
+  }).then(function(e) {
+    if (e.target.status < 300) {
+      var elapsed = goog.now() - start;
+      var responseData = eval(e.target.responseText);
+      goog.log.fine(goog.net.CrossDomainRpc.logger_,
+                    elapsed + 'ms: [' + responseData.result.length + '] ' +
+                        print(responseData));
+      assertEquals(16 * 1024, responseData.result.length);
+      assertEquals(123, e.target.status);
+      assertEquals(1, e.target.responseHeaders.a);
+      assertEquals('2', e.target.responseHeaders.b);
+    } else {
+      goog.log.fine(goog.net.CrossDomainRpc.logger_, print(e));
+      fail();
+    }
+  });
 }
 
 
@@ -83,26 +73,20 @@ function testErrorRequest() {
     return;
   }
 
-  goog.net.CrossDomainRpc.send(
-      'http://hoodjimcwaadji.google.com/index.html',
-      continueTestErrorRequest,
-      'POST',
-      {xyz: '01234567891123456789'}
-  );
-
-  asyncTestCase.waitForAsync('testErrorRequest');
+  return new goog.Promise(function(resolve, reject) {
+    goog.net.CrossDomainRpc.send(
+        'http://hoodjimcwaadji.google.com/index.html',
+        resolve, 'POST', {xyz: '01234567891123456789'});
+  }).then(function(e) {
+    if (e.target.status < 300) {
+      fail('should have failed requesting a non-existent URI');
+    } else {
+      goog.log.fine(goog.net.CrossDomainRpc.logger_,
+                    'expected error seen; event=' + print(e));
+    }
+  });
 }
 
-function continueTestErrorRequest(e) {
-  asyncTestCase.continueTesting();
-
-  if (e.target.status < 300) {
-    fail('should have failed requesting a non-existent URI');
-  } else {
-    goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-                 'expected error seen; event=' + print(e));
-  }
-}
 
 function testGetDummyResourceUri() {
   var url = goog.net.CrossDomainRpc.getDummyResourceUri_();
