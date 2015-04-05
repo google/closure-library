@@ -68,7 +68,7 @@ goog.string.html.HtmlParser.Entities = {
   lt: '<',
   gt: '>',
   amp: '&',
-  nbsp: '\240',
+  nbsp: '\xA0',
   quot: '"',
   apos: '\''
 };
@@ -90,7 +90,7 @@ goog.string.html.HtmlParser.EFlags = {
 
 /**
  * A map of element to a bitmap of flags it has, used internally on the parser.
- * @type {Object}
+ * @type {Object<string, number>}
  */
 goog.string.html.HtmlParser.Elements = {
   'a': 0,
@@ -209,7 +209,6 @@ goog.string.html.HtmlParser.Elements = {
 /**
  * Regular expression that matches &s.
  * @type {RegExp}
- * @private
  */
 goog.string.html.HtmlParser.AMP_RE_ = /&/g;
 
@@ -226,7 +225,6 @@ goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
 /**
  * Regular expression that matches <.
  * @type {RegExp}
- * @private
  */
 goog.string.html.HtmlParser.LT_RE_ = /</g;
 
@@ -234,7 +232,6 @@ goog.string.html.HtmlParser.LT_RE_ = /</g;
 /**
  * Regular expression that matches >.
  * @type {RegExp}
- * @private
  */
 goog.string.html.HtmlParser.GT_RE_ = />/g;
 
@@ -242,7 +239,6 @@ goog.string.html.HtmlParser.GT_RE_ = />/g;
 /**
  * Regular expression that matches ".
  * @type {RegExp}
- * @private
  */
 goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
 
@@ -250,7 +246,6 @@ goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
 /**
  * Regular expression that matches =.
  * @type {RegExp}
- * @private
  */
 goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
 

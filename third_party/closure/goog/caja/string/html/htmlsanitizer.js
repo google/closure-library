@@ -85,9 +85,9 @@ goog.string.html.htmlSanitize = function(
  *
  * @param {goog.string.StringBuffer} stringBuffer A string buffer, used to
  *     output the html as we sanitize it.
- * @param {?function(string):string} opt_urlPolicy An optional function to be
+ * @param {function(string):string=} opt_urlPolicy An optional function to be
  *     applied in URLs.
- * @param {?function(string):string} opt_nmTokenPolicy An optional function to
+ * @param {function(string):string=} opt_nmTokenPolicy An optional function to
  *     be applied in names.
  * @constructor
  * @extends {goog.string.html.HtmlSaxHandler}
@@ -120,14 +120,14 @@ goog.string.html.HtmlSanitizer = function(
 
   /**
    * A function to be applied to urls found on the parsing process.
-   * @type {?function(string):string}
+   * @type {function(string):string|undefined}
    * @private
    */
   this.urlPolicy_ = opt_urlPolicy;
 
   /**
    * A function to be applied to names fround on the parsing process.
-   * @type {?function(string):string}
+   * @type {function(string):string|undefined}
    * @private
    */
   this.nmTokenPolicy_ = opt_nmTokenPolicy;
@@ -548,7 +548,7 @@ goog.string.html.HtmlSanitizer.prototype.escapeAttrib_ = function(s) {
  * Sanitizes attributes found on html entities.
  * @param {string} tagName The name of the tag in which the {@code attribs} were
  *     found.
- * @param {Array.<?string>} attribs An array of attributes.
+ * @param {Array.<(?string|undefined)>} attribs An array of attributes.
  * @return {Array.<?string>} A sanitized version of the {@code attribs}.
  * @private
  */
