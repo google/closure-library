@@ -921,6 +921,33 @@ function testAllWithReject() {
 }
 
 
+function testAllSettledWithEmptyList() {
+  asyncTestCase.waitForAsync();
+  goog.Promise.allSettled([]).then(function(results) {
+    assertArrayEquals([], results);
+  }, shouldNotCall).thenAlways(continueTesting);
+}
+
+
+function testAllSettledWithFulfillAndReject() {
+  asyncTestCase.waitForAsync();
+
+  var a = fulfillSoon('a', 40);
+  var b = rejectSoon('rejected-b', 30);
+  var c = fulfillSoon('c', 10);
+  var d = rejectSoon('rejected-d', 20);
+
+  goog.Promise.allSettled([a, b, c, d]).then(function(results) {
+    assertArrayEquals([
+      {fulfilled: true, value: 'a'},
+      {fulfilled: false, reason: 'rejected-b'},
+      {fulfilled: true, value: 'c'},
+      {fulfilled: false, reason: 'rejected-d'}
+    ], results);
+  }, shouldNotCall).thenAlways(continueTesting);
+}
+
+
 function testFirstFulfilledWithEmptyList() {
   asyncTestCase.waitForAsync();
   goog.Promise.firstFulfilled([]).then(function(value) {
