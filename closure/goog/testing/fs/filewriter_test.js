@@ -15,308 +15,316 @@
 goog.provide('goog.testing.fs.FileWriterTest');
 goog.setTestOnly('goog.testing.fs.FileWriterTest');
 
-goog.require('goog.async.Deferred');
+goog.require('goog.Promise');
+goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileSaver');
-goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.object');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.fs.Blob');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var file, deferredWriter, mockClock;
+
+var EventType = goog.fs.FileSaver.EventType;
+var ReadyState = goog.fs.FileSaver.ReadyState;
+
+
+/** @type {!goog.testing.fs.File} */
+var file;
+
+
+/** @type {!goog.testing.fs.FileWriter} */
+var writer;
+
+
+/** @type {!goog.testing.MockClock} */
+var mockClock;
+
 
 function setUp() {
+  // Temporarily install the MockClock to get predictable file modified times.
   mockClock = new goog.testing.MockClock(true);
-
   var fs = new goog.testing.fs.FileSystem();
   var fileEntry = fs.getRoot().createDirectorySync('foo').createFileSync('bar');
+  mockClock.uninstall();
 
-  deferredWriter = fileEntry.createWriter();
   file = fileEntry.fileSync();
   file.setDataInternal('');
+
+  return fileEntry.createWriter().then(function(fileWriter) {
+    writer = fileWriter;
+  });
 }
+
 
 function tearDown() {
-  mockClock.uninstall();
+  goog.dispose(writer);
 }
+
 
 function testWrite() {
-  deferredWriter.
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.INIT)).
-      addCallback(goog.partial(checkPositionAndLength, 0, 0)).
-      addCallback(goog.partial(checkLastModified, 0)).
-      addCallback(goog.partial(tick, 3)).
-      addCallback(goog.partial(writeString, 'hello')).
-      addCallback(goog.partial(checkPositionAndLength, 0, 0)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(checkLastModified, 0)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_START)).
-      addCallback(goog.partial(checkLastModified, 0)).
-      addCallback(goog.partial(checkPositionAndLength, 0, 0)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE)).
-      addCallback(function() { assertEquals('hello', file.toString()); }).
-      addCallback(goog.partial(checkPositionAndLength, 5, 5)).
-      addCallback(goog.partial(checkLastModified, 3)).
-      addCallback(tick).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(checkLastModified, 3)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_END)).
-      addCallback(goog.partial(checkLastModified, 3)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.DONE)).
-      addCallback(goog.partial(checkLastModified, 3)).
-      addCallback(goog.partial(writeString, ' world')).
-      addCallback(goog.partial(checkPositionAndLength, 5, 5)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE)).
-      addCallback(function() { assertEquals('hello world', file.toString()); }).
-      addCallback(goog.partial(checkPositionAndLength, 11, 11)).
-      addCallback(goog.partial(checkLastModified, 4)).
-      addBoth(continueTesting);
-  waitForAsync('testWrite');
+  var observer = createObserver(writer);
+
+  mockClock.install();
+  assertEquals(ReadyState.INIT, writer.getReadyState());
+  assertPositionAndLength(0, 0, writer);
+  assertLastModified(0, file);
+
+  mockClock.tick(3);
+  var promise = writeString(writer, 'hello');
+  assertPositionAndLength(0, 0, writer);
+  assertEquals(ReadyState.WRITING, writer.getReadyState());
+
+  promise = promise.then(function() {
+    assertEquals('hello', file.toString());
+    assertPositionAndLength(5, 5, writer);
+    assertLastModified(3, file);
+
+    assertEquals(ReadyState.DONE, writer.getReadyState());
+    assertArrayEquals([
+      EventType.WRITE_START,
+      EventType.WRITE,
+      EventType.WRITE_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+
+    var promise = writeString(writer, ' world');
+    assertEquals(ReadyState.WRITING, writer.getReadyState());
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('hello world', file.toString());
+    assertPositionAndLength(11, 11, writer);
+    assertLastModified(4, file);
+
+    assertEquals(ReadyState.DONE, writer.getReadyState());
+    assertArrayEquals([
+      EventType.WRITE_START,
+      EventType.WRITE,
+      EventType.WRITE_END,
+      EventType.WRITE_START,
+      EventType.WRITE,
+      EventType.WRITE_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+
+  mockClock.tick();
+  return promise;
 }
+
 
 function testSeek() {
-  deferredWriter.
-      addCallback(goog.partial(tick, 17)).
-      addCallback(goog.partial(writeAndWait, 'hello world')).
-      addCallback(tick).
-      addCallback(goog.partial(checkPositionAndLength, 11, 11)).
+  mockClock.install();
+  mockClock.tick(17);
+  assertLastModified(0, file);
 
-      addCallback(function(writer) { writer.seek(6); }).
-      addCallback(goog.partial(checkPositionAndLength, 6, 11)).
-      addCallback(goog.partial(checkLastModified, 17)).
-      addCallback(goog.partial(writeAndWait, 'universe')).
-      addCallback(tick).
-      addCallback(function() {
-        assertEquals('hello universe', file.toString());
-      }).
-      addCallback(goog.partial(checkPositionAndLength, 14, 14)).
+  var promise = writeString(writer, 'hello world').then(function() {
+    assertPositionAndLength(11, 11, writer);
+    assertLastModified(17, file);
 
-      addCallback(function(writer) { writer.seek(500); }).
-      addCallback(goog.partial(checkPositionAndLength, 14, 14)).
-      addCallback(goog.partial(writeAndWait, '!')).
-      addCallback(tick).
-      addCallback(function() {
-        assertEquals('hello universe!', file.toString());
-      }).
-      addCallback(goog.partial(checkPositionAndLength, 15, 15)).
+    writer.seek(6);
+    assertPositionAndLength(6, 11, writer);
 
-      addCallback(function(writer) { writer.seek(-9); }).
-      addCallback(goog.partial(checkPositionAndLength, 6, 15)).
-      addCallback(goog.partial(writeAndWait, 'foo')).
-      addCallback(tick).
-      addCallback(function() {
-        assertEquals('hello fooverse!', file.toString());
-      }).
-      addCallback(goog.partial(checkPositionAndLength, 9, 15)).
+    var promise = writeString(writer, 'universe');
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('hello universe', file.toString());
+    assertPositionAndLength(14, 14, writer);
 
-      addCallback(function(writer) { writer.seek(-500); }).
-      addCallback(goog.partial(checkPositionAndLength, 0, 15)).
-      addCallback(goog.partial(writeAndWait, 'bye-o')).
-      addCallback(tick).
-      addCallback(function() {
-        assertEquals('bye-o fooverse!', file.toString());
-      }).
-      addCallback(goog.partial(checkPositionAndLength, 5, 15)).
-      addCallback(goog.partial(checkLastModified, 21)).
-      addBoth(continueTesting);
-  waitForAsync('testSeek');
+    writer.seek(500);
+    assertPositionAndLength(14, 14, writer);
+
+    var promise = writeString(writer, '!');
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('hello universe!', file.toString());
+    assertPositionAndLength(15, 15, writer);
+
+    writer.seek(-9);
+    assertPositionAndLength(6, 15, writer);
+
+    var promise = writeString(writer, 'foo');
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('hello fooverse!', file.toString());
+    assertPositionAndLength(9, 15, writer);
+
+    writer.seek(-500);
+    assertPositionAndLength(0, 15, writer);
+
+    var promise = writeString(writer, 'bye-o');
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('bye-o fooverse!', file.toString());
+    assertPositionAndLength(5, 15, writer);
+    assertLastModified(21, file);
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+
+  mockClock.tick();
+  return promise;
 }
 
+
 function testAbort() {
-  deferredWriter.
-      addCallback(goog.partial(tick, 13)).
-      addCallback(goog.partial(writeString, 'hello world')).
-      addCallback(function(writer) { writer.abort(); }).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(waitForError, goog.fs.Error.ErrorCode.ABORT)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.ABORT)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_END)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.DONE)).
-      addCallback(goog.partial(checkPositionAndLength, 0, 0)).
-      addCallback(goog.partial(checkLastModified, 0)).
-      addCallback(function() { assertEquals('', file.toString()); }).
-      addBoth(continueTesting);
-  waitForAsync('testAbort');
+  var observer = createObserver(writer);
+
+  mockClock.install();
+  mockClock.tick(13);
+
+  var promise = writeString(writer, 'hello world');
+  assertEquals(ReadyState.WRITING, writer.getReadyState());
+  writer.abort();
+
+  promise = promise.then(function() {
+    assertEquals('', file.toString());
+
+    assertEquals(ReadyState.DONE, writer.getReadyState());
+    assertPositionAndLength(0, 0, writer);
+    assertLastModified(0, file);
+
+    assertArrayEquals([
+      EventType.ERROR,
+      EventType.ABORT,
+      EventType.WRITE_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+
+  mockClock.tick();
+  return promise;
 }
 
 function testTruncate() {
-  deferredWriter.
-      addCallback(goog.partial(writeAndWait, 'hello world')).
-      addCallback(goog.partial(checkPositionAndLength, 11, 11)).
-      addCallback(function(writer) { writer.truncate(5); }).
-      addCallback(goog.partial(checkPositionAndLength, 11, 11)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_START)).
-      addCallback(goog.partial(tick, 7)).
-      addCallback(goog.partial(checkPositionAndLength, 11, 11)).
-      addCallback(goog.partial(checkLastModified, 0)).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE)).
-      addCallback(goog.partial(checkLastModified, 7)).
-      addCallback(tick).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.WRITING)).
-      addCallback(goog.partial(checkPositionAndLength, 5, 5)).
-      addCallback(function() { assertEquals('hello', file.toString()); }).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_END)).
-      addCallback(goog.partial(checkReadyState,
-                               goog.fs.FileSaver.ReadyState.DONE)).
+  // Create the event observer after the initial write is complete.
+  var observer;
 
-      addCallback(function(writer) { writer.truncate(10); }).
-      addCallback(goog.partial(waitForEvent,
-                               goog.fs.FileSaver.EventType.WRITE_END)).
-      addCallback(goog.partial(checkPositionAndLength, 5, 10)).
-      addCallback(goog.partial(checkLastModified, 8)).
-      addCallback(function() {
-        assertEquals('hello\0\0\0\0\0', file.toString());
-      }).
-      addBoth(continueTesting);
-  waitForAsync('testTruncate');
+  mockClock.install();
+
+  var promise = writeString(writer, 'hello world').then(function() {
+    observer = createObserver(writer);
+
+    writer.truncate(5);
+    assertEquals(ReadyState.WRITING, writer.getReadyState());
+    assertPositionAndLength(11, 11, writer);
+    assertLastModified(0, file);
+
+    var promise = waitForEvent(writer, EventType.WRITE_END);
+    mockClock.tick();
+    return promise;
+  }).then(function() {
+    assertEquals('hello', file.toString());
+
+    assertEquals(ReadyState.DONE, writer.getReadyState());
+    assertPositionAndLength(5, 5, writer);
+    assertLastModified(7, file);
+
+    assertArrayEquals([
+      EventType.WRITE_START,
+      EventType.WRITE,
+      EventType.WRITE_END
+    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
+
+    writer.truncate(10);
+    var promise = waitForEvent(writer, EventType.WRITE_END);
+    mockClock.tick(1);
+    return promise;
+  }).then(function() {
+    assertEquals('hello\0\0\0\0\0', file.toString());
+    assertLastModified(8, file);
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+
+  mockClock.tick(7);
+  return promise;
 }
+
 
 function testAbortBeforeWrite() {
-  deferredWriter.
-      addCallback(function(writer) { writer.abort(); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(function(calledErrback) {
-        assertTrue(calledErrback);
-      }).
-      addBoth(continueTesting);
-  waitForAsync('testAbortBeforeWrite');
+  var err = assertThrows(function() {
+    writer.abort();
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
+
 
 function testAbortAfterWrite() {
-  deferredWriter.
-      addCallback(goog.partial(writeAndWait, 'hello world')).
-      addCallback(function(writer) { writer.abort(); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(assertTrue).
-      addBoth(continueTesting);
-  waitForAsync('testAbortAfterWrite');
+  return writeString(writer, 'hello world').then(function() {
+    var err = assertThrows(function() {
+      writer.abort();
+    });
+    assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
+  });
 }
+
 
 function testWriteDuringWrite() {
-  deferredWriter.
-      addCallback(goog.partial(writeString, 'hello world')).
-      addCallback(goog.partial(writeString, 'hello world')).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(assertTrue).
-      addBoth(continueTesting);
-  waitForAsync('testWriteDuringWrite');
+  writer.write(new goog.testing.fs.Blob('hello'));
+  var err = assertThrows(function() {
+    writer.write(new goog.testing.fs.Blob('world'));
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
+
 
 function testSeekDuringWrite() {
-  deferredWriter.
-      addCallback(goog.partial(writeString, 'hello world')).
-      addCallback(function(writer) { writer.seek(5); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(assertTrue).
-      addBoth(continueTesting);
-  waitForAsync('testSeekDuringWrite');
+  writer.write(new goog.testing.fs.Blob('hello world'));
+  var err = assertThrows(function() {
+    writer.seek(5);
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
+
 
 function testTruncateDuringWrite() {
-  deferredWriter.
-      addCallback(goog.partial(writeString, 'hello world')).
-      addCallback(function(writer) { writer.truncate(5); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-        return true;
-      }).
-      addCallback(assertTrue).
-      addBoth(continueTesting);
-  waitForAsync('testTruncateDuringWrite');
+  writer.write(new goog.testing.fs.Blob('hello world'));
+  var err = assertThrows(function() {
+    writer.truncate(5);
+  });
+  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
 
 
-function tick(opt_tickCount) {
-  mockClock.tick(opt_tickCount);
+function waitForEvent(target, type) {
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listenOnce(target, type, resolve);
+  });
 }
 
-function continueTesting(result) {
-  asyncTestCase.continueTesting();
-  if (result instanceof Error) {
-    throw result;
-  }
-  mockClock.tick();
-}
 
-function waitForAsync(msg) {
-  asyncTestCase.waitForAsync(msg);
-
-  // The mock clock must be advanced far enough that all timeouts added during
-  // callbacks will be triggered. 1000ms is much more than enough.
-  mockClock.tick(1000);
-}
-
-function waitForEvent(type, target) {
-  var d = new goog.async.Deferred();
-  goog.events.listenOnce(target, type, goog.bind(d.callback, d, target));
-  return d;
-}
-
-function waitForError(type, target) {
-  var d = new goog.async.Deferred();
-  goog.events.listenOnce(
-      target, goog.fs.FileSaver.EventType.ERROR, function(e) {
-        assertEquals(type, target.getError().code);
-        d.callback(target);
-      });
-  return d;
-}
-
-function checkReadyState(expectedState, writer) {
-  assertEquals(expectedState, writer.getReadyState());
-}
-
-function checkPositionAndLength(expectedPosition, expectedLength, writer) {
+function assertPositionAndLength(expectedPosition, expectedLength, writer) {
   assertEquals(expectedPosition, writer.getPosition());
   assertEquals(expectedLength, writer.getLength());
 }
 
-function checkLastModified(expectedTime) {
+
+function assertLastModified(expectedTime, file) {
   assertEquals(expectedTime, file.lastModifiedDate.getTime());
 }
 
-function writeString(str, writer) {
+
+function writeString(writer, str) {
+  var promise = waitForEvent(writer, goog.fs.FileSaver.EventType.WRITE_END);
   writer.write(new goog.testing.fs.Blob(str));
+  return promise;
 }
 
-function writeAndWait(str, writer) {
-  writeString(str, writer);
-  return waitForEvent(goog.fs.FileSaver.EventType.WRITE_END, writer);
+
+function createObserver(writer) {
+  // Observe all file events fired by the FileWriter.
+  var observer = new goog.testing.events.EventObserver();
+  goog.events.listen(writer, goog.object.getValues(EventType), observer);
+  return observer;
 }
