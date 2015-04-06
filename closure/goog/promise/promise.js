@@ -26,9 +26,10 @@ goog.require('goog.promise.Resolver');
 
 /**
  * Promises provide a result that may be resolved asynchronously. A Promise may
- * be resolved by being fulfilled or rejected with a value, which will be known
- * as the fulfillment value or the rejection reason. Whether fulfilled or
- * rejected, the Promise result is immutable once it is set.
+ * be resolved by being fulfilled with a fulfillment value, rejected with a
+ * rejection reason, or blocked by another Promise. A Promise is said to be
+ * settled if it is either fulfilled or rejected. Once settled, the Promise
+ * result is immutable.
  *
  * Promises may represent results of any type, including undefined. Rejection
  * reasons are typically Errors, but may also be of any type. Closure Promises
@@ -37,14 +38,14 @@ goog.require('goog.promise.Resolver');
  *
  * The result of a Promise is accessible by calling {@code then} and registering
  * {@code onFulfilled} and {@code onRejected} callbacks. Once the Promise
- * resolves, the relevant callbacks are invoked with the fulfillment value or
+ * is settled, the relevant callbacks are invoked with the fulfillment value or
  * rejection reason as argument. Callbacks are always invoked in the order they
  * were registered, even when additional {@code then} calls are made from inside
  * another callback. A callback is always run asynchronously sometime after the
  * scope containing the registering {@code then} invocation has returned.
  *
  * If a Promise is resolved with another Promise, the first Promise will block
- * until the second is resolved, and then assumes the same result as the second
+ * until the second is settled, and then assumes the same result as the second
  * Promise. This allows Promises to depend on the results of other Promises,
  * linking together multiple asynchronous operations.
  *
@@ -81,7 +82,7 @@ goog.Promise = function(resolver, opt_context) {
   this.state_ = goog.Promise.State_.PENDING;
 
   /**
-   * The resolved result of the Promise. Immutable once set with either a
+   * The settled result of the Promise. Immutable once set with either a
    * fulfillment value or rejection reason.
    * @private {*}
    */
@@ -254,7 +255,7 @@ goog.Promise.CallbackEntry_ = function() {
 
   /**
    * A boolean value to indicate this is a "thenAlways" callback entry.
-   * Unlike a normal "then/thenVoid" a "thenAlways doesn't particapate
+   * Unlike a normal "then/thenVoid" a "thenAlways doesn't participate
    * in "cancel" considerations but is simply an observer and requires
    * special handling.
    * @type {boolean}
@@ -354,7 +355,8 @@ goog.Promise.reject = function(opt_reason) {
 /**
  * @param {!Array<!(goog.Thenable<TYPE>|Thenable)>} promises
  * @return {!goog.Promise<TYPE>} A Promise that receives the result of the
- *     first Promise (or Promise-like) input to complete.
+ *     first Promise (or Promise-like) input to settle immediately after it
+ *     settles.
  * @template TYPE
  */
 goog.Promise.race = function(promises) {
@@ -373,7 +375,8 @@ goog.Promise.race = function(promises) {
  * @param {!Array<!(goog.Thenable<TYPE>|Thenable)>} promises
  * @return {!goog.Promise<!Array<TYPE>>} A Promise that receives a list of
  *     every fulfilled value once every input Promise (or Promise-like) is
- *     successfully fulfilled, or is rejected by the first rejection result.
+ *     successfully fulfilled, or is rejected with the first rejection reason
+ *     immediately after it is rejected.
  * @template TYPE
  */
 goog.Promise.all = function(promises) {
@@ -555,7 +558,7 @@ goog.Thenable.addImplementation(goog.Promise);
  * @param {?(function(this:THIS, TYPE):
  *             (RESULT|IThenable<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
- *     is fullfilled.
+ *     is fulfilled.
  * @param {?(function(this:THIS, *): *)=} opt_onRejected A function that will
  *     be invoked with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
@@ -611,8 +614,8 @@ goog.Promise.maybeThenVoid_ = function(
 
 
 /**
- * Adds a callback that will be invoked whether the Promise is fulfilled or
- * rejected. The callback receives no argument, and no new child Promise is
+ * Adds a callback that will be invoked when the Promise is settled (fulfilled
+ * or rejected). The callback receives no argument, and no new child Promise is
  * created. This is useful for ensuring that cleanup takes place after certain
  * asynchronous operations. Callbacks added with {@code thenAlways} will be
  * executed in the same order with other calls to {@code then},
@@ -881,11 +884,11 @@ goog.Promise.prototype.unblockAndReject_ = function(reason) {
  * is a no-op if the given Promise has already been resolved.
  *
  * If the given result is a Thenable (such as another Promise), the Promise will
- * be resolved with the same state and result as the Thenable once it is itself
- * resolved.
+ * be settled with the same state and result as the Thenable once it is itself
+ * settled.
  *
- * If the given result is not a Thenable, the Promise will be fulfilled or
- * rejected with that result based on the given state.
+ * If the given result is not a Thenable, the Promise will be settled (fulfilled
+ * or rejected) with that result based on the given state.
  *
  * @see http://promisesaplus.com/#the_promise_resolution_procedure
  *
