@@ -243,7 +243,24 @@ goog.date.getWeekNumber = function(year, month, date, opt_weekDay,
   var d = new Date(year, month, date);
 
   // Default to Thursday for cut off as per ISO 8601.
-  var cutoff = opt_weekDay || goog.date.weekDay.THU;
+
+  var cutoff;
+
+  // @param opt_weekDay might have an intended 0 value, but
+  // if it does, the original cutoff calculation will set a
+  // value of goog.date.weekDay.THU, which is 4. This block
+  // accounts for this case, and it won't break any earlier
+  // workarounds. Test for opt_weekDay === 'undefined' because
+  // an existing production call to this function might have
+  // an undefined value for this parameter.
+  
+  if (typeof opt_weekDay === 'undefined'){
+	cutoff = goog.date.weekDay.THU;
+  } else if (opt_weekDay === 7) {
+	cutoff = 0;
+  } else {
+	cutoff = opt_weekDay;
+  }
 
   // Default to Monday for first day of the week as per ISO 8601.
   var firstday = opt_firstDayOfWeek || goog.date.weekDay.MON;
