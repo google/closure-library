@@ -160,7 +160,7 @@ goog.addDependency('debug/fancywindow.js', ['goog.debug.FancyWindow'], ['goog.ar
 goog.addDependency('debug/formatter.js', ['goog.debug.Formatter', 'goog.debug.HtmlFormatter', 'goog.debug.TextFormatter'], ['goog.debug', 'goog.debug.Logger', 'goog.debug.RelativeTimeProvider', 'goog.html.SafeHtml'], false);
 goog.addDependency('debug/formatter_test.js', ['goog.debug.FormatterTest'], ['goog.debug.HtmlFormatter', 'goog.debug.LogRecord', 'goog.debug.Logger', 'goog.html.SafeHtml', 'goog.testing.jsunit'], false);
 goog.addDependency('debug/fpsdisplay.js', ['goog.debug.FpsDisplay'], ['goog.asserts', 'goog.async.AnimationDelay', 'goog.dom', 'goog.dom.TagName', 'goog.ui.Component'], false);
-goog.addDependency('debug/fpsdisplay_test.js', ['goog.debug.FpsDisplayTest'], ['goog.debug.FpsDisplay', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit'], false);
+goog.addDependency('debug/fpsdisplay_test.js', ['goog.debug.FpsDisplayTest'], ['goog.Timer', 'goog.debug.FpsDisplay', 'goog.testing.jsunit'], false);
 goog.addDependency('debug/gcdiagnostics.js', ['goog.debug.GcDiagnostics'], ['goog.debug.Trace', 'goog.log', 'goog.userAgent'], false);
 goog.addDependency('debug/logbuffer.js', ['goog.debug.LogBuffer'], ['goog.asserts', 'goog.debug.LogRecord'], false);
 goog.addDependency('debug/logbuffer_test.js', ['goog.debug.LogBufferTest'], ['goog.debug.LogBuffer', 'goog.debug.Logger', 'goog.testing.jsunit'], false);
