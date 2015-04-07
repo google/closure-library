@@ -23,6 +23,7 @@ goog.provide('goog.testing.dom');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagIterator');
@@ -60,7 +61,7 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
  * Tests if the given iterator over nodes matches the given Array of node
  * descriptors.  Throws an error if any match fails.
  * @param {goog.iter.Iterator} it  An iterator over nodes.
- * @param {Array.<Node|number|string>} array Array of node descriptors to match
+ * @param {Array<Node|number|string>} array Array of node descriptors to match
  *     against.  Node descriptors can be any of the following:
  *         Node: Test if the two nodes are equal.
  *         number: Test node.nodeType == number.
@@ -172,7 +173,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
  * Map function that converts end tags to a specific object.
  * @param {Node} node The node to map.
  * @param {undefined} ignore Always undefined.
- * @param {!goog.iter.Iterator.<Node>} iterator The iterator.
+ * @param {!goog.iter.Iterator<Node>} iterator The iterator.
  * @return {Node} The resulting iteration item.
  * @private
  */
@@ -205,7 +206,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
     if (match) {
       return goog.testing.dom.checkUserAgents_(match[1]);
     }
-  } else if (node.className) {
+  } else if (node.className && goog.isString(node.className)) {
     return goog.testing.dom.checkUserAgents_(node.className);
   }
   return true;
@@ -221,7 +222,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
  */
 goog.testing.dom.getExpectedText_ = function(node) {
   // Strip off the browser specifications.
-  return node.nodeValue.match(/^(\[\[.+\]\])?(.*)/)[2];
+  return node.nodeValue.match(/^(\[\[.+\]\])?([\s\S]*)/)[2];
 };
 
 
@@ -349,7 +350,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
       if (IE_TEXT_COLLAPSE) {
         // Collapse the leading whitespace, unless the string consists entirely
         // of whitespace.
-        if (collapsible && !goog.string.isEmpty(actualText)) {
+        if (collapsible && !goog.string.isEmptyOrWhitespace(actualText)) {
           actualText = goog.string.trimLeft(actualText);
         }
         // Prepare to collapse whitespace in the next Text node if this one does
@@ -386,12 +387,18 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
  * others.
  * @param {string} htmlPattern The pattern to match.
  * @param {string} actual The html to check.
+ * @param {boolean=} opt_strictAttributes If false, attributes that appear in
+ *     htmlPattern must be in actual, but actual can have attributes not
+ *     present in htmlPattern. If true, htmlPattern and actual must have the
+ *     same set of attributes. Default is false.
  */
-goog.testing.dom.assertHtmlMatches = function(htmlPattern, actual) {
+goog.testing.dom.assertHtmlMatches = function(htmlPattern, actual,
+    opt_strictAttributes) {
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.innerHTML = actual;
 
-  goog.testing.dom.assertHtmlContentsMatch(htmlPattern, div);
+  goog.testing.dom.assertHtmlContentsMatch(
+      htmlPattern, div, opt_strictAttributes);
 };
 
 
@@ -453,13 +460,14 @@ goog.testing.dom.assertRangeEquals = function(start, startOffset, end,
  */
 goog.testing.dom.getAttributeValue_ = function(node, name) {
   // These hacks avoid nondetermistic results in the following cases:
-  // IE7: document.createElement('input').height returns a random number.
+  // IE7: document.createElement(goog.dom.TagName.INPUT).height returns
+  //      a random number.
   // FF3: getAttribute('disabled') returns different value for <div disabled="">
   //      and <div disabled="disabled">
   // WebKit: Two radio buttons with the same name can't be checked at the same
   //      time, even if only one of them is in the document.
-  if (goog.userAgent.WEBKIT && node.tagName == 'INPUT' &&
-      node['type'] == 'radio' && name == 'checked') {
+  if (goog.userAgent.WEBKIT && node.tagName == goog.dom.TagName.INPUT &&
+      node['type'] == goog.dom.InputType.RADIO && name == 'checked') {
     return false;
   }
   return goog.isDef(node[name]) &&
@@ -521,8 +529,9 @@ goog.testing.dom.assertAttributesEqual_ = function(errorSuffix,
         actualAttribute);
     assertEquals('Expected attribute ' + expectedName +
         ' has a different value ' + errorSuffix,
-        expectedValue,
-        goog.testing.dom.getAttributeValue_(actualElem, actualAttribute.name));
+        String(expectedValue),
+        String(goog.testing.dom.getAttributeValue_(
+            actualElem, actualAttribute.name)));
   }
 
   if (strictAttributes) {

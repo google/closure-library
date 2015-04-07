@@ -55,3 +55,20 @@ function testGetSetTooltip() {
   assertEquals('Tooltip must have expected value', 'Hello, world!',
       tab.getTooltip());
 }
+
+function testSetAriaLabel() {
+  assertNull('Tab must not have aria label by default', tab.getAriaLabel());
+  tab.setAriaLabel('My tab');
+  tab.render();
+  var element = tab.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('Tab element must have expected aria-label', 'My tab',
+      element.getAttribute('aria-label'));
+  assertEquals('Tab element must have expected aria role', 'tab',
+      element.getAttribute('role'));
+  tab.setAriaLabel('My new tab');
+  assertEquals('Tab element must have updated aria-label', 'My new tab',
+      element.getAttribute('aria-label'));
+  assertEquals('Tab element must have expected aria role', 'tab',
+      element.getAttribute('role'));
+}

@@ -22,12 +22,14 @@ goog.provide('goog.editor.plugins.TableEditor');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.Table');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.object');
+goog.require('goog.userAgent');
 
 
 
@@ -43,7 +45,7 @@ goog.editor.plugins.TableEditor = function() {
   /**
    * The array of functions that decide whether a table element could be
    * editable by the user or not.
-   * @type {Array.<function(Element):boolean>}
+   * @type {Array<function(Element):boolean>}
    * @private
    */
   this.isTableEditableFunctions_ = [];
@@ -190,7 +192,7 @@ goog.editor.plugins.TableEditor.prototype.execCommandInternal = function(
     // TODO(user): use the reference to the table element returned from
     // replaceContentsWithNode.
     if (!goog.userAgent.IE) {
-      cursorCell = table.getElementsByTagName('td')[0];
+      cursorCell = table.getElementsByTagName(goog.dom.TagName.TD)[0];
     }
   } else {
     var cellSelection = new goog.editor.plugins.TableEditor.CellSelection_(
@@ -429,7 +431,7 @@ goog.editor.plugins.TableEditor.CellSelection_.prototype.getLastColumnIndex =
 
 /**
  * Returns the cells in this selection.
- * @return {!Array.<Element>} Cells in this selection.
+ * @return {!Array<Element>} Cells in this selection.
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.getCells = function() {
   return this.cells_;

@@ -23,6 +23,7 @@ goog.provide('goog.ui.ColorMenuButtonRenderer');
 
 goog.require('goog.asserts');
 goog.require('goog.color');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.userAgent');
@@ -77,10 +78,10 @@ goog.ui.ColorMenuButtonRenderer.prototype.createCaption = function(content,
  * Wrap a caption in a div with the color-menu-button-indicator CSS class.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  */
 goog.ui.ColorMenuButtonRenderer.wrapCaption = function(content, dom) {
-  return dom.createDom('div',
+  return dom.createDom(goog.dom.TagName.DIV,
       goog.getCssName(goog.ui.ColorMenuButtonRenderer.CSS_CLASS, 'indicator'),
       content);
 };

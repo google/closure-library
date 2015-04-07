@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Provides utility methods to render soy template.
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.soy');
@@ -46,7 +47,7 @@ goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
  * will be easier to audit the code for cross-site scripting vulnerabilities.
  *
  * @param {Element} element The element whose content we are rendering into.
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -69,7 +70,7 @@ goog.soy.renderElement = function(element, template, opt_templateData,
  * the method). Otherwise a document fragment is returned containing the
  * rendered nodes.
  *
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -96,7 +97,7 @@ goog.soy.renderAsFragment = function(template, opt_templateData,
  * HTML string represents a single node, then that node is returned. Otherwise,
  * a DIV element is returned containing the rendered nodes.
  *
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -162,13 +163,13 @@ goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
         templateResult);
     var ContentKind = goog.soy.data.SanitizedContentKind;
     if (templateResult.contentKind === ContentKind.HTML) {
-      return goog.asserts.assertString(templateResult.content);
+      return goog.asserts.assertString(templateResult.getContent());
     }
     if (templateResult.contentKind === ContentKind.TEXT) {
       // Allow text to be rendered, as long as we escape it. Other content
       // kinds will fail, since we don't know what to do with them.
       // TODO(gboyer): Perhaps also include URI in this case.
-      return goog.string.htmlEscape(templateResult.content);
+      return goog.string.htmlEscape(templateResult.getContent());
     }
   }
 
@@ -212,7 +213,6 @@ goog.soy.INVALID_TAG_TO_RENDER_ =
 /**
  * Immutable object that is passed into templates that are rendered
  * without any data.
- * @type {Object}
- * @private
+ * @private @const
  */
 goog.soy.defaultTemplateData_ = {};

@@ -77,10 +77,16 @@ goog.net.WebChannel = function() {};
  * when a new instance of WebChannel is created via {@link WebChannelTransport}.
  *
  * messageHeaders: custom headers to be added to every message sent to the
- * server.
+ * server. This object is mutable, and custom headers may be changed, removed,
+ * or added during the runtime after a channel has been opened.
  *
  * messageUrlParams: custom url query parameters to be added to every message
- * sent to the server.
+ * sent to the server. This object is mutable, and custom parameters may be
+ * changed, removed or added during the runtime after a channel has been opened.
+ *
+ * clientProtocolHeaderRequired: whether a special header should be added to
+ * each message so that the server can dispatch webchannel messages without
+ * knowing the URL path prefix. Defaults to false.
  *
  * concurrentRequestLimit: the maximum number of in-flight HTTP requests allowed
  * when SPDY is enabled. Currently we only detect SPDY in Chrome.
@@ -96,8 +102,9 @@ goog.net.WebChannel = function() {};
  *
  *
  * @typedef {{
- *   messageHeaders: (!Object.<string, string>|undefined),
- *   messageUrlParams: (!Object.<string, string>|undefined),
+ *   messageHeaders: (!Object<string, string>|undefined),
+ *   messageUrlParams: (!Object<string, string>|undefined),
+ *   clientProtocolHeaderRequired: (boolean|undefined),
  *   concurrentRequestLimit: (number|undefined),
  *   supportsCrossDomainXhr: (boolean|undefined),
  *   testUrl: (string|undefined)
@@ -109,7 +116,7 @@ goog.net.WebChannel.Options;
 /**
  * Types that are allowed as message data.
  *
- * @typedef {(ArrayBuffer|Blob|Object.<string, string>|Array)}
+ * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
  */
 goog.net.WebChannel.MessageData;
 
@@ -223,10 +230,10 @@ goog.net.WebChannel.prototype.getRuntimeProperties = goog.abstractMethod;
 
 
 /**
- * The readonly runtime properties of the WebChannel instance.
+ * The runtime properties of the WebChannel instance.
  *
- * This class is defined for debugging and monitoring purposes, and for
- * optimization functions that the application may choose to manage by itself.
+ * This class is defined for debugging and monitoring purposes, as well as for
+ * runtime functions that the application may choose to manage by itself.
  *
  * @interface
  */
@@ -278,3 +285,27 @@ goog.net.WebChannel.RuntimeProperties.prototype.setServerFlowControl =
  */
 goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
     goog.abstractMethod;
+
+
+/**
+ * @return {number} The last HTTP status code received by the channel.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
+    goog.abstractMethod;
+
+
+/**
+ * A special header to indicate to the server what messaging protocol
+ * each HTTP message is speaking.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_CLIENT_PROTOCOL = 'X-Client-Protocol';
+
+
+/**
+ * The value for x-client-protocol when the messaging protocol is WebChannel.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_CLIENT_PROTOCOL_WEB_CHANNEL = 'webchannel';

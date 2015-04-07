@@ -76,7 +76,8 @@ goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
           if (range.parentElement().document != doc) {
             return null;
           }
-        } else if (!range.length || range.item(0).document != doc) {
+        } else if (!range.length ||
+            /** @type {ControlRange} */ (range).item(0).document != doc) {
           // For ControlRanges, check that the range has items, and that
           // the first item in the range is in the correct document.
           return null;
@@ -157,7 +158,7 @@ goog.dom.AbstractRange.prototype.getTextRange = goog.abstractMethod;
 /**
  * Gets an array of all text ranges this range is comprised of.  For non-multi
  * ranges, returns a single element array containing this.
- * @return {!Array.<goog.dom.TextRange>} Array of text ranges.
+ * @return {!Array<goog.dom.TextRange>} Array of text ranges.
  */
 goog.dom.AbstractRange.prototype.getTextRanges = function() {
   var output = [];

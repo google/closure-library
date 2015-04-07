@@ -44,18 +44,27 @@ goog.require('goog.math');
  * @constructor
  */
 goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
+  /** @private {string} */
   this.intlCurrencyCode_ = opt_currency ||
       goog.i18n.NumberFormatSymbols.DEF_CURRENCY_CODE;
 
+  /** @private {number} */
   this.currencyStyle_ = opt_currencyStyle ||
       goog.i18n.NumberFormat.CurrencyStyle.LOCAL;
 
+  /** @private {number} */
   this.maximumIntegerDigits_ = 40;
+  /** @private {number} */
   this.minimumIntegerDigits_ = 1;
+  /** @private {number} */
   this.significantDigits_ = 0; // invariant, <= maximumFractionDigits
+  /** @private {number} */
   this.maximumFractionDigits_ = 3; // invariant, >= minFractionDigits
+  /** @private {number} */
   this.minimumFractionDigits_ = 0;
+  /** @private {number} */
   this.minExponentDigits_ = 0;
+  /** @private {boolean} */
   this.useSignForPositiveExponent_ = false;
 
   /**
@@ -65,16 +74,25 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
    */
   this.showTrailingZeros_ = false;
 
+  /** @private {string} */
   this.positivePrefix_ = '';
+  /** @private {string} */
   this.positiveSuffix_ = '';
+  /** @private {string} */
   this.negativePrefix_ = '-';
+  /** @private {string} */
   this.negativeSuffix_ = '';
 
   // The multiplier for use in percent, per mille, etc.
+  /** @private {number} */
   this.multiplier_ = 1;
+  /** @private {number} */
   this.groupingSize_ = 3;
+  /** @private {boolean} */
   this.decimalSeparatorAlwaysShown_ = false;
+  /** @private {boolean} */
   this.useExponentialNotation_ = false;
+  /** @private {goog.i18n.NumberFormat.CompactStyle} */
   this.compactStyle_ = goog.i18n.NumberFormat.CompactStyle.NONE;
 
   /**
@@ -84,6 +102,9 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
    * @private
    */
   this.baseFormattingNumber_ = null;
+
+  /** @private {string} */
+  this.pattern_;
 
   if (typeof pattern == 'number') {
     this.applyStandardPattern_(pattern);
@@ -345,7 +366,7 @@ goog.i18n.NumberFormat.prototype.applyCompactStyle_ = function(style) {
  * parsing stops after the call. If an error occurs, opt_pos won't be updated.
  *
  * @param {string} text The string to be parsed.
- * @param {Array.<number>=} opt_pos Position to pass in and get back.
+ * @param {Array<number>=} opt_pos Position to pass in and get back.
  * @return {number} Parsed number. This throws an error if the text cannot be
  *     parsed.
  */
@@ -356,7 +377,6 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
     throw Error('Parsing of compact numbers is unimplemented');
   }
 
-  var start = pos[0];
   var ret = NaN;
 
   // we don't want to handle 2 kind of space in parsing, normalize it to nbsp
@@ -410,7 +430,7 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
  * handle locale specific decimal, grouping, exponent and digits.
  *
  * @param {string} text The text that need to be parsed.
- * @param {Array.<number>} pos  In/out parsing position. In case of failure,
+ * @param {Array<number>} pos  In/out parsing position. In case of failure,
  *    pos value won't be changed.
  * @return {number} Number value, or NaN if nothing can be parsed.
  * @private
@@ -564,7 +584,8 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
  *
  * @param {number} number
  * @param {number} minIntDigits Minimum integer digits.
- * @param {Array} parts This array holds the pieces of formatted string.
+ * @param {Array<string>} parts
+ *     This array holds the pieces of formatted string.
  *     This function will add its formatted pieces to the array.
  * @private
  */
@@ -648,7 +669,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
  * Formats exponent part of a Number.
  *
  * @param {number} exponent Exponential value.
- * @param {Array.<string>} parts The array that holds the pieces of formatted
+ * @param {Array<string>} parts The array that holds the pieces of formatted
  *     string. This function will append more formatted pieces to the array.
  * @private
  */
@@ -676,7 +697,7 @@ goog.i18n.NumberFormat.prototype.addExponentPart_ = function(exponent, parts) {
  * Formats Number in exponential format.
  *
  * @param {number} number Value need to be formated.
- * @param {Array.<string>} parts The array that holds the pieces of formatted
+ * @param {Array<string>} parts The array that holds the pieces of formatted
  *     string. This function will append more formatted pieces to the array.
  * @private
  */
@@ -843,7 +864,7 @@ goog.i18n.NumberFormat.QUOTE_ = '\'';
  * Parses affix part of pattern.
  *
  * @param {string} pattern Pattern string that need to be parsed.
- * @param {Array.<number>} pos One element position array to set and receive
+ * @param {Array<number>} pos One element position array to set and receive
  *     parsing position.
  *
  * @return {string} Affix received from parsing.
@@ -930,7 +951,7 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
  * Parses the trunk part of a pattern.
  *
  * @param {string} pattern Pattern string that need to be parsed.
- * @param {Array.<number>} pos One element position array to set and receive
+ * @param {Array<number>} pos One element position array to set and receive
  *     parsing position.
  * @private
  */

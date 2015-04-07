@@ -26,7 +26,6 @@ goog.provide('goog.storage.RichStorage.Wrapper');
 
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.Storage');
-goog.require('goog.storage.mechanism.Mechanism');
 
 
 
@@ -36,6 +35,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  * @param {!goog.storage.mechanism.Mechanism} mechanism The underlying
  *     storage mechanism.
  * @constructor
+ * @struct
  * @extends {goog.storage.Storage}
  */
 goog.storage.RichStorage = function(mechanism) {

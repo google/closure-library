@@ -41,17 +41,9 @@ function testparseList() {
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses');
 
-  assertParsedList('<foo@gmail.com>、 <bar@gmail.com>',
-      ['foo@gmail.com', 'bar@gmail.com'],
-      'Failed to parse 2 email addresses with Chinese comma');
-
   assertParsedList('<foo@gmail.com>, <bar@gmail.com>,',
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses and trailing comma');
-
-  assertParsedList('<foo@gmail.com>、 <bar@gmail.com>、',
-      ['foo@gmail.com', 'bar@gmail.com'],
-      'Failed to parse 2 email addresses with trailing Chinese comma');
 
   assertParsedList('<foo@gmail.com>, <bar@gmail.com>, ',
       ['foo@gmail.com', 'bar@gmail.com'],
@@ -135,9 +127,21 @@ function testToString() {
   // No address.
   assertEquals('JOHN Doe', f('JOHN Doe <>'));
 
-  // Special char in the name.
+  // Special chars in the name.
   assertEquals('"JOHN, Doe" <john@gmail.com>',
                f('JOHN, Doe <john@gmail.com>'));
+  assertEquals('"JOHN(Johnny) Doe" <john@gmail.com>',
+               f('JOHN(Johnny) Doe <john@gmail.com>'));
+  assertEquals('"JOHN[Johnny] Doe" <john@gmail.com>',
+               f('JOHN[Johnny] Doe <john@gmail.com>'));
+  assertEquals('"JOHN@work Doe" <john@gmail.com>',
+               f('JOHN@work Doe <john@gmail.com>'));
+  assertEquals('"JOHN:theking Doe" <john@gmail.com>',
+               f('JOHN:theking Doe <john@gmail.com>'));
+  assertEquals('"JOHN\\\\ Doe" <john@gmail.com>',
+               f('JOHN\\ Doe <john@gmail.com>'));
+  assertEquals('"JOHN.com Doe" <john@gmail.com>',
+               f('JOHN.com Doe <john@gmail.com>'));
 
   // Already quoted.
   assertEquals('"JOHN, Doe" <john@gmail.com>',
@@ -209,7 +213,7 @@ function testIsValidDomainPart() {
  * Asserts that parsing the inputString produces a list of email addresses
  * containing the specified address strings, irrespective of their order.
  * @param {string} inputString A raw address list.
- * @param {Array.<string>} expectedList The expected results.
+ * @param {Array<string>} expectedList The expected results.
  * @param {string=} opt_message An assertion message.
  * @return {string} the resulting email address objects.
  */

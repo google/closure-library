@@ -16,6 +16,7 @@ goog.provide('goog.dom.annotateTest');
 goog.setTestOnly('goog.dom.annotateTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.annotate');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.jsunit');
@@ -109,7 +110,8 @@ function testAnnotateTerms() {
 
   terms = [['Tom', true]];
   assertTrue(goog.dom.annotate.annotateTerms($('p'), terms, doAnnotation));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('p'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('p'));
   assertEquals(1, spans.length);
   assertEquals('Tom', spans[0].innerHTML);
   assertEquals(' & Jerry', spans[0].nextSibling.nodeValue);
@@ -118,12 +120,13 @@ function testAnnotateTerms() {
 function testAnnotateTermsInTable() {
   var terms = [['pig', false]];
   assertTrue(goog.dom.annotate.annotateTerms($('q'), terms, doAnnotation));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('q'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('q'));
   assertEquals(2, spans.length);
   assertEquals('pig', spans[0].innerHTML);
   assertEquals('gy', spans[0].nextSibling.nodeValue);
   assertEquals('pig', spans[1].innerHTML);
-  assertEquals('I', spans[1].parentNode.tagName);
+  assertEquals(goog.dom.TagName.I, spans[1].parentNode.tagName);
 }
 
 function testAnnotateTermsWithClassExclusions() {
@@ -131,7 +134,8 @@ function testAnnotateTermsWithClassExclusions() {
   var classesToIgnore = ['s'];
   assertTrue(goog.dom.annotate.annotateTerms($('r'), terms, doAnnotation,
                                              false, classesToIgnore));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('r'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('r'));
   assertEquals(1, spans.length);
   assertEquals('pig', spans[0].innerHTML);
   assertEquals('gy', spans[0].nextSibling.nodeValue);
@@ -141,7 +145,8 @@ function testAnnotateTermsIgnoreCase() {
   var terms1 = [['pig', false]];
   assertTrue(goog.dom.annotate.annotateTerms(
       $('t'), terms1, doAnnotation, true));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('t'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('t'));
   assertEquals(2, spans.length);
   assertEquals('pig', spans[0].innerHTML);
   assertEquals('gy', spans[0].nextSibling.nodeValue);
@@ -150,7 +155,8 @@ function testAnnotateTermsIgnoreCase() {
   var terms2 = [['Pig', false]];
   assertTrue(goog.dom.annotate.annotateTerms(
       $('u'), terms2, doAnnotation, true));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('u'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('u'));
   assertEquals(2, spans.length);
   assertEquals('pig', spans[0].innerHTML);
   assertEquals('gy', spans[0].nextSibling.nodeValue);
@@ -160,7 +166,8 @@ function testAnnotateTermsIgnoreCase() {
 function testAnnotateTermsInObject() {
   var terms = [['object', true]];
   assertTrue(goog.dom.annotate.annotateTerms($('o'), terms, doAnnotation));
-  var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('o'));
+  var spans = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN, 'c0', $('o'));
   assertEquals(1, spans.length);
   assertEquals('object', spans[0].innerHTML);
 }

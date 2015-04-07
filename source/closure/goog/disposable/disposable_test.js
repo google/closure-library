@@ -281,6 +281,17 @@ function testOnDisposeCallbackOrder() {
       ['a', 'b'], invocations);
 }
 
+function testAddOnDisposeCallbackAfterDispose() {
+  var callback = goog.testing.recordFunction();
+  var scope = {};
+  goog.dispose(d1);
+  d1.addOnDisposeCallback(callback, scope);
+  assertEquals('Callback should be immediately called if already disposed', 1,
+      callback.getCallCount());
+  assertEquals('Callback scope should be respected', scope,
+      callback.getLastCall().getThis());
+}
+
 function testInteractiveMonitoring() {
   var d1 = new DisposableTest();
   goog.Disposable.MONITORING_MODE =

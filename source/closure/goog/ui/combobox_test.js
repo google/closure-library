@@ -158,7 +158,7 @@ function testSetEnabled() {
   assertFalse('Text input should initially not be disabled', input.disabled);
   assertFalse('Text input should initially not look disabled',
       goog.dom.classlist.contains(input,
-      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+      goog.getCssName(goog.ui.LabelInput.prototype.labelCssClassName,
           'disabled')));
   assertFalse('Combo box should initially not look disabled',
       goog.dom.classlist.contains(comboBox.getElement(),
@@ -177,7 +177,7 @@ function testSetEnabled() {
       input.disabled);
   assertTrue('Text input should appear disabled after being disabled',
       goog.dom.classlist.contains(input,
-      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+      goog.getCssName(goog.ui.LabelInput.prototype.labelCssClassName,
           'disabled')));
   assertTrue('Combo box should appear disabled after being disabled',
       goog.dom.classlist.contains(comboBox.getElement(),
@@ -192,7 +192,7 @@ function testSetEnabled() {
       input.disabled);
   assertFalse('Text input should not appear disabled after being re-enabled',
       goog.dom.classlist.contains(input,
-      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+      goog.getCssName(goog.ui.LabelInput.prototype.labelCssClassName,
           'disabled')));
   assertFalse('Combo box should not appear disabled after being re-enabled',
       goog.dom.classlist.contains(comboBox.getElement(),
@@ -208,7 +208,7 @@ function testSetEnabled() {
 function testSetFormatFromToken() {
   var item = new goog.ui.ComboBoxItem('ABc');
   item.setFormatFromToken('b');
-  var div = goog.dom.createDom('div');
+  var div = goog.dom.createDom(goog.dom.TagName.DIV);
   new goog.ui.ControlRenderer().setContent(div, item.getContent());
   assertTrue(div.innerHTML == 'A<b>B</b>c' || div.innerHTML == 'A<B>B</B>c');
 }

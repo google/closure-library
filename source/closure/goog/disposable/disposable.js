@@ -44,6 +44,9 @@ goog.Disposable = function() {
     }
     goog.Disposable.instances_[goog.getUid(this)] = this;
   }
+  // Support sealing
+  this.disposed_ = this.disposed_;
+  this.onDisposeCallbacks_ = this.onDisposeCallbacks_;
 };
 
 
@@ -91,14 +94,14 @@ goog.define('goog.Disposable.INCLUDE_STACK_ON_CREATION', true);
 /**
  * Maps the unique ID of every undisposed {@code goog.Disposable} object to
  * the object itself.
- * @type {!Object.<number, !goog.Disposable>}
+ * @type {!Object<number, !goog.Disposable>}
  * @private
  */
 goog.Disposable.instances_ = {};
 
 
 /**
- * @return {!Array.<!goog.Disposable>} All {@code goog.Disposable} objects that
+ * @return {!Array<!goog.Disposable>} All {@code goog.Disposable} objects that
  *     haven't been disposed of.
  */
 goog.Disposable.getUndisposedObjects = function() {
@@ -130,7 +133,7 @@ goog.Disposable.prototype.disposed_ = false;
 
 /**
  * Callbacks to invoke when this object is disposed.
- * @type {Array.<!Function>}
+ * @type {Array<!Function>}
  * @private
  */
 goog.Disposable.prototype.onDisposeCallbacks_;
@@ -139,7 +142,7 @@ goog.Disposable.prototype.onDisposeCallbacks_;
 /**
  * If monitoring the goog.Disposable instances is enabled, stores the creation
  * stack trace of the Disposable instance.
- * @type {string}
+ * @const {string}
  */
 goog.Disposable.prototype.creationStack;
 
@@ -203,12 +206,17 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
 
 /**
  * Invokes a callback function when this object is disposed. Callbacks are
- * invoked in the order in which they were added.
+ * invoked in the order in which they were added. If a callback is added to
+ * an already disposed Disposable, it will be called immediately.
  * @param {function(this:T):?} callback The callback function.
  * @param {T=} opt_scope An optional scope to call the callback in.
  * @template T
  */
 goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
+  if (this.disposed_) {
+    callback.call(opt_scope);
+    return;
+  }
   if (!this.onDisposeCallbacks_) {
     this.onDisposeCallbacks_ = [];
   }

@@ -63,7 +63,7 @@ goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
 
   /**
    * Array for queued messages.
-   * @type {Array}
+   * @type {Array<{serviceName: string, payload: string}>}
    * @private
    */
   this.queue_ = [];
@@ -86,6 +86,18 @@ goog.inherits(goog.net.xpc.FrameElementMethodTransport, goog.net.xpc.Transport);
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.transportType =
     goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
+
+
+/** @private */
+goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetupCb_;
+
+
+/** @private */
+goog.net.xpc.FrameElementMethodTransport.prototype.outgoing_;
+
+
+/** @private */
+goog.net.xpc.FrameElementMethodTransport.prototype.iframeElm_;
 
 
 /**

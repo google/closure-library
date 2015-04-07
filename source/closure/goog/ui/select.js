@@ -147,7 +147,7 @@ goog.ui.Select.prototype.handleMenuAction = function(e) {
   this.setSelectedItem(/** @type {goog.ui.MenuItem} */ (e.target));
   goog.ui.Select.base(this, 'handleMenuAction', e);
 
-  // NOTE(user): We should not stop propagation and then fire
+  // NOTE(chrishenry): We should not stop propagation and then fire
   // our own ACTION event. Fixing this without breaking anyone
   // relying on this event is hard though.
   e.stopPropagation();
@@ -336,7 +336,7 @@ goog.ui.Select.prototype.setValue = function(value) {
     for (var i = 0, item; item = this.selectionModel_.getItemAt(i); i++) {
       if (item && typeof item.getValue == 'function' &&
           item.getValue() == value) {
-        this.setSelectedItem(/** @type {goog.ui.MenuItem} */ (item));
+        this.setSelectedItem(/** @type {!goog.ui.MenuItem} */ (item));
         return;
       }
     }

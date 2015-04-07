@@ -30,10 +30,11 @@
  *   <div class="goog-slider-thumb"></div>
  * </div>
  *
- * <script>
- * var slider = new goog.ui.Slider;
- * slider.decorate(document.getElementById('slider'));
- * </script>
+ * JavaScript code:
+ * <code>
+ *   var slider = new goog.ui.Slider;
+ *   slider.decorate(document.getElementById('slider'));
+ * </code>
  *
  * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/slider.html
@@ -49,6 +50,7 @@ goog.provide('goog.ui.Slider.Orientation');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.ui.SliderBase');
 
 
@@ -123,13 +125,12 @@ goog.ui.Slider.prototype.createThumbs = function() {
 
 /**
  * Creates the thumb element.
- * @return {HTMLDivElement} The created thumb element.
+ * @return {!HTMLDivElement} The created thumb element.
  * @private
  */
 goog.ui.Slider.prototype.createThumb_ = function() {
-  var thumb =
-      this.getDomHelper().createDom('div', goog.ui.Slider.THUMB_CSS_CLASS);
+  var thumb = this.getDomHelper().createDom(goog.dom.TagName.DIV,
+                                            goog.ui.Slider.THUMB_CSS_CLASS);
   goog.a11y.aria.setRole(thumb, goog.a11y.aria.Role.BUTTON);
-  return /** @type {HTMLDivElement} */ (thumb);
+  return /** @type {!HTMLDivElement} */ (thumb);
 };
-

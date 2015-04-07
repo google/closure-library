@@ -27,6 +27,7 @@ goog.provide('goog.fx.Dragger');
 goog.provide('goog.fx.Dragger.EventType');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -69,6 +70,9 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
       this.startDrag, false, this);
 };
 goog.inherits(goog.fx.Dragger, goog.events.EventTarget);
+// Dragger is meant to be extended, but defines most properties on its
+// prototype, thus making it unsuitable for sealing.
+goog.tagUnsealableClass(goog.fx.Dragger);
 
 
 /**
@@ -93,23 +97,25 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ =
  */
 goog.fx.Dragger.cloneNode = function(sourceEl) {
   var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true)),
-      origTexts = sourceEl.getElementsByTagName('textarea'),
-      dragTexts = clonedEl.getElementsByTagName('textarea');
+      origTexts = sourceEl.getElementsByTagName(goog.dom.TagName.TEXTAREA),
+      dragTexts = clonedEl.getElementsByTagName(goog.dom.TagName.TEXTAREA);
   // Cloning does not copy the current value of textarea elements, so correct
   // this manually.
   for (var i = 0; i < origTexts.length; i++) {
     dragTexts[i].value = origTexts[i].value;
   }
-  switch (sourceEl.tagName.toLowerCase()) {
-    case 'tr':
+  switch (sourceEl.tagName) {
+    case goog.dom.TagName.TR:
+      return goog.dom.createDom(goog.dom.TagName.TABLE, null,
+                                goog.dom.createDom(goog.dom.TagName.TBODY,
+                                                   null, clonedEl));
+    case goog.dom.TagName.TD:
+    case goog.dom.TagName.TH:
       return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, clonedEl));
-    case 'td':
-    case 'th':
-      return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
-          'tr', null, clonedEl)));
-    case 'textarea':
+          goog.dom.TagName.TABLE, null, goog.dom.createDom(
+              goog.dom.TagName.TBODY, null, goog.dom.createDom(
+                  goog.dom.TagName.TR, null, clonedEl)));
+    case goog.dom.TagName.TEXTAREA:
       clonedEl.value = sourceEl.value;
     default:
       return clonedEl;
@@ -313,12 +319,15 @@ goog.fx.Dragger.prototype.enableRightPositioningForRtl =
 
 /**
  * Returns the event handler, intended for subclass use.
- * @return {goog.events.EventHandler.<T>} The event handler.
+ * @return {!goog.events.EventHandler<T>} The event handler.
  * @this T
  * @template T
  */
 goog.fx.Dragger.prototype.getHandler = function() {
-  return this.eventHandler_;
+  // TODO(user): templated "this" values currently result in "this" being
+  // "unknown" in the body of the function.
+  var self = /** @type {goog.fx.Dragger} */ (this);
+  return self.eventHandler_;
 };
 
 

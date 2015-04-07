@@ -29,6 +29,7 @@ goog.provide('goog.net.ChannelRequest.Error');
 
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
@@ -103,7 +104,7 @@ goog.net.ChannelRequest = function(channel, channelDebug, opt_sessionId,
 
   /**
    * An object to keep track of the channel request event listeners.
-   * @type {!goog.events.EventHandler.<!goog.net.ChannelRequest>}
+   * @type {!goog.events.EventHandler<!goog.net.ChannelRequest>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -213,7 +214,7 @@ goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
 
 /**
  * The Trident instance if the request is using Trident.
- * @type {ActiveXObject}
+ * @type {Object}
  * @private
  */
 goog.net.ChannelRequest.prototype.trident_ = null;
@@ -839,33 +840,6 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
 
 
 /**
- * Called when the browser declares itself offline at the start of a request or
- * during its lifetime.  Abandons that request.
- * @private
- */
-goog.net.ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ =
-    function() {
-  if (this.successful_) {
-    // Should never happen.
-    this.channelDebug_.severe(
-        'Received browser offline event even though request completed ' +
-        'successfully');
-  }
-
-  this.channelDebug_.browserOfflineResponse(this.requestUri_);
-  this.cleanup_();
-
-  // set error and dispatch failure
-  this.lastError_ = goog.net.ChannelRequest.Error.BROWSER_OFFLINE;
-  /** @suppress {missingRequire} */
-  goog.net.BrowserChannel.notifyStatEvent(
-      /** @suppress {missingRequire} */
-      goog.net.BrowserChannel.Stat.BROWSER_OFFLINE);
-  this.dispatchFailure_();
-};
-
-
-/**
  * Returns the next chunk of a chunk-encoded response. This is not standard
  * HTTP chunked encoding because browsers don't expose the chunk boundaries to
  * the application through XMLHTTP. So we have an additional chunk encoding at
@@ -963,7 +937,7 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.trident_.parentWindow['rpcClose'] =
       goog.bind(this.onTridentDone_, this, false);
 
-  var div = this.trident_.createElement('div');
+  var div = this.trident_.createElement(goog.dom.TagName.DIV);
   this.trident_.parentWindow.document.body.appendChild(div);
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
   this.channelDebug_.tridentChannelRequest('GET',

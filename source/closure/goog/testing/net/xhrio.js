@@ -72,7 +72,7 @@ goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
  * All non-disposed instances of goog.testing.net.XhrIo created
  * by {@link goog.testing.net.XhrIo.send} are in this Array.
  * @see goog.testing.net.XhrIo.cleanup
- * @type {Array.<goog.testing.net.XhrIo>}
+ * @type {!Array<!goog.testing.net.XhrIo>}
  * @private
  */
 goog.testing.net.XhrIo.sendInstances_ = [];
@@ -81,7 +81,8 @@ goog.testing.net.XhrIo.sendInstances_ = [];
 /**
  * Returns an Array containing all non-disposed instances of
  * goog.testing.net.XhrIo created by {@link goog.testing.net.XhrIo.send}.
- * @return {Array} Array of goog.testing.net.XhrIo instances.
+ * @return {!Array<!goog.testing.net.XhrIo>} Array of goog.testing.net.XhrIo
+ *     instances.
  */
 goog.testing.net.XhrIo.getSendInstances = function() {
   return goog.testing.net.XhrIo.sendInstances_;
@@ -112,10 +113,14 @@ goog.testing.net.XhrIo.cleanup = function() {
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
+ * @param {boolean=} opt_withCredentials Whether to send credentials with the
+ *     request. Default to false. See {@link goog.net.XhrIo#setWithCredentials}.
+ * @return {!goog.testing.net.XhrIo} The mocked sent XhrIo.
  */
 goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
                                        opt_content, opt_headers,
-                                       opt_timeoutInterval) {
+                                       opt_timeoutInterval,
+                                       opt_withCredentials) {
   var x = new goog.testing.net.XhrIo();
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
@@ -127,7 +132,10 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
   if (opt_timeoutInterval) {
     x.setTimeoutInterval(opt_timeoutInterval);
   }
+  x.setWithCredentials(Boolean(opt_withCredentials));
   x.send(url, opt_method, opt_content, opt_headers);
+
+  return x;
 };
 
 
@@ -135,7 +143,7 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
  * Disposes of the specified goog.testing.net.XhrIo created by
  * {@link goog.testing.net.XhrIo.send} and removes it from
  * {@link goog.testing.net.XhrIo.pendingStaticSendInstances_}.
- * @param {goog.testing.net.XhrIo} XhrIo An XhrIo created by
+ * @param {!goog.testing.net.XhrIo} XhrIo An XhrIo created by
  *     {@link goog.testing.net.XhrIo.send}.
  * @private
  */
@@ -236,14 +244,6 @@ goog.testing.net.XhrIo.prototype.readyState_ =
  */
 goog.testing.net.XhrIo.prototype.timeoutInterval_ = 0;
 
-
-/**
- * Window timeout ID used to cancel the timeout event handler if the request
- * completes successfully.
- * @type {Object}
- * @private
- */
-goog.testing.net.XhrIo.prototype.timeoutId_ = null;
 
 
 /**
@@ -727,7 +727,7 @@ goog.testing.net.XhrIo.prototype.getAllResponseHeaders = function() {
  * include any case normalization logic, it will just return a key-value
  * representation of the headers.
  * See: http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
- * @return {!Object.<string, string>} An object with the header keys as keys
+ * @return {!Object<string, string>} An object with the header keys as keys
  *     and header values as values.
  */
 goog.testing.net.XhrIo.prototype.getResponseHeaders = function() {

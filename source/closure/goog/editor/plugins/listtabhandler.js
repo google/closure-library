@@ -21,9 +21,11 @@
 
 goog.provide('goog.editor.plugins.ListTabHandler');
 
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractTabHandler');
+goog.require('goog.iter');
 
 
 

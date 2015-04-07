@@ -262,6 +262,12 @@ function testChainFromIterable() {
   assertEquals('012345', goog.iter.join(iter, ''));
 }
 
+function testChainFromIterable2() {
+  var arg = goog.iter.zip([0, 3], [1, 4], [2, 5]);
+  var iter = goog.iter.chainFromIterable(arg);
+  assertEquals('012345', goog.iter.join(iter, ''));
+}
+
 function testDropWhile() {
   var iter = goog.iter.range(10);
   var iter2 = goog.iter.dropWhile(iter, function(val, index, iter3) {
@@ -359,6 +365,14 @@ function testEquals() {
 
   iter = goog.iter.range(4);
   assertFalse('Same iterator', goog.iter.equals(iter, iter));
+
+  // equality function
+  iter = goog.iter.toIterator(['A', 'B', 'C']);
+  iter2 = goog.iter.toIterator(['a', 'b', 'c']);
+  var equalsFn = function(a, b) {
+    return a.toLowerCase() == b.toLowerCase();
+  };
+  assertTrue('Case-insensitive equal', goog.iter.equals(iter, iter2, equalsFn));
 }
 
 

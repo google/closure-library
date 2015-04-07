@@ -23,9 +23,12 @@ goog.provide('goog.html.SafeHtml');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.tags');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.object');
@@ -245,6 +248,27 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
 
 
 /**
+ * Returns HTML-escaped text as a SafeHtml object, with newlines changed to
+ * &lt;br&gt; and escaping whitespace to preserve spatial formatting. Character
+ * entity #160 is used to make it safer for XML.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml The text to escape. If
+ *     the parameter is of type SafeHtml it is returned directly (no escaping
+ *     is done).
+ * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
+ */
+goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces = function(
+    textOrHtml) {
+  if (textOrHtml instanceof goog.html.SafeHtml) {
+    return textOrHtml;
+  }
+  var html = goog.html.SafeHtml.htmlEscape(textOrHtml);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+      goog.string.whitespaceEscape(goog.html.SafeHtml.unwrap(html)),
+      html.getDirection());
+};
+
+
+/**
  * Coerces an arbitrary object into a SafeHtml object.
  *
  * If {@code textOrHtml} is already of type {@code goog.html.SafeHtml}, the same
@@ -271,25 +295,29 @@ goog.html.SafeHtml.VALID_NAMES_IN_TAG_ = /^[a-zA-Z0-9-]+$/;
 /**
  * Set of attributes containing URL as defined at
  * http://www.w3.org/TR/html5/index.html#attributes-1.
- * @private @const {Object.<string,boolean>}
+ * @private @const {!Object<string,boolean>}
  */
 goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
     'data', 'formaction', 'href', 'manifest', 'poster', 'src');
 
 
-// TODO(user): Perhaps add <template> used by Polymer?
 /**
- * Set of tag names that are too dangerous.
- * @private @const {Object.<string,boolean>}
+ * Tags which are unsupported via create(). They might be supported via a
+ * tag-specific create method. These are tags which might require a
+ * TrustedResourceUrl in one of their attributes or a restricted type for
+ * their content.
+ * @private @const {!Object<string,boolean>}
  */
-goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
-    'script', 'style');
+goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
+    goog.dom.TagName.EMBED, goog.dom.TagName.IFRAME, goog.dom.TagName.LINK,
+    goog.dom.TagName.OBJECT, goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE,
+    goog.dom.TagName.TEMPLATE);
 
 
 /**
+ * @typedef {string|number|goog.string.TypedString|
+ *     goog.html.SafeStyle.PropertyMap}
  * @private
- * @typedef {string|number|goog.string.Const|goog.html.SafeUrl|
- *     goog.html.SafeStyle|goog.html.SafeStyle.PropertyMap}
  */
 goog.html.SafeHtml.AttributeValue_;
 
@@ -315,21 +343,29 @@ goog.html.SafeHtml.AttributeValue_;
  *   'style': {'margin': '0'}
  * });
  *
+ * To guarantee SafeHtml's type contract is upheld there are restrictions on
+ * attribute values and tag names.
+ *
+ * - For attributes which contain script code (on*), a goog.string.Const is
+ *   required.
+ * - For attributes which contain style (style), a goog.html.SafeStyle or a
+ *   goog.html.SafeStyle.PropertyMap is required.
+ * - For attributes which are interpreted as URLs (e.g. src, href) a
+ *   goog.html.SafeUrl or goog.string.Const is required.
+ * - For tags which can load code, more specific goog.html.SafeHtml.create*()
+ *   functions must be used. Tags which can load code and are not supported by
+ *   this function are embed, iframe, link, object, script, style, and template.
+ *
  * @param {string} tagName The name of the tag. Only tag names consisting of
- *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
- *     supported.
- * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=}
+ *     [a-zA-Z0-9-] are allowed. Tag names documented above are disallowed.
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
  *     opt_attributes Mapping from attribute names to their values. Only
- *     attribute names consisting of [a-zA-Z0-9-] are allowed. Attributes with
- *     a special meaning (e.g. on*) require goog.string.Const value, attributes
- *     containing URL require goog.string.Const or goog.html.SafeUrl. The
- *     "style" attribute accepts goog.html.SafeStyle or a map which will be
- *     passed to goog.html.SafeStyle.create. Value of null or undefined causes
- *     the attribute to be omitted. Values are HTML-escaped before usage.
+ *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
+ *     undefined causes the attribute to be omitted.
  * @param {!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to put
- *     inside the tag. This must be empty for void tags like <br>. Array
- *     elements are concatenated.
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to
+ *     HTML-escape and put inside the tag. This must be empty for void tags
+ *     like <br>. Array elements are concatenated.
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
  * @throws {Error} If invalid tag name, attribute name, or attribute value is
  *     provided.
@@ -339,9 +375,279 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
     throw Error('Invalid tag name <' + tagName + '>.');
   }
-  if (tagName.toLowerCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
+  if (tagName.toUpperCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
     throw Error('Tag name <' + tagName + '> is not allowed for SafeHtml.');
   }
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      tagName, opt_attributes, opt_content);
+};
+
+
+/**
+ * Creates a SafeHtml representing an iframe tag.
+ *
+ * By default the sandbox attribute is set to an empty value, which is the most
+ * secure option, as it confers the iframe the least privileges. If this
+ * is too restrictive then granting individual privileges is the preferable
+ * option. Unsetting the attribute entirely is the least secure option and
+ * should never be done unless it's stricly necessary.
+ *
+ * @param {goog.html.TrustedResourceUrl=} opt_src The value of the src
+ *     attribute. If null or undefined src will not be set.
+ * @param {goog.html.SafeHtml=} opt_srcdoc The value of the srcdoc attribute.
+ *     If null or undefined srcdoc will not be set.
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
+ *     opt_attributes Mapping from attribute names to their values. Only
+ *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
+ *     undefined causes the attribute to be omitted.
+ * @param {!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to
+ *     HTML-escape and put inside the tag. Array elements are concatenated.
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ * @throws {Error} If invalid tag name, attribute name, or attribute value is
+ *     provided. If opt_attributes contains the src or srcdoc attributes.
+ */
+goog.html.SafeHtml.createIframe = function(
+    opt_src, opt_srcdoc, opt_attributes, opt_content) {
+  var fixedAttributes = {};
+  fixedAttributes['src'] = opt_src || null;
+  fixedAttributes['srcdoc'] = opt_srcdoc || null;
+  var defaultAttributes = {'sandbox': ''};
+  var attributes = goog.html.SafeHtml.combineAttributes(
+      fixedAttributes, defaultAttributes, opt_attributes);
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      'iframe', attributes, opt_content);
+};
+
+
+/**
+ * Creates a SafeHtml representing a style tag. The type attribute is set
+ * to "text/css".
+ * @param {!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>}
+ *     styleSheet Content to put inside the tag. Array elements are
+ *     concatenated.
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
+ *     opt_attributes Mapping from attribute names to their values. Only
+ *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
+ *     undefined causes the attribute to be omitted.
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ * @throws {Error} If invalid attribute name or attribute value is provided. If
+ *     opt_attributes contains the type attribute.
+ */
+goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
+  var fixedAttributes = {'type': 'text/css'};
+  var defaultAttributes = {};
+  var attributes = goog.html.SafeHtml.combineAttributes(
+      fixedAttributes, defaultAttributes, opt_attributes);
+
+  var content = '';
+  styleSheet = goog.array.concat(styleSheet);
+  for (var i = 0; i < styleSheet.length; i++) {
+    content += goog.html.SafeStyleSheet.unwrap(styleSheet[i]);
+  }
+  // Convert to SafeHtml so that it's not HTML-escaped.
+  var htmlContent = goog.html.SafeHtml
+      .createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+          content, goog.i18n.bidi.Dir.NEUTRAL);
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      'style', attributes, htmlContent);
+};
+
+
+/**
+ * @param {string} tagName The tag name.
+ * @param {string} name The attribute name.
+ * @param {!goog.html.SafeHtml.AttributeValue_} value The attribute value.
+ * @return {string} A "name=value" string.
+ * @throws {Error} If attribute value is unsafe for the given tag and attribute.
+ * @private
+ */
+goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
+  // If it's goog.string.Const, allow any valid attribute name.
+  if (value instanceof goog.string.Const) {
+    value = goog.string.Const.unwrap(value);
+  } else if (name.toLowerCase() == 'style') {
+    value = goog.html.SafeHtml.getStyleValue_(value);
+  } else if (/^on/i.test(name)) {
+    // TODO(jakubvrana): Disallow more attributes with a special meaning.
+    throw Error('Attribute "' + name +
+        '" requires goog.string.Const value, "' + value + '" given.');
+  // URL attributes handled differently accroding to tag.
+  } else if (name.toLowerCase() in goog.html.SafeHtml.URL_ATTRIBUTES_) {
+    if (value instanceof goog.html.TrustedResourceUrl) {
+      value = goog.html.TrustedResourceUrl.unwrap(value);
+    } else if (value instanceof goog.html.SafeUrl) {
+      value = goog.html.SafeUrl.unwrap(value);
+    } else {
+      // TODO(user): Allow strings and sanitize them automatically,
+      // so that it's consistent with accepting a map directly for "style".
+      throw Error('Attribute "' + name + '" on tag "' + tagName +
+          '" requires goog.html.SafeUrl or goog.string.Const value, "' +
+          value + '" given.');
+    }
+  }
+
+  // Accept SafeUrl, TrustedResourceUrl, etc. for attributes which only require
+  // HTML-escaping.
+  if (value.implementsGoogStringTypedString) {
+    // Ok to call getTypedStringValue() since there's no reliance on the type
+    // contract for security here.
+    value = value.getTypedStringValue();
+  }
+
+  goog.asserts.assert(goog.isString(value) || goog.isNumber(value),
+      'String or number value expected, got ' +
+      (typeof value) + ' with value: ' + value);
+  return name + '="' + goog.string.htmlEscape(String(value)) + '"';
+};
+
+
+/**
+ * Gets value allowed in "style" attribute.
+ * @param {goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or a
+ *     map which will be passed to goog.html.SafeStyle.create.
+ * @return {string} Unwrapped value.
+ * @throws {Error} If string value is given.
+ * @private
+ */
+goog.html.SafeHtml.getStyleValue_ = function(value) {
+  if (!goog.isObject(value)) {
+    throw Error('The "style" attribute requires goog.html.SafeStyle or map ' +
+        'of style properties, ' + (typeof value) + ' given: ' + value);
+  }
+  if (!(value instanceof goog.html.SafeStyle)) {
+    // Process the property bag into a style object.
+    value = goog.html.SafeStyle.create(value);
+  }
+  return goog.html.SafeStyle.unwrap(value);
+};
+
+
+/**
+ * Creates a SafeHtml content with known directionality consisting of a tag with
+ * optional attributes and optional content.
+ * @param {!goog.i18n.bidi.Dir} dir Directionality.
+ * @param {string} tagName
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ */
+goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
+    opt_content) {
+  var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
+  html.dir_ = dir;
+  return html;
+};
+
+
+/**
+ * Creates a new SafeHtml object by concatenating values.
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args Values to concatenate.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.concat = function(var_args) {
+  var dir = goog.i18n.bidi.Dir.NEUTRAL;
+  var content = '';
+
+  /**
+   * @param {!goog.html.SafeHtml.TextOrHtml_|
+   *     !Array<!goog.html.SafeHtml.TextOrHtml_>} argument
+   */
+  var addArgument = function(argument) {
+    if (goog.isArray(argument)) {
+      goog.array.forEach(argument, addArgument);
+    } else {
+      var html = goog.html.SafeHtml.htmlEscape(argument);
+      content += goog.html.SafeHtml.unwrap(html);
+      var htmlDir = html.getDirection();
+      if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
+        dir = htmlDir;
+      } else if (htmlDir != goog.i18n.bidi.Dir.NEUTRAL && dir != htmlDir) {
+        dir = null;
+      }
+    }
+  };
+
+  goog.array.forEach(arguments, addArgument);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+      content, dir);
+};
+
+
+/**
+ * Creates a new SafeHtml object with known directionality by concatenating the
+ * values.
+ * @param {!goog.i18n.bidi.Dir} dir Directionality.
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args Elements of array
+ *     arguments would be processed recursively.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
+  var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
+  html.dir_ = dir;
+  return html;
+};
+
+
+/**
+ * Type marker for the SafeHtml type, used to implement additional run-time
+ * type checking.
+ * @const
+ * @private
+ */
+goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+
+
+/**
+ * Package-internal utility method to create SafeHtml instances.
+ *
+ * @param {string} html The string to initialize the SafeHtml object with.
+ * @param {?goog.i18n.bidi.Dir} dir The directionality of the SafeHtml to be
+ *     constructed, or null if unknown.
+ * @return {!goog.html.SafeHtml} The initialized SafeHtml object.
+ * @package
+ */
+goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
+    html, dir) {
+  return new goog.html.SafeHtml().initSecurityPrivateDoNotAccessOrElse_(
+      html, dir);
+};
+
+
+/**
+ * Called from createSafeHtmlSecurityPrivateDoNotAccessOrElse(). This
+ * method exists only so that the compiler can dead code eliminate static
+ * fields (like EMPTY) when they're not accessed.
+ * @param {string} html
+ * @param {?goog.i18n.bidi.Dir} dir
+ * @return {!goog.html.SafeHtml}
+ * @private
+ */
+goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
+    html, dir) {
+  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
+  this.dir_ = dir;
+  return this;
+};
+
+
+/**
+ * Like create() but does not restrict which tags can be constructed.
+ *
+ * @param {string} tagName Tag name. Set or validated by caller.
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error} If invalid or unsafe attribute name or value is provided.
+ * @throws {goog.asserts.AssertionError} If content for void tag is provided.
+ * @package
+ */
+goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse =
+    function(tagName, opt_attributes, opt_content) {
   var dir = null;
   var result = '<' + tagName;
 
@@ -351,35 +657,16 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
         throw Error('Invalid attribute name "' + name + '".');
       }
       var value = opt_attributes[name];
-      if (value == null) {
+      if (!goog.isDefAndNotNull(value)) {
         continue;
       }
-      if (value instanceof goog.string.Const) {
-        // If it's goog.string.Const, allow any valid attribute name.
-        value = goog.string.Const.unwrap(value);
-      } else if (name.toLowerCase() == 'style') {
-        value = goog.html.SafeHtml.getStyleValue_(value);
-      } else if (/^on/i.test(name)) {
-        // TODO(user): Disallow more attributes with a special meaning.
-        throw Error('Attribute "' + name +
-            '" requires goog.string.Const value, "' + value + '" given.');
-      } else if (value instanceof goog.html.SafeUrl) {
-        // If it's goog.html.SafeUrl, allow any non-JavaScript attribute name.
-        value = goog.html.SafeUrl.unwrap(value);
-      } else if (name.toLowerCase() in goog.html.SafeHtml.URL_ATTRIBUTES_) {
-        throw Error('Attribute "' + name +
-            '" requires goog.string.Const or goog.html.SafeUrl value, "' +
-            value + '" given.');
-      }
-      goog.asserts.assert(goog.isString(value) || goog.isNumber(value),
-          'String or number value expected, got ' +
-          (typeof value) + ' with value: ' + value);
-      result += ' ' + name + '="' + goog.string.htmlEscape(String(value)) + '"';
+      result += ' ' +
+          goog.html.SafeHtml.getAttrNameAndValue_(tagName, name, value);
     }
   }
 
   var content = opt_content;
-  if (!goog.isDef(content)) {
+  if (!goog.isDefAndNotNull(content)) {
     content = [];
   } else if (!goog.isArray(content)) {
     content = [content];
@@ -412,121 +699,52 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
 
 /**
- * Gets value allowed in "style" attribute.
- * @param {goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or a
- *     map which will be passed to goog.html.SafeStyle.create.
- * @return {string} Unwrapped value.
- * @throws {Error} If string value is given.
- * @private
- */
-goog.html.SafeHtml.getStyleValue_ = function(value) {
-  if (!goog.isObject(value)) {
-    throw Error('The "style" attribute requires goog.html.SafeStyle or map ' +
-        'of style properties, ' + (typeof value) + ' given: ' + value);
-  }
-  if (!(value instanceof goog.html.SafeStyle)) {
-    // Process the property bag into a style object.
-    value = goog.html.SafeStyle.create(value);
-  }
-  return goog.html.SafeStyle.unwrap(value);
-};
-
-
-/**
- * Creates a SafeHtml content with known directionality consisting of a tag with
- * optional attributes and optional content.
- * @param {!goog.i18n.bidi.Dir} dir Directionality.
- * @param {string} tagName
- * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
- * @param {!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
- * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
- */
-goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
-    opt_content) {
-  var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
-  html.dir_ = dir;
-  return html;
-};
-
-
-/**
- * Creates a new SafeHtml object by concatenating the values.
- * @param {...!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
- *     arguments would be processed recursively.
- * @return {!goog.html.SafeHtml}
- */
-goog.html.SafeHtml.concat = function(var_args) {
-  var dir = goog.i18n.bidi.Dir.NEUTRAL;
-  var content = '';
-
-  /**
-   * @param {!goog.html.SafeHtml.TextOrHtml_|
-   *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} argument
-   */
-  var addArgument = function(argument) {
-    if (goog.isArray(argument)) {
-      goog.array.forEach(argument, addArgument);
-    } else {
-      var html = goog.html.SafeHtml.htmlEscape(argument);
-      content += goog.html.SafeHtml.unwrap(html);
-      var htmlDir = html.getDirection();
-      if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
-        dir = htmlDir;
-      } else if (htmlDir != goog.i18n.bidi.Dir.NEUTRAL && dir != htmlDir) {
-        dir = null;
-      }
-    }
-  };
-
-  goog.array.forEach(arguments, addArgument);
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-      content, dir);
-};
-
-
-/**
- * Creates a new SafeHtml object with known directionality by concatenating the
- * values.
- * @param {!goog.i18n.bidi.Dir} dir Directionality.
- * @param {...!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
- *     arguments would be processed recursively.
- * @return {!goog.html.SafeHtml}
- */
-goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
-  var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
-  html.dir_ = dir;
-  return html;
-};
-
-
-/**
- * Type marker for the SafeHtml type, used to implement additional run-time
- * type checking.
- * @const
- * @private
- */
-goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
-
-
-/**
- * Package-internal utility method to create SafeHtml instances.
- *
- * @param {string} html The string to initialize the SafeHtml object with.
- * @param {?goog.i18n.bidi.Dir} dir The directionality of the SafeHtml to be
- *     constructed, or null if unknown.
- * @return {!goog.html.SafeHtml} The initialized SafeHtml object.
+ * @param {!Object<string, string>} fixedAttributes
+ * @param {!Object<string, string>} defaultAttributes
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
+ *     opt_attributes Optional attributes passed to create*().
+ * @return {!Object<string, goog.html.SafeHtml.AttributeValue_>}
+ * @throws {Error} If opt_attributes contains an attribute with the same name
+ *     as an attribute in fixedAttributes.
  * @package
  */
-goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
-    html, dir) {
-  var safeHtml = new goog.html.SafeHtml();
-  safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
-  safeHtml.dir_ = dir;
-  return safeHtml;
+goog.html.SafeHtml.combineAttributes = function(
+    fixedAttributes, defaultAttributes, opt_attributes) {
+  var combinedAttributes = {};
+  var name;
+
+  for (name in fixedAttributes) {
+    goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
+    combinedAttributes[name] = fixedAttributes[name];
+  }
+  for (name in defaultAttributes) {
+    goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
+    combinedAttributes[name] = defaultAttributes[name];
+  }
+
+  for (name in opt_attributes) {
+    var nameLower = name.toLowerCase();
+    if (nameLower in fixedAttributes) {
+      throw Error('Cannot override "' + nameLower + '" attribute, got "' +
+          name + '" with value "' + opt_attributes[name] + '"');
+    }
+    if (nameLower in defaultAttributes) {
+      delete combinedAttributes[nameLower];
+    }
+    combinedAttributes[name] = opt_attributes[name];
+  }
+
+  return combinedAttributes;
 };
+
+
+/**
+ * A SafeHtml instance corresponding to the HTML doctype: "<!DOCTYPE html>".
+ * @const {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.DOCTYPE_HTML =
+    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+        '<!DOCTYPE html>', goog.i18n.bidi.Dir.NEUTRAL);
 
 
 /**

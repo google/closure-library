@@ -1,0 +1,1 @@
+var TYPES = {"types":[{"name":"svgpan","href":"namespace_svgpan.html"},{"name":"svgpan.SvgPan","href":"class_svgpan_SvgPan.html","members":["endPanOrDrag","getState","handleMove","setDragEnabled","setPanEnabled","setZoomEnabled","setZoomScale"]},{"name":"svgpan.SvgPan.State","href":"enum_svgpan_SvgPan_State.html"}]};

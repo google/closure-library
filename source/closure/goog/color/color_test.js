@@ -264,9 +264,9 @@ function testHsvToHex() {
 /**
  * This helper method compares two RGB colors, checking that each color
  * component is the same.
- * @param {Array.<number>} rgb1 Color represented by a 3-element array with
+ * @param {Array<number>} rgb1 Color represented by a 3-element array with
  *     red, green, and blue values respectively, in the range [0, 255].
- * @param {Array.<number>} rgb2 Color represented by a 3-element array with
+ * @param {Array<number>} rgb2 Color represented by a 3-element array with
  *     red, green, and blue values respectively, in the range [0, 255].
  * @return {boolean} True if the colors are the same, false otherwise.
  */
@@ -625,7 +625,7 @@ function testHighContrast() {
  * Helper function for color conversion functions between two colorspaces.
  * @param {Function} funcOne Function that converts from 1st colorspace to 2nd
  * @param {Function} funcTwo Function that converts from 2nd colorspace to 2nd
- * @param {Array.<number>} color The color array passed to funcOne
+ * @param {Array<number>} color The color array passed to funcOne
  * @param {number} DELTA Margin of error for each element in color
  */
 function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
@@ -654,8 +654,8 @@ function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
  * Checks equivalence between two colors' respective values.  Accepts +- delta
  * for each pair of values
  * @param {string} Str
- * @param {Array.<number>} expected
- * @param {Array.<number>} actual
+ * @param {Array<number>} expected
+ * @param {Array<number>} actual
  * @param {number} delta Margin of error for each element in color array
  */
 function assertColorFuzzyEquals(str, expected, actual, delta) {

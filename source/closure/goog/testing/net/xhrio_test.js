@@ -36,11 +36,12 @@ function setUp() {
 
 function testStaticSend() {
   sendInstances = goog.testing.net.XhrIo.getSendInstances();
-  goog.testing.net.XhrIo.send('url');
+  var returnedXhr = goog.testing.net.XhrIo.send('url');
   assertEquals('sendInstances_ after send',
                1, sendInstances.length);
   xhr = sendInstances[sendInstances.length - 1];
   assertTrue('isActive after request', xhr.isActive());
+  assertEquals(returnedXhr, xhr);
   assertEquals('readyState after request',
                goog.net.XmlHttp.ReadyState.LOADING,
                xhr.getReadyState());
@@ -302,20 +303,20 @@ function testAbort_PendingSentRequest() {
   var mockListener = mockControl.createFunctionMock();
 
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertTrue(e.type == goog.net.EventType.COMPLETE);
         assertObjectEquals(e.target, xhr);
         assertEquals(e.target.getLastErrorCode(), goog.net.ErrorCode.ABORT);
         assertTrue(e.target.isActive());
       });
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertTrue(e.type == goog.net.EventType.ABORT);
         assertObjectEquals(e.target, xhr);
         assertTrue(e.target.isActive());
       });
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertTrue(e.type == goog.net.EventType.READY);
         assertObjectEquals(e.target, xhr);
         assertFalse(e.target.isActive());
@@ -348,20 +349,20 @@ function testEvents_Success() {
   }
 
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertEquals(e.type, goog.net.EventType.COMPLETE);
         assertObjectEquals(e.target, xhr);
         assertEquals(e.target.getLastErrorCode(), goog.net.ErrorCode.NO_ERROR);
         assertTrue(e.target.isActive());
       });
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertEquals(e.type, goog.net.EventType.SUCCESS);
         assertObjectEquals(e.target, xhr);
         assertTrue(e.target.isActive());
       });
   mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
-  .$does(function(e) {
+      .$does(function(e) {
         assertEquals(e.type, goog.net.EventType.READY);
         assertObjectEquals(e.target, xhr);
         assertFalse(e.target.isActive());

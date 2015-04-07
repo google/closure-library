@@ -23,12 +23,11 @@ goog.provide('goog.ui.Checkbox.State');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
-goog.require('goog.asserts');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.string');
 goog.require('goog.ui.CheckboxRenderer');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.registry');
 
@@ -147,6 +146,9 @@ goog.ui.Checkbox.prototype.setCheckedInternal = function(checked) {
  * Behaves the same way as the 'label' HTML tag. The label element has to be the
  * direct or non-direct ancestor of the checkbox element because it will get the
  * focus when keyboard support is implemented.
+ * Note: Control#enterDocument also sets aria-label on the element but
+ * Checkbox#enterDocument sets aria-labeledby on the same element which
+ * overrides the aria-label in all modern screen readers.
  *
  * @param {Element} label The label control to set. If null, only the checkbox
  *     reacts to clicks.
@@ -204,13 +206,12 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
   }
 
   // Set aria label.
-  if (this.label_) {
+  var checkboxElement = this.getElementStrict();
+  if (this.label_ && checkboxElement != this.label_ &&
+      goog.string.isEmptyOrWhitespace(goog.a11y.aria.getLabel(checkboxElement))) {
     if (!this.label_.id) {
       this.label_.id = this.makeId('lbl');
     }
-    var checkboxElement = this.getElement();
-    goog.asserts.assert(checkboxElement,
-        'The checkbox DOM element cannot be null.');
     goog.a11y.aria.setState(checkboxElement,
         goog.a11y.aria.State.LABELLEDBY,
         this.label_.id);
@@ -254,6 +255,7 @@ goog.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
 /** @override */
 goog.ui.Checkbox.prototype.handleKeyEventInternal = function(e) {
   if (e.keyCode == goog.events.KeyCodes.SPACE) {
+    this.performActionInternal(e);
     this.handleClickOrSpace_(e);
   }
   return false;

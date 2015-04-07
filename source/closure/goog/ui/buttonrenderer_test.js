@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
@@ -82,7 +83,7 @@ function testGetAriaRole() {
 function testCreateDom() {
   var element = buttonRenderer.createDom(button);
   assertNotNull('Element must not be null', element);
-  assertEquals('Element must be a DIV', 'DIV', element.tagName);
+  assertEquals('Element must be a DIV', goog.dom.TagName.DIV, element.tagName);
   assertHTMLEquals('Element must have expected structure',
       '<div class="goog-button">Hello</div>',
       goog.dom.getOuterHtml(element));
@@ -130,7 +131,9 @@ function testCreateDomAriaState() {
 function testUseAriaPressedForSelected() {
   button.setSupportedState(goog.ui.Component.State.SELECTED, true);
   button.setSelected(true);
-  var element = buttonRenderer.createDom(button);
+  button.setRenderer(buttonRenderer);
+  button.render();
+  var element = button.getElement();
 
   assertEquals('button\'s aria-pressed attribute must be true', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
@@ -140,7 +143,9 @@ function testUseAriaPressedForSelected() {
 
 function testAriaDisabled() {
   button.setEnabled(false);
-  var element = buttonRenderer.createDom(button);
+  button.setRenderer(buttonRenderer);
+  button.render();
+  var element = button.getElement();
 
   assertEquals('button\'s aria-disabled attribute must be true', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));

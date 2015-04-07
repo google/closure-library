@@ -16,6 +16,7 @@ goog.provide('goog.structsTest');
 goog.setTestOnly('goog.structsTest');
 
 goog.require('goog.array');
+goog.require('goog.dom.TagName');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');  // needed for filter
@@ -53,7 +54,7 @@ var node;
 
 
 function addNode() {
-  node = document.createElement('span');
+  node = document.createElement(goog.dom.TagName.SPAN);
   getTestElement().appendChild(node);
 }
 
@@ -66,14 +67,14 @@ function removeNode() {
 function nodeNames(nl) {
   var sb = [];
   for (var i = 0, n; n = nl[i]; i++) {
-    sb.push(n.nodeName.toLowerCase());
+    sb.push(n.nodeName);
   }
   return sb.join(',');
 }
 
 
-var allTagNames1 = 'hr,p,p,p,p,p,p,p,p,h1';
-var allTagNames2 = allTagNames1 + ',span';
+var allTagNames1 = 'HR,P,P,P,P,P,P,P,P,H1';
+var allTagNames2 = allTagNames1 + ',SPAN';
 
 
 function testGetCount() {
@@ -506,9 +507,9 @@ function testFilterNodeList() {
   function f(v, i, col2) {
     assertEquals(col, col2);
     assertEquals('number', typeof i);
-    return v.tagName == 'P';
+    return v.tagName == goog.dom.TagName.P;
   }
-  assertEquals('p,p,p,p,p,p,p,p',
+  assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f)));
 }
 
@@ -519,9 +520,9 @@ function testFilterNodeList2() {
     assertEquals(col, col2);
     assertEquals('number', typeof i);
     assertEquals(THIS_OBJ, this);
-    return v.tagName == 'P';
+    return v.tagName == goog.dom.TagName.P;
   }
-  assertEquals('p,p,p,p,p,p,p,p',
+  assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f, THIS_OBJ)));
 }
 
@@ -670,7 +671,7 @@ function testSomeSet2() {
 }
 
 function testSomeNodeList() {
-  var tagName = 'P';
+  var tagName = goog.dom.TagName.P;
   var col = getAll();
   function f(v, i, col2) {
     assertEquals(col, col2);
@@ -684,7 +685,7 @@ function testSomeNodeList() {
 
 function testSomeNodeList2() {
   var THIS_OBJ = {};
-  var tagName = 'P';
+  var tagName = goog.dom.TagName.P;
   var col = getAll();
   function f(v, i, col2) {
     assertEquals(col, col2);

@@ -20,7 +20,6 @@
 
 goog.provide('goog.editor.plugins.SpacesTabHandler');
 
-goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.plugins.AbstractTabHandler');
 goog.require('goog.editor.range');
@@ -76,7 +75,8 @@ goog.editor.plugins.SpacesTabHandler.prototype.handleTabKey = function(e) {
       // collapse to less than four spaces, regardless of what is adjacent to
       // the inserted spaces. This might make line wrapping slightly
       // sub-optimal around a grouping of non-breaking spaces.
-      var elem = dh.createDom('span', null, '\u00a0\u00a0 \u00a0');
+      var elem = dh.createDom(goog.dom.TagName.SPAN, null,
+                              '\u00a0\u00a0 \u00a0');
       elem = range.insertNode(elem, false);
 
       this.getFieldObject().dispatchChange();
@@ -90,4 +90,3 @@ goog.editor.plugins.SpacesTabHandler.prototype.handleTabKey = function(e) {
 
   return false;
 };
-

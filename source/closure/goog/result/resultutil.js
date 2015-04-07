@@ -122,7 +122,7 @@ goog.result.canceledResult = function() {
  * @param {!goog.result.Result} result The result to install the handlers.
  * @param {function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
- * @param {!T=} opt_scope Optional scope for the handler.
+ * @param {T=} opt_scope Optional scope for the handler.
  * @template T
  */
 goog.result.wait = function(result, handler, opt_scope) {
@@ -151,7 +151,7 @@ goog.result.wait = function(result, handler, opt_scope) {
  * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result value and the result as
  *     parameters.
- * @param {!T=} opt_scope Optional scope for the handler.
+ * @param {T=} opt_scope Optional scope for the handler.
  * @template T
  */
 goog.result.waitOnSuccess = function(result, handler, opt_scope) {
@@ -185,7 +185,7 @@ goog.result.waitOnSuccess = function(result, handler, opt_scope) {
  * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the error and the result object as
  *     parameters.
- * @param {!T=} opt_scope Optional scope for the handler.
+ * @param {T=} opt_scope Optional scope for the handler.
  * @template T
  */
 goog.result.waitOnError = function(result, handler, opt_scope) {
@@ -379,7 +379,7 @@ goog.result.chain = function(result, actionCallback, opt_scope) {
  *     be the resolved given Result objects.
  */
 goog.result.combine = function(var_args) {
-  /** @type {!Array.<!goog.result.Result>} */
+  /** @type {!Array<!goog.result.Result>} */
   var results = goog.array.clone(arguments);
   var combinedResult = new goog.result.DependentResultImpl_(results);
 
@@ -457,7 +457,7 @@ goog.result.combineOnSuccess = function(var_args) {
       goog.result.combine.apply(goog.result.combine, results),
       // The combined result never ERRORs
       function(res) {
-        var results = /** @type {Array.<!goog.result.Result>} */ (
+        var results = /** @type {Array<!goog.result.Result>} */ (
             res.getValue());
         if (goog.array.every(results, resolvedSuccessfully)) {
           combinedResult.setValue(results);
@@ -520,7 +520,7 @@ goog.result.cancelParentResults = function(dependentResult) {
  * @see goog.result.chain or @see goog.result.combine is dependent on the
  * Results given as arguments.
  *
- * @param {!Array.<!goog.result.Result>} parentResults A list of Results that
+ * @param {!Array<!goog.result.Result>} parentResults A list of Results that
  *     will affect the eventual value of this Result.
  * @constructor
  * @implements {goog.result.DependentResult}
@@ -531,7 +531,7 @@ goog.result.DependentResultImpl_ = function(parentResults) {
   goog.result.DependentResultImpl_.base(this, 'constructor');
   /**
    * A list of Results that will affect the eventual value of this Result.
-   * @type {!Array.<!goog.result.Result>}
+   * @type {!Array<!goog.result.Result>}
    * @private
    */
   this.parentResults_ = parentResults;

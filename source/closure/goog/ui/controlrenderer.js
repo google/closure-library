@@ -27,6 +27,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -143,7 +144,7 @@ goog.ui.ControlRenderer.CSS_CLASS = goog.getCssName('goog-control');
  * Members of each class name combination will be joined with underscores in the
  * order that they're defined in the array. You should alphabetize them (for
  * compatibility with the CSS compiler) unless you are doing something special.
- * @type {Array.<Array.<string>>}
+ * @type {Array<Array<string>>}
  */
 goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
 
@@ -153,18 +154,17 @@ goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
  * of component states to ARIA attributes is neither component- nor
  * renderer-specific, this is a static property of the renderer class, and is
  * initialized on first use.
- * @type {Object.<goog.ui.Component.State, goog.a11y.aria.State>}
+ * @type {Object<goog.ui.Component.State, goog.a11y.aria.State>}
  * @private
- * @const
  */
-goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_;
+goog.ui.ControlRenderer.ariaAttributeMap_;
 
 
 /**
  * Map of certain ARIA states to ARIA roles that support them. Used for checked
  * and selected Component states because they are used on Components with ARIA
  * roles that do not support the corresponding ARIA state.
- * @private {!Object.<goog.a11y.aria.Role, goog.a11y.aria.State>}
+ * @private {!Object<goog.a11y.aria.Role, goog.a11y.aria.State>}
  * @const
  */
 goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_ = goog.object.create(
@@ -198,9 +198,9 @@ goog.ui.ControlRenderer.prototype.getAriaRole = function() {
 goog.ui.ControlRenderer.prototype.createDom = function(control) {
   // Create and return DIV wrapping contents.
   var element = control.getDomHelper().createDom(
-      'div', this.getClassNames(control).join(' '), control.getContent());
+      goog.dom.TagName.DIV, this.getClassNames(control).join(' '),
+      control.getContent());
 
-  this.setAriaStates(control, element);
   return element;
 };
 
@@ -321,6 +321,12 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
     } else {
       state |= this.getStateFromClass(className);
     }
+    if (this.getStateFromClass(className) == goog.ui.Component.State.DISABLED) {
+      goog.asserts.assertElement(contentElem);
+      if (goog.dom.isFocusableTabIndex(contentElem)) {
+        goog.dom.setFocusableTabIndex(contentElem, false);
+      }
+    }
   }, this);
   control.setStateInternal(state);
 
@@ -357,7 +363,6 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
     goog.dom.classlist.set(element, classNames.join(' '));
   }
 
-  this.setAriaStates(control, element);
   return element;
 };
 
@@ -419,6 +424,11 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
   goog.asserts.assert(control);
   goog.asserts.assert(element);
 
+  var ariaLabel = control.getAriaLabel();
+  if (goog.isDefAndNotNull(ariaLabel)) {
+    this.setAriaLabel(element, ariaLabel);
+  }
+
   if (!control.isVisible()) {
     goog.a11y.aria.setState(
         element, goog.a11y.aria.State.HIDDEN, !control.isVisible());
@@ -439,6 +449,17 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
     this.updateAriaState(
         element, goog.ui.Component.State.OPENED, control.isOpen());
   }
+};
+
+
+/**
+ * Sets the element's ARIA label. This should be overriden by subclasses that
+ * don't apply the role directly on control.element_.
+ * @param {!Element} element Element whose ARIA label is to be updated.
+ * @param {string} ariaLabel Label to add to the element.
+ */
+goog.ui.ControlRenderer.prototype.setAriaLabel = function(element, ariaLabel) {
+  goog.a11y.aria.setLabel(element, ariaLabel);
 };
 
 
@@ -571,8 +592,8 @@ goog.ui.ControlRenderer.prototype.setState = function(control, state, enable) {
 goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
     enable) {
   // Ensure the ARIA attribute map exists.
-  if (!goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_) {
-    goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_ = goog.object.create(
+  if (!goog.ui.ControlRenderer.ariaAttributeMap_) {
+    goog.ui.ControlRenderer.ariaAttributeMap_ = goog.object.create(
         goog.ui.Component.State.DISABLED, goog.a11y.aria.State.DISABLED,
         goog.ui.Component.State.SELECTED, goog.a11y.aria.State.SELECTED,
         goog.ui.Component.State.CHECKED, goog.a11y.aria.State.CHECKED,
@@ -581,7 +602,7 @@ goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
   goog.asserts.assert(element,
       'The element passed as a first parameter cannot be null.');
   var ariaAttr = goog.ui.ControlRenderer.getAriaStateForAriaRole_(
-      element, goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_[state]);
+      element, goog.ui.ControlRenderer.ariaAttributeMap_[state]);
   if (ariaAttr) {
     goog.a11y.aria.setState(element, ariaAttr, enable);
   }
@@ -654,7 +675,8 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
           // NodeList. The second condition filters out TextNode which also has
           // length attribute but is not array like. The nodes have to be cloned
           // because childHandler removes them from the list during iteration.
-          goog.array.forEach(goog.array.clone(/** @type {NodeList} */(content)),
+          goog.array.forEach(
+              goog.array.clone(/** @type {!NodeList} */(content)),
               childHandler);
         } else {
           // Node or string.
@@ -700,7 +722,7 @@ goog.ui.ControlRenderer.prototype.getCssClass = function() {
  * method doesn't reference {@link IE6_CLASS_COMBINATIONS} so that it can be
  * compiled out, but subclasses should return their IE6_CLASS_COMBINATIONS
  * static constant instead.
- * @return {Array.<Array.<string>>} Array of class name combinations.
+ * @return {Array<Array<string>>} Array of class name combinations.
  */
 goog.ui.ControlRenderer.prototype.getIe6ClassCombinations = function() {
   return [];
@@ -744,7 +766,7 @@ goog.ui.ControlRenderer.prototype.getStructuralCssClass = function() {
  * method is guaranteed to return an array of at least one element.
  * @param {goog.ui.Control} control Control whose CSS classes are to be
  *     returned.
- * @return {!Array.<string>} Array of CSS class names applicable to the control.
+ * @return {!Array<string>} Array of CSS class names applicable to the control.
  * @protected
  */
 goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
@@ -789,11 +811,11 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  * If opt_includedClass is provided, return only the combined classes that have
  * all members contained in classes AND include opt_includedClass as well.
  * opt_includedClass is added to classes as well.
- * @param {goog.array.ArrayLike.<string>} classes Array-like thing of classes to
+ * @param {goog.array.ArrayLike<string>} classes Array-like thing of classes to
  *     return matching combined classes for.
  * @param {?string=} opt_includedClass If provided, get only the combined
  *     classes that include this one.
- * @return {!Array.<string>} Array of combined class names that should be
+ * @return {!Array<string>} Array of combined class names that should be
  *     applied.
  * @private
  */
@@ -821,7 +843,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
  * implementation uses the renderer's {@link getClassForState} method to
  * generate each state-specific class.
  * @param {number} state Bit mask of component states.
- * @return {!Array.<string>} Array of CSS class names representing the given
+ * @return {!Array<string>} Array of CSS class names representing the given
  *     state.
  * @protected
  */

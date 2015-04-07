@@ -16,8 +16,29 @@ goog.provide('goog.debugTest');
 goog.setTestOnly('goog.debugTest');
 
 goog.require('goog.debug');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
+
+function testExposeException() {
+  var expected =
+      'Message: message&quot;<br>' +
+      'Url: <a href="view-source:http://fileName%22" ' +
+          'target="_new">http://fileName&quot;</a><br>' +
+      'Line: lineNumber&quot;<br><br>' +
+      'Browser stack:<br>' +
+      'stack&quot;-&gt; [end]';
+  var error = {
+    message: 'message"',
+    fileName: 'http://fileName"',
+    lineNumber: 'lineNumber"',
+    stack: 'stack"'
+  };
+  var actualHtml = goog.debug.exposeExceptionAsHtml(error);
+  var actual = goog.html.SafeHtml.unwrap(actualHtml);
+  actual = actual.substring(0, expected.length);
+  assertEquals(expected, actual);
+}
 
 function testMakeWhitespaceVisible() {
   assertEquals(

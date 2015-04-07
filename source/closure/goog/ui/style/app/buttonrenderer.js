@@ -28,6 +28,7 @@
 
 goog.provide('goog.ui.style.app.ButtonRenderer');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.CustomButtonRenderer');
@@ -63,7 +64,7 @@ goog.ui.style.app.ButtonRenderer.CSS_CLASS = goog.getCssName('goog-button');
  * Array of arrays of CSS classes that we want composite classes added and
  * removed for in IE6 and lower as a workaround for lack of multi-class CSS
  * selector support.
- * @type {Array.<Array.<string>>}
+ * @type {Array<Array<string>>}
  */
 goog.ui.style.app.ButtonRenderer.IE6_CLASS_COMBINATIONS = [];
 
@@ -117,14 +118,16 @@ goog.ui.style.app.ButtonRenderer.prototype.createButton = function(content,
   var baseClass = this.getStructuralCssClass();
   var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom(
-      'div', inlineBlock + goog.getCssName(baseClass, 'outer-box'),
+      goog.dom.TagName.DIV,
+      inlineBlock + goog.getCssName(baseClass, 'outer-box'),
       dom.createDom(
-          'div', inlineBlock + goog.getCssName(baseClass, 'inner-box'),
-          dom.createDom('div', goog.getCssName(baseClass, 'pos'),
-              dom.createDom(
-                  'div', goog.getCssName(baseClass, 'top-shadow'), '\u00A0'),
-              dom.createDom(
-                  'div', goog.getCssName(baseClass, 'content'), content))));
+          goog.dom.TagName.DIV,
+          inlineBlock + goog.getCssName(baseClass, 'inner-box'),
+          dom.createDom(goog.dom.TagName.DIV, goog.getCssName(baseClass, 'pos'),
+              dom.createDom(goog.dom.TagName.DIV,
+                            goog.getCssName(baseClass, 'top-shadow'), '\u00A0'),
+              dom.createDom(goog.dom.TagName.DIV,
+                            goog.getCssName(baseClass, 'content'), content))));
 };
 
 

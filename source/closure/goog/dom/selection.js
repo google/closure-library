@@ -23,6 +23,7 @@
 
 goog.provide('goog.dom.selection');
 
+goog.require('goog.dom.InputType');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -78,7 +79,7 @@ goog.dom.selection.getStart = function(textfield) {
  *     cursor position is to be returned. In IE, obtaining the end position
  *     involves extra work, hence we have this parameter for calls which need
  *     only start position.
- * @return {!Array.<number>} An array with the start and end positions where the
+ * @return {!Array<number>} An array with the start and end positions where the
  *     selection starts and ends or [0,0] if it was unable to find the
  *     positions or no selection exists. Note that we can't reliably tell the
  *     difference between an element that has no selection and one where
@@ -169,7 +170,7 @@ goog.dom.selection.getEndPointsTextareaIe_ = function(
  * Returns the start and end points of the selection inside a textarea or a
  * text input.
  * @param {Element} textfield A textarea or text input.
- * @return {!Array.<number>} An array with the start and end positions where the
+ * @return {!Array<number>} An array with the start and end positions where the
  *     selection starts and ends or [0,0] if it was unable to find the
  *     positions or no selection exists. Note that we can't reliably tell the
  *     difference between an element that has no selection and one where
@@ -188,7 +189,7 @@ goog.dom.selection.getEndPoints = function(textfield) {
  *     cursor position is to be returned. In IE, obtaining the end position
  *     involves extra work, hence we have this parameter. In FF, there is not
  *     much extra effort involved.
- * @return {!Array.<number>} An array with the start and end positions where the
+ * @return {!Array<number>} An array with the start and end positions where the
  *     selection starts and ends or [0,0] if it was unable to find the
  *     positions or no selection exists. Note that we can't reliably tell the
  *     difference between an element that has no selection and one where
@@ -209,7 +210,7 @@ goog.dom.selection.getEndPoints_ = function(textfield, getOnlyStart) {
 
     if (range.inRange(selectionRange)) {
       range.setEndPoint('EndToStart', selectionRange);
-      if (textfield.type == 'textarea') {
+      if (textfield.type == goog.dom.InputType.TEXTAREA) {
         return goog.dom.selection.getEndPointsTextareaIe_(
             range, selectionRange, getOnlyStart);
       }
@@ -344,7 +345,7 @@ goog.dom.selection.getText = function(textfield) {
 
     if (!range.inRange(selectionRange)) {
       return '';
-    } else if (textfield.type == 'textarea') {
+    } else if (textfield.type == goog.dom.InputType.TEXTAREA) {
       return goog.dom.selection.getSelectionRangeText_(selectionRange);
     }
     return selectionRange.text;
@@ -409,7 +410,7 @@ goog.dom.selection.getSelectionRangeText_ = function(selRange) {
  * selection range
  * @private
  * @param {Element} el The element to get the range for.
- * @return {!Array.<TextRange>} Range of object and selection range in two
+ * @return {!Array<TextRange>} Range of object and selection range in two
  *     element array.
  */
 goog.dom.selection.getRangeIe_ = function(el) {
@@ -419,7 +420,7 @@ goog.dom.selection.getRangeIe_ = function(el) {
   // el.createTextRange() doesn't work on textareas
   var range;
 
-  if (el.type == 'textarea') {
+  if (el.type == goog.dom.InputType.TEXTAREA) {
     range = doc.body.createTextRange();
     range.moveToElementText(el);
   } else {
@@ -441,7 +442,7 @@ goog.dom.selection.getRangeIe_ = function(el) {
  *     move('character', pos).
  */
 goog.dom.selection.canonicalizePositionIe_ = function(textfield, pos) {
-  if (textfield.type == 'textarea') {
+  if (textfield.type == goog.dom.InputType.TEXTAREA) {
     // We do this only for textarea because it is the only one which can
     // have a \r\n (input cannot have this).
     var value = textfield.value.substring(0, pos);

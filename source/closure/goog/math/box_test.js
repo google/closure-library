@@ -19,6 +19,24 @@ goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.testing.jsunit');
 
+function testBoxEquals() {
+  var a = new goog.math.Box(1, 2, 3, 4);
+  var b = new goog.math.Box(1, 2, 3, 4);
+  assertTrue(goog.math.Box.equals(a, a));
+  assertTrue(goog.math.Box.equals(a, b));
+  assertTrue(goog.math.Box.equals(b, a));
+
+  assertFalse('Box should not equal null.', goog.math.Box.equals(a, null));
+  assertFalse('Box should not equal null.', goog.math.Box.equals(null, a));
+
+  assertFalse(goog.math.Box.equals(a, new goog.math.Box(4, 2, 3, 4)));
+  assertFalse(goog.math.Box.equals(a, new goog.math.Box(1, 4, 3, 4)));
+  assertFalse(goog.math.Box.equals(a, new goog.math.Box(1, 2, 4, 4)));
+  assertFalse(goog.math.Box.equals(a, new goog.math.Box(1, 2, 3, 1)));
+
+  assertTrue('Null boxes should be equal.', goog.math.Box.equals(null, null));
+}
+
 function testBoxClone() {
   var b = new goog.math.Box(0, 0, 0, 0);
   assertTrue(goog.math.Box.equals(b, b.clone()));

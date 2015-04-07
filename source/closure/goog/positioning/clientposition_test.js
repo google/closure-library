@@ -14,13 +14,16 @@
 
 /**
  * Tests for {@code goog.positioning.ClientPosition}
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.positioning.clientPositionTest');
 goog.setTestOnly('goog.positioning.clientPositionTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.positioning.ClientPosition');
+goog.require('goog.positioning.Corner');
 goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 
@@ -46,7 +49,7 @@ function setUp() {
 
   window.scrollTo(0, 0);
 
-  popupElement = goog.dom.createDom('div');
+  popupElement = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.style.setSize(popupElement, POPUP_WIDTH, POPUP_HEIGHT);
   popupElement.style.position = 'absolute';
 
@@ -104,7 +107,8 @@ function testClientPositionWithPositionContext() {
   var x = 300;
   var y = 200;
 
-  var contextElement = goog.dom.createDom('div', undefined, popupElement);
+  var contextElement = goog.dom.createDom(goog.dom.TagName.DIV,
+                                          undefined, popupElement);
   goog.style.setPosition(contextElement, contextAbsoluteX, contextAbsoluteY);
   contextElement.style.position = 'absolute';
   goog.dom.appendChild(testArea, contextElement);

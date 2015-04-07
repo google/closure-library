@@ -20,9 +20,7 @@
 goog.provide('goog.editor.plugins.LinkShortcutPlugin');
 
 goog.require('goog.editor.Command');
-goog.require('goog.editor.Link');
 goog.require('goog.editor.Plugin');
-goog.require('goog.string');
 
 
 
@@ -49,7 +47,6 @@ goog.editor.plugins.LinkShortcutPlugin.prototype.getTrogClassId = function() {
  */
 goog.editor.plugins.LinkShortcutPlugin.prototype.handleKeyboardShortcut =
     function(e, key, isModifierPressed) {
-  var command;
   if (isModifierPressed && key == 'k' && !e.shiftKey) {
     var link = /** @type {goog.editor.Link?} */ (
         this.getFieldObject().execCommand(goog.editor.Command.LINK));

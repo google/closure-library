@@ -16,6 +16,7 @@ goog.provide('goog.userAgentTest');
 goog.setTestOnly('goog.userAgentTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.platform');
 goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.PropertyReplacer');
@@ -41,6 +42,7 @@ var UserAgents = {
 
 
 function tearDown() {
+  goog.labs.userAgent.util.setUserAgent(null);
   documentMode = undefined;
   propertyReplacer.reset();
 }
@@ -48,7 +50,7 @@ function tearDown() {
 
 /**
  * Test browser detection for a user agent configuration.
- * @param {Array.<number>} expectedAgents Array of expected userAgents.
+ * @param {Array<number>} expectedAgents Array of expected userAgents.
  * @param {string} uaString User agent string.
  * @param {string=} opt_product Navigator product string.
  * @param {string=} opt_vendor Navigator vendor string.
@@ -193,6 +195,8 @@ function testIe() {
       'Arcor 5.005; .NET CLR 1.0.3705; .NET CLR 1.1.4322)', '7.0');
   assertIe(
       'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko', '11.0');
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertIe(testAgents.IE_EDGE, '12.0');
 }
 
 function testIeDocumentModeOverride() {
@@ -212,6 +216,13 @@ function testDocumentModeInStandardsMode() {
   var expectedMode = goog.userAgent.IE ? parseInt(goog.userAgent.VERSION) :
                                          undefined;
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
+}
+
+function testDocumentModeEdge() {
+  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_EDGE);
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(11));
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(10));
 }
 
 function testOpera() {
@@ -254,6 +265,17 @@ function testNoNavigator() {
       goog.userAgent.PLATFORM);
   assertEquals('Version should be the empty string', '',
       goog.userAgent.VERSION);
+}
+
+function testLegacyChromeOsAndLinux() {
+  // As a legacy behavior, goog.userAgent.LINUX considers
+  // ChromeOS to be Linux.
+  // goog.labs.userAgent.platform.isLinux() does not.
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.CHROME_OS);
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  assertTrue(goog.userAgent.LINUX);
+  assertFalse(goog.labs.userAgent.platform.isLinux());
 }
 
 function assertIe(uaString, expectedVersion) {

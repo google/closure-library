@@ -51,6 +51,7 @@ goog.require('goog.math');
  * @param {number=} opt_m11 The m11 coordinate of the transform.
  * @param {number=} opt_m02 The m02 coordinate of the transform.
  * @param {number=} opt_m12 The m12 coordinate of the transform.
+ * @struct
  * @constructor
  * @final
  */
@@ -399,10 +400,10 @@ goog.math.AffineTransform.prototype.preConcatenate = function(tx) {
  * Transforms an array of coordinates by this transform and stores the result
  * into a destination array.
  *
- * @param {!Array.<number>} src The array containing the source points
+ * @param {!Array<number>} src The array containing the source points
  *     as x, y value pairs.
  * @param {number} srcOff The offset to the first point to be transformed.
- * @param {!Array.<number>} dst The array into which to store the transformed
+ * @param {!Array<number>} dst The array into which to store the transformed
  *     point pairs.
  * @param {number} dstOff The offset of the location of the first transformed
  *     point in the destination array.

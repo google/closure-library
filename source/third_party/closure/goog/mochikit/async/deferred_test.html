@@ -996,7 +996,7 @@ function testPromiseAll() {
   mockClock.tick();
 }
 
-function testPromiseBlocksDeferred() {
+function testGoogPromiseBlocksDeferred() {
   var result;
   var d = new Deferred();
   var p = new goog.Promise(function(resolve) {
@@ -1013,6 +1013,40 @@ function testPromiseBlocksDeferred() {
   assertUndefined(result);
   mockClock.tick();
   assertEquals('promise', result);
+}
+
+function testNativePromiseBlocksDeferred() {
+  // Early-out for browsers that don't support native Promises.
+  if (typeof Promise !== 'function') {
+    return;
+  }
+
+  // Disable mock clock for this test.  Native promises don't abide by it, so
+  // it just complicates things in this case.
+  mockClock.uninstall();
+
+  var blockedOnPromise = true;
+
+  var resolver;
+  var d = Deferred.succeed();
+  d.addCallback(function() {
+    return new Promise(function(resolve) {
+      resolver = resolve;
+    });
+  });
+  d.addCallback(function(r) {
+    blockedOnPromise = false;
+    assertEquals('Native promise value', 'result', r);
+  });
+
+  // Verify that the callback chain executes up to, but not beyond, the callback
+  // that returns a Promise.
+  assertTrue(!!resolver);
+  assertTrue('Deferred chain not blocked on Promise resolution',
+      blockedOnPromise);
+  // Resolve the promise, which should unblock the rest of the callback chain.
+  resolver('result');
+  return d;
 }
 
 function testFromPromise() {
@@ -1064,6 +1098,38 @@ function testPromiseFromCanceledDeferred() {
 function testThenableInterface() {
   var d = new Deferred();
   assertTrue(goog.Thenable.isImplementedBy(d));
+}
+
+function testAddBothPropagatesToErrback() {
+  var log = [];
+  var deferred = new goog.async.Deferred();
+  deferred.addBoth(goog.nullFunction);
+  deferred.addErrback(function () {
+    log.push('errback');
+  });
+  deferred.errback(new Error('my error'));
+
+  mockClock.tick(1);
+  assertArrayEquals(['errback'], log);
+}
+
+function testAddBothDoesNotPropagateUncaughtExceptions() {
+  var deferred = new goog.async.Deferred();
+  deferred.addBoth(goog.nullFunction);
+  deferred.errback(new Error('my error'));
+  mockClock.tick(1);
+}
+
+function testAddFinally() {
+  var deferred = new goog.async.Deferred();
+  deferred.addFinally(goog.nullFunction);
+  deferred.errback(new Error('my error'));
+
+  try {
+    mockClock.tick(1);
+  } catch (e) {
+    assertEquals('my error', e.message);
+  }
 }
 </script>
 </body>

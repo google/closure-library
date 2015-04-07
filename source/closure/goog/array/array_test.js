@@ -17,6 +17,7 @@ goog.setTestOnly('goog.arrayTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -806,6 +807,15 @@ function testExtend() {
   goog.array.extend(f, length3ArrayLikeObject, length3ArrayLikeObject);
   var f2 = [0, 1, 2, 4, 8, 2, 4, 8];
   assertArrayEquals('extend, should be equal', f2, f);
+
+  var result = [];
+  var i = 1000000;
+  var bigArray = Array(i);
+  while (i--) {
+    bigArray[i] = i;
+  }
+  goog.array.extend(result, bigArray);
+  assertArrayEquals(bigArray, result);
 }
 
 function testExtendWithArguments() {
@@ -820,7 +830,7 @@ function testExtendWithArguments() {
 
 function testExtendWithQuerySelector() {
   var a = [0];
-  var d = goog.dom.getElementsByTagNameAndClass('div', 'foo');
+  var d = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV, 'foo');
   goog.array.extend(a, d);
   assertEquals(2, a.length);
 }
@@ -1387,6 +1397,36 @@ function testStableSort() {
   assertArrayEquals(wantedSortedValues, sortedValues2);
 }
 
+function testSortByKey() {
+  function Item(value) {
+    this.getValue = function() {
+      return value;
+    };
+  }
+  var keyFn = function(item) {
+    return item.getValue();
+  };
+
+  // Test without custom key comparison function
+  var arr1 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
+  goog.array.sortByKey(arr1, keyFn);
+  var wantedSortedValues1 = [1, 2, 3, 4, 5];
+  for (var i = 0; i < arr1.length; i++) {
+    assertEquals(wantedSortedValues1[i], arr1[i].getValue());
+  }
+
+  // Test with custom key comparison function
+  var arr2 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
+  function comparisonFn(key1, key2) {
+    return -(key1 - key2);
+  }
+  goog.array.sortByKey(arr2, keyFn, comparisonFn);
+  var wantedSortedValues2 = [5, 4, 3, 2, 1];
+  for (var i = 0; i < arr2.length; i++) {
+    assertEquals(wantedSortedValues2[i], arr2[i].getValue());
+  }
+}
+
 function testArrayBucketModulus() {
   // bucket things by modulus
   var a = {};
@@ -1506,6 +1546,10 @@ function testArrayFlatten() {
   assertArrayEquals([1], goog.array.flatten([[1]]));
   assertArrayEquals([], goog.array.flatten());
   assertArrayEquals([], goog.array.flatten([]));
+  assertArrayEquals(goog.array.repeat(3, 180002),
+      goog.array.flatten(3, goog.array.repeat(3, 180000), 3));
+  assertArrayEquals(goog.array.repeat(3, 180000),
+      goog.array.flatten([goog.array.repeat(3, 180000)]));
 }
 
 function testSortObjectsByKey() {
@@ -1693,4 +1737,51 @@ function testShuffle() {
   // Ensure the shuffled array comprises the same elements (without regard to
   // order).
   assertSameElements(testArrayCopy, testArray);
+}
+
+function testRemoveAllIf() {
+  var testArray = [9, 1, 9, 2, 9, 3, 4, 9, 9, 9, 5];
+  var expectedArray = [1, 2, 3, 4, 5];
+
+  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
+    return el == 9;
+  });
+
+  assertEquals(6, actualOutput);
+  assertArrayEquals(expectedArray, testArray);
+}
+
+function testRemoveAllIf_noMatches() {
+  var testArray = [1];
+  var expectedArray = [1];
+
+  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
+    return false;
+  });
+
+  assertEquals(0, actualOutput);
+  assertArrayEquals(expectedArray, testArray);
+}
+
+function testCopyByIndex() {
+  var testArray = [1, 2, 'a', 'b', 'c', 'd'];
+  var copyIndexes = [1, 3, 0, 0, 2];
+  var expectedArray = [2, 'b', 1, 1, 'a'];
+
+  var actualOutput = goog.array.copyByIndex(testArray, copyIndexes);
+
+  assertArrayEquals(expectedArray, actualOutput);
+}
+
+function testComparators() {
+  var greater = 42;
+  var smaller = 13;
+
+  assertTrue(goog.array.defaultCompare(smaller, greater) < 0);
+  assertEquals(0, goog.array.defaultCompare(smaller, smaller));
+  assertTrue(goog.array.defaultCompare(greater, smaller) > 0);
+
+  assertTrue(goog.array.inverseDefaultCompare(greater, smaller) < 0);
+  assertEquals(0, goog.array.inverseDefaultCompare(greater, greater));
+  assertTrue(goog.array.inverseDefaultCompare(smaller, greater) > 0);
 }

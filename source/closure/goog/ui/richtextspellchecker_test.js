@@ -16,6 +16,7 @@ goog.provide('goog.ui.RichTextSpellCheckerTest');
 goog.setTestOnly('goog.ui.RichTextSpellCheckerTest');
 
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
@@ -81,16 +82,9 @@ function waitForSpellCheckToFinish() {
 
 
 /**
- * @typedef {!Array.<string><string>>}
- * @suppress {missingProvide}
- */
-var lookupWordEntry;
-
-
-/**
  * Function to use for word lookup by the spell check handler. This function is
  * supplied as a constructor parameter for the spell check handler.
- * @param {!Array.<string>} words Unknown words that need to be looked up.
+ * @param {!Array<string>} words Unknown words that need to be looked up.
  * @param {!goog.spell.SpellCheck} spellChecker The spell check handler.
  * @param {function(!Array.)} callback The lookup callback
  *     function.
@@ -144,7 +138,7 @@ function testExcludeMarkers() {
       ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note']);
   assertArrayEquals(['goog-quote', 'goog-comment', 'goog-note'],
       spellChecker.excludeMarker);
-  assertArrayEquals(['DIV', undefined, 'SPAN'],
+  assertArrayEquals([goog.dom.TagName.DIV, undefined, goog.dom.TagName.SPAN],
       spellChecker.excludeTags);
   el.innerHTML = '<div class="goog-quote">misspelling</div>' +
       '<div class="goog-yes">misspelling</div>' +

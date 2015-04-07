@@ -309,10 +309,10 @@ function testPatternDayOfWeekMonthDayYearMedium() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sv;
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
-  assertEquals('tors 28 jun 2012', fmt.format(date));
+  assertEquals('tors 28 juni 2012', fmt.format(date));
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
-  assertEquals('28 jun 2012', fmt.format(date));
+  assertEquals('28 juni 2012', fmt.format(date));
 }
 
 function testQuote() {
@@ -370,18 +370,18 @@ function testPredefinedFormatter() {
   assertEquals('13:49', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
-  assertEquals('Freitag, 4. August 2006 13:49:24 ' + timezoneString(date),
+  assertEquals('Freitag, 4. August 2006 um 13:49:24 ' + timezoneString(date),
       fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.LONG_DATETIME);
-  assertEquals('4. August 2006 13:49:24 ' + timezoneString(date),
+  assertEquals('4. August 2006 um 13:49:24 ' + timezoneString(date),
       fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
-  assertEquals('04.08.2006 13:49:24', fmt.format(date));
+  assertEquals('04.08.2006, 13:49:24', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.SHORT_DATETIME);
-  assertEquals('04.08.06 13:49', fmt.format(date));
+  assertEquals('04.08.06, 13:49', fmt.format(date));
 }
 
 function testMMddyyyyHHmmssZSimpleTimeZone() {
@@ -556,6 +556,24 @@ function test_timeDisplayOnDaylighTimeTransition() {
   date = new Date(Date.UTC(2006, 10 - 1, 29, 1, 30, 0));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
   assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
+}
+
+function testTimeDisplayOnDaylightTimeTransitionDayChange() {
+  // NOTE: this test is a regression test only if the test browser has an OS
+  // timezone of PST. While the test should still work in other timezones, it
+  // does not serve as a regression test in them.
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+
+  // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
+  var date = new Date(Date.UTC(2015, 11 - 1, 01, 11, 0, 1));
+  // Convert to GMT-12, across DST transition.
+  // The date should also change, but does not change when subtracting 4 hours
+  // from PST/PDT due to the extra hour from switching DST.
+  var timeZone = goog.i18n.TimeZone.createTimeZone(12 * 60);
+  var fmt = new goog.i18n.DateTimeFormat('yyyy/MM/dd HH:mm:ss Z');
+  // Regression test: this once returned 2015/11/01 instead.
+  assertEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
 }
 
 function test_nativeDigits() {

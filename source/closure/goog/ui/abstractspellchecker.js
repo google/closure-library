@@ -41,7 +41,9 @@ goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.dom.selection');
 goog.require('goog.events');
@@ -88,7 +90,7 @@ goog.ui.AbstractSpellChecker = function(spellCheck, opt_domHelper) {
 
   /**
    * List of all 'edit word' input elements.
-   * @type {Array.<Element>}
+   * @type {Array<Element>}
    * @private
    */
   this.inputElements_ = [];
@@ -286,7 +288,7 @@ goog.ui.AbstractSpellChecker.prototype.processedElementsCount_ = 0;
  *
  * Used exclusively by the derived classes
  *
- * @type {Array.<string>|string|RegExp|undefined}
+ * @type {Array<string>|string|RegExp|undefined}
  * @protected
  */
 goog.ui.AbstractSpellChecker.prototype.excludeMarker;
@@ -391,7 +393,7 @@ goog.ui.AbstractSpellChecker.prototype.getNextIndex = function() {
  *
  * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker}
  *
- * @param {Array.<string>|string|RegExp|null} marker A RegExp for plain text
+ * @param {Array<string>|string|RegExp|null} marker A RegExp for plain text
  *        or class names for the rich text spell checker for the elements to
  *        exclude from checking.
  */
@@ -471,7 +473,7 @@ goog.ui.AbstractSpellChecker.prototype.ignoreWord = function(word) {
  */
 goog.ui.AbstractSpellChecker.prototype.editWord_ = function(el, old) {
   var input = this.getDomHelper().createDom(
-      'input', {'type': 'text', 'value': old});
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT, 'value': old});
   var w = goog.style.getSize(el).width;
 
   // Minimum width to ensure there's always enough room to type.
@@ -542,7 +544,7 @@ goog.ui.AbstractSpellChecker.prototype.replaceWord = function(el, old, word) {
 /**
  * Retrieves the array of suggested spelling choices.
  *
- * @return {Array.<string>} Suggested spelling choices.
+ * @return {Array<string>} Suggested spelling choices.
  * @private
  */
 goog.ui.AbstractSpellChecker.prototype.getSuggestions_ = function() {
@@ -789,7 +791,7 @@ goog.ui.AbstractSpellChecker.prototype.createWordElement = function(
   }
 
   var el = /** @type {!HTMLSpanElement} */
-      (this.getDomHelper().createDom('span', parameters, word));
+      (this.getDomHelper().createDom(goog.dom.TagName.SPAN, parameters, word));
   goog.a11y.aria.setRole(el, 'menuitem');
   goog.a11y.aria.setState(el, 'haspopup', true);
   this.registerWordElement(word, el);

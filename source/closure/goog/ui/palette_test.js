@@ -170,3 +170,19 @@ function testSetHighlight() {
   palette.setHighlighted(true);
   assertEquals(5, palette.getHighlightedIndex());
 }
+
+function testSetAriaLabel() {
+  assertNull('Palette must not have aria label by default',
+      palette.getAriaLabel());
+  palette.setAriaLabel('My Palette');
+  palette.render();
+  var element = palette.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('Palette element must have expected aria-label', 'My Palette',
+      element.getAttribute('aria-label'));
+  assertEquals('Palette element must have expected aria role', 'grid',
+      element.getAttribute('role'));
+  palette.setAriaLabel('My new Palette');
+  assertEquals('Palette element must have updated aria-label', 'My new Palette',
+      element.getAttribute('aria-label'));
+}

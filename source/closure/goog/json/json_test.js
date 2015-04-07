@@ -280,23 +280,16 @@ function testBooleanUnsafeParse() {
 }
 
 function testArrayParse() {
-  function arrayEquals(a1, a2) {
-    if (a1.length != a2.length) {
-      return false;
-    }
-    for (var i = 0; i < a1.length; i++) {
-      if (a1[i] != a2[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
+  assertArrayEquals([], goog.json.parse('[]'));
+  assertArrayEquals([1], goog.json.parse('[1]'));
+  assertArrayEquals([1, 2], goog.json.parse('[1,2]'));
+  assertArrayEquals([1, 2, 3], goog.json.parse('[1,2,3]'));
+  assertArrayEquals([[]], goog.json.parse('[[]]'));
 
-  assertTrue('[]', arrayEquals(goog.json.parse('[]'), []));
-  assertTrue('[1]', arrayEquals(goog.json.parse('[1]'), [1]));
-  assertTrue('[1,2]', arrayEquals(goog.json.parse('[1,2]'), [1, 2]));
-  assertTrue('[1,2,3]', arrayEquals(goog.json.parse('[1,2,3]'), [1, 2, 3]));
-  assertTrue('[[]]', arrayEquals(goog.json.parse('[[]]')[0], []));
+  // Note that array-holes are not valid json. However, goog.json.parse
+  // supports them so that clients can reap the security benefits of
+  // goog.json.parse even if they are using this non-standard format.
+  assertArrayEquals([1, /* hole */, 3], goog.json.parse('[1,,3]'));
 
   // make sure we do not get an array for something that looks like an array
   assertFalse('{length:0}', 'push' in goog.json.parse('{"length":0}'));

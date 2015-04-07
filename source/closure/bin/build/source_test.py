@@ -35,6 +35,7 @@ class SourceTestCase(unittest.TestCase):
                      test_source.provides)
     self.assertEqual(set(['goog.dom', 'goog.events.EventType']),
                      test_source.requires)
+    self.assertFalse(test_source.is_goog_module)
 
   def testSourceScanBase(self):
     test_source = source.Source(_TEST_BASE_SOURCE)
@@ -42,6 +43,7 @@ class SourceTestCase(unittest.TestCase):
     self.assertEqual(set(['goog']),
                      test_source.provides)
     self.assertEqual(test_source.requires, set())
+    self.assertFalse(test_source.is_goog_module)
 
   def testSourceScanBadBase(self):
 
@@ -49,6 +51,15 @@ class SourceTestCase(unittest.TestCase):
       source.Source(_TEST_BAD_BASE_SOURCE)
 
     self.assertRaises(Exception, MakeSource)
+
+  def testSourceScanGoogModule(self):
+    test_source = source.Source(_TEST_MODULE_SOURCE)
+
+    self.assertEqual(set(['foo']),
+                     test_source.provides)
+    self.assertEqual(set(['bar']),
+                     test_source.requires)
+    self.assertTrue(test_source.is_goog_module)
 
   def testStripComments(self):
     self.assertEquals(
@@ -67,11 +78,18 @@ class SourceTestCase(unittest.TestCase):
                      test_source.provides)
     self.assertEqual(set(['goog.events.EventType']),
                      test_source.requires)
+    self.assertFalse(test_source.is_goog_module)
 
   def testHasProvideGoog(self):
     self.assertTrue(source.Source._HasProvideGoogFlag(_TEST_BASE_SOURCE))
     self.assertTrue(source.Source._HasProvideGoogFlag(_TEST_BAD_BASE_SOURCE))
     self.assertFalse(source.Source._HasProvideGoogFlag(_TEST_COMMENT_SOURCE))
+
+
+_TEST_MODULE_SOURCE = """
+goog.module('foo');
+var b = goog.require('bar');
+"""
 
 
 _TEST_SOURCE = """// Fake copyright notice

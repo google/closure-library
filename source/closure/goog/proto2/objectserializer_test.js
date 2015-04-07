@@ -446,6 +446,56 @@ function testDeserializationNumbersOrStrings() {
   assertArrayEquals(['5300', '5301'], message.repeatedInt64StringArray());
 }
 
+function testSerializationSpecialFloatDoubleValues() {
+  // NaN, Infinity and -Infinity should get serialized as strings.
+  var message = new proto2.TestAllTypes();
+  message.setOptionalFloat(Infinity);
+  message.setOptionalDouble(-Infinity);
+  message.addRepeatedFloat(Infinity);
+  message.addRepeatedFloat(-Infinity);
+  message.addRepeatedFloat(NaN);
+  message.addRepeatedDouble(Infinity);
+  message.addRepeatedDouble(-Infinity);
+  message.addRepeatedDouble(NaN);
+  var simplified = new goog.proto2.ObjectSerializer().serialize(message);
+
+  // Assert that everything serialized properly.
+  assertEquals('Infinity', simplified[11]);
+  assertEquals('-Infinity', simplified[12]);
+  assertEquals('Infinity', simplified[41][0]);
+  assertEquals('-Infinity', simplified[41][1]);
+  assertEquals('NaN', simplified[41][2]);
+  assertEquals('Infinity', simplified[42][0]);
+  assertEquals('-Infinity', simplified[42][1]);
+  assertEquals('NaN', simplified[42][2]);
+}
+
+function testDeserializationSpecialFloatDoubleValues() {
+  // NaN, Infinity and -Infinity values should be de-serialized from their
+  // string representation.
+  var simplified = {
+    41: ['Infinity', '-Infinity', 'NaN'],
+    42: ['Infinity', '-Infinity', 'NaN']
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  var floatArray = message.repeatedFloatArray();
+  assertEquals(Infinity, floatArray[0]);
+  assertEquals(-Infinity, floatArray[1]);
+  assertTrue(isNaN(floatArray[2]));
+
+  var doubleArray = message.repeatedDoubleArray();
+  assertEquals(Infinity, doubleArray[0]);
+  assertEquals(-Infinity, doubleArray[1]);
+  assertTrue(isNaN(doubleArray[2]));
+}
+
 function testDeserializationConversionProhibited() {
   // 64-bit types may have been serialized as numbers or strings.
   // But 32-bit types must be serialized as numbers.
@@ -482,4 +532,36 @@ function testDefaultValueNumbersOrStrings() {
   // When using a String, the value is preserved.
   assertEquals('1000000000000000001',
                message.getOptionalInt64StringOrDefault());
+}
+
+function testBooleanAsNumberFalse() {
+  // Some libraries, such as GWT, can serialize boolean values as 0/1
+
+  var simplified = {
+    13: 0
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertFalse(message.getOptionalBool());
+}
+
+function testBooleanAsNumberTrue() {
+  var simplified = {
+    13: 1
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertTrue(message.getOptionalBool());
 }

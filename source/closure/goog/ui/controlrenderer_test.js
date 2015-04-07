@@ -20,6 +20,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.style');
@@ -638,9 +639,11 @@ function testUpdateAriaStateDisabled() {
           goog.a11y.aria.State.DISABLED));
 }
 
-function testCreateDomAriaStateDisabled() {
+function testSetAriaStatesRender_ariaStateDisabled() {
   control.setEnabled(false);
-  control.createDom();
+  var renderer = new goog.ui.ControlRenderer();
+  control.setRenderer(renderer);
+  control.render(sandbox);
   var element = control.getElement();
   assertNotNull(element);
   assertFalse('Control must be disabled', control.isEnabled());
@@ -649,12 +652,13 @@ function testCreateDomAriaStateDisabled() {
       goog.a11y.aria.State.DISABLED));
 }
 
-function testDecorateAriaStateDisabled() {
+function testSetAriaStatesDecorate_ariaStateDisabled() {
   sandbox.innerHTML =
       '<div id="foo" class="app goog-base-disabled"></div>';
-  var foo = goog.dom.getElement('foo');
+  var element = goog.dom.getElement('foo');
 
-  var element = testRenderer.decorate(control, foo);
+  control.setRenderer(testRenderer);
+  control.decorate(element);
   assertNotNull(element);
   assertFalse('Control must be disabled', control.isEnabled());
   assertEquals('Control must have disabled ARIA state', 'true',
@@ -680,11 +684,13 @@ function testUpdateAriaStateSelected() {
           goog.a11y.aria.State.SELECTED));
 }
 
-function testCreateDomAriaStateSelected() {
+function testSetAriaStatesRender_ariaStateSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
   control.setSelected(true);
 
-  control.createDom();
+  var renderer = new goog.ui.ControlRenderer();
+  control.setRenderer(renderer);
+  control.render(sandbox);
   var element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be selected', control.isSelected());
@@ -692,10 +698,12 @@ function testCreateDomAriaStateSelected() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
 }
 
-function testCreateDomAriaStateNotSelected() {
+function testSetAriaStatesRender_ariaStateNotSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
-  control.createDom();
+  var renderer = new goog.ui.ControlRenderer();
+  control.setRenderer(renderer);
+  control.render(sandbox);
   var element = control.getElement();
   assertNotNull(element);
   assertFalse('Control must not be selected', control.isSelected());
@@ -703,14 +711,15 @@ function testCreateDomAriaStateNotSelected() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
 }
 
-function testDecorateAriaStateSelected() {
+function testSetAriaStatesDecorate_ariaStateSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
   sandbox.innerHTML =
-      '<div id="foo" class="app goog-base-selected"></div>';
-  var foo = goog.dom.getElement('foo');
+      '<div id="foo" class="app goog-control-selected"></div>';
+  var element = goog.dom.getElement('foo');
 
-  var element = testRenderer.decorate(control, foo);
+  control.setRenderer(controlRenderer);
+  control.decorate(element);
   assertNotNull(element);
   assertTrue('Control must be selected', control.isSelected());
   assertEquals('Control must have selected ARIA state', 'true',
@@ -733,11 +742,13 @@ function testUpdateAriaStateChecked() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
-function testCreateDomAriaStateChecked() {
+function testSetAriaStatesRender_ariaStateChecked() {
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
   control.setChecked(true);
 
-  control.createDom();
+  var renderer = new goog.ui.ControlRenderer();
+  control.setRenderer(renderer);
+  control.render(sandbox);
   var element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be checked', control.isChecked());
@@ -745,13 +756,13 @@ function testCreateDomAriaStateChecked() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
-function testDecorateAriaStateChecked() {
+function testSetAriaStatesDecorate_ariaStateChecked() {
   sandbox.innerHTML =
-      '<div id="foo" class="app goog-base-checked"></div>';
-  var foo = goog.dom.getElement('foo');
+      '<div id="foo" class="app goog-control-checked"></div>';
+  var element = goog.dom.getElement('foo');
 
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = testRenderer.decorate(control, foo);
+  control.decorate(element);
   assertNotNull(element);
   assertTrue('Control must be checked', control.isChecked());
   assertEquals('Control must have checked ARIA state', 'true',
@@ -774,11 +785,13 @@ function testUpdateAriaStateOpened() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
 }
 
-function testCreateDomAriaStateOpened() {
+function testSetAriaStatesRender_ariaStateOpened() {
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
   control.setOpen(true);
 
-  control.createDom();
+  var renderer = new goog.ui.ControlRenderer();
+  control.setRenderer(renderer);
+  control.render(sandbox);
   var element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be opened', control.isOpen());
@@ -786,13 +799,14 @@ function testCreateDomAriaStateOpened() {
       goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
 }
 
-function testDecorateAriaStateOpened() {
+function testSetAriaStatesDecorate_ariaStateOpened() {
   sandbox.innerHTML =
       '<div id="foo" class="app goog-base-open"></div>';
-  var foo = goog.dom.getElement('foo');
+  var element = goog.dom.getElement('foo');
 
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
-  var element = testRenderer.decorate(control, foo);
+  control.setRenderer(testRenderer);
+  control.decorate(element);
   assertNotNull(element);
   assertTrue('Control must be opened', control.isOpen());
   assertEquals('Control must have expanded ARIA state', 'true',
@@ -922,7 +936,7 @@ function testSetContentTextNode() {
 function testSetContentElementNode() {
   sandbox.innerHTML = 'Hello, world!';
   controlRenderer.setContent(sandbox,
-      goog.dom.createDom('div', {id: 'foo'}, 'Foo'));
+      goog.dom.createDom(goog.dom.TagName.DIV, {id: 'foo'}, 'Foo'));
   assertEquals('Element must have one child', 1,
       sandbox.childNodes.length);
   assertEquals('Child must be an element node', goog.dom.NodeType.ELEMENT,
@@ -934,7 +948,7 @@ function testSetContentElementNode() {
 function testSetContentArray() {
   sandbox.innerHTML = 'Hello, world!';
   controlRenderer.setContent(sandbox,
-      ['Hello, ', goog.dom.createDom('b', null, 'world'), '!']);
+      ['Hello, ', goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!']);
   assertEquals('Element must have three children', 3,
       sandbox.childNodes.length);
   assertEquals('1st child must be a text node', goog.dom.NodeType.TEXT,
@@ -949,8 +963,8 @@ function testSetContentArray() {
 
 function testSetContentNodeList() {
   sandbox.innerHTML = 'Hello, world!';
-  var div = goog.dom.createDom('div', null, 'Hello, ',
-      goog.dom.createDom('b', null, 'world'), '!');
+  var div = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello, ',
+      goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!');
   controlRenderer.setContent(sandbox, div.childNodes);
   assertEquals('Element must have three children', 3,
       sandbox.childNodes.length);

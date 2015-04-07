@@ -1654,3 +1654,71 @@ function testIndexCursorRemove() {
       addCallback(openCursorAndRemove).
       addCallback(checkStore);
 }
+
+function testCanWaitForTransactionToComplete() {
+  if (!idbSupported) {
+    return;
+  }
+
+  asyncTestCase.waitForAsync('wait for transaction to complete');
+  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+    var tx = db.createTransaction(['store'],
+        goog.db.Transaction.TransactionMode.READ_WRITE);
+    tx.objectStore('store').add({key: 'hi', value: 'something'}, 'stuff');
+    tx.wait().addCallbacks(closeAndContinue, failOnError);
+  });
+}
+
+function testWaitingOnTransactionThatHasAnError() {
+  if (!idbSupported) {
+    return;
+  }
+
+  asyncTestCase.waitForAsync('adding to unique index');
+  globalDb.branch().addCallback(function(db) {
+    return incrementVersion(db, function(ev, db, tx) {
+      var store = db.createObjectStore('store', {keyPath: 'key'});
+      store.createIndex('index', 'value', {unique: true});
+    });
+  }).addCallback(function(db) {
+    var tx = db.createTransaction(
+        ['store'],
+        goog.db.Transaction.TransactionMode.READ_WRITE);
+    assertTrue(tx.objectStore('store').getIndex('index').isUnique());
+    tx.objectStore('store').add({key: '1', value: 'a'});
+    tx.objectStore('store').add({key: '2', value: 'a'});
+    tx.wait().addCallbacks(
+        function() {
+          fail('expected transaction to fail');
+        }, function(err) {
+          assertTrue(
+              'Expected DATA_ERR, CONSTRAINT_ERR, was ' + err.getName(),
+              // Chrome 21, 23+.
+              goog.db.Error.ErrorName.CONSTRAINT_ERR == err.getName() ||
+              // Chrome 22.
+              goog.db.Error.ErrorName.DATA_ERR == err.getName());
+          closeAndContinue(db);
+        });
+  }).addErrback(failOnError);
+}
+
+function testWaitingOnAnAbortedTransaction() {
+  if (!idbSupported) {
+    return;
+  }
+
+  asyncTestCase.waitForAsync('aborting transaction');
+  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+    var tx = db.createTransaction(['store'],
+        goog.db.Transaction.TransactionMode.READ_WRITE);
+    tx.wait().addCallbacks(
+        function() {
+          fail('Wait result should have failed');
+        },
+        function(e) {
+          assertEquals(goog.db.Error.ErrorName.ABORT_ERR, e.getName());
+          closeAndContinue(db);
+        });
+    tx.abort();
+  });
+}

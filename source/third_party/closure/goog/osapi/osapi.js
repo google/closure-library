@@ -36,7 +36,7 @@ osapi.callback;
 
 /**
  * Dispatch a JSON-RPC batch request to services defined in the osapi namespace
- * @param {Array.<Object>} requests an array of rpc requests.
+ * @param {Array<Object>} requests an array of rpc requests.
  */
 goog.osapi.handleGadgetRpcMethod = function(requests) {
   var responses = new Array(requests.length);

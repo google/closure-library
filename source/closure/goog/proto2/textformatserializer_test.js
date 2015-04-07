@@ -163,7 +163,7 @@ function testSerializationOfUnknownParsedFromObject() {
 /**
  * Asserts that the given string value parses into the given set of tokens.
  * @param {string} value The string value to parse.
- * @param {Array.<Object> | Object} tokens The tokens to check against. If not
+ * @param {Array<Object> | Object} tokens The tokens to check against. If not
  *     an array, a single token is expected.
  * @param {boolean=} opt_ignoreWhitespace Whether whitespace tokens should be
  *     skipped by the tokenizer.
@@ -203,6 +203,38 @@ function testTokenizer() {
     { type: types.WHITESPACE, value: ' '},
     { type: types.CLOSE_BRACE }
   ]);
+  // The c++ proto serializer might represent a float in exponential
+  // notation:
+  assertTokens('{ 1.2345e+3 }', [
+    { type: types.OPEN_BRACE },
+    { type: types.WHITESPACE, value: ' ' },
+    { type: types.NUMBER, value: '1.2345e+3' },
+    { type: types.WHITESPACE, value: ' '},
+    { type: types.CLOSE_BRACE }
+  ]);
+}
+
+function testTokenizerExponentialFloatProblem() {
+  var input = 'merchant: {              # blah blah\n' +
+      '    total_price: 3.2186e+06      # 3_218_600; 3.07Mi\n' +
+      '    taxes      : 2.17199e+06\n' +
+      '}';
+  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+  assertTokens(input, [
+    { type: types.IDENTIFIER, value: 'merchant' },
+    { type: types.COLON, value: ':' },
+    { type: types.OPEN_BRACE, value: '{' },
+    { type: types.COMMENT, value: '# blah blah' },
+    { type: types.IDENTIFIER, value: 'total_price' },
+    { type: types.COLON, value: ':' },
+    { type: types.NUMBER, value: '3.2186e+06' },
+    { type: types.COMMENT, value: '# 3_218_600; 3.07Mi' },
+    { type: types.IDENTIFIER, value: 'taxes' },
+    { type: types.COLON, value: ':' },
+    { type: types.NUMBER, value: '2.17199e+06' },
+    { type: types.CLOSE_BRACE, value: '}' }
+  ],
+  true);
 }
 
 function testTokenizerNoWhitespace() {
@@ -273,6 +305,11 @@ function testTokenizerSingleTokens() {
   assertNumber('0x1234');
   assertNumber('0x12ac34');
   assertNumber('0x49e281db686fb');
+  // Floating point numbers might be serialized in exponential
+  // notation:
+  assertNumber('1.2345e+3');
+  assertNumber('1.2345e3');
+  assertNumber('1.2345e-2');
 
   assertString('""');
   assertString('"hello world"');
@@ -364,6 +401,54 @@ function testDeserializationOfZeroFalseAndEmptyString() {
   assertEquals(0, message.getOptionalInt32());
   assertEquals(false, message.getOptionalBool());
   assertEquals('', message.getOptionalString());
+}
+
+function testDeserializationOfConcatenatedString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 123\n' +
+      'optional_string:\n' +
+      '    "FirstLine"\n' +
+      '    "SecondLine"\n' +
+      'optional_float: 456.7';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(123, message.getOptionalInt32());
+  assertEquals('FirstLineSecondLine', message.getOptionalString());
+  assertEquals(456.7, message.getOptionalFloat());
+}
+
+function testDeserializationSkipComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      '# Some comment.\n' +
+      'repeated_int32: 202\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
+}
+
+function testDeserializationSkipTrailingComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      'repeated_int32: 202  # Some trailing comment.\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
 }
 
 function testDeserializationSkipUnknown() {
@@ -487,6 +572,19 @@ function testDeserializationVariedNumbers() {
   assertEquals(-35.5, message.getRepeatedFloat(2));
 }
 
+function testDeserializationScientificNotation() {
+  var message = new proto2.TestAllTypes();
+  var value = 'repeated_float: 1.1e5\n' +
+      'repeated_float: 1.1e-5\n' +
+      'repeated_double: 1.1e5\n' +
+      'repeated_double: 1.1e-5\n';
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+  assertEquals(1.1e5, message.getRepeatedFloat(0));
+  assertEquals(1.1e-5, message.getRepeatedFloat(1));
+  assertEquals(1.1e5, message.getRepeatedDouble(0));
+  assertEquals(1.1e-5, message.getRepeatedDouble(1));
+}
+
 function testParseNumericalConstant() {
   var parseNumericalConstant =
       goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_;
@@ -543,6 +641,31 @@ function testDeserializationOfNumericalConstants() {
   assertEquals(-Infinity, message.getRepeatedFloat(1));
   assertTrue(isNaN(message.getRepeatedFloat(2)));
   assertEquals(300.2, message.getRepeatedFloat(3));
+}
+
+var floatFormatCases = [{given: '1.69e+06', expect: 1.69e+06},
+                        {given: '1.69e6', expect: 1.69e+06},
+                        {given: '2.468e-2', expect: 0.02468}
+                       ];
+
+function testGetNumberFromStringExponentialNotation() {
+  for (var i = 0; i < floatFormatCases.length; ++i) {
+    var thistest = floatFormatCases[i];
+    var result = goog.proto2.TextFormatSerializer.Parser.
+        getNumberFromString_(thistest.given);
+    assertEquals(thistest.expect, result);
+  }
+}
+
+function testDeserializationExponentialFloat() {
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  for (var i = 0; i < floatFormatCases.length; ++i) {
+    var thistest = floatFormatCases[i];
+    var message = new proto2.TestAllTypes();
+    var value = 'optional_float: ' + thistest.given;
+    assertTrue(parser.parse(message, value, true));
+    assertEquals(thistest.expect, message.getOptionalFloat());
+  }
 }
 
 function testGetNumberFromString() {

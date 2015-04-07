@@ -17,6 +17,7 @@ goog.setTestOnly('goog.fx.DragListGroupTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
@@ -55,19 +56,19 @@ var initialListenerCount;
 
 /**
  * Type of events fired by the DragListGroup.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 var firedEventTypes;
 
 function setUp() {
   var sandbox = goog.dom.getElement('sandbox');
-  list = goog.dom.createDom('div', {'id': 'horiz_div'});
-  list.appendChild(
-      goog.dom.createDom('div', null, goog.dom.createTextNode('1')));
-  list.appendChild(
-      goog.dom.createDom('div', null, goog.dom.createTextNode('2')));
-  list.appendChild(
-      goog.dom.createDom('div', null, goog.dom.createTextNode('3')));
+  list = goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'horiz_div'});
+  list.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, null,
+                                      goog.dom.createTextNode('1')));
+  list.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, null,
+                                      goog.dom.createTextNode('2')));
+  list.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, null,
+                                      goog.dom.createTextNode('3')));
   sandbox.appendChild(list);
 
   dlg = new goog.fx.DragListGroup();
@@ -81,7 +82,7 @@ function setUp() {
   initialListenerCount = goog.object.getCount(dlg.eventHandler_.keys_);
 
   event = new goog.events.BrowserEvent();
-  event.currentTarget = list.getElementsByTagName('div')[0];
+  event.currentTarget = list.getElementsByTagName(goog.dom.TagName.DIV)[0];
 
   firedEventTypes = [];
   goog.events.listen(dlg,
@@ -236,7 +237,8 @@ function testRemoveCurrentDragItemClasses() {
   // Need to catch the dispatched event because the temporary fields
   // including dlg.currentDragItem_ are cleared after the dragging has ended.
   var currDragItem = goog.dom.createDom(
-      'div', ['cursor_move', 'blue_bg'], goog.dom.createTextNode('4'));
+      goog.dom.TagName.DIV, ['cursor_move', 'blue_bg'],
+      goog.dom.createTextNode('4'));
   goog.events.listen(dlg, goog.fx.DragListGroup.EventType.DRAGEND,
       function(e) {currDragItem = dlg.currDragItem_;});
 
@@ -356,8 +358,8 @@ function testRightClick() {
  * been initialized.
  */
 function testAddItemToDragList() {
-  var item =
-      goog.dom.createDom('div', null, goog.dom.createTextNode('newItem'));
+  var item = goog.dom.createDom(goog.dom.TagName.DIV, null,
+                                goog.dom.createTextNode('newItem'));
 
   dlg.addItemToDragList(list, item);
 
@@ -379,8 +381,8 @@ function testAddItemToDragList() {
  * initialized is inserted at the correct position.
  */
 function testInsertItemInDragList() {
-  var item =
-      goog.dom.createDom('div', null, goog.dom.createTextNode('newItem'));
+  var item = goog.dom.createDom(goog.dom.TagName.DIV, null,
+                                goog.dom.createTextNode('newItem'));
 
   dlg.addItemToDragList(list, item, 0);
 

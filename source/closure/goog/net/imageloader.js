@@ -23,6 +23,7 @@ goog.provide('goog.net.ImageLoader');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -67,7 +68,7 @@ goog.net.ImageLoader = function(opt_parent) {
    * Map of image IDs to their request including their image src, used to keep
    * track of the images to load.  Once images have started loading, they're
    * removed from this map.
-   * @type {!Object.<!goog.net.ImageLoader.ImageRequest_>}
+   * @type {!Object<!goog.net.ImageLoader.ImageRequest_>}
    * @private
    */
   this.imageIdToRequestMap_ = {};
@@ -76,7 +77,7 @@ goog.net.ImageLoader = function(opt_parent) {
    * Map of image IDs to their image element, used only for images that are in
    * the process of loading.  Used to clean-up event listeners and to know
    * when we've completed loading images.
-   * @type {!Object.<string, !Element>}
+   * @type {!Object<string, !Element>}
    * @private
    */
   this.imageIdToImageMap_ = {};
@@ -84,7 +85,7 @@ goog.net.ImageLoader = function(opt_parent) {
   /**
    * Event handler object, used to keep track of onload and onreadystatechange
    * listeners.
-   * @type {!goog.events.EventHandler.<!goog.net.ImageLoader>}
+   * @type {!goog.events.EventHandler<!goog.net.ImageLoader>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);
@@ -142,7 +143,7 @@ goog.net.ImageLoader.ImageRequest_;
  * http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
  * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx
  *
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @private
  */
 goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
@@ -245,7 +246,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
   var image;
   if (this.parent_) {
     var dom = goog.dom.getDomHelper(this.parent_);
-    image = dom.createDom('img');
+    image = dom.createDom(goog.dom.TagName.IMG);
   } else {
     image = new Image();
   }

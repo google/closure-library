@@ -17,6 +17,7 @@ goog.setTestOnly('goog.editor.ClickToEditWrapperTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.ClickToEditWrapper');
 goog.require('goog.editor.SeamlessField');
 goog.require('goog.testing.MockClock');
@@ -110,12 +111,13 @@ function testClickToEditWithAnchor(opt_isBlended) {
   var dom = FIELD.getEditableDomHelper();
   var selection = goog.dom.Range.createFromWindow(dom.getWindow());
 
-  // TODO(user): the location of the cursor is not yet specified by the W3C
+  // TODO(brndn): the location of the cursor is not yet specified by the W3C
   // Editing APIs (https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html).
   // See b/15678403.
   var body = FIELD.getElement();
   var text = body.firstChild;
-  var link = dom.getElementsByTagNameAndClass('A', null, body)[0].firstChild;
+  var link = dom.getElementsByTagNameAndClass(goog.dom.TagName.A,
+                                              null, body)[0].firstChild;
   var isIELessThan9OrWebkit = goog.userAgent.WEBKIT ||
       (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9));
   assertEquals('Wrong start node',

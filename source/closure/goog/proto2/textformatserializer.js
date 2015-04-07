@@ -312,7 +312,7 @@ goog.proto2.TextFormatSerializer.Printer_ = function() {
 
   /**
    * The buffer of string pieces.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.buffer_ = [];
@@ -386,44 +386,47 @@ goog.proto2.TextFormatSerializer.Printer_.prototype.appendLine = function() {
  * @param {string} data The string data to tokenize.
  * @param {boolean=} opt_ignoreWhitespace If true, whitespace tokens will not
  *    be reported by the tokenizer.
+ * @param {boolean=} opt_ignoreComments If true, comment tokens will not be
+ *    reported by the tokenizer.
  * @constructor
  * @private
  */
 goog.proto2.TextFormatSerializer.Tokenizer_ =
-    function(data, opt_ignoreWhitespace) {
+    function(data, opt_ignoreWhitespace, opt_ignoreComments) {
 
   /**
    * Whether to skip whitespace tokens on output.
-   * @type {boolean}
-   * @private
+   * @private {boolean}
    */
   this.ignoreWhitespace_ = !!opt_ignoreWhitespace;
 
   /**
+   * Whether to skip comment tokens on output.
+   * @private {boolean}
+   */
+  this.ignoreComments_ = !!opt_ignoreComments;
+
+  /**
    * The data being tokenized.
-   * @type {string}
-   * @private
+   * @private {string}
    */
   this.data_ = data;
 
   /**
    * The current index in the data.
-   * @type {number}
-   * @private
+   * @private {number}
    */
   this.index_ = 0;
 
   /**
    * The data string starting at the current index.
-   * @type {string}
-   * @private
+   * @private {string}
    */
   this.currentData_ = data;
 
   /**
    * The current token type.
-   * @type {goog.proto2.TextFormatSerializer.Tokenizer_.Token}
-   * @private
+   * @private {goog.proto2.TextFormatSerializer.Tokenizer_.Token}
    */
   this.current_ = {
     type: goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes.END,
@@ -456,7 +459,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   END: /---end---/,
   // Leading "-" to identify "-infinity"."
   IDENTIFIER: /^-?[a-zA-Z][a-zA-Z0-9_]*/,
-  NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?([f])?)/,
+  NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?(e[+-]?[0-9]+|[f])?)/,
   COMMENT: /^#.*/,
   OPEN_BRACE: /^{/,
   CLOSE_BRACE: /^}/,
@@ -482,7 +485,10 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.next = function() {
 
   // Skip any whitespace if requested.
   while (this.nextInternal_()) {
-    if (this.getCurrent().type != types.WHITESPACE || !this.ignoreWhitespace_) {
+    var type = this.getCurrent().type;
+    if ((type != types.WHITESPACE && type != types.COMMENT) ||
+        (type == types.WHITESPACE && !this.ignoreWhitespace_) ||
+        (type == types.COMMENT && !this.ignoreComments_)) {
       return true;
     }
   }
@@ -514,9 +520,9 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
 
   // Loop through each token type and try to match the beginning of the string
   // with the token's regular expression.
-  goog.object.forEach(types, function(type, id) {
+  goog.object.some(types, function(type, id) {
     if (next || type == types.END) {
-      return;
+      return false;
     }
 
     // Note: This regular expression check is at, minimum, O(n).
@@ -527,6 +533,8 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
         value: info[0]
       };
     }
+
+    return !!next;
   });
 
   // Advance the index by the length of the token.
@@ -587,7 +595,8 @@ goog.proto2.TextFormatSerializer.Parser.prototype.parse =
     function(message, data, opt_ignoreMissingFields) {
   this.error_ = null;
   this.ignoreMissingFields_ = !!opt_ignoreMissingFields;
-  this.tokenizer_ = new goog.proto2.TextFormatSerializer.Tokenizer_(data, true);
+  this.tokenizer_ =
+      new goog.proto2.TextFormatSerializer.Tokenizer_(data, true, true);
   this.tokenizer_.next();
   return this.consumeMessage_(message, '');
 };
@@ -688,7 +697,7 @@ goog.proto2.TextFormatSerializer.Parser.getNumberFromString_ =
  * @param {string} identifier An identifier string to check.
  * @return {?number} Infinity, negative infinity, NaN, or null if none
  *     of the constants could be parsed.
- * @private.
+ * @private
  */
 goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_ =
     function(identifier) {
@@ -999,7 +1008,8 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeNumber_ =
 
 
 /**
- * Consumes a STRING token.
+ * Consumes a STRING token. Strings may come in multiple adjacent tokens which
+ * are automatically concatenated, like in C or Python.
  * @return {?string} The *deescaped* string value or null on error.
  * @private
  */
@@ -1011,7 +1021,13 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeString_ =
     return null;
   }
 
-  return goog.json.parse(value).toString();
+  var stringValue = goog.json.parse(value).toString();
+  while (this.lookingAtType_(types.STRING)) {
+    value = this.consumeToken_(types.STRING);
+    stringValue += goog.json.parse(value).toString();
+  }
+
+  return stringValue;
 };
 
 

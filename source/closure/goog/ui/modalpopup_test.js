@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dispose');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fx.Transition');
@@ -55,7 +56,8 @@ function testDispose() {
   goog.dispose(popup);
   assertNull(goog.dom.getElementByClass('goog-modalpopup-bg'));
   assertNull(goog.dom.getElementByClass('goog-modalpopup'));
-  assertEquals(0, goog.dom.getElementsByTagNameAndClass('span').length);
+  assertEquals(0, goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.SPAN).length);
 }
 
 
@@ -64,27 +66,29 @@ function testRenderWithoutIframeMask() {
   popup.render();
 
   assertEquals(0, goog.dom.getElementsByTagNameAndClass(
-      'iframe', 'goog-modalpopup-bg').length);
+      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg').length);
 
-  var bg = goog.dom.getElementsByTagNameAndClass('div', 'goog-modalpopup-bg');
+  var bg = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
+                                                 'goog-modalpopup-bg');
   assertEquals(1, bg.length);
   var content = goog.dom.getElementByClass('goog-modalpopup');
   assertNotNull(content);
-  var tabCatcher = goog.dom.getElementsByTagNameAndClass('span');
+  var tabCatcher = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
   assertEquals(1, tabCatcher.length);
 
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN)));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
   popup.setVisible(true);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
-  assertEquals('true', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(
+          popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
+  assertEquals('true',
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
   popup.setVisible(false);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN)));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
 }
 
 
@@ -93,28 +97,31 @@ function testRenderWithIframeMask() {
   popup.render();
 
   var iframe = goog.dom.getElementsByTagNameAndClass(
-      'iframe', 'goog-modalpopup-bg');
+      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg');
   assertEquals(1, iframe.length);
-  var bg = goog.dom.getElementsByTagNameAndClass('div', 'goog-modalpopup-bg');
+  var bg = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
+                                                 'goog-modalpopup-bg');
   assertEquals(1, bg.length);
   var content = goog.dom.getElementByClass('goog-modalpopup');
   assertNotNull(content);
-  var tabCatcher = goog.dom.getElementsByTagNameAndClass('span');
+  var tabCatcher = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
   assertEquals(1, tabCatcher.length);
 
   assertTrue(goog.dom.compareNodeOrder(iframe[0], bg[0]) < 0);
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN)));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
   popup.setVisible(true);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
-  assertEquals('true', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(
+          popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
+  assertEquals('true',
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
   popup.setVisible(false);
-  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN)));
+  assertTrue(goog.string.isEmptyOrWhitespace(
+      goog.string.makeSafe(
+          goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
 }
 
 
@@ -145,13 +152,14 @@ function testRenderDoesNotShowAnyElement() {
   popup.render();
 
   var iframe = goog.dom.getElementsByTagNameAndClass(
-      'iframe', 'goog-modalpopup-bg');
+      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg');
   assertFalse(goog.style.isElementShown(iframe[0]));
-  var bg = goog.dom.getElementsByTagNameAndClass('div', 'goog-modalpopup-bg');
+  var bg = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
+                                                 'goog-modalpopup-bg');
   assertFalse(goog.style.isElementShown(bg[0]));
   assertFalse(goog.style.isElementShown(
       goog.dom.getElementByClass('goog-modalpopup')));
-  var tabCatcher = goog.dom.getElementsByTagNameAndClass('span');
+  var tabCatcher = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
   assertFalse(goog.style.isElementShown(tabCatcher[0]));
 }
 
@@ -161,7 +169,7 @@ function testIframeOpacityIsSetToZero() {
   popup.render();
 
   var iframe = goog.dom.getElementsByTagNameAndClass(
-      'iframe', 'goog-modalpopup-bg')[0];
+      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg')[0];
   assertEquals(0, goog.style.getOpacity(iframe));
 }
 
@@ -389,7 +397,7 @@ function testBackgroundHeight() {
   var viewportSize = goog.dom.getViewportSize();
   var w = viewportSize.width * 2;
   var h = viewportSize.height * 2;
-  var dummy = goog.dom.createElement('div');
+  var dummy = goog.dom.createElement(goog.dom.TagName.DIV);
   dummy.style.position = 'absolute';
   goog.style.setSize(dummy, w, h);
   document.body.appendChild(dummy);
@@ -415,6 +423,27 @@ function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
   mockClock.tick(1);
   assertFalse('Backward tab wrap flag should be reset after delay',
       popup.backwardTabWrapInProgress_);
+}
+
+
+function testPopupGetsFocus() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+  popup.setVisible(true);
+  assertTrue('Dialog must receive initial focus',
+      goog.dom.getActiveElement(document) == popup.getElement());
+}
+
+
+function testDecoratedPopupGetsFocus() {
+  var dialogElem = goog.dom.createElement(goog.dom.TagName.DIV);
+  document.body.appendChild(dialogElem);
+  popup = new goog.ui.ModalPopup();
+  popup.decorate(dialogElem);
+  popup.setVisible(true);
+  assertTrue('Dialog must receive initial focus',
+      goog.dom.getActiveElement(document) == popup.getElement());
+  goog.dom.removeNode(dialogElem);
 }
 
 

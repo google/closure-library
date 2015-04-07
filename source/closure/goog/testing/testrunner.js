@@ -24,7 +24,7 @@
  *  - Boolean G_testRunner.isSuccess()
  *  - String G_testRunner.getReport()
  *  - number G_testRunner.getRunTime()
- *  - Object.<string, Array.<string>> G_testRunner.getTestResults()
+ *  - Object<string, Array<string>> G_testRunner.getTestResults()
  *
  * Testing code should not have dependencies outside of goog.testing so as to
  * reduce the chance of masking missing dependencies.
@@ -33,6 +33,7 @@
 
 goog.provide('goog.testing.TestRunner');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.TestCase');
 
 
@@ -49,7 +50,7 @@ goog.require('goog.testing.TestCase');
 goog.testing.TestRunner = function() {
   /**
    * Errors that occurred in the window.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    */
   this.errors = [];
 };
@@ -264,7 +265,21 @@ goog.testing.TestRunner.prototype.execute = function() {
   }
 
   this.testCase.setCompletedCallback(goog.bind(this.onComplete_, this));
-  this.testCase.runTests();
+  if (goog.testing.TestRunner.shouldUsePromises_(this.testCase)) {
+    this.testCase.runTestsReturningPromise();
+  } else {
+    this.testCase.runTests();
+  }
+};
+
+
+/**
+ * @param {!goog.testing.TestCase} testCase
+ * @return {boolean}
+ * @private
+ */
+goog.testing.TestRunner.shouldUsePromises_ = function(testCase) {
+  return testCase.constructor === goog.testing.TestCase;
 };
 
 
@@ -281,7 +296,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   if (!this.logEl_) {
     var el = document.getElementById('closureTestRunnerLog');
     if (el == null) {
-      el = document.createElement('div');
+      el = document.createElement(goog.dom.TagName.DIV);
       document.body.appendChild(el);
     }
     this.logEl_ = el;
@@ -290,10 +305,11 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   // Highlight the page to indicate the overall outcome.
   this.writeLog(log);
 
-  // TODO(user): Make this work with multiple test cases (b/8603638).
-  var runAgainLink = document.createElement('a');
-  runAgainLink.style.display = 'block';
+  // TODO(chrishenry): Make this work with multiple test cases (b/8603638).
+  var runAgainLink = document.createElement(goog.dom.TagName.A);
+  runAgainLink.style.display = 'inline-block';
   runAgainLink.style.fontSize = 'small';
+  runAgainLink.style.marginBottom = '16px';
   runAgainLink.href = '';
   runAgainLink.onclick = goog.bind(function() {
     this.execute();
@@ -321,7 +337,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
     } else {
       color = '#333';
     }
-    var div = document.createElement('div');
+    var div = document.createElement(goog.dom.TagName.DIV);
     if (line.substr(0, 2) == '> ') {
       // The stack trace may contain links so it has to be interpreted as HTML.
       div.innerHTML = line;
@@ -358,7 +374,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       href = href.split('#')[0].split('?')[0] + newSearch + hash;
 
       // Add the link.
-      var a = document.createElement('A');
+      var a = document.createElement(goog.dom.TagName.A);
       a.innerHTML = '(run individually)';
       a.style.fontSize = '0.8em';
       a.style.color = '#888';
@@ -413,7 +429,7 @@ goog.testing.TestRunner.prototype.log = function(s) {
 // TODO(nnaze): Properly handle serving test results when multiple test cases
 // are run.
 /**
- * @return {Object.<string, !Array.<string>>} A map of test names to a list of
+ * @return {Object<string, !Array<string>>} A map of test names to a list of
  * test failures (if any) to provide formatted data for the test runner.
  */
 goog.testing.TestRunner.prototype.getTestResults = function() {

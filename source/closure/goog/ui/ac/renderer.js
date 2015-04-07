@@ -29,6 +29,7 @@ goog.require('goog.asserts');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
@@ -103,14 +104,14 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
 
   /**
    * Array used to store the current set of rows being displayed
-   * @type {Array}
+   * @type {Array<!Object>}
    * @private
    */
   this.rows_ = [];
 
   /**
    * Array of the node divs that hold each result that is being displayed.
-   * @type {Array.<Element>}
+   * @type {Array<Element>}
    * @protected
    * @suppress {underscore|visibility}
    */
@@ -255,6 +256,13 @@ goog.inherits(goog.ui.ac.Renderer, goog.events.EventTarget);
  * @private
  */
 goog.ui.ac.Renderer.prototype.anchorElement_;
+
+
+/**
+ * The anchor element to position the rendered autocompleter against.
+ * @protected {Element|undefined}
+ */
+goog.ui.ac.Renderer.prototype.target_;
 
 
 /**
@@ -409,7 +417,7 @@ goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
 /**
  * Render the autocomplete UI
  *
- * @param {Array} rows Matching UI rows.
+ * @param {Array<!Object>} rows Matching UI rows.
  * @param {string} token Token we are currently matching against.
  * @param {Element=} opt_target Current HTML node, will position popup beneath
  *     this node.
@@ -576,7 +584,7 @@ goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elem) {
 goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
   if (!this.element_) {
     // Make element and add it to the parent
-    var el = this.dom_.createDom('div', {style: 'display:none'});
+    var el = this.dom_.createDom(goog.dom.TagName.DIV, {style: 'display:none'});
     if (this.showScrollbarsIfTooLarge_) {
       // Make sure that the dropdown will get scrollbars if it isn't large
       // enough to show all rows.
@@ -734,7 +742,7 @@ goog.ui.ac.Renderer.prototype.getAutoPosition = function() {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getTarget = function() {
-  return this.target_;
+  return this.target_ || null;
 };
 
 
@@ -787,7 +795,7 @@ goog.ui.ac.Renderer.prototype.renderRowContents_ =
  * this.highlightAllTokens_ value.
  *
  * @param {Node} node Node to match.
- * @param {string|Array.<string>} tokenOrArray Token to match or array of tokens
+ * @param {string|Array<string>} tokenOrArray Token to match or array of tokens
  *     to match.  By default, only the first match will be highlighted.  If
  *     highlightAllTokens is set, then all tokens appearing at the start of a
  *     word, in whatever order and however many times, will be highlighted.
@@ -802,7 +810,7 @@ goog.ui.ac.Renderer.prototype.startHiliteMatchingText_ =
 
 /**
  * @param {Node} node Node to match.
- * @param {string|Array.<string>} tokenOrArray Token to match or array of tokens
+ * @param {string|Array<string>} tokenOrArray Token to match or array of tokens
  *     to match.
  * @private
  */
@@ -869,7 +877,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
         var idx = 2 * i;
 
         node.nodeValue = textNodes[idx];
-        var boldTag = this.dom_.createElement('b');
+        var boldTag = this.dom_.createElement(goog.dom.TagName.B);
         boldTag.className = this.highlightedClassName;
         this.dom_.appendChild(boldTag,
             this.dom_.createTextNode(textNodes[idx + 1]));
@@ -901,7 +909,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
 /**
  * Transforms a token into a string ready to be put into the regular expression
  * in hiliteMatchingText_.
- * @param {string|Array.<string>} tokenOrArray The token or array to get the
+ * @param {string|Array<string>} tokenOrArray The token or array to get the
  *     regex string from.
  * @return {string} The regex-ready token.
  * @private
@@ -916,7 +924,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   if (goog.isArray(tokenOrArray)) {
     // Remove invalid tokens from the array, which may leave us with nothing.
     tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
-      return !goog.string.isEmptySafe(str);
+      return !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
     });
   }
 
@@ -947,7 +955,8 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
       // For the single-match string token, we refuse to match anything if
       // the string begins with a non-word character, as matches by definition
       // can only occur at the start of a word. (This also handles the
-      // goog.string.isEmptySafe(tokenOrArray) case.)
+      // goog.string.isEmptyOrWhitespace(goog.string.makeSafe(tokenOrArray))
+      // case.)
       if (!/^\W/.test(tokenOrArray)) {
         token = goog.string.regExpEscape(tokenOrArray);
       }
@@ -968,7 +977,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
  */
 goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
   // Create and return the element.
-  var elem = this.dom_.createDom('div', {
+  var elem = this.dom_.createDom(goog.dom.TagName.DIV, {
     className: this.rowClassName,
     id: goog.ui.IdGenerator.getInstance().getNextUniqueId()
   });

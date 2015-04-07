@@ -27,6 +27,7 @@ goog.provide('goog.ui.Tooltip.State');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -69,7 +70,7 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
       goog.dom.getDomHelper());
 
   goog.ui.Popup.call(this, this.dom_.createDom(
-      'div', {'style': 'position:absolute;display:none;'}));
+      goog.dom.TagName.DIV, {'style': 'position:absolute;display:none;'}));
 
   /**
    * Cursor position relative to the page.
@@ -103,7 +104,7 @@ goog.tagUnsealableClass(goog.ui.Tooltip);
  * List of active (open) tooltip widgets. Used to prevent multiple tooltips
  * from appearing at once.
  *
- * @type {!Array.<goog.ui.Tooltip>}
+ * @type {!Array<goog.ui.Tooltip>}
  * @private
  */
 goog.ui.Tooltip.activeInstances_ = [];

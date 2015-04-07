@@ -28,7 +28,9 @@ goog.provide('goog.html.testing');
 goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 
@@ -52,6 +54,21 @@ goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
 
 
 /**
+ * Creates a SafeScript wrapping the given value. No validation is performed.
+ *
+ * This function is for use in tests only and must never be used in production
+ * code.
+ *
+ * @param {string} script The string to wrap into a SafeScript.
+ * @return {!goog.html.SafeScript}
+ */
+goog.html.testing.newSafeScriptForTest = function(script) {
+  return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
+      script);
+};
+
+
+/**
  * Creates a SafeStyle wrapping the given value. No validation is performed.
  *
  * This function is for use in tests only and must never be used in production
@@ -63,6 +80,22 @@ goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
 goog.html.testing.newSafeStyleForTest = function(style) {
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
+};
+
+
+/**
+ * Creates a SafeStyleSheet wrapping the given value. No validation is
+ * performed.
+ *
+ * This function is for use in tests only and must never be used in production
+ * code.
+ *
+ * @param {string} styleSheet String to wrap into a SafeStyleSheet.
+ * @return {!goog.html.SafeStyleSheet}
+ */
+goog.html.testing.newSafeStyleSheetForTest = function(styleSheet) {
+  return goog.html.SafeStyleSheet.
+      createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet);
 };
 
 

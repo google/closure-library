@@ -205,7 +205,7 @@ goog.events.BrowserEvent.MouseButton = {
 
 /**
  * Static data for mapping mouse buttons.
- * @type {!Array.<number>}
+ * @type {!Array<number>}
  */
 goog.events.BrowserEvent.IEButtonMap = [
   1, // LEFT
@@ -383,9 +383,4 @@ goog.events.BrowserEvent.prototype.preventDefault = function() {
  */
 goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
   return this.event_;
-};
-
-
-/** @override */
-goog.events.BrowserEvent.prototype.disposeInternal = function() {
 };

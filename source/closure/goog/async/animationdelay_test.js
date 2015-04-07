@@ -14,13 +14,13 @@
 goog.provide('goog.async.AnimationDelayTest');
 goog.setTestOnly('goog.async.AnimationDelayTest');
 
+goog.require('goog.Timer');
 goog.require('goog.async.AnimationDelay');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-var testCase = goog.testing.AsyncTestCase.createAndInstall();
+var TEST_DELAY = 20;
 var stubs = new goog.testing.PropertyReplacer();
 
 function tearDown() {
@@ -35,12 +35,10 @@ function testStart() {
   });
 
   delay.start();
-  testCase.waitForAsync('waiting for delay');
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
+  return goog.Timer.promise(TEST_DELAY).then(function() {
     assertEquals(1, callCount);
-  }, 500);
+  });
 }
 
 function testStop() {
@@ -51,13 +49,11 @@ function testStop() {
   });
 
   delay.start();
-  testCase.waitForAsync('waiting for delay');
   delay.stop();
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
+  return goog.Timer.promise(TEST_DELAY).then(function() {
     assertEquals(0, callCount);
-  }, 500);
+  });
 }
 
 function testAlwaysUseGoogNowForHandlerTimestamp() {
@@ -72,10 +68,8 @@ function testAlwaysUseGoogNowForHandlerTimestamp() {
   var delay = new goog.async.AnimationDelay(handler);
 
   delay.start();
-  testCase.waitForAsync('waiting for delay');
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
+  return goog.Timer.promise(TEST_DELAY).then(function() {
     assertEquals(1, handler.getCallCount());
-  }, 500);
+  });
 }

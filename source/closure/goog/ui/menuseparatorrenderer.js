@@ -21,8 +21,8 @@
 goog.provide('goog.ui.MenuSeparatorRenderer');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 
 
@@ -55,7 +55,8 @@ goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('goog-menuseparator');
  * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
-  return separator.getDomHelper().createDom('div', this.getCssClass());
+  return separator.getDomHelper().createDom(goog.dom.TagName.DIV,
+                                            this.getCssClass());
 };
 
 
@@ -65,7 +66,7 @@ goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
  * @param {goog.ui.Control} separator goog.ui.MenuSeparator to decorate the
  *     element.
  * @param {Element} element Element to decorate.
- * @return {Element} Decorated element.
+ * @return {!Element} Decorated element.
  * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.decorate = function(separator,
@@ -75,7 +76,7 @@ goog.ui.MenuSeparatorRenderer.prototype.decorate = function(separator,
     separator.setId(element.id);
   }
 
-  if (element.tagName == 'HR') {
+  if (element.tagName == goog.dom.TagName.HR) {
     // Replace HR with separator.
     var hr = element;
     element = this.createDom(separator);

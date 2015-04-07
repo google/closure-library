@@ -53,7 +53,7 @@ goog.structs.Heap = function(opt_heap) {
   /**
    * The nodes of the heap.
    * @private
-   * @type {Array.<goog.structs.Node>}
+   * @type {Array<goog.structs.Node>}
    */
   this.nodes_ = [];
 
@@ -144,7 +144,7 @@ goog.structs.Heap.prototype.peek = function() {
 
 /**
  * Retrieves but does not remove the key of the root node of this heap.
- * @return {V} The key at the root of the heap. Returns undefined if the
+ * @return {K} The key at the root of the heap. Returns undefined if the
  *     heap is empty.
  */
 goog.structs.Heap.prototype.peekKey = function() {
@@ -246,7 +246,7 @@ goog.structs.Heap.prototype.getParentIndex_ = function(index) {
 
 /**
  * Gets the values of the heap.
- * @return {!Array.<V>} The values in the heap.
+ * @return {!Array<V>} The values in the heap.
  */
 goog.structs.Heap.prototype.getValues = function() {
   var nodes = this.nodes_;
@@ -261,7 +261,7 @@ goog.structs.Heap.prototype.getValues = function() {
 
 /**
  * Gets the keys of the heap.
- * @return {!Array.<K>} The keys in the heap.
+ * @return {!Array<K>} The keys in the heap.
  */
 goog.structs.Heap.prototype.getKeys = function() {
   var nodes = this.nodes_;

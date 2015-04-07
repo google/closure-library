@@ -138,6 +138,10 @@ goog.net.WebSocket.prototype.closeExpected_ = false;
 goog.net.WebSocket.prototype.reconnectAttempt_ = 0;
 
 
+/** @private {?number} */
+goog.net.WebSocket.prototype.reconnectTimer_ = null;
+
+
 /**
  * The logger for this class.
  * @type {goog.log.Logger}
@@ -403,7 +407,7 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
 /**
  * Called when a new message arrives from the server.
  *
- * @param {MessageEvent.<string>} event The web socket message event.
+ * @param {MessageEvent<string>} event The web socket message event.
  * @private
  */
 goog.net.WebSocket.prototype.onMessage_ = function(event) {

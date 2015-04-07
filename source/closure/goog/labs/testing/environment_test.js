@@ -50,6 +50,7 @@ function tearDown() {
     return;
   }
 
+  mockControl.$resetAll();
   mockControl.$tearDown();
 }
 
@@ -92,6 +93,39 @@ function testLifecycle() {
   testing = false;
 }
 
+function testTearDownWithMockControl() {
+  testing = true;
+
+  var envWith = new goog.labs.testing.Environment();
+  var envWithout = new goog.labs.testing.Environment();
+
+  var mockControlMock = mockControl.createStrictMock(goog.testing.MockControl);
+  var mockControlCtorMock = mockControl.createMethodMock(goog.testing,
+      'MockControl');
+  mockControlCtorMock().$times(1).$returns(mockControlMock);
+  // Expecting verify / reset calls twice since two environments use the same
+  // mockControl, but only one created it and is allowed to tear it down.
+  mockControlMock.$verifyAll();
+  mockControlMock.$replayAll();
+  mockControlMock.$verifyAll();
+  mockControlMock.$resetAll();
+  mockControlMock.$tearDown().$times(1);
+  mockControlMock.$verifyAll();
+  mockControlMock.$replayAll();
+  mockControlMock.$verifyAll();
+  mockControlMock.$resetAll();
+
+  mockControl.$replayAll();
+  envWith.withMockControl();
+  envWithout.mockControl = mockControlMock;
+  envWith.tearDown();
+  envWithout.tearDown();
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+
+  testing = false;
+}
+
 function testAutoDiscoverTests() {
   testing = true;
 
@@ -107,9 +141,9 @@ function testAutoDiscoverTests() {
   assertEquals(tearDownFn, testCase.tearDownFn);
   assertEquals(tearDownPageFn, testCase.tearDownPageFn);
 
-  // Note that this number changes when more tests are added this file as
+  // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(4, testCase.tests_.length);
+  assertEquals(6, testCase.tests_.length);
 
   testing = false;
 }
@@ -118,7 +152,6 @@ function testMockClock() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockClock();
-  assertNull(env.mockClock); // Not created before test runs.
 
   testCase.addNewTest('testThatThrowsEventually', function() {
     setTimeout(function() {
@@ -128,8 +161,6 @@ function testMockClock() {
 
   testCase.runTests();
   assertTestFailure(testCase, 'testThatThrowsEventually', 'LateErrorMessage');
-  assertTrue(env.mockClock.isDisposed());
-  assertNull(env.mockControl);
 
   testing = false;
 }
@@ -138,21 +169,42 @@ function testMockControl() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
-  assertNull(env.mockControl);
+  var test = env.mockControl.createFunctionMock('test');
 
   testCase.addNewTest('testWithoutVerify', function() {
-    var test = env.mockControl.createFunctionMock('test');
     test();
     env.mockControl.$replayAll();
+    test();
   });
 
   testCase.runTests();
-  assertTestFailure(testCase, 'testWithoutVerify', 'Missing a call to test');
   assertNull(env.mockClock);
 
   testing = false;
 }
 
-function assertTestFailure(testCase, name,  message) {
+function testMock() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockControl();
+  var mock = env.mock({
+    test: function() {}
+  });
+
+  testCase.addNewTest('testMockCalled', function() {
+    mock.test().$times(2);
+
+    env.mockControl.$replayAll();
+    mock.test();
+    mock.test();
+    env.mockControl.verifyAll();
+  });
+
+  testCase.runTests();
+
+  testing = false;
+}
+
+function assertTestFailure(testCase, name, message) {
   assertContains(message, testCase.result_.resultsByName[name][0]);
 }

@@ -30,6 +30,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
@@ -110,7 +111,7 @@ goog.ui.Component = function(opt_domHelper) {
    * Array of child components.  Lazily initialized on first use.  Must be kept
    * in sync with {@code childIndex_}.  This property is strictly private and
    * must not be accessed directly outside of this class!
-   * @private {Array.<goog.ui.Component>?}
+   * @private {Array<goog.ui.Component>?}
    */
   this.children_ = null;
 
@@ -543,16 +544,19 @@ goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
 /**
  * Returns the event handler for this component, lazily created the first time
  * this method is called.
- * @return {!goog.events.EventHandler.<T>} Event handler for this component.
+ * @return {!goog.events.EventHandler<T>} Event handler for this component.
  * @protected
  * @this T
  * @template T
  */
 goog.ui.Component.prototype.getHandler = function() {
-  if (!this.googUiComponentHandler_) {
-    this.googUiComponentHandler_ = new goog.events.EventHandler(this);
+  // TODO(user): templated "this" values currently result in "this" being
+  // "unknown" in the body of the function.
+  var self = /** @type {goog.ui.Component} */ (this);
+  if (!self.googUiComponentHandler_) {
+    self.googUiComponentHandler_ = new goog.events.EventHandler(self);
   }
-  return this.googUiComponentHandler_;
+  return self.googUiComponentHandler_;
 };
 
 
@@ -629,7 +633,7 @@ goog.ui.Component.prototype.isInDocument = function() {
  * implementation is to set this.element_ = div.
  */
 goog.ui.Component.prototype.createDom = function() {
-  this.element_ = this.dom_.createElement('div');
+  this.element_ = this.dom_.createElement(goog.dom.TagName.DIV);
 };
 
 
@@ -1038,11 +1042,13 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
   goog.array.insertAt(this.children_, child, index);
 
   if (child.inDocument_ && this.inDocument_ && child.getParent() == this) {
-    // Changing the position of an existing child, move the DOM node.
+    // Changing the position of an existing child, move the DOM node (if
+    // necessary).
     var contentElement = this.getContentElement();
-    contentElement.insertBefore(child.getElement(),
-        (contentElement.childNodes[index] || null));
-
+    var insertBeforeElement = contentElement.childNodes[index] || null;
+    if (insertBeforeElement != child.getElement()) {
+      contentElement.insertBefore(child.getElement(), insertBeforeElement);
+    }
   } else if (opt_render) {
     // If this (parent) component doesn't have a DOM yet, call createDom now
     // to make sure we render the child component's element into the correct
@@ -1137,7 +1143,7 @@ goog.ui.Component.prototype.getChildCount = function() {
 /**
  * Returns an array containing the IDs of the children of this component, or an
  * empty array if the component has no children.
- * @return {!Array.<string>} Child component IDs.
+ * @return {!Array<string>} Child component IDs.
  */
 goog.ui.Component.prototype.getChildIds = function() {
   var ids = [];
@@ -1253,7 +1259,7 @@ goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
     throw Error(goog.ui.Component.Error.NOT_OUR_CHILD);
   }
 
-  return /** @type {goog.ui.Component} */(child);
+  return /** @type {!goog.ui.Component} */(child);
 };
 
 
@@ -1281,7 +1287,7 @@ goog.ui.Component.prototype.removeChildAt = function(index, opt_unrender) {
  * @see goog.ui.Component#removeChild
  * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
  *    removed child components, and detaches their DOM from the document.
- * @return {!Array.<goog.ui.Component>} The removed components if any.
+ * @return {!Array<goog.ui.Component>} The removed components if any.
  */
 goog.ui.Component.prototype.removeChildren = function(opt_unrender) {
   var removedChildren = [];

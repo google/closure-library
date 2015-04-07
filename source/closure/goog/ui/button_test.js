@@ -252,3 +252,32 @@ function testEnterFireActionOnKeyPress() {
   goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
       handleAction);
 }
+
+function testSetAriaLabel() {
+  assertNull('Button must not have aria label by default',
+      button.getAriaLabel());
+  button.setAriaLabel('Button 1');
+  button.render();
+  assertEquals('Button element must have expected aria-label', 'Button 1',
+      button.getElement().getAttribute('aria-label'));
+  button.setAriaLabel('Button 2');
+  assertEquals('Button element must have updated aria-label', 'Button 2',
+      button.getElement().getAttribute('aria-label'));
+}
+
+function testSetAriaLabel_decorate() {
+  assertNull('Button must not have aria label by default',
+      button.getAriaLabel());
+  button.setAriaLabel('Button 1');
+  button.decorate(demoButtonElement);
+  var el = button.getElementStrict();
+  assertEquals('Button element must have expected aria-label', 'Button 1',
+      el.getAttribute('aria-label'));
+  assertEquals('Button element must have expected aria-role', 'button',
+      el.getAttribute('role'));
+  button.setAriaLabel('Button 2');
+  assertEquals('Button element must have updated aria-label', 'Button 2',
+      el.getAttribute('aria-label'));
+  assertEquals('Button element must have expected aria-role', 'button',
+      el.getAttribute('role'));
+}

@@ -30,6 +30,7 @@ goog.require('goog.date.DateRange');
 goog.require('goog.date.Interval');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -118,7 +119,7 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
 
   /**
    * Class names to apply to the weekday columns.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.wdayStyles_ = ['', '', '', '', '', '', ''];
@@ -136,10 +137,44 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
 
   /**
    * Collection of dates that make up the date picker.
-   * @type {!Array.<!Array.<!goog.date.Date>>}
+   * @type {!Array<!Array<!goog.date.Date>>}
    * @private
    */
   this.grid_ = [];
+
+  /** @private {Array<!Array<Element>>} */
+  this.elTable_;
+
+  /**
+   * TODO(tbreisacher): Remove external references to this field,
+   * and make it private.
+   * @type {Element}
+   */
+  this.tableBody_;
+
+  /** @private {Element} */
+  this.tableFoot_;
+
+  /** @private {Element} */
+  this.elYear_;
+
+  /** @private {Element} */
+  this.elMonth_;
+
+  /** @private {Element} */
+  this.elToday_;
+
+  /** @private {Element} */
+  this.elNone_;
+
+  /** @private {Element} */
+  this.menu_;
+
+  /** @private {Element} */
+  this.menuSelected_;
+
+  /** @private {function(Element)} */
+  this.menuCallback_;
 };
 goog.inherits(goog.ui.DatePicker, goog.ui.Component);
 goog.tagUnsealableClass(goog.ui.DatePicker);
@@ -295,7 +330,7 @@ goog.ui.DatePicker.YEAR_MENU_RANGE_ = 5;
 /**
  * Constants for event names
  *
- * @type {Object}
+ * @const
  */
 goog.ui.DatePicker.Events = {
   CHANGE: 'change',
@@ -878,10 +913,10 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.asserts.assert(el);
   goog.dom.classlist.add(el, this.getBaseCssClass());
 
-  var table = this.dom_.createElement('table');
-  var thead = this.dom_.createElement('thead');
-  var tbody = this.dom_.createElement('tbody');
-  var tfoot = this.dom_.createElement('tfoot');
+  var table = this.dom_.createElement(goog.dom.TagName.TABLE);
+  var thead = this.dom_.createElement(goog.dom.TagName.THEAD);
+  var tbody = this.dom_.createElement(goog.dom.TagName.TBODY);
+  var tfoot = this.dom_.createElement(goog.dom.TagName.TFOOT);
 
   goog.a11y.aria.setRole(tbody, 'grid');
   tbody.tabIndex = '0';
@@ -891,7 +926,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   this.tableBody_ = tbody;
   this.tableFoot_ = tfoot;
 
-  var row = this.dom_.createElement('tr');
+  var row = this.dom_.createElement(goog.dom.TagName.TR);
   row.className = goog.getCssName(this.getBaseCssClass(), 'head');
   this.elNavRow_ = row;
   this.updateNavigationRow_();
@@ -901,7 +936,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   var cell;
   this.elTable_ = [];
   for (var i = 0; i < 7; i++) {
-    row = this.dom_.createElement('tr');
+    row = this.dom_.createElement(goog.dom.TagName.TR);
     this.elTable_[i] = [];
     for (var j = 0; j < 8; j++) {
       cell = this.dom_.createElement(j == 0 || i == 0 ? 'th' : 'td');
@@ -917,7 +952,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
     tbody.appendChild(row);
   }
 
-  row = this.dom_.createElement('tr');
+  row = this.dom_.createElement(goog.dom.TagName.TR);
   row.className = goog.getCssName(this.getBaseCssClass(), 'foot');
   this.elFootRow_ = row;
   this.updateFooterRow_();
@@ -999,7 +1034,7 @@ goog.ui.DatePicker.prototype.disposeInternal = function() {
  * @private
  */
 goog.ui.DatePicker.prototype.handleGridClick_ = function(event) {
-  if (event.target.tagName == 'TD') {
+  if (event.target.tagName == goog.dom.TagName.TD) {
     // colIndex/rowIndex is broken in Safari, find position by looping
     var el, x = -2, y = -2; // first col/row is for weekday/weeknum
     for (el = event.target; el; el = el.previousSibling, x++) {}
@@ -1150,8 +1185,8 @@ goog.ui.DatePicker.prototype.handleYearMenuClick_ = function(target) {
  * Support function for menu creation.
  *
  * @param {Element} srcEl Button to create menu for.
- * @param {Array.<string>} items List of items to populate menu with.
- * @param {Function} method Call back method.
+ * @param {Array<string>} items List of items to populate menu with.
+ * @param {function(Element)} method Call back method.
  * @param {string} selected Item to mark as selected in menu.
  * @private
  */
@@ -1159,14 +1194,14 @@ goog.ui.DatePicker.prototype.createMenu_ = function(srcEl, items, method,
                                                     selected) {
   this.destroyMenu_();
 
-  var el = this.dom_.createElement('div');
+  var el = this.dom_.createElement(goog.dom.TagName.DIV);
   el.className = goog.getCssName(this.getBaseCssClass(), 'menu');
 
   this.menuSelected_ = null;
 
-  var ul = this.dom_.createElement('ul');
+  var ul = this.dom_.createElement(goog.dom.TagName.UL);
   for (var i = 0; i < items.length; i++) {
-    var li = this.dom_.createDom('li', null, items[i]);
+    var li = this.dom_.createDom(goog.dom.TagName.LI, null, items[i]);
     li.setAttribute('itemIndex', i);
     if (items[i] == selected) {
       this.menuSelected_ = li;
@@ -1181,7 +1216,7 @@ goog.ui.DatePicker.prototype.createMenu_ = function(srcEl, items, method,
 
   this.menu_ = el;
   if (!this.menuSelected_) {
-    this.menuSelected_ = ul.firstChild;
+    this.menuSelected_ = /** @type {Element} */ (ul.firstChild);
   }
   this.menuSelected_.className =
       goog.getCssName(this.getBaseCssClass(), 'menu-selected');
@@ -1209,7 +1244,7 @@ goog.ui.DatePicker.prototype.handleMenuClick_ = function(event) {
 
   this.destroyMenu_();
   if (this.menuCallback_) {
-    this.menuCallback_(event.target);
+    this.menuCallback_(/** @type {Element} */ (event.target));
   }
 };
 
@@ -1254,7 +1289,7 @@ goog.ui.DatePicker.prototype.handleMenuKeyPress_ = function(event) {
   if (el && el != menuSelected) {
     menuSelected.className = '';
     el.className = goog.getCssName(this.getBaseCssClass(), 'menu-selected');
-    this.menuSelected_ = el;
+    this.menuSelected_ = /** @type {!Element} */ (el);
   }
 };
 
@@ -1431,7 +1466,10 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
     // from the active month and the showFixedNumWeeks is false. The first four
     // weeks are always shown as no month has less than 28 days).
     if (y >= 4) {
-      goog.style.setElementShown(this.elTable_[y + 1][0].parentNode,
+      var parentEl = /** @type {Element} */ (
+          this.elTable_[y + 1][0].parentElement ||
+          this.elTable_[y + 1][0].parentNode);
+      goog.style.setElementShown(parentEl,
           this.grid_[y][0].getMonth() == month || this.showFixedNumWeeks_);
     }
   }
@@ -1467,8 +1505,9 @@ goog.ui.DatePicker.prototype.redrawWeekdays_ = function() {
       goog.dom.setTextContent(el, this.wdayNames_[(wday + 1) % 7]);
     }
   }
-  goog.style.setElementShown(this.elTable_[0][0].parentNode,
-                             this.showWeekdays_);
+  var parentEl =  /** @type {Element} */ (this.elTable_[0][0].parentElement ||
+      this.elTable_[0][0].parentNode);
+  goog.style.setElementShown(parentEl, this.showWeekdays_);
 };
 
 

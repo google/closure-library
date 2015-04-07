@@ -39,7 +39,7 @@ goog.require('goog.math.Long');
  * subclasses.
  * @constructor
  * @param {number} numHashBlocks The size of the output in 16-byte blocks
- * @param {!Array.<number>} initHashBlocks The hash-specific initialization
+ * @param {!Array<number>} initHashBlocks The hash-specific initialization
  *     vector, as a sequence of sixteen 32-bit numbers.
  * @extends {goog.crypt.Hash}
  * @struct
@@ -56,7 +56,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
   /**
    * A chunk holding the currently processed message bytes. Once the chunk has
    * {@code this.blocksize} bytes, we feed it into [@code computeChunk_}.
-   * @private {!Uint8Array|Array}
+   * @private {!Uint8Array|!Array<number>}
    */
   this.chunk_ = goog.isDef(goog.global.Uint8Array) ?
       new Uint8Array(goog.crypt.Sha2_64bit.BLOCK_SIZE_) :
@@ -77,7 +77,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
   /**
    * Holds the previous values of accumulated hash a-h in the
    * {@code computeChunk_} function.
-   * @private {!Array.<!goog.math.Long>}
+   * @private {!Array<!goog.math.Long>}
    */
   this.hash_ = [];
 
@@ -93,7 +93,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
    * member rather than as a local within computeChunk_() as a
    * performance optimization to reduce the number of allocations and
    * reduce garbage collection.
-   * @type {!Array.<!goog.math.Long>}
+   * @type {!Array<!goog.math.Long>}
    * @private
    */
   this.w_ = [];
@@ -101,7 +101,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
   /**
    * The value to which {@code this.hash_} should be reset when this
    * Hasher is reset.
-   * @private @const {!Array.<!goog.math.Long>}
+   * @private @const {!Array<!goog.math.Long>}
    */
   this.initHashBlocks_ = goog.crypt.Sha2_64bit.toLongArray_(initHashBlocks);
 
@@ -127,7 +127,7 @@ goog.crypt.Sha2_64bit.BLOCK_SIZE_ = 1024 / 8;
 
 /**
  * Contains data needed to pad messages less than {@code blocksize} bytes.
- * @private {!Array.<number>}
+ * @private {!Array<number>}
  */
 goog.crypt.Sha2_64bit.PADDING_ = goog.array.concat(
     [0x80], goog.array.repeat(0, goog.crypt.Sha2_64bit.BLOCK_SIZE_ - 1));
@@ -159,7 +159,6 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
   // might end up with a chunk that is less than 512 bits. We store
   // such partial chunk in chunk_ and it will be filled up later
   // in digest().
-  var n = 0;
   var chunkBytes = this.chunkBytes_;
 
   // The input message could be either byte array or string.
@@ -484,10 +483,10 @@ goog.crypt.Sha2_64bit.prototype.sum_ = function(one, two, var_args) {
  * elements.
  *
  * @private
- * @param {!Array.<number>} values An array of 32-bit numbers.  Its length
+ * @param {!Array<number>} values An array of 32-bit numbers.  Its length
  *     must be even.  Each pair of numbers represents a 64-bit integer
  *     in big-endian order
- * @return {!Array.<!goog.math.Long>}
+ * @return {!Array<!goog.math.Long>}
  */
 goog.crypt.Sha2_64bit.toLongArray_ = function(values) {
   goog.asserts.assert(values.length % 2 == 0);
@@ -505,7 +504,7 @@ goog.crypt.Sha2_64bit.toLongArray_ = function(values) {
  * These values are from Section 4.2.3 of
  * http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
  * @const
- * @private {!Array.<!goog.math.Long>}
+ * @private {!Array<!goog.math.Long>}
  */
 goog.crypt.Sha2_64bit.K_ = goog.crypt.Sha2_64bit.toLongArray_([
   0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd,

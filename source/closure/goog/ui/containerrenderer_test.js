@@ -16,6 +16,7 @@ goog.provide('goog.ui.ContainerRendererTest');
 goog.setTestOnly('goog.ui.ContainerRendererTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.PropertyReplacer');
@@ -36,13 +37,13 @@ function setUpPage() {
 function setUp() {
   var sandbox = goog.dom.getElement('sandbox');
 
-  sandbox.appendChild(goog.dom.createDom('span', {
+  sandbox.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN, {
     id: 'noTabIndex'
   }, 'Test'));
-  sandbox.appendChild(goog.dom.createDom('div', {
+  sandbox.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {
     id: 'container',
     'class': 'goog-container-horizontal'
-  }, goog.dom.createDom('div', {
+  }, goog.dom.createDom(goog.dom.TagName.DIV, {
     id: 'control',
     'class': 'goog-control'
   }, 'Hello, world!')));
@@ -161,7 +162,7 @@ function testDecorate() {
 
 function testDecorateWithCustomContainerElement() {
   var element = goog.dom.getElement('container');
-  var alternateContainerElement = goog.dom.createElement('div');
+  var alternateContainerElement = goog.dom.createElement(goog.dom.TagName.DIV);
   element.appendChild(alternateContainerElement);
 
   var container = new goog.ui.Container();

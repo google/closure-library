@@ -15,13 +15,17 @@
 goog.provide('goog.ui.ControlTest');
 goog.setTestOnly('goog.ui.ControlTest');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.events');
@@ -42,6 +46,8 @@ var ALL_EVENTS = goog.object.getValues(goog.ui.Component.EventType);
 var events = {};
 var expectedFailures;
 var sandbox;
+var aria = goog.a11y.aria;
+var State = goog.a11y.aria.State;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -181,8 +187,8 @@ function testConstructor() {
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
-  var content = goog.dom.createDom('div', null, 'Hello',
-      goog.dom.createDom('b', null, 'World'));
+  var content = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello',
+      goog.dom.createDom(goog.dom.TagName.B, null, 'World'));
   var testRenderer = new TestRenderer();
   var fakeDomHelper = {};
   var foo = new goog.ui.Control(content, testRenderer, fakeDomHelper);
@@ -458,7 +464,7 @@ function testGetContentElement() {
  * Tests {@link goog.ui.Control#canDecorate}.
  */
 function testCanDecorate() {
-  assertTrue(control.canDecorate(goog.dom.createElement('div')));
+  assertTrue(control.canDecorate(goog.dom.createElement(goog.dom.TagName.DIV)));
 }
 
 
@@ -699,6 +705,62 @@ function testGetContentForDecoratedControl() {
 
 
 /**
+ * Tests {@link goog.ui.Control#setAriaLabel}.
+ */
+function testSetAriaLabel_render() {
+  assertNull('Controls must not have any aria label by default',
+      control.getAriaLabel());
+
+  control.setAriaLabel('label');
+  assertEquals('Control must have aria label', 'label', control.getAriaLabel());
+
+  control.render(sandbox);
+
+  var elem = control.getElementStrict();
+  assertEquals(
+      'Element must have control\'s aria label after rendering',
+      'label',
+      goog.a11y.aria.getLabel(elem));
+
+  control.setAriaLabel('new label');
+  assertEquals('Element must have the new aria label',
+      'new label',
+      goog.a11y.aria.getLabel(elem));
+}
+
+
+/**
+ * Tests {@link goog.ui.Control#setAriaLabel}.
+ */
+function testSetAriaLabel_decorate() {
+  assertNull('Controls must not have any aria label by default',
+      control.getAriaLabel());
+
+  control.setAriaLabel('label');
+  assertEquals('Control must have aria label', 'label', control.getAriaLabel());
+
+  sandbox.innerHTML = '<div id="nodelist" role="button">' +
+      'Hello, <b>world</b>!</div>';
+  control.decorate(goog.dom.getElement('nodelist'));
+
+  var elem = control.getElementStrict();
+  assertEquals(
+      'Element must have control\'s aria label after rendering',
+      'label',
+      goog.a11y.aria.getLabel(elem));
+  assertEquals(
+      'Element must have the correct role',
+      'button',
+      elem.getAttribute('role'));
+
+  control.setAriaLabel('new label');
+  assertEquals('Element must have the new aria label',
+      'new label',
+      goog.a11y.aria.getLabel(elem));
+}
+
+
+/**
  * Tests {@link goog.ui.Control#setContent}.
  */
 function testSetContent() {
@@ -717,8 +779,8 @@ function testSetContent() {
   assertEquals('Rendered control\'s DOM must have expected contents',
       '', control.getElement().innerHTML);
 
-  control.setContent([goog.dom.createDom('div', null,
-      goog.dom.createDom('span', null, 'Hello')), 'World']);
+  control.setContent([goog.dom.createDom(goog.dom.TagName.DIV, null,
+      goog.dom.createDom(goog.dom.TagName.SPAN, null, 'Hello')), 'World']);
   assertHTMLEquals('Control\'s DOM must be updated',
       '<div><span>Hello</span></div>World', control.getElement().innerHTML);
 }
@@ -1065,6 +1127,11 @@ function testSetEnabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
+  var elem = control.getElementStrict();
+  assertTrue('Control element must not have aria-disabled',
+      goog.string.isEmptyOrWhitespace(aria.getState(elem, State.DISABLED)));
+  assertEquals('Control element must have a tabIndex of 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 
   if (testFocus) {
     // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
@@ -1084,9 +1151,101 @@ function testSetEnabled() {
   assertEquals('One DISABLE event must have been dispatched', 1,
       getEventCount(control, goog.ui.Component.EventType.DISABLE));
   assertFalse('Control must be disabled', control.isEnabled());
-  assertFalse('Control must not be highlighed', control.isHighlighted());
+  assertFalse('Control must not be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
   assertFalse('Control must not be focused', control.isFocused());
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+
+  control.setEnabled(true);
+  control.exitDocument();
+  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
+  element.className = cssClass;
+  goog.dom.appendChild(sandbox, element);
+  control.decorate(element);
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+  control.setEnabled(true);
+  elem = control.getElementStrict();
+  assertEquals('Control element must have aria-disabled false', 'false',
+      aria.getState(elem, State.DISABLED));
+  assertEquals('Control element must have tabIndex 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
+}
+
+
+/**
+ * Tests {@link goog.ui.Control#setState} when using
+ * goog.ui.Component.State.DISABLED.
+ */
+function testSetStateWithDisabled() {
+  control.render(sandbox);
+  control.setHighlighted(true);
+  control.setActive(true);
+  control.getKeyEventTarget().focus();
+
+  resetEventCount();
+
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  assertTrue('No events must have been dispatched', noEventsDispatched());
+  assertTrue('Control must be enabled', control.isEnabled());
+  assertTrue('Control must be highlighted', control.isHighlighted());
+  assertTrue('Control must be active', control.isActive());
+  assertTrue('Control element must not have aria-disabled',
+      goog.string.isEmptyOrWhitespace(
+          aria.getState(control.getElementStrict(), State.DISABLED)));
+  assertEquals('Control element must have a tabIndex of 0', 0,
+      goog.string.toNumber(
+          control.getElement().getAttribute('tabIndex') || ''));
+
+  if (testFocus) {
+    // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
+    // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
+    expectedFailures.expectFailureFor(goog.userAgent.IE);
+    expectedFailures.expectFailureFor(isMacSafari3());
+    try {
+      assertTrue('Control must be focused', control.isFocused());
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  resetEventCount();
+
+  control.setState(goog.ui.Component.State.DISABLED, true);
+  assertEquals('One DISABLE event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.DISABLE));
+  assertFalse('Control must be disabled', control.isEnabled());
+  assertFalse('Control must not be highlighted', control.isHighlighted());
+  assertFalse('Control must not be active', control.isActive());
+  assertFalse('Control must not be focused', control.isFocused());
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  control.exitDocument();
+  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
+  element.className = cssClass;
+  goog.dom.appendChild(sandbox, element);
+  control.decorate(element);
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  elem = control.getElementStrict();
+  assertEquals('Control element must have aria-disabled false', 'false',
+      aria.getState(elem, State.DISABLED));
+  assertEquals('Control element must have tabIndex 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 }
 
 
@@ -1787,7 +1946,8 @@ function testPerformActionInternal() {
  * Tests {@link goog.ui.Control#handleMouseOver}.
  */
 function testHandleMouseOver() {
-  control.setContent(goog.dom.createDom('span', {id: 'caption'}, 'Hello'));
+  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
+                                        'Hello'));
   control.render(sandbox);
 
   var element = control.getElement();
@@ -1870,7 +2030,8 @@ function testHandleMouseOver() {
  * Tests {@link goog.ui.Control#handleMouseOut}.
  */
 function testHandleMouseOut() {
-  control.setContent(goog.dom.createDom('span', {id: 'caption'}, 'Hello'));
+  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
+                                        'Hello'));
   control.setHighlighted(true);
   control.setActive(true);
 
@@ -1973,9 +2134,9 @@ function testHandleMouseOut() {
 }
 
 function testIsMouseEventWithinElement() {
-  var child = goog.dom.createElement('div');
-  var parent = goog.dom.createDom('div', null, child);
-  var notChild = goog.dom.createElement('div');
+  var child = goog.dom.createElement(goog.dom.TagName.DIV);
+  var parent = goog.dom.createDom(goog.dom.TagName.DIV, null, child);
+  var notChild = goog.dom.createElement(goog.dom.TagName.DIV);
 
   var event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = child;
@@ -2223,4 +2384,64 @@ function testHandleMouseUp() {
 function testDefaultConstructor() {
   var control = new goog.ui.Control();
   assertNull(control.getContent());
+}
+
+
+function assertClickSequenceFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickSequence(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickDoesNotFire(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function testIeMouseEventSequenceSimulator() {
+  control.render(sandbox);
+
+  // Click sequences and isolated clicks must be handled correctly in any order.
+  assertClickSequenceFires(
+      'ACTION event expected after a click sequence');
+  assertClickSequenceFires(
+      'ACTION event expected after a second consecutive click sequence');
+  if (goog.userAgent.IE) {
+    // For some reason in IE8 and perhaps earlier, isolated clicks do not result
+    // a detectable dispatch of an ACTION event, so we'll only assert the
+    // desired handling of isolated clicks in IE9 and higher.
+    if (goog.userAgent.isVersionOrHigher(9)) {
+      assertIsolatedClickFires(
+          'ACTION event expected after an isolated click immediately ' +
+          'following a click sequence');
+      assertIsolatedClickFires(
+          'ACTION event expected after second consecutive isolated click');
+    } else {
+      // For IE8-and-lower, fire an isolated click event in preparation for our
+      // final assertion.
+      goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+    }
+  } else {
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after an isolated click immediately ' +
+        'following a click sequence');
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after second consecutive isolated click');
+  }
+  assertClickSequenceFires(
+      'ACTION event expected after click sequence immediately following ' +
+      'an isolated click ');
 }

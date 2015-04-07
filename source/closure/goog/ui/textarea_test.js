@@ -332,3 +332,17 @@ function testSetValueWhenInvisible() {
   elementHeight = goog.style.getStyle(textarea.getElement(), 'height');
   assertEquals(height + 'px', elementHeight);
 }
+
+function testSetAriaLabel() {
+  assertNull('Textarea must not have aria label by default',
+      textarea.getAriaLabel());
+  textarea.setAriaLabel('My textarea');
+  textarea.render(sandbox);
+  var element = textarea.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('Item element must have expected aria-label', 'My textarea',
+      element.getAttribute('aria-label'));
+  textarea.setAriaLabel('My new textarea');
+  assertEquals('Item element must have updated aria-label', 'My new textarea',
+      element.getAttribute('aria-label'));
+}

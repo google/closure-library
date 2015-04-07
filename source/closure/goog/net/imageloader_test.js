@@ -318,7 +318,7 @@ function testSetsCorsAttribute() {
     } else {
       assertTrue(
           'Non-CORS requested images should not have a crossOrigin attribute',
-          goog.string.isEmptySafe(image.crossOrigin));
+          goog.string.isEmptyOrWhitespace(goog.string.makeSafe(image.crossOrigin)));
     }
   });
 

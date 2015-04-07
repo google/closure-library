@@ -19,6 +19,8 @@
 goog.provide('goog.net.xpc.DirectTransportTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.xpc');
@@ -85,12 +87,12 @@ function setUpPage() {
   TransportTypes = goog.net.xpc.TransportTypes;
 
   // Show debug log
-  var debugDiv = document.createElement('debugDiv');
+  var debugDiv = document.createElement(goog.dom.TagName.DEBUGDIV);
   document.body.appendChild(debugDiv);
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msgElm = goog.dom.createDom('div');
+    var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
@@ -117,7 +119,7 @@ function tearDown() {
 
 
 function createIframe() {
-  peerIframe = document.createElement('iframe');
+  peerIframe = document.createElement(goog.dom.TagName.IFRAME);
   peerIframe.id = PEER_IFRAME_ID;
   document.body.insertBefore(peerIframe, document.body.firstChild);
 }
@@ -127,6 +129,13 @@ function createIframe() {
  * Tests 2 same domain frames using direct transport.
  */
 function testDirectTransport() {
+  // This test has been flaky on IE 8-11 on Win7.
+  // For now, disable.
+  // Flakiness is tracked in http://b/18595666
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   createIframe();
   channelName = goog.net.xpc.getRandomString(10);
   outerXpc = new CrossPageChannel(

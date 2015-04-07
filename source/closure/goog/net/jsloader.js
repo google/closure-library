@@ -68,7 +68,7 @@ goog.net.jsloader.Options;
 
 /**
  * Scripts (URIs) waiting to be loaded.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.net.jsloader.scriptsToLoad_ = [];
@@ -88,7 +88,7 @@ goog.net.jsloader.scriptsToLoad_ = [];
  * If you need to load a large number of scripts on the same domain,
  * you may want to use goog.module.ModuleLoader.
  *
- * @param {Array.<string>} uris The URIs to load.
+ * @param {Array<string>} uris The URIs to load.
  * @param {goog.net.jsloader.Options=} opt_options Optional parameters. See
  *     goog.net.jsloader.options documentation for details.
  */
@@ -293,7 +293,7 @@ goog.net.jsloader.cancel_ = function() {
   var request = this;
   if (request && request.script_) {
     var scriptNode = request.script_;
-    if (scriptNode && scriptNode.tagName == 'SCRIPT') {
+    if (scriptNode && scriptNode.tagName == goog.dom.TagName.SCRIPT) {
       goog.net.jsloader.cleanup_(scriptNode, true, request.timeout_);
     }
   }

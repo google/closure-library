@@ -16,6 +16,7 @@ goog.provide('goog.positioning.MenuAnchoredPositionTest');
 goog.setTestOnly('goog.positioning.MenuAnchoredPositionTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.MenuAnchoredPosition');
 goog.require('goog.testing.jsunit');
@@ -47,7 +48,8 @@ function tearDown() {
 function testRepositionWithAdjustAndOnscreenAnchor() {
   // Add so many children that it can't possibly fit onscreen.
   for (var i = 0; i < 200; i++) {
-    menu.appendChild(goog.dom.createDom('div', null, 'New Item ' + i));
+    menu.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
+                                        null, 'New Item ' + i));
   }
 
   var pos = new goog.positioning.MenuAnchoredPosition(
@@ -85,7 +87,8 @@ function testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
 
   // Add so many children that it can't possibly fit onscreen.
   for (var i = 0; i < 200; i++) {
-    menu.appendChild(goog.dom.createDom('div', null, 'New Item ' + i));
+    menu.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
+                                        null, 'New Item ' + i));
   }
 
   var pos = new goog.positioning.MenuAnchoredPosition(

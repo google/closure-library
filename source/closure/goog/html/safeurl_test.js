@@ -22,6 +22,7 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.html.safeUrlTest');
 
@@ -32,7 +33,7 @@ function testSafeUrl() {
       goog.string.Const.from('javascript:trusted();'));
   var extracted = goog.html.SafeUrl.unwrap(safeUrl);
   assertEquals('javascript:trusted();', extracted);
-  assertEquals('javascript:trusted();', safeUrl.getTypedStringValue());
+  assertEquals('javascript:trusted();', goog.html.SafeUrl.unwrap(safeUrl));
   assertEquals('SafeUrl{javascript:trusted();}', String(safeUrl));
 
   // URLs are always LTR.
@@ -41,6 +42,50 @@ function testSafeUrl() {
   // Interface markers are present.
   assertTrue(safeUrl.implementsGoogStringTypedString);
   assertTrue(safeUrl.implementsGoogI18nBidiDirectionalString);
+}
+
+
+function testSafeUrlFromBlob_withSafeType() {
+  if (isIE9OrLower()) {
+    return;
+  }
+  assertBlobTypeIsSafe('image/png', true);
+  assertBlobTypeIsSafe('iMage/pNg', true);
+}
+
+
+function testSafeUrlFromBlob_withUnsafeType() {
+  if (isIE9OrLower()) {
+    return;
+  }
+  assertBlobTypeIsSafe('', false);
+  assertBlobTypeIsSafe('ximage/png', false);
+  assertBlobTypeIsSafe('image/pngx', false);
+}
+
+
+/** @return {boolean} True if running on IE9 or lower. */
+function isIE9OrLower() {
+  return goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10');
+}
+
+
+/**
+ * Tests creating a SafeUrl from a blob with the given MIME type, asserting
+ * whether or not the SafeUrl returned is innocuous or not depending on the
+ * given boolean.
+ * @param {string} type MIME type to test
+ * @param {boolean} isSafe Whether the given MIME type should be considered safe
+ *     by {@link SafeUrl.fromBlob}.
+ */
+function assertBlobTypeIsSafe(type, isSafe) {
+  var safeUrl = goog.html.SafeUrl.fromBlob(new Blob(['test'], {type: type}));
+  var extracted = goog.html.SafeUrl.unwrap(safeUrl);
+  if (isSafe) {
+    assertEquals('blob:', extracted.substring(0, 5));
+  } else {
+    assertEquals(goog.html.SafeUrl.INNOCUOUS_STRING, extracted);
+  }
 }
 
 
@@ -90,6 +135,9 @@ function testSafeUrlSanitize_validatesUrl() {
   assertGoodUrl('http://example.com/');
   assertGoodUrl('https://example.com');
   assertGoodUrl('mailto:foo@example.com');
+  assertGoodUrl('ftp://example.com');
+  assertGoodUrl('ftp://username@example.com');
+  assertGoodUrl('ftp://username:password@example.com');
   // Scheme is case-insensitive
   assertGoodUrl('HTtp://example.com/');
   // Different URL components go through.

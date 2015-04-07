@@ -147,7 +147,7 @@ goog.ui.RichTextSpellChecker.prototype.editorDom_;
  * Tag name portion of the marker for the text that does not need to be checked
  * for spelling.
  *
- * @type {Array.<string|undefined>}
+ * @type {Array<string|undefined>}
  */
 goog.ui.RichTextSpellChecker.prototype.excludeTags;
 

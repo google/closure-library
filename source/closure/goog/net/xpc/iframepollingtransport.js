@@ -23,6 +23,7 @@ goog.provide('goog.net.xpc.IframePollingTransport.Sender');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.xpc');
@@ -78,7 +79,7 @@ goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
 
   /**
    * The queue to hold messages which can't be sent immediately.
-   * @type {Array}
+   * @type {Array<string>}
    * @private
    */
   this.sendQueue_ = [];
@@ -138,6 +139,62 @@ goog.net.xpc.IframePollingTransport.prototype.initialized_ = false;
 goog.net.xpc.IframePollingTransport.prototype.reconnectFrame_ = null;
 
 
+/** @private {goog.net.xpc.IframePollingTransport.Receiver} */
+goog.net.xpc.IframePollingTransport.prototype.ackReceiver_;
+
+
+/** @private {goog.net.xpc.IframePollingTransport.Sender} */
+goog.net.xpc.IframePollingTransport.prototype.ackSender_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.ackIframeElm_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.ackWinObj_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresentCb_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.deliveryQueue_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.msgIframeElm_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.msgReceiver_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.msgSender_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.msgWinObj_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.rcvdConnectionSetupAck_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.sentConnectionSetupAck_;
+
+
+/** @private {boolean} */
+goog.net.xpc.IframePollingTransport.prototype.sentConnectionSetup_;
+
+
+/** @private */
+goog.net.xpc.IframePollingTransport.prototype.parts_;
+
+
 /**
  * The string used to prefix all iframe names and IDs.
  * @type {string}
@@ -181,7 +238,7 @@ goog.net.xpc.IframePollingTransport.prototype.isChannelAvailable = function() {
 /**
  * Safely retrieves the frames from the peer window. If an error is thrown
  * (e.g. the window is closing) an empty frame object is returned.
- * @return {!Object.<!Window>} The frames from the peer window.
+ * @return {!Object<!Window>} The frames from the peer window.
  * @private
  */
 goog.net.xpc.IframePollingTransport.prototype.getPeerFrames_ = function() {
@@ -258,7 +315,7 @@ goog.net.xpc.IframePollingTransport.prototype.constructSenderFrame_ =
     function(id) {
   goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
       'constructing sender frame: ' + id);
-  var ifr = goog.dom.createElement('iframe');
+  var ifr = goog.dom.createElement(goog.dom.TagName.IFRAME);
   var s = ifr.style;
   s.position = 'absolute';
   s.top = '-10px'; s.left = '10px'; s.width = '1px'; s.height = '1px';
@@ -707,7 +764,7 @@ goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
 
 /**
  * Array holding all Receiver-instances.
- * @type {Array.<goog.net.xpc.IframePollingTransport.Receiver>}
+ * @type {Array<goog.net.xpc.IframePollingTransport.Receiver>}
  * @private
  */
 goog.net.xpc.IframePollingTransport.receivers_ = [];

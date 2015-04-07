@@ -39,6 +39,8 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
@@ -85,6 +87,14 @@ goog.ui.LabelInput.prototype.ffKeyRestoreValue_ = null;
 goog.ui.LabelInput.prototype.labelRestoreDelayMs = 10;
 
 
+/** @private {boolean} */
+goog.ui.LabelInput.prototype.inFocusAndSelect_;
+
+
+/** @private {boolean} */
+goog.ui.LabelInput.prototype.formAttached_;
+
+
 /**
  * Indicates whether the browser supports the placeholder attribute, new in
  * HTML5.
@@ -102,7 +112,7 @@ goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_;
 goog.ui.LabelInput.isPlaceholderSupported_ = function() {
   if (!goog.isDefAndNotNull(goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_)) {
     goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_ = (
-        'placeholder' in document.createElement('input'));
+        'placeholder' in document.createElement(goog.dom.TagName.INPUT));
   }
   return goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_;
 };
@@ -127,8 +137,8 @@ goog.ui.LabelInput.prototype.hasFocus_ = false;
  * @override
  */
 goog.ui.LabelInput.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom('input', {'type': 'text'}));
+  this.setElementInternal(this.getDomHelper().createDom(
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT}));
 };
 
 
@@ -151,7 +161,7 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
     this.hasFocus_ = true;
     var el = this.getElement();
     goog.asserts.assert(el);
-    goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
+    goog.dom.classlist.remove(el, this.labelCssClassName);
   }
 
   if (goog.ui.LabelInput.isPlaceholderSupported_()) {
@@ -259,7 +269,7 @@ goog.ui.LabelInput.prototype.disposeInternal = function() {
  * The CSS class name to add to the input when the user has not entered a
  * value.
  */
-goog.ui.LabelInput.prototype.LABEL_CLASS_NAME =
+goog.ui.LabelInput.prototype.labelCssClassName =
     goog.getCssName('label-input-label');
 
 
@@ -272,7 +282,7 @@ goog.ui.LabelInput.prototype.handleFocus_ = function(e) {
   this.hasFocus_ = true;
   var el = this.getElement();
   goog.asserts.assert(el);
-  goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
+  goog.dom.classlist.remove(el, this.labelCssClassName);
   if (goog.ui.LabelInput.isPlaceholderSupported_()) {
     return;
   }
@@ -512,7 +522,7 @@ goog.ui.LabelInput.prototype.check_ = function() {
     if (!this.inFocusAndSelect_ && !this.hasFocus_) {
       var el = this.getElement();
       goog.asserts.assert(el);
-      goog.dom.classlist.add(el, this.LABEL_CLASS_NAME);
+      goog.dom.classlist.add(el, this.labelCssClassName);
     }
 
     // Allow browser to catchup with CSS changes before restoring the label.
@@ -523,7 +533,7 @@ goog.ui.LabelInput.prototype.check_ = function() {
   } else {
     var el = this.getElement();
     goog.asserts.assert(el);
-    goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
+    goog.dom.classlist.remove(el, this.labelCssClassName);
   }
 };
 
@@ -570,7 +580,7 @@ goog.ui.LabelInput.prototype.setEnabled = function(enabled) {
   var el = this.getElement();
   goog.asserts.assert(el);
   goog.dom.classlist.enable(el,
-      goog.getCssName(this.LABEL_CLASS_NAME, 'disabled'), !enabled);
+      goog.getCssName(this.labelCssClassName, 'disabled'), !enabled);
 };
 
 

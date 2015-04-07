@@ -88,7 +88,7 @@ goog.require('goog.events.MouseWheelHandler');
  * @extends {goog.Disposable}
  */
 svgpan.SvgPan = function(opt_graphElementId, opt_root) {
-  goog.base(this);
+  svgpan.SvgPan.base(this, 'constructor');
 
   /** @private {Element} */
   this.root_ = opt_root || document.documentElement;
@@ -120,7 +120,7 @@ svgpan.SvgPan = function(opt_graphElementId, opt_root) {
   /** @private {Element} */
   this.stateTarget_ = null;
 
-  /** @private {Element} */
+  /** @private {SVGPoint} */
   this.stateOrigin_ = null;
 
   /** @private {SVGMatrix} */
@@ -136,7 +136,7 @@ goog.inherits(svgpan.SvgPan, goog.Disposable);
 
 /** @override */
 svgpan.SvgPan.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  svgpan.SvgPan.base(this, 'disposeInternal');
   goog.events.removeAll(this.root_);
   this.mouseWheelHandler_.dispose();
 };
@@ -321,13 +321,14 @@ svgpan.SvgPan.prototype.handleMouseMove_ = function(evt) {
  * Handles mouse motion for the given coordinates.
  * @param {number} x The x coordinate.
  * @param {number} y The y coordinate.
- * @param {Element} svgDoc The svg document.
+ * @param {Document} svgDoc The svg document.
  */
 svgpan.SvgPan.prototype.handleMove = function(x, y, svgDoc) {
   var g = this.getRoot_(svgDoc);
   if (this.state_ == svgpan.SvgPan.State.PAN && this.enablePan_) {
     // Pan mode
-    var p = this.newPoint_(x, y).matrixTransform(this.stateTf_);
+    var p = this.newPoint_(x, y).matrixTransform(
+        /** @type {!SVGMatrix} */ (this.stateTf_));
     this.setCtm_(g, this.stateTf_.inverse().translate(
         p.x - this.stateOrigin_.x, p.y - this.stateOrigin_.y));
     this.cancelNextClick_ = true;
@@ -365,7 +366,7 @@ svgpan.SvgPan.prototype.handleMouseDown_ = function(evt) {
   } else {
     // Drag mode
     this.state_ = svgpan.SvgPan.State.DRAG;
-    this.stateTarget_ = evt.target;
+    this.stateTarget_ = /** @type {Element} */ (evt.target);
     this.stateTf_ = g.getCTM().inverse();
     this.stateOrigin_ = this.getEventPoint_(evt).matrixTransform(this.stateTf_);
   }

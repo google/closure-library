@@ -31,6 +31,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
+goog.require('goog.string');
 
 
 /**
@@ -103,7 +104,7 @@ goog.a11y.aria.setRole = function(element, roleName) {
 /**
  * Gets role of an element.
  * @param {!Element} element DOM element to get role of.
- * @return {!goog.a11y.aria.Role} ARIA Role name.
+ * @return {goog.a11y.aria.Role} ARIA Role name.
  */
 goog.a11y.aria.getRole = function(element) {
   var role = element.getAttribute(goog.a11y.aria.ROLE_ATTRIBUTE_);
@@ -126,13 +127,12 @@ goog.a11y.aria.removeRole = function(element) {
  * @param {!(goog.a11y.aria.State|string)} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
- * @param {string|boolean|number|!goog.array.ArrayLike.<string>} value Value
+ * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
  */
 goog.a11y.aria.setState = function(element, stateName, value) {
-  if (goog.isArrayLike(value)) {
-    var array = /** @type {!goog.array.ArrayLike.<string>} */ (value);
-    value = array.join(' ');
+  if (goog.isArray(value)) {
+    value = value.join(' ');
   }
   var attrStateName = goog.a11y.aria.getAriaAttributeName_(stateName);
   if (value === '' || value == undefined) {
@@ -155,6 +155,28 @@ goog.a11y.aria.setState = function(element, stateName, value) {
   } else {
     element.setAttribute(attrStateName, value);
   }
+};
+
+
+/**
+ * Toggles the ARIA attribute of an element.
+ * Meant for attributes with a true/false value, but works with any attribute.
+ * If the attribute does not have a true/false value, the following rules apply:
+ * A not empty attribute will be removed.
+ * An empty attribute will be set to true.
+ * @param {!Element} el DOM node for which to set attribute.
+ * @param {!(goog.a11y.aria.State|string)} attr ARIA attribute being set.
+ *     Automatically adds prefix 'aria-' to the attribute name if the attribute
+ *     is not an extra attribute.
+ */
+goog.a11y.aria.toggleState = function(el, attr) {
+  var val = goog.a11y.aria.getState(el, attr);
+  if (!goog.string.isEmptyOrWhitespace(goog.string.makeSafe(val)) &&
+      !(val == 'true' || val == 'false')) {
+    goog.a11y.aria.removeState(el, /** @type {!goog.a11y.aria.State} */ (attr));
+    return;
+  }
+  goog.a11y.aria.setState(el, attr, val == 'true' ? 'false' : 'true');
 };
 
 
@@ -243,7 +265,7 @@ goog.a11y.aria.setLabel = function(element, label) {
  * semantics is well supported by most screen readers.
  * Only to be used internally by the ARIA library in goog.a11y.aria.*.
  * @param {!Element} element The element to assert an ARIA role set.
- * @param {!goog.array.ArrayLike.<string>} allowedRoles The child roles of
+ * @param {!goog.array.ArrayLike<string>} allowedRoles The child roles of
  * the roles.
  */
 goog.a11y.aria.assertRoleIsSetInternalUtil = function(element, allowedRoles) {
@@ -324,7 +346,7 @@ goog.a11y.aria.getStateString = function(element, stateName) {
  * Only to be used internally by the ARIA library in goog.a11y.aria.*.
  * @param {!Element} element DOM node to get state from.
  * @param {!goog.a11y.aria.State} stateName State name.
- * @return {!goog.array.ArrayLike.<string>} string Array
+ * @return {!goog.array.ArrayLike<string>} string Array
  *     value of the state attribute.
  */
 goog.a11y.aria.getStringArrayStateInternalUtil = function(element, stateName) {
@@ -337,7 +359,7 @@ goog.a11y.aria.getStringArrayStateInternalUtil = function(element, stateName) {
 /**
  * Splits the input stringValue on whitespace.
  * @param {string} stringValue The value of the string to split.
- * @return {!goog.array.ArrayLike.<string>} string Array
+ * @return {!goog.array.ArrayLike<string>} string Array
  *     value as result of the split.
  * @private
  */

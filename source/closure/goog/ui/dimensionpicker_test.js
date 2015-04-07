@@ -232,3 +232,18 @@ function testRendererDoesntCallGetCssClassInConstructor() {
       assertNoGetCssClassCallsInConstructor(
           goog.ui.DimensionPickerRenderer);
 }
+
+function testSetAriaLabel() {
+  assertNull('Picker must not have aria label by default',
+      picker.getAriaLabel());
+  picker.setAriaLabel('My picker');
+  picker.render(render);
+  var element = picker.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('Picker element must have expected aria-label', 'My picker',
+      element.getAttribute('aria-label'));
+  assertTrue(goog.dom.isFocusableTabIndex(element));
+  picker.setAriaLabel('My new picker');
+  assertEquals('Picker element must have updated aria-label', 'My new picker',
+      element.getAttribute('aria-label'));
+}

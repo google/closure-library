@@ -28,7 +28,6 @@ goog.provide('goog.testing.MethodMock');
 goog.require('goog.object');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.Mock');
-goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.StrictMock');
 
@@ -40,7 +39,7 @@ goog.require('goog.testing.StrictMock');
  *     Set to '[anonymous mocked function]' if not passed in.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked function.
+ * @return {!goog.testing.MockInterface} The mocked function.
  * @suppress {missingProperties} Mocks do not fit in the type system well.
  */
 goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
@@ -53,7 +52,7 @@ goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
       goog.testing.LooseMock : goog.testing.StrictMock;
   goog.object.extend(fn, new base({}));
 
-  return /** @type {goog.testing.MockInterface} */ (fn);
+  return /** @type {!goog.testing.MockInterface} */ (fn);
 };
 
 
@@ -170,7 +169,7 @@ goog.testing.createConstructorMock = function(scope, constructorName,
  * @param {string} functionName The name of the function we're going to mock.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked global function.
+ * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.createGlobalFunctionMock = function(functionName, opt_strictness) {
   return goog.testing.GlobalFunctionMock(functionName, opt_strictness);

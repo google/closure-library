@@ -19,8 +19,8 @@
 goog.provide('goog.testing.i18n.assertsTest');
 goog.setTestOnly('goog.testing.i18n.assertsTest');
 
-goog.require('goog.testing.i18n.asserts');
 goog.require('goog.testing.ExpectedFailures');
+goog.require('goog.testing.i18n.asserts');
 
 
 // Add this mapping for testing only

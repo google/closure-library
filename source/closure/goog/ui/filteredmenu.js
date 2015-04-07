@@ -27,6 +27,8 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.AutoCompleteValues');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
@@ -127,7 +129,7 @@ goog.ui.FilteredMenu.prototype.allowMultiple_ = false;
 
 /**
  * List of items entered in the search box if multiple entries are allowed.
- * @type {Array.<string>|undefined}
+ * @type {Array<string>|undefined}
  * @private
  */
 goog.ui.FilteredMenu.prototype.enteredItems_;
@@ -151,6 +153,12 @@ goog.ui.FilteredMenu.prototype.filterStr_;
 
 
 /**
+ * @private {Element}
+ */
+goog.ui.FilteredMenu.prototype.contentElement_;
+
+
+/**
  * Map of child nodes that shouldn't be affected by filtering.
  * @type {Object|undefined}
  * @private
@@ -163,14 +171,15 @@ goog.ui.FilteredMenu.prototype.createDom = function() {
   goog.ui.FilteredMenu.superClass_.createDom.call(this);
 
   var dom = this.getDomHelper();
-  var el = dom.createDom('div',
+  var el = dom.createDom(goog.dom.TagName.DIV,
       goog.getCssName(this.getRenderer().getCssClass(), 'filter'),
-      this.labelEl_ = dom.createDom('div', null, this.label_),
-      this.filterInput_ = dom.createDom('input', {'type': 'text'}));
+      this.labelEl_ = dom.createDom(goog.dom.TagName.DIV, null, this.label_),
+      this.filterInput_ = dom.createDom(goog.dom.TagName.INPUT,
+                                        {'type': goog.dom.InputType.TEXT}));
   var element = this.getElement();
   dom.appendChild(element, el);
   var contentElementId = this.makeId(goog.ui.FilteredMenu.Id_.CONTENT_ELEMENT);
-  this.contentElement_ = dom.createDom('div', goog.object.create(
+  this.contentElement_ = dom.createDom(goog.dom.TagName.DIV, goog.object.create(
       'class', goog.getCssName(this.getRenderer().getCssClass(), 'content'),
       'id', contentElementId));
   dom.appendChild(element, this.contentElement_);
@@ -335,7 +344,7 @@ goog.ui.FilteredMenu.prototype.getFilterFromIndex = function() {
 
 /**
  * Gets a list of items entered in the search box.
- * @return {!Array.<string>} The entered items.
+ * @return {!Array<string>} The entered items.
  */
 goog.ui.FilteredMenu.prototype.getEnteredItems = function() {
   return this.enteredItems_ || [];
@@ -503,15 +512,16 @@ goog.ui.FilteredMenu.prototype.boldContent_ = function(child, start, len) {
     var match = caption.substr(start, len);
     var postMatch = caption.substr(start + len);
     boldedCaption = this.getDomHelper().createDom(
-        'span',
+        goog.dom.TagName.SPAN,
         null,
         preMatch,
-        this.getDomHelper().createDom('b', null, match),
+        this.getDomHelper().createDom(goog.dom.TagName.B, null, match),
         postMatch);
   }
   var accelerator = child.getAccelerator && child.getAccelerator();
   if (accelerator) {
-    child.setContent([boldedCaption, this.getDomHelper().createDom('span',
+    child.setContent([boldedCaption, this.getDomHelper().createDom(
+        goog.dom.TagName.SPAN,
         goog.ui.MenuItem.ACCELERATOR_CLASS, accelerator)]);
   } else {
     child.setContent(boldedCaption);
@@ -613,7 +623,8 @@ goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
   this.decorateContent(element);
 
   // Locate internally managed elements.
-  var el = this.getDomHelper().getElementsByTagNameAndClass('div',
+  var el = this.getDomHelper().getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV,
       goog.getCssName(this.getRenderer().getCssClass(), 'filter'), element)[0];
   this.labelEl_ = goog.dom.getFirstElementChild(el);
   this.filterInput_ = goog.dom.getNextElementSibling(this.labelEl_);

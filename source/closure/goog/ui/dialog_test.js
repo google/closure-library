@@ -43,7 +43,7 @@ var stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
-  bodyChildElement = document.createElement('div');
+  bodyChildElement = document.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(bodyChildElement);
   dialog = new goog.ui.Dialog();
   var buttons = new goog.ui.Dialog.ButtonSet();
@@ -57,7 +57,7 @@ function setUp() {
   dialog.setButtonSet(buttons);
   dialog.setVisible(true);
 
-  decorateTarget = goog.dom.createDom('div');
+  decorateTarget = goog.dom.createDom(goog.dom.TagName.DIV);
   document.body.appendChild(decorateTarget);
 
   // Reset global flags to their defaults.
@@ -80,7 +80,8 @@ function testCrossFrameFocus() {
   }
   dialog.setVisible(false);
   var iframeWindow = goog.dom.getElement('f').contentWindow;
-  var iframeInput = iframeWindow.document.getElementsByTagName('input')[0];
+  var iframeInput = iframeWindow.document.getElementsByTagName(
+      goog.dom.TagName.INPUT)[0];
   dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   var dialogElement = dialog.getElement();
   var focusCounter = 0;
@@ -123,7 +124,8 @@ function testNoTitleClose() {
  * @return {boolean} Whether a goog.ui.Dialog.EventType.SELECT was dispatched.
  */
 function checkSelectDispatchedOnButtonClick(disableButton) {
-  var aButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[0];
+  var aButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[0];
   assertNotEquals(aButton, null);
   aButton.disabled = disableButton;
   var wasCalled = false;
@@ -146,7 +148,8 @@ function testDisabledButtonClicksDontDispatchSelectEvents() {
 }
 
 function testEnterKeyDispatchesDefaultSelectEvents() {
-  var okButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[1];
+  var okButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[1];
   assertNotEquals(okButton, null);
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };
@@ -164,7 +167,8 @@ function testEnterKeyDispatchesDefaultSelectEvents() {
 }
 
 function testEnterKeyOnDisabledDefaultButtonDoesNotDispatchSelectEvents() {
-  var okButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[1];
+  var okButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[1];
   okButton.focus();
 
   var callRecorder = goog.testing.recordFunction();
@@ -390,8 +394,9 @@ function testShiftTabAtTopSetsUpWrapAndDoesNotPreventPropagation() {
 }
 
 function testButtonsWithContentsDispatchSelectEvents() {
-  var aButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[0];
-  var aSpan = document.createElement('SPAN');
+  var aButton = dialog.getButtonElement().getElementsByTagName(
+      goog.dom.TagName.BUTTON)[0];
+  var aSpan = document.createElement(goog.dom.TagName.SPAN);
   aButton.appendChild(aSpan);
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };
@@ -531,19 +536,27 @@ function testSetAllButtonsEnabled() {
 }
 
 function testIframeMask() {
+  var prevNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
   // generate a new dialog
   dialog.dispose();
   dialog = new goog.ui.Dialog(null, true /* iframe mask */);
   dialog.setVisible(true);
 
-  var iframes =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME);
-  // NOTE: one iframe already exists in the document, so we check for 1 extra
-  // iframe.
-  assertEquals('No iframe mask created', 2, iframes.length);
+  // Test that the dialog added one iframe to the document.
+  // The absolute number of iframes should not be tested because,
+  // in certain cases, the test runner itself can can add an iframe
+  // to the document as part of a strategy not to block the UI for too long.
+  // See goog.async.nextTick.getSetImmediateEmulator_.
+  var curNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
+  assertEquals(
+      'No iframe mask created', prevNumFrames + 1, curNumFrames);
 }
 
 function testNonModalDialog() {
+  var prevNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
   // generate a new dialog
   dialog.dispose();
   dialog = new goog.ui.Dialog(null, true /* iframe mask */);
@@ -552,11 +565,15 @@ function testNonModalDialog() {
   dialog.setVisible(true);
   assertAriaHidden(true);
 
-  var iframes =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME);
-  // NOTE: one iframe already exists in the document, so we check there are
-  // no extra iframes in the document.
-  assertEquals('Iframe mask created for modal dialog', 1, iframes.length);
+  // Test that the dialog did not change the number of iframes in the document.
+  // The absolute number of iframes should not be tested because,
+  // in certain cases, the test runner itself can can add an iframe
+  // to the document as part of a strategy not to block the UI for too long.
+  // See goog.async.nextTick.getSetImmediateEmulator_.
+  var curNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
+  assertEquals(
+      'Iframe mask created for modal dialog', prevNumFrames, curNumFrames);
 }
 
 function testSwapModalForOpenDialog() {
@@ -594,7 +611,7 @@ function testSwapModalForOpenDialog() {
 /**
  * Assert that the dialog has buttons with the given keys in the correct
  * order.
- * @param {Array.<string>} keys An array of button keys.
+ * @param {Array<string>} keys An array of button keys.
  */
 function assertButtons(keys) {
   var buttons = dialog.getElement().getElementsByTagName(

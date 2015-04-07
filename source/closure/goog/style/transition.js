@@ -15,6 +15,7 @@
 /**
  * @fileoverview Utility methods to deal with CSS3 transitions
  * programmatically.
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.style.transition');
@@ -22,6 +23,7 @@ goog.provide('goog.style.transition.Css3Property');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.dom.vendor');
 goog.require('goog.functions');
@@ -52,7 +54,7 @@ goog.style.transition.Css3Property;
  * Sets the element CSS3 transition to properties.
  * @param {Element} element The element to set transition on.
  * @param {goog.style.transition.Css3Property|
- *     Array.<goog.style.transition.Css3Property>} properties A single CSS3
+ *     Array<goog.style.transition.Css3Property>} properties A single CSS3
  *     transition property or array of properties.
  */
 goog.style.transition.set = function(element, properties) {
@@ -103,7 +105,7 @@ goog.style.transition.isSupported = goog.functions.cacheReturnValue(function() {
   // We create a test element with style=-vendor-transition
   // We then detect whether those style properties are recognized and
   // available from js.
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   var transition = 'opacity 1s linear';
   var vendorPrefix = goog.dom.vendor.getVendorPrefix();
   var style = {'transition': transition};

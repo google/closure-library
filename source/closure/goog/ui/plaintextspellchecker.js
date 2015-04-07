@@ -25,6 +25,7 @@ goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -53,11 +54,10 @@ goog.ui.PlainTextSpellChecker = function(handler, opt_domHelper) {
 
   /**
    * Correction UI container.
-   * @type {HTMLDivElement}
-   * @private
+   * @private {!HTMLDivElement}
    */
-  this.overlay_ = /** @type {HTMLDivElement} */
-      (this.getDomHelper().createDom('div'));
+  this.overlay_ = /** @type {!HTMLDivElement} */
+      (this.getDomHelper().createDom(goog.dom.TagName.DIV));
   goog.style.setPreWrap(this.overlay_);
 
   /**
@@ -134,12 +134,25 @@ goog.ui.PlainTextSpellChecker.prototype.eventHandler_;
 goog.ui.PlainTextSpellChecker.prototype.keyHandler_;
 
 
+/** @private {number} */
+goog.ui.PlainTextSpellChecker.prototype.textArrayIndex_;
+
+
+/** @private {!Array<string>} */
+goog.ui.PlainTextSpellChecker.prototype.textArray_;
+
+
+/** @private {!Array<boolean>} */
+goog.ui.PlainTextSpellChecker.prototype.textArrayProcess_;
+
+
 /**
  * Creates the initial DOM representation for the component.
  * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.createDom = function() {
-  this.setElementInternal(this.getDomHelper().createElement('textarea'));
+  this.setElementInternal(this.getDomHelper().createElement(
+      goog.dom.TagName.TEXTAREA));
 };
 
 
@@ -395,7 +408,7 @@ goog.ui.PlainTextSpellChecker.prototype.processRange = function(node, text) {
     }
     node.appendChild(this.getDomHelper().createTextNode(result[1]));
     if (result[2]) {
-      node.appendChild(this.getDomHelper().createElement('br'));
+      node.appendChild(this.getDomHelper().createElement(goog.dom.TagName.BR));
     }
   }
 };
@@ -456,7 +469,7 @@ goog.ui.PlainTextSpellChecker.prototype.getElementProperties =
 goog.ui.PlainTextSpellChecker.prototype.onWordClick_ = function(event) {
   if (event.target.className == this.invalidWordClassName ||
       event.target.className == this.correctedWordClassName) {
-    this.showSuggestionsMenu(/** @type {Element} */ (event.target), event);
+    this.showSuggestionsMenu(/** @type {!Element} */ (event.target), event);
 
     // Prevent document click handler from closing the menu.
     event.stopPropagation();

@@ -122,11 +122,11 @@ def _GetInputByPath(path, sources):
 
   Returns:
     The source from sources identified by path, if found.  Converts to
-    absolute paths for comparison.
+    real paths for comparison.
   """
   for js_source in sources:
-    # Convert both to absolute paths for comparison.
-    if os.path.abspath(path) == os.path.abspath(js_source.GetPath()):
+    # Convert both to real paths for comparison.
+    if os.path.realpath(path) == os.path.realpath(js_source.GetPath()):
       return js_source
 
 
@@ -184,6 +184,15 @@ class _PathSource(source.Source):
     return self._path
 
 
+def _WrapGoogModuleSource(src):
+  return ('goog.loadModule(function(exports) {{'
+          '"use strict";'
+          '{0}'
+          '\n'  # terminate any trailing single line comment.
+          ';return exports'
+          '}});\n').format(src)
+
+
 def main():
   logging.basicConfig(format=(sys.argv[0] + ': %(message)s'),
                       level=logging.INFO)
@@ -237,7 +246,11 @@ def main():
   if output_mode == 'list':
     out.writelines([js_source.GetPath() + '\n' for js_source in deps])
   elif output_mode == 'script':
-    out.writelines([js_source.GetSource() for js_source in deps])
+    for js_source in deps:
+      src = js_source.GetSource()
+      if js_source.is_goog_module:
+        src = _WrapGoogModuleSource(src)
+      out.write(src + '\n')
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
@@ -246,7 +259,7 @@ is prefererred over using this script for performing JavaScript compilation.
 Please migrate your codebase.
 
 See:
-https://code.google.com/p/closure-compiler/wiki/ManageClosureDependencies
+https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
 """)
 
     # Make sure a .jar is specified.

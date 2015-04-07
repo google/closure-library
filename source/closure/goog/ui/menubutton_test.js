@@ -19,6 +19,7 @@ goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -179,6 +180,84 @@ function testHighlightItemBehavior() {
 
 
 /**
+ * Check that the appropriate items are selected when menus are opened with the
+ * keyboard and setSelectFirstOnEnterOrSpace is not set.
+ */
+function testHighlightFirstOnOpen() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals(
+      'By default no items should be highlighted when opened with enter.',
+      null, menuButton.getMenu().getHighlighted());
+
+  menuButton.setOpen(false);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  assertTrue('Menu must open after down key', menuButton.isOpen());
+  assertEquals('First menuitem must be highlighted',
+      'menuItem1', menuButton.getMenu().getHighlighted().getElement().id);
+}
+
+
+/**
+ * Check that the appropriate items are selected when menus are opened with the
+ * keyboard, setSelectFirstOnEnterOrSpace is not set, and the first menu item is
+ * disabled.
+ */
+function testHighlightFirstOnOpen_withFirstDisabled() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  var menu = menuButton.getMenu();
+  menu.getItemAt(0).setEnabled(false);
+
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals(
+      'By default no items should be highlighted when opened with enter.',
+      null, menuButton.getMenu().getHighlighted());
+
+  menuButton.setOpen(false);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  assertTrue('Menu must open after down key', menuButton.isOpen());
+  assertEquals('First enabled menuitem must be highlighted',
+      'menuItem2', menuButton.getMenu().getHighlighted().getElement().id);
+}
+
+
+/**
+ * Check that the appropriate items are selected when menus are opened with the
+ * keyboard and setSelectFirstOnEnterOrSpace is set.
+ */
+function testHighlightFirstOnOpen_withEnterOrSpaceSet() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.setSelectFirstOnEnterOrSpace(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals('The first item should be highlighted when opened with enter ' +
+      'after setting selectFirstOnEnterOrSpace',
+      'menuItem1', menuButton.getMenu().getHighlighted().getElement().id);
+}
+
+
+/**
+ * Check that the appropriate item is selected when a menu is opened with the
+ * keyboard, setSelectFirstOnEnterOrSpace is true, and the first menu item is
+ * disabled.
+ */
+function testHighlightFirstOnOpen_withEnterOrSpaceSetAndFirstDisabled() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.setSelectFirstOnEnterOrSpace(true);
+  var menu = menuButton.getMenu();
+  menu.getItemAt(0).setEnabled(false);
+
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals('The first enabled item should be highlighted when opened ' +
+      'with enter after setting selectFirstOnEnterOrSpace',
+      'menuItem2', menuButton.getMenu().getHighlighted().getElement().id);
+}
+
+
+/**
  * Open the menu, enter a submenu and then back out of it.
  * Check if the aria-activedescendant property is set correctly.
  */
@@ -223,6 +302,24 @@ function testEnterOpensMenu() {
   menuButton.decorate(node);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertTrue('Menu must open after enter', menuButton.isOpen());
+}
+
+
+/**
+ * Tests the behavior of the enter and space keys when the menu is open.
+ */
+function testSpaceOrEnterClosesMenu() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+
+  menuButton.setOpen(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertFalse('Menu should close after pressing Enter', menuButton.isOpen());
+
+  menuButton.setOpen(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
+      goog.events.EventType.KEYUP));
+  assertFalse('Menu should close after pressing Space', menuButton.isOpen());
 }
 
 
@@ -355,9 +452,12 @@ function testOpenedMenuPositionCorrection() {
   assertFalse('positionMenu() shouldn\'t be called.', positionMenuCalled);
 
   // Move the menu button by DOM structure change
-  var p1 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
-  var p2 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
-  var p3 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
+  var p1 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
+  var p2 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
+  var p3 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
   iframeDom.insertSiblingBefore(p1, node);
   iframeDom.insertSiblingBefore(p2, node);
   iframeDom.insertSiblingBefore(p3, node);
@@ -729,4 +829,19 @@ function testScrollOnOverflowSetter() {
 
   menuButton.setScrollOnOverflow(false);
   assertFalse(menuButton.isScrollOnOverflow());
+}
+
+
+/**
+ * Tests that the attached menu has been set to aria-hidden=false explicitly
+ * when the menu is opened.
+ */
+function testSetOpenUnsetsAriaHidden() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  var menuElem = menuButton.getMenu().getElementStrict();
+  goog.a11y.aria.setState(menuElem, goog.a11y.aria.State.HIDDEN, true);
+  menuButton.setOpen(true);
+  assertEquals(
+      '', goog.a11y.aria.getState(menuElem, goog.a11y.aria.State.HIDDEN));
 }

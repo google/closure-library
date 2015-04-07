@@ -22,6 +22,7 @@ goog.provide('goog.ui.emoji.EmojiPaletteRenderer');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.style');
 goog.require('goog.ui.PaletteRenderer');
@@ -79,7 +80,7 @@ goog.ui.emoji.EmojiPaletteRenderer.getCssClass = function() {
  * @param {goog.ui.emoji.SpriteInfo} spriteInfo Spriting info for the emoji.
  * @param {string} displayUrl URL of the image served for this cell, whether
  *     an individual emoji image or a sprite.
- * @return {HTMLDivElement} The palette item for this emoji.
+ * @return {!HTMLDivElement} The palette item for this emoji.
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem =
     function(dom, id, spriteInfo, displayUrl) {
@@ -88,18 +89,18 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem =
   if (spriteInfo) {
     var cssClass = spriteInfo.getCssClass();
     if (cssClass) {
-      el = dom.createDom('div', cssClass);
+      el = dom.createDom(goog.dom.TagName.DIV, cssClass);
     } else {
       el = this.buildElementFromSpriteMetadata(dom, spriteInfo, displayUrl);
     }
   } else {
-    el = dom.createDom('img', {'src': displayUrl});
+    el = dom.createDom(goog.dom.TagName.IMG, {'src': displayUrl});
   }
 
-  var outerdiv =
-      dom.createDom('div', goog.getCssName('goog-palette-cell-wrapper'), el);
+  var outerdiv = dom.createDom(
+      goog.dom.TagName.DIV, goog.getCssName('goog-palette-cell-wrapper'), el);
   outerdiv.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, id);
-  return /** @type {HTMLDivElement} */ (outerdiv);
+  return /** @type {!HTMLDivElement} */ (outerdiv);
 };
 
 
@@ -150,7 +151,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
   var x = spriteInfo.getXOffsetCssValue();
   var y = spriteInfo.getYOffsetCssValue();
 
-  var el = dom.createDom('div');
+  var el = dom.createDom(goog.dom.TagName.DIV);
   goog.style.setStyle(el, {
     'width': width,
     'height': height,
@@ -159,7 +160,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
     'background-position': x + ' ' + y
   });
 
-  return /** @type {HTMLDivElement} */ (el);
+  return /** @type {!HTMLDivElement} */ (el);
 };
 
 
@@ -170,13 +171,13 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
   // empty div, to prevent trying to fetch a null url.
   if (!node) {
     var elem = this.defaultImgUrl_ ?
-               dom.createDom('img', {'src': this.defaultImgUrl_}) :
-               dom.createDom('div');
-    node = dom.createDom('div', goog.getCssName('goog-palette-cell-wrapper'),
-                         elem);
+               dom.createDom(goog.dom.TagName.IMG, {src: this.defaultImgUrl_}) :
+               dom.createDom(goog.dom.TagName.DIV);
+    node = dom.createDom(goog.dom.TagName.DIV,
+                         goog.getCssName('goog-palette-cell-wrapper'), elem);
   }
 
-  var cell = dom.createDom('td', {
+  var cell = dom.createDom(goog.dom.TagName.TD, {
     'class': goog.getCssName(this.getCssClass(), 'cell'),
     // Cells must have an ID, for accessibility, so we generate one here.
     'id': this.getCssClass() + '-cell-' +
@@ -199,7 +200,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.getContainingItem =
     function(palette, node) {
   var root = palette.getElement();
   while (node && node.nodeType == goog.dom.NodeType.ELEMENT && node != root) {
-    if (node.tagName == 'TD') {
+    if (node.tagName == goog.dom.TagName.TD) {
       return node.firstChild;
     }
     node = node.parentNode;

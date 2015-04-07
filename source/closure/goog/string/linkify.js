@@ -28,10 +28,11 @@ goog.require('goog.string');
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {Object.<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=blank. To clear those
- *      default attributes set rel='' and target='_blank'.
- * @return {string} HTML Linkified HTML text.
+ * @param {Object<string, string>=} opt_attributes Attributes to add to all
+ *      links created. Default are rel=nofollow and target=_blank. To clear
+ *      those default attributes set rel='' and target=''.
+ * @return {string} HTML Linkified HTML text. Any text that is not part of a
+ *      link will be HTML-escaped.
  */
 goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
@@ -162,7 +163,7 @@ goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w~#-@!\\[\\]';
 /**
  * List of all protocols patterns recognized in urls (mailto is handled in email
  * matching).
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @const
  * @private
  */

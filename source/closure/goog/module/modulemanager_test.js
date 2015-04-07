@@ -23,20 +23,19 @@ goog.require('goog.testing');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
-goog.require('goog.userAgent');
+
+
 
 var clock;
 var requestCount = 0;
 
-function setUpPage() {
-  clock = new goog.testing.MockClock(true);
-}
 
-function tearDownPage() {
+function tearDown() {
   clock.dispose();
 }
 
 function setUp() {
+  clock = new goog.testing.MockClock(true);
   requestCount = 0;
 }
 
@@ -1769,7 +1768,9 @@ function testExecOnLoadError() {
     throw new Error();
   });
 
-  clock.tick(5);
+  assertThrows(function() {
+    clock.tick(5);
+  });
 
   assertTrue('execOnLoad should have been called on module b.',
       execOnLoadBCalled);
@@ -1806,7 +1807,9 @@ function testExecOnLoadErrorModuleInfoString() {
     throw new Error();
   });
 
-  clock.tick(5);
+  assertThrows(function() {
+    clock.tick(5);
+  });
 
   assertTrue('execOnLoad should have been called on module b.',
       execOnLoadBCalled);
@@ -2028,8 +2031,11 @@ function testErrorInEarlyCallback() {
   mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
       mm, createModulesFor('a', 'b')));
   mm.preloadModule('b');
-  clock.tick(5);
+  var e = assertThrows(function() {
+    clock.tick(5);
+  });
 
+  assertEquals('error', e.message);
   assertEquals(0, callback.getCallCount());
   assertEquals(1, errback.getCallCount());
   assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
@@ -2052,8 +2058,12 @@ function testErrorInNormalCallback() {
   mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
       mm, createModulesFor('a', 'b')));
   mm.preloadModule('b');
+  var e = assertThrows(function() {
+    clock.tick(10);
+  });
   clock.tick(10);
 
+  assertEquals('error', e.message);
   assertEquals(1, errback.getCallCount());
   assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
       errback.getLastCall().getArguments()[0]);
@@ -2072,11 +2082,11 @@ function testErrorInErrback() {
   var e = assertThrows(function() {
     clock.tick(10);
   });
-  assertContains('Module errback failure', e.message);
-  if (!goog.userAgent.IE) {
-    assertContains('error2', e.message);
-  }
-
+  assertEquals('error1', e.message);
+  var e = assertThrows(function() {
+    clock.tick(10);
+  });
+  assertEquals('error2', e.message);
   assertTrue(mm.getModuleInfo('a').isLoaded());
 }
 

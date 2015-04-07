@@ -16,6 +16,8 @@ goog.provide('goog.dom.selectionTest');
 goog.setTestOnly('goog.dom.selectionTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.selection');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -26,12 +28,14 @@ var textarea;
 var hiddenTextarea;
 
 function setUp() {
-  input = goog.dom.createDom('input', {type: 'text'});
-  textarea = goog.dom.createDom('textarea');
+  input = goog.dom.createDom(goog.dom.TagName.INPUT,
+                             {type: goog.dom.InputType.TEXT});
+  textarea = goog.dom.createDom(goog.dom.TagName.TEXTAREA);
   hiddenInput = goog.dom.createDom(
-      'input', {type: 'text', style: 'display: none'});
+      goog.dom.TagName.INPUT,
+      {type: goog.dom.InputType.TEXT, style: 'display: none'});
   hiddenTextarea = goog.dom.createDom(
-      'textarea', {style: 'display: none'});
+      goog.dom.TagName.TEXTAREA, {style: 'display: none'});
 
   document.body.appendChild(input);
   document.body.appendChild(textarea);

@@ -24,6 +24,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -134,7 +135,7 @@ goog.ui.ContainerRenderer.prototype.enableTabIndex = function(element, enable) {
  * @return {Element} Root element for the container.
  */
 goog.ui.ContainerRenderer.prototype.createDom = function(container) {
-  return container.getDomHelper().createDom('div',
+  return container.getDomHelper().createDom(goog.dom.TagName.DIV,
       this.getClassNames(container).join(' '));
 };
 
@@ -247,17 +248,17 @@ goog.ui.ContainerRenderer.prototype.decorateChildren = function(container,
       next = node.nextSibling;
       if (node.nodeType == goog.dom.NodeType.ELEMENT) {
         // Decorate element node.
-        var child = this.getDecoratorForChild(/** @type {Element} */(node));
+        var child = this.getDecoratorForChild(/** @type {!Element} */(node));
         if (child) {
           // addChild() may need to look at the element.
-          child.setElementInternal(/** @type {Element} */(node));
+          child.setElementInternal(/** @type {!Element} */(node));
           // If the container is disabled, mark the child disabled too.  See
           // bug 1263729.  Note that this must precede the call to addChild().
           if (!container.isEnabled()) {
             child.setEnabled(false);
           }
           container.addChild(child);
-          child.decorate(/** @type {Element} */(node));
+          child.decorate(/** @type {!Element} */(node));
         }
       } else if (!node.nodeValue || goog.string.trim(node.nodeValue) == '') {
         // Remove empty text node, otherwise madness ensues (e.g. controls that
@@ -343,7 +344,7 @@ goog.ui.ContainerRenderer.prototype.getCssClass = function() {
  * followed by any state-specific CSS classes.
  * @param {goog.ui.Container} container Container whose CSS classes are to be
  *     returned.
- * @return {!Array.<string>} Array of CSS class names applicable to the
+ * @return {!Array<string>} Array of CSS class names applicable to the
  *     container.
  */
 goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {

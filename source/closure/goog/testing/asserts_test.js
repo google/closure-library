@@ -19,6 +19,8 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
+goog.require('goog.labs.userAgent.browser');
+goog.require('goog.string');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.asserts');
@@ -1129,7 +1131,23 @@ function testStackTrace() {
       assertNotUndefined(e.stack);
     }
     if (e.stack) {
-      assertContains('testStackTrace', e.stack);
+      var stack = e.stack;
+      var stackTraceContainsTestName = goog.string.contains(
+          stack, 'testStackTrace');
+      if (!stackTraceContainsTestName &&
+          goog.labs.userAgent.browser.isChrome()) {
+        // Occasionally Chrome does not give us a full stack trace, making for
+        // a flaky test. If we don't have the full stack trace, at least
+        // check that we got the error string.
+        // Filed a bug on Chromium here:
+        // https://code.google.com/p/chromium/issues/detail?id=403029
+        var expected = 'Call to assertTrue(boolean) with false';
+        assertContains(expected, stack);
+        return;
+      }
+
+      assertTrue('Expected the stack trace to contain string "testStackTrace"',
+                 stackTraceContainsTestName);
     }
   }
 }

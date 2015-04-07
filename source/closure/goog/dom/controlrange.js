@@ -44,6 +44,23 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.dom.ControlRange = function() {
+  /**
+   * The IE control range obejct.
+   * @private {Object}
+   */
+  this.range_ = null;
+
+  /**
+   * Cached list of elements.
+   * @private {Array<Element>}
+   */
+  this.elements_ = null;
+
+  /**
+   * Cached sorted list of elements.
+   * @private {Array<Element>}
+   */
+  this.sortedElements_ = null;
 };
 goog.inherits(goog.dom.ControlRange, goog.dom.AbstractMultiRange);
 
@@ -74,30 +91,6 @@ goog.dom.ControlRange.createFromElements = function(var_args) {
   }
   return goog.dom.ControlRange.createFromBrowserRange(range);
 };
-
-
-/**
- * The IE control range obejct.
- * @type {Object}
- * @private
- */
-goog.dom.ControlRange.prototype.range_ = null;
-
-
-/**
- * Cached list of elements.
- * @type {Array.<Element>?}
- * @private
- */
-goog.dom.ControlRange.prototype.elements_ = null;
-
-
-/**
- * Cached sorted list of elements.
- * @type {Array.<Element>?}
- * @private
- */
-goog.dom.ControlRange.prototype.sortedElements_ = null;
 
 
 // Method implementations
@@ -190,7 +183,7 @@ goog.dom.ControlRange.prototype.getEndOffset = function() {
 
 // TODO(robbyw): Figure out how to unify getElements with TextRange API.
 /**
- * @return {!Array.<Element>} Array of elements in the control range.
+ * @return {!Array<Element>} Array of elements in the control range.
  */
 goog.dom.ControlRange.prototype.getElements = function() {
   if (!this.elements_) {
@@ -207,7 +200,7 @@ goog.dom.ControlRange.prototype.getElements = function() {
 
 
 /**
- * @return {!Array.<Element>} Array of elements comprising the control range,
+ * @return {!Array<Element>} Array of elements comprising the control range,
  *     sorted by document order.
  */
 goog.dom.ControlRange.prototype.getSortedElements = function() {
@@ -355,7 +348,7 @@ goog.dom.ControlRange.prototype.collapse = function(toAnchor) {
 goog.dom.DomSavedControlRange_ = function(range) {
   /**
    * The element list.
-   * @type {Array.<Element>}
+   * @type {Array<Element>}
    * @private
    */
   this.elements_ = range.getElements();
@@ -396,6 +389,24 @@ goog.dom.DomSavedControlRange_.prototype.disposeInternal = function() {
  * @final
  */
 goog.dom.ControlRangeIterator = function(range) {
+  /**
+   * The first node in the selection.
+   * @private {Node}
+   */
+  this.startNode_ = null;
+
+  /**
+   * The last node in the selection.
+   * @private {Node}
+   */
+  this.endNode_ = null;
+
+  /**
+   * The list of elements left to traverse.
+   * @private {Array<Element>?}
+   */
+  this.elements_ = null;
+
   if (range) {
     this.elements_ = range.getSortedElements();
     this.startNode_ = this.elements_.shift();
@@ -403,33 +414,10 @@ goog.dom.ControlRangeIterator = function(range) {
         this.startNode_;
   }
 
-  goog.dom.RangeIterator.call(this, this.startNode_, false);
+  goog.dom.ControlRangeIterator.base(
+      this, 'constructor', this.startNode_, false);
 };
 goog.inherits(goog.dom.ControlRangeIterator, goog.dom.RangeIterator);
-
-
-/**
- * The first node in the selection.
- * @type {Node}
- * @private
- */
-goog.dom.ControlRangeIterator.prototype.startNode_ = null;
-
-
-/**
- * The last node in the selection.
- * @type {Node}
- * @private
- */
-goog.dom.ControlRangeIterator.prototype.endNode_ = null;
-
-
-/**
- * The list of elements left to traverse.
- * @type {Array.<Element>?}
- * @private
- */
-goog.dom.ControlRangeIterator.prototype.elements_ = null;
 
 
 /** @override */

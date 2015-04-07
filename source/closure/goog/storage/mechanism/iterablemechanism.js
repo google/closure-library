@@ -23,7 +23,6 @@ goog.provide('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.iter');
-goog.require('goog.iter.Iterator');
 goog.require('goog.storage.mechanism.Mechanism');
 
 
@@ -32,6 +31,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  * Interface for all iterable storage mechanisms.
  *
  * @constructor
+ * @struct
  * @extends {goog.storage.mechanism.Mechanism}
  */
 goog.storage.mechanism.IterableMechanism = function() {

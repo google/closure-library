@@ -34,7 +34,7 @@ goog.setTestOnly('package_test.pb');
  * @final
  */
 someprotopackage.TestPackageTypes = function() {
-  goog.proto2.Message.apply(this);
+  goog.proto2.Message.call(this);
 };
 goog.inherits(someprotopackage.TestPackageTypes, goog.proto2.Message);
 
@@ -60,7 +60,8 @@ someprotopackage.TestPackageTypes.prototype.getOptionalInt32 = function() {
  * Gets the value of the optional_int32 field or the default value if not set.
  * @return {number} The value.
  */
-someprotopackage.TestPackageTypes.prototype.getOptionalInt32OrDefault = function() {
+someprotopackage.TestPackageTypes.prototype.getOptionalInt32OrDefault =
+    function() {
   return /** @type {number} */ (this.get$ValueOrDefault(1));
 };
 
@@ -149,19 +150,35 @@ someprotopackage.TestPackageTypes.prototype.clearOtherAll = function() {
 };
 
 
-goog.proto2.Message.set$Metadata(someprotopackage.TestPackageTypes, {
-  0: {
-    name: 'TestPackageTypes',
-    fullName: 'someprotopackage.TestPackageTypes'
-  },
-  1: {
-    name: 'optional_int32',
-    fieldType: goog.proto2.Message.FieldType.INT32,
-    type: Number
-  },
-  2: {
-    name: 'other_all',
-    fieldType: goog.proto2.Message.FieldType.MESSAGE,
-    type: proto2.TestAllTypes
+/** @override */
+someprotopackage.TestPackageTypes.prototype.getDescriptor = function() {
+  if (!someprotopackage.TestPackageTypes.descriptor_) {
+    // The descriptor is created lazily when we instantiate a new instance.
+    var descriptorObj = {
+      0: {
+        name: 'TestPackageTypes',
+        fullName: 'someprotopackage.TestPackageTypes'
+      },
+      1: {
+        name: 'optional_int32',
+        fieldType: goog.proto2.Message.FieldType.INT32,
+        type: Number
+      },
+      2: {
+        name: 'other_all',
+        fieldType: goog.proto2.Message.FieldType.MESSAGE,
+        type: proto2.TestAllTypes
+      }
+    };
+    someprotopackage.TestPackageTypes.descriptor_ =
+        goog.proto2.Message.createDescriptor(
+            someprotopackage.TestPackageTypes, descriptorObj);
   }
-});
+  return someprotopackage.TestPackageTypes.descriptor_;
+};
+
+
+// Export getDescriptor static function robust to minification.
+someprotopackage.TestPackageTypes['ctor'] = someprotopackage.TestPackageTypes;
+someprotopackage.TestPackageTypes['ctor'].getDescriptor =
+    someprotopackage.TestPackageTypes.prototype.getDescriptor;

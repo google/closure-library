@@ -16,6 +16,7 @@ goog.provide('goog.userAgent.productTest');
 goog.setTestOnly('goog.userAgent.productTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
@@ -43,52 +44,39 @@ function tearDown() {
 function updateUserAgentUtils() {
   goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
-
-  goog.userAgent.product.init_();
-  // In an ideal world, this assignment would be just a function in
-  // product.js that we could call, but putting it into a function causes
-  // the compiler to fail to compile product.js to nothing when one of
-  // the ASSUME flags is set.
-  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
-  goog.userAgent.product.IE = goog.userAgent.IE;
-  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
-  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
-  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
-  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
-  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
-  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
-  goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
 }
 
 // The set of products whose corresponding goog.userAgent.product value is set
 // in goog.userAgent.product.init_().
 var DETECTED_BROWSER_KEYS =
-    ['FIREFOX', 'CAMINO', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
+    ['FIREFOX', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
-function assertIsBrowser(browser) {
-  function createDetectedBrowserKey(browser) {
-    switch (browser) {
-      case 'FIREFOX': return 'detectedFirefox_';
-      case 'CAMINO': return 'detectedCamino_';
-      case 'IPHONE': return 'detectedIphone_';
-      case 'IPAD': return 'detectedIpad_';
-      case 'ANDROID': return 'detectedAndroid_';
-      case 'CHROME': return 'detectedChrome_';
-      case 'SAFARI': return 'detectedSafari_';
-      case 'IE': return 'IE';
-      case 'OPERA': return 'OPERA';
-    }
-    throw Error('Unknown browser: ' + browser);
-  }
 
-  var productKey = createDetectedBrowserKey(browser);
-  assertTrue(goog.userAgent.product[productKey]);
+// browserKey should be the constant name, as a string
+// 'FIREFOX', 'CHROME', 'ANDROID', etc.
+function assertIsBrowser(currentBrowser) {
+  assertTrue('Current browser key into goog.userAgent.product' +
+      'should be true',
+      goog.userAgent.product[currentBrowser]);
+
   // Make sure we don't have any false positives for other browsers.
-  goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
-    if (el != browser) {
-      assertFalse('useragent should not match: ' + el,
-          goog.userAgent.product[createDetectedBrowserKey(el)]);
+  goog.array.forEach(DETECTED_BROWSER_KEYS, function(browserKey) {
+    // Ignore the iPad/Safari case, as the new code correctly
+    // identifies the test useragent as both iPad and Safari.
+    if (currentBrowser == 'IPAD' && browserKey == 'SAFARI') {
+      return;
+    }
+
+    if (currentBrowser == 'IPHONE' && browserKey == 'SAFARI') {
+      return;
+    }
+
+    if (currentBrowser != browserKey) {
+      assertFalse(
+          'Current browser key is ' + currentBrowser +
+          ' but different key into goog.userAgent.product is true: ' +
+          browserKey,
+          goog.userAgent.product[browserKey]);
     }
   });
 }
@@ -103,9 +91,9 @@ function assertBrowserAndVersion(userAgent, browser, version) {
 
 
 /**
- * @param {Array.<{
+ * @param {Array<{
  *           ua: string,
- *           versions: Array.<{
+ *           versions: Array<{
  *             num: {string|number}, truth: boolean}>}>} userAgents
  * @param {string} browser
  */
@@ -113,8 +101,13 @@ function checkEachUserAgentDetected(userAgents, browser) {
   goog.array.forEach(userAgents, function(ua) {
     mockAgent.setUserAgentString(ua.ua);
     updateUserAgentUtils();
+
     assertIsBrowser(browser);
+
+    // Check versions
     goog.array.forEach(ua.versions, function(v) {
+      mockAgent.setUserAgentString(ua.ua);
+      updateUserAgentUtils();
       assertEquals(
           'Expected version ' + v.num + ' from ' + ua.ua + ' but got ' +
               goog.userAgent.product.VERSION,
@@ -213,27 +206,6 @@ function testFirefox() {
   assertBrowserAndVersion(
       'Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0',
       'FIREFOX', '6.0');
-}
-
-function testCamino() {
-  var userAgents = [
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11) ' +
-          'Gecko/20071128 Camino/1.5.4',
-      versions: [
-        {num: '1.5.4', truth: true},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]},
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.0.10) ' +
-          'Gecko/20070228 Camino/1.0.4',
-      versions: [
-        {num: '1.5.4', truth: false},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]}
-  ];
-  mockAgent.setNavigator({vendor: 'Camino', product: 'Gecko'});
-  checkEachUserAgentDetected(userAgents, 'CAMINO');
 }
 
 function testChrome() {
@@ -345,6 +317,14 @@ function testIpad() {
         {num: '4.1.7B334b', truth: false},
         {num: '4.0.4.7B320c', truth: true},
         {num: '4.0.4.8B334b', truth: false}
+      ]},
+    // Webview in the Facebook iOS app
+    {ua: 'Mozilla/5.0 (iPad; CPU OS 8_1 like Mac OS X) AppleWebKit/600.1.4' +
+          '(KHTML, like Gecko) Mobile/12B410 [FBAN/FBIOS;FBAV/16.0.0.13.22;' +
+          'FBBV/4697910;FBDV/iPad3,4;FBMD/iPad;FBSN/iPhone OS;FBSV/8.1;' +
+          'FBSS/2; FBCR/;FBID/tablet;FBLC/ja_JP;FBOP/1]',
+      versions: [
+        {num: '', truth: true}
       ]}
   ];
   checkEachUserAgentDetected(userAgents, 'IPAD');
@@ -369,4 +349,23 @@ function testAndroid() {
       ]}
   ];
   checkEachUserAgentDetected(userAgents, 'ANDROID');
+}
+
+function testAndroidLegacyBehavior() {
+  mockAgent.setUserAgentString(
+      goog.labs.userAgent.testAgents.FIREFOX_ANDROID_TABLET);
+  updateUserAgentUtils();
+  // Historically, goog.userAgent.product.ANDROID has referred to the
+  // Android browser, not the platform. Firefox on Android should
+  // be false.
+  assertFalse(goog.userAgent.product.ANDROID);
+}
+
+function testSafariIosLegacyBehavior() {
+  mockAgent.setUserAgentString(
+      goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
+  updateUserAgentUtils();
+  // Historically, goog.userAgent.product.SAFARI has referred to the
+  // Safari desktop browser, not the mobile browser.
+  assertFalse(goog.userAgent.product.SAFARI);
 }

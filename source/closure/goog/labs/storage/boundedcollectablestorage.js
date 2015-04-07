@@ -46,6 +46,7 @@ var storage = goog.labs.storage;
  *     storage mechanism.
  * @param {number} maxItems Maximum number of items in storage.
  * @constructor
+ * @struct
  * @extends {goog.storage.CollectableStorage}
  * @final
  */
@@ -73,33 +74,35 @@ storage.BoundedCollectableStorage.KEY_LIST_KEY_ = 'bounded-collectable-storage';
 /**
  * Recreates a list of keys in order of creation.
  *
- * @return {!Array.<string>} a list of unexpired keys.
+ * @return {!Array<string>} a list of unexpired keys.
  * @private
  */
 storage.BoundedCollectableStorage.prototype.rebuildIndex_ = function() {
   var keys = [];
-  goog.iter.forEach(this.mechanism.__iterator__(true), function(key) {
-    if (storage.BoundedCollectableStorage.KEY_LIST_KEY_ == key) {
-      return;
-    }
+  goog.iter.forEach(/** @type {goog.storage.mechanism.IterableMechanism} */ (
+      this.mechanism).__iterator__(true), function(key) {
+        if (storage.BoundedCollectableStorage.KEY_LIST_KEY_ == key) {
+          return;
+        }
 
-    var wrapper;
-    /** @preserveTry */
-    try {
-      wrapper = this.getWrapper(key, true);
-    } catch (ex) {
-      if (ex == goog.storage.ErrorCode.INVALID_VALUE) {
-        // Skip over bad wrappers and continue.
-        return;
-      }
-      // Unknown error, escalate.
-      throw ex;
-    }
-    goog.asserts.assert(wrapper);
+        var wrapper;
+        /** @preserveTry */
+        try {
+          wrapper = this.getWrapper(key, true);
+        } catch (ex) {
+          if (ex == goog.storage.ErrorCode.INVALID_VALUE) {
+            // Skip over bad wrappers and continue.
+            return;
+          }
+          // Unknown error, escalate.
+          throw ex;
+        }
+        goog.asserts.assert(wrapper);
 
-    var creationTime = goog.storage.ExpiringStorage.getCreationTime(wrapper);
-    keys.push({key: key, created: creationTime});
-  }, this);
+        var creationTime =
+            goog.storage.ExpiringStorage.getCreationTime(wrapper);
+        keys.push({key: key, created: creationTime});
+      }, this);
 
   goog.array.sort(keys, function(a, b) {
     return a.created - b.created;
@@ -116,7 +119,7 @@ storage.BoundedCollectableStorage.prototype.rebuildIndex_ = function() {
  * may recreate it.
  *
  * @param {boolean} rebuild Whether to rebuild a index if no index item exists.
- * @return {!Array.<string>} a list of keys if index exist, otherwise undefined.
+ * @return {!Array<string>} a list of keys if index exist, otherwise undefined.
  * @private
  */
 storage.BoundedCollectableStorage.prototype.getKeys_ = function(rebuild) {
@@ -129,14 +132,14 @@ storage.BoundedCollectableStorage.prototype.getKeys_ = function(rebuild) {
       keys = [];
     }
   }
-  return /** @type {!Array.<string>} */ (keys);
+  return /** @type {!Array<string>} */ (keys);
 };
 
 
 /**
  * Saves a list of keys in a local storage.
  *
- * @param {Array.<string>} keys a list of keys to save.
+ * @param {Array<string>} keys a list of keys to save.
  * @private
  */
 storage.BoundedCollectableStorage.prototype.setKeys_ = function(keys) {
@@ -148,10 +151,10 @@ storage.BoundedCollectableStorage.prototype.setKeys_ = function(keys) {
 /**
  * Remove subsequence from a sequence.
  *
- * @param {!Array.<string>} keys is a sequence.
- * @param {!Array.<string>} keysToRemove subsequence of keys, the order must
+ * @param {!Array<string>} keys is a sequence.
+ * @param {!Array<string>} keysToRemove subsequence of keys, the order must
  *     be kept.
- * @return {!Array.<string>} a keys sequence after removing keysToRemove.
+ * @return {!Array<string>} a keys sequence after removing keysToRemove.
  * @private
  */
 storage.BoundedCollectableStorage.removeSubsequence_ =
@@ -182,9 +185,9 @@ storage.BoundedCollectableStorage.removeSubsequence_ =
  * Keeps the number of items in storage under maxItems. Removes elements in the
  * order of creation.
  *
- * @param {!Array.<string>} keys a list of keys in order of creation.
+ * @param {!Array<string>} keys a list of keys in order of creation.
  * @param {number} maxSize a number of items to keep.
- * @return {!Array.<string>} keys left after removing oversize data.
+ * @return {!Array<string>} keys left after removing oversize data.
  * @private
  */
 storage.BoundedCollectableStorage.prototype.collectOversize_ =

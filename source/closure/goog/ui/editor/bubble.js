@@ -68,7 +68,7 @@ goog.ui.editor.Bubble = function(parent, zIndex) {
 
   /**
    * Event handler for this bubble.
-   * @type {goog.events.EventHandler.<!goog.ui.editor.Bubble>}
+   * @type {goog.events.EventHandler<!goog.ui.editor.Bubble>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -83,7 +83,7 @@ goog.ui.editor.Bubble = function(parent, zIndex) {
 
   /**
    * Maps panel ids to panels.
-   * @type {Object.<goog.ui.editor.Bubble.Panel_>}
+   * @type {Object<goog.ui.editor.Bubble.Panel_>}
    * @private
    */
   this.panels_ = {};
@@ -198,7 +198,7 @@ goog.ui.editor.Bubble.prototype.getContainerElement = function() {
 
 
 /**
- * @return {goog.events.EventHandler.<T>} The event handler.
+ * @return {goog.events.EventHandler<T>} The event handler.
  * @protected
  * @this T
  * @template T

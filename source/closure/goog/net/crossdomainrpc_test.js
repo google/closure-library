@@ -15,17 +15,12 @@
 goog.provide('goog.net.CrossDomainRpcTest');
 goog.setTestOnly('goog.net.CrossDomainRpcTest');
 
+goog.require('goog.Promise');
 goog.require('goog.log');
-goog.require('goog.log.Level');
 goog.require('goog.net.CrossDomainRpc');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
-// TODO(user): These tests are in fact async since the send command makes a
-// request for a file, the reason they do not fail is that the JsUnit test
-// runner reports completion after the testFoo functions are finished, and
-// does not catch any errors after this point.  These tests need updating so
-// that they either mock out the async part of the test, or they should be
-// written as an async test case.
 
 function print(o) {
   if (Object.prototype.toSource) {
@@ -48,47 +43,48 @@ function print(o) {
 
 
 function testNormalRequest() {
-  var start = new Date();
-  goog.net.CrossDomainRpc.send(
-      'crossdomainrpc_test_response.html',
-      function(e) {
-        if (e.target.status < 300) {
-          var elapsed = new Date() - start;
-          var responseData = eval(e.target.responseText);
-          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-              elapsed + 'ms: [' + responseData.result.length + '] ' +
-              print(responseData)
-          );
-          assertEquals(16 * 1024, responseData.result.length);
-          assertEquals(e.target.status, 123);
-          assertEquals(e.target.responseHeaders.a, 1);
-          assertEquals(e.target.responseHeaders.b, '2');
-        } else {
-          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-              print(e));
-          fail();
-        }
-      },
-      'POST',
-      {xyz: '01234567891123456789'}
-  );
+  var start = goog.now();
+  return new goog.Promise(function(resolve, reject) {
+    goog.net.CrossDomainRpc.send(
+        'crossdomainrpc_test_response.html',
+        resolve, 'POST', {xyz: '01234567891123456789'});
+  }).then(function(e) {
+    if (e.target.status < 300) {
+      var elapsed = goog.now() - start;
+      var responseData = eval(e.target.responseText);
+      goog.log.fine(goog.net.CrossDomainRpc.logger_,
+                    elapsed + 'ms: [' + responseData.result.length + '] ' +
+                        print(responseData));
+      assertEquals(16 * 1024, responseData.result.length);
+      assertEquals(123, e.target.status);
+      assertEquals(1, e.target.responseHeaders.a);
+      assertEquals('2', e.target.responseHeaders.b);
+    } else {
+      goog.log.fine(goog.net.CrossDomainRpc.logger_, print(e));
+      fail();
+    }
+  });
 }
 
 
 function testErrorRequest() {
-  goog.net.CrossDomainRpc.send(
-      'http://hoodjimcwaadji.google.com/index.html',
-      function(e) {
-        if (e.target.status < 300) {
-          fail('should have failed requesting a non-existent URI');
-        } else {
-          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
-              'expected error seen; event=' + print(e));
-        }
-      },
-      'POST',
-      {xyz: '01234567891123456789'}
-  );
+  // Firefox does not give a valid error event.
+  if (goog.userAgent.GECKO) {
+    return;
+  }
+
+  return new goog.Promise(function(resolve, reject) {
+    goog.net.CrossDomainRpc.send(
+        'http://hoodjimcwaadji.google.com/index.html',
+        resolve, 'POST', {xyz: '01234567891123456789'});
+  }).then(function(e) {
+    if (e.target.status < 300) {
+      fail('should have failed requesting a non-existent URI');
+    } else {
+      goog.log.fine(goog.net.CrossDomainRpc.logger_,
+                    'expected error seen; event=' + print(e));
+    }
+  });
 }
 
 

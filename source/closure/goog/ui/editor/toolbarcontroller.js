@@ -51,7 +51,7 @@ goog.ui.editor.ToolbarController = function(field, toolbar) {
 
   /**
    * Event handler to listen for field events and user actions.
-   * @type {!goog.events.EventHandler.<!goog.ui.editor.ToolbarController>}
+   * @type {!goog.events.EventHandler<!goog.ui.editor.ToolbarController>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);
@@ -72,7 +72,7 @@ goog.ui.editor.ToolbarController = function(field, toolbar) {
 
   /**
    * Editing commands whose state is to be queried when updating the toolbar.
-   * @type {!Array.<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.queryCommands_ = [];
@@ -137,7 +137,7 @@ goog.ui.editor.ToolbarController.prototype.getCommand = function(id) {
 /**
  * Returns the event handler object for the editor toolbar.  Useful for classes
  * that extend {@code goog.ui.editor.ToolbarController}.
- * @return {!goog.events.EventHandler.<T>} The event handler object.
+ * @return {!goog.events.EventHandler<T>} The event handler object.
  * @protected
  * @this T
  * @template T
@@ -247,7 +247,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
 
   /** @preserveTry */
   try {
-    /** @type {Array.<string>} */
+    /** @type {Array<string>} */
     e.commands; // Added by dispatchEvent.
 
     // If the COMMAND_VALUE_CHANGE event specifies which commands changed

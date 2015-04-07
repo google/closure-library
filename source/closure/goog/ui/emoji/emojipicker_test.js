@@ -15,6 +15,7 @@
 goog.provide('goog.ui.emoji.EmojiPickerTest');
 goog.setTestOnly('goog.ui.emoji.EmojiPickerTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.style');
@@ -334,7 +335,7 @@ function checkPathsEndWithSameFile(path1, path2) {
  */
 function getImageUrl(element) {
   element = element.firstChild;  // get the wrapped element
-  if (element.tagName == 'IMG') {
+  if (element.tagName == goog.dom.TagName.IMG) {
     return element.src;
   } else {
     var url = goog.style.getStyle(element, 'background-image');
@@ -369,7 +370,7 @@ function checkContentIsDefaultImg(page, defaultImgUrl) {
  * the default img after the emoji are all used.
  *
  * @param {goog.ui.emoji.EmojiPalette} page The page of the picker to check
- * @param {Array.<Array.<string>>} emojiList List of emoji that should be in the
+ * @param {Array<Array<string>>} emojiList List of emoji that should be in the
  *     palette
  * @param {string} defaultImgUrl The url of the default img
  */
@@ -546,7 +547,7 @@ function testGetSelectedEmoji_shiftClick() {
  * emojipicker.
  *
  * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array.<Array.<string>>} emoji Emoji that should be in the palette.
+ * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkStructureForNonProgressivePicker(palette, emoji) {
   // We can hackily check the items by selecting an item and then getting the
@@ -601,7 +602,7 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
  * Checks and verifies the structure of a progressively-rendered emojipicker.
  *
  * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array.<Array.<string>>} emoji Emoji that should be in the palette.
+ * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkStructureForProgressivePicker(palette, emoji) {
   // We can hackily check the items by selecting an item and then getting the
@@ -662,7 +663,7 @@ function checkStructureForProgressivePicker(palette, emoji) {
  * after the animated emoji have loaded.
  *
  * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array.<Array.<string>>} emoji Emoji that should be in the palette.
+ * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
   for (var i = 0; i < emoji[1].length; i++) {
@@ -732,7 +733,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
  * after the animated emoji have loaded.
  *
  * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array.<Array.<string>>} emoji Emoji that should be in the palette.
+ * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
   for (var i = 0; i < emoji[1].length; i++) {

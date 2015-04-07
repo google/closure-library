@@ -31,6 +31,7 @@ goog.provide('goog.cssom.CssRuleType');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 
 
 /**
@@ -64,11 +65,11 @@ goog.cssom.getAllCssText = function(opt_styleSheet) {
  * CSSStyleSheet.
  * Note that this excludes any CSSImportRules, CSSMediaRules, etc..
  * @param {(CSSStyleSheet|StyleSheetList)=} opt_styleSheet The CSSStyleSheet.
- * @return {Array.<CSSStyleRule>} A list of CSSStyleRules.
+ * @return {Array<CSSStyleRule>} A list of CSSStyleRules.
  */
 goog.cssom.getAllCssStyleRules = function(opt_styleSheet) {
   var styleSheet = opt_styleSheet || document.styleSheets;
-  return /** @type {Array.<CSSStyleRule>} */ (
+  return /** @type {!Array<CSSStyleRule>} */ (
       goog.cssom.getAllCss_(styleSheet, false));
 };
 
@@ -118,7 +119,7 @@ goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
  * @param {(CSSStyleSheet|StyleSheetList)=} opt_styleSheet A CSSStyleSheet.
  * @param {boolean=} opt_includeDisabled If true, includes disabled stylesheets,
  *    defaults to false.
- * @return {!Array.<CSSStyleSheet>} A list of CSSStyleSheet objects.
+ * @return {!Array<CSSStyleSheet>} A list of CSSStyleSheet objects.
  */
 goog.cssom.getAllCssStyleSheets = function(opt_styleSheet,
     opt_includeDisabled) {
@@ -146,7 +147,7 @@ goog.cssom.getAllCssStyleSheets = function(opt_styleSheet,
     // to see if there are styleSheets buried in there.
     // If we have a CSSStyleSheet within CssRules.
     var cssRuleList = goog.cssom.getCssRulesFromStyleSheet(
-        /** @type {CSSStyleSheet} */ (styleSheet));
+        /** @type {!CSSStyleSheet} */ (styleSheet));
     if (cssRuleList && cssRuleList.length) {
       // Chrome does not evaluate cssRuleList[i] to undefined when i >=n;
       // so we use a (i < n) check instead of cssRuleList[i] in the loop below
@@ -351,9 +352,9 @@ goog.cssom.removeCssRule = function(cssStyleSheet, index) {
 goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var document = opt_domHelper ? opt_domHelper.getDocument() :
       goog.dom.getDocument();
-  var cssNode = document.createElement('style');
+  var cssNode = document.createElement(goog.dom.TagName.STYLE);
   cssNode.type = 'text/css';
-  var head = document.getElementsByTagName('head')[0];
+  var head = document.getElementsByTagName(goog.dom.TagName.HEAD)[0];
   head.appendChild(cssNode);
   if (cssNode.styleSheet) {
     // IE.
@@ -396,7 +397,7 @@ goog.cssom.getFileNameFromStyleSheet = function(styleSheet) {
  * Recursively gets all CSS text or rules.
  * @param {CSSStyleSheet|StyleSheetList} styleSheet The CSSStyleSheet.
  * @param {boolean} isTextOutput If true, output is cssText, otherwise cssRules.
- * @return {string|!Array.<CSSRule>} cssText or cssRules.
+ * @return {string|!Array<CSSRule>} cssText or cssRules.
  * @private
  */
 goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {

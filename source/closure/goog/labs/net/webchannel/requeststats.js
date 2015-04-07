@@ -38,7 +38,7 @@ var requestStats = goog.labs.net.webChannel.requestStats;
 
 /**
  * Events fired.
- * @type {Object}
+ * @const
  */
 requestStats.Event = {};
 
@@ -201,10 +201,7 @@ requestStats.Stat = {
    * The browser declared itself offline during the lifetime of a request, or
    * was offline when a request was initially made.
    */
-  BROWSER_OFFLINE: 20,
-
-  /** ActiveX is blocked by the machine's admin settings. */
-  ACTIVE_X_BLOCKED: 21
+  BROWSER_OFFLINE: 20
 };
 
 

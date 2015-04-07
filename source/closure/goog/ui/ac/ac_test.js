@@ -61,7 +61,7 @@ function tearDown() {
  * Fire listeners of a given type that are listening to the event's
  * currentTarget.
  *
- * @param {goog.eventsBrowserEvent} event
+ * @param {goog.events.BrowserEvent} event
  */
 function simulateEvent(event) {
   goog.events.fireListeners(

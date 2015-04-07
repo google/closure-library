@@ -17,13 +17,17 @@ goog.setTestOnly('goog.ui.media.FlashObjectTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
+goog.require('goog.userAgent');
+
 
 var FLASH_URL = 'http://www.youtube.com/v/RbI7cCp0v6w&hl=en&fs=1';
 var control = new goog.testing.MockControl();
@@ -31,12 +35,12 @@ var domHelper = control.createLooseMock(goog.dom.DomHelper);
 // TODO(user): mocking window.document throws exceptions in FF2. find out how
 // to mock it.
 var documentHelper = {body: control.createLooseMock(goog.dom.DomHelper)};
-var element = goog.dom.createElement('div');
+var element = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   control.$resetAll();
   domHelper.getDocument().$returns(documentHelper).$anyTimes();
-  domHelper.createElement('div').$returns(element).$anyTimes();
+  domHelper.createElement(goog.dom.TagName.DIV).$returns(element).$anyTimes();
   documentHelper.body.appendChild(element).$anyTimes();
 }
 
@@ -68,6 +72,120 @@ function testInstantiationAndRendering() {
   var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
   flash.render();
   flash.dispose();
+}
+
+function testRenderedWithCorrectAttributes() {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11)) {
+    return;
+  }
+
+  control.$replayAll();
+
+  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
+  flash.setAllowScriptAccess('allowScriptAccess');
+  flash.setBackgroundColor('backgroundColor');
+  flash.setId('id');
+  flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
+  flash.setWmode('wmode');
+  flash.render();
+
+  var el = flash.getFlashElement();
+  assertEquals('true', el.getAttribute('allowFullScreen'));
+  assertEquals('all', el.getAttribute('allowNetworking'));
+  assertEquals('allowScriptAccess', el.getAttribute('allowScriptAccess'));
+  assertEquals(
+      goog.ui.media.FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
+  assertEquals('k1=v1&k2=v2', el.getAttribute('FlashVars'));
+  assertEquals('id', el.getAttribute('id'));
+  assertEquals('id', el.getAttribute('name'));
+  assertEquals('https://www.macromedia.com/go/getflashplayer',
+      el.getAttribute('pluginspage'));
+  assertEquals('high', el.getAttribute('quality'));
+  assertEquals('false', el.getAttribute('SeamlessTabbing'));
+  assertEquals(FLASH_URL, el.getAttribute('src'));
+  assertEquals('application/x-shockwave-flash',
+      el.getAttribute('type'));
+  assertEquals('wmode', el.getAttribute('wmode'));
+}
+
+function testRenderedWithCorrectAttributesOldIe() {
+  if (!goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(11)) {
+    return;
+  }
+
+  control.$replayAll();
+
+  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
+  flash.setAllowScriptAccess('allowScriptAccess');
+  flash.setBackgroundColor('backgroundColor');
+  flash.setId('id');
+  flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
+  flash.setWmode('wmode');
+  flash.render();
+
+  var el = flash.getFlashElement();
+  assertEquals('class',
+      goog.ui.media.FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
+  assertEquals('clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
+      el.getAttribute('classid'));
+  assertEquals('id', 'id', el.getAttribute('id'));
+  assertEquals('name', 'id', el.getAttribute('name'));
+
+  assertContainsParam(el, 'allowFullScreen', 'true');
+  assertContainsParam(el, 'allowNetworking', 'all');
+  assertContainsParam(el, 'AllowScriptAccess', 'allowScriptAccess');
+  assertContainsParam(el, 'bgcolor', 'backgroundColor');
+  assertContainsParam(el, 'FlashVars', 'FlashVars');
+  assertContainsParam(el, 'movie', FLASH_URL);
+  assertContainsParam(el, 'quality', 'high');
+  assertContainsParam(el, 'SeamlessTabbing', 'false');
+  assertContainsParam(el, 'wmode', 'wmode');
+
+}
+
+function testUrlIsSanitized() {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11)) {
+    return;
+  }
+
+  control.$replayAll();
+
+  var flash = new goog.ui.media.FlashObject('javascript:evil', domHelper);
+  flash.render();
+  var el = flash.getFlashElement();
+
+  assertEquals(goog.html.SafeUrl.INNOCUOUS_STRING, el.getAttribute('src'));
+}
+
+function testUrlIsSanitizedOldIe() {
+  if (!goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(11)) {
+    return;
+  }
+
+  control.$replayAll();
+
+  var flash = new goog.ui.media.FlashObject('javascript:evil', domHelper);
+  flash.render();
+  var el = flash.getFlashElement();
+
+  assertContainsParam(el, 'movie', goog.html.SafeUrl.INNOCUOUS_STRING);
+}
+
+function assertContainsParam(element, expectedName, expectedValue) {
+  var failureMsg = 'Expected param with name \"' + expectedName +
+      '\" and value \"' + expectedValue + '\". Not found in child nodes: ' +
+      element.innerHTML;
+  for (var i = 0; i < element.childNodes.length; i++) {
+    var child = element.childNodes[i];
+    var name = child.getAttribute('name');
+    if (name === expectedName) {
+      if (!child.getAttribute('value') === expectedValue) {
+        fail(failureMsg);
+      }
+      return;
+    }
+  }
+  fail(failureMsg);
 }
 
 function testSetFlashVar() {
@@ -214,7 +332,7 @@ function testPropagatesEventsConsistently() {
 function testEventsGetsSinked() {
   var called = false;
   var flash = new goog.ui.media.FlashObject(FLASH_URL);
-  var parent = goog.dom.createElement('div');
+  var parent = goog.dom.createElement(goog.dom.TagName.DIV);
   flash.render(parent);
 
   goog.events.listen(parent, goog.events.EventType.CLICK, function(e) {

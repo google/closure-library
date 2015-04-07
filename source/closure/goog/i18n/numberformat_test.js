@@ -817,7 +817,7 @@ function testSimpleCompactGerman() {
   // supposed to be interpreted as 'leave the number as-is'.
   // (The number itself will still be formatted with the '.', but no rounding)
   var str = fmt.format(1234);
-  assertEquals('1,2\u00A0Tsd', str);
+  assertEquals('1,2\u00A0Tsd.', str);
 }
 
 function testSimpleCompact1() {

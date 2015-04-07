@@ -21,14 +21,15 @@ goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Link');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.InputHandler');
+goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
@@ -610,8 +611,7 @@ function setDisplayInputText(text) {
   var textInput = getDisplayInput();
   textInput.value = text;
   // Fire event so that dialog behaves like when user types.
-  goog.testing.events.fireBrowserEvent(new goog.events.Event('keyup',
-                                                             textInput));
+  fireInputEvent(textInput, goog.events.KeyCodes.M);
 }
 
 function getUrlInput() {
@@ -628,8 +628,7 @@ function setUrlInputText(text) {
   var urlInput = getUrlInput();
   urlInput.value = text;
   // Fire event so that dialog behaves like when user types.
-  dialog.urlInputHandler_.dispatchEvent(
-      goog.events.InputHandler.EventType.INPUT);
+  fireInputEvent(dialog.urlInputHandler_, goog.events.KeyCodes.M);
 }
 
 function getEmailInput() {
@@ -647,8 +646,7 @@ function setEmailInputText(text) {
   var emailInput = getEmailInput();
   emailInput.value = text;
   // Fire event so that dialog behaves like when user types.
-  dialog.emailInputHandler_.dispatchEvent(
-      goog.events.InputHandler.EventType.INPUT);
+  fireInputEvent(dialog.emailInputHandler_, goog.events.KeyCodes.M);
 }
 
 function getOpenInNewWindowCheckboxChecked() {
@@ -657,4 +655,12 @@ function getOpenInNewWindowCheckboxChecked() {
 
 function setOpenInNewWindowCheckboxChecked(checked) {
   dialog.openInNewWindowCheckbox_.checked = checked;
+}
+
+function fireInputEvent(input, keyCode) {
+  var inputEvent = new goog.testing.events.Event(goog.events.EventType.INPUT,
+      input);
+  inputEvent.keyCode = keyCode;
+  inputEvent.charCode = keyCode;
+  goog.testing.events.fireBrowserEvent(inputEvent);
 }

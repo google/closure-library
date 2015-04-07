@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.TableSorterTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
@@ -32,9 +33,9 @@ function setUpPage() {
 function setUp() {
   goog.dom.getElement('content').innerHTML = oldHtml;
   table = goog.dom.getElement('sortable');
-  alphaHeader = table.getElementsByTagName('TH')[0];
-  numberHeader = table.getElementsByTagName('TH')[1];
-  notSortableHeader = table.getElementsByTagName('TH')[2];
+  alphaHeader = table.getElementsByTagName(goog.dom.TagName.TH)[0];
+  numberHeader = table.getElementsByTagName(goog.dom.TagName.TH)[1];
+  notSortableHeader = table.getElementsByTagName(goog.dom.TagName.TH)[2];
 
   tableSorter = new goog.ui.TableSorter();
   tableSorter.setSortFunction(0, goog.ui.TableSorter.alphaSort);
@@ -199,14 +200,32 @@ function testTwoBodies() {
   }
 }
 
+function testNaNs() {
+  var table = goog.dom.getElement('sortable-4');
+  var header = goog.dom.getElement('sortable-4-col');
+  var sorter = new goog.ui.TableSorter();
+  try {
+    // All non-numbers compare equal, i.e. Bar == Foo, so order of those
+    // elements should not change (since we are using stable sort).
+    sorter.decorate(table);
+    goog.testing.events.fireClickEvent(header);
+    assertOrder(['2', '3', '11', 'Bar', 'Foo'], table);
+    goog.testing.events.fireClickEvent(header);
+    assertOrder(['Bar', 'Foo', '11', '3', '2'], table);
+  } finally {
+    sorter.dispose();
+  }
+}
+
 function assertOrder(arr, opt_table) {
   var tbl = opt_table || table;
   var actual = [];
-  goog.array.forEach(tbl.getElementsByTagName('TD'), function(td, idx) {
-    var txt = goog.dom.getTextContent(td);
-    if (txt) {
-      actual.push(txt);
-    }
-  });
+  goog.array.forEach(tbl.getElementsByTagName(goog.dom.TagName.TD),
+                     function(td, idx) {
+                       var txt = goog.dom.getTextContent(td);
+                       if (txt) {
+                         actual.push(txt);
+                       }
+                     });
   assertArrayEquals(arr, actual);
 }

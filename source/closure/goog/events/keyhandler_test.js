@@ -16,6 +16,7 @@ goog.provide('goog.events.KeyEventTest');
 goog.setTestOnly('goog.events.KeyEventTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventType');
@@ -40,7 +41,6 @@ function testIe8StyleKeyHandling() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = true;
   goog.userAgent.GECKO = false;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -60,7 +60,6 @@ function testIe8StyleKeyHandlingInIe9DocumentMode() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = true;
   goog.userAgent.GECKO = false;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -184,7 +183,6 @@ function testIe9StyleKeyHandling() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = true;
   goog.userAgent.GECKO = false;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -215,7 +213,6 @@ function testGeckoStyleKeyHandling() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = true;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -309,7 +306,6 @@ function testSafari3StyleKeyHandling() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = false;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = true;
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
@@ -441,7 +437,6 @@ function testOperaStyleKeyHandling() {
   goog.userAgent.OPERA = true;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = false;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -531,7 +526,6 @@ function testGeckoOnMacAltHandling() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = true;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
@@ -573,7 +567,6 @@ function testGeckoEqualSign() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = true;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
@@ -598,7 +591,6 @@ function testMacGeckoSlash() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;
   goog.userAgent.GECKO = true;
-  goog.userAgent.CAMINO = false;
   goog.userAgent.WEBKIT = false;
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
@@ -620,8 +612,8 @@ function testMacGeckoSlash() {
 }
 
 function testGetElement() {
-  var target = goog.dom.createDom('div');
-  var target2 = goog.dom.createDom('div');
+  var target = goog.dom.createDom(goog.dom.TagName.DIV);
+  var target2 = goog.dom.createDom(goog.dom.TagName.DIV);
   var keyHandler = new goog.events.KeyHandler();
   assertNull(keyHandler.getElement());
 
@@ -644,7 +636,7 @@ function testGetElement() {
 }
 
 function testDetach() {
-  var target = goog.dom.createDom('div');
+  var target = goog.dom.createDom(goog.dom.TagName.DIV);
   var keyHandler = new goog.events.KeyHandler(target);
   assertEquals(target, keyHandler.getElement());
 
@@ -666,7 +658,7 @@ function testCapturePhase() {
   var gotInCapturePhase;
   var gotInBubblePhase;
 
-  var target = goog.dom.createDom('div');
+  var target = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.events.listen(
       new goog.events.KeyHandler(target, false /* bubble */),
       goog.events.KeyHandler.EventType.KEY,

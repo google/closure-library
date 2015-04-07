@@ -21,6 +21,7 @@ goog.require('goog.editor.Field');
 goog.require('goog.editor.plugins.FirstStrong');
 goog.require('goog.editor.range');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
@@ -28,12 +29,12 @@ goog.require('goog.userAgent');
 
 // The key code for the Hebrew א, a strongly RTL letter.
 var ALEPH_KEYCODE = 1488;
-
 var field;
 var fieldElement;
 var dom;
 var helper;
 var triggeredCommand = null;
+var clock;
 
 function setUp() {
   field = new goog.editor.Field('field');
@@ -58,6 +59,8 @@ function tearDown() {
   goog.dispose(field);
   goog.dispose(helper);
   triggeredCommand = null;
+  goog.dispose(clock); // Make sure clock is disposed.
+
 }
 
 function testFirstCharacter_RTL() {
@@ -148,7 +151,7 @@ function testFirstStrongCharacterWithInnerDiv_LTR() {
 
 
 /**
- * Regression for {@link http://b/7549696}
+ * Regression test for {@link http://b/7549696}
  */
 function testFirstStrongCharacterInNewLine_RTL() {
   field.setHtml(false, '<div><b id="cur">English<br>1</b></div>');
@@ -330,7 +333,7 @@ function testNotFirstStrongCharacterInBR_LTR() {
 
 
 /**
- * Regression for {@link http://b/7530985}
+ * Regression test for {@link http://b/7530985}
  */
 function testFirstStrongCharacterWithPreviousBlockSibling_RTL() {
   field.setHtml(false, '<div>Te<div>xt</div>1<b id="cur">2</b>3</div>');
@@ -391,6 +394,47 @@ function testFirstCharacterFromIME_LTR() {
   } else {
     assertLTR();
   }
+}
+
+
+/**
+ * Regression test for {@link http://b/19297723}
+ */
+function testLTRShortlyAfterRTLAndEnter() {
+  clock = new goog.testing.MockClock();
+  field.focusAndPlaceCursorAtStart();
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  assertRTL();
+  clock.tick(1000);  // Make sure no pending selection change event.
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.ENTER);
+  assertRTL();
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
+  assertLTR();
+  // Verify no RTL for first keypress on already-striong paragraph after
+  // delayed selection change event.
+  clock.tick(1000);  // Let delayed selection change event fire.
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  assertLTR();
+}
+
+function testRTLShortlyAfterLTRAndEnter() {
+  clock = new goog.testing.MockClock();
+  field.focusAndPlaceCursorAtStart();
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
+  assertLTR();
+  clock.tick(1000);  // Make sure no pending selection change event.
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.ENTER);
+  assertLTR();
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  assertRTL();
+  // Verify no LTR for first keypress on already-strong paragraph after
+  // delayed selection change event.
+  clock.tick(1000);  // Let delayed selection change event fire.
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
+  assertRTL();
 }
 
 function assertRTL() {

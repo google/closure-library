@@ -34,56 +34,53 @@ goog.require('goog.math');
  * A "simple" path does not contain any arcs and may be transformed using
  * the {@code transform} method.
  *
+ * @struct
  * @constructor
  * @final
  */
 goog.math.Path = function() {
   /**
    * The segment types that constitute this path.
-   * @type {!Array.<number>}
-   * @private
+   * @private {!Array<goog.math.Path.Segment>}
    */
   this.segments_ = [];
 
   /**
    * The number of repeated segments of the current type.
-   * @type {!Array.<number>}
+   * @type {!Array<number>}
    * @private
    */
   this.count_ = [];
 
   /**
    * The arguments corresponding to each of the segments.
-   * @type {!Array.<number>}
+   * @type {!Array<number>}
    * @private
    */
   this.arguments_ = [];
+
+  /**
+   * The coordinates of the point which closes the path (the point of the
+   * last moveTo command).
+   * @type {Array<number>?}
+   * @private
+   */
+  this.closePoint_ = null;
+
+  /**
+   * The coordinates most recently added to the end of the path.
+   * @type {Array<number>?}
+   * @private
+   */
+  this.currentPoint_ = null;
+
+  /**
+   * Flag for whether this is a simple path (contains no arc segments).
+   * @type {boolean}
+   * @private
+   */
+  this.simple_ = true;
 };
-
-
-/**
- * The coordinates of the point which closes the path (the point of the
- * last moveTo command).
- * @type {Array.<number>?}
- * @private
- */
-goog.math.Path.prototype.closePoint_ = null;
-
-
-/**
- * The coordinates most recently added to the end of the path.
- * @type {Array.<number>?}
- * @private
- */
-goog.math.Path.prototype.currentPoint_ = null;
-
-
-/**
- * Flag for whether this is a simple path (contains no arc segments).
- * @type {boolean}
- * @private
- */
-goog.math.Path.prototype.simple_ = true;
 
 
 /**
@@ -101,7 +98,7 @@ goog.math.Path.Segment = {
 
 /**
  * The number of points for each segment type.
- * @type {!Array.<number>}
+ * @type {!Array<number>}
  * @private
  */
 goog.math.Path.segmentArgCounts_ = (function() {
@@ -120,7 +117,7 @@ goog.math.Path.segmentArgCounts_ = (function() {
  * appearance. Adjacent segments of the same type are collapsed into a single
  * entry in the array. The returned array is a copy; modifications are not
  * reflected in the Path object.
- * @return {!Array.<number>}
+ * @return {!Array<number>}
  */
 goog.math.Path.prototype.getSegmentTypes = function() {
   return this.segments_.concat();
@@ -131,7 +128,7 @@ goog.math.Path.prototype.getSegmentTypes = function() {
  * Returns an array of the number of times each segment type repeats in this
  * path, in order. The returned array is a copy; modifications are not reflected
  * in the Path object.
- * @return {!Array.<number>}
+ * @return {!Array<number>}
  */
 goog.math.Path.prototype.getSegmentCounts = function() {
   return this.count_.concat();
@@ -142,7 +139,7 @@ goog.math.Path.prototype.getSegmentCounts = function() {
  * Returns an array of all arguments for the segments of this path object, in
  * order. The returned array is a copy; modifications are not reflected in the
  * Path object.
- * @return {!Array.<number>}
+ * @return {!Array<number>}
  */
 goog.math.Path.prototype.getSegmentArgs = function() {
   return this.arguments_.concat();
@@ -188,9 +185,9 @@ goog.math.Path.prototype.clear = function() {
   this.segments_.length = 0;
   this.count_.length = 0;
   this.arguments_.length = 0;
-  delete this.closePoint_;
-  delete this.currentPoint_;
-  delete this.simple_;
+  this.closePoint_ = null;
+  this.currentPoint_ = null;
+  this.simple_ = true;
   return this;
 };
 
@@ -231,7 +228,7 @@ goog.math.Path.prototype.lineTo = function(var_args) {
 /**
  * Adds points to the path by drawing a straight line to each point.
  *
- * @param {!Array.<number>} coordinates The coordinates of each
+ * @param {!Array<number>} coordinates The coordinates of each
  *     destination point as x, y value pairs.
  * @return {!goog.math.Path} The path itself.
  */
@@ -243,7 +240,7 @@ goog.math.Path.prototype.lineToFromArray = function(coordinates) {
 /**
  * Adds points to the path by drawing a straight line to each point.
  *
- * @param {!Array.<number>|Arguments} coordinates The coordinates of each
+ * @param {!Array<number>|Arguments} coordinates The coordinates of each
  *     destination point as x, y value pairs.
  * @return {!goog.math.Path} The path itself.
  * @private
@@ -288,7 +285,7 @@ goog.math.Path.prototype.curveTo = function(var_args) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {!Array.<number>} coordinates The coordinates specifiying
+ * @param {!Array<number>} coordinates The coordinates specifiying
  *     each curve in sets of 6 points: {@code [x1, y1]} the first control point,
  *     {@code [x2, y2]} the second control point and {@code [x, y]} the end
  *     point.
@@ -304,7 +301,7 @@ goog.math.Path.prototype.curveToFromArray = function(coordinates) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {!Array.<number>|Arguments} coordinates The coordinates specifiying
+ * @param {!Array<number>|Arguments} coordinates The coordinates specifiying
  *     each curve in sets of 6 points: {@code [x1, y1]} the first control point,
  *     {@code [x2, y2]} the second control point and {@code [x, y]} the end
  *     point.
@@ -466,8 +463,8 @@ goog.math.Path.prototype.arcToAsCurves = function(
  * As a convenience the {@code ARCTO} segment also includes the end point as the
  * last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
  *
- * @param {function(number, Array)} callback The function to call with each
- *     path segment.
+ * @param {function(!goog.math.Path.Segment, !Array<number>)} callback
+ *     The function to call with each path segment.
  */
 goog.math.Path.prototype.forEachSegment = function(callback) {
   var points = this.arguments_;
@@ -484,7 +481,7 @@ goog.math.Path.prototype.forEachSegment = function(callback) {
 /**
  * Returns the coordinates most recently added to the end of the path.
  *
- * @return {Array.<number>?} An array containing the ending coordinates of the
+ * @return {Array<number>?} An array containing the ending coordinates of the
  *     path of the form {@code [x, y]}.
  */
 goog.math.Path.prototype.getCurrentPoint = function() {
@@ -496,7 +493,7 @@ goog.math.Path.prototype.getCurrentPoint = function() {
  * @return {!goog.math.Path} A copy of this path.
  */
 goog.math.Path.prototype.clone = function() {
-  var path = new this.constructor();
+  var path = new goog.math.Path();
   path.segments_ = this.segments_.concat();
   path.count_ = this.count_.concat();
   path.arguments_ = this.arguments_.concat();
@@ -520,8 +517,7 @@ goog.math.Path.prototype.isSimple = function() {
 
 /**
  * A map from segment type to the path function to call to simplify a path.
- * @type {!Object}
- * @private
+ * @private {!Object<goog.math.Path.Segment, function(this: goog.math.Path)>}
  */
 goog.math.Path.simplifySegmentMap_ = (function() {
   var map = {};

@@ -107,10 +107,12 @@ function testRetries() {
   var handler = new Handler();
   var tester = new goog.net.NetworkTester(handler.callback, handler);
   tester.setNumRetries(1);
+  assertEquals(tester.getAttemptCount(), 0);
   assertFalse(tester.isRunning());
   tester.start();
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
+  assertEquals(tester.getAttemptCount(), 1);
 
   // try number 1 fails
   var image = tester.image_;
@@ -119,6 +121,7 @@ function testRetries() {
   image.onerror.call(null);
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
+  assertEquals(tester.getAttemptCount(), 2);
 
   // try number 2 succeeds
   image = tester.image_;
@@ -127,6 +130,7 @@ function testRetries() {
   image.onload.call(null);
   assertTrue(handler.dequeue());
   assertFalse(tester.isRunning());
+  assertEquals(tester.getAttemptCount(), 2);
 }
 
 function testPauseBetweenRetries() {
@@ -198,6 +202,18 @@ function testOffline() {
 // Handler object for verifying callback
 function Handler() {
   this.events_ = [];
+}
+
+function testGetAttemptCount() {
+  // set up the tester
+  var handler = new Handler();
+  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  assertEquals(tester.getAttemptCount(), 0);
+  assertTrue(tester.attempt_ === tester.getAttemptCount());
+  assertFalse(tester.isRunning());
+  tester.start();
+  assertTrue(tester.isRunning());
+  assertTrue(tester.attempt_ === tester.getAttemptCount());
 }
 
 Handler.prototype.callback = function(result) {

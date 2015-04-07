@@ -118,7 +118,7 @@ goog.editor.Field = function(id, opt_doc) {
   /**
    * Plugins registered on this field, indexed by the goog.editor.Plugin.Op
    * that they support.
-   * @type {Object.<Array>}
+   * @type {Object<Array<goog.editor.Plugin>>}
    * @private
    */
   this.indexedPlugins_ = {};
@@ -155,7 +155,7 @@ goog.editor.Field = function(id, opt_doc) {
   }
 
   /**
-   * @type {goog.events.EventHandler.<!goog.editor.Field>}
+   * @type {goog.events.EventHandler<!goog.editor.Field>}
    * @protected
    */
   this.eventRegister = new goog.events.EventHandler(this);
@@ -451,7 +451,7 @@ goog.editor.Field.prototype.getOriginalElement = function() {
  * Registers a keyboard event listener on the field.  This is necessary for
  * Gecko since the fields are contained in an iFrame and there is no way to
  * auto-propagate key events up to the main window.
- * @param {string|Array.<string>} type Event type to listen for or array of
+ * @param {string|Array<string>} type Event type to listen for or array of
  *    event types, for example goog.events.EventType.KEYDOWN.
  * @param {Function} listener Function to be used as the listener.
  * @param {boolean=} opt_capture Whether to use capture phase (optional,
@@ -1031,7 +1031,7 @@ goog.editor.Field.prototype.setFollowLinkInNewWindow =
 
 /**
  * List of mutation events in Gecko browsers.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @protected
  */
 goog.editor.Field.MUTATION_EVENTS_GECKO = [
@@ -1117,10 +1117,9 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
 
 /**
  * Keycodes that result in a selectionchange event (e.g. the cursor moving).
- * @enum {number}
- * @private
+ * @type {!Object<number, number>}
  */
-goog.editor.Field.SELECTION_CHANGE_KEYCODES_ = {
+goog.editor.Field.SELECTION_CHANGE_KEYCODES = {
   8: 1,  // backspace
   9: 1,  // tab
   13: 1, // enter
@@ -1141,7 +1140,7 @@ goog.editor.Field.SELECTION_CHANGE_KEYCODES_ = {
  * Ctrl key cause selection changes in the field contents. These are the keys
  * that are not handled by the basic formatting trogedit plugins. Note that
  * combinations like Ctrl-left etc are already handled in
- * SELECTION_CHANGE_KEYCODES_
+ * SELECTION_CHANGE_KEYCODES
  * @type {Object}
  * @private
  */
@@ -1156,7 +1155,7 @@ goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_ = {
  * Map of keyCodes (not charCodes) that might need to be handled as a keyboard
  * shortcut (even when ctrl/meta key is not pressed) by some plugin. Currently
  * it is a small list. If it grows too big we can optimize it by using ranges
- * or extending it from SELECTION_CHANGE_KEYCODES_
+ * or extending it from SELECTION_CHANGE_KEYCODES
  * @type {Object}
  * @private
  */
@@ -1341,7 +1340,7 @@ goog.editor.Field.prototype.handleKeyUp_ = function(e) {
     return;
   }
 
-  if (goog.editor.Field.SELECTION_CHANGE_KEYCODES_[e.keyCode] ||
+  if (goog.editor.Field.SELECTION_CHANGE_KEYCODES[e.keyCode] ||
       ((e.ctrlKey || e.metaKey) &&
        goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_[e.keyCode])) {
     this.selectionChangeTimer_.start();
@@ -1418,7 +1417,7 @@ goog.editor.Field.prototype.execCommand = function(command, var_args) {
 
 /**
  * Gets the value of command(s).
- * @param {string|Array.<string>} commands String name(s) of the command.
+ * @param {string|Array<string>} commands String name(s) of the command.
  * @return {*} Value of each command. Returns false (or array of falses)
  *     if designMode is off or the field is otherwise uneditable, and
  *     there are no activeOnUneditable plugins for the command.
@@ -1798,7 +1797,7 @@ goog.editor.Field.prototype.manipulateDom = function(func,
 
 /**
  * Dispatches a command value change event.
- * @param {Array.<string>=} opt_commands Commands whose state has
+ * @param {Array<string>=} opt_commands Commands whose state has
  *     changed.
  */
 goog.editor.Field.prototype.dispatchCommandValueChange =
@@ -2189,7 +2188,8 @@ goog.editor.Field.prototype.setInnerHtml_ = function(html) {
     // Note:  We punt on this issue for the non iframe case since
     // we don't want to screw with the main document.
     if (this.usesIframe() && goog.editor.BrowserFeature.MOVES_STYLE_TO_HEAD) {
-      var heads = field.ownerDocument.getElementsByTagName('HEAD');
+      var heads = field.ownerDocument.getElementsByTagName(
+          goog.dom.TagName.HEAD);
       for (var i = heads.length - 1; i >= 1; --i) {
         heads[i].parentNode.removeChild(heads[i]);
       }
@@ -2585,7 +2585,7 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
     html = this.reduceOp_(goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML,
         html, styles);
 
-    var iframe = /** @type {HTMLIFrameElement} */(
+    var iframe = /** @type {!HTMLIFrameElement} */(
         this.originalDomHelper.createDom(goog.dom.TagName.IFRAME,
             this.getIframeAttributes()));
 

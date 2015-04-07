@@ -96,3 +96,15 @@ function testStaticPropFn() {
   assertEquals(new SomeClass().someProp, undefined);
   assertEquals(SomeClass.someProp, 100);
 }
+
+function testUid() {
+  var SomeClass = goog.defineClass(null, {
+    constructor: function() {}
+  });
+
+  var obj1 = new SomeClass();
+  var obj2 = new SomeClass();
+  assertEquals(goog.getUid(obj1), goog.getUid(obj1));
+  assertEquals(goog.getUid(obj2), goog.getUid(obj2));
+  assertNotEquals(goog.getUid(obj1), goog.getUid(obj2));
+}

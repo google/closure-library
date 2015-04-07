@@ -244,3 +244,22 @@ function testCreateTask_args() {
   mockClock.tick(NEXT_FRAME);
   assertEquals('foobarbaz', result);
 }
+
+function testIsRunning() {
+  var result = '';
+  var task = goog.dom.animationFrame.createTask({
+    measure: function() {
+      result += 'me';
+      assertTrue(goog.dom.animationFrame.isRunning());
+    },
+    mutate: function() {
+      result += 'mu';
+      assertTrue(goog.dom.animationFrame.isRunning());
+    }
+  });
+  task();
+  assertFalse(goog.dom.animationFrame.isRunning());
+  mockClock.tick(NEXT_FRAME);
+  assertFalse(goog.dom.animationFrame.isRunning());
+  assertEquals('memu', result);
+}

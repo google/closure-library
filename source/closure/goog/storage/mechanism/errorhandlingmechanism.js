@@ -15,6 +15,7 @@
 /**
  * @fileoverview Wraps a storage mechanism with a custom error handler.
  *
+ * @author ruilopes@google.com (Rui do Nascimento Dias Lopes)
  */
 
 goog.provide('goog.storage.mechanism.ErrorHandlingMechanism');
@@ -31,6 +32,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  * @param {goog.storage.mechanism.ErrorHandlingMechanism.ErrorHandler}
  *     errorHandler An error handler.
  * @constructor
+ * @struct
  * @extends {goog.storage.mechanism.Mechanism}
  * @final
  */
