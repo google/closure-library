@@ -237,7 +237,7 @@ goog.Promise.State_ = {
 /**
  * Entries in the callback chain. Each call to {@code then},
  * {@code thenCatch}, or {@code thenAlways} creates an entry containing the
- * functions that may be invoked once the Promise is resolved.
+ * functions that may be invoked once the Promise is settled.
  *
  * @private @final @struct @constructor
  */
@@ -628,23 +628,23 @@ goog.Promise.maybeThenVoid_ = function(
  * Additionally, since any rejections are not passed to the callback, it does
  * not stop the unhandled rejection handler from running.
  *
- * @param {function(this:THIS): void} onResolved A function that will be invoked
- *     when the Promise is resolved.
+ * @param {function(this:THIS): void} onSettled A function that will be invoked
+ *     when the Promise is settled (fulfilled or rejected).
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
  *     in the global scope.
  * @return {!goog.Promise<TYPE>} This Promise, for chaining additional calls.
  * @template THIS
  */
-goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
+goog.Promise.prototype.thenAlways = function(onSettled, opt_context) {
   if (goog.Promise.LONG_STACK_TRACES) {
     this.addStackTrace_(new Error('thenAlways'));
   }
 
   var callback = function() {
     try {
-      // Ensure that no arguments are passed to onResolved.
-      onResolved.call(opt_context);
+      // Ensure that no arguments are passed to onSettled.
+      onSettled.call(opt_context);
     } catch (err) {
       goog.Promise.handleRejection_.call(null, err);
     }
@@ -777,11 +777,11 @@ goog.Promise.prototype.cancelChild_ = function(childPromise, err) {
 
 /**
  * Adds a callback entry to the current Promise, and schedules callback
- * execution if the Promise has already been resolved.
+ * execution if the Promise has already been settled.
  *
  * @param {goog.Promise.CallbackEntry_} callbackEntry Record containing
  *     {@code onFulfilled} and {@code onRejected} callbacks to execute after
- *     the Promise is resolved.
+ *     the Promise is settled.
  * @private
  */
 goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
@@ -980,7 +980,7 @@ goog.Promise.prototype.tryThen_ = function(thenable, then) {
 
 
 /**
- * Executes the pending callbacks of a resolved Promise after a timeout.
+ * Executes the pending callbacks of a settled Promise after a timeout.
  *
  * Section 2.2.4 of the Promises/A+ specification requires that Promise
  * callbacks must only be invoked from a call stack that only contains Promise
@@ -1088,13 +1088,13 @@ goog.Promise.prototype.executeCallbacks_ = function() {
 
 /**
  * Executes a pending callback for this Promise. Invokes an {@code onFulfilled}
- * or {@code onRejected} callback based on the resolved state of the Promise.
+ * or {@code onRejected} callback based on the settled state of the Promise.
  *
  * @param {!goog.Promise.CallbackEntry_} callbackEntry An entry containing the
  *     onFulfilled and/or onRejected callbacks for this step.
  * @param {goog.Promise.State_} state The resolution status of the Promise,
  *     either FULFILLED or REJECTED.
- * @param {*} result The resolved result of the Promise.
+ * @param {*} result The settled result of the Promise.
  * @private
  */
 goog.Promise.prototype.executeCallback_ = function(
