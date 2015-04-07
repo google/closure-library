@@ -15,14 +15,11 @@
 goog.provide('goog.debug.FpsDisplayTest');
 goog.setTestOnly('goog.debug.FpsDisplayTest');
 
+goog.require('goog.Timer');
 goog.require('goog.debug.FpsDisplay');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var fpsDisplay;
-var timer;
-asyncTestCase.stepTimeout = 10 * 1000;
 
 function setUp() {
   fpsDisplay = new goog.debug.FpsDisplay();
@@ -30,7 +27,6 @@ function setUp() {
 
 function tearDown() {
   goog.dispose(fpsDisplay);
-  window.clearTimeout(timer);
 }
 
 function testRendering() {
@@ -39,11 +35,9 @@ function testRendering() {
   var elem = fpsDisplay.getElement();
   assertHTMLEquals('', elem.innerHTML);
 
-  asyncTestCase.waitForAsync('Waiting for some frames to pass');
-  timer = window.setTimeout(function() {
+  return goog.Timer.promise(2000).then(function() {
     var fps = parseInt(elem.innerHTML, 10);
     assertTrue('FPS of ' + fps + ' should be non-negative', fps >= 0);
     assertTrue('FPS of ' + fps + ' too big', fps < 1000);
-    asyncTestCase.continueTesting();
-  }, 2000);
+  });
 }
