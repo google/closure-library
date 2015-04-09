@@ -66,7 +66,7 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
   // Add listener. Do not use the event handler here since the event handler is
   // used for listeners added and removed during the drag operation.
   goog.events.listen(this.handle,
-      [goog.events.EventType.TOUCHSTART, goog.events.EventType.MOUSEDOWN],
+      [goog.events.EventType.TOUCHMOVE, goog.events.EventType.MOUSEDOWN],
       this.startDrag, false, this);
 };
 goog.inherits(goog.fx.Dragger, goog.events.EventTarget);
@@ -407,7 +407,7 @@ goog.fx.Dragger.prototype.setEnabled = function(enabled) {
 goog.fx.Dragger.prototype.disposeInternal = function() {
   goog.fx.Dragger.superClass_.disposeInternal.call(this);
   goog.events.unlisten(this.handle,
-      [goog.events.EventType.TOUCHSTART, goog.events.EventType.MOUSEDOWN],
+      [goog.events.EventType.TOUCHMOVE, goog.events.EventType.MOUSEDOWN],
       this.startDrag, false, this);
   this.cleanUpAfterDragging_();
 
