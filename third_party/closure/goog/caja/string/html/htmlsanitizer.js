@@ -90,11 +90,10 @@ goog.string.html.htmlSanitize = function(
  * @param {function(string):string=} opt_nmTokenPolicy An optional function to
  *     be applied in names.
  * @constructor
- * @extends {goog.string.html.HtmlSaxHandler}
+ * @implements {goog.string.html.HtmlSaxHandler}
  */
 goog.string.html.HtmlSanitizer = function(
     stringBuffer, opt_urlPolicy, opt_nmTokenPolicy) {
-  goog.string.html.HtmlSaxHandler.call(this);
 
   /**
    * The string buffer that holds the sanitized version of the html. Used
@@ -132,10 +131,6 @@ goog.string.html.HtmlSanitizer = function(
    */
   this.nmTokenPolicy_ = opt_nmTokenPolicy;
 };
-goog.inherits(
-    goog.string.html.HtmlSanitizer,
-    goog.string.html.HtmlSaxHandler);
-
 
 
 /**
