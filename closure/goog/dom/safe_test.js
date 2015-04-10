@@ -20,7 +20,19 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
 goog.require('goog.string.Const');
+goog.require('goog.testing');
 goog.require('goog.testing.jsunit');
+
+
+var mockWindowOpen;
+
+
+function tearDown() {
+  if (mockWindowOpen) {
+    mockWindowOpen.$tearDown();
+  }
+}
+
 
 function testSetInnerHtml() {
   var mockElement =  /** @type {!Element} */ ({
@@ -129,4 +141,33 @@ function testSetAnchorHref() {
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setAnchorHref(mockAnchor, safeUrl);
   assertEquals('javascript:trusted();', mockAnchor.href);
+}
+
+
+function testOpenInWindow() {
+  mockWindowOpen = goog.testing.createMethodMock(window, 'open');
+  var fakeWindow = {};
+
+  mockWindowOpen('about:invalid#zClosurez', 'name', 'specs', true).
+      $returns(fakeWindow);
+  mockWindowOpen.$replay();
+  var retVal = goog.dom.safe.openInWindow('javascript:evil();', window,
+      goog.string.Const.from('name'), 'specs', true);
+  mockWindowOpen.$verify();
+  assertEquals('openInWindow should return the created window',
+      fakeWindow, retVal);
+
+  mockWindowOpen.$reset();
+  retVal = null;
+
+  var safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  mockWindowOpen('javascript:trusted();', 'name', 'specs', true).
+      $returns(fakeWindow);
+  mockWindowOpen.$replay();
+  retVal = goog.dom.safe.openInWindow(safeUrl, window,
+      goog.string.Const.from('name'), 'specs', true);
+  mockWindowOpen.$verify();
+  assertEquals('openInWindow should return the created window',
+      fakeWindow, retVal);
 }
