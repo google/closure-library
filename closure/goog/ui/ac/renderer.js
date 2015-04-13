@@ -448,11 +448,6 @@ goog.ui.ac.Renderer.prototype.dismiss = function() {
       goog.a11y.aria.setState(this.target_,
           goog.a11y.aria.State.HASPOPUP,
           false);
-      goog.a11y.aria.removeState(this.target_,
-          goog.a11y.aria.State.OWNS);
-      goog.a11y.aria.setState(goog.asserts.assert(this.element_),
-          goog.a11y.aria.State.EXPANDED,
-          false);
     }
 
     if (this.menuFadeDuration_ > 0) {
@@ -476,14 +471,13 @@ goog.ui.ac.Renderer.prototype.show = function() {
 
     // Set ARIA roles and states for the target input box.
     if (this.target_) {
+      goog.a11y.aria.setRole(this.target_,
+          goog.a11y.aria.Role.COMBOBOX);
+      goog.a11y.aria.setState(this.target_,
+          goog.a11y.aria.State.AUTOCOMPLETE,
+          'list');
       goog.a11y.aria.setState(this.target_,
           goog.a11y.aria.State.HASPOPUP,
-          true);
-      goog.a11y.aria.setState(this.target_,
-          goog.a11y.aria.State.OWNS,
-          this.element_.id);
-      goog.a11y.aria.setState(goog.asserts.assert(this.element_),
-          goog.a11y.aria.State.EXPANDED,
           true);
     }
 

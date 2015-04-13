@@ -16,6 +16,7 @@ goog.provide('goog.ui.ac.RendererTest');
 goog.setTestOnly('goog.ui.ac.RendererTest');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -475,8 +476,6 @@ function testHighlightAllTokensArrayTokenHighlighting() {
 }
 
 function testMenuFadeDuration() {
-  renderer.maybeCreateElement_();
-
   var hideCalled = false;
   var hideAnimCalled = false;
   var showCalled = false;
@@ -533,35 +532,30 @@ function testAriaTags() {
       goog.a11y.aria.getRole(target));
   assertEquals('',
       goog.a11y.aria.getState(target,
-          goog.a11y.aria.State.HASPOPUP));
-  assertEquals('',
-      goog.a11y.aria.getState(renderer.getElement(),
-          goog.a11y.aria.State.EXPANDED));
+          goog.a11y.aria.State.AUTOCOMPLETE));
   assertEquals('',
       goog.a11y.aria.getState(target,
-          goog.a11y.aria.State.OWNS));
+          goog.a11y.aria.State.HASPOPUP));
 
   renderer.show();
+  assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(
+      target));
+  assertEquals('list',
+      goog.a11y.aria.getState(target,
+          goog.a11y.aria.State.AUTOCOMPLETE));
   assertEquals('true',
       goog.a11y.aria.getState(target,
           goog.a11y.aria.State.HASPOPUP));
-  assertEquals('true',
-      goog.a11y.aria.getState(renderer.getElement(),
-          goog.a11y.aria.State.EXPANDED));
-  assertEquals(renderer.getElement().id,
-      goog.a11y.aria.getState(target,
-          goog.a11y.aria.State.OWNS));
 
   renderer.dismiss();
+  assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(
+      target));
+  assertEquals('list',
+      goog.a11y.aria.getState(target,
+          goog.a11y.aria.State.AUTOCOMPLETE));
   assertEquals('false',
       goog.a11y.aria.getState(target,
           goog.a11y.aria.State.HASPOPUP));
-  assertEquals('false',
-      goog.a11y.aria.getState(renderer.getElement(),
-          goog.a11y.aria.State.EXPANDED));
-  assertEquals('',
-      goog.a11y.aria.getState(target,
-          goog.a11y.aria.State.OWNS));
 }
 
 function testHiliteRowWithDefaultRenderer() {
