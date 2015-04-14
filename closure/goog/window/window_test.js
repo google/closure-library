@@ -305,3 +305,25 @@ function testOpenIosBlankNoreferrer() {
   assertNotNull(dispatchedEvent);
   assertEquals('click', dispatchedEvent.type);
 }
+
+
+function testOpenNoReferrerEscapesUrl() {
+  var documentWriteHtml;
+  var mockNewWin = {};
+  mockNewWin.document = {
+    write: function(html) {
+      documentWriteHtml = html;
+    },
+    close: function() {}
+  };
+  var mockWin = {
+    open: function() {
+      return mockNewWin;
+    }
+  };
+  goog.window.open('https://hello&world', {noreferrer: true}, mockWin);
+  assertRegExp(
+      'Does not contain expected HTML-escaped string: ' + documentWriteHtml,
+      /hello&amp;world/,
+      documentWriteHtml);
+}
