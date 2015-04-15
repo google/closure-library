@@ -1,7 +1,6 @@
 <html>
 <!--
 Copyright 2009 The Closure Library Authors. All Rights Reserved.
-
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
@@ -77,12 +76,31 @@ hooked up to a toolbar.</p>
 
   <script>
   function updateFieldContents() {
-    goog.dom.getElement('fieldContents').value = myField.getCleanContents();
-  }
 
+  // This function must call myField.getCleanContents() because
+  // getCleanContents() itself directly and indirectly calls
+  // other functions the editor needs. For whatever reason, the
+  // editor loads with
+  //
+  //	USING_LOREM 
+  //
+  // from
+  //
+  //	editor\command.js
+  //
+  // already set and this would overwrite the value in the lower
+  // 'fieldContents' textarea.
+
+    var getCleanContentsRetVal = myField.getCleanContents();
+
+  // This block changes the original unrestricted call to getCleanContents().
+
+	if (getCleanContentsRetVal !== goog.string.Unicode.NBSP){
+	  goog.dom.getElement('fieldContents').value = getCleanContentsRetVal;
+	}
+  }
   // Create an editable field.
   var myField = new goog.editor.Field('editMe');
-
   // Create and register all of the editing plugins you want to use.
   myField.registerPlugin(new goog.editor.plugins.BasicTextFormatter());
   myField.registerPlugin(new goog.editor.plugins.RemoveFormatting());
@@ -96,7 +114,6 @@ hooked up to a toolbar.</p>
   myField.registerPlugin(
       new goog.editor.plugins.LinkDialogPlugin());
   myField.registerPlugin(new goog.editor.plugins.LinkBubble());
-
   // Specify the buttons to add to the toolbar, using built in default buttons.
   var buttons = [
     goog.editor.Command.BOLD,
@@ -123,17 +140,19 @@ hooked up to a toolbar.</p>
   ];
   var myToolbar = goog.ui.editor.DefaultToolbar.makeToolbar(buttons,
       goog.dom.getElement('toolbar'));
-
   // Hook the toolbar into the field.
   var myToolbarController =
       new goog.ui.editor.ToolbarController(myField, myToolbar);
-
   // Watch for field changes, to display below.
+
   goog.events.listen(myField, goog.editor.Field.EventType.DELAYEDCHANGE,
       updateFieldContents);
-
   myField.makeEditable();
-  updateFieldContents();
+
+  // Remove call to updateFieldContents() here because this function
+  // places an &nbsp in 'fieldContents' - the lower textarea in the
+  // editor.
+
   </script>
 </body>
 </html>

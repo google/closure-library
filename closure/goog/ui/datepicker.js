@@ -201,9 +201,18 @@ goog.ui.DatePicker.prototype.showOtherMonths_ = true;
  * @type {goog.date.DateRange}
  * @private
  */
-goog.ui.DatePicker.prototype.userSelectableDateRange_ =
-    goog.date.DateRange.allTime();
 
+// This changes the called DateRange function call from
+// allTime() to thisMonth(this.date_) so that
+// the user can only click a day inside the displayed
+// month, not days "visible" outside that month. See
+//
+//   https://github.com/google/closure-library/issues/415
+//
+// for more information.
+
+goog.ui.DatePicker.prototype.userSelectableDateRange_ =
+    goog.date.DateRange.thisMonth(this.date_);
 
 /**
  * Flag indicating if extra week(s) always should be added at the end. If not

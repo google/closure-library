@@ -651,8 +651,21 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           continue;
 
         case goog.dom.TagName.P:
-          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
-          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+
+		  // Make sure the "P" paragraph tag is not the first
+		  // node processed. This prevents an "extra" blank
+		  // line at the top of selected text that starts with
+		  // a paragraph tag. The "Set Field Contents" onclick
+		  // will rebalance all unmatched <p> and/or </p> tags,
+		  // but note that all empty <p></p> pairs will become
+		  // <br><br> in the assembled string. Maybe a future
+		  // enhancement could clean out those empty pairs at
+		  // some point in the function.
+
+		  if ((numNodesProcessed > 1) && (nodeName === "P")) {
+            goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+            goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+		  }
           break;  // break (not continue) so that child nodes are processed.
 
         case goog.dom.TagName.BR:

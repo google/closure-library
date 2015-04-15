@@ -243,7 +243,24 @@ goog.date.getWeekNumber = function(year, month, date, opt_weekDay,
   var d = new Date(year, month, date);
 
   // Default to Thursday for cut off as per ISO 8601.
-  var cutoff = opt_weekDay || goog.date.weekDay.THU;
+  
+  var cutoff;
+
+  // @param opt_weekDay might have an intended 0 value, but
+  // if it does, the original cutoff calculation will set a
+  // value of goog.date.weekDay.THU, which is 4. This block
+  // accounts for this case, and it won't break any earlier
+  // workarounds. Test for opt_weekDay === 'undefined' because
+  // an existing production call to this function might have
+  // an undefined value for this parameter.
+  
+  if (typeof opt_weekDay === 'undefined'){
+	cutoff = goog.date.weekDay.THU;
+  } else if (opt_weekDay === 7) {
+	cutoff = 0;
+  } else {
+	cutoff = opt_weekDay;
+  }
 
   // Default to Monday for first day of the week as per ISO 8601.
   var firstday = opt_firstDayOfWeek || goog.date.weekDay.MON;
@@ -477,7 +494,6 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
  * @param {number=} opt_minutes Minutes.
  * @param {number=} opt_seconds Seconds.
  * @constructor
- * @struct
  * @final
  */
 goog.date.Interval = function(opt_years, opt_months, opt_days, opt_hours,
@@ -749,7 +765,6 @@ goog.date.Interval.prototype.add = function(interval) {
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @constructor
- * @struct
  * @see goog.date.DateTime
  */
 goog.date.Date = function(opt_year, opt_month, opt_date) {
@@ -870,18 +885,18 @@ goog.date.Date.prototype.getTime = function() {
 
 
 /**
- * @return {number} The day of week, US style. 0 = Sun, 6 = Sat.
+ * @return {goog.date.weekDay} The day of week, US style. 0 = Sun, 6 = Sat.
  */
 goog.date.Date.prototype.getDay = function() {
-  return this.date.getDay();
+  return /** @type {goog.date.weekDay} */ (this.date.getDay());
 };
 
 
 /**
- * @return {goog.date.weekDay} The day of week, ISO style. 0 = Mon, 6 = Sun.
+ * @return {number} The day of week, ISO style. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getIsoWeekday = function() {
-  return /** @type {goog.date.weekDay} */ ((this.getDay() + 6) % 7);
+  return (this.getDay() + 6) % 7;
 };
 
 
@@ -919,11 +934,11 @@ goog.date.Date.prototype.getUTCDate = function() {
 
 
 /**
- * @return {number} The day of week according to universal time, US style.
- *     0 = Sun, 1 = Mon, 6 = Sat.
+ * @return {goog.date.weekDay} The day of week according to universal time,
+ *     US style. 0 = Sun, 1 = Mon, 6 = Sat.
  */
 goog.date.Date.prototype.getUTCDay = function() {
-  return this.date.getDay();
+  return /** @type {goog.date.weekDay} */ (this.date.getDay());
 };
 
 
@@ -944,11 +959,11 @@ goog.date.Date.prototype.getUTCMinutes = function() {
 
 
 /**
- * @return {goog.date.weekDay} The day of week according to universal time, ISO
- *     style. 0 = Mon, 6 = Sun.
+ * @return {number} The day of week according to universal time, ISO style.
+ *     0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getUTCIsoWeekday = function() {
-  return /** @type {goog.date.weekDay} */ ((this.date.getUTCDay() + 6) % 7);
+  return (this.date.getUTCDay() + 6) % 7;
 };
 
 
@@ -1330,7 +1345,6 @@ goog.date.Date.compare = function(date1, date2) {
  * @param {number=} opt_seconds Seconds, 0 - 61.
  * @param {number=} opt_milliseconds Milliseconds, 0 - 999.
  * @constructor
- * @struct
  * @extends {goog.date.Date}
  */
 goog.date.DateTime = function(opt_year, opt_month, opt_date, opt_hours,
