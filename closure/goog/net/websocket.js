@@ -320,7 +320,7 @@ goog.net.WebSocket.prototype.close = function() {
 /**
  * Sends the message over the web socket.
  *
- * @param {string} message The message to send.
+ * @param {string|!ArrayBuffer|!ArrayBufferView} message The message to send.
  */
 goog.net.WebSocket.prototype.send = function(message) {
   // Make sure the socket is ready to go before sending a message.
