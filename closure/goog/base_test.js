@@ -1006,13 +1006,6 @@ function testGetMsgWithPlaceholders() {
 
 //=== miscellaneous tests ===
 
-function testIdentity() {
-  assertEquals(3, goog.identityFunction(3));
-  assertEquals(3, goog.identityFunction(3, 4));
-  assertEquals(null, goog.identityFunction(null));
-  assertTrue(goog.identityFunction() === undefined);
-}
-
 function testGetObjectByName() {
   var m = {
     'undefined': undefined,
