@@ -98,28 +98,3 @@ function testFromCharCode_invalidValues() {
   result = goog.i18n.uChar.fromCharCode(NaN);
   assertEquals(null, result);
 }
-
-function testToName() {
-  var result = goog.i18n.uChar.toName(' ');
-  assertEquals('Space', result);
-}
-
-function testToNameForNumberKey() {
-  var result = goog.i18n.uChar.toName('\u2028');
-  assertEquals('Line Separator', result);
-}
-
-function testToNameForVariationSelector() {
-  var result = goog.i18n.uChar.toName('\ufe00');
-  assertEquals('Variation Selector - 1', result);
-}
-
-function testToNameForVariationSelectorSupp() {
-  var result = goog.i18n.uChar.toName('\uDB40\uDD00');
-  assertEquals('Variation Selector - 17', result);
-}
-
-function testToNameForNull() {
-  var result = goog.i18n.uChar.toName('a');
-  assertNull(result);
-}
