@@ -343,6 +343,17 @@ goog.net.WebSocket.prototype.isOpen = function() {
 
 
 /**
+ * Gets the number of bytes of data that have been queued using calls to send()
+ * but not yet transmitted to the network.
+ *
+ * @return {number} Number of bytes of data that have been queued.
+ */
+goog.net.WebSocket.prototype.getBufferedAmount = function() {
+  return this.webSocket_.bufferedAmount;
+};
+
+
+/**
  * Called when the web socket has connected.
  *
  * @private
