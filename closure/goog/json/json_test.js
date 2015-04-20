@@ -163,6 +163,13 @@ function testObjectSerializeWithHasOwnProperty() {
   }
 }
 
+function testWrappedObjects() {
+  assertSerialize('"foo"', new String('foo'));
+  assertSerialize('42', new Number(42));
+  assertSerialize('null', new Number('a NaN'));
+  assertSerialize('true', new Boolean(true));
+}
+
 // parsing
 
 function testStringParse() {
