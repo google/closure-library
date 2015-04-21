@@ -762,11 +762,7 @@ goog.addDependency('net/bulkloader.js', ['goog.net.BulkLoader'], ['goog.events.E
 goog.addDependency('net/bulkloader_test.js', ['goog.net.BulkLoaderTest'], ['goog.events.Event', 'goog.events.EventHandler', 'goog.net.BulkLoader', 'goog.net.EventType', 'goog.testing.MockClock', 'goog.testing.jsunit'], false);
 goog.addDependency('net/bulkloaderhelper.js', ['goog.net.BulkLoaderHelper'], ['goog.Disposable'], false);
 goog.addDependency('net/channeldebug.js', ['goog.net.ChannelDebug'], ['goog.json', 'goog.log'], false);
-<<<<<<< HEAD
-goog.addDependency('net/channelrequest.js', ['goog.net.ChannelRequest', 'goog.net.ChannelRequest.Error'], ['goog.Timer', 'goog.async.Throttle', 'goog.dom.TagName', 'goog.events.EventHandler', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XmlHttp', 'goog.object', 'goog.userAgent'], false);
-=======
 goog.addDependency('net/channelrequest.js', ['goog.net.ChannelRequest', 'goog.net.ChannelRequest.Error'], ['goog.Timer', 'goog.async.Throttle', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events.EventHandler', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XmlHttp', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], false);
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
 goog.addDependency('net/channelrequest_test.js', ['goog.net.ChannelRequestTest'], ['goog.Uri', 'goog.functions', 'goog.net.BrowserChannel', 'goog.net.ChannelDebug', 'goog.net.ChannelRequest', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.net.XhrIo', 'goog.testing.recordFunction'], false);
 goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], [], false);
 goog.addDependency('net/cookies_test.js', ['goog.net.cookiesTest'], ['goog.array', 'goog.net.cookies', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
@@ -1326,11 +1322,7 @@ goog.addDependency('ui/paletterenderer.js', ['goog.ui.PaletteRenderer'], ['goog.
 goog.addDependency('ui/paletterenderer_test.js', ['goog.ui.PaletteRendererTest'], ['goog.a11y.aria', 'goog.a11y.aria.Role', 'goog.a11y.aria.State', 'goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.testing.jsunit', 'goog.ui.Palette', 'goog.ui.PaletteRenderer'], false);
 goog.addDependency('ui/plaintextspellchecker.js', ['goog.ui.PlainTextSpellChecker'], ['goog.Timer', 'goog.a11y.aria', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.events.KeyHandler', 'goog.spell.SpellCheck', 'goog.style', 'goog.ui.AbstractSpellChecker', 'goog.ui.Component', 'goog.userAgent'], false);
 goog.addDependency('ui/plaintextspellchecker_test.js', ['goog.ui.PlainTextSpellCheckerTest'], ['goog.Timer', 'goog.dom', 'goog.events.KeyCodes', 'goog.spell.SpellCheck', 'goog.testing.events', 'goog.testing.jsunit', 'goog.ui.PlainTextSpellChecker'], false);
-<<<<<<< HEAD
 goog.addDependency('ui/popup.js', ['goog.ui.Popup', 'goog.ui.Popup.AbsolutePosition', 'goog.ui.Popup.AnchoredPosition', 'goog.ui.Popup.AnchoredViewPortPosition', 'goog.ui.Popup.ClientPosition', 'goog.ui.Popup.Overflow', 'goog.ui.Popup.ViewPortClientPosition', 'goog.ui.Popup.ViewPortPosition'], ['goog.math.Box', 'goog.positioning.AbsolutePosition', 'goog.positioning.AbstractPosition', 'goog.positioning.AnchoredPosition', 'goog.positioning.AnchoredViewportPosition', 'goog.positioning.ClientPosition', 'goog.positioning.Corner', 'goog.positioning.Overflow', 'goog.positioning.ViewportClientPosition', 'goog.positioning.ViewportPosition', 'goog.style', 'goog.ui.PopupBase'], false);
-=======
-goog.addDependency('ui/popup.js', ['goog.ui.Popup'], ['goog.math.Box', 'goog.positioning.Corner', 'goog.style', 'goog.ui.PopupBase'], false);
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
 goog.addDependency('ui/popup_test.js', ['goog.ui.PopupTest'], ['goog.positioning.AnchoredPosition', 'goog.positioning.Corner', 'goog.style', 'goog.testing.jsunit', 'goog.ui.Popup', 'goog.userAgent'], false);
 goog.addDependency('ui/popupbase.js', ['goog.ui.PopupBase', 'goog.ui.PopupBase.EventType', 'goog.ui.PopupBase.Type'], ['goog.Timer', 'goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.fx.Transition', 'goog.style', 'goog.userAgent'], false);
 goog.addDependency('ui/popupbase_test.js', ['goog.ui.PopupBaseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.fx.Transition', 'goog.fx.css3', 'goog.testing.MockClock', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.jsunit', 'goog.ui.PopupBase'], false);
@@ -1471,9 +1463,5 @@ goog.addDependency('vec/vec4.js', ['goog.vec.Vec4'], ['goog.vec'], false);
 goog.addDependency('vec/vec4d.js', ['goog.vec.vec4d', 'goog.vec.vec4d.Type'], ['goog.vec'], false);
 goog.addDependency('vec/vec4f.js', ['goog.vec.vec4f', 'goog.vec.vec4f.Type'], ['goog.vec'], false);
 goog.addDependency('webgl/webgl.js', ['goog.webgl'], [], false);
-<<<<<<< HEAD
-goog.addDependency('window/window.js', ['goog.window'], ['goog.dom.TagName', 'goog.labs.userAgent.platform', 'goog.string', 'goog.userAgent'], false);
-=======
 goog.addDependency('window/window.js', ['goog.window'], ['goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.labs.userAgent.platform', 'goog.string', 'goog.string.Const', 'goog.userAgent'], false);
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
 goog.addDependency('window/window_test.js', ['goog.windowTest'], ['goog.Promise', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.window'], false);
