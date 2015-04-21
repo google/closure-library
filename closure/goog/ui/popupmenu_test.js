@@ -406,3 +406,17 @@ function testMenuItemKeyboardActivation() {
   goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SPACE);
   assertTrue(menuitemListenerFired);
 }
+
+
+/**
+ * Tests that a context menu isn't shown if the SPACE or ENTER keys are pressed.
+ */
+function testContextMenuKeyboard() {
+  popup.attach(anchor, null, null, true);
+  popup.hide();
+  assertFalse(popup.isVisible());
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.SPACE);
+  assertFalse(popup.isVisible());
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.ENTER);
+  assertFalse(popup.isVisible());
+}

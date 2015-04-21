@@ -454,3 +454,11 @@ function testUrlWithExclamation() {
       'This is awesome www.google.com!',
       'This is awesome <a href="http://www.google.com">www.google.com<\/a>!');
 }
+
+function testIpv6Url() {
+  assertLinkify(
+      'IPv6 URL',
+      'http://[::FFFF:129.144.52.38]:80/index.html',
+      '<a href="http://[::FFFF:129.144.52.38]:80/index.html">' +
+      'http://[::FFFF:129.144.52.38]:80/index.html<\/a>');
+}

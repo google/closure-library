@@ -720,19 +720,6 @@ goog.global.CLOSURE_IMPORT_SCRIPT;
 goog.nullFunction = function() {};
 
 
-/**
- * The identity function. Returns its first argument.
- *
- * @param {*=} opt_returnValue The single value that will be returned.
- * @param {...*} var_args Optional trailing arguments. These are ignored.
- * @return {?} The first argument. We can't know the type -- just pass it along
- *      without type.
- * @deprecated Use goog.functions.identity instead.
- */
-goog.identityFunction = function(opt_returnValue, var_args) {
-  return opt_returnValue;
-};
-
 
 /**
  * When defining a class Foo with an abstract method bar(), you can do:

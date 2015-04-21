@@ -158,7 +158,7 @@ function testTouchEventHandling() {
   assertEquals(target, touchCancel.target);
 }
 
-function createMouseEvent(type, button, opt_ctrlKey) {
+function createBrowserEvent(type, button, opt_ctrlKey) {
   return new goog.events.BrowserEvent({
     type: type,
     button: button,
@@ -189,6 +189,8 @@ function createChangedTouchEvent(type, target, clientCoords, screenCoords) {
       screenX: screenCoords.x,
       screenY: screenCoords.y
     }]
+=======
+>>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
   });
 }
 

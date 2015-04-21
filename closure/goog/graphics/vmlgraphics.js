@@ -107,8 +107,9 @@ goog.graphics.VmlGraphics.VML_IMPORT_ = '#default#VML';
  * @private
  * @type {boolean}
  */
-goog.graphics.VmlGraphics.IE8_MODE_ = document.documentMode &&
-    document.documentMode >= 8;
+goog.graphics.VmlGraphics.IE8_MODE_ =
+    goog.global.document && goog.global.document.documentMode &&
+    goog.global.document.documentMode >= 8;
 
 
 /**

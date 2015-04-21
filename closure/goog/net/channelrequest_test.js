@@ -266,6 +266,16 @@ function testActiveXBlocked() {
   checkReachabilityEvents(0, 0, 0, 0);
 }
 
+
+/**
+ * This is a private method but we rely on it to avoid XSS, so it's important
+ * to verify it works properly.
+ */
+function testEscapeForStringInScript() {
+  var actual = goog.net.ChannelRequest.escapeForStringInScript_('"\'<>');
+  assertEquals('\\"\\\'\\x3c\\x3e', actual);
+}
+
 function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
   var Reachability = goog.net.BrowserChannel.ServerReachability;
   assertEquals(reqMade,

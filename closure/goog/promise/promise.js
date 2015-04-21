@@ -60,7 +60,7 @@ goog.require('goog.promise.Resolver');
  * @param {function(
  *             this:RESOLVER_CONTEXT,
  *             function((TYPE|IThenable<TYPE>|Thenable)=),
- *             function(*)): void} resolver
+ *             function(*=)): void} resolver
  *     Initialization function that is invoked immediately with {@code resolve}
  *     and {@code reject} functions as arguments. The Promise is resolved or
  *     rejected with the first argument passed to either function.
@@ -1268,7 +1268,7 @@ goog.Promise.CancellationError.prototype.name = 'cancel';
  *
  * @param {!goog.Promise<TYPE>} promise
  * @param {function((TYPE|goog.Promise<TYPE>|Thenable)=)} resolve
- * @param {function(*): void} reject
+ * @param {function(*=): void} reject
  * @implements {goog.promise.Resolver<TYPE>}
  * @final @struct
  * @constructor

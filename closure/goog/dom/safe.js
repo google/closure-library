@@ -44,6 +44,7 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 
 
 /**
@@ -273,4 +274,52 @@ goog.dom.safe.setLocationHref = function(loc, url) {
     safeUrl = goog.html.SafeUrl.sanitize(url);
   }
   loc.href = goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+
+/**
+ * Safely opens a URL in a new window (via window.open).
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and passed in to
+ * window.open.  If url is of type string however, it is first sanitized
+ * using goog.html.SafeUrl.sanitize.
+ *
+ * Note that this function does not prevent leakages via the referer that is
+ * sent by window.open. It is advised to only use this to open 1st party URLs.
+ *
+ * Example usage:
+ *   goog.dom.safe.openInWindow(url);
+ * which is a safe alternative to
+ *   window.open(url);
+ * The latter can result in XSS vulnerabilities if redirectUrl is a
+ * user-/attacker-controlled value.
+ *
+ * @param {string|!goog.html.SafeUrl} url The URL to open.
+ * @param {Window=} opt_openerWin Window of which to call the .open() method.
+ *     Defaults to the global window.
+ * @param {!goog.string.Const=} opt_name Name of the window to open in. Can be
+ *     _top, etc as allowed by window.open().
+ * @param {string=} opt_specs Comma-separated list of specifications, same as
+ *     in window.open().
+ * @param {boolean=} opt_replace Whether to replace the current entry in browser
+ *     history, same as in window.open().
+ * @return {Window} Window the url was opened in.
+ */
+goog.dom.safe.openInWindow = function(
+    url, opt_openerWin, opt_name, opt_specs, opt_replace) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitize(url);
+  }
+  var win = opt_openerWin || window;
+  return win.open(goog.html.SafeUrl.unwrap(safeUrl),
+      // If opt_name is undefined, simply passing that in to open() causes IE to
+      // reuse the current window instead of opening a new one. Thus we pass ''
+      // in instead, which according to spec opens a new window. See
+      // https://html.spec.whatwg.org/multipage/browsers.html#dom-open .
+      opt_name ? goog.string.Const.unwrap(opt_name) : '',
+      opt_specs, opt_replace);
 };
