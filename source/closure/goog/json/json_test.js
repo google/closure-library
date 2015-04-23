@@ -20,13 +20,10 @@ goog.require('goog.json');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-function allChars(start, end, opt_allowControlCharacters) {
+function allChars(start, end) {
   var sb = [];
   for (var i = start; i < end; i++) {
-    // unicode without the control characters 0x00 - 0x1f
-    if (opt_allowControlCharacters || i > 0x1f) {
-      sb.push(String.fromCharCode(i));
-    }
+    sb.push(String.fromCharCode(i));
   }
   return sb.join('');
 }
@@ -36,14 +33,19 @@ function allChars(start, end, opt_allowControlCharacters) {
 function testStringSerialize() {
   assertSerialize('""', '');
 
-  // unicode
-  var str = allChars(0, 10000);
-  eval(goog.json.serialize(str));
-
   assertSerialize('"true"', 'true');
   assertSerialize('"false"', 'false');
   assertSerialize('"null"', 'null');
   assertSerialize('"0"', '0');
+
+  // Unicode and control characters
+  assertSerialize('"\\n"', '\n');
+  assertSerialize('"\\u001f"', '\x1f');
+  assertSerialize('"\\u20ac"', '\u20AC');
+  assertSerialize('"\\ud83d\\ud83d"', '\ud83d\ud83d');
+
+  var str = allChars(0, 10000);
+  assertEquals(str, eval(goog.json.serialize(str)));
 }
 
 function testNullSerialize() {
@@ -161,6 +163,13 @@ function testObjectSerializeWithHasOwnProperty() {
   }
 }
 
+function testWrappedObjects() {
+  assertSerialize('"foo"', new String('foo'));
+  assertSerialize('42', new Number(42));
+  assertSerialize('null', new Number('a NaN'));
+  assertSerialize('true', new Boolean(true));
+}
+
 // parsing
 
 function testStringParse() {
@@ -169,7 +178,7 @@ function testStringParse() {
   assertEquals('whitespace string', goog.json.parse('" "'), ' ');
 
   // unicode without the control characters 0x00 - 0x1f, 0x7f - 0x9f
-  var str = allChars(0, 1000);
+  var str = allChars(32, 1000);
   var jsonString = goog.json.serialize(str);
   var a = eval(jsonString);
   assertEquals('unicode string', goog.json.parse(jsonString), a);
@@ -186,7 +195,7 @@ function testStringUnsafeParse() {
   assertEquals('whitespace string', goog.json.unsafeParse('" "'), ' ');
 
   // unicode
-  var str = allChars(0, 1000);
+  var str = allChars(32, 1000);
   var jsonString = goog.json.serialize(str);
   var a = eval(jsonString);
   assertEquals('unicode string', goog.json.unsafeParse(jsonString), a);
@@ -519,6 +528,10 @@ function testToJSONSerialize() {
  */
 function assertSerialize(expected, obj, opt_replacer) {
   assertEquals(expected, goog.json.serialize(obj, opt_replacer));
+
+  // goog.json.serialize escapes non-ASCI characters while JSON.stringify
+  // doesn’t.  This is expected so do not compare the results.
+  if (typeof obj == 'string' && obj.charCodeAt(0) > 0x7f) return;
 
   // I'm pretty sure that the goog.json.serialize behavior is correct by the ES5
   // spec, but JSON.stringify(undefined) is undefined on all browsers.

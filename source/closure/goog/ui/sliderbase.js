@@ -96,7 +96,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
    * The model for the range of the slider.
    * @type {!goog.ui.RangeModel}
    */
-  this.rangeModel = new goog.ui.RangeModel;
+  this.rangeModel = new goog.ui.RangeModel();
 
   /**
    * A function mapping slider values to text description.

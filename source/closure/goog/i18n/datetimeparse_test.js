@@ -326,7 +326,7 @@ function testChineseDate() {
 
   parser = new goog.i18n.DateTimeParse(
       goog.i18n.DateTimeFormat.Format.FULL_TIME);
-  assertTrue(parser.parse('GMT-07:00\u4E0B\u534803:26:28', date) > 0);
+  assertTrue(parser.parse('GMT-07:00 \u4E0B\u534803:26:28', date) > 0);
 
   // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
