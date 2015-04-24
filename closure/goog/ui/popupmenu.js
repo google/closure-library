@@ -327,17 +327,11 @@ goog.ui.PopupMenu.prototype.getAttachedElement = function() {
 goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
   this.getHandler().listen(
       target.element_, target.eventType_, this.onTargetClick_);
-<<<<<<< HEAD
-  this.getHandler().listen(
-      target.element_, goog.events.EventType.KEYDOWN,
-      this.onTargetKeyboardAction_);
-=======
   if (target.eventType_ != goog.events.EventType.CONTEXTMENU) {
     this.getHandler().listen(
         target.element_, goog.events.EventType.KEYDOWN,
         this.onTargetKeyboardAction_);
   }
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
 };
 
 
