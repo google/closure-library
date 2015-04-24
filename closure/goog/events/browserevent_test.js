@@ -189,8 +189,6 @@ function createChangedTouchEvent(type, target, clientCoords, screenCoords) {
       screenX: screenCoords.x,
       screenY: screenCoords.y
     }]
-=======
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
   });
 }
 
