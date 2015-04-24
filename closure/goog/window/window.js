@@ -133,13 +133,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // element and send a click event to it.
     // Notice that the "A" tag does NOT have to be added to the DOM.
     var a = parentWin.document.createElement(goog.dom.TagName.A);
-<<<<<<< HEAD
-    a.setAttribute('href', href);
-=======
-    // TODO(user): Sanitize URL. See cl/89965465 for code and test which
-    // was reverted.
     a.setAttribute('href', url);
->>>>>>> moe_writing_branch_from_4bbc46c30109e7d8b81569dc7488725225b8d9b4
     a.setAttribute('target', target);
     if (opt_options['noreferrer']) {
       a.setAttribute('rel', 'noreferrer');
