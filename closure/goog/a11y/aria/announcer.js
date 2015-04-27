@@ -26,6 +26,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.LivePriority');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.object');
 
 
@@ -105,7 +106,7 @@ goog.a11y.aria.Announcer.prototype.getLiveRegion_ = function(priority) {
     return liveRegion;
   }
 
-  liveRegion = this.domHelper_.createElement('div');
+  liveRegion = this.domHelper_.createElement(goog.dom.TagName.DIV);
   // Note that IE has a habit of declaring things that aren't display:none as
   // invisible to third-party tools like JAWs, so we can't just use height:0.
   liveRegion.style.position = 'absolute';

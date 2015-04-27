@@ -348,14 +348,10 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
                      goog.array.ARRAY_PROTOTYPE_.reduce) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
-      var params = [];
-      for(var i = 1, l = arguments.length; i < l; i++){
-        params.push(arguments[i]);
-      }
       if (opt_obj) {
-        params[0] = goog.bind(f, opt_obj);
+        f = goog.bind(f, opt_obj);
       }
-      return goog.array.ARRAY_PROTOTYPE_.reduce.apply(arr, params);
+      return goog.array.ARRAY_PROTOTYPE_.reduce.call(arr, f, val);
     } :
     function(arr, f, val, opt_obj) {
       var rval = val;

@@ -19,6 +19,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.DivConsole');
 goog.require('goog.debug.LogManager');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.log');
@@ -273,9 +274,9 @@ function testGetForm() {
 
 
 function testAddFormInputs() {
-  var form = document.createElement('form');
+  var form = document.createElement(goog.dom.TagName.FORM);
   goog.net.IframeIo.addFormInputs_(form, {'a': 1, 'b': 2, 'c': 3});
-  var inputs = form.getElementsByTagName('input');
+  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
   assertEquals(3, inputs.length);
   for (var i = 0; i < inputs.length; i++) {
     assertEquals('hidden', inputs[i].type);

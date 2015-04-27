@@ -26,6 +26,7 @@ goog.provide('goog.editor.field_test');
 
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Plugin');
@@ -1108,7 +1109,7 @@ function testRestoreSavedRange() {
 
   // Create another node to take the focus later.
   var doc = goog.dom.getOwnerDocument(editableField.getElement());
-  var otherElem = doc.createElement('div');
+  var otherElem = doc.createElement(goog.dom.TagName.DIV);
   otherElem.tabIndex = '1';  // Make it focusable.
   editableField.getElement().parentNode.appendChild(otherElem);
 
@@ -1305,7 +1306,7 @@ function testHandleWindowLevelMouseUp() {
         selectionHasFired = true;
       });
   var editableElement = editableField.getElement();
-  var otherElement = goog.dom.createDom('div');
+  var otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
 
   goog.testing.events.fireMouseDownEvent(editableElement);
@@ -1325,7 +1326,7 @@ function testNoHandleWindowLevelMouseUp() {
         selectionHasFired = true;
       });
   var editableElement = editableField.getElement();
-  var otherElement = goog.dom.createDom('div');
+  var otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
 
   goog.testing.events.fireMouseDownEvent(editableElement);

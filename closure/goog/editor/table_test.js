@@ -16,12 +16,13 @@ goog.provide('goog.editor.TableTest');
 goog.setTestOnly('goog.editor.TableTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.Table');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 function setUp() {
-  var inputTables = document.getElementsByTagName('table');
+  var inputTables = document.getElementsByTagName(goog.dom.TagName.TABLE);
   testElements = {};
   testObjects = {};
   for (var i = 0; i < inputTables.length; i++) {
@@ -64,7 +65,8 @@ if (!goog.userAgent.WEBKIT) {
   function testBasicTable() {
     // Do some basic sanity checking on the editable table structure
     tableSanityCheck(testObjects.basic, 4, 3);
-    var originalRows = testElements.basic.getElementsByTagName('tr');
+    var originalRows = testElements.basic.getElementsByTagName(
+        goog.dom.TagName.TR);
     assertEquals('Basic table row count, compared to source',
         originalRows.length, testObjects.basic.rows.length);
     assertEquals('Basic table row count, known value',
@@ -82,7 +84,8 @@ if (!goog.userAgent.WEBKIT) {
   function testTortureTable() {
     // Do basic sanity checking on torture table structure
     tableSanityCheck(testObjects.torture, 9, 3);
-    var originalRows = testElements.torture.getElementsByTagName('tr');
+    var originalRows = testElements.torture.getElementsByTagName(
+        goog.dom.TagName.TR);
     assertEquals('Torture table row count, compared to source',
         originalRows.length, testObjects.torture.rows.length);
     assertEquals('Torture table row count, known value',
@@ -97,15 +100,16 @@ if (!goog.userAgent.WEBKIT) {
     }
 
     assertEquals('Row was added to table',
-        originalRowCount + 1, element.getElementsByTagName('tr').length);
+                 originalRowCount + 1, element.getElementsByTagName(
+                     goog.dom.TagName.TR).length);
     assertEquals('Row was added at position ' + index,
-        element.getElementsByTagName('tr')[index], newTr);
+        element.getElementsByTagName(goog.dom.TagName.TR)[index], newTr);
     assertEquals('Row knows its own position',
         index, editableTable.rows[index].index);
     assertEquals('EditableTable shows row at position ' + index,
         newTr, editableTable.rows[index].element);
     assertEquals('New row has correct number of TDs',
-        3, newTr.getElementsByTagName('td').length);
+        3, newTr.getElementsByTagName(goog.dom.TagName.TD).length);
   }
 
   function testInsertRowAtBeginning() {
@@ -139,7 +143,8 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Cell has starting rowspan',
         2,
         goog.dom.getFirstElementChild(
-        testElements.torture.getElementsByTagName('tr')[0]).rowSpan);
+            testElements.torture.getElementsByTagName(
+                goog.dom.TagName.TR)[0]).rowSpan);
     var tr = testObjects.torture.insertRow(0);
     // Among other things this verifies that the new row has 3 child TDs.
     _testInsertRowResult(testElements.torture, testObjects.torture, tr, 0);
@@ -153,7 +158,8 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Cell has ending rowspan',
         4,
         goog.dom.getLastElementChild(
-        testElements.torture.getElementsByTagName('tr')[5]).rowSpan);
+            testElements.torture.getElementsByTagName(
+                goog.dom.TagName.TR)[5]).rowSpan);
     var tr = testObjects.torture.insertRow();
     // Among other things this verifies that the new row has 3 child TDs.
     _testInsertRowResult(testElements.torture, testObjects.torture, tr, 9);
@@ -169,7 +175,7 @@ if (!goog.userAgent.WEBKIT) {
         rowSpannedCell.startRow == 5 && rowSpannedCell.endRow == 8);
     var tr = testObjects.torture.insertRow(7);
     assertEquals('New DOM row has one less cell',
-        2, tr.getElementsByTagName('td').length);
+        2, tr.getElementsByTagName(goog.dom.TagName.TD).length);
     assertEquals('Rowspanned cell listed in new EditableRow\'s columns',
         testObjects.torture.rows[6].columns[2].element,
         testObjects.torture.rows[7].columns[2].element);
@@ -264,68 +270,81 @@ if (!goog.userAgent.WEBKIT) {
   }
 
   function testRemoveFirstRow() {
-    var originalRow = testElements.basic.getElementsByTagName('tr')[0];
+    var originalRow = testElements.basic.getElementsByTagName(
+        goog.dom.TagName.TR)[0];
     testObjects.basic.removeRow(0);
     tableSanityCheck(testObjects.basic, 3, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[0]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[0]);
   }
 
   function testRemoveLastRow() {
-    var originalRow = testElements.basic.getElementsByTagName('tr')[3];
+    var originalRow = testElements.basic.getElementsByTagName(
+        goog.dom.TagName.TR)[3];
     testObjects.basic.removeRow(3);
     tableSanityCheck(testObjects.basic, 3, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[3]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[3]);
   }
 
   function testRemoveMiddleRow() {
-    var originalRow = testElements.basic.getElementsByTagName('tr')[2];
+    var originalRow = testElements.basic.getElementsByTagName(
+        goog.dom.TagName.TR)[2];
     testObjects.basic.removeRow(2);
     tableSanityCheck(testObjects.basic, 3, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[2]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[2]);
   }
 
   function testRemoveRowAtBeginingRowSpan() {
     var originalRow = testObjects.torture.removeRow(0);
     tableSanityCheck(testObjects.torture, 8, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[0]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[0]);
     assertEquals('Rowspan correctly adjusted',
         1, testObjects.torture.rows[0].columns[0].rowSpan);
   }
 
   function testRemoveRowAtEndingRowSpan() {
-    var originalRow = testElements.torture.getElementsByTagName('tr')[8];
+    var originalRow = testElements.torture.getElementsByTagName(
+        goog.dom.TagName.TR)[8];
     testObjects.torture.removeRow(8);
     tableSanityCheck(testObjects.torture, 8, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[8]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[8]);
     assertEquals('Rowspan correctly adjusted',
         3, testObjects.torture.rows[7].columns[2].rowSpan);
   }
 
   function testRemoveRowAtSpanningRowSpan() {
-    var originalRow = testElements.torture.getElementsByTagName('tr')[7];
+    var originalRow = testElements.torture.getElementsByTagName(
+        goog.dom.TagName.TR)[7];
     testObjects.torture.removeRow(7);
     tableSanityCheck(testObjects.torture, 8, 3);
     assertNotEquals('Row was removed from table element',
-        originalRow, testElements.basic.getElementsByTagName('tr')[7]);
+        originalRow, testElements.basic.getElementsByTagName(
+            goog.dom.TagName.TR)[7]);
     assertEquals('Rowspan correctly adjusted',
         3, testObjects.torture.rows[6].columns[2].rowSpan);
   }
 
   function _testRemoveColumn(index) {
     var sampleCell = testElements.basic.getElementsByTagName(
-        'tr')[0].getElementsByTagName('th')[index];
+        goog.dom.TagName.TR)[0].getElementsByTagName(
+            goog.dom.TagName.TH)[index];
     testObjects.basic.removeColumn(index);
     tableSanityCheck(testObjects.basic, 4, 2);
     assertNotEquals(
         'Test cell removed from column',
         sampleCell,
         testElements.basic.getElementsByTagName(
-        'tr')[0].getElementsByTagName('th')[index]);
+        goog.dom.TagName.TR)[0].getElementsByTagName(
+            goog.dom.TagName.TH)[index]);
   }
 
   function testRemoveFirstColumn() {
@@ -346,7 +365,8 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Colspan was decremented correctly',
         1,
         testElements.torture.getElementsByTagName(
-        'tr')[5].getElementsByTagName('th')[0].colSpan);
+        goog.dom.TagName.TR)[5].getElementsByTagName(
+            goog.dom.TagName.TH)[0].colSpan);
   }
 
   function testRemoveColumnAtEndingColSpan() {
@@ -355,7 +375,8 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Colspan was decremented correctly',
         1,
         testElements.torture.getElementsByTagName(
-        'tr')[1].getElementsByTagName('td')[0].colSpan);
+        goog.dom.TagName.TR)[1].getElementsByTagName(
+            goog.dom.TagName.TD)[0].colSpan);
   }
 
   function testRemoveColumnAtSpanningColSpan() {
@@ -364,31 +385,32 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Colspan was decremented correctly',
         2,
         testElements.torture.getElementsByTagName(
-        'tr')[4].getElementsByTagName('th')[0].colSpan);
+        goog.dom.TagName.TR)[4].getElementsByTagName(
+            goog.dom.TagName.TH)[0].colSpan);
   }
 
   function testMergeCellsInRow() {
     testObjects.basic.mergeCells(0, 0, 0, 2);
     tableSanityCheck(testObjects.basic, 4, 3);
-    var trs = testElements.basic.getElementsByTagName('tr');
+    var trs = testElements.basic.getElementsByTagName(goog.dom.TagName.TR);
     assertEquals('Cells merged',
-        1, trs[0].getElementsByTagName('th').length);
+        1, trs[0].getElementsByTagName(goog.dom.TagName.TH).length);
     assertEquals('Merged cell has correct colspan',
-        3, trs[0].getElementsByTagName('th')[0].colSpan);
+        3, trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].colSpan);
     assertEquals('Merged cell has correct rowspan',
-        1, trs[0].getElementsByTagName('th')[0].rowSpan);
+        1, trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].rowSpan);
   }
 
   function testMergeCellsInColumn() {
     testObjects.basic.mergeCells(0, 0, 2, 0);
     tableSanityCheck(testObjects.basic, 4, 3);
-    var trs = testElements.basic.getElementsByTagName('tr');
+    var trs = testElements.basic.getElementsByTagName(goog.dom.TagName.TR);
     assertEquals('Other cells still in row',
-        3, trs[0].getElementsByTagName('th').length);
+        3, trs[0].getElementsByTagName(goog.dom.TagName.TH).length);
     assertEquals('Merged cell has correct colspan',
-        1, trs[0].getElementsByTagName('th')[0].colSpan);
+        1, trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].colSpan);
     assertEquals('Merged cell has correct rowspan',
-        3, trs[0].getElementsByTagName('th')[0].rowSpan);
+        3, trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].rowSpan);
     assert('Cell appears in multiple rows after merge',
         testObjects.basic.rows[0].columns[0] ==
         testObjects.basic.rows[2].columns[0]);
@@ -397,8 +419,8 @@ if (!goog.userAgent.WEBKIT) {
   function testMergeCellsInRowAndColumn() {
     testObjects.basic.mergeCells(1, 1, 3, 2);
     tableSanityCheck(testObjects.basic, 4, 3);
-    var trs = testElements.basic.getElementsByTagName('tr');
-    var mergedCell = trs[1].getElementsByTagName('td')[1];
+    var trs = testElements.basic.getElementsByTagName(goog.dom.TagName.TR);
+    var mergedCell = trs[1].getElementsByTagName(goog.dom.TagName.TD)[1];
     assertEquals('Merged cell has correct rowspan',
         3, mergedCell.rowSpan);
     assertEquals('Merged cell has correct colspan',
@@ -408,8 +430,8 @@ if (!goog.userAgent.WEBKIT) {
   function testMergeCellsAlreadyMerged() {
     testObjects.torture.mergeCells(5, 0, 8, 2);
     tableSanityCheck(testObjects.torture, 9, 3);
-    var trs = testElements.torture.getElementsByTagName('tr');
-    var mergedCell = trs[5].getElementsByTagName('th')[0];
+    var trs = testElements.torture.getElementsByTagName(goog.dom.TagName.TR);
+    var mergedCell = trs[5].getElementsByTagName(goog.dom.TagName.TH)[0];
     assertEquals('Merged cell has correct rowspan',
         4, mergedCell.rowSpan);
     assertEquals('Merged cell has correct colspan',
@@ -438,7 +460,7 @@ if (!goog.userAgent.WEBKIT) {
   function testSplitCell() {
     testObjects.torture.splitCell(1, 1);
     tableSanityCheck(testObjects.torture, 9, 3);
-    var trs = testElements.torture.getElementsByTagName('tr');
+    var trs = testElements.torture.getElementsByTagName(goog.dom.TagName.TR);
     assertEquals('Cell was split into multiple columns in row 1',
         3, trs[1].getElementsByTagName('*').length);
     assertEquals('Cell was split into multiple columns in row 2',
@@ -465,7 +487,8 @@ if (!goog.userAgent.WEBKIT) {
   // The following code is left in here for reference in implementing
   // this TODO.
 
-    var tds = goog.dom.getElement('test1').getElementsByTagName('td');
+    var tds = goog.dom.getElement('test1').getElementsByTagName(
+        goog.dom.TagName.TD);
     var range = goog.dom.Range.createFromNodes(tds[7], tds[9]);
     range.select();
     var cellSelection = new goog.editor.Table.CellSelection(range);

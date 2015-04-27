@@ -18,6 +18,7 @@ goog.setTestOnly('goog.dom.AbstractRangeTest');
 goog.require('goog.dom');
 goog.require('goog.dom.AbstractRange');
 goog.require('goog.dom.Range');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 
 function testCorrectDocument() {
@@ -53,7 +54,7 @@ function testSelectionIsControlRange() {
   // Only IE supports control ranges
   if (c.document.body.createControlRange) {
     var controlRange = c.document.body.createControlRange();
-    controlRange.add(c.document.getElementsByTagName('img')[0]);
+    controlRange.add(c.document.getElementsByTagName(goog.dom.TagName.IMG)[0]);
     controlRange.select();
     var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(c);
     assertNotNull('Selection must not be null', selection);

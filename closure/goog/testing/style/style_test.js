@@ -16,6 +16,7 @@ goog.provide('goog.testing.styleTest');
 goog.setTestOnly('goog.testing.styleTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.style');
@@ -26,7 +27,7 @@ var div2;
 function setUp() {
   var createDiv = function(color) {
     var div = goog.dom.createDom(
-        'div',
+        goog.dom.TagName.DIV,
         {
           style: 'position:absolute;top:0;left:0;' +
               'width:200px;height:100px;' +
@@ -64,7 +65,7 @@ function testIsVisible() {
 }
 
 function testIsOnScreen() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(el);
 
   var dom = goog.dom.getDomHelper(el);
@@ -113,7 +114,7 @@ function testIsOnScreen() {
       'An element partially off the bottom of the screen is on screen.',
       goog.testing.style.isOnScreen(el));
 
-  var el2 = document.createElement('div');
+  var el2 = document.createElement(goog.dom.TagName.DIV);
   el2.style.position = 'absolute';
   goog.style.setSize(el2, 100, 100);
   goog.style.setPosition(el2, winScroll.x, winScroll.y);

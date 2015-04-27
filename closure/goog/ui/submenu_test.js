@@ -436,6 +436,10 @@ function testShowSubMenuAfterRemoval() {
   // (No JS error should occur.)
 }
 
+
+/**
+ * Tests that if a sub menu is selectable, then it can handle actions.
+ */
 function testSubmenuSelectable() {
   var submenu = new goog.ui.SubMenu('submenu');
   submenu.addItem(new goog.ui.MenuItem('submenu item 1'));
@@ -455,6 +459,35 @@ function testSubmenuSelectable() {
   assertEquals('The submenu should have fired an event', 2, numClicks);
 
   submenu.setSelectable(false);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should not have fired any further events', 2,
+      numClicks);
+}
+
+
+/**
+ * Tests that if a sub menu is checkable, then it can handle actions.
+ */
+function testSubmenuCheckable() {
+  var submenu = new goog.ui.SubMenu('submenu');
+  submenu.addItem(new goog.ui.MenuItem('submenu item 1'));
+  menu.addItem(submenu);
+  submenu.setCheckable(true);
+
+  var numClicks = 0;
+  var menuClickedFn = function(e) {
+    numClicks++;
+  };
+
+  goog.events.listen(submenu, goog.ui.Component.EventType.ACTION,
+      menuClickedFn);
+  submenu.performActionInternal(null);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should have fired an event', 2, numClicks);
+
+  submenu.setCheckable(false);
   submenu.performActionInternal(null);
 
   assertEquals('The submenu should not have fired any further events', 2,

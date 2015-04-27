@@ -25,6 +25,7 @@ goog.provide('goog.debug.FpsDisplay');
 goog.require('goog.asserts');
 goog.require('goog.async.AnimationDelay');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.ui.Component');
 
 
@@ -66,8 +67,8 @@ goog.debug.FpsDisplay.prototype.animation_ = null;
 
 /** @override */
 goog.debug.FpsDisplay.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom('div', goog.debug.FpsDisplay.CSS));
+  this.setElementInternal(this.getDomHelper().createDom(
+      goog.dom.TagName.DIV, goog.debug.FpsDisplay.CSS));
 };
 
 

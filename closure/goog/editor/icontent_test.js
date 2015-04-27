@@ -16,6 +16,7 @@ goog.provide('goog.editor.icontentTest');
 goog.setTestOnly('goog.editor.icontentTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.icontent');
 goog.require('goog.editor.icontent.FieldFormatInfo');
@@ -30,8 +31,8 @@ var realIframeDoc;
 var propertyReplacer;
 
 function setUp() {
-  wrapperDiv = goog.dom.createDom('div', null,
-      realIframe = goog.dom.createDom('iframe'));
+  wrapperDiv = goog.dom.createDom(goog.dom.TagName.DIV, null,
+      realIframe = goog.dom.createDom(goog.dom.TagName.IFRAME));
   goog.dom.appendChild(document.body, wrapperDiv);
   realIframeDoc = realIframe.contentWindow.document;
   propertyReplacer = new goog.testing.PropertyReplacer();
@@ -80,7 +81,7 @@ function testWriteInitialIframeContentBlendedStandardsGrowing() {
   assertEquals('', realIframe.style.position); // no padding on wrapper
 
   assertEquals(500, doc.body.firstChild.offsetTop);
-  assert(doc.getElementsByTagName('style')[0].innerHTML.indexOf(
+  assert(doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
       '-moz-force-broken-image-icon') != -1); // standards
 }
 
@@ -105,7 +106,7 @@ function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
 
   assertEquals('-2px', realIframe.style.marginTop);
   assertEquals('-5px', realIframe.style.marginLeft);
-  assert(doc.getElementsByTagName('style')[0].innerHTML.indexOf(
+  assert(doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
       '-moz-force-broken-image-icon') == -1); // quirks
 }
 

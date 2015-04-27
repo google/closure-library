@@ -84,6 +84,7 @@ function test60sTicks() {
 
 function testCallOnce() {
   var c = 0;
+  var expectedTimeoutId = goog.testing.MockClock.nextId;
   var actualTimeoutId = goog.Timer.callOnce(
       function() {
         if (c > 0) {
@@ -92,7 +93,7 @@ function testCallOnce() {
         c++;
       });
   assertEquals('callOnce should return the timeout ID',
-      mockClock.getTimeoutsMade(), actualTimeoutId);
+      expectedTimeoutId, actualTimeoutId);
 
   var obj = {c: 0};
   goog.Timer.callOnce(function() {

@@ -16,6 +16,7 @@ goog.provide('goog.net.IframeLoadMonitorTest');
 goog.setTestOnly('goog.net.IframeLoadMonitorTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.net.IframeLoadMonitor');
 goog.require('goog.testing.AsyncTestCase');
@@ -47,7 +48,7 @@ iframeLoaderTestCase.setUpPage = function() {
   var dom = goog.dom.getDomHelper();
 
   // Load single frame
-  var frame = dom.createDom('iframe');
+  var frame = dom.createDom(goog.dom.TagName.IFRAME);
   this.iframeLoadMonitors_.push(new goog.net.IframeLoadMonitor(frame));
   goog.events.listen(this.iframeLoadMonitors_[0],
       goog.net.IframeLoadMonitor.LOAD_EVENT, this);
@@ -57,7 +58,7 @@ iframeLoaderTestCase.setUpPage = function() {
   frame.src = TEST_FRAME_SRCS[0];
 
   // Load single frame with content check
-  var frame1 = dom.createDom('iframe');
+  var frame1 = dom.createDom(goog.dom.TagName.IFRAME);
   this.iframeLoadMonitors_.push(new goog.net.IframeLoadMonitor(frame1, true));
   goog.events.listen(this.iframeLoadMonitors_[1],
       goog.net.IframeLoadMonitor.LOAD_EVENT, this);

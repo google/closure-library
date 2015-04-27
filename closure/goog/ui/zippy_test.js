@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.ZippyTest');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.object');
@@ -36,8 +37,8 @@ function setUp() {
   zippy = new goog.ui.Zippy(goog.dom.getElement('t1'),
       goog.dom.getElement('c1'));
 
-  var fakeControlEl = document.createElement('button');
-  var fakeContentEl = document.createElement('div');
+  var fakeControlEl = document.createElement(goog.dom.TagName.BUTTON);
+  var fakeContentEl = document.createElement(goog.dom.TagName.DIV);
 
   fakeZippy1 = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
       fakeContentEl.cloneNode(true), true);

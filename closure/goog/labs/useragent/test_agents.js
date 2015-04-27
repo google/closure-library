@@ -152,6 +152,15 @@ testAgents.IE_11_COMPATIBILITY_MSIE_9 =
     'rv:11.0) like Gecko';
 
 
+/**
+ * https://msdn.microsoft.com/en-us/library/hh869301%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396#edge
+ * @const {string}
+ */
+testAgents.IE_EDGE =
+    'Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36 Edge/12.0';
+
+
 /** @const {string} */
 testAgents.FIREFOX_19 =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:19.0) ' +
@@ -368,4 +377,10 @@ testAgents.KINDLE_FIRE =
     'Mozilla/5.0 (Linux; U; Android 4.0.3; en-us; KFTT Build/IML74K)' +
     ' AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19' +
     ' Silk-Accelerated=true';
+
+
+/** @const {string} */
+testAgents.FIREFOX_ANDROID_TABLET =
+    'Mozilla/5.0 (Android; Tablet; rv:28.0) Gecko/28.0 Firefox/28.0';
+
 });  // goog.scope

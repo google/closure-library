@@ -308,7 +308,8 @@ function testRemoveDivCaretRange() {
       outer.lastChild, 0, outer.lastChild, 0);
 
   range.removeContents();
-  range.insertNode(goog.dom.createDom('span', undefined, 'Hello'), true);
+  range.insertNode(goog.dom.createDom(goog.dom.TagName.SPAN,
+                                      undefined, 'Hello'), true);
 
   assertEquals('Resulting contents', 'Test1Hello',
       goog.dom.getTextContent(outer).replace(/\s/g, ''));
@@ -332,7 +333,7 @@ function testCollapse() {
 function testIdWithSpecialCharacters() {
   goog.dom.removeChildren(dynamic);
   dynamic.appendChild(goog.dom.createTextNode('1'));
-  dynamic.appendChild(goog.dom.createDom('div', {id: '<>'}));
+  dynamic.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {id: '<>'}));
   dynamic.appendChild(goog.dom.createTextNode('2'));
   var range = goog.dom.browserrange.createRangeFromNodes(
       dynamic.firstChild, 0, dynamic.lastChild, 1);

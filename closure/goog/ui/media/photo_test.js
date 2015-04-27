@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.PhotoTest');
 goog.setTestOnly('goog.ui.media.PhotoTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.Photo');
@@ -34,16 +35,16 @@ function tearDown() {
 
 function testBasicRendering() {
   control.render();
-  var el = goog.dom.getElementsByTagNameAndClass('div',
+  var el = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.Photo.CSS_CLASS);
   assertEquals(1, el.length);
-  var img = goog.dom.getElementsByTagNameAndClass('img',
+  var img = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IMG,
       goog.ui.media.Photo.CSS_CLASS + '-image');
   assertEquals(1, img.length);
-  var caption = goog.dom.getElementsByTagNameAndClass('div',
+  var caption = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.Photo.CSS_CLASS + '-caption');
   assertEquals(1, caption.length);
-  var content = goog.dom.getElementsByTagNameAndClass('div',
+  var content = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.ui.media.Photo.CSS_CLASS + '-description');
   assertEquals(1, content.length);
 }

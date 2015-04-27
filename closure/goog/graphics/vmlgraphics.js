@@ -23,6 +23,7 @@ goog.provide('goog.graphics.VmlGraphics');
 
 
 goog.require('goog.array');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
@@ -106,8 +107,9 @@ goog.graphics.VmlGraphics.VML_IMPORT_ = '#default#VML';
  * @private
  * @type {boolean}
  */
-goog.graphics.VmlGraphics.IE8_MODE_ = document.documentMode &&
-    document.documentMode >= 8;
+goog.graphics.VmlGraphics.IE8_MODE_ =
+    goog.global.document && goog.global.document.documentMode &&
+    goog.global.document.documentMode >= 8;
 
 
 /**
@@ -536,7 +538,7 @@ goog.graphics.VmlGraphics.prototype.createDom = function() {
   // All inner elements are absolutly positioned on-top of this div.
   var pixelWidth = this.width;
   var pixelHeight = this.height;
-  var divElement = this.dom_.createDom('div', {
+  var divElement = this.dom_.createDom(goog.dom.TagName.DIV, {
     'style': 'overflow:hidden;position:relative;width:' +
         goog.graphics.VmlGraphics.toCssSize(pixelWidth) + ';height:' +
         goog.graphics.VmlGraphics.toCssSize(pixelHeight)

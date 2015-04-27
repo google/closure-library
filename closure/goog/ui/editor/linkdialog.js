@@ -26,6 +26,7 @@ goog.provide('goog.ui.editor.LinkDialog.OkEvent');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
@@ -541,7 +542,8 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
  */
 goog.ui.editor.LinkDialog.prototype.buildOpenInNewWindowDiv_ = function() {
   this.openInNewWindowCheckbox_ = /** @type {!HTMLInputElement} */(
-      this.dom.createDom(goog.dom.TagName.INPUT, {'type': 'checkbox'}));
+      this.dom.createDom(goog.dom.TagName.INPUT,
+                         {'type': goog.dom.InputType.CHECKBOX}));
   return this.dom.createDom(goog.dom.TagName.DIV, null,
       this.dom.createDom(goog.dom.TagName.LABEL, null,
                          this.openInNewWindowCheckbox_,
@@ -565,7 +567,8 @@ goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
       });
 
   this.relNoFollowCheckbox_ = /** @type {!HTMLInputElement} */(
-      this.dom.createDom(goog.dom.TagName.INPUT, {'type': 'checkbox'}));
+      this.dom.createDom(goog.dom.TagName.INPUT,
+                         {'type': goog.dom.InputType.CHECKBOX}));
   return this.dom.createDom(goog.dom.TagName.DIV, null,
       this.dom.createDom(goog.dom.TagName.LABEL, null,
           this.relNoFollowCheckbox_,
@@ -592,11 +595,10 @@ goog.ui.editor.LinkDialog.prototype.buildTabOnTheWeb_ = function() {
   goog.a11y.aria.setState(urlInput,
       goog.a11y.aria.State.LABELLEDBY,
       goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
-  // IE throws on unknown values for type.
-  if (!goog.userAgent.IE) {
+  // IE throws on unknown values for type, but IE10+ supports type=url
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10')) {
     // On browsers that support Web Forms 2.0, allow autocompletion of URLs.
-    // (As of now, this is only supported by Opera 9)
-    urlInput.type = 'url';
+    urlInput.type = goog.dom.InputType.URL;
   }
 
   if (goog.editor.BrowserFeature.NEEDS_99_WIDTH_IN_STANDARDS_MODE &&

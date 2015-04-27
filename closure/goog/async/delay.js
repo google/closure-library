@@ -43,11 +43,13 @@ goog.require('goog.Timer');
  * @param {THIS=} opt_handler The object scope to invoke the function in.
  * @template THIS
  * @constructor
+ * @struct
+ * @suppress {checkStructDictInheritance}
  * @extends {goog.Disposable}
  * @final
  */
 goog.async.Delay = function(listener, opt_interval, opt_handler) {
-  goog.Disposable.call(this);
+  goog.async.Delay.base(this, 'constructor');
 
   /**
    * The function that will be invoked after a delay.
@@ -105,7 +107,7 @@ goog.async.Delay.prototype.id_ = 0;
  * @protected
  */
 goog.async.Delay.prototype.disposeInternal = function() {
-  goog.async.Delay.superClass_.disposeInternal.call(this);
+  goog.async.Delay.base(this, 'disposeInternal');
   this.stop();
   delete this.listener_;
   delete this.handler_;

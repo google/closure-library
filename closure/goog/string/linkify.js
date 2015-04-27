@@ -199,8 +199,8 @@ goog.string.linkify.WWW_START_ = 'www\\.';
  */
 goog.string.linkify.URL_ =
     '(?:' + goog.string.linkify.PROTOCOL_START_ + '|' +
-    goog.string.linkify.WWW_START_ + ')\\w[' +
-    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']*';
+    goog.string.linkify.WWW_START_ + ')[' +
+    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
 
 
 /**

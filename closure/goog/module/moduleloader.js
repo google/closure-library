@@ -35,6 +35,7 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
@@ -98,12 +99,11 @@ goog.module.ModuleLoader.prototype.sourceUrlInjection_ = false;
 
 /**
  * @return {boolean} Whether sourceURL affects stack traces.
- *     Chrome is currently the only browser that does this, but
- *     we believe other browsers are working on this.
- * @see http://bugzilla.mozilla.org/show_bug.cgi?id=583083
  */
 goog.module.ModuleLoader.supportsSourceUrlStackTraces = function() {
-  return goog.userAgent.product.CHROME;
+  return goog.userAgent.product.CHROME ||
+      (goog.labs.userAgent.browser.isFirefox() &&
+       goog.labs.userAgent.browser.isVersionOrHigher('36'));
 };
 
 

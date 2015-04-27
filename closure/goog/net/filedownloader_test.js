@@ -19,14 +19,12 @@ goog.require('goog.fs.Error');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.FileDownloader');
 goog.require('goog.net.XhrIo');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.fs');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIoPool');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var xhrIoPool, xhr, fs, dir, downloader;
 
 function setUpPage() {
@@ -46,312 +44,291 @@ function tearDown() {
 }
 
 function testDownload() {
-  downloader.download('/foo/bar').addCallback(function(blob) {
+  var promise = downloader.download('/foo/bar').then(function(blob) {
     var fileEntry = dir.getFileSync('`3fa/``2Ffoo`2Fbar/`bar');
     assertEquals('data', blob.toString());
     assertEquals('data', fileEntry.fileSync().toString());
-    asyncTestCase.continueTesting();
-  }).addErrback(function(err) { throw err; });
+  });
 
+  xhr.simulateResponse(200, 'data');
   assertEquals('/foo/bar', xhr.getLastUri());
   assertEquals(goog.net.XhrIo.ResponseType.ARRAY_BUFFER, xhr.getResponseType());
 
-  xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testDownload');
+  return promise;
 }
 
 function testGetDownloadedBlob() {
-  downloader.download('/foo/bar').
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addCallback(function(blob) { assertEquals('data', blob.toString()); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
+  var promise = downloader.download('/foo/bar').then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function(blob) {
+    assertEquals('data', blob.toString());
+  });
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testGetDownloadedBlob');
+  return promise;
 }
 
 function testGetLocalUrl() {
-  downloader.download('/foo/bar').
-      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
-      addCallback(function(url) { assertMatches(/\/`bar$/, url); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
+  var promise = downloader.download('/foo/bar').then(function() {
+    return downloader.getLocalUrl('/foo/bar');
+  }).then(function(url) {
+    assertMatches(/\/`bar$/, url);
+  });
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testGetLocalUrl');
+  return promise;
 }
 
 function testLocalUrlWithContentDisposition() {
-  downloader.download('/foo/bar').
-      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
-      addCallback(function(url) { assertMatches(/\/`qux`22bap$/, url); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
+  var promise = downloader.download('/foo/bar').then(function() {
+    return downloader.getLocalUrl('/foo/bar');
+  }).then(function(url) {
+    assertMatches(/\/`qux`22bap$/, url);
+  });
 
   xhr.simulateResponse(
       200, 'data', {'Content-Disposition': 'attachment; filename="qux\\"bap"'});
-  asyncTestCase.waitForAsync('testGetLocalUrl');
+  return promise;
 }
 
 function testIsDownloaded() {
-  downloader.download('/foo/bar').
-      addCallback(function() { return downloader.isDownloaded('/foo/bar'); }).
-      addCallback(assertTrue).
-      addCallback(function() { return downloader.isDownloaded('/foo/baz'); }).
-      addCallback(assertFalse).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
+  var promise = downloader.download('/foo/bar').then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertTrue).then(function(isDownloaded) {
+    return downloader.isDownloaded('/foo/baz');
+  }).then(assertFalse);
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testIsDownloaded');
+  return promise;
 }
 
 function testRemove() {
-  downloader.download('/foo/bar').
-      addCallback(function() { return downloader.remove('/foo/bar'); }).
-      addCallback(function() { return downloader.isDownloaded('/foo/bar'); }).
-      addCallback(assertFalse).
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
-        var download = downloader.download('/foo/bar');
-        xhr.simulateResponse(200, 'more data');
-        return download;
-      }).
-      addCallback(function() { return downloader.isDownloaded('/foo/bar'); }).
-      addCallback(assertTrue).
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addCallback(function(blob) {
-        assertEquals('more data', blob.toString());
-      }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  var promise = downloader.download('/foo/bar').then(function() {
+    return downloader.remove('/foo/bar');
+  }).then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertFalse).then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function() {
+    fail('Should not be able to download a missing blob.');
+  }, function(err) {
+    assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
+    var download = downloader.download('/foo/bar');
+    xhr.simulateResponse(200, 'more data');
+    return download;
+  }).then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertTrue).then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function(blob) {
+    assertEquals('more data', blob.toString());
+  });
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testRemove');
+  return promise;
 }
 
 function testSetBlob() {
-  downloader.setBlob('/foo/bar', goog.testing.fs.getBlob('data')).
-      addCallback(function() { return downloader.isDownloaded('/foo/bar'); }).
-      addCallback(assertTrue).
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addCallback(function(blob) {
-        assertEquals('data', blob.toString());
-      }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
-
-  asyncTestCase.waitForAsync('testSetBlob');
+  return downloader.setBlob(
+      '/foo/bar', goog.testing.fs.getBlob('data')).then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertTrue).then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function(blob) {
+    assertEquals('data', blob.toString());
+  });
 }
 
 function testSetBlobWithName() {
-  downloader.setBlob('/foo/bar', goog.testing.fs.getBlob('data'), 'qux').
-      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
-      addCallback(function(url) { assertMatches(/\/`qux$/, url); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
-      addErrback(function(err) { throw err; });
-
-  asyncTestCase.waitForAsync('testSetBlob');
+  return downloader.setBlob(
+      '/foo/bar', goog.testing.fs.getBlob('data'), 'qux').then(function() {
+    return downloader.getLocalUrl('/foo/bar');
+  }).then(function(url) {
+    assertMatches(/\/`qux$/, url);
+  });
 }
-
 function testDownloadDuringDownload() {
   var download1 = downloader.download('/foo/bar');
   var download2 = downloader.download('/foo/bar');
 
-  download1.
-      addCallback(function() { return download2; }).
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addCallback(function(blob) { assertEquals('data', blob.toString()); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  var promise = download1.then(function() {
+    return download2;
+  }).then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function(blob) {
+    assertEquals('data', blob.toString());
+  });
 
   // There should only need to be one response for both downloads, since the
   // second should return the same deferred as the first.
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testDownloadeduringDownload');
+  return promise;
 }
 
 function testGetDownloadedBlobDuringDownload() {
-  var download = downloader.download('/foo/bar');
-  downloader.waitForDownload('/foo/bar').addCallback(function() {
+  var hasDownloaded = false;
+  downloader.download('/foo/bar').then(function() {
+    hasDownloaded = true;
+  });
+
+  var promise = downloader.waitForDownload('/foo/bar').then(function() {
     return downloader.getDownloadedBlob('/foo/bar');
-  }).addCallback(function(blob) {
-    assertTrue(download.hasFired());
+  }).then(function(blob) {
+    assertTrue(hasDownloaded);
     assertEquals('data', blob.toString());
-    asyncTestCase.continueTesting();
   });
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testGetDownloadedBlobDuringDownload');
+  return promise;
 }
 
+
 function testIsDownloadedDuringDownload() {
-  var download = downloader.download('/foo/bar');
-  downloader.waitForDownload('/foo/bar').addCallback(function() {
-    return downloader.isDownloaded('/foo/bar');
-  }).addCallback(function(isDownloaded) {
-    assertTrue(download.hasFired());
-    assertTrue(isDownloaded);
-    asyncTestCase.continueTesting();
+  var hasDownloaded = false;
+  downloader.download('/foo/bar').then(function() {
+    hasDownloaded = true;
   });
 
+  var promise = downloader.waitForDownload('/foo/bar').then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertTrue);
+
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testIsDownloadedDuringDownload');
+  return promise;
 }
 
 function testRemoveDuringDownload() {
-  var download = downloader.download('/foo/bar');
-  downloader.
-      waitForDownload('/foo/bar').
-      addCallback(function() { return downloader.remove('/foo/bar'); }).
-      addCallback(function() { assertTrue(download.hasFired()); }).
-      addCallback(function() { return downloader.isDownloaded('/foo/bar'); }).
-      addCallback(assertFalse).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  var hasDownloaded = false;
+  downloader.download('/foo/bar').then(function() {
+    hasDownloaded = true;
+  });
+
+  var promise = downloader.waitForDownload('/foo/bar').then(function() {
+    return downloader.remove('/foo/bar');
+  }).then(function() {
+    assertTrue(hasDownloaded);
+  }).then(function() {
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertFalse);
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testRemoveDuringDownload');
+  return promise;
 }
 
 function testSetBlobDuringDownload() {
   var download = downloader.download('/foo/bar');
-  downloader.
-      waitForDownload('/foo/bar').
-      addCallback(function() {
-        return downloader.setBlob(
-            '/foo/bar', goog.testing.fs.getBlob('blob data'));
-      }).
-      addErrback(function(err) {
-        assertEquals(
-            goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
-        return download;
-      }).
-      addCallback(function() {
-        return downloader.getDownloadedBlob('/foo/bar');
-      }).
-      addCallback(function(b) { assertEquals('xhr data', b.toString()); }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+
+  var promise = downloader.waitForDownload('/foo/bar').then(function() {
+    return downloader.setBlob('/foo/bar', goog.testing.fs.getBlob('blob data'));
+  }).then(function() {
+    fail('Should not be able to set blob during a download.');
+  }, function(err) {
+    assertEquals(
+        goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
+    return download;
+  }).then(function() {
+    return downloader.getDownloadedBlob('/foo/bar');
+  }).then(function(b) {
+    assertEquals('xhr data', b.toString());
+  });
 
   xhr.simulateResponse(200, 'xhr data');
-  asyncTestCase.waitForAsync('testSetBlobDuringDownload');
+  return promise;
 }
 
-function testDownloadCancelledBeforeXhr() {
+function testDownloadCanceledBeforeXhr() {
   var download = downloader.download('/foo/bar');
-  download.cancel();
 
-  download.
-      addErrback(function() {
+  var promise = download.then(function() {
+    fail('Download should have been canceled.');
+  }, function() {
     assertEquals('/foo/bar', xhr.getLastUri());
     assertEquals(goog.net.ErrorCode.ABORT, xhr.getLastErrorCode());
     assertFalse(xhr.isActive());
 
     return downloader.isDownloaded('/foo/bar');
-  }).
-      addCallback(assertFalse).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  }).then(assertFalse);
 
-  asyncTestCase.waitForAsync('testDownloadCancelledBeforeXhr');
+  download.cancel();
+  return promise;
 }
 
-function testDownloadCancelledAfterXhr() {
+function testDownloadCanceledAfterXhr() {
   var download = downloader.download('/foo/bar');
   xhr.simulateResponse(200, 'data');
   download.cancel();
 
-  download.
-      addErrback(function() {
+  return download.then(function() {
+    fail('Should not succeed after cancellation.');
+  }, function() {
     assertEquals('/foo/bar', xhr.getLastUri());
     assertEquals(goog.net.ErrorCode.NO_ERROR, xhr.getLastErrorCode());
     assertFalse(xhr.isActive());
 
     return downloader.isDownloaded('/foo/bar');
-  }).
-      addCallback(assertFalse).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
-
-  asyncTestCase.waitForAsync('testDownloadCancelledAfterXhr');
+  }).then(assertFalse);
 }
 
 function testFailedXhr() {
-  downloader.download('/foo/bar').
-      addErrback(function(err) {
-        assertEquals('/foo/bar', err.url);
-        assertEquals(404, err.xhrStatus);
-        assertEquals(goog.net.ErrorCode.HTTP_ERROR, err.xhrErrorCode);
-        assertUndefined(err.fileError);
+  var promise = downloader.download('/foo/bar').then(function() {
+    fail('Download should not have succeeded.');
+  }, function(err) {
+    assertEquals('/foo/bar', err.url);
+    assertEquals(404, err.xhrStatus);
+    assertEquals(goog.net.ErrorCode.HTTP_ERROR, err.xhrErrorCode);
+    assertUndefined(err.fileError);
 
-        return downloader.isDownloaded('/foo/bar');
-      }).
-      addCallback(assertFalse).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+    return downloader.isDownloaded('/foo/bar');
+  }).then(assertFalse);
 
   xhr.simulateResponse(404);
-  asyncTestCase.waitForAsync('testFailedXhr');
+  return promise;
 }
 
 function testFailedDownloadSave() {
-  downloader.download('/foo/bar').
-      addCallback(function() {
-        var download = downloader.download('/foo/bar');
-        xhr.simulateResponse(200, 'data');
-        return download;
-      }).
-      addErrback(function(err) {
-        assertEquals('/foo/bar', err.url);
-        assertUndefined(err.xhrStatus);
-        assertUndefined(err.xhrErrorCode);
-        assertEquals(
-            goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
-
-        asyncTestCase.continueTesting();
-      });
+  var promise = downloader.download('/foo/bar').then(function() {
+    var download = downloader.download('/foo/bar');
+    xhr.simulateResponse(200, 'data');
+    return download;
+  }).then(function() {
+    fail('Should not be able to modify an active download.');
+  }, function(err) {
+    assertEquals('/foo/bar', err.url);
+    assertUndefined(err.xhrStatus);
+    assertUndefined(err.xhrErrorCode);
+    assertEquals(
+        goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
+  });
 
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testFailedDownloadSave');
+  return promise;
 }
 
 function testFailedGetDownloadedBlob() {
-  downloader.getDownloadedBlob('/foo/bar').
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
-        asyncTestCase.continueTesting();
-      });
-
-  asyncTestCase.waitForAsync('testFailedGetDownloadedBlob');
+  return downloader.getDownloadedBlob('/foo/bar').then(function() {
+    fail('Should not be able to get a missing blob.');
+  }, function(err) {
+    assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
+  });
 }
 
 function testFailedRemove() {
-  downloader.remove('/foo/bar').
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
-        asyncTestCase.continueTesting();
-      });
-
-  asyncTestCase.waitForAsync('testFailedRemove');
+  return downloader.remove('/foo/bar').then(function() {
+    fail('Should not be able to remove a missing file.');
+  }, function(err) {
+    assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
+  });
 }
 
 function testIsDownloading() {
   assertFalse(downloader.isDownloading('/foo/bar'));
-  downloader.download('/foo/bar').addCallback(function() {
+  var promise = downloader.download('/foo/bar').then(function() {
     assertFalse(downloader.isDownloading('/foo/bar'));
-    asyncTestCase.continueTesting();
   });
 
   assertTrue(downloader.isDownloading('/foo/bar'));
-
   xhr.simulateResponse(200, 'data');
-  asyncTestCase.waitForAsync('testIsDownloading');
+  return promise;
 }
 
 function testIsDownloadingWhenCancelled() {

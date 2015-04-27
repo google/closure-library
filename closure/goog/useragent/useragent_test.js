@@ -195,6 +195,8 @@ function testIe() {
       'Arcor 5.005; .NET CLR 1.0.3705; .NET CLR 1.1.4322)', '7.0');
   assertIe(
       'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko', '11.0');
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertIe(testAgents.IE_EDGE, '12.0');
 }
 
 function testIeDocumentModeOverride() {
@@ -214,6 +216,13 @@ function testDocumentModeInStandardsMode() {
   var expectedMode = goog.userAgent.IE ? parseInt(goog.userAgent.VERSION) :
                                          undefined;
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
+}
+
+function testDocumentModeEdge() {
+  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_EDGE);
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(11));
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(10));
 }
 
 function testOpera() {

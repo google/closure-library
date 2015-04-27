@@ -16,6 +16,7 @@ goog.provide('goog.editor.plugins.LinkShortcutPluginTest');
 goog.setTestOnly('goog.editor.plugins.LinkShortcutPluginTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.plugins.BasicTextFormatter');
 goog.require('goog.editor.plugins.LinkBubble');
@@ -57,7 +58,7 @@ function testShortcutCreatesALink() {
   goog.testing.events.fireKeySequence(
       field.getElement(), goog.events.KeyCodes.K, { ctrlKey: true });
 
-  var href = field.getElement().getElementsByTagName('A')[0];
+  var href = field.getElement().getElementsByTagName(goog.dom.TagName.A)[0];
   assertEquals('http://www.google.com/', href.href);
   var bubbleLink =
       document.getElementById(goog.editor.plugins.LinkBubble.TEST_LINK_ID_);

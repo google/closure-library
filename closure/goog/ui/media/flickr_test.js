@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.FlickrSetTest');
 goog.setTestOnly('goog.ui.media.FlickrSetTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
@@ -28,7 +29,7 @@ var FLICKR_USER = 'ingawalker';
 var FLICKR_SET = '72057594102831547';
 var FLICKRSET_URL =
     'http://flickr.com/photos/' + FLICKR_USER + '/sets/' + FLICKR_SET;
-var parent = goog.dom.createElement('div');
+var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   flickr = new goog.ui.media.FlickrSet();
@@ -44,7 +45,7 @@ function tearDown() {
 function testBasicRendering() {
   control.render(parent);
   var el = goog.dom.getElementsByTagNameAndClass(
-      'div', goog.ui.media.FlickrSet.CSS_CLASS, parent);
+      goog.dom.TagName.DIV, goog.ui.media.FlickrSet.CSS_CLASS, parent);
   assertEquals(1, el.length);
   assertEquals(FLICKRSET_URL, control.getDataModel().getUrl());
 }
@@ -89,13 +90,13 @@ function testSettingWhichFlashUrlToUse() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      'div',
+      goog.dom.TagName.DIV,
       goog.ui.media.FlickrSet.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
   var flash = goog.dom.getElementsByTagNameAndClass(
-      'div', goog.ui.media.FlashObject.CSS_CLASS, parent);
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }
 

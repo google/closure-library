@@ -21,6 +21,7 @@
 goog.provide('goog.html.SafeUrl');
 
 goog.require('goog.asserts');
+goog.require('goog.fs.url');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string.Const');
@@ -239,6 +240,33 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
 goog.html.SafeUrl.fromConstant = function(url) {
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       goog.string.Const.unwrap(url));
+};
+
+
+/**
+ * A pattern that matches Blob types that can have SafeUrls created from
+ * URL.createObjectURL(blob). Only matches image types, currently.
+ * @const
+ * @private
+ */
+goog.html.SAFE_BLOB_TYPE_PATTERN_ =
+    /^image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)$/i;
+
+
+/**
+ * Creates a SafeUrl wrapping a blob URL for the given {@code blob}. The
+ * blob URL is created with {@code URL.createObjectURL}. If the MIME type
+ * for {@code blob} is not of a known safe image MIME type, then the
+ * SafeUrl will wrap {@link #INNOCUOUS_STRING}.
+ * @see http://www.w3.org/TR/FileAPI/#url
+ * @param {!Blob} blob
+ * @return {!goog.html.SafeUrl} The blob URL, or an innocuous string wrapped
+ *   as a SafeUrl.
+ */
+goog.html.SafeUrl.fromBlob = function(blob) {
+  var url = goog.html.SAFE_BLOB_TYPE_PATTERN_.test(blob.type) ?
+      goog.fs.url.createObjectUrl(blob) : goog.html.SafeUrl.INNOCUOUS_STRING;
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 

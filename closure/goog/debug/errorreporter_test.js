@@ -15,6 +15,7 @@
 goog.provide('goog.debug.ErrorReporterTest');
 goog.setTestOnly('goog.debug.ErrorReporterTest');
 
+goog.require('goog.debug.Error');
 goog.require('goog.debug.ErrorReporter');
 goog.require('goog.events');
 goog.require('goog.functions');
@@ -293,6 +294,13 @@ function testHandleException_ignoresExceptionsDuringEventDispatch() {
         fail('This exception should be swallowed.');
       });
   errorReporter.handleException(new Error());
+}
+
+function testHandleException_doNotReportErrorToServer() {
+  var error = new goog.debug.Error();
+  error.reportErrorToServer = false;
+  errorReporter.handleException(error);
+  assertNull(MockXhrIo.lastUrl);
 }
 
 function testDisposal() {

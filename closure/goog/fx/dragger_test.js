@@ -16,6 +16,7 @@ goog.provide('goog.fx.DraggerTest');
 goog.setTestOnly('goog.fx.DraggerTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -35,25 +36,26 @@ var targetRtl;
 
 function setUp() {
   var sandbox = goog.dom.getElement('sandbox');
-  target = goog.dom.createDom('div', {
+  target = goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'target',
     'style': 'display:none;position:absolute;top:15px;left:10px'
   });
   sandbox.appendChild(target);
-  sandbox.appendChild(goog.dom.createDom('div', {'id': 'handle'}));
+  sandbox.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {id: 'handle'}));
 
   var sandboxRtl = goog.dom.getElement('sandbox_rtl');
-  targetRtl = goog.dom.createDom('div', {
+  targetRtl = goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'target_rtl',
     'style': 'position:absolute; top:15px; right:10px; width:10px; ' +
         'height: 10px; background: green;'
   });
   sandboxRtl.appendChild(targetRtl);
-  sandboxRtl.appendChild(goog.dom.createDom('div', {
+  sandboxRtl.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'background_rtl',
     'style': 'width: 10000px;height:50px;position:absolute;color:blue;'
   }));
-  sandboxRtl.appendChild(goog.dom.createDom('div', {'id': 'handle_rtl'}));
+  sandboxRtl.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
+                                            {id: 'handle_rtl'}));
 }
 
 function tearDown() {
@@ -342,7 +344,7 @@ function testOnWindowMouseOut() {
 
     dragCanceled = false;
     delete e.relatedTarget;
-    e.target = goog.dom.createDom('iframe');
+    e.target = goog.dom.createDom(goog.dom.TagName.IFRAME);
     dragger.onWindowMouseOut_(e);
     assertFalse('Drag is not canceled for mousing into iframe.',
         dragCanceled);
@@ -442,7 +444,7 @@ function testBlur() {
 }
 
 function testCloneNode() {
-  var element = goog.dom.createDom('div');
+  var element = goog.dom.createDom(goog.dom.TagName.DIV);
   element.innerHTML =
       '<input type="hidden" value="v0">' +
       '<textarea>v1</textarea>' +

@@ -25,6 +25,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 
@@ -87,7 +88,8 @@ goog.dom.annotate.MAX_RECURSION_ = 200;
  * The node types whose descendants should not be affected by annotation.
  * @private {Array<string>}
  */
-goog.dom.annotate.NODES_TO_SKIP_ = ['SCRIPT', 'STYLE', 'TEXTAREA'];
+goog.dom.annotate.NODES_TO_SKIP_ = [
+  goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE, goog.dom.TagName.TEXTAREA];
 
 
 /**
@@ -128,7 +130,8 @@ goog.dom.annotate.annotateTermsInNode_ =
       // a temporary node, to get its DOM structure. To avoid adding a wrapper
       // element as a side effect, we'll only actually use the temporary node's
       // children.
-      var tempNode = goog.dom.getOwnerDocument(node).createElement('SPAN');
+      var tempNode = goog.dom.getOwnerDocument(node).createElement(
+          goog.dom.TagName.SPAN);
       goog.dom.safe.setInnerHtml(tempNode, html);
 
       var parentNode = node.parentNode;
