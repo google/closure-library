@@ -60,7 +60,7 @@ global.goog = {};
 global.CLOSURE_IMPORT_SCRIPT = function(src) {
   // Sources are always expressed relative to closure's base.js, but
   // require() is always relative to the current source.
-  require('./../' + src);
+  require(path.resolve(__dirname + '/../', src));
   return true;
 };
 
