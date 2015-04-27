@@ -29,6 +29,8 @@ goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DatePicker');
+/** @suppress {extraRequire} */
+goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.PopupDatePicker');
 
