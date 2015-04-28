@@ -569,7 +569,6 @@ goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
 
 /**
  * Handles a KEYDOWN browser event on one of the popup targets.
- * @param {goog.events.BrowserEvent} e The browser event.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
  */
@@ -589,7 +588,6 @@ goog.ui.PopupMenu.prototype.onTargetKeyboardAction_ = function(e) {
 
 /**
  * Handles a browser event on one of the popup targets.
- * @param {goog.events.BrowserEvent} e The browser event.
  * @param {?goog.events.BrowserEvent} e The browser event.
  * @private
  */
