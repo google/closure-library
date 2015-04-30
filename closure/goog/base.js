@@ -422,6 +422,8 @@ goog.isInModuleLoader_ = function() {
  * that this isn't necessary. Alternately combine this with goog.setTestOnly
  * to minimize boiler plate.
  * @suppress {missingProvide}
+ * @deprecated This approach does not translate to ES6 module syntax, instead
+ *    use goog.testing.testSuite to declare the test methods.
  */
 goog.module.declareTestMethods = function() {
   if (!goog.isInModuleLoader_()) {
