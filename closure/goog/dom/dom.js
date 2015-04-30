@@ -2125,6 +2125,7 @@ goog.dom.getAncestor = function(
   var ignoreSearchSteps = opt_maxSearchSteps == null;
   var steps = 0;
   while (element && (ignoreSearchSteps || steps <= opt_maxSearchSteps)) {
+    goog.asserts.assert(element.name != 'parentNode');
     if (matcher(element)) {
       return element;
     }
