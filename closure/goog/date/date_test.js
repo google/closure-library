@@ -242,6 +242,8 @@ function testGetWeekNumber() {
                f(2007, goog.date.month.JAN, 1, goog.date.weekDay.MON));
   assertEquals('2007-01-01 is in week 1 (cutoff=Sunday)', 1,
                f(2007, goog.date.month.JAN, 1, goog.date.weekDay.SUN));
+  assertEquals('2015-01-01 is in week 52 of the previous year (cutoff=Monday)', 52,
+               f(2015, goog.date.month.JAN, 1, goog.date.weekDay.MON));
 
   // Tests for leap year 2000.
   assertEquals('2000-02-27 is in week 8', 8,
