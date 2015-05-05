@@ -22,9 +22,6 @@
 goog.provide('goog.ui.Popup');
 
 goog.require('goog.math.Box');
-/** @suppress {extraRequire} */
-goog.require('goog.positioning.AbstractPosition');
-goog.require('goog.positioning.ClientPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.style');
 goog.require('goog.ui.PopupBase');

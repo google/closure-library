@@ -77,14 +77,14 @@ goog.tagUnsealableClass(goog.fx.Dragger);
 
 /**
  * Whether setCapture is supported by the browser.
- * @type {boolean}
- * @private
+ * @private {boolean}
+ * @const
  */
 goog.fx.Dragger.HAS_SET_CAPTURE_ =
-    // IE and Gecko after 1.9.3 has setCapture
+    // IE (up to and including IE 11) and Gecko after 1.9.3 have setCapture
     // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
-    goog.userAgent.IE ||
-    goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.3');
+    (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('12')) ||
+    (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.3'));
 
 
 /**
@@ -252,6 +252,13 @@ goog.fx.Dragger.prototype.dragging_ = false;
 
 
 /**
+ * Whether mousedown should be default prevented.
+ * @private {boolean}
+ */
+goog.fx.Dragger.prototype.preventMouseDown_ = true;
+
+
+/**
  * The amount of distance, in pixels, after which a mousedown or touchstart is
  * considered a drag.
  * @type {number}
@@ -403,6 +410,16 @@ goog.fx.Dragger.prototype.setEnabled = function(enabled) {
 };
 
 
+/**
+ * Set whether mousedown should be default prevented.
+ * @param {boolean} preventMouseDown Whether mousedown should be default
+ *     prevented.
+ */
+goog.fx.Dragger.prototype.setPreventMouseDown = function(preventMouseDown) {
+  this.preventMouseDown_ = preventMouseDown;
+};
+
+
 /** @override */
 goog.fx.Dragger.prototype.disposeInternal = function() {
   goog.fx.Dragger.superClass_.disposeInternal.call(this);
@@ -444,15 +461,18 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 
   if (this.enabled_ && !this.dragging_ &&
       (!isMouseDown || e.isMouseActionButton())) {
+    this.maybeReinitTouchEvent_(e);
     if (this.hysteresisDistanceSquared_ == 0) {
       if (this.fireDragStart_(e)) {
         this.dragging_ = true;
-        e.preventDefault();
+        if (this.preventMouseDown_) {
+          e.preventDefault();
+        }
       } else {
         // If the start drag is cancelled, don't setup for a drag.
         return;
       }
-    } else {
+    } else if (this.preventMouseDown_) {
       // Need to preventDefault for hysteresis to prevent page getting selected.
       e.preventDefault();
     }
@@ -552,6 +572,7 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   this.cleanUpAfterDragging_();
 
   if (this.dragging_) {
+    this.maybeReinitTouchEvent_(e);
     this.dragging_ = false;
 
     var x = this.limitX(this.deltaX);
@@ -577,12 +598,32 @@ goog.fx.Dragger.prototype.endDragCancel = function(e) {
 
 
 /**
+ * Re-initializes the event with the first target touch event or, in the case
+ * of a stop event, the last changed touch.
+ * @param {goog.events.BrowserEvent} e A TOUCH... event.
+ * @private
+ */
+goog.fx.Dragger.prototype.maybeReinitTouchEvent_ = function(e) {
+  var type = e.type;
+
+  if (type == goog.events.EventType.TOUCHSTART ||
+      type == goog.events.EventType.TOUCHMOVE) {
+    e.init(e.getBrowserEvent().targetTouches[0], e.currentTarget);
+  } else if (type == goog.events.EventType.TOUCHEND ||
+             type == goog.events.EventType.TOUCHCANCEL) {
+    e.init(e.getBrowserEvent().changedTouches[0], e.currentTarget);
+  }
+};
+
+
+/**
  * Event handler that is used on mouse / touch move to update the drag
  * @param {goog.events.BrowserEvent} e Event object.
  * @private
  */
 goog.fx.Dragger.prototype.handleMove_ = function(e) {
   if (this.enabled_) {
+    this.maybeReinitTouchEvent_(e);
     // dx in right-to-left cases is relative to the right.
     var sign = this.useRightPositioningForRtl_ &&
         this.isRightToLeft_() ? -1 : 1;

@@ -246,7 +246,7 @@ goog.string.linkify.FIND_LINKS_RE_ = new RegExp(
     '([\\S\\s]*?)(' +
     // Match email after a word break.
     '\\b' + goog.string.linkify.EMAIL_ + '|' +
-    // Match url after a workd break.
+    // Match url after a word break.
     '\\b' + goog.string.linkify.URL_ + '|$)',
     'gi');
 

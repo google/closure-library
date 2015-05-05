@@ -219,6 +219,19 @@ function testOpenBlank() {
   });
 }
 
+
+function testOpenBlankReturnsNullPopupBlocker() {
+  var mockWin = {
+    // emulate popup-blocker by returning a null window on open().
+    open: function() {
+      return null;
+    }
+  };
+  var win = goog.window.openBlank('', {noreferrer: true}, mockWin);
+  assertNull(win);
+}
+
+
 function testOpenIosBlank() {
   if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
     // Don't even try this on IE8!
@@ -298,7 +311,6 @@ function testOpenIosBlankNoreferrer() {
   // Attributes.
   assertEquals('http://google.com', attrs['href']);
   assertEquals('_blank', attrs['target']);
-  assertEquals('', attrs['rel'] || '');
   assertEquals('noreferrer', attrs['rel']);
 
   // Click event.
@@ -306,49 +318,6 @@ function testOpenIosBlankNoreferrer() {
   assertEquals('click', dispatchedEvent.type);
 }
 
-
-function testOpenIosBlankNoreferrer() {
-  if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
-    // Don't even try this on IE8!
-    return;
-  }
-  var attrs = {};
-  var dispatchedEvent = null;
-  var element = {
-    setAttribute: function(name, value) {
-      attrs[name] = value;
-    },
-    dispatchEvent: function(event) {
-      dispatchedEvent = event;
-    }
-  };
-  stubs.replace(window.document, 'createElement', function(name) {
-    if (name == goog.dom.TagName.A) {
-      return element;
-    }
-    return null;
-  });
-  stubs.set(window.navigator, 'standalone', true);
-  stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
-
-  var newWin = goog.window.open('http://google.com', {
-    target: '_blank',
-    noreferrer: true
-  });
-
-  // This mode cannot return a new window.
-  assertNotNull(newWin);
-  assertUndefined(newWin.document);
-
-  // Attributes.
-  assertEquals('http://google.com', attrs['href']);
-  assertEquals('_blank', attrs['target']);
-  assertEquals('noreferrer', attrs['rel']);
-
-  // Click event.
-  assertNotNull(dispatchedEvent);
-  assertEquals('click', dispatchedEvent.type);
-}
 
 function testOpenNoReferrerEscapesUrl() {
   var documentWriteHtml;

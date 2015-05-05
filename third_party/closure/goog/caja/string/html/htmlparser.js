@@ -211,7 +211,7 @@ goog.string.html.HtmlParser.Elements = {
 /**
  * Regular expression that matches &s.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.AMP_RE_ = /&/g;
 
@@ -219,7 +219,7 @@ goog.string.html.HtmlParser.AMP_RE_ = /&/g;
 /**
  * Regular expression that matches loose &s.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
     /&([^a-z#]|#(?:[^0-9x]|x(?:[^0-9a-f]|$)|$)|$)/gi;
@@ -228,7 +228,7 @@ goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
 /**
  * Regular expression that matches <.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.LT_RE_ = /</g;
 
@@ -236,7 +236,7 @@ goog.string.html.HtmlParser.LT_RE_ = /</g;
 /**
  * Regular expression that matches >.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.GT_RE_ = />/g;
 
@@ -244,7 +244,7 @@ goog.string.html.HtmlParser.GT_RE_ = />/g;
 /**
  * Regular expression that matches ".
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
 
@@ -252,7 +252,7 @@ goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
 /**
  * Regular expression that matches =.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
 
@@ -260,7 +260,7 @@ goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
 /**
  * Regular expression that matches null characters.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.NULL_RE_ = /\0/g;
 
@@ -268,7 +268,7 @@ goog.string.html.HtmlParser.NULL_RE_ = /\0/g;
 /**
  * Regular expression that matches entities.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.ENTITY_RE_ = /&(#\d+|#x[0-9A-Fa-f]+|\w+);/g;
 
@@ -276,7 +276,7 @@ goog.string.html.HtmlParser.ENTITY_RE_ = /&(#\d+|#x[0-9A-Fa-f]+|\w+);/g;
 /**
  * Regular expression that matches decimal numbers.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.DECIMAL_ESCAPE_RE_ = /^#(\d+)$/;
 
@@ -284,7 +284,7 @@ goog.string.html.HtmlParser.DECIMAL_ESCAPE_RE_ = /^#(\d+)$/;
 /**
  * Regular expression that matches hexadecimal numbers.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.HEX_ESCAPE_RE_ = /^#x([0-9A-Fa-f]+)$/;
 
@@ -292,7 +292,7 @@ goog.string.html.HtmlParser.HEX_ESCAPE_RE_ = /^#x([0-9A-Fa-f]+)$/;
 /**
  * Regular expression that matches the next token to be processed.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
     // Don't capture space.
@@ -334,7 +334,7 @@ goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
  * Regular expression that matches the next token to be processed when we are
  * outside a tag.
  * @type {RegExp}
- * @package
+ * @private
  */
 goog.string.html.HtmlParser.OUTSIDE_TAG_TOKEN_ = new RegExp(
     '^(?:' +

@@ -17,7 +17,6 @@ goog.setTestOnly('goog.events.BrowserEventTest');
 
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
-goog.require('goog.math.Coordinate');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -69,19 +68,19 @@ function testDefaultPrevented() {
 function testIsButtonIe() {
   stubs.set(goog.events.BrowserFeature, 'HAS_W3C_BUTTON', false);
   assertIsButton(
-      createMouseEvent('mousedown', 1),
+      createBrowserEvent('mousedown', 1),
       Button.LEFT,
       true);
   assertIsButton(
-      createMouseEvent('click', 0),
+      createBrowserEvent('click', 0),
       Button.LEFT,
       true);
   assertIsButton(
-      createMouseEvent('mousedown', 2),
+      createBrowserEvent('mousedown', 2),
       Button.RIGHT,
       false);
   assertIsButton(
-      createMouseEvent('mousedown', 4),
+      createBrowserEvent('mousedown', 4),
       Button.MIDDLE,
       false);
 }
@@ -91,27 +90,27 @@ function testIsButtonWebkitMac() {
   stubs.set(goog.userAgent, 'WEBKIT', true);
   stubs.set(goog.userAgent, 'MAC', true);
   assertIsButton(
-      createMouseEvent('mousedown', 0),
+      createBrowserEvent('mousedown', 0),
       Button.LEFT,
       true);
   assertIsButton(
-      createMouseEvent('mousedown', 0, true),
+      createBrowserEvent('mousedown', 0, true),
       Button.LEFT,
       false);
   assertIsButton(
-      createMouseEvent('mousedown', 2),
+      createBrowserEvent('mousedown', 2),
       Button.RIGHT,
       false);
   assertIsButton(
-      createMouseEvent('mousedown', 2, true),
+      createBrowserEvent('mousedown', 2, true),
       Button.RIGHT,
       false);
   assertIsButton(
-      createMouseEvent('mousedown', 1),
+      createBrowserEvent('mousedown', 1),
       Button.MIDDLE,
       false);
   assertIsButton(
-      createMouseEvent('mousedown', 1, true),
+      createBrowserEvent('mousedown', 1, true),
       Button.MIDDLE,
       false);
 }
@@ -121,41 +120,13 @@ function testIsButtonGecko() {
   stubs.set(goog.userAgent, 'GECKO', true);
   stubs.set(goog.userAgent, 'MAC', true);
   assertIsButton(
-      createMouseEvent('mousedown', 0),
+      createBrowserEvent('mousedown', 0),
       Button.LEFT,
       true);
   assertIsButton(
-      createMouseEvent('mousedown', 2, true),
+      createBrowserEvent('mousedown', 2, true),
       Button.RIGHT,
       false);
-}
-
-function testTouchEventHandling() {
-  var clientCoords = new goog.math.Coordinate(5, 5);
-  var screenCoords = new goog.math.Coordinate(10, 10);
-  var target = document.body;
-  var touchStart = createTargetTouchEvent('touchstart', target, clientCoords,
-    screenCoords);
-  var touchMove = createTargetTouchEvent('touchmove', target, clientCoords,
-    screenCoords);
-  var touchEnd = createChangedTouchEvent('touchend', target, clientCoords,
-    screenCoords);
-  var touchCancel = createChangedTouchEvent('touchcancel', target,
-    clientCoords, screenCoords);
-
-  assertEquals(clientCoords.x, touchStart.clientX);
-  assertEquals(clientCoords.y, touchStart.clientY);
-  assertEquals(target, touchStart.target);
-
-  assertEquals(screenCoords.x, touchMove.screenX);
-  assertEquals(screenCoords.y, touchMove.screenY);
-
-  assertEquals(clientCoords.x, touchEnd.clientX);
-  assertEquals(clientCoords.y, touchEnd.clientY);
-
-  assertEquals(screenCoords.x, touchCancel.screenX);
-  assertEquals(screenCoords.y, touchCancel.screenY);
-  assertEquals(target, touchCancel.target);
 }
 
 function createBrowserEvent(type, button, opt_ctrlKey) {
@@ -163,32 +134,6 @@ function createBrowserEvent(type, button, opt_ctrlKey) {
     type: type,
     button: button,
     ctrlKey: !!opt_ctrlKey
-  });
-}
-
-function createTargetTouchEvent(type, target, clientCoords, screenCoords) {
-  return new goog.events.BrowserEvent({
-    type: type,
-    targetTouches: [{
-      target: target,
-      clientX: clientCoords.x,
-      clientY: clientCoords.y,
-      screenX: screenCoords.x,
-      screenY: screenCoords.y
-    }]
-  });
-}
-
-function createChangedTouchEvent(type, target, clientCoords, screenCoords) {
-  return new goog.events.BrowserEvent({
-    type: type,
-    changedTouches: [{
-      target: target,
-      clientX: clientCoords.x,
-      clientY: clientCoords.y,
-      screenX: screenCoords.x,
-      screenY: screenCoords.y
-    }]
   });
 }
 
