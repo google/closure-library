@@ -231,12 +231,11 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   if (!opt_message) {
     opt_message = '';
   }
-
+  var win = goog.window.open('', opt_options, opt_parentWin);
   if (win) {
     goog.dom.safe.documentWrite(
         win.document, goog.html.SafeHtml.htmlEscape(opt_message));
   }
-
   return win;
 };
 

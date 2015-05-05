@@ -223,19 +223,8 @@ goog.events.BrowserEvent.IEButtonMap = [
 goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   var type = this.type = e.type;
 
-  /** @type {Touch} */
-  var relevantTouch = null;
-  if (type == goog.events.EventType.TOUCHSTART ||
-      type == goog.events.EventType.TOUCHMOVE) {
-    relevantTouch = e.targetTouches[0];
-  } else if (type == goog.events.EventType.TOUCHEND ||
-             type == goog.events.EventType.TOUCHCANCEL) {
-    relevantTouch = e.changedTouches[0];
-  }
-
   // TODO(nicksantos): Change this.target to type EventTarget.
-  this.target = goog.isNull(relevantTouch) ?
-      /** @type {Node} */ (e.target) || e.srcElement : relevantTouch.target;
+  this.target = /** @type {Node} */ (e.target) || e.srcElement;
 
   // TODO(nicksantos): Change this.currentTarget to type EventTarget.
   this.currentTarget = /** @type {Node} */ (opt_currentTarget);
@@ -267,6 +256,11 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
       e.offsetX : e.layerX;
   this.offsetY = (goog.userAgent.WEBKIT || e.offsetY !== undefined) ?
       e.offsetY : e.layerY;
+
+  this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
+  this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
+  this.screenX = e.screenX || 0;
+  this.screenY = e.screenY || 0;
 
   this.button = e.button;
 

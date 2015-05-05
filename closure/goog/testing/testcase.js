@@ -1500,10 +1500,25 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
   this.message = message;
 
   /**
-   * Scope that the test function should be called in.
+   * The stack.
    * @type {?string}
    */
-  this.stack = opt_stack || null;
+  this.stack = null;
+
+  if (opt_stack) {
+    this.stack = opt_stack;
+  } else {
+    // Attempt to capture a stack trace.
+    if (Error.captureStackTrace) {
+      // See https://code.google.com/p/v8-wiki/wiki/JavaScriptStackTraceApi
+      Error.captureStackTrace(this, goog.testing.TestCase.Error);
+    } else {
+      var stack = new Error().stack;
+      if (stack) {
+        this.stack = stack;
+      }
+    }
+  }
 };
 
 

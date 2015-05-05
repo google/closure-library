@@ -307,6 +307,25 @@ function testIeDragStartCancelling() {
 }
 
 
+function testPreventMouseDown() {
+  var dragger = new goog.fx.Dragger(target);
+  dragger.setPreventMouseDown(false);
+
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.MOUSEDOWN;
+  e.clientX = 1;
+  e.clientY = 2;
+  e.isMouseActionButton().$returns(true);
+  // preventDefault is not called.
+  e.$replay();
+
+  dragger.startDrag(e);
+
+  assertTrue('Dragging should be in progess.', dragger.isDragging());
+  e.$verify();
+}
+
+
 /** @bug 1680770 */
 function testOnWindowMouseOut() {
   // Test older Gecko browsers - FireFox 2.

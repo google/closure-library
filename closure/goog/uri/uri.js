@@ -910,7 +910,11 @@ goog.Uri.decodeOrEmpty_ = function(val, opt_preserveReserved) {
     return '';
   }
 
-  return opt_preserveReserved ? decodeURI(val) : decodeURIComponent(val);
+  // decodeURI has the same output for '%2f' and '%252f'. We double encode %25
+  // so that we can distinguish between the 2 inputs. This is later undone by
+  // removeDoubleEncoding_.
+  return opt_preserveReserved ?
+      decodeURI(val.replace(/%25/g, '%2525')) : decodeURIComponent(val);
 };
 
 

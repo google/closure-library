@@ -297,22 +297,6 @@ goog.Promise.freelist_ = new goog.async.FreeList(
  * @param {Function} onRejected
  * @param {?} context
  * @return {!goog.Promise.CallbackEntry_}
-<<<<<<< HEAD
- * @private
- */
-goog.Promise.getCallbackEntry_ = function(onFulfilled, onRejected, context) {
-  var entry = goog.Promise.freelist_.get();
-  entry.onFulfilled = onFulfilled;
-  entry.onRejected = onRejected;
-  entry.context = context;
-  return entry;
-};
-
-
-/**
- * @param {!goog.Promise.CallbackEntry_} entry
- * @private
- */
  * @private
  */
 goog.Promise.getCallbackEntry_ = function(onFulfilled, onRejected, context) {
@@ -1146,7 +1130,6 @@ goog.Promise.invokeCallback_ = function(callbackEntry, state, result) {
   } else if (callbackEntry.onRejected) {
     callbackEntry.onRejected.call(callbackEntry.context, result);
   }
-  goog.Promise.returnEntry_(callbackEntry);
 };
 
 

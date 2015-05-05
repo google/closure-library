@@ -1316,7 +1316,7 @@ function testGoogRequireCheck() {
   delete far;
 }
 
-function testCspSafeGoogRequire() {
+function diables_testCspSafeGoogRequire() {
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
     return;
   }
@@ -1447,6 +1447,22 @@ function testGoogModuleGet() {
   // Validate that the module exports object has not changed
   assertEquals(earlyTestModuleGet, testModuleExports);
 }
+
+
+function testLoadFileSync() {
+  var fileContents = goog.loadFileSync_('deps.js');
+  assertTrue('goog.loadFileSync_ returns string',
+      typeof fileContents === 'string');
+  assertTrue('goog.loadFileSync_ string length > 0', fileContents.length > 0);
+
+  stubs.set(goog.global, 'CLOSURE_LOAD_FILE_SYNC', function(src) {
+    return 'closure load file sync: ' + src;
+  });
+
+  assertEquals('goog.CLOSURE_LOAD_FILE_SYNC override',
+      goog.loadFileSync_('test url'), 'closure load file sync: test url');
+}
+
 
 function testNormalizePath() {
   assertEquals('foo/path.js', goog.normalizePath_('./foo/./path.js'));

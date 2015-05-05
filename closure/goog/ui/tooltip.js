@@ -31,6 +31,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.events.FocusHandler');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -85,6 +86,12 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
    * @private
    */
   this.elements_ = new goog.structs.Set();
+
+  /**
+   * Keyboard focus event handler for elements inside the tooltip.
+   * @private {goog.events.FocusHandler}
+   */
+  this.tooltipFocusHandler_ = null;
 
   // Attach to element, if specified
   if (opt_el) {
@@ -409,6 +416,26 @@ goog.ui.Tooltip.prototype.setElement = function(el) {
     var body = this.dom_.getDocument().body;
     body.insertBefore(el, body.lastChild);
   }
+  this.registerContentFocusEvents_();
+};
+
+
+/**
+ * Handler for keyboard focus events of elements inside the tooltip's content
+ * element.
+ * @private
+ */
+goog.ui.Tooltip.prototype.registerContentFocusEvents_ = function() {
+  goog.dispose(this.tooltipFocusHandler_);
+  this.tooltipFocusHandler_ = new goog.events.FocusHandler(this.getElement());
+  this.registerDisposable(this.tooltipFocusHandler_);
+
+  goog.events.listen(this.tooltipFocusHandler_,
+      goog.events.FocusHandler.EventType.FOCUSIN,
+      this.clearHideTimer, undefined /* opt_capt */, this);
+  goog.events.listen(this.tooltipFocusHandler_,
+      goog.events.FocusHandler.EventType.FOCUSOUT,
+      this.startHideTimer, undefined /* opt_capt */, this);
 };
 
 
@@ -641,9 +668,14 @@ goog.ui.Tooltip.prototype.positionAndShow_ = function(el, opt_pos) {
 goog.ui.Tooltip.prototype.maybeHide = function(el) {
   this.hideTimer = undefined;
   if (el == this.anchor) {
+    var dom = this.getDomHelper();
+    var focusedEl = dom.getActiveElement();
+    // If the tooltip content is focused, then don't hide the tooltip.
+    var tooltipContentFocused =
+        focusedEl && dom.contains(this.getElement(), focusedEl);
     if ((this.activeEl_ == null || (this.activeEl_ != this.getElement() &&
         !this.elements_.contains(this.activeEl_))) &&
-        !this.hasActiveChild()) {
+        !tooltipContentFocused && !this.hasActiveChild()) {
       this.setVisible(false);
     }
   }
