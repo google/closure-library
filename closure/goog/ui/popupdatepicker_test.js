@@ -15,6 +15,7 @@
 goog.provide('goog.ui.PopupDatePickerTest');
 goog.setTestOnly('goog.ui.PopupDatePickerTest');
 
+goog.require('goog.date.Date');
 goog.require('goog.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -64,4 +65,26 @@ function testFiresShowAndHideEvents() {
   popupDatePicker.hidePopup();
   assertEquals(0, showHandler.getCallCount());
   assertEquals(1, hideHandler.getCallCount());
+}
+
+function testShow() {
+  popupDatePicker.createDom();
+  popupDatePicker.render();
+  var datePicker = popupDatePicker.getDatePicker();
+  var date = new goog.date.Date();
+
+  // Date should be overwritten when opt_keepDate not specified.
+  datePicker.setDate(date);
+  popupDatePicker.showPopup(document.body, undefined /* opt_keepDate */);
+  assertNull(datePicker.getDate());
+
+  // Date should be overwritten when opt_keepDate is false.
+  datePicker.setDate(date);
+  popupDatePicker.showPopup(document.body, false /* opt_keepDate */);
+  assertNull(datePicker.getDate());
+
+  // Date should be preserved when opt_keepDate is true.
+  datePicker.setDate(date);
+  popupDatePicker.showPopup(document.body, true /* opt_keepDate */);
+  assertTrue(date.equals(datePicker.getDate()));
 }
