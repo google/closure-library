@@ -1950,12 +1950,22 @@ goog.style.toStyleAttribute = function(obj) {
 
 
 /**
+ * JavaScript name of the "float" css property.
+ * @private {string}
+ * @const
+ */
+goog.style.FLOAT_CSS_PROPERTY_NAME_ =
+    goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(12) ?
+        'styleFloat' : 'cssFloat';
+
+
+/**
  * Sets CSS float property on an element.
  * @param {Element} el The element to set float property on.
  * @param {string} value The value of float CSS property to set on this element.
  */
 goog.style.setFloat = function(el, value) {
-  el.style[goog.userAgent.IE ? 'styleFloat' : 'cssFloat'] = value;
+  el.style[goog.style.FLOAT_CSS_PROPERTY_NAME_] = value;
 };
 
 
@@ -1966,7 +1976,7 @@ goog.style.setFloat = function(el, value) {
  *     element.
  */
 goog.style.getFloat = function(el) {
-  return el.style[goog.userAgent.IE ? 'styleFloat' : 'cssFloat'] || '';
+  return el.style[goog.style.FLOAT_CSS_PROPERTY_NAME_] || '';
 };
 
 

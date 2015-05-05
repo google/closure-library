@@ -23,6 +23,7 @@ goog.provide('goog.baseTest');
 
 goog.setTestOnly('goog.baseTest');
 
+goog.require('goog.Promise');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
 goog.require('goog.dom.TagName');
@@ -1313,6 +1314,32 @@ function testGoogRequireCheck() {
 
   stubs.reset();
   delete far;
+}
+
+function testCspSafeGoogRequire() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    return;
+  }
+
+  stubs.set(goog, 'ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', true);
+
+  // Aliased so that build tools do not mistake this for an actual call.
+  var require = goog.require;
+
+  require('goog.Uri');
+
+  // Set a timeout to allow the user agent to finish parsing this script block,
+  // thus allowing the appended script (via goog.require) to execute.
+  var ASYNC_TIMEOUT_MS = 1000;
+
+  var resolver = goog.Promise.withResolver();
+  window.setTimeout(function() {
+    assertNotUndefined(goog.Uri);
+    resolver.resolve();
+    stubs.reset();
+  }, ASYNC_TIMEOUT_MS);
+
+  return resolver.promise;
 }
 
 function testLateRequireProtection() {

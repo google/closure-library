@@ -428,7 +428,7 @@ goog.History.prototype.lastToken_ = null;
  */
 goog.History.isOnHashChangeSupported = goog.memoize(function() {
   return goog.userAgent.IE ?
-      document.documentMode >= 8 :
+      goog.userAgent.isDocumentModeOrHigher(8) :
       'onhashchange' in goog.global;
 });
 

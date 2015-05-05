@@ -297,6 +297,22 @@ goog.Promise.freelist_ = new goog.async.FreeList(
  * @param {Function} onRejected
  * @param {?} context
  * @return {!goog.Promise.CallbackEntry_}
+<<<<<<< HEAD
+ * @private
+ */
+goog.Promise.getCallbackEntry_ = function(onFulfilled, onRejected, context) {
+  var entry = goog.Promise.freelist_.get();
+  entry.onFulfilled = onFulfilled;
+  entry.onRejected = onRejected;
+  entry.context = context;
+  return entry;
+};
+
+
+/**
+ * @param {!goog.Promise.CallbackEntry_} entry
+ * @private
+ */
  * @private
  */
 goog.Promise.getCallbackEntry_ = function(onFulfilled, onRejected, context) {
@@ -641,16 +657,7 @@ goog.Promise.prototype.thenAlways = function(onSettled, opt_context) {
     this.addStackTrace_(new Error('thenAlways'));
   }
 
-  var callback = function() {
-    try {
-      // Ensure that no arguments are passed to onSettled.
-      onSettled.call(opt_context);
-    } catch (err) {
-      goog.Promise.handleRejection_.call(null, err);
-    }
-  };
-
-  var entry = goog.Promise.getCallbackEntry_(callback, callback, null);
+  var entry = goog.Promise.getCallbackEntry_(onSettled, onSettled, opt_context);
   entry.always = true;
   this.addCallbackEntry_(entry);
   return this;
@@ -1099,17 +1106,44 @@ goog.Promise.prototype.executeCallbacks_ = function() {
  */
 goog.Promise.prototype.executeCallback_ = function(
     callbackEntry, state, result) {
-  // When the parent is resolved/rejected, the child no longer needs to hold
-  // on to it, as the parent can no longer be cancelled.
-  if (callbackEntry.child) {
-    callbackEntry.child.parent_ = null;
+  // Cancel an unhandled rejection if the then/thenVoid call had an onRejected.
+  if (state == goog.Promise.State_.REJECTED &&
+      callbackEntry.onRejected && !callbackEntry.always) {
+    this.removeUnhandledRejection_();
   }
+
+  if (callbackEntry.child) {
+    // When the parent is settled, the child no longer needs to hold on to it,
+    // as the parent can no longer be canceled.
+    callbackEntry.child.parent_ = null;
+    goog.Promise.invokeCallback_(callbackEntry, state, result);
+  } else {
+    // Callbacks created with thenAlways or thenVoid do not have the rejection
+    // handling code normally set up in the child Promise.
+    try {
+      callbackEntry.always ?
+          callbackEntry.onFulfilled.call(callbackEntry.context) :
+          goog.Promise.invokeCallback_(callbackEntry, state, result);
+    } catch (err) {
+      goog.Promise.handleRejection_.call(null, err);
+    }
+  }
+  goog.Promise.returnEntry_(callbackEntry);
+};
+
+
+/**
+ * Executes the onFulfilled or onRejected callback for a callbackEntry.
+ *
+ * @param {!goog.Promise.CallbackEntry_} callbackEntry
+ * @param {goog.Promise.State_} state
+ * @param {*} result
+ * @private
+ */
+goog.Promise.invokeCallback_ = function(callbackEntry, state, result) {
   if (state == goog.Promise.State_.FULFILLED) {
     callbackEntry.onFulfilled.call(callbackEntry.context, result);
-  } else if (callbackEntry.onRejected != null) {
-    if (!callbackEntry.always) {
-      this.removeUnhandledRejection_();
-    }
+  } else if (callbackEntry.onRejected) {
     callbackEntry.onRejected.call(callbackEntry.context, result);
   }
   goog.Promise.returnEntry_(callbackEntry);
