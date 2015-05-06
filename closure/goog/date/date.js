@@ -765,10 +765,14 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
     this.maybeFixDst_(opt_year.getDate());
   } else {
     this.date = new Date(goog.now());
+
+    var expectedDate = this.date.getDate();
+
     this.date.setHours(0);
     this.date.setMinutes(0);
     this.date.setSeconds(0);
     this.date.setMilliseconds(0);
+    this.maybeFixDst_(expectedDate);
   }
 };
 
