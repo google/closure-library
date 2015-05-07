@@ -159,8 +159,6 @@ goog.testing.MockClock.prototype.timeoutDelay_ = 0;
  */
 goog.testing.MockClock.prototype.install = function() {
   if (!this.replacer_) {
-    var realSetTimeout = goog.global.setTimeout;
-
     var r = this.replacer_ = new goog.testing.PropertyReplacer();
     r.set(goog.global, 'setTimeout', goog.bind(this.setTimeout_, this));
     r.set(goog.global, 'setInterval', goog.bind(this.setInterval_, this));
@@ -173,8 +171,7 @@ goog.testing.MockClock.prototype.install = function() {
     // default to setImmediate, which is replaced above. Note that we test for
     // the presence of goog.async.run.forceNextTick to be resilient to the case
     // where tests replace goog.async.run directly.
-    goog.async.run.forceNextTick && goog.async.run.forceNextTick(
-        realSetTimeout);
+    goog.async.run.forceNextTick && goog.async.run.forceNextTick();
 
     // Replace the requestAnimationFrame functions.
     this.replaceRequestAnimationFrame_();
