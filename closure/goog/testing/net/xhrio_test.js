@@ -306,6 +306,7 @@ function testAbort_PendingSentRequest() {
       .$does(function(e) {
         assertTrue(e.type == goog.net.EventType.COMPLETE);
         assertObjectEquals(e.target, xhr);
+        assertEquals(e.target.getStatus(), -1);
         assertEquals(e.target.getLastErrorCode(), goog.net.ErrorCode.ABORT);
         assertTrue(e.target.isActive());
       });
