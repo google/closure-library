@@ -36,7 +36,7 @@ goog.require('goog.events');
  * object store. They can only be created when setting the version of the
  * database. Should not be created directly, access object stores through
  * transactions.
- * @see goog.db.IndexedDb#setVersion
+ * @see goog.db.UpgradeNeededCallback
  * @see goog.db.Transaction#objectStore
  *
  * @param {!IDBObjectStore} store The backing IndexedDb object.
@@ -313,8 +313,8 @@ goog.db.ObjectStore.prototype.clear = function() {
 
 
 /**
- * Creates an index in this object store. Can only be called inside the callback
- * for the Deferred returned from goog.db.IndexedDb#setVersion.
+ * Creates an index in this object store. Can only be called inside a
+ * {@link goog.db.UpgradeNeededCallback}.
  *
  * @param {string} name Name of the index to create.
  * @param {string} keyPath Attribute to index on.
@@ -355,8 +355,8 @@ goog.db.ObjectStore.prototype.getIndex = function(name) {
 
 
 /**
- * Deletes an index from the object store. Can only be called inside the
- * callback for the Deferred returned from goog.db.IndexedDb#setVersion.
+ * Deletes an index from the object store. Can only be called inside a
+ * {@link goog.db.UpgradeNeededCallback}.
  *
  * @param {string} name Name of the index to delete.
  * @throws {goog.db.Error} In case of an error deleting the index.
