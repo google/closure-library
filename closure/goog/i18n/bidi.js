@@ -252,7 +252,7 @@ goog.i18n.bidi.ltrCharReg_ = new RegExp('[' + goog.i18n.bidi.ltrChars_ + ']');
 
 
 /**
- * Test whether the given string has any RTL characters in it.
+ * Tests whether the given string has any RTL characters in it.
  * @param {string} str The given string that need to be tested.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
@@ -265,7 +265,7 @@ goog.i18n.bidi.hasAnyRtl = function(str, opt_isHtml) {
 
 
 /**
- * Test whether the given string has any RTL characters in it.
+ * Tests whether the given string has any RTL characters in it.
  * @param {string} str The given string that need to be tested.
  * @return {boolean} Whether the string contains RTL characters.
  * @deprecated Use hasAnyRtl.
@@ -274,7 +274,7 @@ goog.i18n.bidi.hasRtlChar = goog.i18n.bidi.hasAnyRtl;
 
 
 /**
- * Test whether the given string has any LTR characters in it.
+ * Tests whether the given string has any strongly LTR characters in it.
  * @param {string} str The given string that need to be tested.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
@@ -283,6 +283,20 @@ goog.i18n.bidi.hasRtlChar = goog.i18n.bidi.hasAnyRtl;
 goog.i18n.bidi.hasAnyLtr = function(str, opt_isHtml) {
   return goog.i18n.bidi.ltrCharReg_.test(goog.i18n.bidi.stripHtmlIfNeeded_(
       str, opt_isHtml));
+};
+
+
+/**
+ * Tests if the given string has any numeric characters, suggesting it likely
+ * contains parts flowing from left to right.
+ * @param {string} str The given string that need to be tested.
+ * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+ *     Default: false.
+ * @return {boolean} Whether the string contains weakly LTR numerals.
+ */
+goog.i18n.bidi.hasAnyWeaklyLtrNumerals = function(str, opt_isHtml) {
+  return goog.i18n.bidi.hasNumeralsRe_.test(
+      goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
 
 
@@ -796,7 +810,7 @@ goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
       hasWeaklyLtr = true;
     } else if (goog.i18n.bidi.hasAnyLtr(token)) {
       totalCount++;
-    } else if (goog.i18n.bidi.hasNumeralsRe_.test(token)) {
+    } else if (goog.i18n.bidi.hasAnyWeaklyLtrNumerals(token)) {
       hasWeaklyLtr = true;
     }
   }
