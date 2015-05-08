@@ -1114,6 +1114,7 @@ goog.string.regExpEscape = function(s) {
  */
 goog.string.repeat = (String.prototype.repeat) ?
     function(string, length) {
+      // The native method is over 100 times faster than the alternative.
       return string.repeat(length);
     } :
     function(string, length) {
