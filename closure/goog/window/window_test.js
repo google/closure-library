@@ -220,18 +220,6 @@ function testOpenBlank() {
 }
 
 
-function testOpenBlankReturnsNullPopupBlocker() {
-  var mockWin = {
-    // emulate popup-blocker by returning a null window on open().
-    open: function() {
-      return null;
-    }
-  };
-  var win = goog.window.openBlank('', {noreferrer: true}, mockWin);
-  assertNull(win);
-}
-
-
 function testOpenIosBlank() {
   if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
     // Don't even try this on IE8!
@@ -316,26 +304,4 @@ function testOpenIosBlankNoreferrer() {
   // Click event.
   assertNotNull(dispatchedEvent);
   assertEquals('click', dispatchedEvent.type);
-}
-
-
-function testOpenNoReferrerEscapesUrl() {
-  var documentWriteHtml;
-  var mockNewWin = {};
-  mockNewWin.document = {
-    write: function(html) {
-      documentWriteHtml = html;
-    },
-    close: function() {}
-  };
-  var mockWin = {
-    open: function() {
-      return mockNewWin;
-    }
-  };
-  goog.window.open('https://hello&world', {noreferrer: true}, mockWin);
-  assertRegExp(
-      'Does not contain expected HTML-escaped string: ' + documentWriteHtml,
-      /hello&amp;world/,
-      documentWriteHtml);
 }
