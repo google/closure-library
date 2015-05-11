@@ -53,142 +53,125 @@ function testToDir() {
 }
 
 function testIsRtlLang() {
-  assertFalse(goog.i18n.bidi.isRtlLanguage('en'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('fr'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('zh-CN'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('fil'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('az'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('iw-Latn'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('iw-LATN'));
-  assertFalse(goog.i18n.bidi.isRtlLanguage('iw_latn'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('ar'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('AR'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('iw'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('he'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('fa'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('ckb'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('ar-EG'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('az-Arab'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('az-ARAB-IR'));
-  assertTrue(goog.i18n.bidi.isRtlLanguage('az_arab_IR'));
+  assert(!goog.i18n.bidi.isRtlLanguage('en'));
+  assert(!goog.i18n.bidi.isRtlLanguage('fr'));
+  assert(!goog.i18n.bidi.isRtlLanguage('zh-CN'));
+  assert(!goog.i18n.bidi.isRtlLanguage('fil'));
+  assert(!goog.i18n.bidi.isRtlLanguage('az'));
+  assert(!goog.i18n.bidi.isRtlLanguage('iw-Latn'));
+  assert(!goog.i18n.bidi.isRtlLanguage('iw-LATN'));
+  assert(!goog.i18n.bidi.isRtlLanguage('iw_latn'));
+  assert(goog.i18n.bidi.isRtlLanguage('ar'));
+  assert(goog.i18n.bidi.isRtlLanguage('AR'));
+  assert(goog.i18n.bidi.isRtlLanguage('iw'));
+  assert(goog.i18n.bidi.isRtlLanguage('he'));
+  assert(goog.i18n.bidi.isRtlLanguage('fa'));
+  assert(goog.i18n.bidi.isRtlLanguage('ckb'));
+  assert(goog.i18n.bidi.isRtlLanguage('ar-EG'));
+  assert(goog.i18n.bidi.isRtlLanguage('az-Arab'));
+  assert(goog.i18n.bidi.isRtlLanguage('az-ARAB-IR'));
+  assert(goog.i18n.bidi.isRtlLanguage('az_arab_IR'));
 }
 
 function testIsLtrChar() {
-  assertTrue(goog.i18n.bidi.isLtrChar('a'));
-  assertFalse(goog.i18n.bidi.isLtrChar('\u05e0'));
+  assert(goog.i18n.bidi.isLtrChar('a'));
+  assert(!goog.i18n.bidi.isLtrChar('\u05e0'));
   var str = 'a\u05e0z';
-  assertTrue(goog.i18n.bidi.isLtrChar(str.charAt(0)));
-  assertFalse(goog.i18n.bidi.isLtrChar(str.charAt(1)));
-  assertTrue(goog.i18n.bidi.isLtrChar(str.charAt(2)));
+  assert(goog.i18n.bidi.isLtrChar(str.charAt(0)));
+  assert(!goog.i18n.bidi.isLtrChar(str.charAt(1)));
+  assert(goog.i18n.bidi.isLtrChar(str.charAt(2)));
 }
 
 function testIsRtlChar() {
-  assertFalse(goog.i18n.bidi.isRtlChar('a'));
-  assertTrue(goog.i18n.bidi.isRtlChar('\u05e0'));
+  assert(!goog.i18n.bidi.isRtlChar('a'));
+  assert(goog.i18n.bidi.isRtlChar('\u05e0'));
   var str = 'a\u05e0z';
-  assertFalse(goog.i18n.bidi.isRtlChar(str.charAt(0)));
-  assertTrue(goog.i18n.bidi.isRtlChar(str.charAt(1)));
-  assertFalse(goog.i18n.bidi.isRtlChar(str.charAt(2)));
+  assert(!goog.i18n.bidi.isRtlChar(str.charAt(0)));
+  assert(goog.i18n.bidi.isRtlChar(str.charAt(1)));
+  assert(!goog.i18n.bidi.isRtlChar(str.charAt(2)));
 }
 
 function testIsNeutralChar() {
-  assertTrue(goog.i18n.bidi.isNeutralChar('\u0000'));
-  assertTrue(goog.i18n.bidi.isNeutralChar('\u0020'));
-  assertFalse(goog.i18n.bidi.isNeutralChar('a'));
-  assertTrue(goog.i18n.bidi.isNeutralChar('!'));
-  assertTrue(goog.i18n.bidi.isNeutralChar('@'));
-  assertTrue(goog.i18n.bidi.isNeutralChar('['));
-  assertTrue(goog.i18n.bidi.isNeutralChar('`'));
-  assertTrue(goog.i18n.bidi.isNeutralChar('0'));
-  assertFalse(goog.i18n.bidi.isNeutralChar('\u05e0'));
+  assert(goog.i18n.bidi.isNeutralChar('\u0000'));
+  assert(goog.i18n.bidi.isNeutralChar('\u0020'));
+  assert(!goog.i18n.bidi.isNeutralChar('a'));
+  assert(goog.i18n.bidi.isNeutralChar('!'));
+  assert(goog.i18n.bidi.isNeutralChar('@'));
+  assert(goog.i18n.bidi.isNeutralChar('['));
+  assert(goog.i18n.bidi.isNeutralChar('`'));
+  assert(goog.i18n.bidi.isNeutralChar('0'));
+  assert(!goog.i18n.bidi.isNeutralChar('\u05e0'));
 }
 
 function testIsNeutralText() {
-  assertTrue(goog.i18n.bidi.isNeutralText('123'));
-  assertFalse(goog.i18n.bidi.isNeutralText('abc'));
-  assertTrue(goog.i18n.bidi.isNeutralText('http://abc'));
-  assertTrue(goog.i18n.bidi.isNeutralText(' 123-()'));
-  assertFalse(goog.i18n.bidi.isNeutralText('123a456'));
-  assertFalse(goog.i18n.bidi.isNeutralText('123\u05e0456'));
-  assertFalse(
-      goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', false));
-  assertTrue(goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', true));
+  assert(goog.i18n.bidi.isNeutralText('123'));
+  assert(!goog.i18n.bidi.isNeutralText('abc'));
+  assert(goog.i18n.bidi.isNeutralText('http://abc'));
+  assert(goog.i18n.bidi.isNeutralText(' 123-()'));
+  assert(!goog.i18n.bidi.isNeutralText('123a456'));
+  assert(!goog.i18n.bidi.isNeutralText('123\u05e0456'));
+  assert(!goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', false));
+  assert(goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', true));
 }
 
 function testHasAnyLtr() {
-  assertFalse(goog.i18n.bidi.hasAnyLtr(''));
-  assertFalse(goog.i18n.bidi.hasAnyLtr('\u05e0\u05e1\u05e2'));
-  assertTrue(goog.i18n.bidi.hasAnyLtr('\u05e0\u05e1z\u05e2'));
-  assertFalse(goog.i18n.bidi.hasAnyLtr('123\t...  \n'));
-  assertTrue(goog.i18n.bidi.hasAnyLtr('<br>123&lt;', false));
-  assertFalse(goog.i18n.bidi.hasAnyLtr('<br>123&lt;', true));
+  assert(!goog.i18n.bidi.hasAnyLtr(''));
+  assert(!goog.i18n.bidi.hasAnyLtr('\u05e0\u05e1\u05e2'));
+  assert(goog.i18n.bidi.hasAnyLtr('\u05e0\u05e1z\u05e2'));
+  assert(!goog.i18n.bidi.hasAnyLtr('123\t...  \n'));
+  assert(goog.i18n.bidi.hasAnyLtr('<br>123&lt;', false));
+  assert(!goog.i18n.bidi.hasAnyLtr('<br>123&lt;', true));
 }
 
 function testHasAnyRtl() {
-  assertFalse(goog.i18n.bidi.hasAnyRtl(''));
-  assertFalse(goog.i18n.bidi.hasAnyRtl('abc'));
-  assertTrue(goog.i18n.bidi.hasAnyRtl('ab\u05e0c'));
-  assertFalse(goog.i18n.bidi.hasAnyRtl('123\t...  \n'));
-  assertTrue(goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', false));
-  assertFalse(goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', true));
-}
-
-function testHasAnyWeaklyLtrNumerals() {
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('01'));
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('01'));
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('4%'));
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('$5'));
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('6.7'));
-  assertTrue(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('-8'));
-
-  assertFalse(goog.i18n.bidi.hasAnyWeaklyLtrNumerals(''));
-  assertFalse(goog.i18n.bidi.hasAnyWeaklyLtrNumerals(' '));
-  assertFalse(goog.i18n.bidi.hasAnyWeaklyLtrNumerals('-%$'));
-
-  assertFalse('Arabic-indic digits should not count as weakly ltr',
-      goog.i18n.bidi.hasAnyWeaklyLtrNumerals('\u0660 \u0665 \u0669'));
+  assert(!goog.i18n.bidi.hasAnyRtl(''));
+  assert(!goog.i18n.bidi.hasAnyRtl('abc'));
+  assert(goog.i18n.bidi.hasAnyRtl('ab\u05e0c'));
+  assert(!goog.i18n.bidi.hasAnyRtl('123\t...  \n'));
+  assert(goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', false));
+  assert(!goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', true));
 }
 
 function testEndsWithLtr() {
-  assertTrue(goog.i18n.bidi.endsWithLtr('a'));
-  assertTrue(goog.i18n.bidi.endsWithLtr('abc'));
-  assertTrue(goog.i18n.bidi.endsWithLtr('a (!)'));
-  assertTrue(goog.i18n.bidi.endsWithLtr('a.1'));
-  assertTrue(goog.i18n.bidi.endsWithLtr('http://www.google.com '));
-  assertTrue(goog.i18n.bidi.endsWithLtr('\u05e0a'));
-  assertTrue(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2\u05e3 a (!)'));
-  assertTrue(goog.i18n.bidi.endsWithLtr('\u202b\u05d0!\u202c\u200e'));
-  assertFalse(goog.i18n.bidi.endsWithLtr(''));
-  assertFalse(goog.i18n.bidi.endsWithLtr(' '));
-  assertFalse(goog.i18n.bidi.endsWithLtr('1'));
-  assertFalse(goog.i18n.bidi.endsWithLtr('\u05e0'));
-  assertFalse(goog.i18n.bidi.endsWithLtr('\u05e0 1(!)'));
-  assertFalse(goog.i18n.bidi.endsWithLtr('a\u05e0'));
-  assertFalse(goog.i18n.bidi.endsWithLtr('a abc\u05e0\u05e1def\u05e2. 1'));
-  assertFalse(goog.i18n.bidi.endsWithLtr('\u200f\u202eArtielish\u202c\u200f'));
-  assertFalse(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', true));
-  assertTrue(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', false));
+  assert(goog.i18n.bidi.endsWithLtr('a'));
+  assert(goog.i18n.bidi.endsWithLtr('abc'));
+  assert(goog.i18n.bidi.endsWithLtr('a (!)'));
+  assert(goog.i18n.bidi.endsWithLtr('a.1'));
+  assert(goog.i18n.bidi.endsWithLtr('http://www.google.com '));
+  assert(goog.i18n.bidi.endsWithLtr('\u05e0a'));
+  assert(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2\u05e3 a (!)'));
+  assert(goog.i18n.bidi.endsWithLtr('\u202b\u05d0!\u202c\u200e'));
+  assert(!goog.i18n.bidi.endsWithLtr(''));
+  assert(!goog.i18n.bidi.endsWithLtr(' '));
+  assert(!goog.i18n.bidi.endsWithLtr('1'));
+  assert(!goog.i18n.bidi.endsWithLtr('\u05e0'));
+  assert(!goog.i18n.bidi.endsWithLtr('\u05e0 1(!)'));
+  assert(!goog.i18n.bidi.endsWithLtr('a\u05e0'));
+  assert(!goog.i18n.bidi.endsWithLtr('a abc\u05e0\u05e1def\u05e2. 1'));
+  assert(!goog.i18n.bidi.endsWithLtr('\u200f\u202eArtielish\u202c\u200f'));
+  assert(!goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', true));
+  assert(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', false));
 }
 
 function testEndsWithRtl() {
-  assertTrue(goog.i18n.bidi.endsWithRtl('\u05e0'));
-  assertTrue(goog.i18n.bidi.endsWithRtl('\u05e0\u05e1\u05e2'));
-  assertTrue(goog.i18n.bidi.endsWithRtl('\u05e0 (!)'));
-  assertTrue(goog.i18n.bidi.endsWithRtl('\u05e0.1'));
-  assertTrue(goog.i18n.bidi.endsWithRtl('http://www.google.com/\u05e0 '));
-  assertTrue(goog.i18n.bidi.endsWithRtl('a\u05e0'));
-  assertTrue(goog.i18n.bidi.endsWithRtl(' a abc\u05e0def\u05e3. 1'));
-  assertTrue(goog.i18n.bidi.endsWithRtl('\u200f\u202eArtielish\u202c\u200f'));
-  assertFalse(goog.i18n.bidi.endsWithRtl(''));
-  assertFalse(goog.i18n.bidi.endsWithRtl(' '));
-  assertFalse(goog.i18n.bidi.endsWithRtl('1'));
-  assertFalse(goog.i18n.bidi.endsWithRtl('a'));
-  assertFalse(goog.i18n.bidi.endsWithRtl('a 1(!)'));
-  assertFalse(goog.i18n.bidi.endsWithRtl('\u05e0a'));
-  assertFalse(goog.i18n.bidi.endsWithRtl('\u202b\u05d0!\u202c\u200e'));
-  assertFalse(goog.i18n.bidi.endsWithRtl('\u05e0 \u05e0\u05e1ab\u05e2 a (!)'));
-  assertTrue(goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', true));
-  assertFalse(goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', false));
+  assert(goog.i18n.bidi.endsWithRtl('\u05e0'));
+  assert(goog.i18n.bidi.endsWithRtl('\u05e0\u05e1\u05e2'));
+  assert(goog.i18n.bidi.endsWithRtl('\u05e0 (!)'));
+  assert(goog.i18n.bidi.endsWithRtl('\u05e0.1'));
+  assert(goog.i18n.bidi.endsWithRtl('http://www.google.com/\u05e0 '));
+  assert(goog.i18n.bidi.endsWithRtl('a\u05e0'));
+  assert(goog.i18n.bidi.endsWithRtl(' a abc\u05e0def\u05e3. 1'));
+  assert(goog.i18n.bidi.endsWithRtl('\u200f\u202eArtielish\u202c\u200f'));
+  assert(!goog.i18n.bidi.endsWithRtl(''));
+  assert(!goog.i18n.bidi.endsWithRtl(' '));
+  assert(!goog.i18n.bidi.endsWithRtl('1'));
+  assert(!goog.i18n.bidi.endsWithRtl('a'));
+  assert(!goog.i18n.bidi.endsWithRtl('a 1(!)'));
+  assert(!goog.i18n.bidi.endsWithRtl('\u05e0a'));
+  assert(!goog.i18n.bidi.endsWithRtl('\u202b\u05d0!\u202c\u200e'));
+  assert(!goog.i18n.bidi.endsWithRtl('\u05e0 \u05e0\u05e1ab\u05e2 a (!)'));
+  assert(goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', true));
+  assert(!goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', false));
 }
 
 function testGuardBracketInHtml() {
@@ -300,12 +283,6 @@ function testEstimateDirection() {
                goog.i18n.bidi.estimateDirection('! (...)', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('All-Ascii content', false));
-  assertEquals(goog.i18n.bidi.Dir.LTR,
-               goog.i18n.bidi.estimateDirection('0', false));
-  assertEquals(goog.i18n.bidi.Dir.LTR,
-               goog.i18n.bidi.estimateDirection('1%', false));
-  assertEquals(goog.i18n.bidi.Dir.LTR,
-               goog.i18n.bidi.estimateDirection('-1', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('-17.0%', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
