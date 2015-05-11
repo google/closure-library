@@ -285,6 +285,12 @@ function testEstimateDirection() {
                goog.i18n.bidi.estimateDirection('All-Ascii content', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('-17.0%', false));
+  assertEquals('Farsi digits should count as weakly LTR',
+      goog.i18n.bidi.Dir.LTR,
+      goog.i18n.bidi.estimateDirection('\u06f0', false));
+  assertEquals('Farsi digits should count as weakly LTR',
+      goog.i18n.bidi.Dir.LTR,
+      goog.i18n.bidi.estimateDirection('\u06f9', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('http://foo/bar/', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
@@ -298,6 +304,12 @@ function testEstimateDirection() {
   assertEquals(goog.i18n.bidi.Dir.RTL,
                goog.i18n.bidi.estimateDirection(
                    '9 \u05d0 -> 17.5, 23, 45, 19', false));
+  assertEquals('Native arabic numbers should count as RTL',
+      goog.i18n.bidi.Dir.RTL,
+      goog.i18n.bidi.estimateDirection('\u0660', false));
+  assertEquals('Both Farsi letters and digits should count as RTL',
+      goog.i18n.bidi.Dir.RTL,
+      goog.i18n.bidi.estimateDirection('\u06CC \u06F1 \u06F2\u06F3', false));
   assertEquals(goog.i18n.bidi.Dir.RTL,
                goog.i18n.bidi.estimateDirection(
                    'http://foo/bar/ \u05d0 http://foo2/bar2/ ' +

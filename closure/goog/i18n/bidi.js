@@ -203,7 +203,8 @@ goog.i18n.bidi.ltrChars_ =
  * @type {string}
  * @private
  */
-goog.i18n.bidi.rtlChars_ = '\u0591-\u07FF\u200F\uFB1D-\uFDFF\uFE70-\uFEFC';
+goog.i18n.bidi.rtlChars_ =
+    '\u0591-\u06EF\u06FA-\u07FF\u200F\uFB1D-\uFDFF\uFE70-\uFEFC';
 
 
 /**
@@ -755,10 +756,20 @@ goog.i18n.bidi.wordSeparatorRe_ = /\s+/;
  * Regular expression to check if a string contains any numerals. Used to
  * differentiate between completely neutral strings and those containing
  * numbers, which are weakly LTR.
+ *
+ * Native Arabic digits (\u0660 - \u0669) are not included because although they
+ * do flow left-to-right inside a number, this is the case even if the  overall
+ * directionality is RTL, and a mathematical expression using these digits is
+ * supposed to flow right-to-left overall, including unary plus and minus
+ * appearing to the right of a number, and this does depend on the overall
+ * directionality being RTL. The digits used in Farsi (\u06F0 - \u06F9), on the
+ * other hand, are included, since Farsi math (including unary plus and minus)
+ * does flow left-to-right.
+ *
  * @type {RegExp}
  * @private
  */
-goog.i18n.bidi.hasNumeralsRe_ = /\d/;
+goog.i18n.bidi.hasNumeralsRe_ = /[\d\u06f0-\u06f9]/;
 
 
 /**
