@@ -43,9 +43,11 @@ goog.provide('goog.i18n.DateTimePatterns_af');
 goog.provide('goog.i18n.DateTimePatterns_am');
 goog.provide('goog.i18n.DateTimePatterns_ar');
 goog.provide('goog.i18n.DateTimePatterns_az');
+goog.provide('goog.i18n.DateTimePatterns_be');
 goog.provide('goog.i18n.DateTimePatterns_bg');
 goog.provide('goog.i18n.DateTimePatterns_bn');
 goog.provide('goog.i18n.DateTimePatterns_br');
+goog.provide('goog.i18n.DateTimePatterns_bs');
 goog.provide('goog.i18n.DateTimePatterns_ca');
 goog.provide('goog.i18n.DateTimePatterns_chr');
 goog.provide('goog.i18n.DateTimePatterns_cs');
@@ -57,6 +59,7 @@ goog.provide('goog.i18n.DateTimePatterns_de_CH');
 goog.provide('goog.i18n.DateTimePatterns_el');
 goog.provide('goog.i18n.DateTimePatterns_en');
 goog.provide('goog.i18n.DateTimePatterns_en_AU');
+goog.provide('goog.i18n.DateTimePatterns_en_CA');
 goog.provide('goog.i18n.DateTimePatterns_en_GB');
 goog.provide('goog.i18n.DateTimePatterns_en_IE');
 goog.provide('goog.i18n.DateTimePatterns_en_IN');
@@ -66,6 +69,8 @@ goog.provide('goog.i18n.DateTimePatterns_en_ZA');
 goog.provide('goog.i18n.DateTimePatterns_es');
 goog.provide('goog.i18n.DateTimePatterns_es_419');
 goog.provide('goog.i18n.DateTimePatterns_es_ES');
+goog.provide('goog.i18n.DateTimePatterns_es_MX');
+goog.provide('goog.i18n.DateTimePatterns_es_US');
 goog.provide('goog.i18n.DateTimePatterns_et');
 goog.provide('goog.i18n.DateTimePatterns_eu');
 goog.provide('goog.i18n.DateTimePatterns_fa');
@@ -126,6 +131,7 @@ goog.provide('goog.i18n.DateTimePatterns_sk');
 goog.provide('goog.i18n.DateTimePatterns_sl');
 goog.provide('goog.i18n.DateTimePatterns_sq');
 goog.provide('goog.i18n.DateTimePatterns_sr');
+goog.provide('goog.i18n.DateTimePatterns_sr_Latn');
 goog.provide('goog.i18n.DateTimePatterns_sv');
 goog.provide('goog.i18n.DateTimePatterns_sw');
 goog.provide('goog.i18n.DateTimePatterns_ta');
@@ -221,6 +227,25 @@ goog.i18n.DateTimePatterns_az = {
 
 
 /**
+ * Extended set of localized date/time patterns for locale be.
+ */
+goog.i18n.DateTimePatterns_be = {
+  YEAR_FULL: 'y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'LLL y',
+  YEAR_MONTH_FULL: 'LLLL y',
+  MONTH_DAY_ABBR: 'd MMM',
+  MONTH_DAY_FULL: 'dd MMMM',
+  MONTH_DAY_SHORT: 'd.M',
+  MONTH_DAY_MEDIUM: 'd MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
  * Extended set of localized date/time patterns for locale bg.
  */
 goog.i18n.DateTimePatterns_bg = {
@@ -273,6 +298,25 @@ goog.i18n.DateTimePatterns_br = {
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
+ * Extended set of localized date/time patterns for locale bs.
+ */
+goog.i18n.DateTimePatterns_bs = {
+  YEAR_FULL: 'y.',
+  YEAR_FULL_WITH_ERA: 'y. G',
+  YEAR_MONTH_ABBR: 'MMM y.',
+  YEAR_MONTH_FULL: 'LLLL y.',
+  MONTH_DAY_ABBR: 'dd. MMM',
+  MONTH_DAY_FULL: 'dd. MMMM',
+  MONTH_DAY_SHORT: 'dd.MM.',
+  MONTH_DAY_MEDIUM: 'd. MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -487,6 +531,25 @@ goog.i18n.DateTimePatterns_en_AU = {
 
 
 /**
+ * Extended set of localized date/time patterns for locale en_CA.
+ */
+goog.i18n.DateTimePatterns_en_CA = {
+  YEAR_FULL: 'y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'MMM y',
+  YEAR_MONTH_FULL: 'MMMM y',
+  MONTH_DAY_ABBR: 'MMM d',
+  MONTH_DAY_FULL: 'MMMM dd',
+  MONTH_DAY_SHORT: 'MM-dd',
+  MONTH_DAY_MEDIUM: 'MMMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
  * Extended set of localized date/time patterns for locale en_GB.
  */
 goog.i18n.DateTimePatterns_en_GB = {
@@ -653,6 +716,44 @@ goog.i18n.DateTimePatterns_es_ES = {
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
+ * Extended set of localized date/time patterns for locale es_MX.
+ */
+goog.i18n.DateTimePatterns_es_MX = {
+  YEAR_FULL: 'y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'MMM y',
+  YEAR_MONTH_FULL: 'MMMM \'de\' y',
+  MONTH_DAY_ABBR: 'd MMM',
+  MONTH_DAY_FULL: 'dd-MMMM',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d \'de\' MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
+ * Extended set of localized date/time patterns for locale es_US.
+ */
+goog.i18n.DateTimePatterns_es_US = {
+  YEAR_FULL: 'y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'MMM y',
+  YEAR_MONTH_FULL: 'MMMM \'de\' y',
+  MONTH_DAY_ABBR: 'd MMM',
+  MONTH_DAY_FULL: 'dd-MMMM',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMM \'de\' y',
   DAY_ABBR: 'd'
 };
 
@@ -1798,6 +1899,25 @@ goog.i18n.DateTimePatterns_sr = {
 
 
 /**
+ * Extended set of localized date/time patterns for locale sr_Latn.
+ */
+goog.i18n.DateTimePatterns_sr_Latn = {
+  YEAR_FULL: 'y.',
+  YEAR_FULL_WITH_ERA: 'y. G',
+  YEAR_MONTH_ABBR: 'MMM y.',
+  YEAR_MONTH_FULL: 'MMMM y.',
+  MONTH_DAY_ABBR: 'd. MMM',
+  MONTH_DAY_FULL: 'dd. MMMM',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd. MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  DAY_ABBR: 'd'
+};
+
+
+/**
  * Extended set of localized date/time patterns for locale sv.
  */
 goog.i18n.DateTimePatterns_sv = {
@@ -2122,6 +2242,10 @@ if (goog.LOCALE == 'az') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_az;
 }
 
+if (goog.LOCALE == 'be') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_be;
+}
+
 if (goog.LOCALE == 'bg') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_bg;
 }
@@ -2132,6 +2256,10 @@ if (goog.LOCALE == 'bn') {
 
 if (goog.LOCALE == 'br') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_br;
+}
+
+if (goog.LOCALE == 'bs') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_bs;
 }
 
 if (goog.LOCALE == 'ca') {
@@ -2178,6 +2306,10 @@ if (goog.LOCALE == 'en_AU' || goog.LOCALE == 'en-AU') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en_AU;
 }
 
+if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en_CA;
+}
+
 if (goog.LOCALE == 'en_GB' || goog.LOCALE == 'en-GB') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en_GB;
 }
@@ -2212,6 +2344,14 @@ if (goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419') {
 
 if (goog.LOCALE == 'es_ES' || goog.LOCALE == 'es-ES') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_ES;
+}
+
+if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_MX;
+}
+
+if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_US;
 }
 
 if (goog.LOCALE == 'et') {
@@ -2452,6 +2592,10 @@ if (goog.LOCALE == 'sq') {
 
 if (goog.LOCALE == 'sr') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_sr;
+}
+
+if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_sr_Latn;
 }
 
 if (goog.LOCALE == 'sv') {

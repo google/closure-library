@@ -72,8 +72,6 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_az_Cyrl');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_az_Cyrl_AZ');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bas');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bas_CM');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_be');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_be_BY');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bem');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bem_ZM');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bez');
@@ -87,11 +85,8 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_bo_CN');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bo_IN');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_brx');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_brx_IN');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_bs');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bs_Cyrl');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bs_Cyrl_BA');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_bs_Latn');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_bs_Latn_BA');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_cgg');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_cgg_UG');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ckb');
@@ -129,7 +124,6 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_en_BM');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_BS');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_BW');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_BZ');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_en_CA');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_CC');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_CK');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_en_CM');
@@ -204,7 +198,6 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_es_EC');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_GQ');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_GT');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_HN');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_es_MX');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_NI');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_PA');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_PE');
@@ -212,7 +205,6 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_es_PH');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_PR');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_PY');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_SV');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_es_US');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_UY');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_es_VE');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ewo');
@@ -447,10 +439,8 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_sq_XK');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Cyrl_BA');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Cyrl_ME');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Cyrl_XK');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Latn');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Latn_BA');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Latn_ME');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Latn_RS');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sr_Latn_XK');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sv_AX');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_sv_FI');
@@ -3155,58 +3145,6 @@ goog.i18n.CompactNumberFormatSymbols_bas_CM =
 
 
 /**
- * Compact number formatting symbols for locale be.
- */
-goog.i18n.CompactNumberFormatSymbols_be = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0K'
-    },
-    '10000': {
-      'other': '00K'
-    },
-    '100000': {
-      'other': '000K'
-    },
-    '1000000': {
-      'other': '0M'
-    },
-    '10000000': {
-      'other': '00M'
-    },
-    '100000000': {
-      'other': '000M'
-    },
-    '1000000000': {
-      'other': '0G'
-    },
-    '10000000000': {
-      'other': '00G'
-    },
-    '100000000000': {
-      'other': '000G'
-    },
-    '1000000000000': {
-      'other': '0T'
-    },
-    '10000000000000': {
-      'other': '00T'
-    },
-    '100000000000000': {
-      'other': '000T'
-    }
-  }
-};
-
-
-/**
- * Compact number formatting symbols for locale be_BY.
- */
-goog.i18n.CompactNumberFormatSymbols_be_BY =
-    goog.i18n.CompactNumberFormatSymbols_be;
-
-
-/**
  * Compact number formatting symbols for locale bem.
  */
 goog.i18n.CompactNumberFormatSymbols_bem = {
@@ -3602,89 +3540,6 @@ goog.i18n.CompactNumberFormatSymbols_brx_IN =
 
 
 /**
- * Compact number formatting symbols for locale bs.
- */
-goog.i18n.CompactNumberFormatSymbols_bs = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0\u00A0hilj.'
-    },
-    '10000': {
-      'other': '00\u00A0hilj.'
-    },
-    '100000': {
-      'other': '000\u00A0hilj.'
-    },
-    '1000000': {
-      'other': '0\u00A0mil.'
-    },
-    '10000000': {
-      'other': '00\u00A0mil.'
-    },
-    '100000000': {
-      'other': '000\u00A0mil.'
-    },
-    '1000000000': {
-      'other': '0\u00A0mlr.'
-    },
-    '10000000000': {
-      'other': '00\u00A0mlr.'
-    },
-    '100000000000': {
-      'other': '000\u00A0mlr.'
-    },
-    '1000000000000': {
-      'other': '0\u00A0bil.'
-    },
-    '10000000000000': {
-      'other': '00\u00A0bil.'
-    },
-    '100000000000000': {
-      'other': '000\u00A0bil.'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 hiljada'
-    },
-    '10000': {
-      'other': '00 hiljada'
-    },
-    '100000': {
-      'other': '000 hiljada'
-    },
-    '1000000': {
-      'other': '0 miliona'
-    },
-    '10000000': {
-      'other': '00 miliona'
-    },
-    '100000000': {
-      'other': '000 miliona'
-    },
-    '1000000000': {
-      'other': '0 milijardi'
-    },
-    '10000000000': {
-      'other': '00 milijardi'
-    },
-    '100000000000': {
-      'other': '000 milijardi'
-    },
-    '1000000000000': {
-      'other': '0 biliona'
-    },
-    '10000000000000': {
-      'other': '00 biliona'
-    },
-    '100000000000000': {
-      'other': '000 biliona'
-    }
-  }
-};
-
-
-/**
  * Compact number formatting symbols for locale bs_Cyrl.
  */
 goog.i18n.CompactNumberFormatSymbols_bs_Cyrl = {
@@ -3772,20 +3627,6 @@ goog.i18n.CompactNumberFormatSymbols_bs_Cyrl = {
  */
 goog.i18n.CompactNumberFormatSymbols_bs_Cyrl_BA =
     goog.i18n.CompactNumberFormatSymbols_bs_Cyrl;
-
-
-/**
- * Compact number formatting symbols for locale bs_Latn.
- */
-goog.i18n.CompactNumberFormatSymbols_bs_Latn =
-    goog.i18n.CompactNumberFormatSymbols_bs;
-
-
-/**
- * Compact number formatting symbols for locale bs_Latn_BA.
- */
-goog.i18n.CompactNumberFormatSymbols_bs_Latn_BA =
-    goog.i18n.CompactNumberFormatSymbols_bs;
 
 
 /**
@@ -5374,89 +5215,6 @@ goog.i18n.CompactNumberFormatSymbols_en_BW = {
  * Compact number formatting symbols for locale en_BZ.
  */
 goog.i18n.CompactNumberFormatSymbols_en_BZ = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0K'
-    },
-    '10000': {
-      'other': '00K'
-    },
-    '100000': {
-      'other': '000K'
-    },
-    '1000000': {
-      'other': '0M'
-    },
-    '10000000': {
-      'other': '00M'
-    },
-    '100000000': {
-      'other': '000M'
-    },
-    '1000000000': {
-      'other': '0B'
-    },
-    '10000000000': {
-      'other': '00B'
-    },
-    '100000000000': {
-      'other': '000B'
-    },
-    '1000000000000': {
-      'other': '0T'
-    },
-    '10000000000000': {
-      'other': '00T'
-    },
-    '100000000000000': {
-      'other': '000T'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 thousand'
-    },
-    '10000': {
-      'other': '00 thousand'
-    },
-    '100000': {
-      'other': '000 thousand'
-    },
-    '1000000': {
-      'other': '0 million'
-    },
-    '10000000': {
-      'other': '00 million'
-    },
-    '100000000': {
-      'other': '000 million'
-    },
-    '1000000000': {
-      'other': '0 billion'
-    },
-    '10000000000': {
-      'other': '00 billion'
-    },
-    '100000000000': {
-      'other': '000 billion'
-    },
-    '1000000000000': {
-      'other': '0 trillion'
-    },
-    '10000000000000': {
-      'other': '00 trillion'
-    },
-    '100000000000000': {
-      'other': '000 trillion'
-    }
-  }
-};
-
-
-/**
- * Compact number formatting symbols for locale en_CA.
- */
-goog.i18n.CompactNumberFormatSymbols_en_CA = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
       'other': '0K'
@@ -11565,89 +11323,6 @@ goog.i18n.CompactNumberFormatSymbols_es_HN = {
 
 
 /**
- * Compact number formatting symbols for locale es_MX.
- */
-goog.i18n.CompactNumberFormatSymbols_es_MX = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0k'
-    },
-    '10000': {
-      'other': '00k'
-    },
-    '100000': {
-      'other': '000k'
-    },
-    '1000000': {
-      'other': '0\u00A0M'
-    },
-    '10000000': {
-      'other': '00\u00A0M'
-    },
-    '100000000': {
-      'other': '000\u00A0M'
-    },
-    '1000000000': {
-      'other': '0k\u00A0M'
-    },
-    '10000000000': {
-      'other': '00k\u00A0M'
-    },
-    '100000000000': {
-      'other': '000k\u00A0M'
-    },
-    '1000000000000': {
-      'other': '0\u00A0B'
-    },
-    '10000000000000': {
-      'other': '00\u00A0B'
-    },
-    '100000000000000': {
-      'other': '000\u00A0B'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 mil'
-    },
-    '10000': {
-      'other': '00 mil'
-    },
-    '100000': {
-      'other': '000 mil'
-    },
-    '1000000': {
-      'other': '0 millones'
-    },
-    '10000000': {
-      'other': '00 millones'
-    },
-    '100000000': {
-      'other': '000 millones'
-    },
-    '1000000000': {
-      'other': '0 mil millones'
-    },
-    '10000000000': {
-      'other': '00 mil millones'
-    },
-    '100000000000': {
-      'other': '000 mil millones'
-    },
-    '1000000000000': {
-      'other': '0 billones'
-    },
-    '10000000000000': {
-      'other': '00 billones'
-    },
-    '100000000000000': {
-      'other': '000 billones'
-    }
-  }
-};
-
-
-/**
  * Compact number formatting symbols for locale es_NI.
  */
 goog.i18n.CompactNumberFormatSymbols_es_NI = {
@@ -12149,89 +11824,6 @@ goog.i18n.CompactNumberFormatSymbols_es_PY = {
  * Compact number formatting symbols for locale es_SV.
  */
 goog.i18n.CompactNumberFormatSymbols_es_SV = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0'
-    },
-    '10000': {
-      'other': '00k'
-    },
-    '100000': {
-      'other': '000k'
-    },
-    '1000000': {
-      'other': '0\u00A0M'
-    },
-    '10000000': {
-      'other': '00\u00A0M'
-    },
-    '100000000': {
-      'other': '000\u00A0M'
-    },
-    '1000000000': {
-      'other': '0k\u00A0M'
-    },
-    '10000000000': {
-      'other': '00k\u00A0M'
-    },
-    '100000000000': {
-      'other': '000k\u00A0M'
-    },
-    '1000000000000': {
-      'other': '0\u00A0B'
-    },
-    '10000000000000': {
-      'other': '00\u00A0B'
-    },
-    '100000000000000': {
-      'other': '000\u00A0B'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 mil'
-    },
-    '10000': {
-      'other': '00 mil'
-    },
-    '100000': {
-      'other': '000 mil'
-    },
-    '1000000': {
-      'other': '0 millones'
-    },
-    '10000000': {
-      'other': '00 millones'
-    },
-    '100000000': {
-      'other': '000 millones'
-    },
-    '1000000000': {
-      'other': '0 mil millones'
-    },
-    '10000000000': {
-      'other': '00 mil millones'
-    },
-    '100000000000': {
-      'other': '000 mil millones'
-    },
-    '1000000000000': {
-      'other': '0 billones'
-    },
-    '10000000000000': {
-      'other': '00 billones'
-    },
-    '100000000000000': {
-      'other': '000 billones'
-    }
-  }
-};
-
-
-/**
- * Compact number formatting symbols for locale es_US.
- */
-goog.i18n.CompactNumberFormatSymbols_es_US = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
       'other': '0'
@@ -23070,89 +22662,6 @@ goog.i18n.CompactNumberFormatSymbols_sr_Cyrl_XK = {
 
 
 /**
- * Compact number formatting symbols for locale sr_Latn.
- */
-goog.i18n.CompactNumberFormatSymbols_sr_Latn = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0\u00A0hilj.'
-    },
-    '10000': {
-      'other': '00\u00A0hilj.'
-    },
-    '100000': {
-      'other': '000\u00A0hilj.'
-    },
-    '1000000': {
-      'other': '0\u00A0mil.'
-    },
-    '10000000': {
-      'other': '00\u00A0mil.'
-    },
-    '100000000': {
-      'other': '000\u00A0mil.'
-    },
-    '1000000000': {
-      'other': '0\u00A0mlrd.'
-    },
-    '10000000000': {
-      'other': '00\u00A0mlrd.'
-    },
-    '100000000000': {
-      'other': '000\u00A0mlrd.'
-    },
-    '1000000000000': {
-      'other': '0\u00A0bil.'
-    },
-    '10000000000000': {
-      'other': '00\u00A0bil.'
-    },
-    '100000000000000': {
-      'other': '000\u00A0bil.'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 hiljada'
-    },
-    '10000': {
-      'other': '00 hiljada'
-    },
-    '100000': {
-      'other': '000 hiljada'
-    },
-    '1000000': {
-      'other': '0 miliona'
-    },
-    '10000000': {
-      'other': '00 miliona'
-    },
-    '100000000': {
-      'other': '000 miliona'
-    },
-    '1000000000': {
-      'other': '0 milijardi'
-    },
-    '10000000000': {
-      'other': '00 milijardi'
-    },
-    '100000000000': {
-      'other': '000 milijardi'
-    },
-    '1000000000000': {
-      'other': '0 triliona'
-    },
-    '10000000000000': {
-      'other': '00 triliona'
-    },
-    '100000000000000': {
-      'other': '000 triliona'
-    }
-  }
-};
-
-
-/**
  * Compact number formatting symbols for locale sr_Latn_BA.
  */
 goog.i18n.CompactNumberFormatSymbols_sr_Latn_BA = {
@@ -23316,13 +22825,6 @@ goog.i18n.CompactNumberFormatSymbols_sr_Latn_ME = {
     }
   }
 };
-
-
-/**
- * Compact number formatting symbols for locale sr_Latn_RS.
- */
-goog.i18n.CompactNumberFormatSymbols_sr_Latn_RS =
-    goog.i18n.CompactNumberFormatSymbols_sr_Latn;
 
 
 /**
@@ -26028,14 +25530,6 @@ if (goog.LOCALE == 'bas_CM' || goog.LOCALE == 'bas-CM') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bas;
 }
 
-if (goog.LOCALE == 'be') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_be;
-}
-
-if (goog.LOCALE == 'be_BY' || goog.LOCALE == 'be-BY') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_be;
-}
-
 if (goog.LOCALE == 'bem') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bem;
 }
@@ -26088,24 +25582,12 @@ if (goog.LOCALE == 'brx_IN' || goog.LOCALE == 'brx-IN') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_brx;
 }
 
-if (goog.LOCALE == 'bs') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bs;
-}
-
 if (goog.LOCALE == 'bs_Cyrl' || goog.LOCALE == 'bs-Cyrl') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bs_Cyrl;
 }
 
 if (goog.LOCALE == 'bs_Cyrl_BA' || goog.LOCALE == 'bs-Cyrl-BA') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bs_Cyrl;
-}
-
-if (goog.LOCALE == 'bs_Latn' || goog.LOCALE == 'bs-Latn') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bs;
-}
-
-if (goog.LOCALE == 'bs_Latn_BA' || goog.LOCALE == 'bs-Latn-BA') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_bs;
 }
 
 if (goog.LOCALE == 'cgg') {
@@ -26254,10 +25736,6 @@ if (goog.LOCALE == 'en_BW' || goog.LOCALE == 'en-BW') {
 
 if (goog.LOCALE == 'en_BZ' || goog.LOCALE == 'en-BZ') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_en_BZ;
-}
-
-if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_en_CA;
 }
 
 if (goog.LOCALE == 'en_CC' || goog.LOCALE == 'en-CC') {
@@ -26556,10 +26034,6 @@ if (goog.LOCALE == 'es_HN' || goog.LOCALE == 'es-HN') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_es_HN;
 }
 
-if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_es_MX;
-}
-
 if (goog.LOCALE == 'es_NI' || goog.LOCALE == 'es-NI') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_es_NI;
 }
@@ -26586,10 +26060,6 @@ if (goog.LOCALE == 'es_PY' || goog.LOCALE == 'es-PY') {
 
 if (goog.LOCALE == 'es_SV' || goog.LOCALE == 'es-SV') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_es_SV;
-}
-
-if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_es_US;
 }
 
 if (goog.LOCALE == 'es_UY' || goog.LOCALE == 'es-UY') {
@@ -27528,20 +26998,12 @@ if (goog.LOCALE == 'sr_Cyrl_XK' || goog.LOCALE == 'sr-Cyrl-XK') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_sr_Cyrl_XK;
 }
 
-if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_sr_Latn;
-}
-
 if (goog.LOCALE == 'sr_Latn_BA' || goog.LOCALE == 'sr-Latn-BA') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_sr_Latn_BA;
 }
 
 if (goog.LOCALE == 'sr_Latn_ME' || goog.LOCALE == 'sr-Latn-ME') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_sr_Latn_ME;
-}
-
-if (goog.LOCALE == 'sr_Latn_RS' || goog.LOCALE == 'sr-Latn-RS') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_sr_Latn;
 }
 
 if (goog.LOCALE == 'sr_Latn_XK' || goog.LOCALE == 'sr-Latn-XK') {
