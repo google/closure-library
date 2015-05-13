@@ -89,11 +89,16 @@ goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
  * @param {*=} opt_placeCursor Whether to place the cursor in the field
  *     after clearing lorem. Should be a boolean.
  * @override
+ *
+ * Added a new parameter to clearLorem_ - opt_SetHTML.
+ * This controls the call to the javascript function
+ * setHTML; this function clears out the text in the
+ * 'editMe' textarea.
  */
 goog.editor.plugins.LoremIpsum.prototype.execCommand = function(command,
-    opt_placeCursor) {
+    opt_placeCursor, opt_SetHTML) {
   if (command == goog.editor.Command.CLEAR_LOREM) {
-    this.clearLorem_(!!opt_placeCursor);
+    this.clearLorem_(!!opt_placeCursor, opt_SetHTML);
   } else if (command == goog.editor.Command.UPDATE_LOREM) {
     this.updateLorem_();
   }
@@ -147,7 +152,10 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
 
 
 /**
- * Clear an EditableField's lorem ipsum and put in initial text if needed.
+ * The goog.editor utility has a bug that deletes text in the 'editMe' textarea
+ * when the user first clicks inside it. This is part of the repair. Add a new
+ * parameter "opt_SetHTML" to control the call to setHtml - the function that
+ * clears the HTML in 'editMe'.
  *
  * If using click-to-edit mode (where Trogedit manages whether the field
  * is editable), this works for both editable and uneditable fields.
@@ -158,7 +166,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
  * @private
  */
 goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
-    opt_placeCursor) {
+    opt_placeCursor, opt_SetHTML) {
   // Don't mess with lorem state when a dialog is open as that screws
   // with the dialog's ability to properly restore the selection
   // on dialog close (since the DOM nodes would get clobbered)
@@ -174,7 +182,16 @@ goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
     goog.asserts.assert(field);
     this.usingLorem_ = false;
     field.style.fontStyle = this.oldFontStyle_;
-    fieldObj.setHtml(true, null, true);
+
+	// Existing code might call clearLorem_ with only one
+	// parameter and in those situations, opt_SetHTML is
+	// undefined. Therefore, to preserve existing behavior,
+	// call setHTML if the opt_SetHTML parameter is undefined
+	// or as a specific true value.
+
+	if ((opt_SetHTML == true) || (opt_SetHTML == undefined)) {
+		fieldObj.setHtml(true, null, true);
+	}
 
     // TODO(nicksantos): I'm pretty sure that this is a hack, but talk to
     // Julie about why this is necessary and what to do with it. Really,
