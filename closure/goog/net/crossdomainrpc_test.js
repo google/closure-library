@@ -20,6 +20,7 @@ goog.require('goog.log');
 goog.require('goog.net.CrossDomainRpc');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 
 function print(o) {
@@ -68,8 +69,8 @@ function testNormalRequest() {
 
 
 function testErrorRequest() {
-  // Firefox does not give a valid error event.
-  if (goog.userAgent.GECKO) {
+  // Firefox and Safari do not give a valid error event.
+  if (goog.userAgent.GECKO || goog.userAgent.product.SAFARI) {
     return;
   }
 
@@ -77,6 +78,9 @@ function testErrorRequest() {
     goog.net.CrossDomainRpc.send(
         'http://hoodjimcwaadji.google.com/index.html',
         resolve, 'POST', {xyz: '01234567891123456789'});
+    setTimeout(function() {
+      reject('CrossDomainRpc.send did not complete within 2000ms');
+    }, 2000);
   }).then(function(e) {
     if (e.target.status < 300) {
       fail('should have failed requesting a non-existent URI');
