@@ -159,15 +159,22 @@ function testAngleDifference() {
 }
 
 function testSign() {
-  assertEquals(-1, goog.math.sign(-1));
-  assertEquals(1, goog.math.sign(1));
   assertEquals(0, goog.math.sign(0));
-  assertEquals(0, goog.math.sign(-0));
+  assertEquals(-1, goog.math.sign(-3));
+  assertEquals(1, goog.math.sign(3));
   assertEquals(1, goog.math.sign(0.0001));
   assertEquals(-1, goog.math.sign(-0.0001));
+  assertEquals(1, goog.math.sign(3141592653589793));
+}
+
+function testSignOfSpecialFloatValues() {
   assertEquals(-1, goog.math.sign(-Infinity));
   assertEquals(1, goog.math.sign(Infinity));
-  assertEquals(1, goog.math.sign(3141592653589793));
+  assertNaN(goog.math.sign(NaN));
+  assertEquals(0, goog.math.sign(0));
+  assertFalse(goog.math.isNegativeZero(goog.math.sign(0)));
+  assertEquals(0, goog.math.sign(-0));
+  assertTrue(goog.math.isNegativeZero(goog.math.sign(-0)));
 }
 
 function testLongestCommonSubsequence() {
@@ -288,6 +295,14 @@ function testIsFiniteNumber() {
   assertTrue(goog.math.isFiniteNumber(0));
   assertTrue(goog.math.isFiniteNumber(1));
   assertTrue(goog.math.isFiniteNumber(Math.PI));
+}
+
+function testIsNegativeZero() {
+  assertFalse(goog.math.isNegativeZero(0));
+  assertTrue(goog.math.isNegativeZero(-0));
+  assertFalse(goog.math.isNegativeZero(1));
+  assertFalse(goog.math.isNegativeZero(-1));
+  assertFalse(goog.math.isNegativeZero(-Number.MIN_VALUE));
 }
 
 function testLog10Floor() {
