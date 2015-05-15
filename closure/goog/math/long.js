@@ -875,27 +875,3 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
   }
 };
 
-
-// Keeping these for backwards compatibility till all callers have been migrated
-// to the dead-code safe replacements.
-
-
-/** @type {!goog.math.Long} */
-goog.math.Long.ZERO = goog.math.Long.fromInt(0);
-
-
-/** @type {!goog.math.Long} */
-goog.math.Long.ONE = goog.math.Long.fromInt(1);
-
-
-/** @type {!goog.math.Long} */
-goog.math.Long.NEG_ONE = goog.math.Long.fromInt(-1);
-
-
-/** @type {!goog.math.Long} */
-goog.math.Long.MAX_VALUE =
-    goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
-
-
-/** @type {!goog.math.Long} */
-goog.math.Long.MIN_VALUE = goog.math.Long.fromBits(0, 0x80000000 | 0);
