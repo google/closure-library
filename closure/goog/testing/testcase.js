@@ -817,13 +817,22 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
   if (this.depth_ > goog.testing.TestCase.MAX_STACK_DEPTH_ ||
       this.now() - this.batchTime_ > goog.testing.TestCase.maxRunTime) {
     this.saveMessage('Breaking async');
-    this.batchTime_ = this.now();
-    this.depth_ = 0;
-    this.timeout(goog.bind(this.runNextTest_, this), 0);
+    this.timeout(goog.bind(this.startNextBatch_, this), 0);
   } else {
     ++this.depth_;
     this.runNextTest_();
   }
+};
+
+
+/**
+ * Start a new batch to tests after yielding, resetting batchTime and depth.
+ * @private
+ */
+goog.testing.TestCase.prototype.startNextBatch_ = function() {
+  this.batchTime_ = this.now();
+  this.depth_ = 0;
+  this.runNextTest_();
 };
 
 
