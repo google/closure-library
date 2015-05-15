@@ -555,7 +555,7 @@ WebChannelBase.prototype.disconnect = function() {
 
     var request = ChannelRequest.createChannelRequest(
         this, this.channelDebug_, this.sid_, rid);
-    request.sendUsingImgTag(uri);
+    request.sendCloseRequest(uri);
   }
 
   this.onClose_();
