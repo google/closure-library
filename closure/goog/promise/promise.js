@@ -555,8 +555,7 @@ goog.Thenable.addImplementation(goog.Promise);
  * If the Promise is rejected, the {@code onRejected} callback will be invoked
  * with the rejection reason as argument.
  *
- * @param {?(function(this:THIS, TYPE):
- *             (RESULT|IThenable<RESULT>|Thenable))=} opt_onFulfilled A
+ * @param {?(function(this:THIS, TYPE):?)=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fulfilled.
  * @param {?(function(this:THIS, *): *)=} opt_onRejected A function that will
@@ -565,7 +564,7 @@ goog.Thenable.addImplementation(goog.Promise);
  *     execution context for the callbacks. By default, functions are executed
  *     with the default this.
  * @package
- * @template RESULT,THIS
+ * @template THIS
  */
 goog.Promise.prototype.thenVoid = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
