@@ -221,7 +221,10 @@ goog.structs.LinkedMap.prototype.removeNode = function(node) {
 
 
 /**
- * @return {number} The number of items currently in the LinkedMap.
+ * @return {number} The number of items currently in the LinkedMap. Sub classes
+ *     may override this to change how items are counted (e.g. to introduce
+ *     per item weight). Truncation will always proceed as long as the count
+ *     returned from this method is higher than the max count for this map.
  */
 goog.structs.LinkedMap.prototype.getCount = function() {
   return this.map_.getCount();
@@ -443,7 +446,7 @@ goog.structs.LinkedMap.prototype.insert_ = function(node) {
  * @private
  */
 goog.structs.LinkedMap.prototype.truncate_ = function(count) {
-  for (var i = this.map_.getCount(); i > count; i--) {
+  while (this.getCount() > count) {
     var toRemove = this.cache_ ? this.head_.prev : this.head_.next;
     this.removeNode(toRemove);
     if (this.evictionCallback_) {
