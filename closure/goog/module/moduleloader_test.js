@@ -321,6 +321,47 @@ function testErrback() {
   });
 }
 
+function testEventError() {
+  // Don't run this test on older IE, because the way the test runner catches
+  // errors on IE plays badly with the simulated errors in the test.
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(11)) {
+    return;
+  }
+
+  // Modules will throw an exception if this boolean is set to true.
+  modA1Loaded = true;
+
+  return new goog.Promise(function(resolve, reject) {
+    var errorHandler = function() {
+      assertNotLoaded('modA');
+      resolve();
+    };
+    moduleManager.registerCallback(
+        goog.module.ModuleManager.CallbackType.ERROR,
+        errorHandler);
+
+    moduleManager.execOnLoad('modA', function() {
+      fail('modA should not load successfully');
+    });
+  }).then(function() {
+    assertEquals('EVALUATE_CODE',
+        3, observer.getEvents(EventType.EVALUATE_CODE).length);
+    assertUndefined(observer.getEvents(EventType.EVALUATE_CODE)[0].error);
+
+    assertEquals('REQUEST_SUCCESS',
+        3, observer.getEvents(EventType.REQUEST_SUCCESS).length);
+    assertUndefined(observer.getEvents(EventType.REQUEST_SUCCESS)[0].error);
+
+    var requestErrors = observer.getEvents(EventType.REQUEST_ERROR);
+    assertEquals('REQUEST_ERROR', 3, requestErrors.length);
+    assertNotNull(requestErrors[0].error);
+    var expectedString = 'loaded twice';
+    var messageAndStack =
+        requestErrors[0].error.message + requestErrors[0].error.stack;
+    assertContains(expectedString, messageAndStack);
+  });
+}
+
 function testPrefetchThenLoadModuleA() {
   moduleManager.prefetchModule('modA');
   stubs.set(goog.net.BulkLoader.prototype, 'load', function() {
