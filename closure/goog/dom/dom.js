@@ -630,9 +630,14 @@ goog.dom.getDocumentScrollElement = function() {
  * @private
  */
 goog.dom.getDocumentScrollElement_ = function(doc) {
-  // WebKit needs body.scrollLeft in both quirks mode and strict mode. We also
-  // default to the documentElement if the document does not have a body (e.g.
-  // a SVG document).
+  // Old WebKit needs body.scrollLeft in both quirks mode and strict mode. We
+  // also default to the documentElement if the document does not have a body
+  // (e.g. a SVG document).
+  // Uses http://dev.w3.org/csswg/cssom-view/#dom-document-scrollingelement to
+  // avoid trying to guess about browser behavior from the UA string.
+  if (doc.scrollingElement) {
+    return doc.scrollingElement;
+  }
   if (!goog.userAgent.WEBKIT && goog.dom.isCss1CompatMode_(doc)) {
     return doc.documentElement;
   }
