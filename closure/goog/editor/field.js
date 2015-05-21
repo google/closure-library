@@ -1378,6 +1378,13 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
     }
 
     var stringKey = String.fromCharCode(key).toLowerCase();
+    // Ctrl+Cmd+Space generates a charCode for a backtick on Mac Firefox, but
+    // has the correct string key in the browser event.
+    if (goog.userAgent.MAC && goog.userAgent.GECKO &&
+        stringKey == '`' && e.getBrowserEvent().key == ' ') {
+      stringKey = ' ';
+    }
+
     if (this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SHORTCUT,
                                       e, stringKey, isModifierPressed)) {
       e.preventDefault();
