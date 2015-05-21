@@ -16,7 +16,6 @@
  * @fileoverview Shared unit tests for styles.
  */
 
-/** @suppress {extraProvide} */
 goog.provide('goog.style_test');
 
 goog.require('goog.array');
@@ -30,14 +29,12 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.object');
-goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 goog.require('goog.userAgentTestUtil');
 goog.require('goog.userAgentTestUtil.UserAgents');
 
@@ -924,15 +921,6 @@ function testInstallStyles() {
   var result = goog.style.installStyles(
       '#installTest0 { background-color: rgb(255, 192, 203); }');
 
-  // For some odd reason, the change in computed style does not register on
-  // Chrome 19 unless the style property is touched.  The behavior goes
-  // away again in Chrome 20.
-  // TODO(nnaze): Remove special caseing once we switch the testing image
-  // to Chrome 20 or higher.
-  if (isChrome19()) {
-    el.style.display = '';
-  }
-
   assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
 
   goog.style.uninstallStyles(result);
@@ -945,15 +933,6 @@ function testSetStyles() {
   // Change to pink
   var ss = goog.style.installStyles(
       '#installTest1 { background-color: rgb(255, 192, 203); }');
-
-  // For some odd reason, the change in computed style does not register on
-  // Chrome 19 unless the style property is touched.  The behavior goes
-  // away again in Chrome 20.
-  // TODO(nnaze): Remove special caseing once we switch the testing image
-  // to Chrome 20 or higher.
-  if (isChrome19()) {
-    el.style.display = '';
-  }
 
   assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
 
@@ -968,11 +947,6 @@ function assertColorRgbEquals(expected, actual) {
       goog.color.hexToRgbStyle(goog.color.parse(actual).hex));
 }
 
-function isChrome19() {
-  return goog.userAgent.product.CHROME &&
-         goog.string.startsWith(goog.userAgent.product.VERSION, '19.');
-}
-
 function testIsRightToLeft() {
   assertFalse(goog.style.isRightToLeft($('rtl1')));
   assertTrue(goog.style.isRightToLeft($('rtl2')));
@@ -984,6 +958,45 @@ function testIsRightToLeft() {
   assertFalse(goog.style.isRightToLeft($('rtl8')));
   assertTrue(goog.style.isRightToLeft($('rtl9')));
   assertFalse(goog.style.isRightToLeft($('rtl10')));
+}
+
+function testIsUnselectable() {
+  assertEquals(goog.userAgent.GECKO,
+               goog.style.isUnselectable($('unselectable-gecko')));
+  assertEquals(goog.userAgent.IE || goog.userAgent.OPERA,
+               goog.style.isUnselectable($('unselectable-ie')));
+  assertEquals(goog.userAgent.WEBKIT,
+               goog.style.isUnselectable($('unselectable-webkit')));
+}
+
+function testSetUnselectable() {
+  var el = $('make-unselectable');
+  assertFalse(goog.style.isUnselectable(el));
+
+  function assertDescendantsUnselectable(unselectable) {
+    goog.array.forEach(el.getElementsByTagName('*'), function(descendant) {
+      // Skip MathML or any other elements that do not have a style property.
+      if (descendant.style) {
+        assertEquals(unselectable, goog.style.isUnselectable(descendant));
+      }
+    });
+  }
+
+  goog.style.setUnselectable(el, true);
+  assertTrue(goog.style.isUnselectable(el));
+  assertDescendantsUnselectable(true);
+
+  goog.style.setUnselectable(el, false);
+  assertFalse(goog.style.isUnselectable(el));
+  assertDescendantsUnselectable(false);
+
+  goog.style.setUnselectable(el, true, true);
+  assertTrue(goog.style.isUnselectable(el));
+  assertDescendantsUnselectable(false);
+
+  goog.style.setUnselectable(el, false, true);
+  assertFalse(goog.style.isUnselectable(el));
+  assertDescendantsUnselectable(false);
 }
 
 function testPosWithAbsoluteAndScroll() {
