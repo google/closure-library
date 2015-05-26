@@ -330,10 +330,17 @@ goog.Promise.RESOLVE_FAST_PATH_ = function() {};
 /**
  * @param {(TYPE|goog.Thenable<TYPE>|Thenable)=} opt_value
  * @return {!goog.Promise<TYPE>} A new Promise that is immediately resolved
- *     with the given value.
+ *     with the given value. If the input value is already a goog.Promise, it
+ *     will be returned immediately without creating a new instance.
  * @template TYPE
  */
 goog.Promise.resolve = function(opt_value) {
+  if (opt_value instanceof goog.Promise) {
+    // Avoid creating a new object if we already have a promise object
+    // of the correct type.
+    return opt_value;
+  }
+
   // Passes the value as the context, which is a special fast pass when
   // goog.Promise.RESOLVE_FAST_PATH_ is passed as the first argument.
   return new goog.Promise(goog.Promise.RESOLVE_FAST_PATH_, opt_value);
