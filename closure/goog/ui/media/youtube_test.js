@@ -61,11 +61,15 @@ function testParsingUrl() {
   // a simple short link
   assertExtractsCorrectly(
       'uddeBVmKTqE',
-      'http://youtu.be/watch?v=uddeBVmKTqE');
+      'http://youtu.be/uddeBVmKTqE');
   // a secure short link
   assertExtractsCorrectly(
       'uddeBVmKTqE',
-      'https://youtu.be/watch?v=uddeBVmKTqE');
+      'https://youtu.be/uddeBVmKTqE');
+  // a secure short link with a CGI parameter
+  assertExtractsCorrectly(
+      'uddeBVmKTqE',
+      'https://youtu.be/uddeBVmKTqE?feature=channel');
   // a channel link
   assertExtractsCorrectly(
       '4Pb9e1uu3EQ',
