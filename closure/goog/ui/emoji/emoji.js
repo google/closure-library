@@ -28,10 +28,14 @@ goog.provide('goog.ui.emoji.Emoji');
  *
  * @param {string} url URL pointing to the source image for the emoji.
  * @param {string} id The id of the emoji, e.g., 'std.1'.
+ * @param {number=} opt_height The height of the emoji, if undefined the
+ *     natural height of the emoji is used.
+ * @param {number=} opt_width The width of the emoji, if undefined the natural
+ *     width of the emoji is used.
  * @constructor
  * @final
  */
-goog.ui.emoji.Emoji = function(url, id) {
+goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width) {
   /**
    * The URL pointing to the source image for the emoji
    *
@@ -47,6 +51,22 @@ goog.ui.emoji.Emoji = function(url, id) {
    * @private
    */
   this.id_ = id;
+
+  /**
+   * The height of the emoji
+   *
+   * @type {?number}
+   * @private
+   */
+  this.height_ = opt_height || null;
+
+  /**
+   * The width of the emoji
+   *
+   * @type {?number}
+   * @private
+   */
+  this.width_ = opt_width || null;
 };
 
 
@@ -71,3 +91,20 @@ goog.ui.emoji.Emoji.prototype.getUrl = function() {
 goog.ui.emoji.Emoji.prototype.getId = function() {
   return this.id_;
 };
+
+
+/**
+ * @return {?number} The height of this emoji.
+ */
+goog.ui.emoji.Emoji.prototype.getHeight = function() {
+  return this.height_;
+};
+
+
+/**
+ * @return {?number} The width of this emoji.
+ */
+goog.ui.emoji.Emoji.prototype.getWidth = function() {
+  return this.width_;
+};
+

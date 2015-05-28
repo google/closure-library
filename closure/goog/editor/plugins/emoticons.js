@@ -70,10 +70,17 @@ goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(
 goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
     command, opt_arg) {
   var emoji = /** @type {goog.ui.emoji.Emoji} */ (opt_arg);
+
+  var styleProperties = 'margin:0 0.2ex;vertical-align:middle;';
+  var emojiHeight = emoji.getHeight();
+  styleProperties += emojiHeight ? 'height:' + emojiHeight + 'px;' : '';
+  var emojiWidth = emoji.getWidth();
+  styleProperties += emojiWidth ? 'width:' + emojiWidth + 'px;' : '';
+
   var dom = this.getFieldDomHelper();
   var img = dom.createDom(goog.dom.TagName.IMG, {
     'src': emoji.getUrl(),
-    'style': 'margin:0 0.2ex;vertical-align:middle'
+    'style': styleProperties
   });
   img.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, emoji.getId());
 
