@@ -71,6 +71,12 @@ goog.fx.css3.Transition = function(
   goog.fx.css3.Transition.base(this, 'constructor');
 
   /**
+   * Timer id to be used to cancel animation part-way.
+   * @private {number}
+   */
+  this.timerId_;
+
+  /**
    * @type {Element}
    * @private
    */
@@ -101,14 +107,6 @@ goog.fx.css3.Transition = function(
   this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];
 };
 goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
-
-
-/**
- * Timer id to be used to cancel animation part-way.
- * @type {number}
- * @private
- */
-goog.fx.css3.Transition.prototype.timerId_;
 
 
 /** @override */

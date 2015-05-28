@@ -161,6 +161,9 @@ goog.fx.dom.Slide.prototype.updateStyle = function() {
  * @constructor
  */
 goog.fx.dom.SlideFrom = function(element, end, time, opt_acc) {
+  /** @type {?Array<number>} */
+  this.startPoint;
+
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
       goog.style.bidi.getOffsetStart(element) : element.offsetLeft;
   var start = [offsetLeft, element.offsetTop];
