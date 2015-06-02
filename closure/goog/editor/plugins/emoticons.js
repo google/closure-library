@@ -78,10 +78,15 @@ goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
   styleProperties += emojiWidth ? 'width:' + emojiWidth + 'px;' : '';
 
   var dom = this.getFieldDomHelper();
-  var img = dom.createDom(goog.dom.TagName.IMG, {
+  var imgAttributes = {
     'src': emoji.getUrl(),
     'style': styleProperties
-  });
+  };
+  if (emoji.getAltText()) {
+    imgAttributes['alt'] = emoji.getAltText();
+  }
+  var img = dom.createDom(goog.dom.TagName.IMG, imgAttributes);
+
   img.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, emoji.getId());
 
   this.getFieldObject().getRange().replaceContentsWithNode(img);

@@ -32,10 +32,12 @@ goog.provide('goog.ui.emoji.Emoji');
  *     natural height of the emoji is used.
  * @param {number=} opt_width The width of the emoji, if undefined the natural
  *     width of the emoji is used.
+ * @param {string=} opt_altText The alt text for the emoji image, eg. the
+ *     unicode character representation of the emoji.
  * @constructor
  * @final
  */
-goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width) {
+goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width, opt_altText) {
   /**
    * The URL pointing to the source image for the emoji
    *
@@ -67,6 +69,14 @@ goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width) {
    * @private
    */
   this.width_ = opt_width || null;
+
+  /**
+   * The unicode of the emoji
+   *
+   * @type {?string}
+   * @private
+   */
+  this.altText_ = opt_altText || null;
 };
 
 
@@ -106,5 +116,14 @@ goog.ui.emoji.Emoji.prototype.getHeight = function() {
  */
 goog.ui.emoji.Emoji.prototype.getWidth = function() {
   return this.width_;
+};
+
+
+/**
+ * @return {?string} The alt text for the emoji image, eg. the unicode character
+ *     representation of the emoji.
+ */
+goog.ui.emoji.Emoji.prototype.getAltText = function() {
+  return this.altText_;
 };
 
