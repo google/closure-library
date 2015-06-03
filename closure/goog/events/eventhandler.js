@@ -266,13 +266,6 @@ goog.events.EventHandler.prototype.listenOnce_ = function(
       this.listenOnce_(src, type[i], opt_fn, opt_capture, opt_scope);
     }
   } else {
-    var key;
-    goog.events.listenOnce(src, type, function(e) {
-      if (key) {
-        delete this.keys_[key];
-      }
-    }, opt_capture, this);
-
     var listenerObj = goog.events.listenOnce(
         src, type, opt_fn || this.handleEvent, opt_capture,
         opt_scope || this.handler_ || this);
@@ -283,7 +276,7 @@ goog.events.EventHandler.prototype.listenOnce_ = function(
       return this;
     }
 
-    key = listenerObj.key;
+    var key = listenerObj.key;
     this.keys_[key] = listenerObj;
   }
 

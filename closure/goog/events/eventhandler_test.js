@@ -113,20 +113,13 @@ function testListenOnceRemovesListenerWhenFired() {
   var handler = goog.testing.recordFunction();
   eh.listenOnce(target, 'click', handler);
 
-  assertEquals('One listener expected',
-      1, eh.getListenerCount());
-
   target.dispatchEvent('click');
   assertEquals('One event should have been dispatched',
       1, handler.getCallCount());
 
-
   target.dispatchEvent('click');
   assertEquals('No event should have been dispatched',
       1, handler.getCallCount());
-
-  assertEquals('Listener should have been cleaned up',
-      0, eh.getListenerCount());
 }
 
 function testListenOnceListenerIsCleanedUp() {
