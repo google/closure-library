@@ -34,6 +34,7 @@ goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
@@ -2404,7 +2405,7 @@ goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
   this.savedClassName_ = field.className;
   this.setInitialStyle(field.style.cssText);
 
-  field.className += ' editable';
+  goog.dom.classes.add(field, 'editable');
 
   this.makeEditableInternal(opt_iframeSrc);
 };
