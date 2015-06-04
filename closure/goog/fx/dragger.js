@@ -54,14 +54,151 @@ goog.require('goog.userAgent');
  * @constructor
  */
 goog.fx.Dragger = function(target, opt_handle, opt_limits) {
-  goog.events.EventTarget.call(this);
+  goog.fx.Dragger.base(this, 'constructor');
+
+  /**
+   * Reference to drag target element.
+   * @type {?Element}
+   */
   this.target = target;
+
+  /**
+   * Reference to the handler that initiates the drag.
+   * @type {?Element}
+   */
   this.handle = opt_handle || target;
+
+  /**
+   * Object representing the limits of the drag region.
+   * @type {goog.math.Rect}
+   */
   this.limits = opt_limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
 
+  /**
+   * Reference to a document object to use for the events.
+   * @private {Document}
+   */
   this.document_ = goog.dom.getOwnerDocument(target);
+
+  /** @private {!goog.events.EventHandler} */
   this.eventHandler_ = new goog.events.EventHandler(this);
   this.registerDisposable(this.eventHandler_);
+
+  /**
+   * Whether the element is rendered right-to-left. We initialize this lazily.
+   * @private {boolean|undefined}}
+   */
+  this.rightToLeft_;
+
+  /**
+   * Current x position of mouse or touch relative to viewport.
+   * @type {number}
+   */
+  this.clientX = 0;
+
+  /**
+   * Current y position of mouse or touch relative to viewport.
+   * @type {number}
+   */
+  this.clientY = 0;
+
+  /**
+   * Current x position of mouse or touch relative to screen. Deprecated because
+   * it doesn't take into affect zoom level or pixel density.
+   * @type {number}
+   * @deprecated Consider switching to clientX instead.
+   */
+  this.screenX = 0;
+
+  /**
+   * Current y position of mouse or touch relative to screen. Deprecated because
+   * it doesn't take into affect zoom level or pixel density.
+   * @type {number}
+   * @deprecated Consider switching to clientY instead.
+   */
+  this.screenY = 0;
+
+  /**
+   * The x position where the first mousedown or touchstart occurred.
+   * @type {number}
+   */
+  this.startX = 0;
+
+  /**
+   * The y position where the first mousedown or touchstart occurred.
+   * @type {number}
+   */
+  this.startY = 0;
+
+  /**
+   * Current x position of drag relative to target's parent.
+   * @type {number}
+   */
+  this.deltaX = 0;
+
+  /**
+   * Current y position of drag relative to target's parent.
+   * @type {number}
+   */
+  this.deltaY = 0;
+
+  /**
+   * The current page scroll value.
+   * @type {?goog.math.Coordinate}
+   */
+  this.pageScroll;
+
+  /**
+   * Whether dragging is currently enabled.
+   * @private {boolean}
+   */
+  this.enabled_ = true;
+
+  /**
+   * Whether object is currently being dragged.
+   * @private {boolean}
+   */
+  this.dragging_ = false;
+
+  /**
+   * Whether mousedown should be default prevented.
+   * @private {boolean}
+   **/
+  this.preventMouseDown_ = true;
+
+  /**
+   * The amount of distance, in pixels, after which a mousedown or touchstart is
+   * considered a drag.
+   * @private {number}
+   */
+  this.hysteresisDistanceSquared_ = 0;
+
+  /**
+   * Timestamp of when the mousedown or touchstart occurred.
+   * @private {number}
+   */
+  this.mouseDownTime_ = 0;
+
+  /**
+   * The SCROLL event target used to make drag element follow scrolling.
+   * @private {?EventTarget}
+   */
+  this.scrollTarget_;
+
+  /**
+   * Whether IE drag events cancelling is on.
+   * @private {boolean}
+   */
+  this.ieDragStartCancellingOn_ = false;
+
+  /**
+   * Whether the dragger implements the changes described in http://b/6324964,
+   * making it truly RTL.  This is a temporary flag to allow clients to
+   * transition to the new behavior at their convenience.  At some point it will
+   * be the default.
+   * @private {boolean}
+   */
+  this.useRightPositioningForRtl_ = false;
 
   // Add listener. Do not use the event handler here since the event handler is
   // used for listeners added and removed during the drag operation.
@@ -137,177 +274,6 @@ goog.fx.Dragger.EventType = {
   DRAG: 'drag',
   END: 'end'
 };
-
-
-/**
- * Reference to drag target element.
- * @type {Element}
- */
-goog.fx.Dragger.prototype.target;
-
-
-/**
- * Reference to the handler that initiates the drag.
- * @type {Element}
- */
-goog.fx.Dragger.prototype.handle;
-
-
-/**
- * Object representing the limits of the drag region.
- * @type {goog.math.Rect}
- */
-goog.fx.Dragger.prototype.limits;
-
-
-/**
- * Whether the element is rendered right-to-left. We initialize this lazily.
- * @type {boolean|undefined}}
- * @private
- */
-goog.fx.Dragger.prototype.rightToLeft_;
-
-
-/**
- * Current x position of mouse or touch relative to viewport.
- * @type {number}
- */
-goog.fx.Dragger.prototype.clientX = 0;
-
-
-/**
- * Current y position of mouse or touch relative to viewport.
- * @type {number}
- */
-goog.fx.Dragger.prototype.clientY = 0;
-
-
-/**
- * Current x position of mouse or touch relative to screen. Deprecated because
- * it doesn't take into affect zoom level or pixel density.
- * @type {number}
- * @deprecated Consider switching to clientX instead.
- */
-goog.fx.Dragger.prototype.screenX = 0;
-
-
-/**
- * Current y position of mouse or touch relative to screen. Deprecated because
- * it doesn't take into affect zoom level or pixel density.
- * @type {number}
- * @deprecated Consider switching to clientY instead.
- */
-goog.fx.Dragger.prototype.screenY = 0;
-
-
-/**
- * The x position where the first mousedown or touchstart occurred.
- * @type {number}
- */
-goog.fx.Dragger.prototype.startX = 0;
-
-
-/**
- * The y position where the first mousedown or touchstart occurred.
- * @type {number}
- */
-goog.fx.Dragger.prototype.startY = 0;
-
-
-/**
- * Current x position of drag relative to target's parent.
- * @type {number}
- */
-goog.fx.Dragger.prototype.deltaX = 0;
-
-
-/**
- * Current y position of drag relative to target's parent.
- * @type {number}
- */
-goog.fx.Dragger.prototype.deltaY = 0;
-
-
-/**
- * The current page scroll value.
- * @type {goog.math.Coordinate}
- */
-goog.fx.Dragger.prototype.pageScroll;
-
-
-/**
- * Whether dragging is currently enabled.
- * @type {boolean}
- * @private
- */
-goog.fx.Dragger.prototype.enabled_ = true;
-
-
-/**
- * Whether object is currently being dragged.
- * @type {boolean}
- * @private
- */
-goog.fx.Dragger.prototype.dragging_ = false;
-
-
-/**
- * Whether mousedown should be default prevented.
- * @private {boolean}
- */
-goog.fx.Dragger.prototype.preventMouseDown_ = true;
-
-
-/**
- * The amount of distance, in pixels, after which a mousedown or touchstart is
- * considered a drag.
- * @type {number}
- * @private
- */
-goog.fx.Dragger.prototype.hysteresisDistanceSquared_ = 0;
-
-
-/**
- * Timestamp of when the mousedown or touchstart occurred.
- * @type {number}
- * @private
- */
-goog.fx.Dragger.prototype.mouseDownTime_ = 0;
-
-
-/**
- * Reference to a document object to use for the events.
- * @type {Document}
- * @private
- */
-goog.fx.Dragger.prototype.document_;
-
-
-/**
- * The SCROLL event target used to make drag element follow scrolling.
- * @type {EventTarget}
- * @private
- */
-goog.fx.Dragger.prototype.scrollTarget_;
-
-
-/**
- * Whether IE drag events cancelling is on.
- * @type {boolean}
- * @private
- */
-goog.fx.Dragger.prototype.ieDragStartCancellingOn_ = false;
-
-
-/**
- * Whether the dragger implements the changes described in http://b/6324964,
- * making it truly RTL.  This is a temporary flag to allow clients to transition
- * to the new behavior at their convenience.  At some point it will be the
- * default.
- * @type {boolean}
- * @private
- */
-goog.fx.Dragger.prototype.useRightPositioningForRtl_ = false;
 
 
 /**
