@@ -209,6 +209,15 @@ function testSetPropertiesDirectAttributeMap() {
   assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
 }
 
+function testSetPropertiesDirectAttributeMapChecksForOwnProperties() {
+  stubs.set(Object.prototype, 'customProp', 'sdflasdf.,m.,<>fsdflas213!@#');
+  var attrs = {'usemap': '#myMap'};
+  var el = goog.dom.createDom(goog.dom.TagName.IMG);
+
+  var res = goog.dom.setProperties(el, attrs);
+  assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
+}
+
 function testSetPropertiesAria() {
   var attrs = {
     'aria-hidden': 'true',
