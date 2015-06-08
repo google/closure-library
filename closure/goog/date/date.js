@@ -1493,7 +1493,7 @@ goog.date.DateTime.prototype.setSeconds = function(seconds) {
 
 
 /**
- * Sets the seconds part of the datetime.
+ * Sets the milliseconds part of the datetime.
  *
  * @param {number} ms Integer between 0 and 999, representing the milliseconds.
  */
