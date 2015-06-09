@@ -18,21 +18,25 @@ goog.setTestOnly('goog.events.EventHandlerTest');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
 var a, b, c, d, eh;
+var propertyReplacer;
 
 function setUpPage() {
   a = document.getElementById('a');
   b = document.getElementById('b');
   c = document.getElementById('c');
   d = document.getElementById('d');
+  propertyReplacer = new goog.testing.PropertyReplacer();
 }
 
 
 function tearDown() {
   goog.dispose(eh);
+  propertyReplacer.reset();
 }
 
 function testEventHandlerClearsListeners() {
@@ -244,4 +248,13 @@ function testGetListenerCount() {
   assertEquals('1 listener removed, 1 left', 1, eh.getListenerCount());
   eh.removeAll();
   assertEquals('all listeners removed', 0, eh.getListenerCount());
+}
+
+function testRemoveAllCheckSForOwnKeys() {
+  propertyReplacer.set(Object.prototype, 'customMethod',
+      function() { throw new Error('NOOOOOOOOOOO'); });
+  eh = new goog.events.EventHandler();
+  // If removeAll doesn't check keys using hasOwnProperty it will also try
+  // unlisten using customMethod function as key and will throw error.
+  eh.removeAll();
 }
