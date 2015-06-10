@@ -26,6 +26,7 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
+goog.require('goog.math.Coordinate3');
 goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -2188,8 +2189,8 @@ function testGetsTranslation() {
     if (!goog.userAgent.isDocumentModeOrHigher(9) ||
         (!goog.dom.isCss1CompatMode() &&
             !goog.userAgent.isDocumentModeOrHigher(10))) {
-      // 'CSS transforms were introduced in IE9, but only in standards mode
-      // later browsers support the translations in quirks mode.
+      // CSS transforms were introduced in IE9, but only in standards mode.
+      // Later browsers support the translations in quirks mode.
       return;
     }
   }
@@ -2202,6 +2203,68 @@ function testGetsTranslation() {
 
   assertEquals(30, position.x);
   assertRoughlyEquals(40, position.y, .1);
+  assertObjectEquals(expectedTranslation, translation);
+}
+
+function testGets3dTranslation() {
+  var element = document.getElementById('translation-3d');
+
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // CSS 3d transforms were introduced in IE10
+    return;
+  }
+
+  // First check the element is actually translated, and we haven't missed
+  // one of the vendor-specific transform properties
+  var position = goog.style.getClientPosition(element);
+  var translation = goog.style.getCssTranslation3d(element);
+  var expectedTranslation = new goog.math.Coordinate3(40, 30, 10);
+
+  assertEquals(50, position.x);
+  assertRoughlyEquals(40, position.y, .1);
+  assertObjectEquals(expectedTranslation, translation);
+}
+
+function testGets3dTranslationFor2dTransform() {
+  var element = document.getElementById('translation');
+
+  if (goog.userAgent.IE) {
+    if (!goog.userAgent.isDocumentModeOrHigher(9) ||
+        (!goog.dom.isCss1CompatMode() &&
+            !goog.userAgent.isDocumentModeOrHigher(10))) {
+      // CSS transforms were introduced in IE9, but only in standards mode.
+      // Later browsers support the translations in quirks mode.
+      return;
+    }
+  }
+
+  // First check the element is actually translated, and we haven't missed
+  // one of the vendor-specific transform properties
+  var position = goog.style.getClientPosition(element);
+  var translation = goog.style.getCssTranslation3d(element);
+  var expectedTranslation = new goog.math.Coordinate3(20, 30, 0);
+
+  assertEquals(30, position.x);
+  assertRoughlyEquals(40, position.y, .1);
+  assertObjectEquals(expectedTranslation, translation);
+}
+
+function testGets2dTranslationFor3dTranslatedElements() {
+  var element = document.getElementById('translation-noZ');
+
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // CSS 3d transforms were introduced in IE10
+    return;
+  }
+
+  // First check the element is actually translated, and we haven't missed
+  // one of the vendor-specific transform properties
+  var position = goog.style.getClientPosition(element);
+  var translation = goog.style.getCssTranslation(element);
+  var expectedTranslation = new goog.math.Coordinate(5, 10);
+
+  assertEquals(15, position.x);
+  assertRoughlyEquals(20, position.y, .1);
   assertObjectEquals(expectedTranslation, translation);
 }
 

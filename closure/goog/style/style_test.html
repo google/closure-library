@@ -230,6 +230,36 @@ i {
   transform: translate(20px, 30px);
 }
 
+#translation-3d {
+  position: absolute;
+  z-index: 10;
+  left: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  -webkit-transform: translate3d(40px, 30px, 10px);
+  -ms-transform: translate3d(40px, 30px, 10px);
+  -o-transform: translate3d(40px, 30px, 10px);
+  -moz-transform: translate3d(40px, 30px, 10px);
+  transform: translate3d(40px, 30px, 10px);
+}
+
+#translation-noZ {
+  position: absolute;
+  z-index: 10;
+  left: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  -webkit-transform: translate3d(5px, 10px, 0);
+  -ms-transform: translate3d(5px, 10px, 0);
+  -o-transform: translate3d(5px, 10px, 0);
+  -moz-transform: translate3d(5px, 10px, 0);
+  transform: translate3d(5px, 10px, 0);
+}
+
 </style>
 </head>
 <body>
@@ -520,6 +550,8 @@ Test-visible
 
 <div id="test-viewport"></div>
 <div id="translation"></div>
+<div id="translation-3d"></div>
+<div id="translation-noZ"></div>
 
 <div id="rotated"></div>
 <div id="scaled"></div>

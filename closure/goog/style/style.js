@@ -33,6 +33,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.vendor');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
+goog.require('goog.math.Coordinate3');
 goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -2024,9 +2025,22 @@ goog.style.getScrollbarWidth = function(opt_className) {
  * @private
  */
 goog.style.MATRIX_TRANSLATION_REGEX_ =
-    new RegExp('matrix\\([0-9\\.\\-]+, [0-9\\.\\-]+, ' +
-               '[0-9\\.\\-]+, [0-9\\.\\-]+, ' +
+    new RegExp('matrix\\(([0-9\\.\\-]+, ){4}' +
                '([0-9\\.\\-]+)p?x?, ([0-9\\.\\-]+)p?x?\\)');
+
+
+/**
+ * Regular expression to extract x, y, and z translation components from a CSS
+ * transform Matrix3d representation.
+ *
+ * @type {!RegExp}
+ * @const
+ * @private
+ */
+goog.style.MATRIX_3D_TRANSLATION_REGEX_ =
+    new RegExp('matrix3d\\(([0-9\\.\\-]+, ){12}' +
+               '([0-9\\.\\-]+)p?x?, ([0-9\\.\\-]+)p?x?, ' +
+               '([0-9\\.\\-]+)p?x?, [0-9\\.\\-]+\\)');
 
 
 /**
@@ -2037,14 +2051,29 @@ goog.style.MATRIX_TRANSLATION_REGEX_ =
  * @return {!goog.math.Coordinate} The CSS translation of the element in px.
  */
 goog.style.getCssTranslation = function(element) {
+  var translation = goog.style.getCssTranslation3d(element);
+  return new goog.math.Coordinate(translation.x, translation.y);
+};
+
+
+/**
+ * Returns the x,y,z translation3d component of any CSS transforms applied to
+ * the element, in pixels.
+ *
+ * @param {!Element} element The element to get the translation of.
+ * @return {!goog.math.Coordinate3} The CSS translation3d of the element in px.
+ */
+goog.style.getCssTranslation3d = function(element) {
   var transform = goog.style.getComputedTransform(element);
   if (!transform) {
-    return new goog.math.Coordinate(0, 0);
+    return new goog.math.Coordinate3(0, 0, 0);
   }
-  var matches = transform.match(goog.style.MATRIX_TRANSLATION_REGEX_);
+  var matches = transform.match(goog.style.MATRIX_3D_TRANSLATION_REGEX_) ||
+      transform.match(goog.style.MATRIX_TRANSLATION_REGEX_);
   if (!matches) {
-    return new goog.math.Coordinate(0, 0);
+    return new goog.math.Coordinate3(0, 0, 0);
   }
-  return new goog.math.Coordinate(parseFloat(matches[1]),
-                                  parseFloat(matches[2]));
+  return new goog.math.Coordinate3(parseFloat(matches[2]),
+                                   parseFloat(matches[3]),
+                                   parseFloat(matches[4] || 0));
 };
