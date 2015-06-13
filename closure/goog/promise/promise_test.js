@@ -22,6 +22,7 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
+goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.PromiseTest');
 
@@ -29,6 +30,12 @@ goog.setTestOnly('goog.PromiseTest');
 // TODO(brenneman):
 // - Add tests for interoperability with native Promises where available.
 // - Add tests for long stack traces.
+
+var SUPPORTS_ACCESSORS = !!window.Object.defineProperty &&
+    // IE8 and Safari<5.1 have an Object.defineProperty which does not work on
+    // some objects.
+    (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('9')) &&
+    (!goog.userAgent.SAFARI || goog.userAgent.isVersionOrHigher('534.48.3'));
 
 
 var mockClock = new goog.testing.MockClock();
@@ -77,12 +84,127 @@ function fulfillSoon(value, delay) {
 }
 
 
+function fulfillThenableSoon(value, delay) {
+  return createThenable(value, delay, true /* fulfilled */);
+}
+
+
+function fulfillBuiltInSoon(value, delay) {
+  // If the environment does not provide a built-in Promise, then just use
+  // goog.Promise instead to allow tests which use this to continue.
+  if (!window.Promise) {
+    return fulfillSoon(value, delay);
+  }
+  return new window.Promise(function(resolve, reject) {
+    window.setTimeout(function() {
+      resolve(value);
+    }, delay);
+  });
+}
+
+
 function rejectSoon(reason, delay) {
   return new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       reject(reason);
     }, delay);
   });
+}
+
+
+function rejectThenableSoon(value, delay) {
+  return createThenable(value, delay, false /* fulfilled */);
+}
+
+
+function rejectBuiltInSoon(value, delay) {
+  // If the environment does not provide a built-in Promise, then just use
+  // goog.Promise instead to allow tests which use this to continue.
+  if (!window.Promise) {
+    return rejectSoon(value, delay);
+  }
+  return new window.Promise(function(resolve, reject) {
+    window.setTimeout(function() {
+      reject(value);
+    }, delay);
+  });
+}
+
+
+/**
+ * Creates a thenable which isn't formally a promise for testing non-Promise
+ * thenables.
+ */
+function createThenableResolver() {
+  var resolver = goog.Promise.withResolver();
+  var thenable = {};
+  var then = function(onFulfilled, onRejected) {
+    var next = createThenableResolver();
+    next.resolve(resolver.promise.then(onFulfilled, onRejected));
+    return next.thenable;
+  };
+  // Count accesses of the {@code then} property when possible. Otherwise, just
+  // define the {@code then} method as a regular data property.
+  if (SUPPORTS_ACCESSORS) {
+    thenable.thenAccesses = 0;
+    window.Object.defineProperty(thenable, 'then', {
+      get: function() {
+        thenable.thenAccesses++;
+        return then;
+      }
+    });
+  } else {
+    thenable.then = then;
+  }
+  return {
+    resolve: resolver.resolve,
+    reject: resolver.reject,
+    thenable: thenable
+  };
+}
+
+
+/**
+ * @param {*} value The value the thenable should be fulfilled/rejected with.
+ * @param {number} delay The length of the delay until the thenable is resolved.
+ * @param {boolean} fulfill Whether to fulfill or reject the thenable.
+ * @return {!Thenable}
+ */
+function createThenable(value, delay, fulfill) {
+  var resolver = createThenableResolver();
+  window.setTimeout(function() {
+    if (fulfill) {
+      resolver.resolve(value);
+    } else {
+      resolver.reject(value);
+    }
+  }, delay);
+  return resolver.thenable;
+}
+
+
+/**
+ * Creates a malicious thenable that throws when the {@code then} method is
+ * accessed to ensure that it is caught and converted to a rejected promise
+ * instead of allowed to cause a synchronous exception.
+ * @param {*} value The value to throw.
+ * @return {!Thenable}
+ */
+function createThrowingThenable(value) {
+  // If the environment does not provide Object.defineProperty, then just
+  // use an immediately rejected promise to allow tests which use this to
+  // continue.
+  if (!SUPPORTS_ACCESSORS) {
+    return rejectThenableSoon(value, 0);
+  }
+
+  var thenable = {};
+  window.Object.defineProperty(thenable, 'then', {
+    get: function() {
+      throw value;
+    }
+  });
+  return thenable;
 }
 
 
@@ -772,6 +894,75 @@ function testRaceWithFulfill() {
 }
 
 
+function testRaceWithThenables() {
+  var a = fulfillThenableSoon('a', 40);
+  var b = fulfillThenableSoon('b', 30);
+  var c = fulfillThenableSoon('c', 10);
+  var d = fulfillThenableSoon('d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(function(value) {
+    assertEquals('c', value);
+    // Ensure that the {@code then} property was only accessed once by
+    // {@code goog.Promise.race}.
+    if (SUPPORTS_ACCESSORS) {
+      assertEquals(1, c.thenAccesses);
+    }
+    // Return the slowest input thenable to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest thenable should resolve eventually.', 'a', value);
+  });
+}
+
+
+function testRaceWithBuiltIns() {
+  var a = fulfillBuiltInSoon('a', 40);
+  var b = fulfillBuiltInSoon('b', 30);
+  var c = fulfillBuiltInSoon('c', 10);
+  var d = fulfillBuiltInSoon('d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(function(value) {
+    assertEquals('c', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
+function testRaceWithNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = 'b';
+  var c = fulfillSoon('c', 10);
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(function(value) {
+    assertEquals('b', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
+function testRaceWithFulfilledBeforeNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = goog.Promise.resolve('b');
+  var c = 'c';
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(function(value) {
+    assertEquals('b', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
 function testRaceWithReject() {
   var a = rejectSoon('rejected-a', 40);
   var b = rejectSoon('rejected-b', 30);
@@ -780,6 +971,51 @@ function testRaceWithReject() {
 
   return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
     assertEquals('rejected-c', value);
+    return a;
+  }).then(shouldNotCall, function(reason) {
+    assertEquals('The slowest promise should resolve eventually.',
+                 'rejected-a', reason);
+  });
+}
+
+function testRaceWithRejectThenable() {
+  var a = rejectThenableSoon('rejected-a', 40);
+  var b = rejectThenableSoon('rejected-b', 30);
+  var c = rejectThenableSoon('rejected-c', 10);
+  var d = rejectThenableSoon('rejected-d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
+    assertEquals('rejected-c', value);
+    return a;
+  }).then(shouldNotCall, function(reason) {
+    assertEquals('The slowest promise should resolve eventually.',
+                 'rejected-a', reason);
+  });
+}
+
+function testRaceWithRejectBuiltIn() {
+  var a = rejectBuiltInSoon('rejected-a', 40);
+  var b = rejectBuiltInSoon('rejected-b', 30);
+  var c = rejectBuiltInSoon('rejected-c', 10);
+  var d = rejectBuiltInSoon('rejected-d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
+    assertEquals('rejected-c', value);
+    return a;
+  }).then(shouldNotCall, function(reason) {
+    assertEquals('The slowest promise should resolve eventually.',
+                 'rejected-a', reason);
+  });
+}
+
+function testRaceWithRejectAndThrowingThenable() {
+  var a = rejectSoon('rejected-a', 40);
+  var b = rejectThenableSoon('rejected-b', 30);
+  var c = rejectBuiltInSoon('rejected-c', 10);
+  var d = createThrowingThenable('rejected-d');
+
+  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
+    assertEquals('rejected-d', value);
     return a;
   }).then(shouldNotCall, function(reason) {
     assertEquals('The slowest promise should resolve eventually.',
@@ -798,6 +1034,47 @@ function testAllWithEmptyList() {
 function testAllWithFulfill() {
   var a = fulfillSoon('a', 40);
   var b = fulfillSoon('b', 30);
+  var c = fulfillSoon('c', 10);
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.all([a, b, c, d]).then(function(value) {
+    assertArrayEquals(['a', 'b', 'c', 'd'], value);
+  });
+}
+
+
+function testAllWithThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = fulfillThenableSoon('b', 30);
+  var c = fulfillSoon('c', 10);
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.all([a, b, c, d]).then(function(value) {
+    assertArrayEquals(['a', 'b', 'c', 'd'], value);
+    // Ensure that the {@code then} property was only accessed once by
+    // {@code goog.Promise.all}.
+    if (SUPPORTS_ACCESSORS) {
+      assertEquals(1, b.thenAccesses);
+    }
+  });
+}
+
+
+function testAllWithBuiltIn() {
+  var a = fulfillSoon('a', 40);
+  var b = fulfillBuiltInSoon('b', 30);
+  var c = fulfillSoon('c', 10);
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.all([a, b, c, d]).then(function(value) {
+    assertArrayEquals(['a', 'b', 'c', 'd'], value);
+  });
+}
+
+
+function testAllWithNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = 'b';
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
@@ -833,17 +1110,32 @@ function testAllSettledWithEmptyList() {
 function testAllSettledWithFulfillAndReject() {
   var a = fulfillSoon('a', 40);
   var b = rejectSoon('rejected-b', 30);
-  var c = fulfillSoon('c', 10);
-  var d = rejectSoon('rejected-d', 20);
+  var c = 'c';
+  var d = rejectBuiltInSoon('rejected-d', 20);
+  var e = fulfillThenableSoon('e', 40);
+  var f = fulfillBuiltInSoon('f', 30);
+  var g = rejectThenableSoon('rejected-g', 10);
+  var h = createThrowingThenable('rejected-h');
 
-  return goog.Promise.allSettled([a, b, c, d]).then(function(results) {
-    assertArrayEquals([
-      {fulfilled: true, value: 'a'},
-      {fulfilled: false, reason: 'rejected-b'},
-      {fulfilled: true, value: 'c'},
-      {fulfilled: false, reason: 'rejected-d'}
-    ], results);
-  });
+  return goog.Promise.allSettled([a, b, c, d, e, f, g, h])
+      .then(function(results) {
+        assertArrayEquals([
+          {fulfilled: true, value: 'a'},
+          {fulfilled: false, reason: 'rejected-b'},
+          {fulfilled: true, value: 'c'},
+          {fulfilled: false, reason: 'rejected-d'},
+          {fulfilled: true, value: 'e'},
+          {fulfilled: true, value: 'f'},
+          {fulfilled: false, reason: 'rejected-g'},
+          {fulfilled: false, reason: 'rejected-h'}
+        ], results);
+        // Ensure that the {@code then} property was only accessed once by
+        // {@code goog.Promise.allSettled}.
+        if (SUPPORTS_ACCESSORS) {
+          assertEquals(1, e.thenAccesses);
+          assertEquals(1, g.thenAccesses);
+        }
+      });
 }
 
 
@@ -865,27 +1157,113 @@ function testFirstFulfilledWithFulfill() {
     return c;
   }).then(shouldNotCall, function(reason) {
     assertEquals(
-        'Promise "c" should have been rejected before the some() resolved.',
+        'Promise "c" should be rejected before firstFulfilled() resolves.',
         'rejected-c', reason);
     return a;
   }).then(function(value) {
     assertEquals(
-        'Promise "a" should be fulfilled even after some() has resolved.',
+        'Promise "a" should be fulfilled after firstFulfilled() resolves.',
         'a', value);
+  });
+}
+
+
+function testFirstFulfilledWithThenables() {
+  var a = fulfillThenableSoon('a', 40);
+  var b = rejectThenableSoon('rejected-b', 30);
+  var c = rejectThenableSoon('rejected-c', 10);
+  var d = fulfillThenableSoon('d', 20);
+
+  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
+    assertEquals('d', value);
+    // Ensure that the {@code then} property was only accessed once by
+    // {@code goog.Promise.firstFulfilled}.
+    if (SUPPORTS_ACCESSORS) {
+      assertEquals(1, d.thenAccesses);
+    }
+    return c;
+  }).then(shouldNotCall, function(reason) {
+    assertEquals(
+        'Thenable "c" should be rejected before firstFulfilled() resolves.',
+        'rejected-c', reason);
+    return a;
+  }).then(function(value) {
+    assertEquals(
+        'Thenable "a" should be fulfilled after firstFulfilled() resolves.',
+        'a', value);
+  });
+}
+
+
+function testFirstFulfilledWithBuiltIns() {
+  var a = fulfillBuiltInSoon('a', 40);
+  var b = rejectBuiltInSoon('rejected-b', 30);
+  var c = rejectBuiltInSoon('rejected-c', 10);
+  var d = fulfillBuiltInSoon('d', 20);
+
+  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
+    assertEquals('d', value);
+    return c;
+  }).then(shouldNotCall, function(reason) {
+    assertEquals(
+        'Promise "c" should be rejected before firstFulfilled() resolves.',
+        'rejected-c', reason);
+    return a;
+  }).then(function(value) {
+    assertEquals(
+        'Promise "a" should be fulfilled after firstFulfilled() resolves.',
+        'a', value);
+  });
+}
+
+
+function testFirstFulfilledWithNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = rejectSoon('rejected-b', 30);
+  var c = rejectSoon('rejected-c', 10);
+  var d = 'd';
+
+  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
+    assertEquals('d', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
+function testFirstFulfilledWithFulfilledBeforeNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = goog.Promise.resolve('b');
+  var c = rejectSoon('rejected-c', 10);
+  var d = 'd';
+
+  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
+    assertEquals('b', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
   });
 }
 
 
 function testFirstFulfilledWithReject() {
   var a = rejectSoon('rejected-a', 40);
-  var b = rejectSoon('rejected-b', 30);
-  var c = rejectSoon('rejected-c', 10);
-  var d = rejectSoon('rejected-d', 20);
+  var b = rejectThenableSoon('rejected-b', 30);
+  var c = rejectBuiltInSoon('rejected-c', 10);
+  var d = createThrowingThenable('rejected-d');
 
   return goog.Promise.firstFulfilled([a, b, c, d])
       .then(shouldNotCall, function(reason) {
         assertArrayEquals(
             ['rejected-a', 'rejected-b', 'rejected-c', 'rejected-d'], reason);
+        // Ensure that the {@code then} property was only accessed once by
+        // {@code goog.Promise.firstFulfilled}.
+        if (SUPPORTS_ACCESSORS) {
+          assertEquals(1, b.thenAccesses);
+        }
       });
 }
 
