@@ -1273,8 +1273,9 @@ goog.ui.Container.prototype.highlightPrevious = function() {
 /**
  * Helper function that manages the details of moving the highlight among
  * child controls in response to keyboard events.
- * @param {function(number, number) : number} fn Function that accepts the
- *     current and maximum indices, and returns the next index to check.
+ * @param {function(this: goog.ui.Container, number, number) : number} fn
+ *     Function that accepts the current and maximum indices, and returns the
+ *     next index to check.
  * @param {number} startIndex Start index.
  * @return {boolean} Whether the highlight has changed.
  * @protected
