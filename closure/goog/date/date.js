@@ -1672,66 +1672,6 @@ goog.date.DateTime.prototype.toString = function() {
 
 
 /**
- * Generates time label for the datetime, e.g., '5:30am'.
- * By default this does not pad hours (e.g., to '05:30') and it does add
- * an am/pm suffix.
- * TODO(user): i18n -- hardcoding time format like this is bad.  E.g., in CJK
- *               locales, need Chinese characters for hour and minute units.
- * @param {boolean=} opt_padHours Whether to pad hours, e.g., '05:30' vs '5:30'.
- * @param {boolean=} opt_showAmPm Whether to show the 'am' and 'pm' suffix.
- * @param {boolean=} opt_omitZeroMinutes E.g., '5:00pm' becomes '5pm',
- *                                      but '5:01pm' remains '5:01pm'.
- * @return {string} The time label.
- */
-goog.date.DateTime.prototype.toUsTimeString = function(opt_padHours,
-                                                       opt_showAmPm,
-                                                       opt_omitZeroMinutes) {
-  var hours = this.getHours();
-
-  // show am/pm marker by default
-  if (!goog.isDef(opt_showAmPm)) {
-    opt_showAmPm = true;
-  }
-
-  // 12pm
-  var isPM = hours == 12;
-
-  // change from 1-24 to 1-12 basis
-  if (hours > 12) {
-    hours -= 12;
-    isPM = true;
-  }
-
-  // midnight is expressed as "12am", but if am/pm marker omitted, keep as '0'
-  if (hours == 0 && opt_showAmPm) {
-    hours = 12;
-  }
-
-  var label = opt_padHours ? goog.string.padNumber(hours, 2) : String(hours);
-  var minutes = this.getMinutes();
-  if (!opt_omitZeroMinutes || minutes > 0) {
-    label += ':' + goog.string.padNumber(minutes, 2);
-  }
-
-  // by default, show am/pm suffix
-  if (opt_showAmPm) {
-    /**
-     * @desc Suffix for morning times.
-     */
-    var MSG_TIME_AM = goog.getMsg('am');
-
-    /**
-     * @desc Suffix for afternoon times.
-     */
-    var MSG_TIME_PM = goog.getMsg('pm');
-
-    label += isPM ? MSG_TIME_PM : MSG_TIME_AM;
-  }
-  return label;
-};
-
-
-/**
  * Generates time label for the datetime in standard ISO 24-hour time format.
  * E.g., '06:00:00' or '23:30:15'.
  * @param {boolean=} opt_showSeconds Whether to shows seconds. Defaults to TRUE.
