@@ -1150,6 +1150,92 @@ function testDateTimezone() {
 }
 
 
+function testToUsTimeString() {
+  var doPad = true;
+  var doShowPm = true;
+  var dontPad = false;
+  var dontShowPm = false;
+
+  // 12am
+  var d = new goog.date.DateTime(2007, 1, 14);
+  assertEquals('12am test 1', '12:00am', d.toUsTimeString());
+  assertEquals('12am test 2', '12:00am', d.toUsTimeString(doPad));
+  assertEquals('12am test 3', '12:00am', d.toUsTimeString(dontPad));
+  assertEquals('12am test 4', '12:00am', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('12am test 5', '00:00', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('12am test 6', '12:00am', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('12am test 7', '0:00', d.toUsTimeString(dontPad, dontShowPm));
+
+  // 9am
+  d = new goog.date.DateTime(2007, 1, 14, 9);
+  assertEquals('9am test 1', '9:00am', d.toUsTimeString());
+  assertEquals('9am test 2', '09:00am', d.toUsTimeString(doPad));
+  assertEquals('9am test 3', '9:00am', d.toUsTimeString(dontPad));
+  assertEquals('9am test 4', '09:00am', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('9am test 5', '09:00', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('9am test 6', '9:00am', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('9am test 7', '9:00', d.toUsTimeString(dontPad, dontShowPm));
+
+  // 12pm
+  d = new goog.date.DateTime(2007, 1, 14, 12);
+  assertEquals('12pm test 1', '12:00pm', d.toUsTimeString());
+  assertEquals('12pm test 2', '12:00pm', d.toUsTimeString(doPad));
+  assertEquals('12pm test 3', '12:00pm', d.toUsTimeString(dontPad));
+  assertEquals('12pm test 4', '12:00pm', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('12pm test 5', '12:00', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('12pm test 6', '12:00pm', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('12pm test 7', '12:00', d.toUsTimeString(dontPad, dontShowPm));
+
+  // 6pm
+  d = new goog.date.DateTime(2007, 1, 14, 18);
+  assertEquals('6pm test 1', '6:00pm', d.toUsTimeString());
+  assertEquals('6pm test 2', '06:00pm', d.toUsTimeString(doPad));
+  assertEquals('6pm test 3', '6:00pm', d.toUsTimeString(dontPad));
+  assertEquals('6pm test 4', '06:00pm', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('6pm test 5', '06:00', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('6pm test 6', '6:00pm', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('6pm test 7', '6:00', d.toUsTimeString(dontPad, dontShowPm));
+
+  // 6:01pm
+  d = new goog.date.DateTime(2007, 1, 14, 18, 1);
+  assertEquals('6:01pm test 1', '6:01pm', d.toUsTimeString());
+  assertEquals('6:01pm test 2', '06:01pm', d.toUsTimeString(doPad));
+  assertEquals('6:01pm test 3', '6:01pm', d.toUsTimeString(dontPad));
+  assertEquals('6:01pm test 4', '06:01pm', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('6:01pm test 5', '06:01', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('6:01pm test 6', '6:01pm', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('6:01pm test 7', '6:01', d.toUsTimeString(dontPad, dontShowPm));
+
+  // 6:35pm
+  d = new goog.date.DateTime(2007, 1, 14, 18, 35);
+  assertEquals('6:35pm test 1', '6:35pm', d.toUsTimeString());
+  assertEquals('6:35pm test 2', '06:35pm', d.toUsTimeString(doPad));
+  assertEquals('6:35pm test 3', '6:35pm', d.toUsTimeString(dontPad));
+  assertEquals('6:35pm test 4', '06:35pm', d.toUsTimeString(doPad, doShowPm));
+  assertEquals('6:35pm test 5', '06:35', d.toUsTimeString(doPad, dontShowPm));
+  assertEquals('6:35pm test 6', '6:35pm', d.toUsTimeString(dontPad, doShowPm));
+  assertEquals('6:35pm test 7', '6:35', d.toUsTimeString(dontPad, dontShowPm));
+
+  // omit zero minutes
+  d = new goog.date.DateTime(2007, 1, 14, 18);
+  assertEquals('omit zero 1', '6:00pm', d.toUsTimeString(dontPad,
+                                                         doShowPm,
+                                                         false));
+  assertEquals('omit zero 2', '6pm', d.toUsTimeString(dontPad,
+                                                      doShowPm,
+                                                      true));
+
+  // but don't omit zero minutes if not actually zero minutes
+  d = new goog.date.DateTime(2007, 1, 14, 18, 1);
+  assertEquals('omit zero 3', '6:01pm', d.toUsTimeString(dontPad,
+                                                         doShowPm,
+                                                         false));
+  assertEquals('omit zero 4', '6:01pm', d.toUsTimeString(dontPad,
+                                                         doShowPm,
+                                                         true));
+}
+
+
 function testToIsoTimeString() {
   // 00:00
   var d = new goog.date.DateTime(2007, 1, 14);
