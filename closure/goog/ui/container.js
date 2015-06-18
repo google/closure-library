@@ -575,6 +575,15 @@ goog.ui.Container.prototype.handleCloseItem = function(e) {
   if (e.target == this.openItem_) {
     this.openItem_ = null;
   }
+
+  var element = this.getElement();
+  var targetEl = e.target.getElement();
+  // Set the active descendant to the menu item when its submenu is closed and
+  // it is still highlighted. This can sometimes be called when the menuitem is
+  // unhighlighted because the focus moved elsewhere, do nothing at that point.
+  if (element && e.target.isHighlighted() && targetEl) {
+    goog.a11y.aria.setActiveDescendant(element, targetEl);
+  }
 };
 
 
