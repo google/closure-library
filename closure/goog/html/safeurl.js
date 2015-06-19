@@ -244,29 +244,62 @@ goog.html.SafeUrl.fromConstant = function(url) {
 
 
 /**
- * A pattern that matches Blob types that can have SafeUrls created from
- * URL.createObjectURL(blob). Only matches image types, currently.
+ * A pattern that matches Blob or data types that can have SafeUrls created
+ * from URL.createObjectURL(blob) or via a data: URI.  Only matches image and
+ * video types, currently.
  * @const
  * @private
  */
-goog.html.SAFE_BLOB_TYPE_PATTERN_ =
-    /^image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)$/i;
+goog.html.SAFE_MIME_TYPE_PATTERN_ =
+    /^(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm))$/i;
 
 
 /**
- * Creates a SafeUrl wrapping a blob URL for the given {@code blob}. The
- * blob URL is created with {@code URL.createObjectURL}. If the MIME type
- * for {@code blob} is not of a known safe image MIME type, then the
+ * Creates a SafeUrl wrapping a blob URL for the given {@code blob}.
+ *
+ * The blob URL is created with {@code URL.createObjectURL}. If the MIME type
+ * for {@code blob} is not of a known safe image or video MIME type, then the
  * SafeUrl will wrap {@link #INNOCUOUS_STRING}.
+ *
  * @see http://www.w3.org/TR/FileAPI/#url
  * @param {!Blob} blob
  * @return {!goog.html.SafeUrl} The blob URL, or an innocuous string wrapped
  *   as a SafeUrl.
  */
 goog.html.SafeUrl.fromBlob = function(blob) {
-  var url = goog.html.SAFE_BLOB_TYPE_PATTERN_.test(blob.type) ?
+  var url = goog.html.SAFE_MIME_TYPE_PATTERN_.test(blob.type) ?
       goog.fs.url.createObjectUrl(blob) : goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
+/**
+ * Matches a base-64 data URL, with the first match group being the MIME type.
+ * @const
+ * @private
+ */
+goog.html.DATA_URL_PATTERN_ = /^data:([^;,]*);base64,[a-z0-9+\/]+=*$/i;
+
+
+/**
+ * Creates a SafeUrl wrapping a data: URL, after validating it matches a
+ * known-safe image or video MIME type.
+ *
+ * @param {string} dataUrl A valid base64 data URL with one of the whitelisted
+ *     image or video MIME types.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
+  // There's a slight risk here that a browser sniffs the content type if it
+  // doesn't know the MIME type and executes HTML within the data: URL. For this
+  // to cause XSS it would also have to execute the HTML in the same origin
+  // of the page with the link. It seems unlikely that both of these will
+  // happen, particularly in not really old IEs.
+  var match = dataUrl.match(goog.html.DATA_URL_PATTERN_);
+  var valid = match && goog.html.SAFE_MIME_TYPE_PATTERN_.test(match[1]);
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      valid ? dataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
 };
 
 

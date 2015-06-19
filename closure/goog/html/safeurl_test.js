@@ -51,6 +51,11 @@ function testSafeUrlFromBlob_withSafeType() {
   }
   assertBlobTypeIsSafe('image/png', true);
   assertBlobTypeIsSafe('iMage/pNg', true);
+  assertBlobTypeIsSafe('video/mpeg', true);
+  assertBlobTypeIsSafe('video/ogg', true);
+  assertBlobTypeIsSafe('video/mp4', true);
+  assertBlobTypeIsSafe('video/ogg', true);
+  assertBlobTypeIsSafe('video/webm', true);
 }
 
 
@@ -61,6 +66,8 @@ function testSafeUrlFromBlob_withUnsafeType() {
   assertBlobTypeIsSafe('', false);
   assertBlobTypeIsSafe('ximage/png', false);
   assertBlobTypeIsSafe('image/pngx', false);
+  assertBlobTypeIsSafe('video/whatever', false);
+  assertBlobTypeIsSafe('video/', false);
 }
 
 
@@ -86,6 +93,62 @@ function assertBlobTypeIsSafe(type, isSafe) {
   } else {
     assertEquals(goog.html.SafeUrl.INNOCUOUS_STRING, extracted);
   }
+}
+
+
+function testSafeUrlFromDataUrl_withSafeType() {
+  if (isIE9OrLower()) {
+    return;
+  }
+  assertDataUrlIsSafe('data:image/png;base64,' +
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=',
+      true);
+  assertDataUrlIsSafe('dATa:iMage/pNg;bASe64,abc===', true);
+  assertDataUrlIsSafe('data:image/webp;base64,abc===', true);
+  assertDataUrlIsSafe('data:video/mpeg;base64,abc', true);
+  assertDataUrlIsSafe('data:video/ogg;base64,z=', true);
+  assertDataUrlIsSafe('data:video/mp4;base64,z=', true);
+  assertDataUrlIsSafe('data:video/ogg;base64,z=', true);
+  assertDataUrlIsSafe('data:video/webm;base64,z=', true);
+}
+
+
+function testSafeUrlFromDataUrl_withUnsafeType() {
+  if (isIE9OrLower()) {
+    return;
+  }
+  assertDataUrlIsSafe('', false);
+  assertDataUrlIsSafe(':', false);
+  assertDataUrlIsSafe('data:', false);
+  assertDataUrlIsSafe('not-data:image/png;base64,z=', false);
+  assertDataUrlIsSafe(' data:image/png;base64,z=', false);
+  assertDataUrlIsSafe('data:image/png;base64,z= ', false);
+  assertDataUrlIsSafe('data:ximage/png', false);
+  assertDataUrlIsSafe('data:ximage/png;base64,z=', false);
+  assertDataUrlIsSafe('data:image/pngx;base64,z=', false);
+  assertDataUrlIsSafe('data:video/whatever;base64,z=', false);
+  assertDataUrlIsSafe('data:video/;base64,z=', false);
+  assertDataUrlIsSafe('data:image/png;base64,', false);
+  assertDataUrlIsSafe('data:image/png;base64,abc=!', false);
+  assertDataUrlIsSafe('data:image/png;base64,$$', false);
+  assertDataUrlIsSafe('data:image/png;base64,\0', false);
+  assertDataUrlIsSafe('data:video/mp4;baze64,z=', false);
+  assertDataUrlIsSafe('data:video/mp4;,z=', false);
+  assertDataUrlIsSafe('data:text/html,sdfsdfsdfsfsdfs;base64,anything', false);
+}
+
+
+/**
+ * Tests creating a SafeUrl from a data URL, asserting whether or not the
+ * SafeUrl returned is innocuous or not depending on the given boolean.
+ * @param {string} url URL to test.
+ * @param {boolean} isSafe Whether the given URL type should be considered safe
+ *     by {@link SafeUrl.fromDataUrl}.
+ */
+function assertDataUrlIsSafe(url, isSafe) {
+  var safeUrl = goog.html.SafeUrl.fromDataUrl(url);
+  assertEquals(isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
+      goog.html.SafeUrl.unwrap(safeUrl));
 }
 
 
