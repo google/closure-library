@@ -1201,7 +1201,7 @@ goog.dom.getChildren = function(element) {
  * @return {Element} The first child node of {@code node} that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
-  if (node.firstElementChild != undefined) {
+  if (goog.isDef(node.firstElementChild)) {
     return /** @type {!Element} */(node).firstElementChild;
   }
   return goog.dom.getNextElementNode_(node.firstChild, true);
@@ -1214,7 +1214,7 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element} The last child node of {@code node} that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
-  if (node.lastElementChild != undefined) {
+  if (goog.isDef(node.lastElementChild)) {
     return /** @type {!Element} */(node).lastElementChild;
   }
   return goog.dom.getNextElementNode_(node.lastChild, false);
@@ -1227,7 +1227,7 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element} The next sibling of {@code node} that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
-  if (node.nextElementSibling != undefined) {
+  if (goog.isDef(node.nextElementSibling)) {
     return /** @type {!Element} */(node).nextElementSibling;
   }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
@@ -1241,7 +1241,7 @@ goog.dom.getNextElementSibling = function(node) {
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
-  if (node.previousElementSibling != undefined) {
+  if (goog.isDef(node.previousElementSibling)) {
     return /** @type {!Element} */(node).previousElementSibling;
   }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
