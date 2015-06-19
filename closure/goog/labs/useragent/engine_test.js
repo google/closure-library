@@ -97,7 +97,7 @@ function testTrident() {
 }
 
 function testEdge() {
-  goog.labs.userAgent.util.setUserAgent(testAgents.IE_EDGE);
+  goog.labs.userAgent.util.setUserAgent(testAgents.EDGE_12_0);
   assertTrue(goog.labs.userAgent.engine.isEdge());
   assertFalse(goog.labs.userAgent.engine.isTrident());
   assertFalse(goog.labs.userAgent.engine.isGecko());
@@ -168,4 +168,3 @@ function testGecko() {
   assertVersion('14.0.1');
   assertLowAndHighVersions('14.0', '15.0');
 }
-
