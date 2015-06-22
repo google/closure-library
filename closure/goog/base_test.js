@@ -839,7 +839,6 @@ function testPartialMultipleCalls() {
   assertArrayEquals(['foo', 'bar'], calls[3].getArguments());
 }
 
-
 function testGlobalEval() {
   goog.globalEval('var foofoofoo = 125;');
   assertEquals('Var should be globally assigned', 125, goog.global.foofoofoo);
