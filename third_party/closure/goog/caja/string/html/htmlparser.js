@@ -114,6 +114,7 @@ goog.string.html.HtmlParser.Elements = {
       goog.string.html.HtmlParser.EFlags.FOLDABLE,
   'br': goog.string.html.HtmlParser.EFlags.EMPTY,
   'button': 0,
+  'canvas': 0,
   'caption': 0,
   'center': 0,
   'cite': 0,
