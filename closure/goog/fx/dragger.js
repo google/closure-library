@@ -293,7 +293,7 @@ goog.fx.Dragger.prototype.enableRightPositioningForRtl =
 /**
  * Returns the event handler, intended for subclass use.
  * @return {!goog.events.EventHandler<T>} The event handler.
- * @this T
+ * @this {T}
  * @template T
  */
 goog.fx.Dragger.prototype.getHandler = function() {

@@ -421,7 +421,7 @@ goog.ui.PopupBase.prototype.getLastHideTime = function() {
  * {@link #onShow_}.
  * @return {goog.events.EventHandler<T>} Event handler for this popup.
  * @protected
- * @this T
+ * @this {T}
  * @template T
  */
 goog.ui.PopupBase.prototype.getHandler = function() {
