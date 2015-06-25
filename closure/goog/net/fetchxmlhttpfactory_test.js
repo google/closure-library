@@ -36,6 +36,10 @@ var fetchMock;
 var factory;
 
 
+/** @type {!WorkerGlobalScope} */
+var worker;
+
+
 /**
  * Whether the browser supports running this test.
  * @return {boolean}
@@ -46,7 +50,7 @@ function shouldRunTests() {
 
 function setUp() {
   mockControl = new goog.testing.MockControl();
-  var worker = {};
+  worker = {};
   fetchMock = mockControl.createFunctionMock('fetch');
   worker.fetch = fetchMock;
   factory = new goog.net.FetchXmlHttpFactory(worker);
@@ -67,12 +71,12 @@ function testOpen() {
   var xhr = factory.createInstance();
   assertEquals(0, xhr.status);
   assertEquals('', xhr.responseText);
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.UNSENT);
+  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.UNSENT);
 
   var onReadyStateChangeHandler = new goog.testing.recordFunction();
   xhr.onreadystatechange = onReadyStateChangeHandler;
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.OPENED);
+  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
   onReadyStateChangeHandler.assertCallCount(1);
 
   mockControl.$verifyAll();
@@ -120,27 +124,87 @@ function testSend() {
       $returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
+  verifySendSuccess('GET');
+}
 
+
+/**
+ * Verifies the send method with POST mode.
+ */
+function testSendPost() {
+  fetchMock(new Request(
+      'https://www.google.com', {
+        headers: new Headers(),
+        method: 'POST'
+      })).
+      $returns(Promise.resolve(createSuccessResponse()));
+
+  mockControl.$replayAll();
+  verifySendSuccess('POST');
+}
+
+
+/**
+ * Verifies the send method including credentials.
+ */
+function testSend_includeCredentials() {
+  factory = new goog.net.FetchXmlHttpFactory(worker);
+  factory.setCredentialsMode(/** @type {RequestCredentials} */ ('include'));
+  fetchMock(new Request(
+      'https://www.google.com', {
+        headers: new Headers(),
+        method: 'POST',
+        credentials: 'include'
+      })).$returns(Promise.resolve(createSuccessResponse()));
+
+  mockControl.$replayAll();
+  verifySendSuccess('POST');
+}
+
+
+/**
+ * Verifies the send method setting cache mode.
+ */
+function testSend_setCacheMode() {
+  factory = new goog.net.FetchXmlHttpFactory(worker);
+  factory.setCacheMode(/** @type {RequestCache} */ ('no-cache'));
+  fetchMock(new Request(
+      'https://www.google.com', {
+        headers: new Headers(),
+        method: 'POST',
+        cache: 'no-cache'
+      })).$returns(Promise.resolve(createSuccessResponse()));
+
+  mockControl.$replayAll();
+  verifySendSuccess('POST');
+}
+
+
+/**
+ * Util function to verify send method is successful.
+ */
+function verifySendSuccess(sendMethod) {
   var xhr = factory.createInstance();
-  xhr.open('GET', 'https://www.google.com', true /* opt_async */);
+  xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
   xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.HEADER_RECEIVED);
+    assertEquals(xhr.readyState,
+        goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
     assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
     xhr.onreadystatechange = function() {
-      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.LOADING);
+      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.LOADING);
       assertEquals(0, xhr.status);
       assertEquals('', xhr.responseText);
       xhr.onreadystatechange = function() {
         assertEquals(200, xhr.status);
         assertEquals('responseBody', xhr.responseText);
-        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.DONE);
+        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
       };
     };
   };
   xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.OPENED);
+  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
 
   mockControl.$verifyAll();
 }
@@ -159,23 +223,24 @@ function testSend_error() {
   var xhr = factory.createInstance();
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
   xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.HEADER_RECEIVED);
+    assertEquals(xhr.readyState,
+        goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
     assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
     xhr.onreadystatechange = function() {
-      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.LOADING);
+      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.LOADING);
       assertEquals(0, xhr.status);
       assertEquals('', xhr.responseText);
       xhr.onreadystatechange = function() {
         assertEquals(500, xhr.status);
         assertEquals('responseBody', xhr.responseText);
-        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.DONE);
+        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
       };
     };
   };
   xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.OPENED);
+  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
   mockControl.$verifyAll();
 }
 
@@ -196,12 +261,12 @@ function testSend_failToFetch() {
   var xhr = factory.createInstance();
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
   xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.DONE);
+    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
   };
   xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.OPENED);
+  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
 
   mockControl.$verifyAll();
 }
