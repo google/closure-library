@@ -55,6 +55,7 @@ goog.require('goog.style.bidi');
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.Animation}
  * @constructor
+ * @struct
  */
 goog.fx.dom.PredefinedEffect = function(element, start, end, time, opt_acc) {
   goog.fx.Animation.call(this, start, end, time, opt_acc);
@@ -130,6 +131,7 @@ goog.fx.dom.PredefinedEffect.prototype.onBegin = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.Slide = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
@@ -159,6 +161,7 @@ goog.fx.dom.Slide.prototype.updateStyle = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.Slide}
  * @constructor
+ * @struct
  */
 goog.fx.dom.SlideFrom = function(element, end, time, opt_acc) {
   /** @type {?Array<number>} */
@@ -193,6 +196,7 @@ goog.fx.dom.SlideFrom.prototype.onBegin = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.Swipe = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
@@ -263,6 +267,7 @@ goog.fx.dom.Swipe.prototype.clip_ = function(x, y, w, h) {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.Scroll = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
@@ -302,6 +307,7 @@ goog.fx.dom.Scroll.prototype.updateStyle = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.Resize = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
@@ -337,6 +343,7 @@ goog.fx.dom.Resize.prototype.updateStyle = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.ResizeWidth = function(element, start, end, time, opt_acc) {
   goog.fx.dom.PredefinedEffect.call(this, element, [start],
@@ -368,6 +375,7 @@ goog.fx.dom.ResizeWidth.prototype.updateStyle = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.ResizeHeight = function(element, start, end, time, opt_acc) {
   goog.fx.dom.PredefinedEffect.call(this, element, [start],
@@ -400,6 +408,7 @@ goog.fx.dom.ResizeHeight.prototype.updateStyle = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.Fade = function(element, start, end, time, opt_acc) {
   if (goog.isNumber(start)) start = [start];
@@ -491,6 +500,7 @@ goog.fx.dom.Fade.prototype.hide = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.Fade}
  * @constructor
+ * @struct
  */
 goog.fx.dom.FadeOut = function(element, time, opt_acc) {
   goog.fx.dom.Fade.call(this, element, 1, 0, time, opt_acc);
@@ -507,6 +517,7 @@ goog.inherits(goog.fx.dom.FadeOut, goog.fx.dom.Fade);
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.Fade}
  * @constructor
+ * @struct
  */
 goog.fx.dom.FadeIn = function(element, time, opt_acc) {
   goog.fx.dom.Fade.call(this, element, 0, 1, time, opt_acc);
@@ -524,6 +535,7 @@ goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.Fade}
  * @constructor
+ * @struct
  */
 goog.fx.dom.FadeOutAndHide = function(element, time, opt_acc) {
   goog.fx.dom.Fade.call(this, element, 1, 0, time, opt_acc);
@@ -555,6 +567,7 @@ goog.fx.dom.FadeOutAndHide.prototype.onEnd = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.Fade}
  * @constructor
+ * @struct
  */
 goog.fx.dom.FadeInAndShow = function(element, time, opt_acc) {
   goog.fx.dom.Fade.call(this, element, 0, 1, time, opt_acc);
@@ -582,6 +595,7 @@ goog.fx.dom.FadeInAndShow.prototype.onBegin = function() {
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @extends {goog.fx.dom.PredefinedEffect}
  * @constructor
+ * @struct
  */
 goog.fx.dom.BgColorTransform = function(element, start, end, time, opt_acc) {
   if (start.length != 3 || end.length != 3) {
@@ -663,6 +677,7 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
  * @param {number} time Length of animation in milliseconds.
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @constructor
+ * @struct
  * @extends {goog.fx.dom.PredefinedEffect}
  */
 goog.fx.dom.ColorTransform = function(element, start, end, time, opt_acc) {

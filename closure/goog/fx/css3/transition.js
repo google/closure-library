@@ -65,6 +65,7 @@ goog.require('goog.style.transition');
  *     transition property or an array of it.
  * @extends {goog.fx.TransitionBase}
  * @constructor
+ * @struct
  */
 goog.fx.css3.Transition = function(
     element, duration, initialStyle, finalStyle, transitions) {
