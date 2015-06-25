@@ -290,6 +290,46 @@ goog.testing.events.isBrokenGeckoMacActionKey_ = function(e) {
 
 
 /**
+ * Simulates a mouseenter event on the given target.
+ * @param {!EventTarget} target The target for the event.
+ * @param {?EventTarget} relatedTarget The related target for the event (e.g.,
+ *     the node that the mouse is being moved out of).
+ * @param {!goog.math.Coordinate=} opt_coords Mouse position. Defaults to
+ *     event's target's position (if available), otherwise (0, 0).
+ * @return {boolean} The returnValue of the event: false if preventDefault() was
+ *     called on it, true otherwise.
+ */
+goog.testing.events.fireMouseEnterEvent = function(target, relatedTarget,
+    opt_coords) {
+  var mouseenter =
+      new goog.testing.events.Event(goog.events.EventType.MOUSEENTER, target);
+  mouseenter.relatedTarget = relatedTarget;
+  goog.testing.events.setEventClientXY_(mouseenter, opt_coords);
+  return goog.testing.events.fireBrowserEvent(mouseenter);
+};
+
+
+/**
+ * Simulates a mouseleave event on the given target.
+ * @param {!EventTarget} target The target for the event.
+ * @param {?EventTarget} relatedTarget The related target for the event (e.g.,
+ *     the node that the mouse is being moved into).
+ * @param {!goog.math.Coordinate=} opt_coords Mouse position. Defaults to
+ *     event's target's position (if available), otherwise (0, 0).
+ * @return {boolean} The returnValue of the event: false if preventDefault() was
+ *     called on it, true otherwise.
+ */
+goog.testing.events.fireMouseLeaveEvent = function(target, relatedTarget,
+    opt_coords) {
+  var mouseleave =
+      new goog.testing.events.Event(goog.events.EventType.MOUSELEAVE, target);
+  mouseleave.relatedTarget = relatedTarget;
+  goog.testing.events.setEventClientXY_(mouseleave, opt_coords);
+  return goog.testing.events.fireBrowserEvent(mouseleave);
+};
+
+
+/**
  * Simulates a mouseover event on the given target.
  * @param {EventTarget} target The target for the event.
  * @param {EventTarget} relatedTarget The related target for the event (e.g.,

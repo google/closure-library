@@ -141,6 +141,20 @@ function tearDownPage() {
   }
 }
 
+function testMouseEnter() {
+  goog.testing.events.fireMouseEnterEvent(root, null);
+  goog.testing.events.fireMouseEnterEvent(root, null, coordinate);
+  assertEventTypes(['mouseenter', 'mouseenter']);
+  assertCoordinates([goog.style.getClientPosition(root), coordinate]);
+}
+
+function testMouseLeave() {
+  goog.testing.events.fireMouseLeaveEvent(root, null);
+  goog.testing.events.fireMouseLeaveEvent(root, null, coordinate);
+  assertEventTypes(['mouseleave', 'mouseleave']);
+  assertCoordinates([goog.style.getClientPosition(root), coordinate]);
+}
+
 function testMouseOver() {
   goog.testing.events.fireMouseOverEvent(root, null);
   goog.testing.events.fireMouseOverEvent(root, null, coordinate);
