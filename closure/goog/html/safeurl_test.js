@@ -242,63 +242,9 @@ function testSafeUrlSanitize_validatesUrl() {
 }
 
 
-/**
- * Asserts that goog.html.SafeUrl.unwrap returns the expected string when the
- * SafeUrl has been constructed by passing the given url to
- * goog.html.SafeUrl.sanitize.
- * @param {string} url The string to pass to goog.html.SafeUrl.sanitize.
- * @param {string} expected The string representation that
- *         goog.html.SafeUrl.unwrap should return.
- */
-function assertSanitizeEncodesTo(url, expected) {
-  var safeUrl = goog.html.SafeUrl.sanitize(url);
-  var actual = goog.html.SafeUrl.unwrap(safeUrl);
-  assertEquals(
-      'SafeUrl.sanitize().unwrap() doesn\'t return expected ' +
-          'percent-encoded string',
-      expected,
-      actual);
-}
-
-
-function testSafeUrlSanitize_percentEncodesUrl() {
-  // '%' is preserved.
-  assertSanitizeEncodesTo('%', '%');
-  assertSanitizeEncodesTo('%2F', '%2F');
-
-  // Unreserved characters, RFC 3986.
-  assertSanitizeEncodesTo('aA1-._~', 'aA1-._~');
-
-  // Reserved characters, RFC 3986. Only '\'', '(' and ')' are encoded.
-  assertSanitizeEncodesTo('/:?#[]@!$&\'()*+,;=', '/:?#[]@!$&%27%28%29*+,;=');
-
-
-  // Other ASCII characters, printable and non-printable.
-  assertSanitizeEncodesTo('^"\\`\x00\n\r\x7f', '%5E%22%5C%60%00%0A%0D%7F');
-
-  // Codepoints which UTF-8 encode to 2 bytes.
-  assertSanitizeEncodesTo('\u0080\u07ff', '%C2%80%DF%BF');
-
-  // Highest codepoint which can be UTF-16 encoded using two bytes
-  // (one code unit). Highest codepoint in basic multilingual plane and highest
-  // that JavaScript can represent using \u.
-  assertSanitizeEncodesTo('\uffff', '%EF%BF%BF');
-
-  // Supplementary plane codepoint which UTF-16 and UTF-8 encode to 4 bytes.
-  // Valid surrogate sequence.
-  assertSanitizeEncodesTo('\ud800\udc00', '%F0%90%80%80');
-
-  // Invalid lead/high surrogate.
-  assertSanitizeEncodesTo('\udc00', goog.html.SafeUrl.INNOCUOUS_STRING);
-
-  // Invalid trail/low surrogate.
-  assertSanitizeEncodesTo('\ud800\ud800', goog.html.SafeUrl.INNOCUOUS_STRING);
-}
-
-
 function testSafeUrlSanitize_idempotentForSafeUrlArgument() {
-  // This goes through percent-encoding.
-  var safeUrl = goog.html.SafeUrl.sanitize('%11"');
+  // This matches the safe prefix.
+  var safeUrl = goog.html.SafeUrl.sanitize('https://www.google.com/');
   var safeUrl2 = goog.html.SafeUrl.sanitize(safeUrl);
   assertEquals(
       goog.html.SafeUrl.unwrap(safeUrl), goog.html.SafeUrl.unwrap(safeUrl2));
