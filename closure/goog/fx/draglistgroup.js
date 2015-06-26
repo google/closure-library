@@ -55,6 +55,7 @@ goog.require('goog.style');
  *
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @struct
  */
 goog.fx.DragListGroup = function() {
   goog.fx.DragListGroup.base(this, 'constructor');
@@ -1213,6 +1214,7 @@ goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
  *     location of currDragItem.) May be null if not applicable or if
  *     currDragItem would be added to the end of hoverList.
  * @constructor
+ * @struct
  * @extends {goog.events.Event}
  */
 goog.fx.DragListGroupEvent = function(
