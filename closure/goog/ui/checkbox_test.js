@@ -243,6 +243,23 @@ function testLabel() {
   }
 }
 
+function testLabel_setAgain() {
+  var label = goog.dom.createElement(goog.dom.TagName.DIV);
+  document.body.appendChild(label);
+  try {
+    checkbox.setChecked(false);
+    checkbox.setLabel(label);
+    checkbox.render(label);
+
+    checkbox.getElement().focus();
+    checkbox.setLabel(label);
+    assertEquals('checkbox should not have lost focus', checkbox.getElement(),
+        document.activeElement);
+  } finally {
+    document.body.removeChild(label);
+  }
+}
+
 function testConstructor() {
   assertEquals('state is unchecked', goog.ui.Checkbox.State.UNCHECKED,
       checkbox.getChecked());
