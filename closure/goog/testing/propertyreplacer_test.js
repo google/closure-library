@@ -283,6 +283,147 @@ function testDomCustomAttributes() {
   assertEquals('div.attr2 == undefined', undefined, div.attr2);
 }
 
+// Test PropertyReplacer trying to override a read-only property.
+function testReadOnlyProperties() {
+  var stubs = new goog.testing.PropertyReplacer();
+
+  // Function.prototype.length should be read-only.
+  var foo = function(_) {};
+  assertThrows('Trying to set a read-only property fails silently.',
+      goog.bind(stubs.set, stubs, foo, 'length', 10));
+  assertThrows('Trying to replace a read-only property fails silently.',
+      goog.bind(stubs.replace, stubs, foo, 'length', 10));
+
+  // Array length should be undeletable.
+  var a = [1, 2, 3];
+  assertThrows('Trying to remove a read-only property fails silently.',
+      goog.bind(stubs.remove, stubs, a, 'length'));
+
+  window.foo = foo;
+  assertThrows('Trying to set a read-only property by path fails silently.',
+      goog.bind(stubs.setPath, stubs, 'window.foo.length', 10));
+  window.foo = undefined;
+}
+
+// Test PropertyReplacer trying to override a style property doesn't trigger
+// read-only exception.
+function testSettingStyleProperties() {
+  var stubs = new goog.testing.PropertyReplacer();
+
+  var div = document.createElement('div');
+  // Ensures setting a pixel style value doesn't trigger the read-only property
+  // exception, considering div.style.margin will return "0px" instead of just
+  // "0".
+  assertNotThrows('Trying to set a read-only property fails silently.',
+      goog.bind(stubs.set, stubs, div.style, 'margin', '0'));
+}
+
+// Test PropertyReplacer trying to override a sealed property.
+function testSealedProperties() {
+  if (!goog.isFunction(Object.seal)) {
+    return;
+  }
+
+  var stubs = new goog.testing.PropertyReplacer();
+  var sealed = Object.seal({a: 1});
+  assertThrows('Trying to set a new sealed property fails silently.',
+      goog.bind(stubs.set, stubs, sealed, 'b', 2));
+  assertNotThrows('Trying to remove a new sealed property fails.',
+      goog.bind(stubs.remove, stubs, sealed, 'b'));
+  assertNotThrows('Trying to remove a sealed property fails.',
+      goog.bind(stubs.remove, stubs, sealed, 'a'));
+
+  window.sealed = sealed;
+  assertThrows(
+      'Trying to set a new sealed property by path fails silently in strict ' +
+      'mode.',
+      goog.bind(stubs.setPath, stubs, 'window.sealed.b', 2));
+
+  (function() {
+    // Test Object.seal() in strict mode, where the assignment itself throws the
+    // error rather than our explicit consistency check.
+    'use strict';
+
+    var sealed = Object.seal({a: 1});
+    assertThrows(
+        'Trying to set a new sealed property fails silently in strict mode.',
+        goog.bind(stubs.set, stubs, sealed, 'b', 2));
+    assertNotThrows(
+        'Trying to remove a new sealed property fails in strict mode.',
+        goog.bind(stubs.remove, stubs, sealed, 'b'));
+    assertNotThrows('Trying to remove a sealed property fails in strict mode.',
+        goog.bind(stubs.remove, stubs, sealed, 'a'));
+
+    window.sealed = sealed;
+    assertThrows(
+        'Trying to set a new sealed property by path fails silently in ' +
+        'strict mode.',
+        goog.bind(stubs.setPath, stubs, 'window.sealed.b', 2));
+  })();
+
+  delete window.sealed;
+}
+
+// Test PropertyReplacer trying to override a frozen property.
+function testFrozenProperty() {
+  if (!goog.isFunction(Object.freeze)) {
+    return;
+  }
+
+  var stubs = new goog.testing.PropertyReplacer();
+  var frozen = Object.freeze({a: 1});
+  assertThrows('Trying to set a new frozen property fails silently.',
+      goog.bind(stubs.set, stubs, frozen, 'b', 2));
+  assertThrows('Trying to set a frozen property fails silently.',
+      goog.bind(stubs.set, stubs, frozen, 'a', 2));
+  assertThrows('Trying to replace a frozen property fails silently.',
+      goog.bind(stubs.replace, stubs, frozen, 'a', 2));
+  assertNotThrows('Trying to remove a new frozen property fails.',
+      goog.bind(stubs.remove, stubs, frozen, 'b'));
+  assertThrows('Trying to remove a frozen property fails silently.',
+      goog.bind(stubs.remove, stubs, frozen, 'a'));
+
+
+  window.frozen = frozen;
+  assertThrows('Trying to set a frozen property by path fails silently.',
+      goog.bind(stubs.setPath, stubs, 'window.frozen.a', 2));
+
+  (function() {
+    // Test Object.freeze() in strict mode, where the assignment itself throws
+    // the error rather than our explicit consistency check.
+    'use strict';
+
+    var frozen = Object.freeze({a: 1});
+    assertThrows(
+        'Trying to set a new frozen property fails silently in strict mode.',
+        goog.bind(stubs.set, stubs, frozen, 'b', 2));
+    assertThrows(
+        'Trying to ovewrite a frozen property fails silently in strict mode.',
+        goog.bind(stubs.set, stubs, frozen, 'a', 2));
+    assertThrows(
+        'Trying to replace a frozen property fails silently in strict mode.',
+        goog.bind(stubs.replace, stubs, frozen, 'a', 2));
+    assertNotThrows(
+        'Trying to remove a new frozen property fails in strict mode.',
+        goog.bind(stubs.remove, stubs, frozen, 'b'));
+    assertThrows(
+        'Trying to remove a frozen property fails silently in strict mode.',
+        goog.bind(stubs.remove, stubs, frozen, 'a'));
+
+    window.frozen = frozen;
+    assertThrows(
+        'Trying to set a new frozen property by path fails silently in ' +
+        'strict mode.',
+        goog.bind(stubs.setPath, stubs, 'window.frozen.b', 2));
+    assertThrows(
+        'Trying to set a frozen property by path fails silently in strict ' +
+        'mode.',
+        goog.bind(stubs.setPath, stubs, 'window.frozen.a', 2));
+  })();
+
+  delete window.frozen;
+}
+
 // Test PropertyReplacer overriding Math.random.
 function testMathRandom() {
   var stubs = new goog.testing.PropertyReplacer();
