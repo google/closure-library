@@ -154,13 +154,14 @@ goog.ui.Checkbox.prototype.setCheckedInternal = function(checked) {
  *     reacts to clicks.
  */
 goog.ui.Checkbox.prototype.setLabel = function(label) {
-  if (label == this.label_) {
-    return;
-  }
   if (this.isInDocument()) {
+    var wasFocused = this.isFocused();
     this.exitDocument();
     this.label_ = label;
     this.enterDocument();
+    if (wasFocused) {
+      this.getElementStrict().focus();
+    }
   } else {
     this.label_ = label;
   }
