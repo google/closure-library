@@ -383,8 +383,7 @@ goog.Promise.race = function(promises) {
     if (!promises.length) {
       resolve(undefined);
     }
-    for (var i = 0, promise; i < promises.length; i++) {
-      promise = promises[i];
+    for (var i = 0, promise; promise = promises[i]; i++) {
       goog.Promise.resolveThen_(promise, resolve, reject);
     }
   });
@@ -422,8 +421,7 @@ goog.Promise.all = function(promises) {
       reject(reason);
     };
 
-    for (var i = 0, promise; i < promises.length; i++) {
-      promise = promises[i];
+    for (var i = 0, promise; promise = promises[i]; i++) {
       goog.Promise.resolveThen_(
           promise, goog.partial(onFulfill, i), onReject);
     }
@@ -466,8 +464,7 @@ goog.Promise.allSettled = function(promises) {
       }
     };
 
-    for (var i = 0, promise; i < promises.length; i++) {
-      promise = promises[i];
+    for (var i = 0, promise; promise = promises[i]; i++) {
       goog.Promise.resolveThen_(promise,
           goog.partial(onSettled, i, true /* fulfilled */),
           goog.partial(onSettled, i, false /* fulfilled */));
@@ -506,8 +503,7 @@ goog.Promise.firstFulfilled = function(promises) {
       }
     };
 
-    for (var i = 0, promise; i < promises.length; i++) {
-      promise = promises[i];
+    for (var i = 0, promise; promise = promises[i]; i++) {
       goog.Promise.resolveThen_(
           promise, onFulfill, goog.partial(onReject, i));
     }
