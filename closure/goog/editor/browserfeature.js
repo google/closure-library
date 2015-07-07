@@ -258,7 +258,8 @@ goog.editor.BrowserFeature = {
       (goog.userAgent.GECKO &&
        goog.userAgent.isVersionOrHigher('2.0')) ||
       (goog.userAgent.IE &&
-       goog.userAgent.isVersionOrHigher('10')),
+       goog.userAgent.isVersionOrHigher('10')) ||
+      goog.userAgent.EDGE,
 
   // Version of Opera that supports the opera-defaultBlock execCommand to change
   // the default block inserted when [return] is pressed. Note that this only is
