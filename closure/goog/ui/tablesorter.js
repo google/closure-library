@@ -263,7 +263,8 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   });
 
   // Mark this as the last sorted column.
-  this.header_ = table.tHead.rows[this.sortableHeaderRowIndex_].cells[column];
+  this.header_ = /** @type {!HTMLTableCellElement} */
+      (table.tHead.rows[this.sortableHeaderRowIndex_].cells[column]);
 
   // Update the header class.
   goog.dom.classlist.add(this.header_, this.reversed_ ?
