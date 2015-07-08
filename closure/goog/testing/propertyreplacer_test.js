@@ -22,6 +22,12 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 
+
+function isSafari8() {
+  return goog.userAgent.product.SAFARI &&
+         goog.userAgent.product.isVersion('8.0');
+}
+
 // Test PropertyReplacer with JavaScript objects.
 function testSetJsProperties() {
   var stubs = new goog.testing.PropertyReplacer();
@@ -179,13 +185,6 @@ function testFunctionProperties() {
 
 // Test the hasKey_ private method.
 function testHasKey() {
-  if (goog.userAgent.product.SAFARI &&
-      goog.userAgent.product.isVersion('8.0')) {
-    // TODO(b/20733468): Disabled so we can get the rest of the Closure test
-    // suite running in a continuous build. Will investigate later.
-    return;
-  }
-
   f = goog.testing.PropertyReplacer.hasKey_;
 
   assertFalse('{}.a', f({}, 'a'));
@@ -209,13 +208,17 @@ function testHasKey() {
   assertTrue('window, build-in key', f(window, 'location'));
 
   assertFalse('document, invalid key', f(document, 'no such key'));
-  assertTrue('document.body', f(document, 'body'));
 
   var div = document.createElement(goog.dom.TagName.DIV);
   assertFalse('div, invalid key', f(div, 'no such key'));
-  assertTrue('div.className', f(div, 'className'));
   div['a'] = 0;
   assertTrue('div, key added by JS', f(div, 'a'));
+
+  // hasKey_ returns false for these DOM properties on Safari 8. See b/22044928.
+  if (!isSafari8()) {
+    assertTrue('div.className', f(div, 'className'));
+    assertTrue('document.body', f(document, 'body'));
+  }
 
   assertFalse('Date().getTime', f(new Date(), 'getTime'));
   assertTrue('Date.prototype.getTime', f(Date.prototype, 'getTime'));
@@ -238,13 +241,6 @@ function testHasKey() {
 
 // Test PropertyReplacer with DOM objects' built in attributes.
 function testDomBuiltInAttributes() {
-  if (goog.userAgent.product.SAFARI &&
-      goog.userAgent.product.isVersion('8.0')) {
-    // TODO(b/20733468): Disabled so we can get the rest of the Closure test
-    // suite running in a continuous build. Will investigate later.
-    return;
-  }
-
   var div = document.createElement(goog.dom.TagName.DIV);
   div.id = 'old-id';
 
@@ -255,12 +251,16 @@ function testDomBuiltInAttributes() {
   assertEquals('div.className == "test-class"', 'test-class', div.className);
 
   stubs.remove(div, 'className');
-  // '' in Firefox, undefined in Chrome.
-  assertEvaluatesToFalse('div.className is empty', div.className);
 
-  stubs.reset();
-  assertEquals('div.id == "old-id"', 'old-id', div.id);
-  assertEquals('div.name == ""', '', div.className);
+  // Removal of these DOM properties is not supported in Safari 8. See
+  // b/22044928.
+  if (!isSafari8()) {
+    // '' in Firefox, undefined in Chrome.
+    assertEvaluatesToFalse('div.className is empty', div.className);
+    stubs.reset();
+    assertEquals('div.id == "old-id"', 'old-id', div.id);
+    assertEquals('div.name == ""', '', div.className);
+  }
 }
 
 // Test PropertyReplacer with DOM objects' custom attributes.
