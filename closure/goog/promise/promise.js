@@ -315,12 +315,25 @@ goog.Promise.returnEntry_ = function(entry) {
 };
 
 
+// NOTE: this is the same template expression as is used for
+// goog.IThenable.prototype.then
+
+
 /**
- * @param {(TYPE|goog.Thenable<TYPE>|Thenable)=} opt_value
- * @return {!goog.Promise<TYPE>} A new Promise that is immediately resolved
+ * @param {VALUE=} opt_value
+ * @return {RESULT} A new Promise that is immediately resolved
  *     with the given value. If the input value is already a goog.Promise, it
  *     will be returned immediately without creating a new instance.
- * @template TYPE
+ * @template VALUE
+ * @template RESULT := type('goog.Promise',
+ *     cond(isUnknown(VALUE), unknown(),
+ *       mapunion(VALUE, (V) =>
+ *         cond(isTemplatized(V) && sub(rawTypeOf(V), 'IThenable'),
+ *           templateTypeOf(V, 0),
+ *           cond(sub(V, 'Thenable'),
+ *              unknown(),
+ *              V)))))
+ * =:
  */
 goog.Promise.resolve = function(opt_value) {
   if (opt_value instanceof goog.Promise) {
