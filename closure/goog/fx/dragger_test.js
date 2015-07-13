@@ -325,61 +325,6 @@ function testPreventMouseDown() {
   e.$verify();
 }
 
-
-/** @bug 1680770 */
-function testOnWindowMouseOut() {
-  // Test older Gecko browsers - FireFox 2.
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9a')) {
-    var dragger = new goog.fx.Dragger(target);
-
-    var dragCanceled = false;
-    goog.events.listen(dragger, goog.fx.Dragger.EventType.END, function(e) {
-      dragCanceled = e.dragCanceled;
-    });
-
-    var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
-    e.type = goog.events.EventType.MOUSEDOWN;
-    e.clientX = 1;
-    e.clientY = 2;
-    e.isMouseActionButton().$returns(true);
-    e.preventDefault();
-    e.$replay();
-    dragger.startDrag(e);
-    e.$verify();
-
-    assertTrue(dragger.isDragging());
-
-    e = new goog.events.BrowserEvent();
-    e.type = goog.events.EventType.MOUSEOUT;
-    e.target = goog.dom.getElement('sandbox');
-    e.currentTarget = window.top;
-    e.relatedTarget = target;
-    dragger.onWindowMouseOut_(e);
-
-    assertFalse('Drag is not canceled for normal in-window mouseout.',
-        dragCanceled);
-    assertTrue('Must not stop dragging for normal in-window mouseout.',
-        dragger.isDragging());
-
-    dragCanceled = false;
-    delete e.relatedTarget;
-    e.target = goog.dom.createDom(goog.dom.TagName.IFRAME);
-    dragger.onWindowMouseOut_(e);
-    assertFalse('Drag is not canceled for mousing into iframe.',
-        dragCanceled);
-    assertTrue('Must not stop dragging for mousing into iframe.',
-        dragger.isDragging());
-
-    dragCanceled = false;
-    e.target = target;
-    dragger.onWindowMouseOut_(e);
-    assertTrue('Drag is canceled for real mouse out of top window.',
-        dragCanceled);
-    assertFalse('Must stop dragging for real mouse out of top window.',
-        dragger.isDragging());
-  }
-}
-
 function testLimits() {
   var dragger = new goog.fx.Dragger(target);
 

@@ -52,6 +52,7 @@ goog.require('goog.userAgent');
  *
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @struct
  */
 goog.fx.Dragger = function(target, opt_handle, opt_limits) {
   goog.fx.Dragger.base(this, 'constructor');
@@ -776,6 +777,7 @@ goog.fx.Dragger.prototype.isDragging = function() {
  * @param {number=} opt_actY Optional actual y for drag if it has been limited.
  * @param {boolean=} opt_dragCanceled Whether the drag has been canceled.
  * @constructor
+ * @struct
  * @extends {goog.events.Event}
  */
 goog.fx.DragEvent = function(type, dragobj, clientX, clientY, browserEvent,

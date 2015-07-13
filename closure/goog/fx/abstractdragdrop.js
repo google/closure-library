@@ -56,6 +56,7 @@ goog.require('goog.style');
  *
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @struct
  */
 goog.fx.AbstractDragDrop = function() {
   goog.fx.AbstractDragDrop.base(this, 'constructor');
@@ -1163,6 +1164,7 @@ goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
  * @param {Object=} opt_subtarget The currently active subtarget.
  * @extends {goog.events.Event}
  * @constructor
+ * @struct
  */
 goog.fx.DragDropEvent = function(type, source, sourceItem,
                                  opt_target, opt_targetItem, opt_targetElement,
@@ -1246,6 +1248,7 @@ goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
  * @throws Error If no element argument is provided or if the type is invalid
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @struct
  */
 goog.fx.DragDropItem = function(element, opt_data) {
   goog.fx.DragDropItem.base(this, 'constructor');
@@ -1447,6 +1450,7 @@ goog.fx.DragDropItem.prototype.mouseUp_ = function(event) {
  * @param {goog.fx.DragDropItem=} opt_item Item associated with position.
  * @param {Element=} opt_element Element of item associated with position.
  * @constructor
+ * @struct
  * @private
  */
 goog.fx.ActiveDropTarget_ = function(box, opt_target, opt_item, opt_element) {
