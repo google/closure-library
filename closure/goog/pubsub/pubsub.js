@@ -177,7 +177,7 @@ goog.pubsub.PubSub.prototype.unsubscribe = function(topic, fn, opt_context) {
     });
     // Zero is not a valid key.
     if (key) {
-      return this.unsubscribeByKey(/** @type {number} */ (key));
+      return this.unsubscribeByKey(key);
     }
   }
 

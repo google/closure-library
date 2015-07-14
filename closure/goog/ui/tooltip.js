@@ -718,11 +718,11 @@ goog.ui.Tooltip.prototype.saveCursorPosition_ = function(event) {
  */
 goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
   var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
-  this.activeEl_ = /** @type {Element} */ (el);
+  this.activeEl_ = el;
   this.clearHideTimer();
   if (el != this.anchor) {
     this.anchor = el;
-    this.startShowTimer(/** @type {Element} */ (el));
+    this.startShowTimer(el);
     this.checkForParentTooltip_();
     this.saveCursorPosition_(event);
   }
@@ -783,7 +783,7 @@ goog.ui.Tooltip.prototype.handleFocus = function(event) {
     this.anchor = el;
     var pos = this.getPositioningStrategy(goog.ui.Tooltip.Activation.FOCUS);
     this.clearHideTimer();
-    this.startShowTimer(/** @type {Element} */ (el), pos);
+    this.startShowTimer(el, pos);
 
     this.checkForParentTooltip_();
   }

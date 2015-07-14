@@ -214,7 +214,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
 
   if (typeof object == 'object') {
     if (goog.isArray(object)) {
-      this.serializeArray(/** @type {!Array<?>} */ (object), sb);
+      this.serializeArray(object, sb);
       return;
     } else if (object instanceof String ||
                object instanceof Number ||
@@ -229,10 +229,10 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
 
   switch (typeof object) {
     case 'string':
-      this.serializeString_(/** @type {string} */ (object), sb);
+      this.serializeString_(object, sb);
       break;
     case 'number':
-      this.serializeNumber_(/** @type {number} */ (object), sb);
+      this.serializeNumber_(object, sb);
       break;
     case 'boolean':
       sb.push(object);

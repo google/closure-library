@@ -778,7 +778,7 @@ goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
  * @private
  */
 goog.ui.PopupBase.prototype.onDocumentMouseDown_ = function(e) {
-  var target = /** @type {Node} */ (e.target);
+  var target = e.target;
 
   if (!goog.dom.contains(this.element_, target) &&
       !this.isOrWithinAutoHidePartner_(target) &&

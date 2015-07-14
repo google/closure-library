@@ -1103,7 +1103,7 @@ goog.ui.Component.prototype.isRightToLeft = function() {
     this.rightToLeft_ = goog.style.isRightToLeft(this.inDocument_ ?
         this.element_ : this.dom_.getDocument().body);
   }
-  return /** @type {boolean} */(this.rightToLeft_);
+  return this.rightToLeft_;
 };
 
 
