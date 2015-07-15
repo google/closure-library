@@ -198,7 +198,7 @@ function testEnterKeyDoesNothingOnSpecialFormElements() {
 }
 
 function checkEnterKeyDoesNothingOnSpecialFormElement(content, tagName) {
-  // TODO(user): Switch to setSafeHtmlContent here and elsewhere.
+  // TODO(xtof): Switch to setSafeHtmlContent here and elsewhere.
   dialog.setContent(content);
   var formElement = dialog.getContentElement().
       getElementsByTagName(tagName)[0];

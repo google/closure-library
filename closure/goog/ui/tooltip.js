@@ -377,7 +377,7 @@ goog.ui.Tooltip.prototype.setText = function(str) {
 };
 
 
-// TODO(user): Deprecate in favor of setSafeHtml, once developer docs on.
+// TODO(xtof): Deprecate in favor of setSafeHtml, once developer docs on.
 /**
  * Sets tooltip message as HTML markup.
  * using goog.html.SafeHtml are in place.

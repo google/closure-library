@@ -15,7 +15,7 @@
 /**
  * @fileoverview The SafeScript type and its builders.
  *
- * TODO(user): Link to document stating type contract.
+ * TODO(xtof): Link to document stating type contract.
  */
 
 goog.provide('goog.html.SafeScript');

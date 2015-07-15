@@ -33,7 +33,7 @@ goog.setTestOnly('goog.html.safeHtmlTest');
 
 
 function testSafeHtml() {
-  // TODO(user): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
+  // TODO(xtof): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
   // when available.
   var safeHtml = goog.html.testing.newSafeHtmlForTest('Hello <em>World</em>');
   assertSameHtml('Hello <em>World</em>', safeHtml);
