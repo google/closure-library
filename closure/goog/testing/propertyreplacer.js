@@ -68,7 +68,7 @@ goog.testing.PropertyReplacer = function() {
    * Its items are objects with 3 fields: 'object', 'key', 'value'. The
    * original value for the given key in the given object is stored under the
    * 'value' key.
-   * @type {Array<Object>}
+   * @type {Array<{ object: ?, key: string, value: ? }>}
    * @private
    */
   this.original_ = [];

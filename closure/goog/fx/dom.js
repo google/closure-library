@@ -168,8 +168,9 @@ goog.fx.dom.SlideFrom = function(element, end, time, opt_acc) {
   this.startPoint;
 
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
-      goog.style.bidi.getOffsetStart(element) : element.offsetLeft;
-  var start = [offsetLeft, element.offsetTop];
+      goog.style.bidi.getOffsetStart(element) :
+      /** @type {!HTMLElement} */ (element).offsetLeft;
+  var start = [offsetLeft, /** @type {!HTMLElement} */ (element).offsetTop];
   goog.fx.dom.Slide.call(this, element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.SlideFrom, goog.fx.dom.Slide);
@@ -179,7 +180,8 @@ goog.inherits(goog.fx.dom.SlideFrom, goog.fx.dom.Slide);
 goog.fx.dom.SlideFrom.prototype.onBegin = function() {
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
       goog.style.bidi.getOffsetStart(this.element) : this.element.offsetLeft;
-  this.startPoint = [offsetLeft, this.element.offsetTop];
+  this.startPoint = [offsetLeft,
+                     /** @type {!HTMLElement} */ (this.element).offsetTop];
   goog.fx.dom.SlideFrom.superClass_.onBegin.call(this);
 };
 

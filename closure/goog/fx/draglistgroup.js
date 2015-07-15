@@ -132,7 +132,7 @@ goog.fx.DragListGroup = function() {
   /**
    * The clone of the current drag item that's actually being dragged around.
    * Note: This is only defined while a drag action is happening.
-   * @private {Element}
+   * @private {HTMLElement}
    */
   this.draggerEl_;
 
@@ -501,7 +501,8 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
   this.currDragItem_ = /** @type {Element} */ (this.dragItemForHandle_[uid]);
 
-  this.draggerEl_ = this.createDragElementInternal(this.currDragItem_);
+  this.draggerEl_ = /** @type {!HTMLElement} */ (
+      this.createDragElementInternal(this.currDragItem_));
   if (this.draggerElClasses_) {
     // Add CSS class for the clone, if any.
     goog.dom.classlist.addAll(

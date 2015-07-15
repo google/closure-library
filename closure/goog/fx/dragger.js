@@ -732,8 +732,9 @@ goog.fx.Dragger.prototype.limitY = function(y) {
  */
 goog.fx.Dragger.prototype.computeInitialPosition = function() {
   this.deltaX = this.useRightPositioningForRtl_ ?
-      goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
-  this.deltaY = this.target.offsetTop;
+      goog.style.bidi.getOffsetStart(this.target) :
+      /** @type {!HTMLElement} */ (this.target).offsetLeft;
+  this.deltaY = /** @type {!HTMLElement} */ (this.target).offsetTop;
 };
 
 

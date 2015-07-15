@@ -438,7 +438,7 @@ goog.dom.TextRange.prototype.getPastableHtml = function() {
     html = '<table>' + html + '</table>';
   } else if (html.match(/^\s*<li\b/i)) {
     // Match html starting with an LI.
-    var container = this.getContainer();
+    var container = /** @type {!Element} */ (this.getContainer());
     var tagType = goog.dom.TagName.UL;
     while (container) {
       if (container.tagName == goog.dom.TagName.OL) {

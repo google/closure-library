@@ -1955,7 +1955,7 @@ goog.editor.Field.prototype.dispatchFocus_ = function() {
     var range = this.getRange();
 
     if (range) {
-      var focusNode = range.getFocusNode();
+      var focusNode = /** @type {!Element} */ (range.getFocusNode());
       if (range.getFocusOffset() == 0 && (!focusNode || focusNode == field ||
           focusNode.tagName == goog.dom.TagName.BODY)) {
         goog.editor.range.selectNodeStart(field);
@@ -2025,7 +2025,8 @@ goog.editor.Field.prototype.handleMouseDown_ = function(e) {
   if (goog.userAgent.IE) {
     var targetElement = e.target;
     if (targetElement &&
-        targetElement.tagName == goog.dom.TagName.A && e.ctrlKey) {
+        /** @type {!Element} */ (targetElement).tagName == goog.dom.TagName.A &&
+        e.ctrlKey) {
       this.originalDomHelper.getWindow().open(targetElement.href);
     }
   }
