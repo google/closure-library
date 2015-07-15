@@ -1466,5 +1466,5 @@ goog.addDependency('vec/vec4.js', ['goog.vec.Vec4'], ['goog.vec'], false);
 goog.addDependency('vec/vec4d.js', ['goog.vec.vec4d', 'goog.vec.vec4d.Type'], ['goog.vec'], false);
 goog.addDependency('vec/vec4f.js', ['goog.vec.vec4f', 'goog.vec.vec4f.Type'], ['goog.vec'], false);
 goog.addDependency('webgl/webgl.js', ['goog.webgl'], [], false);
-goog.addDependency('window/window.js', ['goog.window'], ['goog.dom.TagName', 'goog.labs.userAgent.platform', 'goog.string', 'goog.userAgent'], false);
+goog.addDependency('window/window.js', ['goog.window'], ['goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.labs.userAgent.platform', 'goog.string', 'goog.string.Const', 'goog.userAgent'], false);
 goog.addDependency('window/window_test.js', ['goog.windowTest'], ['goog.Promise', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.window'], false);
