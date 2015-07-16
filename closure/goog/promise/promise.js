@@ -391,7 +391,7 @@ goog.Promise.race = function(promises) {
 
 
 /**
- * @param {!Array<?(goog.Promise.<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+ * @param {!Array<?(goog.Promise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
  *     promises
  * @return {!goog.Promise<!Array<TYPE>>} A Promise that receives a list of
  *     every fulfilled value once every input Promise (or Promise-like) is

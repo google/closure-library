@@ -81,7 +81,7 @@ goog.structs.LinkedMap = function(opt_maxCount, opt_cache,
 
   /**
    * @private @const {!goog.structs.Map<string,
-   *     goog.structs.LinkedMap.Node_.<string, VALUE>>}
+   *     goog.structs.LinkedMap.Node_<string, VALUE>>}
    */
   this.map_ = new goog.structs.Map();
 

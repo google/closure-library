@@ -64,7 +64,7 @@ goog.string.html.HtmlParser = function() {
 /**
  * HTML entities that are encoded/decoded.
  * TODO(user): use {@code goog.string.htmlEncode} instead.
- * @type {!Object.<string, string>}
+ * @type {!Object<string, string>}
  */
 goog.string.html.HtmlParser.Entities = {
   'lt': '<',
@@ -570,7 +570,7 @@ goog.string.html.HtmlSaxHandler = function() {
 /**
  * Handler called when the parser found a new tag.
  * @param {string} name The name of the tag that is starting.
- * @param {Array.<string>} attributes The attributes of the tag.
+ * @param {Array<string>} attributes The attributes of the tag.
  */
 goog.string.html.HtmlSaxHandler.prototype.startTag = goog.abstractMethod;
 

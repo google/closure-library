@@ -548,8 +548,8 @@ goog.string.html.HtmlSanitizer.prototype.escapeAttrib_ = function(s) {
  * Sanitizes attributes found on html entities.
  * @param {string} tagName The name of the tag in which the {@code attribs} were
  *     found.
- * @param {Array.<?string>} attribs An array of attributes.
- * @return {Array.<?string>} A sanitized version of the {@code attribs}.
+ * @param {Array<?string>} attribs An array of attributes.
+ * @return {Array<?string>} A sanitized version of the {@code attribs}.
  * @private
  */
 goog.string.html.HtmlSanitizer.prototype.sanitizeAttributes_ =

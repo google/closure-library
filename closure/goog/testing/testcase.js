@@ -652,7 +652,7 @@ goog.testing.TestCase.prototype.runTests = function() {
 /**
  * Executes each of the tests, returning a promise that resolves with the
  * test results once they are done running.
- * @return {!IThenable.<!goog.testing.TestCase.Result>}
+ * @return {!IThenable<!goog.testing.TestCase.Result>}
  * @final
  * @package
  */
