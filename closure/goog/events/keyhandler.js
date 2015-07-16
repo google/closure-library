@@ -391,7 +391,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
 
   // Opera reports the keycode or the character code in the keyCode field.
   } else if (goog.userAgent.OPERA) {
-    keyCode = this.keyCode_;
+    keyCode = be.keyCode || this.keyCode_;
     charCode = goog.events.KeyCodes.isCharacterKey(keyCode) ?
         be.keyCode : 0;
 
