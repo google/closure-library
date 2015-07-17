@@ -175,7 +175,7 @@ goog.net.NetworkTester.prototype.getNumRetries = function() {
 
 
 /**
- * Sets the timeout in milliseconds.
+ * Sets a number to represent retry times.
  * @param {number} retries Number of retries to attempt.
  */
 goog.net.NetworkTester.prototype.setNumRetries = function(retries) {
