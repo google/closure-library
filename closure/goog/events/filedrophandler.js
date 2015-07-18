@@ -196,7 +196,9 @@ goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
     e.stopPropagation();
     // Allow the drop on the drop zone.
     var dt = e.getBrowserEvent().dataTransfer;
-    dt.effectAllowed = 'all';
+    try {
+      dt.effectAllowed = 'all';
+    } catch (_error) {}
     dt.dropEffect = 'copy';
   }
 };
