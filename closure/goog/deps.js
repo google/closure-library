@@ -36,6 +36,8 @@ goog.addDependency('a11y/aria/datatables.js', ['goog.a11y.aria.datatables'], ['g
 goog.addDependency('a11y/aria/roles.js', ['goog.a11y.aria.Role'], [], false);
 goog.addDependency('array/array.js', ['goog.array', 'goog.array.ArrayLike'], ['goog.asserts'], false);
 goog.addDependency('array/array_test.js', ['goog.arrayTest'], ['goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
+goog.addDependency('array/async.js', ['goog.array.async'], ['goog.array.ArrayLike', 'goog.async.run'], false);
+goog.addDependency('array/async_test.js', ['goog.arrayAsyncTest'], ['goog.array.async', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.testing.PropertyReplacer'], false);
 goog.addDependency('asserts/asserts.js', ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.dom.NodeType', 'goog.string'], false);
 goog.addDependency('asserts/asserts_test.js', ['goog.assertsTest'], ['goog.asserts', 'goog.asserts.AssertionError', 'goog.dom', 'goog.dom.TagName', 'goog.string', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.Disposable', 'goog.events', 'goog.functions'], false);
