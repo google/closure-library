@@ -77,7 +77,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_az_Latn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_az_Latn_AZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bas');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bas_CM');
-goog.provide('goog.labs.i18n.ListFormatSymbols_be');
 goog.provide('goog.labs.i18n.ListFormatSymbols_be_BY');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bem');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bem_ZM');
@@ -95,7 +94,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_bo_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_br_FR');
 goog.provide('goog.labs.i18n.ListFormatSymbols_brx');
 goog.provide('goog.labs.i18n.ListFormatSymbols_brx_IN');
-goog.provide('goog.labs.i18n.ListFormatSymbols_bs');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bs_Cyrl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bs_Cyrl_BA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bs_Latn');
@@ -145,7 +143,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_en_BM');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_BS');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_BW');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_BZ');
-goog.provide('goog.labs.i18n.ListFormatSymbols_en_CA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_CC');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_CK');
 goog.provide('goog.labs.i18n.ListFormatSymbols_en_CM');
@@ -235,7 +232,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_es_GQ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_GT');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_HN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_IC');
-goog.provide('goog.labs.i18n.ListFormatSymbols_es_MX');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_NI');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_PA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_PE');
@@ -243,7 +239,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_es_PH');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_PR');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_PY');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_SV');
-goog.provide('goog.labs.i18n.ListFormatSymbols_es_US');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_UY');
 goog.provide('goog.labs.i18n.ListFormatSymbols_es_VE');
 goog.provide('goog.labs.i18n.ListFormatSymbols_et_EE');
@@ -546,7 +541,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Cyrl_BA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Cyrl_ME');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Cyrl_RS');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Cyrl_XK');
-goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Latn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Latn_BA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Latn_ME');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sr_Latn_RS');
@@ -1167,18 +1161,6 @@ goog.labs.i18n.ListFormatSymbols_bas_CM = {
 
 
 /**
- * List formatting symbols for locale be.
- */
-goog.labs.i18n.ListFormatSymbols_be = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
-};
-
-
-/**
  * List formatting symbols for locale be_BY.
  */
 goog.labs.i18n.ListFormatSymbols_be_BY = {
@@ -1379,18 +1361,6 @@ goog.labs.i18n.ListFormatSymbols_brx_IN = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale bs.
- */
-goog.labs.i18n.ListFormatSymbols_bs = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} i {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} i {1}'
 };
 
 
@@ -1974,18 +1944,6 @@ goog.labs.i18n.ListFormatSymbols_en_BW = {
  * List formatting symbols for locale en_BZ.
  */
 goog.labs.i18n.ListFormatSymbols_en_BZ = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} and {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, and {1}'
-};
-
-
-/**
- * List formatting symbols for locale en_CA.
- */
-goog.labs.i18n.ListFormatSymbols_en_CA = {
   GENDER_STYLE: 0,
   LIST_TWO: '{0} and {1}',
   LIST_START: '{0}, {1}',
@@ -3063,18 +3021,6 @@ goog.labs.i18n.ListFormatSymbols_es_IC = {
 
 
 /**
- * List formatting symbols for locale es_MX.
- */
-goog.labs.i18n.ListFormatSymbols_es_MX = {
-  GENDER_STYLE: 2,
-  LIST_TWO: '{0} y {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} y {1}'
-};
-
-
-/**
  * List formatting symbols for locale es_NI.
  */
 goog.labs.i18n.ListFormatSymbols_es_NI = {
@@ -3150,18 +3096,6 @@ goog.labs.i18n.ListFormatSymbols_es_PY = {
  * List formatting symbols for locale es_SV.
  */
 goog.labs.i18n.ListFormatSymbols_es_SV = {
-  GENDER_STYLE: 2,
-  LIST_TWO: '{0} y {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} y {1}'
-};
-
-
-/**
- * List formatting symbols for locale es_US.
- */
-goog.labs.i18n.ListFormatSymbols_es_US = {
   GENDER_STYLE: 2,
   LIST_TWO: '{0} y {1}',
   LIST_START: '{0}, {1}',
@@ -6795,18 +6729,6 @@ goog.labs.i18n.ListFormatSymbols_sr_Cyrl_XK = {
 
 
 /**
- * List formatting symbols for locale sr_Latn.
- */
-goog.labs.i18n.ListFormatSymbols_sr_Latn = {
-  GENDER_STYLE: 2,
-  LIST_TWO: '{0} i {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} i {1}'
-};
-
-
-/**
  * List formatting symbols for locale sr_Latn_BA.
  */
 goog.labs.i18n.ListFormatSymbols_sr_Latn_BA = {
@@ -7889,10 +7811,6 @@ if (goog.LOCALE == 'bas_CM' || goog.LOCALE == 'bas-CM') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_bas_CM;
 }
 
-if (goog.LOCALE == 'be') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_be;
-}
-
 if (goog.LOCALE == 'be_BY' || goog.LOCALE == 'be-BY') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_be_BY;
 }
@@ -7959,10 +7877,6 @@ if (goog.LOCALE == 'brx') {
 
 if (goog.LOCALE == 'brx_IN' || goog.LOCALE == 'brx-IN') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_brx_IN;
-}
-
-if (goog.LOCALE == 'bs') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_bs;
 }
 
 if (goog.LOCALE == 'bs_Cyrl' || goog.LOCALE == 'bs-Cyrl') {
@@ -8159,10 +8073,6 @@ if (goog.LOCALE == 'en_BW' || goog.LOCALE == 'en-BW') {
 
 if (goog.LOCALE == 'en_BZ' || goog.LOCALE == 'en-BZ') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en_BZ;
-}
-
-if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en_CA;
 }
 
 if (goog.LOCALE == 'en_CC' || goog.LOCALE == 'en-CC') {
@@ -8521,10 +8431,6 @@ if (goog.LOCALE == 'es_IC' || goog.LOCALE == 'es-IC') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_es_IC;
 }
 
-if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_es_MX;
-}
-
 if (goog.LOCALE == 'es_NI' || goog.LOCALE == 'es-NI') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_es_NI;
 }
@@ -8551,10 +8457,6 @@ if (goog.LOCALE == 'es_PY' || goog.LOCALE == 'es-PY') {
 
 if (goog.LOCALE == 'es_SV' || goog.LOCALE == 'es-SV') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_es_SV;
-}
-
-if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_es_US;
 }
 
 if (goog.LOCALE == 'es_UY' || goog.LOCALE == 'es-UY') {
@@ -9763,10 +9665,6 @@ if (goog.LOCALE == 'sr_Cyrl_RS' || goog.LOCALE == 'sr-Cyrl-RS') {
 
 if (goog.LOCALE == 'sr_Cyrl_XK' || goog.LOCALE == 'sr-Cyrl-XK') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Cyrl_XK;
-}
-
-if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Latn;
 }
 
 if (goog.LOCALE == 'sr_Latn_BA' || goog.LOCALE == 'sr-Latn-BA') {

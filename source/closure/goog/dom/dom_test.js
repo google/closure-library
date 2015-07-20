@@ -209,6 +209,15 @@ function testSetPropertiesDirectAttributeMap() {
   assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
 }
 
+function testSetPropertiesDirectAttributeMapChecksForOwnProperties() {
+  stubs.set(Object.prototype, 'customProp', 'sdflasdf.,m.,<>fsdflas213!@#');
+  var attrs = {'usemap': '#myMap'};
+  var el = goog.dom.createDom(goog.dom.TagName.IMG);
+
+  var res = goog.dom.setProperties(el, attrs);
+  assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
+}
+
 function testSetPropertiesAria() {
   var attrs = {
     'aria-hidden': 'true',
@@ -1558,6 +1567,29 @@ function testGetDocumentScrollFromDocumentWithoutABody() {
   assertEquals(0, dh.getDocumentScroll().x);
   assertEquals(0, dh.getDocumentScroll().y);
   // OK if this does not throw.
+}
+
+function testDefaultToScrollingElement() {
+  var fakeDocument = {
+    documentElement: {},
+    body: {}
+  };
+  var dh = new goog.dom.DomHelper(fakeDocument);
+
+  // When scrollingElement isn't supported or is null (no element causes
+  // scrolling), then behavior is UA-dependant for maximum compatibility.
+  assertTrue(dh.getDocumentScrollElement() == fakeDocument.body ||
+      dh.getDocumentScrollElement() == fakeDocument.documentElement);
+  fakeDocument.scrollingElement = null;
+  assertTrue(dh.getDocumentScrollElement() == fakeDocument.body ||
+      dh.getDocumentScrollElement() == fakeDocument.documentElement);
+
+  // But when scrollingElement is set, we use it directly.
+  fakeDocument.scrollingElement = fakeDocument.documentElement;
+  assertEquals(fakeDocument.documentElement, dh.getDocumentScrollElement());
+  fakeDocument.scrollingElement = fakeDocument.body;
+  assertEquals(fakeDocument.body, dh.getDocumentScrollElement());
+
 }
 
 function testActiveElementIE() {

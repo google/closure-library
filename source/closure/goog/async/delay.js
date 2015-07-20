@@ -130,6 +130,19 @@ goog.async.Delay.prototype.start = function(opt_interval) {
 
 
 /**
+ * Starts the delay timer if it's not already active.
+ * @param {number=} opt_interval If specified and the timer is not already
+ *     active, overrides the object's default interval with this one (in
+ *     milliseconds).
+ */
+goog.async.Delay.prototype.startIfNotActive = function(opt_interval) {
+  if (!this.isActive()) {
+    this.start(opt_interval);
+  }
+};
+
+
+/**
  * Stops the delay timer if it is active. No action is taken if the timer is not
  * in use.
  */

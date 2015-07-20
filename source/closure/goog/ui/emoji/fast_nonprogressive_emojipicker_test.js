@@ -15,17 +15,21 @@
 goog.provide('goog.ui.emoji.FastNonProgressiveEmojiPickerTest');
 goog.setTestOnly('goog.ui.emoji.FastNonProgressiveEmojiPickerTest');
 
+goog.require('goog.Promise');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.style');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPicker');
 goog.require('goog.ui.emoji.SpriteInfo');
-goog.require('goog.userAgent');
+
+
+var images;
+var palette;
+var picker;
 var sprite = '../../demos/emoji/sprite.png';
 var sprite2 = '../../demos/emoji/sprite2.png';
 
@@ -119,15 +123,10 @@ function checkPathsEndWithSameFile(path1, path2) {
 /**
  * Checks and verifies the structure of a non-progressive fast-loading picker
  * after the animated emoji have loaded.
- *
- * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
- * @param {Object} images Map of id -> Image for the images loaded in this
- *     picker.
  */
-function checkPostLoadStructureForFastLoadNonProgressivePicker(palette,
-                                                               emoji,
-                                                               images) {
+function testStructure() {
+  var emoji = spritedEmoji2;
+
   for (var i = 0; i < emoji[1].length; i++) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
@@ -189,60 +188,34 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette,
   }
 }
 
-var testCase = new goog.testing.AsyncTestCase(document.title);
-testCase.stepTimeout = 4 * 1000;
 
-testCase.setUpPage = function() {
-  this.waitForAsync('setUpPage');
+function setUp() {
   var defaultImg = '../../demos/emoji/none.gif';
-  this.picker = new goog.ui.emoji.EmojiPicker(defaultImg);
-  this.picker.setDelayedLoad(false);
-  this.picker.setManualLoadOfAnimatedEmoji(true);
-  this.picker.setProgressiveRender(false);
-  this.picker.addEmojiGroup(spritedEmoji2[0], spritedEmoji2[1]);
-  this.picker.render();
+  picker = new goog.ui.emoji.EmojiPicker(defaultImg);
+  picker.setDelayedLoad(false);
+  picker.setManualLoadOfAnimatedEmoji(true);
+  picker.setProgressiveRender(false);
+  picker.addEmojiGroup(spritedEmoji2[0], spritedEmoji2[1]);
+  picker.render();
 
-  this.palette = this.picker.getPage(0);
-  var imageLoader = this.palette.getImageLoader();
-  this.images = {};
+  palette = picker.getPage(0);
+  var imageLoader = palette.getImageLoader();
+  images = {};
 
-  goog.events.listen(imageLoader, goog.net.EventType.COMPLETE,
-      this.onImageLoaderComplete, false, this);
-  goog.events.listen(imageLoader, goog.events.EventType.LOAD,
-      this.onImageLoaded, false, this);
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(imageLoader, goog.net.EventType.COMPLETE, resolve);
+    goog.events.listen(imageLoader, goog.events.EventType.LOAD, function(e) {
+      var image = e.target;
+      images[image.id] = image;
+    });
 
-  // Now we load the animated emoji and check the structure again. The animated
-  // emoji will be different.
-  this.picker.manuallyLoadAnimatedEmoji();
-};
-
-testCase.onImageLoaded = function(e) {
-  var image = e.target;
-  this.log('Image loaded: ' + image.src);
-  this.images[image.id] = image;
-};
-
-testCase.onImageLoaderComplete = function(e) {
-  this.log('Image loading complete');
-  this.continueTesting();
-};
-
-testCase.tearDownPage = function() {
-  this.picker.dispose();
-};
-
-testCase.addNewTest('testStructure', function() {
-  // Bug 2280968
-  if (goog.userAgent.IE && goog.userAgent.VERSION == '6.0') {
-    this.log('Not testing emojipicker structure');
-    return;
-  }
-
-  this.log('Testing emojipicker structure');
-  checkPostLoadStructureForFastLoadNonProgressivePicker(this.palette,
-      spritedEmoji2, this.images);
-});
+    // Now we load the animated emoji and check the structure again. The
+    // animated emoji will be different.
+    picker.manuallyLoadAnimatedEmoji();
+  });
+}
 
 
-// Standalone Closure Test Runner.
-G_testRunner.initialize(testCase);
+function tearDown() {
+  picker.dispose();
+}

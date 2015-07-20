@@ -15,6 +15,7 @@
 goog.provide('goog.labs.testing.Environment');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.Console');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
@@ -35,8 +36,12 @@ goog.require('goog.testing.jsunit');
 goog.labs.testing.Environment = goog.defineClass(null, {
   /** @constructor */
   constructor: function() {
-    goog.labs.testing.EnvironmentTestCase_.getInstance().
-        registerEnvironment_(this);
+    var testcase = goog.labs.testing.EnvironmentTestCase_.getInstance();
+    testcase.registerEnvironment_(this);
+
+    // Record the active test case, in normal usage this is a singleton,
+    // but while testing this case it is reset.
+    goog.labs.testing.Environment.activeTestCase_ = testcase;
 
     /** @type {goog.testing.MockControl} */
     this.mockControl = null;
@@ -102,10 +107,10 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockControl.$verifyAll();
       } finally {
         this.mockControl.$resetAll();
-      }
-      if (this.shouldMakeMockControl_) {
-        // If we created the mockControl, we'll also tear it down.
-        this.mockControl.$tearDown();
+        if (this.shouldMakeMockControl_) {
+          // If we created the mockControl, we'll also tear it down.
+          this.mockControl.$tearDown();
+        }
       }
     }
     // Verifying the mockControl may throw, so if cleanup needs to happen,
@@ -161,6 +166,21 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 });
 
 
+/**
+ * @private {?goog.testing.TestCase}
+ */
+goog.labs.testing.Environment.activeTestCase_ = null;
+
+
+// TODO(johnlenz): make this package private when it moves out of labs.
+/**
+ * @return {?goog.testing.TestCase}
+ */
+goog.labs.testing.Environment.getTestCaseIfActive = function() {
+  return goog.labs.testing.Environment.activeTestCase_;
+};
+
+
 /** @private @const {!goog.debug.Console} */
 goog.labs.testing.Environment.console_ = new goog.debug.Console();
 
@@ -182,11 +202,27 @@ goog.labs.testing.EnvironmentTestCase_ = function() {
   /** @private {!Array<!goog.labs.testing.Environment>}> */
   this.environments_ = [];
 
+  /** @private {!Object} */
+  this.testobj_ = goog.global; //default
+
   // Automatically install this TestCase when any environment is used in a test.
   goog.testing.TestCase.initializeTestRunner(this);
 };
 goog.inherits(goog.labs.testing.EnvironmentTestCase_, goog.testing.TestCase);
 goog.addSingletonGetter(goog.labs.testing.EnvironmentTestCase_);
+
+
+/**
+ * @param {!Object} obj An object providing the test and life cycle methods.
+ * @override
+ */
+goog.labs.testing.EnvironmentTestCase_.prototype.setTestObj = function(obj) {
+  goog.asserts.assert(this.testobj_ == goog.global,
+      'A test method object has already been provided ' +
+      'and only one is supported.');
+  this.testobj_ = obj;
+  goog.labs.testing.EnvironmentTestCase_.base(this, 'setTestObj', obj);
+};
 
 
 /**
@@ -196,11 +232,12 @@ goog.addSingletonGetter(goog.labs.testing.EnvironmentTestCase_);
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.autoDiscoverLifecycle =
     function() {
-  if (goog.global['runTests']) {
-    this.runTests = goog.bind(goog.global['runTests'], goog.global);
+  if (this.testobj_['runTests']) {
+    this.runTests = goog.bind(this.testobj_['runTests'], this.testobj_);
   }
-  if (goog.global['shouldRunTests']) {
-    this.shouldRunTests = goog.bind(goog.global['shouldRunTests'], goog.global);
+  if (this.testobj_['shouldRunTests']) {
+    this.shouldRunTests = goog.bind(
+        this.testobj_['shouldRunTests'], this.testobj_);
   }
 };
 
@@ -223,8 +260,8 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUpPage = function() {
   });
 
   // User defined setUpPage method.
-  if (goog.global['setUpPage']) {
-    goog.global['setUpPage']();
+  if (this.testobj_['setUpPage']) {
+    this.testobj_['setUpPage']();
   }
 };
 
@@ -232,8 +269,8 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUpPage = function() {
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   // User defined configure method.
-  if (goog.global['configureEnvironment']) {
-    goog.global['configureEnvironment']();
+  if (this.testobj_['configureEnvironment']) {
+    this.testobj_['configureEnvironment']();
   }
 
   goog.array.forEach(this.environments_, function(env) {
@@ -241,8 +278,8 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   }, this);
 
   // User defined setUp method.
-  if (goog.global['setUp']) {
-    goog.global['setUp']();
+  if (this.testobj_['setUp']) {
+    this.testobj_['setUp']();
   }
 };
 
@@ -251,9 +288,9 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
   var firstException;
   // User defined tearDown method.
-  if (goog.global['tearDown']) {
+  if (this.testobj_['tearDown']) {
     try {
-      goog.global['tearDown']();
+      this.testobj_['tearDown']();
     } catch (e) {
       if (!firstException) {
         firstException = e;
@@ -283,8 +320,8 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDownPage = function() {
   // User defined tearDownPage method.
-  if (goog.global['tearDownPage']) {
-    goog.global['tearDownPage']();
+  if (this.testobj_['tearDownPage']) {
+    this.testobj_['tearDownPage']();
   }
 
   goog.array.forEachRight(this.environments_, function(env) {

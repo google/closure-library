@@ -232,6 +232,30 @@ function testOpenBlankReturnsNullPopupBlocker() {
 }
 
 
+function testOpenBlankEscapesSafely() {
+  // Opening a window with javascript: and then reading from its document.body
+  // is problematic because in some browsers the document.body won't have been
+  // updated yet, and in some IE versions the parent window does not have
+  // access to document.body in new blank window.
+  var navigatedUrl;
+  var mockWin = {
+    open: function(url) {
+      navigatedUrl = url;
+    }
+  };
+
+  // Test string determines that all necessary escaping transformations happen,
+  // and that they happen in the right order (HTML->JS->URI).
+  // - " which would be escaped by HTML escaping and JS string escaping. It
+  //     should be HTML escaped.
+  // - \ which would be escaped by JS string escaping and percent-encoded
+  //     by encodeURI(). It gets JS string escaped first (to two '\') and then
+  //     percent-encoded.
+  var win = goog.window.openBlank('"\\', {}, mockWin);
+  assertEquals('javascript:"&quot;%5C%5C"', navigatedUrl);
+}
+
+
 function testOpenIosBlank() {
   if (!goog.labs.userAgent.engine.isWebKit() || !window.navigator) {
     // Don't even try this on IE8!

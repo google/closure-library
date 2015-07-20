@@ -449,6 +449,9 @@ if (goog.LOCALE == 'ar') {
 if (goog.LOCALE == 'az') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.azSelect_;
 }
+if (goog.LOCALE == 'be') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
 if (goog.LOCALE == 'bg') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
@@ -456,6 +459,9 @@ if (goog.LOCALE == 'bn') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.asSelect_;
 }
 if (goog.LOCALE == 'br') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
+if (goog.LOCALE == 'bs') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'ca') {
@@ -491,6 +497,9 @@ if (goog.LOCALE == 'en') {
 if (goog.LOCALE == 'en_AU' || goog.LOCALE == 'en-AU') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.enSelect_;
 }
+if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.enSelect_;
+}
 if (goog.LOCALE == 'en_GB' || goog.LOCALE == 'en-GB') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.enSelect_;
 }
@@ -516,6 +525,12 @@ if (goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'es_ES' || goog.LOCALE == 'es-ES') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
+if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
+if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'et') {
@@ -696,6 +711,9 @@ if (goog.LOCALE == 'sq') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.sqSelect_;
 }
 if (goog.LOCALE == 'sr') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
+if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'sv') {

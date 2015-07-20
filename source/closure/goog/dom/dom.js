@@ -362,7 +362,7 @@ goog.dom.setProperties = function(element, properties) {
       element.className = val;
     } else if (key == 'for') {
       element.htmlFor = val;
-    } else if (key in goog.dom.DIRECT_ATTRIBUTE_MAP_) {
+    } else if (goog.dom.DIRECT_ATTRIBUTE_MAP_.hasOwnProperty(key)) {
       element.setAttribute(goog.dom.DIRECT_ATTRIBUTE_MAP_[key], val);
     } else if (goog.string.startsWith(key, 'aria-') ||
         goog.string.startsWith(key, 'data-')) {
@@ -520,7 +520,7 @@ goog.dom.getDocumentHeight_ = function(win) {
     // to figure out.
 
     var body = doc.body;
-    var docEl = doc.documentElement;
+    var docEl = /** @type {!HTMLElement} */ (doc.documentElement);
     if (!(docEl && body)) {
       return 0;
     }
@@ -630,9 +630,14 @@ goog.dom.getDocumentScrollElement = function() {
  * @private
  */
 goog.dom.getDocumentScrollElement_ = function(doc) {
-  // WebKit needs body.scrollLeft in both quirks mode and strict mode. We also
-  // default to the documentElement if the document does not have a body (e.g.
-  // a SVG document).
+  // Old WebKit needs body.scrollLeft in both quirks mode and strict mode. We
+  // also default to the documentElement if the document does not have a body
+  // (e.g. a SVG document).
+  // Uses http://dev.w3.org/csswg/cssom-view/#dom-document-scrollingelement to
+  // avoid trying to guess about browser behavior from the UA string.
+  if (doc.scrollingElement) {
+    return doc.scrollingElement;
+  }
   if (!goog.userAgent.WEBKIT && goog.dom.isCss1CompatMode_(doc)) {
     return doc.documentElement;
   }
@@ -679,7 +684,7 @@ goog.dom.getWindow_ = function(doc) {
  *     className of the new element. If an array, the elements will be joined
  *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
- *     strings for text nodes. If one of the var_args is an array or NodeList,i
+ *     strings for text nodes. If one of the var_args is an array or NodeList,
  *     its elements will be added as childNodes instead.
  * @return {!Element} Reference to a DOM node.
  */
@@ -1007,7 +1012,7 @@ goog.dom.canHaveChildren = function(node) {
   if (node.nodeType != goog.dom.NodeType.ELEMENT) {
     return false;
   }
-  switch (node.tagName) {
+  switch (/** @type {!Element} */ (node).tagName) {
     case goog.dom.TagName.APPLET:
     case goog.dom.TagName.AREA:
     case goog.dom.TagName.BASE:
@@ -1196,7 +1201,7 @@ goog.dom.getChildren = function(element) {
  * @return {Element} The first child node of {@code node} that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
-  if (node.firstElementChild != undefined) {
+  if (goog.isDef(node.firstElementChild)) {
     return /** @type {!Element} */(node).firstElementChild;
   }
   return goog.dom.getNextElementNode_(node.firstChild, true);
@@ -1209,7 +1214,7 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element} The last child node of {@code node} that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
-  if (node.lastElementChild != undefined) {
+  if (goog.isDef(node.lastElementChild)) {
     return /** @type {!Element} */(node).lastElementChild;
   }
   return goog.dom.getNextElementNode_(node.lastChild, false);
@@ -1222,7 +1227,7 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element} The next sibling of {@code node} that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
-  if (node.nextElementSibling != undefined) {
+  if (goog.isDef(node.nextElementSibling)) {
     return /** @type {!Element} */(node).nextElementSibling;
   }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
@@ -1236,7 +1241,7 @@ goog.dom.getNextElementSibling = function(node) {
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
-  if (node.previousElementSibling != undefined) {
+  if (goog.isDef(node.previousElementSibling)) {
     return /** @type {!Element} */(node).previousElementSibling;
   }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
@@ -2125,6 +2130,7 @@ goog.dom.getAncestor = function(
   var ignoreSearchSteps = opt_maxSearchSteps == null;
   var steps = 0;
   while (element && (ignoreSearchSteps || steps <= opt_maxSearchSteps)) {
+    goog.asserts.assert(element.name != 'parentNode');
     if (matcher(element)) {
       return element;
     }

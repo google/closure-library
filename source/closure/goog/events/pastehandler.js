@@ -232,7 +232,7 @@ goog.events.PasteHandler.prototype.getState = function() {
  * Returns the event handler.
  * @return {goog.events.EventHandler<T>} The event handler.
  * @protected
- * @this T
+ * @this {T}
  * @template T
  */
 goog.events.PasteHandler.prototype.getEventHandler = function() {

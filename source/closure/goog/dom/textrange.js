@@ -349,7 +349,7 @@ goog.dom.TextRange.prototype.containsRange = function(otherRange,
   } else if (otherRangeType == goog.dom.RangeType.CONTROL) {
     var elements = otherRange.getElements();
     var fn = opt_allowPartial ? goog.array.some : goog.array.every;
-    return fn(elements, function(el) {
+    return fn(elements, /** @this {!goog.dom.TextRange} */ function(el) {
       return this.containsNode(el, opt_allowPartial);
     }, this);
   }
@@ -438,7 +438,7 @@ goog.dom.TextRange.prototype.getPastableHtml = function() {
     html = '<table>' + html + '</table>';
   } else if (html.match(/^\s*<li\b/i)) {
     // Match html starting with an LI.
-    var container = this.getContainer();
+    var container = /** @type {!Element} */ (this.getContainer());
     var tagType = goog.dom.TagName.UL;
     while (container) {
       if (container.tagName == goog.dom.TagName.OL) {

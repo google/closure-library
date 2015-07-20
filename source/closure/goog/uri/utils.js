@@ -613,6 +613,9 @@ goog.uri.utils.QueryArray;
  *     the second argument (value) will be an empty string.
  */
 goog.uri.utils.parseQueryData = function(encodedQuery, callback) {
+  if (!encodedQuery) {
+    return;
+  }
   var pairs = encodedQuery.split('&');
   for (var i = 0; i < pairs.length; i++) {
     var indexOfEquals = pairs[i].indexOf('=');

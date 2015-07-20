@@ -243,7 +243,7 @@ goog.date.getWeekNumber = function(year, month, date, opt_weekDay,
   var d = new Date(year, month, date);
 
   // Default to Thursday for cut off as per ISO 8601.
-  var cutoff = opt_weekDay || goog.date.weekDay.THU;
+  var cutoff = goog.isDef(opt_weekDay) ? opt_weekDay : goog.date.weekDay.THU;
 
   // Default to Monday for first day of the week as per ISO 8601.
   var firstday = opt_firstDayOfWeek || goog.date.weekDay.MON;
@@ -836,7 +836,7 @@ goog.date.Date.prototype.getFullYear = function() {
  * Alias for getFullYear.
  *
  * @return {number} The four digit year of date.
- * @see #getFullyear
+ * @see #getFullYear
  */
 goog.date.Date.prototype.getYear = function() {
   return this.getFullYear();
@@ -1493,7 +1493,7 @@ goog.date.DateTime.prototype.setSeconds = function(seconds) {
 
 
 /**
- * Sets the seconds part of the datetime.
+ * Sets the milliseconds part of the datetime.
  *
  * @param {number} ms Integer between 0 and 999, representing the milliseconds.
  */

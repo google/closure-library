@@ -34,6 +34,7 @@ goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.classlist');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
@@ -272,6 +273,15 @@ goog.editor.Field.EventType = {
    * components which contain it can respond.
    */
   IFRAME_RESIZED: 'ifrsz',
+  /**
+   * Dispatched after a user action that will eventually fire a SELECTIONCHANGE
+   * event. For mouseups, this is fired immediately before SELECTIONCHANGE,
+   * since {@link #handleMouseUp_} fires SELECTIONCHANGE immediately. May be
+   * fired up to {@link #SELECTION_CHANGE_FREQUENCY_} ms before SELECTIONCHANGE
+   * is fired in the case of keyup events, since they use
+   * {@link #selectionChangeTimer_}.
+   */
+  BEFORESELECTIONCHANGE: 'beforeselectionchange',
   /**
    * Dispatched when the selection changes.
    * Use handleSelectionChange from plugin API instead of listening
@@ -1343,6 +1353,7 @@ goog.editor.Field.prototype.handleKeyUp_ = function(e) {
   if (goog.editor.Field.SELECTION_CHANGE_KEYCODES[e.keyCode] ||
       ((e.ctrlKey || e.metaKey) &&
        goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_[e.keyCode])) {
+    this.dispatchEvent(goog.editor.Field.EventType.BEFORESELECTIONCHANGE);
     this.selectionChangeTimer_.start();
   }
 };
@@ -1378,6 +1389,13 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
     }
 
     var stringKey = String.fromCharCode(key).toLowerCase();
+    // Ctrl+Cmd+Space generates a charCode for a backtick on Mac Firefox, but
+    // has the correct string key in the browser event.
+    if (goog.userAgent.MAC && goog.userAgent.GECKO &&
+        stringKey == '`' && e.getBrowserEvent().key == ' ') {
+      stringKey = ' ';
+    }
+
     if (this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SHORTCUT,
                                       e, stringKey, isModifierPressed)) {
       e.preventDefault();
@@ -1937,7 +1955,7 @@ goog.editor.Field.prototype.dispatchFocus_ = function() {
     var range = this.getRange();
 
     if (range) {
-      var focusNode = range.getFocusNode();
+      var focusNode = /** @type {!Element} */ (range.getFocusNode());
       if (range.getFocusOffset() == 0 && (!focusNode || focusNode == field ||
           focusNode.tagName == goog.dom.TagName.BODY)) {
         goog.editor.range.selectNodeStart(field);
@@ -2007,7 +2025,8 @@ goog.editor.Field.prototype.handleMouseDown_ = function(e) {
   if (goog.userAgent.IE) {
     var targetElement = e.target;
     if (targetElement &&
-        targetElement.tagName == goog.dom.TagName.A && e.ctrlKey) {
+        /** @type {!Element} */ (targetElement).tagName == goog.dom.TagName.A &&
+        e.ctrlKey) {
       this.originalDomHelper.getWindow().open(targetElement.href);
     }
   }
@@ -2043,6 +2062,7 @@ goog.editor.Field.prototype.handleMouseUp_ = function(e) {
    * retrieve the selection with goog.dom.Range may see an out-of-date
    * selection range.
    */
+  this.dispatchEvent(goog.editor.Field.EventType.BEFORESELECTIONCHANGE);
   this.dispatchSelectionChangeEvent(e);
   if (goog.userAgent.IE) {
     /*
@@ -2397,7 +2417,7 @@ goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
   this.savedClassName_ = field.className;
   this.setInitialStyle(field.style.cssText);
 
-  field.className += ' editable';
+  goog.dom.classlist.add(field, 'editable');
 
   this.makeEditableInternal(opt_iframeSrc);
 };

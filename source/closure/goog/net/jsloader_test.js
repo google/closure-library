@@ -136,3 +136,35 @@ function testLoadMany() {
     assertEquals('verification object', 'Test #1 loaded', window.test1);
   };
 }
+
+
+// Test the load function with additional options.
+function testLoadWithOptions() {
+  testCase.waitForAsync('testLoadWithOptions');
+
+  var testUrl = 'testdata/jsloader_test1.js';
+  var options = {
+    attributes: {
+      'data-attr1' : 'enabled',
+      'data-attr2' : 'disabled',
+    },
+    timeout: undefined,  // Use default
+    cleanupWhenDone: undefined,  // Use default
+    document: undefined  // Use default
+  };
+  var result = goog.net.jsloader.load(testUrl, options);
+  result.addCallback(function() {
+    testCase.continueTesting();
+
+    var script = result.defaultScope_.script_;
+
+    // Check that the URI matches ours.
+    assertTrue('server URI', script.src.indexOf(testUrl) >= 0);
+
+    // Check that the attributes specified are set on the script tag.
+    assertEquals('attribute option not applied for attr1',
+        'enabled', script.getAttribute('data-attr1'));
+    assertEquals('attribute option not applied for attr2',
+        'disabled', script.getAttribute('data-attr2'));
+  });
+}

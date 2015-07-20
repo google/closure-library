@@ -16,6 +16,8 @@ goog.provide('goog.dom.safeTest');
 goog.setTestOnly('goog.dom.safeTest');
 
 goog.require('goog.dom.safe');
+goog.require('goog.dom.safe.InsertAdjacentHtmlPosition');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
@@ -31,6 +33,25 @@ function tearDown() {
   if (mockWindowOpen) {
     mockWindowOpen.$tearDown();
   }
+}
+
+
+function testInsertAdjacentHtml() {
+  var writtenHtml;
+  var writtenPosition;
+  var mockNode =  /** @type {!Node} */ ({
+    'insertAdjacentHTML': function(position, html) {
+      writtenPosition = position;
+      writtenHtml = html;
+    }
+  });
+
+  goog.dom.safe.insertAdjacentHtml(
+      mockNode,
+      goog.dom.safe.InsertAdjacentHtmlPosition.BEFOREBEGIN,
+      goog.html.SafeHtml.create('div', {}, 'foobar'));
+  assertEquals('<div>foobar</div>', writtenHtml);
+  assertEquals('beforebegin', writtenPosition);
 }
 
 

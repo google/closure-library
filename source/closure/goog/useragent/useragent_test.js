@@ -37,7 +37,8 @@ var UserAgents = {
   GECKO: 'GECKO',
   IE: 'IE',
   OPERA: 'OPERA',
-  WEBKIT: 'WEBKIT'
+  WEBKIT: 'WEBKIT',
+  EDGE: 'EDGE'
 };
 
 
@@ -195,8 +196,6 @@ function testIe() {
       'Arcor 5.005; .NET CLR 1.0.3705; .NET CLR 1.1.4322)', '7.0');
   assertIe(
       'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko', '11.0');
-  var testAgents = goog.labs.userAgent.testAgents;
-  assertIe(testAgents.IE_EDGE, '12.0');
 }
 
 function testIeDocumentModeOverride() {
@@ -218,11 +217,10 @@ function testDocumentModeInStandardsMode() {
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
 }
 
-function testDocumentModeEdge() {
-  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_EDGE);
-  goog.userAgentTestUtil.reinitializeUserAgent();
-  assertTrue(goog.userAgent.isDocumentModeOrHigher(11));
-  assertTrue(goog.userAgent.isDocumentModeOrHigher(10));
+function testEdge() {
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertEdge(testAgents.EDGE_12_0, '12.0');
+  assertEdge(testAgents.EDGE_12_9600, '12.9600');
 }
 
 function testOpera() {
@@ -280,6 +278,14 @@ function testLegacyChromeOsAndLinux() {
 
 function assertIe(uaString, expectedVersion) {
   assertUserAgent([UserAgents.IE], uaString);
+  assertEquals('User agent ' + uaString + ' should have had version ' +
+      expectedVersion + ' but had ' + goog.userAgent.VERSION,
+      expectedVersion,
+      goog.userAgent.VERSION);
+}
+
+function assertEdge(uaString, expectedVersion) {
+  assertUserAgent([UserAgents.EDGE], uaString);
   assertEquals('User agent ' + uaString + ' should have had version ' +
       expectedVersion + ' but had ' + goog.userAgent.VERSION,
       expectedVersion,

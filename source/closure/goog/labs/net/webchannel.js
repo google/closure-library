@@ -116,6 +116,10 @@ goog.net.WebChannel.Options;
 /**
  * Types that are allowed as message data.
  *
+ * Note that if you are sending unicode strings from the server, UTF-8 escaping
+ * is required to avoid mismatched string length calculation between the
+ * client and server.
+ *
  * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
  */
 goog.net.WebChannel.MessageData;

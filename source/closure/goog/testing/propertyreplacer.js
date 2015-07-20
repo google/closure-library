@@ -68,7 +68,7 @@ goog.testing.PropertyReplacer = function() {
    * Its items are objects with 3 fields: 'object', 'key', 'value'. The
    * original value for the given key in the given object is stored under the
    * 'value' key.
-   * @type {Array<Object>}
+   * @type {Array<{ object: ?, key: string, value: ? }>}
    * @private
    */
   this.original_ = [];
@@ -128,6 +128,7 @@ goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
  * delete failed.
  * @param {Object|Function} obj The object or function to delete a key from.
  * @param {string} key The key to delete.
+ * @throws {Error} In case of trying to set a read-only property
  * @private
  */
 goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
@@ -148,6 +149,11 @@ goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
     // so undefined will become 'undefined'.
     obj[key] = '';
   }
+
+  if (obj[key]) {
+    throw Error('Cannot delete non configurable property "' + key + '" in ' +
+                obj);
+  }
 };
 
 
@@ -157,12 +163,22 @@ goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
  *     alter. See the constraints in the class description.
  * @param {string} key The key to change the value for.
  * @param {*} value The new value to set.
+ * @throws {Error} In case of trying to set a read-only property.
  */
 goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
   var origValue = goog.testing.PropertyReplacer.hasKey_(obj, key) ? obj[key] :
                   goog.testing.PropertyReplacer.NO_SUCH_KEY_;
   this.original_.push({object: obj, key: key, value: origValue});
   obj[key] = value;
+
+  // Check whether obj[key] was a read-only value and the assignment failed.
+  // Also, check that we're not comparing returned pixel values when "value"
+  // is 0. In other words, account for this case:
+  // document.body.style.margin = 0;
+  // document.body.style.margin; // returns "0px"
+  if (obj[key] != value && (value + 'px') != obj[key]) {
+    throw Error('Cannot overwrite read-only property "' + key + '" in ' + obj);
+  }
 };
 
 

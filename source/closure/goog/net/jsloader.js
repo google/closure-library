@@ -28,6 +28,7 @@ goog.require('goog.async.Deferred');
 goog.require('goog.debug.Error');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.object');
 
 
 /**
@@ -56,11 +57,13 @@ goog.net.jsloader.DEFAULT_TIMEOUT = 5000;
  * cleanupWhenDone: If true clean up the script tag after script completes to
  *     load. This is important if you just want to read data from the JavaScript
  *     and then throw it away. Default is false.
+ * attributes: Additional attributes to set on the script tag.
  *
  * @typedef {{
  *   timeout: (number|undefined),
  *   document: (HTMLDocument|undefined),
- *   cleanupWhenDone: (boolean|undefined)
+ *   cleanupWhenDone: (boolean|undefined),
+ *   attributes: (!Object<string, string>|undefined)
  * }}
  */
 goog.net.jsloader.Options;
@@ -181,14 +184,15 @@ goog.net.jsloader.load = function(uri, opt_options) {
         'Error while loading script ' + uri));
   };
 
-  // Add the script element to the document.
-  goog.dom.setProperties(script, {
+  var properties = options.attributes || {};
+  goog.object.extend(properties, {
     'type': 'text/javascript',
     'charset': 'UTF-8',
     // NOTE(user): Safari never loads the script if we don't set
     // the src attribute before appending.
     'src': uri
   });
+  goog.dom.setProperties(script, properties);
   var scriptParent = goog.net.jsloader.getScriptParentElement_(doc);
   scriptParent.appendChild(script);
 

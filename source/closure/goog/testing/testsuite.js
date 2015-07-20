@@ -13,6 +13,7 @@
 // limitations under the License.
 goog.provide('goog.testing.testSuite');
 
+goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.TestCase');
 
 
@@ -24,16 +25,8 @@ goog.require('goog.testing.TestCase');
  *     methods, and optionally a setUp and tearDown method, etc.
  */
 goog.testing.testSuite = function(obj) {
-  var testCase = new goog.testing.TestCase();
-  var regex = new RegExp('^' + testCase.getAutoDiscoveryPrefix());
-  for (var name in obj) {
-    if (regex.test(name)) {
-      var testMethod = obj[name];
-      if (goog.isFunction(testMethod)) {
-        testCase.addNewTest(name, testMethod, obj);
-      }
-    }
-  }
-  testCase.autoDiscoverLifecycle(obj);
+  var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||
+      new goog.testing.TestCase();
+  testCase.setTestObj(obj);
   goog.testing.TestCase.initializeTestRunner(testCase);
 };

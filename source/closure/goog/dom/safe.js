@@ -38,6 +38,7 @@
  */
 
 goog.provide('goog.dom.safe');
+goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
@@ -45,6 +46,27 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
 goog.require('goog.string.Const');
+
+
+/** @enum {string} */
+goog.dom.safe.InsertAdjacentHtmlPosition = {
+  AFTERBEGIN: 'afterbegin',
+  AFTEREND: 'afterend',
+  BEFOREBEGIN: 'beforebegin',
+  BEFOREEND: 'beforeend'
+};
+
+
+/**
+ * Inserts known-safe HTML into a Node, at the specified position.
+ * @param {!Node} node The node on which to call insertAdjacentHTML.
+ * @param {!goog.dom.safe.InsertAdjacentHtmlPosition} position Position where
+ *     to insert the HTML.
+ * @param {!goog.html.SafeHtml} html The known-safe HTML to insert.
+ */
+goog.dom.safe.insertAdjacentHtml = function(node, position, html) {
+  node.insertAdjacentHTML(position, goog.html.SafeHtml.unwrap(html));
+};
 
 
 /**

@@ -32,12 +32,16 @@ goog.require('goog.userAgent');
 /**
  * Safe source for a blank iframe.
  *
- * Intentionally not about:blank, which gives mixed content warnings in IE6
- * over HTTPS.
+ * Intentionally not about:blank for IE, which gives mixed content warnings in
+ * IE6 over HTTPS. Using 'about:blank' for all other browsers to support Content
+ * Security Policy (CSP). According to http://www.w3.org/TR/CSP/ CSP does not
+ * allow inline javascript by default.
  *
  * @type {string}
  */
-goog.dom.iframe.BLANK_SOURCE = 'javascript:""';
+goog.dom.iframe.BLANK_SOURCE = goog.userAgent.IE ?
+    'javascript:""' :
+    'about:blank';
 
 
 /**

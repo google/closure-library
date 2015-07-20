@@ -93,6 +93,7 @@ if (!goog.userAgent.WEBKIT) {
   }
 
   function _testInsertRowResult(element, editableTable,  newTr, index) {
+    var originalRowCount;
     if (element == testElements.basic) {
       originalRowCount = 4;
     } else if (element == testElements.torture) {
@@ -228,14 +229,6 @@ if (!goog.userAgent.WEBKIT) {
     assertEquals('Insert column incremented column length',
         startColCount + 1, testObjects.basic.rows[0].columns.length);
     _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 2);
-  }
-
-  function testInsertColumnAtBeginning() {
-    var startColCount = testObjects.basic.rows[0].columns.length;
-    var newCells = testObjects.basic.insertColumn(0);
-    assertEquals('Insert column incremented column length',
-        startColCount + 1, testObjects.basic.rows[0].columns.length);
-    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 0);
   }
 
   function testInsertColumnAtBeginningColSpan() {

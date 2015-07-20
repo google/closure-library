@@ -21,7 +21,6 @@ goog.provide('goog.window');
 
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
-goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.labs.userAgent.platform');
@@ -228,15 +227,34 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
  *                  opened.
  */
 goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
+  // Open up a window with the loading message and nothing else.
+  // This will be interpreted as HTML content type with a missing doctype
+  // and html/body tags, but is otherwise acceptable.
+  //
+  // IMPORTANT: The order of escaping is crucial here in order to avoid XSS.
+  // First, HTML-escaping is needed because the result of the JS expression
+  // is evaluated as HTML. Second, JS-string escaping is needed; this avoids
+  // \u escaping from inserting HTML tags and \ from escaping the final ".
+  // Finally, URL percent-encoding is done with encodeURI(); this
+  // avoids percent-encoding from bypassing HTML and JS escaping.
+  //
+  // Note: There are other ways the same result could be achieved but the
+  // current behavior was preserved when this code was refactored to use
+  // SafeUrl, in order to avoid breakage.
+  var loadingMessage;
   if (!opt_message) {
-    opt_message = '';
+    loadingMessage = '';
+  } else {
+    loadingMessage =
+        goog.string.escapeString(goog.string.htmlEscape(opt_message));
   }
-  var win = goog.window.open('', opt_options, opt_parentWin);
-  if (win) {
-    goog.dom.safe.documentWrite(
-        win.document, goog.html.SafeHtml.htmlEscape(opt_message));
-  }
-  return win;
+  var url = goog.html.uncheckedconversions
+      .safeUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'b/12014412, encoded string in javascript: URL'),
+          'javascript:"' + encodeURI(loadingMessage) + '"');
+  return /** @type {Window} */ (goog.window.open(
+      url, opt_options, opt_parentWin));
 };
 
 

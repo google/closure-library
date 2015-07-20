@@ -966,8 +966,8 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
   var defaultHashFn = function(item) {
     // Prefix each type with a single character representing the type to
     // prevent conflicting keys (e.g. true and 'true').
-    return goog.isObject(current) ? 'o' + goog.getUid(current) :
-        (typeof current).charAt(0) + current;
+    return goog.isObject(item) ? 'o' + goog.getUid(item) :
+        (typeof item).charAt(0) + item;
   };
   var hashFn = opt_hashFn || defaultHashFn;
 

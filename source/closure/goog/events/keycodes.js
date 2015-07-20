@@ -23,6 +23,8 @@ goog.provide('goog.events.KeyCodes');
 
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.events.BrowserEvent');
+
 
 /**
  * Key codes for common characters.
@@ -247,7 +249,7 @@ goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
  */
 goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
     opt_shiftKey, opt_ctrlKey, opt_altKey) {
-  if (!goog.userAgent.IE &&
+  if (!goog.userAgent.IE && !goog.userAgent.EDGE &&
       !(goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('525'))) {
     return true;
   }
@@ -276,7 +278,8 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
   }
 
   // Some keys with Ctrl/Shift do not issue keypress in WEBKIT.
-  if (goog.userAgent.WEBKIT && opt_ctrlKey && opt_shiftKey) {
+  if ((goog.userAgent.WEBKIT || goog.userAgent.EDGE) &&
+      opt_ctrlKey && opt_shiftKey) {
     switch (keyCode) {
       case goog.events.KeyCodes.BACKSLASH:
       case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
@@ -304,7 +307,7 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
     case goog.events.KeyCodes.ENTER:
       return true;
     case goog.events.KeyCodes.ESC:
-      return !goog.userAgent.WEBKIT;
+      return !(goog.userAgent.WEBKIT || goog.userAgent.EDGE);
   }
 
   return goog.events.KeyCodes.isCharacterKey(keyCode);
@@ -335,7 +338,7 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
   }
 
   // Safari sends zero key code for non-latin characters.
-  if (goog.userAgent.WEBKIT && keyCode == 0) {
+  if ((goog.userAgent.WEBKIT || goog.userAgent.EDGE) && keyCode == 0) {
     return true;
   }
 

@@ -29,8 +29,10 @@ goog.provide('goog.testing.TestCase.Order');
 goog.provide('goog.testing.TestCase.Result');
 goog.provide('goog.testing.TestCase.Test');
 
+
 goog.require('goog.Promise');
 goog.require('goog.Thenable');
+goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
 goog.require('goog.testing.asserts');
@@ -169,7 +171,7 @@ goog.testing.TestCase.maxRunTime = 200;
  * techniques like tail cail optimization can affect the exact depth.
  * @private @const
  */
-goog.testing.TestCase.MAX_STACK_DEPTH_ = 100;
+goog.testing.TestCase.MAX_STACK_DEPTH_ = 50;
 
 
 /**
@@ -650,7 +652,7 @@ goog.testing.TestCase.prototype.runTests = function() {
 /**
  * Executes each of the tests, returning a promise that resolves with the
  * test results once they are done running.
- * @return {!IThenable.<!goog.testing.TestCase.Result>}
+ * @return {!IThenable<!goog.testing.TestCase.Result>}
  * @final
  * @package
  */
@@ -815,13 +817,22 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
   if (this.depth_ > goog.testing.TestCase.MAX_STACK_DEPTH_ ||
       this.now() - this.batchTime_ > goog.testing.TestCase.maxRunTime) {
     this.saveMessage('Breaking async');
-    this.batchTime_ = this.now();
-    this.depth_ = 0;
-    this.timeout(goog.bind(this.runNextTest_, this), 0);
+    this.timeout(goog.bind(this.startNextBatch_, this), 0);
   } else {
     ++this.depth_;
     this.runNextTest_();
   }
+};
+
+
+/**
+ * Start a new batch to tests after yielding, resetting batchTime and depth.
+ * @private
+ */
+goog.testing.TestCase.prototype.startNextBatch_ = function() {
+  this.batchTime_ = this.now();
+  this.depth_ = 0;
+  this.runNextTest_();
 };
 
 
@@ -995,6 +1006,31 @@ goog.testing.TestCase.prototype.autoDiscoverLifecycle = function(opt_obj) {
   if (obj['shouldRunTests']) {
     this.shouldRunTests = goog.bind(obj['shouldRunTests'], obj);
   }
+};
+
+
+// TODO(johnlenz): make this package private
+/**
+ * @param {!Object} obj  An object from which to extract test and lifecycle
+ * methods.
+ */
+goog.testing.TestCase.prototype.setTestObj = function(obj) {
+  // Drop any previously added (likely auto-discovered) tests, only one source
+  // of discovered test and life-cycle methods is allowed.
+  goog.asserts.assert(this.tests_.length == 0,
+      'Test methods have already been configured.');
+
+  var regex = new RegExp('^' + this.getAutoDiscoveryPrefix());
+  for (var name in obj) {
+    if (regex.test(name)) {
+      var testMethod = obj[name];
+      if (goog.isFunction(testMethod)) {
+        this.addNewTest(name, testMethod, obj);
+      }
+    }
+  }
+
+  this.autoDiscoverLifecycle(obj);
 };
 
 
@@ -1500,10 +1536,25 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
   this.message = message;
 
   /**
-   * Scope that the test function should be called in.
+   * The stack.
    * @type {?string}
    */
-  this.stack = opt_stack || null;
+  this.stack = null;
+
+  if (opt_stack) {
+    this.stack = opt_stack;
+  } else {
+    // Attempt to capture a stack trace.
+    if (Error.captureStackTrace) {
+      // See https://code.google.com/p/v8-wiki/wiki/JavaScriptStackTraceApi
+      Error.captureStackTrace(this, goog.testing.TestCase.Error);
+    } else {
+      var stack = new Error().stack;
+      if (stack) {
+        this.stack = stack;
+      }
+    }
+  }
 };
 
 

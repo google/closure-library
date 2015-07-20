@@ -24,9 +24,11 @@
 /** @suppress {extraProvide} */
 goog.provide('goog.editor.field_test');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Plugin');
@@ -862,15 +864,22 @@ function testNotHandledSelectionChange() {
 function testSelectionChange() {
   var editableField = new FieldConstructor('testField', document);
   var clock = new goog.testing.MockClock(true);
+  var beforeSelectionChanges = goog.testing.recordFunction();
+  goog.events.listen(editableField,
+      goog.editor.Field.EventType.BEFORESELECTIONCHANGE,
+      beforeSelectionChanges);
   var selectionChanges = goog.testing.recordFunction();
   goog.events.listen(editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       selectionChanges);
 
   editableField.makeEditable();
 
-  // Emulate pressing left arrow key, this should result in SELECTIONCHANGE
-  // event after a short timeout.
+  // Emulate pressing left arrow key, this should result in a
+  // BEFORESELECTIONCHANGE event immediately, and a SELECTIONCHANGE event after
+  // a short timeout.
   editableField.handleKeyUp_({keyCode: goog.events.KeyCodes.LEFT});
+  assertEquals('Before selection change should fire immediately', 1,
+      beforeSelectionChanges.getCallCount());
   assertEquals('Selection change should be on a timer', 0,
       selectionChanges.getCallCount());
   clock.tick(1000);
@@ -892,6 +901,10 @@ function testSelectionChangeOnMouseUp() {
       new goog.events.BrowserEvent({type: 'mouseup', target: 'fakeTarget'});
   var editableField = new FieldConstructor('testField', document);
   var clock = new goog.testing.MockClock(true);
+  var beforeSelectionChanges = goog.testing.recordFunction();
+  goog.events.listen(editableField,
+      goog.editor.Field.EventType.BEFORESELECTIONCHANGE,
+      beforeSelectionChanges);
   var selectionChanges = goog.testing.recordFunction();
   goog.events.listen(editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       selectionChanges);
@@ -902,9 +915,12 @@ function testSelectionChangeOnMouseUp() {
 
   editableField.makeEditable();
 
-  // Emulate a mouseup event, this should result in an immediate
-  // SELECTIONCHANGE, plus a second one in IE after a short timeout.
+  // Emulate a mouseup event, this should result in immediate
+  // BEFORESELECTIONCHANGE and SELECTIONCHANGE, plus a second SELECTIONCHANGE in
+  // IE after a short timeout.
   editableField.handleMouseUp_(fakeEvent);
+  assertEquals('Before selection change should fire immediately', 1,
+      beforeSelectionChanges.getCallCount());
   assertEquals('Selection change should fire immediately', 1,
       selectionChanges.getCallCount());
   assertEquals('Plugin should have handled selection change immediately', 1,
@@ -1354,4 +1370,23 @@ function testIsGeneratingKey() {
   } else {
     assertFalse(goog.editor.Field.isGeneratingKey_(imeKeyEvent, false));
   }
+}
+
+function testSetEditableClassName() {
+  var element = goog.dom.getElement('testField');
+  var editableField = new FieldConstructor('testField');
+
+  assertFalse(goog.dom.classes.has(element, 'editable'));
+  editableField.makeEditable();
+  assertTrue(goog.dom.classes.has(element, 'editable'));
+  assertEquals(1, goog.array.count(
+      goog.dom.classes.get(element), goog.functions.equalTo('editable')));
+
+  // Skip restore won't reset the original element's CSS classes.
+  editableField.makeUneditable(true /* opt_skipRestore */);
+
+  editableField.makeEditable();
+  assertTrue(goog.dom.classes.has(element, 'editable'));
+  assertEquals(1, goog.array.count(
+      goog.dom.classes.get(element), goog.functions.equalTo('editable')));
 }

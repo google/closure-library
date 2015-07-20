@@ -23,7 +23,7 @@ goog.require('goog.testing.jsunit');
 function testExposeException() {
   var expected =
       'Message: message&quot;<br>' +
-      'Url: <a href="view-source:http://fileName%22" ' +
+      'Url: <a href="view-source:http://fileName&quot;" ' +
           'target="_new">http://fileName&quot;</a><br>' +
       'Line: lineNumber&quot;<br><br>' +
       'Browser stack:<br>' +
