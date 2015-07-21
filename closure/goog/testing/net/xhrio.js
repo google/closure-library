@@ -30,7 +30,6 @@ goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.structs.Map');
-goog.require('goog.uri.utils');
 
 
 
@@ -67,13 +66,6 @@ goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
  * @enum {string}
  */
 goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
-
-
-/**
- * The pattern matching the 'http' and 'https' URI schemes.
- * @private {!RegExp}
- */
-goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_ = /^https?$/i;
 
 
 /**
@@ -534,21 +526,15 @@ goog.testing.net.XhrIo.prototype.isComplete = function() {
  * @return {boolean} Whether the request compeleted successfully.
  */
 goog.testing.net.XhrIo.prototype.isSuccess = function() {
-  var status = this.getStatus();
-  // A zero status code is considered successful for local files.
-  return goog.net.HttpStatus.isSuccess(status) ||
-      status === 0 && !this.isLastUriEffectiveSchemeHttp_();
-};
+  switch (this.getStatus()) {
+    case goog.net.HttpStatus.OK:
+    case goog.net.HttpStatus.NO_CONTENT:
+    case goog.net.HttpStatus.NOT_MODIFIED:
+      return true;
 
-
-/**
- * @return {boolean} whether the effective scheme of the last URI that was
- *     fetched was 'http' or 'https'.
- * @private
- */
-goog.testing.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
-  var scheme = goog.uri.utils.getEffectiveScheme(this.lastUri_);
-  return goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_.test(scheme);
+    default:
+      return false;
+  }
 };
 
 
