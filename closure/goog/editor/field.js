@@ -274,6 +274,15 @@ goog.editor.Field.EventType = {
    */
   IFRAME_RESIZED: 'ifrsz',
   /**
+   * Dispatched after a user action that will eventually fire a SELECTIONCHANGE
+   * event. For mouseups, this is fired immediately before SELECTIONCHANGE,
+   * since {@link #handleMouseUp_} fires SELECTIONCHANGE immediately. May be
+   * fired up to {@link #SELECTION_CHANGE_FREQUENCY_} ms before SELECTIONCHANGE
+   * is fired in the case of keyup events, since they use
+   * {@link #selectionChangeTimer_}.
+   */
+  BEFORESELECTIONCHANGE: 'beforeselectionchange',
+  /**
    * Dispatched when the selection changes.
    * Use handleSelectionChange from plugin API instead of listening
    * directly to this event.
@@ -1344,6 +1353,7 @@ goog.editor.Field.prototype.handleKeyUp_ = function(e) {
   if (goog.editor.Field.SELECTION_CHANGE_KEYCODES[e.keyCode] ||
       ((e.ctrlKey || e.metaKey) &&
        goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_[e.keyCode])) {
+    this.dispatchEvent(goog.editor.Field.EventType.BEFORESELECTIONCHANGE);
     this.selectionChangeTimer_.start();
   }
 };
@@ -2051,6 +2061,7 @@ goog.editor.Field.prototype.handleMouseUp_ = function(e) {
    * retrieve the selection with goog.dom.Range may see an out-of-date
    * selection range.
    */
+  this.dispatchEvent(goog.editor.Field.EventType.BEFORESELECTIONCHANGE);
   this.dispatchSelectionChangeEvent(e);
   if (goog.userAgent.IE) {
     /*
