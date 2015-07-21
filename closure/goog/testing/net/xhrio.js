@@ -70,9 +70,8 @@ goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
 
 
 /**
- * The pattern matching the 'http' and 'https' URI schemes
- * @type {!RegExp}
- * @private
+ * The pattern matching the 'http' and 'https' URI schemes.
+ * @private {!RegExp}
  */
 goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_ = /^https?$/i;
 
