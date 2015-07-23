@@ -346,20 +346,33 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
 goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
                     (goog.array.ASSUME_NATIVE_FUNCTIONS ||
                      goog.array.ARRAY_PROTOTYPE_.reduce) ?
-    function(arr, f, val, opt_obj) {
-      goog.asserts.assert(arr.length != null);
-      if (opt_obj) {
-        f = goog.bind(f, opt_obj);
+  function(arr, f, val, opt_obj) {
+    goog.asserts.assert(arr.length != null);
+    var params = [];
+    for(var i = 1, l = arguments.length; i < l; i++){
+      params.push(arguments[i]);
+    }
+    if (opt_obj) {
+      params[0] = goog.bind(f, opt_obj);
+    }
+    return goog.array.ARRAY_PROTOTYPE_.reduce.apply(arr, params);
+  } :
+  function(arr, f, val, opt_obj) {
+    goog.asserts.assert(arr.length > 0);
+    var value, length = arr.length, i = 0;
+    if (arguments.length > 2) {
+      value = arguments[2];
+    } else {
+      value = arr[0];
+      i = 1;
+    }
+    for (; i < length; i++) {
+      if(i in arr){
+        value = f.call(opt_obj, value, arr[i], i, arr);
       }
-      return goog.array.ARRAY_PROTOTYPE_.reduce.call(arr, f, val);
-    } :
-    function(arr, f, val, opt_obj) {
-      var rval = val;
-      goog.array.forEach(arr, function(val, index) {
-        rval = f.call(opt_obj, rval, val, index, arr);
-      });
-      return rval;
-    };
+    }
+    return value;
+  };
 
 
 /**
