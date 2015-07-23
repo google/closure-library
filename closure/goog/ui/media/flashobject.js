@@ -623,7 +623,7 @@ goog.ui.media.FlashObject.prototype.isLoaded = function() {
     return true;
   }
 
-  if (this.getFlashElement().PercentLoaded &&
+  if ('PercentLoaded' in this.getFlashElement() &&
       this.getFlashElement().PercentLoaded() == 100) {
     return true;
   }
