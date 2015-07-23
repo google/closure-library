@@ -288,7 +288,7 @@ function testIsLoadedForIE() {
   flash.render();
   assertNotThrows('isLoaded() should not throw exception', function() {
     flash.isLoaded();
-  })
+  });
   flash.dispose();
 }
 
