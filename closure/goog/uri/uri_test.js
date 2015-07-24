@@ -147,6 +147,10 @@ function testQueryResolution() {
   assertEquals('http://www.google.com/search?q=new%20search',
                goog.Uri.parse('http://www.google.com/search?q=old+search#hi').
                    resolve(goog.Uri.parse('?q=new%20search')).toString());
+
+  assertEquals('http://www.google.com/search?q=%26',
+               goog.Uri.parse('http://www.google.com/search').
+                   resolve(goog.Uri.parse('?q=%26')).toString());
 }
 
 function testFragmentResolution() {
