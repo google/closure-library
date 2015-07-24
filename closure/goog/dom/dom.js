@@ -2180,13 +2180,7 @@ goog.dom.getActiveElement = function(doc) {
  */
 goog.dom.getPixelRatio = function() {
   var win = goog.dom.getWindow();
-
-  // devicePixelRatio does not work on Mobile firefox.
-  // TODO(user): Enable this check on a known working mobile Gecko version.
-  // Filed a bug: https://bugzilla.mozilla.org/show_bug.cgi?id=896804
-  var isFirefoxMobile = goog.userAgent.GECKO && goog.userAgent.MOBILE;
-
-  if (goog.isDef(win.devicePixelRatio) && !isFirefoxMobile) {
+  if (goog.isDef(win.devicePixelRatio)) {
     return win.devicePixelRatio;
   } else if (win.matchMedia) {
     return goog.dom.matchesPixelRatio_(.75) ||
