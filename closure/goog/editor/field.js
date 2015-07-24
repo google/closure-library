@@ -1941,7 +1941,14 @@ goog.editor.Field.prototype.dispatchBeforeFocus_ = function() {
     return;
   }
 
-  this.execCommand(goog.editor.Command.CLEAR_LOREM, true);
+  // Add a new parameter to this function that will control
+  // the call to function setHTML() in clearLorem_ . This
+  // approach will not break other calls to clearLorem_
+  // because Javascript will simply assign the value "undefined"
+  // to the parameter if similar calls to CLEAR_LOREM have only
+  // two parameters.
+  
+  this.execCommand(goog.editor.Command.CLEAR_LOREM, true, false);
   this.dispatchEvent(goog.editor.Field.EventType.BEFOREFOCUS);
 };
 
