@@ -623,6 +623,9 @@ goog.ui.media.FlashObject.prototype.isLoaded = function() {
     return true;
   }
 
+  // Use "in" operator to check for PercentLoaded because IE8 throws when
+  // accessing directly. See:
+  // https://github.com/google/closure-library/pull/373.
   if ('PercentLoaded' in this.getFlashElement() &&
       this.getFlashElement().PercentLoaded() == 100) {
     return true;
