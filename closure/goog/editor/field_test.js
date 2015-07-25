@@ -28,7 +28,7 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Plugin');
@@ -1376,17 +1376,17 @@ function testSetEditableClassName() {
   var element = goog.dom.getElement('testField');
   var editableField = new FieldConstructor('testField');
 
-  assertFalse(goog.dom.classes.has(element, 'editable'));
+  assertFalse(goog.dom.classlist.contains(element, 'editable'));
   editableField.makeEditable();
-  assertTrue(goog.dom.classes.has(element, 'editable'));
+  assertTrue(goog.dom.classlist.contains(element, 'editable'));
   assertEquals(1, goog.array.count(
-      goog.dom.classes.get(element), goog.functions.equalTo('editable')));
+      goog.dom.classlist.get(element), goog.functions.equalTo('editable')));
 
   // Skip restore won't reset the original element's CSS classes.
   editableField.makeUneditable(true /* opt_skipRestore */);
 
   editableField.makeEditable();
-  assertTrue(goog.dom.classes.has(element, 'editable'));
+  assertTrue(goog.dom.classlist.contains(element, 'editable'));
   assertEquals(1, goog.array.count(
-      goog.dom.classes.get(element), goog.functions.equalTo('editable')));
+      goog.dom.classlist.get(element), goog.functions.equalTo('editable')));
 }
