@@ -105,8 +105,13 @@ function testArraySerialize() {
   assertSerialize('[1,2]', [1, 2]);
   assertSerialize('[1,2,3]', [1, 2, 3]);
   assertSerialize('[[]]', [[]]);
+  assertSerialize('[null,null]', [function() {}, function() {}]);
 
   assertNotEquals('{length:0}', goog.json.serialize({length: 0}), '[]');
+}
+
+function testFunctionSerialize() {
+  assertSerialize('null', function() {});
 }
 
 function testObjectSerialize_emptyObject() {
@@ -134,7 +139,7 @@ function testSerializeSkipFunction() {
     i: 100,
     f: function() { var x = 'x'; }
   };
-  assertSerialize('', object.f);
+  assertSerialize('null', object.f);
   assertSerialize('{"s":"string value","b":true,"i":100}', object);
 }
 
