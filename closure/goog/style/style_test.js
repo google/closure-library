@@ -619,9 +619,10 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
     document.body.appendChild(div);
 
     // Test all major positioning methods.
-    // Disabled for IE8 and below - IE8 returns dimensions multiplied by 100.
+    // Disabled for IE9 and below - IE8 returns dimensions multiplied by 100.
+    // IE9 is flaky. See b/22873770.
     expectedFailures.expectFailureFor(
-        goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9));
+        goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10));
     try {
       // Test all major positioning methods.
       var pos = goog.style.getClientPosition(div);
@@ -2160,8 +2161,9 @@ function testShadowDomOffsetParent() {
 
 function testGetViewportPageOffset() {
   expectedFailures.expectFailureFor(
-      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9),
-      'Test has been flaky for ie8-winxp image. Disabling.');
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10),
+      'Test has been flaky for ie9-win7 and ie8-winxp image. Disabling. ' +
+      'See b/22873770.');
 
   var testViewport = goog.dom.getElement('test-viewport');
   testViewport.style.height = '5000px';
