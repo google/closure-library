@@ -3,12 +3,28 @@
 # Use of this source code is governed by the Apache License, Version 2.0.
 # See the LICENSE file for details.
 
+# Will upgrade to new container-based infrastructure
+sudo: false
+
+cache:
+  - node_modules
+
+
+before_install:
+  # emulate a GUI environment
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  # 10 minutes
+  - "export PROTRACTOR_TIMEOUT=600000"
+
 install:
   - cd ..
   - git clone https://github.com/google/closure-compiler.git
   - cd closure-compiler
   - ant jar
   - cd ../closure-library
+  - npm install
 
 script:
-  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js_output_file=$(mktemp)
+  - ./node_modules/.bin/webdriver-manager start & sleep 5; ./node_modules/.bin/protractor protractor.conf.js
+  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --js='**.js' --js='!**_test.js' --js='!**node_modules/**/*.js' --js='!**_perf.js' --js_output_file=$(mktemp)
