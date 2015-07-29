@@ -248,3 +248,49 @@ function testPreventDropOutside() {
   // Assert also that the drop effect is set to 'none'.
   assertEquals('none', dt.dropEffect);
 }
+
+function testIEBugNo811625() {
+  // See more at https://github.com/google/closure-library/issues/485
+  // or https://connect.microsoft.com/IE/feedback/details/811625/cant-get-datatransfer-effectallowed-set-in-another-window-raises-a-script65535-error
+  var preventDefault = false;
+  var expectedfiles = [{ fileName: 'file1.jpg' }];
+  var dt = { types: ['Files'], files: expectedfiles };
+  // we construct a mock DataTransfer object and define a setter will throw SCRIPT65535 when attempt to set effectAllowed to simulate the IEBug #811625
+  dt.__defineSetter__('effectAllowed', function(v){
+    throw new Error("SCRIPT65535: see more at https://connect.microsoft.com/IE/feedback/details/811625/cant-get-datatransfer-effectallowed-set-in-another-window-raises-a-script65535-error")
+  })
+
+  // Assert that default actions are prevented on dragenter.
+  textarea.dispatchEvent(new goog.events.BrowserEvent({
+    preventDefault: function() { preventDefault = true; },
+    type: goog.events.EventType.DRAGENTER,
+    dataTransfer: dt
+  }));
+  assertTrue(preventDefault);
+  preventDefault = false;
+
+  // Assert that default actions are prevented on dragover.
+  textarea.dispatchEvent(new goog.events.BrowserEvent({
+    preventDefault: function() { preventDefault = true; },
+    type: goog.events.EventType.DRAGOVER,
+    dataTransfer: dt
+  }));
+  assertTrue(preventDefault);
+  preventDefault = false;
+  // Assert that the drop effect is set to 'copy'.
+  assertEquals('copy', dt.dropEffect);
+
+  // Assert that default actions are prevented on drop.
+  textarea.dispatchEvent(new goog.events.BrowserEvent({
+    preventDefault: function() { preventDefault = true; },
+    type: goog.events.EventType.DROP,
+    dataTransfer: dt
+  }));
+  assertTrue(preventDefault);
+
+  // Assert that DROP has been fired.
+  assertTrue(dnd);
+  assertEquals(1, files.length);
+  assertEquals(expectedfiles[0].fileName, files[0].fileName);
+}
+
