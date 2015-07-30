@@ -151,9 +151,9 @@ goog.i18n.DateTimeFormat.TOKENS_ = [
   //quote string
   /^\'(?:[^\']|\'\')*\'/,
   // pattern chars
-  /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|w+|z+|Z+)/,
+  /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
   // and all the other chars
-  /^[^\'GyMkSEahKHcLQdmsvwzZ]+/  // and all the other chars
+  /^[^\'GyMkSEahKHcLQdmsvVwzZ]+/  // and all the other chars
 ];
 
 
@@ -787,6 +787,24 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ =
 
 
 /**
+ * Generate localized, location dependent time zone id
+ * @param {number} count Number of time pattern char repeats, it controls
+ *     how a field should be formatted.
+ * @param {!goog.date.DateLike} date Whose value being evaluated.
+ * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
+ * @return {string} GMT timeZone string.
+ * @private
+ */
+goog.i18n.DateTimeFormat.prototype.formatTimeZoneLocationId_ =
+    function(count, date, opt_timeZone) {
+  opt_timeZone = opt_timeZone ||
+      goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
+  return count <= 2 ? opt_timeZone.getTimeZoneId() :
+             opt_timeZone.getGenericLocation(date);
+};
+
+
+/**
  * Formatting one date field.
  * @param {string} patternStr The pattern string for the field being formatted.
  * @param {!goog.date.DateLike} date represents the real date to be formatted.
@@ -819,6 +837,7 @@ goog.i18n.DateTimeFormat.prototype.formatField_ =
     case 'm': return this.formatMinutes_(count, dateForTime);
     case 's': return this.formatSeconds_(count, dateForTime);
     case 'v': return this.formatTimeZoneId_(date, opt_timeZone);
+    case 'V': return this.formatTimeZoneLocationId_(count, date, opt_timeZone);
     case 'w': return this.formatWeekOfYear_(count, dateForTime);
     case 'z': return this.formatTimeZone_(count, date, opt_timeZone);
     case 'Z': return this.formatTimeZoneRFC_(count, date, opt_timeZone);

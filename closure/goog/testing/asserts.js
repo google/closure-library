@@ -945,7 +945,7 @@ var assertEvaluatesToFalse = function(a, opt_b) {
  * comparisons erroneously fail:
  * <pre>
  * assertHTMLEquals('<a href="x" target="y">', '<a target="y" href="x">');
- * assertHTMLEquals('<div classname="a b">', '<div classname="b a">');
+ * assertHTMLEquals('<div class="a b">', '<div class="b a">');
  * assertHTMLEquals('<input disabled>', '<input disabled="disabled">');
  * </pre>
  *
