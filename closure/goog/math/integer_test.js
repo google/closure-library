@@ -1691,3 +1691,10 @@ function testBigShift() {
   assertEquals('-591981510028266767381876356163880091648',
                a.negate().shiftLeft(97).toString());
 }
+
+// Regression test for
+// https://github.com/google/closure-library/pull/498
+function testBase36ToString() {
+  assertEquals('zzzzzz',
+               goog.math.Integer.fromString('zzzzzz', 36).toString(36));
+}
