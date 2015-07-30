@@ -98,7 +98,7 @@ goog.date.DateRange.prototype.contains = function(date) {
 
 
 /**
- * @return {!goog.iter.Iterator} An iterator over the date range.
+ * @return {!goog.date.DateRange.Iterator} An iterator over the date range.
  */
 goog.date.DateRange.prototype.iterator = function() {
   return new goog.date.DateRange.Iterator(this);
@@ -397,7 +397,7 @@ goog.date.DateRange.cloneOrCreate_ = function(opt_today) {
  * @constructor
  * @struct
  * @suppress {checkStructDictInheritance}
- * @extends {goog.iter.Iterator}
+ * @extends {goog.iter.Iterator<goog.date.Date>}
  * @param {goog.date.DateRange} dateRange The date range to iterate.
  * @final
  */
