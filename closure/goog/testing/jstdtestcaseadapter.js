@@ -82,6 +82,12 @@ var ConditionalTestCase = ConditionalTestCase || function(
 };
 
 
+// TODO(johnlenz): AsyncTestCase and AsyncConditionalTestCase are
+// placeholders for an implementation that actually understands the
+// JsTestDriver AsyncTestCases which are non-trivial:
+// see https://code.google.com/p/js-test-driver/wiki/AsyncTestCase
+
+
 /**
  * @param {string} testCaseName The name of the test case.
  * @param {?=} opt_proto An optional prototype object for the test case.
