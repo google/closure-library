@@ -250,15 +250,16 @@ function testPreventDropOutside() {
 }
 
 function testEffectAllowedExceptionIsCaught() {
-  // See more at https://github.com/google/closure-library/issues/485
-  // or https://connect.microsoft.com/IE/feedback/details/811625/cant-get-datatransfer-effectallowed-set-in-another-window-raises-a-script65535-error
   var preventDefault = false;
   var expectedfiles = [{ fileName: 'file1.jpg' }];
   var dt = { types: ['Files'], files: expectedfiles };
-  // we construct a mock DataTransfer object and define a setter will throw SCRIPT65535 when attempt to set effectAllowed to simulate the IEBug #811625
+
+  // We construct a mock DataTransfer object that define a setter will throw SCRIPT65535
+  // when attempt to set property effectAllowed to simulate IE Bug #811625.
+  // See more: https://github.com/google/closure-library/issues/485
   Object.defineProperty(dt, 'effectAllowed', {
     set: function(v) {
-      throw new Error("SCRIPT65535: see more at https://connect.microsoft.com/IE/feedback/details/811625/cant-get-datatransfer-effectallowed-set-in-another-window-raises-a-script65535-error")
+      throw new Error("SCRIPT65535");
     }
   });
 
