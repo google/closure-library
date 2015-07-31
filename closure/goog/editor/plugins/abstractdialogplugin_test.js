@@ -16,6 +16,7 @@ goog.provide('goog.editor.plugins.AbstractDialogPluginTest');
 goog.setTestOnly('goog.editor.plugins.AbstractDialogPluginTest');
 
 goog.require('goog.dom.SavedRange');
+goog.require('goog.dom.TagName');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.Event');
@@ -336,7 +337,7 @@ function testRestoreSelection() {
  * it.
  */
 function setUpRealEditableField() {
-  fieldElem = document.createElement('div');
+  fieldElem = document.createElement(goog.dom.TagName.DIV);
   fieldElem.id = 'myField';
   document.body.appendChild(fieldElem);
   fieldObj = new goog.editor.Field('myField', document);

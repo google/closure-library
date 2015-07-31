@@ -50,6 +50,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -95,7 +96,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
    * The model for the range of the slider.
    * @type {!goog.ui.RangeModel}
    */
-  this.rangeModel = new goog.ui.RangeModel;
+  this.rangeModel = new goog.ui.RangeModel();
 
   /**
    * A function mapping slider values to text description.
@@ -370,7 +371,8 @@ goog.ui.SliderBase.prototype.getCssClass = goog.abstractMethod;
 goog.ui.SliderBase.prototype.createDom = function() {
   goog.ui.SliderBase.superClass_.createDom.call(this);
   var element =
-      this.getDomHelper().createDom('div', this.getCssClass(this.orientation_));
+      this.getDomHelper().createDom(goog.dom.TagName.DIV,
+                                    this.getCssClass(this.orientation_));
   this.decorateInternal(element);
 };
 
@@ -541,7 +543,7 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
 
 
 /**
- * Handler for the start/end drag event on the thumgs. Adds/removes
+ * Handler for the start/end drag event on the thumbs. Adds/removes
  * the "-dragging" CSS classes on the slider and thumb.
  * @param {goog.fx.DragEvent} e The drag event used to drag the thumb.
  * @private
@@ -818,7 +820,6 @@ goog.ui.SliderBase.prototype.getValueFromMousePosition = function(e) {
     return (max - min) * x / availW + min;
   }
 };
-
 
 
 /**
@@ -1105,7 +1106,6 @@ goog.ui.SliderBase.prototype.getThumbCoordinateForValue = function(val) {
   }
   return coord;
 };
-
 
 
 /**

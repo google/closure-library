@@ -30,6 +30,7 @@ goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.structs.Map');
+goog.require('goog.uri.utils');
 
 
 
@@ -66,6 +67,13 @@ goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
  * @enum {string}
  */
 goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
+
+
+/**
+ * The pattern matching the 'http' and 'https' URI schemes.
+ * @private {!RegExp}
+ */
+goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_ = /^https?$/i;
 
 
 /**
@@ -228,6 +236,14 @@ goog.testing.net.XhrIo.prototype.response_ = '';
 
 
 /**
+ * The status code.
+ * @type {number}
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.statusCode_ = 0;
+
+
+/**
  * Mock ready state.
  * @type {number}
  * @private
@@ -243,7 +259,6 @@ goog.testing.net.XhrIo.prototype.readyState_ =
  * @private
  */
 goog.testing.net.XhrIo.prototype.timeoutInterval_ = 0;
-
 
 
 /**
@@ -364,6 +379,7 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
   if (this.active_) {
     try {
       this.active_ = false;
+      this.statusCode_ = -1;
       this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
       this.dispatchEvent(goog.net.EventType.COMPLETE);
       this.dispatchEvent(goog.net.EventType.ABORT);
@@ -518,15 +534,21 @@ goog.testing.net.XhrIo.prototype.isComplete = function() {
  * @return {boolean} Whether the request compeleted successfully.
  */
 goog.testing.net.XhrIo.prototype.isSuccess = function() {
-  switch (this.getStatus()) {
-    case goog.net.HttpStatus.OK:
-    case goog.net.HttpStatus.NO_CONTENT:
-    case goog.net.HttpStatus.NOT_MODIFIED:
-      return true;
+  var status = this.getStatus();
+  // A zero status code is considered successful for local files.
+  return goog.net.HttpStatus.isSuccess(status) ||
+      status === 0 && !this.isLastUriEffectiveSchemeHttp_();
+};
 
-    default:
-      return false;
-  }
+
+/**
+ * @return {boolean} whether the effective scheme of the last URI that was
+ *     fetched was 'http' or 'https'.
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
+  var scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
+  return goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_.test(scheme);
 };
 
 

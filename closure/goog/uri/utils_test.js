@@ -596,6 +596,9 @@ function testParseQuery() {
       goog.uri.utils.buildQueryData(result),
       function(name, value) { result2.push(name, value); });
   assertArrayEquals(result, result2);
+
+  goog.uri.utils.parseQueryData('',
+      goog.partial(fail, 'Empty string should not run callback'));
 }
 
 

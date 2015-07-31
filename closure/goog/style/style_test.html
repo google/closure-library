@@ -12,6 +12,7 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0,
     maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
@@ -306,6 +307,15 @@ i {
     <div class=ltr>
       <div id='rtl10'>left to right (css)</div>
     </div>
+  </div>
+
+  <div id="unselectable-gecko" style="-moz-user-select:none">no-select</div>
+  <div id="unselectable-webkit" style="-webkit-user-select:none">no-select</div>
+  <div id="unselectable-ie" unselectable="on">no-select</div>
+
+  <div id="make-unselectable">
+    <p>Can't touch this <aside>(Oh-oh oh oh-oh)</aside></p>
+    <div><em>Stop.</em> Hammer <math><mo>×</mo></math></div>
   </div>
 
   <div id="pos-scroll-abs">

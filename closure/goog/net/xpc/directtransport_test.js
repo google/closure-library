@@ -18,7 +18,9 @@
 
 goog.provide('goog.net.xpc.DirectTransportTest');
 
+goog.require('goog.Promise');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
@@ -27,12 +29,8 @@ goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannel');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.TransportTypes');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 goog.setTestOnly('goog.net.xpc.DirectTransportTest');
-
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(
-    'Direct transport tests.');
 
 
 /**
@@ -68,33 +66,34 @@ var PEER_IFRAME_ID = 'peer-iframe';
 
 
 // Class aliases.
-var CfgFields;
-var CrossPageChannel;
-var CrossPageChannelRole;
-var TransportTypes;
+var CfgFields = goog.net.xpc.CfgFields;
+var CrossPageChannel = goog.net.xpc.CrossPageChannel;
+var CrossPageChannelRole = goog.net.xpc.CrossPageChannelRole;
+var TransportTypes = goog.net.xpc.TransportTypes;
 
 var outerXpc;
 var innerXpc;
 var peerIframe;
 var channelName;
 var messageIsSync = false;
+var savedHtml;
+var debugDiv;
 
 function setUpPage() {
-  CfgFields = goog.net.xpc.CfgFields;
-  CrossPageChannel = goog.net.xpc.CrossPageChannel;
-  CrossPageChannelRole = goog.net.xpc.CrossPageChannelRole;
-  TransportTypes = goog.net.xpc.TransportTypes;
-
   // Show debug log
-  var debugDiv = document.createElement('debugDiv');
-  document.body.appendChild(debugDiv);
+  debugDiv = document.createElement(goog.dom.TagName.DEBUGDIV);
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msgElm = goog.dom.createDom('div');
+    var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
+}
+
+function setUp() {
+  savedHtml = document.body.innerHTML;
+  document.body.appendChild(debugDiv);
 }
 
 
@@ -114,11 +113,12 @@ function tearDown() {
   window.iframeLoadHandler = null;
   channelName = null;
   messageIsSync = false;
+  document.body.innerHTML = savedHtml;
 }
 
 
 function createIframe() {
-  peerIframe = document.createElement('iframe');
+  peerIframe = document.createElement(goog.dom.TagName.IFRAME);
   peerIframe.id = PEER_IFRAME_ID;
   document.body.insertBefore(peerIframe, document.body.firstChild);
 }
@@ -128,7 +128,7 @@ function createIframe() {
  * Tests 2 same domain frames using direct transport.
  */
 function testDirectTransport() {
-  // This test has been flaky on IE 8-11 on Win7.
+  // This test has been flaky on IE.
   // For now, disable.
   // Flakiness is tracked in http://b/18595666
   if (goog.labs.userAgent.browser.isIE()) {
@@ -142,35 +142,29 @@ function testDirectTransport() {
   // Outgoing service.
   outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
   // Incoming service.
+  var resolver = goog.Promise.withResolver();
   outerXpc.registerService(
       RESPONSE_SERVICE_NAME,
-      responseMessageHandler_testDirectTransport);
-  asyncTestCase.waitForAsync('Waiting for xpc connect.');
-  outerXpc.connect(onConnect_testDirectTransport);
+      function(message) {
+        assertEquals(
+            'Received payload is equal to sent payload.',
+            message,
+            MESSAGE_PAYLOAD_1);
+        resolver.resolve();
+      });
+
+  outerXpc.connect(function() {
+    assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
+    outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
+  });
   // inner_peer.html calls this method at end of html.
-  window.iframeLoadHandler = onIframeLoaded_testDirectTransport;
+  window.iframeLoadHandler = function() {
+    peerIframe.contentWindow.instantiateChannel(
+        getConfiguration(CrossPageChannelRole.INNER));
+  };
   peerIframe.src = 'testdata/inner_peer.html';
-}
 
-
-function onIframeLoaded_testDirectTransport() {
-  peerIframe.contentWindow.instantiateChannel(
-      getConfiguration(CrossPageChannelRole.INNER));
-}
-
-
-function onConnect_testDirectTransport() {
-  assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
-  outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
-}
-
-
-function responseMessageHandler_testDirectTransport(message) {
-  assertEquals(
-      'Received payload is equal to sent payload.',
-      message,
-      MESSAGE_PAYLOAD_1);
-  asyncTestCase.continueTesting();
+  return resolver.promise;
 }
 
 
@@ -185,48 +179,40 @@ function testSameWindowDirectTransport() {
 
   // Outgoing service.
   outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+
+  var resolver = goog.Promise.withResolver();
   // Incoming service.
   outerXpc.registerService(
       RESPONSE_SERVICE_NAME,
-      outerResponseMessageHandler_testSameWindowDirectTransport);
-  asyncTestCase.waitForAsync('Waiting for outer xpc connect.');
-  outerXpc.connect(onOuterConnect_testSameWindowDirectTransport);
+      function(message) {
+        assertEquals(
+            'Received payload is equal to sent payload.',
+            message,
+            MESSAGE_PAYLOAD_1);
+        resolver.resolve();
+      });
+  outerXpc.connect(function() {
+    assertTrue(
+        'XPC over direct channel, same window, is connected',
+        outerXpc.isConnected());
+    outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
+  });
 
   innerXpc = new CrossPageChannel(getConfiguration(CrossPageChannelRole.INNER));
   innerXpc.setPeerWindowObject(self);
   // Incoming service.
   innerXpc.registerService(
       ECHO_SERVICE_NAME,
-      innerEchoMessageHandler_testSameWindowDirectTransport);
+      function(message) {
+        innerXpc.send(RESPONSE_SERVICE_NAME, message);
+      });
   // Outgoing service.
   innerXpc.registerService(
       RESPONSE_SERVICE_NAME,
       goog.nullFunction);
   innerXpc.connect();
+  return resolver.promise;
 }
-
-
-function onOuterConnect_testSameWindowDirectTransport() {
-  assertTrue(
-      'XPC over direct channel, same window, is connected',
-      outerXpc.isConnected());
-  outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
-}
-
-
-function outerResponseMessageHandler_testSameWindowDirectTransport(message) {
-  assertEquals(
-      'Received payload is equal to sent payload.',
-      message,
-      MESSAGE_PAYLOAD_1);
-  asyncTestCase.continueTesting();
-}
-
-
-function innerEchoMessageHandler_testSameWindowDirectTransport(message) {
-  innerXpc.send(RESPONSE_SERVICE_NAME, message);
-}
-
 
 function getConfiguration(role, opt_peerFrameId) {
   var cfg = {};
@@ -244,6 +230,13 @@ function getConfiguration(role, opt_peerFrameId) {
  * Tests 2 same domain frames using direct transport using sync mode.
  */
 function testSyncMode() {
+  // This test has been flaky on IE.
+  // For now, disable.
+  // Flakiness is tracked in http://b/18595666
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   createIframe();
   channelName = goog.net.xpc.getRandomString(10);
 
@@ -253,38 +246,30 @@ function testSyncMode() {
   outerXpc = new CrossPageChannel(cfg);
   // Outgoing service.
   outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+  var resolver = goog.Promise.withResolver();
   // Incoming service.
   outerXpc.registerService(
       RESPONSE_SERVICE_NAME,
-      responseMessageHandler_testSyncMode);
-  asyncTestCase.waitForAsync('Waiting for xpc connect.');
-  outerXpc.connect(onConnect_testSyncMode);
+      function(message) {
+        assertTrue('The message response was syncronous', messageIsSync);
+        assertEquals(
+            'Received payload is equal to sent payload.',
+            message,
+            MESSAGE_PAYLOAD_1);
+        resolver.resolve();
+      });
+  outerXpc.connect(function() {
+    assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
+    messageIsSync = true;
+    outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
+    messageIsSync = false;
+  });
   // inner_peer.html calls this method at end of html.
-  window.iframeLoadHandler = onIframeLoaded_testSyncMode;
+  window.iframeLoadHandler = function() {
+    var cfg = getConfiguration(CrossPageChannelRole.INNER);
+    cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
+    peerIframe.contentWindow.instantiateChannel(cfg);
+  };
   peerIframe.src = 'testdata/inner_peer.html';
-}
-
-
-function onIframeLoaded_testSyncMode() {
-  var cfg = getConfiguration(CrossPageChannelRole.INNER);
-  cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
-  peerIframe.contentWindow.instantiateChannel(cfg);
-}
-
-
-function onConnect_testSyncMode() {
-  assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
-  messageIsSync = true;
-  outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
-  messageIsSync = false;
-}
-
-
-function responseMessageHandler_testSyncMode(message) {
-  assertTrue('The message response was syncronous', messageIsSync);
-  assertEquals(
-      'Received payload is equal to sent payload.',
-      message,
-      MESSAGE_PAYLOAD_1);
-  asyncTestCase.continueTesting();
+  return resolver.promise;
 }

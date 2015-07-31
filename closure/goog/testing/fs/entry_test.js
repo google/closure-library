@@ -17,24 +17,24 @@ goog.setTestOnly('goog.testing.fs.EntryTest');
 
 goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.Error');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var fs, file, mockClock;
 
 function setUp() {
+  // Install the MockClock to create predictable timestamps for new files.
   mockClock = new goog.testing.MockClock(true);
 
   fs = new goog.testing.fs.FileSystem();
   file = fs.getRoot().
       getDirectorySync('foo', goog.fs.DirectoryEntry.Behavior.CREATE).
       getFileSync('bar', goog.fs.DirectoryEntry.Behavior.CREATE);
-}
 
-function tearDown() {
+  // Uninstall the MockClock since it interferes with goog.Promise execution.
+  // Tests that require specific timing may reinstall the MockClock and manually
+  // advance promises using mockClock.tick().
   mockClock.uninstall();
 }
 
@@ -52,99 +52,94 @@ function testGetFileSystem() {
 }
 
 function testMoveTo() {
-  file.moveTo(fs.getRoot()).addCallback(function(newFile) {
+  return file.moveTo(fs.getRoot()).then(function(newFile) {
     assertTrue(file.deleted);
     assertFalse(newFile.deleted);
     assertEquals('/bar', newFile.getFullPath());
     assertEquals(fs.getRoot(), newFile.parent);
     assertEquals(newFile, fs.getRoot().getFileSync('bar'));
     assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
-
-    asyncTestCase.continueTesting();
   });
-  waitForAsync('waiting for file move');
 }
 
 function testMoveToNewName() {
   // Advance the clock to an arbitrary, known time.
+  mockClock.install();
   mockClock.tick(71);
-  file.moveTo(fs.getRoot(), 'baz').
-      addCallback(function(newFile) {
-        mockClock.tick();
-        assertTrue(file.deleted);
-        assertFalse(newFile.deleted);
-        assertEquals('/baz', newFile.getFullPath());
-        assertEquals(fs.getRoot(), newFile.parent);
-        assertEquals(newFile, fs.getRoot().getFileSync('baz'));
+  var promise = file.moveTo(fs.getRoot(), 'baz').then(function(newFile) {
+    mockClock.tick();
+    assertTrue(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/baz', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('baz'));
 
-        var oldParentDir = fs.getRoot().getDirectorySync('foo');
-        assertFalse(oldParentDir.hasChild('bar'));
-        assertFalse(oldParentDir.hasChild('baz'));
+    var oldParentDir = fs.getRoot().getDirectorySync('foo');
+    assertFalse(oldParentDir.hasChild('bar'));
+    assertFalse(oldParentDir.hasChild('baz'));
 
-        return oldParentDir.getLastModified();
-      }).
-      addCallback(function(lastModifiedDate) {
-        assertEquals(71, lastModifiedDate.getTime());
-        var oldParentDir = fs.getRoot().getDirectorySync('foo');
-        return oldParentDir.getMetadata();
-      }).
-      addCallback(function(metadata) {
-        assertEquals(71, metadata.modificationTime.getTime());
-        return fs.getRoot().getLastModified();
-      }).
-      addCallback(function(rootLastModifiedDate) {
-        assertEquals(71, rootLastModifiedDate.getTime());
-        return fs.getRoot().getMetadata();
-      }).
-      addCallback(function(rootMetadata) {
-        assertEquals(71, rootMetadata.modificationTime.getTime());
-        asyncTestCase.continueTesting();
-      });
-  waitForAsync('waiting for file move');
+    return oldParentDir.getLastModified();
+  }).then(function(lastModifiedDate) {
+    assertEquals(71, lastModifiedDate.getTime());
+    var oldParentDir = fs.getRoot().getDirectorySync('foo');
+    return oldParentDir.getMetadata();
+  }).then(function(metadata) {
+    assertEquals(71, metadata.modificationTime.getTime());
+    return fs.getRoot().getLastModified();
+  }).then(function(rootLastModifiedDate) {
+    assertEquals(71, rootLastModifiedDate.getTime());
+    return fs.getRoot().getMetadata();
+  }).then(function(rootMetadata) {
+    assertEquals(71, rootMetadata.modificationTime.getTime());
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+  mockClock.tick();
+  return promise;
 }
 
 function testMoveDeletedFile() {
-  assertFailsWhenDeleted(function() { return file.moveTo(fs.getRoot()); });
+  return assertFailsWhenDeleted(function() {
+    return file.moveTo(fs.getRoot());
+  });
 }
 
 function testCopyTo() {
+  mockClock.install();
   mockClock.tick(61);
-  file.copyTo(fs.getRoot()).
-      addCallback(function(newFile) {
-        assertFalse(file.deleted);
-        assertFalse(newFile.deleted);
-        assertEquals('/bar', newFile.getFullPath());
-        assertEquals(fs.getRoot(), newFile.parent);
-        assertEquals(newFile, fs.getRoot().getFileSync('bar'));
+  var promise = file.copyTo(fs.getRoot()).then(function(newFile) {
+    assertFalse(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/bar', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('bar'));
 
-        var oldParentDir = fs.getRoot().getDirectorySync('foo');
-        assertEquals(file, oldParentDir.getFileSync('bar'));
-        return oldParentDir.getLastModified();
-      }).
-      addCallback(function(lastModifiedDate) {
-        assertEquals('The original parent directory was not modified.',
-                     0, lastModifiedDate.getTime());
-        var oldParentDir = fs.getRoot().getDirectorySync('foo');
-        return oldParentDir.getMetadata();
-      }).
-      addCallback(function(metadata) {
-        assertEquals('The original parent directory was not modified.',
-                     0, metadata.modificationTime.getTime());
-        return fs.getRoot().getLastModified();
-      }).
-      addCallback(function(rootLastModifiedDate) {
-        assertEquals(61, rootLastModifiedDate.getTime());
-        return fs.getRoot().getMetadata();
-      }).
-      addCallback(function(rootMetadata) {
-        assertEquals(61, rootMetadata.modificationTime.getTime());
-        asyncTestCase.continueTesting();
-      });
-  waitForAsync('waiting for file copy');
+    var oldParentDir = fs.getRoot().getDirectorySync('foo');
+    assertEquals(file, oldParentDir.getFileSync('bar'));
+    return oldParentDir.getLastModified();
+  }).then(function(lastModifiedDate) {
+    assertEquals('The original parent directory was not modified.',
+                 0, lastModifiedDate.getTime());
+    var oldParentDir = fs.getRoot().getDirectorySync('foo');
+    return oldParentDir.getMetadata();
+  }).then(function(metadata) {
+    assertEquals('The original parent directory was not modified.',
+                 0, metadata.modificationTime.getTime());
+    return fs.getRoot().getLastModified();
+  }).then(function(rootLastModifiedDate) {
+    assertEquals(61, rootLastModifiedDate.getTime());
+    return fs.getRoot().getMetadata();
+  }).then(function(rootMetadata) {
+    assertEquals(61, rootMetadata.modificationTime.getTime());
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+  mockClock.tick();
+  return promise;
 }
 
 function testCopyToNewName() {
-  file.copyTo(fs.getRoot(), 'baz').addCallback(function(newFile) {
+  return file.copyTo(fs.getRoot(), 'baz').addCallback(function(newFile) {
     assertFalse(file.deleted);
     assertFalse(newFile.deleted);
     assertEquals('/baz', newFile.getFullPath());
@@ -152,71 +147,63 @@ function testCopyToNewName() {
     assertEquals(newFile, fs.getRoot().getFileSync('baz'));
     assertEquals(file, fs.getRoot().getDirectorySync('foo').getFileSync('bar'));
     assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('baz'));
-
-    asyncTestCase.continueTesting();
   });
-  waitForAsync('waiting for file copy');
 }
 
 function testCopyDeletedFile() {
-  assertFailsWhenDeleted(function() { return file.copyTo(fs.getRoot()); });
+  return assertFailsWhenDeleted(function() {
+    return file.copyTo(fs.getRoot());
+  });
 }
 
 function testRemove() {
+  mockClock.install();
   mockClock.tick(57);
-  file.remove().
-      addCallback(function() {
-        mockClock.tick();
-        var parentDir = fs.getRoot().getDirectorySync('foo');
+  var promise = file.remove().then(function() {
+    mockClock.tick();
+    var parentDir = fs.getRoot().getDirectorySync('foo');
 
-        assertTrue(file.deleted);
-        assertFalse(parentDir.hasChild('bar'));
+    assertTrue(file.deleted);
+    assertFalse(parentDir.hasChild('bar'));
 
-        return parentDir.getLastModified();
-      }).
-      addCallback(function(date) {
-        assertEquals(57, date.getTime());
-        var parentDir = fs.getRoot().getDirectorySync('foo');
-        return parentDir.getMetadata();
-      }).
-      addCallback(function(metadata) {
-        assertEquals(57, metadata.modificationTime.getTime());
-        asyncTestCase.continueTesting();
-      });
-  waitForAsync('waiting for file removal');
+    return parentDir.getLastModified();
+  }).then(function(date) {
+    assertEquals(57, date.getTime());
+    var parentDir = fs.getRoot().getDirectorySync('foo');
+    return parentDir.getMetadata();
+  }).then(function(metadata) {
+    assertEquals(57, metadata.modificationTime.getTime());
+  }).thenAlways(function() {
+    mockClock.uninstall();
+  });
+  mockClock.tick();
+  return promise;
 }
 
 function testRemoveDeletedFile() {
-  assertFailsWhenDeleted(function() { return file.remove(); });
+  return assertFailsWhenDeleted(function() {
+    return file.remove();
+  });
 }
 
 function testGetParent() {
-  file.getParent().addCallback(function(p) {
+  return file.getParent().then(function(p) {
     assertEquals(file.parent, p);
     assertEquals(fs.getRoot().getDirectorySync('foo'), p);
     assertEquals('/foo', p.getFullPath());
-
-    asyncTestCase.continueTesting();
   });
-  waitForAsync('waiting for file parent');
 }
 
 function testGetDeletedFileParent() {
-  assertFailsWhenDeleted(function() { return file.getParent(); });
+  return assertFailsWhenDeleted(function() {
+    return file.getParent();
+  });
 }
-
 
 function assertFailsWhenDeleted(fn) {
-  file.remove().addCallback(fn).
-      addCallback(function() { fail('Expected an error'); }).
-      addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
-        asyncTestCase.continueTesting();
-      });
-  waitForAsync('waiting for file operation');
-}
-
-function waitForAsync(msg) {
-  asyncTestCase.waitForAsync(msg);
-  mockClock.tick();
+  return file.remove().then(fn).then(function() {
+    fail('Expected an error');
+  }, function(err) {
+    assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
+  });
 }

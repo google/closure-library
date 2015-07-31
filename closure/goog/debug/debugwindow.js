@@ -433,10 +433,10 @@ goog.debug.DebugWindow.prototype.openWindow_ = function() {
                          ',status=no,screenx=' + x + ',screeny=' + y);
 
   if (!this.win) {
-    if (!this.showedBlockedAlert_) {
+    if (!goog.debug.DebugWindow.showedBlockedAlert_) {
       // only show this once
       alert('Logger popup was blocked');
-      this.showedBlockedAlert_ = true;
+      goog.debug.DebugWindow.showedBlockedAlert_ = true;
     }
   }
 

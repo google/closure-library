@@ -16,6 +16,7 @@ goog.provide('goog.ui.tree.BaseNodeTest');
 goog.setTestOnly('goog.ui.tree.BaseNodeTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.html.testing');
@@ -60,7 +61,7 @@ function testExpandIconAfterAddChild() {
   var tree = new goog.ui.tree.TreeControl('root');
   var node1 = new goog.ui.tree.TreeNode('node1');
   var node2 = new goog.ui.tree.TreeNode('node2');
-  tree.render(goog.dom.createDom('div'));
+  tree.render(goog.dom.createDom(goog.dom.TagName.DIV));
   tree.addChild(node1);
 
   node1.addChild(node2);

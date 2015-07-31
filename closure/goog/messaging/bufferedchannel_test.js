@@ -17,6 +17,7 @@ goog.setTestOnly('goog.messaging.BufferedChannelTest');
 
 goog.require('goog.debug.Console');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.messaging.BufferedChannel');
@@ -41,7 +42,7 @@ function setUpPage() {
   var logger = goog.log.getLogger('goog.messaging');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msg = goog.dom.createDom('div');
+    var msg = goog.dom.createDom(goog.dom.TagName.DIV);
     msg.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(goog.dom.getElement('debug-div'), msg);
   });

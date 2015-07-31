@@ -17,6 +17,7 @@ goog.setTestOnly('goog.net.jsloaderTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.net.jsloader');
 goog.require('goog.net.jsloader.ErrorCode');
 goog.require('goog.testing.AsyncTestCase');
@@ -35,7 +36,7 @@ testCase.setUp = function() {
 testCase.tearDown = function() {
   // Remove all the fake scripts.
   var scripts = goog.array.clone(
-      document.getElementsByTagName('SCRIPT'));
+      document.getElementsByTagName(goog.dom.TagName.SCRIPT));
   for (var i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);
@@ -134,4 +135,36 @@ function testLoadMany() {
     // Check that the 1st test was already loaded.
     assertEquals('verification object', 'Test #1 loaded', window.test1);
   };
+}
+
+
+// Test the load function with additional options.
+function testLoadWithOptions() {
+  testCase.waitForAsync('testLoadWithOptions');
+
+  var testUrl = 'testdata/jsloader_test1.js';
+  var options = {
+    attributes: {
+      'data-attr1' : 'enabled',
+      'data-attr2' : 'disabled',
+    },
+    timeout: undefined,  // Use default
+    cleanupWhenDone: undefined,  // Use default
+    document: undefined  // Use default
+  };
+  var result = goog.net.jsloader.load(testUrl, options);
+  result.addCallback(function() {
+    testCase.continueTesting();
+
+    var script = result.defaultScope_.script_;
+
+    // Check that the URI matches ours.
+    assertTrue('server URI', script.src.indexOf(testUrl) >= 0);
+
+    // Check that the attributes specified are set on the script tag.
+    assertEquals('attribute option not applied for attr1',
+        'enabled', script.getAttribute('data-attr1'));
+    assertEquals('attribute option not applied for attr2',
+        'disabled', script.getAttribute('data-attr2'));
+  });
 }

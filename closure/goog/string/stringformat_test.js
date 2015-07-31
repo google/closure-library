@@ -216,3 +216,9 @@ function testNonParticipatingGroupHandling() {
   // Bad types
   assertEquals(expected, goog.string.format(format, '1', 2, 3, 4));
 }
+
+function testMinusString() {
+  var format = '%0.1f%%';
+  var expected = '-0.7%';
+  assertEquals(expected, goog.string.format(format, '-0.723'));
+}

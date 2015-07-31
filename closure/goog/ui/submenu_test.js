@@ -15,11 +15,14 @@
 goog.provide('goog.ui.SubMenuTest');
 goog.setTestOnly('goog.ui.SubMenuTest');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.functions');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Overflow');
@@ -324,6 +327,41 @@ function testDismissWhenSubMenuNotVisible() {
   ], handleEvent);
 }
 
+function testCloseSubMenuBehavior() {
+  menu.decorate(goog.dom.getElement('demoMenu'));
+  var subMenu = menu.getChildAt(1);
+  subMenu.getElement().id = 'subMenu';
+
+  var innerMenu = subMenu.getMenu();
+  innerMenu.getChildAt(0).getElement().id = 'child1';
+
+  subMenu.setHighlighted(true);
+  subMenu.showSubMenu();
+
+  function MyFakeEvent(keyCode, opt_eventType) {
+    this.type = opt_eventType || goog.events.KeyHandler.EventType.KEY;
+    this.keyCode = keyCode;
+    this.propagationStopped = false;
+    this.preventDefault = goog.nullFunction;
+    this.stopPropagation = function() {
+      this.propagationStopped = true;
+    };
+  }
+
+  // Focus on the first item in the submenu and verify the activedescendant is
+  // set correctly.
+  subMenu.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  assertEquals('First item in submenu must be the aria-activedescendant',
+      'child1', goog.a11y.aria.getState(menu.getElement(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  // Dismiss the submenu and verify the activedescendant is updated correctly.
+  subMenu.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.LEFT));
+  assertEquals('Submenu must be the aria-activedescendant',
+      'subMenu', goog.a11y.aria.getState(menu.getElement(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
+}
+
 function testLazyInstantiateSubMenu() {
   menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
@@ -436,6 +474,10 @@ function testShowSubMenuAfterRemoval() {
   // (No JS error should occur.)
 }
 
+
+/**
+ * Tests that if a sub menu is selectable, then it can handle actions.
+ */
 function testSubmenuSelectable() {
   var submenu = new goog.ui.SubMenu('submenu');
   submenu.addItem(new goog.ui.MenuItem('submenu item 1'));
@@ -455,6 +497,35 @@ function testSubmenuSelectable() {
   assertEquals('The submenu should have fired an event', 2, numClicks);
 
   submenu.setSelectable(false);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should not have fired any further events', 2,
+      numClicks);
+}
+
+
+/**
+ * Tests that if a sub menu is checkable, then it can handle actions.
+ */
+function testSubmenuCheckable() {
+  var submenu = new goog.ui.SubMenu('submenu');
+  submenu.addItem(new goog.ui.MenuItem('submenu item 1'));
+  menu.addItem(submenu);
+  submenu.setCheckable(true);
+
+  var numClicks = 0;
+  var menuClickedFn = function(e) {
+    numClicks++;
+  };
+
+  goog.events.listen(submenu, goog.ui.Component.EventType.ACTION,
+      menuClickedFn);
+  submenu.performActionInternal(null);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should have fired an event', 2, numClicks);
+
+  submenu.setCheckable(false);
   submenu.performActionInternal(null);
 
   assertEquals('The submenu should not have fired any further events', 2,

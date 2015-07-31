@@ -311,3 +311,15 @@ function testCacheReturnValueFlagDisabled() {
   assertEquals(2, recordedFunction.getCallCount());
   assertEquals(3, cachedRecordedFunction());
 }
+
+
+function testOnce() {
+  var recordedFunction = goog.testing.recordFunction();
+  var f = goog.functions.once(recordedFunction);
+
+  assertEquals(0, recordedFunction.getCallCount());
+  f();
+  assertEquals(1, recordedFunction.getCallCount());
+  f();
+  assertEquals(1, recordedFunction.getCallCount());
+}

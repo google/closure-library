@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
@@ -186,8 +187,8 @@ function testConstructor() {
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
-  var content = goog.dom.createDom('div', null, 'Hello',
-      goog.dom.createDom('b', null, 'World'));
+  var content = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello',
+      goog.dom.createDom(goog.dom.TagName.B, null, 'World'));
   var testRenderer = new TestRenderer();
   var fakeDomHelper = {};
   var foo = new goog.ui.Control(content, testRenderer, fakeDomHelper);
@@ -463,7 +464,7 @@ function testGetContentElement() {
  * Tests {@link goog.ui.Control#canDecorate}.
  */
 function testCanDecorate() {
-  assertTrue(control.canDecorate(goog.dom.createElement('div')));
+  assertTrue(control.canDecorate(goog.dom.createElement(goog.dom.TagName.DIV)));
 }
 
 
@@ -778,8 +779,8 @@ function testSetContent() {
   assertEquals('Rendered control\'s DOM must have expected contents',
       '', control.getElement().innerHTML);
 
-  control.setContent([goog.dom.createDom('div', null,
-      goog.dom.createDom('span', null, 'Hello')), 'World']);
+  control.setContent([goog.dom.createDom(goog.dom.TagName.DIV, null,
+      goog.dom.createDom(goog.dom.TagName.SPAN, null, 'Hello')), 'World']);
   assertHTMLEquals('Control\'s DOM must be updated',
       '<div><span>Hello</span></div>World', control.getElement().innerHTML);
 }
@@ -1161,7 +1162,7 @@ function testSetEnabled() {
   control.setEnabled(true);
   control.exitDocument();
   var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
-  var element = goog.dom.createDom('div', {tabIndex: 0});
+  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
@@ -1195,8 +1196,9 @@ function testSetStateWithDisabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
-  assertTrue('Control element must not have aria-disabled', goog.string.isEmptyOrWhitespace(
-      aria.getState(control.getElementStrict(), State.DISABLED)));
+  assertTrue('Control element must not have aria-disabled',
+      goog.string.isEmptyOrWhitespace(
+          aria.getState(control.getElementStrict(), State.DISABLED)));
   assertEquals('Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(
           control.getElement().getAttribute('tabIndex') || ''));
@@ -1230,7 +1232,7 @@ function testSetStateWithDisabled() {
   control.setState(goog.ui.Component.State.DISABLED, false);
   control.exitDocument();
   var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
-  var element = goog.dom.createDom('div', {tabIndex: 0});
+  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
@@ -1944,7 +1946,8 @@ function testPerformActionInternal() {
  * Tests {@link goog.ui.Control#handleMouseOver}.
  */
 function testHandleMouseOver() {
-  control.setContent(goog.dom.createDom('span', {id: 'caption'}, 'Hello'));
+  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
+                                        'Hello'));
   control.render(sandbox);
 
   var element = control.getElement();
@@ -2027,7 +2030,8 @@ function testHandleMouseOver() {
  * Tests {@link goog.ui.Control#handleMouseOut}.
  */
 function testHandleMouseOut() {
-  control.setContent(goog.dom.createDom('span', {id: 'caption'}, 'Hello'));
+  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
+                                        'Hello'));
   control.setHighlighted(true);
   control.setActive(true);
 
@@ -2130,9 +2134,9 @@ function testHandleMouseOut() {
 }
 
 function testIsMouseEventWithinElement() {
-  var child = goog.dom.createElement('div');
-  var parent = goog.dom.createDom('div', null, child);
-  var notChild = goog.dom.createElement('div');
+  var child = goog.dom.createElement(goog.dom.TagName.DIV);
+  var parent = goog.dom.createDom(goog.dom.TagName.DIV, null, child);
+  var notChild = goog.dom.createElement(goog.dom.TagName.DIV);
 
   var event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = child;
@@ -2380,4 +2384,64 @@ function testHandleMouseUp() {
 function testDefaultConstructor() {
   var control = new goog.ui.Control();
   assertNull(control.getContent());
+}
+
+
+function assertClickSequenceFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickSequence(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickDoesNotFire(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function testIeMouseEventSequenceSimulator() {
+  control.render(sandbox);
+
+  // Click sequences and isolated clicks must be handled correctly in any order.
+  assertClickSequenceFires(
+      'ACTION event expected after a click sequence');
+  assertClickSequenceFires(
+      'ACTION event expected after a second consecutive click sequence');
+  if (goog.userAgent.IE) {
+    // For some reason in IE8 and perhaps earlier, isolated clicks do not result
+    // a detectable dispatch of an ACTION event, so we'll only assert the
+    // desired handling of isolated clicks in IE9 and higher.
+    if (goog.userAgent.isVersionOrHigher(9)) {
+      assertIsolatedClickFires(
+          'ACTION event expected after an isolated click immediately ' +
+          'following a click sequence');
+      assertIsolatedClickFires(
+          'ACTION event expected after second consecutive isolated click');
+    } else {
+      // For IE8-and-lower, fire an isolated click event in preparation for our
+      // final assertion.
+      goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+    }
+  } else {
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after an isolated click immediately ' +
+        'following a click sequence');
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after second consecutive isolated click');
+  }
+  assertClickSequenceFires(
+      'ACTION event expected after click sequence immediately following ' +
+      'an isolated click ');
 }

@@ -20,13 +20,14 @@
 
 goog.require('goog.Uri');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.log');
+goog.require('goog.log.Level');
 goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannel');
-
 
 
 /**
@@ -182,7 +183,7 @@ xpcdemo.teardown = function() {
  */
 xpcdemo.log = function(msgString) {
   xpcdemo.consoleElm || (xpcdemo.consoleElm = goog.dom.getElement('console'));
-  var msgElm = goog.dom.createDom('div');
+  var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
   msgElm.innerHTML = msgString;
   xpcdemo.consoleElm.insertBefore(msgElm, xpcdemo.consoleElm.firstChild);
 };

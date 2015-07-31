@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
@@ -154,8 +155,9 @@ function testEvents() {
 }
 
 function testCheckboxAriaLabelledby() {
-  var label = goog.dom.createElement('div');
-  var label2 = goog.dom.createElement('div', {id: checkbox.makeId('foo')});
+  var label = goog.dom.createElement(goog.dom.TagName.DIV);
+  var label2 = goog.dom.createElement(goog.dom.TagName.DIV,
+                                      {id: checkbox.makeId('foo')});
   document.body.appendChild(label);
   document.body.appendChild(label2);
   try {
@@ -178,7 +180,7 @@ function testCheckboxAriaLabelledby() {
 }
 
 function testLabel() {
-  var label = goog.dom.createElement('div');
+  var label = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(label);
   try {
     checkbox.setChecked(false);
@@ -236,6 +238,23 @@ function testLabel() {
     assertFalse('label element deactivated', checkbox.getChecked());
     goog.testing.events.fireClickSequence(checkbox.getElement());
     assertTrue('checkbox still active', checkbox.getChecked());
+  } finally {
+    document.body.removeChild(label);
+  }
+}
+
+function testLabel_setAgain() {
+  var label = goog.dom.createElement(goog.dom.TagName.DIV);
+  document.body.appendChild(label);
+  try {
+    checkbox.setChecked(false);
+    checkbox.setLabel(label);
+    checkbox.render(label);
+
+    checkbox.getElement().focus();
+    checkbox.setLabel(label);
+    assertEquals('checkbox should not have lost focus', checkbox.getElement(),
+        document.activeElement);
   } finally {
     document.body.removeChild(label);
   }

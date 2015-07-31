@@ -16,6 +16,7 @@ goog.provide('goog.formatTest');
 goog.setTestOnly('goog.formatTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.format');
 goog.require('goog.string');
 goog.require('goog.testing.PropertyReplacer');
@@ -276,9 +277,9 @@ function testWordBreaksWorking() {
   var text = goog.string.repeat('test', 20);
   var textWbr = goog.string.repeat('test' + goog.format.WORD_BREAK_HTML, 20);
 
-  var overflowEl = goog.dom.createDom('div',
+  var overflowEl = goog.dom.createDom(goog.dom.TagName.DIV,
       {'style': 'width: 100px; overflow: hidden; margin 5px'});
-  var wbrEl = goog.dom.createDom('div',
+  var wbrEl = goog.dom.createDom(goog.dom.TagName.DIV,
       {'style': 'width: 100px; overflow: hidden; margin-top: 15px'});
   goog.dom.appendChild(goog.global.document.body, overflowEl);
   goog.dom.appendChild(goog.global.document.body, wbrEl);
@@ -294,7 +295,7 @@ function testWordBreaksRemovedFromTextContent() {
   var expectedText = goog.string.repeat('test', 20);
   var textWbr = goog.string.repeat('test' + goog.format.WORD_BREAK_HTML, 20);
 
-  var wbrEl = goog.dom.createDom('div', null);
+  var wbrEl = goog.dom.createDom(goog.dom.TagName.DIV, null);
   wbrEl.innerHTML = textWbr;
 
   assertEquals('text content should have wbr character removed', expectedText,

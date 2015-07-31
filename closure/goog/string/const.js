@@ -148,7 +148,7 @@ goog.string.Const.unwrap = function(stringConst) {
  *   var t = goog.string.Const.from('hello' + world);
  * </pre>
  *
- * TODO(user): Compile-time checks that this function is only called
+ * TODO(xtof): Compile-time checks that this function is only called
  * with compile-time constant expressions.
  *
  * @param {string} s A constant string from which to create a Const.

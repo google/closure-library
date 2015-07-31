@@ -285,6 +285,12 @@ function testEstimateDirection() {
                goog.i18n.bidi.estimateDirection('All-Ascii content', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('-17.0%', false));
+  assertEquals('Farsi digits should count as weakly LTR',
+      goog.i18n.bidi.Dir.LTR,
+      goog.i18n.bidi.estimateDirection('\u06f0', false));
+  assertEquals('Farsi digits should count as weakly LTR',
+      goog.i18n.bidi.Dir.LTR,
+      goog.i18n.bidi.estimateDirection('\u06f9', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
                goog.i18n.bidi.estimateDirection('http://foo/bar/', false));
   assertEquals(goog.i18n.bidi.Dir.LTR,
@@ -298,6 +304,12 @@ function testEstimateDirection() {
   assertEquals(goog.i18n.bidi.Dir.RTL,
                goog.i18n.bidi.estimateDirection(
                    '9 \u05d0 -> 17.5, 23, 45, 19', false));
+  assertEquals('Native arabic numbers should count as RTL',
+      goog.i18n.bidi.Dir.RTL,
+      goog.i18n.bidi.estimateDirection('\u0660', false));
+  assertEquals('Both Farsi letters and digits should count as RTL',
+      goog.i18n.bidi.Dir.RTL,
+      goog.i18n.bidi.estimateDirection('\u06CC \u06F1 \u06F2\u06F3', false));
   assertEquals(goog.i18n.bidi.Dir.RTL,
                goog.i18n.bidi.estimateDirection(
                    'http://foo/bar/ \u05d0 http://foo2/bar2/ ' +
@@ -374,35 +386,58 @@ function testEstimateDirection() {
                    'foo/<b>\u05d0</b>', true));
 }
 
-var bidi_text = [];
-
 function testDetectRtlDirectionality() {
-  InitializeSamples();
-  for (var i = 0; i < bidi_text.length; i++) {
-    //alert(bidi_text[i].text);
-    var is_rtl = goog.i18n.bidi.detectRtlDirectionality(bidi_text[i].text,
-                                                        bidi_text[i].isHtml);
-    if (is_rtl != bidi_text[i].isRtl) {
-      var str = '"' + bidi_text[i].text + '" should be ' +
-                (bidi_text[i].isRtl ? 'rtl' : 'ltr') + ' but detected as ' +
+  var bidiText = getBidiTextSamples();
+  for (var i = 0; i < bidiText.length; i++) {
+    //alert(bidiText[i].text);
+    var is_rtl = goog.i18n.bidi.detectRtlDirectionality(bidiText[i].text,
+                                                        bidiText[i].isHtml);
+    if (is_rtl != bidiText[i].isRtl) {
+      var str = '"' + bidiText[i].text + '" should be ' +
+                (bidiText[i].isRtl ? 'rtl' : 'ltr') + ' but detected as ' +
                 (is_rtl ? 'rtl' : 'ltr');
       alert(str);
     }
-    assertEquals(bidi_text[i].isRtl, is_rtl);
+    assertEquals(bidiText[i].isRtl, is_rtl);
   }
 }
 
+function testSetElementDirByTextDirectionality() {
+  var el = document.createElement('DIV');
+
+  var text = '';
+  goog.i18n.bidi.setElementDirByTextDirectionality(el, text);
+  assertEquals('Expected no/empty dir value for empty text.',
+      '', el.dir);
+
+  text = ' ';
+  goog.i18n.bidi.setElementDirByTextDirectionality(el, text);
+  assertEquals('Expected no/empty dir value for neutral text:"' + text + '"',
+      '', el.dir);
+
+  text = 'a';
+  goog.i18n.bidi.setElementDirByTextDirectionality(el, text);
+  assertEquals('Expected dir="ltr" value for LTR text:"' + text + '"',
+      'ltr', el.dir);
+
+  text = '\u05d0';
+  goog.i18n.bidi.setElementDirByTextDirectionality(el, text);
+  assertEquals('Expected dir="rtl" value for RTL text:"' + text + '"',
+      'rtl', el.dir);
+}
 
 function SampleItem() {
   this.text = '';
   this.isRtl = false;
+  this.isHtml = false;
 }
 
-function InitializeSamples() {
+function getBidiTextSamples() {
+  var bidiText = [];
   var item = new SampleItem;
   item.text = 'Pure Ascii content';
   item.isRtl = false;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '\u05d0\u05d9\u05df \u05de\u05de\u05e9 \u05de\u05d4 ' +
@@ -411,7 +446,7 @@ function InitializeSamples() {
       '\u05d5\u05d2\u05dd \u05d0\u05dd \u05d4\u05d9\u05d9\u05ea\u05d9 ' +
       '\u05de\u05e6\u05dc\u05dd, \u05d4\u05d9\u05d4 \u05e9\u05dd';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '\u05db\u05d0\u05df - http://geek.co.il/gallery/v/2007-06 - ' +
@@ -431,13 +466,13 @@ function InitializeSamples() {
       '\u05d9\u05e9\u05e0\u05d5\u05ea \u05d9\u05d5\u05ea\u05e8 ' +
       '\u05e9\u05d9\u05e9 \u05dc\u05d9 \u05d1\u05d0\u05ea\u05e8';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text =
       'CAPTCHA \u05de\u05e9\u05d5\u05db\u05dc\u05dc \u05de\u05d3\u05d9?';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
 
   item = new SampleItem;
@@ -446,36 +481,37 @@ function InitializeSamples() {
       '\u05d0\u05e0\u05d9 \u05e8\u05d5\u05e6\u05d4 \u05de\u05ea\u05e0\u05d4 ' +
       '\u05dc\u05d7\u05d2';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '17.4.02 \u05e9\u05e2\u05d4:13-20 .15-00 .\u05dc\u05d0 ' +
       '\u05d4\u05d9\u05d9\u05ea\u05d9 \u05db\u05d0\u05df.';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '5710 5720 5730. \u05d4\u05d3\u05dc\u05ea. ' +
       '\u05d4\u05e0\u05e9\u05d9\u05e7\u05d4';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text =
       '\u05d4\u05d3\u05dc\u05ea http://www.google.com http://www.gmail.com';
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '&gt;\u05d4&lt;';
   item.isHtml = true;
   item.isRtl = true;
-  bidi_text.push(item);
+  bidiText.push(item);
 
   item = new SampleItem;
   item.text = '&gt;\u05d4&lt;';
   item.isHtml = false;
   item.isRtl = false;
-  bidi_text.push(item);
+  bidiText.push(item);
 
+  return bidiText;
 }

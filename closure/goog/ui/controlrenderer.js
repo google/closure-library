@@ -27,6 +27,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -197,7 +198,8 @@ goog.ui.ControlRenderer.prototype.getAriaRole = function() {
 goog.ui.ControlRenderer.prototype.createDom = function(control) {
   // Create and return DIV wrapping contents.
   var element = control.getDomHelper().createDom(
-      'div', this.getClassNames(control).join(' '), control.getContent());
+      goog.dom.TagName.DIV, this.getClassNames(control).join(' '),
+      control.getContent());
 
   return element;
 };

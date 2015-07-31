@@ -33,7 +33,7 @@ goog.setTestOnly('goog.html.safeHtmlTest');
 
 
 function testSafeHtml() {
-  // TODO(user): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
+  // TODO(xtof): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
   // when available.
   var safeHtml = goog.html.testing.newSafeHtmlForTest('Hello <em>World</em>');
   assertSameHtml('Hello <em>World</em>', safeHtml);
@@ -158,10 +158,6 @@ function testSafeHtmlCreate() {
   });
 
   assertThrows(function() {
-    goog.html.SafeHtml.create('a', {'href': 'javascript:alert(1)'});
-  });
-
-  assertThrows(function() {
     goog.html.SafeHtml.create('a href=""');
   });
 
@@ -204,10 +200,28 @@ function testSafeHtmlCreate_urlAttributes() {
       '<a href="https://google.com/const"></a>',
       goog.html.SafeHtml.create('a', {'href': constUrl}));
 
-  // string is not allowed.
-  assertThrows(function() {
-    goog.html.SafeHtml.create('imG', {'src': 'https://google.com'});
-  });
+  // string is allowed but escaped.
+  assertSameHtml(
+      '<a href="http://google.com/safe&quot;"></a>',
+      goog.html.SafeHtml.create(
+          'a', {'href': 'http://google.com/safe"'}));
+
+  // string is allowed but sanitized.
+  var badUrl = 'javascript:evil();';
+  var sanitizedUrl = goog.html.SafeUrl.unwrap(
+      goog.html.SafeUrl.sanitize(badUrl));
+
+  assertTrue(typeof sanitizedUrl == 'string');
+  assertNotEquals(badUrl, sanitizedUrl);
+
+  assertSameHtml(
+      '<a href="' + sanitizedUrl + '"></a>',
+      goog.html.SafeHtml.create('a', {'href': badUrl}));
+
+  // attribute case is ignored for url attributes purposes
+  assertSameHtml(
+      '<a hReF="' + sanitizedUrl + '"></a>',
+      goog.html.SafeHtml.create('a', {'hReF': badUrl}));
 }
 
 

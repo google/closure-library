@@ -25,6 +25,7 @@ goog.setTestOnly('goog.labs.structs.MapPerf');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.labs.structs.Map');
 goog.require('goog.structs.Map');
 goog.require('goog.testing.PerformanceTable');
@@ -145,7 +146,7 @@ MapPerf.runPerformanceTestForMapSet = function(map, message) {
 
 
 goog.global['setUpPage'] = function() {
-  var content = goog.dom.createDom('div');
+  var content = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(document.body, content, 0);
   var ua = navigator.userAgent;
   content.innerHTML =

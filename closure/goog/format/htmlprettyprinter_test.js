@@ -165,7 +165,8 @@ function testRegexMakesProgress() {
 
 
 /**
- * FF3.0 doesn't like \n between </li> and </ul>. See bug 1520665.
+ * FF3.0 doesn't like \n between <code></li></code> and <code></ul></code>.
+ * See b/1520665.
  */
 function testLists() {
   var original = '<ul><li>one</li><ul><li>two</li></UL><li>three</li></ul>';

@@ -47,6 +47,7 @@ goog.provide('goog.ui.media.FlashObject.ScriptAccessLevel');
 goog.provide('goog.ui.media.FlashObject.Wmodes');
 
 goog.require('goog.asserts');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -501,7 +502,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
     throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
   }
 
-  var element = this.getDomHelper().createElement('div');
+  var element = this.getDomHelper().createElement(goog.dom.TagName.DIV);
   element.className = goog.ui.media.FlashObject.CSS_CLASS;
   this.setElementInternal(element);
 };
@@ -622,7 +623,10 @@ goog.ui.media.FlashObject.prototype.isLoaded = function() {
     return true;
   }
 
-  if (this.getFlashElement().PercentLoaded &&
+  // Use "in" operator to check for PercentLoaded because IE8 throws when
+  // accessing directly. See:
+  // https://github.com/google/closure-library/pull/373.
+  if ('PercentLoaded' in this.getFlashElement() &&
       this.getFlashElement().PercentLoaded() == 100) {
     return true;
   }

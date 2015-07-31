@@ -74,8 +74,8 @@ goog.storage.mechanism.MockThrowableStorage.prototype.key = function(index) {
  * @extends {goog.storage.mechanism.HTML5WebStorage}
  */
 goog.storage.mechanism.HTML5MockStorage = function(opt_isStorageDisabled) {
-  goog.base(
-      this,
+  goog.storage.mechanism.HTML5MockStorage.base(
+      this, 'constructor',
       new goog.storage.mechanism.MockThrowableStorage(opt_isStorageDisabled));
 };
 goog.inherits(goog.storage.mechanism.HTML5MockStorage,

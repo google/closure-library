@@ -76,6 +76,32 @@ goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_ = [
 
 
 /**
+ * A list of roles which are considered container roles.
+ * Container roles are ARIA roles which use the aria-activedescendant property
+ * to manage their active descendants or children. See
+ * {@link http://www.w3.org/TR/wai-aria/states_and_properties
+ * #aria-activedescendant} for more information.
+ * @private @const
+ */
+goog.a11y.aria.CONTAINER_ROLES_ = [
+  goog.a11y.aria.Role.COMBOBOX,
+  goog.a11y.aria.Role.GRID,
+  goog.a11y.aria.Role.GROUP,
+  goog.a11y.aria.Role.LISTBOX,
+  goog.a11y.aria.Role.MENU,
+  goog.a11y.aria.Role.MENUBAR,
+  goog.a11y.aria.Role.RADIOGROUP,
+  goog.a11y.aria.Role.ROW,
+  goog.a11y.aria.Role.ROWGROUP,
+  goog.a11y.aria.Role.TAB_LIST,
+  goog.a11y.aria.Role.TEXTBOX,
+  goog.a11y.aria.Role.TOOLBAR,
+  goog.a11y.aria.Role.TREE,
+  goog.a11y.aria.Role.TREEGRID
+];
+
+
+/**
  * Sets the role of an element. If the roleName is
  * empty string or null, the role for the element is removed.
  * We encourage clients to call the goog.a11y.aria.removeRole
@@ -353,6 +379,21 @@ goog.a11y.aria.getStringArrayStateInternalUtil = function(element, stateName) {
   var attrValue = element.getAttribute(
       goog.a11y.aria.getAriaAttributeName_(stateName));
   return goog.a11y.aria.splitStringOnWhitespace_(attrValue);
+};
+
+
+/**
+ * Returns whether the element has a container ARIA role.
+ * Container roles are ARIA roles that use the aria-activedescendant property
+ * to manage their active descendants or children. See
+ * {@link http://www.w3.org/TR/wai-aria/states_and_properties
+ * #aria-activedescendant} for more information.
+ * @param {!Element} element
+ * @return {boolean}
+ */
+goog.a11y.aria.isContainerRole = function(element) {
+  var role = goog.a11y.aria.getRole(element);
+  return goog.array.contains(goog.a11y.aria.CONTAINER_ROLES_, role);
 };
 
 

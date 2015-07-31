@@ -16,6 +16,7 @@ goog.provide('goog.fx.DraggerTest');
 goog.setTestOnly('goog.fx.DraggerTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -35,25 +36,26 @@ var targetRtl;
 
 function setUp() {
   var sandbox = goog.dom.getElement('sandbox');
-  target = goog.dom.createDom('div', {
+  target = goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'target',
     'style': 'display:none;position:absolute;top:15px;left:10px'
   });
   sandbox.appendChild(target);
-  sandbox.appendChild(goog.dom.createDom('div', {'id': 'handle'}));
+  sandbox.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {id: 'handle'}));
 
   var sandboxRtl = goog.dom.getElement('sandbox_rtl');
-  targetRtl = goog.dom.createDom('div', {
+  targetRtl = goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'target_rtl',
     'style': 'position:absolute; top:15px; right:10px; width:10px; ' +
         'height: 10px; background: green;'
   });
   sandboxRtl.appendChild(targetRtl);
-  sandboxRtl.appendChild(goog.dom.createDom('div', {
+  sandboxRtl.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, {
     'id': 'background_rtl',
     'style': 'width: 10000px;height:50px;position:absolute;color:blue;'
   }));
-  sandboxRtl.appendChild(goog.dom.createDom('div', {'id': 'handle_rtl'}));
+  sandboxRtl.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
+                                            {id: 'handle_rtl'}));
 }
 
 function tearDown() {
@@ -305,58 +307,22 @@ function testIeDragStartCancelling() {
 }
 
 
-/** @bug 1680770 */
-function testOnWindowMouseOut() {
-  // Test older Gecko browsers - FireFox 2.
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9a')) {
-    var dragger = new goog.fx.Dragger(target);
+function testPreventMouseDown() {
+  var dragger = new goog.fx.Dragger(target);
+  dragger.setPreventMouseDown(false);
 
-    var dragCanceled = false;
-    goog.events.listen(dragger, goog.fx.Dragger.EventType.END, function(e) {
-      dragCanceled = e.dragCanceled;
-    });
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.MOUSEDOWN;
+  e.clientX = 1;
+  e.clientY = 2;
+  e.isMouseActionButton().$returns(true);
+  // preventDefault is not called.
+  e.$replay();
 
-    var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
-    e.type = goog.events.EventType.MOUSEDOWN;
-    e.clientX = 1;
-    e.clientY = 2;
-    e.isMouseActionButton().$returns(true);
-    e.preventDefault();
-    e.$replay();
-    dragger.startDrag(e);
-    e.$verify();
+  dragger.startDrag(e);
 
-    assertTrue(dragger.isDragging());
-
-    e = new goog.events.BrowserEvent();
-    e.type = goog.events.EventType.MOUSEOUT;
-    e.target = goog.dom.getElement('sandbox');
-    e.currentTarget = window.top;
-    e.relatedTarget = target;
-    dragger.onWindowMouseOut_(e);
-
-    assertFalse('Drag is not canceled for normal in-window mouseout.',
-        dragCanceled);
-    assertTrue('Must not stop dragging for normal in-window mouseout.',
-        dragger.isDragging());
-
-    dragCanceled = false;
-    delete e.relatedTarget;
-    e.target = goog.dom.createDom('iframe');
-    dragger.onWindowMouseOut_(e);
-    assertFalse('Drag is not canceled for mousing into iframe.',
-        dragCanceled);
-    assertTrue('Must not stop dragging for mousing into iframe.',
-        dragger.isDragging());
-
-    dragCanceled = false;
-    e.target = target;
-    dragger.onWindowMouseOut_(e);
-    assertTrue('Drag is canceled for real mouse out of top window.',
-        dragCanceled);
-    assertFalse('Must stop dragging for real mouse out of top window.',
-        dragger.isDragging());
-  }
+  assertTrue('Dragging should be in progess.', dragger.isDragging());
+  e.$verify();
 }
 
 function testLimits() {
@@ -442,7 +408,7 @@ function testBlur() {
 }
 
 function testCloneNode() {
-  var element = goog.dom.createDom('div');
+  var element = goog.dom.createDom(goog.dom.TagName.DIV);
   element.innerHTML =
       '<input type="hidden" value="v0">' +
       '<textarea>v1</textarea>' +

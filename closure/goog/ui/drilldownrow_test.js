@@ -16,6 +16,8 @@ goog.provide('goog.ui.DrilldownRowTest');
 goog.setTestOnly('goog.ui.DrilldownRowTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.DrilldownRow');
 
@@ -23,13 +25,13 @@ function testMakeRows() {
   var ff = goog.dom.getElement('firstRow');
   var d = new goog.ui.DrilldownRow({});
   var d1 = new goog.ui.DrilldownRow(
-      {html: '<tr><td>Second row</td><td>Second column</td></tr>'}
+      {html: createHtmlForRow('Second row')}
       );
   var d2 = new goog.ui.DrilldownRow(
-      {html: '<tr><td>Third row</td><td>Second column</td></tr>'}
+      {html: createHtmlForRow('Third row')}
       );
   var d21 = new goog.ui.DrilldownRow(
-      {html: '<tr><td>Fourth row</td><td>Second column</td></tr>'}
+      {html: createHtmlForRow('Fourth row')}
       );
   var d22 = new goog.ui.DrilldownRow(goog.ui.DrilldownRow.sampleProperties);
   d.decorate(ff);
@@ -44,4 +46,11 @@ function testMakeRows() {
 
   assertEquals(0, d1.findIndex());
   assertEquals(1, d2.findIndex());
+}
+
+function createHtmlForRow(rowText) {
+  var SafeHtml = goog.html.SafeHtml;
+  return SafeHtml.create(goog.dom.TagName.TR, {}, SafeHtml.concat(
+      goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, rowText),
+      goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, 'Second column')));
 }

@@ -161,7 +161,7 @@ MockChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
   this.requestStartTime_ = goog.now();
 };
 
-MockChannelRequest.prototype.sendUsingImgTag = function(uri) {
+MockChannelRequest.prototype.sendCloseRequest = function(uri) {
   this.requestStartTime_ = goog.now();
 };
 

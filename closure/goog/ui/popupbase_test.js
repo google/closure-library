@@ -16,6 +16,7 @@ goog.provide('goog.ui.PopupBaseTest');
 goog.setTestOnly('goog.ui.PopupBaseTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -336,7 +337,7 @@ function testOnDocumentBlurDisabledCrossIframeDismissalWithDelay() {
 
 function testOnDocumentBlurActiveElementInsidePopupWithoutDelay() {
   popup.setVisible(true);
-  var elementInsidePopup = goog.dom.createDom('div');
+  var elementInsidePopup = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.append(popupDiv, elementInsidePopup);
   elementInsidePopup.setAttribute('tabIndex', 0);
   elementInsidePopup.focus();
@@ -348,7 +349,7 @@ function testOnDocumentBlurActiveElementInsidePopupWithoutDelay() {
 
 function testOnDocumentBlurActiveElementInsidePopupWithDelay() {
   popup.setVisible(true);
-  var elementInsidePopup = goog.dom.createDom('div');
+  var elementInsidePopup = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.append(popupDiv, elementInsidePopup);
   elementInsidePopup.setAttribute('tabIndex', 0);
   elementInsidePopup.focus();
@@ -404,7 +405,7 @@ function testOnDocumentBlurEventTargetNotDocumentWithDelay() {
 function testOnDocumentBlurShouldDebounceWithoutDelay() {
   popup.setVisible(true);
   var commonAncestor = goog.dom.getElement('commonAncestor');
-  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  var focusDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'tabIndex');
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
@@ -419,7 +420,7 @@ function testOnDocumentBlurShouldNotDebounceWithDelay() {
   popup.setVisible(true);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   var commonAncestor = goog.dom.getElement('commonAncestor');
-  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  var focusDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'tabIndex');
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
@@ -434,7 +435,7 @@ function testOnDocumentBlurShouldNotDebounceWithDelay() {
 function testOnDocumentBlurShouldNotHideBubbleWithoutDelay() {
   popup.setVisible(true);
   var commonAncestor = goog.dom.getElement('commonAncestor');
-  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  var focusDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'tabIndex');
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
@@ -449,7 +450,7 @@ function testOnDocumentBlurShouldHideBubbleWithDelay() {
   popup.setVisible(true);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   var commonAncestor = goog.dom.getElement('commonAncestor');
-  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  var focusDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'tabIndex');
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();

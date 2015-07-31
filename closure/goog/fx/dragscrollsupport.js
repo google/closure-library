@@ -44,12 +44,26 @@ goog.require('goog.style');
  *     event handler, useful when events are generated for more than one source
  *     element and/or are not real mousemove events.
  * @constructor
+ * @struct
  * @extends {goog.Disposable}
  * @see ../demos/dragscrollsupport.html
  */
 goog.fx.DragScrollSupport = function(containerNode, opt_margin,
                                      opt_externalMouseMoveTracking) {
-  goog.Disposable.call(this);
+  goog.fx.DragScrollSupport.base(this, 'constructor');
+
+  /**
+   * Whether scrolling should be constrained to happen only when the cursor is
+   * inside the container node.
+   * @private {boolean}
+   */
+  this.constrainScroll_ = false;
+
+  /**
+   * Whether horizontal scrolling is allowed.
+   * @private {boolean}
+   */
+  this.horizontalScrolling_ = true;
 
   /**
    * The container to be scrolled.
@@ -131,23 +145,6 @@ goog.fx.DragScrollSupport.SCROLL_STEP_ = 8;
  * @type {number}
  */
 goog.fx.DragScrollSupport.MARGIN = 32;
-
-
-/**
- * Whether scrolling should be constrained to happen only when the cursor is
- * inside the container node.
- * @type {boolean}
- * @private
- */
-goog.fx.DragScrollSupport.prototype.constrainScroll_ = false;
-
-
-/**
- * Whether horizontal scrolling is allowed.
- * @type {boolean}
- * @private
- */
-goog.fx.DragScrollSupport.prototype.horizontalScrolling_ = true;
 
 
 /**

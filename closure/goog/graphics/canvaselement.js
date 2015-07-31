@@ -522,7 +522,7 @@ goog.graphics.CanvasTextElement = function(graphics, text, x1, y1, x2, y2,
    * @type {Element}
    * @private
    */
-  this.innerElement_ = goog.dom.createDom('DIV', {
+  this.innerElement_ = goog.dom.createDom(goog.dom.TagName.DIV, {
     'style': 'display:table-cell;padding: 0;margin: 0;border: 0'
   });
 

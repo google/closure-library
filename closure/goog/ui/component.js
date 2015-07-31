@@ -30,6 +30,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
@@ -545,7 +546,7 @@ goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
  * this method is called.
  * @return {!goog.events.EventHandler<T>} Event handler for this component.
  * @protected
- * @this T
+ * @this {T}
  * @template T
  */
 goog.ui.Component.prototype.getHandler = function() {
@@ -632,7 +633,7 @@ goog.ui.Component.prototype.isInDocument = function() {
  * implementation is to set this.element_ = div.
  */
 goog.ui.Component.prototype.createDom = function() {
-  this.element_ = this.dom_.createElement('div');
+  this.element_ = this.dom_.createElement(goog.dom.TagName.DIV);
 };
 
 
@@ -1102,7 +1103,7 @@ goog.ui.Component.prototype.isRightToLeft = function() {
     this.rightToLeft_ = goog.style.isRightToLeft(this.inDocument_ ?
         this.element_ : this.dom_.getDocument().body);
   }
-  return /** @type {boolean} */(this.rightToLeft_);
+  return this.rightToLeft_;
 };
 
 

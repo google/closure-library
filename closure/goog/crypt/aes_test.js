@@ -98,6 +98,7 @@ function doTest(key, input, values, dir) {
 }
 
 function onTestKeySchedule(roundNum, keySchedule, keyScheduleIndex) {
+  assertNotNull(keySchedule);
   assertEquals(
       'Incorrect key for round ' + roundNum,
       testData[roundNum].k_sch, encodeKey(keySchedule, keyScheduleIndex));

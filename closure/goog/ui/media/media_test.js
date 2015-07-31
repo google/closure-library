@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.MediaTest');
 goog.setTestOnly('goog.ui.media.MediaTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.math.Size');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ControlRenderer');
@@ -57,13 +58,13 @@ function testBasicElements() {
       undefined,
       goog.ui.ControlRenderer.CSS_CLASS + '-description');
   var thumbnail0 = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail0');
   var thumbnail1 = goog.dom.getElementsByTagNameAndClass(
-      'img',
+      goog.dom.TagName.IMG,
       goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail1');
   var player = goog.dom.getElementsByTagNameAndClass(
-      'iframe',
+      goog.dom.TagName.IFRAME,
       goog.ui.ControlRenderer.CSS_CLASS + '-player');
 
   assertNotNull(caption);

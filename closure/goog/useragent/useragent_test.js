@@ -37,7 +37,8 @@ var UserAgents = {
   GECKO: 'GECKO',
   IE: 'IE',
   OPERA: 'OPERA',
-  WEBKIT: 'WEBKIT'
+  WEBKIT: 'WEBKIT',
+  EDGE: 'EDGE'
 };
 
 
@@ -216,6 +217,12 @@ function testDocumentModeInStandardsMode() {
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
 }
 
+function testEdge() {
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertEdge(testAgents.EDGE_12_0, '12.0');
+  assertEdge(testAgents.EDGE_12_9600, '12.9600');
+}
+
 function testOpera() {
   var assertOpera = function(uaString) {
     assertUserAgent([UserAgents.OPERA], uaString);
@@ -271,6 +278,14 @@ function testLegacyChromeOsAndLinux() {
 
 function assertIe(uaString, expectedVersion) {
   assertUserAgent([UserAgents.IE], uaString);
+  assertEquals('User agent ' + uaString + ' should have had version ' +
+      expectedVersion + ' but had ' + goog.userAgent.VERSION,
+      expectedVersion,
+      goog.userAgent.VERSION);
+}
+
+function assertEdge(uaString, expectedVersion) {
+  assertUserAgent([UserAgents.EDGE], uaString);
   assertEquals('User agent ' + uaString + ' should have had version ' +
       expectedVersion + ' but had ' + goog.userAgent.VERSION,
       expectedVersion,
