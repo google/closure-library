@@ -23,6 +23,7 @@ goog.provide('goog.async.nextTick');
 goog.provide('goog.async.throwException');
 
 goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
@@ -78,8 +79,13 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   // to accept the possible tradeoffs of incorrectness in exchange for speed.
   // The IE fallback of readystate change is much slower.
   if (goog.isFunction(goog.global.setImmediate) &&
-      (opt_useSetImmediate || !goog.global.Window ||
-       goog.global.Window.prototype.setImmediate != goog.global.setImmediate)) {
+      // Opt in.
+      (opt_useSetImmediate ||
+      // or it isn't a browser or the environment is weird
+      !goog.global.Window || !goog.global.Window.prototype ||
+      // or something redefined setImmediate in which case we (YOLO) decide
+      // to use it (This is so that we use the mockClock setImmediate. sigh).
+      goog.global.Window.prototype.setImmediate != goog.global.setImmediate)) {
     goog.global.setImmediate(cb);
     return;
   }
@@ -123,7 +129,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     /** @constructor */
     Channel = function() {
       // Make an empty, invisible iframe.
-      var iframe = document.createElement('iframe');
+      var iframe = document.createElement(goog.dom.TagName.IFRAME);
       iframe.style.display = 'none';
       iframe.src = '';
       document.documentElement.appendChild(iframe);
@@ -190,9 +196,9 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Implementation for IE6+: Script elements fire an asynchronous
   // onreadystatechange event when inserted into the DOM.
   if (typeof document !== 'undefined' && 'onreadystatechange' in
-      document.createElement('script')) {
+      document.createElement(goog.dom.TagName.SCRIPT)) {
     return function(cb) {
-      var script = document.createElement('script');
+      var script = document.createElement(goog.dom.TagName.SCRIPT);
       script.onreadystatechange = function() {
         // Clean up and call the callback.
         script.onreadystatechange = null;

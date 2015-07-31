@@ -171,12 +171,6 @@ function testValueWhitelisting() {
       'value whitelisted');
 }
 
-function testAttributeNormalization() {
-  run('<a href="http://google.com/search?q=tests suxor&hl=en">Click</a>',
-      '<a href="http://google.com/search?q=tests%20suxor&amp;hl=en">Click</a>',
-      'URL normalized');
-}
-
 function testNaiveAttributeRewriterCaught() {
   run('<a href="javascript:http://google.com/&#10;alert(1337)">sneaky</a>',
       '<a>sneaky</a>',

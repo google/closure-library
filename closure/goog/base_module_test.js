@@ -108,6 +108,6 @@ exports = {
   }
 };
 
-exports.testThisInModule = (function() {
+exports.testThisInModule = goog.bind(function() {
   assertEquals(this, goog.global);
-}).bind(this);
+}, this);

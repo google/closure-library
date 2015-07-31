@@ -16,6 +16,7 @@ goog.provide('goog.ui.ToolbarSeparatorRendererTest');
 goog.setTestOnly('goog.ui.ToolbarSeparatorRendererTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
@@ -50,7 +51,8 @@ function testGetCssClass() {
 function testCreateDom() {
   var element = renderer.createDom(separator);
   assertNotNull('Created element must not be null', element);
-  assertEquals('Created element must be a DIV', 'DIV', element.tagName);
+  assertEquals('Created element must be a DIV',
+      goog.dom.TagName.DIV, element.tagName);
   assertSameElements('Created element must have expected class names',
       [goog.ui.ToolbarSeparatorRenderer.CSS_CLASS,
        // Separators are always in a disabled state.

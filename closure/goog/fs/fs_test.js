@@ -597,30 +597,6 @@ function testSliceBlob() {
 }
 
 
-function testBrowserSupportsObjectUrls() {
-  stubs.remove(goog.global, 'URL');
-  stubs.remove(goog.global, 'webkitURL');
-  stubs.remove(goog.global, 'createObjectURL');
-
-  assertFalse(goog.fs.browserSupportsObjectUrls());
-  try {
-    goog.fs.createObjectUrl();
-    fail();
-  } catch (e) {
-    assertEquals('This browser doesn\'t seem to support blob URLs', e.message);
-  }
-
-  var objectUrl = {};
-  function createObjectURL() { return objectUrl; }
-  stubs.set(goog.global, 'createObjectURL', createObjectURL);
-
-  assertTrue(goog.fs.browserSupportsObjectUrls());
-  assertEquals(objectUrl, goog.fs.createObjectUrl());
-
-  stubs.reset();
-}
-
-
 function testGetBlobThrowsError() {
   stubs.remove(goog.global, 'BlobBuilder');
   stubs.remove(goog.global, 'WebKitBlobBuilder');

@@ -11,71 +11,70 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.provide('goog.async.AnimationDelayTest');
+
+goog.module('goog.async.AnimationDelayTest');
 goog.setTestOnly('goog.async.AnimationDelayTest');
 
+goog.require('goog.Timer');
 goog.require('goog.async.AnimationDelay');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-var testCase = goog.testing.AsyncTestCase.createAndInstall();
+var testSuite = goog.require('goog.testing.testSuite');
+
+var TEST_DELAY = 20;
 var stubs = new goog.testing.PropertyReplacer();
 
-function tearDown() {
-  stubs.reset();
-}
+testSuite({
+  tearDown: function() {
+    stubs.reset();
+  },
 
-function testStart() {
-  var callCount = 0;
-  var start = goog.now();
-  var delay = new goog.async.AnimationDelay(function(end) {
-    callCount++;
-  });
+  testStart: function() {
+    var callCount = 0;
+    var start = goog.now();
+    var delay = new goog.async.AnimationDelay(function(end) {
+      callCount++;
+    });
 
-  delay.start();
-  testCase.waitForAsync('waiting for delay');
+    delay.start();
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
-    assertEquals(1, callCount);
-  }, 500);
-}
+    return goog.Timer.promise(TEST_DELAY).then(function() {
+      assertEquals(1, callCount);
+    });
+  },
 
-function testStop() {
-  var callCount = 0;
-  var start = goog.now();
-  var delay = new goog.async.AnimationDelay(function(end) {
-    callCount++;
-  });
+  testStop: function() {
+    var callCount = 0;
+    var start = goog.now();
+    var delay = new goog.async.AnimationDelay(function(end) {
+      callCount++;
+    });
 
-  delay.start();
-  testCase.waitForAsync('waiting for delay');
-  delay.stop();
+    delay.start();
+    delay.stop();
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
-    assertEquals(0, callCount);
-  }, 500);
-}
+    return goog.Timer.promise(TEST_DELAY).then(function() {
+      assertEquals(0, callCount);
+    });
+  },
 
-function testAlwaysUseGoogNowForHandlerTimestamp() {
-  var expectedValue = 12345.1;
-  stubs.set(goog, 'now', function() {
-    return expectedValue;
-  });
+  testAlwaysUseGoogNowForHandlerTimestamp: function() {
+    var expectedValue = 12345.1;
+    stubs.set(goog, 'now', function() {
+      return expectedValue;
+    });
 
-  var handler = goog.testing.recordFunction(function(timestamp) {
-    assertEquals(expectedValue, timestamp);
-  });
-  var delay = new goog.async.AnimationDelay(handler);
+    var handler = goog.testing.recordFunction(function(timestamp) {
+      assertEquals(expectedValue, timestamp);
+    });
+    var delay = new goog.async.AnimationDelay(handler);
 
-  delay.start();
-  testCase.waitForAsync('waiting for delay');
+    delay.start();
 
-  window.setTimeout(function() {
-    testCase.continueTesting();
-    assertEquals(1, handler.getCallCount());
-  }, 500);
-}
+    return goog.Timer.promise(TEST_DELAY).then(function() {
+      assertEquals(1, handler.getCallCount());
+    });
+  }
+});

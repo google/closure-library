@@ -36,7 +36,6 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
-goog.require('goog.uri.utils.StandardQueryParam');
 goog.require('goog.userAgent');
 
 
@@ -277,7 +276,7 @@ ChannelRequest.Type_ = {
   /**
    * IMG requests.
    */
-  IMG: 2
+  CLOSE_REQUEST: 2
 };
 
 
@@ -429,27 +428,15 @@ ChannelRequest.prototype.xmlHttpPost = function(uri, postData, decodeChunks) {
  *     won't cause it to be added to the URL.
  * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
  *     should be closed.
- * @param {boolean=} opt_duplicateRandom   Whether to duplicate the randomness
- *     parameter which is only required for the initial handshake. This allows
- *     a server to break compatibility with old version clients.
  */
 ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
-    hostPrefix, opt_noClose, opt_duplicateRandom) {
+    hostPrefix, opt_noClose) {
   this.type_ = ChannelRequest.Type_.XML_HTTP;
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = null;
   this.decodeChunks_ = decodeChunks;
   if (opt_noClose) {
     this.sendClose_ = false;
-  }
-
-  // TODO(user): clean this up once we phase out all BrowserChannel clients,
-  if (opt_duplicateRandom) {
-    var randomParam = this.baseUri_.getParameterValue(
-        goog.uri.utils.StandardQueryParam.RANDOM);
-    this.baseUri_.setParameterValue(  // baseUri_ reusable for future requests
-        goog.uri.utils.StandardQueryParam.RANDOM + '1',  // 'zx1'
-        randomParam);
   }
 
   this.sendXmlHttp_(hostPrefix);
@@ -799,26 +786,38 @@ ChannelRequest.prototype.getNextChunk_ = function(responseText) {
 
 
 /**
- * Uses an IMG tag to send an HTTP get to the server. This is only currently
- * used to terminate the connection, as an IMG tag is the most reliable way to
- * send something to the server while the page is getting torn down.
+ * Uses an IMG tag or navigator.sendBeacon to send an HTTP get to the server.
+ *
+ * This is only currently used to terminate the connection, as an IMG tag is
+ * the most reliable way to send something to the server while the page
+ * is getting torn down.
+ *
+ * Navigator.sendBeacon is available on Chrome and Firefox as a formal
+ * solution to ensure delivery without blocking window close. See
+ * https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+ *
+ * For Chrome Apps, sendBeacon is always necessary due to Content Security
+ * Policy (CSP) violation of using an IMG tag.
+ *
  * @param {goog.Uri} uri The uri to send a request to.
  */
-ChannelRequest.prototype.sendUsingImgTag = function(uri) {
-  this.type_ = ChannelRequest.Type_.IMG;
+ChannelRequest.prototype.sendCloseRequest = function(uri) {
+  this.type_ = ChannelRequest.Type_.CLOSE_REQUEST;
   this.baseUri_ = uri.clone().makeUnique();
-  this.imgTagGet_();
-};
 
+  var requestSent = false;
 
-/**
- * Starts the IMG request.
- *
- * @private
- */
-ChannelRequest.prototype.imgTagGet_ = function() {
-  var eltImg = new Image();
-  eltImg.src = this.baseUri_;
+  if (goog.global.navigator && goog.global.navigator.sendBeacon) {
+    // empty string body to avoid 413 error on chrome < 41
+    requestSent = goog.global.navigator.sendBeacon(
+        this.baseUri_.toString(), '');
+  }
+
+  if (!requestSent) {
+    var eltImg = new Image();
+    eltImg.src = this.baseUri_;
+  }
+
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 };
@@ -908,17 +907,20 @@ ChannelRequest.prototype.handleTimeout_ = function() {
   }
 
   this.channelDebug_.timeoutResponse(this.requestUri_);
-  // IMG requests never notice if they were successful, and always 'time out'.
-  // This fact says nothing about reachability.
-  if (this.type_ != ChannelRequest.Type_.IMG) {
+
+  // IMG or SendBeacon requests never notice if they were successful,
+  // and always 'time out'. This fact says nothing about reachability.
+  if (this.type_ != ChannelRequest.Type_.CLOSE_REQUEST) {
     requestStats.notifyServerReachabilityEvent(
         requestStats.ServerReachability.REQUEST_FAILED);
+    requestStats.notifyStatEvent(requestStats.Stat.REQUEST_TIMEOUT);
   }
+
   this.cleanup_();
 
-  // set error and dispatch failure
+  // Set error and dispatch failure.
+  // This is called for CLOSE_REQUEST too to ensure channel_.onRequestComplete.
   this.lastError_ = ChannelRequest.Error.TIMEOUT;
-  requestStats.notifyStatEvent(requestStats.Stat.REQUEST_TIMEOUT);
   this.dispatchFailure_();
 };
 

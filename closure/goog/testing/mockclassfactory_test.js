@@ -34,6 +34,8 @@ fake.BaseClass.prototype.toString = function() {return 'foo';};
 
 fake.BaseClass.prototype.toLocaleString = function() {return 'bar';};
 
+fake.BaseClass.prototype.overridden = function() { return 42; };
+
 fake.ChildClass = function(a) {
   fail('real object should never be called');
 };
@@ -51,6 +53,14 @@ fake.ChildClass.staticProperty = 'staticPropertyOnClass';
 
 function TopLevelBaseClass() {
 }
+
+fake.ChildClass.prototype.overridden = function() {
+  var superResult = fake.ChildClass.base(this, 'overridden');
+  if (superResult != 42) {
+    fail('super method not invoked or returned wrong value');
+  }
+  return superResult + 1;
+};
 
 var mockClassFactory = new goog.testing.MockClassFactory();
 var matchers = goog.testing.mockmatchers;
@@ -235,4 +245,11 @@ function testFlexibleClassMockInstantiation() {
 function testMockTopLevelClass() {
   var mock = mockClassFactory.getStrictMockClass(goog.global,
       goog.global.TopLevelBaseClass);
+}
+
+function testGoogBaseCall() {
+  var overriddenFn = fake.ChildClass.prototype.overridden;
+  var mock = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 1);
+  var instance1 = new fake.ChildClass(1);
+  assertTrue(43 == overriddenFn.call(instance1));
 }

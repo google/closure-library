@@ -885,16 +885,16 @@ function testIntersectsTag() {
 }
 
 function testNormalizeNode() {
-  var div = goog.dom.createDom('DIV', null, 'a', 'b', 'c');
+  var div = goog.dom.createDom(goog.dom.TagName.DIV, null, 'a', 'b', 'c');
   assertEquals(3, div.childNodes.length);
   goog.editor.range.normalizeNode(div);
   assertEquals(1, div.childNodes.length);
   assertEquals('abc', div.firstChild.nodeValue);
 
-  div = goog.dom.createDom('DIV', null,
-      goog.dom.createDom('SPAN', null, '1', '2'),
+  div = goog.dom.createDom(goog.dom.TagName.DIV, null,
+      goog.dom.createDom(goog.dom.TagName.SPAN, null, '1', '2'),
       goog.dom.createTextNode(''),
-      goog.dom.createDom('BR'),
+      goog.dom.createDom(goog.dom.TagName.BR),
       'b',
       'c');
   assertEquals(5, div.childNodes.length);
@@ -910,7 +910,7 @@ function testNormalizeNode() {
   assertEquals(1, div.firstChild.childNodes.length);
   assertEquals('12', div.firstChild.firstChild.nodeValue);
   assertEquals('bc', div.lastChild.nodeValue);
-  assertEquals('BR', div.lastChild.previousSibling.tagName);
+  assertEquals(goog.dom.TagName.BR, div.lastChild.previousSibling.tagName);
 }
 
 function testDeepestPoint() {

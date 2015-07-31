@@ -72,6 +72,18 @@ goog.math.Rect.prototype.toBox = function() {
 
 
 /**
+ * Creates a new Rect object with the position and size given.
+ * @param {!goog.math.Coordinate} position The top-left coordinate of the Rect
+ * @param {!goog.math.Size} size The size of the Rect
+ * @return {!goog.math.Rect} A new Rect initialized with the given position and
+ *     size.
+ */
+goog.math.Rect.createFromPositionAndSize = function(position, size) {
+  return new goog.math.Rect(position.x, position.y, size.width, size.height);
+};
+
+
+/**
  * Creates a new Rect object with the same position and dimensions as a given
  * Box.  Note that this is only the inverse of toBox if left/top are defined.
  * @param {goog.math.Box} box A box.

@@ -16,6 +16,7 @@ goog.provide('goog.dom.pattern.matcherTest');
 goog.setTestOnly('goog.dom.pattern.matcherTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.pattern.EndTag');
 goog.require('goog.dom.pattern.FullTag');
 goog.require('goog.dom.pattern.Matcher');
@@ -92,7 +93,7 @@ function testMatcherWithQuit() {
 
   var count = 0;
   var callback = function(node, position) {
-    if (node.nodeName == 'SPAN') {
+    if (node.nodeName == goog.dom.TagName.SPAN) {
       throw goog.iter.StopIteration;
       return true;
     }
@@ -115,8 +116,8 @@ function testMatcherWithReplace() {
   var count = 0;
   var callback = function(node, position) {
     count++;
-    if (node.nodeName == 'B') {
-      var i = goog.dom.createDom('I');
+    if (node.nodeName == goog.dom.TagName.B) {
+      var i = goog.dom.createDom(goog.dom.TagName.I);
       node.parentNode.insertBefore(i, node);
       goog.dom.removeNode(node);
 

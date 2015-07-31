@@ -87,7 +87,8 @@ function testEnterInNonSetupBlockquote() {
       'for DIV');
   try {
     assertEquals('Blockquote should not be split',
-        1, dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem).length);
+        1, dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
+                                            null, elem).length);
   } catch (e) {
     EXPECTEDFAILURES.handleException(e);
   }
@@ -109,7 +110,8 @@ function testEnterInSetupBlockquote() {
   var elem = field2.getElement();
   var dom = field2.getEditableDomHelper();
   assertEquals('Blockquote should be split', 2,
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem).length);
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
+                                       null, elem).length);
   assert('Selection should be deleted',
       -1 == elem.innerHTML.indexOf('selection'));
 
@@ -130,7 +132,8 @@ function testEnterInNonSetupBlockquoteWhenClassnameIsNotRequired() {
   var elem = field1.getElement();
   var dom = field1.getEditableDomHelper();
   assertEquals('Blockquote should be split', 2,
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem).length);
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
+                                       null, elem).length);
   assert('Selection should be deleted',
       -1 == elem.innerHTML.indexOf('selection'));
 
@@ -145,8 +148,8 @@ function testEnterInBlockquoteCreatesDivInBrMode() {
   var elem = field2.getElement();
   var dom = field2.getEditableDomHelper();
 
-  var firstBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[0];
+  var firstBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[0];
   var div = dom.getNextElementSibling(firstBlockquote);
   assertEquals('Element after blockquote should be a div', 'DIV', div.tagName);
   assertEquals('Element after div should be second blockquote',
@@ -184,16 +187,16 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorAfterBr() {
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
-  var secondBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
+  var secondBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('two<br>', secondBlockquote.innerHTML);
 
   // Verifies that a blockquote split doesn't happen if it doesn't need to.
   field1.setHtml(false,
       '<blockquote class="tr_bq">one<br id="brcursor"></blockquote>');
   selectNodeAndHitEnter(field1, 'brcursor');
-  assertEquals(
-      1, dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem).length);
+  assertEquals(1, dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem).length);
 }
 
 
@@ -221,8 +224,8 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
-  var secondBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
+  var secondBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('two<br>', secondBlockquote.innerHTML);
 
   // Ensures that standard text node split works as expected with the new
@@ -233,8 +236,8 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
   goog.dom.Range.createCaret(cursor, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
-  secondBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
+  secondBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('<b>two</b><br>', secondBlockquote.innerHTML);
 }
 
@@ -289,8 +292,8 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
-  var secondBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
+  var secondBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('<div>b</div>', secondBlockquote.innerHTML);
 
   // Ensure that we remove only unnecessary subtrees.
@@ -302,8 +305,8 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
-  secondBlockquote =
-      dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
+  secondBlockquote = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   var expectedHTML = '<div><div>two</div></div>' +
       '<div><span>c</span></div>';
   assertHTMLEquals(expectedHTML, secondBlockquote.innerHTML);
@@ -317,7 +320,8 @@ function testEnterInBlockquoteRemovesExtraNodes() {
       dom.getElement('quote').firstChild.firstChild, 1).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
-  var blockquotes = dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem);
+  var blockquotes = dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.BLOCKQUOTE, null, elem);
   assertEquals(2, blockquotes.length);
   assertHTMLEquals('<div>o</div>', blockquotes[0].innerHTML);
   assertHTMLEquals('<div>ne</div><div>two</div>', blockquotes[1].innerHTML);
@@ -360,7 +364,8 @@ function testEnterAtEndOfBlockInWebkit() {
     // Make sure that the block now has two brs.
     var elem = field1.getElement();
     assertEquals('should have inserted two br tags: ' + elem.innerHTML,
-        2, goog.dom.getElementsByTagNameAndClass('BR', null, elem).length);
+        2, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.BR,
+                                                 null, elem).length);
   }
 }
 

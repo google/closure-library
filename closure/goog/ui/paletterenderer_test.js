@@ -20,6 +20,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
@@ -52,16 +53,16 @@ function tearDown() {
 function testGridA11yRoles() {
   var grid = renderer.createDom(palette);
   assertEquals(goog.a11y.aria.Role.GRID, goog.a11y.aria.getRole(grid));
-  var table = grid.getElementsByTagName('table')[0];
-  var row = table.getElementsByTagName('tr')[0];
+  var table = grid.getElementsByTagName(goog.dom.TagName.TABLE)[0];
+  var row = table.getElementsByTagName(goog.dom.TagName.TR)[0];
   assertEquals(goog.a11y.aria.Role.ROW, goog.a11y.aria.getRole(row));
-  var cell = row.getElementsByTagName('td')[0];
+  var cell = row.getElementsByTagName(goog.dom.TagName.TD)[0];
   assertEquals(goog.a11y.aria.Role.GRIDCELL, goog.a11y.aria.getRole(cell));
 }
 
 function testCellA11yLabels() {
   var grid = renderer.createDom(palette);
-  var cells = grid.getElementsByTagName('td');
+  var cells = grid.getElementsByTagName(goog.dom.TagName.TD);
 
   assertEquals('An aria-label is used as a label',
       'label-0', goog.a11y.aria.getLabel(cells[0]));
@@ -75,7 +76,8 @@ function testCellA11yLabels() {
 
 function testA11yActiveDescendant() {
   palette.render();
-  var cells = palette.getElementStrict().getElementsByTagName('td');
+  var cells = palette.getElementStrict().getElementsByTagName(
+      goog.dom.TagName.TD);
 
   renderer.highlightCell(palette, cells[1].firstChild, true);
   assertEquals(cells[1].id, goog.a11y.aria.getState(

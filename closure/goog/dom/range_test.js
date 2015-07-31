@@ -297,7 +297,7 @@ function testRemovePartialContents() {
         outer.firstChild, 3);
     removeHelper(3, range, outer, 1, '14');
 
-    var br = goog.dom.createDom('BR');
+    var br = goog.dom.createDom(goog.dom.TagName.BR);
     outer.appendChild(br);
     range = goog.dom.Range.createFromNodes(outer.firstChild, 1,
         outer, 1);
@@ -383,8 +383,8 @@ function assertSurroundDoesntChangeSelectionWithOffsets(
 
   var rangeToSurround = goog.dom.Range.createFromNodes(
       div.firstChild, offset1, div.firstChild, offset2);
-  rangeToSurround.surroundWithNodes(goog.dom.createDom('span'),
-      goog.dom.createDom('span'));
+  rangeToSurround.surroundWithNodes(goog.dom.createDom(goog.dom.TagName.SPAN),
+      goog.dom.createDom(goog.dom.TagName.SPAN));
 
   // Make sure that the selection didn't change.
   assertHTMLEquals('Selection must not change when contents are surrounded.',
@@ -702,7 +702,7 @@ function testFocusedElementDisappears() {
   // created, contentEditable is set, is focused, and removed.  After that
   // happens, calling selection.collapse fails.
   // https://bugzilla.mozilla.org/show_bug.cgi?id=773137
-  var disappearingElement = goog.dom.createDom('div');
+  var disappearingElement = goog.dom.createDom(goog.dom.TagName.DIV);
   document.body.appendChild(disappearingElement);
   disappearingElement.contentEditable = true;
   disappearingElement.focus();

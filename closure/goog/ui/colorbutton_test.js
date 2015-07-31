@@ -18,6 +18,7 @@ goog.setTestOnly('goog.ui.ColorButtonTest');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ColorButton');
@@ -46,7 +47,7 @@ function testRender() {
 }
 
 function testDecorate() {
-  var colorDiv = goog.dom.createDom('div', 'goog-color-button');
+  var colorDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'goog-color-button');
   goog.dom.appendChild(buttonDiv, colorDiv);
   button2 = goog.ui.decorate(colorDiv);
   assertNotNull('button should be valid', button2);

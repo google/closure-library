@@ -94,6 +94,33 @@ function testRestart() {
 }
 
 
+function testStartIfNotActive() {
+  delay.startIfNotActive();
+  clock.tick(100);
+
+  delay.stop();
+  assertFalse(invoked);
+
+  delay.startIfNotActive();
+  clock.tick(199);
+  assertFalse(invoked);
+
+  clock.tick(1);
+  assertTrue(invoked);
+
+  invoked = false;
+  delay.start();
+  clock.tick(199);
+
+  assertFalse(invoked);
+
+  delay.startIfNotActive();
+  clock.tick(1);
+
+  assertTrue(invoked);
+}
+
+
 function testOverride() {
   delay.start(50);
   clock.tick(49);

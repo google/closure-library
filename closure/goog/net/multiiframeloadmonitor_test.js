@@ -16,6 +16,7 @@ goog.provide('goog.net.MultiIframeLoadMonitorTest');
 goog.setTestOnly('goog.net.MultiIframeLoadMonitorTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.net.IframeLoadMonitor');
 goog.require('goog.net.MultiIframeLoadMonitor');
 goog.require('goog.testing.AsyncTestCase');
@@ -47,8 +48,8 @@ iframeLoaderTestCase.setUpPage = function() {
   var dom = goog.dom.getDomHelper();
 
   // Load multiple with callback
-  var frame1 = dom.createDom('iframe');
-  var frame2 = dom.createDom('iframe');
+  var frame1 = dom.createDom(goog.dom.TagName.IFRAME);
+  var frame2 = dom.createDom(goog.dom.TagName.IFRAME);
   var multiMonitor = new goog.net.MultiIframeLoadMonitor(
       [frame1, frame2], goog.bind(this.multipleCallback, this));
   this.log('Loading frames at: ' + TEST_FRAME_SRCS[0] + ' and ' +
@@ -62,8 +63,8 @@ iframeLoaderTestCase.setUpPage = function() {
   frame2.src = TEST_FRAME_SRCS[1];
 
   // Load multiple with callback and content check
-  var frame3 = dom.createDom('iframe');
-  var frame4 = dom.createDom('iframe');
+  var frame3 = dom.createDom(goog.dom.TagName.IFRAME);
+  var frame4 = dom.createDom(goog.dom.TagName.IFRAME);
   var multiMonitor = new goog.net.MultiIframeLoadMonitor(
       [frame3, frame4], goog.bind(this.multipleContentCallback, this), true);
   this.log('Loading frames with content check at: ' + TEST_FRAME_SRCS[1] +
@@ -144,7 +145,8 @@ iframeLoaderTestCase.addNewTest('stopMonitoring', function() {
   // behind the scenes, then make sure they are disposed properly.
   this.fakeLoadMonitor();
   var dom = goog.dom.getDomHelper();
-  var frames = [dom.createDom('iframe'), dom.createDom('iframe')];
+  var frames = [dom.createDom(goog.dom.TagName.IFRAME),
+                dom.createDom(goog.dom.TagName.IFRAME)];
   var multiMonitor = new goog.net.MultiIframeLoadMonitor(
       frames,
       function() {

@@ -23,8 +23,10 @@ goog.provide('goog.baseTest');
 
 goog.setTestOnly('goog.baseTest');
 
+goog.require('goog.Promise');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
+goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -533,7 +535,7 @@ function testRemoveUidFromObjectWithoutUid() {
 }
 
 function testRemoveUidFromNode() {
-  var node = document.createElement('div');
+  var node = document.createElement(goog.dom.TagName.DIV);
   var nodeUid = goog.getUid(node);
   goog.removeUid(node);
   assertNotEquals("A node's old and new unique IDs should be different",
@@ -569,14 +571,14 @@ function testConstructorUid() {
  * property set but undefined. See bug 1252508.
  */
 function testUidNotUndefinedOnReusedElement() {
-  var div = document.createElement('DIV');
+  var div = document.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(div);
   div.innerHTML = '<form id="form"></form>';
-  var span = div.getElementsByTagName('FORM')[0];
+  var span = div.getElementsByTagName(goog.dom.TagName.FORM)[0];
   goog.getUid(span);
 
   div.innerHTML = '<form id="form"></form>';
-  var span2 = div.getElementsByTagName('FORM')[0];
+  var span2 = div.getElementsByTagName(goog.dom.TagName.FORM)[0];
   assertNotUndefined(goog.getUid(span2));
 }
 
@@ -837,7 +839,6 @@ function testPartialMultipleCalls() {
   assertArrayEquals(['foo', 'bar'], calls[3].getArguments());
 }
 
-
 function testGlobalEval() {
   goog.globalEval('var foofoofoo = 125;');
   assertEquals('Var should be globally assigned', 125, goog.global.foofoofoo);
@@ -1004,13 +1005,6 @@ function testGetMsgWithPlaceholders() {
 
 
 //=== miscellaneous tests ===
-
-function testIdentity() {
-  assertEquals(3, goog.identityFunction(3));
-  assertEquals(3, goog.identityFunction(3, 4));
-  assertEquals(null, goog.identityFunction(null));
-  assertTrue(goog.identityFunction() === undefined);
-}
 
 function testGetObjectByName() {
   var m = {
@@ -1321,6 +1315,32 @@ function testGoogRequireCheck() {
   delete far;
 }
 
+function diables_testCspSafeGoogRequire() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    return;
+  }
+
+  stubs.set(goog, 'ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', true);
+
+  // Aliased so that build tools do not mistake this for an actual call.
+  var require = goog.require;
+
+  require('goog.Uri');
+
+  // Set a timeout to allow the user agent to finish parsing this script block,
+  // thus allowing the appended script (via goog.require) to execute.
+  var ASYNC_TIMEOUT_MS = 1000;
+
+  var resolver = goog.Promise.withResolver();
+  window.setTimeout(function() {
+    assertNotUndefined(goog.Uri);
+    resolver.resolve();
+    stubs.reset();
+  }, ASYNC_TIMEOUT_MS);
+
+  return resolver.promise;
+}
+
 function testLateRequireProtection() {
   if (!document.readyState) return;
   var e = assertThrows(function() {
@@ -1427,7 +1447,23 @@ function testGoogModuleGet() {
   assertEquals(earlyTestModuleGet, testModuleExports);
 }
 
-function testNormalizePath() {
+
+function testLoadFileSync() {
+  var fileContents = goog.loadFileSync_('deps.js');
+  assertTrue('goog.loadFileSync_ returns string',
+      typeof fileContents === 'string');
+  assertTrue('goog.loadFileSync_ string length > 0', fileContents.length > 0);
+
+  stubs.set(goog.global, 'CLOSURE_LOAD_FILE_SYNC', function(src) {
+    return 'closure load file sync: ' + src;
+  });
+
+  assertEquals('goog.CLOSURE_LOAD_FILE_SYNC override',
+      goog.loadFileSync_('test url'), 'closure load file sync: test url');
+}
+
+
+function testNormalizePath1() {
   assertEquals('foo/path.js', goog.normalizePath_('./foo/./path.js'));
   assertEquals('foo/path.js', goog.normalizePath_('bar/../foo/path.js'));
   assertEquals('bar/path.js', goog.normalizePath_('bar/foo/../path.js'));
@@ -1449,12 +1485,9 @@ function testNormalizePath() {
   assertEquals('http://../x/y.js', goog.normalizePath_('http://../x/y.js'));
   assertEquals('http://path.js', goog.normalizePath_('http://foo/../path.js'));
   assertEquals('http://x/path.js', goog.normalizePath_('http://./x/path.js'));
-
-  var expected = '../../../../../../../javascript/apps/xid/xid.js';
-  var original = '../testing/../../../../../../../' +
-      'closure/goog/../apps/xid/xid.js';
-  assertEquals(expected, goog.normalizePath_(original));
 }
+
+
 
 
 function testGoogModuleNames() {

@@ -17,6 +17,7 @@ goog.setTestOnly('goog.arrayTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -829,7 +830,7 @@ function testExtendWithArguments() {
 
 function testExtendWithQuerySelector() {
   var a = [0];
-  var d = goog.dom.getElementsByTagNameAndClass('div', 'foo');
+  var d = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV, 'foo');
   goog.array.extend(a, d);
   assertEquals(2, a.length);
 }

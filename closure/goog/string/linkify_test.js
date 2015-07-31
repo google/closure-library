@@ -15,12 +15,13 @@
 goog.provide('goog.string.linkifyTest');
 goog.setTestOnly('goog.string.linkifyTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.string.linkify');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 
-var div = document.createElement('div');
+var div = document.createElement(goog.dom.TagName.DIV);
 
 function assertLinkify(comment, input, expected) {
   assertEquals(
@@ -452,4 +453,12 @@ function testUrlWithExclamation() {
       'URL with exclamation points',
       'This is awesome www.google.com!',
       'This is awesome <a href="http://www.google.com">www.google.com<\/a>!');
+}
+
+function testIpv6Url() {
+  assertLinkify(
+      'IPv6 URL',
+      'http://[::FFFF:129.144.52.38]:80/index.html',
+      '<a href="http://[::FFFF:129.144.52.38]:80/index.html">' +
+      'http://[::FFFF:129.144.52.38]:80/index.html<\/a>');
 }

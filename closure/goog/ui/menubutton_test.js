@@ -19,6 +19,7 @@ goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -451,9 +452,12 @@ function testOpenedMenuPositionCorrection() {
   assertFalse('positionMenu() shouldn\'t be called.', positionMenuCalled);
 
   // Move the menu button by DOM structure change
-  var p1 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
-  var p2 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
-  var p3 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
+  var p1 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
+  var p2 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
+  var p3 = iframeDom.createDom(goog.dom.TagName.P, null,
+                               iframeDom.createTextNode('foo'));
   iframeDom.insertSiblingBefore(p1, node);
   iframeDom.insertSiblingBefore(p2, node);
   iframeDom.insertSiblingBefore(p3, node);

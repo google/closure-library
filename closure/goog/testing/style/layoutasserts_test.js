@@ -16,6 +16,7 @@ goog.provide('goog.testing.style.layoutassertsTest');
 goog.setTestOnly('goog.testing.style.layoutassertsTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 /** @suppress {extraRequire} */
@@ -28,7 +29,7 @@ var DEFAULT_HEIGHT = 100;
 
 function setUp() {
   div1 = goog.dom.createDom(
-      'div',
+      goog.dom.TagName.DIV,
       {
         id: 'test',
         className: 'test',
@@ -38,7 +39,7 @@ function setUp() {
                 'background-color:#EEE',
         innerHTML: 'abc'
       });
-  div2 = goog.dom.createDom('div',
+  div2 = goog.dom.createDom(goog.dom.TagName.DIV,
       {
         id: 'test2',
         className: 'test2',

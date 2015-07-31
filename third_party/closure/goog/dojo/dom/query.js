@@ -1343,7 +1343,7 @@ goog.dom.query = (function() {
           //  right now. Not elegant, but it's cheaper than running
           //  the query parser when we might not need to
           if (!((9 == root.nodeType) || nospace)) {
-            throw '';
+            throw new Error('');
           }
           var r = root[qsa](tq);
           // IE QSA queries may incorrectly include comment nodes, so we throw

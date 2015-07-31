@@ -17,17 +17,23 @@ goog.setTestOnly('goog.labs.testing.environmentTest');
 
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.MockControl');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.testSuite');
 
 var testCase = null;
 var mockControl = null;
+var replacer = null;
 
 // Use this flag to control whether the global JsUnit lifecycle events are being
 // called as part of the test lifecycle or as part of the "mocked" environment.
 var testing = false;
 
 function setUp() {
+  // These methods end up being called by the test framework for these tests
+  // as well as the part of the environment that is being tested as part
+  // of the test.  Bail if the test is already running.
   if (testing) {
     return;
   }
@@ -43,12 +49,16 @@ function setUp() {
   goog.testing.TestCase.initializeTestRunner = initFn;
 
   mockControl = new goog.testing.MockControl();
+
+  replacer = new goog.testing.PropertyReplacer();
 }
 
 function tearDown() {
   if (testing) {
     return;
   }
+
+  replacer.reset();
 
   mockControl.$resetAll();
   mockControl.$tearDown();
@@ -143,10 +153,50 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(6, testCase.tests_.length);
+  assertEquals(7, testCase.tests_.length);
 
   testing = false;
 }
+
+
+// Verify "goog.testing.testSuite" integration
+function testTestSuiteTests() {
+  testing = true;
+
+  // don't try to reinitialize the test runner, while a test is running.
+  replacer.set(goog.testing.TestCase, 'initializeTestRunner', function() {});
+
+  // with an active environment.
+  var envOne = new goog.labs.testing.Environment();
+
+  var setUpPageFn = testCase.setUpPage;
+  var setUpFn = testCase.setUp;
+  var tearDownFn = testCase.tearDownFn;
+  var tearDownPageFn = testCase.tearDownPageFn;
+
+  goog.testing.testSuite({
+    // These lifecycle methods should not override the environment testcase
+    // methods but they should be called, when the test runs.
+    setUp: function() {},
+    tearDown: function() {},
+    setUpPage: function() {},
+    tearDownPage: function() {},
+    // This test method should be added.
+    testMe: function() {}
+  });
+
+  assertEquals(setUpPageFn, testCase.setUpPage);
+  assertEquals(setUpFn, testCase.setUp);
+  assertEquals(tearDownFn, testCase.tearDownFn);
+  assertEquals(tearDownPageFn, testCase.tearDownPageFn);
+
+  // Note that this number changes when more tests are added to this file as
+  // the environment reflects on the window global scope for JsUnit.
+  assertEquals(1, testCase.tests_.length);
+
+  testing = false;
+}
+
 
 function testMockClock() {
   testing = true;

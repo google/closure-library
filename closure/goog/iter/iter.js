@@ -42,7 +42,7 @@ goog.iter.Iterable;
 goog.iter.StopIteration = ('StopIteration' in goog.global) ?
     // For script engines that support legacy iterators.
     goog.global['StopIteration'] :
-    Error('StopIteration');
+    { message: 'StopIteration', stack: ''};
 
 
 
@@ -1164,8 +1164,7 @@ goog.iter.slice = function(iterable, start, opt_end) {
   var iterator = goog.iter.consume(iterable, start);
 
   if (goog.isNumber(opt_end)) {
-    goog.asserts.assert(
-        goog.math.isInt(/** @type {number} */ (opt_end)) && opt_end >= start);
+    goog.asserts.assert(goog.math.isInt(opt_end) && opt_end >= start);
     iterator = goog.iter.limit(iterator, opt_end - start /* limitSize */);
   }
 
@@ -1252,9 +1251,7 @@ goog.iter.combinations = function(iterable, length) {
   }
 
   iter.next = function() {
-    return goog.array.map(
-        /** @type {!Array<number>} */
-        (sortedIndexIterator.next()), getIndexFromElements);
+    return goog.array.map(sortedIndexIterator.next(), getIndexFromElements);
   };
 
   return iter;

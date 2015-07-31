@@ -16,6 +16,7 @@ goog.provide('goog.ui.AdvancedTooltipTest');
 goog.setTestOnly('goog.ui.AdvancedTooltipTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Box');
@@ -45,7 +46,7 @@ function isWindowTooSmall() {
 }
 
 function setUp() {
-  popup = goog.dom.createDom('span',
+  popup = goog.dom.createDom(goog.dom.TagName.SPAN,
       {id: 'popup', style: 'position:absolute;top:300;left:300'}, 'Hello');
   att = new goog.ui.AdvancedTooltip('hovertarget');
   att.setElement(popup);
@@ -213,7 +214,7 @@ function testResizingTooltipWhileShown() {
 
 function checkNestedTooltips(useAdvancedTooltip) {
   popup.appendChild(goog.dom.createDom(
-      'span', {id: 'nestedAnchor'}, 'Nested Anchor'));
+      goog.dom.TagName.SPAN, {id: 'nestedAnchor'}, 'Nested Anchor'));
   var nestedAnchor = goog.dom.getElement('nestedAnchor');
   var nestedTooltip;
   if (useAdvancedTooltip) {

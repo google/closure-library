@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.TabBarRendererTest');
 
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.rendererasserts');
@@ -56,7 +57,8 @@ function testGetAriaRole() {
 function testCreateDom() {
   var element = renderer.createDom(tabBar);
   assertNotNull('Created element must not be null', element);
-  assertEquals('Created element must be a DIV', 'DIV', element.tagName);
+  assertEquals('Created element must be a DIV',
+      goog.dom.TagName.DIV, element.tagName);
   assertSameElements('Created element must have expected class names',
       ['goog-tab-bar', 'goog-tab-bar-horizontal', 'goog-tab-bar-top'],
       goog.dom.classlist.get(element));

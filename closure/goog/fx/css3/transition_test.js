@@ -17,6 +17,7 @@ goog.setTestOnly('goog.fx.css3.TransitionTest');
 
 goog.require('goog.dispose');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.fx.Transition');
 goog.require('goog.fx.css3.Transition');
@@ -39,7 +40,7 @@ function createTransition(element, duration) {
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
-  element = goog.dom.createElement('div');
+  element = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(element);
 }
 

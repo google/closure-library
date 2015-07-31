@@ -15,6 +15,7 @@
 goog.provide('goog.ui.emoji.EmojiPickerTest');
 goog.setTestOnly('goog.ui.emoji.EmojiPickerTest');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.style');
@@ -334,7 +335,7 @@ function checkPathsEndWithSameFile(path1, path2) {
  */
 function getImageUrl(element) {
   element = element.firstChild;  // get the wrapped element
-  if (element.tagName == 'IMG') {
+  if (element.tagName == goog.dom.TagName.IMG) {
     return element.src;
   } else {
     var url = goog.style.getStyle(element, 'background-image');

@@ -17,6 +17,7 @@
  * an Element's dataset.
  * See {@link http://www.w3.org/TR/html5/Overview.html#dom-dataset}.
  *
+ * @author nicksay@google.com (Alex Nicksay)
  */
 
 goog.provide('goog.dom.dataset');

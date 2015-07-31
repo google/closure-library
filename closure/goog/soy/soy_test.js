@@ -35,6 +35,13 @@ function tearDown() {
   stubs.reset();
 }
 
+function testRenderHtml() {
+  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+  goog.soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
+  assertEquals('hello <b>world</b>', testDiv.innerHTML.toLowerCase());
+}
+
+
 function testRenderElement() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.soy.renderElement(testDiv, example.multiRootTemplate, {name: 'Boo'});
@@ -124,6 +131,13 @@ function testRenderAsElementMultiRoot() {
 function testRenderAsElementWithNoData() {
   var elem = goog.soy.renderAsElement(example.noDataTemplate);
   assertEquals('Hello', elementToInnerHtml(elem));
+}
+
+function testConvertToElement() {
+  var elem = goog.soy.convertToElement(example.sanitizedHtmlTemplate());
+  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
+  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals('hello <b>world</b>', elem.innerHTML.toLowerCase());
 }
 
 

@@ -20,6 +20,7 @@ goog.provide('goog.dom.classlist_test');
 goog.setTestOnly('goog.dom.classlist_test');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
@@ -32,7 +33,7 @@ function tearDown() {
 }
 
 function testGet() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   assertTrue(classlist.get(el).length == 0);
   el.className = 'C';
   assertElementsEquals(['C'], classlist.get(el));
@@ -64,7 +65,7 @@ function testContainsCaseSensitive() {
 }
 
 function testAddNotAddingMultiples() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   classlist.add(el, 'A');
   assertEquals('A', el.className);
   classlist.add(el, 'A');
@@ -74,7 +75,7 @@ function testAddNotAddingMultiples() {
 }
 
 function testAddCaseSensitive() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   classlist.add(el, 'A');
   assertTrue(classlist.contains(el, 'A'));
   assertFalse(classlist.contains(el, 'a'));
@@ -85,7 +86,7 @@ function testAddCaseSensitive() {
 }
 
 function testAddAll() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo goog-bar';
 
   goog.dom.classlist.addAll(elem, ['goog-baz', 'foo']);
@@ -97,7 +98,7 @@ function testAddAll() {
 
 function testAddAllEmpty() {
   var classes = 'foo bar';
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = classes;
 
   goog.dom.classlist.addAll(elem, []);
@@ -105,21 +106,21 @@ function testAddAllEmpty() {
 }
 
 function testRemove() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   el.className = 'A B C';
   classlist.remove(el, 'B');
   assertEquals('A C', el.className);
 }
 
 function testRemoveCaseSensitive() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   el.className = 'A B C';
   classlist.remove(el, 'b');
   assertEquals('A B C', el.className);
 }
 
 function testRemoveAll() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar baz';
 
   goog.dom.classlist.removeAll(elem, ['bar', 'foo']);
@@ -129,7 +130,7 @@ function testRemoveAll() {
 }
 
 function testRemoveAllOne() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar baz';
 
   goog.dom.classlist.removeAll(elem, ['bar']);
@@ -139,7 +140,7 @@ function testRemoveAllOne() {
 }
 
 function testRemoveAllSomeNotPresent() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar baz';
 
   goog.dom.classlist.removeAll(elem, ['a', 'bar']);
@@ -149,7 +150,7 @@ function testRemoveAllSomeNotPresent() {
 }
 
 function testRemoveAllCaseSensitive() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar baz';
 
   goog.dom.classlist.removeAll(elem, ['BAR', 'foo']);
@@ -180,7 +181,7 @@ function testEnable() {
 }
 
 function testEnableNotAddingMultiples() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   classlist.enable(el, 'A', true);
   assertEquals('A', el.className);
   classlist.enable(el, 'A', true);
@@ -190,7 +191,7 @@ function testEnableNotAddingMultiples() {
 }
 
 function testEnableAllRemove() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar baz';
 
   // Test removing some classes (some not present).
@@ -202,7 +203,7 @@ function testEnableAllRemove() {
 }
 
 function testEnableAllAdd() {
-  var elem = document.createElement('div');
+  var elem = document.createElement(goog.dom.TagName.DIV);
   elem.className = 'foo bar';
 
   // Test adding some classes (some duplicate).
@@ -258,7 +259,7 @@ function testToggle() {
 }
 
 function testAddRemoveString() {
-  var el = document.createElement('div');
+  var el = document.createElement(goog.dom.TagName.DIV);
   el.className = 'A';
 
   classlist.addRemove(el, 'A', 'B');

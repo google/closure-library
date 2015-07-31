@@ -76,6 +76,24 @@ function testMaxSizeLruLinkedMap() {
   assertArrayEquals([4, 2, 1], m.getValues());
 }
 
+function testMaxSizeLruLinkedMapWithEvictionCallback() {
+  var cb = goog.testing.recordFunction();
+  var m = new goog.structs.LinkedMap(4, true, cb);
+  fillLinkedMap(m);
+  assertEquals(0, cb.getCallCount());  // But cache is full.
+  assertArrayEquals(['d', 'c', 'b', 'a'], m.getKeys());
+  m.set('d', 'exists');
+  assertEquals(0, cb.getCallCount());
+  m.set('extra1', 'val1');
+  assertEquals(1, cb.getCallCount());
+  assertArrayEquals(['a', 0], cb.getLastCall().getArguments());
+  m.set('extra2', 'val2');
+  assertEquals(2, cb.getCallCount());
+  assertArrayEquals(['b', 1], cb.getLastCall().getArguments());
+  m.set('extra2', 'val2_2');
+  assertEquals(2, cb.getCallCount());
+}
+
 function testGetCount() {
   var m = new goog.structs.LinkedMap();
   assertEquals(0, m.getCount());

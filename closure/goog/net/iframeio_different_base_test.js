@@ -15,22 +15,20 @@
 goog.provide('goog.net.iframeIoDifferentBaseTest');
 goog.setTestOnly('goog.net.iframeIoDifferentBaseTest');
 
+goog.require('goog.Promise');
 goog.require('goog.events');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 
 function testDifferentBaseUri() {
   var io = new goog.net.IframeIo();
-  goog.events.listen(io, goog.net.EventType.COMPLETE,
-      function() {
-        assertNotEquals('File should have expected content.',
-            -1, io.getResponseText().indexOf('just a file'));
-        asyncTestCase.continueTesting();
-      });
-  io.send('net/iframeio_different_base_test.data');
-  asyncTestCase.waitForAsync('Waiting for iframeIo respons.');
+  return new goog.Promise(function(resolve, reject) {
+    goog.events.listen(io, goog.net.EventType.COMPLETE, resolve);
+    io.send('net/iframeio_different_base_test.data');
+  }).then(function() {
+    assertNotEquals('File should have expected content.',
+        -1, io.getResponseText().indexOf('just a file'));
+  });
 }

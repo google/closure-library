@@ -16,6 +16,7 @@ goog.provide('goog.ui.ColorMenuButtonTest');
 goog.setTestOnly('goog.ui.ColorMenuButtonTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.RendererHarness');
 goog.require('goog.testing.ui.rendererasserts');
@@ -45,7 +46,7 @@ function testEquality() {
 }
 
 function testWrapCaption() {
-  var caption = goog.dom.createDom('div', null, 'Foo');
+  var caption = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Foo');
   var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(caption,
       goog.dom.getDomHelper());
   assertNotEquals('Caption should have been wrapped', caption, wrappedCaption);
@@ -54,7 +55,7 @@ function testWrapCaption() {
 }
 
 function testSetCaptionValue() {
-  var caption = goog.dom.createDom('div', null, 'Foo');
+  var caption = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Foo');
   var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(caption,
       goog.dom.getDomHelper());
   goog.ui.ColorMenuButtonRenderer.setCaptionValue(wrappedCaption, 'red');

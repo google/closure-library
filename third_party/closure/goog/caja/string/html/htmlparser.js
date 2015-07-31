@@ -1,5 +1,5 @@
 // Copyright 2006-2008, The Google Caja project.
-// Modifications Copyright 2009 The Closure Library Authors. All Rights Reserved.
+// Modifications Copyright 2009 The Closure Library Authors.
 // All Rights Reserved
 
 /**
@@ -42,11 +42,13 @@
  * @supported IE6, IE7, IE8, FF1.5, FF2, FF3, Chrome 3.0, Safari and Opera 10.
  */
 
+goog.provide('goog.string.html');
 goog.provide('goog.string.html.HtmlParser');
 goog.provide('goog.string.html.HtmlParser.EFlags');
 goog.provide('goog.string.html.HtmlParser.Elements');
 goog.provide('goog.string.html.HtmlParser.Entities');
 goog.provide('goog.string.html.HtmlSaxHandler');
+
 
 
 /**
@@ -62,15 +64,15 @@ goog.string.html.HtmlParser = function() {
 /**
  * HTML entities that are encoded/decoded.
  * TODO(user): use {@code goog.string.htmlEncode} instead.
- * @enum {string}
+ * @type {!Object<string, string>}
  */
 goog.string.html.HtmlParser.Entities = {
-  lt: '<',
-  gt: '>',
-  amp: '&',
-  nbsp: '\240',
-  quot: '"',
-  apos: '\''
+  'lt': '<',
+  'gt': '>',
+  'amp': '&',
+  'nbsp': '\u00a0',
+  'quot': '"',
+  'apos': '\''
 };
 
 
@@ -90,7 +92,7 @@ goog.string.html.HtmlParser.EFlags = {
 
 /**
  * A map of element to a bitmap of flags it has, used internally on the parser.
- * @type {Object}
+ * @type {Object<string,number>}
  */
 goog.string.html.HtmlParser.Elements = {
   'a': 0,
@@ -112,6 +114,7 @@ goog.string.html.HtmlParser.Elements = {
       goog.string.html.HtmlParser.EFlags.FOLDABLE,
   'br': goog.string.html.HtmlParser.EFlags.EMPTY,
   'button': 0,
+  'canvas': 0,
   'caption': 0,
   'center': 0,
   'cite': 0,
@@ -209,9 +212,9 @@ goog.string.html.HtmlParser.Elements = {
 /**
  * Regular expression that matches &s.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.AMP_RE_ = /&/g;
+goog.string.html.HtmlParser.AMP_RE = /&/g;
 
 
 /**
@@ -226,33 +229,33 @@ goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
 /**
  * Regular expression that matches <.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.LT_RE_ = /</g;
+goog.string.html.HtmlParser.LT_RE = /</g;
 
 
 /**
  * Regular expression that matches >.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.GT_RE_ = />/g;
+goog.string.html.HtmlParser.GT_RE = />/g;
 
 
 /**
  * Regular expression that matches ".
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
+goog.string.html.HtmlParser.QUOTE_RE = /\"/g;
 
 
 /**
  * Regular expression that matches =.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
+goog.string.html.HtmlParser.EQUALS_RE = /=/g;
 
 
 /**
@@ -300,10 +303,10 @@ goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
     // interpreters are inconsistent in whether a group that matches nothing
     // is null, undefined, or the empty string.
     ('(?:' +
-       '([a-z][a-z-]*)' +                   // attribute name
-       ('(' +                               // optionally followed
-          '\\s*=\\s*' +
-          ('(' +
+    '([a-z][a-z-]*)' +                   // attribute name
+    ('(' +                               // optionally followed
+    '\\s*=\\s*' +
+    ('(' +
              // A double quoted string.
              '\"[^\"]*\"' +
              // A single quoted string.
@@ -317,10 +320,10 @@ goog.string.html.HtmlParser.INSIDE_TAG_TOKEN_ = new RegExp(
              '|[^>\"\'\\s]*' +
              ')'
              ) +
-          ')'
-          ) + '?' +
-       ')'
-       ) +
+    ')'
+    ) + '?' +
+    ')'
+    ) +
     // End of tag captured in group 3.
     '|(/?>)' +
     // Don't capture cruft
@@ -418,9 +421,9 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
             (goog.string.html.HtmlParser.EFlags.CDATA |
              goog.string.html.HtmlParser.EFlags.RCDATA))) {
           if (htmlLower === null) {
-            htmlLower = goog.string.html.toLowerCase (htmlText);
+            htmlLower = goog.string.html.toLowerCase(htmlText);
           } else {
-           htmlLower = htmlLower.substring(
+            htmlLower = htmlLower.substring(
                 htmlLower.length - htmlText.length);
           }
           var dataEnd = htmlLower.indexOf('</' + tagName);
@@ -448,7 +451,7 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
       } else if (m[3]) {  // Tag.
         openTag = !m[2];
         inTag = true;
-        tagName = goog.string.html.toLowerCase (m[3]);
+        tagName = goog.string.html.toLowerCase(m[3]);
         eflags = goog.string.html.HtmlParser.Elements.hasOwnProperty(tagName) ?
             goog.string.html.HtmlParser.Elements[tagName] : void 0;
       } else if (m[4]) {  // Text.
@@ -529,8 +532,8 @@ goog.string.html.HtmlParser.prototype.unescapeEntities_ = function(s) {
 goog.string.html.HtmlParser.prototype.normalizeRCData_ = function(rcdata) {
   return rcdata.
       replace(goog.string.html.HtmlParser.LOOSE_AMP_RE_, '&amp;$1').
-      replace(goog.string.html.HtmlParser.LT_RE_, '&lt;').
-      replace(goog.string.html.HtmlParser.GT_RE_, '&gt;');
+      replace(goog.string.html.HtmlParser.LT_RE, '&lt;').
+      replace(goog.string.html.HtmlParser.GT_RE, '&gt;');
 };
 
 
@@ -553,11 +556,12 @@ goog.string.html.toLowerCase = function(str) {
 };
 
 
+
 /**
  * An interface to the {@code goog.string.html.HtmlParser} visitor, that gets
  * called while the HTML is being parsed.
  *
- * @constructor
+ * @interface
  */
 goog.string.html.HtmlSaxHandler = function() {
 };
@@ -566,7 +570,7 @@ goog.string.html.HtmlSaxHandler = function() {
 /**
  * Handler called when the parser found a new tag.
  * @param {string} name The name of the tag that is starting.
- * @param {Array.<string>} attributes The attributes of the tag.
+ * @param {Array<string>} attributes The attributes of the tag.
  */
 goog.string.html.HtmlSaxHandler.prototype.startTag = goog.abstractMethod;
 

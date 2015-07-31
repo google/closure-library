@@ -44,6 +44,7 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   // to do that when the setting is done inside a function that's inlined.
   goog.userAgent.OPERA = goog.labs.userAgent.browser.isOpera();
   goog.userAgent.IE = goog.labs.userAgent.browser.isIE();
+  goog.userAgent.EDGE = goog.labs.userAgent.engine.isEdge();
   goog.userAgent.GECKO = goog.labs.userAgent.engine.isGecko();
   goog.userAgent.WEBKIT = goog.labs.userAgent.engine.isWebKit();
   goog.userAgent.MOBILE = goog.userAgent.isMobile_();
@@ -65,15 +66,20 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.platform.VERSION = goog.userAgent.platform.determineVersion_();
 
   // Update goog.userAgent.product
-  goog.userAgent.product.init_();
-  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
-  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
-  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.IE = goog.userAgent.IE;
-  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
-  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
-  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
-  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
+  goog.userAgent.product.ANDROID =
+      goog.labs.userAgent.browser.isAndroidBrowser();
+  goog.userAgent.product.CHROME =
+      goog.labs.userAgent.browser.isChrome();
+  goog.userAgent.product.FIREFOX =
+      goog.labs.userAgent.browser.isFirefox();
+  goog.userAgent.product.IE =
+      goog.labs.userAgent.browser.isIE();
+  goog.userAgent.product.IPAD = goog.labs.userAgent.platform.isIpad();
+  goog.userAgent.product.IPHONE = goog.userAgent.product.isIphoneOrIpod_();
+  goog.userAgent.product.OPERA = goog.labs.userAgent.browser.isOpera();
+  goog.userAgent.product.SAFARI = goog.userAgent.product.isSafariDesktop_();
+
+  // Still uses its own implementation.
   goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
 
   // goog.userAgent.keyboard
@@ -90,7 +96,8 @@ goog.userAgentTestUtil.UserAgents = {
   GECKO: 'GECKO',
   IE: 'IE',
   OPERA: 'OPERA',
-  WEBKIT: 'WEBKIT'
+  WEBKIT: 'WEBKIT',
+  EDGE: 'EDGE'
 };
 
 
@@ -105,6 +112,8 @@ goog.userAgentTestUtil.getUserAgentDetected = function(agent) {
       return goog.userAgent.GECKO;
     case goog.userAgentTestUtil.UserAgents.IE:
       return goog.userAgent.IE;
+    case goog.userAgentTestUtil.UserAgents.EDGE:
+      return goog.userAgent.EDGE;
     case goog.userAgentTestUtil.UserAgents.OPERA:
       return goog.userAgent.OPERA;
     case goog.userAgentTestUtil.UserAgents.WEBKIT:

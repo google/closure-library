@@ -942,7 +942,9 @@ function testStrictDoubleEncodingRemoval() {
   var url = goog.Uri.parse('dummy/a%25invalid');
   assertEquals('dummy/a%25invalid', url.toString());
   url = goog.Uri.parse('dummy/a%252fdouble-encoded-slash');
-  assertEquals('dummy/a%2fdouble-encoded-slash', url.toString());
+  assertEquals('dummy/a%252fdouble-encoded-slash', url.toString());
+  url = goog.Uri.parse('https://example.com/a%25%2f%25bcd%25%25');
+  assertEquals('https://example.com/a%25%2f%25bcd%25%25', url.toString());
 }
 
 

@@ -16,6 +16,7 @@ goog.provide('goog.tweak.TweakUiTest');
 goog.setTestOnly('goog.tweak.TweakUiTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.tweak');
@@ -92,7 +93,7 @@ function createUi(collapsible) {
 }
 
 function getAllEntryDivs() {
-  return goog.dom.getElementsByTagNameAndClass('div',
+  return goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
       goog.tweak.TweakUi.ENTRY_CSS_CLASS_);
 }
 
@@ -114,8 +115,8 @@ function getEntryDiv(entry) {
 
 function getEntryInput(entry) {
   var div = getEntryDiv(entry);
-  return div.getElementsByTagName('input')[0] ||
-      div.getElementsByTagName('select')[0];
+  return div.getElementsByTagName(goog.dom.TagName.INPUT)[0] ||
+      div.getElementsByTagName(goog.dom.TagName.SELECT)[0];
 }
 
 function testCreate() {
@@ -128,7 +129,8 @@ function testCreate() {
   assertTrue('checkbox should be checked 2',
       getEntryInput(boolEntry2).checked);
   // Enusre custom labels are being used.
-  var html = document.getElementsByTagName('button')[0].innerHTML;
+  var html = document.getElementsByTagName(
+      goog.dom.TagName.BUTTON)[0].innerHTML;
   assertTrue('Button label is wrong', html.indexOf('&lt;btn&gt;') > -1);
   html = getEntryDiv(numEnumEntry).innerHTML;
   assertTrue('Enum2 label is wrong', html.indexOf('second&amp;') > -1);
@@ -209,7 +211,7 @@ function testClickBooleanSetting() {
 
 function testToggleDescriptions() {
   createUi(false);
-  var toggleLink = root.getElementsByTagName('a')[0];
+  var toggleLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
   var heightBefore = root.offsetHeight;
   toggleLink.onclick();
   assertTrue('Expected div height to grow from toggle descriptions.',
@@ -264,7 +266,7 @@ function testCollapsibleIsLazy() {
   if (document.createEvent) {
     createUi(true);
     assertEquals('Expected no entry divs.', 0, getAllEntryDivs().length);
-    var showLink = root.getElementsByTagName('a')[0];
+    var showLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
     var event = document.createEvent('MouseEvents');
     event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false,
         false, false, false, 0, null);
