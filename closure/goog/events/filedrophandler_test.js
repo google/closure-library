@@ -251,17 +251,14 @@ function testPreventDropOutside() {
 
 function testEffectAllowedExceptionIsCaught() {
   var preventDefault = false;
-  var expectedfiles = [{ fileName: 'file1.jpg' }];
-  var dt = { types: ['Files'], files: expectedfiles };
+  var expectedfiles = [{fileName: 'file1.jpg'}];
+  var dt = {types: ['Files'], files: expectedfiles};
 
-  // We construct a mock DataTransfer object that define a setter will throw SCRIPT65535
-  // when attempt to set property effectAllowed to simulate IE Bug #811625.
-  // See more: https://github.com/google/closure-library/issues/485
-  Object.defineProperty(dt, 'effectAllowed', {
-    set: function(v) {
-      throw new Error("SCRIPT65535");
-    }
-  });
+  // We construct a mock DataTransfer object that define a setter will throw
+  // SCRIPT65535 when attempt to set property effectAllowed to simulate IE Bug
+  // #811625. See more: https://github.com/google/closure-library/issues/485.
+  Object.defineProperty(dt, 'effectAllowed',
+                        {set: function(v) { throw new Error("SCRIPT65535"); }});
 
   // Assert that default actions are prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({
