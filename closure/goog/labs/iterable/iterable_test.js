@@ -17,14 +17,13 @@
  */
 
 goog.module('goog.labs.iterableTest');
-
-goog.module.declareTestMethods();
-goog.setTestOnly();
+goog.setTestOnly('goog.labs.iterableTest');
 
 goog.require('goog.testing.jsunit');
 
 var iterable = goog.require('goog.labs.iterable');
 var recordFunction = goog.require('goog.testing.recordFunction');
+var testSuite = goog.require('goog.testing.testSuite');
 
 
 /**
@@ -67,80 +66,82 @@ function isSymbolDefined() {
   return !!goog.global['Symbol'];
 }
 
-exports.testCreateRangeIterable = function() {
-  // Do not run if Symbol does not exist in this browser.
-  if (!isSymbolDefined()) {
-    return;
-  }
+testSuite({
+  testCreateRangeIterable: function() {
+    // Do not run if Symbol does not exist in this browser.
+    if (!isSymbolDefined()) {
+      return;
+    }
 
-  var rangeIterator = createRangeIterator(0, 3);
+    var rangeIterator = createRangeIterator(0, 3);
 
-  for (var i = 0; i < 3; i++) {
-    assertObjectEquals({
-      value: i,
-      done: false
-    }, rangeIterator.next());
-  }
+    for (var i = 0; i < 3; i++) {
+      assertObjectEquals({
+        value: i,
+        done: false
+      }, rangeIterator.next());
+    }
 
-  for (var i = 0; i < 3; i++) {
-    assertObjectEquals({
-      value: undefined,
-      done: true
-    }, rangeIterator.next());
-  }
-};
+    for (var i = 0; i < 3; i++) {
+      assertObjectEquals({
+        value: undefined,
+        done: true
+      }, rangeIterator.next());
+    }
+  },
 
-exports.testForEach = function() {
-  // Do not run if Symbol does not exist in this browser.
-  if (!isSymbolDefined()) {
-    return;
-  }
+  testForEach: function() {
+    // Do not run if Symbol does not exist in this browser.
+    if (!isSymbolDefined()) {
+      return;
+    }
 
-  var range = createRangeIterable(0, 3);
+    var range = createRangeIterable(0, 3);
 
-  var callback = recordFunction();
-  iterable.forEach(callback, range, self);
+    var callback = recordFunction();
+    iterable.forEach(callback, range, self);
 
-  callback.assertCallCount(3);
+    callback.assertCallCount(3);
 
-  var calls = callback.getCalls();
-  for (var i = 0; i < calls.length; i++) {
-    var call = calls[i];
-    assertArrayEquals([i], call.getArguments());
-  }
-};
+    var calls = callback.getCalls();
+    for (var i = 0; i < calls.length; i++) {
+      var call = calls[i];
+      assertArrayEquals([i], call.getArguments());
+    }
+  },
 
-exports.testMap = function() {
-  // Do not run if Symbol does not exist in this browser.
-  if (!isSymbolDefined()) {
-    return;
-  }
+  testMap: function() {
+    // Do not run if Symbol does not exist in this browser.
+    if (!isSymbolDefined()) {
+      return;
+    }
 
-  var range = createRangeIterable(0, 3);
+    var range = createRangeIterable(0, 3);
 
-  function addTwo(i) {
-    return i + 2;
-  }
+    function addTwo(i) {
+      return i + 2;
+    }
 
-  var newIterable = iterable.map(addTwo, range);
-  var newIterator = iterable.getIterator(newIterable);
+    var newIterable = iterable.map(addTwo, range);
+    var newIterator = iterable.getIterator(newIterable);
 
-  var nextObj = newIterator.next();
-  assertEquals(2, nextObj.value);
-  assertFalse(nextObj.done);
+    var nextObj = newIterator.next();
+    assertEquals(2, nextObj.value);
+    assertFalse(nextObj.done);
 
-  nextObj = newIterator.next();
-  assertEquals(3, nextObj.value);
-  assertFalse(nextObj.done);
-
-  nextObj = newIterator.next();
-  assertEquals(4, nextObj.value);
-  assertFalse(nextObj.done);
-
-  // Check that the iterator repeatedly signals done.
-  for (var i = 0; i < 3; i++) {
     nextObj = newIterator.next();
-    assertUndefined(nextObj.value);
-    assertTrue(nextObj.done);
+    assertEquals(3, nextObj.value);
+    assertFalse(nextObj.done);
+
+    nextObj = newIterator.next();
+    assertEquals(4, nextObj.value);
+    assertFalse(nextObj.done);
+
+    // Check that the iterator repeatedly signals done.
+    for (var i = 0; i < 3; i++) {
+      nextObj = newIterator.next();
+      assertUndefined(nextObj.value);
+      assertTrue(nextObj.done);
+    }
   }
-};
+});

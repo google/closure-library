@@ -18,7 +18,6 @@
  */
 
 goog.module('goog.baseModuleTest');
-goog.module.declareTestMethods();
 goog.setTestOnly('goog.baseModuleTest');
 
 
@@ -26,6 +25,7 @@ goog.setTestOnly('goog.baseModuleTest');
 var Timer = goog.require('goog.Timer');
 var Replacer = goog.require('goog.testing.PropertyReplacer');
 var jsunit = goog.require('goog.testing.jsunit');
+var testSuite = goog.require('goog.testing.testSuite');
 
 var testModule = goog.require('goog.test_module');
 
@@ -41,7 +41,7 @@ function assertModuleFails(namespace) {
       goog.partial(goog.module, namespace));
 }
 
-exports = {
+testSuite({
   teardown: function() {
     stubs.reset();
   },
@@ -53,9 +53,9 @@ exports = {
   },
 
   testModuleScoping: function() {
-    // assert test functions are exported to the global namespace
+    // assert test functions are not exported to the global namespace
     assertNotUndefined('module failed: testModule', testModule);
-    assertTrue('module failed: testModule',
+    assertFalse('module failed: testModule',
         goog.isFunction(goog.global.testModuleScoping));
   },
 
@@ -105,9 +105,9 @@ exports = {
     // The test module is available under its alias
     assertNotUndefined('testModule is loaded', testModule);
     assertTrue('module failed: testModule', goog.isFunction(testModule));
-  }
-};
+  },
 
-exports.testThisInModule = goog.bind(function() {
-  assertEquals(this, goog.global);
-}, this);
+  testThisInModule: goog.bind(function() {
+    assertEquals(this, goog.global);
+  }, this)
+});
