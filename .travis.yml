@@ -5,10 +5,19 @@
 
 install:
   - cd ..
-  - git clone https://github.com/google/closure-compiler.git
+  - git clone --depth 1 https://github.com/google/closure-compiler.git
   - cd closure-compiler
   - ant jar
   - cd ../closure-library
+  - sudo pip install svn+http://closure-linter.googlecode.com/svn/trunk#egg=gjslint
 
 script:
   - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js_output_file=$(mktemp)
+
+after_script:
+  - gjslint --strict --jslint_error=all --closurized_namespaces=goog --limited_doc_files='_test.js,datetimepatternsext.js' -r closure/goog
+
+env:
+  global:
+    - secure: chHRUDtNv3oSmOwrEu0SH/ML4SygVO5M0qwu7oUXj2CcHECTCbKuIf2R2jjyZqlJKn/efw+sdKhf0UTXXfmDIZuA53M+arGdrLGNewbeNVha1MY0hDVPOJKWo7O/miZj0hhFIO/qNhrvD/1uWD0y+jcXcWlqHOPWkwO3fITgzQY=
+    - secure: JdK4C/jp4YdMtVH80ooXhiWn7VARijT0R06qC+D8N1sLTMqf+IA1n5UGAVNTbyGQRWdvscGESyPPzQEGRldiWzCXVytxw1MfwNabnOG48GFKWeLuzGq/j7vDnJIFRNqCx4AY1VtDRR1Cqu0OegD5p2bfSN+7uOtNYsvuuBXKKyU=
