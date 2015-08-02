@@ -1396,6 +1396,7 @@ goog.loadFileSync_ = function(src) {
   if (goog.global.CLOSURE_LOAD_FILE_SYNC) {
     return goog.global.CLOSURE_LOAD_FILE_SYNC(src);
   } else {
+    /** @type {XMLHttpRequest} */
     var xhr = new goog.global['XMLHttpRequest']();
     xhr.open('get', src, false);
     xhr.send();
