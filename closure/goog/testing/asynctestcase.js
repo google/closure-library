@@ -116,7 +116,7 @@ goog.require('goog.testing.asserts');
 
 
 /**
- * A test case that is capable of running tests the contain asynchronous logic.
+ * A test case that is capable of running tests that contain asynchronous logic.
  * @param {string=} opt_name A descriptive name for the test case.
  * @extends {goog.testing.TestCase}
  * @constructor
