@@ -33,24 +33,25 @@ goog.require('goog.userAgent');
  * http://protobuf.googlecode.com/svn/trunk/python/stubout.py
  *
  * Example usage:
- * <pre>var stubs = new goog.testing.PropertyReplacer();
  *
- * function setUp() {
- *   // Mock functions used in all test cases.
- *   stubs.set(Math, 'random', function() {
- *     return 4;  // Chosen by fair dice roll. Guaranteed to be random.
- *   });
- * }
+ *     var stubs = new goog.testing.PropertyReplacer();
  *
- * function tearDown() {
- *   stubs.reset();
- * }
+ *     function setUp() {
+ *       // Mock functions used in all test cases.
+ *       stubs.set(Math, 'random', function() {
+ *         return 4;  // Chosen by fair dice roll. Guaranteed to be random.
+ *       });
+ *     }
  *
- * function testThreeDice() {
- *   // Mock a constant used only in this test case.
- *   stubs.set(goog.global, 'DICE_COUNT', 3);
- *   assertEquals(12, rollAllDice());
- * }</pre>
+ *     function tearDown() {
+ *       stubs.reset();
+ *     }
+ *
+ *     function testThreeDice() {
+ *       // Mock a constant used only in this test case.
+ *       stubs.set(goog.global, 'DICE_COUNT', 3);
+ *       assertEquals(12, rollAllDice());
+ *     }
  *
  * Constraints on altered objects:
  * <ul>
