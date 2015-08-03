@@ -11,4 +11,4 @@ install:
   - cd ../closure-library
 
 script:
-  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js_output_file=$(mktemp)
+  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --warning_level VERBOSE --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js_output_file=$(mktemp)
