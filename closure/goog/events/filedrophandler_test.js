@@ -21,6 +21,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FileDropHandler');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 var textarea;
 var doc;
@@ -250,6 +251,11 @@ function testPreventDropOutside() {
 }
 
 function testEffectAllowedExceptionIsCaught() {
+  // This bug was only affecting IE10+.
+  if (!goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(10)) {
+    return;
+  }
+
   var preventDefault = false;
   var expectedfiles = [{fileName: 'file1.jpg'}];
   var dt = {types: ['Files'], files: expectedfiles};
@@ -258,7 +264,7 @@ function testEffectAllowedExceptionIsCaught() {
   // SCRIPT65535 when attempt to set property effectAllowed to simulate IE Bug
   // #811625. See more: https://github.com/google/closure-library/issues/485.
   Object.defineProperty(dt, 'effectAllowed',
-                        {set: function(v) { throw new Error("SCRIPT65535"); }});
+                        {set: function(v) { throw new Error('SCRIPT65535'); }});
 
   // Assert that default actions are prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({

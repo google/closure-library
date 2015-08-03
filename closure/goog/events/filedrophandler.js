@@ -202,7 +202,7 @@ goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
     // See more: https://github.com/google/closure-library/issues/485.
     try {
       dt.effectAllowed = 'all';
-    } catch (e) {
+    } catch (err) {
     }
     dt.dropEffect = 'copy';
   }
