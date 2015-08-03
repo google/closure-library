@@ -201,8 +201,8 @@ function testFencepostErrors() {
 
 /** Test one really large string using SHA512 */
 function testHashing512Large() {
-  // This test tends to time out on IE7.
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8')) {
+  // This test tends to time out on IE7 and IE8. See b/22873770.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('9')) {
     var hasher = new goog.crypt.Sha512();
     hasher.update(goog.array.repeat(0, 1000000));
     var digest = hasher.digest();
