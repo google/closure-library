@@ -413,3 +413,17 @@ function testRunTests_byIndex() {
   assertEquals(2, result.successCount);
   assertEquals(0, result.errors.length);
 }
+
+function testMaybeFailTestEarly() {
+  var message = 'Error in setUpPage().';
+  var testCase = new goog.testing.TestCase();
+  testCase.setUpPage = function() {
+    throw Error(message);
+  };
+  testCase.addNewTest('test', ok);
+  testCase.runTests();
+  assertFalse(testCase.isSuccess());
+  var errors = testCase.getResult().errors;
+  assertEquals(1, errors.length);
+  assertEquals(message, errors[0].message);
+}
