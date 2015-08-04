@@ -15,6 +15,7 @@
 goog.provide('goog.editor.plugins.BasicTextFormatterTest');
 goog.setTestOnly('goog.editor.plugins.BasicTextFormatterTest');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
@@ -248,6 +249,23 @@ function testSwitchListType() {
   tearDownListAndBlockquoteTests();
 }
 
+function testIsSilentCommand() {
+  var commands =
+      goog.object.getValues(goog.editor.plugins.BasicTextFormatter.COMMAND);
+  var silentCommands = [
+    goog.editor.plugins.BasicTextFormatter.COMMAND.CREATE_LINK
+  ];
+
+  for (var i = 0; i < commands.length; i += 1) {
+    var command = commands[i];
+    var shouldBeSilent = goog.array.contains(silentCommands, command);
+    var isSilent =
+        goog.editor.plugins.BasicTextFormatter.prototype.isSilentCommand.call(
+            null, command);
+    assertEquals(shouldBeSilent, isSilent);
+  }
+}
+
 function setUpSubSuperTests() {
   ROOT.innerHTML = '12345';
   HELPER = new goog.testing.editor.TestHelper(ROOT);
@@ -428,6 +446,27 @@ function testUnfocusedLink() {
 
   FORMATTER.execCommandInternal(goog.editor.Command.LINK);
   HELPER.assertHtmlMatches('12345');
+
+  FIELDMOCK.$verify();
+  tearDownLinkTests();
+}
+
+function testCreateLink() {
+  var text = 'some text here';
+  var url = 'http://google.com';
+
+  ROOT.innerHTML = text;
+  HELPER = new goog.testing.editor.TestHelper(ROOT);
+  HELPER.setUpEditableElement();
+  FIELDMOCK.isSelectionEditable().$anyTimes().$returns(true);
+  FIELDMOCK.getElement().$anyTimes().$returns(ROOT);
+  FIELDMOCK.$replay();
+
+  HELPER.select(text, 0, text, text.length);
+  FORMATTER.execCommandInternal(
+      goog.editor.plugins.BasicTextFormatter.COMMAND.CREATE_LINK,
+      FIELDMOCK.getRange(), url);
+  HELPER.assertHtmlMatches('<a href="' + url + '">' + text + '</a>');
 
   FIELDMOCK.$verify();
   tearDownLinkTests();
