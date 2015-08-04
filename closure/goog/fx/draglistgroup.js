@@ -810,7 +810,7 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
         goog.asserts.assert(this.currDragItem_),
         this.currDragItemClasses_ || []);
   } else if (this.currDragItem_) {
-    this.currDragItem_.style.visibility = 'visible';
+    this.currDragItem_.style.visibility = '';
   }
 
   // Remove hover classes (if any) from all drag lists.
