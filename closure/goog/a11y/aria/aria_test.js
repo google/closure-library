@@ -139,6 +139,8 @@ function testGetStateString() {
       'test_label', aria.getState(someDiv, State.LABEL));
   assertEquals('The someSpan\'s enum value should be "copy move".',
       'test_label', aria.getStateString(someSpan, State.LABEL));
+  someDiv.setAttribute('aria-label', '');
+  assertEquals(null, aria.getStateString(someDiv, State.LABEL));
   aria.setState(someDiv, State.MULTILINE, true);
   var thrown = false;
   try {
@@ -266,4 +268,11 @@ function testGetSetLabel() {
   aria.setLabel(someDiv, 'somelabel');
   assertEquals('someDiv\'s label should be "somelabel"', 'somelabel',
       aria.getLabel(someDiv));
+}
+
+function testHasState() {
+  aria.setState(someDiv, State.EXPANDED, false);
+  assertTrue(aria.hasState(someDiv, State.EXPANDED));
+  aria.removeState(someDiv, State.EXPANDED);
+  assertFalse(aria.hasState(someDiv, State.EXPANDED));
 }
