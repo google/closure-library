@@ -172,7 +172,8 @@ goog.math.Box.prototype.expandToInclude = function(box) {
 
 /**
  * Expand this box to include the coordinate.
- * @param {goog.math.Coordinate} coord The coordinate to be included inside the box.
+ * @param {!goog.math.Coordinate} coord The coordinate to be included
+ * inside the box.
  */
 goog.math.Box.prototype.expandToIncludeCoordinate = function(coord) {
   this.top = Math.min(this.top, coord.y);
