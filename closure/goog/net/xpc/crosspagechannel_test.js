@@ -298,6 +298,13 @@ function testLifeCycle_v2_v1_onesided_rev() {
 
 
 function testLifeCycle_v2_v2() {
+  // Test flakes on IE 10+ and Chrome: see b/22873770 and b/18595666.
+  if ((goog.labs.userAgent.browser.isIE() &&
+       goog.labs.userAgent.browser.isVersionOrHigher(10)) ||
+      goog.labs.userAgent.browser.isChrome()) {
+    return;
+  }
+
   checkLifeCycle(
       false /* oneSidedHandshake */,
       2 /* innerProtocolVersion */,
@@ -531,6 +538,12 @@ function testUnescapeServiceName() {
  * Tests the case where the channel is disposed before it is fully connected.
  */
 function testDisposeBeforeConnect() {
+  // Test flakes on IE: see b/22873770 and b/18595666.
+  if (goog.labs.userAgent.browser.isIE() &&
+      goog.labs.userAgent.browser.isVersionOrHigher(9)) {
+    return;
+  }
+
   asyncTestCase.waitForAsync('Checking disposal before connection.');
   driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
       2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
