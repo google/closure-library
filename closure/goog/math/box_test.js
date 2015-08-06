@@ -242,6 +242,25 @@ function testExpandToInclude() {
   assertEquals(100, box.bottom);
 }
 
+function testExpandToIncludeCoordinate() {
+  var box = new goog.math.Box(10, 50, 50, 10);
+  box.expandToIncludeCoordinate(new goog.math.Coordinate(0, 0));
+  assertEquals(0, box.left);
+  assertEquals(0, box.top);
+  assertEquals(50, box.right);
+  assertEquals(50, box.bottom);
+  box.expandToIncludeCoordinate(new goog.math.Coordinate(100, 0));
+  assertEquals(0, box.left);
+  assertEquals(0, box.top);
+  assertEquals(100, box.right);
+  assertEquals(50, box.bottom);
+  box.expandToIncludeCoordinate(new goog.math.Coordinate(0, 100));
+  assertEquals(0, box.left);
+  assertEquals(0, box.top);
+  assertEquals(100, box.right);
+  assertEquals(100, box.bottom);
+}
+
 function testGetWidth() {
   var box = new goog.math.Box(10, 50, 30, 25);
   assertEquals(25, box.getWidth());
