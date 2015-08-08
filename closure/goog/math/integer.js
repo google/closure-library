@@ -569,7 +569,7 @@ goog.math.Integer.carry16_ = function(bits, index) {
 
 /**
  * Returns this Integer divided by the given one.
- * @param {goog.math.Integer} other Th Integer to divide this by.
+ * @param {goog.math.Integer} other The Integer to divide this by.
  * @return {!goog.math.Integer} This value divided by the given one.
  */
 goog.math.Integer.prototype.divide = function(other) {
