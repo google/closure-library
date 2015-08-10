@@ -41,14 +41,6 @@ var COMPILED = false;
  */
 var goog = goog || {};
 
-/**
- * Forward declare type information. Used to assign types to goog.global
- * referenced object that would otherwise result in unknown type references
- * and thus block property disambiguation.
- */
-goog.forwardDeclare('Document');
-goog.forwardDeclare('XMLHttpRequest');
-
 
 /**
  * Reference to the global context.  In most cases this will be 'window'.
@@ -505,6 +497,14 @@ goog.setTestOnly = function(opt_message) {
  *     "goog.package.part".
  */
 goog.forwardDeclare = function(name) {};
+
+/**
+ * Forward declare type information. Used to assign types to goog.global
+ * referenced object that would otherwise result in unknown type references
+ * and thus block property disambiguation.
+ */
+goog.forwardDeclare('Document');
+goog.forwardDeclare('XMLHttpRequest');
 
 
 if (!COMPILED) {
