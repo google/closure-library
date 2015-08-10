@@ -566,6 +566,60 @@ goog.math.Integer.carry16_ = function(bits, index) {
   }
 };
 
+/**
+ * Returns this Integer divided by the given one.
+ * NOTE: Both this and the given Integer MUST be positive.
+ * @param {goog.math.Integer} other The Integer to divide this by.
+ * @return {!goog.math.Integer} This value divided by the given one.
+ * @private
+ */
+goog.math.Integer.prototype.slowDivide_ = function(other) {
+  // This could be a lot better algorithmically, it's just a first an
+  // initial solution to the problem of infinite loops when dividing
+  // large numbers
+
+  // The algorithm builds up the result in binary, starting with the
+  // highest bit.
+  //
+  // Invariants:
+  // twoPower = 2^n
+  // multiple = other * twoPower
+  var twoPower = goog.math.Integer.ONE;
+  var multiple = other;
+
+  // First we have to figure out what the highest bit of the result
+  // is, so we increase `twoPower` and `multiple` until `multiple`
+  // exceeds `this`.
+  while (multiple.lessThanOrEqual(this)) {
+    twoPower = twoPower.shiftLeft(1);
+    multiple = multiple.shiftLeft(1);
+  }
+
+  // Rewind by one power of two, giving us the highest bit of the
+  // result. Create two new variables with the invariant:
+  // total = other * res
+  var res = twoPower.shiftRight(1);
+  var total = multiple.shiftRight(1);
+
+  // Now we starting decreasing `multiple` and `twoPower` to find the
+  // rest of the bits of the result.
+  var total2;
+  multiple = multiple.shiftRight(2);
+  twoPower = twoPower.shiftRight(2);
+  while (!multiple.isZero()) {
+    // whenever we can add `multiple` to the total and not exceed
+    // `this`, that means we've found a 1 bit. Else we've found a 0
+    // and don't need to add to the result.
+    total2 = total.add(multiple);
+    if (total2.lessThanOrEqual(this)) {
+      res = res.add(twoPower);
+      total = total2;
+    }
+    multiple = multiple.shiftRight(1);
+    twoPower = twoPower.shiftRight(1);
+  }
+  return res;
+}
 
 /**
  * Returns this Integer divided by the given one.
@@ -587,6 +641,13 @@ goog.math.Integer.prototype.divide = function(other) {
     }
   } else if (other.isNegative()) {
     return this.divide(other.negate()).negate();
+  }
+
+  // Have to degrade to slowDivide for Very Large Numbers, because
+  // they're out of range for the floating-point approximation
+  // technique used below.
+  if(this.bits_.length > 30) {
+    return this.slowDivide_(other);
   }
 
   // Repeat the following until the remainder is less than other:  find a
