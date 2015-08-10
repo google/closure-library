@@ -41,6 +41,14 @@ var COMPILED = false;
  */
 var goog = goog || {};
 
+/**
+ * Forward declare type information. Used to assign types to goog.global
+ * referenced object that would otherwise result in unknown type references
+ * and thus block property disambiguation.
+ */
+goog.forwardDeclare('Document');
+goog.forwardDeclare('XMLHttpRequest');
+
 
 /**
  * Reference to the global context.  In most cases this will be 'window'.
@@ -853,6 +861,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.inHtmlDocument_ = function() {
+    /** @type {Document} */
     var doc = goog.global.document;
     return typeof doc != 'undefined' &&
            'write' in doc;  // XULDocument misses write.
@@ -870,6 +879,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     } else if (!goog.inHtmlDocument_()) {
       return;
     }
+    /** @type {Document} */
     var doc = goog.global.document;
     var scripts = doc.getElementsByTagName('SCRIPT');
     // Search backwards since the current script is in almost all cases the one
@@ -1159,6 +1169,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.appendScriptSrcNode_ = function(src) {
+    /** @type {Document} */
     var doc = goog.global.document;
     var scriptEl = doc.createElement('script');
     scriptEl.type = 'text/javascript';
@@ -1180,6 +1191,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    */
   goog.writeScriptTag_ = function(src, opt_sourceText) {
     if (goog.inHtmlDocument_()) {
+      /** @type {Document} */
       var doc = goog.global.document;
 
       // If the user tries to require a new symbol after document load,
@@ -1957,6 +1969,7 @@ goog.globalEval = function(script) {
     if (goog.evalWorksForGlobals_) {
       goog.global.eval(script);
     } else {
+      /** @type {Document} */
       var doc = goog.global.document;
       var scriptElt = doc.createElement('SCRIPT');
       scriptElt.type = 'text/javascript';
