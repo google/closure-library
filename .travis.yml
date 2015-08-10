@@ -6,11 +6,8 @@
 sudo: false
 
 install:
-  - cd ..
-  - git clone https://github.com/google/closure-compiler.git
-  - cd closure-compiler
-  - ant jar
-  - cd ../closure-library
+  - ./scripts/ci/install_closure_deps.sh
 
 script:
   - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --warning_level VERBOSE --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js='!**tester.js' --js='!**promise/testsuiteadapter.js' --js='!**osapi/osapi.js' --js='!**svgpan/svgpan.js' --jscomp_off=deprecated   --js_output_file=$(mktemp)
+  - ./scripts/ci/lint_pull_request.sh
