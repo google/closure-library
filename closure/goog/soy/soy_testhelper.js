@@ -41,6 +41,7 @@ goog.require('goog.userAgent');
  * @param {string} content The text.
  * @param {goog.soy.data.SanitizedContentKind} kind The kind of safe content.
  * @extends {goog.soy.data.SanitizedContent}
+ * @suppress {missingProvide}
  */
 function SanitizedContentSubclass(content, kind) {
   // IMPORTANT! No superclass chaining to avoid exception being thrown.
