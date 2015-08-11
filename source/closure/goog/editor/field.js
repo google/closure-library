@@ -1293,6 +1293,11 @@ goog.editor.Field.prototype.getInjectableContents = function(contents, styles) {
  * @private
  */
 goog.editor.Field.prototype.handleKeyDown_ = function(e) {
+  // Mac only fires Cmd+A for keydown, not keyup: b/22407515.
+  if (goog.userAgent.MAC && e.keyCode == goog.events.KeyCodes.A) {
+    this.maybeStartSelectionChangeTimer_(e);
+  }
+
   if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
     if (!this.handleBeforeChangeKeyEvent_(e)) {
       return;
@@ -1332,7 +1337,7 @@ goog.editor.Field.prototype.handleKeyPress_ = function(e) {
 
 /**
  * Handles keyup on the field.
- * @param {goog.events.BrowserEvent} e The browser event.
+ * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
  */
 goog.editor.Field.prototype.handleKeyUp_ = function(e) {
@@ -1345,7 +1350,18 @@ goog.editor.Field.prototype.handleKeyUp_ = function(e) {
   }
 
   this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.KEYUP, e);
+  this.maybeStartSelectionChangeTimer_(e);
+};
 
+
+/**
+ * Fires {@code BEFORESELECTIONCHANGE} and starts the selection change timer
+ * (which will fire {@code SELECTIONCHANGE}) if the given event is a key event
+ * that causes a selection change.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @private
+ */
+goog.editor.Field.prototype.maybeStartSelectionChangeTimer_ = function(e) {
   if (this.isEventStopped(goog.editor.Field.EventType.SELECTIONCHANGE)) {
     return;
   }

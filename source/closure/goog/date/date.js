@@ -765,10 +765,15 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
     this.maybeFixDst_(opt_year.getDate());
   } else {
     this.date = new Date(goog.now());
+    var expectedDate = this.date.getDate();
     this.date.setHours(0);
     this.date.setMinutes(0);
     this.date.setSeconds(0);
     this.date.setMilliseconds(0);
+    // In some time zones there is no "0" hour on certain days during DST.
+    // Adjust here, if necessary. See:
+    // https://github.com/google/closure-library/issues/34.
+    this.maybeFixDst_(expectedDate);
   }
 };
 

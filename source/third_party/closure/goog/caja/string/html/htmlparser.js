@@ -212,9 +212,9 @@ goog.string.html.HtmlParser.Elements = {
 /**
  * Regular expression that matches &s.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.AMP_RE_ = /&/g;
+goog.string.html.HtmlParser.AMP_RE = /&/g;
 
 
 /**
@@ -229,33 +229,33 @@ goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
 /**
  * Regular expression that matches <.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.LT_RE_ = /</g;
+goog.string.html.HtmlParser.LT_RE = /</g;
 
 
 /**
  * Regular expression that matches >.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.GT_RE_ = />/g;
+goog.string.html.HtmlParser.GT_RE = />/g;
 
 
 /**
  * Regular expression that matches ".
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
+goog.string.html.HtmlParser.QUOTE_RE = /\"/g;
 
 
 /**
  * Regular expression that matches =.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
+goog.string.html.HtmlParser.EQUALS_RE = /=/g;
 
 
 /**
@@ -532,8 +532,8 @@ goog.string.html.HtmlParser.prototype.unescapeEntities_ = function(s) {
 goog.string.html.HtmlParser.prototype.normalizeRCData_ = function(rcdata) {
   return rcdata.
       replace(goog.string.html.HtmlParser.LOOSE_AMP_RE_, '&amp;$1').
-      replace(goog.string.html.HtmlParser.LT_RE_, '&lt;').
-      replace(goog.string.html.HtmlParser.GT_RE_, '&gt;');
+      replace(goog.string.html.HtmlParser.LT_RE, '&lt;').
+      replace(goog.string.html.HtmlParser.GT_RE, '&gt;');
 };
 
 

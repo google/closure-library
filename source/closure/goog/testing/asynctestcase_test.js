@@ -50,3 +50,19 @@ function testControlBreakingExceptionThrown() {
     assertEquals(errorMessage2, e.message);
   }
 }
+
+function testMaybeFailTestEarly() {
+  var message = 'Error in setUpPage().';
+  var asyncTestCase = new goog.testing.AsyncTestCase();
+  asyncTestCase.setUpPage = function() {
+    throw Error(message);
+  };
+  asyncTestCase.addNewTest('test', function() { assertTrue(true); });
+  asyncTestCase.runTests();
+  window.setTimeout(function() {
+    assertFalse(asyncTestCase.isSuccess());
+    var errors = asyncTestCase.getResult().errors;
+    assertEquals(1, errors.length);
+    assertEquals(message, errors[0].message);
+  }, asyncTestCase.stepTimeout * 2);
+}

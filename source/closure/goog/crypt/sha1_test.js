@@ -52,8 +52,8 @@ function testHashing() {
   assertEquals('84983e441c3bd26ebaae4aa1f95129e5e54670f1',
                goog.crypt.byteArrayToHex(sha1.digest()));
 
-  // The following test might cause timeouts on IE7.
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8')) {
+  // The following test might cause timeouts on IE7 and IE8. See b/22873770.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('9')) {
     // Test long message.
     var thousandAs = [];
     for (var i = 0; i < 1000; ++i) {

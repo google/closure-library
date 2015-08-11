@@ -826,6 +826,7 @@ goog.math.Long.prototype.shiftLeft = function(numBits) {
 
 /**
  * Returns this Long with bits shifted to the right by the given amount.
+ * The new leading bits match the current sign bit.
  * @param {number} numBits The number of bits by which to shift.
  * @return {!goog.math.Long} This shifted to the right by the given amount.
  */

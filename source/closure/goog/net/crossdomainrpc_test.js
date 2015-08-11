@@ -79,8 +79,8 @@ function testErrorRequest() {
         'http://hoodjimcwaadji.google.com/index.html',
         resolve, 'POST', {xyz: '01234567891123456789'});
     setTimeout(function() {
-      reject('CrossDomainRpc.send did not complete within 2000ms');
-    }, 2000);
+      reject('CrossDomainRpc.send did not complete within 4000ms');
+    }, 4000);
   }).then(function(e) {
     if (e.target.status < 300) {
       fail('should have failed requesting a non-existent URI');

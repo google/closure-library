@@ -1,5 +1,5 @@
 // Copyright 2006-2008, The Google Caja project.
-// Modifications Copyright 2009 The Closure Library Authors. All Rights Reserved.
+// Modifications Copyright 2009 The Closure Library Authors.
 // All Rights Reserved
 
 /**
@@ -53,8 +53,6 @@ goog.provide('goog.string.html.htmlSanitize');
 
 goog.require('goog.string.StringBuffer');
 goog.require('goog.string.html.HtmlParser');
-goog.require('goog.string.html.HtmlParser.EFlags');
-goog.require('goog.string.html.HtmlParser.Elements');
 goog.require('goog.string.html.HtmlSaxHandler');
 
 
@@ -79,15 +77,16 @@ goog.string.html.htmlSanitize = function(
 };
 
 
+
 /**
  * An implementation of the {@code goog.string.HtmlSaxHandler} interface that
  * will take each of the html tags and sanitize it.
  *
  * @param {goog.string.StringBuffer} stringBuffer A string buffer, used to
  *     output the html as we sanitize it.
- * @param {?function(string):string} opt_urlPolicy An optional function to be
+ * @param {?function(string):string=} opt_urlPolicy An optional function to be
  *     applied in URLs.
- * @param {?function(string):string} opt_nmTokenPolicy An optional function to
+ * @param {?function(string):string=} opt_nmTokenPolicy An optional function to
  *     be applied in names.
  * @constructor
  * @implements {goog.string.html.HtmlSaxHandler}
@@ -122,14 +121,14 @@ goog.string.html.HtmlSanitizer = function(
    * @type {?function(string):string}
    * @private
    */
-  this.urlPolicy_ = opt_urlPolicy;
+  this.urlPolicy_ = opt_urlPolicy || null;
 
   /**
    * A function to be applied to names fround on the parsing process.
    * @type {?function(string):string}
    * @private
    */
-  this.nmTokenPolicy_ = opt_nmTokenPolicy;
+  this.nmTokenPolicy_ = opt_nmTokenPolicy || null;
 };
 
 
@@ -531,11 +530,11 @@ goog.string.html.HtmlSanitizer.prototype.endDoc = function() {
  */
 goog.string.html.HtmlSanitizer.prototype.escapeAttrib_ = function(s) {
   // Escaping '=' defangs many UTF-7 and SGML short-tag attacks.
-  return s.replace(goog.string.html.HtmlParser.AMP_RE_, '&amp;').
-      replace(goog.string.html.HtmlParser.LT_RE_, '&lt;').
-      replace(goog.string.html.HtmlParser.GT_RE_, '&gt;').
-      replace(goog.string.html.HtmlParser.QUOTE_RE_, '&#34;').
-      replace(goog.string.html.HtmlParser.EQUALS_RE_, '&#61;');
+  return s.replace(goog.string.html.HtmlParser.AMP_RE, '&amp;').
+      replace(goog.string.html.HtmlParser.LT_RE, '&lt;').
+      replace(goog.string.html.HtmlParser.GT_RE, '&gt;').
+      replace(goog.string.html.HtmlParser.QUOTE_RE, '&#34;').
+      replace(goog.string.html.HtmlParser.EQUALS_RE, '&#61;');
 };
 
 
@@ -573,7 +572,7 @@ goog.string.html.HtmlSanitizer.prototype.sanitizeAttributes_ =
         case goog.string.html.HtmlSanitizer.AttributeType.LOCAL_NAME:
         case goog.string.html.HtmlSanitizer.AttributeType.CLASSES:
           value = this.nmTokenPolicy_ ?
-            this.nmTokenPolicy_(/** @type {string} */ (value)) : value;
+              this.nmTokenPolicy_(/** @type {string} */ (value)) : value;
           break;
         case goog.string.html.HtmlSanitizer.AttributeType.URI:
           value = this.urlPolicy_ && this.urlPolicy_(

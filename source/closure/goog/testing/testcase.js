@@ -1093,8 +1093,8 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
 goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
   if (this.exceptionBeforeTest) {
     // We just use the first error to report an error on a failed test.
-    this.curTest_.name = 'setUpPage for ' + this.curTest_.name;
-    this.doError(this.curTest_, this.exceptionBeforeTest);
+    testCase.name = 'setUpPage for ' + testCase.name;
+    this.doError(testCase, this.exceptionBeforeTest);
     return true;
   }
   return false;

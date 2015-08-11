@@ -17,6 +17,7 @@ goog.setTestOnly('goog.fx.DragScrollSupportTest');
 
 goog.require('goog.fx.DragScrollSupport');
 goog.require('goog.math.Coordinate');
+goog.require('goog.math.Rect');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
@@ -312,4 +313,14 @@ function testSetHorizontalScrolling() {
       scrollLeft > hContainerDiv.scrollLeft);
 
   dsc.dispose();
+}
+
+function testConstrainBoundsWithMargin() {
+  var rect = goog.fx.DragScrollSupport.prototype.constrainBounds_.call(
+      {margin_: 25}, new goog.math.Rect(0, 0, 100, 100));
+  assertEquals(25, rect.left);
+  assertEquals(25, rect.top);
+  assertEquals(25, rect.left);
+  assertEquals(50, rect.width);
+  assertEquals(50, rect.height);
 }

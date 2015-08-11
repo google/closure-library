@@ -120,8 +120,13 @@ def GetFileContents(path):
     IOError: An error occurred opening or reading the file.
 
   """
-  fileobj = open(path)
+  fileobj = None
   try:
+    fileobj = open(path)
     return fileobj.read()
+  except IOError as error:
+    raise IOError('An error occurred opening or reading the file: %s. %s'
+                  % (path, error))
   finally:
-    fileobj.close()
+    if fileobj is not None:
+      fileobj.close()

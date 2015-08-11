@@ -188,8 +188,8 @@ goog.fx.DragScrollSupport.prototype.constrainBounds_ = function(bounds) {
 
     var quarterWidth = bounds.width * 0.25;
     var xMargin = Math.min(margin, quarterWidth);
-    bounds.top += xMargin;
-    bounds.height -= 2 * xMargin;
+    bounds.left += xMargin;
+    bounds.width -= 2 * xMargin;
   }
   return bounds;
 };

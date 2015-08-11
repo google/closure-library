@@ -947,6 +947,22 @@ function testRaceWithNonThenable() {
 }
 
 
+function testRaceWithFalseyNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = 0;
+  var c = fulfillSoon('c', 10);
+  var d = fulfillSoon('d', 20);
+
+  return goog.Promise.race([a, b, c, d]).then(function(value) {
+    assertEquals(0, value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
 function testRaceWithFulfilledBeforeNonThenable() {
   var a = fulfillSoon('a', 40);
   var b = goog.Promise.resolve('b');
@@ -1036,9 +1052,11 @@ function testAllWithFulfill() {
   var b = fulfillSoon('b', 30);
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
+  // Test a falsey value.
+  var z = fulfillSoon(0, 30);
 
-  return goog.Promise.all([a, b, c, d]).then(function(value) {
-    assertArrayEquals(['a', 'b', 'c', 'd'], value);
+  return goog.Promise.all([a, b, c, d, z]).then(function(value) {
+    assertArrayEquals(['a', 'b', 'c', 'd', 0], value);
   });
 }
 
@@ -1077,9 +1095,11 @@ function testAllWithNonThenable() {
   var b = 'b';
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
+  // Test a falsey value.
+  var z = 0;
 
-  return goog.Promise.all([a, b, c, d]).then(function(value) {
-    assertArrayEquals(['a', 'b', 'c', 'd'], value);
+  return goog.Promise.all([a, b, c, d, z]).then(function(value) {
+    assertArrayEquals(['a', 'b', 'c', 'd', 0], value);
   });
 }
 
@@ -1116,8 +1136,10 @@ function testAllSettledWithFulfillAndReject() {
   var f = fulfillBuiltInSoon('f', 30);
   var g = rejectThenableSoon('rejected-g', 10);
   var h = createThrowingThenable('rejected-h');
+  // Test a falsey value.
+  var z = 0;
 
-  return goog.Promise.allSettled([a, b, c, d, e, f, g, h])
+  return goog.Promise.allSettled([a, b, c, d, e, f, g, h, z])
       .then(function(results) {
         assertArrayEquals([
           {fulfilled: true, value: 'a'},
@@ -1127,7 +1149,8 @@ function testAllSettledWithFulfillAndReject() {
           {fulfilled: true, value: 'e'},
           {fulfilled: true, value: 'f'},
           {fulfilled: false, reason: 'rejected-g'},
-          {fulfilled: false, reason: 'rejected-h'}
+          {fulfilled: false, reason: 'rejected-h'},
+          {fulfilled: true, value: 0}
         ], results);
         // Ensure that the {@code then} property was only accessed once by
         // {@code goog.Promise.allSettled}.
@@ -1225,6 +1248,22 @@ function testFirstFulfilledWithNonThenable() {
 
   return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
     assertEquals('d', value);
+    // Return the slowest input promise to wait for it to complete.
+    return a;
+  }).then(function(value) {
+    assertEquals('The slowest promise should resolve eventually.', 'a', value);
+  });
+}
+
+
+function testFirstFulfilledWithFalseyNonThenable() {
+  var a = fulfillSoon('a', 40);
+  var b = rejectSoon('rejected-b', 30);
+  var c = rejectSoon('rejected-c', 10);
+  var d = 0;
+
+  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
+    assertEquals(0, value);
     // Return the slowest input promise to wait for it to complete.
     return a;
   }).then(function(value) {

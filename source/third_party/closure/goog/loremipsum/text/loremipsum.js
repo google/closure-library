@@ -15,6 +15,7 @@ goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
 
+
 /**
  * Generates random strings of "lorem ipsum" text, based on the word
  * distribution of a sample text, using the words in a dictionary.
@@ -204,8 +205,8 @@ goog.text.LoremIpsum.prototype.generateParagraphStatistics_ = function(sample) {
       goog.text.LoremIpsum.isNotEmptyOrWhitepace_);
 
   var paragraphLengths = goog.array.map(
-    goog.array.map(paragraphs, goog.text.LoremIpsum.splitSentences_),
-    goog.text.LoremIpsum.arrayLength_);
+      goog.array.map(paragraphs, goog.text.LoremIpsum.splitSentences_),
+      goog.text.LoremIpsum.arrayLength_);
 
   this.paragraphMean_ = goog.math.average.apply(null, paragraphLengths);
   this.paragraphSigma_ = goog.math.standardDeviation.apply(
@@ -217,6 +218,7 @@ goog.text.LoremIpsum.prototype.generateParagraphStatistics_ = function(sample) {
  * Sets the generator to use a given selection of words for generating
  * sentences with.
  * @param {string} dictionary The dictionary to use.
+ * @private
  */
 goog.text.LoremIpsum.prototype.initializeDictionary_ = function(dictionary) {
   var dictionaryWords = goog.text.LoremIpsum.splitWords_(dictionary);
@@ -248,7 +250,7 @@ goog.text.LoremIpsum.prototype.chooseRandomStart_ = function() {
 
 /**
  * Generates a single sentence, of random length.
- * @param {boolean} opt_startWithLorem Whether to start the setnence with the
+ * @param {boolean=} opt_startWithLorem Whether to start the setnence with the
  *     standard "Lorem ipsum..." first sentence.
  * @return {string} The generated sentence.
  */
@@ -263,7 +265,7 @@ goog.text.LoremIpsum.prototype.generateSentence = function(opt_startWithLorem) {
 
   // The length of the sentence is a normally distributed random variable.
   var sentenceLength = goog.text.LoremIpsum.randomNormal_(
-      this.sentenceMean_, this.sentenceSigma_)
+      this.sentenceMean_, this.sentenceSigma_);
   sentenceLength = Math.max(Math.floor(sentenceLength), 1);
 
   var wordDelimiter = ''; // Defined here in case while loop doesn't run
@@ -317,7 +319,7 @@ goog.text.LoremIpsum.prototype.generateSentence = function(opt_startWithLorem) {
     // Choose a word randomly that matches (or closely matches) the
     // length we're after.
     var closestLength = goog.text.LoremIpsum.chooseClosest(
-            this.words_.getKeys(), wordLength);
+        this.words_.getKeys(), wordLength);
     var word = goog.text.LoremIpsum.randomChoice_(
         this.words_.get(closestLength).getValues());
 
@@ -336,9 +338,10 @@ goog.text.LoremIpsum.prototype.generateSentence = function(opt_startWithLorem) {
   return sentence + '.';
 };
 
+
 /**
  * Generates a single lorem ipsum paragraph, of random length.
- * @param {boolean} opt_startWithLorem Whether to start the sentence with the
+ * @param {boolean=} opt_startWithLorem Whether to start the sentence with the
  *     standard "Lorem ipsum..." first sentence.
  * @return {string} The generated sentence.
  */
@@ -350,17 +353,17 @@ goog.text.LoremIpsum.prototype.generateParagraph = function(
   paragraphLength = Math.max(Math.floor(paragraphLength), 1);
 
   // Construct a paragraph from a number of sentences.
-  var paragraph = []
+  var paragraph = [];
   var startWithLorem = opt_startWithLorem;
   while (paragraph.length < paragraphLength) {
-      var sentence = this.generateSentence(startWithLorem);
-      paragraph.push(sentence);
-      startWithLorem = false;
+    var sentence = this.generateSentence(startWithLorem);
+    paragraph.push(sentence);
+    startWithLorem = false;
   }
 
   // Form the paragraph into a string.
-  paragraph = paragraph.join(' ')
-  return paragraph
+  paragraph = paragraph.join(' ');
+  return paragraph;
 };
 
 
@@ -371,7 +374,7 @@ goog.text.LoremIpsum.prototype.generateParagraph = function(
  * @private
  */
 goog.text.LoremIpsum.splitParagraphs_ = function(text) {
-  return text.split('\n')
+  return text.split('\n');
 };
 
 
@@ -417,6 +420,7 @@ goog.text.LoremIpsum.isNotEmptyOrWhitepace_ = function(text) {
  * as a function parameter.
  * @param {Array} array The array to check.
  * @return {number} The length of the array.
+ * @private
  */
 goog.text.LoremIpsum.arrayLength_ = function(array) {
   return array.length;
@@ -425,12 +429,12 @@ goog.text.LoremIpsum.arrayLength_ = function(array) {
 
 /**
  * Find the number in the list of values that is closest to the target.
- * @param {Array<number>} values The values.
+ * @param {Array<number>|Array<string>} values The values.
  * @param {number} target The target value.
  * @return {number} The closest value.
  */
 goog.text.LoremIpsum.chooseClosest = function(values, target) {
-  var closest = values[0];
+  var closest = Number(values[0]);
   goog.array.forEach(values, function(value) {
     if (Math.abs(target - value) < Math.abs(target - closest)) {
       closest = value;
@@ -439,6 +443,7 @@ goog.text.LoremIpsum.chooseClosest = function(values, target) {
 
   return closest;
 };
+
 
 /**
  * Gets info about a word used as part of the lorem ipsum algorithm.
@@ -450,7 +455,7 @@ goog.text.LoremIpsum.chooseClosest = function(values, target) {
 goog.text.LoremIpsum.getWordInfo_ = function(word) {
   var ret;
   goog.array.some(goog.text.LoremIpsum.DELIMITERS_WORDS_,
-      function (delimiter) {
+      function(delimiter) {
         if (goog.string.endsWith(word, delimiter)) {
           ret = [word.length - delimiter.length, delimiter];
           return true;
@@ -475,6 +480,7 @@ goog.text.LoremIpsum.NV_MAGICCONST_ = 4 * Math.exp(-0.5) / Math.sqrt(2.0);
  * mean and sigma.
  * @param {number} mu The mean of the distribution.
  * @param {number} sigma The sigma of the distribution.
+ * @return {number}
  * @private
  */
 goog.text.LoremIpsum.randomNormal_ = function(mu, sigma) {
@@ -495,6 +501,7 @@ goog.text.LoremIpsum.randomNormal_ = function(mu, sigma) {
  * Picks a random element of the array.
  * @param {Array} array The array to pick from.
  * @return {*} An element from the array.
+ * @private
  */
 goog.text.LoremIpsum.randomChoice_ = function(array) {
   return array[goog.math.randomInt(array.length)];
@@ -503,8 +510,7 @@ goog.text.LoremIpsum.randomChoice_ = function(array) {
 
 /**
  * Dictionary of words for lorem ipsum.
- * @type {string}
- * @private
+ * @private {string}
  */
 goog.text.LoremIpsum.DICT_ =
     'a ac accumsan ad adipiscing aenean aliquam aliquet amet ante ' +
@@ -698,15 +704,16 @@ goog.text.LoremIpsum.SAMPLE_ =
     'quam. Quisque id odio. Praesent venenatis metus at tortor pulvinar ' +
     'varius.\n\n';
 
+
 /**
  * Sample that the generated text is based on .
- * @type {string}
+ * @private {string}
  */
 goog.text.LoremIpsum.prototype.sample_ = goog.text.LoremIpsum.SAMPLE_;
 
 
 /**
  * Dictionary of words.
- * @type {string}
+ * @private {string}
  */
 goog.text.LoremIpsum.prototype.dictionary_ = goog.text.LoremIpsum.DICT_;
