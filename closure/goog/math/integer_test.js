@@ -1661,6 +1661,29 @@ function testBigMultiply() {
                a.multiply(b).toString());
 }
 
+function testSlowDivideThrowsWithNegativeIntegers() {
+  var a = goog.math.Integer.fromString('-10');
+  var b = goog.math.Integer.fromString('2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
+
+  a = goog.math.Integer.fromString('10');
+  b = goog.math.Integer.fromString('-2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
+
+  a = goog.math.Integer.fromString('-10');
+  b = goog.math.Integer.fromString('-2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
+}
+
 function testBigShift() {
   var a = goog.math.Integer.fromString('3735928559');
   assertEquals('591981510028266767381876356163880091648',

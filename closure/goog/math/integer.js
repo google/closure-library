@@ -568,7 +568,7 @@ goog.math.Integer.carry16_ = function(bits, index) {
 
 
 /**
- * Returns "this" Integer divided by the given one.Both "this" and the given
+ * Returns "this" Integer divided by the given one. Both "this" and the given
  * Integer MUST be positive.
  *
  * This method is only needed for very large numbers (>10^308),
