@@ -566,9 +566,10 @@ goog.math.Integer.carry16_ = function(bits, index) {
   }
 };
 
+
 /**
- * Returns "this" Integer divided by the given one.
- * Both "this" and the given Integer MUST be positive.
+ * Returns "this" Integer divided by the given one.Both "this" and the given
+ * Integer MUST be positive.
  *
  * This method is only needed for very large numbers (>10^308),
  * for which the original division algorithm gets into an infinite
@@ -579,41 +580,38 @@ goog.math.Integer.carry16_ = function(bits, index) {
  * the issue linked above.
  *
  * @param {!goog.math.Integer} other The Integer to divide "this" by.
- * @return {!goog.math.Integer} "This" value divided by the given one.
+ * @return {!goog.math.Integer} "this" value divided by the given one.
  * @private
  */
 goog.math.Integer.prototype.slowDivide_ = function(other) {
-  // The algorithm builds up the result in binary, starting with the
-  // highest bit.
-  //
-  // Invariants:
-  // twoPower = 2^n
-  // multiple = other * twoPower
+  if (this.isNegative() || other.isNegative()) {
+    throw Error('slowDivide_ only works with positive integers.');
+  }
+
   var twoPower = goog.math.Integer.ONE;
   var multiple = other;
 
   // First we have to figure out what the highest bit of the result
-  // is, so we increase `twoPower` and `multiple` until `multiple`
-  // exceeds `this`.
+  // is, so we increase "twoPower" and "multiple" until "multiple"
+  // exceeds "this".
   while (multiple.lessThanOrEqual(this)) {
     twoPower = twoPower.shiftLeft(1);
     multiple = multiple.shiftLeft(1);
   }
 
   // Rewind by one power of two, giving us the highest bit of the
-  // result. Create two new variables with the invariant:
-  // total = other * res
+  // result.
   var res = twoPower.shiftRight(1);
   var total = multiple.shiftRight(1);
 
-  // Now we starting decreasing `multiple` and `twoPower` to find the
+  // Now we starting decreasing "multiple" and "twoPower" to find the
   // rest of the bits of the result.
   var total2;
   multiple = multiple.shiftRight(2);
   twoPower = twoPower.shiftRight(2);
   while (!multiple.isZero()) {
-    // whenever we can add `multiple` to the total and not exceed
-    // `this`, that means we've found a 1 bit. Else we've found a 0
+    // whenever we can add "multiple" to the total and not exceed
+    // "this", that means we've found a 1 bit. Else we've found a 0
     // and don't need to add to the result.
     total2 = total.add(multiple);
     if (total2.lessThanOrEqual(this)) {
@@ -625,6 +623,7 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
   }
   return res;
 };
+
 
 /**
  * Returns this Integer divided by the given one.
