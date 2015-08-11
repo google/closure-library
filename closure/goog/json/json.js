@@ -25,12 +25,29 @@ goog.provide('goog.json.Serializer');
 
 
 /**
- * @define {boolean} If true, use the native JSON parsing API.
- * NOTE(ruilopes): EXPERIMENTAL, handle with care.  Setting this to true might
- * break your code.  The default {@code goog.json.parse} implementation is able
- * to handle invalid JSON, such as JSPB.
+ * @define {boolean} NATIVE_JSON indicates whether the code should
+ * rely on JSON functions, if available.
+ *
+ * The JSON functions can be defined by external libraries like
+ * Prototype and setting this flag to false forces closure to use its own
+ * goog.json implementation.
+ *
+ * If your javascript can be loaded by a third party site and you are wary about
+ * relying on the prototype functions, specify
+ * "--define goog.NATIVE_ARRAY_PROTOTYPES=false" to the JSCompiler.
+ *
+ * Setting goog.TRUSTED_SITE to false will automatically set
+ * NATIVE_JSON to false.
  */
-goog.define('goog.json.USE_NATIVE_JSON', false);
+goog.define('goog.NATIVE_JSON', goog.TRUSTED_SITE);
+
+
+/**
+ * @define {boolean} If true, JSCompiler will use the native implementation of
+ * array functions where appropriate (e.g., {@code JSON#stringify}) and remove the
+ * unused pure JS implementation.
+ */
+goog.define('goog.json.ASSUME_NATIVE_FUNCTIONS', false);
 
 
 /**
@@ -92,7 +109,10 @@ goog.json.isValid = function(s) {
  * @throws Error if s is invalid JSON.
  * @return {Object} The object generated from the JSON string, or null.
  */
-goog.json.parse = goog.json.USE_NATIVE_JSON ?
+goog.json.parse = goog.NATIVE_JSON &&
+    (goog.json.ASSUME_NATIVE_FUNCTIONS ||
+    (goog.global['JSON'] &&
+      goog.global['JSON']['parse'].toString().indexOf('native code') != -1)) ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
     function(s) {
       var o = String(s);
@@ -114,8 +134,11 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
  * @param {string} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
  */
-goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
-    /** @type {function(string):Object} */ (goog.global['JSON']['parse']) :
+goog.json.unsafeParse = goog.NATIVE_JSON &&
+    (goog.json.ASSUME_NATIVE_FUNCTIONS ||
+    (goog.global['JSON'] &&
+      goog.global['JSON']['parse'].toString().indexOf('native code') != -1)) ?
+    /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
     function(s) {
       return /** @type {Object} */ (eval('(' + s + ')'));
     };
@@ -152,7 +175,10 @@ goog.json.Reviver;
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
-goog.json.serialize = goog.json.USE_NATIVE_JSON ?
+goog.json.serialize = goog.NATIVE_JSON &&
+    (goog.json.ASSUME_NATIVE_FUNCTIONS ||
+    (goog.global['JSON'] &&
+      goog.global['JSON']['stringify'].toString().indexOf('native code') != -1)) ?
     /** @type {function(*, ?goog.json.Replacer=):string} */
     (goog.global['JSON']['stringify']) :
     function(object, opt_replacer) {
