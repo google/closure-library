@@ -567,17 +567,22 @@ goog.math.Integer.carry16_ = function(bits, index) {
 };
 
 /**
- * Returns this Integer divided by the given one.
- * NOTE: Both this and the given Integer MUST be positive.
- * @param {goog.math.Integer} other The Integer to divide this by.
- * @return {!goog.math.Integer} This value divided by the given one.
+ * Returns "this" Integer divided by the given one.
+ * Both "this" and the given Integer MUST be positive.
+ *
+ * This method is only needed for very large numbers (>10^308),
+ * for which the original division algorithm gets into an infinite
+ * loop (see https://github.com/google/closure-library/issues/500).
+ *
+ * The algorithm has some possible performance enhancements (or
+ * could be rewritten entirely), it's just an initial solution for
+ * the issue linked above.
+ *
+ * @param {!goog.math.Integer} other The Integer to divide "this" by.
+ * @return {!goog.math.Integer} "This" value divided by the given one.
  * @private
  */
 goog.math.Integer.prototype.slowDivide_ = function(other) {
-  // This could be a lot better algorithmically, it's just a first an
-  // initial solution to the problem of infinite loops when dividing
-  // large numbers
-
   // The algorithm builds up the result in binary, starting with the
   // highest bit.
   //
@@ -619,11 +624,11 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
     twoPower = twoPower.shiftRight(1);
   }
   return res;
-}
+};
 
 /**
  * Returns this Integer divided by the given one.
- * @param {goog.math.Integer} other The Integer to divide this by.
+ * @param {!goog.math.Integer} other The Integer to divide this by.
  * @return {!goog.math.Integer} This value divided by the given one.
  */
 goog.math.Integer.prototype.divide = function(other) {
@@ -646,7 +651,7 @@ goog.math.Integer.prototype.divide = function(other) {
   // Have to degrade to slowDivide for Very Large Numbers, because
   // they're out of range for the floating-point approximation
   // technique used below.
-  if(this.bits_.length > 30) {
+  if (this.bits_.length > 30) {
     return this.slowDivide_(other);
   }
 
