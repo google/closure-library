@@ -411,14 +411,9 @@ function testGetClientPositionEvent() {
 
 function testGetClientPositionTouchEvent() {
   var mockTouchEvent = {};
-
-  mockTouchEvent.targetTouches = [{}];
-  mockTouchEvent.targetTouches[0].clientX = 100;
-  mockTouchEvent.targetTouches[0].clientY = 200;
-
-  mockTouchEvent.touches = [{}];
-  mockTouchEvent.touches[0].clientX = 100;
-  mockTouchEvent.touches[0].clientY = 200;
+  mockTouchEvent.changedTouches = [{}];
+  mockTouchEvent.changedTouches[0].clientX = 100;
+  mockTouchEvent.changedTouches[0].clientY = 200;
 
   var pos = goog.style.getClientPosition(mockTouchEvent);
   assertEquals(100, pos.x);
@@ -428,11 +423,11 @@ function testGetClientPositionTouchEvent() {
 function testGetClientPositionEmptyTouchList() {
   var mockTouchEvent = {};
 
-  mockTouchEvent.clientX = 100;
-  mockTouchEvent.clientY = 200;
-
-  mockTouchEvent.targetTouches = [];
   mockTouchEvent.touches = [];
+
+  mockTouchEvent.changedTouches = [{}];
+  mockTouchEvent.changedTouches[0].clientX = 100;
+  mockTouchEvent.changedTouches[0].clientY = 200;
 
   var pos = goog.style.getClientPosition(mockTouchEvent);
   assertEquals(100, pos.x);
@@ -440,14 +435,13 @@ function testGetClientPositionEmptyTouchList() {
 }
 
 function testGetClientPositionAbstractedTouchEvent() {
-  var e = new goog.events.BrowserEvent();
-  e.event_ = {};
-  e.event_.touches = [{}];
-  e.event_.touches[0].clientX = 100;
-  e.event_.touches[0].clientY = 200;
-  e.event_.targetTouches = [{}];
-  e.event_.targetTouches[0].clientX = 100;
-  e.event_.targetTouches[0].clientY = 200;
+  var mockTouchEvent = {};
+  mockTouchEvent.changedTouches = [{}];
+  mockTouchEvent.changedTouches[0].clientX = 100;
+  mockTouchEvent.changedTouches[0].clientY = 200;
+
+  var e = new goog.events.BrowserEvent(mockTouchEvent);
+
   var pos = goog.style.getClientPosition(e);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
