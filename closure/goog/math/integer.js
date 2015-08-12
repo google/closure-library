@@ -696,7 +696,7 @@ goog.math.Integer.prototype.divide = function(other) {
 
 /**
  * Returns this Integer modulo the given one.
- * @param {goog.math.Integer} other The Integer by which to mod.
+ * @param {!goog.math.Integer} other The Integer by which to mod.
  * @return {!goog.math.Integer} This value modulo the given one.
  */
 goog.math.Integer.prototype.modulo = function(other) {
