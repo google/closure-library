@@ -492,19 +492,6 @@ function testIgnoreNonGlobalShortcutsInSelect() {
   listener.$verify();
 }
 
-function testIgnoreNonGlobalShortcutsInAriaRoleOption() {
-  var targetSelect = goog.dom.getElement('targetAriaRoleOption');
-
-  listener.shortcutFired('global');
-  listener.shortcutFired('withAlt');
-  listener.$replay();
-
-  registerEnterSpaceXF1AltY();
-  fireEnterSpaceXF1AltY(goog.dom.getElement('targetSelect'));
-
-  listener.$verify();
-}
-
 function testIgnoreNonGlobalShortcutsInTextArea() {
   listener.shortcutFired('global');
   listener.shortcutFired('withAlt');
