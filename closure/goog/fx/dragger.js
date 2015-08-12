@@ -175,12 +175,6 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
   this.hysteresisDistanceSquared_ = 0;
 
   /**
-   * Timestamp of when the mousedown or touchstart occurred.
-   * @private {number}
-   */
-  this.mouseDownTime_ = 0;
-
-  /**
    * The SCROLL event target used to make drag element follow scrolling.
    * @private {?EventTarget}
    */
@@ -451,8 +445,6 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.screenY = e.screenY;
     this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-
-    this.mouseDownTime_ = goog.now();
   } else {
     this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
   }
