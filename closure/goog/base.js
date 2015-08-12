@@ -483,6 +483,15 @@ goog.forwardDeclare('Document');
 goog.forwardDeclare('XMLHttpRequest');
 
 
+/**
+ * Forward declare type information. Used to assign types to goog.global
+ * referenced object that would otherwise result in unknown type references
+ * and thus block property disambiguation.
+ */
+goog.forwardDeclare('Document');
+goog.forwardDeclare('XMLHttpRequest');
+
+
 if (!COMPILED) {
 
   /**
