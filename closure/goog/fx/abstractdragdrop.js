@@ -588,7 +588,7 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
       event.clientY,
       x,
       y
-  ));
+      ));
 
   // Check if we're still inside the bounds of the active target, if not fire
   // a dragout event and proceed to find a new target.
