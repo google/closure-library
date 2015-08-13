@@ -9,5 +9,6 @@ install:
   - ./scripts/ci/install_closure_deps.sh
 
 script:
-  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --warning_level VERBOSE --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js='!**tester.js' --js='!**promise/testsuiteadapter.js' --js='!**osapi/osapi.js' --js='!**svgpan/svgpan.js' --jscomp_off=deprecated   --js_output_file=$(mktemp)
+  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --warning_level VERBOSE --jscomp_error='*' --jscomp_off=inferredConstCheck --jscomp_off=extraRequire --jscomp_off=unnecessaryCasts --jscomp_off=deprecated --jscomp_off=lintChecks --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js='!**tester.js' --js='!**promise/testsuiteadapter.js' --js='!**osapi/osapi.js' --js='!**svgpan/svgpan.js' --js_output_file=$(mktemp)
+
   - ./scripts/ci/lint_pull_request.sh
