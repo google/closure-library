@@ -1279,14 +1279,12 @@ if (goog.DEPENDENCIES_ENABLED) {
     var moduleState = goog.moduleLoaderState_;
     goog.moduleLoaderState_ = null;
 
-    var loadingModule = false;
     for (var i = 0; i < scripts.length; i++) {
       var path = scripts[i];
       if (path) {
         if (!deps.pathIsModule[path]) {
           goog.importScript_(goog.basePath + path);
         } else {
-          loadingModule = true;
           goog.importModule_(goog.basePath + path);
         }
       } else {
