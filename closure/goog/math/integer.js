@@ -261,7 +261,10 @@ goog.math.Integer.prototype.toString = function(opt_radix) {
   var result = '';
   while (true) {
     var remDiv = rem.divide(radixToPower);
-    var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt();
+    // The right shifting fixes negative values in the case when
+    // intval >= 2^31; for more details see
+    // https://github.com/google/closure-library/pull/498
+    var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt() >>> 0;
     var digits = intval.toString(radix);
 
     rem = remDiv;

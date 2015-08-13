@@ -1569,3 +1569,9 @@ function createTestToFromString(i) {
 for (var i = 0; i < TEST_BITS.length; i += 2) {
   goog.global['testToFromString' + i] = createTestToFromString(i);
 }
+
+// Regression test for
+// https://github.com/google/closure-library/pull/498
+function testBase36ToString() {
+  assertEquals('zzzzzz', goog.math.Long.fromString('zzzzzz', 36).toString(36));
+}
