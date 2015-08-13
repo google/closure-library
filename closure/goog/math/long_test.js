@@ -1563,6 +1563,8 @@ function createTestToFromString(i) {
       assertEquals(TEST_BITS[i + 1],
                    goog.math.Long.fromString(result, radix).getLowBits());
     }
+
+    assertEquals(goog.math.Long.fromString("zzzzzz", 36).toString(36), "zzzzzz");
   }
 }
 
