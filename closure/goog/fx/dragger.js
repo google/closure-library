@@ -212,11 +212,7 @@ goog.tagUnsealableClass(goog.fx.Dragger);
  * @type {boolean}
  * @private
  */
-goog.fx.Dragger.HAS_SET_CAPTURE_ =
-    // IE and Gecko after 1.9.3 has setCapture
-    // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
-    goog.userAgent.IE ||
-    goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.3');
+goog.fx.Dragger.HAS_SET_CAPTURE_ = goog.isDef(goog.global.document.documentElement.setCapture);
 
 
 /**
