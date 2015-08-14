@@ -20,7 +20,7 @@
   },
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
-    "http-server": "^0.8.0",
+    "promise": "^7.0.4",
     "protractor": "^2.1.0"
   }
 }

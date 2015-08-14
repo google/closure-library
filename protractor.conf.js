@@ -1,27 +1,30 @@
-var httpServer = require('http-server');
-var PROTRACTOR_TIMEOUT = process.env.PROTRACTOR_TIMEOUT ?
-    parseInt(process.env.PROTRACTOR_TIMEOUT, 10) : 10 * 60 * 1000;
+// See https://github.com/angular/protractor/blob/master/docs/referenceConf.js
+// for full protractor config reference.
 exports.config = {
-  directConnect: false,
-  seleniumAddress: 'http://localhost:4444/wd/hub',
+  sauceUser: process.env.SAUCE_USERNAME,
 
-  // Capabilities to be passed to the webdriver instance.
+  sauceKey: process.env.SAUCE_ACCESS_KEY,
+
+  // Options specific to which browser tests are run on.
   capabilities: {
-    'browserName': 'firefox'
+    'browserName': 'chrome',
+    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+    'build': process.env.TRAVIS_BUILD_NUMBER,
+    'name': process.env.TRAVIS_PULL_REQUEST == 'false' ?
+                'CO-' + process.env.TRAVIS_BRANCH + '-' +
+                    process.env.TRAVIS_COMMIT :
+                'PR-' + process.env.TRAVIS_PULL_REQUEST + '-' +
+                    process.env.TRAVIS_BRANCH + '-' + process.env.TRAVIS_COMMIT
   },
 
+  // Testing framework used for spec file.
   framework: 'jasmine2',
 
+  // Relative path to spec (i.e., tests).
   specs: ['protractor_spec.js'],
 
   jasmineNodeOpts: {
-    //default timeout plus 10 seconds to make sure spec times out before runner
-    defaultTimeoutInterval: PROTRACTOR_TIMEOUT + 10000
-  },
-
-  beforeLaunch: function () {
-    httpServer.createServer({
-      showDir: false
-    }).listen('8080', 'localhost');
+    // Timeout in ms before a test fails. 30 minutes.
+    defaultTimeoutInterval: 30 * 60 * 1000
   }
 };
