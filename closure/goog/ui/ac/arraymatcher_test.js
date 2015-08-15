@@ -131,7 +131,7 @@ function testGetSimilarRowsMaxMatches() {
   assertEquals('xAa', res[1]);
 }
 
-function testGetSimilarRowsComplex() {
+function testGetSimilarRowsTermDistance() {
   var items = ['surgeon', 'pleasantly', 'closely', 'ba'];
   var am = new ArrayMatcher(items, true);
 
@@ -139,18 +139,19 @@ function testGetSimilarRowsComplex() {
   assertEquals('Should have one match', 1, res.length);
   assertEquals('surgeon', res[0]);
 
-  var res2 = goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows('urgently', 4, items);
+  var res2 = ArrayMatcher.getSimilarMatchesForRows('urgently', 4, items);
   assertArrayEquals(res, res2);
+}
 
-  items = ['application', 'apple', 'happy'];
-  am = new ArrayMatcher(items, true);
-  res = am.getSimilarRows('app', 4);
+function testGetSimilarRowsContainedTerms() {
+  var items = ['application', 'apple', 'happy'];
+  var am = new ArrayMatcher(items, true);
+  var res = am.getSimilarRows('app', 4);
   assertEquals('Should have three matches', 3, res.length);
   assertEquals('application', res[0]);
   assertEquals('apple', res[1]);
   assertEquals('happy', res[2]);
 
-  res2 = goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows('app', 4, items);
+  var res2 = ArrayMatcher.getSimilarMatchesForRows('app', 4, items);
   assertArrayEquals(res, res2);
 }
-
