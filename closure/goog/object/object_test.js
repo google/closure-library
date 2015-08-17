@@ -148,6 +148,18 @@ function testUnsafeCloneObjectThatHasACloneMethod() {
   assertEquals('clone', clone.name);
 }
 
+function testUnsafeCloneObjectThatHasACloneNonMethod() {
+  var originalIndex = {
+    red: [0, 4],
+    clone: [1, 3, 5, 7],
+    yellow: [2, 6]
+  };
+
+  var clone = goog.object.unsafeClone(originalIndex);
+  assertArrayEquals([1, 3, 5, 7], originalIndex.clone);
+  assertArrayEquals([1, 3, 5, 7], clone.clone);
+}
+
 function testUnsafeCloneFlatObject() {
   var original = {a: 1, b: 2, c: 3};
   var clone = goog.object.unsafeClone(original);
