@@ -8677,7 +8677,7 @@ goog.i18n.DateTimeSymbols_fi_FI = {
   QUARTERS: ['1. neljännes', '2. neljännes', '3. neljännes',
     '4. neljännes'],
   AMPMS: ['ap.', 'ip.'],
-  DATEFORMATS: ['cccc d. MMMM y', 'd. MMMM y', 'd.M.y', 'd.M.y'],
+  DATEFORMATS: ['EEEE d. MMMM y', 'd. MMMM y', 'd.M.y', 'd.M.y'],
   TIMEFORMATS: ['H.mm.ss zzzz', 'H.mm.ss z', 'H.mm.ss', 'H.mm'],
   DATETIMEFORMATS: ['{1} \'klo\' {0}', '{1} \'klo\' {0}', '{1} \'klo\' {0}',
     '{1} {0}'],
