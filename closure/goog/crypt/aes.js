@@ -306,7 +306,8 @@ goog.crypt.Aes.prototype.testKeySchedule_ = goog.nullFunction;
 
 /**
  * Helper to copy input into the AES state matrix.
- * @param {!Array<number>} input Byte array to copy into the state matrix.
+ * @param {!Array<number>|!Uint8Array} input Byte array to copy into the state
+ *     matrix.
  * @private
  */
 goog.crypt.Aes.prototype.copyInput_ = function(input) {
