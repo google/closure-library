@@ -24,6 +24,8 @@ goog.provide('goog.ui.KeyboardShortcutHandler');
 goog.provide('goog.ui.KeyboardShortcutHandler.EventType');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
@@ -1073,7 +1075,8 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
       el.tagName == goog.dom.TagName.TEXTAREA ||
       el.tagName == goog.dom.TagName.INPUT ||
       el.tagName == goog.dom.TagName.BUTTON ||
-      el.tagName == goog.dom.TagName.SELECT;
+      el.tagName == goog.dom.TagName.SELECT ||
+      goog.ui.KeyboardShortcutHandler.hasKeyHandlingAriaRole_(el);
 
   var isContentEditable = !isFormElement && (el.isContentEditable ||
       (el.ownerDocument && el.ownerDocument.designMode == 'on'));
@@ -1113,6 +1116,22 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
     }
   }
   // Don't allow any additional shortcut keys for textareas or selects.
+  return false;
+};
+
+
+/**
+ * @param {!Element} el the element to evaluate.
+ * @return {boolean} True iff the specified element has an Aria role
+ *     that handles keyboard input.
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.hasKeyHandlingAriaRole_ = function(el) {
+  try {
+    return goog.a11y.aria.getRole(el) == goog.a11y.aria.Role.OPTION;
+  } catch (e) {
+    // Swallow this... some platforms don't support aria.getRole()
+  }
   return false;
 };
 
