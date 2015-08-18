@@ -34,8 +34,7 @@ goog.require('goog.object');
 /**
  * The name of the property of goog.global under which the JavaScript
  * verification object is stored by the loaded script.
- * @type {string}
- * @private
+ * @private {string}
  */
 goog.net.jsloader.GLOBAL_VERIFY_OBJS_ = 'closure_verification';
 
@@ -71,8 +70,7 @@ goog.net.jsloader.Options;
 
 /**
  * Scripts (URIs) waiting to be loaded.
- * @type {Array<string>}
- * @private
+ * @private {!Array<string>}
  */
 goog.net.jsloader.scriptsToLoad_ = [];
 
@@ -81,8 +79,7 @@ goog.net.jsloader.scriptsToLoad_ = [];
  * The deferred result of loading the URIs in scriptsToLoad_.
  * We need to return this to a caller that wants to load URIs while
  * a deferred is already working on them.
- * @type {!goog.async.Deferred}
- * @private
+ * @private {!goog.async.Deferred<null>}
  */
 goog.net.jsloader.scriptLoadingDeferred_;
 
