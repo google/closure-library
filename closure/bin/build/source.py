@@ -22,6 +22,7 @@ __author__ = 'nnaze@google.com'
 
 
 import re
+import codecs
 
 _BASE_REGEX_STRING = r'^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 _MODULE_REGEX = re.compile(_BASE_REGEX_STRING % 'module')
@@ -30,7 +31,6 @@ _PROVIDE_REGEX = re.compile(_BASE_REGEX_STRING % 'provide')
 _REQUIRE_REGEX_STRING = (r'^\s*(?:(?:var|let|const)\s+[a-zA-Z_$][a-zA-Z0-9$_]*'
                          r'\s*=\s*)?goog\.require\(\s*[\'"](.+)[\'"]\s*\)')
 _REQUIRES_REGEX = re.compile(_REQUIRE_REGEX_STRING)
-
 
 class Source(object):
   """Scans a JavaScript source for its provided and required namespaces."""
@@ -122,7 +122,7 @@ def GetFileContents(path):
   """
   fileobj = None
   try:
-    fileobj = open(path)
+    fileobj = codecs.open(path, encoding="utf-8-sig")
     return fileobj.read()
   except IOError as error:
     raise IOError('An error occurred opening or reading the file: %s. %s'
