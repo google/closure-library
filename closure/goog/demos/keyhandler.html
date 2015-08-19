@@ -98,6 +98,20 @@ function numberInputKeyHandler(e) {
   }
 
   switch (e.keyCode) {
+
+  // Add the keycodes for the number-pad keys
+
+	case goog.events.KeyCodes.NUM_ZERO:
+	case goog.events.KeyCodes.NUM_ONE:
+	case goog.events.KeyCodes.NUM_TWO:
+	case goog.events.KeyCodes.NUM_THREE:
+	case goog.events.KeyCodes.NUM_FOUR:
+	case goog.events.KeyCodes.NUM_FIVE:
+	case goog.events.KeyCodes.NUM_SIX:
+	case goog.events.KeyCodes.NUM_SEVEN:
+	case goog.events.KeyCodes.NUM_EIGHT:
+	case goog.events.KeyCodes.NUM_NINE:
+
     // Allow these
     case goog.events.KeyCodes.DELETE:
     case goog.events.KeyCodes.BACKSPACE:
