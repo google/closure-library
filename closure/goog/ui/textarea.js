@@ -681,7 +681,6 @@ goog.ui.Textarea.prototype.shrink_ = function() {
     } else {
       var currentHeight = this.getHeight_();
       var minHeight = this.getMinHeight_();
-      var maxHeight = this.getMaxHeight_();
       if (!(minHeight && currentHeight <= minHeight)) {
         // Nudge the padding by 1px.
         var paddingBox = this.paddingBox_;
