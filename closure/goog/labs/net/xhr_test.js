@@ -40,6 +40,9 @@ var TEST_IMAGE_BYTES = [
 ];
 
 function setUpPage() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 

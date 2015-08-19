@@ -15,12 +15,18 @@
 goog.provide('goog.proto2.MessageTest');
 goog.setTestOnly('goog.proto2.MessageTest');
 
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('proto2.TestAllTypes');
 goog.require('proto2.TestAllTypes.NestedEnum');
 goog.require('proto2.TestAllTypes.NestedMessage');
 goog.require('proto2.TestAllTypes.OptionalGroup');
 goog.require('proto2.TestAllTypes.RepeatedGroup');
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 function testEqualsWithEmptyMessages() {
   var message1 = new proto2.TestAllTypes();

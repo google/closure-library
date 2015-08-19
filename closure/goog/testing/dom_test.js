@@ -17,12 +17,16 @@ goog.setTestOnly('goog.testing.domTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 var root;
 function setUpPage() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   root = goog.dom.getElement('root');
 }
 

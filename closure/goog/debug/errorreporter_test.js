@@ -20,6 +20,7 @@ goog.require('goog.debug.ErrorReporter');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -46,6 +47,9 @@ var url = 'http://www.your.tst/more/bogus.js';
 var encodedUrl = 'http%3A%2F%2Fwww.your.tst%2Fmore%2Fbogus.js';
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   stubs.set(goog.net, 'XhrIo', MockXhrIo);
   goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT = true;
 }

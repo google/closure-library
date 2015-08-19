@@ -17,6 +17,7 @@ goog.setTestOnly('goog.testing.async.MockControlTest');
 
 goog.require('goog.async.Deferred');
 goog.require('goog.testing.MockControl');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.async.MockControl');
 goog.require('goog.testing.jsunit');
@@ -28,6 +29,9 @@ var mockControl2;
 var asyncMockControl2;
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   mockControl = new goog.testing.MockControl();
   asyncMockControl = new goog.testing.async.MockControl(mockControl);
 

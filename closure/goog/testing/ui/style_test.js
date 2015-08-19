@@ -16,6 +16,7 @@ goog.provide('goog.testing.ui.styleTest');
 goog.setTestOnly('goog.testing.ui.styleTest');
 
 goog.require('goog.dom');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.style');
 
@@ -23,6 +24,11 @@ goog.require('goog.testing.ui.style');
 // compare the generated markup to the reference markup.
 var refPath = 'style_reference.html';
 goog.testing.ui.style.writeReferenceFrame(refPath);
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 // assertStructureMatchesReference should succeed if the structure, node
 // names, and classes match.

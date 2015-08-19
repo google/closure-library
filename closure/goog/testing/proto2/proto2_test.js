@@ -15,9 +15,15 @@
 goog.provide('goog.testing.proto2Test');
 goog.setTestOnly('goog.testing.proto2Test');
 
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.proto2');
 goog.require('proto2.TestAllTypes');
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 function testAssertEquals() {
   var assertProto2Equals = goog.testing.proto2.assertEquals;

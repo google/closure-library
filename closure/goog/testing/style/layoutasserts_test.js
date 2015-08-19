@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.style.layoutassertsTest');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.style');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 /** @suppress {extraRequire} */
 goog.require('goog.testing.style.layoutasserts');
@@ -28,6 +29,9 @@ var DEFAULT_WIDTH = 200;
 var DEFAULT_HEIGHT = 100;
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   div1 = goog.dom.createDom(
       goog.dom.TagName.DIV,
       {

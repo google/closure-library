@@ -17,11 +17,17 @@ goog.setTestOnly('goog.testing.recordFunctionTest');
 
 goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordConstructor');
 goog.require('goog.testing.recordFunction');
 
 var stubs = new goog.testing.PropertyReplacer();
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 function tearDown() {
   stubs.reset();

@@ -15,10 +15,16 @@
 goog.provide('goog.testing.ui.rendererassertsTest');
 goog.setTestOnly('goog.testing.ui.rendererassertsTest');
 
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.rendererasserts');
 goog.require('goog.ui.ControlRenderer');
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 function testSuccess() {
   function GoodRenderer() {}

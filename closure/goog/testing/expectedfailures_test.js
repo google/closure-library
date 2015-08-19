@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.ExpectedFailuresTest');
 goog.require('goog.debug.Logger');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.JsUnitException');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 var count, expectedFailures, lastLevel, lastMessage;
@@ -31,6 +32,9 @@ goog.testing.ExpectedFailures.prototype.logger_.log = function(level,
 };
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   expectedFailures = new goog.testing.ExpectedFailures();
   count = 0;
   lastLevel = lastMessage = '';

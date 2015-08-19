@@ -23,10 +23,16 @@ goog.require('goog.labs.userAgent.browser');
 goog.require('goog.string');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 function testAssertTrue() {
   assertTrue(true);

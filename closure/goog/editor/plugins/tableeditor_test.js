@@ -23,6 +23,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.JsUnitException');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.editor.FieldMock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
@@ -40,6 +41,9 @@ function setUpPage() {
 }
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   testHelper = new goog.testing.editor.TestHelper(
       goog.dom.getElement('field'));
   testHelper.setUpEditableElement();

@@ -32,6 +32,7 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.MockUserAgent');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -50,6 +51,9 @@ var $ = goog.dom.getElement;
 var mockUserAgent;
 
 function setUpPage() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   var viewportSize = goog.dom.getViewportSize();
   // When the window is too short or not wide enough, some tests, especially
   // those for off-screen elements, fail.  Oddly, the most reliable

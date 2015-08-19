@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.editor.TestHelperTest');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.node');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -26,6 +27,9 @@ var root;
 var helper;
 
 function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+
   root = goog.dom.getElement('root');
   goog.dom.removeChildren(root);
   helper = new goog.testing.editor.TestHelper(root);
