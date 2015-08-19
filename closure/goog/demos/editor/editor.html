@@ -133,7 +133,11 @@ hooked up to a toolbar.</p>
       updateFieldContents);
 
   myField.makeEditable();
-  updateFieldContents();
+
+  // Remove call to updateFieldContents() here because this function
+  // places an &nbsp in 'fieldContents' - the lower textarea in the
+  // editor.
+
   </script>
 </body>
 </html>
