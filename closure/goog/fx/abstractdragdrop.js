@@ -577,18 +577,12 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
 
   var activeTarget = this.activeTarget_;
 
-  // Dispatch a drag event
   this.dispatchEvent(new goog.fx.DragDropEvent(
-      goog.fx.AbstractDragDrop.EventType.DRAG,
-      this, this.dragItem_,
+      goog.fx.AbstractDragDrop.EventType.DRAG, this, this.dragItem_,
       activeTarget ? activeTarget.target_ : undefined,
       activeTarget ? activeTarget.item_ : undefined,
       activeTarget ? activeTarget.element_ : undefined,
-      event.clientX,
-      event.clientY,
-      x,
-      y
-      ));
+      event.clientX, event.clientY, x, y));
 
   // Check if we're still inside the bounds of the active target, if not fire
   // a dragout event and proceed to find a new target.
