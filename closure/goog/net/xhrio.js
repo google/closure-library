@@ -20,16 +20,24 @@
  * own XmlHttpRequest object and handles clearing of the event callback to
  * ensure no leaks.
  *
- * XhrIo is event based, it dispatches events when a request finishes, fails or
- * succeeds or when the ready-state changes. The ready-state or timeout event
- * fires first, followed by a generic completed event. Then the abort, error,
- * or success event is fired as appropriate. Lastly, the ready event will fire
- * to indicate that the object may be used to make another request.
+ * XhrIo is event based, it dispatches events on success, failure, finishing,
+ * ready-state change, or progress.
+ *
+ * The ready-state or timeout event fires first, followed by
+ * a generic completed event. Then the abort, error, or success event
+ * is fired as appropriate. Progress events are fired as they are
+ * received. Lastly, the ready event will fire to indicate that the
+ * object may be used to make another request.
  *
  * The error event may also be called before completed and
  * ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
  *
  * This class does not support multiple requests, queuing, or prioritization.
+ *
+ * When progress events are supported by the browser, the
+ * goog.net.EventType.PROGRESS events fired by XhrIo are identical in
+ * usage to ProgressEvents as defined in the standard.
+ *   (See: http://xhr.spec.whatwg.org/#interface-progressevent)
  *
  * Tested = IE6, FF1.5, Safari, Opera 8.5
  *
@@ -43,6 +51,7 @@ goog.provide('goog.net.XhrIo.ResponseType');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
@@ -474,6 +483,14 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   // Set up the onreadystatechange callback
   this.xhr_.onreadystatechange = goog.bind(this.onReadyStateChange_, this);
 
+  // Set up upload/download progress events, if progress events are supported.
+  if ('onprogress' in this.xhr_) {
+    this.xhr_.onprogress = goog.bind(this.onProgressHandler_, this);
+    if (this.xhr_.upload) {
+      this.xhr_.upload.onprogress = goog.bind(this.onProgressHandler_, this);
+    }
+  }
+
   /**
    * Try to open the XMLHttpRequest (always async), if an error occurs here it
    * is generally permission denied
@@ -812,6 +829,19 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
       }
     }
   }
+};
+
+
+/**
+ * Internal handler for the XHR object's onprogress event.
+ * @param {!ProgressEvent} e XHR progress event.
+ * @private
+ */
+goog.net.XhrIo.prototype.onProgressHandler_ = function(e) {
+  goog.asserts.assert(e.type === goog.net.EventType.PROGRESS,
+      'goog.net.EventType.PROGRESS is of the same type as raw XHR progress.');
+  // Redispatch the progress event.
+  this.dispatchEvent(e);
 };
 
 
