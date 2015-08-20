@@ -721,11 +721,14 @@ goog.async.Deferred.succeed = function(opt_result) {
  * Creates a Deferred that fires when the given promise resolves.
  * Use only during migration to Promises.
  *
- * @param {!goog.Promise<T>} promise
+ * @param {!goog.Thenable<T>} promise
  * @return {!goog.async.Deferred<T>} The new Deferred.
  * @template T
  */
 goog.async.Deferred.fromPromise = function(promise) {
+  // This can cause deadlocks if the returned Deferred is returned to a callback
+  goog.asserts.assert(!(promise instanceof goog.async.Deferred),
+      'Do not call fromPromise(Deferred); instead, call .branch().');
   var d = new goog.async.Deferred();
   d.callback();
   d.addCallback(function() {
