@@ -1089,6 +1089,13 @@ function testRestrictedCharactersArePreserved() {
       uri.toString());
 }
 
+
+function testFileUriWithNoDomainToString() {
+  // Regression test for https://github.com/google/closure-library/issues/104.
+  var uri = new goog.Uri('file:///a/b');
+  assertEquals('file:///a/b', uri.toString());
+}
+
 function assertDotRemovedEquals(expected, path) {
   assertEquals(expected, goog.Uri.removeDotSegments(path));
 }
