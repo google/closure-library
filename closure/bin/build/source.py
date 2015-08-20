@@ -23,7 +23,6 @@ __author__ = 'nnaze@google.com'
 
 import codecs
 import re
-import codecs
 
 _BASE_REGEX_STRING = r'^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 _MODULE_REGEX = re.compile(_BASE_REGEX_STRING % 'module')
