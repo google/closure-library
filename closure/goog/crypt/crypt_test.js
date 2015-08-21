@@ -27,7 +27,17 @@ var UTF8_RANGES_BYTE_ARRAY = [
   0xE0, 0xA0, 0x80,
   0xEF, 0xBF, 0xBF];
 
+var UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY = [
+  0xF0, 0x90, 0x80, 0x80,  // \uD800\uDC00
+  0xF0, 0x90, 0x8F, 0xBF,  // \uD800\uDFFF
+  0xF4, 0x8F, 0xB0, 0x80,  // \uDBFF\uDC00
+  0xF4, 0x8F, 0xBF, 0xBF   // \uDBFF\uDFFF
+];
+
 var UTF8_RANGES_STRING = '\u0000\u007F\u0080\u07FF\u0800\uFFFF';
+
+var UTF8_SURROGATE_PAIR_RANGES_STRING =
+    '\uD800\uDC00\uD800\uDFFF\uDBFF\uDC00\uDBFF\uDFFF';
 
 function testStringToUtf8ByteArray() {
   // Known encodings taken from Java's String.getBytes("UTF8")
@@ -43,6 +53,10 @@ function testStringToUtf8ByteArray() {
   assertArrayEquals('limits of the first 3 UTF-8 character ranges',
       UTF8_RANGES_BYTE_ARRAY,
       goog.crypt.stringToUtf8ByteArray(UTF8_RANGES_STRING));
+
+  assertArrayEquals('Surrogate Pair',
+      UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY,
+      goog.crypt.stringToUtf8ByteArray(UTF8_SURROGATE_PAIR_RANGES_STRING));
 }
 
 function testUtf8ByteArrayToString() {
@@ -57,6 +71,10 @@ function testUtf8ByteArrayToString() {
   assertEquals('limits of the first 3 UTF-8 character ranges',
       UTF8_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(UTF8_RANGES_BYTE_ARRAY));
+
+  assertEquals('Surrogate Pair',
+      UTF8_SURROGATE_PAIR_RANGES_STRING,
+      goog.crypt.utf8ByteArrayToString(UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY));
 }
 
 
