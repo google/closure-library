@@ -514,15 +514,19 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
 
 /**
  * Simulates the Xhr progress event.
- * @param {!ProgressEvent} progressEvent The progress event to fire.
+ * @param {!boolean} lengthComputable Whether progress is measurable.
+ * @param {!number} loaded Amount of work already performed.
+ * @param {!number} total Total amount of work to perform.
  */
-goog.testing.net.XhrIo.prototype.simulateProgress = function(progressEvent) {
-  var xhrProgressEvent = new ProgressEvent(goog.net.EventType.PROGRESS, {
-    lengthComputable: progressEvent.lengthComputable,
-    loaded: progressEvent.loaded,
-    total: progressEvent.total
-  });
-  this.dispatchEvent(xhrProgressEvent);
+goog.testing.net.XhrIo.prototype.simulateProgress = function(
+    lengthComputable, loaded, total) {
+  var progressEvent = {
+    type: goog.net.EventType.PROGRESS,
+    lengthComputable: lengthComputable,
+    loaded: loaded,
+    total: total
+  };
+  this.dispatchEvent(progressEvent);
 };
 
 
