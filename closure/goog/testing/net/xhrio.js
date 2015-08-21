@@ -513,24 +513,6 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
 
 
 /**
- * Simulates the Xhr progress event.
- * @param {!boolean} lengthComputable Whether progress is measurable.
- * @param {!number} loaded Amount of work already performed.
- * @param {!number} total Total amount of work to perform.
- */
-goog.testing.net.XhrIo.prototype.simulateProgress = function(
-    lengthComputable, loaded, total) {
-  var progressEvent = {
-    type: goog.net.EventType.PROGRESS,
-    lengthComputable: lengthComputable,
-    loaded: loaded,
-    total: total
-  };
-  this.dispatchEvent(progressEvent);
-};
-
-
-/**
  * @return {boolean} Whether there is an active request.
  */
 goog.testing.net.XhrIo.prototype.isActive = function() {
