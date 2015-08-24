@@ -2,8 +2,8 @@
 
 # Install closure compiler and linter.
 cd ..
-git clone https://github.com/google/closure-compiler.git
-git clone https://github.com/google/closure-linter.git
+git clone --depth 1 https://github.com/google/closure-compiler.git
+git clone --depth 1 https://github.com/google/closure-linter.git
 cd closure-compiler
 ant jar
 cd ../closure-linter
