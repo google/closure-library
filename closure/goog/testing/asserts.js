@@ -1287,6 +1287,7 @@ goog.exportSymbol('fail', fail);
 goog.exportSymbol('assert', assert);
 goog.exportSymbol('assertThrows', assertThrows);
 goog.exportSymbol('assertNotThrows', assertNotThrows);
+goog.exportSymbol('assertThrowsJsUnitException', assertThrowsJsUnitException);
 goog.exportSymbol('assertTrue', assertTrue);
 goog.exportSymbol('assertFalse', assertFalse);
 goog.exportSymbol('assertEquals', assertEquals);
