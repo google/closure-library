@@ -1088,6 +1088,7 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * @private @const {function(string):?}
+   * @suppress {newCheckTypes}
    */
   goog.loadModuleFromSource_ = function() {
     // NOTE: we avoid declaring parameters or local variables here to avoid
