@@ -2665,3 +2665,16 @@ function testGetVendorStyleOpera() {
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
+
+function testParseStyleAttributeWithColon() {
+  // Regression test for https://github.com/google/closure-library/issues/127.
+  var cssObj = goog.style.parseStyleAttribute(
+      'left: 0px; text-align: center; background-image: ' +
+      'url(http://www.google.ca/Test.gif); -ms-filter: ' +
+      'progid:DXImageTransform.Microsoft.MotionBlur(strength=50), ' +
+      'progid:DXImageTransform.Microsoft.BasicImage(mirror=1);');
+  assertEquals('url(http://www.google.ca/Test.gif)', cssObj.backgroundImage);
+  assertEquals('progid:DXImageTransform.Microsoft.MotionBlur(strength=50), ' +
+               'progid:DXImageTransform.Microsoft.BasicImage(mirror=1)',
+               cssObj.MsFilter);
+}
