@@ -642,7 +642,6 @@ goog.logToConsole_ = function(msg) {
  *     module otherwise null.
  */
 goog.require = function(name) {
-
   // If the object already exists we do not need do do anything.
   if (!COMPILED) {
     if (goog.ENABLE_DEBUG_LOADER && goog.IS_OLD_IE_) {
@@ -660,8 +659,7 @@ goog.require = function(name) {
     if (goog.ENABLE_DEBUG_LOADER) {
       var path = goog.getPathFromDeps_(name);
       if (path) {
-        goog.included_[path] = true;
-        goog.writeScripts_();
+        goog.writeScripts_(path);
         return null;
       }
     }
@@ -796,13 +794,6 @@ goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
 
 
 if (goog.DEPENDENCIES_ENABLED) {
-  /**
-   * Object used to keep track of urls that have already been added. This record
-   * allows the prevention of circular dependencies.
-   * @private {!Object<string, boolean>}
-   */
-  goog.included_ = {};
-
 
   /**
    * This object is used to keep track of dependencies and other data that is
@@ -1230,9 +1221,11 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Resolves dependencies based on the dependencies added using addDependency
    * and calls importScript_ in the correct order.
+   * @param {string} pathToLoad The path from which to start discovering
+   *     dependencies.
    * @private
    */
-  goog.writeScripts_ = function() {
+  goog.writeScripts_ = function(pathToLoad) {
     /** @type {!Array<string>} The scripts we need to write this time. */
     var scripts = [];
     var seenScript = {};
@@ -1247,10 +1240,6 @@ if (goog.DEPENDENCIES_ENABLED) {
       // We have already visited this one. We can get here if we have cyclic
       // dependencies.
       if (path in deps.visited) {
-        if (!(path in seenScript)) {
-          seenScript[path] = true;
-          scripts.push(path);
-        }
         return;
       }
 
@@ -1276,11 +1265,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
     }
 
-    for (var path in goog.included_) {
-      if (!deps.written[path]) {
-        visitNode(path);
-      }
-    }
+    visitNode(pathToLoad);
 
     // record that we are going to load all these scripts.
     for (var i = 0; i < scripts.length; i++) {
