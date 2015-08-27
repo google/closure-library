@@ -11,7 +11,7 @@ CHANGED_FILES=$(git diff --name-only --diff-filter=AM master..$CURRENT_BRANCH |
 
 if [[ -n "$CHANGED_FILES" ]]; then
   set -x
-  $USER_BASE/bin/gjslint --strict --jslint_error=all --exclude_files=deps.js $CHANGED_FILES
+  $USER_BASE/bin/gjslint --strict --jslint_error=all --exclude_files=deps.js,alltests.js $CHANGED_FILES
 else
   echo "No .js files found to lint in this Pull Request."
 fi
