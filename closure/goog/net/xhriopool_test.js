@@ -29,9 +29,11 @@ function testSetHeadersForNewPoolObjects() {
   var xhrIo = xhrIoPool.getObject();
 
   assertEquals('Request should contain 1 header', 1, xhrIo.headers.getCount());
-  assertTrue('Request should contain right header key', xhrIo.headers.containsKey('X-Foo'));
-  assertEquals('Request should contain right header value', xhrIo.headers.get('X-Foo'), 'Bar');
-  
+  assertTrue('Request should contain right header key',
+             xhrIo.headers.containsKey('X-Foo'));
+  assertEquals('Request should contain right header value',
+               xhrIo.headers.get('X-Foo'), 'Bar');
+
   xhrIoPool.releaseObject(xhrIo);
   goog.dispose(xhrIoPool);
 }
@@ -42,9 +44,11 @@ function testSetHeadersForInitializedPoolObjects() {
   var xhrIo = xhrIoPool.getObject();
 
   assertEquals('Request should contain 1 header', 1, xhrIo.headers.getCount());
-  assertTrue('Request should contain right header key', xhrIo.headers.containsKey('X-Foo'));
-  assertEquals('Request should contain right header value', 'Bar', xhrIo.headers.get('X-Foo'));
-  
+  assertTrue('Request should contain right header key',
+             xhrIo.headers.containsKey('X-Foo'));
+  assertEquals('Request should contain right header value', 'Bar',
+               xhrIo.headers.get('X-Foo'));
+
   xhrIoPool.releaseObject(xhrIo);
   goog.dispose(xhrIoPool);
 }
