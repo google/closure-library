@@ -162,7 +162,7 @@ goog.string.Const.from = function(s) {
 /**
  * Type marker for the Const type, used to implement additional run-time
  * type checking.
- * @const
+ * @const {!Object}
  * @private
  */
 goog.string.Const.TYPE_MARKER_ = {};

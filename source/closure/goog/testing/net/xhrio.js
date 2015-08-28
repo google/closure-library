@@ -286,6 +286,15 @@ goog.testing.net.XhrIo.prototype.withCredentials_ = false;
 
 
 /**
+ * Whether progress events shall be sent for this request.
+ *
+ * @type {boolean}
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.progressEventsEnabled_ = false;
+
+
+/**
  * Whether there's currently an underlying XHR object.
  * @type {boolean}
  * @private
@@ -367,6 +376,27 @@ goog.testing.net.XhrIo.prototype.setWithCredentials =
  */
 goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
   return this.withCredentials_;
+};
+
+
+/**
+ * Sets whether progress events are enabled for this request. Note
+ * that progress events require pre-flight OPTIONS request handling
+ * for CORS requests, and may cause trouble with older browsers. See
+ * goog.net.XhrIo.progressEventsEnabled_ for details.
+ * @param {boolean} enabled Whether progress events should be enabled.
+ */
+goog.testing.net.XhrIo.prototype.setProgressEventsEnabled = function(enabled) {
+  this.progressEventsEnabled_ = enabled;
+};
+
+
+/**
+ * Gets whether progress events are enabled.
+ * @return {boolean} Whether progress events are enabled for this request.
+ */
+goog.testing.net.XhrIo.prototype.getProgressEventsEnabled = function() {
+  return this.progressEventsEnabled_;
 };
 
 
@@ -509,6 +539,24 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
   this.active_ = false;
   this.xhr_ = false;
   this.dispatchEvent(goog.net.EventType.READY);
+};
+
+
+/**
+ * Simulates the Xhr progress event.
+ * @param {!boolean} lengthComputable Whether progress is measurable.
+ * @param {!number} loaded Amount of work already performed.
+ * @param {!number} total Total amount of work to perform.
+ */
+goog.testing.net.XhrIo.prototype.simulateProgress = function(
+    lengthComputable, loaded, total) {
+  var progressEvent = {
+    type: goog.net.EventType.PROGRESS,
+    lengthComputable: lengthComputable,
+    loaded: loaded,
+    total: total
+  };
+  this.dispatchEvent(progressEvent);
 };
 
 

@@ -248,7 +248,7 @@ goog.testing.AsyncTestCase.prototype.curStepName_ = '';
  * @type {Function|undefined}
  * @private
  */
-goog.testing.AsyncTestCase.prototype.nextStepFunc;
+goog.testing.AsyncTestCase.prototype.nextStepFunc_;
 
 
 /**

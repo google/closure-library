@@ -44,7 +44,6 @@ goog.require('goog.Timer');
  * @template THIS
  * @constructor
  * @struct
- * @suppress {checkStructDictInheritance}
  * @extends {goog.Disposable}
  * @final
  */

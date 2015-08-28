@@ -29,11 +29,24 @@ goog.testing.asserts.ArrayLike;
 var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
   return var1 == var2;
 };
-var JSUNIT_UNDEFINED_VALUE;
+var JSUNIT_UNDEFINED_VALUE = void 0;
 var TO_STRING_EQUALITY_PREDICATE = function(var1, var2) {
   return var1.toString() === var2.toString();
 };
 
+/** @typedef {function(?, ?):boolean} */
+var PredicateFunctionType;
+
+/**
+ * @const {{
+ *   String : PredicateFunctionType,
+ *   Number : PredicateFunctionType,
+ *   Boolean : PredicateFunctionType,
+ *   Date : PredicateFunctionType,
+ *   RegExp : PredicateFunctionType,
+ *   Function : PredicateFunctionType
+ * }}
+ */
 var PRIMITIVE_EQUALITY_PREDICATES = {
   'String': DOUBLE_EQUALITY_PREDICATE,
   'Number': DOUBLE_EQUALITY_PREDICATE,

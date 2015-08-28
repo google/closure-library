@@ -197,7 +197,7 @@ goog.Uri.prototype.toString = function() {
   }
 
   var domain = this.getDomain();
-  if (domain) {
+  if (domain || scheme == 'file') {
     out.push('//');
 
     var userInfo = this.getUserInfo();

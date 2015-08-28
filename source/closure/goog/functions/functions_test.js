@@ -19,7 +19,9 @@
 goog.provide('goog.functionsTest');
 goog.setTestOnly('goog.functionsTest');
 
+goog.require('goog.array');
 goog.require('goog.functions');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -322,4 +324,126 @@ function testOnce() {
   assertEquals(1, recordedFunction.getCallCount());
   f();
   assertEquals(1, recordedFunction.getCallCount());
+}
+
+
+function testDebounce() {
+  // Encoded sequences of commands to perform mapped to expected # of calls.
+  //   f: fire
+  //   w: wait (for the timer to elapse)
+  assertAsyncDecoratorCommandSequenceCalls(goog.functions.debounce, {
+    'f': 0,
+    'ff': 0,
+    'fff': 0,
+    'fw': 1,
+    'ffw': 1,
+    'fffw': 1,
+    'fwffwf': 2,
+    'ffwwwffwwfwf': 3
+  });
+}
+
+
+function testDebounceScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'y': 0};
+  goog.functions.debounce(function() {
+    ++this['y'];
+  }, interval, x)();
+  assertEquals(0, x['y']);
+
+  mockClock.tick(interval);
+  assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+function testThrottle() {
+  // Encoded sequences of commands to perform mapped to expected # of calls.
+  //   f: fire
+  //   w: wait (for the timer to elapse)
+  assertAsyncDecoratorCommandSequenceCalls(goog.functions.throttle, {
+    'f': 1,
+    'ff': 1,
+    'fff': 1,
+    'fw': 1,
+    'ffw': 2,
+    'fwf': 2,
+    'fffw': 2,
+    'fwfff': 2,
+    'fwfffw': 3,
+    'fwffwf': 3,
+    'ffwf': 2,
+    'ffwff': 2,
+    'ffwfw': 3,
+    'ffwffwf': 3,
+    'ffwffwff': 3,
+    'ffwffwffw': 4,
+    'ffwwwffwwfw': 5,
+    'ffwwwffwwfwf': 6
+  });
+}
+
+
+function testThrottleScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'y': 0};
+  goog.functions.throttle(function() {
+    ++this['y'];
+  }, interval, x)();
+  assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+/**
+ * Wraps a {@code goog.testing.recordFunction} with the specified decorator and
+ * executes a list of command sequences, asserting that in each case the
+ * decorated function is called the expected number of times.
+ * @param {function():*} decorator The async decorator to test.
+ * @param {!Object.<string, number>} expectedCommandSequenceCalls An object
+ *     mapping string command sequences (where 'f' is 'fire' and 'w' is 'wait')
+ *     to the number times we expect a decorated function to be called during
+ *     the execution of those commands.
+ */
+function assertAsyncDecoratorCommandSequenceCalls(
+    decorator, expectedCommandSequenceCalls) {
+  var interval = 500;
+
+  var mockClock = new goog.testing.MockClock(true);
+  for (var commandSequence in expectedCommandSequenceCalls) {
+    var recordedFunction = goog.testing.recordFunction();
+    var f = decorator(recordedFunction, interval);
+
+    for (var i = 0; i < commandSequence.length; ++i) {
+      switch (commandSequence[i]) {
+        case 'f':
+          f();
+          break;
+        case 'w':
+          mockClock.tick(interval);
+          break;
+      }
+    }
+
+    var expectedCalls = expectedCommandSequenceCalls[commandSequence];
+    assertEquals(
+        'Expected ' + expectedCalls + ' calls for command sequence "' +
+        commandSequence + '" (' +
+        goog.array.map(commandSequence, function(command) {
+          switch (command) {
+            case 'f': return 'fire';
+            case 'w': return 'wait';
+          }
+        }).join(' -> ') + ')',
+        expectedCalls,
+        recordedFunction.getCallCount());
+  }
+  mockClock.uninstall();
 }

@@ -1640,6 +1640,48 @@ function testBigMultiply() {
   b = goog.math.Integer.fromString('-90689586573473848347384834');
   assertEquals('3573527027965969111849451155845960',
                a.multiply(b).toString());
+
+  // regression test for https://github.com/google/closure-library/issues/500
+  a = goog.math.Integer.fromString('13096940572375952535991073728029631156727' +
+                                   '45889511394745914382575458603399133344113' +
+                                   '55124789839721800834794626807105252175636' +
+                                   '59874572877651812163757781047754345758394' +
+                                   '12393743854289058');
+  b = goog.math.Integer.fromString('27919529936136212349610129940926086216581' +
+                                   '64496528137102143826264378516364143418101' +
+                                   '17954848423382367899187410977857170099434' +
+                                   '88954503636036324930799550973655515139183' +
+                                   '49748613352617850');
+  assertEquals('3656604243822473465231854689622824622925110708289864374262496' +
+               '6011714112304568802330367011373499705061131532809869274041668' +
+               '6403682258958556744594010497630468513209942389833344943567584' +
+               '9711887715782124066353351659885600959610314392971398216556707' +
+               '9177967386189614814272449310787401834779505072200615609456609' +
+               '84075750394399200851742167944560567661447926674910485300',
+               a.multiply(b).toString());
+}
+
+function testSlowDivideThrowsWithNegativeIntegers() {
+  var a = goog.math.Integer.fromString('-10');
+  var b = goog.math.Integer.fromString('2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
+
+  a = goog.math.Integer.fromString('10');
+  b = goog.math.Integer.fromString('-2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
+
+  a = goog.math.Integer.fromString('-10');
+  b = goog.math.Integer.fromString('-2');
+
+  assertThrows(function() {
+    a.slowDivide_(b);
+  });
 }
 
 function testBigShift() {
@@ -1648,4 +1690,11 @@ function testBigShift() {
                a.shiftLeft(97).toString());
   assertEquals('-591981510028266767381876356163880091648',
                a.negate().shiftLeft(97).toString());
+}
+
+// Regression test for
+// https://github.com/google/closure-library/pull/498
+function testBase36ToString() {
+  assertEquals('zzzzzz',
+               goog.math.Integer.fromString('zzzzzz', 36).toString(36));
 }

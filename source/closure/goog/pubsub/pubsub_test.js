@@ -629,3 +629,25 @@ function testClear() {
   assertEquals('Pubsub channel must have no subscribers', 0,
       pubsub.getCount());
 }
+
+function testSubscriberExceptionUnlocksSubscriptions() {
+  var key1 = pubsub.subscribe('X', function() {});
+
+  pubsub.subscribe('X', function() {
+    // Pushes "key1" onto queue to be unsubscribed after subscriptions are
+    // processed.
+    pubsub.unsubscribeByKey(key1);
+  });
+
+  pubsub.subscribe('X', function() { throw 'Oh no!'; });
+
+  var key2 = pubsub.subscribe('X', function() {});
+
+  assertThrows(function() {
+    pubsub.publish('X');
+  });
+
+  assertTrue(pubsub.unsubscribeByKey(key2));
+  // "key1" should've been successfully removed already;
+  assertFalse(pubsub.unsubscribeByKey(key1));
+}
