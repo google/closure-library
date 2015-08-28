@@ -154,7 +154,7 @@ goog.string.html.HtmlSanitizer.AttributeType = {
 
 /**
  * A map of attributes to types it has.
- * @enum {number}
+ * @const {!Object<string,number>}
  */
 goog.string.html.HtmlSanitizer.Attributes = {
   '*::class': goog.string.html.HtmlSanitizer.AttributeType.CLASSES,
