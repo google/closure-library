@@ -906,6 +906,9 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  * triggers an alert in all browsers, even if the returned document fragment
  * is thrown away immediately.
  *
+ * NOTE: This method doesn't work if your htmlString contains elements that
+ * can't be contained in a <div>. For example, <tr>.
+ *
  * @param {string} htmlString The HTML string to convert.
  * @return {!Node} The resulting document fragment.
  */
