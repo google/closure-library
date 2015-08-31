@@ -93,7 +93,7 @@ goog.events.ListenerMap.prototype.getListenerCount = function() {
  * @param {boolean=} opt_useCapture The capture mode of the listener.
  * @param {Object=} opt_listenerScope Object in whose scope to call the
  *     listener.
- * @return {goog.events.ListenableKey} Unique key for the listener.
+ * @return {!goog.events.ListenableKey} Unique key for the listener.
  */
 goog.events.ListenerMap.prototype.add = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {

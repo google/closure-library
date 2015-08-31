@@ -107,7 +107,7 @@ goog.events.Listenable.isImplementedBy = function(obj) {
  *     (defaults to false).
  * @param {SCOPE=} opt_listenerScope Object in whose scope to call the
  *     listener.
- * @return {goog.events.ListenableKey} Unique key for the listener.
+ * @return {!goog.events.ListenableKey} Unique key for the listener.
  * @template SCOPE,EVENTOBJ
  */
 goog.events.Listenable.prototype.listen;
@@ -131,7 +131,7 @@ goog.events.Listenable.prototype.listen;
  *     (defaults to false).
  * @param {SCOPE=} opt_listenerScope Object in whose scope to call the
  *     listener.
- * @return {goog.events.ListenableKey} Unique key for the listener.
+ * @return {!goog.events.ListenableKey} Unique key for the listener.
  * @template SCOPE,EVENTOBJ
  */
 goog.events.Listenable.prototype.listenOnce;
@@ -231,7 +231,7 @@ goog.events.Listenable.prototype.fireListeners;
  *
  * @param {string|!goog.events.EventId} type The type of the listeners to fire.
  * @param {boolean} capture The capture mode of the listeners to fire.
- * @return {!Array<goog.events.ListenableKey>} An array of registered
+ * @return {!Array<!goog.events.ListenableKey>} An array of registered
  *     listeners.
  * @template EVENTOBJ
  */
