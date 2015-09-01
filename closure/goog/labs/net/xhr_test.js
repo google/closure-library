@@ -23,6 +23,10 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
+
 function stubXhrToReturn(status, opt_responseText, opt_latency) {
 
   if (goog.isDefAndNotNull(opt_latency)) {

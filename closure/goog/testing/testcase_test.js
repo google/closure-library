@@ -16,6 +16,7 @@ goog.provide('goog.testing.TestCaseTest');
 goog.setTestOnly('goog.testing.TestCaseTest');
 
 goog.require('goog.Promise');
+goog.require('goog.string');
 goog.require('goog.testing.MockRandom');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
@@ -30,11 +31,19 @@ var okPromise = function() { return Promise.resolve(null); };
 // Native Promise-based equivalent of fail().
 var failPromise = function() { return Promise.reject(null); };
 
+// Native Promise-based test that returns promise which never resolves.
+var neverResolvedPromise = function() { return new Promise(function() {}); };
+
 // goog.Promise-based equivalent of ok().
 var okGoogPromise = function() { return goog.Promise.resolve(null); };
 
 // goog.Promise-based equivalent of fail().
 var failGoogPromise = function() { return goog.Promise.reject(null); };
+
+// Native Promise-based test that returns promise which never resolves.
+var neverResolvedGoogPromise = function() {
+  return new goog.Promise(function() {});
+};
 
 function testEmptyTestCase() {
   var testCase = new goog.testing.TestCase();
@@ -153,6 +162,32 @@ function testTestCaseReturningPromise_GoogPromiseReject() {
   });
 }
 
+function testTestCaseReturningPromise_GoogPromiseTimeout() {
+  var testCase = new goog.testing.TestCase();
+  testCase.addNewTest('foo', neverResolvedGoogPromise);
+  var startTimestamp = new Date().getTime();
+  // We have to decrease timeout for the artificial 'foo' test otherwise current
+  // test will timeout.
+  testCase.promiseTimeout = 500;
+  var startTimestamp = new Date().getTime();
+  return testCase.runTestsReturningPromise().then(function(result) {
+    var elapsedTime = new Date().getTime() - startTimestamp;
+    assertFalse(testCase.isSuccess());
+    assertTrue(result.complete);
+    assertEquals(1, result.totalCount);
+    assertEquals(1, result.runCount);
+    assertEquals(0, result.successCount);
+    assertEquals(1, result.errors.length);
+    // Check that error message mentions test name.
+    assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
+    // Check that error message mentions how to change timeout.
+    assertTrue(goog.string.contains(result.errors[0].message,
+        'G_testRunner.testCase.promiseTimeout'));
+    assertTrue(elapsedTime >= testCase.promiseTimeout - 100 &&
+        elapsedTime <= testCase.promiseTimeout + 100);
+  });
+}
+
 function testTestCaseReturningPromise_PromiseReject() {
   if (!('Promise' in goog.global)) {
     return;
@@ -167,6 +202,34 @@ function testTestCaseReturningPromise_PromiseReject() {
     assertEquals(0, result.successCount);
     assertEquals(1, result.errors.length);
     assertEquals('foo', result.errors[0].source);
+  });
+}
+
+function testTestCaseReturningPromise_PromiseTimeout() {
+  if (!('Promise' in goog.global)) {
+    return;
+  }
+  var testCase = new goog.testing.TestCase();
+  testCase.addNewTest('foo', neverResolvedPromise);
+  // We have to decrease timeout for the artificial 'foo' test otherwise current
+  // test will timeout.
+  testCase.promiseTimeout = 500;
+  var startTimestamp = new Date().getTime();
+  return testCase.runTestsReturningPromise().then(function(result) {
+    var elapsedTime = new Date().getTime() - startTimestamp;
+    assertFalse(testCase.isSuccess());
+    assertTrue(result.complete);
+    assertEquals(1, result.totalCount);
+    assertEquals(1, result.runCount);
+    assertEquals(0, result.successCount);
+    assertEquals(1, result.errors.length);
+    // Check that error message mentions test name.
+    assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
+    // Check that error message mentions how to change timeout.
+    assertTrue(goog.string.contains(result.errors[0].message,
+        'G_testRunner.testCase.promiseTimeout'));
+    assertTrue(elapsedTime >= testCase.promiseTimeout - 100 &&
+        elapsedTime <= testCase.promiseTimeout + 100);
   });
 }
 
@@ -427,3 +490,30 @@ function testMaybeFailTestEarly() {
   assertEquals(1, errors.length);
   assertEquals(message, errors[0].message);
 }
+
+function testSetUpReturnsPromiseThatTimesOut() {
+  var testCase = new goog.testing.TestCase();
+  testCase.promiseTimeout = 500;
+  testCase.setUp = neverResolvedGoogPromise;
+  testCase.addNewTest('test', ok);
+  return testCase.runTestsReturningPromise().then(function(result) {
+    assertFalse(testCase.isSuccess());
+    assertTrue(result.complete);
+    assertEquals(1, result.errors.length);
+    assertTrue(goog.string.contains(result.errors[0].message, 'setUp'));
+  });
+}
+
+function testTearDownReturnsPromiseThatTimesOut() {
+  var testCase = new goog.testing.TestCase();
+  testCase.promiseTimeout = 500;
+  testCase.tearDown = neverResolvedGoogPromise;
+  testCase.addNewTest('test', ok);
+  return testCase.runTestsReturningPromise().then(function(result) {
+    assertFalse(testCase.isSuccess());
+    assertTrue(result.complete);
+    assertEquals(1, result.errors.length);
+    assertTrue(goog.string.contains(result.errors[0].message, 'tearDown'));
+  });
+}
+

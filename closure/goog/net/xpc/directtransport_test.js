@@ -89,6 +89,7 @@ function setUpPage() {
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
 }
 
 function setUp() {

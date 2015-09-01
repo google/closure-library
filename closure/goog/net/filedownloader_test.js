@@ -29,6 +29,7 @@ var xhrIoPool, xhr, fs, dir, downloader;
 
 function setUpPage() {
   goog.testing.fs.install(new goog.testing.PropertyReplacer());
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
 }
 
 function setUp() {

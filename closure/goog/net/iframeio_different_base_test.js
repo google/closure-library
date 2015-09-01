@@ -21,6 +21,9 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
 goog.require('goog.testing.jsunit');
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
 
 function testDifferentBaseUri() {
   var io = new goog.net.IframeIo();

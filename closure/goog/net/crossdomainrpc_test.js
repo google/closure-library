@@ -22,6 +22,9 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
 
 function print(o) {
   if (Object.prototype.toSource) {

@@ -21,6 +21,10 @@ goog.require('goog.testing.jsunit');
 
 var fpsDisplay;
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 5000; // 5s
+}
+
 function setUp() {
   fpsDisplay = new goog.debug.FpsDisplay();
 }

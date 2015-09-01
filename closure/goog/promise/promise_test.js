@@ -27,6 +27,11 @@ goog.require('goog.userAgent');
 goog.setTestOnly('goog.PromiseTest');
 
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
+
+
 // TODO(brenneman):
 // - Add tests for interoperability with native Promises where available.
 // - Add tests for long stack traces.

@@ -55,6 +55,7 @@ testCase.setUpPage = function() {
   if (this.testingReqAnimFrame) {
     window.requestAnimationFrame(goog.bind(this.animFrame, this));
   }
+  this.promiseTimeout = 10000; // 10s.
 };
 
 testCase.tearDownPage = function() {
