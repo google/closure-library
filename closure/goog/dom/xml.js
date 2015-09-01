@@ -22,6 +22,7 @@ goog.provide('goog.dom.xml');
 
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.userAgent');
 
 
 /**
@@ -39,6 +40,39 @@ goog.dom.xml.MAX_ELEMENT_DEPTH = 256; // Same default as MSXML6.
 
 
 /**
+ * Check for ActiveXObject support by the browser.
+ * @return {boolean} true if browser has ActiveXObject support.
+ * @private
+ */
+goog.dom.xml.hasActiveXObjectSupport_ = function() {
+  if (!goog.userAgent.IE) {
+    // Avoid raising useless exception in case code is not compiled
+    // and browser is not MSIE.
+    return false;
+  }
+  try {
+    // Due to lot of changes in IE 9, 10 & 11 behaviour and ActiveX being
+    // totally disableable using MSIE's security level, trying to create the
+    // ActiveXOjbect is a lot more reliable than testing for the existance of
+    // window.ActiveXObject
+    new ActiveXObject('MSXML2.DOMDocument');
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+
+/**
+ * True if browser has ActiveXObject support.
+ * Possible override if this test become wrong in coming IE versions.
+ * @type {boolean}
+ */
+goog.dom.xml.ACTIVEX_SUPPORT = goog.userAgent.IE &&
+                               goog.dom.xml.hasActiveXObjectSupport_();
+
+
+/**
  * Creates an XML document appropriate for the current JS runtime
  * @param {string=} opt_rootTagName The root tag name.
  * @param {string=} opt_namespaceUri Namespace URI of the document element.
@@ -48,11 +82,7 @@ goog.dom.xml.createDocument = function(opt_rootTagName, opt_namespaceUri) {
   if (opt_namespaceUri && !opt_rootTagName) {
     throw Error("Can't create document with namespace and no root tag");
   }
-  if (document.implementation && document.implementation.createDocument) {
-    return document.implementation.createDocument(opt_namespaceUri || '',
-                                                  opt_rootTagName || '',
-                                                  null);
-  } else if (typeof ActiveXObject != 'undefined') {
+  if (goog.dom.xml.ACTIVEX_SUPPORT) {
     var doc = goog.dom.xml.createMsXmlDocument_();
     if (doc) {
       if (opt_rootTagName) {
@@ -62,6 +92,11 @@ goog.dom.xml.createDocument = function(opt_rootTagName, opt_namespaceUri) {
       }
       return doc;
     }
+  } else if (document.implementation &&
+             document.implementation.createDocument) {
+    return document.implementation.createDocument(opt_namespaceUri || '',
+                                                  opt_rootTagName || '',
+                                                  null);
   }
   throw Error('Your browser does not support creating new documents');
 };
@@ -73,12 +108,12 @@ goog.dom.xml.createDocument = function(opt_rootTagName, opt_namespaceUri) {
  * @return {Document} XML document from the text.
  */
 goog.dom.xml.loadXml = function(xml) {
-  if (typeof DOMParser != 'undefined') {
-    return new DOMParser().parseFromString(xml, 'application/xml');
-  } else if (typeof ActiveXObject != 'undefined') {
+  if (goog.dom.xml.ACTIVEX_SUPPORT) {
     var doc = goog.dom.xml.createMsXmlDocument_();
     doc.loadXML(xml);
     return doc;
+  } else if (typeof DOMParser != 'undefined') {
+    return new DOMParser().parseFromString(xml, 'application/xml');
   }
   throw Error('Your browser does not support loading xml documents');
 };
@@ -90,14 +125,14 @@ goog.dom.xml.loadXml = function(xml) {
  * @return {string} The serialized XML.
  */
 goog.dom.xml.serialize = function(xml) {
-  // Compatible with Firefox, Opera and WebKit.
-  if (typeof XMLSerializer != 'undefined') {
-    return new XMLSerializer().serializeToString(xml);
-  }
   // Compatible with Internet Explorer.
   var text = xml.xml;
   if (text) {
     return text;
+  }
+  // Compatible with Firefox, Opera and WebKit.
+  if (typeof XMLSerializer != 'undefined') {
+    return new XMLSerializer().serializeToString(xml);
   }
   throw Error('Your browser does not support serializing XML documents');
 };
