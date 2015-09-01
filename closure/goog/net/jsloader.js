@@ -57,12 +57,16 @@ goog.net.jsloader.DEFAULT_TIMEOUT = 5000;
  *     load. This is important if you just want to read data from the JavaScript
  *     and then throw it away. Default is false.
  * attributes: Additional attributes to set on the script tag.
+ * skipQueue: Used in loadMany. If true, every call to loadMany operates
+ *     independently and no queue is shared. It's then the callers
+ *     responsibility to avoid race conditions.
  *
  * @typedef {{
  *   timeout: (number|undefined),
  *   document: (HTMLDocument|undefined),
  *   cleanupWhenDone: (boolean|undefined),
- *   attributes: (!Object<string, string>|undefined)
+ *   attributes: (!Object<string, string>|undefined),
+ *   skipQueue: (boolean|undefined)
  * }}
  */
 goog.net.jsloader.Options;
@@ -105,28 +109,35 @@ goog.net.jsloader.scriptLoadingDeferred_;
  *     callbacks
  */
 goog.net.jsloader.loadMany = function(uris, opt_options) {
+  // Only the skipQueue option is relevant for loadMany.
+  var options = opt_options || {};
   // Loading the scripts in serial introduces asynchronosity into the flow.
   // Therefore, there are race conditions where client A can kick off the load
   // sequence for client B, even though client A's scripts haven't all been
   // loaded yet.
   //
-  // To work around this issue, all module loads share a queue.
+  // To work around this issue, all module loads share a queue
+  // unless skipQueue is enabled.
   if (!uris.length) {
     return goog.async.Deferred.succeed(null);
   }
 
-  var isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
-  goog.array.extend(goog.net.jsloader.scriptsToLoad_, uris);
-  if (isAnotherModuleLoading) {
-    // jsloader is still loading some other scripts.
-    // In order to prevent the race condition noted above, we just add
-    // these URIs to the end of the scripts' queue and return the deferred
-    // result of the ongoing script load, so the caller knows when they
-    // finish loading.
-    return goog.net.jsloader.scriptLoadingDeferred_;
+  // Use the shared queue by default.
+  if (!options.skipQueue) {
+    var isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
+    goog.array.extend(goog.net.jsloader.scriptsToLoad_, uris);
+    if (isAnotherModuleLoading) {
+      // jsloader is still loading some other scripts.
+      // In order to prevent the race condition noted above, we just add
+      // these URIs to the end of the scripts' queue and return the deferred
+      // result of the ongoing script load, so the caller knows when they
+      // finish loading.
+      return goog.net.jsloader.scriptLoadingDeferred_;
+    }
+
+    uris = goog.net.jsloader.scriptsToLoad_;
   }
 
-  uris = goog.net.jsloader.scriptsToLoad_;
   var popAndLoadNextScript = function() {
     var uri = uris.shift();
     var deferred = goog.net.jsloader.load(uri, opt_options);
@@ -135,8 +146,11 @@ goog.net.jsloader.loadMany = function(uris, opt_options) {
     }
     return deferred;
   };
-  goog.net.jsloader.scriptLoadingDeferred_ = popAndLoadNextScript();
-  return goog.net.jsloader.scriptLoadingDeferred_;
+  var deferred = popAndLoadNextScript();
+  if (!options.skipQueue) {
+    goog.net.jsloader.scriptLoadingDeferred_ = deferred;
+  }
+  return deferred;
 };
 
 

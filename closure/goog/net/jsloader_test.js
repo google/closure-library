@@ -157,6 +157,61 @@ function testLoadMany() {
 }
 
 
+// Test the loadMany function with skipQueue option for independent URL loading.
+function testLoadManySkipQueue() {
+  testCase.waitForAsync('testLoadManySkipQueue');
+
+  // The regular result loads test #3.
+  window.test3 = null;
+  var testUrls1 = ['testdata/jsloader_test3.js'];
+  var result = goog.net.jsloader.loadMany(testUrls1);
+
+  // The result with skipQueue option loads test #4, then test #1.
+  window.test1 = null;
+  window.test4 = null;
+  var optionSkipQueue = {
+    skipQueue: true
+  };
+  var testUrlsSkipQueue = ['testdata/jsloader_test4.js', 'testdata/jsloader_test1.js'];
+  var resultSkipQueue = goog.net.jsloader.loadMany(testUrlsSkipQueue, optionSkipQueue);
+
+  // Verify that result and resultSkipQueue are separate deferreds.
+  assertNotEquals('deferreds are not identical', resultSkipQueue, result);
+
+  window.test3Callback = function(msg) {
+
+    // Set variable when the regular result has finished loading.
+    window.test3 = msg;
+  };
+
+  window.test4Callback = function(msg) {
+    testCase.continueTesting();
+
+    // Check that the last URL in resultSkipQueue sequence was not loaded yet.
+    assertEquals('verification object', null, window.test1);
+
+    // Set variable when first listed URL in resulSkipQueue was loaded.
+    window.test4 = msg;
+
+    testCase.waitForAsync('testLoadManySkipQueue');
+  };
+
+  // Both results finish independently. Wait for both and then continue testing.
+  result.awaitDeferred(resultSkipQueue);
+
+  result.addCallback(function() {
+    testCase.continueTesting();
+
+    // Check that resultSkipQueue has loaded both variables.
+    assertEquals('verification object', 'Test #4 loaded', window.test4);
+    assertEquals('verification object', 'Test #1 loaded', window.test1);
+
+    // Check that the regular result has finished loading.
+    assertEquals('verification object', 'Test #3 loaded', window.test3);
+  });
+}
+
+
 // Test the load function with additional options.
 function testLoadWithOptions() {
   testCase.waitForAsync('testLoadWithOptions');
