@@ -124,7 +124,7 @@ function testLoadMany() {
     // Check that the 1st test was not loaded yet.
     assertEquals('verification object', null, window.test1);
 
-    // check that result has not fired yet
+    // Check that result has not fired yet.
     assertFalse('deferred has fired', result.hasFired());
 
     // Load test #4, which is supposed to wait for #1 to load.
@@ -139,10 +139,10 @@ function testLoadMany() {
     // Check that the 1st test was already loaded.
     assertEquals('verification object', 'Test #1 loaded', window.test1);
 
-    // all scripts loaded - verify that result has fired
+    // All scripts are loaded - verify that result has fired.
     assertTrue('deferred has fired', result.hasFired());
 
-    // on last script loaded, set variable
+    // On last script loaded, set variable.
     window.test4 = msg;
 
     testCase.waitForAsync('testLoadMany');
@@ -151,7 +151,7 @@ function testLoadMany() {
   result.addCallback(function() {
     testCase.continueTesting();
 
-    // verify that the last loaded script callback has executed
+    // Verify that the last loaded script callback has executed.
     assertEquals('verification object', 'Test #4 loaded', window.test4);
   });
 }
