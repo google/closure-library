@@ -35,3 +35,5 @@ function startListening() {
 }
 
 startListening();
+// Signal to portchannel_test that the worker is ready.
+postMessage('loaded');

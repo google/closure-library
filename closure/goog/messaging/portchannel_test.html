@@ -40,15 +40,29 @@ var workerChannel;
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var timer;
 
-// Use a relatively long timeout because workers can take a while to start up.
+// Use a relatively long timeout because the iframe created by withIframe can
+// take a couple seconds to load its JS.
 asyncTestCase.stepTimeout = 3 * 1000;
 
 function setUpPage() {
   if (!('Worker' in goog.global)) {
     return;
   }
-  workerChannel = new goog.messaging.PortChannel(
-      new Worker('testdata/portchannel_worker.js'));
+
+  // Lengthen the timeout just for this step because the Worker can take a while
+  // to start.
+  var oldStepTimeout = asyncTestCase.stepTimeout;
+  asyncTestCase.stepTimeout = 10 * 1000;
+
+  var worker = new Worker('testdata/portchannel_worker.js');
+  workerChannel = new goog.messaging.PortChannel(worker);
+  worker.onmessage = function(e) {
+    if (e.data == 'loaded') {
+      asyncTestCase.continueTesting();
+      asyncTestCase.stepTimeout = oldStepTimeout;
+    }
+  };
+  asyncTestCase.waitForAsync('waiting for worker startup');
 }
 
 function tearDownPage() {
@@ -250,12 +264,6 @@ function testPortIgnoresOrigin() {
 
 function testWindow() {
   if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
-    return;
-  }
-
-  // NOTE(nicksantos): This test is having problems in Safari4 on the
-  // test farm, but no one can reproduce them locally. Just turn it off.
-  if (goog.userAgent.product.SAFARI) {
     return;
   }
 
