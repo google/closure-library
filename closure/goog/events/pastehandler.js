@@ -94,6 +94,7 @@ goog.events.PasteHandler = function(element) {
 
   if (goog.userAgent.WEBKIT ||
       goog.userAgent.IE ||
+      goog.userAgent.EDGE ||
       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9')) {
     // Most modern browsers support the paste event.
     this.eventHandler_.listen(element, goog.events.EventType.PASTE,
