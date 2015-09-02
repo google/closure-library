@@ -29,6 +29,12 @@ var button;
 var refPath = '../../../../../webutil/css/fastui/app/menubutton_spec.html';
 goog.testing.ui.style.writeReferenceFrame(refPath);
 
+function shouldRunTests() {
+  // Disable tests when being run as a part of open-source repo as the button
+  // specs are not included in closure-library.
+  return !(/closure\/goog\/ui/.test(location.pathname));
+}
+
 function setUp() {
   button = new goog.ui.MenuButton('Hello Generated', null, renderer);
   button.setTooltip('Click for Generated');

@@ -47,6 +47,7 @@ function setUpPage() {
               goog.dom.getTextContent(e.target), {'noreferrer': true});
         });
   }
+  G_testRunner.testCase.promiseTimeout = 60000; // 60s
 }
 
 

@@ -255,7 +255,7 @@ goog.soy.assertFirstTagValid_ = function(html) {
  * @private
  */
 goog.soy.INVALID_TAG_TO_RENDER_ =
-    /^<(body|caption|col|colgroup|head|html|tr|td|tbody|thead|tfoot)>/i;
+    /^<(body|caption|col|colgroup|head|html|tr|td|th|tbody|thead|tfoot)>/i;
 
 
 /**

@@ -38,7 +38,6 @@ goog.require('goog.fx.TransitionBase');
  * @constructor
  * @struct
  * @extends {goog.fx.TransitionBase}
- * @suppress {checkStructDictInheritance}
  */
 goog.fx.AnimationQueue = function() {
   goog.fx.AnimationQueue.base(this, 'constructor');

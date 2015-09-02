@@ -396,7 +396,6 @@ goog.date.DateRange.cloneOrCreate_ = function(opt_today) {
  * Creates an iterator over the dates in a {@link goog.date.DateRange}.
  * @constructor
  * @struct
- * @suppress {checkStructDictInheritance}
  * @extends {goog.iter.Iterator<goog.date.Date>}
  * @param {goog.date.DateRange} dateRange The date range to iterate.
  * @final

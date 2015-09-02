@@ -124,6 +124,15 @@ goog.testing.TestCase = function(opt_name) {
    * @suppress {underscore|visibility}
    */
   this.result_ = new goog.testing.TestCase.Result(this);
+
+  /**
+   * The maximum time in milliseconds a promise returned from a test function
+   * may remain pending before the test fails due to timeout.
+   * TODO(nbeloglazov): bring down default timeout to reasonable value to make
+   * it actually useful.
+   * @type {number}
+   */
+  this.promiseTimeout = 24 * 60 * 60 * 1000; // 1 day
 };
 
 
@@ -705,7 +714,8 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
   }
   goog.testing.TestCase.currentTestName = this.curTest_.name;
   this.invokeTestFunction_(
-      this.setUp, this.safeRunTest_, this.safeTearDown_);
+      this.setUp, this.safeRunTest_, this.safeTearDown_,
+      'setUp');
 };
 
 
@@ -717,7 +727,8 @@ goog.testing.TestCase.prototype.safeRunTest_ = function() {
   this.invokeTestFunction_(
       goog.bind(this.curTest_.ref, this.curTest_.scope),
       this.safeTearDown_,
-      this.safeTearDown_);
+      this.safeTearDown_,
+      this.curTest_.name);
 };
 
 
@@ -731,7 +742,8 @@ goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
     this.doError(this.curTest_, opt_error);
   }
   this.invokeTestFunction_(
-      this.tearDown, this.finishTestInvocation_, this.finishTestInvocation_);
+      this.tearDown, this.finishTestInvocation_, this.finishTestInvocation_,
+      'tearDown');
 };
 
 
@@ -756,15 +768,21 @@ goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
  * @param {function()} fn The function to call.
  * @param {function()} onSuccess Success callback.
  * @param {function(*)} onFailure Failure callback.
+ * @param {string} fnName Name of the function being invoked e.g. 'setUp'.
  * @private
  */
 goog.testing.TestCase.prototype.invokeTestFunction_ = function(
-    fn, onSuccess, onFailure) {
+    fn, onSuccess, onFailure, fnName) {
   try {
     var retval = fn.call(this);
     if (goog.Thenable.isImplementedBy(retval) ||
         goog.isFunction(retval && retval['then'])) {
       var self = this;
+      retval = this.rejectIfPromiseTimesOut_(
+          retval, self.promiseTimeout,
+          'Timed out while waiting for a promise returned from ' + fnName +
+          ' to resolve. Set G_testRunner.testCase.promiseTimeout' +
+          ' to adjust the timeout.');
       retval.then(
           function() {
             self.resetBatchTimeAfterPromise_();
@@ -1510,6 +1528,35 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
     }
   }
   return testsToRun;
+};
+
+
+/**
+ * Wraps provided promise and returns a new promise which will be rejected
+ * if the original promise does not settle within the given timeout.
+ * @param {!IThenable<T>} promise
+ * @param {number} timeoutInMs Number of milliseconds to wait for the promise to
+ *     settle before failing it with a timeout error.
+ * @param {string} errorMsg Error message to use if the promise times out.
+ * @return {!goog.Promise<T>} A promise that will settle with the original
+       promise unless the timeout is exceeded.
+ *     errror.
+ * @template T
+ * @private
+ */
+goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ =
+    function(promise, timeoutInMs, errorMsg) {
+  var self = this;
+  var start = this.now();
+  return new goog.Promise(function(resolve, reject) {
+    var timeoutId = self.timeout(function() {
+      var elapsed = self.now() - start;
+      reject(new Error(errorMsg + '\nElapsed time: ' + elapsed + 'ms.'));
+    }, timeoutInMs);
+    promise.then(resolve, reject);
+    var clearTimeout = goog.bind(self.clearTimeout, self, timeoutId);
+    promise.then(clearTimeout, clearTimeout);
+  });
 };
 
 

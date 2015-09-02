@@ -56,6 +56,7 @@ goog.events.KeyCodes = {
   UP: 38,          // also NUM_NORTH
   RIGHT: 39,       // also NUM_EAST
   DOWN: 40,        // also NUM_SOUTH
+  PLUS_SIGN: 43,   // NOT numpad plus
   PRINT_SCREEN: 44,
   INSERT: 45,      // also NUM_INSERT
   DELETE: 46,      // also NUM_DELETE
@@ -345,6 +346,7 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
 
   switch (keyCode) {
     case goog.events.KeyCodes.SPACE:
+    case goog.events.KeyCodes.PLUS_SIGN:
     case goog.events.KeyCodes.QUESTION_MARK:
     case goog.events.KeyCodes.AT_SIGN:
     case goog.events.KeyCodes.NUM_PLUS:

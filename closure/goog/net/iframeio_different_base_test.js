@@ -21,12 +21,15 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
 goog.require('goog.testing.jsunit');
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
 
 function testDifferentBaseUri() {
   var io = new goog.net.IframeIo();
   return new goog.Promise(function(resolve, reject) {
     goog.events.listen(io, goog.net.EventType.COMPLETE, resolve);
-    io.send('net/iframeio_different_base_test.data');
+    io.send('net/iframeio_different_base_test.txt');
   }).then(function() {
     assertNotEquals('File should have expected content.',
         -1, io.getResponseText().indexOf('just a file'));

@@ -49,6 +49,10 @@ var stubs = new goog.testing.PropertyReplacer();
 var EventType = goog.module.ModuleLoader.EventType;
 var observer;
 
+function setUpPage() {
+  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+}
+
 function setUp() {
   modA1Loaded = false;
   modA2Loaded = false;

@@ -175,12 +175,6 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
   this.hysteresisDistanceSquared_ = 0;
 
   /**
-   * Timestamp of when the mousedown or touchstart occurred.
-   * @private {number}
-   */
-  this.mouseDownTime_ = 0;
-
-  /**
    * The SCROLL event target used to make drag element follow scrolling.
    * @private {?EventTarget}
    */
@@ -428,7 +422,6 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 
   if (this.enabled_ && !this.dragging_ &&
       (!isMouseDown || e.isMouseActionButton())) {
-    this.maybeReinitTouchEvent_(e);
     if (this.hysteresisDistanceSquared_ == 0) {
       if (this.fireDragStart_(e)) {
         this.dragging_ = true;
@@ -451,8 +444,6 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.screenY = e.screenY;
     this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-
-    this.mouseDownTime_ = goog.now();
   } else {
     this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
   }
@@ -539,7 +530,6 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   this.cleanUpAfterDragging_();
 
   if (this.dragging_) {
-    this.maybeReinitTouchEvent_(e);
     this.dragging_ = false;
 
     var x = this.limitX(this.deltaX);
@@ -565,32 +555,12 @@ goog.fx.Dragger.prototype.endDragCancel = function(e) {
 
 
 /**
- * Re-initializes the event with the first target touch event or, in the case
- * of a stop event, the last changed touch.
- * @param {goog.events.BrowserEvent} e A TOUCH... event.
- * @private
- */
-goog.fx.Dragger.prototype.maybeReinitTouchEvent_ = function(e) {
-  var type = e.type;
-
-  if (type == goog.events.EventType.TOUCHSTART ||
-      type == goog.events.EventType.TOUCHMOVE) {
-    e.init(e.getBrowserEvent().targetTouches[0], e.currentTarget);
-  } else if (type == goog.events.EventType.TOUCHEND ||
-             type == goog.events.EventType.TOUCHCANCEL) {
-    e.init(e.getBrowserEvent().changedTouches[0], e.currentTarget);
-  }
-};
-
-
-/**
  * Event handler that is used on mouse / touch move to update the drag
  * @param {goog.events.BrowserEvent} e Event object.
  * @private
  */
 goog.fx.Dragger.prototype.handleMove_ = function(e) {
   if (this.enabled_) {
-    this.maybeReinitTouchEvent_(e);
     // dx in right-to-left cases is relative to the right.
     var sign = this.useRightPositioningForRtl_ &&
         this.isRightToLeft_() ? -1 : 1;
