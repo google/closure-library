@@ -135,13 +135,14 @@ goog.dom.browserrange.AbstractRange.prototype.getPosition_ = function(start) {
 
   var rects = this.range_.getClientRects();
   if (rects.length) {
-    var r = start ? rects[0] : goog.array.peek(rects)
+    var r = start ? rects[0] : goog.array.peek(rects);
     return new goog.math.Coordinate(
         start ? r.left : r.right,
         start ? r.top : r.bottom);
   }
   return null;
-}
+};
+
 
 /**
  * Compares one endpoint of this range with the endpoint of another browser
