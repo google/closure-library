@@ -668,3 +668,16 @@ goog.graphics.CanvasGraphics.prototype.resume = function() {
     this.needsRedraw_ = false;
   }
 };
+
+
+/**
+ * Removes an element from the Canvas.
+ * @param {goog.graphics.Element} elem the element to remove.
+ */
+goog.graphics.CanvasGraphics.prototype.removeElement = function(elem) {
+  if (!elem) {
+    return;
+  }
+  this.canvasElement.removeElement(elem);
+  this.redraw();
+};
