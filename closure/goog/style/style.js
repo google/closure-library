@@ -583,22 +583,39 @@ goog.style.getVisibleRectForElement = function(element) {
  * aligned as close to the container's top left corner as possible.
  *
  * @param {Element} element The element to make visible.
- * @param {Element} container The container to scroll.
+ * @param {Element=} opt_container The container to scroll. If not set, then the
+ *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  * @return {!goog.math.Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
 goog.style.getContainerOffsetToScrollInto =
-    function(element, container, opt_center) {
+    function(element, opt_container, opt_center) {
+  var container = opt_container || goog.dom.getDocumentScrollElement();
   // Absolute position of the element's border's top left corner.
   var elementPos = goog.style.getPageOffset(element);
   // Absolute position of the container's border's top left corner.
   var containerPos = goog.style.getPageOffset(container);
   var containerBorder = goog.style.getBorderBox(container);
-  // Relative pos. of the element's border box to the container's content box.
-  var relX = elementPos.x - containerPos.x - containerBorder.left;
-  var relY = elementPos.y - containerPos.y - containerBorder.top;
+  if (container == goog.dom.getDocumentScrollElement()) {
+    // The element position is calculated based on the page offset, and the
+    // document scroll element holds the scroll position within the page. We can
+    // use the scroll position to calculate the relative position from the
+    // element.
+    var relX = elementPos.x - container.scrollLeft;
+    var relY = elementPos.y - container.scrollTop;
+    if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+      // In older versions of IE getPageOffset(element) does not include the
+      // container border so it has to be added to accomodate.
+      relX += containerBorder.left;
+      relY += containerBorder.top;
+    }
+  } else {
+    // Relative pos. of the element's border box to the container's content box.
+    var relX = elementPos.x - containerPos.x - containerBorder.left;
+    var relY = elementPos.y - containerPos.y - containerBorder.top;
+  }
   // How much the element can move in the container, i.e. the difference between
   // the element's bottom-right-most and top-left-most position where it's
   // fully visible.
@@ -609,21 +626,6 @@ goog.style.getContainerOffsetToScrollInto =
 
   var scrollLeft = container.scrollLeft;
   var scrollTop = container.scrollTop;
-  if (container == goog.dom.getDocument().body ||
-      container == goog.dom.getDocument().documentElement) {
-    // If the container is the document scroll element (usually <body>),
-    // getPageOffset(element) is already relative to it and there is no need to
-    // consider the current scroll.
-    scrollLeft = containerPos.x + containerBorder.left;
-    scrollTop = containerPos.y + containerBorder.top;
-
-    if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
-      // In older versions of IE getPageOffset(element) does not include the
-      // continaer border so it has to be added to accomodate.
-      scrollLeft += containerBorder.left;
-      scrollTop += containerBorder.top;
-    }
-  }
   if (opt_center) {
     // All browsers round non-integer scroll positions down.
     scrollLeft += relX - spaceX / 2;
@@ -650,11 +652,14 @@ goog.style.getContainerOffsetToScrollInto =
  * aligned as close to the container's top left corner as possible.
  *
  * @param {Element} element The element to make visible.
- * @param {Element} container The container to scroll.
+ * @param {Element=} opt_container The container to scroll. If not set, then the
+ *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
-goog.style.scrollIntoContainerView = function(element, container, opt_center) {
+goog.style.scrollIntoContainerView =
+    function(element, opt_container, opt_center) {
+  var container = opt_container || goog.dom.getDocumentScrollElement();
   var offset =
       goog.style.getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
