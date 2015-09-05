@@ -248,6 +248,16 @@ function testContains() {
   assertFalse('max date', r.contains(goog.date.DateRange.MAXIMUM_DATE));
 }
 
+
+function testSeparateDateObjects() {
+  // see http://b/23820818
+  var dr = goog.date.DateRange.today();
+  var endDate = dr.getEndDate();
+  endDate.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+  var startDate = dr.getStartDate();
+  assertFalse(startDate.equals(endDate));
+}
+
 function assertStartEnd(name, start, end, actual) {
   assertTrue(
       name + ' start should be ' + start + ' but was ' + actual.getStartDate(),
@@ -255,4 +265,8 @@ function assertStartEnd(name, start, end, actual) {
   assertTrue(
       name + ' end should be ' + end + ' but was ' + actual.getEndDate(),
       end.equals(actual.getEndDate()));
+  // see http://b/23820818
+  assertFalse(
+      name + ' start date was the same object as the end date',
+      actual.getStartDate() === actual.getEndDate());
 }

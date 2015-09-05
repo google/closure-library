@@ -182,7 +182,7 @@ goog.date.DateRange.offsetInMonths_ = function(date, offset) {
 goog.date.DateRange.yesterday = function(opt_today) {
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
   var yesterday = goog.date.DateRange.offsetInDays_(today, -1);
-  return new goog.date.DateRange(yesterday, yesterday);
+  return new goog.date.DateRange(yesterday, yesterday.clone());
 };
 
 
@@ -194,7 +194,7 @@ goog.date.DateRange.yesterday = function(opt_today) {
  */
 goog.date.DateRange.today = function(opt_today) {
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
-  return new goog.date.DateRange(today, today);
+  return new goog.date.DateRange(today, today.clone());
 };
 
 
