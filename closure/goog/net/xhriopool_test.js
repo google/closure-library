@@ -52,3 +52,19 @@ function testSetHeadersForInitializedPoolObjects() {
   xhrIoPool.releaseObject(xhrIo);
   goog.dispose(xhrIoPool);
 }
+
+
+function testSetCredentials() {
+  var xhrIoPool = new goog.net.XhrIoPool(
+      undefined /* opt_headers */,
+      undefined /* opt_minCount */,
+      undefined /* opt_maxCount */,
+      true /* opt_withCredentials */);
+  var xhrIo = xhrIoPool.getObject();
+
+  assertTrue('withCredentials should be set on a request object',
+             xhrIo.getWithCredentials());
+
+  xhrIoPool.releaseObject(xhrIo);
+  goog.dispose(xhrIoPool);
+}
