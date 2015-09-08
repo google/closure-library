@@ -705,19 +705,18 @@ goog.dom.createDom_ = function(doc, args) {
   var tagName = args[0];
   var attributes = args[1];
 
-  // Internet Explorer is dumb: http://msdn.microsoft.com/workshop/author/
-  //                            dhtml/reference/properties/name_2.asp
+  // Internet Explorer is dumb:
+  // name: https://msdn.microsoft.com/en-us/library/ms534184(v=vs.85).aspx
+  // type: https://msdn.microsoft.com/en-us/library/ms534700(v=vs.85).aspx
   // Also does not allow setting of 'type' attribute on 'input' or 'button'.
   if (!goog.dom.BrowserFeature.CAN_ADD_NAME_OR_TYPE_ATTRIBUTES && attributes &&
       (attributes.name || attributes.type)) {
     var tagNameArr = ['<', tagName];
     if (attributes.name) {
-      tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name),
-                      '"');
+      tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name), '"');
     }
     if (attributes.type) {
-      tagNameArr.push(' type="', goog.string.htmlEscape(attributes.type),
-                      '"');
+      tagNameArr.push(' type="', goog.string.htmlEscape(attributes.type), '"');
 
       // Clone attributes map to remove 'type' without mutating the input.
       var clone = {};
