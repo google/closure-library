@@ -673,6 +673,7 @@ goog.graphics.CanvasGraphics.prototype.resume = function() {
 /**
  * Removes an element from the Canvas.
  * @param {goog.graphics.Element} elem the element to remove.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.removeElement = function(elem) {
   if (!elem) {
