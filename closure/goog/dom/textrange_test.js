@@ -286,7 +286,7 @@ function testGetEndPositionReversed() {
 
     // For some reason, ie7 is further off than other browsers.
     var estimate =
-        (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) ? 4 : 1
+        (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) ? 4 : 1;
     assertObjectRoughlyEquals(expected, result, estimate);
   } catch (e) {
     expectedFailures.handleException(e);
