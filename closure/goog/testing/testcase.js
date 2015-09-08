@@ -781,8 +781,8 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
       retval = this.rejectIfPromiseTimesOut_(
           retval, self.promiseTimeout,
           'Timed out while waiting for a promise returned from ' + fnName +
-          ' to resolve. Set G_testRunner.testCase.promiseTimeout' +
-          ' to adjust the timeout.');
+          ' to resolve. Set goog.testing.TestCase.getActiveTestCase()' +
+          '.promiseTimeout to adjust the timeout.');
       retval.then(
           function() {
             self.resetBatchTimeAfterPromise_();
@@ -926,6 +926,20 @@ goog.testing.TestCase.getGlobals = function(opt_prefix) {
   return typeof goog.global['RuntimeObject'] != 'undefined' ?
       [goog.global['RuntimeObject']((opt_prefix || '') + '*'), goog.global] :
       [goog.global];
+};
+
+
+/**
+ * @return {?goog.testing.TestCase} currently active test case or null if not
+ *     test is currently running.
+ */
+goog.testing.TestCase.getActiveTestCase = function() {
+  var gTestRunner = goog.global['G_testRunner'];
+  if (gTestRunner && gTestRunner.testCase) {
+    return gTestRunner.testCase;
+  } else {
+    return null;
+  }
 };
 
 

@@ -31,6 +31,7 @@ goog.require('goog.net.BulkLoader');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -50,7 +51,7 @@ var EventType = goog.module.ModuleLoader.EventType;
 var observer;
 
 function setUpPage() {
-  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
 function setUp() {

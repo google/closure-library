@@ -20,11 +20,12 @@ goog.require('goog.labs.net.xhr');
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 function setUpPage() {
-  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
 function stubXhrToReturn(status, opt_responseText, opt_latency) {

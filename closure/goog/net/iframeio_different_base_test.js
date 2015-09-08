@@ -19,10 +19,11 @@ goog.require('goog.Promise');
 goog.require('goog.events');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 function setUpPage() {
-  G_testRunner.testCase.promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
 function testDifferentBaseUri() {

@@ -182,7 +182,7 @@ function testTestCaseReturningPromise_GoogPromiseTimeout() {
     assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
     // Check that error message mentions how to change timeout.
     assertTrue(goog.string.contains(result.errors[0].message,
-        'G_testRunner.testCase.promiseTimeout'));
+        'goog.testing.TestCase.getActiveTestCase().promiseTimeout'));
     assertTrue(elapsedTime >= testCase.promiseTimeout - 100 &&
         elapsedTime <= testCase.promiseTimeout + 100);
   });
@@ -227,7 +227,7 @@ function testTestCaseReturningPromise_PromiseTimeout() {
     assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
     // Check that error message mentions how to change timeout.
     assertTrue(goog.string.contains(result.errors[0].message,
-        'G_testRunner.testCase.promiseTimeout'));
+        'goog.testing.TestCase.getActiveTestCase().promiseTimeout'));
     assertTrue(elapsedTime >= testCase.promiseTimeout - 100 &&
         elapsedTime <= testCase.promiseTimeout + 100);
   });

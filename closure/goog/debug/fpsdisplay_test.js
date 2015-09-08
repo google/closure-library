@@ -17,12 +17,13 @@ goog.setTestOnly('goog.debug.FpsDisplayTest');
 
 goog.require('goog.Timer');
 goog.require('goog.debug.FpsDisplay');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 var fpsDisplay;
 
 function setUpPage() {
-  G_testRunner.testCase.promiseTimeout = 5000; // 5s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000; // 5s
 }
 
 function setUp() {
