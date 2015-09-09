@@ -1289,7 +1289,10 @@ goog.string.hashCode = function(str) {
   for (var i = 0; i < str.length; ++i) {
     result = 31 * result + str.charCodeAt(i);
     // Normalize to 4 byte range, 0 ... 2^32.
-    result %= goog.string.HASHCODE_MAX_;
+    result |= 0;
+    if (result < 0) {
+      result += goog.string.HASHCODE_MAX_;
+    }
   }
   return result;
 };
