@@ -17,3 +17,6 @@ cd ../closure-library
 
 # Installs node "devDependencies" found in package.json.
 npm install
+
+# Install Selenium.
+./node_modules/protractor/bin/webdriver-manager update
