@@ -76,6 +76,13 @@ function testMaxSizeInIE() {
   }
 }
 
+function testSelectSingleNodeInIe() {
+  var xml = goog.dom.xml.loadXml('<a><b><c>d</c></b></a>');
+  var node = xml.firstChild;
+  var bNode = goog.dom.xml.selectSingleNode(node, 'b');
+  assertNotNull(bNode);
+}
+
 function testSetAttributes() {
   var xmlElement = goog.dom.xml.createDocument().createElement('root');
   var domElement = document.createElement(goog.dom.TagName.DIV);
