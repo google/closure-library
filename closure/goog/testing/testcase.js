@@ -128,11 +128,9 @@ goog.testing.TestCase = function(opt_name) {
   /**
    * The maximum time in milliseconds a promise returned from a test function
    * may remain pending before the test fails due to timeout.
-   * TODO(nbeloglazov): bring down default timeout to reasonable value to make
-   * it actually useful.
    * @type {number}
    */
-  this.promiseTimeout = 24 * 60 * 60 * 1000; // 1 day
+  this.promiseTimeout = 1000; // 1s
 };
 
 
