@@ -19,4 +19,7 @@ java -jar ../closure-compiler/build/compiler.jar \
   --js='!**osapi/osapi.js' \
   --js='!**svgpan/svgpan.js' \
   --js='!**alltests.js' \
+  --js='!**\./node_modules**.js' \
+  --js='!**protractor_spec.js' \
+  --js='!**protractor.conf.js' \
   --js_output_file=$(mktemp);
