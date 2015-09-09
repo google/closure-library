@@ -29,7 +29,9 @@
  * Other streaming-related features such as cancellation and keep-alive are
  * exposed/constrained by the Node streams API semantics.
  *
- * Flow-control support is limited due to the underlying use of XHR.
+ * Flow-control support is limited due to the underlying use of XHR. That is,
+ * this version will assume the "flowing mode", and the read method is not
+ * provided.
  *
  */
 
@@ -62,6 +64,9 @@ goog.net.streams.NodeReadableStream.EventType = {
  * Register a callback to handle I/O events.
  *
  * See https://iojs.org/api/events.html
+ *
+ * Note that under the object mode, an event of DATA will deliver a message
+ * of 1) JSON compliant JS object, including arrays; or 2) an ArrayBuffer.
  *
  * @param {string} eventType The event type
  * @param {function(Object=)} callback The call back to handle the event with
@@ -101,17 +106,3 @@ goog.net.streams.NodeReadableStream.prototype.removeListener =
  * @return {goog.net.streams.NodeReadableStream} this object
  */
 goog.net.streams.NodeReadableStream.prototype.once = goog.abstractMethod;
-
-
-/**
- * Read from the stream.
- *
- * See https://iojs.org/api/stream.html#stream_class_stream_readable
- *
- * TODO(user): clarify the return type (messages).
- *
- * @param {?number=} opt_size How much data (bytes) to read. Returns all the
- * data if size is not specified. Return null if there is not enough data.
- * @return {(?string|Object)} the data or null.
- */
-goog.net.streams.NodeReadableStream.prototype.read = goog.abstractMethod;
