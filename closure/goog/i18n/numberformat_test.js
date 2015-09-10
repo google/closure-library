@@ -55,7 +55,7 @@ function tearDown() {
 
 function veryBigNumberCompare(str1, str2) {
   return str1.length == str2.length &&
-         str1.substring(0, 8) == str2.substring(0, 8);
+      str1.substring(0, 8) == str2.substring(0, 8);
 }
 
 function testVeryBigNumber() {
@@ -64,7 +64,6 @@ function testVeryBigNumber() {
   str = fmt.format(1785599999999999888888888888888);
   // when comparing big number, various platform have small different in
   // precision. We have to tolerate that using veryBigNumberCompare.
-  var expected = '$1,785,599,999,999,999,400,000,000,000,000.00';
   assertTrue(veryBigNumberCompare(
       '$1,785,599,999,999,999,400,000,000,000,000.00', str));
   str = fmt.format(1.7856E30);
@@ -266,6 +265,7 @@ function testGrouping() {
   var fmt = new goog.i18n.NumberFormat('#,###');
   str = fmt.format(1234567890);
   assertEquals('1,234,567,890', str);
+
   fmt = new goog.i18n.NumberFormat('#,####');
   str = fmt.format(1234567890);
   assertEquals('12,3456,7890', str);
@@ -273,6 +273,160 @@ function testGrouping() {
   fmt = new goog.i18n.NumberFormat('#');
   str = fmt.format(1234567890);
   assertEquals('1234567890', str);
+}
+
+function testIndiaNumberGrouping() {
+  // Test for a known grouping used and recognized in India
+  var fmt = new goog.i18n.NumberFormat('#,##,###');
+  var str = fmt.format(1);
+  assertEquals('1', str);
+  str = fmt.format(12);
+  assertEquals('12', str);
+  str = fmt.format(123);
+  assertEquals('123', str);
+  str = fmt.format(1234);
+  assertEquals('1,234', str);
+  str = fmt.format(12345);
+  assertEquals('12,345', str);
+  str = fmt.format(123456);
+  assertEquals('1,23,456', str);
+  str = fmt.format(1234567);
+  assertEquals('12,34,567', str);
+  str = fmt.format(12345678);
+  assertEquals('1,23,45,678', str);
+  str = fmt.format(123456789);
+  assertEquals('12,34,56,789', str);
+  str = fmt.format(1234567890);
+  assertEquals('1,23,45,67,890', str);
+  str = fmt.format(0);
+  assertEquals('0', str);
+  str = fmt.format(-1);
+  assertEquals('-1', str);
+  str = fmt.format(-12);
+  assertEquals('-12', str);
+  str = fmt.format(-123);
+  assertEquals('-123', str);
+  str = fmt.format(-1234);
+  assertEquals('-1,234', str);
+  str = fmt.format(-12345);
+  assertEquals('-12,345', str);
+  str = fmt.format(-123456);
+  assertEquals('-1,23,456', str);
+  str = fmt.format(-1234567);
+  assertEquals('-12,34,567', str);
+  str = fmt.format(-12345678);
+  assertEquals('-1,23,45,678', str);
+  str = fmt.format(-123456789);
+  assertEquals('-12,34,56,789', str);
+  str = fmt.format(-1234567890);
+  assertEquals('-1,23,45,67,890', str);
+}
+
+function testUnknownNumberGroupings() {
+  // Test for any future unknown grouping format in addition to India
+  var fmt = new goog.i18n.NumberFormat('#,####,##,###');
+  var str = fmt.format(1);
+  assertEquals('1', str);
+  str = fmt.format(12);
+  assertEquals('12', str);
+  str = fmt.format(123);
+  assertEquals('123', str);
+  str = fmt.format(1234);
+  assertEquals('1,234', str);
+  str = fmt.format(12345);
+  assertEquals('12,345', str);
+  str = fmt.format(123456);
+  assertEquals('1,23,456', str);
+  str = fmt.format(1234567);
+  assertEquals('12,34,567', str);
+  str = fmt.format(12345678);
+  assertEquals('123,45,678', str);
+  str = fmt.format(123456789);
+  assertEquals('1234,56,789', str);
+  str = fmt.format(1234567890);
+  assertEquals('1,2345,67,890', str);
+  str = fmt.format(11234567890);
+  assertEquals('11,2345,67,890', str);
+  str = fmt.format(111234567890);
+  assertEquals('111,2345,67,890', str);
+  str = fmt.format(1111234567890);
+  assertEquals('1111,2345,67,890', str);
+  str = fmt.format(11111234567890);
+  assertEquals('1,1111,2345,67,890', str);
+  str = fmt.format(0);
+  assertEquals('0', str);
+  str = fmt.format(-1);
+  assertEquals('-1', str);
+  str = fmt.format(-12);
+  assertEquals('-12', str);
+  str = fmt.format(-123);
+  assertEquals('-123', str);
+  str = fmt.format(-1234);
+  assertEquals('-1,234', str);
+  str = fmt.format(-12345);
+  assertEquals('-12,345', str);
+  str = fmt.format(-123456);
+  assertEquals('-1,23,456', str);
+  str = fmt.format(-1234567);
+  assertEquals('-12,34,567', str);
+  str = fmt.format(-12345678);
+  assertEquals('-123,45,678', str);
+  str = fmt.format(-123456789);
+  assertEquals('-1234,56,789', str);
+  str = fmt.format(-1234567890);
+  assertEquals('-1,2345,67,890', str);
+  str = fmt.format(-11234567890);
+  assertEquals('-11,2345,67,890', str);
+  str = fmt.format(-111234567890);
+  assertEquals('-111,2345,67,890', str);
+  str = fmt.format(-1111234567890);
+  assertEquals('-1111,2345,67,890', str);
+  str = fmt.format(-11111234567890);
+  assertEquals('-1,1111,2345,67,890', str);
+
+  fmt = new goog.i18n.NumberFormat('#,#,##,###,#');
+  str = fmt.format(1);
+  assertEquals('1', str);
+  str = fmt.format(12);
+  assertEquals('1,2', str);
+  str = fmt.format(123);
+  assertEquals('12,3', str);
+  str = fmt.format(1234);
+  assertEquals('123,4', str);
+  str = fmt.format(12345);
+  assertEquals('1,234,5', str);
+  str = fmt.format(123456);
+  assertEquals('12,345,6', str);
+  str = fmt.format(1234567);
+  assertEquals('1,23,456,7', str);
+  str = fmt.format(12345678);
+  assertEquals('1,2,34,567,8', str);
+  str = fmt.format(123456789);
+  assertEquals('1,2,3,45,678,9', str);
+  str = fmt.format(1234567890);
+  assertEquals('1,2,3,4,56,789,0', str);
+  str = fmt.format(0);
+  assertEquals('0', str);
+  str = fmt.format(-1);
+  assertEquals('-1', str);
+  str = fmt.format(-12);
+  assertEquals('-1,2', str);
+  str = fmt.format(-123);
+  assertEquals('-12,3', str);
+  str = fmt.format(-1234);
+  assertEquals('-123,4', str);
+  str = fmt.format(-12345);
+  assertEquals('-1,234,5', str);
+  str = fmt.format(-123456);
+  assertEquals('-12,345,6', str);
+  str = fmt.format(-1234567);
+  assertEquals('-1,23,456,7', str);
+  str = fmt.format(-12345678);
+  assertEquals('-1,2,34,567,8', str);
+  str = fmt.format(-123456789);
+  assertEquals('-1,2,3,45,678,9', str);
+  str = fmt.format(-1234567890);
+  assertEquals('-1,2,3,4,56,789,0', str);
 }
 
 function testPerMill() {
@@ -1019,7 +1173,7 @@ function testCompactWithBaseFormattingFrench() {
   // Switch to French.
   stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_fr);
   stubs.set(goog.i18n, 'CompactNumberFormatSymbols',
-            goog.i18n.CompactNumberFormatSymbols_fr);
+      goog.i18n.CompactNumberFormatSymbols_fr);
 
   var fmt = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.COMPACT_SHORT);
