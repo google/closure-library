@@ -17,20 +17,21 @@ goog.setTestOnly('goog.uri.utilsTest');
 
 goog.require('goog.functions');
 goog.require('goog.string');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.uri.utils');
 
-
 var utils = goog.uri.utils;
+var stubs = new goog.testing.PropertyReplacer();
 
 
 function setUpPage() {
   goog.string.getRandomString = goog.functions.constant('RANDOM');
 }
 
-
-function tearDown() {}
-
+function tearDown() {
+  stubs.reset();
+}
 
 function testSplit() {
   var uri = 'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
@@ -59,14 +60,12 @@ function testSplit() {
       utils.getQueryData('http://google.com?foo=bar&baz=bin'));
 }
 
-
 function testMailtoUri() {
   var uri = 'mailto:joe+random@hominid.com';
   assertNull(utils.getDomain(uri));
   assertEquals('mailto', utils.getScheme(uri));
   assertEquals('joe+random@hominid.com', utils.getPath(uri));
 }
-
 
 function testSplitRelativeUri() {
   var uri = '/path%20path+path?q=query&hl=en#fragment';
@@ -81,7 +80,6 @@ function testSplitRelativeUri() {
   assertEquals('fragment', utils.getFragment(uri));
 }
 
-
 function testSplitBadAuthority() {
   // This URL has a syntax error per the RFC (port number must be digits, and
   // host cannot contain a colon except in [...]). This test is solely to
@@ -90,7 +88,6 @@ function testSplitBadAuthority() {
   assertEquals(utils.getDomain('http://host:port/'), 'host:port');
   assertNull(utils.getPort('http://host:port/'));
 }
-
 
 function testSplitIntoHostAndPath() {
   // Splitting into host and path takes care of one of the major use cases
@@ -605,44 +602,3 @@ function testParseQuery() {
 }
 
 
-function testSetPath() {
-  assertEquals('http://www.google.com/bar',
-      goog.uri.utils.setPath('http://www.google.com', 'bar'));
-  assertEquals('http://www.google.com/bar',
-      goog.uri.utils.setPath('http://www.google.com', '/bar'));
-  assertEquals('http://www.google.com/bar/',
-      goog.uri.utils.setPath('http://www.google.com', 'bar/'));
-  assertEquals('http://www.google.com/bar/',
-      goog.uri.utils.setPath('http://www.google.com', '/bar/'));
-  assertEquals('http://www.google.com/bar?q=t',
-      goog.uri.utils.setPath('http://www.google.com/?q=t', '/bar'));
-  assertEquals('http://www.google.com/bar?q=t',
-      goog.uri.utils.setPath('http://www.google.com/?q=t', 'bar'));
-  assertEquals('http://www.google.com/bar/?q=t',
-      goog.uri.utils.setPath('http://www.google.com/?q=t', 'bar/'));
-  assertEquals('http://www.google.com/bar/?q=t',
-      goog.uri.utils.setPath('http://www.google.com/?q=t', '/bar/'));
-  assertEquals('http://www.google.com/bar?q=t',
-      goog.uri.utils.setPath('http://www.google.com/foo?q=t', 'bar'));
-  assertEquals('http://www.google.com/bar?q=t',
-      goog.uri.utils.setPath('http://www.google.com/foo?q=t', '/bar'));
-  assertEquals('https://www.google.com/bar?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com/foo?q=t&q1=y', 'bar'));
-  assertEquals('https://www.google.com:8113/bar?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com:8113?q=t&q1=y', 'bar'));
-  assertEquals('https://www.google.com:8113/foo/bar?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com:8113/foobar?q=t&q1=y',
-      'foo/bar'));
-  assertEquals('https://www.google.com:8113/foo/bar?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com:8113/foobar?q=t&q1=y',
-      '/foo/bar'));
-  assertEquals('https://www.google.com:8113/foo/bar/?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com:8113/foobar?q=t&q1=y',
-      'foo/bar/'));
-  assertEquals('https://www.google.com:8113/foo/bar/?q=t&q1=y',
-      goog.uri.utils.setPath('https://www.google.com:8113/foobar?q=t&q1=y',
-      '/foo/bar/'));
-  assertEquals('https://www.google.com:8113/?q=t&q1=y',
-      goog.uri.utils.setPath(
-          'https://www.google.com:8113/foobar?q=t&q1=y', ''));
-}
