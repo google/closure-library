@@ -27,6 +27,20 @@ function assertValueAndCount(value, count, backoff) {
   assertEquals('Wrong backoff count', count, backoff.getBackoffCount());
 }
 
+function assertValueRangeAndCount(minBackoffValue, maxBackoffValue, count,
+    backoff) {
+  assertTrue('Value too small', backoff.getValue() >= minBackoffValue);
+  assertTrue('Value too large', backoff.getValue() <= maxBackoffValue);
+  assertEquals('Wrong backoff count', count, backoff.getBackoffCount());
+}
+
+function getMinBackoff(baseValue, randomFactor) {
+  return Math.round(baseValue - baseValue * randomFactor);
+}
+
+function getMaxBackoff(baseValue, randomFactor) {
+  return Math.round(baseValue + baseValue * randomFactor);
+}
 
 function createBackoff() {
   return new goog.math.ExponentialBackoff(INITIAL_VALUE, MAX_VALUE);
@@ -59,5 +73,29 @@ function testReset() {
   backoff.backoff();
   backoff.reset();
   assertValueAndCount(INITIAL_VALUE, 0 /* count */, backoff);
+}
 
+function testRandomFactor() {
+  var initialValue = 1;
+  var maxValue = 20;
+  var randomFactor = 0.5;
+  var backoff =
+      new goog.math.ExponentialBackoff(initialValue, maxValue, randomFactor);
+
+  assertValueAndCount(initialValue /* value */, 0 /* count */, backoff);
+  backoff.backoff();
+  assertValueRangeAndCount(getMinBackoff(2, randomFactor),
+      getMaxBackoff(2, randomFactor), 1 /* count */, backoff);
+  backoff.backoff();
+  assertValueRangeAndCount(getMinBackoff(4, randomFactor),
+      getMaxBackoff(4, randomFactor), 2 /* count */, backoff);
+  backoff.backoff();
+  assertValueRangeAndCount(getMinBackoff(8, randomFactor),
+      getMaxBackoff(8, randomFactor), 3 /* count */, backoff);
+  backoff.backoff();
+  assertValueRangeAndCount(getMinBackoff(16, randomFactor),
+      maxValue /* max backoff value */, 4 /* count */, backoff);
+  backoff.backoff();
+  assertValueRangeAndCount(getMinBackoff(maxValue, randomFactor),
+      maxValue /* max backoff value */, 5 /* count */, backoff);
 }
