@@ -128,8 +128,10 @@ goog.math.ExponentialBackoff.prototype.backoff = function() {
   // If we haven't hit the maximum value yet, keep doubling the base value.
   this.currBaseValue_ = Math.min(this.maxValue_, this.currBaseValue_ * 2);
 
-  var randomWait = Math.round(
-      this.randomFactor_ * (Math.random() - 0.5) * 2 * this.currBaseValue_);
+  var randomWait = this.randomFactor_ ?
+      Math.round(this.randomFactor_ *
+          (Math.random() - 0.5) * 2 * this.currBaseValue_) :
+      0;
   this.currValue_ = Math.min(this.maxValue_, this.currBaseValue_ + randomWait);
   this.currCount_++;
 };
