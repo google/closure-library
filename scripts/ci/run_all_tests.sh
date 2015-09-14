@@ -3,6 +3,14 @@
 # Script to install dependencies and bootstrap protractor to run all Closure
 # tests.
 
+# Disable testing on Sauce for PRs. Due to:
+# http://docs.travis-ci.com/user/pull-requests/#Security-Restrictions-when-testing-Pull-Requests.
+# TODO(joeltine): Remove or re-enable when we figure out how we want to run
+# our tests.
+if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+  exit 0
+fi
+
 HTTP_PORT=8080
 
 # Make sure to kill both servers on exit (e.g., CTRL+C).
