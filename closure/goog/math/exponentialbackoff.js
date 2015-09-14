@@ -100,6 +100,7 @@ goog.math.ExponentialBackoff.prototype.currCount_ = 0;
  */
 goog.math.ExponentialBackoff.prototype.reset = function() {
   this.currValue_ = this.initialValue_;
+  this.currBaseValue_ = this.initialValue_;
   this.currCount_ = 0;
 };
 

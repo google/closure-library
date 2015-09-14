@@ -73,6 +73,8 @@ function testReset() {
   backoff.backoff();
   backoff.reset();
   assertValueAndCount(INITIAL_VALUE, 0 /* count */, backoff);
+  backoff.backoff();
+  assertValueAndCount(2 /* value */, 1 /* count */, backoff);
 }
 
 function testRandomFactor() {
