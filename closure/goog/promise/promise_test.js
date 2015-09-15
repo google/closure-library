@@ -2023,7 +2023,7 @@ function testThenableInterface() {
 
   // Test COMPILED code path.
   try {
-    COMPIlED = true;
+    COMPILED = true;
     function C() {}
     C.prototype.then = function(opt_a, opt_b, opt_c) {};
     goog.Thenable.addImplementation(C);
