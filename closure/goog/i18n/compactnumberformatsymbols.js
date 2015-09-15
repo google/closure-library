@@ -7123,6 +7123,89 @@ goog.i18n.CompactNumberFormatSymbols_pt = {
       'other': '000\u00A0mil'
     },
     '1000000': {
+      'other': '0\u00A0M'
+    },
+    '10000000': {
+      'other': '00\u00A0M'
+    },
+    '100000000': {
+      'other': '000\u00A0M'
+    },
+    '1000000000': {
+      'other': '0\u00A0MM'
+    },
+    '10000000000': {
+      'other': '00\u00A0MM'
+    },
+    '100000000000': {
+      'other': '000\u00A0MM'
+    },
+    '1000000000000': {
+      'other': '0\u00A0Bi'
+    },
+    '10000000000000': {
+      'other': '00\u00A0Bi'
+    },
+    '100000000000000': {
+      'other': '000\u00A0Bi'
+    }
+  },
+  COMPACT_DECIMAL_LONG_PATTERN: {
+    '1000': {
+      'other': '0 mil'
+    },
+    '10000': {
+      'other': '00 mil'
+    },
+    '100000': {
+      'other': '000 mil'
+    },
+    '1000000': {
+      'other': '0 milh\u00F5es'
+    },
+    '10000000': {
+      'other': '00 milh\u00F5es'
+    },
+    '100000000': {
+      'other': '000 milh\u00F5es'
+    },
+    '1000000000': {
+      'other': '0 mil milh\u00F5es'
+    },
+    '10000000000': {
+      'other': '00 mil milh\u00F5es'
+    },
+    '100000000000': {
+      'other': '000 mil milh\u00F5es'
+    },
+    '1000000000000': {
+      'other': '0 bili\u00F5es'
+    },
+    '10000000000000': {
+      'other': '00 bili\u00F5es'
+    },
+    '100000000000000': {
+      'other': '000 bili\u00F5es'
+    }
+  }
+};
+
+
+/**
+ * Compact number formatting symbols for locale pt_BR.
+ */
+goog.i18n.CompactNumberFormatSymbols_pt_BR = {
+  COMPACT_DECIMAL_SHORT_PATTERN: {
+    '1000': {
+      'other': '0\u00A0mil'
+    },
+    '10000': {
+      'other': '00\u00A0mil'
+    },
+    '100000': {
+      'other': '000\u00A0mil'
+    },
+    '1000000': {
       'other': '0\u00A0mi'
     },
     '10000000': {
@@ -7192,93 +7275,10 @@ goog.i18n.CompactNumberFormatSymbols_pt = {
 
 
 /**
- * Compact number formatting symbols for locale pt_BR.
- */
-goog.i18n.CompactNumberFormatSymbols_pt_BR =
-    goog.i18n.CompactNumberFormatSymbols_pt;
-
-
-/**
  * Compact number formatting symbols for locale pt_PT.
  */
-goog.i18n.CompactNumberFormatSymbols_pt_PT = {
-  COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0\u00A0mil'
-    },
-    '10000': {
-      'other': '00\u00A0mil'
-    },
-    '100000': {
-      'other': '000\u00A0mil'
-    },
-    '1000000': {
-      'other': '0\u00A0M'
-    },
-    '10000000': {
-      'other': '00\u00A0M'
-    },
-    '100000000': {
-      'other': '000\u00A0M'
-    },
-    '1000000000': {
-      'other': '0\u00A0MM'
-    },
-    '10000000000': {
-      'other': '00\u00A0MM'
-    },
-    '100000000000': {
-      'other': '000\u00A0MM'
-    },
-    '1000000000000': {
-      'other': '0\u00A0Bi'
-    },
-    '10000000000000': {
-      'other': '00\u00A0Bi'
-    },
-    '100000000000000': {
-      'other': '000\u00A0Bi'
-    }
-  },
-  COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 mil'
-    },
-    '10000': {
-      'other': '00 mil'
-    },
-    '100000': {
-      'other': '000 mil'
-    },
-    '1000000': {
-      'other': '0 milh\u00F5es'
-    },
-    '10000000': {
-      'other': '00 milh\u00F5es'
-    },
-    '100000000': {
-      'other': '000 milh\u00F5es'
-    },
-    '1000000000': {
-      'other': '0 mil milh\u00F5es'
-    },
-    '10000000000': {
-      'other': '00 mil milh\u00F5es'
-    },
-    '100000000000': {
-      'other': '000 mil milh\u00F5es'
-    },
-    '1000000000000': {
-      'other': '0 bili\u00F5es'
-    },
-    '10000000000000': {
-      'other': '00 bili\u00F5es'
-    },
-    '100000000000000': {
-      'other': '000 bili\u00F5es'
-    }
-  }
-};
+goog.i18n.CompactNumberFormatSymbols_pt_PT =
+    goog.i18n.CompactNumberFormatSymbols_pt;
 
 
 /**
@@ -10104,7 +10104,7 @@ if (goog.LOCALE == 'pt') {
 }
 
 if (goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR') {
-  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_pt;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_pt_BR;
 }
 
 if (goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT') {
@@ -10298,4 +10298,3 @@ if (goog.LOCALE == 'zu') {
 if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_zu;
 }
-

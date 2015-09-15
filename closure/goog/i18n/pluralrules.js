@@ -443,21 +443,6 @@ goog.i18n.pluralRules.hiSelect_ = function(n, opt_precision) {
 };
 
 /**
- * Plural select rules for pt locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
- * @private
- */
-goog.i18n.pluralRules.ptSelect_ = function(n, opt_precision) {
-  if (n >= 0 && n <= 2 && n != 2) {
-    return goog.i18n.pluralRules.Keyword.ONE;
-  }
-  return goog.i18n.pluralRules.Keyword.OTHER;
-};
-
-/**
  * Plural select rules for ar locale
  *
  * @param {number} n  The count of items.
@@ -526,6 +511,37 @@ goog.i18n.pluralRules.csSelect_ = function(n, opt_precision) {
 };
 
 /**
+ * Plural select rules for pt locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.ptSelect_ = function(n, opt_precision) {
+  var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
+  if (n == 1 && vf.v == 0) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
+ * Plural select rules for pt_BR locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.pt_BRSelect_ = function(n, opt_precision) {
+  if (n >= 0 && n <= 2 && n != 2) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
  * Plural select rules for pt_PT locale
  *
  * @param {number} n  The count of items.
@@ -533,13 +549,7 @@ goog.i18n.pluralRules.csSelect_ = function(n, opt_precision) {
  * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
  * @private
  */
-goog.i18n.pluralRules.pt_PTSelect_ = function(n, opt_precision) {
-  var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
-  if (n == 1 && vf.v == 0) {
-    return goog.i18n.pluralRules.Keyword.ONE;
-  }
-  return goog.i18n.pluralRules.Keyword.OTHER;
-};
+goog.i18n.pluralRules.pt_PTSelect_ = goog.i18n.pluralRules.pt_BRSelect_;
 
 /**
  * Plural select rules for be locale
@@ -1056,7 +1066,7 @@ if (goog.LOCALE == 'pt') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.ptSelect_;
 }
 if (goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR') {
-  goog.i18n.pluralRules.select = goog.i18n.pluralRules.ptSelect_;
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.pt_BRSelect_;
 }
 if (goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.pt_PTSelect_;
