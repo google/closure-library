@@ -381,7 +381,7 @@ goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
  * @private
  */
 goog.userAgent.operaVersion_ = function() {
-  var version = goog.global['opera'].version;
+  var version = goog.global.opera.version;
   try {
     return version();
   } catch (e) {
