@@ -756,7 +756,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
     throw Error('Min value must be less than max value');
   }
 
-  if (parts === null) {
+  if (goog.isNull(parts)) {
     parts = [];
   }
 
