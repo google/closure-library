@@ -32,6 +32,19 @@ function testSerialize() {
   assertTrue(/(<\?xml version="1.0"\?>)?<root ?\/>/.test(serializedDoc));
 }
 
+function testSerializeWithActiveX() {
+  // Prefer ActiveXObject if available.
+  var doc = goog.dom.xml.createDocument('', '', true);
+  var node = doc.createElement('root');
+  doc.appendChild(node);
+
+  var serializedNode = goog.dom.xml.serialize(node);
+  assertTrue(/<root ?\/>/.test(serializedNode));
+
+  var serializedDoc = goog.dom.xml.serialize(doc);
+  assertTrue(/(<\?xml version="1.0"\?>)?<root ?\/>/.test(serializedDoc));
+}
+
 function testBelowMaxDepthInIE() {
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
     // This value is only effective in IE8 and below
@@ -74,6 +87,45 @@ function testMaxSizeInIE() {
     assertNotEquals('Should have caused a parse error', 0,
         Number(doc.parseError));
   }
+}
+
+function testSelectSingleNodeNoActiveX() {
+  if (goog.userAgent.IE) {
+    return;
+  }
+
+  var xml = goog.dom.xml.loadXml('<a><b><c>d</c></b></a>');
+  var node = xml.firstChild;
+  var bNode = goog.dom.xml.selectSingleNode(node, 'b');
+  assertNotNull(bNode);
+}
+
+function testSelectSingleNodeWithActiveX() {
+  // Enable ActiveXObject so IE has xpath support.
+  var xml = goog.dom.xml.loadXml('<a><b><c>d</c></b></a>', true);
+  var node = xml.firstChild;
+  var bNode = goog.dom.xml.selectSingleNode(node, 'b');
+  assertNotNull(bNode);
+}
+
+function testSelectNodesNoActiveX() {
+  if (goog.userAgent.IE) {
+    return;
+  }
+
+  var xml = goog.dom.xml.loadXml('<a><b><c>d</c></b><b>foo</b></a>');
+  var node = xml.firstChild;
+  var bNodes = goog.dom.xml.selectNodes(node, 'b');
+  assertNotNull(bNodes);
+  assertEquals(2, bNodes.length);
+}
+
+function testSelectNodesWithActiveX() {
+  var xml = goog.dom.xml.loadXml('<a><b><c>d</c></b><b>foo</b></a>', true);
+  var node = xml.firstChild;
+  var bNodes = goog.dom.xml.selectNodes(node, 'b');
+  assertNotNull(bNodes);
+  assertEquals(2, bNodes.length);
 }
 
 function testSetAttributes() {
