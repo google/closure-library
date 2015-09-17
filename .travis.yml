@@ -6,10 +6,6 @@
 # Use new container-based infrastructure.
 sudo: false
 
-# Cache node modules across runs.
-cache:
-  - node_modules
-
 install:
   - ./scripts/ci/install_closure_deps.sh
 
@@ -18,10 +14,7 @@ script:
   - ./scripts/ci/lint_pull_request.sh
   - travis_wait 30 ./scripts/ci/run_all_tests.sh
 
-addons:
-  sauce_connect: true
-
 env:
   global:
-    - secure: G3YiCL+uZVLv0XdMjPhczNM5k6vBBqUqsvjArQZmJmf/zKwEP49vv7ag2f//9msc4XrzXs06OzHW3tI8nq7JJnGrupTcJBeZ6Vcg06Z1W2pG8/dSNJ0dRC493ICIBpU8VW2moYF1aDdY1oktdII7xQ705nBcRJ9VcLqG1Km2BpY=
-    - secure: kqXS2ih32mv1Xw0l8bs+QeMRc7wdVxVMzsZ7LdtLbTfAKdHlF/FyshLXpbLjPJDdIndyBZfH1U+KJI2SfqRhyo/kvuiOlz0okeh+paRumCjradPYlTXkr/Ji91gSRa/HObupEoYOKoERjZlK/eH9FXYBKx63LSwV6qiAppQdiSo=
+    - SAUCE_USERNAME=joeltine
+    - SAUCE_ACCESS_KEY=c1426ba29e28-d49b-e304-8559-3a85cd04
