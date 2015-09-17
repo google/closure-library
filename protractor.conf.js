@@ -1,5 +1,7 @@
 // See https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 // for full protractor config reference.
+var browserCapabilities = require('./browser_capabilities');
+
 var SAUCE_ACCESS_KEY =
     process.env.SAUCE_ACCESS_KEY.split('').reverse().join('');
 
@@ -8,17 +10,7 @@ exports.config = {
 
   sauceKey: SAUCE_ACCESS_KEY,
 
-  // Options specific to which browser tests are run on.
-  capabilities: {
-    'browserName': 'chrome',
-    'build': process.env.TRAVIS_BUILD_NUMBER,
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    'name': process.env.TRAVIS_PULL_REQUEST == 'false' ?
-                'CO-' + process.env.TRAVIS_BRANCH + '-' +
-                    process.env.TRAVIS_COMMIT :
-                'PR-' + process.env.TRAVIS_PULL_REQUEST + '-' +
-                    process.env.TRAVIS_BRANCH + '-' + process.env.TRAVIS_COMMIT
-  },
+  multiCapabilities: browserCapabilities,
 
   // Testing framework used for spec file.
   framework: 'jasmine2',

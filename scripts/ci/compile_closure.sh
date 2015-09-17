@@ -22,4 +22,5 @@ java -jar ../closure-compiler/build/compiler.jar \
   --js='!**\./node_modules**.js' \
   --js='!**protractor_spec.js' \
   --js='!**protractor.conf.js' \
+  --js='!**browser_capabilities.js' \
   --js_output_file=$(mktemp);
