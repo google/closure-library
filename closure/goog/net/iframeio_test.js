@@ -285,6 +285,19 @@ function testAddFormInputs() {
   }
 }
 
+function testAddFormArrayInputs() {
+  var form = document.createElement(goog.dom.TagName.FORM);
+  var data = {'a': ['blue', 'green'], 'b': ['red', 'pink', 'white']};
+  goog.net.IframeIo.addFormInputs_(form, data);
+  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
+  assertEquals(5, inputs.length);
+  for (var i = 0; i < inputs.length; i++) {
+    assertEquals('hidden', inputs[i].type);
+    var n = inputs[i].name;
+    assertContains(inputs[i].value, data[n]);
+  }
+}
+
 function testNotIgnoringResponse() {
   // This test can't run in IE because we can't forge the check for
   // iframe.readyState = 'complete'.
