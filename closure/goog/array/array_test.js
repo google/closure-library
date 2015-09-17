@@ -520,6 +520,18 @@ function testArrayFindIndexRightOmitsDeleted() {
   assertEquals(-1, b);
 }
 
+function testArrayPartition() {
+  var a = [4, 0, 1, 1, 2, -1];
+  var b = goog.array.partition(a, function(val, index, a2) {
+    assertEquals(a, a2);
+    assertEquals('index is not a number', 'number', typeof index);
+    return val <= 1;
+  });
+  assertArrayEquals([
+    [0, 1, 1, -1], [4, 2]
+  ], b);
+}
+
 function testArraySome() {
   var a = [0, 1, 2, 3];
   var b = goog.array.some(a, function(val, index, a2) {
