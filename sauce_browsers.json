@@ -1,0 +1,10 @@
+[
+  {
+    "browserName" : "chrome",
+    "platform" : "Linux"
+  },
+  {
+    "browserName" : "firefox",
+    "platform" : "Linux"
+  }
+]

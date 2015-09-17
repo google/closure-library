@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import SimpleHTTPServer
 import SocketServer
 import cgi

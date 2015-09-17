@@ -14,7 +14,7 @@ if [[ -n "$CHANGED_FILES" ]]; then
   $USER_BASE/bin/gjslint \
     --strict \
     --jslint_error=all \
-    --exclude_files=deps.js,alltests.js,protractor.conf.js,protractor_spec.js \
+    --exclude_files=deps.js,alltests.js,protractor.conf.js,protractor_spec.js,browser_capabilities.js \
     $CHANGED_FILES;
 else
   echo "No .js files found to lint in this Pull Request."
