@@ -914,7 +914,7 @@ function testQueryDataAddWithArray() {
 }
 
 function testFragmentEncoding() {
-  var allowedInFragment = /[A-Za-z0-9\-\._~!$&'()*+,;=:@/?]/g;
+  var allowedInFragment = /[A-Za-z0-9\-._~!$&'()*+,;=:@/?]/g;
 
   var sb = [];
   for (var i = 33; i < 500; i++) {  // arbitrarily use first 500 chars.
