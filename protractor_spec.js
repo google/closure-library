@@ -6,7 +6,13 @@ var allTests = require('./alltests');
 // Timeout for individual test package to complete.
 var TEST_TIMEOUT = 45 * 1000;
 var TEST_SERVER = 'http://localhost:8080';
-var IGNORED_TESTS = ['closure/goog/i18n/currency_test.html'];
+var IGNORED_TESTS = [
+  // currency_test has some weird encoding issues when run with the rest of
+  // the test suite.
+  'closure/goog/i18n/currency_test.html',
+  // Test hangs in IE8.
+  'closure/goog/ui/plaintextspellchecker_test.html'
+];
 
 describe('Run all Closure unit tests', function() {
   var removeIgnoredTests = function(tests) {
@@ -19,9 +25,7 @@ describe('Run all Closure unit tests', function() {
     return tests;
   };
 
-  beforeAll(function() {
-    allTests = removeIgnoredTests(allTests);
-  });
+  beforeAll(function() { allTests = removeIgnoredTests(allTests); });
 
   beforeEach(function() {
     // Ignores synchronization with angular loading. Since we don't use angular,

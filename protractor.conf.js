@@ -19,7 +19,7 @@ exports.config = {
   specs: ['protractor_spec.js'],
 
   jasmineNodeOpts: {
-    // Timeout in ms before a test fails. 30 minutes.
+    // Timeout in ms before a test fails.
     defaultTimeoutInterval: 30 * 60 * 1000
   }
 };
