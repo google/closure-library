@@ -605,7 +605,7 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
  *     takes 3 arguments (the element, the index and the array) and should
  *     return a boolean.
  * @param {S=} opt_obj An optional "this" context for the function.
- * @return {Array<Array<T>, Array<T>>} An array of 2 elements: values of
+ * @return {Array<Array<T>>} An array of 2 elements: values of
  *       arr which satisfies the condition and ones which does not.
  * @template T,S
  */
