@@ -2180,8 +2180,8 @@ goog.exportProperty = function(object, publicName, symbol) {
  * child.foo(); // This works.
  * </pre>
  *
- * @param {Function} childCtor Child class.
- * @param {Function} parentCtor Parent class.
+ * @param {!Function} childCtor Child class.
+ * @param {!Function} parentCtor Parent class.
  */
 goog.inherits = function(childCtor, parentCtor) {
   /** @constructor */
