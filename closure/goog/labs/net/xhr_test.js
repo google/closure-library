@@ -235,7 +235,7 @@ function testBadUrlDetectedAsError() {
 
 function testBadOriginTriggersOnErrorHandler() {
   // Disable tests when being run as a part of open-source. For some reason, the
-  // external Windows/IE images allow cross-origin requests.
+  // external Windows/IE VMs on Sauce Labs allow cross-origin requests.
   // TODO(joeltine): Re-enable externally when cross-origin requests are
   // properly blocked.
   if (goog.userAgent.IE && /closure\/goog\/labs/.test(location.pathname)) {
