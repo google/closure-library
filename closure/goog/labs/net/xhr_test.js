@@ -238,7 +238,7 @@ function testBadOriginTriggersOnErrorHandler() {
   // external Windows/IE images allow cross-origin requests.
   // TODO(joeltine): Re-enable externally when cross-origin requests are
   // properly blocked.
-  if (/closure\/goog\/labs/.test(location.pathname)) {
+  if (goog.userAgent.IE && /closure\/goog\/labs/.test(location.pathname)) {
     return;
   }
   return xhr.get('http://www.google.com').then(
