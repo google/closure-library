@@ -234,6 +234,13 @@ function testBadUrlDetectedAsError() {
 }
 
 function testBadOriginTriggersOnErrorHandler() {
+  // Disable tests when being run as a part of open-source. For some reason, the
+  // external Windows/IE images allow cross-origin requests.
+  // TODO(joeltine): Re-enable externally when cross-origin requests are
+  // properly blocked.
+  if (/closure\/goog\/labs/.test(location.pathname)) {
+    return;
+  }
   return xhr.get('http://www.google.com').then(
       fail /* opt_onFulfilled */,
       function(err) {
