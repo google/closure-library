@@ -403,7 +403,7 @@ goog.module.getInternal_ = function(name) {
 
 
 /**
- * @private {?{moduleName: (string|undefined)}}
+ * @private {?{moduleName: (string|undefined), declareLegacyNamespace:boolean}}
  */
 goog.moduleLoaderState_ = null;
 
@@ -1047,7 +1047,10 @@ if (goog.DEPENDENCIES_ENABLED) {
     // of the module.
     var previousState = goog.moduleLoaderState_;
     try {
-      goog.moduleLoaderState_ = {moduleName: undefined};
+      goog.moduleLoaderState_ = {
+        moduleName: undefined,
+        declareLegacyNamespace: false
+      };
       var exports;
       if (goog.isFunction(moduleDef)) {
         exports = moduleDef.call(goog.global, {});
