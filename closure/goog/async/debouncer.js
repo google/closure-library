@@ -31,8 +31,8 @@ goog.require('goog.Timer');
  * interval apart (in milliseconds). Whether it receives one signal or multiple,
  * it will always wait until a full interval has elapsed since the last signal
  * before performing the action.
- * @param {function(this: T, ...*)} listener Function to callback when the
- *     action is triggered.
+ * @param {function(this: T)} listener Function to callback when the action is
+ *     triggered.
  * @param {number} interval Interval over which to debounce. The listener will
  *     only be called after the full interval has elapsed since the last signal.
  * @param {T=} opt_handler Object in whose scope to call the listener.
@@ -47,10 +47,9 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
 
   /**
    * Function to callback
-   * @private {function(this: T, ...*)}
+   * @private {function(this: T)}
    */
-  this.listener_ = goog.isDefAndNotNull(opt_handler) ?
-      goog.bind(listener, opt_handler) : listener;
+  this.listener_ = listener;
 
   /**
    * Interval for the debounce time
@@ -58,6 +57,13 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
    * @private
    */
   this.interval_ = interval;
+
+  /**
+   * "this" context for the listener
+   * @type {Object|undefined}
+   * @private
+   */
+  this.handler_ = opt_handler;
 
   /**
    * Cached callback function invoked after the debounce timeout completes
@@ -88,12 +94,6 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
    * @private
    */
   this.timer_ = null;
-
-  /**
-   * The last arguments passed into {@code fire}.
-   * @private {!Array}
-   */
-  this.args_ = [];
 };
 goog.inherits(goog.async.Debouncer, goog.Disposable);
 
@@ -103,11 +103,9 @@ goog.inherits(goog.async.Debouncer, goog.Disposable);
  * call so that the callback is only called after the last action in a sequence
  * of actions separated by periods less the interval parameter passed to the
  * constructor.
- * @param {...*} var_args Arguments to pass on to the debounced function.
  */
-goog.async.Debouncer.prototype.fire = function(var_args) {
+goog.async.Debouncer.prototype.fire = function() {
   this.stop();
-  this.args_ = arguments;
   this.timer_ = goog.Timer.callOnce(this.callback_, this.interval_);
 };
 
@@ -122,7 +120,6 @@ goog.async.Debouncer.prototype.stop = function() {
     this.timer_ = null;
   }
   this.shouldFire_ = false;
-  this.args_ = [];
 };
 
 
@@ -181,5 +178,5 @@ goog.async.Debouncer.prototype.onTimer_ = function() {
  */
 goog.async.Debouncer.prototype.doAction_ = function() {
   this.shouldFire_ = false;
-  this.listener_.apply(null, this.args_);
+  this.listener_.call(this.handler_);
 };
