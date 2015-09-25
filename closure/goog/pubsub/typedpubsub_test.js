@@ -521,7 +521,7 @@ function testUnsubscribeWhilePublishing() {
   /** const */ var TOPIC_X = new goog.pubsub.TopicId('X');
 
   function first() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         pubsub.unsubscribe(TOPIC_X, second));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount(TOPIC_X));
@@ -530,14 +530,12 @@ function testUnsubscribeWhilePublishing() {
   pubsub.subscribe(TOPIC_X, first);
 
   function second() {
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
-        pubsub.getCount(TOPIC_X));
     secondCalled = true;
   }
   pubsub.subscribe(TOPIC_X, second);
 
   function third() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         pubsub.unsubscribe(TOPIC_X, first));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount(TOPIC_X));
@@ -552,7 +550,7 @@ function testUnsubscribeWhilePublishing() {
 
   assertTrue(pubsub.publish(TOPIC_X));
   assertTrue('First function must have been called', firstCalled);
-  assertTrue('Second function must have been called', secondCalled);
+  assertFalse('Second function must have been called', secondCalled);
   assertTrue('Third function must have been called', thirdCalled);
   assertEquals('Topic "X" must have 1 subscriber after publishing', 1,
       pubsub.getCount(TOPIC_X));
@@ -567,7 +565,7 @@ function testUnsubscribeSelfWhilePublishing() {
   /** @const */ SOME_TOPIC = new goog.pubsub.TopicId('someTopic');
 
   function selfDestruct() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         pubsub.unsubscribe(SOME_TOPIC, arguments.callee));
     assertEquals('Topic must still have 1 subscriber', 1,
         pubsub.getCount(SOME_TOPIC));
@@ -660,4 +658,21 @@ function testClear() {
   pubsub.clear();
   assertEquals('Pubsub channel must have no subscribers', 0,
       pubsub.getCount());
+}
+
+function testNestedSubscribeOnce() {
+  var calls = 0;
+
+  pubsub.subscribeOnce('X', function() {
+    calls++;
+  });
+
+  pubsub.subscribe('Y', function() {
+    pubsub.publish('X');
+    pubsub.publish('X');
+  });
+
+  pubsub.publish('Y');
+
+  assertEquals('X must be called once', 1, calls);
 }

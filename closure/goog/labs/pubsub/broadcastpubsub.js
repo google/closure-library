@@ -307,7 +307,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.subscribeOnce =
 
 /**
  * Returns the number of subscriptions to the given topic (or all topics if
- * unspecified).
+ * unspecified). This number will not change while publishing any messages.
  * @param {string=} opt_topic The topic (all topics if unspecified).
  * @return {number} Number of subscriptions to the topic.
  */

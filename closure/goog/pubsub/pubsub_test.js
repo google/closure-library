@@ -497,7 +497,7 @@ function testUnsubscribeWhilePublishing() {
   var thirdCalled = false;
 
   function first() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('X', second));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount('X'));
@@ -506,14 +506,12 @@ function testUnsubscribeWhilePublishing() {
   pubsub.subscribe('X', first);
 
   function second() {
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
-        pubsub.getCount('X'));
     secondCalled = true;
   }
   pubsub.subscribe('X', second);
 
   function third() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('X', first));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount('X'));
@@ -528,7 +526,7 @@ function testUnsubscribeWhilePublishing() {
 
   assertTrue(pubsub.publish('X'));
   assertTrue('First function must have been called', firstCalled);
-  assertTrue('Second function must have been called', secondCalled);
+  assertFalse('Second function must not have been called', secondCalled);
   assertTrue('Third function must have been called', thirdCalled);
   assertEquals('Topic "X" must have 1 subscriber after publishing', 1,
       pubsub.getCount('X'));
@@ -543,7 +541,7 @@ function testUnsubscribeSelfWhilePublishing() {
   var selfDestructCalled = false;
 
   function selfDestruct() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('someTopic', arguments.callee));
     assertEquals('Topic must still have 1 subscriber', 1,
         pubsub.getCount('someTopic'));
@@ -650,4 +648,21 @@ function testSubscriberExceptionUnlocksSubscriptions() {
   assertTrue(pubsub.unsubscribeByKey(key2));
   // "key1" should've been successfully removed already;
   assertFalse(pubsub.unsubscribeByKey(key1));
+}
+
+function testNestedSubscribeOnce() {
+  var calls = 0;
+
+  pubsub.subscribeOnce('X', function() {
+    calls++;
+  });
+
+  pubsub.subscribe('Y', function() {
+    pubsub.publish('X');
+    pubsub.publish('X');
+  });
+
+  pubsub.publish('Y');
+
+  assertEquals('X must be called once', 1, calls);
 }
