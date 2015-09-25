@@ -485,9 +485,14 @@ goog.editor.plugins.LinkBubble.prototype.showLinkDialog_ = function(e) {
 
 /**
  * Deletes the link associated with the bubble
+ * @param {goog.events.BrowserEvent} e The event.
  * @private
  */
-goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function() {
+goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function(e) {
+  // Needed when this occurs due to an ENTER key event, else the editor receives
+  // the key press and inserts a newline.
+  e.preventDefault();
+
   this.getFieldObject().dispatchBeforeChange();
 
   var link = this.getTargetElement();
