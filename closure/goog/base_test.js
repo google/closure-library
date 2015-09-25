@@ -28,12 +28,12 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
+goog.require('goog.test_module');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 
-goog.require('goog.test_module');
 var earlyTestModuleGet = goog.module.get('goog.test_module');
 
 function getFramedVars(name) {
