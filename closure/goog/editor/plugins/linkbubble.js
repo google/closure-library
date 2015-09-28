@@ -22,11 +22,11 @@ goog.provide('goog.editor.plugins.LinkBubble.Action');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Link');
 goog.require('goog.editor.plugins.AbstractBubblePlugin');
-goog.require('goog.editor.range');
 goog.require('goog.functions');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -498,7 +498,10 @@ goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function(e) {
   var link = this.getTargetElement();
   var child = link.lastChild;
   goog.dom.flattenElement(link);
-  goog.editor.range.placeCursorNextTo(child, false);
+
+  var range = goog.dom.Range.createFromNodeContents(child);
+  range.collapse(false);
+  range.select();
 
   this.closeBubble();
 

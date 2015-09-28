@@ -39,6 +39,7 @@ var fieldDiv;
 var FIELDMOCK;
 var linkBubble;
 var link;
+var linkChild;
 var mockWindowOpen;
 var stubs;
 var testHelper;
@@ -57,6 +58,7 @@ function setUp() {
   linkBubble.fieldObject = FIELDMOCK;
 
   link = fieldDiv.firstChild;
+  linkChild = link.lastChild;
 
   mockWindowOpen = new goog.testing.FunctionMock('open');
   stubs.set(window, 'open', mockWindowOpen);
@@ -181,6 +183,10 @@ function testDeleteClicked() {
   assertNotEquals('Link removed', element.firstChild.nodeName,
       goog.dom.TagName.A);
   assertNoBubble();
+  var range = goog.dom.Range.createFromWindow();
+  assertEquals('Link selection on link text', linkChild, range.getEndNode());
+  assertEquals('Link selection on link text end',
+      goog.dom.getRawTextContent(linkChild).length, range.getEndOffset());
   FIELDMOCK.$verify();
 }
 
@@ -206,6 +212,10 @@ function testDeletePressed() {
   assertNotEquals('Link removed', element.firstChild.nodeName,
       goog.dom.TagName.A);
   assertNoBubble();
+  var range = goog.dom.Range.createFromWindow();
+  assertEquals('Link selection on link text', linkChild, range.getEndNode());
+  assertEquals('Link selection on link text end',
+      goog.dom.getRawTextContent(linkChild).length, range.getEndOffset());
   FIELDMOCK.$verify();
 }
 
