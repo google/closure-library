@@ -396,7 +396,7 @@ goog.object.add = function(obj, key, val) {
  * @param {string} key The key for which to get the value.
  * @param {R=} opt_val The value to return if no item is found for the given
  *     key (default is undefined).
- * @return {V|R|undefined} The value for the given key.
+ * @return {V|R} The value for the given key.
  * @template K,V,R
  */
 goog.object.get = function(obj, key, opt_val) {
