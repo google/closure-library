@@ -1,7 +1,8 @@
 [
   {
     "browserName" : "firefox",
-    "platform" : "Linux"
+    "platform" : "Linux",
+    "version": "40.0"
   },
   {
     "browserName" : "chrome",
