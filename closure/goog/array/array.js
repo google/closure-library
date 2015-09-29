@@ -1059,22 +1059,20 @@ goog.array.binarySelect = function(arr, evaluator, opt_obj) {
  *
  * Runtime: O(log n)
  *
- * @param {Array<VALUE>|goog.array.ArrayLike} arr The array to be searched.
- * @param {function(TARGET, VALUE): number|
- *         function(this:THIS, VALUE, number, ?): number} compareFn Either an
- *     evaluator or a comparison function, as defined by binarySearch
+ * @param {Array<?>|goog.array.ArrayLike} arr The array to be searched.
+ * @param {function(?, ?, ?): number | function(?, ?): number} compareFn
+ *     Either an evaluator or a comparison function, as defined by binarySearch
  *     and binarySelect above.
  * @param {boolean} isEvaluator Whether the function is an evaluator or a
  *     comparison function.
- * @param {TARGET=} opt_target If the function is a comparison function, then
+ * @param {?=} opt_target If the function is a comparison function, then
  *     this is the target to binary search for.
- * @param {THIS=} opt_selfObj If the function is an evaluator, this is an
-  *    optional this object for the evaluator.
+ * @param {Object=} opt_selfObj If the function is an evaluator, this is an
+ *     optional this object for the evaluator.
  * @return {number} Lowest index of the target value if found, otherwise
  *     (-(insertion point) - 1). The insertion point is where the value should
  *     be inserted into arr to preserve the sorted property.  Return value >= 0
  *     iff target is found.
- * @template THIS, VALUE, TARGET
  * @private
  */
 goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
