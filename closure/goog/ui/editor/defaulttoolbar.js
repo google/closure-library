@@ -612,17 +612,17 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  * @param {goog.ui.ControlContent} caption Button caption.
  * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
+ * @param {string} color Hex color in 3 digits beginning with #
  * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
  *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
  *     unspecified.
  * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
- * @param {string} color Hex color in 3 digits beginning with #
  * @return {!goog.ui.Button} A toolbar button.
  * @private
  */
 goog.ui.editor.DefaultToolbar.colorFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper, color) {
+    caption, color, opt_classNames, opt_renderer, opt_domHelper) {
   var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id, tooltip,
       caption, opt_classNames, opt_renderer, opt_domHelper);
   button.setSelectedColor(color);
@@ -653,7 +653,7 @@ goog.ui.editor.DefaultToolbar.colorFactory_ = function(id, tooltip,
 goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
     caption, opt_classNames, opt_renderer, opt_domHelper) {
   return goog.ui.editor.DefaultToolbar.colorFactory_(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper, '#000');
+      caption, '#000', opt_classNames, opt_renderer, opt_domHelper);
 };
 
 
@@ -678,7 +678,7 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
 goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(id, tooltip,
     caption, opt_classNames, opt_renderer, opt_domHelper) {
   return goog.ui.editor.DefaultToolbar.colorFactory_(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper, '#FFF');
+      caption, '#FFF', opt_classNames, opt_renderer, opt_domHelper);
 };
 
 
