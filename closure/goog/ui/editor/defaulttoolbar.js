@@ -610,9 +610,9 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
+ * @param {string} color Hex color in 3 digits beginning with #
  * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {string} color Hex color in 3 digits beginning with #
  * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
  *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
  *     unspecified.
