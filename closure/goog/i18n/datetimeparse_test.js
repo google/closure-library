@@ -628,3 +628,31 @@ function testStandaloneMonthPattern() {
     }
   }
 }
+
+function testConstructorSymbols() {
+  var y = 2015, m = 8, d = 28;
+  var dateFr = new Date(y, m, d);
+  var dateZh = new Date(y, m, d);
+
+  var parserFr = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE,
+      goog.i18n.DateTimeSymbols_fr);
+
+  var parserZh = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE,
+      goog.i18n.DateTimeSymbols_zh);
+
+  var fmtFr = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE,
+      goog.i18n.DateTimeSymbols_fr);
+
+  var fmtZh = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE,
+      goog.i18n.DateTimeSymbols_zh);
+
+  var dateStrFr = fmtFr.format(dateFr);
+  var dateStrZh = fmtZh.format(dateZh);
+
+  assertParsedDateEquals(y, m, d, parserFr, dateStrFr, dateFr);
+  assertParsedDateEquals(y, m, d, parserZh, dateStrZh, dateZh);
+}
