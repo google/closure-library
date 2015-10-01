@@ -242,6 +242,16 @@ function testChromeIphone() {
   assertVersionBetween('22.0', '22.10');
 }
 
+function testChromeIpad() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.CHROME_IPAD);
+  assertBrowser(Browser.CHROME);
+  assertTrue(goog.labs.userAgent.browser.isChrome());
+  assertVersion('32.0.1700.20');
+  assertVersionBetween('32.0', '33.0');
+  assertVersionBetween('32.0', '32.10');
+}
+
 function testChromeMac() {
   goog.labs.userAgent.util.setUserAgent(
       goog.labs.userAgent.testAgents.CHROME_MAC);
