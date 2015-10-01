@@ -832,8 +832,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   goog.inHtmlDocument_ = function() {
     /** @type {Document} */
     var doc = goog.global.document;
-    return typeof doc != 'undefined' &&
-           'write' in doc;  // XULDocument misses write.
+    return doc != null && 'write' in doc;  // XULDocument misses write.
   };
 
 
@@ -1410,7 +1409,7 @@ goog.retrieveAndExecModule_ = function(src) {
 /**
  * This is a "fixed" version of the typeof operator.  It differs from the typeof
  * operator in such a way that null returns 'null' and arrays return 'array'.
- * @param {*} value The value to get the type of.
+ * @param {?} value The value to get the type of.
  * @return {string} The name of the type.
  */
 goog.typeOf = function(value) {
@@ -1432,7 +1431,7 @@ goog.typeOf = function(value) {
       //   value, the compiler requires the value be cast to type Object,
       //   even though the ECMA spec explicitly allows it.
       var className = Object.prototype.toString.call(
-          /** @type {Object} */ (value));
+          /** @type {!Object} */ (value));
       // In Firefox 3.6, attempting to access iframe window objects' length
       // property throws an NS_ERROR_FAILURE, so we need to special-case it
       // here.
@@ -1663,7 +1662,7 @@ goog.removeUid = function(obj) {
 
   // In IE, DOM nodes are not instances of Object and throw an exception if we
   // try to delete.  Instead we try to use removeAttribute.
-  if ('removeAttribute' in obj) {
+  if (obj != null && 'removeAttribute' in obj) {
     obj.removeAttribute(goog.UID_PROPERTY_);
   }
   /** @preserveTry */
@@ -2100,7 +2099,8 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
 goog.getMsg = function(str, opt_values) {
   if (opt_values) {
     str = str.replace(/\{\$([^}]+)}/g, function(match, key) {
-      return key in opt_values ? opt_values[key] : match;
+      return (opt_values != null && key in opt_values) ?
+          opt_values[key] : match;
     });
   }
   return str;
