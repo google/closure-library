@@ -69,19 +69,33 @@ goog.color.alpha.hexToRgbaStyle = function(hexColor) {
 
 
 /**
+ * Gets the hex or alpha color part of an alpha hex color
+ * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
+ * @param {number} startIdx The start index of the alpha hex color to strip
+   from.
+ * @param {number} endIdx The end index of the alpha hex color to strip until.
+ * @return {string} The hex color where the alpha part has been stripped off.
+ * @private
+ */
+goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
+  if (goog.color.alpha.isValidAlphaHexColor_(colorWithAlpha)) {
+    var fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
+    var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
+    return normalizedColor.substring(startIdx, endIdx);
+  } else {
+    throw Error(colorWithAlpha + ' is not a valid 8-hex color string');
+  }
+};
+
+
+/**
  * Gets the hex color part of an alpha hex color. For example, from '#abcdef55'
  * return '#abcdef'.
  * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
  * @return {string} The hex color where the alpha part has been stripped off.
  */
 goog.color.alpha.extractHexColor = function(colorWithAlpha) {
-  if (goog.color.alpha.isValidAlphaHexColor_(colorWithAlpha)) {
-    var fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
-    var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
-    return normalizedColor.substring(0, 7);
-  } else {
-    throw Error(colorWithAlpha + ' is not a valid 8-hex color string');
-  }
+  return goog.color.alpha.extractColor_(colorWithAlpha, 0, 7);
 };
 
 
@@ -92,13 +106,7 @@ goog.color.alpha.extractHexColor = function(colorWithAlpha) {
  * @return {string} The hex color where the alpha part has been stripped off.
  */
 goog.color.alpha.extractAlpha = function(colorWithAlpha) {
-  if (goog.color.alpha.isValidAlphaHexColor_(colorWithAlpha)) {
-    var fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
-    var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
-    return normalizedColor.substring(7, 9);
-  } else {
-    throw Error(colorWithAlpha + ' is not a valid 8-hex color string');
-  }
+  return goog.color.alpha.extractColor_(colorWithAlpha, 7, 9);
 };
 
 
