@@ -81,7 +81,7 @@ goog.array.last = goog.array.peek;
 
 /**
  * Reference to the original {@code Array.prototype}.
- * @private
+ * @private {!Object}
  */
 goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 
