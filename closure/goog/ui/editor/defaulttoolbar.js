@@ -610,6 +610,36 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
+ * @param {string} color Hex color in 3 digits beginning with #
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
+ *     element.
+ * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
+ *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
+ *     unspecified.
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+ *     creation; defaults to the current document if unspecified.
+ * @return {!goog.ui.Button} A toolbar button.
+ * @private
+ */
+goog.ui.editor.DefaultToolbar.colorFactory_ = function(id, tooltip,
+    caption, color, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id, tooltip,
+      caption, opt_classNames, opt_renderer, opt_domHelper);
+  button.setSelectedColor(color);
+  button.updateFromValue = goog.partial(
+      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
+  return button;
+};
+
+
+/**
+ * Creates a toolbar button with the given ID, tooltip, and caption.  Applies
+ * any custom CSS class names to the button's caption element. Use to create
+ * a font color button.
+ * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+ *     built-in buttons, anything else for custom buttons.
+ * @param {string} tooltip Tooltip to be shown on hover.
+ * @param {goog.ui.ControlContent} caption Button caption.
  * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
  * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
@@ -622,13 +652,8 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  */
 goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
     caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
-  // Initialize default foreground color.
-  button.setSelectedColor('#000');
-  button.updateFromValue = goog.partial(
-      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
-  return button;
+  return goog.ui.editor.DefaultToolbar.colorFactory_(id, tooltip,
+      caption, '#000', opt_classNames, opt_renderer, opt_domHelper);
 };
 
 
@@ -652,13 +677,8 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
  */
 goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(id, tooltip,
     caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id,
-      tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
-  // Initialize default background color.
-  button.setSelectedColor('#FFF');
-  button.updateFromValue = goog.partial(
-      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
-  return button;
+  return goog.ui.editor.DefaultToolbar.colorFactory_(id, tooltip,
+      caption, '#FFF', opt_classNames, opt_renderer, opt_domHelper);
 };
 
 
