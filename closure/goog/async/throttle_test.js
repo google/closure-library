@@ -93,3 +93,73 @@ function testThrottle() {
 
   clock.uninstall();
 }
+
+
+function testThrottleScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'y': 0};
+  new goog.async.Throttle(function() {
+    ++this['y'];
+  }, interval, x).fire();
+  assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+function testThrottleArgumentBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  var throttle = new goog.async.Throttle(function(a, b, c) {
+    ++calls;
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval);
+
+  throttle.fire(3, 'string', false);
+  assertEquals(1, calls);
+
+  // fire should always pass the last arguments passed to it into the decorated
+  // function, even if called multiple times.
+  throttle.fire();
+  mockClock.tick(interval / 2);
+  throttle.fire(8, null, true);
+  throttle.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, calls);
+
+  mockClock.uninstall();
+}
+
+
+function testThrottleArgumentAndScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'calls': 0};
+  var throttle = new goog.async.Throttle(function(a, b, c) {
+    ++this['calls'];
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval, x);
+
+  throttle.fire(3, 'string', false);
+  assertEquals(1, x['calls']);
+
+  // fire should always pass the last arguments passed to it into the decorated
+  // function, even if called multiple times.
+  throttle.fire();
+  mockClock.tick(interval / 2);
+  throttle.fire(8, null, true);
+  throttle.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, x['calls']);
+
+  mockClock.uninstall();
+}
