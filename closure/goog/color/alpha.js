@@ -69,12 +69,13 @@ goog.color.alpha.hexToRgbaStyle = function(hexColor) {
 
 
 /**
- * Gets the hex or alpha color part of an alpha hex color
+ * Extracts a substring, from startIdx to endIdx, of the normalized (lowercase
+ * #rrggbbaa) form of a hex-with-alpha color.
  * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
- * @param {number} startIdx The start index of the alpha hex color to strip
-   from.
- * @param {number} endIdx The end index of the alpha hex color to strip until.
- * @return {string} The hex color where the alpha part has been stripped off.
+ *     This may be four or eight digits.
+ * @param {number} startIdx The start index within the #rrggbbaa color.
+ * @param {number} endIdx The end index within the #rrggbbbaa color.
+ * @return {string} The requested startIdx-to-endIdx substring from the color.
  * @private
  */
 goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
@@ -89,8 +90,8 @@ goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
 
 
 /**
- * Gets the hex color part of an alpha hex color. For example, from '#abcdef55'
- * return '#abcdef'.
+ * Gets the hex color part of an alpha hex color. For example, both '#abcd' and
+ * '#AABBCC12' return '#aabbcc'.
  * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
  * @return {string} The hex color where the alpha part has been stripped off.
  */
@@ -100,10 +101,10 @@ goog.color.alpha.extractHexColor = function(colorWithAlpha) {
 
 
 /**
- * Gets the alpha color part of an alpha hex color. For example, from
- * '#abcdef55' return '55'. The result is guaranteed to be two characters long.
+ * Gets the alpha color part of an alpha hex color. For example, both '#123A'
+ * and '#123456aa' return 'aa'. The result is always two characters long.
  * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
- * @return {string} The hex color where the alpha part has been stripped off.
+ * @return {string} The two-character alpha from the given color.
  */
 goog.color.alpha.extractAlpha = function(colorWithAlpha) {
   return goog.color.alpha.extractColor_(colorWithAlpha, 7, 9);
