@@ -1582,18 +1582,20 @@ goog.array.zip = function(var_args) {
     return [];
   }
   var result = [];
-  for (var i = 0; true; i++) {
+  var minLen = arguments[0].length;
+  for (var i = 1; i < arguments.length; i++) {
+    if (arguments[i].length < minLen) {
+      minLen = arguments[i].length;
+    }
+  }
+  for (var i = 0; i < minLen; i++) {
     var value = [];
     for (var j = 0; j < arguments.length; j++) {
-      var arr = arguments[j];
-      // If i is larger than the array length, this is the shortest array.
-      if (i >= arr.length) {
-        return result;
-      }
-      value.push(arr[i]);
+      value.push(arguments[j][i]);
     }
     result.push(value);
   }
+  return result;
 };
 
 

@@ -1662,7 +1662,7 @@ goog.removeUid = function(obj) {
 
   // In IE, DOM nodes are not instances of Object and throw an exception if we
   // try to delete.  Instead we try to use removeAttribute.
-  if (obj != null && 'removeAttribute' in obj) {
+  if ('removeAttribute' in /** @type {!Object} */ (obj)) {
     obj.removeAttribute(goog.UID_PROPERTY_);
   }
   /** @preserveTry */
