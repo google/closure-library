@@ -18,50 +18,54 @@
  *
  */
 
-goog.provide('goog.testing.parallelClosureTestSuite');
+goog.module('goog.testing.parallelClosureTestSuite');
 goog.setTestOnly('goog.testing.parallelClosureTestSuite');
 
-goog.require('goog.Promise');
-goog.require('goog.events');
-goog.require('goog.testing.MultiTestRunner');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
+var Promise = goog.require('goog.Promise');
+var events = goog.require('goog.events');
+var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
+var TestCase = goog.require('goog.testing.TestCase');
+var jsunit = goog.require('goog.testing.jsunit');
+var testSuite = goog.require('goog.testing.testSuite');
 
 var testRunner;
 
-function setUpPage() {
-  // G_parallelTestRunner is exported in gen_parallel_test_html.py.
-  var timeout = goog.global['G_parallelTestRunner']['testTimeout'];
-  var allTests = goog.global['G_parallelTestRunner']['allTests'];
-  var parallelFrames = goog.global['G_parallelTestRunner']['parallelFrames'];
-  var parallelTimeout = goog.global['G_parallelTestRunner']['parallelTimeout'];
+testSuite({
+  setUpPage: function() {
+    // G_parallelTestRunner is exported in gen_parallel_test_html.py.
+    var timeout = goog.global['G_parallelTestRunner']['testTimeout'];
+    var allTests = goog.global['G_parallelTestRunner']['allTests'];
+    var parallelFrames = goog.global['G_parallelTestRunner']['parallelFrames'];
+    var parallelTimeout =
+        goog.global['G_parallelTestRunner']['parallelTimeout'];
 
-  // Create a test runner and render it.
-  testRunner = new goog.testing.MultiTestRunner()
-                   .setName(document.title)
-                   .setBasePath('/google3/')
-                   .setPoolSize(parallelFrames)
-                   .setStatsBucketSizes(5, 500)
-                   .setTimeout(parallelTimeout * 1000)
-                   .addTests(allTests);
+    // Create a test runner and render it.
+    testRunner = new MultiTestRunner()
+                     .setName(document.title)
+                     .setBasePath('/google3/')
+                     .setPoolSize(parallelFrames)
+                     .setStatsBucketSizes(5, 500)
+                     .setTimeout(parallelTimeout * 1000)
+                     .addTests(allTests);
 
-  testRunner.render(document.getElementById('runner'));
+    testRunner.render(document.getElementById('runner'));
 
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = timeout * 1000;
-}
+    TestCase.getActiveTestCase().promiseTimeout = timeout * 1000;
+  },
 
-function testRunAllTests() {
-  var failurePromise = new goog.Promise(function(resolve, reject) {
-    goog.events.listen(testRunner, 'testsFinished', resolve);
-  });
+  testRunAllTests: function() {
+    var failurePromise = new Promise(function(resolve, reject) {
+      events.listen(testRunner, 'testsFinished', resolve);
+    });
 
-  testRunner.start();
+    testRunner.start();
 
-  return failurePromise.then(function(failures) {
-    var totalFailed = failures['failureReports'].length;
-    if (totalFailed) {
-      fail(totalFailed + ' of ' + failures['totalTests'] +
-           ' test(s) failed!\n ' + failures['failureReports'].join('\n\n'));
-    }
-  });
-}
+    return failurePromise.then(function(failures) {
+      var totalFailed = failures['failureReports'].length;
+      if (totalFailed) {
+        fail(totalFailed + ' of ' + failures['totalTests'] +
+             ' test(s) failed!\n ' + failures['failureReports'].join('\n\n'));
+      }
+    });
+  }
+});
