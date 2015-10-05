@@ -15,8 +15,8 @@ install:
   - ./scripts/ci/install_closure_deps.sh
 
 before_script:
-  - ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
-  - ./scripts/ci/sauce_connect.sh
+  #- ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
+  #- ./scripts/ci/sauce_connect.sh
 
 script:
   - ./scripts/ci/compile_closure.sh
