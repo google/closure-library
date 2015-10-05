@@ -397,31 +397,18 @@ goog.string.caseInsensitiveCompare = function(str1, str2) {
 
 
 /**
- * Regular expression used for splitting a string into substrings of fractional
- * numbers, integers, and non-numeric characters.
- * @type {RegExp}
+ * Compares two strings interpreting their numeric substrings as numbers.
+ *
+ * @param {string} str1 First string.
+ * @param {string} str2 Second string.
+ * @param {!RegExp} tokenizerRegExp Splits a string into substrings of
+ *     non-negative integers, non-numeric characters and optionally fractional
+ *     numbers starting with a decimal point.
+ * @return {number} Negative if str1 < str2, 0 is str1 == str2, positive if
+ *     str1 > str2.
  * @private
  */
-goog.string.numerateCompareRegExp_ = /(\.\d+)|(\d+)|(\D+)/g;
-
-
-/**
- * String comparison function that handles numbers in a way humans might expect.
- * Using this function, the string "File 2.jpg" sorts before "File 10.jpg". The
- * comparison is mostly case-insensitive, though strings that are identical
- * except for case are sorted with the upper-case strings before lower-case.
- *
- * This comparison function is significantly slower (about 500x) than either
- * the default or the case-insensitive compare. It should not be used in
- * time-critical code, but should be fast enough to sort several hundred short
- * strings (like filenames) with a reasonable delay.
- *
- * @param {string} str1 The string to compare in a numerically sensitive way.
- * @param {string} str2 The string to compare {@code str1} to.
- * @return {number} less than 0 if str1 < str2, 0 if str1 == str2, greater than
- *     0 if str1 > str2.
- */
-goog.string.numerateCompare = function(str1, str2) {
+goog.string.numberAwareCompare_ = function(str1, str2, tokenizerRegExp) {
   if (str1 == str2) {
     return 0;
   }
@@ -434,8 +421,8 @@ goog.string.numerateCompare = function(str1, str2) {
 
   // Using match to split the entire string ahead of time turns out to be faster
   // for most inputs than using RegExp.exec or iterating over each character.
-  var tokens1 = str1.toLowerCase().match(goog.string.numerateCompareRegExp_);
-  var tokens2 = str2.toLowerCase().match(goog.string.numerateCompareRegExp_);
+  var tokens1 = str1.toLowerCase().match(tokenizerRegExp);
+  var tokens2 = str2.toLowerCase().match(tokenizerRegExp);
 
   var count = Math.min(tokens1.length, tokens2.length);
 
@@ -445,7 +432,6 @@ goog.string.numerateCompare = function(str1, str2) {
 
     // Compare pairs of tokens, returning if one token sorts before the other.
     if (a != b) {
-
       // Only if both tokens are integers is a special comparison required.
       // Decimal numbers are sorted as strings (e.g., '.09' < '.1').
       var num1 = parseInt(a, 10);
@@ -465,10 +451,59 @@ goog.string.numerateCompare = function(str1, str2) {
   }
 
   // The two strings must be equivalent except for case (perfect equality is
-  // tested at the head of the function.) Revert to default ASCII-betical string
-  // comparison to stablize the sort.
+  // tested at the head of the function.) Revert to default ASCII string
+  // comparison to stabilize the sort.
   return str1 < str2 ? -1 : 1;
 };
+
+
+/**
+ * String comparison function that handles non-negative integer numbers in a
+ * way humans might expect. Using this function, the string 'File 2.jpg' sorts
+ * before 'File 10.jpg', and 'Version 1.9' before 'Version 1.10'. The comparison
+ * is mostly case-insensitive, though strings that are identical except for case
+ * are sorted with the upper-case strings before lower-case.
+ *
+ * This comparison function is up to 50x slower than either the default or the
+ * case-insensitive compare. It should not be used in time-critical code, but
+ * should be fast enough to sort several hundred short strings (like filenames)
+ * with a reasonable delay.
+ *
+ * @param {string} str1 The string to compare in a numerically sensitive way.
+ * @param {string} str2 The string to compare {@code str1} to.
+ * @return {number} less than 0 if str1 < str2, 0 if str1 == str2, greater than
+ *     0 if str1 > str2.
+ */
+goog.string.intAwareCompare = function(str1, str2) {
+  return goog.string.numberAwareCompare_(str1, str2, /\d+|\D+/g);
+};
+
+
+/**
+ * String comparison function that handles non-negative integer and fractional
+ * numbers in a way humans might expect. Using this function, the string
+ * 'File 2.jpg' sorts before 'File 10.jpg', and '3.14' before '3.2'. Equivalent
+ * to {@link goog.string.intAwareCompare} apart from the way how it interprets
+ * dots.
+ *
+ * @param {string} str1 The string to compare in a numerically sensitive way.
+ * @param {string} str2 The string to compare {@code str1} to.
+ * @return {number} less than 0 if str1 < str2, 0 if str1 == str2, greater than
+ *     0 if str1 > str2.
+ */
+goog.string.floatAwareCompare = function(str1, str2) {
+  return goog.string.numberAwareCompare_(str1, str2, /\d+|\.\d+|\D+/g);
+};
+
+
+/**
+ * Alias for {@link goog.string.floatAwareCompare}.
+ *
+ * @param {string} str1
+ * @param {string} str2
+ * @return {number}
+ */
+goog.string.numerateCompare = goog.string.floatAwareCompare;
 
 
 /**
