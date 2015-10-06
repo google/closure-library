@@ -62,7 +62,7 @@ function findNodeWithHierarchy() {
 
 function setUpAssertHtmlMatches() {
   var tag1, tag2;
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     tag1 = goog.dom.TagName.DIV;
   } else if (goog.userAgent.WEBKIT) {
     tag1 = goog.dom.TagName.P;
@@ -99,7 +99,7 @@ function testAssertHtmlContentsMatch() {
 
   goog.testing.dom.assertHtmlContentsMatch(
       '<div style="display: none; font-size: 2em">' +
-      '[[!WEBKIT]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
+      '[[!WEBKIT]]NonWebKitText<div class="IE EDGE"><p class="WEBKIT">' +
       '<span class="GECKO"><br class="GECKO WEBKIT">Text</span></p></div>' +
       '</div>[[WEBKIT]]WebKitText',
       root);
