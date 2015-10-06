@@ -55,7 +55,7 @@ var DETECTED_BROWSER_KEYS =
 // browserKey should be the constant name, as a string
 // 'FIREFOX', 'CHROME', 'ANDROID', etc.
 function assertIsBrowser(currentBrowser) {
-  assertTrue('Current browser key into goog.userAgent.product' +
+  assertTrue('Current browser key into goog.userAgent.product ' +
       'should be true',
       goog.userAgent.product[currentBrowser]);
 
@@ -142,6 +142,23 @@ function testInternetExplorer() {
   // properties.
   mockAgent.setNavigator({});
   checkEachUserAgentDetected(userAgents, 'IE');
+}
+
+function testEdge() {
+  var userAgents = [
+    {ua: goog.labs.userAgent.testAgents.EDGE_12_9600,
+      versions: [
+        {num: 11, truth: true},
+        {num: 12, truth: true},
+        {num: '12.96', truth: true},
+        {num: '12.9600', truth: true},
+        {num: '12.9601', truth: false},
+        {num: '12.10240', truth: false},
+        {num: 13, truth: false}
+      ]
+    }
+  ];
+  checkEachUserAgentDetected(userAgents, 'EDGE');
 }
 
 function testOpera() {
