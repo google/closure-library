@@ -216,6 +216,7 @@ goog.tagUnsealableClass(goog.fx.Dragger);
  * @private
  */
 goog.fx.Dragger.HAS_SET_CAPTURE_ =
+    goog.global.document &&
     goog.global.document.documentElement.setCapture != null;
 
 
