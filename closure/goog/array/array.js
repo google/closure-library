@@ -529,16 +529,26 @@ goog.array.find = function(arr, f, opt_obj) {
  *     or -1 if no element is found.
  * @template T,S
  */
-goog.array.findIndex = function(arr, f, opt_obj) {
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
-      return i;
-    }
-  }
-  return -1;
-};
+goog.array.findIndex = goog.NATIVE_ARRAY_PROTOTYPES &&
+                       (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                        Array.prototype.findIndex) ?
+    function(arr, f, opt_obj) {
+      goog.asserts.assert(goog.isArray(arr));
+      // TODO: Update type annotation since null is not accepted.
+      goog.asserts.assert(!goog.isNull(f));
+
+      return Array.prototype.findIndex.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
+          return i;
+        }
+      }
+      return -1;
+    };
 
 
 /**
