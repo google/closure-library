@@ -121,6 +121,23 @@ function testCreate_allowsLengths() {
 }
 
 
+function testCreate_allowsRgb() {
+  var style = goog.html.SafeStyle.create({'color': 'rgb(10,20,30)'});
+  assertEquals('color:rgb(10,20,30);', goog.html.SafeStyle.unwrap(style));
+  style = goog.html.SafeStyle.create({'color': 'rgb(10%, 20%, 30%)'});
+  assertEquals('color:rgb(10%, 20%, 30%);', goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testCreate_allowsRgba() {
+  var style = goog.html.SafeStyle.create({'color': 'rgba(10,20,30,0.1)'});
+  assertEquals('color:rgba(10,20,30,0.1);', goog.html.SafeStyle.unwrap(style));
+  style = goog.html.SafeStyle.create({'color': 'rgba(10%, 20%, 30%, .5)'});
+  assertEquals('color:rgba(10%, 20%, 30%, .5);',
+      goog.html.SafeStyle.unwrap(style));
+}
+
+
 function testCreate_throwsOnForbiddenCharacters() {
   assertThrows(function() {
     goog.html.SafeStyle.create({'<': '0'});

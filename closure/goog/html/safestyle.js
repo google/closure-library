@@ -355,7 +355,8 @@ goog.html.SafeStyle.create = function(map) {
       goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
     } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
       goog.asserts.fail(
-          'String value allows only [-,."\'%_!# a-zA-Z0-9], got: ' + value);
+          'String value allows only [-,."\'%_!# a-zA-Z0-9], rgb() and ' +
+          'rgba(), got: ' + value);
       value = goog.html.SafeStyle.INNOCUOUS_STRING;
     } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
       goog.asserts.fail('String value requires balanced quotes, got: ' + value);
@@ -407,10 +408,14 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
  * ',' allows multiple values to be assigned to the same property
  * (e.g. background-attachment or font-family) and hence could allow
  * multiple values to get injected, but that should pose no risk of XSS.
+ *
+ * The rgb() and rgba() expression checks only for XSS safety, not for CSS
+ * validity.
  * @const {!RegExp}
  * @private
  */
-goog.html.SafeStyle.VALUE_RE_ = /^[-,."'%_!# a-zA-Z0-9]+$/;
+goog.html.SafeStyle.VALUE_RE_ =
+    /^([-,."'%_!# a-zA-Z0-9]+|(?:rgb|hsl)a?\([0-9.%, ]+\))$/;
 
 
 /**
