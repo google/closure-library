@@ -1129,7 +1129,8 @@ if (goog.DEPENDENCIES_ENABLED) {
   goog.appendScriptSrcNode_ = function(src) {
     /** @type {Document} */
     var doc = goog.global.document;
-    var scriptEl = doc.createElement('script');
+    var scriptEl = /** @type {HTMLScriptElement} */
+        (doc.createElement('script'));
     scriptEl.type = 'text/javascript';
     scriptEl.src = src;
     scriptEl.defer = false;
@@ -1921,7 +1922,8 @@ goog.globalEval = function(script) {
     } else {
       /** @type {Document} */
       var doc = goog.global.document;
-      var scriptElt = doc.createElement('SCRIPT');
+      var scriptElt = /** @type {HTMLScriptElement} */
+          (doc.createElement('SCRIPT'));
       scriptElt.type = 'text/javascript';
       scriptElt.defer = false;
       // Note(user): can't use .innerHTML since "t('<test>')" will fail and
