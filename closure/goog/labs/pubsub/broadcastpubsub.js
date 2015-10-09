@@ -120,7 +120,7 @@ goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_ = '_closure_bps';
 
 /**
  * Handle the storage event and possibly dispatch topics.
- * @param {!goog.events.Event} e Event object.
+ * @param {!goog.events.BrowserEvent} e Event object.
  * @private
  */
 goog.labs.pubsub.BroadcastPubSub.prototype.handleStorageEvent_ =
