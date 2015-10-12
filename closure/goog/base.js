@@ -1129,7 +1129,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   goog.appendScriptSrcNode_ = function(src) {
     /** @type {Document} */
     var doc = goog.global.document;
-    var scriptEl = /** @type {HTMLScriptElement} */
+    var scriptEl = /** @type {!HTMLScriptElement} */
         (doc.createElement('script'));
     scriptEl.type = 'text/javascript';
     scriptEl.src = src;
@@ -1922,7 +1922,7 @@ goog.globalEval = function(script) {
     } else {
       /** @type {Document} */
       var doc = goog.global.document;
-      var scriptElt = /** @type {HTMLScriptElement} */
+      var scriptElt = /** @type {!HTMLScriptElement} */
           (doc.createElement('SCRIPT'));
       scriptElt.type = 'text/javascript';
       scriptElt.defer = false;
