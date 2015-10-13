@@ -1036,6 +1036,33 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
+   * Load a goog.module from the provided URL.  This is not a general purpose
+   * code loader and does not support late loading code, that is it should only
+   * be used during page load. This method exists to support unit tests and
+   * "debug" loaders that would otherwise have inserted script tags. Under the
+   * hood this needs to use a synchronous XHR and is not recommeneded for
+   * production code.
+   *
+   * The module's goog.requires must have already been satisified; an exception
+   * will be thrown if this is not the case. This assumption is that no
+   * "deps.js" file exists, so there is no way to discover and locate the
+   * module-to-be-loaded's dependencies and no attempt is made to do so.
+   *
+   * There should only be one attempt to load a module.  If
+   * "goog.loadModuleFromUrl" is called for an already loaded module, an
+   * exception will be throw.
+   *
+   * @param {string} url The URL from which to attempt to load the goog.module.
+   */
+  goog.loadModuleFromUrl = function(url) {
+    // Because this executes synchronously, we don't need to do any additional
+    // bookkeeping. When "goog.loadModule" the namespace will be marked as
+    // having been provided which is sufficient.
+    goog.retrieveAndExecModule_(url);
+  };
+
+
+  /**
    * @param {function(?):?|string} moduleDef The module definition.
    */
   goog.loadModule = function(moduleDef) {

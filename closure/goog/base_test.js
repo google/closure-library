@@ -1448,6 +1448,24 @@ function testGoogModuleGet() {
 }
 
 
+// Validate the behavior of goog.module when used from traditional files.
+function testGoogLoadModuleByUrl() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    // IE before 10 don't report an error.
+    return;
+  }
+
+  // "goog.loadModuleByUrl" is not a general purpose code loader, it can
+  // not be used to late load code.
+  var err = assertThrows('loadModuleFromUrl should not hide failures',
+      function() {
+        goog.loadModuleFromUrl('bogus url');
+      });
+  assertContains('Cannot write "bogus url" after document load',
+      err.message);
+}
+
+
 function testLoadFileSync() {
   var fileContents = goog.loadFileSync_('deps.js');
   assertTrue('goog.loadFileSync_ returns string',
