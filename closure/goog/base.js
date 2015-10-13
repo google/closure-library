@@ -1109,6 +1109,10 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * @private @const {function(string):?}
+   *
+   * The new type inference warns because this function has no formal
+   * parameters, but its jsdoc says that it takes one argument.
+   * (The argument is used via arguments[0], but NTI does not detect this.)
    * @suppress {newCheckTypes}
    */
   goog.loadModuleFromSource_ = function() {
