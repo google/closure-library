@@ -212,10 +212,8 @@ function testNextTick_notStarvedBySetTimeout() {
  * there would be no callbacks in the linked list).
  */
 function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
-  // IE does not use the postMessage polyfill and FF41 always fails.
-  // TODO(joeltine): Fix for FF and re-enable.
-  if (goog.labs.userAgent.browser.isIE() ||
-      goog.labs.userAgent.browser.isFirefox()) {
+  // IE does not use the postMessage polyfill.
+  if (goog.labs.userAgent.browser.isIE()) {
     return;
   }
 
@@ -236,8 +234,7 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
   frame.contentWindow.onerror = function(e) {
     error = e;
   };
-
-  return goog.Timer.promise(0).then(function() {
+  return goog.Timer.promise(3).then(function() {
     assert('Callback should have been called.', callbackCalled);
     assertNull('An unexpected error was thrown.', error);
   }).thenAlways(function() {
