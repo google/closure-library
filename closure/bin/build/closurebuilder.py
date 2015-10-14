@@ -250,7 +250,7 @@ def main():
       src = js_source.GetSource()
       if js_source.is_goog_module:
         src = _WrapGoogModuleSource(src)
-      out.write(src + '\n')
+      out.write(src.encode('utf-8') + '\n')
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
@@ -276,7 +276,7 @@ https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
         compiler_flags=options.compiler_flags)
 
     logging.info('JavaScript compilation succeeded.')
-    out.write(compiled_source)
+    out.write(compiled_source.encode('utf-8'))
 
   else:
     logging.error('Invalid value for --output flag.')
