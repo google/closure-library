@@ -119,8 +119,8 @@ testSuite({
     return failurePromise.then(function(failures) {
       var testResults = processAllTestResults(failures['allTestResults']);
       allResults = testResults['allResults'];
-      if (testResults['totalFailed']) {
-        fail(testResults['totalFailed'] + ' of ' + testResults['totalTests'] +
+      if (testResults['totalFailures']) {
+        fail(testResults['totalFailures'] + ' of ' + testResults['totalTests'] +
              ' test(s) failed!\n\n' + testResults['failureReports']);
       }
     });
