@@ -137,7 +137,7 @@ goog.string.linkify.findFirstEmail = function(text) {
  * @const
  * @private
  */
-goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?>\\]\\)!';
+goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?}\\]\\)!';
 
 
 /**
@@ -151,13 +151,14 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ = new RegExp(
 
 /**
  * Set of characters to be put into a regex character set ("[...]"), used to
- * match against a url hostname and everything after it. It includes
- * "#-@", which represents the characters "#$%&'()*+,-./0123456789:;<=>?@".
+ * match against a url hostname and everything after it. It includes, in order,
+ * \w which represents [a-zA-Z0-9_], "#-;" which represents the characters
+ * "#$%&'()*+,-./0123456789:;" and the characters "!=?@[\]`{|}~".
  * @type {string}
  * @const
  * @private
  */
-goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w~#-@!\\[\\]';
+goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w#-;!=?@\\[\\\\\\]_`{|}~';
 
 
 /**

@@ -464,6 +464,14 @@ function testEndsWithPunctuation_angles() {
           'http://www.google.com/<\/a>&gt;');
 }
 
+function testEndsWithPunctuation_curlies() {
+  assertLinkify(
+      'Link inside curly brackets',
+      '{http://www.google.com/}',
+      '{<a href="http://www.google.com/">' +
+          'http://www.google.com/<\/a>}');
+}
+
 function testEndsWithPunctuation_closingPairThenSingle() {
   assertLinkify(
       'Link followed by closing punctuation pair then singular punctuation',
@@ -493,6 +501,24 @@ function testUrlWithExclamation() {
       'URL with exclamation points',
       'This is awesome www.google.com!',
       'This is awesome <a href="http://www.google.com">www.google.com<\/a>!');
+}
+
+function testSpecialCharactersInUrl() {
+  assertLinkify(
+      'Link with characters that are neither reserved nor unreserved as per' +
+          'RFC 3986 but that are recognized by other Google properties.',
+      'https://www.google.com/?q=\`{|}recognized',
+      '<a href="https://www.google.com/?q=\`{|}recognized">' +
+          'https://www.google.com/?q=\`{|}recognized<\/a>');
+}
+
+function testUsuallyUnrecognizedCharactersAreNotInUrl() {
+  assertLinkify(
+      'Link with characters that are neither reserved nor unreserved as per' +
+          'RFC 3986 and which are not recognized by other Google properties.',
+      'https://www.google.com/?q=<^>"',
+      '<a href="https://www.google.com/?q=">' +
+          'https://www.google.com/?q=<\/a>&lt;^&gt;&quot;');
 }
 
 function testIpv6Url() {
