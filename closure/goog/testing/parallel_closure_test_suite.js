@@ -30,6 +30,54 @@ var testSuite = goog.require('goog.testing.testSuite');
 
 var testRunner;
 
+
+/**
+ * @typedef {{
+ *   totalTests: number,
+ *   totalFailures: number,
+ *   failureReports: string,
+ *   allResults: !Object<string, !Array<string>>
+ * }}
+ */
+var ParallelTestResults;
+
+
+/**
+ * Processes the test results returned from MultiTestRunner and creates a
+ * consolidated result object that the test runner understands.
+ * @param {!Array<!Object<string,!Array<string>>>} testResults The list of
+ *     individual test results from MultiTestRunner.
+ * @return {!ParallelTestResults} Flattened test report for all tests.
+ */
+function processAllTestResults(testResults) {
+  var totalTests = 0;
+  var totalFailed = 0;
+  var allResults = {};
+  var failureReports = '';
+
+  for (var i = 0; i < testResults.length; i++) {
+    var result = testResults[i];
+    for (var testName in result) {
+      totalTests++;
+      allResults[testName] = result[testName];
+      var failures = result[testName];
+      if (failures.length) {
+        totalFailed++;
+        for (var j = 0; j < failures.length; j++) {
+          failureReports += failures[j] + '\n';
+        }
+      }
+    }
+  }
+
+  return {
+    'totalTests': totalTests,
+    'totalFailures': totalFailed,
+    'failureReports': failureReports,
+    'allResults': allResults
+  };
+}
+
 testSuite({
   setUpPage: function() {
     // G_parallelTestRunner is exported in gen_parallel_test_html.py.
@@ -60,11 +108,20 @@ testSuite({
 
     testRunner.start();
 
+    var allResults = {};
+    // TestPoller.java invokes this to get test results for sponge. We override
+    // it and return the results of each individual test instead of the
+    // containing "testRunAllTests".
+    window['G_testRunner']['getTestResults'] = function() {
+      return allResults;
+    };
+
     return failurePromise.then(function(failures) {
-      var totalFailed = failures['failureReports'].length;
-      if (totalFailed) {
-        fail(totalFailed + ' of ' + failures['totalTests'] +
-             ' test(s) failed!\n ' + failures['failureReports'].join('\n\n'));
+      var testResults = processAllTestResults(failures['allTestResults']);
+      allResults = testResults['allResults'];
+      if (testResults['totalFailed']) {
+        fail(testResults['totalFailed'] + ' of ' + testResults['totalTests'] +
+             ' test(s) failed!\n\n' + testResults['failureReports']);
       }
     });
   }
