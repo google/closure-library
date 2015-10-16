@@ -93,12 +93,14 @@ testSuite({
                      .setBasePath('/google3/')
                      .setPoolSize(parallelFrames)
                      .setStatsBucketSizes(5, 500)
-                     .setTimeout(parallelTimeout * 1000)
+                     .setTimeout(timeout * 1000)
                      .addTests(allTests);
 
     testRunner.render(document.getElementById('runner'));
 
-    TestCase.getActiveTestCase().promiseTimeout = timeout * 1000;
+    // There's only a single test method that runs all the tests, so this
+    // promiseTimeout is effectively the timeout of the entire test suite
+    TestCase.getActiveTestCase().promiseTimeout = parallelTimeout * 1000;
   },
 
   testRunAllTests: function() {
