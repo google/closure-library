@@ -819,6 +819,7 @@ function testQuoteSpecialChars() {
   assertEquals('"\\""', goog.string.quote('"'));
   assertEquals('"\'"', goog.string.quote("'"));
   assertEquals('"\\\\"', goog.string.quote('\\'));
+  assertEquals('"\x3c"', goog.string.quote('<'));
 
   var zeroQuoted = goog.string.quote('\0');
   assertTrue(

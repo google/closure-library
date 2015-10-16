@@ -958,7 +958,13 @@ goog.string.specialEscapeChars_ = {
   '\t': '\\t',
   '\x0B': '\\x0B', // '\v' is not supported in JScript
   '"': '\\"',
-  '\\': '\\\\'
+  '\\': '\\\\',
+  // To support the use case of embedding quoted strings inside of <script>
+  // tags, we have to make sure "<!--", "<script", and "</script" does not
+  // appear in the resulting string. The specific strings that must be escaped
+  // are documented at:
+  // http://www.w3.org/TR/html51/semantics.html#restrictions-for-contents-of-script-elements
+  '<': '\x3c'
 };
 
 
@@ -973,25 +979,22 @@ goog.string.jsEscapeCache_ = {
 
 /**
  * Encloses a string in double quotes and escapes characters so that the
- * string is a valid JS string.
+ * string is a valid JS string. The resulting string is safe to embed in
+ * <script> tags as "<" is escaped.
  * @param {string} s The string to quote.
  * @return {string} A copy of {@code s} surrounded by double quotes.
  */
 goog.string.quote = function(s) {
   s = String(s);
-  if (s.quote) {
-    return s.quote();
-  } else {
-    var sb = ['"'];
-    for (var i = 0; i < s.length; i++) {
-      var ch = s.charAt(i);
-      var cc = ch.charCodeAt(0);
-      sb[i + 1] = goog.string.specialEscapeChars_[ch] ||
-          ((cc > 31 && cc < 127) ? ch : goog.string.escapeChar(ch));
-    }
-    sb.push('"');
-    return sb.join('');
+  var sb = ['"'];
+  for (var i = 0; i < s.length; i++) {
+    var ch = s.charAt(i);
+    var cc = ch.charCodeAt(0);
+    sb[i + 1] = goog.string.specialEscapeChars_[ch] ||
+                ((cc > 31 && cc < 127) ? ch : goog.string.escapeChar(ch));
   }
+  sb.push('"');
+  return sb.join('');
 };
 
 
