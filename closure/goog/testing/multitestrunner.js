@@ -695,6 +695,12 @@ goog.testing.MultiTestRunner.prototype.start = function() {
   this.clearStats_();
   this.showTab_(0);
 
+  // No tests to run, finish early and return.
+  if (this.activeTests_.length == 0) {
+    this.finish_();
+    return;
+  }
+
   // Ensure the pool isn't too big.
   while (this.getChildCount() > this.poolSize_) {
     this.removeChildAt(0, true).dispose();
@@ -829,7 +835,7 @@ goog.testing.MultiTestRunner.prototype.finish_ = function() {
   if (unfinished.length) {
     this.reportEl_.appendChild(goog.dom.createDom(
         goog.dom.TagName.PRE, undefined,
-        'Theses tests did not finish:\n' + unfinished.join('\n')));
+        'These tests did not finish:\n' + unfinished.join('\n')));
   }
 
   this.dispatchEvent({
@@ -1422,8 +1428,14 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
 goog.testing.MultiTestRunner.TestFrame.prototype.getTestResults = function() {
   var results = {};
   for (var testName in this.testResults_) {
-    var fileName = this.testFile_.replace(/\.html$/, '');
-    results[fileName + ':' + testName] = this.testResults_[testName];
+    var testKey = this.testFile_.replace(/\.html$/, '');
+    // Concatenate with ":<testName>" unless the testName is equivalent to
+    // testFile_, which means the test timed out and there's no way to get
+    // the test method name.
+    if (testName != this.testFile_) {
+      testKey += ':' + testName;
+    }
+    results[testKey] = this.testResults_[testName];
   }
   return results;
 };
@@ -1510,6 +1522,9 @@ goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
   if (goog.now() - this.lastStateTime_ > this.timeoutMs_) {
     this.report_ = this.testFile_ + ' timed out  ' +
         goog.testing.MultiTestRunner.STATES[this.currentState_];
+    var results = {};
+    results[this.testFile_] = [this.report_];
+    this.testResults_ = results;
     this.isSuccess_ = false;
     this.finish_();
     return;
