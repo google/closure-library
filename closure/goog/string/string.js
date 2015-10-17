@@ -980,7 +980,7 @@ goog.string.jsEscapeCache_ = {
 /**
  * Encloses a string in double quotes and escapes characters so that the
  * string is a valid JS string. The resulting string is safe to embed in
- * <script> tags as "<" is escaped.
+ * `<script>` tags as "<" is escaped.
  * @param {string} s The string to quote.
  * @return {string} A copy of {@code s} surrounded by double quotes.
  */
