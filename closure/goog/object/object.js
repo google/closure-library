@@ -32,7 +32,7 @@ goog.provide('goog.object');
  */
 goog.object.forEach = function(obj, f, opt_obj) {
   for (var key in obj) {
-    f.call(opt_obj, obj[key], key, obj);
+    f.call(/** @type {?} */ (opt_obj), obj[key], key, obj);
   }
 };
 
@@ -56,7 +56,7 @@ goog.object.forEach = function(obj, f, opt_obj) {
 goog.object.filter = function(obj, f, opt_obj) {
   var res = {};
   for (var key in obj) {
-    if (f.call(opt_obj, obj[key], key, obj)) {
+    if (f.call(/** @type {?} */ (opt_obj), obj[key], key, obj)) {
       res[key] = obj[key];
     }
   }
@@ -81,7 +81,7 @@ goog.object.filter = function(obj, f, opt_obj) {
 goog.object.map = function(obj, f, opt_obj) {
   var res = {};
   for (var key in obj) {
-    res[key] = f.call(opt_obj, obj[key], key, obj);
+    res[key] = f.call(/** @type {?} */ (opt_obj), obj[key], key, obj);
   }
   return res;
 };
@@ -103,7 +103,7 @@ goog.object.map = function(obj, f, opt_obj) {
  */
 goog.object.some = function(obj, f, opt_obj) {
   for (var key in obj) {
-    if (f.call(opt_obj, obj[key], key, obj)) {
+    if (f.call(/** @type {?} */ (opt_obj), obj[key], key, obj)) {
       return true;
     }
   }
@@ -127,7 +127,7 @@ goog.object.some = function(obj, f, opt_obj) {
  */
 goog.object.every = function(obj, f, opt_obj) {
   for (var key in obj) {
-    if (!f.call(opt_obj, obj[key], key, obj)) {
+    if (!f.call(/** @type {?} */ (opt_obj), obj[key], key, obj)) {
       return false;
     }
   }
@@ -304,7 +304,7 @@ goog.object.containsValue = function(obj, val) {
  */
 goog.object.findKey = function(obj, f, opt_this) {
   for (var key in obj) {
-    if (f.call(opt_this, obj[key], key, obj)) {
+    if (f.call(/** @type {?} */ (opt_this), obj[key], key, obj)) {
       return key;
     }
   }
@@ -360,7 +360,7 @@ goog.object.clear = function(obj) {
  * Removes a key-value pair based on the key.
  *
  * @param {Object} obj The object from which to remove the key.
- * @param {*} key The key to remove.
+ * @param {?} key The key to remove.
  * @return {boolean} Whether an element was removed.
  */
 goog.object.remove = function(obj, key) {
