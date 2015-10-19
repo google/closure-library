@@ -1095,6 +1095,7 @@ goog.addDependency('testing/net/xhrio_test.js', ['goog.testing.net.XhrIoTest'], 
 goog.addDependency('testing/net/xhriopool.js', ['goog.testing.net.XhrIoPool'], ['goog.net.XhrIoPool', 'goog.testing.net.XhrIo'], false);
 goog.addDependency('testing/objectpropertystring.js', ['goog.testing.ObjectPropertyString'], [], false);
 goog.addDependency('testing/parallel_closure_test_suite.js', ['goog.testing.parallelClosureTestSuite'], ['goog.Promise', 'goog.events', 'goog.testing.MultiTestRunner', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.testSuite'], true);
+goog.addDependency('testing/parallel_closure_test_suite_test.js', ['goog.testing.parallelClosureTestSuiteTest'], ['goog.testing.MockControl', 'goog.testing.MultiTestRunner', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.mockmatchers', 'goog.testing.mockmatchers.ArgumentMatcher', 'goog.testing.parallelClosureTestSuite', 'goog.testing.testSuite'], true);
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTimer'], false);
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer', 'goog.testing.PerformanceTimer.Task'], ['goog.array', 'goog.async.Deferred', 'goog.math'], false);
 goog.addDependency('testing/performancetimer_test.js', ['goog.testing.PerformanceTimerTest'], ['goog.async.Deferred', 'goog.dom', 'goog.math', 'goog.testing.MockClock', 'goog.testing.PerformanceTimer', 'goog.testing.jsunit'], false);
