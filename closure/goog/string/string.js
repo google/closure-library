@@ -959,10 +959,10 @@ goog.string.specialEscapeChars_ = {
   '\x0B': '\\x0B', // '\v' is not supported in JScript
   '"': '\\"',
   '\\': '\\\\',
-  // To support the use case of embedding quoted strings inside of <script>
-  // tags, we have to make sure "<!--", "<script", and "</script" does not
-  // appear in the resulting string. The specific strings that must be escaped
-  // are documented at:
+  // To support the use case of embedding quoted strings inside of script
+  // tags, we have to make sure HTML comments and opening/closing script tags do
+  // not appear in the resulting string. The specific strings that must be
+  // escaped are documented at:
   // http://www.w3.org/TR/html51/semantics.html#restrictions-for-contents-of-script-elements
   '<': '\x3c'
 };
