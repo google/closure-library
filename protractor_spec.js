@@ -11,7 +11,9 @@ var IGNORED_TESTS = [
   // the test suite.
   'closure/goog/i18n/currency_test.html',
   // Test hangs in IE8.
-  'closure/goog/ui/plaintextspellchecker_test.html'
+  'closure/goog/ui/plaintextspellchecker_test.html',
+  // TODO(joeltine): Re-enable once fixed for external testing.
+  'closure/goog/testing/multitestrunner_test.html'
 ];
 
 describe('Run all Closure unit tests', function() {
