@@ -517,7 +517,10 @@ goog.fx.AbstractDragDrop.prototype.endDrag = function(event) {
   }
 
   var dragEndEvent = new goog.fx.DragDropEvent(
-      goog.fx.AbstractDragDrop.EventType.DRAGEND, this, this.dragItem_);
+      goog.fx.AbstractDragDrop.EventType.DRAGEND, this, this.dragItem_,
+      activeTarget ? activeTarget.target_ : undefined,
+      activeTarget ? activeTarget.item_ : undefined,
+      activeTarget ? activeTarget.element_ : undefined);
   this.dispatchEvent(dragEndEvent);
 
   goog.events.unlisten(this.dragger_, goog.fx.Dragger.EventType.DRAG,
