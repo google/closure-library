@@ -12,153 +12,107 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.MultiIframeLoadMonitorTest');
+goog.module('goog.net.MultiIframeLoadMonitorTest');
 goog.setTestOnly('goog.net.MultiIframeLoadMonitorTest');
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.net.IframeLoadMonitor');
-goog.require('goog.net.MultiIframeLoadMonitor');
-goog.require('goog.testing.AsyncTestCase');
-goog.require('goog.testing.jsunit');
-
-var TEST_FRAME_SRCS = ['iframeloadmonitor_test_frame.html',
-  'iframeloadmonitor_test_frame2.html',
-  'iframeloadmonitor_test_frame3.html'];
-
-// Create a new test case.
-var iframeLoaderTestCase = new goog.testing.AsyncTestCase(document.title);
-iframeLoaderTestCase.stepTimeout = 4 * 1000;
-
-// How many multpile frames finished loading
-iframeLoaderTestCase.multipleComplete_ = 0;
-
-iframeLoaderTestCase.numMonitors = 0;
-iframeLoaderTestCase.disposeCalled = 0;
+var Promise = goog.require('goog.Promise');
+var Timer = goog.require('goog.Timer');
+var dom = goog.require('goog.dom');
+var TagName = goog.require('goog.dom.TagName');
+var IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
+var MultiIframeLoadMonitor = goog.require('goog.net.MultiIframeLoadMonitor');
+var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+var jsunit = goog.require('goog.testing.jsunit');
+var testSuite = goog.require('goog.testing.testSuite');
 
 
-/**
- * Sets up the test environment, adds tests and sets up the worker pools.
- * @this {goog.testing.AsyncTestCase}
- */
-iframeLoaderTestCase.setUpPage = function() {
-  this.log('Setting tests up');
-  iframeLoaderTestCase.waitForAsync('loading iframes');
+var stubs = new PropertyReplacer();
+var TEST_FRAME_SRCS =
+    ['iframeloadmonitor_test_frame.html', 'iframeloadmonitor_test_frame2.html'];
+var frameParent;
 
-  var dom = goog.dom.getDomHelper();
+testSuite({
+  setUpPage: function() { frameParent = dom.getElement('frame_parent'); },
 
-  // Load multiple with callback
-  var frame1 = dom.createDom(goog.dom.TagName.IFRAME);
-  var frame2 = dom.createDom(goog.dom.TagName.IFRAME);
-  var multiMonitor = new goog.net.MultiIframeLoadMonitor(
-      [frame1, frame2], goog.bind(this.multipleCallback, this));
-  this.log('Loading frames at: ' + TEST_FRAME_SRCS[0] + ' and ' +
-      TEST_FRAME_SRCS[1]);
-  // Make sure they don't look loaded yet.
-  assertEquals(0, this.multipleComplete_);
-  var frameParent = dom.getElement('frame_parent');
-  dom.appendChild(frameParent, frame1);
-  frame1.src = TEST_FRAME_SRCS[0];
-  dom.appendChild(frameParent, frame2);
-  frame2.src = TEST_FRAME_SRCS[1];
+  tearDown: function() {
+    dom.removeChildren(frameParent);
+    stubs.reset();
+  },
 
-  // Load multiple with callback and content check
-  var frame3 = dom.createDom(goog.dom.TagName.IFRAME);
-  var frame4 = dom.createDom(goog.dom.TagName.IFRAME);
-  var multiMonitor = new goog.net.MultiIframeLoadMonitor(
-      [frame3, frame4], goog.bind(this.multipleContentCallback, this), true);
-  this.log('Loading frames with content check at: ' + TEST_FRAME_SRCS[1] +
-      ' and ' + TEST_FRAME_SRCS[2]);
-  dom.appendChild(frameParent, frame3);
-  frame3.src = TEST_FRAME_SRCS[1];
-  dom.appendChild(frameParent, frame4);
-  frame4.src = TEST_FRAME_SRCS[2];
+  testMultiIframeLoadMonitor: function() {
+    var frames = [dom.createDom(TagName.IFRAME), dom.createDom(TagName.IFRAME)];
+    var loaded = false;
 
-
-};
-
-
-/**
- * Callback for the multiple frame load test case
- * @this {goog.testing.AsyncTestCase}
- */
-iframeLoaderTestCase.multipleCallback = function() {
-  this.log('multiple frames finished loading');
-  this.multipleComplete_++;
-  this.multipleCompleteNoContent_ = true;
-  this.callbacksComplete();
-};
-
-
-/**
- * Callback for the multiple frame with content load test case
- * @this {goog.testing.AsyncTestCase}
- */
-iframeLoaderTestCase.multipleContentCallback = function() {
-  this.log('multiple frames with content finished loading');
-  this.multipleComplete_++;
-  this.multipleCompleteContent_ = true;
-  this.callbacksComplete();
-};
-
-
-/**
- * Checks if all the load callbacks are done
- * @this {goog.testing.AsyncTestCase}
- */
-iframeLoaderTestCase.callbacksComplete = function() {
-  if (this.multipleComplete_ == 2) {
-    iframeLoaderTestCase.continueTesting();
-  }
-};
-
-
-/** Tests the results. */
-iframeLoaderTestCase.addNewTest('testResults', function() {
-  this.log('getting test results');
-  assertTrue(this.multipleCompleteNoContent_);
-  assertTrue(this.multipleCompleteContent_);
-});
-
-iframeLoaderTestCase.fakeLoadMonitor = function() {
-  // Replaces IframeLoadMonitor with a fake version that just tracks
-  // instantiations/disposals
-  this.loadMonitorConstructor = goog.net.IframeLoadMonitor;
-  var that = this;
-  goog.net.IframeLoadMonitor = function() {
-    that.numMonitors++;
-    return {
-      isLoaded: function() { return false; },
-      dispose: function() { that.disposeCalled++; },
-      attachEvent: function() {}
-    };
-  };
-  goog.net.IframeLoadMonitor.LOAD_EVENT = 'ifload';
-};
-
-iframeLoaderTestCase.unfakeLoadMonitor = function() {
-  goog.net.IframeLoadMonitor = this.loadMonitorConstructor;
-};
-
-iframeLoaderTestCase.addNewTest('stopMonitoring', function() {
-  // create two unloaded frames, make sure that load monitors are loaded
-  // behind the scenes, then make sure they are disposed properly.
-  this.fakeLoadMonitor();
-  var dom = goog.dom.getDomHelper();
-  var frames = [dom.createDom(goog.dom.TagName.IFRAME),
-                dom.createDom(goog.dom.TagName.IFRAME)];
-  var multiMonitor = new goog.net.MultiIframeLoadMonitor(
-      frames,
-      function() {
-        fail('should not invoke callback for unloaded rames');
+    var monitorPromise = new Promise(function(resolve, reject) {
+      new MultiIframeLoadMonitor(frames, function() {
+        loaded = true;
+        resolve();
       });
-  assertEquals(frames.length, this.numMonitors);
-  assertEquals(0, this.disposeCalled);
-  multiMonitor.stopMonitoring();
-  assertEquals(frames.length, this.disposeCalled);
-  this.unfakeLoadMonitor();
+    });
+
+    assertFalse(loaded);
+    frameParent.appendChild(frames[0]);
+    frameParent.appendChild(frames[1]);
+
+    return monitorPromise.then(function() { assertTrue(loaded); });
+  },
+
+  testMultiIframeLoadMonitor_withContentCheck: function() {
+    var frames = [dom.createDom(TagName.IFRAME), dom.createDom(TagName.IFRAME)];
+    var loaded = false;
+
+    var monitorPromise = new Promise(function(resolve, reject) {
+      new MultiIframeLoadMonitor(frames, function() {
+        loaded = true;
+        resolve();
+      }, true);
+    });
+
+    frameParent.appendChild(frames[0]);
+    frameParent.appendChild(frames[1]);
+
+    return Timer.promise(10)
+        .then(function() {
+          assertFalse('Monitor should not fire until all iframes have content.',
+                      loaded);
+
+          frames[0].src = TEST_FRAME_SRCS[0];
+          return Timer.promise(10);
+        })
+        .then(function() {
+          assertFalse('Monitor should not fire until all iframes have content.',
+                      loaded);
+
+          frames[1].src = TEST_FRAME_SRCS[1];
+          return monitorPromise;
+        })
+        .then(function() { assertTrue(loaded); });
+  },
+
+  testStopMonitoring: function() {
+    var iframeLoadMonitorsCreated = 0;
+    var disposeCalls = 0;
+
+    // Replace the IframeLoadMonitor implementation with a fake.
+    stubs.replace(goog.net, 'IframeLoadMonitor', function() {
+      iframeLoadMonitorsCreated++;
+      return {
+        attachEvent: function() {},
+        dispose: function() { disposeCalls++; },
+        isLoaded: function() { return false; }
+      };
+    });
+    goog.net.IframeLoadMonitor.LOAD_EVENT = 'ifload';
+
+    var frames = [dom.createDom(TagName.IFRAME), dom.createDom(TagName.IFRAME)];
+    var monitor = new MultiIframeLoadMonitor(frames, function() {
+      fail('should not invoke callback for unloaded frames');
+    }, true);
+
+    assertEquals(frames.length, iframeLoadMonitorsCreated);
+    assertEquals(0, disposeCalls);
+
+    monitor.stopMonitoring();
+    assertEquals(frames.length, disposeCalls);
+  }
 });
-
-
-/** Standalone Closure Test Runner. */
-G_testRunner.initialize(iframeLoaderTestCase);
