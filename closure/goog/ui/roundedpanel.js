@@ -52,6 +52,8 @@ goog.require('goog.userAgent');
  *     document we want to render in.
  * @return {!goog.ui.BaseRoundedPanel} An instance of a
  *     goog.ui.BaseRoundedPanel subclass.
+ * TODO(user): deprecate this class, which has <5 usages and only really
+ *            matters for IE8, and then only stylistically.
  */
 goog.ui.RoundedPanel.create = function(radius,
                                        borderWidth,
@@ -61,9 +63,11 @@ goog.ui.RoundedPanel.create = function(radius,
                                        opt_domHelper) {
   // This variable checks for the presence of Safari 3.0+ or Gecko 1.9+,
   // which can leverage special CSS styles to create rounded corners.
-  var isCssReady = goog.userAgent.WEBKIT &&
-      goog.userAgent.isVersionOrHigher('500') ||
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9a');
+  var isCssReady =
+      (goog.userAgent.WEBKIT &&
+          goog.userAgent.isVersionOrHigher('500')) ||
+      (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9a')) ||
+      goog.userAgent.EDGE;
 
   if (isCssReady) {
     // Safari 3.0+ and Firefox 3.0+ support this instance.

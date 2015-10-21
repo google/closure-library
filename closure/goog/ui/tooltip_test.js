@@ -65,7 +65,7 @@ function setUp() {
   // We get access denied error when accessing the iframe in IE on the farm
   // as IE doesn't have the same window size issues as firefox on the farm
   // we bypass the iframe and use the current document instead.
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     dom = goog.dom.getDomHelper(document);
   } else {
     var frame = document.getElementById('testframe');

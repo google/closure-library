@@ -32,13 +32,15 @@ function testRoundedPanelCreate() {
                                         '#cccccc',
                                         '#cccccc',
                                         goog.ui.RoundedPanel.Corner.ALL);
-
   if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9a')) {
     assertTrue('For Firefox 3.0+ (uses Gecko 1.9+), an instance of ' +
         'goog.ui.CssRoundedPanel should be returned.',
         rcp instanceof goog.ui.CssRoundedPanel);
   } else if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('500')) {
     assertTrue('For Safari 3.0+, an instance of goog.ui.CssRoundedPanel ' +
+        'should be returned.', rcp instanceof goog.ui.CssRoundedPanel);
+  } else if (goog.userAgent.EDGE) {
+    assertTrue('For MS Edge, an instance of goog.ui.CssRoundedPanel ' +
         'should be returned.', rcp instanceof goog.ui.CssRoundedPanel);
   } else if (goog.userAgent.GECKO ||
              goog.userAgent.IE ||
