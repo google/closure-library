@@ -1403,13 +1403,14 @@ goog.style.isRightToLeft = function(el) {
 /**
  * The CSS style property corresponding to an element being
  * unselectable on the current browser platform (null if none).
- * Opera and IE instead use a DOM attribute 'unselectable'.
+ * Opera and IE instead use a DOM attribute 'unselectable'. MS Edge uses
+ * the Webkit prefix.
  * @type {?string}
  * @private
  */
 goog.style.unselectableStyle_ =
     goog.userAgent.GECKO ? 'MozUserSelect' :
-    goog.userAgent.WEBKIT ? 'WebkitUserSelect' :
+    goog.userAgent.WEBKIT || goog.userAgent.EDGE ? 'WebkitUserSelect' :
     null;
 
 
