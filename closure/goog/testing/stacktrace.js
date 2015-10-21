@@ -268,7 +268,9 @@ goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_ = new RegExp(
  * @const
  */
 goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ = '(' +
-    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '(?:\\s+\\w+)*)';
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
+    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
+    '(?:\\s+\\w+)*)';
 
 
 /**

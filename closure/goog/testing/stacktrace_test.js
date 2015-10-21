@@ -334,6 +334,14 @@ function testParseStackFrameInIE10() {
   assertObjectEquals('nested eval', expected, frame);
 }
 
+function testParseStackFrameInEdge() {
+  frameString = '   at a.b.c (http://host.com:80/some/file.js:101:2)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'a.b.c',
+      '', '', 'http://host.com:80/some/file.js:101:2');
+  assertObjectEquals(expected, frame);
+}
+
 // Verifies that retrieving the stack trace works when the 'stack' field of an
 // exception contains an array of CallSites instead of a string. This is the
 // case when running in a lightweight V8 runtime (for instance, in gjstests),
