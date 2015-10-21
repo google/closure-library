@@ -445,6 +445,7 @@ goog.ui.ac.Renderer.prototype.dismiss = function() {
 
     // Clear ARIA popup role for the target input box.
     if (this.target_) {
+      goog.a11y.aria.removeRole(this.target_);
       goog.a11y.aria.setState(this.target_,
           goog.a11y.aria.State.HASPOPUP,
           false);

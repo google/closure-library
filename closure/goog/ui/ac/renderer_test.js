@@ -548,8 +548,8 @@ function testAriaTags() {
           goog.a11y.aria.State.HASPOPUP));
 
   renderer.dismiss();
-  assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(
-      target));
+  assertEvaluatesToFalse('The role should be empty.',
+      goog.a11y.aria.getRole(target));
   assertEquals('list',
       goog.a11y.aria.getState(target,
           goog.a11y.aria.State.AUTOCOMPLETE));
