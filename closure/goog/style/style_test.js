@@ -960,7 +960,7 @@ function testIsUnselectable() {
                goog.style.isUnselectable($('unselectable-gecko')));
   assertEquals(goog.userAgent.IE || goog.userAgent.OPERA,
                goog.style.isUnselectable($('unselectable-ie')));
-  assertEquals(goog.userAgent.WEBKIT,
+  assertEquals(goog.userAgent.WEBKIT || goog.userAgent.EDGE,
                goog.style.isUnselectable($('unselectable-webkit')));
 }
 
