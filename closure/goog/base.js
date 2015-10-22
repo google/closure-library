@@ -183,6 +183,13 @@ goog.define('goog.DEBUG', true);
 
 
 /**
+ * @define {boolean} TESTING indicates that this is a non-production build
+ * for testing purposes.
+ */
+goog.define('goog.TESTING', false);
+
+
+/**
  * @define {string} LOCALE defines the locale being used for compilation. It is
  * used to select locale specific data to be compiled in js binary. BUILD rule
  * can specify this value by "--define goog.LOCALE=<locale_name>" as JSCompiler
