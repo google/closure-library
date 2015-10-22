@@ -102,7 +102,8 @@ goog.async.run.workQueue_ = new goog.async.WorkQueue();
 
 if (goog.DEBUG || goog.TESTING) {
   /**
-   * Reset the work queue. Only available in TESTING mode.
+   * Reset the work queue. Only available for tests in debug mode
+   * or testing mode.
    */
   goog.async.run.resetQueue = function() {
     goog.async.run.workQueueScheduled_ = false;
