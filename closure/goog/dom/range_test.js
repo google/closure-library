@@ -504,12 +504,13 @@ function testRemovedNode() {
 }
 
 function testReversedRange() {
+  if (goog.userAgent.EDGE_OR_IE) return; // IE doesn't make this distinction.
+
   goog.dom.Range.createFromNodes(goog.dom.getElement('test2'), 0,
       goog.dom.getElement('test1'), 0).select();
 
   var range = goog.dom.Range.createFromWindow(window);
-  assertTrue('Range should be reversed',
-      goog.userAgent.IE || range.isReversed());
+  assertTrue('Range should be reversed', range.isReversed());
 }
 
 function testUnreversedRange() {
