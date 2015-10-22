@@ -26,6 +26,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.ImageLoader');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
@@ -53,6 +54,12 @@ var TEST_IMAGES = {
 
 var startTime;
 var loader;
+
+
+function setUpPage() {
+  // Increase the timeout to 5 seconds to allow more time for images to load.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5 * 1000;
+}
 
 
 function setUp() {
