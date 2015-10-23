@@ -24,7 +24,6 @@ goog.addDependency('../../third_party/closure/goog/dojo/dom/query.js', ['goog.do
 goog.addDependency('../../third_party/closure/goog/jpeg_encoder/jpeg_encoder_basic.js', ['goog.crypt.JpegEncoder'], ['goog.crypt.base64'], false);
 goog.addDependency('../../third_party/closure/goog/loremipsum/text/loremipsum.js', ['goog.text.LoremIpsum'], ['goog.array', 'goog.math', 'goog.string', 'goog.structs.Map', 'goog.structs.Set'], false);
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], false);
-goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_async_test.js', ['goog.async.DeferredAsyncTest'], ['goog.async.Deferred', 'goog.testing.jsunit'], false);
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred'], false);
 goog.addDependency('../../third_party/closure/goog/osapi/osapi.js', ['goog.osapi'], [], false);
 goog.addDependency('../../third_party/closure/goog/svgpan/svgpan.js', ['svgpan.SvgPan'], ['goog.Disposable', 'goog.events', 'goog.events.EventType', 'goog.events.MouseWheelHandler'], false);
