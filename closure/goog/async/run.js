@@ -100,7 +100,7 @@ goog.async.run.workQueueScheduled_ = false;
 goog.async.run.workQueue_ = new goog.async.WorkQueue();
 
 
-if (goog.DEBUG || goog.TESTING) {
+if (goog.DEBUG) {
   /**
    * Reset the work queue. Only available for tests in debug mode
    * or testing mode.
