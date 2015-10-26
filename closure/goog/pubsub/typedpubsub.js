@@ -22,15 +22,13 @@ goog.require('goog.pubsub.PubSub');
 /**
  * This object is a temporary shim that provides goog.pubsub.TopicId support
  * for goog.pubsub.PubSub.  See b/12477087 for more info.
- * @param {boolean=} opt_async Enable asynchronous behavior.  Recommended for
- *     new code.  See notes on {@code goog.pubsub.PubSub.publish}.
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.pubsub.TypedPubSub = function(opt_async) {
+goog.pubsub.TypedPubSub = function() {
   goog.pubsub.TypedPubSub.base(this, 'constructor');
 
-  this.pubSub_ = new goog.pubsub.PubSub(opt_async);
+  this.pubSub_ = new goog.pubsub.PubSub();
   this.registerDisposable(this.pubSub_);
 };
 goog.inherits(goog.pubsub.TypedPubSub, goog.Disposable);
