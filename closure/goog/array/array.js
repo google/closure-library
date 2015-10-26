@@ -199,7 +199,7 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
       var arr2 = goog.isString(arr) ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
-          f.call(opt_obj, arr2[i], i, arr);
+          f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
         }
       }
     };
@@ -224,7 +224,7 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
   var arr2 = goog.isString(arr) ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; --i) {
     if (i in arr2) {
-      f.call(opt_obj, arr2[i], i, arr);
+      f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
     }
   }
 };
@@ -265,7 +265,7 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
           var val = arr2[i];  // in case f mutates arr2
-          if (f.call(opt_obj, val, i, arr)) {
+          if (f.call(/** @type {?} */ (opt_obj), val, i, arr)) {
             res[resLength++] = val;
           }
         }
@@ -304,7 +304,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
       var arr2 = goog.isString(arr) ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
-          res[i] = f.call(opt_obj, arr2[i], i, arr);
+          res[i] = f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
         }
       }
       return res;
@@ -348,7 +348,7 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
     function(arr, f, val, opt_obj) {
       var rval = val;
       goog.array.forEach(arr, function(val, index) {
-        rval = f.call(opt_obj, rval, val, index, arr);
+        rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
       return rval;
     };
@@ -385,6 +385,7 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
                           Array.prototype.reduceRight) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
+      goog.asserts.assert(f != null);
       if (opt_obj) {
         f = goog.bind(f, opt_obj);
       }
@@ -393,7 +394,7 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
     function(arr, f, val, opt_obj) {
       var rval = val;
       goog.array.forEachRight(arr, function(val, index) {
-        rval = f.call(opt_obj, rval, val, index, arr);
+        rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
       return rval;
     };
@@ -428,7 +429,7 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
       var l = arr.length;  // must be fixed during loop... see docs
       var arr2 = goog.isString(arr) ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
-        if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
+        if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return true;
         }
       }
@@ -465,7 +466,7 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
       var l = arr.length;  // must be fixed during loop... see docs
       var arr2 = goog.isString(arr) ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
-        if (i in arr2 && !f.call(opt_obj, arr2[i], i, arr)) {
+        if (i in arr2 && !f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return false;
         }
       }
@@ -488,7 +489,7 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
 goog.array.count = function(arr, f, opt_obj) {
   var count = 0;
   goog.array.forEach(arr, function(element, index, arr) {
-    if (f.call(opt_obj, element, index, arr)) {
+    if (f.call(/** @type {?} */ (opt_obj), element, index, arr)) {
       ++count;
     }
   }, opt_obj);
@@ -533,7 +534,7 @@ goog.array.findIndex = function(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
   var arr2 = goog.isString(arr) ? arr.split('') : arr;
   for (var i = 0; i < l; i++) {
-    if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
+    if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
     }
   }
@@ -579,7 +580,7 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
   var arr2 = goog.isString(arr) ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; i--) {
-    if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
+    if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
     }
   }
@@ -752,7 +753,7 @@ goog.array.removeIf = function(arr, f, opt_obj) {
 goog.array.removeAllIf = function(arr, f, opt_obj) {
   var removedCount = 0;
   goog.array.forEachRight(arr, function(val, index) {
-    if (f.call(opt_obj, val, index, arr)) {
+    if (f.call(/** @type {?} */ (opt_obj), val, index, arr)) {
       if (goog.array.removeAt(arr, index)) {
         removedCount++;
       }
@@ -1078,7 +1079,10 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
     if (isEvaluator) {
       compareResult = compareFn.call(opt_selfObj, arr[middle], middle, arr);
     } else {
-      compareResult = compareFn(opt_target, arr[middle]);
+      // NOTE(dimvar): To avoid this cast, we'd have to use function overloading
+      // for the type of binarySearch_, which the type system can't express yet.
+      compareResult = /** @type {function(?, ?): number} */ (
+          compareFn)(opt_target, arr[middle]);
     }
     if (compareResult > 0) {
       left = middle + 1;
@@ -1382,7 +1386,7 @@ goog.array.bucket = function(array, sorter, opt_obj) {
 
   for (var i = 0; i < array.length; i++) {
     var value = array[i];
-    var key = sorter.call(opt_obj, value, i, array);
+    var key = sorter.call(/** @type {?} */ (opt_obj), value, i, array);
     if (goog.isDef(key)) {
       // Push the value to the right bucket, creating it if necessary.
       var bucket = buckets[key] || (buckets[key] = []);
@@ -1413,7 +1417,7 @@ goog.array.bucket = function(array, sorter, opt_obj) {
 goog.array.toObject = function(arr, keyFunc, opt_obj) {
   var ret = {};
   goog.array.forEach(arr, function(element, index) {
-    ret[keyFunc.call(opt_obj, element, index, arr)] = element;
+    ret[keyFunc.call(/** @type {?} */ (opt_obj), element, index, arr)] = element;
   });
   return ret;
 };
