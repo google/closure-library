@@ -1591,19 +1591,28 @@ goog.dom.getOwnerDocument = function(node) {
  * @return {!Document} The frame content document.
  */
 goog.dom.getFrameContentDocument = function(frame) {
-  var doc = frame.contentDocument || frame.contentWindow.document;
-  return doc;
+  return frame.contentDocument || frame.contentWindow.document;
 };
 
 
 /**
  * Cross-browser function for getting the window of a frame or iframe.
  * @param {Element} frame Frame element.
- * @return {Window} The window associated with the given frame.
+ * @return {Window} The window associated with the given frame, or null if none
+ *     exists.
  */
 goog.dom.getFrameContentWindow = function(frame) {
-  return frame.contentWindow ||
-      goog.dom.getWindow(goog.dom.getFrameContentDocument(frame));
+  try {
+    return frame.contentWindow ||
+           (frame.contentDocument ? goog.dom.getWindow(frame.contentDocument) :
+                                    null);
+  } catch (e) {
+    // NOTE(user): In IE8, checking the contentWindow or contentDocument
+    // properties will throw a "Unspecified Error" exception if the iframe is
+    // not inserted in the DOM. If we get this we can be sure that no window
+    // exists, so return null.
+  }
+  return null;
 };
 
 

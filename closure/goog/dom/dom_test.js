@@ -1281,6 +1281,11 @@ function testGetFrameContentWindow() {
   assertEquals(window.frames[name], iframeWin);
 }
 
+function testGetFrameContentWindowNotInitialized() {
+  var iframe = goog.dom.createDom(goog.dom.TagName.IFRAME);
+  assertNull(goog.dom.getFrameContentWindow(iframe));
+}
+
 function testCanHaveChildren() {
   var EMPTY_ELEMENTS = goog.object.createSet(
       goog.dom.TagName.APPLET,

@@ -125,7 +125,7 @@ function testContainsControlRange() {
 function getTest3ElementTopLeft() {
   var topLeft = goog.style.getPageOffset(test3.firstChild);
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     // On IE the selection is as tall as its tallest element.
     var logoPosition = goog.style.getPageOffset(logo3);
     topLeft.y = logoPosition.y;
@@ -205,7 +205,7 @@ function testGetStartPositionRightToLeft() {
   var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
   var topLeft = goog.style.getPageOffset(test3Rtl.firstChild);
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     // On IE the selection is as tall as its tallest element.
     var logoPosition = goog.style.getPageOffset(logo3Rtl);
     topLeft.y = logoPosition.y;

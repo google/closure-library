@@ -583,6 +583,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText =
       // to do this only if there is an uncommitted IME, but this isn't possible
       // to detect. Since text editing is finicky we restrict this
       // workaround to Firefox and IE 9 where it's necessary.
+      // (Note: this has been fixed in Edge and since FF 41)
       if (goog.userAgent.GECKO ||
           (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
         el.blur();
@@ -937,7 +938,7 @@ goog.ui.ac.InputHandler.prototype.addEventHandlers_ = function() {
   this.eh_.listen(this.activeElement_,
       goog.events.EventType.MOUSEDOWN, this.onMouseDown_);
 
-  // IE also needs a keypress to check if the user typed a separator
+  // IE6 also needs a keypress to check if the user typed a separator
   if (goog.userAgent.IE) {
     this.eh_.listen(this.activeElement_,
         goog.events.EventType.KEYPRESS, this.onIeKeyPress_);

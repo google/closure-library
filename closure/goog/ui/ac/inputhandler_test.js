@@ -169,6 +169,8 @@ function simulateWinFirefox3() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = false;
@@ -181,6 +183,8 @@ function simulateWinIe7() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = true;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = true;
   goog.userAgent.DOCUMENT_MODE = 7;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = false;
@@ -194,6 +198,8 @@ function simulateWinChrome() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = true;
   goog.userAgent.VERSION = '525';
@@ -207,6 +213,8 @@ function simulateMacFirefox3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = true;
@@ -219,6 +227,8 @@ function simulateMacSafari3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = true;
   goog.userAgent.VERSION = '525';
@@ -232,6 +242,8 @@ function simulateLinuxFirefox3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = true;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = true;

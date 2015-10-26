@@ -282,7 +282,7 @@ goog.dom.browserrange.W3cRange.prototype.removeContents = function() {
     }
   }
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     // Unfortunately, when deleting a portion of a single text node, IE creates
     // an extra text node instead of modifying the nodeValue of the start node.
     // We normalize for that behavior here, similar to code in

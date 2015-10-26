@@ -19,9 +19,15 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.messaging.PortChannel');
 goog.require('goog.messaging.PortOperator');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 var timer;
+
+function setUpPage() {
+  // Use a relatively long timeout because workers can take a while to start up.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5 * 1000;
+}
 
 function setUp() {
   timer = new goog.Timer(50);
