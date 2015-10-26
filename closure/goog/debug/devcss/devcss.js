@@ -58,6 +58,8 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
       opt_userAgent = goog.debug.DevCss.UserAgent.MOBILE;
     } else if (goog.userAgent.OPERA) {
       opt_userAgent = goog.debug.DevCss.UserAgent.OPERA;
+    } else if (goog.userAgent.EDGE) {
+      opt_userAgent = goog.debug.DevCss.UserAgent.EDGE;
     }
   }
   switch (opt_userAgent) {
@@ -68,6 +70,7 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
     case goog.debug.DevCss.UserAgent.WEBKIT:
     case goog.debug.DevCss.UserAgent.SAFARI:
     case goog.debug.DevCss.UserAgent.MOBILE:
+    case goog.debug.DevCss.UserAgent.EDGE:
       break;
     default:
       throw Error('Could not determine the user agent from known UserAgents');
@@ -156,7 +159,8 @@ goog.debug.DevCss.UserAgent = {
   FIREFOX: 'GECKO',
   WEBKIT: 'WEBKIT',
   SAFARI: 'WEBKIT',
-  MOBILE: 'MOBILE'
+  MOBILE: 'MOBILE',
+  EDGE: 'EDGE'
 };
 
 
