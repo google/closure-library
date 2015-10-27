@@ -36,6 +36,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.object');
+goog.require('goog.reflect');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -758,6 +759,13 @@ goog.style.getFramedPageOffset = function(el, relativeWin) {
   // Iterate up the ancestor frame chain, keeping track of the current window
   // and the current element in that window.
   var currentWin = goog.dom.getWindow(goog.dom.getOwnerDocument(el));
+
+  // MS Edge throws when accessing "parent" if el's containing iframe has been
+  // deleted.
+  if (!goog.reflect.canAccessProperty(currentWin, 'parent')) {
+    return position;
+  }
+
   var currentEl = el;
   do {
     // if we're at the top window, we want to get the page offset.

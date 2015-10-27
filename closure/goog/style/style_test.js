@@ -786,8 +786,8 @@ function testGetSizeSvgElements() {
   svgEl.appendChild(el);
 
   // The bounding size in 1 larger than the SVG element in IE.
-  var expectedWidth = (goog.userAgent.IE) ? 33 : 32;
-  var expectedHeight = (goog.userAgent.IE) ? 22 : 21;
+  var expectedWidth = (goog.userAgent.EDGE_OR_IE) ? 33 : 32;
+  var expectedHeight = (goog.userAgent.EDGE_OR_IE) ? 22 : 21;
 
   var dims = goog.style.getSize(el);
   assertEquals(expectedWidth, dims.width);
@@ -825,7 +825,7 @@ function testGetSizeSvgDocument() {
   var doc = goog.dom.getFrameContentDocument(frame);
   var rect = doc.getElementById('rect');
   var dims = goog.style.getSize(rect);
-  if (!goog.userAgent.IE) {
+  if (!goog.userAgent.EDGE_OR_IE) {
     assertEquals(50, dims.width);
     assertEquals(50, dims.height);
   } else {
