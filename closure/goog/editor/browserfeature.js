@@ -107,6 +107,7 @@ goog.editor.BrowserFeature = {
 
   // Whether hitting the tab key will fire a keypress event.
   // see http://www.quirksmode.org/js/keys.html
+  // TODO(user): This is fixed in IE8 and higher.
   TAB_FIRES_KEYPRESS: !goog.userAgent.IE,
 
   // Has a standards mode quirk where width=100% doesn't do the right thing,
@@ -155,7 +156,7 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser has document.activeElement available.
   HAS_ACTIVE_ELEMENT:
-      goog.userAgent.IE || goog.userAgent.OPERA ||
+      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.OPERA ||
       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9'),
 
   // Whether this browser supports the setCapture method on DOM elements.
@@ -229,8 +230,8 @@ goog.editor.BrowserFeature = {
   // Browsers where executing subscript then superscript (or vv) will cause both
   // to be applied in a nested fashion instead of the first being overwritten by
   // the second.
-  NESTS_SUBSCRIPT_SUPERSCRIPT: goog.userAgent.IE || goog.userAgent.GECKO ||
-      goog.userAgent.OPERA,
+  NESTS_SUBSCRIPT_SUPERSCRIPT: goog.userAgent.IE || goog.userAgent.EDGE ||
+      goog.userAgent.GECKO || goog.userAgent.OPERA,
 
   // Whether this browser can place a cursor in an empty element natively.
   CAN_SELECT_EMPTY_ELEMENT: !goog.userAgent.IE && !goog.userAgent.WEBKIT,
@@ -247,7 +248,8 @@ goog.editor.BrowserFeature = {
   // size, the browser creates a font tag, but the font size in the style attr
   // overrides the font tag. Only webkit removes that font size from the style
   // attr.
-  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT,
+  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR:
+      !goog.userAgent.WEBKIT && !goog.userAgent.EDGE,
 
   // Implements this spec about dragging files from the filesystem to the
   // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd

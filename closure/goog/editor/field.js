@@ -2404,15 +2404,10 @@ goog.editor.Field.prototype.placeCursorAtStartOrEnd_ = function(isStart) {
  * @param {goog.dom.SavedRange=} opt_range A previously saved selected range.
  */
 goog.editor.Field.prototype.restoreSavedRange = function(opt_range) {
-  if (goog.userAgent.IE) {
-    this.focus();
-  }
   if (opt_range) {
     opt_range.restore();
   }
-  if (!goog.userAgent.IE) {
-    this.focus();
-  }
+  this.focus();
 };
 
 
