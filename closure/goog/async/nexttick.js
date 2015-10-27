@@ -65,27 +65,12 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
     cb = goog.bind(callback, opt_context);
   }
   cb = goog.async.nextTick.wrapCallback_(cb);
-  // window.setImmediate was introduced and currently only supported by IE10+,
-  // but due to a bug in the implementation it is not guaranteed that
-  // setImmediate is faster than setTimeout nor that setImmediate N is before
-  // setImmediate N+1. That is why we do not use the native version if
-  // available. We do, however, call setImmediate if it is a normal function
-  // because that indicates that it has been replaced by goog.testing.MockClock
-  // which we do want to support.
-  // See
-  // http://connect.microsoft.com/IE/feedback/details/801823/setimmediate-and-messagechannel-are-broken-in-ie10
-  //
   // Note we do allow callers to also request setImmediate if they are willing
   // to accept the possible tradeoffs of incorrectness in exchange for speed.
-  // The IE fallback of readystate change is much slower.
+  // The IE fallback of readystate change is much slower. See useSetImmediate_
+  // for details.
   if (goog.isFunction(goog.global.setImmediate) &&
-      // Opt in.
-      (opt_useSetImmediate ||
-      // or it isn't a browser or the environment is weird
-      !goog.global.Window || !goog.global.Window.prototype ||
-      // or something redefined setImmediate in which case we (YOLO) decide
-      // to use it (This is so that we use the mockClock setImmediate. sigh).
-      goog.global.Window.prototype.setImmediate != goog.global.setImmediate)) {
+      (opt_useSetImmediate || goog.async.nextTick.useSetImmediate_())) {
     goog.global.setImmediate(cb);
     return;
   }
@@ -96,6 +81,50 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
         goog.async.nextTick.getSetImmediateEmulator_();
   }
   goog.async.nextTick.setImmediate_(cb);
+};
+
+
+/**
+ * Returns whether should use setImmediate implementation currently on window.
+ *
+ * window.setImmediate was introduced and currently only supported by IE10+,
+ * but due to a bug in the implementation it is not guaranteed that
+ * setImmediate is faster than setTimeout nor that setImmediate N is before
+ * setImmediate N+1. That is why we do not use the native version if
+ * available. We do, however, call setImmediate if it is a non-native function
+ * because that indicates that it has been replaced by goog.testing.MockClock
+ * which we do want to support.
+ * See
+ * http://connect.microsoft.com/IE/feedback/details/801823/setimmediate-and-messagechannel-are-broken-in-ie10
+ *
+ * TODO(joeltine): Verify if EDGE has fixed the bug mentioned above and, if so,
+ * allow the native setImmediate.
+ *
+ * @return {boolean} Whether to use the implementation of setImmediate defined
+ *     on Window.
+ * @private
+ */
+goog.async.nextTick.useSetImmediate_ = function() {
+  // Not a browser environment.
+  if (!goog.global.Window || !goog.global.Window.prototype) {
+    return true;
+  }
+
+  // MS Edge has window.setImmediate natively, but it's not on Window.prototype,
+  // so the check below doesn't work for it. Instead, we toString it and see
+  // if it's native code.
+  if (goog.labs.userAgent.browser.isEdge()) {
+    if (String(goog.global.setImmediate).indexOf('native code') == -1) {
+      return true;
+    }
+  } else if (goog.global.Window.prototype.setImmediate !=
+             goog.global.setImmediate) {
+    // Something redefined setImmediate in which case we (YOLO) decide
+    // to use it (This is so that we use the mockClock setImmediate. sigh).
+    return true;
+  }
+
+  return false;
 };
 
 
