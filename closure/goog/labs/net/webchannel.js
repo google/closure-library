@@ -38,13 +38,11 @@
  *
  * Note that we have no immediate plan to move this API out of labs. While
  * the implementation is production ready, the API is subject to change
- * (addition):
- * 1. Completely new W3C APIs for Web messaging may emerge in near future.
+ * (addition only):
+ * 1. Adopt new Web APIs (mainly whatwg streams) and goog.net.streams.
  * 2. New programming models for cloud (on the server-side) may require
  *    new APIs to be defined.
  * 3. WebRTC DataChannel alignment
- * Lastly, we also want to white-list all internal use cases. As a general rule,
- * we expect most applications to rely on stateless/RPC services.
  *
  */
 
@@ -116,9 +114,11 @@ goog.net.WebChannel.Options;
 /**
  * Types that are allowed as message data.
  *
- * Note that if you are sending unicode strings from the server, UTF-8 escaping
- * is required to avoid mismatched string length calculation between the
- * client and server.
+ * Note that JS objects (sent by the client) can only have string encoded
+ * values due to the limitation of the current wire protocol.
+ *
+ * Unicode strings (sent by the server) may or may not need be escaped, as
+ * decided by the server.
  *
  * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
  */
