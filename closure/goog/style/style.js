@@ -1275,8 +1275,8 @@ goog.style.isElementShown = function(el) {
 
 
 /**
- * Installs the styles string into the window that contains opt_element.  If
- * opt_element is null, the main window is used.
+ * Installs the styles string into the window that contains opt_node.  If
+ * opt_node is null, the main window is used.
  * @param {string} stylesString The style string to install.
  * @param {Node=} opt_node Node whose parent document should have the
  *     styles installed.
