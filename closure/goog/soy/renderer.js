@@ -24,11 +24,9 @@
  * {'dataKey': 'value', 'otherDataKey': 'otherValue'}
  * </pre>
  *
- * To use injected data, you need to enable the soy-to-js compiler
- * option {@code --isUsingIjData}. The injected data can then be
- * referred to in any soy templates as part of a magic "ij"
- * parameter. For example, {@code $ij.dataKey} will evaluate to
- * 'value' with the above injected data.
+ * The injected data can then be referred to in any soy templates as
+ * part of a magic "ij" parameter. For example, {@code $ij.dataKey}
+ * will evaluate to 'value' with the above injected data.
  *
  * @author henrywong@google.com (Henry Wong)
  * @author chrishenry@google.com (Chris Henry)
