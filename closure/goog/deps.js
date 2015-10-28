@@ -807,7 +807,7 @@ goog.addDependency('net/networkstatusmonitor.js', ['goog.net.NetworkStatusMonito
 goog.addDependency('net/networktester.js', ['goog.net.NetworkTester'], ['goog.Timer', 'goog.Uri', 'goog.log'], false);
 goog.addDependency('net/networktester_test.js', ['goog.net.NetworkTesterTest'], ['goog.Uri', 'goog.net.NetworkTester', 'goog.testing.MockClock', 'goog.testing.jsunit'], false);
 goog.addDependency('net/streams/jsonstreamparser.js', ['goog.net.streams.JsonStreamParser'], ['goog.json', 'goog.net.streams.StreamParser'], false);
-goog.addDependency('net/streams/jsonstreamparser_test.js', ['goog.net.streams.JsonStreamParserTest'], ['goog.net.streams.JsonStreamParser', 'goog.testing.asserts', 'goog.testing.jsunit'], false);
+goog.addDependency('net/streams/jsonstreamparser_test.js', ['goog.net.streams.JsonStreamParserTest'], ['goog.array', 'goog.json', 'goog.labs.testing.JsonFuzzing', 'goog.net.streams.JsonStreamParser', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.uri.utils'], false);
 goog.addDependency('net/streams/nodereadablestream.js', ['goog.net.streams.NodeReadableStream'], [], false);
 goog.addDependency('net/streams/streamfactory.js', ['goog.net.streams.createXhrNodeReadableStream'], ['goog.asserts', 'goog.net.streams.XhrNodeReadableStream', 'goog.net.streams.XhrStreamReader'], false);
 goog.addDependency('net/streams/streamparser.js', ['goog.net.streams.StreamParser'], [], false);

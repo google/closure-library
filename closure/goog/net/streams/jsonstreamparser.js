@@ -182,12 +182,15 @@ Parser.prototype.getErrorMessage = function() {
 
 
 /**
+ * @param {string} input The current input string
+ * @param {number} pos The position in the current input that triggers the error
  * @throws {Error} Throws an error message indicating where
  *     the stream is broken.
  * @private
  */
-Parser.prototype.error_ = function() {
-  this.errorMessage_ = 'The stream is broken @ ' + this.pos_;
+Parser.prototype.error_ = function(input, pos) {
+  this.errorMessage_ = 'The stream is broken @' +
+      this.pos_ + '/' + pos + '. With input:\n' + input;
   throw Error(this.errorMessage_);
 };
 
@@ -215,12 +218,12 @@ Parser.prototype.parse = function(input) {
   while (i < num) {
     switch (parser.streamState_) {
       case Parser.StreamState_.INVALID:
-        parser.error_();
+        parser.error_(input, i);
         return null;
 
       case Parser.StreamState_.ARRAY_END:
         if (readMore()) {
-          parser.error_();
+          parser.error_(input, i);
         }
         return null;
 
@@ -237,7 +240,7 @@ Parser.prototype.parse = function(input) {
 
             continue;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
         }
         return null;
@@ -281,6 +284,7 @@ Parser.prototype.parse = function(input) {
     while (i < input.length) {
       if (isWhitespace(input[i])) {
         i++;
+        parser.pos_++;
         continue;
       }
       break;
@@ -319,7 +323,7 @@ Parser.prototype.parse = function(input) {
           } else if (current === '[') {
             parser.state_ = State.ARRAY_OPEN;
           } else if (!isWhitespace(current)) {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -342,7 +346,7 @@ Parser.prototype.parse = function(input) {
           if (current === '"') {
             parser.state_ = State.STRING;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -368,7 +372,7 @@ Parser.prototype.parse = function(input) {
             }
             parser.state_ = State.KEY_START;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -406,7 +410,7 @@ Parser.prototype.parse = function(input) {
           } else if ('0123456789'.indexOf(current) !== -1) {
             parser.state_ = State.NUM_DIGIT;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -415,8 +419,8 @@ Parser.prototype.parse = function(input) {
             stack.push(State.ARRAY_END);
             parser.state_ = State.VALUE;
 
-            if (parser.depth_ === 1 && msgStart > -1) {
-              msgStart = i;   // skip ','
+            if (parser.depth_ === 1) {
+              msgStart = i;   // skip ',', including a leading one
             }
           } else if (current === ']') {
             parser.depth_--;
@@ -427,12 +431,13 @@ Parser.prototype.parse = function(input) {
           } else if (isWhitespace(current)) {
             continue;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
         case State.STRING:
           var start = i - 1;
+          var old = i;
 
           STRING_LOOP: while (true) {
 
@@ -448,6 +453,7 @@ Parser.prototype.parse = function(input) {
                 break STRING_LOOP;
               }
             }
+
             if (current === '"' && !parser.slashed_) {
               parser.state_ = nextState();
               break;
@@ -486,6 +492,9 @@ Parser.prototype.parse = function(input) {
               break;
             }
           }
+
+          parser.pos_ += (i - old);
+
           continue;
 
         case State.TRUE1:
@@ -495,7 +504,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'r') {
             parser.state_ = State.TRUE2;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -506,7 +515,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'u') {
             parser.state_ = State.TRUE3;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -517,7 +526,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'e') {
             parser.state_ = nextState();
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -528,7 +537,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'a') {
             parser.state_ = State.FALSE2;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -539,7 +548,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'l') {
             parser.state_ = State.FALSE3;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -550,7 +559,7 @@ Parser.prototype.parse = function(input) {
           if (current === 's') {
             parser.state_ = State.FALSE4;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -561,7 +570,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'e') {
             parser.state_ = nextState();
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -572,7 +581,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'u') {
             parser.state_ = State.NULL2;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -583,7 +592,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'l') {
             parser.state_ = State.NULL3;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -594,7 +603,7 @@ Parser.prototype.parse = function(input) {
           if (current === 'l') {
             parser.state_ = nextState();
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -602,7 +611,7 @@ Parser.prototype.parse = function(input) {
           if (current === '.') {
             parser.state_ = State.NUM_DIGIT;
           } else {
-            parser.error_();
+            parser.error_(input, i);
           }
           continue;
 
@@ -611,12 +620,13 @@ Parser.prototype.parse = function(input) {
             continue;
           } else {
             i--;
+            parser.pos_--;
             parser.state_ = nextState();
           }
           continue;
 
         default:
-          parser.error_();
+          parser.error_(input, i);
       }
     }
   }
