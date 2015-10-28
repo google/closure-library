@@ -195,11 +195,18 @@ goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_ = new RegExp('^    at' +
 /**
  * RegExp pattern for function call in the Firefox stack trace.
  * Creates 2 submatches with function name (optional) and arguments.
+ *
+ * Modern FF produces stack traces like:
+ *    foo@url:1:2
+ *    a.b.foo@url:3:4
+ *
  * @private {string}
  * @const
  */
 goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ =
-    '(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')?' +
+    '(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
+    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
+    ')?' +
     '(\\(.*\\))?@';
 
 

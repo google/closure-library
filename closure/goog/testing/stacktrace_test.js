@@ -210,6 +210,16 @@ function testParseStackFrameInFirefox() {
   assertObjectEquals('anonymous function', expected, frame);
 }
 
+// All test strings are parsed with the conventional and long
+// frame algorithms.
+function testParseStackFrameInFirefoxWithQualifiedName() {
+  var frameString = 'ns.method@http://some.thing/a.js:1:2';
+  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  var expected = new goog.testing.stacktrace.Frame('', 'ns.method', '', '',
+      'http://some.thing/a.js:1:2');
+  assertObjectEquals('anonymous function', expected, frame);
+}
+
 function testCanonicalizeFrame() {
   var frame = new goog.testing.stacktrace.Frame('<window>', 'foo', 'bar',
       '("<a>\'&amp;")', 'http://x?a=1&b=2:1');
