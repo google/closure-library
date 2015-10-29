@@ -220,7 +220,7 @@ goog.editor.BrowserFeature = {
   // removing them from the Document instead of merging them.
   NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES: goog.userAgent.GECKO &&
       goog.userAgent.isVersionOrHigher('1.9') || goog.userAgent.IE ||
-      goog.userAgent.OPERA ||
+      goog.userAgent.EDGE || goog.userAgent.OPERA ||
       goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('531'),
 
   // Whether the browser corrupts all text nodes in Node#normalize,
