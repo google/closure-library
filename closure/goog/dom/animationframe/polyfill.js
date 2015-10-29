@@ -43,7 +43,7 @@ goog.dom.animationFrame.polyfill.install =
 
   if (!window.requestAnimationFrame) {
     var lastTime = 0;
-    window.requestAnimationFrame = function(callback, element) {
+    window.requestAnimationFrame = function(callback) {
       var currTime = new Date().getTime();
       var timeToCall = Math.max(0, 16 - (currTime - lastTime));
       lastTime = currTime + timeToCall;
