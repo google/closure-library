@@ -75,7 +75,7 @@ goog.soy.renderElement = function(element, template, opt_templateData,
   goog.asserts.assert(template, 'Soy template may not be null.');
   element.innerHTML = goog.soy.ensureTemplateOutputHtml_(template(
       opt_templateData || goog.soy.defaultTemplateData_, undefined,
-      opt_injectedData));
+      opt_injectedData || goog.soy.defaultTemplateData_));
 };
 
 
@@ -102,7 +102,8 @@ goog.soy.renderAsFragment = function(template, opt_templateData,
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var html = goog.soy.ensureTemplateOutputHtml_(
       template(opt_templateData || goog.soy.defaultTemplateData_,
-               undefined, opt_injectedData));
+               undefined,
+               opt_injectedData || goog.soy.defaultTemplateData_));
   goog.soy.assertFirstTagValid_(html);
   return dom.htmlToDocumentFragment(html);
 };
@@ -129,7 +130,8 @@ goog.soy.renderAsElement = function(template, opt_templateData,
   goog.asserts.assert(template, 'Soy template may not be null.');
   return goog.soy.convertToElement_(template(
       opt_templateData || goog.soy.defaultTemplateData_,
-      undefined, opt_injectedData), opt_domHelper);
+      undefined,
+      opt_injectedData || goog.soy.defaultTemplateData_), opt_domHelper);
 };
 
 
