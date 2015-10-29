@@ -530,6 +530,7 @@ function testGeckoOnMacAltHandling() {
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
+  goog.userAgent.EDGE = false;
   goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
