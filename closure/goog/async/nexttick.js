@@ -220,7 +220,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       channel['port2'].postMessage(0);
     };
   }
-  // Implementation for IE6+: Script elements fire an asynchronous
+  // Implementation for IE6 to IE10: Script elements fire an asynchronous
   // onreadystatechange event when inserted into the DOM.
   if (typeof document !== 'undefined' && 'onreadystatechange' in
       document.createElement(goog.dom.TagName.SCRIPT)) {
@@ -239,6 +239,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   }
   // Fall back to setTimeout with 0. In browsers this creates a delay of 5ms
   // or more.
+  // NOTE(user): This fallback is used for IE11.
   return function(cb) {
     goog.global.setTimeout(cb, 0);
   };
