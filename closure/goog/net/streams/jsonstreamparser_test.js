@@ -86,6 +86,19 @@ function testSingleMessage() {
   assertEquals('b', result[0].a);
 }
 
+function testEnclosingArray() {
+  var parser = new goog.net.streams.JsonStreamParser();
+  var result = parser.parse('[\n');
+  assertNull(result);
+
+  result = parser.parse('{"a" : "b"}');
+  assertEquals(1, result.length);
+  assertEquals('b', result[0].a);
+
+  result = parser.parse('\n]');
+  assertNull(result);
+}
+
 function testSingleMessageInChunks() {
   var parser = new goog.net.streams.JsonStreamParser();
   var result = parser.parse('[{"a" : ');

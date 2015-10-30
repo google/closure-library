@@ -213,7 +213,8 @@ goog.net.streams.XhrStreamReader.prototype.getParserByContentType_ =
     return new goog.net.streams.JsonStreamParser();
   }
 
-  return null;
+  // TODO(user): caller to specify the C-T (ctor)
+  return new goog.net.streams.JsonStreamParser();
 };
 
 
@@ -331,11 +332,13 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
         this.xhr_.getLastUri() + ' status ' + statusCode);
   }
 
-  this.parser_ = this.getParserByContentType_();
-  if (this.parser_ == null) {
-    goog.log.warning(this.logger_, 'Invalid response content-type: ' +
-        this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER));
-    this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
+  if (!this.parser_) {
+    this.parser_ = this.getParserByContentType_();
+    if (this.parser_ == null) {
+      goog.log.warning(this.logger_, 'Invalid response content-type: ' +
+          this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER));
+      this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
+    }
   }
 
   if (this.status_ > goog.net.streams.XhrStreamReader.Status.SUCCESS) {
