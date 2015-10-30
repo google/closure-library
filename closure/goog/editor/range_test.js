@@ -690,7 +690,7 @@ function testSelectionPreservingNormalize2() {
 }
 
 function testSelectionPreservingNormalize3() {
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     return;
   }
   var parent = $('normalizeTest-2');
@@ -790,7 +790,7 @@ function testSelectNodeStartSimple() {
   // the text will go into the P node.  In Gecko, the selection is at the start
   // of the text node, as you'd expect, but in pre-530 Webkit, it has been
   // normalized to the visible position of P:0.
-  if (goog.userAgent.GECKO || goog.userAgent.IE ||
+  if (goog.userAgent.GECKO || goog.userAgent.IE || goog.userAgent.EDGE ||
       (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('530'))) {
     goog.testing.dom.assertRangeEquals(div.firstChild.firstChild, 0,
         div.firstChild.firstChild, 0, range);
