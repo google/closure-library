@@ -31,7 +31,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
-goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ServerChart');
@@ -1429,13 +1428,6 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.getTestResults = function() {
   var results = {};
-  // If there is a syntax error, or no tests, it's not possible to get the
-  // individual test method results from TestCase. So just create one here
-  // based on the test report and filename.
-  if (goog.object.isEmpty(this.testResults_)) {
-    this.testResults_[this.testFile_] = [this.report_];
-  }
-
   for (var testName in this.testResults_) {
     var testKey = this.testFile_.replace(/\.html$/, '');
     // Concatenate with ":<testName>" unless the testName is equivalent to
