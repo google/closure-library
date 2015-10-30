@@ -29,6 +29,8 @@ var ALL_TESTS = [
   'testdata/fake_failing_test.html',
   'testdata/fake_failing_test2.html'
 ];
+var EMPTY_TEST = 'testdata/fake_failing_test3.html';
+var SKIPPED_TEST = 'testdata/fake_failing_test4.html';
 
 var testRunner;
 var mocks = new MockControl();
@@ -202,6 +204,48 @@ testSuite({
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
       assertArrayContainsString('testdata/fake_failing_test2.html',
                                 failedTests);
+    });
+  },
+
+  testMissingTestResultsIsAFailure: function() {
+    var promise = createEventPromise(testRunner, 'testsFinished');
+
+    testRunner.addTests(EMPTY_TEST);
+    testRunner.render(document.getElementById('runner'));
+    testRunner.start();
+
+    return promise.then(function(results) {
+      var testResults = processTestResults(results['allTestResults']);
+      var testNames = testResults.testNames;
+      assertEquals(4, testNames.length);
+      assertArrayContainsString('testdata/fake_failing_test3',
+                                testNames);
+      var failureReports = testResults.failureReports;
+      var failedTests = testRunner.getTestsThatFailed();
+      assertEquals(3, failureReports.length);
+      assertEquals(3, failedTests.length);
+      assertArrayContainsString('testdata/fake_failing_test3.html',
+                                failedTests);
+    });
+  },
+
+  testShouldRunTestsFalseIsSuccess: function() {
+    var promise = createEventPromise(testRunner, 'testsFinished');
+
+    testRunner.addTests(SKIPPED_TEST);
+    testRunner.render(document.getElementById('runner'));
+    testRunner.start();
+
+    return promise.then(function(results) {
+      var testResults = processTestResults(results['allTestResults']);
+      var testNames = testResults.testNames;
+      assertEquals(4, testNames.length);
+      assertArrayContainsString('testdata/fake_failing_test4',
+                                testNames);
+      var failureReports = testResults.failureReports;
+      var failedTests = testRunner.getTestsThatFailed();
+      // Test should pass even though its test method is a failure.
+      assertNotContains('testdata/fake_failing_test4', failedTests);
     });
   },
 
