@@ -716,7 +716,7 @@ goog.i18n.NumberFormatSymbols_cy_GB = goog.i18n.NumberFormatSymbols_cy;
  */
 goog.i18n.NumberFormatSymbols_da = {
   DECIMAL_SEP: ',',
-  GROUP_SEP: '.',
+  GROUP_SEP: ':',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
