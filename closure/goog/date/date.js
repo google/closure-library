@@ -1566,13 +1566,13 @@ goog.date.DateTime.prototype.add = function(interval) {
   goog.date.Date.prototype.add.call(this, interval);
 
   if (interval.hours) {
-    this.setHours(this.date.getHours() + interval.hours);
+    this.setUTCHours(this.date.getUTCHours() + interval.hours);
   }
   if (interval.minutes) {
-    this.setMinutes(this.date.getMinutes() + interval.minutes);
+    this.setUTCMinutes(this.date.getUTCMinutes() + interval.minutes);
   }
   if (interval.seconds) {
-    this.setSeconds(this.date.getSeconds() + interval.seconds);
+    this.setUTCSeconds(this.date.getUTCSeconds() + interval.seconds);
   }
 };
 
