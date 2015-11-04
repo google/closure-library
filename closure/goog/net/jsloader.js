@@ -50,7 +50,8 @@ goog.net.jsloader.DEFAULT_TIMEOUT = 5000;
 /**
  * Optional parameters for goog.net.jsloader.send.
  * timeout: The length of time, in milliseconds, we are prepared to wait
- *     for a load request to complete. Default it 5 seconds.
+ *     for a load request to complete, or 0 or negative for no timeout. Default
+ *     is 5 seconds.
  * document: The HTML document under which to load the JavaScript. Default is
  *     the current document.
  * cleanupWhenDone: If true clean up the script tag after script completes to
