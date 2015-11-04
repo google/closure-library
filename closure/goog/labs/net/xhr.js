@@ -30,6 +30,7 @@ goog.provide('goog.labs.net.xhr.ResponseType');
 goog.provide('goog.labs.net.xhr.TimeoutError');
 
 goog.require('goog.Promise');
+goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 goog.require('goog.json');
 goog.require('goog.net.HttpStatus');
@@ -41,6 +42,7 @@ goog.require('goog.userAgent');
 
 
 goog.scope(function() {
+var userAgent = goog.userAgent;
 var xhr = goog.labs.net.xhr;
 var HttpStatus = goog.net.HttpStatus;
 
@@ -163,6 +165,30 @@ xhr.getJson = function(url, opt_options) {
 
 /**
  * Sends a get request, returning a promise that will be resolved with the
+ * response as a Blob.
+ *
+ * @param {string} url The URL to request.
+ * @param {xhr.Options=} opt_options Configuration options for the request. The
+ *     responseType will be overwritten to 'blob' if it was set.
+ * @return {!goog.Promise<!Blob>} A promise that will be resolved with an
+ *     immutable Blob representing the file once the request completes.
+ */
+xhr.getBlob = function(url, opt_options) {
+  goog.asserts.assert('Blob' in goog.global,
+                      'getBlob is not supported in this browser.');
+
+  var options = opt_options || {};
+  options.responseType = xhr.ResponseType.BLOB;
+
+  return xhr.send('GET', url, null, options)
+      .then(function(request) {
+        return /** @type {!Blob} */ (request.response);
+      });
+};
+
+
+/**
+ * Sends a get request, returning a promise that will be resolved with the
  * response as an array of bytes.
  *
  * Supported in all XMLHttpRequest level 2 browsers, as well as IE9. IE8 and
@@ -175,9 +201,8 @@ xhr.getJson = function(url, opt_options) {
  *     resolved with an array of bytes once the request completes.
  */
 xhr.getBytes = function(url, opt_options) {
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
-    throw new Error('getBytes is not supported in this browser.');
-  }
+  goog.asserts.assert(!userAgent.IE || userAgent.isDocumentModeOrHigher(9),
+                      'getBytes is not supported in this browser.');
 
   var options = opt_options || {};
   options.responseType = xhr.ResponseType.ARRAYBUFFER;
