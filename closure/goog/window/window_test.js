@@ -37,6 +37,13 @@ var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
 var stubs = new goog.testing.PropertyReplacer();
 
 
+function shouldRunTests() {
+  // MS Edge has a bunch of flaky test failures around window.open.
+  // TODO(joeltine): Remove this when http://b/25455129 is fixed.
+  return !goog.labs.userAgent.browser.isEdge();
+}
+
+
 function setUpPage() {
   var anchors = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.DIV, 'goog-like-link');
