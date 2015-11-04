@@ -399,8 +399,8 @@ goog.vec.Quaternion.toAngleAxis = function(quat, axis) {
 /**
  * Generates the quaternion from the given 3x3 rotation matrix.
  *
- * Note: a faster algorithm exists, see
- * http://jsperf.com/conversion-of-3x3-matrix-to-quaternion.
+ * Perf: http://jsperf.com/conversion-of-3x3-matrix-to-quaternion
+ *       http://jsperf.com/goog-vec-fromrotationmatrix3-a
  *
  * @param {!goog.vec.AnyType} matrix The source matrix.
  * @param {!goog.vec.Quaternion.AnyType} quat The resulting quaternion.
@@ -408,15 +408,46 @@ goog.vec.Quaternion.toAngleAxis = function(quat, axis) {
  *     operations can be chained together.
  */
 goog.vec.Quaternion.fromRotationMatrix3 = function(matrix, quat) {
-  var sx = matrix[0], sy = matrix[4], sz = matrix[8];
-  quat[3] = Math.sqrt(Math.max(0, 1 + sx + sy + sz)) / 2;
-  quat[0] = Math.sqrt(Math.max(0, 1 + sx - sy - sz)) / 2;
-  quat[1] = Math.sqrt(Math.max(0, 1 - sx + sy - sz)) / 2;
-  quat[2] = Math.sqrt(Math.max(0, 1 - sx - sy + sz)) / 2;
+  // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
+  // article "Quaternion Calculus and Fast Animation".
+  var fTrace = matrix[0] + matrix[4] + matrix[8];
+  var fRoot;
 
-  quat[0] = (matrix[5] - matrix[7] < 0) != (quat[0] < 0) ? -quat[0] : quat[0];
-  quat[1] = (matrix[6] - matrix[2] < 0) != (quat[1] < 0) ? -quat[1] : quat[1];
-  quat[2] = (matrix[1] - matrix[3] < 0) != (quat[2] < 0) ? -quat[2] : quat[2];
+  if (fTrace > 0.0) {
+    // |w| > 1/2, may as well choose w > 1/2
+    fRoot = Math.sqrt(fTrace + 1.0); // 2w
+    quat[3] = 0.5 * fRoot;
+    fRoot = 0.5 / fRoot; // 1 / (4w)
+    quat[0] = (matrix[5] - matrix[7]) * fRoot;
+    quat[1] = (matrix[6] - matrix[2]) * fRoot;
+    quat[2] = (matrix[1] - matrix[3]) * fRoot;
+  } else {
+    // |w| <= 1/2
+    var i = 0;
+    if (matrix[4] > matrix[0])
+      i = 1;
+    if (matrix[8] > matrix[i * 3 + i])
+      i = 2;
+    var j = (i + 1) % 3;
+    var k = (i + 2) % 3;
+
+    fRoot = Math.sqrt(matrix[i * 3 + i] -
+                      matrix[j * 3 + j] -
+                      matrix[k * 3 + k] + 1.0);
+    quat[i] = 0.5 * fRoot;
+    fRoot = 0.5 / fRoot;
+    quat[3] = (matrix[j * 3 + k] - matrix[k * 3 + j]) * fRoot;
+    quat[j] = (matrix[j * 3 + i] + matrix[i * 3 + j]) * fRoot;
+    quat[k] = (matrix[k * 3 + i] + matrix[i * 3 + k]) * fRoot;
+
+    // Flip all signs if w is negative.
+    if (quat[3] < 0) {
+      quat[0] = -quat[0];
+      quat[1] = -quat[1];
+      quat[2] = -quat[2];
+      quat[3] = -quat[3];
+    }
+  }
   return quat;
 };
 
@@ -424,8 +455,10 @@ goog.vec.Quaternion.fromRotationMatrix3 = function(matrix, quat) {
 /**
  * Generates the quaternion from the given 4x4 rotation matrix.
  *
- * Note: a faster algorithm exists, see
- * http://jsperf.com/conversion-of-3x3-matrix-to-quaternion.
+ * Perf: http://jsperf.com/goog-vec-fromrotationmatrix4
+ *
+ * Implementation is the same as fromRotationMatrix3 but using indices from
+ * the top left 3x3 in a 4x4 matrix.
  *
  * @param {!goog.vec.AnyType} matrix The source matrix.
  * @param {!goog.vec.Quaternion.AnyType} quat The resulting quaternion.
@@ -433,15 +466,44 @@ goog.vec.Quaternion.fromRotationMatrix3 = function(matrix, quat) {
  *     operations can be chained together.
  */
 goog.vec.Quaternion.fromRotationMatrix4 = function(matrix, quat) {
-  var sx = matrix[0], sy = matrix[5], sz = matrix[10];
-  quat[3] = Math.sqrt(Math.max(0, 1 + sx + sy + sz)) / 2;
-  quat[0] = Math.sqrt(Math.max(0, 1 + sx - sy - sz)) / 2;
-  quat[1] = Math.sqrt(Math.max(0, 1 - sx + sy - sz)) / 2;
-  quat[2] = Math.sqrt(Math.max(0, 1 - sx - sy + sz)) / 2;
+  var fTrace = matrix[0] + matrix[5] + matrix[10];
+  var fRoot;
 
-  quat[0] = (matrix[6] - matrix[9] < 0) != (quat[0] < 0) ? -quat[0] : quat[0];
-  quat[1] = (matrix[8] - matrix[2] < 0) != (quat[1] < 0) ? -quat[1] : quat[1];
-  quat[2] = (matrix[1] - matrix[4] < 0) != (quat[2] < 0) ? -quat[2] : quat[2];
+  if (fTrace > 0.0) {
+    // |w| > 1/2, may as well choose w > 1/2
+    fRoot = Math.sqrt(fTrace + 1.0); // 2w
+    quat[3] = 0.5 * fRoot;
+    fRoot = 0.5 / fRoot; // 1 / (4w)
+    quat[0] = (matrix[6] - matrix[9]) * fRoot;
+    quat[1] = (matrix[8] - matrix[2]) * fRoot;
+    quat[2] = (matrix[1] - matrix[4]) * fRoot;
+  } else {
+    // |w| <= 1/2
+    var i = 0;
+    if (matrix[8] > matrix[0])
+      i = 1;
+    if (matrix[10] > matrix[i * 4 + i])
+      i = 2;
+    var j = (i + 1) % 3;
+    var k = (i + 2) % 3;
+
+    fRoot = Math.sqrt(matrix[i * 4 + i] -
+                      matrix[j * 4 + j] -
+                      matrix[k * 4 + k] + 1.0);
+    quat[i] = 0.5 * fRoot;
+    fRoot = 0.5 / fRoot;
+    quat[3] = (matrix[j * 4 + k] - matrix[k * 4 + j]) * fRoot;
+    quat[j] = (matrix[j * 4 + i] + matrix[i * 4 + j]) * fRoot;
+    quat[k] = (matrix[k * 4 + i] + matrix[i * 4 + k]) * fRoot;
+
+    // Flip all signs if w is negative.
+    if (quat[3] < 0) {
+      quat[0] = -quat[0];
+      quat[1] = -quat[1];
+      quat[2] = -quat[2];
+      quat[3] = -quat[3];
+    }
+  }
   return quat;
 };
 
