@@ -12,6 +12,7 @@
     "browserName" : "internet explorer",
     "version" : "11.0",
     "platform" : "Windows 7",
+    "timeZone": "Pacific",
     "prerun": {
       "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
     }
@@ -19,6 +20,7 @@
   {
     "browserName" : "internet explorer",
     "version" : "10.0",
+    "timeZone": "Pacific",
     "platform" : "Windows 7",
     "prerun": {
       "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
@@ -28,6 +30,7 @@
     "browserName" : "internet explorer",
     "version" : "9.0",
     "platform" : "Windows 7",
+    "timeZone": "Pacific",
     "prerun": {
       "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
     }
@@ -36,6 +39,7 @@
     "browserName" : "internet explorer",
     "version" : "8.0",
     "platform" : "Windows 7",
+    "timeZone": "Pacific",
     "prerun": {
       "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
     }
