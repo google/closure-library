@@ -16,6 +16,9 @@ var IGNORED_TESTS = [
   'closure/goog/testing/multitestrunner_test.html'
 ];
 
+// RM THIS!
+allTests = ['closure/goog/labs/net/xhr_test.html'];
+
 describe('Run all Closure unit tests', function() {
   var removeIgnoredTests = function(tests) {
     for (var i = 0; i < IGNORED_TESTS.length; i++) {
