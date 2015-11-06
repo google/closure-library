@@ -202,8 +202,8 @@ goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
 /**
  * Compares the given entries. Orders alphabetically and groups buttons and
  * expandable groups.
- * @param {goog.tweak.BaseEntry} a The first entry to compare.
- * @param {goog.tweak.BaseEntry} b The second entry to compare.
+ * @param {!goog.tweak.BaseEntry} a The first entry to compare.
+ * @param {!goog.tweak.BaseEntry} b The second entry to compare.
  * @return {number} Refer to goog.array.defaultCompare.
  * @private
  */

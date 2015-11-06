@@ -427,7 +427,7 @@ goog.debug.DevCss.prototype.addIe6CombinedClassNames_ = function() {
       var classNamesLength = classNameEntry.classNames.length;
       for (var k = 0, className; className = classNameEntry.classNames[k];
           k++) {
-        if (!goog.dom.classlist.contains(goog.asserts.assert(el), className)) {
+        if (!goog.dom.classlist.contains(el, className)) {
           break;
         }
         if (k == classNamesLength - 1) {

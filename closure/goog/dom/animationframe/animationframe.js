@@ -207,7 +207,8 @@ goog.dom.animationFrame.createTask = function(spec, opt_context) {
       taskSet.isScheduled = true;
       var tasksArray = goog.dom.animationFrame.tasks_[
           goog.dom.animationFrame.doubleBufferIndex_];
-      tasksArray.push(taskSet);
+      tasksArray.push(
+          /** @type {goog.dom.animationFrame.TaskSet_} */ (taskSet));
     }
     goog.dom.animationFrame.requestAnimationFrame_();
   };

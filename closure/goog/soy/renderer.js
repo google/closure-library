@@ -276,7 +276,7 @@ goog.soy.Renderer.prototype.saveTemplateRender_ = function(
   if (goog.DEBUG) {
     this.savedTemplateRenders_.push({
       template: template.soyTemplateName,
-      data: opt_templateData,
+      data: opt_templateData || null,
       ijData: this.getInjectedData_()
     });
   }

@@ -439,7 +439,8 @@ goog.ui.Palette.prototype.setHighlightedIndex = function(index) {
  */
 goog.ui.Palette.prototype.setHighlightedItem = function(item) {
   var items = /** @type {Array<Node>} */ (this.getContent());
-  this.setHighlightedIndex(items ? goog.array.indexOf(items, item) : -1);
+  this.setHighlightedIndex(
+      (items && item) ? goog.array.indexOf(items, item) : -1);
 };
 
 

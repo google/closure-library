@@ -268,10 +268,12 @@ goog.ui.HoverCard.prototype.setCurrentAnchor_ = function(anchor) {
  * @private
  */
 goog.ui.HoverCard.prototype.detachTempAnchor_ = function(anchor) {
-  var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
-  if (pos != -1) {
-    this.detach(anchor);
-    this.tempAttachedAnchors_.splice(pos, 1);
+  if (anchor) {
+    var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
+    if (pos != -1) {
+      this.detach(anchor);
+      this.tempAttachedAnchors_.splice(pos, 1);
+    }
   }
 };
 

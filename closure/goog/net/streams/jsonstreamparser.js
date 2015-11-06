@@ -37,6 +37,7 @@
 
 goog.provide('goog.net.streams.JsonStreamParser');
 
+goog.require('goog.asserts');
 goog.require('goog.json');
 goog.require('goog.net.streams.StreamParser');
 
@@ -203,6 +204,7 @@ Parser.prototype.parse = function(input) {
   // captures
   var parser = this;
   var stack = parser.stack_;
+  /** @type {!Array<!Object>} */
   var result = parser.result_;
   var pattern = parser.stringInputPattern_;
   var State = Parser.State_;   // enums
@@ -661,7 +663,8 @@ Parser.prototype.parse = function(input) {
       }
     }
     if (goog.isString(opt_data)) {
-      result.push(goog.json.parse(opt_data));
+      result.push(
+          goog.asserts.assertInstanceof(goog.json.parse(opt_data), Object));
     } else {
       result.push(opt_data);
     }

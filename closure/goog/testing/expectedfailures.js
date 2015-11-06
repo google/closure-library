@@ -20,6 +20,7 @@
 
 goog.provide('goog.testing.ExpectedFailures');
 
+goog.require('goog.asserts');
 goog.require('goog.debug.DivConsole');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -170,6 +171,7 @@ goog.testing.ExpectedFailures.prototype.isExceptionExpected = function(ex) {
  */
 goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
   if (this.isExceptionExpected(ex)) {
+    goog.asserts.assertInstanceof(ex, goog.testing.JsUnitException);
     goog.log.info(this.logger_, 'Suppressing test failure in ' +
         goog.testing.TestCase.currentTestName + ':' +
         (this.failureMessage_ ? '\n(' + this.failureMessage_ + ')' : ''),
