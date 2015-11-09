@@ -570,6 +570,8 @@ goog.i18n.bidi.bracketGuardTextRe_ =
  * @param {boolean=} opt_isRtlContext specifies default direction (usually
  *     direction of the UI).
  * @return {string} The processed string, with all bracket guarded.
+ * @deprecated This function is broken. Use
+ *     {@link  goog.i18n.BidiFormatter#spanWrap} if necessary.
  */
 goog.i18n.bidi.guardBracketInHtml = function(s, opt_isRtlContext) {
   var useRtl = opt_isRtlContext === undefined ?
