@@ -18,6 +18,7 @@ goog.setTestOnly('goog.net.streams.XhrNodeReadableStreamTest');
 goog.require('goog.net.streams.NodeReadableStream');
 goog.require('goog.net.streams.XhrNodeReadableStream');
 goog.require('goog.net.streams.XhrStreamReader');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 
@@ -27,6 +28,8 @@ var xhrStream;
 
 var EventType = goog.net.streams.NodeReadableStream.EventType;
 var Status = goog.net.streams.XhrStreamReader.Status;
+
+var propertyReplacer;
 
 
 
@@ -65,10 +68,26 @@ function MockXhrStreamReader() {
 }
 
 
-function testOneDataCallback() {
+function setUp() {
   xhrReader = new MockXhrStreamReader();
   xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
 
+  propertyReplacer = new goog.testing.PropertyReplacer();
+  propertyReplacer.replace(xhrStream, 'handleError_', function(message) {
+    // the real XhrNodeReadableStream class ignores any error thrown
+    // from inside a callback function, but we want to see those assert
+    // errors thrown by the test callback function installed by unit tests
+    fail(message);
+  });
+}
+
+
+function tearDown() {
+  propertyReplacer.reset();
+}
+
+
+function testOneDataCallback() {
   var delivered = false;
 
   var callback = function(message) {
@@ -84,9 +103,6 @@ function testOneDataCallback() {
 
 
 function testMultipleDataCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   var delivered = 0;
 
   var callback = function(message) {
@@ -103,9 +119,6 @@ function testMultipleDataCallbacks() {
 
 
 function testOrderedDataCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   var delivered = 0;
 
   var callback1 = function(message) {
@@ -127,9 +140,6 @@ function testOrderedDataCallbacks() {
 
 
 function testMultipleMessagesCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   var delivered = 0;
 
   var callback1 = function(message) {
@@ -165,9 +175,6 @@ function testMultipleMessagesCallbacks() {
 
 
 function testMultipleMessagesWithOnceCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   var delivered = 0;
 
   var callback1 = function(message) {
@@ -209,9 +216,6 @@ function testMultipleMessagesWithOnceCallbacks() {
 
 
 function testMultipleMessagesWithRemovedCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   var delivered = 0;
 
   var callback1 = function(message) {
@@ -264,9 +268,6 @@ function testMultipleMessagesWithRemovedCallbacks() {
 
 
 function testOrderedStatusCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   checkStatusMapping(Status.ACTIVE, EventType.READABLE);
 
   checkStatusMapping(Status.BAD_DATA, EventType.ERROR);
@@ -316,9 +317,6 @@ function testOrderedStatusCallbacks() {
 
 
 function testOrderedStatusMultipleCallbacks() {
-  xhrReader = new MockXhrStreamReader();
-  xhrStream = new goog.net.streams.XhrNodeReadableStream(xhrReader);
-
   checkStatusMapping(Status.ACTIVE, EventType.READABLE);
 
   function checkStatusMapping(status, event) {
