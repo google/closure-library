@@ -34,7 +34,7 @@ goog.define('goog.debug.LOGGING_ENABLED', goog.DEBUG);
 
 
 /** @define {boolean} Whether to force "sloppy" stack building. */
-goog.define('goog.debug.FORCE_SLOPPY_STACKS', !goog.STRICT_MODE_COMPATIBLE);
+goog.define('goog.debug.FORCE_SLOPPY_STACKS', false);
 
 
 /**
