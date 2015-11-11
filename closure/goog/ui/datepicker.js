@@ -744,11 +744,23 @@ goog.ui.DatePicker.prototype.getDateElementAt = function(row, col) {
 
 
 /**
- * Sets the selected date.
+ * Sets the selected date. Will always fire the SELECT event.
  *
  * @param {goog.date.Date|Date} date Date to select or null to select nothing.
  */
 goog.ui.DatePicker.prototype.setDate = function(date) {
+  this.setDate_(date, true);
+};
+
+
+/**
+ * Sets the selected date, and optionally fires the SELECT event based on param.
+ *
+ * @param {goog.date.Date|Date} date Date to select or null to select nothing.
+ * @param {boolean} fireSelection Whether to fire the selection event.
+ * @private
+ */
+goog.ui.DatePicker.prototype.setDate_ = function(date, fireSelection) {
   // Check if the month has been changed.
   var sameMonth = date == this.date_ || date && this.date_ &&
       date.getFullYear() == this.date_.getFullYear() &&
@@ -771,11 +783,13 @@ goog.ui.DatePicker.prototype.setDate = function(date) {
   // selected another month can be displayed.
   this.updateCalendarGrid_();
 
-  // TODO(eae): Standardize selection and change events with other components.
-  // Fire select event.
-  var selectEvent = new goog.ui.DatePickerEvent(
-      goog.ui.DatePicker.Events.SELECT, this, this.date_);
-  this.dispatchEvent(selectEvent);
+  if (fireSelection) {
+    // TODO(eae): Standardize selection and change events with other components.
+    // Fire select event.
+    var selectEvent = new goog.ui.DatePickerEvent(
+        goog.ui.DatePicker.Events.SELECT, this, this.date_);
+    this.dispatchEvent(selectEvent);
+  }
 
   // Fire change event.
   if (!sameDate) {
@@ -1086,6 +1100,11 @@ goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
     case 46: // Delete
       event.preventDefault();
       this.selectNone();
+      break;
+    case 13: // Enter
+    case 32: // Space
+      event.preventDefault();
+      this.setDate_(this.date_, true /* fireSelection */);
     default:
       return;
   }
@@ -1098,7 +1117,7 @@ goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
     date.setDate(1);
   }
   if (this.isUserSelectableDate_(date)) {
-    this.setDate(date);
+    this.setDate_(date, false /* fireSelection */);
   }
 };
 
