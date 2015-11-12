@@ -219,8 +219,9 @@ function testNextTick_notStarvedBySetTimeout() {
  * there would be no callbacks in the linked list).
  */
 function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
-  // IE does not use the postMessage polyfill.
-  if (goog.labs.userAgent.browser.isIE()) {
+  // EDGE/IE does not use the postMessage polyfill.
+  if (goog.labs.userAgent.browser.isIE() ||
+      goog.labs.userAgent.browser.isEdge()) {
     return;
   }
 
