@@ -33,58 +33,45 @@ goog.require('goog.structs.Trie');
  * @final
  */
 goog.ui.tree.TypeAhead = function() {
+  /**
+   * Map of tree nodes to allow for quick access by characters in the label
+   * text.
+   * @private {goog.structs.Trie<Array<goog.ui.tree.BaseNode>>}
+   */
   this.nodeMap_ = new goog.structs.Trie();
+
+  /**
+   * Buffer for storing typeahead characters.
+   * @private {string}
+   */
+  this.buffer_ = '';
+
+  /**
+   * Matching labels from the latest typeahead search.
+   * @private {?Array<string>}
+   */
+  this.matchingLabels_ = null;
+
+  /**
+   * Matching nodes from the latest typeahead search. Used when more than
+   * one node is present with the same label text.
+   * @private {?Array<goog.ui.tree.BaseNode>}
+   */
+  this.matchingNodes_ = null;
+
+  /**
+   * Specifies the current index of the label from the latest typeahead search.
+   * @private {number}
+   */
+  this.matchingLabelIndex_ = 0;
+
+  /**
+   * Specifies the index into matching nodes when more than one node is found
+   * with the same label.
+   * @private {number}
+   */
+  this.matchingNodeIndex_ = 0;
 };
-
-
-/**
- * Map of tree nodes to allow for quick access by characters in the label text.
- * @type {goog.structs.Trie<Array<goog.ui.tree.BaseNode>>}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.nodeMap_;
-
-
-/**
- * Buffer for storing typeahead characters.
- * @type {string}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.buffer_ = '';
-
-
-/**
- * Matching labels from the latest typeahead search.
- * @type {?Array<string>}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.matchingLabels_ = null;
-
-
-/**
- * Matching nodes from the latest typeahead search. Used when more than
- * one node is present with the same label text.
- * @type {?Array<goog.ui.tree.BaseNode>}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.matchingNodes_ = null;
-
-
-/**
- * Specifies the current index of the label from the latest typeahead search.
- * @type {number}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.matchingLabelIndex_ = 0;
-
-
-/**
- * Specifies the index into matching nodes when more than one node is found
- * with the same label.
- * @type {number}
- * @private
- */
-goog.ui.tree.TypeAhead.prototype.matchingNodeIndex_ = 0;
 
 
 /**

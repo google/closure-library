@@ -91,6 +91,43 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
 
   /** @private {goog.ui.tree.BaseNode} */
   this.lastChild_;
+
+  /**
+   * Whether the tree item is selected.
+   * @private {boolean}
+   */
+  this.selected_ = false;
+
+  /**
+   * Whether the tree node is expanded.
+   * @private {boolean}
+   */
+  this.expanded_ = false;
+
+  /**
+   * Tooltip for the tree item
+   * @private {?string}
+   */
+  this.toolTip_ = null;
+
+  /**
+   * HTML that can appear after the label (so not inside the anchor).
+   * @private {!goog.html.SafeHtml}
+   */
+  this.afterLabelHtml_ = goog.html.SafeHtml.EMPTY;
+
+  /**
+   * Whether to allow user to collapse this node.
+   * @private {boolean}
+   */
+  this.isUserCollapsible_ = true;
+
+  /**
+   * Nesting depth of this node; cached result of computeDepth_.
+   * -1 if value has not been cached.
+   * @private {number}
+   */
+  this.depth_ = -1;
 };
 goog.inherits(goog.ui.tree.BaseNode, goog.ui.Component);
 
@@ -115,55 +152,6 @@ goog.ui.tree.BaseNode.EventType = {
  * @protected
  */
 goog.ui.tree.BaseNode.allNodes = {};
-
-
-/**
- * Whether the tree item is selected.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.selected_ = false;
-
-
-/**
- * Whether the tree node is expanded.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.expanded_ = false;
-
-
-/**
- * Tooltip for the tree item
- * @type {?string}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.toolTip_ = null;
-
-
-/**
- * HTML that can appear after the label (so not inside the anchor).
- * @type {!goog.html.SafeHtml}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.afterLabelHtml_ = goog.html.SafeHtml.EMPTY;
-
-
-/**
- * Whether to allow user to collapse this node.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.isUserCollapsible_ = true;
-
-
-/**
- * Nesting depth of this node; cached result of computeDepth_.
- * -1 if value has not been cached.
- * @type {number}
- * @private
- */
-goog.ui.tree.BaseNode.prototype.depth_ = -1;
 
 
 /** @override */
