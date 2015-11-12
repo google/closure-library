@@ -546,6 +546,9 @@ function testAriaTags() {
       goog.a11y.aria.getState(target,
           goog.a11y.aria.State.HASPOPUP));
   assertEquals('true',
+      goog.a11y.aria.getState(target,
+          goog.a11y.aria.State.EXPANDED));
+  assertEquals('true',
       goog.a11y.aria.getState(renderer.getElement(),
           goog.a11y.aria.State.EXPANDED));
   assertEquals(renderer.getElement().id,
@@ -556,6 +559,9 @@ function testAriaTags() {
   assertEquals('false',
       goog.a11y.aria.getState(target,
           goog.a11y.aria.State.HASPOPUP));
+  assertEquals('false',
+      goog.a11y.aria.getState(target,
+          goog.a11y.aria.State.EXPANDED));
   assertEquals('false',
       goog.a11y.aria.getState(renderer.getElement(),
           goog.a11y.aria.State.EXPANDED));

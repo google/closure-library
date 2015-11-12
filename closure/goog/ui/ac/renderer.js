@@ -490,6 +490,9 @@ goog.ui.ac.Renderer.prototype.toggleAriaMarkup_ = function(isShown) {
   goog.a11y.aria.setState(goog.asserts.assert(this.element_),
       goog.a11y.aria.State.EXPANDED,
       isShown);
+  goog.a11y.aria.setState(this.target_,
+      goog.a11y.aria.State.EXPANDED,
+      isShown);
   if (isShown) {
     goog.a11y.aria.setState(this.target_,
         goog.a11y.aria.State.OWNS,
