@@ -1119,6 +1119,7 @@ goog.style.toSelectorCase = function(selector) {
  *     if the opacity is not set.
  */
 goog.style.getOpacity = function(el) {
+  goog.asserts.assert(el);
   var style = el.style;
   var result = '';
   if ('opacity' in style) {
@@ -1142,6 +1143,7 @@ goog.style.getOpacity = function(el) {
  *     {@code ''} to clear the opacity.
  */
 goog.style.setOpacity = function(el, alpha) {
+  goog.asserts.assert(el);
   var style = el.style;
   if ('opacity' in style) {
     style.opacity = alpha;
