@@ -42,6 +42,11 @@ See the COPYING file for details.
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0], m);
   }
 
+  function testCreateIdentity() {
+    var m = goog.vec.mat3d.createIdentity();
+    assertElementsEquals([1, 0, 0, 0, 1, 0, 0, 0, 1], m);
+  }
+
   function testSet() {
     var m0 = goog.vec.mat3d.create();
     var m1 = goog.vec.mat3d.setFromArray(
@@ -415,9 +420,9 @@ See the COPYING file for details.
   }
 
   function testEulerZXZExtrema() {
-    var m0 = goog.vec.mat3d.setFromArray(goog.vec.mat3d.create(), 
+    var m0 = goog.vec.mat3d.setFromArray(goog.vec.mat3d.create(),
         [1, 0, 0, 0, 0, -1, 0, 1, 0]);
-    var m1 = goog.vec.mat3d.setFromArray(goog.vec.mat3d.create(), 
+    var m1 = goog.vec.mat3d.setFromArray(goog.vec.mat3d.create(),
         [0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     var euler = [0, 0, 0];

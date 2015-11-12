@@ -104,11 +104,12 @@ goog.structs.InversionMap.prototype.spliceInversion = function(
     startSplice++;
   } // otherwise we overwrite the insertion point.
 
-  var spliceLength = endSplice - startSplice + 1;
-  goog.partial(goog.array.splice, this.rangeArray, startSplice,
-      spliceLength).apply(null, otherMap.rangeArray);
-  goog.partial(goog.array.splice, this.values, startSplice,
-      spliceLength).apply(null, otherMap.values);
+  this.rangeArray = this.rangeArray.slice(0, startSplice)
+      .concat(otherMap.rangeArray)
+      .concat(this.rangeArray.slice(endSplice + 1));
+  this.values = this.values.slice(0, startSplice)
+      .concat(otherMap.values)
+      .concat(this.values.slice(endSplice + 1));
 };
 
 

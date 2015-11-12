@@ -297,7 +297,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
           startNode == endNode && startOffset == endOffset - 1) {
         var element = startNode.childNodes[startOffset];
         if (element.nodeType == goog.dom.NodeType.ELEMENT) {
-          selectedElement = element;
+          selectedElement = /** @type {!Element} */ (element);
         }
       }
     }

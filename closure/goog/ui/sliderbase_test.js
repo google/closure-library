@@ -808,12 +808,12 @@ function testValueFromMousePosition() {
       });
   goog.testing.events.fireMouseMoveEvent(oneThumbSlider, offset);
   assertNotEquals(e, null);
-  assertEquals(
-      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)));
+  assertRoughlyEquals(
+      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)), 1);
   // Verify this works regardless of current position.
   oneThumbSlider.setValue(value / 2);
-  assertEquals(
-      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)));
+  assertRoughlyEquals(
+      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)), 1);
 }
 
 

@@ -43,7 +43,7 @@ var currentDirectory = location.href.substring(
 
 var echo = {};
 echo[goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID] = 0;
-echo[goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI] = goog.userAgent.IE ?
+echo[goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI] = goog.userAgent.EDGE_OR_IE ?
     currentDirectory + '/crossdomainrpc_test.gif' :
     currentDirectory + '/crossdomainrpc_test.css';
 

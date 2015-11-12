@@ -402,8 +402,8 @@ function testLinks() {
   HELPER.select(url1, 0, url2, url2.length);
   FORMATTER.execCommandInternal(goog.editor.Command.LINK);
   HELPER.assertHtmlMatches('<p><a href="' + url1 + '">' + url1 + '</a></p><p>' +
-      '<a href="' + dialogUrl + '">' + (goog.userAgent.IE ? dialogUrl : url2) +
-      '</a></p>');
+      '<a href="' + dialogUrl + '">' +
+      (goog.userAgent.EDGE_OR_IE ? dialogUrl : url2) + '</a></p>');
 }
 
 function testSelectedLink() {
@@ -655,7 +655,6 @@ function testFontSizeOverridesStyleAttrMultiNode() {
         span.getAttributeNode('style') != null &&
         span.getAttributeNode('style').specified);
     assertTrue('Style attribute should not be gone from last span',
-        span2.getAttributeNode('style') != null &&
         span2.getAttributeNode('style').specified);
   }
 

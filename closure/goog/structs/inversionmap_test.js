@@ -138,6 +138,29 @@ function testInversionMapSplice5() {
   assertArrayEquals([0, 97, 98, 99], map.rangeArray);
 }
 
+function testInversionMapSpliceLarge() {
+  var map = new goog.structs.InversionMap(
+      [0, 99, 100, 101],
+      [null, true, false, null]);
+  var rangeArray = [];
+  var values = [];
+  for (var i = 100, value = true; i < 1000000; i++, value = !value) {
+    rangeArray.push(i);
+    values.push(value);
+  }
+  map.spliceInversion(rangeArray, values);
+  assertEquals(null, map.at(98));
+  assertEquals(true, map.at(99));
+  assertEquals(true, map.at(100));
+  assertEquals(false, map.at(101));
+  assertEquals(true, map.at(102));
+  assertEquals(false, map.at(103));
+  assertEquals(false, map.at(999997));
+  assertEquals(true, map.at(999998));
+  assertEquals(false, map.at(999999));
+  assertEquals(false, map.at(1000000));
+}
+
 function newAsciiMap() {
   return new goog.structs.InversionMap(
       [0, 97, 98, 99, 100, 101, 120, 121, 122, 123],

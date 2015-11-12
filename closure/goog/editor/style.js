@@ -196,7 +196,7 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
  * not arise.  Text nodes do not have styles, so its style can't be set to
  * unselectable.
  *
- * @param {Element} element The element to make selectable.
+ * @param {!Element} element The element to make selectable.
  */
 goog.editor.style.makeSelectable = function(element) {
   goog.style.setUnselectable(element, false);
@@ -213,7 +213,8 @@ goog.editor.style.makeSelectable = function(element) {
         for (var i = 0, len = current.childNodes.length; i < len; i++) {
           var node = current.childNodes[i];
           if (node != child && node.nodeType == goog.dom.NodeType.ELEMENT) {
-            goog.style.setUnselectable(current.childNodes[i], true);
+            goog.style.setUnselectable(
+                /** @type {!Element} */ (current.childNodes[i]), true);
           }
         }
       }

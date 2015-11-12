@@ -451,6 +451,14 @@ function testIsNotValid() {
   assertFalse(goog.json.isValid('"\x0c"'));
 
   assertFalse(goog.json.isValid('"\\\u200D\\", alert(\'foo\') //"\n'));
+
+  // Disallow referencing variables with names built up from primitives
+  assertFalse(goog.json.isValid('truefalse'));
+  assertFalse(goog.json.isValid('null0'));
+  assertFalse(goog.json.isValid('null0.null0'));
+  assertFalse(goog.json.isValid('[truefalse]'));
+  assertFalse(goog.json.isValid('{"a": null0}'));
+  assertFalse(goog.json.isValid('{"a": null0, "b": 1}'));
 }
 
 function testIsValid() {

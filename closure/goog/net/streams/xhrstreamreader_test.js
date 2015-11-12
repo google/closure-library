@@ -52,11 +52,6 @@ function tearDown() {
 function testContentType() {
   xhrReader = new goog.net.streams.XhrStreamReader(xhrIo);
   assertNotNull(xhrReader.getParserByContentType_());
-
-  xhrIo.getResponseHeader = function() {
-    return 'application/json+protobuf';
-  };
-  assertNull(xhrReader.getParserByContentType_());
 }
 
 

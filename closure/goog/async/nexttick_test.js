@@ -155,6 +155,13 @@ function testNextTickProtectEntryPoint() {
       errorHandlerCallbackCalled = true;
     });
 
+    // MS Edge will always use goog.global.setImmediate, so ensure we get
+    // to setImmediate_ here. See useSetImmediate_ implementation for details on
+    // Edge special casing.
+    propertyReplacer.set(goog.async.nextTick, 'useSetImmediate_', function() {
+      return false;
+    });
+
     // This is only testing wrapping the callback with the protected entry
     // point, so it's okay to replace this function with a fake.
     propertyReplacer.set(goog.async.nextTick, 'setImmediate_', function(cb) {

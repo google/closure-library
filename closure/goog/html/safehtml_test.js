@@ -164,6 +164,31 @@ function testSafeHtmlCreate() {
   assertThrows(function() {
     goog.html.SafeHtml.create('a', {'title="" href': ''});
   });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('applet');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('applet', {'code': 'kittens.class'});
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('base');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('base', {'href': 'http://example.org'});
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('math');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('svg');
+  });
+
 }
 
 

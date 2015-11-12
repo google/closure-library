@@ -24,7 +24,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 20000; // 20s
 }
 
 function print(o) {

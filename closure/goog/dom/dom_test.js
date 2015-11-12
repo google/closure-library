@@ -285,8 +285,9 @@ function testGetDocumentHeightInIframe() {
   var doc = goog.dom.getDomHelper(myIframeDoc).getDocument();
   var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
 
-  // Broken in webkit quirks mode and in IE8+
-  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) &&
+  // Broken in webkit/edge quirks mode and in IE8+
+  if ((goog.dom.isCss1CompatMode_(doc) ||
+       !goog.userAgent.WEBKIT && !goog.userAgent.EDGE) &&
       !isIE8OrHigher()) {
     assertEquals('height should be 65', 42 + 23, height);
   }

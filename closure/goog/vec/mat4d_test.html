@@ -19,6 +19,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.vec.mat4d</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.vec.Quaternion');
   goog.require('goog.vec.mat4d');
   goog.require('goog.testing.jsunit');
 </script>
@@ -49,9 +50,14 @@ See the COPYING file for details.
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], m);
   }
 
+  function testCreateIdentity() {
+    var m = goog.vec.mat4d.createIdentity();
+    assertElementsEquals([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], m);
+  }
+
   function testSet() {
     var m0 = goog.vec.mat4d.create();
-    var m1 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(), 
+    var m1 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(),
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     goog.vec.mat4d.setFromArray(m0, m1);
     assertElementsEquals(
@@ -189,7 +195,7 @@ See the COPYING file for details.
   }
 
   function testMakeZero() {
-    var m0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(),
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     assertElementsEquals(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m0);
@@ -219,9 +225,9 @@ See the COPYING file for details.
   }
 
   function testAddMat() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8);
     var m2 = goog.vec.mat4d.create();
     goog.vec.mat4d.addMat(m0, m1, m2);
@@ -240,9 +246,9 @@ See the COPYING file for details.
   }
 
   function testSubMat() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8);
     var m2 = goog.vec.mat4d.create();
 
@@ -262,7 +268,7 @@ See the COPYING file for details.
   }
 
   function testMultScalar() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var m1 = goog.vec.mat4d.create();
 
@@ -278,9 +284,9 @@ See the COPYING file for details.
   }
 
   function testMultMat() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m1 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var m2 = goog.vec.mat4d.create();
 
@@ -297,7 +303,7 @@ See the COPYING file for details.
   }
 
   function testTranspose() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var m1 = goog.vec.mat4d.create();
     goog.vec.mat4d.transpose(m0, m1);
@@ -310,7 +316,7 @@ See the COPYING file for details.
   }
 
   function testDeterminant() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     assertEquals(0, goog.vec.mat4d.determinant(m0));
     assertElementsEquals(
@@ -324,7 +330,7 @@ See the COPYING file for details.
   }
 
   function testInvert() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     assertFalse(goog.vec.mat4d.invert(m0, m0));
     assertElementsEquals(
@@ -346,7 +352,7 @@ See the COPYING file for details.
   }
 
   function testEquals() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var m1 = goog.vec.mat4d.setFromMat4d(goog.vec.mat4d.create(), m0);
     assertTrue(goog.vec.mat4d.equals(m0, m1));
@@ -360,7 +366,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -374,7 +380,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3NoTranslate() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -388,7 +394,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3Projective() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -405,7 +411,7 @@ See the COPYING file for details.
   }
 
   function testMultVec4() {
-    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromValues(goog.vec.mat4d.create(),
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3, 4];
     var v1 = [0, 0, 0, 0];
@@ -420,7 +426,7 @@ See the COPYING file for details.
     var a0 = goog.vec.mat4d.create();
     assertElementsEquals(
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], a0);
-    a0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(), 
+    a0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(),
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     assertElementsEquals(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], a0);
@@ -504,7 +510,6 @@ See the COPYING file for details.
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
   }
 
-
   function testTranslate() {
     var m0 = goog.vec.mat4d.makeIdentity(goog.vec.mat4d.create());
     goog.vec.mat4d.translate(m0, 3, 4, 5);
@@ -572,6 +577,64 @@ See the COPYING file for details.
     goog.vec.mat4d.multMat(m1, m0, m0);
     goog.vec.mat4d.rotateZ(m1, Math.PI / 7);
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testMakeRotationTranslation() {
+    // Create manually.
+    var m0 = goog.vec.mat4d.makeIdentity(goog.vec.mat4d.create());
+    goog.vec.mat4d.translate(m0, 3, 4, 5);
+    goog.vec.mat4d.rotate(m0, Math.PI / 2, 3 / 13, 4 / 13, 12 / 13);
+
+    // Create using makeRotationTranslation.
+    var m1 = goog.vec.mat4d.create();
+    var q = goog.vec.Quaternion.createFloat64();
+    var axis = goog.vec.vec3d.createFromValues(3 / 13, 4 / 13, 12 / 13);
+    goog.vec.Quaternion.fromAngleAxis(Math.PI / 2, axis, q);
+    var v = goog.vec.vec3d.createFromValues(3, 4, 5);
+    goog.vec.mat4d.makeRotationTranslation(m1, q, v);
+
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testMakeRotationTranslationScale() {
+    // Create manually.
+    var m0 = goog.vec.mat4d.makeIdentity(goog.vec.mat4d.create());
+    goog.vec.mat4d.translate(m0, 3, 4, 5);
+    goog.vec.mat4d.rotate(m0, Math.PI / 2, 3 / 13, 4 / 13, 12 / 13);
+    goog.vec.mat4d.scale(m0, 6, 7, 8);
+
+    // Create using makeRotationTranslationScale.
+    var m1 = goog.vec.mat4d.create();
+    var q = goog.vec.Quaternion.createFloat64();
+    var axis = goog.vec.vec3d.createFromValues(3 / 13, 4 / 13, 12 / 13);
+    goog.vec.Quaternion.fromAngleAxis(Math.PI / 2, axis, q);
+    var v = goog.vec.vec3d.createFromValues(3, 4, 5);
+    var s = goog.vec.vec3d.createFromValues(6, 7, 8);
+    goog.vec.mat4d.makeRotationTranslationScale(m1, q, v, s);
+
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testMakeRotationTranslationScaleOrigin() {
+    // Create manually.
+    var m0 = goog.vec.mat4d.makeIdentity(goog.vec.mat4d.create());
+    goog.vec.mat4d.translate(m0, 3, 4, 5);
+    goog.vec.mat4d.translate(m0, 9, 10, -11); // Origin.
+    goog.vec.mat4d.rotate(m0, Math.PI / 2, 3 / 13, 4 / 13, 12 / 13);
+    goog.vec.mat4d.scale(m0, 6, 7, 8);
+    goog.vec.mat4d.translate(m0, -9, -10, 11); // -Origin.
+
+    // Create using makeRotationTranslationScaleOrigin.
+    var m1 = goog.vec.mat4d.create();
+    var q = goog.vec.Quaternion.createFloat64();
+    var axis = goog.vec.vec3d.createFromValues(3 / 13, 4 / 13, 12 / 13);
+    goog.vec.Quaternion.fromAngleAxis(Math.PI / 2, axis, q);
+    var v = goog.vec.vec3d.createFromValues(3, 4, 5);
+    var s = goog.vec.vec3d.createFromValues(6, 7, 8);
+    var o = goog.vec.vec3d.createFromValues(9, 10, -11);
+    goog.vec.mat4d.makeRotationTranslationScaleOrigin(m1, q, v, s, o);
+
+    assertElementsRoughlyEqual(m0, m1, 0.00001); // Slightly larger epsilon.
   }
 
   function testGetTranslation() {
@@ -651,9 +714,9 @@ See the COPYING file for details.
   }
 
   function testEulerZXZExtrema() {
-    var m0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(), 
+    var m0 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(),
     [1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1]);
-    var m1 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(), 
+    var m1 = goog.vec.mat4d.setFromArray(goog.vec.mat4d.create(),
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     var euler = [0, 0, 0];

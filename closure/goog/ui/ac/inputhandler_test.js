@@ -15,6 +15,10 @@
 goog.provide('goog.ui.ac.InputHandlerTest');
 goog.setTestOnly('goog.ui.ac.InputHandlerTest');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.dom');
 goog.require('goog.dom.selection');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -725,4 +729,21 @@ function testMultipleSeparatorUsesEmptyDefaults() {
   inputHandler.setTokenText('waldo', true /* multi-row */);
 
   assertEquals('bob,waldo', mockElement.value);
+}
+
+
+function testAriaTags() {
+  var target = goog.dom.createDom('div');
+  mh.attachInput(target);
+
+  assertEquals(goog.a11y.aria.Role.COMBOBOX,
+      goog.a11y.aria.getRole(target));
+  assertEquals('list',
+      goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
+
+  mh.detachInput(target);
+
+  assertNull(goog.a11y.aria.getRole(target));
+  assertEquals('',
+      goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
 }

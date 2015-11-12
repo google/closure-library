@@ -31,6 +31,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ServerChart');
@@ -1259,6 +1260,12 @@ goog.testing.MultiTestRunner.TestFrame = function(
    */
   this.eh_ = new goog.events.EventHandler(this);
 
+  /**
+   * Object to hold test results. Key is test method or file name (depending on
+   * failure mode) and the value is an array of failure messages.
+   * @private {!Object<string,!Array<string>>}
+   */
+  this.testResults_ = {};
 };
 goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
 
@@ -1375,6 +1382,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.runTest = function(testFile) {
   this.currentState_ = 0;
   this.isSuccess_ = null;
   this.report_ = '';
+  this.testResults_ = {};
   this.testFile_ = testFile;
 
   try {
@@ -1420,6 +1428,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
   return this.report_;
 };
 
+
 /**
  * @return {!Object<string,!Array<string>>} The results per individual test in
  *     the file. Key is the test filename concatenated with the test name, and
@@ -1430,8 +1439,8 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getTestResults = function() {
   for (var testName in this.testResults_) {
     var testKey = this.testFile_.replace(/\.html$/, '');
     // Concatenate with ":<testName>" unless the testName is equivalent to
-    // testFile_, which means the test timed out and there's no way to get
-    // the test method name.
+    // testFile_, which means the test timed out or had no test methods and
+    // there's no way to get the test method name.
     if (testName != this.testFile_) {
       testKey += ':' + testName;
     }
@@ -1511,6 +1520,15 @@ goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
         this.isSuccess_ = tr['isSuccess']();
         this.report_ = tr['getReport'](this.verbosePasses_);
         this.testResults_ = tr['getTestResults']();
+        // If there is a syntax error, or no tests, it's not possible to get the
+        // individual test method results from TestCase. So just create one here
+        // based on the test report and filename.
+        if (goog.object.isEmpty(this.testResults_)) {
+          // Existence of a report is a signal of a test failure by the test
+          // runner.
+          this.testResults_[this.testFile_] =
+              this.isSuccess_ ? [] : [this.report_];
+        }
         this.runTime_ = tr['getRunTime']();
         this.numFilesLoaded_ = tr['getNumFilesLoaded']();
         this.finish_();
@@ -1522,9 +1540,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
   if (goog.now() - this.lastStateTime_ > this.timeoutMs_) {
     this.report_ = this.testFile_ + ' timed out  ' +
         goog.testing.MultiTestRunner.STATES[this.currentState_];
-    var results = {};
-    results[this.testFile_] = [this.report_];
-    this.testResults_ = results;
+    this.testResults_[this.testFile_] = [this.report_];
     this.isSuccess_ = false;
     this.finish_();
     return;

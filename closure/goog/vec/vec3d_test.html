@@ -32,6 +32,22 @@ See the COPYING file for details.
     assertElementsEquals([0, 0, 0], v);
   }
 
+  function testCreateFromArray() {
+    var v = goog.vec.vec3d.createFromArray([1, 2, 3]);
+    assertElementsEquals([1, 2, 3], v);
+  }
+
+  function testCreateFromValues() {
+    var v = goog.vec.vec3d.createFromValues(1, 2, 3);
+    assertElementsEquals([1, 2, 3], v);
+  }
+
+  function testClone() {
+    var v0 = goog.vec.vec3d.createFromValues(1, 2, 3);
+    var v1 = goog.vec.vec3d.clone(v0);
+    assertElementsEquals([1, 2, 3], v1);
+  }
+
   function testSet() {
     var v = goog.vec.vec3d.create();
     goog.vec.vec3d.setFromValues(v, 1, 2, 3);

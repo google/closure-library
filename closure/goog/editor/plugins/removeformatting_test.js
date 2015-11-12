@@ -62,6 +62,9 @@ function setUpPage() {
   } else if (WEBKIT_AFTER_CHROME_16) {
     insertImageBoldGarbage = '<b><br/></b>';
     insertImageFontGarbage = '<font size="1"><br/></font>';
+  } else if (goog.userAgent.EDGE) {
+    insertImageFontGarbage =
+        '<fontsize="-1"><font class="p" size="-1"></font></fontsize="-1">';
   }
   // Extra html to add to test html to make sure removeformatting is actually
   // getting called when you're testing if it leaves certain styles alone
@@ -72,6 +75,9 @@ function setUpPage() {
   // fixed.
   controlHtml = goog.userAgent.IE ? '' : '<u>control</u>';
   controlCleanHtml = goog.userAgent.IE ? '' : 'control';
+  if (goog.userAgent.EDGE) {
+    controlCleanHtml = 'control<u></u>';
+  }
   expectedFailures = new goog.testing.ExpectedFailures();
 }
 
@@ -117,8 +123,8 @@ function testTableTagsAreNotRemoved() {
   FORMATTER.removeFormatting_();
 
   var elem = document.getElementById('outerTd');
-  assert('TD should not be removed', !!elem);
-  if (!goog.userAgent.WEBKIT) {
+  assertTrue('TD should not be removed', !!elem);
+  if (!goog.userAgent.WEBKIT && !goog.userAgent.EDGE) {
     // webkit seems to have an Apple-style-span
     assertEquals('TD should be clean', 'four',
         goog.string.trim(elem.innerHTML));
@@ -129,17 +135,17 @@ function testTableTagsAreNotRemoved() {
   goog.dom.Range.createFromNodeContents(span).select();
   FORMATTER.removeFormatting_();
 
-  var elem = document.getElementById('outerTr');
-  assert('TR should not be removed', !!elem);
+  elem = document.getElementById('outerTr');
+  assertTrue('TR should not be removed', !!elem);
 
   // TH
   span = document.getElementById('emptyTh');
   goog.dom.Range.createFromNodeContents(span).select();
   FORMATTER.removeFormatting_();
 
-  var elem = document.getElementById('outerTh');
-  assert('TH should not be removed', !!elem);
-  if (!goog.userAgent.WEBKIT) {
+  elem = document.getElementById('outerTh');
+  assertTrue('TH should not be removed', !!elem);
+  if (!goog.userAgent.WEBKIT && !goog.userAgent.EDGE) {
     // webkit seems to have an Apple-style-span
     assertEquals('TH should be clean', 'head2', elem.innerHTML);
   }
@@ -159,8 +165,9 @@ function testTableDataIsNotRemoved() {
     return;
   }
 
-  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
-      'The content moves out of the table in WEBKIT.');
+  expectedFailures.expectFailureFor(
+      goog.userAgent.WEBKIT || goog.userAgent.EDGE,
+      'The content moves out of the table in WebKit and Edge.');
 
   if (goog.userAgent.IE) {
     // Not used since we bail out early for IE, but this is there so that
@@ -340,6 +347,9 @@ function testRemoveFormattingDoesNotShrinkSelection() {
   // <br> to the end of the html.
   var html = '<div>l </div><br class="GECKO WEBKIT">afoo bar' +
       (goog.editor.BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT ? '<br>' : '');
+  if (goog.userAgent.EDGE) { // TODO(user): I have no idea where this comes from
+    html = html.replace(' class="GECKO WEBKIT"', '');
+  }
 
   goog.testing.dom.assertHtmlContentsMatch(html, div);
   FIELDMOCK.$verify();
@@ -358,8 +368,9 @@ function testInsideListRemoveFormat() {
 
   expectedFailures.expectFailureFor(goog.userAgent.IE,
       'IE adds the "two" to the "three" li, and leaves empty B tags.');
-  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
-      'WebKit leave the "two" orphaned outside of an li but ' +
+  expectedFailures.expectFailureFor(
+      goog.userAgent.WEBKIT || goog.userAgent.EDGE,
+      'WebKit and Edge leave the "two" orphaned outside of an li but ' +
       'inside the ul (invalid HTML).');
 
   expectedFailures.run(function() {
@@ -409,6 +420,9 @@ function testPartialListRemoveFormat() {
       'IE leaves behind an empty LI.');
   expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
       'WebKit completely loses the "one".');
+  expectedFailures.expectFailureFor(goog.userAgent.EDGE,
+      'Edge leaves "two" and "threeafter" orphaned outside of an li ' +
+      'but inside the ul (invalid HTML).');
 
   expectedFailures.run(function() {
     FORMATTER.removeFormatting_();
@@ -736,9 +750,13 @@ function testTwoTablesSelectedFullyAndPartiallyRemoveFormatting() {
     goog.dom.Range.createFromNodes(goog.dom.getElement('td1').firstChild, 0,
         goog.dom.getElement('td2').firstChild.firstChild, 2).select();
     FORMATTER.removeFormatting_();
-    assertHTMLEquals('<br>foo<br>' +
-                     '<table><tr><td id="td2">ba<b>r</b></td></tr></table>',
-        div.innerHTML);
+    var expectedHtml = '<br>foo<br>' +
+                       '<table><tr><td id="td2">ba<b>r</b></td></tr></table>';
+    if (goog.userAgent.EDGE) {
+      // TODO(user): Edge inserts an extra empty <b> tag but is otherwise correct
+      expectedHtml = expectedHtml.replace('</b>', '<b></b></b>');
+    }
+    assertHTMLEquals(expectedHtml, div.innerHTML);
     FIELDMOCK.$verify();
   });
 }

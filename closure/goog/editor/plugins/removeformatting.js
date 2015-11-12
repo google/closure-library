@@ -482,7 +482,7 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
     return;
   }
 
-  if (goog.userAgent.GECKO) {
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE) {
     // Determine if we need to handle tables, since they are special cases.
     // If the selection is entirely within a table, there is no extra
     // formatting removal we can do.  If a table is fully selected, we will
@@ -551,7 +551,7 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
   var text = this.getHtmlText_(range);
   this.pasteHtml_(convertFunc(text));
 
-  if (goog.userAgent.GECKO && savedCaretRange) {
+  if ((goog.userAgent.GECKO || goog.userAgent.EDGE) && savedCaretRange) {
     // If we moved the selection, move it back so the user can't tell we did
     // anything crazy and so the browser removeFormat that we call next
     // will operate on the entire originally selected range.

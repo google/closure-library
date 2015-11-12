@@ -499,6 +499,7 @@ goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function(e) {
   var child = link.lastChild;
   goog.dom.flattenElement(link);
 
+  var restoreScrollPosition = this.saveScrollPosition();
   var range = goog.dom.Range.createFromNodeContents(child);
   range.collapse(false);
   range.select();
@@ -507,6 +508,7 @@ goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function(e) {
 
   this.getFieldObject().dispatchChange();
   this.getFieldObject().focus();
+  restoreScrollPosition();
 };
 
 

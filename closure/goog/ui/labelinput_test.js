@@ -193,8 +193,8 @@ function testDecorateElementWithFocusDelay() {
 function testClassName() {
   labelInput = new goog.ui.LabelInput();
 
-  // IE always fails this test, suspect it is a focus issue.
-  if (goog.userAgent.IE) {
+  // EDGE/IE always fails this test, suspect it is a focus issue.
+  if (goog.userAgent.EDGE_OR_IE) {
     return;
   }
   // FF does not perform focus if the window is not active in the first place.

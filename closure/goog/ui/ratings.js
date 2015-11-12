@@ -154,7 +154,7 @@ goog.ui.Ratings.prototype.decorateInternal = function(el) {
   }
   this.setSelectedIndex(select.selectedIndex);
   select.style.display = 'none';
-  this.attachedFormField_ = select;
+  this.attachedFormField_ = /** @type {HTMLSelectElement} */(select);
   this.createDom();
   el.insertBefore(this.getElement(), select);
 };

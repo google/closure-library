@@ -166,15 +166,15 @@ goog.net.streams.XhrNodeReadableStream.prototype.onData_ = function(messages) {
  */
 goog.net.streams.XhrNodeReadableStream.prototype.doMessages_ = function(
     messages, callbacks) {
+  var self = this;
   for (var i = 0; i < messages.length; i++) {
     var message = messages[i];
 
-    var logger = this.logger_;
     goog.array.forEach(callbacks, function(callback) {
       try {
         callback(message);
       } catch (ex) {
-        goog.log.error(logger, 'message-callback exception (ignored) ' + ex);
+        self.handleError_('message-callback exception (ignored) ' + ex);
       }
     });
   }
@@ -224,13 +224,13 @@ goog.net.streams.XhrNodeReadableStream.prototype.onStatusChange_ = function() {
 goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
     eventType) {
   var callbacks = this.callbackMap_[eventType];
+  var self = this;
   if (callbacks) {
-    var logger = this.logger_;
     goog.array.forEach(callbacks, function(callback) {
       try {
         callback();
       } catch (ex) {
-        goog.log.error(logger, 'status-callback exception (ignored) ' + ex);
+        self.handleError_('status-callback exception (ignored) ' + ex);
       }
     });
   }
@@ -244,3 +244,15 @@ goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
 
   this.callbackOnceMap_[eventType] = [];
 };
+
+
+/**
+ * Log an error
+ *
+ * @param {string} message The error message
+ * @private
+ */
+goog.net.streams.XhrNodeReadableStream.prototype.handleError_ = function(
+    message) {
+  goog.log.error(this.logger_, message);
+}
