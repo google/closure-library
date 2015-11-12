@@ -14,19 +14,12 @@
 
 goog.provide('goog.events.EventId');
 
-// Note: in the comment below there is a zero-width space \u008b between
-// the * and / in the sample code, so that the */ doesn't end the comment
-// block.
-// To recreate the zero-width space execute in a browser console:
-//      console.log('*\u008b/');
-// and copy/paste the result where needed.
-
 
 /**
  * A templated class that is used when registering for events. Typical usage:
  *
  * <pre>
- * /** @type {goog.events.EventId&lt;MyEventObj&gt;}*/
+ * /** @type {goog.events.EventId&lt;MyEventObj&gt;} * /
  * var myEventId = new goog.events.EventId(
  *     goog.events.getUniqueId(('someEvent'));
  *
