@@ -405,6 +405,86 @@ goog.vec.vec3f.lerp = function(v0, v1, f, resultVec) {
 
 
 /**
+ * Perform a spherical linear interpolation from v0 to v1 according to f. The
+ * value of f should be in the range [0..1] otherwise the results are undefined.
+ *
+ * Slerp is normally used to interpolate quaternions, but there is a geometric
+ * formula for interpolating vectors directly, see "Geometric Slerp" in:
+ * https://en.wikipedia.org/wiki/Slerp.
+ *
+ * This interpolates the vectors' directions via slerp, but linearly
+ * interpolates the vectors' magnitudes.
+ *
+ * Results are undefined if v0 or v1 are of zero magnitude.
+ *
+ * @param {!goog.vec.vec3f.Type} v0 The first vector.
+ * @param {!goog.vec.vec3f.Type} v1 The second vector.
+ * @param {number} f The interpolation factor.
+ * @param {!goog.vec.vec3f.Type} resultVec The vector to receive the
+ *     results (may be v0 or v1).
+ * @return {!goog.vec.vec3f.Type} Return resultVec so that operations can be
+ *     chained together.
+ */
+goog.vec.vec3f.slerp = function(v0, v1, f, resultVec) {
+  var v0Magnitude = goog.vec.vec3f.magnitude(v0);
+  var v1Magnitude = goog.vec.vec3f.magnitude(v1);
+
+  var cosAngle = goog.vec.vec3f.dot(v0, v1) / (v0Magnitude * v1Magnitude);
+  var angle = Math.acos(cosAngle);
+
+  // If v0 and v1 are almost the same direction, fall back on a straight lerp.
+  if (angle < goog.vec.EPSILON) {
+    return goog.vec.vec3f.lerp(v0, v1, f, resultVec);
+  }
+
+  var sinAngle = 0;
+
+  // If v0 and v1 are opposite directions, pick an arbitrary 'mid' vector that
+  // is perpendicular to both, and slerp from v0 -> mid -> v1.
+  if (angle > Math.PI - goog.vec.EPSILON) {
+    var mid = goog.vec.vec3f.create();
+    var magnitudeFactor = (v0Magnitude + v1Magnitude) / 2;
+    if (v0[0]) {  // v0 not parallel to [0,0,1].
+      magnitudeFactor /= Math.sqrt(v0[0] * v0[0] + v0[1] + v0[1]);
+      mid[0] = -v0[1] * magnitudeFactor;
+      mid[1] = v0[0] * magnitudeFactor;
+      mid[2] = 0;
+    } else {  // v0 not parallel to [1,0,0].
+      magnitudeFactor /= Math.sqrt(v0[2] * v0[2] + v0[1] + v0[1]);
+      mid[0] = 0;
+      mid[1] = -v0[2] * magnitudeFactor;
+      mid[2] = v0[1] * magnitudeFactor;
+    }
+
+    // Depending on f, slerp between either v0 and mid, or mid and v1.
+    if (f <= 0.5) {
+      v1Magnitude = v0Magnitude;
+      v1 = mid;
+      f *= 2;
+    } else {
+      v0 = mid;
+      f = 2 * f - 1;
+    }
+
+    angle = Math.PI / 2;
+    cosAngle = 0;
+    sinAngle = 1;
+  } else {
+    sinAngle = Math.sqrt(1 - cosAngle * cosAngle);
+  }
+
+  var coeff0 = (Math.sin((1 - f) * angle) / sinAngle) / v0Magnitude;
+  var coeff1 = (Math.sin((f * angle) / sinAngle)) / v1Magnitude;
+  var magnitude = (1 - f) * v0Magnitude + f * v1Magnitude;
+
+  resultVec[0] = (v0[0] * coeff0 + v1[0] * coeff1) * magnitude;
+  resultVec[1] = (v0[1] * coeff0 + v1[1] * coeff1) * magnitude;
+  resultVec[2] = (v0[2] * coeff0 + v1[2] * coeff1) * magnitude;
+  return resultVec;
+};
+
+
+/**
  * Compares the components of vec0 with the components of another vector or
  * scalar, storing the larger values in resultVec.
  *
