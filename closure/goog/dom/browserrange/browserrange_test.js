@@ -585,7 +585,7 @@ function testCompareBrowserRangeEndpoints() {
  * created and inserted node.
  */
 function testInsertNodeNonElement() {
-  dynamic.innerHTML = 'beforeafter';
+  goog.dom.setTextContent(dynamic, 'beforeafter');
   var range = goog.dom.browserrange.createRangeFromNodes(
       dynamic.firstChild, 6, dynamic.firstChild, 6);
   var newNode = goog.dom.createTextNode('INSERTED');

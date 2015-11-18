@@ -76,12 +76,12 @@ function tearDownPage() {
       });
 
   var label = document.createElement('h3');
-  label.innerHTML = 'TweakUi:';
+  goog.dom.setTextContent(label, 'TweakUi:');
   root.appendChild(label);
   createUi(false);
 
   label = document.createElement('h3');
-  label.innerHTML = 'Collapsible:';
+  goog.dom.setTextContent(label, 'Collapsible:');
   root.appendChild(label);
   createUi(true);
 }

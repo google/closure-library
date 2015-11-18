@@ -937,7 +937,7 @@ function testSetTextContent() {
   assertEquals(s, p1.firstChild.data);
 
   // Text/CharacterData
-  p1.innerHTML = 'before';
+  goog.dom.setTextContent(p1, 'before');
   s = 'after';
   goog.dom.setTextContent(p1.firstChild, s);
   assertEquals('We should have one childNode after setTextContent', 1,
