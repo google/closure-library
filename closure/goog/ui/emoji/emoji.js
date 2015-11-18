@@ -83,8 +83,17 @@ goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width, opt_altText) {
 /**
  * The name of the goomoji attribute, used for emoji image elements.
  * @type {string}
+ * @deprecated Use goog.ui.emoji.Emoji.DATA_ATTRIBUTE instead.
  */
 goog.ui.emoji.Emoji.ATTRIBUTE = 'goomoji';
+
+
+/**
+ * The name of the goomoji data-attribute, used for emoji image elements. Data
+ * attributes are the preferred way in HTML5 to set custom attributes.
+ * @type {string}
+ */
+goog.ui.emoji.Emoji.DATA_ATTRIBUTE = 'data-' + goog.ui.emoji.Emoji.ATTRIBUTE;
 
 
 /**

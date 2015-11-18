@@ -88,6 +88,7 @@ goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
   var img = dom.createDom(goog.dom.TagName.IMG, imgAttributes);
 
   img.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, emoji.getId());
+  img.setAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE, emoji.getId());
 
   this.getFieldObject().getRange().replaceContentsWithNode(img);
 
