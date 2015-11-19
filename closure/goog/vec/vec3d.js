@@ -475,7 +475,7 @@ goog.vec.vec3d.slerp = function(v0, v1, f, resultVec) {
   }
 
   var coeff0 = (Math.sin((1 - f) * angle) / sinAngle) / v0Magnitude;
-  var coeff1 = (Math.sin((f * angle) / sinAngle)) / v1Magnitude;
+  var coeff1 = (Math.sin(f * angle) / sinAngle) / v1Magnitude;
   var magnitude = (1 - f) * v0Magnitude + f * v1Magnitude;
 
   resultVec[0] = (v0[0] * coeff0 + v1[0] * coeff1) * magnitude;
