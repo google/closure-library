@@ -194,7 +194,7 @@ goog.crypt.base64.decodeString = function(input, opt_webSafe) {
 
 
 /**
- * Base64-decode a string.
+ * Base64-decode a string to an Array of numbers.
  *
  * In base-64 decoding, groups of four characters are converted into three
  * bytes.  If the encoder did not apply padding, the input length may not
@@ -209,13 +209,59 @@ goog.crypt.base64.decodeString = function(input, opt_webSafe) {
  * @return {!Array<number>} bytes representing the decoded value.
  */
 goog.crypt.base64.decodeStringToByteArray = function(input, opt_webSafe) {
+  var output = [];
+  function pushByte(b) { output.push(b); }
+
+  goog.crypt.base64.decodeStringInternal_(input, pushByte, opt_webSafe);
+
+  return output;
+};
+
+
+/**
+ * Base64-decode a string to a Uint8Array.
+ *
+ * Note that Uint8Array is not supported on older browsers, e.g. IE < 10.
+ * @see http://caniuse.com/uint8array
+ *
+ * In base-64 decoding, groups of four characters are converted into three
+ * bytes.  If the encoder did not apply padding, the input length may not
+ * be a multiple of 4.
+ *
+ * In this case, the last group will have fewer than 4 characters, and
+ * padding will be inferred.  If the group has one or two characters, it decodes
+ * to one byte.  If the group has three characters, it decodes to two bytes.
+ *
+ * @param {string} input Input to decode.
+ * @param {boolean=} opt_webSafe True if we should use the web-safe alphabet.
+ * @return {!Uint8Array} bytes representing the decoded value.
+ */
+goog.crypt.base64.decodeStringToUint8Array = function(input, opt_webSafe) {
+  goog.asserts.assert(
+      !goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10'),
+      'Browser does not support typed arrays');
+  var output = new Uint8Array(Math.ceil(input.length * 3 / 4));
+  var outLen = 0;
+  function pushByte(b) { output[outLen++] = b; }
+
+  goog.crypt.base64.decodeStringInternal_(input, pushByte, opt_webSafe);
+
+  return output.subarray(0, outLen);
+};
+
+
+/**
+ * @param {string} input Input to decode.
+ * @param {function(number):void} pushByte result accumulator.
+ * @param {boolean=} opt_webSafe True if we should use the web-safe alphabet.
+ * @private
+ */
+goog.crypt.base64.decodeStringInternal_ = function(
+    input, pushByte, opt_webSafe) {
   goog.crypt.base64.init_();
 
-  var charToByteMap = opt_webSafe ?
-                      goog.crypt.base64.charToByteMapWebSafe_ :
-                      goog.crypt.base64.charToByteMap_;
-
-  var output = [];
+  var charToByteMap = opt_webSafe ? goog.crypt.base64.charToByteMapWebSafe_ :
+                                    goog.crypt.base64.charToByteMap_;
 
   for (var i = 0; i < input.length; ) {
     var byte1 = charToByteMap[input.charAt(i++)];
@@ -238,20 +284,18 @@ goog.crypt.base64.decodeStringToByteArray = function(input, opt_webSafe) {
     }
 
     var outByte1 = (byte1 << 2) | (byte2 >> 4);
-    output.push(outByte1);
+    pushByte(outByte1);
 
     if (byte3 != 64) {
       var outByte2 = ((byte2 << 4) & 0xF0) | (byte3 >> 2);
-      output.push(outByte2);
+      pushByte(outByte2);
 
       if (byte4 != 64) {
         var outByte3 = ((byte3 << 6) & 0xC0) | byte4;
-        output.push(outByte3);
+        pushByte(outByte3);
       }
     }
   }
-
-  return output;
 };
 
 
