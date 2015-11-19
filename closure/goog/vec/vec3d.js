@@ -430,18 +430,18 @@ goog.vec.vec3d.slerp = function(v0, v1, f, resultVec) {
   var v1Magnitude = goog.vec.vec3d.magnitude(v1);
 
   var cosAngle = goog.vec.vec3d.dot(v0, v1) / (v0Magnitude * v1Magnitude);
-  var angle = Math.acos(cosAngle);
 
   // If v0 and v1 are almost the same direction, fall back on a straight lerp.
-  if (angle < goog.vec.EPSILON) {
+  if (cosAngle > 1 - goog.vec.EPSILON) {
     return goog.vec.vec3d.lerp(v0, v1, f, resultVec);
   }
 
+  var angle = 0;
   var sinAngle = 0;
 
   // If v0 and v1 are opposite directions, pick an arbitrary 'mid' vector that
   // is perpendicular to both, and slerp from v0 -> mid -> v1.
-  if (angle > Math.PI - goog.vec.EPSILON) {
+  if (cosAngle < -1 + goog.vec.EPSILON) {
     var mid = goog.vec.vec3d.create();
     var magnitudeFactor = (v0Magnitude + v1Magnitude) / 2;
     if (v0[0]) {  // v0 not parallel to [0,0,1].
@@ -470,6 +470,7 @@ goog.vec.vec3d.slerp = function(v0, v1, f, resultVec) {
     cosAngle = 0;
     sinAngle = 1;
   } else {
+    angle = Math.acos(cosAngle);
     sinAngle = Math.sqrt(1 - cosAngle * cosAngle);
   }
 

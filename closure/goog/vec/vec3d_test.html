@@ -333,6 +333,14 @@ See the COPYING file for details.
         goog.vec.EPSILON);
     // Magnitude should be linearly interpolated.
     assertRoughlyEquals(3.0, goog.vec.vec3d.magnitude(v5), goog.vec.EPSILON);
+
+    // Try a case where the vectors are the same direction (the same vector in
+    // this case), but where numerical error results in a dot product
+    // slightly greater than 1. Taking the acos of this would result in NaN.
+    var v6 = goog.vec.vec3d.setFromValues(goog.vec.vec3d.create(), 0.009, 0.147,
+                                          0.989);
+    goog.vec.vec3d.slerp(v6, v6, .25, v5);
+    assertElementsRoughlyEqual([ v6[0], v6[1], v6[2] ], v5, goog.vec.EPSILON);
   }
 
   function testMax() {
