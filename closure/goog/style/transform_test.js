@@ -36,9 +36,8 @@ var element;
  * @param {number} y The vertical translation
  */
 var setAndAssertTranslation = function(x, y) {
-  if (goog.userAgent.GECKO ||
-      goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
-    // Mozilla and <IE10 do not support CSSMatrix.
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // <IE10 do not support CSSMatrix.
     return;
   }
   var success = goog.style.transform.setTranslation(element, x, y);
@@ -60,9 +59,8 @@ var setAndAssertTranslation = function(x, y) {
  * @param {number} z The depth scale
  */
 var setAndAssertScale = function(x, y, z) {
-  if (goog.userAgent.GECKO ||
-      goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
-    // Mozilla and <IE10 do not support CSSMatrix.
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // <IE10 do not support CSSMatrix.
     return;
   }
   var success = goog.style.transform.setScale(element, x, y, z);
@@ -100,7 +98,7 @@ function testIsSupported() {
 
 
 function testIs3dSupported() {
-  if (goog.userAgent.GECKO && !goog.userAgent.product.isVersion(10) ||
+  if (!goog.userAgent.product.isVersion(10) ||
       (goog.userAgent.IE && !goog.userAgent.product.isVersion(10))) {
     assertFalse(goog.style.transform.is3dSupported());
   } else {
