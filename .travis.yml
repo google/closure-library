@@ -25,5 +25,5 @@ script:
 
 env:
   global:
-    - SAUCE_USERNAME=joeltine
-    - SAUCE_ACCESS_KEY=c1426ba29e28-d49b-e304-8559-3a85cd04
+    - SAUCE_USERNAME=closure-sauce
+    - SAUCE_ACCESS_KEY=dfd98f70a612-e69a-ad34-6149-3ca056f8
