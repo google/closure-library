@@ -1,20 +1,11 @@
 [
   {
-    "browserName" : "firefox",
-    "platform" : "Linux",
-    "version": "40.0"
-  },
-  {
-    "browserName" : "chrome",
-    "platform" : "Linux"
-  },
-  {
     "browserName" : "internet explorer",
     "version" : "11.0",
     "platform" : "Windows 7",
     "timeZone": "Pacific",
     "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
+      "executable": "https://raw.githubusercontent.com/joeltine/closure-library/same-origin-ie8/scripts/ci/ie_setup.bat"
     }
   },
   {
@@ -23,7 +14,7 @@
     "timeZone": "Pacific",
     "platform" : "Windows 7",
     "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
+      "executable": "https://raw.githubusercontent.com/joeltine/closure-library/same-origin-ie8/scripts/ci/ie_setup.bat"
     }
   },
   {
@@ -32,7 +23,7 @@
     "platform" : "Windows 7",
     "timeZone": "Pacific",
     "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
+      "executable": "https://raw.githubusercontent.com/joeltine/closure-library/same-origin-ie8/scripts/ci/ie_setup.bat"
     }
   },
   {
@@ -41,7 +32,7 @@
     "platform" : "Windows 7",
     "timeZone": "Pacific",
     "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
+      "executable": "https://raw.githubusercontent.com/joeltine/closure-library/same-origin-ie8/scripts/ci/ie_setup.bat"
     }
   }
 ]
