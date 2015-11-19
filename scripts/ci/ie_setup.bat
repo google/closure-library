@@ -41,3 +41,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" ^
     /v "Disable Script Debugger" /t REG_SZ /d yes /f
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" ^
     /v "DisableScriptDebuggerIE" /t REG_SZ /d yes /f
+
+:: Disable cross-origin XHRs. Sauce enables this in IE by default.
+@ECHO OFF
+REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /v 1406 /t REG_DWORD /d 3 /f
