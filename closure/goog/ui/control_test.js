@@ -2445,3 +2445,26 @@ function testIeMouseEventSequenceSimulator() {
       'ACTION event expected after click sequence immediately following ' +
       'an isolated click ');
 }
+
+function testIeMouseEventSequenceSimulatorStrictMode() {
+  if (!document.createEvent) {
+    return;
+  }
+
+  control.render(sandbox);
+
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  var e = document.createEvent('MouseEvents');
+  e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false,
+      false, false, 0, null);
+  control.getElementStrict().dispatchEvent(e);
+  if (goog.userAgent.IE) {
+    assertEquals('ACTION event expected after an isolated click',
+        actionCount + 1,
+        getEventCount(control, goog.ui.Component.EventType.ACTION));
+  } else {
+    assertEquals('No ACTION event expected after an isolated click',
+        actionCount,
+        getEventCount(control, goog.ui.Component.EventType.ACTION));
+  }
+}
