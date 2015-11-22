@@ -17,12 +17,23 @@ goog.setTestOnly('goog.messaging.PortNetworkTest');
 
 goog.require('goog.Promise');
 goog.require('goog.Timer');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.messaging.PortChannel');
 goog.require('goog.messaging.PortOperator');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 var timer;
+
+function shouldRunTests() {
+  // Something about this test crashes Firefox 41, but not 42. (b/25813662)
+  if (goog.labs.userAgent.browser.isFirefox() &&
+      goog.labs.userAgent.browser.isVersionOrHigher(41) &&
+      !goog.labs.userAgent.browser.isVersionOrHigher(42)) {
+    return false;
+  }
+  return true;
+}
 
 function setUpPage() {
   // Use a relatively long timeout because workers can take a while to start up.
