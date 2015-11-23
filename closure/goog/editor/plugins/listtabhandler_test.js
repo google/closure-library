@@ -147,7 +147,7 @@ function testListOutdentContainLi() {
 
 
 function testNoOp() {
-  field.innerHTML = 'Text';
+  goog.dom.setTextContent(field, 'Text');
 
   var testText = field.firstChild;
   testHelper.select(testText, 0, testText, 4);

@@ -491,14 +491,14 @@ function testClearUndoHistory() {
   editableField.dispatchChange();
   clock.tick(10000);
 
-  editableField.getElement().innerHTML = 'y';
+  goog.dom.setTextContent(editableField.getElement(), 'y');
   editableField.dispatchChange();
   assertFalse(undoRedoPlugin.undoManager_.hasUndoState());
 
   clock.tick(10000);
   assertTrue(undoRedoPlugin.undoManager_.hasUndoState());
 
-  editableField.getElement().innerHTML = 'z';
+  goog.dom.setTextContent(editableField.getElement(), 'z');
   editableField.dispatchChange();
 
   var numCalls = 0;

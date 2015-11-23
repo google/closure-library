@@ -317,7 +317,7 @@ function testDontLinkifyInvalidScheme() {
 
   var badLink = document.createElement(goog.dom.TagName.A);
   badLink.href = 'javascript:alert(1)';
-  badLink.innerHTML = 'bad link';
+  goog.dom.setTextContent(badLink, 'bad link');
 
   linkBubble.handleSelectionChange(createMouseEvent(badLink));
   assertBubble();
@@ -383,7 +383,7 @@ function testLongUrlTestLinkAnchorTextCorrect() {
 
   var longLink = document.createElement(goog.dom.TagName.A);
   longLink.href = longUrl;
-  longLink.innerHTML = 'Google';
+  goog.dom.setTextContent(longLink, 'Google');
   fieldDiv.appendChild(longLink);
 
   linkBubble.handleSelectionChange(createMouseEvent(longLink));

@@ -894,7 +894,7 @@ function testGetTableAncestor() {
       !!FORMATTER.getTableAncestor_(
           div.childNodes[1].firstChild.firstChild.firstChild));
 
-  div.innerHTML = 'foo';
+  goog.dom.setTextContent(div, 'foo');
   assertNull('No table inside field.',
       FORMATTER.getTableAncestor_(div.childNodes[0]));
 }

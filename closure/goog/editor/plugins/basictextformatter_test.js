@@ -267,7 +267,7 @@ function testIsSilentCommand() {
 }
 
 function setUpSubSuperTests() {
-  ROOT.innerHTML = '12345';
+  goog.dom.setTextContent(ROOT, '12345');
   HELPER = new goog.testing.editor.TestHelper(ROOT);
   HELPER.setUpEditableElement();
 }

@@ -54,7 +54,7 @@ function tearDown() {
 
 
 function testHeaderShortcuts() {
-  field.innerHTML = 'myText';
+  goog.dom.setTextContent(field, 'myText');
 
   var textNode = field.firstChild;
   testHelper.select(textNode, 0, textNode, textNode.length);
