@@ -1013,14 +1013,6 @@ goog.i18n.NumberFormat.PATTERN_PLUS_ = '+';
 
 
 /**
- * A minus character.
- * @type {string}
- * @private
- */
-goog.i18n.NumberFormat.PATTERN_MINUS_ = '-';
-
-
-/**
  * A quote character.
  * @type {string}
  * @private

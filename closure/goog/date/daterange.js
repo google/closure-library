@@ -141,22 +141,6 @@ goog.date.DateRange.offsetInDays_ = function(date, offset) {
 
 
 /**
- * Calculates the Monday before a date. If the input is a Monday, returns the
- * input. Does not modify its input.
- * @param {goog.date.Date} date The input date.
- * @return {!goog.date.Date} If |date| is a Monday, return |date|; otherwise
- *     return the Monday before |date|.
- * @private
- */
-goog.date.DateRange.currentOrLastMonday_ = function(date) {
-  var newDate = date.clone();
-  newDate.add(new goog.date.Interval(goog.date.Interval.DAYS,
-      -newDate.getIsoWeekday()));
-  return newDate;
-};
-
-
-/**
  * Calculates a date that is a number of months after the first day in the
  * month that contains its input. Does not modify its input.
  * @param {goog.date.Date} date The input date.

@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Protocol Buffer Message base class.
+ * @suppress {unusedPrivateMembers} For descriptor_ declaration.
  */
 
 goog.provide('goog.proto2.Message');

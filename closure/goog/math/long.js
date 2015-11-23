@@ -199,31 +199,8 @@ goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
  * @type {number}
  * @private
  */
-goog.math.Long.getTwoPwr24DBL_ = 1 << 24;
-
-
-/**
- * @type {number}
- * @private
- */
 goog.math.Long.TWO_PWR_32_DBL_ =
     goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_31_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ / 2;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_48_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
 
 
 /**

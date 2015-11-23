@@ -61,25 +61,6 @@ function testOffsetInDays() {
   assertTrue('last day', new gd(1999, 11, 31).equals(f(d, -1)));
 }
 
-function testCurrentOrLastMonday() {
-  var mon = new gd(2008, 9, 13);
-  var tue = new gd(2008, 9, 14);
-  var wed = new gd(2008, 9, 15);
-  var thu = new gd(2008, 9, 16);
-  var fri = new gd(2008, 9, 17);
-  var sat = new gd(2008, 9, 18);
-  var sun = new gd(2008, 9, 19);
-  var f = gdr.currentOrLastMonday_;
-
-  assertTrue('mon', mon.equals(f(mon)));
-  assertTrue('tue', mon.equals(f(tue)));
-  assertTrue('wed', mon.equals(f(wed)));
-  assertTrue('thu', mon.equals(f(thu)));
-  assertTrue('fri', mon.equals(f(fri)));
-  assertTrue('sat', mon.equals(f(sat)));
-  assertTrue('sun', mon.equals(f(sun)));
-}
-
 function testOffsetInMonths() {
   var d = new gd(2008, 9, 13);
   var f = gdr.offsetInMonths_;
