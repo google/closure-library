@@ -845,10 +845,10 @@ function test_variousDateTypes() {
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
 
   var date = new Date(2006, 6, 27, 13, 10, 42, 250);
-  assertEquals('27 juil. 2006 13:10:42', fmt.format(date));
+  assertEquals('27 juil. 2006 à 13:10:42', fmt.format(date));
 
   var gdatetime = new goog.date.DateTime(2006, 6, 27, 13, 10, 42, 250);
-  assertEquals('27 juil. 2006 13:10:42', fmt.format(gdatetime));
+  assertEquals('27 juil. 2006 à 13:10:42', fmt.format(gdatetime));
 
   var gdate = new goog.date.Date(2006, 6, 27);
   var fmtDate =
