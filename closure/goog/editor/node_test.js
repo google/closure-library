@@ -81,7 +81,9 @@ function setUpDomTree() {
 }
 
 function tearDownDomTree() {
-  childNode1.innerHTML = childNode2.innerHTML = childNode3.innerHTML = '';
+  goog.dom.removeChildren(childNode1);
+  goog.dom.removeChildren(childNode2);
+  goog.dom.removeChildren(childNode3);
   gChildWsNode1 = null;
   gChildTextNode1 = null;
   gChildNbspNode1 = null;

@@ -209,7 +209,7 @@ function testGeckoListFont() {
     retVal = FORMATTER.beforeInsertListGecko_();
     assertFalse('Workaround shouldn\'t be applied when not needed', retVal);
 
-    font.innerHTML = '';
+    goog.dom.removeChildren(font);
     goog.dom.Range.createFromNodeContents(font).select();
     var retVal = FORMATTER.beforeInsertListGecko_();
     assertTrue('Workaround should be applied when needed', retVal);
@@ -1156,7 +1156,7 @@ function testPrepareContent() {
 
 function testScrubImagesRemovesCustomAttributes() {
   var fieldElem = goog.dom.getElement('real-field');
-  fieldElem.innerHTML = '';
+  goog.dom.removeChildren(fieldElem);
   var attrs = {'src': 'http://www.google.com/foo.jpg',
     'tabIndex': '0',
     'tabIndexSet': '0'};

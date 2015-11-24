@@ -92,7 +92,7 @@ function setUp() {
 function tearDown() {
   plugin.dispose();
   tearDownRealEditableField();
-  testDiv.innerHTML = '';
+  goog.dom.removeChildren(testDiv);
   mockCtrl.$tearDown();
 }
 

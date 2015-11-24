@@ -410,7 +410,7 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockIE_ =
   range.select();
 
   // Remove the no-longer-necessary nbsp.
-  div.innerHTML = '';
+  goog.dom.removeChildren(div);
 
   // Clear the original selection.
   range.pasteHTML('');

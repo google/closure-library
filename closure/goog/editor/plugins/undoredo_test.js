@@ -96,7 +96,7 @@ function tearDown() {
     editableField.makeUneditable();
   }
   editableField.dispose();
-  goog.dom.getElement('testField').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('testField'));
   stubs.reset();
 }
 
