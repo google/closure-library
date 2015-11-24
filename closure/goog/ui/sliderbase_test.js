@@ -188,7 +188,7 @@ function tearDown() {
   oneThumbSliderRtl.dispose();
   twoThumbSliderRtl.dispose();
   mockClock.dispose();
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 }
 
 function testGetAndSetValue() {

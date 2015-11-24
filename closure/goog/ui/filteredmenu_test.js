@@ -38,7 +38,7 @@ function setUp() {
 
 
 function tearDown() {
-  sandbox.innerHTML = '';
+  goog.dom.removeChildren(sandbox);
 }
 
 

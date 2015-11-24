@@ -42,7 +42,7 @@ function tearDown() {
   splitpane.dispose();
   leftComponent.dispose();
   rightComponent.dispose();
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 }
 
 function testRender() {

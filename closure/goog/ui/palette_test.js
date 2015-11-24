@@ -42,7 +42,7 @@ function setUp() {
 
 function tearDown() {
   palette.dispose();
-  document.getElementById('sandbox').innerHTML = '';
+  goog.dom.removeChildren(document.getElementById('sandbox'));
 }
 
 function testAfterHighlightListener() {

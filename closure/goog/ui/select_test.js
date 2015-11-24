@@ -323,7 +323,7 @@ function testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
 
     // In IE10 setting the innerHTML of a node invalidates the parent child
     // relation of all its child nodes (unlike removeNode).
-    sandboxEl.innerHTML = '';
+    goog.dom.removeChildren(sandboxEl);
 
     // goog.ui.Select's disposeInternal trigger's goog.ui.Component's
     // disposeInternal, which triggers goog.ui.MenuButton's exitDocument,

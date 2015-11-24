@@ -34,7 +34,7 @@ var comboBox;
 var input;
 
 function setUp() {
-  goog.dom.getElement('combo').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('combo'));
 
   comboBox = new goog.ui.ComboBox();
   comboBox.setDefaultText('Select a color...');
