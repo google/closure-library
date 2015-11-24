@@ -40,7 +40,7 @@ function tearDown() {
   goog.tweak.activeBooleanGroup_ = null;
   // When debugging a single test, don't clear out the DOM.
   if (window.location.search.indexOf('runTests') == -1) {
-    root.innerHTML = '';
+    goog.dom.removeChildren(root);
   }
 }
 

@@ -953,7 +953,7 @@ function testSetTextContent() {
   assertEquals(s, df.firstChild.data);
 
   // clean up
-  p1.innerHTML = '';
+  goog.dom.removeChildren(p1);
 }
 
 function testFindNode() {

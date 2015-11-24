@@ -59,8 +59,8 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.dom.getElement('sandbox').innerHTML = '';
-  goog.dom.getElement('sandbox_rtl').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
+  goog.dom.removeChildren(goog.dom.getElement('sandbox_rtl'));
   goog.events.removeAll(document);
 }
 

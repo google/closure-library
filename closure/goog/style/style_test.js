@@ -74,10 +74,10 @@ function tearDown() {
   expectedFailures.handleTearDown();
   var testVisibleDiv2 = goog.dom.getElement('test-visible2');
   testVisibleDiv2.setAttribute('style', '');
-  testVisibleDiv2.innerHTML = '';
+  goog.dom.removeChildren(testVisibleDiv2);
   var testViewport = goog.dom.getElement('test-viewport');
   testViewport.setAttribute('style', '');
-  testViewport.innerHTML = '';
+  goog.dom.removeChildren(testViewport);
   goog.dispose(mockUserAgent);
 
   // Prevent multiple vendor prefixed mock elements from poisoning the cache.

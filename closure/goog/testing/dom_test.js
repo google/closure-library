@@ -27,7 +27,7 @@ function setUpPage() {
 }
 
 function setUp() {
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
 }
 
 function testFindNode() {
@@ -362,18 +362,18 @@ function testAssertHtmlMatchesWithCheckedAttribute() {
 }
 
 function testAssertHtmlMatchesWithWhitespace() {
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createTextNode('  A  '));
   goog.testing.dom.assertHtmlContentsMatch('  A  ', root);
 
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createTextNode('  A  '));
   root.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN, null, '  B  '));
   root.appendChild(goog.dom.createTextNode('  C  '));
   goog.testing.dom.assertHtmlContentsMatch(
       '  A  <span>  B  </span>  C  ', root);
 
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createTextNode('  A'));
   root.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN, null, '  B'));
   root.appendChild(goog.dom.createTextNode('  C'));
@@ -382,7 +382,7 @@ function testAssertHtmlMatchesWithWhitespace() {
 }
 
 function testAssertHtmlMatchesWithWhitespaceAndNesting() {
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, null,
       goog.dom.createDom(goog.dom.TagName.B, null, '  A  '),
       goog.dom.createDom(goog.dom.TagName.B, null, '  B  ')));
@@ -394,7 +394,7 @@ function testAssertHtmlMatchesWithWhitespaceAndNesting() {
       '<div><b>  A  </b><b>  B  </b></div>' +
       '<div><b>  C  </b><b>  D  </b></div>', root);
 
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createDom(goog.dom.TagName.B, null,
       goog.dom.createDom(goog.dom.TagName.B, null,
           goog.dom.createDom(goog.dom.TagName.B, null, '  A  '))));
@@ -403,7 +403,7 @@ function testAssertHtmlMatchesWithWhitespaceAndNesting() {
   goog.testing.dom.assertHtmlContentsMatch(
       '<b><b><b>  A  </b></b></b><b>  B  </b>', root);
 
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   root.appendChild(goog.dom.createDom(goog.dom.TagName.DIV, null,
       goog.dom.createDom(goog.dom.TagName.B, null,
           goog.dom.createDom(goog.dom.TagName.B, null, '  A  '))));

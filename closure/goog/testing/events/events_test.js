@@ -64,7 +64,7 @@ function setUp() {
   goog.events.removeAll(parentEl);
   goog.events.removeAll(childEl);
 
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
   firedEventTypes = [];
   firedEventCoordinates = [];
   firedScreenCoordinates = [];

@@ -73,7 +73,7 @@ See the COPYING file for details.
     tearDownRealEditableField();
     expectedFailures.handleTearDown();
     stubs.reset();
-    goog.dom.getElement('myField').innerHTML = '';
+    goog.dom.removeChildren(goog.dom.getElement('myField'));
   }
 
   /**

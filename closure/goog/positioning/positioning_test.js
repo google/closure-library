@@ -69,7 +69,7 @@ function setUp() {
 function tearDown() {
   expectedFailures.handleTearDown();
   testArea.setAttribute('style', '');
-  testArea.innerHTML = '';
+  goog.dom.removeChildren(testArea);
 }
 
 

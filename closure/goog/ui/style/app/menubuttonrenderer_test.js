@@ -44,7 +44,7 @@ function tearDown() {
   if (button) {
     button.dispose();
   }
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 }
 
 function testGeneratedButton() {
