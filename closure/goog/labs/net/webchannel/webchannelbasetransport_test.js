@@ -23,7 +23,9 @@ goog.provide('goog.labs.net.webChannel.webChannelBaseTransportTest');
 
 goog.require('goog.events');
 goog.require('goog.functions');
+goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
+goog.require('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
 goog.require('goog.net.WebChannel');
 goog.require('goog.testing.PropertyReplacer');
@@ -175,6 +177,25 @@ function testOpenWithCorsEnabled() {
   webChannel.open();
 
   assertTrue(webChannel.channel_.supportsCrossDomainXhrs_);
+}
+
+function testSendRawJson() {
+  var channelMsg;
+  stubs.set(goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
+      function(message) {
+        channelMsg = message;
+      });
+
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'sendRawJson': true};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  webChannel.send({foo: 'bar'});
+
+  var receivedMsg = goog.json.parse(channelMsg['__data__']);
+  assertEquals('bar', receivedMsg.foo);
 }
 
 function testOpenThenCloseChannel() {

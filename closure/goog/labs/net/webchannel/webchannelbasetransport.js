@@ -26,6 +26,7 @@ goog.provide('goog.labs.net.webChannel.WebChannelBaseTransport');
 
 goog.require('goog.asserts');
 goog.require('goog.events.EventTarget');
+goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.log');
@@ -84,16 +85,12 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   WebChannelBaseTransport.Channel.base(this, 'constructor');
 
   /**
-   * The underlying channel object.
-   *
-   * @private {!WebChannelBase}
+   * @private {!WebChannelBase} The underlying channel object.
    */
   this.channel_ = new WebChannelBase(opt_options);
 
   /**
-   * The URL of the target server end-point.
-   *
-   * @private {string}
+   * @private {string} The URL of the target server end-point.
    */
   this.url_ = url;
 
@@ -107,14 +104,13 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
       goog.string.path.join(this.url_, 'test');
 
   /**
-   * The logger for this class.
-   * @private {goog.log.Logger}
+   * @private {goog.log.Logger} The logger for this class.
    */
   this.logger_ = goog.log.getLogger(
       'goog.labs.net.webChannel.WebChannelBaseTransport');
 
   /**
-   * @private {Object<string, string>} messageUrlParams_ Extra URL parameters
+   * @private {Object<string, string>} Extra URL parameters
    * to be added to each HTTP request.
    */
   this.messageUrlParams_ =
@@ -138,16 +134,20 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   this.channel_.setExtraHeaders(messageHeaders);
 
   /**
-   * @private {boolean} supportsCrossDomainXhr_ Whether to enable CORS.
+   * @private {boolean} Whether to enable CORS.
    */
   this.supportsCrossDomainXhr_ =
       (opt_options && opt_options.supportsCrossDomainXhr) || false;
 
   /**
+   * @private {boolean} Whether to send raw Json and bypass v8 wire format.
+   */
+  this.sendRawJson_ = (opt_options && opt_options.sendRawJson) || false;
+
+  /**
    * The channel handler.
    *
-   * @type {WebChannelBaseTransport.Channel.Handler_}
-   * @private
+   * @private {!WebChannelBaseTransport.Channel.Handler_}
    */
   this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
 };
@@ -186,7 +186,14 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
  */
 WebChannelBaseTransport.Channel.prototype.send = function(message) {
   goog.asserts.assert(goog.isObject(message), 'only object type expected');
-  this.channel_.sendMap(message);
+
+  if (this.sendRawJson_) {
+    var rawJson = {};
+    rawJson['__data__'] = goog.json.serialize(message);
+    this.channel_.sendMap(rawJson);
+  } else {
+    this.channel_.sendMap(message);
+  }
 };
 
 
