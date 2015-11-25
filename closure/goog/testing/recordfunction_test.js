@@ -169,7 +169,15 @@ function testAssertCallCount() {
   f('Bedazzler');
   f.assertCallCount(1);
 
-  assertThrows(function() {
+  var error = assertThrows(function() {
     f.assertCallCount(11);
   });
+  assertEquals(error.comment, 'Expected 11 call(s), but was 1.');
+
+  var comment = 'This application has requested the Runtime to terminate it ' +
+      'in an unusual way.';
+  var error2 = assertThrows(function() {
+    f.assertCallCount(comment, 12);
+  });
+  assertEquals(error2.comment, 'Expected 12 call(s), but was 1. ' + comment);
 }
