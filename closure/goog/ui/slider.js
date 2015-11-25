@@ -119,7 +119,7 @@ goog.ui.Slider.prototype.createThumbs = function() {
     thumb = this.createThumb_();
     element.appendChild(thumb);
   }
-  this.valueThumb = this.extentThumb = thumb;
+  this.valueThumb = this.extentThumb = /** @type {!HTMLDivElement} */ (thumb);
 };
 
 

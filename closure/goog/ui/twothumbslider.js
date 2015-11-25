@@ -153,7 +153,7 @@ goog.ui.TwoThumbSlider.prototype.createThumbs = function() {
     // Insert highlight before value thumb so that it renders under the thumbs.
     this.getDomHelper().insertSiblingBefore(rangeHighlight, valueThumb);
   }
-  this.valueThumb = valueThumb;
-  this.extentThumb = extentThumb;
-  this.rangeHighlight = rangeHighlight;
+  this.valueThumb = /** @type {!HTMLDivElement} */ (valueThumb);
+  this.extentThumb = /** @type {!HTMLDivElement} */ (extentThumb);
+  this.rangeHighlight = /** @type {!HTMLDivElement} */ (rangeHighlight);
 };
