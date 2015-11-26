@@ -691,7 +691,7 @@ function test_dateTimeConcatenation() {
   assertEquals('Apr 1, 2006, 6:30:00 PM', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.SHORT_DATETIME);
-  assertEquals('4/1/06, 6:30 PM', fmt.format(date, timeZone));
+  assertEquals('4/1/2006, 6:30 PM', fmt.format(date, timeZone));
 }
 
 function testNotUsingGlobalSymbols() {
