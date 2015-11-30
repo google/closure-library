@@ -1373,11 +1373,14 @@ goog.dom.getParentElement = function(element) {
 
 /**
  * Whether a node contains another node.
- * @param {Node} parent The node that should contain the other node.
- * @param {Node} descendant The node to test presence of.
+ * @param {?Node} parent The node that should contain the other node.
+ * @param {?Node} descendant The node to test presence of.
  * @return {boolean} Whether the parent node contains the descendent node.
  */
 goog.dom.contains = function(parent, descendant) {
+  if (!parent || !descendant) {
+    return false;
+  }
   // We use browser specific methods for this if available since it is faster
   // that way.
 
