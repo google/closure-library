@@ -324,25 +324,32 @@ var assertNotThrows = function(a, opt_b) {
  *     in a JsUnitException (usually contains a call to an assert).
  * @param {string=} opt_expectedMessage Failure message expected to be given
  *     with the exception.
+ * @return {!goog.testing.JsUnitException} The error thrown by the function.
+ * @throws {goog.testing.JsUnitException} If the function did not throw a
+ *     JsUnitException.
  */
 var assertThrowsJsUnitException = function(callback, opt_expectedMessage) {
-  var failed = false;
   try {
     goog.testing.asserts.callWithoutLogging(callback);
-  } catch (ex) {
-    if (!ex.isJsUnitException) {
+  } catch (e) {
+    if (!e.isJsUnitException) {
       fail('Expected a JsUnitException');
     }
+
     if (typeof opt_expectedMessage != 'undefined' &&
-        ex.message != opt_expectedMessage) {
+        e.message != opt_expectedMessage) {
       fail('Expected message [' + opt_expectedMessage + '] but got [' +
-          ex.message + ']');
+          e.message + ']');
     }
-    failed = true;
+
+    return e;
   }
-  if (!failed) {
-    fail('Expected a failure: ' + opt_expectedMessage);
+
+  var msg = 'Expected a failure';
+  if (typeof opt_expectedMessage != 'undefined') {
+    msg += ': ' + opt_expectedMessage;
   }
+  throw new goog.testing.JsUnitException(msg);
 };
 
 
