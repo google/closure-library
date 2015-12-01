@@ -1874,9 +1874,14 @@ goog.dom.nativelySupportsFocus_ = function(element) {
  * @private
  */
 goog.dom.hasNonZeroBoundingRect_ = function(element) {
-  var rect = goog.isFunction(element['getBoundingClientRect']) ?
-      element.getBoundingClientRect() :
-      {'height': element.offsetHeight, 'width': element.offsetWidth};
+  var rect;
+  if (!goog.isFunction(element['getBoundingClientRect']) ||
+      // In IE, getBoundingClientRect throws on detached nodes.
+      (goog.userAgent.IE && element.parentElement == null)) {
+    rect = {'height': element.offsetHeight, 'width': element.offsetWidth};
+  } else {
+    rect = element.getBoundingClientRect();
+  }
   return goog.isDefAndNotNull(rect) && rect.height > 0 && rect.width > 0;
 };
 

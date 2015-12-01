@@ -1114,6 +1114,9 @@ function testIsFocusable() {
       goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative1')),
       goog.dom.isFocusable(goog.dom.getElement('tabIndexNegative1')));
 
+  // Make sure IE doesn't throw for detached elements. IE can't measure detached
+  // elements, and calling getBoundingClientRect() will throw Unspecified Error.
+  goog.dom.isFocusable(goog.dom.createDom('button'));
 }
 
 function testGetTextContent() {
