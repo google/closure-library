@@ -156,9 +156,11 @@ function testAssertCallCount() {
   var f = goog.testing.recordFunction(goog.functions.identity);
 
   f.assertCallCount(0);
+  f.assertCallCount('Unexpected failure.', 0);
 
   f('Poodles');
   f.assertCallCount(1);
+  f.assertCallCount('Unexpected failure.', 1);
 
   f('Hopscotch');
   f.assertCallCount(2);

@@ -89,8 +89,8 @@ goog.testing.recordFunction = function(opt_f) {
    */
   recordedFunction.assertCallCount = function(a, opt_b) {
     var actual = calls.length;
-    var expected = opt_b ? opt_b : a;
-    var message = opt_b ? ' ' + a : '';
+    var expected = arguments.length == 1 ? a : opt_b;
+    var message = arguments.length == 1 ? '' : ' ' + a;
     assertEquals(
         'Expected ' + expected + ' call(s), but was ' + actual + '.' + message,
         expected, actual);
