@@ -27,10 +27,6 @@ function assertLinkify(comment, input, expected) {
   assertEquals(
       comment, expected,
       goog.string.linkify.linkifyPlainText(input, {rel: '', target: ''}));
-  assertEquals(
-      comment, expected,
-      goog.string.linkify.linkifyPlainTextSafe(input, {rel: '', target: ''})
-          .getTypedStringValue());
 }
 
 function testContainsNoLink() {

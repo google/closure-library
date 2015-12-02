@@ -19,7 +19,6 @@
 
 goog.provide('goog.string.linkify');
 
-goog.require('goog.html.SafeHtml');
 goog.require('goog.string');
 
 
@@ -34,27 +33,8 @@ goog.require('goog.string');
  *      those default attributes set rel='' and target=''.
  * @return {string} HTML Linkified HTML text. Any text that is not part of a
  *      link will be HTML-escaped.
- * @deprecated Use goog.string.linkify.linkifyPlainTextSafe instead.
  */
 goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
-  return goog.html.SafeHtml.unwrap(
-      goog.string.linkify.linkifyPlainTextSafe(text, opt_attributes));
-};
-
-
-/**
- * Takes a string of plain text and linkifies URLs and email addresses. For a
- * URL (unless opt_attributes is specified), the target of the link will be
- * _blank and it will have a rel=nofollow attribute applied to it so that links
- * created by linkify will not be of interest to search engines.
- * @param {string} text Plain text.
- * @param {Object<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=_blank. To clear
- *      those default attributes set rel='' and target=''.
- * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
- *      link will be HTML-escaped.
- */
-goog.string.linkify.linkifyPlainTextSafe = function(text, opt_attributes) {
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
@@ -63,7 +43,7 @@ goog.string.linkify.linkifyPlainTextSafe = function(text, opt_attributes) {
       text.indexOf('www.') == -1 &&
       text.indexOf('Www.') == -1 &&
       text.indexOf('WWW.') == -1) {
-    return goog.html.SafeHtml.htmlEscape(text);
+    return goog.string.htmlEscape(text);
   }
 
   var attributesMap = opt_attributes || {};
@@ -74,35 +54,37 @@ goog.string.linkify.linkifyPlainTextSafe = function(text, opt_attributes) {
   if (!('target' in attributesMap)) {
     attributesMap['target'] = '_blank';
   }
+  // Creates attributes string from options.
+  var attributesArray = [];
   for (var key in attributesMap) {
-    if (!attributesMap[key]) {
-      // Our API allows '' to omit the attribute, SafeHtml requires null.
-      attributesMap[key] = null;
+    if (attributesMap.hasOwnProperty(key) && attributesMap[key]) {
+      attributesArray.push(
+          goog.string.htmlEscape(key), '="',
+          goog.string.htmlEscape(attributesMap[key]), '" ');
     }
   }
+  var attributes = attributesArray.join('');
 
-  var output = [];
-  // Return value is ignored.
-  text.replace(
+  return text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
-        output.push(before);
+        var output = [goog.string.htmlEscape(before)];
         if (!original) {
-          return '';
+          return output[0];
         }
-        var href = '';
+        output.push('<a ', attributes, 'href="');
         /** @type {string} */
         var linkText;
         /** @type {string} */
         var afterLink;
         if (email) {
-          href = 'mailto:';
+          output.push('mailto:');
           linkText = email;
           afterLink = '';
         } else {
           // This is a full url link.
           if (!protocol) {
-            href = 'http://';
+            output.push('http://');
           }
           var splitEndingPunctuation =
               original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
@@ -118,12 +100,11 @@ goog.string.linkify.linkifyPlainTextSafe = function(text, opt_attributes) {
             afterLink = '';
           }
         }
-        attributesMap['href'] = href + linkText;
-        output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
-        output.push(afterLink);
-        return '';
+        linkText = goog.string.htmlEscape(linkText);
+        afterLink = goog.string.htmlEscape(afterLink);
+        output.push(linkText, '">', linkText, '</a>', afterLink);
+        return output.join('');
       });
-  return goog.html.SafeHtml.concat(output);
 };
 
 
