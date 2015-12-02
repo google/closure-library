@@ -106,17 +106,16 @@ function getSampleStep() {
 
 
 /**
- * @return {goog.testing.ContinuationTestCase.Test} A simple continuation test
- *     with generic setUp, test, and tearDown functions.
+ * @return {goog.testing.ContinuationTestCase.ContinuationTest} A simple
+ *     continuation test with generic setUp, test, and tearDown functions.
  */
 function getSampleTest() {
   var setupStep = new goog.testing.TestCase.Test('setup', function() {});
   var testStep = new goog.testing.TestCase.Test('test', function() {});
   var teardownStep = new goog.testing.TestCase.Test('teardown', function() {});
 
-  return new goog.testing.ContinuationTestCase.Test(setupStep,
-                                                    testStep,
-                                                    teardownStep);
+  return new goog.testing.ContinuationTestCase.ContinuationTest(
+      setupStep, testStep, teardownStep);
 }
 
 
