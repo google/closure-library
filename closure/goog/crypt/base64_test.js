@@ -177,3 +177,25 @@ function testWebSafeEncoding() {
         'foooooo)oooo', true /*websafe*/);
   });
 }
+
+function testDecodeIgnoresSpace() {
+  var spaceTests = [
+    // [encoded, expected decoded]
+    [' \n\t\r', ''],
+    ['Z g =\n=', 'f'],
+    ['Zm 8=', 'fo'],
+    [' Zm 9v', 'foo'],
+    ['Zm9v Yg ==\t ', 'foob'],
+    ['\nZ m9  vYm\n E=', 'fooba'],
+    ['  \nZ \tm9v YmFy  ', 'foobar']
+  ];
+
+  for (var i = 0; i < spaceTests.length; i++) {
+    var thisTest = spaceTests[i];
+    var encoded = thisTest[0];
+    var expected = goog.crypt.stringToByteArray(thisTest[1]);
+
+    assertDecodeToByteArrayEquals(expected, encoded);
+    assertDecodeToUint8ArrayEquals(expected, encoded);
+  }
+}

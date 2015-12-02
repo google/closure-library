@@ -24,6 +24,7 @@ goog.provide('goog.crypt.base64');
 
 goog.require('goog.asserts');
 goog.require('goog.crypt');
+goog.require('goog.string');
 goog.require('goog.userAgent');
 
 // Static lookup maps, lazily populated by init_()
@@ -263,24 +264,42 @@ goog.crypt.base64.decodeStringInternal_ = function(
   var charToByteMap = opt_webSafe ? goog.crypt.base64.charToByteMapWebSafe_ :
                                     goog.crypt.base64.charToByteMap_;
 
-  for (var i = 0; i < input.length; ) {
-    var byte1 = charToByteMap[input.charAt(i++)];
+  var nextCharIndex = 0;
+  /** @return {?number} The next 6-bit value, or null for end-of-input. */
+  function getByte() {
+    while (nextCharIndex < input.length) {
+      var ch = input.charAt(nextCharIndex++);
+      var b = charToByteMap[ch];
+      if (b != null) {
+        return b;  // Common case: decoded the char.
+      }
+      if (!goog.string.isEmptyOrWhitespace(ch)) {
+        throw Error('Unknown base64 encoding at char: ' + ch);
+      }
+      // We encountered whitespace: loop around to the next input char.
+    }
+    return null;  // No more input remaining.
+  }
 
-    var haveByte2 = i < input.length;
-    var byte2 = haveByte2 ? charToByteMap[input.charAt(i)] : 0;
-    ++i;
+  while (true) {
+    var byte1 = getByte();
+    var byte2 = getByte();
+    var byte3 = getByte();
+    var byte4 = getByte();
 
-    var haveByte3 = i < input.length;
-    var byte3 = haveByte3 ? charToByteMap[input.charAt(i)] : 64;
-    ++i;
-
-    var haveByte4 = i < input.length;
-    var byte4 = haveByte4 ? charToByteMap[input.charAt(i)] : 64;
-    ++i;
-
-    if (byte1 == null || byte2 == null ||
-        byte3 == null || byte4 == null) {
-      throw Error();
+    // The common case is that all four bytes are present, so if we have byte4
+    // we can skip over the truncated input special case handling.
+    if (byte4 == null) {
+      if (byte1 == null) {
+        return;  // Terminal case: no input left to decode.
+      }
+      // Here we know an intermediate number of bytes are missing, so apply the
+      // inferred padding rules per the public API documentation. i.e: 1 byte
+      // missing should yield 2 bytes of output, but 2 or 3 missing bytes yield
+      // a single byte of output. (Recall that 64 corresponds the padding char).
+      byte4 = 64;
+      byte3 = byte3 != null ? byte3 : 64;
+      byte2 = byte2 != null ? byte2 : 0;
     }
 
     var outByte1 = (byte1 << 2) | (byte2 >> 4);
