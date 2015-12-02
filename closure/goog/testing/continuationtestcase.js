@@ -97,6 +97,8 @@ goog.require('goog.testing.asserts');
  * @param {string=} opt_name Optional name for the test case.
  * @constructor
  * @extends {goog.testing.TestCase}
+ * @deprecated ContinuationTestCase is deprecated. Prefer returning Promises
+ *     for tests that assert Asynchronous behavior.
  * @final
  */
 goog.testing.ContinuationTestCase = function(opt_name) {
