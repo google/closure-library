@@ -950,7 +950,7 @@ goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json',
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.structs.Map', 'goog.testing.asserts'], false);
 goog.addDependency('string/const.js', ['goog.string.Const'], ['goog.asserts', 'goog.string.TypedString'], false);
 goog.addDependency('string/const_test.js', ['goog.string.constTest'], ['goog.string.Const', 'goog.testing.jsunit'], false);
-goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.string'], false);
+goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.html.SafeHtml', 'goog.string'], false);
 goog.addDependency('string/linkify_test.js', ['goog.string.linkifyTest'], ['goog.dom.TagName', 'goog.string', 'goog.string.linkify', 'goog.testing.dom', 'goog.testing.jsunit'], false);
 goog.addDependency('string/newlines.js', ['goog.string.newlines', 'goog.string.newlines.Line'], ['goog.array'], false);
 goog.addDependency('string/newlines_test.js', ['goog.string.newlinesTest'], ['goog.string.newlines', 'goog.testing.jsunit'], false);
