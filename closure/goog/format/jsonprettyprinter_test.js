@@ -107,3 +107,13 @@ function testHtmlDelimiters() {
       'class="goog-jsonprettyprinter-propertyvalue-unknown">""</span>\n}',
       htmlFormatter.format({'a': 1, 'b': '2', 'c': function() {}}));
 }
+
+
+function testSafeHtmlDelimiters() {
+  var htmlFormatter = new goog.format.JsonPrettyPrinter(
+      new goog.format.JsonPrettyPrinter.SafeHtmlDelimiters());
+  assertEquals('{\n  <span class="goog-jsonprettyprinter-propertyname">&quot;' +
+      'a&lt;b&quot;</span>: <span class="goog-jsonprettyprinter-propertyvalue' +
+      '-string">&quot;&gt;&quot;</span>\n}',
+      htmlFormatter.formatSafeHtml({'a<b': '>'}).getTypedStringValue());
+}
