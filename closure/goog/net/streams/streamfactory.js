@@ -34,6 +34,10 @@ goog.require('goog.net.streams.XhrStreamReader');
  * otherwise. After send() is called, the lifecycle events are expected to
  * be handled directly via the stream API.
  *
+ * If a binary response (e.g. protobuf) is expected, the caller should configure
+ * the xhrIo by setResponseType(goog.net.XhrIo.ResponseType.ARRAY_BUFFER)
+ * before xhrIo.send() is invoked.
+ *
  * States specific to the xhr may be accessed before or after send() is called
  * as long as those operations are safe, e.g. configuring headers and options.
  *

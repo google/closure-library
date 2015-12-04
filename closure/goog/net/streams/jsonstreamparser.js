@@ -183,7 +183,7 @@ Parser.prototype.getErrorMessage = function() {
 
 
 /**
- * @param {string} input The current input string
+ * @param {string|!ArrayBuffer} input The current input string (always)
  * @param {number} pos The position in the current input that triggers the error
  * @throws {Error} Throws an error message indicating where
  *     the stream is broken.
@@ -197,10 +197,12 @@ Parser.prototype.error_ = function(input, pos) {
 
 
 /**
- * @override
  * @throws {Error} Throws an error message if the input is invalid.
+ * @override
  */
 Parser.prototype.parse = function(input) {
+  goog.asserts.assertString(input);
+
   // captures
   var parser = this;
   var stack = parser.stack_;
