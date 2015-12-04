@@ -182,17 +182,21 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
     try {
       return fn.apply(this, arguments);
     } catch (e) {
+      // Don't re-report errors that have already been handled by this code.
+      var MESSAGE_PREFIX =
+          goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
+      if ((typeof e === 'object' && e.message.indexOf(MESSAGE_PREFIX) == 0) ||
+          (typeof e === 'string' && e.indexOf(MESSAGE_PREFIX) == 0)) {
+        return;
+      }
       that.errorHandlerFn_(e);
       if (!that.wrapErrors_) {
         // Add the prefix to the existing message.
         if (that.prefixErrorMessages_) {
           if (typeof e === 'object') {
-            e.message =
-                goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
-                e.message;
+            e.message = MESSAGE_PREFIX + e.message;
           } else {
-            e = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
-                e;
+            e = MESSAGE_PREFIX + e;
           }
         }
         if (goog.DEBUG) {

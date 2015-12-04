@@ -187,7 +187,7 @@ function testStackPreserved() {
     var e = Error();
     hasStacks = !!e.stack;
     throw e;
-  };
+  }
   var wrappedFn = errorHandler.wrap(specialFunctionName);
   try {
     wrappedFn();
@@ -256,6 +256,22 @@ function testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
   assertEquals(
       goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
           'String', e);
+}
+
+function testProtectedFunction_infiniteLoop() {
+  var numErrors = 0;
+  var errorHandler = new goog.debug.ErrorHandler(
+      function(ex) {
+        numErrors++;
+      });
+  errorHandler.protectWindowSetTimeout();
+
+  fakeWin.setTimeout(function() {
+    fakeWin.setTimeout(badTimer, 3);
+  }, 3);
+  assertEquals(
+      'Error handler should only have been executed once.',
+      1, numErrors);
 }
 
 function assertSetTimeoutError(caught) {
