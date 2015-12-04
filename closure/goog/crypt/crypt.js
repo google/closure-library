@@ -173,8 +173,8 @@ goog.crypt.utf8ByteArrayToString = function(bytes) {
 
 /**
  * XOR two byte arrays.
- * @param {!ArrayBufferView|!Array<number>} bytes1 Byte array 1.
- * @param {!ArrayBufferView|!Array<number>} bytes2 Byte array 2.
+ * @param {!Uint8Array|!Int8Array|!Array<number>} bytes1 Byte array 1.
+ * @param {!Uint8Array|!Int8Array|!Array<number>} bytes2 Byte array 2.
  * @return {!Array<number>} Resulting XOR of the two byte arrays.
  */
 goog.crypt.xorByteArray = function(bytes1, bytes2) {
