@@ -291,10 +291,17 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ =
     // IE doesn't support .call for setInterval/setTimeout, but it
     // also doesn't care what "this" is, so we can just call the
     // original function directly
-    if (originalFn.call) {
-      return originalFn.call(this, fn, time);
+    if (originalFn.apply) {
+      return originalFn.apply(this, arguments);
     } else {
-      return originalFn(fn, time);
+      var callback = fn;
+      if (arguments.length > 2) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        callback = function() {
+          fn.apply(this, args);
+        };
+      }
+      return originalFn(callback, time);
     }
   };
   win[fnName][this.getFunctionIndex_(false)] = originalFn;

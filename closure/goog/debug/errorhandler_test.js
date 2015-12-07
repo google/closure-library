@@ -55,7 +55,7 @@ function setUp() {
     if (goog.isString(fn)) {
       eval(fn);
     } else {
-      fn();
+      fn.apply(this, Array.prototype.slice.call(arguments, 2));
     }
   };
 
@@ -65,7 +65,7 @@ function setUp() {
     if (goog.isString(fn)) {
       eval(fn);
     } else {
-      fn();
+      fn.apply(this, Array.prototype.slice.call(arguments, 2));
     }
   };
 
@@ -103,6 +103,15 @@ function testWrapSetTimeout() {
   assertSetTimeoutError(caught);
 }
 
+function testWrapSetTimeoutWithoutException() {
+  errorHandler.protectWindowSetTimeout();
+
+  fakeWin.setTimeout(function(x, y) {
+    assertEquals('test', x);
+    assertEquals(7, y);
+  }, 3, 'test', 7);
+}
+
 function testWrapSetTimeoutWithString() {
   errorHandler.protectWindowSetTimeout();
 
@@ -127,6 +136,15 @@ function testWrapSetInterval() {
     caught = ex;
   }
   assertSetIntervalError(caught);
+}
+
+function testWrapSetIntervalWithoutException() {
+  errorHandler.protectWindowSetInterval();
+
+  fakeWin.setInterval(function(x, y) {
+    assertEquals('test', x);
+    assertEquals(7, y);
+  }, 3, 'test', 7);
 }
 
 function testWrapSetIntervalWithString() {
