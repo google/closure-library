@@ -16,6 +16,7 @@ goog.provide('goog.string.linkifyTest');
 goog.setTestOnly('goog.string.linkifyTest');
 
 goog.require('goog.dom.TagName');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.string');
 goog.require('goog.string.linkify');
 goog.require('goog.testing.dom');
@@ -27,6 +28,10 @@ function assertLinkify(comment, input, expected) {
   assertEquals(
       comment, expected,
       goog.string.linkify.linkifyPlainText(input, {rel: '', target: ''}));
+  assertEquals(
+      comment, expected,
+      goog.html.SafeHtml.unwrap(goog.string.linkify.linkifyPlainTextAsHtml(
+          input, {rel: '', target: ''})));
 }
 
 function testContainsNoLink() {
