@@ -46,18 +46,34 @@ goog.editor.Plugin = function() {
    * @private
    */
   this.enabled_ = this.activeOnUneditableFields();
+
+  /**
+   * The field object this plugin is attached to.
+   * @type {goog.editor.Field}
+   * @protected
+   * @deprecated Use goog.editor.Plugin.getFieldObject and
+   *     goog.editor.Plugin.setFieldObject.
+   */
+  this.fieldObject = null;
+
+  /**
+   * Indicates if this plugin should be automatically disposed when the
+   * registered field is disposed. This should be changed to false for
+   * plugins used as multi-field plugins.
+   * @type {boolean}
+   * @private
+   */
+  this.autoDispose_ = true;
+
+  /**
+   * The logger for this plugin.
+   * @type {?goog.log.Logger}
+   * @protected
+   */
+  this.logger = goog.log.getLogger('goog.editor.Plugin');
+
 };
 goog.inherits(goog.editor.Plugin, goog.events.EventTarget);
-
-
-/**
- * The field object this plugin is attached to.
- * @type {goog.editor.Field}
- * @protected
- * @deprecated Use goog.editor.Plugin.getFieldObject and
- *     goog.editor.Plugin.setFieldObject.
- */
-goog.editor.Plugin.prototype.fieldObject = null;
 
 
 /**
@@ -67,25 +83,6 @@ goog.editor.Plugin.prototype.fieldObject = null;
 goog.editor.Plugin.prototype.getFieldDomHelper = function() {
   return this.getFieldObject() && this.getFieldObject().getEditableDomHelper();
 };
-
-
-/**
- * Indicates if this plugin should be automatically disposed when the
- * registered field is disposed. This should be changed to false for
- * plugins used as multi-field plugins.
- * @type {boolean}
- * @private
- */
-goog.editor.Plugin.prototype.autoDispose_ = true;
-
-
-/**
- * The logger for this plugin.
- * @type {goog.log.Logger}
- * @protected
- */
-goog.editor.Plugin.prototype.logger =
-    goog.log.getLogger('goog.editor.Plugin');
 
 
 /**
