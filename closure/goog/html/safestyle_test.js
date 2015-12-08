@@ -44,7 +44,7 @@ function testUnwrap() {
   var evil = {};
   evil.safeStyleValueWithSecurityContract__googHtmlSecurityPrivate_ =
       'width: expression(evil);';
-  evil.SAFE_STYLE_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeStyle.unwrap(evil);
