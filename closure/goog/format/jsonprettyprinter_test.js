@@ -96,19 +96,6 @@ function testObjectMultipleProperties() {
 }
 
 
-function testHtmlDelimiters() {
-  var htmlFormatter = new goog.format.JsonPrettyPrinter(
-      new goog.format.JsonPrettyPrinter.HtmlDelimiters());
-  assertEquals('{\n  <span class="goog-jsonprettyprinter-propertyname">"a"</s' +
-      'pan>: <span class="goog-jsonprettyprinter-propertyvalue-number">1</spa' +
-      'n>,\n  <span class="goog-jsonprettyprinter-propertyname">"b"</span>: <' +
-      'span class="goog-jsonprettyprinter-propertyvalue-string">"2"</span>,\n' +
-      '  <span class="goog-jsonprettyprinter-propertyname">"c"</span>: <span ' +
-      'class="goog-jsonprettyprinter-propertyvalue-unknown">""</span>\n}',
-      htmlFormatter.format({'a': 1, 'b': '2', 'c': function() {}}));
-}
-
-
 function testSafeHtmlDelimiters() {
   var htmlFormatter = new goog.format.JsonPrettyPrinter(
       new goog.format.JsonPrettyPrinter.SafeHtmlDelimiters());
