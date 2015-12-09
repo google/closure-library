@@ -542,14 +542,8 @@ goog.ui.Tooltip.prototype.onBeforeShow = function() {
 };
 
 
-/**
- * Called after the popup is hidden.
- *
- * @protected
- * @suppress {underscore|visibility}
- * @override
- */
-goog.ui.Tooltip.prototype.onHide_ = function() {
+/** @override */
+goog.ui.Tooltip.prototype.onHide = function() {
   goog.array.remove(goog.ui.Tooltip.activeInstances_, this);
 
   // Hide all open tooltips triggered by an element inside this tooltip.
@@ -578,7 +572,7 @@ goog.ui.Tooltip.prototype.onHide_ = function() {
     this.seenInteraction_ = false;
   }
 
-  goog.ui.PopupBase.prototype.onHide_.call(this);
+  goog.ui.PopupBase.prototype.onHide.call(this);
 };
 
 

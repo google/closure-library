@@ -173,11 +173,10 @@ goog.ui.AdvancedTooltip.prototype.getCursorTrackingHideDelayMs = function() {
 /**
  * Called after the popup is shown.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.AdvancedTooltip.prototype.onShow_ = function() {
-  goog.ui.AdvancedTooltip.superClass_.onShow_.call(this);
+goog.ui.AdvancedTooltip.prototype.onShow = function() {
+  goog.ui.AdvancedTooltip.superClass_.onShow.call(this);
 
   this.boundingBox_ = goog.style.getBounds(this.getElement()).toBox();
   if (this.anchor) {
@@ -194,10 +193,9 @@ goog.ui.AdvancedTooltip.prototype.onShow_ = function() {
 /**
  * Called after the popup is hidden.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.AdvancedTooltip.prototype.onHide_ = function() {
+goog.ui.AdvancedTooltip.prototype.onHide = function() {
   goog.events.unlisten(this.getDomHelper().getDocument(),
                        goog.events.EventType.MOUSEMOVE,
                        this.handleMouseMove, false, this);
@@ -206,7 +204,7 @@ goog.ui.AdvancedTooltip.prototype.onHide_ = function() {
   this.anchorBox_ = null;
   this.tracking_ = false;
 
-  goog.ui.AdvancedTooltip.superClass_.onHide_.call(this);
+  goog.ui.AdvancedTooltip.superClass_.onHide.call(this);
 };
 
 

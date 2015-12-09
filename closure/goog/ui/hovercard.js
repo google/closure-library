@@ -344,11 +344,10 @@ goog.ui.HoverCard.prototype.getAnchorElement = function() {
 /**
  * Make sure we detach from temp anchor when we are done displaying hovercard.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.HoverCard.prototype.onHide_ = function() {
-  goog.ui.HoverCard.superClass_.onHide_.call(this);
+goog.ui.HoverCard.prototype.onHide = function() {
+  goog.ui.HoverCard.superClass_.onHide.call(this);
   this.setCurrentAnchor_(null);
 };
 

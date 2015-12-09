@@ -98,7 +98,7 @@ function setUp() {
 function tearDown() {
   // tooltip needs to be hidden as well as disposed of so that it doesn't
   // leave global state hanging around to trip up other tests.
-  tt.onHide_();
+  tt.onHide();
   tt.dispose();
   clock.uninstall();
   handler.removeAll();
@@ -334,7 +334,7 @@ function testNested() {
   assertEquals('visible', tt.getElement().style.visibility);
   assertEquals('hidden', ttNested.getElement().style.visibility);
 
-  ttNested.onHide_();
+  ttNested.onHide();
   ttNested.dispose();
 }
 

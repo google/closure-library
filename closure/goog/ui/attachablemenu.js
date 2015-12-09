@@ -209,11 +209,10 @@ goog.ui.AttachableMenu.prototype.showPopupElement = function() {
 /**
  * Called after the menu is shown.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.AttachableMenu.prototype.onShow_ = function() {
-  goog.ui.AttachableMenu.superClass_.onShow_.call(this);
+goog.ui.AttachableMenu.prototype.onShow = function() {
+  goog.ui.AttachableMenu.superClass_.onShow.call(this);
 
   // In IE, focusing the menu causes weird scrolling to happen. Focusing the
   // first child makes the scroll behavior better, and the key handling still
