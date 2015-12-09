@@ -24,14 +24,15 @@ goog.require('goog.testing.jsunit');
 
 var div = document.createElement(goog.dom.TagName.DIV);
 
-function assertLinkify(comment, input, expected) {
+function assertLinkify(comment, input, expected, opt_preserveNewlines) {
   assertEquals(
       comment, expected,
-      goog.string.linkify.linkifyPlainText(input, {rel: '', target: ''}));
+      goog.string.linkify.linkifyPlainText(
+          input, {rel: '', target: ''}, opt_preserveNewlines));
   assertEquals(
       comment, expected,
       goog.html.SafeHtml.unwrap(goog.string.linkify.linkifyPlainTextAsHtml(
-          input, {rel: '', target: ''})));
+          input, {rel: '', target: ''}, opt_preserveNewlines)));
 }
 
 function testContainsNoLink() {
@@ -532,4 +533,13 @@ function testIpv6Url() {
       'http://[::FFFF:129.144.52.38]:80/index.html',
       '<a href="http://[::FFFF:129.144.52.38]:80/index.html">' +
       'http://[::FFFF:129.144.52.38]:80/index.html<\/a>');
+}
+
+function testPreserveNewlines() {
+  assertLinkify(
+      'Line wrapping',
+      'Example:\nhttp://www.google.com/',
+      'Example:<br>' +
+          '<a href="http://www.google.com/">http://www.google.com/<\/a>',
+      /* preserveNewlines */ true);
 }

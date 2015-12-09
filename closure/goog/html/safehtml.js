@@ -320,9 +320,8 @@ goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
 /**
  * @typedef {string|number|goog.string.TypedString|
  *     goog.html.SafeStyle.PropertyMap}
- * @private
  */
-goog.html.SafeHtml.AttributeValue_;
+goog.html.SafeHtml.AttributeValue;
 
 
 /**
@@ -363,10 +362,10 @@ goog.html.SafeHtml.AttributeValue_;
  *
  * @param {string} tagName The name of the tag. Only tag names consisting of
  *     [a-zA-Z0-9-] are allowed. Tag names documented above are disallowed.
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Mapping from attribute names to their values. Only
- *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
- *     undefined causes the attribute to be omitted.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Mapping from attribute names to their values. Only attribute names
+ *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
+ *     the attribute to be omitted.
  * @param {!goog.html.SafeHtml.TextOrHtml_|
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to
  *     HTML-escape and put inside the tag. This must be empty for void tags
@@ -401,10 +400,10 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  *     attribute. If null or undefined src will not be set.
  * @param {goog.html.SafeHtml=} opt_srcdoc The value of the srcdoc attribute.
  *     If null or undefined srcdoc will not be set.
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Mapping from attribute names to their values. Only
- *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
- *     undefined causes the attribute to be omitted.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Mapping from attribute names to their values. Only attribute names
+ *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
+ *     the attribute to be omitted.
  * @param {!goog.html.SafeHtml.TextOrHtml_|
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to
  *     HTML-escape and put inside the tag. Array elements are concatenated.
@@ -431,10 +430,10 @@ goog.html.SafeHtml.createIframe = function(
  * @param {!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>}
  *     styleSheet Content to put inside the tag. Array elements are
  *     concatenated.
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Mapping from attribute names to their values. Only
- *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
- *     undefined causes the attribute to be omitted.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Mapping from attribute names to their values. Only attribute names
+ *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
+ *     the attribute to be omitted.
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
  * @throws {Error} If invalid attribute name or attribute value is provided. If
  *     opt_attributes contains the type attribute.
@@ -507,7 +506,7 @@ goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
 /**
  * @param {string} tagName The tag name.
  * @param {string} name The attribute name.
- * @param {!goog.html.SafeHtml.AttributeValue_} value The attribute value.
+ * @param {!goog.html.SafeHtml.AttributeValue} value The attribute value.
  * @return {string} A "name=value" string.
  * @throws {Error} If attribute value is unsafe for the given tag and attribute.
  * @private
@@ -554,7 +553,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
 
 /**
  * Gets value allowed in "style" attribute.
- * @param {goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or a
+ * @param {!goog.html.SafeHtml.AttributeValue} value It could be SafeStyle or a
  *     map which will be passed to goog.html.SafeStyle.create.
  * @return {string} Unwrapped value.
  * @throws {Error} If string value is given.
@@ -578,7 +577,7 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
  * optional attributes and optional content.
  * @param {!goog.i18n.bidi.Dir} dir Directionality.
  * @param {string} tagName
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  * @param {!goog.html.SafeHtml.TextOrHtml_|
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
@@ -688,7 +687,7 @@ goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
  * Like create() but does not restrict which tags can be constructed.
  *
  * @param {string} tagName Tag name. Set or validated by caller.
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  * @param {(!goog.html.SafeHtml.TextOrHtml_|
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
  * @return {!goog.html.SafeHtml}
@@ -751,9 +750,9 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse =
 /**
  * @param {!Object<string, string>} fixedAttributes
  * @param {!Object<string, string>} defaultAttributes
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Optional attributes passed to create*().
- * @return {!Object<string, goog.html.SafeHtml.AttributeValue_>}
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Optional attributes passed to create*().
+ * @return {!Object<string, ?goog.html.SafeHtml.AttributeValue>}
  * @throws {Error} If opt_attributes contains an attribute with the same name
  *     as an attribute in fixedAttributes.
  * @package

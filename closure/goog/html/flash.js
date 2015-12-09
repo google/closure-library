@@ -148,8 +148,8 @@ goog.html.flash.combineParams = function(defaultParams, opt_params) {
 /**
  * Checks that keys are not present as keys in maps.
  * @param {!Array<string>} keys Keys that must not be present, lower-case.
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Optional attributes passed to create*().
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Optional attributes passed to create*().
  * @param {!Object<string, string>=}  opt_params Optional params passed to
  *     createObject*().
  * @throws {Error} If any of keys exist as a key, ignoring case, in

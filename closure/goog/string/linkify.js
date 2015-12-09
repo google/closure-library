@@ -30,16 +30,21 @@ goog.require('goog.string');
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {Object<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=_blank. To clear
- *      those default attributes set rel='' and target=''.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Attributes to add to all links created. Default are rel=nofollow and
+ *     target=_blank. To clear those default attributes set rel='' and
+ *     target=''.
+ * @param {boolean=} opt_preserveNewlines Whether to preserve newlines with
+ *     &lt;br&gt;.
  * @return {string} HTML Linkified HTML text. Any text that is not part of a
  *      link will be HTML-escaped.
  * @deprecated Use goog.string.linkify.linkifyPlainTextAsHtml instead.
  */
-goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
+goog.string.linkify.linkifyPlainText =
+    function(text, opt_attributes, opt_preserveNewlines) {
   return goog.html.SafeHtml.unwrap(
-      goog.string.linkify.linkifyPlainTextAsHtml(text, opt_attributes));
+      goog.string.linkify.linkifyPlainTextAsHtml(
+          text, opt_attributes, opt_preserveNewlines));
 };
 
 
@@ -49,13 +54,17 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {Object<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=_blank. To clear
- *      those default attributes set rel='' and target=''.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Attributes to add to all links created. Default are rel=nofollow and
+ *     target=_blank. To clear those default attributes set rel='' and
+ *     target=''.
+ * @param {boolean=} opt_preserveNewlines Whether to preserve newlines with
+ *     &lt;br&gt;.
  * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
  *      link will be HTML-escaped.
  */
-goog.string.linkify.linkifyPlainTextAsHtml = function(text, opt_attributes) {
+goog.string.linkify.linkifyPlainTextAsHtml =
+    function(text, opt_attributes, opt_preserveNewlines) {
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
@@ -87,7 +96,9 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(text, opt_attributes) {
   text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
-        output.push(before);
+        output.push(opt_preserveNewlines ?
+            goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
+            before);
         if (!original) {
           return '';
         }
@@ -123,7 +134,9 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(text, opt_attributes) {
         // of the conformance config. TODO(jakubvrana): Remove this hack.
         goog.object.set(attributesMap, 'href', href + linkText);
         output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
-        output.push(afterLink);
+        output.push(opt_preserveNewlines ?
+            goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
+            afterLink);
         return '';
       });
   return goog.html.SafeHtml.concat(output);
