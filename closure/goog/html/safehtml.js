@@ -31,6 +31,7 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Const');
@@ -308,6 +309,7 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
  * their content.
  * @private @const {!Object<string,boolean>}
  */
+// TODO(user): ban goog.dom.TagName.META, once users have been moved.
 goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
     goog.dom.TagName.APPLET, goog.dom.TagName.BASE, goog.dom.TagName.EMBED,
     goog.dom.TagName.IFRAME, goog.dom.TagName.LINK, goog.dom.TagName.MATH,
@@ -454,6 +456,51 @@ goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
           content, goog.i18n.bidi.Dir.NEUTRAL);
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'style', attributes, htmlContent);
+};
+
+
+/**
+ * Creates a SafeHtml representing a meta refresh tag.
+ * @param {!goog.html.SafeUrl|string} url Where to redirect. If a string is
+ *     passed, it will be sanitized with SafeUrl.sanitize().
+ * @param {number=} opt_secs Number of seconds until the page should be
+ *     reloaded. Will be set to 0 if unspecified.
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ */
+goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
+
+  // Note that sanitize is a no-op on SafeUrl.
+  var unwrappedUrl = goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url));
+
+  if (goog.labs.userAgent.browser.isIE() ||
+      goog.labs.userAgent.browser.isEdge()) {
+    // IE/EDGE can't parse the content attribute if the url contains a
+    // semicolon. We can fix this by adding quotes around the url, but then we
+    // can't parse quotes in the URL correctly. Also, it seems that IE/EDGE
+    // did not unescape semicolons in these URLs at some point in the past. We
+    // take a best-effort approach.
+    //
+    // If the URL has semicolons (which may happen in some cases, see
+    // http://www.w3.org/TR/1999/REC-html401-19991224/appendix/notes.html#h-B.2
+    // for instance), wrap it in single quotes to protect the semicolons.
+    // If the URL has semicolons and single quotes, url-encode the single quotes
+    // as well.
+    //
+    // This is imperfect. Notice that both ' and ; are reserved characters in
+    // URIs, so this could do the wrong thing, but at least it will do the wrong
+    // thing in only rare cases.
+    if (goog.string.contains(unwrappedUrl, ';')) {
+      unwrappedUrl = "'" + unwrappedUrl.replace(/'/g, '%27') + "'";
+    }
+  }
+  var attributes = {
+    'http-equiv': 'refresh',
+    'content': (opt_secs || 0) + '; url=' + unwrappedUrl
+  };
+
+  // This function will handle the HTML escaping for attributes.
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      'meta', attributes);
 };
 
 

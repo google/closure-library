@@ -285,6 +285,46 @@ function testSafeHtmlCreateIframe() {
       goog.html.SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
 }
 
+function testSafeHtmlCreateMeta() {
+  var url = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('https://google.com/trusted<'));
+
+  // SafeUrl with no timeout gets properly escaped.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="0; url=https://google.com/trusted&lt;">',
+      goog.html.SafeHtml.createMetaRefresh(url));
+
+  // SafeUrl with 0 timeout also gets properly escaped.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="0; url=https://google.com/trusted&lt;">',
+      goog.html.SafeHtml.createMetaRefresh(url, 0));
+
+  // Positive timeouts are supported.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="1337; url=https://google.com/trusted&lt;">',
+      goog.html.SafeHtml.createMetaRefresh(url, 1337));
+
+  // Negative timeouts are also kept, though they're not correct HTML.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="-1337; url=https://google.com/trusted&lt;">',
+      goog.html.SafeHtml.createMetaRefresh(url, -1337));
+
+  // String-based URLs work out of the box.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="0; url=https://google.com/trusted&lt;">',
+      goog.html.SafeHtml.createMetaRefresh('https://google.com/trusted<'));
+
+  // Sanitization happens.
+  assertSameHtml(
+      '<meta http-equiv="refresh" ' +
+          'content="0; url=about:invalid#zClosurez">',
+      goog.html.SafeHtml.createMetaRefresh('javascript:alert(1)'));
+}
 
 function testSafeHtmlCreateStyle() {
   var styleSheet = goog.html.SafeStyleSheet.fromConstant(
