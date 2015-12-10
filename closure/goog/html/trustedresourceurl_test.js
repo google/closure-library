@@ -20,6 +20,7 @@ goog.provide('goog.html.trustedResourceUrlTest');
 
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
@@ -47,14 +48,21 @@ function testTrustedResourceUrl() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName =
+      'privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_';
+  var markerFieldName =
+      'TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(
+      goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.from('')));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.trustedResourceUrlValueWithSecurityContract_googHtmlSecurityPrivate_ =
-      '<script>evil()</script';
-  evil.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = 'http://example.com/evil.js';
+  evil[markerFieldName] = {};
 
   var exception = assertThrows(function() {
     goog.html.TrustedResourceUrl.unwrap(evil);
   });
-  assertTrue(exception.message.indexOf(
-      'expected object of type TrustedResourceUrl') > 0);
+  assertContains(
+      'expected object of type TrustedResourceUrl', exception.message);
 }

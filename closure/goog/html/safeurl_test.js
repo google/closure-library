@@ -20,12 +20,12 @@ goog.provide('goog.html.safeUrlTest');
 
 goog.require('goog.html.SafeUrl');
 goog.require('goog.i18n.bidi.Dir');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.html.safeUrlTest');
-
 
 
 function testSafeUrl() {
@@ -154,15 +154,20 @@ function assertDataUrlIsSafe(url, isSafe) {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName =
+      'privateDoNotAccessOrElseSafeHtmlWrappedValue_';
+  var markerFieldName = 'SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(goog.html.SafeUrl.sanitize(''));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.safeUrlValueWithSecurityContract_googHtmlSecurityPrivate_ =
-      '<script>evil()</script';
-  evil.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = 'javascript:evil()';
+  evil[markerFieldName] = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeUrl.unwrap(evil);
   });
-  assertTrue(exception.message.indexOf('expected object of type SafeUrl') > 0);
+  assertContains('expected object of type SafeUrl', exception.message);
 }
 
 

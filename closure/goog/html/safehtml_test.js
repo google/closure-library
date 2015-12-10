@@ -25,11 +25,11 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
 goog.require('goog.i18n.bidi.Dir');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.html.safeHtmlTest');
-
 
 
 function testSafeHtml() {
@@ -59,15 +59,19 @@ function testSafeHtml() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName = 'privateDoNotAccessOrElseSafeHtmlWrappedValue_';
+  var markerFieldName = 'SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(goog.html.SafeHtml.htmlEscape(''));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.safeHtmlValueWithSecurityContract__googHtmlSecurityPrivate_ =
-      '<script>evil()</script';
-  evil.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = '<script>evil()</script';
+  evil[markerFieldName] = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeHtml.unwrap(evil);
   });
-  assertTrue(exception.message.indexOf('expected object of type SafeHtml') > 0);
+  assertContains('expected object of type SafeHtml', exception.message);
 }
 
 
