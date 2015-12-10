@@ -22,6 +22,12 @@ goog.require('goog.testing.jsunit');
 
 var fpsDisplay;
 
+function shouldRunTests() {
+  // Disable tests when being run as a part of open-source repo as the test
+  // mysteriously times out way before 5s. See http://b/26132213.
+  return !(/closure\/goog\/ui/.test(location.pathname));
+}
+
 function setUpPage() {
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000; // 5s
 }
