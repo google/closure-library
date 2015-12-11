@@ -124,7 +124,11 @@ function testHexToRgbStyle() {
 function testRgbToHex() {
   assertEquals(goog.color.names.red, goog.color.rgbToHex(255, 0, 0));
   assertEquals('#af13ff', goog.color.rgbToHex(175, 19, 255));
-  var badRgb = [[-1, -1, -1], [256, 0, 0], ['a', 'b', 'c'], [undefined, 5, 5]];
+  var badRgb = [[-1, -1, -1],
+                [256, 0, 0],
+                ['a', 'b', 'c'],
+                [undefined, 5, 5],
+                [1.2, 3, 4]];
   for (var i = 0; i < badRgb.length; ++i) {
     var e = assertThrows(goog.partial(goog.color.rgbArrayToHex, badRgb[i]));
     assertContains('is not a valid RGB color', e.message);
@@ -653,7 +657,7 @@ function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
 /**
  * Checks equivalence between two colors' respective values.  Accepts +- delta
  * for each pair of values
- * @param {string} Str
+ * @param {string} str
  * @param {Array<number>} expected
  * @param {Array<number>} actual
  * @param {number} delta Margin of error for each element in color array

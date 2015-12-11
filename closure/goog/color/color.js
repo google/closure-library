@@ -181,9 +181,7 @@ goog.color.rgbToHex = function(r, g, b) {
   r = Number(r);
   g = Number(g);
   b = Number(b);
-  if (isNaN(r) || r < 0 || r > 255 ||
-      isNaN(g) || g < 0 || g > 255 ||
-      isNaN(b) || b < 0 || b > 255) {
+  if (r != (r & 255) || g != (g & 255) || b != (b & 255)) {
     throw Error('"(' + r + ',' + g + ',' + b + '") is not a valid RGB color');
   }
   var hexR = goog.color.prependZeroIfNecessaryHelper(r.toString(16));
