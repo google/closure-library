@@ -98,8 +98,7 @@ function testIsSupported() {
 
 
 function testIs3dSupported() {
-  if (!goog.userAgent.product.isVersion(10) ||
-      (goog.userAgent.IE && !goog.userAgent.product.isVersion(10))) {
+  if (goog.userAgent.IE && !goog.userAgent.product.isVersion(10)) {
     assertFalse(goog.style.transform.is3dSupported());
   } else {
     assertTrue(goog.style.transform.is3dSupported());
