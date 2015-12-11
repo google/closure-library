@@ -18,6 +18,7 @@ goog.setTestOnly('goog.ui.ScrollFloaterTest');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ScrollFloater');
 
@@ -134,3 +135,30 @@ function testScrollFloaterUpdateStyleOnFloatEvent() {
 
   scrollFloater.dispose();
 }
+
+function testScrollFloaterHandlesHorizontalScrolling() {
+  var scrollFloater = new goog.ui.ScrollFloater();
+  var floater = goog.dom.getElement('floater');
+  scrollFloater.decorate(floater);
+
+  scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
+
+  // For some reason the default position of the tested SF is 16px left.
+  assertEquals('Element should be left aligned',
+      '16px', goog.style.getStyle(scrollFloater.getElement(), 'left'));
+
+  var propReplacer = new goog.testing.PropertyReplacer();
+  propReplacer.set(goog.dom, 'getDocumentScroll',
+      function() {
+        return {'x': 20};
+      });
+
+  scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
+
+  assertEquals('Element should be scrolled to the left',
+      '-4px', goog.style.getStyle(scrollFloater.getElement(), 'left'));
+
+  propReplacer.reset();
+  scrollFloater.dispose();
+}
+
