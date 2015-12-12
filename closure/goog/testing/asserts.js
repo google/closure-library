@@ -34,8 +34,10 @@ var TO_STRING_EQUALITY_PREDICATE = function(var1, var2) {
   return var1.toString() === var2.toString();
 };
 
+
 /** @typedef {function(?, ?):boolean} */
 var PredicateFunctionType;
+
 
 /**
  * @const {{
@@ -184,9 +186,30 @@ var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
   _assert(null, valid, 'Incorrect arguments passed to assert function');
 };
 
+var _getCurrentTestCase = function() {
+  // We can't call goog.testing.TestCase.getActiveTestCase because there would
+  // be a dependency cycle; this effectively does the same thing.
+  var testRunner = goog.global['G_testRunner'];
+  return testRunner ? testRunner.testCase : null;
+};
+
 var _assert = function(comment, booleanValue, failureMessage) {
   if (!booleanValue) {
-    goog.testing.asserts.raiseException(comment, failureMessage);
+    try {
+      goog.testing.asserts.raiseException(comment, failureMessage);
+    } catch (e) {
+      // Catch the exception immediately so it can be saved with a preserved
+      // stack trace. If the exception is unexpectedly caught during a unit
+      // test, it will be rethrown so that it is seen by the test framework.
+      var testCase = _getCurrentTestCase();
+      if (testCase) {
+        testCase.raiseAssertionException(e);
+      } else {
+        goog.global.console.error(
+            'Failed to save thrown exception: no test case is installed.');
+        throw e;
+      }
+    }
   }
 };
 
@@ -332,6 +355,14 @@ var assertThrowsJsUnitException = function(callback, opt_expectedMessage) {
   try {
     goog.testing.asserts.callWithoutLogging(callback);
   } catch (e) {
+    var testCase = _getCurrentTestCase();
+    if (testCase) {
+      testCase.invalidateAssertionException(e);
+    } else {
+      goog.global.console.error(
+          'Failed to remove expected exception: no test case is installed.');
+    }
+
     if (!e.isJsUnitException) {
       fail('Expected a JsUnitException');
     }

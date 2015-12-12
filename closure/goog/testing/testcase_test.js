@@ -16,8 +16,12 @@ goog.provide('goog.testing.TestCaseTest');
 goog.setTestOnly('goog.testing.TestCaseTest');
 
 goog.require('goog.Promise');
+goog.require('goog.functions');
 goog.require('goog.string');
+goog.require('goog.testing.JsUnitException');
+goog.require('goog.testing.MethodMock');
 goog.require('goog.testing.MockRandom');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
@@ -517,3 +521,171 @@ function testTearDownReturnsPromiseThatTimesOut() {
   });
 }
 
+function testFailOnUnreportedAsserts_DisabledByDefault() {
+  // Fail-safe to make sure we understand the implications of switching this
+  // to be on by default.
+  assertFalse(new goog.testing.TestCase().failOnUnreportedAsserts);
+}
+
+
+/**
+ * Verifies that:
+ * <ol>
+ * <li>when the {@code failOnUnreportedAsserts} flag is disabled, the test
+ *     function passes;
+ * <li>when the {@code failOnUnreportedAsserts} flag is enabled, the test
+ *     function passes if {@code shouldPassWithFlagEnabled} is true and fails if
+ *     it is false; and that
+ * <li>when the {@code failOnUnreportedAsserts} flag is enabled, and in addition
+ *     {@code invalidateAssertionException} is stubbed out to do nothing, the
+ *     test function fails.
+ * </ol>
+ * @param {boolean} shouldPassWithFlagEnabled
+ * @param {!function(): !goog.Promise} testFunction
+ * @return {!goog.Promise}
+ */
+function verifyTestOutcomeForFailOnUnreportedAssertsFlag(
+    shouldPassWithFlagEnabled, testFunction) {
+
+  return verifyWithFlagEnabledAndNoInvalidation(testFunction)
+      .then(function() {
+        return verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled);
+      })
+      .then(function() {
+        return verifyWithFlagDisabled(testFunction);
+      });
+}
+
+function verifyWithFlagDisabled(testFunction) {
+  // With the flag disabled, the test is expected to pass, as any caught
+  // exception would not be reported.
+  var testCase = new goog.testing.TestCase();
+  var getTestCase = goog.functions.constant(testCase);
+  testCase.addNewTest('test', testFunction);
+  testCase.failOnUnreportedAsserts = false;
+
+  var stubs = new goog.testing.PropertyReplacer();
+  stubs.replace(window, '_getCurrentTestCase', getTestCase);
+  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
+
+  var promise = new goog.Promise(function(resolve, reject) {
+    testCase.setCompletedCallback(resolve);
+  }).then(function() {
+    assertTrue(testCase.isSuccess());
+    var result = testCase.getResult();
+    assertTrue(result.complete);
+    assertEquals(0, result.errors.length);
+  }).thenAlways(function() {
+    stubs.reset();
+  });
+
+  testCase.runTests();
+  return promise;
+}
+
+function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
+  // With the flag enabled, the test is expected to pass if shouldPassWithFlag
+  // is true, and fail if shouldPassWithFlag is false.
+  var testCase = new goog.testing.TestCase();
+  var getTestCase = goog.functions.constant(testCase);
+  testCase.addNewTest('test', testFunction);
+  testCase.failOnUnreportedAsserts = true;
+
+  var stubs = new goog.testing.PropertyReplacer();
+  stubs.replace(window, '_getCurrentTestCase', getTestCase);
+  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
+
+  var promise = new goog.Promise(function(resolve, reject) {
+    testCase.setCompletedCallback(resolve);
+  }).then(function() {
+    assertEquals(shouldPassWithFlagEnabled, testCase.isSuccess());
+    var result = testCase.getResult();
+    assertTrue(result.complete);
+    assertEquals(shouldPassWithFlagEnabled ? 0 : 1, result.errors.length);
+  }).thenAlways(function() {
+    stubs.reset();
+  });
+
+  testCase.runTests();
+  return promise;
+}
+
+function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
+  // With the flag enabled, the test is expected to pass if shouldPassWithFlag
+  // is true, and fail if shouldPassWithFlag is false.
+  var testCase = new goog.testing.TestCase();
+  var getTestCase = goog.functions.constant(testCase);
+  testCase.addNewTest('test', testFunction);
+  testCase.failOnUnreportedAsserts = true;
+
+  var stubs = new goog.testing.PropertyReplacer();
+  stubs.replace(window, '_getCurrentTestCase', getTestCase);
+  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
+  stubs.replace(goog.testing.TestCase.prototype,
+      'invalidateAssertionException', goog.nullFunction);
+
+  var promise = new goog.Promise(function(resolve, reject) {
+    testCase.setCompletedCallback(resolve);
+  }).then(function() {
+    assertFalse(testCase.isSuccess());
+    var result = testCase.getResult();
+    assertTrue(result.complete);
+    assertEquals(1, result.errors.length);
+  }).thenAlways(function() {
+    stubs.reset();
+  });
+
+  testCase.runTests();
+  return promise;
+}
+
+function testFailOnUnreportedAsserts_SwallowedException() {
+  return verifyTestOutcomeForFailOnUnreportedAssertsFlag(false, function() {
+    try {
+      assertTrue(false);
+    } catch (e) {
+      // Swallow the exception generated by the assertion.
+    }
+  });
+}
+
+function testFailOnUnreportedAsserts_SwallowedExceptionViaPromise() {
+  return verifyTestOutcomeForFailOnUnreportedAssertsFlag(false, function() {
+    return new goog.Promise.resolve()
+        .then(function() {
+          assertTrue(false);
+        })
+        .thenCatch(function(e) {
+          // Swallow the exception generated by the assertion.
+        });
+  });
+}
+
+function testFailOnUnreportedAsserts_NotForAssertThrowsJsUnitException() {
+  return verifyTestOutcomeForFailOnUnreportedAssertsFlag(true, function() {
+    assertThrowsJsUnitException(function() {
+      assertTrue(false);
+    });
+  });
+}
+
+function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
+  var testCase = new goog.testing.TestCase();
+
+  var e1 = new goog.testing.JsUnitException('foo123');
+  var e2 = new goog.testing.JsUnitException('bar456');
+
+  var mockLogError = goog.testing.MethodMock(testCase, 'logError');
+  mockLogError('test', e1);
+  mockLogError('test', e2);
+  mockLogError.$replay();
+
+  testCase.thrownAssertionExceptions_.push(e1);
+  testCase.thrownAssertionExceptions_.push(e2);
+
+  var exception = testCase.reportUnpropagatedAssertionExceptions_('test');
+  assertContains('One or more assertions were', exception.toString());
+
+  mockLogError.$verify();
+  mockLogError.$tearDown();
+}
