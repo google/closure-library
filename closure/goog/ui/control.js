@@ -1488,7 +1488,7 @@ goog.inherits(goog.ui.Control.IeMouseEventSequenceSimulator_, goog.Disposable);
  *
  * See https://msdn.microsoft.com/library/dn905219(v=vs.85).aspx for details.
  *
- * @private
+ * @private {boolean}
  * @const
  */
 goog.ui.Control.IeMouseEventSequenceSimulator_.SYNTHETIC_EVENTS_ =
