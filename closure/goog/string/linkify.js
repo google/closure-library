@@ -73,7 +73,9 @@ goog.string.linkify.linkifyPlainTextAsHtml =
       text.indexOf('www.') == -1 &&
       text.indexOf('Www.') == -1 &&
       text.indexOf('WWW.') == -1) {
-    return goog.html.SafeHtml.htmlEscape(text);
+    return opt_preserveNewlines ?
+        goog.html.SafeHtml.htmlEscapePreservingNewlines(text) :
+        goog.html.SafeHtml.htmlEscape(text);
   }
 
   var attributesMap = opt_attributes || {};

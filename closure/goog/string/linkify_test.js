@@ -537,9 +537,14 @@ function testIpv6Url() {
 
 function testPreserveNewlines() {
   assertLinkify(
-      'Line wrapping',
+      'Preserving newlines',
       'Example:\nhttp://www.google.com/',
       'Example:<br>' +
           '<a href="http://www.google.com/">http://www.google.com/<\/a>',
+      /* preserveNewlines */ true);
+  assertLinkify(
+      'Preserving newlines with no links',
+      'Line 1\nLine 2',
+      'Line 1<br>Line 2',
       /* preserveNewlines */ true);
 }
