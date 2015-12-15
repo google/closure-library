@@ -195,21 +195,7 @@ var _getCurrentTestCase = function() {
 
 var _assert = function(comment, booleanValue, failureMessage) {
   if (!booleanValue) {
-    try {
-      goog.testing.asserts.raiseException(comment, failureMessage);
-    } catch (e) {
-      // Catch the exception immediately so it can be saved with a preserved
-      // stack trace. If the exception is unexpectedly caught during a unit
-      // test, it will be rethrown so that it is seen by the test framework.
-      var testCase = _getCurrentTestCase();
-      if (testCase) {
-        testCase.raiseAssertionException(e);
-      } else {
-        goog.global.console.error(
-            'Failed to save thrown exception: no test case is installed.');
-        throw e;
-      }
-    }
+    goog.testing.asserts.raiseException(comment, failureMessage);
   }
 };
 
@@ -1229,12 +1215,23 @@ var standardizeCSSValue = function(propertyName, value) {
 
 
 /**
- * Raises a JsUnit exception with the given comment.
+ * Raises a JsUnit exception with the given comment. If the exception is
+ * unexpectedly caught during a unit test, it will be rethrown so that it is
+ * seen by the test framework.
  * @param {string} comment A summary for the exception.
  * @param {string=} opt_message A description of the exception.
  */
 goog.testing.asserts.raiseException = function(comment, opt_message) {
-  throw new goog.testing.JsUnitException(comment, opt_message);
+  var e = new goog.testing.JsUnitException(comment, opt_message);
+
+  var testCase = _getCurrentTestCase();
+  if (testCase) {
+    testCase.raiseAssertionException(e);
+  } else {
+    goog.global.console.error(
+        'Failed to save thrown exception: no test case is installed.');
+    throw e;
+  }
 };
 
 
