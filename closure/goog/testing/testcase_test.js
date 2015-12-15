@@ -18,12 +18,14 @@ goog.setTestOnly('goog.testing.TestCaseTest');
 goog.require('goog.Promise');
 goog.require('goog.functions');
 goog.require('goog.string');
+goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MethodMock');
 goog.require('goog.testing.MockRandom');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.mockmatchers.ObjectEquals');
 
 
 // Dual of fail().
@@ -666,6 +668,24 @@ function testFailOnUnreportedAsserts_NotForAssertThrowsJsUnitException() {
     assertThrowsJsUnitException(function() {
       assertTrue(false);
     });
+  });
+}
+
+function testFailOnUnreportedAsserts_NotForMockMatchersObjectEquals() {
+  return verifyTestOutcomeForFailOnUnreportedAssertsFlag(true, function() {
+    new goog.testing.mockmatchers.ObjectEquals(true).matches(false);
+  });
+}
+
+function testFailOnUnreportedAsserts_NotForExpectedFailures() {
+  return verifyTestOutcomeForFailOnUnreportedAssertsFlag(true, function() {
+    var expectedFailures = new goog.testing.ExpectedFailures();
+    expectedFailures.expectFailureFor(true);
+    try {
+      assertTrue(false);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
   });
 }
 

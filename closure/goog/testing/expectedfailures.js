@@ -177,6 +177,7 @@ goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
         (this.failureMessage_ ? '\n(' + this.failureMessage_ + ')' : ''),
         ex);
     this.suppressedFailures_.push(ex);
+    goog.testing.TestCase.invalidateAssertionException(ex);
     return;
   }
 
