@@ -228,6 +228,16 @@ function testGetProtectedFunction() {
   assertEquals('Foo', e.cause.message);
 }
 
+function testGetProtectedFunctionNullError() {
+  var fn = function() {
+    throw null;
+  };
+  var protectedFn = errorHandler.getProtectedFunction(fn);
+  var e = assertThrows(protectedFn);
+  assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+  assertNull(e.cause);
+}
+
 function testGetProtectedFunction_withoutWrappedErrors() {
   var shouldCallErrorLog = !!Error.captureStackTrace;
   if (shouldCallErrorLog) {
