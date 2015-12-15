@@ -603,7 +603,8 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
     assertEquals(shouldPassWithFlagEnabled, testCase.isSuccess());
     var result = testCase.getResult();
     assertTrue(result.complete);
-    assertEquals(shouldPassWithFlagEnabled ? 0 : 1, result.errors.length);
+    // Expect both the caught assertion and the failOnUnreportedAsserts error.
+    assertEquals(shouldPassWithFlagEnabled ? 0 : 2, result.errors.length);
   }).thenAlways(function() {
     stubs.reset();
   });
@@ -632,7 +633,8 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
     assertFalse(testCase.isSuccess());
     var result = testCase.getResult();
     assertTrue(result.complete);
-    assertEquals(1, result.errors.length);
+    // Expect both the caught assertion and the failOnUnreportedAsserts error.
+    assertEquals(2, result.errors.length);
   }).thenAlways(function() {
     stubs.reset();
   });
@@ -725,10 +727,10 @@ function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
   var e1 = new goog.testing.JsUnitException('foo123');
   var e2 = new goog.testing.JsUnitException('bar456');
 
-  var mockLogError = goog.testing.MethodMock(testCase, 'logError');
-  mockLogError('test', e1);
-  mockLogError('test', e2);
-  mockLogError.$replay();
+  var mockRecordError = goog.testing.MethodMock(testCase, 'recordError_');
+  mockRecordError('test', e1);
+  mockRecordError('test', e2);
+  mockRecordError.$replay();
 
   testCase.thrownAssertionExceptions_.push(e1);
   testCase.thrownAssertionExceptions_.push(e2);
@@ -736,6 +738,6 @@ function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
   var exception = testCase.reportUnpropagatedAssertionExceptions_('test');
   assertContains('One or more assertions were', exception.toString());
 
-  mockLogError.$verify();
-  mockLogError.$tearDown();
+  mockRecordError.$verify();
+  mockRecordError.$tearDown();
 }

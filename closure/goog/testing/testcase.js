@@ -841,15 +841,13 @@ goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
   var numExceptions = this.thrownAssertionExceptions_.length;
 
   for (var i = 0; i < numExceptions; i++) {
-    this.logError(testName, this.thrownAssertionExceptions_[i]);
+    this.recordError_(testName, this.thrownAssertionExceptions_[i]);
   }
 
   return new goog.testing.JsUnitException(
       'One or more assertions were raised but not caught by the testing ' +
-      'framework. These assertions may have been unintentionally captured in ' +
-      'a catch block or thenCatch/thenAlways resolution of Promise, perhaps ' +
-      'somewhere along the call path to a mocked function containing ' +
-      'assertions.');
+      'framework. These assertions may have been unintentionally captured ' +
+      'by a catch block or a thenCatch resolution of a Promise.');
 };
 
 
@@ -1339,6 +1337,27 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
 
 
 /**
+ * Records and logs a test failure.
+ * @param {string} testName The name of the test that failed.
+ * @param {*=} opt_e The exception object associated with the
+ *     failure or a string.
+ * @private
+ */
+goog.testing.TestCase.prototype.recordError_ = function(testName, opt_e) {
+  var message = testName + ' : FAILED';
+  this.log(message);
+  this.saveMessage(message);
+  var err = this.logError(testName, opt_e);
+  this.result_.errors.push(err);
+  if (testName in this.result_.resultsByName) {
+    this.result_.resultsByName[testName].push(err.toString());
+  } else {
+    this.result_.resultsByName[testName] = [err.toString()];
+  }
+};
+
+
+/**
  * Handles a test that failed.
  * @param {goog.testing.TestCase.Test} test The test that failed.
  * @param {*=} opt_e The exception object associated with the
@@ -1346,16 +1365,7 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
  * @protected
  */
 goog.testing.TestCase.prototype.doError = function(test, opt_e) {
-  var message = test.name + ' : FAILED';
-  this.log(message);
-  this.saveMessage(message);
-  var err = this.logError(test.name, opt_e);
-  this.result_.errors.push(err);
-  if (test.name in this.result_.resultsByName) {
-    this.result_.resultsByName[test.name].push(err.toString());
-  } else {
-    this.result_.resultsByName[test.name] = [err.toString()];
-  }
+  this.recordError_(test.name, opt_e);
 };
 
 
