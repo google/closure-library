@@ -157,7 +157,7 @@ goog.events.Listenable.prototype.unlisten;
  * Removes an event listener which was added with listen() by the key
  * returned by listen().
  *
- * @param {goog.events.ListenableKey} key The key returned by
+ * @param {!goog.events.ListenableKey} key The key returned by
  *     listen() or listenOnce().
  * @return {boolean} Whether any listener was removed.
  */
