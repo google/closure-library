@@ -768,17 +768,14 @@ function testUnsubscribeWhilePublishing() {
   var fn3 = mockControl.createFunctionMock();
 
   fn1().$does(function() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('X', fn2));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         broadcastPubSub.getCount('X'));
   });
-  fn2().$does(function() {
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
-        broadcastPubSub.getCount('X'));
-  });
+  fn2().$times(0);
   fn3().$does(function() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('X', fn1));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         broadcastPubSub.getCount('X'));
@@ -815,7 +812,7 @@ function testUnsubscribeSelfWhilePublishing() {
 
   var fn = mockControl.createFunctionMock();
   fn().$does(function() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('someTopic', fn));
     assertEquals('Topic must still have 1 subscriber', 1,
         broadcastPubSub.getCount('someTopic'));
@@ -1054,6 +1051,30 @@ function testClear() {
   broadcastPubSub.clear();
   assertEquals('BroadcastChannel must have no subscribers', 0,
       broadcastPubSub.getCount());
+  broadcastPubSub.dispose();
+  mockControl.$verifyAll();
+}
+
+function testNestedSubscribeOnce() {
+  mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
+
+  var x = mockControl.createFunctionMock();
+  var y = mockControl.createFunctionMock();
+
+  x().$times(1);
+  y().$does(function() {
+    broadcastPubSub.publish('X');
+    broadcastPubSub.publish('X');
+  });
+
+  mockControl.$replayAll();
+
+  broadcastPubSub = new goog.labs.pubsub.BroadcastPubSub();
+  broadcastPubSub.subscribeOnce('X', x);
+  broadcastPubSub.subscribe('Y', y);
+  broadcastPubSub.publish('Y');
+  mockClock.tick();
+
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
 }

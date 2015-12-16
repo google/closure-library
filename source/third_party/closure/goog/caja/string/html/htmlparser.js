@@ -518,8 +518,10 @@ goog.string.html.HtmlParser.prototype.stripNULs_ = function(s) {
  */
 goog.string.html.HtmlParser.prototype.unescapeEntities_ = function(s) {
   return s.replace(
-      goog.string.html.HtmlParser.ENTITY_RE_,
-      goog.bind(this.lookupEntity_, this));
+      goog.string.html.HtmlParser.ENTITY_RE_, goog.bind(
+          function(fullEntity, name) {
+               return this.lookupEntity_(name);
+          }, this));
 };
 
 

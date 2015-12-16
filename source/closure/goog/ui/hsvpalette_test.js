@@ -194,15 +194,5 @@ function testHandleMouseMoveHueSaturation() {
   event.clientY = 85;
   // TODO(user): Use goog.testing.events when appropriate (see above).
   samplePalette.handleMouseMoveHs_(boundaries, event);
-  // TODO(user): Fix the main code for this, see bug #1324469.
-  // NOTE(gboyer): It's a little better than before due to the
-  // goog.style getBoundingClientRect fix, but still not the same. :-(
-  if (goog.userAgent.IE) {
-    var expectedColor = '#ffe0b2';
-  } else {
-    var expectedColor = '#ffeec4';
-  }
-
-  assertEquals(expectedColor,
-      goog.color.parse(samplePalette.getColor()).hex);
+  assertEquals('#ffeec4', goog.color.parse(samplePalette.getColor()).hex);
 }

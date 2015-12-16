@@ -17,6 +17,7 @@ goog.setTestOnly('goog.fx.AbstractDragDropTest');
 
 goog.require('goog.array');
 goog.require('goog.dom.TagName');
+goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
 goog.require('goog.fx.AbstractDragDrop');
@@ -618,6 +619,63 @@ function testGetDragElementPosition() {
       'margins', pageOffset.y - 14, pos.y);
 }
 
+function testDragEndEvent() {
+  function testDragEndEventInternal(shouldContainItemData) {
+    var testGroup = new goog.fx.AbstractDragDrop();
+
+    var childEl = document.getElementById('child1');
+    var item = new goog.fx.DragDropItem(childEl);
+    item.currentDragElement_ = childEl;
+
+    testGroup.items_.push(item);
+    testGroup.recalculateDragTargets();
+
+    // Simulate starting a drag
+    var startEvent = {
+      'clientX': 0,
+      'clientY': 0,
+      'type': goog.events.EventType.MOUSEMOVE,
+      'relatedTarget': childEl,
+      'preventDefault': function() {}
+    };
+    testGroup.startDrag(startEvent, item);
+
+    testGroup.activeTarget_ = new goog.fx.ActiveDropTarget_(
+        new goog.math.Box(0, 0, 0, 0), testGroup, item, childEl);
+
+    goog.events.listen(
+        testGroup, goog.fx.AbstractDragDrop.EventType.DRAGEND, function(event) {
+          if (shouldContainItemData) {
+            assertEquals('The drag end event should contain a drop target',
+                         testGroup, event.dropTarget);
+            assertEquals('The drag end event should contain a drop target item',
+                         item, event.dropTargetItem);
+            assertEquals(
+                'The drag end event should contain a drop target element',
+                childEl, event.dropTargetElement);
+          } else {
+            assertUndefined(
+                'The drag end event shouldn\'t contain a drop target',
+                event.dropTarget);
+            assertUndefined(
+                'The drag end event shouldn\'t contain a drop target item',
+                event.dropTargetItem);
+            assertUndefined(
+                'The drag end event shouldn\'t contain a drop target element',
+                event.dropTargetElement);
+          }
+        });
+
+    testGroup.endDrag(
+        {'clientX': 0, 'clientY': 0, 'dragCanceled': !shouldContainItemData});
+
+    testGroup.dispose();
+    item.dispose();
+  }
+
+  testDragEndEventInternal(false);
+  testDragEndEventInternal(true);
+}
 
 // Helper function for manual debugging.
 function drawTargets(targets, multiplier) {

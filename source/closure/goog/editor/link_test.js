@@ -159,7 +159,7 @@ function testPlaceCursorRightOf() {
 
   // In order to test the cursor placement properly, we need to have
   // link text.  See more details in the test below.
-  anchor.innerHTML = 'I am text';
+  goog.dom.setTextContent(anchor, 'I am text');
 
   var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
   link.placeCursorRightOf();

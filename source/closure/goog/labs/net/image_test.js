@@ -22,11 +22,16 @@ goog.provide('goog.labs.net.imageTest');
 
 goog.require('goog.labs.net.image');
 goog.require('goog.string');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
 goog.setTestOnly('goog.labs.net.imageTest');
 
+
+function setUpPage() {
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+}
 
 function testValidImage() {
   var url = 'testdata/cleardot.gif';

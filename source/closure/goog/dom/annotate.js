@@ -312,6 +312,7 @@ goog.dom.annotate.helpAnnotateText_ = function(text, terms, annotateFn,
 
       // Quit if there are no more hits.
       if (posOfNextHit < 0) break;
+      goog.asserts.assertNumber(termIndexOfNextHit);
 
       // Remove the next hit from our hit list.
       termHits[termIndexOfNextHit].shift();

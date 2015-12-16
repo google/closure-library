@@ -46,7 +46,8 @@ goog.crypt.stringToByteArray = function(str) {
 /**
  * Turns an array of numbers into the string given by the concatenation of the
  * characters to which the numbers correspond.
- * @param {Array<number>} bytes Array of numbers representing characters.
+ * @param {!Uint8Array|!Array<number>} bytes Array of numbers representing
+ *     characters.
  * @return {string} Stringification of the array.
  */
 goog.crypt.byteArrayToString = function(bytes) {
@@ -117,6 +118,15 @@ goog.crypt.stringToUtf8ByteArray = function(str) {
     } else if (c < 2048) {
       out[p++] = (c >> 6) | 192;
       out[p++] = (c & 63) | 128;
+    } else if (((c & 0xFC00) == 0xD800) &&
+               (i + 1) < str.length &&
+               ((str.charCodeAt(i + 1) & 0xFC00) == 0xDC00)) {
+      // Surrogate Pair
+      c = 0x10000 + ((c & 0x03FF) << 10) + (str.charCodeAt(++i) & 0x03FF);
+      out[p++] = (c >> 18) | 240;
+      out[p++] = ((c >> 12) & 63) | 128;
+      out[p++] = ((c >> 6) & 63) | 128;
+      out[p++] = (c & 63) | 128;
     } else {
       out[p++] = (c >> 12) | 224;
       out[p++] = ((c >> 6) & 63) | 128;
@@ -142,6 +152,15 @@ goog.crypt.utf8ByteArrayToString = function(bytes) {
     } else if (c1 > 191 && c1 < 224) {
       var c2 = bytes[pos++];
       out[c++] = String.fromCharCode((c1 & 31) << 6 | c2 & 63);
+    } else if (c1 > 239 && c1 < 365) {
+      // Surrogate Pair
+      var c2 = bytes[pos++];
+      var c3 = bytes[pos++];
+      var c4 = bytes[pos++];
+      var u = ((c1 & 7) << 18 | (c2 & 63) << 12 | (c3 & 63) << 6 | c4 & 63) -
+              0x10000;
+      out[c++] = String.fromCharCode(0xD800 + (u >> 10));
+      out[c++] = String.fromCharCode(0xDC00 + (u & 1023));
     } else {
       var c2 = bytes[pos++];
       var c3 = bytes[pos++];
@@ -155,8 +174,8 @@ goog.crypt.utf8ByteArrayToString = function(bytes) {
 
 /**
  * XOR two byte arrays.
- * @param {!ArrayBufferView|!Array<number>} bytes1 Byte array 1.
- * @param {!ArrayBufferView|!Array<number>} bytes2 Byte array 2.
+ * @param {!Uint8Array|!Int8Array|!Array<number>} bytes1 Byte array 1.
+ * @param {!Uint8Array|!Int8Array|!Array<number>} bytes2 Byte array 2.
  * @return {!Array<number>} Resulting XOR of the two byte arrays.
  */
 goog.crypt.xorByteArray = function(bytes1, bytes2) {

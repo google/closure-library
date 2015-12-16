@@ -131,6 +131,30 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
 
 
 /**
+ * Safely assigns a URL to an image element's src property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * image's src property.  If url is of type string however, it is first
+ * sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * @param {!HTMLImageElement} imageElement The image element whose src property
+ *     is to be assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setImageSrc = function(imageElement, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitize(url);
+  }
+  imageElement.src = goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+
+/**
  * Safely assigns a URL to an embed element's src property.
  *
  * Example usage:

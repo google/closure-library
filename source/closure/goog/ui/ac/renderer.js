@@ -437,18 +437,9 @@ goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
  * Hide the object.
  */
 goog.ui.ac.Renderer.prototype.dismiss = function() {
-  if (this.target_) {
-    goog.a11y.aria.setActiveDescendant(this.target_, null);
-  }
   if (this.visible_) {
     this.visible_ = false;
-
-    // Clear ARIA popup role for the target input box.
-    if (this.target_) {
-      goog.a11y.aria.setState(this.target_,
-          goog.a11y.aria.State.HASPOPUP,
-          false);
-    }
+    this.toggleAriaMarkup_(false /* isShown */);
 
     if (this.menuFadeDuration_ > 0) {
       goog.dispose(this.animation_);
@@ -468,18 +459,7 @@ goog.ui.ac.Renderer.prototype.dismiss = function() {
 goog.ui.ac.Renderer.prototype.show = function() {
   if (!this.visible_) {
     this.visible_ = true;
-
-    // Set ARIA roles and states for the target input box.
-    if (this.target_) {
-      goog.a11y.aria.setRole(this.target_,
-          goog.a11y.aria.Role.COMBOBOX);
-      goog.a11y.aria.setState(this.target_,
-          goog.a11y.aria.State.AUTOCOMPLETE,
-          'list');
-      goog.a11y.aria.setState(this.target_,
-          goog.a11y.aria.State.HASPOPUP,
-          true);
-    }
+    this.toggleAriaMarkup_(true /* isShown */);
 
     if (this.menuFadeDuration_ > 0) {
       goog.dispose(this.animation_);
@@ -489,6 +469,39 @@ goog.ui.ac.Renderer.prototype.show = function() {
     } else {
       goog.style.setElementShown(this.element_, true);
     }
+  }
+};
+
+
+/**
+ * Toggle the ARIA markup to add popup semantics when the target is shown and
+ * to remove them when it is hidden.
+ * @param {boolean} isShown Whether the menu is being shown.
+ * @private
+ */
+goog.ui.ac.Renderer.prototype.toggleAriaMarkup_ = function(isShown) {
+  if (!this.target_) {
+    return;
+  }
+
+  goog.a11y.aria.setState(this.target_,
+      goog.a11y.aria.State.HASPOPUP,
+      isShown);
+  goog.a11y.aria.setState(goog.asserts.assert(this.element_),
+      goog.a11y.aria.State.EXPANDED,
+      isShown);
+  goog.a11y.aria.setState(this.target_,
+      goog.a11y.aria.State.EXPANDED,
+      isShown);
+  if (isShown) {
+    goog.a11y.aria.setState(this.target_,
+        goog.a11y.aria.State.OWNS,
+        this.element_.id);
+  } else {
+    goog.a11y.aria.removeState(this.target_,
+        goog.a11y.aria.State.OWNS);
+    goog.a11y.aria.setActiveDescendant(this.target_,
+        null);
   }
 };
 

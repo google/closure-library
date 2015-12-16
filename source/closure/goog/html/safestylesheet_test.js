@@ -19,7 +19,7 @@
 goog.provide('goog.html.safeStyleSheetTest');
 
 goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.string');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
@@ -42,17 +42,21 @@ function testSafeStyleSheet() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName = 'privateDoNotAccessOrElseSafeStyleSheetWrappedValue_';
+  var markerFieldName =
+      'SAFE_STYLE_SHEET_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(
+      goog.html.SafeStyleSheet.fromConstant(goog.string.Const.from('')));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.safeStyleSheetValueWithSecurityContract__googHtmlSecurityPrivate_ =
-      'P.special { color:expression(evil) ; }';
-  evil.SAFE_STYLE_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = 'P.special { color:expression(evil) ; }';
+  evil[markerFieldName] = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeStyleSheet.unwrap(evil);
   });
-  assertTrue(goog.string.contains(
-      exception.message,
-      'expected object of type SafeStyleSheet'));
+  assertContains('expected object of type SafeStyleSheet', exception.message);
 }
 
 

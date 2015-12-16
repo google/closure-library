@@ -420,3 +420,21 @@ function testContextMenuKeyboard() {
   goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.ENTER);
   assertFalse(popup.isVisible());
 }
+
+
+/**
+ * Tests that there is no crash when hitting a key when no menu item is
+ * highlighted.
+ */
+function testKeyPressWithNoHighlightedItem() {
+  popup.decorate(menu);
+  popup.attach(anchor);
+  goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.SPACE);
+  assertTrue(popup.isVisible());
+  try {
+    goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SPACE);
+  } catch (e) {
+    fail('Crash attempting to reference null selected menu item after ' +
+        'keyboard event.');
+  }
+}

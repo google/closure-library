@@ -887,14 +887,14 @@ function testToggleAriaStateMap() {
   }
 }
 function testSetContent() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox, 'Not so fast!');
   assertEquals('Element must contain expected text value', 'Not so fast!',
       goog.dom.getTextContent(sandbox));
 }
 
 function testSetContentNull() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox, null);
   assertEquals('Element must have no child nodes', 0,
       sandbox.childNodes.length);
@@ -903,7 +903,7 @@ function testSetContentNull() {
 }
 
 function testSetContentEmpty() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox, '');
   assertEquals('Element must not have children', 0,
       sandbox.childNodes.length);
@@ -912,7 +912,7 @@ function testSetContentEmpty() {
 }
 
 function testSetContentWhitespace() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox, ' ');
   assertEquals('Element must have one child', 1,
       sandbox.childNodes.length);
@@ -923,7 +923,7 @@ function testSetContentWhitespace() {
 }
 
 function testSetContentTextNode() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox, document.createTextNode('Text'));
   assertEquals('Element must have one child', 1,
       sandbox.childNodes.length);
@@ -934,7 +934,7 @@ function testSetContentTextNode() {
 }
 
 function testSetContentElementNode() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox,
       goog.dom.createDom(goog.dom.TagName.DIV, {id: 'foo'}, 'Foo'));
   assertEquals('Element must have one child', 1,
@@ -946,7 +946,7 @@ function testSetContentElementNode() {
 }
 
 function testSetContentArray() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   controlRenderer.setContent(sandbox,
       ['Hello, ', goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!']);
   assertEquals('Element must have three children', 3,
@@ -962,7 +962,7 @@ function testSetContentArray() {
 }
 
 function testSetContentNodeList() {
-  sandbox.innerHTML = 'Hello, world!';
+  goog.dom.setTextContent(sandbox, 'Hello, world!');
   var div = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello, ',
       goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!');
   controlRenderer.setContent(sandbox, div.childNodes);

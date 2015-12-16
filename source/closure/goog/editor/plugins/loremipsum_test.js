@@ -52,7 +52,7 @@ function testQueryUsingLorem() {
 }
 
 function testUpdateLoremIpsum() {
-  goog.dom.getElement('field').innerHTML = 'stuff';
+  goog.dom.setTextContent(goog.dom.getElement('field'), 'stuff');
 
   var loremPlugin = FIELD.getPluginByClassId('LoremIpsum');
   FIELD.makeEditable();
@@ -94,7 +94,7 @@ function testUpdateLoremIpsum() {
 }
 
 function testLoremIpsumAndGetCleanContents() {
-  goog.dom.getElement('field').innerHTML = 'This is a field';
+  goog.dom.setTextContent(goog.dom.getElement('field'), 'This is a field');
   FIELD.makeEditable();
 
   // test direct getCleanContents
@@ -124,7 +124,7 @@ function testLoremIpsumAndGetCleanContents2() {
   // make a field blank before we make it editable, and then check
   // that making it editable activates lorem.
   assert('field is editable', FIELD.isUneditable());
-  goog.dom.getElement('field').innerHTML = '   ';
+  goog.dom.setTextContent(goog.dom.getElement('field'), '   ');
 
   FIELD.makeEditable();
   assertEquals('field contains unexpected contents',

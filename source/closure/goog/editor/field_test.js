@@ -82,6 +82,8 @@ function tearDown() {
  * @final
  */
 function TestPlugin() {
+  TestPlugin.base(this, 'constructor');
+
   this.getTrogClassId = function() {
     return 'TestPlugin';
   };

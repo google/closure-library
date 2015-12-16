@@ -268,10 +268,12 @@ goog.ui.HoverCard.prototype.setCurrentAnchor_ = function(anchor) {
  * @private
  */
 goog.ui.HoverCard.prototype.detachTempAnchor_ = function(anchor) {
-  var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
-  if (pos != -1) {
-    this.detach(anchor);
-    this.tempAttachedAnchors_.splice(pos, 1);
+  if (anchor) {
+    var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
+    if (pos != -1) {
+      this.detach(anchor);
+      this.tempAttachedAnchors_.splice(pos, 1);
+    }
   }
 };
 
@@ -342,11 +344,10 @@ goog.ui.HoverCard.prototype.getAnchorElement = function() {
 /**
  * Make sure we detach from temp anchor when we are done displaying hovercard.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.HoverCard.prototype.onHide_ = function() {
-  goog.ui.HoverCard.superClass_.onHide_.call(this);
+goog.ui.HoverCard.prototype.onHide = function() {
+  goog.ui.HoverCard.superClass_.onHide.call(this);
   this.setCurrentAnchor_(null);
 };
 

@@ -361,6 +361,64 @@ function testDebounceScopeBinding() {
 }
 
 
+function testDebounceArgumentBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  var debouncedFn = goog.functions.debounce(function(a, b, c) {
+    ++calls;
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval);
+
+  debouncedFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(1, calls);
+
+  // goog.functions.debounce should always pass the last arguments passed to the
+  // decorator into the decorated function, even if called multiple times.
+  debouncedFn();
+  mockClock.tick(interval / 2);
+  debouncedFn(8, null, true);
+  debouncedFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, calls);
+
+  mockClock.uninstall();
+}
+
+
+function testDebounceArgumentAndScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'calls': 0};
+  var debouncedFn = goog.functions.debounce(function(a, b, c) {
+    ++this['calls'];
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval, x);
+
+  debouncedFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(1, x['calls']);
+
+  // goog.functions.debounce should always pass the last arguments passed to the
+  // decorator into the decorated function, even if called multiple times.
+  debouncedFn();
+  mockClock.tick(interval / 2);
+  debouncedFn(8, null, true);
+  debouncedFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, x['calls']);
+
+  mockClock.uninstall();
+}
+
+
 function testThrottle() {
   // Encoded sequences of commands to perform mapped to expected # of calls.
   //   f: fire
@@ -397,6 +455,62 @@ function testThrottleScopeBinding() {
     ++this['y'];
   }, interval, x)();
   assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+function testThrottleArgumentBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  var throttledFn = goog.functions.throttle(function(a, b, c) {
+    ++calls;
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval);
+
+  throttledFn(3, 'string', false);
+  assertEquals(1, calls);
+
+  // goog.functions.throttle should always pass the last arguments passed to the
+  // decorator into the decorated function, even if called multiple times.
+  throttledFn();
+  mockClock.tick(interval / 2);
+  throttledFn(8, null, true);
+  throttledFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, calls);
+
+  mockClock.uninstall();
+}
+
+
+function testThrottleArgumentAndScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'calls': 0};
+  var throttledFn = goog.functions.throttle(function(a, b, c) {
+    ++this['calls'];
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval, x);
+
+  throttledFn(3, 'string', false);
+  assertEquals(1, x['calls']);
+
+  // goog.functions.throttle should always pass the last arguments passed to the
+  // decorator into the decorated function, even if called multiple times.
+  throttledFn();
+  mockClock.tick(interval / 2);
+  throttledFn(8, null, true);
+  throttledFn(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, x['calls']);
 
   mockClock.uninstall();
 }

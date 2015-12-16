@@ -76,6 +76,14 @@ goog.math.Long.IntCache_ = {};
 
 
 /**
+ * A cache of the Long representations of common values.
+ * @type {!Object}
+ * @private
+ */
+goog.math.Long.valueCache_ = {};
+
+
+/**
  * Returns a Long representing the given (32-bit) integer value.
  * @param {number} value The 32-bit integer in question.
  * @return {!goog.math.Long} The corresponding Long value.
@@ -191,31 +199,8 @@ goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
  * @type {number}
  * @private
  */
-goog.math.Long.getTwoPwr24DBL_ = 1 << 24;
-
-
-/**
- * @type {number}
- * @private
- */
 goog.math.Long.TWO_PWR_32_DBL_ =
     goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_31_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ / 2;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_48_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
 
 
 /**
@@ -234,24 +219,17 @@ goog.math.Long.TWO_PWR_63_DBL_ =
     goog.math.Long.TWO_PWR_64_DBL_ / 2;
 
 
-/** @private {!goog.math.Long} */
-goog.math.Long.ZERO_;
-
-
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getZero = function() {
-  if (!goog.math.Long.ZERO_) {
-    goog.math.Long.ZERO_ = goog.math.Long.fromInt(0);
+  var idZero = goog.math.Long.ValueCacheId_.ZERO;
+  if (!goog.math.Long.valueCache_[idZero]) {
+    goog.math.Long.valueCache_[idZero] = goog.math.Long.fromInt(0);
   }
-  return goog.math.Long.ZERO_;
+  return goog.math.Long.valueCache_[idZero];
 };
-
-
-/** @private {!goog.math.Long} */
-goog.math.Long.ONE_;
 
 
 /**
@@ -259,15 +237,12 @@ goog.math.Long.ONE_;
  * @public
  */
 goog.math.Long.getOne = function() {
-  if (!goog.math.Long.ONE_) {
-    goog.math.Long.ONE_ = goog.math.Long.fromInt(1);
+  var idOne = goog.math.Long.ValueCacheId_.ONE;
+  if (!goog.math.Long.valueCache_[idOne]) {
+    goog.math.Long.valueCache_[idOne] = goog.math.Long.fromInt(1);
   }
-  return goog.math.Long.ONE_;
+  return goog.math.Long.valueCache_[idOne];
 };
-
-
-/** @private {!goog.math.Long} */
-goog.math.Long.NEG_ONE_;
 
 
 /**
@@ -275,15 +250,12 @@ goog.math.Long.NEG_ONE_;
  * @public
  */
 goog.math.Long.getNegOne = function() {
-  if (!goog.math.Long.NEG_ONE_) {
-    goog.math.Long.NEG_ONE_ = goog.math.Long.fromInt(-1);
+  var idNegOne = goog.math.Long.ValueCacheId_.NEG_ONE;
+  if (!goog.math.Long.valueCache_[idNegOne]) {
+    goog.math.Long.valueCache_[idNegOne] = goog.math.Long.fromInt(-1);
   }
-  return goog.math.Long.NEG_ONE_;
+  return goog.math.Long.valueCache_[idNegOne];
 };
-
-
-/** @private {!goog.math.Long} */
-goog.math.Long.MAX_VALUE_;
 
 
 /**
@@ -291,16 +263,13 @@ goog.math.Long.MAX_VALUE_;
  * @public
  */
 goog.math.Long.getMaxValue = function() {
-  if (!goog.math.Long.MAX_VALUE_) {
-    goog.math.Long.MAX_VALUE_ = goog.math.Long.fromBits(
+  var idMaxValue = goog.math.Long.ValueCacheId_.MAX_VALUE;
+  if (!goog.math.Long.valueCache_[idMaxValue]) {
+    goog.math.Long.valueCache_[idMaxValue] = goog.math.Long.fromBits(
         0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
   }
-  return goog.math.Long.MAX_VALUE_;
+  return goog.math.Long.valueCache_[idMaxValue];
 };
-
-
-/** @private {!goog.math.Long} */
-goog.math.Long.MIN_VALUE_;
 
 
 /**
@@ -308,15 +277,13 @@ goog.math.Long.MIN_VALUE_;
  * @public
  */
 goog.math.Long.getMinValue = function() {
-  if (!goog.math.Long.MIN_VALUE_) {
-    goog.math.Long.MIN_VALUE_ = goog.math.Long.fromBits(0, 0x80000000 | 0);
+  var idMinValue = goog.math.Long.ValueCacheId_.MIN_VALUE;
+  if (!goog.math.Long.valueCache_[idMinValue]) {
+    goog.math.Long.valueCache_[idMinValue] = goog.math.Long.fromBits(
+        0, 0x80000000 | 0);
   }
-  return goog.math.Long.MIN_VALUE_;
+  return goog.math.Long.valueCache_[idMinValue];
 };
-
-
-/** @private {!goog.math.Long} */
-goog.math.Long.TWO_PWR_24_;
 
 
 /**
@@ -324,10 +291,11 @@ goog.math.Long.TWO_PWR_24_;
  * @public
  */
 goog.math.Long.getTwoPwr24 = function() {
-  if (!goog.math.Long.TWO_PWR_24_) {
-    goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromInt(1 << 24);
+  var idTwoPwr24 = goog.math.Long.ValueCacheId_.TWO_PWR_24;
+  if (!goog.math.Long.valueCache_[idTwoPwr24]) {
+    goog.math.Long.valueCache_[idTwoPwr24] = goog.math.Long.fromInt(1 << 24);
   }
-  return goog.math.Long.TWO_PWR_24_;
+  return goog.math.Long.valueCache_[idTwoPwr24];
 };
 
 
@@ -877,5 +845,19 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
       return goog.math.Long.fromBits(high >>> (numBits - 32), 0);
     }
   }
+};
+
+
+/**
+ * @enum {number} Ids of commonly requested Long instances.
+ * @private
+ */
+goog.math.Long.ValueCacheId_ = {
+  MAX_VALUE: 1,
+  MIN_VALUE: 2,
+  ZERO: 3,
+  ONE: 4,
+  NEG_ONE: 5,
+  TWO_PWR_24: 6
 };
 

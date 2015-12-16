@@ -159,6 +159,20 @@ goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
 
 
 /**
+ * Restore the original state of a key in an object.
+ * @param {{ object: ?, key: string, value: ? }} original Original state
+ * @private
+ */
+goog.testing.PropertyReplacer.restoreOriginal_ = function(original) {
+  if (original.value == goog.testing.PropertyReplacer.NO_SUCH_KEY_) {
+    goog.testing.PropertyReplacer.deleteKey_(original.object, original.key);
+  } else {
+    original.object[original.key] = original.value;
+  }
+};
+
+
+/**
  * Adds or changes a value in an object while saving its original state.
  * @param {Object|Function} obj The JavaScript or native object or function to
  *     alter. See the constraints in the class description.
@@ -246,16 +260,31 @@ goog.testing.PropertyReplacer.prototype.remove = function(obj, key) {
 
 
 /**
+ * Restore the original state of key in an object.
+ * @param {!Object|!Function} obj The JavaScript or native object whose state
+ *     should be restored.
+ * @param {string} key The key to restore the original value for.
+ * @throws {Error} In case the object/key pair hadn't been modified earlier.
+ */
+goog.testing.PropertyReplacer.prototype.restore = function(obj, key) {
+  for (var i = this.original_.length - 1; i >= 0; i--) {
+    var original = this.original_[i];
+    if (original.object === obj && original.key == key) {
+      goog.testing.PropertyReplacer.restoreOriginal_(original);
+      this.original_.splice(i, 1);
+      return;
+    }
+  }
+  throw Error('Cannot restore unmodified property "' + key + '" of ' + obj);
+};
+
+
+/**
  * Resets all changes made by goog.testing.PropertyReplacer.prototype.set.
  */
 goog.testing.PropertyReplacer.prototype.reset = function() {
   for (var i = this.original_.length - 1; i >= 0; i--) {
-    var original = this.original_[i];
-    if (original.value == goog.testing.PropertyReplacer.NO_SUCH_KEY_) {
-      goog.testing.PropertyReplacer.deleteKey_(original.object, original.key);
-    } else {
-      original.object[original.key] = original.value;
-    }
+    goog.testing.PropertyReplacer.restoreOriginal_(this.original_[i]);
     delete this.original_[i];
   }
   this.original_.length = 0;

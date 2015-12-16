@@ -69,7 +69,7 @@ goog.ui.DimensionPickerRenderer.CSS_CLASS =
  */
 goog.ui.DimensionPickerRenderer.prototype.getUnderlyingDiv_ = function(
     element) {
-  return element.firstChild.childNodes[1];
+  return /** @type {Element} */(element.firstChild.childNodes[1]);
 };
 
 

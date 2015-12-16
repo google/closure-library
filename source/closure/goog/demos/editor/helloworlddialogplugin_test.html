@@ -11,6 +11,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8" />
 <title>Closure Unit Tests - goog.demos.editor.HelloWorldDialogPlugin</title>
 <script src="../../base.js"></script>
 <script src="deps.js"></script>
@@ -73,7 +74,7 @@ See the COPYING file for details.
     tearDownRealEditableField();
     expectedFailures.handleTearDown();
     stubs.reset();
-    goog.dom.getElement('myField').innerHTML = '';
+    goog.dom.removeChildren(goog.dom.getElement('myField'));
   }
 
   /**

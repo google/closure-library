@@ -174,33 +174,6 @@ function testEndsWithRtl() {
   assert(!goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', false));
 }
 
-function testGuardBracketInHtml() {
-  var strWithRtl = 'asc \u05d0 (\u05d0\u05d0\u05d0)';
-  assertEquals('asc \u05d0 <span dir=rtl>(\u05d0\u05d0\u05d0)</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl));
-  assertEquals('asc \u05d0 <span dir=rtl>(\u05d0\u05d0\u05d0)</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl, true));
-  assertEquals('asc \u05d0 <span dir=ltr>(\u05d0\u05d0\u05d0)</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl, false));
-
-  var strWithRtl2 = '\u05d0 a (asc:))';
-  assertEquals('\u05d0 a <span dir=rtl>(asc:))</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl2));
-  assertEquals('\u05d0 a <span dir=rtl>(asc:))</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl2, true));
-  assertEquals('\u05d0 a <span dir=ltr>(asc:))</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithRtl2, false));
-
-  var strWithoutRtl = 'a (asc) {{123}}';
-  assertEquals('a <span dir=ltr>(asc)</span> <span dir=ltr>{{123}}</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithoutRtl));
-  assertEquals('a <span dir=rtl>(asc)</span> <span dir=rtl>{{123}}</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithoutRtl, true));
-  assertEquals('a <span dir=ltr>(asc)</span> <span dir=ltr>{{123}}</span>',
-      goog.i18n.bidi.guardBracketInHtml(strWithoutRtl, false));
-
-}
-
 function testGuardBracketInText() {
   var strWithRtl = 'asc \u05d0 (\u05d0\u05d0\u05d0)';
   assertEquals('asc \u05d0 \u200f(\u05d0\u05d0\u05d0)\u200f',

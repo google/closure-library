@@ -35,8 +35,8 @@ function setUpPage() {
 
 function setUp() {
   picker = new goog.ui.DimensionPicker();
-  render.innerHTML = '';
-  decorate.innerHTML = '';
+  goog.dom.removeChildren(render);
+  goog.dom.removeChildren(decorate);
 }
 
 function tearDown() {

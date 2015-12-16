@@ -34,8 +34,10 @@ var TO_STRING_EQUALITY_PREDICATE = function(var1, var2) {
   return var1.toString() === var2.toString();
 };
 
+
 /** @typedef {function(?, ?):boolean} */
 var PredicateFunctionType;
+
 
 /**
  * @const {{
@@ -184,6 +186,13 @@ var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
   _assert(null, valid, 'Incorrect arguments passed to assert function');
 };
 
+var _getCurrentTestCase = function() {
+  // We can't call goog.testing.TestCase.getActiveTestCase because there would
+  // be a dependency cycle; this effectively does the same thing.
+  var testRunner = goog.global['G_testRunner'];
+  return testRunner ? testRunner.testCase : null;
+};
+
 var _assert = function(comment, booleanValue, failureMessage) {
   if (!booleanValue) {
     goog.testing.asserts.raiseException(comment, failureMessage);
@@ -324,25 +333,40 @@ var assertNotThrows = function(a, opt_b) {
  *     in a JsUnitException (usually contains a call to an assert).
  * @param {string=} opt_expectedMessage Failure message expected to be given
  *     with the exception.
+ * @return {!goog.testing.JsUnitException} The error thrown by the function.
+ * @throws {goog.testing.JsUnitException} If the function did not throw a
+ *     JsUnitException.
  */
 var assertThrowsJsUnitException = function(callback, opt_expectedMessage) {
-  var failed = false;
   try {
     goog.testing.asserts.callWithoutLogging(callback);
-  } catch (ex) {
-    if (!ex.isJsUnitException) {
+  } catch (e) {
+    var testCase = _getCurrentTestCase();
+    if (testCase) {
+      testCase.invalidateAssertionException(e);
+    } else {
+      goog.global.console.error(
+          'Failed to remove expected exception: no test case is installed.');
+    }
+
+    if (!e.isJsUnitException) {
       fail('Expected a JsUnitException');
     }
+
     if (typeof opt_expectedMessage != 'undefined' &&
-        ex.message != opt_expectedMessage) {
+        e.message != opt_expectedMessage) {
       fail('Expected message [' + opt_expectedMessage + '] but got [' +
-          ex.message + ']');
+          e.message + ']');
     }
-    failed = true;
+
+    return e;
   }
-  if (!failed) {
-    fail('Expected a failure: ' + opt_expectedMessage);
+
+  var msg = 'Expected a failure';
+  if (typeof opt_expectedMessage != 'undefined') {
+    msg += ': ' + opt_expectedMessage;
   }
+  throw new goog.testing.JsUnitException(msg);
 };
 
 
@@ -1191,12 +1215,23 @@ var standardizeCSSValue = function(propertyName, value) {
 
 
 /**
- * Raises a JsUnit exception with the given comment.
+ * Raises a JsUnit exception with the given comment. If the exception is
+ * unexpectedly caught during a unit test, it will be rethrown so that it is
+ * seen by the test framework.
  * @param {string} comment A summary for the exception.
  * @param {string=} opt_message A description of the exception.
  */
 goog.testing.asserts.raiseException = function(comment, opt_message) {
-  throw new goog.testing.JsUnitException(comment, opt_message);
+  var e = new goog.testing.JsUnitException(comment, opt_message);
+
+  var testCase = _getCurrentTestCase();
+  if (testCase) {
+    testCase.raiseAssertionException(e);
+  } else {
+    goog.global.console.error(
+        'Failed to save thrown exception: no test case is installed.');
+    throw e;
+  }
 };
 
 
@@ -1249,6 +1284,7 @@ goog.exportSymbol('fail', fail);
 goog.exportSymbol('assert', assert);
 goog.exportSymbol('assertThrows', assertThrows);
 goog.exportSymbol('assertNotThrows', assertNotThrows);
+goog.exportSymbol('assertThrowsJsUnitException', assertThrowsJsUnitException);
 goog.exportSymbol('assertTrue', assertTrue);
 goog.exportSymbol('assertFalse', assertFalse);
 goog.exportSymbol('assertEquals', assertEquals);

@@ -31,6 +31,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ServerChart');
@@ -76,6 +77,20 @@ goog.testing.MultiTestRunner = function(opt_domHelper) {
    * @private
    */
   this.tableSorter_ = new goog.ui.TableSorter(this.dom_);
+
+  /**
+   * Array to hold individual test reports for tests that failed.
+   * @type {!Array<!string>}
+   * @private
+   */
+  this.failureReports_ = [];
+
+  /**
+   * Array of test result objects returned from G_testRunner.getTestResults for
+   * each individual test run.
+   * @private {!Array<!Object<string,!Array<string>>>}
+   */
+  this.allTestResults_ = [];
 };
 goog.inherits(goog.testing.MultiTestRunner, goog.ui.Component);
 
@@ -96,6 +111,13 @@ goog.testing.MultiTestRunner.STATES = [
   'initializing tests',
   'waiting for tests to finish'
 ];
+
+
+/**
+ * Event type dispatched when tests are completed.
+ * @const
+ */
+goog.testing.MultiTestRunner.TESTS_FINISHED = 'testsFinished';
 
 
 /**
@@ -538,6 +560,24 @@ goog.testing.MultiTestRunner.prototype.getTestsThatFailed = function() {
 
 
 /**
+ * Returns a list of reports for tests that have finished since last "start".
+ * @return {!Array<string>} A list of tests reports.
+ */
+goog.testing.MultiTestRunner.prototype.getFailureReports = function() {
+  return this.failureReports_;
+};
+
+
+/**
+ * Returns list of each frame's test results.
+ * @return {!Array<!Object<string,!Array<string>>>}
+ */
+goog.testing.MultiTestRunner.prototype.getAllTestResults = function() {
+  return this.allTestResults_;
+};
+
+
+/**
  * Deletes and re-creates the progress table inside the progess element.
  * @private
  */
@@ -647,6 +687,7 @@ goog.testing.MultiTestRunner.prototype.start = function() {
   this.passes_ = 0;
   this.stats_ = [];
   this.startTime_ = goog.now();
+  this.failureReports_ = [];
 
   this.resetProgressDom_();
   goog.dom.removeChildren(this.logEl_);
@@ -654,6 +695,12 @@ goog.testing.MultiTestRunner.prototype.start = function() {
   this.resetReport_();
   this.clearStats_();
   this.showTab_(0);
+
+  // No tests to run, finish early and return.
+  if (this.activeTests_.length == 0) {
+    this.finish_();
+    return;
+  }
 
   // Ensure the pool isn't too big.
   while (this.getChildCount() > this.poolSize_) {
@@ -706,8 +753,14 @@ goog.testing.MultiTestRunner.prototype.processResult = function(frame) {
   var success = frame.isSuccess();
   var report = frame.getReport();
   var test = frame.getTestFile();
+  var stats = frame.getStats();
 
-  this.stats_.push(frame.getStats());
+  if (!stats.success) {
+    this.failureReports_.push(report);
+  }
+
+  this.allTestResults_.push(frame.getTestResults());
+  this.stats_.push(stats);
   this.finished_[test] = true;
 
   var prefix = success ? '' : '*** FAILURE *** ';
@@ -783,8 +836,13 @@ goog.testing.MultiTestRunner.prototype.finish_ = function() {
   if (unfinished.length) {
     this.reportEl_.appendChild(goog.dom.createDom(
         goog.dom.TagName.PRE, undefined,
-        'Theses tests did not finish:\n' + unfinished.join('\n')));
+        'These tests did not finish:\n' + unfinished.join('\n')));
   }
+
+  this.dispatchEvent({
+    'type': goog.testing.MultiTestRunner.TESTS_FINISHED,
+    'allTestResults': this.getAllTestResults()
+  });
 };
 
 
@@ -1202,6 +1260,12 @@ goog.testing.MultiTestRunner.TestFrame = function(
    */
   this.eh_ = new goog.events.EventHandler(this);
 
+  /**
+   * Object to hold test results. Key is test method or file name (depending on
+   * failure mode) and the value is an array of failure messages.
+   * @private {!Object<string,!Array<string>>}
+   */
+  this.testResults_ = {};
 };
 goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
 
@@ -1318,6 +1382,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.runTest = function(testFile) {
   this.currentState_ = 0;
   this.isSuccess_ = null;
   this.report_ = '';
+  this.testResults_ = {};
   this.testFile_ = testFile;
 
   try {
@@ -1361,6 +1426,27 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getStats = function() {
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
   return this.report_;
+};
+
+
+/**
+ * @return {!Object<string,!Array<string>>} The results per individual test in
+ *     the file. Key is the test filename concatenated with the test name, and
+ *     the array holds failures.
+ */
+goog.testing.MultiTestRunner.TestFrame.prototype.getTestResults = function() {
+  var results = {};
+  for (var testName in this.testResults_) {
+    var testKey = this.testFile_.replace(/\.html$/, '');
+    // Concatenate with ":<testName>" unless the testName is equivalent to
+    // testFile_, which means the test timed out or had no test methods and
+    // there's no way to get the test method name.
+    if (testName != this.testFile_) {
+      testKey += ':' + testName;
+    }
+    results[testKey] = this.testResults_[testName];
+  }
+  return results;
 };
 
 
@@ -1433,6 +1519,16 @@ goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
         var tr = js['G_testRunner'];
         this.isSuccess_ = tr['isSuccess']();
         this.report_ = tr['getReport'](this.verbosePasses_);
+        this.testResults_ = tr['getTestResults']();
+        // If there is a syntax error, or no tests, it's not possible to get the
+        // individual test method results from TestCase. So just create one here
+        // based on the test report and filename.
+        if (goog.object.isEmpty(this.testResults_)) {
+          // Existence of a report is a signal of a test failure by the test
+          // runner.
+          this.testResults_[this.testFile_] =
+              this.isSuccess_ ? [] : [this.report_];
+        }
         this.runTime_ = tr['getRunTime']();
         this.numFilesLoaded_ = tr['getNumFilesLoaded']();
         this.finish_();
@@ -1444,6 +1540,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
   if (goog.now() - this.lastStateTime_ > this.timeoutMs_) {
     this.report_ = this.testFile_ + ' timed out  ' +
         goog.testing.MultiTestRunner.STATES[this.currentState_];
+    this.testResults_[this.testFile_] = [this.report_];
     this.isSuccess_ = false;
     this.finish_();
     return;

@@ -15,6 +15,7 @@
 goog.provide('goog.net.ImageLoaderTest');
 goog.setTestOnly('goog.net.ImageLoaderTest');
 
+goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dispose');
@@ -25,15 +26,9 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.ImageLoader');
 goog.require('goog.object');
 goog.require('goog.string');
-goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
-
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
-
-// Set the AsyncTestCase timeout to larger value to allow more time
-// for images to load.
-asyncTestCase.stepTimeout = 5000;
 
 
 var TEST_EVENT_TYPES = [
@@ -61,6 +56,12 @@ var startTime;
 var loader;
 
 
+function setUpPage() {
+  // Increase the timeout to 5 seconds to allow more time for images to load.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5 * 1000;
+}
+
+
 function setUp() {
   startTime = goog.now();
 
@@ -84,37 +85,30 @@ function tearDown() {
  * Tests loading image and disposing before loading completes.
  */
 function testDisposeInTheMiddleOfLoadingWorks() {
-  goog.events.listen(loader, TEST_EVENT_TYPES,
-      goog.partial(handleDisposalImageLoaderEvent, loader));
-  // waitForAsync before starting loader just in case
-  // handleDisposalImageLoaderEvent is called from within loader.start
-  // (before we yield control). This may happen in IE7/IE8.
-  asyncTestCase.waitForAsync('Waiting for loader handler to fire.');
+  var resolver = goog.Promise.withResolver();
+
+  goog.events.listen(loader, TEST_EVENT_TYPES, function(e) {
+    assertFalse('Handler is still invoked after loader is disposed.',
+                loader.isDisposed());
+
+    switch (e.type) {
+      case goog.net.EventType.COMPLETE:
+        resolver.reject('This test should never get COMPLETE event.');
+        return;
+
+      case goog.events.EventType.LOAD:
+      case goog.net.EventType.ERROR:
+        loader.dispose();
+        break;
+    }
+
+    // Make sure that handler is never called again after disposal before
+    // marking test as successful.
+    goog.Timer.callOnce(function() { resolver.resolve(); }, 500);
+  });
+
   loader.start();
-}
-
-
-function handleDisposalImageLoaderEvent(loader, e) {
-  assertFalse('Handler is still invoked after loader is disposed.',
-      loader.isDisposed());
-
-  switch (e.type) {
-    case goog.net.EventType.COMPLETE:
-      fail('This test should never get COMPLETE event.');
-      return;
-
-    case goog.events.EventType.LOAD:
-    case goog.net.EventType.ERROR:
-      loader.dispose();
-      break;
-  }
-
-  // Make sure that handler is never called again after disposal before
-  // marking test as successful.
-  asyncTestCase.waitForAsync('Wait to ensure that COMPLETE is never fired');
-  goog.Timer.callOnce(function() {
-    asyncTestCase.continueTesting();
-  }, 500);
+  return resolver.promise;
 }
 
 
@@ -122,36 +116,36 @@ function handleDisposalImageLoaderEvent(loader, e) {
  * Tests loading of images until completion.
  */
 function testLoadingUntilCompletion() {
+  var resolver = goog.Promise.withResolver();
   var results = {};
-  goog.events.listen(loader, TEST_EVENT_TYPES,
-      function(e) {
-        switch (e.type) {
-          case goog.events.EventType.LOAD:
-            var image = e.target;
-            results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
-                [image.naturalWidth, image.naturalHeight, e.type];
-            return;
+  goog.events.listen(loader, TEST_EVENT_TYPES, function(e) {
+    switch (e.type) {
+      case goog.events.EventType.LOAD:
+        var image = e.target;
+        results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
+            [image.naturalWidth, image.naturalHeight, e.type];
+        return;
 
-          case goog.net.EventType.ERROR:
-            var image = e.target;
-            results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
-                [image.naturalWidth, image.naturalHeight, e.type];
-            return;
+      case goog.net.EventType.ERROR:
+        var image = e.target;
+        results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
+            [image.naturalWidth, image.naturalHeight, e.type];
+        return;
 
-          case goog.net.EventType.COMPLETE:
-            // Test completes successfully.
-            asyncTestCase.continueTesting();
-
-            assertImagesAreCorrect(results);
-            return;
+      case goog.net.EventType.COMPLETE:
+        try {
+          assertImagesAreCorrect(results);
+        } catch (e) {
+          resolver.reject(e);
+          return;
         }
-      });
+        resolver.resolve();
+        return;
+    }
+  });
 
-  // waitForAsync before starting loader just in case handleImageLoaderEvent
-  // is called from within loader.start (before we yield control).
-  // This may happen in IE7/IE8.
-  asyncTestCase.waitForAsync('Waiting for loader handler to fire.');
   loader.start();
+  return resolver.promise;
 }
 
 
@@ -318,7 +312,8 @@ function testSetsCorsAttribute() {
     } else {
       assertTrue(
           'Non-CORS requested images should not have a crossOrigin attribute',
-          goog.string.isEmptyOrWhitespace(goog.string.makeSafe(image.crossOrigin)));
+          goog.string.isEmptyOrWhitespace(
+              goog.string.makeSafe(image.crossOrigin)));
     }
   });
 

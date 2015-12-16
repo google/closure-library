@@ -30,7 +30,7 @@ function setUpPage() {
 }
 
 function tearDown() {
-  root.innerHTML = '';
+  goog.dom.removeChildren(root);
 }
 
 function setUpNonEmptyTests() {

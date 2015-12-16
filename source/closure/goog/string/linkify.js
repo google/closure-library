@@ -19,6 +19,8 @@
 
 goog.provide('goog.string.linkify');
 
+goog.require('goog.html.SafeHtml');
+goog.require('goog.object');
 goog.require('goog.string');
 
 
@@ -28,13 +30,41 @@ goog.require('goog.string');
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {Object<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=_blank. To clear
- *      those default attributes set rel='' and target=''.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Attributes to add to all links created. Default are rel=nofollow and
+ *     target=_blank. To clear those default attributes set rel='' and
+ *     target=''.
+ * @param {boolean=} opt_preserveNewlines Whether to preserve newlines with
+ *     &lt;br&gt;.
  * @return {string} HTML Linkified HTML text. Any text that is not part of a
  *      link will be HTML-escaped.
+ * @deprecated Use goog.string.linkify.linkifyPlainTextAsHtml instead.
  */
-goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
+goog.string.linkify.linkifyPlainText =
+    function(text, opt_attributes, opt_preserveNewlines) {
+  return goog.html.SafeHtml.unwrap(
+      goog.string.linkify.linkifyPlainTextAsHtml(
+          text, opt_attributes, opt_preserveNewlines));
+};
+
+
+/**
+ * Takes a string of plain text and linkifies URLs and email addresses. For a
+ * URL (unless opt_attributes is specified), the target of the link will be
+ * _blank and it will have a rel=nofollow attribute applied to it so that links
+ * created by linkify will not be of interest to search engines.
+ * @param {string} text Plain text.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Attributes to add to all links created. Default are rel=nofollow and
+ *     target=_blank. To clear those default attributes set rel='' and
+ *     target=''.
+ * @param {boolean=} opt_preserveNewlines Whether to preserve newlines with
+ *     &lt;br&gt;.
+ * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
+ *      link will be HTML-escaped.
+ */
+goog.string.linkify.linkifyPlainTextAsHtml =
+    function(text, opt_attributes, opt_preserveNewlines) {
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
@@ -43,7 +73,9 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
       text.indexOf('www.') == -1 &&
       text.indexOf('Www.') == -1 &&
       text.indexOf('WWW.') == -1) {
-    return goog.string.htmlEscape(text);
+    return opt_preserveNewlines ?
+        goog.html.SafeHtml.htmlEscapePreservingNewlines(text) :
+        goog.html.SafeHtml.htmlEscape(text);
   }
 
   var attributesMap = opt_attributes || {};
@@ -54,37 +86,37 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
   if (!('target' in attributesMap)) {
     attributesMap['target'] = '_blank';
   }
-  // Creates attributes string from options.
-  var attributesArray = [];
   for (var key in attributesMap) {
-    if (attributesMap.hasOwnProperty(key) && attributesMap[key]) {
-      attributesArray.push(
-          goog.string.htmlEscape(key), '="',
-          goog.string.htmlEscape(attributesMap[key]), '" ');
+    if (!attributesMap[key]) {
+      // Our API allows '' to omit the attribute, SafeHtml requires null.
+      attributesMap[key] = null;
     }
   }
-  var attributes = attributesArray.join('');
 
-  return text.replace(
+  var output = [];
+  // Return value is ignored.
+  text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
-        var output = [goog.string.htmlEscape(before)];
+        output.push(opt_preserveNewlines ?
+            goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
+            before);
         if (!original) {
-          return output[0];
+          return '';
         }
-        output.push('<a ', attributes, 'href="');
+        var href = '';
         /** @type {string} */
         var linkText;
         /** @type {string} */
         var afterLink;
         if (email) {
-          output.push('mailto:');
+          href = 'mailto:';
           linkText = email;
           afterLink = '';
         } else {
           // This is a full url link.
           if (!protocol) {
-            output.push('http://');
+            href = 'http://';
           }
           var splitEndingPunctuation =
               original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
@@ -100,11 +132,16 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
             afterLink = '';
           }
         }
-        linkText = goog.string.htmlEscape(linkText);
-        afterLink = goog.string.htmlEscape(afterLink);
-        output.push(linkText, '">', linkText, '</a>', afterLink);
-        return output.join('');
+        // A simple attributesMap['href'] assignment causes a possible violation
+        // of the conformance config. TODO(jakubvrana): Remove this hack.
+        goog.object.set(attributesMap, 'href', href + linkText);
+        output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
+        output.push(opt_preserveNewlines ?
+            goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
+            afterLink);
+        return '';
       });
+  return goog.html.SafeHtml.concat(output);
 };
 
 
@@ -114,7 +151,7 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
  * @return {string} The first URL, or an empty string if not found.
  */
 goog.string.linkify.findFirstUrl = function(text) {
-  var link = text.match(goog.string.linkify.URL_);
+  var link = text.match(goog.string.linkify.URL_RE_);
   return link != null ? link[0] : '';
 };
 
@@ -125,7 +162,7 @@ goog.string.linkify.findFirstUrl = function(text) {
  * @return {string} The first email address, or an empty string if not found.
  */
 goog.string.linkify.findFirstEmail = function(text) {
-  var email = text.match(goog.string.linkify.EMAIL_);
+  var email = text.match(goog.string.linkify.EMAIL_RE_);
   return email != null ? email[0] : '';
 };
 
@@ -137,7 +174,7 @@ goog.string.linkify.findFirstEmail = function(text) {
  * @const
  * @private
  */
-goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?>\\]\\)!';
+goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?}\\]\\)!';
 
 
 /**
@@ -151,13 +188,14 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ = new RegExp(
 
 /**
  * Set of characters to be put into a regex character set ("[...]"), used to
- * match against a url hostname and everything after it. It includes
- * "#-@", which represents the characters "#$%&'()*+,-./0123456789:;<=>?@".
+ * match against a url hostname and everything after it. It includes, in order,
+ * \w which represents [a-zA-Z0-9_], "#-;" which represents the characters
+ * "#$%&'()*+,-./0123456789:;" and the characters "!=?@[\]`{|}~".
  * @type {string}
  * @const
  * @private
  */
-goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w~#-@!\\[\\]';
+goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w#-;!=?@\\[\\\\\\]_`{|}~';
 
 
 /**
@@ -197,10 +235,20 @@ goog.string.linkify.WWW_START_ = 'www\\.';
  * @const
  * @private
  */
-goog.string.linkify.URL_ =
+goog.string.linkify.URL_RE_STRING_ =
     '(?:' + goog.string.linkify.PROTOCOL_START_ + '|' +
     goog.string.linkify.WWW_START_ + ')[' +
     goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
+
+
+/**
+ * Regular expression that matches an url. Case-insensitive.
+ * @type {!RegExp}
+ * @const
+ * @private
+ */
+goog.string.linkify.URL_RE_ = new RegExp(
+    goog.string.linkify.URL_RE_STRING_, 'i');
 
 
 /**
@@ -226,9 +274,19 @@ goog.string.linkify.TOP_LEVEL_DOMAIN_ =
  * @const
  * @private
  */
-goog.string.linkify.EMAIL_ =
+goog.string.linkify.EMAIL_RE_STRING_ =
     '(?:mailto:)?([\\w.+-]+@[A-Za-z0-9.-]+\\.' +
     goog.string.linkify.TOP_LEVEL_DOMAIN_ + ')';
+
+
+/**
+ * Regular expression that matches an email. Case-insensitive.
+ * @type {!RegExp}
+ * @const
+ * @private
+ */
+goog.string.linkify.EMAIL_RE_ = new RegExp(
+    goog.string.linkify.EMAIL_RE_STRING_, 'i');
 
 
 /**
@@ -245,8 +303,8 @@ goog.string.linkify.FIND_LINKS_RE_ = new RegExp(
     // Match everything including newlines.
     '([\\S\\s]*?)(' +
     // Match email after a word break.
-    '\\b' + goog.string.linkify.EMAIL_ + '|' +
+    '\\b' + goog.string.linkify.EMAIL_RE_STRING_ + '|' +
     // Match url after a word break.
-    '\\b' + goog.string.linkify.URL_ + '|$)',
+    '\\b' + goog.string.linkify.URL_RE_STRING_ + '|$)',
     'gi');
 

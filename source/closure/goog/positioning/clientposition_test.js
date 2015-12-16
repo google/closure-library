@@ -60,7 +60,7 @@ function setUp() {
 
 function tearDown() {
   popupElement = null;
-  testArea.innerHTML = '';
+  goog.dom.removeChildren(testArea);
   testArea.setAttribute('style', '');
 }
 

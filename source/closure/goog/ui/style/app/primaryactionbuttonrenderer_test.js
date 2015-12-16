@@ -30,6 +30,12 @@ var refPath = '../../../../../' +
     'webutil/css/fastui/app/primaryactionbutton_spec.html';
 goog.testing.ui.style.writeReferenceFrame(refPath);
 
+function shouldRunTests() {
+  // Disable tests when being run as a part of open-source repo as the button
+  // specs are not included in closure-library.
+  return !(/closure\/goog\/ui/.test(location.pathname));
+}
+
 function setUp() {
   button = new goog.ui.Button('Hello Generated', renderer);
 }
@@ -38,7 +44,7 @@ function tearDown() {
   if (button) {
     button.dispose();
   }
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 }
 
 function testGeneratedButton() {

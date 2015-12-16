@@ -182,17 +182,22 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
     try {
       return fn.apply(this, arguments);
     } catch (e) {
+      // Don't re-report errors that have already been handled by this code.
+      var MESSAGE_PREFIX =
+          goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
+      if ((e && typeof e === 'object' &&
+              e.message && e.message.indexOf(MESSAGE_PREFIX) == 0) ||
+          (typeof e === 'string' && e.indexOf(MESSAGE_PREFIX) == 0)) {
+        return;
+      }
       that.errorHandlerFn_(e);
       if (!that.wrapErrors_) {
         // Add the prefix to the existing message.
         if (that.prefixErrorMessages_) {
-          if (typeof e === 'object') {
-            e.message =
-                goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
-                e.message;
+          if (e && typeof e === 'object') {
+            e.message = MESSAGE_PREFIX + e.message;
           } else {
-            e = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
-                e;
+            e = MESSAGE_PREFIX + e;
           }
         }
         if (goog.DEBUG) {
@@ -287,10 +292,17 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ =
     // IE doesn't support .call for setInterval/setTimeout, but it
     // also doesn't care what "this" is, so we can just call the
     // original function directly
-    if (originalFn.call) {
-      return originalFn.call(this, fn, time);
+    if (originalFn.apply) {
+      return originalFn.apply(this, arguments);
     } else {
-      return originalFn(fn, time);
+      var callback = fn;
+      if (arguments.length > 2) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        callback = function() {
+          fn.apply(this, args);
+        };
+      }
+      return originalFn(callback, time);
     }
   };
   win[fnName][this.getFunctionIndex_(false)] = originalFn;

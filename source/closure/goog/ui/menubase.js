@@ -80,11 +80,10 @@ goog.ui.MenuBase.prototype.disposeInternal = function() {
  * event but should make sure to call the parent class method.
  *
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.MenuBase.prototype.onShow_ = function() {
-  goog.ui.MenuBase.superClass_.onShow_.call(this);
+goog.ui.MenuBase.prototype.onShow = function() {
+  goog.ui.MenuBase.superClass_.onShow.call(this);
 
   // register common event handlers for derived classes
   var el = this.getElement();
@@ -109,11 +108,10 @@ goog.ui.MenuBase.prototype.onShow_ = function() {
  * event but should make sure to call the parent class method.
  * @param {Object=} opt_target Target of the event causing the hide.
  * @protected
- * @suppress {underscore|visibility}
  * @override
  */
-goog.ui.MenuBase.prototype.onHide_ = function(opt_target) {
-  goog.ui.MenuBase.superClass_.onHide_.call(this, opt_target);
+goog.ui.MenuBase.prototype.onHide = function(opt_target) {
+  goog.ui.MenuBase.superClass_.onHide.call(this, opt_target);
 
   // remove listeners when hidden
   this.eventHandler_.removeAll();

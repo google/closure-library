@@ -17,7 +17,6 @@ goog.setTestOnly('goog.ui.ac.ArrayMatcherTest');
 
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ac.ArrayMatcher');
-// TODO(arv): Add more useful tests for the similarity matching.
 
 var ArrayMatcher = goog.ui.ac.ArrayMatcher;
 
@@ -111,7 +110,7 @@ function testGetPrefixMatchesEmptyToken() {
   assertEquals('Should have no matches', 0, res.length);
 }
 
-function testGetSimilarRows() {
+function testGetSimilarRowsSimple() {
   var items = ['xa', 'xb', 'xc'];
   var am = new ArrayMatcher(items, true);
 
@@ -130,4 +129,29 @@ function testGetSimilarRowsMaxMatches() {
   assertEquals('Should have two matches', 2, res.length);
   assertEquals('xa', res[0]);
   assertEquals('xAa', res[1]);
+}
+
+function testGetSimilarRowsTermDistance() {
+  var items = ['surgeon', 'pleasantly', 'closely', 'ba'];
+  var am = new ArrayMatcher(items, true);
+
+  var res = am.getSimilarRows('urgently', 4);
+  assertEquals('Should have one match', 1, res.length);
+  assertEquals('surgeon', res[0]);
+
+  var res2 = ArrayMatcher.getSimilarMatchesForRows('urgently', 4, items);
+  assertArrayEquals(res, res2);
+}
+
+function testGetSimilarRowsContainedTerms() {
+  var items = ['application', 'apple', 'happy'];
+  var am = new ArrayMatcher(items, true);
+  var res = am.getSimilarRows('app', 4);
+  assertEquals('Should have three matches', 3, res.length);
+  assertEquals('application', res[0]);
+  assertEquals('apple', res[1]);
+  assertEquals('happy', res[2]);
+
+  var res2 = ArrayMatcher.getSimilarMatchesForRows('app', 4, items);
+  assertArrayEquals(res, res2);
 }

@@ -33,6 +33,7 @@ goog.provide('goog.testing.mockmatchers.TypeOf');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 
 
@@ -206,6 +207,9 @@ goog.testing.mockmatchers.ObjectEquals.prototype.matches =
     if (opt_expectation) {
       opt_expectation.addErrorMessage(e.message);
     }
+    // The mock will report the error when validated, so ignore the caught
+    // assertion exception.
+    goog.testing.TestCase.invalidateAssertionException(e);
     return false;
   }
 };

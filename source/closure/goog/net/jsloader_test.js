@@ -20,20 +20,15 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.net.jsloader');
 goog.require('goog.net.jsloader.ErrorCode');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 
-// Initialize the AsyncTestCase.
-var testCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
-testCase.stepTimeout = 5 * 1000; // 5 seconds
 
-
-testCase.setUp = function() {
+function setUp() {
   goog.provide = goog.nullFunction;
-};
+}
 
 
-testCase.tearDown = function() {
+function tearDown() {
   // Remove all the fake scripts.
   var scripts = goog.array.clone(
       document.getElementsByTagName(goog.dom.TagName.SCRIPT));
@@ -42,19 +37,16 @@ testCase.tearDown = function() {
       goog.dom.removeNode(scripts[i]);
     }
   }
-};
+}
 
 
 // Sunny day scenario for load function.
 function testLoad() {
-  testCase.waitForAsync('testLoad');
-
   window.test1 = null;
   var testUrl = 'testdata/jsloader_test1.js';
   var result = goog.net.jsloader.load(testUrl);
-  result.addCallback(function() {
-    testCase.continueTesting();
 
+  return result.then(function() {
     var script = result.defaultScope_.script_;
 
     assertNotNull('script created', script);
@@ -71,13 +63,10 @@ function testLoad() {
 
 // Sunny day scenario for loadAndVerify function.
 function testLoadAndVerify() {
-  testCase.waitForAsync('testLoadAndVerify');
-
   var testUrl = 'testdata/jsloader_test2.js';
   var result = goog.net.jsloader.loadAndVerify(testUrl, 'test2');
-  result.addCallback(function(verifyObj) {
-    testCase.continueTesting();
 
+  return result.then(function(verifyObj) {
     // Check that the verification object has passed ok.
     assertEquals('verification object', 'Test #2 loaded', verifyObj);
   });
@@ -86,13 +75,10 @@ function testLoadAndVerify() {
 
 // What happens when the verification object is not set by the loaded script?
 function testLoadAndVerifyError() {
-  testCase.waitForAsync('testLoadAndVerifyError');
-
   var testUrl = 'testdata/jsloader_test2.js';
   var result = goog.net.jsloader.loadAndVerify(testUrl, 'fake');
-  result.addErrback(function(error) {
-    testCase.continueTesting();
 
+  return result.then(fail, function(error) {
     // Check that the error code is right.
     assertEquals('verification error', goog.net.jsloader.ErrorCode.VERIFY_ERROR,
         error.code);
@@ -101,7 +87,7 @@ function testLoadAndVerifyError() {
 
 
 // Tests that callers can cancel the deferred without error.
-function testLoadAndVerifyCancelled() {
+function testLoadAndVerifyCanceled() {
   var testUrl = 'testdata/jsloader_test2.js';
   var result = goog.net.jsloader.loadAndVerify(testUrl, 'test2');
   result.cancel();
@@ -110,47 +96,31 @@ function testLoadAndVerifyCancelled() {
 
 // Test the loadMany function.
 function testLoadMany() {
-  testCase.waitForAsync('testLoadMany');
-
-  // Load test #3 and then #1.
   window.test1 = null;
   window.test4 = null;
+
+  // Load test #3 and then #1.
   var testUrls1 = ['testdata/jsloader_test3.js', 'testdata/jsloader_test1.js'];
   var result = goog.net.jsloader.loadMany(testUrls1);
 
   window.test3Callback = function(msg) {
-    testCase.continueTesting();
-
     // Check that the 1st test was not loaded yet.
     assertEquals('verification object', null, window.test1);
 
-    // check that result has not fired yet
-    assertFalse('deferred has fired', result.hasFired());
-
     // Load test #4, which is supposed to wait for #1 to load.
-    testCase.waitForAsync('testLoadMany');
     var testUrls2 = ['testdata/jsloader_test4.js'];
     goog.net.jsloader.loadMany(testUrls2);
   };
 
   window.test4Callback = function(msg) {
-    testCase.continueTesting();
-
     // Check that the 1st test was already loaded.
     assertEquals('verification object', 'Test #1 loaded', window.test1);
 
-    // all scripts loaded - verify that result has fired
-    assertTrue('deferred has fired', result.hasFired());
-
     // on last script loaded, set variable
     window.test4 = msg;
-
-    testCase.waitForAsync('testLoadMany');
   };
 
-  result.addCallback(function() {
-    testCase.continueTesting();
-
+  return result.then(function() {
     // verify that the last loaded script callback has executed
     assertEquals('verification object', 'Test #4 loaded', window.test4);
   });
@@ -159,8 +129,6 @@ function testLoadMany() {
 
 // Test the load function with additional options.
 function testLoadWithOptions() {
-  testCase.waitForAsync('testLoadWithOptions');
-
   var testUrl = 'testdata/jsloader_test1.js';
   var options = {
     attributes: {
@@ -172,9 +140,8 @@ function testLoadWithOptions() {
     document: undefined  // Use default
   };
   var result = goog.net.jsloader.load(testUrl, options);
-  result.addCallback(function() {
-    testCase.continueTesting();
 
+  return result.then(function() {
     var script = result.defaultScope_.script_;
 
     // Check that the URI matches ours.

@@ -120,6 +120,8 @@ goog.require('goog.testing.asserts');
  * @param {string=} opt_name A descriptive name for the test case.
  * @extends {goog.testing.TestCase}
  * @constructor
+ * @deprecated Use goog.testing.TestCase instead. goog.testing.TestCase now
+ *    supports async testing using promises.
  */
 goog.testing.AsyncTestCase = function(opt_name) {
   goog.testing.TestCase.call(this, opt_name);

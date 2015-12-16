@@ -169,7 +169,7 @@ goog.net.CrossDomainRpc.isInResponseIframe_ = function() {
  *    response iframe.
  */
 if (goog.net.CrossDomainRpc.isInResponseIframe_()) {
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     document.execCommand('Stop');
   } else if (goog.userAgent.GECKO) {
     window.stop();
@@ -319,7 +319,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
         'No suitable dummy resource specified or detected for this page');
   }
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.EDGE_OR_IE) {
     // use this page as the dummy resource; remove hash from URL if any
     return goog.net.CrossDomainRpc.removeHash_(window.location.href);
   } else {
@@ -559,7 +559,7 @@ goog.net.CrossDomainRpc.prototype.detectResponse_ =
 
     var responseData = chunks.join('');
     // Payload is not encoded to begin with on IE. Decode in other cases only.
-    if (!goog.userAgent.IE) {
+    if (!goog.userAgent.EDGE_OR_IE) {
       responseData = decodeURIComponent(responseData);
     }
 
@@ -696,7 +696,7 @@ goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_ =
  * @private
  */
 goog.net.CrossDomainRpc.MAX_CHUNK_SIZE_ =
-    goog.userAgent.IE ? 4095 : 1024 * 1024;
+    goog.userAgent.EDGE_OR_IE ? 4095 : 1024 * 1024;
 
 
 /**
@@ -775,7 +775,7 @@ goog.net.CrossDomainRpc.sendResponse =
    * Note(*): IE actually does encode only space to %20 and decodes that
    *   automatically when you do location.href or location.hash.
    */
-  if (!goog.userAgent.IE) {
+  if (!goog.userAgent.EDGE_OR_IE) {
     data = encodeURIComponent(data);
   }
 

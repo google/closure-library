@@ -1483,6 +1483,18 @@ goog.ui.Control.IeMouseEventSequenceSimulator_ = function(control) {
 goog.inherits(goog.ui.Control.IeMouseEventSequenceSimulator_, goog.Disposable);
 
 
+/**
+ * Whether this browser supports synthetic MouseEvents.
+ *
+ * See https://msdn.microsoft.com/library/dn905219(v=vs.85).aspx for details.
+ *
+ * @private {boolean}
+ * @const
+ */
+goog.ui.Control.IeMouseEventSequenceSimulator_.SYNTHETIC_EVENTS_ =
+    !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(9);
+
+
 /** @private */
 goog.ui.Control.IeMouseEventSequenceSimulator_.prototype.handleMouseDown_ =
     function() {
@@ -1494,6 +1506,46 @@ goog.ui.Control.IeMouseEventSequenceSimulator_.prototype.handleMouseDown_ =
 goog.ui.Control.IeMouseEventSequenceSimulator_.prototype.handleMouseUp_ =
     function() {
   this.clickExpected_ = true;
+};
+
+
+/**
+ * @param {!MouseEvent} e
+ * @param {goog.events.EventType} typeArg
+ * @return {!MouseEvent}
+ * @private
+ */
+goog.ui.Control.IeMouseEventSequenceSimulator_.makeLeftMouseEvent_ =
+    function(e, typeArg) {
+  'use strict';
+
+  if (!goog.ui.Control.IeMouseEventSequenceSimulator_.SYNTHETIC_EVENTS_) {
+    // IE < 9 does not support synthetic mouse events. Therefore, reuse the
+    // existing MouseEvent by overwriting the read only button and type
+    // properties. As IE < 9 does not support ES5 strict mode this will not
+    // generate an exception even when the script specifies "use strict".
+    e.button = goog.events.BrowserEvent.MouseButton.LEFT;
+    e.type = typeArg;
+    return e;
+  }
+
+  var event = /** @type {!MouseEvent} */ (document.createEvent('MouseEvents'));
+  event.initMouseEvent(typeArg,
+      e.bubbles,
+      e.cancelable,
+      e.view || null,  // IE9 errors if view is undefined
+      e.detail,
+      e.screenX,
+      e.screenY,
+      e.clientX,
+      e.clientY,
+      e.ctrlKey,
+      e.altKey,
+      e.shiftKey,
+      e.metaKey,
+      goog.events.BrowserEvent.MouseButton.LEFT,
+      e.relatedTarget || null);  // IE9 errors if relatedTarget is undefined
+  return event;
 };
 
 
@@ -1516,19 +1568,26 @@ goog.ui.Control.IeMouseEventSequenceSimulator_.prototype.handleClick_ =
 
   var browserEvent = /** @type {goog.events.BrowserEvent} */ (e);
 
-  var event = browserEvent.getBrowserEvent();
+  var event = /** @type {!MouseEvent} */ (browserEvent.getBrowserEvent());
   var origEventButton = event.button;
   var origEventType = event.type;
 
-  event.button = goog.events.BrowserEvent.MouseButton.LEFT;
-
-  event.type = goog.events.EventType.MOUSEDOWN;
+  var down = goog.ui.Control.IeMouseEventSequenceSimulator_.makeLeftMouseEvent_(
+      event, goog.events.EventType.MOUSEDOWN);
   this.control_.handleMouseDown(
-      new goog.events.BrowserEvent(event, browserEvent.currentTarget));
+      new goog.events.BrowserEvent(down, browserEvent.currentTarget));
 
-  event.type = goog.events.EventType.MOUSEUP;
+  var up = goog.ui.Control.IeMouseEventSequenceSimulator_.makeLeftMouseEvent_(
+      event, goog.events.EventType.MOUSEUP);
   this.control_.handleMouseUp(
-      new goog.events.BrowserEvent(event, browserEvent.currentTarget));
+      new goog.events.BrowserEvent(up, browserEvent.currentTarget));
+
+  if (goog.ui.Control.IeMouseEventSequenceSimulator_.SYNTHETIC_EVENTS_) {
+    // This browser supports synthetic events. Avoid resetting the read only
+    // properties (type, button) as they were not overwritten and writing them
+    // results in an exception when running in ES5 strict mode.
+    return;
+  }
 
   // Restore original values for click handlers that have not yet been invoked.
   event.button = origEventButton;

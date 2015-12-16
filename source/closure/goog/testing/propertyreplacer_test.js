@@ -520,3 +520,82 @@ function testSetPathWithFunction() {
   assertObjectEquals('a.b.c reset', {b: f}, goog.global.a);
   assertObjectEquals('a.b.prototype reset', {}, goog.global.a.b.prototype);
 }
+
+// Tests restoring original attribute values with restore() rather than reset().
+function testRestore() {
+  var stubs = new goog.testing.PropertyReplacer();
+  var x = {a: 1, b: undefined};
+
+  // Setting simple value.
+  stubs.set(x, 'num', 1);
+  assertEquals('x.num = 1', 1, x.num);
+  stubs.restore(x, 'num');
+  assertFalse('x.num removed', 'num' in x);
+
+  // Setting undefined value.
+  stubs.set(x, 'undef', undefined);
+  assertTrue('x.undef = undefined', 'undef' in x && x.undef === undefined);
+  stubs.restore(x, 'undef');
+  assertFalse('x.undef removed', 'undef' in x);
+
+  // Setting null value.
+  stubs.set(x, 'null', null);
+  assertTrue('x["null"] = null', x['null'] === null);
+  stubs.restore(x, 'null');
+  assertFalse('x["null"] removed', 'null' in x);
+
+  // Setting a simple value that existed originally.
+  stubs.set(x, 'b', null);
+  assertTrue('x.b = null', x.b === null);
+
+  // Setting a complex value.
+  stubs.set(x, 'obj', {});
+  assertEquals('x.obj = {}', 'object', typeof x.obj);
+  stubs.set(x.obj, 'num', 2);
+  assertEquals('x.obj.num = 2', 2, x.obj.num);
+  stubs.restore(x.obj, 'num');
+  assertFalse('x.obj.num removed', 'num' in x.obj);
+  stubs.restore(x, 'obj');
+  assertFalse('x.obj removed', 'obj' in x);
+
+  // Setting a function.
+  stubs.set(x, 'func', function(n) { return n + 1; });
+  assertEquals('x.func = lambda n: n+1', 11, x.func(10));
+  stubs.restore(x, 'func');
+  assertFalse('x.func removed', 'func' in x);
+
+  // Setting a constructor and a prototype method.
+  stubs.set(x, 'Class', function(num) { this.num = num; });
+  stubs.set(x.Class.prototype, 'triple', function() { return this.num * 3; });
+  assertEquals('prototype method', 12, (new x.Class(4)).triple());
+  stubs.restore(x, 'Class');
+  assertFalse('x.Class removed', 'Class' in x);
+
+  // Final cleanup with reset(). This should have no effect:
+  // all assertions about the original state shall still hold.
+  stubs.reset();
+  assertEquals('x.a preserved', 1, x.a);
+  assertTrue('x.b reset', 'b' in x && x.b === undefined);
+  assertFalse('x.num removed', 'num' in x);
+  assertFalse('x.undef removed', 'undef' in x);
+  assertFalse('x["null"] removed', 'null' in x);
+  assertFalse('x.obj removed', 'obj' in x);
+  assertFalse('x.func removed', 'func' in x);
+  assertFalse('x.Class removed', 'Class' in x);
+}
+
+// Tests restore() with invalid arguments.
+function testRestoreWithInvalidArguments() {
+  var stubs = new goog.testing.PropertyReplacer();
+  var x = {a: 1, b: undefined};
+  var y = {a: 1};
+
+  stubs.set(x, 'a', 42);
+
+  assertThrows('Trying to restore state of an unmodified property',
+      goog.bind(stubs.restore, stubs, x, 'b'));
+  assertThrows('Trying to restore state of a non-existing property',
+      goog.bind(stubs.restore, stubs, x, 'not_here'));
+  assertThrows('Trying to restore state of an unmodified object',
+      goog.bind(stubs.restore, stubs, y, 'a'));
+}

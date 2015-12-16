@@ -433,35 +433,56 @@ function testCaseInsensitiveCompare() {
 }
 
 
-// === tests for goog.string.numerateCompare ===
-function testNumerateCompare() {
-  var f = goog.string.numerateCompare;
+/**
+ * Test cases for goog.string.floatAwareCompare and goog.string.intAwareCompare.
+ * Each comparison in this list is tested to assure that terms[0] < terms[1],
+ * terms[1] > terms[0], and identity tests terms[0] == terms[0] and
+ * terms[1] == terms[1].
+ * @const {!Array<!Array<string>>}
+ */
+var NUMERIC_COMPARISON_TEST_CASES = [
+  ['', '0'],
+  ['2', '10'],
+  ['05', '9'],
+  ['sub', 'substring'],
+  ['photo 7', 'Photo 8'],  // Case insensitive for most sorts.
+  ['Mango', 'mango'],  // Case sensitive if strings are otherwise identical.
+  ['album 2 photo 20', 'album 10 photo 20'],
+  ['album 7 photo 20', 'album 7 photo 100']
+];
 
-  // Each comparison in this list is tested to assure that t[0] < t[1],
-  // t[1] > t[0], and identity tests t[0] == t[0] and t[1] == t[1].
-  var comparisons = [
-    ['', '0'],
-    ['2', '10'],
-    ['05', '9'],
-    ['3.14', '3.2'],
-    ['sub', 'substring'],
-    ['Photo 7', 'photo 8'], // Case insensitive for most sorts.
-    ['Mango', 'mango'], // Case sensitive if strings are otherwise identical.
-    ['album 2 photo 20', 'album 10 photo 20'],
-    ['album 7 photo 20', 'album 7 photo 100']];
 
+function testFloatAwareCompare() {
+  var comparisons = NUMERIC_COMPARISON_TEST_CASES.concat([['3.14', '3.2']]);
   for (var i = 0; i < comparisons.length; i++) {
-    var t = comparisons[i];
-    assert(t[0] + ' should be less than ' + t[1],
-           f(t[0], t[1]) < 0);
-    assert(t[1] + ' should be greater than ' + t[0],
-           f(t[1], t[0]) > 0);
-    assert(t[0] + ' should be equal to ' + t[0],
-           f(t[0], t[0]) == 0);
-    assert(t[1] + ' should be equal to ' + t[1],
-           f(t[1], t[1]) == 0);
+    var terms = comparisons[i];
+    assert(terms[0] + ' should be less than ' + terms[1],
+           goog.string.floatAwareCompare(terms[0], terms[1]) < 0);
+    assert(terms[1] + ' should be greater than ' + terms[0],
+           goog.string.floatAwareCompare(terms[1], terms[0]) > 0);
+    assert(terms[0] + ' should be equal to ' + terms[0],
+           goog.string.floatAwareCompare(terms[0], terms[0]) == 0);
+    assert(terms[1] + ' should be equal to ' + terms[1],
+           goog.string.floatAwareCompare(terms[1], terms[1]) == 0);
   }
 }
+
+
+function testIntAwareCompare() {
+  var comparisons = NUMERIC_COMPARISON_TEST_CASES.concat([['3.2', '3.14']]);
+  for (var i = 0; i < comparisons.length; i++) {
+    var terms = comparisons[i];
+    assert(terms[0] + ' should be less than ' + terms[1],
+           goog.string.intAwareCompare(terms[0], terms[1]) < 0);
+    assert(terms[1] + ' should be greater than ' + terms[0],
+           goog.string.intAwareCompare(terms[1], terms[0]) > 0);
+    assert(terms[0] + ' should be equal to ' + terms[0],
+           goog.string.intAwareCompare(terms[0], terms[0]) == 0);
+    assert(terms[1] + ' should be equal to ' + terms[1],
+           goog.string.intAwareCompare(terms[1], terms[1]) == 0);
+  }
+}
+
 
 // === tests for goog.string.urlEncode && .urlDecode ===
 // NOTE: When test was written it was simply an alias for the built in
@@ -798,6 +819,7 @@ function testQuoteSpecialChars() {
   assertEquals('"\\""', goog.string.quote('"'));
   assertEquals('"\'"', goog.string.quote("'"));
   assertEquals('"\\\\"', goog.string.quote('\\'));
+  assertEquals('"\x3c"', goog.string.quote('<'));
 
   var zeroQuoted = goog.string.quote('\0');
   assertTrue(

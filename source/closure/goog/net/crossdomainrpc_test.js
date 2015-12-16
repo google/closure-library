@@ -18,10 +18,14 @@ goog.setTestOnly('goog.net.CrossDomainRpcTest');
 goog.require('goog.Promise');
 goog.require('goog.log');
 goog.require('goog.net.CrossDomainRpc');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
+function setUpPage() {
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 20000; // 20s
+}
 
 function print(o) {
   if (Object.prototype.toSource) {

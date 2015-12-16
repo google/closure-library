@@ -285,8 +285,9 @@ function testGetDocumentHeightInIframe() {
   var doc = goog.dom.getDomHelper(myIframeDoc).getDocument();
   var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
 
-  // Broken in webkit quirks mode and in IE8+
-  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) &&
+  // Broken in webkit/edge quirks mode and in IE8+
+  if ((goog.dom.isCss1CompatMode_(doc) ||
+       !goog.userAgent.WEBKIT && !goog.userAgent.EDGE) &&
       !isIE8OrHigher()) {
     assertEquals('height should be 65', 42 + 23, height);
   }
@@ -936,7 +937,7 @@ function testSetTextContent() {
   assertEquals(s, p1.firstChild.data);
 
   // Text/CharacterData
-  p1.innerHTML = 'before';
+  goog.dom.setTextContent(p1, 'before');
   s = 'after';
   goog.dom.setTextContent(p1.firstChild, s);
   assertEquals('We should have one childNode after setTextContent', 1,
@@ -952,7 +953,7 @@ function testSetTextContent() {
   assertEquals(s, df.firstChild.data);
 
   // clean up
-  p1.innerHTML = '';
+  goog.dom.removeChildren(p1);
 }
 
 function testFindNode() {
@@ -1113,6 +1114,9 @@ function testIsFocusable() {
       goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative1')),
       goog.dom.isFocusable(goog.dom.getElement('tabIndexNegative1')));
 
+  // Make sure IE doesn't throw for detached elements. IE can't measure detached
+  // elements, and calling getBoundingClientRect() will throw Unspecified Error.
+  goog.dom.isFocusable(goog.dom.createDom('button'));
 }
 
 function testGetTextContent() {
@@ -1279,6 +1283,11 @@ function testGetFrameContentWindow() {
   var name = iframe.name;
   var iframeWin = goog.dom.getFrameContentWindow(iframe);
   assertEquals(window.frames[name], iframeWin);
+}
+
+function testGetFrameContentWindowNotInitialized() {
+  var iframe = goog.dom.createDom(goog.dom.TagName.IFRAME);
+  assertNull(goog.dom.getFrameContentWindow(iframe));
 }
 
 function testCanHaveChildren() {

@@ -262,7 +262,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.innerHTML = htmlPattern;
 
-  var errorSuffix = '\nExpected\n' + htmlPattern + '\nActual\n' +
+  var errorSuffix = '\nExpected\n' + div.innerHTML + '\nActual\n' +
       actual.innerHTML;
 
   var actualIt = goog.iter.filter(

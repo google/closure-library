@@ -64,10 +64,64 @@ goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
 
   /**
    * Used for typeahead support.
-   * @type {!goog.ui.tree.TypeAhead}
-   * @private
+   * @private {!goog.ui.tree.TypeAhead}
    */
   this.typeAhead_ = new goog.ui.tree.TypeAhead();
+
+  /**
+   * The object handling keyboard events.
+   * @private {?goog.events.KeyHandler}
+   */
+  this.keyHandler_ = null;
+
+  /**
+   * The object handling focus events.
+   * @private {?goog.events.FocusHandler}
+   */
+  this.focusHandler_ = null;
+
+  /**
+   * Logger
+   * @private {?goog.log.Logger}
+   */
+  this.logger_ =
+      goog.log.getLogger('this');
+
+  /**
+   * Whether the tree is focused.
+   * @private {boolean}
+   */
+  this.focused_ = false;
+
+  /**
+   * Child node that currently has focus.
+   * @private {?goog.ui.tree.BaseNode}
+   */
+  this.focusedNode_ = null;
+
+  /**
+   * Whether to show lines.
+   * @private {boolean}
+   */
+  this.showLines_ = true;
+
+  /**
+   * Whether to show expanded lines.
+   * @private {boolean}
+   */
+  this.showExpandIcons_ = true;
+
+  /**
+   * Whether to show the root node.
+   * @private {boolean}
+   */
+  this.showRootNode_ = true;
+
+  /**
+   * Whether to show the root lines.
+   * @private {boolean}
+   */
+  this.showRootLines_ = true;
 
   if (goog.userAgent.IE) {
     /** @preserveTry */
@@ -80,79 +134,6 @@ goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
   }
 };
 goog.inherits(goog.ui.tree.TreeControl, goog.ui.tree.BaseNode);
-
-
-/**
- * The object handling keyboard events.
- * @type {goog.events.KeyHandler}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.keyHandler_ = null;
-
-
-/**
- * The object handling focus events.
- * @type {goog.events.FocusHandler}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.focusHandler_ = null;
-
-
-/**
- * Logger
- * @type {goog.log.Logger}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.logger_ =
-    goog.log.getLogger('goog.ui.tree.TreeControl');
-
-
-/**
- * Whether the tree is focused.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.focused_ = false;
-
-
-/**
- * Child node that currently has focus.
- * @type {goog.ui.tree.BaseNode}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.focusedNode_ = null;
-
-
-/**
- * Whether to show lines.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.showLines_ = true;
-
-
-/**
- * Whether to show expanded lines.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.showExpandIcons_ = true;
-
-
-/**
- * Whether to show the root node.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.showRootNode_ = true;
-
-
-/**
- * Whether to show the root lines.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.showRootLines_ = true;
 
 
 /** @override */

@@ -546,15 +546,6 @@ goog.i18n.bidi.isRtlLanguage = function(lang) {
 
 
 /**
- * Regular expression for bracket guard replacement in html.
- * @type {RegExp}
- * @private
- */
-goog.i18n.bidi.bracketGuardHtmlRe_ =
-    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&lt;.*?(&gt;)+)/g;
-
-
-/**
  * Regular expression for bracket guard replacement in text.
  * @type {RegExp}
  * @private
@@ -564,30 +555,11 @@ goog.i18n.bidi.bracketGuardTextRe_ =
 
 
 /**
- * Apply bracket guard using html span tag. This is to address the problem of
- * messy bracket display frequently happens in RTL layout.
- * @param {string} s The string that need to be processed.
- * @param {boolean=} opt_isRtlContext specifies default direction (usually
- *     direction of the UI).
- * @return {string} The processed string, with all bracket guarded.
- */
-goog.i18n.bidi.guardBracketInHtml = function(s, opt_isRtlContext) {
-  var useRtl = opt_isRtlContext === undefined ?
-      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
-  if (useRtl) {
-    return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
-        '<span dir=rtl>$&</span>');
-  }
-  return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
-      '<span dir=ltr>$&</span>');
-};
-
-
-/**
  * Apply bracket guard using LRM and RLM. This is to address the problem of
  * messy bracket display frequently happens in RTL layout.
- * This version works for both plain text and html. But it does not work as
- * good as guardBracketInHtml in some cases.
+ * This function works for plain text, not for HTML. In HTML, the opening
+ * bracket might be in a different context than the closing bracket (such as
+ * an attribute value).
  * @param {string} s The string that need to be processed.
  * @param {boolean=} opt_isRtlContext specifies default direction (usually
  *     direction of the UI).

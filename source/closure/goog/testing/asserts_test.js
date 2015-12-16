@@ -767,6 +767,25 @@ function testAssertThrows() {
   assertEquals('string error', 'string error test', stringError);
 }
 
+function testAssertThrowsJsUnitException() {
+  var error = assertThrowsJsUnitException(function() {
+    assertTrue(false);
+  });
+  assertEquals('Call to assertTrue(boolean) with false', error.message);
+
+  error = assertThrowsJsUnitException(function() {
+    assertThrowsJsUnitException(function() {
+      throw new Error('fail');
+    });
+  });
+  assertEquals('Call to fail()\nExpected a JsUnitException', error.message);
+
+  error = assertThrowsJsUnitException(function() {
+    assertThrowsJsUnitException(goog.nullFunction);
+  });
+  assertEquals('Expected a failure', error.message);
+}
+
 function testAssertNotThrows() {
   if (goog.userAgent.product.SAFARI) {
     // TODO(b/20733468): Disabled so we can get the rest of the Closure test

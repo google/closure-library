@@ -377,6 +377,22 @@ goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
 /**
  * @return {string} The string that describes the version number of the user
  *     agent.
+ * Assumes user agent is opera.
+ * @private
+ */
+goog.userAgent.operaVersion_ = function() {
+  var version = goog.global.opera.version;
+  try {
+    return version();
+  } catch (e) {
+    return version;
+  }
+};
+
+
+/**
+ * @return {string} The string that describes the version number of the user
+ *     agent.
  * @private
  */
 goog.userAgent.determineVersion_ = function() {
@@ -384,8 +400,7 @@ goog.userAgent.determineVersion_ = function() {
   // different naming schemes.
 
   if (goog.userAgent.OPERA && goog.global['opera']) {
-    var operaVersion = goog.global['opera'].version;
-    return goog.isFunction(operaVersion) ? operaVersion() : operaVersion;
+    return goog.userAgent.operaVersion_();
   }
 
   // version is a string rather than a number because it may contain 'b', 'a',

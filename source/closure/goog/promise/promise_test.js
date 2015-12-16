@@ -20,11 +20,17 @@ goog.require('goog.Timer');
 goog.require('goog.functions');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.PromiseTest');
+
+
+function setUpPage() {
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+}
 
 
 // TODO(brenneman):
@@ -2017,7 +2023,7 @@ function testThenableInterface() {
 
   // Test COMPILED code path.
   try {
-    COMPIlED = true;
+    COMPILED = true;
     function C() {}
     C.prototype.then = function(opt_a, opt_b, opt_c) {};
     goog.Thenable.addImplementation(C);

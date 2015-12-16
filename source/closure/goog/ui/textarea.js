@@ -67,9 +67,8 @@ goog.tagUnsealableClass(goog.ui.Textarea);
  * @type {boolean}
  * @private
  */
-goog.ui.Textarea.NEEDS_HELP_SHRINKING_ = goog.userAgent.GECKO ||
-    goog.userAgent.WEBKIT ||
-    (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(11));
+goog.ui.Textarea.NEEDS_HELP_SHRINKING_ =
+    !(goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11));
 
 
 /**

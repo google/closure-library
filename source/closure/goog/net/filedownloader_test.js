@@ -20,6 +20,7 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.FileDownloader');
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.fs');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
@@ -29,6 +30,7 @@ var xhrIoPool, xhr, fs, dir, downloader;
 
 function setUpPage() {
   goog.testing.fs.install(new goog.testing.PropertyReplacer());
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
 function setUp() {

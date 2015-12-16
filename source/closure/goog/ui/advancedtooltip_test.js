@@ -67,7 +67,7 @@ function tearDown() {
   // tooltip needs to be hidden as well as disposed of so that it doesn't
   // leave global state hanging around to trip up other tests.
   if (att.isVisible()) {
-    att.onHide_();
+    att.onHide();
   }
   att.dispose();
   clock.uninstall();

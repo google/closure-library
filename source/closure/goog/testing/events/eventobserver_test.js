@@ -65,3 +65,21 @@ function testHandleEvent() {
   assertArrayEquals([events[1]], observer.getEvents('bar'));
   assertArrayEquals([events[2]], observer.getEvents('baz'));
 }
+
+function testClear() {
+  var event = new goog.events.Event('foo');
+
+  var observer = new goog.testing.events.EventObserver();
+  observer.handleEvent(event);
+
+  assertArrayEquals([event], observer.getEvents());
+
+  observer.clear();
+
+  assertArrayEquals([], observer.getEvents());
+
+  var otherEvent = new goog.events.Event('baz');
+  observer.handleEvent(otherEvent);
+
+  assertArrayEquals([otherEvent], observer.getEvents());
+}

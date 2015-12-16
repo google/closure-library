@@ -155,6 +155,13 @@ function testNextTickProtectEntryPoint() {
       errorHandlerCallbackCalled = true;
     });
 
+    // MS Edge will always use goog.global.setImmediate, so ensure we get
+    // to setImmediate_ here. See useSetImmediate_ implementation for details on
+    // Edge special casing.
+    propertyReplacer.set(goog.async.nextTick, 'useSetImmediate_', function() {
+      return false;
+    });
+
     // This is only testing wrapping the callback with the protected entry
     // point, so it's okay to replace this function with a fake.
     propertyReplacer.set(goog.async.nextTick, 'setImmediate_', function(cb) {
@@ -212,8 +219,9 @@ function testNextTick_notStarvedBySetTimeout() {
  * there would be no callbacks in the linked list).
  */
 function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
-  // IE does not use the postMessage polyfill.
-  if (goog.labs.userAgent.browser.isIE()) {
+  // EDGE/IE does not use the postMessage polyfill.
+  if (goog.labs.userAgent.browser.isIE() ||
+      goog.labs.userAgent.browser.isEdge()) {
     return;
   }
 
@@ -234,8 +242,7 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
   frame.contentWindow.onerror = function(e) {
     error = e;
   };
-
-  return goog.Timer.promise(0).then(function() {
+  return goog.Timer.promise(3).then(function() {
     assert('Callback should have been called.', callbackCalled);
     assertNull('An unexpected error was thrown.', error);
   }).thenAlways(function() {

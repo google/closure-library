@@ -80,6 +80,10 @@ goog.text.LoremIpsum.prototype.words_;
 goog.text.LoremIpsum.prototype.chains_;
 
 
+/** @private {!Object<string, !Array>} */
+goog.text.LoremIpsum.prototype.chainKeys_;
+
+
 /**
  * Pairs of word-lengths that can appear at the beginning of sentences.
  * @type {Array}
@@ -243,7 +247,8 @@ goog.text.LoremIpsum.prototype.initializeDictionary_ = function(dictionary) {
  * @private
  */
 goog.text.LoremIpsum.prototype.chooseRandomStart_ = function() {
-  var key = goog.text.LoremIpsum.randomChoice_(this.starts_);
+  var key = /** @type {string} */ (goog.text.LoremIpsum.randomChoice_(
+      this.starts_));
   return this.chainKeys_[key];
 };
 

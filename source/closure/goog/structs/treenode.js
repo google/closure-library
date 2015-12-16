@@ -441,7 +441,8 @@ goog.structs.TreeNode.prototype.removeChildAt = function(index) {
  * @return {goog.structs.TreeNode<KEY, VALUE>} The removed node if any.
  */
 goog.structs.TreeNode.prototype.removeChild = function(child) {
-  return this.removeChildAt(goog.array.indexOf(this.getChildren(), child));
+  return child &&
+      this.removeChildAt(goog.array.indexOf(this.getChildren(), child));
 };
 
 

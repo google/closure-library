@@ -141,6 +141,8 @@ function testStructure() {
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
+    assertEquals('The palette item should have the data-goomoji attribute',
+        cell.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var url = emojiInfo[0];  // url of the animated emoji

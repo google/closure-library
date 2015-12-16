@@ -341,7 +341,7 @@ goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
   if (message &&
       Object.prototype.toString.call(/** @type {!Object} */ (message)) ==
       '[object MessagePort]') {
-    ports.push(message);
+    ports.push(/** @type {MessagePort} */ (message));
     return {'_port': {'type': 'real', 'index': ports.length - 1}};
   } else if (goog.isArray(message)) {
     return goog.array.map(message, goog.bind(this.extractPorts_, this, ports));

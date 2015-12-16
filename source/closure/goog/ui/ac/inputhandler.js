@@ -94,6 +94,8 @@ goog.provide('goog.ui.ac.InputHandler');
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.selection');
 goog.require('goog.events.EventHandler');
@@ -449,7 +451,8 @@ goog.ui.ac.InputHandler.prototype.setCursorPosition = function(pos) {
 goog.ui.ac.InputHandler.prototype.attachInput = function(target) {
   if (goog.dom.isElement(target)) {
     var el = /** @type {!Element} */ (target);
-    goog.a11y.aria.setState(el, 'haspopup', true);
+    goog.a11y.aria.setRole(el, goog.a11y.aria.Role.COMBOBOX);
+    goog.a11y.aria.setState(el, goog.a11y.aria.State.AUTOCOMPLETE, 'list');
   }
 
   this.eh_.listen(target, goog.events.EventType.FOCUS, this.handleFocus);
@@ -478,6 +481,12 @@ goog.ui.ac.InputHandler.prototype.attachInput = function(target) {
  *     input handler from.
  */
 goog.ui.ac.InputHandler.prototype.detachInput = function(target) {
+  if (goog.dom.isElement(target)) {
+    var el = /** @type {!Element} */ (target);
+    goog.a11y.aria.removeRole(el);
+    goog.a11y.aria.removeState(el, goog.a11y.aria.State.AUTOCOMPLETE);
+  }
+
   if (target == this.activeElement_) {
     this.handleBlur();
   }
@@ -583,6 +592,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText =
       // to do this only if there is an uncommitted IME, but this isn't possible
       // to detect. Since text editing is finicky we restrict this
       // workaround to Firefox and IE 9 where it's necessary.
+      // (Note: this has been fixed in Edge and since FF 41)
       if (goog.userAgent.GECKO ||
           (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
         el.blur();
@@ -937,7 +947,7 @@ goog.ui.ac.InputHandler.prototype.addEventHandlers_ = function() {
   this.eh_.listen(this.activeElement_,
       goog.events.EventType.MOUSEDOWN, this.onMouseDown_);
 
-  // IE also needs a keypress to check if the user typed a separator
+  // IE6 also needs a keypress to check if the user typed a separator
   if (goog.userAgent.IE) {
     this.eh_.listen(this.activeElement_,
         goog.events.EventType.KEYPRESS, this.onIeKeyPress_);

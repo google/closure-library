@@ -117,8 +117,11 @@ goog.ui.PopupDatePicker.prototype.enterDocument = function() {
     goog.style.setElementShown(el, false);
     this.datePicker_.decorate(el);
   }
-  this.getHandler().listen(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
-                           this.onDateChanged_);
+  this.getHandler()
+      .listen(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
+          this.onDateChanged_)
+      .listen(this.datePicker_, goog.ui.DatePicker.Events.SELECT,
+          this.onDateSelected_);
 };
 
 
@@ -237,8 +240,12 @@ goog.ui.PopupDatePicker.prototype.showPopup = function(element, opt_keepDate) {
 
   // Don't listen to date changes while we're setting up the popup so we don't
   // have to worry about change events when we call setDate().
-  this.getHandler().unlisten(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
-                             this.onDateChanged_);
+  this.getHandler()
+      .unlisten(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
+                this.onDateChanged_)
+      .unlisten(this.datePicker_, goog.ui.DatePicker.Events.SELECT,
+                this.onDateSelected_);
+
   var keepDate = !!opt_keepDate;
   if (!keepDate) {
     this.datePicker_.setDate(null);
@@ -249,12 +256,16 @@ goog.ui.PopupDatePicker.prototype.showPopup = function(element, opt_keepDate) {
   // without firing more events.
   this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
 
-  this.getHandler().listen(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
-                           this.onDateChanged_);
   this.popup_.setVisible(true);
   if (this.allowAutoFocus_) {
     this.getElement().focus();  // Our element contains the date picker.
   }
+
+  this.getHandler()
+      .listen(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
+              this.onDateChanged_)
+      .listen(this.datePicker_, goog.ui.DatePicker.Events.SELECT,
+              this.onDateSelected_);
 };
 
 
@@ -280,14 +291,26 @@ goog.ui.PopupDatePicker.prototype.hidePopup = function() {
 
 
 /**
+ * Called when date selection is made.
+ *
+ * @param {!goog.events.Event} event The date change event.
+ * @private
+ */
+goog.ui.PopupDatePicker.prototype.onDateSelected_ = function(event) {
+  this.hidePopup();
+
+  // Forward the change event onto our listeners.
+  this.dispatchEvent(event);
+};
+
+
+/**
  * Called when the date is changed.
  *
- * @param {goog.events.Event} event The date change event.
+ * @param {!goog.events.Event} event The date change event.
  * @private
  */
 goog.ui.PopupDatePicker.prototype.onDateChanged_ = function(event) {
-  this.hidePopup();
-
   // Forward the change event onto our listeners.
   this.dispatchEvent(event);
 };

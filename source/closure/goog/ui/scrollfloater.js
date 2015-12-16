@@ -125,6 +125,13 @@ goog.ui.ScrollFloater = function(opt_parentElement, opt_domHelper) {
   this.originalTopOffset_ = 0;
 
   /**
+   * Element's left offset when it's not floated or pinned.
+   * @type {number}
+   * @private
+   */
+  this.originalLeftOffset_ = 0;
+
+  /**
    * The placeholder element dropped in to hold the layout for
    * the floated element.
    * @type {Element}
@@ -281,8 +288,10 @@ goog.ui.ScrollFloater.prototype.update = function() {
   if (this.containerElement_) {
     this.containerBounds_ = goog.style.getBounds(this.containerElement_);
   }
+  var pageOffset_ = goog.style.getPageOffset(this.getElement());
   this.originalBounds_ = goog.style.getBounds(this.getElement());
-  this.originalTopOffset_ = goog.style.getPageOffset(this.getElement()).y;
+  this.originalTopOffset_ = pageOffset_.y;
+  this.originalLeftOffset_ = pageOffset_.x;
   this.handleScroll_();
 };
 
@@ -459,14 +468,19 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
     return;
   }
 
-  // Ignore if the component is floating or the FLOAT event is cancelled.
-  if (this.floating_ ||
-      !this.dispatchEvent(goog.ui.ScrollFloater.EventType.FLOAT)) {
+  // Ignore if the FLOAT event is cancelled.
+  if (!this.dispatchEvent(goog.ui.ScrollFloater.EventType.FLOAT)) {
+    return;
+  }
+
+  // If the component is already floating, only update the left position.
+  var newWindowLeftOffset_ = goog.dom.getDocumentScroll().x;
+  if (this.floating_) {
+    this.updateFloatingLeftPosition_();
     return;
   }
 
   var elem = /** @type {!HTMLElement} */ (this.getElement());
-  var doc = this.getDomHelper().getDocument();
 
   // Read properties of element before modifying it.
   var originalLeft_ = goog.style.getPageOffsetLeft(elem);
@@ -478,7 +492,7 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
 
   // Make element float.
   goog.style.setStyle(elem, {
-    'left': originalLeft_ + 'px',
+    'left': (originalLeft_ - newWindowLeftOffset_) + 'px',
     'width': originalWidth_ + 'px',
     'cssFloat': 'none'
   });
@@ -555,6 +569,23 @@ goog.ui.ScrollFloater.prototype.dock_ = function() {
   this.floating_ = this.pinned_ = false;
 
   return true;
+};
+
+
+/**
+ * Handle horizontal scroll events by updating the left offset position. This
+ * cannot change the floating or docked state and is only valid while the
+ * element is floating.
+ * @private
+ */
+goog.ui.ScrollFloater.prototype.updateFloatingLeftPosition_ = function() {
+  goog.asserts.assert(this.floating_);
+
+  var newWindowLeftOffset_ = goog.dom.getDocumentScroll().x;
+
+  goog.style.setStyle(this.getElement(), {
+    'left': (this.originalLeftOffset_ - newWindowLeftOffset_) + 'px'
+  });
 };
 
 

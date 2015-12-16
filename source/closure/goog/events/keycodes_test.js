@@ -78,7 +78,7 @@ function testKeyCodeZero() {
       !goog.userAgent.GECKO,
       KeyCodes.isTextModifyingKeyEvent(zeroEvent));
   assertEquals(
-      goog.userAgent.WEBKIT,
+      goog.userAgent.WEBKIT || goog.userAgent.EDGE,
       KeyCodes.isCharacterKey(0));
 }
 

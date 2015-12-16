@@ -169,12 +169,15 @@ goog.editor.Field = function(id, opt_doc) {
   var doc = opt_doc || document;
 
   /**
-   * @type {!goog.dom.DomHelper}
+   * The dom helper for the node to be made editable.
+   * @type {goog.dom.DomHelper}
    * @protected
    */
   this.originalDomHelper = goog.dom.getDomHelper(doc);
 
   /**
+   * The original node that is being made editable, or null if it has
+   * not yet been found.
    * @type {Element}
    * @protected
    */
@@ -198,15 +201,6 @@ goog.inherits(goog.editor.Field, goog.events.EventTarget);
  * TODO(user): Make this private!
  */
 goog.editor.Field.prototype.field = null;
-
-
-/**
- * The original node that is being made editable, or null if it has
- * not yet been found.
- * @type {Element}
- * @protected
- */
-goog.editor.Field.prototype.originalElement = null;
 
 
 /**
@@ -338,14 +332,6 @@ goog.editor.Field.prototype.inModalMode_ = false;
  * @private
  */
 goog.editor.Field.prototype.appWindow_;
-
-
-/**
- * The dom helper for the node to be made editable.
- * @type {goog.dom.DomHelper}
- * @protected
- */
-goog.editor.Field.prototype.originalDomHelper;
 
 
 /**
@@ -2404,15 +2390,10 @@ goog.editor.Field.prototype.placeCursorAtStartOrEnd_ = function(isStart) {
  * @param {goog.dom.SavedRange=} opt_range A previously saved selected range.
  */
 goog.editor.Field.prototype.restoreSavedRange = function(opt_range) {
-  if (goog.userAgent.IE) {
-    this.focus();
-  }
   if (opt_range) {
     opt_range.restore();
   }
-  if (!goog.userAgent.IE) {
-    this.focus();
-  }
+  this.focus();
 };
 
 

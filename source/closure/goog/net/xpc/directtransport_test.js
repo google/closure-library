@@ -29,6 +29,7 @@ goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannel');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.TransportTypes');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.setTestOnly('goog.net.xpc.DirectTransportTest');
 
@@ -89,6 +90,7 @@ function setUpPage() {
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
 function setUp() {

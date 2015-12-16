@@ -16,8 +16,9 @@ goog.provide('goog.net.xpc.CrossPageChannelTest');
 goog.setTestOnly('goog.net.xpc.CrossPageChannelTest');
 
 goog.require('goog.Disposable');
+goog.require('goog.Promise');
+goog.require('goog.Timer');
 goog.require('goog.Uri');
-goog.require('goog.async.Deferred');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.labs.userAgent.browser');
@@ -29,8 +30,8 @@ goog.require('goog.net.xpc.CrossPageChannel');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.TransportTypes');
 goog.require('goog.object');
-goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 // Set this to false when working on this test.  It needs to be true for
@@ -40,16 +41,14 @@ var CLEAN_UP_IFRAMES = true;
 
 var IFRAME_LOAD_WAIT_MS = 1000;
 var stubs = new goog.testing.PropertyReplacer();
-var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(
-    document.title);
 var uniqueId = 0;
 var driver;
 var canAccessSameDomainIframe = true;
-var accessCheckIframes = [];
+var accessCheckPromise = null;
 
 function setUpPage() {
   // This test is insanely slow on IE8 for some reason.
-  asyncTestCase.stepTimeout = 20 * 1000;
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 20 * 1000;
 
   // Show debug log
   var debugDiv = goog.dom.getElement('debugDiv');
@@ -60,29 +59,39 @@ function setUpPage() {
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
-  asyncTestCase.waitForAsync('Checking if we can access same domain iframes');
-  checkSameDomainIframeAccess();
+
+  accessCheckPromise = new goog.Promise(function(resolve, reject) {
+    var accessCheckIframes = [];
+
+    accessCheckIframes.push(
+        create1x1Iframe('nonexistant', 'testdata/i_am_non_existant.html'));
+    window.setTimeout(function() {
+      accessCheckIframes.push(
+          create1x1Iframe('existant', 'testdata/access_checker.html'));
+    }, 10);
+
+    // Called from testdata/access_checker.html
+    window['sameDomainIframeAccessComplete'] = function(canAccess) {
+      canAccessSameDomainIframe = canAccess;
+      for (var i = 0; i < accessCheckIframes.length; i++) {
+        document.body.removeChild(accessCheckIframes[i]);
+      }
+      resolve();
+    };
+  });
 }
 
 
 function setUp() {
   driver = new Driver();
+  // Ensure that the access check is complete before starting each test.
+  return accessCheckPromise;
 }
 
 
 function tearDown() {
   stubs.reset();
   driver.dispose();
-}
-
-
-function checkSameDomainIframeAccess() {
-  accessCheckIframes.push(
-      create1x1Iframe('nonexistant', 'testdata/i_am_non_existant.html'));
-  window.setTimeout(function() {
-    accessCheckIframes.push(
-        create1x1Iframe('existant', 'testdata/access_checker.html'));
-  }, 10);
 }
 
 
@@ -96,34 +105,19 @@ function create1x1Iframe(iframeId, src) {
 }
 
 
-function sameDomainIframeAccessComplete(canAccess) {
-  canAccessSameDomainIframe = canAccess;
-  for (var i = 0; i < accessCheckIframes.length; i++) {
-    document.body.removeChild(accessCheckIframes[i]);
-  }
-  asyncTestCase.continueTesting();
-}
-
-
 function testCreateIframeSpecifyId() {
   driver.createPeerIframe('new_iframe');
 
-  asyncTestCase.waitForAsync('iframe load');
-  window.setTimeout(function() {
-    driver.checkPeerIframe();
-    asyncTestCase.continueTesting();
-  }, IFRAME_LOAD_WAIT_MS);
+  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS)
+      .then(function() { driver.checkPeerIframe(); });
 }
 
 
 function testCreateIframeRandomId() {
   driver.createPeerIframe();
 
-  asyncTestCase.waitForAsync('iframe load');
-  window.setTimeout(function() {
-    driver.checkPeerIframe();
-    asyncTestCase.continueTesting();
-  }, IFRAME_LOAD_WAIT_MS);
+  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS)
+      .then(function() { driver.checkPeerIframe(); });
 }
 
 
@@ -166,134 +160,98 @@ function testGetRole() {
 
 
 function testLifeCycle_v1_v1() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v1_v1_rev() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v1_v1_onesided() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v1_v1_onesided_rev() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v1_v2() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v1_v2_rev() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v1_v2_onesided() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v1_v2_onesided_rev() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v2_v1() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v2_v1_rev() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v2_v1_onesided() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v2_v1_onesided_rev() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
@@ -305,46 +263,34 @@ function testLifeCycle_v2_v2() {
     return;
   }
 
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v2_v2_rev() {
-  checkLifeCycle(
-      false /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
 function testLifeCycle_v2_v2_onesided() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */,
-      false /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */, false /* reverse */);
 }
 
 
 function testLifeCycle_v2_v2_onesided_rev() {
-  checkLifeCycle(
-      true /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */,
-      true /* reverse */);
+  return checkLifeCycle(
+      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */, true /* reverse */);
 }
 
 
@@ -353,8 +299,9 @@ function checkLifeCycle(oneSidedHandshake, innerProtocolVersion,
     innerFrameMigrationSupported, reverse) {
   driver.createPeerIframe('new_iframe', oneSidedHandshake,
       innerProtocolVersion, outerProtocolVersion);
-  driver.connect(true /* fullLifeCycleTest */, outerFrameReconnectSupported,
-      innerFrameMigrationSupported, reverse);
+  return driver.connect(true /* fullLifeCycleTest */,
+                        outerFrameReconnectSupported,
+                        innerFrameMigrationSupported, reverse);
 }
 
 // testConnectMismatchedNames have been flaky on IEs.
@@ -366,10 +313,9 @@ function testConnectMismatchedNames_v1_v1() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* reverse */);
+  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
+                                     1 /* outerProtocolVersion */,
+                                     false /* reverse */);
 }
 
 
@@ -378,10 +324,9 @@ function testConnectMismatchedNames_v1_v1_rev() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* reverse */);
+  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
+                                     1 /* outerProtocolVersion */,
+                                     true /* reverse */);
 }
 
 
@@ -390,10 +335,9 @@ function testConnectMismatchedNames_v1_v2() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* reverse */);
+  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
+                                     2 /* outerProtocolVersion */,
+                                     false /* reverse */);
 }
 
 
@@ -402,10 +346,9 @@ function testConnectMismatchedNames_v1_v2_rev() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* reverse */);
+  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
+                                     2 /* outerProtocolVersion */,
+                                     true /* reverse */);
 }
 
 
@@ -414,10 +357,9 @@ function testConnectMismatchedNames_v2_v1() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      false /* reverse */);
+  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
+                                     1 /* outerProtocolVersion */,
+                                     false /* reverse */);
 }
 
 
@@ -426,10 +368,9 @@ function testConnectMismatchedNames_v2_v1_rev() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */,
-      true /* reverse */);
+  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
+                                     1 /* outerProtocolVersion */,
+                                     true /* reverse */);
 }
 
 
@@ -438,10 +379,9 @@ function testConnectMismatchedNames_v2_v2() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      false /* reverse */);
+  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
+                                     2 /* outerProtocolVersion */,
+                                     false /* reverse */);
 }
 
 
@@ -450,10 +390,9 @@ function testConnectMismatchedNames_v2_v2_rev() {
     return;
   }
 
-  checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */,
-      true /* reverse */);
+  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
+                                     2 /* outerProtocolVersion */,
+                                     true /* reverse */);
 }
 
 
@@ -462,10 +401,9 @@ function checkConnectMismatchedNames(innerProtocolVersion,
   driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
       innerProtocolVersion,
       outerProtocolVersion, true /* opt_randomChannelNames */);
-  driver.connect(false /* fullLifeCycleTest */,
-      false /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */,
-      reverse /* reverse */);
+  return driver.connect(
+      false /* fullLifeCycleTest */, false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */, reverse /* reverse */);
 }
 
 
@@ -544,11 +482,10 @@ function testDisposeBeforeConnect() {
     return;
   }
 
-  asyncTestCase.waitForAsync('Checking disposal before connection.');
   driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
       2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
       true /* opt_randomChannelNames */);
-  driver.connectOuterAndDispose();
+  return driver.connectOuterAndDispose();
 }
 
 
@@ -612,18 +549,18 @@ Driver = function() {
   this.outerFrameEchoPayload_ = null;
 
   /**
-   * A deferred which fires when the inner frame receives its echo response.
-   * @type {goog.async.Deferred}
+   * A resolver which fires its promise when the inner frame receives an echo.
+   * @type {!goog.promise.Resolver}
    * @private
    */
-  this.innerFrameResponseReceived_ = new goog.async.Deferred();
+  this.innerFrameResponseReceived_ = goog.Promise.withResolver();
 
   /**
-   * A deferred which fires when the outer frame receives its echo response.
-   * @type {goog.async.Deferred}
+   * A resolver which fires its promise when the outer frame receives an echo.
+   * @type {!goog.promise.Resolver}
    * @private
    */
-  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+  this.outerFrameResponseReceived_ = goog.Promise.withResolver();
 
 };
 goog.inherits(Driver, goog.Disposable);
@@ -638,10 +575,8 @@ Driver.prototype.disposeInternal = function() {
     delete this.iframe_;
   }
   goog.dispose(this.channel_);
-  this.innerFrameResponseReceived_.cancel();
-  this.innerFrameResponseReceived_ = null;
-  this.outerFrameResponseReceived_.cancel();
-  this.outerFrameResponseReceived_ = null;
+  this.innerFrameResponseReceived_.promise.cancel();
+  this.outerFrameResponseReceived_.promise.cancel();
   Driver.base(this, 'disposeInternal');
 };
 
@@ -814,29 +749,23 @@ Driver.prototype.checkPeerIframe = function() {
 Driver.prototype.connect = function(fullLifeCycleTest,
     outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
   if (!this.isTransportTestable_()) {
-    asyncTestCase.continueTesting();
     return;
   }
 
-  asyncTestCase.waitForAsync('parent and child connect');
-
   // Set the criteria for the initial handshake portion of the test.
-  this.reinitializeDeferreds_();
-  this.innerFrameResponseReceived_.awaitDeferred(
-      this.outerFrameResponseReceived_);
-  this.innerFrameResponseReceived_.addCallback(
-      goog.bind(this.checkChannelNames_, this));
+  this.reinitializePromises_();
+
+  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
+                                                this);
 
   if (fullLifeCycleTest) {
-    this.innerFrameResponseReceived_.addCallback(
-        goog.bind(this.testReconnects_, this,
-            outerFrameReconnectSupported, innerFrameMigrationSupported));
-  } else {
-    this.innerFrameResponseReceived_.addCallback(
-        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+    this.innerFrameResponseReceived_.promise.then(
+        goog.bind(this.testReconnects_, this, outerFrameReconnectSupported,
+                  innerFrameMigrationSupported));
   }
 
   this.continueConnect_(reverse);
+  return this.innerFrameResponseReceived_.promise;
 };
 
 
@@ -878,7 +807,7 @@ Driver.prototype.outerFrameConnected_ = function() {
 
 
 /**
- * Called by the inner frame connection callback.
+ * Called by the inner frame connection callback in inner_peer.html.
  */
 Driver.prototype.innerFrameConnected = function() {
   var payload = this.innerFrameEchoPayload_ =
@@ -910,12 +839,12 @@ Driver.prototype.responseHandler_ = function(payload) {
   var peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   assertEquals(this.outerFrameEchoPayload_, payload);
-  this.outerFrameResponseReceived_.callback(true);
+  this.outerFrameResponseReceived_.resolve(true);
 };
 
 
 /**
- * The handler function for incoming echo replies.
+ * The handler function for incoming echo replies. Called from inner_peer.html.
  * @param {string} payload The message payload.
  */
 Driver.prototype.innerFrameGotResponse = function(payload) {
@@ -923,7 +852,7 @@ Driver.prototype.innerFrameGotResponse = function(payload) {
   var peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   assertEquals(this.innerFrameEchoPayload_, payload);
-  this.innerFrameResponseReceived_.callback(true);
+  this.innerFrameResponseReceived_.resolve(true);
 };
 
 
@@ -937,20 +866,16 @@ Driver.prototype.innerFrameGotResponse = function(payload) {
 Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported,
     innerFrameMigrationSupported) {
   G_testRunner.log('Performing inner frame reconnect');
-  this.reinitializeDeferreds_();
-  this.innerFrameResponseReceived_.addCallback(
-      goog.bind(this.checkChannelNames_, this));
+  this.reinitializePromises_();
+  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
+                                                this);
 
   if (outerFrameReconnectSupported) {
-    this.innerFrameResponseReceived_.addCallback(
-        goog.bind(this.performOuterFrameReconnect_, this,
-            innerFrameMigrationSupported));
+    this.innerFrameResponseReceived_.promise.then(goog.bind(
+        this.performOuterFrameReconnect_, this, innerFrameMigrationSupported));
   } else if (innerFrameMigrationSupported) {
-    this.innerFrameResponseReceived_.addCallback(
-        goog.bind(this.migrateInnerFrame_, this));
-  } else {
-    this.innerFrameResponseReceived_.addCallback(
-        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+    this.innerFrameResponseReceived_.promise.then(this.migrateInnerFrame_, null,
+                                                  this);
   }
 
   this.performInnerFrameReconnect_();
@@ -958,17 +883,17 @@ Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported,
 
 
 /**
- * Initializes the deferreds and clears the echo payloads, ready for another
- * sub-test.
+ * Initializes the promise resolvers and clears the echo payloads, ready for
+ * another sub-test.
  * @private
  */
-Driver.prototype.reinitializeDeferreds_ = function() {
+Driver.prototype.reinitializePromises_ = function() {
   this.innerFrameEchoPayload_ = null;
   this.outerFrameEchoPayload_ = null;
-  this.innerFrameResponseReceived_.cancel();
-  this.innerFrameResponseReceived_ = new goog.async.Deferred();
-  this.outerFrameResponseReceived_.cancel();
-  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+  this.innerFrameResponseReceived_.promise.cancel();
+  this.innerFrameResponseReceived_ = goog.Promise.withResolver();
+  this.outerFrameResponseReceived_.promise.cancel();
+  this.outerFrameResponseReceived_ = goog.Promise.withResolver();
 };
 
 
@@ -1003,15 +928,12 @@ Driver.prototype.performOuterFrameReconnect_ = function(
   }
 
   G_testRunner.log('Reconnecting outer frame');
-  this.reinitializeDeferreds_();
-  this.innerFrameResponseReceived_.addCallback(
-      goog.bind(this.checkChannelNames_, this));
+  this.reinitializePromises_();
+  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
+                                                this);
   if (innerFrameMigrationSupported) {
-    this.outerFrameResponseReceived_.addCallback(
-        goog.bind(this.migrateInnerFrame_, this));
-  } else {
-    this.outerFrameResponseReceived_.addCallback(
-        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+    this.outerFrameResponseReceived_.promise.then(this.migrateInnerFrame_, null,
+                                                  this);
   }
   this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
 };
@@ -1023,13 +945,11 @@ Driver.prototype.performOuterFrameReconnect_ = function(
  */
 Driver.prototype.migrateInnerFrame_ = function() {
   G_testRunner.log('Migrating inner frame');
-  this.reinitializeDeferreds_();
+  this.reinitializePromises_();
   var innerFrameProtoVersion = this.innerFrameCfg_[
       goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION];
-  this.innerFrameResponseReceived_.addCallback(
-      goog.bind(this.checkChannelNames_, this));
-  this.innerFrameResponseReceived_.addCallback(
-      goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
+                                                this);
   this.innerFrameCfg_[
       goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
       innerFrameProtoVersion == 1 ? 2 : 1;
@@ -1071,7 +991,7 @@ Driver.prototype.isTransportTestable_ = function() {
  */
 Driver.prototype.connectOuterAndDispose = function() {
   this.channel_.connect();
-  window.setTimeout(goog.bind(this.disposeAndCheck_, this), 2000);
+  return goog.Timer.promise(2000).then(this.disposeAndCheck_, null, this);
 };
 
 
@@ -1090,6 +1010,5 @@ Driver.prototype.disposeAndCheck_ = function() {
   assertTrue(transport.isDisposed());
 
   // Let any errors caused by erroneous retries happen.
-  window.setTimeout(goog.bind(asyncTestCase.continueTesting, asyncTestCase),
-      2000);
+  return goog.Timer.promise(2000);
 };

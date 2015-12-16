@@ -187,10 +187,6 @@ goog.net.xpc.IframePollingTransport.prototype.rcvdConnectionSetupAck_;
 goog.net.xpc.IframePollingTransport.prototype.sentConnectionSetupAck_;
 
 
-/** @private {boolean} */
-goog.net.xpc.IframePollingTransport.prototype.sentConnectionSetup_;
-
-
 /** @private */
 goog.net.xpc.IframePollingTransport.prototype.parts_;
 
@@ -524,7 +520,6 @@ goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresent_ =
 
     this.getWindow().setTimeout(goog.bind(function() {
       this.msgSender_.send(goog.net.xpc.SETUP);
-      this.sentConnectionSetup_ = true;
       this.waitForAck_ = true;
       goog.log.fine(goog.net.xpc.logger, 'SETUP sent');
     }, this), 100);

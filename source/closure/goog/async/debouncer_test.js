@@ -101,3 +101,79 @@ function testDebouncerCommandSequences() {
   }
   mockClock.uninstall();
 }
+
+
+function testDebouncerScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'y': 0};
+  var debouncer = new goog.async.Debouncer(function() {
+    ++this['y'];
+  }, interval, x);
+  debouncer.fire();
+  assertEquals(0, x['y']);
+
+  mockClock.tick(interval);
+  assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+function testDebouncerArgumentBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  var debouncer = new goog.async.Debouncer(function(a, b, c) {
+    ++calls;
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval);
+
+  debouncer.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(1, calls);
+
+  // fire should always pass the last arguments passed to it into the decorated
+  // function, even if called multiple times.
+  debouncer.fire();
+  mockClock.tick(interval / 2);
+  debouncer.fire(8, null, true);
+  debouncer.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, calls);
+
+  mockClock.uninstall();
+}
+
+
+function testDebouncerArgumentAndScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'calls': 0};
+  var debouncer = new goog.async.Debouncer(function(a, b, c) {
+    ++this['calls'];
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval, x);
+
+  debouncer.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(1, x['calls']);
+
+  // fire should always pass the last arguments passed to it into the decorated
+  // function, even if called multiple times.
+  debouncer.fire();
+  mockClock.tick(interval / 2);
+  debouncer.fire(8, null, true);
+  debouncer.fire(3, 'string', false);
+  mockClock.tick(interval);
+  assertEquals(2, x['calls']);
+
+  mockClock.uninstall();
+}

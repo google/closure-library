@@ -28,9 +28,9 @@ goog.require('goog.string');
 
 
 /**
- * Performs sprintf-like conversion, ie. puts the values in a template.
+ * Performs sprintf-like conversion, i.e. puts the values in a template.
  * DO NOT use it instead of built-in conversions in simple cases such as
- * 'Cost: %.2f' as it would introduce unneccessary latency oposed to
+ * 'Cost: %.2f' as it would introduce unnecessary latency opposed to
  * 'Cost: ' + cost.toFixed(2).
  * @param {string} formatString Template string containing % specifiers.
  * @param {...string|number} var_args Values formatString is to be filled with.
@@ -98,8 +98,7 @@ goog.string.format = function(formatString, var_args) {
 
 /**
  * Contains various conversion functions (to be filled in later on).
- * @type {Object}
- * @private
+ * @private {!Object}
  */
 goog.string.format.demuxes_ = {};
 

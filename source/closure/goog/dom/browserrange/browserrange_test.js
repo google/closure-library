@@ -384,7 +384,7 @@ function testRangeEndingWithBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Start node should be span', spanElem, startNode);
   } else {
@@ -410,7 +410,7 @@ function testRangeEndingWithBR2() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Start node should be span', spanElem, startNode);
   } else {
@@ -440,7 +440,7 @@ function testRangeEndingBeforeBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Start node should be span', spanElem, startNode);
   } else {
@@ -449,7 +449,7 @@ function testRangeEndingBeforeBR() {
   }
   assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Endnode should be span', spanElem, endNode);
     assertEquals('Endoffset should be 1', 1, selRange.getEndOffset());
@@ -475,7 +475,7 @@ function testRangeStartingWithBR() {
   assertEquals('Start node should be span', spanElem, startNode);
   assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Endnode should be span', spanElem, endNode);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
@@ -498,7 +498,7 @@ function testRangeStartingAfterBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Start node should be span', spanElem, startNode);
     assertEquals('Startoffset should be 2', 2, selRange.getStartOffset());
@@ -508,7 +508,7 @@ function testRangeStartingAfterBR() {
     assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
   }
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO ||
+  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
     assertEquals('Endnode should be span', spanElem, endNode);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
@@ -585,7 +585,7 @@ function testCompareBrowserRangeEndpoints() {
  * created and inserted node.
  */
 function testInsertNodeNonElement() {
-  dynamic.innerHTML = 'beforeafter';
+  goog.dom.setTextContent(dynamic, 'beforeafter');
   var range = goog.dom.browserrange.createRangeFromNodes(
       dynamic.firstChild, 6, dynamic.firstChild, 6);
   var newNode = goog.dom.createTextNode('INSERTED');

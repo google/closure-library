@@ -15,16 +15,15 @@
 goog.module('goog.async.AnimationDelayTest');
 goog.setTestOnly('goog.async.AnimationDelayTest');
 
-goog.require('goog.Timer');
-goog.require('goog.async.AnimationDelay');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
-
+var AnimationDelay = goog.require('goog.async.AnimationDelay');
+var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+var Timer = goog.require('goog.Timer');
+var jsunit = goog.require('goog.testing.jsunit');
+var recordFunction = goog.require('goog.testing.recordFunction');
 var testSuite = goog.require('goog.testing.testSuite');
 
 var TEST_DELAY = 20;
-var stubs = new goog.testing.PropertyReplacer();
+var stubs = new PropertyReplacer();
 
 testSuite({
   tearDown: function() {
@@ -34,13 +33,13 @@ testSuite({
   testStart: function() {
     var callCount = 0;
     var start = goog.now();
-    var delay = new goog.async.AnimationDelay(function(end) {
+    var delay = new AnimationDelay(function(end) {
       callCount++;
     });
 
     delay.start();
 
-    return goog.Timer.promise(TEST_DELAY).then(function() {
+    return Timer.promise(TEST_DELAY).then(function() {
       assertEquals(1, callCount);
     });
   },
@@ -48,14 +47,14 @@ testSuite({
   testStop: function() {
     var callCount = 0;
     var start = goog.now();
-    var delay = new goog.async.AnimationDelay(function(end) {
+    var delay = new AnimationDelay(function(end) {
       callCount++;
     });
 
     delay.start();
     delay.stop();
 
-    return goog.Timer.promise(TEST_DELAY).then(function() {
+    return Timer.promise(TEST_DELAY).then(function() {
       assertEquals(0, callCount);
     });
   },
@@ -66,14 +65,14 @@ testSuite({
       return expectedValue;
     });
 
-    var handler = goog.testing.recordFunction(function(timestamp) {
+    var handler = recordFunction(function(timestamp) {
       assertEquals(expectedValue, timestamp);
     });
-    var delay = new goog.async.AnimationDelay(handler);
+    var delay = new AnimationDelay(handler);
 
     delay.start();
 
-    return goog.Timer.promise(TEST_DELAY).then(function() {
+    return Timer.promise(TEST_DELAY).then(function() {
       assertEquals(1, handler.getCallCount());
     });
   }

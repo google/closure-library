@@ -94,7 +94,7 @@ function setUp() {
 
 function tearDown() {
   dlg.dispose();
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 }
 
 

@@ -21,168 +21,111 @@ goog.require('goog.testing.jsunit');
 
 
 var EPSILON = 2;
-var body;
-var html;
+var documentScroll;
 
 function setUp() {
-  body = document.body;
-  setUpElement(body);
-  html = document.documentElement;
-  setUpElement(html);
-}
-
-
-function setUpElement(element) {
-  element.scrollTop = 100;
-  element.scrollLeft = 100;
+  documentScroll = goog.dom.getDocumentScrollElement();
+  documentScroll.scrollTop = 100;
+  documentScroll.scrollLeft = 100;
 }
 
 
 function tearDown() {
-  tearDownElement(body);
-  tearDownElement(html);
+  documentScroll.style.border = '';
+  documentScroll.style.padding = '';
+  documentScroll.style.margin = '';
+  documentScroll.scrollTop = 0;
+  documentScroll.scrollLeft = 0;
 }
-
-
-function tearDownElement(element) {
-  element.style.border = '';
-  element.style.padding = '';
-  element.style.margin = '';
-  element.scrollTop = 0;
-  element.scrollLeft = 0;
-}
-
 
 
 function testDocumentScrollWithZeroedBodyProperties() {
   assertRoughlyEquals(200,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), body).y,
+          goog.dom.getElement('testEl1')).y,
       EPSILON);
   assertRoughlyEquals(300,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), body).x,
-      EPSILON);
-}
-
-
-function testHtmlScrollWithZeroedBodyProperties() {
-  assertRoughlyEquals(200,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), html).y,
-      EPSILON);
-  assertRoughlyEquals(300,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), html).x,
+          goog.dom.getElement('testEl2')).x,
       EPSILON);
 }
 
 
 function testDocumentScrollWithMargin() {
-  body.style.margin = '20px 0 0 30px';
+  documentScroll.style.margin = '20px 0 0 30px';
   assertRoughlyEquals(220,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), body).y,
+          goog.dom.getElement('testEl1')).y,
       EPSILON);
   assertRoughlyEquals(330,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), body).x,
+          goog.dom.getElement('testEl2')).x,
       EPSILON);
 }
-
-
-function testHtmlScrollWithMargin() {
-  html.style.margin = '20px 0 0 30px';
-  assertRoughlyEquals(220,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), html).y,
-      EPSILON);
-  assertRoughlyEquals(330,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), html).x,
-      EPSILON);
-}
-
 
 
 function testDocumentScrollWithPadding() {
-  body.style.padding = '20px 0 0 30px';
+  documentScroll.style.padding = '20px 0 0 30px';
   assertRoughlyEquals(220,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), body).y,
+          goog.dom.getElement('testEl1')).y,
       EPSILON);
   assertRoughlyEquals(330,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), body).x,
-      EPSILON);
-}
-
-
-function testHtmlScrollWithPadding() {
-  html.style.padding = '20px 0 0 30px';
-  assertRoughlyEquals(220,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), html).y,
-      EPSILON);
-  assertRoughlyEquals(330,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), html).x,
+          goog.dom.getElement('testEl2')).x,
       EPSILON);
 }
 
 
 function testDocumentScrollWithBorder() {
-  body.style.border = '20px solid green';
+  documentScroll.style.border = '20px solid green';
   assertRoughlyEquals(220,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), body).y,
+          goog.dom.getElement('testEl1')).y,
       EPSILON);
   assertRoughlyEquals(320,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), body).x,
-      EPSILON);
-}
-
-
-function testHtmlScrollWithBorder() {
-  html.style.border = '20px solid green';
-  assertRoughlyEquals(220,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), html).y,
-      EPSILON);
-  assertRoughlyEquals(320,
-      goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), html).x,
+          goog.dom.getElement('testEl2')).x,
       EPSILON);
 }
 
 
 function testDocumentScrollWithAllProperties() {
-  body.style.margin = '20px 0 0 30px';
-  body.style.padding = '40px 0 0 50px';
-  body.style.border = '10px solid green';
+  documentScroll.style.margin = '20px 0 0 30px';
+  documentScroll.style.padding = '40px 0 0 50px';
+  documentScroll.style.border = '10px solid green';
   assertRoughlyEquals(270,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), body).y,
+          goog.dom.getElement('testEl1')).y,
       EPSILON);
   assertRoughlyEquals(390,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), body).x,
+          goog.dom.getElement('testEl2')).x,
       EPSILON);
 }
 
 
-function testHtmlScrollWithAllProperties() {
-  html.style.margin = '20px 0 0 30px';
-  html.style.padding = '40px 0 0 50px';
-  html.style.border = '10px solid green';
-  assertRoughlyEquals(270,
+function testDocumentScrollNoOpIfElementAlreadyInView() {
+  // Scroll once to make testEl3 visible.
+  documentScroll.scrollTop =
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl1'), html).y,
-      EPSILON);
-  assertRoughlyEquals(390,
+          goog.dom.getElement('testEl3')).y;
+
+  // Scroll a bit more so that now the element is approximately at the middle.
+  var viewportHeight = documentScroll.clientHeight;
+  documentScroll.scrollTop += viewportHeight / 2;
+
+  // Since the element is fully within viewport, additional calls to
+  // getContainerOffsetToScrollInto should be a no-op.
+  assertEquals(documentScroll.scrollTop,
       goog.style.getContainerOffsetToScrollInto(
-          goog.dom.getElement('testEl2'), html).x,
-      EPSILON);
+          goog.dom.getElement('testEl3')).y);
 }
 
+
+function testScrollIntoContainerView() {
+  goog.style.scrollIntoContainerView(goog.dom.getElement('testEl1'));
+  assertRoughlyEquals(200, documentScroll.scrollTop, EPSILON);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('testEl2'));
+  assertRoughlyEquals(300, documentScroll.scrollLeft, EPSILON);
+}

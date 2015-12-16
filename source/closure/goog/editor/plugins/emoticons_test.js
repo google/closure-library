@@ -58,6 +58,7 @@ function runEmojiTestWithPlugin(plugin) {
   var img = imgs[0];
   assertUriEquals(src, img.getAttribute('src'));
   assertEquals(id, img.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE));
+  assertEquals(id, img.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE));
 
   var range = field.getRange();
   assertNotNull('must have a selection', range);

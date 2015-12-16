@@ -18,10 +18,17 @@ goog.setTestOnly('goog.testing.fs.EntryTest');
 goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.Error');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 
 var fs, file, mockClock;
+
+function setUpPage() {
+  // This test has a tendency to timeout on external Travis testing
+  // infrastructure. Up to 5s from 1s.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000;
+}
 
 function setUp() {
   // Install the MockClock to create predictable timestamps for new files.

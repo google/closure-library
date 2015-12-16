@@ -100,6 +100,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem =
   var outerdiv = dom.createDom(
       goog.dom.TagName.DIV, goog.getCssName('goog-palette-cell-wrapper'), el);
   outerdiv.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, id);
+  outerdiv.setAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE, id);
   return /** @type {!HTMLDivElement} */ (outerdiv);
 };
 

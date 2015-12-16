@@ -632,7 +632,8 @@ goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
   this.contentElement_ = goog.dom.getNextElementSibling(el);
 
   // Decorate additional menu items (like 'apply').
-  this.getRenderer().decorateChildren(this, el.parentNode,
+  this.getRenderer().decorateChildren(this,
+      /** @type {!Element} */ (el.parentNode),
       this.contentElement_);
 
   this.initFilterInput_();

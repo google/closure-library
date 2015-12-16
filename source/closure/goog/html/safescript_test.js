@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeScriptTest');
 
 goog.require('goog.html.SafeScript');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
@@ -41,16 +42,20 @@ function testSafeScript() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
+  var markerFieldName = 'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(
+      goog.html.SafeScript.fromConstant(goog.string.Const.from('')));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.safeScriptValueWithSecurityContract__googHtmlSecurityPrivate_ =
-      'var string = \'evil\';';
-  evil.SAFE_STYLE_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = 'var string = \'evil\';';
+  evil[markerFieldName] = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeScript.unwrap(evil);
   });
-  assertTrue(
-      exception.message.indexOf('expected object of type SafeScript') > 0);
+  assertContains('expected object of type SafeScript', exception.message);
 }
 
 

@@ -65,7 +65,7 @@ function tearDown() {
   var element = goog.dom.getElement('demoMenu');
   element.parentNode.replaceChild(clonedMenuDom, element);
 
-  goog.dom.getElement('sandbox').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
 
   if (mockClock) {
     mockClock.uninstall();

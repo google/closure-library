@@ -67,6 +67,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
+goog.require('goog.string.Unicode');
 goog.require('goog.ui.Component');
 
 
@@ -417,11 +418,14 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
     throw Error('No cells');
   }
   var cell = row.cells[0];
-  var html = '<div style="float: left; width: ' + depth +
-      'em;"><div class=toggle style="width: 1em; float: right;">' +
-      '&nbsp;</div></div>';
-  var fragment = /** @type {!Element} */ (
-      selfObj.getDomHelper().htmlToDocumentFragment(html));
+  var dom = selfObj.getDomHelper();
+  var fragment = dom.createDom(goog.dom.TagName.DIV,
+      {'style': 'float: left; width: ' + depth + 'em;'},
+      dom.createDom(goog.dom.TagName.DIV,
+          {'class': 'toggle', 'style': 'width: 1em; float: right;'},
+          // NOTE: NBSP is probably only needed by IE6. This div can probably be
+          // made contentless.
+          goog.string.Unicode.NBSP));
   cell.insertBefore(fragment, cell.firstChild);
   goog.dom.classlist.add(row, selfObj.isExpanded() ?
       goog.getCssName('goog-drilldown-expanded') :

@@ -37,8 +37,8 @@ function tearDown() {
   if (popupDatePicker) {
     popupDatePicker.dispose();
   }
-  goog.dom.getElement('renderElement').innerHTML = '';
-  goog.dom.getElement('popupParent').innerHTML = '';
+  goog.dom.removeChildren(goog.dom.getElement('renderElement'));
+  goog.dom.removeChildren(goog.dom.getElement('popupParent'));
 }
 
 

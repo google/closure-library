@@ -24,6 +24,7 @@ goog.require('goog.editor.plugins.LinkBubble');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.FunctionMock');
@@ -38,6 +39,7 @@ var fieldDiv;
 var FIELDMOCK;
 var linkBubble;
 var link;
+var linkChild;
 var mockWindowOpen;
 var stubs;
 var testHelper;
@@ -56,6 +58,7 @@ function setUp() {
   linkBubble.fieldObject = FIELDMOCK;
 
   link = fieldDiv.firstChild;
+  linkChild = link.lastChild;
 
   mockWindowOpen = new goog.testing.FunctionMock('open');
   stubs.set(window, 'open', mockWindowOpen);
@@ -133,6 +136,33 @@ function testChangeClicked() {
   FIELDMOCK.$verify();
 }
 
+function testChangePressed() {
+  FIELDMOCK.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
+      new goog.editor.Link(link, false));
+  FIELDMOCK.$registerArgumentListVerifier('execCommand', function(arr1, arr2) {
+    return arr1.length == arr2.length &&
+           arr1.length == 2 &&
+           arr1[0] == goog.editor.Command.MODAL_LINK_EDITOR &&
+           arr2[0] == goog.editor.Command.MODAL_LINK_EDITOR &&
+           arr1[1] instanceof goog.editor.Link &&
+           arr2[1] instanceof goog.editor.Link;
+  });
+  FIELDMOCK.$times(1);
+  FIELDMOCK.$returns(true);
+  FIELDMOCK.$replay();
+  linkBubble.enable(FIELDMOCK);
+
+  linkBubble.handleSelectionChange(createMouseEvent(link));
+  assertBubble();
+
+  var defaultPrevented = !goog.testing.events.fireKeySequence(
+      goog.dom.$(goog.editor.plugins.LinkBubble.CHANGE_LINK_ID_),
+      goog.events.KeyCodes.ENTER);
+  assertTrue(defaultPrevented);
+  assertNoBubble();
+  FIELDMOCK.$verify();
+}
+
 function testDeleteClicked() {
   FIELDMOCK.dispatchBeforeChange();
   FIELDMOCK.$times(1);
@@ -153,6 +183,39 @@ function testDeleteClicked() {
   assertNotEquals('Link removed', element.firstChild.nodeName,
       goog.dom.TagName.A);
   assertNoBubble();
+  var range = goog.dom.Range.createFromWindow();
+  assertEquals('Link selection on link text', linkChild, range.getEndNode());
+  assertEquals('Link selection on link text end',
+      goog.dom.getRawTextContent(linkChild).length, range.getEndOffset());
+  FIELDMOCK.$verify();
+}
+
+function testDeletePressed() {
+  FIELDMOCK.dispatchBeforeChange();
+  FIELDMOCK.$times(1);
+  FIELDMOCK.dispatchChange();
+  FIELDMOCK.$times(1);
+  FIELDMOCK.focus();
+  FIELDMOCK.$times(1);
+  FIELDMOCK.$replay();
+
+  linkBubble.enable(FIELDMOCK);
+
+  linkBubble.handleSelectionChange(createMouseEvent(link));
+  assertBubble();
+
+  var defaultPrevented = !goog.testing.events.fireKeySequence(
+      goog.dom.$(goog.editor.plugins.LinkBubble.DELETE_LINK_ID_),
+      goog.events.KeyCodes.ENTER);
+  assertTrue(defaultPrevented);
+  var element = goog.userAgent.GECKO ? document.body : fieldDiv;
+  assertNotEquals('Link removed', element.firstChild.nodeName,
+      goog.dom.TagName.A);
+  assertNoBubble();
+  var range = goog.dom.Range.createFromWindow();
+  assertEquals('Link selection on link text', linkChild, range.getEndNode());
+  assertEquals('Link selection on link text end',
+      goog.dom.getRawTextContent(linkChild).length, range.getEndOffset());
   FIELDMOCK.$verify();
 }
 
@@ -254,7 +317,7 @@ function testDontLinkifyInvalidScheme() {
 
   var badLink = document.createElement(goog.dom.TagName.A);
   badLink.href = 'javascript:alert(1)';
-  badLink.innerHTML = 'bad link';
+  goog.dom.setTextContent(badLink, 'bad link');
 
   linkBubble.handleSelectionChange(createMouseEvent(badLink));
   assertBubble();
@@ -320,7 +383,7 @@ function testLongUrlTestLinkAnchorTextCorrect() {
 
   var longLink = document.createElement(goog.dom.TagName.A);
   longLink.href = longUrl;
-  longLink.innerHTML = 'Google';
+  goog.dom.setTextContent(longLink, 'Google');
   fieldDiv.appendChild(longLink);
 
   linkBubble.handleSelectionChange(createMouseEvent(longLink));

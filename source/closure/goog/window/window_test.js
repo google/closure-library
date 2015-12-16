@@ -25,6 +25,7 @@ goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.window');
 
@@ -34,6 +35,13 @@ var WIN_LOAD_TRY_TIMEOUT = 100;
 var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
 
 var stubs = new goog.testing.PropertyReplacer();
+
+
+function shouldRunTests() {
+  // MS Edge has a bunch of flaky test failures around window.open.
+  // TODO(joeltine): Remove this when http://b/25455129 is fixed.
+  return !goog.labs.userAgent.browser.isEdge();
+}
 
 
 function setUpPage() {
@@ -47,6 +55,7 @@ function setUpPage() {
               goog.dom.getTextContent(e.target), {'noreferrer': true});
         });
   }
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 60000; // 60s
 }
 
 

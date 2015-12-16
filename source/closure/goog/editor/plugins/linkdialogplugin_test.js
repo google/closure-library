@@ -59,11 +59,11 @@ var linkObj;
 
 function setUp() {
   testDiv = goog.dom.getDocument().getElementById('test');
-  testDiv.innerHTML = 'Some preceeding text';
+  goog.dom.setTextContent(testDiv, 'Some preceeding text');
 
   anchorElem = goog.dom.createElement(goog.dom.TagName.A);
   anchorElem.href = 'http://www.google.com/';
-  anchorElem.innerHTML = 'anchor text';
+  goog.dom.setTextContent(anchorElem, 'anchor text');
   goog.dom.appendChild(testDiv, anchorElem);
   extraAnchors = [];
 
@@ -92,7 +92,7 @@ function setUp() {
 function tearDown() {
   plugin.dispose();
   tearDownRealEditableField();
-  testDiv.innerHTML = '';
+  goog.dom.removeChildren(testDiv);
   mockCtrl.$tearDown();
 }
 

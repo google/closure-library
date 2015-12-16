@@ -132,7 +132,8 @@ goog.cssom.getAllCssStyleSheets = function(opt_styleSheet,
   if (styleSheet.imports && styleSheet.imports.length) {
     for (var i = 0, n = styleSheet.imports.length; i < n; i++) {
       goog.array.extend(styleSheetsOutput,
-          goog.cssom.getAllCssStyleSheets(styleSheet.imports[i]));
+          goog.cssom.getAllCssStyleSheets(
+              /** @type {CSSStyleSheet} */ (styleSheet.imports[i])));
     }
 
   } else if (styleSheet.length) {

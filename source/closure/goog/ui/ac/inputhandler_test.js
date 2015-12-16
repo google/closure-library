@@ -15,6 +15,10 @@
 goog.provide('goog.ui.ac.InputHandlerTest');
 goog.setTestOnly('goog.ui.ac.InputHandlerTest');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.dom');
 goog.require('goog.dom.selection');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -169,6 +173,8 @@ function simulateWinFirefox3() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = false;
@@ -181,6 +187,8 @@ function simulateWinIe7() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = true;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = true;
   goog.userAgent.DOCUMENT_MODE = 7;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = false;
@@ -194,6 +202,8 @@ function simulateWinChrome() {
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = true;
   goog.userAgent.VERSION = '525';
@@ -207,6 +217,8 @@ function simulateMacFirefox3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = true;
@@ -219,6 +231,8 @@ function simulateMacSafari3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = false;
   goog.userAgent.WEBKIT = true;
   goog.userAgent.VERSION = '525';
@@ -232,6 +246,8 @@ function simulateLinuxFirefox3() {
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = true;
   goog.userAgent.IE = false;
+  goog.userAgent.EDGE = false;
+  goog.userAgent.EDGE_OR_IE = false;
   goog.userAgent.GECKO = true;
   goog.userAgent.WEBKIT = false;
   goog.events.KeyHandler.USES_KEYDOWN_ = true;
@@ -713,4 +729,21 @@ function testMultipleSeparatorUsesEmptyDefaults() {
   inputHandler.setTokenText('waldo', true /* multi-row */);
 
   assertEquals('bob,waldo', mockElement.value);
+}
+
+
+function testAriaTags() {
+  var target = goog.dom.createDom('div');
+  mh.attachInput(target);
+
+  assertEquals(goog.a11y.aria.Role.COMBOBOX,
+      goog.a11y.aria.getRole(target));
+  assertEquals('list',
+      goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
+
+  mh.detachInput(target);
+
+  assertNull(goog.a11y.aria.getRole(target));
+  assertEquals('',
+      goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
 }

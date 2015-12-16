@@ -28,6 +28,7 @@ var client;
 var logger;
 
 function setUp() {
+  goog.debug.FORCE_SLOPPY_STACKS = false;
   mockControl = new goog.testing.MockControl();
   channel = new goog.testing.messaging.MockMessageChannel(mockControl);
   client = new goog.messaging.LoggerClient(channel, 'log');
@@ -78,6 +79,10 @@ function testCommandWithException() {
 }
 
 function testCommandWithStringException() {
+  // NOTE: the stack traces won't match with the strict mode compatible
+  // stack traces as they are recorded in different locations.
+  goog.debug.FORCE_SLOPPY_STACKS = true;
+
   channel.send('log', {
     name: 'test.logging.Object',
     level: goog.debug.Logger.Level.WARNING.value,

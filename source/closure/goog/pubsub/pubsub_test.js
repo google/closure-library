@@ -17,15 +17,22 @@ goog.setTestOnly('goog.pubsub.PubSubTest');
 
 goog.require('goog.array');
 goog.require('goog.pubsub.PubSub');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 
 var pubsub;
+var asyncPubsub;
+var mockClock;
 
 function setUp() {
   pubsub = new goog.pubsub.PubSub();
+  asyncPubsub = new goog.pubsub.PubSub(true);
+  mockClock = new goog.testing.MockClock(true);
 }
 
 function tearDown() {
+  mockClock.uninstall();
+  asyncPubsub.dispose();
   pubsub.dispose();
 }
 
@@ -196,6 +203,67 @@ function testSubscribeOnce() {
   assertEquals('Topic must have no subscribers', 0,
       pubsub.getCount('someTopic'));
   assertTrue('Subscriber must have been called', context.called);
+  assertEquals('Value must have been updated', 17, context.value);
+}
+
+function testAsyncSubscribeOnce() {
+  var callCount = 0;
+  asyncPubsub.subscribeOnce('someTopic', function() {
+    callCount++;
+  });
+  assertEquals('Topic must have one subscriber', 1,
+               asyncPubsub.getCount('someTopic'));
+  mockClock.tick();
+  assertEquals('Subscriber must not have been called yet', 0, callCount);
+
+  asyncPubsub.publish('someTopic');
+  asyncPubsub.publish('someTopic');
+  mockClock.tick();
+  assertEquals('Topic must have no subscribers', 0,
+               asyncPubsub.getCount('someTopic'));
+  assertEquals('Subscriber must have been called once', 1, callCount);
+}
+
+function testAsyncSubscribeOnceWithContext() {
+  var context = {callCount: 0};
+  asyncPubsub.subscribeOnce('someTopic', function() {
+    this.callCount++;
+  }, context);
+  assertEquals('Topic must have one subscriber', 1,
+               asyncPubsub.getCount('someTopic'));
+  mockClock.tick();
+  assertEquals('Subscriber must not have been called yet',
+               0, context.callCount);
+
+  asyncPubsub.publish('someTopic');
+  asyncPubsub.publish('someTopic');
+  mockClock.tick();
+  assertEquals('Topic must have no subscribers', 0,
+               asyncPubsub.getCount('someTopic'));
+  assertEquals('Subscriber must have been called once',
+               1, context.callCount);
+}
+
+function testAsyncSubscribeOnceWithContextAndValue() {
+  var context = {callCount: 0, value: 0};
+  asyncPubsub.subscribeOnce('someTopic', function(value) {
+    this.callCount++;
+    this.value = value;
+  }, context);
+  assertEquals('Topic must have one subscriber', 1,
+               asyncPubsub.getCount('someTopic'));
+  mockClock.tick();
+  assertEquals('Subscriber must not have been called yet',
+               0, context.callCount);
+  assertEquals('Value must have expected value', 0, context.value);
+
+  asyncPubsub.publish('someTopic', 17);
+  asyncPubsub.publish('someTopic', 42);
+  mockClock.tick();
+  assertEquals('Topic must have no subscribers', 0,
+               asyncPubsub.getCount('someTopic'));
+  assertEquals('Subscriber must have been called once',
+               1, context.callCount);
   assertEquals('Value must have been updated', 17, context.value);
 }
 
@@ -430,6 +498,56 @@ function testPublish() {
   assertTrue('bar() must have been called', barCalled);
 }
 
+function testAsyncPublish() {
+  var context = {};
+  var fooCallCount = 0;
+  var barCallCount = 0;
+
+  function foo(x, y) {
+    fooCallCount++;
+    assertEquals('x must have expected value', 'x', x);
+    assertEquals('y must have expected value', 'y', y);
+  }
+
+  function bar(x, y) {
+    barCallCount++;
+    assertEquals('Context must have expected value', context, this);
+    assertEquals('x must have expected value', 'x', x);
+    assertEquals('y must have expected value', 'y', y);
+  }
+
+  asyncPubsub.subscribe('someTopic', foo);
+  asyncPubsub.subscribe('someTopic', bar, context);
+
+  assertTrue(asyncPubsub.publish('someTopic', 'x', 'y'));
+  assertEquals('foo() must not have been called', 0, fooCallCount);
+  assertEquals('bar() must not have been called', 0, barCallCount);
+  mockClock.tick();
+  assertEquals('foo() must have been called once', 1, fooCallCount);
+  assertEquals('bar() must have been called once', 1, barCallCount);
+
+  fooCallCount = 0;
+  barCallCount = 0;
+  assertTrue(asyncPubsub.unsubscribe('someTopic', foo));
+
+  assertTrue(asyncPubsub.publish('someTopic', 'x', 'y'));
+  assertEquals('foo() must not have been called', 0, fooCallCount);
+  assertEquals('bar() must not have been called', 0, barCallCount);
+  mockClock.tick();
+  assertEquals('foo() must not have been called', 0, fooCallCount);
+  assertEquals('bar() must have been called once', 1, barCallCount);
+
+  fooCallCount = 0;
+  barCallCount = 0;
+  asyncPubsub.subscribe('differentTopic', foo);
+  assertTrue(asyncPubsub.publish('someTopic', 'x', 'y'));
+  assertEquals('foo() must not have been called', 0, fooCallCount);
+  assertEquals('bar() must not have been called', 0, barCallCount);
+  mockClock.tick();
+  assertEquals('foo() must not have been called', 0, fooCallCount);
+  assertEquals('bar() must have been called once', 1, barCallCount);
+}
+
 function testPublishEmptyTopic() {
   var fooCalled = false;
   function foo() {
@@ -497,7 +615,7 @@ function testUnsubscribeWhilePublishing() {
   var thirdCalled = false;
 
   function first() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('X', second));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount('X'));
@@ -506,14 +624,12 @@ function testUnsubscribeWhilePublishing() {
   pubsub.subscribe('X', first);
 
   function second() {
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
-        pubsub.getCount('X'));
     secondCalled = true;
   }
   pubsub.subscribe('X', second);
 
   function third() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('X', first));
     assertEquals('Topic "X" must still have 3 subscribers', 3,
         pubsub.getCount('X'));
@@ -528,7 +644,7 @@ function testUnsubscribeWhilePublishing() {
 
   assertTrue(pubsub.publish('X'));
   assertTrue('First function must have been called', firstCalled);
-  assertTrue('Second function must have been called', secondCalled);
+  assertFalse('Second function must not have been called', secondCalled);
   assertTrue('Third function must have been called', thirdCalled);
   assertEquals('Topic "X" must have 1 subscriber after publishing', 1,
       pubsub.getCount('X'));
@@ -543,7 +659,7 @@ function testUnsubscribeSelfWhilePublishing() {
   var selfDestructCalled = false;
 
   function selfDestruct() {
-    assertFalse('unsubscribe() must return false during publishing',
+    assertTrue('unsubscribe() must return true when unsubscribing',
         pubsub.unsubscribe('someTopic', arguments.callee));
     assertEquals('Topic must still have 1 subscriber', 1,
         pubsub.getCount('someTopic'));
@@ -650,4 +766,21 @@ function testSubscriberExceptionUnlocksSubscriptions() {
   assertTrue(pubsub.unsubscribeByKey(key2));
   // "key1" should've been successfully removed already;
   assertFalse(pubsub.unsubscribeByKey(key1));
+}
+
+function testNestedSubscribeOnce() {
+  var calls = 0;
+
+  pubsub.subscribeOnce('X', function() {
+    calls++;
+  });
+
+  pubsub.subscribe('Y', function() {
+    pubsub.publish('X');
+    pubsub.publish('X');
+  });
+
+  pubsub.publish('Y');
+
+  assertEquals('X must be called once', 1, calls);
 }

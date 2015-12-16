@@ -65,7 +65,6 @@ function testSetInnerHtml() {
   assertEquals(html, mockElement.innerHTML);
 }
 
-
 function testDocumentWrite() {
   var mockDoc = /** @type {!Document} */ ({
     'html': null,
@@ -164,6 +163,31 @@ function testSetAnchorHref() {
   assertEquals('javascript:trusted();', mockAnchor.href);
 }
 
+function testSetImageSrc_withSafeUrlObject() {
+  var mockImageElement =  /** @type {!HTMLImageElement} */ ({
+    'src': 'blarg'
+  });
+  goog.dom.safe.setImageSrc(mockImageElement, 'javascript:evil();');
+  assertEquals('about:invalid#zClosurez', mockImageElement.src);
+
+  mockImageElement =  /** @type {!HTMLImageElement} */ ({
+    'src': 'blarg'
+  });
+  var safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  goog.dom.safe.setImageSrc(mockImageElement, safeUrl);
+  assertEquals('javascript:trusted();', mockImageElement.src);
+}
+
+function testSetImageSrc_withHttpsUrl() {
+  var mockImageElement =  /** @type {!HTMLImageElement} */ ({
+    'src': 'blarg'
+  });
+
+  var safeUrl = 'https://trusted_url';
+  goog.dom.safe.setImageSrc(mockImageElement, safeUrl);
+  assertEquals(safeUrl, mockImageElement.src);
+}
 
 function testOpenInWindow() {
   mockWindowOpen = goog.testing.createMethodMock(window, 'open');

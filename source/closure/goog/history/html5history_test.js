@@ -15,10 +15,15 @@
 goog.provide('goog.history.Html5HistoryTest');
 goog.setTestOnly('goog.history.Html5HistoryTest');
 
+goog.require('goog.Timer');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.history.EventType');
 goog.require('goog.history.Html5History');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers');
+goog.require('goog.testing.recordFunction');
 
 var mockControl;
 var mockWindow;
@@ -156,4 +161,51 @@ function testGetUrlWithoutUsingFragmentWithCustomTransformerAndPrefix() {
   assertEquals('/something/else/?different',
                html5History.getUrl_('some/token'));
   mockControl.$verifyAll();
+}
+
+// Regression test for b/18663922.
+function testNavigateFiresOnceOnNavigation() {
+  var history = new goog.history.Html5History;
+  var onNavigate = goog.testing.recordFunction();
+  history.setEnabled(true);
+  history.listen(goog.history.EventType.NAVIGATE, onNavigate);
+
+  // Simulate that the user navigates in the history.
+  location = '#' + goog.now();
+
+  return goog.Timer.promise(0).then(function() {
+    // NAVIGATE should fire once with isNavigation=true.
+    onNavigate.assertCallCount(1);
+    assertTrue(onNavigate.getLastCall().getArgument(0).isNavigation);
+    return goog.Timer.promise(0).then(function() {
+      // NAVIGATE should not fire again after the current JS execution context.
+      onNavigate.assertCallCount(1);
+    });
+  });
+}
+
+// Regression test for b/18663922.
+function testNavigateFiresOnceWithoutPopstate() {
+  var history = new goog.history.Html5History;
+  var onNavigate = goog.testing.recordFunction();
+  history.setEnabled(true);
+  history.listen(goog.history.EventType.NAVIGATE, onNavigate);
+
+  // Removing POPSTATE to ensure NAVIGATE is triggered in browsers that don't
+  // support it.
+  assertTrue(goog.events.unlisten(window, goog.events.EventType.POPSTATE,
+                                  history.onHistoryEvent_, false, history));
+
+  // Simulate that the user navigates in the history.
+  location = '#' + goog.now();
+
+  return goog.Timer.promise(0).then(function() {
+    // NAVIGATE should fire once with isNavigation=true.
+    onNavigate.assertCallCount(1);
+    assertTrue(onNavigate.getLastCall().getArgument(0).isNavigation);
+    return goog.Timer.promise(0).then(function() {
+      // NAVIGATE should not fire again after the current JS execution context.
+      onNavigate.assertCallCount(1);
+    });
+  });
 }

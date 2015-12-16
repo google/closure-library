@@ -48,6 +48,8 @@ goog.require('goog.ui.editor.AbstractDialog');
 goog.editor.plugins.AbstractDialogPlugin = function(command) {
   goog.editor.Plugin.call(this);
   this.command_ = command;
+  /** @private {function()} */
+  this.restoreScrollPosition_ = function() {};
 };
 goog.inherits(goog.editor.plugins.AbstractDialogPlugin, goog.editor.Plugin);
 
@@ -169,6 +171,8 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
   var tempRange = this.getFieldObject().getRange();
   // saveUsingDom() did not work as well as saveUsingNormalizedCarets(),
   // not sure why.
+
+  this.restoreScrollPosition_ = this.saveScrollPosition();
   this.savedRange_ = tempRange && goog.editor.range.saveUsingNormalizedCarets(
       tempRange);
   goog.dom.Range.clearSelection(
@@ -208,6 +212,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
     e) {
   this.getFieldObject().setModalMode(false);
   this.restoreOriginalSelection();
+  this.restoreScrollPosition_();
 
   if (!this.reuseDialog_) {
     this.disposeDialog_();

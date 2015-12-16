@@ -302,10 +302,11 @@ goog.ui.SplitBehavior.prototype.decorateChildren_ = function(
   for (var i = 0; i < len && !finished; i++) {
     var child = childNodes[i];
     if (child.nodeType == goog.dom.NodeType.ELEMENT) {
+      var el = /** @type {!Element} */ (child);
       if (!this.first_) {
-        this.first_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(child));
+        this.first_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(el));
       } else if (!this.second_) {
-        this.second_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(child));
+        this.second_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(el));
         finished = true;
       }
     }

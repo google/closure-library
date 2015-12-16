@@ -43,7 +43,7 @@ function setUp() {
 }
 
 function tearDown() {
-  sandbox.innerHTML = '';
+  goog.dom.removeChildren(sandbox);
   someDiv = null;
   someSpan = null;
 

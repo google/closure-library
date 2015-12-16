@@ -50,7 +50,7 @@ function tearDown() {
 }
 
 function testSelectedTextIndent() {
-  field.innerHTML = 'Test';
+  goog.dom.setTextContent(field, 'Test');
 
   var testText = field.firstChild;
   testHelper.select(testText, 0, testText, 4);
@@ -80,7 +80,7 @@ function testSelectedTextIndent() {
 }
 
 function testCursorIndent() {
-  field.innerHTML = 'Test';
+  goog.dom.setTextContent(field, 'Test');
 
   var testText = field.firstChild;
   testHelper.select(testText, 2, testText, 2);
@@ -108,7 +108,7 @@ function testCursorIndent() {
 }
 
 function testShiftTabNoOp() {
-  field.innerHTML = 'Test';
+  goog.dom.setTextContent(field, 'Test');
 
   range = goog.dom.Range.createFromNodeContents(field);
   range.collapse();

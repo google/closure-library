@@ -109,14 +109,6 @@ goog.net.xpc.FrameElementMethodTransport.prototype.recursive_ = false;
 
 
 /**
- * Timer used to enforce asynchronous message delivery.
- * @type {number}
- * @private
- */
-goog.net.xpc.FrameElementMethodTransport.prototype.timer_ = 0;
-
-
-/**
  * Holds the function to send messages to the peer
  * (once it becomes available).
  * @type {Function}
@@ -226,7 +218,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.incoming_ =
   else {
     this.queue_.push({serviceName: serviceName, payload: payload});
     if (this.queue_.length == 1) {
-      this.timer_ = this.getWindow().setTimeout(this.deliverQueuedCb_, 1);
+      this.getWindow().setTimeout(this.deliverQueuedCb_, 1);
     }
   }
 };

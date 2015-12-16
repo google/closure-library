@@ -363,7 +363,8 @@ goog.graphics.VmlTextElement.prototype.getElement =
  */
 goog.graphics.VmlTextElement.prototype.setText = function(text) {
   /** @suppress {missingRequire} */
-  goog.graphics.VmlGraphics.setAttribute(this.getElement().childNodes[1],
+  goog.graphics.VmlGraphics.setAttribute(
+      /** @type {!Element} */ (this.getElement().childNodes[1]),
       'string', text);
 };
 

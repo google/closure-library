@@ -36,6 +36,7 @@ goog.provide('goog.vec.Float64Array');
  *     The length of the array, or an array to initialize the contents of the
  *     new Float64Array.
  * @constructor
+ * @implements {IArrayLike<number>}
  * @final
  */
 goog.vec.Float64Array = function(p0) {

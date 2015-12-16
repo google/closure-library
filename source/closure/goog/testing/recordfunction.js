@@ -82,13 +82,17 @@ goog.testing.recordFunction = function(opt_f) {
   };
 
   /**
-   * Asserts that the function was called {@code expected} times.
-   * @param {number} expected The expected number of calls.
+   * Asserts that the function was called a certain number of times.
+   * @param {number|string} a The expected number of calls (1 arg) or debug
+   *     message (2 args).
+   * @param {number=} opt_b The expected number of calls (2 args only).
    */
-  recordedFunction.assertCallCount = function(expected) {
+  recordedFunction.assertCallCount = function(a, opt_b) {
     var actual = calls.length;
+    var expected = arguments.length == 1 ? a : opt_b;
+    var message = arguments.length == 1 ? '' : ' ' + a;
     assertEquals(
-        'Expected ' + expected + ' call(s), but was ' + actual + '.',
+        'Expected ' + expected + ' call(s), but was ' + actual + '.' + message,
         expected, actual);
   };
 

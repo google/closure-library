@@ -16,12 +16,32 @@ goog.provide('goog.labs.net.xhrTest');
 goog.setTestOnly('goog.labs.net.xhrTest');
 
 goog.require('goog.Promise');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.labs.net.xhr');
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+
+
+/** Path to a small download target used for testing binary requests. */
+var TEST_IMAGE = 'testdata/cleardot.gif';
+
+
+/** The expected bytes of the test image. */
+var TEST_IMAGE_BYTES = [
+  0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0xFF, 0x00,
+  0xC0, 0xC0, 0xC0, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00, 0x00, 0x00,
+  0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02,
+  0x44, 0x01, 0x00, 0x3B
+];
+
+function setUpPage() {
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+}
 
 function stubXhrToReturn(status, opt_responseText, opt_latency) {
 
@@ -183,22 +203,43 @@ function testGetJson() {
       });
 }
 
+function testGetBlob() {
+  if (isRunningLocally()) return;
+
+  // IE9 and earlier do not support blobs.
+  if (!('Blob' in goog.global)) {
+    var err = assertThrows(function() { xhr.getBlob(TEST_IMAGE); });
+    assertEquals('Assertion failed: getBlob is not supported in this browser.',
+                 err.message);
+    return;
+  }
+
+  return xhr.getBlob(TEST_IMAGE)
+      .then(function(blob) {
+        var reader = new FileReader();
+        return new goog.Promise(function(resolve, reject) {
+          goog.events.listenOnce(reader, goog.events.EventType.LOAD, resolve);
+          reader.readAsArrayBuffer(blob);
+        });
+      })
+      .then(function(e) {
+        assertElementsEquals(TEST_IMAGE_BYTES, new Uint8Array(e.target.result));
+      });
+}
+
 function testGetBytes() {
   if (isRunningLocally()) return;
 
   // IE8 requires a VBScript fallback to read the bytes from the response.
   if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
+    var err = assertThrows(function() { xhr.getBytes(TEST_IMAGE); });
+    assertEquals('Assertion failed: getBytes is not supported in this browser.',
+                 err.message);
     return;
   }
 
-  return xhr.getBytes('testdata/cleardot.gif').then(function(bytes) {
-    assertElementsEquals([
-      0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0xFF,
-      0x00, 0xC0, 0xC0, 0xC0, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00,
-      0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
-      0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B
-    ], bytes);
-  });
+  return xhr.getBytes(TEST_IMAGE)
+      .then(function(bytes) { assertElementsEquals(TEST_IMAGE_BYTES, bytes); });
 }
 
 function testSerialRequests() {
@@ -230,7 +271,10 @@ function testBadUrlDetectedAsError() {
 
 function testBadOriginTriggersOnErrorHandler() {
   return xhr.get('http://www.google.com').then(
-      fail /* opt_onFulfilled */,
+      function() {
+        fail('XHR to http://www.google.com should\'ve failed due to ' +
+            'same-origin policy.');
+      } /* opt_onFulfilled */,
       function(err) {
         // In IE this will be a goog.labs.net.xhr.Error since it is thrown
         //  when calling xhr.open(), other browsers will raise an HttpError.

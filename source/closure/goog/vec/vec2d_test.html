@@ -16,6 +16,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8" />
 <title>Closure Unit Tests - goog.vec.vec2d</title>
 <script src="../base.js"></script>
 <script>
@@ -30,6 +31,22 @@ See the COPYING file for details.
   function testCreate() {
     var v = goog.vec.vec2d.create();
     assertElementsEquals([0, 0], v);
+  }
+
+  function testCreateFromArray() {
+    var v = goog.vec.vec2d.createFromArray([1, 2]);
+    assertElementsEquals([1, 2], v);
+  }
+
+  function testCreateFromValues() {
+    var v = goog.vec.vec2d.createFromValues(1, 2);
+    assertElementsEquals([1, 2], v);
+  }
+
+  function testClone() {
+    var v0 = goog.vec.vec2d.createFromValues(1, 2);
+    var v1 = goog.vec.vec2d.clone(v0);
+    assertElementsEquals([1, 2], v1);
   }
 
   function testSet() {

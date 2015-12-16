@@ -28,12 +28,12 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
+goog.require('goog.test_module');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 
-goog.require('goog.test_module');
 var earlyTestModuleGet = goog.module.get('goog.test_module');
 
 function getFramedVars(name) {
@@ -1445,6 +1445,24 @@ function testGoogModuleGet() {
 
   // Validate that the module exports object has not changed
   assertEquals(earlyTestModuleGet, testModuleExports);
+}
+
+
+// Validate the behavior of goog.module when used from traditional files.
+function testGoogLoadModuleByUrl() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    // IE before 10 don't report an error.
+    return;
+  }
+
+  // "goog.loadModuleByUrl" is not a general purpose code loader, it can
+  // not be used to late load code.
+  var err = assertThrows('loadModuleFromUrl should not hide failures',
+      function() {
+        goog.loadModuleFromUrl('bogus url');
+      });
+  assertContains('Cannot write "bogus url" after document load',
+      err.message);
 }
 
 

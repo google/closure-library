@@ -137,7 +137,7 @@ goog.proto2.Descriptor.prototype.getFields = function() {
    */
   function tagComparator(fieldA, fieldB) {
     return fieldA.getTag() - fieldB.getTag();
-  };
+  }
 
   var fields = goog.object.getValues(this.fields_);
   goog.array.sort(fields, tagComparator);

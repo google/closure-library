@@ -53,7 +53,7 @@ function tearDown() {
   menu.dispose();
   menuButton.dispose();
   splitbehavior.dispose();
-  splitDiv.innerHTML = '';
+  goog.dom.removeChildren(splitDiv);
   splitDiv.className = '';
 }
 

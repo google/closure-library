@@ -63,7 +63,8 @@ goog.json.isValid = function(s) {
   // We split the first stage into 4 regexp operations in order to work around
   // crippling inefficiencies in IE's and Safari's regexp engines. First we
   // replace all backslash pairs with '@' (a non-JSON character). Second, we
-  // replace all simple value tokens with ']' characters. Third, we delete all
+  // replace all simple value tokens with ']' characters, but only when followed
+  // by a colon, comma, closing bracket or end of string. Third, we delete all
   // open brackets that follow a colon or comma or that begin the text. Finally,
   // we look to see that the remaining characters are only whitespace or ']' or
   // ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.
@@ -71,7 +72,7 @@ goog.json.isValid = function(s) {
   // Don't make these static since they have the global flag.
   var backslashesRe = /\\["\\\/bfnrtu]/g;
   var simpleValuesRe =
-      /"[^"\\\n\r\u2028\u2029\x00-\x08\x0a-\x1f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
+      /(?:"[^"\\\n\r\u2028\u2029\x00-\x08\x0a-\x1f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)[\s\u2028\u2029]*(?=:|,|]|}|$)/g;
   var openBracketsRe = /(?:^|:|,)(?:[\s\u2028\u2029]*\[)+/g;
   var remainderRe = /^[\],:{}\s\u2028\u2029]*$/;
 
@@ -235,7 +236,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       this.serializeNumber_(object, sb);
       break;
     case 'boolean':
-      sb.push(object);
+      sb.push(String(object));
       break;
     case 'function':
       sb.push('null');
@@ -305,7 +306,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
-  sb.push(isFinite(n) && !isNaN(n) ? n : 'null');
+  sb.push(isFinite(n) && !isNaN(n) ? String(n) : 'null');
 };
 
 

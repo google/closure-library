@@ -40,7 +40,7 @@ function tearDown() {
   goog.tweak.activeBooleanGroup_ = null;
   // When debugging a single test, don't clear out the DOM.
   if (window.location.search.indexOf('runTests') == -1) {
-    root.innerHTML = '';
+    goog.dom.removeChildren(root);
   }
 }
 
@@ -76,12 +76,12 @@ function tearDownPage() {
       });
 
   var label = document.createElement('h3');
-  label.innerHTML = 'TweakUi:';
+  goog.dom.setTextContent(label, 'TweakUi:');
   root.appendChild(label);
   createUi(false);
 
   label = document.createElement('h3');
-  label.innerHTML = 'Collapsible:';
+  goog.dom.setTextContent(label, 'Collapsible:');
   root.appendChild(label);
   createUi(true);
 }

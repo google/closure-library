@@ -705,19 +705,18 @@ goog.dom.createDom_ = function(doc, args) {
   var tagName = args[0];
   var attributes = args[1];
 
-  // Internet Explorer is dumb: http://msdn.microsoft.com/workshop/author/
-  //                            dhtml/reference/properties/name_2.asp
+  // Internet Explorer is dumb:
+  // name: https://msdn.microsoft.com/en-us/library/ms534184(v=vs.85).aspx
+  // type: https://msdn.microsoft.com/en-us/library/ms534700(v=vs.85).aspx
   // Also does not allow setting of 'type' attribute on 'input' or 'button'.
   if (!goog.dom.BrowserFeature.CAN_ADD_NAME_OR_TYPE_ATTRIBUTES && attributes &&
       (attributes.name || attributes.type)) {
     var tagNameArr = ['<', tagName];
     if (attributes.name) {
-      tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name),
-                      '"');
+      tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name), '"');
     }
     if (attributes.type) {
-      tagNameArr.push(' type="', goog.string.htmlEscape(attributes.type),
-                      '"');
+      tagNameArr.push(' type="', goog.string.htmlEscape(attributes.type), '"');
 
       // Clone attributes map to remove 'type' without mutating the input.
       var clone = {};
@@ -905,6 +904,9 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  * {@code goog.dom.htmlToDocumentFragment('&lt;img src=x onerror=alert(0)&gt;')}
  * triggers an alert in all browsers, even if the returned document fragment
  * is thrown away immediately.
+ *
+ * NOTE: This method doesn't work if your htmlString contains elements that
+ * can't be contained in a <div>. For example, <tr>.
  *
  * @param {string} htmlString The HTML string to convert.
  * @return {!Node} The resulting document fragment.
@@ -1371,11 +1373,14 @@ goog.dom.getParentElement = function(element) {
 
 /**
  * Whether a node contains another node.
- * @param {Node} parent The node that should contain the other node.
- * @param {Node} descendant The node to test presence of.
+ * @param {?Node} parent The node that should contain the other node.
+ * @param {?Node} descendant The node to test presence of.
  * @return {boolean} Whether the parent node contains the descendent node.
  */
 goog.dom.contains = function(parent, descendant) {
+  if (!parent || !descendant) {
+    return false;
+  }
   // We use browser specific methods for this if available since it is faster
   // that way.
 
@@ -1589,19 +1594,28 @@ goog.dom.getOwnerDocument = function(node) {
  * @return {!Document} The frame content document.
  */
 goog.dom.getFrameContentDocument = function(frame) {
-  var doc = frame.contentDocument || frame.contentWindow.document;
-  return doc;
+  return frame.contentDocument || frame.contentWindow.document;
 };
 
 
 /**
  * Cross-browser function for getting the window of a frame or iframe.
  * @param {Element} frame Frame element.
- * @return {Window} The window associated with the given frame.
+ * @return {Window} The window associated with the given frame, or null if none
+ *     exists.
  */
 goog.dom.getFrameContentWindow = function(frame) {
-  return frame.contentWindow ||
-      goog.dom.getWindow(goog.dom.getFrameContentDocument(frame));
+  try {
+    return frame.contentWindow ||
+           (frame.contentDocument ? goog.dom.getWindow(frame.contentDocument) :
+                                    null);
+  } catch (e) {
+    // NOTE(user): In IE8, checking the contentWindow or contentDocument
+    // properties will throw a "Unspecified Error" exception if the iframe is
+    // not inserted in the DOM. If we get this we can be sure that no window
+    // exists, so return null.
+  }
+  return null;
 };
 
 
@@ -1860,9 +1874,14 @@ goog.dom.nativelySupportsFocus_ = function(element) {
  * @private
  */
 goog.dom.hasNonZeroBoundingRect_ = function(element) {
-  var rect = goog.isFunction(element['getBoundingClientRect']) ?
-      element.getBoundingClientRect() :
-      {'height': element.offsetHeight, 'width': element.offsetWidth};
+  var rect;
+  if (!goog.isFunction(element['getBoundingClientRect']) ||
+      // In IE, getBoundingClientRect throws on detached nodes.
+      (goog.userAgent.IE && element.parentElement == null)) {
+    rect = {'height': element.offsetHeight, 'width': element.offsetWidth};
+  } else {
+    rect = element.getBoundingClientRect();
+  }
   return goog.isDefAndNotNull(rect) && rect.height > 0 && rect.width > 0;
 };
 

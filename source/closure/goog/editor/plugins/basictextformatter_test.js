@@ -209,7 +209,7 @@ function testGeckoListFont() {
     retVal = FORMATTER.beforeInsertListGecko_();
     assertFalse('Workaround shouldn\'t be applied when not needed', retVal);
 
-    font.innerHTML = '';
+    goog.dom.removeChildren(font);
     goog.dom.Range.createFromNodeContents(font).select();
     var retVal = FORMATTER.beforeInsertListGecko_();
     assertTrue('Workaround should be applied when needed', retVal);
@@ -267,7 +267,7 @@ function testIsSilentCommand() {
 }
 
 function setUpSubSuperTests() {
-  ROOT.innerHTML = '12345';
+  goog.dom.setTextContent(ROOT, '12345');
   HELPER = new goog.testing.editor.TestHelper(ROOT);
   HELPER.setUpEditableElement();
 }
@@ -402,8 +402,8 @@ function testLinks() {
   HELPER.select(url1, 0, url2, url2.length);
   FORMATTER.execCommandInternal(goog.editor.Command.LINK);
   HELPER.assertHtmlMatches('<p><a href="' + url1 + '">' + url1 + '</a></p><p>' +
-      '<a href="' + dialogUrl + '">' + (goog.userAgent.IE ? dialogUrl : url2) +
-      '</a></p>');
+      '<a href="' + dialogUrl + '">' +
+      (goog.userAgent.EDGE_OR_IE ? dialogUrl : url2) + '</a></p>');
 }
 
 function testSelectedLink() {
@@ -655,7 +655,6 @@ function testFontSizeOverridesStyleAttrMultiNode() {
         span.getAttributeNode('style') != null &&
         span.getAttributeNode('style').specified);
     assertTrue('Style attribute should not be gone from last span',
-        span2.getAttributeNode('style') != null &&
         span2.getAttributeNode('style').specified);
   }
 
@@ -1157,7 +1156,7 @@ function testPrepareContent() {
 
 function testScrubImagesRemovesCustomAttributes() {
   var fieldElem = goog.dom.getElement('real-field');
-  fieldElem.innerHTML = '';
+  goog.dom.removeChildren(fieldElem);
   var attrs = {'src': 'http://www.google.com/foo.jpg',
     'tabIndex': '0',
     'tabIndexSet': '0'};

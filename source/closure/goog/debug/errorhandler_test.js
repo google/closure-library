@@ -55,7 +55,7 @@ function setUp() {
     if (goog.isString(fn)) {
       eval(fn);
     } else {
-      fn();
+      fn.apply(this, Array.prototype.slice.call(arguments, 2));
     }
   };
 
@@ -65,7 +65,7 @@ function setUp() {
     if (goog.isString(fn)) {
       eval(fn);
     } else {
-      fn();
+      fn.apply(this, Array.prototype.slice.call(arguments, 2));
     }
   };
 
@@ -103,6 +103,15 @@ function testWrapSetTimeout() {
   assertSetTimeoutError(caught);
 }
 
+function testWrapSetTimeoutWithoutException() {
+  errorHandler.protectWindowSetTimeout();
+
+  fakeWin.setTimeout(function(x, y) {
+    assertEquals('test', x);
+    assertEquals(7, y);
+  }, 3, 'test', 7);
+}
+
 function testWrapSetTimeoutWithString() {
   errorHandler.protectWindowSetTimeout();
 
@@ -127,6 +136,15 @@ function testWrapSetInterval() {
     caught = ex;
   }
   assertSetIntervalError(caught);
+}
+
+function testWrapSetIntervalWithoutException() {
+  errorHandler.protectWindowSetInterval();
+
+  fakeWin.setInterval(function(x, y) {
+    assertEquals('test', x);
+    assertEquals(7, y);
+  }, 3, 'test', 7);
 }
 
 function testWrapSetIntervalWithString() {
@@ -187,7 +205,7 @@ function testStackPreserved() {
     var e = Error();
     hasStacks = !!e.stack;
     throw e;
-  };
+  }
   var wrappedFn = errorHandler.wrap(specialFunctionName);
   try {
     wrappedFn();
@@ -208,6 +226,16 @@ function testGetProtectedFunction() {
   var e = assertThrows(protectedFn);
   assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
   assertEquals('Foo', e.cause.message);
+}
+
+function testGetProtectedFunctionNullError() {
+  var fn = function() {
+    throw null;
+  };
+  var protectedFn = errorHandler.getProtectedFunction(fn);
+  var e = assertThrows(protectedFn);
+  assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+  assertNull(e.cause);
 }
 
 function testGetProtectedFunction_withoutWrappedErrors() {
@@ -256,6 +284,22 @@ function testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
   assertEquals(
       goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
           'String', e);
+}
+
+function testProtectedFunction_infiniteLoop() {
+  var numErrors = 0;
+  var errorHandler = new goog.debug.ErrorHandler(
+      function(ex) {
+        numErrors++;
+      });
+  errorHandler.protectWindowSetTimeout();
+
+  fakeWin.setTimeout(function() {
+    fakeWin.setTimeout(badTimer, 3);
+  }, 3);
+  assertEquals(
+      'Error handler should only have been executed once.',
+      1, numErrors);
 }
 
 function assertSetTimeoutError(caught) {
