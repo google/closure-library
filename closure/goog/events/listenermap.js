@@ -159,7 +159,7 @@ goog.events.ListenerMap.prototype.remove = function(
 
 /**
  * Removes the given listener object.
- * @param {goog.events.ListenableKey} listener The listener to remove.
+ * @param {!goog.events.ListenableKey} listener The listener to remove.
  * @return {boolean} Whether the listener is removed.
  */
 goog.events.ListenerMap.prototype.removeByKey = function(listener) {
@@ -210,7 +210,7 @@ goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
  * @param {string|!goog.events.EventId} type The type of the listeners
  *     to retrieve.
  * @param {boolean} capture The capture mode of the listeners to retrieve.
- * @return {!Array<goog.events.ListenableKey>} An array of matching
+ * @return {!Array<!goog.events.ListenableKey>} An array of matching
  *     listeners.
  */
 goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
