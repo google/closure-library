@@ -43,8 +43,8 @@ goog.require('goog.testing.stacktrace');
 
 
 /**
- * A class representing a JsUnit test case.  A TestCase is made up of a number
- * of test functions which can be run.  Individual test cases can override the
+ * A class representing a JsUnit test case. A TestCase is made up of a number
+ * of test functions which can be run. Individual test cases can override the
  * following functions to set up their test environment:
  *   - runTests - completely override the test's runner
  *   - setUpPage - called before any of the test functions are run
@@ -52,10 +52,69 @@ goog.require('goog.testing.stacktrace');
  *   - setUp - called before each of the test functions
  *   - tearDown - called after each of the test functions
  *   - shouldRunTests - called before a test run, all tests are skipped if it
- *                      returns false.  Can be used to disable tests on browsers
+ *                      returns false. Can be used to disable tests on browsers
  *                      where they aren't expected to pass.
+ * <p>
+ * TestCase objects are usually constructed by inspecting the global environment
+ * to discover functions that begin with the prefix <code>test</code>.
+ * (See {@link #autoDiscoverLifecycle} and {@link #autoDiscoverTests}.)
+ * </p>
  *
- * Use {@link #autoDiscoverLifecycle} and {@link #autoDiscoverTests}
+ * <h2>Testing asychronous code with promises</h2>
+ *
+ * <p>
+ * In the simplest cases, the behavior that the developer wants to test
+ * is synchronous, and the test functions exercising the behavior execute
+ * synchronously. But TestCase can also be used to exercise asynchronous code
+ * through the use of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
+ * promises</a>. If a test function returns an object that has a
+ * <code>then</code> method defined on it, the test framework switches to an
+ * asynchronous execution strategy: the next test function will not begin
+ * execution until the returned promise is resolved or rejected. Instead of
+ * writing test assertions at the top level inside a test function, the test
+ * author chains them on the end of the returned promise. For example:
+ * </p>
+ * <pre>
+ *   function testPromiseBasedAPI() {
+ *     return promiseBasedAPI().then(function(value) {
+ *       // Will run when the promise resolves, and before the next
+ *       // test function begins execution.
+ *       assertEquals('foo', value.bar);
+ *     });
+ *   }
+ * </pre>
+ * <p>
+ * Synchronous and asynchronous tests can be mixed in the same TestCase.
+ * Test functions that return an object with a <code>then</code> method are
+ * executed asynchronously, and all other test functions are executed
+ * synchronously. While this is convenient for test authors (since it doesn't
+ * require any explicit configuration for asynchronous tests), it can lead to
+ * confusion if the test author forgets to return the promise from the test
+ * function. For example:
+ * </p>
+ * <pre>
+ *   function testPromiseBasedAPI() {
+ *     // This test should never succeed.
+ *     promiseBasedAPI().then(fail, fail);
+ *     // Oops! The promise isn't returned to the framework,
+ *     // so this test actually does succeed.
+ *   }
+ * </pre>
+ * <p>
+ * Since the test framework knows nothing about the promise created
+ * in the test function, it will run the function synchronously, record
+ * a success, and proceed immediately to the next test function.
+ * </p>
+ * <p>
+ * Promises returned from test functions can time out. If a returned promise
+ * is not resolved or rejected within {@link promiseTimeout} milliseconds,
+ * the test framework rejects the promise without a timeout error message.
+ * Test cases can configure the value of {@code promiseTimeout} by setting
+ * <pre>
+ *   goog.testing.TestCase.getActiveTestCase().promiseTimeout = ...
+ * </pre>
+ * in their {@code setUpPage} methods.
+ * </p>
  *
  * @param {string=} opt_name The name of the test case, defaults to
  *     'Untitled Test Case'.
