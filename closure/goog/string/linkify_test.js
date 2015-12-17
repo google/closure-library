@@ -217,6 +217,12 @@ function testEmailUsernameWithSpecialChars() {
       'Send mail to bolin-fest+for.um@google.com',
       'Send mail to <a href="mailto:bolin-fest+for.um@google.com">' +
           'bolin-fest+for.um@google.com<\/a>');
+  assertLinkify(
+      'Email with all special characters in the user name',
+      'Send mail to muad\'dib!#$%&\*/=?^_`{|}~@google.com',
+      'Send mail to ' +
+          '<a href="mailto:muad&#39;dib!#$%&amp;\*/=?^_`{|}~@google.com">' +
+          'muad&#39;dib!#$%&amp;\*/=?^_`{|}~@google.com<\/a>');
 }
 
 function testEmailWithUnderscoreInvalid() {

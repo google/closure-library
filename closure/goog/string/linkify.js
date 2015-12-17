@@ -275,7 +275,7 @@ goog.string.linkify.TOP_LEVEL_DOMAIN_ =
  * @private
  */
 goog.string.linkify.EMAIL_RE_STRING_ =
-    '(?:mailto:)?([\\w.+-]+@[A-Za-z0-9.-]+\\.' +
+    '(?:mailto:)?([\\w.!#$%&\'*+-/=?^_`{|}~]+@[A-Za-z0-9.-]+\\.' +
     goog.string.linkify.TOP_LEVEL_DOMAIN_ + ')';
 
 
