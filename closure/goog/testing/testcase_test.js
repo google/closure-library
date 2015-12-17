@@ -51,6 +51,11 @@ var neverResolvedGoogPromise = function() {
   return new goog.Promise(function() {});
 };
 
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
+
 function testEmptyTestCase() {
   var testCase = new goog.testing.TestCase();
   testCase.runTests();
@@ -64,8 +69,8 @@ function testEmptyTestCase() {
 }
 
 function testEmptyTestCaseReturningPromise() {
-  return new goog.testing.TestCase().runTestsReturningPromise().
-      then(function(result) {
+  return new goog.testing.TestCase().runTestsReturningPromise()
+      .then(function(result) {
         assertTrue(result.complete);
         assertEquals(0, result.totalCount);
         assertEquals(0, result.runCount);
@@ -523,10 +528,8 @@ function testTearDownReturnsPromiseThatTimesOut() {
   });
 }
 
-function testFailOnUnreportedAsserts_DisabledByDefault() {
-  // Fail-safe to make sure we understand the implications of switching this
-  // to be on by default.
-  assertFalse(new goog.testing.TestCase().failOnUnreportedAsserts);
+function testFailOnUnreportedAsserts_EnabledByDefault() {
+  assertTrue(new goog.testing.TestCase().failOnUnreportedAsserts);
 }
 
 

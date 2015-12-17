@@ -197,7 +197,7 @@ goog.testing.TestCase = function(opt_name) {
    * never bubbled up to the testing framework.
    * @type {boolean}
    */
-  this.failOnUnreportedAsserts = false;  // TODO(b/25875505): default to true.
+  this.failOnUnreportedAsserts = true;
 
   /**
    * The maximum time in milliseconds a promise returned from a test function
