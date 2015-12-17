@@ -1200,7 +1200,7 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
   var iframeAttributes = {'name': this.iframeName_, 'id': this.iframeName_};
   // Setting the source to javascript:"" is a fix to remove IE6 mixed content
   // warnings when being used in an https page.
-  if (goog.userAgent.IE && goog.userAgent.VERSION < 7) {
+  if (goog.userAgent.IE && Number(goog.userAgent.VERSION) < 7) {
     iframeAttributes.src = 'javascript:""';
   }
 

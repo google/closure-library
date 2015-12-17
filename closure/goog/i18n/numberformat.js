@@ -633,7 +633,7 @@ goog.i18n.NumberFormat.formatNumberGroupingRepeatingDigitsParts_ =
 
   // There are repeating digits and non-repeating digits
   for (var i = 0; i < digitLen; i++) {
-    parts.push(String.fromCharCode(zeroCode + intPart.charAt(i) * 1));
+    parts.push(String.fromCharCode(zeroCode + Number(intPart.charAt(i)) * 1));
     if (digitLen - i > 1) {
       currentGroupSize = groupingArray[currentGroupSizeIndex];
       if (i < repeatedDigitLen) {
@@ -722,8 +722,8 @@ goog.i18n.NumberFormat.formatNumberGroupingNonRepeatingDigitsParts_ =
          rightDigitIndex++) {
       rightToLeftParts.push(
           String.fromCharCode(
-              zeroCode + intPart.charAt(
-                  digitLenLeft - rightDigitIndex - 1) * 1));
+              zeroCode + Number(intPart.charAt(
+                  digitLenLeft - rightDigitIndex - 1)) * 1));
     }
     // Update the number of digits left
     digitLenLeft -= currentGroupSize;
@@ -836,7 +836,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
   }
 
   for (var i = 1; i < fracLen; i++) {
-    parts.push(String.fromCharCode(zeroCode + fracPart.charAt(i) * 1));
+    parts.push(String.fromCharCode(zeroCode + Number(fracPart.charAt(i)) * 1));
   }
 };
 

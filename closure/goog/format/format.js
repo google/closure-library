@@ -134,7 +134,7 @@ goog.format.stringToNumericValue_ = function(stringValue, conversion) {
   if (!match) {
     return NaN;
   }
-  var val = match[1] * conversion[match[2]];
+  var val = Number(match[1]) * conversion[match[2]];
   return val;
 };
 

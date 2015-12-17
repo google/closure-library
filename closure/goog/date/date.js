@@ -433,7 +433,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
   var offset = 0; // local time if no timezone info
   if (parts) {
     if (parts[0] != 'Z') {
-      offset = parts[2] * 60 + Number(parts[3]);
+      offset = Number(parts[2]) * 60 + Number(parts[3]);
       offset *= parts[1] == '-' ? 1 : -1;
     }
     offset -= d.getTimezoneOffset();
@@ -449,7 +449,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
   d.setHours(Number(parts[1]));
   d.setMinutes(Number(parts[2]) || 0);
   d.setSeconds(Number(parts[3]) || 0);
-  d.setMilliseconds(parts[4] ? parts[4] * 1000 : 0);
+  d.setMilliseconds(parts[4] ? Number(parts[4]) * 1000 : 0);
 
   if (offset != 0) {
     // adjust the date and time according to the specified timezone
