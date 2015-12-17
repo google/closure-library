@@ -823,7 +823,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
     classes, opt_includedClass) {
   var toAdd = [];
   if (opt_includedClass) {
-    classes = classes.concat([opt_includedClass]);
+    classes = goog.array.concat(classes, [opt_includedClass]);
   }
   goog.array.forEach(this.getIe6ClassCombinations(), function(combo) {
     if (goog.array.every(combo, goog.partial(goog.array.contains, classes)) &&
