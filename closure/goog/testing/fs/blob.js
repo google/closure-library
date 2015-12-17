@@ -19,7 +19,6 @@
 
 goog.provide('goog.testing.fs.Blob');
 
-goog.require('goog.crypt');
 goog.require('goog.crypt.base64');
 
 
@@ -43,9 +42,8 @@ goog.testing.fs.Blob = function(opt_data, opt_type) {
 
 
 /**
- * The data encapsulated by the blob as an Array of bytes, a "byte" being a
- * JS number in the range 0-255.
- * @type {Array<number>}
+ * The string data encapsulated by the blob.
+ * @type {string}
  * @private
  */
 goog.testing.fs.Blob.prototype.data_;
@@ -73,33 +71,32 @@ goog.testing.fs.Blob.prototype.slice = function(
   var relativeStart;
   if (goog.isNumber(opt_start)) {
     relativeStart = (opt_start < 0) ?
-        Math.max(this.size + opt_start, 0) :
-        Math.min(opt_start, this.size);
+        Math.max(this.data_.length + opt_start, 0) :
+        Math.min(opt_start, this.data_.length);
   } else {
     relativeStart = 0;
   }
   var relativeEnd;
   if (goog.isNumber(opt_end)) {
     relativeEnd = (opt_end < 0) ?
-        Math.max(this.size + opt_end, 0) :
-        Math.min(opt_end, this.size);
+        Math.max(this.data_.length + opt_end, 0) :
+        Math.min(opt_end, this.data_.length);
   } else {
-    relativeEnd = this.size;
+    relativeEnd = this.data_.length;
   }
   var span = Math.max(relativeEnd - relativeStart, 0);
-  var blob =
-      new goog.testing.fs.Blob('', opt_contentType);
-  blob.setDataBytes_(this.data_.slice(relativeStart, relativeStart + span));
-  return blob;
+  return new goog.testing.fs.Blob(
+      this.data_.substr(relativeStart, span),
+      opt_contentType);
 };
 
 
 /**
- * @return {string} The string data encapsulated by the blob as UTF-8.
+ * @return {string} The string data encapsulated by the blob.
  * @override
  */
 goog.testing.fs.Blob.prototype.toString = function() {
-  return goog.crypt.utf8ByteArrayToString(this.data_);
+  return this.data_;
 };
 
 
@@ -108,10 +105,10 @@ goog.testing.fs.Blob.prototype.toString = function() {
  *     ArrayBuffer.
  */
 goog.testing.fs.Blob.prototype.toArrayBuffer = function() {
-  var buf = new ArrayBuffer(this.data_.length);
-  var arr = new Uint8Array(buf);
+  var buf = new ArrayBuffer(this.data_.length * 2);
+  var arr = new Uint16Array(buf);
   for (var i = 0; i < this.data_.length; i++) {
-    arr[i] = this.data_[i];
+    arr[i] = this.data_.charCodeAt(i);
   }
   return buf;
 };
@@ -122,7 +119,7 @@ goog.testing.fs.Blob.prototype.toArrayBuffer = function() {
  */
 goog.testing.fs.Blob.prototype.toDataUrl = function() {
   return 'data:' + this.type + ';base64,' +
-      goog.crypt.base64.encodeByteArray(this.data_);
+      goog.crypt.base64.encodeString(this.data_);
 };
 
 
@@ -130,21 +127,9 @@ goog.testing.fs.Blob.prototype.toDataUrl = function() {
  * Sets the internal contents of the blob. This should only be called by other
  * functions inside the {@code goog.testing.fs} namespace.
  *
- * @param {Array<number>} data The data for this Blob as an Array of bytes,
- *     a "byte" being a JS number in the range 0-255.
- * @private
- */
-goog.testing.fs.Blob.prototype.setDataBytes_ = function(data) {
-  this.data_ = data;
-  this.size = this.data_.length;
-};
-
-
-/**
- * Sets the internal contents of the blob to a string.
- * @param {string} data An UTF-8 string.
+ * @param {string} data The data for this Blob.
  */
 goog.testing.fs.Blob.prototype.setDataInternal = function(data) {
-  this.setDataBytes_(goog.crypt.stringToUtf8ByteArray(data));
+  this.data_ = data;
+  this.size = data.length;
 };
-
