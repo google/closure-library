@@ -26,7 +26,6 @@ goog.provide('goog.i18n.DateTimeFormat.Format');
 goog.require('goog.asserts');
 goog.require('goog.date');
 goog.require('goog.i18n.DateTimeSymbols');
-goog.require('goog.i18n.DateTimeSymbolsType');
 goog.require('goog.i18n.TimeZone');
 goog.require('goog.string');
 
@@ -95,12 +94,14 @@ goog.require('goog.string');
  * </pre>
  */
 
+
+
 /**
  * Construct a DateTimeFormat object based on current locale.
  * @constructor
  * @param {string|number} pattern pattern specification or pattern type.
- * @param {!goog.i18n.DateTimeSymbolsType=} opt_dateTimeSymbols Optional symbols
- *     to use for this instance rather than the global symbols.
+ * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use for this
+ *     instance rather than the global symbols.
  * @final
  */
 goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {
@@ -114,7 +115,8 @@ goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {
   /**
    * Data structure that with all the locale info needed for date formatting.
    * (day/month names, most common patterns, rules for week-end, etc.)
-   * @private {!goog.i18n.DateTimeSymbolsType}
+   * @type {!Object}
+   * @private
    */
   this.dateTimeSymbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
   if (typeof pattern == 'number') {
@@ -370,8 +372,8 @@ goog.i18n.DateTimeFormat.isEnforceAsciiDigits = function() {
  * Localizes a string potentially containing numbers, replacing ASCII digits
  * with native digits if specified so by the locale. Leaves other characters.
  * @param {number|string} input the string to be localized, using ASCII digits.
- * @param {!Object=} opt_dateTimeSymbols Optional symbols
- *     to use use rather than the global symbols.
+ * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use rather than
+ *     the global symbols.
  * @return {string} localized string, potentially using native digits.
  */
 goog.i18n.DateTimeFormat.localizeNumbers =
@@ -491,8 +493,8 @@ goog.i18n.DateTimeFormat.validateDateHasTime_ = function(date) {
 goog.i18n.DateTimeFormat.prototype.format24Hours_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  var hours = date.getHours ? date.getHours() : 24;
-  return this.localizeNumbers_(goog.string.padNumber(hours, count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(date.getHours() || 24, count));
 };
 
 
@@ -545,7 +547,7 @@ goog.i18n.DateTimeFormat.prototype.formatDayOfWeek_ =
  */
 goog.i18n.DateTimeFormat.prototype.formatAmPm_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  var hours = date.getHours ? date.getHours() : 0;
+  var hours = date.getHours();
   return this.dateTimeSymbols_.AMPMS[hours >= 12 && hours < 24 ? 1 : 0];
 };
 
@@ -562,8 +564,8 @@ goog.i18n.DateTimeFormat.prototype.formatAmPm_ = function(count, date) {
 goog.i18n.DateTimeFormat.prototype.format1To12Hours_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  var hours = date.getHours ? date.getHours() % 12 : 12;
-  return this.localizeNumbers_(goog.string.padNumber(hours, count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(date.getHours() % 12 || 12, count));
 };
 
 
@@ -579,8 +581,8 @@ goog.i18n.DateTimeFormat.prototype.format1To12Hours_ =
 goog.i18n.DateTimeFormat.prototype.format0To11Hours_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  var hours = date.getHours ? date.getHours() % 12 : 0;
-  return this.localizeNumbers_(goog.string.padNumber(hours, count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(date.getHours() % 12, count));
 };
 
 
@@ -596,8 +598,7 @@ goog.i18n.DateTimeFormat.prototype.format0To11Hours_ =
 goog.i18n.DateTimeFormat.prototype.format0To23Hours_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  var hours = date.getHours ? date.getHours() : 0;
-  return this.localizeNumbers_(goog.string.padNumber(hours, count));
+  return this.localizeNumbers_(goog.string.padNumber(date.getHours(), count));
 };
 
 
@@ -694,8 +695,7 @@ goog.i18n.DateTimeFormat.prototype.formatDate_ = function(count, date) {
 goog.i18n.DateTimeFormat.prototype.formatMinutes_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(goog.string.padNumber(
-    /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
+  return this.localizeNumbers_(goog.string.padNumber(date.getMinutes(), count));
 };
 
 
@@ -711,8 +711,7 @@ goog.i18n.DateTimeFormat.prototype.formatMinutes_ =
 goog.i18n.DateTimeFormat.prototype.formatSeconds_ =
     function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(goog.string.padNumber(
-    /** @type {!goog.date.DateTime} */ (date).getSeconds(), count));
+  return this.localizeNumbers_(goog.string.padNumber(date.getSeconds(), count));
 };
 
 
@@ -850,3 +849,4 @@ goog.i18n.DateTimeFormat.prototype.formatField_ =
     default: return '';
   }
 };
+

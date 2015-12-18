@@ -33,7 +33,6 @@
 
 // clang-format off
 goog.provide('goog.i18n.DateTimeSymbols');
-goog.provide('goog.i18n.DateTimeSymbolsType');
 goog.provide('goog.i18n.DateTimeSymbols_af');
 goog.provide('goog.i18n.DateTimeSymbols_am');
 goog.provide('goog.i18n.DateTimeSymbols_ar');
@@ -4574,37 +4573,6 @@ goog.i18n.DateTimeSymbols_zu = {
   FIRSTWEEKCUTOFFDAY: 5
 };
 
-/**
- * @typedef {{
- *   ERAS,
- *   ERANAMES,
- *   NARROWMONTHS,
- *   STANDALONENARROWMONTHS,
- *   MONTHS,
- *   STANDALONEMONTHS,
- *   SHORTMONTHS,
- *   STANDALONESHORTMONTHS,
- *   WEEKDAYS,
- *   STANDALONEWEEKDAYS,
- *   SHORTWEEKDAYS,
- *   STANDALONESHORTWEEKDAYS,
- *   NARROWWEEKDAYS,
- *   STANDALONENARROWWEEKDAYS,
- *   SHORTQUARTERS,
- *   QUARTERS,
- *   AMPMS,
- *   DATEFORMATS,
- *   TIMEFORMATS,
- *   DATETIMEFORMATS,
- *   FIRSTDAYOFWEEK,
- *   WEEKENDRANGE,
- *   FIRSTWEEKCUTOFFDAY
- * }}
- */
-goog.i18n.DateTimeSymbolsType;
-
-/** @type {!goog.i18n.DateTimeSymbolsType} */
-goog.i18n.DateTimeSymbols;
 
 /**
  * Selected date/time formatting symbols by locale.
@@ -4827,3 +4795,4 @@ if (goog.LOCALE == 'af') {
 } else {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 }
+
