@@ -38,6 +38,7 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
 goog.require('goog.i18n.DateTimeSymbols');
+goog.require('goog.i18n.DateTimeSymbolsType');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DefaultDatePickerRenderer');
@@ -51,7 +52,8 @@ goog.require('goog.ui.IdGenerator');
  *
  * @param {goog.date.Date|Date=} opt_date Date to initialize the date picker
  *     with, defaults to the current date.
- * @param {Object=} opt_dateTimeSymbols Date and time symbols to use.
+ * @param {?goog.i18n.DateTimeSymbolsType=} opt_dateTimeSymbols Date and time
+ *     symbols to use.
  *     Defaults to goog.i18n.DateTimeSymbols if not set.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @param {goog.ui.DatePickerRenderer=} opt_renderer Optional Date picker
@@ -65,7 +67,7 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
 
   /**
    * Date and time symbols to use.
-   * @type {Object}
+   * @type {goog.i18n.DateTimeSymbolsType}
    * @private
    */
   this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
