@@ -29,9 +29,6 @@ goog.setTestOnly('goog.PromiseTest');
 
 
 function setUpPage() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
 }
 
@@ -1411,11 +1408,17 @@ function testContextWithFulfillment() {
 
 
 function testContextWithRejection() {
-  return goog.Promise.reject().then(shouldNotCall, function() {
-    assertEquals(
-        'Call should be made in the global scope if no context is specified.',
-        goog.global, this);
-  }).then(shouldNotCall, function() { assertEquals(sentinel, this); }, sentinel)
+  return goog.Promise.reject()
+      .then(
+          shouldNotCall,
+          function() {
+            assertEquals(
+                'Call should be in the default scope when no context is set.',
+                goog.global, this);
+            throw new Error('Intentional rejection');
+          })
+      .then(
+          shouldNotCall, function() { assertEquals(sentinel, this); }, sentinel)
       .thenAlways(function() { assertEquals(sentinel, this); }, sentinel)
       .thenCatch(function() { assertEquals(sentinel, this); }, sentinel);
 }
