@@ -4573,6 +4573,38 @@ goog.i18n.DateTimeSymbols_zu = {
   FIRSTWEEKCUTOFFDAY: 5
 };
 
+/**
+ * @typedef {{
+ *   ERAS,
+ *   ERANAMES,
+ *   NARROWMONTHS,
+ *   STANDALONENARROWMONTHS,
+ *   MONTHS,
+ *   STANDALONEMONTHS,
+ *   SHORTMONTHS,
+ *   STANDALONESHORTMONTHS,
+ *   WEEKDAYS,
+ *   STANDALONEWEEKDAYS,
+ *   SHORTWEEKDAYS,
+ *   STANDALONESHORTWEEKDAYS,
+ *   NARROWWEEKDAYS,
+ *   STANDALONENARROWWEEKDAYS,
+ *   SHORTQUARTERS,
+ *   QUARTERS,
+ *   AMPMS,
+ *   DATEFORMATS,
+ *   TIMEFORMATS,
+ *   DATETIMEFORMATS,
+ *   FIRSTDAYOFWEEK,
+ *   WEEKENDRANGE,
+ *   FIRSTWEEKCUTOFFDAY
+ * }}
+ */
+goog.i18n.DateTimeSymbolsType;
+
+// The type of goog.i18n.DateTimeSymbols should be
+// goog.i18n.DateTimeSymbolsType, but doing that requires fixing projects that
+// are using the wrong type.
 
 /**
  * Selected date/time formatting symbols by locale.
@@ -4795,4 +4827,3 @@ if (goog.LOCALE == 'af') {
 } else {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 }
-

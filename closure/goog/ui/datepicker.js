@@ -65,10 +65,11 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
 
   /**
    * Date and time symbols to use.
-   * @type {Object}
+   * @type {!goog.i18n.DateTimeSymbolsType}
    * @private
    */
-  this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+  this.symbols_ = /** @type {!goog.i18n.DateTimeSymbolsType} */ (
+      opt_dateTimeSymbols || goog.i18n.DateTimeSymbols);
 
   this.wdayNames_ = this.symbols_.STANDALONESHORTWEEKDAYS;
 

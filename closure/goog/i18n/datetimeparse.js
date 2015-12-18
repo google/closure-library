@@ -126,7 +126,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 /**
  * Construct a DateTimeParse based on current locale.
  * @param {string|number} pattern pattern specification or pattern type.
- * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use for this
+ * @param {!Object=} opt_dateTimeSymbols Optional symbols to use for this
  *     instance rather than the global symbols.
  * @constructor
  * @final
@@ -141,9 +141,10 @@ goog.i18n.DateTimeParse = function(pattern, opt_dateTimeSymbols) {
   /**
    * Data structure with all the locale info needed for date formatting.
    * (day/month names, most common patterns, rules for week-end, etc.)
-   * @const @private {!Object}
+   * @const @private {!goog.i18n.DateTimeSymbolsType}
    */
-  this.dateTimeSymbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+  this.dateTimeSymbols_ = /** @type {!goog.i18n.DateTimeSymbolsType} */ (
+      opt_dateTimeSymbols || goog.i18n.DateTimeSymbols);
   if (typeof pattern == 'number') {
     this.applyStandardPattern_(pattern);
   } else {
