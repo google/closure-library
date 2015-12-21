@@ -54,6 +54,7 @@ function testSafeHtml() {
 
   // Pre-defined constant.
   assertSameHtml('', goog.html.SafeHtml.EMPTY);
+  assertSameHtml('<br>', goog.html.SafeHtml.BR);
 }
 
 

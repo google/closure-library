@@ -803,3 +803,12 @@ goog.html.SafeHtml.DOCTYPE_HTML =
 goog.html.SafeHtml.EMPTY =
     goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '', goog.i18n.bidi.Dir.NEUTRAL);
+
+
+/**
+ * A SafeHtml instance corresponding to the <br> tag.
+ * @const {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.BR =
+    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+        '<br>', goog.i18n.bidi.Dir.NEUTRAL);
