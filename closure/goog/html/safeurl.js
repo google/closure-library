@@ -382,3 +382,11 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
   safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = url;
   return safeUrl;
 };
+
+
+/**
+ * A SafeUrl corresponding to the special about:blank url.
+ * @const {!goog.html.SafeUrl}
+ */
+goog.html.SafeUrl.ABOUT_BLANK = goog.html.SafeUrl.
+    createSafeUrlSecurityPrivateDoNotAccessOrElse('about:blank');
