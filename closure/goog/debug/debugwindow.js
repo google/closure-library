@@ -494,7 +494,7 @@ goog.debug.DebugWindow.prototype.writeInitialDocument = function() {
         'style': goog.string.Const.from('text-align:center;')},
       goog.html.SafeHtml.concat(
           this.welcomeMessage,
-          goog.html.SafeHtml.create('br'),
+          goog.html.SafeHtml.BR,
           goog.html.SafeHtml.create(
               'small', {}, 'Logger: ' + this.identifier)));
   var html = goog.html.SafeHtml.concat(

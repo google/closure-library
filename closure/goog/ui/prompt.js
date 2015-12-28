@@ -76,7 +76,7 @@ goog.ui.Prompt = function(promptTitle, promptHtml, callback, opt_defaultValue,
   var label = goog.html.SafeHtml.create('label', {'for': this.inputElementId_},
       promptHtml instanceof goog.html.SafeHtml ? promptHtml :
           goog.html.legacyconversions.safeHtmlFromString(promptHtml));
-  var br = goog.html.SafeHtml.create('br');
+  var br = goog.html.SafeHtml.BR;
   this.setSafeHtmlContent(goog.html.SafeHtml.concat(label, br, br));
 
   this.callback_ = callback;

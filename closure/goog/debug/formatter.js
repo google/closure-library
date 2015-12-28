@@ -296,7 +296,7 @@ goog.debug.HtmlFormatter.prototype.formatRecordAsHtml = function(logRecord) {
   var exceptionHtml = goog.html.SafeHtml.EMPTY;
   if (this.showExceptionText && logRecord.getException()) {
     exceptionHtml = goog.html.SafeHtml.concat(
-        goog.html.SafeHtml.create('br'),
+        goog.html.SafeHtml.BR,
         goog.debug.exposeExceptionAsHtml(logRecord.getException()));
   }
   var logRecordHtml = goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
@@ -311,7 +311,7 @@ goog.debug.HtmlFormatter.prototype.formatRecordAsHtml = function(logRecord) {
   var html;
   if (this.appendNewline) {
     html = goog.html.SafeHtml.concat(fullPrefixHtml, recordAndExceptionHtml,
-        goog.html.SafeHtml.create('br'));
+        goog.html.SafeHtml.BR);
   } else {
     html = goog.html.SafeHtml.concat(fullPrefixHtml, recordAndExceptionHtml);
   }

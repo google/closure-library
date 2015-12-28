@@ -889,7 +889,7 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
   var tempDiv = doc.createElement(goog.dom.TagName.DIV);
   if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
     goog.dom.safe.setInnerHtml(tempDiv,
-        goog.html.SafeHtml.concat(goog.html.SafeHtml.create('br'), html));
+        goog.html.SafeHtml.concat(goog.html.SafeHtml.BR, html));
     tempDiv.removeChild(tempDiv.firstChild);
   } else {
     goog.dom.safe.setInnerHtml(tempDiv, html);
