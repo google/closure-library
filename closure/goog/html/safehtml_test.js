@@ -262,7 +262,7 @@ function testSafeHtmlCreateIframe() {
   assertSameHtml(
       '<iframe src="https://google.com/trusted&lt;"></iframe>',
       goog.html.SafeHtml.createIframe(url, null, {'sandbox': null}));
-  var srcdoc = goog.html.SafeHtml.create('br');
+  var srcdoc = goog.html.SafeHtml.BR;
   assertSameHtml(
       '<iframe srcdoc="&lt;br&gt;"></iframe>',
       goog.html.SafeHtml.createIframe(null, srcdoc, {'sandbox': null}));
