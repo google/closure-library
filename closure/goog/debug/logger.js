@@ -324,7 +324,8 @@ goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
     goog.debug.Logger.Level.createPredefinedLevelsCache_();
   }
 
-  if (value in goog.debug.Logger.Level.predefinedLevelsCache_) {
+  if (value in /** @type {!Object} */ (
+      goog.debug.Logger.Level.predefinedLevelsCache_)) {
     return goog.debug.Logger.Level.predefinedLevelsCache_[value];
   }
 

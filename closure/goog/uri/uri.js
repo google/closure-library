@@ -33,6 +33,7 @@ goog.provide('goog.Uri');
 goog.provide('goog.Uri.QueryData');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -1198,7 +1199,7 @@ goog.Uri.QueryData.prototype.add = function(key, value) {
     this.keyMap_.set(key, (values = []));
   }
   values.push(value);
-  this.count_++;
+  this.count_ = goog.asserts.assertNumber(this.count_) + 1;
   return this;
 };
 
@@ -1216,7 +1217,8 @@ goog.Uri.QueryData.prototype.remove = function(key) {
     this.invalidateCache_();
 
     // Decrement parameter count.
-    this.count_ -= this.keyMap_.get(key).length;
+    this.count_ =
+        goog.asserts.assertNumber(this.count_) - this.keyMap_.get(key).length;
     return this.keyMap_.remove(key);
   }
   return false;
@@ -1332,10 +1334,11 @@ goog.Uri.QueryData.prototype.set = function(key, value) {
   // ordering.
   key = this.getKeyName_(key);
   if (this.containsKey(key)) {
-    this.count_ -= this.keyMap_.get(key).length;
+    this.count_ =
+        goog.asserts.assertNumber(this.count_) - this.keyMap_.get(key).length;
   }
   this.keyMap_.set(key, [value]);
-  this.count_++;
+  this.count_ = goog.asserts.assertNumber(this.count_) + 1;
   return this;
 };
 
@@ -1371,7 +1374,7 @@ goog.Uri.QueryData.prototype.setValues = function(key, values) {
   if (values.length > 0) {
     this.invalidateCache_();
     this.keyMap_.set(this.getKeyName_(key), goog.array.clone(values));
-    this.count_ += values.length;
+    this.count_ = goog.asserts.assertNumber(this.count_) + values.length;
   }
 };
 

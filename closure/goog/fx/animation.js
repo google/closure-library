@@ -377,6 +377,9 @@ goog.fx.Animation.prototype.onAnimationFrame = function(now) {
  * @param {number} now The current time.
  */
 goog.fx.Animation.prototype.cycle = function(now) {
+  goog.asserts.assertNumber(this.startTime);
+  goog.asserts.assertNumber(this.endTime);
+  goog.asserts.assertNumber(this.lastFrame);
   this.progress = (now - this.startTime) / (this.endTime - this.startTime);
 
   if (this.progress >= 1) {

@@ -296,8 +296,9 @@ goog.math.Bezier.prototype.solvePositionFromXValue = function(xVal) {
   // Try gradient descent to solve for t. If it works, it is very fast.
   var tMin = 0;
   var tMax = 1;
+  var value = 0;
   for (var i = 0; i < 8; i++) {
-    var value = this.getPointX(t);
+    value = this.getPointX(t);
     var derivative = (this.getPointX(t + epsilon) - value) / epsilon;
     if (Math.abs(value - xVal) < epsilon) {
       return t;

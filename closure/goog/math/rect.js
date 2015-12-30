@@ -18,6 +18,7 @@
 
 goog.provide('goog.math.Rect');
 
+goog.require('goog.asserts');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
@@ -448,7 +449,7 @@ goog.math.Rect.prototype.translate = function(tx, opt_ty) {
     this.left += tx.x;
     this.top += tx.y;
   } else {
-    this.left += tx;
+    this.left += goog.asserts.assertNumber(tx);
     if (goog.isNumber(opt_ty)) {
       this.top += opt_ty;
     }

@@ -889,8 +889,8 @@ goog.style.setPageOffset = function(el, x, opt_y) {
   // require us to manually transform between different units
 
   // Work out deltas
-  var dx = x - cur.x;
-  var dy = opt_y - cur.y;
+  var dx = goog.asserts.assertNumber(x) - cur.x;
+  var dy = Number(opt_y) - cur.y;
 
   // Set position to current left/top + delta
   goog.style.setPosition(el, /** @type {!HTMLElement} */ (el).offsetLeft + dx,
@@ -1154,7 +1154,7 @@ goog.style.setOpacity = function(el, alpha) {
     if (alpha === '') {
       style.filter = '';
     } else {
-      style.filter = 'alpha(opacity=' + alpha * 100 + ')';
+      style.filter = 'alpha(opacity=' + (Number(alpha) * 100) + ')';
     }
   }
 };
@@ -1718,7 +1718,7 @@ goog.style.getMarginBox = function(element) {
 
 /**
  * A map used to map the border width keywords to a pixel width.
- * @type {Object}
+ * @type {!Object}
  * @private
  */
 goog.style.ieBorderWidthKeywords_ = {
@@ -1841,7 +1841,7 @@ goog.style.getLengthUnits = function(value) {
 
 /**
  * Map of absolute CSS length units
- * @type {Object}
+ * @type {!Object}
  * @private
  */
 goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
@@ -1857,7 +1857,7 @@ goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
  * Map of relative CSS length units that can be accurately converted to px
  * font-size values using getIePixelValue_. Only units that are defined in
  * relation to a font size are convertible (%, small, etc. are not).
- * @type {Object}
+ * @type {!Object}
  * @private
  */
 goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_ = {

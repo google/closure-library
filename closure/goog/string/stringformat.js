@@ -128,7 +128,7 @@ goog.string.format.demuxes_['s'] = function(value,
   // The check for '' is necessary because Firefox incorrectly provides the
   // empty string instead of undefined for non-participating capture groups,
   // and isNaN('') == false.
-  if (isNaN(width) || width == '' || replacement.length >= width) {
+  if (isNaN(width) || width == '' || replacement.length >= Number(width)) {
     return replacement;
   }
 

@@ -19,6 +19,7 @@
 goog.provide('goog.math.Matrix');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.math');
 goog.require('goog.math.Size');
 goog.require('goog.string');
@@ -310,7 +311,7 @@ goog.math.Matrix.prototype.getInverse = function() {
   }
   if (this.getSize().width == 1) {
     var a = this.getValueAt(0, 0);
-    return a == 0 ? null : new goog.math.Matrix([[1 / a]]);
+    return a == 0 ? null : new goog.math.Matrix([[1 / Number(a)]]);
   }
   var identity = goog.math.Matrix.createIdentityMatrix(this.size_.height);
   var mi = this.appendColumns(identity).getReducedRowEchelonForm();
@@ -645,7 +646,8 @@ goog.math.Matrix.prototype.matrixMultiply_ = function(m) {
   goog.math.Matrix.forEach(resultMatrix, function(val, x, y) {
     var newVal = 0;
     for (var i = 0; i < this.size_.width; i++) {
-      newVal += this.getValueAt(x, i) * m.getValueAt(i, y);
+      newVal += goog.asserts.assertNumber(this.getValueAt(x, i)) *
+          goog.asserts.assertNumber(m.getValueAt(i, y));
     }
     resultMatrix.setValueAt(x, y, newVal);
   }, this);

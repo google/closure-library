@@ -292,7 +292,7 @@ goog.net.NetworkTester.prototype.startNextAttempt_ = function() {
  * @private
  */
 goog.net.NetworkTester.getNavigatorOffline_ = function() {
-  return 'onLine' in navigator && !navigator.onLine;
+  return navigator !== null && 'onLine' in navigator && !navigator.onLine;
 };
 
 

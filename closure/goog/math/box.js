@@ -19,6 +19,7 @@
 
 goog.provide('goog.math.Box');
 
+goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 
@@ -146,10 +147,10 @@ goog.math.Box.prototype.expand = function(top, opt_right, opt_bottom,
     this.bottom += top.bottom;
     this.left -= top.left;
   } else {
-    this.top -= top;
-    this.right += opt_right;
-    this.bottom += opt_bottom;
-    this.left -= opt_left;
+    this.top -= /** @type {number} */ (top);
+    this.right += Number(opt_right);
+    this.bottom += Number(opt_bottom);
+    this.left -= Number(opt_left);
   }
 
   return this;
@@ -368,6 +369,7 @@ goog.math.Box.prototype.translate = function(tx, opt_ty) {
     this.top += tx.y;
     this.bottom += tx.y;
   } else {
+    goog.asserts.assertNumber(tx);
     this.left += tx;
     this.right += tx;
     if (goog.isNumber(opt_ty)) {

@@ -127,7 +127,7 @@ goog.math.Line.prototype.getClosestLinearInterpolation_ = function(x, opt_y) {
   var xChange = this.x1 - x0;
   var yChange = this.y1 - y0;
 
-  return ((x - x0) * xChange + (y - y0) * yChange) /
+  return ((Number(x) - x0) * xChange + (Number(y) - y0) * yChange) /
       this.getSegmentLengthSquared();
 };
 

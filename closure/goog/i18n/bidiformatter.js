@@ -168,7 +168,7 @@ goog.i18n.BidiFormatter.prototype.estimateDirection =
  */
 goog.i18n.BidiFormatter.prototype.areDirectionalitiesOpposite_ = function(dir1,
     dir2) {
-  return dir1 * dir2 < 0;
+  return Number(dir1) * Number(dir2) < 0;
 };
 
 

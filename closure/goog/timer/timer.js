@@ -278,7 +278,7 @@ goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
     throw Error('Invalid listener argument');
   }
 
-  if (opt_delay > goog.Timer.MAX_TIMEOUT_) {
+  if (Number(opt_delay) > goog.Timer.MAX_TIMEOUT_) {
     // Timeouts greater than MAX_INT return immediately due to integer
     // overflow in many browsers.  Since MAX_INT is 24.8 days, just don't
     // schedule anything at all.

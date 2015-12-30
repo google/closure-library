@@ -1584,7 +1584,7 @@ goog.string.editDistance = function(a, b) {
     v1[0] = i + 1;
 
     for (var j = 0; j < b.length; j++) {
-      var cost = a[i] != b[j];
+      var cost = Number(a[i] != b[j]);
       // Cost for the substring is the minimum of adding one character, removing
       // one character, or a swap.
       v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);

@@ -272,7 +272,7 @@ goog.cssom.replaceCssRule = function(cssRule, cssText, opt_parentStyleSheet,
   var parentStyleSheet = opt_parentStyleSheet ||
       goog.cssom.getParentStyleSheet(cssRule);
   if (parentStyleSheet) {
-    var index = opt_index >= 0 ? opt_index :
+    var index = Number(opt_index) >= 0 ? opt_index :
         goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule, parentStyleSheet);
     if (index >= 0) {
       goog.cssom.removeCssRule(parentStyleSheet, index);
@@ -299,7 +299,7 @@ goog.cssom.replaceCssRule = function(cssRule, cssText, opt_parentStyleSheet,
  */
 goog.cssom.addCssRule = function(cssStyleSheet, cssText, opt_index) {
   var index = opt_index;
-  if (index < 0 || index == undefined) {
+  if (index == undefined || index < 0) {
     // If no index specified, insert at the end of the current list
     // of rules.
     var rules = goog.cssom.getCssRulesFromStyleSheet(cssStyleSheet);
@@ -409,12 +409,7 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
     var cssRuleList = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
 
     if (cssRuleList && cssRuleList.length) {
-
-      // We're going to track cssRule index if we want rule output.
-      if (!isTextOutput) {
-        var ruleIndex = 0;
-      }
-
+      var ruleIndex = 0;
       for (var j = 0, n = cssRuleList.length, cssRule; j < n; j++) {
         cssRule = cssRuleList[j];
         // Gets cssText output, ignoring CSSImportRules.
@@ -440,11 +435,11 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
             // onto the style object as a property.
             // Unfortunately we have to use the style object to store these
             // pieces of info since the rule object is read-only.
-            cssRule.style['-closure-rule-index'] = ruleIndex;
+            cssRule.style['-closure-rule-index'] =
+                isTextOutput ? undefined : ruleIndex;
           }
           cssOut.push(cssRule);
         }
-
         if (!isTextOutput) {
           ruleIndex++;
         }
@@ -453,4 +448,3 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
   }
   return isTextOutput ? cssOut.join(' ') : cssOut;
 };
-

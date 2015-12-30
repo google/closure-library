@@ -1655,6 +1655,8 @@ goog.dom.setTextContent = function(node, text) {
  * @return {string} The outerHTML of the given element.
  */
 goog.dom.getOuterHtml = function(element) {
+  goog.asserts.assert(element !== null,
+      'goog.dom.getOuterHtml expects a non-null value for element');
   // IE, Opera and WebKit all have outerHTML.
   if ('outerHTML' in element) {
     return element.outerHTML;
@@ -1901,7 +1903,8 @@ goog.dom.getTextContent = function(node) {
   var textContent;
   // Note(arv): IE9, Opera, and Safari 3 support innerText but they include
   // text nodes in script tags. So we revert to use a user agent test here.
-  if (goog.dom.BrowserFeature.CAN_USE_INNER_TEXT && ('innerText' in node)) {
+  if (goog.dom.BrowserFeature.CAN_USE_INNER_TEXT &&
+      node !== null && ('innerText' in node)) {
     textContent = goog.string.canonicalizeNewlines(node.innerText);
     // Unfortunately .innerText() returns text with &shy; symbols
     // We need to filter it out and then remove duplicate whitespaces
@@ -2146,9 +2149,9 @@ goog.dom.getAncestor = function(
   if (!opt_includeNode) {
     element = element.parentNode;
   }
-  var ignoreSearchSteps = opt_maxSearchSteps == null;
   var steps = 0;
-  while (element && (ignoreSearchSteps || steps <= opt_maxSearchSteps)) {
+  while (element &&
+      (opt_maxSearchSteps == null || steps <= opt_maxSearchSteps)) {
     goog.asserts.assert(element.name != 'parentNode');
     if (matcher(element)) {
       return element;

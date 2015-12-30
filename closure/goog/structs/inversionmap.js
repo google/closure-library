@@ -56,7 +56,7 @@ goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
  * If delta is true, the integers are delta from the previous value and
  * will be restored to the absolute value.
  * When used as a set, even indices are IN, and odd are OUT.
- * @param {Array<number?>} rangeArray An array of monotonically
+ * @param {Array<number>} rangeArray An array of monotonically
  *     increasing integer values, with at least one instance.
  * @param {boolean=} opt_delta If true, saves only delta from previous value.
  * @private

@@ -539,7 +539,7 @@ goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
  *     same as the given version.
  */
 goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
-  return goog.userAgent.DOCUMENT_MODE >= documentMode;
+  return Number(goog.userAgent.DOCUMENT_MODE) >= documentMode;
 };
 
 

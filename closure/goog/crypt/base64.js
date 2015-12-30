@@ -276,8 +276,11 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
   goog.crypt.base64.init_();
 
   var nextCharIndex = 0;
-  /** @return {?number} The next 6-bit value, or null for end-of-input. */
-  function getByte() {
+  /**
+   * @param {number} default_val Used for end-of-input.
+   * @return {number} The next 6-bit value, or the default for end-of-input.
+   */
+  function getByte(default_val) {
     while (nextCharIndex < input.length) {
       var ch = input.charAt(nextCharIndex++);
       var b = goog.crypt.base64.charToByteMap_[ch];
@@ -289,28 +292,26 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
       }
       // We encountered whitespace: loop around to the next input char.
     }
-    return null;  // No more input remaining.
+    return default_val;  // No more input remaining.
   }
 
   while (true) {
-    var byte1 = getByte();
-    var byte2 = getByte();
-    var byte3 = getByte();
-    var byte4 = getByte();
+    var byte1 = getByte(-1);
+    var byte2 = getByte(0);
+    var byte3 = getByte(64);
+    var byte4 = getByte(64);
 
     // The common case is that all four bytes are present, so if we have byte4
     // we can skip over the truncated input special case handling.
-    if (byte4 == null) {
-      if (byte1 == null) {
+    if (byte4 === 64) {
+      if (byte1 === -1) {
         return;  // Terminal case: no input left to decode.
       }
-      // Here we know an intermediate number of bytes are missing, so apply the
-      // inferred padding rules per the public API documentation. i.e: 1 byte
+      // Here we know an intermediate number of bytes are missing.
+      // The defaults for byte2, byte3 and byte4 apply the inferred padding
+      // rules per the public API documentation. i.e: 1 byte
       // missing should yield 2 bytes of output, but 2 or 3 missing bytes yield
       // a single byte of output. (Recall that 64 corresponds the padding char).
-      byte4 = 64;
-      byte3 = byte3 != null ? byte3 : 64;
-      byte2 = byte2 != null ? byte2 : 0;
     }
 
     var outByte1 = (byte1 << 2) | (byte2 >> 4);
