@@ -82,7 +82,7 @@ var debugDiv;
 
 function setUpPage() {
   // Show debug log
-  debugDiv = document.createElement(goog.dom.TagName.DEBUGDIV);
+  debugDiv = document.createElement(goog.dom.TagName.DIV);
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {

@@ -180,7 +180,7 @@ function testTestCaseReturningPromise_GoogPromiseTimeout() {
   // We have to decrease timeout for the artificial 'foo' test otherwise current
   // test will timeout.
   testCase.promiseTimeout = 500;
-  var startTimestamp = new Date().getTime();
+  startTimestamp = new Date().getTime();
   return testCase.runTestsReturningPromise().then(function(result) {
     var elapsedTime = new Date().getTime() - startTimestamp;
     assertFalse(testCase.isSuccess());
@@ -688,7 +688,7 @@ function testFailOnUnreportedAsserts_SwallowedAssertNotThrowsException() {
 
 function testFailOnUnreportedAsserts_SwallowedExceptionViaPromise() {
   return verifyTestOutcomeForFailOnUnreportedAssertsFlag(false, function() {
-    return new goog.Promise.resolve()
+    return goog.Promise.resolve()
         .then(function() {
           assertTrue(false);
         })

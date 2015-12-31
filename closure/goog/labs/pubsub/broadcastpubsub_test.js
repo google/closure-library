@@ -347,7 +347,7 @@ function testHandleQueuedRemoteEvents() {
   };
   remoteStorageEvent(eventData);
 
-  var eventData = {
+  eventData = {
     'args': ['barTopic', 'd', 'c'],
     'timestamp': goog.now()
   };
@@ -382,7 +382,7 @@ function testHandleRemoteEventsUnsubscribe() {
   remoteStorageEvent(eventData);
   mockClock.tick();
 
-  var eventData = {
+  eventData = {
     'args': ['barTopic', 'd', 'c'],
     'timestamp': goog.now()
   };
@@ -412,7 +412,7 @@ function testHandleRemoteEventsCalledOnce() {
   remoteStorageEvent(eventData);
   mockClock.tick();
 
-  var eventData = {
+  eventData = {
     'args': ['someTopic', 'x', 'y'],
     'timestamp': goog.now()
   };

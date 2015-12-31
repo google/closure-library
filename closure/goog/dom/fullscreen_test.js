@@ -21,7 +21,7 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 
-var opt_domHelper;
+var domHelper;
 var mock_doc;
 var stubs;
 

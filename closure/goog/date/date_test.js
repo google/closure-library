@@ -222,7 +222,7 @@ function testGetWeekNumber() {
   assertEquals('2008-12-29 is in week 1 of the following year', 1,
                f(2008, goog.date.month.DEC, 29));
   assertEquals('2010-01-03 is in week 53 of the previous year', 53,
-               f(2010, goog.date.month.JAN, 03));
+               f(2010, goog.date.month.JAN, 3));
 
   assertEquals('2008-02-01 is in week 5', 5,
                f(2008, goog.date.month.FEB, 1));
@@ -304,12 +304,12 @@ function testDateConstructor() {
   assertEquals(2, date.getMonth());
   assertEquals(3, date.getDate());
 
-  var date = new goog.date.Date(2001);
+  date = new goog.date.Date(2001);
   assertEquals(2001, date.getFullYear());
   assertEquals(0, date.getMonth());
   assertEquals(1, date.getDate());
 
-  var date = new goog.date.Date(new Date(2001, 2, 3, 4, 5, 6, 7));
+  date = new goog.date.Date(new Date(2001, 2, 3, 4, 5, 6, 7));
   assertEquals(2001, date.getFullYear());
   assertEquals(2, date.getMonth());
   assertEquals(3, date.getDate());
@@ -318,7 +318,7 @@ function testDateConstructor() {
   goog.now = function() {
     return new Date(2001, 2, 3, 4).getTime();
   };
-  var date = new goog.date.Date();
+  date = new goog.date.Date();
   assertEquals(2001, date.getFullYear());
   assertEquals(2, date.getMonth());
   assertEquals(3, date.getDate());
@@ -386,8 +386,7 @@ function testRfc822StringToDate() {
   assertEquals(0, date.getMilliseconds());
   assertEquals(new Date(2002, 9, 2, 8).getTime(), date.getTime());
 
-  var date = goog.date.DateTime.fromRfc822String(
-      'Sat, 02 Oct 2010 08:00:00 UTC');
+  date = goog.date.DateTime.fromRfc822String('Sat, 02 Oct 2010 08:00:00 UTC');
   assertEquals(2010, date.getFullYear());
   assertEquals(9, date.getUTCMonth());
   assertEquals(2, date.getUTCDate());
@@ -396,13 +395,13 @@ function testRfc822StringToDate() {
   assertEquals(0, date.getUTCSeconds());
   assertEquals(0, date.getUTCMilliseconds());
 
-  var date = goog.date.DateTime.fromRfc822String('');
+  date = goog.date.DateTime.fromRfc822String('');
   assertEquals(null, date);
 
-  var date = goog.date.DateTime.fromRfc822String('Invalid Date String');
+  date = goog.date.DateTime.fromRfc822String('Invalid Date String');
   assertEquals(null, date);
 
-  var date = goog.date.DateTime.fromRfc822String('Sat, 02 Oct 2010');
+  date = goog.date.DateTime.fromRfc822String('Sat, 02 Oct 2010');
   assertEquals(2010, date.getFullYear());
   assertEquals(9, date.getMonth());
   assertEquals(2, date.getDate());
@@ -862,7 +861,7 @@ function testDateTimeConstructor() {
   assertEquals(7, date.getMilliseconds());
   assertEquals(new Date(2001, 2, 3, 4, 5, 6, 7).getTime(), date.getTime());
 
-  var date = new goog.date.DateTime(2001);
+  date = new goog.date.DateTime(2001);
   assertEquals(2001, date.getFullYear());
   assertEquals(0, date.getMonth());
   assertEquals(1, date.getDate());
@@ -871,7 +870,7 @@ function testDateTimeConstructor() {
   assertEquals(0, date.getSeconds());
   assertEquals(0, date.getMilliseconds());
 
-  var date = new goog.date.DateTime(new Date(2001, 2, 3, 4, 5, 6, 7));
+  date = new goog.date.DateTime(new Date(2001, 2, 3, 4, 5, 6, 7));
   assertEquals(2001, date.getFullYear());
   assertEquals(2, date.getMonth());
   assertEquals(3, date.getDate());
@@ -884,7 +883,7 @@ function testDateTimeConstructor() {
   goog.now = function() {
     return new Date(2001, 2, 3, 4).getTime();
   };
-  var date = new goog.date.DateTime();
+  date = new goog.date.DateTime();
   assertEquals(2001, date.getFullYear());
   assertEquals(2, date.getMonth());
   assertEquals(3, date.getDate());
@@ -894,7 +893,7 @@ function testDateTimeConstructor() {
   assertEquals(0, date.getMilliseconds());
   assertEquals(new Date(2001, 2, 3, 4).getTime(), date.getTime());
 
-  var date = new goog.date.DateTime(new Date('October 2, 2002 8:00:00'));
+  date = new goog.date.DateTime(new Date('October 2, 2002 8:00:00'));
   assertEquals(2002, date.getFullYear());
   assertEquals(9, date.getMonth());
   assertEquals(2, date.getDate());
@@ -1143,10 +1142,10 @@ function testIsDateLikeWithGoogDateTime() {
 
 
 function testDateTimezone() {
-  var d = new goog.date.DateTime(2006, 01, 01, 12, 00, 00);
+  var d = new goog.date.DateTime(2006, 1, 1, 12, 0, 0);
   d.add(new goog.date.Interval(goog.date.Interval.MINUTES,
                                d.getTimezoneOffset()));
-  var d2 = new goog.date.DateTime(2006, 01, 01, 12, 00, 00);
+  var d2 = new goog.date.DateTime(2006, 1, 1, 12, 0, 0);
   assertEquals('Compensate for timezone and compare with UTC date/time',
                d.toIsoString(true), d2.toUTCIsoString(true));
 }
@@ -1379,7 +1378,7 @@ function testDateCompare() {
       goog.date.Date.compare(
           new goog.date.DateTime(1982, goog.date.month.MAR, 12, 6, 48, 32, 354),
           new goog.date.DateTime(
-              1982, goog.date.month.MAR, 12, 12, 07, 21, 832)));
+              1982, goog.date.month.MAR, 12, 12, 7, 21, 832)));
 
   // Test dates before the year 0.  Dates are Talk Like a Pirate Day, and
   // Towel Day, 300 B.C. (and before pirates).
@@ -1457,7 +1456,7 @@ function testDateTimeIntervalAdd() {
   assertEquals(1, d.getHours());
 
   // Add minutes
-  var d = new goog.date.DateTime(2007, goog.date.month.JAN, 1, 22, 20, 30);
+  d = new goog.date.DateTime(2007, goog.date.month.JAN, 1, 22, 20, 30);
   d.add(new goog.date.Interval(goog.date.Interval.MINUTES, 10));
   assertEquals(30, d.getMinutes());
 
@@ -1472,7 +1471,7 @@ function testDateTimeIntervalAdd() {
   assertEquals(35, d.getMinutes());
 
   // Add seconds
-  var d = new goog.date.DateTime(2007, goog.date.month.JAN, 1, 23, 45, 30);
+  d = new goog.date.DateTime(2007, goog.date.month.JAN, 1, 23, 45, 30);
   d.add(new goog.date.Interval(goog.date.Interval.SECONDS, 10));
   assertEquals(40, d.getSeconds());
 
@@ -1488,7 +1487,7 @@ function testDateTimeIntervalAdd() {
   assertEquals(35, d.getSeconds());
 
   // Test daylight savings day 2015-11-1
-  var d = new goog.date.DateTime(2015, goog.date.month.NOV, 1, 0, 50, 30);
+  d = new goog.date.DateTime(2015, goog.date.month.NOV, 1, 0, 50, 30);
   d.add(new goog.date.Interval(goog.date.Interval.MINUTES, 15));
   assertEquals(1, d.getHours());
   assertEquals(5, d.getMinutes());
@@ -1497,7 +1496,7 @@ function testDateTimeIntervalAdd() {
   assertEquals(1, d.getHours());
 
   // Test daylight savings day 2015-3-8
-  var d = new goog.date.DateTime(2015, goog.date.month.MAR, 8, 0, 50, 30);
+  d = new goog.date.DateTime(2015, goog.date.month.MAR, 8, 0, 50, 30);
   d.add(new goog.date.Interval(goog.date.Interval.MINUTES, 15));
   assertEquals(1, d.getHours());
   assertEquals(5, d.getMinutes());
