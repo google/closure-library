@@ -156,7 +156,8 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     /** @constructor */
     Channel = function() {
       // Make an empty, invisible iframe.
-      var iframe = document.createElement(goog.dom.TagName.IFRAME);
+      var iframe = /** @type {!HTMLIFrameElement} */ (
+          document.createElement(goog.dom.TagName.IFRAME));
       iframe.style.display = 'none';
       iframe.src = '';
       document.documentElement.appendChild(iframe);

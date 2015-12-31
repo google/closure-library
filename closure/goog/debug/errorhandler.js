@@ -194,7 +194,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
       if (!that.wrapErrors_) {
         // Add the prefix to the existing message.
         if (that.prefixErrorMessages_) {
-          if (e && typeof e === 'object') {
+          if (e && typeof e === 'object' && 'message' in e) {
             e.message = MESSAGE_PREFIX + e.message;
           } else {
             e = MESSAGE_PREFIX + e;

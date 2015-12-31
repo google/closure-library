@@ -51,9 +51,10 @@ goog.Timer = function(opt_interval, opt_timerObject) {
    * object. Changing this on {@link goog.Timer.prototype} changes the object
    * for all timer instances which can be useful if your environment has some
    * other implementation of timers than the {@code window} object.
-   * @private {Object}
+   * @private {{setTimeout:!Function, clearTimeout:!Function}}
    */
-  this.timerObject_ = opt_timerObject || goog.Timer.defaultTimerObject;
+  this.timerObject_ = /** @type {{setTimeout, clearTimeout}} */ (
+      opt_timerObject || goog.Timer.defaultTimerObject);
 
   /**
    * Cached {@code tick_} bound to the object for later use in the timer.
@@ -112,7 +113,7 @@ goog.Timer.prototype.enabled = false;
  * object. Changing {@code goog.Timer.defaultTimerObject} changes the object for
  * all timer instances which can be useful if your environment has some other
  * implementation of timers you'd like to use.
- * @type {Object}
+ * @type {{setTimeout, clearTimeout}}
  */
 goog.Timer.defaultTimerObject = goog.global;
 

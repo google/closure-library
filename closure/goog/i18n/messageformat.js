@@ -312,7 +312,8 @@ goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
 
 /**
  * Formats select block. Only one option is selected.
- * @param {!Object} parsedPattern JSON object containing select block info.
+ * @param {!{argumentIndex:?}} parsedPattern JSON object containing select
+ *     block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
  * @param {boolean} ignorePound If true, treat '#' in plural messages as a
@@ -344,7 +345,8 @@ goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
 /**
  * Formats plural or selectordinal block. Only one option is selected and all #
  * are replaced.
- * @param {!Object} parsedPattern JSON object containing plural block info.
+ * @param {!{argumentIndex, argumentOffset}} parsedPattern JSON object
+ *     containing plural block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
  * @param {!function(number, number=):string} pluralSelector  A select function

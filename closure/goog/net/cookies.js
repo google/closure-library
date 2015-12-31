@@ -334,7 +334,8 @@ goog.net.Cookies.prototype.getParts_ = function() {
 
 /**
  * Gets the names and values for all the cookies.
- * @return {!Object} An object with keys and values.
+ * @return {!{keys:!Array<string>, values:!Array<string>}} An object with keys
+ *     and values.
  * @private
  */
 goog.net.Cookies.prototype.getKeyValues_ = function() {

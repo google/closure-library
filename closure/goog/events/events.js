@@ -434,7 +434,7 @@ goog.events.unlistenByKey = function(key) {
 
   var src = listener.src;
   if (goog.events.Listenable.isImplementedBy(src)) {
-    return src.unlistenByKey(listener);
+    return /** @type {!goog.events.Listenable} */ (src).unlistenByKey(listener);
   }
 
   var type = listener.type;
@@ -506,7 +506,7 @@ goog.events.removeAll = function(obj, opt_type) {
   }
 
   if (goog.events.Listenable.isImplementedBy(obj)) {
-    return obj.removeAllListeners(opt_type);
+    return /** @type {?} */ (obj).removeAllListeners(opt_type);
   }
 
   var listenerMap = goog.events.getListenerMap_(
@@ -539,11 +539,12 @@ goog.events.removeAll = function(obj, opt_type) {
  * @param {Object} obj Object to get listeners for.
  * @param {string|!goog.events.EventId} type Event type.
  * @param {boolean} capture Capture phase?.
- * @return {Array<goog.events.Listener>} Array of listener objects.
+ * @return {Array<!goog.events.Listener>} Array of listener objects.
  */
 goog.events.getListeners = function(obj, type, capture) {
   if (goog.events.Listenable.isImplementedBy(obj)) {
-    return obj.getListeners(type, capture);
+    return /** @type {!goog.events.Listenable} */ (obj)
+        .getListeners(type, capture);
   } else {
     if (!obj) {
       // TODO(chrishenry): We should tighten the API to accept
@@ -667,7 +668,8 @@ goog.events.getOnString_ = function(type) {
  */
 goog.events.fireListeners = function(obj, type, capture, eventObject) {
   if (goog.events.Listenable.isImplementedBy(obj)) {
-    return obj.fireListeners(type, capture, eventObject);
+    return /** @type {!goog.events.Listenable} */ (obj)
+        .fireListeners(type, capture, eventObject);
   }
 
   return goog.events.fireListeners_(obj, type, capture, eventObject);
@@ -965,7 +967,7 @@ goog.events.wrapListener = function(listener) {
       listener.handleEvent, 'An object listener must have handleEvent method.');
   if (!listener[goog.events.LISTENER_WRAPPER_PROP_]) {
     listener[goog.events.LISTENER_WRAPPER_PROP_] =
-        function(e) { return listener.handleEvent(e); };
+        function(e) { return /** @type {?} */ (listener).handleEvent(e); };
   }
   return listener[goog.events.LISTENER_WRAPPER_PROP_];
 };

@@ -1345,7 +1345,8 @@ goog.date.DateTime = function(opt_year, opt_month, opt_date, opt_hours,
         opt_hours || 0, opt_minutes || 0, opt_seconds || 0,
         opt_milliseconds || 0);
   } else {
-    this.date = new Date(opt_year ? opt_year.getTime() : goog.now());
+    this.date = new Date(opt_year && opt_year.getTime ?
+        opt_year.getTime() : goog.now());
   }
 };
 goog.inherits(goog.date.DateTime, goog.date.Date);
