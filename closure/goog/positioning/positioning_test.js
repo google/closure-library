@@ -156,6 +156,61 @@ function testPositionAtAnchorLeftToRight() {
   assertRoundedEquals('Popup should be positioned just below the anchor.',
                       anchorRect.top + anchorRect.height,
                       popupRect.top);
+
+  // Anchor top center to top center.
+  goog.positioning.positionAtAnchor(anchor, corner.TOP_CENTER,
+                                    popup, corner.TOP_CENTER);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  // We use flooring math because we consider 10 and 10.5 to be "equal".
+  // IE8 doesn't allow split pixels in positioning and as such this test would
+  // fail on it, as Anchor L+W/2 is round while Popup L+W/2 is .5 away.
+  assertRoundedEquals('The center of popup should line up with the center ' +
+                      'of anchor.',
+                      Math.floor(anchorRect.left + anchorRect.width / 2),
+                      Math.floor(popupRect.left + popupRect.width / 2));
+  assertRoundedEquals('Popup should have the same y position as the anchor.',
+                      anchorRect.top,
+                      popupRect.top);
+
+  // Anchor top center to top left.
+  goog.positioning.positionAtAnchor(anchor, corner.TOP_CENTER,
+                                    popup, corner.TOP_LEFT);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertRoundedEquals('Left edge of popup should line up with the center ' +
+                      'of anchor.',
+                      Math.floor(anchorRect.left + anchorRect.width / 2),
+                      Math.floor(popupRect.left));
+  assertRoundedEquals('Popup should have the same y position as the anchor.',
+                      anchorRect.top,
+                      popupRect.top);
+
+  // Anchor bottom center to top left.
+  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_CENTER,
+                                    popup, corner.TOP_LEFT);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertRoundedEquals('Left edge of popup should line up with the middle ' +
+                      'of anchor.',
+                      Math.floor(anchorRect.left + anchorRect.width / 2),
+                      Math.floor(popupRect.left));
+  assertRoundedEquals('Popup should be positioned just below the anchor.',
+                      anchorRect.top + anchorRect.height,
+                      popupRect.top);
+
+  // Anchor bottom left to top center.
+  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_LEFT,
+                                    popup, corner.TOP_CENTER);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertRoundedEquals('Left edge of popup should line up with the middle ' +
+                      'of anchor.',
+                      anchorRect.left,
+                      Math.floor(popupRect.left + popupRect.width / 2));
+  assertRoundedEquals('Popup should be positioned just below the anchor.',
+                      anchorRect.top + anchorRect.height,
+                      popupRect.top);
 }
 
 

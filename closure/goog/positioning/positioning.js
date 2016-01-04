@@ -35,6 +35,19 @@ goog.require('goog.style.bidi');
 
 
 /**
+ * Enum for bits in the {@see goog.positioning.Corner) bitmap.
+ *
+ * @enum {number}
+ */
+goog.positioning.CornerBit = {
+  BOTTOM: 1,
+  CENTER: 2,
+  RIGHT: 4,
+  FLIP_RTL: 8
+};
+
+
+/**
  * Enum for representing an element corner for positioning the popup.
  *
  * The START constants map to LEFT if element directionality is left
@@ -45,25 +58,21 @@ goog.require('goog.style.bidi');
  */
 goog.positioning.Corner = {
   TOP_LEFT: 0,
-  TOP_RIGHT: 2,
-  BOTTOM_LEFT: 1,
-  BOTTOM_RIGHT: 3,
-  TOP_START: 4,
-  TOP_END: 6,
-  BOTTOM_START: 5,
-  BOTTOM_END: 7
-};
-
-
-/**
- * Enum for bits in the {@see goog.positioning.Corner) bitmap.
- *
- * @enum {number}
- */
-goog.positioning.CornerBit = {
-  BOTTOM: 1,
-  RIGHT: 2,
-  FLIP_RTL: 4
+  TOP_RIGHT: goog.positioning.CornerBit.RIGHT,
+  BOTTOM_LEFT: goog.positioning.CornerBit.BOTTOM,
+  BOTTOM_RIGHT: goog.positioning.CornerBit.BOTTOM |
+      goog.positioning.CornerBit.RIGHT,
+  TOP_START: goog.positioning.CornerBit.FLIP_RTL,
+  TOP_END: goog.positioning.CornerBit.FLIP_RTL |
+      goog.positioning.CornerBit.RIGHT,
+  BOTTOM_START: goog.positioning.CornerBit.BOTTOM |
+      goog.positioning.CornerBit.FLIP_RTL,
+  BOTTOM_END: goog.positioning.CornerBit.BOTTOM |
+      goog.positioning.CornerBit.RIGHT |
+      goog.positioning.CornerBit.FLIP_RTL,
+  TOP_CENTER: goog.positioning.CornerBit.CENTER,
+  BOTTOM_CENTER: goog.positioning.CornerBit.BOTTOM |
+      goog.positioning.CornerBit.CENTER
 };
 
 
@@ -221,13 +230,18 @@ goog.positioning.positionAtAnchor = function(anchorElement,
   // Offset based on which corner of the element we want to position against.
   var corner = goog.positioning.getEffectiveCorner(anchorElement,
                                                    anchorElementCorner);
+  var offsetLeft = anchorRect.left;
+  if (corner & goog.positioning.CornerBit.RIGHT) {
+    offsetLeft += anchorRect.width;
+  } else if (corner & goog.positioning.CornerBit.CENTER) {
+    offsetLeft += anchorRect.width / 2;
+  }
+
   // absolutePos is a candidate position relative to the
   // movableElement's window.
-  var absolutePos = new goog.math.Coordinate(
-      corner & goog.positioning.CornerBit.RIGHT ?
-          anchorRect.left + anchorRect.width : anchorRect.left,
-      corner & goog.positioning.CornerBit.BOTTOM ?
-          anchorRect.top + anchorRect.height : anchorRect.top);
+  var absolutePos = new goog.math.Coordinate(offsetLeft,
+      anchorRect.top +
+          (corner & goog.positioning.CornerBit.BOTTOM ? anchorRect.height : 0));
 
   // Translate absolutePos to be relative to the offsetParent.
   absolutePos =
@@ -416,6 +430,8 @@ goog.positioning.getPositionAtCoordinate = function(
   if (opt_margin || elementCorner != goog.positioning.Corner.TOP_LEFT) {
     if (elementCorner & goog.positioning.CornerBit.RIGHT) {
       absolutePos.x -= elementSize.width + (opt_margin ? opt_margin.right : 0);
+    } else if (elementCorner & goog.positioning.CornerBit.CENTER) {
+      absolutePos.x -= elementSize.width / 2;
     } else if (opt_margin) {
       absolutePos.x += opt_margin.left;
     }
