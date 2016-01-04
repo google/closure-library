@@ -73,7 +73,7 @@ goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
-goog.require('goog.html.legacyconversions');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.net.EventType');
@@ -85,11 +85,6 @@ goog.require('goog.userAgent');
 
 /**
  * Creates a new instance of cross domain RPC.
- *
- * This class makes use of goog.html.legacyconversions and provides no
- * HTML-type-safe alternative. As such, it is not compatible with
- * code that sets goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS to
- * false.
  *
  * @extends {goog.events.EventTarget}
  * @constructor
@@ -252,26 +247,11 @@ goog.net.CrossDomainRpc.logger_ =
  * Creates the HTML of an input element
  * @param {string} name Name of input element.
  * @param {*} value Value of input element.
- * @return {string} HTML of input element with that name and value.
+ * @return {!goog.html.SafeHtml} HTML of input element with that name and value.
  * @private
  */
 goog.net.CrossDomainRpc.createInputHtml_ = function(name, value) {
-  return '<textarea name="' + name + '">' +
-      goog.net.CrossDomainRpc.escapeAmpersand_(value) + '</textarea>';
-};
-
-
-/**
- * Escapes ampersand so that XML/HTML entities are submitted as is because
- * browser unescapes them when they are put into a text area.
- * @param {*} value Value to escape.
- * @return {*} Value with ampersand escaped, if value is a string;
- *     otherwise the value itself is returned.
- * @private
- */
-goog.net.CrossDomainRpc.escapeAmpersand_ = function(value) {
-  return value && (goog.isString(value) || value.constructor == String) ?
-      value.replace(/&/g, '&amp;') : value;
+  return goog.html.SafeHtml.create('textarea', {'name': name}, String(value));
 };
 
 
@@ -408,7 +388,8 @@ goog.net.CrossDomainRpc.REQUEST_MARKER_ = 'xdrq';
 /**
  * Sends a request across domain.
  * @param {string} uri Uri to make request to.
- * @param {string=} opt_method Method of request. Default is POST.
+ * @param {string=} opt_method Method of request, 'GET' or 'POST' (uppercase).
+ *     Default is 'POST'.
  * @param {Object=} opt_params Parameters. Each property is turned into a
  *     request parameter.
  * @param {Object=} opt_headers Map of headers of the request.
@@ -459,11 +440,11 @@ goog.net.CrossDomainRpc.prototype.sendRequest =
     }
   }
 
-  var requestFrameContent = '<body><form method="' +
-      (opt_method == 'GET' ? 'GET' : 'POST') + '" action="' +
-      uri + '">' + inputs.join('') + '</form></body>';
-  var requestFrameContentHtml = goog.html.legacyconversions.safeHtmlFromString(
-      requestFrameContent);
+  var requestFrameContentHtml = goog.html.SafeHtml.create('body', {},
+      goog.html.SafeHtml.create('form', {
+        'method': opt_method == 'GET' ? 'GET' : 'POST',
+        'action': uri
+      }, inputs));
   var requestFrameDoc = goog.dom.getFrameContentDocument(requestFrame);
   requestFrameDoc.open();
   goog.dom.safe.documentWrite(requestFrameDoc, requestFrameContentHtml);
