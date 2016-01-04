@@ -212,7 +212,7 @@ function testLastBusinessWeek() {
 }
 
 function testAllTime() {
-  var s = new gd(0000, 0, 1);
+  var s = new gd(0, 0, 1);
   var e = new gd(9999, 11, 31);
   assertStartEnd('allTime', s, e, gdr.allTime());
   assertStartEnd('allTime by key', s, e,

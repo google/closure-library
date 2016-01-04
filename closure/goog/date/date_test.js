@@ -222,7 +222,7 @@ function testGetWeekNumber() {
   assertEquals('2008-12-29 is in week 1 of the following year', 1,
                f(2008, goog.date.month.DEC, 29));
   assertEquals('2010-01-03 is in week 53 of the previous year', 53,
-               f(2010, goog.date.month.JAN, 03));
+               f(2010, goog.date.month.JAN, 3));
 
   assertEquals('2008-02-01 is in week 5', 5,
                f(2008, goog.date.month.FEB, 1));
@@ -1143,10 +1143,10 @@ function testIsDateLikeWithGoogDateTime() {
 
 
 function testDateTimezone() {
-  var d = new goog.date.DateTime(2006, 01, 01, 12, 00, 00);
+  var d = new goog.date.DateTime(2006, 1, 1, 12, 0, 0);
   d.add(new goog.date.Interval(goog.date.Interval.MINUTES,
                                d.getTimezoneOffset()));
-  var d2 = new goog.date.DateTime(2006, 01, 01, 12, 00, 00);
+  var d2 = new goog.date.DateTime(2006, 1, 1, 12, 0, 0);
   assertEquals('Compensate for timezone and compare with UTC date/time',
                d.toIsoString(true), d2.toUTCIsoString(true));
 }
@@ -1379,7 +1379,7 @@ function testDateCompare() {
       goog.date.Date.compare(
           new goog.date.DateTime(1982, goog.date.month.MAR, 12, 6, 48, 32, 354),
           new goog.date.DateTime(
-              1982, goog.date.month.MAR, 12, 12, 07, 21, 832)));
+              1982, goog.date.month.MAR, 12, 12, 7, 21, 832)));
 
   // Test dates before the year 0.  Dates are Talk Like a Pirate Day, and
   // Towel Day, 300 B.C. (and before pirates).

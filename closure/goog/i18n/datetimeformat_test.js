@@ -361,7 +361,7 @@ function testFractionalSeconds() {
 function testPredefinedFormatter() {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
-  date = new Date(2006, 7, 4, 13, 49, 24, 000);
+  date = new Date(2006, 7, 4, 13, 49, 24, 0);
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATE);
   assertEquals('Freitag, 4. August 2006', fmt.format(date));
@@ -581,10 +581,10 @@ function test_daylightTimeTransition() {
   var date = new Date(Date.UTC(2006, 4 - 1, 2, 9, 59, 0));
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 01:59:00 PST', fmt.format(date, timeZone));
-  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 01, 0));
+  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 1, 0));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 03:01:00 PDT', fmt.format(date, timeZone));
-  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 00, 0));
+  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 0, 0));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 03:00:00 PDT', fmt.format(date, timeZone));
 }
@@ -614,7 +614,7 @@ function testTimeDisplayOnDaylightTimeTransitionDayChange() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
 
   // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
-  var date = new Date(Date.UTC(2015, 11 - 1, 01, 11, 0, 1));
+  var date = new Date(Date.UTC(2015, 11 - 1, 1, 11, 0, 1));
   // Convert to GMT-12, across DST transition.
   // The date should also change, but does not change when subtracting 4 hours
   // from PST/PDT due to the extra hour from switching DST.
