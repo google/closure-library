@@ -180,7 +180,7 @@ function testAllowsMultipleModifiers() {
 
   handler.registerShortcut('lettergeectrlaltshift',
       KeyCodes.G, Modifiers.CTRL | Modifiers.ALT | Modifiers.SHIFT);
-  fire(KeyCodes.G, {ctrlKey: true, altKey: true, shiftKey: true});
+  fireAltGraphKey(KeyCodes.G, 0, {ctrlKey: true, altKey: true, shiftKey: true});
 
   listener.$verify();
 }
@@ -191,7 +191,7 @@ function testAllowsMultipleModifiersSpecifiedAsString() {
 
   handler.registerShortcut('lettergeectrlaltshiftmeta',
       'ctrl+shift+alt+meta+g');
-  fire(KeyCodes.G,
+  fireAltGraphKey(KeyCodes.G, 0,
       {ctrlKey: true, altKey: true, shiftKey: true, metaKey: true});
 
   listener.$verify();
@@ -669,6 +669,27 @@ function testAltGraphKeyOnSpanishLayout() {
     fireAltGraphKey(KeyCodes.THREE, 0x0023, {ctrlKey: true, altKey: true});
     fireAltGraphKey(KeyCodes.FOUR, 0x0303, {ctrlKey: true, altKey: true});
     fireAltGraphKey(KeyCodes.FIVE, 0x20ac, {ctrlKey: true, altKey: true});
+
+    listener.$verify();
+  }
+}
+
+function testAltGraphKeyOnPolishLayout_withShift() {
+  // Windows assigns printable characters to ctrl+alt+shift+A key in polish
+  // layout. This test verifies that we do not fire shortcut events for A, but
+  // does fire for Q which does not have a printable character.
+  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+    listener.shortcutFired('letterQ');
+    listener.$replay();
+
+    handler.registerShortcut('letterA', 'ctrl+alt+shift+A');
+    handler.registerShortcut('letterQ', 'ctrl+alt+shift+Q');
+
+    // Send key events on the Polish (Programmer) layout.
+    fireAltGraphKey(KeyCodes.A, 0x0104,
+        {ctrlKey: true, altKey: true, shiftKey: true});
+    fireAltGraphKey(KeyCodes.Q, 0,
+        {ctrlKey: true, altKey: true, shiftKey: true});
 
     listener.$verify();
   }

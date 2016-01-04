@@ -793,7 +793,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleGeckoKeyUp_ = function(e) {
 goog.ui.KeyboardShortcutHandler.prototype.isPossiblePrintableKey_ =
     function(e) {
   return goog.userAgent.WINDOWS && !goog.userAgent.GECKO &&
-      e.ctrlKey && e.altKey && !e.shiftKey;
+      e.ctrlKey && e.altKey;
 };
 
 
