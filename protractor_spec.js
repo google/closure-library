@@ -65,13 +65,13 @@ describe('Run all Closure unit tests', function() {
                   if (currTime - testStartTime > TEST_TIMEOUT) {
                     status.isSuccess = false;
                     status.report = testPath + ' timed out after ' +
-                                    (TEST_TIMEOUT / 1000) + 's!';
+                        (TEST_TIMEOUT / 1000) + 's!';
                     // resolve so tests continue running.
                     resolve(status);
                   } else {
                     // Check every 300ms for completion.
-                    setTimeout(waitForTest.bind(undefined, resolve, reject),
-                               300);
+                    setTimeout(
+                        waitForTest.bind(undefined, resolve, reject), 300);
                   }
                 }
               },
