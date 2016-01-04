@@ -3,9 +3,7 @@
 # Script to determine if .js files in Pull Request are properly formatted.
 # Exits with non 0 exit code if formatting is needed.
 
-FILES_TO_CHECK=$(git diff --name-only HEAD^ |
-    grep -E "\.js$" |
-    grep -v -f scripts/ci/clang_ignore.txt)
+FILES_TO_CHECK=$(git diff --name-only HEAD^ | grep -E "\.js$")
 
 if [ -z "${FILES_TO_CHECK}" ]; then
   echo "No .js files to check for formatting."
