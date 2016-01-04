@@ -715,7 +715,7 @@ function testFontSizeDoesntOverrideStyleAttrMultiNode() {
  * tag, sometimes it wraps the span with the font tag. Either one is ok as
  * long as a font tag is actually being used instead of just modifying the
  * span's style, because our fix for {@bug 1286408} would remove that style.
- * @param {function} doSelect Function to select the "23" text in the test
+ * @param {function()} doSelect Function to select the "23" text in the test
  *     content.
  */
 function doTestFontSizeStyledSpan(doSelect) {
