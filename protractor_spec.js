@@ -16,7 +16,9 @@ var IGNORED_TESTS = [
   'closure/goog/testing/multitestrunner_test.html',
   // These Promise-based tests all timeout for unknown reasons.
   // Disable for now.
-  'closure/goog/testing/fs/integration_test.html'
+  'closure/goog/testing/fs/integration_test.html',
+  'closure/goog/debug/fpsdisplay_test.html',
+  'closure/goog/net/jsloader_test.html'
 ];
 
 describe('Run all Closure unit tests', function() {
