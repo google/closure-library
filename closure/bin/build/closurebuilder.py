@@ -276,7 +276,7 @@ https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
         compiler_flags=options.compiler_flags)
 
     logging.info('JavaScript compilation succeeded.')
-    out.write(compiled_source.encode('utf-8'))
+    out.write(str(str(compiled_source).encode('utf-8')))
 
   else:
     logging.error('Invalid value for --output flag.')
