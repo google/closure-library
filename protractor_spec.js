@@ -7,9 +7,6 @@ var allTests = require('./alltests');
 var TEST_TIMEOUT = 45 * 1000;
 var TEST_SERVER = 'http://localhost:8080';
 var IGNORED_TESTS = [
-  // currency_test has some weird encoding issues when run with the rest of
-  // the test suite.
-  'closure/goog/i18n/currency_test.html',
   // Test hangs in IE8.
   'closure/goog/ui/plaintextspellchecker_test.html',
   // TODO(joeltine): Re-enable once fixed for external testing.
