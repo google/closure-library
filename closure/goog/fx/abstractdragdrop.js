@@ -1404,6 +1404,8 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
 
   this.startPosition_ = new goog.math.Coordinate(
       event.clientX, event.clientY);
+
+  event.preventDefault();
 };
 
 
@@ -1430,9 +1432,6 @@ goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
     this.eventHandler_.removeAll();
     this.parent_.startDrag(event, this);
   }
-
-  // Prevent text selection while dragging an element.
-  event.preventDefault();
 };
 
 

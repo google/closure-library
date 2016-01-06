@@ -26,7 +26,6 @@ goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 goog.require('goog.testing.events');
-goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 
 var targets = [
@@ -508,22 +507,6 @@ function testScrollableContainersCalculation() {
   assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
 
-function testMouseDownEventDefaultAction() {
-  var group = new goog.fx.AbstractDragDrop();
-  var target = new goog.fx.AbstractDragDrop();
-  group.addTarget(target);
-  var item1 = new goog.fx.DragDropItem(document.getElementById('child1'));
-  group.items_.push(item1);
-  item1.setParent(group);
-  group.init();
-
-  var mousedownDefaultPrevented =
-      !goog.testing.events.fireMouseDownEvent(item1.element);
-
-  assertFalse('Default action of mousedown event should not be cancelled.',
-      mousedownDefaultPrevented);
-}
-
 // See http://b/7494613.
 function testMouseUpOutsideElement() {
   var group = new goog.fx.AbstractDragDrop();
@@ -600,20 +583,14 @@ function testMouseMove_mouseOutBeforeThreshold() {
     draggedItem = item;
   };
 
-  var event = new goog.testing.events.Event(goog.events.EventType.MOUSEOUT,
-      childEl);
-  // Drag distance is only 2.
-  event.clientX = 8;
-  event.clientY = 10;
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+    'type': goog.events.EventType.MOUSEOUT, 'target': childEl};
   item.mouseMove_(event);
   assertEquals('DragStart should not be fired for mouseout on child element.',
       null, draggedItem);
 
-  var event = new goog.testing.events.Event(goog.events.EventType.MOUSEOUT,
-      itemEl);
-  // Drag distance is only 2.
-  event.clientX = 8;
-  event.clientY = 10;
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+    'type': goog.events.EventType.MOUSEOUT, 'target': itemEl};
   item.mouseMove_(event);
   assertEquals('DragStart should be fired for mouseout on main element.',
       item, draggedItem);
