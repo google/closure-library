@@ -296,7 +296,7 @@ goog.positioning.getOffsetParentPageOffset = function(movableElement) {
   // IE strict mode) there's no need to get the position of the BODY as it
   // doesn't affect the page offset.
   var movableParentTopLeft;
-  var parent = movableElement.offsetParent;
+  var parent = /** @type {?} */ (movableElement).offsetParent;
   if (parent) {
     var isBody = parent.tagName == goog.dom.TagName.HTML ||
         parent.tagName == goog.dom.TagName.BODY;
@@ -632,4 +632,3 @@ goog.positioning.flipCorner = function(corner) {
       goog.positioning.CornerBit.BOTTOM ^
       goog.positioning.CornerBit.RIGHT);
 };
-

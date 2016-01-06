@@ -1594,7 +1594,8 @@ goog.dom.getOwnerDocument = function(node) {
  * @return {!Document} The frame content document.
  */
 goog.dom.getFrameContentDocument = function(frame) {
-  return frame.contentDocument || frame.contentWindow.document;
+  return frame.contentDocument ||
+      /** @type {!HTMLFrameElement} */ (frame).contentWindow.document;
 };
 
 
@@ -1821,7 +1822,8 @@ goog.dom.isFocusable = function(element) {
 
   // IE requires elements to be visible in order to focus them.
   return focusable && goog.userAgent.IE ?
-             goog.dom.hasNonZeroBoundingRect_(element) : focusable;
+      goog.dom.hasNonZeroBoundingRect_(/** @type {!HTMLElement} */ (element)) :
+      focusable;
 };
 
 
@@ -1847,7 +1849,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
  * @private
  */
 goog.dom.isTabIndexFocusable_ = function(element) {
-  var index = element.tabIndex;
+  var index = /** @type {!HTMLElement} */ (element).tabIndex;
   // NOTE: IE9 puts tabIndex in 16-bit int, e.g. -2 is 65534.
   return goog.isNumber(index) && index >= 0 && index < 32768;
 };
@@ -1871,7 +1873,7 @@ goog.dom.nativelySupportsFocus_ = function(element) {
 /**
  * Returns true if the element has a bounding rectangle that would be visible
  * (i.e. its width and height are greater than zero).
- * @param {!Element} element Element to check.
+ * @param {!HTMLElement} element Element to check.
  * @return {boolean} Whether the element has a non-zero bounding rectangle.
  * @private
  */
