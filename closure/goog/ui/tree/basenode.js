@@ -907,12 +907,11 @@ goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
 };
 
 
-// TODO(jakubvrana): Deprecate in favor of setSafeHtml, once developer docs on
-// using goog.html.SafeHtml are in place.
 /**
  * Sets the html that appears after the label. This is useful if you want to
  * put extra UI on the row of the label but not inside the anchor tag.
  * @param {string} html The html.
+ * @deprecated Use setAfterLabelSafeHtml.
  */
 goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
   this.setAfterLabelSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
@@ -1203,11 +1202,10 @@ goog.ui.tree.BaseNode.prototype.getText = function() {
 };
 
 
-// TODO(jakubvrana): Deprecate in favor of setSafeHtml, once developer docs on
-// using goog.html.SafeHtml are in place.
 /**
  * Sets the html of the label.
  * @param {string} s The html string for the label.
+ * @deprecated Use setSafeHtml.
  */
 goog.ui.tree.BaseNode.prototype.setHtml = function(s) {
   this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(s));
