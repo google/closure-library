@@ -492,7 +492,6 @@ goog.style.getOffsetParent = function(element) {
   // browsers it only includes elements with position absolute, relative or
   // fixed, not elements with overflow set to auto or scroll.
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(8)) {
-    goog.asserts.assert('offsetParent' in element);
     return element.offsetParent;
   }
 

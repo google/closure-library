@@ -172,7 +172,7 @@ goog.dom.forms.hasFileInput = function(form) {
 goog.dom.forms.setDisabled = function(el, disabled) {
   // disable all elements in a form
   if (el.tagName == goog.dom.TagName.FORM) {
-    var els = /** @type {!HTMLFormElement} */ (el).elements;
+    var els = el.elements;
     for (var i = 0; el = els[i]; i++) {
       goog.dom.forms.setDisabled(el, disabled);
     }
@@ -229,7 +229,7 @@ goog.dom.forms.hasValueByName = function(form, name) {
  *     (or null).
  */
 goog.dom.forms.getValue = function(el) {
-  var type = /** @type {!HTMLInputElement} */ (el).type;
+  var type = el.type;
   if (!goog.isDef(type)) {
     return null;
   }
@@ -292,7 +292,7 @@ goog.dom.forms.getValueByName = function(form, name) {
  * @private
  */
 goog.dom.forms.getInputChecked_ = function(el) {
-  return el.checked ? /** @type {?} */ (el).value : null;
+  return el.checked ? el.value : null;
 };
 
 
@@ -303,7 +303,7 @@ goog.dom.forms.getInputChecked_ = function(el) {
  * @private
  */
 goog.dom.forms.getSelectSingle_ = function(el) {
-  var selectedIndex = /** @type {!HTMLSelectElement} */ (el).selectedIndex;
+  var selectedIndex = el.selectedIndex;
   return selectedIndex >= 0 ? el.options[selectedIndex].value : null;
 };
 
@@ -316,9 +316,7 @@ goog.dom.forms.getSelectSingle_ = function(el) {
  */
 goog.dom.forms.getSelectMultiple_ = function(el) {
   var values = [];
-  for (var option, i = 0;
-       option = /** @type {!HTMLSelectElement} */ (el).options[i];
-       i++) {
+  for (var option, i = 0; option = el.options[i]; i++) {
     if (option.selected) {
       values.push(option.value);
     }
@@ -335,7 +333,7 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
  *     an array for setting the value of select multiple elements.
  */
 goog.dom.forms.setValue = function(el, opt_value) {
-  var type = /** @type {!HTMLInputElement} */ (el).type;
+  var type = el.type;
   if (goog.isDef(type)) {
     switch (type.toLowerCase()) {
       case goog.dom.InputType.CHECKBOX:
@@ -383,9 +381,7 @@ goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
   // unset any prior selections
   el.selectedIndex = -1;
   if (goog.isString(opt_value)) {
-    for (var option, i = 0;
-         option = /** @type {!HTMLSelectElement} */ (el).options[i];
-         i++) {
+    for (var option, i = 0; option = el.options[i]; i++) {
       if (option.value == opt_value) {
         option.selected = true;
         break;
@@ -407,9 +403,7 @@ goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
   if (goog.isString(opt_value)) {
     opt_value = [opt_value];
   }
-  for (var option, i = 0;
-       option = /** @type {!HTMLSelectElement} */ (el).options[i];
-       i++) {
+  for (var option, i = 0; option = el.options[i]; i++) {
     // we have to reset the other options to false for select-multiple
     option.selected = false;
     if (opt_value) {

@@ -199,8 +199,7 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
     var logger = loggers[i];
-    var sel = /** @type {!HTMLSelectElement} */ (
-        dh.getElement('sel' + logger.getName()));
+    var sel = dh.getElement('sel' + logger.getName());
     var level = sel.options[sel.selectedIndex].text;
     if (level == 'INHERIT') {
       logger.setLevel(null);
@@ -220,7 +219,7 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
 goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
   var dh = this.dh_;
   var logel = /** @type {!HTMLElement} */ (dh.getElement('log'));
-  var headel = /** @type {!HTMLElement} */ (dh.getElement('head'));
+  var headel = dh.getElement('head');
   logel.style.top = headel.offsetHeight + 'px';
   logel.style.height = (dh.getDocument().body.offsetHeight -
       headel.offsetHeight - (goog.userAgent.IE ? 4 : 0)) + 'px';
