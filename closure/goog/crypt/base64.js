@@ -26,6 +26,7 @@ goog.require('goog.asserts');
 goog.require('goog.crypt');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 // Static lookup maps, lazily populated by init_()
 
@@ -87,8 +88,9 @@ goog.crypt.base64.ENCODED_VALS_WEBSAFE =
  * removal in per-browser compilations.
  * @private {boolean}
  */
-goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ =
-    goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA;
+goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ = goog.userAgent.GECKO ||
+    (goog.userAgent.WEBKIT && !goog.userAgent.product.SAFARI) ||
+    goog.userAgent.OPERA;
 
 
 /**
@@ -108,7 +110,8 @@ goog.crypt.base64.HAS_NATIVE_ENCODE_ =
  */
 goog.crypt.base64.HAS_NATIVE_DECODE_ =
     goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ ||
-    (!goog.userAgent.IE && typeof(goog.global.atob) == 'function');
+    (!goog.userAgent.product.SAFARI && !goog.userAgent.IE &&
+     typeof(goog.global.atob) == 'function');
 
 
 /**
