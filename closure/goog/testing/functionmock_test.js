@@ -48,7 +48,7 @@ function testMockFunctionCallOrdering() {
     if (success) {
       callFunction();
     } else {
-      assertThrows(callFunction);
+      assertThrowsJsUnitException(callFunction);
     }
   };
 
@@ -100,32 +100,32 @@ function testFailsIfCalledWithIncorrectArgs() {
 
   mockFoo();
   mockFoo.$replay();
-  assertThrows(function() {mockFoo('x');});
+  assertThrowsJsUnitException(function() { mockFoo('x'); });
   mockFoo.$reset();
 
   mockFoo('x');
   mockFoo.$replay();
-  assertThrows(function() {mockFoo();});
+  assertThrowsJsUnitException(function() { mockFoo(); });
   mockFoo.$reset();
 
   mockFoo('x');
   mockFoo.$replay();
-  assertThrows(function() {mockFoo('x', 'y');});
+  assertThrowsJsUnitException(function() { mockFoo('x', 'y'); });
   mockFoo.$reset();
 
   mockFoo('x', 'y');
   mockFoo.$replay();
-  assertThrows(function() {mockFoo('x');});
+  assertThrowsJsUnitException(function() { mockFoo('x'); });
   mockFoo.$reset();
 
   mockFoo('correct');
   mockFoo.$replay();
-  assertThrows(function() {mockFoo('wrong');});
+  assertThrowsJsUnitException(function() { mockFoo('wrong'); });
   mockFoo.$reset();
 
   mockFoo('correct', 'args');
   mockFoo.$replay();
-  assertThrows(function() {mockFoo('wrong', 'args');});
+  assertThrowsJsUnitException(function() { mockFoo('wrong', 'args'); });
   mockFoo.$reset();
 }
 
@@ -211,8 +211,7 @@ function testGlobalFunctionMockFailsWithIncorrectArgs() {
 
   mockGlobal.$replay();
 
-  assertThrows('Mock should have failed because of incorrect arguments',
-      function() {globalBar('b', 'a')});
+  assertThrowsJsUnitException(function() { globalBar('b', 'a'); });
 }
 
 function testGlobalFunctionMockQuacksLikeAFunctionMock() {
@@ -269,7 +268,7 @@ function testGlobalFunctionMockCallOrdering() {
   mock(1);
   mock(2);
   mock.$replay();
-  assertThrows(function() {globalFoo(2);});
+  assertThrowsJsUnitException(function() { globalFoo(2); });
   mock.$tearDown();
 
   mock = goog.testing.createGlobalFunctionMock('globalFoo',
@@ -287,7 +286,7 @@ function testGlobalFunctionMockCallOrdering() {
   mock(1);
   mock(2);
   mock.$replay();
-  assertThrows(function() {globalFoo(2);});
+  assertThrowsJsUnitException(function() { globalFoo(2); });
   mock.$tearDown();
 
   mock = goog.testing.createGlobalFunctionMock('globalFoo',
@@ -339,7 +338,7 @@ function testMethodMockCallOrdering() {
   mynamespace.myMethod(1);
   mynamespace.myMethod(2);
   mynamespace.myMethod.$replay();
-  assertThrows(function() {mynamespace.myMethod(2);});
+  assertThrowsJsUnitException(function() { mynamespace.myMethod(2); });
   mynamespace.myMethod.$tearDown();
 
   goog.testing.createMethodMock(mynamespace, 'myMethod',
@@ -357,7 +356,7 @@ function testMethodMockCallOrdering() {
   mynamespace.myMethod(1);
   mynamespace.myMethod(2);
   mynamespace.myMethod.$replay();
-  assertThrows(function() {mynamespace.myMethod(2);});
+  assertThrowsJsUnitException(function() { mynamespace.myMethod(2); });
   mynamespace.myMethod.$tearDown();
 
   goog.testing.createMethodMock(mynamespace, 'myMethod',
@@ -455,8 +454,9 @@ function testConstructorMockCallOrdering() {
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();
-  assertThrows(
-      function() {new constructornamespace.MyConstructorWithArgument(2);});
+  assertThrowsJsUnitException(function() {
+    new constructornamespace.MyConstructorWithArgument(2);
+  });
   constructornamespace.MyConstructorWithArgument.$tearDown();
 
   goog.testing.createConstructorMock(constructornamespace,
@@ -476,8 +476,9 @@ function testConstructorMockCallOrdering() {
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();
-  assertThrows(
-      function() {new constructornamespace.MyConstructorWithArgument(2);});
+  assertThrowsJsUnitException(function() {
+    new constructornamespace.MyConstructorWithArgument(2);
+  });
   constructornamespace.MyConstructorWithArgument.$tearDown();
 
   goog.testing.createConstructorMock(constructornamespace,

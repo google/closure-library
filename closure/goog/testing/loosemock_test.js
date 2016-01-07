@@ -71,7 +71,7 @@ function unsilenceFailureLogging() {
  */
 function assertThrowsQuiet(var_args) {
   silenceFailureLogging();
-  assertThrows.apply(null, arguments);
+  assertThrowsJsUnitException.apply(null, arguments);
   unsilenceFailureLogging();
 }
 
@@ -290,7 +290,7 @@ function testArgsAndReturns() {
 function testThrows() {
   mock.a().$throws('exception!');
   mock.$replay();
-  assertThrowsQuiet(goog.bind(mock.a, mock));
+  assertThrows(goog.bind(mock.a, mock));
   mock.$verify();
 }
 
