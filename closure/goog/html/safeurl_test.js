@@ -220,6 +220,7 @@ function testSafeUrlSanitize_validatesUrl() {
   assertGoodUrl('path?foo=bar#baz');
   assertGoodUrl('p//ath');
   assertGoodUrl('p//ath?foo=bar#baz');
+  assertGoodUrl('#baz');
   // Restricted characters ('&', ':', \') after [/?#].
   assertGoodUrl('/&');
   assertGoodUrl('?:');
