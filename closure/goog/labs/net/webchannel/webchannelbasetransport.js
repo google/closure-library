@@ -161,12 +161,11 @@ goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
   this.channel_.setHandler(this.channelHandler_);
-  this.channel_.connect(this.testUrl_, this.url_,
-      (this.messageUrlParams_ || undefined));
-
   if (this.supportsCrossDomainXhr_) {
     this.channel_.setSupportsCrossDomainXhrs(true);
   }
+  this.channel_.connect(
+      this.testUrl_, this.url_, (this.messageUrlParams_ || undefined));
 };
 
 

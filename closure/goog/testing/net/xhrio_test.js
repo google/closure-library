@@ -153,6 +153,16 @@ function testGetLastRequestHeaders() {
   xhr.send('http://www.example.com');
   assertUndefined('New request sent without extra headers',
       xhr.getLastRequestHeaders());
+  xhr.simulateResponse(200, '');
+
+  xhr.headers.set('X', 'A');
+  xhr.headers.set('Y', 'B');
+  xhr.send(
+      'http://www.example.com/', undefined, undefined, {'Y': 'P', 'Z': 'Q'});
+  assertObjectEquals(
+      'Default headers combined with call headers',
+      {'X': 'A', 'Y': 'P', 'Z': 'Q'}, xhr.getLastRequestHeaders());
+  xhr.simulateResponse(200, '');
 }
 
 function testGetResponseText() {

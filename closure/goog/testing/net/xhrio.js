@@ -29,6 +29,7 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
+goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 
@@ -437,7 +438,17 @@ goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   this.lastUri_ = url;
   this.lastMethod_ = opt_method || 'GET';
   this.lastContent_ = opt_content;
-  this.lastHeaders_ = opt_headers;
+  if (!this.headers.isEmpty()) {
+    this.lastHeaders_ = this.headers.toObject();
+    // Add headers specific to this request
+    if (opt_headers) {
+      goog.structs.forEach(opt_headers, goog.bind(function(value, key) {
+        this.lastHeaders_[key] = value;
+      }, this));
+    }
+  } else {
+    this.lastHeaders_ = opt_headers;
+  }
 
   if (this.testQueue_) {
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);

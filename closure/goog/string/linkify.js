@@ -20,7 +20,6 @@
 goog.provide('goog.string.linkify');
 
 goog.require('goog.html.SafeHtml');
-goog.require('goog.object');
 goog.require('goog.string');
 
 
@@ -78,19 +77,21 @@ goog.string.linkify.linkifyPlainTextAsHtml =
         goog.html.SafeHtml.htmlEscape(text);
   }
 
-  var attributesMap = opt_attributes || {};
-  // Set default options.
+  var attributesMap = {};
+  for (var key in opt_attributes) {
+    if (!opt_attributes[key]) {
+      // Our API allows '' to omit the attribute, SafeHtml requires null.
+      attributesMap[key] = null;
+    } else {
+      attributesMap[key] = opt_attributes[key];
+    }
+  }
+  // Set default options if they haven't been explicitly set.
   if (!('rel' in attributesMap)) {
     attributesMap['rel'] = 'nofollow';
   }
   if (!('target' in attributesMap)) {
     attributesMap['target'] = '_blank';
-  }
-  for (var key in attributesMap) {
-    if (!attributesMap[key]) {
-      // Our API allows '' to omit the attribute, SafeHtml requires null.
-      attributesMap[key] = null;
-    }
   }
 
   var output = [];
@@ -132,9 +133,7 @@ goog.string.linkify.linkifyPlainTextAsHtml =
             afterLink = '';
           }
         }
-        // A simple attributesMap['href'] assignment causes a possible violation
-        // of the conformance config. TODO(jakubvrana): Remove this hack.
-        goog.object.set(attributesMap, 'href', href + linkText);
+        attributesMap['href'] = href + linkText;
         output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
         output.push(opt_preserveNewlines ?
             goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
