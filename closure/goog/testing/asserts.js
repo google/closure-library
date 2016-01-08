@@ -288,6 +288,17 @@ var assertThrows = function(a, opt_b) {
         e['message'] = e['message'].substr(0, startIndex - 14);
       }
     }
+
+    var testCase = _getCurrentTestCase();
+    if (e && e['isJsUnitException'] && testCase &&
+        testCase.failOnUnreportedAsserts) {
+      goog.testing.asserts.raiseException(
+          comment,
+          'Function passed to assertThrows caught a JsUnitException (usually ' +
+              'from an assert or call to fail()). If this is expected, use ' +
+              'assertThrowsJsUnitException instead.');
+    }
+
     return e;
   }
   goog.testing.asserts.raiseException(comment,

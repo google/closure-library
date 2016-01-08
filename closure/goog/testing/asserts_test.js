@@ -773,6 +773,37 @@ function testAssertThrows() {
   assertEquals('string error', 'string error test', stringError);
 }
 
+function testAssertThrowsThrowsIfJsUnitException() {
+  // TODO(b/25875505): We currently need this true for this part of the test.
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = true;
+
+  // Asserts that assertThrows will throw a JsUnitException if the method
+  // passed to assertThrows throws a JsUnitException of its own. assertThrows
+  // should not be used for catching JsUnitExceptions with
+  // "failOnUnreportedAsserts" enabled.
+  var e = assertThrowsJsUnitException(function() {
+    assertThrows(function() {
+      // We need to invalidate this exception so it's not flagged as a
+      // legitimate failure by the test framework. The only way to get at the
+      // exception thrown by assertTrue is to catch it so we can invalidate it.
+      // We then need to rethrow it so the surrounding assertThrows behaves as
+      // expected.
+      try {
+        assertTrue(false);
+      } catch (ex) {
+        goog.testing.TestCase.getActiveTestCase().invalidateAssertionException(
+            ex);
+        throw ex;
+      }
+    });
+  });
+  assertContains(
+      'Function passed to assertThrows caught a JsUnitException', e.message);
+
+  // TODO(b/25875505): Set back to false so the rest of the tests pass.
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
+
 function testAssertThrowsJsUnitException() {
   var error = assertThrowsJsUnitException(function() {
     assertTrue(false);
