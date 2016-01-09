@@ -112,7 +112,7 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
 
 
 /**
- * Returns this SafeHtml's value a string.
+ * Returns this SafeHtml's value as string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed {@code SafeHtml}, use {@code goog.html.SafeHtml.unwrap} instead of
