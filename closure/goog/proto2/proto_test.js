@@ -18,6 +18,7 @@ goog.setTestOnly('goog.proto2.messageTest');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.testing.jsunit');
 goog.require('proto2.TestAllTypes');
+goog.require('proto2.TestDefaultParent');
 goog.require('someprotopackage.TestPackageTypes');
 
 function testPackage() {
