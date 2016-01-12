@@ -1518,10 +1518,7 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
 goog.Uri.QueryData.prototype.extend = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
     var data = arguments[i];
-    goog.structs.forEach(data,
-        /** @this {goog.Uri.QueryData} */
-        function(value, key) {
-          this.add(key, value);
-        }, this);
+    goog.structs.forEach(
+        data, function(value, key) { this.add(key, value); }, this);
   }
 };

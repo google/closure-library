@@ -344,8 +344,14 @@ goog.dom.TextRange.prototype.containsRange = function(otherRange,
         otherRange.getBrowserRangeWrapper_(), opt_allowPartial);
   } else if (otherRangeType == goog.dom.RangeType.CONTROL) {
     var elements = otherRange.getElements();
+    /**
+     * @param {!Array<!Element>} array
+     * @param {function(this: T, !Element)} fn
+     * @param {T} scope
+     * @template T
+     */
     var fn = opt_allowPartial ? goog.array.some : goog.array.every;
-    return fn(elements, /** @this {!goog.dom.TextRange} */ function(el) {
+    return fn(elements, function(el) {
       return this.containsNode(el, opt_allowPartial);
     }, this);
   }
