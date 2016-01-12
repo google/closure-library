@@ -41,6 +41,13 @@ function tearDown() {
   stubs.reset();
 }
 
+var foo = 'global';
+var obj = {foo: 'obj'};
+
+function getFoo(arg1, arg2) {
+  return {foo: this.foo, arg1: arg1, arg2: arg2};
+}
+
 function testTrue() {
   assertTrue(goog.functions.TRUE());
 }
@@ -72,6 +79,81 @@ function testNth() {
   assertEquals(undefined, goog.functions.nth(0)());
   assertEquals(undefined, goog.functions.nth(1)(true));
   assertEquals(undefined, goog.functions.nth(-1)());
+}
+
+function testPartialRight() {
+  var f = function(x, y) { return x / y; };
+  var g = goog.functions.partialRight(f, 2);
+  assertEquals(2, g(4));
+
+  var h = goog.functions.partialRight(f, 4, 2);
+  assertEquals(2, h());
+
+  var i = goog.functions.partialRight(f);
+  assertEquals(2, i(4, 2));
+}
+
+function testPartialRightUsesGlobal() {
+  var f = function(x, y) {
+    assertEquals(goog.global, this);
+    return x / y;
+  };
+  var g = goog.functions.partialRight(f, 2);
+  var h = goog.functions.partialRight(g, 4);
+  assertEquals(2, h());
+}
+
+function testPartialRightWithCall() {
+  var obj = {};
+  var f = function(x, y) {
+    assertEquals(obj, this);
+    return x / y;
+  };
+  var g = goog.functions.partialRight(f, 2);
+  var h = goog.functions.partialRight(g, 4);
+  assertEquals(2, h.call(obj));
+}
+
+function testPartialRightAndBind() {
+  // This ensures that this "survives" through a partialRight.
+  var p = goog.functions.partialRight(getFoo, 'dog');
+  var b = goog.bind(p, obj, 'hot');
+
+  var res = b();
+  assertEquals(obj.foo, res.foo);
+  assertEquals('hot', res.arg1);
+  assertEquals('dog', res.arg2);
+}
+
+function testBindAndPartialRight() {
+  // This ensures that this "survives" through a partialRight.
+  var b = goog.bind(getFoo, obj, 'hot');
+  var p = goog.functions.partialRight(b, 'dog');
+
+  var res = p();
+  assertEquals(obj.foo, res.foo);
+  assertEquals('hot', res.arg1);
+  assertEquals('dog', res.arg2);
+}
+
+function testPartialRightMultipleCalls() {
+  var f = goog.testing.recordFunction();
+
+  var a = goog.functions.partialRight(f, 'foo');
+  var b = goog.functions.partialRight(a, 'bar');
+
+  a();
+  a();
+  b();
+  b();
+
+  assertEquals(4, f.getCallCount());
+
+  var calls = f.getCalls();
+  assertArrayEquals(['foo'], calls[0].getArguments());
+  assertArrayEquals(['foo'], calls[1].getArguments());
+  assertArrayEquals(['bar', 'foo'], calls[2].getArguments());
+  assertArrayEquals(['bar', 'foo'], calls[3].getArguments());
 }
 
 function testIdentity() {
