@@ -561,7 +561,7 @@ goog.crypt.Aes.prototype.rotWord_ = function(w) {
   return w;
 };
 
-
+// clang-format off
 /**
  * Precomputed SBox lookup.
  * @type {!Array<number>}
@@ -1028,3 +1028,4 @@ goog.crypt.Aes.MULT_E_ = [
   0xD7, 0xD9, 0xCB, 0xC5, 0xEF, 0xE1, 0xF3, 0xFD, 0xA7, 0xA9, 0xBB, 0xB5,
   0x9F, 0x91, 0x83, 0x8D
 ];
+// clang-format on
