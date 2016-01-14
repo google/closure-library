@@ -28,7 +28,6 @@ goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');
@@ -50,10 +49,9 @@ var SafeHtml = goog.html.SafeHtml;
  * The Bubble provides a general purpose bubble implementation that can be
  * anchored to a particular element and displayed for a period of time.
  *
- * @param {string|!goog.html.SafeHtml|Element} message HTML or an element
- *     to display inside the bubble. If possible pass a SafeHtml; string
- *     is supported for backwards-compatibility only and uses
- *     goog.html.legacyconversions.
+ * @param {string|!goog.html.SafeHtml|?Element} message Message or an element
+ *     to display inside the bubble. Strings are treated as plain-text and will
+ *     be HTML escaped.
  * @param {Object=} opt_config The configuration
  *     for the bubble. If not specified, the default configuration will be
  *     used. {@see goog.ui.Bubble.defaultConfig}.
@@ -65,7 +63,7 @@ goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   if (goog.isString(message)) {
-    message = goog.html.legacyconversions.safeHtmlFromString(message);
+    message = goog.html.SafeHtml.htmlEscape(message);
   }
 
   /**
