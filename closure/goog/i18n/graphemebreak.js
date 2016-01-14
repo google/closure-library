@@ -122,7 +122,6 @@ goog.i18n.GraphemeBreak.getBreakProp_ = function(acode) {
     return prop.LVT;
   } else {
     if (!goog.i18n.GraphemeBreak.inversions_) {
-      // clang-format off
       goog.i18n.GraphemeBreak.inversions_ = new goog.structs.InversionMap(
           [0, 10, 1, 2, 1, 18, 95, 33, 13, 1, 594, 112, 275, 7, 263, 45, 1, 1,
            1, 2, 1, 2, 1, 1, 56, 5, 11, 11, 48, 21, 16, 1, 101, 7, 1, 1, 6, 2,
@@ -187,7 +186,6 @@ goog.i18n.GraphemeBreak.getBreakProp_ = function(acode) {
            0, 4, 2, 0, 2, 4, 2, 0, 4, 2, 1, 2, 0, 2, 0, 2, 0, 2, 0, 14, 0, 1,
            2],
           true);
-      // clang-format on
     }
     return /** @type {number} */ (
         goog.i18n.GraphemeBreak.inversions_.at(acode));
