@@ -690,6 +690,24 @@ goog.array.remove = function(arr, obj) {
 
 
 /**
+ * Removes the last occurrence of a particular value from an array.
+ * @param {!Array<T>|!goog.array.ArrayLike} arr Array from which to remove
+ *     value.
+ * @param {T} obj Object to remove.
+ * @return {boolean} True if an element was removed.
+ * @template T
+ */
+goog.array.removeLast = function(arr, obj) {
+  var i = goog.array.lastIndexOf(arr, obj);
+  if (i >= 0) {
+    goog.array.removeAt(arr, i);
+    return true;
+  }
+  return false;
+};
+
+
+/**
  * Removes from an array the element at index i
  * @param {IArrayLike<?>} arr Array or array like object from which to
  *     remove value.
