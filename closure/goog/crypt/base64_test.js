@@ -131,10 +131,8 @@ function testMultipleIterations() {
 
   var numIterations = 100;
   for (var i = 0; i < numIterations; i++) {
-
     var input = [];
-    for (var j = 0; j < i; j++)
-      input[j] = j % 256;
+    for (var j = 0; j < i; j++) input[j] = j % 256;
 
     var encoded = goog.crypt.base64.encodeByteArray(input);
     assertDecodeToByteArrayEquals(input, encoded);
@@ -177,12 +175,8 @@ function testWebSafeEncoding() {
 function testDecodeIgnoresSpace() {
   var spaceTests = [
     // [encoded, expected decoded]
-    [' \n\t\r', ''],
-    ['Z g =\n=', 'f'],
-    ['Zm 8=', 'fo'],
-    [' Zm 9v', 'foo'],
-    ['Zm9v Yg ==\t ', 'foob'],
-    ['\nZ m9  vYm\n E=', 'fooba'],
+    [' \n\t\r', ''], ['Z g =\n=', 'f'], ['Zm 8=', 'fo'], [' Zm 9v', 'foo'],
+    ['Zm9v Yg ==\t ', 'foob'], ['\nZ m9  vYm\n E=', 'fooba'],
     ['  \nZ \tm9v YmFy  ', 'foobar']
   ];
 

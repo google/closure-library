@@ -125,8 +125,9 @@ var testObj = {
       var testResults = processAllTestResults(failures['allTestResults']);
       allResults = testResults.allResults;
       if (testResults.totalFailures) {
-        fail(testResults.totalFailures + ' of ' + testResults.totalTests +
-             ' test(s) failed!\n\n' + testResults.failureReports);
+        fail(
+            testResults.totalFailures + ' of ' + testResults.totalTests +
+            ' test(s) failed!\n\n' + testResults.failureReports);
       }
     });
   }

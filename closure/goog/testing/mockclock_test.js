@@ -135,13 +135,10 @@ function testSetInterval() {
 
 
 function testRequestAnimationFrame() {
-  goog.global.requestAnimationFrame = function() {
-  };
+  goog.global.requestAnimationFrame = function() {};
   var clock = new goog.testing.MockClock(true);
   var times = [];
-  var recFunc = goog.testing.recordFunction(function(now) {
-    times.push(now);
-  });
+  var recFunc = goog.testing.recordFunction(function(now) { times.push(now); });
   goog.global.requestAnimationFrame(recFunc);
   clock.tick(50);
   assertEquals(1, recFunc.getCallCount());
@@ -217,10 +214,8 @@ function testClearInterval2() {
 
 
 function testCancelRequestAnimationFrame() {
-  goog.global.requestAnimationFrame = function() {
-  };
-  goog.global.cancelRequestAnimationFrame = function() {
-  };
+  goog.global.requestAnimationFrame = function() {};
+  goog.global.cancelRequestAnimationFrame = function() {};
   var clock = new goog.testing.MockClock(true);
   var ran = false;
   var c = goog.global.requestAnimationFrame(function() { ran = true; });
@@ -293,21 +288,16 @@ function testTimerCallbackCanCreateIntermediateTimer() {
 
   setTimeout(function() {
     sequence.push('timer1 at T=' + goog.now());
-    setTimeout(function() {
-      sequence.push('timer2 at T=' + goog.now());
-    }, 1);
+    setTimeout(function() { sequence.push('timer2 at T=' + goog.now()); }, 1);
   }, 1);
 
-  setTimeout(function() {
-    sequence.push('timer3 at T=' + goog.now());
-  }, 3);
+  setTimeout(function() { sequence.push('timer3 at T=' + goog.now()); }, 3);
 
   clock.tick(4);
 
   assertEquals(
       'Each timer should fire in sequence at the correct time.',
-      'timer1 at T=1, timer2 at T=2, timer3 at T=3',
-      sequence.join(', '));
+      'timer1 at T=1, timer2 at T=2, timer3 at T=3', sequence.join(', '));
 
   clock.uninstall();
 }
@@ -319,12 +309,9 @@ function testCorrectArgumentsPassedToCallback() {
   var timeoutExecuted = false;
 
   timeoutId = setTimeout(function(arg) {
-    assertEquals('"this" must be goog.global',
-        goog.global, this);
-    assertEquals('The timeout ID must be the first parameter',
-        timeoutId, arg);
-    assertEquals('Exactly one argument must be passed',
-        1, arguments.length);
+    assertEquals('"this" must be goog.global', goog.global, this);
+    assertEquals('The timeout ID must be the first parameter', timeoutId, arg);
+    assertEquals('Exactly one argument must be passed', 1, arguments.length);
     timeoutExecuted = true;
   }, 1);
 
@@ -381,8 +368,9 @@ function testReset() {
   setTimeout(function() { calls++; }, 10);
   clearTimeout(id);
   clock.tick(100);
-  assertEquals('New timeout should still run after clearing from before reset',
-      1, calls);
+  assertEquals(
+      'New timeout should still run after clearing from before reset', 1,
+      calls);
 
   clock.uninstall();
 }
@@ -402,8 +390,8 @@ function testNewClockWithOldTimeoutId() {
   setTimeout(function() { calls++; }, 10);
   clearTimeout(id);
   clock.tick(100);
-  assertEquals('Timeout should still run after cancelling from old clock',
-      1, calls);
+  assertEquals(
+      'Timeout should still run after cancelling from old clock', 1, calls);
   clock.uninstall();
 }
 
@@ -420,30 +408,24 @@ function testQueueInsertionHelper() {
   }
 
   goog.testing.MockClock.insert_({runAtMillis: 2}, queue);
-  assertEquals('Only item',
-      '2', queueToString());
+  assertEquals('Only item', '2', queueToString());
 
   goog.testing.MockClock.insert_({runAtMillis: 4}, queue);
-  assertEquals('Biggest item',
-      '4,2', queueToString());
+  assertEquals('Biggest item', '4,2', queueToString());
 
   goog.testing.MockClock.insert_({runAtMillis: 5}, queue);
-  assertEquals('An even bigger item',
-      '5,4,2', queueToString());
+  assertEquals('An even bigger item', '5,4,2', queueToString());
 
   goog.testing.MockClock.insert_({runAtMillis: 1}, queue);
-  assertEquals('Smallest item',
-      '5,4,2,1', queueToString());
+  assertEquals('Smallest item', '5,4,2,1', queueToString());
 
   goog.testing.MockClock.insert_({runAtMillis: 1, dup: true}, queue);
-  assertEquals('Duplicate smallest item',
-      '5,4,2,1,1', queueToString());
+  assertEquals('Duplicate smallest item', '5,4,2,1,1', queueToString());
   assertTrue('Duplicate item comes at a smaller index', queue[3].dup);
 
   goog.testing.MockClock.insert_({runAtMillis: 3}, queue);
   goog.testing.MockClock.insert_({runAtMillis: 3, dup: true}, queue);
-  assertEquals('Duplicate a middle item',
-      '5,4,3,3,2,1,1', queueToString());
+  assertEquals('Duplicate a middle item', '5,4,3,3,2,1,1', queueToString());
   assertTrue('Duplicate item comes at a smaller index', queue[2].dup);
 }
 
@@ -451,19 +433,24 @@ function testQueueInsertionHelper() {
 function testIsTimeoutSet() {
   var clock = new goog.testing.MockClock(true);
   var timeoutKey = setTimeout(function() {}, 1);
-  assertTrue('Timeout ' + timeoutKey + ' should be set',
+  assertTrue(
+      'Timeout ' + timeoutKey + ' should be set',
       clock.isTimeoutSet(timeoutKey));
   var nextTimeoutKey = timeoutKey + 1;
-  assertFalse('Timeout ' + nextTimeoutKey + ' should not be set',
+  assertFalse(
+      'Timeout ' + nextTimeoutKey + ' should not be set',
       clock.isTimeoutSet(nextTimeoutKey));
   clearTimeout(timeoutKey);
-  assertFalse('Timeout ' + timeoutKey + ' should no longer be set',
+  assertFalse(
+      'Timeout ' + timeoutKey + ' should no longer be set',
       clock.isTimeoutSet(timeoutKey));
   var newTimeoutKey = setTimeout(function() {}, 1);
   clock.tick(5);
-  assertFalse('Timeout ' + timeoutKey + ' should not be set',
+  assertFalse(
+      'Timeout ' + timeoutKey + ' should not be set',
       clock.isTimeoutSet(timeoutKey));
-  assertTrue('Timeout ' + newTimeoutKey + ' should be set',
+  assertTrue(
+      'Timeout ' + newTimeoutKey + ' should be set',
       clock.isTimeoutSet(newTimeoutKey));
   clock.uninstall();
 }
@@ -476,14 +463,12 @@ function testBalksOnTimeoutsGreaterThanMaxInt() {
   // Functions on window don't seem to be able to throw exceptions in
   // IE6.  Explicitly reading the property makes it work.
   var setTimeout = window.setTimeout;
-  assertThrows('Timeouts > MAX_INT should fail',
-      function() {
-        setTimeout(goog.nullFunction, 2147483648);
-      });
-  assertThrows('Timeouts much greater than MAX_INT should fail',
-      function() {
-        setTimeout(goog.nullFunction, 2147483648 * 10);
-      });
+  assertThrows('Timeouts > MAX_INT should fail', function() {
+    setTimeout(goog.nullFunction, 2147483648);
+  });
+  assertThrows('Timeouts much greater than MAX_INT should fail', function() {
+    setTimeout(goog.nullFunction, 2147483648 * 10);
+  });
   clock.uninstall();
 }
 
@@ -543,16 +528,14 @@ function testNonFunctionArguments() {
   // strings, not undefined, etc). Make sure that if we get a non-function, we
   // fail early rather than on the next .tick() operation.
 
-  assertThrows('setTimeout with a non-function value should fail',
-      function() {
-        window.setTimeout(undefined, 0);
-      });
+  assertThrows('setTimeout with a non-function value should fail', function() {
+    window.setTimeout(undefined, 0);
+  });
   clock.tick(1);
 
-  assertThrows('setTimeout with a string should fail',
-      function() {
-        window.setTimeout('throw new Error("setTimeout string eval!");', 0);
-      });
+  assertThrows('setTimeout with a string should fail', function() {
+    window.setTimeout('throw new Error("setTimeout string eval!");', 0);
+  });
   clock.tick(1);
 
   clock.dispose();
@@ -621,17 +604,13 @@ function testTickPromise() {
   assertEquals('foo', clock.tickPromise(p));
 
   var rejected = goog.Promise.reject(new Error('failed'));
-  var e = assertThrows(function() {
-    clock.tickPromise(rejected);
-  });
+  var e = assertThrows(function() { clock.tickPromise(rejected); });
   assertEquals('failed', e.message);
 
   var delayed = goog.Timer.promise(500, 'delayed');
-  e = assertThrows(function() {
-    clock.tickPromise(delayed);
-  });
-  assertEquals('Promise was expected to be resolved after mock clock tick.',
-      e.message);
+  e = assertThrows(function() { clock.tickPromise(delayed); });
+  assertEquals(
+      'Promise was expected to be resolved after mock clock tick.', e.message);
   assertEquals('delayed', clock.tickPromise(delayed, 500));
 
   clock.dispose();

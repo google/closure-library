@@ -66,7 +66,8 @@ goog.require('goog.testing.stacktrace');
  * In the simplest cases, the behavior that the developer wants to test
  * is synchronous, and the test functions exercising the behavior execute
  * synchronously. But TestCase can also be used to exercise asynchronous code
- * through the use of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
+ * through the use of <a
+ * href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
  * promises</a>. If a test function returns an object that has a
  * <code>then</code> method defined on it, the test framework switches to an
  * asynchronous execution strategy: the next test function will not begin
@@ -204,7 +205,7 @@ goog.testing.TestCase = function(opt_name) {
    * may remain pending before the test fails due to timeout.
    * @type {number}
    */
-  this.promiseTimeout = 1000; // 1s
+  this.promiseTimeout = 1000;  // 1s
 };
 
 
@@ -373,8 +374,9 @@ goog.testing.TestCase.prototype.onCompleteCallback_ = null;
 goog.testing.TestCase.prototype.add = function(test) {
   goog.asserts.assert(test);
   if (this.started) {
-    throw Error('Tests cannot be added after execute() has been called. ' +
-                'Test: ' + test.name);
+    throw Error(
+        'Tests cannot be added after execute() has been called. ' +
+        'Test: ' + test.name);
   }
 
   this.tests_.push(test);
@@ -787,8 +789,7 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
   }
   goog.testing.TestCase.currentTestName = this.curTest_.name;
   this.invokeTestFunction_(
-      this.setUp, this.safeRunTest_, this.safeTearDown_,
-      'setUp');
+      this.setUp, this.safeRunTest_, this.safeTearDown_, 'setUp');
 };
 
 
@@ -798,10 +799,8 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
  */
 goog.testing.TestCase.prototype.safeRunTest_ = function() {
   this.invokeTestFunction_(
-      goog.bind(this.curTest_.ref, this.curTest_.scope),
-      this.safeTearDown_,
-      this.safeTearDown_,
-      this.curTest_.name);
+      goog.bind(this.curTest_.ref, this.curTest_.scope), this.safeTearDown_,
+      this.safeTearDown_, this.curTest_.name);
 };
 
 
@@ -856,8 +855,8 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
       retval = this.rejectIfPromiseTimesOut_(
           retval, self.promiseTimeout,
           'Timed out while waiting for a promise returned from ' + fnName +
-          ' to resolve. Set goog.testing.TestCase.getActiveTestCase()' +
-          '.promiseTimeout to adjust the timeout.');
+              ' to resolve. Set goog.testing.TestCase.getActiveTestCase()' +
+              '.promiseTimeout to adjust the timeout.');
       retval.then(
           function() {
             self.resetBatchTimeAfterPromise_();
@@ -974,7 +973,7 @@ goog.testing.TestCase.prototype.orderTests_ = function() {
       var i = this.tests_.length;
       while (i > 1) {
         // goog.math.randomInt is inlined to reduce dependencies.
-        var j = Math.floor(Math.random() * i); // exclusive
+        var j = Math.floor(Math.random() * i);  // exclusive
         i--;
         var tmp = this.tests_[i];
         this.tests_[i] = this.tests_[j];
@@ -1131,8 +1130,8 @@ goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
  * @return {!goog.testing.TestCase.Test} The newly created test.
  * @protected
  */
-goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction =
-    function(name, ref) {
+goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction = function(
+    name, ref) {
   return new goog.testing.TestCase.Test(name, ref, goog.global);
 };
 
@@ -1175,8 +1174,8 @@ goog.testing.TestCase.prototype.autoDiscoverLifecycle = function(opt_obj) {
 goog.testing.TestCase.prototype.setTestObj = function(obj) {
   // Drop any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
-  goog.asserts.assert(this.tests_.length == 0,
-      'Test methods have already been configured.');
+  goog.asserts.assert(
+      this.tests_.length == 0, 'Test methods have already been configured.');
 
   var regex = new RegExp('^' + this.getAutoDiscoveryPrefix());
   for (var name in obj) {
@@ -1351,7 +1350,7 @@ goog.testing.TestCase.prototype.getTimeStamp_ = function() {
   millis = millis.substr(millis.length - 3);
 
   return this.pad_(d.getHours()) + ':' + this.pad_(d.getMinutes()) + ':' +
-         this.pad_(d.getSeconds()) + '.' + millis;
+      this.pad_(d.getSeconds()) + '.' + millis;
 };
 
 
@@ -1474,7 +1473,7 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
     } else {
       errMsg = opt_e.message || opt_e.description || opt_e.toString();
       stack = opt_e.stack ? goog.testing.stacktrace.canonicalize(opt_e.stack) :
-          opt_e['stackTrace'];
+                            opt_e['stackTrace'];
     }
   } else {
     errMsg = 'An unknown error occurred';
@@ -1637,13 +1636,12 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
     var countOfRunTests = this.testCase_.getActuallyRunCount();
     if (countOfRunTests) {
       failures = countOfRunTests - this.successCount;
-      suppressionMessage = ', ' +
-          (this.totalCount - countOfRunTests) + ' suppressed by querystring';
+      suppressionMessage = ', ' + (this.totalCount - countOfRunTests) +
+          ' suppressed by querystring';
     }
-    summary += this.successCount + ' passed, ' +
-        failures + ' failed' + suppressionMessage + '.\n' +
-        Math.round(this.runTime / this.runCount) + ' ms/test. ' +
-        this.numFilesLoaded + ' files loaded.';
+    summary += this.successCount + ' passed, ' + failures + ' failed' +
+        suppressionMessage + '.\n' + Math.round(this.runTime / this.runCount) +
+        ' ms/test. ' + this.numFilesLoaded + ' files loaded.';
   }
 
   return summary;
@@ -1659,7 +1657,8 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
 
   if (goog.global.location) {
     var search = goog.global.location.search;
-    testCase.setOrder(goog.testing.TestCase.parseOrder_(search) ||
+    testCase.setOrder(
+        goog.testing.TestCase.parseOrder_(search) ||
         goog.testing.TestCase.Order.SORTED);
     testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
   }
@@ -1668,7 +1667,8 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
   if (gTestRunner) {
     gTestRunner['initialize'](testCase);
   } else {
-    throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
+    throw Error(
+        'G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }
 };
@@ -1682,8 +1682,7 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
  */
 goog.testing.TestCase.parseOrder_ = function(search) {
   var order = null;
-  var orderMatch = search.match(
-      /(?:\?|&)order=(natural|random|sorted)/i);
+  var orderMatch = search.match(/(?:\?|&)order=(natural|random|sorted)/i);
   if (orderMatch) {
     order = /** @type {goog.testing.TestCase.Order} */ (
         orderMatch[1].toLowerCase());
@@ -1726,8 +1725,8 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
  * @template T
  * @private
  */
-goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ =
-    function(promise, timeoutInMs, errorMsg) {
+goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ = function(
+    promise, timeoutInMs, errorMsg) {
   var self = this;
   var start = this.now();
   return new goog.Promise(function(resolve, reject) {
@@ -1793,6 +1792,6 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
  * @override
  */
 goog.testing.TestCase.Error.prototype.toString = function() {
-  return 'ERROR in ' + this.source + '\n' +
-      this.message + (this.stack ? '\n' + this.stack : '');
+  return 'ERROR in ' + this.source + '\n' + this.message +
+      (this.stack ? '\n' + this.stack : '');
 };

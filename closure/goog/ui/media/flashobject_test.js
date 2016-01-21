@@ -98,13 +98,13 @@ function testRenderedWithCorrectAttributes() {
   assertEquals('k1=v1&k2=v2', el.getAttribute('FlashVars'));
   assertEquals('id', el.getAttribute('id'));
   assertEquals('id', el.getAttribute('name'));
-  assertEquals('https://www.macromedia.com/go/getflashplayer',
+  assertEquals(
+      'https://www.macromedia.com/go/getflashplayer',
       el.getAttribute('pluginspage'));
   assertEquals('high', el.getAttribute('quality'));
   assertEquals('false', el.getAttribute('SeamlessTabbing'));
   assertEquals(FLASH_URL, el.getAttribute('src'));
-  assertEquals('application/x-shockwave-flash',
-      el.getAttribute('type'));
+  assertEquals('application/x-shockwave-flash', el.getAttribute('type'));
   assertEquals('wmode', el.getAttribute('wmode'));
 }
 
@@ -124,10 +124,11 @@ function testRenderedWithCorrectAttributesOldIe() {
   flash.render();
 
   var el = flash.getFlashElement();
-  assertEquals('class',
-      goog.ui.media.FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
-  assertEquals('clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
-      el.getAttribute('classid'));
+  assertEquals(
+      'class', goog.ui.media.FlashObject.FLASH_CSS_CLASS,
+      el.getAttribute('class'));
+  assertEquals(
+      'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', el.getAttribute('classid'));
   assertEquals('id', 'id', el.getAttribute('id'));
   assertEquals('name', 'id', el.getAttribute('name'));
 
@@ -140,7 +141,6 @@ function testRenderedWithCorrectAttributesOldIe() {
   assertContainsParam(el, 'quality', 'high');
   assertContainsParam(el, 'SeamlessTabbing', 'false');
   assertContainsParam(el, 'wmode', 'wmode');
-
 }
 
 function testUrlIsSanitized() {
@@ -210,10 +210,7 @@ function testAddFlashVars() {
   var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
 
   assertTrue(flash.getFlashVars().isEmpty());
-  flash.addFlashVars({
-    'using': 'an',
-    'object': 'literal'
-  });
+  flash.addFlashVars({'using': 'an', 'object': 'literal'});
   assertFalse(flash.getFlashVars().isEmpty());
 
   flash.render();
@@ -261,8 +258,8 @@ function testSetFlashVarUrlEncoding() {
   var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
   flash.setFlashVar('foo', 'bar and some extra spaces');
   flash.render();
-  assertEquals('foo=bar%20and%20some%20extra%20spaces',
-      getFlashVarsFromElement(flash));
+  assertEquals(
+      'foo=bar%20and%20some%20extra%20spaces', getFlashVarsFromElement(flash));
   flash.dispose();
 }
 
@@ -274,9 +271,7 @@ function testThrowsRequiredVersionOfFlashNotAvailable() {
 
   assertTrue(flash.hasRequiredVersion());
 
-  assertThrows(function() {
-    flash.render();
-  });
+  assertThrows(function() { flash.render(); });
 
   flash.dispose();
 }
@@ -301,8 +296,8 @@ function testIsLoadedAfterDispose() {
   // asynchronous tests. if debugger; is left here, the test pass. if removed
   // the test fails. that happens because flash needs some time to be
   // considered loaded, after flash.render() is called (like img.src i guess).
-  //debugger;
-  //assertTrue(flash.isLoaded());
+  // debugger;
+  // assertTrue(flash.isLoaded());
   flash.dispose();
   assertFalse(flash.isLoaded());
 }
@@ -346,9 +341,8 @@ function testEventsGetsSinked() {
   var parent = goog.dom.createElement(goog.dom.TagName.DIV);
   flash.render(parent);
 
-  goog.events.listen(parent, goog.events.EventType.CLICK, function(e) {
-    called = true;
-  });
+  goog.events.listen(
+      parent, goog.events.EventType.CLICK, function(e) { called = true; });
 
   assertFalse(called);
 

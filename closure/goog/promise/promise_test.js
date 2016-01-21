@@ -29,7 +29,7 @@ goog.setTestOnly('goog.PromiseTest');
 
 
 function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
 }
 
 
@@ -83,9 +83,7 @@ function shouldNotCall(result) {
 
 function fulfillSoon(value, delay) {
   return new goog.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      resolve(value);
-    }, delay);
+    window.setTimeout(function() { resolve(value); }, delay);
   });
 }
 
@@ -102,18 +100,14 @@ function fulfillBuiltInSoon(value, delay) {
     return fulfillSoon(value, delay);
   }
   return new window.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      resolve(value);
-    }, delay);
+    window.setTimeout(function() { resolve(value); }, delay);
   });
 }
 
 
 function rejectSoon(reason, delay) {
   return new goog.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      reject(reason);
-    }, delay);
+    window.setTimeout(function() { reject(reason); }, delay);
   });
 }
 
@@ -130,9 +124,7 @@ function rejectBuiltInSoon(value, delay) {
     return rejectSoon(value, delay);
   }
   return new window.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      reject(value);
-    }, delay);
+    window.setTimeout(function() { reject(value); }, delay);
   });
 }
 
@@ -205,11 +197,8 @@ function createThrowingThenable(value) {
   }
 
   var thenable = {};
-  window.Object.defineProperty(thenable, 'then', {
-    get: function() {
-      throw value;
-    }
-  });
+  window.Object.defineProperty(
+      thenable, 'then', {get: function() { throw value; }});
   return thenable;
 }
 
@@ -217,16 +206,14 @@ function createThrowingThenable(value) {
 function testThenIsFulfilled() {
   var timesCalled = 0;
 
-  var p = new goog.Promise(function(resolve, reject) {
-    resolve(sentinel);
-  });
+  var p = new goog.Promise(function(resolve, reject) { resolve(sentinel); });
   p.then(function(value) {
     timesCalled++;
     assertEquals(sentinel, value);
   });
 
-  assertEquals('then() must return before callbacks are invoked.',
-               0, timesCalled);
+  assertEquals(
+      'then() must return before callbacks are invoked.', 0, timesCalled);
 
   return p.then(function() {
     assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
@@ -242,8 +229,8 @@ function testThenVoidIsFulfilled() {
     assertEquals(sentinel, value);
   });
 
-  assertEquals('thenVoid() must return before callbacks are invoked.',
-               0, timesCalled);
+  assertEquals(
+      'thenVoid() must return before callbacks are invoked.', 0, timesCalled);
 
   return p.then(function() {
     assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
@@ -259,8 +246,8 @@ function testThenIsRejected() {
     assertEquals(sentinel, value);
   });
 
-  assertEquals('then() must return before callbacks are invoked.',
-               0, timesCalled);
+  assertEquals(
+      'then() must return before callbacks are invoked.', 0, timesCalled);
 
   return p.then(shouldNotCall, function() {
     assertEquals('onRejected must be called exactly once.', 1, timesCalled);
@@ -277,8 +264,8 @@ function testThenVoidIsRejected() {
     assertEquals('onRejected must be called exactly once.', 1, timesCalled);
   });
 
-  assertEquals('thenVoid() must return before callbacks are invoked.',
-               0, timesCalled);
+  assertEquals(
+      'thenVoid() must return before callbacks are invoked.', 0, timesCalled);
 
   return p.then(shouldNotCall, function() {
     assertEquals('onRejected must be called exactly once.', 1, timesCalled);
@@ -288,28 +275,20 @@ function testThenVoidIsRejected() {
 function testThenAsserts() {
   var p = goog.Promise.resolve();
 
-  var m = assertThrows(function() {
-    p.then({});
-  });
+  var m = assertThrows(function() { p.then({}); });
   assertContains('opt_onFulfilled should be a function.', m.message);
 
-  m = assertThrows(function() {
-    p.then(function() {}, {});
-  });
+  m = assertThrows(function() { p.then(function() {}, {}); });
   assertContains('opt_onRejected should be a function.', m.message);
 }
 
 function testThenVoidAsserts() {
   var p = goog.Promise.resolve();
 
-  var m = assertThrows(function() {
-    p.thenVoid({});
-  });
+  var m = assertThrows(function() { p.thenVoid({}); });
   assertContains('opt_onFulfilled should be a function.', m.message);
 
-  m = assertThrows(function() {
-    p.thenVoid(function() {}, {});
-  });
+  m = assertThrows(function() { p.thenVoid(function() {}, {}); });
   assertContains('opt_onRejected should be a function.', m.message);
 }
 
@@ -317,9 +296,7 @@ function testOptionalOnFulfilled() {
   return goog.Promise.resolve(sentinel)
       .then(null, null)
       .then(null, shouldNotCall)
-      .then(function(value) {
-        assertEquals(sentinel, value);
-      });
+      .then(function(value) { assertEquals(sentinel, value); });
 }
 
 
@@ -327,9 +304,7 @@ function testOptionalOnRejected() {
   return goog.Promise.reject(sentinel)
       .then(null, null)
       .then(shouldNotCall)
-      .then(null, function(reason) {
-        assertEquals(sentinel, reason);
-      });
+      .then(null, function(reason) { assertEquals(sentinel, reason); });
 }
 
 
@@ -382,9 +357,7 @@ function testMultipleRejects() {
 function testAsynchronousThenCalls() {
   var timesCalled = [0, 0, 0, 0];
   var p = new goog.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      resolve();
-    }, 30);
+    window.setTimeout(function() { resolve(); }, 30);
   });
 
   p.then(function() {
@@ -418,9 +391,8 @@ function testAsynchronousThenCalls() {
 function testResolveWithPromise() {
   var resolveBlocker;
   var hasFulfilled = false;
-  var blocker = new goog.Promise(function(resolve, reject) {
-    resolveBlocker = resolve;
-  });
+  var blocker =
+      new goog.Promise(function(resolve, reject) { resolveBlocker = resolve; });
 
   var p = goog.Promise.resolve(blocker);
   p.then(function(value) {
@@ -431,18 +403,15 @@ function testResolveWithPromise() {
   assertFalse(hasFulfilled);
   resolveBlocker(sentinel);
 
-  return p.then(function() {
-    assertTrue(hasFulfilled);
-  });
+  return p.then(function() { assertTrue(hasFulfilled); });
 }
 
 
 function testResolveWithRejectedPromise() {
   var rejectBlocker;
   var hasRejected = false;
-  var blocker = new goog.Promise(function(resolve, reject) {
-    rejectBlocker = reject;
-  });
+  var blocker =
+      new goog.Promise(function(resolve, reject) { rejectBlocker = reject; });
 
   var p = goog.Promise.resolve(blocker);
   var child = p.then(shouldNotCall, function(reason) {
@@ -453,18 +422,15 @@ function testResolveWithRejectedPromise() {
   assertFalse(hasRejected);
   rejectBlocker(sentinel);
 
-  return child.thenCatch(function() {
-    assertTrue(hasRejected);
-  });
+  return child.thenCatch(function() { assertTrue(hasRejected); });
 }
 
 
 function testRejectWithPromise() {
   var resolveBlocker;
   var hasFulfilled = false;
-  var blocker = new goog.Promise(function(resolve, reject) {
-    resolveBlocker = resolve;
-  });
+  var blocker =
+      new goog.Promise(function(resolve, reject) { resolveBlocker = resolve; });
 
   var p = goog.Promise.reject(blocker);
   var child = p.then(function(value) {
@@ -475,18 +441,15 @@ function testRejectWithPromise() {
   assertFalse(hasFulfilled);
   resolveBlocker(sentinel);
 
-  return child.thenCatch(function() {
-    assertTrue(hasRejected);
-  });
+  return child.thenCatch(function() { assertTrue(hasRejected); });
 }
 
 
 function testRejectWithRejectedPromise() {
   var rejectBlocker;
   var hasRejected = false;
-  var blocker = new goog.Promise(function(resolve, reject) {
-    rejectBlocker = reject;
-  });
+  var blocker =
+      new goog.Promise(function(resolve, reject) { rejectBlocker = reject; });
 
   var p = goog.Promise.reject(blocker);
   var child = p.then(shouldNotCall, function(reason) {
@@ -497,9 +460,7 @@ function testRejectWithRejectedPromise() {
   assertFalse(hasRejected);
   rejectBlocker(sentinel);
 
-  return child.thenCatch(function() {
-    assertTrue(hasRejected);
-  });
+  return child.thenCatch(function() { assertTrue(hasRejected); });
 }
 
 
@@ -511,11 +472,9 @@ function testResolveAndReject() {
     reject();
   });
 
-  p.then(function() {
-    onFulfilledCalled = true;
-  }, function() {
-    onRejectedCalled = true;
-  });
+  p.then(
+      function() { onFulfilledCalled = true; },
+      function() { onRejectedCalled = true; });
 
   return p.then(function() {
     assertTrue(onFulfilledCalled);
@@ -525,12 +484,12 @@ function testResolveAndReject() {
 
 
 function testRejectAndResolve() {
-  return new goog.Promise(function(resolve, reject) {
-    reject();
-    resolve();
-  }).then(shouldNotCall, function() {
-    return true;
-  });
+  return new goog
+      .Promise(function(resolve, reject) {
+        reject();
+        resolve();
+      })
+      .then(shouldNotCall, function() { return true; });
 }
 
 
@@ -665,9 +624,7 @@ function testRejectionOrderWithNestedThen() {
       resolver.resolve();
     });
   });
-  p.then(shouldNotCall, function() {
-    callbacks.push(2);
-  });
+  p.then(shouldNotCall, function() { callbacks.push(2); });
 
   return resolver.promise.then(function() {
     assertArrayEquals([1, 2, 3], callbacks);
@@ -678,26 +635,29 @@ function testRejectionOrderWithNestedThen() {
 function testBranching() {
   var p = goog.Promise.resolve(2);
 
-  var branch1 = p.then(function(value) {
-    assertEquals('then functions should see the same value', 2, value);
-    return value / 2;
-  }).then(function(value) {
-    assertEquals('branch should receive the returned value', 1, value);
-  });
+  var branch1 =
+      p.then(function(value) {
+         assertEquals('then functions should see the same value', 2, value);
+         return value / 2;
+       }).then(function(value) {
+        assertEquals('branch should receive the returned value', 1, value);
+      });
 
-  var branch2 = p.then(function(value) {
-    assertEquals('then functions should see the same value', 2, value);
-    throw value + 1;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals('branch should receive the thrown value', 3, reason);
-  });
+  var branch2 =
+      p.then(function(value) {
+         assertEquals('then functions should see the same value', 2, value);
+         throw value + 1;
+       }).then(shouldNotCall, function(reason) {
+        assertEquals('branch should receive the thrown value', 3, reason);
+      });
 
-  var branch3 = p.then(function(value) {
-    assertEquals('then functions should see the same value', 2, value);
-    return value * 2;
-  }).then(function(value) {
-    assertEquals('branch should receive the returned value', 4, value);
-  });
+  var branch3 =
+      p.then(function(value) {
+         assertEquals('then functions should see the same value', 2, value);
+         return value * 2;
+       }).then(function(value) {
+        assertEquals('branch should receive the returned value', 4, value);
+      });
 
   return goog.Promise.all([branch1, branch2, branch3]);
 }
@@ -708,8 +668,8 @@ function testThenReturnsPromise() {
   var child = parent.then();
 
   assertTrue(child instanceof goog.Promise);
-  assertNotEquals('The returned Promise must be different from the input.',
-                  parent, child);
+  assertNotEquals(
+      'The returned Promise must be different from the input.', parent, child);
 }
 
 
@@ -730,11 +690,8 @@ function testBlockingPromise() {
     return new goog.Promise(function(resolve, reject) {});
   });
 
-  p2.then(function() {
-    wasFulfilled = true;
-  }, function() {
-    wasRejected = true;
-  });
+  p2.then(
+      function() { wasFulfilled = true; }, function() { wasRejected = true; });
 
   return goog.Timer.promise(10).then(function() {
     assertFalse('p2 should be blocked on the returned Promise', wasFulfilled);
@@ -745,41 +702,30 @@ function testBlockingPromise() {
 
 function testBlockingPromiseFulfilled() {
   var blockingPromise = new goog.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      resolve(sentinel);
-    }, 0);
+    window.setTimeout(function() { resolve(sentinel); }, 0);
   });
 
   var p = goog.Promise.resolve(dummy);
-  var p2 = p.then(function(value) {
-    return blockingPromise;
-  });
+  var p2 = p.then(function(value) { return blockingPromise; });
 
-  return p2.then(function(value) {
-    assertEquals(sentinel, value);
-  });
+  return p2.then(function(value) { assertEquals(sentinel, value); });
 }
 
 
 function testBlockingPromiseRejected() {
   var blockingPromise = new goog.Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      reject(sentinel);
-    }, 0);
+    window.setTimeout(function() { reject(sentinel); }, 0);
   });
 
   var p = goog.Promise.resolve(blockingPromise);
 
-  return p.then(shouldNotCall, function(reason) {
-    assertEquals(sentinel, reason);
-  });
+  return p.then(
+      shouldNotCall, function(reason) { assertEquals(sentinel, reason); });
 }
 
 
 function testBlockingThenableFulfilled() {
-  var thenable = {
-    then: function(onFulfill, onReject) { onFulfill(sentinel); }
-  };
+  var thenable = {then: function(onFulfill, onReject) { onFulfill(sentinel); }};
 
   return goog.Promise.resolve(thenable).then(function(reason) {
     assertEquals(sentinel, reason);
@@ -788,24 +734,18 @@ function testBlockingThenableFulfilled() {
 
 
 function testBlockingThenableRejected() {
-  var thenable = {
-    then: function(onFulfill, onReject) { onReject(sentinel); }
-  };
+  var thenable = {then: function(onFulfill, onReject) { onReject(sentinel); }};
 
-  return goog.Promise.resolve(thenable).then(shouldNotCall, function(reason) {
-    assertEquals(sentinel, reason);
-  });
+  return goog.Promise.resolve(thenable).then(
+      shouldNotCall, function(reason) { assertEquals(sentinel, reason); });
 }
 
 
 function testBlockingThenableThrows() {
-  var thenable = {
-    then: function(onFulfill, onReject) { throw sentinel; }
-  };
+  var thenable = {then: function(onFulfill, onReject) { throw sentinel; }};
 
-  return goog.Promise.resolve(thenable).then(shouldNotCall, function(reason) {
-    assertEquals(sentinel, reason);
-  });
+  return goog.Promise.resolve(thenable).then(
+      shouldNotCall, function(reason) { assertEquals(sentinel, reason); });
 }
 
 
@@ -840,16 +780,14 @@ function testNestingThenables() {
 
   return goog.Promise.resolve(thenableC).then(function(value) {
     assertEquals(
-        'Should resolve to the fulfillment value of thenableA',
-        sentinel, value);
+        'Should resolve to the fulfillment value of thenableA', sentinel,
+        value);
   });
 }
 
 
 function testNestingThenablesRejected() {
-  var thenableA = {
-    then: function(onFulfill, onReject) { onReject(sentinel); }
-  };
+  var thenableA = {then: function(onFulfill, onReject) { onReject(sentinel); }};
   var thenableB = {
     then: function(onFulfill, onReject) { onReject(thenableA); }
   };
@@ -859,21 +797,22 @@ function testNestingThenablesRejected() {
 
   return goog.Promise.reject(thenableC).then(shouldNotCall, function(reason) {
     assertEquals(
-        'Should resolve to rejection reason of thenableA',
-        sentinel, reason);
+        'Should resolve to rejection reason of thenableA', sentinel, reason);
   });
 }
 
 
 function testThenCatch() {
   var catchCalled = false;
-  return goog.Promise.reject().thenCatch(function(reason) {
-    catchCalled = true;
-    return sentinel;
-  }).then(function(value) {
-    assertTrue(catchCalled);
-    assertEquals(sentinel, value);
-  });
+  return goog.Promise.reject()
+      .thenCatch(function(reason) {
+        catchCalled = true;
+        return sentinel;
+      })
+      .then(function(value) {
+        assertTrue(catchCalled);
+        assertEquals(sentinel, value);
+      });
 }
 
 
@@ -890,13 +829,16 @@ function testRaceWithFulfill() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals('c', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals('c', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -906,18 +848,21 @@ function testRaceWithThenables() {
   var c = fulfillThenableSoon('c', 10);
   var d = fulfillThenableSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals('c', value);
-    // Ensure that the {@code then} property was only accessed once by
-    // {@code goog.Promise.race}.
-    if (SUPPORTS_ACCESSORS) {
-      assertEquals(1, c.thenAccesses);
-    }
-    // Return the slowest input thenable to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest thenable should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals('c', value);
+        // Ensure that the {@code then} property was only accessed once by
+        // {@code goog.Promise.race}.
+        if (SUPPORTS_ACCESSORS) {
+          assertEquals(1, c.thenAccesses);
+        }
+        // Return the slowest input thenable to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest thenable should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -927,13 +872,16 @@ function testRaceWithBuiltIns() {
   var c = fulfillBuiltInSoon('c', 10);
   var d = fulfillBuiltInSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals('c', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals('c', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -943,13 +891,16 @@ function testRaceWithNonThenable() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals('b', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals('b', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -959,13 +910,16 @@ function testRaceWithFalseyNonThenable() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals(0, value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals(0, value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -975,13 +929,16 @@ function testRaceWithFulfilledBeforeNonThenable() {
   var c = 'c';
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(function(value) {
-    assertEquals('b', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(function(value) {
+        assertEquals('b', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -991,13 +948,18 @@ function testRaceWithReject() {
   var c = rejectSoon('rejected-c', 10);
   var d = rejectSoon('rejected-d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
-    assertEquals('rejected-c', value);
-    return a;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals('The slowest promise should resolve eventually.',
-                 'rejected-a', reason);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(
+          shouldNotCall,
+          function(value) {
+            assertEquals('rejected-c', value);
+            return a;
+          })
+      .then(shouldNotCall, function(reason) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'rejected-a',
+            reason);
+      });
 }
 
 function testRaceWithRejectThenable() {
@@ -1006,13 +968,18 @@ function testRaceWithRejectThenable() {
   var c = rejectThenableSoon('rejected-c', 10);
   var d = rejectThenableSoon('rejected-d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
-    assertEquals('rejected-c', value);
-    return a;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals('The slowest promise should resolve eventually.',
-                 'rejected-a', reason);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(
+          shouldNotCall,
+          function(value) {
+            assertEquals('rejected-c', value);
+            return a;
+          })
+      .then(shouldNotCall, function(reason) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'rejected-a',
+            reason);
+      });
 }
 
 function testRaceWithRejectBuiltIn() {
@@ -1021,13 +988,18 @@ function testRaceWithRejectBuiltIn() {
   var c = rejectBuiltInSoon('rejected-c', 10);
   var d = rejectBuiltInSoon('rejected-d', 20);
 
-  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
-    assertEquals('rejected-c', value);
-    return a;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals('The slowest promise should resolve eventually.',
-                 'rejected-a', reason);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(
+          shouldNotCall,
+          function(value) {
+            assertEquals('rejected-c', value);
+            return a;
+          })
+      .then(shouldNotCall, function(reason) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'rejected-a',
+            reason);
+      });
 }
 
 function testRaceWithRejectAndThrowingThenable() {
@@ -1036,13 +1008,18 @@ function testRaceWithRejectAndThrowingThenable() {
   var c = rejectBuiltInSoon('rejected-c', 10);
   var d = createThrowingThenable('rejected-d');
 
-  return goog.Promise.race([a, b, c, d]).then(shouldNotCall, function(value) {
-    assertEquals('rejected-d', value);
-    return a;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals('The slowest promise should resolve eventually.',
-                 'rejected-a', reason);
-  });
+  return goog.Promise.race([a, b, c, d])
+      .then(
+          shouldNotCall,
+          function(value) {
+            assertEquals('rejected-d', value);
+            return a;
+          })
+      .then(shouldNotCall, function(reason) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'rejected-a',
+            reason);
+      });
 }
 
 
@@ -1116,13 +1093,19 @@ function testAllWithReject() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.all([a, b, c, d]).then(shouldNotCall, function(reason) {
-    assertEquals('rejected-b', reason);
-    return a;
-  }).then(function(value) {
-    assertEquals('Promise "a" should be fulfilled even though the all()' +
-                 'was rejected.', 'a', value);
-  });
+  return goog.Promise.all([a, b, c, d])
+      .then(
+          shouldNotCall,
+          function(reason) {
+            assertEquals('rejected-b', reason);
+            return a;
+          })
+      .then(function(value) {
+        assertEquals(
+            'Promise "a" should be fulfilled even though the all()' +
+                'was rejected.',
+            'a', value);
+      });
 }
 
 
@@ -1147,17 +1130,18 @@ function testAllSettledWithFulfillAndReject() {
 
   return goog.Promise.allSettled([a, b, c, d, e, f, g, h, z])
       .then(function(results) {
-        assertArrayEquals([
-          {fulfilled: true, value: 'a'},
-          {fulfilled: false, reason: 'rejected-b'},
-          {fulfilled: true, value: 'c'},
-          {fulfilled: false, reason: 'rejected-d'},
-          {fulfilled: true, value: 'e'},
-          {fulfilled: true, value: 'f'},
-          {fulfilled: false, reason: 'rejected-g'},
-          {fulfilled: false, reason: 'rejected-h'},
-          {fulfilled: true, value: 0}
-        ], results);
+        assertArrayEquals(
+            [
+              {fulfilled: true, value: 'a'},
+              {fulfilled: false, reason: 'rejected-b'},
+              {fulfilled: true, value: 'c'},
+              {fulfilled: false, reason: 'rejected-d'},
+              {fulfilled: true, value: 'e'}, {fulfilled: true, value: 'f'},
+              {fulfilled: false, reason: 'rejected-g'},
+              {fulfilled: false, reason: 'rejected-h'},
+              {fulfilled: true, value: 0}
+            ],
+            results);
         // Ensure that the {@code then} property was only accessed once by
         // {@code goog.Promise.allSettled}.
         if (SUPPORTS_ACCESSORS) {
@@ -1181,19 +1165,24 @@ function testFirstFulfilledWithFulfill() {
   var c = rejectSoon('rejected-c', 10);
   var d = fulfillSoon('d', 20);
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals('d', value);
-    return c;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals(
-        'Promise "c" should be rejected before firstFulfilled() resolves.',
-        'rejected-c', reason);
-    return a;
-  }).then(function(value) {
-    assertEquals(
-        'Promise "a" should be fulfilled after firstFulfilled() resolves.',
-        'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals('d', value);
+        return c;
+      })
+      .then(
+          shouldNotCall,
+          function(reason) {
+            assertEquals(
+                'Promise "c" should be rejected before firstFulfilled() resolves.',
+                'rejected-c', reason);
+            return a;
+          })
+      .then(function(value) {
+        assertEquals(
+            'Promise "a" should be fulfilled after firstFulfilled() resolves.',
+            'a', value);
+      });
 }
 
 
@@ -1203,24 +1192,29 @@ function testFirstFulfilledWithThenables() {
   var c = rejectThenableSoon('rejected-c', 10);
   var d = fulfillThenableSoon('d', 20);
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals('d', value);
-    // Ensure that the {@code then} property was only accessed once by
-    // {@code goog.Promise.firstFulfilled}.
-    if (SUPPORTS_ACCESSORS) {
-      assertEquals(1, d.thenAccesses);
-    }
-    return c;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals(
-        'Thenable "c" should be rejected before firstFulfilled() resolves.',
-        'rejected-c', reason);
-    return a;
-  }).then(function(value) {
-    assertEquals(
-        'Thenable "a" should be fulfilled after firstFulfilled() resolves.',
-        'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals('d', value);
+        // Ensure that the {@code then} property was only accessed once by
+        // {@code goog.Promise.firstFulfilled}.
+        if (SUPPORTS_ACCESSORS) {
+          assertEquals(1, d.thenAccesses);
+        }
+        return c;
+      })
+      .then(
+          shouldNotCall,
+          function(reason) {
+            assertEquals(
+                'Thenable "c" should be rejected before firstFulfilled() resolves.',
+                'rejected-c', reason);
+            return a;
+          })
+      .then(function(value) {
+        assertEquals(
+            'Thenable "a" should be fulfilled after firstFulfilled() resolves.',
+            'a', value);
+      });
 }
 
 
@@ -1230,19 +1224,24 @@ function testFirstFulfilledWithBuiltIns() {
   var c = rejectBuiltInSoon('rejected-c', 10);
   var d = fulfillBuiltInSoon('d', 20);
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals('d', value);
-    return c;
-  }).then(shouldNotCall, function(reason) {
-    assertEquals(
-        'Promise "c" should be rejected before firstFulfilled() resolves.',
-        'rejected-c', reason);
-    return a;
-  }).then(function(value) {
-    assertEquals(
-        'Promise "a" should be fulfilled after firstFulfilled() resolves.',
-        'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals('d', value);
+        return c;
+      })
+      .then(
+          shouldNotCall,
+          function(reason) {
+            assertEquals(
+                'Promise "c" should be rejected before firstFulfilled() resolves.',
+                'rejected-c', reason);
+            return a;
+          })
+      .then(function(value) {
+        assertEquals(
+            'Promise "a" should be fulfilled after firstFulfilled() resolves.',
+            'a', value);
+      });
 }
 
 
@@ -1252,13 +1251,16 @@ function testFirstFulfilledWithNonThenable() {
   var c = rejectSoon('rejected-c', 10);
   var d = 'd';
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals('d', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals('d', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -1268,13 +1270,16 @@ function testFirstFulfilledWithFalseyNonThenable() {
   var c = rejectSoon('rejected-c', 10);
   var d = 0;
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals(0, value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals(0, value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -1284,13 +1289,16 @@ function testFirstFulfilledWithFulfilledBeforeNonThenable() {
   var c = rejectSoon('rejected-c', 10);
   var d = 'd';
 
-  return goog.Promise.firstFulfilled([a, b, c, d]).then(function(value) {
-    assertEquals('b', value);
-    // Return the slowest input promise to wait for it to complete.
-    return a;
-  }).then(function(value) {
-    assertEquals('The slowest promise should resolve eventually.', 'a', value);
-  });
+  return goog.Promise.firstFulfilled([a, b, c, d])
+      .then(function(value) {
+        assertEquals('b', value);
+        // Return the slowest input promise to wait for it to complete.
+        return a;
+      })
+      .then(function(value) {
+        assertEquals(
+            'The slowest promise should resolve eventually.', 'a', value);
+      });
 }
 
 
@@ -1315,25 +1323,31 @@ function testFirstFulfilledWithReject() {
 
 function testThenAlwaysWithFulfill() {
   var thenAlwaysCalled = false;
-  return goog.Promise.resolve(sentinel).thenAlways(function() {
-    assertEquals('thenAlways should have no arguments', 0, arguments.length);
-    thenAlwaysCalled = true;
-  }).then(function(value) {
-    assertEquals(sentinel, value);
-    assertTrue(thenAlwaysCalled);
-  });
+  return goog.Promise.resolve(sentinel)
+      .thenAlways(function() {
+        assertEquals(
+            'thenAlways should have no arguments', 0, arguments.length);
+        thenAlwaysCalled = true;
+      })
+      .then(function(value) {
+        assertEquals(sentinel, value);
+        assertTrue(thenAlwaysCalled);
+      });
 }
 
 
 function testThenAlwaysWithReject() {
   var thenAlwaysCalled = false;
-  return goog.Promise.reject(sentinel).thenAlways(function(arg) {
-    assertEquals('thenAlways should have no arguments', 0, arguments.length);
-    thenAlwaysCalled = true;
-  }).then(shouldNotCall, function(err) {
-    assertEquals(sentinel, err);
-    return null;
-  });
+  return goog.Promise.reject(sentinel)
+      .thenAlways(function(arg) {
+        assertEquals(
+            'thenAlways should have no arguments', 0, arguments.length);
+        thenAlwaysCalled = true;
+      })
+      .then(shouldNotCall, function(err) {
+        assertEquals(sentinel, err);
+        return null;
+      });
 }
 
 
@@ -1357,13 +1371,11 @@ function testThenAlwaysCalledMultipleTimes() {
         sentinel, value);
     calls.push(3);
   });
-  p.thenAlways(function() {
-    assertArrayEquals([1, 2, 3], calls);
-  });
+  p.thenAlways(function() { assertArrayEquals([1, 2, 3], calls); });
   p.thenAlways(function() {
     assertEquals(
-        'Should be one unhandled exception from the "thenAlways throw".',
-        1, unhandledRejections.getCallCount());
+        'Should be one unhandled exception from the "thenAlways throw".', 1,
+        unhandledRejections.getCallCount());
     var rejectionCall = unhandledRejections.popLastCall();
     assertEquals(1, rejectionCall.getArguments().length);
     var err = rejectionCall.getArguments()[0];
@@ -1371,9 +1383,7 @@ function testThenAlwaysCalledMultipleTimes() {
     assertEquals(goog.global, rejectionCall.getThis());
   });
 
-  return p.thenAlways(function() {
-    assertEquals(3, calls.length);
-  });
+  return p.thenAlways(function() { assertEquals(3, calls.length); });
 }
 
 
@@ -1388,9 +1398,7 @@ function testContextWithInit() {
 
 function testContextWithInitDefault() {
   var initContext;
-  var p = new goog.Promise(function(resolve, reject) {
-    initContext = this;
-  });
+  var p = new goog.Promise(function(resolve, reject) { initContext = this; });
   assertEquals(
       'initFunc should default to being called in the global scope',
       goog.global, initContext);
@@ -1398,11 +1406,14 @@ function testContextWithInitDefault() {
 
 
 function testContextWithFulfillment() {
-  return goog.Promise.resolve().then(function() {
-    assertEquals(
-        'Call should be made in the global scope if no context is specified.',
-        goog.global, this);
-  }).then(function() { assertEquals(sentinel, this); }, shouldNotCall, sentinel)
+  return goog.Promise.resolve()
+      .then(function() {
+        assertEquals(
+            'Call should be made in the global scope if no context is specified.',
+            goog.global, this);
+      })
+      .then(
+          function() { assertEquals(sentinel, this); }, shouldNotCall, sentinel)
       .thenAlways(function() { assertEquals(sentinel, this); }, sentinel);
 }
 
@@ -1478,9 +1489,8 @@ function testThenVoidCancelAfterResolve() {
 function testCancelAfterReject() {
   var p = goog.Promise.reject(sentinel);
   p.cancel();
-  return p.then(shouldNotCall, function(reason) {
-    assertEquals(sentinel, reason);
-  });
+  return p.then(
+      shouldNotCall, function(reason) { assertEquals(sentinel, reason); });
 }
 
 
@@ -1494,9 +1504,7 @@ function testThenVoidCancelAfterReject() {
     thenVoidCalled = true;
   });
 
-  return p.thenCatch(function() {
-    assertTrue(thenVoidCalled);
-  });
+  return p.thenCatch(function() { assertTrue(thenVoidCalled); });
 }
 
 
@@ -1505,11 +1513,11 @@ function testCancelPropagation() {
   var p = new goog.Promise(goog.nullFunction);
 
   var p2 = p.then(shouldNotCall, function(reason) {
-    cancelError = reason;
-    assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('parent cancel message', reason.message);
-    return sentinel;
-  }).then(function(value) {
+              cancelError = reason;
+              assertTrue(reason instanceof goog.Promise.CancellationError);
+              assertEquals('parent cancel message', reason.message);
+              return sentinel;
+            }).then(function(value) {
     assertEquals(
         'Child promises should receive the returned value of the parent.',
         sentinel, value);
@@ -1582,19 +1590,20 @@ function testCancelPropagationUpward() {
   });
 
   var grandChild = child.then(shouldNotCall, function(reason) {
-    assertEquals('Child should receive the same cancel error.',
-                 cancelError, reason);
+    assertEquals(
+        'Child should receive the same cancel error.', cancelError, reason);
     cancelCalls.push('child');
   });
 
   var descendant = grandChild.then(shouldNotCall, function(reason) {
-    assertEquals('GrandChild should receive the same cancel error.',
-                 cancelError, reason);
+    assertEquals(
+        'GrandChild should receive the same cancel error.', cancelError,
+        reason);
     cancelCalls.push('grandChild');
 
     assertArrayEquals(
         'Each promise in the hierarchy has a single child, so canceling the ' +
-        'grandChild should cancel each ancestor in order.',
+            'grandChild should cancel each ancestor in order.',
         ['parent', 'child', 'grandChild'], cancelCalls);
 
     // Return a non-Error to resolve the cancellation rejection.
@@ -1619,14 +1628,15 @@ function testThenVoidCancelPropagationUpward() {
   });
 
   var grandChild = child.then(shouldNotCall, function(reason) {
-    assertEquals('Child should receive the same cancel error.',
-                 cancelError, reason);
+    assertEquals(
+        'Child should receive the same cancel error.', cancelError, reason);
     cancelCalls.push('child');
   });
 
   grandChild.thenVoid(shouldNotCall, function(reason) {
-    assertEquals('GrandChild should receive the same cancel error.',
-                 cancelError, reason);
+    assertEquals(
+        'GrandChild should receive the same cancel error.', cancelError,
+        reason);
     cancelCalls.push('grandChild');
   });
 
@@ -1635,7 +1645,7 @@ function testThenVoidCancelPropagationUpward() {
     assertEquals(cancelError, reason);
     assertArrayEquals(
         'Each promise in the hierarchy has a single child, so canceling the ' +
-        'grandChild should cancel each ancestor in order.',
+            'grandChild should cancel each ancestor in order.',
         ['parent', 'child', 'grandChild'], cancelCalls);
 
     // Return a non-Error to resolve the cancellation rejection.
@@ -1672,7 +1682,7 @@ function testCancelPropagationUpwardWithMultipleChildren() {
     assertEquals(reason, cancelError);
     assertArrayEquals(
         'The parent promise has multiple children, so only the child and ' +
-        'grandChild should be canceled.',
+            'grandChild should be canceled.',
         ['child', 'grandChild'], cancelCalls);
 
     // Return a non-Error to resolve the cancellation rejection.
@@ -1714,7 +1724,7 @@ function testThenVoidCancelPropagationUpwardWithMultipleChildren() {
     assertEquals(reason, cancelError);
     assertArrayEquals(
         'The parent promise has multiple children, so only the child and ' +
-        'grandChildren should be canceled.',
+            'grandChildren should be canceled.',
         ['child', 'grandChild', 'void grandChild'], cancelCalls);
 
     // Return a non-Error to resolve the cancellation rejection.
@@ -1745,8 +1755,8 @@ function testCancelRecovery() {
   var grandChild = sibling2.then(function(value) {
     cancelCalls.push('child');
     assertEquals(
-        'Returning a non-cancel value should uncancel the grandChild.',
-        value, sentinel);
+        'Returning a non-cancel value should uncancel the grandChild.', value,
+        sentinel);
     assertArrayEquals(['sibling2', 'child'], cancelCalls);
   }, shouldNotCall);
 
@@ -1771,9 +1781,7 @@ function testMockClock() {
   var resolveB;
   var calls = [];
 
-  var p = new goog.Promise(function(resolve, reject) {
-    resolveA = resolve;
-  });
+  var p = new goog.Promise(function(resolve, reject) { resolveA = resolve; });
 
   p.then(function(value) {
     assertEquals(sentinel, value);
@@ -1781,36 +1789,34 @@ function testMockClock() {
   });
 
   var fulfilledChild = p.then(function(value) {
-    assertEquals(sentinel, value);
-    return goog.Promise.resolve(1);
-  }).then(function(value) {
+                          assertEquals(sentinel, value);
+                          return goog.Promise.resolve(1);
+                        }).then(function(value) {
     assertEquals(1, value);
     calls.push('fulfilledChild');
 
   });
 
   var rejectedChild = p.then(function(value) {
-    assertEquals(sentinel, value);
-    return goog.Promise.reject(2);
-  }).then(shouldNotCall, function(reason) {
+                         assertEquals(sentinel, value);
+                         return goog.Promise.reject(2);
+                       }).then(shouldNotCall, function(reason) {
     assertEquals(2, reason);
     calls.push('rejectedChild');
   });
 
-  var unresolvedChild = p.then(function(value) {
-    assertEquals(sentinel, value);
-    return new goog.Promise(function(r) {
-      resolveB = r;
-    });
-  }).then(function(value) {
-    assertEquals(3, value);
-    calls.push('unresolvedChild');
-  });
+  var unresolvedChild =
+      p.then(function(value) {
+         assertEquals(sentinel, value);
+         return new goog.Promise(function(r) { resolveB = r; });
+       }).then(function(value) {
+        assertEquals(3, value);
+        calls.push('unresolvedChild');
+      });
 
   resolveA(sentinel);
   assertArrayEquals(
-      'Calls must not be resolved until the clock ticks.',
-      [], calls);
+      'Calls must not be resolved until the clock ticks.', [], calls);
 
   mockClock.tick();
   assertArrayEquals(
@@ -1903,9 +1909,7 @@ function testUnhandledThrow() {
     assertEquals(sentinel, err);
     resolver.resolve();
   });
-  goog.Promise.resolve().then(function() {
-    throw sentinel;
-  });
+  goog.Promise.resolve().then(function() { throw sentinel; });
 
   return resolver.promise;
 }
@@ -1919,9 +1923,7 @@ function testThenVoidUnhandledThrow() {
     resolver.resolve();
   });
 
-  goog.Promise.resolve().thenVoid(function() {
-    throw sentinel;
-  });
+  goog.Promise.resolve().thenVoid(function() { throw sentinel; });
 
   return resolver.promise;
 }
@@ -2051,18 +2053,17 @@ function testCreateWithResolver_Resolved() {
     assertEquals(sentinel, value);
   }, fail);
 
-  assertEquals('then() must return before callbacks are invoked.',
-      0, timesCalled);
+  assertEquals(
+      'then() must return before callbacks are invoked.', 0, timesCalled);
 
   mockClock.tick();
 
-  assertEquals('promise is not resolved until resolver is invoked.',
-      0, timesCalled);
+  assertEquals(
+      'promise is not resolved until resolver is invoked.', 0, timesCalled);
 
   resolver.resolve(sentinel);
 
-  assertEquals('resolution is delayed until the next tick',
-      0, timesCalled);
+  assertEquals('resolution is delayed until the next tick', 0, timesCalled);
 
   mockClock.tick();
 
@@ -2081,18 +2082,17 @@ function testCreateWithResolver_Rejected() {
     assertEquals(sentinel, reason);
   });
 
-  assertEquals('then() must return before callbacks are invoked.',
-      0, timesCalled);
+  assertEquals(
+      'then() must return before callbacks are invoked.', 0, timesCalled);
 
   mockClock.tick();
 
-  assertEquals('promise is not resolved until resolver is invoked.',
-      0, timesCalled);
+  assertEquals(
+      'promise is not resolved until resolver is invoked.', 0, timesCalled);
 
   resolver.reject(sentinel);
 
-  assertEquals('resolution is delayed until the next tick',
-      0, timesCalled);
+  assertEquals('resolution is delayed until the next tick', 0, timesCalled);
 
   mockClock.tick();
 
@@ -2146,4 +2146,3 @@ function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
   assertEquals(null, parent.callbackEntries_);
   assertEquals(null, child.callbackEntries_);
 }
-

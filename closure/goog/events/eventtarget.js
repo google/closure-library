@@ -330,7 +330,7 @@ goog.events.EventTarget.prototype.assertInitialized_ = function() {
   goog.asserts.assert(
       this.eventTargetListeners_,
       'Event target is not initialized. Did you call the superclass ' +
-      '(goog.events.EventTarget) constructor?');
+          '(goog.events.EventTarget) constructor?');
 };
 
 

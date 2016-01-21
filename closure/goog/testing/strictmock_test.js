@@ -19,8 +19,7 @@ goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.jsunit');
 
 // The object that we will be mocking
-var RealObject = function() {
-};
+var RealObject = function() {};
 
 RealObject.prototype.a = function() {
   fail('real object should never be called');
@@ -55,7 +54,7 @@ function testMockFunction() {
 
   mock.$reset();
 
-  assertThrows(function() {mock.x()});
+  assertThrows(function() { mock.x() });
 }
 
 
@@ -181,8 +180,8 @@ function testMultipleReturnValues() {
 
   mock.$replay();
 
-  assertArrayEquals('Mock should return the right value sequence',
-      [3, 2, 1],
+  assertArrayEquals(
+      'Mock should return the right value sequence', [3, 2, 1],
       [mock.a(), mock.a(), mock.a()]);
 
   mock.$verify();
@@ -399,7 +398,7 @@ function testThrows() {
 
 
 function testDoes() {
-  mock.a(1, 2).$does(function(a, b) {return a + b;});
+  mock.a(1, 2).$does(function(a, b) { return a + b; });
   mock.$replay();
   assertEquals('Mock should call the function', 3, mock.a(1, 2));
   mock.$verify();

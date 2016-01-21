@@ -52,9 +52,8 @@ function testUnwrap() {
   evil[privateFieldName] = 'var string = \'evil\';';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.SafeScript.unwrap(evil);
-  });
+  var exception =
+      assertThrows(function() { goog.html.SafeScript.unwrap(evil); });
   assertContains('expected object of type SafeScript', exception.message);
 }
 

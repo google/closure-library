@@ -256,16 +256,16 @@ goog.ui.Bubble.prototype.configureElement_ = function() {
 
   var element = this.getElement();
   var corner = this.popup_.getPinnedCorner();
-  goog.dom.safe.setInnerHtml(/** @type {!Element} */ (element),
-      this.computeHtmlForCorner_(corner));
+  goog.dom.safe.setInnerHtml(
+      /** @type {!Element} */ (element), this.computeHtmlForCorner_(corner));
 
   if (!(this.message_ instanceof SafeHtml)) {
     var messageDiv = this.getDomHelper().getElement(this.messageId_);
     this.getDomHelper().appendChild(messageDiv, this.message_);
   }
   var closeButton = this.getDomHelper().getElement(this.closeButtonId_);
-  this.listener_ = goog.events.listen(closeButton,
-      goog.events.EventType.CLICK, this.hideBubble_, false, this);
+  this.listener_ = goog.events.listen(
+      closeButton, goog.events.EventType.CLICK, this.hideBubble_, false, this);
 
   if (this.timeout_) {
     this.timerId_ = goog.Timer.callOnce(this.hideBubble_, this.timeout_, this);
@@ -304,14 +304,14 @@ goog.ui.Bubble.prototype.unconfigureElement_ = function() {
  *     positioning.
  * @private
  */
-goog.ui.Bubble.prototype.setAnchoredPosition_ = function(anchorElement,
-    corner) {
+goog.ui.Bubble.prototype.setAnchoredPosition_ = function(
+    anchorElement, corner) {
   this.popup_.setPinnedCorner(corner);
   var margin = this.createMarginForCorner_(corner);
   this.popup_.setMargin(margin);
   var anchorCorner = goog.positioning.flipCorner(corner);
-  this.popup_.setPosition(new goog.positioning.AnchoredPosition(
-      anchorElement, anchorCorner));
+  this.popup_.setPosition(
+      new goog.positioning.AnchoredPosition(anchorElement, anchorCorner));
 };
 
 
@@ -428,25 +428,37 @@ goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
   }
 
   var tableRows = goog.html.SafeHtml.concat(
-      SafeHtml.create('tr', {},
+      SafeHtml.create(
+          'tr', {},
           SafeHtml.create('td', {'colspan': 4, 'class': bubbleTopClass})),
-      SafeHtml.create('tr', {}, SafeHtml.concat(
-          SafeHtml.create('td', {'class': this.config_.cssBubbleLeft }),
-          SafeHtml.create('td',
-              {'class': this.config_.cssBubbleFont, 'style':
-                goog.string.Const.from('padding:0 4px;background:white')},
-              message),
-          SafeHtml.create('td',
-              {'id': this.closeButtonId_,
-                'class': this.config_.cssCloseButton }),
-          SafeHtml.create('td', {'class': this.config_.cssBubbleRight }))),
-      SafeHtml.create('tr', {},
+      SafeHtml.create(
+          'tr', {},
+          SafeHtml.concat(
+              SafeHtml.create('td', {'class': this.config_.cssBubbleLeft}),
+              SafeHtml.create(
+                  'td', {
+                    'class': this.config_.cssBubbleFont,
+                    'style':
+                        goog.string.Const.from('padding:0 4px;background:white')
+                  },
+                  message),
+              SafeHtml.create('td', {
+                'id': this.closeButtonId_,
+                'class': this.config_.cssCloseButton
+              }),
+              SafeHtml.create('td', {'class': this.config_.cssBubbleRight}))),
+      SafeHtml.create(
+          'tr', {},
           SafeHtml.create('td', {'colspan': 4, 'class': bubbleBottomClass})));
 
-  return SafeHtml.create('table',
-      {'border': 0, 'cellspacing': 0, 'cellpadding': 0,
+  return SafeHtml.create(
+      'table', {
+        'border': 0,
+        'cellspacing': 0,
+        'cellpadding': 0,
         'width': this.config_.bubbleWidth,
-        'style': goog.string.Const.from('z-index:1')},
+        'style': goog.string.Const.from('z-index:1')
+      },
       tableRows);
 };
 
@@ -480,9 +492,7 @@ goog.ui.Bubble.defaultConfig = {
  * @private
  */
 goog.ui.Bubble.corners_ = [
-  goog.positioning.Corner.BOTTOM_RIGHT,
-  goog.positioning.Corner.BOTTOM_LEFT,
-  goog.positioning.Corner.TOP_RIGHT,
-  goog.positioning.Corner.TOP_LEFT
+  goog.positioning.Corner.BOTTOM_RIGHT, goog.positioning.Corner.BOTTOM_LEFT,
+  goog.positioning.Corner.TOP_RIGHT, goog.positioning.Corner.TOP_LEFT
 ];
 });  // goog.scope

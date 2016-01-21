@@ -161,6 +161,6 @@ goog.userAgent.flash.VERSION = goog.userAgent.flash.detectedFlashVersion_;
  *     than a given version.
  */
 goog.userAgent.flash.isVersion = function(version) {
-  return goog.string.compareVersions(goog.userAgent.flash.VERSION,
-                                     version) >= 0;
+  return goog.string.compareVersions(goog.userAgent.flash.VERSION, version) >=
+      0;
 };

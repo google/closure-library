@@ -32,7 +32,7 @@ goog.require('goog.window');
 var newWin;
 var REDIRECT_URL_PREFIX = 'window_test.html?runTests=';
 var WIN_LOAD_TRY_TIMEOUT = 100;
-var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
+var MAX_WIN_LOAD_TRIES = 50;  // 50x100ms = 5s waiting for window to load.
 
 var stubs = new goog.testing.PropertyReplacer();
 
@@ -48,14 +48,11 @@ function setUpPage() {
   var anchors = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.DIV, 'goog-like-link');
   for (var i = 0; i < anchors.length; i++) {
-    goog.events.listen(
-        anchors[i], 'click',
-        function(e) {
-          goog.window.open(
-              goog.dom.getTextContent(e.target), {'noreferrer': true});
-        });
+    goog.events.listen(anchors[i], 'click', function(e) {
+      goog.window.open(goog.dom.getTextContent(e.target), {'noreferrer': true});
+    });
   }
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 60000; // 60s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 60000;  // 60s
 }
 
 
@@ -127,8 +124,9 @@ function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
   // allow it to be undefined, which in IE seems to result in the same window
   // being reused, instead of a new one being created. If goog.window.open()
   // is fixed to use "_blank" by default then target can be removed here.
-  newWin = goog.window.open(REDIRECT_URL_PREFIX + urlParam,
-                            {'noreferrer': noreferrer, 'target': '_blank'});
+  newWin = goog.window.open(
+      REDIRECT_URL_PREFIX + urlParam,
+      {'noreferrer': noreferrer, 'target': '_blank'});
 
   return waitForTestWindow(newWin).then(function(win) {
     verifyWindow(win, noreferrer, urlParam);
@@ -145,14 +143,15 @@ function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
  */
 function verifyWindow(win, noreferrer, urlParam) {
   if (noreferrer) {
-    assertEquals('Referrer should have been stripped',
-                 '', win.document.referrer);
+    assertEquals(
+        'Referrer should have been stripped', '', win.document.referrer);
   }
 
   var winUrl = decodeURI(win.location);
   var expectedUrlSuffix = decodeURI(urlParam);
-  assertTrue('New window href should have ended with <' + expectedUrlSuffix +
-      '> but was <' + winUrl + '>',
+  assertTrue(
+      'New window href should have ended with <' + expectedUrlSuffix +
+          '> but was <' + winUrl + '>',
       goog.string.endsWith(winUrl, expectedUrlSuffix));
 }
 
@@ -232,9 +231,7 @@ function testOpenBlank() {
 function testOpenBlankReturnsNullPopupBlocker() {
   var mockWin = {
     // emulate popup-blocker by returning a null window on open().
-    open: function() {
-      return null;
-    }
+    open: function() { return null; }
   };
   var win = goog.window.openBlank('', {noreferrer: true}, mockWin);
   assertNull(win);
@@ -247,11 +244,7 @@ function testOpenBlankEscapesSafely() {
   // updated yet, and in some IE versions the parent window does not have
   // access to document.body in new blank window.
   var navigatedUrl;
-  var mockWin = {
-    open: function(url) {
-      navigatedUrl = url;
-    }
-  };
+  var mockWin = {open: function(url) { navigatedUrl = url; }};
 
   // Test string determines that all necessary escaping transformations happen,
   // and that they happen in the right order (HTML->JS->URI).
@@ -273,12 +266,8 @@ function testOpenIosBlank() {
   var attrs = {};
   var dispatchedEvent = null;
   var element = {
-    setAttribute: function(name, value) {
-      attrs[name] = value;
-    },
-    dispatchEvent: function(event) {
-      dispatchedEvent = event;
-    }
+    setAttribute: function(name, value) { attrs[name] = value; },
+    dispatchEvent: function(event) { dispatchedEvent = event; }
   };
   stubs.replace(window.document, 'createElement', function(name) {
     if (name == goog.dom.TagName.A) {
@@ -289,9 +278,7 @@ function testOpenIosBlank() {
   stubs.set(window.navigator, 'standalone', true);
   stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
 
-  var newWin = goog.window.open('http://google.com', {
-    target: '_blank'
-  });
+  var newWin = goog.window.open('http://google.com', {target: '_blank'});
 
   // This mode cannot return a new window.
   assertNotNull(newWin);
@@ -316,12 +303,8 @@ function testOpenIosBlankNoreferrer() {
   var attrs = {};
   var dispatchedEvent = null;
   var element = {
-    setAttribute: function(name, value) {
-      attrs[name] = value;
-    },
-    dispatchEvent: function(event) {
-      dispatchedEvent = event;
-    }
+    setAttribute: function(name, value) { attrs[name] = value; },
+    dispatchEvent: function(event) { dispatchedEvent = event; }
   };
   stubs.replace(window.document, 'createElement', function(name) {
     if (name == goog.dom.TagName.A) {
@@ -332,10 +315,8 @@ function testOpenIosBlankNoreferrer() {
   stubs.set(window.navigator, 'standalone', true);
   stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
 
-  var newWin = goog.window.open('http://google.com', {
-    target: '_blank',
-    noreferrer: true
-  });
+  var newWin = goog.window.open(
+      'http://google.com', {target: '_blank', noreferrer: true});
 
   // This mode cannot return a new window.
   assertNotNull(newWin);
@@ -356,19 +337,12 @@ function testOpenNoReferrerEscapesUrl() {
   var documentWriteHtml;
   var mockNewWin = {};
   mockNewWin.document = {
-    write: function(html) {
-      documentWriteHtml = html;
-    },
+    write: function(html) { documentWriteHtml = html; },
     close: function() {}
   };
-  var mockWin = {
-    open: function() {
-      return mockNewWin;
-    }
-  };
+  var mockWin = {open: function() { return mockNewWin; }};
   goog.window.open('https://hello&world', {noreferrer: true}, mockWin);
   assertRegExp(
       'Does not contain expected HTML-escaped string: ' + documentWriteHtml,
-      /hello&amp;world/,
-      documentWriteHtml);
+      /hello&amp;world/, documentWriteHtml);
 }

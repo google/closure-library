@@ -36,7 +36,8 @@ function testFieldDescriptorConstruction() {
 
   assertEquals(true, fieldDescriptor.isPacked());
 
-  assertEquals(goog.proto2.FieldDescriptor.FieldType.INT32,
+  assertEquals(
+      goog.proto2.FieldDescriptor.FieldType.INT32,
       fieldDescriptor.getFieldType());
   assertEquals(Number, fieldDescriptor.getNativeType());
   assertEquals(0, fieldDescriptor.getDefaultValue());
@@ -74,12 +75,9 @@ function testGetDefaultValueOfInt64() {
 
 function testRepeatedField() {
   var messageType = {};
-  var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
-    name: 'test',
-    repeated: true,
-    fieldType: 7,
-    type: Number
-  });
+  var fieldDescriptor = new goog.proto2.FieldDescriptor(
+      messageType, 10,
+      {name: 'test', repeated: true, fieldType: 7, type: Number});
 
   assertEquals(true, fieldDescriptor.isRepeated());
   assertEquals(false, fieldDescriptor.isRequired());
@@ -88,12 +86,9 @@ function testRepeatedField() {
 
 function testRequiredField() {
   var messageType = {};
-  var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
-    name: 'test',
-    required: true,
-    fieldType: 7,
-    type: Number
-  });
+  var fieldDescriptor = new goog.proto2.FieldDescriptor(
+      messageType, 10,
+      {name: 'test', required: true, fieldType: 7, type: Number});
 
   assertEquals(false, fieldDescriptor.isRepeated());
   assertEquals(true, fieldDescriptor.isRequired());
@@ -102,11 +97,8 @@ function testRequiredField() {
 
 function testOptionalField() {
   var messageType = {};
-  var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
-    name: 'test',
-    fieldType: 7,
-    type: Number
-  });
+  var fieldDescriptor = new goog.proto2.FieldDescriptor(
+      messageType, 10, {name: 'test', fieldType: 7, type: Number});
 
   assertEquals(false, fieldDescriptor.isRepeated());
   assertEquals(false, fieldDescriptor.isRequired());
@@ -114,27 +106,18 @@ function testOptionalField() {
 }
 
 function testContaingType() {
-  var MessageType = function() {
-    MessageType.base(this, 'constructor');
-  };
+  var MessageType = function() { MessageType.base(this, 'constructor'); };
   goog.inherits(MessageType, goog.proto2.Message);
 
   MessageType.getDescriptor = function() {
     if (!MessageType.descriptor_) {
       // The descriptor is created lazily when we instantiate a new instance.
       var descriptorObj = {
-        0: {
-          name: 'test_message',
-          fullName: 'this.is.a.test_message'
-        },
-        10: {
-          name: 'test',
-          fieldType: 7,
-          type: Number
-        }
+        0: {name: 'test_message', fullName: 'this.is.a.test_message'},
+        10: {name: 'test', fieldType: 7, type: Number}
       };
-      MessageType.descriptor_ = goog.proto2.Message.createDescriptor(
-          MessageType, descriptorObj);
+      MessageType.descriptor_ =
+          goog.proto2.Message.createDescriptor(MessageType, descriptorObj);
     }
     return MessageType.descriptor_;
   };

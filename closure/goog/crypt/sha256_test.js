@@ -60,7 +60,8 @@ function testHashing() {
       'hijkijkljklmklmnlmnomnopnopq' +
       'asdfljhr78yasdfljh45opa78sdf' +
       '120839414104897aavnasdfafasd';
-  assertTrue(biggerThanOneBlock.length > goog.crypt.Sha2.BLOCKSIZE_ &&
+  assertTrue(
+      biggerThanOneBlock.length > goog.crypt.Sha2.BLOCKSIZE_ &&
       biggerThanOneBlock.length < 2 * goog.crypt.Sha2.BLOCKSIZE_);
   sha256.update(goog.crypt.stringToByteArray(biggerThanOneBlock));
   assertEquals(
@@ -84,9 +85,7 @@ function testHashing() {
 
 /** Check that the code checks for bad input */
 function testBadInput() {
-  assertThrows('Bad input', function() {
-    new goog.crypt.Sha256().update({});
-  });
+  assertThrows('Bad input', function() { new goog.crypt.Sha256().update({}); });
   assertThrows('Floating point not allows', function() {
     new goog.crypt.Sha256().update([1, 2, 3, 4, 4.5]);
   });

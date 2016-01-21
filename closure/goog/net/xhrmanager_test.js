@@ -106,14 +106,11 @@ function testNonDefaultResponseType() {
     eventCalled = true;
   });
   goog.events.listenOnce(xhrManager, goog.net.EventType.READY, callback);
-  xhrManager.send('test2', '/test2',
-      undefined /* opt_method */,
-      undefined /* opt_content */,
-      undefined /* opt_headers */,
-      undefined /* opt_priority */,
-      undefined /* opt_callback */,
-      undefined /* opt_maxRetries */,
-      goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
+  xhrManager.send(
+      'test2', '/test2', undefined /* opt_method */,
+      undefined /* opt_content */, undefined /* opt_headers */,
+      undefined /* opt_priority */, undefined /* opt_callback */,
+      undefined /* opt_maxRetries */, goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
   assertEquals(1, callback.getCallCount());
 
   xhrIo.simulateResponse(200, 'data');  // Do this to make tearDown() happy.

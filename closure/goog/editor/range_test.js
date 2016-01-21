@@ -43,8 +43,8 @@ function tearDown() {
 function testNoNarrow() {
   var def = $('def');
   var jkl = $('jkl');
-  var range = goog.dom.Range.createFromNodes(
-      def.firstChild, 1, jkl.firstChild, 2);
+  var range =
+      goog.dom.Range.createFromNodes(def.firstChild, 1, jkl.firstChild, 2);
 
   range = goog.editor.range.narrow(range, $('parentNode'));
   goog.testing.dom.assertRangeEquals(
@@ -54,8 +54,8 @@ function testNoNarrow() {
 function testNarrowAtEndEdge() {
   var def = $('def');
   var jkl = $('jkl');
-  var range = goog.dom.Range.createFromNodes(
-      def.firstChild, 1, jkl.firstChild, 2);
+  var range =
+      goog.dom.Range.createFromNodes(def.firstChild, 1, jkl.firstChild, 2);
 
   range = goog.editor.range.narrow(range, def);
   goog.testing.dom.assertRangeEquals(
@@ -65,8 +65,8 @@ function testNarrowAtEndEdge() {
 function testNarrowAtStartEdge() {
   var def = $('def');
   var jkl = $('jkl');
-  var range = goog.dom.Range.createFromNodes(
-      def.firstChild, 1, jkl.firstChild, 2);
+  var range =
+      goog.dom.Range.createFromNodes(def.firstChild, 1, jkl.firstChild, 2);
 
   range = goog.editor.range.narrow(range, jkl);
 
@@ -77,8 +77,8 @@ function testNarrowAtStartEdge() {
 function testNarrowOutsideElement() {
   var def = $('def');
   var jkl = $('jkl');
-  var range = goog.dom.Range.createFromNodes(
-      def.firstChild, 1, jkl.firstChild, 2);
+  var range =
+      goog.dom.Range.createFromNodes(def.firstChild, 1, jkl.firstChild, 2);
 
   range = goog.editor.range.narrow(range, $('pqr'));
   assertNull(range);
@@ -143,16 +143,14 @@ function testMultipleChildrenExpand() {
   var range = goog.dom.Range.createFromNodes(textNode, 0, textNode, 3);
 
   range = goog.editor.range.expand(range);
-  goog.testing.dom.assertRangeEquals(
-      li.parentNode, 1, li.parentNode, 2, range);
+  goog.testing.dom.assertRangeEquals(li.parentNode, 1, li.parentNode, 2, range);
 
   // Make the same visible selection, only slightly different dom position.
   // Select starting from the text node, but ending in the li.
   range = goog.dom.Range.createFromNodes(textNode, 0, li, 1);
 
   range = goog.editor.range.expand(range);
-  goog.testing.dom.assertRangeEquals(
-      li.parentNode, 1, li.parentNode, 2, range);
+  goog.testing.dom.assertRangeEquals(li.parentNode, 1, li.parentNode, 2, range);
 }
 
 function testSimpleDifferentContainersExpand() {
@@ -163,21 +161,18 @@ function testSimpleDifferentContainersExpand() {
   var li = div.firstChild.childNodes[1];
   var boldNode = li.childNodes[0];
   var italicNode = li.childNodes[1];
-  var range = goog.dom.Range.createFromNodes(boldNode.firstChild, 0,
-      italicNode.firstChild, 6);
+  var range = goog.dom.Range.createFromNodes(
+      boldNode.firstChild, 0, italicNode.firstChild, 6);
 
   range = goog.editor.range.expand(range);
-  goog.testing.dom.assertRangeEquals(
-      li.parentNode, 1, li.parentNode, 2, range);
+  goog.testing.dom.assertRangeEquals(li.parentNode, 1, li.parentNode, 2, range);
 
   // Make the same visible selection, only slightly different dom position.
   // Select "bold" at the b node level and "italic" at the text node level.
-  range = goog.dom.Range.createFromNodes(boldNode, 0,
-      italicNode.firstChild, 6);
+  range = goog.dom.Range.createFromNodes(boldNode, 0, italicNode.firstChild, 6);
 
   range = goog.editor.range.expand(range);
-  goog.testing.dom.assertRangeEquals(
-      li.parentNode, 1, li.parentNode, 2, range);
+  goog.testing.dom.assertRangeEquals(li.parentNode, 1, li.parentNode, 2, range);
 }
 
 function testSimpleDifferentContainersSmallExpand() {
@@ -189,16 +184,15 @@ function testSimpleDifferentContainersSmallExpand() {
   var li = div.firstChild.childNodes[1];
   var boldNode = li.childNodes[0];
   var italicNode = li.childNodes[1];
-  var range = goog.dom.Range.createFromNodes(boldNode.firstChild, 0,
-      italicNode.firstChild, 6);
+  var range = goog.dom.Range.createFromNodes(
+      boldNode.firstChild, 0, italicNode.firstChild, 6);
 
   range = goog.editor.range.expand(range);
   goog.testing.dom.assertRangeEquals(li, 0, li, 2, range);
 
   // Same visible position, different dom position.
   // Select "bold" starting in text node, "italic" at i node.
-  range = goog.dom.Range.createFromNodes(boldNode.firstChild, 0,
-      italicNode, 1);
+  range = goog.dom.Range.createFromNodes(boldNode.firstChild, 0, italicNode, 1);
 
   range = goog.editor.range.expand(range);
   goog.testing.dom.assertRangeEquals(li, 0, li, 2, range);
@@ -211,8 +205,8 @@ function testEmbeddedDifferentContainersExpand() {
   var boldNode = div.firstChild.childNodes[0];
   var italicNode = boldNode.childNodes[0];
   var underNode = div.firstChild.childNodes[1];
-  var range = goog.dom.Range.createFromNodes(italicNode.firstChild, 0,
-      underNode.firstChild, 5);
+  var range = goog.dom.Range.createFromNodes(
+      italicNode.firstChild, 0, underNode.firstChild, 5);
 
   range = goog.editor.range.expand(range);
   goog.testing.dom.assertRangeEquals(div, 0, div, 1, range);
@@ -266,8 +260,8 @@ function testOjanCase() {
   goog.testing.dom.assertRangeEquals(iNode, 0, iNode, 1, range);
 
   // Same selection, at b node level.
-  range = goog.dom.Range.createFromNodes(iNode.firstChild, 0,
-      iNode.firstChild, 1);
+  range =
+      goog.dom.Range.createFromNodes(iNode.firstChild, 0, iNode.firstChild, 1);
   range = goog.editor.range.expand(range);
 
   goog.testing.dom.assertRangeEquals(iNode, 0, iNode, 1, range);
@@ -280,11 +274,11 @@ function testPlaceCursorNextToLeft() {
   var range = goog.editor.range.placeCursorNextTo(node, true);
 
   var expose = goog.testing.dom.exposeNode;
-  assertEquals('Selection should be to the left of the node ' +
-      expose(node) + ',' + expose(range.getStartNode().nextSibling),
+  assertEquals(
+      'Selection should be to the left of the node ' + expose(node) + ',' +
+          expose(range.getStartNode().nextSibling),
       node, range.getStartNode().nextSibling);
-  assertEquals('Selection should be collapsed',
-      true, range.isCollapsed());
+  assertEquals('Selection should be collapsed', true, range.isCollapsed());
 }
 
 
@@ -294,10 +288,10 @@ function testPlaceCursorNextToRight() {
   var node = $('bar');
   var range = goog.editor.range.placeCursorNextTo(node, false);
 
-  assertEquals('Selection should be to the right of the node',
-      node, range.getStartNode().previousSibling);
-  assertEquals('Selection should be collapsed',
-      true, range.isCollapsed());
+  assertEquals(
+      'Selection should be to the right of the node', node,
+      range.getStartNode().previousSibling);
+  assertEquals('Selection should be collapsed', true, range.isCollapsed());
 }
 
 function testPlaceCursorNextTo_rightOfLineBreak() {
@@ -343,10 +337,10 @@ function testPlaceCursorNextTo_rightOfImg() {
   var imgNode = children[1];
   var range = goog.editor.range.placeCursorNextTo(imgNode, false);
 
-  assertEquals('range node should be the right sibling of img tag',
-      children[2], range.getStartNode());
+  assertEquals(
+      'range node should be the right sibling of img tag', children[2],
+      range.getStartNode());
   assertEquals(0, range.getStartOffset());
-
 }
 
 function testPlaceCursorNextTo_rightOfImgAtEnd() {
@@ -358,11 +352,10 @@ function testPlaceCursorNextTo_rightOfImgAtEnd() {
   var imgNode = children[1];
   var range = goog.editor.range.placeCursorNextTo(imgNode, false);
 
-  assertEquals('range node should be the parent of img',
-      div, range.getStartNode());
-  assertEquals('offset should be right after the img tag',
-      2, range.getStartOffset());
-
+  assertEquals(
+      'range node should be the parent of img', div, range.getStartNode());
+  assertEquals(
+      'offset should be right after the img tag', 2, range.getStartOffset());
 }
 
 function testPlaceCursorNextTo_leftOfImg() {
@@ -374,10 +367,9 @@ function testPlaceCursorNextTo_leftOfImg() {
   var imgNode = children[0];
   var range = goog.editor.range.placeCursorNextTo(imgNode, true);
 
-  assertEquals('range node should be the parent of img',
-      div, range.getStartNode());
-  assertEquals('offset should point to the img tag',
-      0, range.getStartOffset());
+  assertEquals(
+      'range node should be the parent of img', div, range.getStartNode());
+  assertEquals('offset should point to the img tag', 0, range.getStartOffset());
 }
 
 function testPlaceCursorNextTo_rightOfFirstOfTwoImgTags() {
@@ -390,11 +382,12 @@ function testPlaceCursorNextTo_rightOfFirstOfTwoImgTags() {
   var imgNode = children[1];  // First of two IMG nodes
   var range = goog.editor.range.placeCursorNextTo(imgNode, false);
 
-  assertEquals('range node should be the parent of img instead of ' +
-      'node with innerHTML=' + range.getStartNode().innerHTML,
+  assertEquals(
+      'range node should be the parent of img instead of ' +
+          'node with innerHTML=' + range.getStartNode().innerHTML,
       div, range.getStartNode());
-  assertEquals('offset should be right after the img tag',
-      2, range.getStartOffset());
+  assertEquals(
+      'offset should be right after the img tag', 2, range.getStartOffset());
 }
 
 function testGetDeepEndPoint() {
@@ -402,20 +395,20 @@ function testGetDeepEndPoint() {
   var def = $('def');
   var jkl = $('jkl');
 
-  assertPointEquals(div.firstChild, 0,
-      goog.editor.range.getDeepEndPoint(
-          goog.dom.Range.createFromNodeContents(div), true));
-  assertPointEquals(div.lastChild, div.lastChild.length,
+  assertPointEquals(
+      div.firstChild, 0, goog.editor.range.getDeepEndPoint(
+                             goog.dom.Range.createFromNodeContents(div), true));
+  assertPointEquals(
+      div.lastChild, div.lastChild.length,
       goog.editor.range.getDeepEndPoint(
           goog.dom.Range.createFromNodeContents(div), false));
 
-  assertPointEquals(def.firstChild, 0,
-      goog.editor.range.getDeepEndPoint(
-          goog.dom.Range.createCaret(div, 1), true));
-  assertPointEquals(def.nextSibling, 0,
-      goog.editor.range.getDeepEndPoint(
-          goog.dom.Range.createCaret(div, 2), true));
-
+  assertPointEquals(
+      def.firstChild, 0, goog.editor.range.getDeepEndPoint(
+                             goog.dom.Range.createCaret(div, 1), true));
+  assertPointEquals(
+      def.nextSibling, 0, goog.editor.range.getDeepEndPoint(
+                              goog.dom.Range.createCaret(div, 2), true));
 }
 
 function testNormalizeOnNormalizedDom() {
@@ -515,7 +508,7 @@ function testNormalizeInFragmentedDomWithPreviousSiblings() {
   var range = goog.dom.Range.createFromNodes(ghiText, 1, mnoText, 2);
 
   // Fragment the DOM a bunch.
-  fragmentText($('def').previousSibling); // fragment abc
+  fragmentText($('def').previousSibling);  // fragment abc
   fragmentText(ghiText);
   fragmentText(mnoText);
 
@@ -535,7 +528,7 @@ function testRangeCreatedInFragmentedDomWithPreviousSiblings() {
   var mnoText = $('jkl').nextSibling;
 
   // Fragment the DOM a bunch.
-  fragmentText($('def').previousSibling); // fragment abc
+  fragmentText($('def').previousSibling);  // fragment abc
   fragmentText(ghiText);
   fragmentText(mnoText);
 
@@ -560,8 +553,8 @@ function testSavedCaretRange() {
   var def = $('def-1');
   var jkl = $('jkl-1');
 
-  var range = goog.dom.Range.createFromNodes(
-      def.firstChild, 1, jkl.firstChild, 2);
+  var range =
+      goog.dom.Range.createFromNodes(def.firstChild, 1, jkl.firstChild, 2);
   range.select();
 
   var saved = goog.editor.range.saveUsingNormalizedCarets(range);
@@ -597,16 +590,18 @@ function testRangePreservingNormalize() {
   range = goog.editor.range.rangePreservingNormalize(parent, range);
 
   // Check that everything was normalized ok.
-  assertEquals('def should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'def should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, def.childNodes.length);
-  assertEquals('jkl should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'jkl should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, jkl.childNodes.length);
-  goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
-                                     range);
+  goog.testing.dom.assertRangeEquals(
+      def.firstChild, 1, jkl.firstChild, 2, range);
 }
 
 function testRangePreservingNormalizeWhereEndNodePreviousSiblingIsSplit() {
@@ -648,24 +643,26 @@ function testSelectionPreservingNormalize1() {
   goog.dom.Range.createFromNodes(def, 3, jkl, 4).select();
   assertFalse(goog.dom.Range.createFromWindow(window).isReversed());
 
-  var oldRangeDescription = goog.testing.dom.exposeRange(
-      goog.dom.Range.createFromWindow(window));
+  var oldRangeDescription =
+      goog.testing.dom.exposeRange(goog.dom.Range.createFromWindow(window));
   goog.editor.range.selectionPreservingNormalize(parent);
 
   // Check that everything was normalized ok.
   var range = goog.dom.Range.createFromWindow(window);
   assertFalse(range.isReversed());
 
-  assertEquals('def should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'def should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, def.childNodes.length);
-  assertEquals('jkl should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'jkl should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, jkl.childNodes.length);
-  goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
-      range);
+  goog.testing.dom.assertRangeEquals(
+      def.firstChild, 1, jkl.firstChild, 2, range);
 }
 
 
@@ -702,24 +699,26 @@ function testSelectionPreservingNormalize3() {
   goog.dom.Range.createFromNodes(jkl, 4, def, 3).select();
   assertTrue(goog.dom.Range.createFromWindow(window).isReversed());
 
-  var oldRangeDescription = goog.testing.dom.exposeRange(
-      goog.dom.Range.createFromWindow(window));
+  var oldRangeDescription =
+      goog.testing.dom.exposeRange(goog.dom.Range.createFromWindow(window));
   goog.editor.range.selectionPreservingNormalize(parent);
 
   // Check that everything was normalized ok.
   var range = goog.dom.Range.createFromWindow(window);
   assertTrue(range.isReversed());
 
-  assertEquals('def should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'def should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, def.childNodes.length);
-  assertEquals('jkl should have 1 child; range is ' +
-      goog.testing.dom.exposeRange(range) +
-      ', range was ' + oldRangeDescription,
+  assertEquals(
+      'jkl should have 1 child; range is ' +
+          goog.testing.dom.exposeRange(range) + ', range was ' +
+          oldRangeDescription,
       1, jkl.childNodes.length);
-  goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
-      range);
+  goog.testing.dom.assertRangeEquals(
+      def.firstChild, 1, jkl.firstChild, 2, range);
 }
 
 function testSelectionPreservingNormalizeAfterPlaceCursorNextTo() {
@@ -792,11 +791,11 @@ function testSelectNodeStartSimple() {
   // normalized to the visible position of P:0.
   if (goog.userAgent.GECKO || goog.userAgent.IE || goog.userAgent.EDGE ||
       (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('530'))) {
-    goog.testing.dom.assertRangeEquals(div.firstChild.firstChild, 0,
-        div.firstChild.firstChild, 0, range);
+    goog.testing.dom.assertRangeEquals(
+        div.firstChild.firstChild, 0, div.firstChild.firstChild, 0, range);
   } else {
-    goog.testing.dom.assertRangeEquals(div.firstChild, 0,
-        div.firstChild, 0, range);
+    goog.testing.dom.assertRangeEquals(
+        div.firstChild, 0, div.firstChild, 0, range);
   }
 }
 
@@ -807,8 +806,8 @@ function testSelectNodeStartBr() {
   goog.editor.range.selectNodeStart(div);
   var range = goog.dom.Range.createFromWindow(window);
   // We have to skip the BR since Gecko can't render a cursor at a BR.
-  goog.testing.dom.assertRangeEquals(div.firstChild, 0,
-      div.firstChild, 0, range);
+  goog.testing.dom.assertRangeEquals(
+      div.firstChild, 0, div.firstChild, 0, range);
 }
 
 function testIsEditable() {
@@ -821,26 +820,30 @@ function testIsEditable() {
   }
 
   var editableContainer = goog.dom.Range.createFromNodes(
-      containerElement.parentNode, containerIndex,
-      containerElement.parentNode, containerIndex + 1);
-  assertFalse('Range containing container element not considered editable',
+      containerElement.parentNode, containerIndex, containerElement.parentNode,
+      containerIndex + 1);
+  assertFalse(
+      'Range containing container element not considered editable',
       goog.editor.range.isEditable(editableContainer));
 
   var allEditableChildren = goog.dom.Range.createFromNodes(
       containerElement, 0, containerElement,
       containerElement.childNodes.length);
-  assertTrue('Range of all of container element children considered editable',
+  assertTrue(
+      'Range of all of container element children considered editable',
       goog.editor.range.isEditable(allEditableChildren));
 
-  var someEditableChildren = goog.dom.Range.createFromNodes(
-      containerElement, 2, containerElement, 6);
-  assertTrue('Range of some container element children considered editable',
+  var someEditableChildren =
+      goog.dom.Range.createFromNodes(containerElement, 2, containerElement, 6);
+  assertTrue(
+      'Range of some container element children considered editable',
       goog.editor.range.isEditable(someEditableChildren));
 
 
   var mixedEditableNonEditable = goog.dom.Range.createFromNodes(
       containerElement.previousSibling, 0, containerElement, 2);
-  assertFalse('Range overlapping some content not considered editable',
+  assertFalse(
+      'Range overlapping some content not considered editable',
       goog.editor.range.isEditable(mixedEditableNonEditable));
 }
 
@@ -866,8 +869,8 @@ function testIntersectsTag() {
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.U));
 
   // Select "ld x y".
-  range = goog.dom.Range.createFromNodes(root.firstChild.firstChild, 2,
-      root.childNodes[2], 1);
+  range = goog.dom.Range.createFromNodes(
+      root.firstChild.firstChild, 2, root.childNodes[2], 1);
   assertTrue(goog.editor.range.intersectsTag(range, goog.dom.TagName.DIV));
   assertTrue(goog.editor.range.intersectsTag(range, goog.dom.TagName.B));
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.I));
@@ -875,8 +878,8 @@ function testIntersectsTag() {
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.U));
 
   // Select ol.
-  range = goog.dom.Range.createFromNodes(root.firstChild.firstChild, 1,
-      root.firstChild.firstChild, 3);
+  range = goog.dom.Range.createFromNodes(
+      root.firstChild.firstChild, 1, root.firstChild.firstChild, 3);
   assertTrue(goog.editor.range.intersectsTag(range, goog.dom.TagName.DIV));
   assertTrue(goog.editor.range.intersectsTag(range, goog.dom.TagName.B));
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.I));
@@ -891,11 +894,10 @@ function testNormalizeNode() {
   assertEquals(1, div.childNodes.length);
   assertEquals('abc', div.firstChild.nodeValue);
 
-  div = goog.dom.createDom(goog.dom.TagName.DIV, null,
+  div = goog.dom.createDom(
+      goog.dom.TagName.DIV, null,
       goog.dom.createDom(goog.dom.TagName.SPAN, null, '1', '2'),
-      goog.dom.createTextNode(''),
-      goog.dom.createDom(goog.dom.TagName.BR),
-      'b',
+      goog.dom.createTextNode(''), goog.dom.createDom(goog.dom.TagName.BR), 'b',
       'c');
   assertEquals(5, div.childNodes.length);
   assertEquals(2, div.firstChild.childNodes.length);
@@ -922,15 +924,15 @@ function testDeepestPoint() {
   var deepestPoint = goog.editor.range.Point.createDeepestPoint;
 
   var defStartLeft = deepestPoint(parent, 1, true);
-  assertPointEquals(def.previousSibling, def.previousSibling.nodeValue.length,
-      defStartLeft);
+  assertPointEquals(
+      def.previousSibling, def.previousSibling.nodeValue.length, defStartLeft);
 
   var defStartRight = deepestPoint(parent, 1, false);
   assertPointEquals(def.firstChild, 0, defStartRight);
 
   var defEndLeft = deepestPoint(parent, 2, true);
-  assertPointEquals(def.firstChild, def.firstChild.nodeValue.length,
-      defEndLeft);
+  assertPointEquals(
+      def.firstChild, def.firstChild.nodeValue.length, defEndLeft);
 
   var defEndRight = deepestPoint(parent, 2, false);
   assertPointEquals(def.nextSibling, 0, defEndRight);

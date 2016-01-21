@@ -52,9 +52,8 @@ function testUnwrap() {
   evil[privateFieldName] = 'width: expression(evil);';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.SafeStyle.unwrap(evil);
-  });
+  var exception =
+      assertThrows(function() { goog.html.SafeStyle.unwrap(evil); });
   assertContains('expected object of type SafeStyle', exception.message);
 }
 
@@ -95,12 +94,10 @@ function testEmpty() {
 
 
 function testCreate() {
-  var style = goog.html.SafeStyle.create({
-    'background': goog.string.Const.from('url(i.png)'),
-    'margin': '0'
-  });
-  assertEquals('background:url(i.png);margin:0;',
-      goog.html.SafeStyle.unwrap(style));
+  var style = goog.html.SafeStyle.create(
+      {'background': goog.string.Const.from('url(i.png)'), 'margin': '0'});
+  assertEquals(
+      'background:url(i.png);margin:0;', goog.html.SafeStyle.unwrap(style));
 }
 
 
@@ -133,15 +130,13 @@ function testCreate_allowsRgba() {
   var style = goog.html.SafeStyle.create({'color': 'rgba(10,20,30,0.1)'});
   assertEquals('color:rgba(10,20,30,0.1);', goog.html.SafeStyle.unwrap(style));
   style = goog.html.SafeStyle.create({'color': 'rgba(10%, 20%, 30%, .5)'});
-  assertEquals('color:rgba(10%, 20%, 30%, .5);',
-      goog.html.SafeStyle.unwrap(style));
+  assertEquals(
+      'color:rgba(10%, 20%, 30%, .5);', goog.html.SafeStyle.unwrap(style));
 }
 
 
 function testCreate_throwsOnForbiddenCharacters() {
-  assertThrows(function() {
-    goog.html.SafeStyle.create({'<': '0'});
-  });
+  assertThrows(function() { goog.html.SafeStyle.create({'<': '0'}); });
   assertThrows(function() {
     goog.html.SafeStyle.create({'color': goog.string.Const.from('<')});
   });
@@ -150,32 +145,20 @@ function testCreate_throwsOnForbiddenCharacters() {
 
 function testCreate_values() {
   var valids = [
-    '0',
-    '0 0',
-    '1px',
-    '100%',
-    '2.3px',
-    '.1em',
-    'red',
-    '#f00',
-    'red !important',
-    '"Times New Roman"',
-    "'Times New Roman'",
-    '"Bold \'nuff"',
+    '0', '0 0', '1px', '100%', '2.3px', '.1em', 'red', '#f00', 'red !important',
+    '"Times New Roman"', "'Times New Roman'", '"Bold \'nuff"',
     '"O\'Connor\'s Revenge"'
   ];
   for (var i = 0; i < valids.length; i++) {
     var value = valids[i];
-    assertEquals('background:' + value + ';', goog.html.SafeStyle.unwrap(
-        goog.html.SafeStyle.create({'background': value})));
+    assertEquals(
+        'background:' + value + ';',
+        goog.html.SafeStyle.unwrap(
+            goog.html.SafeStyle.create({'background': value})));
   }
 
   var invalids = [
-    '',
-    'expression(alert(1))',
-    'url(i.png)',
-    '"',
-    '"\'"\'',
+    '', 'expression(alert(1))', 'url(i.png)', '"', '"\'"\'',
     goog.string.Const.from('red;')
   ];
   for (var i = 0; i < invalids.length; i++) {
@@ -188,8 +171,8 @@ function testCreate_values() {
 
 
 function testConcat() {
-  var width = goog.html.SafeStyle.fromConstant(
-      goog.string.Const.from('width: 1em;'));
+  var width =
+      goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: 1em;'));
   var margin = goog.html.SafeStyle.create({'margin': '0'});
   var padding = goog.html.SafeStyle.create({'padding': '0'});
 
@@ -200,8 +183,8 @@ function testConcat() {
   assertEquals('width: 1em;margin:0;', goog.html.SafeStyle.unwrap(style));
 
   style = goog.html.SafeStyle.concat([width], [padding, margin]);
-  assertEquals('width: 1em;padding:0;margin:0;',
-      goog.html.SafeStyle.unwrap(style));
+  assertEquals(
+      'width: 1em;padding:0;margin:0;', goog.html.SafeStyle.unwrap(style));
 }
 
 

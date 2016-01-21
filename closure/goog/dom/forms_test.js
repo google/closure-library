@@ -24,7 +24,7 @@ function testGetFormDataString() {
   var result = goog.dom.forms.getFormDataString(el);
   assertEquals(
       'in1=foo&in2=bar&in2=baaz&in3=&pass=bar&textarea=foo%20bar%20baz&' +
-      'select1=1&select2=a&select2=c&select3=&checkbox1=on&radio=X&radio2=Y',
+          'select1=1&select2=a&select2=c&select3=&checkbox1=on&radio=X&radio2=Y',
       result);
 }
 
@@ -167,10 +167,8 @@ function testHasValueByNameSelectMultipleNotSelected() {
 }
 
 // TODO(user): make this a meaningful selenium test
-function testSetDisabledFalse() {
-}
-function testSetDisabledTrue() {
-}
+function testSetDisabledFalse() {}
+function testSetDisabledTrue() {}
 
 // TODO(user): make this a meaningful selenium test
 function testFocusAndSelect() {
@@ -207,11 +205,7 @@ function testSetValueInput() {
   goog.dom.forms.setValue(el, {});
   assertEquals({}.toString(), goog.dom.forms.getValue(el));
 
-  goog.dom.forms.setValue(el, {
-    toString: function() {
-      return 'test';
-    }
-  });
+  goog.dom.forms.setValue(el, {toString: function() { return 'test'; }});
   assertEquals('test', goog.dom.forms.getValue(el));
 
   // unset

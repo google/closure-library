@@ -27,12 +27,15 @@ function testNoIframeAndSameElement() {
   var field = new goog.editor.ContentEditableField('testField');
   field.makeEditable();
   assertFalse(field.usesIframe());
-  assertEquals('Original element should equal field element',
-      field.getOriginalElement(), field.getElement());
-  assertEquals('Sanity check on original element',
-      'testField', field.getOriginalElement().id);
-  assertEquals('Editable document should be same as main document',
-      document, field.getEditableDomHelper().getDocument());
+  assertEquals(
+      'Original element should equal field element', field.getOriginalElement(),
+      field.getElement());
+  assertEquals(
+      'Sanity check on original element', 'testField',
+      field.getOriginalElement().id);
+  assertEquals(
+      'Editable document should be same as main document', document,
+      field.getEditableDomHelper().getDocument());
   field.dispose();
 }
 

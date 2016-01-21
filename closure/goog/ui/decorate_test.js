@@ -21,8 +21,7 @@ goog.require('goog.ui.registry');
 // Fake component and renderer implementations, for testing only.
 
 // UnknownComponent has no default renderer or decorator registered.
-function UnknownComponent() {
-}
+function UnknownComponent() {}
 
 // FakeComponentX's default renderer is FakeRenderer.  It also has a
 // decorator.
@@ -44,17 +43,14 @@ goog.inherits(FakeComponentY, FakeComponentX);
 
 // FakeComponentZ is just another component.  Its default renderer is
 // FakeSingletonRenderer, but it has no decorator registered.
-function FakeComponentZ() {
-}
+function FakeComponentZ() {}
 
 // FakeRenderer is a stateful renderer.
-function FakeRenderer() {
-}
+function FakeRenderer() {}
 
 // FakeSingletonRenderer is a stateless renderer that can be used as a
 // singleton.
-function FakeSingletonRenderer() {
-}
+function FakeSingletonRenderer() {}
 
 FakeSingletonRenderer.instance_ = new FakeSingletonRenderer();
 
@@ -64,17 +60,12 @@ FakeSingletonRenderer.getInstance = function() {
 
 function setUp() {
   goog.ui.registry.setDefaultRenderer(FakeComponentX, FakeRenderer);
-  goog.ui.registry.setDefaultRenderer(FakeComponentZ,
-      FakeSingletonRenderer);
+  goog.ui.registry.setDefaultRenderer(FakeComponentZ, FakeSingletonRenderer);
 
-  goog.ui.registry.setDecoratorByClassName('fake-component-x',
-      function() {
-        return new FakeComponentX();
-      });
-  goog.ui.registry.setDecoratorByClassName('fake-component-y',
-      function() {
-        return new FakeComponentY();
-      });
+  goog.ui.registry.setDecoratorByClassName(
+      'fake-component-x', function() { return new FakeComponentX(); });
+  goog.ui.registry.setDecoratorByClassName(
+      'fake-component-y', function() { return new FakeComponentY(); });
 }
 
 function tearDown() {
@@ -83,16 +74,22 @@ function tearDown() {
 
 function testDecorate() {
   var dx = goog.ui.decorate(document.getElementById('x'));
-  assertTrue('Decorator for element with fake-component-x class must be ' +
-      'a FakeComponentX', dx instanceof FakeComponentX);
-  assertEquals('Element x must have been decorated',
-      document.getElementById('x'), dx.element);
+  assertTrue(
+      'Decorator for element with fake-component-x class must be ' +
+          'a FakeComponentX',
+      dx instanceof FakeComponentX);
+  assertEquals(
+      'Element x must have been decorated', document.getElementById('x'),
+      dx.element);
 
   var dy = goog.ui.decorate(document.getElementById('y'));
-  assertTrue('Decorator for element with fake-component-y class must be ' +
-      'a FakeComponentY', dy instanceof FakeComponentY);
-  assertEquals('Element y must have been decorated',
-      document.getElementById('y'), dy.element);
+  assertTrue(
+      'Decorator for element with fake-component-y class must be ' +
+          'a FakeComponentY',
+      dy instanceof FakeComponentY);
+  assertEquals(
+      'Element y must have been decorated', document.getElementById('y'),
+      dy.element);
 
   var dz = goog.ui.decorate(document.getElementById('z'));
   assertNull('Decorator for element with unknown class must be null', dz);

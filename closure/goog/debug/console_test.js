@@ -34,23 +34,24 @@ function setUp() {
   debugConsole = new goog.debug.Console();
 
   // Set up a recorder for mockConsole.log
-  mockConsole = { log: goog.testing.recordFunction() };
+  mockConsole = {log: goog.testing.recordFunction()};
   goog.debug.Console.console_ = mockConsole;
 
   // Test logger 1.
   loggerName1 = 'this.is.a.logger';
-  logRecord1 = new goog.debug.LogRecord(goog.debug.Logger.Level.INFO,
-      'this is a statement', loggerName1);
+  logRecord1 = new goog.debug.LogRecord(
+      goog.debug.Logger.Level.INFO, 'this is a statement', loggerName1);
 
   // Test logger 2.
   loggerName2 = 'name.of.logger';
-  logRecord2 = new goog.debug.LogRecord(goog.debug.Logger.Level.WARNING,
-      'hey, this is a warning', loggerName2);
+  logRecord2 = new goog.debug.LogRecord(
+      goog.debug.Logger.Level.WARNING, 'hey, this is a warning', loggerName2);
 
   // Test logger 3.
   loggerName3 = 'third.logger';
-  logRecord3 = new goog.debug.LogRecord(goog.debug.Logger.Level.SEVERE,
-      'seriously, this statement is serious', loggerName3);
+  logRecord3 = new goog.debug.LogRecord(
+      goog.debug.Logger.Level.SEVERE, 'seriously, this statement is serious',
+      loggerName3);
 }
 
 function testLoggingWithSimpleConsole() {

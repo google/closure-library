@@ -557,13 +557,8 @@ goog.object.transpose = function(obj) {
  * @private
  */
 goog.object.PROTOTYPE_FIELDS_ = [
-  'constructor',
-  'hasOwnProperty',
-  'isPrototypeOf',
-  'propertyIsEnumerable',
-  'toLocaleString',
-  'toString',
-  'valueOf'
+  'constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable',
+  'toLocaleString', 'toString', 'valueOf'
 ];
 
 

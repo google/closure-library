@@ -64,12 +64,12 @@ function testAvailability() {
 
 function testEncoding() {
   function assertEncodingPair(cleartext, encoded) {
-    assertEquals(encoded,
-                 goog.storage.mechanism.IEUserData.encodeKey_(cleartext));
-    assertEquals(cleartext,
-                 goog.storage.mechanism.IEUserData.decodeKey_(encoded));
+    assertEquals(
+        encoded, goog.storage.mechanism.IEUserData.encodeKey_(cleartext));
+    assertEquals(
+        cleartext, goog.storage.mechanism.IEUserData.decodeKey_(encoded));
   }
   assertEncodingPair('simple', '_simple');
-  assertEncodingPair('aa.bb%cc!\0$\u4e00.',
-                     '_aa.2Ebb.25cc.21.00.24.E4.B8.80.2E');
+  assertEncodingPair(
+      'aa.bb%cc!\0$\u4e00.', '_aa.2Ebb.25cc.21.00.24.E4.B8.80.2E');
 }

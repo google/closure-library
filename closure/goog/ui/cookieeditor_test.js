@@ -53,7 +53,8 @@ function newCookieEditor(opt_cookieValue) {
   var editor = new goog.ui.CookieEditor();
   editor.selectCookie(COOKIE_KEY);
   editor.render(goog.dom.getElement('test_container'));
-  assertEquals('wrong text area value', opt_cookieValue || '',
+  assertEquals(
+      'wrong text area value', opt_cookieValue || '',
       editor.textAreaElem_.value || '');
 
   return editor;
@@ -67,8 +68,7 @@ function testRender() {
   var elem = editor.getElement();
   assertNotNullNorUndefined('missing element', elem);
   assertNotNullNorUndefined('missing clear button', editor.clearButtonElem_);
-  assertNotNullNorUndefined('missing update button',
-      editor.updateButtonElem_);
+  assertNotNullNorUndefined('missing update button', editor.updateButtonElem_);
   assertNotNullNorUndefined('missing text area', editor.textAreaElem_);
 }
 
@@ -79,17 +79,19 @@ function testEditCookie() {
   // Invalid value.
   var newValue = 'my bad value;';
   editor.textAreaElem_.value = newValue;
-  goog.testing.events.fireBrowserEvent(new goog.events.Event(
-      goog.events.EventType.CLICK, editor.updateButtonElem_));
+  goog.testing.events.fireBrowserEvent(
+      new goog.events.Event(
+          goog.events.EventType.CLICK, editor.updateButtonElem_));
   assertTrue('unexpected cookie value', !goog.net.cookies.get(COOKIE_KEY));
 
   // Valid value.
   newValue = 'my fabulous value';
   editor.textAreaElem_.value = newValue;
-  goog.testing.events.fireBrowserEvent(new goog.events.Event(
-      goog.events.EventType.CLICK, editor.updateButtonElem_));
-  assertEquals('wrong cookie value', newValue,
-      goog.net.cookies.get(COOKIE_KEY));
+  goog.testing.events.fireBrowserEvent(
+      new goog.events.Event(
+          goog.events.EventType.CLICK, editor.updateButtonElem_));
+  assertEquals(
+      'wrong cookie value', newValue, goog.net.cookies.get(COOKIE_KEY));
 }
 
 function testClearCookie() {
@@ -98,7 +100,8 @@ function testClearCookie() {
   var editor = newCookieEditor(value);
 
   // Clear value.
-  goog.testing.events.fireBrowserEvent(new goog.events.Event(
-      goog.events.EventType.CLICK, editor.clearButtonElem_));
+  goog.testing.events.fireBrowserEvent(
+      new goog.events.Event(
+          goog.events.EventType.CLICK, editor.clearButtonElem_));
   assertTrue('unexpected cookie value', !goog.net.cookies.get(COOKIE_KEY));
 }

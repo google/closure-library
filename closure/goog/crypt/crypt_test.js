@@ -19,13 +19,8 @@ goog.require('goog.crypt');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 
-var UTF8_RANGES_BYTE_ARRAY = [
-  0x00,
-  0x7F,
-  0xC2, 0x80,
-  0xDF, 0xBF,
-  0xE0, 0xA0, 0x80,
-  0xEF, 0xBF, 0xBF];
+var UTF8_RANGES_BYTE_ARRAY =
+    [0x00, 0x7F, 0xC2, 0x80, 0xDF, 0xBF, 0xE0, 0xA0, 0x80, 0xEF, 0xBF, 0xBF];
 
 var UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY = [
   0xF0, 0x90, 0x80, 0x80,  // \uD800\uDC00
@@ -42,38 +37,40 @@ var UTF8_SURROGATE_PAIR_RANGES_STRING =
 function testStringToUtf8ByteArray() {
   // Known encodings taken from Java's String.getBytes("UTF8")
 
-  assertArrayEquals('ASCII',
-      [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100],
+  assertArrayEquals(
+      'ASCII', [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100],
       goog.crypt.stringToUtf8ByteArray('Hello, world'));
 
-  assertArrayEquals('Latin',
-      [83, 99, 104, 195, 182, 110],
+  assertArrayEquals(
+      'Latin', [83, 99, 104, 195, 182, 110],
       goog.crypt.stringToUtf8ByteArray('Sch\u00f6n'));
 
-  assertArrayEquals('limits of the first 3 UTF-8 character ranges',
-      UTF8_RANGES_BYTE_ARRAY,
+  assertArrayEquals(
+      'limits of the first 3 UTF-8 character ranges', UTF8_RANGES_BYTE_ARRAY,
       goog.crypt.stringToUtf8ByteArray(UTF8_RANGES_STRING));
 
-  assertArrayEquals('Surrogate Pair',
-      UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY,
+  assertArrayEquals(
+      'Surrogate Pair', UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY,
       goog.crypt.stringToUtf8ByteArray(UTF8_SURROGATE_PAIR_RANGES_STRING));
 }
 
 function testUtf8ByteArrayToString() {
   // Known encodings taken from Java's String.getBytes("UTF8")
 
-  assertEquals('ASCII', 'Hello, world', goog.crypt.utf8ByteArrayToString(
-      [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]));
+  assertEquals('ASCII', 'Hello, world', goog.crypt.utf8ByteArrayToString([
+    72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100
+  ]));
 
-  assertEquals('Latin', 'Sch\u00f6n', goog.crypt.utf8ByteArrayToString(
-      [83, 99, 104, 195, 182, 110]));
+  assertEquals(
+      'Latin', 'Sch\u00f6n',
+      goog.crypt.utf8ByteArrayToString([83, 99, 104, 195, 182, 110]));
 
-  assertEquals('limits of the first 3 UTF-8 character ranges',
-      UTF8_RANGES_STRING,
+  assertEquals(
+      'limits of the first 3 UTF-8 character ranges', UTF8_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(UTF8_RANGES_BYTE_ARRAY));
 
-  assertEquals('Surrogate Pair',
-      UTF8_SURROGATE_PAIR_RANGES_STRING,
+  assertEquals(
+      'Surrogate Pair', UTF8_SURROGATE_PAIR_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY));
 }
 
@@ -88,16 +85,16 @@ function testUint8ArrayToString() {
     return;
   }
 
-  var arr = new Uint8Array(
-      [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]);
+  var arr =
+      new Uint8Array([72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]);
   assertEquals('ASCII', 'Hello, world', goog.crypt.utf8ByteArrayToString(arr));
 
   arr = new Uint8Array([83, 99, 104, 195, 182, 110]);
   assertEquals('Latin', 'Sch\u00f6n', goog.crypt.utf8ByteArrayToString(arr));
 
   arr = new Uint8Array(UTF8_RANGES_BYTE_ARRAY);
-  assertEquals('limits of the first 3 UTF-8 character ranges',
-      UTF8_RANGES_STRING,
+  assertEquals(
+      'limits of the first 3 UTF-8 character ranges', UTF8_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(arr));
 }
 
@@ -121,13 +118,11 @@ function testHexToByteArray() {
 function testByteArrayToHex() {
   assertEquals(
       // Java magic number
-      'cafedead',
-      goog.crypt.byteArrayToHex([202, 254, 222, 173]));
+      'cafedead', goog.crypt.byteArrayToHex([202, 254, 222, 173]));
 
   assertEquals(
       // IBM magic number
-      'deadbeef',
-      goog.crypt.byteArrayToHex([222, 173, 190, 239]));
+      'deadbeef', goog.crypt.byteArrayToHex([222, 173, 190, 239]));
 }
 
 
@@ -164,10 +159,9 @@ function testXorUint8Array() {
   }
 
   assertElementsEquals(
-      [20, 83, 96, 66],
-      goog.crypt.xorByteArray(
-          new Uint8Array([202, 254, 222, 173]),
-          new Uint8Array([222, 173, 190, 239])));
+      [20, 83, 96, 66], goog.crypt.xorByteArray(
+                            new Uint8Array([202, 254, 222, 173]),
+                            new Uint8Array([222, 173, 190, 239])));
 }
 
 

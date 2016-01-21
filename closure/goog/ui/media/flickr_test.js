@@ -33,8 +33,8 @@ var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
   flickr = new goog.ui.media.FlickrSet();
-  var set = new goog.ui.media.FlickrSetModel(FLICKR_USER, FLICKR_SET,
-      'caption');
+  var set =
+      new goog.ui.media.FlickrSetModel(FLICKR_USER, FLICKR_SET, 'caption');
   control = new goog.ui.media.Media(set, flickr);
 }
 
@@ -53,23 +53,24 @@ function testBasicRendering() {
 function testParsingUrl() {
   assertExtractsCorrectly(FLICKR_USER, FLICKR_SET, FLICKRSET_URL);
   // user id with @ sign
-  assertExtractsCorrectly('30441750@N06', '7215760789302468',
+  assertExtractsCorrectly(
+      '30441750@N06', '7215760789302468',
       'http://flickr.com/photos/30441750@N06/sets/7215760789302468/');
   // user id with - sign
-  assertExtractsCorrectly('30441750-N06', '7215760789302468',
+  assertExtractsCorrectly(
+      '30441750-N06', '7215760789302468',
       'http://flickr.com/photos/30441750-N06/sets/7215760789302468/');
 
   var invalidUrl = 'http://invalidUrl/filename.doc';
-  var e = assertThrows('', function() {
-    goog.ui.media.FlickrSetModel.newInstance(invalidUrl);
-  });
+  var e = assertThrows(
+      '', function() { goog.ui.media.FlickrSetModel.newInstance(invalidUrl); });
   assertEquals('failed to parse flickr url: ' + invalidUrl, e.message);
 }
 
 function testBuildingUrl() {
-  assertEquals(FLICKRSET_URL,
-      goog.ui.media.FlickrSetModel.buildUrl(
-          FLICKR_USER, FLICKR_SET, FLICKRSET_URL));
+  assertEquals(
+      FLICKRSET_URL, goog.ui.media.FlickrSetModel.buildUrl(
+                         FLICKR_USER, FLICKR_SET, FLICKRSET_URL));
 }
 
 function testCreatingModel() {
@@ -83,15 +84,14 @@ function testCreatingModel() {
 function testSettingWhichFlashUrlToUse() {
   goog.ui.media.FlickrSet.setFlashUrl(
       goog.html.testing.newTrustedResourceUrlForTest('http://foo'));
-  assertEquals('http://foo',
-      goog.ui.media.FlickrSet.flashUrl_.getTypedStringValue());
+  assertEquals(
+      'http://foo', goog.ui.media.FlickrSet.flashUrl_.getTypedStringValue());
 }
 
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.FlickrSet.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.FlickrSet.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 

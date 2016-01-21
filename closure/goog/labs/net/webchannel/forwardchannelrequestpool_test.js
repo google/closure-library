@@ -40,8 +40,7 @@ function shouldRunTests() {
 }
 
 
-function setUp() {
-}
+function setUp() {}
 
 
 function tearDown() {
@@ -50,11 +49,9 @@ function tearDown() {
 
 
 function stubSpdyCheck(spdyEnabled) {
-  propertyReplacer.set(goog.labs.net.webChannel.ForwardChannelRequestPool,
-      'isSpdyEnabled_',
-      function() {
-        return spdyEnabled;
-      });
+  propertyReplacer.set(
+      goog.labs.net.webChannel.ForwardChannelRequestPool, 'isSpdyEnabled_',
+      function() { return spdyEnabled; });
 }
 
 
@@ -107,7 +104,7 @@ function testApplyClientProtocol() {
   assertEquals(1, pool.getMaxSize());
   pool.applyClientProtocol('spdy/3');
   assertTrue(pool.getMaxSize() > 1);
-  pool.applyClientProtocol('foo-bar');   // no effect
+  pool.applyClientProtocol('foo-bar');  // no effect
   assertTrue(pool.getMaxSize() > 1);
 
   pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();

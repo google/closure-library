@@ -215,10 +215,9 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
           goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
-    goog.asserts.fail('expected object of type SafeUrl, got \'' +
-                      safeUrl + '\'');
+    goog.asserts.fail(
+        'expected object of type SafeUrl, got \'' + safeUrl + '\'');
     return 'type_error:SafeUrl';
-
   }
 };
 
@@ -264,7 +263,8 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ =
  */
 goog.html.SafeUrl.fromBlob = function(blob) {
   var url = goog.html.SAFE_MIME_TYPE_PATTERN_.test(blob.type) ?
-      goog.fs.url.createObjectUrl(blob) : goog.html.SafeUrl.INNOCUOUS_STRING;
+      goog.fs.url.createObjectUrl(blob) :
+      goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
@@ -347,8 +347,7 @@ goog.html.SAFE_URL_PATTERN_ =
 goog.html.SafeUrl.sanitize = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
-  }
-  else if (url.implementsGoogStringTypedString) {
+  } else if (url.implementsGoogStringTypedString) {
     url = url.getTypedStringValue();
   } else {
     url = String(url);
@@ -388,5 +387,6 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
  * A SafeUrl corresponding to the special about:blank url.
  * @const {!goog.html.SafeUrl}
  */
-goog.html.SafeUrl.ABOUT_BLANK = goog.html.SafeUrl.
-    createSafeUrlSecurityPrivateDoNotAccessOrElse('about:blank');
+goog.html.SafeUrl.ABOUT_BLANK =
+    goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+        'about:blank');

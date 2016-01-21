@@ -181,10 +181,10 @@ function testSome() {
   }, someObj);
 
   assertTrue(result);
-  assertFalse(m.some(function(val) {return val > 3}));
+  assertFalse(m.some(function(val) { return val > 3 }));
 
-  assertTrue(m.some(function(val, key) {return key == 'c';}));
-  assertFalse(m.some(function(val, key) {return key == 'e';}));
+  assertTrue(m.some(function(val, key) { return key == 'c'; }));
+  assertFalse(m.some(function(val, key) { return key == 'e'; }));
 }
 
 function testEvery() {
@@ -198,10 +198,10 @@ function testEvery() {
   }, someObj);
 
   assertTrue(result);
-  assertFalse(m.every(function(val) {return val < 2}));
+  assertFalse(m.every(function(val) { return val < 2 }));
 
-  assertTrue(m.every(function(val, key) {return key.length == 1;}));
-  assertFalse(m.every(function(val, key) {return key == 'b';}));
+  assertTrue(m.every(function(val, key) { return key.length == 1; }));
+  assertFalse(m.every(function(val, key) { return key == 'b'; }));
 }
 
 function testPeek() {
@@ -263,52 +263,63 @@ function testRemoveNodeCalls() {
   m.removeNode = goog.testing.recordFunction(m.removeNode);
 
   m.set('1', 1);
-  assertEquals('removeNode not called after adding an element', 0,
+  assertEquals(
+      'removeNode not called after adding an element', 0,
       m.removeNode.getCallCount());
   m.set('1', 2);
-  assertEquals('removeNode not called after updating an element', 0,
+  assertEquals(
+      'removeNode not called after updating an element', 0,
       m.removeNode.getCallCount());
   m.set('2', 2);
-  assertEquals('removeNode called after adding an overflowing element', 1,
+  assertEquals(
+      'removeNode called after adding an overflowing element', 1,
       m.removeNode.getCallCount());
 
   m.remove('3');
-  assertEquals('removeNode not called after removing a non-existing element', 1,
+  assertEquals(
+      'removeNode not called after removing a non-existing element', 1,
       m.removeNode.getCallCount());
   m.remove('2');
-  assertEquals('removeNode called after removing an existing element', 2,
+  assertEquals(
+      'removeNode called after removing an existing element', 2,
       m.removeNode.getCallCount());
 
   m.set('1', 1);
   m.clear();
-  assertEquals('removeNode called after clearing the map', 3,
+  assertEquals(
+      'removeNode called after clearing the map', 3,
       m.removeNode.getCallCount());
   m.clear();
-  assertEquals('removeNode not called after clearing an empty map', 3,
+  assertEquals(
+      'removeNode not called after clearing an empty map', 3,
       m.removeNode.getCallCount());
 
   m.set('1', 1);
   m.pop();
-  assertEquals('removeNode called after calling pop', 4,
-      m.removeNode.getCallCount());
+  assertEquals(
+      'removeNode called after calling pop', 4, m.removeNode.getCallCount());
   m.pop();
-  assertEquals('removeNode not called after calling pop on an empty map', 4,
+  assertEquals(
+      'removeNode not called after calling pop on an empty map', 4,
       m.removeNode.getCallCount());
 
   m.set('1', 1);
   m.shift();
-  assertEquals('removeNode called after calling shift', 5,
-      m.removeNode.getCallCount());
+  assertEquals(
+      'removeNode called after calling shift', 5, m.removeNode.getCallCount());
   m.shift();
-  assertEquals('removeNode not called after calling shift on an empty map', 5,
+  assertEquals(
+      'removeNode not called after calling shift on an empty map', 5,
       m.removeNode.getCallCount());
 
   m.setMaxCount(2);
   m.set('1', 1);
   m.set('2', 2);
-  assertEquals('removeNode not called after increasing the maximum map size', 5,
+  assertEquals(
+      'removeNode not called after increasing the maximum map size', 5,
       m.removeNode.getCallCount());
   m.setMaxCount(1);
-  assertEquals('removeNode called after decreasing the maximum map size', 6,
+  assertEquals(
+      'removeNode called after decreasing the maximum map size', 6,
       m.removeNode.getCallCount());
 }

@@ -236,8 +236,8 @@ goog.style.getCascadedStyle = function(element, style) {
  */
 goog.style.getStyle_ = function(element, style) {
   return goog.style.getComputedStyle(element, style) ||
-         goog.style.getCascadedStyle(element, style) ||
-         (element.style && element.style[style]);
+      goog.style.getCascadedStyle(element, style) ||
+      (element.style && element.style[style]);
 };
 
 
@@ -460,7 +460,6 @@ goog.style.getBoundingClientRect_ = function(el) {
   // Patch the result in IE only, so that this function can be inlined if
   // compiled for non-IE.
   if (goog.userAgent.IE && el.ownerDocument.body) {
-
     // In IE, most of the time, 2 extra pixels are added to the top and left
     // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
     // IE6 standards mode, this border can be overridden by setting the
@@ -502,19 +501,18 @@ goog.style.getOffsetParent = function(element) {
   for (var parent = element.parentNode; parent && parent != doc;
        parent = parent.parentNode) {
     // Skip shadowDOM roots.
-    if (parent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT &&
-        parent.host) {
+    if (parent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT && parent.host) {
       parent = parent.host;
     }
     positionStyle =
         goog.style.getStyle_(/** @type {!Element} */ (parent), 'position');
     skipStatic = skipStatic && positionStyle == 'static' &&
-                 parent != doc.documentElement && parent != doc.body;
-    if (!skipStatic && (parent.scrollWidth > parent.clientWidth ||
-                        parent.scrollHeight > parent.clientHeight ||
-                        positionStyle == 'fixed' ||
-                        positionStyle == 'absolute' ||
-                        positionStyle == 'relative')) {
+        parent != doc.documentElement && parent != doc.body;
+    if (!skipStatic &&
+        (parent.scrollWidth > parent.clientWidth ||
+         parent.scrollHeight > parent.clientHeight ||
+         positionStyle == 'fixed' || positionStyle == 'absolute' ||
+         positionStyle == 'relative')) {
       return /** @type {!Element} */ (parent);
     }
   }
@@ -540,7 +538,7 @@ goog.style.getVisibleRectForElement = function(element) {
 
   // Determine the size of the visible rect by climbing the dom accounting for
   // all scrollable containers.
-  for (var el = element; el = goog.style.getOffsetParent(el); ) {
+  for (var el = element; el = goog.style.getOffsetParent(el);) {
     // clientWidth is zero for inline block elements in IE.
     // on WEBKIT, body element can have clientHeight = 0 and scrollHeight > 0
     if ((!goog.userAgent.IE || el.clientWidth != 0) &&
@@ -549,17 +547,16 @@ goog.style.getVisibleRectForElement = function(element) {
         // viewport. In some browsers, el.offsetParent may be
         // document.documentElement, so check for that too.
         (el != body && el != documentElement &&
-            goog.style.getStyle_(el, 'overflow') != 'visible')) {
+         goog.style.getStyle_(el, 'overflow') != 'visible')) {
       var pos = goog.style.getPageOffset(el);
       var client = goog.style.getClientLeftTop(el);
       pos.x += client.x;
       pos.y += client.y;
 
       visibleRect.top = Math.max(visibleRect.top, pos.y);
-      visibleRect.right = Math.min(visibleRect.right,
-                                   pos.x + el.clientWidth);
-      visibleRect.bottom = Math.min(visibleRect.bottom,
-                                    pos.y + el.clientHeight);
+      visibleRect.right = Math.min(visibleRect.right, pos.x + el.clientWidth);
+      visibleRect.bottom =
+          Math.min(visibleRect.bottom, pos.y + el.clientHeight);
       visibleRect.left = Math.max(visibleRect.left, pos.x);
     }
   }
@@ -572,9 +569,10 @@ goog.style.getVisibleRectForElement = function(element) {
   visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
   visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
   return visibleRect.top >= 0 && visibleRect.left >= 0 &&
-         visibleRect.bottom > visibleRect.top &&
-         visibleRect.right > visibleRect.left ?
-         visibleRect : null;
+          visibleRect.bottom > visibleRect.top &&
+          visibleRect.right > visibleRect.left ?
+      visibleRect :
+      null;
 };
 
 
@@ -592,8 +590,8 @@ goog.style.getVisibleRectForElement = function(element) {
  * @return {!goog.math.Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
-goog.style.getContainerOffsetToScrollInto =
-    function(element, opt_container, opt_center) {
+goog.style.getContainerOffsetToScrollInto = function(
+    element, opt_container, opt_center) {
   var container = opt_container || goog.dom.getDocumentScrollElement();
   // Absolute position of the element's border's top left corner.
   var elementPos = goog.style.getPageOffset(element);
@@ -659,8 +657,8 @@ goog.style.getContainerOffsetToScrollInto =
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
-goog.style.scrollIntoContainerView =
-    function(element, opt_container, opt_center) {
+goog.style.scrollIntoContainerView = function(
+    element, opt_container, opt_center) {
   var container = opt_container || goog.dom.getDocumentScrollElement();
   var offset =
       goog.style.getContainerOffsetToScrollInto(element, container, opt_center);
@@ -775,15 +773,14 @@ goog.style.getFramedPageOffset = function(el, relativeWin) {
     // the outer window.
     var offset = currentWin == relativeWin ?
         goog.style.getPageOffset(currentEl) :
-        goog.style.getClientPositionForElement_(
-            goog.asserts.assert(currentEl));
+        goog.style.getClientPositionForElement_(goog.asserts.assert(currentEl));
 
     position.x += offset.x;
     position.y += offset.y;
   } while (currentWin && currentWin != relativeWin &&
-      currentWin != currentWin.parent &&
-      (currentEl = currentWin.frameElement) &&
-      (currentWin = currentWin.parent));
+           currentWin != currentWin.parent &&
+           (currentEl = currentWin.frameElement) &&
+           (currentWin = currentWin.parent));
 
   return position;
 };
@@ -862,9 +859,7 @@ goog.style.getClientPosition = function(el) {
         /** @type {!Element} */ (el));
   } else {
     var targetEvent = el.changedTouches ? el.changedTouches[0] : el;
-    return new goog.math.Coordinate(
-        targetEvent.clientX,
-        targetEvent.clientY);
+    return new goog.math.Coordinate(targetEvent.clientX, targetEvent.clientY);
   }
 };
 
@@ -894,8 +889,9 @@ goog.style.setPageOffset = function(el, x, opt_y) {
   var dy = Number(opt_y) - cur.y;
 
   // Set position to current left/top + delta
-  goog.style.setPosition(el, /** @type {!HTMLElement} */ (el).offsetLeft + dx,
-                         /** @type {!HTMLElement} */ (el).offsetTop + dy);
+  goog.style.setPosition(
+      el, /** @type {!HTMLElement} */ (el).offsetLeft + dx,
+      /** @type {!HTMLElement} */ (el).offsetTop + dy);
 };
 
 
@@ -1043,8 +1039,8 @@ goog.style.getSizeWithDisplay_ = function(element) {
     // will still return 0 on Webkit prior to 534.8, see
     // http://trac.webkit.org/changeset/67252.
     var clientRect = goog.style.getBoundingClientRect_(element);
-    return new goog.math.Size(clientRect.right - clientRect.left,
-        clientRect.bottom - clientRect.top);
+    return new goog.math.Size(
+        clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
   }
   return new goog.math.Size(offsetWidth, offsetHeight);
 };
@@ -1072,8 +1068,8 @@ goog.style.getTransformedSize = function(element) {
 
   var clientRect = goog.style.evaluateWithTemporaryDisplay_(
       goog.style.getBoundingClientRect_, element);
-  return new goog.math.Size(clientRect.right - clientRect.left,
-      clientRect.bottom - clientRect.top);
+  return new goog.math.Size(
+      clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 };
 
 
@@ -1419,10 +1415,9 @@ goog.style.isRightToLeft = function(el) {
  * @type {?string}
  * @private
  */
-goog.style.unselectableStyle_ =
-    goog.userAgent.GECKO ? 'MozUserSelect' :
-    goog.userAgent.WEBKIT || goog.userAgent.EDGE ? 'WebkitUserSelect' :
-    null;
+goog.style.unselectableStyle_ = goog.userAgent.GECKO ?
+    'MozUserSelect' :
+    goog.userAgent.WEBKIT || goog.userAgent.EDGE ? 'WebkitUserSelect' : null;
 
 
 /**
@@ -1508,17 +1503,16 @@ goog.style.setBorderBoxSize = function(element, size) {
   var doc = goog.dom.getOwnerDocument(element);
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
 
-  if (goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('10') &&
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
       (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
     var style = element.style;
     if (isCss1CompatMode) {
       var paddingBox = goog.style.getPaddingBox(element);
       var borderBox = goog.style.getBorderBox(element);
       style.pixelWidth = size.width - borderBox.left - paddingBox.left -
-                         paddingBox.right - borderBox.right;
+          paddingBox.right - borderBox.right;
       style.pixelHeight = size.height - borderBox.top - paddingBox.top -
-                          paddingBox.bottom - borderBox.bottom;
+          paddingBox.bottom - borderBox.bottom;
     } else {
       style.pixelWidth = size.width;
       style.pixelHeight = size.height;
@@ -1538,27 +1532,25 @@ goog.style.setBorderBoxSize = function(element, size) {
 goog.style.getContentBoxSize = function(element) {
   var doc = goog.dom.getOwnerDocument(element);
   var ieCurrentStyle = goog.userAgent.IE && element.currentStyle;
-  if (ieCurrentStyle &&
-      goog.dom.getDomHelper(doc).isCss1CompatMode() &&
+  if (ieCurrentStyle && goog.dom.getDomHelper(doc).isCss1CompatMode() &&
       ieCurrentStyle.width != 'auto' && ieCurrentStyle.height != 'auto' &&
       !ieCurrentStyle.boxSizing) {
     // If IE in CSS1Compat mode than just use the width and height.
     // If we have a boxSizing then fall back on measuring the borders etc.
-    var width = goog.style.getIePixelValue_(element, ieCurrentStyle.width,
-                                            'width', 'pixelWidth');
-    var height = goog.style.getIePixelValue_(element, ieCurrentStyle.height,
-                                             'height', 'pixelHeight');
+    var width = goog.style.getIePixelValue_(
+        element, ieCurrentStyle.width, 'width', 'pixelWidth');
+    var height = goog.style.getIePixelValue_(
+        element, ieCurrentStyle.height, 'height', 'pixelHeight');
     return new goog.math.Size(width, height);
   } else {
     var borderBoxSize = goog.style.getBorderBoxSize(element);
     var paddingBox = goog.style.getPaddingBox(element);
     var borderBox = goog.style.getBorderBox(element);
-    return new goog.math.Size(borderBoxSize.width -
-                              borderBox.left - paddingBox.left -
-                              paddingBox.right - borderBox.right,
-                              borderBoxSize.height -
-                              borderBox.top - paddingBox.top -
-                              paddingBox.bottom - borderBox.bottom);
+    return new goog.math.Size(
+        borderBoxSize.width - borderBox.left - paddingBox.left -
+            paddingBox.right - borderBox.right,
+        borderBoxSize.height - borderBox.top - paddingBox.top -
+            paddingBox.bottom - borderBox.bottom);
   }
 };
 
@@ -1572,8 +1564,7 @@ goog.style.getContentBoxSize = function(element) {
 goog.style.setContentBoxSize = function(element, size) {
   var doc = goog.dom.getOwnerDocument(element);
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
-  if (goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('10') &&
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
       (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
     var style = element.style;
     if (isCss1CompatMode) {
@@ -1583,9 +1574,9 @@ goog.style.setContentBoxSize = function(element, size) {
       var paddingBox = goog.style.getPaddingBox(element);
       var borderBox = goog.style.getBorderBox(element);
       style.pixelWidth = size.width + borderBox.left + paddingBox.left +
-                         paddingBox.right + borderBox.right;
+          paddingBox.right + borderBox.right;
       style.pixelHeight = size.height + borderBox.top + paddingBox.top +
-                          paddingBox.bottom + borderBox.bottom;
+          paddingBox.bottom + borderBox.bottom;
     }
   } else {
     goog.style.setBoxSizingSize_(element, size, 'content-box');
@@ -1660,7 +1651,8 @@ goog.style.getIePixelValue_ = function(element, value, name, pixelName) {
 goog.style.getIePixelDistance_ = function(element, propName) {
   var value = goog.style.getCascadedStyle(element, propName);
   return value ?
-      goog.style.getIePixelValue_(element, value, 'left', 'pixelLeft') : 0;
+      goog.style.getIePixelValue_(element, value, 'left', 'pixelLeft') :
+      0;
 };
 
 
@@ -1677,8 +1669,8 @@ goog.style.getBox_ = function(element, stylePrefix) {
     var left = goog.style.getIePixelDistance_(element, stylePrefix + 'Left');
     var right = goog.style.getIePixelDistance_(element, stylePrefix + 'Right');
     var top = goog.style.getIePixelDistance_(element, stylePrefix + 'Top');
-    var bottom = goog.style.getIePixelDistance_(
-        element, stylePrefix + 'Bottom');
+    var bottom =
+        goog.style.getIePixelDistance_(element, stylePrefix + 'Bottom');
     return new goog.math.Box(top, right, bottom, left);
   } else {
     // On non-IE browsers, getComputedStyle is always non-null.
@@ -1689,10 +1681,9 @@ goog.style.getBox_ = function(element, stylePrefix) {
 
     // NOTE(arv): Gecko can return floating point numbers for the computed
     // style values.
-    return new goog.math.Box(parseFloat(top),
-                             parseFloat(right),
-                             parseFloat(bottom),
-                             parseFloat(left));
+    return new goog.math.Box(
+        parseFloat(top), parseFloat(right), parseFloat(bottom),
+        parseFloat(left));
   }
 };
 
@@ -1767,10 +1758,9 @@ goog.style.getBorderBox = function(element) {
     var top = goog.style.getComputedStyle(element, 'borderTopWidth');
     var bottom = goog.style.getComputedStyle(element, 'borderBottomWidth');
 
-    return new goog.math.Box(parseFloat(top),
-                             parseFloat(right),
-                             parseFloat(bottom),
-                             parseFloat(left));
+    return new goog.math.Box(
+        parseFloat(top), parseFloat(right), parseFloat(bottom),
+        parseFloat(left));
   }
 };
 
@@ -1846,11 +1836,11 @@ goog.style.getLengthUnits = function(value) {
  * @private
  */
 goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
-  'cm' : 1,
-  'in' : 1,
-  'mm' : 1,
-  'pc' : 1,
-  'pt' : 1
+  'cm': 1,
+  'in': 1,
+  'mm': 1,
+  'pc': 1,
+  'pt': 1
 };
 
 
@@ -1862,8 +1852,8 @@ goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
  * @private
  */
 goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_ = {
-  'em' : 1,
-  'ex' : 1
+  'em': 1,
+  'ex': 1
 };
 
 
@@ -1890,24 +1880,19 @@ goog.style.getFontSize = function(el) {
   // be converted.
   if (goog.userAgent.IE) {
     if (sizeUnits in goog.style.ABSOLUTE_CSS_LENGTH_UNITS_) {
-      return goog.style.getIePixelValue_(el,
-                                         fontSize,
-                                         'left',
-                                         'pixelLeft');
-    } else if (el.parentNode &&
-               el.parentNode.nodeType == goog.dom.NodeType.ELEMENT &&
-               sizeUnits in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
+      return goog.style.getIePixelValue_(el, fontSize, 'left', 'pixelLeft');
+    } else if (
+        el.parentNode && el.parentNode.nodeType == goog.dom.NodeType.ELEMENT &&
+        sizeUnits in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
       // Check the parent size - if it is the same it means the relative size
       // value is inherited and we therefore don't want to count it twice.  If
       // it is different, this element either has explicit style or has a CSS
       // rule applying to it.
       var parentElement = /** @type {!Element} */ (el.parentNode);
       var parentSize = goog.style.getStyle_(parentElement, 'fontSize');
-      return goog.style.getIePixelValue_(parentElement,
-                                         fontSize == parentSize ?
-                                             '1em' : fontSize,
-                                         'left',
-                                         'pixelLeft');
+      return goog.style.getIePixelValue_(
+          parentElement, fontSize == parentSize ? '1em' : fontSize, 'left',
+          'pixelLeft');
     }
   }
 
@@ -1916,10 +1901,10 @@ goog.style.getFontSize = function(el) {
   // an invisible, absolutely-positioned span sized to be the height of an 'M'
   // rendered in its parent's (i.e., our target element's) font size. This is
   // the definition of CSS's font size attribute.
-  var sizeElement = goog.dom.createDom(
-      goog.dom.TagName.SPAN,
-      {'style': 'visibility:hidden;position:absolute;' +
-            'line-height:0;padding:0;margin:0;border:0;height:1em;'});
+  var sizeElement = goog.dom.createDom(goog.dom.TagName.SPAN, {
+    'style': 'visibility:hidden;position:absolute;' +
+        'line-height:0;padding:0;margin:0;border:0;height:1em;'
+  });
   goog.dom.appendChild(el, sizeElement);
   fontSize = sizeElement.offsetHeight;
   goog.dom.removeNode(sizeElement);
@@ -2022,10 +2007,10 @@ goog.style.getScrollbarWidth = function(opt_className) {
  * @const
  * @private
  */
-goog.style.MATRIX_TRANSLATION_REGEX_ =
-    new RegExp('matrix\\([0-9\\.\\-]+, [0-9\\.\\-]+, ' +
-               '[0-9\\.\\-]+, [0-9\\.\\-]+, ' +
-               '([0-9\\.\\-]+)p?x?, ([0-9\\.\\-]+)p?x?\\)');
+goog.style.MATRIX_TRANSLATION_REGEX_ = new RegExp(
+    'matrix\\([0-9\\.\\-]+, [0-9\\.\\-]+, ' +
+    '[0-9\\.\\-]+, [0-9\\.\\-]+, ' +
+    '([0-9\\.\\-]+)p?x?, ([0-9\\.\\-]+)p?x?\\)');
 
 
 /**
@@ -2044,6 +2029,6 @@ goog.style.getCssTranslation = function(element) {
   if (!matches) {
     return new goog.math.Coordinate(0, 0);
   }
-  return new goog.math.Coordinate(parseFloat(matches[1]),
-                                  parseFloat(matches[2]));
+  return new goog.math.Coordinate(
+      parseFloat(matches[1]), parseFloat(matches[2]));
 };

@@ -77,8 +77,8 @@ goog.math.Line.prototype.clone = function() {
  * @return {boolean} Whether the given line is the same as this one.
  */
 goog.math.Line.prototype.equals = function(other) {
-  return this.x0 == other.x0 && this.y0 == other.y0 &&
-         this.x1 == other.x1 && this.y1 == other.y1;
+  return this.x0 == other.x0 && this.y0 == other.y0 && this.x1 == other.x1 &&
+      this.y1 == other.y1;
 };
 
 
@@ -141,8 +141,7 @@ goog.math.Line.prototype.getClosestLinearInterpolation_ = function(x, opt_y) {
  */
 goog.math.Line.prototype.getInterpolatedPoint = function(t) {
   return new goog.math.Coordinate(
-      goog.math.lerp(this.x0, this.x1, t),
-      goog.math.lerp(this.y0, this.y1, t));
+      goog.math.lerp(this.x0, this.x1, t), goog.math.lerp(this.y0, this.y1, t));
 };
 
 

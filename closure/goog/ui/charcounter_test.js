@@ -31,8 +31,7 @@ function setUp() {
   inputElement.value = '';
   countElement = goog.dom.getElementByClass('char-count');
   goog.dom.setTextContent(countElement, '');
-  charCounter =
-      new goog.ui.CharCounter(inputElement, countElement, maxLength);
+  charCounter = new goog.ui.CharCounter(inputElement, countElement, maxLength);
 }
 
 function tearDown() {
@@ -102,7 +101,8 @@ function testCheckLength_limitedContent() {
   setupCheckLength(limitedContent, remaining);
 
   assertEquals(limitedContent, inputElement.value);
-  assertEquals(remainingLimitedContentLength.toString(),
+  assertEquals(
+      remainingLimitedContentLength.toString(),
       goog.dom.getTextContent(countElement));
 
   // Test the characters incremented in DOM with limited content
@@ -110,8 +110,8 @@ function testCheckLength_limitedContent() {
   charCounter.checkLength();
 
   assertEquals(limitedContent, inputElement.value);
-  assertEquals(limitedContentLength.toString(),
-      goog.dom.getTextContent(countElement));
+  assertEquals(
+      limitedContentLength.toString(), goog.dom.getTextContent(countElement));
 }
 
 function testCheckLength_overflowContent() {
@@ -150,11 +150,13 @@ function testCheckLength_newLineContent() {
   // Test for IE 7,8 which appends \r to \n
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
     assertEquals(carriageReturnContent, inputElement.value);
-    assertEquals(remainingCarriageReturnContentLength.toString(),
+    assertEquals(
+        remainingCarriageReturnContentLength.toString(),
         goog.dom.getTextContent(countElement));
   } else {
     assertEquals(newLineContent, inputElement.value);
-    assertEquals(remainingNewLineContentLength.toString(),
+    assertEquals(
+        remainingNewLineContentLength.toString(),
         goog.dom.getTextContent(countElement));
   }
 
@@ -165,12 +167,13 @@ function testCheckLength_newLineContent() {
   // Test for IE 7,8 which appends \r to \n
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
     assertEquals(carriageReturnContent, inputElement.value);
-    assertEquals(carriageReturnContentLength.toString(),
+    assertEquals(
+        carriageReturnContentLength.toString(),
         goog.dom.getTextContent(countElement));
   } else {
     assertEquals(newLineContent, inputElement.value);
-    assertEquals(newLineContentLength.toString(),
-        goog.dom.getTextContent(countElement));
+    assertEquals(
+        newLineContentLength.toString(), goog.dom.getTextContent(countElement));
   }
 }
 
@@ -191,12 +194,14 @@ function testCheckLength_carriageReturnContent() {
   // Test for IE 7,8
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
     assertEquals(carriageReturnContent, inputElement.value);
-    assertEquals(remainingCarriageReturnContentLength.toString(),
+    assertEquals(
+        remainingCarriageReturnContentLength.toString(),
         goog.dom.getTextContent(countElement));
   } else {
     // Others replace \r\n with \n
     assertEquals(newLineContent, inputElement.value);
-    assertEquals(remainingNewLineContentLength.toString(),
+    assertEquals(
+        remainingNewLineContentLength.toString(),
         goog.dom.getTextContent(countElement));
   }
 
@@ -207,12 +212,13 @@ function testCheckLength_carriageReturnContent() {
   // Test for IE 7,8
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
     assertEquals(carriageReturnContent, inputElement.value);
-    assertEquals(carriageReturnContentLength.toString(),
+    assertEquals(
+        carriageReturnContentLength.toString(),
         goog.dom.getTextContent(countElement));
   } else {
     // Others replace \r\n with \n
     assertEquals(newLineContent, inputElement.value);
-    assertEquals(newLineContentLength.toString(),
-        goog.dom.getTextContent(countElement));
+    assertEquals(
+        newLineContentLength.toString(), goog.dom.getTextContent(countElement));
   }
 }

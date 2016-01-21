@@ -29,7 +29,9 @@ var ParentClass = function() {};
 ParentClass.prototype.method1 = function() {};
 ParentClass.prototype.x = 1;
 ParentClass.prototype.val = 0;
-ParentClass.prototype.incrementVal = function() { this.val++; };
+ParentClass.prototype.incrementVal = function() {
+  this.val++;
+};
 
 var ChildClass = function() {};
 goog.inherits(ChildClass, ParentClass);
@@ -44,7 +46,8 @@ function testParentClass() {
   assertUndefined(parentMock.method2);
   assertNotUndefined(parentMock.x);
   assertUndefined(parentMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
 }
 
@@ -57,7 +60,8 @@ function testChildClass() {
   assertUndefined(childMock.method2());
   assertNotUndefined(childMock.x);
   assertNotUndefined(childMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       childMock instanceof ChildClass);
 }
 
@@ -69,7 +73,8 @@ function testParentClassInstance() {
   assertUndefined(parentMock.method2);
   assertNotUndefined(parentMock.x);
   assertUndefined(parentMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
 }
 
@@ -82,7 +87,8 @@ function testChildClassInstance() {
   assertUndefined(childMock.method2());
   assertNotUndefined(childMock.x);
   assertNotUndefined(childMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       childMock instanceof ParentClass);
 }
 
@@ -97,25 +103,21 @@ function testNonEnumerableProperties() {
 
 function testBasicStubbing() {
   var obj = {
-    method1: function(i) {
-      return 2 * i;
-    },
-    method2: function(i, str) {
-      return str;
-    },
-    method3: function(x) {
-      return x;
-    }
+    method1: function(i) { return 2 * i; },
+    method2: function(i, str) { return str; },
+    method3: function(x) { return x; }
   };
 
   var mockObj = goog.labs.mock.mock(obj);
-  goog.labs.mock.when(mockObj).method1(2).then(function(i) {return i;});
+  goog.labs.mock.when(mockObj).method1(2).then(function(i) { return i; });
 
   assertEquals(4, obj.method1(2));
   assertEquals(2, mockObj.method1(2));
   assertUndefined(mockObj.method1(4));
 
-  goog.labs.mock.when(mockObj).method2(1, 'hi').then(function(i) {return 'oh'});
+  goog.labs.mock.when(mockObj).method2(1, 'hi').then(function(i) {
+    return 'oh'
+  });
   assertEquals('hi', obj.method2(1, 'hi'));
   assertEquals('oh', mockObj.method2(1, 'hi'));
   assertUndefined(mockObj.method2(3, 'foo'));
@@ -140,11 +142,7 @@ function testMockFunctions() {
 }
 
 function testStubbingConsecutiveCalls() {
-  var obj = {
-    method: function(i) {
-      return i * 42;
-    }
-  };
+  var obj = {method: function(i) { return i * 42; }};
 
   var mockObj = goog.labs.mock.mock(obj);
   goog.labs.mock.when(mockObj).method(1).thenReturn(3);
@@ -168,12 +166,8 @@ function testStubbingConsecutiveCalls() {
 
 function testSpying() {
   var obj = {
-    method1: function(i) {
-      return 2 * i;
-    },
-    method2: function(i) {
-      return 5 * i;
-    }
+    method1: function(i) { return 2 * i; },
+    method2: function(i) { return 5 * i; }
   };
 
   var spyObj = goog.labs.mock.spy(obj);
@@ -197,11 +191,13 @@ function testSpyParentClassInstance() {
   assertUndefined(parentMock.method2);
   assertNotUndefined(parentMock.x);
   assertUndefined(parentMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
   var incrementedOrigVal = parent.val + 1;
   parentMock.incrementVal();
-  assertEquals('Changes in the spied object should reflect in the spy.',
+  assertEquals(
+      'Changes in the spied object should reflect in the spy.',
       incrementedOrigVal, parentMock.val);
 }
 
@@ -215,22 +211,20 @@ function testSpyChildClassInstance() {
   assertUndefined(childMock.method2());
   assertNotUndefined(childMock.x);
   assertNotUndefined(childMock.y);
-  assertTrue('Mock should be an instance of the mocked class.',
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
       childMock instanceof ParentClass);
   var incrementedOrigVal = child.val + 1;
   childMock.incrementVal();
-  assertEquals('Changes in the spied object should reflect in the spy.',
+  assertEquals(
+      'Changes in the spied object should reflect in the spy.',
       incrementedOrigVal, childMock.val);
 }
 
 function testVerifyForObjects() {
   var obj = {
-    method1: function(i) {
-      return 2 * i;
-    },
-    method2: function(i) {
-      return 5 * i;
-    }
+    method1: function(i) { return 2 * i; },
+    method2: function(i) { return 5 * i; }
   };
 
   var mockObj = goog.labs.mock.mock(obj);
@@ -243,9 +237,7 @@ function testVerifyForObjects() {
 }
 
 function testVerifyForFunctions() {
-  var func = function(i) {
-    return i;
-  };
+  var func = function(i) { return i; };
 
   var mockFunc = goog.labs.mock.mockFunction(func);
   goog.labs.mock.when(mockFunc)(2).thenReturn(55);
@@ -263,11 +255,7 @@ function testVerifyForFunctions() {
 * expectation call, as well as the recorded calls to the same method.
 */
 function testVerificationErrorMessages() {
-  var mock = goog.labs.mock.mock({
-    method: function(i) {
-      return i;
-    }
-  });
+  var mock = goog.labs.mock.mock({method: function(i) { return i; }});
 
   // Failure when there are no recorded calls.
   var e = assertThrows(function() { goog.labs.mock.verify(mock).method(4); });
@@ -297,7 +285,7 @@ function testVerificationErrorMessages() {
 
   // With mockFunctions
   var mockCallback = goog.labs.mock.mockFunction(callback);
-  e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5);});
+  e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5); });
   expected = '\nExpected: #mockFor<#anonymous' + callbackId + '>(5)\n' +
       'Recorded: No recorded calls';
 
@@ -310,7 +298,7 @@ function testVerificationErrorMessages() {
   obj.y = obj;
 
   mockCallback(obj);
-  e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5);});
+  e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5); });
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 
   // Should respect string representation of different custom classes.
@@ -320,7 +308,7 @@ function testVerificationErrorMessages() {
   var mockFunction = goog.labs.mock.mockFunction(function f() {});
   mockFunction(new myClass());
 
-  e = assertThrows(function() { goog.labs.mock.verify(mockFunction)(5);});
+  e = assertThrows(function() { goog.labs.mock.verify(mockFunction)(5); });
   expected = '\nExpected: #mockFor<f>(5)\n' +
       'Recorded: #mockFor<f>(<superClass>)';
   assertEquals(expected, e.message);
@@ -333,9 +321,8 @@ function testVerificationErrorMessages() {
 */
 function assertContainsInOrder(str, var_args) {
   var expected = goog.array.splice(arguments, 1);
-  var indices = goog.array.map(expected, function(val) {
-    return str.indexOf(val);
-  });
+  var indices =
+      goog.array.map(expected, function(val) { return str.indexOf(val); });
 
   for (var i = 0; i < expected.length; i++) {
     var msg = 'Missing "' + expected[i] + '" from "' + str + '"';
@@ -351,12 +338,8 @@ function assertContainsInOrder(str, var_args) {
 
 function testMatchers() {
   var obj = {
-    method1: function(i) {
-      return 2 * i;
-    },
-    method2: function(i) {
-      return 5 * i;
-    }
+    method1: function(i) { return 2 * i; },
+    method2: function(i) { return 5 * i; }
   };
 
   var mockObj = goog.labs.mock.mock(obj);
@@ -372,11 +355,7 @@ function testMatchers() {
 }
 
 function testMatcherVerify() {
-  var obj = {
-    method: function(i) {
-      return 2 * i;
-    }
-  };
+  var obj = {method: function(i) { return 2 * i; }};
 
   // Using spy objects.
   var spy = goog.labs.mock.spy(obj);
@@ -384,8 +363,8 @@ function testMatcherVerify() {
   spy.method(6);
 
   goog.labs.mock.verify(spy).method(greaterThan(4));
-  var e = assertThrows(
-      goog.bind(goog.labs.mock.verify(spy).method, lessThan(4)));
+  var e =
+      assertThrows(goog.bind(goog.labs.mock.verify(spy).method, lessThan(4)));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 
   // Using mocks
@@ -400,11 +379,7 @@ function testMatcherVerify() {
 }
 
 function testMatcherVerifyCollision() {
-  var obj = {
-    method: function(i) {
-      return 2 * i;
-    }
-  };
+  var obj = {method: function(i) { return 2 * i; }};
   var mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(5).thenReturn(100);
@@ -412,11 +387,7 @@ function testMatcherVerifyCollision() {
 }
 
 function testMatcherVerifyCollisionBetweenMatchers() {
-  var obj = {
-    method: function(i) {
-      return 2 * i;
-    }
-  };
+  var obj = {method: function(i) { return 2 * i; }};
   var mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(anything()).thenReturn(100);
@@ -441,11 +412,13 @@ function testFormatMethodCall() {
   assertEquals('alert()', formatMethodCall('alert'));
   assertEquals('sum(2, 4)', formatMethodCall('sum', [2, 4]));
   assertEquals('sum("2", "4")', formatMethodCall('sum', ['2', '4']));
-  assertEquals('call(<function unicorn>)',
+  assertEquals(
+      'call(<function unicorn>)',
       formatMethodCall('call', [function unicorn() {}]));
 
   var arg = {x: 1, y: {hello: 'world'}};
-  assertEquals('call(' + goog.labs.mock.formatValue_(arg) + ')',
+  assertEquals(
+      'call(' + goog.labs.mock.formatValue_(arg) + ')',
       formatMethodCall('call', [arg]));
 }
 
@@ -454,10 +427,12 @@ function testGetFunctionName() {
   var f2 = function() {};
   var named = function myName() {};
 
-  assert(goog.string.startsWith(
-      goog.labs.mock.getFunctionName_(f1), '#anonymous'));
-  assert(goog.string.startsWith(
-      goog.labs.mock.getFunctionName_(f2), '#anonymous'));
+  assert(
+      goog.string.startsWith(
+          goog.labs.mock.getFunctionName_(f1), '#anonymous'));
+  assert(
+      goog.string.startsWith(
+          goog.labs.mock.getFunctionName_(f2), '#anonymous'));
   assertNotEquals(
       goog.labs.mock.getFunctionName_(f1), goog.labs.mock.getFunctionName_(f2));
   assertEquals('myName', goog.labs.mock.getFunctionName_(named));
@@ -469,38 +444,35 @@ function testFormatObject() {
   obj = {x: 1};
   assertEquals(
       '{"x":1 _id:' + goog.labs.mock.getUid(obj) + '}',
-      goog.labs.mock.formatValue_(obj)
-  );
+      goog.labs.mock.formatValue_(obj));
   assertEquals('{"x":1}', goog.labs.mock.formatValue_(obj, false /* id */));
 
   obj = {x: 'hello'};
   assertEquals(
       '{"x":"hello" _id:' + goog.labs.mock.getUid(obj) + '}',
-      goog.labs.mock.formatValue_(obj)
-  );
-  assertEquals('{"x":"hello"}',
-      goog.labs.mock.formatValue_(obj, false /* id */));
+      goog.labs.mock.formatValue_(obj));
+  assertEquals(
+      '{"x":"hello"}', goog.labs.mock.formatValue_(obj, false /* id */));
 
   obj3 = {};
   obj2 = {y: obj3};
   obj3.x = obj2;
   assertEquals(
       '{"x":{"y":<recursive/dupe obj_' + goog.labs.mock.getUid(obj3) + '> ' +
-      '_id:' + goog.labs.mock.getUid(obj2) + '} ' +
-      '_id:' + goog.labs.mock.getUid(obj3) + '}',
-      goog.labs.mock.formatValue_(obj3)
-  );
-  assertEquals('{"x":{"y":<recursive/dupe>}}',
-      goog.labs.mock.formatValue_(obj3, false /* id */)
-  );
+          '_id:' + goog.labs.mock.getUid(obj2) + '} ' +
+          '_id:' + goog.labs.mock.getUid(obj3) + '}',
+      goog.labs.mock.formatValue_(obj3));
+  assertEquals(
+      '{"x":{"y":<recursive/dupe>}}',
+      goog.labs.mock.formatValue_(obj3, false /* id */));
 
 
-  obj = {x: function y() {} };
-  assertEquals('{"x":<function y> _id:' + goog.labs.mock.getUid(obj) + '}',
+  obj = {x: function y() {}};
+  assertEquals(
+      '{"x":<function y> _id:' + goog.labs.mock.getUid(obj) + '}',
       goog.labs.mock.formatValue_(obj));
-  assertEquals('{"x":<function y>}',
-      goog.labs.mock.formatValue_(obj, false /* id */));
-
+  assertEquals(
+      '{"x":<function y>}', goog.labs.mock.formatValue_(obj, false /* id */));
 }
 
 function testGetUid() {

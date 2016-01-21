@@ -72,8 +72,8 @@ goog.math.Box = function(top, right, bottom, left) {
  * @return {!goog.math.Box} A Box containing all the specified Coordinates.
  */
 goog.math.Box.boundingBox = function(var_args) {
-  var box = new goog.math.Box(arguments[0].y, arguments[0].x,
-                              arguments[0].y, arguments[0].x);
+  var box = new goog.math.Box(
+      arguments[0].y, arguments[0].x, arguments[0].y, arguments[0].x);
   for (var i = 1; i < arguments.length; i++) {
     box.expandToIncludeCoordinate(arguments[i]);
   }
@@ -114,7 +114,7 @@ if (goog.DEBUG) {
    */
   goog.math.Box.prototype.toString = function() {
     return '(' + this.top + 't, ' + this.right + 'r, ' + this.bottom + 'b, ' +
-           this.left + 'l)';
+        this.left + 'l)';
   };
 }
 
@@ -139,8 +139,8 @@ goog.math.Box.prototype.contains = function(other) {
  * @param {number=} opt_left Left margin.
  * @return {!goog.math.Box} A reference to this Box.
  */
-goog.math.Box.prototype.expand = function(top, opt_right, opt_bottom,
-    opt_left) {
+goog.math.Box.prototype.expand = function(
+    top, opt_right, opt_bottom, opt_left) {
   if (goog.isObject(top)) {
     this.top -= top.top;
     this.right += top.right;
@@ -198,8 +198,8 @@ goog.math.Box.equals = function(a, b) {
   if (!a || !b) {
     return false;
   }
-  return a.top == b.top && a.right == b.right &&
-         a.bottom == b.bottom && a.left == b.left;
+  return a.top == b.top && a.right == b.right && a.bottom == b.bottom &&
+      a.left == b.left;
 };
 
 
@@ -221,8 +221,8 @@ goog.math.Box.contains = function(box, other) {
   }
 
   // other is a Coordinate.
-  return other.x >= box.left && other.x <= box.right &&
-         other.y >= box.top && other.y <= box.bottom;
+  return other.x >= box.left && other.x <= box.right && other.y >= box.top &&
+      other.y <= box.bottom;
 };
 
 
@@ -289,8 +289,9 @@ goog.math.Box.distance = function(box, coord) {
  * @return {boolean} Whether the boxes intersect.
  */
 goog.math.Box.intersects = function(a, b) {
-  return (a.left <= b.right && b.left <= a.right &&
-          a.top <= b.bottom && b.top <= a.bottom);
+  return (
+      a.left <= b.right && b.left <= a.right && a.top <= b.bottom &&
+      b.top <= a.bottom);
 };
 
 
@@ -303,8 +304,9 @@ goog.math.Box.intersects = function(a, b) {
  * @return {boolean} Whether the boxes intersect.
  */
 goog.math.Box.intersectsWithPadding = function(a, b, padding) {
-  return (a.left <= b.right + padding && b.left <= a.right + padding &&
-          a.top <= b.bottom + padding && b.top <= a.bottom + padding);
+  return (
+      a.left <= b.right + padding && b.left <= a.right + padding &&
+      a.top <= b.bottom + padding && b.top <= a.bottom + padding);
 };
 
 

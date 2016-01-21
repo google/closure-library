@@ -22,13 +22,13 @@ goog.require('goog.date.relativeTest');
 goog.require('goog.date.relativeWithPlurals');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
-goog.require('goog.i18n.DateTimeSymbols_bn'); // Bengali
+goog.require('goog.i18n.DateTimeSymbols_bn');  // Bengali
 goog.require('goog.i18n.DateTimeSymbols_en');
-goog.require('goog.i18n.DateTimeSymbols_fa'); // Persian
+goog.require('goog.i18n.DateTimeSymbols_fa');  // Persian
 goog.require('goog.i18n.NumberFormatSymbols');
-goog.require('goog.i18n.NumberFormatSymbols_bn'); // Bengali
+goog.require('goog.i18n.NumberFormatSymbols_bn');  // Bengali
 goog.require('goog.i18n.NumberFormatSymbols_en');
-goog.require('goog.i18n.NumberFormatSymbols_fa'); // Persian
+goog.require('goog.i18n.NumberFormatSymbols_fa');  // Persian
 
 
 function tearDown() {
@@ -48,37 +48,50 @@ function testFormatRelativeForPastDatesPersianDigits() {
 
   // For Persian \u06F0 is the base, so \u6F0 = digit 0, \u6F5 = digit 5 ...
   // "Western" digits in square brackets for convenience
-  assertEquals('Should round seconds to the minute below',
+  assertEquals(
+      'Should round seconds to the minute below',
       localizeNumber(0) + ' minutes ago',  // ۰ minutes ago
       fn(timestamp('23 March 2009 14:30:10')));
 
-  assertEquals('Should round seconds to the minute below',
+  assertEquals(
+      'Should round seconds to the minute below',
       localizeNumber(1) + ' minute ago',  // ۱ minute ago
       fn(timestamp('23 March 2009 14:29:56')));
 
-  assertEquals('Should round seconds to the minute below',
+  assertEquals(
+      'Should round seconds to the minute below',
       localizeNumber(2) + ' minutes ago',  // ۲ minutes ago
       fn(timestamp('23 March 2009 14:29:00')));
 
-  assertEquals(localizeNumber(10) + ' minutes ago',  // ۱۰ minutes ago
+  assertEquals(
+      localizeNumber(10) + ' minutes ago',  // ۱۰ minutes ago
       fn(timestamp('23 March 2009 14:20:10')));
-  assertEquals(localizeNumber(59) + ' minutes ago',  // ۵۹ minutes ago
+  assertEquals(
+      localizeNumber(59) + ' minutes ago',  // ۵۹ minutes ago
       fn(timestamp('23 March 2009 13:31:42')));
-  assertEquals(localizeNumber(2) + ' hours ago',  // ۲ hours ago
+  assertEquals(
+      localizeNumber(2) + ' hours ago',  // ۲ hours ago
       fn(timestamp('23 March 2009 12:20:56')));
-  assertEquals(localizeNumber(23) + ' hours ago',  // ۲۳ hours ago
+  assertEquals(
+      localizeNumber(23) + ' hours ago',  // ۲۳ hours ago
       fn(timestamp('22 March 2009 15:30:56')));
-  assertEquals(localizeNumber(1) + ' day ago',  // ۱ day ago
+  assertEquals(
+      localizeNumber(1) + ' day ago',  // ۱ day ago
       fn(timestamp('22 March 2009 12:11:04')));
-  assertEquals(localizeNumber(1) + ' day ago',  // ۱ day ago
+  assertEquals(
+      localizeNumber(1) + ' day ago',  // ۱ day ago
       fn(timestamp('22 March 2009 00:00:00')));
-  assertEquals(localizeNumber(2) + ' days ago',  // ۲ days ago
+  assertEquals(
+      localizeNumber(2) + ' days ago',  // ۲ days ago
       fn(timestamp('21 March 2009 23:59:59')));
-  assertEquals(localizeNumber(2) + ' days ago',  // ۲ days ago
+  assertEquals(
+      localizeNumber(2) + ' days ago',  // ۲ days ago
       fn(timestamp('21 March 2009 10:30:56')));
-  assertEquals(localizeNumber(2) + ' days ago',  // ۲ days ago
+  assertEquals(
+      localizeNumber(2) + ' days ago',  // ۲ days ago
       fn(timestamp('21 March 2009 00:00:00')));
-  assertEquals(localizeNumber(3) + ' days ago',  // ۳ days ago
+  assertEquals(
+      localizeNumber(3) + ' days ago',  // ۳ days ago
       fn(timestamp('20 March 2009 23:59:59')));
 }
 
@@ -89,35 +102,48 @@ function testFormatRelativeForFutureDatesBengaliDigits() {
 
   // For Bengali \u09E6 is the base, so \u09E6 = digit 0, \u09EB = digit 5
   // "Western" digits in square brackets for convenience
-  assertEquals('Should round seconds to the minute below',
+  assertEquals(
+      'Should round seconds to the minute below',
       'in ' + localizeNumber(1) + ' minute',  // in ১ minute
       fn(timestamp('23 March 2009 14:32:05')));
 
-  assertEquals('Should round seconds to the minute below',
+  assertEquals(
+      'Should round seconds to the minute below',
       'in ' + localizeNumber(2) + ' minutes',  // in ২ minutes
       fn(timestamp('23 March 2009 14:33:00')));
 
-  assertEquals('in ' + localizeNumber(10) + ' minutes',  // in ১০ minutes
+  assertEquals(
+      'in ' + localizeNumber(10) + ' minutes',  // in ১০ minutes
       fn(timestamp('23 March 2009 14:40:10')));
-  assertEquals('in ' + localizeNumber(59) + ' minutes',  // in ৫৯ minutes
+  assertEquals(
+      'in ' + localizeNumber(59) + ' minutes',  // in ৫৯ minutes
       fn(timestamp('23 March 2009 15:29:15')));
-  assertEquals('in ' + localizeNumber(2) + ' hours',  // in ২ hours
+  assertEquals(
+      'in ' + localizeNumber(2) + ' hours',  // in ২ hours
       fn(timestamp('23 March 2009 17:20:56')));
-  assertEquals('in ' + localizeNumber(23) + ' hours',  // in ২৩ hours
+  assertEquals(
+      'in ' + localizeNumber(23) + ' hours',  // in ২৩ hours
       fn(timestamp('24 March 2009 13:30:56')));
-  assertEquals('in ' + localizeNumber(1) + ' day',  // in ১ day
+  assertEquals(
+      'in ' + localizeNumber(1) + ' day',  // in ১ day
       fn(timestamp('24 March 2009 14:31:07')));
-  assertEquals('in ' + localizeNumber(1) + ' day',  // in ১ day
+  assertEquals(
+      'in ' + localizeNumber(1) + ' day',  // in ১ day
       fn(timestamp('24 March 2009 16:11:04')));
-  assertEquals('in ' + localizeNumber(1) + ' day',  // in ১ day
+  assertEquals(
+      'in ' + localizeNumber(1) + ' day',  // in ১ day
       fn(timestamp('24 March 2009 23:59:59')));
-  assertEquals('in ' + localizeNumber(2) + ' days',  // in ২ days
+  assertEquals(
+      'in ' + localizeNumber(2) + ' days',  // in ২ days
       fn(timestamp('25 March 2009 00:00:00')));
-  assertEquals('in ' + localizeNumber(2) + ' days',  // in ২ days
+  assertEquals(
+      'in ' + localizeNumber(2) + ' days',  // in ২ days
       fn(timestamp('25 March 2009 10:30:56')));
-  assertEquals('in ' + localizeNumber(2) + ' days',  // in ২ days
+  assertEquals(
+      'in ' + localizeNumber(2) + ' days',  // in ২ days
       fn(timestamp('25 March 2009 23:59:59')));
-  assertEquals('in ' + localizeNumber(3) + ' days',  // in ৩ days
+  assertEquals(
+      'in ' + localizeNumber(3) + ' days',  // in ৩ days
       fn(timestamp('26 March 2009 00:00:00')));
 }
 

@@ -132,9 +132,7 @@ function testCreateBubble(opt_fn) {
 function testOpeningBubbleCallsOnShow() {
   var numCalled = 0;
   testCreateBubble(function() {
-    bubblePlugin.onShow = function() {
-      numCalled++;
-    };
+    bubblePlugin.onShow = function() { numCalled++; };
   });
 
   assertEquals('onShow should be called', 1, numCalled);
@@ -153,15 +151,15 @@ function testZindexBehavior() {
   // Don't use the default return values.
   fieldMock.$reset();
   fieldMock.getAppWindow().$anyTimes().$returns(window);
-  fieldMock.getEditableDomHelper().$anyTimes()
-      .$returns(goog.dom.getDomHelper(document));
+  fieldMock.getEditableDomHelper().$anyTimes().$returns(
+      goog.dom.getDomHelper(document));
   fieldMock.getBaseZindex().$returns(2);
   bubblePlugin.createBubbleContents = goog.nullFunction;
   fieldMock.$replay();
 
   bubblePlugin.createBubble(link);
-  assertEquals('2',
-      '' + bubblePlugin.getSharedBubble_().bubbleContainer_.style.zIndex);
+  assertEquals(
+      '2', '' + bubblePlugin.getSharedBubble_().bubbleContainer_.style.zIndex);
 
   fieldMock.$verify();
 }
@@ -190,14 +188,14 @@ function testNoTwoBubblesOpenAtSameTime() {
 
 function testHandleSelectionChangeWithEvent() {
   fieldMock.$replay();
-  var fakeEvent =
-      new goog.events.BrowserEvent({type: 'mouseup', target: link});
+  var fakeEvent = new goog.events.BrowserEvent({type: 'mouseup', target: link});
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = goog.nullFunction;
   bubblePlugin.handleSelectionChange(fakeEvent);
   assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
-  assertEquals('Bubble target should be provided event\'s target',
-               link, bubblePlugin.targetElement_);
+  assertEquals(
+      'Bubble target should be provided event\'s target', link,
+      bubblePlugin.targetElement_);
 }
 
 function testHandleSelectionChangeWithTarget() {
@@ -206,8 +204,9 @@ function testHandleSelectionChangeWithTarget() {
   bubblePlugin.createBubbleContents = goog.nullFunction;
   bubblePlugin.handleSelectionChange(undefined, link2);
   assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
-  assertEquals('Bubble target should be provided target',
-               link2, bubblePlugin.targetElement_);
+  assertEquals(
+      'Bubble target should be provided target', link2,
+      bubblePlugin.targetElement_);
 }
 
 
@@ -339,8 +338,8 @@ function testTabKeyNoEffectKeyboardNavDisabled() {
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
   var tabHandledByBubble = simulateTabKeyOnBubble();
-  assertFalse('The action should not be handled by the plugin',
-      tabHandledByBubble);
+  assertFalse(
+      'The action should not be handled by the plugin', tabHandledByBubble);
   assertNotFocused(bubbleLink);
 
   // Verify that tabbing the link doesn't cause focus of the field.
@@ -365,8 +364,8 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   var keyHandledByBubble =
       simulateKeyDownOnBubble(goog.events.KeyCodes.B, true);
 
-  assertFalse('The action should not be handled by the plugin',
-      keyHandledByBubble);
+  assertFalse(
+      'The action should not be handled by the plugin', keyHandledByBubble);
   assertNotFocused(bubbleLink);
 
   fieldMock.$verify();
@@ -413,8 +412,8 @@ function simulateKeyDownOnBubble(keyCode, isCtrl) {
   // bubble element shares the same window and hence the designMode. In this
   // mode, activeElement remains the <body> and isn't changed along with the
   // focus as a result of tab key.
-  bubblePlugin.getSharedBubble_().getContentElement().
-      ownerDocument.designMode = 'off';
+  bubblePlugin.getSharedBubble_().getContentElement().ownerDocument.designMode =
+      'off';
 
   var event =
       new goog.testing.events.Event(goog.events.EventType.KEYDOWN, null);

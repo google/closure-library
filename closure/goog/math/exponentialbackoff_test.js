@@ -38,15 +38,15 @@ function assertValueAndDecayCount(value, count, backoff) {
   assertEquals('Wrong decay count', count, backoff.getDecayCount());
 }
 
-function assertValueRangeAndBackoffCount(minBackoffValue, maxBackoffValue,
-    count, backoff) {
+function assertValueRangeAndBackoffCount(
+    minBackoffValue, maxBackoffValue, count, backoff) {
   assertTrue('Value too small', backoff.getValue() >= minBackoffValue);
   assertTrue('Value too large', backoff.getValue() <= maxBackoffValue);
   assertEquals('Wrong backoff count', count, backoff.getBackoffCount());
 }
 
-function assertValueRangeAndDecayCount(minBackoffValue, maxBackoffValue, count,
-    backoff) {
+function assertValueRangeAndDecayCount(
+    minBackoffValue, maxBackoffValue, count, backoff) {
   assertTrue('Value too small', backoff.getValue() >= minBackoffValue);
   assertTrue('Value too large', backoff.getValue() <= maxBackoffValue);
   assertEquals('Wrong decay count', count, backoff.getDecayCount());
@@ -110,45 +110,54 @@ function testRandomFactorBackoff() {
 
   assertValueAndBackoffCount(initialValue /* value */, 0 /* count */, backoff);
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(2, randomFactor),
-      getMaxBackoff(2, randomFactor), 1 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(2, randomFactor), getMaxBackoff(2, randomFactor),
+      1 /* count */, backoff);
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(4, randomFactor),
-      getMaxBackoff(4, randomFactor), 2 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(4, randomFactor), getMaxBackoff(4, randomFactor),
+      2 /* count */, backoff);
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(8, randomFactor),
-      getMaxBackoff(8, randomFactor), 3 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(8, randomFactor), getMaxBackoff(8, randomFactor),
+      3 /* count */, backoff);
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(16, randomFactor),
-      maxValue /* max backoff value */, 4 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(16, randomFactor), maxValue /* max backoff value */,
+      4 /* count */, backoff);
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(maxValue, randomFactor),
-      maxValue /* max backoff value */, 5 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(maxValue, randomFactor), maxValue /* max backoff value */,
+      5 /* count */, backoff);
 }
 
 function testRandomFactorDecay() {
   var initialValue = 1;
   var maxValue = 8;
   var randomFactor = 0.5;
-  var backoff = new goog.math.ExponentialBackoff(
-      initialValue, maxValue, randomFactor);
+  var backoff =
+      new goog.math.ExponentialBackoff(initialValue, maxValue, randomFactor);
 
   backoff.backoff();
   backoff.backoff();
   backoff.backoff();
   backoff.backoff();
   backoff.backoff();
-  assertValueRangeAndBackoffCount(getMinBackoff(maxValue, randomFactor),
-      maxValue /* max backoff value */, 5 /* count */, backoff);
+  assertValueRangeAndBackoffCount(
+      getMinBackoff(maxValue, randomFactor), maxValue /* max backoff value */,
+      5 /* count */, backoff);
   backoff.decay();
-  assertValueRangeAndDecayCount(getMinBackoff(4, randomFactor),
-      getMaxBackoff(4, randomFactor), 1 /* count */, backoff);
+  assertValueRangeAndDecayCount(
+      getMinBackoff(4, randomFactor), getMaxBackoff(4, randomFactor),
+      1 /* count */, backoff);
   backoff.decay();
-  assertValueRangeAndDecayCount(getMinBackoff(2, randomFactor),
-      getMaxBackoff(2, randomFactor), 2 /* count */, backoff);
+  assertValueRangeAndDecayCount(
+      getMinBackoff(2, randomFactor), getMaxBackoff(2, randomFactor),
+      2 /* count */, backoff);
   backoff.decay();
-  assertValueRangeAndDecayCount(initialValue,
-      getMaxBackoff(initialValue, randomFactor), 3 /* count */, backoff);
+  assertValueRangeAndDecayCount(
+      initialValue, getMaxBackoff(initialValue, randomFactor), 3 /* count */,
+      backoff);
 }
 
 

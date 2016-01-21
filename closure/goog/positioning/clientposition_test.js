@@ -107,8 +107,8 @@ function testClientPositionWithPositionContext() {
   var x = 300;
   var y = 200;
 
-  var contextElement = goog.dom.createDom(goog.dom.TagName.DIV,
-                                          undefined, popupElement);
+  var contextElement =
+      goog.dom.createDom(goog.dom.TagName.DIV, undefined, popupElement);
   goog.style.setPosition(contextElement, contextAbsoluteX, contextAbsoluteY);
   contextElement.style.position = 'absolute';
   goog.dom.appendChild(testArea, contextElement);

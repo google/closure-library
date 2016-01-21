@@ -39,85 +39,88 @@ function tearDown() {
 var emojiGroup1 = [
   'Emoji 1',
   [
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200']
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200']
+  ]
+];
 
 // 20 emoji
 var emojiGroup2 = [
   'Emoji 2',
   [
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204']
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204']
+  ]
+];
 
 // 20 emoji
 var emojiGroup3 = [
   'Emoji 3',
   [
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204']
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204']
+  ]
+];
 
 var sprite = '../../demos/emoji/sprite.png';
 var sprite2 = '../../demos/emoji/sprite2.png';
@@ -139,10 +142,12 @@ var sprite2 = '../../demos/emoji/sprite2.png';
  * @param {boolean=} opt_animated Whether the sprite info is for an animated
  *     emoji.
  */
-function si(cssClass, opt_url, opt_width, opt_height, opt_xOffset,
-            opt_yOffset, opt_animated) {
-  return new goog.ui.emoji.SpriteInfo(cssClass, opt_url, opt_width,
-      opt_height, opt_xOffset, opt_yOffset, opt_animated);
+function si(
+    cssClass, opt_url, opt_width, opt_height, opt_xOffset, opt_yOffset,
+    opt_animated) {
+  return new goog.ui.emoji.SpriteInfo(
+      cssClass, opt_url, opt_width, opt_height, opt_xOffset, opt_yOffset,
+      opt_animated);
 }
 
 // Contains a mix of sprited emoji via css, sprited emoji via metadata, and
@@ -150,85 +155,78 @@ function si(cssClass, opt_url, opt_width, opt_height, opt_xOffset,
 var spritedEmoji1 = [
   'Emoji 1',
   [
-   ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
-   ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
-   ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
-   ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
-   ['../../demos/emoji/204.gif', 'std.204', si('SPRITE_204')],
-   ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
-   ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
-   ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
-   ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
-   ['../../demos/emoji/2BE.gif', 'std.2BE',
-    si(null, sprite, 18, 18, 36, 54)],
-   ['../../demos/emoji/2BF.gif', 'std.2BF',
-    si(null, sprite, 18, 18, 0, 126)],
-   ['../../demos/emoji/2C0.gif', 'std.2C0',
-    si(null, sprite, 18, 18, 18, 305)],
-   ['../../demos/emoji/2C1.gif', 'std.2C1',
-    si(null, sprite, 18, 18, 0, 287)],
-   ['../../demos/emoji/2C2.gif', 'std.2C2',
-    si(null, sprite, 18, 18, 18, 126)],
-   ['../../demos/emoji/2C3.gif', 'std.2C3',
-    si(null, sprite, 18, 18, 36, 234)],
-   ['../../demos/emoji/2C4.gif', 'std.2C4',
-    si(null, sprite, 18, 18, 36, 72)],
-   ['../../demos/emoji/2C5.gif', 'std.2C5',
-    si(null, sprite, 18, 18, 54, 54)],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203'],
-   ['../../demos/emoji/204.gif', 'std.204'],
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201'],
-   ['../../demos/emoji/202.gif', 'std.202'],
-   ['../../demos/emoji/203.gif', 'std.203']
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
+    ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
+    ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
+    ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
+    ['../../demos/emoji/204.gif', 'std.204', si('SPRITE_204')],
+    ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
+    ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
+    ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
+    ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
+    ['../../demos/emoji/2BE.gif', 'std.2BE', si(null, sprite, 18, 18, 36, 54)],
+    ['../../demos/emoji/2BF.gif', 'std.2BF', si(null, sprite, 18, 18, 0, 126)],
+    ['../../demos/emoji/2C0.gif', 'std.2C0', si(null, sprite, 18, 18, 18, 305)],
+    ['../../demos/emoji/2C1.gif', 'std.2C1', si(null, sprite, 18, 18, 0, 287)],
+    ['../../demos/emoji/2C2.gif', 'std.2C2', si(null, sprite, 18, 18, 18, 126)],
+    ['../../demos/emoji/2C3.gif', 'std.2C3', si(null, sprite, 18, 18, 36, 234)],
+    ['../../demos/emoji/2C4.gif', 'std.2C4', si(null, sprite, 18, 18, 36, 72)],
+    ['../../demos/emoji/2C5.gif', 'std.2C5', si(null, sprite, 18, 18, 54, 54)],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203'],
+    ['../../demos/emoji/204.gif', 'std.204'],
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201'],
+    ['../../demos/emoji/202.gif', 'std.202'],
+    ['../../demos/emoji/203.gif', 'std.203']
+  ]
+];
 
 // This group contains a mix of sprited emoji via css, sprited emoji via
 // metadata, and non-sprited emoji.
 var spritedEmoji2 = [
   'Emoji 1',
   [
-   ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
-   ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
-   ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
-   ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
-   ['../../demos/emoji/204.gif', 'std.204', si('SPRITE_204')],
-   ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
-   ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
-   ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
-   ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
-   ['../../demos/emoji/2BE.gif', 'std.2BE',
-    si(null, sprite, 18, 18, 36, 54)],
-   ['../../demos/emoji/2BF.gif', 'std.2BF',
-    si(null, sprite, 18, 18, 0, 126)],
-   ['../../demos/emoji/2C0.gif', 'std.2C0',
-    si(null, sprite, 18, 18, 18, 305)],
-   ['../../demos/emoji/2C1.gif', 'std.2C1',
-    si(null, sprite, 18, 18, 0, 287)],
-   ['../../demos/emoji/2C2.gif', 'std.2C2',
-    si(null, sprite, 18, 18, 18, 126)],
-   ['../../demos/emoji/2C3.gif', 'std.2C3',
-    si(null, sprite, 18, 18, 36, 234)],
-   ['../../demos/emoji/2C4.gif', 'std.2C4',
-    si(null, sprite, 18, 18, 36, 72)],
-   ['../../demos/emoji/2C5.gif', 'std.2C5',
-    si(null, sprite, 18, 18, 54, 54)],
-   ['../../demos/emoji/2C6.gif', 'std.2C6'],
-   ['../../demos/emoji/2C7.gif', 'std.2C7'],
-   ['../../demos/emoji/2C8.gif', 'std.2C8'],
-   ['../../demos/emoji/2C9.gif', 'std.2C9'],
-   ['../../demos/emoji/2CA.gif', 'std.2CA',
-    si(null, sprite2, 18, 20, 36, 72, 1)],
-   ['../../demos/emoji/2E3.gif', 'std.2E3',
-    si(null, sprite2, 18, 18, 0, 0, 1)],
-   ['../../demos/emoji/2EF.gif', 'std.2EF',
-    si(null, sprite2, 18, 20, 0, 300, 1)],
-   ['../../demos/emoji/2F1.gif', 'std.2F1',
-    si(null, sprite2, 18, 18, 0, 320, 1)]
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
+    ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
+    ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
+    ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
+    ['../../demos/emoji/204.gif', 'std.204', si('SPRITE_204')],
+    ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
+    ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
+    ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
+    ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
+    ['../../demos/emoji/2BE.gif', 'std.2BE', si(null, sprite, 18, 18, 36, 54)],
+    ['../../demos/emoji/2BF.gif', 'std.2BF', si(null, sprite, 18, 18, 0, 126)],
+    ['../../demos/emoji/2C0.gif', 'std.2C0', si(null, sprite, 18, 18, 18, 305)],
+    ['../../demos/emoji/2C1.gif', 'std.2C1', si(null, sprite, 18, 18, 0, 287)],
+    ['../../demos/emoji/2C2.gif', 'std.2C2', si(null, sprite, 18, 18, 18, 126)],
+    ['../../demos/emoji/2C3.gif', 'std.2C3', si(null, sprite, 18, 18, 36, 234)],
+    ['../../demos/emoji/2C4.gif', 'std.2C4', si(null, sprite, 18, 18, 36, 72)],
+    ['../../demos/emoji/2C5.gif', 'std.2C5', si(null, sprite, 18, 18, 54, 54)],
+    ['../../demos/emoji/2C6.gif', 'std.2C6'],
+    ['../../demos/emoji/2C7.gif', 'std.2C7'],
+    ['../../demos/emoji/2C8.gif', 'std.2C8'],
+    ['../../demos/emoji/2C9.gif', 'std.2C9'],
+    [
+      '../../demos/emoji/2CA.gif', 'std.2CA',
+      si(null, sprite2, 18, 20, 36, 72, 1)
+    ],
+    [
+      '../../demos/emoji/2E3.gif', 'std.2E3', si(null, sprite2, 18, 18, 0, 0, 1)
+    ],
+    [
+      '../../demos/emoji/2EF.gif', 'std.2EF',
+      si(null, sprite2, 18, 20, 0, 300, 1)
+    ],
+    [
+      '../../demos/emoji/2F1.gif', 'std.2F1',
+      si(null, sprite2, 18, 18, 0, 320, 1)
+    ]
+  ]
+];
 
 var emojiGroups = [emojiGroup1, emojiGroup2, emojiGroup3];
 
@@ -358,9 +356,9 @@ function checkContentIsDefaultImg(page, defaultImgUrl) {
 
   for (var i = 0; i < content.length; i++) {
     var url = getImageUrl(content[i]);
-    assertTrue('img src should be ' + defaultImgUrl + ' but is ' +
-               url,
-               checkPathsEndWithSameFile(url, defaultImgUrl));
+    assertTrue(
+        'img src should be ' + defaultImgUrl + ' but is ' + url,
+        checkPathsEndWithSameFile(url, defaultImgUrl));
   }
 }
 
@@ -380,13 +378,14 @@ function checkContentIsEmojiImages(page, emojiList, defaultImg) {
   for (var i = 0; i < content.length; i++) {
     var url = getImageUrl(content[i]);
     if (i < emojiList.length) {
-      assertTrue('Paths should end with the same file: ' +
-                 url + ', ' + emojiList[i][0],
-                 checkPathsEndWithSameFile(url, emojiList[i][0]));
+      assertTrue(
+          'Paths should end with the same file: ' + url + ', ' +
+              emojiList[i][0],
+          checkPathsEndWithSameFile(url, emojiList[i][0]));
     } else {
-      assertTrue('Paths should end with the same file: ' +
-                 url + ', ' + defaultImg,
-                 checkPathsEndWithSameFile(url, defaultImg));
+      assertTrue(
+          'Paths should end with the same file: ' + url + ', ' + defaultImg,
+          checkPathsEndWithSameFile(url, defaultImg));
     }
   }
 }
@@ -423,8 +422,9 @@ function testNonDelayedLoadPaletteCreationForMultiPagePicker() {
 
   for (var i = 0; i < emojiGroups.length; i++) {
     var page = picker.getPage(i);
-    assertTrue('Page ' + i + ' should be in the document but is not',
-               page.isInDocument());
+    assertTrue(
+        'Page ' + i + ' should be in the document but is not',
+        page.isInDocument());
     checkContentIsEmojiImages(page, emojiGroups[i][1], defaultImg);
   }
 
@@ -494,12 +494,11 @@ function testGetSelectedEmoji_click() {
   palette.setSelectedIndex(0);  // Select a different emoji.
 
   var eventSent;
-  handler.listen(picker, goog.ui.Component.EventType.ACTION,
-      function(e) {
-        eventSent = e;
-      });
-  goog.testing.events.fireClickSequence(element, undefined, undefined,
-      { shiftKey: false });
+  handler.listen(picker, goog.ui.Component.EventType.ACTION, function(e) {
+    eventSent = e;
+  });
+  goog.testing.events.fireClickSequence(
+      element, undefined, undefined, {shiftKey: false});
 
   // Now we should get the first emoji back. See emojiGroup1 above.
   var emoji = picker.getSelectedEmoji();
@@ -525,12 +524,11 @@ function testGetSelectedEmoji_shiftClick() {
   palette.setSelectedIndex(0);  // Select a different emoji.
 
   var eventSent;
-  handler.listen(picker, goog.ui.Component.EventType.ACTION,
-      function(e) {
-        eventSent = e;
-      });
-  goog.testing.events.fireClickSequence(element, undefined, undefined,
-      { shiftKey: true });
+  handler.listen(picker, goog.ui.Component.EventType.ACTION, function(e) {
+    eventSent = e;
+  });
+  goog.testing.events.fireClickSequence(
+      element, undefined, undefined, {shiftKey: true});
 
   // Now we should get the first emoji back. See emojiGroup1 above.
   var emoji = picker.getSelectedEmoji();
@@ -560,12 +558,15 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
-    assertEquals('The palette item should be a div wrapped around something',
+    assertEquals(
+        'The palette item should be a div wrapped around something',
         cell.tagName, 'DIV');
     assertNotNull('The outer div is not wrapped around another element', inner);
-    assertEquals('The palette item should have the goomoji attribute',
+    assertEquals(
+        'The palette item should have the goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
-    assertEquals('The palette item should have the data-goomoji attribute',
+    assertEquals(
+        'The palette item should have the data-goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
@@ -574,22 +575,26 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
       assertEquals(inner.tagName, 'DIV');
       var cssClass = spriteInfo.getCssClass();
       if (cssClass) {
-        assertTrue('Sprite should have its CSS class set',
+        assertTrue(
+            'Sprite should have its CSS class set',
             goog.dom.classlist.contains(inner, cssClass));
       } else {
         checkPathsEndWithSameFile(
             goog.style.getStyle(inner, 'background-image'),
             spriteInfo.getUrl());
-        assertEquals(spriteInfo.getWidthCssValue(),
-            goog.style.getStyle(inner, 'width'));
-        assertEquals(spriteInfo.getHeightCssValue(),
+        assertEquals(
+            spriteInfo.getWidthCssValue(), goog.style.getStyle(inner, 'width'));
+        assertEquals(
+            spriteInfo.getHeightCssValue(),
             goog.style.getStyle(inner, 'height'));
-        assertEquals((spriteInfo.getXOffsetCssValue() + ' ' +
-                      spriteInfo.getYOffsetCssValue()).replace(/px/g, '').
-            replace(/pt/g, ''),
-            goog.style.getStyle(inner,
-                'background-position').replace(/px/g, '').
-                replace(/pt/g, ''));
+        assertEquals(
+            (spriteInfo.getXOffsetCssValue() + ' ' +
+             spriteInfo.getYOffsetCssValue())
+                .replace(/px/g, '')
+                .replace(/pt/g, ''),
+            goog.style.getStyle(inner, 'background-position')
+                .replace(/px/g, '')
+                .replace(/pt/g, ''));
       }
     } else {
       // A non-sprited emoji is just an img
@@ -617,12 +622,15 @@ function checkStructureForProgressivePicker(palette, emoji) {
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
-    assertEquals('The palette item should be a div wrapped around something',
+    assertEquals(
+        'The palette item should be a div wrapped around something',
         cell.tagName, 'DIV');
     assertNotNull('The outer div is not wrapped around another element', inner);
-    assertEquals('The palette item should have the goomoji attribute',
+    assertEquals(
+        'The palette item should have the goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
-    assertEquals('The palette item should have the data-goomoji attribute',
+    assertEquals(
+        'The palette item should have the data-goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
@@ -631,7 +639,8 @@ function checkStructureForProgressivePicker(palette, emoji) {
       var cssClass = spriteInfo.getCssClass();
       if (cssClass) {
         assertEquals('DIV', inner.tagName);
-        assertTrue('Sprite should have its CSS class set',
+        assertTrue(
+            'Sprite should have its CSS class set',
             goog.dom.classlist.contains(inner, cssClass));
       } else {
         // There's an inner div wrapping an img tag
@@ -640,18 +649,21 @@ function checkStructureForProgressivePicker(palette, emoji) {
         assertNotNull('Div should be wrapping something', img);
         assertEquals('IMG', img.tagName);
         checkPathsEndWithSameFile(img.src, spriteInfo.getUrl());
-        assertEquals(spriteInfo.getWidthCssValue(),
-                     goog.style.getStyle(inner, 'width'));
-        assertEquals(spriteInfo.getHeightCssValue(),
-                     goog.style.getStyle(inner, 'height'));
-        assertEquals(spriteInfo.getXOffsetCssValue().replace(/px/, '').
-            replace(/pt/, ''),
-            goog.style.getStyle(img, 'left').replace(/px/, '').
-                replace(/pt/, ''));
-        assertEquals(spriteInfo.getYOffsetCssValue().replace(/px/, '').
-            replace(/pt/, ''),
-            goog.style.getStyle(img, 'top').replace(/px/, '').
-                replace(/pt/, ''));
+        assertEquals(
+            spriteInfo.getWidthCssValue(), goog.style.getStyle(inner, 'width'));
+        assertEquals(
+            spriteInfo.getHeightCssValue(),
+            goog.style.getStyle(inner, 'height'));
+        assertEquals(
+            spriteInfo.getXOffsetCssValue().replace(/px/, '').replace(/pt/, ''),
+            goog.style.getStyle(img, 'left')
+                .replace(/px/, '')
+                .replace(/pt/, ''));
+        assertEquals(
+            spriteInfo.getYOffsetCssValue().replace(/px/, '').replace(/pt/, ''),
+            goog.style.getStyle(img, 'top')
+                .replace(/px/, '')
+                .replace(/pt/, ''));
       }
     } else {
       // A non-sprited emoji is just an img
@@ -678,16 +690,19 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
-    assertEquals('The palette item should be a div wrapped around something',
+    assertEquals(
+        'The palette item should be a div wrapped around something',
         cell.tagName, 'DIV');
     assertNotNull('The outer div is not wrapped around another element', inner);
-    assertEquals('The palette item should have the goomoji attribute',
+    assertEquals(
+        'The palette item should have the goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
-    assertEquals('The palette item should have the data-goomoji attribute',
+    assertEquals(
+        'The palette item should have the data-goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
-    var url = emojiInfo[0];   // url of the animated emoji
+    var url = emojiInfo[0];  // url of the animated emoji
     var spriteInfo = emojiInfo[2];
     if (spriteInfo) {
       assertEquals(inner.tagName, 'DIV');
@@ -695,34 +710,43 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
         var img = new Image();
         img.src = url;
         checkPathsEndWithSameFile(
-            goog.style.getStyle(inner, 'background-image'),
-            url);
-        assertEquals(String(img.width), goog.style.getStyle(inner, 'width').
-            replace(/px/g, '').replace(/pt/g, ''));
-        assertEquals(String(img.height), goog.style.getStyle(inner, 'height').
-            replace(/px/g, '').replace(/pt/g, ''));
-        assertEquals('0 0', goog.style.getStyle(inner,
-            'background-position').replace(/px/g, '').
-            replace(/pt/g, ''));
+            goog.style.getStyle(inner, 'background-image'), url);
+        assertEquals(
+            String(img.width), goog.style.getStyle(inner, 'width')
+                                   .replace(/px/g, '')
+                                   .replace(/pt/g, ''));
+        assertEquals(
+            String(img.height), goog.style.getStyle(inner, 'height')
+                                    .replace(/px/g, '')
+                                    .replace(/pt/g, ''));
+        assertEquals(
+            '0 0', goog.style.getStyle(inner, 'background-position')
+                       .replace(/px/g, '')
+                       .replace(/pt/g, ''));
       } else {
         var cssClass = spriteInfo.getCssClass();
         if (cssClass) {
-          assertTrue('Sprite should have its CSS class set',
+          assertTrue(
+              'Sprite should have its CSS class set',
               goog.dom.classlist.contains(inner, cssClass));
         } else {
           checkPathsEndWithSameFile(
               goog.style.getStyle(inner, 'background-image'),
               spriteInfo.getUrl());
-          assertEquals(spriteInfo.getWidthCssValue(),
+          assertEquals(
+              spriteInfo.getWidthCssValue(),
               goog.style.getStyle(inner, 'width'));
-          assertEquals(spriteInfo.getHeightCssValue(),
+          assertEquals(
+              spriteInfo.getHeightCssValue(),
               goog.style.getStyle(inner, 'height'));
-          assertEquals((spriteInfo.getXOffsetCssValue() + ' ' +
-                        spriteInfo.getYOffsetCssValue()).replace(/px/g, '').
-              replace(/pt/g, ''),
-              goog.style.getStyle(inner,
-                  'background-position').replace(/px/g, '').
-                  replace(/pt/g, ''));
+          assertEquals(
+              (spriteInfo.getXOffsetCssValue() + ' ' +
+               spriteInfo.getYOffsetCssValue())
+                  .replace(/px/g, '')
+                  .replace(/pt/g, ''),
+              goog.style.getStyle(inner, 'background-position')
+                  .replace(/px/g, '')
+                  .replace(/pt/g, ''));
         }
       }
     } else {
@@ -750,12 +774,15 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
-    assertEquals('The palette item should be a div wrapped around something',
+    assertEquals(
+        'The palette item should be a div wrapped around something',
         cell.tagName, 'DIV');
     assertNotNull('The outer div is not wrapped around another element', inner);
-    assertEquals('The palette item should have the goomoji attribute',
+    assertEquals(
+        'The palette item should have the goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
-    assertEquals('The palette item should have the data-goomoji attribute',
+    assertEquals(
+        'The palette item should have the data-goomoji attribute',
         cell.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
@@ -769,15 +796,20 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
         checkPathsEndWithSameFile(img.src, url);
         assertEquals(testImg.width, img.width);
         assertEquals(testImg.height, img.height);
-        assertEquals('0', goog.style.getStyle(img, 'left').replace(/px/g, '').
-            replace(/pt/g, ''));
-        assertEquals('0', goog.style.getStyle(img, 'top').replace(/px/g, '').
-            replace(/pt/g, ''));
+        assertEquals(
+            '0', goog.style.getStyle(img, 'left')
+                     .replace(/px/g, '')
+                     .replace(/pt/g, ''));
+        assertEquals(
+            '0', goog.style.getStyle(img, 'top')
+                     .replace(/px/g, '')
+                     .replace(/pt/g, ''));
       } else {
         var cssClass = spriteInfo.getCssClass();
         if (cssClass) {
           assertEquals('DIV', inner.tagName);
-          assertTrue('Sprite should have its CSS class set',
+          assertTrue(
+              'Sprite should have its CSS class set',
               goog.dom.classlist.contains(inner, cssClass));
         } else {
           // There's an inner div wrapping an img tag
@@ -786,18 +818,24 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
           assertNotNull('Div should be wrapping something', img);
           assertEquals('IMG', img.tagName);
           checkPathsEndWithSameFile(img.src, spriteInfo.getUrl());
-          assertEquals(spriteInfo.getWidthCssValue(),
+          assertEquals(
+              spriteInfo.getWidthCssValue(),
               goog.style.getStyle(inner, 'width'));
-          assertEquals(spriteInfo.getHeightCssValue(),
+          assertEquals(
+              spriteInfo.getHeightCssValue(),
               goog.style.getStyle(inner, 'height'));
-          assertEquals(spriteInfo.getXOffsetCssValue().replace(/px/, '').
-              replace(/pt/, ''),
-              goog.style.getStyle(img, 'left').replace(/px/, '').
-                  replace(/pt/, ''));
-          assertEquals(spriteInfo.getYOffsetCssValue().replace(/px/, '').
-              replace(/pt/, ''),
-              goog.style.getStyle(img, 'top').replace(/px/, '').
-                  replace(/pt/, ''));
+          assertEquals(
+              spriteInfo.getXOffsetCssValue().replace(/px/, '').replace(
+                  /pt/, ''),
+              goog.style.getStyle(img, 'left')
+                  .replace(/px/, '')
+                  .replace(/pt/, ''));
+          assertEquals(
+              spriteInfo.getYOffsetCssValue().replace(/px/, '').replace(
+                  /pt/, ''),
+              goog.style.getStyle(img, 'top')
+                  .replace(/px/, '')
+                  .replace(/pt/, ''));
         }
       }
     } else {
@@ -894,8 +932,9 @@ function testDelayedLoadPaletteCreationForMultiPagePicker() {
 
   // The first page should be loaded
   var page = picker.getPage(0);
-  assertTrue('Page ' + i + ' should be in the document but is not',
-             page.isInDocument());
+  assertTrue(
+      'Page ' + i + ' should be in the document but is not',
+      page.isInDocument());
   checkContentIsEmojiImages(page, emojiGroups[0][1], defaultImg);
 
   // The other pages should all be filled with the default img since they are

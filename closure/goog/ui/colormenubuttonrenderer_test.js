@@ -29,8 +29,7 @@ var harness;
 function setUp() {
   harness = new goog.testing.ui.RendererHarness(
       goog.ui.ColorMenuButtonRenderer.getInstance(),
-      goog.dom.getElement('parent'),
-      goog.dom.getElement('decoratedButton'));
+      goog.dom.getElement('parent'), goog.dom.getElement('decoratedButton'));
 }
 
 function tearDown() {
@@ -38,35 +37,35 @@ function tearDown() {
 }
 
 function testEquality() {
-  harness.attachControlAndRender(
-      new goog.ui.ColorMenuButton('Foo'));
-  harness.attachControlAndDecorate(
-      new goog.ui.ColorMenuButton());
+  harness.attachControlAndRender(new goog.ui.ColorMenuButton('Foo'));
+  harness.attachControlAndDecorate(new goog.ui.ColorMenuButton());
   harness.assertDomMatches();
 }
 
 function testWrapCaption() {
   var caption = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Foo');
-  var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(caption,
-      goog.dom.getDomHelper());
+  var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(
+      caption, goog.dom.getDomHelper());
   assertNotEquals('Caption should have been wrapped', caption, wrappedCaption);
-  assertEquals('Wrapped caption should have indicator css class',
+  assertEquals(
+      'Wrapped caption should have indicator css class',
       'goog-color-menu-button-indicator', wrappedCaption.className);
 }
 
 function testSetCaptionValue() {
   var caption = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Foo');
-  var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(caption,
-      goog.dom.getDomHelper());
+  var wrappedCaption = goog.ui.ColorMenuButtonRenderer.wrapCaption(
+      caption, goog.dom.getDomHelper());
   goog.ui.ColorMenuButtonRenderer.setCaptionValue(wrappedCaption, 'red');
 
   var expectedColor =
       goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9) ?
-      '#ff0000' : 'rgb(255, 0, 0)';
+      '#ff0000' :
+      'rgb(255, 0, 0)';
   assertEquals(expectedColor, caption.style.borderBottomColor);
 }
 
 function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(goog.ui.ColorMenuButtonRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.ColorMenuButtonRenderer);
 }

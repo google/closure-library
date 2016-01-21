@@ -97,8 +97,8 @@ goog.i18n.MessageFormat = function(pattern) {
    * @type {goog.i18n.NumberFormat}
    * @private
    */
-  this.numberFormatter_ = new goog.i18n.NumberFormat(
-      goog.i18n.NumberFormat.Format.DECIMAL);
+  this.numberFormatter_ =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
 
   this.parsePattern_(pattern);
 };
@@ -193,8 +193,8 @@ goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
  *     and 2nd parameter is just a data to be printed out in proper position.
  * @return {string} Formatted message.
  */
-goog.i18n.MessageFormat.prototype.formatIgnoringPound =
-    function(namedParameters) {
+goog.i18n.MessageFormat.prototype.formatIgnoringPound = function(
+    namedParameters) {
   return this.format_(namedParameters, true);
 };
 
@@ -213,8 +213,8 @@ goog.i18n.MessageFormat.prototype.formatIgnoringPound =
  * @return {string} Formatted message.
  * @private
  */
-goog.i18n.MessageFormat.prototype.format_ =
-    function(namedParameters, ignorePound) {
+goog.i18n.MessageFormat.prototype.format_ = function(
+    namedParameters, ignorePound) {
   if (this.parsedPattern_.length == 0) {
     return '';
   }
@@ -228,8 +228,8 @@ goog.i18n.MessageFormat.prototype.format_ =
   }
 
   while (this.literals_.length > 0) {
-    message = message.replace(this.buildPlaceholder_(this.literals_),
-                              this.literals_.pop());
+    message = message.replace(
+        this.buildPlaceholder_(this.literals_), this.literals_.pop());
   }
 
   return message;
@@ -266,19 +266,15 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
         break;
       case goog.i18n.MessageFormat.BlockType_.PLURAL:
         var pattern = parsedPattern[i].value;
-        this.formatPluralOrdinalBlock_(pattern,
-                                       namedParameters,
-                                       goog.i18n.pluralRules.select,
-                                       ignorePound,
-                                       result);
+        this.formatPluralOrdinalBlock_(
+            pattern, namedParameters, goog.i18n.pluralRules.select, ignorePound,
+            result);
         break;
       case goog.i18n.MessageFormat.BlockType_.ORDINAL:
         var pattern = parsedPattern[i].value;
-        this.formatPluralOrdinalBlock_(pattern,
-                                       namedParameters,
-                                       goog.i18n.ordinalRules.select,
-                                       ignorePound,
-                                       result);
+        this.formatPluralOrdinalBlock_(
+            pattern, namedParameters, goog.i18n.ordinalRules.select,
+            ignorePound, result);
         break;
       default:
         goog.asserts.fail('Unrecognized block type: ' + parsedPattern[i].type);
@@ -376,11 +372,11 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
   if (!goog.isDef(option)) {
     goog.asserts.assert(diff >= 0, 'Argument index smaller than offset.');
     var item;
-    if (this.numberFormatter_.getMinimumFractionDigits) { // number formatter?
+    if (this.numberFormatter_.getMinimumFractionDigits) {  // number formatter?
       // If we know the number of fractional digits we can make better decisions
       // We can decide (for instance) between "1 dollar" and "1.00 dollars".
-      item = pluralSelector(diff,
-          this.numberFormatter_.getMinimumFractionDigits());
+      item = pluralSelector(
+          diff, this.numberFormatter_.getMinimumFractionDigits());
     } else {
       item = pluralSelector(diff);
     }
@@ -442,15 +438,13 @@ goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
   // First replace '' with single quote placeholder since they can be found
   // inside other literals.
   pattern = pattern.replace(
-      goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_,
-      function() {
+      goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_, function() {
         literals.push("'");
         return buildPlaceholder(literals);
       });
 
   pattern = pattern.replace(
-      goog.i18n.MessageFormat.REGEX_LITERAL_,
-      function(match, text) {
+      goog.i18n.MessageFormat.REGEX_LITERAL_, function(match, text) {
         literals.push(text);
         return buildPlaceholder(literals);
       });
@@ -479,8 +473,8 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
     var pos = match.index;
     if (match[0] == '}') {
       var brace = braceStack.pop();
-      goog.asserts.assert(goog.isDef(brace) && brace == '{',
-                          'No matching { for }.');
+      goog.asserts.assert(
+          goog.isDef(brace) && brace == '{', 'No matching { for }.');
 
       if (braceStack.length == 0) {
         // End of the block.
@@ -508,15 +502,13 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
   }
 
   // Take care of the final string, and check if the braceStack is empty.
-  goog.asserts.assert(braceStack.length == 0,
-                      'There are mismatched { or } in the pattern.');
+  goog.asserts.assert(
+      braceStack.length == 0, 'There are mismatched { or } in the pattern.');
 
   var substring = pattern.substring(prevPos);
   if (substring != '') {
-    results.push({
-      type: goog.i18n.MessageFormat.Element_.STRING,
-      value: substring
-    });
+    results.push(
+        {type: goog.i18n.MessageFormat.Element_.STRING, value: substring});
   }
 
   return results;
@@ -650,8 +642,8 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
     goog.asserts.assertString(key, 'Missing select key element.');
 
     pos++;
-    goog.asserts.assert(pos < parts.length,
-                        'Missing or invalid select value element.');
+    goog.asserts.assert(
+        pos < parts.length, 'Missing or invalid select value element.');
 
     if (goog.i18n.MessageFormat.Element_.BLOCK == parts[pos].type) {
       var value = this.parseBlock_(parts[pos].value);
@@ -662,8 +654,9 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
     pos++;
   }
 
-  goog.asserts.assertArray(result[goog.i18n.MessageFormat.OTHER_],
-                           'Missing other key in select statement.');
+  goog.asserts.assertArray(
+      result[goog.i18n.MessageFormat.OTHER_],
+      'Missing other key in select statement.');
   return result;
 };
 
@@ -698,8 +691,8 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
     goog.asserts.assertString(key, 'Missing plural key element.');
 
     pos++;
-    goog.asserts.assert(pos < parts.length,
-                        'Missing or invalid plural value element.');
+    goog.asserts.assert(
+        pos < parts.length, 'Missing or invalid plural value element.');
 
     if (goog.i18n.MessageFormat.Element_.BLOCK == parts[pos].type) {
       var value = this.parseBlock_(parts[pos].value);
@@ -710,8 +703,9 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
     pos++;
   }
 
-  goog.asserts.assertArray(result[goog.i18n.MessageFormat.OTHER_],
-                           'Missing other key in plural statement.');
+  goog.asserts.assertArray(
+      result[goog.i18n.MessageFormat.OTHER_],
+      'Missing other key in plural statement.');
 
   return result;
 };
@@ -752,8 +746,8 @@ goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
     goog.asserts.assertString(key, 'Missing ordinal key element.');
 
     pos++;
-    goog.asserts.assert(pos < parts.length,
-                        'Missing or invalid ordinal value element.');
+    goog.asserts.assert(
+        pos < parts.length, 'Missing or invalid ordinal value element.');
 
     if (goog.i18n.MessageFormat.Element_.BLOCK == parts[pos].type) {
       var value = this.parseBlock_(parts[pos].value);
@@ -764,8 +758,9 @@ goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
     pos++;
   }
 
-  goog.asserts.assertArray(result[goog.i18n.MessageFormat.OTHER_],
-                           'Missing other key in selectordinal statement.');
+  goog.asserts.assertArray(
+      result[goog.i18n.MessageFormat.OTHER_],
+      'Missing other key in selectordinal statement.');
 
   return result;
 };

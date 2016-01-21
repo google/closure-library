@@ -67,8 +67,7 @@ function testIe() {
   setUserAgent(goog.labs.userAgent.testAgents.IE_8);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.IE_8_COMPATIBILITY);
+  setUserAgent(goog.labs.userAgent.testAgents.IE_8_COMPATIBILITY);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   setUserAgent(goog.labs.userAgent.testAgents.IE_9);
@@ -77,97 +76,80 @@ function testIe() {
   setUserAgent(goog.labs.userAgent.testAgents.IE_10);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.IE_10_COMPATIBILITY);
+  setUserAgent(goog.labs.userAgent.testAgents.IE_10_COMPATIBILITY);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   setUserAgent(goog.labs.userAgent.testAgents.IE_11);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.IE_11_COMPATIBILITY_MSIE_7);
+  setUserAgent(goog.labs.userAgent.testAgents.IE_11_COMPATIBILITY_MSIE_7);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.IE_11_COMPATIBILITY_MSIE_9);
+  setUserAgent(goog.labs.userAgent.testAgents.IE_11_COMPATIBILITY_MSIE_9);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testFirefoxMac() {
   mockAgent.setNavigator({platform: 'Macintosh'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.FIREFOX_MAC);
+  setUserAgent(goog.labs.userAgent.testAgents.FIREFOX_MAC);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testFirefoxNotMac() {
   mockAgent.setNavigator({platform: 'X11'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.FIREFOX_LINUX);
+  setUserAgent(goog.labs.userAgent.testAgents.FIREFOX_LINUX);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'Windows'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.FIREFOX_WINDOWS);
+  setUserAgent(goog.labs.userAgent.testAgents.FIREFOX_WINDOWS);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testSafari() {
   mockAgent.setNavigator({platform: 'Macintosh'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_6);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_6);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_MAC);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_MAC);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'iPhone'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPHONE_32);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_IPHONE_32);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPHONE_421);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_IPHONE_421);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPHONE_431);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_IPHONE_431);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'iPod'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPOD);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_IPOD);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testSafariWndows() {
   mockAgent.setNavigator({platform: 'Macintosh'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_WINDOWS);
+  setUserAgent(goog.labs.userAgent.testAgents.SAFARI_WINDOWS);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testOperaMac() {
   mockAgent.setNavigator({platform: 'Macintosh'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.OPERA_MAC);
+  setUserAgent(goog.labs.userAgent.testAgents.OPERA_MAC);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testOperaNonMac() {
   mockAgent.setNavigator({platform: 'X11'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.OPERA_LINUX);
+  setUserAgent(goog.labs.userAgent.testAgents.OPERA_LINUX);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'Windows'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.OPERA_15);
+  setUserAgent(goog.labs.userAgent.testAgents.OPERA_15);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
@@ -185,35 +167,29 @@ function testIPad() {
 
 function testChromeMac() {
   mockAgent.setNavigator({platform: 'Macintosh'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_MAC);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_MAC);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'iPhone'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_IPHONE);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_IPHONE);
   assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testChromeNonMac() {
   mockAgent.setNavigator({platform: 'Linux'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_ANDROID);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_ANDROID);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'X11'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_OS);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_OS);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'X11'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_LINUX);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_LINUX);
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 
   mockAgent.setNavigator({platform: 'Windows'});
-  setUserAgent(
-      goog.labs.userAgent.testAgents.CHROME_25);
+  setUserAgent(goog.labs.userAgent.testAgents.CHROME_25);
 
   assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }

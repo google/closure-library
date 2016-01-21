@@ -60,9 +60,7 @@ function setViewportSize(w, h, fireEvent) {
 
 var eventWasFired = {};
 function getListenerFn(id) {
-  return function() {
-    propertyReplacer.set(eventWasFired, id, true);
-  };
+  return function() { propertyReplacer.set(eventWasFired, id, true); };
 }
 
 
@@ -89,35 +87,36 @@ function tearDown() {
 
 
 function testResizeEvent() {
-  goog.events.listen(viewportSizeMonitor, goog.events.EventType.RESIZE,
-      getListenerFn(1));
-  assertFalse('Listener should not be called if window was not resized',
+  goog.events.listen(
+      viewportSizeMonitor, goog.events.EventType.RESIZE, getListenerFn(1));
+  assertFalse(
+      'Listener should not be called if window was not resized',
       listenerWasCalled(1));
   setViewportSize(300, 300, true);
-  assertFalse('Listener should not be called for bogus resize event',
+  assertFalse(
+      'Listener should not be called for bogus resize event',
       listenerWasCalled(1));
   setViewportSize(301, 301, true);
-  assertTrue('Listener should be called for valid resize event',
-      listenerWasCalled(1));
+  assertTrue(
+      'Listener should be called for valid resize event', listenerWasCalled(1));
 }
 
 
 function testInstanceGetter() {
   var fakeWindow1 = new FakeWindow();
-  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
-      fakeWindow1);
-  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
-      fakeWindow1);
-  assertEquals('The same window should give us the same instance monitor',
-      monitor1, monitor2);
+  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  assertEquals(
+      'The same window should give us the same instance monitor', monitor1,
+      monitor2);
 
   var fakeWindow2 = new FakeWindow();
-  var monitor3 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
-      fakeWindow2);
-  assertNotEquals('Different windows should give different instances',
-      monitor1, monitor3);
+  var monitor3 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow2);
+  assertNotEquals(
+      'Different windows should give different instances', monitor1, monitor3);
 
-  assertEquals('Monitors should match if opt_window is not provided',
+  assertEquals(
+      'Monitors should match if opt_window is not provided',
       goog.dom.ViewportSizeMonitor.getInstanceForWindow(),
       goog.dom.ViewportSizeMonitor.getInstanceForWindow());
 }
@@ -125,13 +124,11 @@ function testInstanceGetter() {
 
 function testRemoveInstanceForWindow() {
   var fakeWindow1 = new FakeWindow();
-  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
-      fakeWindow1);
+  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
 
   goog.dom.ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
   assertTrue(monitor1.isDisposed());
 
-  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
-      fakeWindow1);
+  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
   assertNotEquals(monitor1, monitor2);
 }

@@ -146,8 +146,8 @@ goog.html.legacyconversions.safeStyleFromString = function(style) {
  */
 goog.html.legacyconversions.trustedResourceUrlFromString = function(url) {
   goog.html.legacyconversions.throwIfConversionsDisallowed();
-  return goog.html.TrustedResourceUrl.
-      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 

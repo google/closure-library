@@ -29,7 +29,7 @@ function shouldRunTests() {
 }
 
 function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000; // 5s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000;  // 5s
 }
 
 function setUp() {

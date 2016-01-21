@@ -23,8 +23,8 @@ goog.require('goog.testing.jsunit');
 
 function testHasEntries() {
   var obj1 = {x: 1, y: 2, z: 3};
-  goog.labs.testing.assertThat(obj1, hasEntries({x: 1, y: 2}),
-      'obj1 has entries: {x:1, y:2}');
+  goog.labs.testing.assertThat(
+      obj1, hasEntries({x: 1, y: 2}), 'obj1 has entries: {x:1, y:2}');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(obj1, hasEntries({z: 5, a: 4}));
@@ -33,8 +33,7 @@ function testHasEntries() {
 
 function testHasEntry() {
   var obj1 = {x: 1, y: 2, z: 3};
-  goog.labs.testing.assertThat(obj1, hasEntry('x', 1),
-      'obj1 has entry: {x:1}');
+  goog.labs.testing.assertThat(obj1, hasEntry('x', 1), 'obj1 has entry: {x:1}');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(obj1, hasEntry('z', 5));

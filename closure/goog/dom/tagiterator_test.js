@@ -28,32 +28,34 @@ var it;
 var pos;
 
 function assertStartTag(type) {
-  assertEquals('Position ' + pos + ' should be start tag',
+  assertEquals(
+      'Position ' + pos + ' should be start tag',
       goog.dom.TagWalkType.START_TAG, it.tagType);
   assertTrue('isStartTag should return true', it.isStartTag());
   assertFalse('isEndTag should return false', it.isEndTag());
   assertFalse('isNonElement should return false', it.isNonElement());
-  assertEquals('Position ' + pos + ' should be ' + type, type,
-      it.node.tagName);
+  assertEquals('Position ' + pos + ' should be ' + type, type, it.node.tagName);
 }
 
 function assertEndTag(type) {
-  assertEquals('Position ' + pos + ' should be end tag',
-      goog.dom.TagWalkType.END_TAG, it.tagType);
+  assertEquals(
+      'Position ' + pos + ' should be end tag', goog.dom.TagWalkType.END_TAG,
+      it.tagType);
   assertFalse('isStartTag should return false', it.isStartTag());
   assertTrue('isEndTag should return true', it.isEndTag());
   assertFalse('isNonElement should return false', it.isNonElement());
-  assertEquals('Position ' + pos + ' should be ' + type, type,
-      it.node.tagName);
+  assertEquals('Position ' + pos + ' should be ' + type, type, it.node.tagName);
 }
 
 function assertTextNode(value) {
-  assertEquals('Position ' + pos + ' should be text node',
-      goog.dom.TagWalkType.OTHER, it.tagType);
+  assertEquals(
+      'Position ' + pos + ' should be text node', goog.dom.TagWalkType.OTHER,
+      it.tagType);
   assertFalse('isStartTag should return false', it.isStartTag());
   assertFalse('isEndTag should return false', it.isEndTag());
   assertTrue('isNonElement should return true', it.isNonElement());
-  assertEquals('Position ' + pos + ' should be "' + value + '"', value,
+  assertEquals(
+      'Position ' + pos + ' should be "' + value + '"', value,
       it.node.nodeValue);
 }
 
@@ -362,13 +364,13 @@ function testUnconstrained() {
     }
   });
 
-  assertNotEquals('Unonstrained iterator should not stop at position 3.', 3,
-      pos);
+  assertNotEquals(
+      'Unonstrained iterator should not stop at position 3.', 3, pos);
 }
 
 function testConstrainedText() {
-  it = new goog.dom.TagIterator(goog.dom.getElement('test3').firstChild,
-      false, false);
+  it = new goog.dom.TagIterator(
+      goog.dom.getElement('test3').firstChild, false, false);
   pos = 0;
 
   goog.iter.forEach(it, function() {
@@ -380,8 +382,7 @@ function testConstrainedText() {
     }
   });
 
-  assertEquals('Constrained text iterator should stop at position 1.', 1,
-      pos);
+  assertEquals('Constrained text iterator should stop at position 1.', 1, pos);
 }
 
 function testReverseConstrained() {
@@ -403,8 +404,8 @@ function testReverseConstrained() {
     }
   });
 
-  assertEquals('Constrained reversed iterator should stop at position 1.', 1,
-      pos);
+  assertEquals(
+      'Constrained reversed iterator should stop at position 1.', 1, pos);
 }
 
 function testSpliceRemoveSingleNode() {
@@ -412,9 +413,7 @@ function testSpliceRemoveSingleNode() {
   testDiv.innerHTML = '<br/>';
   it = new goog.dom.TagIterator(testDiv.firstChild);
 
-  goog.iter.forEach(it, function(node, dummy, i) {
-    i.splice();
-  });
+  goog.iter.forEach(it, function(node, dummy, i) { i.splice(); });
 
   assertEquals('Node not removed', 0, testDiv.childNodes.length);
 }
@@ -433,8 +432,8 @@ function testSpliceRemoveFirstTextNode() {
     }
   });
 
-  goog.testing.dom.assertHtmlMatches('<b>world</b><i>goodbye</i>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<b>world</b><i>goodbye</i>', testDiv.innerHTML);
 }
 
 function testSpliceReplaceFirstTextNode() {
@@ -450,8 +449,8 @@ function testSpliceReplaceFirstTextNode() {
     }
   });
 
-  goog.testing.dom.assertHtmlMatches('<i>HELLO</i><b>world</b>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<i>HELLO</i><b>world</b>', testDiv.innerHTML);
 }
 
 function testSpliceReplaceSingleNode() {
@@ -460,8 +459,9 @@ function testSpliceReplaceSingleNode() {
   it = new goog.dom.TagIterator(testDiv.firstChild);
 
   goog.iter.forEach(it, function(node, dummy, i) {
-    i.splice(goog.dom.createDom(goog.dom.TagName.LINK),
-             goog.dom.createDom(goog.dom.TagName.IMG));
+    i.splice(
+        goog.dom.createDom(goog.dom.TagName.LINK),
+        goog.dom.createDom(goog.dom.TagName.IMG));
   });
 
   goog.testing.dom.assertHtmlMatches('<link><img>', testDiv.innerHTML);
@@ -472,12 +472,11 @@ function testSpliceFlattenSingleNode() {
   testDiv.innerHTML = '<div><b>one</b>two<i>three</i></div>';
   it = new goog.dom.TagIterator(testDiv.firstChild);
 
-  goog.iter.forEach(it, function(node, dummy, i) {
-    i.splice(node.childNodes);
-  });
+  goog.iter.forEach(
+      it, function(node, dummy, i) { i.splice(node.childNodes); });
 
-  goog.testing.dom.assertHtmlMatches('<b>one</b>two<i>three</i>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<b>one</b>two<i>three</i>', testDiv.innerHTML);
 }
 
 function testSpliceMiddleNode() {
@@ -539,8 +538,8 @@ function testSpliceMultipleNodes() {
     }
   });
 
-  goog.testing.dom.assertHtmlMatches('<b>this</b> is <i>from IE</i>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<b>this</b> is <i>from IE</i>', testDiv.innerHTML);
 }
 
 function testSpliceMultipleNodesAtEnd() {
@@ -560,8 +559,8 @@ function testSpliceMultipleNodesAtEnd() {
     }
   });
 
-  goog.testing.dom.assertHtmlMatches('<b>this</b> is <i>from IE</i>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<b>this</b> is <i>from IE</i>', testDiv.innerHTML);
 }
 
 function testSpliceMultipleNodesReversed() {
@@ -581,6 +580,6 @@ function testSpliceMultipleNodesReversed() {
     }
   });
 
-  goog.testing.dom.assertHtmlMatches('<b>this</b> is <i>from IE</i>',
-      testDiv.innerHTML);
+  goog.testing.dom.assertHtmlMatches(
+      '<b>this</b> is <i>from IE</i>', testDiv.innerHTML);
 }

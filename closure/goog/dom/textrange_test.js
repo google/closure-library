@@ -55,52 +55,45 @@ function tearDown() {
 }
 
 function testCreateFromNodeContents() {
-  assertNotNull('Text range object can be created for element node',
+  assertNotNull(
+      'Text range object can be created for element node',
       goog.dom.TextRange.createFromNodeContents(logo));
-  assertNotNull('Text range object can be created for text node',
+  assertNotNull(
+      'Text range object can be created for text node',
       goog.dom.TextRange.createFromNodeContents(logo2.previousSibling));
 }
 
 function testMoveToNodes() {
   var range = goog.dom.TextRange.createFromNodeContents(table2);
   range.moveToNodes(table2div, 0, table2div, 1, false);
-  assertEquals('Range should start in table2div',
-               table2div,
-               range.getStartNode());
-  assertEquals('Range should end in table2div',
-               table2div,
-               range.getEndNode());
-  assertEquals('Range start offset should be 0',
-               0,
-               range.getStartOffset());
-  assertEquals('Range end offset should be 0',
-               1,
-               range.getEndOffset());
-  assertFalse('Range should not be reversed',
-              range.isReversed());
+  assertEquals(
+      'Range should start in table2div', table2div, range.getStartNode());
+  assertEquals('Range should end in table2div', table2div, range.getEndNode());
+  assertEquals('Range start offset should be 0', 0, range.getStartOffset());
+  assertEquals('Range end offset should be 0', 1, range.getEndOffset());
+  assertFalse('Range should not be reversed', range.isReversed());
   range.moveToNodes(table2div, 0, table2div, 1, true);
-  assertTrue('Range should be reversed',
-             range.isReversed());
-  assertEquals('Range text should be "foo"',
-               'foo',
-               range.getText());
+  assertTrue('Range should be reversed', range.isReversed());
+  assertEquals('Range text should be "foo"', 'foo', range.getText());
 }
 
 function testContainsTextRange() {
   var range = goog.dom.TextRange.createFromNodeContents(table2);
   var range2 = goog.dom.TextRange.createFromNodeContents(table2div);
-  assertTrue('TextRange contains other TextRange',
-      range.containsRange(range2));
-  assertFalse('TextRange does not contain other TextRange',
+  assertTrue('TextRange contains other TextRange', range.containsRange(range2));
+  assertFalse(
+      'TextRange does not contain other TextRange',
       range2.containsRange(range));
 
   range = goog.dom.Range.createFromNodes(
       table2div.firstChild, 1, table2div.lastChild, 1);
   range2 = goog.dom.TextRange.createFromNodes(
       table2div.firstChild, 0, table2div.lastChild, 0);
-  assertTrue('TextRange partially contains other TextRange',
+  assertTrue(
+      'TextRange partially contains other TextRange',
       range2.containsRange(range, true));
-  assertFalse('TextRange does not fully contain other TextRange',
+  assertFalse(
+      'TextRange does not fully contain other TextRange',
       range2.containsRange(range, false));
 }
 
@@ -108,16 +101,17 @@ function testContainsControlRange() {
   if (goog.userAgent.IE) {
     var range = goog.dom.ControlRange.createFromElements(table2);
     var range2 = goog.dom.TextRange.createFromNodeContents(table2div);
-    assertFalse('TextRange does not contain ControlRange',
-        range2.containsRange(range));
+    assertFalse(
+        'TextRange does not contain ControlRange', range2.containsRange(range));
     range = goog.dom.ControlRange.createFromElements(logo2);
-    assertTrue('TextRange contains ControlRange',
-        range2.containsRange(range));
+    assertTrue('TextRange contains ControlRange', range2.containsRange(range));
     range = goog.dom.TextRange.createFromNodeContents(table2);
     range2 = goog.dom.ControlRange.createFromElements(logo, logo2);
-    assertTrue('TextRange partially contains ControlRange',
+    assertTrue(
+        'TextRange partially contains ControlRange',
         range2.containsRange(range, true));
-    assertFalse('TextRange does not fully contain ControlRange',
+    assertFalse(
+        'TextRange does not fully contain ControlRange',
         range2.containsRange(range, false));
   }
 }
@@ -139,8 +133,8 @@ function getTest3ElementTopLeft() {
 }
 
 function testGetStartPosition() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
 
   // The start node is in the top left.
   var range = goog.dom.TextRange.createFromNodeContents(test3);
@@ -154,10 +148,10 @@ function testGetStartPosition() {
 }
 
 function testGetStartPositionNotInDocument() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
-  expectedFailures.expectFailureFor(goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('8'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8'));
 
   var range = goog.dom.TextRange.createFromNodeContents(test3);
 
@@ -173,8 +167,8 @@ function testGetStartPositionNotInDocument() {
 }
 
 function testGetStartPositionReversed() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
 
   // Simulate the user selecting backwards from right-to-left.
   // The start node is now in the bottom right.
@@ -198,8 +192,8 @@ function testGetStartPositionRightToLeft() {
     return;
   }
 
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
 
   // Even in RTL content the start node is still in the top left.
   var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
@@ -238,8 +232,8 @@ function getTest3ElementBottomRight() {
 }
 
 function testGetEndPosition() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
 
   // The end node is in the bottom right.
   var range = goog.dom.TextRange.createFromNodeContents(test3);
@@ -254,10 +248,10 @@ function testGetEndPosition() {
 }
 
 function testGetEndPositionNotInDocument() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
-  expectedFailures.expectFailureFor(goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('8'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8'));
 
   var range = goog.dom.TextRange.createFromNodeContents(test3);
 
@@ -273,8 +267,8 @@ function testGetEndPositionNotInDocument() {
 }
 
 function testGetEndPositionReversed() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
 
   // Simulate the user selecting backwards from right-to-left.
   // The end node is still in the lower right.
@@ -294,10 +288,10 @@ function testGetEndPositionReversed() {
 }
 
 function testGetEndPositionRightToLeft() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
-  expectedFailures.expectFailureFor(goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('8'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'));
+  expectedFailures.expectFailureFor(
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8'));
 
   // Even in RTL content the end node is still in the bottom right.
   var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);

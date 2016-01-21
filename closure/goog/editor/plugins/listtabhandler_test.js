@@ -56,7 +56,7 @@ function tearDown() {
 function testListIndentInLi() {
   field.innerHTML = '<ul><li>Text</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(testText, 0, testText, 4);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -69,7 +69,8 @@ function testListIndentInLi() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event must be handled',
+  assertTrue(
+      'Event must be handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
 
   editableField.$verify();
@@ -79,7 +80,7 @@ function testListIndentInLi() {
 function testListIndentContainLi() {
   field.innerHTML = '<ul><li>Text</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(field.firstChild, 0, testText, 4);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -92,7 +93,8 @@ function testListIndentContainLi() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event must be handled',
+  assertTrue(
+      'Event must be handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
 
   editableField.$verify();
@@ -102,7 +104,7 @@ function testListIndentContainLi() {
 function testListOutdentInLi() {
   field.innerHTML = '<ul><li>Text</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(testText, 0, testText, 4);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -115,7 +117,8 @@ function testListOutdentInLi() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event must be handled',
+  assertTrue(
+      'Event must be handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
 
   editableField.$verify();
@@ -125,7 +128,7 @@ function testListOutdentInLi() {
 function testListOutdentContainLi() {
   field.innerHTML = '<ul><li>Text</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(field.firstChild, 0, testText, 4);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -138,7 +141,8 @@ function testListOutdentContainLi() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event must be handled',
+  assertTrue(
+      'Event must be handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
 
   editableField.$verify();
@@ -159,7 +163,8 @@ function testNoOp() {
   editableField.$replay();
   event.$replay();
 
-  assertFalse('Event must not be handled',
+  assertFalse(
+      'Event must not be handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
 
   editableField.$verify();

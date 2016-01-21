@@ -39,12 +39,8 @@ function setUp() {
   onSuccessCalled = false;
   onFailureCalled = false;
   delay = new goog.async.ConditionalDelay(callback);
-  delay.onSuccess = function() {
-    onSuccessCalled = true;
-  };
-  delay.onFailure = function() {
-    onFailureCalled = true;
-  };
+  delay.onSuccess = function() { onSuccessCalled = true; };
+  delay.onFailure = function() { onFailureCalled = true; };
 }
 
 

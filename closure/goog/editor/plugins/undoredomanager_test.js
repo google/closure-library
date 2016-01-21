@@ -34,16 +34,14 @@ var preventDefault;
 function setUp() {
   manager = new goog.editor.plugins.UndoRedoManager();
   stateChangeCount = 0;
-  goog.events.listen(manager,
-      goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
-      function() {
-        stateChangeCount++;
-      });
+  goog.events.listen(
+      manager, goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
+      function() { stateChangeCount++; });
 
   beforeUndoCount = 0;
   preventDefault = false;
-  goog.events.listen(manager,
-      goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO,
+  goog.events.listen(
+      manager, goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO,
       function(e) {
         beforeUndoCount++;
         if (preventDefault) {
@@ -52,8 +50,8 @@ function setUp() {
       });
 
   beforeRedoCount = 0;
-  goog.events.listen(manager,
-      goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
+  goog.events.listen(
+      manager, goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
       function(e) {
         beforeRedoCount++;
         if (preventDefault) {
@@ -66,14 +64,11 @@ function setUp() {
   mockState3 = new goog.testing.StrictMock(goog.editor.plugins.UndoRedoState);
   states = [mockState1, mockState2, mockState3];
 
-  mockState1.equals = mockState2.equals = mockState3.equals = function(state) {
-    return this == state;
-  };
+  mockState1.equals = mockState2.equals =
+      mockState3.equals = function(state) { return this == state; };
 
   mockState1.isAsynchronous = mockState2.isAsynchronous =
-      mockState3.isAsynchronous = function() {
-    return false;
-  };
+      mockState3.isAsynchronous = function() { return false; };
 }
 
 
@@ -111,55 +106,66 @@ function resetStates() {
 function testSetMaxUndoDepth() {
   manager.setMaxUndoDepth(2);
   addStatesToManager();
-  assertArrayEquals('Undo stack must contain only the two most recent states.',
+  assertArrayEquals(
+      'Undo stack must contain only the two most recent states.',
       [mockState2, mockState3], manager.undoStack_);
 }
 
 
 function testAddState() {
   var stateAddedCount = 0;
-  goog.events.listen(manager,
-      goog.editor.plugins.UndoRedoManager.EventType.STATE_ADDED,
-      function() {
-        stateAddedCount++;
-      });
+  goog.events.listen(
+      manager, goog.editor.plugins.UndoRedoManager.EventType.STATE_ADDED,
+      function() { stateAddedCount++; });
 
   manager.addState(mockState1);
-  assertArrayEquals('Undo stack must contain added state.',
-      [mockState1], manager.undoStack_);
-  assertEquals('Manager must dispatch one state change event on ' +
-      'undo stack 0->1 transition.', 1, stateChangeCount);
+  assertArrayEquals(
+      'Undo stack must contain added state.', [mockState1], manager.undoStack_);
+  assertEquals(
+      'Manager must dispatch one state change event on ' +
+          'undo stack 0->1 transition.',
+      1, stateChangeCount);
   assertEquals('State added must have dispatched once.', 1, stateAddedCount);
   mockState1.$reset();
 
   // Test adding same state twice.
   manager.addState(mockState1);
-  assertArrayEquals('Undo stack must not contain two equal, sequential states.',
-      [mockState1], manager.undoStack_);
-  assertEquals('Manager must not dispatch state change event when nothing is ' +
-      'added to the stack.', 1, stateChangeCount);
+  assertArrayEquals(
+      'Undo stack must not contain two equal, sequential states.', [mockState1],
+      manager.undoStack_);
+  assertEquals(
+      'Manager must not dispatch state change event when nothing is ' +
+          'added to the stack.',
+      1, stateChangeCount);
   assertEquals('State added must have dispatched once.', 1, stateAddedCount);
 
   // Test adding a second state.
   manager.addState(mockState2);
-  assertArrayEquals('Undo stack must contain both states.',
-      [mockState1, mockState2], manager.undoStack_);
-  assertEquals('Manager must not dispatch state change event when second ' +
-      'state is added to the stack.', 1, stateChangeCount);
+  assertArrayEquals(
+      'Undo stack must contain both states.', [mockState1, mockState2],
+      manager.undoStack_);
+  assertEquals(
+      'Manager must not dispatch state change event when second ' +
+          'state is added to the stack.',
+      1, stateChangeCount);
   assertEquals('State added must have dispatched twice.', 2, stateAddedCount);
 
   // Test adding a state when there is state on the redo stack.
   manager.undo();
-  assertEquals('Manager must dispatch state change when redo stack goes to 1.',
-      2, stateChangeCount);
+  assertEquals(
+      'Manager must dispatch state change when redo stack goes to 1.', 2,
+      stateChangeCount);
 
   manager.addState(mockState3);
-  assertArrayEquals('Undo stack must contain states 1 and 3.',
-      [mockState1, mockState3], manager.undoStack_);
-  assertEquals('Manager must dispatch state change event when redo stack ' +
-      'goes to zero.', 3, stateChangeCount);
-  assertEquals('State added must have dispatched three times.',
-      3, stateAddedCount);
+  assertArrayEquals(
+      'Undo stack must contain states 1 and 3.', [mockState1, mockState3],
+      manager.undoStack_);
+  assertEquals(
+      'Manager must dispatch state change event when redo stack ' +
+          'goes to zero.',
+      3, stateChangeCount);
+  assertEquals(
+      'State added must have dispatched three times.', 3, stateAddedCount);
 }
 
 
@@ -185,12 +191,13 @@ function testClearHistory() {
   manager.clearHistory();
   assertFalse('Undo stack must be empty.', manager.hasUndoState());
   assertFalse('Redo stack must be empty.', manager.hasRedoState());
-  assertEquals('State change count must be 1 after clear history.',
-      1, stateChangeCount);
+  assertEquals(
+      'State change count must be 1 after clear history.', 1, stateChangeCount);
 
   manager.clearHistory();
-  assertEquals('Repeated clearHistory must not change state change count.',
-      1, stateChangeCount);
+  assertEquals(
+      'Repeated clearHistory must not change state change count.', 1,
+      stateChangeCount);
 }
 
 
@@ -200,29 +207,30 @@ function testUndo() {
   mockState3.undo();
   mockState3.$replay();
   manager.undo();
-  assertEquals('Adding first item to redo stack must dispatch state change.',
-      1, stateChangeCount);
-  assertEquals('Undo must cause before action to dispatch',
-      1, beforeUndoCount);
+  assertEquals(
+      'Adding first item to redo stack must dispatch state change.', 1,
+      stateChangeCount);
+  assertEquals('Undo must cause before action to dispatch', 1, beforeUndoCount);
   mockState3.$verify();
 
   preventDefault = true;
   mockState2.$replay();
   manager.undo();
-  assertEquals('No stack transitions between 0 and 1, must not dispatch ' +
-      'state change.', 1, stateChangeCount);
-  assertEquals('Undo must cause before action to dispatch',
-      2, beforeUndoCount);
-  mockState2.$verify(); // Verify that undo was prevented.
+  assertEquals(
+      'No stack transitions between 0 and 1, must not dispatch ' +
+          'state change.',
+      1, stateChangeCount);
+  assertEquals('Undo must cause before action to dispatch', 2, beforeUndoCount);
+  mockState2.$verify();  // Verify that undo was prevented.
 
   preventDefault = false;
   mockState1.undo();
   mockState1.$replay();
   manager.undo();
-  assertEquals('Doing last undo operation must dispatch state change.',
-      2, stateChangeCount);
-  assertEquals('Undo must cause before action to dispatch',
-      3, beforeUndoCount);
+  assertEquals(
+      'Doing last undo operation must dispatch state change.', 2,
+      stateChangeCount);
+  assertEquals('Undo must cause before action to dispatch', 3, beforeUndoCount);
   mockState1.$verify();
 }
 
@@ -232,13 +240,9 @@ function testUndo_Asynchronous() {
   // EventTarget and dispatch events.
   var stubState = new goog.editor.plugins.UndoRedoState(true);
   var undoCalled = false;
-  stubState.undo = function() {
-    undoCalled = true;
-  };
+  stubState.undo = function() { undoCalled = true; };
   stubState.redo = goog.nullFunction;
-  stubState.equals = function() {
-    return false;
-  };
+  stubState.equals = function() { return false; };
 
   manager.addState(mockState2);
   manager.addState(mockState1);
@@ -246,28 +250,27 @@ function testUndo_Asynchronous() {
 
   manager.undo();
   assertTrue('undoCalled must be true (undo must be called).', undoCalled);
-  assertEquals('Undo must cause before action to dispatch',
-      1, beforeUndoCount);
+  assertEquals('Undo must cause before action to dispatch', 1, beforeUndoCount);
 
   // Calling undo shouldn't actually undo since the first async undo hasn't
   // fired an event yet.
   mockState1.$replay();
   manager.undo();
   mockState1.$verify();
-  assertEquals('Before action must not dispatch for pending undo.',
-      1, beforeUndoCount);
+  assertEquals(
+      'Before action must not dispatch for pending undo.', 1, beforeUndoCount);
 
   // Dispatching undo completed on first undo, should cause the second pending
   // undo to happen.
   mockState1.$reset();
   mockState1.undo();
   mockState1.$replay();
-  mockState2.$replay(); // Nothing should happen to mockState2.
+  mockState2.$replay();  // Nothing should happen to mockState2.
   stubState.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
   mockState1.$verify();
   mockState2.$verify();
-  assertEquals('Second undo must cause before action to dispatch',
-      2, beforeUndoCount);
+  assertEquals(
+      'Second undo must cause before action to dispatch', 2, beforeUndoCount);
 
   // Test last undo.
   mockState2.$reset();
@@ -275,8 +278,8 @@ function testUndo_Asynchronous() {
   mockState2.$replay();
   manager.undo();
   mockState2.$verify();
-  assertEquals('Third undo must cause before action to dispatch',
-      3, beforeUndoCount);
+  assertEquals(
+      'Third undo must cause before action to dispatch', 3, beforeUndoCount);
 }
 
 
@@ -291,39 +294,44 @@ function testRedo() {
   mockState1.redo();
   mockState1.$replay();
   manager.redo();
-  assertEquals('Pushing first item onto undo stack during redo must dispatch ' +
-               'state change.', 1, stateChangeCount);
-  assertEquals('First redo must cause before action to dispatch',
-      1, beforeRedoCount);
+  assertEquals(
+      'Pushing first item onto undo stack during redo must dispatch ' +
+          'state change.',
+      1, stateChangeCount);
+  assertEquals(
+      'First redo must cause before action to dispatch', 1, beforeRedoCount);
   mockState1.$verify();
 
   preventDefault = true;
   mockState2.$replay();
   manager.redo();
-  assertEquals('No stack transitions between 0 and 1, must not dispatch ' +
-      'state change.', 1, stateChangeCount);
-  assertEquals('Second redo must cause before action to dispatch',
-      2, beforeRedoCount);
-  mockState2.$verify(); // Verify that redo was prevented.
+  assertEquals(
+      'No stack transitions between 0 and 1, must not dispatch ' +
+          'state change.',
+      1, stateChangeCount);
+  assertEquals(
+      'Second redo must cause before action to dispatch', 2, beforeRedoCount);
+  mockState2.$verify();  // Verify that redo was prevented.
 
   preventDefault = false;
   mockState3.redo();
   mockState3.$replay();
   manager.redo();
-  assertEquals('Removing last item from redo stack must dispatch state change.',
-      2, stateChangeCount);
-  assertEquals('Third redo must cause before action to dispatch',
-      3, beforeRedoCount);
+  assertEquals(
+      'Removing last item from redo stack must dispatch state change.', 2,
+      stateChangeCount);
+  assertEquals(
+      'Third redo must cause before action to dispatch', 3, beforeRedoCount);
   mockState3.$verify();
   mockState3.$reset();
 
   mockState3.undo();
   mockState3.$replay();
   manager.undo();
-  assertEquals('Putting item on redo stack must dispatch state change.',
-      3, stateChangeCount);
-  assertEquals('Undo must cause before action to dispatch',
-      4, beforeUndoCount);
+  assertEquals(
+      'Putting item on redo stack must dispatch state change.', 3,
+      stateChangeCount);
+  assertEquals('Undo must cause before action to dispatch', 4, beforeUndoCount);
   mockState3.$verify();
 }
 
@@ -331,13 +339,9 @@ function testRedo() {
 function testRedo_Asynchronous() {
   var stubState = new goog.editor.plugins.UndoRedoState(true);
   var redoCalled = false;
-  stubState.redo = function() {
-    redoCalled = true;
-  };
+  stubState.redo = function() { redoCalled = true; };
   stubState.undo = goog.nullFunction;
-  stubState.equals = function() {
-    return false;
-  };
+  stubState.equals = function() { return false; };
 
   manager.addState(stubState);
   manager.addState(mockState1);
@@ -363,7 +367,7 @@ function testRedo_Asynchronous() {
   mockState1.$reset();
   mockState1.redo();
   mockState1.$replay();
-  mockState2.$replay(); // Nothing should happen to mockState1.
+  mockState2.$replay();  // Nothing should happen to mockState1.
   stubState.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
   mockState1.$verify();
   mockState2.$verify();
@@ -380,8 +384,10 @@ function testUndoAndRedoPeek() {
   addStatesToManager();
   manager.undo();
 
-  assertEquals('redoPeek must return the top of the redo stack.',
+  assertEquals(
+      'redoPeek must return the top of the redo stack.',
       manager.redoStack_[manager.redoStack_.length - 1], manager.redoPeek());
-  assertEquals('undoPeek must return the top of the undo stack.',
+  assertEquals(
+      'undoPeek must return the top of the undo stack.',
       manager.undoStack_[manager.undoStack_.length - 1], manager.undoPeek());
 }

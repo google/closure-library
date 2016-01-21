@@ -33,8 +33,8 @@ function testExpiredKeyCollection() {
   var clock = new goog.testing.MockClock(true);
   var storage = new goog.labs.storage.BoundedCollectableStorage(mechanism, 15);
 
-  goog.storage.collectableStorageTester.runBasicTests(mechanism, clock,
-      storage);
+  goog.storage.collectableStorageTester.runBasicTests(
+      mechanism, clock, storage);
 }
 
 function testLimitingNumberOfItems() {

@@ -36,8 +36,7 @@ testCase.setUpPage = function() {
   // Whether requestAnimationFrame is available for testing.
   this.testingReqAnimFrame = !!window.requestAnimationFrame;
 
-  this.handler = new goog.debug.ErrorHandler(
-      goog.bind(this.onException, this));
+  this.handler = new goog.debug.ErrorHandler(goog.bind(this.onException, this));
   this.handler.protectWindowSetTimeout();
   this.handler.protectWindowSetInterval();
   this.handler.protectWindowRequestAnimationFrame();
@@ -55,7 +54,7 @@ testCase.setUpPage = function() {
   if (this.testingReqAnimFrame) {
     window.requestAnimationFrame(goog.bind(this.animFrame, this));
   }
-  this.promiseTimeout = 10000; // 10s.
+  this.promiseTimeout = 10000;  // 10s.
 };
 
 testCase.tearDownPage = function() {
@@ -99,9 +98,15 @@ testCase.addNewTest('testResults', function() {
 
     for (var i = 0; i < this.exceptions.length; ++i) {
       switch (this.exceptions[i]) {
-        case this.timeOut: timeoutHit = true; break;
-        case this.interval: intervalHit = true; break;
-        case this.animFrame: animFrameHit = true; break;
+        case this.timeOut:
+          timeoutHit = true;
+          break;
+        case this.interval:
+          intervalHit = true;
+          break;
+        case this.animFrame:
+          animFrameHit = true;
+          break;
       }
     }
 

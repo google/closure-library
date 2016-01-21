@@ -48,10 +48,12 @@ function testRectClone() {
 }
 
 function testRectIntersection() {
-  var tests = [[[10, 10, 20, 20], [15, 15, 25, 25], [15, 15, 20, 20]],
-               [[10, 10, 20, 20], [20, 0, 30, 10], [20, 10, 20, 10]],
-               [[0, 0, 1, 1], [10, 11, 12, 13], null],
-               [[11, 12, 98, 99], [22, 23, 34, 35], [22, 23, 34, 35]]];
+  var tests = [
+    [[10, 10, 20, 20], [15, 15, 25, 25], [15, 15, 20, 20]],
+    [[10, 10, 20, 20], [20, 0, 30, 10], [20, 10, 20, 10]],
+    [[0, 0, 1, 1], [10, 11, 12, 13], null],
+    [[11, 12, 98, 99], [22, 23, 34, 35], [22, 23, 34, 35]]
+  ];
   for (var i = 0; i < tests.length; ++i) {
     var t = tests[i];
     var r0 = createRect(t[0]);
@@ -87,10 +89,12 @@ function testRectIntersects() {
 }
 
 function testRectBoundingRect() {
-  var tests = [[[10, 10, 20, 20], [15, 15, 25, 25], [10, 10, 25, 25]],
-               [[10, 10, 20, 20], [20, 0, 30, 10], [10, 0, 30, 20]],
-               [[0, 0, 1, 1], [10, 11, 12, 13], [0, 0, 12, 13]],
-               [[11, 12, 98, 99], [22, 23, 34, 35], [11, 12, 98, 99]]];
+  var tests = [
+    [[10, 10, 20, 20], [15, 15, 25, 25], [10, 10, 25, 25]],
+    [[10, 10, 20, 20], [20, 0, 30, 10], [10, 0, 30, 20]],
+    [[0, 0, 1, 1], [10, 11, 12, 13], [0, 0, 12, 13]],
+    [[11, 12, 98, 99], [22, 23, 34, 35], [11, 12, 98, 99]]
+  ];
   for (var i = 0; i < tests.length; ++i) {
     var t = tests[i];
     var r0 = createRect(t[0]);
@@ -116,51 +120,42 @@ function testRectDifference() {
   // B does not touch A.
   assertDifference([10, 10, 20, 20], [0, 0, 5, 5], [[10, 10, 20, 20]]);
   // B overlaps top half of A.
-  assertDifference([10, 10, 20, 20], [5, 15, 25, 25],
-      [[10, 10, 20, 15]]);
+  assertDifference([10, 10, 20, 20], [5, 15, 25, 25], [[10, 10, 20, 15]]);
   // B overlaps bottom half of A.
-  assertDifference([10, 10, 20, 20], [5, 5, 25, 15],
-      [[10, 15, 20, 20]]);
+  assertDifference([10, 10, 20, 20], [5, 5, 25, 15], [[10, 15, 20, 20]]);
   // B overlaps right half of A.
-  assertDifference([10, 10, 20, 20], [15, 5, 25, 25],
-      [[10, 10, 15, 20]]);
+  assertDifference([10, 10, 20, 20], [15, 5, 25, 25], [[10, 10, 15, 20]]);
   // B overlaps left half of A.
-  assertDifference([10, 10, 20, 20], [5, 5, 15, 25],
-      [[15, 10, 20, 20]]);
+  assertDifference([10, 10, 20, 20], [5, 5, 15, 25], [[15, 10, 20, 20]]);
   // B touches A at its bottom right corner
-  assertDifference([10, 10, 20, 20], [20, 20, 30, 30],
-      [[10, 10, 20, 20]]);
+  assertDifference([10, 10, 20, 20], [20, 20, 30, 30], [[10, 10, 20, 20]]);
   // B touches A at its top left corner
-  assertDifference([10, 10, 20, 20], [5, 5, 10, 10],
-      [[10, 10, 20, 20]]);
+  assertDifference([10, 10, 20, 20], [5, 5, 10, 10], [[10, 10, 20, 20]]);
   // B touches A along its bottom edge
-  assertDifference([10, 10, 20, 20], [12, 20, 17, 25],
-      [[10, 10, 20, 20]]);
+  assertDifference([10, 10, 20, 20], [12, 20, 17, 25], [[10, 10, 20, 20]]);
   // B splits A horizontally.
-  assertDifference([10, 10, 20, 20], [5, 12, 25, 18],
-      [[10, 10, 20, 12], [10, 18, 20, 20]]);
+  assertDifference(
+      [10, 10, 20, 20], [5, 12, 25, 18], [[10, 10, 20, 12], [10, 18, 20, 20]]);
   // B splits A vertically.
-  assertDifference([10, 10, 20, 20], [12, 5, 18, 25],
-      [[10, 10, 12, 20], [18, 10, 20, 20]]);
+  assertDifference(
+      [10, 10, 20, 20], [12, 5, 18, 25], [[10, 10, 12, 20], [18, 10, 20, 20]]);
   // B subtracts a notch from the top of A.
-  assertDifference([10, 10, 20, 20], [12, 5, 18, 15],
+  assertDifference(
+      [10, 10, 20, 20], [12, 5, 18, 15],
       [[10, 15, 20, 20], [10, 10, 12, 15], [18, 10, 20, 15]]);
   // B subtracts a notch from the bottom left of A
-  assertDifference([1, 6, 3, 9], [1, 7, 2, 9],
-      [[1, 6, 3, 7], [2, 7, 3, 9]]);
+  assertDifference([1, 6, 3, 9], [1, 7, 2, 9], [[1, 6, 3, 7], [2, 7, 3, 9]]);
   // B subtracts a notch from the bottom right of A
-  assertDifference([1, 6, 3, 9], [2, 7, 3, 9],
-      [[1, 6, 3, 7], [1, 7, 2, 9]]);
+  assertDifference([1, 6, 3, 9], [2, 7, 3, 9], [[1, 6, 3, 7], [1, 7, 2, 9]]);
   // B subtracts a notch from the top left of A
-  assertDifference([1, 6, 3, 9], [1, 6, 2, 8],
-      [[1, 8, 3, 9], [2, 6, 3, 8]]);
+  assertDifference([1, 6, 3, 9], [1, 6, 2, 8], [[1, 8, 3, 9], [2, 6, 3, 8]]);
   // B subtracts a notch from the top left of A (no coinciding edge)
-  assertDifference([1, 6, 3, 9], [0, 5, 2, 8],
-      [[1, 8, 3, 9], [2, 6, 3, 8]]);
+  assertDifference([1, 6, 3, 9], [0, 5, 2, 8], [[1, 8, 3, 9], [2, 6, 3, 8]]);
   // B subtracts a hole from the center of A.
-  assertDifference([-20, -20, -10, -10], [-18, -18, -12, -12],
-      [[-20, -20, -10, -18], [-20, -12, -10, -10],
-       [-20, -18, -18, -12], [-12, -18, -10, -12]]);
+  assertDifference([-20, -20, -10, -10], [-18, -18, -12, -12], [
+    [-20, -20, -10, -18], [-20, -12, -10, -10], [-20, -18, -18, -12],
+    [-12, -18, -10, -12]
+  ]);
 }
 
 function assertDifference(a, b, expected) {
@@ -168,8 +163,9 @@ function assertDifference(a, b, expected) {
   var r1 = createRect(b);
   var diff = goog.math.Rect.difference(r0, r1);
 
-  assertEquals('Wrong number of rectangles in difference ',
-      expected.length, diff.length);
+  assertEquals(
+      'Wrong number of rectangles in difference ', expected.length,
+      diff.length);
 
   for (var j = 0; j < expected.length; ++j) {
     var e = createRect(expected[j]);
@@ -182,8 +178,9 @@ function assertDifference(a, b, expected) {
   // Test in place version
   var diff = r0.difference(r1);
 
-  assertEquals('Wrong number of rectangles in in-place difference ',
-      expected.length, diff.length);
+  assertEquals(
+      'Wrong number of rectangles in in-place difference ', expected.length,
+      diff.length);
 
   for (var j = 0; j < expected.length; ++j) {
     var e = createRect(expected[j]);
@@ -213,22 +210,22 @@ function testRectToBox() {
 
 function testBoxToRect() {
   var box = new goog.math.Box(0, 0, 0, 0);
-  assertObjectEquals(new goog.math.Rect(0, 0, 0, 0),
-                     goog.math.Rect.createFromBox(box));
+  assertObjectEquals(
+      new goog.math.Rect(0, 0, 0, 0), goog.math.Rect.createFromBox(box));
 
   box.top = 10;
   box.left = 15;
   box.right = 23;
   box.bottom = 27;
-  assertObjectEquals(new goog.math.Rect(15, 10, 8, 17),
-                     goog.math.Rect.createFromBox(box));
+  assertObjectEquals(
+      new goog.math.Rect(15, 10, 8, 17), goog.math.Rect.createFromBox(box));
 
   box.top = -10;
   box.left = 3;
   box.right = 12;
   box.bottom = 7;
-  assertObjectEquals(new goog.math.Rect(3, -10, 9, 17),
-                     goog.math.Rect.createFromBox(box));
+  assertObjectEquals(
+      new goog.math.Rect(3, -10, 9, 17), goog.math.Rect.createFromBox(box));
 }
 
 function testBoxToRectAndBack() {
@@ -309,79 +306,85 @@ function testRectContainsCoordinate() {
 }
 
 function testGetSize() {
-  assertObjectEquals(new goog.math.Size(60, 80),
-                     new goog.math.Rect(20, 40, 60, 80).getSize());
+  assertObjectEquals(
+      new goog.math.Size(60, 80), new goog.math.Rect(20, 40, 60, 80).getSize());
 }
 
 function testGetBottomRight() {
-  assertObjectEquals(new goog.math.Coordinate(40, 60),
-                     new goog.math.Rect(10, 20, 30, 40).getBottomRight());
+  assertObjectEquals(
+      new goog.math.Coordinate(40, 60),
+      new goog.math.Rect(10, 20, 30, 40).getBottomRight());
 }
 
 function testGetCenter() {
-  assertObjectEquals(new goog.math.Coordinate(25, 40),
-                     new goog.math.Rect(10, 20, 30, 40).getCenter());
+  assertObjectEquals(
+      new goog.math.Coordinate(25, 40),
+      new goog.math.Rect(10, 20, 30, 40).getCenter());
 }
 
 function testGetTopLeft() {
-  assertObjectEquals(new goog.math.Coordinate(10, 20),
-                     new goog.math.Rect(10, 20, 30, 40).getTopLeft());
+  assertObjectEquals(
+      new goog.math.Coordinate(10, 20),
+      new goog.math.Rect(10, 20, 30, 40).getTopLeft());
 }
 
 function testRectCeil() {
   var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      rect, rect.ceil());
+  assertEquals(
+      'The function should return the target instance', rect, rect.ceil());
   assertRectsEqual(new goog.math.Rect(12, 27, 18, 10), rect);
 }
 
 function testRectFloor() {
   var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      rect, rect.floor());
+  assertEquals(
+      'The function should return the target instance', rect, rect.floor());
   assertRectsEqual(new goog.math.Rect(11, 26, 17, 9), rect);
 }
 
 function testRectRound() {
   var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      rect, rect.round());
+  assertEquals(
+      'The function should return the target instance', rect, rect.round());
   assertRectsEqual(new goog.math.Rect(11, 27, 18, 9), rect);
 }
 
 function testRectTranslateCoordinate() {
   var rect = new goog.math.Rect(10, 40, 30, 20);
   var c = new goog.math.Coordinate(10, 5);
-  assertEquals('The function should return the target instance',
-      rect, rect.translate(c));
+  assertEquals(
+      'The function should return the target instance', rect,
+      rect.translate(c));
   assertRectsEqual(new goog.math.Rect(20, 45, 30, 20), rect);
 }
 
 function testRectTranslateXY() {
   var rect = new goog.math.Rect(10, 20, 40, 35);
-  assertEquals('The function should return the target instance',
-      rect, rect.translate(15, 10));
+  assertEquals(
+      'The function should return the target instance', rect,
+      rect.translate(15, 10));
   assertRectsEqual(new goog.math.Rect(25, 30, 40, 35), rect);
 }
 
 function testRectTranslateX() {
   var rect = new goog.math.Rect(12, 34, 113, 88);
-  assertEquals('The function should return the target instance',
-      rect, rect.translate(10));
+  assertEquals(
+      'The function should return the target instance', rect,
+      rect.translate(10));
   assertRectsEqual(new goog.math.Rect(22, 34, 113, 88), rect);
 }
 
 function testRectScaleXY() {
   var rect = new goog.math.Rect(10, 30, 100, 60);
-  assertEquals('The function should return the target instance',
-      rect, rect.scale(2, 5));
+  assertEquals(
+      'The function should return the target instance', rect, rect.scale(2, 5));
   assertRectsEqual(new goog.math.Rect(20, 150, 200, 300), rect);
 }
 
 function testRectScaleFactor() {
   var rect = new goog.math.Rect(12, 34, 113, 88);
-  assertEquals('The function should return the target instance',
-      rect, rect.scale(10));
+  assertEquals(
+      'The function should return the target instance', rect, rect.scale(10));
   assertRectsEqual(new goog.math.Rect(120, 340, 1130, 880), rect);
 }
 

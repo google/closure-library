@@ -85,18 +85,27 @@ function testDebouncerCommandSequences() {
     var expectedCalls = expectedCommandSequenceCalls[commandSequence];
     assertEquals(
         'Expected ' + expectedCalls + ' calls for command sequence "' +
-        commandSequence + '" (' +
-        goog.array.map(commandSequence, function(command) {
-          switch (command) {
-            case 'f': return 'fire';
-            case 'w': return 'wait';
-            case 'p': return 'pause';
-            case 'r': return 'resume';
-            case 's': return 'stop';
-          }
-        }).join(' -> ') + ')',
-        expectedCalls,
-        recordFn.getCallCount());
+            commandSequence + '" (' +
+            goog.array
+                .map(
+                    commandSequence,
+                    function(command) {
+                      switch (command) {
+                        case 'f':
+                          return 'fire';
+                        case 'w':
+                          return 'wait';
+                        case 'p':
+                          return 'pause';
+                        case 'r':
+                          return 'resume';
+                        case 's':
+                          return 'stop';
+                      }
+                    })
+                .join(' -> ') +
+            ')',
+        expectedCalls, recordFn.getCallCount());
     debouncer.dispose();
   }
   mockClock.uninstall();
@@ -108,9 +117,8 @@ function testDebouncerScopeBinding() {
   var mockClock = new goog.testing.MockClock(true);
 
   var x = {'y': 0};
-  var debouncer = new goog.async.Debouncer(function() {
-    ++this['y'];
-  }, interval, x);
+  var debouncer =
+      new goog.async.Debouncer(function() { ++this['y']; }, interval, x);
   debouncer.fire();
   assertEquals(0, x['y']);
 

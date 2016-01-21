@@ -174,7 +174,8 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       // unless the origin is '*'.
       // TODO(b/16335441): Use '*' origin for data: and other similar protocols.
       var origin = win.location.protocol == 'file:' ?
-          '*' : win.location.protocol + '//' + win.location.host;
+          '*' :
+          win.location.protocol + '//' + win.location.host;
       var onmessage = goog.bind(function(e) {
         // Validate origin and message to make sure that this message was
         // intended for us. If the origin is set to '*' (see above) only the
@@ -188,14 +189,11 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       win.addEventListener('message', onmessage, false);
       this['port1'] = {};
       this['port2'] = {
-        postMessage: function() {
-          win.postMessage(message, origin);
-        }
+        postMessage: function() { win.postMessage(message, origin); }
       };
     };
   }
-  if (typeof Channel !== 'undefined' &&
-      (!goog.labs.userAgent.browser.isIE())) {
+  if (typeof Channel !== 'undefined' && (!goog.labs.userAgent.browser.isIE())) {
     // Exclude all of IE due to
     // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
     // which allows starving postMessage with a busy setTimeout loop.
@@ -214,17 +212,15 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       }
     };
     return function(cb) {
-      tail.next = {
-        cb: cb
-      };
+      tail.next = {cb: cb};
       tail = tail.next;
       channel['port2'].postMessage(0);
     };
   }
   // Implementation for IE6 to IE10: Script elements fire an asynchronous
   // onreadystatechange event when inserted into the DOM.
-  if (typeof document !== 'undefined' && 'onreadystatechange' in
-      document.createElement(goog.dom.TagName.SCRIPT)) {
+  if (typeof document !== 'undefined' &&
+      'onreadystatechange' in document.createElement(goog.dom.TagName.SCRIPT)) {
     return function(cb) {
       var script = document.createElement(goog.dom.TagName.SCRIPT);
       script.onreadystatechange = function() {
@@ -241,9 +237,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Fall back to setTimeout with 0. In browsers this creates a delay of 5ms
   // or more.
   // NOTE(user): This fallback is used for IE11.
-  return function(cb) {
-    goog.global.setTimeout(cb, 0);
-  };
+  return function(cb) { goog.global.setTimeout(cb, 0); };
 };
 
 
@@ -265,6 +259,4 @@ goog.debug.entryPointRegistry.register(
      * @param {function(!Function): !Function} transformer The transforming
      *     function.
      */
-    function(transformer) {
-      goog.async.nextTick.wrapCallback_ = transformer;
-    });
+    function(transformer) { goog.async.nextTick.wrapCallback_ = transformer; });

@@ -62,8 +62,7 @@ function testParsingUrl() {
 }
 
 function testBuildingUrl() {
-  assertEquals(
-      VIMEO_URL, goog.ui.media.VimeoModel.buildUrl(VIMEO_ID));
+  assertEquals(VIMEO_URL, goog.ui.media.VimeoModel.buildUrl(VIMEO_ID));
 }
 
 function testCreatingModel() {
@@ -76,9 +75,7 @@ function testCreatingModel() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Vimeo.CSS_CLASS + '-caption',
-      parent);
+      goog.dom.TagName.DIV, goog.ui.media.Vimeo.CSS_CLASS + '-caption', parent);
   assertEquals(1, caption.length);
 
   var flash = goog.dom.getElementsByTagNameAndClass(

@@ -26,16 +26,12 @@ var TEST_DELAY = 20;
 var stubs = new PropertyReplacer();
 
 testSuite({
-  tearDown: function() {
-    stubs.reset();
-  },
+  tearDown: function() { stubs.reset(); },
 
   testStart: function() {
     var callCount = 0;
     var start = goog.now();
-    var delay = new AnimationDelay(function(end) {
-      callCount++;
-    });
+    var delay = new AnimationDelay(function(end) { callCount++; });
 
     delay.start();
 
@@ -47,9 +43,7 @@ testSuite({
   testStop: function() {
     var callCount = 0;
     var start = goog.now();
-    var delay = new AnimationDelay(function(end) {
-      callCount++;
-    });
+    var delay = new AnimationDelay(function(end) { callCount++; });
 
     delay.start();
     delay.stop();
@@ -61,9 +55,7 @@ testSuite({
 
   testAlwaysUseGoogNowForHandlerTimestamp: function() {
     var expectedValue = 12345.1;
-    stubs.set(goog, 'now', function() {
-      return expectedValue;
-    });
+    stubs.set(goog, 'now', function() { return expectedValue; });
 
     var handler = recordFunction(function(timestamp) {
       assertEquals(expectedValue, timestamp);

@@ -59,16 +59,16 @@ function MockAutoCompleter() {
   this.selectHilitedWasCalled = false;
   this.dismissWasCalled = false;
   this.getTarget = function() { return mockElement };
-  this.setTarget = function() { };
+  this.setTarget = function() {};
   this.setToken = function(token) {
     this.setTokenWasCalled = true;
     this.setToken = token;
   };
   this.selectHilited = function() {
     this.selectHilitedWasCalled = true;
-    return true; // Success.
+    return true;  // Success.
   };
-  this.cancelDelayedDismiss = function() { };
+  this.cancelDelayedDismiss = function() {};
   this.dismissOnDelay = function() {};
   this.dismiss = function() { this.dismissWasCalled = true; };
   this.isOpen = goog.functions.TRUE;
@@ -108,8 +108,7 @@ MockInputHandler.prototype.fireKeyEvents = function(
 
 
 /** Simulates an event. */
-MockInputHandler.prototype.fireEvent = function(
-    type, keyCode, opt_properties) {
+MockInputHandler.prototype.fireEvent = function(type, keyCode, opt_properties) {
   var e = {};
   e.type = type;
   e.keyCode = keyCode;
@@ -569,7 +568,6 @@ function testActiveElementAlreadyFocused() {
 }
 
 function testUpdateDoesNotTriggerSetTokenForSelectRow() {
-
   var ih = new goog.ui.ac.InputHandler();
 
   // Set up our input handler with the necessary mocks
@@ -581,16 +579,17 @@ function testUpdateDoesNotTriggerSetTokenForSelectRow() {
   ih.selectRow(row, false);
 
   ih.update();
-  assertFalse('update should not call setToken on selectRow',
-              mockAutoCompleter.setTokenWasCalled);
+  assertFalse(
+      'update should not call setToken on selectRow',
+      mockAutoCompleter.setTokenWasCalled);
 
   ih.update();
-  assertFalse('update should not call setToken on selectRow',
-              mockAutoCompleter.setTokenWasCalled);
+  assertFalse(
+      'update should not call setToken on selectRow',
+      mockAutoCompleter.setTokenWasCalled);
 }
 
 function testSetTokenText() {
-
   var ih = new MockInputHandler();
 
   // Set up our input handler with the necessary mocks
@@ -606,7 +605,6 @@ function testSetTokenText() {
 }
 
 function testSetTokenTextLeftHandSideOfToken() {
-
   var ih = new MockInputHandler();
   ih.setSeparators(' ');
   ih.setWhitespaceWrapEntries(false);
@@ -634,10 +632,12 @@ function testEmptyTokenWithSeparator() {
   goog.dom.selection.setStart(mockElement, 2);
 
   ih.update();
-  assertTrue('update should call setToken on selectRow',
+  assertTrue(
+      'update should call setToken on selectRow',
       mockAutoCompleter.setTokenWasCalled);
-  assertEquals('update should be called with empty string',
-      '', mockAutoCompleter.setToken);
+  assertEquals(
+      'update should be called with empty string', '',
+      mockAutoCompleter.setToken);
 }
 
 function testNonEmptyTokenWithSeparator() {
@@ -650,10 +650,12 @@ function testNonEmptyTokenWithSeparator() {
   goog.dom.selection.setStart(mockElement, 5);
 
   ih.update();
-  assertTrue('update should call setToken on selectRow',
+  assertTrue(
+      'update should call setToken on selectRow',
       mockAutoCompleter.setTokenWasCalled);
-  assertEquals('update should be called with expected string',
-      'joe', mockAutoCompleter.setToken);
+  assertEquals(
+      'update should be called with expected string', 'joe',
+      mockAutoCompleter.setToken);
 }
 
 function testGetThrottleTime() {
@@ -701,8 +703,8 @@ function testTabDoesNotSelectWhenClosed() {
 function testShiftTabDoesNotSelect() {
   mh.fireEvent('focus', '');
   mh.ac_.isOpen = goog.functions.TRUE;
-  mh.fireKeyEvents(goog.events.KeyCodes.TAB, true, true, true,
-      {shiftKey: true});
+  mh.fireKeyEvents(
+      goog.events.KeyCodes.TAB, true, true, true, {shiftKey: true});
   assertFalse('Should NOT hilite', mh.ac_.selectHilitedWasCalled);
   assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
 }
@@ -736,14 +738,14 @@ function testAriaTags() {
   var target = goog.dom.createDom('div');
   mh.attachInput(target);
 
-  assertEquals(goog.a11y.aria.Role.COMBOBOX,
-      goog.a11y.aria.getRole(target));
-  assertEquals('list',
+  assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(target));
+  assertEquals(
+      'list',
       goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
 
   mh.detachInput(target);
 
   assertNull(goog.a11y.aria.getRole(target));
-  assertEquals('',
-      goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
+  assertEquals(
+      '', goog.a11y.aria.getState(target, goog.a11y.aria.State.AUTOCOMPLETE));
 }

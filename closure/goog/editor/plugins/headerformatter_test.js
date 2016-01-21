@@ -76,7 +76,8 @@ function testHeaderShortcuts() {
   editableField.$does(function() {
     btf.execCommandInternal(
         goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK,
-        goog.editor.plugins.HeaderFormatter.HEADER_COMMAND.H1); });
+        goog.editor.plugins.HeaderFormatter.HEADER_COMMAND.H1);
+  });
 
   var event = new goog.testing.LooseMock(goog.events.BrowserEvent);
   if (goog.userAgent.GECKO) {
@@ -86,7 +87,8 @@ function testHeaderShortcuts() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event handled',
+  assertTrue(
+      'Event handled',
       headerFormatter.handleKeyboardShortcut(event, '1', true));
   assertEquals('Field contains a header', 'H1', field.firstChild.nodeName);
 

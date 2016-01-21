@@ -361,11 +361,12 @@ goog.dom.safe.openInWindow = function(
     safeUrl = goog.html.SafeUrl.sanitize(url);
   }
   var win = opt_openerWin || window;
-  return win.open(goog.html.SafeUrl.unwrap(safeUrl),
+  return win.open(
+      goog.html.SafeUrl.unwrap(safeUrl),
       // If opt_name is undefined, simply passing that in to open() causes IE to
       // reuse the current window instead of opening a new one. Thus we pass ''
       // in instead, which according to spec opens a new window. See
       // https://html.spec.whatwg.org/multipage/browsers.html#dom-open .
-      opt_name ? goog.string.Const.unwrap(opt_name) : '',
-      opt_specs, opt_replace);
+      opt_name ? goog.string.Const.unwrap(opt_name) : '', opt_specs,
+      opt_replace);
 };

@@ -151,7 +151,7 @@ goog.i18n.DateTimeFormat.Format = {
  * @private
  */
 goog.i18n.DateTimeFormat.TOKENS_ = [
-  //quote string
+  // quote string
   /^\'(?:[^\']|\'\')*\'/,
   // pattern chars
   /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
@@ -202,11 +202,11 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
           if (part == "''") {
             part = "'";  // '' -> '
           } else {
-            part = part.substring(1, part.length - 1); // strip quotes
+            part = part.substring(1, part.length - 1);  // strip quotes
             part = part.replace(/\'\'/, "'");
           }
         }
-        this.patternParts_.push({ text: part, type: i });
+        this.patternParts_.push({text: part, type: i});
         break;
       }
     }
@@ -226,8 +226,7 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
  *    object (for instance goog.date.Date) using a pattern with time fields.
  */
 goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
-  if (!date)
-    throw Error('The date to format must be non-null.');
+  if (!date) throw Error('The date to format must be non-null.');
 
   // We don't want to write code to calculate each date field because we
   // want to maximize performance and minimize code size.
@@ -245,7 +244,8 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
   // one for time within that day, and one for timeZone object since it need
   // the real time to figure out actual time zone offset.
   var diff = opt_timeZone ?
-      (date.getTimezoneOffset() - opt_timeZone.getOffset(date)) * 60000 : 0;
+      (date.getTimezoneOffset() - opt_timeZone.getOffset(date)) * 60000 :
+      0;
   var dateForDate = diff ? new Date(date.getTime() + diff) : date;
   var dateForTime = dateForDate;
   // When the time manipulation applied above spans the DST on/off hour, this
@@ -261,8 +261,8 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
   //   subtracted by the DST switch.
   if (opt_timeZone &&
       dateForDate.getTimezoneOffset() != date.getTimezoneOffset()) {
-    var dstDiff = (dateForDate.getTimezoneOffset() - date.getTimezoneOffset()) *
-        60000;
+    var dstDiff =
+        (dateForDate.getTimezoneOffset() - date.getTimezoneOffset()) * 60000;
     dateForDate = new Date(dateForDate.getTime() + dstDiff);
 
     diff += diff > 0 ? -goog.date.MS_PER_DAY : goog.date.MS_PER_DAY;
@@ -274,8 +274,9 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
     var text = this.patternParts_[i].text;
     if (goog.i18n.DateTimeFormat.PartTypes_.FIELD ==
         this.patternParts_[i].type) {
-      out.push(this.formatField_(text, date, dateForDate, dateForTime,
-                                 opt_timeZone));
+      out.push(
+          this.formatField_(
+              text, date, dateForDate, dateForTime, opt_timeZone));
     } else {
       out.push(text);
     }
@@ -290,8 +291,8 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
  * @param {number} formatType A number that identified the predefined pattern.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ =
-    function(formatType) {
+goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ = function(
+    formatType) {
   var pattern;
   if (formatType < 4) {
     pattern = this.dateTimeSymbols_.DATEFORMATS[formatType];
@@ -299,10 +300,10 @@ goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ =
     pattern = this.dateTimeSymbols_.TIMEFORMATS[formatType - 4];
   } else if (formatType < 12) {
     pattern = this.dateTimeSymbols_.DATETIMEFORMATS[formatType - 8];
-    pattern = pattern.replace('{1}',
-        this.dateTimeSymbols_.DATEFORMATS[formatType - 8]);
-    pattern = pattern.replace('{0}',
-        this.dateTimeSymbols_.TIMEFORMATS[formatType - 8]);
+    pattern = pattern.replace(
+        '{1}', this.dateTimeSymbols_.DATEFORMATS[formatType - 8]);
+    pattern = pattern.replace(
+        '{0}', this.dateTimeSymbols_.TIMEFORMATS[formatType - 8]);
   } else {
     this.applyStandardPattern_(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
     return;
@@ -354,8 +355,7 @@ goog.i18n.DateTimeFormat.removeRlmInPatterns_ = false;
  * instantiated after this call.
  * @param {boolean} enforceAsciiDigits Whether Ascii digits should be enforced.
  */
-goog.i18n.DateTimeFormat.setEnforceAsciiDigits = function(
-    enforceAsciiDigits) {
+goog.i18n.DateTimeFormat.setEnforceAsciiDigits = function(enforceAsciiDigits) {
   goog.i18n.DateTimeFormat.enforceAsciiDigits_ = enforceAsciiDigits;
 
   // Also setting removal of RLM chracters when forcing ASCII digits since it's
@@ -383,8 +383,8 @@ goog.i18n.DateTimeFormat.isEnforceAsciiDigits = function() {
  *     the global symbols.
  * @return {string} localized string, potentially using native digits.
  */
-goog.i18n.DateTimeFormat.localizeNumbers =
-    function(input, opt_dateTimeSymbols) {
+goog.i18n.DateTimeFormat.localizeNumbers = function(
+    input, opt_dateTimeSymbols) {
   input = String(input);
   var dateTimeSymbols = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
   if (dateTimeSymbols.ZERODIGIT === undefined ||
@@ -395,9 +395,10 @@ goog.i18n.DateTimeFormat.localizeNumbers =
   var parts = [];
   for (var i = 0; i < input.length; i++) {
     var c = input.charCodeAt(i);
-    parts.push((0x30 <= c && c <= 0x39) ? // '0' <= c <= '9'
-        String.fromCharCode(dateTimeSymbols.ZERODIGIT + c - 0x30) :
-        input.charAt(i));
+    parts.push(
+        (0x30 <= c && c <= 0x39) ?  // '0' <= c <= '9'
+            String.fromCharCode(dateTimeSymbols.ZERODIGIT + c - 0x30) :
+            input.charAt(i));
   }
   return parts.join('');
 };
@@ -460,9 +461,12 @@ goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
 goog.i18n.DateTimeFormat.prototype.formatMonth_ = function(count, date) {
   var value = date.getMonth();
   switch (count) {
-    case 5: return this.dateTimeSymbols_.NARROWMONTHS[value];
-    case 4: return this.dateTimeSymbols_.MONTHS[value];
-    case 3: return this.dateTimeSymbols_.SHORTMONTHS[value];
+    case 5:
+      return this.dateTimeSymbols_.NARROWMONTHS[value];
+    case 4:
+      return this.dateTimeSymbols_.MONTHS[value];
+    case 3:
+      return this.dateTimeSymbols_.SHORTMONTHS[value];
     default:
       return this.localizeNumbers_(goog.string.padNumber(value + 1, count));
   }
@@ -480,10 +484,10 @@ goog.i18n.DateTimeFormat.prototype.formatMonth_ = function(count, date) {
  * @private
  */
 goog.i18n.DateTimeFormat.validateDateHasTime_ = function(date) {
-  if (date.getHours && date.getSeconds && date.getMinutes)
-    return;
+  if (date.getHours && date.getSeconds && date.getMinutes) return;
   // if (date instanceof Date || date instanceof goog.date.DateTime)
-  throw Error('The date to format has no time (probably a goog.date.Date). ' +
+  throw Error(
+      'The date to format has no time (probably a goog.date.Date). ' +
       'Use Date or goog.date.DateTime, or use a pattern without time fields.');
 };
 
@@ -497,8 +501,7 @@ goog.i18n.DateTimeFormat.validateDateHasTime_ = function(date) {
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.format24Hours_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.format24Hours_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   var hours = goog.i18n.DateTimeFormat.getHours_(date) || 24;
   return this.localizeNumbers_(goog.string.padNumber(hours, count));
@@ -516,8 +519,8 @@ goog.i18n.DateTimeFormat.prototype.format24Hours_ =
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ = function(
+    count, date) {
   // Fractional seconds left-justify, append 0 for precision beyond 3
   var value = date.getTime() % 1000 / 1000;
   return this.localizeNumbers_(
@@ -535,8 +538,7 @@ goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ =
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatDayOfWeek_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatDayOfWeek_ = function(count, date) {
   var value = date.getDay();
   return count >= 4 ? this.dateTimeSymbols_.WEEKDAYS[value] :
                       this.dateTimeSymbols_.SHORTWEEKDAYS[value];
@@ -568,8 +570,7 @@ goog.i18n.DateTimeFormat.prototype.formatAmPm_ = function(count, date) {
  * @return {string} formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.format1To12Hours_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.format1To12Hours_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   var hours = goog.i18n.DateTimeFormat.getHours_(date) % 12 || 12;
   return this.localizeNumbers_(goog.string.padNumber(hours, count));
@@ -585,8 +586,7 @@ goog.i18n.DateTimeFormat.prototype.format1To12Hours_ =
  * @return {string} formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.format0To11Hours_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.format0To11Hours_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   var hours = goog.i18n.DateTimeFormat.getHours_(date) % 12;
   return this.localizeNumbers_(goog.string.padNumber(hours, count));
@@ -602,8 +602,7 @@ goog.i18n.DateTimeFormat.prototype.format0To11Hours_ =
  * @return {string} formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.format0To23Hours_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.format0To23Hours_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   var hours = goog.i18n.DateTimeFormat.getHours_(date);
   return this.localizeNumbers_(goog.string.padNumber(hours, count));
@@ -619,8 +618,8 @@ goog.i18n.DateTimeFormat.prototype.format0To23Hours_ =
  * @return {string} formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatStandaloneDay_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatStandaloneDay_ = function(
+    count, date) {
   var value = date.getDay();
   switch (count) {
     case 5:
@@ -644,8 +643,8 @@ goog.i18n.DateTimeFormat.prototype.formatStandaloneDay_ =
  * @return {string} formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatStandaloneMonth_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatStandaloneMonth_ = function(
+    count, date) {
   var value = date.getMonth();
   switch (count) {
     case 5:
@@ -669,8 +668,7 @@ goog.i18n.DateTimeFormat.prototype.formatStandaloneMonth_ =
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatQuarter_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatQuarter_ = function(count, date) {
   var value = Math.floor(date.getMonth() / 3);
   return count < 4 ? this.dateTimeSymbols_.SHORTQUARTERS[value] :
                      this.dateTimeSymbols_.QUARTERS[value];
@@ -700,11 +698,11 @@ goog.i18n.DateTimeFormat.prototype.formatDate_ = function(count, date) {
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatMinutes_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatMinutes_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(goog.string.padNumber(
-    /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(
+          /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
 };
 
 
@@ -717,11 +715,11 @@ goog.i18n.DateTimeFormat.prototype.formatMinutes_ =
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatSeconds_ =
-    function(count, date) {
+goog.i18n.DateTimeFormat.prototype.formatSeconds_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(goog.string.padNumber(
-    /** @type {!goog.date.DateTime} */ (date).getSeconds(), count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(
+          /** @type {!goog.date.DateTime} */ (date).getSeconds(), count));
 };
 
 
@@ -756,8 +754,8 @@ goog.i18n.DateTimeFormat.prototype.formatWeekOfYear_ = function(count, date) {
  * @return {string} Formatted string that represent this field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatTimeZoneRFC_ =
-    function(count, date, opt_timeZone) {
+goog.i18n.DateTimeFormat.prototype.formatTimeZoneRFC_ = function(
+    count, date, opt_timeZone) {
   opt_timeZone = opt_timeZone ||
       goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
 
@@ -777,12 +775,12 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneRFC_ =
  * @return {string} GMT timeZone string.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatTimeZone_ =
-    function(count, date, opt_timeZone) {
+goog.i18n.DateTimeFormat.prototype.formatTimeZone_ = function(
+    count, date, opt_timeZone) {
   opt_timeZone = opt_timeZone ||
       goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return count < 4 ? opt_timeZone.getShortName(date) :
-             opt_timeZone.getLongName(date);
+                     opt_timeZone.getLongName(date);
 };
 
 
@@ -793,8 +791,8 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZone_ =
  * @return {string} GMT timeZone string.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ =
-    function(date, opt_timeZone) {
+goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ = function(
+    date, opt_timeZone) {
   opt_timeZone = opt_timeZone ||
       goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return opt_timeZone.getTimeZoneId();
@@ -810,12 +808,12 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ =
  * @return {string} GMT timeZone string.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatTimeZoneLocationId_ =
-    function(count, date, opt_timeZone) {
+goog.i18n.DateTimeFormat.prototype.formatTimeZoneLocationId_ = function(
+    count, date, opt_timeZone) {
   opt_timeZone = opt_timeZone ||
       goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return count <= 2 ? opt_timeZone.getTimeZoneId() :
-             opt_timeZone.getGenericLocation(date);
+                      opt_timeZone.getGenericLocation(date);
 };
 
 
@@ -831,31 +829,53 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneLocationId_ =
  * @return {string} string representation for the given field.
  * @private
  */
-goog.i18n.DateTimeFormat.prototype.formatField_ =
-    function(patternStr, date, dateForDate, dateForTime, opt_timeZone) {
+goog.i18n.DateTimeFormat.prototype.formatField_ = function(
+    patternStr, date, dateForDate, dateForTime, opt_timeZone) {
   var count = patternStr.length;
   switch (patternStr.charAt(0)) {
-    case 'G': return this.formatEra_(count, dateForDate);
-    case 'y': return this.formatYear_(count, dateForDate);
-    case 'M': return this.formatMonth_(count, dateForDate);
-    case 'k': return this.format24Hours_(count, dateForTime);
-    case 'S': return this.formatFractionalSeconds_(count, dateForTime);
-    case 'E': return this.formatDayOfWeek_(count, dateForDate);
-    case 'a': return this.formatAmPm_(count, dateForTime);
-    case 'h': return this.format1To12Hours_(count, dateForTime);
-    case 'K': return this.format0To11Hours_(count, dateForTime);
-    case 'H': return this.format0To23Hours_(count, dateForTime);
-    case 'c': return this.formatStandaloneDay_(count, dateForDate);
-    case 'L': return this.formatStandaloneMonth_(count, dateForDate);
-    case 'Q': return this.formatQuarter_(count, dateForDate);
-    case 'd': return this.formatDate_(count, dateForDate);
-    case 'm': return this.formatMinutes_(count, dateForTime);
-    case 's': return this.formatSeconds_(count, dateForTime);
-    case 'v': return this.formatTimeZoneId_(date, opt_timeZone);
-    case 'V': return this.formatTimeZoneLocationId_(count, date, opt_timeZone);
-    case 'w': return this.formatWeekOfYear_(count, dateForTime);
-    case 'z': return this.formatTimeZone_(count, date, opt_timeZone);
-    case 'Z': return this.formatTimeZoneRFC_(count, date, opt_timeZone);
-    default: return '';
+    case 'G':
+      return this.formatEra_(count, dateForDate);
+    case 'y':
+      return this.formatYear_(count, dateForDate);
+    case 'M':
+      return this.formatMonth_(count, dateForDate);
+    case 'k':
+      return this.format24Hours_(count, dateForTime);
+    case 'S':
+      return this.formatFractionalSeconds_(count, dateForTime);
+    case 'E':
+      return this.formatDayOfWeek_(count, dateForDate);
+    case 'a':
+      return this.formatAmPm_(count, dateForTime);
+    case 'h':
+      return this.format1To12Hours_(count, dateForTime);
+    case 'K':
+      return this.format0To11Hours_(count, dateForTime);
+    case 'H':
+      return this.format0To23Hours_(count, dateForTime);
+    case 'c':
+      return this.formatStandaloneDay_(count, dateForDate);
+    case 'L':
+      return this.formatStandaloneMonth_(count, dateForDate);
+    case 'Q':
+      return this.formatQuarter_(count, dateForDate);
+    case 'd':
+      return this.formatDate_(count, dateForDate);
+    case 'm':
+      return this.formatMinutes_(count, dateForTime);
+    case 's':
+      return this.formatSeconds_(count, dateForTime);
+    case 'v':
+      return this.formatTimeZoneId_(date, opt_timeZone);
+    case 'V':
+      return this.formatTimeZoneLocationId_(count, date, opt_timeZone);
+    case 'w':
+      return this.formatWeekOfYear_(count, dateForTime);
+    case 'z':
+      return this.formatTimeZone_(count, date, opt_timeZone);
+    case 'Z':
+      return this.formatTimeZoneRFC_(count, date, opt_timeZone);
+    default:
+      return '';
   }
 };

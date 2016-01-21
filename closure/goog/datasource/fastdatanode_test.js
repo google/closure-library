@@ -27,15 +27,18 @@ var dataChangeEvents;
 
 function setUp() {
   simpleObject = {Name: 'Jon Doe', Email: 'jon.doe@gmail.com'};
-  complexObject = {Name: 'Jon Doe', Email: 'jon.doe@gmail.com',
-    Emails: [{Address: 'jon.doe@gmail.com', Type: 'Home'},
-             {Address: 'jon.doe@workplace.com', Type: 'Work'}],
-    GroupIds: [23, 42]};
+  complexObject = {
+    Name: 'Jon Doe',
+    Email: 'jon.doe@gmail.com',
+    Emails: [
+      {Address: 'jon.doe@gmail.com', Type: 'Home'},
+      {Address: 'jon.doe@workplace.com', Type: 'Work'}
+    ],
+    GroupIds: [23, 42]
+  };
   var dm = goog.ds.DataManager.getInstance();
   dataChangeEvents = [];
-  dm.fireDataChange = function(dataPath) {
-    dataChangeEvents.push(dataPath);
-  };
+  dm.fireDataChange = function(dataPath) { dataChangeEvents.push(dataPath); };
 }
 
 function tearDown() {
@@ -101,12 +104,15 @@ function testFastListNode() {
   var node = goog.ds.FastDataNode.fromJs(complexObject, 'Object');
   assertEquals('Jon Doe', node.getChildNodeValue('Name'));
   var emails = node.getChildNode('Emails');
-  assertEquals('jon.doe@gmail.com',
+  assertEquals(
+      'jon.doe@gmail.com',
       emails.getChildNode('[0]').getChildNodeValue('Address'));
-  assertEquals('jon.doe@workplace.com',
+  assertEquals(
+      'jon.doe@workplace.com',
       emails.getChildNode('[1]').getChildNodeValue('Address'));
 
-  assertEquals('Object/Emails/[0]/Address',
+  assertEquals(
+      'Object/Emails/[0]/Address',
       emails.getChildNode('[0]').getChildNode('Address').getDataPath());
 
   var groups = node.getChildNode('GroupIds');
@@ -115,7 +121,8 @@ function testFastListNode() {
 
   var childValues = emails.getChildNodes();
   assertEquals(2, childValues.getCount());
-  assertEquals('jon.doe@gmail.com',
+  assertEquals(
+      'jon.doe@gmail.com',
       childValues.getByIndex(0).getChildNodeValue('Address'));
 }
 
@@ -139,13 +146,14 @@ function testAllChildrenSelector() {
 
 function testExpression() {
   var node = goog.ds.FastDataNode.fromJs(complexObject, 'Object');
-  assertEquals('Jon Doe',
-      goog.ds.Expr.create('Name').getValue(node));
-  assertEquals('jon.doe@workplace.com',
+  assertEquals('Jon Doe', goog.ds.Expr.create('Name').getValue(node));
+  assertEquals(
+      'jon.doe@workplace.com',
       goog.ds.Expr.create('Emails/[1]/Address').getNode(node).get());
   var emails = goog.ds.Expr.create('Emails/*').getNodes(node);
   assertEquals(2, emails.getCount());
-  assertEquals('jon.doe@workplace.com',
+  assertEquals(
+      'jon.doe@workplace.com',
       emails.getByIndex(1).getChildNodeValue('Address'));
 }
 
@@ -187,8 +195,8 @@ function testSetChildNotWithNull_object() {
   var node = new goog.ds.FastDataNode({Foo: 'Bar'}, 'test');
   node.setChildNode('Foo', null);
   assertNull('node should not have a Foo child', node.getChildNode('Foo'));
-  assertEquals('node should not have any children',
-      0, node.getChildNodes().getCount());
+  assertEquals(
+      'node should not have any children', 0, node.getChildNodes().getCount());
 }
 
 function testSetChildNotWithNull_list() {
@@ -204,13 +212,10 @@ function testSetChildNotWithNull_list() {
 }
 
 function testNodeListIndexesOnId() {
-  var list = goog.ds.FastDataNode.fromJs([
-    {id: '^Freq', value: 'foo'}], 'list');
-  assertEquals('foo',
-      list.getChildNode('^Freq').getChildNodeValue('value'));
+  var list = goog.ds.FastDataNode.fromJs([{id: '^Freq', value: 'foo'}], 'list');
+  assertEquals('foo', list.getChildNode('^Freq').getChildNodeValue('value'));
   list.setChildNode('^Temp', {id: '^Temp', value: 'bar'});
-  assertEquals('bar',
-      list.getChildNode('^Temp').getChildNodeValue('value'));
+  assertEquals('bar', list.getChildNode('^Temp').getChildNodeValue('value'));
 }
 
 function verifyDataChangeEvents(expected) {
@@ -240,10 +245,10 @@ function testFireDataChangeOnSetChildNode_list() {
   verifyDataChangeEvents(['Node/GroupIds/[0]']);
 
   node.getChildNode('GroupIds').getChildNodes().add(1002);
-  verifyDataChangeEvents(['Node/GroupIds/[2]', 'Node/GroupIds',
-    'Node/GroupIds/count()']);
+  verifyDataChangeEvents(
+      ['Node/GroupIds/[2]', 'Node/GroupIds', 'Node/GroupIds/count()']);
 
   node.getChildNode('GroupIds').setChildNode('foo', 1003);
-  verifyDataChangeEvents(['Node/GroupIds/foo', 'Node/GroupIds',
-    'Node/GroupIds/count()']);
+  verifyDataChangeEvents(
+      ['Node/GroupIds/foo', 'Node/GroupIds', 'Node/GroupIds/count()']);
 }

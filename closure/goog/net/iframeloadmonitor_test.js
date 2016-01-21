@@ -62,8 +62,9 @@ testSuite({
 
     return Timer.promise(10)
         .then(function() {
-          assertFalse('Monitor should not fire before content has loaded.',
-                      monitor.isLoaded());
+          assertFalse(
+              'Monitor should not fire before content has loaded.',
+              monitor.isLoaded());
           frame.src = TEST_FRAME_SRC;
 
           return monitorPromise;

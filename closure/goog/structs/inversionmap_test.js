@@ -21,15 +21,11 @@ goog.require('goog.testing.jsunit');
 function testInversionWithDelta() {
   var alphabetNames = new goog.structs.InversionMap(
       [0, 97, 1, 1, 1, 20, 1, 1, 1],
-      [null,
-        'LATIN SMALL LETTER A',
-        'LATIN SMALL LETTER B',
-        'LATIN SMALL LETTER C',
-        null,
-        'LATIN SMALL LETTER X',
-        'LATIN SMALL LETTER Y',
-        'LATIN SMALL LETTER Z',
-        null],
+      [
+        null, 'LATIN SMALL LETTER A', 'LATIN SMALL LETTER B',
+        'LATIN SMALL LETTER C', null, 'LATIN SMALL LETTER X',
+        'LATIN SMALL LETTER Y', 'LATIN SMALL LETTER Z', null
+      ],
       true);
 
   assertEquals('LATIN SMALL LETTER A', alphabetNames.at(97));
@@ -41,15 +37,11 @@ function testInversionWithDelta() {
 function testInversionWithoutDelta() {
   var alphabetNames = new goog.structs.InversionMap(
       [0, 97, 98, 99, 100, 120, 121, 122, 123],
-      [null,
-        'LATIN SMALL LETTER A',
-        'LATIN SMALL LETTER B',
-        'LATIN SMALL LETTER C',
-        null,
-        'LATIN SMALL LETTER X',
-        'LATIN SMALL LETTER Y',
-        'LATIN SMALL LETTER Z',
-        null],
+      [
+        null, 'LATIN SMALL LETTER A', 'LATIN SMALL LETTER B',
+        'LATIN SMALL LETTER C', null, 'LATIN SMALL LETTER X',
+        'LATIN SMALL LETTER Y', 'LATIN SMALL LETTER Z', null
+      ],
       false);
 
   assertEquals('LATIN SMALL LETTER A', alphabetNames.at(97));
@@ -59,17 +51,12 @@ function testInversionWithoutDelta() {
 }
 
 function testInversionWithoutDeltaNoOpt() {
-  var alphabetNames = new goog.structs.InversionMap(
-      [0, 97, 98, 99, 100, 120, 121, 122, 123],
-      [null,
-        'LATIN SMALL LETTER A',
-        'LATIN SMALL LETTER B',
-        'LATIN SMALL LETTER C',
-        null,
-        'LATIN SMALL LETTER X',
-        'LATIN SMALL LETTER Y',
-        'LATIN SMALL LETTER Z',
-        null]);
+  var alphabetNames =
+      new goog.structs.InversionMap([0, 97, 98, 99, 100, 120, 121, 122, 123], [
+        null, 'LATIN SMALL LETTER A', 'LATIN SMALL LETTER B',
+        'LATIN SMALL LETTER C', null, 'LATIN SMALL LETTER X',
+        'LATIN SMALL LETTER Y', 'LATIN SMALL LETTER Z', null
+      ]);
 
   assertEquals('LATIN SMALL LETTER A', alphabetNames.at(97));
   assertEquals('LATIN SMALL LETTER Y', alphabetNames.at(121));
@@ -79,8 +66,7 @@ function testInversionWithoutDeltaNoOpt() {
 
 function testInversionMapSplice1() {
   var alphabetNames = newAsciiMap();
-  alphabetNames.spliceInversion(
-      [99, 105, 114], ['XXX', 'YYY', 'ZZZ']);
+  alphabetNames.spliceInversion([99, 105, 114], ['XXX', 'YYY', 'ZZZ']);
   assertEquals('LATIN SMALL LETTER B', alphabetNames.at(98));
   assertEquals('XXX', alphabetNames.at(100));
   assertEquals('ZZZ', alphabetNames.at(114));
@@ -90,8 +76,7 @@ function testInversionMapSplice1() {
 
 function testInversionMapSplice2() {
   var alphabetNames = newAsciiMap();
-  alphabetNames.spliceInversion(
-      [105, 114, 121], ['XXX', 'YYY', 'ZZZ']);
+  alphabetNames.spliceInversion([105, 114, 121], ['XXX', 'YYY', 'ZZZ']);
   assertEquals(null, alphabetNames.at(104));
   assertEquals('XXX', alphabetNames.at(105));
   assertEquals('YYY', alphabetNames.at(120));
@@ -113,8 +98,7 @@ function testInversionMapSplice3() {
 function testInversionMapSplice4() {
   var alphabetNames = newAsciiMap();
   alphabetNames.spliceInversion(
-      [98, 1], ['CHANGED LETTER B', 'CHANGED LETTER C'],
-      true /* delta mode */);
+      [98, 1], ['CHANGED LETTER B', 'CHANGED LETTER C'], true /* delta mode */);
   assertEquals('LATIN SMALL LETTER A', alphabetNames.at(97));
   assertEquals('CHANGED LETTER B', alphabetNames.at(98));
   assertEquals('CHANGED LETTER C', alphabetNames.at(99));
@@ -123,14 +107,10 @@ function testInversionMapSplice4() {
 }
 
 function testInversionMapSplice5() {
-  var map = new goog.structs.InversionMap(
-      [0, 97, 98, 99],
-      [null,
-       'LATIN SMALL LETTER A',
-       'LATIN SMALL LETTER B',
-       'LATIN SMALL LETTER C']);
-  map.spliceInversion(
-      [98], ['CHANGED LETTER B']);
+  var map = new goog.structs.InversionMap([0, 97, 98, 99], [
+    null, 'LATIN SMALL LETTER A', 'LATIN SMALL LETTER B', 'LATIN SMALL LETTER C'
+  ]);
+  map.spliceInversion([98], ['CHANGED LETTER B']);
   assertEquals('LATIN SMALL LETTER A', map.at(97));
   assertEquals('CHANGED LETTER B', map.at(98));
   assertEquals('LATIN SMALL LETTER C', map.at(99));
@@ -140,8 +120,7 @@ function testInversionMapSplice5() {
 
 function testInversionMapSpliceLarge() {
   var map = new goog.structs.InversionMap(
-      [0, 99, 100, 101],
-      [null, true, false, null]);
+      [0, 99, 100, 101], [null, true, false, null]);
   var rangeArray = [];
   var values = [];
   for (var i = 100, value = true; i < 1000000; i++, value = !value) {
@@ -163,15 +142,10 @@ function testInversionMapSpliceLarge() {
 
 function newAsciiMap() {
   return new goog.structs.InversionMap(
-      [0, 97, 98, 99, 100, 101, 120, 121, 122, 123],
-      [null,
-        'LATIN SMALL LETTER A',
-        'LATIN SMALL LETTER B',
-        'LATIN SMALL LETTER C',
-        'LATIN SMALL LETTER D',
-        null,
-        'LATIN SMALL LETTER X',
-        'LATIN SMALL LETTER Y',
-        'LATIN SMALL LETTER Z',
-        null]);
+      [0, 97, 98, 99, 100, 101, 120, 121, 122, 123], [
+        null, 'LATIN SMALL LETTER A', 'LATIN SMALL LETTER B',
+        'LATIN SMALL LETTER C', 'LATIN SMALL LETTER D', null,
+        'LATIN SMALL LETTER X', 'LATIN SMALL LETTER Y', 'LATIN SMALL LETTER Z',
+        null
+      ]);
 }

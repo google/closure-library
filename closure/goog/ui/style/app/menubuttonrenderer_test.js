@@ -49,94 +49,95 @@ function tearDown() {
 
 function testGeneratedButton() {
   button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
-  assertEquals('Hello Generated',
-      button.getContentElement().firstChild.nodeValue);
-  assertEquals('Click for Generated',
-      button.getElement().getAttribute('title'));
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
+  assertEquals(
+      'Hello Generated', button.getContentElement().firstChild.nodeValue);
+  assertEquals(
+      'Click for Generated', button.getElement().getAttribute('title'));
 }
 
 function testButtonStates() {
   button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
   button.setState(goog.ui.Component.State.HOVER, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-hover');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-hover');
   button.setState(goog.ui.Component.State.HOVER, false);
   button.setState(goog.ui.Component.State.FOCUSED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-focused');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-focused');
   button.setState(goog.ui.Component.State.FOCUSED, false);
   button.setState(goog.ui.Component.State.ACTIVE, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-active');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-active');
   button.setState(goog.ui.Component.State.ACTIVE, false);
   button.setState(goog.ui.Component.State.DISABLED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-disabled');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-disabled');
 }
 
 function testDecoratedButton() {
   button.decorate(goog.dom.getElement('button'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
-  assertEquals('Hello Decorated',
-      button.getContentElement().firstChild.nodeValue);
-  assertEquals('Click for Decorated',
-      button.getElement().getAttribute('title'));
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
+  assertEquals(
+      'Hello Decorated', button.getContentElement().firstChild.nodeValue);
+  assertEquals(
+      'Click for Decorated', button.getElement().getAttribute('title'));
 }
 
 function testDecoratedButtonBox() {
   button.decorate(goog.dom.getElement('button-box'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
-  assertEquals('Hello Decorated Box',
-      button.getContentElement().firstChild.nodeValue);
-  assertEquals('Click for Decorated Box',
-      button.getElement().getAttribute('title'));
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
+  assertEquals(
+      'Hello Decorated Box', button.getContentElement().firstChild.nodeValue);
+  assertEquals(
+      'Click for Decorated Box', button.getElement().getAttribute('title'));
 }
 
 function testExistingContentIsUsed() {
   button.decorate(goog.dom.getElement('button-with-dom-content'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
   // Safari 3 adds style="-webkit-user-select" to the strong tag, so we
   // can't simply look at the HTML.
   var content = button.getContentElement();
-  assertEquals('Unexpected number of child nodes; expected existing number ' +
-      'plus one for the dropdown element', 4, content.childNodes.length);
-  assertEquals('Unexpected tag', 'STRONG',
-      content.childNodes[0].tagName);
-  assertEquals('Unexpected text content', 'Hello Strong',
+  assertEquals(
+      'Unexpected number of child nodes; expected existing number ' +
+          'plus one for the dropdown element',
+      4, content.childNodes.length);
+  assertEquals('Unexpected tag', 'STRONG', content.childNodes[0].tagName);
+  assertEquals(
+      'Unexpected text content', 'Hello Strong',
       content.childNodes[0].innerHTML);
-  assertEquals('Unexpected tag', 'EM',
-      content.childNodes[2].tagName);
-  assertEquals('Unexpected text content', 'Box',
-      content.childNodes[2].innerHTML);
+  assertEquals('Unexpected tag', 'EM', content.childNodes[2].tagName);
+  assertEquals(
+      'Unexpected text content', 'Box', content.childNodes[2].innerHTML);
 }
 
 function testDecoratedButtonWithMenu() {
   button.decorate(goog.dom.getElement('button-with-menu'));
   assertEquals('Unexpected number of menu items', 2, button.getItemCount());
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
-  assertFalse('Expected menu element to not be contained by button',
-      goog.dom.contains(button.getElement(),
-          button.getMenu().getElement()));
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
+  assertFalse(
+      'Expected menu element to not be contained by button',
+      goog.dom.contains(button.getElement(), button.getMenu().getElement()));
 }
 
 function testDropDownExistsAfterButtonRename() {
   button.decorate(goog.dom.getElement('button-2'));
   button.setContent('New title');
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
-  assertEquals('Unexpected number of child nodes; expected text element ' +
-      'and the dropdown element',
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
+  assertEquals(
+      'Unexpected number of child nodes; expected text element ' +
+          'and the dropdown element',
       2, button.getContentElement().childNodes.length);
-  assertEquals('New title',
-      button.getContentElement().firstChild.nodeValue);
-  assertEquals('Click for Decorated',
-      button.getElement().getAttribute('title'));
+  assertEquals('New title', button.getContentElement().firstChild.nodeValue);
+  assertEquals(
+      'Click for Decorated', button.getElement().getAttribute('title'));
 }

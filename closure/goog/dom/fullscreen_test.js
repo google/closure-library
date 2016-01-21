@@ -43,8 +43,7 @@ function setUp() {
 function testGetFullScreenElement() {
   var element = {};
   mock_doc.webkitFullscreenElement = element;
-  assertEquals(element,
-               goog.dom.fullscreen.getFullScreenElement(domHelper));
+  assertEquals(element, goog.dom.fullscreen.getFullScreenElement(domHelper));
 }
 
 function testGetFullScreenElementNotFullScreen() {

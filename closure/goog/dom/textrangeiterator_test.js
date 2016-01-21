@@ -33,62 +33,68 @@ function setUpPage() {
 function testBasic() {
   goog.testing.dom.assertNodesMatch(
       new goog.dom.TextRangeIterator(test, 0, test, 2),
-      ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1',
-        '#span1', '#p1']);
+      ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1', '#span1', '#p1']);
 }
 
 function testAdjustStart() {
   var iterator = new goog.dom.TextRangeIterator(test, 0, test, 2);
   iterator.setStartNode(goog.dom.getElement('span1'));
 
-  goog.testing.dom.assertNodesMatch(iterator,
-      ['#span1', '#span1', '#p1']);
+  goog.testing.dom.assertNodesMatch(iterator, ['#span1', '#span1', '#p1']);
 }
 
 function testAdjustEnd() {
   var iterator = new goog.dom.TextRangeIterator(test, 0, test, 2);
   iterator.setEndNode(goog.dom.getElement('span1'));
 
-  goog.testing.dom.assertNodesMatch(iterator,
-      ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1']);
+  goog.testing.dom.assertNodesMatch(
+      iterator, ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1']);
 }
 
 function testOffsets() {
-  var iterator = new goog.dom.TextRangeIterator(test2.firstChild, 1,
-      test2.lastChild, 2);
+  var iterator =
+      new goog.dom.TextRangeIterator(test2.firstChild, 1, test2.lastChild, 2);
 
   // foo
   var node = iterator.next();
-  assertEquals('Should have start offset at iteration step 1', 1,
+  assertEquals(
+      'Should have start offset at iteration step 1', 1,
       iterator.getStartTextOffset());
-  assertEquals('Should not have end offset at iteration step 1',
-      node.nodeValue.length, iterator.getEndTextOffset());
+  assertEquals(
+      'Should not have end offset at iteration step 1', node.nodeValue.length,
+      iterator.getEndTextOffset());
 
   // <br>
   node = iterator.next();
-  assertEquals('Should not have start offset at iteration step 2', -1,
+  assertEquals(
+      'Should not have start offset at iteration step 2', -1,
       iterator.getStartTextOffset());
-  assertEquals('Should not have end offset at iteration step 2', -1,
+  assertEquals(
+      'Should not have end offset at iteration step 2', -1,
       iterator.getEndTextOffset());
 
   // </br>
   node = iterator.next();
-  assertEquals('Should not have start offset at iteration step 3', -1,
+  assertEquals(
+      'Should not have start offset at iteration step 3', -1,
       iterator.getStartTextOffset());
-  assertEquals('Should not have end offset at iteration step 3', -1,
+  assertEquals(
+      'Should not have end offset at iteration step 3', -1,
       iterator.getEndTextOffset());
 
   // bar
   node = iterator.next();
-  assertEquals('Should not have start offset at iteration step 4', 0,
+  assertEquals(
+      'Should not have start offset at iteration step 4', 0,
       iterator.getStartTextOffset());
-  assertEquals('Should have end offset at iteration step 4', 2,
+  assertEquals(
+      'Should have end offset at iteration step 4', 2,
       iterator.getEndTextOffset());
 }
 
 function testSingleNodeOffsets() {
-  var iterator = new goog.dom.TextRangeIterator(test2.firstChild, 1,
-      test2.firstChild, 2);
+  var iterator =
+      new goog.dom.TextRangeIterator(test2.firstChild, 1, test2.firstChild, 2);
 
   iterator.next();
   assertEquals('Should have start offset', 1, iterator.getStartTextOffset());
@@ -104,8 +110,7 @@ function testEndNodeOffsetAtEnd() {
 function testSkipTagDoesNotSkipEnd() {
   // Iterate over 'Tex'.
   var iterator = new goog.dom.TextRangeIterator(
-      test.firstChild.firstChild, 0,
-      test.firstChild.lastChild, 1);
+      test.firstChild.firstChild, 0, test.firstChild.lastChild, 1);
 
   var node = iterator.next();
   assertEquals('T', node.nodeValue);

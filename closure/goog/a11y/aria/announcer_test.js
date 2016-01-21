@@ -34,8 +34,8 @@ var mockClock;
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
   someDiv = goog.dom.createDom(goog.dom.TagName.DIV, {id: 'someDiv'}, 'DIV');
-  someSpan = goog.dom.createDom(goog.dom.TagName.SPAN,
-                                {id: 'someSpan'}, 'SPAN');
+  someSpan =
+      goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'someSpan'}, 'SPAN');
   sandbox.appendChild(someDiv);
   someDiv.appendChild(someSpan);
 
@@ -91,8 +91,8 @@ function testAnnouncerAssertive() {
 function testAnnouncerInIframe() {
   var text = 'test content';
   var frame = goog.dom.iframe.createWithContent(sandbox);
-  var helper = goog.dom.getDomHelper(
-      goog.dom.getFrameContentDocument(frame).body);
+  var helper =
+      goog.dom.getDomHelper(goog.dom.getFrameContentDocument(frame).body);
   var announcer = new goog.a11y.aria.Announcer(helper);
   announcer.say(text, 'polite', helper);
   checkLiveRegionContains(text, 'polite', helper);
@@ -112,8 +112,8 @@ function testAnnouncerWithAriaHidden() {
   // Announce a new message and make sure that the aria-hidden was removed.
   announcer.say(text2);
   checkLiveRegionContains(text2, 'polite');
-  assertEquals('',
-      goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
+  assertEquals(
+      '', goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
   goog.dispose(announcer);
 }
 

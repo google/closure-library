@@ -23,8 +23,8 @@ goog.require('goog.testing.jsunit');
 
 var actionHandler;
 function setUp() {
-  actionHandler = new goog.events.ActionHandler(
-      goog.dom.getElement('actionDiv'));
+  actionHandler =
+      new goog.events.ActionHandler(goog.dom.getElement('actionDiv'));
 }
 function tearDown() {
   actionHandler.dispose();
@@ -34,16 +34,12 @@ function tearDown() {
 function testActionHandlerWithBeforeActionHandler() {
   var actionEventFired = false;
   var beforeActionFired = false;
-  goog.events.listen(actionHandler,
-      goog.events.ActionHandler.EventType.ACTION,
-      function(e) {
-        actionEventFired = true;
-      });
-  goog.events.listen(actionHandler,
-      goog.events.ActionHandler.EventType.BEFOREACTION,
-      function(e) {
-        beforeActionFired = true;
-      });
+  goog.events.listen(
+      actionHandler, goog.events.ActionHandler.EventType.ACTION,
+      function(e) { actionEventFired = true; });
+  goog.events.listen(
+      actionHandler, goog.events.ActionHandler.EventType.BEFOREACTION,
+      function(e) { beforeActionFired = true; });
   goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
   assertTrue('BEFOREACTION event was not fired', beforeActionFired);
   assertTrue('ACTION event was not fired', actionEventFired);
@@ -53,9 +49,9 @@ function testActionHandlerWithBeforeActionHandler() {
 // BEFOREACTION handler.
 function testActionHandlerWithoutBeforeActionHandler() {
   var actionEventFired = false;
-  goog.events.listen(actionHandler,
-      goog.events.ActionHandler.EventType.ACTION,
-      function(e) {actionEventFired = true;});
+  goog.events.listen(
+      actionHandler, goog.events.ActionHandler.EventType.ACTION,
+      function(e) { actionEventFired = true; });
   goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
   assertTrue('ACTION event was not fired', actionEventFired);
 }
@@ -65,11 +61,11 @@ function testActionHandlerWithoutBeforeActionHandler() {
 function testBeforeActionCancel() {
   var actionEventFired = false;
   var beforeActionFired = false;
-  goog.events.listen(actionHandler,
-      goog.events.ActionHandler.EventType.ACTION,
-      function(e) {actionEvent = e;});
-  goog.events.listen(actionHandler,
-      goog.events.ActionHandler.EventType.BEFOREACTION,
+  goog.events.listen(
+      actionHandler, goog.events.ActionHandler.EventType.ACTION,
+      function(e) { actionEvent = e; });
+  goog.events.listen(
+      actionHandler, goog.events.ActionHandler.EventType.BEFOREACTION,
       function(e) {
         beforeActionFired = true;
         e.preventDefault();

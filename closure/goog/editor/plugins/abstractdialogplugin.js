@@ -128,8 +128,8 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.getDialog = function() {
  * @param {boolean} reuse Whether to reuse the dialog.
  * @protected
  */
-goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog =
-    function(reuse) {
+goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog = function(
+    reuse) {
   this.reuseDialog_ = reuse;
 };
 
@@ -158,8 +158,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
     this.dialog_ = this.createDialog(
         // TODO(user): Add Field.getAppDomHelper. (Note dom helper will
         // need to be updated if setAppWindow is called by clients.)
-        goog.dom.getDomHelper(this.getFieldObject().getAppWindow()),
-        opt_arg);
+        goog.dom.getDomHelper(this.getFieldObject().getAppWindow()), opt_arg);
   }
 
   // Since we're opening a dialog, we need to clear the selection because the
@@ -173,17 +172,15 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
   // not sure why.
 
   this.restoreScrollPosition_ = this.saveScrollPosition();
-  this.savedRange_ = tempRange && goog.editor.range.saveUsingNormalizedCarets(
-      tempRange);
+  this.savedRange_ =
+      tempRange && goog.editor.range.saveUsingNormalizedCarets(tempRange);
   goog.dom.Range.clearSelection(
       this.getFieldObject().getEditableDomHelper().getWindow());
 
   // Listen for the dialog closing so we can clean up.
-  goog.events.listenOnce(this.dialog_,
-      goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE,
-      this.handleAfterHide,
-      false,
-      this);
+  goog.events.listenOnce(
+      this.dialog_, goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE,
+      this.handleAfterHide, false, this);
 
   this.getFieldObject().setModalMode(true);
   this.dialog_.show();

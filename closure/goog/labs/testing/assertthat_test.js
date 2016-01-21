@@ -24,30 +24,33 @@ var successMatchesFn, failureMatchesFn, describeFn, successTestMatcher;
 var failureTestMatcher;
 
 function setUp() {
-  successMatchesFn = new goog.testing.recordFunction(function() {return true;});
+  successMatchesFn =
+      new goog.testing.recordFunction(function() { return true; });
   failureMatchesFn =
-      new goog.testing.recordFunction(function() {return false;});
+      new goog.testing.recordFunction(function() { return false; });
   describeFn = new goog.testing.recordFunction();
 
   successTestMatcher = function() {
-    return { matches: successMatchesFn, describe: describeFn };
+    return {matches: successMatchesFn, describe: describeFn};
   };
   failureTestMatcher = function() {
-    return { matches: failureMatchesFn, describe: describeFn };
+    return {matches: failureMatchesFn, describe: describeFn};
   };
 }
 
 function testAssertthatAlwaysCallsMatches() {
   var value = 7;
-  goog.labs.testing.assertThat(value, successTestMatcher(),
-      'matches is called on success');
+  goog.labs.testing.assertThat(
+      value, successTestMatcher(), 'matches is called on success');
 
   assertEquals(1, successMatchesFn.getCallCount());
   var matchesCall = successMatchesFn.popLastCall();
   assertEquals(value, matchesCall.getArgument(0));
 
-  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
-      value, failureTestMatcher(), 'matches is called on failure'));
+  var e = assertThrows(
+      goog.bind(
+          goog.labs.testing.assertThat, null, value, failureTestMatcher(),
+          'matches is called on failure'));
 
   assertTrue(e instanceof goog.labs.testing.MatcherError);
 
@@ -56,8 +59,10 @@ function testAssertthatAlwaysCallsMatches() {
 
 function testAssertthatCallsDescribeOnFailure() {
   var value = 7;
-  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
-      value, failureTestMatcher(), 'describe is called on failure'));
+  var e = assertThrows(
+      goog.bind(
+          goog.labs.testing.assertThat, null, value, failureTestMatcher(),
+          'describe is called on failure'));
 
   assertTrue(e instanceof goog.labs.testing.MatcherError);
 

@@ -57,8 +57,7 @@ function testRequestMatchingRows_twoCalls() {
   mockMatchHandler(token, responseJson);
   mockControl.$replayAll();
 
-  matcher.requestMatchingRows(token, maxMatches, dummyMatchHandler,
-      fullToken);
+  matcher.requestMatchingRows(token, maxMatches, dummyMatchHandler, fullToken);
 
   matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
   matcher.xhr_.simulateResponse(200, responseJsonText);

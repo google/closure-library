@@ -55,11 +55,13 @@ function testDecorate() {
 }
 
 function assertColorButton(div) {
-  assertTrue('button className contains goog-color-button',
+  assertTrue(
+      'button className contains goog-color-button',
       goog.array.contains(goog.dom.classlist.get(div), 'goog-color-button'));
-  var caption = goog.asserts.assertElement(
-      div.firstChild.firstChild.firstChild);
-  assertTrue('caption className contains goog-color-button',
-      goog.array.contains(goog.dom.classlist.get(caption),
-          'goog-color-button'));
+  var caption =
+      goog.asserts.assertElement(div.firstChild.firstChild.firstChild);
+  assertTrue(
+      'caption className contains goog-color-button',
+      goog.array.contains(
+          goog.dom.classlist.get(caption), 'goog-color-button'));
 }

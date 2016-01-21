@@ -38,11 +38,9 @@ function testInvalidNodeBug() {
 
   var event = {};
   event.relatedTarget = {};
-  event.relatedTarget.__defineGetter__(
-      'nodeName',
-      function() {
-        throw Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
-      });
+  event.relatedTarget.__defineGetter__('nodeName', function() {
+    throw Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
+  });
   assertThrows(function() { return event.relatedTarget.nodeName; });
 
   var bEvent = new goog.events.BrowserEvent(event);
@@ -68,66 +66,30 @@ function testDefaultPrevented() {
 
 function testIsButtonIe() {
   stubs.set(goog.events.BrowserFeature, 'HAS_W3C_BUTTON', false);
-  assertIsButton(
-      createMouseEvent('mousedown', 1),
-      Button.LEFT,
-      true);
-  assertIsButton(
-      createMouseEvent('click', 0),
-      Button.LEFT,
-      true);
-  assertIsButton(
-      createMouseEvent('mousedown', 2),
-      Button.RIGHT,
-      false);
-  assertIsButton(
-      createMouseEvent('mousedown', 4),
-      Button.MIDDLE,
-      false);
+  assertIsButton(createMouseEvent('mousedown', 1), Button.LEFT, true);
+  assertIsButton(createMouseEvent('click', 0), Button.LEFT, true);
+  assertIsButton(createMouseEvent('mousedown', 2), Button.RIGHT, false);
+  assertIsButton(createMouseEvent('mousedown', 4), Button.MIDDLE, false);
 }
 
 function testIsButtonWebkitMac() {
   stubs.set(goog.events.BrowserFeature, 'HAS_W3C_BUTTON', true);
   stubs.set(goog.userAgent, 'WEBKIT', true);
   stubs.set(goog.userAgent, 'MAC', true);
-  assertIsButton(
-      createMouseEvent('mousedown', 0),
-      Button.LEFT,
-      true);
-  assertIsButton(
-      createMouseEvent('mousedown', 0, true),
-      Button.LEFT,
-      false);
-  assertIsButton(
-      createMouseEvent('mousedown', 2),
-      Button.RIGHT,
-      false);
-  assertIsButton(
-      createMouseEvent('mousedown', 2, true),
-      Button.RIGHT,
-      false);
-  assertIsButton(
-      createMouseEvent('mousedown', 1),
-      Button.MIDDLE,
-      false);
-  assertIsButton(
-      createMouseEvent('mousedown', 1, true),
-      Button.MIDDLE,
-      false);
+  assertIsButton(createMouseEvent('mousedown', 0), Button.LEFT, true);
+  assertIsButton(createMouseEvent('mousedown', 0, true), Button.LEFT, false);
+  assertIsButton(createMouseEvent('mousedown', 2), Button.RIGHT, false);
+  assertIsButton(createMouseEvent('mousedown', 2, true), Button.RIGHT, false);
+  assertIsButton(createMouseEvent('mousedown', 1), Button.MIDDLE, false);
+  assertIsButton(createMouseEvent('mousedown', 1, true), Button.MIDDLE, false);
 }
 
 function testIsButtonGecko() {
   stubs.set(goog.events.BrowserFeature, 'HAS_W3C_BUTTON', true);
   stubs.set(goog.userAgent, 'GECKO', true);
   stubs.set(goog.userAgent, 'MAC', true);
-  assertIsButton(
-      createMouseEvent('mousedown', 0),
-      Button.LEFT,
-      true);
-  assertIsButton(
-      createMouseEvent('mousedown', 2, true),
-      Button.RIGHT,
-      false);
+  assertIsButton(createMouseEvent('mousedown', 0), Button.LEFT, true);
+  assertIsButton(createMouseEvent('mousedown', 2, true), Button.RIGHT, false);
 }
 
 function testTouchEventHandling() {
@@ -159,11 +121,8 @@ function testTouchEventHandling() {
 }
 
 function createMouseEvent(type, button, opt_ctrlKey) {
-  return new goog.events.BrowserEvent({
-    type: type,
-    button: button,
-    ctrlKey: !!opt_ctrlKey
-  });
+  return new goog.events.BrowserEvent(
+      {type: type, button: button, ctrlKey: !!opt_ctrlKey});
 }
 
 function createTouchEvent(type, target, clientCoords, screenCoords) {
@@ -182,8 +141,8 @@ function createTouchEvent(type, target, clientCoords, screenCoords) {
 function assertIsButton(event, button, isActionButton) {
   for (var key in Button) {
     assertEquals(
-        'Testing isButton(' + key + ') against ' +
-        button + ' and type ' + event.type,
+        'Testing isButton(' + key + ') against ' + button + ' and type ' +
+            event.type,
         Button[key] == button, event.isButton(Button[key]));
   }
 

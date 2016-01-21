@@ -175,11 +175,13 @@ goog.html.SafeStyle.fromConstant = function(style) {
     return goog.html.SafeStyle.EMPTY;
   }
   goog.html.SafeStyle.checkStyle_(styleString);
-  goog.asserts.assert(goog.string.endsWith(styleString, ';'),
+  goog.asserts.assert(
+      goog.string.endsWith(styleString, ';'),
       'Last character of style string is not \';\': ' + styleString);
-  goog.asserts.assert(goog.string.contains(styleString, ':'),
+  goog.asserts.assert(
+      goog.string.contains(styleString, ':'),
       'Style string must contain at least one \':\', to ' +
-      'specify a "name: value" pair: ' + styleString);
+          'specify a "name: value" pair: ' + styleString);
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       styleString);
 };
@@ -191,8 +193,8 @@ goog.html.SafeStyle.fromConstant = function(style) {
  * @private
  */
 goog.html.SafeStyle.checkStyle_ = function(style) {
-  goog.asserts.assert(!/[<>]/.test(style),
-      'Forbidden characters in style string: ' + style);
+  goog.asserts.assert(
+      !/[<>]/.test(style), 'Forbidden characters in style string: ' + style);
 };
 
 
@@ -233,8 +235,8 @@ if (goog.DEBUG) {
    * @override
    */
   goog.html.SafeStyle.prototype.toString = function() {
-    return 'SafeStyle{' +
-        this.privateDoNotAccessOrElseSafeStyleWrappedValue_ + '}';
+    return 'SafeStyle{' + this.privateDoNotAccessOrElseSafeStyleWrappedValue_ +
+        '}';
   };
 }
 
@@ -280,8 +282,8 @@ goog.html.SafeStyle.unwrap = function(safeStyle) {
  * @return {!goog.html.SafeStyle} The initialized SafeStyle object.
  * @package
  */
-goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse =
-    function(style) {
+goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse = function(
+    style) {
   return new goog.html.SafeStyle().initSecurityPrivateDoNotAccessOrElse_(style);
 };
 

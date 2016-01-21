@@ -51,31 +51,36 @@ function testHandleKey() {
   event.ctrlKey = false;
   event.metaKey = false;
 
-  assertTrue('Event must be handled when no modifier keys are pressed.',
+  assertTrue(
+      'Event must be handled when no modifier keys are pressed.',
       tabHandler.handleKeyboardShortcut(event, '', false));
   assertTrue(handleTabKeyCalled);
   handleTabKeyCalled = false;
 
   editableField.setModalMode(true);
   if (goog.userAgent.GECKO) {
-    assertFalse('Event must not be handled when in modal mode',
+    assertFalse(
+        'Event must not be handled when in modal mode',
         tabHandler.handleKeyboardShortcut(event, '', false));
     assertFalse(handleTabKeyCalled);
   } else {
-    assertTrue('Event must be handled when in modal mode',
+    assertTrue(
+        'Event must be handled when in modal mode',
         tabHandler.handleKeyboardShortcut(event, '', false));
     assertTrue(handleTabKeyCalled);
     handleTabKeyCalled = false;
   }
 
   event.ctrlKey = true;
-  assertFalse('Plugin must never handle tab key press when ctrlKey is pressed.',
+  assertFalse(
+      'Plugin must never handle tab key press when ctrlKey is pressed.',
       tabHandler.handleKeyboardShortcut(event, '', false));
   assertFalse(handleTabKeyCalled);
 
   event.ctrlKey = false;
   event.metaKey = true;
-  assertFalse('Plugin must never handle tab key press when metaKey is pressed.',
+  assertFalse(
+      'Plugin must never handle tab key press when metaKey is pressed.',
       tabHandler.handleKeyboardShortcut(event, '', false));
   assertFalse(handleTabKeyCalled);
 }

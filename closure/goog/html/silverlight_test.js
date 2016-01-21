@@ -38,8 +38,7 @@ function testCreateObjectForSilverlight() {
           '<param name="onload" value="onload&lt;">' +
           '</object>',
       goog.html.silverlight.createObject(
-          trustedResourceUrl,
-          {'onload': 'onload<'}, {'class': 'test<'}));
+          trustedResourceUrl, {'onload': 'onload<'}, {'class': 'test<'}));
 
   // Cannot override params, case insensitive.
   assertThrows(function() {

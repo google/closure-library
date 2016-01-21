@@ -26,32 +26,12 @@ var jsObj = {
   Errors: [],
   Body: {
     Contacts: [
-      {
-        Name: 'John Doe',
-        Email: 'john@gmail.com',
-        EmailCount: 300
-      },
-      {
-        Name: 'Jane Doh',
-        Email: 'jane@gmail.com'
-      },
-      {
-        Name: 'Steve Smith',
-        Email: 'steve@gmail.com',
-        EmailCount: 305
-      },
-      {
-        Name: 'John Smith',
-        Email: 'smith@gmail.com'
-      },
-      {
-        Name: 'Homer Simpson',
-        Email: 'homer@gmail.com'
-      },
-      {
-        Name: 'Bart Simpson',
-        Email: 'bart@gmail.com'
-      }
+      {Name: 'John Doe', Email: 'john@gmail.com', EmailCount: 300},
+      {Name: 'Jane Doh', Email: 'jane@gmail.com'},
+      {Name: 'Steve Smith', Email: 'steve@gmail.com', EmailCount: 305},
+      {Name: 'John Smith', Email: 'smith@gmail.com'},
+      {Name: 'Homer Simpson', Email: 'homer@gmail.com'},
+      {Name: 'Bart Simpson', Email: 'bart@gmail.com'}
     ]
   }
 };
@@ -67,14 +47,14 @@ function testBasicStuff() {
 }
 
 function testArrayExpressions() {
-  assertEquals(6,
-      goog.ds.Expr.create('$JS/Body/Contacts/*').getNodes().getCount());
-  assertEquals('John Doe',
-      goog.ds.Expr.create('$JS/Body/Contacts/[0]/Name').getValue());
-  assertEquals(305,
-      goog.ds.Expr.create('$JS/Body/Contacts/[2]/EmailCount').getValue());
-  assertEquals(6,
-      goog.ds.Expr.create('$JS/Body/Contacts/*/count()').getValue());
+  assertEquals(
+      6, goog.ds.Expr.create('$JS/Body/Contacts/*').getNodes().getCount());
+  assertEquals(
+      'John Doe', goog.ds.Expr.create('$JS/Body/Contacts/[0]/Name').getValue());
+  assertEquals(
+      305, goog.ds.Expr.create('$JS/Body/Contacts/[2]/EmailCount').getValue());
+  assertEquals(
+      6, goog.ds.Expr.create('$JS/Body/Contacts/*/count()').getValue());
   assertEquals(0, goog.ds.Expr.create('$JS/Errors/*/count()').getValue());
 }
 

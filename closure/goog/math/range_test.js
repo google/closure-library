@@ -44,12 +44,11 @@ function testFromPair() {
 }
 
 function testRangeIntersection() {
-  var tests = [[[1, 2], [3, 4], null],
-               [[1, 3], [2, 4], [2, 3]],
-               [[1, 4], [2, 3], [2, 3]],
-               [[-1, 2], [-1, 2], [-1, 2]],
-               [[1, 2], [2, 3], [2, 2]],
-               [[1, 1], [1, 1], [1, 1]]];
+  var tests = [
+    [[1, 2], [3, 4], null], [[1, 3], [2, 4], [2, 3]], [[1, 4], [2, 3], [2, 3]],
+    [[-1, 2], [-1, 2], [-1, 2]], [[1, 2], [2, 3], [2, 2]],
+    [[1, 1], [1, 1], [1, 1]]
+  ];
   for (var i = 0; i < tests.length; ++i) {
     var t = tests[i];
     var r0 = createRange(t[0]);
@@ -64,12 +63,11 @@ function testRangeIntersection() {
 }
 
 function testBoundingRange() {
-  var tests = [[[1, 2], [3, 4], [1, 4]],
-               [[1, 3], [2, 4], [1, 4]],
-               [[1, 4], [2, 3], [1, 4]],
-               [[-1, 2], [-1, 2], [-1, 2]],
-               [[1, 2], [2, 3], [1, 3]],
-               [[1, 1], [1, 1], [1, 1]]];
+  var tests = [
+    [[1, 2], [3, 4], [1, 4]], [[1, 3], [2, 4], [1, 4]],
+    [[1, 4], [2, 3], [1, 4]], [[-1, 2], [-1, 2], [-1, 2]],
+    [[1, 2], [2, 3], [1, 3]], [[1, 1], [1, 1], [1, 1]]
+  ];
   for (var i = 0; i < tests.length; ++i) {
     var t = tests[i];
     var r0 = createRange(t[0]);
@@ -81,11 +79,10 @@ function testBoundingRange() {
 }
 
 function testRangeContains() {
-  var tests = [[[0, 4], [2, 1], true],
-               [[-4, -1], [-2, -3], true],
-               [[1, 3], [2, 4], false],
-               [[-1, 0], [0, 1], false],
-               [[0, 2], [3, 5], false]];
+  var tests = [
+    [[0, 4], [2, 1], true], [[-4, -1], [-2, -3], true], [[1, 3], [2, 4], false],
+    [[-1, 0], [0, 1], false], [[0, 2], [3, 5], false]
+  ];
   for (var i = 0; i < tests.length; ++i) {
     var t = tests[i];
     var r0 = createRange(t[0]);

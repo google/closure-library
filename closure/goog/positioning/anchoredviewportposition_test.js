@@ -46,8 +46,8 @@ function testRepositionBottom() {
 
   avp.reposition(popup, corner.TOP_LEFT);
   var anchorRect = goog.style.getBounds(anchor);
-  assertEquals(anchorRect.top + anchorRect.height,
-               goog.style.getPageOffset(popup).y);
+  assertEquals(
+      anchorRect.top + anchorRect.height, goog.style.getPageOffset(popup).y);
 }
 
 // No enough space at the bottom, but at the top.
@@ -71,8 +71,8 @@ function testRepositionBottomRight() {
   var avp = new goog.positioning.AnchoredViewportPosition(
       anchor, corner.BOTTOM_RIGHT, false);
   goog.style.setSize(anchor, 100, 100);
-  goog.style.setPosition(anchor, viewportSize.width - 110,
-      viewportSize.height - 110);
+  goog.style.setPosition(
+      anchor, viewportSize.width - 110, viewportSize.height - 110);
 
   avp.reposition(popup, corner.TOP_LEFT);
   anchorRect = goog.style.getBounds(anchor);
@@ -110,17 +110,24 @@ function testRepositionNoSpaceWithAdjustment() {
 }
 
 function testAdjustCorner() {
-  var avp = new goog.positioning.AnchoredViewportPosition(
-      anchor, corner.BOTTOM_LEFT);
+  var avp =
+      new goog.positioning.AnchoredViewportPosition(anchor, corner.BOTTOM_LEFT);
   assertEquals(corner.BOTTOM_LEFT, avp.adjustCorner(0, corner.BOTTOM_LEFT));
-  assertEquals(corner.BOTTOM_RIGHT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_HORIZONTAL, corner.BOTTOM_LEFT));
-  assertEquals(corner.TOP_LEFT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_VERTICAL, corner.BOTTOM_LEFT));
-  assertEquals(corner.TOP_RIGHT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_VERTICAL |
-      goog.positioning.OverflowStatus.FAILED_HORIZONTAL,
-      corner.BOTTOM_LEFT));
+  assertEquals(
+      corner.BOTTOM_RIGHT,
+      avp.adjustCorner(
+          goog.positioning.OverflowStatus.FAILED_HORIZONTAL,
+          corner.BOTTOM_LEFT));
+  assertEquals(
+      corner.TOP_LEFT,
+      avp.adjustCorner(
+          goog.positioning.OverflowStatus.FAILED_VERTICAL, corner.BOTTOM_LEFT));
+  assertEquals(
+      corner.TOP_RIGHT,
+      avp.adjustCorner(
+          goog.positioning.OverflowStatus.FAILED_VERTICAL |
+              goog.positioning.OverflowStatus.FAILED_HORIZONTAL,
+          corner.BOTTOM_LEFT));
 }
 
 // No space to fit, so uses fallback.

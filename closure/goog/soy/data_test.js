@@ -25,8 +25,8 @@ function testToSafeHtml() {
   var html;
 
   html = example.unsanitizedTextTemplate().toSafeHtml();
-  assertEquals('I &lt;3 Puppies &amp; Kittens',
-      goog.html.SafeHtml.unwrap(html));
+  assertEquals(
+      'I &lt;3 Puppies &amp; Kittens', goog.html.SafeHtml.unwrap(html));
 
   html = example.sanitizedHtmlTemplate().toSafeHtml();
   assertEquals('Hello <b>World</b>', goog.html.SafeHtml.unwrap(html));

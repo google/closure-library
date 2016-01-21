@@ -28,8 +28,8 @@ function testMockMethod() {
   mockRange.getStartOffset().$returns(42);
   mockRange.$replay();
 
-  assertEquals('Mock method should return recorded value',
-               42,
-               mockRange.getStartOffset());
+  assertEquals(
+      'Mock method should return recorded value', 42,
+      mockRange.getStartOffset());
   mockRange.$verify();
 }

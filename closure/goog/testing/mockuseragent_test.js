@@ -39,8 +39,7 @@ function testMockUserAgentInstall() {
 
   mockUserAgent.install();
   assertTrue(mockUserAgent.installed_);
-  assertNotEquals(goog.userAgent.getUserAgentString,
-      originalUserAgentFunction);
+  assertNotEquals(goog.userAgent.getUserAgentString, originalUserAgentFunction);
 
   mockUserAgent.uninstall();
   assertFalse(mockUserAgent.installed_);
@@ -70,4 +69,3 @@ function testMockUserAgentNavigator() {
   assertTrue(mockUserAgent.installed_);
   assertEquals(fakeNavigator, goog.userAgent.getNavigator());
 }
-

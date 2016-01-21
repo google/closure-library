@@ -7952,7 +7952,8 @@ if (goog.LOCALE == 'az_Cyrl' || goog.LOCALE == 'az-Cyrl') {
 }
 
 if (goog.LOCALE == 'az_Cyrl_AZ' || goog.LOCALE == 'az-Cyrl-AZ') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_az_Cyrl_AZ;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_az_Cyrl_AZ;
 }
 
 if (goog.LOCALE == 'az_Latn' || goog.LOCALE == 'az-Latn') {
@@ -7960,7 +7961,8 @@ if (goog.LOCALE == 'az_Latn' || goog.LOCALE == 'az-Latn') {
 }
 
 if (goog.LOCALE == 'az_Latn_AZ' || goog.LOCALE == 'az-Latn-AZ') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_az_Latn_AZ;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_az_Latn_AZ;
 }
 
 if (goog.LOCALE == 'bas') {
@@ -8040,7 +8042,8 @@ if (goog.LOCALE == 'bs_Cyrl' || goog.LOCALE == 'bs-Cyrl') {
 }
 
 if (goog.LOCALE == 'bs_Cyrl_BA' || goog.LOCALE == 'bs-Cyrl-BA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_bs_Cyrl_BA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_bs_Cyrl_BA;
 }
 
 if (goog.LOCALE == 'bs_Latn' || goog.LOCALE == 'bs-Latn') {
@@ -8048,7 +8051,8 @@ if (goog.LOCALE == 'bs_Latn' || goog.LOCALE == 'bs-Latn') {
 }
 
 if (goog.LOCALE == 'bs_Latn_BA' || goog.LOCALE == 'bs-Latn-BA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_bs_Latn_BA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_bs_Latn_BA;
 }
 
 if (goog.LOCALE == 'ca_AD' || goog.LOCALE == 'ca-AD') {
@@ -8552,7 +8556,8 @@ if (goog.LOCALE == 'en_UM' || goog.LOCALE == 'en-UM') {
 }
 
 if (goog.LOCALE == 'en_US_POSIX' || goog.LOCALE == 'en-US-POSIX') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en_US_POSIX;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_en_US_POSIX;
 }
 
 if (goog.LOCALE == 'en_VC' || goog.LOCALE == 'en-VC') {
@@ -9576,7 +9581,8 @@ if (goog.LOCALE == 'pa_Arab' || goog.LOCALE == 'pa-Arab') {
 }
 
 if (goog.LOCALE == 'pa_Arab_PK' || goog.LOCALE == 'pa-Arab-PK') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_pa_Arab_PK;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_pa_Arab_PK;
 }
 
 if (goog.LOCALE == 'pa_Guru' || goog.LOCALE == 'pa-Guru') {
@@ -9584,7 +9590,8 @@ if (goog.LOCALE == 'pa_Guru' || goog.LOCALE == 'pa-Guru') {
 }
 
 if (goog.LOCALE == 'pa_Guru_IN' || goog.LOCALE == 'pa-Guru-IN') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_pa_Guru_IN;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_pa_Guru_IN;
 }
 
 if (goog.LOCALE == 'pl_PL' || goog.LOCALE == 'pl-PL') {
@@ -9788,7 +9795,8 @@ if (goog.LOCALE == 'shi_Latn' || goog.LOCALE == 'shi-Latn') {
 }
 
 if (goog.LOCALE == 'shi_Latn_MA' || goog.LOCALE == 'shi-Latn-MA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_shi_Latn_MA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_shi_Latn_MA;
 }
 
 if (goog.LOCALE == 'shi_Tfng' || goog.LOCALE == 'shi-Tfng') {
@@ -9796,7 +9804,8 @@ if (goog.LOCALE == 'shi_Tfng' || goog.LOCALE == 'shi-Tfng') {
 }
 
 if (goog.LOCALE == 'shi_Tfng_MA' || goog.LOCALE == 'shi-Tfng-MA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_shi_Tfng_MA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_shi_Tfng_MA;
 }
 
 if (goog.LOCALE == 'si_LK' || goog.LOCALE == 'si-LK') {
@@ -9864,35 +9873,43 @@ if (goog.LOCALE == 'sr_Cyrl' || goog.LOCALE == 'sr-Cyrl') {
 }
 
 if (goog.LOCALE == 'sr_Cyrl_BA' || goog.LOCALE == 'sr-Cyrl-BA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Cyrl_BA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Cyrl_BA;
 }
 
 if (goog.LOCALE == 'sr_Cyrl_ME' || goog.LOCALE == 'sr-Cyrl-ME') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Cyrl_ME;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Cyrl_ME;
 }
 
 if (goog.LOCALE == 'sr_Cyrl_RS' || goog.LOCALE == 'sr-Cyrl-RS') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Cyrl_RS;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Cyrl_RS;
 }
 
 if (goog.LOCALE == 'sr_Cyrl_XK' || goog.LOCALE == 'sr-Cyrl-XK') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Cyrl_XK;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Cyrl_XK;
 }
 
 if (goog.LOCALE == 'sr_Latn_BA' || goog.LOCALE == 'sr-Latn-BA') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Latn_BA;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Latn_BA;
 }
 
 if (goog.LOCALE == 'sr_Latn_ME' || goog.LOCALE == 'sr-Latn-ME') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Latn_ME;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Latn_ME;
 }
 
 if (goog.LOCALE == 'sr_Latn_RS' || goog.LOCALE == 'sr-Latn-RS') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Latn_RS;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Latn_RS;
 }
 
 if (goog.LOCALE == 'sr_Latn_XK' || goog.LOCALE == 'sr-Latn-XK') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sr_Latn_XK;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_sr_Latn_XK;
 }
 
 if (goog.LOCALE == 'sv_AX' || goog.LOCALE == 'sv-AX') {
@@ -10028,7 +10045,8 @@ if (goog.LOCALE == 'uz_Arab' || goog.LOCALE == 'uz-Arab') {
 }
 
 if (goog.LOCALE == 'uz_Arab_AF' || goog.LOCALE == 'uz-Arab-AF') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_uz_Arab_AF;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_uz_Arab_AF;
 }
 
 if (goog.LOCALE == 'uz_Cyrl' || goog.LOCALE == 'uz-Cyrl') {
@@ -10036,7 +10054,8 @@ if (goog.LOCALE == 'uz_Cyrl' || goog.LOCALE == 'uz-Cyrl') {
 }
 
 if (goog.LOCALE == 'uz_Cyrl_UZ' || goog.LOCALE == 'uz-Cyrl-UZ') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_uz_Cyrl_UZ;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_uz_Cyrl_UZ;
 }
 
 if (goog.LOCALE == 'uz_Latn' || goog.LOCALE == 'uz-Latn') {
@@ -10044,7 +10063,8 @@ if (goog.LOCALE == 'uz_Latn' || goog.LOCALE == 'uz-Latn') {
 }
 
 if (goog.LOCALE == 'uz_Latn_UZ' || goog.LOCALE == 'uz-Latn-UZ') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_uz_Latn_UZ;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_uz_Latn_UZ;
 }
 
 if (goog.LOCALE == 'vai') {
@@ -10056,7 +10076,8 @@ if (goog.LOCALE == 'vai_Latn' || goog.LOCALE == 'vai-Latn') {
 }
 
 if (goog.LOCALE == 'vai_Latn_LR' || goog.LOCALE == 'vai-Latn-LR') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_vai_Latn_LR;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_vai_Latn_LR;
 }
 
 if (goog.LOCALE == 'vai_Vaii' || goog.LOCALE == 'vai-Vaii') {
@@ -10064,7 +10085,8 @@ if (goog.LOCALE == 'vai_Vaii' || goog.LOCALE == 'vai-Vaii') {
 }
 
 if (goog.LOCALE == 'vai_Vaii_LR' || goog.LOCALE == 'vai-Vaii-LR') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_vai_Vaii_LR;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_vai_Vaii_LR;
 }
 
 if (goog.LOCALE == 'vi_VN' || goog.LOCALE == 'vi-VN') {
@@ -10136,19 +10158,23 @@ if (goog.LOCALE == 'zh_Hans' || goog.LOCALE == 'zh-Hans') {
 }
 
 if (goog.LOCALE == 'zh_Hans_CN' || goog.LOCALE == 'zh-Hans-CN') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hans_CN;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hans_CN;
 }
 
 if (goog.LOCALE == 'zh_Hans_HK' || goog.LOCALE == 'zh-Hans-HK') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hans_HK;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hans_HK;
 }
 
 if (goog.LOCALE == 'zh_Hans_MO' || goog.LOCALE == 'zh-Hans-MO') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hans_MO;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hans_MO;
 }
 
 if (goog.LOCALE == 'zh_Hans_SG' || goog.LOCALE == 'zh-Hans-SG') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hans_SG;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hans_SG;
 }
 
 if (goog.LOCALE == 'zh_Hant' || goog.LOCALE == 'zh-Hant') {
@@ -10156,18 +10182,20 @@ if (goog.LOCALE == 'zh_Hant' || goog.LOCALE == 'zh-Hant') {
 }
 
 if (goog.LOCALE == 'zh_Hant_HK' || goog.LOCALE == 'zh-Hant-HK') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hant_HK;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hant_HK;
 }
 
 if (goog.LOCALE == 'zh_Hant_MO' || goog.LOCALE == 'zh-Hant-MO') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hant_MO;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hant_MO;
 }
 
 if (goog.LOCALE == 'zh_Hant_TW' || goog.LOCALE == 'zh-Hant-TW') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zh_Hant_TW;
+  goog.labs.i18n.ListFormatSymbols =
+      goog.labs.i18n.ListFormatSymbols_zh_Hant_TW;
 }
 
 if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zu_ZA;
 }
-

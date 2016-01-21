@@ -33,16 +33,12 @@ function setUp() {
   wireCodec = new goog.labs.net.webChannel.WireV8();
 }
 
-function tearDown() {
-}
+function tearDown() {}
 
 
 function testEncodeSimpleMessage() {
   // scalar types only
-  var message = {
-    a: 'a',
-    b: 'b'
-  };
+  var message = {a: 'a', b: 'b'};
   var buff = [];
   wireCodec.encodeMessage(message, buff, 'prefix_');
   assertEquals(2, buff.length);
@@ -52,13 +48,7 @@ function testEncodeSimpleMessage() {
 
 
 function testEncodeComplexMessage() {
-  var message = {
-    a: 'a',
-    b: {
-      x: 1,
-      y: 2
-    }
-  };
+  var message = {a: 'a', b: {x: 1, y: 2}};
   var buff = [];
   wireCodec.encodeMessage(message, buff, 'prefix_');
   assertEquals(2, buff.length);
@@ -69,20 +59,10 @@ function testEncodeComplexMessage() {
 
 
 function testEncodeMessageQueue() {
-  var message1 = {
-    a: 'a'
-  };
-  var queuedMessage1 = {
-    map: message1,
-    mapId: 3
-  };
-  var message2 = {
-    b: 'b'
-  };
-  var queuedMessage2 = {
-    map: message2,
-    mapId: 4
-  };
+  var message1 = {a: 'a'};
+  var queuedMessage1 = {map: message1, mapId: 3};
+  var message2 = {b: 'b'};
+  var queuedMessage2 = {map: message2, mapId: 4};
   var queue = [queuedMessage1, queuedMessage2];
   var result = wireCodec.encodeMessageQueue(queue, 2, null);
   assertEquals('count=2&ofs=3&req0_a=a&req1_b=b', result);

@@ -100,8 +100,9 @@ function testSafeUrlFromDataUrl_withSafeType() {
   if (isIE9OrLower()) {
     return;
   }
-  assertDataUrlIsSafe('data:image/png;base64,' +
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=',
+  assertDataUrlIsSafe(
+      'data:image/png;base64,' +
+          'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=',
       true);
   assertDataUrlIsSafe('dATa:iMage/pNg;bASe64,abc===', true);
   assertDataUrlIsSafe('data:image/webp;base64,abc===', true);
@@ -147,15 +148,15 @@ function testSafeUrlFromDataUrl_withUnsafeType() {
  */
 function assertDataUrlIsSafe(url, isSafe) {
   var safeUrl = goog.html.SafeUrl.fromDataUrl(url);
-  assertEquals(isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
+  assertEquals(
+      isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(safeUrl));
 }
 
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
-  var privateFieldName =
-      'privateDoNotAccessOrElseSafeHtmlWrappedValue_';
+  var privateFieldName = 'privateDoNotAccessOrElseSafeHtmlWrappedValue_';
   var markerFieldName = 'SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
   var propNames = goog.object.getKeys(goog.html.SafeUrl.sanitize(''));
   assertContains(privateFieldName, propNames);
@@ -164,9 +165,7 @@ function testUnwrap() {
   evil[privateFieldName] = 'javascript:evil()';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.SafeUrl.unwrap(evil);
-  });
+  var exception = assertThrows(function() { goog.html.SafeUrl.unwrap(evil); });
   assertContains('expected object of type SafeUrl', exception.message);
 }
 
@@ -193,8 +192,7 @@ function assertGoodUrl(url) {
 function assertBadUrl(url) {
   assertEquals(
       goog.html.SafeUrl.INNOCUOUS_STRING,
-      goog.html.SafeUrl.unwrap(
-          goog.html.SafeUrl.sanitize(url)));
+      goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url)));
 }
 
 

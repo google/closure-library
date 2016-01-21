@@ -26,19 +26,17 @@ function testSaved() {
   var savedRange = range.saveUsingDom();
 
   range = savedRange.restore(true);
-  assertEquals('Restored range should select "Text"', 'Text',
-      range.getText());
+  assertEquals('Restored range should select "Text"', 'Text', range.getText());
   assertFalse('Restored range should not be reversed.', range.isReversed());
-  assertFalse('Range should not have disposed itself.',
-      savedRange.isDisposed());
+  assertFalse(
+      'Range should not have disposed itself.', savedRange.isDisposed());
 
   goog.dom.Range.clearSelection();
   assertFalse(goog.dom.Range.hasSelection(window));
 
   range = savedRange.restore();
   assertTrue('Range should have auto-disposed.', savedRange.isDisposed());
-  assertEquals('Restored range should select "Text"', 'Text',
-      range.getText());
+  assertEquals('Restored range should select "Text"', 'Text', range.getText());
   assertFalse('Restored range should not be reversed.', range.isReversed());
 }
 
@@ -48,8 +46,7 @@ function testReversedSave() {
   var savedRange = range.saveUsingDom();
 
   range = savedRange.restore();
-  assertEquals('Restored range should select "Text"', 'Text',
-      range.getText());
+  assertEquals('Restored range should select "Text"', 'Text', range.getText());
   if (!goog.userAgent.IE) {
     assertTrue('Restored range should be reversed.', range.isReversed());
   }

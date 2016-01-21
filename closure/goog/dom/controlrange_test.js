@@ -36,7 +36,8 @@ function testCreateFromElement() {
   if (!goog.userAgent.IE) {
     return;
   }
-  assertNotNull('Control range object can be created for element',
+  assertNotNull(
+      'Control range object can be created for element',
       goog.dom.ControlRange.createFromElements(logo));
 }
 
@@ -46,7 +47,8 @@ function testCreateFromRange() {
   }
   var range = document.body.createControlRange();
   range.addElement(table);
-  assertNotNull('Control range object can be created for element',
+  assertNotNull(
+      'Control range object can be created for element',
       goog.dom.ControlRange.createFromBrowserRange(range));
 }
 
@@ -58,11 +60,13 @@ function testSelect() {
   var range = goog.dom.ControlRange.createFromElements(table);
   range.select();
 
-  assertEquals('Control range should be selected', 'Control',
-      document.selection.type);
-  assertEquals('Control range should have length 1', 1,
+  assertEquals(
+      'Control range should be selected', 'Control', document.selection.type);
+  assertEquals(
+      'Control range should have length 1', 1,
       document.selection.createRange().length);
-  assertEquals('Control range should select table', table,
+  assertEquals(
+      'Control range should select table', table,
       document.selection.createRange().item(0));
 }
 
@@ -72,10 +76,11 @@ function testControlRangeIterator() {
   }
   var range = goog.dom.ControlRange.createFromElements(logo, table);
   // Each node is included twice - once as a start tag, once as an end.
-  goog.testing.dom.assertNodesMatch(range, ['#logo', '#logo', '#table',
-    '#tbody', '#tr1', '#td11', 'a', '#td11', '#td12', 'b', '#td12', '#tr1',
-    '#tr2', '#td21', 'c', '#td21', '#td22', 'd', '#td22', '#tr2', '#tbody',
-    '#table']);
+  goog.testing.dom.assertNodesMatch(range, [
+    '#logo', '#logo', '#table', '#tbody', '#tr1',   '#td11', 'a', '#td11',
+    '#td12', 'b',     '#td12',  '#tr1',   '#tr2',   '#td21', 'c', '#td21',
+    '#td22', 'd',     '#td22',  '#tr2',   '#tbody', '#table'
+  ]);
 }
 
 function testBounds() {
@@ -112,11 +117,13 @@ function testGetContainer() {
   }
 
   var range = goog.dom.ControlRange.createFromElements(logo);
-  assertEquals('Single element range is contained by itself', logo,
+  assertEquals(
+      'Single element range is contained by itself', logo,
       range.getContainer());
 
   range = goog.dom.ControlRange.createFromElements(logo, table);
-  assertEquals('Two element range is contained by body', document.body,
+  assertEquals(
+      'Two element range is contained by body', document.body,
       range.getContainer());
 }
 
@@ -132,8 +139,8 @@ function testSave() {
   assertTrue('Successfully collapsed', range.isCollapsed());
 
   range = savedRange.restore();
-  assertEquals('Restored a control range', goog.dom.RangeType.CONTROL,
-      range.getType());
+  assertEquals(
+      'Restored a control range', goog.dom.RangeType.CONTROL, range.getType());
   assertFalse('Not collapsed after restore', range.isCollapsed());
   helpTestBounds(range);
 }
@@ -164,8 +171,7 @@ function testReplaceContents() {
   }
 
   var outer = goog.dom.getElement('test1');
-  outer.innerHTML =
-      '<div contentEditable="true">' +
+  outer.innerHTML = '<div contentEditable="true">' +
       'Hello <input type="text" value="World">' +
       '</div>';
   range = goog.dom.ControlRange.createFromElements(
@@ -186,31 +192,35 @@ function testContainsRange() {
 
   var range = goog.dom.ControlRange.createFromElements(logo, table);
   var range2 = goog.dom.ControlRange.createFromElements(logo);
-  assertTrue('Control range contains the other control range',
+  assertTrue(
+      'Control range contains the other control range',
       range.containsRange(range2));
-  assertTrue('Control range partially contains the other control range',
+  assertTrue(
+      'Control range partially contains the other control range',
       range2.containsRange(range, true));
 
   range2 = goog.dom.ControlRange.createFromElements(table2);
-  assertFalse('Control range does not contain the other control range',
+  assertFalse(
+      'Control range does not contain the other control range',
       range.containsRange(range2));
 
   range = goog.dom.ControlRange.createFromElements(table2);
   range2 = goog.dom.TextRange.createFromNodeContents(table2td);
-  assertTrue('Control range contains text range',
-      range.containsRange(range2));
+  assertTrue('Control range contains text range', range.containsRange(range2));
 
   range2 = goog.dom.TextRange.createFromNodeContents(table);
-  assertFalse('Control range does not contain text range',
-      range.containsRange(range2));
+  assertFalse(
+      'Control range does not contain text range', range.containsRange(range2));
 
   range = goog.dom.ControlRange.createFromElements(logo2);
   range2 = goog.dom.TextRange.createFromNodeContents(table2);
-  assertFalse('Control range does not fully contain text range',
+  assertFalse(
+      'Control range does not fully contain text range',
       range.containsRange(range2, false));
 
   range2 = goog.dom.ControlRange.createFromElements(table2);
-  assertTrue('Control range contains the other control range (2)',
+  assertTrue(
+      'Control range contains the other control range (2)',
       range2.containsRange(range));
 }
 
@@ -223,6 +233,7 @@ function testCloneRange() {
 
   var cloneRange = range.clone();
   assertNotNull('Cloned control range object', cloneRange);
-  assertArrayEquals('Control range and clone have same elements',
-      range.getElements(), cloneRange.getElements());
+  assertArrayEquals(
+      'Control range and clone have same elements', range.getElements(),
+      cloneRange.getElements());
 }

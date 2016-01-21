@@ -32,20 +32,12 @@ function setUp() {
   mockClock = new goog.testing.MockClock(true);
   result = '';
   t0 = goog.dom.animationFrame.createTask({
-    measure: function() {
-      result += 'me0';
-    },
-    mutate: function() {
-      result += 'mu0';
-    }
+    measure: function() { result += 'me0'; },
+    mutate: function() { result += 'mu0'; }
   });
   t1 = goog.dom.animationFrame.createTask({
-    measure: function() {
-      result += 'me1';
-    },
-    mutate: function() {
-      result += 'mu1';
-    }
+    measure: function() { result += 'me1'; },
+    mutate: function() { result += 'mu1'; }
   });
   assertEquals('', result);
 }
@@ -62,17 +54,14 @@ function testCreateTask_one() {
   mockClock.tick(NEXT_FRAME);
   assertEquals('me0mu0', result);
   t0();
-  t0(); // Should do nothing.
+  t0();  // Should do nothing.
   mockClock.tick(NEXT_FRAME);
   assertEquals('me0mu0me0mu0', result);
 }
 
 function testCreateTask_onlyMutate() {
-  t0 = goog.dom.animationFrame.createTask({
-    mutate: function() {
-      result += 'mu0';
-    }
-  });
+  t0 = goog.dom.animationFrame.createTask(
+      {mutate: function() { result += 'mu0'; }});
   t0();
   assertEquals('', result);
   mockClock.tick(NEXT_FRAME);
@@ -80,11 +69,8 @@ function testCreateTask_onlyMutate() {
 }
 
 function testCreateTask_onlyMeasure() {
-  t0 = goog.dom.animationFrame.createTask({
-    mutate: function() {
-      result += 'me0';
-    }
-  });
+  t0 = goog.dom.animationFrame.createTask(
+      {mutate: function() { result += 'me0'; }});
   t0();
   assertEquals('', result);
   mockClock.tick(NEXT_FRAME);
@@ -116,9 +102,7 @@ function testCreateTask_recurse() {
       }
       result += 're0';
     },
-    mutate: function() {
-      result += 'ru0';
-    }
+    mutate: function() { result += 'ru0'; }
   });
   recurse();
   mockClock.tick(NEXT_FRAME);
@@ -151,9 +135,7 @@ function testCreateTask_recurseTwoMethodsWithState() {
       result += 'r1e0';
       state.text = 'T0';
     },
-    mutate: function(state) {
-      result += 'r1u0' + state.text;
-    }
+    mutate: function(state) { result += 'r1u0' + state.text; }
   });
   var recurse2 = goog.dom.animationFrame.createTask({
     measure: function(state) {
@@ -163,9 +145,7 @@ function testCreateTask_recurseTwoMethodsWithState() {
       result += 'r2e0';
       state.text = 'T1';
     },
-    mutate: function(state) {
-      result += 'r2u0' + state.text;
-    }
+    mutate: function(state) { result += 'r2u0' + state.text; }
   });
 
   var taskLength = goog.dom.animationFrame.tasks_[0].length;
@@ -200,25 +180,25 @@ function testCreateTask_recurseTwoMethodsWithState() {
 
 function testCreateTask_args() {
   var context = {context: true};
-  var s = goog.dom.animationFrame.createTask({
-    measure: function(state) {
-      assertEquals(context, this);
-      assertUndefined(state.foo);
-      state.foo = 'foo';
-    },
-    mutate: function(state) {
-      assertEquals(context, this);
-      result += state.foo;
-    }
-  }, context);
+  var s = goog.dom.animationFrame.createTask(
+      {
+        measure: function(state) {
+          assertEquals(context, this);
+          assertUndefined(state.foo);
+          state.foo = 'foo';
+        },
+        mutate: function(state) {
+          assertEquals(context, this);
+          result += state.foo;
+        }
+      },
+      context);
   s();
   mockClock.tick(NEXT_FRAME);
   assertEquals('foo', result);
 
   var dynamicContext = goog.dom.animationFrame.createTask({
-    measure: function(state) {
-      assertEquals(context, this);
-    },
+    measure: function(state) { assertEquals(context, this); },
     mutate: function(state) {
       assertEquals(context, this);
       result += 'bar';

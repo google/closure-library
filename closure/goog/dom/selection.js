@@ -162,7 +162,8 @@ goog.dom.selection.getEndPointsTextareaIe_ = function(
   }
   return [
     untrimmedBeforeSelectionText.length,
-    untrimmedBeforeSelectionText.length + untrimmedSelectionText.length];
+    untrimmedBeforeSelectionText.length + untrimmedSelectionText.length
+  ];
 };
 
 

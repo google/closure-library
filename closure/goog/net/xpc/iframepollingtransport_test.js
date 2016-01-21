@@ -43,10 +43,12 @@ function setUp() {
   var innerPeerWindow = createMockPeerWindow(innerPeerHostName);
 
   // Create the channels.
-  outerChannel = createChannel(goog.net.xpc.CrossPageChannelRole.OUTER, 'test',
-      outerPeerHostName, outerPeerWindow, innerPeerHostName, innerPeerWindow);
-  innerChannel = createChannel(goog.net.xpc.CrossPageChannelRole.INNER, 'test',
-      innerPeerHostName, innerPeerWindow, outerPeerHostName, outerPeerWindow);
+  outerChannel = createChannel(
+      goog.net.xpc.CrossPageChannelRole.OUTER, 'test', outerPeerHostName,
+      outerPeerWindow, innerPeerHostName, innerPeerWindow);
+  innerChannel = createChannel(
+      goog.net.xpc.CrossPageChannelRole.INNER, 'test', innerPeerHostName,
+      innerPeerWindow, outerPeerHostName, outerPeerWindow);
 }
 
 
@@ -192,21 +194,14 @@ function testSend_innerPeerClosing() {
  * @param {string} toHostName The host name of the peer window.
  * @param {!Object} toWindow The peer window.
  */
-function createChannel(role, channelName, fromHostName, fromWindow, toHostName,
-    toWindow) {
-
+function createChannel(
+    role, channelName, fromHostName, fromWindow, toHostName, toWindow) {
   // Build a channel config using frame polling.
   var channelConfig = goog.object.create(
-      goog.net.xpc.CfgFields.ROLE,
-      role,
-      goog.net.xpc.CfgFields.PEER_HOSTNAME,
-      toHostName,
-      goog.net.xpc.CfgFields.CHANNEL_NAME,
-      channelName,
-      goog.net.xpc.CfgFields.LOCAL_POLL_URI,
-      fromHostName + '/robots.txt',
-      goog.net.xpc.CfgFields.PEER_POLL_URI,
-      toHostName + '/robots.txt',
+      goog.net.xpc.CfgFields.ROLE, role, goog.net.xpc.CfgFields.PEER_HOSTNAME,
+      toHostName, goog.net.xpc.CfgFields.CHANNEL_NAME, channelName,
+      goog.net.xpc.CfgFields.LOCAL_POLL_URI, fromHostName + '/robots.txt',
+      goog.net.xpc.CfgFields.PEER_POLL_URI, toHostName + '/robots.txt',
       goog.net.xpc.CfgFields.TRANSPORT,
       goog.net.xpc.TransportTypes.IFRAME_POLLING);
 

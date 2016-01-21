@@ -36,9 +36,9 @@ goog.require('goog.string.Const');
  * @private
  */
 goog.html.silverlight.FORBIDDEN_ATTRS_AND_PARAMS_ON_SILVERLIGHT_ = [
-  'data',  // Always set to a fixed value.
-  'source',  // Specifies the URL for the Silverlight file.
-  'type',  // Always set to a fixed value.
+  'data',          // Always set to a fixed value.
+  'source',        // Specifies the URL for the Silverlight file.
+  'type',          // Always set to a fixed value.
   'typemustmatch'  // Always set to a fixed value.
 ];
 
@@ -70,22 +70,20 @@ goog.html.silverlight.createObject = function(
     source, opt_params, opt_attributes) {
   goog.html.flash.verifyKeysNotInMaps(
       goog.html.silverlight.FORBIDDEN_ATTRS_AND_PARAMS_ON_SILVERLIGHT_,
-      opt_attributes,
-      opt_params);
+      opt_attributes, opt_params);
 
   // We don't set default for Silverlight's EnableHtmlAccess and
   // AllowHtmlPopupwindow because their default changes depending on whether
   // a file loaded from the same domain.
-  var paramTags = goog.html.flash.combineParams(
-      {'source': source}, opt_params);
+  var paramTags = goog.html.flash.combineParams({'source': source}, opt_params);
   var fixedAttributes = {
     'data': goog.html.TrustedResourceUrl.fromConstant(
         goog.string.Const.from('data:application/x-silverlight-2,')),
     'type': 'application/x-silverlight-2',
     'typemustmatch': ''
   };
-  var attributes = goog.html.SafeHtml.combineAttributes(
-      fixedAttributes, {}, opt_attributes);
+  var attributes =
+      goog.html.SafeHtml.combineAttributes(fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'object', attributes, paramTags);

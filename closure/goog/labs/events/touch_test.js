@@ -80,11 +80,8 @@ function testTouchChangeEvent() {
     'target': fakeTarget
   };
 
-  var fakeTouchStart = {
-    'changedTouches': [fakeTouch],
-    'target': fakeTarget,
-    'type': 'touchend'
-  };
+  var fakeTouchStart =
+      {'changedTouches': [fakeTouch], 'target': fakeTarget, 'type': 'touchend'};
 
   var data = goog.labs.events.touch.getTouchData(fakeTouchStart);
   assertEquals(1, data.clientX);
@@ -93,4 +90,3 @@ function testTouchChangeEvent() {
   assertEquals(4, data.screenY);
   assertEquals(fakeTarget, data.target);
 }
-

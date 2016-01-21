@@ -31,8 +31,8 @@ var handler = goog.testing.recordFunction(goog.nullFunction);
 var mechanism;
 
 function setUp() {
-  mechanism = new goog.storage.mechanism.ErrorHandlingMechanism(
-      submechanism, handler);
+  mechanism =
+      new goog.storage.mechanism.ErrorHandlingMechanism(submechanism, handler);
 }
 
 function tearDown() {
@@ -44,10 +44,8 @@ function testSet() {
   assertEquals(1, handler.getCallCount());
   assertArrayEquals(
       [
-        error,
-        goog.storage.mechanism.ErrorHandlingMechanism.Operation.SET,
-        'foo',
-        'bar'
+        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.SET,
+        'foo', 'bar'
       ],
       handler.getLastCall().getArguments());
 }
@@ -57,8 +55,7 @@ function testGet() {
   assertEquals(1, handler.getCallCount());
   assertArrayEquals(
       [
-        error,
-        goog.storage.mechanism.ErrorHandlingMechanism.Operation.GET,
+        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.GET,
         'foo'
       ],
       handler.getLastCall().getArguments());
@@ -69,8 +66,7 @@ function testRemove() {
   assertEquals(1, handler.getCallCount());
   assertArrayEquals(
       [
-        error,
-        goog.storage.mechanism.ErrorHandlingMechanism.Operation.REMOVE,
+        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.REMOVE,
         'foo'
       ],
       handler.getLastCall().getArguments());

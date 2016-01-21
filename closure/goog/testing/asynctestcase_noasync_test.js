@@ -26,8 +26,7 @@ var curTestIsDone = true;
 // For restoring it later.
 var oldTimeout = window.setTimeout;
 // Use an asynchronous test runner for our tests.
-var asyncTestCase =
-    goog.testing.AsyncTestCase.createAndInstall(document.title);
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
 
 
 /**
@@ -42,9 +41,7 @@ function doAsyncStuff(numAsyncCalls, name) {
     curTestIsDone = false;
     asyncTestCase.waitForAsync(
         'doAsyncStuff-' + name + '(' + numAsyncCalls + ')');
-    window.setTimeout(function() {
-      doAsyncStuff(numAsyncCalls - 1, name);
-    }, 0);
+    window.setTimeout(function() { doAsyncStuff(numAsyncCalls - 1, name); }, 0);
   } else {
     curTestIsDone = true;
     asyncTestCase.continueTesting();
@@ -54,9 +51,7 @@ function doAsyncStuff(numAsyncCalls, name) {
 function setUpPage() {
   debug('setUpPage was called.');
   // Don't do anything asynchronously.
-  window.setTimeout = function(callback, time) {
-    callback();
-  };
+  window.setTimeout = function(callback, time) { callback(); };
   doAsyncStuff(3, 'setUpPage');
 }
 function setUp() {
@@ -97,12 +92,10 @@ function testSignalsCallContinueTestingBeforeFinishing() {
   asyncTestCase.waitForSignals(2);
 
   window.setTimeout(function() {
-    var thrown = assertThrows(function() {
-      asyncTestCase.continueTesting();
-    });
+    var thrown = assertThrows(function() { asyncTestCase.continueTesting(); });
     assertEquals('Still waiting for 1 signals.', thrown.message);
   }, 0);
-  doAsyncSignals(); // To not timeout.
+  doAsyncSignals();  // To not timeout.
 }
 function tearDownPage() {
   debug('tearDownPage was called.');

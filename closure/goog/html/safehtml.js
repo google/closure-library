@@ -179,8 +179,8 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
           goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
-    goog.asserts.fail('expected object of type SafeHtml, got \'' +
-                      safeHtml + '\'');
+    goog.asserts.fail(
+        'expected object of type SafeHtml, got \'' + safeHtml + '\'');
     return 'type_error:SafeHtml';
   }
 };
@@ -298,8 +298,9 @@ goog.html.SafeHtml.VALID_NAMES_IN_TAG_ = /^[a-zA-Z0-9-]+$/;
  * http://www.w3.org/TR/html5/index.html#attributes-1.
  * @private @const {!Object<string,boolean>}
  */
-goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
-    'data', 'formaction', 'href', 'manifest', 'poster', 'src');
+goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet(
+    'action', 'cite', 'data', 'formaction', 'href', 'manifest', 'poster',
+    'src');
 
 
 /**
@@ -450,8 +451,8 @@ goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
     content += goog.html.SafeStyleSheet.unwrap(styleSheet[i]);
   }
   // Convert to SafeHtml so that it's not HTML-escaped.
-  var htmlContent = goog.html.SafeHtml
-      .createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+  var htmlContent =
+      goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
           content, goog.i18n.bidi.Dir.NEUTRAL);
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'style', attributes, htmlContent);
@@ -519,9 +520,10 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     value = goog.html.SafeHtml.getStyleValue_(value);
   } else if (/^on/i.test(name)) {
     // TODO(jakubvrana): Disallow more attributes with a special meaning.
-    throw Error('Attribute "' + name +
-        '" requires goog.string.Const value, "' + value + '" given.');
-  // URL attributes handled differently accroding to tag.
+    throw Error(
+        'Attribute "' + name + '" requires goog.string.Const value, "' + value +
+        '" given.');
+    // URL attributes handled differently accroding to tag.
   } else if (name.toLowerCase() in goog.html.SafeHtml.URL_ATTRIBUTES_) {
     if (value instanceof goog.html.TrustedResourceUrl) {
       value = goog.html.TrustedResourceUrl.unwrap(value);
@@ -530,7 +532,8 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     } else if (goog.isString(value)) {
       value = goog.html.SafeUrl.sanitize(value).getTypedStringValue();
     } else {
-      throw Error('Attribute "' + name + '" on tag "' + tagName +
+      throw Error(
+          'Attribute "' + name + '" on tag "' + tagName +
           '" requires goog.html.SafeUrl, goog.string.Const, or string,' +
           ' value "' + value + '" given.');
     }
@@ -544,9 +547,10 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     value = value.getTypedStringValue();
   }
 
-  goog.asserts.assert(goog.isString(value) || goog.isNumber(value),
-      'String or number value expected, got ' +
-      (typeof value) + ' with value: ' + value);
+  goog.asserts.assert(
+      goog.isString(value) || goog.isNumber(value),
+      'String or number value expected, got ' + (typeof value) +
+          ' with value: ' + value);
   return name + '="' + goog.string.htmlEscape(String(value)) + '"';
 };
 
@@ -561,7 +565,8 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
   if (!goog.isObject(value)) {
-    throw Error('The "style" attribute requires goog.html.SafeStyle or map ' +
+    throw Error(
+        'The "style" attribute requires goog.html.SafeStyle or map ' +
         'of style properties, ' + (typeof value) + ' given: ' + value);
   }
   if (!(value instanceof goog.html.SafeStyle)) {
@@ -582,8 +587,8 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
  */
-goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
-    opt_content) {
+goog.html.SafeHtml.createWithDir = function(
+    dir, tagName, opt_attributes, opt_content) {
   var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
   html.dir_ = dir;
   return html;
@@ -695,8 +700,8 @@ goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
  * @throws {goog.asserts.AssertionError} If content for void tag is provided.
  * @package
  */
-goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse =
-    function(tagName, opt_attributes, opt_content) {
+goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
+    tagName, opt_attributes, opt_content) {
   var dir = null;
   var result = '<' + tagName;
 
@@ -709,8 +714,8 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse =
       if (!goog.isDefAndNotNull(value)) {
         continue;
       }
-      result += ' ' +
-          goog.html.SafeHtml.getAttrNameAndValue_(tagName, name, value);
+      result +=
+          ' ' + goog.html.SafeHtml.getAttrNameAndValue_(tagName, name, value);
     }
   }
 
@@ -722,8 +727,8 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse =
   }
 
   if (goog.dom.tags.isVoidTag(tagName.toLowerCase())) {
-    goog.asserts.assert(!content.length,
-        'Void tag <' + tagName + '> does not allow content.');
+    goog.asserts.assert(
+        !content.length, 'Void tag <' + tagName + '> does not allow content.');
     result += '>';
   } else {
     var html = goog.html.SafeHtml.concat(content);
@@ -774,8 +779,9 @@ goog.html.SafeHtml.combineAttributes = function(
   for (name in opt_attributes) {
     var nameLower = name.toLowerCase();
     if (nameLower in fixedAttributes) {
-      throw Error('Cannot override "' + nameLower + '" attribute, got "' +
-          name + '" with value "' + opt_attributes[name] + '"');
+      throw Error(
+          'Cannot override "' + nameLower + '" attribute, got "' + name +
+          '" with value "' + opt_attributes[name] + '"');
     }
     if (nameLower in defaultAttributes) {
       delete combinedAttributes[nameLower];

@@ -61,7 +61,8 @@ function testParsingUrl() {
   var e = assertThrows('parser expects a well formed URL', function() {
     goog.ui.media.GoogleVideoModel.newInstance(invalidUrl);
   });
-  assertEquals('failed to parse video id from GoogleVideo url: ' + invalidUrl,
+  assertEquals(
+      'failed to parse video id from GoogleVideo url: ' + invalidUrl,
       e.message);
 }
 
@@ -79,8 +80,7 @@ function testCreatingModel() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.GoogleVideo.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.GoogleVideo.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 

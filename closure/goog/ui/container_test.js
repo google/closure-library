@@ -44,8 +44,7 @@ function setUp() {
   keyContainer = null;
   listContainer = null;
 
-  sandbox.innerHTML =
-      '<div id="containerElement" class="goog-container">\n' +
+  sandbox.innerHTML = '<div id="containerElement" class="goog-container">\n' +
       '  <div class="goog-control" id="hello">Hello</div>\n' +
       '  <div class="goog-control" id="world">World</div>\n' +
       '</div>';
@@ -66,8 +65,10 @@ function testDecorateHidden() {
   container.decorate(containerElement);
   assertFalse('Container must be hidden', container.isVisible());
   container.forEachChild(function(control) {
-    assertTrue('Child control ' + control.getId() + ' must report being ' +
-        'visible, even if in a hidden container', control.isVisible());
+    assertTrue(
+        'Child control ' + control.getId() + ' must report being ' +
+            'visible, even if in a hidden container',
+        control.isVisible());
   });
 }
 
@@ -78,8 +79,10 @@ function testDecorateDisabled() {
   container.decorate(containerElement);
   assertFalse('Container must be disabled', container.isEnabled());
   container.forEachChild(function(control) {
-    assertFalse('Child control ' + control.getId() + ' must be disabled, ' +
-        'because the host container is disabled', control.isEnabled());
+    assertFalse(
+        'Child control ' + control.getId() + ' must be disabled, ' +
+            'because the host container is disabled',
+        control.isEnabled());
   });
 }
 
@@ -87,8 +90,9 @@ function testDecorateFocusableContainer() {
   container.decorate(containerElement);
   assertTrue('Container must be focusable', container.isFocusable());
   container.forEachChild(function(control) {
-    assertFalse('Child control ' + control.getId() + ' must not be ' +
-        'focusable',
+    assertFalse(
+        'Child control ' + control.getId() + ' must not be ' +
+            'focusable',
         control.isSupportedState(goog.ui.Component.State.FOCUSED));
   });
 }
@@ -99,8 +103,9 @@ function testDecorateFocusableChildrenContainer() {
   container.decorate(containerElement);
   assertFalse('Container must not be focusable', container.isFocusable());
   container.forEachChild(function(control) {
-    assertTrue('Child control ' + control.getId() + ' must be ' +
-        'focusable',
+    assertTrue(
+        'Child control ' + control.getId() + ' must be ' +
+            'focusable',
         control.isSupportedState(goog.ui.Component.State.FOCUSED));
   });
 }
@@ -113,39 +118,45 @@ function testHighlightOnEnter() {
   // their disposition toward the "misunderstood contract" problem.
 
   container.decorate(containerElement);
-  assertFalse('Child 0 should initially not be highlighted',
+  assertFalse(
+      'Child 0 should initially not be highlighted',
       container.getChildAt(0).isHighlighted());
 
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(0).getElement(), sandbox);
-  assertTrue('Child 0 should become highlighted after a mouse over',
+  assertTrue(
+      'Child 0 should become highlighted after a mouse over',
       container.getChildAt(0).isHighlighted());
-  assertEquals('Child 0 should be the active descendant',
+  assertEquals(
+      'Child 0 should be the active descendant',
       container.getChildAt(0).getElement(),
       goog.a11y.aria.getActiveDescendant(container.getElement()));
 
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(1).getElement(),
       container.getChildAt(0).getElement());
-  assertFalse('Child 0 should lose highlight when child 1 is moused ' +
-      'over, even if no mouseout occurs.',
+  assertFalse(
+      'Child 0 should lose highlight when child 1 is moused ' +
+          'over, even if no mouseout occurs.',
       container.getChildAt(0).isHighlighted());
-  assertTrue('Child 1 should now be highlighted.',
+  assertTrue(
+      'Child 1 should now be highlighted.',
       container.getChildAt(1).isHighlighted());
-  assertEquals('Child 1 should be the active descendant',
+  assertEquals(
+      'Child 1 should be the active descendant',
       container.getChildAt(1).getElement(),
       goog.a11y.aria.getActiveDescendant(container.getElement()));
 }
 
 function testHighlightOnEnterPreventable() {
   container.decorate(containerElement);
-  goog.events.listen(container, goog.ui.Component.EventType.ENTER,
-      function(event) {
-        event.preventDefault();
-      });
+  goog.events.listen(
+      container, goog.ui.Component.EventType.ENTER,
+      function(event) { event.preventDefault(); });
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(0).getElement(), sandbox);
-  assertFalse('Child 0 should not be highlighted if preventDefault called',
+  assertFalse(
+      'Child 0 should not be highlighted if preventDefault called',
       container.getChildAt(0).isHighlighted());
 }
 
@@ -155,35 +166,38 @@ function testHighlightDisabled() {
   container.getChildAt(0).setEnabled(false);
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(0).getElement(), sandbox);
-  assertFalse('Disabled children should not be highlighted',
+  assertFalse(
+      'Disabled children should not be highlighted',
       container.getChildAt(0).isHighlighted());
 }
 
 function testGetOwnerControl() {
   container.decorate(containerElement);
 
-  assertEquals('Must return appropriate control given an element in the ' +
-      'control.',
+  assertEquals(
+      'Must return appropriate control given an element in the ' +
+          'control.',
       container.getChildAt(1),
       container.getOwnerControl(container.getChildAt(1).getElement()));
 
-  assertNull('Must return null for element not associated with control.',
+  assertNull(
+      'Must return null for element not associated with control.',
       container.getOwnerControl(document.body));
-  assertNull('Must return null if given null node',
-      container.getOwnerControl(null));
+  assertNull(
+      'Must return null if given null node', container.getOwnerControl(null));
 }
 
 function testShowEvent() {
   container.decorate(containerElement);
   container.setVisible(false);
   var eventFired = false;
-  goog.events.listen(container, goog.ui.Component.EventType.SHOW,
-      function() {
-        assertFalse('Container must not be visible when SHOW event is ' +
-                    'fired',
-                    container.isVisible());
-        eventFired = true;
-      });
+  goog.events.listen(container, goog.ui.Component.EventType.SHOW, function() {
+    assertFalse(
+        'Container must not be visible when SHOW event is ' +
+            'fired',
+        container.isVisible());
+    eventFired = true;
+  });
   container.setVisible(true);
   assertTrue('SHOW event expected', eventFired);
 }
@@ -192,11 +206,12 @@ function testAfterShowEvent() {
   container.decorate(containerElement);
   container.setVisible(false);
   var eventFired = false;
-  goog.events.listen(container, goog.ui.Container.EventType.AFTER_SHOW,
-      function() {
-        assertTrue('Container must be visible when AFTER_SHOW event is ' +
-                   'fired',
-                   container.isVisible());
+  goog.events.listen(
+      container, goog.ui.Container.EventType.AFTER_SHOW, function() {
+        assertTrue(
+            'Container must be visible when AFTER_SHOW event is ' +
+                'fired',
+            container.isVisible());
         eventFired = true;
       });
   container.setVisible(true);
@@ -208,25 +223,26 @@ function testHideEvents() {
   container.decorate(containerElement);
   container.setVisible(true);
   var eventFired = false;
-  goog.events.listen(container, goog.ui.Component.EventType.HIDE,
-      function(e) {
-        assertTrue(
-            'Container must be visible when HIDE event is fired',
-            container.isVisible());
-        events.push(e.type);
-      });
-  goog.events.listen(container, goog.ui.Container.EventType.AFTER_HIDE,
-      function(e) {
+  goog.events.listen(container, goog.ui.Component.EventType.HIDE, function(e) {
+    assertTrue(
+        'Container must be visible when HIDE event is fired',
+        container.isVisible());
+    events.push(e.type);
+  });
+  goog.events.listen(
+      container, goog.ui.Container.EventType.AFTER_HIDE, function(e) {
         assertFalse(
             'Container must not be visible when AFTER_HIDE event is fired',
             container.isVisible());
         events.push(e.type);
       });
   container.setVisible(false);
-  assertArrayEquals('HIDE event followed by AFTER_HIDE expected', [
-    goog.ui.Component.EventType.HIDE,
-    goog.ui.Container.EventType.AFTER_HIDE
-  ], events);
+  assertArrayEquals(
+      'HIDE event followed by AFTER_HIDE expected',
+      [
+        goog.ui.Component.EventType.HIDE, goog.ui.Container.EventType.AFTER_HIDE
+      ],
+      events);
 }
 
 
@@ -263,8 +279,8 @@ function testGetOwnerControlWithNoRenderingInAddChild() {
   listContainer.render();
   var ownerControl = listContainer.getOwnerControl(control.getElement());
 
-  assertEquals('Control was added with addChild(control, false)',
-      control, ownerControl);
+  assertEquals(
+      'Control was added with addChild(control, false)', control, ownerControl);
 }
 
 
@@ -293,13 +309,13 @@ function testHandleKeyEvent_onlyHandlesWhenVisible() {
 
   keyContainer.setVisible(false);
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('No key events should be handled',
-      0, keyContainer.keyEventsHandled);
+  assertEquals(
+      'No key events should be handled', 0, keyContainer.keyEventsHandled);
 
   keyContainer.setVisible(true);
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('One key event should be handled',
-      1, keyContainer.keyEventsHandled);
+  assertEquals(
+      'One key event should be handled', 1, keyContainer.keyEventsHandled);
 }
 
 function testHandleKeyEvent_onlyHandlesWhenEnabled() {
@@ -309,13 +325,13 @@ function testHandleKeyEvent_onlyHandlesWhenEnabled() {
 
   keyContainer.setEnabled(false);
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('No key events should be handled',
-      0, keyContainer.keyEventsHandled);
+  assertEquals(
+      'No key events should be handled', 0, keyContainer.keyEventsHandled);
 
   keyContainer.setEnabled(true);
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('One key event should be handled',
-      1, keyContainer.keyEventsHandled);
+  assertEquals(
+      'One key event should be handled', 1, keyContainer.keyEventsHandled);
 }
 
 function testHandleKeyEvent_childlessContainersIgnoreKeyEvents() {
@@ -324,13 +340,13 @@ function testHandleKeyEvent_childlessContainersIgnoreKeyEvents() {
   keyContainer.setVisible(true);
 
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('No key events should be handled',
-      0, keyContainer.keyEventsHandled);
+  assertEquals(
+      'No key events should be handled', 0, keyContainer.keyEventsHandled);
 
   keyContainer.addChild(new goog.ui.Control());
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('One key event should be handled',
-      1, keyContainer.keyEventsHandled);
+  assertEquals(
+      'One key event should be handled', 1, keyContainer.keyEventsHandled);
 }
 
 function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
@@ -340,28 +356,25 @@ function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
   keyContainer.setVisible(true);
 
   keyContainer.handleKeyEvent(new goog.events.Event());
-  assertEquals('One key events should be handled',
-      1, keyContainer.keyEventsHandled);
+  assertEquals(
+      'One key events should be handled', 1, keyContainer.keyEventsHandled);
 }
 
 function testHandleKeyEventInternal_onlyHandlesUnmodified() {
   container.setKeyEventTarget(sandbox);
-  var event = new goog.events.KeyEvent(
-      goog.events.KeyCodes.ESC, 0, false, null);
+  var event =
+      new goog.events.KeyEvent(goog.events.KeyCodes.ESC, 0, false, null);
 
-  var propertyNames = [
-    'shiftKey',
-    'altKey',
-    'ctrlKey',
-    'metaKey'
-  ];
+  var propertyNames = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'];
 
   // Verify that the event is not handled whenever a modifier key is true.
   for (var i = 0, propertyName; propertyName = propertyNames[i]; i++) {
-    assertTrue('Event should be handled when modifer key is not pressed.',
+    assertTrue(
+        'Event should be handled when modifer key is not pressed.',
         container.handleKeyEventInternal(event));
     event[propertyName] = true;
-    assertFalse('Event should not be handled when modifer key is pressed.',
+    assertFalse(
+        'Event should not be handled when modifer key is pressed.',
         container.handleKeyEventInternal(event));
     event[propertyName] = false;
   }
@@ -370,7 +383,8 @@ function testHandleKeyEventInternal_onlyHandlesUnmodified() {
 function testOpenFollowsHighlight() {
   container.decorate(containerElement);
   container.setOpenFollowsHighlight(true);
-  assertTrue('isOpenFollowsHighlight should return true',
+  assertTrue(
+      'isOpenFollowsHighlight should return true',
       container.isOpenFollowsHighlight());
 
   // Make the children openable.
@@ -380,24 +394,30 @@ function testOpenFollowsHighlight() {
   // Open child 1 initially.
   container.getChildAt(1).setOpen(true);
 
-  assertFalse('Child 0 should initially not be highlighted',
+  assertFalse(
+      'Child 0 should initially not be highlighted',
       container.getChildAt(0).isHighlighted());
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(0).getElement(), sandbox);
-  assertTrue('Child 0 should become highlighted after a mouse over',
+  assertTrue(
+      'Child 0 should become highlighted after a mouse over',
       container.getChildAt(0).isHighlighted());
-  assertTrue('Child 0 should become open after higlighted',
+  assertTrue(
+      'Child 0 should become open after higlighted',
       container.getChildAt(0).isOpen());
-  assertFalse('Child 1 should become closed once 0 is open',
+  assertFalse(
+      'Child 1 should become closed once 0 is open',
       container.getChildAt(1).isOpen());
-  assertEquals('OpenItem should be child 0',
-      container.getChildAt(0), container.getOpenItem());
+  assertEquals(
+      'OpenItem should be child 0', container.getChildAt(0),
+      container.getOpenItem());
 }
 
 function testOpenNotFollowsHighlight() {
   container.decorate(containerElement);
   container.setOpenFollowsHighlight(false);
-  assertFalse('isOpenFollowsHighlight should return false',
+  assertFalse(
+      'isOpenFollowsHighlight should return false',
       container.isOpenFollowsHighlight());
 
   // Make the children openable.
@@ -407,18 +427,21 @@ function testOpenNotFollowsHighlight() {
   // Open child 1 initially.
   container.getChildAt(1).setOpen(true);
 
-  assertFalse('Child 0 should initially not be highlighted',
+  assertFalse(
+      'Child 0 should initially not be highlighted',
       container.getChildAt(0).isHighlighted());
   goog.testing.events.fireMouseOverEvent(
       container.getChildAt(0).getElement(), sandbox);
-  assertTrue('Child 0 should become highlighted after a mouse over',
+  assertTrue(
+      'Child 0 should become highlighted after a mouse over',
       container.getChildAt(0).isHighlighted());
-  assertFalse('Child 0 should remain closed after higlighted',
+  assertFalse(
+      'Child 0 should remain closed after higlighted',
       container.getChildAt(0).isOpen());
-  assertTrue('Child 1 should remain open',
-      container.getChildAt(1).isOpen());
-  assertEquals('OpenItem should be child 1',
-      container.getChildAt(1), container.getOpenItem());
+  assertTrue('Child 1 should remain open', container.getChildAt(1).isOpen());
+  assertEquals(
+      'OpenItem should be child 1', container.getChildAt(1),
+      container.getOpenItem());
 }
 
 function testRemoveChild() {
@@ -439,29 +462,34 @@ function testRemoveChild() {
 
   container.setHighlightedIndex(2);
 
-  assertEquals('Parent must remove and return child by ID', b,
+  assertEquals(
+      'Parent must remove and return child by ID', b,
       container.removeChild('b'));
-  assertNull('Parent must no longer contain this child',
-      container.getChild('b'));
-  assertEquals('Highlighted index must be decreased', 1,
+  assertNull(
+      'Parent must no longer contain this child', container.getChild('b'));
+  assertEquals(
+      'Highlighted index must be decreased', 1,
       container.getHighlightedIndex());
-  assertTrue('The removed control must handle its own mouse events',
+  assertTrue(
+      'The removed control must handle its own mouse events',
       b.isHandleMouseEvents());
 
-  assertEquals('Parent must remove and return child', c,
-      container.removeChild(c));
-  assertNull('Parent must no longer contain this child',
-      container.getChild('c'));
-  assertFalse('This child must no longer be highlighted',
-      c.isHighlighted());
-  assertTrue('The removed control must handle its own mouse events',
+  assertEquals(
+      'Parent must remove and return child', c, container.removeChild(c));
+  assertNull(
+      'Parent must no longer contain this child', container.getChild('c'));
+  assertFalse('This child must no longer be highlighted', c.isHighlighted());
+  assertTrue(
+      'The removed control must handle its own mouse events',
       c.isHandleMouseEvents());
 
-  assertEquals('Parent must remove and return child by index', a,
+  assertEquals(
+      'Parent must remove and return child by index', a,
       container.removeChildAt(0));
-  assertNull('Parent must no longer contain this child',
-      container.getChild('a'));
-  assertTrue('The removed control must handle its own mouse events',
+  assertNull(
+      'Parent must no longer contain this child', container.getChild('a'));
+  assertTrue(
+      'The removed control must handle its own mouse events',
       a.isHandleMouseEvents());
 }
 
@@ -489,10 +517,12 @@ function assertHighlightedIndex(explanation, index) {
   assertEquals(explanation, index, container.getHighlightedIndex());
   for (var i = 0; i < container.getChildCount(); i++) {
     if (i == index) {
-      assertTrue('Child at highlighted index should be highlighted',
+      assertTrue(
+          'Child at highlighted index should be highlighted',
           container.getChildAt(i).isHighlighted());
     } else {
-      assertFalse('Only child at highlighted index should be highlighted',
+      assertFalse(
+          'Only child at highlighted index should be highlighted',
           container.getChildAt(i).isHighlighted());
     }
   }

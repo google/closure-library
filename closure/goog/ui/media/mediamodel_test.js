@@ -35,12 +35,12 @@ function testMediaModel() {
   assertEquals('a description', model.getDescription());
 
   var incompleteModel = new goog.ui.media.MediaModel(
-      'http://foo.bar',
-      undefined,
+      'http://foo.bar', undefined,
       'This media has no caption but has a description and a URL');
   assertEquals('http://foo.bar', incompleteModel.getUrl());
   assertUndefined(incompleteModel.getCaption());
-  assertEquals('This media has no caption but has a description and a URL',
+  assertEquals(
+      'This media has no caption but has a description and a URL',
       incompleteModel.getDescription());
   assertArrayEquals([], incompleteModel.getThumbnails());
 }
@@ -53,10 +53,8 @@ function testMediaModelFindCategoryWithScheme() {
     new goog.ui.media.MediaModel.Category('scheme-b', 'value-b')
   ]);
   assertNull(model.findCategoryWithScheme('no such scheme'));
-  assertEquals('value-a',
-      model.findCategoryWithScheme('scheme-a').getValue());
-  assertEquals('value-b',
-      model.findCategoryWithScheme('scheme-b').getValue());
+  assertEquals('value-a', model.findCategoryWithScheme('scheme-a').getValue());
+  assertEquals('value-b', model.findCategoryWithScheme('scheme-b').getValue());
 }
 
 
@@ -71,19 +69,14 @@ function testMediaModelFindCreditsWithRole() {
 
   assertEquals(0, model.findCreditsWithRole('no such role').length);
   assertEquals(2, model.findCreditsWithRole('role-a').length);
-  assertEquals('value-a',
-      model.findCreditsWithRole('role-a')[0].getValue());
-  assertEquals('value-a2',
-      model.findCreditsWithRole('role-a')[1].getValue());
-  assertEquals('value-b',
-      model.findCreditsWithRole('role-b')[0].getValue());
+  assertEquals('value-a', model.findCreditsWithRole('role-a')[0].getValue());
+  assertEquals('value-a2', model.findCreditsWithRole('role-a')[1].getValue());
+  assertEquals('value-b', model.findCreditsWithRole('role-b')[0].getValue());
 }
 
 function testMediaModelSubtitles() {
-  model.setSubTitles([
-    new goog.ui.media.MediaModel.SubTitle(
-        'uri', '*', 'application/tts+xml')
-  ]);
+  model.setSubTitles([new goog.ui.media.MediaModel.SubTitle(
+      'uri', '*', 'application/tts+xml')]);
   assertEquals(1, model.getSubTitles().length);
   assertEquals('uri', model.getSubTitles()[0].getHref());
   assertEquals('*', model.getSubTitles()[0].getLang());

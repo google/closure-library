@@ -67,8 +67,9 @@ function testHighlightSecondStaysAtTop() {
 function testHighlightSecondLastScrollsNearTheBottom() {
   scroller = new goog.ui.ContainerScroller(container);
   container.getChildAt(8).setHighlighted(true);
-  assertEquals('Since scrolling is lazy, when highlighting the second' +
-      ' last, the item should be the last visible one.',
+  assertEquals(
+      'Since scrolling is lazy, when highlighting the second' +
+          ' last, the item should be the last visible one.',
       80, container.getElement().scrollTop);
 }
 
@@ -84,9 +85,10 @@ function testScrollRestoreIfStillVisible() {
   var scrollTop = container.getElement().scrollTop;
   container.setVisible(false);
   container.setVisible(true);
-  assertEquals('Scroll position should be the same after restore, if it ' +
-               'still makes highlighted item visible',
-               scrollTop, container.getElement().scrollTop);
+  assertEquals(
+      'Scroll position should be the same after restore, if it ' +
+          'still makes highlighted item visible',
+      scrollTop, container.getElement().scrollTop);
 }
 
 function testNoScrollRestoreIfNotVisible() {
@@ -95,10 +97,11 @@ function testNoScrollRestoreIfNotVisible() {
   container.setVisible(false);
   container.getChildAt(0).setHighlighted(true);
   container.setVisible(true);
-  assertNotEquals('Scroll position should not be the same after restore, if ' +
-                  'the scroll position when the menu was hidden no longer ' +
-                  'makes the highlighted item visible when the container is ' +
-                  'shown again',
+  assertNotEquals(
+      'Scroll position should not be the same after restore, if ' +
+          'the scroll position when the menu was hidden no longer ' +
+          'makes the highlighted item visible when the container is ' +
+          'shown again',
       100, container.getElement().scrollTop);
 }
 
@@ -111,7 +114,7 @@ function testCenterOnHighlightedOnFirstOpen() {
   // of 40 pixels.
   assertEquals(
       'On the very first display of the scroller, the item should be ' +
-      'centered, rather than just assured in view.',
+          'centered, rather than just assured in view.',
       40, container.getElement().scrollTop);
 }
 
@@ -119,10 +122,10 @@ function testHighlightsAreIgnoredInResponseToScrolling() {
   scroller = new goog.ui.ContainerScroller(container);
   container.getChildAt(9).setHighlighted(true);
   goog.testing.events.fireMouseOverEvent(
-      goog.dom.getElement('control-5'),
-      goog.dom.getElement('control-9'));
-  assertEquals('Mouseovers due to scrolls should be ignored',
-      9, container.getHighlightedIndex());
+      goog.dom.getElement('control-5'), goog.dom.getElement('control-9'));
+  assertEquals(
+      'Mouseovers due to scrolls should be ignored', 9,
+      container.getHighlightedIndex());
 }
 
 function testHighlightsAreNotIgnoredWhenNotScrolling() {
@@ -130,13 +133,12 @@ function testHighlightsAreNotIgnoredWhenNotScrolling() {
   container.getChildAt(5).setHighlighted(true);
   mockClock.tick(1000);
   goog.testing.events.fireMouseOutEvent(
-      goog.dom.getElement('control-5'),
-      goog.dom.getElement('control-6'));
+      goog.dom.getElement('control-5'), goog.dom.getElement('control-6'));
   goog.testing.events.fireMouseOverEvent(
-      goog.dom.getElement('control-6'),
-      goog.dom.getElement('control-5'));
-  assertEquals('Mousovers not due to scrolls should not be ignored',
-      6, container.getHighlightedIndex());
+      goog.dom.getElement('control-6'), goog.dom.getElement('control-5'));
+  assertEquals(
+      'Mousovers not due to scrolls should not be ignored', 6,
+      container.getHighlightedIndex());
 }
 
 function testFastSynchronousHighlightsNotIgnored() {
@@ -148,11 +150,13 @@ function testFastSynchronousHighlightsNotIgnored() {
   // times in the same execution context.
   container.getChildAt(9).setHighlighted(true);
   container.getChildAt(1).setHighlighted(true);
-  assertEquals('Synchronous highlights should NOT be ignored.',
-      1, container.getHighlightedIndex());
+  assertEquals(
+      'Synchronous highlights should NOT be ignored.', 1,
+      container.getHighlightedIndex());
   container.getChildAt(8).setHighlighted(true);
-  assertEquals('Synchronous highlights should NOT be ignored.',
-      8, container.getHighlightedIndex());
+  assertEquals(
+      'Synchronous highlights should NOT be ignored.', 8,
+      container.getHighlightedIndex());
 }
 
 function testInitialItemIsCentered() {
@@ -162,7 +166,7 @@ function testInitialItemIsCentered() {
   // of 40 pixels.
   assertEquals(
       'On the very first attachment of the scroller, the item should be ' +
-      'centered, rather than just assured in view.',
+          'centered, rather than just assured in view.',
       40, container.getElement().scrollTop);
 }
 
@@ -175,8 +179,9 @@ function testInitialItemIsCenteredTopItem() {
 function testHidingMenuItemsDoesntAffectContainerScroller() {
   scroller = new goog.ui.ContainerScroller(container);
   container.getElement = function() {
-    fail('getElement() must not be called when a control in the container is ' +
-         'being hidden');
+    fail(
+        'getElement() must not be called when a control in the container is ' +
+        'being hidden');
   };
   container.getChildAt(0).setVisible(false);
 }

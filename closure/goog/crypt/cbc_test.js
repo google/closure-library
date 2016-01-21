@@ -30,26 +30,26 @@ goog.setTestOnly('goog.crypt.CbcTest');
 
 function stringToBytes(s) {
   var bytes = new Array(s.length);
-  for (var i = 0; i < s.length; ++i)
-    bytes[i] = s.charCodeAt(i) & 255;
+  for (var i = 0; i < s.length; ++i) bytes[i] = s.charCodeAt(i) & 255;
   return bytes;
 }
 
-function runCbcAesTest(keyBytes, initialVectorBytes, plainTextBytes,
-                       cipherTextBytes) {
-
+function runCbcAesTest(
+    keyBytes, initialVectorBytes, plainTextBytes, cipherTextBytes) {
   var aes = new goog.crypt.Aes(keyBytes);
   var cbc = new goog.crypt.Cbc(aes);
 
   var encryptedBytes = cbc.encrypt(plainTextBytes, initialVectorBytes);
-  assertEquals('Encrypted bytes should match cipher text.',
-               goog.crypt.byteArrayToHex(cipherTextBytes),
-               goog.crypt.byteArrayToHex(encryptedBytes));
+  assertEquals(
+      'Encrypted bytes should match cipher text.',
+      goog.crypt.byteArrayToHex(cipherTextBytes),
+      goog.crypt.byteArrayToHex(encryptedBytes));
 
   var decryptedBytes = cbc.decrypt(cipherTextBytes, initialVectorBytes);
-  assertEquals('Decrypted bytes should match plain text.',
-               goog.crypt.byteArrayToHex(plainTextBytes),
-               goog.crypt.byteArrayToHex(decryptedBytes));
+  assertEquals(
+      'Decrypted bytes should match plain text.',
+      goog.crypt.byteArrayToHex(plainTextBytes),
+      goog.crypt.byteArrayToHex(decryptedBytes));
 }
 
 function testAesCbcCipherAlgorithm() {

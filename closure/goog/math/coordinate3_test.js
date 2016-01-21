@@ -19,8 +19,8 @@ goog.require('goog.math.Coordinate3');
 goog.require('goog.testing.jsunit');
 
 function assertCoordinate3Equals(a, b) {
-  assertTrue(b + ' should be equal to ' + a,
-             goog.math.Coordinate3.equals(a, b));
+  assertTrue(
+      b + ' should be equal to ' + a, goog.math.Coordinate3.equals(a, b));
 }
 
 
@@ -65,8 +65,8 @@ function testCoordinate3FloatValues() {
   assertEquals(10.5, floatCoord.x);
   assertEquals(20.897, floatCoord.y);
   assertEquals(-71.385, floatCoord.z);
-  assertCoordinate3Equals(floatCoord,
-      new goog.math.Coordinate3(10.5, 20.897, -71.385));
+  assertCoordinate3Equals(
+      floatCoord, new goog.math.Coordinate3(10.5, 20.897, -71.385));
 }
 
 
@@ -79,9 +79,8 @@ function testCoordinate3OneNonNumericValue() {
 
 
 function testCoordinate3AllNonNumericValues() {
-  var nonNumeric = new goog.math.Coordinate3('ten',
-                                             {woop: 'test'},
-                                             Math.sqrt(-1));
+  var nonNumeric =
+      new goog.math.Coordinate3('ten', {woop: 'test'}, Math.sqrt(-1));
   assertTrue(isNaN(nonNumeric.x));
   assertTrue(isNaN(nonNumeric.y));
   assertTrue(isNaN(nonNumeric.z));
@@ -108,17 +107,15 @@ function testCoordinate3Clone() {
 
 
 function testToString() {
-  assertEquals('(0, 0, 0)', new
-               goog.math.Coordinate3().toString());
-  assertEquals('(1, 0, 0)', new
-               goog.math.Coordinate3(1).toString());
-  assertEquals('(1, 2, 0)', new
-               goog.math.Coordinate3(1, 2).toString());
+  assertEquals('(0, 0, 0)', new goog.math.Coordinate3().toString());
+  assertEquals('(1, 0, 0)', new goog.math.Coordinate3(1).toString());
+  assertEquals('(1, 2, 0)', new goog.math.Coordinate3(1, 2).toString());
   assertEquals('(0, 0, 0)', new goog.math.Coordinate3(0, 0, 0).toString());
   assertEquals('(1, 2, 3)', new goog.math.Coordinate3(1, 2, 3).toString());
   assertEquals('(-4, 5, -3)', new goog.math.Coordinate3(-4, 5, -3).toString());
-  assertEquals('(11.25, -71.935, 2.8)',
-               new goog.math.Coordinate3(11.25, -71.935, 2.8).toString());
+  assertEquals(
+      '(11.25, -71.935, 2.8)',
+      new goog.math.Coordinate3(11.25, -71.935, 2.8).toString());
 }
 
 
@@ -152,8 +149,9 @@ function testCoordinate3SquaredDistance() {
 function testCoordinate3Difference() {
   var a = new goog.math.Coordinate3(7, 11, 1);
   var b = new goog.math.Coordinate3(3, -1, 1);
-  assertCoordinate3Equals(goog.math.Coordinate3.difference(a, b),
-                          new goog.math.Coordinate3(4, 12, 0));
+  assertCoordinate3Equals(
+      goog.math.Coordinate3.difference(a, b),
+      new goog.math.Coordinate3(4, 12, 0));
 }
 
 
@@ -191,6 +189,7 @@ function testFromArray() {
   assertEquals('(0, 0, 0)', h.toString());
 
   var tooLong = [1, 2, 3, 4, 5, 6];
-  assertThrows('Error should be thrown attempting to convert an invalid type.',
+  assertThrows(
+      'Error should be thrown attempting to convert an invalid type.',
       goog.partial(goog.math.Coordinate3.fromArray, tooLong));
 }

@@ -50,7 +50,8 @@ goog.memoize = function(f, opt_serializer) {
       var cache = thisOrGlobal[goog.memoize.CACHE_PROPERTY_] ||
           (thisOrGlobal[goog.memoize.CACHE_PROPERTY_] = {});
       var key = serializer(goog.getUid(f), arguments);
-      return cache.hasOwnProperty(key) ? cache[key] :
+      return cache.hasOwnProperty(key) ?
+          cache[key] :
           (cache[key] = f.apply(this, arguments));
     } else {
       return f.apply(this, arguments);

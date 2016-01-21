@@ -61,8 +61,7 @@ function testCreateCallbackMockSuccessWithArg() {
   var callback = asyncMockControl.createCallbackMock(
       'succeedingCallbackMockWithArg',
       asyncMockControl.createCallbackMock(
-          'metaCallbackMock',
-          function(val) { assertEquals(10, val); }));
+          'metaCallbackMock', function(val) { assertEquals(10, val); }));
   callback(10);
   mockControl.$verifyAll();
 }
@@ -121,9 +120,8 @@ function testAssertDeferredErrorFailureNoError() {
 
 function testAssertDeferredErrorSuccess() {
   var deferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredError(deferred, function() {
-    deferred.errback(new Error('FAIL'));
-  });
+  asyncMockControl.assertDeferredError(
+      deferred, function() { deferred.errback(new Error('FAIL')); });
   mockControl.$verifyAll();
 }
 
@@ -160,18 +158,16 @@ function testAssertDeferredEqualsFailureExpectedDeferredNeverResolvesBoth() {
 function testAssertDeferredEqualsFailureWrongValueActualDeferred() {
   var actual = new goog.async.Deferred();
   asyncMockControl.assertDeferredEquals('doesn\'t resolve', 12, actual);
-  asyncMockControl2.assertDeferredError(actual, function() {
-    actual.callback(13);
-  });
+  asyncMockControl2.assertDeferredError(
+      actual, function() { actual.callback(13); });
   mockControl2.$verifyAll();
 }
 
 function testAssertDeferredEqualsFailureWrongValueExpectedDeferred() {
   var expected = new goog.async.Deferred();
   asyncMockControl.assertDeferredEquals('doesn\'t resolve', expected, 12);
-  asyncMockControl2.assertDeferredError(expected, function() {
-    expected.callback(13);
-  });
+  asyncMockControl2.assertDeferredError(
+      expected, function() { expected.callback(13); });
   mockControl2.$verifyAll();
 }
 
@@ -181,9 +177,8 @@ function testAssertDeferredEqualsFailureWongValueBothDeferred() {
   asyncMockControl.assertDeferredEquals(
       'different values', expectedDeferred, actualDeferred);
   expectedDeferred.callback(12);
-  asyncMockControl2.assertDeferredError(actualDeferred, function() {
-    actualDeferred.callback(13);
-  });
+  asyncMockControl2.assertDeferredError(
+      actualDeferred, function() { actualDeferred.callback(13); });
   assertVerifyFails();
   mockControl2.$verifyAll();
 }

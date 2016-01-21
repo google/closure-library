@@ -225,8 +225,7 @@ goog.ds.BaseDataNode.prototype.getDataPath = function() {
   var parentPath = '';
   var myName = this.getDataName();
   if (this.getParent()) {
-    parentPath =
-        this.getParent().getDataPath() +
+    parentPath = this.getParent().getDataPath() +
         (myName.indexOf(
              /** @suppress {missingRequire} */ goog.ds.STR_ARRAY_START) != -1 ?
              '' :
@@ -654,8 +653,6 @@ goog.ds.Util.makeReferenceNode = function(node, name) {
   var nodeCreator = function() {};
   nodeCreator.prototype = node;
   var newNode = new nodeCreator();
-  newNode.getDataName = function() {
-    return name;
-  };
+  newNode.getDataName = function() { return name; };
   return newNode;
 };

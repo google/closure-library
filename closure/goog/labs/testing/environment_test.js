@@ -110,8 +110,8 @@ function testTearDownWithMockControl() {
   var envWithout = new goog.labs.testing.Environment();
 
   var mockControlMock = mockControl.createStrictMock(goog.testing.MockControl);
-  var mockControlCtorMock = mockControl.createMethodMock(goog.testing,
-      'MockControl');
+  var mockControlCtorMock =
+      mockControl.createMethodMock(goog.testing, 'MockControl');
   mockControlCtorMock().$times(1).$returns(mockControlMock);
   // Expecting verify / reset calls twice since two environments use the same
   // mockControl, but only one created it and is allowed to tear it down.
@@ -204,9 +204,7 @@ function testMockClock() {
   var env = new goog.labs.testing.Environment().withMockClock();
 
   testCase.addNewTest('testThatThrowsEventually', function() {
-    setTimeout(function() {
-      throw new Error('LateErrorMessage');
-    }, 200);
+    setTimeout(function() { throw new Error('LateErrorMessage'); }, 200);
   });
 
   testCase.runTests();
@@ -237,9 +235,7 @@ function testMock() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
-  var mock = env.mock({
-    test: function() {}
-  });
+  var mock = env.mock({test: function() {}});
 
   testCase.addNewTest('testMockCalled', function() {
     mock.test().$times(2);

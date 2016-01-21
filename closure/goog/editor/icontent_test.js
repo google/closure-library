@@ -31,7 +31,8 @@ var realIframeDoc;
 var propertyReplacer;
 
 function setUp() {
-  wrapperDiv = goog.dom.createDom(goog.dom.TagName.DIV, null,
+  wrapperDiv = goog.dom.createDom(
+      goog.dom.TagName.DIV, null,
       realIframe = goog.dom.createDom(goog.dom.TagName.IFRAME));
   goog.dom.appendChild(document.body, wrapperDiv);
   realIframeDoc = realIframe.contentWindow.document;
@@ -62,32 +63,33 @@ function testWriteHttpsInitialIframeContentRtl() {
 
 function testWriteInitialIframeContentBlendedStandardsGrowing() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    return; // only executes when using an iframe
+    return;  // only executes when using an iframe
   }
 
   var info = new goog.editor.icontent.FieldFormatInfo('id', true, true, false);
-  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv,
-      '.MyClass { position: absolute; top: 500px; }');
+  var styleInfo = new goog.editor.icontent.FieldStyleInfo(
+      wrapperDiv, '.MyClass { position: absolute; top: 500px; }');
   var doc = realIframeDoc;
   var html = '<div class="MyClass">Some Html</div>';
-  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
-      styleInfo, realIframe);
+  goog.editor.icontent.writeNormalInitialBlendedIframe(
+      info, html, styleInfo, realIframe);
 
   assertBodyCorrect(doc.body, 'id', html);
-  assertEquals('CSS1Compat', doc.compatMode); // standards
-  assertEquals('auto', doc.documentElement.style.height); // growing
-  assertEquals('100%', doc.body.style.height); // standards
-  assertEquals('hidden', doc.body.style.overflowY); // growing
-  assertEquals('', realIframe.style.position); // no padding on wrapper
+  assertEquals('CSS1Compat', doc.compatMode);              // standards
+  assertEquals('auto', doc.documentElement.style.height);  // growing
+  assertEquals('100%', doc.body.style.height);             // standards
+  assertEquals('hidden', doc.body.style.overflowY);        // growing
+  assertEquals('', realIframe.style.position);  // no padding on wrapper
 
   assertEquals(500, doc.body.firstChild.offsetTop);
-  assert(doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
-      '-moz-force-broken-image-icon') != -1); // standards
+  assert(
+      doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
+          '-moz-force-broken-image-icon') != -1);  // standards
 }
 
 function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    return; // only executes when using an iframe
+    return;  // only executes when using an iframe
   }
 
   var info = new goog.editor.icontent.FieldFormatInfo('id', false, true, true);
@@ -95,19 +97,20 @@ function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
   wrapperDiv.style.padding = '2px 5px';
   var doc = realIframeDoc;
   var html = 'Some Html';
-  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
-      styleInfo, realIframe);
+  goog.editor.icontent.writeNormalInitialBlendedIframe(
+      info, html, styleInfo, realIframe);
 
   assertBodyCorrect(doc.body, 'id', html, true);
-  assertEquals('BackCompat', doc.compatMode); // quirks
-  assertEquals('100%', doc.documentElement.style.height); // fixed height
-  assertEquals('auto', doc.body.style.height); // quirks
-  assertEquals('auto', doc.body.style.overflow); // fixed height
+  assertEquals('BackCompat', doc.compatMode);              // quirks
+  assertEquals('100%', doc.documentElement.style.height);  // fixed height
+  assertEquals('auto', doc.body.style.height);             // quirks
+  assertEquals('auto', doc.body.style.overflow);           // fixed height
 
   assertEquals('-2px', realIframe.style.marginTop);
   assertEquals('-5px', realIframe.style.marginLeft);
-  assert(doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
-      '-moz-force-broken-image-icon') == -1); // quirks
+  assert(
+      doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
+          '-moz-force-broken-image-icon') == -1);  // quirks
 }
 
 function testWhiteboxStandardsFixedRtl() {
@@ -115,32 +118,32 @@ function testWhiteboxStandardsFixedRtl() {
   var styleInfo = null;
   var doc = realIframeDoc;
   var html = 'Some Html';
-  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
-      styleInfo, realIframe);
+  goog.editor.icontent.writeNormalInitialBlendedIframe(
+      info, html, styleInfo, realIframe);
   assertBodyCorrect(doc.body, 'id', html, true);
 
   // TODO(nicksantos): on Safari, there's a bug where all written iframes
   // are CSS1Compat. It's fixed in the nightlies as of 3/31/08, so remove
   // this guard when the latest version of Safari is on the farm.
   if (!goog.userAgent.WEBKIT) {
-    assertEquals('BackCompat', doc.compatMode); // always use quirks in whitebox
+    assertEquals(
+        'BackCompat', doc.compatMode);  // always use quirks in whitebox
   }
 }
 
 function testGetInitialIframeContent() {
-  var info = new goog.editor.icontent.FieldFormatInfo(
-      'id', true, false, false);
+  var info = new goog.editor.icontent.FieldFormatInfo('id', true, false, false);
   var styleInfo = null;
   var html = 'Some Html';
-  propertyReplacer.set(goog.editor.BrowserFeature,
-      'HAS_CONTENT_EDITABLE', false);
-  var htmlOut = goog.editor.icontent.getInitialIframeContent_(
-      info, html, styleInfo);
+  propertyReplacer.set(
+      goog.editor.BrowserFeature, 'HAS_CONTENT_EDITABLE', false);
+  var htmlOut =
+      goog.editor.icontent.getInitialIframeContent_(info, html, styleInfo);
   assertEquals(/contentEditable/i.test(htmlOut), false);
-  propertyReplacer.set(goog.editor.BrowserFeature,
-      'HAS_CONTENT_EDITABLE', true);
-  htmlOut = goog.editor.icontent.getInitialIframeContent_(
-      info, html, styleInfo);
+  propertyReplacer.set(
+      goog.editor.BrowserFeature, 'HAS_CONTENT_EDITABLE', true);
+  htmlOut =
+      goog.editor.icontent.getInitialIframeContent_(info, html, styleInfo);
   assertEquals(/<body[^>]+?contentEditable/i.test(htmlOut), true);
   assertEquals(/<html[^>]+?style="[^>"]*min-width:\s*0/i.test(htmlOut), true);
   assertEquals(/<body[^>]+?style="[^>"]*min-width:\s*0/i.test(htmlOut), true);
@@ -148,16 +151,16 @@ function testGetInitialIframeContent() {
 
 function testIframeMinWidthOverride() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    return; // only executes when using an iframe
+    return;  // only executes when using an iframe
   }
 
   var info = new goog.editor.icontent.FieldFormatInfo('id', true, true, false);
-  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv,
-      '.MyClass { position: absolute; top: 500px; }');
+  var styleInfo = new goog.editor.icontent.FieldStyleInfo(
+      wrapperDiv, '.MyClass { position: absolute; top: 500px; }');
   var doc = realIframeDoc;
   var html = '<div class="MyClass">Some Html</div>';
-  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
-      styleInfo, realIframe);
+  goog.editor.icontent.writeNormalInitialBlendedIframe(
+      info, html, styleInfo, realIframe);
 
   // Make sure that the minimum width isn't being inherited from the parent
   // document's style.
@@ -194,11 +197,12 @@ function assertBodyCorrect(body, id, bodyHTML, opt_rtl) {
   }
   assertContains('editable', body.className.match(/\S+/g));
   assertEquals('true', String(body.getAttribute('g_editable')));
-  assertEquals('true',
+  assertEquals(
+      'true',
       // IE has bugs with getAttribute('hideFocus'), and
       // Webkit has bugs with normal .hideFocus access.
-      String(goog.userAgent.IE ? body.hideFocus :
-          body.getAttribute('hideFocus')));
+      String(
+          goog.userAgent.IE ? body.hideFocus : body.getAttribute('hideFocus')));
   assertEquals(id, body.id);
 }
 
@@ -211,7 +215,7 @@ function createMockDocument() {
     body: {
       setAttribute: function(key, val) { this[key] = val; },
       getAttribute: function(key) { return this[key]; },
-      style: { direction: '' }
+      style: {direction: ''}
     }
   };
 }

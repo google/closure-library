@@ -48,8 +48,8 @@ function testShortcutCreatesALink() {
     return;
   }
 
-  propertyReplacer.set(window, 'prompt', function() {
-    return 'http://www.google.com/'; });
+  propertyReplacer.set(
+      window, 'prompt', function() { return 'http://www.google.com/'; });
   var linkBubble = new goog.editor.plugins.LinkBubble();
   var formatter = new goog.editor.plugins.BasicTextFormatter();
   var plugin = new goog.editor.plugins.LinkShortcutPlugin();
@@ -60,10 +60,10 @@ function testShortcutCreatesALink() {
   field.registerPlugin(plugin);
   field.makeEditable();
   field.focusAndPlaceCursorAtStart();
-  var textNode = goog.testing.dom.findTextNode('http://www.google.com/',
-      fieldEl);
+  var textNode =
+      goog.testing.dom.findTextNode('http://www.google.com/', fieldEl);
   goog.testing.events.fireKeySequence(
-      field.getElement(), goog.events.KeyCodes.K, { ctrlKey: true });
+      field.getElement(), goog.events.KeyCodes.K, {ctrlKey: true});
 
   var href = field.getElement().getElementsByTagName(goog.dom.TagName.A)[0];
   assertEquals('http://www.google.com/', href.href);

@@ -51,8 +51,8 @@ function testBelowMaxDepthInIE() {
     goog.dom.xml.MAX_ELEMENT_DEPTH = 5;
     var junk = '<a><b><c><d><e>Hello</e></d></c></b></a>';
     var doc = goog.dom.xml.loadXml(junk);
-    assertEquals('Should not have caused a parse error', 0,
-        Number(doc.parseError));
+    assertEquals(
+        'Should not have caused a parse error', 0, Number(doc.parseError));
   }
 }
 
@@ -62,8 +62,8 @@ function testAboveMaxDepthInIE() {
     goog.dom.xml.MAX_ELEMENT_DEPTH = 4;
     var junk = '<a><b><c><d><e>Hello</e></d></c></b></a>';
     var doc = goog.dom.xml.loadXml(junk);
-    assertNotEquals('Should have caused a parse error', 0,
-        Number(doc.parseError));
+    assertNotEquals(
+        'Should have caused a parse error', 0, Number(doc.parseError));
   }
 }
 
@@ -73,8 +73,8 @@ function testBelowMaxSizeInIE() {
     goog.dom.xml.MAX_XML_SIZE_KB = 1;
     var junk = '<a>' + new Array(50).join('<b>junk</b>') + '</a>';
     var doc = goog.dom.xml.loadXml(junk);
-    assertEquals('Should not have caused a parse error',
-        0, Number(doc.parseError));
+    assertEquals(
+        'Should not have caused a parse error', 0, Number(doc.parseError));
   }
 }
 
@@ -84,8 +84,8 @@ function testMaxSizeInIE() {
     goog.dom.xml.MAX_XML_SIZE_KB = 1;
     var junk = '<a>' + new Array(1000).join('<b>junk</b>') + '</a>';
     var doc = goog.dom.xml.loadXml(junk);
-    assertNotEquals('Should have caused a parse error', 0,
-        Number(doc.parseError));
+    assertNotEquals(
+        'Should have caused a parse error', 0, Number(doc.parseError));
   }
 }
 
@@ -131,12 +131,8 @@ function testSelectNodesWithActiveX() {
 function testSetAttributes() {
   var xmlElement = goog.dom.xml.createDocument().createElement('root');
   var domElement = document.createElement(goog.dom.TagName.DIV);
-  var attrs = {
-    name: 'test3',
-    title: 'A title',
-    random: 'woop',
-    cellpadding: '123'
-  };
+  var attrs =
+      {name: 'test3', title: 'A title', random: 'woop', cellpadding: '123'};
 
   goog.dom.xml.setAttributes(xmlElement, attrs);
   goog.dom.xml.setAttributes(domElement, attrs);

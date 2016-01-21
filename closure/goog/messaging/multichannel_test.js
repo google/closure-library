@@ -38,9 +38,7 @@ function setUp() {
 function expectedFn(name, callback) {
   var ignored = new goog.testing.mockmatchers.IgnoreArgument();
   var fn = mockControl.createFunctionMock(name);
-  fn(ignored).$does(function(args) {
-    callback.apply(this, args);
-  });
+  fn(ignored).$does(function(args) { callback.apply(this, args); });
   return function() { fn(arguments); };
 }
 

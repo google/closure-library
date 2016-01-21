@@ -21,10 +21,8 @@ goog.require('goog.testing.jsunit');
 
 function testDescriptorConstruction() {
   var messageType = function() {};
-  var descriptor = new goog.proto2.Descriptor(messageType, {
-    name: 'test',
-    fullName: 'this.is.a.test'
-  }, []);
+  var descriptor = new goog.proto2.Descriptor(
+      messageType, {name: 'test', fullName: 'this.is.a.test'}, []);
 
   assertEquals('test', descriptor.getName());
   assertEquals('this.is.a.test', descriptor.getFullName());
@@ -35,20 +33,15 @@ function testParentDescriptor() {
   var parentType = function() {};
   var messageType = function() {};
 
-  var parentDescriptor = new goog.proto2.Descriptor(parentType, {
-    name: 'parent',
-    fullName: 'this.is.a.parent'
-  }, []);
+  var parentDescriptor = new goog.proto2.Descriptor(
+      parentType, {name: 'parent', fullName: 'this.is.a.parent'}, []);
 
-  parentType.getDescriptor = function() {
-    return parentDescriptor;
-  };
+  parentType.getDescriptor = function() { return parentDescriptor; };
 
-  var descriptor = new goog.proto2.Descriptor(messageType, {
-    name: 'test',
-    fullName: 'this.is.a.test',
-    containingType: parentType
-  }, []);
+  var descriptor = new goog.proto2.Descriptor(
+      messageType,
+      {name: 'test', fullName: 'this.is.a.test', containingType: parentType},
+      []);
 
   assertEquals(parentDescriptor, descriptor.getContainingType());
 }
@@ -60,14 +53,9 @@ function testStaticGetDescriptorCachesResults() {
   messageType.prototype.getDescriptor = function() {
     if (!messageType.descriptor_) {
       // The descriptor is created lazily when we instantiate a new instance.
-      var descriptorObj = {
-        0: {
-          name: 'test',
-          fullName: 'this.is.a.test'
-        }
-      };
-      messageType.descriptor_ = goog.proto2.Message.createDescriptor(
-          messageType, descriptorObj);
+      var descriptorObj = {0: {name: 'test', fullName: 'this.is.a.test'}};
+      messageType.descriptor_ =
+          goog.proto2.Message.createDescriptor(messageType, descriptorObj);
     }
     return messageType.descriptor_;
   };

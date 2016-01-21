@@ -63,8 +63,10 @@ function testNoMatchName() {
   // Make sure we handle the lack of a match name
   assertFalse(matcher.matches(456, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: missing mockmatcher description ' +
-      'but was: <456> (Number)', mockExpect.errorMessages[0]);
+  assertEquals(
+      'Expected: missing mockmatcher description ' +
+          'but was: <456> (Number)',
+      mockExpect.errorMessages[0]);
 }
 
 
@@ -75,8 +77,9 @@ function testInstanceOf() {
 
   assertFalse(matcher.matches(new bar(), mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: instanceOf() ' +
-      'but was: <[object Object]> (Object)',
+  assertEquals(
+      'Expected: instanceOf() ' +
+          'but was: <[object Object]> (Object)',
       mockExpect.errorMessages[0]);
 }
 
@@ -89,7 +92,8 @@ function testTypeOf() {
 
   assertFalse(matcher.matches(true, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: typeOf(number) but was: <true> (Boolean)',
+  assertEquals(
+      'Expected: typeOf(number) but was: <true> (Boolean)',
       mockExpect.errorMessages[0]);
 }
 
@@ -103,7 +107,8 @@ function testRegexpMatch() {
 
   assertFalse(matcher.matches('an anger', mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: match(/^cho[dtp]/) but was: <an anger> (String)',
+  assertEquals(
+      'Expected: match(/^cho[dtp]/) but was: <an anger> (String)',
       mockExpect.errorMessages[0]);
 }
 
@@ -113,31 +118,38 @@ function testObjectEquals() {
   var simpleMatcher = new matchers.ObjectEquals({name: 'Bob', age: 42});
   assertTrue(simpleMatcher.matches({name: 'Bob', age: 42}, mockExpect));
   assertEquals(0, mockExpect.getErrorMessageCount());
-  expectObjectEqualsFailure(simpleMatcher, {name: 'Bill', age: 42},
+  expectObjectEqualsFailure(
+      simpleMatcher, {name: 'Bill', age: 42},
       'name: Expected <Bob> (String) but was <Bill> (String)');
-  expectObjectEqualsFailure(simpleMatcher, {name: 'Bob', age: 21},
+  expectObjectEqualsFailure(
+      simpleMatcher, {name: 'Bob', age: 21},
       'age: Expected <42> (Number) but was <21> (Number)');
-  expectObjectEqualsFailure(simpleMatcher, {name: 'Bob'},
+  expectObjectEqualsFailure(
+      simpleMatcher, {name: 'Bob'},
       'property age not present in actual Object');
-  expectObjectEqualsFailure(simpleMatcher,
-      {name: 'Bob', age: 42, country: 'USA'},
+  expectObjectEqualsFailure(
+      simpleMatcher, {name: 'Bob', age: 42, country: 'USA'},
       'property country not present in expected Object');
 
   // Multiple mismatches should include multiple messages.
-  expectObjectEqualsFailure(simpleMatcher, {name: 'Jim', age: 36},
+  expectObjectEqualsFailure(
+      simpleMatcher, {name: 'Jim', age: 36},
       'name: Expected <Bob> (String) but was <Jim> (String)\n' +
-      '   age: Expected <42> (Number) but was <36> (Number)');
+          '   age: Expected <42> (Number) but was <36> (Number)');
 }
 
 function testComplexObjectEquals() {
   var complexMatcher = new matchers.ObjectEquals(
       {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'baz', sub2: -1}});
-  assertTrue(complexMatcher.matches(
-      {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'baz', sub2: -1}}));
-  expectObjectEqualsFailure(complexMatcher,
+  assertTrue(
+      complexMatcher.matches(
+          {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'baz', sub2: -1}}));
+  expectObjectEqualsFailure(
+      complexMatcher,
       {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'zap', sub2: -1}},
       'sub1: Expected <baz> (String) but was <zap> (String)');
-  expectObjectEqualsFailure(complexMatcher,
+  expectObjectEqualsFailure(
+      complexMatcher,
       {a: 'foo', b: 2, c: ['bar', 6], d: {sub1: 'baz', sub2: -1}},
       'c[1]: Expected <3> (Number) but was <6> (Number)');
 }
@@ -154,10 +166,9 @@ function testSaveArgument() {
   assertFalse(saveMatcher.matches(17));
   assertEquals(17, saveMatcher.arg);
 
-  saveMatcher = new matchers.SaveArgument(new matchers.ObjectEquals({
-    value: 'value'
-  }));
-  assertTrue(saveMatcher.matches({ value: 'value' }));
+  saveMatcher =
+      new matchers.SaveArgument(new matchers.ObjectEquals({value: 'value'}));
+  assertTrue(saveMatcher.matches({value: 'value'}));
   assertEquals('value', saveMatcher.arg.value);
   assertFalse(saveMatcher.matches('test'));
   assertEquals('test', saveMatcher.arg);
@@ -171,7 +182,8 @@ function testIsArray() {
 
   assertFalse(matchers.isArray.matches({}, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isArray but was: <[object Object]> (Object)',
+  assertEquals(
+      'Expected: isArray but was: <[object Object]> (Object)',
       mockExpect.errorMessages[0]);
 }
 
@@ -191,7 +203,8 @@ function testIsArrayLike() {
 
   assertFalse(matchers.isArrayLike.matches(3, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isArrayLike but was: <3> (Number)',
+  assertEquals(
+      'Expected: isArrayLike but was: <3> (Number)',
       mockExpect.errorMessages[0]);
 }
 
@@ -202,7 +215,8 @@ function testIsDateLike() {
 
   assertFalse(matchers.isDateLike.matches('test', mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isDateLike but was: <test> (String)',
+  assertEquals(
+      'Expected: isDateLike but was: <test> (String)',
       mockExpect.errorMessages[0]);
 }
 
@@ -214,8 +228,8 @@ function testIsString() {
 
   assertFalse(matchers.isString.matches(null, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isString but was: <null>',
-      mockExpect.errorMessages[0]);
+  assertEquals(
+      'Expected: isString but was: <null>', mockExpect.errorMessages[0]);
 }
 
 
@@ -226,8 +240,8 @@ function testIsBoolean() {
 
   assertFalse(matchers.isBoolean.matches([], mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isBoolean but was: <> (Array)',
-      mockExpect.errorMessages[0]);
+  assertEquals(
+      'Expected: isBoolean but was: <> (Array)', mockExpect.errorMessages[0]);
 }
 
 
@@ -239,7 +253,8 @@ function testIsNumber() {
 
   assertFalse(matchers.isNumber.matches('hello', mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isNumber but was: <hello> (String)',
+  assertEquals(
+      'Expected: isNumber but was: <hello> (String)',
       mockExpect.errorMessages[0]);
 }
 
@@ -250,7 +265,8 @@ function testIsFunction() {
 
   assertFalse(matchers.isFunction.matches({}, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isFunction but was: <[object Object]> (Object)',
+  assertEquals(
+      'Expected: isFunction but was: <[object Object]> (Object)',
       mockExpect.errorMessages[0]);
 }
 
@@ -266,7 +282,8 @@ function testIsObject() {
 
   assertFalse(matchers.isObject.matches(1234, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isObject but was: <1234> (Number)',
+  assertEquals(
+      'Expected: isObject but was: <1234> (Number)',
       mockExpect.errorMessages[0]);
 }
 
@@ -281,7 +298,8 @@ function testIsNodeLike() {
 
   assertFalse(matchers.isNodeLike.matches('test', mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
-  assertEquals('Expected: isNodeLike but was: <test> (String)',
+  assertEquals(
+      'Expected: isNodeLike but was: <test> (String)',
       mockExpect.errorMessages[0]);
 }
 
@@ -316,9 +334,7 @@ function testFlexibleArrayMatcher() {
   var verifyValue = true;
   var argVerifier = function() {};
   goog.inherits(argVerifier, matchers.ArgumentMatcher);
-  argVerifier.prototype.matches = function(arg) {
-    return verifyValue;
-  };
+  argVerifier.prototype.matches = function(arg) { return verifyValue; };
 
   // Test that the arguments are always verified when the verifier returns
   // true.
@@ -338,7 +354,7 @@ function testFlexibleArrayMatcher() {
   assertEquals(1, mockExpect.errorMessages.length);
   assertEquals(
       'Expected <anything> (String) but was <12345> (Number)\n' +
-      '    Expected <anything> (String) but was <12345> (Number)',
+          '    Expected <anything> (String) but was <12345> (Number)',
       mockExpect.errorMessages[0]);
 
   // And test we report errors found via the matcher
@@ -351,11 +367,11 @@ function testFlexibleArrayMatcher() {
   assertEquals(2, mockExpect.errorMessages.length);
   assertEquals(
       'Expected <anything> (String) but was <12345> (Number)\n' +
-      '    Expected <anything> (String) but was <12345> (Number)',
+          '    Expected <anything> (String) but was <12345> (Number)',
       mockExpect.errorMessages[0]);
   // plus the new error...
-  assertEquals('Expected: isString but was: <null>',
-      mockExpect.errorMessages[1]);
+  assertEquals(
+      'Expected: isString but was: <null>', mockExpect.errorMessages[1]);
 }
 
 

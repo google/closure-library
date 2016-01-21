@@ -61,8 +61,8 @@ goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
  * @param {boolean=} opt_delta If true, saves only delta from previous value.
  * @private
  */
-goog.structs.InversionMap.prototype.storeInversion_ = function(rangeArray,
-    opt_delta) {
+goog.structs.InversionMap.prototype.storeInversion_ = function(
+    rangeArray, opt_delta) {
   this.rangeArray = rangeArray;
 
   for (var i = 1; i < rangeArray.length; i++) {
@@ -87,8 +87,8 @@ goog.structs.InversionMap.prototype.spliceInversion = function(
     rangeArray, valueArray, opt_delta) {
   // By building another inversion map, we build the arrays that we need
   // to splice in.
-  var otherMap = new goog.structs.InversionMap(
-      rangeArray, valueArray, opt_delta);
+  var otherMap =
+      new goog.structs.InversionMap(rangeArray, valueArray, opt_delta);
 
   // Figure out where to splice those arrays.
   var startRange = otherMap.rangeArray[0];
@@ -102,14 +102,14 @@ goog.structs.InversionMap.prototype.spliceInversion = function(
     // ...if we're splicing in a start point that isn't already here,
     // then we need to insert it after the insertion point.
     startSplice++;
-  } // otherwise we overwrite the insertion point.
+  }  // otherwise we overwrite the insertion point.
 
   this.rangeArray = this.rangeArray.slice(0, startSplice)
-      .concat(otherMap.rangeArray)
-      .concat(this.rangeArray.slice(endSplice + 1));
+                        .concat(otherMap.rangeArray)
+                        .concat(this.rangeArray.slice(endSplice + 1));
   this.values = this.values.slice(0, startSplice)
-      .concat(otherMap.values)
-      .concat(this.values.slice(endSplice + 1));
+                    .concat(otherMap.values)
+                    .concat(this.values.slice(endSplice + 1));
 };
 
 

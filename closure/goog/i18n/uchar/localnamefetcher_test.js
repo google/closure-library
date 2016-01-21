@@ -43,9 +43,8 @@ function testGetName_variationSelector() {
 }
 
 function testGetName_missing() {
-  var callback = goog.testing.recordFunction(function(name) {
-    assertNull(name);
-  });
+  var callback =
+      goog.testing.recordFunction(function(name) { assertNull(name); });
   nameFetcher.getName('P', callback);
   assertEquals(1, callback.getCallCount());
 }

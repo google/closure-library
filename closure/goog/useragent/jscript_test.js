@@ -40,15 +40,18 @@ function testHasJscript() {
 }
 
 function testVersion() {
-  assertEquals('Version should be 1.2.3456', '1.2.3456',
-               goog.userAgent.jscript.VERSION);
+  assertEquals(
+      'Version should be 1.2.3456', '1.2.3456', goog.userAgent.jscript.VERSION);
 }
 
 function testIsVersion() {
-  assertTrue('Should be version 1.2.3456 or larger',
-             goog.userAgent.jscript.isVersion('1.2.3456'));
-  assertTrue('Should be version 1.2 or larger',
-             goog.userAgent.jscript.isVersion('1.2'));
-  assertFalse('Should not be version 8.9 or larger',
+  assertTrue(
+      'Should be version 1.2.3456 or larger',
+      goog.userAgent.jscript.isVersion('1.2.3456'));
+  assertTrue(
+      'Should be version 1.2 or larger',
+      goog.userAgent.jscript.isVersion('1.2'));
+  assertFalse(
+      'Should not be version 8.9 or larger',
       goog.userAgent.jscript.isVersion('8.9'));
 }

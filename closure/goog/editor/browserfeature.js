@@ -88,14 +88,13 @@ goog.editor.BrowserFeature = {
   HAS_UNSELECTABLE_STYLE: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether this browser's "FormatBlock" command does not suck.
-  FORMAT_BLOCK_WORKS_FOR_BLOCKQUOTES: goog.userAgent.GECKO ||
-      goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+  FORMAT_BLOCK_WORKS_FOR_BLOCKQUOTES:
+      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
 
   // Whether this browser's "FormatBlock" command may create multiple
   // blockquotes.
   CREATES_MULTIPLE_BLOCKQUOTES:
-      (goog.userAgent.WEBKIT &&
-       !goog.userAgent.isVersionOrHigher('534.16')) ||
+      (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('534.16')) ||
       goog.userAgent.OPERA,
 
   // Whether this browser's "FormatBlock" command will wrap blockquotes
@@ -141,8 +140,8 @@ goog.editor.BrowserFeature = {
   TABS_THROUGH_IMAGES: goog.userAgent.IE,
 
   // Whether this browser unescapes urls when you extract it from the href tag.
-  UNESCAPES_URLS_WITHOUT_ASKING: goog.userAgent.IE &&
-      !goog.userAgent.isVersionOrHigher('7.0'),
+  UNESCAPES_URLS_WITHOUT_ASKING:
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7.0'),
 
   // Whether this browser supports execCommand("styleWithCSS") to toggle between
   // inserting html tags or inline styling for things like bold, italic, etc.
@@ -155,8 +154,8 @@ goog.editor.BrowserFeature = {
       goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'),
 
   // Whether this browser has document.activeElement available.
-  HAS_ACTIVE_ELEMENT:
-      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.OPERA ||
+  HAS_ACTIVE_ELEMENT: goog.userAgent.IE || goog.userAgent.EDGE ||
+      goog.userAgent.OPERA ||
       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9'),
 
   // Whether this browser supports the setCapture method on DOM elements.
@@ -218,9 +217,9 @@ goog.editor.BrowserFeature = {
 
   // Whether the browser corrupts empty text nodes in Node#normalize,
   // removing them from the Document instead of merging them.
-  NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES: goog.userAgent.GECKO &&
-      goog.userAgent.isVersionOrHigher('1.9') || goog.userAgent.IE ||
-      goog.userAgent.EDGE || goog.userAgent.OPERA ||
+  NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES:
+      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9') ||
+      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.OPERA ||
       goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('531'),
 
   // Whether the browser corrupts all text nodes in Node#normalize,
@@ -257,10 +256,8 @@ goog.editor.BrowserFeature = {
                                  goog.userAgent.product.isVersion('4')) ||
       (goog.userAgent.product.SAFARI &&
        goog.userAgent.isVersionOrHigher('533')) ||
-      (goog.userAgent.GECKO &&
-       goog.userAgent.isVersionOrHigher('2.0')) ||
-      (goog.userAgent.IE &&
-       goog.userAgent.isVersionOrHigher('10')) ||
+      (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('2.0')) ||
+      (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10')) ||
       goog.userAgent.EDGE,
 
   // Version of Opera that supports the opera-defaultBlock execCommand to change
@@ -271,6 +268,6 @@ goog.editor.BrowserFeature = {
   SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND:
       goog.userAgent.OPERA && goog.userAgent.isVersionOrHigher('11.10'),
 
-  SUPPORTS_FILE_PASTING: goog.userAgent.product.CHROME &&
-      goog.userAgent.product.isVersion('12')
+  SUPPORTS_FILE_PASTING:
+      goog.userAgent.product.CHROME && goog.userAgent.product.isVersion('12')
 };

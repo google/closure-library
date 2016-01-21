@@ -60,8 +60,7 @@ goog.crypt.base64.byteToCharMapWebSafe_ = null;
  * ENCODED_VALS and ENCODED_VALS_WEBSAFE
  * @type {string}
  */
-goog.crypt.base64.ENCODED_VALS_BASE =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+goog.crypt.base64.ENCODED_VALS_BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
     'abcdefghijklmnopqrstuvwxyz' +
     '0123456789';
 
@@ -70,8 +69,7 @@ goog.crypt.base64.ENCODED_VALS_BASE =
  * Our default alphabet. Value 64 (=) is special; it means "nothing."
  * @type {string}
  */
-goog.crypt.base64.ENCODED_VALS =
-    goog.crypt.base64.ENCODED_VALS_BASE + '+/=';
+goog.crypt.base64.ENCODED_VALS = goog.crypt.base64.ENCODED_VALS_BASE + '+/=';
 
 
 /**
@@ -126,14 +124,13 @@ goog.crypt.base64.HAS_NATIVE_DECODE_ =
 goog.crypt.base64.encodeByteArray = function(input, opt_webSafe) {
   // Assert avoids runtime dependency on goog.isArrayLike, which helps reduce
   // size of jscompiler output, and which yields slight performance increase.
-  goog.asserts.assert(goog.isArrayLike(input),
-                      'encodeByteArray takes an array as a parameter');
+  goog.asserts.assert(
+      goog.isArrayLike(input), 'encodeByteArray takes an array as a parameter');
 
   goog.crypt.base64.init_();
 
-  var byteToCharMap = opt_webSafe ?
-                      goog.crypt.base64.byteToCharMapWebSafe_ :
-                      goog.crypt.base64.byteToCharMap_;
+  var byteToCharMap = opt_webSafe ? goog.crypt.base64.byteToCharMapWebSafe_ :
+                                    goog.crypt.base64.byteToCharMap_;
 
   var output = [];
 
@@ -157,10 +154,9 @@ goog.crypt.base64.encodeByteArray = function(input, opt_webSafe) {
       }
     }
 
-    output.push(byteToCharMap[outByte1],
-                byteToCharMap[outByte2],
-                byteToCharMap[outByte3],
-                byteToCharMap[outByte4]);
+    output.push(
+        byteToCharMap[outByte1], byteToCharMap[outByte2],
+        byteToCharMap[outByte3], byteToCharMap[outByte4]);
   }
 
   return output.join('');
@@ -354,8 +350,9 @@ goog.crypt.base64.init_ = function() {
 
       // Be forgiving when decoding and correctly decode both encodings.
       if (i >= goog.crypt.base64.ENCODED_VALS_BASE.length) {
-        goog.crypt.base64.charToByteMap_[
-            goog.crypt.base64.ENCODED_VALS_WEBSAFE.charAt(i)] = i;
+        goog.crypt.base64
+            .charToByteMap_[goog.crypt.base64.ENCODED_VALS_WEBSAFE.charAt(i)] =
+            i;
       }
     }
   }

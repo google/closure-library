@@ -132,8 +132,8 @@ goog.inherits(goog.fx.Animation, goog.fx.TransitionBase);
  * @param {boolean} useRightPositioningForRtl True if "right" should be used for
  *     positioning, false if "left" should be used for positioning.
  */
-goog.fx.Animation.prototype.enableRightPositioningForRtl =
-    function(useRightPositioningForRtl) {
+goog.fx.Animation.prototype.enableRightPositioningForRtl = function(
+    useRightPositioningForRtl) {
   this.useRightPositioningForRtl_ = useRightPositioningForRtl;
 };
 
@@ -399,7 +399,7 @@ goog.fx.Animation.prototype.cycle = function(now) {
     this.onFinish();
     this.onEnd();
 
-  // Animation is still under way.
+    // Animation is still under way.
   } else if (this.isPlaying()) {
     this.onAnimate();
   }
@@ -418,8 +418,8 @@ goog.fx.Animation.prototype.updateCoords_ = function(t) {
   }
   this.coords = new Array(this.startPoint.length);
   for (var i = 0; i < this.startPoint.length; i++) {
-    this.coords[i] = (this.endPoint[i] - this.startPoint[i]) * t +
-        this.startPoint[i];
+    this.coords[i] =
+        (this.endPoint[i] - this.startPoint[i]) * t + this.startPoint[i];
   }
 };
 

@@ -50,51 +50,27 @@ function tearDown() {
 
 function testSendWithSignature() {
   // 1 to 2 and back.
-  var message1Ch1Request = {'data': CH1_REQUEST,
-    'signature': 0};
-  var message1Ch2Response = {'data': CH2_RESPONSE,
-    'signature': 0};
-  var message2Ch1Request = {'data': CH1_REQUEST,
-    'signature': 1};
-  var message2Ch2Response = {'data': CH2_RESPONSE,
-    'signature': 1};
+  var message1Ch1Request = {'data': CH1_REQUEST, 'signature': 0};
+  var message1Ch2Response = {'data': CH2_RESPONSE, 'signature': 0};
+  var message2Ch1Request = {'data': CH1_REQUEST, 'signature': 1};
+  var message2Ch2Response = {'data': CH2_RESPONSE, 'signature': 1};
   // 2 to 1 and back.
-  var message3Ch2Request = {'data': CH2_REQUEST,
-    'signature': 0};
-  var message3Ch1Response = {'data': CH1_RESPONSE,
-    'signature': 0};
-  var message4Ch2Request = {'data': CH2_REQUEST,
-    'signature': 1};
-  var message4Ch1Response = {'data': CH1_RESPONSE,
-    'signature': 1};
+  var message3Ch2Request = {'data': CH2_REQUEST, 'signature': 0};
+  var message3Ch1Response = {'data': CH1_RESPONSE, 'signature': 0};
+  var message4Ch2Request = {'data': CH2_REQUEST, 'signature': 1};
+  var message4Ch1Response = {'data': CH1_RESPONSE, 'signature': 1};
 
   // 1 to 2 and back.
-  ch1.send(
-      'public:' + SERVICE_NAME,
-      message1Ch1Request);
-  ch2.send(
-      'private:mics',
-      message1Ch2Response);
-  ch1.send(
-      'public:' + SERVICE_NAME,
-      message2Ch1Request);
-  ch2.send(
-      'private:mics',
-      message2Ch2Response);
+  ch1.send('public:' + SERVICE_NAME, message1Ch1Request);
+  ch2.send('private:mics', message1Ch2Response);
+  ch1.send('public:' + SERVICE_NAME, message2Ch1Request);
+  ch2.send('private:mics', message2Ch2Response);
 
   // 2 to 1 and back.
-  ch2.send(
-      'public:' + SERVICE_NAME,
-      message3Ch2Request);
-  ch1.send(
-      'private:mics',
-      message3Ch1Response);
-  ch2.send(
-      'public:' + SERVICE_NAME,
-      message4Ch2Request);
-  ch1.send(
-      'private:mics',
-      message4Ch1Response);
+  ch2.send('public:' + SERVICE_NAME, message3Ch2Request);
+  ch1.send('private:mics', message3Ch1Response);
+  ch2.send('public:' + SERVICE_NAME, message4Ch2Request);
+  ch1.send('private:mics', message4Ch1Response);
 
   mockControl.$replayAll();
 
@@ -145,8 +121,6 @@ function testSendWithSignature() {
   ch2.receive('private:mics', message4Ch1Response);
 
   assertTrue(
-      hasInvokedCh1 &&
-      hasInvokedCh2 &&
-      hasReturnedFromCh1 &&
+      hasInvokedCh1 && hasInvokedCh2 && hasReturnedFromCh1 &&
       hasReturnedFromCh2);
 }

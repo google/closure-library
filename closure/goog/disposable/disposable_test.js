@@ -81,33 +81,40 @@ function testConstructor() {
 function testDispose() {
   assertFalse(d1.isDisposed());
   d1.dispose();
-  assertTrue('goog.Disposable instance should have been disposed of',
-      d1.isDisposed());
+  assertTrue(
+      'goog.Disposable instance should have been disposed of', d1.isDisposed());
 
   assertFalse(d2.isDisposed());
   d2.dispose();
-  assertTrue('goog.DisposableTest instance should have been disposed of',
+  assertTrue(
+      'goog.DisposableTest instance should have been disposed of',
       d2.isDisposed());
 }
 
 function testDisposeInternal() {
   assertNotUndefined(d2.element);
   d2.dispose();
-  assertUndefined('goog.DisposableTest.prototype.disposeInternal should ' +
-      'have deleted the element reference', d2.element);
+  assertUndefined(
+      'goog.DisposableTest.prototype.disposeInternal should ' +
+          'have deleted the element reference',
+      d2.element);
 }
 
 function testDisposeAgain() {
   d2.dispose();
-  assertUndefined('goog.DisposableTest.prototype.disposeInternal should ' +
-      'have deleted the element reference', d2.element);
+  assertUndefined(
+      'goog.DisposableTest.prototype.disposeInternal should ' +
+          'have deleted the element reference',
+      d2.element);
   // Manually reset the element to a non-null value, and call dispose().
   // Because the object is already marked disposed, disposeInternal won't
   // be called again.
   d2.element = document.getElementById('someElement');
   d2.dispose();
-  assertNotUndefined('disposeInternal should not be called again if the ' +
-      'object has already been marked disposed', d2.element);
+  assertNotUndefined(
+      'disposeInternal should not be called again if the ' +
+          'object has already been marked disposed',
+      d2.element);
 }
 
 function testDisposeWorksRecursively() {
@@ -117,19 +124,22 @@ function testDisposeWorksRecursively() {
 function testStaticDispose() {
   assertFalse(d1.isDisposed());
   goog.dispose(d1);
-  assertTrue('goog.Disposable instance should have been disposed of',
-      d1.isDisposed());
+  assertTrue(
+      'goog.Disposable instance should have been disposed of', d1.isDisposed());
 
   assertFalse(d2.isDisposed());
   goog.dispose(d2);
-  assertTrue('goog.DisposableTest instance should have been disposed of',
+  assertTrue(
+      'goog.DisposableTest instance should have been disposed of',
       d2.isDisposed());
 
   var duck = new DisposableDuck();
   assertNotUndefined(duck.element);
   goog.dispose(duck);
-  assertUndefined('goog.dispose should have disposed of object that ' +
-      'implements the disposable interface', duck.element);
+  assertUndefined(
+      'goog.dispose should have disposed of object that ' +
+          'implements the disposable interface',
+      duck.element);
 }
 
 function testStaticDisposeOnNonDisposableType() {
@@ -148,55 +158,58 @@ function testStaticDisposeOnNonDisposableType() {
 }
 
 function testMonitoringFailure() {
-  function BadDisposable() {};
+  function BadDisposable(){};
   goog.inherits(BadDisposable, goog.Disposable);
 
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.PERMANENT;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
 
   var badDisposable = new BadDisposable;
-  assertArrayEquals('no disposable objects registered', [],
+  assertArrayEquals(
+      'no disposable objects registered', [],
       goog.Disposable.getUndisposedObjects());
-  assertThrows('the base ctor should have been called',
+  assertThrows(
+      'the base ctor should have been called',
       goog.bind(badDisposable.dispose, badDisposable));
 }
 
 function testGetUndisposedObjects() {
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.PERMANENT;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
 
   var d1 = new DisposableTest();
   var d2 = new DisposableTest();
-  assertSameElements('the undisposed instances', [d1, d2],
+  assertSameElements(
+      'the undisposed instances', [d1, d2],
       goog.Disposable.getUndisposedObjects());
 
   d1.dispose();
-  assertSameElements('1 undisposed instance left', [d2],
+  assertSameElements(
+      '1 undisposed instance left', [d2],
       goog.Disposable.getUndisposedObjects());
 
   d1.dispose();
-  assertSameElements('second disposal of the same object is no-op', [d2],
+  assertSameElements(
+      'second disposal of the same object is no-op', [d2],
       goog.Disposable.getUndisposedObjects());
 
   d2.dispose();
-  assertSameElements('all objects have been disposed of', [],
+  assertSameElements(
+      'all objects have been disposed of', [],
       goog.Disposable.getUndisposedObjects());
 }
 
 function testClearUndisposedObjects() {
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.PERMANENT;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
 
   var d1 = new DisposableTest();
   var d2 = new DisposableTest();
   d2.dispose();
   goog.Disposable.clearUndisposedObjects();
-  assertSameElements('no undisposed object in the registry', [],
+  assertSameElements(
+      'no undisposed object in the registry', [],
       goog.Disposable.getUndisposedObjects());
 
-  assertThrows('disposal after clearUndisposedObjects()', function() {
-    d1.dispose();
-  });
+  assertThrows(
+      'disposal after clearUndisposedObjects()', function() { d1.dispose(); });
 
   // d2 is already disposed of, the redisposal shouldn't throw error.
   d2.dispose();
@@ -237,27 +250,23 @@ function testDisposeAllRecursive() {
 }
 
 function testCreationStack() {
-  if (!new Error().stack)
-    return;
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.PERMANENT;
+  if (!new Error().stack) return;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
   var disposableStack = new DisposableTest().creationStack;
   // Check that the name of this test function occurs in the stack trace.
   assertNotEquals(-1, disposableStack.indexOf('testCreationStack'));
 }
 
 function testMonitoredWithoutCreationStack() {
-  if (!new Error().stack)
-    return;
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.PERMANENT;
+  if (!new Error().stack) return;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
   goog.Disposable.INCLUDE_STACK_ON_CREATION = false;
   var d1 = new DisposableTest();
 
   // Check that it is tracked, but not with a creation stack.
   assertUndefined(d1.creationStack);
-  assertSameElements('the undisposed instance', [d1],
-      goog.Disposable.getUndisposedObjects());
+  assertSameElements(
+      'the undisposed instance', [d1], goog.Disposable.getUndisposedObjects());
 }
 
 function testOnDisposeCallback() {
@@ -265,20 +274,19 @@ function testOnDisposeCallback() {
   d1.addOnDisposeCallback(callback);
   assertEquals('callback called too early', 0, callback.getCallCount());
   d1.dispose();
-  assertEquals('callback should be called once on dispose',
-      1, callback.getCallCount());
+  assertEquals(
+      'callback should be called once on dispose', 1, callback.getCallCount());
 }
 
 function testOnDisposeCallbackOrder() {
   var invocations = [];
-  var callback = function(str) {
-    invocations.push(str);
-  };
+  var callback = function(str) { invocations.push(str); };
   d1.addOnDisposeCallback(goog.partial(callback, 'a'));
   d1.addOnDisposeCallback(goog.partial(callback, 'b'));
   goog.dispose(d1);
-  assertArrayEquals('callbacks should be called in chronological order',
-      ['a', 'b'], invocations);
+  assertArrayEquals(
+      'callbacks should be called in chronological order', ['a', 'b'],
+      invocations);
 }
 
 function testAddOnDisposeCallbackAfterDispose() {
@@ -286,28 +294,31 @@ function testAddOnDisposeCallbackAfterDispose() {
   var scope = {};
   goog.dispose(d1);
   d1.addOnDisposeCallback(callback, scope);
-  assertEquals('Callback should be immediately called if already disposed', 1,
+  assertEquals(
+      'Callback should be immediately called if already disposed', 1,
       callback.getCallCount());
-  assertEquals('Callback scope should be respected', scope,
+  assertEquals(
+      'Callback scope should be respected', scope,
       callback.getLastCall().getThis());
 }
 
 function testInteractiveMonitoring() {
   var d1 = new DisposableTest();
-  goog.Disposable.MONITORING_MODE =
-      goog.Disposable.MonitoringMode.INTERACTIVE;
+  goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.INTERACTIVE;
   var d2 = new DisposableTest();
 
-  assertSameElements('only 1 undisposed instance tracked', [d2],
+  assertSameElements(
+      'only 1 undisposed instance tracked', [d2],
       goog.Disposable.getUndisposedObjects());
 
   // No errors should be thrown.
   d1.dispose();
 
-  assertSameElements('1 undisposed instance left', [d2],
+  assertSameElements(
+      '1 undisposed instance left', [d2],
       goog.Disposable.getUndisposedObjects());
 
   d2.dispose();
-  assertSameElements('all disposed', [],
-      goog.Disposable.getUndisposedObjects());
+  assertSameElements(
+      'all disposed', [], goog.Disposable.getUndisposedObjects());
 }

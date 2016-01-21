@@ -21,10 +21,9 @@ goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
 
 function testExposeException() {
-  var expected =
-      'Message: message&quot;<br>' +
+  var expected = 'Message: message&quot;<br>' +
       'Url: <a href="view-source:http://fileName&quot;" ' +
-          'target="_new">http://fileName&quot;</a><br>' +
+      'target="_new">http://fileName&quot;</a><br>' +
       'Line: lineNumber&quot;<br><br>' +
       'Browser stack:<br>' +
       'stack&quot;-&gt; [end]';
@@ -43,8 +42,8 @@ function testExposeException() {
 function testMakeWhitespaceVisible() {
   assertEquals(
       'Hello[_][_]World![r][n]\n' +
-      '[r][n]\n' +
-      '[f][f]I[_]am[t][t]here![r][n]\n',
+          '[r][n]\n' +
+          '[f][f]I[_]am[t][t]here![r][n]\n',
       goog.debug.makeWhitespaceVisible(
           'Hello  World!\r\n\r\n\f\fI am\t\there!\r\n'));
 }
@@ -69,17 +68,14 @@ function testGetFunctionName() {
       'goog.debug.getFunctionName',
       goog.debug.getFunctionName(goog.debug.getFunctionName));
   assertEquals(
-      'goog.structs.Set',
-      goog.debug.getFunctionName(goog.structs.Set));
+      'goog.structs.Set', goog.debug.getFunctionName(goog.structs.Set));
   var set = new goog.structs.Set();
   assertEquals(
-      'goog.structs.Set.getCount',
-      goog.debug.getFunctionName(set.getCount));
+      'goog.structs.Set.getCount', goog.debug.getFunctionName(set.getCount));
 
   // This function is matched by the fallback heuristic.
   assertEquals(
-      'testGetFunctionName',
-      goog.debug.getFunctionName(testGetFunctionName));
+      'testGetFunctionName', goog.debug.getFunctionName(testGetFunctionName));
 
   goog.debug.setFunctionResolver(null);
 }
@@ -92,8 +88,9 @@ function testGetFunctionName() {
  * @param {string} text The text string to search within.
  */
 function assertContainsSubstring(substring, text) {
-  assertNotEquals('Could not find "' + substring + '" in "' + text + '"',
-      -1, text.search(substring));
+  assertNotEquals(
+      'Could not find "' + substring + '" in "' + text + '"', -1,
+      text.search(substring));
 }
 
 
@@ -106,8 +103,8 @@ function testDeepExpose() {
 
   var deepExpose = goog.debug.deepExpose(a);
 
-  assertContainsSubstring('ancestor = ... reference loop detected ...',
-                          deepExpose);
+  assertContainsSubstring(
+      'ancestor = ... reference loop detected ...', deepExpose);
 
   assertContainsSubstring('otherObjectAgain = {', deepExpose);
 }

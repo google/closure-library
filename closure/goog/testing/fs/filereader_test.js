@@ -72,22 +72,24 @@ function testRead() {
   assertEquals(ReadyState.INIT, reader.getReadyState());
   assertUndefined(reader.getResult());
 
-  return new goog.Promise(function(resolve, reject) {
-    goog.events.listen(reader, EventType.LOAD_END, resolve);
-    reader.readAsText(file);
-    assertEquals(ReadyState.LOADING, reader.getReadyState());
-  }).then(function(result) {
-    assertEquals(file.toString(), reader.getResult());
+  return new goog
+      .Promise(function(resolve, reject) {
+        goog.events.listen(reader, EventType.LOAD_END, resolve);
+        reader.readAsText(file);
+        assertEquals(ReadyState.LOADING, reader.getReadyState());
+      })
+      .then(function(result) {
+        assertEquals(file.toString(), reader.getResult());
 
-    assertEquals(ReadyState.DONE, reader.getReadyState());
-    assertArrayEquals([
-      EventType.LOAD_START,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD_END
-    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
-  });
+        assertEquals(ReadyState.DONE, reader.getReadyState());
+        assertArrayEquals(
+            [
+              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
+              EventType.LOAD, EventType.LOAD_END
+            ],
+            goog.array.map(
+                observer.getEvents(), function(e) { return e.type; }));
+      });
 }
 
 
@@ -97,68 +99,71 @@ function testReadAsArrayBuffer() {
     return;
   }
 
-  return new goog.Promise(function(resolve, reject) {
-    goog.events.listen(reader, EventType.LOAD_END, resolve);
-    reader.readAsArrayBuffer(file);
-    assertEquals(ReadyState.LOADING, reader.getReadyState());
-  }).then(function(result) {
-    assertElementsEquals(file.toArrayBuffer(), reader.getResult());
+  return new goog
+      .Promise(function(resolve, reject) {
+        goog.events.listen(reader, EventType.LOAD_END, resolve);
+        reader.readAsArrayBuffer(file);
+        assertEquals(ReadyState.LOADING, reader.getReadyState());
+      })
+      .then(function(result) {
+        assertElementsEquals(file.toArrayBuffer(), reader.getResult());
 
-    assertEquals(ReadyState.DONE, reader.getReadyState());
-    assertArrayEquals([
-      EventType.LOAD_START,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD_END
-    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
-  });
+        assertEquals(ReadyState.DONE, reader.getReadyState());
+        assertArrayEquals(
+            [
+              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
+              EventType.LOAD, EventType.LOAD_END
+            ],
+            goog.array.map(
+                observer.getEvents(), function(e) { return e.type; }));
+      });
 }
 
 
 function testReadAsDataUrl() {
-  return new goog.Promise(function(resolve, reject) {
-    goog.events.listen(reader, EventType.LOAD_END, resolve);
-    reader.readAsDataUrl(file);
-    assertEquals(ReadyState.LOADING, reader.getReadyState());
-  }).then(function(result) {
-    assertEquals(file.toDataUrl(), reader.getResult());
+  return new goog
+      .Promise(function(resolve, reject) {
+        goog.events.listen(reader, EventType.LOAD_END, resolve);
+        reader.readAsDataUrl(file);
+        assertEquals(ReadyState.LOADING, reader.getReadyState());
+      })
+      .then(function(result) {
+        assertEquals(file.toDataUrl(), reader.getResult());
 
-    assertEquals(ReadyState.DONE, reader.getReadyState());
-    assertArrayEquals([
-      EventType.LOAD_START,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD,
-      EventType.LOAD_END
-    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
-  });
+        assertEquals(ReadyState.DONE, reader.getReadyState());
+        assertArrayEquals(
+            [
+              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
+              EventType.LOAD, EventType.LOAD_END
+            ],
+            goog.array.map(
+                observer.getEvents(), function(e) { return e.type; }));
+      });
 }
 
 
 function testAbort() {
-  return new goog.Promise(function(resolve, reject) {
-    goog.events.listen(reader, EventType.LOAD_END, resolve);
-    reader.readAsText(file);
-    assertEquals(ReadyState.LOADING, reader.getReadyState());
-    reader.abort();
-  }).then(function(result) {
-    assertUndefined(reader.getResult());
+  return new goog
+      .Promise(function(resolve, reject) {
+        goog.events.listen(reader, EventType.LOAD_END, resolve);
+        reader.readAsText(file);
+        assertEquals(ReadyState.LOADING, reader.getReadyState());
+        reader.abort();
+      })
+      .then(function(result) {
+        assertUndefined(reader.getResult());
 
-    assertEquals(ReadyState.DONE, reader.getReadyState());
-    assertArrayEquals([
-      EventType.ERROR,
-      EventType.ABORT,
-      EventType.LOAD_END
-    ], goog.array.map(observer.getEvents(), function(e) { return e.type; }));
-  });
+        assertEquals(ReadyState.DONE, reader.getReadyState());
+        assertArrayEquals(
+            [EventType.ERROR, EventType.ABORT, EventType.LOAD_END],
+            goog.array.map(
+                observer.getEvents(), function(e) { return e.type; }));
+      });
 }
 
 
 function testAbortBeforeRead() {
-  var err = assertThrows(function() {
-    reader.abort();
-  });
+  var err = assertThrows(function() { reader.abort(); });
   assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
 }
 

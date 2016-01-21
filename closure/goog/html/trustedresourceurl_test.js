@@ -29,8 +29,8 @@ goog.setTestOnly('goog.html.trustedResourceUrlTest');
 
 function testTrustedResourceUrl() {
   var url = 'javascript:trusted();';
-  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(
-      goog.string.Const.from(url));
+  var trustedResourceUrl =
+      goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.from(url));
   var extracted = goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl);
   assertEquals(url, extracted);
   assertEquals(url, trustedResourceUrl.getTypedStringValue());
@@ -60,9 +60,8 @@ function testUnwrap() {
   evil[privateFieldName] = 'http://example.com/evil.js';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.TrustedResourceUrl.unwrap(evil);
-  });
+  var exception =
+      assertThrows(function() { goog.html.TrustedResourceUrl.unwrap(evil); });
   assertContains(
       'expected object of type TrustedResourceUrl', exception.message);
 }

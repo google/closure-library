@@ -63,7 +63,8 @@ function testSetScrollOffsetRtl() {
       goog.style.getRelativePosition(scrolledElm, document.body).x;
   var scrollAndAssert = function(pixels) {
     goog.style.bidi.setScrollOffset(scrollElm, pixels);
-    assertEquals(originalDistance + pixels,
+    assertEquals(
+        originalDistance + pixels,
         goog.style.getRelativePosition(scrolledElm, document.body).x);
   };
   scrollAndAssert(0);
@@ -81,7 +82,8 @@ function testSetScrollOffsetLtr() {
       goog.style.getRelativePosition(scrolledElm, document.body).x;
   var scrollAndAssert = function(pixels) {
     goog.style.bidi.setScrollOffset(scrollElm, pixels);
-    assertEquals(originalDistance - pixels,
+    assertEquals(
+        originalDistance - pixels,
         goog.style.getRelativePosition(scrolledElm, document.body).x);
   };
   scrollAndAssert(0);
@@ -94,8 +96,8 @@ function testSetScrollOffsetLtr() {
 
 function testFixedBodyChildLtr() {
   var bodyChild = document.getElementById('bodyChild');
-  assertEquals(goog.userAgent.GECKO ? document.body : null,
-      bodyChild.offsetParent);
+  assertEquals(
+      goog.userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
   assertEquals(60, goog.style.bidi.getOffsetStart(bodyChild));
 }
 
@@ -104,8 +106,8 @@ function testFixedBodyChildRtl() {
   document.body.dir = 'rtl';
 
   var bodyChild = document.getElementById('bodyChild');
-  assertEquals(goog.userAgent.GECKO ? document.body : null,
-      bodyChild.offsetParent);
+  assertEquals(
+      goog.userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
 
   var expectedOffsetStart =
       goog.dom.getViewportSize().width - 60 - bodyChild.offsetWidth;
@@ -118,8 +120,7 @@ function testFixedBodyChildRtl() {
     expectedOffsetStart -= (marginBox.left + marginBox.right);
   }
 
-  assertEquals(expectedOffsetStart,
-      goog.style.bidi.getOffsetStart(bodyChild));
+  assertEquals(expectedOffsetStart, goog.style.bidi.getOffsetStart(bodyChild));
 }
 
 function testGetScrollLeftRTL() {

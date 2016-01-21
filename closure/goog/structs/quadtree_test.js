@@ -46,8 +46,9 @@ function testGetKeys() {
 function testGetValues() {
   var values = getTree().getValues();
   var valueString = values.sort().join(',');
-  assertEquals('Sorted values should be Bar,Baz,Bing,Bong,Foo',
-      'Bar,Baz,Bing,Bong,Foo', valueString);
+  assertEquals(
+      'Sorted values should be Bar,Baz,Bing,Bong,Foo', 'Bar,Baz,Bing,Bong,Foo',
+      valueString);
 }
 
 function testContains() {
@@ -95,8 +96,9 @@ function testIsEmpty() {
   var qt = getTree();
   qt.clear();
   assertTrue(qt.isEmpty());
-  assertEquals('Root should  be empty node',
-      goog.structs.QuadTree.NodeType.EMPTY, qt.getRootNode().nodeType);
+  assertEquals(
+      'Root should  be empty node', goog.structs.QuadTree.NodeType.EMPTY,
+      qt.getRootNode().nodeType);
   assertTreesChildrenAreNull(qt);
 }
 
@@ -118,8 +120,9 @@ function testBalancing() {
   // Add a point to the NW quadrant.
   qt.set(25, 25, 'first');
 
-  assertEquals('Root should be a leaf node.',
-      goog.structs.QuadTree.NodeType.LEAF, root.nodeType);
+  assertEquals(
+      'Root should be a leaf node.', goog.structs.QuadTree.NodeType.LEAF,
+      root.nodeType);
   assertTreesChildrenAreNull(qt);
 
   assertEquals('first', root.point.value);
@@ -127,8 +130,9 @@ function testBalancing() {
   // Add another point in the NW quadrant
   qt.set(25, 30, 'second');
 
-  assertEquals('Root should now be a pointer.',
-      goog.structs.QuadTree.NodeType.POINTER, root.nodeType);
+  assertEquals(
+      'Root should now be a pointer.', goog.structs.QuadTree.NodeType.POINTER,
+      root.nodeType);
   assertNotNull('NE should be not be null', root.ne);
   assertNotNull('NW should be not be null', root.nw);
   assertNotNull('SE should be not be null', root.se);
@@ -138,7 +142,8 @@ function testBalancing() {
   // Delete the second point.
   qt.remove(25, 30);
 
-  assertEquals('Root should have been rebalanced and be a leaf node.',
+  assertEquals(
+      'Root should have been rebalanced and be a leaf node.',
       goog.structs.QuadTree.NodeType.LEAF, root.nodeType);
   assertTreesChildrenAreNull(qt);
   assertEquals('first', root.point.value);
@@ -158,11 +163,9 @@ function testTreeBounds() {
 // Helper functions
 
 function assertFails(context, fn, args) {
-  assertThrows('Exception expected from ' + fn.toString() +
-      ' with arguments ' + args,
-      function() {
-        fn.apply(context, args);
-      });
+  assertThrows(
+      'Exception expected from ' + fn.toString() + ' with arguments ' + args,
+      function() { fn.apply(context, args); });
 }
 
 function assertTreesChildrenAreNull(qt) {

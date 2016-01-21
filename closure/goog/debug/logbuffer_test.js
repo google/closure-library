@@ -20,9 +20,9 @@ goog.require('goog.debug.Logger');
 goog.require('goog.testing.jsunit');
 
 var DUMMY_LEVELS = [
-  goog.debug.Logger.Level.INFO,
-  goog.debug.Logger.Level.WARNING,
-  goog.debug.Logger.Level.SEVERE];
+  goog.debug.Logger.Level.INFO, goog.debug.Logger.Level.WARNING,
+  goog.debug.Logger.Level.SEVERE
+];
 var DUMMY_MESSAGES = ['a', 'b', 'c'];
 var DUMMY_NAMES = ['X', 'Y', 'Z'];
 
@@ -40,12 +40,13 @@ function verifyRecord(expectedIndex, record) {
   var message = DUMMY_MESSAGES[index];
   var level = DUMMY_LEVELS[index];
   var name = DUMMY_NAMES[index];
-  assertEquals('Wrong level for record ' + expectedIndex, level,
-      record.getLevel());
-  assertEquals('Wrong message for record ' + expectedIndex, message,
+  assertEquals(
+      'Wrong level for record ' + expectedIndex, level, record.getLevel());
+  assertEquals(
+      'Wrong message for record ' + expectedIndex, message,
       record.getMessage());
-  assertEquals('Wrong name for record ' + expectedIndex, name,
-      record.getLoggerName());
+  assertEquals(
+      'Wrong name for record ' + expectedIndex, name, record.getLoggerName());
 }
 
 function addAndVerifyRecord() {
@@ -83,18 +84,14 @@ function testForEachRecord() {
   var howMany1 = goog.debug.LogBuffer.CAPACITY / 2;
   addSomeRecords(howMany1);
   var counter1 = 0;
-  buffer.forEachRecord(function(record) {
-    verifyRecord(counter1++, record);
-  });
+  buffer.forEachRecord(function(record) { verifyRecord(counter1++, record); });
   assertEquals('Wrong number of records when half full.', howMany1, counter1);
 
   // Test with it full.
   var howMany2 = goog.debug.LogBuffer.CAPACITY;
   addSomeRecords(howMany2);
   var index = counter1;
-  buffer.forEachRecord(function(record) {
-    verifyRecord(index++, record);
-  });
-  assertEquals('Wrong number of records when full.', howMany1 + howMany2,
-      index);
+  buffer.forEachRecord(function(record) { verifyRecord(index++, record); });
+  assertEquals(
+      'Wrong number of records when full.', howMany1 + howMany2, index);
 }

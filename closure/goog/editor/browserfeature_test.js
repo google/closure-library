@@ -44,7 +44,7 @@ function testEmptyNodeNormalization() {
 
   assertEquals(
       'NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES incorrect for ' +
-      navigator.userAgent,
+          navigator.userAgent,
       goog.editor.BrowserFeature.NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES,
       textNode.parentNode == null);
 }
@@ -61,8 +61,7 @@ function testLeavesPWhenRemovingLists() {
   document.execCommand('insertorderedlist', false, true);
 
   assertEquals(
-      'LEAVES_P_WHEN_REMOVING_LISTS incorrect for ' +
-      navigator.userAgent,
+      'LEAVES_P_WHEN_REMOVING_LISTS incorrect for ' + navigator.userAgent,
       goog.editor.BrowserFeature.LEAVES_P_WHEN_REMOVING_LISTS,
       !!root.getElementsByTagName(goog.dom.TagName.P).length);
 }
@@ -77,8 +76,9 @@ function testActiveElement() {
   expectedFailures.expectFailureFor(
       !goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT);
   try {
-    assertEquals('document.activeElement should be the created div',
-                 div, document.activeElement);
+    assertEquals(
+        'document.activeElement should be the created div', div,
+        document.activeElement);
   } catch (e) {
     expectedFailures.handleException(e);
   }
@@ -95,8 +95,8 @@ function testNormalizeCorruption() {
   expectedFailures.expectFailureFor(
       goog.editor.BrowserFeature.NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES);
   try {
-    assertEquals('text node should not be corrupted',
-        textNode, root.firstChild);
+    assertEquals(
+        'text node should not be corrupted', textNode, root.firstChild);
   } catch (e) {
     expectedFailures.handleException(e);
 

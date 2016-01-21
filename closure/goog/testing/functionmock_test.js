@@ -53,14 +53,18 @@ function testMockFunctionCallOrdering() {
   };
 
   var doTest = function(strict_ok, loose_ok, expected_args, actual_args) {
-    doOneTest(goog.testing.createFunctionMock(), strict_ok,
-              expected_args, actual_args);
-    doOneTest(goog.testing.createFunctionMock('name'), strict_ok,
-              expected_args, actual_args);
-    doOneTest(goog.testing.createFunctionMock('name', goog.testing.Mock.STRICT),
-              strict_ok, expected_args, actual_args);
-    doOneTest(goog.testing.createFunctionMock('name', goog.testing.Mock.LOOSE),
-              loose_ok, expected_args, actual_args);
+    doOneTest(
+        goog.testing.createFunctionMock(), strict_ok, expected_args,
+        actual_args);
+    doOneTest(
+        goog.testing.createFunctionMock('name'), strict_ok, expected_args,
+        actual_args);
+    doOneTest(
+        goog.testing.createFunctionMock('name', goog.testing.Mock.STRICT),
+        strict_ok, expected_args, actual_args);
+    doOneTest(
+        goog.testing.createFunctionMock('name', goog.testing.Mock.LOOSE),
+        loose_ok, expected_args, actual_args);
   };
 
   doTest(true, true, [1, 2], [1, 2]);
@@ -139,13 +143,9 @@ function testMocksFunctionWithReturnValue() {
 
 function testFunctionMockWorksWhenPassedAsACallback() {
   var invoker = {
-    register: function(callback) {
-      this.callback = callback;
-    },
+    register: function(callback) { this.callback = callback; },
 
-    invoke: function(args) {
-      return this.callback(args);
-    }
+    invoke: function(args) { return this.callback(args); }
   };
 
   var mockFunction = goog.testing.createFunctionMock();
@@ -271,8 +271,8 @@ function testGlobalFunctionMockCallOrdering() {
   assertThrowsJsUnitException(function() { globalFoo(2); });
   mock.$tearDown();
 
-  mock = goog.testing.createGlobalFunctionMock('globalFoo',
-                                               goog.testing.Mock.STRICT);
+  mock = goog.testing.createGlobalFunctionMock(
+      'globalFoo', goog.testing.Mock.STRICT);
   mock(1);
   mock(2);
   mock.$replay();
@@ -281,16 +281,16 @@ function testGlobalFunctionMockCallOrdering() {
   mock.$verify();
   mock.$tearDown();
 
-  mock = goog.testing.createGlobalFunctionMock('globalFoo',
-                                               goog.testing.Mock.STRICT);
+  mock = goog.testing.createGlobalFunctionMock(
+      'globalFoo', goog.testing.Mock.STRICT);
   mock(1);
   mock(2);
   mock.$replay();
   assertThrowsJsUnitException(function() { globalFoo(2); });
   mock.$tearDown();
 
-  mock = goog.testing.createGlobalFunctionMock('globalFoo',
-                                               goog.testing.Mock.LOOSE);
+  mock = goog.testing.createGlobalFunctionMock(
+      'globalFoo', goog.testing.Mock.LOOSE);
   mock(1);
   mock(2);
   mock.$replay();
@@ -341,8 +341,8 @@ function testMethodMockCallOrdering() {
   assertThrowsJsUnitException(function() { mynamespace.myMethod(2); });
   mynamespace.myMethod.$tearDown();
 
-  goog.testing.createMethodMock(mynamespace, 'myMethod',
-                                goog.testing.Mock.STRICT);
+  goog.testing.createMethodMock(
+      mynamespace, 'myMethod', goog.testing.Mock.STRICT);
   mynamespace.myMethod(1);
   mynamespace.myMethod(2);
   mynamespace.myMethod.$replay();
@@ -351,16 +351,16 @@ function testMethodMockCallOrdering() {
   mynamespace.myMethod.$verify();
   mynamespace.myMethod.$tearDown();
 
-  goog.testing.createMethodMock(mynamespace, 'myMethod',
-                                goog.testing.Mock.STRICT);
+  goog.testing.createMethodMock(
+      mynamespace, 'myMethod', goog.testing.Mock.STRICT);
   mynamespace.myMethod(1);
   mynamespace.myMethod(2);
   mynamespace.myMethod.$replay();
   assertThrowsJsUnitException(function() { mynamespace.myMethod(2); });
   mynamespace.myMethod.$tearDown();
 
-  goog.testing.createMethodMock(mynamespace, 'myMethod',
-                                goog.testing.Mock.LOOSE);
+  goog.testing.createMethodMock(
+      mynamespace, 'myMethod', goog.testing.Mock.LOOSE);
   mynamespace.myMethod(1);
   mynamespace.myMethod(2);
   mynamespace.myMethod.$replay();
@@ -374,8 +374,7 @@ function testMethodMockCallOrdering() {
 
 var constructornamespace = {};
 
-constructornamespace.MyConstructor = function() {
-};
+constructornamespace.MyConstructor = function() {};
 
 constructornamespace.MyConstructor.prototype.myMethod = function() {
   return 'I should be mocked.';
@@ -389,8 +388,7 @@ constructornamespace.MyConstructorWithArgument.prototype.myMethod = function() {
   return this.argument_;
 };
 
-constructornamespace.MyConstructorWithClassMembers = function() {
-};
+constructornamespace.MyConstructorWithClassMembers = function() {};
 
 constructornamespace.MyConstructorWithClassMembers.CONSTANT = 42;
 
@@ -401,14 +399,15 @@ constructornamespace.MyConstructorWithClassMembers.classMethod = function() {
 function testConstructorMock() {
   var mockObject =
       new goog.testing.StrictMock(constructornamespace.MyConstructor);
-  var mockConstructor = goog.testing.createConstructorMock(
-      constructornamespace, 'MyConstructor');
+  var mockConstructor =
+      goog.testing.createConstructorMock(constructornamespace, 'MyConstructor');
   mockConstructor().$returns(mockObject);
   mockObject.myMethod().$returns('I have been mocked!');
 
   mockConstructor.$replay();
   mockObject.$replay();
-  assertEquals('I have been mocked!',
+  assertEquals(
+      'I have been mocked!',
       new constructornamespace.MyConstructor().myMethod());
   mockConstructor.$verify();
   mockObject.$verify();
@@ -425,7 +424,8 @@ function testConstructorMockWithArgument() {
 
   mockConstructor.$replay();
   mockObject.$replay();
-  assertEquals('I have been mocked!',
+  assertEquals(
+      'I have been mocked!',
       new constructornamespace.MyConstructorWithArgument('I should be mocked.')
           .myMethod());
   mockConstructor.$verify();
@@ -441,7 +441,8 @@ function testConstructorMockWithClassMembers() {
   var mockConstructor = goog.testing.createConstructorMock(
       constructornamespace, 'MyConstructorWithClassMembers');
   assertEquals(42, constructornamespace.MyConstructorWithClassMembers.CONSTANT);
-  assertEquals('class method return value',
+  assertEquals(
+      'class method return value',
       constructornamespace.MyConstructorWithClassMembers.classMethod());
   mockConstructor.$tearDown();
 }
@@ -449,8 +450,8 @@ function testConstructorMockWithClassMembers() {
 function testConstructorMockCallOrdering() {
   var instance = {};
 
-  goog.testing.createConstructorMock(constructornamespace,
-                                     'MyConstructorWithArgument');
+  goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithArgument');
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();
@@ -459,9 +460,9 @@ function testConstructorMockCallOrdering() {
   });
   constructornamespace.MyConstructorWithArgument.$tearDown();
 
-  goog.testing.createConstructorMock(constructornamespace,
-                                     'MyConstructorWithArgument',
-                                     goog.testing.Mock.STRICT);
+  goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithArgument',
+      goog.testing.Mock.STRICT);
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();
@@ -470,9 +471,9 @@ function testConstructorMockCallOrdering() {
   constructornamespace.MyConstructorWithArgument.$verify();
   constructornamespace.MyConstructorWithArgument.$tearDown();
 
-  goog.testing.createConstructorMock(constructornamespace,
-                                     'MyConstructorWithArgument',
-                                     goog.testing.Mock.STRICT);
+  goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithArgument',
+      goog.testing.Mock.STRICT);
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();
@@ -481,9 +482,9 @@ function testConstructorMockCallOrdering() {
   });
   constructornamespace.MyConstructorWithArgument.$tearDown();
 
-  goog.testing.createConstructorMock(constructornamespace,
-                                     'MyConstructorWithArgument',
-                                     goog.testing.Mock.LOOSE);
+  goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithArgument',
+      goog.testing.Mock.LOOSE);
   constructornamespace.MyConstructorWithArgument(1).$returns(instance);
   constructornamespace.MyConstructorWithArgument(2).$returns(instance);
   constructornamespace.MyConstructorWithArgument.$replay();

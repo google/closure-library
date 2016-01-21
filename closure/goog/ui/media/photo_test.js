@@ -35,16 +35,16 @@ function tearDown() {
 
 function testBasicRendering() {
   control.render();
-  var el = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS);
+  var el = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS);
   assertEquals(1, el.length);
-  var img = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IMG,
-      goog.ui.media.Photo.CSS_CLASS + '-image');
+  var img = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.IMG, goog.ui.media.Photo.CSS_CLASS + '-image');
   assertEquals(1, img.length);
-  var caption = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS + '-caption');
+  var caption = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS + '-caption');
   assertEquals(1, caption.length);
-  var content = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS + '-description');
+  var content = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS + '-description');
   assertEquals(1, content.length);
 }

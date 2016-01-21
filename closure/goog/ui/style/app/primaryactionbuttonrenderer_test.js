@@ -49,27 +49,27 @@ function tearDown() {
 
 function testGeneratedButton() {
   button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
 }
 
 function testButtonStates() {
   button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-resting');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-resting');
   button.setState(goog.ui.Component.State.HOVER, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-hover');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-hover');
   button.setState(goog.ui.Component.State.HOVER, false);
   button.setState(goog.ui.Component.State.FOCUSED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-focused');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-focused');
   button.setState(goog.ui.Component.State.FOCUSED, false);
   button.setState(goog.ui.Component.State.ACTIVE, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-active');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-active');
   button.setState(goog.ui.Component.State.ACTIVE, false);
   button.setState(goog.ui.Component.State.DISABLED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
-      'normal-disabled');
+  goog.testing.ui.style.assertStructureMatchesReference(
+      button.getElement(), 'normal-disabled');
 }

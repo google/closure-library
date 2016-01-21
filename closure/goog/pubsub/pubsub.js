@@ -269,9 +269,7 @@ goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
       for (i = 0; i < keys.length; i++) {
         var key = keys[i];
         goog.pubsub.PubSub.runAsync_(
-            this.subscriptions_[key + 1],
-            this.subscriptions_[key + 2],
-            args);
+            this.subscriptions_[key + 1], this.subscriptions_[key + 2], args);
       }
     } else {
       // We must lock subscriptions and remove them at the end, so we don't
@@ -321,9 +319,7 @@ goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
  * @private
  */
 goog.pubsub.PubSub.runAsync_ = function(func, context, args) {
-  goog.async.run(function() {
-    func.apply(context, args);
-  });
+  goog.async.run(function() { func.apply(context, args); });
 };
 
 

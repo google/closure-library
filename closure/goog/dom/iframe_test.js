@@ -35,10 +35,9 @@ function setUp() {
 }
 
 function testCreateWithContent() {
-  var iframe = goog.dom.iframe.createWithContent(sandbox,
-      '<title>Foo Title</title>', '<div id="blah">Test</div>',
-      'position: absolute',
-      false /* opt_quirks */);
+  var iframe = goog.dom.iframe.createWithContent(
+      sandbox, '<title>Foo Title</title>', '<div id="blah">Test</div>',
+      'position: absolute', false /* opt_quirks */);
 
   var doc = goog.dom.getFrameContentDocument(iframe);
   assertNotNull(doc.getElementById('blah'));
@@ -49,11 +48,10 @@ function testCreateWithContent() {
 function testCreateWithContent_safeTypes() {
   var head = goog.html.SafeHtml.create('title', {}, 'Foo Title');
   var body = goog.html.SafeHtml.create('div', {id: 'blah'}, 'Test');
-  var style = goog.html.SafeStyle.fromConstant(goog.string.Const.from(
-      'position: absolute;'));
-  var iframe = goog.dom.iframe.createWithContent(sandbox,
-      head, body, style,
-      false /* opt_quirks */);
+  var style = goog.html.SafeStyle.fromConstant(
+      goog.string.Const.from('position: absolute;'));
+  var iframe = goog.dom.iframe.createWithContent(
+      sandbox, head, body, style, false /* opt_quirks */);
 
   var doc = goog.dom.getFrameContentDocument(iframe);
   assertNotNull(doc.getElementById('blah'));
@@ -68,11 +66,11 @@ function testCreateBlankYieldsIframeWithNoBorderOrPadding() {
   var blankElement = domHelper.getElement('blank');
   blankElement.appendChild(iframe);
   assertEquals(
-      'Width should be as styled: no extra borders, padding, etc.',
-      350, blankElement.offsetWidth);
+      'Width should be as styled: no extra borders, padding, etc.', 350,
+      blankElement.offsetWidth);
   assertEquals(
-      'Height should be as styled: no extra borders, padding, etc.',
-      250, blankElement.offsetHeight);
+      'Height should be as styled: no extra borders, padding, etc.', 250,
+      blankElement.offsetHeight);
 }
 
 function testCreateBlankWithStyles() {
@@ -83,9 +81,8 @@ function testCreateBlankWithStyles() {
 
 function testCreateBlankWithSafeStyles() {
   var iframe = goog.dom.iframe.createBlank(
-      domHelper,
-      goog.html.SafeStyle.fromConstant(goog.string.Const.from(
-          'position:absolute;')));
+      domHelper, goog.html.SafeStyle.fromConstant(
+                     goog.string.Const.from('position:absolute;')));
   assertEquals('absolute', iframe.style.position);
   assertEquals('bottom', iframe.style.verticalAlign);
 }

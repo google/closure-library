@@ -53,11 +53,13 @@ function testWrapping() {
 
   // Invalid wrappings.
   mechanism.set('third', 'null');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
-               assertThrows(function() {storage.get('third')}));
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
+                 storage.get('third')
+               }));
   mechanism.set('third', '{"meta": "data"}');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
-               assertThrows(function() {storage.get('third')}));
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
+                 storage.get('third')
+               }));
 
   // Weird values.
   var wrapperA = new goog.storage.RichStorage.Wrapper.wrapIfNecessary(null);

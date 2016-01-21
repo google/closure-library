@@ -38,9 +38,7 @@ function shouldRunTests() {
 
 function setUp() {
   xhrIo = new goog.testing.net.XhrIo();
-  xhrIo.getResponseHeader = function() {
-    return 'application/json';
-  };
+  xhrIo.getResponseHeader = function() { return 'application/json'; };
 }
 
 
@@ -60,9 +58,7 @@ function testXhrTimeout() {
 
   xhrIo.send('/test', null, 'GET', null, null, 1000, false);
 
-  xhrIo.getLastErrorCode = function() {
-    return goog.net.ErrorCode.TIMEOUT;
-  };
+  xhrIo.getLastErrorCode = function() { return goog.net.ErrorCode.TIMEOUT; };
   xhrIo.simulateReadyStateChange(ReadyState.COMPLETE);
 
   assertEquals(Status.TIMEOUT, xhrReader.getStatus());

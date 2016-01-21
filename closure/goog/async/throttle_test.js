@@ -22,9 +22,7 @@ function testThrottle() {
   var clock = new goog.testing.MockClock(true);
 
   var callBackCount = 0;
-  var callBackFunction = function() {
-    callBackCount++;
-  };
+  var callBackFunction = function() { callBackCount++; };
 
   var throttle = new goog.async.Throttle(callBackFunction, 100);
   assertEquals(0, callBackCount);
@@ -100,9 +98,7 @@ function testThrottleScopeBinding() {
   var mockClock = new goog.testing.MockClock(true);
 
   var x = {'y': 0};
-  new goog.async.Throttle(function() {
-    ++this['y'];
-  }, interval, x).fire();
+  new goog.async.Throttle(function() { ++this['y']; }, interval, x).fire();
   assertEquals(1, x['y']);
 
   mockClock.uninstall();

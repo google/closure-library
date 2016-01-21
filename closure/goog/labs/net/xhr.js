@@ -174,16 +174,15 @@ xhr.getJson = function(url, opt_options) {
  *     immutable Blob representing the file once the request completes.
  */
 xhr.getBlob = function(url, opt_options) {
-  goog.asserts.assert('Blob' in goog.global,
-                      'getBlob is not supported in this browser.');
+  goog.asserts.assert(
+      'Blob' in goog.global, 'getBlob is not supported in this browser.');
 
   var options = opt_options || {};
   options.responseType = xhr.ResponseType.BLOB;
 
-  return xhr.send('GET', url, null, options)
-      .then(function(request) {
-        return /** @type {!Blob} */ (request.response);
-      });
+  return xhr.send('GET', url, null, options).then(function(request) {
+    return /** @type {!Blob} */ (request.response);
+  });
 };
 
 
@@ -201,8 +200,9 @@ xhr.getBlob = function(url, opt_options) {
  *     resolved with an array of bytes once the request completes.
  */
 xhr.getBytes = function(url, opt_options) {
-  goog.asserts.assert(!userAgent.IE || userAgent.isDocumentModeOrHigher(9),
-                      'getBytes is not supported in this browser.');
+  goog.asserts.assert(
+      !userAgent.IE || userAgent.isDocumentModeOrHigher(9),
+      'getBytes is not supported in this browser.');
 
   var options = opt_options || {};
   options.responseType = xhr.ResponseType.ARRAYBUFFER;
@@ -270,7 +270,8 @@ xhr.send = function(method, url, data, opt_options) {
     var timer;
 
     var request = options.xmlHttpFactory ?
-        options.xmlHttpFactory.createInstance() : goog.net.XmlHttp();
+        options.xmlHttpFactory.createInstance() :
+        goog.net.XmlHttp();
     try {
       request.open(method, url, true);
     } catch (e) {
@@ -311,8 +312,8 @@ xhr.send = function(method, url, data, opt_options) {
 
     // Browsers will automatically set the content type to multipart/form-data
     // when passed a FormData object.
-    var dataIsFormData = (goog.global['FormData'] &&
-        (data instanceof goog.global['FormData']));
+    var dataIsFormData =
+        (goog.global['FormData'] && (data instanceof goog.global['FormData']));
     // If a content type hasn't been set, it hasn't been explicitly set to null,
     // and the data isn't a FormData, default to form-urlencoded/UTF8 for POSTs.
     // This is because some proxies have been known to reject posts without a
@@ -388,8 +389,8 @@ xhr.isEffectiveSchemeHttp_ = function(url) {
 xhr.parseJson_ = function(responseText, options) {
   var prefixStrippedResult = responseText;
   if (options && options.xssiPrefix) {
-    prefixStrippedResult = xhr.stripXssiPrefix_(
-        options.xssiPrefix, prefixStrippedResult);
+    prefixStrippedResult =
+        xhr.stripXssiPrefix_(options.xssiPrefix, prefixStrippedResult);
   }
   return goog.json.parse(prefixStrippedResult);
 };

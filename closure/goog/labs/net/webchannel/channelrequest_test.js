@@ -79,8 +79,9 @@ function setUp() {
     }
     reachabilityEvents[reachabilityType]++;
   };
-  stubs.set(goog.labs.net.webChannel.requestStats,
-      'notifyServerReachabilityEvent', notifyServerReachabilityEvent);
+  stubs.set(
+      goog.labs.net.webChannel.requestStats, 'notifyServerReachabilityEvent',
+      notifyServerReachabilityEvent);
 }
 
 
@@ -98,15 +99,9 @@ function tearDown() {
  * @final
  */
 function MockWebChannelBase() {
-  this.isClosed = function() {
-    return false;
-  };
-  this.isActive = function() {
-    return true;
-  };
-  this.shouldUseSecondaryDomains = function() {
-    return false;
-  };
+  this.isClosed = function() { return false; };
+  this.isActive = function() { return true; };
+  this.shouldUseSecondaryDomains = function() { return false; };
   this.completedRequests = [];
   this.onRequestComplete = function(request) {
     this.completedRequests.push(request);
@@ -127,20 +122,15 @@ function MockWebChannelBase() {
  */
 function createChannelRequest() {
   xhrIo = new goog.testing.net.XhrIo();
-  xhrIo.abort = xhrIo.abort || function() {
-    this.active_ = false;
-  };
+  xhrIo.abort = xhrIo.abort || function() { this.active_ = false; };
 
   // Install mock channel and no-op debug logger.
   mockChannel = new MockWebChannelBase();
   channelRequest = new goog.labs.net.webChannel.ChannelRequest(
-      mockChannel,
-      new goog.labs.net.webChannel.WebChannelDebug());
+      mockChannel, new goog.labs.net.webChannel.WebChannelDebug());
 
   // Install test XhrIo.
-  mockChannel.createXhrIo = function() {
-    return xhrIo;
-  };
+  mockChannel.createXhrIo = function() { return xhrIo; };
 
   // Install watchdogTimeoutCallCount.
   channelRequest.watchdogTimeoutCallCount = 0;
@@ -275,14 +265,11 @@ function testRequestTimeoutWithUnexpectedException() {
 
 
 function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
-  var Reachability =
-      goog.labs.net.webChannel.requestStats.ServerReachability;
-  assertEquals(reqMade,
-      reachabilityEvents[Reachability.REQUEST_MADE] || 0);
-  assertEquals(reqSucceeded,
-      reachabilityEvents[Reachability.REQUEST_SUCCEEDED] || 0);
-  assertEquals(reqFail,
-      reachabilityEvents[Reachability.REQUEST_FAILED] || 0);
-  assertEquals(backChannel,
-      reachabilityEvents[Reachability.BACK_CHANNEL_ACTIVITY] || 0);
+  var Reachability = goog.labs.net.webChannel.requestStats.ServerReachability;
+  assertEquals(reqMade, reachabilityEvents[Reachability.REQUEST_MADE] || 0);
+  assertEquals(
+      reqSucceeded, reachabilityEvents[Reachability.REQUEST_SUCCEEDED] || 0);
+  assertEquals(reqFail, reachabilityEvents[Reachability.REQUEST_FAILED] || 0);
+  assertEquals(
+      backChannel, reachabilityEvents[Reachability.BACK_CHANNEL_ACTIVITY] || 0);
 }

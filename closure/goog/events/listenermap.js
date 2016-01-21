@@ -268,17 +268,16 @@ goog.events.ListenerMap.prototype.hasListener = function(
   var typeStr = hasType ? opt_type.toString() : '';
   var hasCapture = goog.isDef(opt_capture);
 
-  return goog.object.some(
-      this.listeners, function(listenerArray, type) {
-        for (var i = 0; i < listenerArray.length; ++i) {
-          if ((!hasType || listenerArray[i].type == typeStr) &&
-              (!hasCapture || listenerArray[i].capture == opt_capture)) {
-            return true;
-          }
-        }
+  return goog.object.some(this.listeners, function(listenerArray, type) {
+    for (var i = 0; i < listenerArray.length; ++i) {
+      if ((!hasType || listenerArray[i].type == typeStr) &&
+          (!hasCapture || listenerArray[i].capture == opt_capture)) {
+        return true;
+      }
+    }
 
-        return false;
-      });
+    return false;
+  });
 };
 
 
@@ -297,8 +296,7 @@ goog.events.ListenerMap.findListenerIndex_ = function(
     listenerArray, listener, opt_useCapture, opt_listenerScope) {
   for (var i = 0; i < listenerArray.length; ++i) {
     var listenerObj = listenerArray[i];
-    if (!listenerObj.removed &&
-        listenerObj.listener == listener &&
+    if (!listenerObj.removed && listenerObj.listener == listener &&
         listenerObj.capture == !!opt_useCapture &&
         listenerObj.handler == opt_listenerScope) {
       return i;

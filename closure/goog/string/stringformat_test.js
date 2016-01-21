@@ -48,7 +48,6 @@ function testFloatConversionSpecifier() {
   assertEquals('%f', '123.456', f('%f', 123.456));
 
   // Precisions, paddings and other flags are handled on a flag to flag basis.
-
 }
 
 function testAliasedConversionSpecifiers() {
@@ -70,7 +69,6 @@ function testIntegerConversion() {
   assertEquals('%d', '-123', f('%d', -123.456));
 
   // Precisions, paddings and other flags are handled on a flag to flag basis.
-
 }
 
 function testSpaceFlag() {

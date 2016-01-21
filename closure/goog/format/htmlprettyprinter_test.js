@@ -31,9 +31,7 @@ var mockClockTicks;
 function setUp() {
   mockClockTicks = 0;
   mockClock = new goog.testing.MockClock();
-  mockClock.getCurrentTime = function() {
-    return mockClockTicks++;
-  };
+  mockClock.getCurrentTime = function() { return mockClockTicks++; };
   mockClock.install();
 }
 
@@ -154,10 +152,11 @@ function testRegexMakesProgress() {
     assertEquals('f o o\n', goog.format.HtmlPrettyPrinter.format('f o o'));
 
     // But not this one.
-    var ex = assertThrows('should have failed for invalid regex - endless loop',
+    var ex = assertThrows(
+        'should have failed for invalid regex - endless loop',
         goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
-    assertEquals('Regex failed to make progress through source html.',
-        ex.message);
+    assertEquals(
+        'Regex failed to make progress through source html.', ex.message);
   } finally {
     goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
   }
@@ -197,7 +196,8 @@ function testAvoidDataLoss() {
     assertEquals('foo\n', goog.format.HtmlPrettyPrinter.format('foo'));
 
     // But not this one.
-    var ex = assertThrows('should have failed for invalid regex - data loss',
+    var ex = assertThrows(
+        'should have failed for invalid regex - data loss',
         goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
     assertEquals('Lost data pretty printing html.', ex.message);
   } finally {

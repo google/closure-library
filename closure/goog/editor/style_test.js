@@ -46,15 +46,16 @@ var $text = goog.dom.createTextNode;
 function setUpGetNodeFunctions() {
   parentNode = $dom(
       goog.dom.TagName.P, {id: 'parentNode'},
-      childNode1 = $dom(goog.dom.TagName.DIV, null,
-          gChildWsNode1 = $text(' \t\r\n'),
+      childNode1 = $dom(
+          goog.dom.TagName.DIV, null, gChildWsNode1 = $text(' \t\r\n'),
           gChildTextNode1 = $text('Child node'),
           gChildNbspNode1 = $text('\u00a0'),
           gChildMixedNode1 = $text('Text\n plus\u00a0')),
-      childNode2 = $dom(goog.dom.TagName.DIV, null,
-          gChildWsNode2a = $text(''),
+      childNode2 = $dom(
+          goog.dom.TagName.DIV, null, gChildWsNode2a = $text(''),
           gChildWsNode2b = $text(' ')),
-      childNode3 = $dom(goog.dom.TagName.DIV, null,
+      childNode3 = $dom(
+          goog.dom.TagName.DIV, null,
           gChildTextNode3a = $text('I am a grand child'),
           gChildWsNode3 = $text('   \t  \r   \n'),
           gChildTextNode3b = $text('I am also a grand child')));
@@ -85,11 +86,11 @@ function tearDownGetNodeFunctions() {
  * Test isBlockLevel with a node that is block style and a node that is not
  */
 function testIsDisplayBlock() {
-  assertTrue('Body is block style',
-      goog.editor.style.isDisplayBlock(document.body));
+  assertTrue(
+      'Body is block style', goog.editor.style.isDisplayBlock(document.body));
   var tableNode = $dom(goog.dom.TagName.TABLE);
-  assertFalse('Table is not block style',
-      goog.editor.style.isDisplayBlock(tableNode));
+  assertFalse(
+      'Table is not block style', goog.editor.style.isDisplayBlock(tableNode));
 }
 
 
@@ -103,14 +104,12 @@ function testIsContainer() {
   var textNode = $text('I am text');
   document.body.appendChild(textNode);
 
-  assertTrue('Table is a container',
-      goog.editor.style.isContainer(tableNode));
-  assertTrue('Body is a container',
-      goog.editor.style.isContainer(document.body));
-  assertTrue('List item is a container',
-      goog.editor.style.isContainer(liNode));
-  assertFalse('Text node is not a container',
-      goog.editor.style.isContainer(textNode));
+  assertTrue('Table is a container', goog.editor.style.isContainer(tableNode));
+  assertTrue(
+      'Body is a container', goog.editor.style.isContainer(document.body));
+  assertTrue('List item is a container', goog.editor.style.isContainer(liNode));
+  assertFalse(
+      'Text node is not a container', goog.editor.style.isContainer(textNode));
 }
 
 
@@ -120,27 +119,29 @@ function testIsContainer() {
  */
 function testGetContainer() {
   setUpGetNodeFunctions();
-  assertEquals('Should return self', childNode1,
+  assertEquals(
+      'Should return self', childNode1,
       goog.editor.style.getContainer(childNode1));
-  assertEquals('Should return parent', childNode1,
+  assertEquals(
+      'Should return parent', childNode1,
       goog.editor.style.getContainer(gChildWsNode1));
-  assertNull('Document has no ancestors',
-      goog.editor.style.getContainer(document));
+  assertNull(
+      'Document has no ancestors', goog.editor.style.getContainer(document));
   tearDownGetNodeFunctions();
 }
 
 
 function testMakeUnselectable() {
   var div = goog.dom.createElement(goog.dom.TagName.DIV);
-  div.innerHTML =
-      '<div>No input</div>' +
+  div.innerHTML = '<div>No input</div>' +
       '<p><input type="checkbox">Checkbox</p>' +
       '<span><input type="text"></span>';
   document.body.appendChild(div);
 
   var eventHandler = new goog.testing.LooseMock(goog.events.EventHandler);
   if (goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE) {
-    eventHandler.listen(div, goog.events.EventType.MOUSEDOWN,
+    eventHandler.listen(
+        div, goog.events.EventType.MOUSEDOWN,
         goog.testing.mockmatchers.isFunction, true);
   }
   eventHandler.$replay();
@@ -156,7 +157,7 @@ function testMakeUnselectable() {
 
   assertEquals(
       'For browsers with non-overridable selectability, the root should be ' +
-      'selectable.  Otherwise it should be unselectable.',
+          'selectable.  Otherwise it should be unselectable.',
       !goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE,
       goog.style.isUnselectable(div));
   assertTrue(goog.style.isUnselectable(childDiv));
@@ -165,7 +166,7 @@ function testMakeUnselectable() {
 
   assertEquals(
       'For browsers with non-overridable selectability, the span will be ' +
-      'selectable.  Otherwise it will be unselectable. ',
+          'selectable.  Otherwise it will be unselectable. ',
       !goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE,
       goog.style.isUnselectable(span));
   assertFalse(goog.style.isUnselectable(text));

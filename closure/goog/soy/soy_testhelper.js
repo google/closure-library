@@ -103,37 +103,36 @@ example.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
 
 example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  var sanitized = makeSanitizedContent('Hello <b>World</b>',
-      goog.soy.data.SanitizedContentKind.HTML);
+  var sanitized = makeSanitizedContent(
+      'Hello <b>World</b>', goog.soy.data.SanitizedContentKind.HTML);
   sanitized.contentDir = goog.i18n.bidi.Dir.LTR;
   return sanitized;
 };
 
 
-example.sanitizedHtmlAttributesTemplate =
-    function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('foo="bar"',
-      goog.soy.data.SanitizedContentKind.ATTRIBUTES);
+example.sanitizedHtmlAttributesTemplate = function(
+    opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'foo="bar"', goog.soy.data.SanitizedContentKind.ATTRIBUTES);
 };
 
 
-example.sanitizedCssTemplate =
-    function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('display:none',
-      goog.soy.data.SanitizedContentKind.CSS);
+example.sanitizedCssTemplate = function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'display:none', goog.soy.data.SanitizedContentKind.CSS);
 };
 
 
-example.unsanitizedTextTemplate =
-    function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('I <3 Puppies & Kittens',
-      goog.soy.data.SanitizedContentKind.TEXT);
+example.unsanitizedTextTemplate = function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'I <3 Puppies & Kittens', goog.soy.data.SanitizedContentKind.TEXT);
 };
 
 
-example.templateSpoofingSanitizedContentString =
-    function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('Hello World',
+example.templateSpoofingSanitizedContentString = function(
+    opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'Hello World',
       // This is to ensure we're using triple-equals against a unique Javascript
       // object.  For example, in Javascript, consider ({}) == '[Object object]'
       // is true.

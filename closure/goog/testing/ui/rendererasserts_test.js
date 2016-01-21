@@ -29,8 +29,8 @@ function setUp() {
 function testSuccess() {
   function GoodRenderer() {}
 
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(GoodRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      GoodRenderer);
 }
 
 function testFailure() {
@@ -41,12 +41,13 @@ function testFailure() {
   goog.inherits(BadRenderer, goog.ui.ControlRenderer);
 
   var ex = assertThrows(
-      'Expected assertNoGetCssClassCallsInConstructor to fail.',
-      function() {
-        goog.testing.ui.rendererasserts.
-            assertNoGetCssClassCallsInConstructor(BadRenderer);
+      'Expected assertNoGetCssClassCallsInConstructor to fail.', function() {
+        goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+            BadRenderer);
       });
-  assertTrue('Expected assertNoGetCssClassCallsInConstructor to throw a' +
-      ' jsunit exception', ex.isJsUnitException);
+  assertTrue(
+      'Expected assertNoGetCssClassCallsInConstructor to throw a' +
+          ' jsunit exception',
+      ex.isJsUnitException);
   assertContains('getCssClass', ex.message);
 }

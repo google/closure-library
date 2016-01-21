@@ -24,8 +24,7 @@ goog.require('goog.testing.jsunit');
 var count, expectedFailures, lastLevel, lastMessage;
 
 // Stub out the logger.
-goog.testing.ExpectedFailures.prototype.logger_.log = function(level,
-    message) {
+goog.testing.ExpectedFailures.prototype.logger_.log = function(level, message) {
   lastLevel = level;
   lastMessage = message;
   count++;
@@ -51,10 +50,12 @@ function testPreventExpectedFailure() {
 
   expectedFailures.handleException(new goog.testing.JsUnitException('', ''));
   assertEquals('Should have logged a message', 1, count);
-  assertEquals('Should have logged an info message',
-      goog.debug.Logger.Level.INFO, lastLevel);
-  assertContains('Should log a suppression message',
-      'Suppressing test failure', lastMessage);
+  assertEquals(
+      'Should have logged an info message', goog.debug.Logger.Level.INFO,
+      lastLevel);
+  assertContains(
+      'Should log a suppression message', 'Suppressing test failure',
+      lastMessage);
 
   expectedFailures.handleTearDown();
   assertEquals('Should not have logged another message', 1, count);
@@ -74,24 +75,26 @@ function testExpectedFailureDidNotOccur() {
 
   expectedFailures.handleTearDown();
   assertEquals('Should have logged a message', 1, count);
-  assertEquals('Should have logged a warning',
-      goog.debug.Logger.Level.WARNING, lastLevel);
-  assertContains('Should log a suppression message',
-      'Expected a test failure', lastMessage);
+  assertEquals(
+      'Should have logged a warning', goog.debug.Logger.Level.WARNING,
+      lastLevel);
+  assertContains(
+      'Should log a suppression message', 'Expected a test failure',
+      lastMessage);
 }
 
 function testRun() {
   expectedFailures.expectFailureFor(true);
 
-  expectedFailures.run(function() {
-    fail('Expected failure');
-  });
+  expectedFailures.run(function() { fail('Expected failure'); });
 
   assertEquals('Should have logged a message', 1, count);
-  assertEquals('Should have logged an info message',
-      goog.debug.Logger.Level.INFO, lastLevel);
-  assertContains('Should log a suppression message',
-      'Suppressing test failure', lastMessage);
+  assertEquals(
+      'Should have logged an info message', goog.debug.Logger.Level.INFO,
+      lastLevel);
+  assertContains(
+      'Should log a suppression message', 'Suppressing test failure',
+      lastMessage);
 
   expectedFailures.handleTearDown();
   assertEquals('Should not have logged another message', 1, count);
@@ -118,8 +121,10 @@ function testRunLenient() {
   }, true);
   expectedFailures.handleTearDown();
   assertEquals('Should have logged a message', 1, count);
-  assertEquals('Should have logged a warning',
-      goog.debug.Logger.Level.WARNING, lastLevel);
-  assertContains('Should log a suppression message',
-      'Expected a test failure', lastMessage);
+  assertEquals(
+      'Should have logged a warning', goog.debug.Logger.Level.WARNING,
+      lastLevel);
+  assertContains(
+      'Should log a suppression message', 'Expected a test failure',
+      lastMessage);
 }

@@ -90,7 +90,7 @@ function setUpPage() {
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
 }
 
 function setUp() {
@@ -145,15 +145,12 @@ function testDirectTransport() {
   outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
   // Incoming service.
   var resolver = goog.Promise.withResolver();
-  outerXpc.registerService(
-      RESPONSE_SERVICE_NAME,
-      function(message) {
-        assertEquals(
-            'Received payload is equal to sent payload.',
-            message,
-            MESSAGE_PAYLOAD_1);
-        resolver.resolve();
-      });
+  outerXpc.registerService(RESPONSE_SERVICE_NAME, function(message) {
+    assertEquals(
+        'Received payload is equal to sent payload.', message,
+        MESSAGE_PAYLOAD_1);
+    resolver.resolve();
+  });
 
   outerXpc.connect(function() {
     assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
@@ -184,15 +181,12 @@ function testSameWindowDirectTransport() {
 
   var resolver = goog.Promise.withResolver();
   // Incoming service.
-  outerXpc.registerService(
-      RESPONSE_SERVICE_NAME,
-      function(message) {
-        assertEquals(
-            'Received payload is equal to sent payload.',
-            message,
-            MESSAGE_PAYLOAD_1);
-        resolver.resolve();
-      });
+  outerXpc.registerService(RESPONSE_SERVICE_NAME, function(message) {
+    assertEquals(
+        'Received payload is equal to sent payload.', message,
+        MESSAGE_PAYLOAD_1);
+    resolver.resolve();
+  });
   outerXpc.connect(function() {
     assertTrue(
         'XPC over direct channel, same window, is connected',
@@ -203,15 +197,11 @@ function testSameWindowDirectTransport() {
   innerXpc = new CrossPageChannel(getConfiguration(CrossPageChannelRole.INNER));
   innerXpc.setPeerWindowObject(self);
   // Incoming service.
-  innerXpc.registerService(
-      ECHO_SERVICE_NAME,
-      function(message) {
-        innerXpc.send(RESPONSE_SERVICE_NAME, message);
-      });
+  innerXpc.registerService(ECHO_SERVICE_NAME, function(message) {
+    innerXpc.send(RESPONSE_SERVICE_NAME, message);
+  });
   // Outgoing service.
-  innerXpc.registerService(
-      RESPONSE_SERVICE_NAME,
-      goog.nullFunction);
+  innerXpc.registerService(RESPONSE_SERVICE_NAME, goog.nullFunction);
   innerXpc.connect();
   return resolver.promise;
 }
@@ -250,16 +240,13 @@ function testSyncMode() {
   outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
   var resolver = goog.Promise.withResolver();
   // Incoming service.
-  outerXpc.registerService(
-      RESPONSE_SERVICE_NAME,
-      function(message) {
-        assertTrue('The message response was syncronous', messageIsSync);
-        assertEquals(
-            'Received payload is equal to sent payload.',
-            message,
-            MESSAGE_PAYLOAD_1);
-        resolver.resolve();
-      });
+  outerXpc.registerService(RESPONSE_SERVICE_NAME, function(message) {
+    assertTrue('The message response was syncronous', messageIsSync);
+    assertEquals(
+        'Received payload is equal to sent payload.', message,
+        MESSAGE_PAYLOAD_1);
+    resolver.resolve();
+  });
   outerXpc.connect(function() {
     assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
     messageIsSync = true;

@@ -36,8 +36,9 @@ function setUpPage() {
 function setUp() {
   mockControl = new goog.testing.MockControl();
   channel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  stubs.set(goog.debug.LogManager, 'getLogger',
-            mockControl.createFunctionMock('goog.log.getLogger'));
+  stubs.set(
+      goog.debug.LogManager, 'getLogger',
+      mockControl.createFunctionMock('goog.log.getLogger'));
 }
 
 function tearDown() {
@@ -48,8 +49,8 @@ function tearDown() {
 function testCommandWithoutChannelName() {
   var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
   goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(mockLogger,
-      goog.log.Level.SEVERE, '[remote logger] foo bar', null);
+  goog.log.log(
+      mockLogger, goog.log.Level.SEVERE, '[remote logger] foo bar', null);
   mockControl.$replayAll();
 
   var server = new goog.messaging.LoggerServer(channel, 'log');
@@ -66,8 +67,8 @@ function testCommandWithoutChannelName() {
 function testCommandWithChannelName() {
   var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
   goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(mockLogger,
-      goog.log.Level.SEVERE, '[some channel] foo bar', null);
+  goog.log.log(
+      mockLogger, goog.log.Level.SEVERE, '[some channel] foo bar', null);
   mockControl.$replayAll();
 
   var server = new goog.messaging.LoggerServer(channel, 'log', 'some channel');
@@ -84,8 +85,8 @@ function testCommandWithChannelName() {
 function testCommandWithException() {
   var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
   goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(mockLogger,
-      goog.log.Level.SEVERE, '[some channel] foo bar',
+  goog.log.log(
+      mockLogger, goog.log.Level.SEVERE, '[some channel] foo bar',
       {message: 'Bad things', stack: ['foo', 'bar']});
   mockControl.$replayAll();
 

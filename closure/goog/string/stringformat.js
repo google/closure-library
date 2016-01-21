@@ -63,15 +63,8 @@ goog.string.format = function(formatString, var_args) {
    * @param {string} wholeString Has the actualString being searched.
    * @return {string} Formatted parameter.
    */
-  function replacerDemuxer(match,
-                           flags,
-                           width,
-                           dotp,
-                           precision,
-                           type,
-                           offset,
-                           wholeString) {
-
+  function replacerDemuxer(
+      match, flags, width, dotp, precision, type, offset, wholeString) {
     // The % is too simple and doesn't take an argument.
     if (type == '%') {
       return '%';
@@ -89,7 +82,6 @@ goog.string.format = function(formatString, var_args) {
     arguments[0] = value;
 
     return goog.string.format.demuxes_[type].apply(null, arguments);
-
   }
 
   return template.replace(formatRe, replacerDemuxer);
@@ -115,14 +107,8 @@ goog.string.format.demuxes_ = {};
  * @param {string} wholeString Has the actualString being searched.
  * @return {string} Replacement string.
  */
-goog.string.format.demuxes_['s'] = function(value,
-                                            flags,
-                                            width,
-                                            dotp,
-                                            precision,
-                                            type,
-                                            offset,
-                                            wholeString) {
+goog.string.format.demuxes_['s'] = function(
+    value, flags, width, dotp, precision, type, offset, wholeString) {
   var replacement = value;
   // If no padding is necessary we're done.
   // The check for '' is necessary because Firefox incorrectly provides the
@@ -135,10 +121,10 @@ goog.string.format.demuxes_['s'] = function(value,
   // Otherwise we should find out where to put spaces.
   if (flags.indexOf('-', 0) > -1) {
     replacement = replacement +
-      goog.string.repeat(' ', Number(width) - replacement.length);
+        goog.string.repeat(' ', Number(width) - replacement.length);
   } else {
     replacement = goog.string.repeat(' ', Number(width) - replacement.length) +
-      replacement;
+        replacement;
   }
   return replacement;
 };
@@ -156,14 +142,8 @@ goog.string.format.demuxes_['s'] = function(value,
  * @param {string} wholeString Has the actualString being searched.
  * @return {string} Replacement string.
  */
-goog.string.format.demuxes_['f'] = function(value,
-                                            flags,
-                                            width,
-                                            dotp,
-                                            precision,
-                                            type,
-                                            offset,
-                                            wholeString) {
+goog.string.format.demuxes_['f'] = function(
+    value, flags, width, dotp, precision, type, offset, wholeString) {
 
   var replacement = value.toString();
 
@@ -196,9 +176,8 @@ goog.string.format.demuxes_['f'] = function(value,
   }
 
   // We need a clean signless replacement to start with
-  replacement = isNaN(precision) ?
-      Math.abs(value).toString() :
-      Math.abs(value).toFixed(precision);
+  replacement = isNaN(precision) ? Math.abs(value).toString() :
+                                   Math.abs(value).toFixed(precision);
 
   var padCount = Number(width) - replacement.length - sign.length;
 
@@ -229,17 +208,10 @@ goog.string.format.demuxes_['f'] = function(value,
  * @param {string} wholeString Has the actualString being searched.
  * @return {string} Replacement string.
  */
-goog.string.format.demuxes_['d'] = function(value,
-                                            flags,
-                                            width,
-                                            dotp,
-                                            precision,
-                                            type,
-                                            offset,
-                                            wholeString) {
+goog.string.format.demuxes_['d'] = function(
+    value, flags, width, dotp, precision, type, offset, wholeString) {
   return goog.string.format.demuxes_['f'](
-      parseInt(value, 10) /* value */,
-      flags, width, dotp, 0 /* precision */,
+      parseInt(value, 10) /* value */, flags, width, dotp, 0 /* precision */,
       type, offset, wholeString);
 };
 

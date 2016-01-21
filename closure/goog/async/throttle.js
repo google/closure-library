@@ -50,8 +50,8 @@ goog.async.Throttle = function(listener, interval, opt_handler) {
    * @type {function(this: T, ...?)}
    * @private
    */
-  this.listener_ = opt_handler != null ?
-      goog.bind(listener, opt_handler) : listener;
+  this.listener_ =
+      opt_handler != null ? goog.bind(listener, opt_handler) : listener;
 
   /**
    * Interval for the throttle time

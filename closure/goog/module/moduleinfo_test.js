@@ -65,7 +65,8 @@ function testOnLoad() {
 
   m.dispose();
   assertTrue(m.isDisposed());
-  assertTrue('Disposing of ModuleInfo should dispose of its module',
+  assertTrue(
+      'Disposing of ModuleInfo should dispose of its module',
       module.isDisposed());
 }
 
@@ -104,9 +105,7 @@ function testErrorsInCallbacks() {
   var hadError = m.onLoad(goog.nullFunction);
   assertTrue(hadError);
 
-  var e = assertThrows(function() {
-    mockClock.tick();
-  });
+  var e = assertThrows(function() { mockClock.tick(); });
 
   assertEquals('boom1', e.message);
 }

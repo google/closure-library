@@ -81,22 +81,26 @@ function testEnterInNonSetupBlockquote() {
   // make sure there's just one blockquote, and that the text has been deleted.
   var elem = field1.getElement();
   var dom = field1.getEditableDomHelper();
-  EXPECTEDFAILURES.expectFailureFor(goog.userAgent.OPERA,
+  EXPECTEDFAILURES.expectFailureFor(
+      goog.userAgent.OPERA,
       'The blockquote is overwritten with DIV due to CORE-22104 -- Opera ' +
-      'overwrites the BLOCKQUOTE ancestor with DIV when doing FormatBlock ' +
-      'for DIV');
+          'overwrites the BLOCKQUOTE ancestor with DIV when doing FormatBlock ' +
+          'for DIV');
   try {
-    assertEquals('Blockquote should not be split',
-        1, dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
-                                            null, elem).length);
+    assertEquals(
+        'Blockquote should not be split', 1,
+        dom.getElementsByTagNameAndClass(
+               goog.dom.TagName.BLOCKQUOTE, null, elem)
+            .length);
   } catch (e) {
     EXPECTEDFAILURES.handleException(e);
   }
-  assert('Selection should be deleted',
-      -1 == elem.innerHTML.indexOf('selection'));
+  assert(
+      'Selection should be deleted', -1 == elem.innerHTML.indexOf('selection'));
 
-  assertEquals('The event should have been prevented only on webkit',
-      prevented, goog.userAgent.WEBKIT);
+  assertEquals(
+      'The event should have been prevented only on webkit', prevented,
+      goog.userAgent.WEBKIT);
 }
 
 function testEnterInSetupBlockquote() {
@@ -109,13 +113,15 @@ function testEnterInSetupBlockquote() {
   // make sure there are two blockquotes, and a DIV with nbsp in the middle.
   var elem = field2.getElement();
   var dom = field2.getEditableDomHelper();
-  assertEquals('Blockquote should be split', 2,
-      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
-                                       null, elem).length);
-  assert('Selection should be deleted',
-      -1 == elem.innerHTML.indexOf('selection'));
+  assertEquals(
+      'Blockquote should be split', 2,
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE, null, elem)
+          .length);
+  assert(
+      'Selection should be deleted', -1 == elem.innerHTML.indexOf('selection'));
 
-  assert('should have div with &nbsp;',
+  assert(
+      'should have div with &nbsp;',
       -1 != elem.innerHTML.indexOf('>' + getNbsp() + '<'));
   assert('event should have been prevented', prevented);
 }
@@ -131,13 +137,15 @@ function testEnterInNonSetupBlockquoteWhenClassnameIsNotRequired() {
   // make sure there are two blockquotes, and a DIV with nbsp in the middle.
   var elem = field1.getElement();
   var dom = field1.getEditableDomHelper();
-  assertEquals('Blockquote should be split', 2,
-      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE,
-                                       null, elem).length);
-  assert('Selection should be deleted',
-      -1 == elem.innerHTML.indexOf('selection'));
+  assertEquals(
+      'Blockquote should be split', 2,
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE, null, elem)
+          .length);
+  assert(
+      'Selection should be deleted', -1 == elem.innerHTML.indexOf('selection'));
 
-  assert('should have div with &nbsp;',
+  assert(
+      'should have div with &nbsp;',
       -1 != elem.innerHTML.indexOf('>' + getNbsp() + '<'));
   assert('event should have been prevented', prevented);
 }
@@ -152,8 +160,9 @@ function testEnterInBlockquoteCreatesDivInBrMode() {
       goog.dom.TagName.BLOCKQUOTE, null, elem)[0];
   var div = dom.getNextElementSibling(firstBlockquote);
   assertEquals('Element after blockquote should be a div', 'DIV', div.tagName);
-  assertEquals('Element after div should be second blockquote',
-      'BLOCKQUOTE', dom.getNextElementSibling(div).tagName);
+  assertEquals(
+      'Element after div should be second blockquote', 'BLOCKQUOTE',
+      dom.getNextElementSibling(div).tagName);
 }
 
 
@@ -179,24 +188,26 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorAfterBr() {
   // <blockquote>one<br></blockquote>
   // <div>&nbsp;</div>
   // <blockquote>two<br></blockquote>
-  field1.setHtml(false,
-      '<blockquote id="quote" class="tr_bq">one<br>' +
-      'two<br></blockquote>');
+  field1.setHtml(
+      false, '<blockquote id="quote" class="tr_bq">one<br>' +
+          'two<br></blockquote>');
   var dom = field1.getEditableDomHelper();
   goog.dom.Range.createCaret(dom.getElement('quote'), 2).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
   var secondBlockquote = dom.getElementsByTagNameAndClass(
       goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('two<br>', secondBlockquote.innerHTML);
 
   // Verifies that a blockquote split doesn't happen if it doesn't need to.
-  field1.setHtml(false,
-      '<blockquote class="tr_bq">one<br id="brcursor"></blockquote>');
+  field1.setHtml(
+      false, '<blockquote class="tr_bq">one<br id="brcursor"></blockquote>');
   selectNodeAndHitEnter(field1, 'brcursor');
-  assertEquals(1, dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.BLOCKQUOTE, null, elem).length);
+  assertEquals(
+      1,
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE, null, elem)
+          .length);
 }
 
 
@@ -215,14 +226,14 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
   // <blockquote>one<br></blockquote>
   // <div>&nbsp;</div>
   // <blockquote>two<br></blockquote>
-  field1.setHtml(false,
-      '<blockquote id="quote" class="tr_bq">one<br>' +
-      'two<br></blockquote>');
+  field1.setHtml(
+      false, '<blockquote id="quote" class="tr_bq">one<br>' +
+          'two<br></blockquote>');
   var dom = field1.getEditableDomHelper();
   var cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
   var secondBlockquote = dom.getElementsByTagNameAndClass(
       goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
@@ -230,12 +241,12 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
 
   // Ensures that standard text node split works as expected with the new
   // change.
-  field1.setHtml(false,
-      '<blockquote id="quote" class="tr_bq">one<b>two</b><br>');
+  field1.setHtml(
+      false, '<blockquote id="quote" class="tr_bq">one<b>two</b><br>');
   cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
   secondBlockquote = dom.getElementsByTagNameAndClass(
       goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('<b>two</b><br>', secondBlockquote.innerHTML);
@@ -282,29 +293,29 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   //   <div>two</div>
   // </blockquote>
   //
-  field1.setHtml(false,
-      '<blockquote class="tr_bq">' +
-      '<div><div>a</div><ol><li id="cursor">one</li></div>' +
-      '<div>b</div>' +
-      '</blockquote>');
+  field1.setHtml(
+      false, '<blockquote class="tr_bq">' +
+          '<div><div>a</div><ol><li id="cursor">one</li></div>' +
+          '<div>b</div>' +
+          '</blockquote>');
   var dom = field1.getEditableDomHelper();
   goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
   var secondBlockquote = dom.getElementsByTagNameAndClass(
       goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   assertHTMLEquals('<div>b</div>', secondBlockquote.innerHTML);
 
   // Ensure that we remove only unnecessary subtrees.
-  field1.setHtml(false,
-      '<blockquote class="tr_bq">' +
-      '<div><span>a</span><div id="cursor">one</div><div>two</div></div>' +
-      '<div><span>c</span></div>' +
-      '</blockquote>');
+  field1.setHtml(
+      false, '<blockquote class="tr_bq">' +
+          '<div><span>a</span><div id="cursor">one</div><div>two</div></div>' +
+          '<div><span>c</span></div>' +
+          '</blockquote>');
   goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
   secondBlockquote = dom.getElementsByTagNameAndClass(
       goog.dom.TagName.BLOCKQUOTE, null, elem)[1];
   var expectedHTML = '<div><div>two</div></div>' +
@@ -312,16 +323,16 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   assertHTMLEquals(expectedHTML, secondBlockquote.innerHTML);
 
   // Place the cursor in the middle of a line.
-  field1.setHtml(false,
-      '<blockquote id="quote" class="tr_bq">' +
-      '<div>one</div><div>two</div>' +
-      '</blockquote>');
-  goog.dom.Range.createCaret(
-      dom.getElement('quote').firstChild.firstChild, 1).select();
-  goog.testing.events.fireKeySequence(field1.getElement(),
-                                      goog.events.KeyCodes.ENTER);
-  var blockquotes = dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.BLOCKQUOTE, null, elem);
+  field1.setHtml(
+      false, '<blockquote id="quote" class="tr_bq">' +
+          '<div>one</div><div>two</div>' +
+          '</blockquote>');
+  goog.dom.Range.createCaret(dom.getElement('quote').firstChild.firstChild, 1)
+      .select();
+  goog.testing.events.fireKeySequence(
+      field1.getElement(), goog.events.KeyCodes.ENTER);
+  var blockquotes =
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.BLOCKQUOTE, null, elem);
   assertEquals(2, blockquotes.length);
   assertHTMLEquals('<div>o</div>', blockquotes[0].innerHTML);
   assertHTMLEquals('<div>ne</div><div>two</div>', blockquotes[1].innerHTML);
@@ -332,8 +343,7 @@ function testEnterInList() {
 
   // <enter> in a list should *never* be handled by custom code. Lists are
   // just way too complicated to get right.
-  field1.setHtml(false,
-      '<ol><li>hi!<span id="field1cursor"></span></li></ol>');
+  field1.setHtml(false, '<ol><li>hi!<span id="field1cursor"></span></li></ol>');
   if (goog.userAgent.OPERA) {
     // Opera doesn't actually place the selection in the empty span
     // unless we add a text node first.
@@ -348,8 +358,8 @@ function testEnterAtEndOfBlockInWebkit() {
   setUpFields(true);
 
   if (goog.userAgent.WEBKIT) {
-    field1.setHtml(false,
-        '<blockquote>hi!<span id="field1cursor"></span></blockquote>');
+    field1.setHtml(
+        false, '<blockquote>hi!<span id="field1cursor"></span></blockquote>');
 
     var cursor = field1.getEditableDomHelper().getElement('field1cursor');
     goog.editor.range.placeCursorNextTo(cursor, false);
@@ -363,9 +373,10 @@ function testEnterAtEndOfBlockInWebkit() {
 
     // Make sure that the block now has two brs.
     var elem = field1.getElement();
-    assertEquals('should have inserted two br tags: ' + elem.innerHTML,
-        2, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.BR,
-                                                 null, elem).length);
+    assertEquals(
+        'should have inserted two br tags: ' + elem.innerHTML, 2,
+        goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.BR, null, elem)
+            .length);
   }
 }
 
@@ -385,107 +396,113 @@ function testDeleteBrBeforeBlock() {
   if (goog.userAgent.GECKO) {
     field1.setHtml(false, 'one<br><br><div>two</div>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    helper.select(field1.getElement(), 2); // Between the two BR's.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted exactly one <br>',
-                 'one<br><div>two</div>',
-                 field1.getElement().innerHTML);
+    helper.select(field1.getElement(), 2);  // Between the two BR's.
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted exactly one <br>', 'one<br><div>two</div>',
+        field1.getElement().innerHTML);
 
     // We test the case where the BR has a previous sibling which is not
     // a block level element.
     field1.setHtml(false, 'one<br><ul><li>two</li></ul>');
-    helper.select(field1.getElement(), 1); // Between one and BR.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted the <br>',
-                 'one<ul><li>two</li></ul>',
-                 field1.getElement().innerHTML);
+    helper.select(field1.getElement(), 1);  // Between one and BR.
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted the <br>', 'one<ul><li>two</li></ul>',
+        field1.getElement().innerHTML);
     // Verify that the cursor is placed at the end of the text node "one".
     var range = field1.getRange();
     var focusNode = range.getFocusNode();
     assertTrue('The selected range should be collapsed', range.isCollapsed());
-    assertTrue('The focus node should be the text node "one"',
-               focusNode.nodeType == goog.dom.NodeType.TEXT &&
-               focusNode.data == 'one');
-    assertEquals('The focus offset should be at the end of the text node "one"',
-                 focusNode.length,
-                 range.getFocusOffset());
-    assertTrue('The next sibling of the focus node should be the UL',
-               focusNode.nextSibling &&
-               focusNode.nextSibling.tagName == goog.dom.TagName.UL);
+    assertTrue(
+        'The focus node should be the text node "one"',
+        focusNode.nodeType == goog.dom.NodeType.TEXT &&
+            focusNode.data == 'one');
+    assertEquals(
+        'The focus offset should be at the end of the text node "one"',
+        focusNode.length, range.getFocusOffset());
+    assertTrue(
+        'The next sibling of the focus node should be the UL',
+        focusNode.nextSibling &&
+            focusNode.nextSibling.tagName == goog.dom.TagName.UL);
 
     // We test the case where the previous sibling of the BR is a block
     // level element.
     field1.setHtml(false, '<div>foo</div><br><div><span>bar</span></div>');
-    helper.select(field1.getElement(), 1); // Before the BR.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted the <br>',
-                 '<div>foo</div><div><span>bar</span></div>',
-                 field1.getElement().innerHTML);
+    helper.select(field1.getElement(), 1);  // Before the BR.
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted the <br>',
+        '<div>foo</div><div><span>bar</span></div>',
+        field1.getElement().innerHTML);
     range = field1.getRange();
-    assertEquals('The selected range should be contained within the <span>',
-                 goog.dom.TagName.SPAN,
-                 range.getContainerElement().tagName);
+    assertEquals(
+        'The selected range should be contained within the <span>',
+        goog.dom.TagName.SPAN, range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     // Verify that the cursor is placed inside the span at the beginning of bar.
     focusNode = range.getFocusNode();
-    assertTrue('The focus node should be the text node "bar"',
-               focusNode.nodeType == goog.dom.NodeType.TEXT &&
-               focusNode.data == 'bar');
-    assertEquals('The focus offset should be at the beginning ' +
-                 'of the text node "bar"',
-                 0,
-                 range.getFocusOffset());
+    assertTrue(
+        'The focus node should be the text node "bar"',
+        focusNode.nodeType == goog.dom.NodeType.TEXT &&
+            focusNode.data == 'bar');
+    assertEquals(
+        'The focus offset should be at the beginning ' +
+            'of the text node "bar"',
+        0, range.getFocusOffset());
 
     // We test the case where the BR does not have a previous sibling.
     field1.setHtml(false, '<br><ul><li>one</li></ul>');
-    helper.select(field1.getElement(), 0); // Before the BR.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted the <br>',
-                 '<ul><li>one</li></ul>',
-                 field1.getElement().innerHTML);
+    helper.select(field1.getElement(), 0);  // Before the BR.
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted the <br>', '<ul><li>one</li></ul>',
+        field1.getElement().innerHTML);
     range = field1.getRange();
     // Verify that the cursor is placed inside the LI at the text node "one".
-    assertEquals('The selected range should be contained within the <li>',
-                 goog.dom.TagName.LI,
-                 range.getContainerElement().tagName);
+    assertEquals(
+        'The selected range should be contained within the <li>',
+        goog.dom.TagName.LI, range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     focusNode = range.getFocusNode();
-    assertTrue('The focus node should be the text node "one"',
-               (focusNode.nodeType == goog.dom.NodeType.TEXT &&
-                focusNode.data == 'one'));
-    assertEquals('The focus offset should be at the beginning of ' +
-                 'the text node "one"',
-                 0,
-                 range.getFocusOffset());
+    assertTrue(
+        'The focus node should be the text node "one"',
+        (focusNode.nodeType == goog.dom.NodeType.TEXT &&
+         focusNode.data == 'one'));
+    assertEquals(
+        'The focus offset should be at the beginning of ' +
+            'the text node "one"',
+        0, range.getFocusOffset());
 
     // Testing deleting a BR followed by a block level element and preceded
     // by a BR.
     field1.setHtml(false, '<br><br><ul><li>one</li></ul>');
-    helper.select(field1.getElement(), 1); // Between the BR's.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted the <br>',
-                 '<br><ul><li>one</li></ul>',
-                 field1.getElement().innerHTML);
+    helper.select(field1.getElement(), 1);  // Between the BR's.
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted the <br>', '<br><ul><li>one</li></ul>',
+        field1.getElement().innerHTML);
     // Verify that the cursor is placed inside the LI at the text node "one".
     range = field1.getRange();
-    assertEquals('The selected range should be contained within the <li>',
-                 goog.dom.TagName.LI,
-                 range.getContainerElement().tagName);
+    assertEquals(
+        'The selected range should be contained within the <li>',
+        goog.dom.TagName.LI, range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     focusNode = range.getFocusNode();
-    assertTrue('The focus node should be the text node "one"',
-               (focusNode.nodeType == goog.dom.NodeType.TEXT &&
-                focusNode.data == 'one'));
-    assertEquals('The focus offset should be at the beginning of ' +
-                 'the text node "one"',
-                 0,
-                 range.getFocusOffset());
-  } // End if GECKO
+    assertTrue(
+        'The focus node should be the text node "one"',
+        (focusNode.nodeType == goog.dom.NodeType.TEXT &&
+         focusNode.data == 'one'));
+    assertEquals(
+        'The focus offset should be at the beginning of ' +
+            'the text node "one"',
+        0, range.getFocusOffset());
+  }  // End if GECKO
 }
 
 
@@ -497,35 +514,37 @@ function testDeleteBeforeBlockquote() {
   setUpFields(true);
 
   if (goog.userAgent.GECKO) {
-    field1.setHtml(false,
-                   '<br><br><div><br><blockquote>foo</blockquote></div>');
+    field1.setHtml(
+        false, '<br><br><div><br><blockquote>foo</blockquote></div>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    helper.select(field1.getElement(), 0); // Before the first BR.
+    helper.select(field1.getElement(), 0);  // Before the first BR.
     // Fire three deletes in quick succession.
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted all the <br>\'s and the blockquote ' +
-                 'isn\'t affected',
-                 '<div><blockquote>foo</blockquote></div>',
-                 field1.getElement().innerHTML);
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted all the <br>\'s and the blockquote ' +
+            'isn\'t affected',
+        '<div><blockquote>foo</blockquote></div>',
+        field1.getElement().innerHTML);
     var range = field1.getRange();
-    assertEquals('The selected range should be contained within the ' +
-                 '<blockquote>',
-                 goog.dom.TagName.BLOCKQUOTE,
-                 range.getContainerElement().tagName);
+    assertEquals(
+        'The selected range should be contained within the ' +
+            '<blockquote>',
+        goog.dom.TagName.BLOCKQUOTE, range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     var focusNode = range.getFocusNode();
-    assertTrue('The focus node should be the text node "foo"',
-               (focusNode.nodeType == goog.dom.NodeType.TEXT &&
-                focusNode.data == 'foo'));
-    assertEquals('The focus offset should be at the ' +
-                 'beginning of the text node "foo"',
-                 0,
-                 range.getFocusOffset());
+    assertTrue(
+        'The focus node should be the text node "foo"',
+        (focusNode.nodeType == goog.dom.NodeType.TEXT &&
+         focusNode.data == 'foo'));
+    assertEquals(
+        'The focus offset should be at the ' +
+            'beginning of the text node "foo"',
+        0, range.getFocusOffset());
   }
 }
 
@@ -543,18 +562,18 @@ function testDeleteBrNormal() {
   // and let the browser do the delete, which can only be tested with a robot
   // test (see javascript/apps/editor/tests/delete_br_robot.html).
   if (goog.userAgent.GECKO) {
-
     field1.setHtml(false, 'one<br><br><br>two');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    helper.select(field1.getElement(), 2); // Between the first and second BR's.
+    helper.select(
+        field1.getElement(), 2);  // Between the first and second BR's.
     field1.getElement().focus();
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.DELETE);
-    assertEquals('Should have deleted exactly one <br>',
-                 'one<br><br>two',
-                 field1.getElement().innerHTML);
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.DELETE);
+    assertEquals(
+        'Should have deleted exactly one <br>', 'one<br><br>two',
+        field1.getElement().innerHTML);
 
-  } // End if GECKO
+  }  // End if GECKO
 }
 
 
@@ -569,10 +588,11 @@ function testCollapsedSelectionKeepsBrOpera() {
   if (goog.userAgent.OPERA) {
     field1.setHtml(false, '<div><br id="pleasedontdeleteme"></div>');
     field1.focus();
-    goog.testing.events.fireKeySequence(field1.getElement(),
-                                        goog.events.KeyCodes.ENTER);
-    assertNotNull('The <br> must not have been deleted',
-                  goog.dom.getElement('pleasedontdeleteme'));
+    goog.testing.events.fireKeySequence(
+        field1.getElement(), goog.events.KeyCodes.ENTER);
+    assertNotNull(
+        'The <br> must not have been deleted',
+        goog.dom.getElement('pleasedontdeleteme'));
   }
 }
 
@@ -600,16 +620,16 @@ function selectNodeAndHitEnter(field, id) {
 function makeField(id, classnameRequiredToSplitBlockquote) {
   var field = new goog.editor.Field(id);
   field.registerPlugin(new goog.editor.plugins.EnterHandler());
-  field.registerPlugin(new goog.editor.plugins.Blockquote(
-      classnameRequiredToSplitBlockquote));
+  field.registerPlugin(
+      new goog.editor.plugins.Blockquote(classnameRequiredToSplitBlockquote));
 
-  goog.events.listen(field, goog.editor.Field.EventType.BEFORECHANGE,
-      function() {
+  goog.events.listen(
+      field, goog.editor.Field.EventType.BEFORECHANGE, function() {
         // set the global flag that beforechange was fired.
         firedBeforeChange = true;
       });
-  goog.events.listen(field, goog.editor.Field.EventType.DELAYEDCHANGE,
-      function() {
+  goog.events.listen(
+      field, goog.editor.Field.EventType.DELAYEDCHANGE, function() {
         // set the global flag that delayed change was fired.
         firedDelayedChange = true;
       });
@@ -640,7 +660,8 @@ function assertChangeFlags() {
  * Wait for delayedchange to propagate.
  */
 function waitForChangeEvents() {
-  clock.tick(goog.editor.Field.DELAYED_CHANGE_FREQUENCY +
+  clock.tick(
+      goog.editor.Field.DELAYED_CHANGE_FREQUENCY +
       goog.editor.Field.CHANGE_FREQUENCY);
 }
 
@@ -648,7 +669,9 @@ function getNbsp() {
   // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
   // innerHTML under some circumstances.
   return (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) ||
-         goog.userAgent.OPERA ? '\u00a0' : '&nbsp;';
+          goog.userAgent.OPERA ?
+      '\u00a0' :
+      '&nbsp;';
 }
 
 
@@ -664,9 +687,9 @@ function testPrepareContent() {
  * Assert that the prepared contents matches the expected.
  */
 function assertPreparedContents(expected, original) {
-  assertEquals(expected,
-      field1.reduceOp_(
-          goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML, original));
+  assertEquals(
+      expected,
+      field1.reduceOp_(goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML, original));
 }
 
 // UTILITY FUNCTION TESTS.
@@ -674,8 +697,8 @@ function assertPreparedContents(expected, original) {
 function testDeleteW3CSimple() {
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     container.innerHTML = '<div>abcd</div>';
-    var range = goog.dom.Range.createFromNodes(container.firstChild.firstChild,
-        1, container.firstChild.firstChild, 3);
+    var range = goog.dom.Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.firstChild.firstChild, 3);
     range.select();
     goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
 
@@ -686,8 +709,8 @@ function testDeleteW3CSimple() {
 function testDeleteW3CAll() {
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     container.innerHTML = '<div>abcd</div>';
-    var range = goog.dom.Range.createFromNodes(container.firstChild.firstChild,
-        0, container.firstChild.firstChild, 4);
+    var range = goog.dom.Range.createFromNodes(
+        container.firstChild.firstChild, 0, container.firstChild.firstChild, 4);
     range.select();
     goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
 
@@ -698,8 +721,8 @@ function testDeleteW3CAll() {
 function testDeleteW3CPartialEnd() {
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     container.innerHTML = '<div>ab</div><div>cd</div>';
-    var range = goog.dom.Range.createFromNodes(container.firstChild.firstChild,
-        1, container.lastChild.firstChild, 1);
+    var range = goog.dom.Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.lastChild.firstChild, 1);
     range.select();
     goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
 
@@ -710,8 +733,8 @@ function testDeleteW3CPartialEnd() {
 function testDeleteW3CNonPartialEnd() {
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     container.innerHTML = '<div>ab</div><div>cd</div>';
-    var range = goog.dom.Range.createFromNodes(container.firstChild.firstChild,
-        1, container.lastChild.firstChild, 2);
+    var range = goog.dom.Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.lastChild.firstChild, 2);
     range.select();
     goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
 
@@ -725,7 +748,8 @@ function testIsInOneContainer() {
     var div = container.firstChild;
     var range = goog.dom.Range.createFromNodes(div, 0, div, 1);
     range.select();
-    assertTrue('Selection must be recognized as being in one container',
+    assertTrue(
+        'Selection must be recognized as being in one container',
         goog.editor.plugins.EnterHandler.isInOneContainerW3c_(range));
   }
 }

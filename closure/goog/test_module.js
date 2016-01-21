@@ -28,4 +28,3 @@ var dep = goog.require('goog.test_module_dep');
 
 /** @constructor */
 exports = function() {};
-

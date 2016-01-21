@@ -19,7 +19,7 @@ goog.require('goog.testing.jsunit');
 
 function testSuper() {
   /** @constructor */
-  function SomeSuper() {};
+  function SomeSuper(){};
 
   var SomeClass = goog.defineClass(SomeSuper, {
     /** @constructor */
@@ -33,8 +33,7 @@ function testSuper() {
 function testPrototypeProp() {
   var SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() {
-    },
+    constructor: function() {},
     trueMethod: function() { return true; }
   });
 
@@ -45,9 +44,7 @@ function testPrototypeProp() {
 function testInstanceProp() {
   var SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() {
-      this.falseProp = false;
-    }
+    constructor: function() { this.falseProp = false; }
   });
 
   assertEquals(new SomeClass().falseProp, false);
@@ -56,11 +53,8 @@ function testInstanceProp() {
 function testPrototypeProp() {
   var SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() {
-    },
-    trueMethod: function() {
-      return true;
-    }
+    constructor: function() {},
+    trueMethod: function() { return true; }
   });
 
   assertEquals(new SomeClass().trueMethod(), true);
@@ -70,11 +64,8 @@ function testPrototypeProp() {
 function testStaticProp() {
   var SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() {
-    },
-    statics: {
-      someProp: 100
-    }
+    constructor: function() {},
+    statics: {someProp: 100}
   });
 
   assertEquals(new SomeClass().statics, undefined);
@@ -85,11 +76,8 @@ function testStaticProp() {
 function testStaticPropFn() {
   var SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() {
-    },
-    statics: function(cls) {
-      cls.someProp = 100;
-    }
+    constructor: function() {},
+    statics: function(cls) { cls.someProp = 100; }
   });
 
   assertEquals(new SomeClass().statics, undefined);
@@ -98,9 +86,7 @@ function testStaticPropFn() {
 }
 
 function testUid() {
-  var SomeClass = goog.defineClass(null, {
-    constructor: function() {}
-  });
+  var SomeClass = goog.defineClass(null, {constructor: function() {}});
 
   var obj1 = new SomeClass();
   var obj2 = new SomeClass();

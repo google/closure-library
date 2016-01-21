@@ -51,9 +51,7 @@ goog.dom.animationFrame.polyfill.install = function() {
       };
 
       if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
-          clearTimeout(id);
-        };
+        window.cancelAnimationFrame = function(id) { clearTimeout(id); };
       }
     }
   }

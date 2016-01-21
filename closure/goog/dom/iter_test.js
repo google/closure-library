@@ -33,8 +33,7 @@ function setUpPage() {
 
 function testNextSibling() {
   goog.testing.dom.assertNodesMatch(
-      new goog.dom.iter.SiblingIterator(test.firstChild),
-      ['#br', 'def']);
+      new goog.dom.iter.SiblingIterator(test.firstChild), ['#br', 'def']);
 }
 
 function testNextSiblingInclusive() {
@@ -57,20 +56,17 @@ function testPreviousSiblingInclusive() {
 
 function testChildIterator() {
   goog.testing.dom.assertNodesMatch(
-      new goog.dom.iter.ChildIterator(test),
-      ['abc', '#br', 'def']);
+      new goog.dom.iter.ChildIterator(test), ['abc', '#br', 'def']);
 }
 
 function testChildIteratorIndex() {
   goog.testing.dom.assertNodesMatch(
-      new goog.dom.iter.ChildIterator(test, false, 1),
-      ['#br', 'def']);
+      new goog.dom.iter.ChildIterator(test, false, 1), ['#br', 'def']);
 }
 
 function testChildIteratorReverse() {
   goog.testing.dom.assertNodesMatch(
-      new goog.dom.iter.ChildIterator(test, true),
-      ['def', '#br', 'abc']);
+      new goog.dom.iter.ChildIterator(test, true), ['def', '#br', 'abc']);
 }
 
 function testEmptyChildIteratorReverse() {
@@ -80,8 +76,7 @@ function testEmptyChildIteratorReverse() {
 
 function testChildIteratorIndexReverse() {
   goog.testing.dom.assertNodesMatch(
-      new goog.dom.iter.ChildIterator(test, true, 1),
-      ['#br', 'abc']);
+      new goog.dom.iter.ChildIterator(test, true, 1), ['#br', 'abc']);
 }
 
 function testAncestorIterator() {

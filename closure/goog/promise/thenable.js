@@ -69,8 +69,8 @@ goog.Thenable = function() {};
  *  =:
  *
  */
-goog.Thenable.prototype.then = function(opt_onFulfilled, opt_onRejected,
-    opt_context) {};
+goog.Thenable.prototype.then = function(
+    opt_onFulfilled, opt_onRejected, opt_context) {};
 
 
 /**

@@ -214,8 +214,7 @@ goog.vec.Quaternion.scale = goog.vec.Vec4.scale;
  * @param {!goog.vec.Quaternion.AnyType} quat0 The quaternion.
  * @return {number} The magnitude of the quaternion.
  */
-goog.vec.Quaternion.magnitudeSquared =
-    goog.vec.Vec4.magnitudeSquared;
+goog.vec.Quaternion.magnitudeSquared = goog.vec.Vec4.magnitudeSquared;
 
 
 /**
@@ -224,8 +223,7 @@ goog.vec.Quaternion.magnitudeSquared =
  * @param {!goog.vec.Quaternion.AnyType} quat0 The quaternion.
  * @return {number} The magnitude of the quaternion.
  */
-goog.vec.Quaternion.magnitude =
-    goog.vec.Vec4.magnitude;
+goog.vec.Quaternion.magnitude = goog.vec.Vec4.magnitude;
 
 
 /**
@@ -415,25 +413,22 @@ goog.vec.Quaternion.fromRotationMatrix3 = function(matrix, quat) {
 
   if (fTrace > 0.0) {
     // |w| > 1/2, may as well choose w > 1/2
-    fRoot = Math.sqrt(fTrace + 1.0); // 2w
+    fRoot = Math.sqrt(fTrace + 1.0);  // 2w
     quat[3] = 0.5 * fRoot;
-    fRoot = 0.5 / fRoot; // 1 / (4w)
+    fRoot = 0.5 / fRoot;  // 1 / (4w)
     quat[0] = (matrix[5] - matrix[7]) * fRoot;
     quat[1] = (matrix[6] - matrix[2]) * fRoot;
     quat[2] = (matrix[1] - matrix[3]) * fRoot;
   } else {
     // |w| <= 1/2
     var i = 0;
-    if (matrix[4] > matrix[0])
-      i = 1;
-    if (matrix[8] > matrix[i * 3 + i])
-      i = 2;
+    if (matrix[4] > matrix[0]) i = 1;
+    if (matrix[8] > matrix[i * 3 + i]) i = 2;
     var j = (i + 1) % 3;
     var k = (i + 2) % 3;
 
-    fRoot = Math.sqrt(matrix[i * 3 + i] -
-                      matrix[j * 3 + j] -
-                      matrix[k * 3 + k] + 1.0);
+    fRoot = Math.sqrt(
+        matrix[i * 3 + i] - matrix[j * 3 + j] - matrix[k * 3 + k] + 1.0);
     quat[i] = 0.5 * fRoot;
     fRoot = 0.5 / fRoot;
     quat[3] = (matrix[j * 3 + k] - matrix[k * 3 + j]) * fRoot;
@@ -471,25 +466,22 @@ goog.vec.Quaternion.fromRotationMatrix4 = function(matrix, quat) {
 
   if (fTrace > 0.0) {
     // |w| > 1/2, may as well choose w > 1/2
-    fRoot = Math.sqrt(fTrace + 1.0); // 2w
+    fRoot = Math.sqrt(fTrace + 1.0);  // 2w
     quat[3] = 0.5 * fRoot;
-    fRoot = 0.5 / fRoot; // 1 / (4w)
+    fRoot = 0.5 / fRoot;  // 1 / (4w)
     quat[0] = (matrix[6] - matrix[9]) * fRoot;
     quat[1] = (matrix[8] - matrix[2]) * fRoot;
     quat[2] = (matrix[1] - matrix[4]) * fRoot;
   } else {
     // |w| <= 1/2
     var i = 0;
-    if (matrix[8] > matrix[0])
-      i = 1;
-    if (matrix[10] > matrix[i * 4 + i])
-      i = 2;
+    if (matrix[8] > matrix[0]) i = 1;
+    if (matrix[10] > matrix[i * 4 + i]) i = 2;
     var j = (i + 1) % 3;
     var k = (i + 2) % 3;
 
-    fRoot = Math.sqrt(matrix[i * 4 + i] -
-                      matrix[j * 4 + j] -
-                      matrix[k * 4 + k] + 1.0);
+    fRoot = Math.sqrt(
+        matrix[i * 4 + i] - matrix[j * 4 + j] - matrix[k * 4 + k] + 1.0);
     quat[i] = 0.5 * fRoot;
     fRoot = 0.5 / fRoot;
     quat[3] = (matrix[j * 4 + k] - matrix[k * 4 + j]) * fRoot;

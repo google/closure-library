@@ -68,21 +68,22 @@ function testFindNode() {
 function testFindNodeDuplicate() {
   // Test duplicate.
   root.innerHTML = 'c<br>c';
-  assertEquals('Should return first duplicate', helper.findTextNode('c'),
-               root.firstChild);
+  assertEquals(
+      'Should return first duplicate', helper.findTextNode('c'),
+      root.firstChild);
 }
 
 function findNodeWithHierarchy() {
   // Test a more complicated hierarchy.
   root.innerHTML = '<div>a<p>b<span>c</span>d</p>e</div>';
-  assertEquals(goog.dom.TagName.DIV,
-               helper.findTextNode('a').parentNode.tagName);
+  assertEquals(
+      goog.dom.TagName.DIV, helper.findTextNode('a').parentNode.tagName);
   assertEquals(goog.dom.TagName.P, helper.findTextNode('b').parentNode.tagName);
-  assertEquals(goog.dom.TagName.SPAN,
-               helper.findTextNode('c').parentNode.tagName);
+  assertEquals(
+      goog.dom.TagName.SPAN, helper.findTextNode('c').parentNode.tagName);
   assertEquals(goog.dom.TagName.P, helper.findTextNode('d').parentNode.tagName);
-  assertEquals(goog.dom.TagName.DIV,
-               helper.findTextNode('e').parentNode.tagName);
+  assertEquals(
+      goog.dom.TagName.DIV, helper.findTextNode('e').parentNode.tagName);
 }
 
 function setUpAssertHtmlMatches() {

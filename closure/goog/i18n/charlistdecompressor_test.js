@@ -53,6 +53,6 @@ function testAddCharsForType2() {
 }
 
 function testToCharList() {
-  var list = decompressor.toCharList('%812E<E'); // a, x-z, p-r
+  var list = decompressor.toCharList('%812E<E');  // a, x-z, p-r
   assertArrayEquals(['a', 'x', 'y', 'z', 'p', 'q', 'r'], list);
 }

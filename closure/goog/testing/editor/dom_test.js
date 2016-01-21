@@ -41,11 +41,8 @@ function setUpNonEmptyTests() {
   childNode1 = goog.dom.createElement(goog.dom.TagName.DIV);
   childNode2 = goog.dom.createElement(goog.dom.TagName.DIV);
   childNode3 = goog.dom.createElement(goog.dom.TagName.DIV);
-  parentNode = goog.dom.createDom(goog.dom.TagName.DIV,
-      null,
-      childNode1,
-      childNode2,
-      childNode3);
+  parentNode = goog.dom.createDom(
+      goog.dom.TagName.DIV, null, childNode1, childNode2, childNode3);
   goog.dom.appendChild(root, parentNode);
 
   childNode1.appendChild(goog.dom.createTextNode('One'));
@@ -63,26 +60,22 @@ function setUpNonEmptyTests() {
 function testGetNextNonEmptyTextNode() {
   setUpNonEmptyTests();
 
-  var nodeOne =
-      goog.testing.editor.dom.getNextNonEmptyTextNode(parentNode);
-  assertEquals('Should have found the next non-empty text node',
-               'One',
-               nodeOne.nodeValue);
-  var nodeTwoA =
-      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeOne);
-  assertEquals('Should have found the next non-empty text node',
-               'TwoA',
-               nodeTwoA.nodeValue);
-  var nodeTwoB =
-      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoA);
-  assertEquals('Should have found the next non-empty text node',
-               'TwoB',
-               nodeTwoB.nodeValue);
-  var nodeThree =
-      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoB);
-  assertEquals('Should have found the next non-empty text node',
-               'Three',
-               nodeThree.nodeValue);
+  var nodeOne = goog.testing.editor.dom.getNextNonEmptyTextNode(parentNode);
+  assertEquals(
+      'Should have found the next non-empty text node', 'One',
+      nodeOne.nodeValue);
+  var nodeTwoA = goog.testing.editor.dom.getNextNonEmptyTextNode(nodeOne);
+  assertEquals(
+      'Should have found the next non-empty text node', 'TwoA',
+      nodeTwoA.nodeValue);
+  var nodeTwoB = goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoA);
+  assertEquals(
+      'Should have found the next non-empty text node', 'TwoB',
+      nodeTwoB.nodeValue);
+  var nodeThree = goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoB);
+  assertEquals(
+      'Should have found the next non-empty text node', 'Three',
+      nodeThree.nodeValue);
   var nodeNull =
       goog.testing.editor.dom.getNextNonEmptyTextNode(nodeThree, parentNode);
   assertNull('Should not have found any non-empty text node', nodeNull);
@@ -93,9 +86,9 @@ function testGetNextNonEmptyTextNode() {
 
   var nodeBeforeStop =
       goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoA, childNode2);
-  assertEquals('Should have found the next non-empty text node',
-               'TwoB',
-               nodeBeforeStop.nodeValue);
+  assertEquals(
+      'Should have found the next non-empty text node', 'TwoB',
+      nodeBeforeStop.nodeValue);
 }
 
 function testGetPreviousNonEmptyTextNode() {
@@ -103,40 +96,34 @@ function testGetPreviousNonEmptyTextNode() {
 
   var nodeThree =
       goog.testing.editor.dom.getPreviousNonEmptyTextNode(parentNode);
-  assertEquals('Should have found the previous non-empty text node',
-               'Three',
-               nodeThree.nodeValue);
-  var nodeTwoB =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeThree);
-  assertEquals('Should have found the previous non-empty text node',
-               'TwoB',
-               nodeTwoB.nodeValue);
-  var nodeTwoA =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB);
-  assertEquals('Should have found the previous non-empty text node',
-               'TwoA',
-               nodeTwoA.nodeValue);
-  var nodeOne =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoA);
-  assertEquals('Should have found the previous non-empty text node',
-               'One',
-               nodeOne.nodeValue);
+  assertEquals(
+      'Should have found the previous non-empty text node', 'Three',
+      nodeThree.nodeValue);
+  var nodeTwoB = goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeThree);
+  assertEquals(
+      'Should have found the previous non-empty text node', 'TwoB',
+      nodeTwoB.nodeValue);
+  var nodeTwoA = goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB);
+  assertEquals(
+      'Should have found the previous non-empty text node', 'TwoA',
+      nodeTwoA.nodeValue);
+  var nodeOne = goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoA);
+  assertEquals(
+      'Should have found the previous non-empty text node', 'One',
+      nodeOne.nodeValue);
   var nodeNull =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeOne,
-                                                          parentNode);
+      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeOne, parentNode);
   assertNull('Should not have found any non-empty text node', nodeNull);
 
-  var nodeStop =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeThree,
-                                                          childNode3);
+  var nodeStop = goog.testing.editor.dom.getPreviousNonEmptyTextNode(
+      nodeThree, childNode3);
   assertNull('Should have stopped before finding a node', nodeStop);
 
   var nodeBeforeStop =
-      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB,
-                                                          childNode2);
-  assertEquals('Should have found the previous non-empty text node',
-               'TwoA',
-               nodeBeforeStop.nodeValue);
+      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB, childNode2);
+  assertEquals(
+      'Should have found the previous non-empty text node', 'TwoA',
+      nodeBeforeStop.nodeValue);
 }
 
 
@@ -167,128 +154,128 @@ function createFakeRange(startNode, startOffset, opt_endNode, opt_endOffset) {
 
 function testAssertRangeBetweenText0() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('0', '1',
-      createFakeRange(first.firstChild, 1));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '0', '1', createFakeRange(first.firstChild, 1));
 }
 
 function testAssertRangeBetweenText1() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(first.firstChild, 2));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(first.firstChild, 2));
 }
 
 function testAssertRangeBetweenText2() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(first, 1));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(first, 1));
 }
 
 function testAssertRangeBetweenText3() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(root, 1));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(root, 1));
 }
 
 function testAssertRangeBetweenText4() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(middle, 0));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(middle, 0));
 }
 
 function testAssertRangeBetweenText5() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(middle.firstChild, 0));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(middle.firstChild, 0));
 }
 
 function testAssertRangeBetweenText6() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(middle, 1));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(middle, 1));
 }
 
 function testAssertRangeBetweenText7() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(root, 2));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(root, 2));
 }
 
 function testAssertRangeBetweenText8() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(last, 0));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(last, 0));
 }
 
 function testAssertRangeBetweenText9() {
   setUpAssertRangeBetweenText();
-  goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-      createFakeRange(last.firstChild, 0));
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '1', '2', createFakeRange(last.firstChild, 0));
 }
 
 
 function testAssertRangeBetweenTextBefore() {
   setUpAssertRangeBetweenText();
   // Test that it works when the cursor is at the beginning of all text.
-  goog.testing.editor.dom.assertRangeBetweenText('', '0',
-      createFakeRange(first.firstChild, 0),
-      root); // Restrict to root div so it won't find /n's and script.
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '', '0', createFakeRange(first.firstChild, 0),
+      root);  // Restrict to root div so it won't find /n's and script.
 }
 
 function testAssertRangeBetweenTextAfter() {
   setUpAssertRangeBetweenText();
   // Test that it works when the cursor is at the end of all text.
-  goog.testing.editor.dom.assertRangeBetweenText('3', '',
-      createFakeRange(last.firstChild, 2),
-      root); // Restrict to root div so it won't find /n's and script.
+  goog.testing.editor.dom.assertRangeBetweenText(
+      '3', '', createFakeRange(last.firstChild, 2),
+      root);  // Restrict to root div so it won't find /n's and script.
 }
 
 
 function testAssertRangeBetweenTextFail1() {
   setUpAssertRangeBetweenText();
-  var e = assertThrows('assertRangeBetweenText should have failed',
-      function() {
-        goog.testing.editor.dom.assertRangeBetweenText('1', '3',
-            createFakeRange(first.firstChild, 2));
-      });
-  assertContains('Assert reason incorrect',
-      'Expected <3> after range but found <23>', e.message);
+  var e = assertThrows('assertRangeBetweenText should have failed', function() {
+    goog.testing.editor.dom.assertRangeBetweenText(
+        '1', '3', createFakeRange(first.firstChild, 2));
+  });
+  assertContains(
+      'Assert reason incorrect', 'Expected <3> after range but found <23>',
+      e.message);
 }
 
 function testAssertRangeBetweenTextFail2() {
   setUpAssertRangeBetweenText();
-  var e = assertThrows('assertRangeBetweenText should have failed',
-      function() {
-        goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-            createFakeRange(first.firstChild, 2, last.firstChild, 1));
-      });
-  assertContains('Assert reason incorrect',
-      'Expected <2> after range but found <3>', e.message);
+  var e = assertThrows('assertRangeBetweenText should have failed', function() {
+    goog.testing.editor.dom.assertRangeBetweenText(
+        '1', '2', createFakeRange(first.firstChild, 2, last.firstChild, 1));
+  });
+  assertContains(
+      'Assert reason incorrect', 'Expected <2> after range but found <3>',
+      e.message);
 }
 
 function testAssertRangeBetweenTextBeforeFail() {
   setUpAssertRangeBetweenText();
   // Test that it gives the right message when the cursor is at the beginning
   // of all text but you're expecting something before it.
-  var e = assertThrows('assertRangeBetweenText should have failed',
-      function() {
-        goog.testing.editor.dom.assertRangeBetweenText('-1', '0',
-            createFakeRange(first.firstChild, 0),
-            root); // Restrict to root div so it won't find /n's and script.
-      });
-  assertContains('Assert reason incorrect',
-      'Expected <-1> before range but found nothing', e.message);
+  var e = assertThrows('assertRangeBetweenText should have failed', function() {
+    goog.testing.editor.dom.assertRangeBetweenText(
+        '-1', '0', createFakeRange(first.firstChild, 0),
+        root);  // Restrict to root div so it won't find /n's and script.
+  });
+  assertContains(
+      'Assert reason incorrect', 'Expected <-1> before range but found nothing',
+      e.message);
 }
 
 function testAssertRangeBetweenTextAfterFail() {
   setUpAssertRangeBetweenText();
   // Test that it gives the right message when the cursor is at the end
   // of all text but you're expecting something after it.
-  var e = assertThrows('assertRangeBetweenText should have failed',
-      function() {
-        goog.testing.editor.dom.assertRangeBetweenText('3', '4',
-            createFakeRange(last.firstChild, 2),
-            root); // Restrict to root div so it won't find /n's and script.
-      });
-  assertContains('Assert reason incorrect',
-      'Expected <4> after range but found nothing', e.message);
+  var e = assertThrows('assertRangeBetweenText should have failed', function() {
+    goog.testing.editor.dom.assertRangeBetweenText(
+        '3', '4', createFakeRange(last.firstChild, 2),
+        root);  // Restrict to root div so it won't find /n's and script.
+  });
+  assertContains(
+      'Assert reason incorrect', 'Expected <4> after range but found nothing',
+      e.message);
 }

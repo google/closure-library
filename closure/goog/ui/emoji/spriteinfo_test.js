@@ -26,20 +26,20 @@ function testGetCssValues() {
 }
 
 function testIncompletelySpecifiedSpriteInfoFails() {
-  assertThrows('CSS class can\'t be null if the rest of the metadata ' +
-               'isn\'t specified', function() {
-        new goog.ui.emoji.SpriteInfo(null)});
+  assertThrows(
+      'CSS class can\'t be null if the rest of the metadata ' +
+          'isn\'t specified',
+      function() { new goog.ui.emoji.SpriteInfo(null) });
 
-  assertThrows('Can\'t create an incompletely specified sprite info',
-      function() {
-        new goog.ui.emoji.SpriteInfo(null, 's.png', 10);
-      });
+  assertThrows(
+      'Can\'t create an incompletely specified sprite info',
+      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10); });
 
-  assertThrows('Can\'t create an incompletely specified sprite info',
-      function() {
-        new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10);
-      });
+  assertThrows(
+      'Can\'t create an incompletely specified sprite info',
+      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10); });
 
-  assertThrows('Can\'t create an incompletely specified sprite info',
-      function() {new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10, 0);});
+  assertThrows(
+      'Can\'t create an incompletely specified sprite info',
+      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10, 0); });
 }

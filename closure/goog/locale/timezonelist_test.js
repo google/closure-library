@@ -24,12 +24,8 @@ function setUpPage() {
   // Test data files are in in http://go/js_locale_data
 
   // Test data from TimeZoneSelectedIds__FR.js
-  var TimeZoneSelectedIds__FR = [
-    'Etc/GMT+12',
-    'Pacific/Midway',
-    'America/Adak',
-    'Pacific/Honolulu'
-  ];
+  var TimeZoneSelectedIds__FR =
+      ['Etc/GMT+12', 'Pacific/Midway', 'America/Adak', 'Pacific/Honolulu'];
   goog.locale.registerTimeZoneSelectedIds(TimeZoneSelectedIds__FR, 'FR');
 
   // Test data from TimeZoneSelectedShortNames__de_DE.js
@@ -59,21 +55,13 @@ function setUpPage() {
       TimeZoneSelectedLongNames__de_DE, 'de_DE');
 
   // Test data from TimeZoneSelectedIds__en.js
-  var TimeZoneSelectedIds__en = [
-    'Etc/GMT+12',
-    'Pacific/Midway',
-    'America/Adak',
-    'Pacific/Honolulu'
-  ];
+  var TimeZoneSelectedIds__en =
+      ['Etc/GMT+12', 'Pacific/Midway', 'America/Adak', 'Pacific/Honolulu'];
   goog.locale.registerTimeZoneSelectedIds(TimeZoneSelectedIds__en, 'en');
 
   // Test data from TimeZoneSelectedIds__DE.js
-  var TimeZoneSelectedIds__DE = [
-    'Etc/GMT+12',
-    'Pacific/Midway',
-    'America/Adak',
-    'Pacific/Honolulu'
-  ];
+  var TimeZoneSelectedIds__DE =
+      ['Etc/GMT+12', 'Pacific/Midway', 'America/Adak', 'Pacific/Honolulu'];
   goog.locale.registerTimeZoneSelectedIds(TimeZoneSelectedIds__DE, 'DE');
 
   // Test data from TimeZoneAllLongNames__de_DE.js
@@ -87,8 +75,8 @@ function setUpPage() {
     {id: 'America/Adak', name: 'GMT-10:00 Adak (Vereinigte Staaten)'},
     {id: 'Pacific/Fakaofo', name: 'GMT-10:00 Tokelau'}
   ];
-  goog.locale.registerTimeZoneAllLongNames(TimeZoneAllLongNames__de_DE,
-      'de_DE');
+  goog.locale.registerTimeZoneAllLongNames(
+      TimeZoneAllLongNames__de_DE, 'de_DE');
 
   goog.locale.setLocale('de_DE');
 }

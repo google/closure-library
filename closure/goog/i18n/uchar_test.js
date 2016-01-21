@@ -36,15 +36,24 @@ function testToCharCode() {
 function testcodePointAt() {
   // Basic cases.
   assertEquals(0x006C, goog.i18n.uChar.getCodePointAround('Hello!', 2));
-  assertEquals(0x2708 /* Airplane symbol (non-ASCII) */,
+  assertEquals(
+      0x2708 /* Airplane symbol (non-ASCII) */,
       goog.i18n.uChar.getCodePointAround('Hello\u2708', 5));
 
   // Supplementary characters.
   assertEquals(0x2A6D6, goog.i18n.uChar.getCodePointAround('\uD869\uDED6', 0));
   assertEquals(-0x2A6D6, goog.i18n.uChar.getCodePointAround('\uD869\uDED6', 1));
-  assertEquals(0xD869, goog.i18n.uChar.getCodePointAround('\uD869' + 'w', 0));
-  assertEquals(0xDED6, goog.i18n.uChar.getCodePointAround('\uD869' + 'w' +
-      '\uDED6', 2));
+  assertEquals(
+      0xD869, goog.i18n.uChar.getCodePointAround(
+                  '\uD869' +
+                      'w',
+                  0));
+  assertEquals(
+      0xDED6, goog.i18n.uChar.getCodePointAround(
+                  '\uD869' +
+                      'w' +
+                      '\uDED6',
+                  2));
 }
 
 function testBuildSupplementaryCodePoint() {
@@ -85,8 +94,8 @@ function testFromCharCode_invalidValues() {
   var result = goog.i18n.uChar.fromCharCode(-1);
   assertEquals(null, result);
 
-  result = goog.i18n.uChar.fromCharCode(
-      goog.i18n.uChar.CODE_POINT_MAX_VALUE_ + 1);
+  result =
+      goog.i18n.uChar.fromCharCode(goog.i18n.uChar.CODE_POINT_MAX_VALUE_ + 1);
   assertEquals(null, result);
 
   result = goog.i18n.uChar.fromCharCode(null);

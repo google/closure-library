@@ -114,8 +114,8 @@ goog.demos.SampleComponent.prototype.decorateInternal = function(element) {
   elem.tabIndex = 0;
 
   this.kh_ = new goog.events.KeyHandler(elem);
-  this.getHandler().listen(this.kh_, goog.events.KeyHandler.EventType.KEY,
-      this.onKey_);
+  this.getHandler().listen(
+      this.kh_, goog.events.KeyHandler.EventType.KEY, this.onKey_);
 };
 
 
@@ -134,8 +134,8 @@ goog.demos.SampleComponent.prototype.disposeInternal = function() {
  */
 goog.demos.SampleComponent.prototype.enterDocument = function() {
   goog.demos.SampleComponent.base(this, 'enterDocument');
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
-      this.onDivClicked_);
+  this.getHandler().listen(
+      this.getElement(), goog.events.EventType.CLICK, this.onDivClicked_);
 };
 
 

@@ -39,8 +39,8 @@ goog.require('goog.string');
  *      link will be HTML-escaped.
  * @deprecated Use goog.string.linkify.linkifyPlainTextAsHtml instead.
  */
-goog.string.linkify.linkifyPlainText =
-    function(text, opt_attributes, opt_preserveNewlines) {
+goog.string.linkify.linkifyPlainText = function(
+    text, opt_attributes, opt_preserveNewlines) {
   return goog.html.SafeHtml.unwrap(
       goog.string.linkify.linkifyPlainTextAsHtml(
           text, opt_attributes, opt_preserveNewlines));
@@ -62,15 +62,13 @@ goog.string.linkify.linkifyPlainText =
  * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
  *      link will be HTML-escaped.
  */
-goog.string.linkify.linkifyPlainTextAsHtml =
-    function(text, opt_attributes, opt_preserveNewlines) {
+goog.string.linkify.linkifyPlainTextAsHtml = function(
+    text, opt_attributes, opt_preserveNewlines) {
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
-  if (text.indexOf('@') == -1 &&
-      text.indexOf('://') == -1 &&
-      text.indexOf('www.') == -1 &&
-      text.indexOf('Www.') == -1 &&
+  if (text.indexOf('@') == -1 && text.indexOf('://') == -1 &&
+      text.indexOf('www.') == -1 && text.indexOf('Www.') == -1 &&
       text.indexOf('WWW.') == -1) {
     return opt_preserveNewlines ?
         goog.html.SafeHtml.htmlEscapePreservingNewlines(text) :
@@ -99,9 +97,10 @@ goog.string.linkify.linkifyPlainTextAsHtml =
   text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
-        output.push(opt_preserveNewlines ?
-            goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
-            before);
+        output.push(
+            opt_preserveNewlines ?
+                goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
+                before);
         if (!original) {
           return '';
         }
@@ -135,9 +134,10 @@ goog.string.linkify.linkifyPlainTextAsHtml =
         }
         attributesMap['href'] = href + linkText;
         output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
-        output.push(opt_preserveNewlines ?
-            goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
-            afterLink);
+        output.push(
+            opt_preserveNewlines ?
+                goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
+                afterLink);
         return '';
       });
   return goog.html.SafeHtml.concat(output);
@@ -234,10 +234,9 @@ goog.string.linkify.WWW_START_ = 'www\\.';
  * @const
  * @private
  */
-goog.string.linkify.URL_RE_STRING_ =
-    '(?:' + goog.string.linkify.PROTOCOL_START_ + '|' +
-    goog.string.linkify.WWW_START_ + ')[' +
-    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
+goog.string.linkify.URL_RE_STRING_ = '(?:' +
+    goog.string.linkify.PROTOCOL_START_ + '|' + goog.string.linkify.WWW_START_ +
+    ')[' + goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
 
 
 /**
@@ -246,8 +245,8 @@ goog.string.linkify.URL_RE_STRING_ =
  * @const
  * @private
  */
-goog.string.linkify.URL_RE_ = new RegExp(
-    goog.string.linkify.URL_RE_STRING_, 'i');
+goog.string.linkify.URL_RE_ =
+    new RegExp(goog.string.linkify.URL_RE_STRING_, 'i');
 
 
 /**
@@ -256,8 +255,7 @@ goog.string.linkify.URL_RE_ = new RegExp(
  * @const
  * @private
  */
-goog.string.linkify.TOP_LEVEL_DOMAIN_ =
-    '(?:com|org|net|edu|gov' +
+goog.string.linkify.TOP_LEVEL_DOMAIN_ = '(?:com|org|net|edu|gov' +
     // from http://www.iana.org/gtld/gtld.htm
     '|aero|biz|cat|coop|info|int|jobs|mobi|museum|name|pro|travel' +
     '|arpa|asia|xxx' +
@@ -284,8 +282,8 @@ goog.string.linkify.EMAIL_RE_STRING_ =
  * @const
  * @private
  */
-goog.string.linkify.EMAIL_RE_ = new RegExp(
-    goog.string.linkify.EMAIL_RE_STRING_, 'i');
+goog.string.linkify.EMAIL_RE_ =
+    new RegExp(goog.string.linkify.EMAIL_RE_STRING_, 'i');
 
 
 /**
@@ -301,9 +299,8 @@ goog.string.linkify.EMAIL_RE_ = new RegExp(
 goog.string.linkify.FIND_LINKS_RE_ = new RegExp(
     // Match everything including newlines.
     '([\\S\\s]*?)(' +
-    // Match email after a word break.
-    '\\b' + goog.string.linkify.EMAIL_RE_STRING_ + '|' +
-    // Match url after a word break.
-    '\\b' + goog.string.linkify.URL_RE_STRING_ + '|$)',
+        // Match email after a word break.
+        '\\b' + goog.string.linkify.EMAIL_RE_STRING_ + '|' +
+        // Match url after a word break.
+        '\\b' + goog.string.linkify.URL_RE_STRING_ + '|$)',
     'gi');
-

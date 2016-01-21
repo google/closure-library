@@ -543,6 +543,6 @@ goog.vec.vec3d.min = function(vec0, limit, resultVec) {
  * @return {boolean} True if the vectors are equal, false otherwise.
  */
 goog.vec.vec3d.equals = function(v0, v1) {
-  return v0.length == v1.length &&
-      v0[0] == v1[0] && v0[1] == v1[1] && v0[2] == v1[2];
+  return v0.length == v1.length && v0[0] == v1[0] && v0[1] == v1[1] &&
+      v0[2] == v1[2];
 };

@@ -51,35 +51,38 @@ function fixCssTextForIe(cssText) {
 
 function testGetFileNameFromStyleSheet() {
   var styleSheet = {'href': 'http://foo.com/something/filename.css'};
-  assertEquals('filename.css',
-      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+  assertEquals(
+      'filename.css', goog.cssom.getFileNameFromStyleSheet(styleSheet));
 
   styleSheet = {'href': 'https://foo.com:123/something/filename.css'};
-  assertEquals('filename.css',
-      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+  assertEquals(
+      'filename.css', goog.cssom.getFileNameFromStyleSheet(styleSheet));
 
   styleSheet = {'href': 'http://foo.com/something/filename.css?bar=bas'};
-  assertEquals('filename.css',
-      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+  assertEquals(
+      'filename.css', goog.cssom.getFileNameFromStyleSheet(styleSheet));
 
   styleSheet = {'href': 'filename.css?bar=bas'};
-  assertEquals('filename.css',
-      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+  assertEquals(
+      'filename.css', goog.cssom.getFileNameFromStyleSheet(styleSheet));
 
   styleSheet = {'href': 'filename.css'};
-  assertEquals('filename.css',
-      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+  assertEquals(
+      'filename.css', goog.cssom.getFileNameFromStyleSheet(styleSheet));
 }
 
 function testGetAllCssStyleSheets() {
   var styleSheets = goog.cssom.getAllCssStyleSheets();
   assertEquals(4, styleSheets.length);
   // Makes sure they're in the right cascade order.
-  assertEquals('cssom_test_link_1.css',
+  assertEquals(
+      'cssom_test_link_1.css',
       goog.cssom.getFileNameFromStyleSheet(styleSheets[0]));
-  assertEquals('cssom_test_import_2.css',
+  assertEquals(
+      'cssom_test_import_2.css',
       goog.cssom.getFileNameFromStyleSheet(styleSheets[1]));
-  assertEquals('cssom_test_import_1.css',
+  assertEquals(
+      'cssom_test_import_1.css',
       goog.cssom.getFileNameFromStyleSheet(styleSheets[2]));
   // Not an external styleSheet
   assertNull(goog.cssom.getFileNameFromStyleSheet(styleSheets[3]));
@@ -120,11 +123,9 @@ function testAddCssText() {
     // Opera inserts the CSSRule to the first position. And fixCssText
     // is also needed to clean up whitespace.
     if (goog.userAgent.OPERA) {
-      assertEquals(newCssText + ' ' + cssText,
-                   fixCssTextForIe(allCssText));
+      assertEquals(newCssText + ' ' + cssText, fixCssTextForIe(allCssText));
     } else {
-      assertEquals(cssText + ' ' + newCssText,
-                   fixCssTextForIe(allCssText));
+      assertEquals(cssText + ' ' + newCssText, fixCssTextForIe(allCssText));
     }
   }
 
@@ -240,8 +241,8 @@ function testGetCssRuleIndexInParentStyleSheetAfterGetAllCssStyleRules() {
   // See http://dev.w3.org/csswg/cssom/#cssrule.
   var parentStyleSheet = goog.cssom.getParentStyleSheet(cssRule);
   var ruleIndex = goog.isDefAndNotNull(parentStyleSheet.cssRules) ? 2 : 1;
-  assertEquals(ruleIndex,
-      goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule));
+  assertEquals(
+      ruleIndex, goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule));
 }
 
 function testGetCssRuleIndexInParentStyleSheetNonStyleRule() {
@@ -271,8 +272,7 @@ function testReplaceCssRuleWithStyleSheetAndIndex() {
   var origCssText =
       fixCssTextForIe(goog.cssom.getCssTextFromCssRule(origCssRule));
 
-  goog.cssom.replaceCssRule(origCssRule, replacementCssText, styleSheet,
-      index);
+  goog.cssom.replaceCssRule(origCssRule, replacementCssText, styleSheet, index);
 
   var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   var newCssRule = rules[index];

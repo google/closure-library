@@ -41,8 +41,7 @@ function setUp() {
 
 // No enough space at the bottom and no overflow adjustment.
 function testRepositionWithDefaultOverflow() {
-  var avp = new goog.positioning.AnchoredPosition(
-      anchor, corner.BOTTOM_LEFT);
+  var avp = new goog.positioning.AnchoredPosition(anchor, corner.BOTTOM_LEFT);
   var newTop = viewportSize.height - anchorLength;
   goog.style.setPosition(anchor, 50, newTop);
   var anchorRect = goog.style.getBounds(anchor);
@@ -55,14 +54,13 @@ function testRepositionWithDefaultOverflow() {
 // No enough space at the bottom and ADJUST_Y overflow adjustment.
 function testRepositionWithOverflow() {
   var avp = new goog.positioning.AnchoredPosition(
-      anchor, corner.BOTTOM_LEFT,
-      goog.positioning.Overflow.ADJUST_Y);
+      anchor, corner.BOTTOM_LEFT, goog.positioning.Overflow.ADJUST_Y);
   var newTop = viewportSize.height - anchorLength;
   goog.style.setPosition(anchor, 50, newTop);
   var anchorRect = goog.style.getBounds(anchor);
 
   avp.reposition(popup, corner.TOP_LEFT);
   var popupRect = goog.style.getBounds(popup);
-  assertEquals(anchorRect.top + anchorRect.height,
-      popupRect.top + popupRect.height);
+  assertEquals(
+      anchorRect.top + anchorRect.height, popupRect.top + popupRect.height);
 }
