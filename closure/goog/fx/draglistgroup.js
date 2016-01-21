@@ -436,6 +436,16 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
  * Caches the heights of each drag list and drag item, except for the current
  * drag item.
  *
+ */
+goog.fx.DragListGroup.prototype.recacheListAndItemBounds = function() {
+  this.recacheListAndItemBounds_(this.currDragItem_);
+};
+
+
+/**
+ * Caches the heights of each drag list and drag item, except for the current
+ * drag item.
+ *
  * @param {Element} currDragItem The item currently being dragged.
  * @private
  */
