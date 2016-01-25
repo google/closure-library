@@ -32,8 +32,8 @@ goog.provide('goog.locale.defaultLocaleNameConstants');
 
 /**
  * Default list of locale specific country and language names
+ * @const
  */
-
 goog.locale.defaultLocaleNameConstants = {
   'COUNTRY': {
     '001': 'World',
