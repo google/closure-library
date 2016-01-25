@@ -99,8 +99,7 @@ goog.array.last = goog.array.peek;
  * @template T
  */
 goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-                     (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                      Array.prototype.indexOf) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.indexOf) ?
     function(arr, obj, opt_fromIndex) {
       goog.asserts.assert(arr.length != null);
 
@@ -108,8 +107,9 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, obj, opt_fromIndex) {
       var fromIndex = opt_fromIndex == null ?
-          0 : (opt_fromIndex < 0 ?
-               Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
+          0 :
+          (opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) :
+                               opt_fromIndex);
 
       if (goog.isString(arr)) {
         // Array.prototype.indexOf uses === so only strings should be found.
@@ -120,8 +120,7 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
 
       for (var i = fromIndex; i < arr.length; i++) {
-        if (i in arr && arr[i] === obj)
-          return i;
+        if (i in arr && arr[i] === obj) return i;
       }
       return -1;
     };
@@ -141,8 +140,7 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T
  */
 goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-                         (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                          Array.prototype.lastIndexOf) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.lastIndexOf) ?
     function(arr, obj, opt_fromIndex) {
       goog.asserts.assert(arr.length != null);
 
@@ -167,8 +165,7 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
 
       for (var i = fromIndex; i >= 0; i--) {
-        if (i in arr && arr[i] === obj)
-          return i;
+        if (i in arr && arr[i] === obj) return i;
       }
       return -1;
     };
@@ -187,8 +184,7 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
-                     (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                      Array.prototype.forEach) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.forEach) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -250,8 +246,7 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  * @template T,S
  */
 goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
-                    (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                     Array.prototype.filter) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -291,8 +286,7 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template THIS, VALUE, RESULT
  */
 goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
-                 (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                  Array.prototype.map) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.map) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -336,8 +330,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S,R
  */
 goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
-                    (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                     Array.prototype.reduce) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduce) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
       if (opt_obj) {
@@ -381,8 +374,7 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S,R
  */
 goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
-                         (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                          Array.prototype.reduceRight) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduceRight) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
       goog.asserts.assert(f != null);
@@ -418,8 +410,7 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
-                  (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                   Array.prototype.some) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.some) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -455,8 +446,7 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
-                   (goog.array.ASSUME_NATIVE_FUNCTIONS ||
-                    Array.prototype.every) ?
+        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.every) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -791,8 +781,7 @@ goog.array.removeAllIf = function(arr, f, opt_obj) {
  * @return {!Array<?>} The new resultant array.
  */
 goog.array.concat = function(var_args) {
-  return Array.prototype.concat.apply(
-      Array.prototype, arguments);
+  return Array.prototype.concat.apply(Array.prototype, arguments);
 };
 
 
@@ -803,8 +792,7 @@ goog.array.concat = function(var_args) {
  * @template T
  */
 goog.array.join = function(var_args) {
-  return Array.prototype.concat.apply(
-      Array.prototype, arguments);
+  return Array.prototype.concat.apply(Array.prototype, arguments);
 };
 
 
@@ -897,8 +885,7 @@ goog.array.extend = function(arr1, var_args) {
 goog.array.splice = function(arr, index, howMany, var_args) {
   goog.asserts.assert(arr.length != null);
 
-  return Array.prototype.splice.apply(
-      arr, goog.array.slice(arguments, 1));
+  return Array.prototype.splice.apply(arr, goog.array.slice(arguments, 1));
 };
 
 
@@ -960,7 +947,7 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
     // Prefix each type with a single character representing the type to
     // prevent conflicting keys (e.g. true and 'true').
     return goog.isObject(item) ? 'o' + goog.getUid(item) :
-        (typeof item).charAt(0) + item;
+                                 (typeof item).charAt(0) + item;
   };
   var hashFn = opt_hashFn || defaultHashFn;
 
@@ -1004,8 +991,8 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
  * @template TARGET, VALUE
  */
 goog.array.binarySearch = function(arr, target, opt_compareFn) {
-  return goog.array.binarySearch_(arr,
-      opt_compareFn || goog.array.defaultCompare, false /* isEvaluator */,
+  return goog.array.binarySearch_(
+      arr, opt_compareFn || goog.array.defaultCompare, false /* isEvaluator */,
       target);
 };
 
@@ -1035,8 +1022,9 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  * @template THIS, VALUE
  */
 goog.array.binarySelect = function(arr, evaluator, opt_obj) {
-  return goog.array.binarySearch_(arr, evaluator, true /* isEvaluator */,
-      undefined /* opt_target */, opt_obj);
+  return goog.array.binarySearch_(
+      arr, evaluator, true /* isEvaluator */, undefined /* opt_target */,
+      opt_obj);
 };
 
 
@@ -1068,9 +1056,9 @@ goog.array.binarySelect = function(arr, evaluator, opt_obj) {
  *     iff target is found.
  * @private
  */
-goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
-    opt_selfObj) {
-  var left = 0;  // inclusive
+goog.array.binarySearch_ = function(
+    arr, compareFn, isEvaluator, opt_target, opt_selfObj) {
+  var left = 0;            // inclusive
   var right = arr.length;  // exclusive
   var found;
   while (left < right) {
@@ -1081,8 +1069,8 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
     } else {
       // NOTE(dimvar): To avoid this cast, we'd have to use function overloading
       // for the type of binarySearch_, which the type system can't express yet.
-      compareResult = /** @type {function(?, ?): number} */ (
-          compareFn)(opt_target, arr[middle]);
+      compareResult = /** @type {function(?, ?): number} */ (compareFn)(
+          opt_target, arr[middle]);
     }
     if (compareResult > 0) {
       left = middle + 1;
@@ -1179,9 +1167,8 @@ goog.array.stableSort = function(arr, opt_compareFn) {
  */
 goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
   var keyCompareFn = opt_compareFn || goog.array.defaultCompare;
-  goog.array.sort(arr, function(a, b) {
-    return keyCompareFn(keyFn(a), keyFn(b));
-  });
+  goog.array.sort(
+      arr, function(a, b) { return keyCompareFn(keyFn(a), keyFn(b)); });
 };
 
 
@@ -1197,9 +1184,7 @@ goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
  *     values.
  */
 goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
-  goog.array.sortByKey(arr,
-      function(obj) { return obj[key]; },
-      opt_compareFn);
+  goog.array.sortByKey(arr, function(obj) { return obj[key]; }, opt_compareFn);
 };
 
 
@@ -1644,8 +1629,6 @@ goog.array.shuffle = function(arr, opt_randFn) {
  */
 goog.array.copyByIndex = function(arr, index_arr) {
   var result = [];
-  goog.array.forEach(index_arr, function(index) {
-    result.push(arr[index]);
-  });
+  goog.array.forEach(index_arr, function(index) { result.push(arr[index]); });
   return result;
 };

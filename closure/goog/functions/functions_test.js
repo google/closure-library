@@ -190,25 +190,19 @@ function testFail() {
 }
 
 function testCompose() {
-  var add2 = function(x) {
-    return x + 2;
-  };
+  var add2 = function(x) { return x + 2; };
 
-  var doubleValue = function(x) {
-    return x * 2;
-  };
+  var doubleValue = function(x) { return x * 2; };
 
   assertEquals(6, goog.functions.compose(doubleValue, add2)(1));
   assertEquals(4, goog.functions.compose(add2, doubleValue)(1));
   assertEquals(6, goog.functions.compose(add2, add2, doubleValue)(1));
-  assertEquals(12,
-      goog.functions.compose(doubleValue, add2, add2, doubleValue)(1));
+  assertEquals(
+      12, goog.functions.compose(doubleValue, add2, add2, doubleValue)(1));
   assertUndefined(goog.functions.compose()(1));
   assertEquals(3, goog.functions.compose(add2)(1));
 
-  var add2Numbers = function(x, y) {
-    return x + y;
-  };
+  var add2Numbers = function(x, y) { return x + y; };
   assertEquals(17, goog.functions.compose(add2Numbers)(10, 7));
   assertEquals(34, goog.functions.compose(doubleValue, add2Numbers)(10, 7));
 }
@@ -337,13 +331,11 @@ function assertCallOrderAndReset(expectedArray) {
 }
 
 function testCacheReturnValue() {
-  var returnFive = function() {
-    return 5;
-  };
+  var returnFive = function() { return 5; };
 
   var recordedReturnFive = goog.testing.recordFunction(returnFive);
-  var cachedRecordedReturnFive = goog.functions.cacheReturnValue(
-      recordedReturnFive);
+  var cachedRecordedReturnFive =
+      goog.functions.cacheReturnValue(recordedReturnFive);
 
   assertEquals(0, recordedReturnFive.getCallCount());
   assertEquals(5, cachedRecordedReturnFive());
@@ -360,10 +352,9 @@ function testCacheReturnValueFlagEnabled() {
     return count;
   };
 
-  var recordedFunction = goog.testing.recordFunction(
-      returnIncrementingInteger);
-  var cachedRecordedFunction = goog.functions.cacheReturnValue(
-      recordedFunction);
+  var recordedFunction = goog.testing.recordFunction(returnIncrementingInteger);
+  var cachedRecordedFunction =
+      goog.functions.cacheReturnValue(recordedFunction);
 
   assertEquals(0, recordedFunction.getCallCount());
   assertEquals(1, cachedRecordedFunction());
@@ -383,10 +374,9 @@ function testCacheReturnValueFlagDisabled() {
     return count;
   };
 
-  var recordedFunction = goog.testing.recordFunction(
-      returnIncrementingInteger);
-  var cachedRecordedFunction = goog.functions.cacheReturnValue(
-      recordedFunction);
+  var recordedFunction = goog.testing.recordFunction(returnIncrementingInteger);
+  var cachedRecordedFunction =
+      goog.functions.cacheReturnValue(recordedFunction);
 
   assertEquals(0, recordedFunction.getCallCount());
   assertEquals(1, cachedRecordedFunction());
@@ -431,9 +421,7 @@ function testDebounceScopeBinding() {
   var mockClock = new goog.testing.MockClock(true);
 
   var x = {'y': 0};
-  goog.functions.debounce(function() {
-    ++this['y'];
-  }, interval, x)();
+  goog.functions.debounce(function() { ++this['y']; }, interval, x)();
   assertEquals(0, x['y']);
 
   mockClock.tick(interval);
@@ -533,9 +521,7 @@ function testThrottleScopeBinding() {
   var mockClock = new goog.testing.MockClock(true);
 
   var x = {'y': 0};
-  goog.functions.throttle(function() {
-    ++this['y'];
-  }, interval, x)();
+  goog.functions.throttle(function() { ++this['y']; }, interval, x)();
   assertEquals(1, x['y']);
 
   mockClock.uninstall();
@@ -631,15 +617,21 @@ function assertAsyncDecoratorCommandSequenceCalls(
     var expectedCalls = expectedCommandSequenceCalls[commandSequence];
     assertEquals(
         'Expected ' + expectedCalls + ' calls for command sequence "' +
-        commandSequence + '" (' +
-        goog.array.map(commandSequence, function(command) {
-          switch (command) {
-            case 'f': return 'fire';
-            case 'w': return 'wait';
-          }
-        }).join(' -> ') + ')',
-        expectedCalls,
-        recordedFunction.getCallCount());
+            commandSequence + '" (' +
+            goog.array
+                .map(
+                    commandSequence,
+                    function(command) {
+                      switch (command) {
+                        case 'f':
+                          return 'fire';
+                        case 'w':
+                          return 'wait';
+                      }
+                    })
+                .join(' -> ') +
+            ')',
+        expectedCalls, recordedFunction.getCallCount());
   }
   mockClock.uninstall();
 }

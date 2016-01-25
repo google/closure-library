@@ -34,8 +34,8 @@ function shouldRunTests() {
 
 
 function testGenerateId() {
-  assertNotEquals(goog.structs.weak.generateId(),
-                  goog.structs.weak.generateId());
+  assertNotEquals(
+      goog.structs.weak.generateId(), goog.structs.weak.generateId());
 }
 
 
@@ -51,9 +51,7 @@ function testCheckKeyTypeValidObject() {
 function testCheckKeyTypePrimitive() {
   var primitiveKeys = ['test', 1, true, null, undefined];
   goog.array.forEach(primitiveKeys, function(key) {
-    assertThrows(function() {
-      goog.structs.weak.checkKeyType(key);
-    });
+    assertThrows(function() { goog.structs.weak.checkKeyType(key); });
   });
 }
 
@@ -63,12 +61,8 @@ function testCheckKeyTypeNonExtensibleObject() {
   Object.seal(sealedObj);
   Object.freeze(frozenObj);
   Object.preventExtensions(preventExtensionsObj);
-  assertThrows(function() {
-    goog.structs.weak.checkKeyType(sealedObj);
-  });
-  assertThrows(function() {
-    goog.structs.weak.checkKeyType(frozenObj);
-  });
+  assertThrows(function() { goog.structs.weak.checkKeyType(sealedObj); });
+  assertThrows(function() { goog.structs.weak.checkKeyType(frozenObj); });
   assertThrows(function() {
     goog.structs.weak.checkKeyType(preventExtensionsObj);
   });

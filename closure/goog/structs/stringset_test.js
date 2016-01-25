@@ -27,9 +27,16 @@ var TEST_VALUES = [
 ];
 
 var TEST_VALUES_WITH_DUPLICATES = [
-  '', '', ' ', '  ', 'true', true, 'null', null, 'undefined', undefined, '0', 0,
-  'new', 'constructor', 'prototype', '__proto__', 'set', 'hasOwnProperty',
-  'toString', 'valueOf'
+  '',          '',
+  ' ',         '  ',
+  'true',      true,
+  'null',      null,
+  'undefined', undefined,
+  '0',         0,
+  'new',       'constructor',
+  'prototype', '__proto__',
+  'set',       'hasOwnProperty',
+  'toString',  'valueOf'
 ];
 
 function testConstructor() {
@@ -37,8 +44,9 @@ function testConstructor() {
   assertSameElements('elements in empty set', [], empty.getValues());
 
   var s = new goog.structs.StringSet(TEST_VALUES_WITH_DUPLICATES);
-  assertSameElements('duplicates are filtered out by their string value',
-      TEST_VALUES, s.getValues());
+  assertSameElements(
+      'duplicates are filtered out by their string value', TEST_VALUES,
+      s.getValues());
 }
 
 function testConstructorAssertsThatObjectPrototypeHasNoEnumerableKeys() {
@@ -54,9 +62,7 @@ function testConstructorAssertsThatObjectPrototypeHasNoEnumerableKeys() {
 
 function testOverridingObjectPrototypeToStringIsSafe() {
   var originalToString = Object.prototype.toString;
-  Object.prototype.toString = function() {
-    return 'object';
-  };
+  Object.prototype.toString = function() { return 'object'; };
   try {
     assertEquals(0, new goog.structs.StringSet().getCount());
     assertFalse(new goog.structs.StringSet().contains('toString'));
@@ -96,8 +102,9 @@ function testClone() {
   var c = s.clone();
   assertSameElements('elements in clone', ['1', '2'], c.getValues());
   s.add(3);
-  assertSameElements('changing the original set does not affect the clone',
-      ['1', '2'], c.getValues());
+  assertSameElements(
+      'changing the original set does not affect the clone', ['1', '2'],
+      c.getValues());
 }
 
 function testContains() {
@@ -116,7 +123,8 @@ function testContains() {
 function testContainsArray() {
   var s = new goog.structs.StringSet(TEST_VALUES);
   assertTrue('set contains empty array', s.containsArray([]));
-  assertTrue('set contains all elements of itself with some duplication',
+  assertTrue(
+      'set contains all elements of itself with some duplication',
       s.containsArray(TEST_VALUES_WITH_DUPLICATES));
   assertFalse('set does not contain 42', s.containsArray([42]));
 }
@@ -125,9 +133,11 @@ function testEquals() {
   var s = new goog.structs.StringSet([1, 2]);
   assertTrue('set equals to itself', s.equals(s));
   assertTrue('set equals to its clone', s.equals(s.clone()));
-  assertFalse('set does not equal to its subset',
+  assertFalse(
+      'set does not equal to its subset',
       s.equals(new goog.structs.StringSet([1])));
-  assertFalse('set does not equal to its superset',
+  assertFalse(
+      'set does not equal to its superset',
       s.equals(new goog.structs.StringSet([1, 2, 3])));
 }
 
@@ -155,29 +165,30 @@ function testGetCount() {
 function testGetDifference() {
   var s1 = new goog.structs.StringSet([1, 2]);
   var s2 = new goog.structs.StringSet([2, 3]);
-  assertSameElements('{1, 2} - {2, 3}', ['1'],
-      s1.getDifference(s2).getValues());
+  assertSameElements(
+      '{1, 2} - {2, 3}', ['1'], s1.getDifference(s2).getValues());
 }
 
 function testGetIntersection() {
   var s1 = new goog.structs.StringSet([1, 2]);
   var s2 = new goog.structs.StringSet([2, 3]);
-  assertSameElements('{1, 2} * {2, 3}', ['2'],
-      s1.getIntersection(s2).getValues());
+  assertSameElements(
+      '{1, 2} * {2, 3}', ['2'], s1.getIntersection(s2).getValues());
 }
 
 function testGetSymmetricDifference() {
   var s1 = new goog.structs.StringSet([1, 2]);
   var s2 = new goog.structs.StringSet([2, 3]);
-  assertSameElements('{1, 2} sym.diff. {2, 3}', ['1', '3'],
+  assertSameElements(
+      '{1, 2} sym.diff. {2, 3}', ['1', '3'],
       s1.getSymmetricDifference(s2).getValues());
 }
 
 function testGetUnion() {
   var s1 = new goog.structs.StringSet([1, 2]);
   var s2 = new goog.structs.StringSet([2, 3]);
-  assertSameElements('{1, 2} + {2, 3}', ['1', '2', '3'],
-      s1.getUnion(s2).getValues());
+  assertSameElements(
+      '{1, 2} + {2, 3}', ['1', '2', '3'], s1.getUnion(s2).getValues());
 }
 
 function testIsDisjoint() {
@@ -237,8 +248,9 @@ function testRemove() {
 function testRemoveArray() {
   var s = new goog.structs.StringSet(TEST_VALUES);
   s.removeArray(TEST_VALUES.slice(0, TEST_VALUES.length - 2));
-  assertSameElements('removed elements from array',
-      TEST_VALUES.slice(TEST_VALUES.length - 2), s.getValues());
+  assertSameElements(
+      'removed elements from array', TEST_VALUES.slice(TEST_VALUES.length - 2),
+      s.getValues());
 }
 
 function testRemoveSet() {
@@ -251,9 +263,7 @@ function testRemoveSet() {
 function testIterator() {
   var s = new goog.structs.StringSet(TEST_VALUES_WITH_DUPLICATES);
   var values = [];
-  goog.iter.forEach(s, function(value) {
-    values.push(value);
-  });
-  assertSameElements('__iterator__ takes all elements once',
-      TEST_VALUES, values);
+  goog.iter.forEach(s, function(value) { values.push(value); });
+  assertSameElements(
+      '__iterator__ takes all elements once', TEST_VALUES, values);
 }

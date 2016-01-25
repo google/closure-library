@@ -166,8 +166,8 @@ goog.fx.anim.requestAnimationFrame_ = function() {
     if (goog.fx.anim.animationWindow_) {
       // requestAnimationFrame will call cycleAnimations_ with the current
       // time in ms, as returned from goog.now().
-      goog.fx.anim.animationDelay_ = new goog.async.AnimationDelay(
-          function(now) {
+      goog.fx.anim.animationDelay_ =
+          new goog.async.AnimationDelay(function(now) {
             goog.fx.anim.cycleAnimations_(now);
           }, goog.fx.anim.animationWindow_);
     } else {

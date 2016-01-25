@@ -167,10 +167,9 @@ goog.Timer.prototype.setInterval = function(interval) {
 goog.Timer.prototype.tick_ = function() {
   if (this.enabled) {
     var elapsed = goog.now() - this.last_;
-    if (elapsed > 0 &&
-        elapsed < this.interval_ * goog.Timer.intervalScale) {
-      this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
-          this.interval_ - elapsed);
+    if (elapsed > 0 && elapsed < this.interval_ * goog.Timer.intervalScale) {
+      this.timer_ = this.timerObject_.setTimeout(
+          this.boundTick_, this.interval_ - elapsed);
       return;
     }
 
@@ -184,8 +183,8 @@ goog.Timer.prototype.tick_ = function() {
     this.dispatchTick();
     // The timer could be stopped in the timer event handler.
     if (this.enabled) {
-      this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
-          this.interval_);
+      this.timer_ =
+          this.timerObject_.setTimeout(this.boundTick_, this.interval_);
       this.last_ = goog.now();
     }
   }
@@ -285,8 +284,7 @@ goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
     // schedule anything at all.
     return goog.Timer.INVALID_TIMEOUT_ID_;
   } else {
-    return goog.Timer.defaultTimerObject.setTimeout(
-        listener, opt_delay || 0);
+    return goog.Timer.defaultTimerObject.setTimeout(listener, opt_delay || 0);
   }
 };
 
@@ -310,16 +308,17 @@ goog.Timer.clear = function(timerId) {
  */
 goog.Timer.promise = function(delay, opt_result) {
   var timerKey = null;
-  return new goog.Promise(function(resolve, reject) {
-    timerKey = goog.Timer.callOnce(function() {
-      resolve(opt_result);
-    }, delay);
-    if (timerKey == goog.Timer.INVALID_TIMEOUT_ID_) {
-      reject(new Error('Failed to schedule timer.'));
-    }
-  }).thenCatch(function(error) {
-    // Clear the timer. The most likely reason is "cancel" signal.
-    goog.Timer.clear(timerKey);
-    throw error;
-  });
+  return new goog
+      .Promise(function(resolve, reject) {
+        timerKey =
+            goog.Timer.callOnce(function() { resolve(opt_result); }, delay);
+        if (timerKey == goog.Timer.INVALID_TIMEOUT_ID_) {
+          reject(new Error('Failed to schedule timer.'));
+        }
+      })
+      .thenCatch(function(error) {
+        // Clear the timer. The most likely reason is "cancel" signal.
+        goog.Timer.clear(timerKey);
+        throw error;
+      });
 };

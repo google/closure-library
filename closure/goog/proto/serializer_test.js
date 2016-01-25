@@ -21,18 +21,30 @@ goog.require('goog.testing.jsunit');
 var serialize = goog.proto.serialize;
 
 function testArraySerialize() {
-
   assertEquals('Empty array', serialize([]), '[]');
 
   assertEquals('Normal array', serialize([0, 1, 2]), '[0,1,2]');
   assertEquals('Empty start', serialize([, 1, 2]), '[,1,2]');
-  assertEquals('Empty start', serialize([,,, 3, 4]), '[,,,3,4]');
-  assertEquals('Empty middle', serialize([0,, 2]), '[0,,2]');
-  assertEquals('Empty middle', serialize([0,,, 3]), '[0,,,3]');
+  assertEquals('Empty start', serialize([, , , 3, 4]), '[,,,3,4]');
+  assertEquals('Empty middle', serialize([0, , 2]), '[0,,2]');
+  assertEquals('Empty middle', serialize([0, , , 3]), '[0,,,3]');
   assertEquals('Empty end', serialize([0, 1, 2]), '[0,1,2]');
-  assertEquals('Empty end', serialize([0, 1, 2,,]), '[0,1,2]');
-  assertEquals('Empty start and end', serialize([,, 2,, 4]), '[,,2,,4]');
-  assertEquals('All elements empty', serialize([,,,]), '[]');
+  assertEquals(
+      'Empty end', serialize([
+        0,
+        1,
+        2,
+        ,
+      ]),
+      '[0,1,2]');
+  assertEquals('Empty start and end', serialize([, , 2, , 4]), '[,,2,,4]');
+  assertEquals(
+      'All elements empty', serialize([
+        ,
+        ,
+        ,
+      ]),
+      '[]');
 
   assertEquals('Nested', serialize([, 1, [, 1, [, 1]]]), '[,1,[,1,[,1]]]');
 }

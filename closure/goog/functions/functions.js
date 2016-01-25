@@ -30,9 +30,7 @@ goog.provide('goog.functions');
  * @template T
  */
 goog.functions.constant = function(retValue) {
-  return function() {
-    return retValue;
-  };
+  return function() { return retValue; };
 };
 
 
@@ -76,9 +74,7 @@ goog.functions.identity = function(opt_returnValue, var_args) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.error = function(message) {
-  return function() {
-    throw Error(message);
-  };
+  return function() { throw Error(message); };
 };
 
 
@@ -88,9 +84,7 @@ goog.functions.error = function(message) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.fail = function(err) {
-  return function() {
-    throw err;
-  }
+  return function() { throw err; }
 };
 
 
@@ -116,9 +110,7 @@ goog.functions.lock = function(f, opt_numArgs) {
  * @return {!Function} A new function.
  */
 goog.functions.nth = function(n) {
-  return function() {
-    return arguments[n];
-  };
+  return function() { return arguments[n]; };
 };
 
 
@@ -277,9 +269,7 @@ goog.functions.or = function(var_args) {
  * opposite.
  */
 goog.functions.not = function(f) {
-  return function() {
-    return !f.apply(this, arguments);
-  };
+  return function() { return !f.apply(this, arguments); };
 };
 
 
@@ -409,9 +399,8 @@ goog.functions.debounce = function(f, interval, opt_scope) {
   return /** @type {function(...?)} */ (function(var_args) {
     goog.global.clearTimeout(timeout);
     var args = arguments;
-    timeout = goog.global.setTimeout(function() {
-      f.apply(null, args);
-    }, interval);
+    timeout =
+        goog.global.setTimeout(function() { f.apply(null, args); }, interval);
   });
 };
 
