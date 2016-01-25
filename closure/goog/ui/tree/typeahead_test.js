@@ -22,10 +22,14 @@ goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TypeAhead');
 function makeATree() {
   var tree = new goog.ui.tree.TreeControl('root');
-  var testData = ['level1',
-    [['level2', [['eve', []], ['eve2', []]], []],
-     ['level22', [['eve', []], ['eve3', []]], []]],
-    []];
+  var testData = [
+    'level1',
+    [
+      ['level2', [['eve', []], ['eve2', []]], []],
+      ['level22', [['eve', []], ['eve3', []]], []]
+    ],
+    []
+  ];
 
   createTreeFromTestData(tree, testData, 3);
 
@@ -86,7 +90,7 @@ function testJumpTo() {
   // Jump to the first matching 'eve', followed by Ctrl+DOWN to jump to
   // second matching 'eve'
   var handled = typeAhead.jumpToLabel_('eve') &&
-                typeAhead.jumpTo_(goog.ui.tree.TypeAhead.Offset.DOWN);
+      typeAhead.jumpTo_(goog.ui.tree.TypeAhead.Offset.DOWN);
   var selectedItem = tree.getSelectedItem();
   assertTrue(handled && selectedItem.getHtml() == 'eve');
 

@@ -85,11 +85,9 @@ goog.ui.tree.TreeNode.prototype.getCalculatedIconClass = function() {
   var config = this.getConfig();
   if (this.hasChildren()) {
     if (expanded && config.cssExpandedFolderIcon) {
-      return config.cssTreeIcon + ' ' +
-             config.cssExpandedFolderIcon;
+      return config.cssTreeIcon + ' ' + config.cssExpandedFolderIcon;
     } else if (!expanded && config.cssCollapsedFolderIcon) {
-      return config.cssTreeIcon + ' ' +
-             config.cssCollapsedFolderIcon;
+      return config.cssTreeIcon + ' ' + config.cssCollapsedFolderIcon;
     }
   } else {
     if (config.cssFileIcon) {

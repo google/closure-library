@@ -68,8 +68,10 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
    * @type {!goog.html.SafeHtml}
    * @private
    */
-  this.html_ = (html instanceof goog.html.SafeHtml ? html :
-      goog.html.legacyconversions.safeHtmlFromString(html));
+  this.html_ =
+      (html instanceof goog.html.SafeHtml ?
+           html :
+           goog.html.legacyconversions.safeHtmlFromString(html));
 
   /** @private {string} */
   this.iconClass_;
@@ -244,8 +246,8 @@ goog.ui.tree.BaseNode.prototype.exitDocument = function() {
  * child's DOM tree won't be created.
  * @override
  */
-goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
-    opt_render) {
+goog.ui.tree.BaseNode.prototype.addChildAt = function(
+    child, index, opt_render) {
   goog.asserts.assert(!child.getParent());
   goog.asserts.assertInstanceof(child, goog.ui.tree.BaseNode);
   var prevNode = this.getChildAt(index - 1);
@@ -311,13 +313,14 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
  * @return {!goog.ui.tree.BaseNode} The added child.
  */
 goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
-  goog.asserts.assert(!opt_before || opt_before.getParent() == this,
+  goog.asserts.assert(
+      !opt_before || opt_before.getParent() == this,
       'Can only add nodes before siblings');
   if (child.getParent()) {
     child.getParent().removeChild(child);
   }
-  this.addChildAt(child,
-      opt_before ? this.indexOfChild(opt_before) : this.getChildCount());
+  this.addChildAt(
+      child, opt_before ? this.indexOfChild(opt_before) : this.getChildCount());
   return child;
 };
 
@@ -330,8 +333,8 @@ goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
  * @return {!goog.ui.tree.BaseNode} The child that was removed.
  * @override
  */
-goog.ui.tree.BaseNode.prototype.removeChild =
-    function(childNode, opt_unrender) {
+goog.ui.tree.BaseNode.prototype.removeChild = function(
+    childNode, opt_unrender) {
   // In reality, this only accepts BaseNodes.
   var child = /** @type {goog.ui.tree.BaseNode} */ (childNode);
 
@@ -468,9 +471,7 @@ goog.ui.tree.BaseNode.prototype.setDepth_ = function(depth) {
         row.style.paddingLeft = indent;
       }
     }
-    this.forEachChild(function(child) {
-      child.setDepth_(depth + 1);
-    });
+    this.forEachChild(function(child) { child.setDepth_(depth + 1); });
   }
 };
 
@@ -514,9 +515,7 @@ goog.ui.tree.BaseNode.prototype.getChildAt;
  */
 goog.ui.tree.BaseNode.prototype.getChildren = function() {
   var children = [];
-  this.forEachChild(function(child) {
-    children.push(child);
-  });
+  this.forEachChild(function(child) { children.push(child); });
   return children;
 };
 
@@ -605,11 +604,9 @@ goog.ui.tree.BaseNode.prototype.setSelectedInternal = function(selected) {
     goog.a11y.aria.setState(el, 'selected', selected);
     if (selected) {
       var treeElement = this.getTree().getElement();
-      goog.asserts.assert(treeElement,
-          'The DOM element for the tree cannot be null');
-      goog.a11y.aria.setState(treeElement,
-          'activedescendant',
-          this.getId());
+      goog.asserts.assert(
+          treeElement, 'The DOM element for the tree cannot be null');
+      goog.a11y.aria.setState(treeElement, 'activedescendant', this.getId());
     }
   }
 };
@@ -642,7 +639,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
     // Only fire events if the expanded state has actually changed.
     var prevented = !this.dispatchEvent(
         expanded ? goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND :
-        goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE);
+                   goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE);
     if (prevented) return;
   }
   var ce;
@@ -667,9 +664,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
             children.push(child.toSafeHtml());
           });
           goog.dom.safe.setInnerHtml(ce, goog.html.SafeHtml.concat(children));
-          this.forEachChild(function(child) {
-            child.enterDocument();
-          });
+          this.forEachChild(function(child) { child.enterDocument(); });
         }
       }
       this.updateExpandIcon();
@@ -686,8 +681,9 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
   }
 
   if (isStateChange) {
-    this.dispatchEvent(expanded ? goog.ui.tree.BaseNode.EventType.EXPAND :
-                       goog.ui.tree.BaseNode.EventType.COLLAPSE);
+    this.dispatchEvent(
+        expanded ? goog.ui.tree.BaseNode.EventType.EXPAND :
+                   goog.ui.tree.BaseNode.EventType.COLLAPSE);
   }
 };
 
@@ -720,9 +716,7 @@ goog.ui.tree.BaseNode.prototype.collapse = function() {
  * Collapses the children of the node.
  */
 goog.ui.tree.BaseNode.prototype.collapseChildren = function() {
-  this.forEachChild(function(child) {
-    child.collapseAll();
-  });
+  this.forEachChild(function(child) { child.collapseAll(); });
 };
 
 
@@ -739,9 +733,7 @@ goog.ui.tree.BaseNode.prototype.collapseAll = function() {
  * Expands the children of the node.
  */
 goog.ui.tree.BaseNode.prototype.expandChildren = function() {
-  this.forEachChild(function(child) {
-    child.expandAll();
-  });
+  this.forEachChild(function(child) { child.expandAll(); });
 };
 
 
@@ -799,28 +791,23 @@ goog.ui.tree.BaseNode.prototype.toSafeHtml = function() {
   var hideLines = !tree.getShowLines() ||
       tree == this.getParent() && !tree.getShowRootLines();
 
-  var childClass = hideLines ? this.config_.cssChildrenNoLines :
-      this.config_.cssChildren;
+  var childClass =
+      hideLines ? this.config_.cssChildrenNoLines : this.config_.cssChildren;
 
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
-  var attributes = {
-    'class': childClass,
-    'style': this.getLineStyle()
-  };
+  var attributes = {'class': childClass, 'style': this.getLineStyle()};
 
   var content = [];
   if (nonEmptyAndExpanded) {
     // children
-    this.forEachChild(function(child) {
-      content.push(child.toSafeHtml());
-    });
+    this.forEachChild(function(child) { content.push(child.toSafeHtml()); });
   }
 
   var children = goog.html.SafeHtml.create('div', attributes, content);
 
-  return goog.html.SafeHtml.create('div',
-      {'class': this.config_.cssItem, 'id': this.getId()},
+  return goog.html.SafeHtml.create(
+      'div', {'class': this.config_.cssItem, 'id': this.getId()},
       [this.getRowSafeHtml(), children]);
 };
 
@@ -842,13 +829,9 @@ goog.ui.tree.BaseNode.prototype.getRowSafeHtml = function() {
   var style = {};
   style['padding-' + (this.isRightToLeft() ? 'right' : 'left')] =
       this.getPixelIndent_() + 'px';
-  var attributes = {
-    'class': this.getRowClassName(),
-    'style': style
-  };
+  var attributes = {'class': this.getRowClassName(), 'style': style};
   var content = [
-    this.getExpandIconSafeHtml(),
-    this.getIconSafeHtml(),
+    this.getExpandIconSafeHtml(), this.getIconSafeHtml(),
     this.getLabelSafeHtml()
   ];
   return goog.html.SafeHtml.create('div', attributes, content);
@@ -875,13 +858,12 @@ goog.ui.tree.BaseNode.prototype.getRowClassName = function() {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getLabelSafeHtml = function() {
-  var html = goog.html.SafeHtml.create('span',
-      {
-        'class': this.config_.cssItemLabel,
-        'title': this.getToolTip() || null
-      },
+  var html = goog.html.SafeHtml.create(
+      'span',
+      {'class': this.config_.cssItemLabel, 'title': this.getToolTip() || null},
       this.getSafeHtml());
-  return goog.html.SafeHtml.concat(html,
+  return goog.html.SafeHtml.concat(
+      html,
       goog.html.SafeHtml.create('span', {}, this.getAfterLabelSafeHtml()));
 };
 
@@ -914,8 +896,8 @@ goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
  * @deprecated Use setAfterLabelSafeHtml.
  */
 goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
-  this.setAfterLabelSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
-      html));
+  this.setAfterLabelSafeHtml(
+      goog.html.legacyconversions.safeHtmlFromString(html));
 };
 
 
@@ -1061,8 +1043,9 @@ goog.ui.tree.BaseNode.prototype.getLineStyle = function() {
  * @return {string} The background position style value.
  */
 goog.ui.tree.BaseNode.prototype.getBackgroundPosition = function() {
-  return (this.isLastSibling() ? '-100' :
-          (this.getDepth() - 1) * this.config_.indentWidth) + 'px 0';
+  return (this.isLastSibling() ? '-100' : (this.getDepth() - 1) *
+                  this.config_.indentWidth) +
+      'px 0';
 };
 
 
@@ -1118,7 +1101,8 @@ goog.ui.tree.BaseNode.prototype.getLabelElement = function() {
   // TODO: find/fix race condition that requires us to add
   // the lastChild check
   return el && el.lastChild ?
-      /** @type {Element} */ (el.lastChild.previousSibling) : null;
+      /** @type {Element} */ (el.lastChild.previousSibling) :
+                             null;
 };
 
 
@@ -1515,9 +1499,7 @@ goog.ui.tree.BaseNode.prototype.setTreeInternal = function(tree) {
     this.tree = tree;
     // Add new node to the type ahead node map.
     tree.setNode(this);
-    this.forEachChild(function(child) {
-      child.setTreeInternal(tree);
-    });
+    this.forEachChild(function(child) { child.setTreeInternal(tree); });
   }
 };
 
