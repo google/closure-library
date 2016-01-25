@@ -45,11 +45,12 @@ var mockClock;
 // the menu always fits. (we don't care about testing the
 // dynamic menu positioning if the menu doesn't fit in the window.)
 var oldPositionFn = goog.positioning.positionAtCoordinate;
-goog.positioning.positionAtCoordinate = function(absolutePos, movableElement,
-                                                 movableElementCorner,
-                                                 opt_margin, opt_overflow) {
-  return oldPositionFn.call(null, absolutePos, movableElement,
-      movableElementCorner, opt_margin, goog.positioning.Overflow.IGNORE);
+goog.positioning.positionAtCoordinate = function(
+    absolutePos, movableElement, movableElementCorner, opt_margin,
+    opt_overflow) {
+  return oldPositionFn.call(
+      null, absolutePos, movableElement, movableElementCorner, opt_margin,
+      goog.positioning.Overflow.IGNORE);
 };
 
 function setUp() {
@@ -123,14 +124,14 @@ function assertKeyHandlingIsCorrect(keyToOpenSubMenu, keyToCloseSubMenu) {
 }
 
 function testKeyHandling_ltr() {
-  assertKeyHandlingIsCorrect(goog.events.KeyCodes.RIGHT,
-      goog.events.KeyCodes.LEFT);
+  assertKeyHandlingIsCorrect(
+      goog.events.KeyCodes.RIGHT, goog.events.KeyCodes.LEFT);
 }
 
 function testKeyHandling_rtl() {
   document.body.style.direction = 'rtl';
-  assertKeyHandlingIsCorrect(goog.events.KeyCodes.LEFT,
-      goog.events.KeyCodes.RIGHT);
+  assertKeyHandlingIsCorrect(
+      goog.events.KeyCodes.LEFT, goog.events.KeyCodes.RIGHT);
 }
 
 function testNormalLtrSubMenu() {
@@ -244,37 +245,37 @@ function testShowAndDismissSubMenu() {
   var subMenu = menu.getChildAt(1);
   subMenu.setHighlighted(true);
 
-  goog.events.listen(subMenu, [
-    goog.ui.Component.EventType.OPEN,
-    goog.ui.Component.EventType.CLOSE
-  ], handleEvent);
+  goog.events.listen(
+      subMenu,
+      [goog.ui.Component.EventType.OPEN, goog.ui.Component.EventType.CLOSE],
+      handleEvent);
 
-  assertFalse('Submenu must not have "-open" CSS class',
+  assertFalse(
+      'Submenu must not have "-open" CSS class',
       goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
-  assertFalse('Popup menu must not be visible',
-      subMenu.getMenu().isVisible());
+  assertFalse('Popup menu must not be visible', subMenu.getMenu().isVisible());
   assertFalse('No OPEN event must have been dispatched', openEventDispatched);
   assertFalse('No CLOSE event must have been dispatched', closeEventDispatched);
 
   subMenu.showSubMenu();
-  assertTrue('Submenu must have "-open" CSS class',
+  assertTrue(
+      'Submenu must have "-open" CSS class',
       goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
-  assertTrue('Popup menu must be visible',
-      subMenu.getMenu().isVisible());
+  assertTrue('Popup menu must be visible', subMenu.getMenu().isVisible());
   assertTrue('OPEN event must have been dispatched', openEventDispatched);
   assertFalse('No CLOSE event must have been dispatched', closeEventDispatched);
 
   subMenu.dismissSubMenu();
-  assertFalse('Submenu must not have "-open" CSS class',
+  assertFalse(
+      'Submenu must not have "-open" CSS class',
       goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
-  assertFalse('Popup menu must not be visible',
-      subMenu.getMenu().isVisible());
+  assertFalse('Popup menu must not be visible', subMenu.getMenu().isVisible());
   assertTrue('CLOSE event must have been dispatched', closeEventDispatched);
 
-  goog.events.unlisten(subMenu, [
-    goog.ui.Component.EventType.OPEN,
-    goog.ui.Component.EventType.CLOSE
-  ], handleEvent);
+  goog.events.unlisten(
+      subMenu,
+      [goog.ui.Component.EventType.OPEN, goog.ui.Component.EventType.CLOSE],
+      handleEvent);
 }
 
 function testDismissWhenSubMenuNotVisible() {
@@ -298,15 +299,15 @@ function testDismissWhenSubMenuNotVisible() {
   var subMenu = menu.getChildAt(1);
   subMenu.setHighlighted(true);
 
-  goog.events.listen(subMenu, [
-    goog.ui.Component.EventType.OPEN,
-    goog.ui.Component.EventType.CLOSE
-  ], handleEvent);
+  goog.events.listen(
+      subMenu,
+      [goog.ui.Component.EventType.OPEN, goog.ui.Component.EventType.CLOSE],
+      handleEvent);
 
-  assertFalse('Submenu must not have "-open" CSS class',
+  assertFalse(
+      'Submenu must not have "-open" CSS class',
       goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
-  assertFalse('Popup menu must not be visible',
-      subMenu.getMenu().isVisible());
+  assertFalse('Popup menu must not be visible', subMenu.getMenu().isVisible());
   assertFalse('No OPEN event must have been dispatched', openEventDispatched);
   assertFalse('No CLOSE event must have been dispatched', closeEventDispatched);
 
@@ -314,17 +315,17 @@ function testDismissWhenSubMenuNotVisible() {
   subMenu.getMenu().setVisible(false);
 
   subMenu.dismissSubMenu();
-  assertFalse('Submenu must not have "-open" CSS class',
+  assertFalse(
+      'Submenu must not have "-open" CSS class',
       goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
   assertFalse(subMenu.menuIsVisible_);
-  assertFalse('Popup menu must not be visible',
-      subMenu.getMenu().isVisible());
+  assertFalse('Popup menu must not be visible', subMenu.getMenu().isVisible());
   assertTrue('CLOSE event must have been dispatched', closeEventDispatched);
 
-  goog.events.unlisten(subMenu, [
-    goog.ui.Component.EventType.OPEN,
-    goog.ui.Component.EventType.CLOSE
-  ], handleEvent);
+  goog.events.unlisten(
+      subMenu,
+      [goog.ui.Component.EventType.OPEN, goog.ui.Component.EventType.CLOSE],
+      handleEvent);
 }
 
 function testCloseSubMenuBehavior() {
@@ -343,23 +344,23 @@ function testCloseSubMenuBehavior() {
     this.keyCode = keyCode;
     this.propagationStopped = false;
     this.preventDefault = goog.nullFunction;
-    this.stopPropagation = function() {
-      this.propagationStopped = true;
-    };
+    this.stopPropagation = function() { this.propagationStopped = true; };
   }
 
   // Focus on the first item in the submenu and verify the activedescendant is
   // set correctly.
   subMenu.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
-  assertEquals('First item in submenu must be the aria-activedescendant',
-      'child1', goog.a11y.aria.getState(menu.getElement(),
-          goog.a11y.aria.State.ACTIVEDESCENDANT));
+  assertEquals(
+      'First item in submenu must be the aria-activedescendant', 'child1',
+      goog.a11y.aria.getState(
+          menu.getElement(), goog.a11y.aria.State.ACTIVEDESCENDANT));
 
   // Dismiss the submenu and verify the activedescendant is updated correctly.
   subMenu.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.LEFT));
-  assertEquals('Submenu must be the aria-activedescendant',
-      'subMenu', goog.a11y.aria.getState(menu.getElement(),
-          goog.a11y.aria.State.ACTIVEDESCENDANT));
+  assertEquals(
+      'Submenu must be the aria-activedescendant', 'subMenu',
+      goog.a11y.aria.getState(
+          menu.getElement(), goog.a11y.aria.State.ACTIVEDESCENDANT));
 }
 
 function testLazyInstantiateSubMenu() {
@@ -369,8 +370,8 @@ function testLazyInstantiateSubMenu() {
 
   var lazyMenu;
 
-  var key = goog.events.listen(subMenu, goog.ui.Component.EventType.OPEN,
-      function(e) {
+  var key = goog.events.listen(
+      subMenu, goog.ui.Component.EventType.OPEN, function(e) {
         lazyMenu = new goog.ui.Menu();
         lazyMenu.addItem(new goog.ui.MenuItem('foo'));
         lazyMenu.addItem(new goog.ui.MenuItem('bar'));
@@ -379,15 +380,16 @@ function testLazyInstantiateSubMenu() {
 
   subMenu.showSubMenu();
   assertNotNull('Popup menu must have been created', lazyMenu);
-  assertEquals('Popup menu must be a child of the submenu', subMenu,
+  assertEquals(
+      'Popup menu must be a child of the submenu', subMenu,
       lazyMenu.getParent());
   assertTrue('Popup menu must have been rendered', lazyMenu.isInDocument());
   assertTrue('Popup menu must be visible', lazyMenu.isVisible());
 
   menu.dispose();
   assertTrue('Submenu must have been disposed of', subMenu.isDisposed());
-  assertFalse('Popup menu must not have been disposed of',
-      lazyMenu.isDisposed());
+  assertFalse(
+      'Popup menu must not have been disposed of', lazyMenu.isDisposed());
 
   lazyMenu.dispose();
 
@@ -410,36 +412,47 @@ function testReusableMenu() {
   assertNull('Shared menu must not have a parent', sharedMenu.getParent());
 
   subMenuOne.setMenu(sharedMenu);
-  assertEquals('SubMenuOne must point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuOne must point to the shared menu', sharedMenu,
       subMenuOne.getMenu());
-  assertEquals('SubMenuOne must be the shared menu\'s parent', subMenuOne,
+  assertEquals(
+      'SubMenuOne must be the shared menu\'s parent', subMenuOne,
       sharedMenu.getParent());
 
   subMenuTwo.setMenu(sharedMenu);
-  assertEquals('SubMenuTwo must point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuTwo must point to the shared menu', sharedMenu,
       subMenuTwo.getMenu());
-  assertEquals('SubMenuTwo must be the shared menu\'s parent', subMenuTwo,
+  assertEquals(
+      'SubMenuTwo must be the shared menu\'s parent', subMenuTwo,
       sharedMenu.getParent());
-  assertEquals('SubMenuOne must still point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuOne must still point to the shared menu', sharedMenu,
       subMenuOne.getMenu());
 
   menu.setHighlighted(subMenuOne);
   subMenuOne.showSubMenu();
-  assertEquals('SubMenuOne must point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuOne must point to the shared menu', sharedMenu,
       subMenuOne.getMenu());
-  assertEquals('SubMenuOne must be the shared menu\'s parent', subMenuOne,
+  assertEquals(
+      'SubMenuOne must be the shared menu\'s parent', subMenuOne,
       sharedMenu.getParent());
-  assertEquals('SubMenuTwo must still point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuTwo must still point to the shared menu', sharedMenu,
       subMenuTwo.getMenu());
   assertTrue('Shared menu must be visible', sharedMenu.isVisible());
 
   menu.setHighlighted(subMenuTwo);
   subMenuTwo.showSubMenu();
-  assertEquals('SubMenuTwo must point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuTwo must point to the shared menu', sharedMenu,
       subMenuTwo.getMenu());
-  assertEquals('SubMenuTwo must be the shared menu\'s parent', subMenuTwo,
+  assertEquals(
+      'SubMenuTwo must be the shared menu\'s parent', subMenuTwo,
       sharedMenu.getParent());
-  assertEquals('SubMenuOne must still point to the shared menu', sharedMenu,
+  assertEquals(
+      'SubMenuOne must still point to the shared menu', sharedMenu,
       subMenuOne.getMenu());
   assertTrue('Shared menu must be visible', sharedMenu.isVisible());
 }
@@ -485,12 +498,10 @@ function testSubmenuSelectable() {
   submenu.setSelectable(true);
 
   var numClicks = 0;
-  var menuClickedFn = function(e) {
-    numClicks++;
-  };
+  var menuClickedFn = function(e) { numClicks++; };
 
-  goog.events.listen(submenu, goog.ui.Component.EventType.ACTION,
-      menuClickedFn);
+  goog.events.listen(
+      submenu, goog.ui.Component.EventType.ACTION, menuClickedFn);
   submenu.performActionInternal(null);
   submenu.performActionInternal(null);
 
@@ -499,8 +510,8 @@ function testSubmenuSelectable() {
   submenu.setSelectable(false);
   submenu.performActionInternal(null);
 
-  assertEquals('The submenu should not have fired any further events', 2,
-      numClicks);
+  assertEquals(
+      'The submenu should not have fired any further events', 2, numClicks);
 }
 
 
@@ -514,12 +525,10 @@ function testSubmenuCheckable() {
   submenu.setCheckable(true);
 
   var numClicks = 0;
-  var menuClickedFn = function(e) {
-    numClicks++;
-  };
+  var menuClickedFn = function(e) { numClicks++; };
 
-  goog.events.listen(submenu, goog.ui.Component.EventType.ACTION,
-      menuClickedFn);
+  goog.events.listen(
+      submenu, goog.ui.Component.EventType.ACTION, menuClickedFn);
   submenu.performActionInternal(null);
   submenu.performActionInternal(null);
 
@@ -528,8 +537,8 @@ function testSubmenuCheckable() {
   submenu.setCheckable(false);
   submenu.performActionInternal(null);
 
-  assertEquals('The submenu should not have fired any further events', 2,
-      numClicks);
+  assertEquals(
+      'The submenu should not have fired any further events', 2, numClicks);
 }
 
 
@@ -573,8 +582,7 @@ function assertRenderDirection(subMenu, left) {
   var menuPosition = goog.style.getPageOffset(subMenu.getMenu().getElement());
   assert(Math.abs(menuItemPosition.y - menuPosition.y) < 5);
   assertEquals(
-      'Menu at: ' + menuPosition.x +
-      ', submenu item at: ' + menuItemPosition.x,
+      'Menu at: ' + menuPosition.x + ', submenu item at: ' + menuItemPosition.x,
       left, menuPosition.x < menuItemPosition.x);
 }
 
@@ -587,7 +595,7 @@ function assertRenderDirection(subMenu, left) {
 function assertArrowDirection(subMenu, left) {
   assertEquals(
       left ? goog.ui.SubMenuRenderer.LEFT_ARROW_ :
-      goog.ui.SubMenuRenderer.RIGHT_ARROW_,
+             goog.ui.SubMenuRenderer.RIGHT_ARROW_,
       getArrowElement(subMenu).innerHTML);
 }
 
@@ -602,9 +610,10 @@ function assertArrowPosition(subMenu, left) {
   var expectedLeft =
       left ? 0 : arrow.offsetParent.offsetWidth - arrow.offsetWidth;
   var actualLeft = arrow.offsetLeft;
-  assertTrue('Expected left offset: ' + expectedLeft + '\n' +
-             'Actual left offset: ' + actualLeft + '\n',
-             Math.abs(expectedLeft - actualLeft) < 5);
+  assertTrue(
+      'Expected left offset: ' + expectedLeft + '\n' +
+          'Actual left offset: ' + actualLeft + '\n',
+      Math.abs(expectedLeft - actualLeft) < 5);
 }
 
 

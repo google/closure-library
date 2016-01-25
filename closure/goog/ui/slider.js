@@ -129,8 +129,8 @@ goog.ui.Slider.prototype.createThumbs = function() {
  * @private
  */
 goog.ui.Slider.prototype.createThumb_ = function() {
-  var thumb = this.getDomHelper().createDom(goog.dom.TagName.DIV,
-                                            goog.ui.Slider.THUMB_CSS_CLASS);
+  var thumb = this.getDomHelper().createDom(
+      goog.dom.TagName.DIV, goog.ui.Slider.THUMB_CSS_CLASS);
   goog.a11y.aria.setRole(thumb, goog.a11y.aria.Role.BUTTON);
   return /** @type {!HTMLDivElement} */ (thumb);
 };

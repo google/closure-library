@@ -25,8 +25,7 @@ var page2;
 var page3;
 
 function setUp() {
-  goog.dom.getElement('testBody').innerHTML =
-      '<div id="tabpane"></div>' +
+  goog.dom.getElement('testBody').innerHTML = '<div id="tabpane"></div>' +
       '<div id="page1Content">' +
       '  Content for page 1' +
       '</div>' +
@@ -38,12 +37,12 @@ function setUp() {
       '</div>';
 
   tabPane = new goog.ui.TabPane(goog.dom.getElement('tabpane'));
-  page1 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page1Content'),
-      'page1');
-  page2 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page2Content'),
-      'page2');
-  page3 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page3Content'),
-      'page3');
+  page1 =
+      new goog.ui.TabPane.TabPage(goog.dom.getElement('page1Content'), 'page1');
+  page2 =
+      new goog.ui.TabPane.TabPage(goog.dom.getElement('page2Content'), 'page2');
+  page3 =
+      new goog.ui.TabPane.TabPage(goog.dom.getElement('page3Content'), 'page3');
 
   tabPane.addPage(page1);
   tabPane.addPage(page2);
@@ -58,43 +57,43 @@ function testAllPagesEnabledAndSelectable() {
   tabPane.setSelectedIndex(0);
   var selected = tabPane.getSelectedPage();
   assertEquals('page1 should be selected', 'page1', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 
   tabPane.setSelectedIndex(1);
   selected = tabPane.getSelectedPage();
   assertEquals('page2 should be selected', 'page2', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 
   tabPane.setSelectedIndex(2);
   selected = tabPane.getSelectedPage();
   assertEquals('page3 should be selected', 'page3', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 }
 
 function testDisabledPageIsNotSelectable() {
   page2.setEnabled(false);
-  assertEquals('goog-tabpane-tab-disabled',
-               page2.getTitleElement().className);
+  assertEquals('goog-tabpane-tab-disabled', page2.getTitleElement().className);
 
   tabPane.setSelectedIndex(0);
   var selected = tabPane.getSelectedPage();
   assertEquals('page1 should be selected', 'page1', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 
   tabPane.setSelectedIndex(1);
   selected = tabPane.getSelectedPage();
-  assertEquals('page1 should remain selected, as page2 is disabled',
-               'page1', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'page1 should remain selected, as page2 is disabled', 'page1',
+      selected.getTitle());
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 
   tabPane.setSelectedIndex(2);
   selected = tabPane.getSelectedPage();
   assertEquals('page3 should be selected', 'page3', selected.getTitle());
-  assertEquals('goog-tabpane-tab-selected',
-               selected.getTitleElement().className);
+  assertEquals(
+      'goog-tabpane-tab-selected', selected.getTitleElement().className);
 }

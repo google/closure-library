@@ -44,26 +44,31 @@ function testConstructor() {
 }
 
 function testGetCssClass() {
-  assertEquals('getCssClass() must return expected value',
+  assertEquals(
+      'getCssClass() must return expected value',
       goog.ui.ToolbarSeparatorRenderer.CSS_CLASS, renderer.getCssClass());
 }
 
 function testCreateDom() {
   var element = renderer.createDom(separator);
   assertNotNull('Created element must not be null', element);
-  assertEquals('Created element must be a DIV',
-      goog.dom.TagName.DIV, element.tagName);
-  assertSameElements('Created element must have expected class names',
-      [goog.ui.ToolbarSeparatorRenderer.CSS_CLASS,
-       // Separators are always in a disabled state.
-       renderer.getClassForState(goog.ui.Component.State.DISABLED),
-       goog.ui.INLINE_BLOCK_CLASSNAME],
+  assertEquals(
+      'Created element must be a DIV', goog.dom.TagName.DIV, element.tagName);
+  assertSameElements(
+      'Created element must have expected class names',
+      [
+        goog.ui.ToolbarSeparatorRenderer.CSS_CLASS,
+        // Separators are always in a disabled state.
+        renderer.getClassForState(goog.ui.Component.State.DISABLED),
+        goog.ui.INLINE_BLOCK_CLASSNAME
+      ],
       goog.dom.classlist.get(element));
 }
 
 function testCreateDomWithExtraCssClass() {
   separator.addClassName('another-class');
   var element = renderer.createDom(separator);
-  assertContains('Created element must contain extra CSS classes',
-                 'another-class', goog.dom.classlist.get(element));
+  assertContains(
+      'Created element must contain extra CSS classes', 'another-class',
+      goog.dom.classlist.get(element));
 }

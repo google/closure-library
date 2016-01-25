@@ -77,16 +77,14 @@ function testPostWithDefaults() {
 
 function expectUrlAndParameters_(url, target, parameters) {
   var form = formPost.getElement();
-  assertEquals('element must be a form',
-      goog.dom.TagName.FORM, form.tagName);
+  assertEquals('element must be a form', goog.dom.TagName.FORM, form.tagName);
   assertEquals('form must be hidden', 'none', form.style.display);
-  assertEquals('form method must be POST',
-      'POST', form.method.toUpperCase());
+  assertEquals('form method must be POST', 'POST', form.method.toUpperCase());
   assertEquals('submits', 1, submits);
   assertEquals('action attribute', url, form.action);
   assertEquals('target attribute', target, form.target);
-  var inputs = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.INPUT, null, form);
+  var inputs =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.INPUT, null, form);
   var formValues = {};
   for (var i = 0, input = inputs[i]; input = inputs[i]; i++) {
     if (goog.isArray(formValues[input.name])) {

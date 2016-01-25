@@ -48,25 +48,24 @@ function testRtl() {
   samplePalette.handleInput(null);
   var expectedRight = samplePalette.hsImageEl_.offsetWidth -
       Math.ceil(samplePalette.hsHandleEl_.offsetWidth / 2);
-  assertEquals(expectedRight + 'px',
-      samplePalette.hsHandleEl_.style['right']);
+  assertEquals(expectedRight + 'px', samplePalette.hsHandleEl_.style['right']);
   assertEquals('', samplePalette.hsHandleEl_.style['left']);
 }
 
 function testOptionalInitialColor() {
   var initialColor = '#0000ff';
   var customInitialPalette = new goog.ui.HsvPalette(null, initialColor);
-  assertEquals(initialColor,
-      goog.color.parse(customInitialPalette.getColor()).hex);
+  assertEquals(
+      initialColor, goog.color.parse(customInitialPalette.getColor()).hex);
 }
 
 function testCustomClassName() {
   var customClassName = 'custom-plouf';
-  var customClassPalette =
-      new goog.ui.HsvPalette(null, null, customClassName);
+  var customClassPalette = new goog.ui.HsvPalette(null, null, customClassName);
   customClassPalette.createDom();
-  assertTrue(goog.dom.classlist.contains(customClassPalette.getElement(),
-      customClassName));
+  assertTrue(
+      goog.dom.classlist.contains(
+          customClassPalette.getElement(), customClassName));
 }
 
 function testCannotDecorate() {
@@ -85,8 +84,9 @@ function testSetColor() {
 function testChangeEvent() {
   // TODO(user): Add functionality to goog.testing.events to assert
   // an event was fired.
-  goog.events.listen(samplePalette, goog.ui.Component.EventType.ACTION,
-      function() {eventWasFired = true;});
+  goog.events.listen(
+      samplePalette, goog.ui.Component.EventType.ACTION,
+      function() { eventWasFired = true; });
   samplePalette.setColor('#123456');
   assertTrue(eventWasFired);
 }
@@ -101,8 +101,7 @@ function testSetHsv() {
 
   // Setting saturation to 0 should yield white.
   samplePalette.setHsv(null, 0, null);
-  assertEquals('#ffffff',
-      goog.color.parse(samplePalette.getColor()).hex);
+  assertEquals('#ffffff', goog.color.parse(samplePalette.getColor()).hex);
 
   // Setting value/brightness to 0 should yield black.
   samplePalette.setHsv(null, null, 0);
@@ -119,12 +118,14 @@ function testRender() {
   assertEquals(goog.dom.TagName.DIV, elem.tagName);
 
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
-    assertSameElements('On IE6, the noalpha class must be present',
+    assertSameElements(
+        'On IE6, the noalpha class must be present',
         ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
         goog.dom.classlist.get(elem));
   } else {
-    assertEquals('The noalpha class must not be present',
-        'goog-hsv-palette', elem.className);
+    assertEquals(
+        'The noalpha class must not be present', 'goog-hsv-palette',
+        elem.className);
   }
 }
 
@@ -135,15 +136,15 @@ function testSwatchTextIsReadable() {
 
   // Text should be black when background is light.
   samplePalette.setColor('#ccffff');
-  assertEquals('#000000',
-      goog.color.parse(goog.style.getStyle(swatchElement,
-      'color')).hex);
+  assertEquals(
+      '#000000',
+      goog.color.parse(goog.style.getStyle(swatchElement, 'color')).hex);
 
   // Text should be white when background is dark.
   samplePalette.setColor('#410800');
-  assertEquals('#ffffff',
-      goog.color.parse(goog.style.getStyle(swatchElement,
-      'color')).hex);
+  assertEquals(
+      '#ffffff',
+      goog.color.parse(goog.style.getStyle(swatchElement, 'color')).hex);
 }
 
 function testInputColor() {
@@ -164,8 +165,8 @@ function testHandleMouseMoveValue() {
   samplePalette.setColor('#630c00');
   goog.style.setPageOffset(samplePalette.valueBackgroundImageElement, 0, 0);
   goog.style.setSize(samplePalette.valueBackgroundImageElement, 10, 100);
-  var boundaries = goog.style.getBounds(
-      samplePalette.valueBackgroundImageElement, 0, 0);
+  var boundaries =
+      goog.style.getBounds(samplePalette.valueBackgroundImageElement, 0, 0);
 
   var event = new goog.events.Event();
   event.clientY = -50;

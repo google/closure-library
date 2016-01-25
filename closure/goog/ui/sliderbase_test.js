@@ -131,10 +131,9 @@ function setUp() {
   oneThumbSlider = new OneThumbSlider();
   oneThumbSlider.decorate(oneThumbElem);
   oneChangeEventCount = 0;
-  goog.events.listen(oneThumbSlider, goog.ui.Component.EventType.CHANGE,
-      function() {
-        oneChangeEventCount++;
-      });
+  goog.events.listen(
+      oneThumbSlider, goog.ui.Component.EventType.CHANGE,
+      function() { oneChangeEventCount++; });
 
   var twoThumbElem = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'twoThumbSlider'},
@@ -145,13 +144,12 @@ function setUp() {
   twoThumbSlider = new TwoThumbSlider();
   twoThumbSlider.decorate(twoThumbElem);
   twoChangeEventCount = 0;
-  goog.events.listen(twoThumbSlider, goog.ui.Component.EventType.CHANGE,
-      function() {
-        twoChangeEventCount++;
-      });
+  goog.events.listen(
+      twoThumbSlider, goog.ui.Component.EventType.CHANGE,
+      function() { twoChangeEventCount++; });
 
-  var sandBoxRtl = goog.dom.createDom(goog.dom.TagName.DIV,
-      {'dir': 'rtl', 'style': 'position:absolute;'});
+  var sandBoxRtl = goog.dom.createDom(
+      goog.dom.TagName.DIV, {'dir': 'rtl', 'style': 'position:absolute;'});
   sandBox.appendChild(sandBoxRtl);
 
   var oneThumbElemRtl = goog.dom.createDom(
@@ -161,10 +159,9 @@ function setUp() {
   oneThumbSliderRtl = new OneThumbSlider();
   oneThumbSliderRtl.enableFlipForRtl(true);
   oneThumbSliderRtl.decorate(oneThumbElemRtl);
-  goog.events.listen(oneThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
-      function() {
-        oneChangeEventCount++;
-      });
+  goog.events.listen(
+      oneThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
+      function() { oneChangeEventCount++; });
 
   var twoThumbElemRtl = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'twoThumbSliderRtl'},
@@ -176,10 +173,9 @@ function setUp() {
   twoThumbSliderRtl.enableFlipForRtl(true);
   twoThumbSliderRtl.decorate(twoThumbElemRtl);
   twoChangeEventCount = 0;
-  goog.events.listen(twoThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
-      function() {
-        twoChangeEventCount++;
-      });
+  goog.events.listen(
+      twoThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
+      function() { twoChangeEventCount++; });
 }
 
 function tearDown() {
@@ -194,19 +190,23 @@ function tearDown() {
 function testGetAndSetValue() {
   oneThumbSlider.setValue(30);
   assertEquals(30, oneThumbSlider.getValue());
-  assertEquals('Setting valid value must dispatch only a single change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch only a single change event.', 1,
+      oneChangeEventCount);
 
   oneThumbSlider.setValue(30);
   assertEquals(30, oneThumbSlider.getValue());
-  assertEquals('Setting to same value must not dispatch change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting to same value must not dispatch change event.', 1,
+      oneChangeEventCount);
 
   oneThumbSlider.setValue(-30);
-  assertEquals('Setting invalid value must not change value.',
-      30, oneThumbSlider.getValue());
-  assertEquals('Setting invalid value must not dispatch change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting invalid value must not change value.', 30,
+      oneThumbSlider.getValue());
+  assertEquals(
+      'Setting invalid value must not dispatch change event.', 1,
+      oneChangeEventCount);
 
 
   // Value thumb can't go past extent thumb, so we must move that first to
@@ -215,19 +215,23 @@ function testGetAndSetValue() {
   twoChangeEventCount = 0;
   twoThumbSlider.setValue(60);
   assertEquals(60, twoThumbSlider.getValue());
-  assertEquals('Setting valid value must dispatch only a single change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch only a single change event.', 1,
+      twoChangeEventCount);
 
   twoThumbSlider.setValue(60);
   assertEquals(60, twoThumbSlider.getValue());
-  assertEquals('Setting to same value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting to same value must not dispatch change event.', 1,
+      twoChangeEventCount);
 
   twoThumbSlider.setValue(-60);
-  assertEquals('Setting invalid value must not change value.',
-      60, twoThumbSlider.getValue());
-  assertEquals('Setting invalid value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting invalid value must not change value.', 60,
+      twoThumbSlider.getValue());
+  assertEquals(
+      'Setting invalid value must not dispatch change event.', 1,
+      twoChangeEventCount);
 }
 
 function testGetAndSetValueRtl() {
@@ -238,22 +242,26 @@ function testGetAndSetValueRtl() {
 
   oneThumbSliderRtl.setValue(30);
   assertEquals(30, oneThumbSliderRtl.getValue());
-  assertEquals('Setting valid value must dispatch only a single change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch only a single change event.', 1,
+      oneChangeEventCount);
 
   assertEquals('', thumbElement.style.left);
   assertTrue(thumbElement.style.right >= 0);
 
   oneThumbSliderRtl.setValue(30);
   assertEquals(30, oneThumbSliderRtl.getValue());
-  assertEquals('Setting to same value must not dispatch change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting to same value must not dispatch change event.', 1,
+      oneChangeEventCount);
 
   oneThumbSliderRtl.setValue(-30);
-  assertEquals('Setting invalid value must not change value.',
-      30, oneThumbSliderRtl.getValue());
-  assertEquals('Setting invalid value must not dispatch change event.',
-      1, oneChangeEventCount);
+  assertEquals(
+      'Setting invalid value must not change value.', 30,
+      oneThumbSliderRtl.getValue());
+  assertEquals(
+      'Setting invalid value must not dispatch change event.', 1,
+      oneChangeEventCount);
 
 
   // Value thumb can't go past extent thumb, so we must move that first to
@@ -271,13 +279,15 @@ function testGetAndSetValueRtl() {
   twoChangeEventCount = 0;
   twoThumbSliderRtl.setValue(60);
   assertEquals(60, twoThumbSliderRtl.getValue());
-  assertEquals('Setting valid value must dispatch only a single change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch only a single change event.', 1,
+      twoChangeEventCount);
 
   twoThumbSliderRtl.setValue(60);
   assertEquals(60, twoThumbSliderRtl.getValue());
-  assertEquals('Setting to same value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting to same value must not dispatch change event.', 1,
+      twoChangeEventCount);
 
   assertEquals('', valueThumbElement.style.left);
   assertTrue(valueThumbElement.style.right >= 0);
@@ -285,10 +295,12 @@ function testGetAndSetValueRtl() {
   assertTrue(extentThumbElement.style.right >= 0);
 
   twoThumbSliderRtl.setValue(-60);
-  assertEquals('Setting invalid value must not change value.',
-      60, twoThumbSliderRtl.getValue());
-  assertEquals('Setting invalid value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting invalid value must not change value.', 60,
+      twoThumbSliderRtl.getValue());
+  assertEquals(
+      'Setting invalid value must not dispatch change event.', 1,
+      twoChangeEventCount);
 }
 
 function testGetAndSetExtent() {
@@ -297,48 +309,55 @@ function testGetAndSetExtent() {
 
   twoThumbSlider.setExtent(7);
   assertEquals(7, twoThumbSlider.getExtent());
-  assertEquals('Setting valid value must dispatch only a single change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch only a single change event.', 1,
+      twoChangeEventCount);
 
   twoThumbSlider.setExtent(7);
   assertEquals(7, twoThumbSlider.getExtent());
-  assertEquals('Setting to same value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting to same value must not dispatch change event.', 1,
+      twoChangeEventCount);
 
   twoThumbSlider.setExtent(-7);
-  assertEquals('Setting invalid value must not change value.',
-      7, twoThumbSlider.getExtent());
-  assertEquals('Setting invalid value must not dispatch change event.',
-      1, twoChangeEventCount);
+  assertEquals(
+      'Setting invalid value must not change value.', 7,
+      twoThumbSlider.getExtent());
+  assertEquals(
+      'Setting invalid value must not dispatch change event.', 1,
+      twoChangeEventCount);
 }
 
 function testUpdateValueExtent() {
   twoThumbSlider.setValueAndExtent(30, 50);
 
   assertNotNull(twoThumbSlider.getElement());
-  assertEquals('Setting value results in updating aria-valuenow',
-      '30',
-      goog.a11y.aria.getState(twoThumbSlider.getElement(),
-          goog.a11y.aria.State.VALUENOW));
+  assertEquals(
+      'Setting value results in updating aria-valuenow', '30',
+      goog.a11y.aria.getState(
+          twoThumbSlider.getElement(), goog.a11y.aria.State.VALUENOW));
   assertEquals(30, twoThumbSlider.getValue());
   assertEquals(50, twoThumbSlider.getExtent());
 }
 
 function testValueText() {
   oneThumbSlider.setValue(10);
-  assertEquals('Setting value results in correct aria-valuetext',
-      'A big value.', goog.a11y.aria.getState(oneThumbSlider.getElement(),
-          goog.a11y.aria.State.VALUETEXT));
+  assertEquals(
+      'Setting value results in correct aria-valuetext', 'A big value.',
+      goog.a11y.aria.getState(
+          oneThumbSlider.getElement(), goog.a11y.aria.State.VALUETEXT));
   oneThumbSlider.setValue(2);
-  assertEquals('Updating value results in updated aria-valuetext',
-      'A small value.', goog.a11y.aria.getState(oneThumbSlider.getElement(),
-          goog.a11y.aria.State.VALUETEXT));
+  assertEquals(
+      'Updating value results in updated aria-valuetext', 'A small value.',
+      goog.a11y.aria.getState(
+          oneThumbSlider.getElement(), goog.a11y.aria.State.VALUETEXT));
 }
 
 function testGetValueText() {
   oneThumbSlider.setValue(10);
-  assertEquals('Getting the text value gets the correct description',
-      'A big value.', oneThumbSlider.getTextValue());
+  assertEquals(
+      'Getting the text value gets the correct description', 'A big value.',
+      oneThumbSlider.getTextValue());
   oneThumbSlider.setValue(2);
   assertEquals(
       'Getting the updated text value gets the correct updated description',
@@ -358,9 +377,10 @@ function testRangeListener() {
 
   slider.exitDocument();
   slider.rangeModel.setValue(0);
-  assertEquals('The range model listener should not have been removed so we ' +
-               'should have gotten a second event dispatch',
-               2, f.getCallCount());
+  assertEquals(
+      'The range model listener should not have been removed so we ' +
+          'should have gotten a second event dispatch',
+      2, f.getCallCount());
 }
 
 
@@ -376,11 +396,15 @@ function testRangeListener() {
 function assertHighlightedRange(rangeHighlight, startValue, endValue) {
   var rangeStr = '[' + startValue + ', ' + endValue + ']';
   var rangeStart = 10 + 10 * startValue;
-  assertEquals('Range highlight for ' + rangeStr + ' should start at ' +
-      rangeStart + 'px.', rangeStart, rangeHighlight.offsetLeft);
+  assertEquals(
+      'Range highlight for ' + rangeStr + ' should start at ' + rangeStart +
+          'px.',
+      rangeStart, rangeHighlight.offsetLeft);
   var rangeSize = 10 * (endValue - startValue);
-  assertEquals('Range highlight for ' + rangeStr + ' should have size ' +
-      rangeSize + 'px.', rangeSize, rangeHighlight.offsetWidth);
+  assertEquals(
+      'Range highlight for ' + rangeStr + ' should have size ' + rangeSize +
+          'px.',
+      rangeSize, rangeHighlight.offsetWidth);
 }
 
 function testKeyHandlingTests() {
@@ -411,25 +435,23 @@ function testKeyHandlingTests() {
 
   goog.testing.events.fireKeySequence(
       twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(10, twoThumbSlider.getValue());
   assertEquals(90, twoThumbSlider.getExtent());
 
   goog.testing.events.fireKeySequence(
       twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(20, twoThumbSlider.getValue());
   assertEquals(80, twoThumbSlider.getExtent());
 
   goog.testing.events.fireKeySequence(
-      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT,
-      { shiftKey: true });
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT, {shiftKey: true});
   assertEquals(10, twoThumbSlider.getValue());
   assertEquals(80, twoThumbSlider.getExtent());
 
   goog.testing.events.fireKeySequence(
-      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT,
-      { shiftKey: true });
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT, {shiftKey: true});
   assertEquals(0, twoThumbSlider.getValue());
   assertEquals(80, twoThumbSlider.getExtent());
 }
@@ -490,25 +512,25 @@ function testKeyHandlingRtl() {
 
   goog.testing.events.fireKeySequence(
       twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(0, twoThumbSliderRtl.getValue());
   assertEquals(90, twoThumbSliderRtl.getExtent());
 
   goog.testing.events.fireKeySequence(
       twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(0, twoThumbSliderRtl.getValue());
   assertEquals(80, twoThumbSliderRtl.getExtent());
 
   goog.testing.events.fireKeySequence(
       twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(10, twoThumbSliderRtl.getValue());
   assertEquals(80, twoThumbSliderRtl.getExtent());
 
   goog.testing.events.fireKeySequence(
       twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT,
-      { shiftKey: true });
+      {shiftKey: true});
   assertEquals(20, twoThumbSliderRtl.getValue());
   assertEquals(80, twoThumbSliderRtl.getExtent());
 }
@@ -533,7 +555,7 @@ function testRangeHighlight() {
 }
 
 function testRangeHighlightAnimation() {
-  var animationDelay = 160; // Delay in ms, is a bit higher than actual delay.
+  var animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
   if (goog.userAgent.IE) {
     // For some reason, (probably due to how timing works), IE7 and IE8 will not
     // stop if we don't wait for it.
@@ -575,8 +597,9 @@ function testRangeHighlightForZeroSizeSlider() {
 
   // The setVisible call is used to force a UI update.
   twoThumbSlider.setVisible(true);
-  assertEquals('Range highlight size should be 0 when slider size is 0',
-      0, goog.dom.getElement('rangeHighlight').offsetWidth);
+  assertEquals(
+      'Range highlight size should be 0 when slider size is 0', 0,
+      goog.dom.getElement('rangeHighlight').offsetWidth);
 }
 
 function testAnimatedSetValueAnimatesFactoryCreatedAnimations() {
@@ -631,21 +654,25 @@ function testDisabledAndEnabledSlider() {
   // Disable the slider and check its state
   oneThumbSlider.setEnabled(false);
   assertFalse(oneThumbSlider.isEnabled());
-  assertTrue(goog.dom.classlist.contains(
-      oneThumbSlider.getElement(), 'goog-slider-disabled'));
+  assertTrue(
+      goog.dom.classlist.contains(
+          oneThumbSlider.getElement(), 'goog-slider-disabled'));
   assertEquals(0, oneThumbSlider.getHandler().getListenerCount());
 
   // setValue should work unaffected even when the slider is disabled.
   oneThumbSlider.setValue(30);
   assertEquals(30, oneThumbSlider.getValue());
-  assertEquals('Setting valid value must dispatch a change event ' +
-      'even when slider is disabled.', 1, oneChangeEventCount);
+  assertEquals(
+      'Setting valid value must dispatch a change event ' +
+          'even when slider is disabled.',
+      1, oneChangeEventCount);
 
   // Test the transition from disabled to enabled
   oneThumbSlider.setEnabled(true);
   assertTrue(oneThumbSlider.isEnabled());
-  assertFalse(goog.dom.classlist.contains(
-      oneThumbSlider.getElement(), 'goog-slider-disabled'));
+  assertFalse(
+      goog.dom.classlist.contains(
+          oneThumbSlider.getElement(), 'goog-slider-disabled'));
   assertTrue(listenerCount == oneThumbSlider.getHandler().getListenerCount());
 }
 
@@ -653,44 +680,63 @@ function testBlockIncrementingWithEnableAndDisabled() {
   var doc = goog.dom.getOwnerDocument(oneThumbSlider.getElement());
   // Case when slider is not disabled between the mouse down and up events.
   goog.testing.events.fireMouseDownEvent(oneThumbSlider.getElement());
-  assertEquals(1, goog.events.getListeners(
-      oneThumbSlider.getElement(),
-      goog.events.EventType.MOUSEMOVE, false).length);
-  assertEquals(1, goog.events.getListeners(
-      doc, goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(
+      1, goog.events
+             .getListeners(
+                 oneThumbSlider.getElement(), goog.events.EventType.MOUSEMOVE,
+                 false)
+             .length);
+  assertEquals(
+      1, goog.events.getListeners(doc, goog.events.EventType.MOUSEUP, true)
+             .length);
 
   goog.testing.events.fireMouseUpEvent(oneThumbSlider.getElement());
 
-  assertEquals(0, goog.events.getListeners(
-      oneThumbSlider.getElement(),
-      goog.events.EventType.MOUSEMOVE, false).length);
-  assertEquals(0, goog.events.getListeners(
-      doc, goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(
+      0, goog.events
+             .getListeners(
+                 oneThumbSlider.getElement(), goog.events.EventType.MOUSEMOVE,
+                 false)
+             .length);
+  assertEquals(
+      0, goog.events.getListeners(doc, goog.events.EventType.MOUSEUP, true)
+             .length);
 
   // Case when the slider is disabled between the mouse down and up events.
   goog.testing.events.fireMouseDownEvent(oneThumbSlider.getElement());
-  assertEquals(1, goog.events.getListeners(
-      oneThumbSlider.getElement(),
-      goog.events.EventType.MOUSEMOVE, false).length);
-  assertEquals(1,
-      goog.events.getListeners(doc,
-      goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(
+      1, goog.events
+             .getListeners(
+                 oneThumbSlider.getElement(), goog.events.EventType.MOUSEMOVE,
+                 false)
+             .length);
+  assertEquals(
+      1, goog.events.getListeners(doc, goog.events.EventType.MOUSEUP, true)
+             .length);
 
   oneThumbSlider.setEnabled(false);
 
-  assertEquals(0, goog.events.getListeners(
-      oneThumbSlider.getElement(),
-      goog.events.EventType.MOUSEMOVE, false).length);
-  assertEquals(0, goog.events.getListeners(
-      doc, goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(
+      0, goog.events
+             .getListeners(
+                 oneThumbSlider.getElement(), goog.events.EventType.MOUSEMOVE,
+                 false)
+             .length);
+  assertEquals(
+      0, goog.events.getListeners(doc, goog.events.EventType.MOUSEUP, true)
+             .length);
   assertEquals(1, oneThumbSlider.getHandler().getListenerCount());
 
   goog.testing.events.fireMouseUpEvent(oneThumbSlider.getElement());
-  assertEquals(0, goog.events.getListeners(
-      oneThumbSlider.getElement(),
-      goog.events.EventType.MOUSEMOVE, false).length);
-  assertEquals(0, goog.events.getListeners(
-      doc, goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(
+      0, goog.events
+             .getListeners(
+                 oneThumbSlider.getElement(), goog.events.EventType.MOUSEMOVE,
+                 false)
+             .length);
+  assertEquals(
+      0, goog.events.getListeners(doc, goog.events.EventType.MOUSEUP, true)
+             .length);
 }
 
 function testMouseClickWithMoveToPointEnabled() {
@@ -709,12 +755,14 @@ function testMouseClickWithMoveToPointEnabled() {
   coords.x += pixelsPerStep / 2;
 
   // Case when value is increased
-  goog.testing.events.fireClickSequence(oneThumbSlider.getElement(),
+  goog.testing.events.fireClickSequence(
+      oneThumbSlider.getElement(),
       /* opt_button */ undefined, coords);
   assertEquals(oneThumbSlider.getValue(), initialValue + stepSize);
 
   // Case when value is decreased
-  goog.testing.events.fireClickSequence(oneThumbSlider.getElement(),
+  goog.testing.events.fireClickSequence(
+      oneThumbSlider.getElement(),
       /* opt_button */ undefined, coords);
   assertEquals(oneThumbSlider.getValue(), initialValue);
 
@@ -802,10 +850,9 @@ function testValueFromMousePosition() {
   offset.x += size.width / 2;
   offset.y += size.height / 2;
   var e = null;
-  goog.events.listen(oneThumbSlider, goog.events.EventType.MOUSEMOVE,
-      function(evt) {
-        e = evt;
-      });
+  goog.events.listen(
+      oneThumbSlider, goog.events.EventType.MOUSEMOVE,
+      function(evt) { e = evt; });
   goog.testing.events.fireMouseMoveEvent(oneThumbSlider, offset);
   assertNotEquals(e, null);
   assertRoughlyEquals(
@@ -869,18 +916,19 @@ function testDragEvents() {
   offset.x += size.width / 2;
   offset.y += size.height / 2;
   var event_types = [];
-  var handler = function(evt) {
-    event_types.push(evt.type);
-  };
+  var handler = function(evt) { event_types.push(evt.type); };
 
-  goog.events.listen(oneThumbSlider,
-      [goog.ui.SliderBase.EventType.DRAG_START,
-       goog.ui.SliderBase.EventType.DRAG_END,
-       goog.ui.SliderBase.EventType.DRAG_VALUE_START,
-       goog.ui.SliderBase.EventType.DRAG_VALUE_END,
-       goog.ui.SliderBase.EventType.DRAG_EXTENT_START,
-       goog.ui.SliderBase.EventType.DRAG_EXTENT_END,
-       goog.ui.Component.EventType.CHANGE],
+  goog.events.listen(
+      oneThumbSlider,
+      [
+        goog.ui.SliderBase.EventType.DRAG_START,
+        goog.ui.SliderBase.EventType.DRAG_END,
+        goog.ui.SliderBase.EventType.DRAG_VALUE_START,
+        goog.ui.SliderBase.EventType.DRAG_VALUE_END,
+        goog.ui.SliderBase.EventType.DRAG_EXTENT_START,
+        goog.ui.SliderBase.EventType.DRAG_EXTENT_END,
+        goog.ui.Component.EventType.CHANGE
+      ],
       handler);
 
   // Since the order of the events between value and extent is not guaranteed

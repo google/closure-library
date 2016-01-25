@@ -42,26 +42,30 @@ function tearDown() {
 
 function testMenuItemRenderer() {
   assertNotNull('Instance must not be null', renderer);
-  assertEquals('Singleton getter must always return same instance',
-      renderer, goog.ui.MenuItemRenderer.getInstance());
+  assertEquals(
+      'Singleton getter must always return same instance', renderer,
+      goog.ui.MenuItemRenderer.getInstance());
 }
 
 function testCreateDom() {
   var element = renderer.createDom(item);
   assertNotNull('Element must not be null', element);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem'], goog.dom.classlist.get(element));
-  assertEquals('Element must have exactly one child element', 1,
+  assertSameElements(
+      'Element must have the expected class names', ['goog-menuitem'],
+      goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have exactly one child element', 1,
       element.childNodes.length);
-  assertHTMLEquals('Child element must have the expected structure',
-      '<div class="goog-menuitem-content">Hello</div>',
-      element.innerHTML);
+  assertHTMLEquals(
+      'Child element must have the expected structure',
+      '<div class="goog-menuitem-content">Hello</div>', element.innerHTML);
 }
 
 function testCreateDomWithHoverState() {
   item.setHighlighted(true);
   var element = renderer.createDom(item);
-  assertSameElements('Element must have the expected class names',
+  assertSameElements(
+      'Element must have the expected class names',
       ['goog-menuitem', 'goog-menuitem-highlight'],
       goog.dom.classlist.get(element));
 }
@@ -71,19 +75,21 @@ function testCreateDomForCheckableItem() {
   item.render();
   var element = item.getElement();
   assertNotNull(element);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem', 'goog-option'],
-      goog.dom.classlist.get(element));
-  assertEquals('Element must have ARIA role menuitemcheckbox',
-      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
-      goog.a11y.aria.getRole(element));
+  assertSameElements(
+      'Element must have the expected class names',
+      ['goog-menuitem', 'goog-option'], goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have ARIA role menuitemcheckbox',
+      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX, goog.a11y.aria.getRole(element));
 
   item.setChecked(true);
   assertTrue('Item must be checked', item.isChecked());
-  assertSameElements('Checked item must have the expected class names',
+  assertSameElements(
+      'Checked item must have the expected class names',
       ['goog-menuitem', 'goog-option', 'goog-option-selected'],
       goog.dom.classlist.get(element));
-  assertEquals('Item must have checked ARIA state', 'true',
+  assertEquals(
+      'Item must have checked ARIA state', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
@@ -93,20 +99,22 @@ function testCreateUpdateDomForCheckableItem() {
   var element = item.getElement();
   item.setSupportedState(goog.ui.Component.State.CHECKED, true);
   assertNotNull(element);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem', 'goog-option'],
-      goog.dom.classlist.get(element));
-  assertEquals('Element must have ARIA role menuitemcheckbox',
-      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
-      goog.a11y.aria.getRole(element));
+  assertSameElements(
+      'Element must have the expected class names',
+      ['goog-menuitem', 'goog-option'], goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have ARIA role menuitemcheckbox',
+      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX, goog.a11y.aria.getRole(element));
 
   // Now actually check the item.
   item.setChecked(true);
   assertTrue('Item must be checked', item.isChecked());
-  assertSameElements('Checked item must have the expected class names',
+  assertSameElements(
+      'Checked item must have the expected class names',
       ['goog-menuitem', 'goog-option', 'goog-option-selected'],
       goog.dom.classlist.get(element));
-  assertEquals('Item must have checked ARIA state', 'true',
+  assertEquals(
+      'Item must have checked ARIA state', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
@@ -115,19 +123,21 @@ function testCreateDomForSelectableItem() {
   item.render();
   var element = item.getElement();
   assertNotNull(element);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem', 'goog-option'],
-      goog.dom.classlist.get(element));
-  assertEquals('Element must have ARIA role menuitemradio',
-      goog.a11y.aria.Role.MENU_ITEM_RADIO,
-      goog.a11y.aria.getRole(element));
+  assertSameElements(
+      'Element must have the expected class names',
+      ['goog-menuitem', 'goog-option'], goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have ARIA role menuitemradio',
+      goog.a11y.aria.Role.MENU_ITEM_RADIO, goog.a11y.aria.getRole(element));
 
   item.setSelected(true);
   assertTrue('Item must be selected', item.isSelected());
-  assertSameElements('Selected item must have the expected class names',
+  assertSameElements(
+      'Selected item must have the expected class names',
       ['goog-menuitem', 'goog-option', 'goog-option-selected'],
       goog.dom.classlist.get(element));
-  assertEquals('Item must have selected ARIA state', 'true',
+  assertEquals(
+      'Item must have selected ARIA state', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
@@ -138,28 +148,31 @@ function testCreateUpdateDomForSelectableItem() {
   var element = item.getElement();
   item.setSupportedState(goog.ui.Component.State.SELECTED, true);
   assertNotNull(element);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem', 'goog-option'],
-      goog.dom.classlist.get(element));
-  assertEquals('Element must have ARIA role menuitemradio',
-      goog.a11y.aria.Role.MENU_ITEM_RADIO,
-      goog.a11y.aria.getRole(element));
+  assertSameElements(
+      'Element must have the expected class names',
+      ['goog-menuitem', 'goog-option'], goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have ARIA role menuitemradio',
+      goog.a11y.aria.Role.MENU_ITEM_RADIO, goog.a11y.aria.getRole(element));
 
   // Now actually select the item.
   item.setSelected(true);
   assertTrue('Item must be selected', item.isSelected());
-  assertSameElements('Selected item must have the expected class names',
+  assertSameElements(
+      'Selected item must have the expected class names',
       ['goog-menuitem', 'goog-option', 'goog-option-selected'],
       goog.dom.classlist.get(element));
-  assertEquals('Item must have selected ARIA state', 'true',
+  assertEquals(
+      'Item must have selected ARIA state', 'true',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 }
 
 function testGetContentElement() {
-  assertNull('Content element must be the null initially',
-      item.getContentElement());
+  assertNull(
+      'Content element must be the null initially', item.getContentElement());
   item.createDom();
-  assertEquals('Content element must be the element\'s first child',
+  assertEquals(
+      'Content element must be the element\'s first child',
       item.getElement().firstChild, item.getContentElement());
 }
 
@@ -168,13 +181,15 @@ function testDecorate() {
   var foo = goog.dom.getElement('foo');
 
   var element = renderer.decorate(item, foo);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem'], goog.dom.classlist.get(element));
-  assertEquals('Element must have exactly one child element', 1,
+  assertSameElements(
+      'Element must have the expected class names', ['goog-menuitem'],
+      goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have exactly one child element', 1,
       element.childNodes.length);
-  assertHTMLEquals('Child element must have the expected structure',
-      '<div class="goog-menuitem-content">Hello</div>',
-      element.innerHTML);
+  assertHTMLEquals(
+      'Child element must have the expected structure',
+      '<div class="goog-menuitem-content">Hello</div>', element.innerHTML);
 }
 
 function testDecorateWithContentStructure() {
@@ -183,13 +198,15 @@ function testDecorateWithContentStructure() {
   var foo = goog.dom.getElement('foo');
 
   var element = renderer.decorate(item, foo);
-  assertSameElements('Element must have the expected class names',
-      ['goog-menuitem'], goog.dom.classlist.get(element));
-  assertEquals('Element must have exactly one child element', 1,
+  assertSameElements(
+      'Element must have the expected class names', ['goog-menuitem'],
+      goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must have exactly one child element', 1,
       element.childNodes.length);
-  assertHTMLEquals('Child element must have the expected structure',
-      '<div class="goog-menuitem-content">Hello</div>',
-      element.innerHTML);
+  assertHTMLEquals(
+      'Child element must have the expected structure',
+      '<div class="goog-menuitem-content">Hello</div>', element.innerHTML);
 }
 
 function testDecorateWithHoverState() {
@@ -199,7 +216,8 @@ function testDecorateWithHoverState() {
 
   assertFalse('Item must not be highlighted', item.isHighlighted());
   var element = renderer.decorate(item, foo);
-  assertSameElements('Element must have the expected class names',
+  assertSameElements(
+      'Element must have the expected class names',
       ['goog-menuitem', 'goog-menuitem-highlight'],
       goog.dom.classlist.get(element));
   assertTrue('Item must be highlighted', item.isHighlighted());
@@ -209,14 +227,18 @@ function testDecorateCheckableItem() {
   sandbox.innerHTML = '<div id="foo" class="goog-option">Hello</div>';
   var foo = goog.dom.getElement('foo');
 
-  assertFalse('Item must not be checkable',
+  assertFalse(
+      'Item must not be checkable',
       item.isSupportedState(goog.ui.Component.State.CHECKED));
   var element = renderer.decorate(item, foo);
-  assertSameElements('Element must have the expected class names',
+  assertSameElements(
+      'Element must have the expected class names',
       ['goog-menuitem', 'goog-option'], goog.dom.classlist.get(element));
-  assertTrue('Item must be checkable',
+  assertTrue(
+      'Item must be checkable',
       item.isSupportedState(goog.ui.Component.State.CHECKED));
-  assertHTMLEquals('Child element must have the expected structure',
+  assertHTMLEquals(
+      'Child element must have the expected structure',
       '<div class="goog-menuitem-content">' +
           '<div class="goog-menuitem-checkbox"></div>Hello</div>',
       element.innerHTML);
@@ -225,19 +247,21 @@ function testDecorateCheckableItem() {
 function testSetContent() {
   item.setSupportedState(goog.ui.Component.State.CHECKED, true);
   var element = renderer.createDom(item);
-  assertHTMLEquals('Child element must have the expected structure',
+  assertHTMLEquals(
+      'Child element must have the expected structure',
       '<div class="goog-menuitem-content">' +
           '<div class="goog-menuitem-checkbox"></div>Hello</div>',
       element.innerHTML);
 
   renderer.setContent(element, 'Goodbye');
-  assertHTMLEquals('Child element must have the expected structure',
+  assertHTMLEquals(
+      'Child element must have the expected structure',
       '<div class="goog-menuitem-content">' +
           '<div class="goog-menuitem-checkbox"></div>Goodbye</div>',
       element.innerHTML);
 }
 
 function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(goog.ui.MenuItemRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.MenuItemRenderer);
 }

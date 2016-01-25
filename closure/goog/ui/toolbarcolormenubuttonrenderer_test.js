@@ -27,8 +27,7 @@ var harness;
 function setUp() {
   harness = new goog.testing.ui.RendererHarness(
       goog.ui.ToolbarColorMenuButtonRenderer.getInstance(),
-      goog.dom.getElement('parent'),
-      goog.dom.getElement('decoratedButton'));
+      goog.dom.getElement('parent'), goog.dom.getElement('decoratedButton'));
 }
 
 function tearDown() {
@@ -36,15 +35,12 @@ function tearDown() {
 }
 
 function testEquality() {
-  harness.attachControlAndRender(
-      new goog.ui.ToolbarColorMenuButton('Foo'));
-  harness.attachControlAndDecorate(
-      new goog.ui.ToolbarColorMenuButton());
+  harness.attachControlAndRender(new goog.ui.ToolbarColorMenuButton('Foo'));
+  harness.attachControlAndDecorate(new goog.ui.ToolbarColorMenuButton());
   harness.assertDomMatches();
 }
 
 function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(
-          goog.ui.ToolbarColorMenuButtonRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.ToolbarColorMenuButtonRenderer);
 }

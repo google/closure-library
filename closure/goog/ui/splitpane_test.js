@@ -34,8 +34,8 @@ var rightComponent;
 function setUp() {
   leftComponent = new goog.ui.Component();
   rightComponent = new goog.ui.Component();
-  splitpane = new goog.ui.SplitPane(leftComponent, rightComponent,
-      goog.ui.SplitPane.Orientation.HORIZONTAL);
+  splitpane = new goog.ui.SplitPane(
+      leftComponent, rightComponent, goog.ui.SplitPane.Orientation.HORIZONTAL);
 }
 
 function tearDown() {
@@ -47,24 +47,36 @@ function tearDown() {
 
 function testRender() {
   splitpane.render(goog.dom.getElement('sandbox'));
-  assertEquals(1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane').length);
-  assertEquals(1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-first-container').length);
-  assertEquals(1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-second-container').length);
-  assertEquals(1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-handle').length);
+  assertEquals(
+      1,
+      goog.dom
+          .getElementsByTagNameAndClass(goog.dom.TagName.DIV, 'goog-splitpane')
+          .length);
+  assertEquals(
+      1, goog.dom
+             .getElementsByTagNameAndClass(
+                 goog.dom.TagName.DIV, 'goog-splitpane-first-container')
+             .length);
+  assertEquals(
+      1, goog.dom
+             .getElementsByTagNameAndClass(
+                 goog.dom.TagName.DIV, 'goog-splitpane-second-container')
+             .length);
+  assertEquals(
+      1, goog.dom
+             .getElementsByTagNameAndClass(
+                 goog.dom.TagName.DIV, 'goog-splitpane-handle')
+             .length);
 }
 
 function testDecorate() {
-  var mainDiv = goog.dom.createDom(goog.dom.TagName.DIV, 'goog-splitpane',
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-first-container'),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-second-container'),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-handle'));
+  var mainDiv = goog.dom.createDom(
+      goog.dom.TagName.DIV, 'goog-splitpane',
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-first-container'),
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-second-container'),
+      goog.dom.createDom(goog.dom.TagName.DIV, 'goog-splitpane-handle'));
   var sandbox = goog.dom.getElement('sandbox');
   goog.dom.appendChild(sandbox, mainDiv);
 
@@ -72,37 +84,34 @@ function testDecorate() {
 }
 
 function testDecorateWithNestedSplitPane() {
-
   // Create a standard split pane to be nested within another split pane.
-  var innerSplitPaneDiv = goog.dom.createDom(goog.dom.TagName.DIV,
-                                             'goog-splitpane',
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-first-container e1'),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-second-container e2'),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-handle e3'));
+  var innerSplitPaneDiv = goog.dom.createDom(
+      goog.dom.TagName.DIV, 'goog-splitpane',
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-first-container e1'),
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-second-container e2'),
+      goog.dom.createDom(goog.dom.TagName.DIV, 'goog-splitpane-handle e3'));
 
   // Create a split pane containing a split pane instance.
-  var outerSplitPaneDiv = goog.dom.createDom(goog.dom.TagName.DIV,
-                                             'goog-splitpane',
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-first-container e4',
+  var outerSplitPaneDiv = goog.dom.createDom(
+      goog.dom.TagName.DIV, 'goog-splitpane',
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-first-container e4',
           innerSplitPaneDiv),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-second-container e5'),
-      goog.dom.createDom(goog.dom.TagName.DIV,
-                         'goog-splitpane-handle e6'));
+      goog.dom.createDom(
+          goog.dom.TagName.DIV, 'goog-splitpane-second-container e5'),
+      goog.dom.createDom(goog.dom.TagName.DIV, 'goog-splitpane-handle e6'));
 
   var sandbox = goog.dom.getElement('sandbox');
   goog.dom.appendChild(sandbox, outerSplitPaneDiv);
 
   // Decorate and check that the correct containers and handle are used.
   splitpane.decorate(outerSplitPaneDiv);
-  assertTrue(goog.dom.classlist.contains(
-      splitpane.firstComponentContainer_, 'e4'));
-  assertTrue(goog.dom.classlist.contains(
-      splitpane.secondComponentContainer_, 'e5'));
+  assertTrue(
+      goog.dom.classlist.contains(splitpane.firstComponentContainer_, 'e4'));
+  assertTrue(
+      goog.dom.classlist.contains(splitpane.secondComponentContainer_, 'e5'));
   assertTrue(goog.dom.classlist.contains(splitpane.splitpaneHandle_, 'e6'));
 }
 
@@ -125,12 +134,12 @@ function testOrientationChange() {
   splitpane.render(goog.dom.getElement('sandbox'));
   splitpane.setSize(new goog.math.Size(500, 300));
 
-  var first = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-first-container')[0];
-  var second = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-second-container')[0];
-  var handle = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-handle')[0];
+  var first = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-first-container')[0];
+  var second = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-second-container')[0];
+  var handle = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-handle')[0];
 
   var handleSize = goog.style.getBorderBoxSize(handle);
   assertEquals(10, handleSize.width);
@@ -141,7 +150,7 @@ function testOrientationChange() {
   assertEquals(300, firstSize.height);
 
   var secondSize = goog.style.getBorderBoxSize(second);
-  assertEquals(290, secondSize.width); // 500 - 200 - 10 = 290
+  assertEquals(290, secondSize.width);  // 500 - 200 - 10 = 290
   assertEquals(300, secondSize.height);
 
   splitpane.setOrientation(goog.ui.SplitPane.Orientation.VERTICAL);
@@ -151,11 +160,11 @@ function testOrientationChange() {
   assertEquals(500, handleSize.width);
 
   firstSize = goog.style.getBorderBoxSize(first);
-  assertEquals(120, firstSize.height); // 200 * 300/500 = 120
+  assertEquals(120, firstSize.height);  // 200 * 300/500 = 120
   assertEquals(500, firstSize.width);
 
   secondSize = goog.style.getBorderBoxSize(second);
-  assertEquals(170, secondSize.height); // 300 - 120 - 10 = 170
+  assertEquals(170, secondSize.height);  // 300 - 120 - 10 = 170
   assertEquals(500, secondSize.width);
 
   splitpane.setOrientation(goog.ui.SplitPane.Orientation.HORIZONTAL);
@@ -179,10 +188,10 @@ function testDragEvent() {
   splitpane.render(goog.dom.getElement('sandbox'));
 
   var handler = goog.testing.recordFunction();
-  goog.events.listen(splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG,
-      handler);
-  var handle = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-handle')[0];
+  goog.events.listen(
+      splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG, handler);
+  var handle = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-handle')[0];
 
   goog.testing.events.fireMouseDownEvent(handle);
   goog.testing.events.fireMouseMoveEvent(handle);
@@ -202,11 +211,11 @@ function testDragEndEvent() {
   splitpane.setHandleSize(10);
   splitpane.render(goog.dom.getElement('sandbox'));
   var handler = goog.testing.recordFunction();
-  goog.events.listen(splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG_END,
-      handler);
+  goog.events.listen(
+      splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, handler);
 
-  var handle = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-handle')[0];
+  var handle = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-handle')[0];
 
   goog.testing.events.fireMouseDownEvent(handle);
   goog.testing.events.fireMouseMoveEvent(handle);
@@ -226,10 +235,10 @@ function testSnapEvent() {
   splitpane.setHandleSize(10);
   splitpane.render(goog.dom.getElement('sandbox'));
   var handler = goog.testing.recordFunction();
-  goog.events.listen(splitpane, goog.ui.SplitPane.EventType.HANDLE_SNAP,
-      handler);
-  var handle = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-splitpane-handle')[0];
+  goog.events.listen(
+      splitpane, goog.ui.SplitPane.EventType.HANDLE_SNAP, handler);
+  var handle = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, 'goog-splitpane-handle')[0];
   goog.testing.events.fireDoubleClickSequence(handle);
   assertEquals('HANDLE_SNAP event expected', 1, handler.getCallCount());
 }

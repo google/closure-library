@@ -55,17 +55,16 @@ function testFocusOnInputElement() {
     // but only on the test farm.
     return;
   }
-  assertEquals('defaultValue',
-      goog.dom.selection.getText(prompt.userInputEl_));
+  assertEquals('defaultValue', goog.dom.selection.getText(prompt.userInputEl_));
 }
 
 
 function testValidationFunction() {
   var promptResult = undefined;
-  prompt = new goog.ui.Prompt('title', 'Prompt:', function(result) {
-    promptResult = result;
-  }, '');
-  prompt.setValidationFunction(goog.functions.not(goog.string.isEmptyOrWhitespace));
+  prompt = new goog.ui.Prompt(
+      'title', 'Prompt:', function(result) { promptResult = result; }, '');
+  prompt.setValidationFunction(
+      goog.functions.not(goog.string.isEmptyOrWhitespace));
   prompt.setVisible(true);
 
   var buttonSet = prompt.getButtonSet();
@@ -73,12 +72,12 @@ function testValidationFunction() {
   assertTrue(okButton.disabled);
 
   prompt.userInputEl_.value = '';
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.SPACE);
   assertTrue(okButton.disabled);
   prompt.userInputEl_.value = 'foo';
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.X);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.X);
   assertFalse(okButton.disabled);
 }
 
@@ -91,19 +90,19 @@ function testBidiInput() {
   prompt.setVisible(true);
 
   prompt.userInputEl_.value = shalomInHebrew;
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.SPACE);
   goog.testing.events.fireBrowserEvent(
-      {'target' : prompt.userInputEl_, 'type' : 'input'});
+      {'target': prompt.userInputEl_, 'type': 'input'});
   bidiInput.inputHandler_.dispatchEvent(
       goog.events.InputHandler.EventType.INPUT);
   assertEquals('rtl', prompt.userInputEl_.dir);
 
   prompt.userInputEl_.value = 'shalomInEnglish';
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.SPACE);
   goog.testing.events.fireBrowserEvent(
-      {'target' : prompt.userInputEl_, 'type' : 'input'});
+      {'target': prompt.userInputEl_, 'type': 'input'});
   bidiInput.inputHandler_.dispatchEvent(
       goog.events.InputHandler.EventType.INPUT);
   assertEquals('ltr', prompt.userInputEl_.dir);
@@ -117,15 +116,15 @@ function testBidiInput_off() {
   prompt.setVisible(true);
 
   prompt.userInputEl_.value = shalomInHebrew;
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.SPACE);
   goog.testing.events.fireBrowserEvent(
-      {'target' : prompt.userInputEl_, 'type' : 'input'});
+      {'target': prompt.userInputEl_, 'type': 'input'});
   assertEquals('', prompt.userInputEl_.dir);
 
   prompt.userInputEl_.value = 'shalomInEnglish';
-  goog.testing.events.fireKeySequence(prompt.userInputEl_,
-      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireKeySequence(
+      prompt.userInputEl_, goog.events.KeyCodes.SPACE);
   assertEquals('', prompt.userInputEl_.dir);
 }
 

@@ -91,26 +91,31 @@ function testAriaRoles() {
   assertNotNull(select.getElement());
   assertNotNull(item1.getElement());
   assertNotNull(item2.getElement());
-  assertEquals(goog.a11y.aria.Role.LISTBOX,
-      goog.a11y.aria.getRole(select.getElement()));
-  assertEquals(goog.a11y.aria.Role.OPTION,
-      goog.a11y.aria.getRole(item1.getElement()));
-  assertEquals(goog.a11y.aria.Role.OPTION,
-      goog.a11y.aria.getRole(item2.getElement()));
-  assertNotNull(goog.a11y.aria.getState(select.getElement(),
-      goog.a11y.aria.State.ACTIVEDESCENDANT));
-  var contentElement = select.getRenderer().
-      getContentElement(select.getElement());
-  assertEquals('2', goog.a11y.aria.getState(contentElement,
-      goog.a11y.aria.State.SETSIZE));
-  assertEquals('0', goog.a11y.aria.getState(contentElement,
-      goog.a11y.aria.State.POSINSET));
+  assertEquals(
+      goog.a11y.aria.Role.LISTBOX, goog.a11y.aria.getRole(select.getElement()));
+  assertEquals(
+      goog.a11y.aria.Role.OPTION, goog.a11y.aria.getRole(item1.getElement()));
+  assertEquals(
+      goog.a11y.aria.Role.OPTION, goog.a11y.aria.getRole(item2.getElement()));
+  assertNotNull(
+      goog.a11y.aria.getState(
+          select.getElement(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  var contentElement =
+      select.getRenderer().getContentElement(select.getElement());
+  assertEquals(
+      '2',
+      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.SETSIZE));
+  assertEquals(
+      '0',
+      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
   select.setSelectedItem(item1);
-  assertEquals('1', goog.a11y.aria.getState(contentElement,
-      goog.a11y.aria.State.POSINSET));
+  assertEquals(
+      '1',
+      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
   select.setSelectedItem(item2);
-  assertEquals('2', goog.a11y.aria.getState(contentElement,
-      goog.a11y.aria.State.POSINSET));
+  assertEquals(
+      '2',
+      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
 }
 
 
@@ -212,20 +217,24 @@ function testSelectEventFiresForProgrammaticChange() {
       select, goog.ui.Component.EventType.CHANGE, recordingHandler);
 
   select.setSelectedItem(item2);
-  assertEquals('Selecting new item should fire CHANGE event.',
-      1, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting new item should fire CHANGE event.', 1,
+      recordingHandler.getCallCount());
 
   select.setSelectedItem(item2);
-  assertEquals('Selecting the same item should not fire CHANGE event.',
-      1, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting the same item should not fire CHANGE event.', 1,
+      recordingHandler.getCallCount());
 
   select.setSelectedIndex(0);
-  assertEquals('Selecting new item should fire CHANGE event.',
-      2, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting new item should fire CHANGE event.', 2,
+      recordingHandler.getCallCount());
 
   select.setSelectedIndex(0);
-  assertEquals('Selecting the same item should not fire CHANGE event.',
-      2, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting the same item should not fire CHANGE event.', 2,
+      recordingHandler.getCallCount());
 }
 
 function testSelectEventFiresForUserInitiatedAction() {
@@ -242,15 +251,17 @@ function testSelectEventFiresForUserInitiatedAction() {
   select.setOpen(true);
 
   item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals('Selecting new item should fire CHANGE event.',
-      1, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting new item should fire CHANGE event.', 1,
+      recordingHandler.getCallCount());
   assertFalse(select.isOpen());
 
   select.setOpen(true);
 
   item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals('Selecting the same item should not fire CHANGE event.',
-      1, recordingHandler.getCallCount());
+  assertEquals(
+      'Selecting the same item should not fire CHANGE event.', 1,
+      recordingHandler.getCallCount());
   assertFalse(select.isOpen());
 }
 
@@ -317,7 +328,8 @@ function testUpdateCaption_aria() {
 
 function testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
   assertNotThrows(function() {
-    var customSelect = new goog.ui.Select(null /* label */, new goog.ui.Menu(),
+    var customSelect = new goog.ui.Select(
+        null /* label */, new goog.ui.Menu(),
         new goog.ui.CustomButtonRenderer());
     customSelect.render(sandboxEl);
 

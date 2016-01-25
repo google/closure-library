@@ -29,7 +29,9 @@ goog.require('goog.userAgent');
 function assertRoundedEquals(a, b, c) {
   function round(x) {
     return goog.userAgent.GECKO && (goog.userAgent.MAC || goog.userAgent.X11) &&
-        goog.userAgent.isVersionOrHigher('1.9') ? Math.round(x) : x;
+            goog.userAgent.isVersionOrHigher('1.9') ?
+        Math.round(x) :
+        x;
   }
   if (arguments.length == 3) {
     assertEquals(a, round(b), round(c));
@@ -43,20 +45,20 @@ function testCreateAndReposition() {
   var popupEl = document.getElementById('popup');
   var corner = goog.positioning.Corner;
 
-  var pos = new goog.positioning.AnchoredPosition(anchorEl,
-                                                  corner.BOTTOM_START);
+  var pos =
+      new goog.positioning.AnchoredPosition(anchorEl, corner.BOTTOM_START);
   var popup = new goog.ui.Popup(popupEl, pos);
   popup.setVisible(true);
 
   var anchorRect = goog.style.getBounds(anchorEl);
   var popupRect = goog.style.getBounds(popupEl);
-  assertRoundedEquals('Left edge of popup should line up with left edge ' +
-                      'of anchor.',
-                      anchorRect.left,
-                      popupRect.left);
-  assertRoundedEquals('Popup should be positioned just below the anchor.',
-                      anchorRect.top + anchorRect.height,
-                      popupRect.top);
+  assertRoundedEquals(
+      'Left edge of popup should line up with left edge ' +
+          'of anchor.',
+      anchorRect.left, popupRect.left);
+  assertRoundedEquals(
+      'Popup should be positioned just below the anchor.',
+      anchorRect.top + anchorRect.height, popupRect.top);
 
   // Reposition.
   anchorEl.style.marginTop = '7px';
@@ -64,9 +66,9 @@ function testCreateAndReposition() {
 
   anchorRect = goog.style.getBounds(anchorEl);
   popupRect = goog.style.getBounds(popupEl);
-  assertRoundedEquals('Popup should be positioned just below the anchor.',
-                      anchorRect.top + anchorRect.height,
-                      popupRect.top);
+  assertRoundedEquals(
+      'Popup should be positioned just below the anchor.',
+      anchorRect.top + anchorRect.height, popupRect.top);
 }
 
 
@@ -75,34 +77,34 @@ function testSetPinnedCorner() {
   var popupEl = document.getElementById('popup');
   var corner = goog.positioning.Corner;
 
-  var pos = new goog.positioning.AnchoredPosition(anchorEl,
-                                                  corner.BOTTOM_START);
+  var pos =
+      new goog.positioning.AnchoredPosition(anchorEl, corner.BOTTOM_START);
   var popup = new goog.ui.Popup(popupEl, pos);
   popup.setVisible(true);
 
   var anchorRect = goog.style.getBounds(anchorEl);
   var popupRect = goog.style.getBounds(popupEl);
-  assertRoundedEquals('Left edge of popup should line up with left edge ' +
-                      'of anchor.',
-                      anchorRect.left,
-                      popupRect.left);
-  assertRoundedEquals('Popup should be positioned just below the anchor.',
-                      anchorRect.top + anchorRect.height,
-                      popupRect.top);
+  assertRoundedEquals(
+      'Left edge of popup should line up with left edge ' +
+          'of anchor.',
+      anchorRect.left, popupRect.left);
+  assertRoundedEquals(
+      'Popup should be positioned just below the anchor.',
+      anchorRect.top + anchorRect.height, popupRect.top);
 
   // Change pinned corner.
   popup.setPinnedCorner(corner.BOTTOM_END);
 
   anchorRect = goog.style.getBounds(anchorEl);
   popupRect = goog.style.getBounds(popupEl);
-  assertRoundedEquals('Right edge of popup should line up with left edge ' +
-                      'of anchor.',
-                      anchorRect.left,
-                      popupRect.left + popupRect.width);
-  assertRoundedEquals('Bottom edge of popup should line up with bottom ' +
-                      'of anchor.',
-                      anchorRect.top + anchorRect.height,
-                      popupRect.top + popupRect.height);
+  assertRoundedEquals(
+      'Right edge of popup should line up with left edge ' +
+          'of anchor.',
+      anchorRect.left, popupRect.left + popupRect.width);
+  assertRoundedEquals(
+      'Bottom edge of popup should line up with bottom ' +
+          'of anchor.',
+      anchorRect.top + anchorRect.height, popupRect.top + popupRect.height);
 
   // Position outside the viewport.
   anchorEl.style.marginLeft = '0';
@@ -111,10 +113,10 @@ function testSetPinnedCorner() {
   anchorRect = goog.style.getBounds(anchorEl);
   popupRect = goog.style.getBounds(popupEl);
 
-  assertRoundedEquals('Right edge of popup should line up with left edge ' +
-                      'of anchor.',
-                      anchorRect.left,
-                      popupRect.left + popupRect.width);
+  assertRoundedEquals(
+      'Right edge of popup should line up with left edge ' +
+          'of anchor.',
+      anchorRect.left, popupRect.left + popupRect.width);
 
   anchorEl.style.marginLeft = '';
 }

@@ -89,14 +89,14 @@ function assertUnalteredElements() {
  * @return {!goog.ui.ModalAriaVisibilityHelper}
  */
 function createHelper(id) {
-  return new goog.ui.ModalAriaVisibilityHelper(goog.dom.getElement(id),
-      goog.dom.getDomHelper());
+  return new goog.ui.ModalAriaVisibilityHelper(
+      goog.dom.getElement(id), goog.dom.getDomHelper());
 }
 
 
 function clearAriaState(id) {
-  goog.a11y.aria.removeState(goog.dom.getElement(id),
-      goog.a11y.aria.State.HIDDEN);
+  goog.a11y.aria.removeState(
+      goog.dom.getElement(id), goog.a11y.aria.State.HIDDEN);
 }
 
 
@@ -105,8 +105,10 @@ function clearAriaState(id) {
  */
 function assertEmptyAriaHiddenState(id) {
   var element = goog.dom.getElement(id);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
-      goog.a11y.aria.getState(element, goog.a11y.aria.State.HIDDEN))));
+  assertTrue(
+      goog.string.isEmptyOrWhitespace(
+          goog.string.makeSafe(
+              goog.a11y.aria.getState(element, goog.a11y.aria.State.HIDDEN))));
 }
 
 
@@ -116,6 +118,7 @@ function assertEmptyAriaHiddenState(id) {
  */
 function assertAriaHiddenState(id, expectedState) {
   var element = goog.dom.getElement(id);
-  assertEquals(expectedState,
+  assertEquals(
+      expectedState,
       goog.a11y.aria.getState(element, goog.a11y.aria.State.HIDDEN));
 }

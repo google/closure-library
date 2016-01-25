@@ -34,32 +34,36 @@ function tearDown() {
 
 function testGetBaseEntry() {
   // Initial values
-  assertEquals('wrong bool1 object', boolEntry,
-      registry.getBooleanSetting('Bool'));
-  assertEquals('wrong string object', strEntry,
-      registry.getStringSetting('Str'));
-  assertEquals('wrong numeric object', numEntry,
-      registry.getNumericSetting('Num'));
-  assertEquals('wrong button object', buttonEntry,
-      registry.getEntry('Button'));
-  assertEquals('wrong button object', boolGroup,
-      registry.getEntry('BoolGroup'));
+  assertEquals(
+      'wrong bool1 object', boolEntry, registry.getBooleanSetting('Bool'));
+  assertEquals(
+      'wrong string object', strEntry, registry.getStringSetting('Str'));
+  assertEquals(
+      'wrong numeric object', numEntry, registry.getNumericSetting('Num'));
+  assertEquals('wrong button object', buttonEntry, registry.getEntry('Button'));
+  assertEquals(
+      'wrong button object', boolGroup, registry.getEntry('BoolGroup'));
 }
 
 function testInitializeFromQueryParams() {
   var testCase = 0;
-  function assertQuery(queryStr, boolValue, enumValue, strValue, subBoolValue,
-      subBoolValue2) {
+  function assertQuery(
+      queryStr, boolValue, enumValue, strValue, subBoolValue, subBoolValue2) {
     createRegistryEntries(queryStr);
-    assertEquals('Wrong bool value for query: ' + queryStr, boolValue,
+    assertEquals(
+        'Wrong bool value for query: ' + queryStr, boolValue,
         boolEntry.getValue());
-    assertEquals('Wrong enum value for query: ' + queryStr, enumValue,
+    assertEquals(
+        'Wrong enum value for query: ' + queryStr, enumValue,
         strEnumEntry.getValue());
-    assertEquals('Wrong str value for query: ' + queryStr, strValue,
+    assertEquals(
+        'Wrong str value for query: ' + queryStr, strValue,
         strEntry.getValue());
-    assertEquals('Wrong BoolOne value for query: ' + queryStr, subBoolValue,
+    assertEquals(
+        'Wrong BoolOne value for query: ' + queryStr, subBoolValue,
         boolOneEntry.getValue());
-    assertEquals('Wrong BoolTwo value for query: ' + queryStr, subBoolValue2,
+    assertEquals(
+        'Wrong BoolTwo value for query: ' + queryStr, subBoolValue2,
         boolTwoEntry.getValue());
   }
   assertQuery('?dummy=1&bool=&enum=&s=', false, '', '', false, true);
@@ -74,28 +78,30 @@ function testInitializeFromQueryParams() {
 }
 
 function testMakeUrlQuery() {
-  assertEquals('All values are default.',
-      '', registry.makeUrlQuery(''));
-  assertEquals('All values are default - with existing params.',
-      '?super=pudu', registry.makeUrlQuery('?super=pudu'));
+  assertEquals('All values are default.', '', registry.makeUrlQuery(''));
+  assertEquals(
+      'All values are default - with existing params.', '?super=pudu',
+      registry.makeUrlQuery('?super=pudu'));
 
   boolEntry.setValue(true);
   numEnumEntry.setValue(2);
   strEntry.setValue('f o&o');
-  assertEquals('Wrong query string 1.',
-      '?bool=1&enum2=2&s=f+o%26o',
+  assertEquals(
+      'Wrong query string 1.', '?bool=1&enum2=2&s=f+o%26o',
       registry.makeUrlQuery('?bool=1'));
-  assertEquals('Wrong query string 1 - with existing params.',
+  assertEquals(
+      'Wrong query string 1 - with existing params.',
       '?super=pudu&bool=1&enum2=2&s=f+o%26o',
       registry.makeUrlQuery('?bool=0&s=g&super=pudu'));
 
   boolOneEntry.setValue(true);
-  assertEquals('Wrong query string 2.',
-      '?bool=1&boolgroup=B1&enum2=2&s=f+o%26o',
+  assertEquals(
+      'Wrong query string 2.', '?bool=1&boolgroup=B1&enum2=2&s=f+o%26o',
       registry.makeUrlQuery(''));
 
   boolTwoEntry.setValue(false);
-  assertEquals('Wrong query string 3.',
+  assertEquals(
+      'Wrong query string 3.',
       '?bool=1&boolgroup=B1,-booltwo&enum2=2&s=f+o%26o',
       registry.makeUrlQuery(''));
 }
@@ -113,12 +119,12 @@ function testOverrideDefaultValue_calledAfter() {
   var exception = assertThrows('Should assert.', function() {
     registry.overrideDefaultValue('Bool2', false);
   });
-  assertTrue('Wrong exception',
-      exception instanceof goog.asserts.AssertionError);
+  assertTrue(
+      'Wrong exception', exception instanceof goog.asserts.AssertionError);
 }
 
 function testCompilerOverrideDefaultValue() {
-  createRegistryEntries('', { 'b': true });
+  createRegistryEntries('', {'b': true});
   registry = goog.tweak.getRegistry();
   goog.tweak.registerBoolean('b', 'b desc');
   var bEntry = registry.getEntry('b');
@@ -127,7 +133,7 @@ function testCompilerOverrideDefaultValue() {
 }
 
 function testCompilerAndJsOverrideDefaultValue() {
-  createRegistryEntries('', { 'b': false });
+  createRegistryEntries('', {'b': false});
   registry = goog.tweak.getRegistry();
   registry.overrideDefaultValue('b', true);
   goog.tweak.registerBoolean('b', 'b desc', true);

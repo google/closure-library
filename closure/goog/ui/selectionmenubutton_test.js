@@ -53,8 +53,8 @@ function testBasicButtonBehavior() {
 
   var menuItemClicked = 0;
   var lastMenuItemClicked = null;
-  goog.events.listen(selectionMenuButton.getMenu(),
-      goog.ui.Component.EventType.ACTION,
+  goog.events.listen(
+      selectionMenuButton.getMenu(), goog.ui.Component.EventType.ACTION,
       function(e) {
         menuItemClicked++;
         lastMenuItemClicked = e.target;
@@ -62,10 +62,11 @@ function testBasicButtonBehavior() {
 
   var menuItem2 = goog.dom.getElement('menuItem2');
   goog.testing.events.fireClickSequence(menuItem2);
-  assertFalse('Menu must close on clicking when open',
-      selectionMenuButton.isOpen());
+  assertFalse(
+      'Menu must close on clicking when open', selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
-  assertEquals('menuItem2 should be the last menuitem clicked', menuItem2,
+  assertEquals(
+      'menuItem2 should be the last menuitem clicked', menuItem2,
       lastMenuItemClicked.getElement());
 }
 
@@ -79,8 +80,8 @@ function testCheckboxFireEvents() {
 
   var menuItemClicked = 0;
   var lastMenuItemClicked = null;
-  goog.events.listen(selectionMenuButton.getMenu(),
-      goog.ui.Component.EventType.ACTION,
+  goog.events.listen(
+      selectionMenuButton.getMenu(), goog.ui.Component.EventType.ACTION,
       function(e) {
         menuItemClicked++;
         lastMenuItemClicked = e.target;
@@ -91,19 +92,22 @@ function testCheckboxFireEvents() {
 
   checkbox.checked = true;
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must be closed when clicking checkbox',
+  assertFalse(
+      'Menu must be closed when clicking checkbox',
       selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
-  assertEquals('menuItem1 should be the last menuitem clicked',
-      goog.dom.getElement('menuItem1'),
-      lastMenuItemClicked.getElement());
+  assertEquals(
+      'menuItem1 should be the last menuitem clicked',
+      goog.dom.getElement('menuItem1'), lastMenuItemClicked.getElement());
 
   checkbox.checked = false;
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must be closed when clicking checkbox',
+  assertFalse(
+      'Menu must be closed when clicking checkbox',
       selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 2', 2, menuItemClicked);
-  assertEquals('menuItem2 should be the last menuitem clicked',
+  assertEquals(
+      'menuItem2 should be the last menuitem clicked',
       goog.dom.getElement('menuItem2'), lastMenuItemClicked.getElement());
 }
 
@@ -139,23 +143,23 @@ function testSelectionState() {
   selectionMenuButton.setSelectionState(
       goog.ui.SelectionMenuButton.SelectionState.ALL);
   assertTrue('Checkbox should be checked when selecting all', checkbox.checked);
-  assertEquals('selectionState should be ALL',
-      selectionMenuButton.getSelectionState(),
+  assertEquals(
+      'selectionState should be ALL', selectionMenuButton.getSelectionState(),
       goog.ui.SelectionMenuButton.SelectionState.ALL);
 
   selectionMenuButton.setSelectionState(
       goog.ui.SelectionMenuButton.SelectionState.NONE);
-  assertFalse('Checkbox should be checked when selecting all',
-      checkbox.checked);
-  assertEquals('selectionState should be NONE',
-      selectionMenuButton.getSelectionState(),
+  assertFalse(
+      'Checkbox should be checked when selecting all', checkbox.checked);
+  assertEquals(
+      'selectionState should be NONE', selectionMenuButton.getSelectionState(),
       goog.ui.SelectionMenuButton.SelectionState.NONE);
 
   selectionMenuButton.setSelectionState(
       goog.ui.SelectionMenuButton.SelectionState.SOME);
   assertTrue('Checkbox should be checked when selecting all', checkbox.checked);
-  assertEquals('selectionState should be SOME',
-      selectionMenuButton.getSelectionState(),
+  assertEquals(
+      'selectionState should be SOME', selectionMenuButton.getSelectionState(),
       goog.ui.SelectionMenuButton.SelectionState.SOME);
 }
 
@@ -187,15 +191,16 @@ function testCheckboxClickMenuClosed() {
 
   var checkbox = goog.dom.getElement('demoCheckbox');
   goog.testing.events.fireMouseDownEvent(checkbox);
-  assertFalse('Menu must be closed when mousedown checkbox',
+  assertFalse(
+      'Menu must be closed when mousedown checkbox',
       selectionMenuButton.isOpen());
   goog.testing.events.fireMouseUpEvent(checkbox);
-  assertFalse('Menu must remain closed when mouseup checkbox',
+  assertFalse(
+      'Menu must remain closed when mouseup checkbox',
       selectionMenuButton.isOpen());
 
   selectionMenuButton.setOpen(true);
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must close when clickin checkbox',
-      selectionMenuButton.isOpen());
-
+  assertFalse(
+      'Menu must close when clickin checkbox', selectionMenuButton.isOpen());
 }

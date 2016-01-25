@@ -69,8 +69,9 @@ function tearDown() {
  * @param {goog.math.Box} expectedMargin The expected value of the
  *     {@code target.margin_} property.
  */
-function assertTarget(target, expectedElement, expectedTargetCorner,
-    expectedMenuCorner, expectedEventType, expectedMargin) {
+function assertTarget(
+    target, expectedElement, expectedTargetCorner, expectedMenuCorner,
+    expectedEventType, expectedMargin) {
   var expectedTarget = {
     element_: expectedElement,
     targetCorner_: expectedTargetCorner,
@@ -93,43 +94,44 @@ function testBeforeShowEvent() {
 
   function beforeShowPopup(e) {
     // Ensure that the element is not yet visible.
-    assertFalse('The element should not be shown when BEFORE_SHOW event is ' +
-        'being handled',
+    assertFalse(
+        'The element should not be shown when BEFORE_SHOW event is ' +
+            'being handled',
         goog.style.isElementShown(popup.getElement()));
     // Verify that current anchor is set before dispatching BEFORE_SHOW.
     assertNotNullNorUndefined(popup.getAttachedElement());
-    assertEquals('The attached anchor element is incorrect',
-        target.element_, popup.getAttachedElement());
+    assertEquals(
+        'The attached anchor element is incorrect', target.element_,
+        popup.getAttachedElement());
     beforeShowPopupCalled = true;
     return showPopup;
-
   };
   function onShowPopup(e) {
-    assertEquals('The attached anchor element is incorrect',
-        target.element_, popup.getAttachedElement());
+    assertEquals(
+        'The attached anchor element is incorrect', target.element_,
+        popup.getAttachedElement());
   };
 
-  handler.listen(popup,
-                 goog.ui.Menu.EventType.BEFORE_SHOW,
-                 beforeShowPopup);
-  handler.listen(popup,
-                 goog.ui.Menu.EventType.SHOW,
-                 onShowPopup);
+  handler.listen(popup, goog.ui.Menu.EventType.BEFORE_SHOW, beforeShowPopup);
+  handler.listen(popup, goog.ui.Menu.EventType.SHOW, onShowPopup);
 
   beforeShowPopupCalled = false;
   showPopup = false;
   popup.showMenu(target, 0, 0);
-  assertTrue('BEFORE_SHOW event handler should be called on #showMenu',
+  assertTrue(
+      'BEFORE_SHOW event handler should be called on #showMenu',
       beforeShowPopupCalled);
-  assertFalse('The element should not be shown when BEFORE_SHOW handler ' +
-      'returned false',
+  assertFalse(
+      'The element should not be shown when BEFORE_SHOW handler ' +
+          'returned false',
       goog.style.isElementShown(popup.getElement()));
 
   beforeShowPopupCalled = false;
   showPopup = true;
   popup.showMenu(target, 0, 0);
-  assertTrue('The element should be shown when BEFORE_SHOW handler ' +
-      'returned true',
+  assertTrue(
+      'The element should be shown when BEFORE_SHOW handler ' +
+          'returned true',
       goog.style.isElementShown(popup.getElement()));
 }
 
@@ -140,15 +142,17 @@ function testBeforeShowEvent() {
 function testIsAttachTarget() {
   popup.render();
   // Before 'attach' is called.
-  assertFalse('Menu should not be attached to the element',
+  assertFalse(
+      'Menu should not be attached to the element',
       popup.isAttachTarget(anchor));
 
   popup.attach(anchor);
-  assertTrue('Menu should be attached to the anchor',
-      popup.isAttachTarget(anchor));
+  assertTrue(
+      'Menu should be attached to the anchor', popup.isAttachTarget(anchor));
 
   popup.detach(anchor);
-  assertFalse('Menu is expected to be detached from the element',
+  assertFalse(
+      'Menu is expected to be detached from the element',
       popup.isAttachTarget(anchor));
 }
 
@@ -160,27 +164,30 @@ function testCreateAttachTarget() {
   // Randomly picking parameters.
   var targetCorner = goog.positioning.Corner.TOP_END;
   var menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
-  var contextMenu = false;   // Show menu on mouse down event.
+  var contextMenu = false;  // Show menu on mouse down event.
   var margin = new goog.math.Box(0, 10, 5, 25);
 
   // Simply setting the required parameters.
   var target = popup.createAttachTarget(anchor);
   assertTrue(popup.isAttachTarget(anchor));
-  assertTarget(target, anchor, undefined, undefined,
-      goog.events.EventType.MOUSEDOWN, undefined);
+  assertTarget(
+      target, anchor, undefined, undefined, goog.events.EventType.MOUSEDOWN,
+      undefined);
 
   // Creating another target with all the parameters.
-  target = popup.createAttachTarget(anchor, targetCorner, menuCorner,
-      contextMenu, margin);
+  target = popup.createAttachTarget(
+      anchor, targetCorner, menuCorner, contextMenu, margin);
   assertTrue(popup.isAttachTarget(anchor));
-  assertTarget(target, anchor, targetCorner, menuCorner,
-      goog.events.EventType.MOUSEDOWN, margin);
+  assertTarget(
+      target, anchor, targetCorner, menuCorner, goog.events.EventType.MOUSEDOWN,
+      margin);
 
   // Finally, switch up the 'contextMenu'
-  target = popup.createAttachTarget(anchor, undefined, undefined,
-      true /*opt_contextMenu*/, undefined);
-  assertTarget(target, anchor, undefined, undefined,
-      goog.events.EventType.CONTEXTMENU, undefined);
+  target = popup.createAttachTarget(
+      anchor, undefined, undefined, true /*opt_contextMenu*/, undefined);
+  assertTarget(
+      target, anchor, undefined, undefined, goog.events.EventType.CONTEXTMENU,
+      undefined);
 }
 
 
@@ -191,23 +198,25 @@ function testGetAttachTarget() {
   popup.render();
   // Before the menu is attached to the anchor.
   var target = popup.getAttachTarget(anchor);
-  assertTrue('Not expecting a target before the element is attach to the menu',
+  assertTrue(
+      'Not expecting a target before the element is attach to the menu',
       target == null);
 
   // Randomly picking parameters.
   var targetCorner = goog.positioning.Corner.TOP_END;
   var menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
-  var contextMenu = false;   // Show menu on mouse down event.
+  var contextMenu = false;  // Show menu on mouse down event.
   var margin = new goog.math.Box(0, 10, 5, 25);
 
   popup.attach(anchor, targetCorner, menuCorner, contextMenu, margin);
   target = popup.getAttachTarget(anchor);
-  assertTrue('Failed to get target after attaching element to menu',
-      target != null);
+  assertTrue(
+      'Failed to get target after attaching element to menu', target != null);
 
   // Make sure we got the right target back.
-  assertTarget(target, anchor, targetCorner, menuCorner,
-      goog.events.EventType.MOUSEDOWN, margin);
+  assertTarget(
+      target, anchor, targetCorner, menuCorner, goog.events.EventType.MOUSEDOWN,
+      margin);
 }
 
 function testSmallViewportSliding() {
@@ -376,9 +385,7 @@ function testMenuItemKeyboardActivation() {
       menuitemListenerFired = true;
     }
   };
-  handler.listen(menuitem1,
-      goog.events.EventType.KEYDOWN,
-      onMenuitemAction);
+  handler.listen(menuitem1, goog.events.EventType.KEYDOWN, onMenuitemAction);
   // Simulate opening a menu using the DOWN key, and pressing the SPACE/ENTER
   // key in order to activate the first menuitem.
   goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
@@ -397,9 +404,7 @@ function testMenuItemKeyboardActivation() {
   // Simulate opening menu and moving down to the third menu item using the
   // DOWN key, and then activating it using the SPACE key.
   menuitemListenerFired = false;
-  handler.listen(menuitem3,
-      goog.events.EventType.KEYDOWN,
-      onMenuitemAction);
+  handler.listen(menuitem3, goog.events.EventType.KEYDOWN, onMenuitemAction);
   goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
   goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
   goog.testing.events.fireKeySequence(anchor, goog.events.KeyCodes.DOWN);
@@ -434,7 +439,8 @@ function testKeyPressWithNoHighlightedItem() {
   try {
     goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.SPACE);
   } catch (e) {
-    fail('Crash attempting to reference null selected menu item after ' +
+    fail(
+        'Crash attempting to reference null selected menu item after ' +
         'keyboard event.');
   }
 }

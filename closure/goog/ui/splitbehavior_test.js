@@ -41,9 +41,8 @@ function setUp() {
   button = new goog.ui.CustomButton('text');
   menu = new goog.ui.Menu();
   menuValues = ['a', 'b', 'c'];
-  goog.array.forEach(menuValues, function(val) {
-    menu.addItem(new goog.ui.MenuItem(val));
-  });
+  goog.array.forEach(
+      menuValues, function(val) { menu.addItem(new goog.ui.MenuItem(val)); });
   menuButton = new goog.ui.MenuButton('text', menu);
   splitbehavior = new goog.ui.SplitBehavior(button, menuButton);
 }
@@ -58,37 +57,51 @@ function tearDown() {
 }
 
 function testRender() {
-  assertEquals('no elements in doc with goog-split-behavior class',
-      0, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-split-behavior').length);
+  assertEquals(
+      'no elements in doc with goog-split-behavior class', 0,
+      goog.dom
+          .getElementsByTagNameAndClass(
+              goog.dom.TagName.DIV, 'goog-split-behavior')
+          .length);
   splitbehavior.render(splitDiv);
   assertEquals('two childs are rendered', 2, splitDiv.childNodes.length);
-  assertEquals('one element in doc with goog-split-behavior class',
-      1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-split-behavior').length);
-  assertEquals('one goog-custom-button',
-      1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-custom-button', splitDiv).length);
-  assertEquals('one goog-menu-button',
-      1, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      'goog-menu-button', splitDiv).length);
+  assertEquals(
+      'one element in doc with goog-split-behavior class', 1,
+      goog.dom
+          .getElementsByTagNameAndClass(
+              goog.dom.TagName.DIV, 'goog-split-behavior')
+          .length);
+  assertEquals(
+      'one goog-custom-button', 1,
+      goog.dom
+          .getElementsByTagNameAndClass(
+              goog.dom.TagName.DIV, 'goog-custom-button', splitDiv)
+          .length);
+  assertEquals(
+      'one goog-menu-button', 1,
+      goog.dom
+          .getElementsByTagNameAndClass(
+              goog.dom.TagName.DIV, 'goog-menu-button', splitDiv)
+          .length);
 }
 
 function testDecorate() {
-  var decorateDiv = goog.dom.createDom(goog.dom.TagName.DIV,
-                                       'goog-split-behavior',
+  var decorateDiv = goog.dom.createDom(
+      goog.dom.TagName.DIV, 'goog-split-behavior',
       goog.dom.createDom(goog.dom.TagName.DIV, 'goog-custom-button'),
       goog.dom.createDom(goog.dom.TagName.DIV, 'goog-menu-button'));
   goog.dom.appendChild(splitDiv, decorateDiv);
   var split = goog.ui.decorate(decorateDiv);
   assertNotNull(split);
-  assertTrue('instance of SplitBehavior',
-      split.constructor == goog.ui.SplitBehavior);
+  assertTrue(
+      'instance of SplitBehavior', split.constructor == goog.ui.SplitBehavior);
   assertNotNull(split.first_);
-  assertTrue('instance of CustomButton',
+  assertTrue(
+      'instance of CustomButton',
       split.first_.constructor == goog.ui.CustomButton);
   assertNotNull(split.second_);
-  assertTrue('instance of MenuButton',
+  assertTrue(
+      'instance of MenuButton',
       split.second_.constructor == goog.ui.MenuButton);
 }
 

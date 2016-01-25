@@ -28,13 +28,12 @@ function testScrollFloater() {
   scrollFloater.decorate(floater);
 
   assertTrue('Default state is enabled', scrollFloater.isScrollingEnabled());
-  assertFalse('On unscrolled page should not be floating',
-              scrollFloater.isFloating());
+  assertFalse(
+      'On unscrolled page should not be floating', scrollFloater.isFloating());
 
   scrollFloater.setScrollingEnabled(false);
 
-  assertFalse('We can disable the floater',
-              scrollFloater.isScrollingEnabled());
+  assertFalse('We can disable the floater', scrollFloater.isScrollingEnabled());
   scrollFloater.dispose();
 }
 
@@ -125,13 +124,16 @@ function testScrollFloaterUpdateStyleOnFloatEvent() {
   scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.BOTTOM);
 
   // Ensure event handler got called and updated the font size.
-  assertEquals('Font size should be 20px',
-      '20px', goog.style.getStyle(scrollFloater.getElement(), 'font-size'));
+  assertEquals(
+      'Font size should be 20px', '20px',
+      goog.style.getStyle(scrollFloater.getElement(), 'font-size'));
 
-  assertEquals('Top should be auto',
-      'auto', goog.style.getStyle(scrollFloater.getElement(), 'top'));
-  assertEquals('Bottom should be 0px',
-      0, parseInt(goog.style.getStyle(scrollFloater.getElement(), 'bottom')));
+  assertEquals(
+      'Top should be auto', 'auto',
+      goog.style.getStyle(scrollFloater.getElement(), 'top'));
+  assertEquals(
+      'Bottom should be 0px', 0,
+      parseInt(goog.style.getStyle(scrollFloater.getElement(), 'bottom')));
 
   scrollFloater.dispose();
 }
@@ -144,21 +146,20 @@ function testScrollFloaterHandlesHorizontalScrolling() {
   scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
 
   // For some reason the default position of the tested SF is 16px left.
-  assertEquals('Element should be left aligned',
-      '16px', goog.style.getStyle(scrollFloater.getElement(), 'left'));
+  assertEquals(
+      'Element should be left aligned', '16px',
+      goog.style.getStyle(scrollFloater.getElement(), 'left'));
 
   var propReplacer = new goog.testing.PropertyReplacer();
-  propReplacer.set(goog.dom, 'getDocumentScroll',
-      function() {
-        return {'x': 20};
-      });
+  propReplacer.set(
+      goog.dom, 'getDocumentScroll', function() { return {'x': 20}; });
 
   scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
 
-  assertEquals('Element should be scrolled to the left',
-      '-4px', goog.style.getStyle(scrollFloater.getElement(), 'left'));
+  assertEquals(
+      'Element should be scrolled to the left', '-4px',
+      goog.style.getStyle(scrollFloater.getElement(), 'left'));
 
   propReplacer.reset();
   scrollFloater.dispose();
 }
-

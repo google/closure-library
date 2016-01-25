@@ -27,8 +27,7 @@ goog.require('goog.ui.PaletteRenderer');
 
 var sandbox;
 var items = [
-  '<div aria-label="label-0"></div>',
-  '<div title="title-1"></div>',
+  '<div aria-label="label-0"></div>', '<div title="title-1"></div>',
   '<div aria-label="label-2" title="title-2"></div>',
   '<div><span title="child-title-3"></span></div>'
 ];
@@ -64,30 +63,40 @@ function testCellA11yLabels() {
   var grid = renderer.createDom(palette);
   var cells = grid.getElementsByTagName(goog.dom.TagName.TD);
 
-  assertEquals('An aria-label is used as a label',
-      'label-0', goog.a11y.aria.getLabel(cells[0]));
-  assertEquals('A title is used as a label',
-      'title-1', goog.a11y.aria.getLabel(cells[1]));
-  assertEquals('An aria-label takes precedence over a title',
-      'label-2', goog.a11y.aria.getLabel(cells[2]));
-  assertEquals('Children are traversed to find labels',
-      'child-title-3', goog.a11y.aria.getLabel(cells[3]));
+  assertEquals(
+      'An aria-label is used as a label', 'label-0',
+      goog.a11y.aria.getLabel(cells[0]));
+  assertEquals(
+      'A title is used as a label', 'title-1',
+      goog.a11y.aria.getLabel(cells[1]));
+  assertEquals(
+      'An aria-label takes precedence over a title', 'label-2',
+      goog.a11y.aria.getLabel(cells[2]));
+  assertEquals(
+      'Children are traversed to find labels', 'child-title-3',
+      goog.a11y.aria.getLabel(cells[3]));
 }
 
 function testA11yActiveDescendant() {
   palette.render();
-  var cells = palette.getElementStrict().getElementsByTagName(
-      goog.dom.TagName.TD);
+  var cells =
+      palette.getElementStrict().getElementsByTagName(goog.dom.TagName.TD);
 
   renderer.highlightCell(palette, cells[1].firstChild, true);
-  assertEquals(cells[1].id, goog.a11y.aria.getState(
-      palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  assertEquals(
+      cells[1].id,
+      goog.a11y.aria.getState(
+          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
 
   renderer.highlightCell(palette, cells[0].firstChild, false);
-  assertEquals(cells[1].id, goog.a11y.aria.getState(
-      palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  assertEquals(
+      cells[1].id,
+      goog.a11y.aria.getState(
+          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
 
   renderer.highlightCell(palette, cells[1].firstChild, false);
-  assertNotEquals(cells[1].id, goog.a11y.aria.getState(
-      palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  assertNotEquals(
+      cells[1].id,
+      goog.a11y.aria.getState(
+          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
 }

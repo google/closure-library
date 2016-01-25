@@ -89,8 +89,8 @@ function testSetContent() {
   assertHTMLEquals('Foo', contentEl.innerHTML);
   assertTrue(hasInlineBlock(contentEl));
 
-  renderedButton.setContent(goog.dom.createDom(goog.dom.TagName.DIV, null,
-                                               'Bar'));
+  renderedButton.setContent(
+      goog.dom.createDom(goog.dom.TagName.DIV, null, 'Bar'));
   contentEl = renderedButton.getContentElement();
   assertHTMLEquals('<div>Bar</div>', contentEl.innerHTML);
 
@@ -154,10 +154,11 @@ function checkAriaState(button) {
       goog.a11y.aria.getState(
           button.getElement(), goog.a11y.aria.State.EXPANDED));
   button.setOpen(true);
-  assertEquals('menu buttons should not aria-expanded == true after ' +
-      'opening', 'true',
-      goog.a11y.aria.getState(
-          button.getElement(), goog.a11y.aria.State.EXPANDED));
+  assertEquals(
+      'menu buttons should not aria-expanded == true after ' +
+          'opening',
+      'true', goog.a11y.aria.getState(
+                  button.getElement(), goog.a11y.aria.State.EXPANDED));
 }
 
 function hasInlineBlock(el) {
@@ -165,6 +166,6 @@ function hasInlineBlock(el) {
 }
 
 function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(goog.ui.MenuButtonRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.MenuButtonRenderer);
 }
