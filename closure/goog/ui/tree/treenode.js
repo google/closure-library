@@ -46,6 +46,7 @@ goog.inherits(goog.ui.tree.TreeNode, goog.ui.tree.BaseNode);
 
 /**
  * Returns the tree.
+ * @return {?goog.ui.tree.TreeControl} The tree.
  * @override
  */
 goog.ui.tree.TreeNode.prototype.getTree = function() {

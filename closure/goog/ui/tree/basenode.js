@@ -417,7 +417,6 @@ goog.ui.tree.BaseNode.prototype.onTimeoutSelect_ = function() {
 
 /**
  * Returns the tree.
- * @return {?goog.ui.tree.TreeControl} The tree.
  */
 goog.ui.tree.BaseNode.prototype.getTree = goog.abstractMethod;
 
