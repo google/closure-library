@@ -24,8 +24,10 @@ var TEST_DATA = {
   'wtih': [goog.spell.SpellCheck.WordStatus.INVALID, []],
   'a': [goog.spell.SpellCheck.WordStatus.VALID, []],
   'few': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'misspeled': [goog.spell.SpellCheck.WordStatus.INVALID,
-    ['misspelled', 'misapplied', 'misspell']],
+  'misspeled': [
+    goog.spell.SpellCheck.WordStatus.INVALID,
+    ['misspelled', 'misapplied', 'misspell']
+  ],
   'words': [goog.spell.SpellCheck.WordStatus.VALID, []],
   'Testing': [goog.spell.SpellCheck.WordStatus.VALID, []],
   'set': [goog.spell.SpellCheck.WordStatus.VALID, []],

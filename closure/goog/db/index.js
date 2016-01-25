@@ -93,9 +93,7 @@ goog.db.Index.prototype.get_ = function(fn, msg, key) {
     d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
-  request.onsuccess = function(ev) {
-    d.callback(ev.target.result);
-  };
+  request.onsuccess = function(ev) { d.callback(ev.target.result); };
   request.onerror = function(ev) {
     msg += ' with key ' + goog.debug.deepExpose(key);
     d.errback(goog.db.Error.fromRequest(ev.target, msg));
@@ -188,9 +186,7 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_key) {
  */
 goog.db.Index.prototype.getAll = function(opt_key) {
   return this.getAll_(
-      'openCursor',
-      'getting all from index ' + this.getName(),
-      opt_key);
+      'openCursor', 'getting all from index ' + this.getName(), opt_key);
 };
 
 
@@ -204,8 +200,7 @@ goog.db.Index.prototype.getAll = function(opt_key) {
  */
 goog.db.Index.prototype.getAllKeys = function(opt_key) {
   return this.getAll_(
-      'openKeyCursor',
-      'getting all keys from index ' + this.getName(),
+      'openKeyCursor', 'getting all keys from index ' + this.getName(),
       opt_key);
 };
 

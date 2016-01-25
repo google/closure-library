@@ -289,8 +289,7 @@ function testSafariIphone() {
 }
 
 function testCoast() {
-  goog.labs.userAgent.util.setUserAgent(
-      goog.labs.userAgent.testAgents.COAST);
+  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.COAST);
   assertBrowser(Browser.COAST);
 }
 
