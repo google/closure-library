@@ -821,6 +821,11 @@ function testSetContent_guardedByGlobalFlag() {
       }).message);
 }
 
+function testSetTextContent() {
+  dialog.setTextContent('Dinner <3\nTogether');
+  assertEquals('Dinner &lt;3<br>Together', dialog.getContent());
+}
+
 function testFocus() {
   // Focus should go to the dialog element.
   document.body.focus();

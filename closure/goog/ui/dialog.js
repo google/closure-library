@@ -268,10 +268,20 @@ goog.ui.Dialog.prototype.getTitle = function() {
 /**
  * Allows arbitrary HTML to be set in the content element.
  * @param {string} html Content HTML.
- * @deprecated Use setSafeHtmlContent.
+ * @deprecated Use setSafeHtmlContent or setTextContent.
  */
 goog.ui.Dialog.prototype.setContent = function(html) {
   this.setSafeHtmlContent(goog.html.legacyconversions.safeHtmlFromString(html));
+};
+
+
+/**
+ * Allows plain text to be set in the content element.
+ * @param {string} text Content plain text. Newlines are preserved.
+ */
+goog.ui.Dialog.prototype.setTextContent = function(text) {
+  this.setSafeHtmlContent(
+      goog.html.SafeHtml.htmlEscapePreservingNewlines(text));
 };
 
 
