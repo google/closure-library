@@ -215,8 +215,8 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
           goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
-    goog.asserts.fail(
-        'expected object of type SafeUrl, got \'' + safeUrl + '\'');
+    goog.asserts.fail('expected object of type SafeUrl, got \'' +
+        safeUrl + '\' of type ' + goog.typeOf(safeUrl));
     return 'type_error:SafeUrl';
   }
 };

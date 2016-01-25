@@ -268,8 +268,8 @@ goog.html.SafeStyle.unwrap = function(safeStyle) {
           goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeStyle.privateDoNotAccessOrElseSafeStyleWrappedValue_;
   } else {
-    goog.asserts.fail(
-        'expected object of type SafeStyle, got \'' + safeStyle + '\'');
+    goog.asserts.fail('expected object of type SafeStyle, got \'' +
+        safeStyle + '\' of type ' + goog.typeOf(safeStyle));
     return 'type_error:SafeStyle';
   }
 };

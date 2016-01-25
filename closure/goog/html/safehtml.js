@@ -179,8 +179,8 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
           goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
-    goog.asserts.fail(
-        'expected object of type SafeHtml, got \'' + safeHtml + '\'');
+    goog.asserts.fail('expected object of type SafeHtml, got \'' +
+        safeHtml + '\' of type ' + goog.typeOf(safeHtml));
     return 'type_error:SafeHtml';
   }
 };

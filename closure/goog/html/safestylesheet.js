@@ -232,8 +232,8 @@ goog.html.SafeStyleSheet.unwrap = function(safeStyleSheet) {
           goog.html.SafeStyleSheet.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeStyleSheet.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_;
   } else {
-    goog.asserts.fail(
-        "expected object of type SafeStyleSheet, got '" + safeStyleSheet + "'");
+    goog.asserts.fail('expected object of type SafeStyleSheet, got \'' +
+        safeStyleSheet + '\' of type ' + goog.typeOf(safeStyleSheet));
     return 'type_error:SafeStyleSheet';
   }
 };
