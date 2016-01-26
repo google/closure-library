@@ -92,8 +92,7 @@ goog.net.XmlHttp.OptionType = {
 
 /**
  * Status constants for XMLHTTP, matches:
- * http://msdn.microsoft.com/library/default.asp?url=/library/
- *   en-us/xmlsdk/html/0e6a34e4-f90c-489d-acff-cb44242fafc6.asp
+ * https://msdn.microsoft.com/en-us/library/ms534361(v=vs.85).aspx
  * @enum {number}
  */
 goog.net.XmlHttp.ReadyState = {
