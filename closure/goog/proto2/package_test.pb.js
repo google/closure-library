@@ -19,11 +19,10 @@
  */
 
 goog.provide('someprotopackage.TestPackageTypes');
+goog.setTestOnly('someprotopackage.TestPackageTypes');
 
 goog.require('goog.proto2.Message');
 goog.require('proto2.TestAllTypes');
-
-goog.setTestOnly('package_test.pb');
 
 
 
@@ -37,6 +36,13 @@ someprotopackage.TestPackageTypes = function() {
   goog.proto2.Message.call(this);
 };
 goog.inherits(someprotopackage.TestPackageTypes, goog.proto2.Message);
+
+
+/**
+ * Descriptor for this message, deserialized lazily in getDescriptor().
+ * @private {?goog.proto2.Descriptor}
+ */
+someprotopackage.TestPackageTypes.descriptor_ = null;
 
 
 /**
@@ -60,8 +66,7 @@ someprotopackage.TestPackageTypes.prototype.getOptionalInt32 = function() {
  * Gets the value of the optional_int32 field or the default value if not set.
  * @return {number} The value.
  */
-someprotopackage.TestPackageTypes.prototype.getOptionalInt32OrDefault =
-    function() {
+someprotopackage.TestPackageTypes.prototype.getOptionalInt32OrDefault = function() {
   return /** @type {number} */ (this.get$ValueOrDefault(1));
 };
 
@@ -101,10 +106,10 @@ someprotopackage.TestPackageTypes.prototype.clearOptionalInt32 = function() {
 
 /**
  * Gets the value of the other_all field.
- * @return {proto2.TestAllTypes} The value.
+ * @return {?proto2.TestAllTypes} The value.
  */
 someprotopackage.TestPackageTypes.prototype.getOtherAll = function() {
-  return /** @type {proto2.TestAllTypes} */ (this.get$Value(2));
+  return /** @type {?proto2.TestAllTypes} */ (this.get$Value(2));
 };
 
 
@@ -152,7 +157,8 @@ someprotopackage.TestPackageTypes.prototype.clearOtherAll = function() {
 
 /** @override */
 someprotopackage.TestPackageTypes.prototype.getDescriptor = function() {
-  if (!someprotopackage.TestPackageTypes.descriptor_) {
+  var descriptor = someprotopackage.TestPackageTypes.descriptor_;
+  if (!descriptor) {
     // The descriptor is created lazily when we instantiate a new instance.
     var descriptorObj = {
       0: {
@@ -170,15 +176,14 @@ someprotopackage.TestPackageTypes.prototype.getDescriptor = function() {
         type: proto2.TestAllTypes
       }
     };
-    someprotopackage.TestPackageTypes.descriptor_ =
+    someprotopackage.TestPackageTypes.descriptor_ = descriptor =
         goog.proto2.Message.createDescriptor(
-            someprotopackage.TestPackageTypes, descriptorObj);
+             someprotopackage.TestPackageTypes, descriptorObj);
   }
-  return someprotopackage.TestPackageTypes.descriptor_;
+  return descriptor;
 };
 
 
-// Export getDescriptor static function robust to minification.
-someprotopackage.TestPackageTypes['ctor'] = someprotopackage.TestPackageTypes;
-someprotopackage.TestPackageTypes['ctor'].getDescriptor =
+/** @nocollapse */
+someprotopackage.TestPackageTypes.getDescriptor =
     someprotopackage.TestPackageTypes.prototype.getDescriptor;
