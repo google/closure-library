@@ -187,6 +187,8 @@ function testSafeHtmlCreate() {
 
   assertThrows(function() { goog.html.SafeHtml.create('math'); });
 
+  assertThrows(function() { goog.html.SafeHtml.create('meta'); });
+
   assertThrows(function() { goog.html.SafeHtml.create('svg'); });
 }
 

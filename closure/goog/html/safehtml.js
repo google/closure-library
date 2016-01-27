@@ -310,12 +310,11 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet(
  * their content.
  * @private @const {!Object<string,boolean>}
  */
-// TODO(user): ban goog.dom.TagName.META, once users have been moved.
 goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
     goog.dom.TagName.APPLET, goog.dom.TagName.BASE, goog.dom.TagName.EMBED,
     goog.dom.TagName.IFRAME, goog.dom.TagName.LINK, goog.dom.TagName.MATH,
-    goog.dom.TagName.OBJECT, goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE,
-    goog.dom.TagName.SVG, goog.dom.TagName.TEMPLATE);
+    goog.dom.TagName.META, goog.dom.TagName.OBJECT, goog.dom.TagName.SCRIPT,
+    goog.dom.TagName.STYLE, goog.dom.TagName.SVG, goog.dom.TagName.TEMPLATE);
 
 
 /**
