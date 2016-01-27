@@ -29,7 +29,6 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.testing');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -39,7 +38,6 @@ var bodyChildElement;
 var decorateTarget;
 var dialog;
 var mockClock;
-var stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
@@ -54,10 +52,6 @@ function setUp() {
 
   decorateTarget = goog.dom.createDom(goog.dom.TagName.DIV);
   document.body.appendChild(decorateTarget);
-
-  // Reset global flags to their defaults.
-  /** @suppress {missingRequire} */
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
 }
 
 function tearDown() {
@@ -809,16 +803,6 @@ function testHtmlContent() {
   assertEquals(
       '<span class="theSpan">Hello</span>',
       goog.html.SafeHtml.unwrap(dialog.getSafeHtmlContent()));
-}
-
-function testSetContent_guardedByGlobalFlag() {
-  /** @suppress {missingRequire} */
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        dialog.setContent('<img src="blag" onerror="evil();">');
-      }).message);
 }
 
 function testSetTextContent() {

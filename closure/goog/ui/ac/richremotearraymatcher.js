@@ -34,9 +34,7 @@ goog.require('goog.ui.ac.RemoteArrayMatcher');
  * rich rows.
  *
  * This class makes use of goog.html.legacyconversions and provides no
- * HTML-type-safe alternative. As such, it is not compatible with
- * code that sets goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS to
- * false.
+ * HTML-type-safe alternative.
  *
  * @param {string} url The Uri which generates the auto complete matches.  The
  *     search term is passed to the server as the 'token' query param.
@@ -56,7 +54,6 @@ goog.ui.ac.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
   // respective check rule fire from all such places which polymorphically
   // call requestMatchingRows(); such calls are safe as long as they're not to
   // RichRemoteArrayMatcher.
-  goog.html.legacyconversions.throwIfConversionsDisallowed();
   goog.ui.ac.RemoteArrayMatcher.call(this, url, opt_noSimilar);
 
   /**

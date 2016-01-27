@@ -18,20 +18,12 @@ goog.setTestOnly('goog.ui.tree.BaseNodeTest');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.html.testing');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
-var stubs = new goog.testing.PropertyReplacer();
-
-function setUp() {
-  // Reset global flags to their defaults.
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
-}
 
 function testAdd() {
   var node1 = new goog.ui.tree.TreeNode('node1');
@@ -284,13 +276,4 @@ function testSetHtml() {
   tree = new goog.ui.tree.TreeControl('');
   tree.setSafeHtml(goog.html.testing.newSafeHtmlForTest('<b>tree</b>'));
   assertEquals('<b>tree</b>', tree.getHtml());
-}
-
-function testSetHtml_guardedByGlobalFlag() {
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        new goog.ui.tree.TreeControl('<img src="blag" onerror="evil();">');
-      }).message);
 }

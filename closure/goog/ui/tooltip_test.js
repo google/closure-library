@@ -26,15 +26,12 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.positioning.AbsolutePosition');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestQueue');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');
-
-var stubs = new goog.testing.PropertyReplacer();
 
 
 
@@ -89,10 +86,6 @@ function setUp() {
   handler = new goog.events.EventHandler(eventQueue);
   handler.listen(tt, goog.ui.PopupBase.EventType.SHOW, eventQueue.enqueue);
   handler.listen(tt, goog.ui.PopupBase.EventType.HIDE, eventQueue.enqueue);
-
-  // Reset global flags to their defaults.
-  /** @suppress {missingRequire} */
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
 }
 
 function tearDown() {
@@ -393,16 +386,6 @@ function testHtmlContent() {
           '<span class="theSpan">Hello</span>'));
   var spanEl = goog.dom.getElementByClass('theSpan', tt.getElement());
   assertEquals('Hello', goog.dom.getTextContent(spanEl));
-}
-
-function testSetContent_guardedByGlobalFlag() {
-  /** @suppress {missingRequire} */
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        tt.setHtml('<img src="blag" onerror="evil();">');
-      }).message);
 }
 
 function testSetElementNull() {

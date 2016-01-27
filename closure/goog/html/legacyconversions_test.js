@@ -22,61 +22,26 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.legacyconversions');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.html.legacyconversionsTest');
 
 
-/** @type {!goog.testing.PropertyReplacer} */
-var stubs = new goog.testing.PropertyReplacer();
+function testSafeHtmlFromString() {
+  var html = '<div>irrelevant</div>';
+  var safeHtml = goog.html.legacyconversions.safeHtmlFromString(html);
+  assertEquals(html, goog.html.SafeHtml.unwrap(safeHtml));
 
-
-function setUp() {
-  // Reset goog.html.legacyconveresions global defines for each test case.
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
+  assertFunctionReports(goog.html.legacyconversions.safeHtmlFromString);
 }
 
 
-function testSafeHtmlFromString_allowedIfNotGloballyDisabled() {
-  var helloWorld = 'Hello <em>World</em>';
-  var safeHtml = goog.html.legacyconversions.safeHtmlFromString(helloWorld);
-  assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
-  assertNull(safeHtml.getDirection());
-}
+function testSafeStyleFromString() {
+  var style = 'P.special { color:red ; }';
+  var safeStyle = goog.html.legacyconversions.safeStyleFromString(style);
+  assertEquals(style, goog.html.SafeStyle.unwrap(safeStyle));
 
-
-function testSafeHtmlFromString_guardedByGlobalFlag() {
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        goog.html.legacyconversions.safeHtmlFromString(
-            'Possibly untrusted <html>');
-      }).message);
-}
-
-
-function testSafeHtmlFromString_reports() {
-  var reported = false;
-  goog.html.legacyconversions.setReportCallback(function() {
-    reported = true;
-  });
-  goog.html.legacyconversions.safeHtmlFromString('<html>');
-  assertTrue('Expected legacy conversion to be reported.', reported);
-
-  reported = false;
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  try {
-    goog.html.legacyconversions.safeHtmlFromString('<html>');
-  } catch (expected) {
-  }
-  assertFalse('Expected legacy conversion to not be reported.', reported);
-
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
-  goog.html.legacyconversions.setReportCallback(goog.nullFunction);
-  goog.html.legacyconversions.safeHtmlFromString('<html>');
-  assertFalse('Expected legacy conversion to not be reported.', reported);
+  assertFunctionReports(goog.html.legacyconversions.safeStyleFromString);
 }
 
 
@@ -84,6 +49,8 @@ function testSafeUrlFromString() {
   var url = 'https://www.google.com';
   var safeUrl = goog.html.legacyconversions.safeUrlFromString(url);
   assertEquals(url, goog.html.SafeUrl.unwrap(safeUrl));
+
+  assertFunctionReports(goog.html.legacyconversions.safeUrlFromString);
 }
 
 
@@ -92,4 +59,25 @@ function testTrustedResourceUrlFromString() {
   var trustedResourceUrl =
       goog.html.legacyconversions.trustedResourceUrlFromString(url);
   assertEquals(url, goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
+
+  assertFunctionReports(
+      goog.html.legacyconversions.trustedResourceUrlFromString);
+}
+
+
+/**
+ * Asserts that conversionFunction calls the report callback.
+ * @param {!function(string) : *} conversionFunction
+ */
+function assertFunctionReports(conversionFunction) {
+  var reported = false;
+  try {
+    goog.html.legacyconversions.setReportCallback(function() {
+      reported = true;
+    });
+    conversionFunction('irrelevant');
+    assertTrue('Expected legacy conversion to be reported.', reported);
+  } finally {
+    goog.html.legacyconversions.setReportCallback(goog.nullFunction);
+  }
 }

@@ -48,9 +48,7 @@ goog.require('goog.ui.ac.RichRemoteArrayMatcher');
  * render the results.
  *
  * This class makes use of goog.html.legacyconversions and provides no
- * HTML-type-safe alternative. As such, it is not compatible with
- * code that sets goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS to
- * false.
+ * HTML-type-safe alternative.
  *
  * @param {string} url The Uri which generates the auto complete matches.
  * @param {Element} input Input element or text area.
