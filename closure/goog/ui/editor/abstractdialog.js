@@ -44,8 +44,11 @@ goog.require('goog.ui.PopupBase');
  * @extends {goog.events.EventTarget}
  */
 goog.ui.editor.AbstractDialog = function(domHelper) {
-  goog.events.EventTarget.call(this);
+  goog.ui.editor.AbstractDialog.base(this, 'constructor');
   this.dom = domHelper;
+
+  /** @private {?goog.ui.Dialog} */
+  this.dialogInternal_ = null;
 };
 goog.inherits(goog.ui.editor.AbstractDialog, goog.events.EventTarget);
 
