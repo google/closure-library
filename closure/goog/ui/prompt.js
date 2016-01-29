@@ -29,7 +29,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Dialog');
 goog.require('goog.userAgent');
@@ -43,8 +42,8 @@ goog.require('goog.userAgent');
  * "Content area" and has the default class-name 'modal-dialog-userInput'
  *
  * @param {string} promptTitle The title of the prompt.
- * @param {string|!goog.html.SafeHtml} promptHtml The HTML body of the prompt.
- *     The variable is trusted and it should be already properly escaped.
+ * @param {string|!goog.html.SafeHtml} promptBody The body of the prompt.
+ *     String is treated as plain text and it will be HTML-escaped.
  * @param {Function} callback The function to call when the user selects Ok or
  *     Cancel. The function should expect a single argument which represents
  *     what the user entered into the prompt. If the user presses cancel, the
@@ -60,7 +59,7 @@ goog.require('goog.userAgent');
  * @extends {goog.ui.Dialog}
  */
 goog.ui.Prompt = function(
-    promptTitle, promptHtml, callback, opt_defaultValue, opt_class,
+    promptTitle, promptBody, callback, opt_defaultValue, opt_class,
     opt_useIframeForIE, opt_domHelper) {
   goog.ui.Prompt.base(
       this, 'constructor', opt_class, opt_useIframeForIE, opt_domHelper);
@@ -76,9 +75,7 @@ goog.ui.Prompt = function(
 
   var label = goog.html.SafeHtml.create(
       'label', {'for': this.inputElementId_},
-      promptHtml instanceof goog.html.SafeHtml ?
-          promptHtml :
-          goog.html.legacyconversions.safeHtmlFromString(promptHtml));
+      goog.html.SafeHtml.htmlEscapePreservingNewlines(promptBody));
   var br = goog.html.SafeHtml.BR;
   this.setSafeHtmlContent(goog.html.SafeHtml.concat(label, br, br));
 
