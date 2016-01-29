@@ -137,21 +137,27 @@ goog.editor.Field = function(id, opt_doc) {
   this.cssStyles = '';
 
   // The field will not listen to change events until it has finished loading
+  /** @private */
   this.stoppedEvents_ = {};
   this.stopEvent(goog.editor.Field.EventType.CHANGE);
   this.stopEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+  /** @private */
   this.isModified_ = false;
+  /** @private */
   this.isEverModified_ = false;
+  /** @private */
   this.delayedChangeTimer_ = new goog.async.Delay(
       this.dispatchDelayedChange_, goog.editor.Field.DELAYED_CHANGE_FREQUENCY,
       this);
 
+  /** @private */
   this.debouncedEvents_ = {};
   for (var key in goog.editor.Field.EventType) {
     this.debouncedEvents_[goog.editor.Field.EventType[key]] = 0;
   }
 
   if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+    /** @private */
     this.changeTimerGecko_ = new goog.async.Delay(
         this.handleChange, goog.editor.Field.CHANGE_FREQUENCY, this);
   }
@@ -163,8 +169,10 @@ goog.editor.Field = function(id, opt_doc) {
   this.eventRegister = new goog.events.EventHandler(this);
 
   // Wrappers around this field, to be disposed when the field is disposed.
+  /** @private */
   this.wrappers_ = [];
 
+  /** @private */
   this.loadState_ = goog.editor.Field.LoadState_.UNEDITABLE;
 
   var doc = opt_doc || document;
@@ -191,6 +199,7 @@ goog.editor.Field = function(id, opt_doc) {
       goog.editor.BrowserFeature.FOLLOWS_EDITABLE_LINKS;
 
   // Default to the same window as the field is in.
+  /** @private */
   this.appWindow_ = this.originalDomHelper.getWindow();
 };
 goog.inherits(goog.editor.Field, goog.events.EventTarget);
