@@ -268,6 +268,11 @@ function testConstructor() {
   assertEquals('tree', tree.getHtml());
 }
 
+function testConstructor_allowsPlainText() {
+  var tree = new goog.ui.tree.TreeControl('tree <3');
+  assertEquals('tree &lt;3', tree.getHtml());
+}
+
 function testSetHtml() {
   var tree = new goog.ui.tree.TreeControl('');
   tree.setHtml('<b>tree</b>');

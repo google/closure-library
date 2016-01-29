@@ -45,7 +45,8 @@ goog.require('goog.ui.Component');
 /**
  * An abstract base class for a node in the tree.
  *
- * @param {string|!goog.html.SafeHtml} html The html content of the node label.
+ * @param {string|!goog.html.SafeHtml} content The content of the node label.
+ *     Strings are treated as plain-text and will be HTML escaped.
  * @param {Object=} opt_config The configuration for the tree. See
  *    {@link goog.ui.tree.BaseNode.defaultConfig}. If not specified the
  *    default config will be used.
@@ -53,7 +54,7 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
+goog.ui.tree.BaseNode = function(content, opt_config, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -68,10 +69,7 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
    * @type {!goog.html.SafeHtml}
    * @private
    */
-  this.html_ =
-      (html instanceof goog.html.SafeHtml ?
-           html :
-           goog.html.legacyconversions.safeHtmlFromString(html));
+  this.html_ = goog.html.SafeHtml.htmlEscapePreservingNewlines(content);
 
   /** @private {string} */
   this.iconClass_;
