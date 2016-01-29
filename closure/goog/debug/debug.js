@@ -284,7 +284,13 @@ goog.debug.createViewSourceUrl_ = function(opt_fileName) {
 /**
  * Normalizes the error/exception object between browsers.
  * @param {Object} err Raw error object.
- * @return {!Object} Normalized error object.
+ * @return {!{
+ *    message: (?|undefined),
+ *    name: (?|undefined),
+ *    lineNumber: (?|undefined),
+ *    fileName: (?|undefined),
+ *    stack: (?|undefined)
+ * }} Normalized error object.
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
@@ -335,7 +341,8 @@ goog.debug.normalizeErrorObject = function(err) {
   }
 
   // Standards error object
-  return err;
+  // Typed !Object. Should be a subtype of the return type, but it's not.
+  return /** @type {?} */ (err);
 };
 
 
