@@ -71,7 +71,7 @@ goog.i18n.ordinalRules.decimals_ = function(n) {
  *     (http://unicode.org/reports/tr35/tr35-numbers.html#Plural_rules_syntax)
  * @param {number} n The count of items.
  * @param {number=} opt_precision optional, precision.
- * @return {!Object} The v and f.
+ * @return {!{v:number, f:number}} The v and f.
  * @private
  */
 goog.i18n.ordinalRules.get_vf_ = function(n, opt_precision) {
@@ -95,7 +95,7 @@ goog.i18n.ordinalRules.get_vf_ = function(n, opt_precision) {
  *     (http://unicode.org/reports/tr35/tr35-numbers.html#Plural_rules_syntax)
  * @param {number} v Calculated previously.
  * @param {number} f Calculated previously.
- * @return {!Object} The w and t.
+ * @return {!{w:number, t:number}} The w and t.
  * @private
  */
 goog.i18n.ordinalRules.get_wt_ = function(v, f) {
