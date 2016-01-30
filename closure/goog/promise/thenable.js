@@ -106,7 +106,7 @@ goog.Thenable.addImplementation = function(ctor) {
 
 
 /**
- * @param {*} object
+ * @param {?} object
  * @return {boolean} Whether a given instance implements {@code goog.Thenable}.
  *     The class/superclass of the instance must call {@code addImplementation}.
  */

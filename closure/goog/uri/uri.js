@@ -1282,7 +1282,7 @@ goog.Uri.QueryData.prototype.containsValue = function(value) {
 goog.Uri.QueryData.prototype.getKeys = function() {
   this.ensureKeyMapInitialized_();
   // We need to get the values to know how many keys to add.
-  var vals = /** @type {!Array<*>} */ (this.keyMap_.getValues());
+  var vals = this.keyMap_.getValues();
   var keys = this.keyMap_.getKeys();
   var rv = [];
   for (var i = 0; i < keys.length; i++) {
