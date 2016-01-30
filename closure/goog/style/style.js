@@ -491,7 +491,7 @@ goog.style.getOffsetParent = function(element) {
   // browsers it only includes elements with position absolute, relative or
   // fixed, not elements with overflow set to auto or scroll.
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(8)) {
-    goog.asserts.assert('offsetParent' in element);
+    goog.asserts.assert(element && 'offsetParent' in element);
     return element.offsetParent;
   }
 
@@ -1879,11 +1879,11 @@ goog.style.getFontSize = function(el) {
   // (em, ex) are applied relative to the element's parentNode and can also
   // be converted.
   if (goog.userAgent.IE) {
-    if (sizeUnits in goog.style.ABSOLUTE_CSS_LENGTH_UNITS_) {
+    if (String(sizeUnits) in goog.style.ABSOLUTE_CSS_LENGTH_UNITS_) {
       return goog.style.getIePixelValue_(el, fontSize, 'left', 'pixelLeft');
     } else if (
         el.parentNode && el.parentNode.nodeType == goog.dom.NodeType.ELEMENT &&
-        sizeUnits in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
+        String(sizeUnits) in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
       // Check the parent size - if it is the same it means the relative size
       // value is inherited and we therefore don't want to count it twice.  If
       // it is different, this element either has explicit style or has a CSS

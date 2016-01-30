@@ -412,7 +412,7 @@ goog.userAgent.determineVersion_ = function() {
     // It is recommended to set the X-UA-Compatible header to ensure that IE9
     // uses documentMode 9.
     var docMode = goog.userAgent.getDocumentMode_();
-    if (docMode > parseFloat(version)) {
+    if (docMode != null && docMode > parseFloat(version)) {
       return String(docMode);
     }
   }
