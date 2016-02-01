@@ -161,8 +161,9 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
  * an {@code Image} object with {@code id} and {@code src} attributes based on
  * these arguments.
  * @param {string} id The ID of the image to load.
- * @param {string|Image} image Either the source URL of the image or the HTML
- *     image element itself (or any object with a {@code src} property, really).
+ * @param {string|!HTMLImageElement} image Either the source URL of the image or
+ *     the HTML image element itself (or any object with a {@code src} property,
+ *     really).
  * @param {!goog.net.ImageLoader.CorsRequestType=} opt_corsRequestType The type
  *     of CORS request to use, if any.
  */
