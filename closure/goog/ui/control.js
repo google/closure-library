@@ -39,7 +39,6 @@ goog.require('goog.ui.Component');
 /** @suppress {extraRequire} */
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
-goog.require('goog.ui.decorate');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
@@ -122,18 +121,6 @@ goog.ui.Control.registerDecorator = goog.ui.registry.setDecoratorByClassName;
 goog.ui.Control.getDecorator =
     /** @type {function(Element): goog.ui.Control} */ (
         goog.ui.registry.getDecorator);
-
-
-/**
- * Takes an element, and decorates it with a {@link goog.ui.Control} instance
- * if a suitable decorator is found.
- * @param {Element} element Element to decorate.
- * @return {goog.ui.Control?} New control instance that decorates the element
- *     (null if none).
- * @deprecated Use {@link goog.ui.decorate} instead.
- */
-goog.ui.Control.decorate =
-    /** @type {function(Element): goog.ui.Control} */ (goog.ui.decorate);
 
 
 /**
