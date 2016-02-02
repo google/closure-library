@@ -1039,7 +1039,7 @@ function testBinarySearch() {
   assertTrue('-900000 should not be found', pos < 0);
   assertEquals(
       '-900000 should have an insertion point of 0', 0, insertionPoint(pos));
-  pos = goog.array.binarySearch(d, '54255');
+  pos = goog.array.binarySearch(d, 54255);
   assertTrue('54255 should not be found', pos < 0);
   assertEquals(
       '54255 should have an insertion point of ' + (d.length), d.length,
@@ -1067,8 +1067,8 @@ function testBinarySearch() {
       '-3 should be found at index 10', 10,
       goog.array.binarySearch(e, -3, revNumCompare));
   pos = goog.array.binarySearch(e, 0, revNumCompare);
-  assertTrue(
-      '0 should be found at index  || 10', pos == 7 || pos == 9 || pos == 10);
+  assertTrue('0 should be found at index 7 || 8 || 9',
+             pos == 7 || pos == 8 || pos == 9);
   pos = goog.array.binarySearch(e, 54254.1, revNumCompare);
   assertTrue('54254.1 should not be found', pos < 0);
   assertEquals(
