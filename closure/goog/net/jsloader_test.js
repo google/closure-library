@@ -132,10 +132,7 @@ function testLoadMany() {
 function testLoadWithOptions() {
   var testUrl = 'testdata/jsloader_test1.js';
   var options = {
-    attributes: {
-      'data-attr1': 'enabled',
-      'data-attr2': 'disabled',
-    },
+    attributes: {'data-attr1': 'enabled', 'data-attr2': 'disabled'},
     timeout: undefined,          // Use default
     cleanupWhenDone: undefined,  // Use default
     document: undefined          // Use default
