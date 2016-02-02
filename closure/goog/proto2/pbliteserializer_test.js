@@ -195,9 +195,9 @@ function testDeserializationFromExternalSource() {
     , , , , , , , , ,                    // 22-30
     [201, 202],                          // 31
     , , , , , , , , , , , ,              // 32-43
-    ['foo', 'bar'],                      // 44
-    , , , ,                              // 45-49
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -261,9 +261,9 @@ function testModifyLazyDeserializedMessage() {
     , , , , , , , , ,                    // 22-30
     [201, 202],                          // 31
     , , , , , , , , , , , ,              // 32-43
-    ['foo', 'bar'],                      // 44
-    , , , ,                              // 45-49
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -330,9 +330,9 @@ function testModifyLazyDeserializedMessageByAddingMessage() {
     , , , , , , , , ,                    // 22-30
     [201, 202],                          // 31
     , , , , , , , , , , , ,              // 32-43
-    ['foo', 'bar'],                      // 44
-    , , , ,                              // 45-49
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
