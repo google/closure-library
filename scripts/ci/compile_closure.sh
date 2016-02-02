@@ -11,6 +11,7 @@ java -jar ../closure-compiler/build/compiler.jar \
   --jscomp_off=unnecessaryCasts \
   --jscomp_off=deprecated \
   --jscomp_off=lintChecks \
+  --jscomp_off=analyzerChecks \
   --js='**.js' \
   --js='!**_test.js' \
   --js='!**_perf.js' \
