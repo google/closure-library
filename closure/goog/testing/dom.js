@@ -584,7 +584,8 @@ goog.testing.dom.compareClassAttribute_ = function(expectedElem, actualElem) {
 
   assertArrayEquals(
       'Expected class was: ' + expectedClasses.join(' ') +
-          ', but actual class was: ' + actualElem.className,
+          ', but actual class was: ' + actualElem.className + ' in node ' +
+          goog.testing.dom.describeNode_(actualElem),
       expectedClasses, actualClasses);
 };
 
