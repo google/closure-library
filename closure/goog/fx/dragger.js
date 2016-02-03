@@ -229,7 +229,7 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ = goog.global.document &&
  * @return {!Element} The clone of {@code sourceEl}.
  */
 goog.fx.Dragger.cloneNode = function(sourceEl) {
-  var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true)),
+  var clonedEl = sourceEl.cloneNode(true),
       origTexts = sourceEl.getElementsByTagName(goog.dom.TagName.TEXTAREA),
       dragTexts = clonedEl.getElementsByTagName(goog.dom.TagName.TEXTAREA);
   // Cloning does not copy the current value of textarea elements, so correct
