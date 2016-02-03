@@ -1067,8 +1067,9 @@ function testBinarySearch() {
       '-3 should be found at index 10', 10,
       goog.array.binarySearch(e, -3, revNumCompare));
   pos = goog.array.binarySearch(e, 0, revNumCompare);
-  assertTrue('0 should be found at index 7 || 8 || 9',
-             pos == 7 || pos == 8 || pos == 9);
+  assertTrue(
+      '0 should be found at index 7 || 8 || 9',
+      pos == 7 || pos == 8 || pos == 9);
   pos = goog.array.binarySearch(e, 54254.1, revNumCompare);
   assertTrue('54254.1 should not be found', pos < 0);
   assertEquals(
