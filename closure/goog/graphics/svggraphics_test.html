@@ -96,7 +96,13 @@ See the COPYING file for details.
     var rect = graphics.drawRect(10, 20, 30, 40, stroke, fill);
     rect.setTransform(affine);
     graphics.render();
-    var svgMatrix = rect.getElement().getTransformToElement(graphics.getElement());
+    // getTransformToElement was deleted in Chrome48. See
+    // https://code.google.com/p/chromium/issues/detail?id=524432.
+    function getTransformToElement(element, target) {
+      return target.getScreenCTM().inverse().multiply(element.getScreenCTM());
+    }
+    var svgMatrix =
+        getTransformToElement(rect.getElement(), graphics.getElement());
     assertRoughlyEquals(svgMatrix.a, costheta, 0.001);
     assertRoughlyEquals(svgMatrix.b, -sintheta + 1, 0.001);
     assertRoughlyEquals(svgMatrix.c, sintheta, 0.001);
