@@ -928,7 +928,7 @@ goog.ui.ComboBox.prototype.isItemSticky_ = function(item) {
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the item (use to add icons or styling to
  *     menus).
- * @param {Object=} opt_data Identifying data for the menu item.
+ * @param {*=} opt_data Identifying data for the menu item.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
  *     interactions.
  * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.
@@ -937,7 +937,8 @@ goog.ui.ComboBox.prototype.isItemSticky_ = function(item) {
  */
 goog.ui.ComboBoxItem = function(
     content, opt_data, opt_domHelper, opt_renderer) {
-  goog.ui.MenuItem.call(this, content, opt_data, opt_domHelper, opt_renderer);
+  goog.ui.ComboBoxItem.base(
+      this, 'constructor', content, opt_data, opt_domHelper, opt_renderer);
 };
 goog.inherits(goog.ui.ComboBoxItem, goog.ui.MenuItem);
 goog.tagUnsealableClass(goog.ui.ComboBoxItem);
