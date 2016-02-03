@@ -19,7 +19,9 @@ mv $CLANG_BUILD clang
 rm -f $CLANG_TAR
 
 # Install closure compiler and linter.
-git clone --depth 1 https://github.com/google/closure-compiler.git
+if [ ! -d "closure-compiler" ]; then
+  git clone --depth 1 https://github.com/google/closure-compiler.git
+fi
 cd closure-compiler
 ant jar
 ant linter
