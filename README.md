@@ -31,5 +31,5 @@ require("google-closure-library")
 
 goog.require("goog.array")
 
-goog.concat([1, 2], [3, 4])
+goog.array.concat([1, 2], [3, 4])
 ```
