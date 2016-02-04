@@ -1059,7 +1059,6 @@ function testGetCssName() {
 
 function testAddDependency() {
   stubs.set(goog, 'writeScriptTag_', goog.nullFunction);
-  stubs.set(goog, 'isDocumentFinishedLoading_', false);
 
   goog.addDependency('foo.js', ['testDep.foo'], ['testDep.bar']);
 
@@ -1072,6 +1071,42 @@ function testAddDependency() {
   require('testDep.foo');
 
   assertTrue(goog.isObject(testDep.bar));
+
+  // Unset provided namespace so the test can be re-run.
+  testDep = undefined;
+}
+
+function testAddDependencyModule() {
+  var load = goog.testing.recordFunction();
+  stubs.set(goog, 'writeScriptTag_', load);
+
+  goog.addDependency('mod.js', ['testDep.mod'], [], true);
+  goog.addDependency('empty.js', ['testDep.empty'], [], {});
+  goog.addDependency('mod-goog.js', ['testDep.goog'], [], {'module': 'goog'});
+
+  // To differentiate this call from the real one.
+  var require = goog.require;
+
+  var assertModuleLoad = function(module, args) {
+    assertEquals(2, args.length);
+    assertEquals('', args[0]);
+    assertRegExp(
+        '^goog\\.retrieveAndExecModule_\\(".*/' + module + '"\\);$', args[1]);
+  };
+
+  require('testDep.mod');
+  assertEquals(1, load.getCallCount());
+  assertModuleLoad('mod.js', load.getCalls()[0].getArguments());
+
+  require('testDep.empty');
+  assertEquals(2, load.getCallCount());
+  assertEquals(2, load.getCalls()[1].getArguments().length);
+  assertRegExp('^.*/empty.js$', load.getCalls()[1].getArguments()[0]);
+  assertUndefined(load.getCalls()[1].getArguments()[1]);
+
+  require('testDep.goog');
+  assertEquals(3, load.getCallCount());
+  assertModuleLoad('mod-goog.js', load.getCalls()[2].getArguments());
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;

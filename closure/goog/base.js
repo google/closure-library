@@ -566,17 +566,22 @@ goog.globalize = function(obj, opt_global) {
  *     the names of the objects this file provides.
  * @param {!Array<string>} requires An array of strings with
  *     the names of the objects this file requires.
- * @param {boolean=} opt_isModule Whether this dependency must be loaded as
- *     a module as declared by goog.module.
+ * @param {boolean|!Object<string>=} opt_loadFlags Parameters indicating
+ *     how the file must be loaded.  The boolean 'true' is equivalent
+ *     to {'module': 'goog'} for backwards-compatibility.  Valid properties
+ *     and values include {'module': 'goog'} and {'lang': 'es6'}.
  */
-goog.addDependency = function(relPath, provides, requires, opt_isModule) {
+goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
   if (goog.DEPENDENCIES_ENABLED) {
     var provide, require;
     var path = relPath.replace(/\\/g, '/');
     var deps = goog.dependencies_;
+    if (!opt_loadFlags || typeof opt_loadFlags === 'boolean') {
+      opt_loadFlags = opt_loadFlags ? {'module': 'goog'} : {};
+    }
     for (var i = 0; provide = provides[i]; i++) {
       deps.nameToPath[provide] = path;
-      deps.pathIsModule[path] = !!opt_isModule;
+      deps.pathIsModule[path] = opt_loadFlags['module'] == 'goog';
     }
     for (var j = 0; require = requires[j]; j++) {
       if (!(path in deps.requires)) {
