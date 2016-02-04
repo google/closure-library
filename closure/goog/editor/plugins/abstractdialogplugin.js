@@ -46,10 +46,41 @@ goog.require('goog.ui.editor.AbstractDialog');
  * @extends {goog.editor.Plugin}
  */
 goog.editor.plugins.AbstractDialogPlugin = function(command) {
-  goog.editor.Plugin.call(this);
+  goog.editor.plugins.AbstractDialogPlugin.base(this, 'constructor');
+
+  /**
+   * The command that this plugin handles.
+   * @private {string}
+   */
   this.command_ = command;
+
   /** @private {function()} */
   this.restoreScrollPosition_ = function() {};
+
+  /**
+   * The current dialog that was created and opened by this plugin.
+   * @private {?goog.ui.editor.AbstractDialog}
+   */
+  this.dialog_ = null;
+
+  /**
+   * Whether this plugin should reuse the same instance of the dialog each time
+   * execCommand is called or create a new one.
+   * @private {boolean}
+   */
+  this.reuseDialog_ = false;
+
+  /**
+   * Mutex to prevent recursive calls to disposeDialog_.
+   * @private {boolean}
+   */
+  this.isDisposingDialog_ = false;
+
+  /**
+   * SavedRange representing the selection before the dialog was opened.
+   * @private {?goog.dom.SavedRange}
+   */
+  this.savedRange_ = null;
 };
 goog.inherits(goog.editor.plugins.AbstractDialogPlugin, goog.editor.Plugin);
 
@@ -270,47 +301,6 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
 
 
 // *** Private implementation *********************************************** //
-
-
-/**
- * The command that this plugin handles.
- * @type {string}
- * @private
- */
-goog.editor.plugins.AbstractDialogPlugin.prototype.command_;
-
-
-/**
- * The current dialog that was created and opened by this plugin.
- * @type {goog.ui.editor.AbstractDialog}
- * @private
- */
-goog.editor.plugins.AbstractDialogPlugin.prototype.dialog_;
-
-
-/**
- * Whether this plugin should reuse the same instance of the dialog each time
- * execCommand is called or create a new one.
- * @type {boolean}
- * @private
- */
-goog.editor.plugins.AbstractDialogPlugin.prototype.reuseDialog_ = false;
-
-
-/**
- * Mutex to prevent recursive calls to disposeDialog_.
- * @type {boolean}
- * @private
- */
-goog.editor.plugins.AbstractDialogPlugin.prototype.isDisposingDialog_ = false;
-
-
-/**
- * SavedRange representing the selection before the dialog was opened.
- * @type {goog.dom.SavedRange}
- * @private
- */
-goog.editor.plugins.AbstractDialogPlugin.prototype.savedRange_;
 
 
 /**
