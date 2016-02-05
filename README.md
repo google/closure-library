@@ -18,7 +18,9 @@ See also the
 [goog.ui Demos](http://google.github.io/closure-library/source/closure/goog/demos/)
 
 ## Using with Node.js
-Install the [official package](https://www.npmjs.com/package/google-closure-library) from npm.
+
+Install the [official package](https://www.npmjs.com/package/google-closure-library)
+from npm.
 
 ```
 npm install google-closure-library
@@ -27,9 +29,9 @@ npm install google-closure-library
 Require the package and use goog.require normally.
 
 ```
-require("google-closure-library")
+require("google-closure-library");
 
-goog.require("goog.crypt.Sha1")
+goog.require("goog.crypt.Sha1");
 
 var sha1 = new goog.crypt.Sha1();
 sha1.update("foobar");
