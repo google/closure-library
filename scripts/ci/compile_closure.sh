@@ -2,7 +2,7 @@
 #
 # Compiles pertinent Closure library files.
 
-java -jar ../closure-compiler/build/compiler.jar \
+java -Xmx1G -jar ../closure-compiler/build/compiler.jar \
   -O ADVANCED \
   --warning_level VERBOSE \
   --jscomp_error='*' \
