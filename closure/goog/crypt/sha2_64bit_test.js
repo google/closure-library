@@ -252,3 +252,24 @@ function testHasherNeedsReset_beforeUpdate() {
   hasher.digest();
   assertThrows('Need reset after digest', function() { hasher.update('abc'); });
 }
+
+function testHashingArrayLike() {
+  // Create array-like object
+  var obj = {};
+  obj.length = 26;
+  for (var i = 0; i < 26; i++) {
+    obj[i] = 97 + i;
+  }
+
+  // Check hashing
+  var hasher = new goog.crypt.Sha512();
+  hasher.update(obj);
+  var digest1 = hasher.digest();
+
+  hasher.reset();
+
+  hasher.update('abcdefghijklmnopqrstuvwxyz', 26);
+  var digest2 = hasher.digest();
+
+  assertElementsEquals(digest1, digest2);
+}
