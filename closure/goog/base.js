@@ -1188,8 +1188,8 @@ if (goog.DEPENDENCIES_ENABLED) {
             goog.writeScriptSrcNode_(src);
           }
         } else {
-          var state = " onreadystatechange='goog.onScriptLoad_(this, " +
-              ++goog.lastNonModuleScriptIndex_ + ")' ";
+          var state = ' onreadystatechange=\'goog.onScriptLoad_(this, ' +
+              ++goog.lastNonModuleScriptIndex_ + ')\' ';
           doc.write(
               '<script type="text/javascript" src="' + src + '"' + state +
               '></' +
@@ -1197,7 +1197,8 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       } else {
         doc.write(
-            '<script type="text/javascript">' + opt_sourceText + '</' +
+            '<script type="text/javascript">' +
+            goog.protectScriptTag_(opt_sourceText) + '</' +
             'script>');
       }
       return true;
@@ -1206,6 +1207,17 @@ if (goog.DEPENDENCIES_ENABLED) {
     }
   };
 
+  /**
+   * Rewrites closing script tags in input to avoid ending an enclosing script
+   * tag.
+   *
+   * @param {string} str
+   * @return {string}
+   * @private
+   */
+  goog.protectScriptTag_ = function(str) {
+    return str.replace(/<\/(SCRIPT)>/ig, '\\x3c\\$1>');
+  };
 
   /**
    * Determines whether the given language needs to be transpiled.
@@ -1962,7 +1974,9 @@ goog.bindJs_ = function(fn, selfObj, var_args) {
     };
 
   } else {
-    return function() { return fn.apply(selfObj, arguments); };
+    return function() {
+      return fn.apply(selfObj, arguments);
+    };
   }
 };
 
@@ -2202,7 +2216,9 @@ goog.getCssName = function(className, opt_modifier) {
     rename =
         goog.cssNameMappingStyle_ == 'BY_WHOLE' ? getMapping : renameByParts;
   } else {
-    rename = function(a) { return a; };
+    rename = function(a) {
+      return a;
+    };
   }
 
   var result =
