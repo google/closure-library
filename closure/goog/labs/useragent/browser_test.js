@@ -99,6 +99,14 @@ function testOpera15() {
   assertVersionBetween('15.00', '16.00');
 }
 
+function testOperaMini() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.OPERA_MINI);
+  assertBrowser(Browser.OPERA);
+  assertVersion('11.10');
+  assertVersionBetween('11.00', '12.00');
+}
+
 function testIE6() {
   goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_6);
   assertBrowser(Browser.IE);

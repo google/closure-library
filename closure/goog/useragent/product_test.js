@@ -168,15 +168,6 @@ function testOpera() {
   replacer.set(goog.global, 'opera', opera);
   opera.version = '10.01';
   checkEachUserAgentDetected(userAgents, 'OPERA');
-  userAgents = [{
-    ua: 'Opera/9.63 (Windows NT 5.1; U; en) Presto/2.1.1',
-    versions: [
-      {num: 9, truth: true}, {num: '10.1', truth: false},
-      {num: '9.80', truth: false}, {num: '9.60', truth: true}
-    ]
-  }];
-  opera.version = '9.63';
-  checkEachUserAgentDetected(userAgents, 'OPERA');
 }
 
 function testFirefox() {

@@ -371,32 +371,11 @@ goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
 /**
  * @return {string} The string that describes the version number of the user
  *     agent.
- * Assumes user agent is opera.
- * @private
- */
-goog.userAgent.operaVersion_ = function() {
-  var version = goog.global.opera.version;
-  try {
-    return version();
-  } catch (e) {
-    return version;
-  }
-};
-
-
-/**
- * @return {string} The string that describes the version number of the user
- *     agent.
  * @private
  */
 goog.userAgent.determineVersion_ = function() {
   // All browsers have different ways to detect the version and they all have
   // different naming schemes.
-
-  if (goog.userAgent.OPERA && goog.global['opera']) {
-    return goog.userAgent.operaVersion_();
-  }
-
   // version is a string rather than a number because it may contain 'b', 'a',
   // and so on.
   var version = '';
@@ -422,7 +401,7 @@ goog.userAgent.determineVersion_ = function() {
 
 
 /**
- * @return {Array|undefined} The version regex matches from parsing the user
+ * @return {?Array|undefined} The version regex matches from parsing the user
  *     agent string. These regex statements must be executed inline so they can
  *     be compiled out by the closure compiler with the rest of the useragent
  *     detection logic when ASSUME_* is specified.
@@ -443,6 +422,12 @@ goog.userAgent.getVersionRegexResult_ = function() {
     // WebKit/125.4
     return /WebKit\/(\S+)/.exec(userAgent);
   }
+  if (goog.userAgent.OPERA) {
+    // If none of the above browsers were detected but the browser is Opera, the
+    // only string that is of interest is 'Version/<number>'.
+    return /(?:Version)[ \/]?(\S+)/.exec(userAgent);
+  }
+  return undefined;
 };
 
 

@@ -52,6 +52,12 @@ function testPresto() {
   assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('2.9.168');
   assertLowAndHighVersions('2.9', '2.10');
+
+  goog.labs.userAgent.util.setUserAgent(testAgents.OPERA_MINI);
+  assertTrue(goog.labs.userAgent.engine.isPresto());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
+  assertVersion('2.8.119');
+  assertLowAndHighVersions('2.8', '2.9');
 }
 
 function testTrident() {

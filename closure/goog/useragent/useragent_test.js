@@ -70,32 +70,34 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
 }
 
 function testOperaInit() {
-  var mockOpera = {'version': function() { return '9.20'; }};
-
+  // Check Opera Mini version strings are detected properly
   var mockGlobal = {
-    'navigator': {'userAgent': 'Opera/9.20 (Windows NT 5.1; U; de),gzip(gfe)'},
-    'opera': mockOpera
+    'navigator': {'userAgent': goog.labs.userAgent.testAgents.OPERA_MINI}
   };
   propertyReplacer.set(goog, 'global', mockGlobal);
-
   propertyReplacer.set(goog.userAgent, 'getUserAgentString', function() {
-    return 'Opera/9.20 (Windows NT 5.1; U; de),gzip(gfe)';
+    return goog.labs.userAgent.testAgents.OPERA_MINI;
   });
 
   goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
   assertTrue(goog.userAgent.OPERA);
-  assertEquals('9.20', goog.userAgent.VERSION);
+  assertEquals('11.10', goog.userAgent.VERSION);
 
-  // What if 'opera' global has been overwritten?
-  // We must degrade gracefully (rather than throwing JS errors).
-  propertyReplacer.set(goog.global, 'opera', 'bobloblaw');
+  // Check Opera + Blink versions are detected
+  mockGlobal = {
+    'navigator': {'userAgent': goog.labs.userAgent.testAgents.OPERA_15},
+  };
+  propertyReplacer.set(goog, 'global', mockGlobal);
+  propertyReplacer.set(goog.userAgent, 'getUserAgentString', function() {
+    return goog.labs.userAgent.testAgents.OPERA_15;
+  });
 
-  // NOTE(nnaze): window.opera is now ignored with the migration to
-  // goog.labs.userAgent.*. Version is expected to should stay the same.
   goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
-  assertUndefined(goog.userAgent.VERSION);
+  assertTrue(goog.userAgent.OPERA);
+  assertTrue(goog.userAgent.WEBKIT);
+  assertEquals('537.36', goog.userAgent.VERSION);
 }
 
 function testCompare() {
