@@ -917,6 +917,7 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  *
  * @param {string} htmlString The HTML string to convert.
  * @return {!Node} The resulting document fragment.
+ * @deprecated Use {@link goog.dom.safeHtmlToNode} instead.
  */
 goog.dom.htmlToDocumentFragment = function(htmlString) {
   return goog.dom.htmlToDocumentFragment_(document, htmlString);
@@ -2536,6 +2537,7 @@ goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
  *
  * @param {string} htmlString The HTML string to convert.
  * @return {!Node} The resulting node.
+ * @deprecated Use {@link goog.dom.DomHelper.prototype.safeHtmlToNode} instead.
  */
 goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
   return goog.dom.htmlToDocumentFragment_(this.document_, htmlString);
