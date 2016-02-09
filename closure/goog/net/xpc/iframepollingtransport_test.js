@@ -28,8 +28,13 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
+/** @type {?goog.testing.MockClock} */
 var mockClock = null;
+
+/** @type {?goog.net.xpc.CrossPageChannel} */
 var outerChannel = null;
+
+/** @type {?goog.net.xpc.CrossPageChannel} */
 var innerChannel = null;
 
 function setUp() {
@@ -193,6 +198,7 @@ function testSend_innerPeerClosing() {
  * @param {!Object} fromWindow The window hosting the channel.
  * @param {string} toHostName The host name of the peer window.
  * @param {!Object} toWindow The peer window.
+ * @return {!goog.net.xpc.CrossPageChannel}
  */
 function createChannel(
     role, channelName, fromHostName, fromWindow, toHostName, toWindow) {
