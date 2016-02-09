@@ -76,6 +76,9 @@
  * Note that new code should always be compiled with
  * ALLOW_LEGACY_CONVERSIONS=false.  At some future point, the default for this
  * define may change to false.
+ *
+ * @visibility {//closure/goog/html:approved_for_legacy_conversion}
+ * @visibility {//closure/goog/bin/sizetests:__pkg__}
  */
 
 
