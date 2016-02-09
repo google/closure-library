@@ -46,6 +46,21 @@ function testTrustedResourceUrl() {
 }
 
 
+function testFromConstants() {
+  assertEquals('', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([])));
+  assertEquals('foo', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([
+        goog.string.Const.from('foo')
+      ])));
+  assertEquals('foobar', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([
+        goog.string.Const.from('foo'),
+        goog.string.Const.from('bar')
+      ])));
+}
+
+
 /** @suppress {checkTypes} */
 function testUnwrap() {
   var privateFieldName =

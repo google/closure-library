@@ -197,6 +197,27 @@ goog.html.TrustedResourceUrl.fromConstant = function(url) {
 
 
 /**
+ * Creates a TrustedResourceUrl object from a compile-time constant strings.
+ *
+ * Compile-time constant strings are inherently program-controlled and hence
+ * trusted.
+ *
+ * @param {!Array<!goog.string.Const>} parts Compile-time-constant strings from
+ *     which to create a TrustedResourceUrl.
+ * @return {!goog.html.TrustedResourceUrl} A TrustedResourceUrl object
+ *     initialized to concatenation of {@code parts}.
+ */
+goog.html.TrustedResourceUrl.fromConstants = function(parts) {
+  var unwrapped = '';
+  for (var i = 0; i < parts.length; i++) {
+    unwrapped += goog.string.Const.unwrap(parts[i]);
+  }
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(unwrapped);
+};
+
+
+/**
  * Type marker for the TrustedResourceUrl type, used to implement additional
  * run-time type checking.
  * @const {!Object}
