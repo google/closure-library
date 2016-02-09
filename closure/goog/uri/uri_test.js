@@ -558,16 +558,16 @@ function testTreatmentOfAt1() {
 }
 
 function testTreatmentOfAt2() {
-  var uri = new goog.Uri('http://www/~johndoe@gmail.com/foo');
+  var uri = new goog.Uri('http://test/~johndoe@gmail.com/foo');
   assertEquals('http', uri.getScheme());
-  assertEquals('www', uri.getDomain());
+  assertEquals('test', uri.getDomain());
   assertEquals('/~johndoe@gmail.com/foo', uri.getPath());
 
   assertEquals(
-      'http://www/~johndoe@gmail.com/foo',
+      'http://test/~johndoe@gmail.com/foo',
       goog.Uri
           .create(
-              'http', null, 'www', null, '/~johndoe@gmail.com/foo', null, null)
+              'http', null, 'test', null, '/~johndoe@gmail.com/foo', null, null)
           .toString());
 }
 
