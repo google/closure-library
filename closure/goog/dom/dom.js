@@ -191,7 +191,7 @@ goog.dom.$ = goog.dom.getElement;
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
- * @return { {length: number} } Array-like list of elements (only a length
+ * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  */
 goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
@@ -206,7 +206,7 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
  * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {(Document|Element)=} opt_el Optional element to look in.
- * @return { {length: number} } The items found with the class name provided.
+ * @return {!IArrayLike<!Element>} The items found with the class name provided.
  */
 goog.dom.getElementsByClass = function(className, opt_el) {
   var parent = opt_el || document;
@@ -275,7 +275,7 @@ goog.dom.canUseQuerySelector_ = function(parent) {
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
- * @return { {length: number} } Array-like list of elements (only a length
+ * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  * @private
  */
@@ -307,7 +307,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
       }
       arrayLike.length = len;
 
-      return arrayLike;
+      return /** @type {!IArrayLike<!Element>} */ (arrayLike);
     } else {
       return els;
     }
@@ -327,7 +327,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
       }
     }
     arrayLike.length = len;
-    return arrayLike;
+    return /** @type {!IArrayLike<!Element>} */ (arrayLike);
   } else {
     return els;
   }
@@ -339,7 +339,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {Element=} opt_el Optional element to look in.
- * @return { {length: number} } Array-like list of elements (only a length
+ * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  * @deprecated Use {@link goog.dom.getElementsByTagNameAndClass} instead.
  */
@@ -1187,8 +1187,8 @@ goog.dom.flattenElement = function(element) {
 /**
  * Returns an array containing just the element children of the given element.
  * @param {Element} element The element whose element children we want.
- * @return {!(Array|NodeList)} An array or array-like list of just the element
- *     children of the given element.
+ * @return {!(Array<!Element>|NodeList<!Element>)} An array or array-like list
+ *     of just the element children of the given element.
  */
 goog.dom.getChildren = function(element) {
   // We check if the children attribute is supported for child elements
@@ -2330,7 +2330,7 @@ goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
  * @param {?string=} opt_tag Element tag name or * for all tags.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
- * @return { {length: number} } Array-like list of elements (only a length
+ * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  */
 goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
@@ -2345,7 +2345,7 @@ goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
  * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
- * @return { {length: number} } The items found with the class name provided.
+ * @return {!IArrayLike<!Element>} The items found with the class name provided.
  */
 goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
   var doc = opt_el || this.document_;
@@ -2391,7 +2391,7 @@ goog.dom.DomHelper.prototype.getRequiredElementByClass = function(
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {Element=} opt_el Optional element to look in.
- * @return { {length: number} } Array-like list of elements (only a length
+ * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  */
 goog.dom.DomHelper.prototype.$$ =
@@ -2685,8 +2685,8 @@ goog.dom.DomHelper.prototype.flattenElement = goog.dom.flattenElement;
 /**
  * Returns an array containing just the element children of the given element.
  * @param {Element} element The element whose element children we want.
- * @return {!(Array|NodeList)} An array or array-like list of just the element
- *     children of the given element.
+ * @return {!(Array<!Element>|NodeList<!Element>)} An array or array-like list
+ *     of just the element children of the given element.
  */
 goog.dom.DomHelper.prototype.getChildren = goog.dom.getChildren;
 

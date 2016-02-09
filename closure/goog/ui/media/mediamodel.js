@@ -34,33 +34,6 @@ goog.require('goog.html.legacyconversions');
 
 
 
-/**
- * An base data value class for all media data models.
- *
- * MediaModels are exact matches to the fields defined in the Yahoo RSS media
- * specification {@link http://search.yahoo.com/mrss/}.
- *
- * The current common data shared by medias is to have URLs, mime types,
- * captions, descriptions, thumbnails and players. Some of these may not be
- * available, or applications may not want to render them, so {@code null}
- * values are allowed. {@code goog.ui.media.MediaRenderer} checks whether the
- * values are available before creating DOMs for them.
- *
- * TODO(user): support asynchronous data models by subclassing
- * {@link goog.events.EventTarget} or {@link goog.ds.DataNode}. Understand why
- * {@link http://goto/datanode} is not available in closure. Add setters to
- * MediaModel once this is supported.
- *
- * @param {string=} opt_url An optional URL of the media.
- * @param {string=} opt_caption An optional caption of the media.
- * @param {string=} opt_description An optional description of the media.
- * @param {goog.ui.media.MediaModel.MimeType=} opt_type The type of the media.
- * @param {goog.ui.media.MediaModel.Medium=} opt_medium The medium of the media.
- * @param {number=} opt_duration The duration of the media in seconds.
- * @param {number=} opt_width The width of the media in pixels.
- * @param {number=} opt_height The height of the media in pixels.
- * @constructor
- */
 goog.ui.media.MediaModel = function(
     opt_url, opt_caption, opt_description, opt_type, opt_medium, opt_duration,
     opt_width, opt_height) {

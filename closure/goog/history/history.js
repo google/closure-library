@@ -176,7 +176,6 @@ goog.require('goog.history.Event');
 goog.require('goog.history.EventType');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.labs.userAgent.device');
 goog.require('goog.memoize');
 goog.require('goog.string');
@@ -214,10 +213,8 @@ goog.require('goog.userAgent');
  *
  * @param {boolean=} opt_invisible True to use hidden history states instead of
  *     the user-visible location hash.
- * @param {!goog.html.TrustedResourceUrl|string=} opt_blankPageUrl A URL to a
- *     blank page on the same server. Required if opt_invisible is true.  If
- *     possible pass a TrustedResourceUrl; string is supported for
- *     backwards-compatibility only and uses goog.html.legacyconversions.
+ * @param {!goog.html.TrustedResourceUrl=} opt_blankPageUrl A URL to a
+ *     blank page on the same server. Required if opt_invisible is true.
  *     This URL is also used as the src for the iframe used to track history
  *     state in IE (if not specified the iframe is not given a src attribute).
  *     Access is Denied error may occur in IE7 if the window's URL's scheme
@@ -274,21 +271,13 @@ goog.History = function(
       goog.dom.getWindow(goog.dom.getOwnerDocument(opt_input)) :
       window;
 
-  var iframeSrc;
-  if (goog.isString(opt_blankPageUrl)) {
-    iframeSrc = goog.html.legacyconversions.trustedResourceUrlFromString(
-        opt_blankPageUrl);
-  } else {
-    iframeSrc = opt_blankPageUrl;
-  }
-
   /**
    * The base URL for the hidden iframe. Must refer to a document in the
    * same domain as the main page.
    * @type {!goog.html.TrustedResourceUrl|undefined}
    * @private
    */
-  this.iframeSrc_ = iframeSrc;
+  this.iframeSrc_ = opt_blankPageUrl;
 
   if (goog.userAgent.IE && !opt_blankPageUrl) {
     if (window.location.protocol == 'https') {

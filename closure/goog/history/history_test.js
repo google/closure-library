@@ -53,14 +53,6 @@ function testCreation() {
   } finally {
     goog.dispose(history);
   }
-
-  // Test that SafeHtml.create() works with legacy conversion from string.
-  try {
-    var history =
-        new goog.History(true, 'blank_test_helper.html', input, iframe);
-  } finally {
-    goog.dispose(history);
-  }
 }
 
 function testIsHashChangeSupported() {

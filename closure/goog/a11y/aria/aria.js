@@ -275,7 +275,7 @@ goog.a11y.aria.setLabel = function(element, label) {
  * semantics is well supported by most screen readers.
  * Only to be used internally by the ARIA library in goog.a11y.aria.*.
  * @param {!Element} element The element to assert an ARIA role set.
- * @param {!goog.array.ArrayLike<string>} allowedRoles The child roles of
+ * @param {!IArrayLike<string>} allowedRoles The child roles of
  * the roles.
  */
 goog.a11y.aria.assertRoleIsSetInternalUtil = function(element, allowedRoles) {
@@ -359,7 +359,7 @@ goog.a11y.aria.getStateString = function(element, stateName) {
  * Only to be used internally by the ARIA library in goog.a11y.aria.*.
  * @param {!Element} element DOM node to get state from.
  * @param {!goog.a11y.aria.State} stateName State name.
- * @return {!goog.array.ArrayLike<string>} string Array
+ * @return {!IArrayLike<string>} string Array
  *     value of the state attribute.
  */
 goog.a11y.aria.getStringArrayStateInternalUtil = function(element, stateName) {

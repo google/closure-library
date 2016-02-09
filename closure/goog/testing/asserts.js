@@ -22,7 +22,7 @@ goog.require('goog.testing.stacktrace');
 
 
 /**
- * @typedef {Array|NodeList|Arguments|{length: number}}
+ * @typedef {IArrayLike<?>}
  */
 goog.testing.asserts.ArrayLike;
 

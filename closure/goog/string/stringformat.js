@@ -176,8 +176,8 @@ goog.string.format.demuxes_['f'] = function(
   }
 
   // We need a clean signless replacement to start with
-  replacement = isNaN(precision) ? Math.abs(value).toString() :
-                                   Math.abs(value).toFixed(precision);
+  replacement = isNaN(precision) ? Math.abs(Number(value)).toString() :
+                                   Math.abs(Number(value)).toFixed(precision);
 
   var padCount = Number(width) - replacement.length - sign.length;
 

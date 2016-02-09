@@ -184,6 +184,27 @@ function testSetHighlight() {
   assertEquals(5, palette.getHighlightedIndex());
 }
 
+function testPerformActionInternal() {
+  var container = new goog.ui.Container();
+  container.render(document.getElementById('sandbox'));
+  container.addChild(palette, true);
+  palette.setActive(true);
+  palette.setSelectedIndex(1);
+  palette.setHighlightedIndex(3);
+  palette.setHighlighted(true);
+  assertEquals(1, palette.getSelectedIndex());
+  assertEquals(3, palette.getHighlightedIndex());
+
+  // Click somewhere in the palette, but not inside a cell.
+  var mouseUp = new goog.events.BrowserEvent(
+      {type: 'mouseup', button: 1, target: palette});
+  palette.handleMouseUp(mouseUp);
+
+  // Highlight and selection are both unchanged (user did not select anything).
+  assertEquals(1, palette.getSelectedIndex());
+  assertEquals(3, palette.getHighlightedIndex());
+}
+
 function testSetAriaLabel() {
   assertNull(
       'Palette must not have aria label by default', palette.getAriaLabel());

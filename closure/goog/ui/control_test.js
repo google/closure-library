@@ -572,9 +572,9 @@ function testDecorateInternalForHiddenElement() {
 function testEnterDocument() {
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse & 3 key event listeners on IE', 8,
+        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
         getListenerCount(control));
   } else {
     assertEquals(
@@ -613,9 +613,9 @@ function testEnterDocumentForNonFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse event listeners on IE', 5,
+        'Control must have 5 mouse event listeners on IE8', 5,
         getListenerCount(control));
   } else {
     assertEquals(
@@ -652,9 +652,9 @@ function testEnterDocumentForControlWithoutEventHandlers() {
 function testExitDocument() {
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse & 3 key event listeners on IE', 8,
+        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
         getListenerCount(control));
   } else {
     assertEquals(

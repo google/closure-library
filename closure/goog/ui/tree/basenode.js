@@ -34,7 +34,6 @@ goog.require('goog.events.Event');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
@@ -890,18 +889,6 @@ goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
 /**
  * Sets the html that appears after the label. This is useful if you want to
  * put extra UI on the row of the label but not inside the anchor tag.
- * @param {string} html The html.
- * @deprecated Use setAfterLabelSafeHtml.
- */
-goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
-  this.setAfterLabelSafeHtml(
-      goog.html.legacyconversions.safeHtmlFromString(html));
-};
-
-
-/**
- * Sets the html that appears after the label. This is useful if you want to
- * put extra UI on the row of the label but not inside the anchor tag.
  * @param {!goog.html.SafeHtml} html The html.
  */
 goog.ui.tree.BaseNode.prototype.setAfterLabelSafeHtml = function(html) {
@@ -1181,16 +1168,6 @@ goog.ui.tree.BaseNode.prototype.setText = function(s) {
  */
 goog.ui.tree.BaseNode.prototype.getText = function() {
   return goog.string.unescapeEntities(goog.html.SafeHtml.unwrap(this.html_));
-};
-
-
-/**
- * Sets the html of the label.
- * @param {string} s The html string for the label.
- * @deprecated Use setSafeHtml.
- */
-goog.ui.tree.BaseNode.prototype.setHtml = function(s) {
-  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(s));
 };
 
 

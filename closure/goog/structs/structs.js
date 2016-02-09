@@ -151,7 +151,7 @@ goog.structs.clear = function(col) {
   if (col.clear && typeof col.clear == 'function') {
     col.clear();
   } else if (goog.isArrayLike(col)) {
-    goog.array.clear(/** @type {goog.array.ArrayLike} */ (col));
+    goog.array.clear(/** @type {IArrayLike<?>} */ (col));
   } else {
     goog.object.clear(col);
   }

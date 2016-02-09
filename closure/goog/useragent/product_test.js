@@ -211,7 +211,6 @@ function testFirefox() {
   // Mozilla reported to us that they plan this UA format starting
   // in Firefox 13.
   // See bug at https://bugzilla.mozilla.org/show_bug.cgi?id=588909
-  // and thread at http://goto.google.com/pfltz
   mockAgent.setNavigator({product: 'Gecko'});
   assertBrowserAndVersion(
       'Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0', 'FIREFOX',

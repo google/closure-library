@@ -39,7 +39,7 @@ goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
 /**
  * Gets an array-like object of class names on an element.
  * @param {Element} element DOM node to get the classes of.
- * @return {!goog.array.ArrayLike} Class names on {@code element}.
+ * @return {!IArrayLike<?>} Class names on {@code element}.
  */
 goog.dom.classlist.get = function(element) {
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
@@ -103,7 +103,7 @@ goog.dom.classlist.add = function(element, className) {
 /**
  * Convenience method to add a number of class names at once.
  * @param {Element} element The element to which to add classes.
- * @param {goog.array.ArrayLike<string>} classesToAdd An array-like object
+ * @param {IArrayLike<string>} classesToAdd An array-like object
  * containing a collection of class names to add to the element.
  * This method may throw a DOM exception if classesToAdd contains invalid
  * or empty class names.
@@ -164,7 +164,7 @@ goog.dom.classlist.remove = function(element, className) {
  * repeatedly calling {@code goog.dom.classlist.remove} if you want to remove
  * a large set of class names at once.
  * @param {Element} element The element from which to remove classes.
- * @param {goog.array.ArrayLike<string>} classesToRemove An array-like object
+ * @param {IArrayLike<string>} classesToRemove An array-like object
  * containing a collection of class names to remove from the element.
  * This method may throw a DOM exception if classesToRemove contains invalid
  * or empty class names.

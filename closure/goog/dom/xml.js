@@ -185,8 +185,8 @@ goog.dom.xml.selectSingleNode = function(node, path) {
  * Selects multiple nodes using an Xpath expression and a root node
  * @param {Node} node The root node.
  * @param {string} path Xpath selector.
- * @return {(NodeList|Array<Node>)} The selected nodes, or empty array if no
- *     matching nodes.
+ * @return {(!NodeList<!Node>|!Array<!Node>)} The selected nodes, or empty array
+ *     if no matching nodes.
  */
 goog.dom.xml.selectNodes = function(node, path) {
   if (typeof node.selectNodes != 'undefined') {

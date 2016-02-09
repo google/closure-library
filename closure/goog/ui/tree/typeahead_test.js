@@ -41,7 +41,7 @@ function makeATree() {
 }
 
 function createTreeFromTestData(node, data, maxLevels) {
-  node.setHtml(data[0]);
+  node.setText(data[0]);
   if (maxLevels < 0) {
     return;
   }

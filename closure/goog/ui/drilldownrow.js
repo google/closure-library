@@ -66,7 +66,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.string.Unicode');
 goog.require('goog.ui.Component');
 
@@ -149,44 +148,6 @@ goog.inherits(goog.ui.DrilldownRow, goog.ui.Component);
  * }}
  */
 goog.ui.DrilldownRow.DrilldownRowProperties;
-
-
-/**
- * See documentation for fields in goog.ui.DrilldownRow.DrilldownRowProperties.
- * @typedef {{
- *   loaded: (boolean|undefined),
- *   expanded: (boolean|undefined),
- *   html: (string|undefined),
- *   decorator: (Function|undefined)
- * }}
- */
-goog.ui.DrilldownRow.DrilldownRowPropertiesUnsafe;
-
-
-/**
- * Builds a DrilldownRow component.  This function exists for
- * backwards-compatibility only and uses goog.html.legacyconversions.  For all
- * new code use the goog.ui.DrilldownRow() constructor.
- * @param {goog.ui.DrilldownRow.DrilldownRowPropertiesUnsafe=} opt_properties
- *   Optional properties.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @return {!goog.ui.DrilldownRow}
- * @deprecated Use goog.ui.DrilldownRow constructor instead.
- *
- */
-goog.ui.DrilldownRow.unsafeCreate = function(opt_properties, opt_domHelper) {
-  var properties = {};
-  if (opt_properties) {
-    properties.loaded = opt_properties.loaded;
-    properties.expanded = opt_properties.expanded;
-    if (goog.isString(opt_properties.html)) {
-      properties.html =
-          goog.html.legacyconversions.safeHtmlFromString(opt_properties.html);
-    }
-    properties.decorator = opt_properties.decorator;
-  }
-  return new goog.ui.DrilldownRow(properties, opt_domHelper);
-};
 
 
 /**

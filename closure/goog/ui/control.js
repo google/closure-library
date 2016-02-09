@@ -592,8 +592,13 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
     }
     if (goog.userAgent.IE) {
-      handler.listen(
-          element, goog.events.EventType.DBLCLICK, this.handleDblClick);
+      // Versions of IE before 9 send only one click event followed by a
+      // dblclick, so we must explicitly listen for these. In later versions,
+      // two click events are fired  and so a dblclick listener is unnecessary.
+      if (!goog.userAgent.isVersionOrHigher(9)) {
+        handler.listen(
+            element, goog.events.EventType.DBLCLICK, this.handleDblClick);
+      }
       if (!this.ieMouseEventSequenceSimulator_) {
         this.ieMouseEventSequenceSimulator_ =
             new goog.ui.Control.IeMouseEventSequenceSimulator_(this);
@@ -613,8 +618,10 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
     }
     if (goog.userAgent.IE) {
-      handler.unlisten(
-          element, goog.events.EventType.DBLCLICK, this.handleDblClick);
+      if (!goog.userAgent.isVersionOrHigher(9)) {
+        handler.unlisten(
+            element, goog.events.EventType.DBLCLICK, this.handleDblClick);
+      }
       goog.dispose(this.ieMouseEventSequenceSimulator_);
       this.ieMouseEventSequenceSimulator_ = null;
     }

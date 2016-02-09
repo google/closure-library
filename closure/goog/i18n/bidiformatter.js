@@ -312,6 +312,7 @@ goog.i18n.BidiFormatter.prototype.spanWrapSafeHtml = function(
  *     matching the context directionality, when needed, to prevent the possible
  *     garbling of whatever may follow {@code str}. Default: true.
  * @return {string} Input text after applying the above processing.
+ * @deprecated Use spanWrapSafeHtml instead.
  */
 goog.i18n.BidiFormatter.prototype.spanWrap = function(
     str, opt_isHtml, opt_dirReset) {
@@ -363,6 +364,7 @@ goog.i18n.BidiFormatter.prototype.spanWrapSafeHtmlWithKnownDir = function(
  *     matching the context directionality, when needed, to prevent the possible
  *     garbling of whatever may follow {@code str}. Default: true.
  * @return {string} Input text after applying the above processing.
+ * @deprecated Use spanWrapSafeHtmlWithKnownDir instead.
  */
 goog.i18n.BidiFormatter.prototype.spanWrapWithKnownDir = function(
     dir, str, opt_isHtml, opt_dirReset) {

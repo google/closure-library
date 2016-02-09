@@ -273,12 +273,8 @@ function testConstructor_allowsPlainText() {
   assertEquals('tree &lt;3', tree.getHtml());
 }
 
-function testSetHtml() {
+function testSetSafeHtml() {
   var tree = new goog.ui.tree.TreeControl('');
-  tree.setHtml('<b>tree</b>');
-  assertEquals('<b>tree</b>', tree.getHtml());
-
-  tree = new goog.ui.tree.TreeControl('');
   tree.setSafeHtml(goog.html.testing.newSafeHtmlForTest('<b>tree</b>'));
   assertEquals('<b>tree</b>', tree.getHtml());
 }
