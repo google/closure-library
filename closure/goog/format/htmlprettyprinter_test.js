@@ -22,6 +22,7 @@ goog.require('goog.testing.jsunit');
 var COMPLEX_HTML = '<!DOCTYPE root-element [SYSTEM OR PUBLIC FPI] "uri" [' +
     '<!-- internal declarations -->]>' +
     '<html><head><title>My HTML</title><!-- my comment --></head>' +
+    '<script> if(i<0)\nfoo; </script>' +
     '<body><h1>My Header</h1>My text.<br><b>My bold text.</b><hr>' +
     '<pre>My\npreformatted <br> HTML.</pre>5 < 10</body>' +
     '</html>';
@@ -62,6 +63,7 @@ function testComplexHtml() {
       '<title>My HTML</title>\n' +
       '<!-- my comment -->' +
       '</head>\n' +
+      '<script> if(i<0)\nfoo; </script>\n' +
       '<body>\n' +
       '<h1>My Header</h1>\n' +
       'My text.<br>\n' +
@@ -82,6 +84,7 @@ function testTimeout() {
       '<!-- internal declarations -->]>\n' +
       '<html>\n' +
       '<head><title>My HTML</title><!-- my comment --></head>' +
+      '<script> if(i<0)\nfoo; </script>' +
       '<body><h1>My Header</h1>My text.<br><b>My bold text.</b><hr>' +
       '<pre>My\npreformatted <br> HTML.</pre>5 < 10</body>' +
       '</html>\n';

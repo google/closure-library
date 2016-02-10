@@ -85,7 +85,7 @@ goog.format.HtmlPrettyPrinter.format = function(html) {
  * @const
  */
 goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
-    /(?:<!--.*?-->|<!.*?>|<(\/?)(\w+)[^>]*>|[^<]+|<)/g;
+    /(?:<!--.*?-->|<!.*?>|<(\/?)(\w+)[^<>]*>|[^<]+|<)/g;
 
 
 /**
