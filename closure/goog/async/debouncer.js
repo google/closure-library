@@ -91,7 +91,7 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
 
   /**
    * The last arguments passed into {@code fire}.
-   * @private {!Array|!IArrayLike}
+   * @private {!IArrayLike}
    */
   this.args_ = [];
 };
