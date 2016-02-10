@@ -22,8 +22,7 @@
 
 goog.provide('goog.ui.ac.RichRemoteArrayMatcher');
 
-goog.require('goog.dom.safe');
-goog.require('goog.html.legacyconversions');
+goog.require('goog.dom');
 goog.require('goog.json');
 goog.require('goog.ui.ac.RemoteArrayMatcher');
 
@@ -32,9 +31,6 @@ goog.require('goog.ui.ac.RemoteArrayMatcher');
 /**
  * An array matcher that requests rich matches via ajax and converts them into
  * rich rows.
- *
- * This class makes use of goog.html.legacyconversions and provides no
- * HTML-type-safe alternative.
  *
  * @param {string} url The Uri which generates the auto complete matches.  The
  *     search term is passed to the server as the 'token' query param.
@@ -46,14 +42,6 @@ goog.require('goog.ui.ac.RemoteArrayMatcher');
  * @extends {goog.ui.ac.RemoteArrayMatcher}
  */
 goog.ui.ac.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
-  // requestMatchingRows() sets innerHTML directly from unsanitized/unescaped
-  // server-data, with no form of type-safety. Because requestMatchingRows is
-  // used polymorphically (for example, from
-  // goog.ui.ac.AutoComplete.prototype.setToken) it is undesirable to have
-  // Conformance legacyconversions rule for it. Doing so would cause the
-  // respective check rule fire from all such places which polymorphically
-  // call requestMatchingRows(); such calls are safe as long as they're not to
-  // RichRemoteArrayMatcher.
   goog.ui.ac.RemoteArrayMatcher.call(this, url, opt_noSimilar);
 
   /**
@@ -108,12 +96,10 @@ goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows = function(
           var richRow = func(matches[i][j]);
           rows.push(richRow);
 
-          // If no render function was provided, set the node's innerHTML.
+          // If no render function was provided, set the node's textContent.
           if (typeof richRow.render == 'undefined') {
             richRow.render = function(node, token) {
-              goog.dom.safe.setInnerHtml(
-                  node, goog.html.legacyconversions.safeHtmlFromString(
-                            richRow.toString()));
+              goog.dom.setTextContent(node, richRow.toString());
             };
           }
 
