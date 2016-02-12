@@ -13,69 +13,54 @@
 // limitations under the License.
 
 /**
- * @fileoverview Conversions from plain string to goog.html types for use in
- * legacy APIs that do not use goog.html types.
+ * @fileoverview Transitional utilities to unsafely trust random strings as
+ * goog.html types. Intended for temporary use when upgrading a library that
+ * used to accept plain strings to use safe types, but where it's not
+ * practical to transitively update callers.
  *
- * This file provides conversions to create values of goog.html types from plain
- * strings.  These conversions are intended for use in legacy APIs that consume
- * HTML in the form of plain string types, but whose implementations use
- * goog.html types internally (and expose such types in an augmented, HTML-type-
- * safe API).
+ * IMPORTANT: No new code should use the conversion functions in this file,
+ * they are intended for refactoring old code to use goog.html types. New code
+ * should construct goog.html types via their APIs, template systems or
+ * sanitizers. If that’s not possible it should use
+ * goog.html.uncheckedconversions and undergo security review.
+
  *
- * IMPORTANT: No new code should use the conversion functions in this file.
- *
- * The conversion functions in this file are guarded with global flag
- * (goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS). If set to false, it
- * effectively "locks in" an entire application to only use HTML-type-safe APIs.
- *
- * Intended use of the functions in this file are as follows:
- *
- * Many Closure and application-specific classes expose methods that consume
- * values that in the class' implementation are forwarded to DOM APIs that can
- * result in security vulnerabilities.  For example, goog.ui.Dialog's setContent
- * method consumes a string that is assigned to an element's innerHTML property;
- * if this string contains untrusted (attacker-controlled) data, this can result
- * in a cross-site-scripting vulnerability.
- *
- * Widgets such as goog.ui.Dialog are being augmented to expose safe APIs
- * expressed in terms of goog.html types.  For instance, goog.ui.Dialog has a
- * method setSafeHtmlContent that consumes an object of type goog.html.SafeHtml,
- * a type whose contract guarantees that its value is safe to use in HTML
- * context, i.e. can be safely assigned to .innerHTML. An application that only
- * uses this API is forced to only supply values of this type, i.e. values that
- * are safe.
- *
- * However, the legacy method setContent cannot (for the time being) be removed
- * from goog.ui.Dialog, due to a large number of existing callers.  The
- * implementation of goog.ui.Dialog has been refactored to use
- * goog.html.SafeHtml throughout.  This in turn requires that the value consumed
- * by its setContent method is converted to goog.html.SafeHtml in an unchecked
- * conversion. The conversion function is provided by this file:
- * goog.html.legacyconversions.safeHtmlFromString.
- *
- * Note that the semantics of the conversions in goog.html.legacyconversions are
- * very different from the ones provided by goog.html.uncheckedconversions:  The
+ * The semantics of the conversions in goog.html.legacyconversions are very
+ * different from the ones provided by goog.html.uncheckedconversions. The
  * latter are for use in code where it has been established through manual
- * security review that the value produced by a piece of code must always
+ * security review that the value produced by a piece of code will always
  * satisfy the SafeHtml contract (e.g., the output of a secure HTML sanitizer).
  * In uses of goog.html.legacyconversions, this guarantee is not given -- the
  * value in question originates in unreviewed legacy code and there is no
  * guarantee that it satisfies the SafeHtml contract.
  *
- * To establish correctness with confidence, application code should be
- * refactored to use SafeHtml instead of plain string to represent HTML markup,
- * and to use goog.html-typed APIs (e.g., goog.ui.Dialog#setSafeHtmlContent
- * instead of goog.ui.Dialog#setContent).
+ * There are only three valid uses of legacyconversions:
  *
- * To prevent introduction of new vulnerabilities, application owners can
- * effectively disable unsafe legacy APIs by compiling with the define
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS set to false.  When
- * set, this define causes the conversion methods in this file to
- * unconditionally throw an exception.
+ * 1. Introducing a goog.html version of a function which currently consumes
+ * string and passes that string to a DOM API which can execute script - and
+ * hence cause XSS - like innerHTML. For example, Dialog might expose a
+ * setContent method which takes a string and sets the innerHTML property of
+ * an element with it. In this case a setSafeHtmlContent function could be
+ * added, consuming goog.html.SafeHtml instead of string, and using
+ * goog.dom.safe.setInnerHtml instead of directly setting innerHTML.
+ * setContent could then internally use legacyconversions to create a SafeHtml
+ * from string and pass the SafeHtml to setSafeHtmlContent. In this scenario
+ * remember to document the use of legacyconversions in the modified setContent
+ * and consider deprecating it as well.
  *
- * Note that new code should always be compiled with
- * ALLOW_LEGACY_CONVERSIONS=false.  At some future point, the default for this
- * define may change to false.
+ * 2. Automated refactoring of application code which handles HTML as string
+ * but needs to call a function which only takes goog.html types. For example,
+ * in the Dialog scenario from (1) an alternative option would be to refactor
+ * setContent to accept goog.html.SafeHtml instead of string and then refactor
+ * all current callers to use legacyconversions to pass SafeHtml. This is
+ * generally preferable to (1) because it keeps the library clean of
+ * legacyconversions, and makes code sites in application code that are
+ * potentially vulnerable to XSS more apparent.
+ *
+ * 3. Old code which needs to call APIs which consume goog.html types and for
+ * which it is prohibitively expensive to refactor to use goog.html types.
+ * Generally, this is code where safety from XSS is either hopeless or
+ * unimportant.
  *
  * @visibility {//closure/goog/html:approved_for_legacy_conversion}
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
@@ -94,6 +79,8 @@ goog.require('goog.html.TrustedResourceUrl');
  * Performs an "unchecked conversion" from string to SafeHtml for legacy API
  * purposes.
  *
+ * Please read fileoverview documentation before using.
+ *
  * @param {string} html A string to be converted to SafeHtml.
  * @return {!goog.html.SafeHtml} The value of html, wrapped in a SafeHtml
  *     object.
@@ -108,6 +95,8 @@ goog.html.legacyconversions.safeHtmlFromString = function(html) {
 /**
  * Performs an "unchecked conversion" from string to SafeStyle for legacy API
  * purposes.
+ *
+ * Please read fileoverview documentation before using.
  *
  * @param {string} style A string to be converted to SafeStyle.
  * @return {!goog.html.SafeStyle} The value of style, wrapped in a SafeStyle
@@ -124,6 +113,8 @@ goog.html.legacyconversions.safeStyleFromString = function(style) {
  * Performs an "unchecked conversion" from string to SafeUrl for legacy API
  * purposes.
  *
+ * Please read fileoverview documentation before using.
+ *
  * @param {string} url A string to be converted to SafeUrl.
  * @return {!goog.html.SafeUrl} The value of url, wrapped in a SafeUrl
  *     object.
@@ -137,6 +128,8 @@ goog.html.legacyconversions.safeUrlFromString = function(url) {
 /**
  * Performs an "unchecked conversion" from string to TrustedResourceUrl for
  * legacy API purposes.
+ *
+ * Please read fileoverview documentation before using.
  *
  * @param {string} url A string to be converted to TrustedResourceUrl.
  * @return {!goog.html.TrustedResourceUrl} The value of url, wrapped in a
