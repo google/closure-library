@@ -387,6 +387,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
   'frameborder': 'frameBorder',
   'height': 'height',
   'maxlength': 'maxLength',
+  'nonce': 'nonce',
   'role': 'role',
   'rowspan': 'rowSpan',
   'type': 'type',

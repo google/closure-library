@@ -277,6 +277,22 @@ function testPayloadParameters() {
   timeoutHandler();
 }
 
+function testNonce() {
+  var checkCleanup = newCleanupGuard();
+
+  var jsonp = new goog.net.Jsonp(fakeUrl);
+  jsonp.setNonce('foo');
+  var result = jsonp.send();
+
+  var script = getScriptElement(result);
+  assertEquals(
+      'Nonce attribute should have been added to script element.', 'foo',
+      script.getAttribute('nonce'));
+
+  checkCleanup();
+  timeoutHandler();
+}
+
 function testOptionalPayload() {
   var checkCleanup = newCleanupGuard();
 

@@ -89,6 +89,15 @@ goog.net.Jsonp = function(uri, opt_callbackParamName) {
    * @private
    */
   this.timeout_ = 5000;
+
+  /**
+   * The nonce to use in the dynamically generated script tags. This is used for
+   * allowing the script callbacks to execute when the page has an enforced
+   * Content Security Policy.
+   * @type {string}
+   * @private
+   */
+  this.nonce_ = '';
 };
 
 
@@ -129,6 +138,19 @@ goog.net.Jsonp.prototype.setRequestTimeout = function(timeout) {
  */
 goog.net.Jsonp.prototype.getRequestTimeout = function() {
   return this.timeout_;
+};
+
+
+/**
+ * Sets the nonce value for CSP. This nonce value will be added to any created
+ * script elements and must match the nonce provided in the
+ * Content-Security-Policy header sent by the server for the callback to pass
+ * CSP enforcement.
+ *
+ * @param {string} nonce The CSP nonce value.
+ */
+goog.net.Jsonp.prototype.setNonce = function(nonce) {
+  this.nonce_ = nonce;
 };
 
 
@@ -193,8 +215,12 @@ goog.net.Jsonp.prototype.send = function(
         this.callbackParamName_, goog.net.Jsonp.CALLBACKS + '.' + id);
   }
 
-  var deferred = goog.net.jsloader.load(
-      uri.toString(), {timeout: this.timeout_, cleanupWhenDone: true});
+  var options = {timeout: this.timeout_, cleanupWhenDone: true};
+  if (this.nonce_) {
+    options.attributes = {nonce: this.nonce_};
+  }
+
+  var deferred = goog.net.jsloader.load(uri.toString(), options);
   var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
   deferred.addErrback(error);
 
