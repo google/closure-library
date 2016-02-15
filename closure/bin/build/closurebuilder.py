@@ -259,7 +259,7 @@ is prefererred over using this script for performing JavaScript compilation.
 Please migrate your codebase.
 
 See:
-https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
+https://github.com/google/closure-compiler/wiki/Managing-Dependencies
 """)
 
     # Make sure a .jar is specified.
