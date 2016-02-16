@@ -384,6 +384,31 @@ function testDeserializationUnknownSymbolicEnumValue() {
       });
 }
 
+function testDeserializationEnumValueAsNumericString() {
+  var simplified = {21: '2'};
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.BAR, message.getOptionalNestedEnum());
+}
+
+function testDeserializationEnumValueWithNegativeString() {
+  var simplified = {21: '-2'};
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  assertThrows(
+      'Should have an assertion failure in deserialization', function() {
+        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+      });
+}
+
 function testDeserializationNumbersOrStrings() {
   // 64-bit types may have been serialized as numbers or strings.
   // Deserialization should be able to handle either.
