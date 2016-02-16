@@ -251,7 +251,7 @@ goog.testing.TestRunner.prototype.execute = function() {
 
   if (this.strict_ && this.testCase.getCount() == 0) {
     throw Error(
-        'No tests found in given test case: ' + this.testCase.getName() + ' ' +
+        'No tests found in given test case: ' + this.testCase.getName() + '. ' +
         'By default, the test runner fails if a test case has no tests. ' +
         'To modify this behavior, see goog.testing.TestRunner\'s ' +
         'setStrict() method, or G_testRunner.setStrict()');
