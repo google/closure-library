@@ -102,8 +102,7 @@ goog.net.Jsonp = function(uri, opt_callbackParamName) {
 
 
 /**
- * The name of the property of goog.global under which the callback is
- * stored.
+ * The prefix for the callback name which will be stored on goog.global.
  */
 goog.net.Jsonp.CALLBACKS = '_callbacks_';
 
@@ -114,6 +113,19 @@ goog.net.Jsonp.CALLBACKS = '_callbacks_';
  * @private
  */
 goog.net.Jsonp.scriptCounter_ = 0;
+
+
+/**
+ * Static private method which returns the global unique callback id.
+ *
+ * @param {string} id The id of the script node.
+ * @return {string} A global unique id used to store callback on goog.global
+ *     object.
+ * @private
+ */
+goog.net.Jsonp.getCallbackId_ = function(id) {
+  return goog.net.Jsonp.CALLBACKS + '__' + id;
+};
 
 
 /**
@@ -196,10 +208,7 @@ goog.net.Jsonp.prototype.send = function(
   var id = opt_callbackParamValue ||
       '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
           goog.now().toString(36);
-
-  if (!goog.global[goog.net.Jsonp.CALLBACKS]) {
-    goog.global[goog.net.Jsonp.CALLBACKS] = {};
-  }
+  var callbackId = goog.net.Jsonp.getCallbackId_(id);
 
   // Create a new Uri object onto which this payload will be added
   var uri = this.uri_.clone();
@@ -209,10 +218,10 @@ goog.net.Jsonp.prototype.send = function(
 
   if (opt_replyCallback) {
     var reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
-    goog.global[goog.net.Jsonp.CALLBACKS][id] = reply;
-
-    uri.setParameterValues(
-        this.callbackParamName_, goog.net.Jsonp.CALLBACKS + '.' + id);
+    // Register the callback on goog.global to make it discoverable
+    // by jsonp response.
+    goog.global[callbackId] = reply;
+    uri.setParameterValues(this.callbackParamName_, callbackId);
   }
 
   var options = {timeout: this.timeout_, cleanupWhenDone: true};
@@ -297,7 +306,7 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
 
 
 /**
- * Removes the script node and reply handler with the given id.
+ * Removes the reply handler registered on goog.global object.
  *
  * @param {string} id The id of the script node to be removed.
  * @param {boolean} deleteReplyHandler If true, delete the reply handler
@@ -306,13 +315,20 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
  * @private
  */
 goog.net.Jsonp.cleanup_ = function(id, deleteReplyHandler) {
-  if (goog.global[goog.net.Jsonp.CALLBACKS][id]) {
+  var callbackId = goog.net.Jsonp.getCallbackId_(id);
+  if (goog.global[callbackId]) {
     if (deleteReplyHandler) {
-      delete goog.global[goog.net.Jsonp.CALLBACKS][id];
+      try {
+        delete goog.global[callbackId];
+      } catch (e) {
+        // NOTE: Workaround to delete property on 'window' in IE <= 8, see:
+        // http://stackoverflow.com/questions/1073414/deleting-a-window-property-in-ie
+        goog.global[callbackId] = undefined;
+      }
     } else {
       // Removing the script tag doesn't necessarily prevent the script
       // from firing, so we make the callback a noop.
-      goog.global[goog.net.Jsonp.CALLBACKS][id] = goog.nullFunction;
+      goog.global[callbackId] = goog.nullFunction;
     }
   }
 };

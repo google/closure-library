@@ -68,9 +68,15 @@ function newCleanupGuard() {
       var propCounter = 0;
 
       // All callbacks should have been deleted or be the null function.
-      for (var id in goog.global[goog.net.Jsonp.CALLBACKS]) {
-        if (goog.global[goog.net.Jsonp.CALLBACKS][id] != goog.nullFunction) {
-          propCounter++;
+      for (var key in goog.global) {
+        // NOTES: callbacks are stored on goog.global with property
+        // name prefixed with goog.net.Jsonp.CALLBACKS.
+        if (key.indexOf(goog.net.Jsonp.CALLBACKS) == 0) {
+          var callbackId = goog.net.Jsonp.getCallbackId_(key);
+          if (goog.global[callbackId] &&
+              goog.global[callbackId] != goog.nullFunction) {
+            propCounter++;
+          }
         }
       }
 
@@ -180,12 +186,14 @@ function testSendWithCallbackParamValue() {
   assertTrue('payload in url', script.src.indexOf('basket=yellow') > -1);
   assertTrue(
       'dummyId in url',
-      script.src.indexOf('callback=_callbacks_.dummyId') > -1);
+      script.src.indexOf(
+          'callback=' + goog.net.Jsonp.getCallbackId_('dummyId')) > -1);
   assertTrue('server url', script.src.indexOf(fakeUrl) == 0);
 
   // Now, we simulate a returned request using the known callback function
   // name.
-  var callbackFunc = _callbacks_.dummyId;
+  var callbackFunc =
+      eval('callback=' + goog.net.Jsonp.getCallbackId_('dummyId'));
   callbackFunc({some: 'data', another: ['data', 'right', 'here']});
   assertEquals('input was received', 'right', replyReceived.another[1]);
 
@@ -252,9 +260,14 @@ function testCancel() {
   jsonp.cancel(requestObject);
 
   for (var key in goog.global[goog.net.Jsonp.CALLBACKS]) {
-    assertNotEquals(
-        'The success callback should have been removed',
-        goog.global[goog.net.Jsonp.CALLBACKS][key], successCallback);
+    // NOTES: callbacks are stored on goog.global with property
+    // name prefixed with goog.net.Jsonp.CALLBACKS.
+    if (key.indexOf('goog.net.Jsonp.CALLBACKS') == 0) {
+      var callbackId = goog.net.Jsonp.getCallbackId_(key);
+      assertNotEquals(
+          'The success callback should have been removed',
+          goog.global[callbackId], successCallback);
+    }
   }
 
   // Make sure cancelling removes the script tag
