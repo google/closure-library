@@ -226,7 +226,7 @@ goog.net.Jsonp.prototype.send = function(
 
   var options = {timeout: this.timeout_, cleanupWhenDone: true};
   if (this.nonce_) {
-    options.attributes = {nonce: this.nonce_};
+    options.attributes = {'nonce': this.nonce_};
   }
 
   var deferred = goog.net.jsloader.load(uri.toString(), options);
