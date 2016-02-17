@@ -1085,6 +1085,7 @@ goog.testing.TestCase.prototype.tearDownPage = function() {};
 /**
  * Gets called before every goog.testing.TestCase.Test is been executed. Can be
  * overridden to add set up functionality to each test.
+ * @return {!Thenable|undefined}
  */
 goog.testing.TestCase.prototype.setUp = function() {};
 
@@ -1092,6 +1093,7 @@ goog.testing.TestCase.prototype.setUp = function() {};
 /**
  * Gets called after every goog.testing.TestCase.Test has been executed. Can be
  * overriden to add tear down functionality to each test.
+ * @return {!Thenable|undefined}
  */
 goog.testing.TestCase.prototype.tearDown = function() {};
 
