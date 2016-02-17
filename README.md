@@ -27,9 +27,9 @@ npm install google-closure-library
 Require the package and use goog.require normally.
 
 ```
-require("google-closure-library")
+require("google-closure-library");
 
-goog.require("goog.crypt.Sha1")
+goog.require("goog.crypt.Sha1");
 
 var sha1 = new goog.crypt.Sha1();
 sha1.update("foobar");
