@@ -40,6 +40,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -921,33 +922,14 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  * @deprecated Use {@link goog.dom.safeHtmlToNode} instead.
  */
 goog.dom.htmlToDocumentFragment = function(htmlString) {
-  return goog.dom.htmlToDocumentFragment_(document, htmlString);
-};
-
-
-// TODO(jakubvrana): Merge with {@code safeHtmlToNode_}.
-/**
- * Helper for {@code htmlToDocumentFragment}.
- *
- * @param {!Document} doc The document.
- * @param {string} htmlString The HTML string to convert.
- * @return {!Node} The resulting document fragment.
- * @private
- */
-goog.dom.htmlToDocumentFragment_ = function(doc, htmlString) {
-  var tempDiv = doc.createElement(goog.dom.TagName.DIV);
-  if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
-    tempDiv.innerHTML = '<br>' + htmlString;
-    tempDiv.removeChild(tempDiv.firstChild);
-  } else {
-    tempDiv.innerHTML = htmlString;
-  }
-  return goog.dom.childrenToNode_(doc, tempDiv);
+  return goog.dom.safeHtmlToNode_(document,
+      // For now, we are blindly trusting that the HTML is safe.
+      goog.html.legacyconversions.safeHtmlFromString(htmlString));
 };
 
 
 /**
- * Helper for {@code htmlToDocumentFragment_}.
+ * Helper for {@code safeHtmlToNode_}.
  * @param {!Document} doc The document.
  * @param {!Node} tempDiv The input node.
  * @return {!Node} The resulting node.
@@ -2541,7 +2523,8 @@ goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
  * @deprecated Use {@link goog.dom.DomHelper.prototype.safeHtmlToNode} instead.
  */
 goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
-  return goog.dom.htmlToDocumentFragment_(this.document_, htmlString);
+  return goog.dom.safeHtmlToNode_(this.document_,
+      goog.html.legacyconversions.safeHtmlFromString(htmlString));
 };
 
 
