@@ -15,6 +15,10 @@
 /**
  * @fileoverview Utilities for working with ES6 iterables.
  * Note that this file is written ES5-only.
+ *
+ * The goal is that this should be a replacement for goog.iter which uses
+ * a now non-standard approach to iterables.
+ *
  * @see https://goo.gl/Rok5YQ
  */
 
