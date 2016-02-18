@@ -41,7 +41,8 @@ function whileLoopIterator(cond, body) {
         } else {
           return {done: false, value: body()};
         }
-      }
+      },
+      'throw': function(error) { throw error; }
     };
   };
 }
@@ -243,6 +244,46 @@ testSuite({
                 default:
                   return {done: true};
               }
+            }
+          };
+        })
+        .then(function(result) { assertEquals(3, result); });
+  },
+
+  testRunYieldWithThrow: function() {
+    // ES6 version:
+    //   return promise.run(function*() {
+    //     var x = 0;
+    //     try {
+    //       x = yield Promise.reject('error');
+    //     catch (e) {
+    //       x = yield Promise.resolve(1);
+    //     }
+    //     var y = yield Promise.resolve(2);
+    //     return x + y;
+    //   }).then(result => assertEquals(3, result));
+
+    return promise
+        .run(function() {
+          var step = 0;
+          var x, y;
+          return {
+            next: function(nextArg) {
+              switch (++step) {
+                case 1:
+                  return {done: false, value: Promise.reject('error')};
+                case 2:
+                  x = nextArg;
+                  return {done: false, value: Promise.resolve(2)};
+                case 3:
+                  y = nextArg;
+                  return {done: true, value: x + y};
+                default:
+                  return {done: true};
+              }
+            },
+            'throw': function(error) {
+              return {done: false, value: Promise.resolve(1)};
             }
           };
         })
