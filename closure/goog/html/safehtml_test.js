@@ -249,6 +249,7 @@ function testSafeHtmlCreate_urlAttributes() {
 }
 
 
+/** @suppress {checkTypes} */
 function testSafeHtmlCreateIframe() {
   // Setting src and srcdoc.
   var url = goog.html.TrustedResourceUrl.fromConstant(
@@ -277,11 +278,50 @@ function testSafeHtmlCreateIframe() {
     goog.html.SafeHtml.createIframe(null, null, {'Srcdoc': url});
   });
 
+  // Unsafe src and srcdoc.
+  assertThrows(function() {
+    goog.html.SafeHtml.createIframe('http://example.com');
+  });
+  assertThrows(function() {
+    goog.html.SafeHtml.createIframe(null, '<script>alert(1)</script>');
+  });
+
   // Can set content.
   assertSameHtml(
       '<iframe>&lt;</iframe>',
       goog.html.SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
 }
+
+
+/** @suppress {checkTypes} */
+function testSafeHtmlCreateScriptSrc() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://google.com/trusted<'));
+
+  assertSameHtml(
+      '<script src="https://google.com/trusted&lt;"></script>',
+      goog.html.SafeHtml.createScriptSrc(url));
+
+  assertSameHtml(
+      '<script src="https://google.com/trusted&lt;" defer="defer"></script>',
+      goog.html.SafeHtml.createScriptSrc(url, {'defer': 'defer'}));
+
+  // Unsafe src.
+  assertThrows(function() {
+    goog.html.SafeHtml.createScriptSrc('http://example.com');
+  });
+
+  // Unsafe attribute.
+  assertThrows(function() {
+    goog.html.SafeHtml.createScriptSrc(url, {'onerror': 'alert(1)'});
+  });
+
+  // Cannot override src.
+  assertThrows(function() {
+    goog.html.SafeHtml.createScriptSrc(url, {'Src': url});
+  });
+}
+
 
 function testSafeHtmlCreateMeta() {
   var url = goog.html.SafeUrl.fromConstant(

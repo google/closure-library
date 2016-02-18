@@ -413,14 +413,44 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  */
 goog.html.SafeHtml.createIframe = function(
     opt_src, opt_srcdoc, opt_attributes, opt_content) {
+  if (opt_src) {
+    // Check whether this is really TrustedResourceUrl.
+    goog.html.TrustedResourceUrl.unwrap(opt_src);
+  }
+
   var fixedAttributes = {};
   fixedAttributes['src'] = opt_src || null;
-  fixedAttributes['srcdoc'] = opt_srcdoc || null;
+  fixedAttributes['srcdoc'] =
+      opt_srcdoc && goog.html.SafeHtml.unwrap(opt_srcdoc);
   var defaultAttributes = {'sandbox': ''};
   var attributes = goog.html.SafeHtml.combineAttributes(
       fixedAttributes, defaultAttributes, opt_attributes);
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'iframe', attributes, opt_content);
+};
+
+
+/**
+ * Creates a SafeHtml representing a script tag with the src attribute.
+ * @param {!goog.html.TrustedResourceUrl} src The value of the src attribute.
+ * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Mapping from attribute names to their values. Only attribute names
+ *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
+ *     the attribute to be omitted.
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ * @throws {Error} If invalid attribute name or value is provided. If
+ *     opt_attributes contains the src attribute.
+ */
+goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
+  // Check whether this is really TrustedResourceUrl.
+  goog.html.TrustedResourceUrl.unwrap(src);
+
+  var fixedAttributes = {'src': src};
+  var defaultAttributes = {};
+  var attributes = goog.html.SafeHtml.combineAttributes(
+      fixedAttributes, defaultAttributes, opt_attributes);
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      'script', attributes);
 };
 
 
