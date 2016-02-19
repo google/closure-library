@@ -23,6 +23,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.string');
@@ -101,12 +102,15 @@ goog.soy.renderAsFragment = function(
   // Soy template parameter is only nullable for historical reasons.
   goog.asserts.assert(template, 'Soy template may not be null.');
   var dom = opt_domHelper || goog.dom.getDomHelper();
-  var html = goog.soy.ensureTemplateOutputHtml_(
-      template(
-          opt_templateData || goog.soy.defaultTemplateData_, undefined,
-          opt_injectedData));
+  var output = template(
+      opt_templateData || goog.soy.defaultTemplateData_, undefined,
+      opt_injectedData);
+  var html = goog.soy.ensureTemplateOutputHtml_(output);
   goog.soy.assertFirstTagValid_(html);
-  return dom.htmlToDocumentFragment(html);
+  var safeHtml = output instanceof goog.soy.data.SanitizedContent ?
+      output.toSafeHtml() :
+      goog.html.legacyconversions.safeHtmlFromString(html);
+  return dom.safeHtmlToNode(safeHtml);
 };
 
 
