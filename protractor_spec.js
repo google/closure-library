@@ -17,7 +17,8 @@ var IGNORED_TESTS = [
   'closure/goog/debug/fpsdisplay_test.html',
   'closure/goog/net/jsloader_test.html',
   'closure/goog/net/filedownloader_test.html',
-  'closure/goog/promise/promise_test.html'
+  'closure/goog/promise/promise_test.html',
+  'closure/goog/editor/plugins/abstractdialogplugin_test.html'
 ];
 
 describe('Run all Closure unit tests', function() {
