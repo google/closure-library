@@ -729,12 +729,11 @@ goog.graphics.SvgGraphics.prototype.createGroup = function(opt_group) {
  * the visible area, measure the div width, and immediatly erase the written
  * value.
  *
- * @param {string} text The text string to measure.
- * @param {goog.graphics.Font} font The font object describing the font style.
  * @override
  */
 goog.graphics.SvgGraphics.prototype.getTextWidth = function(text, font) {
   // TODO(user) Implement
+  throw new Error("unimplemented method");
 };
 
 
