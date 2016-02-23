@@ -79,6 +79,8 @@ goog.addDependency('crypt/cbc.js', ['goog.crypt.Cbc'], ['goog.array', 'goog.asse
 goog.addDependency('crypt/cbc_test.js', ['goog.crypt.CbcTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Cbc', 'goog.testing.jsunit'], false);
 goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array', 'goog.asserts'], false);
 goog.addDependency('crypt/crypt_test.js', ['goog.cryptTest'], ['goog.crypt', 'goog.string', 'goog.testing.jsunit'], false);
+goog.addDependency('crypt/ctr.js', ['goog.crypt.Ctr'], ['goog.array', 'goog.asserts', 'goog.crypt'], false);
+goog.addDependency('crypt/ctr_test.js', ['goog.crypt.CtrTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Ctr', 'goog.testing.jsunit'], false);
 goog.addDependency('crypt/hash.js', ['goog.crypt.Hash'], [], false);
 goog.addDependency('crypt/hash32.js', ['goog.crypt.hash32'], ['goog.crypt'], false);
 goog.addDependency('crypt/hash32_test.js', ['goog.crypt.hash32Test'], ['goog.crypt.hash32', 'goog.testing.TestCase', 'goog.testing.jsunit'], false);
