@@ -26,6 +26,7 @@
 
 goog.provide('goog.events.ListenerMap');
 
+goog.require('goog.asserts');
 goog.require('goog.array');
 goog.require('goog.events.Listener');
 goog.require('goog.object');
@@ -170,6 +171,7 @@ goog.events.ListenerMap.prototype.removeByKey = function(listener) {
 
   var removed = goog.array.remove(this.listeners[type], listener);
   if (removed) {
+    goog.asserts.assertInstanceof(listener, goog.events.Listener);
     listener.markAsRemoved();
     if (this.listeners[type].length == 0) {
       delete this.listeners[type];
