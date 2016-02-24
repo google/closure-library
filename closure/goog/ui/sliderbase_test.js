@@ -937,11 +937,11 @@ function testDragEvents() {
   function isValueOrExtentDragStart(type) {
     return type == goog.ui.SliderBase.EventType.DRAG_VALUE_START ||
         type == goog.ui.SliderBase.EventType.DRAG_EXTENT_START;
-  };
+  }
   function isValueOrExtentDragEnd(type) {
     return type == goog.ui.SliderBase.EventType.DRAG_VALUE_END ||
         type == goog.ui.SliderBase.EventType.DRAG_EXTENT_END;
-  };
+  }
 
   // Test that dragging the thumb calls all the correct events.
   goog.testing.events.fireMouseDownEvent(oneThumbSlider.valueThumb);

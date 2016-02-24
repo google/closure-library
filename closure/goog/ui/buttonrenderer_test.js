@@ -28,6 +28,7 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ControlRenderer');
 
 var button, buttonRenderer, testRenderer;
 var sandbox;

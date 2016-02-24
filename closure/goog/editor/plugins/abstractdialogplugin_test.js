@@ -86,7 +86,7 @@ function tearDown() {
 /**
  * Creates a concrete instance of goog.ui.editor.AbstractDialog by adding
  * a plain implementation of createDialogControl().
- * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
+ * @param {goog.dom.DomHelper} domHelper The dom helper to be used to
  *     create the dialog.
  * @return {goog.ui.editor.AbstractDialog} The created dialog.
  */
@@ -123,7 +123,7 @@ function createDialogPlugin() {
 /**
  * Sets up the mock event handler to expect an OPENED event.
  */
-function expectOpened(opt_times) {
+function expectOpened(/** number= */ opt_times) {
   mockOpenedHandler.handleEvent(
       new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type ==
@@ -140,7 +140,7 @@ function expectOpened(opt_times) {
 /**
  * Sets up the mock event handler to expect a CLOSED event.
  */
-function expectClosed(opt_times) {
+function expectClosed(/** number= */ opt_times) {
   mockClosedHandler.handleEvent(
       new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type ==
@@ -197,7 +197,7 @@ function testExecAndDisposeReuse() {
  * Tests the flow of calling execCommand (which opens the dialog) and
  * then hiding it (simulating that a user did somthing to cause the dialog to
  * close).
- * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
+ * @param {boolean=} opt_reuse Whether to set the plugin to reuse its dialog.
  */
 function testExecAndHide(opt_reuse) {
   setUpMockRange();
@@ -249,7 +249,7 @@ function testExecAndHideReuse() {
  * user can't do another execCommand before closing the first dialog. But
  * since the API makes it possible, I thought it would be good to guard
  * against and unit test.
- * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
+ * @param {boolean=} opt_reuse Whether to set the plugin to reuse its dialog.
  */
 function testExecTwice(opt_reuse) {
   setUpMockRange();

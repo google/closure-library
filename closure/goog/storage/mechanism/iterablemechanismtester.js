@@ -22,8 +22,6 @@
 
 goog.provide('goog.storage.mechanism.iterableMechanismTester');
 
-goog.require('goog.iter.Iterator');
-goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.testing.asserts');
 goog.setTestOnly('iterableMechanismTester');
 
