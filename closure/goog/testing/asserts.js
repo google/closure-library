@@ -13,18 +13,11 @@
 // limitations under the License.
 goog.provide('goog.testing.JsUnitException');
 goog.provide('goog.testing.asserts');
-goog.provide('goog.testing.asserts.ArrayLike');
 
 goog.require('goog.testing.stacktrace');
 
 // TODO(user): Copied from JsUnit with some small modifications, we should
 // reimplement the asserters.
-
-
-/**
- * @typedef {IArrayLike<?>}
- */
-goog.testing.asserts.ArrayLike;
 
 var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
   return var1 == var2;
@@ -936,11 +929,11 @@ var assertElementsRoughlyEqual = function(a, b, c, opt_d) {
 
 /**
  * Compares two array-like objects without taking their order into account.
- * @param {string|goog.testing.asserts.ArrayLike} a Assertion message or the
+ * @param {string|IArrayLike} a Assertion message or the
  *     expected elements.
- * @param {goog.testing.asserts.ArrayLike} b Expected elements or the actual
+ * @param {IArrayLike} b Expected elements or the actual
  *     elements.
- * @param {goog.testing.asserts.ArrayLike=} opt_c Actual elements.
+ * @param {IArrayLike=} opt_c Actual elements.
  */
 var assertSameElements = function(a, b, opt_c) {
   _validateArguments(2, arguments);
@@ -1172,7 +1165,7 @@ var assertRegExp = function(a, b, opt_c) {
 
 /**
  * Converts an array like object to array or clones it if it's already array.
- * @param {goog.testing.asserts.ArrayLike} arrayLike The collection.
+ * @param {IArrayLike} arrayLike The collection.
  * @return {!Array<?>} Copy of the collection as array.
  * @private
  */
@@ -1187,7 +1180,7 @@ goog.testing.asserts.toArray_ = function(arrayLike) {
 
 /**
  * Finds the position of the first occurrence of an element in a container.
- * @param {goog.testing.asserts.ArrayLike} container
+ * @param {IArrayLike} container
  *     The array to find the element in.
  * @param {*} contained Element to find.
  * @return {number} Index of the first occurrence or -1 if not found.
@@ -1210,7 +1203,7 @@ goog.testing.asserts.indexOf_ = function(container, contained) {
 
 /**
  * Tells whether the array contains the given element.
- * @param {goog.testing.asserts.ArrayLike} container The array to
+ * @param {IArrayLike} container The array to
  *     find the element in.
  * @param {*} contained Element to find.
  * @return {boolean} Whether the element is in the array.
