@@ -479,7 +479,8 @@ goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
   for (var i = 0; i < styleSheet.length; i++) {
     content += goog.html.SafeStyleSheet.unwrap(styleSheet[i]);
   }
-  // Convert to SafeHtml so that it's not HTML-escaped.
+  // Convert to SafeHtml so that it's not HTML-escaped. This is safe because
+  // as part of its contract, SafeStyleSheet should have no dangerous '<'.
   var htmlContent =
       goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
           content, goog.i18n.bidi.Dir.NEUTRAL);
