@@ -89,6 +89,7 @@ WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
  *     V8 only support JS objects.
  * @param {number} count The number of messages to be encoded.
  * @param {?function(!Object)} badMapHandler Callback for bad messages.
+ * @return {string} the encoded messages
  */
 WireV8.prototype.encodeMessageQueue = function(
     messageQueue, count, badMapHandler) {
