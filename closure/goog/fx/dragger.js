@@ -428,14 +428,14 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     if (this.hysteresisDistanceSquared_ == 0) {
       if (this.fireDragStart_(e)) {
         this.dragging_ = true;
-        if (this.preventMouseDown_) {
+        if (this.preventMouseDown_ && isMouseDown) {
           e.preventDefault();
         }
       } else {
         // If the start drag is cancelled, don't setup for a drag.
         return;
       }
-    } else if (this.preventMouseDown_) {
+    } else if (this.preventMouseDown_ && isMouseDown) {
       // Need to preventDefault for hysteresis to prevent page getting selected.
       e.preventDefault();
     }

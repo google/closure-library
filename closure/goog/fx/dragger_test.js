@@ -200,7 +200,7 @@ function testStartDrag_MouseMove() {
   e.type = goog.events.EventType.MOUSEMOVE;
   e.clientX = 1;
   e.clientY = 2;
-  e.preventDefault();
+  // preventDefault is not called.
   e.$replay();
 
   var startDragFired = false;
@@ -226,6 +226,64 @@ function testStartDrag_MouseMove() {
 
 
 /**
+ * Tests that preventDefault is not called for TOUCHSTART event.
+ */
+function testStartDrag_TouchStart() {
+  var dragger = new goog.fx.Dragger(target);
+
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.TOUCHSTART;
+  // preventDefault is not called.
+  e.$replay();
+
+  var startDragFired = false;
+  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+    startDragFired = true;
+  });
+
+  dragger.startDrag(e);
+
+  assertTrue('Dragging should be in progress.', dragger.isDragging());
+  assertTrue('Start drag event should have fired.', startDragFired);
+  assertTrue(
+      'Dragger must have registered touchstart listener.',
+      goog.events.hasListener(
+          dragger.handle, goog.events.EventType.TOUCHSTART, false /*opt_cap*/));
+  e.$verify();
+}
+
+
+/**
+ * Tests that preventDefault is not called for TOUCHSTART event when hysteresis
+ * is set to be greater than zero.
+ */
+function testStartDrag_TouchStart_NonZeroHysteresis() {
+  var dragger = new goog.fx.Dragger(target);
+  dragger.setHysteresis(5);
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.TOUCHSTART;
+  // preventDefault is not called.
+  e.$replay();
+
+  var startDragFired = false;
+  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+    startDragFired = true;
+  });
+
+  dragger.startDrag(e);
+
+  assertFalse(
+      'Start drag must not start drag because of hysterisis.',
+      dragger.isDragging());
+  assertTrue(
+      'Dragger must have registered touchstart listener.',
+      goog.events.hasListener(
+          dragger.handle, goog.events.EventType.TOUCHSTART, false /*opt_cap*/));
+  e.$verify();
+}
+
+
+/**
  * @bug 1381317 Cancelling start drag didn't end the attempt to drag.
  */
 function testHandleMove_Cancel() {
@@ -241,7 +299,7 @@ function testHandleMove_Cancel() {
   e.clientX = 1;
   e.clientY = 2;
   e.isMouseActionButton().$returns(true).$anyTimes();
-  e.preventDefault();
+  // preventDefault is not called.
   e.$replay();
   dragger.startDrag(e);
   assertFalse(
