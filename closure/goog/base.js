@@ -2352,6 +2352,9 @@ goog.base = function(me, opt_methodName, var_args) {
  *     (e.g. "var Timer = goog.Timer").
  */
 goog.scope = function(fn) {
+  if (goog.isInModuleLoader_()) {
+    throw Error('goog.scope is not supported within a goog.module.');
+  }
   fn.call(goog.global);
 };
 
