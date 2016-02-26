@@ -34,20 +34,9 @@ function setUp() {
   goog.dom.removeChildren(sandbox);
 }
 
-function testCreateWithContent() {
-  var iframe = goog.dom.iframe.createWithContent(
-      sandbox, '<title>Foo Title</title>', '<div id="blah">Test</div>',
-      'position: absolute', false /* opt_quirks */);
-
-  var doc = goog.dom.getFrameContentDocument(iframe);
-  assertNotNull(doc.getElementById('blah'));
-  assertEquals('Foo Title', doc.title);
-  assertEquals('absolute', iframe.style.position);
-}
-
 function testCreateWithContent_safeTypes() {
   var head = goog.html.SafeHtml.create('title', {}, 'Foo Title');
-  var body = goog.html.SafeHtml.create('div', {id: 'blah'}, 'Test');
+  var body = goog.html.SafeHtml.create('div', {'id': 'blah'}, 'Test');
   var style = goog.html.SafeStyle.fromConstant(
       goog.string.Const.from('position: absolute;'));
   var iframe = goog.dom.iframe.createWithContent(
@@ -71,12 +60,6 @@ function testCreateBlankYieldsIframeWithNoBorderOrPadding() {
   assertEquals(
       'Height should be as styled: no extra borders, padding, etc.', 250,
       blankElement.offsetHeight);
-}
-
-function testCreateBlankWithStyles() {
-  var iframe = goog.dom.iframe.createBlank(domHelper, 'position:absolute;');
-  assertEquals('absolute', iframe.style.position);
-  assertEquals('bottom', iframe.style.verticalAlign);
 }
 
 function testCreateBlankWithSafeStyles() {
