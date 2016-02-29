@@ -33,7 +33,6 @@ goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.positioning');
@@ -378,16 +377,6 @@ goog.ui.Tooltip.prototype.getHideDelayMs = function() {
  */
 goog.ui.Tooltip.prototype.setText = function(str) {
   goog.dom.setTextContent(this.getElement(), str);
-};
-
-
-/**
- * Sets tooltip message as HTML markup.
- * @param {string} str HTML message to display in tooltip.
- * @deprecated Use setSafeHtml.
- */
-goog.ui.Tooltip.prototype.setHtml = function(str) {
-  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(str));
 };
 
 

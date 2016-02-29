@@ -47,7 +47,7 @@ See the COPYING file for details.
   <script>
     var tooltip = new goog.ui.AdvancedTooltip('btn');
     tooltip.className = 'tooltip';
-    tooltip.setHtml(
+    tooltip.setSafeHtml(goog.html.testing.newSafeHtmlForTest(
       "<h2>AdvancedTooltip</h2>" +
       "<ul><li>Move cursor towards the tooltip (<em>that's me!</em>) " +
       "and see that it remains open.</li>" +
@@ -58,14 +58,15 @@ See the COPYING file for details.
       "stays inside the box formed by the tooltip and the padding it remains " +
       "open.</li></ul><hr/><div style=\"text-align: center;\">" +
       "<button id=\"btn-nest\">Hover me</button>&nbsp;" +
-      "<button id=\"btn-close\">Close</button></div>", true);
+      "<button id=\"btn-close\">Close</button></div>"));
     tooltip.setHotSpotPadding(new goog.math.Box(5, 5, 5, 5));
     tooltip.setCursorTracking(true);
     tooltip.setMargin(new goog.math.Box(100, 0, 0, 100));
     tooltip.setHideDelayMs(250);
 
-    new goog.ui.AdvancedTooltip('btn-nest').setHtml(
-        'Clicking<br> this<br> button<br> has no effect.');
+    new goog.ui.AdvancedTooltip('btn-nest').setSafeHtml(
+        goog.html.testing.newSafeHtmlForTest(
+            'Clicking<br> this<br> button<br> has no effect.'));
     new goog.ui.Tooltip('btn-close', 'Closes tooltip');
 
     goog.events.listen(document.getElementById('btn-close'),

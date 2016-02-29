@@ -11,6 +11,7 @@ See the COPYING file for details.
   <meta charset="utf-8">
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.html.testing');
     goog.require('goog.ui.Tooltip');
   </script>
   <link rel="stylesheet" href="css/demo.css">
@@ -66,10 +67,10 @@ See the COPYING file for details.
 
     var tooltip2 = new goog.ui.Tooltip('btn2');
     tooltip2.className = 'tooltip2';
-    tooltip2.setHtml(
+    tooltip2.setSafeHtml(goog.html.testing.newSafeHtmlForTest(
       "This is message two, using a different class name for the tooltip and " +
       "<strong>HTML</strong> <em>markup</em>.<br>" +
-      "<button id=\"btn-nest\">Hover me</button>", true);
+      "<button id=\"btn-nest\">Hover me</button>"));
     tooltip2.attach('btn5');
 
     var tooltip3 = new goog.ui.Tooltip('btn3', 'Tooltip for button 3');
@@ -85,7 +86,8 @@ See the COPYING file for details.
     var tooltip6 = new goog.ui.Tooltip('txt2', 'outer tooltip');
 
     var tooltip7 = new goog.ui.Tooltip('btn-nest');
-    tooltip7.setHtml("Even nested<br>tooltips!");
+    tooltip7.setSafeHtml(goog.html.testing.newSafeHtmlForTest(
+      "Even nested<br>tooltips!"));
   </script>
 </body>
 </html>
