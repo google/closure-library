@@ -907,6 +907,7 @@ goog.addDependency('pubsub/topicid.js', ['goog.pubsub.TopicId'], [], false);
 goog.addDependency('pubsub/typedpubsub.js', ['goog.pubsub.TypedPubSub'], ['goog.Disposable', 'goog.pubsub.PubSub'], false);
 goog.addDependency('pubsub/typedpubsub_test.js', ['goog.pubsub.TypedPubSubTest'], ['goog.array', 'goog.pubsub.TopicId', 'goog.pubsub.TypedPubSub', 'goog.testing.jsunit'], false);
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], [], false);
+goog.addDependency('reflect/reflect_test.js', ['goog.reflectTest'], ['goog.object', 'goog.reflect', 'goog.testing.jsunit'], false);
 goog.addDependency('result/deferredadaptor.js', ['goog.result.DeferredAdaptor'], ['goog.async.Deferred', 'goog.result', 'goog.result.Result'], false);
 goog.addDependency('result/dependentresult.js', ['goog.result.DependentResult'], ['goog.result.Result'], false);
 goog.addDependency('result/result_interface.js', ['goog.result.Result'], ['goog.Thenable'], false);

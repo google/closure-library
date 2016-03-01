@@ -76,3 +76,42 @@ goog.reflect.canAccessProperty = function(obj, prop) {
   }
   return false;
 };
+
+
+/**
+ * Retrieves a value from a cache given a key. The compiler provides special
+ * consideration for this call such that it is generally considered side-effect
+ * free. However, if the {@code opt_keyFn} or {@code valueFn} have side-effects
+ * then the entire call is considered to have side-effects.
+ *
+ * Conventionally storing the value on the cache would be considered a
+ * side-effect and preclude unused calls from being pruned, ie. even if
+ * the value was never used, it would still always be stored in the cache.
+ *
+ * Providing a side-effect free {@code valueFn} and {@code opt_keyFn}
+ * allows unused calls to {@code goog.cache} to be pruned.
+ *
+ * @param {!Object<K, V>} cacheObj The object that contains the cached values.
+ * @param {?} key The key to lookup in the cache. If it is not string or number
+ *     then a {@code opt_keyFn} should be provided. The key is also used as the
+ *     parameter to the {@code valueFn}.
+ * @param {!function(?):V} valueFn The value provider to use to calculate the
+ *     value to store in the cache. This function should be side-effect free
+ *     to take advantage of the optimization.
+ * @param {function(?):K=} opt_keyFn The key provider to determine the cache
+ *     map key. This should be used if the given key is not a string or number.
+ *     If not provided then the given key is used. This function should be
+ *     side-effect free to take advantage of the optimization.
+ * @return {V} The cached or calculated value.
+ * @template K
+ * @template V
+ */
+goog.reflect.cache = function(cacheObj, key, valueFn, opt_keyFn) {
+  var storedKey = opt_keyFn ? opt_keyFn(key) : key;
+
+  if (storedKey in cacheObj) {
+    return cacheObj[storedKey];
+  }
+
+  return (cacheObj[storedKey] = valueFn(key));
+};

@@ -339,6 +339,7 @@ var _allTests = [
   "closure/goog/proto/serializer_test.html",
   "closure/goog/pubsub/pubsub_test.html",
   "closure/goog/pubsub/typedpubsub_test.html",
+  "closure/goog/reflect/reflect_test.html",
   "closure/goog/result/chain_test.html",
   "closure/goog/result/combine_test.html",
   "closure/goog/result/deferredadaptor_test.html",
