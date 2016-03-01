@@ -703,6 +703,19 @@ function testArrayRemove() {
   assertArrayEquals('remove, remove non existing element', ['a', 'b', 'd'], a);
 }
 
+function testArrayRemoveLast() {
+  var a = ['c', 'a', 'b', 'c', 'd', 'a'];
+  goog.array.removeLast(a, 'c');
+  var temp = ['c', 'a', 'b', 'd', 'a'];
+  assertArrayEquals('remove, remove existing element', temp, a);
+  goog.array.removeLast(a, 'a');
+  temp = ['c', 'a', 'b', 'd'];
+  assertArrayEquals('remove, remove existing element', temp, a);
+  goog.array.removeLast(a, 'y');
+  temp = ['c', 'a', 'b', 'd'];
+  assertArrayEquals('remove, remove non existing element', temp, a);
+}
+
 function testArrayRemoveAt() {
   var a = [0, 1, 2, 3];
   goog.array.removeAt(a, 2);
