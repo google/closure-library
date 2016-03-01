@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.module.ModuleInfoTest');
-goog.setTestOnly('goog.module.ModuleInfoTest');
+goog.provide('goog.loader.ModuleInfoTest');
+goog.setTestOnly('goog.loader.ModuleInfoTest');
 
-goog.require('goog.module.BaseModule');
-goog.require('goog.module.ModuleInfo');
+goog.require('goog.loader.BaseModule');
+goog.require('goog.loader.ModuleInfo');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 
@@ -39,21 +39,21 @@ function tearDown() {
  * Test initial state of module info.
  */
 function testNotLoadedAtStart() {
-  var m = new goog.module.ModuleInfo();
+  var m = new goog.loader.ModuleInfo();
   assertFalse('Shouldn\'t be loaded', m.isLoaded());
 }
 
 var TestModule = function() {
-  goog.module.BaseModule.call(this);
+  goog.loader.BaseModule.call(this);
 };
-goog.inherits(TestModule, goog.module.BaseModule);
+goog.inherits(TestModule, goog.loader.BaseModule);
 
 
 /**
  * Test loaded module info.
  */
 function testOnLoad() {
-  var m = new goog.module.ModuleInfo();
+  var m = new goog.loader.ModuleInfo();
 
   m.setModuleConstructor(TestModule);
   m.onLoad(goog.nullFunction);
@@ -75,7 +75,7 @@ function testOnLoad() {
  * Test callbacks on module load.
  */
 function testCallbacks() {
-  var m = new goog.module.ModuleInfo();
+  var m = new goog.loader.ModuleInfo();
   m.setModuleConstructor(TestModule);
   var index = 0;
   var a = -1, b = -1, c = -1, d = -1;
@@ -98,7 +98,7 @@ function testCallbacks() {
 
 
 function testErrorsInCallbacks() {
-  var m = new goog.module.ModuleInfo();
+  var m = new goog.loader.ModuleInfo();
   m.setModuleConstructor(TestModule);
   m.registerCallback(function() { throw new Error('boom1'); });
   m.registerCallback(function() { throw new Error('boom2'); });
@@ -115,7 +115,7 @@ function testErrorsInCallbacks() {
  * Tests the error callbacks.
  */
 function testErrbacks() {
-  var m = new goog.module.ModuleInfo();
+  var m = new goog.loader.ModuleInfo();
   m.setModuleConstructor(TestModule);
   var index = 0;
   var a = -1, b = -1, c = -1, d = -1;

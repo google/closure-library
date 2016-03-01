@@ -14,20 +14,11 @@
 
 /**
  *
- * @fileoverview This class supports the dynamic loading of compiled
- * javascript modules at runtime, as descibed in the designdoc.
- *
- *   <http://go/js_modules_design>
- *
+ * @fileoverview Stub file that will be deleted soon.
  */
 
 goog.provide('goog.module');
 
-// TODO(johnlenz): Here we explicitly initialize the namespace to avoid
-// problems with the goog.module method in base.js.  Once the goog.module has
-// landed and compiler updated and released and everyone is on that release
-// we can remove this file.
-//
-// Alternately, we can move everthing out of the goog.module namespace.
-//
+// TODO(tbreisacher): Delete this and the entire goog.module package.
+// It is now in goog.loader.
 goog.module = goog.module || {};

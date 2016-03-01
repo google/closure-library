@@ -17,11 +17,11 @@
  * @fileoverview File #1 of module B.
  */
 
-goog.provide('goog.module.testdata.modB_1');
+goog.provide('goog.loader.testdata.modB_1');
 
-goog.setTestOnly('goog.module.testdata.modB_1');
+goog.setTestOnly('goog.loader.testdata.modB_1');
 
-goog.require('goog.module.ModuleManager');
+goog.require('goog.loader.ModuleManager');
 
 function throwErrorInModuleB() {
   throw Error();
@@ -30,4 +30,4 @@ function throwErrorInModuleB() {
 if (window.modB1Loaded) throw Error('modB_1 loaded twice');
 window.modB1Loaded = true;
 
-goog.module.ModuleManager.getInstance().setLoaded('modB');
+goog.loader.ModuleManager.getInstance().setLoaded('modB');

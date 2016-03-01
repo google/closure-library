@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.module.ModuleManagerTest');
-goog.setTestOnly('goog.module.ModuleManagerTest');
+goog.provide('goog.loader.ModuleManagerTest');
+goog.setTestOnly('goog.loader.ModuleManagerTest');
 
 goog.require('goog.array');
 goog.require('goog.functions');
-goog.require('goog.module.BaseModule');
-goog.require('goog.module.ModuleManager');
+goog.require('goog.loader.BaseModule');
+goog.require('goog.loader.ModuleManager');
 goog.require('goog.testing');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -40,7 +40,7 @@ function setUp() {
 }
 
 function getModuleManager(infoMap) {
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   mm.setAllModuleInfo(infoMap);
 
   mm.isModuleLoaded = function(id) {
@@ -134,7 +134,7 @@ function testExecOnLoad() {
 
 /**
  * Tests execOnLoad with the specified module manager.
- * @param {goog.module.ModuleManager} mm The module manager.
+ * @param {goog.loader.ModuleManager} mm The module manager.
  */
 function execOnLoad_(mm) {
   // When module is unloaded, execOnLoad is async.
@@ -235,7 +235,7 @@ function testExecOnLoadWhilePreloadingAndViceVersa() {
 
 /**
  * Perform tests with the specified module manager.
- * @param {goog.module.ModuleManager} mm The module manager.
+ * @param {goog.loader.ModuleManager} mm The module manager.
  */
 function execOnLoadWhilePreloadingAndViceVersa_(mm) {
   var mm = getModuleManager({'c': [], 'd': []});
@@ -964,11 +964,11 @@ function testLoadWithFailingModule() {
   var mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
+            goog.loader.ModuleManager.FailureType.UNAUTHORIZED, cause);
         firedLoadFailed = true;
       });
   var calledBack = false;
@@ -990,7 +990,7 @@ function testLoadWithFailingModule() {
   // object's message.
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error.message));
 }
 
@@ -1003,11 +1003,11 @@ function testLoadMultipleWithFailingModule() {
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
   mm.setBatchModeEnabled(true);
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
+            goog.loader.ModuleManager.FailureType.UNAUTHORIZED, cause);
       });
   var calledBack11 = false;
   var error11 = null;
@@ -1051,18 +1051,18 @@ function testLoadMultipleWithFailingModule() {
   // object's message.
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error11.message));
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error12.message));
 
   // The first deferred of the second load should be called since it asks for
   // one of the failed modules.
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error21.message));
 
   // The last deferred should be dropped so it is neither called back nor an
@@ -1083,11 +1083,11 @@ function testLoadMultipleWithFailingModuleDependencies() {
   var cancelledIds = [];
 
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
+            goog.loader.ModuleManager.FailureType.UNAUTHORIZED, cause);
         cancelledIds.push(id);
       });
   var calledBack11 = false;
@@ -1139,11 +1139,11 @@ function testLoadMultipleWithFailingModuleDependencies() {
   // object's message.
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error11.message));
   assertEquals(
       'Failure cause was not as expected',
-      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+      goog.loader.ModuleManager.FailureType.UNAUTHORIZED,
       Number(error12.message));
 
   // Check that among the failed modules, 'c' and 'd' are also cancelled
@@ -1289,11 +1289,11 @@ function testUnauthorizedLoading() {
   // Callback checks for an unauthorized error
   var firedLoadFailed = false;
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
+            goog.loader.ModuleManager.FailureType.UNAUTHORIZED, cause);
         firedLoadFailed = true;
       });
   mm.execOnLoad('o', function() {});
@@ -1381,11 +1381,11 @@ function testConsecutiveErrors() {
   // Register an error callback for consecutive failures.
   var firedLoadFailed = false;
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.CONSECUTIVE_FAILURES, cause);
+            goog.loader.ModuleManager.FailureType.CONSECUTIVE_FAILURES, cause);
         firedLoadFailed = true;
       });
 
@@ -1434,11 +1434,11 @@ function testOldCodeGoneError() {
   // Callback checks for an old code failure
   var firedLoadFailed = false;
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.OLD_CODE_GONE, cause);
+            goog.loader.ModuleManager.FailureType.OLD_CODE_GONE, cause);
         firedLoadFailed = true;
       });
 
@@ -1460,11 +1460,11 @@ function testTimeout() {
   // Callback checks for timeout
   var firedTimeout = false;
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR,
+      goog.loader.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
         assertEquals(
             'Failure cause was not as expected',
-            goog.module.ModuleManager.FailureType.TIMEOUT, cause);
+            goog.loader.ModuleManager.FailureType.TIMEOUT, cause);
         firedTimeout = true;
       });
 
@@ -1484,29 +1484,29 @@ function testExecOnLoadError() {
   // ERROR, the right module id and failure type INIT_ERROR.
   var errorCallback1 = goog.testing.createFunctionMock('callback1');
   errorCallback1(
-      goog.module.ModuleManager.CallbackType.ERROR, 'b',
-      goog.module.ModuleManager.FailureType.INIT_ERROR);
+      goog.loader.ModuleManager.CallbackType.ERROR, 'b',
+      goog.loader.ModuleManager.FailureType.INIT_ERROR);
 
   var errorCallback2 = goog.testing.createFunctionMock('callback2');
   errorCallback2(
-      goog.module.ModuleManager.CallbackType.ERROR, 'b',
-      goog.module.ModuleManager.FailureType.INIT_ERROR);
+      goog.loader.ModuleManager.CallbackType.ERROR, 'b',
+      goog.loader.ModuleManager.FailureType.INIT_ERROR);
 
   errorCallback1.$replay();
   errorCallback2.$replay();
 
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   // Register the first callback before setting the module info map.
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR, errorCallback1);
+      goog.loader.ModuleManager.CallbackType.ERROR, errorCallback1);
 
   mm.setAllModuleInfo({'a': [], 'b': [], 'c': []});
 
   // Register the second callback after setting the module info map.
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR, errorCallback2);
+      goog.loader.ModuleManager.CallbackType.ERROR, errorCallback2);
 
   var execOnLoadBCalled = false;
   mm.execOnLoad('b', function() {
@@ -1532,17 +1532,17 @@ function testExecOnLoadErrorModuleInfoString() {
   // id and failure type INIT_ERROR.
   var errorCallback = goog.testing.createFunctionMock('callback');
   errorCallback(
-      goog.module.ModuleManager.CallbackType.ERROR, 'b',
-      goog.module.ModuleManager.FailureType.INIT_ERROR);
+      goog.loader.ModuleManager.CallbackType.ERROR, 'b',
+      goog.loader.ModuleManager.FailureType.INIT_ERROR);
 
   errorCallback.$replay();
 
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   // Register the first callback before setting the module info map.
   mm.registerCallback(
-      goog.module.ModuleManager.CallbackType.ERROR, errorCallback);
+      goog.loader.ModuleManager.CallbackType.ERROR, errorCallback);
 
   mm.setAllModuleInfoString('a/b/c');
 
@@ -1701,19 +1701,19 @@ function testSetModuleConstructor() {
   };
   function AModule() {
     ++info['a'].count;
-    goog.module.BaseModule.call(this);
+    goog.loader.BaseModule.call(this);
   }
-  goog.inherits(AModule, goog.module.BaseModule);
+  goog.inherits(AModule, goog.loader.BaseModule);
   function BModule() {
     ++info['b'].count;
-    goog.module.BaseModule.call(this);
+    goog.loader.BaseModule.call(this);
   }
-  goog.inherits(BModule, goog.module.BaseModule);
+  goog.inherits(BModule, goog.loader.BaseModule);
   function CModule() {
     ++info['c'].count;
-    goog.module.BaseModule.call(this);
+    goog.loader.BaseModule.call(this);
   }
-  goog.inherits(CModule, goog.module.BaseModule);
+  goog.inherits(CModule, goog.loader.BaseModule);
 
   mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
   execOnLoad_(mm);
@@ -1736,9 +1736,9 @@ function testLoadWhenInitializing() {
   var info = {'a': {ctor: AModule, count: 0}};
   function AModule() {
     ++info['a'].count;
-    goog.module.BaseModule.call(this);
+    goog.loader.BaseModule.call(this);
   }
-  goog.inherits(AModule, goog.module.BaseModule);
+  goog.inherits(AModule, goog.loader.BaseModule);
   AModule.prototype.initialize = function() { mm.load('a'); };
   mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
   mm.preloadModule('a');
@@ -1764,7 +1764,7 @@ function testErrorInEarlyCallback() {
   assertEquals(0, callback.getCallCount());
   assertEquals(1, errback.getCallCount());
   assertEquals(
-      goog.module.ModuleManager.FailureType.INIT_ERROR,
+      goog.loader.ModuleManager.FailureType.INIT_ERROR,
       errback.getLastCall().getArguments()[0]);
   assertTrue(mm.getModuleInfo('a').isLoaded());
   assertFalse(mm.getModuleInfo('b').isLoaded());
@@ -1791,7 +1791,7 @@ function testErrorInNormalCallback() {
   assertEquals('error', e.message);
   assertEquals(1, errback.getCallCount());
   assertEquals(
-      goog.module.ModuleManager.FailureType.INIT_ERROR,
+      goog.loader.ModuleManager.FailureType.INIT_ERROR,
       errback.getLastCall().getArguments()[0]);
   assertTrue(mm.getModuleInfo('a').isLoaded());
   assertTrue(mm.getModuleInfo('b').isLoaded());
@@ -1817,7 +1817,7 @@ function createModulesFor(var_args) {
   var result = {};
   for (var i = 0; i < arguments.length; i++) {
     var key = arguments[i];
-    result[key] = {ctor: goog.module.BaseModule};
+    result[key] = {ctor: goog.loader.BaseModule};
   }
   return result;
 }
@@ -1840,7 +1840,7 @@ function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
 }
 
 function testInitCallbackInBaseModule() {
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   var called = false;
   var context;
   mm.registerInitializationCallback(function(mcontext) {
@@ -1851,7 +1851,7 @@ function testInitCallbackInBaseModule() {
   assertTrue('Base initialization not called', called);
   assertNull('Context should still be null', context);
 
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   called = false;
   mm.registerInitializationCallback(function(mcontext) {
     called = true;
@@ -1865,7 +1865,7 @@ function testInitCallbackInBaseModule() {
 
 function testSetAllModuleInfoString() {
   var info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   mm.setAllModuleInfoString(info);
 
   assertNotNull('Base should exist', mm.getModuleInfo('base'));
@@ -1883,7 +1883,7 @@ function testSetAllModuleInfoString() {
 }
 
 function testSetAllModuleInfoStringWithEmptyString() {
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   var called = false;
   var context;
   mm.registerInitializationCallback(function(mcontext) {
@@ -1895,7 +1895,7 @@ function testSetAllModuleInfoStringWithEmptyString() {
 }
 
 function testBackOffAmounts() {
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   assertEquals(0, mm.getBackOff_());
 
   mm.consecutiveFailures_++;
@@ -1913,9 +1913,9 @@ function testBackOffAmounts() {
 function testIdleCallbackWithInitialModules() {
   var callback = goog.testing.recordFunction();
 
-  var mm = new goog.module.ModuleManager();
+  var mm = new goog.loader.ModuleManager();
   mm.setAllModuleInfoString('a', ['a']);
-  mm.registerCallback(goog.module.ModuleManager.CallbackType.IDLE, callback);
+  mm.registerCallback(goog.loader.ModuleManager.CallbackType.IDLE, callback);
 
   assertTrue(mm.isActive());
 
