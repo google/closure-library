@@ -174,7 +174,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
         chunkBytes = 0;
       }
     }
-  } else if (goog.isArray(message)) {
+  } else if (goog.isArrayLike(message)) {
     for (var i = 0; i < length; i++) {
       var b = message[i];
       // Hack:  b|0 coerces b to an integer, so the last part confirms that
