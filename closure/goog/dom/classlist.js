@@ -213,7 +213,7 @@ goog.dom.classlist.enable = function(element, className, enabled) {
  * method may throw a DOM exception for an invalid or empty class name if
  * DOMTokenList is used.
  * @param {!Element} element DOM node to add or remove the class on.
- * @param {goog.array.ArrayLike<string>} classesToEnable An array-like object
+ * @param {?IArrayLike<string>} classesToEnable An array-like object
  *     containing a collection of class names to add or remove from the element.
  * @param {boolean} enabled Whether to add or remove the classes (true adds,
  *     false removes).

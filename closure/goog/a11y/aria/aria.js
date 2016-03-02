@@ -398,7 +398,7 @@ goog.a11y.aria.isContainerRole = function(element) {
 /**
  * Splits the input stringValue on whitespace.
  * @param {string} stringValue The value of the string to split.
- * @return {!goog.array.ArrayLike<string>} string Array
+ * @return {!IArrayLike<string>} string Array
  *     value as result of the split.
  * @private
  */

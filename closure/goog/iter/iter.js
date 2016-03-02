@@ -1163,7 +1163,7 @@ goog.iter.slice = function(iterable, start, opt_end) {
 
 /**
  * Checks an array for duplicate elements.
- * @param {Array<VALUE>|goog.array.ArrayLike} arr The array to check for
+ * @param {?IArrayLike<VALUE>} arr The array to check for
  *     duplicates.
  * @return {boolean} True, if the array contains duplicates, false otherwise.
  * @private
