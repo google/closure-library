@@ -13,18 +13,35 @@
 // limitations under the License.
 
 /**
- * @fileoverview Stub for backward compatibility. Will be deleted soon.
+ * @fileoverview Defines the base class for a module. This is used to allow the
+ * code to be modularized, giving the benefits of lazy loading and loading on
+ * demand.
+ *
  */
 
 goog.provide('goog.module.BaseModule');
 
-goog.require('goog.loader.BaseModule');
+goog.require('goog.Disposable');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
 
 
+
 /**
- * @const
- * @deprecated Please use goog.loader.BaseModule
+ * A basic module object that represents a module of Javascript code that can
+ * be dynamically loaded.
+ *
+ * @constructor
+ * @extends {goog.Disposable}
  */
-goog.module.BaseModule = goog.loader.BaseModule;
+goog.module.BaseModule = function() {
+  goog.Disposable.call(this);
+};
+goog.inherits(goog.module.BaseModule, goog.Disposable);
+
+
+/**
+ * Performs any load-time initialization that the module requires.
+ * @param {Object} context The module context.
+ */
+goog.module.BaseModule.prototype.initialize = function(context) {};

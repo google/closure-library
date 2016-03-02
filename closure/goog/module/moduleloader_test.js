@@ -13,11 +13,11 @@
 // limitations under the License.
 
 /**
- * @fileoverview Tests for goog.loader.ModuleLoader.
+ * @fileoverview Tests for goog.module.ModuleLoader.
  * @author nicksantos@google.com (Nick Santos)
  */
 
-goog.provide('goog.loader.ModuleLoaderTest');
+goog.provide('goog.module.ModuleLoaderTest');
 
 goog.require('goog.Promise');
 goog.require('goog.array');
@@ -25,8 +25,8 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
-goog.require('goog.loader.ModuleLoader');
-goog.require('goog.loader.ModuleManager');
+goog.require('goog.module.ModuleLoader');
+goog.require('goog.module.ModuleManager');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
@@ -36,7 +36,7 @@ goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-goog.setTestOnly('goog.loader.ModuleLoaderTest');
+goog.setTestOnly('goog.module.ModuleLoaderTest');
 
 
 var modA1Loaded = false;
@@ -47,7 +47,7 @@ var moduleLoader = null;
 var moduleManager = null;
 var stubs = new goog.testing.PropertyReplacer();
 
-var EventType = goog.loader.ModuleLoader.EventType;
+var EventType = goog.module.ModuleLoader.EventType;
 var observer;
 
 function setUpPage() {
@@ -60,10 +60,10 @@ function setUp() {
   modB1Loaded = false;
 
   goog.provide = goog.nullFunction;
-  moduleManager = goog.loader.ModuleManager.getInstance();
+  moduleManager = goog.module.ModuleManager.getInstance();
   stubs.replace(moduleManager, 'getBackOff_', goog.functions.constant(0));
 
-  moduleLoader = new goog.loader.ModuleLoader();
+  moduleLoader = new goog.module.ModuleLoader();
   observer = new goog.testing.events.EventObserver();
 
   goog.events.listen(moduleLoader, goog.object.getValues(EventType), observer);
@@ -85,8 +85,8 @@ function tearDown() {
   goog.dispose(moduleLoader);
 
   // Ensure that the module manager was created.
-  assertNotNull(goog.loader.ModuleManager.getInstance());
-  moduleManager = goog.loader.ModuleManager.instance_ = null;
+  assertNotNull(goog.module.ModuleManager.getInstance());
+  moduleManager = goog.module.ModuleManager.instance_ = null;
 
   // tear down the module loaded flag.
   modA1Loaded = false;
@@ -234,7 +234,7 @@ function assertSourceInjection() {
         var stackTrace = ex.stack.toString();
         var expectedString = 'testdata/modB_1.js';
 
-        if (goog.loader.ModuleLoader.supportsSourceUrlStackTraces()) {
+        if (goog.module.ModuleLoader.supportsSourceUrlStackTraces()) {
           // Source URL should be added in eval or in jsloader.
           assertContains(expectedString, stackTrace);
         } else if (moduleLoader.getDebugMode()) {
@@ -286,7 +286,7 @@ function testModuleLoaderRecursesTooDeep(opt_numModules) {
     errorIds.push(modId);
   };
   moduleManager.registerCallback(
-      goog.loader.ModuleManager.CallbackType.ERROR, errorHandler);
+      goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
   moduleManager.execOnLoad(
       mods[0], function() { fail('modB should not load successfully'); });
@@ -327,7 +327,7 @@ function testErrback() {
       resolve();
     };
     moduleManager.registerCallback(
-        goog.loader.ModuleManager.CallbackType.ERROR, errorHandler);
+        goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
     moduleManager.execOnLoad(
         'modA', function() { fail('modA should not load successfully'); });
@@ -351,7 +351,7 @@ function testEventError() {
           resolve();
         };
         moduleManager.registerCallback(
-            goog.loader.ModuleManager.CallbackType.ERROR, errorHandler);
+            goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
         moduleManager.execOnLoad(
             'modA', function() { fail('modA should not load successfully'); });
@@ -499,7 +499,7 @@ function testLoadErrorCallbackExecutedWhenPrefetchFails() {
   var errorCount = 0;
   var errorHandler = function() { errorCount++; };
   moduleManager.registerCallback(
-      goog.loader.ModuleManager.CallbackType.ERROR, errorHandler);
+      goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
   moduleLoader.prefetchModule('modA', moduleManager.moduleInfoMap_['modA']);
   moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap_, function() {

@@ -14,16 +14,13 @@
 // All Rights Reserved
 
 /**
- * @fileoverview File #2 of module A.
+ * @fileoverview File #1 of module A.
  */
 
-goog.provide('goog.loader.testdata.modA_2');
+goog.provide('goog.module.testdata.modA_1');
 
-goog.setTestOnly('goog.loader.testdata.modA_2');
 
-goog.require('goog.loader.ModuleManager');
+goog.setTestOnly('goog.module.testdata.modA_1');
 
-if (window.modA2Loaded) throw Error('modA_2 loaded twice');
-window.modA2Loaded = true;
-
-goog.loader.ModuleManager.getInstance().setLoaded('modA');
+if (window.modA1Loaded) throw Error('modA_1 loaded twice');
+window.modA1Loaded = true;
