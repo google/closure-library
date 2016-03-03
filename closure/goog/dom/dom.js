@@ -88,7 +88,7 @@ goog.dom.getDomHelper = function(opt_element) {
 
 /**
  * Cached default DOM helper.
- * @type {goog.dom.DomHelper}
+ * @type {!goog.dom.DomHelper|undefined}
  * @private
  */
 goog.dom.defaultDomHelper_;
