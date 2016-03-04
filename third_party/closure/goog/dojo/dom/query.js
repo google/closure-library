@@ -211,9 +211,8 @@ goog.dom.query = (function() {
 
   // On browsers that support the "children" collection we can avoid a lot of
   // iteration on chaff (non-element) nodes.
-  var childNodesName = !!goog.dom.getDocument().firstChild['children'] ?
-                          'children' :
-                          'childNodes';
+  var childNodesName =
+      goog.dom.getDocument().firstChild['children'] ? 'children' : 'childNodes';
 
   var specials = '>~+';
 

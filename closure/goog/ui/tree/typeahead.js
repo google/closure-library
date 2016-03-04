@@ -198,7 +198,7 @@ goog.ui.tree.TypeAhead.prototype.removeNodeFromMap = function(node) {
     if (nodeList) {
       // Remove the node from the array.
       goog.array.remove(nodeList, node);
-      if (!!nodeList.length) {
+      if (nodeList.length) {
         this.nodeMap_.remove(labelText);
       }
     }

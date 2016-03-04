@@ -291,7 +291,7 @@ goog.fx.Animation.prototype.stop = function(opt_gotoEnd) {
   goog.fx.anim.unregisterAnimation(this);
   this.setStateStopped();
 
-  if (!!opt_gotoEnd) {
+  if (opt_gotoEnd) {
     this.progress = 1;
   }
 
