@@ -70,6 +70,7 @@ goog.provide('goog.ui.media.Youtube');
 goog.provide('goog.ui.media.YoutubeModel');
 
 goog.require('goog.dom.TagName');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.media.FlashObject');
@@ -335,7 +336,8 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
  * @param {string} videoId The youtube video ID.
  * @param {boolean=} opt_autoplay Whether the flash movie should start playing
  *     as soon as it is shown, or if it should show a 'play' button.
- * @return {string} The flash URL to be embedded on the page.
+ * @return {!goog.html.TrustedResourceUrl} The flash URL to be embedded on the
+ *     page.
  */
 goog.ui.media.YoutubeModel.getFlashUrl = function(videoId, opt_autoplay) {
   var autoplay = opt_autoplay ? '&autoplay=1' : '';
@@ -343,8 +345,11 @@ goog.ui.media.YoutubeModel.getFlashUrl = function(videoId, opt_autoplay) {
   // generated input. the video id is later used to embed a flash object,
   // which is generated through HTML construction. We goog.string.urlEncode
   // the video id to make sure the URL is safe to be embedded.
-  return 'http://www.youtube.com/v/' + goog.string.urlEncode(videoId) +
-      '&hl=en&fs=1' + autoplay;
+  return goog.html.uncheckedconversions.
+      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from('Fixed domain, encoded path.'),
+          'http://www.youtube.com/v/' + goog.string.urlEncode(videoId) +
+              '&hl=en&fs=1' + autoplay);
 };
 
 

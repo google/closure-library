@@ -17,11 +17,13 @@ goog.setTestOnly('goog.ui.media.PhotoTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.Photo');
 var control;
-var PHOTO_URL = 'http://foo/bar.jpg';
+var PHOTO_URL = goog.html.testing.newTrustedResourceUrlForTest(
+    'http://foo/bar.jpg');
 
 function setUp() {
   var photo = new goog.ui.media.MediaModel(PHOTO_URL, 'title', 'description');
