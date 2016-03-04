@@ -1410,3 +1410,53 @@ function testEditDistance() {
       'Substitution should be preferred over insert/delete', 4,
       goog.string.editDistance('abcd', 'defg'));
 }
+
+function testLastComponent() {
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', []));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', null));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', undefined));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', ''));
+  assertEquals(
+      'Giving a simple string separator instead of an array should work', 'fgh',
+      goog.string.lastComponent('abcdefgh', 'e'));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', ['']));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', ['', '']));
+  assertEquals(
+      'Last component of a string without separators should be the string',
+      'abcdefgh', goog.string.lastComponent('abcdefgh', ['']));
+  assertEquals(
+      'Last component of a single character string should be the string', 'a',
+      goog.string.lastComponent('a', ['']));
+  assertEquals(
+      'Last component of a single character string separated by its only' +
+          'character should be the empty string',
+      '', goog.string.lastComponent('a', ['a']));
+  assertEquals(
+      'Last component of the empty string should be the empty string', '',
+      goog.string.lastComponent('', ['']));
+  assertEquals(
+      'Last component of the empty string should be the empty string', '',
+      goog.string.lastComponent('', ['a']));
+  assertEquals(
+      'Last component of the empty string should be the empty string', '',
+      goog.string.lastComponent('', ['']));
+  assertEquals('ccc', goog.string.lastComponent('aaabbbccc', ['b']));
+  assertEquals('baz', goog.string.lastComponent('foo/bar/baz', ['/']));
+  assertEquals('baz', goog.string.lastComponent('foo.bar.baz', ['.']));
+  assertEquals('baz', goog.string.lastComponent('foo.bar.baz', ['/', '.']));
+  assertEquals('bar/baz', goog.string.lastComponent('foo.bar/baz', ['.']));
+  assertEquals('bar-baz', goog.string.lastComponent('foo.bar-baz', ['/', '.']));
+  assertEquals('baz', goog.string.lastComponent('foo.bar-baz', ['-', '', '.']));
+}
