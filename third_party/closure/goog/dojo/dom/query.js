@@ -562,6 +562,7 @@ goog.dom.query = (function() {
   };
 
   /**
+   * @param {(number|string|Node)} i
    * @param {Array=} opt_arr
    */
   function getArr(i, opt_arr) {
@@ -571,7 +572,7 @@ goog.dom.query = (function() {
       r.push(i);
     }
     return r;
-  };
+  }
 
   var isElement = function(n) {
     return (1 == n.nodeType);
@@ -620,7 +621,7 @@ goog.dom.query = (function() {
       var tval = ' ' + value;
       return function(elem) {
         var ea = ' ' + getAttr(elem, attr);
-        return (ea.lastIndexOf(value) == (ea.length - value.length));
+        return (ea.lastIndexOf(tval) == (ea.length - tval.length));
       }
     },
     '~=': function(attr, value) {
@@ -1271,7 +1272,11 @@ goog.dom.query = (function() {
     (!goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('526'))
   );
 
-  /** @param {boolean=} opt_forceDOM */
+  /**
+   * @param {(string|Array)} query
+   * @param {boolean=} opt_forceDOM
+   * @return {function((string|Node)): !Array}
+   */
   var getQueryFunc = function(query, opt_forceDOM) {
 
     if (qsaAvail) {
@@ -1476,10 +1481,10 @@ goog.dom.query = (function() {
   /**
    * The main executor. Type specification from above.
    * @param {string|Array} query The query.
-   * @param {(string|Node)=} root The root.
+   * @param {(string|Node)=} opt_root The root.
    * @return {!Array} The elements that matched the query.
    */
-  var query = function(query, root) {
+  var query = function(query, opt_root) {
     // NOTE: elementsById is not currently supported
     // NOTE: ignores xpath-ish queries for now
 
@@ -1498,6 +1503,7 @@ goog.dom.query = (function() {
       return [query];
     }
 
+    var root = opt_root;
     if (goog.isString(root)) {
       root = goog.dom.getElement(root);
       if (!root) {
@@ -1532,7 +1538,7 @@ goog.dom.query = (function() {
       return r;
     }
     return _zip(r);
-  }
+  };
 
   // FIXME: need to add infrastructure for post-filtering pseudos, ala :last
   query.pseudos = pseudos;
