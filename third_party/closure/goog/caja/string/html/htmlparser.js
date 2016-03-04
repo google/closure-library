@@ -488,8 +488,7 @@ goog.string.html.HtmlParser.prototype.lookupEntity_ = function(name) {
   var m = name.match(goog.string.html.HtmlParser.DECIMAL_ESCAPE_RE_);
   if (m) {
     return String.fromCharCode(parseInt(m[1], 10));
-  } else if (
-      !!(m = name.match(goog.string.html.HtmlParser.HEX_ESCAPE_RE_))) {
+  } else if (m = name.match(goog.string.html.HtmlParser.HEX_ESCAPE_RE_)) {
     return String.fromCharCode(parseInt(m[1], 16));
   }
   return '';

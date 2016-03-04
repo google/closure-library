@@ -276,7 +276,7 @@ goog.net.xpc.CrossPageChannel.prototype.isPeerAvailable = function() {
   // when querying its parent's 'closed' status. Note that this is a different
   // case than mibuerge@'s note above.
   try {
-    return !!this.peerWindowObject_ && !Boolean(this.peerWindowObject_.closed);
+    return !!this.peerWindowObject_ && !this.peerWindowObject_.closed;
   } catch (e) {
     // If the window is closing, an error may be thrown.
     return false;
