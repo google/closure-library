@@ -385,8 +385,8 @@ goog.structs.AvlTree.prototype.getValues = function() {
  * maximum node or when {@code func} returns a value that evaluates to true.
  *
  * @param {Function} func Function to call on each traversed node.
- * @param {Object=} opt_startValue If specified, traversal will begin on the
- *    node with the smallest value >= opt_startValue.
+ * @param {T=} opt_startValue If specified, traversal will begin on the node
+ *     with the smallest value >= opt_startValue.
  */
 goog.structs.AvlTree.prototype.inOrderTraverse = function(
     func, opt_startValue) {
@@ -445,8 +445,8 @@ goog.structs.AvlTree.prototype.inOrderTraverse = function(
  * tree's minimum node or when func returns a value that evaluates to true.
  *
  * @param {function(T):?} func Function to call on each traversed node.
- * @param {Object=} opt_startValue If specified, traversal will begin on the
- *    node with the largest value <= opt_startValue.
+ * @param {T=} opt_startValue If specified, traversal will begin on the node
+ *     with the largest value <= opt_startValue.
  */
 goog.structs.AvlTree.prototype.reverseOrderTraverse = function(
     func, opt_startValue) {
