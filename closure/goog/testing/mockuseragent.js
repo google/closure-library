@@ -18,6 +18,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.MockUserAgent');
 goog.provide('goog.testing.MockUserAgent');
 
 goog.require('goog.Disposable');

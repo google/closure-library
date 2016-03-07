@@ -32,6 +32,7 @@
  * @author nicksantos@google.com (Nick Santos)
  */
 
+goog.setTestOnly('goog.testing.events');
 goog.provide('goog.testing.events');
 goog.provide('goog.testing.events.Event');
 

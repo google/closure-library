@@ -21,6 +21,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.jsunit');
 goog.provide('goog.testing.jsunit');
 
 goog.require('goog.dom.TagName');

@@ -27,6 +27,7 @@
  */
 
 
+goog.setTestOnly('goog.testing.MockControl');
 goog.provide('goog.testing.MockControl');
 
 goog.require('goog.array');
