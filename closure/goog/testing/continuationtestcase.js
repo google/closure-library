@@ -78,7 +78,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.ContinuationTestCase');
 goog.provide('goog.testing.ContinuationTestCase');
 goog.provide('goog.testing.ContinuationTestCase.ContinuationTest');
 goog.provide('goog.testing.ContinuationTestCase.Step');

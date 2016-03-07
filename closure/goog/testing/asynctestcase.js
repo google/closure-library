@@ -107,7 +107,6 @@
  * @author agrieve@google.com (Andrew Grieve)
  */
 
-goog.setTestOnly('goog.testing.AsyncTestCase');
 goog.provide('goog.testing.AsyncTestCase');
 goog.provide('goog.testing.AsyncTestCase.ControlBreakingException');
 

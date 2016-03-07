@@ -18,7 +18,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.ui.style');
 goog.provide('goog.testing.ui.style');
 
 goog.require('goog.array');

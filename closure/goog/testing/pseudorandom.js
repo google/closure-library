@@ -19,7 +19,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.PseudoRandom');
 goog.provide('goog.testing.PseudoRandom');
 
 goog.require('goog.Disposable');

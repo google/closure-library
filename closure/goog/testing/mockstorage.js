@@ -18,7 +18,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.MockStorage');
 goog.provide('goog.testing.MockStorage');
 
 

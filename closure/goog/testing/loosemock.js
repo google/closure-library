@@ -16,7 +16,6 @@
  * @fileoverview This file defines a loose mock implementation.
  */
 
-goog.setTestOnly('goog.testing.LooseMock');
 goog.provide('goog.testing.LooseExpectationCollection');
 goog.provide('goog.testing.LooseMock');
 

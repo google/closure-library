@@ -35,7 +35,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.Mock');
 goog.provide('goog.testing.Mock');
 goog.provide('goog.testing.MockExpectation');
 

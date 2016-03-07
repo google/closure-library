@@ -36,7 +36,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.MockClassFactory');
 goog.provide('goog.testing.MockClassFactory');
 goog.provide('goog.testing.MockClassRecord');
 

@@ -23,7 +23,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.TestCase');
 goog.provide('goog.testing.TestCase');
 goog.provide('goog.testing.TestCase.Error');
 goog.provide('goog.testing.TestCase.Order');

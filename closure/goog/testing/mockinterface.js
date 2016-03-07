@@ -17,7 +17,6 @@
  * @author nicksantos@google.com (Nick Santos)
  */
 
-goog.setTestOnly('goog.testing.MockInterface');
 goog.provide('goog.testing.MockInterface');
 
 

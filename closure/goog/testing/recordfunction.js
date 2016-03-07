@@ -41,7 +41,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.recordFunction');
 goog.provide('goog.testing.FunctionCall');
 goog.provide('goog.testing.recordConstructor');
 goog.provide('goog.testing.recordFunction');

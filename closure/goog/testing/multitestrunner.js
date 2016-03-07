@@ -20,7 +20,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.MultiTestRunner');
 goog.provide('goog.testing.MultiTestRunner');
 goog.provide('goog.testing.MultiTestRunner.TestFrame');
 

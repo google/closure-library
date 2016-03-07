@@ -17,7 +17,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.net.XhrIoPool');
 goog.provide('goog.testing.net.XhrIoPool');
 
 goog.require('goog.net.XhrIoPool');

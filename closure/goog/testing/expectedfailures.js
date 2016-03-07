@@ -18,7 +18,6 @@
  * @author robbyw@google.com (Robby Walker)
  */
 
-goog.setTestOnly('goog.testing.ExpectedFailures');
 goog.provide('goog.testing.ExpectedFailures');
 
 goog.require('goog.asserts');

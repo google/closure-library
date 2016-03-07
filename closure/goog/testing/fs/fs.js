@@ -19,7 +19,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.fs');
 goog.provide('goog.testing.fs');
 
 goog.require('goog.Timer');

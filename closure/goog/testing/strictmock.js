@@ -16,7 +16,6 @@
  * @fileoverview This file defines a strict mock implementation.
  */
 
-goog.setTestOnly('goog.testing.StrictMock');
 goog.provide('goog.testing.StrictMock');
 
 goog.require('goog.array');

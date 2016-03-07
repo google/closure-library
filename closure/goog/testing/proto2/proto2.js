@@ -17,7 +17,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.proto2');
 goog.provide('goog.testing.proto2');
 
 goog.require('goog.proto2.Message');

@@ -19,7 +19,6 @@
  * @author nicksantos@google.com (Nick Santos)
  */
 
-goog.setTestOnly('goog.testing.ui.RendererHarness');
 goog.provide('goog.testing.ui.RendererHarness');
 
 goog.require('goog.Disposable');

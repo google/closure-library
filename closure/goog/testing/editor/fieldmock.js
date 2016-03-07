@@ -18,7 +18,6 @@
  * @author robbyw@google.com (Robby Walker)
  */
 
-goog.setTestOnly('goog.testing.editor.FieldMock');
 goog.provide('goog.testing.editor.FieldMock');
 
 goog.require('goog.dom');

@@ -18,7 +18,6 @@
  * @author robbyw@google.com (Robby Walker)
  */
 
-goog.setTestOnly('goog.testing.graphics');
 goog.provide('goog.testing.graphics');
 
 goog.require('goog.graphics.Path');

@@ -18,7 +18,6 @@
  * @author robbyw@google.com (Robby Walker)
  */
 
-goog.setTestOnly('goog.testing.editor.TestHelper');
 goog.provide('goog.testing.editor.TestHelper');
 
 goog.require('goog.Disposable');

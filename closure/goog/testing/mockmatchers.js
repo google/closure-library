@@ -22,7 +22,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.mockmatchers');
 goog.provide('goog.testing.mockmatchers');
 goog.provide('goog.testing.mockmatchers.ArgumentMatcher');
 goog.provide('goog.testing.mockmatchers.IgnoreArgument');

@@ -19,7 +19,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.messaging.MockMessageChannel');
 goog.provide('goog.testing.messaging.MockMessageChannel');
 
 goog.require('goog.messaging.AbstractChannel');

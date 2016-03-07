@@ -17,7 +17,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.fs.File');
 goog.provide('goog.testing.fs.File');
 
 goog.require('goog.testing.fs.Blob');

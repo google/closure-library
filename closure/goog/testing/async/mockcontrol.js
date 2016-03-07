@@ -44,7 +44,6 @@
  */
 
 
-goog.setTestOnly('goog.testing.async.MockControl');
 goog.provide('goog.testing.async.MockControl');
 
 goog.require('goog.asserts');

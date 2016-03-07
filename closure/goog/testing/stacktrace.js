@@ -17,7 +17,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.stacktrace');
 goog.provide('goog.testing.stacktrace');
 goog.provide('goog.testing.stacktrace.Frame');
 

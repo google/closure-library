@@ -17,7 +17,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.fs.FileSystem');
 goog.provide('goog.testing.fs.FileSystem');
 
 goog.require('goog.fs.FileSystem');

@@ -19,7 +19,6 @@
  * them to transition to the Closure test runner and allow JSTD runner to be
  * deprecated.
  */
-goog.setTestOnly('goog.testing.JsTdTestCaseAdapter');
 goog.provide('goog.testing.JsTdTestCaseAdapter');
 
 goog.require('goog.async.run');

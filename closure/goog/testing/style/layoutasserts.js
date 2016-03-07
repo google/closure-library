@@ -18,7 +18,6 @@
  * See {@link http://go/layouttesting}.
  */
 
-goog.setTestOnly('goog.testing.style.layoutasserts');
 goog.provide('goog.testing.style.layoutasserts');
 
 goog.require('goog.style');

@@ -17,7 +17,6 @@
  * @author dbk@google.com (David Barrett-Kahn)
  */
 
-goog.setTestOnly('goog.testing.events.OnlineHandler');
 goog.provide('goog.testing.events.OnlineHandler');
 
 goog.require('goog.events.EventTarget');

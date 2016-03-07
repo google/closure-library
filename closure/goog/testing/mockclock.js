@@ -21,7 +21,6 @@
  *
  */
 
-goog.setTestOnly('goog.testing.MockClock');
 goog.provide('goog.testing.MockClock');
 
 goog.require('goog.Disposable');

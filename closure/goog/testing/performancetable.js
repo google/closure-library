@@ -21,7 +21,6 @@
  * @author nicksantos@google.com (Nick Santos)
  */
 
-goog.setTestOnly('goog.testing.PerformanceTable');
 goog.provide('goog.testing.PerformanceTable');
 
 goog.require('goog.dom');
