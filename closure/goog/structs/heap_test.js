@@ -22,10 +22,10 @@ goog.require('goog.testing.jsunit');
 
 /**
  * Constructs a heap from key-value pairs passed as arguments
- * @param {...!Array} List of length 2 arrays [key, value] as arguments
- * @returns {goog.structs.Heap} Heap constructed from passed in key-value pairs
+ * @param {...!Array} var_args List of length-2 arrays [key, value]
+ * @return {goog.structs.Heap} Heap constructed from passed in key-value pairs
  */
-function makeHeap() {
+function makeHeap(var_args) {
   var h = new goog.structs.Heap();
   var key, value;
 
