@@ -72,7 +72,8 @@ function tearDownPage() {
 }
 
 function testIeStyleMouseWheel() {
-  goog.userAgent = {OPERA: false, IE: true, GECKO: false, WEBKIT: false};
+  goog.userAgent =
+      {OPERA: false, EDGE_OR_IE: true, GECKO: false, WEBKIT: false};
 
   createHandlerAndListen();
 
@@ -202,19 +203,19 @@ function testWebkitStyleMouseWheel_nonIeStyle() {
   createHandlerAndListen();
 
   // non-IE-style Webkit events do not get wheelDelta scaled
-  handleEvent(createFakeWebkitMouseWheelEvent(-1, 0));
+  handleEvent(createFakeWebkitMouseWheelEvent(-40, 0));
   assertMouseWheelEvent(1, 1, 0);
 
-  handleEvent(createFakeWebkitMouseWheelEvent(3, 0));
+  handleEvent(createFakeWebkitMouseWheelEvent(120, 0));
   assertMouseWheelEvent(-3, -3, 0);
 
-  handleEvent(createFakeWebkitMouseWheelEvent(0, 3));
+  handleEvent(createFakeWebkitMouseWheelEvent(0, 120));
   assertMouseWheelEvent(-3, 0, -3);
 
-  handleEvent(createFakeWebkitMouseWheelEvent(0, -1));
+  handleEvent(createFakeWebkitMouseWheelEvent(0, -40));
   assertMouseWheelEvent(1, 0, 1);
 
-  handleEvent(createFakeWebkitMouseWheelEvent(2, -1));
+  handleEvent(createFakeWebkitMouseWheelEvent(80, -40));
   assertMouseWheelEvent(-2, -2, 1);
 }
 
