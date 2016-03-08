@@ -2132,6 +2132,10 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * var MSG_NAME = goog.getMsg('Hello {$placeholder}', {'placeholder': 'world'});
  * </code>
  *
+ * This function produces a string which should be treated as plain text. Use
+ * {@link goog.html.SafeHtmlFormatter} in conjunction with goog.getMsg to
+ * produce SafeHtml.
+ *
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object<string, string>=} opt_values Maps place holder name to value.
  * @return {string} message with placeholders filled.
