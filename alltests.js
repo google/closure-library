@@ -190,6 +190,7 @@ var _allTests = [
   'closure/goog/history/html5history_test.html',
   'closure/goog/html/flash_test.html',
   'closure/goog/html/legacyconversions_test.html',
+  'closure/goog/html/safehtmlformatter_test.html',
   'closure/goog/html/safehtml_test.html',
   'closure/goog/html/safescript_test.html',
   'closure/goog/html/safestylesheet_test.html',
