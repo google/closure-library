@@ -1339,10 +1339,11 @@ goog.style.setStyles = function(element, stylesString) {
     // selector was invalid or there were CSS comments.  Setting the cssText of
     // the style node works fine and ignores CSS that IE doesn't understand.
     // However IE >= 11 doesn't support cssText any more, so we make sure that
-    // cssText is a defined property and otherwise fall back to innerHTML.
+    // cssText is a defined property and otherwise fall back to setTextContent.
     element.cssText = stylesString;
   } else {
-    element.innerHTML = stylesString;
+    // NOTE: We could also set textContent directly here.
+    goog.dom.setTextContent(/** @type {!Element} */ (element), stylesString);
   }
 };
 
