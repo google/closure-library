@@ -88,6 +88,12 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
   this.multiplier_ = 1;
 
   /**
+   * True if the percent/permill sign of the negative pattern is expected.
+   * @private {!boolean}
+   */
+  this.negativePercentSignExpected_ = false;
+
+  /**
    * The grouping array is used to store the values of each number group
    * following left of the decimal place. For example, a number group with
    * goog.i18n.NumberFormat('#,##,###') should have [3,2] where 2 is the
@@ -303,6 +309,7 @@ goog.i18n.NumberFormat.prototype.applyPattern_ = function(pattern) {
   if (pos[0] < pattern.length &&
       pattern.charAt(pos[0]) == goog.i18n.NumberFormat.PATTERN_SEPARATOR_) {
     pos[0]++;
+    if (this.multiplier_ != 1) this.negativePercentSignExpected_ = true;
     this.negativePrefix_ = this.parseAffix_(pattern, pos);
     // we assume this part is identical to positive part.
     // user must make sure the pattern is correctly constructed.
@@ -1094,17 +1101,25 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
           }
           break;
         case goog.i18n.NumberFormat.PATTERN_PERCENT_:
-          if (this.multiplier_ != 1) {
+          if (!this.negativePercentSignExpected_ && this.multiplier_ != 1) {
             throw Error('Too many percent/permill');
+          } else if (
+              this.negativePercentSignExpected_ && this.multiplier_ != 100) {
+            throw Error('Inconsistent use of percent/permill characters');
           }
           this.multiplier_ = 100;
+          this.negativePercentSignExpected_ = false;
           affix += goog.i18n.NumberFormatSymbols.PERCENT;
           break;
         case goog.i18n.NumberFormat.PATTERN_PER_MILLE_:
-          if (this.multiplier_ != 1) {
+          if (!this.negativePercentSignExpected_ && this.multiplier_ != 1) {
             throw Error('Too many percent/permill');
+          } else if (
+              this.negativePercentSignExpected_ && this.multiplier_ != 1000) {
+            throw Error('Inconsistent use of percent/permill characters');
           }
           this.multiplier_ = 1000;
+          this.negativePercentSignExpected_ = false;
           affix += goog.i18n.NumberFormatSymbols.PERMILL;
           break;
         default:

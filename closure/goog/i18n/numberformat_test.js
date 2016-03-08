@@ -129,6 +129,16 @@ function testNegativePercentage() {
   assertEquals('-123,458%', str);
 }
 
+function testNegativePercentagePattern() {
+  var str;
+  var fmt = new goog.i18n.NumberFormat('#,##0.00%;(#,##0.00%)');
+  str = fmt.format(1234.56);
+  assertEquals('123,456.00%', str);
+
+  str = fmt.format(-1234.56);
+  assertEquals('(123,456.00%)', str);
+}
+
 function testCustomPercentage() {
   var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.PERCENT);
   fmt.setMaximumFractionDigits(1);
