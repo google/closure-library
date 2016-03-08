@@ -691,8 +691,7 @@ goog.array.remove = function(arr, obj) {
 
 /**
  * Removes the last occurrence of a particular value from an array.
- * @param {!Array<T>|!goog.array.ArrayLike} arr Array from which to remove
- *     value.
+ * @param {!IArrayLike<T>} arr Array from which to remove value.
  * @param {T} obj Object to remove.
  * @return {boolean} True if an element was removed.
  * @template T
