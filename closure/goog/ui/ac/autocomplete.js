@@ -54,6 +54,7 @@ goog.forwardDeclare('goog.ui.ac.RenderOptions');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @suppress {underscore}
  */
 goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
   goog.events.EventTarget.call(this);

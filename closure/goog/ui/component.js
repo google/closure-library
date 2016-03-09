@@ -45,6 +45,7 @@ goog.require('goog.ui.IdGenerator');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @suppress {underscore}
  */
 goog.ui.Component = function(opt_domHelper) {
   goog.events.EventTarget.call(this);

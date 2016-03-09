@@ -62,6 +62,7 @@ goog.require('goog.ui.ac.AutoComplete');
  *     bolds every matching substring for a given token in each row. True by
  *     default.
  * @extends {goog.events.EventTarget}
+ * @suppress {underscore}
  */
 goog.ui.ac.Renderer = function(
     opt_parentNode, opt_customRenderer, opt_rightAlign,
