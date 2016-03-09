@@ -72,19 +72,19 @@ goog.labs.html.scrubber.balance = function(html) {
 };
 
 
-/** Character code constant for {@code '<'}.  @private */
+/** @private Character code constant for {@code '<'}. */
 goog.labs.html.scrubber.CC_LT_ = '<'.charCodeAt(0);
 
 
-/** Character code constant for {@code '!'}.  @private */
+/** @private Character code constant for {@code '!'}. */
 goog.labs.html.scrubber.CC_BANG_ = '!'.charCodeAt(0);
 
 
-/** Character code constant for {@code '/'}.  @private */
+/** @private Character code constant for {@code '/'}. */
 goog.labs.html.scrubber.CC_SLASH_ = '/'.charCodeAt(0);
 
 
-/** Character code constant for {@code '?'}.  @private */
+/** @private Character code constant for {@code '?'}. */
 goog.labs.html.scrubber.CC_QMARK_ = '?'.charCodeAt(0);
 
 
