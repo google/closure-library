@@ -300,6 +300,25 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
 
 
 /**
+ * Creates a SafeUrl wrapping a tel: URL.
+ *
+ * @param {string} telUrl A tel URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromTelUrl = function(telUrl) {
+  // There's a risk that a tel: URL could immediately place a call once
+  // clicked, without requiring user confirmation. For that reason it is
+  // handled in this separate function.
+  if (!goog.string.caseInsensitiveStartsWith(telUrl, 'tel:')) {
+    telUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      telUrl);
+};
+
+
+/**
  * A pattern that recognizes a commonly useful subset of URLs that satisfy
  * the SafeUrl contract.
  *

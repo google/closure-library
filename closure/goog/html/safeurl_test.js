@@ -97,9 +97,6 @@ function assertBlobTypeIsSafe(type, isSafe) {
 
 
 function testSafeUrlFromDataUrl_withSafeType() {
-  if (isIE9OrLower()) {
-    return;
-  }
   assertDataUrlIsSafe(
       'data:image/png;base64,' +
           'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=',
@@ -115,9 +112,6 @@ function testSafeUrlFromDataUrl_withSafeType() {
 
 
 function testSafeUrlFromDataUrl_withUnsafeType() {
-  if (isIE9OrLower()) {
-    return;
-  }
   assertDataUrlIsSafe('', false);
   assertDataUrlIsSafe(':', false);
   assertDataUrlIsSafe('data:', false);
@@ -148,6 +142,37 @@ function testSafeUrlFromDataUrl_withUnsafeType() {
  */
 function assertDataUrlIsSafe(url, isSafe) {
   var safeUrl = goog.html.SafeUrl.fromDataUrl(url);
+  assertEquals(
+      isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
+      goog.html.SafeUrl.unwrap(safeUrl));
+}
+
+
+
+function testSafeUrlFromTelUrl_withSafeType() {
+  assertTelUrlIsSafe('tEl:+1(23)129-29192A.ABC#;eXt=29', true);
+  assertTelUrlIsSafe('tEL:123;randmomparam=123', true);
+}
+
+
+function testSafeUrlFromTelUrl_withUnsafeType() {
+  assertTelUrlIsSafe('', false);
+  assertTelUrlIsSafe(':', false);
+  assertTelUrlIsSafe('tell:', false);
+  assertTelUrlIsSafe('not-tel:+1', false);
+  assertTelUrlIsSafe(' tel:+1', false);
+}
+
+
+/**
+ * Tests creating a SafeUrl from a tel URL, asserting whether or not the
+ * SafeUrl returned is innocuous or not depending on the given boolean.
+ * @param {string} url URL to test.
+ * @param {boolean} isSafe Whether the given URL type should be considered safe
+ *     by {@link SafeUrl.fromTelUrl}.
+ */
+function assertTelUrlIsSafe(url, isSafe) {
+  var safeUrl = goog.html.SafeUrl.fromTelUrl(url);
   assertEquals(
       isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(safeUrl));
