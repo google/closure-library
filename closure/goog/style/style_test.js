@@ -23,6 +23,7 @@ goog.require('goog.color');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.html.testing');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -937,6 +938,21 @@ function testInstallStyles() {
   assertEquals(originalBackground, goog.style.getBackgroundColor(el));
 }
 
+function testInstallSafeStyleSheet() {
+  var el = $('installTest0');
+  var originalBackground = goog.style.getBackgroundColor(el);
+
+  // Uses background-color because it's easy to get the computed value
+  var result = goog.style.installSafeStyleSheet(
+      goog.html.testing.newSafeStyleSheetForTest(
+          '#installTest0 { background-color: rgb(255, 192, 203); }'));
+
+  assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
+
+  goog.style.uninstallStyles(result);
+  assertEquals(originalBackground, goog.style.getBackgroundColor(el));
+}
+
 function testSetStyles() {
   var el = $('installTest1');
 
@@ -949,6 +965,23 @@ function testSetStyles() {
   // Now change to orange
   goog.style.setStyles(
       ss, '#installTest1 { background-color: rgb(255, 255, 0); }');
+  assertColorRgbEquals('rgb(255,255,0)', goog.style.getBackgroundColor(el));
+}
+
+function testSetSafeStyleSheet() {
+  var el = $('installTest1');
+
+  // Change to pink
+  var ss = goog.style.installSafeStyleSheet(
+      goog.html.testing.newSafeStyleSheetForTest(
+          '#installTest1 { background-color: rgb(255, 192, 203); }'));
+
+  assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
+
+  // Now change to orange
+  goog.style.setSafeStyleSheet(ss,
+      goog.html.testing.newSafeStyleSheetForTest(
+          '#installTest1 { background-color: rgb(255, 255, 0); }'));
   assertColorRgbEquals('rgb(255,255,0)', goog.style.getBackgroundColor(el));
 }
 

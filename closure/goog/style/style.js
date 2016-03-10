@@ -31,6 +31,8 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.vendor');
+goog.require('goog.html.SafeStyleSheet');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -1279,9 +1281,25 @@ goog.style.isElementShown = function(el) {
  * @param {string} stylesString The style string to install.
  * @param {Node=} opt_node Node whose parent document should have the
  *     styles installed.
- * @return {Element|StyleSheet} The style element created.
+ * @return {!Element|!StyleSheet} The style element created.
+ * @deprecated Use {@link #installSafeStyleSheet} instead.
  */
 goog.style.installStyles = function(stylesString, opt_node) {
+  return goog.style.installSafeStyleSheet(
+      goog.html.legacyconversions.safeStyleSheetFromString(stylesString),
+      opt_node);
+};
+
+
+/**
+ * Installs the style sheet into the window that contains opt_node.  If
+ * opt_node is null, the main window is used.
+ * @param {!goog.html.SafeStyleSheet} safeStyleSheet The style sheet to install.
+ * @param {?Node=} opt_node Node whose parent document should have the
+ *     styles installed.
+ * @return {!Element|!StyleSheet} The style element created.
+ */
+goog.style.installSafeStyleSheet = function(safeStyleSheet, opt_node) {
   var dh = goog.dom.getDomHelper(opt_node);
   var styleSheet = null;
 
@@ -1290,7 +1308,7 @@ goog.style.installStyles = function(stylesString, opt_node) {
   var doc = dh.getDocument();
   if (goog.userAgent.IE && doc.createStyleSheet) {
     styleSheet = doc.createStyleSheet();
-    goog.style.setStyles(styleSheet, stylesString);
+    goog.style.setSafeStyleSheet(styleSheet, safeStyleSheet);
   } else {
     var head = dh.getElementsByTagNameAndClass(goog.dom.TagName.HEAD)[0];
 
@@ -1306,7 +1324,7 @@ goog.style.installStyles = function(stylesString, opt_node) {
     // to the head results in a nasty Webkit bug in certain scenarios. Please
     // refer to https://bugs.webkit.org/show_bug.cgi?id=26307 for additional
     // details.
-    goog.style.setStyles(styleSheet, stylesString);
+    goog.style.setSafeStyleSheet(styleSheet, safeStyleSheet);
     dh.appendChild(head, styleSheet);
   }
   return styleSheet;
@@ -1328,12 +1346,29 @@ goog.style.uninstallStyles = function(styleSheet) {
 /**
  * Sets the content of a style element.  The style element can be any valid
  * style element.  This element will have its content completely replaced by
- * the new stylesString.
+ * the stylesString.
  * @param {Element|StyleSheet} element A stylesheet element as returned by
  *     installStyles.
  * @param {string} stylesString The new content of the stylesheet.
+ * @deprecated Use {@link #setSafeStyleSheet} instead.
  */
 goog.style.setStyles = function(element, stylesString) {
+  goog.style.setSafeStyleSheet(/** @type {!Element|!StyleSheet} */ (element),
+      goog.html.legacyconversions.safeStyleSheetFromString(stylesString));
+};
+
+
+/**
+ * Sets the content of a style element.  The style element can be any valid
+ * style element.  This element will have its content completely replaced by
+ * the safeStyleSheet.
+ * @param {!Element|!StyleSheet} element A stylesheet element as returned by
+ *     installStyles.
+ * @param {!goog.html.SafeStyleSheet} safeStyleSheet The new content of the
+ *     stylesheet.
+ */
+goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
+  var stylesString = goog.html.SafeStyleSheet.unwrap(safeStyleSheet);
   if (goog.userAgent.IE && goog.isDef(element.cssText)) {
     // Adding the selectors individually caused the browser to hang if the
     // selector was invalid or there were CSS comments.  Setting the cssText of

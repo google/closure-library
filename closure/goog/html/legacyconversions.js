@@ -71,6 +71,7 @@ goog.provide('goog.html.legacyconversions');
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 
@@ -106,6 +107,23 @@ goog.html.legacyconversions.safeStyleFromString = function(style) {
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
+};
+
+
+/**
+ * Performs an "unchecked conversion" from string to SafeStyleSheet for legacy
+ * API purposes.
+ *
+ * Please read fileoverview documentation before using.
+ *
+ * @param {string} styleSheet A string to be converted to SafeStyleSheet.
+ * @return {!goog.html.SafeStyleSheet} The value of style sheet, wrapped in
+ *     a SafeStyleSheet object.
+ */
+goog.html.legacyconversions.safeStyleSheetFromString = function(styleSheet) {
+  goog.html.legacyconversions.reportCallback_();
+  return goog.html.SafeStyleSheet
+      .createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet);
 };
 
 
