@@ -1304,11 +1304,20 @@ goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
 
+  if (!goog.isDefAndNotNull(table)) {
+    table = goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN;
+  }
+
   if (base < 3) {
     return goog.i18n.NumberFormat.NULL_UNIT_;
   } else {
     base = Math.min(14, base);
     var patterns = table[Math.pow(10, base)];
+    var previousNonNullBase = base - 1;
+    while (!patterns && previousNonNullBase >= 3) {
+      patterns = table[Math.pow(10, previousNonNullBase)];
+      previousNonNullBase--;
+    }
     if (!patterns) {
       return goog.i18n.NumberFormat.NULL_UNIT_;
     }
@@ -1326,7 +1335,7 @@ goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
     return {
       prefix: parts[1],
       suffix: parts[3],
-      divisorBase: base - (parts[2].length - 1)
+      divisorBase: (previousNonNullBase + 1) - (parts[2].length - 1)
     };
   }
 };

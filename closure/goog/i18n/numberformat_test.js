@@ -1063,6 +1063,16 @@ function testCompactWithoutSignificant2() {
   assertEquals('1M', fmt.format(999995));
 }
 
+function testCompactFallbacks() {
+  var cdfSymbols = {COMPACT_DECIMAL_SHORT_PATTERN: {'1000': {'other': '0K'}}};
+
+  goog.i18n.CompactNumberFormatSymbols = cdfSymbols;
+  var fmt =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_LONG);
+  var str = fmt.format(220000000000000);
+  assertEquals('220,000,000,000K', str);
+}
+
 function testShowTrailingZerosWithSignificantDigits() {
   var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setSignificantDigits(2);
