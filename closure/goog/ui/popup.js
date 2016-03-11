@@ -56,9 +56,7 @@ goog.ui.Popup = function(opt_element, opt_position) {
   /**
    * Positioning helper object.
    *
-   * @type {goog.positioning.AbstractPosition|undefined}
-   * @protected
-   * @suppress {underscore|visibility}
+   * @private {goog.positioning.AbstractPosition|undefined}
    */
   this.position_ = opt_position || undefined;
   goog.ui.PopupBase.call(this, opt_element);
