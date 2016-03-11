@@ -26,13 +26,11 @@ goog.require('goog.crypt');
  * for the spec.
  *
  * @param {!goog.crypt.BlockCipher} cipher The block cipher to use.
- * @param {number=} opt_blockSize The block size of the cipher in bytes.
- *     Defaults to 16 bytes.
  * @constructor
  * @final
  * @struct
  */
-goog.crypt.Ctr = function(cipher, opt_blockSize) {
+goog.crypt.Ctr = function(cipher) {
 
   /**
    * Block cipher.
@@ -40,13 +38,6 @@ goog.crypt.Ctr = function(cipher, opt_blockSize) {
    * @private
    */
   this.cipher_ = cipher;
-
-  /**
-   * Block size in bytes.
-   * @type {number}
-   * @private
-   */
-  this.blockSize_ = opt_blockSize || 16;
 };
 
 /**
@@ -62,7 +53,7 @@ goog.crypt.Ctr = function(cipher, opt_blockSize) {
 goog.crypt.Ctr.prototype.encrypt = function(plainText, initialVector) {
 
   goog.asserts.assert(
-      initialVector.length == this.blockSize_,
+      initialVector.length == this.cipher_.BLOCK_SIZE,
       'Initial vector must be size of one block.');
 
   // Copy the IV, so it's not modified.
@@ -78,7 +69,7 @@ goog.crypt.Ctr.prototype.encrypt = function(plainText, initialVector) {
 
     plainTextBlock = goog.array.slice(
         plainText, encryptedArray.length,
-        encryptedArray.length + this.blockSize_);
+        encryptedArray.length + this.cipher_.BLOCK_SIZE);
     goog.array.extend(
         encryptedArray,
         goog.crypt.xorByteArray(
