@@ -495,6 +495,8 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
  * Callback from ChannelRequest that indicates a request has completed.
  *
  * @param {goog.net.ChannelRequest} req  The request object.
+ * @suppress {missingRequire} Cannot depend on goog.net.BrowserChannel because
+ *     it creates a circular dependency.
  */
 goog.net.BrowserTestChannel.prototype.onRequestComplete = function(req) {
   this.lastStatusCode_ = this.request_.getLastStatusCode();

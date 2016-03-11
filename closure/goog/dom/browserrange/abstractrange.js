@@ -206,6 +206,8 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange = function(
  * @param {boolean=} opt_allowPartial If not set or false, the node must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given node.
+ * @suppress {missingRequire} Cannot depend on goog.dom.browserrange because it
+ *     creates a circular dependency.
  */
 goog.dom.browserrange.AbstractRange.prototype.containsNode = function(
     node, opt_allowPartial) {

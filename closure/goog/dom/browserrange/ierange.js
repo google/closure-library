@@ -14,6 +14,8 @@
 
 /**
  * @fileoverview Definition of the IE browser specific range wrapper.
+ * @suppress {missingRequire} Cannot depend on goog.dom.browserrange because it
+ *     creates a circular dependency.
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *

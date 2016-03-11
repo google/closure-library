@@ -200,6 +200,8 @@ goog.dom.MultiRange.prototype.getContainer = function() {
 /**
  * @return {!Array<goog.dom.TextRange>} An array of sub-ranges, sorted by start
  *     point.
+ * @suppress {missingRequire} Cannot depend on goog.dom.Range because
+ *     it creates a circular dependency.
  */
 goog.dom.MultiRange.prototype.getSortedRanges = function() {
   if (!this.sortedRanges_) {
