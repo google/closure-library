@@ -25,7 +25,6 @@ goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
-goog.require('goog.string.Const');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
@@ -246,10 +245,7 @@ function testOpenWindowNoSanitization() {
   goog.window.open('', {}, mockWin);
   assertEquals('', navigatedUrl);
 
-  // TODO(user): replace with the about:blank constant once it's in.
-  goog.window.open(
-      goog.html.SafeUrl.fromConstant(goog.string.Const.from('about:blank')), {},
-      mockWin);
+  goog.window.open(goog.html.SafeUrl.ABOUT_BLANK, {}, mockWin);
   assertEquals('about:blank', navigatedUrl);
 }
 
