@@ -27,6 +27,7 @@
 goog.provide('goog.debug.FancyWindow');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');

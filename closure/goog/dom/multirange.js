@@ -29,6 +29,7 @@ goog.require('goog.dom.RangeIterator');
 goog.require('goog.dom.RangeType');
 goog.require('goog.dom.SavedRange');
 goog.require('goog.dom.TextRange');
+goog.require('goog.iter');
 goog.require('goog.iter.StopIteration');
 goog.require('goog.log');
 

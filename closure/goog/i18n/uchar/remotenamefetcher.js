@@ -34,6 +34,7 @@ goog.provide('goog.i18n.uChar.RemoteNameFetcher');
 
 goog.require('goog.Disposable');
 goog.require('goog.Uri');
+goog.require('goog.events');
 goog.require('goog.i18n.uChar');
 goog.require('goog.i18n.uChar.NameFetcher');
 goog.require('goog.log');

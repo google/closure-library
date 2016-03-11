@@ -26,11 +26,12 @@ goog.provide('goog.fx.Animation.State');
 goog.provide('goog.fx.AnimationEvent');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.events.Event');
-goog.require('goog.fx.Transition');  // Unreferenced: interface
+goog.require('goog.fx.Transition');
 goog.require('goog.fx.TransitionBase');
 goog.require('goog.fx.anim');
-goog.require('goog.fx.anim.Animated');  // Unreferenced: interface
+goog.require('goog.fx.anim.Animated');
 
 
 

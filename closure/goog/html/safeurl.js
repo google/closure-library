@@ -24,6 +24,7 @@ goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
+goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
 
