@@ -34,6 +34,7 @@ goog.require('goog.ui.MenuItemRenderer');
 /**
  * Default renderer for {@link goog.ui.SubMenu}s.  Each item has the following
  * structure:
+ *
  *    <div class="goog-submenu">
  *      ...(menuitem content)...
  *      <div class="goog-menu">

@@ -37,8 +37,8 @@ goog.require('goog.ui.registry');
 /**
  * Flat Menu Button renderer. Creates a simpler version of
  * {@link goog.ui.MenuButton} that doesn't look like a button and
- * doesn't have rounded corners. Uses just a <div> and looks more like
- * a traditional <select> element.
+ * doesn't have rounded corners. Uses just a `<div>` and looks more like
+ * a traditional `<select>` element.
  * @constructor
  * @extends {goog.ui.FlatButtonRenderer}
  */
@@ -60,6 +60,7 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
 
 /**
  * Returns the button's contents wrapped in the following DOM structure:
+ *
  *    <div class="goog-inline-block goog-flat-menu-button">
  *        <div class="goog-inline-block goog-flat-menu-button-caption">
  *          Contents...
@@ -68,6 +69,7 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
  *          &nbsp;
  *        </div>
  *    </div>
+ *
  * Overrides {@link goog.ui.FlatButtonRenderer#createDom}.
  * @param {goog.ui.Control} control Button to render.
  * @return {!Element} Root element for the button.
@@ -153,6 +155,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
 /**
  * Takes a text caption or existing DOM structure, and returns it wrapped in
  * an appropriately-styled DIV.  Creates the following DOM structure:
+ *
  *    <div class="goog-inline-block goog-flat-menu-button-caption">
  *      Contents...
  *    </div>
@@ -172,9 +175,11 @@ goog.ui.FlatMenuButtonRenderer.prototype.createCaption = function(content,
 /**
  * Returns an appropriately-styled DIV containing a dropdown arrow element.
  * Creates the following DOM structure:
+ *
  *    <div class="goog-inline-block goog-flat-menu-button-dropdown">
  *      &nbsp;
  *    </div>
+ *
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
  * @return {!Element} Dropdown element.
  */
