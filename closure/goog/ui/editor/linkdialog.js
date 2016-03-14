@@ -37,6 +37,7 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.InputHandler');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeHtmlFormatter');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
@@ -562,13 +563,17 @@ goog.ui.editor.LinkDialog.prototype.buildOpenInNewWindowDiv_ = function() {
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
+  var formatter = new goog.html.SafeHtmlFormatter();
   /** @desc Checkbox text for adding 'rel=nofollow' attribute to a link. */
   var MSG_ADD_REL_NOFOLLOW_ATTR = goog.getMsg(
       "Add '{$relNoFollow}' attribute ({$linkStart}Learn more{$linkEnd})", {
         'relNoFollow': 'rel=nofollow',
-        'linkStart': '<a href="http://support.google.com/webmasters/bin/' +
-            'answer.py?hl=en&answer=96569" target="_blank">',
-        'linkEnd': '</a>'
+        'linkStart': formatter.startTag('a', {
+          'href': 'http://support.google.com/webmasters/bin/' +
+              'answer.py?hl=en&answer=96569',
+          'target': '_blank'
+        }),
+        'linkEnd': formatter.endTag('a')
       });
 
   this.relNoFollowCheckbox_ = /** @type {!HTMLInputElement} */ (
@@ -578,7 +583,8 @@ goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
       goog.dom.TagName.DIV, null,
       this.dom.createDom(
           goog.dom.TagName.LABEL, null, this.relNoFollowCheckbox_,
-          goog.dom.htmlToDocumentFragment(MSG_ADD_REL_NOFOLLOW_ATTR)));
+          goog.dom.safeHtmlToNode(
+              formatter.format(MSG_ADD_REL_NOFOLLOW_ATTR))));
 };
 
 

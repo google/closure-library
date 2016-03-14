@@ -24,6 +24,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -895,7 +896,9 @@ function testGetCaption() {
       control.getCaption());
 
   var arrayContent = goog.array.clone(
-      goog.dom.htmlToDocumentFragment(' <b> foo</b><i>  bar</i> ').childNodes);
+      goog.dom.safeHtmlToNode(
+          goog.html.testing.newSafeHtmlForTest(
+              ' <b> foo</b><i>  bar</i> ')).childNodes);
   control.setContent(arrayContent);
   assertEquals(
       'whitespaces must be normalized in the caption', 'foo bar',

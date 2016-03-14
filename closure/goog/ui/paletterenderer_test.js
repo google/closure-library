@@ -21,6 +21,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
@@ -38,7 +39,7 @@ var palette;
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
   itemEls = goog.array.map(items, function(item, index, a) {
-    return goog.dom.htmlToDocumentFragment(item);
+    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
   });
   renderer = new goog.ui.PaletteRenderer();
   palette = new goog.ui.Palette(itemEls, renderer);
