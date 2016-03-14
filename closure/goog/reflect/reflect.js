@@ -45,7 +45,9 @@ goog.reflect.object = function(type, object) {
  *     // Force a layout
  *     goog.reflect.sinkValue(dialog.offsetHeight);
  * </code>
- * @type {!Function}
+ * @param {T} x
+ * @return {T}
+ * @template T
  */
 goog.reflect.sinkValue = function(x) {
   goog.reflect.sinkValue[' '](x);

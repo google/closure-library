@@ -174,6 +174,7 @@ goog.i18n.DateTimeFormat.PartTypes_ = {
 
 /**
  * @param {!goog.date.DateLike} date
+ * @return {number}
  * @private
  */
 goog.i18n.DateTimeFormat.getHours_ = function(date) {

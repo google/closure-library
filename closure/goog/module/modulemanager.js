@@ -1276,7 +1276,6 @@ goog.module.ModuleManager.prototype.loadNextModules_ = function() {
     // Remove modules that are already loaded.
     var nextIds = goog.array.filter(
         this.requestedModuleIdsQueue_.shift(),
-        /** @param {string} id The module id. */
         function(id) { return !this.getModuleInfo(id).isLoaded(); }, this);
     if (nextIds.length > 0) {
       this.loadModules_(nextIds);
