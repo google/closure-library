@@ -20,7 +20,6 @@
 
 
 goog.provide('goog.array');
-goog.provide('goog.array.ArrayLike');
 
 goog.require('goog.asserts');
 
@@ -49,12 +48,6 @@ goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
  * unused pure JS implementation.
  */
 goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
-
-
-/**
- * @typedef {IArrayLike<?>}
- */
-goog.array.ArrayLike;
 
 
 /**
