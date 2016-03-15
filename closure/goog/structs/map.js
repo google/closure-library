@@ -350,6 +350,47 @@ goog.structs.Map.prototype.forEach = function(f, opt_obj) {
 
 
 /**
+ * Searches the map for an element that satisfies the given condition and
+ * returns its key.
+ * @param {function(this:T,V,string,goog.structs.Map<K,V>):boolean} f The
+ *      function to call for every element. Takes 3 arguments (the value,
+ *     the key and the map) and should return a boolean.
+ * @param {T=} opt_this An optional "this" context for the function.
+ * @return {string|undefined} The key of an element for which the function
+ *     returns true or undefined if no such element is found.
+ * @template T,K,V
+ */
+goog.structs.Map.prototype.findKey = function(f, opt_this) {
+  var keys = this.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var value = this.get(key);
+    if (f.call(opt_this, value, key, this)) {
+      return key;
+    }
+  }
+  return undefined;
+};
+
+
+/**
+ * Searches the map for an element that satisfies the given condition and
+ * returns its value.
+ * @param {function(this:T,V,string,goog.structs.Map<K,V>):boolean} f The function
+ *     to call for every element. Takes 3 arguments (the value, the key
+ *     and the map) and should return a boolean.
+ * @param {T=} opt_this An optional "this" context for the function.
+ * @return {V} The value of an element for which the function returns true or
+ *     undefined if no such element is found.
+ * @template T,K,V
+ */
+goog.structs.Map.prototype.findValue = function(f, opt_this) {
+  var key = this.findKey(f, opt_this);
+  return key && this.get(key);
+};
+
+
+/**
  * Clones a map and returns a new map.
  * @return {!goog.structs.Map} A new map with the same key-value pairs.
  */
