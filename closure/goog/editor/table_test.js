@@ -49,8 +49,7 @@ function tearDown() {
 
 function tableSanityCheck(editableTable, rowCount, colCount) {
   assertEquals(
-      'Table has expected number of rows', rowCount,
-      editableTable.rows.length);
+      'Table has expected number of rows', rowCount, editableTable.rows.length);
   for (var i = 0, row; row = editableTable.rows[i]; i++) {
     assertEquals(
         'Row ' + i + ' has expected number of columns', colCount,
@@ -153,8 +152,7 @@ function testInsertRowAtBeginningRowspan() {
       'Cell has starting rowspan', 2,
       goog.dom
           .getFirstElementChild(
-              testElements.torture.getElementsByTagName(
-                  goog.dom.TagName.TR)[0])
+              testElements.torture.getElementsByTagName(goog.dom.TagName.TR)[0])
           .rowSpan);
   var tr = testObjects.torture.insertRow(0);
   // Among other things this verifies that the new row has 3 child TDs.
@@ -170,8 +168,7 @@ function testInsertRowAtEndingRowspan() {
       'Cell has ending rowspan', 4,
       goog.dom
           .getLastElementChild(
-              testElements.torture.getElementsByTagName(
-                  goog.dom.TagName.TR)[5])
+              testElements.torture.getElementsByTagName(goog.dom.TagName.TR)[5])
           .rowSpan);
   var tr = testObjects.torture.insertRow();
   // Among other things this verifies that the new row has 3 child TDs.
@@ -368,11 +365,17 @@ function _testRemoveColumn(index) {
           .getElementsByTagName(goog.dom.TagName.TH)[index]);
 }
 
-function testRemoveFirstColumn() { _testRemoveColumn(0); }
+function testRemoveFirstColumn() {
+  _testRemoveColumn(0);
+}
 
-function testRemoveMiddleColumn() { _testRemoveColumn(1); }
+function testRemoveMiddleColumn() {
+  _testRemoveColumn(1);
+}
 
-function testRemoveLastColumn() { _testRemoveColumn(2); }
+function testRemoveLastColumn() {
+  _testRemoveColumn(2);
+}
 
 function testRemoveColumnAtStartingColSpan() {
   testObjects.torture.removeColumn(0);
