@@ -172,18 +172,21 @@ function testEnterKeyOnDisabledDefaultButtonDoesNotDispatchSelectEvents() {
 
 function testEnterKeyDoesNothingOnSpecialFormElements() {
   checkEnterKeyDoesNothingOnSpecialFormElement(
-      '<textarea>Hello dialog</textarea>', 'TEXTAREA');
+      goog.html.SafeHtml.create('textarea', {}, 'Hello dialog'),
+      'TEXTAREA');
 
   checkEnterKeyDoesNothingOnSpecialFormElement(
-      '<select>Selection</select>', 'SELECT');
+      goog.html.SafeHtml.create('select', {}, 'Selection'),
+      'SELECT');
 
   checkEnterKeyDoesNothingOnSpecialFormElement(
-      '<a href="http://google.com">Hello dialog</a>', 'A');
+      goog.html.SafeHtml.create('a', {'href': 'http://google.com'},
+          'Hello dialog'),
+      'A');
 }
 
 function checkEnterKeyDoesNothingOnSpecialFormElement(content, tagName) {
-  // TODO(xtof): Switch to setSafeHtmlContent here and elsewhere.
-  dialog.setContent(content);
+  dialog.setSafeHtmlContent(content);
   var formElement = dialog.getContentElement().getElementsByTagName(tagName)[0];
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };
@@ -200,9 +203,10 @@ function checkEnterKeyDoesNothingOnSpecialFormElement(content, tagName) {
 }
 
 function testEscapeKeyDoesNothingOnSpecialFormElements() {
-  dialog.setContent(
-      '<select><option>Hello</option>' +
-      '<option>dialog</option></select>');
+  dialog.setSafeHtmlContent(goog.html.SafeHtml.create('select', {}, [
+    goog.html.SafeHtml.create('option', {}, 'Hello'),
+    goog.html.SafeHtml.create('option', {}, 'dialog')
+  ]));
   var select = dialog.getContentElement().getElementsByTagName('SELECT')[0];
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };
@@ -245,7 +249,9 @@ function testKeydownClosesWithoutButtonSet() {
   dialog.setButtonSet(null);
 
   // Create a custom button.
-  dialog.setContent('<button id="button" name="ok">OK</button>');
+  dialog.setSafeHtmlContent(goog.html.SafeHtml.create('button',
+      {'id': 'button', 'name': 'ok'},
+      'OK'));
   var wasCalled = false;
   function called() { wasCalled = true; }
   var element = goog.dom.getElement('button');
@@ -262,7 +268,9 @@ function testEnterKeyWithoutDefaultDoesNotPreventPropagation() {
   buttons.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, 'Foo!', false);
   // Set a button set without a default selected button
   dialog.setButtonSet(buttons);
-  dialog.setContent('<span id="linkel" tabindex="0">Link Span</span>');
+  dialog.setSafeHtmlContent(goog.html.SafeHtml.create('span',
+      {'id': 'linkel', 'tabindex': '0'},
+      'Link Span'));
 
   var call = false;
   function called() { call = true; }
