@@ -496,7 +496,11 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       sawExponent = true;
     } else if (ch == '+' || ch == '-') {
       normalizedText += ch;
-    } else if (ch == goog.i18n.NumberFormatSymbols.PERCENT.charAt(0)) {
+    } else if (
+        this.multiplier_ == 1 &&
+        ch == goog.i18n.NumberFormatSymbols.PERCENT.charAt(0)) {
+      // Parse the percent character as part of the number only when it's
+      // not already included in the pattern.
       if (scale != 1) {
         break;
       }
@@ -505,7 +509,11 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
         pos[0]++;  // eat this character if parse end here
         break;
       }
-    } else if (ch == goog.i18n.NumberFormatSymbols.PERMILL.charAt(0)) {
+    } else if (
+        this.multiplier_ == 1 &&
+        ch == goog.i18n.NumberFormatSymbols.PERMILL.charAt(0)) {
+      // Parse the permill character as part of the number only when it's
+      // not already included in the pattern.
       if (scale != 1) {
         break;
       }
@@ -518,6 +526,13 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       break;
     }
   }
+
+  // Scale the number when the percent/permill character was included in
+  // the pattern.
+  if (this.multiplier_ != 1) {
+    scale = this.multiplier_;
+  }
+
   return parseFloat(normalizedText) / scale;
 };
 
