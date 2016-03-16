@@ -215,12 +215,12 @@ goog.ui.Prompt.prototype.setInputDecoratorFn = function(inputDecoratorFn) {
 
 /**
  * Set the number of rows in the user input element.
- * A values of 1 means use an <input> element.  If the prompt is already
- * rendered then you cannot change from <input> to <textarea> or vice versa.
+ * A values of 1 means use an `<input>` element.  If the prompt is already
+ * rendered then you cannot change from `<input>` to `<textarea>` or vice versa.
  * @param {number} rows Number of rows for user input element.
  * @throws {goog.ui.Component.Error.ALREADY_RENDERED} If the component is
- *    already rendered and an attempt to change between <input> and <textarea>
- *    is made.
+ *    already rendered and an attempt to change between `<input>` and
+ *    `<textarea>` is made.
  */
 goog.ui.Prompt.prototype.setRows = function(rows) {
   if (this.isInDocument()) {

@@ -159,7 +159,7 @@ goog.locale.getNativeCountryName = function(countryCode) {
  * Returns the localized country name for the provided language code in the
  * current or provided locale symbols set.
  *
- * This method depends on goog.locale.LocaleNameConstants__<locale> available
+ * This method depends on `goog.locale.LocaleNameConstants__<locale>` available
  * from http://go/js_locale_data. User of this method has to add dependency to
  * this.
  *
@@ -207,7 +207,7 @@ goog.locale.getNativeLanguageName = function(languageCode) {
  * Returns the localized language name for the provided language code in
  * the current or provided locale symbols set.
  *
- * This method depends on goog.locale.LocaleNameConstants__<locale> available
+ * This method depends on `goog.locale.LocaleNameConstants__<locale>` available
  * from http://go/js_locale_data. User of this method has to add dependency to
  * this.
  *

@@ -96,7 +96,7 @@ goog.require('goog.ui.media.MediaRenderer');
  * goog.ui.media.Youtube currently supports all {@link goog.ui.Component.State}.
  * It will change its DOM structure between SELECTED and !SELECTED, and rely on
  * CSS definitions on the others. On !SELECTED, the renderer will render a
- * youtube static <img>, with a thumbnail of the video. On SELECTED, the
+ * youtube static `<img>`, with a thumbnail of the video. On SELECTED, the
  * renderer will append to the DOM a flash object, that contains the youtube
  * video.
  *
