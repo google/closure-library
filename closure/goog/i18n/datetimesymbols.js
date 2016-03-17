@@ -33,6 +33,7 @@
 
 // clang-format off
 goog.provide('goog.i18n.DateTimeSymbols');
+goog.provide('goog.i18n.DateTimeSymbolsType');
 goog.provide('goog.i18n.DateTimeSymbols_af');
 goog.provide('goog.i18n.DateTimeSymbols_am');
 goog.provide('goog.i18n.DateTimeSymbols_ar');
