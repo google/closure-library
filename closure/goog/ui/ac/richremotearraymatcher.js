@@ -23,7 +23,6 @@
 goog.provide('goog.ui.ac.RichRemoteArrayMatcher');
 
 goog.require('goog.dom');
-goog.require('goog.json');
 goog.require('goog.ui.ac.RemoteArrayMatcher');
 
 
@@ -90,8 +89,7 @@ goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows = function(
     try {
       var rows = [];
       for (var i = 0; i < matches.length; i++) {
-        var func = /** @type {!Function} */
-            (goog.json.unsafeParse(matches[i][0]));
+        var func = /** @type {!Function} */ (eval(matches[i][0]));
         for (var j = 1; j < matches[i].length; j++) {
           var richRow = func(matches[i][j]);
           rows.push(richRow);
