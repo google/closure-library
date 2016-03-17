@@ -318,19 +318,6 @@ goog.ui.AbstractSpellChecker.prototype.getSpellCheck = function() {
   return this.spellCheck;
 };
 
-
-/**
- * @return {goog.spell.SpellCheck} The handler used for caching and lookups.
- * @override
- * @suppress {checkTypes} This method makes no sense. It overrides
- *     Component's getHandler with something different.
- * @deprecated Use #getSpellCheck instead.
- */
-goog.ui.AbstractSpellChecker.prototype.getHandler = function() {
-  return this.getSpellCheck();
-};
-
-
 /**
  * Sets the spell checker used for caching and lookups.
  * @param {goog.spell.SpellCheck} spellCheck The handler used for caching and
