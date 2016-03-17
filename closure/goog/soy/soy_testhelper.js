@@ -17,7 +17,6 @@
  * @author chrishenry@google.com (Chris Henry)
  */
 
-/** @suppress {extraProvide} */
 goog.provide('goog.soy.testHelper');
 goog.setTestOnly('goog.soy.testHelper');
 
@@ -75,7 +74,7 @@ var example = {};
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
- * @param {Object<string, *>=} opt_injectedData
+ * @param {?Object<string, *>=} opt_injectedData
  * @return {string}
  */
 example.textNodeTemplate = function(data, opt_sb, opt_injectedData) {
@@ -88,7 +87,7 @@ example.textNodeTemplate = function(data, opt_sb, opt_injectedData) {
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
- * @param {Object<string, *>=} opt_injectedData
+ * @param {?Object<string, *>=} opt_injectedData
  * @return {string}
  */
 example.singleRootTemplate = function(data, opt_sb, opt_injectedData) {
@@ -101,7 +100,7 @@ example.singleRootTemplate = function(data, opt_sb, opt_injectedData) {
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
- * @param {Object<string, *>=} opt_injectedData
+ * @param {?Object<string, *>=} opt_injectedData
  * @return {string}
  */
 example.multiRootTemplate = function(data, opt_sb, opt_injectedData) {
@@ -114,7 +113,7 @@ example.multiRootTemplate = function(data, opt_sb, opt_injectedData) {
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
- * @param {Object<string, *>=} opt_injectedData
+ * @param {?Object<string, *>=} opt_injectedData
  * @return {string}
  */
 example.injectedDataTemplate = function(data, opt_sb, opt_injectedData) {
