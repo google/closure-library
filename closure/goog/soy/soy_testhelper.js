@@ -121,7 +121,7 @@ example.injectedDataTemplate = function(data, opt_sb, opt_injectedData) {
   assertNotNull(data);
   assertNotUndefined(data);
   return goog.string.htmlEscape(data.name) +
-         goog.string.htmlEscape(opt_injectedData.name);
+      goog.string.htmlEscape(opt_injectedData.name);
 };
 
 
@@ -159,8 +159,8 @@ example.sanitizedHtmlTemplate = function(data, opt_sb, opt_injectedData) {
  * @param {Object<string, *>=} opt_injectedData
  * @return {!SanitizedContentSubclass}
  */
-example.sanitizedHtmlAttributesTemplate = function(data, opt_sb,
-                                                   opt_injectedData) {
+example.sanitizedHtmlAttributesTemplate = function(
+    data, opt_sb, opt_injectedData) {
   return makeSanitizedContent(
       'foo="bar"', goog.soy.data.SanitizedContentKind.ATTRIBUTES);
 };
@@ -196,8 +196,8 @@ example.unsanitizedTextTemplate = function(data, opt_sb, opt_injectedData) {
  * @param {Object<string, *>=} opt_injectedData
  * @return {!SanitizedContentSubclass}
  */
-example.templateSpoofingSanitizedContentString = function(data, opt_sb,
-                                                          opt_injectedData) {
+example.templateSpoofingSanitizedContentString = function(
+    data, opt_sb, opt_injectedData) {
   return makeSanitizedContent(
       'Hello World',
       // This is to ensure we're using triple-equals against a unique Javascript
