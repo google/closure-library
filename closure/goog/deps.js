@@ -701,7 +701,7 @@ goog.addDependency('math/interpolator/spline1.js', ['goog.math.interpolator.Spli
 goog.addDependency('math/interpolator/spline1_test.js', ['goog.math.interpolator.Spline1Test'], ['goog.math.interpolator.Spline1', 'goog.testing.jsunit'], false);
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate'], false);
 goog.addDependency('math/line_test.js', ['goog.math.LineTest'], ['goog.math.Coordinate', 'goog.math.Line', 'goog.testing.jsunit'], false);
-goog.addDependency('math/long.js', ['goog.math.Long'], [], false);
+goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.reflect'], false);
 goog.addDependency('math/long_test.js', ['goog.math.LongTest'], ['goog.math.Long', 'goog.testing.jsunit'], false);
 goog.addDependency('math/math.js', ['goog.math'], ['goog.array', 'goog.asserts'], false);
 goog.addDependency('math/math_test.js', ['goog.mathTest'], ['goog.math', 'goog.testing.jsunit'], false);
