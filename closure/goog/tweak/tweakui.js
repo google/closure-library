@@ -466,8 +466,8 @@ goog.tweak.EntriesPanel.prototype.getRootElement = function() {
  *    <div>
  *      <a>Show Descriptions</a>
  *      <div>
- *        ...
- *        {endElement}
+ *         ...
+ *         {endElement}
  *      </div>
  *    </div>
  *

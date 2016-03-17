@@ -159,6 +159,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
  *    <div class="goog-inline-block goog-flat-menu-button-caption">
  *      Contents...
  *    </div>
+ *
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
  *     in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.

@@ -41,6 +41,7 @@ goog.require('goog.ui.MenuItemRenderer');
  *        ... (submenu content) ...
  *      </div>
  *    </div>
+ *
  * @constructor
  * @extends {goog.ui.MenuItemRenderer}
  * @final

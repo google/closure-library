@@ -34,6 +34,7 @@ goog.require('goog.ui.MenuItemRenderer');
  *        <div class="goog-tristatemenuitem-checkbox"></div>
  *        <div>...(content)...</div>
  *    </div>
+ *
  * @constructor
  * @extends {goog.ui.MenuItemRenderer}
  * @final

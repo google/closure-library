@@ -78,7 +78,7 @@ goog.require('goog.functions');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
-  /**
+/**
    * Returns nodes which match the given CSS3 selector, searching the
    * entire document by default but optionally taking a node to scope
    * the search by.

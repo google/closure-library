@@ -56,7 +56,7 @@ goog.require('goog.debug.Error');
  * Deferreds may be templated to a specific type they produce using generics
  * with syntax such as:
  *
- *    /** @type {goog.async.Deferred<string>}
+ *    /** @type {goog.async.Deferred<string>} *\
  *    var d = new goog.async.Deferred();
  *    // Compiler can infer that foo is a string.
  *    d.addCallback(function(foo) {...});

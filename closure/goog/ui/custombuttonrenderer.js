@@ -225,6 +225,7 @@ goog.ui.CustomButtonRenderer.prototype.getCssClass = function() {
  * whether to trim from the start or the end of the node list.  Empty text
  * nodes are removed, and the first non-empty text node is trimmed from the
  * left or the right as appropriate.  For example,
+ *
  *    <div class="goog-inline-block">
  *      #text ""
  *      #text "\n    Hello "
@@ -232,12 +233,15 @@ goog.ui.CustomButtonRenderer.prototype.getCssClass = function() {
  *      #text " World!    \n"
  *      #text ""
  *    </div>
+ *
  * becomes
+ *
  *    <div class="goog-inline-block">
  *      #text "Hello "
  *      <span>...</span>
  *      #text " World!"
  *    </div>
+ *
  * This is essential for Gecko, where leading/trailing whitespace messes with
  * the layout of elements with -moz-inline-box (used in goog-inline-block), and
  * optional but harmless for non-Gecko.
