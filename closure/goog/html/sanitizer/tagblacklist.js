@@ -1,0 +1,48 @@
+// Copyright 2016 The Closure Library Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+/**
+ * @fileoverview Contains the tag blacklist for use in the Html sanitizer.
+ */
+
+goog.provide('goog.html.sanitizer.TagBlacklist');
+
+
+/**
+ * A list of tags which should be removed entirely from the DOM, rather than
+ * merely being made inert. Note that even if TEMPLATE is removed from this
+ * blacklist (or even whitelisted) it will continue to be removed from the HTML
+ * as TEMPLATE is used interally to denote nodes which should not be added to
+ * the sanitized HTML.
+ * @dict {boolean}
+ */
+goog.html.sanitizer.TagBlacklist = {
+  'APPLET': true,
+  'AUDIO': true,
+  'BASE': true,
+  'BGSOUND': true,
+  'EMBED': true,
+  'IFRAME': true,   // NOTE: can remove this for old browser behavior
+  'ISINDEX': true,  // Can result in network requests
+  'KEYGEN': true,   // Unused and just unnecessarily increase attack surface
+  'LAYER': true,
+  'LINK': true,
+  'META': true,
+  'OBJECT': true,
+  'SCRIPT': true,
+  'STYLE': true,
+  'TEMPLATE': true,
+  'VIDEO': true
+};
