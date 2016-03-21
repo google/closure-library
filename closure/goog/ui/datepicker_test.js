@@ -337,6 +337,21 @@ function testUserSelectableDates() {
       picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 28)));
 }
 
+function testGetUserSelectableDateRange() {
+  picker = new goog.ui.DatePicker();
+  var dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'default date range is all time',
+      goog.date.DateRange.equals(dateRange, goog.date.DateRange.allTime()));
+  var newDateRange = new goog.date.DateRange(
+      new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
+  picker.setUserSelectableDateRange(newDateRange);
+  dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'should be equal to updated date range',
+      goog.date.DateRange.equals(dateRange, newDateRange));
+}
+
 function testUniqueCellIds() {
   picker = new goog.ui.DatePicker();
   picker.render();

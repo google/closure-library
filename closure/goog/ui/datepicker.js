@@ -200,7 +200,7 @@ goog.ui.DatePicker.prototype.showOtherMonths_ = true;
 
 /**
  * Range of dates which are selectable by the user.
- * @type {goog.date.DateRange}
+ * @type {!goog.date.DateRange}
  * @private
  */
 goog.ui.DatePicker.prototype.userSelectableDateRange_ =
@@ -487,7 +487,7 @@ goog.ui.DatePicker.prototype.setShowOtherMonths = function(b) {
 /**
  * Sets the range of dates which may be selected by the user.
  *
- * @param {goog.date.DateRange} dateRange The range of selectable dates.
+ * @param {!goog.date.DateRange} dateRange The range of selectable dates.
  */
 goog.ui.DatePicker.prototype.setUserSelectableDateRange = function(dateRange) {
   this.userSelectableDateRange_ = dateRange;
@@ -495,9 +495,19 @@ goog.ui.DatePicker.prototype.setUserSelectableDateRange = function(dateRange) {
 
 
 /**
+ * Gets the range of dates which may be selected by the user.
+ *
+ * @return {!goog.date.DateRange} The range of selectable dates.
+ */
+goog.ui.DatePicker.prototype.getUserSelectableDateRange = function() {
+  return this.userSelectableDateRange_;
+};
+
+
+/**
  * Determine if a date may be selected by the user.
  *
- * @param {goog.date.Date} date The date to be tested.
+ * @param {!goog.date.Date} date The date to be tested.
  * @return {boolean} Whether the user may select this date.
  * @private
  */
