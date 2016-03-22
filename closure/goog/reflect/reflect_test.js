@@ -23,6 +23,7 @@ goog.require('goog.testing.jsunit');
 
 /**
  * @param {number} key
+ * @return {number}
  */
 var doubleFn = function(key) {
   return key * 2;
@@ -30,6 +31,7 @@ var doubleFn = function(key) {
 
 /**
  * @param {number} key
+ * @return {number}
  */
 var tripleFn = function(key) {
   return key * 3;
@@ -40,6 +42,14 @@ var tripleFn = function(key) {
  */
 var throwsFn = function(key) {
   throw new Error("Shouldn't be called.");
+};
+
+/**
+ * @param {string} key
+ * @return {string}
+ */
+var passthroughFn = function(key) {
+  return key;
 };
 
 function testCache() {
@@ -53,6 +63,13 @@ function testCache() {
   assertEquals(2, goog.reflect.cache(cacheObj, 1, throwsFn));
   assertEquals(2, cacheObj[1]);
   assertEquals(1, goog.object.getCount(cacheObj));
+
+  // Ensure cache works with all string keys.
+  assertEquals(
+      'toString', goog.reflect.cache(cacheObj, 'toString', passthroughFn));
+  assertEquals('toString', goog.reflect.cache(cacheObj, 'toString', throwsFn));
+  // Not checking count as it is not correct for IE8 (doesn't enumerate
+  // toString).
 }
 
 function testCache_keyFn() {
