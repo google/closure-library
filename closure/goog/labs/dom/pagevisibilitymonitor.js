@@ -87,8 +87,10 @@ goog.inherits(dom.PageVisibilityMonitor, goog.events.EventTarget);
  */
 dom.PageVisibilityMonitor.prototype.getBrowserEventType_ =
     goog.memoize(function() {
-      var isSupported = this.isSupported();
-      var isPrefixed = this.isPrefixed_();
+      var isSupported =
+          /** @type {!dom.PageVisibilityMonitor} */ (this).isSupported();
+      var isPrefixed =
+          /** @type {!dom.PageVisibilityMonitor} */ (this).isPrefixed_();
 
       if (isSupported) {
         return isPrefixed ?
@@ -109,7 +111,9 @@ dom.PageVisibilityMonitor.prototype.getBrowserEventType_ =
 dom.PageVisibilityMonitor.prototype.getHiddenPropertyName_ =
     goog.memoize(function() {
       return goog.dom.vendor.getPrefixedPropertyName(
-          'hidden', this.domHelper_.getDocument());
+          'hidden',
+          /** @type {!dom.PageVisibilityMonitor} */
+          (this).domHelper_.getDocument());
     });
 
 
@@ -130,7 +134,9 @@ dom.PageVisibilityMonitor.prototype.isPrefixed_ = function() {
 dom.PageVisibilityMonitor.prototype.getVisibilityStatePropertyName_ =
     goog.memoize(function() {
       return goog.dom.vendor.getPrefixedPropertyName(
-          'visibilityState', this.domHelper_.getDocument());
+          'visibilityState',
+          /** @type {!dom.PageVisibilityMonitor} */
+          (this).domHelper_.getDocument());
     });
 
 
