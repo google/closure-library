@@ -906,9 +906,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // synchronous XHRs, put each load in its own script block.
     var bootstrap = 'goog.retrieveAndExecModule_("' + src + '");';
 
-    if (goog.importScript_('', bootstrap)) {
-      goog.dependencies_.written[src] = true;
-    }
+    goog.importScript_('', bootstrap);
   };
 
 
