@@ -232,7 +232,7 @@ function testVerifyForObjects() {
 
   assertEquals(5, mockObj.method1(2));
   goog.labs.mock.verify(mockObj).method1(2);
-  var e = assertThrows(goog.bind(goog.labs.mock.verify(mockObj).method1, 2));
+  var e = assertThrows(goog.partial(goog.labs.mock.verify(mockObj).method2, 2));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
@@ -245,7 +245,7 @@ function testVerifyForFunctions() {
   goog.labs.mock.verify(mockFunc)(2);
   goog.labs.mock.verify(mockFunc)(lessThan(3));
 
-  var e = assertThrows(goog.bind(goog.labs.mock.verify(mockFunc), 3));
+  var e = assertThrows(goog.partial(goog.labs.mock.verify(mockFunc), 3));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
@@ -363,8 +363,8 @@ function testMatcherVerify() {
   spy.method(6);
 
   goog.labs.mock.verify(spy).method(greaterThan(4));
-  var e =
-      assertThrows(goog.bind(goog.labs.mock.verify(spy).method, lessThan(4)));
+  var e = assertThrows(
+      goog.partial(goog.labs.mock.verify(spy).method, lessThan(4)));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 
   // Using mocks
@@ -374,7 +374,7 @@ function testMatcherVerify() {
 
   goog.labs.mock.verify(mockObj).method(greaterThan(7));
   var e = assertThrows(
-      goog.bind(goog.labs.mock.verify(mockObj).method, lessThan(7)));
+      goog.partial(goog.labs.mock.verify(mockObj).method, lessThan(7)));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
@@ -393,7 +393,7 @@ function testMatcherVerifyCollisionBetweenMatchers() {
   goog.labs.mock.when(mockObj).method(anything()).thenReturn(100);
 
   var e = assertThrows(
-      goog.bind(goog.labs.mock.verify(mockObj).method, anything()));
+      goog.partial(goog.labs.mock.verify(mockObj).method, anything()));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
