@@ -176,7 +176,6 @@ goog.i18n.DateTimeSymbols_en_ISO = {
   TIMEFORMATS: ['HH:mm:ss v', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
   DATETIMEFORMATS: ['{1} \'at\' {0}', '{1} \'at\' {0}',
     '{1}, {0}', '{1}, {0}'],
-  AVAILABLEFORMATS: {'Md': 'M/d', 'MMMMd': 'MMMM d', 'MMMd': 'MMM d'},
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
@@ -4575,37 +4574,87 @@ goog.i18n.DateTimeSymbols_zu = {
 };
 
 /**
- * @typedef {{
- *   ERAS,
- *   ERANAMES,
- *   NARROWMONTHS,
- *   STANDALONENARROWMONTHS,
- *   MONTHS,
- *   STANDALONEMONTHS,
- *   SHORTMONTHS,
- *   STANDALONESHORTMONTHS,
- *   WEEKDAYS,
- *   STANDALONEWEEKDAYS,
- *   SHORTWEEKDAYS,
- *   STANDALONESHORTWEEKDAYS,
- *   NARROWWEEKDAYS,
- *   STANDALONENARROWWEEKDAYS,
- *   SHORTQUARTERS,
- *   QUARTERS,
- *   AMPMS,
- *   DATEFORMATS,
- *   TIMEFORMATS,
- *   DATETIMEFORMATS,
- *   FIRSTDAYOFWEEK,
- *   WEEKENDRANGE,
- *   FIRSTWEEKCUTOFFDAY
- * }}
+ * @record
+ * @struct
  */
-goog.i18n.DateTimeSymbolsType;
+goog.i18n.DateTimeSymbolsType = function() {};
 
-// The type of goog.i18n.DateTimeSymbols should be
-// goog.i18n.DateTimeSymbolsType, but doing that requires fixing projects that
-// are using the wrong type.
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.ERAS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.ERANAMES;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.NARROWMONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONENARROWMONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.MONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONEMONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.SHORTMONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONESHORTMONTHS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.WEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.SHORTWEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONESHORTWEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONEWEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.NARROWWEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.STANDALONENARROWWEEKDAYS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.SHORTQUARTERS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.QUARTERS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.AMPMS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.DATEFORMATS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.TIMEFORMATS;
+
+/** @type {!Array<string>} */
+goog.i18n.DateTimeSymbolsType.prototype.DATETIMEFORMATS;
+
+/** @type {number|undefined} */
+goog.i18n.DateTimeSymbolsType.prototype.ZERODIGIT;
+
+/** @type {number} */
+goog.i18n.DateTimeSymbolsType.prototype.FIRSTDAYOFWEEK;
+
+/** @type {!Array<number>} */
+goog.i18n.DateTimeSymbolsType.prototype.WEEKENDRANGE;
+
+/** @type {number} */
+goog.i18n.DateTimeSymbolsType.prototype.FIRSTWEEKCUTOFFDAY;
+
+
+
+/** @type {!goog.i18n.DateTimeSymbolsType} */
+goog.i18n.DateTimeSymbols;
 
 /**
  * Selected date/time formatting symbols by locale.
