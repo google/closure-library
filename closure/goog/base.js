@@ -2008,6 +2008,15 @@ goog.cssNameMappingStyle_;
 
 
 /**
+ * @define {string} CSS_CLASS_SPLITTER is provided as a splitter for splitting
+ * css class name. Developers can easily define the customized splitter by
+ * using --define goog.CSS_CLASS_SPLITTER=_ (Any single valid character you want).
+ * You can get the usage of this specific character in function
+ * <code>goog.getCssName</code>
+ */
+goog.define('goog.CSS_CLASS_SPLITTER', '-');
+
+/**
  * Handles strings that are intended to be used as CSS class names.
  *
  * This function works in tandem with @see goog.setCssNameMapping.
@@ -2045,12 +2054,12 @@ goog.getCssName = function(className, opt_modifier) {
 
   var renameByParts = function(cssName) {
     // Remap all the parts individually.
-    var parts = cssName.split('-');
+    var parts = cssName.split(goog.CSS_CLASS_SPLITTER);
     var mapped = [];
     for (var i = 0; i < parts.length; i++) {
       mapped.push(getMapping(parts[i]));
     }
-    return mapped.join('-');
+    return mapped.join(goog.CSS_CLASS_SPLITTER);
   };
 
   var rename;
@@ -2062,7 +2071,7 @@ goog.getCssName = function(className, opt_modifier) {
   }
 
   if (opt_modifier) {
-    return className + '-' + rename(opt_modifier);
+    return className + goog.CSS_CLASS_SPLITTER + rename(opt_modifier);
   } else {
     return rename(className);
   }
