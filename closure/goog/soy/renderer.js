@@ -41,6 +41,7 @@ goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
+goog.require('goog.string.Const');
 
 
 
