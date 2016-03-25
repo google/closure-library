@@ -211,6 +211,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange = function(
  */
 goog.dom.browserrange.AbstractRange.prototype.containsNode = function(
     node, opt_allowPartial) {
+  /** @suppress {missingRequire} Circular dep with browserrange */
   return this.containsRange(
       goog.dom.browserrange.createRangeFromNodeContents(node),
       opt_allowPartial);

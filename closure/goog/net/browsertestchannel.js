@@ -556,6 +556,7 @@ goog.net.BrowserTestChannel.prototype.onRequestComplete = function(req) {
       this.channel_.testConnectionFinished(this, true);
     } else {
       this.channelDebug_.debug('Test connection failed; not using streaming');
+      /** @suppress {missingRequire} Circular dep */
       goog.net.BrowserChannel.notifyStatEvent(
           goog.net.BrowserChannel.Stat.PROXY);
       this.channel_.testConnectionFinished(this, false);
