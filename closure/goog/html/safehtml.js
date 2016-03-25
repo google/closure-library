@@ -877,7 +877,7 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
     }
   }
   return result;
-}
+};
 
 
 /**

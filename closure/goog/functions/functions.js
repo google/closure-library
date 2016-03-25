@@ -84,7 +84,7 @@ goog.functions.error = function(message) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.fail = function(err) {
-  return function() { throw err; }
+  return function() { throw err; };
 };
 
 
@@ -343,7 +343,7 @@ goog.functions.cacheReturnValue = function(fn) {
     }
 
     return value;
-  }
+  };
 };
 
 
