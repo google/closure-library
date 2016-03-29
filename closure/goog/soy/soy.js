@@ -44,7 +44,7 @@ goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
- * @typedef {function(?Object<string, *>=, null=, ?Object<string, *>=):
+ * @typedef {function(?, null=, ?Object<string, *>=):
  *     !goog.soy.data.SanitizedContent}
  */
 goog.soy.StrictTemplate;
