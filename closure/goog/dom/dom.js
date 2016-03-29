@@ -40,7 +40,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -878,7 +877,8 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
 
 
 /**
- * Converts HTML markup into a node.
+ * Converts HTML markup into a node. This is a safe version of
+ * {@code goog.dom.htmlToDocumentFragment} which is now deleted.
  * @param {!goog.html.SafeHtml} html The HTML markup to convert.
  * @return {!Node} The resulting node.
  */
@@ -904,27 +904,6 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
     goog.dom.safe.setInnerHtml(tempDiv, html);
   }
   return goog.dom.childrenToNode_(doc, tempDiv);
-};
-
-
-/**
- * Converts an HTML string into a document fragment. The string must be
- * sanitized in order to avoid cross-site scripting. For example
- * {@code goog.dom.htmlToDocumentFragment('&lt;img src=x onerror=alert(0)&gt;')}
- * triggers an alert in all browsers, even if the returned document fragment
- * is thrown away immediately.
- *
- * NOTE: This method doesn't work if your htmlString contains elements that
- * can't be contained in a <div>. For example, <tr>.
- *
- * @param {string} htmlString The HTML string to convert.
- * @return {!Node} The resulting document fragment.
- * @deprecated Use {@link goog.dom.safeHtmlToNode} instead.
- */
-goog.dom.htmlToDocumentFragment = function(htmlString) {
-  return goog.dom.safeHtmlToNode_(document,
-      // For now, we are blindly trusting that the HTML is safe.
-      goog.html.legacyconversions.safeHtmlFromString(htmlString));
 };
 
 
@@ -2503,28 +2482,14 @@ goog.dom.DomHelper.prototype.createTable = function(
 /**
  * Converts an HTML into a node or a document fragment. A single Node is used if
  * {@code html} only generates a single node. If {@code html} generates multiple
- * nodes then these are put inside a {@code DocumentFragment}.
+ * nodes then these are put inside a {@code DocumentFragment}. This is a safe
+ * version of {@code goog.dom.DomHelper#htmlToDocumentFragment} which is now
+ * deleted.
  * @param {!goog.html.SafeHtml} html The HTML markup to convert.
  * @return {!Node} The resulting node.
  */
 goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
   return goog.dom.safeHtmlToNode_(this.document_, html);
-};
-
-
-/**
- * Converts an HTML string into a node or a document fragment.  A single Node
- * is used if the {@code htmlString} only generates a single node.  If the
- * {@code htmlString} generates multiple nodes then these are put inside a
- * {@code DocumentFragment}.
- *
- * @param {string} htmlString The HTML string to convert.
- * @return {!Node} The resulting node.
- * @deprecated Use {@link goog.dom.DomHelper.prototype.safeHtmlToNode} instead.
- */
-goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
-  return goog.dom.safeHtmlToNode_(this.document_,
-      goog.html.legacyconversions.safeHtmlFromString(htmlString));
 };
 
 

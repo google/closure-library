@@ -878,12 +878,12 @@ function testGetChildren() {
 }
 
 function testGetNextNode() {
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
 
   assertNull(goog.dom.getNextNode(null));
 
@@ -907,12 +907,12 @@ function testGetNextNode() {
 }
 
 function testGetPreviousNode() {
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
 
   assertNull(goog.dom.getPreviousNode(null));
 
@@ -1534,28 +1534,6 @@ function testSafeHtmlToNode() {
   }
 }
 
-function testHtmlToDocumentFragment() {
-  var docFragment = goog.dom.htmlToDocumentFragment('<a>1</a><b>2</b>');
-  assertNull(docFragment.parentNode);
-  assertEquals(2, docFragment.childNodes.length);
-
-  var div = goog.dom.htmlToDocumentFragment('<div>3</div>');
-  assertEquals(goog.dom.TagName.DIV, div.tagName);
-
-  var script = goog.dom.htmlToDocumentFragment('<script></script>');
-  assertEquals(goog.dom.TagName.SCRIPT, script.tagName);
-
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
-    // Removing an Element from a DOM tree in IE sets its parentNode to a new
-    // DocumentFragment. Bizarre!
-    assertEquals(
-        goog.dom.NodeType.DOCUMENT_FRAGMENT,
-        goog.dom.removeNode(div).parentNode.nodeType);
-  } else {
-    assertNull(div.parentNode);
-  }
-}
-
 function testAppend() {
   var div = document.createElement(goog.dom.TagName.DIV);
   var b = document.createElement(goog.dom.TagName.B);
@@ -1680,12 +1658,12 @@ function testParentElement() {
   var documentNotAnElement = goog.dom.getParentElement(htmlEl);
   assertNull(documentNotAnElement);
 
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
   assertNull(goog.dom.getParentElement(tree));
   pEl = goog.dom.getNextNode(tree);
   var fragmentRootEl = goog.dom.getParentElement(pEl);
