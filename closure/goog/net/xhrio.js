@@ -40,10 +40,6 @@
  * progress event. Additionally, a DOWNLOAD_PROGRESS or UPLOAD_PROGRESS event
  * will be fired for download and upload progress respectively.
  *
- * Tested = IE6, FF1.5, Safari, Opera 8.5
- *
- * TODO(user): Error cases aren't playing nicely in Safari.
- *
  */
 
 
