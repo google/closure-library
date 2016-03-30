@@ -21,7 +21,6 @@
 
 goog.provide('goog.math.Long');
 
-goog.require('goog.asserts');
 goog.require('goog.reflect');
 
 
@@ -85,17 +84,6 @@ goog.math.Long.IntCache_ = {};
  */
 goog.math.Long.valueCache_ = {};
 
-/**
- * Returns a cached long number representing the given (32-bit) integer value.
- * @param {number} value The 32-bit integer in question.
- * @return {!goog.math.Long} The corresponding Long value.
- * @private
- */
-goog.math.Long.getCachedIntValue_ = function(value) {
-  return goog.reflect.cache(goog.math.Long.IntCache_, value, function(val) {
-    return new goog.math.Long(val, val < 0 ? -1 : 0);
-  });
-};
 
 /**
  * Returns a Long representing the given (32-bit) integer value.
@@ -103,13 +91,12 @@ goog.math.Long.getCachedIntValue_ = function(value) {
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromInt = function(value) {
-  var intValue = value | 0;
-  goog.asserts.assert(value === intValue, 'value should be a 32-bit integer');
-
-  if (-128 <= intValue && intValue < 128) {
-    return goog.math.Long.getCachedIntValue_(intValue);
+  if (-128 <= value && value < 128) {
+    return goog.reflect.cache(goog.math.Long.IntCache_, value, function(val) {
+      return new goog.math.Long(val | 0, val < 0 ? -1 : 0);
+    });
   } else {
-    return new goog.math.Long(intValue, intValue < 0 ? -1 : 0);
+    return new goog.math.Long(value | 0, value < 0 ? -1 : 0);
   }
 };
 
@@ -233,7 +220,9 @@ goog.math.Long.TWO_PWR_63_DBL_ = goog.math.Long.TWO_PWR_64_DBL_ / 2;
  * @public
  */
 goog.math.Long.getZero = function() {
-  return goog.math.Long.getCachedIntValue_(0);
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.ZERO,
+      function() { return goog.math.Long.fromInt(0); });
 };
 
 
@@ -242,7 +231,9 @@ goog.math.Long.getZero = function() {
  * @public
  */
 goog.math.Long.getOne = function() {
-  return goog.math.Long.getCachedIntValue_(1);
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.ONE,
+      function() { return goog.math.Long.fromInt(1); });
 };
 
 
@@ -251,7 +242,9 @@ goog.math.Long.getOne = function() {
  * @public
  */
 goog.math.Long.getNegOne = function() {
-  return goog.math.Long.getCachedIntValue_(-1);
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.NEG_ONE,
+      function() { return goog.math.Long.fromInt(-1); });
 };
 
 
@@ -842,5 +835,8 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
 goog.math.Long.ValueCacheId_ = {
   MAX_VALUE: 1,
   MIN_VALUE: 2,
+  ZERO: 3,
+  ONE: 4,
+  NEG_ONE: 5,
   TWO_PWR_24: 6
 };
