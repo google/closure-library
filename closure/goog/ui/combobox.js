@@ -695,7 +695,6 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
 goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
   if (!goog.dom.contains(
           this.menu_.getElement(), /** @type {Node} */ (e.target))) {
-    goog.log.info(this.logger_, 'onDocClicked_() - dismissing immediately');
     this.dismiss();
   }
 };
