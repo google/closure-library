@@ -145,20 +145,26 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
     } else {
       // We must be in Key == NAME mode to lookup by name.
       goog.asserts.assert(
-          this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME);
+          this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME,
+          'Key mode ' + this.keyOption_ + 'for key ' + key + ' is not ' +
+              goog.proto2.ObjectSerializer.KeyOption.NAME);
 
       field = descriptor.findFieldByName(key);
     }
 
     if (field) {
       if (field.isRepeated()) {
-        goog.asserts.assert(goog.isArray(value));
+        goog.asserts.assert(
+            goog.isArray(value),
+            'Value for repeated field ' + field + ' must be an array.');
 
         for (var j = 0; j < value.length; j++) {
           message.add(field, this.getDeserializedValue(field, value[j]));
         }
       } else {
-        goog.asserts.assert(!goog.isArray(value));
+        goog.asserts.assert(
+            !goog.isArray(value),
+            'Value for non-repeated field ' + field + ' must not be an array.');
         message.set(field, this.getDeserializedValue(field, value));
       }
     } else {

@@ -139,7 +139,10 @@ goog.proto2.Message.prototype.initializeForLazyDeserializer = function(
 goog.proto2.Message.prototype.setUnknown = function(tag, value) {
   goog.asserts.assert(
       !this.fields_[tag], 'Field is not unknown in this message');
-  goog.asserts.assert(tag >= 1, 'Tag is not valid');
+  goog.asserts.assert(
+      tag >= 1, 'Tag ' + tag + ' has value "' + value + '" in descriptor ' +
+          this.getDescriptor().getName());
+
   goog.asserts.assert(value !== null, 'Value cannot be null');
 
   this.values_[tag] = value;
