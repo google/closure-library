@@ -1383,6 +1383,25 @@ function testDefineClass_unsealable() {
   assertEquals('bar', der.foo);
 }
 
+function testDefineClass_constructorIsNotWrappedWhenSealingIsDisabled() {
+  stubs.replace(goog.defineClass, 'SEAL_CLASS_INSTANCES', false);
+  var ctr = function() {};
+  var MyClass = goog.defineClass(null, {constructor: ctr});
+  assertEquals('The constructor should not be wrapped.', ctr, MyClass);
+}
+
+function testDefineClass_unsealableConstructorIsWrapped() {
+  var LegacyBase = function() {};
+  LegacyBase.prototype.foo = null;
+  LegacyBase.prototype.setFoo = function(foo) { this.foo = foo; };
+  goog.tagUnsealableClass(LegacyBase);
+
+  var ctr = function() {};
+  var Derived = goog.defineClass(LegacyBase, {constructor: ctr});
+
+  assertNotEquals('The constructor should be wrapped.', ctr, Derived);
+}
+
 // Validate the behavior of goog.module when used from traditional files.
 function testGoogModuleGet() {
   // assert that goog.module doesn't modify the global namespace
