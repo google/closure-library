@@ -212,7 +212,7 @@ goog.module.ModuleLoader.prototype.evaluateCode_ = function(moduleIds) {
     if (this.usingSourceUrlInjection_()) {
       for (var i = 0; i < uris.length; i++) {
         var uri = uris[i];
-        goog.globalEval(texts[i] + ' //@ sourceURL=' + uri);
+        goog.globalEval(texts[i] + ' //# sourceURL=' + uri);
       }
     } else {
       goog.globalEval(texts.join('\n'));
