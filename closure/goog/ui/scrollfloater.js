@@ -523,7 +523,7 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
       elem.style.bottom = 'auto';
     } else {
       elem.style.top = 'auto';
-      elem.style.bottom = 0;
+      elem.style.bottom = '0';
     }
   }
 
