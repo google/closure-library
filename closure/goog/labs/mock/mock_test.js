@@ -116,7 +116,7 @@ function testBasicStubbing() {
   assertUndefined(mockObj.method1(4));
 
   goog.labs.mock.when(mockObj).method2(1, 'hi').then(function(i) {
-    return 'oh'
+    return 'oh';
   });
   assertEquals('hi', obj.method2(1, 'hi'));
   assertEquals('oh', mockObj.method2(1, 'hi'));
@@ -145,8 +145,7 @@ function testStubbingConsecutiveCalls() {
   var obj = {method: function(i) { return i * 42; }};
 
   var mockObj = goog.labs.mock.mock(obj);
-  goog.labs.mock.when(mockObj).method(1).thenReturn(3);
-  goog.labs.mock.when(mockObj).method(1).thenReturn(4);
+  goog.labs.mock.when(mockObj).method(1).thenReturn(3).thenReturn(4);
 
   assertEquals(42, obj.method(1));
   assertEquals(3, mockObj.method(1));
@@ -155,13 +154,56 @@ function testStubbingConsecutiveCalls() {
 
   var x = function(i) { return i; };
   var mockedFunc = goog.labs.mock.mockFunction(x);
-  goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
-  goog.labs.mock.when(mockedFunc)(100).thenReturn(25);
+  goog.labs.mock.when(mockedFunc)(100).thenReturn(10).thenReturn(25);
 
   assertEquals(100, x(100));
   assertEquals(10, mockedFunc(100));
   assertEquals(25, mockedFunc(100));
   assertEquals(25, mockedFunc(100));
+}
+
+function testStubbingMultipleObjectStubsNonConflictingArgsAllShouldWork() {
+  var obj = {method: function(i) { return i * 2; }};
+  var mockObj = goog.labs.mock.mock(obj);
+
+  goog.labs.mock.when(mockObj).method(2).thenReturn(100);
+  goog.labs.mock.when(mockObj).method(5).thenReturn(45);
+
+  assertEquals(100, mockObj.method(2));
+  assertEquals(45, mockObj.method(5));
+}
+
+function
+testStubbingMultipleObjectStubsConflictingArgsMostRecentShouldPrevail() {
+  var obj = {method: function(i) { return i * 2; }};
+  var mockObj = goog.labs.mock.mock(obj);
+
+  goog.labs.mock.when(mockObj).method(2).thenReturn(100);
+  goog.labs.mock.when(mockObj).method(2).thenReturn(45);
+
+  assertEquals(45, mockObj.method(2));
+}
+
+function testStubbingMultipleFunctionStubsNonConflictingArgsAllShouldWork() {
+  var x = function(i) { return i; };
+  var mockedFunc = goog.labs.mock.mockFunction(x);
+
+  goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
+  goog.labs.mock.when(mockedFunc)(10).thenReturn(132);
+
+  assertEquals(10, mockedFunc(100));
+  assertEquals(132, mockedFunc(10));
+}
+
+function
+testStubbingMultipleFunctionStubsConflictingArgsMostRecentShouldPrevail() {
+  var x = function(i) { return i; };
+  var mockedFunc = goog.labs.mock.mockFunction(x);
+
+  goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
+  goog.labs.mock.when(mockedFunc)(100).thenReturn(132);
+
+  assertEquals(132, mockedFunc(100));
 }
 
 function testSpying() {
