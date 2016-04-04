@@ -143,8 +143,8 @@ xpcdemo.initCommon_ = function() {
   });
 
   // Register services.
-  // The functions will only recieve strings but takes an optional third
-  // parameter that causes the function to recieve an Object to cast to the
+  // The functions will only receive strings but takes an optional third
+  // parameter that causes the function to receive an Object to cast to the
   // expected type, but it would be better to change the API or add
   // overload support to the compiler.
   xpcdemo.channel.registerService(

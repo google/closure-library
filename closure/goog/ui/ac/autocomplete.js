@@ -125,7 +125,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * Id of the first row in autocomplete menu. Note that new ids are assigned
-   * everytime new suggestions are fetched.
+   * every time new suggestions are fetched.
    *
    * TODO(chrishenry): Figure out what subclass does with this value
    * and whether we should expose a more proper API.

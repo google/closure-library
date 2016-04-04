@@ -151,7 +151,7 @@ goog.dom.Range.clearSelection = function(opt_win) {
     return;
   }
   if (sel.empty) {
-    // We can't just check that the selection is empty, becuase IE
+    // We can't just check that the selection is empty, because IE
     // sometimes gets confused.
     try {
       sel.empty();

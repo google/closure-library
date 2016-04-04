@@ -1053,7 +1053,7 @@ goog.net.XhrIo.prototype.getStatus = function() {
 goog.net.XhrIo.prototype.getStatusText = function() {
   /**
    * IE doesn't like you checking status until the readystate is greater than 2
-   * (i.e. it is recieving or complete).  The try/catch is used for when the
+   * (i.e. it is receiving or complete).  The try/catch is used for when the
    * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
    * @preserveTry
    */

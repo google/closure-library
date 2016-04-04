@@ -96,7 +96,7 @@ function testPassWithTestRunner() {
     return testCompleteDeferred;
   });
   deferredCallbackOnPass.addCallback(function() {
-    assertTrue('Test case should have succeded.', testTestCase.isSuccess());
+    assertTrue('Test case should have succeeded.', testTestCase.isSuccess());
   });
 
   deferredTestCase.waitForDeferred(deferredCallbackOnPass);

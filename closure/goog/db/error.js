@@ -33,7 +33,7 @@ goog.require('goog.debug.Error');
  *
  * @param {number|!DOMError} error The DOMError instance returned by the
  *     browser for Chrome22+, or an error code for previous versions.
- * @param {string} context A description of where the error occured.
+ * @param {string} context A description of where the error occurred.
  * @param {string=} opt_message Additional message.
  * @constructor
  * @extends {goog.debug.Error}

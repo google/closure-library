@@ -470,7 +470,7 @@ function testHslDistance() {
       hslDistance <= 0.02);
   hslDistance = goog.color.hslDistance(whiteHsl, redHsl);
   assertTrue(
-      'The HSL distance betwen white and red is > 0.02.', hslDistance > 0.02);
+      'The HSL distance between white and red is > 0.02.', hslDistance > 0.02);
   hslDistance = goog.color.hslDistance(navyHsl, aliceBlueHsl);
   assertTrue(
       'The HSL distance between navy and alice blue is > 0.02.',

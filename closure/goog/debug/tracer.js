@@ -321,7 +321,7 @@ goog.debug.Trace_.prototype.setStartTime = function(startTime) {
 /**
  * Initializes and resets the current trace
  * @param {number} defaultThreshold The default threshold below which the
- * tracer output will be supressed. Can be overridden on a per-Tracer basis.
+ * tracer output will be suppressed. Can be overridden on a per-Tracer basis.
  */
 goog.debug.Trace_.prototype.initCurrentTrace = function(defaultThreshold) {
   this.reset(defaultThreshold);
@@ -339,7 +339,7 @@ goog.debug.Trace_.prototype.clearCurrentTrace = function() {
 /**
  * Resets the trace.
  * @param {number} defaultThreshold The default threshold below which the
- * tracer output will be supressed. Can be overridden on a per-Tracer basis.
+ * tracer output will be suppressed. Can be overridden on a per-Tracer basis.
  */
 goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
   this.defaultThreshold_ = defaultThreshold;

@@ -36,7 +36,7 @@ goog.require('goog.testing.mockmatchers');
  *     different from {@code opt_window} when mocking a field that uses an
  *     iframe. Defaults to {@code opt_window}.
  * @param {goog.dom.AbstractRange=} opt_range An object (mock or real) to be
- *     returned by getRange(). If ommitted, a new goog.dom.Range is created
+ *     returned by getRange(). If omitted, a new goog.dom.Range is created
  *     from the window every time getRange() is called.
  * @constructor
  * @extends {goog.testing.LooseMock}

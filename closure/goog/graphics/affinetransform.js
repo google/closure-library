@@ -407,7 +407,7 @@ goog.graphics.AffineTransform.prototype.preConcatenate = function(tx) {
  *     point pairs.
  * @param {number} dstOff The offset of the location of the first transformed
  *     point in the destination array.
- * @param {number} numPts The number of points to tranform.
+ * @param {number} numPts The number of points to transform.
  */
 goog.graphics.AffineTransform.prototype.transform = function(
     src, srcOff, dst, dstOff, numPts) {

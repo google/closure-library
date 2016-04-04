@@ -573,7 +573,7 @@ goog.ui.ComboBox.prototype.setupMenu_ = function() {
 
 /**
  * Shows the menu if it isn't already showing.  Also positions the menu
- * correctly, resets the menu item visibilities and highlights the relevent
+ * correctly, resets the menu item visibilities and highlights the relevant
  * item.
  * @param {boolean} showAll Whether to show all items, with the first matching
  *     item highlighted.

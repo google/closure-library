@@ -609,7 +609,7 @@ goog.style.getContainerOffsetToScrollInto = function(
     var relY = elementPos.y - container.scrollTop;
     if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
       // In older versions of IE getPageOffset(element) does not include the
-      // container border so it has to be added to accomodate.
+      // container border so it has to be added to accommodate.
       relX += containerBorder.left;
       relY += containerBorder.top;
     }

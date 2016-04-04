@@ -1621,7 +1621,7 @@ function testDefaultToScrollingElement() {
   var dh = new goog.dom.DomHelper(fakeDocument);
 
   // When scrollingElement isn't supported or is null (no element causes
-  // scrolling), then behavior is UA-dependant for maximum compatibility.
+  // scrolling), then behavior is UA-dependent for maximum compatibility.
   assertTrue(
       dh.getDocumentScrollElement() == fakeDocument.body ||
       dh.getDocumentScrollElement() == fakeDocument.documentElement);

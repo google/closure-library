@@ -170,7 +170,7 @@ goog.string.format.demuxes_['f'] = function(
     replacement = sign + replacement;
   }
 
-  // If no padding is neccessary we're done.
+  // If no padding is necessary we're done.
   if (isNaN(width) || replacement.length >= Number(width)) {
     return replacement;
   }

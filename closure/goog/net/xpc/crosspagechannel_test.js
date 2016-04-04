@@ -64,10 +64,10 @@ function setUpPage() {
     var accessCheckIframes = [];
 
     accessCheckIframes.push(
-        create1x1Iframe('nonexistant', 'testdata/i_am_non_existant.html'));
+        create1x1Iframe('nonexistent', 'testdata/i_am_non_existent.html'));
     window.setTimeout(function() {
       accessCheckIframes.push(
-          create1x1Iframe('existant', 'testdata/access_checker.html'));
+          create1x1Iframe('existent', 'testdata/access_checker.html'));
     }, 10);
 
     // Called from testdata/access_checker.html

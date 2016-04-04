@@ -52,7 +52,7 @@ goog.require('goog.style');
  *
  * This class can also be made aware of scrollable containers that contain
  * drop targets by calling addScrollableContainer. This will cause dnd to
- * take changing scroll positions into account while a drag is occuring.
+ * take changing scroll positions into account while a drag is occurring.
  *
  * @extends {goog.events.EventTarget}
  * @constructor

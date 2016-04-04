@@ -828,7 +828,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
 
 
 /**
- * Sets up the test page and then waits untill the test case has been marked
+ * Sets up the test page and then waits until the test case has been marked
  * as ready before executing the tests.
  * @private
  */

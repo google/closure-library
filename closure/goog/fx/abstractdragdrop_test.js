@@ -82,7 +82,7 @@ RangeOverlap = {
 
 
 /**
- * Computes how two one dimentional ranges overlap.
+ * Computes how two one dimensional ranges overlap.
  *
  * @param {number} left1 Left inclusive bound of the first range.
  * @param {number} right1 Right exclusive bound of the first range.

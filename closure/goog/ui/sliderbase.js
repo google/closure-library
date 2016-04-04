@@ -1670,7 +1670,7 @@ goog.ui.SliderBase.AnimationFactory = function() {};
 
 
 /**
- * Creates an additonal animation to play when animating to a new value.
+ * Creates an additional animation to play when animating to a new value.
  *
  * @param {number} previousValue The previous value (before animation).
  * @param {number} newValue The new value (after animation).

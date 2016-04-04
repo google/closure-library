@@ -114,7 +114,7 @@
  * listening for events on the IframeIo object itself. The following events
  * will be sent:
  * - goog.net.EventType.COMPLETE: when the request is completed
- *   (either sucessfully or unsuccessfully). You can find out about the result
+ *   (either successfully or unsuccessfully). You can find out about the result
  *   using the isSuccess() and getLastError
  *   methods.
  * - goog.net.EventType.SUCCESS</code>: when the request was completed
@@ -730,7 +730,7 @@ goog.net.IframeIo.prototype.getResponseJson = function() {
 
 
 /**
- * Returns the document object from the last request.  Not truely XML, but
+ * Returns the document object from the last request.  Not truly XML, but
  * used to mirror the XhrIo interface.
  * @return {HTMLDocument} The document object from the last request.
  */

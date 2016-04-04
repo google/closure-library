@@ -741,7 +741,7 @@ goog.testing.MultiTestRunner.prototype.log = function(msg) {
 /**
  * Processes a result returned from a TestFrame.  If there are tests remaining
  * it will trigger the next one to be run, otherwise if there are no tests and
- * all results have been recieved then it will call finish.
+ * all results have been received then it will call finish.
  * @param {goog.testing.MultiTestRunner.TestFrame} frame The frame that just
  *     finished.
  */

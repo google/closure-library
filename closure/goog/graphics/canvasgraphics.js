@@ -610,7 +610,7 @@ goog.graphics.CanvasGraphics.prototype.createGroup = function(opt_group) {
  * Measure and return the width (in pixels) of a given text string.
  * Text measurement is needed to make sure a text can fit in the allocated
  * area. The way text length is measured is by writing it into a div that is
- * after the visible area, measure the div width, and immediatly erase the
+ * after the visible area, measure the div width, and immediately erase the
  * written value.
  *
  * @param {string} text The text string to measure.

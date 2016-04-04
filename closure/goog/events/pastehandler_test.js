@@ -175,7 +175,7 @@ function testMouseOverOnInit() {
   // user normaly mouseovers the textarea, with no text change
   textarea.dispatchEvent(goog.events.EventType.MOUSEOVER);
   assertTrue(handler.getState() == goog.events.PasteHandler.State.INIT);
-  // text area value doesnt change
+  // text area value doesn't change
   assertFalse(pasted);
 }
 
@@ -229,7 +229,7 @@ function testTypingReallyFastDispatchesTwoInputEventsBeforeTheKeyDownEvent() {
   textarea.dispatchEvent(goog.events.EventType.FOCUS);
 
   // keydown and input events seems to be fired indepently: even though input
-  // should happen after the key event, it doens't if the user types fast
+  // should happen after the key event, it doesn't if the user types fast
   // enough. FF2 + linux doesn't fire keydown events for every key pressed when
   // you type fast enough. if one of the keydown events gets swallowed, two
   // input events are fired consecutively. notice that there is a similar

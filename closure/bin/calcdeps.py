@@ -302,7 +302,7 @@ def ResolveDependencies(require, search_hash, result_list, seen_list):
     result_list: a list of filenames that have been calculated as dependencies.
       This variable is the output for this function.
     seen_list: a list of filenames that have been 'seen'.  This is required
-      for the dependency->dependant ordering.
+      for the dependency->dependent ordering.
   """
   if require not in search_hash:
     raise Exception('Missing provider for (%s)' % require)
@@ -526,7 +526,7 @@ def main():
                     help='The location of the Closure compiler .jar file.')
   parser.add_option('-f',
                     '--compiler_flag',
-                    '--compiler_flags', # for backwards compatability
+                    '--compiler_flags', # for backwards compatibility
                     dest='compiler_flags',
                     action='append',
                     help='Additional flag to pass to the Closure compiler. '

@@ -73,7 +73,7 @@ goog.testing.editor.TestHelper.prototype.setRoot = function(root) {
 
 
 /**
- * Make the root element editable.  Alse saves its HTML to be restored
+ * Make the root element editable.  Also saves its HTML to be restored
  * in tearDown.
  */
 goog.testing.editor.TestHelper.prototype.setUpEditableElement = function() {

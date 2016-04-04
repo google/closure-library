@@ -53,7 +53,7 @@ goog.dom.xml.hasActiveXObjectSupport_ = function() {
   try {
     // Due to lot of changes in IE 9, 10 & 11 behaviour and ActiveX being
     // totally disableable using MSIE's security level, trying to create the
-    // ActiveXOjbect is a lot more reliable than testing for the existance of
+    // ActiveXOjbect is a lot more reliable than testing for the existence of
     // window.ActiveXObject
     new ActiveXObject('MSXML2.DOMDocument');
     return true;

@@ -157,7 +157,7 @@ function testWebkitStyleMouseWheel_ieStyleOnLinux() {
     WINDOWS: false,
     LINUX: true
   };
-  runWebKitContinousAndDiscreteEventsTest();
+  runWebKitContinuousAndDiscreteEventsTest();
 }
 
 function testWebkitStyleMouseWheel_ieStyleOnMac() {
@@ -169,10 +169,10 @@ function testWebkitStyleMouseWheel_ieStyleOnMac() {
     WINDOWS: false,
     MAC: true
   };
-  runWebKitContinousAndDiscreteEventsTest();
+  runWebKitContinuousAndDiscreteEventsTest();
 }
 
-function runWebKitContinousAndDiscreteEventsTest() {
+function runWebKitContinuousAndDiscreteEventsTest() {
   goog.userAgent.isVersionOrHigher = goog.functions.TRUE;
 
   createHandlerAndListen();

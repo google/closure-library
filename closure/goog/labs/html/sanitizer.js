@@ -336,7 +336,7 @@ goog.labs.html.Sanitizer.chain_ = function(f, g) {
  * minimal safety properties.
  *
  * <p>
- * For url atributes, it checks that any protocol is on a safe set that
+ * For url attributes, it checks that any protocol is on a safe set that
  * doesn't allow script execution.
  * <p>
  * It also blanket disallows CSS and event handler attributes.

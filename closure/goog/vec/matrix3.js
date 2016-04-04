@@ -237,7 +237,7 @@ goog.vec.Matrix3.setDiagonal = function(mat, vec) {
 /**
  * Sets the specified column with the supplied values.
  *
- * @param {goog.vec.ArrayType} mat The matrix to recieve the
+ * @param {goog.vec.ArrayType} mat The matrix to receive the
  *     values.
  * @param {number} column The column index to set the values on.
  * @param {number} v0 The value for row 0.

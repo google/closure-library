@@ -297,7 +297,7 @@ function testMapArrayLike2() {
 function testMapString() {
   var col = '012';
   function f(v, i, col2) {
-    // Teh SpiderMonkey Array.map for strings turns the string into a String
+    // The SpiderMonkey Array.map for strings turns the string into a String
     // so we cannot use assertEquals because it uses ===.
     assertTrue(col == col2);
     assertEquals('number', typeof i);

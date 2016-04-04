@@ -1102,7 +1102,7 @@ goog.array.binarySearch_ = function(
  * <code>goog.array.defaultCompare</code>, which compares the elements using
  * the built in < and > operators.  This will produce the expected behavior
  * for homogeneous arrays of String(s) and Number(s), unlike the native sort,
- * but will give unpredictable results for heterogenous lists of strings and
+ * but will give unpredictable results for heterogeneous lists of strings and
  * numbers with different numbers of digits.
  *
  * This sort is not guaranteed to be stable.

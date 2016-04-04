@@ -313,7 +313,7 @@ function testRemoveFormattingNestedDivs() {
 
 /**
  * Test that when we perform remove formatting on an entire table,
- * that the visual look is similiar to as if there was a table there.
+ * that the visual look is similar to as if there was a table there.
  */
 function testRemoveFormattingForTableFormatting() {
   // We preserve the table formatting as much as possible.

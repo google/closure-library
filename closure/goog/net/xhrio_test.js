@@ -124,7 +124,7 @@ function testSyncSend() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertTrue('Should be succesful', e.target.isSuccess());
+    assertTrue('Should be successful', e.target.isSuccess());
     count++;
 
   });
@@ -151,7 +151,7 @@ function testSyncSendFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -239,7 +239,7 @@ function testSendHttpZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -261,7 +261,7 @@ function testSendHttpUpperZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -283,7 +283,7 @@ function testSendHttpUpperUriZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -305,7 +305,7 @@ function testSendHttpUriZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -327,7 +327,7 @@ function testSendHttpUriZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -355,7 +355,7 @@ function testSendHttpsZeroStatusFailure() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertFalse('Should not be succesful', e.target.isSuccess());
+    assertFalse('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -377,7 +377,7 @@ function testSendFileUpperZeroStatusSuccess() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertTrue('Should not be succesful', e.target.isSuccess());
+    assertTrue('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -399,7 +399,7 @@ function testSendFileUriZeroStatusSuccess() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertTrue('Should not be succesful', e.target.isSuccess());
+    assertTrue('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -421,7 +421,7 @@ function testSendDummyUriZeroStatusSuccess() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertTrue('Should not be succesful', e.target.isSuccess());
+    assertTrue('Should not be successful', e.target.isSuccess());
     count++;
   });
 
@@ -443,7 +443,7 @@ function testSendFileUpperUriZeroStatusSuccess() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     assertFalse('Should not fire complete from inside send', inSend);
-    assertTrue('Should not be succesful', e.target.isSuccess());
+    assertTrue('Should not be successful', e.target.isSuccess());
     count++;
   });
 

@@ -1604,7 +1604,7 @@ function testDependencyOrderingWithCommonDepsInDeps() {
 
 function testDependencyOrderingWithCommonDepsInRoot1() {
   // Tests the case where a dependency of the root depends on another
-  // dependency of the root.  Irregardless of ordering in the root's
+  // dependency of the root.  Regardless of ordering in the root's
   // deps.
   var mm = getModuleManager({'a': ['b', 'c'], 'b': ['c'], 'c': []});
   var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
@@ -1614,7 +1614,7 @@ function testDependencyOrderingWithCommonDepsInRoot1() {
 
 function testDependencyOrderingWithCommonDepsInRoot2() {
   // Tests the case where a dependency of the root depends on another
-  // dependency of the root.  Irregardless of ordering in the root's
+  // dependency of the root.  Regardless of ordering in the root's
   // deps.
   var mm = getModuleManager({'a': ['b', 'c'], 'b': [], 'c': ['b']});
   var ids = mm.getNotYetLoadedTransitiveDepIds_('a');

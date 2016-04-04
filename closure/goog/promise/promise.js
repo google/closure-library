@@ -798,7 +798,7 @@ goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
  *
  * @param {?function(this:THIS, TYPE):
  *          (RESULT|goog.Promise<RESULT>|Thenable)} onFulfilled A callback that
- *     will be invoked if the Promise is fullfilled, or null.
+ *     will be invoked if the Promise is fulfilled, or null.
  * @param {?function(this:THIS, *): *} onRejected A callback that will be
  *     invoked if the Promise is rejected, or null.
  * @param {THIS=} opt_context An optional execution context for the callbacks.

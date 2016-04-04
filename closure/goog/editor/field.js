@@ -2575,7 +2575,7 @@ goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
 
       // Find the top-most window we have access to and see if it's https.
       // Technically this could fail if we have an http frame in an https frame
-      // on the same domain (or vice versa), but walking up the window heirarchy
+      // on the same domain (or vice versa), but walking up the window hierarchy
       // to find the first window that has an http* protocol seems like
       // overkill.
       var win = this.originalDomHelper.getWindow();

@@ -979,7 +979,7 @@ function testStrictDoubleEncodingRemoval() {
 
 // Tests, that creating URI from components and then
 // getting the components back yields equal results.
-// The special attention is payed to test proper encoding
+// The special attention is paid to test proper encoding
 // and decoding of URI components.
 function testComponentsAfterUriCreate() {
   var createdUri = new goog.Uri.create(

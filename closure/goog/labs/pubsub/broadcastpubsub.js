@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
  *
  * Delivery is guaranteed on all browsers except IE8 where topics expire after a
  * timeout. Publishing of a topic within a callback function provides no
- * guarantee on ordering in that there is a possiblilty that separate origin
+ * guarantee on ordering in that there is a possibility that separate origin
  * contexts may see topics in a different order.
  *
  * This class is not secure and in certain cases (e.g., a browser crash) data

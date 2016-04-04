@@ -115,7 +115,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNode_ = function(node) {
     // range.htmlText includes the element's outerHTML. The range created above
     // is not collapsed, and should be collapsed explicitly.
     // Example : node = <div></div>
-    // But if the node is sth like <br>, it shouldnt be collapsed.
+    // But if the node is sth like <br>, it shouldn't be collapsed.
     if (goog.dom.browserrange.canContainRangeEndpoint(node) &&
         !node.childNodes.length) {
       nodeRange.collapse(false);
