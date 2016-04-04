@@ -342,10 +342,10 @@ goog.ui.ProgressBar.prototype.updateUi_ = function() {
 goog.ui.ProgressBar.prototype.initializeUi_ = function() {
   var tStyle = this.thumbElement_.style;
   if (this.orientation_ == goog.ui.ProgressBar.Orientation.VERTICAL) {
-    tStyle.left = 0;
+    tStyle.left = '0';
     tStyle.width = '100%';
   } else {
-    tStyle.top = tStyle.left = 0;
+    tStyle.top = tStyle.left = '0';
     tStyle.height = '100%';
   }
 };

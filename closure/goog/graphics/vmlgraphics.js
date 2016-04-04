@@ -558,7 +558,7 @@ goog.graphics.VmlGraphics.prototype.createDom = function() {
   var style = group.style;
 
   style.position = 'absolute';
-  style.left = style.top = 0;
+  style.left = style.top = '0';
   style.width = this.width;
   style.height = this.height;
   if (this.coordWidth) {
