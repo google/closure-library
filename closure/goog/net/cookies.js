@@ -26,17 +26,18 @@ goog.provide('goog.net.cookies');
 
 /**
  * A class for handling browser cookies.
- * @param {Document} context The context document to get/set cookies on.
+ * @param {?Document} context The context document to get/set cookies on.
  * @constructor
  * @final
  */
 goog.net.Cookies = function(context) {
   /**
-   * The context document to get/set cookies on
-   * @type {Document}
-   * @private
-   */
-  this.document_ = context;
+  * The context document to get/set cookies on. If no document context is
+  * passed, use a fake one with only the "cookie" attribute. This allows
+  * this class to be instantiated safely in web worker environments.
+  * @private {{cookie: string}}
+  */
+  this.document_ = context || {cookie: ''};
 };
 
 
@@ -355,11 +356,14 @@ goog.net.Cookies.prototype.getKeyValues_ = function() {
 };
 
 
+// TODO(b/23687502): This should be a singleton getter instead of a static
+// instance.
 /**
  * A static default instance.
  * @type {goog.net.Cookies}
  */
-goog.net.cookies = new goog.net.Cookies(document);
+goog.net.cookies =
+    new goog.net.Cookies(typeof document == 'undefined' ? null : document);
 
 
 /**
