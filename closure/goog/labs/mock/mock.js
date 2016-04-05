@@ -356,13 +356,13 @@ goog.labs.mock.MockManager_ = function() {
  *
  * @param {string} methodName The name of the method being bound.
  * @param {...*} var_args The arguments to the method.
- * @return {!goog.labs.mock.StubBinder_} The stub binder.
+ * @return {!goog.labs.mock.StubBinder} The stub binder.
  * @private
  */
 goog.labs.mock.MockManager_.prototype.handleMockCall_ = function(
     methodName, var_args) {
   var args = goog.array.slice(arguments, 1);
-  return new goog.labs.mock.StubBinder_(this, methodName, args);
+  return new goog.labs.mock.StubBinderImpl_(this, methodName, args);
 };
 
 
@@ -689,22 +689,56 @@ goog.labs.mock.MockFunctionManager_.prototype.useMockedFunctionName_ = function(
 };
 
 
+/**
+ * A stub binder is an object that helps define the stub by binding
+ * method name to the stub method.
+ * @interface
+ */
+goog.labs.mock.StubBinder = function() {};
+
 
 /**
- * The stub binder is the object that helps define the stubs by binding
- * method name to the stub method.
- * TODO(user): Move the public methods to an interface and implement it.
+ * Defines the function to be called for the method name and arguments bound
+ * to this {@code StubBinder}.
+ *
+ * If {@code then} or {@code thenReturn} has been previously called
+ * on this {@code StubBinder} then the given stub {@code func} will be called
+ * only after the stubs passed previously have been called.  Afterwards,
+ * if no other calls are made to {@code then} or {@code thenReturn} for this
+ * {@code StubBinder} then the given {@code func} will be used for every further
+ * invocation.
+ * See #when for complete examples.
+ * TODO(user): Add support for the 'Answer' interface.
+ *
+ * @param {!Function} func The function to call.
+ * @return {!goog.labs.mock.StubBinder} Returns itself for chaining.
+ */
+goog.labs.mock.StubBinder.prototype.then = goog.abstractMethod;
+
+
+/**
+ * Defines the constant return value for the stub represented by this
+ * {@code StubBinder}.
+ *
+ * @param {*} value The value to return.
+ * @return {!goog.labs.mock.StubBinder} Returns itself for chaining.
+ */
+goog.labs.mock.StubBinder.prototype.thenReturn = goog.abstractMethod;
+
+
+/**
+ * A {@code StubBinder} which uses {@code MockManager_} to manage stub
+ * bindings.
  *
  * @param {!goog.labs.mock.MockManager_}
  *   mockManager The mock manager.
  * @param {?string} name The method name.
  * @param {!Array<?>} args The other arguments to the method.
  *
- * @constructor
- * @struct
- * @private
+ * @implements {goog.labs.mock.StubBinder}
+ * @private @constructor @struct @final
  */
-goog.labs.mock.StubBinder_ = function(mockManager, name, args) {
+goog.labs.mock.StubBinderImpl_ = function(mockManager, name, args) {
   /**
    * The mock manager instance.
    * @type {!goog.labs.mock.MockManager_}
@@ -736,22 +770,9 @@ goog.labs.mock.StubBinder_ = function(mockManager, name, args) {
 
 
 /**
- * Defines the stub to be called for the method name and arguments bound
- * earlier.
- *
- * If {@code then} or {@code thenReturn} has been previously called
- * on this {@code StubBinder} then the given stub {@code func} will be called
- * only after the stubs passed previously have been called.  Afterwards,
- * if no other calls are made to {@code then} or {@code thenReturn} for this
- * {@code StubBinder} then the given {@code func} will be used for every further
- * invocation.
- * See #when for complete examples.
- * TODO(user): Add support for the 'Answer' interface.
- *
- * @param {!Function} func The stub.
- * @return {!goog.labs.mock.StubBinder_} Returns itself for chaining.
+ * @override
  */
-goog.labs.mock.StubBinder_.prototype.then = function(func) {
+goog.labs.mock.StubBinderImpl_.prototype.then = function(func) {
   if (this.sequentialStubsArray_.length) {
     this.sequentialStubsArray_.push(
         new goog.labs.mock.MethodBinding_(this.name_, this.args_, func));
@@ -764,12 +785,9 @@ goog.labs.mock.StubBinder_.prototype.then = function(func) {
 
 
 /**
- * Defines the stub to return a specific value for a method name and arguments.
- * See #then for detailed usage information.
- * @param {*} value The value to return.
- * @return {!goog.labs.mock.StubBinder_} Returns itself for chaining.
+ * @override
  */
-goog.labs.mock.StubBinder_.prototype.thenReturn = function(value) {
+goog.labs.mock.StubBinderImpl_.prototype.thenReturn = function(value) {
   return this.then(goog.functions.constant(value));
 };
 
@@ -797,7 +815,7 @@ goog.labs.mock.StubBinder_.prototype.thenReturn = function(value) {
  *     });
  *
  * @param {!Object} mockObject The mocked object.
- * @return {!goog.labs.mock.StubBinder_} The property binder.
+ * @return {!goog.labs.mock.StubBinder} The property binder.
  */
 goog.labs.mock.when = function(mockObject) {
   goog.asserts.assert(mockObject.$stubBinder, 'Stub binder cannot be null!');
