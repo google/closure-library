@@ -523,3 +523,36 @@ function testObjectsWithSameKeysAndValuesAreEqual() {
 function testObjectsWithSameKeysInDifferentOrderAreEqual() {
   assertTrue(goog.object.equals({'a': 1, 'b': 2}, {'b': 2, 'a': 1}));
 }
+
+function testIs() {
+  var object = {};
+  assertTrue(goog.object.is(object, object));
+  assertFalse(goog.object.is(object, {}));
+
+  assertTrue(goog.object.is(NaN, NaN));
+  assertTrue(goog.object.is(0, 0));
+  assertTrue(goog.object.is(1, 1));
+  assertTrue(goog.object.is(-1, -1));
+  assertTrue(goog.object.is(123, 123));
+  assertFalse(goog.object.is(0, -0));
+  assertFalse(goog.object.is(-0, 0));
+  assertFalse(goog.object.is(0, 1));
+
+  assertTrue(goog.object.is(true, true));
+  assertTrue(goog.object.is(false, false));
+  assertFalse(goog.object.is(true, false));
+  assertFalse(goog.object.is(false, true));
+
+  assertTrue(goog.object.is('', ''));
+  assertTrue(goog.object.is('a', 'a'));
+  assertFalse(goog.object.is('', 'a'));
+  assertFalse(goog.object.is('a', ''));
+  assertFalse(goog.object.is('a', 'b'));
+
+  assertFalse(goog.object.is(true, 'true'));
+  assertFalse(goog.object.is('true', true));
+  assertFalse(goog.object.is(false, 'false'));
+  assertFalse(goog.object.is('false', false));
+  assertFalse(goog.object.is(0, '0'));
+  assertFalse(goog.object.is('0', 0));
+}
