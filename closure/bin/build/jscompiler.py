@@ -19,7 +19,7 @@ import logging
 import os
 import re
 import subprocess
-
+import tempfile
 
 # Pulls just the major and minor version numbers from the first line of
 # 'java -version'. Versions are in the format of [0-9]+\.[0-9]+\..* See:
@@ -69,8 +69,7 @@ def _JavaSupports32BitMode():
   return supported
 
 
-def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
-                       jvm_flags, compiler_flags):
+def _GetJsCompilerArgs(compiler_jar_path, java_version, jvm_flags):
   """Assembles arguments for call to JsCompiler."""
 
   if java_version < (1, 7):
@@ -97,6 +96,10 @@ def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
   # Add the application JAR.
   args += ['-jar', compiler_jar_path]
 
+  return args
+
+def _GetFlagFile(source_paths, compiler_flags):
+  args = []
   for path in source_paths:
     args += ['--js', path]
 
@@ -104,8 +107,11 @@ def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
   if compiler_flags:
     args += compiler_flags
 
-  return args
+  flags_file = tempfile.NamedTemporaryFile(delete = False)
+  flags_file.write(" ".join(args))
+  flags_file.close()
 
+  return flags_file
 
 def Compile(compiler_jar_path, source_paths,
             jvm_flags=None,
@@ -125,7 +131,13 @@ def Compile(compiler_jar_path, source_paths,
   java_version = _ParseJavaVersion(str(_GetJavaVersionString()))
 
   args = _GetJsCompilerArgs(
-      compiler_jar_path, java_version, source_paths, jvm_flags, compiler_flags)
+      compiler_jar_path, java_version, jvm_flags)
+
+  # Write source path arguments to flag file for avoiding "The filename or 
+  # extension is too long" error in big projects. See
+  # https://github.com/google/closure-library/pull/678
+  flags_file = _GetFlagFile(source_paths, compiler_flags)
+  args += ['--flagfile', flags_file.name]
 
   logging.info('Compiling with the following command: %s', ' '.join(args))
 
@@ -133,3 +145,5 @@ def Compile(compiler_jar_path, source_paths,
     return subprocess.check_output(args)
   except subprocess.CalledProcessError:
     raise JsCompilerError('JavaScript compilation failed.')
+  finally:
+    os.remove(flags_file.name)
