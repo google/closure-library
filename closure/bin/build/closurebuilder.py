@@ -34,6 +34,7 @@ import logging
 import optparse
 import os
 import sys
+import io
 
 import depstree
 import jscompiler
@@ -200,9 +201,14 @@ def main():
 
   # Make our output pipe.
   if options.output_file:
-    out = open(options.output_file, 'w')
+    out = io.open(options.output_file, 'wb')
   else:
-    out = sys.stdout
+    version = sys.version_info[:2]
+    if version >= (3,0):
+        # Write bytes to stdout
+        out = sys.stdout.buffer
+    else:
+        out = sys.stdout
 
   sources = set()
 
@@ -250,7 +256,7 @@ def main():
       src = js_source.GetSource()
       if js_source.is_goog_module:
         src = _WrapGoogModuleSource(src)
-      out.write(src.encode('utf-8') + '\n')
+      out.write(src.encode('utf-8') + b'\n')
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
@@ -276,7 +282,7 @@ https://github.com/google/closure-compiler/wiki/Managing-Dependencies
         compiler_flags=options.compiler_flags)
 
     logging.info('JavaScript compilation succeeded.')
-    out.write(str(str(compiled_source).encode('utf-8')))
+    out.write(compiled_source.encode('utf-8'))
 
   else:
     logging.error('Invalid value for --output flag.')
