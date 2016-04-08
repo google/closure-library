@@ -503,6 +503,7 @@ goog.addDependency('html/safestylesheet_test.js', ['goog.html.safeStyleSheetTest
 goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], false);
 goog.addDependency('html/safeurl_test.js', ['goog.html.safeUrlTest'], ['goog.html.SafeUrl', 'goog.i18n.bidi.Dir', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('html/sanitizer/attributewhitelist.js', ['goog.html.sanitizer.AttributeWhitelist'], [], false);
+goog.addDependency('html/sanitizer/csssanitizer.js', ['goog.html.sanitizer.CssSanitizer'], ['goog.array', 'goog.object', 'goog.string'], false);
 goog.addDependency('html/sanitizer/tagblacklist.js', ['goog.html.sanitizer.TagBlacklist'], [], false);
 goog.addDependency('html/sanitizer/tagwhitelist.js', ['goog.html.sanitizer.TagWhitelist'], [], false);
 goog.addDependency('html/silverlight.js', ['goog.html.silverlight'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const'], false);
