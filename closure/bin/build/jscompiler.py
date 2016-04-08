@@ -11,9 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Utility to use the Closure Compiler CLI from Python."""
-
 
 import logging
 import os
@@ -60,8 +58,9 @@ def _JavaSupports32BitMode():
   supported = False
   try:
     devnull = open(os.devnull, 'wb')
-    return subprocess.call(
-        ['java', '-d32', '-version'], stdout=devnull, stderr=devnull) == 0
+    return subprocess.call(['java', '-d32', '-version'],
+                           stdout=devnull,
+                           stderr=devnull) == 0
   except IOError:
     pass
   else:
@@ -98,7 +97,20 @@ def _GetJsCompilerArgs(compiler_jar_path, java_version, jvm_flags):
 
   return args
 
+
 def _GetFlagFile(source_paths, compiler_flags):
+  """Writes given source paths and compiler flags to a --flagfile.
+
+  The given source_paths will be written as '--js' flags and the compiler_flags
+  are written as-is.
+
+  Args:
+    source_paths: List of string js source paths.
+    compiler_flags: List of string compiler flags.
+
+  Returns:
+    The file to which the flags were written.
+  """
   args = []
   for path in source_paths:
     args += ['--js', path]
@@ -107,13 +119,15 @@ def _GetFlagFile(source_paths, compiler_flags):
   if compiler_flags:
     args += compiler_flags
 
-  flags_file = tempfile.NamedTemporaryFile(delete = False)
-  flags_file.write(" ".join(args))
+  flags_file = tempfile.NamedTemporaryFile(delete=False)
+  flags_file.write(' '.join(args))
   flags_file.close()
 
   return flags_file
 
-def Compile(compiler_jar_path, source_paths,
+
+def Compile(compiler_jar_path,
+            source_paths,
             jvm_flags=None,
             compiler_flags=None):
   """Prepares command-line call to Closure Compiler.
@@ -130,10 +144,9 @@ def Compile(compiler_jar_path, source_paths,
 
   java_version = _ParseJavaVersion(str(_GetJavaVersionString()))
 
-  args = _GetJsCompilerArgs(
-      compiler_jar_path, java_version, jvm_flags)
+  args = _GetJsCompilerArgs(compiler_jar_path, java_version, jvm_flags)
 
-  # Write source path arguments to flag file for avoiding "The filename or 
+  # Write source path arguments to flag file for avoiding "The filename or
   # extension is too long" error in big projects. See
   # https://github.com/google/closure-library/pull/678
   flags_file = _GetFlagFile(source_paths, compiler_flags)
