@@ -134,7 +134,7 @@ goog.html.SafeHtmlFormatter.prototype.replaceFormattingString_ =
 /**
  * Saves a start tag and returns its marker.
  * @param {string} tagName
- * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {?Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  *     Mapping from attribute names to their values. Only attribute names
  *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
  *     the attribute to be omitted.
