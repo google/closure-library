@@ -1643,3 +1643,23 @@ goog.array.copyByIndex = function(arr, index_arr) {
   goog.array.forEach(index_arr, function(index) { result.push(arr[index]); });
   return result;
 };
+
+
+/**
+ * Maps each element of the input array into zero or more elements of the output
+ * array.
+ *
+ * @param {!IArrayLike<VALUE>|string} arr Array or array like object
+ *     over which to iterate.
+ * @param {function(this:THIS, VALUE, number, ?): !Array<RESULT>} f The function
+ *     to call for every element. This function takes 3 arguments (the element,
+ *     the index and the array) and should return an array. The result will be
+ *     used to extend a new array.
+ * @param {THIS=} opt_obj The object to be used as the value of 'this' within f.
+ * @return {!Array<RESULT>} a new array with the concatenation of all arrays
+ *     returned from f.
+ * @template THIS, VALUE, RESULT
+ */
+goog.array.concatMap = function(arr, f, opt_obj) {
+  return goog.array.concat.apply([], goog.array.map(arr, f, opt_obj));
+};

@@ -1809,3 +1809,18 @@ function testComparators() {
   assertEquals(0, goog.array.inverseDefaultCompare(greater, greater));
   assertTrue(goog.array.inverseDefaultCompare(smaller, greater) > 0);
 }
+
+function testConcatMap() {
+  var a = [0, 1, 2, 0];
+  var context = {};
+  var arraysToReturn = [['x', 'y', 'z'], [], ['a', 'b']];
+  var timesCalled = 0;
+  var result = goog.array.concatMap(a, function(val, index, a2) {
+    assertEquals(a, a2);
+    assertEquals(context, this);
+    assertEquals(timesCalled++, index);
+    assertEquals(a[index], val);
+    return arraysToReturn[val];
+  }, context);
+  assertArrayEquals(['x', 'y', 'z', 'a', 'b', 'x', 'y', 'z'], result);
+}
