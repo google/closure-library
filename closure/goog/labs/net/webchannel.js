@@ -146,6 +146,12 @@ goog.net.WebChannel.prototype.close = goog.abstractMethod;
  * the WebChannel.
  *
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
+ * @param {function()=} opt_onDelivery An optional callback to signal the
+ * delivery of the message by the server. This is useful for the client to
+ * issue an explicit commit or a snapshot command to ensure all the
+ * client-generated messages, up to this message, have been delivered
+ * (to the application) by the server. Messages are totally ordered (FIFO)
+ * for a given channel instance.
  */
 goog.net.WebChannel.prototype.send = goog.abstractMethod;
 
