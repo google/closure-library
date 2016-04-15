@@ -82,6 +82,9 @@ goog.async.run.forceNextTick = function(opt_realSetTimeout) {
       opt_realSetTimeout(goog.async.run.processWorkQueue);
     }
   };
+  if (goog.async.run.workQueueScheduled_) {
+    goog.async.run.schedule_();
+  }
 };
 
 
