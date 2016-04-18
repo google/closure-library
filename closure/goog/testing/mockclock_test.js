@@ -17,7 +17,6 @@ goog.setTestOnly('goog.testing.MockClockTest');
 
 goog.require('goog.Promise');
 goog.require('goog.Timer');
-goog.require('goog.async.run');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.testing.MockClock');
@@ -615,37 +614,4 @@ function testTickPromise() {
   assertEquals('delayed', clock.tickPromise(delayed, 500));
 
   clock.dispose();
-}
-
-
-// This test verifies that ticking a mock clock will execute events scheduled
-// using goog.async.run, including events that were scheduled before the mock
-// clock was installed.
-function testTickWithPendingAsyncEvents() {
-  var oldEventExecuted = false;
-  goog.async.run(function() { oldEventExecuted = true; });
-
-  var clock = new goog.testing.MockClock(true);
-
-  var newEventExecuted = false;
-  goog.async.run(function() { newEventExecuted = true; });
-
-  clock.tick(0);
-  assertTrue(oldEventExecuted);
-  assertTrue(newEventExecuted);
-
-  clock.dispose();
-}
-
-
-function testGoogNow() {
-  var mockClock = new goog.testing.MockClock(true);
-  var x, y;
-  assertEquals(0, goog.now());
-  goog.Promise.resolve().then(function() { x = goog.now(); });
-  setTimeout(function() { y = goog.now(); }, 20);
-  mockClock.tick(100);
-  assertEquals(0, x);
-  assertEquals(20, y);
-  mockClock.dispose();
 }
