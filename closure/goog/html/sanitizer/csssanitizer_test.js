@@ -96,7 +96,7 @@ function getSanitizedInlineStyle(sourceCss, opt_urlRewrite) {
     // IE8 doesn't like setting invalid properties. It throws an "Invalid
     // Argument" exception.
     if (!isIE8()) {
-      throw 'Rethrowing: ' + err;
+      throw err;
     }
     return '';
   }
