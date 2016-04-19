@@ -141,6 +141,21 @@ function testMockFunctions() {
   assertEquals(25, mockedFunc(50));
 }
 
+function testMockConstructor() {
+  var Ctor = function() { this.isMock = false; };
+  var mockInstance = {isMock: true};
+  var MockCtor = goog.labs.mock.mockConstructor(Ctor);
+  goog.labs.mock.when(MockCtor)().thenReturn(mockInstance);
+  assertEquals(mockInstance, new MockCtor());
+}
+
+function testMockConstructorCopiesProperties() {
+  var Ctor = function() {};
+  Ctor.myParam = true;
+  var MockCtor = goog.labs.mock.mockConstructor(Ctor);
+  assertTrue(MockCtor.myParam);
+}
+
 function testStubbingConsecutiveCalls() {
   var obj = {method: function(i) { return i * 42; }};
 

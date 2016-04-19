@@ -69,6 +69,28 @@ goog.labs.mock.mockFunction = function(func) {
 
 
 /**
+ * Mocks a given constructor.
+ *
+ * @param {!Function} ctor A constructor function to be mocked.
+ * @return {!Function} The mocked constructor.
+ */
+goog.labs.mock.mockConstructor = function(ctor) {
+  var mockCtor = goog.labs.mock.mockFunction(ctor);
+
+  // Copy class members from the real constructor to the mock. Do not copy
+  // the closure superClass_ property (see goog.inherits), the built-in
+  // prototype property, or properties added to Function.prototype
+  for (var property in ctor) {
+    if (property != 'superClass_' && property != 'prototype' &&
+        ctor.hasOwnProperty(property)) {
+      mockCtor[property] = ctor[property];
+    }
+  }
+  return mockCtor;
+};
+
+
+/**
  * Spies on a given object.
  *
  * @param {!Object} obj The object to be spied on.
@@ -680,12 +702,15 @@ goog.inherits(goog.labs.mock.MockFunctionManager_, goog.labs.mock.MockManager_);
  */
 goog.labs.mock.MockFunctionManager_.prototype.useMockedFunctionName_ = function(
     nextFunc) {
-  return goog.bind(function(var_args) {
-    var args = goog.array.slice(arguments, 0);
-    var name = '#mockFor<' + goog.labs.mock.getFunctionName_(this.func_) + '>';
+  var mockFunctionManager = this;
+  // Avoid using 'this' because this function may be called with 'new'.
+  return function(var_args) {
+    var args = goog.array.clone(arguments);
+    var name = '#mockFor<' +
+        goog.labs.mock.getFunctionName_(mockFunctionManager.func_) + '>';
     goog.array.insertAt(args, name, 0);
-    return nextFunc.apply(this, args);
-  }, this);
+    return nextFunc.apply(mockFunctionManager, args);
+  };
 };
 
 
