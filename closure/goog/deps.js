@@ -664,6 +664,8 @@ goog.addDependency('labs/useragent/platform_test.js', ['goog.labs.userAgent.plat
 goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], false);
 goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string'], false);
 goog.addDependency('labs/useragent/util_test.js', ['goog.labs.userAgent.utilTest'], ['goog.functions', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
+goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], false);
+goog.addDependency('labs/useragent/verifier_test.js', ['goog.labs.useragent.verifierTest'], ['goog.labs.userAgent.browser', 'goog.labs.useragent.verifier', 'goog.testing.testSuite'], true);
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], [], false);
 goog.addDependency('locale/countrylanguagenames_test.js', ['goog.locale.countryLanguageNamesTest'], ['goog.locale', 'goog.testing.jsunit'], false);
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], [], false);
