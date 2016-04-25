@@ -603,7 +603,7 @@ function testMouseMove_mouseOutBeforeThreshold() {
   // Drag distance is only 2.
   event.clientX = 8;
   event.clientY = 10;
-  item.mouseMove_(event);
+  item.dragMoveHandler_(event);
   assertEquals(
       'DragStart should not be fired for mouseout on child element.', null,
       draggedItem);
@@ -613,7 +613,7 @@ function testMouseMove_mouseOutBeforeThreshold() {
   // Drag distance is only 2.
   event.clientX = 8;
   event.clientY = 10;
-  item.mouseMove_(event);
+  item.dragMoveHandler_(event);
   assertEquals(
       'DragStart should be fired for mouseout on main element.', item,
       draggedItem);
@@ -706,6 +706,30 @@ function testDragEndEvent() {
 
   testDragEndEventInternal(false);
   testDragEndEventInternal(true);
+}
+
+function testTouchDrag() {
+  // Setup dragdrop and item
+  var itemEl = document.createElement(goog.dom.TagName.DIV);
+  var add = new goog.fx.AbstractDragDrop();
+  var item = new goog.fx.DragDropItem(itemEl);
+  item.setParent(add);
+  add.items_.push(item);
+  item.startPosition_ = new goog.math.Coordinate(10, 10);
+  item.currentDragElement_ = itemEl;
+
+  // Test
+  var draggedItem = null;
+  add.startDrag = function(event, item) { draggedItem = item; };
+
+  var event =
+      new goog.testing.events.Event(goog.events.EventType.TOUCHMOVE, itemEl);
+  // Drag distance is 10, greater than threshold.
+  event.clientX = 20;
+  event.clientY = 10;
+  item.dragMoveHandler_(event);
+  assertEquals('DragStart should be fired for touchmove event.', item,
+               draggedItem);
 }
 
 // Helper function for manual debugging.

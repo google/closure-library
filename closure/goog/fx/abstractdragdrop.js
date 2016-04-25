@@ -295,8 +295,9 @@ goog.fx.AbstractDragDrop.prototype.init = function() {
 goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
   if (this.isSource_) {
     goog.events.listen(
-        item.element, goog.events.EventType.MOUSEDOWN, item.mouseDown_, false,
-        item);
+        item.element,
+        [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
+        item.dragStartHandler_, false, item);
     if (this.sourceClass_) {
       goog.dom.classlist.add(
           goog.asserts.assert(item.element), this.sourceClass_);
@@ -319,8 +320,9 @@ goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
 goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
   if (this.isSource_) {
     goog.events.unlisten(
-        item.element, goog.events.EventType.MOUSEDOWN, item.mouseDown_, false,
-        item);
+        item.element,
+        [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
+        item.dragStartHandler_, false, item);
     if (this.sourceClass_) {
       goog.dom.classlist.remove(
           goog.asserts.assert(item.element), this.sourceClass_);
@@ -350,7 +352,7 @@ goog.fx.AbstractDragDrop.prototype.removeItems = function() {
  * cursor moves a few pixels. Allows dragging of items without first having to
  * register them with addItem.
  *
- * @param {goog.events.BrowserEvent} event Mouse down event.
+ * @param {goog.events.BrowserEvent} event Mouse down or touch start event.
  * @param {goog.fx.DragDropItem} item Item that's being dragged.
  */
 goog.fx.AbstractDragDrop.prototype.maybeStartDrag = function(event, item) {
@@ -361,7 +363,7 @@ goog.fx.AbstractDragDrop.prototype.maybeStartDrag = function(event, item) {
 /**
  * Event handler that's used to start drag.
  *
- * @param {goog.events.BrowserEvent} event Mouse move event.
+ * @param {goog.events.BrowserEvent} event Mouse move or touch move event.
  * @param {goog.fx.DragDropItem} item Item that's being dragged.
  */
 goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
@@ -1348,13 +1350,14 @@ goog.fx.DragDropItem.prototype.getDraggableElements = function() {
 
 
 /**
- * Event handler for mouse down.
+ * Event handler for drag start (mouse down or touch start).
  *
- * @param {goog.events.BrowserEvent} event Mouse down event.
+ * @param {goog.events.BrowserEvent} event Mouse down or touch start event.
  * @private
  */
-goog.fx.DragDropItem.prototype.mouseDown_ = function(event) {
-  if (!event.isMouseActionButton()) {
+goog.fx.DragDropItem.prototype.dragStartHandler_ = function(event) {
+  if (!event.isMouseActionButton() &&
+      event.type !== goog.events.EventType.TOUCHSTART) {
     return;
   }
 
@@ -1384,9 +1387,10 @@ goog.fx.DragDropItem.prototype.setParent = function(parent) {
  */
 goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
   var eventType = goog.events.EventType;
-  this.eventHandler_
-      .listen(element, eventType.MOUSEMOVE, this.mouseMove_, false)
-      .listen(element, eventType.MOUSEOUT, this.mouseMove_, false);
+  this.eventHandler_.listen(element, eventType.MOUSEMOVE, this.dragMoveHandler_,
+                            false)
+      .listen(element, eventType.MOUSEOUT, this.dragMoveHandler_, false)
+      .listen(element, eventType.TOUCHMOVE, this.dragMoveHandler_, false);
 
   // Capture the MOUSEUP on the document to ensure that we cancel the start
   // drag handlers even if the mouse up occurs on some other element. This can
@@ -1394,7 +1398,8 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
   // clicked on (e.g. through changes in activation styling) such that the mouse
   // up occurs outside the original element.
   var doc = goog.dom.getOwnerDocument(element);
-  this.eventHandler_.listen(doc, eventType.MOUSEUP, this.mouseUp_, true);
+  this.eventHandler_.listen(doc, eventType.MOUSEUP, this.dragEndHandler_, true)
+      .listen(doc, eventType.TOUCHEND, this.dragEndHandler_, true);
 
   this.currentDragElement_ = element;
 
@@ -1403,13 +1408,14 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
 
 
 /**
- * Event handler for mouse move. Starts drag operation if moved more than the
+ * Event handler for drag move. Starts drag operation if moved more than the
  * threshold value.
  *
- * @param {goog.events.BrowserEvent} event Mouse move or mouse out event.
+ * @param {goog.events.BrowserEvent} event Mouse move, mouse out, or touch
+ *     move event.
  * @private
  */
-goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
+goog.fx.DragDropItem.prototype.dragMoveHandler_ = function(event) {
   var distance = Math.abs(event.clientX - this.startPosition_.x) +
       Math.abs(event.clientY - this.startPosition_.y);
   // Fire dragStart event if the drag distance exceeds the threshold or if the
@@ -1432,13 +1438,13 @@ goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
 
 
 /**
- * Event handler for mouse up. Removes mouse move, mouse out and mouse up event
+ * Event handler for drag end. Removes drag move and drag end event
  * handlers.
  *
- * @param {goog.events.BrowserEvent} event Mouse up event.
+ * @param {goog.events.BrowserEvent} event Mouse up or touch end event.
  * @private
  */
-goog.fx.DragDropItem.prototype.mouseUp_ = function(event) {
+goog.fx.DragDropItem.prototype.dragEndHandler_ = function(event) {
   this.eventHandler_.removeAll();
   delete this.startPosition_;
   this.currentDragElement_ = null;
