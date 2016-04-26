@@ -149,3 +149,32 @@ function testIPad() {
   assertTrue(goog.userAgent.IPAD);
   assertEquals('4.2.1', goog.userAgent.platform.VERSION);
 }
+
+function testIPod22() {
+  // Borrowing from webserver/browser_rules for user agents
+  var uaString = 'Mozilla/5.0 (iPod; U; CPU iPhone OS 2_2 like ' +
+      'Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Mobile/5G77a';
+
+  // Need to set this lest the testing platform be used for detection.
+  mockAgent.setNavigator({platform: 'iPod'});
+
+  mockAgent.setUserAgentString(uaString);
+  updateUserAgentUtils();
+  assertTrue(goog.userAgent.IPOD);
+  assertEquals('2.2', goog.userAgent.platform.VERSION);
+}
+
+function testIPod91() {
+  // Borrowing from webserver/browser_rules for user agents
+  var uaString = 'Mozilla/5.0 (iPod; CPU iPhone OS 9_1 like ' +
+      'Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) ' +
+      'CriOS/47.0.2526.70 Mobile/13B143 Safari/601.1.46,gzip(gfe)';
+
+  // Need to set this lest the testing platform be used for detection.
+  mockAgent.setNavigator({platform: 'iPod'});
+
+  mockAgent.setUserAgentString(uaString);
+  updateUserAgentUtils();
+  assertTrue(goog.userAgent.IPOD);
+  assertEquals('9.1', goog.userAgent.platform.VERSION);
+}

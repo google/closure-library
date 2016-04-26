@@ -267,13 +267,20 @@ goog.define('goog.userAgent.ASSUME_IPAD', false);
 
 
 /**
+ * @define {boolean} Whether the user agent is running on an iPod.
+ */
+goog.define('goog.userAgent.ASSUME_IPOD', false);
+
+
+/**
  * @type {boolean}
  * @private
  */
 goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC ||
     goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX ||
     goog.userAgent.ASSUME_X11 || goog.userAgent.ASSUME_ANDROID ||
-    goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD;
+    goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD ||
+    goog.userAgent.ASSUME_IPOD;
 
 
 /**
@@ -366,6 +373,15 @@ goog.userAgent.IPHONE = goog.userAgent.PLATFORM_KNOWN_ ?
 goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_IPAD :
     goog.labs.userAgent.platform.isIpad();
+
+
+/**
+ * Whether the user agent is running on an iPod.
+ * @type {boolean}
+ */
+goog.userAgent.IPOD = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPOD :
+    goog.labs.userAgent.platform.isIpod();
 
 
 /**

@@ -60,6 +60,7 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.ANDROID = goog.labs.userAgent.platform.isAndroid();
   goog.userAgent.IPAD = goog.labs.userAgent.platform.isIpad();
   goog.userAgent.IPHONE = goog.labs.userAgent.platform.isIphone();
+  goog.userAgent.IPOD = goog.labs.userAgent.platform.isIpod();
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
   // Platform in goog.userAgent.platform.
