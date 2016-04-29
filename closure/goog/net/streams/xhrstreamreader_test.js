@@ -65,4 +65,5 @@ function testXhrTimeout() {
 }
 
 
-// TODO: more mocked/networked tests, testing.xhrio not useful
+// TODO: more mocked/networked tests, testing.xhrio not useful for streaming
+// states

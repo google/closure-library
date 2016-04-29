@@ -16,7 +16,7 @@
  * @fileoverview the XHR stream reader implements a low-level stream
  * reader for handling a streamed XHR response body. The reader takes a
  * StreamParser which may support JSON or any other formats as confirmed by
- * the Content-Type of the response. The reader may used as polyfill for
+ * the Content-Type of the response. The reader may be used as polyfill for
  * different streams APIs such as Node streams or whatwg streams (Fetch).
  *
  * The first version of this implementation only covers functions necessary
@@ -38,6 +38,7 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.net.streams.JsonStreamParser');
+goog.require('goog.net.streams.PbStreamParser');
 goog.require('goog.userAgent');
 
 
@@ -211,6 +212,8 @@ goog.net.streams.XhrStreamReader.prototype.getParserByContentType_ =
       this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
   if (contentType == 'application/json') {
     return new goog.net.streams.JsonStreamParser();
+  } else if (contentType == 'application/x-protobuf') {
+    return new goog.net.streams.PbStreamParser();
   }
 
   // TODO(user): caller to specify the C-T (ctor)
