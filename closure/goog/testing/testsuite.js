@@ -23,7 +23,7 @@ goog.require('goog.testing.TestCase');
  * or goog.modules.
  *
  * @param {!Object<string, function()>} obj An object with one or more test
- *     methods, and optionally a setUp and tearDown method, etc.
+ *     methods, and optional setUp, tearDown and getTestName methods, etc.
  */
 goog.testing.testSuite = function(obj) {
   var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||

@@ -1189,6 +1189,10 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
     }
   }
 
+  if (obj['getTestName']) {
+    this.name_ = obj['getTestName']();
+  }
+
   this.autoDiscoverLifecycle(obj);
 };
 
