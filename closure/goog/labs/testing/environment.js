@@ -277,7 +277,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
 
   // User defined setUp method.
   if (this.testobj_['setUp']) {
-    this.testobj_['setUp']();
+    return this.testobj_['setUp']();
   }
 };
 
