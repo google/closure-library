@@ -504,6 +504,7 @@ goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'g
 goog.addDependency('html/safeurl_test.js', ['goog.html.safeUrlTest'], ['goog.html.SafeUrl', 'goog.i18n.bidi.Dir', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('html/sanitizer/attributewhitelist.js', ['goog.html.sanitizer.AttributeWhitelist'], [], false);
 goog.addDependency('html/sanitizer/csssanitizer.js', ['goog.html.sanitizer.CssSanitizer'], ['goog.array', 'goog.object', 'goog.string'], false);
+goog.addDependency('html/sanitizer/htmlsanitizer.js', ['goog.html.sanitizer.HtmlSanitizer', 'goog.html.sanitizer.HtmlSanitizer.Builder', 'goog.html.sanitizer.HtmlSanitizerPolicy', 'goog.html.sanitizer.HtmlSanitizerPolicyContext', 'goog.html.sanitizer.HtmlSanitizerPolicyHints'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.functions', 'goog.html.SafeUrl', 'goog.html.sanitizer.AttributeWhitelist', 'goog.html.sanitizer.CssSanitizer', 'goog.html.sanitizer.TagBlacklist', 'goog.html.sanitizer.TagWhitelist', 'goog.html.uncheckedconversions', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], false);
 goog.addDependency('html/sanitizer/tagblacklist.js', ['goog.html.sanitizer.TagBlacklist'], [], false);
 goog.addDependency('html/sanitizer/tagwhitelist.js', ['goog.html.sanitizer.TagWhitelist'], [], false);
 goog.addDependency('html/silverlight.js', ['goog.html.silverlight'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const'], false);

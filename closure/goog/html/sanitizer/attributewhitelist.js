@@ -22,7 +22,7 @@ goog.provide('goog.html.sanitizer.AttributeWhitelist');
 
 /**
  * A tag whitelist for allowed attributes.
- * @dict {boolean}
+ * @const @dict {boolean}
  */
 goog.html.sanitizer.AttributeWhitelist = {
   '* ABBR': true,

@@ -22,7 +22,7 @@ goog.provide('goog.html.sanitizer.TagWhitelist');
 
 /**
  * A tag whitelist for allowed tags.
- * @dict {boolean}
+ * @const @dict {boolean}
  */
 goog.html.sanitizer.TagWhitelist = {
   'A': true,           // HTMLAnchorElement

@@ -26,7 +26,7 @@ goog.provide('goog.html.sanitizer.TagBlacklist');
  * blacklist (or even whitelisted) it will continue to be removed from the HTML
  * as TEMPLATE is used interally to denote nodes which should not be added to
  * the sanitized HTML.
- * @dict {boolean}
+ * @const @dict {boolean}
  */
 goog.html.sanitizer.TagBlacklist = {
   'APPLET': true,
@@ -34,14 +34,20 @@ goog.html.sanitizer.TagBlacklist = {
   'BASE': true,
   'BGSOUND': true,
   'EMBED': true,
-  'IFRAME': true,   // NOTE: can remove this for old browser behavior
-  'ISINDEX': true,  // Can result in network requests
-  'KEYGEN': true,   // Unused and just unnecessarily increase attack surface
+  // NOTE: can remove this for old browser behavior
+  'IFRAME': true,
+  // Can result in network requests
+  'ISINDEX': true,
+  // Unused and just unnecessarily increase attack surface
+  'KEYGEN': true,
   'LAYER': true,
   'LINK': true,
   'META': true,
   'OBJECT': true,
   'SCRIPT': true,
+  // Can result in an XSS in FF
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1205631
+  'SVG': true,
   'STYLE': true,
   'TEMPLATE': true,
   'VIDEO': true
