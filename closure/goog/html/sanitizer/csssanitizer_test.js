@@ -212,6 +212,11 @@ function testCssBackground() {
   assertFalse(goog.string.contains(sanitizedCss, 'Bar.png'));
 }
 
+function testVendorPrefixed() {
+  var actualCSS = '-webkit-text-stroke: calc(3px - 2px) red';
+  var expectedCSS = '';
+  assertCSSTextEquals(expectedCSS, getSanitizedInlineStyle(actualCSS));
+}
 
 function testColor() {
   var colors = [

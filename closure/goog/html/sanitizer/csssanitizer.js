@@ -272,7 +272,8 @@ goog.html.sanitizer.CssSanitizer.getCssValue_ = function(cssStyle, propName) {
   var getPropDescriptor = Object.getOwnPropertyDescriptor(
       CSSStyleDeclaration.prototype, 'getPropertyValue');
   if (getPropDescriptor && cssStyle.getPropertyValue) {
-    return getPropDescriptor.value.call(cssStyle, propName);
+    // getPropertyValue on Safari can return null
+    return getPropDescriptor.value.call(cssStyle, propName) || '';
   } else if (cssStyle.getAttribute) {
     // In IE8 and other older browers we make a direct call to getAttribute.
     return String(cssStyle.getAttribute(propName));
