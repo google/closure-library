@@ -20,18 +20,18 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TypeAhead');
+
 function makeATree() {
   var tree = new goog.ui.tree.TreeControl('root');
   var testData = [
     'level1',
     [
-      ['level2', [['eve', []], ['eve2', []]], []],
-      ['level22', [['eve', []], ['eve3', []]], []]
-    ],
-    []
+      ['level2', [['eve', []], ['eve2', [['eve4', []]]]]],
+      ['level22', [['eve', []], ['eve3', []], ['eve5', []]]]
+    ]
   ];
 
-  createTreeFromTestData(tree, testData, 3);
+  createTreeNodeFromTestData(tree, testData, 3);
 
   tree.createDom();
   goog.dom.getElement('treeContainer').appendChild(tree.getElement());
@@ -40,7 +40,7 @@ function makeATree() {
   return tree;
 }
 
-function createTreeFromTestData(node, data, maxLevels) {
+function createTreeNodeFromTestData(node, data, maxLevels) {
   node.setText(data[0]);
   if (maxLevels < 0) {
     return;
@@ -51,7 +51,7 @@ function createTreeFromTestData(node, data, maxLevels) {
     var child = children[i];
     var childNode = node.getTree().createNode('');
     node.add(childNode);
-    createTreeFromTestData(childNode, child, maxLevels - 1);
+    createTreeNodeFromTestData(childNode, child, maxLevels - 1);
   }
 }
 
@@ -72,11 +72,39 @@ function testJumpToLabel() {
   handled = typeAhead.jumpToLabel_('eve');
   selectedItem = tree.getSelectedItem();
   assertTrue(handled && selectedItem.getHtml() == 'eve');
+  var firstEveNode = selectedItem;
 
   // Test the case when the matching entry is at a deeper level.
   handled = typeAhead.jumpToLabel_('eve3');
   selectedItem = tree.getSelectedItem();
   assertTrue(handled && selectedItem.getHtml() == 'eve3');
+  var leafNode = selectedItem;  // eve3 is a leaf
+
+  // Test the case after leaf node removal; ensure no node is picked.
+  leafNode.getParent().removeChild(leafNode);
+  handled = typeAhead.jumpToLabel_('eve3');
+  selectedItem = tree.getSelectedItem();
+  assertTrue(!handled);
+
+  // Test the case after duplicate node removal; ensure another node is picked.
+  firstEveNode.getParent().removeChild(firstEveNode);
+  handled = typeAhead.jumpToLabel_('eve');
+  selectedItem = tree.getSelectedItem();
+  assertTrue(handled && selectedItem.getHtml() == 'eve');
+  var secondEveNode = selectedItem;
+
+  // Test the case after all exact matching node removal.
+  secondEveNode.getParent().removeChild(secondEveNode);
+  handled = typeAhead.jumpToLabel_('eve');
+  selectedItem = tree.getSelectedItem();
+  assertTrue(handled && selectedItem.getHtml() == 'eve2');
+  var parentNode = selectedItem;  // eve2 is a parent
+
+  // Test the case after prior parent node removal of node with similar prefix.
+  parentNode.getParent().removeChild(parentNode);
+  handled = typeAhead.jumpToLabel_('eve');
+  selectedItem = tree.getSelectedItem();
+  assertTrue(handled && selectedItem.getHtml() == 'eve5');
 }
 
 

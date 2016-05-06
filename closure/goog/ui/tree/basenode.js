@@ -368,8 +368,8 @@ goog.ui.tree.BaseNode.prototype.removeChild = function(
   child.depth_ = -1;
 
   if (tree) {
-    // Tell the tree control that this node is now removed.
-    tree.removeNode(this);
+    // Tell the tree control that the child node is now removed.
+    tree.removeNode(child);
 
     if (this.isInDocument()) {
       var el = this.getChildrenElement();
