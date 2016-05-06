@@ -27,7 +27,7 @@ goog.require('goog.string');
 goog.require('goog.structs.Set');
 
 goog.scope(function() {
-// type checking only (no require)
+/** @suppress {missingRequire} type checking only */
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 
 
