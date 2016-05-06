@@ -587,8 +587,11 @@ goog.net.XhrIo.prototype.send = function(
   if (this.responseType_) {
     this.xhr_.responseType = this.responseType_;
   }
-
-  if (goog.object.containsKey(this.xhr_, 'withCredentials')) {
+  // Set xhr_.withCredentials only when the value is different, or else in 
+  // synchronous XMLHtppRequest.open Firefox will throw an exception.
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=736340
+  if (goog.object.containsKey(this.xhr_, 'withCredentials') &&
+	  this.xhr_.withCredentials !== this.withCredentials_) {
     this.xhr_.withCredentials = this.withCredentials_;
   }
 
