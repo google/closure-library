@@ -57,7 +57,6 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
-goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -587,8 +586,11 @@ goog.net.XhrIo.prototype.send = function(
   if (this.responseType_) {
     this.xhr_.responseType = this.responseType_;
   }
-
-  if (goog.object.containsKey(this.xhr_, 'withCredentials')) {
+  // Set xhr_.withCredentials only when the value is different, or else in
+  // synchronous XMLHtppRequest.open Firefox will throw an exception.
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=736340
+  if ('withCredentials' in this.xhr_ &&
+      this.xhr_.withCredentials !== this.withCredentials_) {
     this.xhr_.withCredentials = this.withCredentials_;
   }
 
