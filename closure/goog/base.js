@@ -1209,10 +1209,8 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       }
 
-      var isOldIE = goog.IS_OLD_IE_;
-
       if (opt_sourceText === undefined) {
-        if (!isOldIE) {
+        if (!goog.IS_OLD_IE_) {
           if (goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING) {
             goog.appendScriptSrcNode_(src);
           } else {
@@ -1427,8 +1425,7 @@ goog.retrieveAndExecModule_ = function(src) {
 
     if (scriptText != null) {
       var execModuleScript = goog.wrapModule_(src, scriptText);
-      var isOldIE = goog.IS_OLD_IE_;
-      if (isOldIE) {
+      if (goog.IS_OLD_IE_) {
         goog.dependencies_.deferred[originalPath] = execModuleScript;
         goog.queuedModules_.push(originalPath);
       } else {
