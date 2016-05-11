@@ -1091,8 +1091,7 @@ function testAddDependencyModule() {
     assertEquals(2, args.length);
     assertEquals('', args[0]);
     assertRegExp(
-        '^goog\\.retrieveAndExec_\\(".*/' + module + '", true, false\\);$',
-        args[1]);
+        '^goog\\.retrieveAndExecModule_\\(".*/' + module + '"\\);$', args[1]);
   };
 
   require('testDep.mod');
@@ -1108,37 +1107,6 @@ function testAddDependencyModule() {
   require('testDep.goog');
   assertEquals(3, load.getCallCount());
   assertModuleLoad('mod-goog.js', load.getCalls()[2].getArguments());
-
-  // Unset provided namespace so the test can be re-run.
-  testDep = undefined;
-}
-
-function testAddDependencyEs6() {
-  var script = null;
-  goog.transpiledLanguages_ = {'es5': false, 'es6-impl': false, 'es6': true};
-  stubs.set(goog, 'writeScriptTag_', function(src, scriptText) {
-    if (script != null) {
-      throw new Error('Multiple scripts written');
-    }
-    script = scriptText;
-  });
-
-  goog.addDependency(
-      'fancy.js', ['testDep.fancy'], [],
-      {'lang': 'es6-impl', 'module': 'goog'});
-  goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es6'});
-
-  // To differentiate this call from the real one.
-  var require = goog.require;
-
-  require('testDep.fancy');
-  assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/fancy\.js", true, false\);$/, script);
-  script = null;
-
-  require('testDep.superFancy');
-  assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/super\.js", false, true\);$/, script);
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
@@ -1474,10 +1442,6 @@ function testGoogLoadModuleByUrl() {
     // IE before 10 don't report an error.
     return;
   }
-
-  stubs.set(goog, 'loadFileSync_', function(src) {
-    return 'closure load file sync: ' + src;
-  });
 
   // "goog.loadModuleByUrl" is not a general purpose code loader, it can
   // not be used to late load code.
