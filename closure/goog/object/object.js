@@ -507,7 +507,7 @@ goog.object.equals = function(a, b) {
 
 
 /**
- * Does a flat clone of the object.
+ * Returns a shallow clone of the object.
  *
  * @param {Object<K,V>} obj Object to clone.
  * @return {!Object<K,V>} Clone of the input object.
