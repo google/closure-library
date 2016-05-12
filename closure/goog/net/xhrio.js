@@ -244,7 +244,7 @@ goog.net.XhrIo.ResponseType = {
 
 /**
  * A reference to the XhrIo logger
- * @private {goog.debug.Logger}
+ * @private {?goog.log.Logger}
  * @const
  */
 goog.net.XhrIo.prototype.logger_ = goog.log.getLogger('goog.net.XhrIo');
