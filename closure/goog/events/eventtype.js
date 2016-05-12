@@ -121,6 +121,7 @@ goog.events.EventType = {
   READYSTATECHANGE: 'readystatechange',
   RESIZE: 'resize',
   SCROLL: 'scroll',
+  TIMEUPDATE: 'timeupdate',
   UNLOAD: 'unload',
 
   // HTML 5 History events
