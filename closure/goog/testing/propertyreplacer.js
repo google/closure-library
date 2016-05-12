@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.PropertyReplacer');
 goog.provide('goog.testing.PropertyReplacer');
 
 /** @suppress {extraRequire} Needed for some tests to compile. */

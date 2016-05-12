@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.fs.FileWriter');
 goog.provide('goog.testing.fs.FileWriter');
 
 goog.require('goog.Timer');

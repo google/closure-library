@@ -31,6 +31,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.TestRunner');
 goog.provide('goog.testing.TestRunner');
 
 goog.require('goog.dom.TagName');

@@ -20,6 +20,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing');
 goog.provide('goog.testing');
 goog.provide('goog.testing.FunctionMock');
 goog.provide('goog.testing.GlobalFunctionMock');

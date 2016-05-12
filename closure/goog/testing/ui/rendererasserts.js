@@ -18,6 +18,7 @@
  * @author mkretzschmar@google.com (Martin Kretzschmar)
  */
 
+goog.setTestOnly('goog.testing.ui.rendererasserts');
 goog.provide('goog.testing.ui.rendererasserts');
 
 goog.require('goog.testing.asserts');

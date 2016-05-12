@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.fs.Blob');
 goog.provide('goog.testing.fs.Blob');
 
 goog.require('goog.crypt');
