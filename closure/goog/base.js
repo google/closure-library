@@ -584,7 +584,7 @@ goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
     }
     for (var i = 0; provide = provides[i]; i++) {
       deps.nameToPath[provide] = path;
-      deps.pathIsModule[path] = opt_loadFlags['module'] == 'goog';
+      deps.loadFlags[path] = opt_loadFlags;
     }
     for (var j = 0; require = requires[j]; j++) {
       if (!(path in deps.requires)) {
@@ -804,13 +804,21 @@ goog.loadedModules_ = {};
 goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
 
 
+/** @define {boolean} Whether to always transpile every file. */
+goog.define('goog.ALWAYS_TRANSPILE', false);
+
+
+/** @define {boolean} Never transpile if this is set. */
+goog.define('goog.NEVER_TRANSPILE', false);
+
+
 if (goog.DEPENDENCIES_ENABLED) {
   /**
    * This object is used to keep track of dependencies and other data that is
    * used for loading scripts.
    * @private
    * @type {{
-   *   pathIsModule: !Object<string, boolean>,
+   *   loadFlags: !Object<string, !Object<string, string>>,
    *   nameToPath: !Object<string, string>,
    *   requires: !Object<string, !Object<string, boolean>>,
    *   visited: !Object<string, boolean>,
@@ -819,7 +827,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * }}
    */
   goog.dependencies_ = {
-    pathIsModule: {},  // 1 to 1
+    loadFlags: {},  // 1 to 1
 
     nameToPath: {},  // 1 to 1
 
@@ -891,20 +899,28 @@ if (goog.DEPENDENCIES_ENABLED) {
   };
 
 
-  /** @const @private {boolean} */
+  /**
+   * Whether the browser is IE9 or earlier, which needs special handling
+   * for deferred modules.
+   * @const @private {boolean}
+   */
   goog.IS_OLD_IE_ =
       !!(!goog.global.atob && goog.global.document && goog.global.document.all);
 
 
   /**
-   * Given a URL initiate retrieval and execution of the module.
+   * Given a URL initiate retrieval and execution of a script that needs
+   * pre-processing.
    * @param {string} src Script source URL.
+   * @param {boolean} isModule Whether this is a goog.module.
+   * @param {boolean} needsTranspile Whether this source needs transpilation.
    * @private
    */
-  goog.importModule_ = function(src) {
+  goog.importProcessedScript_ = function(src, isModule, needsTranspile) {
     // In an attempt to keep browsers from timing out loading scripts using
     // synchronous XHRs, put each load in its own script block.
-    var bootstrap = 'goog.retrieveAndExecModule_("' + src + '");';
+    var bootstrap = 'goog.retrieveAndExec_("' + src + '", ' + isModule + ', ' +
+        needsTranspile + ');';
 
     goog.importScript_('', bootstrap);
   };
@@ -1000,7 +1016,9 @@ if (goog.DEPENDENCIES_ENABLED) {
    */
   goog.isDeferredModule_ = function(name) {
     var path = goog.getPathFromDeps_(name);
-    if (path && goog.dependencies_.pathIsModule[path]) {
+    var loadFlags = path && goog.dependencies_.loadFlags[path] || {};
+    if (path && (loadFlags['module'] == 'goog' ||
+                 goog.needsTranspile_(loadFlags['lang']))) {
       var abspath = goog.basePath + path;
       return (abspath) in goog.dependencies_.deferred;
     }
@@ -1064,7 +1082,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // Because this executes synchronously, we don't need to do any additional
     // bookkeeping. When "goog.loadModule" the namespace will be marked as
     // having been provided which is sufficient.
-    goog.retrieveAndExecModule_(url);
+    goog.retrieveAndExec_(url, true, false);
   };
 
 
@@ -1236,6 +1254,66 @@ if (goog.DEPENDENCIES_ENABLED) {
   };
 
 
+  /**
+   * Determines whether the given language needs to be transpiled.
+   * @param {string} lang
+   * @return {boolean}
+   * @private
+   */
+  goog.needsTranspile_ = function(lang) {
+    if (goog.ALWAYS_TRANSPILE) {
+      return true;
+    } else if (goog.NEVER_TRANSPILE) {
+      return false;
+    } else if (!goog.transpiledLanguages_) {
+      goog.transpiledLanguages_ = {'es5': true, 'es6': true, 'es6-impl': true};
+      /** @preserveTry */
+      try {
+        // Perform some quick conformance checks, to distinguish
+        // between browsers that support es5, es6-impl, or es6.
+
+        // Identify ES3-only browsers by their incorrect treatment of commas.
+        goog.transpiledLanguages_['es5'] = eval('[1,].length!=1');
+
+        // As browsers mature, features will be moved from the full test
+        // into the impl test.  This must happen before the corresponding
+        // features are changed in the Closure Compiler's FeatureSet object.
+
+        // Test 1: es6-impl [FF49, Edge 13, Chrome 49]
+        //   (a) let/const keyword, (b) class expressions, (c) Map object,
+        //   (d) iterable arguments, (e) spread operator
+        var es6implTest =
+            'let a={};const X=class{constructor(){}x(z){return new Map([' +
+            '...arguments]).get(z[0])==3}};return new X().x([a,3])';
+
+        // Test 2: es6 [FF50 (?), Edge 14 (?), Chrome 50]
+        //   (a) default params (specifically shadowing locals),
+        //   (b) destructuring, (c) block-scoped functions,
+        //   (d) for-of (const), (e) new.target/Reflect.construct
+        var es6fullTest =
+            'class X{constructor(){if(new.target!=String)throw 1;this.x=42}}' +
+            'let q=Reflect.construct(X,[],String);if(q.x!=42||!(q instanceof ' +
+            'String))throw 1;for(const a of[2,3]){if(a==2)continue;function ' +
+            'f(z={a}){let a=0;return z.a}{function f(){return 0;}}return f()' +
+            '==3}';
+
+        if (eval('(()=>{"use strict";' + es6implTest + '})()')) {
+          goog.transpiledLanguages_['es6-impl'] = false;
+        }
+        if (eval('(()=>{"use strict";' + es6fullTest + '})()')) {
+          goog.transpiledLanguages_['es6'] = false;
+        }
+      } catch (err) {
+      }
+    }
+    return !!goog.transpiledLanguages_[lang];
+  };
+
+
+  /** @private {?Object<string, boolean>} */
+  goog.transpiledLanguages_ = null;
+
+
   /** @private {number} */
   goog.lastNonModuleScriptIndex_ = 0;
 
@@ -1321,10 +1399,14 @@ if (goog.DEPENDENCIES_ENABLED) {
     for (var i = 0; i < scripts.length; i++) {
       var path = scripts[i];
       if (path) {
-        if (!deps.pathIsModule[path]) {
-          goog.importScript_(goog.basePath + path);
+        var loadFlags = deps.loadFlags[path] || {};
+        var needsTranspile = goog.needsTranspile_(loadFlags['lang']);
+        if (loadFlags['module'] == 'goog' || needsTranspile) {
+          goog.importProcessedScript_(
+              goog.basePath + path, loadFlags['module'] == 'goog',
+              needsTranspile);
         } else {
-          goog.importModule_(goog.basePath + path);
+          goog.importScript_(goog.basePath + path);
         }
       } else {
         goog.moduleLoaderState_ = moduleState;
@@ -1389,7 +1471,7 @@ goog.normalizePath_ = function(path) {
 /**
  * Loads file by synchronous XHR. Should not be used in production environments.
  * @param {string} src Source URL.
- * @return {string} File contents.
+ * @return {?string} File contents, or null if load failed.
  * @private
  */
 goog.loadFileSync_ = function(src) {
@@ -1400,17 +1482,19 @@ goog.loadFileSync_ = function(src) {
     var xhr = new goog.global['XMLHttpRequest']();
     xhr.open('get', src, false);
     xhr.send();
-    return xhr.responseText;
+    return xhr.status == 200 ? xhr.responseText : null;
   }
 };
 
 
 /**
- * Retrieve and execute a module.
+ * Retrieve and execute a script that needs some sort of wrapping.
  * @param {string} src Script source URL.
+ * @param {boolean} isModule Whether to load as a module.
+ * @param {boolean} needsTranspile Whether to transpile down to ES3.
  * @private
  */
-goog.retrieveAndExecModule_ = function(src) {
+goog.retrieveAndExec_ = function(src, isModule, needsTranspile) {
   if (!COMPILED) {
     // The full but non-canonicalized URL for later use.
     var originalPath = src;
@@ -1422,19 +1506,71 @@ goog.retrieveAndExecModule_ = function(src) {
         goog.global.CLOSURE_IMPORT_SCRIPT || goog.writeScriptTag_;
 
     var scriptText = goog.loadFileSync_(src);
+    if (scriptText == null) {
+      throw new Error('Load of "' + src + '" failed');
+    }
 
-    if (scriptText != null) {
-      var execModuleScript = goog.wrapModule_(src, scriptText);
-      if (goog.IS_OLD_IE_) {
-        goog.dependencies_.deferred[originalPath] = execModuleScript;
-        goog.queuedModules_.push(originalPath);
-      } else {
-        importScript(src, execModuleScript);
-      }
+    if (needsTranspile) {
+      scriptText = goog.transpile_.call(goog.global, scriptText, src);
+    }
+
+    if (isModule) {
+      scriptText = goog.wrapModule_(src, scriptText);
     } else {
-      throw new Error('load of ' + src + 'failed');
+      scriptText += '\n//# sourceURL=' + src;
+    }
+    var isOldIE = goog.IS_OLD_IE_;
+    if (isOldIE) {
+      goog.dependencies_.deferred[originalPath] = scriptText;
+      goog.queuedModules_.push(originalPath);
+    } else {
+      importScript(src, scriptText);
     }
   }
+};
+
+
+/**
+ * Lazily retrieves the transpiler and applies it to the source.
+ * @param {string} code JS code.
+ * @param {string} path Path to the code.
+ * @return {string} The transpiled code.
+ * @private
+ */
+goog.transpile_ = function(code, path) {
+  var jscomp = goog.global['$jscomp'];
+  if (!jscomp) {
+    goog.global['$jscomp'] = jscomp = {};
+  }
+  var transpile = jscomp.transpile;
+  if (!transpile) {
+    var transpilerPath = goog.basePath + 'transpile.js';
+    var transpilerCode = goog.loadFileSync_(transpilerPath);
+    if (transpilerCode) {
+      // This must be executed synchronously, since by the time we know we
+      // need it, we're about to load and write the ES6 code synchronously,
+      // so a normal script-tag load will be too slow.
+      eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
+      // Note: transpile.js reassigns goog.global['$jscomp'] so pull it again.
+      jscomp = goog.global['$jscomp'];
+      transpile = jscomp.transpile;
+    }
+  }
+  if (!transpile) {
+    // The transpiler is an optional component.  If it's not available then
+    // replace it with a pass-through function that simply logs.
+    var suffix = ' requires transpilation but no transpiler was found.';
+    transpile = jscomp.transpile = function(code, path) {
+      // TODO(user): figure out some way to get this error to show up
+      // in test results, noting that the failure may occur in many
+      // different ways, including in loadModule() before the test
+      // runner even comes up.
+      goog.logToConsole_(path + suffix);
+      return code;
+    };
+  }
+  // Note: any transpilation errors/warnings will be logged to the console.
+  return transpile(code, path);
 };
 
 
