@@ -17,7 +17,193 @@ goog.setTestOnly('goog.dom.formsTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.forms');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
+
+
+var stubs = new goog.testing.PropertyReplacer();
+
+function tearDown() {
+  stubs.reset();
+}
+
+
+/**
+ * Sets up a mocked version of goog.window.openBlank.
+ * @param {!Object} mockForm A mocked form Object to return on
+ *     createElement('form').
+ */
+function mockWindowOpen(mockForm) {
+  var windowOpen = function() {
+    return {
+      document: {
+        createElement: function(name) {
+          if (name == 'form') {
+            return mockForm;
+          }
+          return {};
+        }
+      }
+    };
+  };
+  stubs.setPath('goog.window.openBlank', windowOpen);
+}
+
+function testSubmitFormInNewWindowWithSubmitButton() {
+  var expectedForm = [
+    {name: 'in1', value: 'foo', type: 'hidden'},
+    {name: 'in2', value: 'bar', type: 'hidden'},
+    {name: 'in2', value: 'baaz', type: 'hidden'},
+    {name: 'in3', value: '', type: 'hidden'},
+    {name: 'pass', value: 'bar', type: 'hidden'},
+    {name: 'textarea', value: 'foo bar baz', type: 'hidden'},
+    {name: 'select1', value: '1', type: 'hidden'},
+    {name: 'select2', value: 'a', type: 'hidden'},
+    {name: 'select2', value: 'c', type: 'hidden'},
+    {name: 'select3', value: '', type: 'hidden'},
+    {name: 'checkbox1', value: 'on', type: 'hidden'},
+    {name: 'radio', value: 'X', type: 'hidden'},
+    {name: 'radio2', value: 'Y', type: 'hidden'},
+    {name: 'submit', value: 'submitb', type: 'hidden'}
+  ];
+
+  var formElements = [];
+
+  var mockForm = {
+    appendChild: function(child) { formElements.push(child); },
+    submit: function() {
+      assertArrayEquals(expectedForm, formElements);
+      assertEquals('https://foo.xyz/baz', mockForm.action);
+      assertEquals('get', mockForm.method);
+    }
+  };
+
+  mockWindowOpen(mockForm);
+
+  var formEl = goog.dom.getElement('testform1');
+  var submitEl = goog.dom.getElement('submitb');
+  var result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
+  assertTrue(result);
+}
+
+function testSubmitFormInNewWindowWithSubmitInput() {
+  var expectedForm = [
+    {name: 'in1', value: 'foo', type: 'hidden'},
+    {name: 'in2', value: 'bar', type: 'hidden'},
+    {name: 'in2', value: 'baaz', type: 'hidden'},
+    {name: 'in3', value: '', type: 'hidden'},
+    {name: 'pass', value: 'bar', type: 'hidden'},
+    {name: 'textarea', value: 'foo bar baz', type: 'hidden'},
+    {name: 'select1', value: '1', type: 'hidden'},
+    {name: 'select2', value: 'a', type: 'hidden'},
+    {name: 'select2', value: 'c', type: 'hidden'},
+    {name: 'select3', value: '', type: 'hidden'},
+    {name: 'checkbox1', value: 'on', type: 'hidden'},
+    {name: 'radio', value: 'X', type: 'hidden'},
+    {name: 'radio2', value: 'Y', type: 'hidden'},
+    {name: 'submit', value: 'submitv', type: 'hidden'}
+  ];
+
+  var formElements = [];
+
+  var mockForm = {
+    appendChild: function(child) { formElements.push(child); },
+    submit: function() {
+      assertArrayEquals(expectedForm, formElements);
+      assertEquals('https://foo.xyz/baz', mockForm.action);
+      assertEquals('get', mockForm.method);
+    }
+  };
+
+  mockWindowOpen(mockForm);
+
+
+  var formEl = goog.dom.getElement('testform1');
+  var submitEl = goog.dom.getElement('submit');
+  var result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
+  assertTrue(result);
+}
+
+function testSubmitFormInNewWindowWithoutSubmitButton() {
+  var expectedForm = [
+    {name: 'in1', value: 'foo', type: 'hidden'},
+    {name: 'in2', value: 'bar', type: 'hidden'},
+    {name: 'in2', value: 'baaz', type: 'hidden'},
+    {name: 'in3', value: '', type: 'hidden'},
+    {name: 'pass', value: 'bar', type: 'hidden'},
+    {name: 'textarea', value: 'foo bar baz', type: 'hidden'},
+    {name: 'select1', value: '1', type: 'hidden'},
+    {name: 'select2', value: 'a', type: 'hidden'},
+    {name: 'select2', value: 'c', type: 'hidden'},
+    {name: 'select3', value: '', type: 'hidden'},
+    {name: 'checkbox1', value: 'on', type: 'hidden'},
+    {name: 'radio', value: 'X', type: 'hidden'},
+    {name: 'radio2', value: 'Y', type: 'hidden'}
+  ];
+
+  var formElements = [];
+
+  var mockForm = {
+    appendChild: function(child) { formElements.push(child); },
+    submit: function() {
+      assertArrayEquals(expectedForm, formElements);
+      assertEquals('https://foo.bar/baz', mockForm.action);
+      assertEquals('get', mockForm.method);
+    }
+  };
+
+  mockWindowOpen(mockForm);
+
+  var formEl = goog.dom.getElement('testform1');
+  var result = goog.dom.forms.submitFormInNewWindow(formEl);
+  assertTrue(result);
+}
+
+function testSubmitFormInNewWindowError() {
+  var formEl = goog.dom.getElement('testform1');
+  var resetEl = goog.dom.getElement('reset');
+
+  assertThrows(
+      'Non-submit type elements cannot be used to submit form.',
+      function() { goog.dom.forms.submitFormInNewWindow(formEl, resetEl); });
+}
+
+function testSubmitFormDataInNewWindow() {
+  var expectedForm = [
+    {name: 'in1', value: 'foo', type: 'hidden'},
+    {name: 'in2', value: 'bar', type: 'hidden'},
+    {name: 'in2', value: 'baaz', type: 'hidden'},
+    {name: 'in3', value: '', type: 'hidden'},
+    {name: 'pass', value: 'bar', type: 'hidden'},
+    {name: 'textarea', value: 'foo bar baz', type: 'hidden'},
+    {name: 'select1', value: '1', type: 'hidden'},
+    {name: 'select2', value: 'a', type: 'hidden'},
+    {name: 'select2', value: 'c', type: 'hidden'},
+    {name: 'select3', value: '', type: 'hidden'},
+    {name: 'checkbox1', value: 'on', type: 'hidden'},
+    {name: 'radio', value: 'X', type: 'hidden'},
+    {name: 'radio2', value: 'Y', type: 'hidden'}
+  ];
+
+  var formElements = [];
+
+  var mockForm = {
+    appendChild: function(child) { formElements.push(child); },
+    submit: function() {
+      assertArrayEquals(expectedForm, formElements);
+      assertEquals('https://foo.bar/baz', mockForm.action);
+      assertEquals('get', mockForm.method);
+    }
+  };
+
+  mockWindowOpen(mockForm);
+
+  var formEl = goog.dom.getElement('testform1');
+  var formData = goog.dom.forms.getFormDataMap(formEl);
+  var result = goog.dom.forms.submitFormDataInNewWindow(
+      formEl.action, formEl.method, formData);
+  assertTrue(result);
+}
 
 function testGetFormDataString() {
   var el = goog.dom.getElement('testform1');
@@ -356,7 +542,7 @@ function testGetValueButton() {
 function testGetValueSubmit() {
   var el = goog.dom.getElement('submit');
   var result = goog.dom.forms.getValue(el);
-  assertEquals('submit', result);
+  assertEquals('submitv', result);
 }
 
 function testGetValueReset() {

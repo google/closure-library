@@ -19,7 +19,7 @@ See the COPYING file for details.
   <!-- empty div to test against -->
   <div id="testdiv1"></div>
 
-  <form id="testform1" onsubmit="return false">
+  <form id="testform1" action="https://foo.bar/baz" onsubmit="return false">
 
     <!-- text input with one value -->
     <input id="in1" name="in1" value="foo">
@@ -81,10 +81,15 @@ See the COPYING file for details.
     <button id="button" name="button" type="button" value="button" onclick="testSetValueSelectMultiple()">button</button>
 
     <!-- submit -->
-    <input id="submit" type="submit" name="submit" value="submit">
+    <input id="submit" type="submit" name="submit" value="submitv" formaction="https://foo.xyz/baz">
 
     <!-- reset -->
     <input id="reset" type="reset" name="reset" value="reset">
+
+    <!-- submit -->
+    <button id="submitb" name="submit" value="submitb" formaction="https://foo.xyz/baz">
+      Submit
+    </button>
 
   </form>
 
