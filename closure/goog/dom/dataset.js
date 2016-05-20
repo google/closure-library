@@ -97,7 +97,7 @@ goog.dom.dataset.remove = function(element, key) {
   if (goog.dom.dataset.ALLOWED_ && element.dataset) {
     // In strict mode Safari will trigger an error when trying to delete a
     // property which does not exist.
-    if (element.dataset.hasOwnProperty(key)) {
+    if (goog.dom.dataset.has(element, key)) {
       delete element.dataset[key];
     }
   } else {
