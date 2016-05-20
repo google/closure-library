@@ -182,17 +182,10 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
  * The WebChannelBase only supports object types.
  *
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
- * @param {function()=} opt_onDelivery An optional callback to signal the
- * delivery of the message by the server. This is useful for the client to
- * issue an explicit commit or a snapshot command to ensure all the
- * client-generated messages, up to this message, have been delivered
- * (to the application) by the server. Messages are totally ordered (FIFO)
- * for a given channel instance.
  *
  * @override
  */
-WebChannelBaseTransport.Channel.prototype.send = function(
-    message, opt_onDelivery) {
+WebChannelBaseTransport.Channel.prototype.send = function(message) {
   goog.asserts.assert(goog.isObject(message), 'only object type expected');
 
   if (this.sendRawJson_) {
@@ -375,7 +368,7 @@ WebChannelBaseTransport.ChannelProperties.prototype.isSpdyEnabled = function() {
 /**
  * @override
  */
-WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
+WebChannelBaseTransport.ChannelProperties.prototype.commit =
     goog.abstractMethod;
 
 
@@ -383,6 +376,20 @@ WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
  * @override
  */
 WebChannelBaseTransport.ChannelProperties.prototype.getNonAckedMessageCount =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.onCommit =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.ackCommit =
     goog.abstractMethod;
 
 
