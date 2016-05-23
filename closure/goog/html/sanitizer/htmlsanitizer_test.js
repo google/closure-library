@@ -788,6 +788,22 @@ function testDataAttributes() {
 }
 
 
+function testDisallowedDataWhitelistingAttributes() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowDataAttributes(['datai'])
+        .build();
+  });
+
+  // Disallow internal attribute used by html sanitizer
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowDataAttributes(['data-i', 'data-sanitizer-safe'])
+        .build();
+  });
+}
+
+
 function testFormBody() {
   var safeHtml = '<form>stuff</form>';
   var formHtml = '<form name="body">stuff</form>';

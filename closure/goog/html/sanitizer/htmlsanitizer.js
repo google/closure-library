@@ -127,6 +127,8 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
   goog.array.forEach(opt_builder.dataAttributeWhitelist_, function(dataAttr) {
     // TODO(danesh): What if this is just data-, do we need to check data-\w+?
     goog.asserts.assert(goog.string.startsWith(dataAttr, 'data-'));
+    goog.asserts.assert(!goog.string.startsWith(
+        dataAttr, goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_));
 
     this.attributeHandlers_['* ' + dataAttr.toUpperCase()] =
         /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (
