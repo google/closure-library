@@ -372,6 +372,7 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
     }
     return;  // Skip the test
   }
+  /** @private @suppress {missingRequire} Circular dep. */
   this.request_ =
       goog.net.BrowserChannel.createChannelRequest(this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
