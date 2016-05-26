@@ -102,13 +102,14 @@ goog.math.Long.fromInt = function(value) {
 
 
 /**
- * Returns a Long representing the given value, provided that it is a finite
- * number.  Otherwise, zero is returned.
+ * Returns a Long representing the given value.
+ * NaN will be returned as zero. Infinity is converted to max value and
+ * -Infinity to min value.
  * @param {number} value The number in question.
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromNumber = function(value) {
-  if (isNaN(value) || !isFinite(value)) {
+  if (isNaN(value)) {
     return goog.math.Long.getZero();
   } else if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
     return goog.math.Long.getMinValue();

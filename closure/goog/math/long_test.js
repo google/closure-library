@@ -1339,6 +1339,12 @@ function testToFromNumber() {
     var val = goog.math.Long.fromNumber(num);
     assertEquals(num, val.toNumber());
   }
+  // Test edge cases
+  assertEquals(goog.math.Long.getZero(), goog.math.Long.fromNumber(NaN));
+  assertEquals(
+      goog.math.Long.getMaxValue(), goog.math.Long.fromNumber(Infinity));
+  assertEquals(
+      goog.math.Long.getMinValue(), goog.math.Long.fromNumber(-Infinity));
 }
 
 function testIsZero() {
