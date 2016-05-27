@@ -722,7 +722,7 @@ goog.html.sanitizer.HtmlSanitizer.getParentNode_ = function(node) {
  * sanitized tree.
  * @param {?string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} Sanitized HTML
- * @throws {!Error} If browser doesn't support <template> or
+ * @throws {!Error} If browser doesn't support `<template>` or
  *     document.implementation, or if the sanitizedParent DIV node is not found
  *     in the serialized XML. IE8 is not supported.
  * @final
@@ -966,7 +966,7 @@ goog.html.sanitizer.HtmlSanitizer.getContext_ = function(
  * sanitizer with default options and uses this to sanitize.
  * @param {string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} sanitizedHtml
- * @throws {!Error} If browser doesn't support <template> or
+ * @throws {!Error} If browser doesn't support `<template>` or
  *     document.implementation, or if the sanitizedParent DIV node is not found
  *     in the serialized XML. IE8 is not supported.
  */

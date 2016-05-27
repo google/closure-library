@@ -35,8 +35,8 @@ goog.require('goog.window');
  * optional submit element with formaction and/or formmethod attributes is
  * provided.
  * @param {!HTMLFormElement} form The form.
- * @param {!HTMLElement=} opt_submitElement The <button> or <input> element used
- *     to submit the form. The element should have a submit type.
+ * @param {!HTMLElement=} opt_submitElement The `<button>` or `<input>` element
+ *     used to submit the form. The element should have a submit type.
  * @return {boolean} true If the form was submitted succesfully.
  * @throws {!Error} If opt_submitElement is not a valid form submit element.
  */
