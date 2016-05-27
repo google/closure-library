@@ -37,7 +37,7 @@ goog.provide('goog.labs.mock.verification.VerificationMode');
  * goog.module('my.package.MyClassTest');
  * goog.setTestOnly('my.package.MyClassTest');
  *
- * var testSuite = goog.require('goog.testSuite');
+ * var testSuite = goog.require('goog.testing.testSuite');
  * var verification = goog.require('goog.labs.mock.verification');
  *
  * var times = verification.times;
