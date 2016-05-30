@@ -40,6 +40,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -873,6 +874,23 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
     tbody.appendChild(tr);
   }
   return table;
+};
+
+
+/**
+ * Creates a new Node from a constant string of HTML markup.
+ * @param {!goog.string.Const} constHtml The HTML string to convert into a node.
+ * @return {!Node}
+ */
+goog.dom.constHtmlToNode = function(constHtml) {
+  var safeHtml =
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from(
+                  'Constant HTML string, that gets turned into a ' +
+                  'Node later, so it will be automatically balanced.'),
+              goog.string.Const.unwrap(constHtml));
+  return goog.dom.safeHtmlToNode(safeHtml);
 };
 
 
