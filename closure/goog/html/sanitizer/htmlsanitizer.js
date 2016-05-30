@@ -82,6 +82,16 @@ goog.html.sanitizer.HtmlSanitizerPolicy;
 
 
 /**
+ * Boolean for whether the HTML sanitizer is supported. For now mainly exclude
+ * IE9 or below where we know the sanitizer is insecure.
+ * @private {boolean}
+ * @const
+ */
+goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ =
+    !goog.userAgent.IE || document.documentMode >= 10;
+
+
+/**
  * Prefix used by all internal html sanitizer booking properties.
  * @private {string}
  * @const
@@ -99,6 +109,25 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ = 'data-sanitizer-';
 goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
     goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'elem-num';
 
+
+/**
+ * List of property descriptors we use to avoid looking up the prototypes
+ * multiple times.
+ * @private {!Object<string, !ObjectPropertyDescriptor>}
+ * @const
+ */
+goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_ =
+    goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ ? {
+      'attributes':
+          Object.getOwnPropertyDescriptor(Element.prototype, 'attributes'),
+      'setAttribute':
+          Object.getOwnPropertyDescriptor(Element.prototype, 'setAttribute'),
+      'nodeName': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName'),
+      'parentNode':
+          Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode'),
+      'style': Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style')
+    } :
+                                                    {};
 
 
 /**
@@ -578,7 +607,7 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
     iteratorParent = templateElement.content;
   } else {
     // In browsers where <template> is not implemented, use an HTMLDocument.
-    var doc = document.implementation.createHTMLDocument('unsanitized input');
+    var doc = document.implementation.createHTMLDocument('x');
     iteratorParent = doc.body;
     doc.body.innerHTML = unsanitizedHtml;
   }
@@ -599,7 +628,7 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
  */
 goog.html.sanitizer.HtmlSanitizer.getAttributes_ = function(node) {
   var attrDescriptor =
-      Object.getOwnPropertyDescriptor(Element.prototype, 'attributes');
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['attributes'];
   if (attrDescriptor && attrDescriptor.get) {
     return attrDescriptor.get.apply(node);
   } else {
@@ -620,18 +649,9 @@ goog.html.sanitizer.HtmlSanitizer.getAttributes_ = function(node) {
  */
 goog.html.sanitizer.HtmlSanitizer.setAttribute_ = function(node, name, value) {
   var attrDescriptor =
-      Object.getOwnPropertyDescriptor(Element.prototype, 'attributes');
-  if (attrDescriptor && attrDescriptor.set) {
-    attrDescriptor.set.call(node, value);
-  } else {
-    if (node.attributes instanceof NamedNodeMap) {
-      var curr = node.attributes.getNamedItem(name);
-      if (!curr) {
-        curr = curr ? curr : document.createAttribute(name);
-        node.attributes.setNamedItem(curr);
-      }
-      curr.value = value;
-    }
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['setAttribute'];
+  if (attrDescriptor && attrDescriptor.value) {
+    attrDescriptor.value.call(node, name, value);
   }
 };
 
@@ -646,19 +666,12 @@ goog.html.sanitizer.HtmlSanitizer.setAttribute_ = function(node, name, value) {
  * @private
  */
 goog.html.sanitizer.HtmlSanitizer.getStyle_ = function(node) {
-  var styleDescriptor;
-  if (node instanceof HTMLElement) {
-    styleDescriptor =
-        Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
-  }
-  try {
-    if (styleDescriptor && styleDescriptor.get) {
-      return styleDescriptor.get.apply(node);
-    } else {
-      return node.style instanceof CSSStyleDeclaration ? node.style : null;
-    }
-  } catch (e) {
-    return null;  // you have no style.
+  var styleDescriptor =
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['style'];
+  if (node instanceof HTMLElement && styleDescriptor && styleDescriptor.get) {
+    return styleDescriptor.get.apply(node);
+  } else {
+    return node.style instanceof CSSStyleDeclaration ? node.style : null;
   }
 };
 
@@ -673,7 +686,7 @@ goog.html.sanitizer.HtmlSanitizer.getStyle_ = function(node) {
  */
 goog.html.sanitizer.HtmlSanitizer.getNodeName_ = function(node) {
   var nodeNameDescriptor =
-      Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName');
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['nodeName'];
   if (nodeNameDescriptor && nodeNameDescriptor.get) {
     return nodeNameDescriptor.get.apply(node);
   } else {
@@ -691,11 +704,11 @@ goog.html.sanitizer.HtmlSanitizer.getNodeName_ = function(node) {
  * @private
  */
 goog.html.sanitizer.HtmlSanitizer.getParentNode_ = function(node) {
-  if (!node) {
+  if (!goog.isDefAndNotNull(node)) {
     return null;
   }
   var parentNodeDescriptor =
-      Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode');
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['parentNode'];
   if (parentNodeDescriptor && parentNodeDescriptor.get) {
     return parentNodeDescriptor.get.apply(node);
   } else {
@@ -722,9 +735,6 @@ goog.html.sanitizer.HtmlSanitizer.getParentNode_ = function(node) {
  * sanitized tree.
  * @param {?string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} Sanitized HTML
- * @throws {!Error} If browser doesn't support `<template>` or
- *     document.implementation, or if the sanitizedParent DIV node is not found
- *     in the serialized XML. IE8 is not supported.
  * @final
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
@@ -732,17 +742,20 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
   var sanitizedParent = this.sanitizeToDomNode(unsanitizedHtml);
   var sanitizedString = new XMLSerializer().serializeToString(sanitizedParent);
 
-  // The serializeToString function acts like outerHTML, so we need to get rid
-  // of the parent div.
-  var sanitizedParentWithDiv = goog.dom.safeHtmlToNode(
-      goog.html.uncheckedconversions
-          .safeHtmlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from('Output of HTML sanitizer'),
-              sanitizedString));
+  // Remove the outer div added by XMLSerializer. We could create an element
+  // from it and then pull out the innerHtml, but this is more performant.
+  if (goog.string.startsWith(sanitizedString, '<div')) {
+    if (goog.string.endsWith(sanitizedString, '</div>')) {
+      sanitizedString = sanitizedString.slice(
+          sanitizedString.indexOf('>') + 1, -1 * ('</div>'.length));
+    } else if (goog.string.endsWith(sanitizedString, '/>')) {
+      sanitizedString = '';
+    }
+  }
+
   return goog.html.uncheckedconversions
       .safeHtmlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Output of HTML sanitizer w/o outerDiv'),
-          sanitizedParentWithDiv.innerHTML);
+          goog.string.Const.from('Output of HTML sanitizer'), sanitizedString);
 };
 
 
@@ -756,20 +769,19 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     unsanitizedHtml) {
-  if (!unsanitizedHtml ||
-      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10))) {
+  var sanitizedParent = document.createElement('div');
+  if (!goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ || !unsanitizedHtml) {
     // TODO(danesh): IE9 or earlier versions don't provide an easy way to
     // parse HTML inertly. Handle in a way other than an empty div perhaps.
-    return document.createElement('div');
+    return sanitizedParent;
   }
 
-  // Get the parent and treeWalker initialized.
-  var sanitizedParent = document.createElement('div');
+  // Get the treeWalker initialized.
   try {
     var treeWalker =
         goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_(unsanitizedHtml);
   } catch (e) {
-    throw Error('Browser Not Supported');
+    return sanitizedParent;
   }
 
   // Used in order to find the correct parent node in the sanitizedParent.
@@ -795,23 +807,34 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     var target;
     var dirtyParent =
         goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyNode);
-    var dirtyGrandParent =
-        goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyParent);
-    var dirtyGrtGrandParent = !dirtyGrandParent ? null :
-        goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyGrandParent);
-    var dirtyGrtGrtGrandParent = !dirtyGrtGrandParent ? null :
-        goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyGrtGrandParent);
-
-    if (goog.isNull(dirtyParent) ||
+    var isSanitizedParent = false;
+    if (goog.isNull(dirtyParent)) {
+      isSanitizedParent = true;
+    } else if (
+        goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyParent)
+                .toLowerCase() == 'body' ||
+        dirtyParent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT) {
+      var dirtyGrandParent =
+          goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyParent);
+      // The following checks if target is an immediate child of the inert
+      // parent template element
+      if (dirtyParent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT &&
+          goog.isNull(dirtyGrandParent)) {
+        isSanitizedParent = true;
+      } else if (
+          goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyParent)
+              .toLowerCase() == 'body') {
         // The following checks if target is an immediate child of the inert
         // parent HtmlDocument
-        (goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyParent)
-                 .toLowerCase() == 'body' &&
-         goog.isNull(dirtyGrtGrtGrandParent)) ||
-        // The following checks if target is an immediate child of the inert
-        // parent template element
-        (dirtyParent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT &&
-         goog.isNull(dirtyGrandParent))) {
+        var dirtyGrtGrandParent =
+            goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyGrandParent);
+        if (goog.isNull(goog.html.sanitizer.HtmlSanitizer.getParentNode_(
+                dirtyGrtGrandParent))) {
+          isSanitizedParent = true;
+        }
+      }
+    }
+    if (isSanitizedParent || goog.isNull(dirtyParent)) {
       target = sanitizedParent;
     } else {
       target = elementMap
@@ -874,9 +897,10 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttrs_ = function(
     dirtyNode, cleanNode) {
-  var attributesOrNull =
-      goog.html.sanitizer.HtmlSanitizer.getAttributes_(dirtyNode);
-  var attributes = attributesOrNull ? attributesOrNull : [];
+  var attributes = goog.html.sanitizer.HtmlSanitizer.getAttributes_(dirtyNode);
+  if (!goog.isDefAndNotNull(attributes)) {
+    return cleanNode;
+  }
   for (var i = 0; i < attributes.length; i++) {
     var attrib = attributes[i];
     if (attrib.specified) {
@@ -904,6 +928,12 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttribute_ = function(
     dirtyNode, attribute) {
 
   var attributeName = attribute.name;
+  if (goog.string.startsWith(
+          goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_,
+          attributeName)) {
+    return null;
+  }
+
   var nodeName = goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyNode);
   var unsanitizedAttrValue = attribute.value;
 
@@ -912,14 +942,8 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttribute_ = function(
     tagName: goog.string.trim(nodeName).toLowerCase(),
     attributeName: goog.string.trim(attributeName).toLowerCase()
   };
-
-  if (goog.string.startsWith(
-          goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_,
-          attributeName)) {
-    return null;
-  }
-  var policyContext =
-      goog.html.sanitizer.HtmlSanitizer.getContext_(attributeName, dirtyNode);
+  var policyContext = goog.html.sanitizer.HtmlSanitizer.getContext_(
+      policyHints.attributeName, dirtyNode);
 
   // Prefer attribute handler for this specific tag.
   var tagHandlerIndex = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
@@ -953,7 +977,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttribute_ = function(
 goog.html.sanitizer.HtmlSanitizer.getContext_ = function(
     attributeName, dirtyNode) {
   var policyContext = {cssStyle: undefined};
-  if (attributeName.toUpperCase() == 'STYLE') {
+  if (attributeName == 'style') {
     policyContext.cssStyle =
         goog.html.sanitizer.HtmlSanitizer.getStyle_(dirtyNode);
   }
@@ -966,9 +990,6 @@ goog.html.sanitizer.HtmlSanitizer.getContext_ = function(
  * sanitizer with default options and uses this to sanitize.
  * @param {string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} sanitizedHtml
- * @throws {!Error} If browser doesn't support `<template>` or
- *     document.implementation, or if the sanitizedParent DIV node is not found
- *     in the serialized XML. IE8 is not supported.
  */
 goog.html.sanitizer.HtmlSanitizer.sanitize = function(unsanitizedHtml) {
   var sanitizer = new goog.html.sanitizer.HtmlSanitizer.Builder().build();
