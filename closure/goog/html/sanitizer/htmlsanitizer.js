@@ -387,6 +387,11 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
             goog.html.sanitizer.HtmlSanitizer.sanitizeName_, this.namePolicy_));
   }, this);
 
+  this.attributeWhitelist_['A TARGET'] =
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
+          goog.html.sanitizer.HtmlSanitizer.allowedAttributeValues_,
+          ['_blank', '_self']));
+
   this.attributeWhitelist_['* CLASS'] =
       /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeClasses_,
@@ -499,6 +504,24 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_ = function(
 goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_ = function(
     attrValue, policyHints) {
   return goog.string.trim(attrValue);
+};
+
+
+/**
+ * An attribute handler which only allows a set of attribute values.
+ * @param {!Array<string>} allowedAttrs Set of allowed attributes lowercased.
+ * @param {string} attrValue
+ * @param {goog.html.sanitizer.HtmlSanitizerPolicyHints} policyHints
+ * @return {?string} sanitizedAttrValue
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.allowedAttributeValues_ = function(
+    allowedAttrs, attrValue, policyHints) {
+  attrValue = goog.string.trim(attrValue);
+  if (goog.array.contains(allowedAttrs, attrValue.toLowerCase())) {
+    return attrValue;
+  }
+  return null;
 };
 
 

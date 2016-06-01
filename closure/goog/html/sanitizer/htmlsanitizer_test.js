@@ -111,6 +111,9 @@ function testHtmlSanitizeSafeHtml() {
 
   html = '<div><span>hello world</span></div>';
   assertSanitizedHtml(html, html);
+
+  html = '<div><a target=\'_blank\'>hello world</a></div>';
+  assertSanitizedHtml(html, html);
 }
 
 
@@ -160,6 +163,10 @@ function testHtmlSanitizeXSS() {
   // Browser Support [IE6.0|IE8.0|NS8.1-IE]
   safeHtml = '<img />';
   xssHtml = '<IMG SRC="javascript:xss=true;">';
+  assertSanitizedHtml(xssHtml, safeHtml);
+
+  safeHtml = '<div><a>hello world</a></div>';
+  xssHtml = '<div><a target=\'_xss\'>hello world</a></div>';
   assertSanitizedHtml(xssHtml, safeHtml);
 
   safeHtml = '';
