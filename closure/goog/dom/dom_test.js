@@ -1540,62 +1540,81 @@ function testSafeHtmlToNode() {
  * Assert that the given goog.string.Const, when converted to a Node,
  * stringifies in one of the specified ways.
  *
- * @param{!goog.string.Const} constHtml
  * @param{!Array<string>} potentialStringifications
+ * @param{...!goog.string.Const} var_args The constants to use.
  */
 function assertConstHtmlToNodeStringifiesToOneOf(
-    constHtml, potentialStringifications) {
-  var node = goog.dom.constHtmlToNode(constHtml);
+    potentialStringifications, var_args) {
+  var node =
+      goog.dom.constHtmlToNode.apply(undefined, goog.array.slice(arguments, 1));
   var stringified = goog.dom.getOuterHtml(node);
   if (goog.array.find(potentialStringifications, function(element) {
         return element == stringified;
       }) === null) {
     fail(
         'Unexpected stringification for a node built from "' +
-        goog.string.Const.unwrap(constHtml) + '": "' + stringified + '"');
+        goog.array.map(goog.array.slice(arguments, 1), goog.string.Const.unwrap)
+            .join('') +
+        '": "' + stringified + '"');
   }
 }
 
 function testRegularConstHtmlToNodeStringifications() {
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<b>foo</b>'), ['<b>foo</b>', '<B>foo</B>']);
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo</b>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<br>'), ['<br>', '<BR>']);
-
-  assertConstHtmlToNodeStringifiesToOneOf(goog.string.Const.from('<svg></b>'), [
-    '<SVG></B>', '<svg></svg>', '<svg xmlns="http://www.w3.org/2000/svg" />'
-  ]);
+      ['<br>', '<BR>'], goog.string.Const.from('<br>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<unknown />'),
-      ['<unknown></unknown>', '<unknown>', '<UNKNOWN />']);
+      [
+        '<SVG></B>', '<svg></svg>', '<svg xmlns="http://www.w3.org/2000/svg" />'
+      ],
+      goog.string.Const.from('<svg></b>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<"&'), ['&lt;"&amp;', '&lt;"']);
+      ['<unknown></unknown>', '<unknown>', '<UNKNOWN />'],
+      goog.string.Const.from('<unknown />'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['&lt;"&amp;', '&lt;"'], goog.string.Const.from('<"&'));
+}
+
+function testConcatenatedConstHtmlToNodeStringifications() {
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo<'),
+      goog.string.Const.from('/b>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo</b>'),
+      goog.string.Const.from(''));
+
+  assertConstHtmlToNodeStringifiesToOneOf(['']);
 }
 
 function testSpecialConstHtmlToNodeStringifications() {
   // body one is IE8, \r\n is opera.
-  assertConstHtmlToNodeStringifiesToOneOf(goog.string.Const.from('<script>'), [
-    '<script></script>', '<SCRIPT></SCRIPT>', '<script></body></script>',
-    '\r\n' +
-        '<SCRIPT></SCRIPT>'
-  ]);
+  assertConstHtmlToNodeStringifiesToOneOf(
+      [
+        '<script></script>', '<SCRIPT></SCRIPT>', '<script></body></script>',
+        '\r\n' +
+            '<SCRIPT></SCRIPT>'
+      ],
+      goog.string.Const.from('<script>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<% %>'), ['&lt;% %&gt;', '<% %>']);
+      ['&lt;% %&gt;', '<% %>'], goog.string.Const.from('<% %>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('<% <script> %>'),
-      ['&lt;% <script> %></script>', '<% <script> %>']);
+      ['&lt;% <script> %></script>', '<% <script> %>'],
+      goog.string.Const.from('<% <script> %>'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('</ hi />'), ['</ hi />', '<!-- hi /-->', '']);
+      ['</ hi />', '<!-- hi /-->', ''], goog.string.Const.from('</ hi />'));
 
   assertConstHtmlToNodeStringifiesToOneOf(
-      goog.string.Const.from('</ <script > />'),
-      ['<!-- <script --> /&gt;', '</ <script>/&gt;', ' /&gt;']);
+      ['<!-- <script --> /&gt;', '</ <script>/&gt;', ' /&gt;'],
+      goog.string.Const.from('</ <script > />'));
 }
 
 function testAppend() {

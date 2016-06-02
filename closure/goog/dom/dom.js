@@ -877,19 +877,22 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
 };
 
 
+
 /**
- * Creates a new Node from a constant string of HTML markup.
- * @param {!goog.string.Const} constHtml The HTML string to convert into a node.
+ * Creates a new Node from constant strings of HTML markup.
+ * @param {...!goog.string.Const} var_args The HTML strings to concatenate then
+ *     convert into a node.
  * @return {!Node}
  */
-goog.dom.constHtmlToNode = function(constHtml) {
+goog.dom.constHtmlToNode = function(var_args) {
+  var stringArray = goog.array.map(arguments, goog.string.Const.unwrap);
   var safeHtml =
       goog.html.uncheckedconversions
           .safeHtmlFromStringKnownToSatisfyTypeContract(
               goog.string.Const.from(
                   'Constant HTML string, that gets turned into a ' +
                   'Node later, so it will be automatically balanced.'),
-              goog.string.Const.unwrap(constHtml));
+              stringArray.join(''));
   return goog.dom.safeHtmlToNode(safeHtml);
 };
 
