@@ -175,7 +175,7 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
  * @private
  */
 goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_ = function(customUrlPolicy) {
-  return /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+  return /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
       function(url, policyHints) {
         var trimmed = goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(
             url, policyHints);
@@ -230,28 +230,28 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   /**
    * A function to be applied to urls found on the parsing process which do not
    * trigger requests.
-   * @private {goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
    */
   this.urlPolicy_ = goog.html.sanitizer.HtmlSanitizer.defaultUrlPolicy_;
 
   /**
    * A function to be applied to urls found on the parsing process which may
    * trigger requests.
-   * @private {goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
    */
   this.networkRequestUrlPolicy_ =
       goog.html.sanitizer.HtmlSanitizer.defaultNetworkRequestUrlPolicy_;
 
   /**
    * A function to be applied to names found on the parsing process.
-   * @private {goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
    */
   this.namePolicy_ = goog.html.sanitizer.HtmlSanitizer.defaultNamePolicy_;
 
   /**
    * A function to be applied to other tokens (i.e. classes and IDs) found on
    * the parsing process.
-   * @private {goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
    */
   this.tokenPolicy_ = goog.html.sanitizer.HtmlSanitizer.defaultTokenPolicy_;
 
@@ -364,7 +364,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
   // Binding all the non-trivial attribute sanitizers to the appropriate,
   // potentially customizable, handling functions at build().
   this.attributeWhitelist_['* USEMAP'] =
-      /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
           goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_);
 
   var urlAttributes = ['* ACTION', '* CITE', '* HREF'];
@@ -383,7 +383,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
   var nameAttributes = ['* FOR', '* HEADERS', '* NAME'];
   goog.array.forEach(nameAttributes, function(attribute) {
     this.attributeWhitelist_[attribute] =
-        /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
+        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
             goog.html.sanitizer.HtmlSanitizer.sanitizeName_, this.namePolicy_));
   }, this);
 
@@ -393,17 +393,17 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
           ['_blank', '_self']));
 
   this.attributeWhitelist_['* CLASS'] =
-      /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeClasses_,
           this.tokenPolicy_));
 
   this.attributeWhitelist_['* ID'] =
-      /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeId_, this.tokenPolicy_));
 
   if (this.sanitizeCssPolicy_) {
     this.attributeWhitelist_['* STYLE'] =
-        /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
+        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
             this.sanitizeCssPolicy_, this.networkRequestUrlPolicy_));
   }
 
