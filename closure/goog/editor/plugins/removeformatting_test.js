@@ -311,6 +311,21 @@ function testRemoveFormattingNestedDivs() {
 }
 
 
+function testTheJavascriptReplaceMetacharacters() {
+  var div = document.getElementById('html');
+  div.innerHTML = '123 $< $> $" $& $$ $` $\' 456';
+  var expected = '123 $&lt; $&gt; $" $&amp; $$ $` $\' 456' +
+      (goog.userAgent.product.SAFARI ? '<br>' : '');
+  // No idea why these <br> appear, but they're fairly insignificant anyways.
+
+  goog.dom.Range.createFromNodeContents(div).select();
+
+  FORMATTER.removeFormatting_();
+  assertHTMLEquals(
+      'String.prototype.replace metacharacters should not trigger', expected,
+      div.innerHTML);
+}
+
 /**
  * Test that when we perform remove formatting on an entire table,
  * that the visual look is similar to as if there was a table there.

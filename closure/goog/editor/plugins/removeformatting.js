@@ -285,8 +285,12 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
     // remove parentNodes of the span while they are empty.
 
     if (goog.userAgent.GECKO) {
+      // Escape dollars passed in second argument of String.proto.replace.
+      // And since we're using that to replace, we need to escape those as well,
+      // hence the 2*2 dollar signs.
       goog.editor.node.replaceInnerHtml(
-          parent, parent.innerHTML.replace(dummyImageNodePattern, html));
+          parent, parent.innerHTML.replace(
+                      dummyImageNodePattern, html.replace(/\$/g, '$$$$')));
     } else {
       goog.editor.node.replaceInnerHtml(
           parent,
@@ -311,7 +315,9 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
       }
       goog.editor.node.replaceInnerHtml(
           parent,
-          parent.innerHTML.replace(new RegExp(dummySpanText, 'i'), html));
+          // Escape dollars passed in second argument of String.proto.replace
+          parent.innerHTML.replace(
+              new RegExp(dummySpanText, 'i'), html.replace(/\$/g, '$$$$')));
     }
   }
 
