@@ -73,26 +73,22 @@ goog.ui.DatePicker = function(
 
   this.wdayNames_ = this.symbols_.STANDALONESHORTWEEKDAYS;
 
-  // The DateTimeFormat object uses the global goog.i18n.DateTimeSymbols
-  // for initialization. So we save the original value, the global object,
-  // create the formatters, then restore the original value.
-  var tempSymbols = goog.i18n.DateTimeSymbols;  // save
-  goog.i18n.DateTimeSymbols = this.symbols_;
-
   // Formatters for the various areas of the picker
-  this.i18nDateFormatterDay_ = new goog.i18n.DateTimeFormat('d');
-  this.i18nDateFormatterDay2_ = new goog.i18n.DateTimeFormat('dd');
-  this.i18nDateFormatterWeek_ = new goog.i18n.DateTimeFormat('w');
+  this.i18nDateFormatterDay_ = new goog.i18n.DateTimeFormat('d', this.symbols_);
+  this.i18nDateFormatterDay2_ =
+      new goog.i18n.DateTimeFormat('dd', this.symbols_);
+  this.i18nDateFormatterWeek_ =
+      new goog.i18n.DateTimeFormat('w', this.symbols_);
 
   // Previous implementation did not use goog.i18n.DateTimePatterns,
   // so it is likely most developers did not set it.
   // This is why the fallback to a hard-coded string (just in case).
   var patYear = goog.i18n.DateTimePatterns.YEAR_FULL || 'y';
-  this.i18nDateFormatterYear_ = new goog.i18n.DateTimeFormat(patYear);
+  this.i18nDateFormatterYear_ =
+      new goog.i18n.DateTimeFormat(patYear, this.symbols_);
   var patMMMMy = goog.i18n.DateTimePatterns.YEAR_MONTH_FULL || 'MMMM y';
-  this.i18nDateFormatterMonthYear_ = new goog.i18n.DateTimeFormat(patMMMMy);
-
-  goog.i18n.DateTimeSymbols = tempSymbols;  // restore
+  this.i18nDateFormatterMonthYear_ =
+      new goog.i18n.DateTimeFormat(patMMMMy, this.symbols_);
 
   /**
    * @type {!goog.ui.DatePickerRenderer}
