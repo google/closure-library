@@ -895,7 +895,7 @@ goog.Promise.prototype.resolve_ = function(state, x) {
     return;
   }
 
-  if (this == x) {
+  if (this === x) {
     state = goog.Promise.State_.REJECTED;
     x = new TypeError('Promise cannot resolve to itself');
   }
