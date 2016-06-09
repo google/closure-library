@@ -706,6 +706,7 @@ goog.addDependency('math/interpolator/pchip1.js', ['goog.math.interpolator.Pchip
 goog.addDependency('math/interpolator/pchip1_test.js', ['goog.math.interpolator.Pchip1Test'], ['goog.math.interpolator.Pchip1', 'goog.testing.jsunit'], {});
 goog.addDependency('math/interpolator/spline1.js', ['goog.math.interpolator.Spline1'], ['goog.array', 'goog.asserts', 'goog.math', 'goog.math.interpolator.Interpolator1', 'goog.math.tdma'], {});
 goog.addDependency('math/interpolator/spline1_test.js', ['goog.math.interpolator.Spline1Test'], ['goog.math.interpolator.Spline1', 'goog.testing.jsunit'], {});
+goog.addDependency('math/irect.js', ['goog.math.IRect'], [], {});
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/line_test.js', ['goog.math.LineTest'], ['goog.math.Coordinate', 'goog.math.Line', 'goog.testing.jsunit'], {});
 goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.reflect'], {});
@@ -722,7 +723,7 @@ goog.addDependency('math/range.js', ['goog.math.Range'], ['goog.asserts'], {});
 goog.addDependency('math/range_test.js', ['goog.math.RangeTest'], ['goog.math.Range', 'goog.testing.jsunit'], {});
 goog.addDependency('math/rangeset.js', ['goog.math.RangeSet'], ['goog.array', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.math.Range'], {});
 goog.addDependency('math/rangeset_test.js', ['goog.math.RangeSetTest'], ['goog.iter', 'goog.math.Range', 'goog.math.RangeSet', 'goog.testing.jsunit'], {});
-goog.addDependency('math/rect.js', ['goog.math.Rect'], ['goog.asserts', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Size'], {});
+goog.addDependency('math/rect.js', ['goog.math.Rect'], ['goog.asserts', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.IRect', 'goog.math.Size'], {});
 goog.addDependency('math/rect_test.js', ['goog.math.RectTest'], ['goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.testing.jsunit'], {});
 goog.addDependency('math/size.js', ['goog.math.Size'], [], {});
 goog.addDependency('math/size_test.js', ['goog.math.SizeTest'], ['goog.math.Size', 'goog.testing.jsunit'], {});
