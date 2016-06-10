@@ -31,6 +31,8 @@ goog.require('goog.dispose');
 goog.require('goog.log');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
+/** @suppress {extraRequire} interface */
+goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
 goog.require('goog.object');
