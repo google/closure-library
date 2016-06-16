@@ -23,6 +23,7 @@ goog.setTestOnly('goog.testing.JsTdTestCaseAdapter');
 goog.provide('goog.testing.JsTdTestCaseAdapter');
 
 goog.require('goog.async.run');
+goog.require('goog.testing.JsTdAsyncWrapper');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
@@ -31,11 +32,13 @@ goog.require('goog.testing.jsunit');
  * @param {string} testCaseName The name of the test case.
  * @param {boolean} condition A condition to determine whether to run the tests.
  * @param {?=} opt_proto An optional prototype object for the test case.
+ * @param {boolean=} opt_isAsync Whether this test is an async test using the
+ *     JSTD testing queue.
  * @return {!Function}
  * @private
  */
 goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
-    testCaseName, condition, opt_proto) {
+    testCaseName, condition, opt_proto, opt_isAsync) {
   /** @constructor */
   var T = function() {};
   if (opt_proto) T.prototype = opt_proto;
@@ -43,6 +46,9 @@ goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
 
   goog.async.run(function() {
     var t = condition ? new T() : {};
+    if (opt_isAsync) {
+      t = goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj(t);
+    }
     var testCase = new goog.testing.TestCase(testCaseName);
     testCase.shouldRunTests = function() { return condition; };
     testCase.setTestObj(t);
@@ -51,6 +57,7 @@ goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
 
   return T;
 };
+
 
 // --- conditionally add polyfills for the basic JSTD API ---
 
@@ -81,19 +88,16 @@ var ConditionalTestCase =
     };
 
 
-// TODO(johnlenz): AsyncTestCase and AsyncConditionalTestCase are
-// placeholders for an implementation that actually understands the
-// JsTestDriver AsyncTestCases which are non-trivial:
-// see https://code.google.com/p/js-test-driver/wiki/AsyncTestCase
-
-
 /**
  * @param {string} testCaseName The name of the test case.
  * @param {?=} opt_proto An optional prototype object for the test case.
  * @return {!Function}
  * @suppress {duplicate}
  */
-var AsyncTestCase = AsyncTestCase || TestCase;
+var AsyncTestCase = AsyncTestCase || function(testCaseName, opt_proto) {
+  return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
+      testCaseName, true, opt_proto, true);
+};
 
 
 /**
@@ -103,7 +107,22 @@ var AsyncTestCase = AsyncTestCase || TestCase;
  * @return {!Function}
  * @suppress {duplicate}
  */
-var AsyncConditionalTestCase = AsyncConditionalTestCase || ConditionalTestCase;
+var AsyncConditionalTestCase =
+    AsyncConditionalTestCase || function(testCaseName, condition, opt_proto) {
+      return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
+          testCaseName, condition, opt_proto, true);
+    };
+
+
+/**
+ * @param {string} testCaseName The name of the test case.
+ * @param {boolean} condition A condition to determine whether to run the tests.
+ * @param {?=} opt_proto An optional prototype object for the test case.
+ * @return {!Function}
+ * @suppress {duplicate}
+ */
+var ConditionalAsyncTestCase =
+    ConditionalAsyncTestCase || AsyncConditionalTestCase;
 
 
 // The API is also available under the jstestdriver namespace.
@@ -115,6 +134,7 @@ if (!jstestdriver.testCaseManager) {
     TestCase: TestCase,
     ConditionalTestCase: ConditionalTestCase,
     AsyncTestCase: AsyncTestCase,
-    AsyncConditionalTestCase: AsyncConditionalTestCase
+    AsyncConditionalTestCase: AsyncConditionalTestCase,
+    ConditionalAsyncTestCase: ConditionalAsyncTestCase
   };
 }

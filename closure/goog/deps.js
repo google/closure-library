@@ -1084,7 +1084,8 @@ goog.addDependency('testing/functionmock_test.js', ['goog.testing.FunctionMockTe
 goog.addDependency('testing/graphics.js', ['goog.testing.graphics'], ['goog.graphics.Path', 'goog.testing.asserts'], {});
 goog.addDependency('testing/i18n/asserts.js', ['goog.testing.i18n.asserts'], ['goog.testing.jsunit'], {});
 goog.addDependency('testing/i18n/asserts_test.js', ['goog.testing.i18n.assertsTest'], ['goog.testing.ExpectedFailures', 'goog.testing.i18n.asserts'], {});
-goog.addDependency('testing/jstdtestcaseadapter.js', ['goog.testing.JsTdTestCaseAdapter'], ['goog.async.run', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
+goog.addDependency('testing/jstdasyncwrapper.js', ['goog.testing.JsTdAsyncWrapper'], ['goog.Promise'], {});
+goog.addDependency('testing/jstdtestcaseadapter.js', ['goog.testing.JsTdTestCaseAdapter'], ['goog.async.run', 'goog.testing.JsTdAsyncWrapper', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/jsunit.js', ['goog.testing.jsunit'], ['goog.dom.TagName', 'goog.testing.TestCase', 'goog.testing.TestRunner'], {});
 goog.addDependency('testing/loosemock.js', ['goog.testing.LooseExpectationCollection', 'goog.testing.LooseMock'], ['goog.array', 'goog.structs.Map', 'goog.testing.Mock'], {});
 goog.addDependency('testing/loosemock_test.js', ['goog.testing.LooseMockTest'], ['goog.testing.LooseMock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], {});
