@@ -6,7 +6,7 @@
   },
   {
     "browserName" : "chrome",
-    "platform" : "Linux",
+    "platform" : "Windows 7",
     "version" : "51.0"
   },
   {
