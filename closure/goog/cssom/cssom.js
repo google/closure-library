@@ -17,8 +17,6 @@
  * References:
  * - W3C: http://dev.w3.org/csswg/cssom/
  * - MSDN: http://msdn.microsoft.com/en-us/library/ms531209(VS.85).aspx.
- * @supported in FF3, IE6, IE7, Safari 3.1.2, Chrome
- * TODO(user): Fix in Opera.
  * TODO(user): Consider hacking page, media, etc.. to work.
  *     This would be pretty challenging. IE returns the text for any rule
  *     regardless of whether or not the media is correct or not. Firefox at

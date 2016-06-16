@@ -51,10 +51,7 @@
  *   video.setSelected(true);
  * </pre>
  *
- *
- * @supported IE6, FF2+, Safari. Requires flash to actually work.
- *
- * TODO(user): test on other browsers
+ * Requires flash to actually work.
  */
 
 goog.provide('goog.ui.media.Vimeo');

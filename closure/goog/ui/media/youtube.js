@@ -59,10 +59,8 @@
  *     'http://www.youtube.com/watch?v=ddl5f44spwQ');
  * </pre>
  *
+ * Requires flash to actually work.
  *
- * @supported IE6, FF2+, Safari. Requires flash to actually work.
- *
- * TODO(user): test on other browsers
  */
 
 

@@ -39,7 +39,7 @@
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tokenization.html
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tree-construction.html
  *
- * @supported IE6, IE7, IE8, FF1.5, FF2, FF3, Chrome 3.0, Safari and Opera 10.
+ * @supported IE6+, FF1.5+, Chrome 3.0+, Safari and Opera 10.
  */
 
 goog.provide('goog.string.html');
