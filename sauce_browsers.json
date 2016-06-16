@@ -6,7 +6,8 @@
   },
   {
     "browserName" : "chrome",
-    "platform" : "Linux"
+    "platform" : "Linux",
+    "version" : "51.0"
   },
   {
     "browserName" : "internet explorer",
