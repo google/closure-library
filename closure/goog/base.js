@@ -1409,9 +1409,9 @@ goog.loadModule = function(moduleDef) {
     };
     var exports;
     if (goog.isFunction(moduleDef)) {
-      exports = moduleDef.call(goog.global, {});
+      exports = moduleDef.call(undefined, {});
     } else if (goog.isString(moduleDef)) {
-      exports = goog.loadModuleFromSource_.call(goog.global, moduleDef);
+      exports = goog.loadModuleFromSource_.call(undefined, moduleDef);
     } else {
       throw Error('Invalid module definition');
     }
