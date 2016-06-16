@@ -25,6 +25,7 @@ goog.provide('goog.i18n.currencyCodeMapTier2');
 
 
 /**
+ * Deprecated.
  * The mapping of currency symbol through intl currency code.
  * The source of information is mostly from wikipedia and CLDR. Since there is
  * no authoritative source, items are judged by personal perception.
@@ -34,6 +35,7 @@ goog.provide('goog.i18n.currencyCodeMapTier2');
  *     goog.object.extend(goog.i18n.currencyCodeMap,
  *                        goog.i18n.currencyCodeMapTier2);
  *
+ * @deprecated Use {@link goog.i18n.currency.getLocalCurrencyPattern} instead.
  * @const {!Object<string, string>}
  */
 goog.i18n.currencyCodeMap = {
