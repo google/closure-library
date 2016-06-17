@@ -7,6 +7,7 @@
   {
     "browserName" : "chrome",
     "platform" : "Windows 10",
+    "timeZone": "Pacific",
     "version" : "51.0"
   },
   {
