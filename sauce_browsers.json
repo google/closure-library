@@ -6,7 +6,9 @@
   },
   {
     "browserName" : "chrome",
-    "platform" : "Linux"
+    "platform" : "Windows 10",
+    "timeZone": "Pacific",
+    "version" : "51.0"
   },
   {
     "browserName" : "internet explorer",
