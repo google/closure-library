@@ -23,6 +23,7 @@ goog.setTestOnly('goog.testing.JsTdTestCaseAdapter');
 goog.provide('goog.testing.JsTdTestCaseAdapter');
 
 goog.require('goog.async.run');
+goog.require('goog.functions');
 goog.require('goog.testing.JsTdAsyncWrapper');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
@@ -30,7 +31,8 @@ goog.require('goog.testing.jsunit');
 
 /**
  * @param {string} testCaseName The name of the test case.
- * @param {boolean} condition A condition to determine whether to run the tests.
+ * @param {function(): boolean} condition A condition to determine whether to
+ *     run the tests.
  * @param {?=} opt_proto An optional prototype object for the test case.
  * @param {boolean=} opt_isAsync Whether this test is an async test using the
  *     JSTD testing queue.
@@ -45,12 +47,12 @@ goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
   T.displayName = testCaseName;
 
   goog.async.run(function() {
-    var t = condition ? new T() : {};
+    var t = new T();
     if (opt_isAsync) {
       t = goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj(t);
     }
     var testCase = new goog.testing.TestCase(testCaseName);
-    testCase.shouldRunTests = function() { return condition; };
+    testCase.shouldRunTests = condition;
     testCase.setTestObj(t);
     goog.testing.TestCase.initializeTestRunner(testCase);
   });
@@ -70,13 +72,14 @@ goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
  */
 var TestCase = TestCase || function(testCaseName, opt_proto) {
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
-      testCaseName, true, opt_proto);
+      testCaseName, goog.functions.TRUE, opt_proto);
 };
 
 
 /**
  * @param {string} testCaseName The name of the test case.
- * @param {boolean} condition A condition to determine whether to run the tests.
+ * @param {function(): boolean} condition A condition to determine whether to
+ *     run the tests.
  * @param {?=} opt_proto An optional prototype object for the test case.
  * @return {!Function}
  * @suppress {duplicate}
@@ -96,13 +99,14 @@ var ConditionalTestCase =
  */
 var AsyncTestCase = AsyncTestCase || function(testCaseName, opt_proto) {
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
-      testCaseName, true, opt_proto, true);
+      testCaseName, goog.functions.TRUE, opt_proto, true);
 };
 
 
 /**
  * @param {string} testCaseName The name of the test case.
- * @param {boolean} condition A condition to determine whether to run the tests.
+ * @param {function(): boolean} condition A condition to determine whether to
+ *     run the tests.
  * @param {?=} opt_proto An optional prototype object for the test case.
  * @return {!Function}
  * @suppress {duplicate}
@@ -116,7 +120,8 @@ var AsyncConditionalTestCase =
 
 /**
  * @param {string} testCaseName The name of the test case.
- * @param {boolean} condition A condition to determine whether to run the tests.
+ * @param {function(): boolean} condition A condition to determine whether to
+ *     run the tests.
  * @param {?=} opt_proto An optional prototype object for the test case.
  * @return {!Function}
  * @suppress {duplicate}
