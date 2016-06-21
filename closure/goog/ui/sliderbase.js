@@ -94,7 +94,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
 
   /**
    * The model for the range of the slider.
-   * @type {!goog.ui.RangeModel}
+   * @protected {!goog.ui.RangeModel}
    */
   this.rangeModel = new goog.ui.RangeModel();
 
@@ -192,14 +192,6 @@ goog.ui.SliderBase.MOUSE_DOWN_INCREMENT_INTERVAL_ = 200;
  * @private
  */
 goog.ui.SliderBase.ANIMATION_INTERVAL_ = 100;
-
-
-/**
- * The underlying range model
- * @type {goog.ui.RangeModel}
- * @protected
- */
-goog.ui.SliderBase.prototype.rangeModel;
 
 
 /**
