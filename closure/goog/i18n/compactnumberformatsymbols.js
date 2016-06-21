@@ -33,6 +33,7 @@
  * to incorporate changes before we could fix CLDR. All manual
  * modification must be documented in this section, and should be
  * removed after those changes land to CLDR.
+ * @suppress {const}
  */
 
 // clang-format off

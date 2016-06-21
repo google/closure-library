@@ -33,6 +33,7 @@
  * usages. If simple pattern works fine, it won't be covered here either.
  * For example, pattern 'MMM' will work well to get short month name for
  * almost all locales thus won't be included here.
+ * @suppress {const}
  */
 
 // clang-format off
