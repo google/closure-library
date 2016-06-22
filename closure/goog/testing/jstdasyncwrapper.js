@@ -72,9 +72,9 @@ goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj = function(original) {
 goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
   /**
    * The chain of testing step promises.
-   * @type {!Promise<undefined>}
+   * @type {!goog.Promise<undefined>}
    */
-  this.chain = Promise.resolve();
+  this.chain = goog.Promise.resolve();
 
   /**
    * A delegate that is used within a defer call.
