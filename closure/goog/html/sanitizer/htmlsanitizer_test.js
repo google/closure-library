@@ -827,6 +827,29 @@ function testStyleTag() {
 }
 
 
+function testOnlyAllowTags() {
+  var result = '<div><div></div><a href="http://www.google.com">hi</a><br>' +
+      'Test.<div></div><div align="right">Test</div></div>';
+  // If we were mimicing goog.labs.html.sanitizer, our output would be
+  // '<div><a>hi</a><br>Test.<div>Test</div></div>';
+  assertSanitizedHtml(
+      '<div><img id="bar" name=foo class="c d" ' +
+          'src="http://wherever.com">' +
+          '<a href=" http://www.google.com">hi</a>' +
+          '<br>Test.<hr><div align="right">Test</div></div>',
+      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                  .onlyAllowTags(['bR', 'a', 'DIV'])
+                  .build());
+}
+
+
+function testDisallowNonWhitelistedTags() {
+  assertThrows('Should error on elements not whitelisted', function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowTags(['x'])
+  });
+}
+
+
 function testDefaultPoliciesAreApplied() {
   var result = '<img /><a href="http://www.google.com">hi</a>' +
       '<a href="ftp://whatever.com">another</a>';
@@ -837,6 +860,7 @@ function testDefaultPoliciesAreApplied() {
           '<a href=ftp://whatever.com>another</a>',
       result);
 }
+
 
 function testCustomNamePolicyIsApplied() {
   var result = '<img name="myOwnPrefix-foo" />' +

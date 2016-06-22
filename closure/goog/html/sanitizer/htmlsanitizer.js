@@ -149,6 +149,10 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
    */
   this.tagBlacklist_ = goog.object.clone(opt_builder.tagBlacklist_);
 
+  /**
+   * @private {!Object<string, boolean>}
+   */
+  this.tagWhitelist_ = goog.object.clone(opt_builder.tagWhitelist_);
 
   // Add whitelist data-* attributes from the builder to the attributeHandlers
   // with a default cleanUpAttribute function. data-* attributes are inert as
@@ -228,6 +232,13 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.tagBlacklist_ = {};
 
   /**
+   * A tag whitelist, to effectively allow an element and its children from the
+   * dom.
+   * @private {!Object<string, boolean>}
+   */
+  this.tagWhitelist_ = goog.html.sanitizer.TagWhitelist;
+
+  /**
    * A function to be applied to urls found on the parsing process which do not
    * trigger requests.
    * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
@@ -285,6 +296,34 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
   this.allowFormTag_ = true;
+  return this;
+};
+
+
+/**
+ * Allows only the provided whitelist of tags. Tags still need to be in the
+ * TagWhitelist to be allowed.
+ * <p>
+ * DIV tags are ALWAYS ALLOWED as part of the mechanism required to preserve
+ * the HTML tree structure (when removing non-blacklisted tags and
+ * non-whitelisted tags).
+ * @param {!Array<string>} tagWhitelist
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ * @throws {Error} Thrown if an attempt is made to allow a non-whitelisted tag.
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
+    tagWhitelist) {
+  this.tagWhitelist_ = {'DIV': true};
+  goog.array.forEach(tagWhitelist, function(tag) {
+    tag = tag.toUpperCase();
+    if (goog.html.sanitizer.TagWhitelist[tag]) {
+      this.tagWhitelist_[tag] = true;
+    } else {
+      throw new Error(
+          'Only whitelisted tags can be allowed. See ' +
+          'goog.html.sanitizer.TagWhitelist');
+    }
+  }, this);
   return this;
 };
 
@@ -899,7 +938,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
       elemName in this.tagBlacklist_) {
     // If it's in the inert blacklist, replace with template.
     cleanElemName = 'template';
-  } else if (elemName in goog.html.sanitizer.TagWhitelist) {
+  } else if (this.tagWhitelist_[elemName]) {
     // If it's in the whitelist, keep as is.
     cleanElemName = elemName;
   } else {

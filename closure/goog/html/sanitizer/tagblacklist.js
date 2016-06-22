@@ -22,10 +22,10 @@ goog.provide('goog.html.sanitizer.TagBlacklist');
 
 /**
  * A list of tags which should be removed entirely from the DOM, rather than
- * merely being made inert. Note that even if TEMPLATE is removed from this
- * blacklist (or even whitelisted) it will continue to be removed from the HTML
- * as TEMPLATE is used interally to denote nodes which should not be added to
- * the sanitized HTML.
+ * merely being made inert. Tag names must be in all caps. Note that even if
+ * TEMPLATE is removed from this blacklist (or even whitelisted) it will
+ * continue to be removed from the HTML  as TEMPLATE is used interally to
+ * denote nodes which should not be added to the sanitized HTML.
  * @const @dict {boolean}
  */
 goog.html.sanitizer.TagBlacklist = {
