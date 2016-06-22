@@ -164,8 +164,5 @@ goog.style.transform.matrixConstructor_ =
       if (goog.isDef(goog.global['MSCSSMatrix'])) {
         return goog.global['MSCSSMatrix'];
       }
-      if (goog.isDef(goog.global['CSSMatrix'])) {
-        return goog.global['CSSMatrix'];
-      }
       return null;
     });
