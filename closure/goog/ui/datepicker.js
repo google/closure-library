@@ -785,6 +785,8 @@ goog.ui.DatePicker.prototype.setDate_ = function(date, fireSelection) {
   // Set current month
   if (date) {
     this.activeMonth_.set(this.date_);
+    // Set years with two digits to their full year, not 19XX.
+    this.activeMonth_.setFullYear(this.date_.getFullYear());
     this.activeMonth_.setDate(1);
   }
 
@@ -1392,7 +1394,16 @@ goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
     this.grid_[y] = [];
     for (var x = 0; x < 7; x++) {  // Weekdays
       this.grid_[y][x] = date.clone();
+      // Date.add breaks dates before year 100 by adding 1900 to the year
+      // value. As a workaround we store the year before the add and reapply it
+      // after (with special handling for January 1st).
+      var year = date.getFullYear();
       date.add(dayInterval);
+      if (date.getMonth() == 0 && date.getDate() == 1) {
+        // Increase year on January 1st.
+        year++;
+      }
+      date.setFullYear(year);
     }
   }
 
