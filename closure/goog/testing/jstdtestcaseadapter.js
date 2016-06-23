@@ -145,6 +145,7 @@ var ConditionalAsyncTestCase = ConditionalAsyncTestCase ||
 
 // The API is also available under the jstestdriver namespace.
 
+/** @suppress {duplicate} */
 var jstestdriver = jstestdriver || {};
 if (!jstestdriver.testCaseManager) {
   /** A jstestdriver API polyfill. */
