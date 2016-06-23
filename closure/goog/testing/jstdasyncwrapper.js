@@ -91,12 +91,19 @@ goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
 
 
 /**
- * @param {string} stepName The name of the current testing step.
- * @param {function(!goog.testing.JsTdAsyncWrapper.Pool_=)} fn A function that
- * will be
- *     called.
+ * @param {string|function(!goog.testing.JsTdAsyncWrapper.Pool_=)} stepName
+ *     The name of the current testing step, or the fn parameter if
+ *     no stepName is desired.
+ * @param {function(!goog.testing.JsTdAsyncWrapper.Pool_=)=} opt_fn A function
+ *   that will be called.
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(stepName, fn) {
+goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(
+    stepName, opt_fn) {
+  var fn = opt_fn;
+  if (!opt_fn && typeof stepName == 'function') {
+    fn = stepName;
+    stepName = '(Not named)';
+  }
   // If another queue.defer is called within a pool callback it should be
   // executed after the current one. Any defer that is called within a defer
   // will be passed to a delegate and the current defer waits till all delegate
