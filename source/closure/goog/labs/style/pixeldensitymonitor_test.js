@@ -47,9 +47,7 @@ function tearDown() {
 }
 
 function setUpMonitor(initialRatio, hasMatchMedia) {
-  fakeWindow = {
-    devicePixelRatio: initialRatio
-  };
+  fakeWindow = {devicePixelRatio: initialRatio};
 
   if (hasMatchMedia) {
     // Every call to matchMedia should return a new media query list with its
@@ -57,9 +55,7 @@ function setUpMonitor(initialRatio, hasMatchMedia) {
     fakeWindow.matchMedia = function(query) {
       var listeners = [];
       var newList = {
-        addListener: function(listener) {
-          listeners.push(listener);
-        },
+        addListener: function(listener) { listeners.push(listener); },
         removeListener: function(listener) {
           goog.array.remove(listeners, listener);
         },
@@ -68,9 +64,7 @@ function setUpMonitor(initialRatio, hasMatchMedia) {
             listeners[i]();
           }
         },
-        getListenerCount: function() {
-          return listeners.length;
-        }
+        getListenerCount: function() { return listeners.length; }
       };
       mediaQueryLists.push(newList);
       return newList;
@@ -82,8 +76,9 @@ function setUpMonitor(initialRatio, hasMatchMedia) {
   mockControl.$replayAll();
 
   monitor = new goog.labs.style.PixelDensityMonitor(domHelper);
-  goog.events.listen(monitor,
-      goog.labs.style.PixelDensityMonitor.EventType.CHANGE, recordFunction);
+  goog.events.listen(
+      monitor, goog.labs.style.PixelDensityMonitor.EventType.CHANGE,
+      recordFunction);
 }
 
 function setNewRatio(newRatio) {
@@ -95,41 +90,43 @@ function setNewRatio(newRatio) {
 
 function testNormalDensity() {
   setUpMonitor(1, false);
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
 }
 
 function testHighDensity() {
   setUpMonitor(1.5, false);
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.HIGH, monitor.getDensity());
 }
 
 function testNormalDensityIfUndefined() {
   setUpMonitor(undefined, false);
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
 }
 
 function testChangeEvent() {
   setUpMonitor(1, true);
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
   monitor.start();
 
   setNewRatio(2);
   var call = recordFunction.popLastCall();
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.HIGH,
       call.getArgument(0).target.getDensity());
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.HIGH, monitor.getDensity());
 
   setNewRatio(1);
   call = recordFunction.popLastCall();
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.NORMAL,
       call.getArgument(0).target.getDensity());
-  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
-      monitor.getDensity());
+  assertEquals(
+      goog.labs.style.PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
 }
 
 function testListenerIsDisposed() {

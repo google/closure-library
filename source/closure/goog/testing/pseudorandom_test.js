@@ -35,7 +35,8 @@ function runFairnessTest(sides, rolls, chiSquareLimit) {
   for (var i = 0; i < sides; ++i) {
     chiSquare += (counts[i] - expected) * (counts[i] - expected) / expected;
   }
-  assert('Chi-square test for a distribution fit failed',
+  assert(
+      'Chi-square test for a distribution fit failed',
       chiSquare < chiSquareLimit);
 }
 

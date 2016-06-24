@@ -85,37 +85,29 @@ function setUp() {
     });
   }
 
-  eventCount = {
-    parentBubble: 0,
-    parentCapture: 0,
-    childCapture: 0,
-    childBubble: 0
-  };
+  eventCount =
+      {parentBubble: 0, parentCapture: 0, childCapture: 0, childBubble: 0};
   // Event listeners for the capture/bubble test.
-  goog.events.listen(parentEl, goog.events.EventType.CLICK,
-      function(e) {
-        eventCount.parentCapture++;
-        assertEquals(parentEl, e.currentTarget);
-        assertEquals(childEl, e.target);
-      }, true);
-  goog.events.listen(childEl, goog.events.EventType.CLICK,
-      function(e) {
-        eventCount.childCapture++;
-        assertEquals(childEl, e.currentTarget);
-        assertEquals(childEl, e.target);
-      }, true);
-  goog.events.listen(childEl, goog.events.EventType.CLICK,
-      function(e) {
-        eventCount.childBubble++;
-        assertEquals(childEl, e.currentTarget);
-        assertEquals(childEl, e.target);
-      });
-  goog.events.listen(parentEl, goog.events.EventType.CLICK,
-      function(e) {
-        eventCount.parentBubble++;
-        assertEquals(parentEl, e.currentTarget);
-        assertEquals(childEl, e.target);
-      });
+  goog.events.listen(parentEl, goog.events.EventType.CLICK, function(e) {
+    eventCount.parentCapture++;
+    assertEquals(parentEl, e.currentTarget);
+    assertEquals(childEl, e.target);
+  }, true);
+  goog.events.listen(childEl, goog.events.EventType.CLICK, function(e) {
+    eventCount.childCapture++;
+    assertEquals(childEl, e.currentTarget);
+    assertEquals(childEl, e.target);
+  }, true);
+  goog.events.listen(childEl, goog.events.EventType.CLICK, function(e) {
+    eventCount.childBubble++;
+    assertEquals(childEl, e.currentTarget);
+    assertEquals(childEl, e.target);
+  });
+  goog.events.listen(parentEl, goog.events.EventType.CLICK, function(e) {
+    eventCount.parentBubble++;
+    assertEquals(parentEl, e.currentTarget);
+    assertEquals(childEl, e.target);
+  });
 }
 
 function tearDownPage() {
@@ -124,19 +116,20 @@ function tearDownPage() {
     if (type == 'mousemove' || type == 'mouseout' || type == 'mouseover') {
       continue;
     }
-    goog.dom.appendChild(input,
-        goog.dom.createDom(goog.dom.TagName.LABEL, null,
-            goog.dom.createDom(goog.dom.TagName.INPUT,
-                {'id': type, 'type': goog.dom.InputType.CHECKBOX}),
-            type,
-            goog.dom.createDom(goog.dom.TagName.BR)));
+    goog.dom.appendChild(
+        input, goog.dom.createDom(
+                   goog.dom.TagName.LABEL, null,
+                   goog.dom.createDom(
+                       goog.dom.TagName.INPUT,
+                       {'id': type, 'type': goog.dom.InputType.CHECKBOX}),
+                   type, goog.dom.createDom(goog.dom.TagName.BR)));
     goog.events.listen(testButton, type, function(e) {
       if (goog.dom.getElement(e.type).checked) {
         e.preventDefault();
       }
 
-      log.innerHTML += goog.string.subs('<br />%s (%s, %s)',
-          e.type, e.clientX, e.clientY);
+      log.innerHTML +=
+          goog.string.subs('<br />%s (%s, %s)', e.type, e.clientX, e.clientY);
     });
   }
 }
@@ -172,6 +165,11 @@ function testMouseOut() {
 function testFocus() {
   goog.testing.events.fireFocusEvent(root);
   assertEventTypes(['focus']);
+}
+
+function testFocusIn() {
+  goog.testing.events.fireFocusInEvent(root);
+  assertEventTypes([goog.events.EventType.FOCUSIN]);
 }
 
 function testBlur() {
@@ -226,8 +224,9 @@ function testTouchSequenceWithCoordinate() {
 }
 
 function testClickSequenceWithEventProperty() {
-  assertTrue(goog.testing.events.fireClickSequence(
-      root, null, undefined, { shiftKey: true }));
+  assertTrue(
+      goog.testing.events.fireClickSequence(
+          root, null, undefined, {shiftKey: true}));
   assertArrayEquals([true, true, true], firedShiftKeys);
 }
 
@@ -269,19 +268,13 @@ function testClickSequenceCancellingClickWithCoordinate() {
 
 // For a double click, IE fires selectstart instead of the second mousedown,
 // but we don't simulate selectstart. Also, IE doesn't fire the second click.
-var DBLCLICK_SEQ = (goog.userAgent.IE ?
-                    ['mousedown',
-                     'mouseup',
-                     'click',
-                     'mouseup',
-                     'dblclick'] :
-                    ['mousedown',
-                     'mouseup',
-                     'click',
-                     'mousedown',
-                     'mouseup',
-                     'click',
-                     'dblclick']);
+var DBLCLICK_SEQ =
+    (goog.userAgent.IE ?
+         ['mousedown', 'mouseup', 'click', 'mouseup', 'dblclick'] :
+         [
+           'mousedown', 'mouseup', 'click', 'mousedown', 'mouseup', 'click',
+           'dblclick'
+         ]);
 
 
 var DBLCLICK_SEQ_COORDS = goog.array.repeat(coordinate, DBLCLICK_SEQ.length);
@@ -345,35 +338,35 @@ function testDoubleClickSequenceCancellingDoubleClickWithCoordinate() {
 }
 
 function testKeySequence() {
-  assertTrue(goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.ZERO));
+  assertTrue(
+      goog.testing.events.fireKeySequence(root, goog.events.KeyCodes.ZERO));
   assertEventTypes(['keydown', 'keypress', 'keyup']);
 }
 
 function testKeySequenceCancellingKeydown() {
   preventDefaultEventType('keydown');
-  assertFalse(goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.ZERO));
+  assertFalse(
+      goog.testing.events.fireKeySequence(root, goog.events.KeyCodes.ZERO));
   assertEventTypes(['keydown', 'keyup']);
 }
 
 function testKeySequenceCancellingKeypress() {
   preventDefaultEventType('keypress');
-  assertFalse(goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.ZERO));
+  assertFalse(
+      goog.testing.events.fireKeySequence(root, goog.events.KeyCodes.ZERO));
   assertEventTypes(['keydown', 'keypress', 'keyup']);
 }
 
 function testKeySequenceCancellingKeyup() {
   preventDefaultEventType('keyup');
-  assertFalse(goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.ZERO));
+  assertFalse(
+      goog.testing.events.fireKeySequence(root, goog.events.KeyCodes.ZERO));
   assertEventTypes(['keydown', 'keypress', 'keyup']);
 }
 
 function testKeySequenceWithEscapeKey() {
-  assertTrue(goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.ESC));
+  assertTrue(
+      goog.testing.events.fireKeySequence(root, goog.events.KeyCodes.ESC));
   if (goog.userAgent.EDGE ||
       (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('525'))) {
     assertEventTypes(['keydown', 'keyup']);
@@ -423,7 +416,9 @@ function testKeySequenceForOptionKeysOnMac() {
     [0xba, 0x2026],  // option+;
     [0xbb, 0x2260],  // option+=
     [0xdb, 0x201c],  // option+[
-    [0xdc, 0x00ab],  // option+\
+    [
+      0xdc, 0x00ab
+    ],               // option+\
     [0xdd, 0x2018],  // option+]
     [0x41, 0x00e5],  // option+a
     [0x42, 0x222b],  // option+b
@@ -464,12 +459,12 @@ function testKeySequenceForOptionKeysOnMac() {
   }
 }
 
-var CONTEXTMENU_SEQ =
-    goog.userAgent.WINDOWS ? ['mousedown', 'mouseup', 'contextmenu'] :
+var CONTEXTMENU_SEQ = goog.userAgent.WINDOWS ?
+    ['mousedown', 'mouseup', 'contextmenu'] :
     goog.userAgent.GECKO ? ['mousedown', 'contextmenu', 'mouseup'] :
-    goog.userAgent.WEBKIT && goog.userAgent.MAC ?
-        ['mousedown', 'contextmenu', 'mouseup', 'click'] :
-    ['mousedown', 'contextmenu', 'mouseup'];
+                           goog.userAgent.WEBKIT && goog.userAgent.MAC ?
+                           ['mousedown', 'contextmenu', 'mouseup', 'click'] :
+                           ['mousedown', 'contextmenu', 'mouseup'];
 
 function testContextMenuSequence() {
   assertTrue(goog.testing.events.fireContextMenuSequence(root));
@@ -510,82 +505,59 @@ function testContextMenuSequenceFakeMacWebkit() {
 
 function testCaptureBubble_simple() {
   assertTrue(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 1,
-    childBubble: 1,
-    parentBubble: 1
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 1, childBubble: 1, parentBubble: 1},
+      eventCount);
 }
 
 function testCaptureBubble_preventDefault() {
-  goog.events.listen(childEl, goog.events.EventType.CLICK,
-      function(e) {
-        e.preventDefault();
-      });
+  goog.events.listen(childEl, goog.events.EventType.CLICK, function(e) {
+    e.preventDefault();
+  });
   assertFalse(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 1,
-    childBubble: 1,
-    parentBubble: 1
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 1, childBubble: 1, parentBubble: 1},
+      eventCount);
 }
 
 function testCaptureBubble_stopPropagationParentCapture() {
-  goog.events.listen(parentEl, goog.events.EventType.CLICK,
-      function(e) {
-        e.stopPropagation();
-      }, true /* capture */);
+  goog.events.listen(parentEl, goog.events.EventType.CLICK, function(e) {
+    e.stopPropagation();
+  }, true /* capture */);
   assertTrue(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 0,
-    childBubble: 0,
-    parentBubble: 0
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 0, childBubble: 0, parentBubble: 0},
+      eventCount);
 }
 
 function testCaptureBubble_stopPropagationChildCapture() {
-  goog.events.listen(childEl, goog.events.EventType.CLICK,
-      function(e) {
-        e.stopPropagation();
-      }, true /* capture */);
+  goog.events.listen(childEl, goog.events.EventType.CLICK, function(e) {
+    e.stopPropagation();
+  }, true /* capture */);
   assertTrue(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 1,
-    childBubble: 0,
-    parentBubble: 0
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 1, childBubble: 0, parentBubble: 0},
+      eventCount);
 }
 
 function testCaptureBubble_stopPropagationChildBubble() {
-  goog.events.listen(childEl, goog.events.EventType.CLICK,
-      function(e) {
-        e.stopPropagation();
-      });
+  goog.events.listen(childEl, goog.events.EventType.CLICK, function(e) {
+    e.stopPropagation();
+  });
   assertTrue(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 1,
-    childBubble: 1,
-    parentBubble: 0
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 1, childBubble: 1, parentBubble: 0},
+      eventCount);
 }
 
 function testCaptureBubble_stopPropagationParentBubble() {
-  goog.events.listen(parentEl, goog.events.EventType.CLICK,
-      function(e) {
-        e.stopPropagation();
-      });
+  goog.events.listen(parentEl, goog.events.EventType.CLICK, function(e) {
+    e.stopPropagation();
+  });
   assertTrue(goog.testing.events.fireClickEvent(childEl));
-  assertObjectEquals({
-    parentCapture: 1,
-    childCapture: 1,
-    childBubble: 1,
-    parentBubble: 1
-  }, eventCount);
+  assertObjectEquals(
+      {parentCapture: 1, childCapture: 1, childBubble: 1, parentBubble: 1},
+      eventCount);
 }
 
 function testMixinListenable() {

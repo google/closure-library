@@ -81,11 +81,10 @@ function tearDownPage() {
   // Create interactive demo.
   mouseWheelHandler = new goog.events.WheelHandler(document.body);
 
-  goog.events.listen(mouseWheelHandler,
-      goog.events.WheelEvent.EventType.WHEEL,
-      function(e) {
-        log.innerHTML += goog.string.subs('<br />(deltaX, deltaY): (%s, %s)',
-            e.deltaX, e.deltaY);
+  goog.events.listen(
+      mouseWheelHandler, goog.events.WheelEvent.EventType.WHEEL, function(e) {
+        log.innerHTML += goog.string.subs(
+            '<br />(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY);
       });
 }
 
@@ -190,26 +189,24 @@ function testLegacyIeStyleWheel() {
 
 function testNullBody() {
   goog.userAgent.IE = true;
-  var documentObjectWithNoBody = { };
+  var documentObjectWithNoBody = {};
   goog.testing.events.mixinListenable(documentObjectWithNoBody);
-  mouseWheelHandler =
-      new goog.events.WheelHandler(documentObjectWithNoBody);
+  mouseWheelHandler = new goog.events.WheelHandler(documentObjectWithNoBody);
 }
 
 // Be sure to call this after setting up goog.userAgent mock and not before.
 function createHandlerAndListen() {
-  mouseWheelHandler = new goog.events.WheelHandler(
-      goog.dom.getElement('foo'));
+  mouseWheelHandler = new goog.events.WheelHandler(goog.dom.getElement('foo'));
 
-  goog.events.listen(mouseWheelHandler,
-      goog.events.WheelEvent.EventType.WHEEL,
+  goog.events.listen(
+      mouseWheelHandler, goog.events.WheelEvent.EventType.WHEEL,
       function(e) { mouseWheelEvent = e; });
 
-  mouseWheelHandlerRtl = new goog.events.WheelHandler(
-      goog.dom.getElement('fooRtl'));
+  mouseWheelHandlerRtl =
+      new goog.events.WheelHandler(goog.dom.getElement('fooRtl'));
 
-  goog.events.listen(mouseWheelHandlerRtl,
-      goog.events.WheelEvent.EventType.WHEEL,
+  goog.events.listen(
+      mouseWheelHandlerRtl, goog.events.WheelEvent.EventType.WHEEL,
       function(e) { mouseWheelEventRtl = e; });
 }
 
@@ -220,30 +217,39 @@ function handleEvent(event) {
 
 function assertWheelEvent(deltaMode, deltaX, deltaY, deltaZ) {
   assertTrue('event should be non-null', !!mouseWheelEvent);
-  assertTrue('event should have correct JS type',
+  assertTrue(
+      'event should have correct JS type',
       mouseWheelEvent instanceof goog.events.WheelEvent);
-  assertEquals('event should have correct deltaMode property',
-      deltaMode, mouseWheelEvent.deltaMode);
-  assertEquals('event should have correct deltaX property',
-      deltaX, mouseWheelEvent.deltaX);
-  assertEquals('event should have correct deltaY property',
-      deltaY, mouseWheelEvent.deltaY);
-  assertEquals('event should have correct deltaZ property',
-      deltaZ, mouseWheelEvent.deltaZ);
+  assertEquals(
+      'event should have correct deltaMode property', deltaMode,
+      mouseWheelEvent.deltaMode);
+  assertEquals(
+      'event should have correct deltaX property', deltaX,
+      mouseWheelEvent.deltaX);
+  assertEquals(
+      'event should have correct deltaY property', deltaY,
+      mouseWheelEvent.deltaY);
+  assertEquals(
+      'event should have correct deltaZ property', deltaZ,
+      mouseWheelEvent.deltaZ);
 
   // RTL
   assertTrue('event should be non-null', !!mouseWheelEventRtl);
-  assertTrue('event should have correct JS type',
+  assertTrue(
+      'event should have correct JS type',
       mouseWheelEventRtl instanceof goog.events.WheelEvent);
-  assertEquals('event should have correct deltaMode property',
-      deltaMode, mouseWheelEventRtl.deltaMode);
-  assertEquals('event should have correct deltaX property',
-      -deltaX, mouseWheelEventRtl.deltaX);
-  assertEquals('event should have correct deltaY property',
-      deltaY, mouseWheelEventRtl.deltaY);
-  assertEquals('event should have correct deltaZ property',
-      deltaZ, mouseWheelEventRtl.deltaZ);
-
+  assertEquals(
+      'event should have correct deltaMode property', deltaMode,
+      mouseWheelEventRtl.deltaMode);
+  assertEquals(
+      'event should have correct deltaX property', -deltaX,
+      mouseWheelEventRtl.deltaX);
+  assertEquals(
+      'event should have correct deltaY property', deltaY,
+      mouseWheelEventRtl.deltaY);
+  assertEquals(
+      'event should have correct deltaZ property', deltaZ,
+      mouseWheelEventRtl.deltaZ);
 }
 
 function assertPixelDeltas(scale) {
@@ -252,12 +258,12 @@ function assertPixelDeltas(scale) {
   assertEquals(mouseWheelEvent.deltaZ * scale, mouseWheelEvent.pixelDeltaZ);
 
   // RTL
-  assertEquals(mouseWheelEventRtl.deltaX * scale,
-      mouseWheelEventRtl.pixelDeltaX);
-  assertEquals(mouseWheelEventRtl.deltaY * scale,
-      mouseWheelEventRtl.pixelDeltaY);
-  assertEquals(mouseWheelEventRtl.deltaZ * scale,
-      mouseWheelEventRtl.pixelDeltaZ);
+  assertEquals(
+      mouseWheelEventRtl.deltaX * scale, mouseWheelEventRtl.pixelDeltaX);
+  assertEquals(
+      mouseWheelEventRtl.deltaY * scale, mouseWheelEventRtl.pixelDeltaY);
+  assertEquals(
+      mouseWheelEventRtl.deltaZ * scale, mouseWheelEventRtl.pixelDeltaZ);
 }
 
 function createFakePreferredEvent(

@@ -64,7 +64,7 @@ function testExceedMax2() {
 
 
 function testExceedMax3() {
-  var p = new goog.structs.Pool(); // default: 10
+  var p = new goog.structs.Pool();  // default: 10
   var objs = [];
 
   for (var i = 0; i < 12; i++) {
@@ -234,9 +234,7 @@ function testInvalidMinMax1() {
   assertEquals(0, p.getInUseCount());
   assertEquals(0, p.getFreeCount());
 
-  assertThrows(function() {
-    p.setMinimumCount(11);
-  });
+  assertThrows(function() { p.setMinimumCount(11); });
 }
 
 
@@ -247,16 +245,12 @@ function testInvalidMinMax2() {
   assertEquals(0, p.getInUseCount());
   assertEquals(5, p.getFreeCount());
 
-  assertThrows(function() {
-    p.setMaximumCount(4);
-  });
+  assertThrows(function() { p.setMaximumCount(4); });
 }
 
 
 function testInvalidMinMax3() {
-  assertThrows(function() {
-    new goog.structs.Pool(10, 1);
-  });
+  assertThrows(function() { new goog.structs.Pool(10, 1); });
 }
 
 

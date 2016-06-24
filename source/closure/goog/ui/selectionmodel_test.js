@@ -58,10 +58,9 @@ function testGetLast() {
  * Tests the behavior of goog.ui.SelectionModel.getItemAt(index).
  */
 function testGetItemAt() {
-  goog.array.forEach(items,
-      function(item, i) {
-        assertEquals(item, selectionModel.getItemAt(i));
-      });
+  goog.array.forEach(items, function(item, i) {
+    assertEquals(item, selectionModel.getItemAt(i));
+  });
 }
 
 /*
@@ -131,10 +130,9 @@ function testGetItems() {
  * Checks that an item's index can be found in the selection model.
  */
 function testIndexOfItem() {
-  goog.array.forEach(items,
-      function(item, i) {
-        assertEquals(i, selectionModel.indexOfItem(item));
-      });
+  goog.array.forEach(items, function(item, i) {
+    assertEquals(i, selectionModel.indexOfItem(item));
+  });
 }
 
 /*

@@ -28,51 +28,41 @@ var testTestCase;
 var runner;
 
 // Optionally, set a longer-than-usual step timeout.
-deferredTestCase.stepTimeout = 15 * 1000; // 15 seconds
+deferredTestCase.stepTimeout = 15 * 1000;  // 15 seconds
 
 // This is the sample code in deferredtestcase.js
 function testDeferredCallbacks() {
   var callbackTime = goog.now();
   var callbacks = new goog.async.Deferred();
   deferredTestCase.addWaitForAsync('Waiting for 1st callback', callbacks);
-  callbacks.addCallback(
-      function() {
-        assertTrue(
-            'We\'re going back in time!', goog.now() >= callbackTime);
-        callbackTime = goog.now();
-      });
+  callbacks.addCallback(function() {
+    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+    callbackTime = goog.now();
+  });
   deferredTestCase.addWaitForAsync('Waiting for 2nd callback', callbacks);
-  callbacks.addCallback(
-      function() {
-        assertTrue(
-            'We\'re going back in time!', goog.now() >= callbackTime);
-        callbackTime = goog.now();
-      });
+  callbacks.addCallback(function() {
+    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+    callbackTime = goog.now();
+  });
   deferredTestCase.addWaitForAsync('Waiting for last callback', callbacks);
-  callbacks.addCallback(
-      function() {
-        assertTrue(
-            'We\'re going back in time!', goog.now() >= callbackTime);
-        callbackTime = goog.now();
-      });
+  callbacks.addCallback(function() {
+    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+    callbackTime = goog.now();
+  });
 
   deferredTestCase.waitForDeferred(callbacks);
 }
 
 function createDeferredTestCase(d) {
   testTestCase = new goog.testing.DeferredTestCase('Foobar TestCase');
-  testTestCase.add(new goog.testing.TestCase.Test(
-      'Foobar Test',
-      function() {
-        this.waitForDeferred(d);
-      },
-      testTestCase));
+  testTestCase.add(new goog.testing.TestCase.Test('Foobar Test', function() {
+    this.waitForDeferred(d);
+  }, testTestCase));
 
   var testCompleteCallback = new goog.async.Deferred();
-  testTestCase.setCompletedCallback(
-      function() {
-        testCompleteCallback.callback(true);
-      });
+  testTestCase.setCompletedCallback(function() {
+    testCompleteCallback.callback(true);
+  });
 
   // We're not going to use the runner to run the test, but we attach one
   // here anyway because without a runner TestCase throws an exception in
@@ -86,9 +76,7 @@ function createDeferredTestCase(d) {
 function testDeferredWait() {
   var d = new goog.async.Deferred();
   deferredTestCase.addWaitForAsync('Foobar', d);
-  d.addCallback(function() {
-    return goog.async.Deferred.succeed(true);
-  });
+  d.addCallback(function() { return goog.async.Deferred.succeed(true); });
   deferredTestCase.waitForDeferred(d);
 }
 
@@ -98,9 +86,7 @@ function testNonAsync() {
 
 function testPassWithTestRunner() {
   var d = new goog.async.Deferred();
-  d.addCallback(function() {
-    return goog.async.Deferred.succeed(true);
-  });
+  d.addCallback(function() { return goog.async.Deferred.succeed(true); });
 
   var testCompleteDeferred = createDeferredTestCase(d);
   testTestCase.execute();
@@ -110,7 +96,7 @@ function testPassWithTestRunner() {
     return testCompleteDeferred;
   });
   deferredCallbackOnPass.addCallback(function() {
-    assertTrue('Test case should have succeded.', testTestCase.isSuccess());
+    assertTrue('Test case should have succeeded.', testTestCase.isSuccess());
   });
 
   deferredTestCase.waitForDeferred(deferredCallbackOnPass);
@@ -118,9 +104,7 @@ function testPassWithTestRunner() {
 
 function testFailWithTestRunner() {
   var d = new goog.async.Deferred();
-  d.addCallback(function() {
-    return goog.async.Deferred.fail(true);
-  });
+  d.addCallback(function() { return goog.async.Deferred.fail(true); });
 
   var testCompleteDeferred = createDeferredTestCase(d);
 

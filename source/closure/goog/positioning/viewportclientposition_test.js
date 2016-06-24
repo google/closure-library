@@ -50,12 +50,10 @@ function testPositionAtCoordinateTopLeft() {
   pos.reposition(popup, corner.TOP_LEFT);
 
   var offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should be at specified x coordinate.',
-               100,
-               offset.x);
-  assertEquals('Top edge of popup should be at specified y coordinate.',
-               100,
-               offset.y);
+  assertEquals(
+      'Left edge of popup should be at specified x coordinate.', 100, offset.x);
+  assertEquals(
+      'Top edge of popup should be at specified y coordinate.', 100, offset.y);
 }
 
 
@@ -64,12 +62,12 @@ function testPositionAtCoordinateBottomRight() {
   pos.reposition(popup, corner.BOTTOM_RIGHT);
 
   var bounds = goog.style.getBounds(popup);
-  assertEquals('Right edge of popup should be at specified x coordinate.',
-               100,
-               bounds.left + bounds.width);
-  assertEquals('Bottom edge of popup should be at specified x coordinate.',
-               100,
-               bounds.top + bounds.height);
+  assertEquals(
+      'Right edge of popup should be at specified x coordinate.', 100,
+      bounds.left + bounds.width);
+  assertEquals(
+      'Bottom edge of popup should be at specified x coordinate.', 100,
+      bounds.top + bounds.height);
 }
 
 
@@ -83,21 +81,22 @@ function testPositionAtCoordinateTopLeftWithScroll() {
   pos.reposition(popup, corner.TOP_LEFT);
 
   var offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should be at specified x coordinate.',
-               0,
-               offset.x);
-  assertTrue('Top edge of popup should be at specified y coordinate ' +
-             'adjusted for scroll.',
-             Math.abs(offset.y - 50) <= ALLOWED_OFFSET);
+  assertEquals(
+      'Left edge of popup should be at specified x coordinate.', 0, offset.x);
+  assertTrue(
+      'Top edge of popup should be at specified y coordinate ' +
+          'adjusted for scroll.',
+      Math.abs(offset.y - 50) <= ALLOWED_OFFSET);
 
   dom.getDocument().body.style.paddingLeft = '1000px';
   dom.getDocumentScrollElement().scrollLeft = 500;
 
   pos.reposition(popup, corner.TOP_LEFT);
   offset = goog.style.getPageOffset(popup);
-  assertTrue('Left edge of popup should be at specified x coordinate ' +
-             'adjusted for scroll.',
-             Math.abs(offset.x - 500) <= ALLOWED_OFFSET);
+  assertTrue(
+      'Left edge of popup should be at specified x coordinate ' +
+          'adjusted for scroll.',
+      Math.abs(offset.x - 500) <= ALLOWED_OFFSET);
 
   dom.getDocumentScrollElement().scrollLeft = 0;
   dom.getDocumentScrollElement().scrollTop = 0;
@@ -106,28 +105,24 @@ function testPositionAtCoordinateTopLeftWithScroll() {
 
   pos.reposition(popup, corner.TOP_LEFT);
   offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should be at specified x coordinate.',
-               0,
-               offset.x);
-  assertEquals('Top edge of popup should be at specified y coordinate.',
-               0,
-               offset.y);
+  assertEquals(
+      'Left edge of popup should be at specified x coordinate.', 0, offset.x);
+  assertEquals(
+      'Top edge of popup should be at specified y coordinate.', 0, offset.y);
 }
 
 
 function testOverflowRightFlipHor() {
-  var pos = new goog.positioning.ViewportClientPosition(frameRect.right,
-                                                        100);
+  var pos = new goog.positioning.ViewportClientPosition(frameRect.right, 100);
   pos.reposition(popup, corner.TOP_LEFT);
 
   var offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should have been adjusted so that it ' +
-      'fits inside the viewport.',
-               frameRect.right - popup.offsetWidth,
-               offset.x);
-  assertEquals('Top edge of popup should be at specified y coordinate.',
-               100,
-               offset.y);
+  assertEquals(
+      'Left edge of popup should have been adjusted so that it ' +
+          'fits inside the viewport.',
+      frameRect.right - popup.offsetWidth, offset.x);
+  assertEquals(
+      'Top edge of popup should be at specified y coordinate.', 100, offset.y);
 }
 
 
@@ -136,30 +131,29 @@ function testOverflowTopFlipVer() {
   pos.reposition(popup, corner.TOP_RIGHT);
 
   var offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should be at specified x coordinate.',
-               80,
-               offset.x);
-  assertEquals('Top edge of popup should have been adjusted so that it ' +
-      'fits inside the viewport.',
-               0,
-               offset.y);
+  assertEquals(
+      'Left edge of popup should be at specified x coordinate.', 80, offset.x);
+  assertEquals(
+      'Top edge of popup should have been adjusted so that it ' +
+          'fits inside the viewport.',
+      0, offset.y);
 }
 
 
 function testOverflowBottomRightFlipBoth() {
-  var pos = new goog.positioning.ViewportClientPosition(frameRect.right,
-                                                        frameRect.bottom);
+  var pos = new goog.positioning.ViewportClientPosition(
+      frameRect.right, frameRect.bottom);
   pos.reposition(popup, corner.TOP_LEFT);
 
   var offset = goog.style.getPageOffset(popup);
-  assertEquals('Left edge of popup should have been adjusted so that it ' +
-      'fits inside the viewport.',
-               frameRect.right - popup.offsetWidth,
-               offset.x);
-  assertEquals('Top edge of popup should have been adjusted so that it ' +
-      'fits inside the viewport.',
-               frameRect.bottom - popup.offsetHeight,
-               offset.y);
+  assertEquals(
+      'Left edge of popup should have been adjusted so that it ' +
+          'fits inside the viewport.',
+      frameRect.right - popup.offsetWidth, offset.x);
+  assertEquals(
+      'Top edge of popup should have been adjusted so that it ' +
+          'fits inside the viewport.',
+      frameRect.bottom - popup.offsetHeight, offset.y);
 }
 
 

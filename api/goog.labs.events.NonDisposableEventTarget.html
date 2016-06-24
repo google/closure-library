@@ -1,0 +1,136 @@
+---
+{edit_path: '', layout: api, page: goog.labs.events.NonDisposableEventTarget, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>NonDisposableEventTarget</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.labs.events.html">goog.labs.events</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L69" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class NonDisposableEventTarget</div></h1></div><div class="body"><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.events.Listenable.html">goog.events.Listenable</a></code></dl><p>An implementation of <code>goog.events.Listenable</code> with full W3C
+EventTarget-like support (capture/bubble mechanism, stopping event
+propagation, preventing default actions).</p>
+<p>You may subclass this class to turn your class into a Listenable.</p>
+<p>Unlike <a href="goog.events.EventTarget.html"><code>goog.events.EventTarget</code></a>, this class does not implement
+<a href="goog.disposable.IDisposable.html"><code>goog.disposable.IDisposable</code></a>. Instances of this class that have had
+It is not necessary to call <a href="goog.dispose.html"><code>goog.dispose</code></a>
+or <a href="goog.labs.events.NonDisposableEventTarget.html#removeAllListeners"><code>#removeAllListeners</code></a> in order for an instance of this class
+to be garbage collected.</p>
+<p>Unless propagation is stopped, an event dispatched by an
+EventTarget will bubble to the parent returned by
+<code>getParentEventTarget</code>. To set the parent, call
+<code>setParentEventTarget</code>. Subclasses that don&#39;t support
+changing the parent can override the setter to throw an error.</p>
+<p>Example usage:</p>
+ <pre>
+   var source &#61; new goog.labs.events.NonDisposableEventTarget();
+   function handleEvent(e) {
+     alert(&#39;Type: &#39; &#43; e.type &#43; &#39;; Target: &#39; &#43; e.target);
+   }
+   source.listen(&#39;foo&#39;, handleEvent);
+   source.dispatchEvent(&#39;foo&#39;); // will call handleEvent
+ </pre>
+<p>TODO(chrishenry|johnlenz): Consider a more modern, less viral
+(not based on inheritance) replacement of goog.Disposable, which will allow
+goog.events.EventTarget to not be disposable.</p>
+<h3 class="name"><div>new NonDisposableEventTarget()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="dispatchEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L115" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispatchEvent(<var>e</var>)</div></h3></div><div class="body"><p>Dispatches an event (or event like object) and calls all listeners
+listening for events of this type. The type of the event is decided by the
+type property on the event object.</p>
+<p>If any of the listeners returns false OR calls preventDefault then this
+function will return false.  If one of the capture listeners calls
+stopPropagation, then the bubble listeners won&#39;t fire.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#dispatchEvent">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>e</var><code><a href="goog.events.html#goog.events.EventLike">goog.events.EventLike</a></code><dd><p>Event object.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>If anyone called preventDefault on the event object (or
+if any of the listeners returns false) this will also return false.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireListeners"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L178" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireListeners(<var>type</var>, <var>capture</var>, <var>eventObject</var>)</div></h3></div><div class="body"><p>Fires all registered listeners in this listenable for the given
+type and capture mode, passing them the given eventObject. This
+does not perform actual capture/bubble. Only implementors of the
+interface should be using this.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#fireListeners">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)</code><dd><p>The type of the
+listeners to fire.</p>
+<dt class="type name"><var>capture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The capture mode of the listeners to fire.</p>
+<dt class="type name"><var>eventObject</var><code>EVENTOBJ</code><dd><p>The event object to fire.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether all listeners succeeded without
+attempting to prevent default behavior. If any listener returns
+false or called goog.events.Event#preventDefault, this returns
+false.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getListener"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L217" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getListener(<var>type</var>, <var>listener</var>, <var>capture</var>, <var>opt_listenerScope</var>)</div></h3></div><div class="body"><p>Gets the goog.events.ListenableKey for the event or null if no such
+listener is in use.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#getListener">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)</code><dd><p>The name of the event
+without the &#39;on&#39; prefix.</p>
+<dt class="type name"><var>listener</var><code>function(this: SCOPE, EVENTOBJ): (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>The
+listener function to get.</p>
+<dt class="type name"><var>capture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the listener is a capturing listener.</p>
+<dt class="type name"><var>opt_listenerScope</var><code>SCOPE=</code><dd><p>Object in whose scope to call the
+listener.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.events.ListenableKey.html">goog.events.ListenableKey</a></code><dd><p>the found listener or null if not found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getListeners"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L210" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getListeners(<var>type</var>, <var>capture</var>)</div></h3></div><div class="body"><p>Gets all listeners in this listenable for the given type and
+capture mode.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#getListeners">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>)</code><dd><p>The type of the listeners to fire.</p>
+<dt class="type name"><var>capture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The capture mode of the listeners to fire.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="goog.events.ListenableKey.html">goog.events.ListenableKey</a>&gt;</code><dd><p>An array of registered
+listeners.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getParentEventTarget"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L97" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getParentEventTarget()</div></h3></div><div class="body"><p>Returns the parent of this event target to use for capture/bubble
+mechanism.</p>
+<p>NOTE(chrishenry): The name reflects the original implementation of
+custom event target (<code>goog.events.EventTarget</code>). We decided
+that changing the name is not worth it.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#getParentEventTarget">goog.events.Listenable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.events.Listenable.html">goog.events.Listenable</a></code><dd><p>The parent EventTarget or null if
+there is no parent.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasListener"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L225" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>hasListener(<var>opt_type</var>, <var>opt_capture</var>)</div></h3></div><div class="body"><p>Whether there is any active listeners matching the specified
+signature. If either the type or capture parameters are
+unspecified, the function will match on the remaining criteria.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#hasListener">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)=</code><dd><p>Event type.</p>
+<dt class="type name"><var>opt_capture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to check for capture or bubble
+listeners.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether there is any active listeners matching
+the requested type and/or capture phase.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="listen"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L137" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>listen(<var>type</var>, <var>listener</var>, <var>opt_useCapture</var>, <var>opt_listenerScope</var>)</div></h3></div><div class="body"><p>Adds an event listener. A listener can only be added once to an
+object and if it is added again the key for the listener is
+returned. Note that if the existing listener is a one-off listener
+(registered via listenOnce), it will no longer be a one-off
+listener after a call to listen().</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#listen">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)</code><dd><p>The event type id.</p>
+<dt class="type name"><var>listener</var><code>function(this: SCOPE, EVENTOBJ): (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>Callback
+method.</p>
+<dt class="type name"><var>opt_useCapture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to fire in capture phase
+(defaults to false).</p>
+<dt class="type name"><var>opt_listenerScope</var><code>SCOPE=</code><dd><p>Object in whose scope to call the
+listener.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.events.ListenableKey.html">goog.events.ListenableKey</a></code><dd><p>Unique key for the listener.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="listenOnce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>listenOnce(<var>type</var>, <var>listener</var>, <var>opt_useCapture</var>, <var>opt_listenerScope</var>)</div></h3></div><div class="body"><p>Adds an event listener that is removed automatically after the
+listener fired once.</p>
+<p>If an existing listener already exists, listenOnce will do
+nothing. In particular, if the listener was previously registered
+via listen(), listenOnce() will not turn the listener into a
+one-off listener. Similarly, if there is already an existing
+one-off listener, listenOnce does not modify the listeners (it is
+still a once listener).</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#listenOnce">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)</code><dd><p>The event type id.</p>
+<dt class="type name"><var>listener</var><code>function(this: SCOPE, EVENTOBJ): (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>Callback
+method.</p>
+<dt class="type name"><var>opt_useCapture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to fire in capture phase
+(defaults to false).</p>
+<dt class="type name"><var>opt_listenerScope</var><code>SCOPE=</code><dd><p>Object in whose scope to call the
+listener.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.events.ListenableKey.html">goog.events.ListenableKey</a></code><dd><p>Unique key for the listener.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeAllListeners"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L171" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>removeAllListeners(<var>opt_type</var>)</div></h3></div><div class="body"><p>Removes all listeners from this listenable. If type is specified,
+it will only remove listeners of the particular type. otherwise all
+registered listeners will be removed.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#removeAllListeners">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_type</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Type of event to remove, default is to
+remove all types.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Number of listeners removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setParentEventTarget"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L108" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setParentEventTarget(<var>parent</var>)</div></h3></div><div class="body"><p>Sets the parent of this event target to use for capture/bubble
+mechanism.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code><a href="goog.events.Listenable.html">goog.events.Listenable</a></code><dd><p>Parent listenable (null if none).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unlisten"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L156" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unlisten(<var>type</var>, <var>listener</var>, <var>opt_useCapture</var>, <var>opt_listenerScope</var>)</div></h3></div><div class="body"><p>Removes an event listener which was added with listen() or listenOnce().</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#unlisten">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.events.EventId.html">goog.events.EventId</a>&lt;EVENTOBJ&gt;)</code><dd><p>The event type id.</p>
+<dt class="type name"><var>listener</var><code>function(this: SCOPE, EVENTOBJ): (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>Callback
+method.</p>
+<dt class="type name"><var>opt_useCapture</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to fire in capture phase
+(defaults to false).</p>
+<dt class="type name"><var>opt_listenerScope</var><code>SCOPE=</code><dd><p>Object in whose scope to call
+the listener.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether any listener was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unlistenByKey"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/events/nondisposableeventtarget.js#L164" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unlistenByKey(<var>key</var>)</div></h3></div><div class="body"><p>Removes an event listener which was added with listen() by the key
+returned by listen().</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.events.Listenable.html#unlistenByKey">goog.events.Listenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code>!<a href="goog.events.ListenableKey.html">goog.events.ListenableKey</a></code><dd><p>The key returned by
+listen() or listenOnce().</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether any listener was removed.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

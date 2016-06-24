@@ -92,8 +92,10 @@ function testSerialization() {
   assertEquals(202, simplified[31][1]);
 
   // Serialize to a simplified object (with key as name).
-  simplified = new goog.proto2.ObjectSerializer(
-      goog.proto2.ObjectSerializer.KeyOption.NAME).serialize(message);
+  simplified =
+      new goog.proto2
+          .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.NAME)
+          .serialize(message);
 
   // Assert that everything serialized properly.
   assertEquals(101, simplified['optional_int32']);
@@ -115,8 +117,8 @@ function testSerialization() {
   assertEquals(111, simplified['optionalgroup']['a']);
   assertEquals(112, simplified['optional_nested_message']['b']);
 
-  assertEquals(proto2.TestAllTypes.NestedEnum.FOO,
-      simplified['optional_nested_enum']);
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO, simplified['optional_nested_enum']);
 
   assertEquals(201, simplified['repeated_int32'][0]);
   assertEquals(202, simplified['repeated_int32'][1]);
@@ -151,17 +153,12 @@ function testSerializationOfUnknown() {
 }
 
 function testDeserializationOfUnknown() {
-  var simplified = {
-    1: 101,
-    2: '102',
-    1000: 103,
-    1001: 104
-  };
+  var simplified = {1: 101, 2: '102', 1000: 103, 1001: 104};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
   assertTrue(message.hasOptionalInt32());
@@ -194,14 +191,14 @@ function testDeserializationRepeated() {
     42: [],
     43: [true, false],
     44: ['he', 'llo'],
-    46: [{ 47: [101] } , { 47: [102] }],
-    48: [{ 1: 201 }, { 1: 202 }]
+    46: [{47: [101]}, {47: [102]}],
+    48: [{1: 201}, {1: 202}]
   };
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
@@ -264,15 +261,15 @@ function testDeserialization() {
     13: true,
     14: 'test',
     15: 'abcd',
-    16: { 17 : 113 },
-    18: { 1 : 114 },
+    16: {17: 113},
+    18: {1: 114},
     21: proto2.TestAllTypes.NestedEnum.FOO
   };
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
@@ -332,19 +329,17 @@ function testDeserialization() {
   assertEquals(113, message.getOptionalgroup().getA());
   assertEquals(114, message.getOptionalNestedMessage().getB());
 
-  assertEquals(proto2.TestAllTypes.NestedEnum.FOO,
-      message.getOptionalNestedEnum());
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO, message.getOptionalNestedEnum());
 }
 
 function testDeserializationUnknownEnumValue() {
-  var simplified = {
-    21: 1001
-  };
+  var simplified = {21: 1001};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
@@ -352,45 +347,64 @@ function testDeserializationUnknownEnumValue() {
 }
 
 function testDeserializationSymbolicEnumValue() {
-  var simplified = {
-    21: 'BAR'
-  };
+  var simplified = {21: 'BAR'};
 
   propertyReplacer.set(goog.proto2.Serializer, 'DECODE_SYMBOLIC_ENUMS', true);
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
-  assertEquals(proto2.TestAllTypes.NestedEnum.BAR,
-      message.getOptionalNestedEnum());
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.BAR, message.getOptionalNestedEnum());
 }
 
 function testDeserializationSymbolicEnumValueTurnedOff() {
-  var simplified = {
-    21: 'BAR'
-  };
+  var simplified = {21: 'BAR'};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  assertThrows('Should have an assertion failure in deserialization',
-      function() {
+  assertThrows(
+      'Should have an assertion failure in deserialization', function() {
         serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
       });
 }
 
 function testDeserializationUnknownSymbolicEnumValue() {
-  var simplified = {
-    21: 'BARRED'
-  };
+  var simplified = {21: 'BARRED'};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  assertThrows('Should have an assertion failure in deserialization',
-      function() {
+  assertThrows(
+      'Should have an assertion failure in deserialization', function() {
+        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+      });
+}
+
+function testDeserializationEnumValueAsNumericString() {
+  var simplified = {21: '2'};
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.BAR, message.getOptionalNestedEnum());
+}
+
+function testDeserializationEnumValueWithNegativeString() {
+  var simplified = {21: '-2'};
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  assertThrows(
+      'Should have an assertion failure in deserialization', function() {
         serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
       });
 }
@@ -399,19 +413,11 @@ function testDeserializationNumbersOrStrings() {
   // 64-bit types may have been serialized as numbers or strings.
   // Deserialization should be able to handle either.
 
-  var simplifiedWithNumbers = {
-    50: 5000,
-    51: 5100,
-    52: [5200, 5201],
-    53: [5300, 5301]
-  };
+  var simplifiedWithNumbers =
+      {50: 5000, 51: 5100, 52: [5200, 5201], 53: [5300, 5301]};
 
-  var simplifiedWithStrings = {
-    50: '5000',
-    51: '5100',
-    52: ['5200', '5201'],
-    53: ['5300', '5301']
-  };
+  var simplifiedWithStrings =
+      {50: '5000', 51: '5100', 52: ['5200', '5201'], 53: ['5300', '5301']};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
@@ -480,8 +486,8 @@ function testDeserializationSpecialFloatDoubleValues() {
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
@@ -502,12 +508,12 @@ function testDeserializationConversionProhibited() {
   // Test deserialization fails on 32-bit numbers as strings.
 
   var simplified = {
-    1: '1000'   // optionalInt32
+    1: '1000'  // optionalInt32
   };
   var serializer = new goog.proto2.ObjectSerializer();
 
-  assertThrows('Should have an assertion failure in deserialization',
-      function() {
+  assertThrows(
+      'Should have an assertion failure in deserialization', function() {
         serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
       });
 }
@@ -530,21 +536,19 @@ function testDefaultValueNumbersOrStrings() {
   assertEquals('1000000000000000000', String(value));  // Value is rounded!
 
   // When using a String, the value is preserved.
-  assertEquals('1000000000000000001',
-               message.getOptionalInt64StringOrDefault());
+  assertEquals(
+      '1000000000000000001', message.getOptionalInt64StringOrDefault());
 }
 
 function testBooleanAsNumberFalse() {
   // Some libraries, such as GWT, can serialize boolean values as 0/1
 
-  var simplified = {
-    13: 0
-  };
+  var simplified = {13: 0};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 
@@ -552,14 +556,12 @@ function testBooleanAsNumberFalse() {
 }
 
 function testBooleanAsNumberTrue() {
-  var simplified = {
-    13: 1
-  };
+  var simplified = {13: 1};
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
 
   assertNotNull(message);
 

@@ -1,0 +1,58 @@
+---
+{edit_path: '', layout: api, page: goog.net.Jsonp, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>Jsonp</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.net.html">goog.net</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L68" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class Jsonp</div></h1></div><div class="body"><p>Creates a new cross domain channel that sends data to the specified
+host URL. By default, if no reply arrives within 5s, the channel
+assumes the call failed to complete successfully.</p>
+<h3 class="name"><div>new Jsonp(<var>uri</var>, <var>opt_callbackParamName</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>uri</var><code>(<a href="goog.Uri.html">goog.Uri</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The Uri of the server side code that receives
+data posted through this channel (e.g.,
+&#34;http://maps.google.com/maps/geo&#34;).</p>
+<dt class="type name"><var>opt_callbackParamName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>The parameter name that is used to
+specify the callback. Defaults to &#34;callback&#34;.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="cancel"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L246" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>cancel(<var>request</var>)</div></h3></div><div class="body"><p>Cancels a given request. The request must be exactly the object returned by
+the send method.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>request</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The request object returned by the send method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRequestTimeout"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L151" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRequestTimeout()</div></h3></div><div class="body"><p>Returns the current timeout value, in milliseconds.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The timeout value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="send"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>send(<var>opt_payload</var>, <var>opt_replyCallback</var>, <var>opt_errorCallback</var>, <var>opt_callbackParamValue</var>)</div></h3></div><div class="body"><p>Sends the given payload to the URL specified at the construction
+time. The reply is delivered to the given replyCallback. If the
+errorCallback is specified and the reply does not arrive within the
+timeout period set on this channel, the errorCallback is invoked
+with the original payload.</p>
+<p>If no reply callback is specified, then the response is expected to
+consist of calls to globally registered functions. No &amp;callback&#61;
+URL parameter will be sent in the request, and the script element
+will be cleaned up after the timeout.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_payload</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Name-value pairs.  If given, these will be
+added as parameters to the supplied URI as GET parameters to the
+given server URI.</p>
+<dt class="type name"><var>opt_replyCallback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>A function expecting one
+argument, called when the reply arrives, with the response data.</p>
+<dt class="type name"><var>opt_errorCallback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>A function expecting one
+argument, called on timeout, with the payload (if given), otherwise
+null.</p>
+<dt class="type name"><var>opt_callbackParamValue</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Value to be used as the
+parameter value for the callback parameter (callbackParamName).
+To be used when the value needs to be fixed by the client for a
+particular request, to make use of the cached responses for the request.
+NOTE: If multiple requests are made with the same
+opt_callbackParamValue, only the last call will work whenever the
+response comes back.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>A request descriptor that may be used to cancel this
+transmission, or null, if the message may not be cancelled.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setNonce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L164" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setNonce(<var>nonce</var>)</div></h3></div><div class="body"><p>Sets the nonce value for CSP. This nonce value will be added to any created
+script elements and must match the nonce provided in the
+Content-Security-Policy header sent by the server for the callback to pass
+CSP enforcement.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>nonce</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The CSP nonce value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRequestTimeout"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L141" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRequestTimeout(<var>timeout</var>)</div></h3></div><div class="body"><p>Sets the length of time, in milliseconds, this channel is prepared
+to wait for for a request to complete. If the call is not competed
+within the set time span, it is assumed to have failed. To wait
+indefinitely for a request to complete set the timout to a negative
+number.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>timeout</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The length of time before calls are
+interrupted.</p>
+</dl></dd></dl></div></section></section><section class="static-properties"><h2>Static Properties</h2><section class="property expandable" id="Jsonp.CALLBACKS"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/jsonp.js#L107" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Jsonp.CALLBACKS</div></h3></div><div class="body"><p>The prefix for the callback name which will be stored on goog.global.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

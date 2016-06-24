@@ -26,14 +26,12 @@ var div2;
 
 function setUp() {
   var createDiv = function(color) {
-    var div = goog.dom.createDom(
-        goog.dom.TagName.DIV,
-        {
-          style: 'position:absolute;top:0;left:0;' +
-              'width:200px;height:100px;' +
-              'background-color:' + color,
-          innerHTML: 'abc'
-        });
+    var div = goog.dom.createDom(goog.dom.TagName.DIV, {
+      style: 'position:absolute;top:0;left:0;' +
+          'width:200px;height:100px;' +
+          'background-color:' + color,
+      innerHTML: 'abc'
+    });
     document.body.appendChild(div);
     return div;
   };
@@ -44,10 +42,8 @@ function setUp() {
 
 
 function tearDown() {
-  if (div1.parentNode)
-    div1.parentNode.removeChild(div1);
-  if (div2.parentNode)
-    div2.parentNode.removeChild(div2);
+  if (div1.parentNode) div1.parentNode.removeChild(div1);
+  if (div2.parentNode) div2.parentNode.removeChild(div2);
 
   div1 = null;
   div2 = null;
@@ -55,13 +51,15 @@ function tearDown() {
 
 
 function testIsVisible() {
-  assertTrue('The div should be detected as visible.',
-             goog.testing.style.isVisible(div1));
+  assertTrue(
+      'The div should be detected as visible.',
+      goog.testing.style.isVisible(div1));
 
   // Tests with hidden element
   goog.style.setElementShown(div1, false /* display */);
-  assertFalse('The div should be detected as not visible.',
-              goog.testing.style.isVisible(div1));
+  assertFalse(
+      'The div should be detected as not visible.',
+      goog.testing.style.isVisible(div1));
 }
 
 function testIsOnScreen() {
@@ -76,7 +74,8 @@ function testIsOnScreen() {
   goog.style.setSize(el, 100, 100);
 
   goog.style.setPosition(el, winScroll.x, winScroll.y);
-  assertTrue('An element fully on the screen is on screen.',
+  assertTrue(
+      'An element fully on the screen is on screen.',
       goog.testing.style.isOnScreen(el));
 
   goog.style.setPosition(el, winScroll.x - 10, winScroll.y - 10);
@@ -118,41 +117,49 @@ function testIsOnScreen() {
   el2.style.position = 'absolute';
   goog.style.setSize(el2, 100, 100);
   goog.style.setPosition(el2, winScroll.x, winScroll.y);
-  assertFalse('An element not in the DOM is not on screen.',
-              goog.testing.style.isOnScreen(el2));
+  assertFalse(
+      'An element not in the DOM is not on screen.',
+      goog.testing.style.isOnScreen(el2));
 }
 
 function testHasVisibleDimensions() {
   goog.style.setSize(div1, 0, 0);
-  assertFalse('0x0 should not be considered visible dimensions.',
-              goog.testing.style.hasVisibleDimensions(div1));
+  assertFalse(
+      '0x0 should not be considered visible dimensions.',
+      goog.testing.style.hasVisibleDimensions(div1));
   goog.style.setSize(div1, 10, 0);
-  assertFalse('10x0 should not be considered visible dimensions.',
-              goog.testing.style.hasVisibleDimensions(div1));
+  assertFalse(
+      '10x0 should not be considered visible dimensions.',
+      goog.testing.style.hasVisibleDimensions(div1));
   goog.style.setSize(div1, 10, 10);
-  assertTrue('10x10 should be considered visible dimensions.',
-             goog.testing.style.hasVisibleDimensions(div1));
+  assertTrue(
+      '10x10 should be considered visible dimensions.',
+      goog.testing.style.hasVisibleDimensions(div1));
   goog.style.setSize(div1, 0, 10);
-  assertFalse('0x10 should not be considered visible dimensions.',
-              goog.testing.style.hasVisibleDimensions(div1));
+  assertFalse(
+      '0x10 should not be considered visible dimensions.',
+      goog.testing.style.hasVisibleDimensions(div1));
 }
 
 function testIntersects() {
   // No intersection
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 500, 500);
-  assertFalse('The divs should not be determined to itersect.',
-              goog.testing.style.intersects(div1, div2));
+  assertFalse(
+      'The divs should not be determined to itersect.',
+      goog.testing.style.intersects(div1, div2));
 
   // Some intersection
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 50, 50);
-  assertTrue('The divs should be determined to itersect.',
-             goog.testing.style.intersects(div1, div2));
+  assertTrue(
+      'The divs should be determined to itersect.',
+      goog.testing.style.intersects(div1, div2));
 
   // Completely superimposed.
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 0, 0);
-  assertTrue('The divs should be determined to itersect.',
-             goog.testing.style.intersects(div1, div2));
+  assertTrue(
+      'The divs should be determined to itersect.',
+      goog.testing.style.intersects(div1, div2));
 }

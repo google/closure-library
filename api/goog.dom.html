@@ -1,0 +1,442 @@
+---
+{edit_path: '', layout: api, page: goog.dom, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.dom</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/nodetype.js#L19" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.dom</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="$"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L173" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>$(<var>element</var>)</div></h3></div><div class="body"><p>Alias for getElement.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.dom.html#getElement"><code>goog.dom.getElement</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|Element)</code><dd><p>Element ID or a DOM node.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The element with the given ID, or the node passed in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="$$"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L350" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>$$(<var>opt_tag</var>, <var>opt_class</var>, <var>opt_el</var>)</div></h3></div><div class="body"><p>Alias for <code>getElementsByTagNameAndClass</code>.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.dom.html#getElementsByTagNameAndClass"><code>goog.dom.getElementsByTagNameAndClass</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_tag</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Element tag name.</p>
+<dt class="type name"><var>opt_class</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional class name.</p>
+<dt class="type name"><var>opt_el</var><code>Element=</code><dd><p>Optional element to look in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;!Element&gt;</code><dd><p>Array-like list of elements (only a length
+property and numerical indices are guaranteed to exist).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="$dom"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L816" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>$dom(<var>tagName</var>, <var>opt_attributes</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Alias for <code>createDom</code>.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.dom.html#createDom"><code>goog.dom.createDom</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tagName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Tag to create.</p>
+<dt class="type name"><var>opt_attributes</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)=</code><dd><p>If object, then a map of name-value
+pairs for attributes. If a string, then this is the className of the new
+element.</p>
+<dt class="type name"><var>var_args</var><code>...(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>|NodeList)</code><dd><p>Further DOM nodes or
+strings for text nodes. If one of the var_args is an array, its
+children will be added as childNodes instead.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>Reference to a DOM node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="append"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1065" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>append(<var>parent</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Appends a node with text or other nodes.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code>!Node</code><dd><p>The node to append nodes to.</p>
+<dt class="type name"><var>var_args</var><code>...<a href="goog.dom.html#goog.dom.Appendable">goog.dom.Appendable</a></code><dd><p>The things to append to the node.
+If this is a Node it is appended as is.
+If this is a string then a text node is appended.
+If this is an array like object then fields 0 to length - 1 are appended.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="appendChild"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1052" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>appendChild(<var>parent</var>, <var>child</var>)</div></h3></div><div class="body"><p>Appends a child to a node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code>Node</code><dd><p>Parent.</p>
+<dt class="type name"><var>child</var><code>Node</code><dd><p>Child.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="canHaveChildren"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1011" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>canHaveChildren(<var>node</var>)</div></h3></div><div class="body"><p>Determines if the given node can contain children, intended to be used for
+HTML generation.</p>
+<p>IE natively supports node.canHaveChildren but has inconsistent behavior.
+Prior to IE8 the base tag allows children and in IE9 all nodes return true
+for canHaveChildren.</p>
+<p>In practice all non-IE browsers allow you to add children to any node, but
+the behavior is inconsistent:</p>
+ <pre>
+   var a &#61; document.createElement(goog.dom.TagName.BR);
+   a.appendChild(document.createTextNode(&#39;foo&#39;));
+   a.appendChild(document.createTextNode(&#39;bar&#39;));
+   console.log(a.childNodes.length);  // 2
+   console.log(a.innerHTML);  // Chrome: &#34;&#34;, IE9: &#34;foobar&#34;, FF3.5: &#34;foobar&#34;
+ </pre>
+<p>For more information, see:
+http://dev.w3.org/html5/markup/syntax.html#syntax-elements</p>
+<p>TODO(user): Rename shouldAllowChildren() ?</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the node can contain children.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="compareNodeOrder"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1415" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>compareNodeOrder(<var>node1</var>, <var>node2</var>)</div></h3></div><div class="body"><p>Compares the document order of two nodes, returning 0 if they are the same
+node, a negative number if node1 is before node2, and a positive number if
+node2 is before node1.  Note that we compare the order the tags appear in the
+document so in the tree <b><i>text</i></b> the B node is considered to be
+before the I node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node1</var><code>Node</code><dd><p>The first node to compare.</p>
+<dt class="type name"><var>node2</var><code>Node</code><dd><p>The second node to compare.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>0 if the nodes are the same node, a negative number if node1
+is before node2, and a positive number if node2 is before node1.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="constHtmlToNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L894" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>constHtmlToNode(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates a new Node from constant strings of HTML markup.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...!<a href="goog.string.Const.html">goog.string.Const</a></code><dd><p>The HTML strings to concatenate then
+convert into a node.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Node</code></dl></dd></dl></div></section><section class="property expandable" id="contains"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1377" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>contains(<var>parent</var>, <var>descendant</var>)</div></h3></div><div class="body"><p>Whether a node contains another node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code>?Node</code><dd><p>The node that should contain the other node.</p>
+<dt class="type name"><var>descendant</var><code>?Node</code><dd><p>The node to test presence of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the parent node contains the descendent node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createDom"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L706" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> createDom(<var>tagName</var>, <var>opt_attributes</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Returns a dom node with a set of attributes.  This function accepts varargs
+for subsequent nodes to be added.  Subsequent nodes will be added to the
+first node as childNodes.</p>
+<p>So:
+<code>createDom(&#39;div&#39;, null, createDom(&#39;p&#39;), createDom(&#39;p&#39;));</code>
+would return a div with two child paragraphs</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tagName</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.dom.TypedTagName.html">goog.dom.TypedTagName</a>&lt;T&gt;)</code><dd><p>Tag to create.</p>
+<dt class="type name"><var>opt_attributes</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)=</code><dd><p>If object, then a map
+of name-value pairs for attributes. If a string, then this is the
+className of the new element. If an array, the elements will be joined
+together as the className of the new element.</p>
+<dt class="type name"><var>var_args</var><code>...(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>|NodeList)</code><dd><p>Further DOM nodes or
+strings for text nodes. If one of the var_args is an array or NodeList,
+its elements will be added as childNodes instead.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>Reference to a DOM node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L825" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> createElement(<var>name</var>)</div></h3></div><div class="body"><p>Creates a new element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="goog.dom.TypedTagName.html">goog.dom.TypedTagName</a>&lt;T&gt;)</code><dd><p>Tag name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>The new element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createTable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L848" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createTable(<var>rows</var>, <var>columns</var>, <var>opt_fillWithNbsp</var>)</div></h3></div><div class="body"><p>Create a table.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>rows</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of rows in the table.  Must be &gt;&#61; 1.</p>
+<dt class="type name"><var>columns</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of columns in the table.  Must be &gt;&#61; 1.</p>
+<dt class="type name"><var>opt_fillWithNbsp</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If true, fills table entries with
+<code>goog.string.Unicode.NBSP</code> characters.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>The created table.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createTextNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L835" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createTextNode(<var>content</var>)</div></h3></div><div class="body"><p>Creates a new text node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>content</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Content.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Text</code><dd><p>The new text node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="findCommonAncestor"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1537" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>findCommonAncestor(<var>var_args</var>)</div></h3></div><div class="body"><p>Find the deepest common ancestor of the given nodes.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...Node</code><dd><p>The nodes to find a common ancestor of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>The common ancestor of the nodes, or null if there is none.
+null will only be returned if two or more of the nodes are from different
+documents.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="findNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1685" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>findNode(<var>root</var>, <var>p</var>)</div></h3></div><div class="body"><p>Finds the first descendant node that matches the filter function, using
+a depth first search. This function offers the most general purpose way
+of finding a matching element. You may also wish to consider
+<code>goog.dom.query</code> which can express many matching criteria using
+CSS selector expressions. These expressions often result in a more
+compact representation of the desired result.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>root</var><code>Node</code><dd><p>The root of the tree to search.</p>
+<dt class="type name"><var>p</var><code>function(Node): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The filter function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(Node|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>The found node or undefined if none is found.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.dom.query.html">goog.dom.query</a></dd></dl></div></section><section class="property expandable" id="findNodes"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1704" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>findNodes(<var>root</var>, <var>p</var>)</div></h3></div><div class="body"><p>Finds all the descendant nodes that match the filter function, using a
+a depth first search. This function offers the most general-purpose way
+of finding a set of matching elements. You may also wish to consider
+<code>goog.dom.query</code> which can express many matching criteria using
+CSS selector expressions. These expressions often result in a more
+compact representation of the desired result.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>root</var><code>Node</code><dd><p>The root of the tree to search.</p>
+<dt class="type name"><var>p</var><code>function(Node): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The filter function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!Node&gt;</code><dd><p>The found nodes or an empty array if none are found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="flattenElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1159" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>flattenElement(<var>element</var>)</div></h3></div><div class="body"><p>Flattens an element. That is, removes it and replace it with its children.
+Does nothing if the element is not in the document.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to flatten.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(Element|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>The original element, detached from the document
+tree, sans children; or undefined, if the element was not in the document
+to begin with.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getActiveElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getActiveElement(<var>doc</var>)</div></h3></div><div class="body"><p>Determines the active element in the given document.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>doc</var><code>Document</code><dd><p>The document to look in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The active element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAncestor"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2150" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAncestor(<var>element</var>, <var>matcher</var>, <var>opt_includeNode</var>, <var>opt_maxSearchSteps</var>)</div></h3></div><div class="body"><p>Walks up the DOM hierarchy returning the first ancestor that passes the
+matcher function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>The DOM node to start with.</p>
+<dt class="type name"><var>matcher</var><code>function(Node): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>A function that returns true if the
+passed node matches the desired criteria.</p>
+<dt class="type name"><var>opt_includeNode</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If true, the node itself is included in
+the search (the first call to the matcher will pass startElement as
+the node to test).</p>
+<dt class="type name"><var>opt_maxSearchSteps</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Maximum number of levels to search up the
+dom.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>DOM node that matched the matcher, or null if there was
+no match.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAncestorByClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2130" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAncestorByClass(<var>element</var>, <var>className</var>, <var>opt_maxSearchSteps</var>)</div></h3></div><div class="body"><p>Walks up the DOM hierarchy returning the first ancestor that has the passed
+class name. If the passed element matches the specified criteria, the
+element itself is returned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>The DOM node to start with.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The class name to match.</p>
+<dt class="type name"><var>opt_maxSearchSteps</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Maximum number of levels to search up the
+dom.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first ancestor that matches the passed criteria, or
+null if none match.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAncestorByTagNameAndClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAncestorByTagNameAndClass(<var>element</var>, <var>opt_tag</var>, <var>opt_class</var>, <var>opt_maxSearchSteps</var>)</div></h3></div><div class="body"><p>Walks up the DOM hierarchy returning the first ancestor that has the passed
+tag name and/or class name. If the passed element matches the specified
+criteria, the element itself is returned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>The DOM node to start with.</p>
+<dt class="type name"><var>opt_tag</var><code>?(<a href="goog.dom.TagName.html">goog.dom.TagName</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)=</code><dd><p>The tag name to match (or
+null/undefined to match only based on class name).</p>
+<dt class="type name"><var>opt_class</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>The class name to match (or null/undefined to
+match only based on tag name).</p>
+<dt class="type name"><var>opt_maxSearchSteps</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Maximum number of levels to search up the
+dom.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first ancestor that matches the passed criteria, or
+null if no match is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getChildren"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1184" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getChildren(<var>element</var>)</div></h3></div><div class="body"><p>Returns an array containing just the element children of the given element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element whose element children we want.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!Element&gt;|NodeList&lt;!Element&gt;)</code><dd><p>An array or array-like list
+of just the element children of the given element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDocument"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDocument()</div></h3></div><div class="body"><p>Gets the document object being used by the dom library.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Document</code><dd><p>Document object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDocumentHeight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L493" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDocumentHeight()</div></h3></div><div class="body"><p>Calculates the height of the document.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The height of the current document.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDocumentHeightForWindow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L503" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDocumentHeightForWindow(<var>win</var>)</div></h3></div><div class="body"><p>Calculates the height of the document of the given window.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>win</var><code>!Window</code><dd><p>The window whose document height to retrieve.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The height of the document of the given window.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDocumentScroll"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L602" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDocumentScroll()</div></h3></div><div class="body"><p>Gets the document scroll distance as a coordinate object.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>Object with values &#39;x&#39; and &#39;y&#39;.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDocumentScrollElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L633" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDocumentScrollElement()</div></h3></div><div class="body"><p>Gets the document scroll element.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>Scrolling element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDomHelper"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L84" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDomHelper(<var>opt_element</var>)</div></h3></div><div class="body"><p>Gets the DomHelper object for the document where the element resides.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_element</var><code>(Node|Window)=</code><dd><p>If present, gets the DomHelper for this
+element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.dom.DomHelper.html">goog.dom.DomHelper</a></code><dd><p>The DomHelper.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L117" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElement(<var>element</var>)</div></h3></div><div class="body"><p>Gets an element from the current document by element id.</p>
+<p>If an Element is passed in, it is returned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|Element)</code><dd><p>Element ID or a DOM node.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The element with the given ID, or the node passed in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getElementByClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L232" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElementByClass(<var>className</var>, <var>opt_el</var>)</div></h3></div><div class="body"><p>Returns the first element with the provided className.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>the name of the class to look for.</p>
+<dt class="type name"><var>opt_el</var><code>(Element|Document)=</code><dd><p>Optional element to look in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first item with the class name provided.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>{goog.dom.query}</p>
+</dd></dl></div></section><section class="property expandable" id="getElementsByClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L215" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElementsByClass(<var>className</var>, <var>opt_el</var>)</div></h3></div><div class="body"><p>Returns a static, array-like list of the elements with the provided
+className.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>the name of the class to look for.</p>
+<dt class="type name"><var>opt_el</var><code>(Document|Element)=</code><dd><p>Optional element to look in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;!Element&gt;</code><dd><p>The items found with the class name provided.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>{goog.dom.query}</p>
+</dd></dl></div></section><section class="property expandable" id="getElementsByTagNameAndClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L201" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElementsByTagNameAndClass(<var>opt_tag</var>, <var>opt_class</var>, <var>opt_el</var>)</div></h3></div><div class="body"><p>Looks up elements by both tag and class name, using browser native functions
+(<code>querySelectorAll</code>, <code>getElementsByTagName</code> or
+<code>getElementsByClassName</code>) where possible. This function
+is a useful, if limited, way of collecting a list of DOM elements
+with certain characteristics.  <code>goog.dom.query</code> offers a
+more powerful and general solution which allows matching on CSS3
+selector expressions, but at increased cost in code size. If all you
+need is particular tags belonging to a single class, this function
+is fast and sleek.</p>
+<p>Note that tag names are case sensitive in the SVG namespace, and this
+function converts opt_tag to uppercase for comparisons. For queries in the
+SVG namespace you should use querySelector or querySelectorAll instead.
+https://bugzilla.mozilla.org/show_bug.cgi?id&#61;963870
+https://bugs.webkit.org/show_bug.cgi?id&#61;83438</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_tag</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Element tag name.</p>
+<dt class="type name"><var>opt_class</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional class name.</p>
+<dt class="type name"><var>opt_el</var><code>(Document|Element)=</code><dd><p>Optional element to look in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;!Element&gt;</code><dd><p>Array-like list of elements (only a length
+property and numerical indices are guaranteed to exist).</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>{goog.dom.query}</p>
+</dd></dl></div></section><section class="property expandable" id="getFirstElementChild"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFirstElementChild(<var>node</var>)</div></h3></div><div class="body"><p>Returns the first child node that is an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to get the first child element of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first child node of <code>node</code> that is an element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFrameContentDocument"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1593" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFrameContentDocument(<var>frame</var>)</div></h3></div><div class="body"><p>Cross-browser function for getting the document element of a frame or iframe.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>frame</var><code>Element</code><dd><p>Frame element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Document</code><dd><p>The frame content document.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFrameContentWindow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1605" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFrameContentWindow(<var>frame</var>)</div></h3></div><div class="body"><p>Cross-browser function for getting the window of a frame or iframe.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>frame</var><code>Element</code><dd><p>Frame element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Window</code><dd><p>The window associated with the given frame, or null if none
+exists.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLastElementChild"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLastElementChild(<var>node</var>)</div></h3></div><div class="body"><p>Returns the last child node that is an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to get the last child element of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The last child node of <code>node</code> that is an element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNextElementSibling"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1229" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNextElementSibling(<var>node</var>)</div></h3></div><div class="body"><p>Returns the first next sibling that is an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to get the next sibling element of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The next sibling of <code>node</code> that is an element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNextNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1274" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNextNode(<var>node</var>)</div></h3></div><div class="body"><p>Returns the next node in source order from the given node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>The next node in the DOM tree, or null if this was the last
+node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNodeAtOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2035" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNodeAtOffset(<var>parent</var>, <var>offset</var>, <var>opt_result</var>)</div></h3></div><div class="body"><p>Returns the node at a given offset in a parent node.  If an object is
+provided for the optional third parameter, the node and the remainder of the
+offset will stored as properties of this object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code>Node</code><dd><p>The parent node.</p>
+<dt class="type name"><var>offset</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The offset into the parent node.</p>
+<dt class="type name"><var>opt_result</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Object to be used to store the return value. The
+return value will be stored in the form {node: Node, remainder: number}
+if this object is provided.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>The node at the given offset.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNodeTextLength"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1994" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNodeTextLength(<var>node</var>)</div></h3></div><div class="body"><p>Returns the text length of the text contained in a node, without markup. This
+is equivalent to the selection length if the node was selected, or the number
+of cursor movements to traverse the node. Images &amp; BRs take one space.  New
+lines are ignored.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node whose text content length is being calculated.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The length of <code>node</code>&#39;s text content.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNodeTextOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2008" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNodeTextOffset(<var>node</var>, <var>opt_offsetParent</var>)</div></h3></div><div class="body"><p>Returns the text offset of a node relative to one of its ancestors. The text
+length is the same as the length calculated by goog.dom.getNodeTextLength.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node whose offset is being calculated.</p>
+<dt class="type name"><var>opt_offsetParent</var><code>Node=</code><dd><p>The node relative to which the offset will
+be calculated. Defaults to the node&#39;s owner document&#39;s body.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The text offset.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getOuterHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1656" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOuterHtml(<var>element</var>)</div></h3></div><div class="body"><p>Gets the outerHTML of a node, which islike innerHTML, except that it
+actually contains the HTML of the node itself.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the HTML of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The outerHTML of the given element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getOwnerDocument"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1579" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOwnerDocument(<var>node</var>)</div></h3></div><div class="body"><p>Returns the owner document for a node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>(Node|Window)</code><dd><p>The node to get the document for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Document</code><dd><p>The document owning the node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPageScroll"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L591" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getPageScroll(<var>opt_window</var>)</div></h3></div><div class="body"><p>Gets the page scroll distance as a coordinate object.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.dom.html#getDocumentScroll"><code>goog.dom.getDocumentScroll</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_window</var><code>Window=</code><dd><p>Optional window element to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>Object with values &#39;x&#39; and &#39;y&#39;.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getParentElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1351" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getParentElement(<var>element</var>)</div></h3></div><div class="body"><p>Returns an element&#39;s parent, if it&#39;s an Element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The DOM element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The parent, or null if not an Element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPixelRatio"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2206" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPixelRatio()</div></h3></div><div class="body"><p>Gives the current devicePixelRatio.</p>
+<p>By default, this is the value of window.devicePixelRatio (which should be
+preferred if present).</p>
+<p>If window.devicePixelRatio is not present, the ratio is calculated with
+window.matchMedia, if present. Otherwise, gives 1.0.</p>
+<p>Some browsers (including Chrome) consider the browser zoom level in the pixel
+ratio, so the value may change across multiple calls.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of actual pixels per virtual pixel.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPreviousElementSibling"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1243" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPreviousElementSibling(<var>node</var>)</div></h3></div><div class="body"><p>Returns the first previous sibling that is an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to get the previous sibling element of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first previous sibling of <code>node</code> that is
+an element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPreviousNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1297" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPreviousNode(<var>node</var>)</div></h3></div><div class="body"><p>Returns the previous node in source order from the given node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>The previous node in the DOM tree, or null if this was the
+first node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRawTextContent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1948" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRawTextContent(<var>node</var>)</div></h3></div><div class="body"><p>Returns the text content of the current node, without markup.</p>
+<p>Unlike <code>getTextContent</code> this method does not collapse whitespaces
+or normalize lines breaks.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node from which we are getting content.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The raw text content.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRequiredElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L144" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRequiredElement(<var>id</var>)</div></h3></div><div class="body"><p>Gets an element by id, asserting that the element is found.</p>
+<p>This is used when an element is expected to exist, and should fail with
+an assertion error if it does not (if assertions are enabled).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>id</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Element ID.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>The element with the given ID, if it exists.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRequiredElementByClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L257" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRequiredElementByClass(<var>className</var>, <var>opt_root</var>)</div></h3></div><div class="body"><p>Ensures an element with the given className exists, and then returns the
+first element with the provided className.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>the name of the class to look for.</p>
+<dt class="type name"><var>opt_root</var><code>(!Element|!Document)=</code><dd><p>Optional element or document to look
+in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>The first item with the class name provided.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="goog.asserts.AssertionError.html">goog.asserts.AssertionError</a></code><dd><p>Thrown if no element is found.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>{goog.dom.query}</p>
+</dd></dl></div></section><section class="property expandable" id="getTextContent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1905" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTextContent(<var>node</var>)</div></h3></div><div class="body"><p>Returns the text content of the current node, without markup and invisible
+symbols. New lines are stripped and whitespace is collapsed,
+such that each character would be visible.</p>
+<p>In browsers that support it, innerText is used.  Other browsers attempt to
+simulate it via node traversal.  Line breaks are canonicalized in IE.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node from which we are getting content.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The text content.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getViewportSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L469" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getViewportSize(<var>opt_window</var>)</div></h3></div><div class="body"><p>Gets the dimensions of the viewport.</p>
+<p>Gecko Standards mode:
+docEl.clientWidth  Width of viewport excluding scrollbar.
+win.innerWidth     Width of viewport including scrollbar.
+body.clientWidth   Width of body element.</p>
+<p>docEl.clientHeight Height of viewport excluding scrollbar.
+win.innerHeight    Height of viewport including scrollbar.
+body.clientHeight  Height of document.</p>
+<p>Gecko Backwards compatible mode:
+docEl.clientWidth  Width of viewport excluding scrollbar.
+win.innerWidth     Width of viewport including scrollbar.
+body.clientWidth   Width of viewport excluding scrollbar.</p>
+<p>docEl.clientHeight Height of document.
+win.innerHeight    Height of viewport including scrollbar.
+body.clientHeight  Height of viewport excluding scrollbar.</p>
+<p>IE6/7 Standards mode:
+docEl.clientWidth  Width of viewport excluding scrollbar.
+win.innerWidth     Undefined.
+body.clientWidth   Width of body element.</p>
+<p>docEl.clientHeight Height of viewport excluding scrollbar.
+win.innerHeight    Undefined.
+body.clientHeight  Height of document element.</p>
+<p>IE5 &#43; IE6/7 Backwards compatible mode:
+docEl.clientWidth  0.
+win.innerWidth     Undefined.
+body.clientWidth   Width of viewport excluding scrollbar.</p>
+<p>docEl.clientHeight 0.
+win.innerHeight    Undefined.
+body.clientHeight  Height of viewport excluding scrollbar.</p>
+<p>Opera 9 Standards and backwards compatible mode:
+docEl.clientWidth  Width of viewport excluding scrollbar.
+win.innerWidth     Width of viewport including scrollbar.
+body.clientWidth   Width of viewport excluding scrollbar.</p>
+<p>docEl.clientHeight Height of document.
+win.innerHeight    Height of viewport including scrollbar.
+body.clientHeight  Height of viewport excluding scrollbar.</p>
+<p>WebKit:
+Safari 2
+docEl.clientHeight Same as scrollHeight.
+docEl.clientWidth  Same as innerWidth.
+win.innerWidth     Width of viewport excluding scrollbar.
+win.innerHeight    Height of the viewport including scrollbar.
+frame.innerHeight  Height of the viewport exluding scrollbar.</p>
+<p>Safari 3 (tested in 522)</p>
+<p>docEl.clientWidth  Width of viewport excluding scrollbar.
+docEl.clientHeight Height of viewport excluding scrollbar in strict mode.
+body.clientHeight  Height of viewport excluding scrollbar in quirks mode.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_window</var><code>Window=</code><dd><p>Optional window element to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>Object with values &#39;width&#39; and &#39;height&#39;.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getWindow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L666" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getWindow(<var>opt_doc</var>)</div></h3></div><div class="body"><p>Gets the window object associated with the given document.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_doc</var><code>Document=</code><dd><p>Document object to get window for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Window</code><dd><p>The window associated with the given document.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertChildAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1120" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>insertChildAt(<var>parent</var>, <var>child</var>, <var>index</var>)</div></h3></div><div class="body"><p>Insert a child at a given index. If index is larger than the number of child
+nodes that the parent currently has, the node is inserted as the last child
+node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parent</var><code>Element</code><dd><p>The element into which to insert the child.</p>
+<dt class="type name"><var>child</var><code>Node</code><dd><p>The element to insert.</p>
+<dt class="type name"><var>index</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index at which to insert the new child node. Must
+not be negative.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertSiblingAfter"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>insertSiblingAfter(<var>newNode</var>, <var>refNode</var>)</div></h3></div><div class="body"><p>Inserts a new node after an existing reference node (i.e. as the next
+sibling). If the reference node has no parent, then does nothing.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>newNode</var><code>Node</code><dd><p>Node to insert.</p>
+<dt class="type name"><var>refNode</var><code>Node</code><dd><p>Reference node to insert after.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertSiblingBefore"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1091" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>insertSiblingBefore(<var>newNode</var>, <var>refNode</var>)</div></h3></div><div class="body"><p>Inserts a new node before an existing reference node (i.e. as the previous
+sibling). If the reference node has no parent, then does nothing.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>newNode</var><code>Node</code><dd><p>Node to insert.</p>
+<dt class="type name"><var>refNode</var><code>Node</code><dd><p>Reference node to insert before.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isCss1CompatMode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L963" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isCss1CompatMode()</div></h3></div><div class="body"><p>Returns true if the browser is in &#34;CSS1-compatible&#34; (standards-compliant)
+mode, false otherwise.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if in CSS1-compatible mode.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1330" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isElement(<var>obj</var>)</div></h3></div><div class="body"><p>Whether the object looks like an Element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>?</code><dd><p>The object being tested for Element likeness.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object looks like an Element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isFocusable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1811" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isFocusable(<var>element</var>)</div></h3></div><div class="body"><p>Returns true if the element can be focused, i.e. it has a tab index that
+allows it to receive keyboard focus (tabIndex &gt;&#61; 0), or it is an element
+that natively supports keyboard focus.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dd><p>Element to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the element allows keyboard focus.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isFocusableTabIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1775" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isFocusableTabIndex(<var>element</var>)</div></h3></div><div class="body"><p>Returns true if the element has a tab index that allows it to receive
+keyboard focus (tabIndex &gt;&#61; 0), false otherwise.  Note that some elements
+natively support keyboard focus, even if they have no tab index.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dd><p>Element to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the element has a tab index that allows keyboard
+focus.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNodeLike"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1320" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNodeLike(<var>obj</var>)</div></h3></div><div class="body"><p>Whether the object looks like a DOM node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>?</code><dd><p>The object being tested for node likeness.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object looks like a DOM node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNodeList"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2068" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNodeList(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the object is a <code>NodeList</code>.  To qualify as a NodeList,
+the object must have a numeric length property and an item function (which
+has type &#39;string&#39; on IE for some reason).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object is a NodeList.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isWindow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1341" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isWindow(<var>obj</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is a Window object. This includes the
+global window for HTML pages, and iframe windows.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the variable is a window.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeChildren"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1074" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>removeChildren(<var>node</var>)</div></h3></div><div class="body"><p>Removes all the child nodes on a DOM node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>Node to remove children from.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1132" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>removeNode(<var>node</var>)</div></h3></div><div class="body"><p>Removes a node from its parent.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Node</code><dd><p>The node removed if removed; else, null.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="replaceNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1143" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>replaceNode(<var>newNode</var>, <var>oldNode</var>)</div></h3></div><div class="body"><p>Replaces a node in the DOM tree. Will do nothing if <code>oldNode</code> has no
+parent.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>newNode</var><code>Node</code><dd><p>Node to insert.</p>
+<dt class="type name"><var>oldNode</var><code>Node</code><dd><p>Node to replace.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="safeHtmlToNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L913" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>safeHtmlToNode(<var>html</var>)</div></h3></div><div class="body"><p>Converts HTML markup into a node. This is a safe version of
+<code>goog.dom.htmlToDocumentFragment</code> which is now deleted.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>html</var><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>The HTML markup to convert.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Node</code><dd><p>The resulting node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFocusableTabIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1790" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFocusableTabIndex(<var>element</var>, <var>enable</var>)</div></h3></div><div class="body"><p>Enables or disables keyboard focus support on the element via its tab index.
+Only elements for which <a href="goog.dom.html#isFocusableTabIndex"><code>goog.dom.isFocusableTabIndex</code></a> returns true
+(or elements that natively support keyboard focus, like form elements) can
+receive keyboard focus.  See http://go/tabindex for more info.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element whose tab index is to be changed.</p>
+<dt class="type name"><var>enable</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to set or remove a tab index on the element
+that supports keyboard focus.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setProperties"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L358" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setProperties(<var>element</var>, <var>properties</var>)</div></h3></div><div class="body"><p>Sets multiple properties on a node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>DOM node to set properties on.</p>
+<dt class="type name"><var>properties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Hash of property:value pairs.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setTextContent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L1625" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setTextContent(<var>node</var>, <var>text</var>)</div></h3></div><div class="body"><p>Sets the text content of a node, with cross-browser support.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>The node to change the text content of.</p>
+<dt class="type name"><var>text</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>The value that should replace the node&#39;s content.</p>
+</dl></dd></dl></div></section></section><section class="static-properties"><h2>Properties</h2><section class="property expandable" id="$F"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/forms.js#L341" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>$F</div></h3></div><div class="body"><p>Alias for goog.dom.form.element.getValue</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.dom.forms.html#getValue"><code>goog.dom.forms.getValue</code></a> instead.</p>
+<dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></dd></dl></div></section></section><section class="constants"><h2>Compiler Constants</h2><section class="property expandable" id="goog.dom.ASSUME_QUIRKS_MODE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L59" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.dom.ASSUME_QUIRKS_MODE</div></h3></div><div class="body"><p>Whether we know at compile time that the browser is in
+quirks mode.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.dom.ASSUME_STANDARDS_MODE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L66" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.dom.ASSUME_STANDARDS_MODE</div></h3></div><div class="body"><p>Whether we know at compile time that the browser is in
+standards compliance mode.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.dom.AbstractMultiRange.html">AbstractMultiRange</a></div><li class="summary"><div><a href="goog.dom.AbstractRange.html">AbstractRange</a></div><li class="summary"><div><a href="goog.dom.BufferedViewportSizeMonitor.html">BufferedViewportSizeMonitor</a></div><li class="summary"><div><a href="goog.dom.ControlRange.html">ControlRange</a></div><li class="summary"><div><a href="goog.dom.ControlRangeIterator.html">ControlRangeIterator</a></div><li class="summary"><div><a href="goog.dom.DomHelper.html">DomHelper</a></div><li class="summary"><div><a href="goog.dom.DomSavedControlRange_.html">DomSavedControlRange_</a></div><li class="summary"><div><a href="goog.dom.DomSavedMultiRange_.html">DomSavedMultiRange_</a></div><li class="summary"><div><a href="goog.dom.DomSavedTextRange_.html">DomSavedTextRange_</a></div><li class="summary"><div><a href="goog.dom.FontSizeMonitor.html">FontSizeMonitor</a></div><li class="summary"><div><a href="goog.dom.MultiRange.html">MultiRange</a></div><li class="summary"><div><a href="goog.dom.MultiRangeIterator.html">MultiRangeIterator</a></div><li class="summary"><div><a href="goog.dom.NodeIterator.html">NodeIterator</a></div><li class="summary"><div><a href="goog.dom.NodeOffset.html">NodeOffset</a></div><li class="summary"><div><a href="goog.dom.RangeIterator.html">RangeIterator</a></div><li class="summary"><div><a href="goog.dom.SavedCaretRange.html">SavedCaretRange</a></div><li class="summary"><div><a href="goog.dom.SavedRange.html">SavedRange</a></div><li class="summary"><div><a href="goog.dom.TagIterator.html">TagIterator</a></div><li class="summary"><div><a href="goog.dom.TextRange.html">TextRange</a></div><li class="summary"><div><a href="goog.dom.TextRangeIterator.html">TextRangeIterator</a></div><li class="summary"><div><a href="goog.dom.TypedTagName.html">TypedTagName</a></div><li class="summary"><div><a href="goog.dom.ViewportSizeMonitor.html">ViewportSizeMonitor</a></div></ul></section><section class="types"><h2>Enumerations</h2><ul><li class="summary"><div><a href="goog.dom.BrowserFeature.html">BrowserFeature</a></div><li class="summary"><div><a href="goog.dom.InputType.html">InputType</a></div><li class="summary"><div><a href="goog.dom.NodeType.html">NodeType</a></div><li class="summary"><div><a href="goog.dom.RangeEndpoint.html">RangeEndpoint</a></div><li class="summary"><div><a href="goog.dom.RangeType.html">RangeType</a></div><li class="summary"><div><a href="goog.dom.TagName.html">TagName</a></div><li class="summary"><div><a href="goog.dom.TagWalkType.html">TagWalkType</a></div></ul></section><section class="type-defs"><h2>Type Definitions</h2><section id="Appendable" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/dom.js#L2427" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Appendable</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>|NodeList)</code></dl><p>Typedef for use with goog.dom.createDom and goog.dom.append.</p>
+</div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

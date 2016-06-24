@@ -33,8 +33,8 @@ function testGetBlob() {
       goog.testing.fs.getBlob('foo', 'bar', 'baz').toString());
   assertEquals(
       new goog.testing.fs.Blob('foobarbaz').toString(),
-      goog.testing.fs.getBlob('foo', new goog.testing.fs.Blob('bar'), 'baz').
-      toString());
+      goog.testing.fs.getBlob('foo', new goog.testing.fs.Blob('bar'), 'baz')
+          .toString());
 }
 
 function testBlobToString() {
@@ -45,8 +45,10 @@ function testBlobToString() {
 function testGetBlobWithProperties() {
   assertEquals(
       'data:spam/eggs;base64,Zm9vYmFy',
-      new goog.testing.fs.getBlobWithProperties(
-          ['foo', new goog.testing.fs.Blob('bar')], 'spam/eggs').toDataUrl());
+      new goog.testing.fs
+          .getBlobWithProperties(
+              ['foo', new goog.testing.fs.Blob('bar')], 'spam/eggs')
+          .toDataUrl());
 }
 
 function testSliceBlob() {

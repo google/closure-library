@@ -54,26 +54,26 @@ function testGetName_existing() {
 }
 
 function testGetName_fail() {
-  var callback = goog.testing.recordFunction(function(name) {
-    assertNull(name);
-  });
+  var callback =
+      goog.testing.recordFunction(function(name) { assertNull(name); });
   nameFetcher.getName('\uD801\uDC9D', callback);
-  assertEquals('http://www.example.com?c=1049d&p=name',
+  assertEquals(
+      'http://www.example.com?c=1049d&p=name',
       nameFetcher.getNameXhrIo_.getLastUri().toString());
   nameFetcher.getNameXhrIo_.simulateResponse(400);
   assertEquals(1, callback.getCallCount());
 }
 
 function testGetName_abort() {
-  var callback1 = goog.testing.recordFunction(function(name) {
-    assertNull(name);
-  });
+  var callback1 =
+      goog.testing.recordFunction(function(name) { assertNull(name); });
   nameFetcher.getName('I', callback1);
   var callback2 = goog.testing.recordFunction(function(name) {
     assertEquals(name, 'LATIN SMALL LETTER Y');
   });
   nameFetcher.getName('ÿ', callback2);
-  assertEquals('http://www.example.com?c=ff&p=name',
+  assertEquals(
+      'http://www.example.com?c=ff&p=name',
       nameFetcher.getNameXhrIo_.getLastUri().toString());
   var responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"}}';
   nameFetcher.getNameXhrIo_.simulateResponse(200, responseJsonText);
@@ -83,7 +83,8 @@ function testGetName_abort() {
 
 function testPrefetch() {
   nameFetcher.prefetch('ÿI\uD801\uDC9D');
-  assertEquals('http://www.example.com?b88=%C3%BFI%F0%90%92%9D&p=name',
+  assertEquals(
+      'http://www.example.com?b88=%C3%BFI%F0%90%92%9D&p=name',
       nameFetcher.prefetchXhrIo_.getLastUri().toString());
 
   var responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"},"49":{' +
@@ -99,7 +100,8 @@ function testPrefetch() {
 function testPrefetch_abort() {
   nameFetcher.prefetch('I\uD801\uDC9D');
   nameFetcher.prefetch('ÿ');
-  assertEquals('http://www.example.com?b88=%C3%BF&p=name',
+  assertEquals(
+      'http://www.example.com?b88=%C3%BF&p=name',
       nameFetcher.prefetchXhrIo_.getLastUri().toString());
 }
 

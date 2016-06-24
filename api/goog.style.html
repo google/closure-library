@@ -1,0 +1,404 @@
+---
+{edit_path: '', layout: api, page: goog.style, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.style</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L25" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.style</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="clearTransparentBackgroundImage"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1197" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>clearTransparentBackgroundImage(<var>el</var>)</div></h3></div><div class="body"><p>Clears the background image of an element in a browser independent manner.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to clear background image for.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getBackgroundColor"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L288" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getBackgroundColor(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed background color string for a given element. The
+string returned is suitable for assigning to another element&#39;s
+background-color, but is not guaranteed to be in any particular string
+format. Accessing the color in a numeric form may not be possible in all
+browsers or with all input.</p>
+<p>If the background color for the element is defined as a hexadecimal value,
+the resulting string can be parsed by goog.color.parse in all supported
+browsers.</p>
+<p>Whether named colors like &#34;red&#34; or &#34;lightblue&#34; get translated into a
+format which can be parsed is browser dependent. Calling this function on
+transparent elements will return &#34;transparent&#34; in most browsers or
+&#34;rgba(0, 0, 0, 0)&#34; in WebKit.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the background color of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string value of the background color.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getBorderBox"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1782" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getBorderBox(<var>element</var>)</div></h3></div><div class="body"><p>Gets the computed border widths (on all sides) in pixels</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the border widths for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Box.html">goog.math.Box</a></code><dd><p>The computed border widths.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getBorderBoxSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1524" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getBorderBoxSize(<var>element</var>)</div></h3></div><div class="body"><p>Gets the border box size for an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the size for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>The border box size.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getBounds"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1083" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getBounds(<var>element</var>)</div></h3></div><div class="body"><p>Returns a bounding rectangle for a given element in page space.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get bounds of. Must not be display none.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Rect.html">goog.math.Rect</a></code><dd><p>Bounding rectangle for the element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getCascadedStyle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L221" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCascadedStyle(<var>element</var>, <var>style</var>)</div></h3></div><div class="body"><p>Gets the cascaded style value of a node, or null if the value cannot be
+computed (only Internet Explorer can do this).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get style of.</p>
+<dt class="type name"><var>style</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Property to get (camel-case).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Style value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getClientLeftTop"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L679" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getClientLeftTop(<var>el</var>)</div></h3></div><div class="body"><p>Returns clientLeft (width of the left border and, if the directionality is
+right to left, the vertical scrollbar) and clientTop as a coordinate object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to get clientLeft for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>Client left and top.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getClientPosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L857" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getClientPosition(<var>el</var>)</div></h3></div><div class="body"><p>Returns the position of the event or the element&#39;s border box relative to
+the client viewport. If an event is passed, and if this event is a &#34;touch&#34;
+event, then the position of the first changedTouches will be returned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>(Element|Event|<a href="goog.events.Event.html">goog.events.Event</a>)</code><dd><p>Element or a mouse / touch event.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The position.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getClientViewportElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L401" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getClientViewportElement(<var>opt_node</var>)</div></h3></div><div class="body"><p>Returns the viewport element for a particular document</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_node</var><code>Node=</code><dd><p>DOM node (Document is OK) to get the viewport element
+of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>document.documentElement or document.body.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedBoxSizing"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L253" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedBoxSizing(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the box-sizing CSS attribute.
+Browser support: http://caniuse.com/css3-boxsizing.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dd><p>The element whose box-sizing to get.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#39;content-box&#39;, &#39;border-box&#39; or &#39;padding-box&#39;. null if
+box-sizing is not supported (IE7 and below).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedCursor"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L338" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedCursor(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the cursor CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the cursor of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string value of the cursor attribute.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedOverflowX"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L298" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedOverflowX(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the overflow-x CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the overflow-x of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string value of the overflow-x attribute.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedOverflowY"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L308" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedOverflowY(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the overflow-y CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the overflow-y of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string value of the overflow-y attribute.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedPosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L265" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedPosition(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the position CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the position of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Position value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedStyle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L198" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedStyle(<var>element</var>, <var>property</var>)</div></h3></div><div class="body"><p>Retrieves a computed style value of a node. It returns empty string if the
+value cannot be computed (which will be the case in Internet Explorer) or
+&#34;none&#34; if the property requested is an SVG one and it has not been
+explicitly set (firefox and webkit).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get style of.</p>
+<dt class="type name"><var>property</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Property to get (camel-case).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Style value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedTextAlign"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L328" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedTextAlign(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the text-align CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the text-align of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string value of the text-align attribute.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedTransform"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L348" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedTransform(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the CSS transform attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the transform of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The computed string representation of the transform matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getComputedZIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L318" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getComputedZIndex(<var>element</var>)</div></h3></div><div class="body"><p>Retrieves the computed value of the z-index CSS attribute.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the z-index of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>The computed value of the z-index attribute.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getContainerOffsetToScrollInto"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L595" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getContainerOffsetToScrollInto(<var>element</var>, <var>opt_container</var>, <var>opt_center</var>)</div></h3></div><div class="body"><p>Calculate the scroll position of <code>container</code> with the minimum amount so
+that the content and the borders of the given <code>element</code> become visible.
+If the element is bigger than the container, its top left corner will be
+aligned as close to the container&#39;s top left corner as possible.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to make visible.</p>
+<dt class="type name"><var>opt_container</var><code>Element=</code><dd><p>The container to scroll. If not set, then the
+document scroll element will be used.</p>
+<dt class="type name"><var>opt_center</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to center the element in the container.
+Defaults to false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The new scroll position of the container,
+in form of goog.math.Coordinate(scrollLeft, scrollTop).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getContentBoxSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1567" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getContentBoxSize(<var>element</var>)</div></h3></div><div class="body"><p>Gets the content box size for an element.  This is potentially expensive in
+all browsers.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the size for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>The content box size.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getCssTranslation"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L2058" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCssTranslation(<var>element</var>)</div></h3></div><div class="body"><p>Returns the x,y translation component of any CSS transforms applied to the
+element, in pixels.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dd><p>The element to get the translation of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The CSS translation of the element in px.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFloat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L2002" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFloat(<var>el</var>)</div></h3></div><div class="body"><p>Gets value of explicitly-set float CSS property on an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to get float property of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The value of explicitly-set float CSS property on this
+element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFontFamily"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1810" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFontFamily(<var>el</var>)</div></h3></div><div class="body"><p>Returns the font face applied to a given node. Opera and IE should return
+the font actually displayed. Firefox returns the author&#39;s most-preferred
+font (whether the browser is capable of displaying it or not.)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element whose font family is returned.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The font family applied to el.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFontSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1900" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFontSize(<var>el</var>)</div></h3></div><div class="body"><p>Returns the font size, in pixels, of text in an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element whose font size is returned.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The font size (in pixels).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getFramedPageOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L757" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getFramedPageOffset(<var>el</var>, <var>relativeWin</var>)</div></h3></div><div class="body"><p>Returns a Coordinate object relative to the top-left of an HTML document
+in an ancestor frame of this element. Used for measuring the position of
+an element inside a frame relative to a containing frame.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to get the page offset for.</p>
+<dt class="type name"><var>relativeWin</var><code>Window</code><dd><p>The window to measure relative to. If relativeWin
+is not in the ancestor frame chain of the element, we measure relative to
+the top-most window.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The page offset.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLengthUnits"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1862" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLengthUnits(<var>value</var>)</div></h3></div><div class="body"><p>Returns the units used for a CSS length measurement.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A CSS length quantity.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The units of measurement.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getMarginBox"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1741" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMarginBox(<var>element</var>)</div></h3></div><div class="body"><p>Gets the computed margins (on all sides) in pixels.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the margins for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Box.html">goog.math.Box</a></code><dd><p>The computed margins.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getOffsetParent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L491" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOffsetParent(<var>element</var>)</div></h3></div><div class="body"><p>Returns the first parent that could affect the position of a given element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the offset parent for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>The first offset parent or null if one cannot be found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getOpacity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1120" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOpacity(<var>el</var>)</div></h3></div><div class="body"><p>Gets the opacity of a node (x-browser). This gets the inline style opacity
+of the node, and does not take into account the cascaded or the computed
+style for this node.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element whose opacity has to be found.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Opacity between 0 and 1 or an empty string <code>&#39;&#39;</code>
+if the opacity is not set.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPaddingBox"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1731" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPaddingBox(<var>element</var>)</div></h3></div><div class="body"><p>Gets the computed paddings (on all sides) in pixels.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to get the padding for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Box.html">goog.math.Box</a></code><dd><p>The computed paddings.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPageOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L694" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPageOffset(<var>el</var>)</div></h3></div><div class="body"><p>Returns a Coordinate object relative to the top-left of the HTML document.
+Implemented as a single function to save having to do two recursive loops in
+opera and safari just to get both coordinates.  If you just want one value do
+use goog.style.getPageOffsetLeft() and goog.style.getPageOffsetTop(), but
+note if you call both those methods the tree will be analysed twice.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to get the page offset for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The page offset.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPageOffsetLeft"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L731" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPageOffsetLeft(<var>el</var>)</div></h3></div><div class="body"><p>Returns the left coordinate of an element relative to the HTML document</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Elements.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The left coordinate.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPageOffsetTop"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L741" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPageOffsetTop(<var>el</var>)</div></h3></div><div class="body"><p>Returns the top coordinate of an element relative to the HTML document</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Elements.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The top coordinate.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L388" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPosition(<var>element</var>)</div></h3></div><div class="body"><p>Gets the offsetLeft and offsetTop properties of an element and returns them
+in a Coordinate object</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The position.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRelativePosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L830" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRelativePosition(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Returns the position of an element relative to another element in the
+document.  A relative to B</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>a</var><code>(Element|Event|<a href="goog.events.Event.html">goog.events.Event</a>)</code><dd><p>Element or mouse event whose
+position we&#39;re calculating.</p>
+<dt class="type name"><var>b</var><code>(Element|Event|<a href="goog.events.Event.html">goog.events.Event</a>)</code><dd><p>Element or mouse event position
+is relative to.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The relative position.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getScrollbarWidth"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L2016" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getScrollbarWidth(<var>opt_className</var>)</div></h3></div><div class="body"><p>Returns the scroll bar width (represents the width of both horizontal
+and vertical scroll).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>An optional class name (or names) to apply
+to the invisible div created to measure the scrollbar. This is necessary
+if some scrollbars are styled differently than others.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scroll bar width in px.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L983" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getSize(<var>element</var>)</div></h3></div><div class="body"><p>Gets the height and width of an element, even if its display is none.</p>
+<p>Specifically, this returns the height and width of the border box,
+irrespective of the box model in effect.</p>
+<p>Note that this function does not take CSS transforms into account. Please see
+<code>goog.style.getTransformedSize</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get size of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>Object with width/height properties.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getStyle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L170" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getStyle(<var>element</var>, <var>property</var>)</div></h3></div><div class="body"><p>Retrieves an explicitly-set style value of a node. This returns &#39;&#39; if there
+isn&#39;t a style attribute on the element or if this style property has not been
+explicitly set in script.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get style of.</p>
+<dt class="type name"><var>property</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Property to get, css-style (if you have a camel-case
+property, use element.style[style]).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Style value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTransformedSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1066" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTransformedSize(<var>element</var>)</div></h3></div><div class="body"><p>Gets the height and width of an element, post transform, even if its display
+is none.</p>
+<p>This is like <code>goog.style.getSize</code>, except:</p>
+ <ol><li>Takes webkitTransforms such as rotate and scale into account.
+ </li><li>Will return null if <code>element</code> doesn&#39;t respond to
+     <code>getBoundingClientRect</code>.
+ </li><li>Currently doesn&#39;t make sense on non-WebKit browsers which don&#39;t support
+    webkitTransforms.
+ </li></ol>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dd><p>Element to get size of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>Object with width/height properties.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getViewportPageOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L425" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getViewportPageOffset(<var>doc</var>)</div></h3></div><div class="body"><p>Calculates the viewport coordinates relative to the page/document
+containing the node. The viewport may be the browser viewport for
+non-iframe document, or the iframe container for iframe&#39;d document.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>doc</var><code>!Document</code><dd><p>The document to use as the reference point.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a></code><dd><p>The page offset of the viewport.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getVisibleRectForElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L534" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getVisibleRectForElement(<var>element</var>)</div></h3></div><div class="body"><p>Calculates and returns the visible rectangle for a given element. Returns a
+box describing the visible portion of the nearest scrollable offset ancestor.
+Coordinates are given relative to the document.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to get the visible rect for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.math.Box.html">goog.math.Box</a></code><dd><p>Bounding elementBox describing the visible rect or
+null if scrollable ancestor isn&#39;t inside the visible viewport.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="installSafeStyleSheet"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1302" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>installSafeStyleSheet(<var>safeStyleSheet</var>, <var>opt_node</var>)</div></h3></div><div class="body"><p>Installs the style sheet into the window that contains opt_node.  If
+opt_node is null, the main window is used.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>safeStyleSheet</var><code>!<a href="goog.html.SafeStyleSheet.html">goog.html.SafeStyleSheet</a></code><dd><p>The style sheet to install.</p>
+<dt class="type name"><var>opt_node</var><code>?Node=</code><dd><p>Node whose parent document should have the
+styles installed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(!Element|!StyleSheet)</code><dd><p>The style element created.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="installStyles"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1287" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>installStyles(<var>stylesString</var>, <var>opt_node</var>)</div></h3></div><div class="body"><p>Installs the styles string into the window that contains opt_node.  If
+opt_node is null, the main window is used.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.style.html#installSafeStyleSheet"><code>#installSafeStyleSheet</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>stylesString</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The style string to install.</p>
+<dt class="type name"><var>opt_node</var><code>Node=</code><dd><p>Node whose parent document should have the
+styles installed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(!Element|!StyleSheet)</code><dd><p>The style element created.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isElementShown"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1273" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isElementShown(<var>el</var>)</div></h3></div><div class="body"><p>Test whether the given element has been shown or hidden via a call to
+<a href="goog.style.html#setElementShown"><code>#setElementShown</code></a>.</p>
+<p>Note this is strictly a companion method for a call
+to <a href="goog.style.html#setElementShown"><code>#setElementShown</code></a> and the same caveats apply; in particular, this
+method does not guarantee that the return value will be consistent with
+whether or not the element is actually visible.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the element has been shown.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.style.html#setElementShown">#setElementShown</a></dd></dl></div></section><section class="property expandable" id="isRightToLeft"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1440" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isRightToLeft(<var>el</var>)</div></h3></div><div class="body"><p>Returns true if the element is using right to left (rtl) direction.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True for right to left, false for left to right.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isUnselectable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1466" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isUnselectable(<var>el</var>)</div></h3></div><div class="body"><p>Returns true if the element is set to be unselectable, false otherwise.
+Note that on some platforms (e.g. Mozilla), even if an element isn&#39;t set
+to be unselectable, it will behave as such if any of its ancestors is
+unselectable.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the element is set to be unselectable.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="parseStyleAttribute"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1956" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>parseStyleAttribute(<var>value</var>)</div></h3></div><div class="body"><p>Parses a style attribute value.  Converts CSS property names to camel case.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The style attribute value.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Map of CSS properties to string values.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="scrollIntoContainerView"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L662" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>scrollIntoContainerView(<var>element</var>, <var>opt_container</var>, <var>opt_center</var>)</div></h3></div><div class="body"><p>Changes the scroll position of <code>container</code> with the minimum amount so
+that the content and the borders of the given <code>element</code> become visible.
+If the element is bigger than the container, its top left corner will be
+aligned as close to the container&#39;s top left corner as possible.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to make visible.</p>
+<dt class="type name"><var>opt_container</var><code>Element=</code><dd><p>The container to scroll. If not set, then the
+document scroll element will be used.</p>
+<dt class="type name"><var>opt_center</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to center the element in the container.
+Defaults to false.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setBorderBoxSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1537" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setBorderBoxSize(<var>element</var>, <var>size</var>)</div></h3></div><div class="body"><p>Sets the border box size of an element. This is potentially expensive in IE
+if the document is CSS1Compat mode</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to set the size on.</p>
+<dt class="type name"><var>size</var><code><a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>The new size.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setContentBoxSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1599" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setContentBoxSize(<var>element</var>, <var>size</var>)</div></h3></div><div class="body"><p>Sets the content box size of an element. This is potentially expensive in IE
+if the document is BackCompat mode.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to set the size on.</p>
+<dt class="type name"><var>size</var><code><a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>The new size.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setElementShown"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1255" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setElementShown(<var>el</var>, <var>isShown</var>)</div></h3></div><div class="body"><p>Shows or hides an element from the page. Hiding the element is done by
+setting the display property to &#34;none&#34;, removing the element from the
+rendering hierarchy so it takes up no space. To show the element, the default
+inherited display property is restored (defined either in stylesheets or by
+the browser&#39;s default style rules).</p>
+<p>Caveat 1: if the inherited display property for the element is set to &#34;none&#34;
+by the stylesheets, that is the property that will be restored by a call to
+setElementShown(), effectively toggling the display between &#34;none&#34; and
+&#34;none&#34;.</p>
+<p>Caveat 2: if the element display style is set inline (by setting either
+element.style.display or a style attribute in the HTML), a call to
+setElementShown will clear that setting and defer to the inherited style in
+the stylesheet.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to show or hide.</p>
+<dt class="type name"><var>isShown</var><code>*</code><dd><p>True to render the element in its default style,
+false to disable rendering the element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFloat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1991" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFloat(<var>el</var>, <var>value</var>)</div></h3></div><div class="body"><p>Sets CSS float property on an element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to set float property on.</p>
+<dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The value of float CSS property to set on this element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setHeight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L956" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setHeight(<var>element</var>, <var>height</var>)</div></h3></div><div class="body"><p>Set the height of an element.  Sets the element&#39;s style property.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to set the height of.</p>
+<dt class="type name"><var>height</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>The height value to set.  If a number, &#39;px&#39;
+will be appended, otherwise the value will be applied directly.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setInlineBlock"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1417" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setInlineBlock(<var>el</var>)</div></h3></div><div class="body"><p>Sets &#39;display: inline-block&#39; for an element (cross-browser).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to which the inline-block display style is to be
+applied.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>../demos/inline_block_quirks.html</p>
+</dd><dd><p>../demos/inline_block_standards.html</p>
+</dd></dl></div></section><section class="property expandable" id="setOpacity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1144" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setOpacity(<var>el</var>, <var>alpha</var>)</div></h3></div><div class="body"><p>Sets the opacity of a node (x-browser).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Elements whose opacity has to be set.</p>
+<dt class="type name"><var>alpha</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Opacity between 0 and 1 or an empty string
+<code>&#39;&#39;</code> to clear the opacity.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setPageOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L877" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setPageOffset(<var>el</var>, <var>x</var>, <var>opt_y</var>)</div></h3></div><div class="body"><p>Moves an element to the given coordinates relative to the client viewport.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Absolutely positioned element to set page offset for.
+It must be in the document.</p>
+<dt class="type name"><var>x</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="goog.math.Coordinate.html">goog.math.Coordinate</a>)</code><dd><p>Left position of the element&#39;s margin
+box or a coordinate object.</p>
+<dt class="type name"><var>opt_y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Top position of the element&#39;s margin box.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setPosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L364" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setPosition(<var>el</var>, <var>arg1</var>, <var>opt_arg2</var>)</div></h3></div><div class="body"><p>Sets the top/left values of an element.  If no unit is specified in the
+argument then it will add px. The second argument is required if the first
+argument is a string or number and is ignored if the first argument
+is a coordinate.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to move.</p>
+<dt class="type name"><var>arg1</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="goog.math.Coordinate.html">goog.math.Coordinate</a>)</code><dd><p>Left position or coordinate.</p>
+<dt class="type name"><var>opt_arg2</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)=</code><dd><p>Top position.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setPreWrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1397" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setPreWrap(<var>el</var>)</div></h3></div><div class="body"><p>Sets &#39;white-space: pre-wrap&#39; for a node (x-browser).</p>
+<p>There are as many ways of specifying pre-wrap as there are browsers.</p>
+<p>CSS3/IE8: white-space: pre-wrap;
+Mozilla:  white-space: -moz-pre-wrap;
+Opera:    white-space: -o-pre-wrap;
+IE6/7:    white-space: pre; word-wrap: break-word;</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to enable pre-wrap for.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setSafeStyleSheet"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1370" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setSafeStyleSheet(<var>element</var>, <var>safeStyleSheet</var>)</div></h3></div><div class="body"><p>Sets the content of a style element.  The style element can be any valid
+style element.  This element will have its content completely replaced by
+the safeStyleSheet.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>(!Element|!StyleSheet)</code><dd><p>A stylesheet element as returned by
+installStyles.</p>
+<dt class="type name"><var>safeStyleSheet</var><code>!<a href="goog.html.SafeStyleSheet.html">goog.html.SafeStyleSheet</a></code><dd><p>The new content of the
+stylesheet.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L913" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setSize(<var>element</var>, <var>w</var>, <var>opt_h</var>)</div></h3></div><div class="body"><p>Sets the width/height values of an element.  If an argument is numeric,
+or a goog.math.Size is passed, it is assumed to be pixels and will add
+&#39;px&#39; after converting it to an integer in string form. (This just sets the
+CSS width and height properties so it might set content-box or border-box
+size depending on the box model the browser is using.)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to set the size of.</p>
+<dt class="type name"><var>w</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="goog.math.Size.html">goog.math.Size</a>)</code><dd><p>Width of the element, or a
+size object.</p>
+<dt class="type name"><var>opt_h</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)=</code><dd><p>Height of the element. Required if w is not a
+size object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setStyle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L65" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setStyle(<var>element</var>, <var>style</var>, <var>opt_value</var>)</div></h3></div><div class="body"><p>Sets a style value on an element.</p>
+<p>This function is not indended to patch issues in the browser&#39;s style
+handling, but to allow easy programmatic access to setting dash-separated
+style properties.  An example is setting a batch of properties from a data
+object without overwriting old styles.  When possible, use native APIs:
+elem.style.propertyKey &#61; &#39;value&#39; or (if obliterating old styles is fine)
+elem.style.cssText &#61; &#39;property1: value1; property2: value2&#39;.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to change.</p>
+<dt class="type name"><var>style</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code><dd><p>If a string, a style name. If an object, a hash
+of style names to style values.</p>
+<dt class="type name"><var>opt_value</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)=</code><dd><p>If style was a string, then this
+should be the value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setStyles"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1355" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>setStyles(<var>element</var>, <var>stylesString</var>)</div></h3></div><div class="body"><p>Sets the content of a style element.  The style element can be any valid
+style element.  This element will have its content completely replaced by
+the stylesString.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.style.html#setSafeStyleSheet"><code>#setSafeStyleSheet</code></a> instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>(Element|StyleSheet)</code><dd><p>A stylesheet element as returned by
+installStyles.</p>
+<dt class="type name"><var>stylesString</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The new content of the stylesheet.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setTransparentBackgroundImage"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1174" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setTransparentBackgroundImage(<var>el</var>, <var>src</var>)</div></h3></div><div class="body"><p>Sets the background of an element to a transparent image in a browser-
+independent manner.</p>
+<p>This function does not support repeating backgrounds or alternate background
+positions to match the behavior of Internet Explorer. It also does not
+support sizingMethods other than crop since they cannot be replicated in
+browsers other than Internet Explorer.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to set background on.</p>
+<dt class="type name"><var>src</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The image source URL.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setUnselectable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1487" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setUnselectable(<var>el</var>, <var>unselectable</var>, <var>opt_noRecurse</var>)</div></h3></div><div class="body"><p>Makes the element and its descendants selectable or unselectable.  Note
+that on some platforms (e.g. Mozilla), even if an element isn&#39;t set to
+be unselectable, it will behave as such if any of its ancestors is
+unselectable.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>The element to alter.</p>
+<dt class="type name"><var>unselectable</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the element and its descendants
+should be made unselectable.</p>
+<dt class="type name"><var>opt_noRecurse</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to only alter the element&#39;s own
+selectable state, and leave its descendants alone; defaults to false.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setWidth"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L967" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setWidth(<var>element</var>, <var>width</var>)</div></h3></div><div class="body"><p>Set the width of an element.  Sets the element&#39;s style property.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to set the width of.</p>
+<dt class="type name"><var>width</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>The width value to set.  If a number, &#39;px&#39;
+will be appended, otherwise the value will be applied directly.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="showElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1230" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>showElement(<var>el</var>, <var>display</var>)</div></h3></div><div class="body"><p>Shows or hides an element from the page. Hiding the element is done by
+setting the display property to &#34;none&#34;, removing the element from the
+rendering hierarchy so it takes up no space. To show the element, the default
+inherited display property is restored (defined either in stylesheets or by
+the browser&#39;s default style rules.)</p>
+<p>Caveat 1: if the inherited display property for the element is set to &#34;none&#34;
+by the stylesheets, that is the property that will be restored by a call to
+showElement(), effectively toggling the display between &#34;none&#34; and &#34;none&#34;.</p>
+<p>Caveat 2: if the element display style is set inline (by setting either
+element.style.display or a style attribute in the HTML), a call to
+showElement will clear that setting and defer to the inherited style in the
+stylesheet.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.style.setElementShown instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>el</var><code>Element</code><dd><p>Element to show or hide.</p>
+<dt class="type name"><var>display</var><code>*</code><dd><p>True to render the element in its default style,
+false to disable rendering the element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toCamelCase"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1096" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>toCamelCase(<var>selector</var>)</div></h3></div><div class="body"><p>Converts a CSS selector in the form style-property to styleProperty.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.string.toCamelCase instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>selector</var><code>*</code><dd><p>CSS Selector.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Camel case selector.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toSelectorCase"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1107" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>toSelectorCase(<var>selector</var>)</div></h3></div><div class="body"><p>Converts a CSS selector in the form styleProperty to style-property.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.string.toSelectorCase instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>selector</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Camel case selector.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Selector cased.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toStyleAttribute"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1977" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toStyleAttribute(<var>obj</var>)</div></h3></div><div class="body"><p>Reverse of parseStyleAttribute; that is, takes a style object and returns the
+corresponding attribute value.  Converts camel case property names to proper
+CSS selector names.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Map of CSS properties to values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The style attribute value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="translateRectForAnotherFrame"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L802" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>translateRectForAnotherFrame(<var>rect</var>, <var>origBase</var>, <var>newBase</var>)</div></h3></div><div class="body"><p>Translates the specified rect relative to origBase page, for newBase page.
+If origBase and newBase are the same, this function does nothing.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>rect</var><code><a href="goog.math.Rect.html">goog.math.Rect</a></code><dd><p>The source rectangle relative to origBase page,
+and it will have the translated result.</p>
+<dt class="type name"><var>origBase</var><code><a href="goog.dom.DomHelper.html">goog.dom.DomHelper</a></code><dd><p>The DomHelper for the input rectangle.</p>
+<dt class="type name"><var>newBase</var><code><a href="goog.dom.DomHelper.html">goog.dom.DomHelper</a></code><dd><p>The DomHelper for the resultant
+coordinate.  This must be a DOM for an ancestor frame of origBase
+or the same as origBase.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="uninstallStyles"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/style.js#L1339" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>uninstallStyles(<var>styleSheet</var>)</div></h3></div><div class="body"><p>Removes the styles added by <a href="goog.style.html#installStyles"><code>#installStyles</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>styleSheet</var><code>(Element|StyleSheet)</code><dd><p>The value returned by
+<a href="goog.style.html#installStyles"><code>#installStyles</code></a>.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

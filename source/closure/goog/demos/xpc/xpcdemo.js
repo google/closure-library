@@ -88,8 +88,8 @@ xpcdemo.initOuter = function() {
 
   // Construct the URI of the peer page.
 
-  var peerUri = ownUri.resolve(
-      new goog.Uri('inner.html')).setDomain(peerDomain);
+  var peerUri =
+      ownUri.resolve(new goog.Uri('inner.html')).setDomain(peerDomain);
   // Passthrough of verbose and compiled flags.
   if (goog.isDef(ownUri.getParameterValue('verbose'))) {
     peerUri.setParameterValue('verbose', '');
@@ -104,8 +104,8 @@ xpcdemo.initOuter = function() {
   xpcdemo.channel = new goog.net.xpc.CrossPageChannel(cfg);
 
   // Create the peer iframe.
-  xpcdemo.peerIframe = xpcdemo.channel.createPeerIframe(goog.asserts.assert(
-      goog.dom.getElement('iframeContainer')));
+  xpcdemo.peerIframe = xpcdemo.channel.createPeerIframe(
+      goog.asserts.assert(goog.dom.getElement('iframeContainer')));
 
   xpcdemo.initCommon_();
 
@@ -134,30 +134,34 @@ xpcdemo.initInner = function() {
  * @private
  */
 xpcdemo.initCommon_ = function() {
-  var xpcLogger = goog.log.getLogger('goog.net.xpc',
-      window.location.href.match(/verbose/) ?
-          goog.log.Level.ALL : goog.log.Level.INFO);
+  var xpcLogger = goog.log.getLogger(
+      'goog.net.xpc', window.location.href.match(/verbose/) ?
+          goog.log.Level.ALL :
+          goog.log.Level.INFO);
   goog.log.addHandler(xpcLogger, function(logRecord) {
     xpcdemo.log('[XPC] ' + logRecord.getMessage());
   });
 
   // Register services.
-  // The functions will only recieve strings but takes an optional third
-  // parameter that causes the function to recieve an Object to cast to the
+  // The functions will only receive strings but takes an optional third
+  // parameter that causes the function to receive an Object to cast to the
   // expected type, but it would be better to change the API or add
   // overload support to the compiler.
-  xpcdemo.channel.registerService('log',
+  xpcdemo.channel.registerService(
+      'log',
       /** @type {function((!Object|string)): ?} */ (xpcdemo.log));
-  xpcdemo.channel.registerService('ping',
+  xpcdemo.channel.registerService(
+      'ping',
       /** @type {function((!Object|string)): ?} */ (xpcdemo.pingHandler_));
-  xpcdemo.channel.registerService('events',
+  xpcdemo.channel.registerService(
+      'events',
       /** @type {function((!Object|string)): ?} */ (xpcdemo.eventsMsgHandler_));
 
   // Connect the channel.
   xpcdemo.channel.connect(function() {
     xpcdemo.channel.send('log', 'Hi from ' + window.location.host);
-    goog.events.listen(goog.dom.getElement('clickfwd'),
-                       'click', xpcdemo.mouseEventHandler_);
+    goog.events.listen(
+        goog.dom.getElement('clickfwd'), 'click', xpcdemo.mouseEventHandler_);
   });
 };
 
@@ -166,8 +170,9 @@ xpcdemo.initCommon_ = function() {
  * Kills the peer iframe and the disposes the channel.
  */
 xpcdemo.teardown = function() {
-  goog.events.unlisten(goog.dom.getElement('clickfwd'),
-                       goog.events.EventType.CLICK, xpcdemo.mouseEventHandler_);
+  goog.events.unlisten(
+      goog.dom.getElement('clickfwd'), goog.events.EventType.CLICK,
+      xpcdemo.mouseEventHandler_);
 
   xpcdemo.channel.dispose();
   delete xpcdemo.channel;
@@ -243,8 +248,8 @@ xpcdemo.mmLastRateOutput_ = 0;
  * sends them over the channel.
  */
 xpcdemo.startMousemoveForwarding = function() {
-  goog.events.listen(document, goog.events.EventType.MOUSEMOVE,
-                     xpcdemo.mouseEventHandler_);
+  goog.events.listen(
+      document, goog.events.EventType.MOUSEMOVE, xpcdemo.mouseEventHandler_);
   xpcdemo.mmLastRateOutput_ = goog.now();
 };
 
@@ -253,8 +258,8 @@ xpcdemo.startMousemoveForwarding = function() {
  * Stop mousemove event forwarding.
  */
 xpcdemo.stopMousemoveForwarding = function() {
-  goog.events.unlisten(document, goog.events.EventType.MOUSEMOVE,
-                       xpcdemo.mouseEventHandler_);
+  goog.events.unlisten(
+      document, goog.events.EventType.MOUSEMOVE, xpcdemo.mouseEventHandler_);
 };
 
 
@@ -264,8 +269,8 @@ xpcdemo.stopMousemoveForwarding = function() {
  * @private
  */
 xpcdemo.mouseEventHandler_ = function(e) {
-  xpcdemo.channel.send('events',
-      [e.type, e.clientX, e.clientY, goog.now()].join(','));
+  xpcdemo.channel.send(
+      'events', [e.type, e.clientX, e.clientY, goog.now()].join(','));
 };
 
 

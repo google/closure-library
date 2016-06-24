@@ -89,10 +89,12 @@ function installMockClock() {
   // Overwrite the "protected" setTimeout and clearTimeout with the versions
   // replaced by MockClock. Normal tests should never do this, but we need to
   // test the ContinuationTest itself.
-  stubs.set(goog.testing.ContinuationTestCase.Step, 'protectedClearTimeout_',
-            window.clearTimeout);
-  stubs.set(goog.testing.ContinuationTestCase.Step, 'protectedSetTimeout_',
-            window.setTimeout);
+  stubs.set(
+      goog.testing.ContinuationTestCase.Step, 'protectedClearTimeout_',
+      window.clearTimeout);
+  stubs.set(
+      goog.testing.ContinuationTestCase.Step, 'protectedSetTimeout_',
+      window.setTimeout);
 }
 
 
@@ -130,7 +132,7 @@ function testStepSetTimeout() {
   var step = getSampleStep();
 
   var timeoutReached = false;
-  step.setTimeout(function() {timeoutReached = true}, 100);
+  step.setTimeout(function() { timeoutReached = true }, 100);
 
   clock.tick(50);
   assertFalse(timeoutReached);
@@ -143,7 +145,7 @@ function testStepClearTimeout() {
   var step = new goog.testing.ContinuationTestCase.Step('test', function() {});
 
   var timeoutReached = false;
-  step.setTimeout(function() {timeoutReached = true}, 100);
+  step.setTimeout(function() { timeoutReached = true }, 100);
 
   clock.tick(50);
   assertFalse(timeoutReached);
@@ -179,8 +181,9 @@ function testTestSetError() {
   test.setError(error1);
   assertEquals(error1, test.getError());
   test.setError(error2);
-  assertEquals('Once an error has been set, it should not be overwritten.',
-               error1, test.getError());
+  assertEquals(
+      'Once an error has been set, it should not be overwritten.', error1,
+      test.getError());
 }
 
 
@@ -264,9 +267,7 @@ function testWaitForEvent() {
     et.dispatchEvent('test');
   });
 
-  waitForEvent(et, 'test', function() {
-    assertTrue(eventFired);
-  });
+  waitForEvent(et, 'test', function() { assertTrue(eventFired); });
 
   et.dispatchEvent('testPrefire');
 }
@@ -275,11 +276,9 @@ function testWaitForEvent() {
 function testWaitForCondition() {
   var counter = 0;
 
-  waitForCondition(function() {
-    return ++counter >= 2;
-  }, function() {
-    assertEquals(2, counter);
-  }, 10, 200);
+  waitForCondition(
+      function() { return ++counter >= 2; },
+      function() { assertEquals(2, counter); }, 10, 200);
 }
 
 
@@ -289,9 +288,9 @@ function testOutOfOrderWaits() {
   // Note that if the delta between the timeout is too small, two
   // continuation may be invoked at the same timer tick, using the
   // registration order.
-  waitForTimeout(function() {assertEquals(3, ++counter);}, 200);
-  waitForTimeout(function() {assertEquals(1, ++counter);}, 0);
-  waitForTimeout(function() {assertEquals(2, ++counter);}, 100);
+  waitForTimeout(function() { assertEquals(3, ++counter); }, 200);
+  waitForTimeout(function() { assertEquals(1, ++counter); }, 0);
+  waitForTimeout(function() { assertEquals(2, ++counter); }, 100);
 }
 
 
@@ -305,11 +304,7 @@ var testObj;
 
 
 function testCrazyNestedWaitFunction() {
-  testObj = {
-    lock: true,
-    et: new goog.events.EventTarget(),
-    steps: 0
-  };
+  testObj = {lock: true, et: new goog.events.EventTarget(), steps: 0};
 
   waitForTimeout(handleTimeout, 10);
   waitForEvent(testObj.et, 'test', handleEvent);

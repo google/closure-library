@@ -15,16 +15,22 @@
 goog.provide('goog.testing.ui.rendererassertsTest');
 goog.setTestOnly('goog.testing.ui.rendererassertsTest');
 
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.rendererasserts');
 goog.require('goog.ui.ControlRenderer');
 
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
+
 function testSuccess() {
   function GoodRenderer() {}
 
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(GoodRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      GoodRenderer);
 }
 
 function testFailure() {
@@ -35,12 +41,13 @@ function testFailure() {
   goog.inherits(BadRenderer, goog.ui.ControlRenderer);
 
   var ex = assertThrows(
-      'Expected assertNoGetCssClassCallsInConstructor to fail.',
-      function() {
-        goog.testing.ui.rendererasserts.
-            assertNoGetCssClassCallsInConstructor(BadRenderer);
+      'Expected assertNoGetCssClassCallsInConstructor to fail.', function() {
+        goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+            BadRenderer);
       });
-  assertTrue('Expected assertNoGetCssClassCallsInConstructor to throw a' +
-      ' jsunit exception', ex.isJsUnitException);
+  assertTrue(
+      'Expected assertNoGetCssClassCallsInConstructor to throw a' +
+          ' jsunit exception',
+      ex.isJsUnitException);
   assertContains('getCssClass', ex.message);
 }

@@ -1,0 +1,47 @@
+---
+{edit_path: '', layout: api, page: goog.testing.editor.dom, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.testing.editor.dom</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/editor/dom.js#L21" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.testing.editor.dom</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="assertRangeBetweenText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/editor/dom.js#L199" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>assertRangeBetweenText(<var>before</var>, <var>after</var>, <var>range</var>, <var>opt_stopAt</var>)</div></h3></div><div class="body"><p>Assert that the range is surrounded by the given strings. This is useful
+because different browsers can place the range endpoints inside different
+nodes even when visually the range looks the same. Also, there may be empty
+text nodes in the way (again depending on the browser) making it difficult to
+use assertRangeEquals.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>before</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String that should occur immediately before the start
+point of the range. If this is the empty string, assert will only succeed
+if there is no text before the start point of the range.</p>
+<dt class="type name"><var>after</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String that should occur immediately after the end
+point of the range. If this is the empty string, assert will only succeed
+if there is no text after the end point of the range.</p>
+<dt class="type name"><var>range</var><code><a href="goog.dom.AbstractRange.html">goog.dom.AbstractRange</a></code><dd><p>The range to be tested.</p>
+<dt class="type name"><var>opt_stopAt</var><code>Node=</code><dd><p>Node to stop searching at (search will be
+restricted to this node&#39;s subtree).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNextNonEmptyTextNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/editor/dom.js#L69" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNextNonEmptyTextNode(<var>node</var>, <var>opt_stopAt</var>, <var>opt_skipDescendants</var>)</div></h3></div><div class="body"><p>Returns the next (in document order) node from the given node that is a
+non-empty text node, or null if none is found or opt_stopAt is not an
+ancestor of node. Note that if the given node has children, the search will
+start from the start tag of the node, meaning all its descendants will be
+included in the search, unless opt_skipDescendants is true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>Node to start searching from.</p>
+<dt class="type name"><var>opt_stopAt</var><code>Node=</code><dd><p>Node to stop searching at (search will be
+restricted to this node&#39;s subtree), defaults to the body of the document
+containing node.</p>
+<dt class="type name"><var>opt_skipDescendants</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to skip searching the given
+node&#39;s descentants.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Text</code><dd><p>The next (in document order) node from the given node that
+is a non-empty text node, or null if none is found or opt_stopAt is not
+an ancestor of node.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getPreviousNonEmptyTextNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/editor/dom.js#L46" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getPreviousNonEmptyTextNode(<var>node</var>, <var>opt_stopAt</var>, <var>opt_skipDescendants</var>)</div></h3></div><div class="body"><p>Returns the previous (in document order) node from the given node that is a
+non-empty text node, or null if none is found or opt_stopAt is not an
+ancestor of node. Note that if the given node has children, the search will
+start from the end tag of the node, meaning all its descendants will be
+included in the search, unless opt_skipDescendants is true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>Node</code><dd><p>Node to start searching from.</p>
+<dt class="type name"><var>opt_stopAt</var><code>Node=</code><dd><p>Node to stop searching at (search will be
+restricted to this node&#39;s subtree), defaults to the body of the document
+containing node.</p>
+<dt class="type name"><var>opt_skipDescendants</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to skip searching the given
+node&#39;s descentants.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Text</code><dd><p>The previous (in document order) node from the given node
+that is a non-empty text node, or null if none is found.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

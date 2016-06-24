@@ -67,11 +67,10 @@ function assertMessageArraysEqual(ma1, ma2) {
   assertEquals('message array lengths differ', ma1.length, ma2.length);
   for (var i = 0; i < ma1.length; i++) {
     assertEquals(
-        'message array serviceNames differ',
-        ma1[i].serviceName, ma2[i].serviceName);
+        'message array serviceNames differ', ma1[i].serviceName,
+        ma2[i].serviceName);
     assertEquals(
-        'message array payloads differ',
-        ma1[i].payload, ma2[i].payload);
+        'message array payloads differ', ma1[i].payload, ma2[i].payload);
   }
 }
 
@@ -82,13 +81,12 @@ function testDelegationToWrappedChannel() {
 
   channel.registerDefaultService(
       asyncMockControl.asyncAssertEquals(
-          'default service should be delegated',
-          'defaultServiceName', 'default service payload'));
+          'default service should be delegated', 'defaultServiceName',
+          'default service payload'));
   channel.registerService(
       'normalServiceName',
       asyncMockControl.asyncAssertEquals(
-          'normal service should be delegated',
-          'normal service payload'));
+          'normal service should be delegated', 'normal service payload'));
   mockChannel.send(
       goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':message',
       'payload');
@@ -123,16 +121,16 @@ function testSendExceptionsInSendReadyPingStopsTimerAndReraises() {
   var channel = new goog.messaging.BufferedChannel(mockChannel);
 
   var errorMessage = 'errorMessage';
-  mockChannel.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':' +
-      goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
-      /* payload */ '').$throws(Error(errorMessage));
+  mockChannel
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':' +
+              goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
+          /* payload */ '')
+      .$throws(Error(errorMessage));
   channel.timer_.enabled = true;
 
   mockControl.$replayAll();
-  var exception = assertThrows(function() {
-    channel.sendReadyPing_();
-  });
+  var exception = assertThrows(function() { channel.sendReadyPing_(); });
   assertContains(errorMessage, exception.message);
   assertFalse(channel.timer_.enabled);
   mockControl.$verifyAll();
@@ -158,27 +156,32 @@ function testBidirectionalCommunicationBuffersUntilReadyPingsSucceed() {
   var mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
   var bufferedChannel1 = new goog.messaging.BufferedChannel(mockChannel1);
   var bufferedChannel2 = new goog.messaging.BufferedChannel(mockChannel2);
+  mockChannel1
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '')
+      .$does(function() { bufferedChannel2.setPeerReady_(''); });
+  mockChannel2
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel1.setPeerReady_('1'); });
+  mockChannel1
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel2.setPeerReady_('1'); });
   mockChannel1.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '').$does(function() {
-    bufferedChannel2.setPeerReady_('');
-  });
+      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
+          messages[0].serviceName,
+      messages[0].payload);
   mockChannel2.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel1.setPeerReady_('1');
-  });
-  mockChannel1.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel2.setPeerReady_('1');
-  });
-  mockChannel1.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
-                    messages[0].serviceName,
-                    messages[0].payload);
-  mockChannel2.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
-                    messages[1].serviceName,
-                    messages[1].payload);
+      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
+          messages[1].serviceName,
+      messages[1].payload);
 
   mockControl.$replayAll();
   bufferedChannel1.send(messages[0].serviceName, messages[0].payload);
@@ -204,50 +207,58 @@ function testBidirectionalCommunicationReconnectsAfterOneSideRestarts() {
   var bufferedChannel3 = new goog.messaging.BufferedChannel(mockChannel3);
 
   // First tick
-  mockChannel1.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '').$does(function() {
-    bufferedChannel2.setPeerReady_('');
-  });
-  mockChannel2.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel1.setPeerReady_('1');
-  });
-  mockChannel1.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel2.setPeerReady_('1');
-  });
+  mockChannel1
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '')
+      .$does(function() { bufferedChannel2.setPeerReady_(''); });
+  mockChannel2
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel1.setPeerReady_('1'); });
+  mockChannel1
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel2.setPeerReady_('1'); });
   mockChannel3.send(
       goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
       '');  // pretend it's not ready to connect yet
 
   // Second tick
-  mockChannel3.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '').$does(function() {
-    bufferedChannel1.setPeerReady_('');
-  });
+  mockChannel3
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '')
+      .$does(function() { bufferedChannel1.setPeerReady_(''); });
 
   // Third tick
-  mockChannel1.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel3.setPeerReady_('1');
-  });
-  mockChannel3.send(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
-      '1').$does(function() {
-    bufferedChannel1.setPeerReady_('1');
-  });
+  mockChannel1
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel3.setPeerReady_('1'); });
+  mockChannel3
+      .send(
+          goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ +
+              ':setPeerReady_',
+          '1')
+      .$does(function() { bufferedChannel1.setPeerReady_('1'); });
 
-  mockChannel1.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
-                    messages[0].serviceName,
-                    messages[0].payload);
-  mockChannel3.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
-                    messages[1].serviceName,
-                    messages[1].payload);
+  mockChannel1.send(
+      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
+          messages[0].serviceName,
+      messages[0].payload);
+  mockChannel3.send(
+      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
+          messages[1].serviceName,
+      messages[1].payload);
 
   mockControl.$replayAll();
   // First tick causes setPeerReady_ to fire, which sets up the connection

@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.media.MediaTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.testing');
 goog.require('goog.math.Size');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ControlRenderer');
@@ -46,26 +47,23 @@ function testBasicElements() {
   var thumb2 = new goog.ui.media.MediaModel.Thumbnail(
       'http://thumb.com/big.jpg', new goog.math.Size(800, 600));
   model.setThumbnails([thumb1, thumb2]);
-  model.setPlayer(new goog.ui.media.MediaModel.Player(
-      'http://media/player.swf'));
+  model.setPlayer(
+      new goog.ui.media.MediaModel.Player(
+          goog.html.testing.newTrustedResourceUrlForTest(
+              'http://media/player.swf')));
   var control = new goog.ui.media.Media(model, renderer);
   control.render();
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      undefined,
-      goog.ui.ControlRenderer.CSS_CLASS + '-caption');
+      undefined, goog.ui.ControlRenderer.CSS_CLASS + '-caption');
   var description = goog.dom.getElementsByTagNameAndClass(
-      undefined,
-      goog.ui.ControlRenderer.CSS_CLASS + '-description');
+      undefined, goog.ui.ControlRenderer.CSS_CLASS + '-description');
   var thumbnail0 = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail0');
+      goog.dom.TagName.IMG, goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail0');
   var thumbnail1 = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail1');
+      goog.dom.TagName.IMG, goog.ui.ControlRenderer.CSS_CLASS + '-thumbnail1');
   var player = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IFRAME,
-      goog.ui.ControlRenderer.CSS_CLASS + '-player');
+      goog.dom.TagName.IFRAME, goog.ui.ControlRenderer.CSS_CLASS + '-player');
 
   assertNotNull(caption);
   assertEquals(1, caption.length);
@@ -95,11 +93,9 @@ function testDoesntCreatesCaptionIfUnavailable() {
   incompleteMedia.setDataModel(incompleteModel);
   incompleteMedia.render();
   var caption = goog.dom.getElementsByTagNameAndClass(
-      undefined,
-      goog.ui.ControlRenderer.CSS_CLASS + '-caption');
+      undefined, goog.ui.ControlRenderer.CSS_CLASS + '-caption');
   var description = goog.dom.getElementsByTagNameAndClass(
-      undefined,
-      goog.ui.ControlRenderer.CSS_CLASS + '-description');
+      undefined, goog.ui.ControlRenderer.CSS_CLASS + '-description');
   assertEquals(0, caption.length);
   assertNotNull(description);
   incompleteMedia.dispose();
@@ -113,19 +109,23 @@ function testSetAriaLabel() {
   var thumb2 = new goog.ui.media.MediaModel.Thumbnail(
       'http://thumb.com/big.jpg', new goog.math.Size(800, 600));
   model.setThumbnails([thumb1, thumb2]);
-  model.setPlayer(new goog.ui.media.MediaModel.Player(
-      'http://media/player.swf'));
+  model.setPlayer(
+      new goog.ui.media.MediaModel.Player(
+          goog.html.testing.newTrustedResourceUrlForTest(
+              'http://media/player.swf')));
   var control = new goog.ui.media.Media(model, renderer);
-  assertNull('Media must not have aria label by default',
-      control.getAriaLabel());
+  assertNull(
+      'Media must not have aria label by default', control.getAriaLabel());
   control.setAriaLabel('My media');
   control.render();
   var element = control.getElementStrict();
   assertNotNull('Element must not be null', element);
-  assertEquals('Media element must have expected aria-label', 'My media',
+  assertEquals(
+      'Media element must have expected aria-label', 'My media',
       element.getAttribute('aria-label'));
   assertTrue(goog.dom.isFocusableTabIndex(element));
   control.setAriaLabel('My new media');
-  assertEquals('Media element must have updated aria-label', 'My new media',
+  assertEquals(
+      'Media element must have updated aria-label', 'My new media',
       element.getAttribute('aria-label'));
 }

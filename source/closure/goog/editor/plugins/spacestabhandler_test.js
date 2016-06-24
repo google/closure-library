@@ -67,12 +67,13 @@ function testSelectedTextIndent() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event marked as handled',
+  assertTrue(
+      'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
   var contents = field.textContent || field.innerText;
   // Chrome doesn't treat \u00a0 as a space.
-  assertTrue('Text should be replaced with 4 spaces but was: "' +
-      contents + '"',
+  assertTrue(
+      'Text should be replaced with 4 spaces but was: "' + contents + '"',
       /^(\s|\u00a0){4}$/.test(contents));
 
   editableField.$verify();
@@ -97,10 +98,12 @@ function testCursorIndent() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event marked as handled',
+  assertTrue(
+      'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
   var contents = field.textContent || field.innerText;
-  assertTrue('Expected contents "Te    st" but was: "' + contents + '"',
+  assertTrue(
+      'Expected contents "Te    st" but was: "' + contents + '"',
       /Te[\s|\u00a0]{4}st/.test(contents));
 
   editableField.$verify();
@@ -122,7 +125,8 @@ function testShiftTabNoOp() {
   editableField.$replay();
   event.$replay();
 
-  assertTrue('Event marked as handled',
+  assertTrue(
+      'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
   var contents = field.textContent || field.innerText;
   assertEquals('Shift+tab should not change contents', 'Test', contents);
@@ -134,7 +138,7 @@ function testShiftTabNoOp() {
 function testInListNoOp() {
   field.innerHTML = '<ul><li>Test</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(testText, 2, testText, 2);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -144,7 +148,8 @@ function testInListNoOp() {
   editableField.$replay();
   event.$replay();
 
-  assertFalse('Event must not be handled when selection inside list.',
+  assertFalse(
+      'Event must not be handled when selection inside list.',
       tabHandler.handleKeyboardShortcut(event, '', false));
   testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
 
@@ -155,7 +160,7 @@ function testInListNoOp() {
 function testContainsListNoOp() {
   field.innerHTML = '<ul><li>Test</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(field.firstChild, 0, testText, 2);
 
   var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
@@ -165,7 +170,8 @@ function testContainsListNoOp() {
   editableField.$replay();
   event.$replay();
 
-  assertFalse('Event must not be handled when selection inside list.',
+  assertFalse(
+      'Event must not be handled when selection inside list.',
       tabHandler.handleKeyboardShortcut(event, '', false));
   testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
 

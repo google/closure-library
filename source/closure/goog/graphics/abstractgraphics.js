@@ -44,9 +44,8 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.graphics.AbstractGraphics = function(width, height,
-                                          opt_coordWidth, opt_coordHeight,
-                                          opt_domHelper) {
+goog.graphics.AbstractGraphics = function(
+    width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -57,7 +56,7 @@ goog.graphics.AbstractGraphics = function(width, height,
   this.width = width;
 
   /**
-   * Height of graphics in pixels or precentage points.
+   * Height of graphics in pixels or percentage points.
    * @type {number|string}
    * @protected
    */
@@ -117,8 +116,8 @@ goog.graphics.AbstractGraphics.prototype.getCanvasElement = function() {
  * @param {number} coordWidth  The coordinate width.
  * @param {number} coordHeight  The coordinate height.
  */
-goog.graphics.AbstractGraphics.prototype.setCoordSize = function(coordWidth,
-                                                                 coordHeight) {
+goog.graphics.AbstractGraphics.prototype.setCoordSize = function(
+    coordWidth, coordHeight) {
   this.coordWidth = coordWidth;
   this.coordHeight = coordHeight;
 };
@@ -129,7 +128,8 @@ goog.graphics.AbstractGraphics.prototype.setCoordSize = function(coordWidth,
  */
 goog.graphics.AbstractGraphics.prototype.getCoordSize = function() {
   if (this.coordWidth) {
-    return new goog.math.Size(this.coordWidth,
+    return new goog.math.Size(
+        this.coordWidth,
         /** @type {number} */ (this.coordHeight));
   } else {
     return this.getPixelSize();
@@ -340,7 +340,7 @@ goog.graphics.AbstractGraphics.prototype.drawRect = goog.abstractMethod;
  */
 goog.graphics.AbstractGraphics.prototype.drawText = function(
     text, x, y, width, height, align, vAlign, font, stroke, fill, opt_group) {
-  var baseline = font.size / 2; // Baseline is middle of line
+  var baseline = font.size / 2;  // Baseline is middle of line
   var textY;
   if (vAlign == 'bottom') {
     textY = y + height - baseline;
@@ -350,8 +350,8 @@ goog.graphics.AbstractGraphics.prototype.drawText = function(
     textY = y + baseline;
   }
 
-  return this.drawTextOnLine(text, x, textY, x + width, textY, align,
-      font, stroke, fill, opt_group);
+  return this.drawTextOnLine(
+      text, x, textY, x + width, textY, align, font, stroke, fill, opt_group);
 };
 
 
@@ -417,7 +417,7 @@ goog.graphics.AbstractGraphics.prototype.createPath = function() {
  * Measure and return the width (in pixels) of a given text string.
  * Text measurement is needed to make sure a text can fit in the allocated
  * area. The way text length is measured is by writing it into a div that is
- * after the visible area, measure the div width, and immediatly erase the
+ * after the visible area, measure the div width, and immediately erase the
  * written value.
  *
  * @param {string} text The text string to measure.
@@ -442,13 +442,11 @@ goog.graphics.AbstractGraphics.prototype.isDomClonable = function() {
  * together.  Not guaranteed to do anything - i.e. only use this for
  * optimization of a single code path.
  */
-goog.graphics.AbstractGraphics.prototype.suspend = function() {
-};
+goog.graphics.AbstractGraphics.prototype.suspend = function() {};
 
 
 /**
  * Stop preventing redraws.  If any redraws had been prevented, a redraw will
  * be done now.
  */
-goog.graphics.AbstractGraphics.prototype.resume = function() {
-};
+goog.graphics.AbstractGraphics.prototype.resume = function() {};

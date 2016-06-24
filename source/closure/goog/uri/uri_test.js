@@ -15,6 +15,7 @@
 /**
  * @fileoverview Unit tests for goog.Uri.
  *
+ * @author msamuel@google.com (Mike Samuel)
  */
 
 goog.provide('goog.UriTest');
@@ -34,49 +35,57 @@ function testUriParse() {
   assertEquals('q=query', uri.getQuery());
   assertEquals('fragmento', uri.getFragment());
 
-  assertEquals('terer258+foo@gmail.com',
-               goog.Uri.parse('mailto:terer258+foo@gmail.com').getPath());
+  assertEquals(
+      'terer258+foo@gmail.com',
+      goog.Uri.parse('mailto:terer258+foo@gmail.com').getPath());
 }
 
 function testUriParseAcceptsThingsWithToString() {
   // Ensure that the goog.Uri constructor coerces random types to strings.
   var uriStr = 'http://www.google.com:80/path?q=query#fragmento';
   var uri = new goog.Uri({toString: function() { return uriStr; }});
-  assertEquals('http://www.google.com:80/path?q=query#fragmento',
-      uri.toString());
+  assertEquals(
+      'http://www.google.com:80/path?q=query#fragmento', uri.toString());
 }
 
 function testUriCreate() {
   assertEquals(
       'http://www.google.com:81/search%20path?q=what%20to%20eat%2Bdrink%3F',
-      goog.Uri.create('http', null, 'www.google.com', 81, '/search path',
-          (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
-      .toString());
+      goog.Uri
+          .create(
+              'http', null, 'www.google.com', 81, '/search path',
+              (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
+          .toString());
 
   assertEquals(
       'http://www.google.com:80/search%20path?q=what%20to%20eat%2Bdrink%3F',
-      goog.Uri.create('http', null, 'www.google.com', 80, '/search path',
-          (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
-      .toString());
+      goog.Uri
+          .create(
+              'http', null, 'www.google.com', 80, '/search path',
+              (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
+          .toString());
 
   assertEquals(
       'http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F',
-      goog.Uri.create('http', null, 'www.google.com', null, '/search path',
-          (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
-      .toString());
+      goog.Uri
+          .create(
+              'http', null, 'www.google.com', null, '/search path',
+              (new goog.Uri.QueryData).set('q', 'what to eat+drink?'), null)
+          .toString());
 
   var createdUri = goog.Uri.create(
       'http', null, 'www.google.com', null, '/search path',
       new goog.Uri.QueryData(null, null, true).set('Q', 'what to eat+drink?'),
       null);
 
-  assertEquals('http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F',
-               createdUri.toString());
+  assertEquals(
+      'http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F',
+      createdUri.toString());
 }
 
 function testClone() {
-  var uri1 = new goog.Uri(
-      'http://user:pass@www.google.com:8080/foo?a=1&b=2#c=3');
+  var uri1 =
+      new goog.Uri('http://user:pass@www.google.com:8080/foo?a=1&b=2#c=3');
   // getCount forces instantiation of internal data structures to more
   // thoroughly test clone.
   uri1.getQueryData().getCount();
@@ -97,71 +106,83 @@ function testRelativeUris() {
 function testAbsolutePathResolution() {
   var uri1 = new goog.Uri('http://www.google.com:8080/path?q=query#fragmento');
 
-  assertEquals('http://www.google.com:8080/foo',
-               uri1.resolve(new goog.Uri('/foo')).toString());
+  assertEquals(
+      'http://www.google.com:8080/foo',
+      uri1.resolve(new goog.Uri('/foo')).toString());
 
-  assertEquals('http://www.google.com:8080/foo/bar',
-               goog.Uri.resolve('http://www.google.com:8080/search/',
-                                '/foo/bar').toString());
+  assertEquals(
+      'http://www.google.com:8080/foo/bar',
+      goog.Uri.resolve('http://www.google.com:8080/search/', '/foo/bar')
+          .toString());
 }
 
 function testRelativePathResolution() {
   var uri1 = new goog.Uri('http://www.google.com:8080/path?q=query#fragmento');
-  assertEquals('http://www.google.com:8080/foo',
-               uri1.resolve(goog.Uri.parse('foo')).toString());
+  assertEquals(
+      'http://www.google.com:8080/foo',
+      uri1.resolve(goog.Uri.parse('foo')).toString());
 
   var uri2 = new goog.Uri('http://www.google.com:8080/search');
-  assertEquals('http://www.google.com:8080/foo/bar',
-               uri2.resolve(new goog.Uri('foo/bar')).toString());
+  assertEquals(
+      'http://www.google.com:8080/foo/bar',
+      uri2.resolve(new goog.Uri('foo/bar')).toString());
 
   var uri3 = new goog.Uri('http://www.google.com:8080/search/');
-  assertEquals('http://www.google.com:8080/search/foo/bar',
-               uri3.resolve(new goog.Uri('foo/bar')).toString());
+  assertEquals(
+      'http://www.google.com:8080/search/foo/bar',
+      uri3.resolve(new goog.Uri('foo/bar')).toString());
 
   var uri4 = new goog.Uri('foo');
-  assertEquals('bar',
-               uri4.resolve(new goog.Uri('bar')).toString());
+  assertEquals('bar', uri4.resolve(new goog.Uri('bar')).toString());
 
   var uri5 = new goog.Uri('http://www.google.com:8080/search/');
-  assertEquals('http://www.google.com:8080/search/..%2ffoo/bar',
-               uri3.resolve(new goog.Uri('..%2ffoo/bar')).toString());
-
+  assertEquals(
+      'http://www.google.com:8080/search/..%2ffoo/bar',
+      uri3.resolve(new goog.Uri('..%2ffoo/bar')).toString());
 }
 
 function testDomainResolution() {
-  assertEquals('https://www.google.com/foo/bar',
-               new goog.Uri('https://www.fark.com:443/search/').resolve(
-                   new goog.Uri('//www.google.com/foo/bar')
-               ).toString());
+  assertEquals(
+      'https://www.google.com/foo/bar',
+      new goog.Uri('https://www.fark.com:443/search/')
+          .resolve(new goog.Uri('//www.google.com/foo/bar'))
+          .toString());
 
-  assertEquals('http://www.google.com/',
-               goog.Uri.resolve('http://www.fark.com/search/',
-                                '//www.google.com/').toString());
+  assertEquals(
+      'http://www.google.com/',
+      goog.Uri.resolve('http://www.fark.com/search/', '//www.google.com/')
+          .toString());
 }
 
 function testQueryResolution() {
-  assertEquals('http://www.google.com/search?q=new%20search',
-               goog.Uri.parse('http://www.google.com/search?q=old+search').
-                   resolve(goog.Uri.parse('?q=new%20search')).toString());
+  assertEquals(
+      'http://www.google.com/search?q=new%20search',
+      goog.Uri.parse('http://www.google.com/search?q=old+search')
+          .resolve(goog.Uri.parse('?q=new%20search'))
+          .toString());
 
-  assertEquals('http://www.google.com/search?q=new%20search',
-               goog.Uri.parse('http://www.google.com/search?q=old+search#hi').
-                   resolve(goog.Uri.parse('?q=new%20search')).toString());
+  assertEquals(
+      'http://www.google.com/search?q=new%20search',
+      goog.Uri.parse('http://www.google.com/search?q=old+search#hi')
+          .resolve(goog.Uri.parse('?q=new%20search'))
+          .toString());
 }
 
 function testFragmentResolution() {
-  assertEquals('http://www.google.com/foo/bar?q=hi#there',
-               goog.Uri.resolve('http://www.google.com/foo/bar?q=hi',
-                                '#there').toString());
+  assertEquals(
+      'http://www.google.com/foo/bar?q=hi#there',
+      goog.Uri.resolve('http://www.google.com/foo/bar?q=hi', '#there')
+          .toString());
 
-  assertEquals('http://www.google.com/foo/bar?q=hi#there',
-               goog.Uri.resolve('http://www.google.com/foo/bar?q=hi#you',
-                                '#there').toString());
+  assertEquals(
+      'http://www.google.com/foo/bar?q=hi#there',
+      goog.Uri.resolve('http://www.google.com/foo/bar?q=hi#you', '#there')
+          .toString());
 }
 
 function testBogusResolution() {
-  var uri = goog.Uri.parse('some:base/url').resolve(
-      goog.Uri.parse('a://completely.different/url'));
+  var uri = goog.Uri.parse('some:base/url')
+                .resolve(goog.Uri.parse('a://completely.different/url'));
   assertEquals('a://completely.different/url', uri.toString());
 }
 
@@ -227,68 +248,68 @@ function testParameterGetters() {
     assertEquals(l1s, l2s);
     assertEquals(l1s, l1.length, l2.length);
     for (var i = 0; i < l1.length; ++i) {
-      assertEquals('part ' + i + ' of ' + l1.length + ' in ' + l1s,
-                   l1[i], l2[i]);
+      assertEquals(
+          'part ' + i + ' of ' + l1.length + ' in ' + l1s, l1[i], l2[i]);
     }
   }
 
-  assertArraysEqual(['v1', 'v2'],
-      goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3').
-          getParameterValues('key'));
+  assertArraysEqual(
+      ['v1', 'v2'],
+      goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
+          .getParameterValues('key'));
 
-  assertArraysEqual(['v1', 'v2'],
-      goog.Uri.parse('/path?a=b&keY=v1&c=d&KEy=v2&keywithsuffix=v3', true).
-          getParameterValues('kEy'));
+  assertArraysEqual(
+      ['v1', 'v2'],
+      goog.Uri.parse('/path?a=b&keY=v1&c=d&KEy=v2&keywithsuffix=v3', true)
+          .getParameterValues('kEy'));
 
-  assertEquals('v1',
-      goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2').
-          getParameterValue('key'));
+  assertEquals(
+      'v1', goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2')
+                .getParameterValue('key'));
 
-  assertEquals('v1',
-      goog.Uri.parse('/path?kEY=v1&c=d&keywithsuffix=v3&key=v2', true).
-          getParameterValue('Key'));
+  assertEquals(
+      'v1', goog.Uri.parse('/path?kEY=v1&c=d&keywithsuffix=v3&key=v2', true)
+                .getParameterValue('Key'));
 
-  assertEquals('v1=v2',
+  assertEquals(
+      'v1=v2',
       goog.Uri.parse('/path?key=v1=v2', true).getParameterValue('key'));
 
-  assertEquals('v1=v2=v3',
+  assertEquals(
+      'v1=v2=v3',
       goog.Uri.parse('/path?key=v1=v2=v3', true).getParameterValue('key'));
 
-  assertArraysEqual(undefined,
-                    goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2').
-                    getParameterValue('nosuchkey'));
+  assertArraysEqual(
+      undefined, goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2')
+                     .getParameterValue('nosuchkey'));
 
   // test boundary conditions
-  assertArraysEqual(['v1', 'v2'],
-      goog.Uri.parse('/path?key=v1&c=d&key=v2&keywithsuffix=v3').
-          getParameterValues('key'));
-  assertArraysEqual(['v1', 'v2'],
-      goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2').
-          getParameterValues('key'));
+  assertArraysEqual(
+      ['v1', 'v2'], goog.Uri.parse('/path?key=v1&c=d&key=v2&keywithsuffix=v3')
+                        .getParameterValues('key'));
+  assertArraysEqual(
+      ['v1', 'v2'], goog.Uri.parse('/path?key=v1&c=d&keywithsuffix=v3&key=v2')
+                        .getParameterValues('key'));
 
   // test no =
-  assertArraysEqual([''],
-      goog.Uri.parse('/path?key').getParameterValues('key'));
-  assertArraysEqual([''],
-      goog.Uri.parse('/path?key', true).getParameterValues('key'));
+  assertArraysEqual(
+      [''], goog.Uri.parse('/path?key').getParameterValues('key'));
+  assertArraysEqual(
+      [''], goog.Uri.parse('/path?key', true).getParameterValues('key'));
 
-  assertArraysEqual([''],
-                    goog.Uri.parse('/path?foo=bar&key').
-                    getParameterValues('key'));
-  assertArraysEqual([''],
-                    goog.Uri.parse('/path?foo=bar&key', true).
-                    getParameterValues('key'));
+  assertArraysEqual(
+      [''], goog.Uri.parse('/path?foo=bar&key').getParameterValues('key'));
+  assertArraysEqual(
+      [''],
+      goog.Uri.parse('/path?foo=bar&key', true).getParameterValues('key'));
 
-  assertEquals('',
-               goog.Uri.parse('/path?key').getParameterValue('key'));
-  assertEquals('',
-               goog.Uri.parse('/path?key', true).getParameterValue('key'));
+  assertEquals('', goog.Uri.parse('/path?key').getParameterValue('key'));
+  assertEquals('', goog.Uri.parse('/path?key', true).getParameterValue('key'));
 
-  assertEquals('',
-               goog.Uri.parse('/path?foo=bar&key').getParameterValue('key'));
-  assertEquals('',
-               goog.Uri.parse('/path?foo=bar&key', true).
-               getParameterValue('key'));
+  assertEquals(
+      '', goog.Uri.parse('/path?foo=bar&key').getParameterValue('key'));
+  assertEquals(
+      '', goog.Uri.parse('/path?foo=bar&key', true).getParameterValue('key'));
 
   var u = new goog.Uri('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3');
   assertArraysEqual(u.getParameterValues('a'), ['b']);
@@ -320,40 +341,48 @@ function testParameterGetters() {
 }
 
 function testRemoveParameter() {
-  assertEquals('/path?a=b&c=d&keywithsuffix=v3',
-               goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
-               .removeParameter('key').toString());
+  assertEquals(
+      '/path?a=b&c=d&keywithsuffix=v3',
+      goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
+          .removeParameter('key')
+          .toString());
 }
 
 function testParameterSetters() {
-  assertEquals('/path?a=b&key=newval&c=d&keywithsuffix=v3',
-               goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
-               .setParameterValue('key', 'newval').toString());
+  assertEquals(
+      '/path?a=b&key=newval&c=d&keywithsuffix=v3',
+      goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
+          .setParameterValue('key', 'newval')
+          .toString());
 
-  assertEquals('/path?a=b&key=1&key=2&key=3&c=d&keywithsuffix=v3',
-               goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
-               .setParameterValues('key', ['1', '2', '3']).toString());
+  assertEquals(
+      '/path?a=b&key=1&key=2&key=3&c=d&keywithsuffix=v3',
+      goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
+          .setParameterValues('key', ['1', '2', '3'])
+          .toString());
 
-  assertEquals('/path',
-      goog.Uri.parse('/path?key=v1&key=v2')
-          .setParameterValues('key', []).toString());
+  assertEquals(
+      '/path', goog.Uri.parse('/path?key=v1&key=v2')
+                   .setParameterValues('key', [])
+                   .toString());
 
   // Test case-insensitive setters
-  assertEquals('/path?a=b&key=newval&c=d&keywithsuffix=v3',
+  assertEquals(
+      '/path?a=b&key=newval&c=d&keywithsuffix=v3',
       goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3', true)
-               .setParameterValue('KEY', 'newval').toString());
+          .setParameterValue('KEY', 'newval')
+          .toString());
 
   assertEquals(
       '/path?a=b&key=1&key=2&key=3&c=d&keywithsuffix=v3',
       goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3', true)
-          .setParameterValues('kEY', ['1', '2', '3']).toString());
+          .setParameterValues('kEY', ['1', '2', '3'])
+          .toString());
 }
 
 function testEncoding() {
-  assertEquals('/foo bar baz',
-               goog.Uri.parse('/foo%20bar%20baz').getPath());
-  assertEquals('/foo+bar+baz',
-               goog.Uri.parse('/foo+bar+baz').getPath());
+  assertEquals('/foo bar baz', goog.Uri.parse('/foo%20bar%20baz').getPath());
+  assertEquals('/foo+bar+baz', goog.Uri.parse('/foo+bar+baz').getPath());
 }
 
 function testSetScheme() {
@@ -362,26 +391,25 @@ function testSetScheme() {
   uri.setScheme('https');
   assertTrue(uri.hasScheme());
   assertEquals('https', uri.getScheme());
-  assertEquals('https://www.google.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'https://www.google.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setScheme(encodeURIComponent('ab cd'), true);
   assertTrue(uri.hasScheme());
   assertEquals('ab cd', uri.getScheme());
-  assertEquals('ab%20cd://www.google.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'ab%20cd://www.google.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setScheme('http:');
   assertTrue(uri.hasScheme());
   assertEquals('http', uri.getScheme());
-  assertEquals('http://www.google.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'http://www.google.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setScheme('');
   assertFalse(uri.hasScheme());
   assertEquals('', uri.getScheme());
-  assertEquals('//www.google.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals('//www.google.com:80/path?q=query#fragmento', uri.toString());
 }
 
 function testSetDomain() {
@@ -390,40 +418,35 @@ function testSetDomain() {
   uri.setDomain('\u1e21oogle.com');
   assertTrue(uri.hasDomain());
   assertEquals('\u1e21oogle.com', uri.getDomain());
-  assertEquals('http://%E1%B8%A1oogle.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'http://%E1%B8%A1oogle.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setDomain(encodeURIComponent('\u1e21oogle.com'), true);
   assertTrue(uri.hasDomain());
   assertEquals('\u1e21oogle.com', uri.getDomain());
-  assertEquals('http://%E1%B8%A1oogle.com:80/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'http://%E1%B8%A1oogle.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setDomain('');
   assertFalse(uri.hasDomain());
   assertEquals('', uri.getDomain());
-  assertEquals('http:/path?q=query#fragmento',
-               uri.toString());
+  assertEquals('http:/path?q=query#fragmento', uri.toString());
 }
 
 function testSetPort() {
   var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
 
-  assertThrows(function() {
-    uri.setPort(-1);
-  });
+  assertThrows(function() { uri.setPort(-1); });
   assertEquals(80, uri.getPort());
 
-  assertThrows(function() {
-    uri.setPort('a');
-  });
+  assertThrows(function() { uri.setPort('a'); });
   assertEquals(80, uri.getPort());
 
   uri.setPort(443);
   assertTrue(uri.hasPort());
   assertEquals(443, uri.getPort());
-  assertEquals('http://www.google.com:443/path?q=query#fragmento',
-               uri.toString());
+  assertEquals(
+      'http://www.google.com:443/path?q=query#fragmento', uri.toString());
 
   // TODO(chrishenry): This is undocumented, but exist in previous unit
   // test. We should clarify whether this is intended (alternatively,
@@ -431,8 +454,7 @@ function testSetPort() {
   uri.setPort(null);
   assertFalse(uri.hasPort());
   assertEquals(null, uri.getPort());
-  assertEquals('http://www.google.com/path?q=query#fragmento',
-               uri.toString());
+  assertEquals('http://www.google.com/path?q=query#fragmento', uri.toString());
 }
 
 function testSetPath() {
@@ -455,9 +477,7 @@ function testSetPath() {
   uri.setPath('');
   assertFalse(uri.hasPath());
   assertEquals('', uri.getPath());
-  assertEquals(
-      'http://www.google.com:80?q=query#fragmento',
-      uri.toString());
+  assertEquals('http://www.google.com:80?q=query#fragmento', uri.toString());
 }
 
 function testSetFragment() {
@@ -480,9 +500,7 @@ function testSetFragment() {
   uri.setFragment('');
   assertFalse(uri.hasFragment());
   assertEquals('', uri.getFragment());
-  assertEquals(
-      'http://www.google.com:80/path?q=query',
-      uri.toString());
+  assertEquals('http://www.google.com:80/path?q=query', uri.toString());
 }
 
 function testSetUserInfo() {
@@ -491,33 +509,36 @@ function testSetUserInfo() {
   uri.setUserInfo('user:pw d');
   assertTrue(uri.hasUserInfo());
   assertEquals('user:pw d', uri.getUserInfo());
-  assertEquals('http://user:pw%20d@www.google.com:80/path?q=query#fragmento',
+  assertEquals(
+      'http://user:pw%20d@www.google.com:80/path?q=query#fragmento',
       uri.toString());
 
   uri.setUserInfo(encodeURIComponent('user:pw d2'), true);
   assertTrue(uri.hasUserInfo());
   assertEquals('user:pw d2', uri.getUserInfo());
-  assertEquals('http://user:pw%20d2@www.google.com:80/path?q=query#fragmento',
+  assertEquals(
+      'http://user:pw%20d2@www.google.com:80/path?q=query#fragmento',
       uri.toString());
 
   uri.setUserInfo('user');
   assertTrue(uri.hasUserInfo());
   assertEquals('user', uri.getUserInfo());
-  assertEquals('http://user@www.google.com:80/path?q=query#fragmento',
-      uri.toString());
+  assertEquals(
+      'http://user@www.google.com:80/path?q=query#fragmento', uri.toString());
 
   uri.setUserInfo('');
   assertFalse(uri.hasUserInfo());
   assertEquals('', uri.getUserInfo());
-  assertEquals('http://www.google.com:80/path?q=query#fragmento',
-      uri.toString());
+  assertEquals(
+      'http://www.google.com:80/path?q=query#fragmento', uri.toString());
 }
 
 function testSetParameterValues() {
   var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
 
   uri.setParameterValues('q', ['foo', 'other query']);
-  assertEquals('http://www.google.com:80/path?q=foo&q=other%20query#fragmento',
+  assertEquals(
+      'http://www.google.com:80/path?q=foo&q=other%20query#fragmento',
       uri.toString());
 
   uri.setParameterValues('lang', 'en');
@@ -532,21 +553,23 @@ function testTreatmentOfAt1() {
   assertEquals('www.google.com', uri.getDomain());
   assertEquals('johndoe@gmail.com', uri.getParameterValue('q'));
 
-  uri = goog.Uri.create('http', null, 'www.google.com', null, null,
-                        'q=johndoe@gmail.com', null);
+  uri = goog.Uri.create(
+      'http', null, 'www.google.com', null, null, 'q=johndoe@gmail.com', null);
   assertEquals('http://www.google.com?q=johndoe%40gmail.com', uri.toString());
 }
 
 function testTreatmentOfAt2() {
-  var uri = new goog.Uri('http://www/~johndoe@gmail.com/foo');
+  var uri = new goog.Uri('http://test/~johndoe@gmail.com/foo');
   assertEquals('http', uri.getScheme());
-  assertEquals('www', uri.getDomain());
+  assertEquals('test', uri.getDomain());
   assertEquals('/~johndoe@gmail.com/foo', uri.getPath());
 
-  assertEquals('http://www/~johndoe@gmail.com/foo',
-               goog.Uri.create('http', null, 'www', null,
-                               '/~johndoe@gmail.com/foo', null, null).
-               toString());
+  assertEquals(
+      'http://test/~johndoe@gmail.com/foo',
+      goog.Uri
+          .create(
+              'http', null, 'test', null, '/~johndoe@gmail.com/foo', null, null)
+          .toString());
 }
 
 function testTreatmentOfAt3() {
@@ -556,15 +579,23 @@ function testTreatmentOfAt3() {
   assertEquals('teleport', uri.getDomain());
   assertEquals('/~skroob@vacuum', uri.getPath());
 
-  assertEquals('ftp://skroob:1234@teleport/~skroob@vacuum',
-               goog.Uri.create('ftp', 'skroob:1234', 'teleport', null,
-                               '/~skroob@vacuum', null, null).toString());
+  assertEquals(
+      'ftp://skroob:1234@teleport/~skroob@vacuum',
+      goog.Uri
+          .create(
+              'ftp', 'skroob:1234', 'teleport', null, '/~skroob@vacuum', null,
+              null)
+          .toString());
 }
 
 function testTreatmentOfAt4() {
-  assertEquals('ftp://darkhelmet:45%4078@teleport/~dhelmet@vacuum',
-               goog.Uri.create('ftp', 'darkhelmet:45@78', 'teleport', null,
-                               '/~dhelmet@vacuum', null, null).toString());
+  assertEquals(
+      'ftp://darkhelmet:45%4078@teleport/~dhelmet@vacuum',
+      goog.Uri
+          .create(
+              'ftp', 'darkhelmet:45@78', 'teleport', null, '/~dhelmet@vacuum',
+              null, null)
+          .toString());
 }
 
 function testSameDomain1() {
@@ -621,16 +652,12 @@ function testMakeUnique() {
 function testSetReadOnly() {
   var uri = new goog.Uri('http://www.google.com/setgmail');
   uri.setReadOnly(true);
-  assertThrows(function() {
-    uri.setParameterValue('cant', 'dothis');
-  });
+  assertThrows(function() { uri.setParameterValue('cant', 'dothis'); });
 }
 
 function testSetReadOnlyChained() {
   var uri = new goog.Uri('http://www.google.com/setgmail').setReadOnly(true);
-  assertThrows(function() {
-    uri.setParameterValue('cant', 'dothis');
-  });
+  assertThrows(function() { uri.setParameterValue('cant', 'dothis'); });
 }
 
 function testQueryDataCount() {
@@ -875,10 +902,11 @@ function testQueryDataExtend() {
 
 function testQueryDataCreateFromMap() {
   assertEquals('', String(goog.Uri.QueryData.createFromMap({})));
-  assertEquals('a=A&b=B&c=C',
+  assertEquals(
+      'a=A&b=B&c=C',
       String(goog.Uri.QueryData.createFromMap({a: 'A', b: 'B', c: 'C'})));
-  assertEquals('a=foo%26bar',
-      String(goog.Uri.QueryData.createFromMap({a: 'foo&bar'})));
+  assertEquals(
+      'a=foo%26bar', String(goog.Uri.QueryData.createFromMap({a: 'foo&bar'})));
 }
 
 function testQueryDataCreateFromMapWithArrayValues() {
@@ -888,15 +916,18 @@ function testQueryDataCreateFromMapWithArrayValues() {
   qd.add('breakCache', 1);
   obj.key.push('4');
   assertEquals('key=1&key=2&key=3&breakCache=1', qd.toString());
-
 }
 
 function testQueryDataCreateFromKeysValues() {
   assertEquals('', String(goog.Uri.QueryData.createFromKeysValues([], [])));
-  assertEquals('a=A&b=B&c=C', String(goog.Uri.QueryData.createFromKeysValues(
-      ['a', 'b', 'c'], ['A', 'B', 'C'])));
-  assertEquals('a=A&a=B&a=C', String(goog.Uri.QueryData.createFromKeysValues(
-      ['a', 'a', 'a'], ['A', 'B', 'C'])));
+  assertEquals(
+      'a=A&b=B&c=C', String(
+                         goog.Uri.QueryData.createFromKeysValues(
+                             ['a', 'b', 'c'], ['A', 'B', 'C'])));
+  assertEquals(
+      'a=A&a=B&a=C', String(
+                         goog.Uri.QueryData.createFromKeysValues(
+                             ['a', 'a', 'a'], ['A', 'B', 'C'])));
 }
 
 function testQueryDataAddMultipleValuesWithSameKey() {
@@ -935,7 +966,6 @@ function testFragmentEncoding() {
 
   // Only illegal characters should remain, which is a fail.
   assertEquals('String should be empty', 0, fragment.length);
-
 }
 
 function testStrictDoubleEncodingRemoval() {
@@ -950,23 +980,24 @@ function testStrictDoubleEncodingRemoval() {
 
 // Tests, that creating URI from components and then
 // getting the components back yields equal results.
-// The special attention is payed to test proper encoding
+// The special attention is paid to test proper encoding
 // and decoding of URI components.
 function testComponentsAfterUriCreate() {
-  var createdUri = new goog.Uri.create('%40',  // scheme
-                                       '%41',  // user info
-                                       '%42',  // domain
-                                       43,     // port
-                                       '%44',  // path
-                                       '%45',  // query
-                                       '%46'); // fragment
+  var createdUri = new goog.Uri.create(
+      '%40',   // scheme
+      '%41',   // user info
+      '%42',   // domain
+      43,      // port
+      '%44',   // path
+      '%45',   // query
+      '%46');  // fragment
 
   assertEquals('%40', createdUri.getScheme());
   assertEquals('%41', createdUri.getUserInfo());
   assertEquals('%42', createdUri.getDomain());
   assertEquals(43, createdUri.getPort());
   assertEquals('%44', createdUri.getPath());
-  assertEquals('%2545', createdUri.getQuery()); // returns encoded value
+  assertEquals('%2545', createdUri.getQuery());  // returns encoded value
   assertEquals('%45', createdUri.getDecodedQuery());
   assertEquals('%2545', createdUri.getEncodedQuery());
   assertEquals('%46', createdUri.getFragment());
@@ -982,7 +1013,7 @@ function testSetQueryAndGetParameterValue() {
   assertEquals('?i=j&k', uri.toString());
   assertEquals('i=j&k', uri.getDecodedQuery());
   assertEquals('i=j&k', uri.getEncodedQuery());
-  assertEquals('i=j&k', uri.getQuery()); // returns encoded value
+  assertEquals('i=j&k', uri.getQuery());  // returns encoded value
   assertEquals('j', uri.getParameterValue('i'));
   assertEquals('', uri.getParameterValue('k'));
 
@@ -991,7 +1022,7 @@ function testSetQueryAndGetParameterValue() {
   assertEquals('?i=j&k', uri.toString());
   assertEquals('i=j&k', uri.getDecodedQuery());
   assertEquals('i=j&k', uri.getEncodedQuery());
-  assertEquals('i=j&k', uri.getQuery()); // returns encoded value
+  assertEquals('i=j&k', uri.getQuery());  // returns encoded value
   assertEquals('j', uri.getParameterValue('i'));
   assertEquals('', uri.getParameterValue('k'));
 
@@ -1000,7 +1031,7 @@ function testSetQueryAndGetParameterValue() {
   assertEquals('?i=j%2526k', uri.toString());
   assertEquals('i=j%26k', uri.getDecodedQuery());
   assertEquals('i=j%2526k', uri.getEncodedQuery());
-  assertEquals('i=j%2526k', uri.getQuery()); // returns encoded value
+  assertEquals('i=j%2526k', uri.getQuery());  // returns encoded value
   assertEquals('j%26k', uri.getParameterValue('i'));
   assertUndefined(uri.getParameterValue('k'));
 
@@ -1009,7 +1040,7 @@ function testSetQueryAndGetParameterValue() {
   assertEquals('?i=j%26k', uri.toString());
   assertEquals('i=j&k', uri.getDecodedQuery());
   assertEquals('i=j%26k', uri.getEncodedQuery());
-  assertEquals('i=j%26k', uri.getQuery()); // returns encoded value
+  assertEquals('i=j%26k', uri.getQuery());  // returns encoded value
   assertEquals('j&k', uri.getParameterValue('i'));
   assertUndefined(uri.getParameterValue('k'));
 }
@@ -1022,13 +1053,13 @@ function testSetParameterValueAndGetQuery() {
   assertEquals('?a=b%26c', uri.toString());
   assertEquals('a=b&c', uri.getDecodedQuery());
   assertEquals('a=b%26c', uri.getEncodedQuery());
-  assertEquals('a=b%26c', uri.getQuery()); // returns encoded value
+  assertEquals('a=b%26c', uri.getQuery());  // returns encoded value
 
   uri.setParameterValue('a', 'b%26c');
   assertEquals('?a=b%2526c', uri.toString());
   assertEquals('a=b%26c', uri.getDecodedQuery());
   assertEquals('a=b%2526c', uri.getEncodedQuery());
-  assertEquals('a=b%2526c', uri.getQuery()); // returns encoded value
+  assertEquals('a=b%2526c', uri.getQuery());  // returns encoded value
 }
 
 
@@ -1043,28 +1074,33 @@ function testQueryNotModified() {
 
 
 function testRelativePathEscapesColon() {
-  assertEquals('javascript%3aalert(1)',
-               new goog.Uri().setPath('javascript:alert(1)').toString());
+  assertEquals(
+      'javascript%3aalert(1)',
+      new goog.Uri().setPath('javascript:alert(1)').toString());
 }
 
 
 function testAbsolutePathDoesNotEscapeColon() {
-  assertEquals('/javascript:alert(1)',
-               new goog.Uri('/javascript:alert(1)').toString());
+  assertEquals(
+      '/javascript:alert(1)', new goog.Uri('/javascript:alert(1)').toString());
 }
 
 
 function testColonInPathNotUnescaped() {
-  assertEquals('/javascript%3aalert(1)',
-               new goog.Uri('/javascript%3aalert(1)').toString());
-  assertEquals('javascript%3aalert(1)',
-               new goog.Uri('javascript%3aalert(1)').toString());
-  assertEquals('javascript:alert(1)',
-               new goog.Uri('javascript:alert(1)').toString());
-  assertEquals('http://www.foo.bar/path:with:colon/x',
-               new goog.Uri('http://www.foo.bar/path:with:colon/x').toString());
-  assertEquals('//www.foo.bar/path:with:colon/x',
-               new goog.Uri('//www.foo.bar/path:with:colon/x').toString());
+  assertEquals(
+      '/javascript%3aalert(1)',
+      new goog.Uri('/javascript%3aalert(1)').toString());
+  assertEquals(
+      'javascript%3aalert(1)',
+      new goog.Uri('javascript%3aalert(1)').toString());
+  assertEquals(
+      'javascript:alert(1)', new goog.Uri('javascript:alert(1)').toString());
+  assertEquals(
+      'http://www.foo.bar/path:with:colon/x',
+      new goog.Uri('http://www.foo.bar/path:with:colon/x').toString());
+  assertEquals(
+      '//www.foo.bar/path:with:colon/x',
+      new goog.Uri('//www.foo.bar/path:with:colon/x').toString());
 }
 
 
@@ -1085,7 +1121,8 @@ function testRestrictedCharactersArePreserved() {
   assertEquals('http', uri.getScheme());
   assertEquals('host.example.%2f.com', uri.getDomain());
   assertEquals('/path%2f-with-embedded-slash/', uri.getPath());
-  assertEquals('http://host.example.%2f.com/path%2f-with-embedded-slash/',
+  assertEquals(
+      'http://host.example.%2f.com/path%2f-with-embedded-slash/',
       uri.toString());
 }
 

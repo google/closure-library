@@ -1,0 +1,39 @@
+---
+{edit_path: '', layout: api, page: goog.ui.ac.CachingMatcher, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>CachingMatcher</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.ui.ac.html">goog.ui.ac</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L48" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class CachingMatcher</div></h1></div><div class="body"><p>A matcher which wraps another (typically slow) matcher and
+keeps a client-side cache of the results. For instance, you can use this to
+wrap a RemoteArrayMatcher to hide the latency of the underlying matcher
+having to make ajax request.</p>
+<p>Objects in the cache are deduped on their stringified forms.</p>
+<p>Note - when the user types a character, they will instantly get a set of
+local results, and then some time later, the results from the server will
+show up.</p>
+<h3 class="name"><div>new CachingMatcher(<var>baseMatcher</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>baseMatcher</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The underlying matcher to use. Must implement
+requestMatchingRows.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="requestMatchingRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>requestMatchingRows(<var>token</var>, <var>maxMatches</var>, <var>matchHandler</var>)</div></h3></div><div class="body"><p>Function used to pass matches to the autocomplete.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>token</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Token to match.</p>
+<dt class="type name"><var>maxMatches</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Max number of matches to return.</p>
+<dt class="type name"><var>matchHandler</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>callback to execute after matching.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setBaseMatcherMaxMatches"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L132" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setBaseMatcherMaxMatches(<var>maxMatches</var>)</div></h3></div><div class="body"><p>Sets the maxMatches to use for the base matcher. If the base matcher makes
+AJAX requests, it may help to make this a large number so that the local
+cache gets populated quickly.</p>
+<p>Default value: 100.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>maxMatches</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value to set.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setLocalMatcher"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L164" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setLocalMatcher(<var>localMatcher</var>)</div></h3></div><div class="body"><p>Sets the local matcher to use.</p>
+<p>The local matcher should be a function with the same signature as
+<a href="goog.ui.ac.ArrayMatcher.html#ArrayMatcher.getMatchesForRows"><code>goog.ui.ac.ArrayMatcher.getMatchesForRows</code></a>, i.e. its arguments are
+searchToken, maxMatches, rowsToSearch; and it returns a list of matching
+rows.</p>
+<p>Default value: <a href="goog.ui.ac.ArrayMatcher.html#ArrayMatcher.getMatchesForRows"><code>goog.ui.ac.ArrayMatcher.getMatchesForRows</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>localMatcher</var><code>function(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, !<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&gt;): !<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&gt;</code></dl></dd></dl></div></section><section class="property expandable" id="setMaxCacheSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L146" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setMaxCacheSize(<var>maxCacheSize</var>)</div></h3></div><div class="body"><p>Sets the maximum size of the local cache. If the local cache grows larger
+than this size, it will be emptied.</p>
+<p>Default value: 1000.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>maxCacheSize</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setThrottleTime"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/ac/cachingmatcher.js#L117" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setThrottleTime(<var>throttleTime</var>)</div></h3></div><div class="body"><p>Sets the number of milliseconds with which to throttle the match requests
+on the underlying matcher.</p>
+<p>Default value: 150.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>throttleTime</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

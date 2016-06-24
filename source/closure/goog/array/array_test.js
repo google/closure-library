@@ -106,20 +106,17 @@ function testArrayForEachWithOnlySomeValuesAsigned() {
     assertEquals(100, index);
     count++;
   });
-  assertEquals('Should only call function when a value of array was assigned.',
-      1, count);
+  assertEquals(
+      'Should only call function when a value of array was assigned.', 1,
+      count);
 }
 
 function testArrayForEachWithArrayLikeObject() {
   var counter = goog.testing.recordFunction();
-  var a = {
-    'length': 1,
-    '0': 0,
-    '100': 100,
-    '101': 102
-  };
+  var a = {'length': 1, '0': 0, '100': 100, '101': 102};
   goog.array.forEach(a, counter);
-  assertEquals('Number of calls should not exceed the value of its length', 1,
+  assertEquals(
+      'Number of calls should not exceed the value of its length', 1,
       counter.getCallCount());
 }
 
@@ -603,10 +600,9 @@ function testArrayCount() {
   }, context));
 
   delete a[2];
-  assertEquals('deleted element is ignored', 4,
-      goog.array.count(a, function() {
-        return true;
-      }));
+  assertEquals('deleted element is ignored', 4, goog.array.count(a, function() {
+    return true;
+  }));
 }
 
 function testArrayContains() {
@@ -623,8 +619,8 @@ function testArrayContainsOmitsDeleted() {
   var a = [0, 1, 2, 3];
   delete a[1];
   delete a[3];
-  assertFalse('should not contain undefined',
-      goog.array.contains(a, undefined));
+  assertFalse(
+      'should not contain undefined', goog.array.contains(a, undefined));
 }
 
 function testArrayInsert() {
@@ -643,14 +639,15 @@ function testArrayInsertAt() {
   goog.array.insertAt(a, 4, 2);
   assertArrayEquals('insertAt, insert in middle', [0, 1, 4, 2, 3], a);
   goog.array.insertAt(a, 5, 10);
-  assertArrayEquals('insertAt, too large value should append',
-                    [0, 1, 4, 2, 3, 5], a);
+  assertArrayEquals(
+      'insertAt, too large value should append', [0, 1, 4, 2, 3, 5], a);
   goog.array.insertAt(a, 6);
-  assertArrayEquals('insertAt, null/undefined value should insert at 0',
-                    [6, 0, 1, 4, 2, 3, 5], a);
+  assertArrayEquals(
+      'insertAt, null/undefined value should insert at 0',
+      [6, 0, 1, 4, 2, 3, 5], a);
   goog.array.insertAt(a, 7, -2);
-  assertArrayEquals('insertAt, negative values start from end',
-                    [6, 0, 1, 4, 2, 7, 3, 5], a);
+  assertArrayEquals(
+      'insertAt, negative values start from end', [6, 0, 1, 4, 2, 7, 3, 5], a);
 }
 
 function testArrayInsertArrayAt() {
@@ -658,39 +655,44 @@ function testArrayInsertArrayAt() {
   goog.array.insertArrayAt(a, [3, 4], 1);
   assertArrayEquals('insertArrayAt, insert in middle', [2, 3, 4, 5], a);
   goog.array.insertArrayAt(a, [0, 1], 0);
-  assertArrayEquals('insertArrayAt, insert at beginning',
-                    [0, 1, 2, 3, 4, 5], a);
+  assertArrayEquals(
+      'insertArrayAt, insert at beginning', [0, 1, 2, 3, 4, 5], a);
   goog.array.insertArrayAt(a, [6, 7], 6);
-  assertArrayEquals('insertArrayAt, insert at end',
-                    [0, 1, 2, 3, 4, 5, 6, 7], a);
+  assertArrayEquals(
+      'insertArrayAt, insert at end', [0, 1, 2, 3, 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['x'], 4);
-  assertArrayEquals('insertArrayAt, insert one element',
-                    [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
+  assertArrayEquals(
+      'insertArrayAt, insert one element', [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, [], 4);
-  assertArrayEquals('insertArrayAt, insert 0 elements',
-                    [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
+  assertArrayEquals(
+      'insertArrayAt, insert 0 elements', [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['y', 'z']);
-  assertArrayEquals('insertArrayAt, undefined value should insert at 0',
+  assertArrayEquals(
+      'insertArrayAt, undefined value should insert at 0',
       ['y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['a'], null);
-  assertArrayEquals('insertArrayAt, null value should insert at 0',
+  assertArrayEquals(
+      'insertArrayAt, null value should insert at 0',
       ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['b'], 100);
-  assertArrayEquals('insertArrayAt, too large value should append',
+  assertArrayEquals(
+      'insertArrayAt, too large value should append',
       ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7, 'b'], a);
   goog.array.insertArrayAt(a, ['c', 'd'], -2);
-  assertArrayEquals('insertArrayAt, negative values start from end',
+  assertArrayEquals(
+      'insertArrayAt, negative values start from end',
       ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 'c', 'd', 7, 'b'], a);
 }
 
 function testArrayInsertBefore() {
   var a = ['a', 'b', 'c', 'd'];
   goog.array.insertBefore(a, 'e', 'b');
-  assertArrayEquals('insertBefore, with existing element',
-                    ['a', 'e', 'b', 'c', 'd'], a);
+  assertArrayEquals(
+      'insertBefore, with existing element', ['a', 'e', 'b', 'c', 'd'], a);
   goog.array.insertBefore(a, 'f', 'x');
-  assertArrayEquals('insertBefore, with non existing element',
-                    ['a', 'e', 'b', 'c', 'd', 'f'], a);
+  assertArrayEquals(
+      'insertBefore, with non existing element', ['a', 'e', 'b', 'c', 'd', 'f'],
+      a);
 }
 
 function testArrayRemove() {
@@ -699,6 +701,19 @@ function testArrayRemove() {
   assertArrayEquals('remove, remove existing element', ['a', 'b', 'd'], a);
   goog.array.remove(a, 'x');
   assertArrayEquals('remove, remove non existing element', ['a', 'b', 'd'], a);
+}
+
+function testArrayRemoveLast() {
+  var a = ['c', 'a', 'b', 'c', 'd', 'a'];
+  goog.array.removeLast(a, 'c');
+  var temp = ['c', 'a', 'b', 'd', 'a'];
+  assertArrayEquals('remove, remove existing element', temp, a);
+  goog.array.removeLast(a, 'a');
+  temp = ['c', 'a', 'b', 'd'];
+  assertArrayEquals('remove, remove existing element', temp, a);
+  goog.array.removeLast(a, 'y');
+  temp = ['c', 'a', 'b', 'd'];
+  assertArrayEquals('remove, remove non existing element', temp, a);
 }
 
 function testArrayRemoveAt() {
@@ -757,12 +772,14 @@ function testToArray() {
 
 function testToArrayOnNonArrayLike() {
   var nonArrayLike = {};
-  assertArrayEquals('toArray on non ArrayLike should return an empty array',
-                    [], goog.array.toArray(nonArrayLike));
+  assertArrayEquals(
+      'toArray on non ArrayLike should return an empty array', [],
+      goog.array.toArray(nonArrayLike));
 
   var nonArrayLike2 = {length: 'hello world'};
-  assertArrayEquals('toArray on non ArrayLike should return an empty array',
-                    [], goog.array.toArray(nonArrayLike2));
+  assertArrayEquals(
+      'toArray on non ArrayLike should return an empty array', [],
+      goog.array.toArray(nonArrayLike2));
 }
 
 function testExtend() {
@@ -819,9 +836,7 @@ function testExtend() {
 }
 
 function testExtendWithArguments() {
-  function f() {
-    return arguments;
-  }
+  function f() { return arguments; }
   var a = [0];
   var a2 = [0, 1, 2, 3, 4, 5];
   goog.array.extend(a, f(1, 2, 3), f(4, 5));
@@ -871,9 +886,10 @@ function assertRemovedDuplicates(expected, original) {
 
 function testRemoveDuplicates() {
   assertRemovedDuplicates([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]);
-  assertRemovedDuplicates([9, 4, 2, 1, 3, 6, 0, -9],
-                          [9, 4, 2, 4, 4, 2, 9, 1, 3, 6, 0, -9]);
-  assertRemovedDuplicates(['four', 'one', 'two', 'three', 'THREE'],
+  assertRemovedDuplicates(
+      [9, 4, 2, 1, 3, 6, 0, -9], [9, 4, 2, 4, 4, 2, 9, 1, 3, 6, 0, -9]);
+  assertRemovedDuplicates(
+      ['four', 'one', 'two', 'three', 'THREE'],
       ['four', 'one', 'two', 'one', 'three', 'THREE', 'four', 'two']);
   assertRemovedDuplicates([], []);
   assertRemovedDuplicates(
@@ -885,8 +901,8 @@ function testRemoveDuplicates() {
 
   // Mixed object types.
   assertRemovedDuplicates([1, '1', 2, '2'], [1, '1', 2, '2']);
-  assertRemovedDuplicates([true, 'true', false, 'false'],
-                          [true, 'true', false, 'false']);
+  assertRemovedDuplicates(
+      [true, 'true', false, 'false'], [true, 'true', false, 'false']);
   assertRemovedDuplicates(['foo'], [String('foo'), 'foo']);
   assertRemovedDuplicates([12], [Number(12), 12]);
 
@@ -902,7 +918,7 @@ function testRemoveDuplicates_customHashFn() {
   var array = [object1, object2, dupeObject, 'bar'];
   var hashFn = function(object) {
     return goog.isObject(object) ? object.key :
-        (typeof object).charAt(0) + object;
+                                   (typeof object).charAt(0) + object;
   };
   goog.array.removeDuplicates(array, /* opt_rv */ undefined, hashFn);
   assertArrayEquals([object1, object2, 'bar'], array);
@@ -955,138 +971,158 @@ function testBinaryInsertRemove() {
 }
 
 function testBinarySearch() {
-  var insertionPoint = function(position) { return -(position + 1)};
+  var insertionPoint = function(position) { return -(position + 1) };
   var pos;
 
   // test default comparison on array of String(s)
-  var a = ['1000', '9', 'AB', 'ABC', 'ABCABC', 'ABD', 'ABDA', 'B', 'B', 'B',
-           'C', 'CA', 'CC', 'ZZZ', 'ab', 'abc', 'abcabc', 'abd', 'abda', 'b',
-           'c', 'ca', 'cc', 'zzz'];
+  var a = [
+    '1000',   '9',   'AB',   'ABC', 'ABCABC', 'ABD', 'ABDA', 'B',
+    'B',      'B',   'C',    'CA',  'CC',     'ZZZ', 'ab',   'abc',
+    'abcabc', 'abd', 'abda', 'b',   'c',      'ca',  'cc',   'zzz'
+  ];
 
-  assertEquals('\'1000\' should be found at index 0', 0,
-               goog.array.binarySearch(a, '1000'));
-  assertEquals('\'zzz\' should be found at index ' + (a.length - 1),
-      a.length - 1, goog.array.binarySearch(a, 'zzz'));
-  assertEquals('\'C\' should be found at index 10', 10,
-               goog.array.binarySearch(a, 'C'));
+  assertEquals(
+      '\'1000\' should be found at index 0', 0,
+      goog.array.binarySearch(a, '1000'));
+  assertEquals(
+      '\'zzz\' should be found at index ' + (a.length - 1), a.length - 1,
+      goog.array.binarySearch(a, 'zzz'));
+  assertEquals(
+      '\'C\' should be found at index 10', 10, goog.array.binarySearch(a, 'C'));
   pos = goog.array.binarySearch(a, 'B');
-  assertTrue('\'B\' should be found at index 7 || 8 || 9', pos == 7 ||
-      pos == 8 || pos == 9);
+  assertTrue(
+      '\'B\' should be found at index 7 || 8 || 9',
+      pos == 7 || pos == 8 || pos == 9);
   pos = goog.array.binarySearch(a, '100');
   assertTrue('\'100\' should not be found', pos < 0);
-  assertEquals('\'100\' should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals(
+      '\'100\' should have an insertion point of 0', 0, insertionPoint(pos));
   pos = goog.array.binarySearch(a, 'zzz0');
   assertTrue('\'zzz0\' should not be found', pos < 0);
-  assertEquals('\'zzz0\' should have an insertion point of ' + (a.length),
-      a.length, insertionPoint(pos));
+  assertEquals(
+      '\'zzz0\' should have an insertion point of ' + (a.length), a.length,
+      insertionPoint(pos));
   pos = goog.array.binarySearch(a, 'BA');
   assertTrue('\'BA\' should not be found', pos < 0);
-  assertEquals('\'BA\' should have an insertion point of 10', 10,
-      insertionPoint(pos));
+  assertEquals(
+      '\'BA\' should have an insertion point of 10', 10, insertionPoint(pos));
 
   // test 0 length array with default comparison
   var b = [];
 
   pos = goog.array.binarySearch(b, 'a');
   assertTrue('\'a\' should not be found', pos < 0);
-  assertEquals('\'a\' should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals(
+      '\'a\' should have an insertion point of 0', 0, insertionPoint(pos));
 
   // test single element array with default lexiographical comparison
   var c = ['only item'];
 
-  assertEquals('\'only item\' should be found at index 0', 0,
+  assertEquals(
+      '\'only item\' should be found at index 0', 0,
       goog.array.binarySearch(c, 'only item'));
   pos = goog.array.binarySearch(c, 'a');
   assertTrue('\'a\' should not be found', pos < 0);
-  assertEquals('\'a\' should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals(
+      '\'a\' should have an insertion point of 0', 0, insertionPoint(pos));
   pos = goog.array.binarySearch(c, 'z');
   assertTrue('\'z\' should not be found', pos < 0);
-  assertEquals('\'z\' should have an insertion point of 1', 1,
-      insertionPoint(pos));
+  assertEquals(
+      '\'z\' should have an insertion point of 1', 1, insertionPoint(pos));
 
   // test default comparison on array of Number(s)
-  var d = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0,
-           0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+  var d = [
+    -897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0, 0.31255, 5,
+    142.88888708, 334, 342, 453, 54254
+  ];
 
-  assertEquals('-897123.9 should be found at index 0', 0,
+  assertEquals(
+      '-897123.9 should be found at index 0', 0,
       goog.array.binarySearch(d, -897123.9));
-  assertEquals('54254 should be found at index ' + (a.length - 1),
-      d.length - 1, goog.array.binarySearch(d, 54254));
+  assertEquals(
+      '54254 should be found at index ' + (a.length - 1), d.length - 1,
+      goog.array.binarySearch(d, 54254));
   assertEquals(
       '-3 should be found at index 5', 5, goog.array.binarySearch(d, -3));
   pos = goog.array.binarySearch(d, 0);
-  assertTrue('0 should be found at index 6 || 7 || 8', pos == 6 ||
-      pos == 7 || pos == 8);
+  assertTrue(
+      '0 should be found at index 6 || 7 || 8',
+      pos == 6 || pos == 7 || pos == 8);
   pos = goog.array.binarySearch(d, -900000);
   assertTrue('-900000 should not be found', pos < 0);
-  assertEquals('-900000 should have an insertion point of 0', 0,
-      insertionPoint(pos));
-  pos = goog.array.binarySearch(d, '54255');
+  assertEquals(
+      '-900000 should have an insertion point of 0', 0, insertionPoint(pos));
+  pos = goog.array.binarySearch(d, 54255);
   assertTrue('54255 should not be found', pos < 0);
-  assertEquals('54255 should have an insertion point of ' + (d.length),
-      d.length, insertionPoint(pos));
+  assertEquals(
+      '54255 should have an insertion point of ' + (d.length), d.length,
+      insertionPoint(pos));
   pos = goog.array.binarySearch(d, 1.1);
   assertTrue('1.1 should not be found', pos < 0);
-  assertEquals('1.1 should have an insertion point of 10', 10,
-      insertionPoint(pos));
+  assertEquals(
+      '1.1 should have an insertion point of 10', 10, insertionPoint(pos));
 
   // test with custom comparison function, which reverse orders numbers
   var revNumCompare = function(a, b) { return b - a; };
 
-  var e = [54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, 0, 0, -3,
-           -9, -324, -1321.3124, -321434.58758, -897123.9];
+  var e = [
+    54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, 0, 0, -3, -9, -324,
+    -1321.3124, -321434.58758, -897123.9
+  ];
 
-  assertEquals('54254 should be found at index 0', 0,
-               goog.array.binarySearch(e, 54254, revNumCompare));
-  assertEquals('-897123.9 should be found at index ' + (e.length - 1),
-      e.length - 1, goog.array.binarySearch(e, -897123.9, revNumCompare));
-  assertEquals('-3 should be found at index 10', 10,
-               goog.array.binarySearch(e, -3, revNumCompare));
+  assertEquals(
+      '54254 should be found at index 0', 0,
+      goog.array.binarySearch(e, 54254, revNumCompare));
+  assertEquals(
+      '-897123.9 should be found at index ' + (e.length - 1), e.length - 1,
+      goog.array.binarySearch(e, -897123.9, revNumCompare));
+  assertEquals(
+      '-3 should be found at index 10', 10,
+      goog.array.binarySearch(e, -3, revNumCompare));
   pos = goog.array.binarySearch(e, 0, revNumCompare);
-  assertTrue('0 should be found at index  || 10', pos == 7 ||
-      pos == 9 || pos == 10);
+  assertTrue(
+      '0 should be found at index 7 || 8 || 9',
+      pos == 7 || pos == 8 || pos == 9);
   pos = goog.array.binarySearch(e, 54254.1, revNumCompare);
   assertTrue('54254.1 should not be found', pos < 0);
-  assertEquals('54254.1 should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals(
+      '54254.1 should have an insertion point of 0', 0, insertionPoint(pos));
   pos = goog.array.binarySearch(e, -897124, revNumCompare);
   assertTrue('-897124 should not be found', pos < 0);
-  assertEquals('-897124 should have an insertion point of ' + (e.length),
-      e.length, insertionPoint(pos));
+  assertEquals(
+      '-897124 should have an insertion point of ' + (e.length), e.length,
+      insertionPoint(pos));
   pos = goog.array.binarySearch(e, 1.1, revNumCompare);
   assertTrue('1.1 should not be found', pos < 0);
-  assertEquals('1.1 should have an insertion point of 6', 6,
-      insertionPoint(pos));
+  assertEquals(
+      '1.1 should have an insertion point of 6', 6, insertionPoint(pos));
 
   // test 0 length array with custom comparison function
   var f = [];
 
   pos = goog.array.binarySearch(f, 0, revNumCompare);
   assertTrue('0 should not be found', pos < 0);
-  assertEquals('0 should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals('0 should have an insertion point of 0', 0, insertionPoint(pos));
 
   // test single element array with custom comparison function
   var g = [1];
 
-  assertEquals('1 should be found at index 0', 0, goog.array.binarySearch(g, 1,
-      revNumCompare));
+  assertEquals(
+      '1 should be found at index 0', 0,
+      goog.array.binarySearch(g, 1, revNumCompare));
   pos = goog.array.binarySearch(g, 2, revNumCompare);
   assertTrue('2 should not be found', pos < 0);
-  assertEquals('2 should have an insertion point of 0', 0,
-      insertionPoint(pos));
+  assertEquals('2 should have an insertion point of 0', 0, insertionPoint(pos));
   pos = goog.array.binarySearch(g, 0, revNumCompare);
   assertTrue('0 should not be found', pos < 0);
-  assertEquals('0 should have an insertion point of 1', 1,
-      insertionPoint(pos));
+  assertEquals('0 should have an insertion point of 1', 1, insertionPoint(pos));
 
-  assertEquals('binarySearch should find the index of the first 0',
-      0, goog.array.binarySearch([0, 0, 1], 0));
-  assertEquals('binarySearch should find the index of the first 1',
-      1, goog.array.binarySearch([0, 1, 1], 1));
+  assertEquals(
+      'binarySearch should find the index of the first 0', 0,
+      goog.array.binarySearch([0, 0, 1], 0));
+  assertEquals(
+      'binarySearch should find the index of the first 1', 1,
+      goog.array.binarySearch([0, 1, 1], 1));
 }
 
 
@@ -1110,9 +1146,8 @@ function testBinarySearchPerformance() {
     // Test with the default comparison function.
     goog.array.binarySearch(array, 48);
     // Test with a custom comparison function.
-    goog.array.binarySearch(array, 13, function(a, b) {
-      return a > b ? 1 : a < b ? -1 : 0;
-    });
+    goog.array.binarySearch(
+        array, 13, function(a, b) { return a > b ? 1 : a < b ? -1 : 0; });
   } finally {
     // The test runner uses Function.prototype.apply to call tearDown in the
     // global context so it has to be reset here.
@@ -1122,10 +1157,12 @@ function testBinarySearchPerformance() {
 
 
 function testBinarySelect() {
-  var insertionPoint = function(position) { return -(position + 1)};
-  var numbers = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0,
-                 0.31255, 5, 142.88888708, 334, 342, 453, 54254];
-  var objects = goog.array.map(numbers, function(n) {return {n: n};});
+  var insertionPoint = function(position) { return -(position + 1) };
+  var numbers = [
+    -897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0, 0.31255, 5,
+    142.88888708, 334, 342, 453, 54254
+  ];
+  var objects = goog.array.map(numbers, function(n) { return {n: n}; });
   function makeEvaluator(target) {
     return function(obj, i, arr) {
       assertEquals(objects, arr);
@@ -1133,28 +1170,34 @@ function testBinarySelect() {
       return target - obj.n;
     };
   }
-  assertEquals('{n:-897123.9} should be found at index 0', 0,
+  assertEquals(
+      '{n:-897123.9} should be found at index 0', 0,
       goog.array.binarySelect(objects, makeEvaluator(-897123.9)));
-  assertEquals('{n:54254} should be found at index ' + (objects.length - 1),
+  assertEquals(
+      '{n:54254} should be found at index ' + (objects.length - 1),
       objects.length - 1,
       goog.array.binarySelect(objects, makeEvaluator(54254)));
-  assertEquals('{n:-3} should be found at index 5', 5,
+  assertEquals(
+      '{n:-3} should be found at index 5', 5,
       goog.array.binarySelect(objects, makeEvaluator(-3)));
   pos = goog.array.binarySelect(objects, makeEvaluator(0));
-  assertTrue('{n:0} should be found at index 6 || 7 || 8', pos == 6 ||
-      pos == 7 || pos == 8);
+  assertTrue(
+      '{n:0} should be found at index 6 || 7 || 8',
+      pos == 6 || pos == 7 || pos == 8);
   pos = goog.array.binarySelect(objects, makeEvaluator(-900000));
   assertTrue('{n:-900000} should not be found', pos < 0);
-  assertEquals('{n:-900000} should have an insertion point of 0', 0,
+  assertEquals(
+      '{n:-900000} should have an insertion point of 0', 0,
       insertionPoint(pos));
   pos = goog.array.binarySelect(objects, makeEvaluator('54255'));
   assertTrue('{n:54255} should not be found', pos < 0);
-  assertEquals('{n:54255} should have an insertion point of ' +
-      (objects.length), objects.length, insertionPoint(pos));
+  assertEquals(
+      '{n:54255} should have an insertion point of ' + (objects.length),
+      objects.length, insertionPoint(pos));
   pos = goog.array.binarySelect(objects, makeEvaluator(1.1));
   assertTrue('{n:1.1} should not be found', pos < 0);
-  assertEquals('{n:1.1} should have an insertion point of 10', 10,
-      insertionPoint(pos));
+  assertEquals(
+      '{n:1.1} should have an insertion point of 10', 10, insertionPoint(pos));
 }
 
 
@@ -1191,28 +1234,32 @@ function testArrayEquals() {
   assertTrue('[{}] cmp [{a: 1}]', goog.array.equals([{}], [{a: 1}], cmp));
 
   // Test with array-like objects.
-  assertTrue('[5] == obj [5]',
-      goog.array.equals([5], {0: 5, length: 1}));
-  assertTrue('obj [5] == [5]',
-      goog.array.equals({0: 5, length: 1}, [5]));
-  assertTrue('["x"] == obj ["x"]',
-      goog.array.equals(['x'], {0: 'x', length: 1}));
-  assertTrue('obj ["x"] == ["x"]',
-      goog.array.equals({0: 'x', length: 1}, ['x']));
-  assertTrue('[5] == {0: 5, 1: 6, length: 1}',
+  assertTrue('[5] == obj [5]', goog.array.equals([5], {0: 5, length: 1}));
+  assertTrue('obj [5] == [5]', goog.array.equals({0: 5, length: 1}, [5]));
+  assertTrue(
+      '["x"] == obj ["x"]', goog.array.equals(['x'], {0: 'x', length: 1}));
+  assertTrue(
+      'obj ["x"] == ["x"]', goog.array.equals({0: 'x', length: 1}, ['x']));
+  assertTrue(
+      '[5] == {0: 5, 1: 6, length: 1}',
       goog.array.equals([5], {0: 5, 1: 6, length: 1}));
-  assertTrue('{0: 5, 1: 6, length: 1} == [5]',
+  assertTrue(
+      '{0: 5, 1: 6, length: 1} == [5]',
       goog.array.equals({0: 5, 1: 6, length: 1}, [5]));
-  assertFalse('[5, 6] == {0: 5, 1: 6, length: 1}',
+  assertFalse(
+      '[5, 6] == {0: 5, 1: 6, length: 1}',
       goog.array.equals([5, 6], {0: 5, 1: 6, length: 1}));
-  assertFalse('{0: 5, 1: 6, length: 1}, [5, 6]',
+  assertFalse(
+      '{0: 5, 1: 6, length: 1}, [5, 6]',
       goog.array.equals({0: 5, 1: 6, length: 1}, [5, 6]));
-  assertTrue('[5, 6] == obj [5, 6]',
+  assertTrue(
+      '[5, 6] == obj [5, 6]',
       goog.array.equals([5, 6], {0: 5, 1: 6, length: 2}));
-  assertTrue('obj [5, 6] == [5, 6]',
+  assertTrue(
+      'obj [5, 6] == [5, 6]',
       goog.array.equals({0: 5, 1: 6, length: 2}, [5, 6]));
-  assertFalse('{0: 5, 1: 6} == [5, 6]',
-      goog.array.equals({0: 5, 1: 6}, [5, 6]));
+  assertFalse(
+      '{0: 5, 1: 6} == [5, 6]', goog.array.equals({0: 5, 1: 6}, [5, 6]));
 }
 
 
@@ -1227,9 +1274,7 @@ function testArrayCompare3Basic() {
 
 
 function testArrayCompare3ComparatorFn() {
-  function cmp(a, b) {
-    return a - b;
-  };
+  function cmp(a, b) { return a - b; };
   assertEquals(0, goog.array.compare3([], [], cmp));
   assertEquals(0, goog.array.compare3([8, 4], [8, 4], cmp));
   assertEquals(-1, goog.array.compare3([4, 3], [5, 0]));
@@ -1243,14 +1288,18 @@ function testSort() {
   // Test sorting empty array
   var a = [];
   goog.array.sort(a);
-  assertEquals('Sorted empty array is still an empty array (length 0)', 0,
-      a.length);
+  assertEquals(
+      'Sorted empty array is still an empty array (length 0)', 0, a.length);
 
   // Test sorting homogenous array of String(s) of length > 1
-  var b = ['JUST', '1', 'test', 'Array', 'to', 'test', 'array', 'Sort',
-           'about', 'NOW', '!!'];
-  var bSorted = ['!!', '1', 'Array', 'JUST', 'NOW', 'Sort', 'about', 'array',
-                 'test', 'test', 'to'];
+  var b = [
+    'JUST', '1', 'test', 'Array', 'to', 'test', 'array', 'Sort', 'about', 'NOW',
+    '!!'
+  ];
+  var bSorted = [
+    '!!', '1', 'Array', 'JUST', 'NOW', 'Sort', 'about', 'array', 'test', 'test',
+    'to'
+  ];
   goog.array.sort(b);
   assertArrayEquals(bSorted, b);
 
@@ -1259,10 +1308,14 @@ function testSort() {
   assertArrayEquals(bSorted, b);
 
   // Test sorting homogenous array of integer Number(s) of length > 1
-  var c = [100, 1, 2000, -1, 0, 1000023, 12312512, -12331, 123, 54325,
-           -38104783, 93708, 908, -213, -4, 5423, 0];
-  var cSorted = [-38104783, -12331, -213, -4, -1, 0, 0, 1, 100, 123, 908,
-                 2000, 5423, 54325, 93708, 1000023, 12312512];
+  var c = [
+    100, 1, 2000, -1, 0, 1000023, 12312512, -12331, 123, 54325, -38104783,
+    93708, 908, -213, -4, 5423, 0
+  ];
+  var cSorted = [
+    -38104783, -12331, -213, -4, -1, 0, 0, 1, 100, 123, 908, 2000, 5423, 54325,
+    93708, 1000023, 12312512
+  ];
   goog.array.sort(c);
   assertArrayEquals(cSorted, c);
 
@@ -1271,10 +1324,14 @@ function testSort() {
   assertArrayEquals(cSorted, c);
 
   // Test sorting homogenous array of Number(s) of length > 1
-  var e = [-1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758, -324,
-           453, 334, -3, 5, -9, 342, -897123.9];
-  var eSorted = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0,
-                 0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+  var e = [
+    -1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758, -324, 453, 334,
+    -3, 5, -9, 342, -897123.9
+  ];
+  var eSorted = [
+    -897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0.31255, 5,
+    142.88888708, 334, 342, 453, 54254
+  ];
   goog.array.sort(e);
   assertArrayEquals(eSorted, e);
 
@@ -1284,27 +1341,27 @@ function testSort() {
 
   // Test sorting array of Number(s) of length > 1,
   // using custom comparison function which does reverse ordering
-  var f = [-1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758,
-           -324, 453, 334, -3, 5, -9, 342, -897123.9];
-  var fSorted = [54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, -3, -9,
-                 -324, -1321.3124, -321434.58758, -897123.9];
+  var f = [
+    -1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758, -324, 453, 334,
+    -3, 5, -9, 342, -897123.9
+  ];
+  var fSorted = [
+    54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, -3, -9, -324, -1321.3124,
+    -321434.58758, -897123.9
+  ];
   goog.array.sort(f, function(a, b) { return b - a; });
   assertArrayEquals(fSorted, f);
 
   // Test sorting already sorted array of Number(s) of length > 1
   // using custom comparison function which does reverse ordering
-  goog.array.sort(f, function(a, b) {return b - a; });
+  goog.array.sort(f, function(a, b) { return b - a; });
   assertArrayEquals(fSorted, f);
 
   // Test sorting array of custom Object(s) of length > 1 that have
   // an overriden toString
-  function ComparedObject(value) {
-    this.value = value;
-  };
+  function ComparedObject(value) { this.value = value; };
 
-  ComparedObject.prototype.toString = function() {
-    return this.value;
-  };
+  ComparedObject.prototype.toString = function() { return this.value; };
 
   var co1 = new ComparedObject('a');
   var co2 = new ComparedObject('b');
@@ -1366,13 +1423,13 @@ function testSort() {
 
 function testStableSort() {
   // Test array with custom comparison function
-  var arr = [{key: 3, val: 'a'}, {key: 2, val: 'b'}, {key: 3, val: 'c'},
-             {key: 4, val: 'd'}, {key: 3, val: 'e'}];
+  var arr = [
+    {key: 3, val: 'a'}, {key: 2, val: 'b'}, {key: 3, val: 'c'},
+    {key: 4, val: 'd'}, {key: 3, val: 'e'}
+  ];
   var arrClone = goog.array.clone(arr);
 
-  function comparisonFn(obj1, obj2) {
-    return obj1.key - obj2.key;
-  }
+  function comparisonFn(obj1, obj2) { return obj1.key - obj2.key; }
   goog.array.stableSort(arr, comparisonFn);
   var sortedValues = [];
   for (var i = 0; i < arr.length; i++) {
@@ -1384,10 +1441,10 @@ function testStableSort() {
   // Test array without custom comparison function
   var arr2 = [];
   for (var i = 0; i < arrClone.length; i++) {
-    arr2.push({val: arrClone[i].val, toString:
-          goog.partial(function(index) {
-            return arrClone[index].key;
-          }, i)});
+    arr2.push({
+      val: arrClone[i].val,
+      toString: goog.partial(function(index) { return arrClone[index].key; }, i)
+    });
   }
   goog.array.stableSort(arr2);
   var sortedValues2 = [];
@@ -1399,13 +1456,9 @@ function testStableSort() {
 
 function testSortByKey() {
   function Item(value) {
-    this.getValue = function() {
-      return value;
-    };
+    this.getValue = function() { return value; };
   }
-  var keyFn = function(item) {
-    return item.getValue();
-  };
+  var keyFn = function(item) { return item.getValue(); };
 
   // Test without custom key comparison function
   var arr1 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
@@ -1417,9 +1470,7 @@ function testSortByKey() {
 
   // Test with custom key comparison function
   var arr2 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
-  function comparisonFn(key1, key2) {
-    return -(key1 - key2);
-  }
+  function comparisonFn(key1, key2) { return -(key1 - key2); }
   goog.array.sortByKey(arr2, keyFn, comparisonFn);
   var wantedSortedValues2 = [5, 4, 3, 2, 1];
   for (var i = 0; i < arr2.length; i++) {
@@ -1432,9 +1483,7 @@ function testArrayBucketModulus() {
   var a = {};
   var b = [];
 
-  function modFive(num) {
-    return num % 5;
-  }
+  function modFive(num) { return num % 5; }
 
   for (var i = 0; i < 20; i++) {
     var mod = modFive(i);
@@ -1473,9 +1522,7 @@ function testArrayBucketEvenOdd() {
 function testArrayBucketUsingThisObject() {
   var a = [1, 2, 3, 4, 5];
 
-  var obj = {
-    specialValue: 2
-  };
+  var obj = {specialValue: 2};
 
   function isSpecialValue(value, index, array) {
     return value == this.specialValue ? 1 : 0;
@@ -1487,11 +1534,7 @@ function testArrayBucketUsingThisObject() {
 }
 
 function testArrayToObject() {
-  var a = [
-    {name: 'a'},
-    {name: 'b'},
-    {name: 'c'},
-    {name: 'd'}];
+  var a = [{name: 'a'}, {name: 'b'}, {name: 'c'}, {name: 'd'}];
 
   function getName(value, index, array) {
     assertEquals(value, array[index]);
@@ -1546,9 +1589,11 @@ function testArrayFlatten() {
   assertArrayEquals([1], goog.array.flatten([[1]]));
   assertArrayEquals([], goog.array.flatten());
   assertArrayEquals([], goog.array.flatten([]));
-  assertArrayEquals(goog.array.repeat(3, 180002),
+  assertArrayEquals(
+      goog.array.repeat(3, 180002),
       goog.array.flatten(3, goog.array.repeat(3, 180000), 3));
-  assertArrayEquals(goog.array.repeat(3, 180000),
+  assertArrayEquals(
+      goog.array.repeat(3, 180000),
       goog.array.flatten([goog.array.repeat(3, 180000)]));
 }
 
@@ -1568,9 +1613,7 @@ function testSortObjectsByKeyWithCompareFunction() {
   var descSortedArray =
       [sortedArray[3], sortedArray[2], sortedArray[1], sortedArray[0]];
 
-  function descCompare(a, b) {
-    return a < b ? 1 : a > b ? -1 : 0;
-  };
+  function descCompare(a, b) { return a < b ? 1 : a > b ? -1 : 0; };
 
   goog.array.sortObjectsByKey(objects, 'name', descCompare);
   validateObjectArray(descSortedArray, objects);
@@ -1579,10 +1622,7 @@ function testSortObjectsByKeyWithCompareFunction() {
 function buildSortedObjectArray(size) {
   var objectArray = [];
   for (var i = 0; i < size; i++) {
-    objectArray.push({
-      'name': 'name_' + i,
-      'id': 'id_' + (size - i)
-    });
+    objectArray.push({'name': 'name_' + i, 'id': 'id_' + (size - i)});
   }
 
   return objectArray;
@@ -1605,9 +1645,7 @@ function testIsSorted() {
   assertFalse(goog.array.isSorted([1, 2, 2], null, true));
   assertFalse(goog.array.isSorted([1, 2, 1], null, true));
 
-  function compare(a, b) {
-    return b - a;
-  }
+  function compare(a, b) { return b - a; }
 
   assertFalse(goog.array.isSorted([1, 2, 3], compare));
   assertTrue(goog.array.isSorted([3, 2, 2], compare));
@@ -1644,18 +1682,10 @@ function testMoveItemWithArray() {
   goog.array.moveItem(arr, 1, 1);  // toIndex == fromIndex
   assertArrayEquals([3, 0, 2, 1], arr);
   // Out-of-bounds indexes throw assertion errors.
-  assertThrows(function() {
-    goog.array.moveItem(arr, -1, 1);
-  });
-  assertThrows(function() {
-    goog.array.moveItem(arr, 4, 1);
-  });
-  assertThrows(function() {
-    goog.array.moveItem(arr, 1, -1);
-  });
-  assertThrows(function() {
-    goog.array.moveItem(arr, 1, 4);
-  });
+  assertThrows(function() { goog.array.moveItem(arr, -1, 1); });
+  assertThrows(function() { goog.array.moveItem(arr, 4, 1); });
+  assertThrows(function() { goog.array.moveItem(arr, 1, -1); });
+  assertThrows(function() { goog.array.moveItem(arr, 1, 4); });
   // The array should not be modified by the out-of-bound calls.
   assertArrayEquals([3, 0, 2, 1], arr);
 }
@@ -1716,18 +1746,14 @@ function testShuffle() {
   // Custom random function, which always returns a value approaching 1,
   // resulting in a "shuffle" that preserves the order of original array
   // (for array sizes that we work with here).
-  var noChangeShuffleFunction = function() {
-    return .999999;
-  };
+  var noChangeShuffleFunction = function() { return .999999; };
   goog.array.shuffle(testArray, noChangeShuffleFunction);
   assertArrayEquals(testArrayCopy, testArray);
 
   // Custom random function, which always returns 0, resulting in a
   // deterministic "shuffle" that is predictable but differs from the
   // original order of the array.
-  var testShuffleFunction = function() {
-    return 0;
-  };
+  var testShuffleFunction = function() { return 0; };
   goog.array.shuffle(testArray, testShuffleFunction);
   assertArrayEquals([2, 3, 4, 5, 1], testArray);
 
@@ -1743,9 +1769,8 @@ function testRemoveAllIf() {
   var testArray = [9, 1, 9, 2, 9, 3, 4, 9, 9, 9, 5];
   var expectedArray = [1, 2, 3, 4, 5];
 
-  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
-    return el == 9;
-  });
+  var actualOutput =
+      goog.array.removeAllIf(testArray, function(el) { return el == 9; });
 
   assertEquals(6, actualOutput);
   assertArrayEquals(expectedArray, testArray);
@@ -1755,9 +1780,8 @@ function testRemoveAllIf_noMatches() {
   var testArray = [1];
   var expectedArray = [1];
 
-  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
-    return false;
-  });
+  var actualOutput =
+      goog.array.removeAllIf(testArray, function(el) { return false; });
 
   assertEquals(0, actualOutput);
   assertArrayEquals(expectedArray, testArray);
@@ -1784,4 +1808,19 @@ function testComparators() {
   assertTrue(goog.array.inverseDefaultCompare(greater, smaller) < 0);
   assertEquals(0, goog.array.inverseDefaultCompare(greater, greater));
   assertTrue(goog.array.inverseDefaultCompare(smaller, greater) > 0);
+}
+
+function testConcatMap() {
+  var a = [0, 1, 2, 0];
+  var context = {};
+  var arraysToReturn = [['x', 'y', 'z'], [], ['a', 'b']];
+  var timesCalled = 0;
+  var result = goog.array.concatMap(a, function(val, index, a2) {
+    assertEquals(a, a2);
+    assertEquals(context, this);
+    assertEquals(timesCalled++, index);
+    assertEquals(a[index], val);
+    return arraysToReturn[val];
+  }, context);
+  assertArrayEquals(['x', 'y', 'z', 'a', 'b', 'x', 'y', 'z'], result);
 }

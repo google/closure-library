@@ -123,8 +123,7 @@ function testGetTimeZoneList() {
   assertEquals('Asia/Chongqing', timeZoneList[7]);
   assertEquals(16, timeZoneList.length);
 
-  timeZoneList =
-      goog.locale.timeZoneDetection.getTimeZoneList('AU', mockDate);
+  timeZoneList = goog.locale.timeZoneDetection.getTimeZoneList('AU', mockDate);
   assertEquals(1, timeZoneList.length);
   assertEquals('Australia/Perth', timeZoneList[0]);
 }

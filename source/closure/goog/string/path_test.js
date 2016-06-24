@@ -38,14 +38,10 @@ function testDirname() {
 }
 
 function testJoin() {
-  assertEquals('/bar/baz',
-      goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
-  assertEquals('/foo/bar/baz',
-      goog.string.path.join('/foo', 'bar', 'baz'));
-  assertEquals('/foo/bar/baz',
-      goog.string.path.join('/foo/', 'bar', 'baz'));
-  assertEquals('/foo/bar/baz/',
-      goog.string.path.join('/foo/', 'bar/', 'baz/'));
+  assertEquals('/bar/baz', goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
+  assertEquals('/foo/bar/baz', goog.string.path.join('/foo', 'bar', 'baz'));
+  assertEquals('/foo/bar/baz', goog.string.path.join('/foo/', 'bar', 'baz'));
+  assertEquals('/foo/bar/baz/', goog.string.path.join('/foo/', 'bar/', 'baz/'));
 }
 
 function testNormalizePath() {
@@ -54,22 +50,18 @@ function testNormalizePath() {
   assertEquals('/', goog.string.path.normalizePath('/'));
   assertEquals('//', goog.string.path.normalizePath('//'));
   assertEquals('/', goog.string.path.normalizePath('///'));
-  assertEquals('/foo/bar',
-               goog.string.path.normalizePath('///foo/.//bar//'));
-  assertEquals('/foo/baz',
-               goog.string.path.normalizePath('///foo/.//bar//.//..//.//baz'));
-  assertEquals('/foo/bar',
-               goog.string.path.normalizePath('///..//./foo/.//bar'));
-  assertEquals('../../cat/dog',
-               goog.string.path.normalizePath('../../cat/dog/'));
-  assertEquals('../dog',
-               goog.string.path.normalizePath('../cat/../dog/'));
-  assertEquals('/cat/dog',
-               goog.string.path.normalizePath('/../cat/dog/'));
-  assertEquals('/dog',
-               goog.string.path.normalizePath('/../cat/../dog'));
-  assertEquals('/dog',
-               goog.string.path.normalizePath('/../../../dog'));
+  assertEquals('/foo/bar', goog.string.path.normalizePath('///foo/.//bar//'));
+  assertEquals(
+      '/foo/baz',
+      goog.string.path.normalizePath('///foo/.//bar//.//..//.//baz'));
+  assertEquals(
+      '/foo/bar', goog.string.path.normalizePath('///..//./foo/.//bar'));
+  assertEquals(
+      '../../cat/dog', goog.string.path.normalizePath('../../cat/dog/'));
+  assertEquals('../dog', goog.string.path.normalizePath('../cat/../dog/'));
+  assertEquals('/cat/dog', goog.string.path.normalizePath('/../cat/dog/'));
+  assertEquals('/dog', goog.string.path.normalizePath('/../cat/../dog'));
+  assertEquals('/dog', goog.string.path.normalizePath('/../../../dog'));
 }
 
 function testSplit() {
@@ -83,8 +75,7 @@ function testSplit() {
 function testExtension() {
   assertEquals('jpg', goog.string.path.extension('././foo/bar/baz.jpg'));
   assertEquals('jpg', goog.string.path.extension('././foo bar/baz.jpg'));
-  assertEquals('jpg', goog.string.path.extension(
-      'foo/bar/baz/blah blah.jpg'));
+  assertEquals('jpg', goog.string.path.extension('foo/bar/baz/blah blah.jpg'));
   assertEquals('', goog.string.path.extension('../../foo/bar/baz baz'));
   assertEquals('', goog.string.path.extension('../../foo bar/baz baz'));
   assertEquals('', goog.string.path.extension('foo/bar/.'));

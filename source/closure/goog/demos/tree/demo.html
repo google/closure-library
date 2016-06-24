@@ -1,3 +1,7 @@
+---
+{edit_path: '', layout: empty, page: demo, section: 3-demos}
+---
+{% raw %}
 <!DOCTYPE html>
 <html>
 <!--
@@ -77,7 +81,7 @@ See the COPYING file for details.
 
 
     function createTreeFromTestData(node, data) {
-      node.setHtml(data[0]);
+      node.setText(data[0]);
       if (data.length > 1) {
         var children = data[1];
         var childNotCollapsible = 3; // Hard coded to reduce randomness.
@@ -124,3 +128,4 @@ See the COPYING file for details.
   </script>
 </body>
 </html>
+{% endraw %}

@@ -45,7 +45,8 @@ goog.require('goog.userAgent');
 /**
  * This creates a TreeControl object. A tree control provides a way to
  * view a hierarchical set of data.
- * @param {string|!goog.html.SafeHtml} html The HTML content of the node label.
+ * @param {string|!goog.html.SafeHtml} content The content of the node label.
+ *     Strings are treated as plain-text and will be HTML escaped.
  * @param {Object=} opt_config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.defaultConfig. If not specified, a default config
  *    will be used.
@@ -53,8 +54,8 @@ goog.require('goog.userAgent');
  * @constructor
  * @extends {goog.ui.tree.BaseNode}
  */
-goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
-  goog.ui.tree.BaseNode.call(this, html, opt_config, opt_domHelper);
+goog.ui.tree.TreeControl = function(content, opt_config, opt_domHelper) {
+  goog.ui.tree.BaseNode.call(this, content, opt_config, opt_domHelper);
 
   // The root is open and selected by default.
   this.setExpandedInternal(true);
@@ -84,8 +85,7 @@ goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
    * Logger
    * @private {?goog.log.Logger}
    */
-  this.logger_ =
-      goog.log.getLogger('this');
+  this.logger_ = goog.log.getLogger('this');
 
   /**
    * Whether the tree is focused.
@@ -167,8 +167,7 @@ goog.ui.tree.TreeControl.prototype.reveal = function() {
 goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
   this.focused_ = true;
   goog.dom.classlist.add(
-      goog.asserts.assert(this.getElement()),
-      goog.getCssName('focused'));
+      goog.asserts.assert(this.getElement()), goog.getCssName('focused'));
 
   if (this.selectedItem_) {
     this.selectedItem_.select();
@@ -184,8 +183,7 @@ goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
 goog.ui.tree.TreeControl.prototype.handleBlur_ = function(e) {
   this.focused_ = false;
   goog.dom.classlist.remove(
-      goog.asserts.assert(this.getElement()),
-      goog.getCssName('focused'));
+      goog.asserts.assert(this.getElement()), goog.getCssName('focused'));
 };
 
 
@@ -353,7 +351,7 @@ goog.ui.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
     if (childrenEl) {
       var hideLines = !showLines || tree == node.getParent() && !showRootLines;
       var childClass = hideLines ? node.getConfig().cssChildrenNoLines :
-          node.getConfig().cssChildren;
+                                   node.getConfig().cssChildren;
       childrenEl.className = childClass;
 
       var expandIconEl = node.getExpandIconElement();
@@ -484,13 +482,13 @@ goog.ui.tree.TreeControl.prototype.attachEvents_ = function() {
   var kh = this.keyHandler_ = new goog.events.KeyHandler(el);
   var fh = this.focusHandler_ = new goog.events.FocusHandler(el);
 
-  this.getHandler().
-      listen(fh, goog.events.FocusHandler.EventType.FOCUSOUT, this.handleBlur_).
-      listen(fh, goog.events.FocusHandler.EventType.FOCUSIN, this.handleFocus_).
-      listen(kh, goog.events.KeyHandler.EventType.KEY, this.handleKeyEvent).
-      listen(el, goog.events.EventType.MOUSEDOWN, this.handleMouseEvent_).
-      listen(el, goog.events.EventType.CLICK, this.handleMouseEvent_).
-      listen(el, goog.events.EventType.DBLCLICK, this.handleMouseEvent_);
+  this.getHandler()
+      .listen(fh, goog.events.FocusHandler.EventType.FOCUSOUT, this.handleBlur_)
+      .listen(fh, goog.events.FocusHandler.EventType.FOCUSIN, this.handleFocus_)
+      .listen(kh, goog.events.KeyHandler.EventType.KEY, this.handleKeyEvent)
+      .listen(el, goog.events.EventType.MOUSEDOWN, this.handleMouseEvent_)
+      .listen(el, goog.events.EventType.CLICK, this.handleMouseEvent_)
+      .listen(el, goog.events.EventType.DBLCLICK, this.handleMouseEvent_);
 };
 
 
@@ -540,8 +538,8 @@ goog.ui.tree.TreeControl.prototype.handleKeyEvent = function(e) {
 
   // Handle typeahead and navigation keystrokes.
   handled = this.typeAhead_.handleNavigation(e) ||
-            (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) ||
-            this.typeAhead_.handleTypeAheadChar(e);
+      (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) ||
+      this.typeAhead_.handleTypeAheadChar(e);
 
   if (handled) {
     e.preventDefault();
@@ -579,11 +577,13 @@ goog.ui.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
 
 /**
  * Creates a new tree node using the same config as the root.
- * @param {string=} opt_html The HTML content of the node label.
+ * @param {string=} opt_content The content of the node label. Strings are
+ *     treated as plain-text and will be HTML escaped. To set SafeHtml content,
+ *     omit opt_content and call setSafeHtml on the resulting node.
  * @return {!goog.ui.tree.TreeNode} The new item.
  */
-goog.ui.tree.TreeControl.prototype.createNode = function(opt_html) {
-  return new goog.ui.tree.TreeNode(opt_html || goog.html.SafeHtml.EMPTY,
+goog.ui.tree.TreeControl.prototype.createNode = function(opt_content) {
+  return new goog.ui.tree.TreeNode(opt_content || goog.html.SafeHtml.EMPTY,
       this.getConfig(), this.getDomHelper());
 };
 

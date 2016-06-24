@@ -23,93 +23,99 @@ goog.require('goog.labs.userAgent.browser');
 goog.require('goog.string');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
+
 function testAssertTrue() {
   assertTrue(true);
   assertTrue('Good assertion', true);
-  assertThrowsJsUnitException(
-      function() { assertTrue(false); },
-      'Call to assertTrue(boolean) with false');
-  assertThrowsJsUnitException(
-      function() { assertTrue('Should be true', false); },
-      'Should be true\nCall to assertTrue(boolean) with false');
-  assertThrowsJsUnitException(
-      function() { assertTrue(null); },
-      'Bad argument to assertTrue(boolean)');
-  assertThrowsJsUnitException(
-      function() { assertTrue(undefined); },
-      'Bad argument to assertTrue(boolean)');
+  assertThrowsJsUnitException(function() {
+    assertTrue(false);
+  }, 'Call to assertTrue(boolean) with false');
+  assertThrowsJsUnitException(function() {
+    assertTrue('Should be true', false);
+  }, 'Should be true\nCall to assertTrue(boolean) with false');
+  assertThrowsJsUnitException(function() {
+    assertTrue(null);
+  }, 'Bad argument to assertTrue(boolean)');
+  assertThrowsJsUnitException(function() {
+    assertTrue(undefined);
+  }, 'Bad argument to assertTrue(boolean)');
 }
 
 function testAssertFalse() {
   assertFalse(false);
   assertFalse('Good assertion', false);
-  assertThrowsJsUnitException(
-      function() { assertFalse(true); },
-      'Call to assertFalse(boolean) with true');
-  assertThrowsJsUnitException(
-      function() { assertFalse('Should be false', true); },
-      'Should be false\nCall to assertFalse(boolean) with true');
-  assertThrowsJsUnitException(
-      function() { assertFalse(null); },
-      'Bad argument to assertFalse(boolean)');
-  assertThrowsJsUnitException(
-      function() { assertFalse(undefined); },
-      'Bad argument to assertFalse(boolean)');
+  assertThrowsJsUnitException(function() {
+    assertFalse(true);
+  }, 'Call to assertFalse(boolean) with true');
+  assertThrowsJsUnitException(function() {
+    assertFalse('Should be false', true);
+  }, 'Should be false\nCall to assertFalse(boolean) with true');
+  assertThrowsJsUnitException(function() {
+    assertFalse(null);
+  }, 'Bad argument to assertFalse(boolean)');
+  assertThrowsJsUnitException(function() {
+    assertFalse(undefined);
+  }, 'Bad argument to assertFalse(boolean)');
 }
 
 function testAssertEqualsWithString() {
   assertEquals('a', 'a');
   assertEquals('Good assertion', 'a', 'a');
-  assertThrowsJsUnitException(
-      function() { assertEquals('a', 'b'); },
-      'Expected <a> (String) but was <b> (String)');
-  assertThrowsJsUnitException(
-      function() { assertEquals('Bad assertion', 'a', 'b'); },
-      'Bad assertion\nExpected <a> (String) but was <b> (String)');
+  assertThrowsJsUnitException(function() {
+    assertEquals('a', 'b');
+  }, 'Expected <a> (String) but was <b> (String)');
+  assertThrowsJsUnitException(function() {
+    assertEquals('Bad assertion', 'a', 'b');
+  }, 'Bad assertion\nExpected <a> (String) but was <b> (String)');
 }
 
 function testAssertEqualsWithInteger() {
   assertEquals(1, 1);
   assertEquals('Good assertion', 1, 1);
-  assertThrowsJsUnitException(
-      function() { assertEquals(1, 2); },
-      'Expected <1> (Number) but was <2> (Number)');
-  assertThrowsJsUnitException(
-      function() { assertEquals('Bad assertion', 1, 2); },
-      'Bad assertion\nExpected <1> (Number) but was <2> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertEquals(1, 2);
+  }, 'Expected <1> (Number) but was <2> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertEquals('Bad assertion', 1, 2);
+  }, 'Bad assertion\nExpected <1> (Number) but was <2> (Number)');
 }
 
 function testAssertNotEquals() {
   assertNotEquals('a', 'b');
   assertNotEquals('a', 'a', 'b');
-  assertThrowsJsUnitException(
-      function() { assertNotEquals('a', 'a'); },
-      'Expected not to be <a> (String)');
-  assertThrowsJsUnitException(
-      function() { assertNotEquals('a', 'a', 'a'); },
-      'a\nExpected not to be <a> (String)');
+  assertThrowsJsUnitException(function() {
+    assertNotEquals('a', 'a');
+  }, 'Expected not to be <a> (String)');
+  assertThrowsJsUnitException(function() {
+    assertNotEquals('a', 'a', 'a');
+  }, 'a\nExpected not to be <a> (String)');
 }
 
 function testAssertNull() {
   assertNull(null);
   assertNull('Good assertion', null);
-  assertThrowsJsUnitException(
-      function() { assertNull(true); },
-      'Expected <null> but was <true> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertNull('Should be null', false); },
-      'Should be null\nExpected <null> but was <false> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertNull(undefined); },
-      'Expected <null> but was <undefined>');
-  assertThrowsJsUnitException(
-      function() { assertNull(1); },
-      'Expected <null> but was <1> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertNull(true);
+  }, 'Expected <null> but was <true> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNull('Should be null', false);
+  }, 'Should be null\nExpected <null> but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNull(undefined);
+  }, 'Expected <null> but was <undefined>');
+  assertThrowsJsUnitException(function() {
+    assertNull(1);
+  }, 'Expected <null> but was <1> (Number)');
 }
 
 function testAssertNotNull() {
@@ -119,29 +125,29 @@ function testAssertNotNull() {
   assertNotNull(undefined);
   assertNotNull(1);
   assertNotNull('a');
-  assertThrowsJsUnitException(
-      function() { assertNotNull(null); },
-      'Expected not to be <null>');
-  assertThrowsJsUnitException(
-      function() { assertNotNull('Should not be null', null); },
-      'Should not be null\nExpected not to be <null>');
+  assertThrowsJsUnitException(function() {
+    assertNotNull(null);
+  }, 'Expected not to be <null>');
+  assertThrowsJsUnitException(function() {
+    assertNotNull('Should not be null', null);
+  }, 'Should not be null\nExpected not to be <null>');
 }
 
 function testAssertUndefined() {
   assertUndefined(undefined);
   assertUndefined('Good assertion', undefined);
-  assertThrowsJsUnitException(
-      function() { assertUndefined(true); },
-      'Expected <undefined> but was <true> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertUndefined('Should be undefined', false); },
-      'Should be undefined\nExpected <undefined> but was <false> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertUndefined(null); },
-      'Expected <undefined> but was <null>');
-  assertThrowsJsUnitException(
-      function() { assertUndefined(1); },
-      'Expected <undefined> but was <1> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertUndefined(true);
+  }, 'Expected <undefined> but was <true> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertUndefined('Should be undefined', false);
+  }, 'Should be undefined\nExpected <undefined> but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertUndefined(null);
+  }, 'Expected <undefined> but was <null>');
+  assertThrowsJsUnitException(function() {
+    assertUndefined(1);
+  }, 'Expected <undefined> but was <1> (Number)');
 }
 
 function testAssertNotUndefined() {
@@ -151,12 +157,12 @@ function testAssertNotUndefined() {
   assertNotUndefined(null);
   assertNotUndefined(1);
   assertNotUndefined('a');
-  assertThrowsJsUnitException(
-      function() { assertNotUndefined(undefined); },
-      'Expected not to be <undefined>');
-  assertThrowsJsUnitException(
-      function() { assertNotUndefined('Should not be undefined', undefined); },
-      'Should not be undefined\nExpected not to be <undefined>');
+  assertThrowsJsUnitException(function() {
+    assertNotUndefined(undefined);
+  }, 'Expected not to be <undefined>');
+  assertThrowsJsUnitException(function() {
+    assertNotUndefined('Should not be undefined', undefined);
+  }, 'Should not be undefined\nExpected not to be <undefined>');
 }
 
 function testAssertNotNullNorUndefined() {
@@ -190,59 +196,55 @@ function testAssertNonEmptyString() {
   assertNonEmptyString('undefined');
   assertNonEmptyString('\n');
   assertNonEmptyString(' ');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(''); },
-      'Expected non-empty string but was <> (String)');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString('');
+  }, 'Expected non-empty string but was <> (String)');
   assertThrowsJsUnitException(
       function() { assertNonEmptyString('Should be non-empty string', ''); },
       'Should be non-empty string\n' +
-      'Expected non-empty string but was <> (String)');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(true); },
-      'Expected non-empty string but was <true> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(false); },
-      'Expected non-empty string but was <false> (Boolean)');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(1); },
-      'Expected non-empty string but was <1> (Number)');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(null); },
-      'Expected non-empty string but was <null>');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(undefined); },
-      'Expected non-empty string but was <undefined>');
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(['hello']); },
-      'Expected non-empty string but was <hello> (Array)');
+          'Expected non-empty string but was <> (String)');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(true);
+  }, 'Expected non-empty string but was <true> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(false);
+  }, 'Expected non-empty string but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(1);
+  }, 'Expected non-empty string but was <1> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(null);
+  }, 'Expected non-empty string but was <null>');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(undefined);
+  }, 'Expected non-empty string but was <undefined>');
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(['hello']);
+  }, 'Expected non-empty string but was <hello> (Array)');
   // Different browsers return different values/types in the failure message
   // so don't bother checking if the message is exactly as expected.
-  assertThrowsJsUnitException(
-      function() { assertNonEmptyString(goog.dom.createTextNode('hello')); });
+  assertThrowsJsUnitException(function() {
+    assertNonEmptyString(goog.dom.createTextNode('hello'));
+  });
 }
 
 function testAssertNaN() {
   assertNaN(NaN);
   assertNaN('Good assertion', NaN);
-  assertThrowsJsUnitException(
-      function() { assertNaN(1); }, 'Expected NaN');
-  assertThrowsJsUnitException(
-      function() { assertNaN('Should be NaN', 1); },
-      'Should be NaN\nExpected NaN');
-  assertThrowsJsUnitException(
-      function() { assertNaN(true); }, 'Expected NaN');
-  assertThrowsJsUnitException(
-      function() { assertNaN(false); }, 'Expected NaN');
-  assertThrowsJsUnitException(
-      function() { assertNaN(null); }, 'Expected NaN');
-  assertThrowsJsUnitException(
-      function() { assertNaN(''); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() { assertNaN(1); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() {
+    assertNaN('Should be NaN', 1);
+  }, 'Should be NaN\nExpected NaN');
+  assertThrowsJsUnitException(function() { assertNaN(true); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() { assertNaN(false); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() { assertNaN(null); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() { assertNaN(''); }, 'Expected NaN');
 
   // TODO(user): These assertions fail. We should decide on the
   // semantics of assertNaN
-  //assertThrowsJsUnitException(function() { assertNaN(undefined); },
+  // assertThrowsJsUnitException(function() { assertNaN(undefined); },
   //    'Expected NaN');
-  //assertThrowsJsUnitException(function() { assertNaN('a'); },
+  // assertThrowsJsUnitException(function() { assertNaN('a'); },
   //    'Expected NaN');
 }
 
@@ -256,20 +258,20 @@ function testAssertNotNaN() {
 
   // TODO(user): These assertions fail. We should decide on the
   // semantics of assertNotNaN
-  //assertNotNaN(undefined);
-  //assertNotNaN('a');
+  // assertNotNaN(undefined);
+  // assertNotNaN('a');
 
-  assertThrowsJsUnitException(
-      function() { assertNotNaN(Number.NaN); },
-      'Expected not NaN');
-  assertThrowsJsUnitException(
-      function() { assertNotNaN('Should not be NaN', Number.NaN); },
-      'Should not be NaN\nExpected not NaN');
+  assertThrowsJsUnitException(function() {
+    assertNotNaN(Number.NaN);
+  }, 'Expected not NaN');
+  assertThrowsJsUnitException(function() {
+    assertNotNaN('Should not be NaN', Number.NaN);
+  }, 'Should not be NaN\nExpected not NaN');
 }
 
 function testAssertObjectEquals() {
   var obj1 = [{'a': 'hello', 'b': 'world'}];
-  var obj2 = [{'a': 'hello', 'c': 'dear', 'b' : 'world'}];
+  var obj2 = [{'a': 'hello', 'c': 'dear', 'b': 'world'}];
 
   // Check with obj1 and obj2 as first and second arguments respectively.
   assertThrows('Objects should not be equal', function() {
@@ -303,7 +305,7 @@ function testAssertObjectEquals() {
 
 function testAssertObjectNotEquals() {
   var obj1 = [{'a': 'hello', 'b': 'world'}];
-  var obj2 = [{'a': 'hello', 'c': 'dear', 'b' : 'world'}];
+  var obj2 = [{'a': 'hello', 'c': 'dear', 'b': 'world'}];
 
   // Check with obj1 and obj2 as first and second arguments respectively.
   assertObjectNotEquals(obj1, obj2);
@@ -351,18 +353,14 @@ function testAssertObjectEquals3() {
   // as equals. We can't do a negative test because on browsers that
   // implement __iterator__ we can't check the values of the iterated
   // properties.
-  var obj1 = [{'a': 'hi',
-               'b': new goog.structs.Map('hola', 'amigo',
-                                         'como', 'estas?')},
-              14,
-              'yes',
-              true];
-  var obj2 = [{'a': 'hi',
-               'b': new goog.structs.Map('hola', 'amigo',
-                                         'como', 'estas?')},
-              14,
-              'yes',
-              true];
+  var obj1 = [
+    {'a': 'hi', 'b': new goog.structs.Map('hola', 'amigo', 'como', 'estas?')},
+    14, 'yes', true
+  ];
+  var obj2 = [
+    {'a': 'hi', 'b': new goog.structs.Map('hola', 'amigo', 'como', 'estas?')},
+    14, 'yes', true
+  ];
   assertObjectEquals('Objects should be equal', obj1, obj2);
 
   var obj3 = {'a': [1, 2]};
@@ -400,12 +398,8 @@ function testAssertObjectEqualsSet() {
 function testAssertObjectEqualsIterNoEquals() {
   // an object with an iterator but no equals() and no map_ cannot
   // be compared
-  function Thing() {
-    this.what = [];
-  }
-  Thing.prototype.add = function(n, v) {
-    this.what.push(n + '@' + v);
-  };
+  function Thing() { this.what = []; }
+  Thing.prototype.add = function(n, v) { this.what.push(n + '@' + v); };
   Thing.prototype.get = function(n) {
     var m = new RegExp('^' + n + '@(.*)$', '');
     for (var i = 0; i < this.what.length; ++i) {
@@ -430,8 +424,10 @@ function testAssertObjectEqualsIterNoEquals() {
     return iter;
   };
 
-  var thing1 = new Thing(); thing1.name = 'thing1';
-  var thing2 = new Thing(); thing2.name = 'thing2';
+  var thing1 = new Thing();
+  thing1.name = 'thing1';
+  var thing2 = new Thing();
+  thing2.name = 'thing2';
   thing1.add('red', 'fish');
   thing1.add('blue', 'fish');
 
@@ -451,7 +447,7 @@ function testAssertObjectEqualsWithDates() {
 }
 
 function testAssertObjectEqualsSparseArrays() {
-  var arr1 = [, 2,, 4];
+  var arr1 = [, 2, , 4];
   var arr2 = [1, 2, 3, 4, 5];
 
   assertThrows('Sparse arrays should not be equal', function() {
@@ -467,7 +463,7 @@ function testAssertObjectEqualsSparseArrays2() {
   // On IE6-8, the expression "1 in [4,undefined]" evaluates to false,
   // but true on other browsers. FML. This test verifies a regression
   // where IE reported that arr4 was not equal to arr1 or arr2.
-  var arr1 = [1,, 3];
+  var arr1 = [1, , 3];
   var arr2 = [1, undefined, 3];
   var arr3 = goog.array.clone(arr1);
   var arr4 = [];
@@ -500,109 +496,82 @@ function testAssertSameElementsOnArray() {
   assertSameElements([1, 2], [2, 1]);
   assertSameElements('Good assertion', [1, 2], [2, 1]);
   assertSameElements('Good assertion with duplicates', [1, 1, 2], [2, 1, 1]);
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements([1, 2], [1]);
-      },
-      'Expected 2 elements: [1,2], got 1 elements: [1]');
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements('Should match', [1, 2], [1]);
-      },
-      'Should match\nExpected 2 elements: [1,2], got 1 elements: [1]');
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements([1, 2], [1, 3]);
-      },
-      'Expected [1,2], got [1,3]');
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements('Should match', [1, 2], [1, 3]);
-      },
-      'Should match\nExpected [1,2], got [1,3]');
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements([1, 1, 2], [2, 2, 1]);
-      },
-      'Expected [1,1,2], got [2,2,1]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements([1, 2], [1]);
+  }, 'Expected 2 elements: [1,2], got 1 elements: [1]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements('Should match', [1, 2], [1]);
+  }, 'Should match\nExpected 2 elements: [1,2], got 1 elements: [1]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements([1, 2], [1, 3]);
+  }, 'Expected [1,2], got [1,3]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements('Should match', [1, 2], [1, 3]);
+  }, 'Should match\nExpected [1,2], got [1,3]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements([1, 1, 2], [2, 2, 1]);
+  }, 'Expected [1,1,2], got [2,2,1]');
 }
 
 function testAssertSameElementsOnArrayLike() {
   assertSameElements({0: 0, 1: 1, length: 2}, {length: 2, 1: 1, 0: 0});
-  assertThrowsJsUnitException(
-      function() {
-        assertSameElements({0: 0, 1: 1, length: 2}, {0: 0, length: 1});
-      },
-      'Expected 2 elements: [0,1], got 1 elements: [0]');
+  assertThrowsJsUnitException(function() {
+    assertSameElements({0: 0, 1: 1, length: 2}, {0: 0, length: 1});
+  }, 'Expected 2 elements: [0,1], got 1 elements: [0]');
 }
 
 function testAssertSameElementsWithBadArguments() {
   assertThrowsJsUnitException(
-      function() {
-        assertSameElements([], new goog.structs.Set());
-      },
+      function() { assertSameElements([], new goog.structs.Set()); },
       'Bad arguments to assertSameElements(opt_message, expected: ' +
-      'ArrayLike, actual: ArrayLike)\n' +
-      'Call to assertTrue(boolean) with false');
+          'ArrayLike, actual: ArrayLike)\n' +
+          'Call to assertTrue(boolean) with false');
 }
 
-var implicitlyTrue = [
-  true,
-  1,
-  -1,
-  ' ',
-  'string',
-  Infinity,
-  new Object()
-];
+var implicitlyTrue = [true, 1, -1, ' ', 'string', Infinity, new Object()];
 
-var implicitlyFalse = [
-  false,
-  0,
-  '',
-  null,
-  undefined,
-  NaN
-];
+var implicitlyFalse = [false, 0, '', null, undefined, NaN];
 
 function testAssertEvaluatesToTrue() {
   assertEvaluatesToTrue(true);
   assertEvaluatesToTrue('', true);
   assertEvaluatesToTrue('Good assertion', true);
-  assertThrowsJsUnitException(
-      function() { assertEvaluatesToTrue(false); },
-      'Expected to evaluate to true');
-  assertThrowsJsUnitException(
-      function() {assertEvaluatesToTrue('Should be true', false); },
-      'Should be true\nExpected to evaluate to true');
+  assertThrowsJsUnitException(function() {
+    assertEvaluatesToTrue(false);
+  }, 'Expected to evaluate to true');
+  assertThrowsJsUnitException(function() {
+    assertEvaluatesToTrue('Should be true', false);
+  }, 'Should be true\nExpected to evaluate to true');
   for (var i = 0; i < implicitlyTrue.length; i++) {
-    assertEvaluatesToTrue(String('Test ' + implicitlyTrue[i] +
-        ' [' + i + ']'), implicitlyTrue[i]);
+    assertEvaluatesToTrue(
+        String('Test ' + implicitlyTrue[i] + ' [' + i + ']'),
+        implicitlyTrue[i]);
   }
   for (var i = 0; i < implicitlyFalse.length; i++) {
-    assertThrowsJsUnitException(
-        function() { assertEvaluatesToTrue(implicitlyFalse[i]); },
-        'Expected to evaluate to true');
+    assertThrowsJsUnitException(function() {
+      assertEvaluatesToTrue(implicitlyFalse[i]);
+    }, 'Expected to evaluate to true');
   }
 }
 
 function testAssertEvaluatesToFalse() {
   assertEvaluatesToFalse(false);
   assertEvaluatesToFalse('Good assertion', false);
-  assertThrowsJsUnitException(
-      function() { assertEvaluatesToFalse(true); },
-      'Expected to evaluate to false');
-  assertThrowsJsUnitException(
-      function() { assertEvaluatesToFalse('Should be false', true); },
-      'Should be false\nExpected to evaluate to false');
+  assertThrowsJsUnitException(function() {
+    assertEvaluatesToFalse(true);
+  }, 'Expected to evaluate to false');
+  assertThrowsJsUnitException(function() {
+    assertEvaluatesToFalse('Should be false', true);
+  }, 'Should be false\nExpected to evaluate to false');
   for (var i = 0; i < implicitlyFalse.length; i++) {
-    assertEvaluatesToFalse(String('Test ' + implicitlyFalse[i] +
-        ' [' + i + ']'), implicitlyFalse[i]);
+    assertEvaluatesToFalse(
+        String('Test ' + implicitlyFalse[i] + ' [' + i + ']'),
+        implicitlyFalse[i]);
   }
   for (var i = 0; i < implicitlyTrue.length; i++) {
-    assertThrowsJsUnitException(
-        function() { assertEvaluatesToFalse(implicitlyTrue[i]); },
-        'Expected to evaluate to false');
+    assertThrowsJsUnitException(function() {
+      assertEvaluatesToFalse(implicitlyTrue[i]);
+    }, 'Expected to evaluate to false');
   }
 }
 
@@ -615,32 +584,32 @@ function testAssertHashEquals() {
   assertHashEquals('Good assertion', {a: 1, b: 2}, {b: 2, a: 1});
   assertHashEquals({a: undefined}, {a: undefined});
   // Missing key.
-  assertThrowsJsUnitException(
-      function() { assertHashEquals({a: 1, b: 2}, {a: 1}); },
-      'Expected hash had key b that was not found');
-  assertThrowsJsUnitException(
-      function() { assertHashEquals('Should match', {a: 1, b: 2}, {a: 1}); },
-      'Should match\nExpected hash had key b that was not found');
-  assertThrowsJsUnitException(
-      function() { assertHashEquals({a: undefined}, {}); },
-      'Expected hash had key a that was not found');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals({a: 1, b: 2}, {a: 1});
+  }, 'Expected hash had key b that was not found');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals('Should match', {a: 1, b: 2}, {a: 1});
+  }, 'Should match\nExpected hash had key b that was not found');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals({a: undefined}, {});
+  }, 'Expected hash had key a that was not found');
   // Not equal key.
-  assertThrowsJsUnitException(
-      function() { assertHashEquals({a: 1}, {a: 5}); },
-      'Value for key a mismatch - expected = 1, actual = 5');
-  assertThrowsJsUnitException(
-      function() { assertHashEquals('Should match', {a: 1}, {a: 5}); },
-      'Should match\nValue for key a mismatch - expected = 1, actual = 5');
-  assertThrowsJsUnitException(
-      function() { assertHashEquals({a: undefined}, {a: 1})},
-      'Value for key a mismatch - expected = undefined, actual = 1');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals({a: 1}, {a: 5});
+  }, 'Value for key a mismatch - expected = 1, actual = 5');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals('Should match', {a: 1}, {a: 5});
+  }, 'Should match\nValue for key a mismatch - expected = 1, actual = 5');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals({a: undefined}, {a: 1})
+  }, 'Value for key a mismatch - expected = undefined, actual = 1');
   // Extra key.
-  assertThrowsJsUnitException(
-      function() { assertHashEquals({a: 1}, {a: 1, b: 1}); },
-      'Actual hash had key b that was not expected');
-  assertThrowsJsUnitException(
-      function() { assertHashEquals('Should match', {a: 1}, {a: 1, b: 1}); },
-      'Should match\nActual hash had key b that was not expected');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals({a: 1}, {a: 1, b: 1});
+  }, 'Actual hash had key b that was not expected');
+  assertThrowsJsUnitException(function() {
+    assertHashEquals('Should match', {a: 1}, {a: 1, b: 1});
+  }, 'Should match\nActual hash had key b that was not expected');
 }
 
 function testAssertRoughlyEquals() {
@@ -648,48 +617,48 @@ function testAssertRoughlyEquals() {
   assertRoughlyEquals('Good assertion', 1, 1, 0);
   assertRoughlyEquals(1, 1.1, 0.11);
   assertRoughlyEquals(1.1, 1, 0.11);
-  assertThrowsJsUnitException(
-      function() { assertRoughlyEquals(1, 1.1, 0.05); },
-      'Expected 1, but got 1.1 which was more than 0.05 away');
-  assertThrowsJsUnitException(
-      function() { assertRoughlyEquals('Close enough', 1, 1.1, 0.05); },
-      'Close enough\nExpected 1, but got 1.1 which was more than 0.05 away');
+  assertThrowsJsUnitException(function() {
+    assertRoughlyEquals(1, 1.1, 0.05);
+  }, 'Expected 1, but got 1.1 which was more than 0.05 away');
+  assertThrowsJsUnitException(function() {
+    assertRoughlyEquals('Close enough', 1, 1.1, 0.05);
+  }, 'Close enough\nExpected 1, but got 1.1 which was more than 0.05 away');
 }
 
 function testAssertContains() {
   var a = [1, 2, 3];
   assertContains(1, [1, 2, 3]);
   assertContains('Should contain', 1, [1, 2, 3]);
-  assertThrowsJsUnitException(
-      function() { assertContains(4, [1, 2, 3]); },
-      'Expected \'1,2,3\' to contain \'4\'');
-  assertThrowsJsUnitException(
-      function() { assertContains('Should contain', 4, [1, 2, 3]); },
-      'Should contain\nExpected \'1,2,3\' to contain \'4\'');
+  assertThrowsJsUnitException(function() {
+    assertContains(4, [1, 2, 3]);
+  }, 'Expected \'1,2,3\' to contain \'4\'');
+  assertThrowsJsUnitException(function() {
+    assertContains('Should contain', 4, [1, 2, 3]);
+  }, 'Should contain\nExpected \'1,2,3\' to contain \'4\'');
   // assertContains uses ===.
   var o = new Object();
   assertContains(o, [o, 2, 3]);
-  assertThrowsJsUnitException(
-      function() { assertContains(o, [1, 2, 3]); },
-      'Expected \'1,2,3\' to contain \'[object Object]\'');
+  assertThrowsJsUnitException(function() {
+    assertContains(o, [1, 2, 3]);
+  }, 'Expected \'1,2,3\' to contain \'[object Object]\'');
 }
 
 function testAssertNotContains() {
   var a = [1, 2, 3];
   assertNotContains(4, [1, 2, 3]);
   assertNotContains('Should not contain', 4, [1, 2, 3]);
-  assertThrowsJsUnitException(
-      function() { assertNotContains(1, [1, 2, 3]); },
-      'Expected \'1,2,3\' not to contain \'1\'');
-  assertThrowsJsUnitException(
-      function() { assertNotContains('Should not contain', 1, [1, 2, 3]); },
-      "Should not contain\nExpected '1,2,3' not to contain '1'");
+  assertThrowsJsUnitException(function() {
+    assertNotContains(1, [1, 2, 3]);
+  }, 'Expected \'1,2,3\' not to contain \'1\'');
+  assertThrowsJsUnitException(function() {
+    assertNotContains('Should not contain', 1, [1, 2, 3]);
+  }, "Should not contain\nExpected '1,2,3' not to contain '1'");
   // assertNotContains uses ===.
   var o = new Object();
   assertNotContains({}, [o, 2, 3]);
-  assertThrowsJsUnitException(
-      function() { assertNotContains(o, [o, 2, 3]); },
-      'Expected \'[object Object],2,3\' not to contain \'[object Object]\'');
+  assertThrowsJsUnitException(function() {
+    assertNotContains(o, [o, 2, 3]);
+  }, 'Expected \'[object Object],2,3\' not to contain \'[object Object]\'');
 }
 
 function testAssertRegExp() {
@@ -700,12 +669,12 @@ function testAssertRegExp() {
   assertRegExp('Expected subject to be about turtles', 'turtles$', a);
 
   var b = 'Hello';
-  assertThrowsJsUnitException(
-      function() { assertRegExp(/turtles$/, b); },
-      'Expected \'Hello\' to match RegExp /turtles$/');
-  assertThrowsJsUnitException(
-      function() { assertRegExp('turtles$', b); },
-      'Expected \'Hello\' to match RegExp /turtles$/');
+  assertThrowsJsUnitException(function() {
+    assertRegExp(/turtles$/, b);
+  }, 'Expected \'Hello\' to match RegExp /turtles$/');
+  assertThrowsJsUnitException(function() {
+    assertRegExp('turtles$', b);
+  }, 'Expected \'Hello\' to match RegExp /turtles$/');
 }
 
 function testAssertThrows() {
@@ -719,8 +688,7 @@ function testAssertThrows() {
 
   try {
     assertThrows(
-        'assertThrows should not pass with undefined param',
-        undefined);
+        'assertThrows should not pass with undefined param', undefined);
     failed = true;
   } catch (e) {
   }
@@ -748,35 +716,60 @@ function testAssertThrows() {
   assertFalse('Fail should not get set to true', failed);
 
   try {
-    var error = assertThrows('valid function throws Error', function() {
-      throw new Error('test');
-    });
+    var error = assertThrows(
+        'valid function throws Error', function() { throw new Error('test'); });
   } catch (e) {
     fail('assertThrows incorrectly doesn\'t detect a thrown exception');
   }
   assertEquals('error message', 'test', error.message);
 
   try {
-    var stringError = assertThrows('valid function throws string error',
-        function() {
-          throw 'string error test';
-        });
+    var stringError = assertThrows(
+        'valid function throws string error',
+        function() { throw 'string error test'; });
   } catch (e) {
     fail('assertThrows doesn\'t detect a thrown string exception');
   }
   assertEquals('string error', 'string error test', stringError);
 }
 
-function testAssertThrowsJsUnitException() {
-  var error = assertThrowsJsUnitException(function() {
-    assertTrue(false);
+function testAssertThrowsThrowsIfJsUnitException() {
+  // TODO(b/25875505): We currently need this true for this part of the test.
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = true;
+
+  // Asserts that assertThrows will throw a JsUnitException if the method
+  // passed to assertThrows throws a JsUnitException of its own. assertThrows
+  // should not be used for catching JsUnitExceptions with
+  // "failOnUnreportedAsserts" enabled.
+  var e = assertThrowsJsUnitException(function() {
+    assertThrows(function() {
+      // We need to invalidate this exception so it's not flagged as a
+      // legitimate failure by the test framework. The only way to get at the
+      // exception thrown by assertTrue is to catch it so we can invalidate it.
+      // We then need to rethrow it so the surrounding assertThrows behaves as
+      // expected.
+      try {
+        assertTrue(false);
+      } catch (ex) {
+        goog.testing.TestCase.getActiveTestCase().invalidateAssertionException(
+            ex);
+        throw ex;
+      }
+    });
   });
+  assertContains(
+      'Function passed to assertThrows caught a JsUnitException', e.message);
+
+  // TODO(b/25875505): Set back to false so the rest of the tests pass.
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
+
+function testAssertThrowsJsUnitException() {
+  var error = assertThrowsJsUnitException(function() { assertTrue(false); });
   assertEquals('Call to assertTrue(boolean) with false', error.message);
 
   error = assertThrowsJsUnitException(function() {
-    assertThrowsJsUnitException(function() {
-      throw new Error('fail');
-    });
+    assertThrowsJsUnitException(function() { throw new Error('fail'); });
   });
   assertEquals('Call to fail()\nExpected a JsUnitException', error.message);
 
@@ -817,8 +810,8 @@ function testAssertNotThrows() {
   assertFalse('Fail should not get set to true', failed);
 
   try {
-    assertNotThrows('assertNotThrows should not pass with string param',
-        'string');
+    assertNotThrows(
+        'assertNotThrows should not pass with string param', 'string');
     failed = true;
   } catch (e) {
   }
@@ -835,23 +828,21 @@ function testAssertNotThrows() {
 
   var result;
   try {
-    result = assertNotThrows('valid function',
-        function() {
-          return 'some value';
-        });
+    result =
+        assertNotThrows('valid function', function() { return 'some value'; });
   } catch (e) {
     // Shouldn't be here: throw exception.
     fail('assertNotThrows returned failure on a valid function');
   }
-  assertEquals('assertNotThrows should return the result of the function.',
-      'some value', result);
+  assertEquals(
+      'assertNotThrows should return the result of the function.', 'some value',
+      result);
 
   var errorDescription = 'a test error exception';
   try {
-    assertNotThrows('non valid error throwing function',
-        function() {
-          throw new Error(errorDescription);
-        });
+    assertNotThrows('non valid error throwing function', function() {
+      throw new Error(errorDescription);
+    });
     failed = true;
   } catch (e) {
     // Some browsers don't have a stack trace so expect to at least have the
@@ -892,10 +883,9 @@ function testAssertArrayEquals() {
     assertArrayEquals([0], ['0']);
   });
 
-  assertThrows('Arrays with different length should be different',
-      function() {
-        assertArrayEquals([0, undefined], [0]);
-      });
+  assertThrows('Arrays with different length should be different', function() {
+    assertArrayEquals([0, undefined], [0]);
+  });
 
   a1 = [0];
   a2 = [0];
@@ -909,8 +899,9 @@ function testAssertArrayEquals() {
       'Extra properties are ignored. Use assertObjectEquals to compare them.',
       a1, a2);
 
-  assertArrayEquals('An example where assertObjectEquals would fail in IE.',
-      ['x'], 'x'.match(/x/g));
+  assertArrayEquals(
+      'An example where assertObjectEquals would fail in IE.', ['x'],
+      'x'.match(/x/g));
 }
 
 function testAssertObjectsEqualsDifferentArrays() {
@@ -957,8 +948,8 @@ function testAssertObjectsRoughlyEquals() {
   assertThrowsJsUnitException(
       function() { assertObjectRoughlyEquals({'a': 1}, {'a': 1.2}, 0.1); },
       'Expected <[object Object]> (Object) but was <[object Object]> ' +
-      '(Object)\n   a: Expected <1> (Number) but was <1.2> (Number) which ' +
-      'was more than 0.1 away');
+          '(Object)\n   a: Expected <1> (Number) but was <1.2> (Number) which ' +
+          'was more than 0.1 away');
 }
 
 function testFindDifferences_equal() {
@@ -967,22 +958,22 @@ function testFindDifferences_equal() {
   assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
   assertNull(goog.testing.asserts.findDifferences(1, 1));
   assertNull(goog.testing.asserts.findDifferences([1, 'a'], [1, 'a']));
-  assertNull(goog.testing.asserts.findDifferences(
-      [[1, 2], [3, 4]], [[1, 2], [3, 4]]));
-  assertNull(goog.testing.asserts.findDifferences(
-      [{a: 1, b: 2}], [{b: 2, a: 1}]));
+  assertNull(
+      goog.testing.asserts.findDifferences([[1, 2], [3, 4]], [[1, 2], [3, 4]]));
+  assertNull(
+      goog.testing.asserts.findDifferences([{a: 1, b: 2}], [{b: 2, a: 1}]));
   assertNull(goog.testing.asserts.findDifferences(null, null));
   assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
 }
 
 function testFindDifferences_unequal() {
   assertNotNull(goog.testing.asserts.findDifferences(true, false));
-  assertNotNull(goog.testing.asserts.findDifferences(
-      [{a: 1, b: 2}], [{a: 2, b: 1}]));
-  assertNotNull(goog.testing.asserts.findDifferences(
-      [{a: 1}], [{a: 1, b: [2]}]));
-  assertNotNull(goog.testing.asserts.findDifferences(
-      [{a: 1, b: [2]}], [{a: 1}]));
+  assertNotNull(
+      goog.testing.asserts.findDifferences([{a: 1, b: 2}], [{a: 2, b: 1}]));
+  assertNotNull(
+      goog.testing.asserts.findDifferences([{a: 1}], [{a: 1, b: [2]}]));
+  assertNotNull(
+      goog.testing.asserts.findDifferences([{a: 1, b: [2]}], [{a: 1}]));
 }
 
 function testFindDifferences_objectsAndNull() {
@@ -1068,15 +1059,11 @@ function testFindDifferences_asymmetricCycleArray() {
 function testFindDifferences_multiCycles() {
   var a = {};
   a.cycle1 = a;
-  a.test = {
-    cycle2: a
-  };
+  a.test = {cycle2: a};
 
   var b = {};
   b.cycle1 = b;
-  b.test = {
-    cycle2: b
-  };
+  b.test = {cycle2: b};
   assertNull(goog.testing.asserts.findDifferences(a, b));
 }
 
@@ -1094,10 +1081,11 @@ function testFindDifferences_binaryTree() {
 
   // TODO(gboyer,user): This test does not terminate with the current
   // algorithm. Can be enabled when (if) the algorithm is improved.
-  //assertNull(goog.testing.asserts.findDifferences(
+  // assertNull(goog.testing.asserts.findDifferences(
   //    createBinTree(5, null), createBinTree(5, null)));
-  assertNotNull(goog.testing.asserts.findDifferences(
-      createBinTree(4, null), createBinTree(5, null)));
+  assertNotNull(
+      goog.testing.asserts.findDifferences(
+          createBinTree(4, null), createBinTree(5, null)));
 }
 
 function testStringForWindowIE() {
@@ -1115,26 +1103,26 @@ function testStringSamePrefix() {
   assertThrowsJsUnitException(
       function() { assertEquals('abcdefghi', 'abcdefghx'); },
       'Expected <abcdefghi> (String) but was <abcdefghx> (String)\n' +
-      'Difference was at position 8. Expected [...ghi] vs. actual [...ghx]');
+          'Difference was at position 8. Expected [...ghi] vs. actual [...ghx]');
 }
 
 function testStringSameSuffix() {
   assertThrowsJsUnitException(
       function() { assertEquals('xbcdefghi', 'abcdefghi'); },
       'Expected <xbcdefghi> (String) but was <abcdefghi> (String)\n' +
-      'Difference was at position 0. Expected [xbc...] vs. actual [abc...]');
+          'Difference was at position 0. Expected [xbc...] vs. actual [abc...]');
 }
 
 function testStringDissimilarShort() {
-  assertThrowsJsUnitException(
-      function() { assertEquals('x', 'y'); },
-      'Expected <x> (String) but was <y> (String)');
+  assertThrowsJsUnitException(function() {
+    assertEquals('x', 'y');
+  }, 'Expected <x> (String) but was <y> (String)');
 }
 
 function testStringDissimilarLong() {
-  assertThrowsJsUnitException(
-      function() { assertEquals('xxxxxxxxxx', 'yyyyyyyyyy'); },
-      'Expected <xxxxxxxxxx> (String) but was <yyyyyyyyyy> (String)');
+  assertThrowsJsUnitException(function() {
+    assertEquals('xxxxxxxxxx', 'yyyyyyyyyy');
+  }, 'Expected <xxxxxxxxxx> (String) but was <yyyyyyyyyy> (String)');
 }
 
 function testAssertElementsEquals() {
@@ -1146,7 +1134,7 @@ function testAssertElementsEquals() {
         assertElementsEquals('Message', [1, 2], [1]);
       },
       'length mismatch: Message\n' +
-      'Expected <2> (Number) but was <1> (Number)');
+          'Expected <2> (Number) but was <1> (Number)');
 }
 
 function testStackTrace() {
@@ -1158,8 +1146,8 @@ function testStackTrace() {
     }
     if (e.stack) {
       var stack = e.stack;
-      var stackTraceContainsTestName = goog.string.contains(
-          stack, 'testStackTrace');
+      var stackTraceContainsTestName =
+          goog.string.contains(stack, 'testStackTrace');
       if (!stackTraceContainsTestName &&
           goog.labs.userAgent.browser.isChrome()) {
         // Occasionally Chrome does not give us a full stack trace, making for
@@ -1172,8 +1160,9 @@ function testStackTrace() {
         return;
       }
 
-      assertTrue('Expected the stack trace to contain string "testStackTrace"',
-                 stackTraceContainsTestName);
+      assertTrue(
+          'Expected the stack trace to contain string "testStackTrace"',
+          stackTraceContainsTestName);
     }
   }
 }
@@ -1187,15 +1176,16 @@ function testDisplayStringForValue() {
   assertEquals('<1> (Number)', _displayStringForValue(1));
   assertEquals('<null>', _displayStringForValue(null));
   assertEquals('<undefined>', _displayStringForValue(undefined));
-  assertEquals('<hello,,,,1> (Array)', _displayStringForValue(
-      ['hello', /* array hole */, undefined, null, 1]));
+  assertEquals(
+      '<hello,,,,1> (Array)',
+      _displayStringForValue(['hello', /* array hole */, undefined, null, 1]));
 }
 
 function testDisplayStringForValue_exception() {
-  assertEquals('<toString failed: foo message> (Object)',
-      _displayStringForValue({toString: function() {
-        throw Error('foo message');
-      }}));
+  assertEquals(
+      '<toString failed: foo message> (Object)',
+      _displayStringForValue(
+          {toString: function() { throw Error('foo message'); }}));
 }
 
 function testDisplayStringForValue_cycle() {

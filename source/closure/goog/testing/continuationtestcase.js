@@ -78,6 +78,7 @@
  */
 
 
+goog.setTestOnly('goog.testing.ContinuationTestCase');
 goog.provide('goog.testing.ContinuationTestCase');
 goog.provide('goog.testing.ContinuationTestCase.ContinuationTest');
 goog.provide('goog.testing.ContinuationTestCase.Step');
@@ -142,11 +143,11 @@ goog.testing.ContinuationTestCase.prototype.currentTest_ = null;
  * @param {boolean} enable Whether the wait functions should be exported.
  * @private
  */
-goog.testing.ContinuationTestCase.prototype.enableWaitFunctions_ =
-    function(enable) {
+goog.testing.ContinuationTestCase.prototype.enableWaitFunctions_ = function(
+    enable) {
   if (enable) {
-    goog.exportSymbol('waitForCondition',
-                      goog.bind(this.waitForCondition, this));
+    goog.exportSymbol(
+        'waitForCondition', goog.bind(this.waitForCondition, this));
     goog.exportSymbol('waitForEvent', goog.bind(this.waitForEvent, this));
     goog.exportSymbol('waitForTimeout', goog.bind(this.waitForTimeout, this));
   } else {
@@ -207,8 +208,7 @@ goog.testing.ContinuationTestCase.prototype.createNextTest_ = function() {
   this.log('Running test: ' + name);
 
   return new goog.testing.ContinuationTestCase.ContinuationTest(
-      new goog.testing.TestCase.Test(name, this.setUp, this),
-      test,
+      new goog.testing.TestCase.Test(name, this.setUp, this), test,
       new goog.testing.TestCase.Test(name, this.tearDown, this));
 };
 
@@ -255,9 +255,8 @@ goog.testing.ContinuationTestCase.prototype.runNextStep_ = function() {
   }
 
   // Find the next step that is not in a wait state.
-  var stepIndex = goog.array.findIndex(phase, function(step) {
-    return !step.waiting;
-  });
+  var stepIndex =
+      goog.array.findIndex(phase, function(step) { return !step.waiting; });
 
   if (stepIndex < 0) {
     // All active steps are currently waiting. Return until one wakes up.
@@ -301,11 +300,11 @@ goog.testing.ContinuationTestCase.prototype.runNextStep_ = function() {
  * @param {Function} continuation The test function to invoke after the timeout.
  * @param {number=} opt_duration The length of the timeout in milliseconds.
  */
-goog.testing.ContinuationTestCase.prototype.waitForTimeout =
-    function(continuation, opt_duration) {
+goog.testing.ContinuationTestCase.prototype.waitForTimeout = function(
+    continuation, opt_duration) {
   var step = this.addStep_(continuation);
-  step.setTimeout(goog.bind(this.handleComplete_, this, step),
-                  opt_duration || 0);
+  step.setTimeout(
+      goog.bind(this.handleComplete_, this, step), opt_duration || 0);
 };
 
 
@@ -319,19 +318,16 @@ goog.testing.ContinuationTestCase.prototype.waitForTimeout =
  *     fires.
  */
 goog.testing.ContinuationTestCase.prototype.waitForEvent = function(
-    eventTarget,
-    eventType,
-    continuation) {
+    eventTarget, eventType, continuation) {
 
   var step = this.addStep_(continuation);
 
   var duration = goog.testing.ContinuationTestCase.MAX_TIMEOUT;
-  step.setTimeout(goog.bind(this.handleTimeout_, this, step, duration),
-                  duration);
+  step.setTimeout(
+      goog.bind(this.handleTimeout_, this, step, duration), duration);
 
-  this.handler_.listenOnce(eventTarget,
-                           eventType,
-                           goog.bind(this.handleComplete_, this, step));
+  this.handler_.listenOnce(
+      eventTarget, eventType, goog.bind(this.handleComplete_, this, step));
 };
 
 
@@ -347,10 +343,7 @@ goog.testing.ContinuationTestCase.prototype.waitForEvent = function(
  *     condition in milliseconds (defaults to 1000).
  */
 goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
-    condition,
-    continuation,
-    opt_interval,
-    opt_maxTimeout) {
+    condition, continuation, opt_interval, opt_maxTimeout) {
 
   var interval = opt_interval || 100;
   var timeout = opt_maxTimeout || goog.testing.ContinuationTestCase.MAX_TIMEOUT;
@@ -373,9 +366,7 @@ goog.testing.ContinuationTestCase.prototype.addStep_ = function(func) {
   }
 
   var step = new goog.testing.ContinuationTestCase.Step(
-      this.currentTest_.name,
-      func,
-      this.currentTest_.scope);
+      this.currentTest_.name, func, this.currentTest_.scope);
   this.currentTest_.addStep(step);
   return step;
 };
@@ -402,8 +393,8 @@ goog.testing.ContinuationTestCase.prototype.handleComplete_ = function(step) {
  * @param {number} duration The length of the timeout in milliseconds.
  * @private
  */
-goog.testing.ContinuationTestCase.prototype.handleTimeout_ =
-    function(step, duration) {
+goog.testing.ContinuationTestCase.prototype.handleTimeout_ = function(
+    step, duration) {
   step.ref = function() {
     fail('Continuation timed out after ' + duration + 'ms.');
   };
@@ -430,25 +421,18 @@ goog.testing.ContinuationTestCase.prototype.handleTimeout_ =
  * @private
  */
 goog.testing.ContinuationTestCase.prototype.testCondition_ = function(
-    step,
-    condition,
-    startTime,
-    interval,
-    timeout) {
+    step, condition, startTime, interval, timeout) {
 
   var duration = goog.now() - startTime;
 
   if (condition()) {
     this.handleComplete_(step);
   } else if (duration < timeout) {
-    step.setTimeout(goog.bind(this.testCondition_,
-                              this,
-                              step,
-                              condition,
-                              startTime,
-                              interval,
-                              timeout),
-                    interval);
+    step.setTimeout(
+        goog.bind(
+            this.testCondition_, this, step, condition, startTime, interval,
+            timeout),
+        interval);
   } else {
     this.handleTimeout_(step, duration);
   }
@@ -504,8 +488,9 @@ goog.testing.ContinuationTestCase.ContinuationTest = function(
    */
   this.tearDown_ = [tearDown];
 };
-goog.inherits(goog.testing.ContinuationTestCase.ContinuationTest,
-              goog.testing.TestCase.Test);
+goog.inherits(
+    goog.testing.ContinuationTestCase.ContinuationTest,
+    goog.testing.TestCase.Test);
 
 
 /**
@@ -629,8 +614,8 @@ goog.testing.ContinuationTestCase.ContinuationTest.prototype.cancelPhase_ =
 goog.testing.ContinuationTestCase.Step = function(name, ref, opt_scope) {
   goog.testing.TestCase.Test.call(this, name, ref, opt_scope);
 };
-goog.inherits(goog.testing.ContinuationTestCase.Step,
-              goog.testing.TestCase.Test);
+goog.inherits(
+    goog.testing.ContinuationTestCase.Step, goog.testing.TestCase.Test);
 
 
 /**
@@ -676,8 +661,8 @@ goog.testing.ContinuationTestCase.Step.prototype.timeout_;
  * @param {number} duration The number of milliseconds to wait before invoking
  *     the function.
  */
-goog.testing.ContinuationTestCase.Step.prototype.setTimeout =
-    function(func, duration) {
+goog.testing.ContinuationTestCase.Step.prototype.setTimeout = function(
+    func, duration) {
 
   this.clearTimeout();
 

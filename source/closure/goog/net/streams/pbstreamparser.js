@@ -86,5 +86,3 @@ goog.net.streams.PbStreamParser.prototype.parse = function(input) {
 
   return null;
 };
-
-

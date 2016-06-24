@@ -24,6 +24,7 @@
  *
  */
 
+// clang-format off
 
 /**
  * Namespace for current country codes.

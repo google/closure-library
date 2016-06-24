@@ -74,52 +74,63 @@ function testHmac() {
   // HMAC test vectors from:
   // http://tools.ietf.org/html/2202
 
-  assertEquals('test 1 failed',
-      'b617318655057264e28bc0b6fb378c8ef146be00',
-      getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
+  assertEquals(
+      'test 1 failed', 'b617318655057264e28bc0b6fb378c8ef146be00',
+      getHmac(
+          hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
           stringToBytes('Hi There')));
 
-  assertEquals('test 2 failed',
-      'effcdf6ae5eb2fa2d27416d5f184df9c259a7c79',
-      getHmac(stringToBytes('Jefe'),
+  assertEquals(
+      'test 2 failed', 'effcdf6ae5eb2fa2d27416d5f184df9c259a7c79',
+      getHmac(
+          stringToBytes('Jefe'),
           stringToBytes('what do ya want for nothing?')));
 
-  assertEquals('test 3 failed',
-      '125d7342b9ac11cd91a39af48aa17b4f63f175d3',
-      getHmac(hexToBytes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-          hexToBytes('dddddddddddddddddddddddddddddddddddddddd' +
+  assertEquals(
+      'test 3 failed', '125d7342b9ac11cd91a39af48aa17b4f63f175d3',
+      getHmac(
+          hexToBytes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+          hexToBytes(
+              'dddddddddddddddddddddddddddddddddddddddd' +
               'dddddddddddddddddddddddddddddddddddddddd' +
               'dddddddddddddddddddd')));
 
-  assertEquals('test 4 failed',
-      '4c9007f4026250c6bc8414f9bf50c86c2d7235da',
-      getHmac(hexToBytes('0102030405060708090a0b0c0d0e0f10111213141516171819'),
-          hexToBytes('cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd' +
+  assertEquals(
+      'test 4 failed', '4c9007f4026250c6bc8414f9bf50c86c2d7235da',
+      getHmac(
+          hexToBytes('0102030405060708090a0b0c0d0e0f10111213141516171819'),
+          hexToBytes(
+              'cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd' +
               'cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd' +
               'cdcdcdcdcdcdcdcdcdcd')));
 
-  assertEquals('test 5 failed',
-      '4c1a03424b55e07fe7f27be1d58bb9324a9a5a04',
-      getHmac(hexToBytes('0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c'),
+  assertEquals(
+      'test 5 failed', '4c1a03424b55e07fe7f27be1d58bb9324a9a5a04',
+      getHmac(
+          hexToBytes('0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c'),
           stringToBytes('Test With Truncation')));
 
-  assertEquals('test 6 failed',
-      'aa4ae5e15272d00e95705637ce8a3b55ed402112',
-      getHmac(hexToBytes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+  assertEquals(
+      'test 6 failed', 'aa4ae5e15272d00e95705637ce8a3b55ed402112',
+      getHmac(
+          hexToBytes(
+              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
               'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
               'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
               'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
           stringToBytes(
               'Test Using Larger Than Block-Size Key - Hash Key First')));
 
-  assertEquals('test 7 failed',
-      'b617318655057264e28bc0b6fb378c8ef146be00',
-      getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
+  assertEquals(
+      'test 7 failed', 'b617318655057264e28bc0b6fb378c8ef146be00',
+      getHmac(
+          hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
           stringToBytes('Hi There'), 64));
 
-  assertEquals('test 8 failed',
-      '941f806707826395dc510add6a45ce9933db976e',
-      getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
+  assertEquals(
+      'test 8 failed', '941f806707826395dc510add6a45ce9933db976e',
+      getHmac(
+          hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
           stringToBytes('Hi There'), 32));
 }
 
@@ -128,10 +139,11 @@ function testHmac() {
 function testUpdateWithLongKey() {
   // Calling update() then digest() should give the same result as just
   // calling getHmac()
-  var key = hexToBytes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
-                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
-                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
-                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  var key = hexToBytes(
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   var message = 'Secret Message';
   var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), key);
   hmac.update(message);

@@ -29,8 +29,8 @@ goog.setTestOnly('goog.html.trustedResourceUrlTest');
 
 function testTrustedResourceUrl() {
   var url = 'javascript:trusted();';
-  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(
-      goog.string.Const.from(url));
+  var trustedResourceUrl =
+      goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.from(url));
   var extracted = goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl);
   assertEquals(url, extracted);
   assertEquals(url, trustedResourceUrl.getTypedStringValue());
@@ -43,6 +43,21 @@ function testTrustedResourceUrl() {
   // Interface markers are present.
   assertTrue(trustedResourceUrl.implementsGoogStringTypedString);
   assertTrue(trustedResourceUrl.implementsGoogI18nBidiDirectionalString);
+}
+
+
+function testFromConstants() {
+  assertEquals('', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([])));
+  assertEquals('foo', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([
+        goog.string.Const.from('foo')
+      ])));
+  assertEquals('foobar', goog.html.TrustedResourceUrl.unwrap(
+      goog.html.TrustedResourceUrl.fromConstants([
+        goog.string.Const.from('foo'),
+        goog.string.Const.from('bar')
+      ])));
 }
 
 
@@ -60,9 +75,8 @@ function testUnwrap() {
   evil[privateFieldName] = 'http://example.com/evil.js';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.TrustedResourceUrl.unwrap(evil);
-  });
+  var exception =
+      assertThrows(function() { goog.html.TrustedResourceUrl.unwrap(evil); });
   assertContains(
       'expected object of type TrustedResourceUrl', exception.message);
 }

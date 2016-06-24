@@ -25,37 +25,37 @@ var Keyword = goog.i18n.pluralRules.Keyword;
 function testSimpleSelectEn() {
   var funcSelect = goog.i18n.pluralRules.enSelect_;
 
-  assertEquals(Keyword.OTHER, funcSelect(0)); // 0 dollars
-  assertEquals(Keyword.ONE, funcSelect(1)); // 1 dollar
-  assertEquals(Keyword.OTHER, funcSelect(2)); // 2 dollars
+  assertEquals(Keyword.OTHER, funcSelect(0));  // 0 dollars
+  assertEquals(Keyword.ONE, funcSelect(1));    // 1 dollar
+  assertEquals(Keyword.OTHER, funcSelect(2));  // 2 dollars
 
-  assertEquals(Keyword.OTHER, funcSelect(0, 2)); // 0.00 dollars
-  assertEquals(Keyword.OTHER, funcSelect(1, 2)); // 1.00 dollars
-  assertEquals(Keyword.OTHER, funcSelect(2, 2)); // 2.00 dollars
+  assertEquals(Keyword.OTHER, funcSelect(0, 2));  // 0.00 dollars
+  assertEquals(Keyword.OTHER, funcSelect(1, 2));  // 1.00 dollars
+  assertEquals(Keyword.OTHER, funcSelect(2, 2));  // 2.00 dollars
 }
 
 function testSimpleSelectRo() {
   var funcSelect = goog.i18n.pluralRules.roSelect_;
 
-  assertEquals(Keyword.FEW, funcSelect(0)); // 0 dolari
-  assertEquals(Keyword.ONE, funcSelect(1)); // 1 dolar
-  assertEquals(Keyword.FEW, funcSelect(2)); // 2 dolari
-  assertEquals(Keyword.FEW, funcSelect(12)); // 12 dolari
-  assertEquals(Keyword.OTHER, funcSelect(23)); // 23 de dolari
-  assertEquals(Keyword.FEW, funcSelect(1212)); // 1212 dolari
-  assertEquals(Keyword.OTHER, funcSelect(1223)); // 1223 de dolari
+  assertEquals(Keyword.FEW, funcSelect(0));       // 0 dolari
+  assertEquals(Keyword.ONE, funcSelect(1));       // 1 dolar
+  assertEquals(Keyword.FEW, funcSelect(2));       // 2 dolari
+  assertEquals(Keyword.FEW, funcSelect(12));      // 12 dolari
+  assertEquals(Keyword.OTHER, funcSelect(23));    // 23 de dolari
+  assertEquals(Keyword.FEW, funcSelect(1212));    // 1212 dolari
+  assertEquals(Keyword.OTHER, funcSelect(1223));  // 1223 de dolari
 
-  assertEquals(Keyword.FEW, funcSelect(0, 2)); // 0.00 dolari
-  assertEquals(Keyword.FEW, funcSelect(1, 2)); // 1.00 dolari
-  assertEquals(Keyword.FEW, funcSelect(2, 2)); // 2.00 dolari
-  assertEquals(Keyword.FEW, funcSelect(12, 2)); // 12.00 dolari
-  assertEquals(Keyword.FEW, funcSelect(23, 2)); // 23.00  dolari
-  assertEquals(Keyword.FEW, funcSelect(1212, 2)); // 1212.00  dolari
-  assertEquals(Keyword.FEW, funcSelect(1223, 2)); // 1223.00 dolari
+  assertEquals(Keyword.FEW, funcSelect(0, 2));     // 0.00 dolari
+  assertEquals(Keyword.FEW, funcSelect(1, 2));     // 1.00 dolari
+  assertEquals(Keyword.FEW, funcSelect(2, 2));     // 2.00 dolari
+  assertEquals(Keyword.FEW, funcSelect(12, 2));    // 12.00 dolari
+  assertEquals(Keyword.FEW, funcSelect(23, 2));    // 23.00  dolari
+  assertEquals(Keyword.FEW, funcSelect(1212, 2));  // 1212.00  dolari
+  assertEquals(Keyword.FEW, funcSelect(1223, 2));  // 1223.00 dolari
 }
 
 function testSimpleSelectSr() {
-  var funcSelect = goog.i18n.pluralRules.srSelect_; // Serbian
+  var funcSelect = goog.i18n.pluralRules.srSelect_;  // Serbian
 
   assertEquals(Keyword.ONE, funcSelect(1));
   assertEquals(Keyword.ONE, funcSelect(31));

@@ -1,0 +1,82 @@
+---
+{edit_path: '', layout: api, page: goog.i18n.TimeZone, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>TimeZone</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.i18n.html">goog.i18n</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L60" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class TimeZone</div></h1></div><div class="body"><p>TimeZone class implemented a time zone resolution and name information
+source for client applications. The time zone object is initiated from
+a time zone information object. Application can initiate a time zone
+statically, or it may choose to initiate from a data obtained from server.
+Each time zone information array is small, but the whole set of data
+is too much for client application to download. If end user is allowed to
+change time zone setting, dynamic retrieval should be the method to use.
+In case only time zone offset is known, there is a decent fallback
+that only use the time zone offset to create a TimeZone object.
+A whole set of time zone information array was available under
+http://go/js_locale_data. It is generated based on CLDR/ICU and
+Olson time zone data base, and will be updated timely.</p>
+<h3 class="name"><div>new TimeZone()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="getDaylightAdjustment"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L289" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDaylightAdjustment(<var>date</var>)</div></h3></div><div class="body"><p>Return the DST adjustment to the time zone offset for a given time.
+While Daylight Saving Time is in effect, this number is positive.
+Otherwise, it is zero.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The DST adjustment in minutes EAST of UTC.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getGMTString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L309" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getGMTString(<var>date</var>)</div></h3></div><div class="body"><p>Return the GMT representation of this time zone object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The date for which time to retrieve
+GMT string.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>GMT representation string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getGenericLocation"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L412" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getGenericLocation(<var>date</var>)</div></h3></div><div class="body"><p>Get the generic location time zone name for a given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code>!<a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve
+the generic location time zone name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The generic location time zone name.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLongName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L320" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLongName(<var>date</var>)</div></h3></div><div class="body"><p>Get the long time zone name for a given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve
+the long time zone name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The long time zone name.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLongNameGMT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L393" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLongNameGMT(<var>date</var>)</div></h3></div><div class="body"><p>Get the long GMT time zone name for a given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code>!<a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve
+the long GMT time zone name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The long GMT time zone name.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L333" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOffset(<var>date</var>)</div></h3></div><div class="body"><p>Get the time zone offset in minutes WEST of UTC for a given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve
+the time zone offset.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The time zone offset in minutes WEST of UTC.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRFCTimeZoneString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L344" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRFCTimeZoneString(<var>date</var>)</div></h3></div><div class="body"><p>Get the RFC representation of the time zone for a given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve the
+RFC time zone string.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The RFC time zone string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getShortName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L361" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getShortName(<var>date</var>)</div></h3></div><div class="body"><p>Get the short time zone name for given date/time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time for which to retrieve
+the short time zone name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The short time zone name.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTimeZoneData"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L271" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTimeZoneData()</div></h3></div><div class="body"><p>Convert the contents of time zone object to a timeZoneData object, suitable
+for passing to goog.i18n.TimeZone.createTimeZone.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>A timeZoneData object (see the documentation for
+goog.i18n.TimeZone.createTimeZone).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTimeZoneId"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L372" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTimeZoneId()</div></h3></div><div class="body"><p>Return the time zone ID for this time zone.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The time zone ID.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDaylightTime"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L382" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDaylightTime(<var>date</var>)</div></h3></div><div class="body"><p>Check if Daylight Saving Time is in effect at a given time in this time zone.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>date</var><code><a href="goog.date.html#goog.date.DateLike">goog.date.DateLike</a></code><dd><p>The time to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if Daylight Saving Time is in effect.</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="TimeZone.createTimeZone"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/timezone.js#L167" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TimeZone.createTimeZone(<var>timeZoneData</var>)</div></h3></div><div class="body"><p>This factory method creates a time zone instance.  It takes either an object
+containing complete time zone information, or a single number representing a
+constant time zone offset.  If the latter form is used, DST functionality is
+not available.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>timeZoneData</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code><dd><p>If this parameter is a number, it should
+indicate minutes WEST of UTC to be used as a constant time zone offset.
+Otherwise, it should be an object with these four fields:
+</p><ul><li>id: A string ID for the time zone.
+</li><li>std_offset: The standard time zone offset in minutes EAST of UTC.
+</li><li>names: An array of four names (standard short name, standard long
+name, daylight short name, daylight long, name)
+</li><li>names_ext: A hash of four fields (standard long name gmt, daylight
+long name gmt, standard generic location, daylight generic
+location)
+</li><li>transitions: An array of numbers which are interpreted in pairs:
+[time1, adjustment1, time2, adjustment2, ...] where each time is
+a DST transition point given as a number of hours since 00:00 UTC,
+January 1, 1970, and each adjustment is the adjustment to apply
+for times after the DST transition, given as minutes EAST of UTC.
+</li></ul>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.i18n.TimeZone.html">goog.i18n.TimeZone</a></code><dd><p>A goog.i18n.TimeZone object for the given
+time zone data.</p>
+</dl></dd></dl></div></section></section><section class="types"><h2>Enumerations</h2><ul><li class="summary"><div><a href="goog.i18n.TimeZone.NameType.html">TimeZone.NameType</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

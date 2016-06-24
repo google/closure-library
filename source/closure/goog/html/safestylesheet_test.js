@@ -53,9 +53,8 @@ function testUnwrap() {
   evil[privateFieldName] = 'P.special { color:expression(evil) ; }';
   evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.SafeStyleSheet.unwrap(evil);
-  });
+  var exception =
+      assertThrows(function() { goog.html.SafeStyleSheet.unwrap(evil); });
   assertContains('expected object of type SafeStyleSheet', exception.message);
 }
 
@@ -84,8 +83,7 @@ function testConcat() {
 
   var concatStyleSheet = goog.html.SafeStyleSheet.concat(
       styleSheet1, [styleSheet1, styleSheet2], styleSheet2);
-  assertEquals(
-      expected, goog.html.SafeStyleSheet.unwrap(concatStyleSheet));
+  assertEquals(expected, goog.html.SafeStyleSheet.unwrap(concatStyleSheet));
 
   // Empty.
   concatStyleSheet = goog.html.SafeStyleSheet.concat();

@@ -20,12 +20,14 @@ goog.require('goog.color.names');
 goog.require('goog.testing.jsunit');
 
 function testIsValidColor() {
-  var goodColors = ['#ffffff', '#ff7812', '#012345', '#Ff003D', '#3CA',
-                    '(255, 26, 75)', 'RGB(2, 3, 4)', '(0,0,0)', 'white',
-                    'blue'];
-  var badColors = ['#xxxxxx', '8899000', 'not_color', '#1234567', 'fffffg',
-                   '(2555,0,0)', '(1,2,3,4)', 'rgb(1,20,)', 'RGB(20,20,20,)',
-                   'omgwtfbbq'];
+  var goodColors = [
+    '#ffffff', '#ff7812', '#012345', '#Ff003D', '#3CA', '(255, 26, 75)',
+    'RGB(2, 3, 4)', '(0,0,0)', 'white', 'blue'
+  ];
+  var badColors = [
+    '#xxxxxx', '8899000', 'not_color', '#1234567', 'fffffg', '(2555,0,0)',
+    '(1,2,3,4)', 'rgb(1,20,)', 'RGB(20,20,20,)', 'omgwtfbbq'
+  ];
   for (var i = 0; i < goodColors.length; i++) {
     assertTrue(goodColors[i], goog.color.isValidColor(goodColors[i]));
   }
@@ -48,24 +50,26 @@ function testIsValidHexColor() {
 
 
 function testIsValidRgbColor() {
-  var goodRgbColors = ['(255, 26, 75)', 'RGB(2, 3, 4)', '(0,0,0)',
-                       'rgb(255,255,255)'];
-  var badRgbColors = ['(2555,0,0)', '(1,2,3,4)', 'rgb(1,20,)',
-                      'RGB(20,20,20,)'];
+  var goodRgbColors =
+      ['(255, 26, 75)', 'RGB(2, 3, 4)', '(0,0,0)', 'rgb(255,255,255)'];
+  var badRgbColors =
+      ['(2555,0,0)', '(1,2,3,4)', 'rgb(1,20,)', 'RGB(20,20,20,)'];
   for (var i = 0; i < goodRgbColors.length; i++) {
-    assertEquals(goodRgbColors[i],
-                 goog.color.isValidRgbColor_(goodRgbColors[i]).length, 3);
+    assertEquals(
+        goodRgbColors[i], goog.color.isValidRgbColor_(goodRgbColors[i]).length,
+        3);
   }
   for (var i = 0; i < badRgbColors.length; i++) {
-    assertEquals(badRgbColors[i],
-                 goog.color.isValidRgbColor_(badRgbColors[i]).length, 0);
+    assertEquals(
+        badRgbColors[i], goog.color.isValidRgbColor_(badRgbColors[i]).length,
+        0);
   }
 }
 
 
 function testParse() {
-  var colors = ['rgb(15, 250, 77)', '(127, 127, 127)', '#ffeedd', '123456',
-                'magenta'];
+  var colors =
+      ['rgb(15, 250, 77)', '(127, 127, 127)', '#ffeedd', '123456', 'magenta'];
   var parsed = goog.array.map(colors, goog.color.parse);
   assertEquals('rgb', parsed[0].type);
   assertEquals(goog.color.rgbToHex(15, 250, 77), parsed[0].hex);
@@ -87,9 +91,10 @@ function testParse() {
 
 
 function testHexToRgb() {
-  var testColors = [['#B0FF2D', [176, 255, 45]],
-                    ['#b26e5f', [178, 110, 95]],
-                    ['#66f', [102, 102, 255]]];
+  var testColors = [
+    ['#B0FF2D', [176, 255, 45]], ['#b26e5f', [178, 110, 95]],
+    ['#66f', [102, 102, 255]]
+  ];
 
   for (var i = 0; i < testColors.length; i++) {
     var r = goog.color.hexToRgb(testColors[i][0]);
@@ -124,11 +129,9 @@ function testHexToRgbStyle() {
 function testRgbToHex() {
   assertEquals(goog.color.names.red, goog.color.rgbToHex(255, 0, 0));
   assertEquals('#af13ff', goog.color.rgbToHex(175, 19, 255));
-  var badRgb = [[-1, -1, -1],
-                [256, 0, 0],
-                ['a', 'b', 'c'],
-                [undefined, 5, 5],
-                [1.2, 3, 4]];
+  var badRgb = [
+    [-1, -1, -1], [256, 0, 0], ['a', 'b', 'c'], [undefined, 5, 5], [1.2, 3, 4]
+  ];
   for (var i = 0; i < badRgb.length; ++i) {
     var e = assertThrows(goog.partial(goog.color.rgbArrayToHex, badRgb[i]));
     assertContains('is not a valid RGB color', e.message);
@@ -158,12 +161,10 @@ function testHslToRgb() {
 function testHSLBidiToRGB() {
   var DELTA = 1;
 
-  var color = [[100, 56, 200],
-               [255, 0, 0],
-               [0, 0, 255],
-               [0, 255, 0],
-               [255, 255, 255],
-               [0, 0, 0]];
+  var color = [
+    [100, 56, 200], [255, 0, 0], [0, 0, 255], [0, 255, 0], [255, 255, 255],
+    [0, 0, 0]
+  ];
 
   for (var i = 0; i < color.length; i++) {
     colorConversionTestHelper(
@@ -177,8 +178,8 @@ function testHSLBidiToRGB() {
 
     colorConversionTestHelper(
         function(color) { return goog.color.rgbArrayToHsl(color); },
-        function(color) { return goog.color.hslArrayToRgb(color); },
-        color[i], DELTA);
+        function(color) { return goog.color.hslArrayToRgb(color); }, color[i],
+        DELTA);
   }
 }
 
@@ -187,12 +188,10 @@ function testHSLBidiToRGB() {
 function testHSVToRGB() {
   var DELTA = 1;
 
-  var color = [[100, 56, 200],
-               [255, 0, 0],
-               [0, 0, 255],
-               [0, 255, 0],
-               [255, 255, 255],
-               [0, 0, 0]];
+  var color = [
+    [100, 56, 200], [255, 0, 0], [0, 0, 255], [0, 255, 0], [255, 255, 255],
+    [0, 0, 0]
+  ];
 
   for (var i = 0; i < color.length; i++) {
     colorConversionTestHelper(
@@ -206,8 +205,8 @@ function testHSVToRGB() {
 
     colorConversionTestHelper(
         function(color) { return goog.color.rgbArrayToHsv(color); },
-        function(color) { return goog.color.hsvArrayToRgb(color); },
-        color[i], DELTA);
+        function(color) { return goog.color.hsvArrayToRgb(color); }, color[i],
+        DELTA);
   }
 }
 
@@ -224,21 +223,16 @@ function testHSVSpecRangeIsCorrect() {
 function testHslToHex() {
   var DELTA = 1;
 
-  var color = [[0, 0, 0],
-               [20, 0.5, 0.5],
-               [0, 0, 1],
-               [255, .45, .76]];
+  var color = [[0, 0, 0], [20, 0.5, 0.5], [0, 0, 1], [255, .45, .76]];
 
   for (var i = 0; i < color.length; i++) {
     colorConversionTestHelper(
         function(hsl) { return goog.color.hslToHex(hsl[0], hsl[1], hsl[2]); },
-        function(hex) { return goog.color.hexToHsl(hex); },
-        color[i], DELTA);
+        function(hex) { return goog.color.hexToHsl(hex); }, color[i], DELTA);
 
     colorConversionTestHelper(
         function(hsl) { return goog.color.hslArrayToHex(hsl); },
-        function(hex) { return goog.color.hexToHsl(hex); },
-        color[i], DELTA);
+        function(hex) { return goog.color.hexToHsl(hex); }, color[i], DELTA);
   }
 }
 
@@ -246,21 +240,16 @@ function testHslToHex() {
 function testHsvToHex() {
   var DELTA = 1;
 
-  var color = [[0, 0, 0],
-               [.5, 0.5, 155],
-               [0, 0, 255],
-               [.7, .45, 21]];
+  var color = [[0, 0, 0], [.5, 0.5, 155], [0, 0, 255], [.7, .45, 21]];
 
   for (var i = 0; i < color.length; i++) {
     colorConversionTestHelper(
         function(hsl) { return goog.color.hsvToHex(hsl[0], hsl[1], hsl[2]); },
-        function(hex) { return goog.color.hexToHsv(hex); },
-        color[i], DELTA);
+        function(hex) { return goog.color.hexToHsv(hex); }, color[i], DELTA);
 
     colorConversionTestHelper(
         function(hsl) { return goog.color.hsvArrayToHex(hsl); },
-        function(hex) { return goog.color.hexToHsv(hex); },
-        color[i], DELTA);
+        function(hex) { return goog.color.hexToHsv(hex); }, color[i], DELTA);
   }
 }
 
@@ -275,9 +264,7 @@ function testHsvToHex() {
  * @return {boolean} True if the colors are the same, false otherwise.
  */
 function rgbColorsAreEqual(rgb1, rgb2) {
-  return (rgb1[0] == rgb2[0] &&
-          rgb1[1] == rgb2[1] &&
-          rgb1[2] == rgb2[2]);
+  return (rgb1[0] == rgb2[0] && rgb1[1] == rgb2[1] && rgb1[2] == rgb2[2]);
 }
 
 
@@ -301,38 +288,36 @@ function testColorBlend() {
   // Blend arbitrary colors, using 0 and 1 for factors. Using 0 should return
   // the first color, while using 1 should return the second color.
   var redWithNoGreen = goog.color.blend(red, green, 1);
-  assertTrue('red + 0 * green = red',
-             rgbColorsAreEqual(red, redWithNoGreen));
+  assertTrue('red + 0 * green = red', rgbColorsAreEqual(red, redWithNoGreen));
   var whiteWithAllBlue = goog.color.blend(white, blue, 0);
-  assertTrue('white + 1 * blue = blue',
-             rgbColorsAreEqual(blue, whiteWithAllBlue));
+  assertTrue(
+      'white + 1 * blue = blue', rgbColorsAreEqual(blue, whiteWithAllBlue));
 
   // Blend the same colors using arbitrary factors. This should return the
   // same colors.
   var greenWithGreen = goog.color.blend(green, green, .25);
-  assertTrue('green + .25 * green = green',
-             rgbColorsAreEqual(green, greenWithGreen));
+  assertTrue(
+      'green + .25 * green = green', rgbColorsAreEqual(green, greenWithGreen));
 
   // Blend different colors using varying factors.
   var blackWithWhite = goog.color.blend(black, white, .5);
-  assertTrue('black + .5 * white = gray',
-             rgbColorsAreEqual(gray, blackWithWhite));
+  assertTrue(
+      'black + .5 * white = gray', rgbColorsAreEqual(gray, blackWithWhite));
   var redAndBlue = goog.color.blend(red, blue, .5);
-  assertTrue('red + .5 * blue = purple',
-             rgbColorsAreEqual(purple, redAndBlue));
+  assertTrue('red + .5 * blue = purple', rgbColorsAreEqual(purple, redAndBlue));
   var lightGreen = goog.color.blend(green, white, .75);
-  assertTrue('green + .25 * white = a lighter shade of white',
-             lightGreen[0] > 0 &&
-             lightGreen[1] == 255 &&
-             lightGreen[2] > 0);
+  assertTrue(
+      'green + .25 * white = a lighter shade of white',
+      lightGreen[0] > 0 && lightGreen[1] == 255 && lightGreen[2] > 0);
 
   // Blend arbitrary colors using factors outside the expected range.
   var noGreenAllPurple = goog.color.blend(green, purple, -0.5);
-  assertTrue('green * -0.5 + purple = purple.',
-             rgbColorsAreEqual(purple, noGreenAllPurple));
+  assertTrue(
+      'green * -0.5 + purple = purple.',
+      rgbColorsAreEqual(purple, noGreenAllPurple));
   var allBlueNoYellow = goog.color.blend(blue, yellow, 1.37);
-  assertTrue('blue * 1.37 + yellow = blue.',
-             rgbColorsAreEqual(blue, allBlueNoYellow));
+  assertTrue(
+      'blue * 1.37 + yellow = blue.', rgbColorsAreEqual(blue, allBlueNoYellow));
 }
 
 
@@ -353,45 +338,46 @@ function testColorDarken() {
 
   // Darken black by an arbitrary factor, which should still return black.
   var darkBlack = goog.color.darken(black, .63);
-  assertTrue('black darkened by .63 is still black.',
-             rgbColorsAreEqual(black, darkBlack));
+  assertTrue(
+      'black darkened by .63 is still black.',
+      rgbColorsAreEqual(black, darkBlack));
 
   // Call darken() with edge-case factors (0 and 1).
   var greenNotDarkened = goog.color.darken(green, 0);
-  assertTrue('green darkened by 0 is still green.',
-             rgbColorsAreEqual(green, greenNotDarkened));
+  assertTrue(
+      'green darkened by 0 is still green.',
+      rgbColorsAreEqual(green, greenNotDarkened));
   var whiteFullyDarkened = goog.color.darken(white, 1);
-  assertTrue('white darkened by 1 is black.',
-             rgbColorsAreEqual(black, whiteFullyDarkened));
+  assertTrue(
+      'white darkened by 1 is black.',
+      rgbColorsAreEqual(black, whiteFullyDarkened));
 
   // Call darken() with various colors and factors. The result should be
   // a color with less luminance.
-  var whiteHsl = goog.color.rgbToHsl(white[0],
-                                     white[1],
-                                     white[2]);
+  var whiteHsl = goog.color.rgbToHsl(white[0], white[1], white[2]);
   var whiteDarkened = goog.color.darken(white, .43);
-  var whiteDarkenedHsl = goog.color.rgbToHsl(whiteDarkened[0],
-                                             whiteDarkened[1],
-                                             whiteDarkened[2]);
-  assertTrue('White that\'s darkened has less luminance than white.',
-             whiteDarkenedHsl[2] < whiteHsl[2]);
-  var purpleHsl = goog.color.rgbToHsl(purple[0],
-                                      purple[1],
-                                      purple[2]);
+  var whiteDarkenedHsl =
+      goog.color.rgbToHsl(whiteDarkened[0], whiteDarkened[1], whiteDarkened[2]);
+  assertTrue(
+      'White that\'s darkened has less luminance than white.',
+      whiteDarkenedHsl[2] < whiteHsl[2]);
+  var purpleHsl = goog.color.rgbToHsl(purple[0], purple[1], purple[2]);
   var purpleDarkened = goog.color.darken(purple, .1);
-  var purpleDarkenedHsl = goog.color.rgbToHsl(purpleDarkened[0],
-                                              purpleDarkened[1],
-                                              purpleDarkened[2]);
-  assertTrue('Purple that\'s darkened has less luminance than purple.',
-             purpleDarkenedHsl[2] < purpleHsl[2]);
+  var purpleDarkenedHsl = goog.color.rgbToHsl(
+      purpleDarkened[0], purpleDarkened[1], purpleDarkened[2]);
+  assertTrue(
+      'Purple that\'s darkened has less luminance than purple.',
+      purpleDarkenedHsl[2] < purpleHsl[2]);
 
   // Call darken() with factors outside the expected range.
   var darkGrayTurnedBlack = goog.color.darken(darkGray, 2.1);
-  assertTrue('Darkening dark gray by 2.1 returns black.',
-             rgbColorsAreEqual(black, darkGrayTurnedBlack));
+  assertTrue(
+      'Darkening dark gray by 2.1 returns black.',
+      rgbColorsAreEqual(black, darkGrayTurnedBlack));
   var whiteNotDarkened = goog.color.darken(white, -0.62);
-  assertTrue('Darkening white by -0.62 returns white.',
-             rgbColorsAreEqual(white, whiteNotDarkened));
+  assertTrue(
+      'Darkening white by -0.62 returns white.',
+      rgbColorsAreEqual(white, whiteNotDarkened));
 }
 
 
@@ -411,45 +397,46 @@ function testColorLighten() {
 
   // Lighten white by an arbitrary factor, which should still return white.
   var lightWhite = goog.color.lighten(white, .41);
-  assertTrue('white lightened by .41 is still white.',
-             rgbColorsAreEqual(white, lightWhite));
+  assertTrue(
+      'white lightened by .41 is still white.',
+      rgbColorsAreEqual(white, lightWhite));
 
   // Call lighten() with edge-case factors(0 and 1).
   var navyNotLightened = goog.color.lighten(navy, 0);
-  assertTrue('navy lightened by 0 is still navy.',
-             rgbColorsAreEqual(navy, navyNotLightened));
+  assertTrue(
+      'navy lightened by 0 is still navy.',
+      rgbColorsAreEqual(navy, navyNotLightened));
   var orangeFullyLightened = goog.color.lighten(orange, 1);
-  assertTrue('orange lightened by 1 is white.',
-             rgbColorsAreEqual(white, orangeFullyLightened));
+  assertTrue(
+      'orange lightened by 1 is white.',
+      rgbColorsAreEqual(white, orangeFullyLightened));
 
   // Call lighten() with various colors and factors. The result should be
   // a color with greater luminance.
-  var blackHsl = goog.color.rgbToHsl(black[0],
-                                     black[1],
-                                     black[2]);
+  var blackHsl = goog.color.rgbToHsl(black[0], black[1], black[2]);
   var blackLightened = goog.color.lighten(black, .33);
-  var blackLightenedHsl = goog.color.rgbToHsl(blackLightened[0],
-                                              blackLightened[1],
-                                              blackLightened[2]);
-  assertTrue('Black that\'s lightened has more luminance than black.',
-             blackLightenedHsl[2] >= blackHsl[2]);
-  var orangeHsl = goog.color.rgbToHsl(orange[0],
-                                      orange[1],
-                                      orange[2]);
+  var blackLightenedHsl = goog.color.rgbToHsl(
+      blackLightened[0], blackLightened[1], blackLightened[2]);
+  assertTrue(
+      'Black that\'s lightened has more luminance than black.',
+      blackLightenedHsl[2] >= blackHsl[2]);
+  var orangeHsl = goog.color.rgbToHsl(orange[0], orange[1], orange[2]);
   var orangeLightened = goog.color.lighten(orange, .91);
-  var orangeLightenedHsl = goog.color.rgbToHsl(orangeLightened[0],
-                                               orangeLightened[1],
-                                               orangeLightened[2]);
-  assertTrue('Orange that\'s lightened has more luminance than orange.',
-             orangeLightenedHsl[2] >= orangeHsl[2]);
+  var orangeLightenedHsl = goog.color.rgbToHsl(
+      orangeLightened[0], orangeLightened[1], orangeLightened[2]);
+  assertTrue(
+      'Orange that\'s lightened has more luminance than orange.',
+      orangeLightenedHsl[2] >= orangeHsl[2]);
 
   // Call lighten() with factors outside the expected range.
   var navyTurnedWhite = goog.color.lighten(navy, 1.01);
-  assertTrue('Lightening navy by 1.01 returns white.',
-             rgbColorsAreEqual(white, navyTurnedWhite));
+  assertTrue(
+      'Lightening navy by 1.01 returns white.',
+      rgbColorsAreEqual(white, navyTurnedWhite));
   var brownNotLightened = goog.color.lighten(brown, -0.0000001);
-  assertTrue('Lightening brown by -0.0000001 returns brown.',
-             rgbColorsAreEqual(brown, brownNotLightened));
+  assertTrue(
+      'Lightening brown by -0.0000001 returns brown.',
+      rgbColorsAreEqual(brown, brownNotLightened));
 }
 
 
@@ -466,26 +453,31 @@ function testHslDistance() {
   var whiteHsl = goog.color.rgbToHsl(255, 255, 255);
 
   // The distance between the same colors should be 0.
-  assertTrue('There is no HSL distance between white and white.',
-             goog.color.hslDistance(whiteHsl, whiteHsl) == 0);
-  assertTrue('There is no HSL distance between red and red.',
-             goog.color.hslDistance(redHsl, redHsl) == 0);
+  assertTrue(
+      'There is no HSL distance between white and white.',
+      goog.color.hslDistance(whiteHsl, whiteHsl) == 0);
+  assertTrue(
+      'There is no HSL distance between red and red.',
+      goog.color.hslDistance(redHsl, redHsl) == 0);
 
   // The distance between various colors should be within certain thresholds.
   var hslDistance = goog.color.hslDistance(whiteHsl, ghostWhiteHsl);
-  assertTrue('The HSL distance between white and ghost white is > 0.',
-             hslDistance > 0);
-  assertTrue('The HSL distance between white and ghost white is <= 0.02.',
-             hslDistance <= 0.02);
+  assertTrue(
+      'The HSL distance between white and ghost white is > 0.',
+      hslDistance > 0);
+  assertTrue(
+      'The HSL distance between white and ghost white is <= 0.02.',
+      hslDistance <= 0.02);
   hslDistance = goog.color.hslDistance(whiteHsl, redHsl);
-  assertTrue('The HSL distance betwen white and red is > 0.02.',
-             hslDistance > 0.02);
+  assertTrue(
+      'The HSL distance between white and red is > 0.02.', hslDistance > 0.02);
   hslDistance = goog.color.hslDistance(navyHsl, aliceBlueHsl);
-  assertTrue('The HSL distance between navy and alice blue is > 0.02.',
-             hslDistance > 0.02);
+  assertTrue(
+      'The HSL distance between navy and alice blue is > 0.02.',
+      hslDistance > 0.02);
   hslDistance = goog.color.hslDistance(blackHsl, whiteHsl);
-  assertTrue('The HSL distance between white and black is 1.',
-             hslDistance == 1);
+  assertTrue(
+      'The HSL distance between white and black is 1.', hslDistance == 1);
 }
 
 
@@ -504,10 +496,10 @@ function testYiqBrightness() {
   var lightgreenBrightness = goog.color.yiqBrightness_(lightgreen);
 
   // brightness should be a number
-  assertTrue('White brightness is a number.',
-             typeof whiteBrightness == 'number');
-  assertTrue('Coral brightness is a number.',
-             typeof coralBrightness == 'number');
+  assertTrue(
+      'White brightness is a number.', typeof whiteBrightness == 'number');
+  assertTrue(
+      'Coral brightness is a number.', typeof coralBrightness == 'number');
 
   // brightness for known colors should match known values
   assertEquals('White brightness is 255', whiteBrightness, 255);
@@ -548,13 +540,13 @@ function testYiqBrightnessDiff() {
 
   // brightness diff for known pairs should match known values
   assertEquals('deeppink-indigo is 68.', diffs['deeppink-indigo'], 68);
-  assertEquals('saddlebrown-deeppink is 21.',
-               diffs['saddlebrown-deeppink'], 21);
+  assertEquals(
+      'saddlebrown-deeppink is 21.', diffs['saddlebrown-deeppink'], 21);
 
   // reversed pairs should have equal values
   assertEquals('indigo-saddlebrown is 47.', diffs['indigo-saddlebrown'], 47);
-  assertEquals('saddlebrown-indigo is also 47.',
-               diffs['saddlebrown-indigo'], 47);
+  assertEquals(
+      'saddlebrown-indigo is also 47.', diffs['saddlebrown-indigo'], 47);
 }
 
 
@@ -584,8 +576,8 @@ function testColorDiff() {
   }
 
   // color diff for same-color pairs should be 0
-  assertEquals('mediumblue-mediumblue is 0.',
-               diffs['mediumblue-mediumblue'], 0);
+  assertEquals(
+      'mediumblue-mediumblue is 0.', diffs['mediumblue-mediumblue'], 0);
   assertEquals('oldlace-oldlace is 0.', diffs['oldlace-oldlace'], 0);
 
   // color diff for known pairs should match known values
@@ -594,8 +586,8 @@ function testColorDiff() {
 
   // reversed pairs should have equal values
   assertEquals('orchid-mediumblue is 339.', diffs['orchid-mediumblue'], 339);
-  assertEquals('mediumblue-orchid is also 339.',
-               diffs['mediumblue-orchid'], 339);
+  assertEquals(
+      'mediumblue-orchid is also 339.', diffs['mediumblue-orchid'], 339);
 }
 
 
@@ -608,20 +600,22 @@ function testHighContrast() {
   lemonchiffron = [255, 250, 205];
   sienna = [160, 82, 45];
 
-  var suggestion = goog.color.highContrast(
-      black, [white, black, sienna, lemonchiffron]);
+  var suggestion =
+      goog.color.highContrast(black, [white, black, sienna, lemonchiffron]);
 
   // should return an array of three numbers
   assertTrue('Return value is an array.', typeof suggestion == 'object');
   assertTrue('Return value is 3 long.', suggestion.length == 3);
 
   // known color combos should return a known (i.e. human-verified) suggestion
-  assertArrayEquals('White is best on sienna.',
-      goog.color.highContrast(
-          sienna, [white, black, sienna, lemonchiffron]), white);
-  assertArrayEquals('Black is best on lemonchiffron.',
-      goog.color.highContrast(
-          white, [white, black, sienna, lemonchiffron]), black);
+  assertArrayEquals(
+      'White is best on sienna.',
+      goog.color.highContrast(sienna, [white, black, sienna, lemonchiffron]),
+      white);
+  assertArrayEquals(
+      'Black is best on lemonchiffron.',
+      goog.color.highContrast(white, [white, black, sienna, lemonchiffron]),
+      black);
 }
 
 
@@ -633,7 +627,6 @@ function testHighContrast() {
  * @param {number} DELTA Margin of error for each element in color
  */
 function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
-
   var temp = funcOne(color);
 
   if (!goog.color.isValidHexColor_(temp)) {
@@ -663,9 +656,10 @@ function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
  * @param {number} delta Margin of error for each element in color array
  */
 function assertColorFuzzyEquals(str, expected, actual, delta) {
-  assertTrue(str + ' Expected: ' + expected + '  and got: ' + actual +
-                 ' w/ delta: ' + delta,
-             (Math.abs(expected[0] - actual[0]) <= delta) &&
-             (Math.abs(expected[1] - actual[1]) <= delta) &&
-             (Math.abs(expected[2] - actual[2]) <= delta));
+  assertTrue(
+      str + ' Expected: ' + expected + '  and got: ' + actual + ' w/ delta: ' +
+          delta,
+      (Math.abs(expected[0] - actual[0]) <= delta) &&
+          (Math.abs(expected[1] - actual[1]) <= delta) &&
+          (Math.abs(expected[2] - actual[2]) <= delta));
 }

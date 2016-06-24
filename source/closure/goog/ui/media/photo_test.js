@@ -17,11 +17,13 @@ goog.setTestOnly('goog.ui.media.PhotoTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.Photo');
 var control;
-var PHOTO_URL = 'http://foo/bar.jpg';
+var PHOTO_URL = goog.html.testing.newTrustedResourceUrlForTest(
+    'http://foo/bar.jpg');
 
 function setUp() {
   var photo = new goog.ui.media.MediaModel(PHOTO_URL, 'title', 'description');
@@ -35,16 +37,16 @@ function tearDown() {
 
 function testBasicRendering() {
   control.render();
-  var el = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS);
+  var el = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS);
   assertEquals(1, el.length);
-  var img = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IMG,
-      goog.ui.media.Photo.CSS_CLASS + '-image');
+  var img = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.IMG, goog.ui.media.Photo.CSS_CLASS + '-image');
   assertEquals(1, img.length);
-  var caption = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS + '-caption');
+  var caption = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS + '-caption');
   assertEquals(1, caption.length);
-  var content = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Photo.CSS_CLASS + '-description');
+  var content = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Photo.CSS_CLASS + '-description');
   assertEquals(1, content.length);
 }

@@ -32,15 +32,9 @@ function tearDown() {
 }
 
 function testError() {
-  function xxxxx() {
-    yyyyy();
-  }
-  function yyyyy() {
-    zzzzz();
-  }
-  function zzzzz() {
-    throw new goog.debug.Error('testing');
-  }
+  function xxxxx() { yyyyy(); }
+  function yyyyy() { zzzzz(); }
+  function zzzzz() { throw new goog.debug.Error('testing'); }
 
   var stack = null, message = null;
   try {
@@ -56,9 +50,9 @@ function testError() {
 
   expectedFailures.expectFailureFor(
       (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) ||
-      goog.userAgent.product.SAFARI || (
-          goog.userAgent.product.CHROME &&
-          !goog.userAgent.isVersionOrHigher(532)),
+          goog.userAgent.product.SAFARI ||
+          (goog.userAgent.product.CHROME &&
+           !goog.userAgent.isVersionOrHigher(532)),
       'error.stack is not widely supported');
 
   try {
@@ -79,23 +73,17 @@ function testError() {
       stack.splice(1, 1);  // Remove stack[1].
     }
 
-    assertContains(
-        '1st line of stack should have "Error"', 'Error', stack[0]);
-    assertContains(
-        '2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
-    assertContains(
-        '3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
-    assertContains(
-        '4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
+    assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
+    assertContains('2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
+    assertContains('3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
+    assertContains('4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
   } catch (e) {
     expectedFailures.handleException(e);
   }
 }
 
 function testInheriting() {
-  function MyError() {
-    goog.debug.Error.call(this);
-  }
+  function MyError() { goog.debug.Error.call(this); }
   goog.inherits(MyError, goog.debug.Error);
   MyError.prototype.message = 'My custom error';
 

@@ -47,34 +47,21 @@ function testCreation() {
     // which in some browsers overrides the current page and causes the
     // test to fail.
     var history = new goog.History(
-        true,
-        goog.html.TrustedResourceUrl.fromConstant(
-            goog.string.Const.from('blank_test_helper.html')),
-        input,
-        iframe);
-  } finally {
-    goog.dispose(history);
-  }
-
-  // Test that SafeHtml.create() works with legacy conversion from string.
-  try {
-    var history = new goog.History(
-        true, 'blank_test_helper.html', input, iframe);
+        true, goog.html.TrustedResourceUrl.fromConstant(
+                  goog.string.Const.from('blank_test_helper.html')),
+        input, iframe);
   } finally {
     goog.dispose(history);
   }
 }
 
 function testIsHashChangeSupported() {
-
   // This is the policy currently implemented.
-  var supportsOnHashChange = (goog.userAgent.IE ?
-      document.documentMode >= 8 :
-      'onhashchange' in window);
+  var supportsOnHashChange =
+      (goog.userAgent.IE ? document.documentMode >= 8 :
+                           'onhashchange' in window);
 
-  assertEquals(
-      supportsOnHashChange,
-      goog.History.isOnHashChangeSupported());
+  assertEquals(supportsOnHashChange, goog.History.isOnHashChangeSupported());
 }
 
 // TODO(nnaze): Test additional behavior.

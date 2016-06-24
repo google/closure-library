@@ -62,12 +62,8 @@ function testGetShearInstance() {
 }
 
 function testConstructor() {
-  assertThrows(function() {
-    new goog.math.AffineTransform([0, 0]);
-  });
-  assertThrows(function() {
-    new goog.math.AffineTransform({});
-  });
+  assertThrows(function() { new goog.math.AffineTransform([0, 0]); });
+  assertThrows(function() { new goog.math.AffineTransform({}); });
   assertThrows(function() {
     new goog.math.AffineTransform(0, 0, 0, 'a', 0, 0);
   });
@@ -104,12 +100,8 @@ function testClone() {
 
 function testSetTransform() {
   var tx = new goog.math.AffineTransform();
-  assertThrows(function() {
-    tx.setTransform(1, 2, 3, 4, 6);
-  });
-  assertThrows(function() {
-    tx.setTransform('a', 2, 3, 4, 5, 6);
-  });
+  assertThrows(function() { tx.setTransform(1, 2, 3, 4, 6); });
+  assertThrows(function() { tx.setTransform('a', 2, 3, 4, 5, 6); });
 
   tx.setTransform(1, 2, 3, 4, 5, 6);
   assertEquals(1, tx.getScaleX());
@@ -231,10 +223,12 @@ function testPreConcatentate() {
 }
 
 function testAssociativeConcatenate() {
-  var x = new goog.math.AffineTransform(2, 3, 5, 7, 11, 13).concatenate(
-      new goog.math.AffineTransform(17, 19, 23, 29, 31, 37));
-  var y = new goog.math.AffineTransform(17, 19, 23, 29, 31, 37)
-      .preConcatenate(new goog.math.AffineTransform(2, 3, 5, 7, 11, 13));
+  var x =
+      new goog.math.AffineTransform(2, 3, 5, 7, 11, 13)
+          .concatenate(new goog.math.AffineTransform(17, 19, 23, 29, 31, 37));
+  var y =
+      new goog.math.AffineTransform(17, 19, 23, 29, 31, 37)
+          .preConcatenate(new goog.math.AffineTransform(2, 3, 5, 7, 11, 13));
   assertEquals(x.getScaleX(), y.getScaleX());
   assertEquals(x.getShearY(), y.getShearY());
   assertEquals(x.getShearX(), y.getShearX());
@@ -250,11 +244,13 @@ function testTransform() {
   tx.translate(5, 10);
   tx.rotate(Math.PI / 4, 5, 10);
   tx.transform(srcPts, 0, dstPts, 0, 4);
-  assert(goog.array.equals(
-      [27.071068, 28.180195, 28.485281, 30.301516,
-       27.071068, 32.422836, 25.656855, 30.301516],
-      dstPts,
-      goog.math.nearlyEquals));
+  assert(
+      goog.array.equals(
+          [
+            27.071068, 28.180195, 28.485281, 30.301516, 27.071068, 32.422836,
+            25.656855, 30.301516
+          ],
+          dstPts, goog.math.nearlyEquals));
 }
 
 function testGetDeterminant() {
@@ -265,36 +261,27 @@ function testGetDeterminant() {
 }
 
 function testIsInvertible() {
-  assertTrue(new goog.math.AffineTransform(2, 3, 4, 5, 6, 7).
-      isInvertible());
-  assertTrue(new goog.math.AffineTransform(1, 0, 0, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(NaN, 0, 0, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, NaN, 0, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, NaN, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, NaN, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, NaN, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, 0, NaN).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(Infinity, 0, 0, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, Infinity, 0, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, Infinity, 1, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, Infinity, 0, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, Infinity, 0).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, 0, Infinity).
-      isInvertible());
-  assertFalse(new goog.math.AffineTransform(0, 0, 0, 0, 1, 0).
-      isInvertible());
+  assertTrue(new goog.math.AffineTransform(2, 3, 4, 5, 6, 7).isInvertible());
+  assertTrue(new goog.math.AffineTransform(1, 0, 0, 1, 0, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(NaN, 0, 0, 1, 0, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(1, NaN, 0, 1, 0, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(1, 0, NaN, 1, 0, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(1, 0, 0, NaN, 0, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, NaN, 0).isInvertible());
+  assertFalse(new goog.math.AffineTransform(1, 0, 0, 1, 0, NaN).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(Infinity, 0, 0, 1, 0, 0).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(1, Infinity, 0, 1, 0, 0).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(1, 0, Infinity, 1, 0, 0).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(1, 0, 0, Infinity, 0, 0).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(1, 0, 0, 1, Infinity, 0).isInvertible());
+  assertFalse(
+      new goog.math.AffineTransform(1, 0, 0, 1, 0, Infinity).isInvertible());
+  assertFalse(new goog.math.AffineTransform(0, 0, 0, 0, 1, 0).isInvertible());
 }
 
 function testCreateInverse() {

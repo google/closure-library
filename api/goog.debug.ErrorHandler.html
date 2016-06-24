@@ -1,0 +1,98 @@
+---
+{edit_path: '', layout: api, page: goog.debug.ErrorHandler, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>ErrorHandler</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.debug.html">goog.debug</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L49" target="_blank">View Source</a></div><h1 class="title"><div>class ErrorHandler</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.Disposable.html">goog.Disposable</a>
+  &#x2514; goog.debug.ErrorHandler</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.debug.EntryPointMonitor.html">goog.debug.EntryPointMonitor</a></code><dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code></dl><p>The ErrorHandler can be used to to wrap functions with a try/catch
+statement. If an exception is thrown, the given error handler function will
+be called.</p>
+<p>When this object is disposed, it will stop handling exceptions and tracing.
+It will also try to restore window.setTimeout and window.setInterval
+if it wrapped them. Notice that in the general case, it is not technically
+possible to remove the wrapper, because functions have no knowledge of
+what they have been assigned to. So the app is responsible for other
+forms of unwrapping.</p>
+<h3 class="name"><div>new ErrorHandler(<var>handler</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>handler</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Handler for exceptions.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addOnDisposeCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addOnDisposeCallback(<var>callback</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Invokes a callback function when this object is disposed. Callbacks are
+invoked in the order in which they were added. If a callback is added to
+an already disposed Disposable, it will be called immediately.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#addOnDisposeCallback">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(this: T): ?</code><dd><p>The callback function.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dispose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispose()</div></h3></div><div class="body"><p>Disposes of the object. If the object hasn&#39;t already been disposed of, calls
+<a href="goog.debug.ErrorHandler.html#disposeInternal"><code>#disposeInternal</code></a>. Classes that extend <code>goog.Disposable</code> should
+override <a href="goog.debug.ErrorHandler.html#disposeInternal"><code>#disposeInternal</code></a> in order to delete references to COM
+objects, DOM nodes, and other disposable objects. Reentrant.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#dispose">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#dispose">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="disposeInternal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L329" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>disposeInternal()</div></h3></div><div class="body"><p>Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend <code>goog.Disposable</code> should
+override this method.
+Not reentrant. To avoid calling it twice, it must only be called from the
+subclass&#39; <code>disposeInternal</code> method. Everywhere else the public
+<code>dispose</code> method must be used.
+For example:</p>
+ <pre>
+   mypackage.MyClass &#61; function() {
+     mypackage.MyClass.base(this, &#39;constructor&#39;);
+     // Constructor logic specific to MyClass.
+     ...
+   };
+   goog.inherits(mypackage.MyClass, goog.Disposable);
+
+   mypackage.MyClass.prototype.disposeInternal &#61; function() {
+     // Dispose logic specific to MyClass.
+     ...
+     // Call superclass&#39;s disposeInternal at the end of the subclass&#39;s, like
+     // in C&#43;&#43;, to avoid hard-to-catch issues.
+     mypackage.MyClass.base(this, &#39;disposeInternal&#39;);
+   };
+ </pre>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.Disposable.html#disposeInternal">goog.Disposable</a></dd></dl></div></section><section class="property expandable" id="getDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L163" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.debug.ErrorHandler.html#isDisposed"><code>#isDisposed</code></a> instead.</p>
+<dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#getDisposed">goog.Disposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getProtectedFunction"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L167" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>getProtectedFunction(<var>fn</var>)</div></h3></div><div class="body"><p>Helps <a href="goog.debug.ErrorHandler.html#protectEntryPoint"><code>#protectEntryPoint</code></a> by actually creating the protected
+wrapper function, after <a href="goog.debug.ErrorHandler.html#protectEntryPoint"><code>#protectEntryPoint</code></a> determines that one does
+not already exist for the given function.  Can be overriden by subclasses
+that may want to implement different error handling, or add additional
+entry point hooks.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>An entry point function to be protected.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>protected wrapper function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#isDisposed">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#isDisposed">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="protectEntryPoint"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>protectEntryPoint(<var>fn</var>)</div></h3></div><div class="body"><p>Installs exception protection for an entry point function. When an exception
+is thrown from a protected function, a handler will be invoked to handle it.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>An entry point function to be protected.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A protected wrapper function that calls the entry point
+function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="protectWindowRequestAnimationFrame"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L253" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>protectWindowRequestAnimationFrame()</div></h3></div><div class="body"><p>Install exception protection for window.requestAnimationFrame to handle
+exceptions.</p>
+</div></section><section class="property expandable" id="protectWindowSetInterval"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L244" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>protectWindowSetInterval()</div></h3></div><div class="body"><p>Install exception protection for window.setInterval to handle exceptions.</p>
+</div></section><section class="property expandable" id="protectWindowSetTimeout"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L236" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>protectWindowSetTimeout()</div></h3></div><div class="body"><p>Installs exception protection for window.setTimeout to handle exceptions.</p>
+</div></section><section class="property expandable" id="registerDisposable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDisposable(<var>disposable</var>)</div></h3></div><div class="body"><p>Associates a disposable object with this object so that they will be disposed
+together.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#registerDisposable">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>disposable</var><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><p>that will be disposed when
+this object is disposed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setAddTracersToProtectedFunctions"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L91" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setAddTracersToProtectedFunctions(<var>newVal</var>)</div></h3></div><div class="body"><p>Enable tracers when instrumenting entry points.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>newVal</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>See above.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setPrefixErrorMessages"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L322" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setPrefixErrorMessages(<var>prefixErrorMessages</var>)</div></h3></div><div class="body"><p>Set whether to add a prefix to all error messages that occur in protected
+functions.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>prefixErrorMessages</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to add a prefix to error
+messages.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setWrapErrors"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L311" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setWrapErrors(<var>wrapErrors</var>)</div></h3></div><div class="body"><p>Set whether to wrap errors that occur in protected functions in a
+goog.debug.ErrorHandler.ProtectedFunctionError.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>wrapErrors</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to wrap errors.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unwrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unwrap(<var>fn</var>)</div></h3></div><div class="body"><p>Try to remove an instrumentation wrapper created by this monitor.
+If the function passed to unwrap is not a wrapper created by this
+monitor, then we will do nothing.</p>
+<p>Notice that some wrappers may not be unwrappable. For example, if other
+monitors have applied their own wrappers, then it will be impossible to
+unwrap them because their wrappers will have captured our wrapper.</p>
+<p>So it is important that entry points are unwrapped in the reverse
+order that they were wrapped.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.debug.EntryPointMonitor.html#unwrap">goog.debug.EntryPointMonitor</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function to unwrap.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The unwrapped function, or <code>fn</code> if it was not
+a wrapped function created by this monitor.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="wrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/debug/errorhandler.js#L98" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>wrap(<var>fn</var>)</div></h3></div><div class="body"><p>Instruments a function.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.debug.EntryPointMonitor.html#wrap">goog.debug.EntryPointMonitor</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function to instrument.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The instrumented function.</p>
+</dl></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="creationStack"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>creationStack</div></h3></div><div class="body"><p>If monitoring the goog.Disposable instances is enabled, stores the creation
+stack trace of the Disposable instance.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#creationStack">goog.Disposable</a></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.debug.ErrorHandler.ProtectedFunctionError.html">ErrorHandler.ProtectedFunctionError</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -71,15 +71,9 @@ function tearDown() {
  */
 function MockBrowserChannel() {
   this.reachabilityEvents = {};
-  this.isClosed = function() {
-    return false;
-  };
-  this.isActive = function() {
-    return true;
-  };
-  this.shouldUseSecondaryDomains = function() {
-    return false;
-  };
+  this.isClosed = function() { return false; };
+  this.isActive = function() { return true; };
+  this.shouldUseSecondaryDomains = function() { return false; };
   this.completedRequests = [];
   this.notifyServerReachabilityEvent = function(reachabilityType) {
     if (!this.reachabilityEvents[reachabilityType]) {
@@ -106,20 +100,15 @@ function MockBrowserChannel() {
  */
 function createChannelRequest() {
   xhrIo = new goog.testing.net.XhrIo();
-  xhrIo.abort = xhrIo.abort || function() {
-    this.active_ = false;
-  };
+  xhrIo.abort = xhrIo.abort || function() { this.active_ = false; };
 
   // Install mock browser channel and no-op debug logger.
   mockBrowserChannel = new MockBrowserChannel();
   channelRequest = new goog.net.ChannelRequest(
-      mockBrowserChannel,
-      new goog.net.ChannelDebug());
+      mockBrowserChannel, new goog.net.ChannelDebug());
 
   // Install test XhrIo.
-  mockBrowserChannel.createXhrIo = function() {
-    return xhrIo;
-  };
+  mockBrowserChannel.createXhrIo = function() { return xhrIo; };
 
   // Install watchdogTimeoutCallCount.
   channelRequest.watchdogTimeoutCallCount = 0;
@@ -255,12 +244,13 @@ function testRequestTimeoutWithUnexpectedException() {
 
 function testActiveXBlocked() {
   createChannelRequest();
-  stubs.set(goog.global, 'ActiveXObject',
-      goog.functions.error('Active X blocked'));
+  stubs.set(
+      goog.global, 'ActiveXObject', goog.functions.error('Active X blocked'));
 
   channelRequest.tridentGet(new goog.Uri('some_uri'), false);
   assertFalse(channelRequest.getSuccess());
-  assertEquals(goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED,
+  assertEquals(
+      goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED,
       channelRequest.getLastError());
 
   checkReachabilityEvents(0, 0, 0, 0);
@@ -278,15 +268,19 @@ function testEscapeForStringInScript() {
 
 function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
   var Reachability = goog.net.BrowserChannel.ServerReachability;
-  assertEquals(reqMade,
+  assertEquals(
+      reqMade,
       mockBrowserChannel.reachabilityEvents[Reachability.REQUEST_MADE] || 0);
-  assertEquals(reqSucceeded,
+  assertEquals(
+      reqSucceeded,
       mockBrowserChannel.reachabilityEvents[Reachability.REQUEST_SUCCEEDED] ||
-      0);
-  assertEquals(reqFail,
+          0);
+  assertEquals(
+      reqFail,
       mockBrowserChannel.reachabilityEvents[Reachability.REQUEST_FAILED] || 0);
-  assertEquals(backChannel,
-      mockBrowserChannel.reachabilityEvents[
-          Reachability.BACK_CHANNEL_ACTIVITY] ||
-      0);
+  assertEquals(
+      backChannel,
+      mockBrowserChannel
+              .reachabilityEvents[Reachability.BACK_CHANNEL_ACTIVITY] ||
+          0);
 }

@@ -51,13 +51,11 @@ function testIsMonthOnLeft() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   var head = $$('tr', 'goog-date-picker-head')[0];
-  var month = $$('button', 'goog-date-picker-month',
-      head.firstChild)[0];
+  var month = $$('button', 'goog-date-picker-month', head.firstChild)[0];
   assertSameElements(
       'Button element must have expected class names',
       ['goog-date-picker-btn', 'goog-date-picker-month'],
-      goog.dom.classlist.get(month)
-  );
+      goog.dom.classlist.get(month));
 }
 
 function testIsYearOnLeft() {
@@ -65,13 +63,11 @@ function testIsYearOnLeft() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   var head = $$('tr', 'goog-date-picker-head')[0];
-  var year = $$('button', 'goog-date-picker-year',
-      head.firstChild)[0];
+  var year = $$('button', 'goog-date-picker-year', head.firstChild)[0];
   assertSameElements(
       'Button element must have expected class names',
       ['goog-date-picker-btn', 'goog-date-picker-year'],
-      goog.dom.classlist.get(year)
-  );
+      goog.dom.classlist.get(year));
 }
 
 function testHidingOfTableFoot0() {
@@ -162,8 +158,28 @@ function testGetActiveMonth() {
   assertObjectEquals(new goog.date.Date(2000, 5, 1), month);
 
   month.setMonth(10);
-  assertObjectEquals('modifying the returned object is safe',
-      new goog.date.Date(2000, 5, 1), picker.getActiveMonth());
+  assertObjectEquals(
+      'modifying the returned object is safe', new goog.date.Date(2000, 5, 1),
+      picker.getActiveMonth());
+}
+
+function testGetActiveMonthBeforeYear100() {
+  var date = new Date(23, 5, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  date.setFullYear(23);
+
+  var expectedMonth = new goog.date.Date(23, 5, 1);
+  expectedMonth.setFullYear(23);
+
+  picker = new goog.ui.DatePicker(date);
+  var month = picker.getActiveMonth();
+  assertObjectEquals(expectedMonth, month);
+
+  month.setMonth(10);
+  assertObjectEquals(
+      'modifying the returned object is safe', expectedMonth,
+      picker.getActiveMonth());
 }
 
 function testGetDate() {
@@ -172,11 +188,77 @@ function testGetDate() {
   assertObjectEquals(new goog.date.Date(2000, 0, 1), date);
 
   date.setMonth(1);
-  assertObjectEquals('modifying the returned date is safe',
-      new goog.date.Date(2000, 0, 1), picker.getDate());
+  assertObjectEquals(
+      'modifying the returned date is safe', new goog.date.Date(2000, 0, 1),
+      picker.getDate());
 
   picker.setDate(null);
   assertNull('no date is selected', picker.getDate());
+}
+
+function testGetDateBeforeYear100() {
+  var inputDate = new Date(23, 5, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  inputDate.setFullYear(23);
+  picker = new goog.ui.DatePicker(inputDate);
+  var date = picker.getDate();
+
+  var expectedDate = new goog.date.Date(23, 5, 5);
+  expectedDate.setFullYear(23);
+  assertObjectEquals(expectedDate, date);
+
+  picker.setDate(inputDate);
+  assertObjectEquals(expectedDate, picker.getDate());
+  var expectedMonth = new goog.date.Date(23, 5, 1);
+  expectedMonth.setFullYear(23);
+  assertObjectEquals(expectedMonth, picker.getActiveMonth());
+}
+
+function testGridForDecember23() {
+  // Initialize picker to December 23.
+  var inputDate = new Date(23, 11, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  inputDate.setFullYear(23);
+  picker = new goog.ui.DatePicker(inputDate);
+  picker.create(sandbox);
+
+  // Grid start with last days of November 23, shows December 23 and first days
+  // of January 24.
+  for (var i = 0; i < 6; i++) {
+    for (var j = 0; j < 7; j++) {
+      var date = picker.getDateAt(i, j);
+      if (date.getMonth() == 0) {
+        assertEquals(24, date.getFullYear());
+      } else {
+        assertEquals(23, date.getFullYear());
+      }
+    }
+  }
+}
+
+function testGridForJanuary22() {
+  // Initialize picker to January 22.
+  var inputDate = new Date(22, 0, 5);
+  // Above statement will create date with year 1922, need to set full year
+  // explicitly.
+  inputDate.setFullYear(22);
+  picker = new goog.ui.DatePicker(inputDate);
+  picker.create(sandbox);
+
+  // Grid start with last days of December 21, shows January 22 and first days
+  // of February 22.
+  for (var i = 0; i < 6; i++) {
+    for (var j = 0; j < 7; j++) {
+      var date = picker.getDateAt(i, j);
+      if (date.getMonth() == 11) {
+        assertEquals(21, date.getFullYear());
+      } else {
+        assertEquals(22, date.getFullYear());
+      }
+    }
+  }
 }
 
 function testGetDateAt() {
@@ -234,48 +316,43 @@ function testSetDate() {
   var selectEvents = 0;
   var changeEvents = 0;
   var changeActiveMonthEvents = 0;
-  goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT,
-      function() {
-        selectEvents++;
-      });
-  goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE,
-      function() {
-        changeEvents++;
-      });
-  goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
-      function() {
-        changeActiveMonthEvents++;
-      });
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.SELECT, function() { selectEvents++; });
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.CHANGE, function() { changeEvents++; });
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+      function() { changeActiveMonthEvents++; });
 
   // Set date.
   picker.setDate(new Date(2010, 1, 26));
   assertEquals('no select event dispatched', 1, selectEvents);
   assertEquals('no change event dispatched', 1, changeEvents);
-  assertEquals('no change active month event dispatched',
-      1, changeActiveMonthEvents);
-  assertTrue('date is set',
-      new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
+  assertEquals(
+      'no change active month event dispatched', 1, changeActiveMonthEvents);
+  assertTrue(
+      'date is set', new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
 
   // Set date to same date.
   picker.setDate(new Date(2010, 1, 26));
   assertEquals('1 select event dispatched', 2, selectEvents);
   assertEquals('no change event dispatched', 1, changeEvents);
-  assertEquals('no change active month event dispatched',
-      1, changeActiveMonthEvents);
+  assertEquals(
+      'no change active month event dispatched', 1, changeActiveMonthEvents);
 
   // Set date to different date.
   picker.setDate(new Date(2010, 1, 27));
   assertEquals('another select event dispatched', 3, selectEvents);
   assertEquals('1 change event dispatched', 2, changeEvents);
-  assertEquals('2 change active month events dispatched',
-      1, changeActiveMonthEvents);
+  assertEquals(
+      '2 change active month events dispatched', 1, changeActiveMonthEvents);
 
   // Set date to a date in a different month.
   picker.setDate(new Date(2010, 2, 27));
   assertEquals('another select event dispatched', 4, selectEvents);
   assertEquals('another change event dispatched', 3, changeEvents);
-  assertEquals('3 change active month event dispatched',
-      2, changeActiveMonthEvents);
+  assertEquals(
+      '3 change active month event dispatched', 2, changeActiveMonthEvents);
 
   // Set date to none.
   picker.setDate(null);
@@ -287,39 +364,39 @@ function testSetDate() {
 function testChangeActiveMonth() {
   picker = new goog.ui.DatePicker();
   var changeActiveMonthEvents = 0;
-  goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
-      function() {
-        changeActiveMonthEvents++;
-      });
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+      function() { changeActiveMonthEvents++; });
 
   // Set date.
   picker.setDate(new Date(2010, 1, 26));
-  assertEquals('no change active month event dispatched',
-      1, changeActiveMonthEvents);
-  assertTrue('date is set',
-      new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
+  assertEquals(
+      'no change active month event dispatched', 1, changeActiveMonthEvents);
+  assertTrue(
+      'date is set', new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
 
   // Change to next month.
   picker.nextMonth();
-  assertEquals('1 change active month event dispatched',
-      2, changeActiveMonthEvents);
-  assertTrue('date should still be the same',
+  assertEquals(
+      '1 change active month event dispatched', 2, changeActiveMonthEvents);
+  assertTrue(
+      'date should still be the same',
       new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
 
   // Change to next year.
   picker.nextYear();
-  assertEquals('2 change active month events dispatched',
-      3, changeActiveMonthEvents);
+  assertEquals(
+      '2 change active month events dispatched', 3, changeActiveMonthEvents);
 
   // Change to previous month.
   picker.previousMonth();
-  assertEquals('3 change active month events dispatched',
-      4, changeActiveMonthEvents);
+  assertEquals(
+      '3 change active month events dispatched', 4, changeActiveMonthEvents);
 
   // Change to previous year.
   picker.previousYear();
-  assertEquals('4 change active month events dispatched',
-      5, changeActiveMonthEvents);
+  assertEquals(
+      '4 change active month events dispatched', 5, changeActiveMonthEvents);
 }
 
 function testUserSelectableDates() {
@@ -327,16 +404,36 @@ function testUserSelectableDates() {
       new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
   picker = new goog.ui.DatePicker();
   picker.setUserSelectableDateRange(dateRange);
-  assertFalse('should not be selectable date',
-              picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 24)));
-  assertTrue('should be a selectable date',
+  assertFalse(
+      'should not be selectable date',
+      picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 24)));
+  assertTrue(
+      'should be a selectable date',
       picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 25)));
-  assertTrue('should be a selectable date',
+  assertTrue(
+      'should be a selectable date',
       picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 26)));
-  assertTrue('should be a selectable date',
+  assertTrue(
+      'should be a selectable date',
       picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 27)));
-  assertFalse('should not be selectable date',
-              picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 28)));
+  assertFalse(
+      'should not be selectable date',
+      picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 28)));
+}
+
+function testGetUserSelectableDateRange() {
+  picker = new goog.ui.DatePicker();
+  var dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'default date range is all time',
+      goog.date.DateRange.equals(dateRange, goog.date.DateRange.allTime()));
+  var newDateRange = new goog.date.DateRange(
+      new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
+  picker.setUserSelectableDateRange(newDateRange);
+  dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'should be equal to updated date range',
+      goog.date.DateRange.equals(dateRange, newDateRange));
 }
 
 function testUniqueCellIds() {
@@ -350,8 +447,7 @@ function testUniqueCellIds() {
     assertNotNull(cells[i]);
     if (goog.a11y.aria.getRole(cells[i]) == goog.a11y.aria.Role.GRIDCELL) {
       assertNonEmptyString('cell id is non empty', cells[i].id);
-      assertUndefined('cell id is not unique',
-          existingIds[cells[i].id]);
+      assertUndefined('cell id is not unique', existingIds[cells[i].id]);
       existingIds[cells[i].id] = 1;
     }
   }
@@ -374,13 +470,15 @@ function testKeyboardNavigation() {
   goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT, selectEvents);
   goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE, changeEvents);
 
-  goog.testing.events.fireNonAsciiKeySequence(picker.getElement(),
-      goog.events.KeyCodes.DOWN, goog.events.KeyCodes.DOWN);
+  goog.testing.events.fireNonAsciiKeySequence(
+      picker.getElement(), goog.events.KeyCodes.DOWN,
+      goog.events.KeyCodes.DOWN);
   changeEvents.assertCallCount(1);
   selectEvents.assertCallCount(0);
 
-  goog.testing.events.fireNonAsciiKeySequence(picker.getElement(),
-      goog.events.KeyCodes.ENTER, goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireNonAsciiKeySequence(
+      picker.getElement(), goog.events.KeyCodes.ENTER,
+      goog.events.KeyCodes.ENTER);
   changeEvents.assertCallCount(1);
   selectEvents.assertCallCount(1);
 }

@@ -45,8 +45,7 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.events.CAPTURE_SIMULATION_MODE =
-      goog.events.CaptureSimulationMode.ON;
+  goog.events.CAPTURE_SIMULATION_MODE = goog.events.CaptureSimulationMode.ON;
   goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
   goog.disposeAll(et1, et2, et3);
   goog.events.removeAll(document.body);
@@ -71,21 +70,20 @@ function testProtectBrowserEventEntryPoint() {
 
   var err = Error('test');
   var body = document.body;
-  goog.events.listen(body, goog.events.EventType.CLICK, function() {
-    throw err;
-  });
+  goog.events.listen(
+      body, goog.events.EventType.CLICK, function() { throw err; });
 
   dispatchClick(body);
 
-  assertEquals('Error handler callback should be called.',
-      1, errorHandlerFn.getCallCount());
+  assertEquals(
+      'Error handler callback should be called.', 1,
+      errorHandlerFn.getCallCount());
   assertEquals(err, errorHandlerFn.getLastCall().getArgument(0));
 
   assertEquals(1, browserEventHandler.getCallCount());
   var err2 = browserEventHandler.getLastCall().getError();
   assertNotNull(err2);
-  assertTrue(
-      err2 instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+  assertTrue(err2 instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
 }
 
 function testSelfRemove() {
@@ -124,7 +122,7 @@ function testHasListener() {
 function testHasListenerWithEventTarget() {
   assertFalse(goog.events.hasListener(et1));
 
-  function callback() {};
+  function callback(){};
   goog.events.listen(et1, 'test', callback, true);
   assertTrue(goog.events.hasListener(et1));
   assertTrue(goog.events.hasListener(et1, 'test'));
@@ -139,7 +137,7 @@ function testHasListenerWithEventTarget() {
 }
 
 function testHasListenerWithMultipleTargets() {
-  function callback() {};
+  function callback(){};
 
   goog.events.listen(et1, 'test1', callback, true);
   goog.events.listen(et2, 'test2', callback, true);
@@ -161,9 +159,7 @@ function testBubbleSingle() {
   et2.setParentEventTarget(et3);
 
   var count = 0;
-  function callback() {
-    count++;
-  }
+  function callback() { count++; }
 
   goog.events.listen(et3, 'test', callback, false);
 
@@ -181,9 +177,7 @@ function testCaptureSingle() {
   et2.setParentEventTarget(et3);
 
   var count = 0;
-  function callback() {
-    count++;
-  }
+  function callback() { count++; }
 
   goog.events.listen(et3, 'test', callback, true);
 
@@ -246,9 +240,7 @@ function testCaptureAndBubble() {
 
 function testCapturingRemovesBubblingListener() {
   var bubbleCount = 0;
-  function callbackBubble() {
-    bubbleCount++;
-  }
+  function callbackBubble() { bubbleCount++; }
 
   var captureCount = 0;
   function callbackCapture() {
@@ -269,8 +261,9 @@ function dispatchClick(target) {
     target.click();
   } else {
     var e = document.createEvent('MouseEvents');
-    e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false,
-        false, false, false, 0, null);
+    e.initMouseEvent(
+        'click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false,
+        0, null);
     target.dispatchEvent(e);
   }
 }
@@ -278,9 +271,7 @@ function dispatchClick(target) {
 function testHandleBrowserEventBubblingListener() {
   var count = 0;
   var body = document.body;
-  goog.events.listen(body, 'click', function() {
-    count++;
-  });
+  goog.events.listen(body, 'click', function() { count++; });
   dispatchClick(body);
   assertEquals(1, count);
 }
@@ -288,9 +279,7 @@ function testHandleBrowserEventBubblingListener() {
 function testHandleBrowserEventCapturingListener() {
   var count = 0;
   var body = document.body;
-  goog.events.listen(body, 'click', function() {
-    count++;
-  }, true);
+  goog.events.listen(body, 'click', function() { count++; }, true);
   dispatchClick(body);
   assertEquals(1, count);
 }
@@ -298,12 +287,8 @@ function testHandleBrowserEventCapturingListener() {
 function testHandleBrowserEventCapturingAndBubblingListener() {
   var count = 1;
   var body = document.body;
-  goog.events.listen(body, 'click', function() {
-    count += 3;
-  }, true);
-  goog.events.listen(body, 'click', function() {
-    count *= 5;
-  }, false);
+  goog.events.listen(body, 'click', function() { count += 3; }, true);
+  goog.events.listen(body, 'click', function() { count *= 5; }, false);
   dispatchClick(body);
   assertEquals(20, count);
 }
@@ -312,9 +297,7 @@ function testHandleBrowserEventCapturingRemovesBubblingListener() {
   var body = document.body;
 
   var bubbleCount = 0;
-  function callbackBubble() {
-    bubbleCount++;
-  }
+  function callbackBubble() { bubbleCount++; }
 
   var captureCount = 0;
   function callbackCapture() {
@@ -332,12 +315,10 @@ function testHandleBrowserEventCapturingRemovesBubblingListener() {
 
 function testHandleEventPropagationOnParentElement() {
   var count = 1;
-  goog.events.listen(document.documentElement, 'click', function() {
-    count += 3;
-  }, true);
-  goog.events.listen(document.documentElement, 'click', function() {
-    count *= 5;
-  }, false);
+  goog.events.listen(
+      document.documentElement, 'click', function() { count += 3; }, true);
+  goog.events.listen(
+      document.documentElement, 'click', function() { count *= 5; }, false);
   dispatchClick(document.body);
   assertEquals(20, count);
 }
@@ -345,8 +326,8 @@ function testHandleEventPropagationOnParentElement() {
 function testEntryPointRegistry() {
   var monitor = new goog.debug.EntryPointMonitor();
   var replacement = function() {};
-  monitor.wrap = goog.testing.recordFunction(
-      goog.functions.constant(replacement));
+  monitor.wrap =
+      goog.testing.recordFunction(goog.functions.constant(replacement));
 
   goog.debug.entryPointRegistry.monitorAll(monitor);
   assertTrue(monitor.wrap.getCallCount() >= 1);
@@ -355,26 +336,24 @@ function testEntryPointRegistry() {
 
 // Fixes bug http://b/6434926
 function testListenOnceHandlerDispatchCausingInfiniteLoop() {
-  var handleFoo = goog.testing.recordFunction(function() {
-    et1.dispatchEvent('foo');
-  });
+  var handleFoo =
+      goog.testing.recordFunction(function() { et1.dispatchEvent('foo'); });
 
   goog.events.listenOnce(et1, 'foo', handleFoo);
 
   et1.dispatchEvent('foo');
 
-  assertEquals('Handler should be called only once.',
-               1, handleFoo.getCallCount());
+  assertEquals(
+      'Handler should be called only once.', 1, handleFoo.getCallCount());
 }
 
 function testCreationStack() {
-  if (!new Error().stack)
-    return;
+  if (!new Error().stack) return;
   propertyReplacer.replace(goog.events.Listener, 'ENABLE_MONITORING', true);
 
   var div = document.createElement(goog.dom.TagName.DIV);
-  var key = goog.events.listen(
-      div, goog.events.EventType.CLICK, goog.nullFunction);
+  var key =
+      goog.events.listen(div, goog.events.EventType.CLICK, goog.nullFunction);
   var listenerStack = key.creationStack;
 
   // Check that the name of this test function occurs in the stack trace.
@@ -444,14 +423,14 @@ function testUnlistenAfterListenOnce() {
 }
 
 function testEventBubblingWithReentrantDispatch_bubbling() {
-  runEventPropogationWithReentrantDispatch(false);
+  runEventPropagationWithReentrantDispatch(false);
 }
 
 function testEventBubblingWithReentrantDispatch_capture() {
-  runEventPropogationWithReentrantDispatch(true);
+  runEventPropagationWithReentrantDispatch(true);
 }
 
-function runEventPropogationWithReentrantDispatch(useCapture) {
+function runEventPropagationWithReentrantDispatch(useCapture) {
   var eventType = 'test-event-type';
 
   var child = et1;
@@ -480,15 +459,15 @@ function runEventPropogationWithReentrantDispatch(useCapture) {
   assertEquals(2, secondListener.getCallCount());
 }
 
-function testEventPropogationWhenListenerRemoved_bubbling() {
-  runEventPropogationWhenListenerRemoved(false);
+function testEventPropagationWhenListenerRemoved_bubbling() {
+  runEventPropagationWhenListenerRemoved(false);
 }
 
-function testEventPropogationWhenListenerRemoved_capture() {
-  runEventPropogationWhenListenerRemoved(true);
+function testEventPropagationWhenListenerRemoved_capture() {
+  runEventPropagationWhenListenerRemoved(true);
 }
 
-function runEventPropogationWhenListenerRemoved(useCapture) {
+function runEventPropagationWhenListenerRemoved(useCapture) {
   var eventType = 'test-event-type';
 
   var child = et1;
@@ -508,15 +487,15 @@ function runEventPropogationWhenListenerRemoved(useCapture) {
   assertEquals(1, secondListener.getCallCount());
 }
 
-function testEventPropogationWhenListenerAdded_bubbling() {
-  runEventPropogationWhenListenerAdded(false);
+function testEventPropagationWhenListenerAdded_bubbling() {
+  runEventPropagationWhenListenerAdded(false);
 }
 
-function testEventPropogationWhenListenerAdded_capture() {
-  runEventPropogationWhenListenerAdded(true);
+function testEventPropagationWhenListenerAdded_capture() {
+  runEventPropagationWhenListenerAdded(true);
 }
 
-function runEventPropogationWhenListenerAdded(useCapture) {
+function runEventPropagationWhenListenerAdded(useCapture) {
   var eventType = 'test-event-type';
 
   var child = et1;
@@ -537,15 +516,15 @@ function runEventPropogationWhenListenerAdded(useCapture) {
   assertEquals(1, secondListener.getCallCount());
 }
 
-function testEventPropogationWhenListenerAddedAndRemoved_bubbling() {
-  runEventPropogationWhenListenerAddedAndRemoved(false);
+function testEventPropagationWhenListenerAddedAndRemoved_bubbling() {
+  runEventPropagationWhenListenerAddedAndRemoved(false);
 }
 
-function testEventPropogationWhenListenerAddedAndRemoved_capture() {
-  runEventPropogationWhenListenerAddedAndRemoved(true);
+function testEventPropagationWhenListenerAddedAndRemoved_capture() {
+  runEventPropagationWhenListenerAddedAndRemoved(true);
 }
 
-function runEventPropogationWhenListenerAddedAndRemoved(useCapture) {
+function runEventPropagationWhenListenerAddedAndRemoved(useCapture) {
   var eventType = 'test-event-type';
 
   var child = et1;
@@ -581,25 +560,20 @@ function testAssertWhenUsedWithUninitializedCustomEventTarget() {
     goog.events.dispatchEvent(instance, 'test1');
   });
   assertTrue(e instanceof goog.asserts.AssertionError);
-  e = assertThrows(function() {
-    instance.dispatchEvent('test1');
-  });
+  e = assertThrows(function() { instance.dispatchEvent('test1'); });
   assertTrue(e instanceof goog.asserts.AssertionError);
 }
 
 function testAssertWhenDispatchEventIsUsedWithNonCustomEventTarget() {
   var obj = {};
-  e = assertThrows(function() {
-    goog.events.dispatchEvent(obj, 'test1');
-  });
+  e = assertThrows(function() { goog.events.dispatchEvent(obj, 'test1'); });
   assertTrue(e instanceof goog.asserts.AssertionError);
 }
 
 
 function testPropagationStoppedDuringCapture() {
-  var captureHandler = goog.testing.recordFunction(function(e) {
-    e.stopPropagation();
-  });
+  var captureHandler =
+      goog.testing.recordFunction(function(e) { e.stopPropagation(); });
   var bubbleHandler = goog.testing.recordFunction();
 
   var body = document.body;
@@ -627,9 +601,8 @@ function testPropagationStoppedDuringCapture() {
 
 function testPropagationStoppedDuringBubble() {
   var captureHandler = goog.testing.recordFunction();
-  var bubbleHandler1 = goog.testing.recordFunction(function(e) {
-    e.stopPropagation();
-  });
+  var bubbleHandler1 =
+      goog.testing.recordFunction(function(e) { e.stopPropagation(); });
   var bubbleHandler2 = goog.testing.recordFunction();
 
   var body = document.body;

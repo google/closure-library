@@ -50,30 +50,29 @@ function testMouseupDoesntActivateMenuItemImmediately() {
 
   var menuItem = menu.getChildAt(1);
   var actionDispatched = false;
-  goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
-      function(e) {
-        actionDispatched = true;
-      });
+  goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION, function(e) {
+    actionDispatched = true;
+  });
 
   menu.setVisible(true, false, fakeEvent);
   // Makes the menu item active so it can be selected on mouseup.
   menuItem.setActive(true);
 
   goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
-  assertFalse('ACTION should not be dispatched after the initial mouseup',
-              actionDispatched);
+  assertFalse(
+      'ACTION should not be dispatched after the initial mouseup',
+      actionDispatched);
 
   goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
-  assertTrue('ACTION should be dispatched after the second mouseup',
-             actionDispatched);
-
+  assertTrue(
+      'ACTION should be dispatched after the second mouseup', actionDispatched);
 }
 
 function testHoverBehavior() {
   menu.decorate(goog.dom.getElement('demoMenu'));
 
-  goog.testing.events.fireMouseOverEvent(goog.dom.getElement('menuItem2'),
-      document.body);
+  goog.testing.events.fireMouseOverEvent(
+      goog.dom.getElement('menuItem2'), document.body);
   assertEquals(1, menu.getHighlightedIndex());
 
   menu.exitDocument();
@@ -83,8 +82,8 @@ function testHoverBehavior() {
 function testIndirectionDecoration() {
   menu.decorate(goog.dom.getElement('complexMenu'));
 
-  goog.testing.events.fireMouseOverEvent(goog.dom.getElement('complexItem3'),
-      document.body);
+  goog.testing.events.fireMouseOverEvent(
+      goog.dom.getElement('complexItem3'), document.body);
   assertEquals(2, menu.getHighlightedIndex());
 
   menu.exitDocument();
@@ -99,14 +98,16 @@ function testSetHighlightedIndex() {
   var element = goog.dom.getElement('scrollableMenuItem4');
   menu.setHighlightedIndex(3);
   assertTrue(element.offsetTop >= menu.getElement().scrollTop);
-  assertTrue(element.offsetTop <=
+  assertTrue(
+      element.offsetTop <=
       menu.getElement().scrollTop + menu.getElement().offsetHeight);
 
   // Scroll up
   element = goog.dom.getElement('scrollableMenuItem3');
   menu.setHighlightedIndex(2);
   assertTrue(element.offsetTop >= menu.getElement().scrollTop);
-  assertTrue(element.offsetTop <=
+  assertTrue(
+      element.offsetTop <=
       menu.getElement().scrollTop + menu.getElement().offsetHeight);
 
   menu.exitDocument();

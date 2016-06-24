@@ -138,8 +138,9 @@ goog.editor.Plugin.prototype.enable = function(fieldObject) {
   if (this.getFieldObject() == fieldObject) {
     this.enabled_ = true;
   } else {
-    goog.log.error(this.logger, 'Trying to enable an unregistered field with ' +
-        'this plugin.');
+    goog.log.error(
+        this.logger, 'Trying to enable an unregistered field with ' +
+            'this plugin.');
   }
 };
 
@@ -152,8 +153,9 @@ goog.editor.Plugin.prototype.disable = function(fieldObject) {
   if (this.getFieldObject() == fieldObject) {
     this.enabled_ = false;
   } else {
-    goog.log.error(this.logger, 'Trying to disable an unregistered field ' +
-        'with this plugin.');
+    goog.log.error(
+        this.logger, 'Trying to disable an unregistered field ' +
+            'with this plugin.');
   }
 };
 
@@ -243,8 +245,8 @@ goog.editor.Plugin.Op = {
  * A map from plugin operations to the names of the methods that
  * invoke those operations.
  */
-goog.editor.Plugin.OPCODE = goog.object.transpose(
-    goog.reflect.object(goog.editor.Plugin, {
+goog.editor.Plugin.OPCODE =
+    goog.object.transpose(goog.reflect.object(goog.editor.Plugin, {
       handleKeyDown: goog.editor.Plugin.Op.KEYDOWN,
       handleKeyPress: goog.editor.Plugin.Op.KEYPRESS,
       handleKeyUp: goog.editor.Plugin.Op.KEYUP,

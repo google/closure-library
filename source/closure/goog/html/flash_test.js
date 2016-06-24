@@ -44,8 +44,7 @@ function testCreateEmbed() {
 
   // Cannot override attributes, case insensitive.
   assertThrows(function() {
-    goog.html.flash.createEmbed(
-        trustedResourceUrl, {'Type': 'cannotdothis'});
+    goog.html.flash.createEmbed(trustedResourceUrl, {'Type': 'cannotdothis'});
   });
 }
 
@@ -61,13 +60,12 @@ function testCreateObject() {
           '<param name="allowScriptAccess" value="always&lt;">' +
           '</object>',
       goog.html.flash.createObject(
-          trustedResourceUrl,
-          {'allowScriptAccess': 'always<'}, {'class': 'test<'}));
+          trustedResourceUrl, {'allowScriptAccess': 'always<'},
+          {'class': 'test<'}));
 
   // Cannot override params, case insensitive.
   assertThrows(function() {
-    goog.html.flash.createObject(
-        trustedResourceUrl, {'datA': 'cantdothis'});
+    goog.html.flash.createObject(trustedResourceUrl, {'datA': 'cantdothis'});
   });
 
   // Cannot override attributes, case insensitive.
@@ -89,8 +87,8 @@ function testCreateObjectForOldIe() {
           '<param name="allowScriptAccess" value="always&lt;">' +
           '</object>',
       goog.html.flash.createObjectForOldIe(
-          trustedResourceUrl,
-          {'allowScriptAccess': 'always<'}, {'class': 'test<'}));
+          trustedResourceUrl, {'allowScriptAccess': 'always<'},
+          {'class': 'test<'}));
 
   // Cannot override params, case insensitive.
   assertThrows(function() {

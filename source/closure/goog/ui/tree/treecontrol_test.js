@@ -20,16 +20,10 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.ui.tree.TreeControl');
 function makeATree() {
   var tree = new goog.ui.tree.TreeControl('root');
-  var testData = ['A', [
-    ['AA', [
-      ['AAA', []],
-      ['AAB', []]
-    ]],
-    ['AB', [
-      ['ABA', []],
-      ['ABB', []]
-    ]]
-  ]];
+  var testData = [
+    'A',
+    [['AA', [['AAA', []], ['AAB', []]]], ['AB', [['ABA', []], ['ABB', []]]]]
+  ];
 
   createTreeFromTestData(tree, testData, 3);
   tree.render(goog.dom.getElement('treeContainer'));
@@ -37,7 +31,7 @@ function makeATree() {
 }
 
 function createTreeFromTestData(node, data, maxLevels) {
-  node.setHtml(data[0]);
+  node.setText(data[0]);
   if (maxLevels < 0) {
     return;
   }

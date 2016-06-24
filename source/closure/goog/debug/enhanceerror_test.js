@@ -34,9 +34,7 @@ function testEnhanceError() {
   // Tests are like this:
   // [test num, expect something in the stack, expect an extra message]
   var tests = [
-    [THROW_STRING],
-    [THROW_NPE],
-    [THROW_ERROR],
+    [THROW_STRING], [THROW_NPE], [THROW_ERROR],
     [THROW_ENHANCED_ERROR, 'throwEnhancedError', 'an enhanced error'],
     [THROW_ENHANCED_STRING, 'throwEnhancedString']
   ];
@@ -54,23 +52,26 @@ function testEnhanceError() {
         debug(s[j]);
       }
       // 'baz' is always in the stack
-      assertTrue('stack should contain "baz"',
-                 e.stack.indexOf('baz') != -1);
+      assertTrue('stack should contain "baz"', e.stack.indexOf('baz') != -1);
 
       if (testInStack) {
-        assertTrue('stack should contain "' + testInStack + '"',
-                   e.stack.indexOf(testInStack) != -1);
+        assertTrue(
+            'stack should contain "' + testInStack + '"',
+            e.stack.indexOf(testInStack) != -1);
       }
       if (testExtraMessage) {
         // 2 messages
-        assertTrue('message0 should contain "' + testExtraMessage + '"',
-                   e.message0.indexOf(testExtraMessage) != -1);
-        assertTrue('message1 should contain "message from baz"',
-                   e.message1.indexOf('message from baz') != -1);
+        assertTrue(
+            'message0 should contain "' + testExtraMessage + '"',
+            e.message0.indexOf(testExtraMessage) != -1);
+        assertTrue(
+            'message1 should contain "message from baz"',
+            e.message1.indexOf('message from baz') != -1);
       } else {
         // 1 message
-        assertTrue('message0 should contain "message from baz"',
-                   e.message0.indexOf('message from baz') != -1);
+        assertTrue(
+            'message0 should contain "message from baz"',
+            e.message0.indexOf('message from baz') != -1);
       }
       continue;
     }

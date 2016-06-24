@@ -55,21 +55,26 @@ function tearDownPage() {
   // Add an extra tweak for testing the creation of tweaks after the UI has
   // already been rendered.
   var entryCounter = 0;
-  goog.tweak.registerButton('CreateNewTweak', 'Creates a new tweak. Meant ' +
-      'to simulate a tweak being registered in a lazy-loaded module.',
+  goog.tweak.registerButton(
+      'CreateNewTweak', 'Creates a new tweak. Meant ' +
+          'to simulate a tweak being registered in a lazy-loaded module.',
       function() {
         goog.tweak.registerBoolean(
             'Lazy' + ++entryCounter, 'Lazy-loaded tweak.');
       });
-  goog.tweak.registerButton('CreateNewTweakInNamespace1',
+  goog.tweak.registerButton(
+      'CreateNewTweakInNamespace1',
       'Creates a new tweak within a namespace. Meant to simulate a tweak ' +
-      'being registered in a lazy-loaded module.', function() {
+          'being registered in a lazy-loaded module.',
+      function() {
         goog.tweak.registerString(
             'foo.bar.Lazy' + ++entryCounter, 'Lazy-loaded tweak.');
       });
-  goog.tweak.registerButton('CreateNewTweakInNamespace2',
+  goog.tweak.registerButton(
+      'CreateNewTweakInNamespace2',
       'Creates a new tweak within a namespace. Meant to simulate a tweak ' +
-      'being registered in a lazy-loaded module.', function() {
+          'being registered in a lazy-loaded module.',
+      function() {
         goog.tweak.registerNumber(
             'foo.bar.baz.Lazy' + ++entryCounter, 'Lazy combo', 3,
             {validValues: [1, 2, 3], label: 'Lazy!'});
@@ -88,13 +93,13 @@ function tearDownPage() {
 
 function createUi(collapsible) {
   var tweakUiElem = collapsible ? goog.tweak.TweakUi.createCollapsible() :
-      goog.tweak.TweakUi.create();
+                                  goog.tweak.TweakUi.create();
   root.appendChild(tweakUiElem);
 }
 
 function getAllEntryDivs() {
-  return goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.tweak.TweakUi.ENTRY_CSS_CLASS_);
+  return goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.tweak.TweakUi.ENTRY_CSS_CLASS_);
 }
 
 function getEntryDiv(entry) {
@@ -121,16 +126,16 @@ function getEntryInput(entry) {
 
 function testCreate() {
   createUi(false);
-  assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT,
+  assertEquals(
+      'Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT,
       getAllEntryDivs().length);
 
-  assertFalse('checkbox should not be checked 1',
-      getEntryInput(boolEntry).checked);
-  assertTrue('checkbox should be checked 2',
-      getEntryInput(boolEntry2).checked);
+  assertFalse(
+      'checkbox should not be checked 1', getEntryInput(boolEntry).checked);
+  assertTrue('checkbox should be checked 2', getEntryInput(boolEntry2).checked);
   // Enusre custom labels are being used.
-  var html = document.getElementsByTagName(
-      goog.dom.TagName.BUTTON)[0].innerHTML;
+  var html =
+      document.getElementsByTagName(goog.dom.TagName.BUTTON)[0].innerHTML;
   assertTrue('Button label is wrong', html.indexOf('&lt;btn&gt;') > -1);
   html = getEntryDiv(numEnumEntry).innerHTML;
   assertTrue('Enum2 label is wrong', html.indexOf('second&amp;') > -1);
@@ -140,36 +145,33 @@ function testToggleBooleanSetting() {
   boolEntry.setValue(true);
   createUi(false);
 
-  assertTrue('checkbox should be checked',
-      getEntryInput(boolEntry).checked);
+  assertTrue('checkbox should be checked', getEntryInput(boolEntry).checked);
 
   boolEntry.setValue(false);
-  assertFalse('checkbox should not be checked 1',
-      getEntryInput(boolEntry).checked);
+  assertFalse(
+      'checkbox should not be checked 1', getEntryInput(boolEntry).checked);
 }
 
 function testToggleStringSetting() {
   strEntry.setValue('val1');
   createUi(false);
 
-  assertEquals('Textbox has wrong value 1',
-      'val1', getEntryInput(strEntry).value);
+  assertEquals(
+      'Textbox has wrong value 1', 'val1', getEntryInput(strEntry).value);
 
   strEntry.setValue('val2');
-  assertEquals('Textbox has wrong value 2',
-      'val2', getEntryInput(strEntry).value);
+  assertEquals(
+      'Textbox has wrong value 2', 'val2', getEntryInput(strEntry).value);
 }
 
 function testToggleStringEnumSetting() {
   strEnumEntry.setValue('B');
   createUi(false);
 
-  assertEquals('wrong value 1',
-      'B', getEntryInput(strEnumEntry).value);
+  assertEquals('wrong value 1', 'B', getEntryInput(strEnumEntry).value);
 
   strEnumEntry.setValue('C');
-  assertEquals('wrong value 2',
-      'C', getEntryInput(strEnumEntry).value);
+  assertEquals('wrong value 2', 'C', getEntryInput(strEnumEntry).value);
 }
 
 
@@ -177,24 +179,20 @@ function testToggleNumericSetting() {
   numEntry.setValue(3);
   createUi(false);
 
-  assertEquals('wrong value 1',
-      '3', getEntryInput(numEntry).value);
+  assertEquals('wrong value 1', '3', getEntryInput(numEntry).value);
 
   numEntry.setValue(4);
-  assertEquals('wrong value 2',
-      '4', getEntryInput(numEntry).value);
+  assertEquals('wrong value 2', '4', getEntryInput(numEntry).value);
 }
 
 function testToggleNumericEnumSetting() {
   numEnumEntry.setValue(2);
   createUi(false);
 
-  assertEquals('wrong value 1',
-      '2', getEntryInput(numEnumEntry).value);
+  assertEquals('wrong value 1', '2', getEntryInput(numEnumEntry).value);
 
   numEnumEntry.setValue(3);
-  assertEquals('wrong value 2',
-      '3', getEntryInput(numEnumEntry).value);
+  assertEquals('wrong value 2', '3', getEntryInput(numEnumEntry).value);
 }
 
 function testClickBooleanSetting() {
@@ -214,11 +212,13 @@ function testToggleDescriptions() {
   var toggleLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
   var heightBefore = root.offsetHeight;
   toggleLink.onclick();
-  assertTrue('Expected div height to grow from toggle descriptions.',
+  assertTrue(
+      'Expected div height to grow from toggle descriptions.',
       root.offsetHeight > heightBefore);
   toggleLink.onclick();
-  assertEquals('Expected div height to revert from toggle descriptions.',
-      heightBefore, root.offsetHeight);
+  assertEquals(
+      'Expected div height to revert from toggle descriptions.', heightBefore,
+      root.offsetHeight);
 }
 
 function assertEntryOrder(entryId1, entryId2) {
@@ -233,13 +233,15 @@ function assertEntryOrder(entryId1, entryId2) {
 function testAddEntry() {
   createUi(false);
   goog.tweak.registerBoolean('Lazy1', 'Lazy-loaded tweak.');
-  goog.tweak.registerBoolean('Lazy2', 'Lazy-loaded tweak.',
-      /* defaultValue */ false, { restartRequired: false });
+  goog.tweak.registerBoolean(
+      'Lazy2', 'Lazy-loaded tweak.',
+      /* defaultValue */ false, {restartRequired: false});
   goog.tweak.beginBooleanGroup('LazyGroup', 'Lazy-loaded tweak.');
   goog.tweak.registerBoolean('Lazy3', 'Lazy-loaded tweak.');
   goog.tweak.endBooleanGroup();
 
-  assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 4,
+  assertEquals(
+      'Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 4,
       getAllEntryDivs().length);
   assertEntryOrder('Enum2', 'Lazy1');
   assertEntryOrder('Lazy1', 'Lazy2');
@@ -255,7 +257,8 @@ function testAddNamespacedEntries() {
   goog.tweak.registerBoolean('NS.Banana', 'Lazy-loaded tweak.');
   goog.tweak.registerBoolean('NS.Apple', 'Lazy-loaded tweak.');
 
-  assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 5,
+  assertEquals(
+      'Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 5,
       getAllEntryDivs().length);
   assertEntryOrder('Enum2', 'NS.Apple');
   assertEntryOrder('NS.Apple', 'NS.Banana');
@@ -268,10 +271,12 @@ function testCollapsibleIsLazy() {
     assertEquals('Expected no entry divs.', 0, getAllEntryDivs().length);
     var showLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
     var event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false,
-        false, false, false, 0, null);
+    event.initMouseEvent(
+        'click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false,
+        0, null);
     showLink.dispatchEvent(event);
-    assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT,
+    assertEquals(
+        'Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT,
         getAllEntryDivs().length);
   }
 }

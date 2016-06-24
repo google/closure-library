@@ -38,9 +38,7 @@ function setUpPage() {
 }
 
 function tearDown() {
-  return loadTestDir().then(function(dir) {
-    return dir.removeRecursively();
-  });
+  return loadTestDir().then(function(dir) { return dir.removeRecursively(); });
 }
 
 function testWriteFile() {
@@ -59,7 +57,7 @@ function testRemoveFile() {
 function testMoveFile() {
   var subdir = loadDirectory('subdir', Behavior.CREATE);
   var writtenFile = loadFile('test', Behavior.CREATE)
-      .then(goog.partial(writeToFile, 'test content'));
+                        .then(goog.partial(writeToFile, 'test content'));
 
   return goog.Promise.all([subdir, writtenFile])
       .then(function(results) {
@@ -103,8 +101,7 @@ function testAbortWrite() {
 function testSeek() {
   var file = loadFile('test', Behavior.CREATE);
 
-  return file
-      .then(goog.partial(writeToFile, 'test content'))
+  return file.then(goog.partial(writeToFile, 'test content'))
       .then(function(fileEntry) { return fileEntry.createWriter(); })
       .then(goog.partial(checkReadyState, ReadyState.INIT))
       .then(function(writer) {
@@ -121,8 +118,7 @@ function testSeek() {
 function testTruncate() {
   var file = loadFile('test', Behavior.CREATE);
 
-  return file
-      .then(goog.partial(writeToFile, 'test content'))
+  return file.then(goog.partial(writeToFile, 'test content'))
       .then(function(fileEntry) { return fileEntry.createWriter(); })
       .then(goog.partial(checkReadyState, ReadyState.INIT))
       .then(function(writer) {
@@ -170,9 +166,9 @@ function waitForEvent(type, target) {
 }
 
 function writeToFile(content, fileEntry) {
-  return startWrite(content, fileEntry).
-      then(goog.partial(waitForEvent, EventType.WRITE)).
-      then(function() { return fileEntry; });
+  return startWrite(content, fileEntry)
+      .then(goog.partial(waitForEvent, EventType.WRITE))
+      .then(function() { return fileEntry; });
 }
 
 function checkFileContent(content, fileEntry) {
@@ -186,7 +182,7 @@ function checkFileRemoved(filename) {
       .then(goog.partial(fail, 'expected file to be removed'))
       .thenCatch(function(err) {
         assertEquals(err.code, goog.fs.Error.ErrorCode.NOT_FOUND);
-        return true; // Go back to the non-rejected path.
+        return true;  // Go back to the non-rejected path.
       });
 }
 

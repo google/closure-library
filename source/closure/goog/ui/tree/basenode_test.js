@@ -18,20 +18,12 @@ goog.setTestOnly('goog.ui.tree.BaseNodeTest');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.html.testing');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
-var stubs = new goog.testing.PropertyReplacer();
-
-function setUp() {
-  // Reset global flags to their defaults.
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
-}
 
 function testAdd() {
   var node1 = new goog.ui.tree.TreeNode('node1');
@@ -65,11 +57,14 @@ function testExpandIconAfterAddChild() {
   tree.addChild(node1);
 
   node1.addChild(node2);
-  assertTrue('expand icon of node1 changed to L+', goog.dom.classlist.contains(
-      node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
+  assertTrue(
+      'expand icon of node1 changed to L+',
+      goog.dom.classlist.contains(
+          node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
 
   node1.removeChild(node2);
-  assertFalse('expand icon of node1 changed back to L',
+  assertFalse(
+      'expand icon of node1 changed back to L',
       goog.dom.classlist.contains(
           node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
 }
@@ -81,16 +76,15 @@ function testExpandEvents() {
   n.setExpanded(expanded);
   assertEquals(expanded, n.getExpanded());
   var callCount = 0;
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND,
-      function(e) {
+  n.addEventListener(
+      goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND, function(e) {
         assertEquals(expanded, n.getExpanded());
         callCount++;
       });
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND,
-      function(e) {
-        assertEquals(!expanded, n.getExpanded());
-        callCount++;
-      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND, function(e) {
+    assertEquals(!expanded, n.getExpanded());
+    callCount++;
+  });
   n.setExpanded(!expanded);
   assertEquals(2, callCount);
 }
@@ -102,16 +96,15 @@ function testExpandEvents2() {
   n.setExpanded(expanded);
   assertEquals(expanded, n.getExpanded());
   var callCount = 0;
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE,
-      function(e) {
+  n.addEventListener(
+      goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE, function(e) {
         assertEquals(expanded, n.getExpanded());
         callCount++;
       });
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE,
-      function(e) {
-        assertEquals(!expanded, n.getExpanded());
-        callCount++;
-      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE, function(e) {
+    assertEquals(!expanded, n.getExpanded());
+    callCount++;
+  });
   n.setExpanded(!expanded);
   assertEquals(2, callCount);
 }
@@ -123,16 +116,15 @@ function testExpandEventsPreventDefault() {
   n.setExpanded(expanded);
   assertEquals(expanded, n.getExpanded());
   var callCount = 0;
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE,
-      function(e) {
+  n.addEventListener(
+      goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE, function(e) {
         assertEquals(expanded, n.getExpanded());
         e.preventDefault();
         callCount++;
       });
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE,
-      function(e) {
-        fail('Should not fire COLLAPSE');
-      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE, function(e) {
+    fail('Should not fire COLLAPSE');
+  });
   n.setExpanded(!expanded);
   assertEquals(1, callCount);
 }
@@ -144,16 +136,15 @@ function testExpandEventsPreventDefault2() {
   n.setExpanded(expanded);
   assertEquals(expanded, n.getExpanded());
   var callCount = 0;
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND,
-      function(e) {
+  n.addEventListener(
+      goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND, function(e) {
         assertEquals(expanded, n.getExpanded());
         e.preventDefault();
         callCount++;
       });
-  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND,
-      function(e) {
-        fail('Should not fire EXPAND');
-      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND, function(e) {
+    fail('Should not fire EXPAND');
+  });
   n.setExpanded(!expanded);
   assertEquals(1, callCount);
 }
@@ -180,7 +171,8 @@ function testGetNextShownNode() {
 
   var component = new goog.ui.Component();
   component.addChild(tree);
-  assertNull('next node for node3 inside the tree if the tree has parent',
+  assertNull(
+      'next node for node3 inside the tree if the tree has parent',
       node3.getNextShownNode());
 }
 
@@ -195,23 +187,28 @@ function testGetPreviousShownNode() {
   node1.add(node2);
   tree.add(node3);
 
-  assertEquals('prev node for node3 when node1 is unexpanded',
-               node1, node3.getPreviousShownNode());
+  assertEquals(
+      'prev node for node3 when node1 is unexpanded', node1,
+      node3.getPreviousShownNode());
   node1.expand();
-  assertEquals('prev node for node3 when node1 is expanded',
-               node2, node3.getPreviousShownNode());
-  assertEquals('prev node for node2 when node1 is expanded',
-               node1, node2.getPreviousShownNode());
-  assertEquals('prev node for node1 when root is shown', tree,
-               node1.getPreviousShownNode());
+  assertEquals(
+      'prev node for node3 when node1 is expanded', node2,
+      node3.getPreviousShownNode());
+  assertEquals(
+      'prev node for node2 when node1 is expanded', node1,
+      node2.getPreviousShownNode());
+  assertEquals(
+      'prev node for node1 when root is shown', tree,
+      node1.getPreviousShownNode());
   tree.setShowRootNode(false);
-  assertNull('next node for node1 when root is not shown',
-             node1.getPreviousShownNode());
+  assertNull(
+      'next node for node1 when root is not shown',
+      node1.getPreviousShownNode());
 
   var component = new goog.ui.Component();
   component.addChild(tree);
-  assertNull('prev node for root if the tree has parent',
-             tree.getPreviousShownNode());
+  assertNull(
+      'prev node for root if the tree has parent', tree.getPreviousShownNode());
 }
 
 function testInvisibleNodesInUnrenderedTree() {
@@ -226,8 +223,8 @@ function testInvisibleNodesInUnrenderedTree() {
       tree.getElement().textContent || tree.getElement().innerText;
   assertContains('Node should be rendered.', 'tree', textContent);
   assertContains('Node should be rendered.', 'a', textContent);
-  assertNotContains('Unexpanded node child should not be rendered.',
-      'b', textContent);
+  assertNotContains(
+      'Unexpanded node child should not be rendered.', 'b', textContent);
 
   a.expand();
   var textContent =
@@ -250,8 +247,8 @@ function testInvisibleNodesInRenderedTree() {
       tree.getElement().textContent || tree.getElement().innerText;
   assertContains('Node should be rendered.', 'tree', textContent);
   assertContains('Node should be rendered.', 'a', textContent);
-  assertNotContains('Unexpanded node child should not be rendered.',
-      'b', textContent);
+  assertNotContains(
+      'Unexpanded node child should not be rendered.', 'b', textContent);
 
   a.expand();
   var textContent =
@@ -271,21 +268,13 @@ function testConstructor() {
   assertEquals('tree', tree.getHtml());
 }
 
-function testSetHtml() {
-  var tree = new goog.ui.tree.TreeControl('');
-  tree.setHtml('<b>tree</b>');
-  assertEquals('<b>tree</b>', tree.getHtml());
-
-  tree = new goog.ui.tree.TreeControl('');
-  tree.setSafeHtml(goog.html.testing.newSafeHtmlForTest('<b>tree</b>'));
-  assertEquals('<b>tree</b>', tree.getHtml());
+function testConstructor_allowsPlainText() {
+  var tree = new goog.ui.tree.TreeControl('tree <3');
+  assertEquals('tree &lt;3', tree.getHtml());
 }
 
-function testSetHtml_guardedByGlobalFlag() {
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        new goog.ui.tree.TreeControl('<img src="blag" onerror="evil();">');
-      }).message);
+function testSetSafeHtml() {
+  var tree = new goog.ui.tree.TreeControl('');
+  tree.setSafeHtml(goog.html.testing.newSafeHtmlForTest('<b>tree</b>'));
+  assertEquals('<b>tree</b>', tree.getHtml());
 }

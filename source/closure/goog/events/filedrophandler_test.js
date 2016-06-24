@@ -36,11 +36,10 @@ function setUp() {
   handler = new goog.events.FileDropHandler(textarea);
   dnd = false;
   files = null;
-  goog.events.listen(handler, goog.events.FileDropHandler.EventType.DROP,
-      function(e) {
+  goog.events.listen(
+      handler, goog.events.FileDropHandler.EventType.DROP, function(e) {
         dnd = true;
-        files =
-            e.getBrowserEvent().dataTransfer.files;
+        files = e.getBrowserEvent().dataTransfer.files;
       });
 }
 
@@ -52,8 +51,8 @@ function tearDown() {
 
 function testOneFile() {
   var preventDefault = false;
-  var expectedfiles = [{ fileName: 'file1.jpg' }];
-  var dt = { types: ['Files'], files: expectedfiles };
+  var expectedfiles = [{fileName: 'file1.jpg'}];
+  var dt = {types: ['Files'], files: expectedfiles};
 
   // Assert that default actions are prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({
@@ -91,8 +90,8 @@ function testOneFile() {
 
 function testMultipleFiles() {
   var preventDefault = false;
-  var expectedfiles = [{ fileName: 'file1.jpg' }, { fileName: 'file2.jpg' }];
-  var dt = { types: ['Files', 'text'], files: expectedfiles };
+  var expectedfiles = [{fileName: 'file1.jpg'}, {fileName: 'file2.jpg'}];
+  var dt = {types: ['Files', 'text'], files: expectedfiles};
 
   // Assert that default actions are prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({
@@ -131,7 +130,7 @@ function testMultipleFiles() {
 
 function testNoFiles() {
   var preventDefault = false;
-  var dt = { types: ['text'] };
+  var dt = {types: ['text']};
 
   // Assert that default actions are not prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({
@@ -173,7 +172,7 @@ function testDragEnter() {
   textarea.dispatchEvent(new goog.events.BrowserEvent({
     preventDefault: function() { preventDefault = true; },
     type: goog.events.EventType.DRAGENTER,
-    dataTransfer: { types: ['Files'], files: [] }
+    dataTransfer: {types: ['Files'], files: []}
   }));
   assertTrue(preventDefault);
   preventDefault = false;
@@ -184,7 +183,7 @@ function testDragEnter() {
   textarea.dispatchEvent(new goog.events.BrowserEvent({
     preventDefault: function() { preventDefault = true; },
     type: goog.events.EventType.DRAGENTER,
-    dataTransfer: { types: ['public.file-url'], files: [] }
+    dataTransfer: {types: ['public.file-url'], files: []}
   }));
   assertTrue(preventDefault);
   preventDefault = false;
@@ -194,14 +193,14 @@ function testDragEnter() {
   textarea.dispatchEvent(new goog.events.BrowserEvent({
     preventDefault: function() { preventDefault = true; },
     type: goog.events.EventType.DRAGENTER,
-    dataTransfer: { types: ['text'], files: [] }
+    dataTransfer: {types: ['text'], files: []}
   }));
   assertFalse(preventDefault);
 }
 
 function testPreventDropOutside() {
   var preventDefault = false;
-  var dt = { types: ['Files'], files: [{ fileName: 'file1.jpg' }] };
+  var dt = {types: ['Files'], files: [{fileName: 'file1.jpg'}]};
 
   // Assert that default actions are not prevented on dragenter on the
   // document outside the text area.
@@ -263,8 +262,9 @@ function testEffectAllowedExceptionIsCaught() {
   // We construct a mock DataTransfer object that define a setter will throw
   // SCRIPT65535 when attempt to set property effectAllowed to simulate IE Bug
   // #811625. See more: https://github.com/google/closure-library/issues/485.
-  Object.defineProperty(dt, 'effectAllowed',
-                        {set: function(v) { throw new Error('SCRIPT65535'); }});
+  Object.defineProperty(
+      dt, 'effectAllowed',
+      {set: function(v) { throw new Error('SCRIPT65535'); }});
 
   // Assert that default actions are prevented on dragenter.
   textarea.dispatchEvent(new goog.events.BrowserEvent({

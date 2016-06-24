@@ -151,8 +151,10 @@ function testFire() {
 
   invoked = false;
   clock.tick(200);
-  assertFalse('Delay fired early with fire call, timeout should have been ' +
-      'cleared', invoked);
+  assertFalse(
+      'Delay fired early with fire call, timeout should have been ' +
+          'cleared',
+      invoked);
 }
 
 function testFireIfActive() {
@@ -164,6 +166,8 @@ function testFireIfActive() {
   assertTrue(invoked);
   invoked = false;
   clock.tick(300);
-  assertFalse('Delay fired early with fireIfActive, timeout should have been ' +
-      'cleared', invoked);
+  assertFalse(
+      'Delay fired early with fireIfActive, timeout should have been ' +
+          'cleared',
+      invoked);
 }

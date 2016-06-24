@@ -1,0 +1,48 @@
+---
+{edit_path: '', layout: api, page: goog.style.bidi, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.style.bidi</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/bidi.js#L20" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.style.bidi</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="getOffsetStart"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/bidi.js#L89" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getOffsetStart(<var>element</var>)</div></h3></div><div class="body"><p>Returns the &#34;offsetStart&#34; of an element, analogous to offsetLeft but
+normalized for right-to-left environments and various browser
+inconsistencies. This value returned can always be passed to setScrollOffset
+to scroll to an element&#39;s left edge in a left-to-right offsetParent or
+right edge in a right-to-left offsetParent.</p>
+<p>For example, here offsetStart is 10px in an LTR environment and 5px in RTL:</p>
+ <pre>
+ |          xxxxxxxxxx     |
+  ^^^^^^^^^^   ^^^^   ^^^^^
+     10px      elem    5px
+ </pre>
+<p>If an element is positioned before the start of its offsetParent, the
+startOffset may be negative.  This can be used with setScrollOffset to
+reliably scroll to an element:</p>
+ <pre>
+ var scrollOffset &#61; goog.style.bidi.getOffsetStart(element);
+ goog.style.bidi.setScrollOffset(element.offsetParent, scrollOffset);
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element for which we need to determine the
+offsetStart position.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The offsetStart for that element.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>setScrollOffset</p>
+</dd></dl></div></section><section class="property expandable" id="getScrollLeft"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/bidi.js#L34" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getScrollLeft(<var>element</var>)</div></h3></div><div class="body"><p>Returns the normalized scrollLeft position for a scrolled element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The scrolled element.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of pixels the element is scrolled. 0 indicates
+that the element is not scrolled at all (which, in general, is the
+left-most position in ltr and the right-most position in rtl).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setPosition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/bidi.js#L177" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setPosition(<var>elem</var>, <var>left</var>, <var>top</var>, <var>isRtl</var>)</div></h3></div><div class="body"><p>Sets the element&#39;s left style attribute in LTR or right style attribute in
+RTL.  Also clears the left attribute in RTL and the right attribute in LTR.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>elem</var><code>Element</code><dd><p>The element to position.</p>
+<dt class="type name"><var>left</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The left position in LTR; will be set as right in RTL.</p>
+<dt class="type name"><var>top</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The top position.  If null only the left/right is set.</p>
+<dt class="type name"><var>isRtl</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether we are in RTL mode.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setScrollOffset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/style/bidi.js#L146" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setScrollOffset(<var>element</var>, <var>offsetStart</var>)</div></h3></div><div class="body"><p>Sets the element&#39;s scrollLeft attribute so it is correctly scrolled by
+offsetStart pixels.  This takes into account whether the element is RTL and
+the nuances of different browsers.  To scroll to the &#34;beginning&#34; of an
+element use getOffsetStart to obtain the element&#39;s offsetStart value and then
+pass the value to setScrollOffset.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>The element to set scrollLeft on.</p>
+<dt class="type name"><var>offsetStart</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of pixels to scroll the element.
+If this value is &lt; 0, 0 is used.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>getOffsetStart</p>
+</dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -1,0 +1,48 @@
+---
+{edit_path: '', layout: api, page: goog.result.DependentResult, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>DependentResult</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.result.html">goog.result</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/dependentresult.js#L35" target="_blank">View Source</a></div><h1 class="title deprecated"><div class="tags"><span class="deprecated"></span></div><div>interface DependentResult</div></h1></div><div class="body"><dl><dt class="spec">All extended interfaces<dd><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#ithenable">IThenable</a>&lt;TYPE&gt;</code><dd><code><a href="goog.Thenable.html">goog.Thenable</a></code><dd><code><a href="goog.result.Result.html">goog.result.Result</a></code><dt class="spec">Deprecated<dd><p>Use <a href="goog.Promise.html"><code>goog.Promise</code></a> instead - http://go/promisemigration</p>
+</dl><p>A DependentResult represents a Result whose eventual value depends on the
+value of one or more other Results. For example, the Result returned by</p>
+</div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="cancel"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L97" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>cancel()</div></h3></div><div class="body"><p>Cancels the current Result, invoking the canceler function, if set.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the Result was canceled.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getError"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L89" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getError()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The error slug for this Result. Will return undefined if the
+Result was a success, the error slug was not set, or if the Result is
+pending.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getParentResults"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/dependentresult.js#L45" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getParentResults()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="goog.result.Result.html">goog.result.Result</a>&gt;</code><dd><p>A list of Results which will affect
+the eventual value of this Result. The returned Results may themselves
+have parent results, which would be grandparents of this Result;
+grandparents (and any other ancestors) are not included in this list.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getState"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L74" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getState()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.result.Result.State.html">goog.result.Result.State</a></code><dd><p>The state of this Result.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L81" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getValue()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The value of this Result. Will return undefined if the Result is
+pending or was an error.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isCanceled"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L103" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isCanceled()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether this Result was canceled.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="then"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/promise/thenable.js#L72" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE, THIS&gt;</var> then(<var>opt_onFulfilled</var>, <var>opt_onRejected</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Adds callbacks that will operate on the result of the Thenable, returning a
+new child Promise.</p>
+<p>If the Thenable is fulfilled, the <code>onFulfilled</code> callback will be
+invoked with the fulfillment value as argument, and the child Promise will
+be fulfilled with the return value of the callback. If the callback throws
+an exception, the child Promise will be rejected with the thrown value
+instead.</p>
+<p>If the Thenable is rejected, the <code>onRejected</code> callback will be invoked
+with the rejection reason as argument, and the child Promise will be rejected
+with the return value of the callback or thrown value.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#ithenable">IThenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_onFulfilled</var><code>?function(this: THIS, TYPE): VALUE=</code><dd><p>A
+function that will be invoked with the fulfillment value if the Promise
+is fulfilled.</p>
+<dt class="type name"><var>opt_onRejected</var><code>?function(this: THIS, *): *=</code><dd><p>A function that will
+be invoked with the rejection reason if the Promise is rejected.</p>
+<dt class="type name"><var>opt_context</var><code>THIS=</code><dd><p>An optional context object that will be the
+execution context for the callbacks. By default, functions are executed
+with the default this.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>RESULT</code><dd><p>A new Promise that will receive the result
+of the fulfillment or rejection callback.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="wait"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/result_interface.js#L50" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> wait(<var>handler</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Attaches handlers to be called when the value of this Result is available.
+Handlers are called in the order they were added by wait.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>handler</var><code>!function(this: T, !<a href="goog.result.Result.html">goog.result.Result</a>)</code><dd><p>The function called
+when the value is available. The function is passed the Result object as
+the only argument.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>Optional scope for the handler.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

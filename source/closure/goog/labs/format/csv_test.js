@@ -35,8 +35,7 @@ function testGoldenPath() {
 function testGoldenPathWithSpaceAsCustomDelimiter() {
   assertObjectEquals(
       [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i']],
-      goog.labs.format.csv.parse(
-          'a b c\nd e f\ng h i\n', undefined, ' '));
+      goog.labs.format.csv.parse('a b c\nd e f\ng h i\n', undefined, ' '));
   assertObjectEquals(
       [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i']],
       goog.labs.format.csv.parse(
@@ -75,8 +74,7 @@ function testBadDelimitersTwoCharacter() {
     goog.labs.format.csv.parse('a,b,c\r\nd,e,f\r\ng,h,i\r\n', undefined, 'aa');
   });
   assertEquals(
-      'Assertion failed: Delimiter must be a single character.',
-      e.message);
+      'Assertion failed: Delimiter must be a single character.', e.message);
 }
 
 function testNoCrlfAtEnd() {
@@ -108,17 +106,16 @@ function testEmbeddedQuotes() {
 }
 
 function testUnclosedQuote() {
-  var e = assertThrows(function() {
-    goog.labs.format.csv.parse('a,"b,c\nd,e,f');
-  });
+  var e =
+      assertThrows(function() { goog.labs.format.csv.parse('a,"b,c\nd,e,f'); });
 
   assertTrue(e instanceof goog.labs.format.csv.ParseError);
   assertEquals(2, e.position.line);
   assertEquals(5, e.position.column);
   assertEquals(
       'Unexpected end of text after open quote at line 2 column 5\n' +
-      'd,e,f\n' +
-      '    ^',
+          'd,e,f\n' +
+          '    ^',
       e.message);
 }
 
@@ -134,8 +131,8 @@ function testQuotesInUnquotedField() {
 
   assertEquals(
       'Unexpected quote mark at line 1 column 5\n' +
-      'a,b "and" b,c\n' +
-      '    ^',
+          'a,b "and" b,c\n' +
+          '    ^',
       e.message);
 }
 
@@ -149,8 +146,8 @@ function testGarbageOutsideQuotes() {
   assertEquals(6, e.position.column);
   assertEquals(
       'Unexpected character "o" after quote mark at line 2 column 6\n' +
-      'd,"e"oops,f\n' +
-      '     ^',
+          'd,"e"oops,f\n' +
+          '     ^',
       e.message);
 }
 
@@ -172,18 +169,17 @@ function testIgnoringErrors() {
 
   // Quotes inside field
   assertObjectEquals(
-      [['Hello "World"!', 'b'], ['c', 'd']], goog.labs.format.csv.parse(
-          'Hello "World"!,b\nc,d', true));
+      [['Hello "World"!', 'b'], ['c', 'd']],
+      goog.labs.format.csv.parse('Hello "World"!,b\nc,d', true));
 
   // Missing closing quote
   assertObjectEquals(
-      [['Hello', 'World!']], goog.labs.format.csv.parse(
-          'Hello,"World!', true));
+      [['Hello', 'World!']], goog.labs.format.csv.parse('Hello,"World!', true));
 
   // Broken use of quotes in quoted field
   assertObjectEquals(
-      [['a', '"Hello"World!"']], goog.labs.format.csv.parse(
-          'a,"Hello"World!"', true));
+      [['a', '"Hello"World!"']],
+      goog.labs.format.csv.parse('a,"Hello"World!"', true));
 
   // All of the above. A real mess.
   assertObjectEquals(
@@ -194,8 +190,8 @@ function testIgnoringErrors() {
 
 function testIgnoringErrorsTrailingTabs() {
   assertObjectEquals(
-      [['"a\tb"\t'], ['c,d']], goog.labs.format.csv.parse(
-          '"a\tb"\t\n"c,d"', true));
+      [['"a\tb"\t'], ['c,d']],
+      goog.labs.format.csv.parse('"a\tb"\t\n"c,d"', true));
 }
 
 function testFindLineInfo() {
@@ -216,8 +212,7 @@ function testGetLineDebugString() {
   assertEquals(
       goog.labs.format.csv.ParseError.getLineDebugString_(str, column),
       'abcdefghijklmnop\n' +
-      '         ^');
-
+          '         ^');
 }
 
 function testIsCharacterString() {
@@ -235,20 +230,13 @@ function testIsCharacterString() {
 function testAssertToken() {
   goog.labs.format.csv.assertToken_('a');
 
-  goog.object.forEach(goog.labs.format.csv.SENTINELS_,
-      function(value) {
-        goog.labs.format.csv.assertToken_(value);
-      });
-
-  assertThrows(function() {
-    goog.labs.format.csv.assertToken_('aa');
+  goog.object.forEach(goog.labs.format.csv.SENTINELS_, function(value) {
+    goog.labs.format.csv.assertToken_(value);
   });
 
-  assertThrows(function() {
-    goog.labs.format.csv.assertToken_('');
-  });
+  assertThrows(function() { goog.labs.format.csv.assertToken_('aa'); });
 
-  assertThrows(function() {
-    goog.labs.format.csv.assertToken_({});
-  });
+  assertThrows(function() { goog.labs.format.csv.assertToken_(''); });
+
+  assertThrows(function() { goog.labs.format.csv.assertToken_({}); });
 }

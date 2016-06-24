@@ -1,0 +1,70 @@
+---
+{edit_path: '', layout: api, page: goog.net.xpc.CfgFields, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.net.xpc.CfgFields</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L92" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.net.xpc.CfgFields</div></h1></div><div class="body"><p>Field names used on configuration object.</p>
+</div></section><section class="static-properties"><h2>Properties</h2><section class="property expandable" id="AUTH_TOKEN"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>AUTH_TOKEN</div></h3></div><div class="body"><p>Authorization token. If set, NIX will use this authorization token
+to validate the setup.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="CHANNEL_NAME"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L99" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>CHANNEL_NAME</div></h3></div><div class="body"><p>Channel name identifier.
+Both peers have to be initialized with
+the same channel name.  If not present, a channel name is
+generated (which then has to transferred to the peer somehow).</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="DIRECT_TRANSPORT_SYNC_MODE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L200" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>DIRECT_TRANSPORT_SYNC_MODE</div></h3></div><div class="body"><p>Whether the direct transport runs in synchronous mode. The default is to
+emulate the other transports and run asyncronously but there are some
+circumstances where syncronous calls are required. If this property is
+set to true, the transport will send the messages synchronously.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="IFRAME_ID"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L118" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>IFRAME_ID</div></h3></div><div class="body"><p>Ifame-ID identifier.
+The id of the iframe element the peer-document lives in.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="LOCAL_POLL_URI"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L143" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>LOCAL_POLL_URI</div></h3></div><div class="body"><p>Local poll URI identifier (IframePollingTransport-specific).
+The URI  (can&#39;t contain a fragment identifier)which is polled
+to receive data from the peer.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="LOCAL_RELAY_URI"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L131" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>LOCAL_RELAY_URI</div></h3></div><div class="body"><p>Local relay URI identifier (IframeRelayTransport-specific).
+The URI (can&#39;t contain a fragment identifier) used by the peer to
+relay data through.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="NATIVE_TRANSPORT_PROTOCOL_VERSION"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L193" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>NATIVE_TRANSPORT_PROTOCOL_VERSION</div></h3></div><div class="body"><p>Which version of the native transport startup protocol should be used, the
+default being &#39;2&#39;.  Version 1 had various timing vulnerabilities, which
+had to be compensated for by introducing delays, and is deprecated.  V1
+and V2 are broadly compatible, although the more robust timing and lack
+of delays is not gained unless both sides are using V2.  The only
+unsupported case of cross-protocol interoperation is where a connection
+starts out with V2 at both ends, and one of the ends reconnects as a V1.
+All other initial startup and reconnection scenarios are supported.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="ONE_SIDED_HANDSHAKE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ONE_SIDED_HANDSHAKE</div></h3></div><div class="body"><p>Usually both frames using a connection initially send a SETUP message to
+each other, and each responds with a SETUP_ACK.  A frame marks itself
+connected when it receives that SETUP_ACK.  If this parameter is true
+however, the channel it is passed to will not send a SETUP, but rather will
+wait for one from its peer and mark itself connected when that arrives.
+Peer iframes created using such a channel will send SETUP however, and will
+wait for SETUP_ACK before marking themselves connected.  The goal is to
+cope with a situation where the availability of the URL for the peer frame
+cannot be relied on, eg when the application is offline.  Without this
+setting, the primary frame will attempt to send its SETUP message every
+100ms, forever.  This floods the javascript console with uncatchable
+security warnings, and fruitlessly burns CPU.  There is one scenario this
+mode will not support, and that is reconnection by the outer frame, ie the
+creation of a new channel object to connect to a peer iframe which was
+already communicating with a previous channel object of the same name.  If
+that behavior is needed, this mode should not be used.  Reconnection by
+inner frames is supported in this mode however.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="PEER_HOSTNAME"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L155" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PEER_HOSTNAME</div></h3></div><div class="body"><p>The hostname of the peer window, including protocol, domain, and port
+(if specified). Used for security sensitive applications that make
+use of NativeMessagingTransport (i.e. most applications).</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="PEER_POLL_URI"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L149" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PEER_POLL_URI</div></h3></div><div class="body"><p>Local poll URI identifier (IframePollingTransport-specific).
+The URI (can&#39;t contain a fragment identifier) used to send data
+to the peer.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="PEER_RELAY_URI"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L137" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PEER_RELAY_URI</div></h3></div><div class="body"><p>Peer relay URI identifier (IframeRelayTransport-specific).
+The URI (can&#39;t contain a fragment identifier) used to relay data
+to the peer.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="PEER_URI"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L113" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PEER_URI</div></h3></div><div class="body"><p>The URI of the peer page.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="REMOTE_AUTH_TOKEN"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L109" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>REMOTE_AUTH_TOKEN</div></h3></div><div class="body"><p>Remote party&#39;s authorization token. If set, NIX will validate this
+authorization token against that sent by the other party.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="ROLE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L182" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ROLE</div></h3></div><div class="body"><p>The frame role (inner or outer). Used to explicitly indicate the role for
+each peer whenever the role cannot be reliably determined (e.g. the two
+peer windows are not parent/child frames). If unspecified, the role will
+be dynamically determined, assuming a parent/child frame setup.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="TRANSPORT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/xpc/xpc.js#L125" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TRANSPORT</div></h3></div><div class="body"><p>Transport type identifier.
+The transport type to use. Possible values are entries from
+goog.net.xpc.TransportTypes. If not present, the transport is
+determined automatically based on the useragent&#39;s capabilities.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

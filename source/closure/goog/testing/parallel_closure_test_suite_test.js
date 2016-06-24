@@ -20,6 +20,7 @@ var MockControl = goog.require('goog.testing.MockControl');
 var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var TestCase = goog.require('goog.testing.TestCase');
+var dom = goog.require('goog.dom');
 var jsunit = goog.require('goog.testing.jsunit');
 var mockmatchers = goog.require('goog.testing.mockmatchers');
 var parallelClosureTestSuite = goog.require('goog.testing.parallelClosureTestSuite');
@@ -28,8 +29,8 @@ var testSuite = goog.require('goog.testing.testSuite');
 var mocks = new MockControl();
 var stubs = new PropertyReplacer();
 
-function setTestRunnerGlobals(testTimeout, allTests, parallelFrames,
-                              parallelTimeout) {
+function setTestRunnerGlobals(
+    testTimeout, allTests, parallelFrames, parallelTimeout) {
   var tr = goog.global['G_parallelTestRunner'] = {};
   tr['testTimeout'] = testTimeout;
   tr['allTests'] = allTests;
@@ -71,8 +72,8 @@ testSuite({
     assertEquals(2, allResults.totalTests);
     assertEquals(1, allResults.totalFailures);
     assertEquals('testB Failed!\n', allResults.failureReports);
-    assertObjectEquals({'testA': [], 'testB': ['testB Failed!']},
-                       allResults.allResults);
+    assertObjectEquals(
+        {'testA': [], 'testB': ['testB Failed!']}, allResults.allResults);
 
     var testResults =
         [{'testA': ['testA Failed!']}, {'testB': ['testB Failed!']}];
@@ -82,8 +83,9 @@ testSuite({
     assertEquals(2, allResults.totalFailures);
     assertContains('testB Failed!\n', allResults.failureReports);
     assertContains('testA Failed!\n', allResults.failureReports);
-    assertObjectEquals({'testA': ['testA Failed!'], 'testB': ['testB Failed!']},
-                       allResults.allResults);
+    assertObjectEquals(
+        {'testA': ['testA Failed!'], 'testB': ['testB Failed!']},
+        allResults.allResults);
   },
 
   testSetUpPageTestRunnerInitializedProperly: function() {
@@ -91,11 +93,11 @@ testSuite({
     var mockRender =
         mocks.createMethodMock(MultiTestRunner.prototype, 'render');
     var elementMatcher = new ArgumentMatcher(function(container) {
-      return goog.dom.isElement(container);
+      return dom.isElement(container);
     });
     var testCaseObj = {promiseTimeout: -1};
-    stubs.set(TestCase, 'getActiveTestCase',
-              function() { return testCaseObj; });
+    stubs.set(
+        TestCase, 'getActiveTestCase', function() { return testCaseObj; });
 
     mockRender(elementMatcher);
 
@@ -116,12 +118,12 @@ testSuite({
     var mockFail = mocks.createMethodMock(goog.global, 'fail');
     var failureMatcher = new ArgumentMatcher(function(failMsg) {
       return /testA Failed!/.test(failMsg) &&
-             /1 of 2 test\(s\) failed/.test(failMsg);
+          /1 of 2 test\(s\) failed/.test(failMsg);
     });
     // Don't want this test case's timeout overwritten, so set a stub for
     // getActiveTestCase.
-    stubs.set(TestCase, 'getActiveTestCase',
-              function() { return {timeout: 100}; });
+    stubs.set(
+        TestCase, 'getActiveTestCase', function() { return {timeout: 100}; });
 
     mockStart();
     fail(failureMatcher);
@@ -131,7 +133,7 @@ testSuite({
     var testRunner = parallelClosureTestSuite.setUpPage();
     var testPromise = parallelClosureTestSuite.testRunAllTests();
     testRunner.dispatchEvent({
-      'type': goog.testing.MultiTestRunner.TESTS_FINISHED,
+      'type': MultiTestRunner.TESTS_FINISHED,
       'allTestResults': [{'testA': ['testA Failed!']}, {'testB': []}]
     });
 
@@ -147,12 +149,12 @@ testSuite({
     var mockFail = mocks.createMethodMock(goog.global, 'fail');
     var failureMatcher = new ArgumentMatcher(function(failMsg) {
       return /testA Failed!/.test(failMsg) &&
-             /1 of 2 test\(s\) failed/.test(failMsg);
+          /1 of 2 test\(s\) failed/.test(failMsg);
     });
     // Don't want this test case's timeout overwritten, so set a stub for
     // getActiveTestCase.
-    stubs.set(TestCase, 'getActiveTestCase',
-              function() { return {timeout: 100}; });
+    stubs.set(
+        TestCase, 'getActiveTestCase', function() { return {timeout: 100}; });
 
     mockStart();
     fail(mockmatchers.ignoreArgument).$times(0);
@@ -162,7 +164,7 @@ testSuite({
     var testRunner = parallelClosureTestSuite.setUpPage();
     var testPromise = parallelClosureTestSuite.testRunAllTests();
     testRunner.dispatchEvent({
-      'type': goog.testing.MultiTestRunner.TESTS_FINISHED,
+      'type': MultiTestRunner.TESTS_FINISHED,
       'allTestResults': [{'testA': []}, {'testB': []}]
     });
 

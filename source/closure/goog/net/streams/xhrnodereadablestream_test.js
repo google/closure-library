@@ -40,26 +40,17 @@ var propertyReplacer;
  * @final
  */
 function MockXhrStreamReader() {
-
   // mocked API
 
-  this.setStatusHandler = function(handler) {
-    this.statusHandler_ = handler;
-  };
+  this.setStatusHandler = function(handler) { this.statusHandler_ = handler; };
 
-  this.setDataHandler = function(handler) {
-    this.dataHandler_ = handler;
-  };
+  this.setDataHandler = function(handler) { this.dataHandler_ = handler; };
 
-  this.getStatus = function() {
-    return this.status_;
-  };
+  this.getStatus = function() { return this.status_; };
 
   // simulated events
 
-  this.onData = function(messages) {
-    this.dataHandler_(messages);
-  };
+  this.onData = function(messages) { this.dataHandler_(messages); };
 
   this.onStatus = function(status) {
     this.status_ = status;

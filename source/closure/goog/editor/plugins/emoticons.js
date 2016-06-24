@@ -53,8 +53,7 @@ goog.editor.plugins.Emoticons.prototype.getTrogClassId =
 
 
 /** @override */
-goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(
-    command) {
+goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(command) {
   return command == goog.editor.plugins.Emoticons.COMMAND;
 };
 
@@ -78,10 +77,7 @@ goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
   styleProperties += emojiWidth ? 'width:' + emojiWidth + 'px;' : '';
 
   var dom = this.getFieldDomHelper();
-  var imgAttributes = {
-    'src': emoji.getUrl(),
-    'style': styleProperties
-  };
+  var imgAttributes = {'src': emoji.getUrl(), 'style': styleProperties};
   if (emoji.getAltText()) {
     imgAttributes['alt'] = emoji.getAltText();
   }

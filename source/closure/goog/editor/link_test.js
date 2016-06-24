@@ -66,8 +66,9 @@ function testCreateNewLinkFromTextLeadingTrailingWhitespace() {
   var link = goog.editor.Link.createNewLinkFromText(anchor);
   assertNotNull('Should have created object', link);
   assertEquals('Should have url in anchor', url, anchor.href);
-  assertEquals('The text should still have spaces',
-      urlWithSpacesUpdatedByBrowser, link.getCurrentText());
+  assertEquals(
+      'The text should still have spaces', urlWithSpacesUpdatedByBrowser,
+      link.getCurrentText());
 }
 
 function testCreateNewLinkFromTextWithAnchor() {
@@ -88,8 +89,8 @@ function testInitialize() {
 }
 
 function testInitializeWithTarget() {
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertNotNull('Should have created object', link);
   assertTrue('Should be new', link.isNew());
   assertEquals('Should have correct anchor', anchor, link.getAnchor());
@@ -98,56 +99,62 @@ function testInitializeWithTarget() {
 }
 
 function testSetText() {
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should be empty', '', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
-  assertEquals('Should point to http://docs.google.com/',
-      'http://docs.google.com/', anchor.href);
+  assertEquals(
+      'Should point to http://docs.google.com/', 'http://docs.google.com/',
+      anchor.href);
   assertEquals('Should have correct text', 'Text', link.getCurrentText());
 }
 
 function testSetBoldText() {
   anchor.innerHTML = '<b></b>';
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should be empty', '', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
-  assertEquals('Should point to http://docs.google.com/',
-      'http://docs.google.com/', anchor.href);
+  assertEquals(
+      'Should point to http://docs.google.com/', 'http://docs.google.com/',
+      anchor.href);
   assertEquals('Should have correct text', 'Text', link.getCurrentText());
-  assertEquals('Should still be bold', goog.dom.TagName.B,
-      anchor.firstChild.tagName);
+  assertEquals(
+      'Should still be bold', goog.dom.TagName.B, anchor.firstChild.tagName);
 }
 
 function testLinkImgTag() {
   anchor.innerHTML = '<img src="www.google.com" alt="alt_txt">';
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Test getCurrentText', 'alt_txt', link.getCurrentText());
   link.setTextAndUrl('newText', 'http://docs.google.com/');
   assertEquals('Test getCurrentText', 'newText', link.getCurrentText());
-  assertEquals('Should point to http://docs.google.com/',
-      'http://docs.google.com/', anchor.href);
+  assertEquals(
+      'Should point to http://docs.google.com/', 'http://docs.google.com/',
+      anchor.href);
 
-  assertEquals('Should still have img tag', goog.dom.TagName.IMG,
+  assertEquals(
+      'Should still have img tag', goog.dom.TagName.IMG,
       anchor.firstChild.tagName);
 
-  assertEquals('Alt should equal "newText"', 'newText',
+  assertEquals(
+      'Alt should equal "newText"', 'newText',
       anchor.firstChild.getAttribute('alt'));
 }
 
 function testSetMixed() {
   anchor.innerHTML = '<b>A</b>B';
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should have text: AB', 'AB', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
-  assertEquals('Should point to http://docs.google.com/',
-      'http://docs.google.com/', anchor.href);
+  assertEquals(
+      'Should point to http://docs.google.com/', 'http://docs.google.com/',
+      anchor.href);
   assertEquals('Should have correct text', 'Text', link.getCurrentText());
-  assertEquals('Should not be bold', goog.dom.NodeType.TEXT,
-      anchor.firstChild.nodeType);
+  assertEquals(
+      'Should not be bold', goog.dom.NodeType.TEXT, anchor.firstChild.nodeType);
 }
 
 function testPlaceCursorRightOf() {
@@ -169,8 +176,9 @@ function testPlaceCursorRightOf() {
   var startNode = range.getStartNode();
 
   if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) {
-    assertEquals('Selection should be to the right of the anchor',
-        anchor, startNode.previousSibling);
+    assertEquals(
+        'Selection should be to the right of the anchor', anchor,
+        startNode.previousSibling);
   } else {
     // Check that the selection is the "right" place.
     //
@@ -178,10 +186,11 @@ function testPlaceCursorRightOf() {
     // but if you type, it types outside the anchor.
     //
     // Best we can do is test that it is at the end of the anchor text.
-    assertEquals('Selection should be in anchor text',
-        anchor.firstChild, startNode);
-    assertEquals('Selection should be at the end of the text',
-        anchor.firstChild.length, range.getStartOffset());
+    assertEquals(
+        'Selection should be in anchor text', anchor.firstChild, startNode);
+    assertEquals(
+        'Selection should be at the end of the text', anchor.firstChild.length,
+        range.getStartOffset());
   }
 
   if (ed) {
@@ -209,16 +218,15 @@ function testIsLikelyUrl() {
     'ww.jester', 'juicer.fake', 'abs.nonsense.something', 'filename.txt'
   ];
   for (var i = 0; i < good.length; i++) {
-    assertTrue(good[i] + ' should be good',
-        goog.editor.Link.isLikelyUrl(good[i]));
+    assertTrue(
+        good[i] + ' should be good', goog.editor.Link.isLikelyUrl(good[i]));
   }
 
   var bad = [
     // Definitely not URLs
-    'bananas', 'http google com', '<img>', 'Sad :/', '*garbage!.123',
-    'ftp', 'http', '/', 'https', 'this is', '*!&.banana!*&!',
-    'www.jester is gone.com', 'ftp .nospaces.net', 'www_foo_net',
-    "www.'jester'.net", 'www:8080',
+    'bananas', 'http google com', '<img>', 'Sad :/', '*garbage!.123', 'ftp',
+    'http', '/', 'https', 'this is', '*!&.banana!*&!', 'www.jester is gone.com',
+    'ftp .nospaces.net', 'www_foo_net', "www.'jester'.net", 'www:8080',
     'www . notnsense.com', 'email@address.com',
 
     // URL-ish but not quite
@@ -227,8 +235,8 @@ function testIsLikelyUrl() {
   ];
 
   for (i = 0; i < bad.length; i++) {
-    assertFalse(bad[i] + ' should be bad',
-        goog.editor.Link.isLikelyUrl(bad[i]));
+    assertFalse(
+        bad[i] + ' should be bad', goog.editor.Link.isLikelyUrl(bad[i]));
   }
 }
 
@@ -246,12 +254,27 @@ function testIsLikelyEmailAddress() {
 
   var bad = [
     // Malformed/incomplete email addresses
-    'user', '@gmail.com', 'user@gmail', 'user@.com', 'user@gmail.c',
-    'user@gmail.co.u', '@ya.com', '.@hi3.nl', 'jim.com',
-    'ed:@gmail.com', '*!&.banana!*&!', ':jon@gmail.com',
-    '3g?@bil.com', 'adam be@hi.net', 'john\nsmith@test.com',
-    "www.'jester'.net", "'james'@covald.net", 'ftp://user@site.com/',
-    'aim:goim?screenname=en2es', 'user:pass@site.com', 'user@site.com yay'
+    'user',
+    '@gmail.com',
+    'user@gmail',
+    'user@.com',
+    'user@gmail.c',
+    'user@gmail.co.u',
+    '@ya.com',
+    '.@hi3.nl',
+    'jim.com',
+    'ed:@gmail.com',
+    '*!&.banana!*&!',
+    ':jon@gmail.com',
+    '3g?@bil.com',
+    'adam be@hi.net',
+    'john\nsmith@test.com',
+    "www.'jester'.net",
+    "'james'@covald.net",
+    'ftp://user@site.com/',
+    'aim:goim?screenname=en2es',
+    'user:pass@site.com',
+    'user@site.com yay'
   ];
 
   for (i = 0; i < bad.length; i++) {
@@ -274,11 +297,10 @@ function testIsMailToLink() {
 function testGetValidLinkFromText() {
   var textLinkPairs = [
     // input text, expected link output
-    'www.foo.com', 'http://www.foo.com',
-    'user@gmail.com', 'mailto:user@gmail.com',
-    'http://www.foo.com', 'http://www.foo.com',
-    'https://this.that.edu', 'https://this.that.edu',
-    'nothing to see here', null
+    'www.foo.com', 'http://www.foo.com', 'user@gmail.com',
+    'mailto:user@gmail.com', 'http://www.foo.com', 'http://www.foo.com',
+    'https://this.that.edu', 'https://this.that.edu', 'nothing to see here',
+    null
   ];
   var link = new goog.editor.Link(anchor, true);
 

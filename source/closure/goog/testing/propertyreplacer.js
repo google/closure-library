@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.PropertyReplacer');
 goog.provide('goog.testing.PropertyReplacer');
 
 /** @suppress {extraRequire} Needed for some tests to compile. */
@@ -90,6 +91,7 @@ goog.testing.PropertyReplacer.NO_SUCH_KEY_ = {};
  * @param {string} key The key to check.
  * @return {boolean} Whether the object has the key as own key.
  * @private
+ * @suppress {unusedLocalVariables}
  */
 goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
   if (!(key in obj)) {
@@ -105,7 +107,7 @@ goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
   // examining obj.toString().
   if (obj.constructor == Object &&
       (!goog.userAgent.OPERA ||
-          Object.prototype.toString.call(obj) == '[object Object]')) {
+       Object.prototype.toString.call(obj) == '[object Object]')) {
     return false;
   }
   try {
@@ -152,8 +154,8 @@ goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
   }
 
   if (obj[key]) {
-    throw Error('Cannot delete non configurable property "' + key + '" in ' +
-                obj);
+    throw Error(
+        'Cannot delete non configurable property "' + key + '" in ' + obj);
   }
 };
 
@@ -181,8 +183,9 @@ goog.testing.PropertyReplacer.restoreOriginal_ = function(original) {
  * @throws {Error} In case of trying to set a read-only property.
  */
 goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
-  var origValue = goog.testing.PropertyReplacer.hasKey_(obj, key) ? obj[key] :
-                  goog.testing.PropertyReplacer.NO_SUCH_KEY_;
+  var origValue = goog.testing.PropertyReplacer.hasKey_(obj, key) ?
+      obj[key] :
+      goog.testing.PropertyReplacer.NO_SUCH_KEY_;
   this.original_.push({object: obj, key: key, value: origValue});
   obj[key] = value;
 
@@ -215,7 +218,8 @@ goog.testing.PropertyReplacer.prototype.replace = function(obj, key, value) {
     throw Error('Cannot replace missing property "' + key + '" in ' + obj);
   }
   if (goog.typeOf(obj[key]) != goog.typeOf(value)) {
-    throw Error('Cannot replace property "' + key + '" in ' + obj +
+    throw Error(
+        'Cannot replace property "' + key + '" in ' + obj +
         ' with a value of different type');
   }
   this.set(obj, key, value);

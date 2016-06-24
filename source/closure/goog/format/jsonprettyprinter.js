@@ -62,8 +62,8 @@ goog.format.JsonPrettyPrinter = function(delimiters) {
    * @type {goog.format.JsonPrettyPrinter.TextDelimiters}
    * @private
    */
-  this.delimiters_ = delimiters ||
-      new goog.format.JsonPrettyPrinter.TextDelimiters();
+  this.delimiters_ =
+      delimiters || new goog.format.JsonPrettyPrinter.TextDelimiters();
 
   /**
    * Used to serialize property names and values.
@@ -87,7 +87,8 @@ goog.format.JsonPrettyPrinter.prototype.format = function(json) {
   for (var i = 0; i < buffer.length; i++) {
     var item = buffer[i];
     output += item instanceof goog.html.SafeHtml ?
-        goog.html.SafeHtml.unwrap(item) : item;
+        goog.html.SafeHtml.unwrap(item) :
+        item;
   }
   return output;
 };
@@ -137,8 +138,8 @@ goog.format.JsonPrettyPrinter.prototype.format_ = function(json) {
  *     output.
  * @private
  */
-goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
-    outputBuffer, indent) {
+goog.format.JsonPrettyPrinter.prototype.printObject_ = function(
+    val, outputBuffer, indent) {
   var typeOf = goog.typeOf(val);
   switch (typeOf) {
     case 'null':
@@ -148,8 +149,8 @@ goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
       // "null", "boolean", "number" and "string" properties are printed
       // directly to the output.
       this.printValue_(
-          /** @type {null|string|boolean|number} */ (val),
-          typeOf, outputBuffer);
+          /** @type {null|string|boolean|number} */ (val), typeOf,
+          outputBuffer);
       break;
     case 'array':
       // Example of how an array looks when formatted
@@ -169,8 +170,8 @@ goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
         }
         outputBuffer.push(this.delimiters_.lineBreak);
         this.printSpaces_(indent + this.delimiters_.indent, outputBuffer);
-        this.printObject_(val[i], outputBuffer,
-            indent + this.delimiters_.indent);
+        this.printObject_(
+            val[i], outputBuffer, indent + this.delimiters_.indent);
       }
       // If there are no properties in this object, don't put a line break
       // between the beginning "[" and ending "]", so the output of an empty
@@ -203,10 +204,10 @@ goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
         outputBuffer.push(this.delimiters_.lineBreak);
         this.printSpaces_(indent + this.delimiters_.indent, outputBuffer);
         this.printName_(name, outputBuffer);
-        outputBuffer.push(this.delimiters_.nameValueSeparator,
-            this.delimiters_.space);
-        this.printObject_(val[name], outputBuffer,
-            indent + this.delimiters_.indent);
+        outputBuffer.push(
+            this.delimiters_.nameValueSeparator, this.delimiters_.space);
+        this.printObject_(
+            val[name], outputBuffer, indent + this.delimiters_.indent);
         propertyCount++;
       }
       // If there are no properties in this object, don't put a line break
@@ -235,8 +236,8 @@ goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
  *     the response to.
  * @private
  */
-goog.format.JsonPrettyPrinter.prototype.printName_ = function(name,
-    outputBuffer) {
+goog.format.JsonPrettyPrinter.prototype.printName_ = function(
+    name, outputBuffer) {
   outputBuffer.push(
       this.delimiters_.formatName(this.jsonSerializer_.serialize(name)));
 };
@@ -255,8 +256,8 @@ goog.format.JsonPrettyPrinter.prototype.printName_ = function(name,
  *     the response to.
  * @private
  */
-goog.format.JsonPrettyPrinter.prototype.printValue_ = function(val,
-    typeOf, outputBuffer) {
+goog.format.JsonPrettyPrinter.prototype.printValue_ = function(
+    val, typeOf, outputBuffer) {
   var value = this.jsonSerializer_.serialize(val);
   outputBuffer.push(this.delimiters_.formatValue(value, typeOf));
 };
@@ -269,8 +270,8 @@ goog.format.JsonPrettyPrinter.prototype.printValue_ = function(val,
  *     the response to.
  * @private
  */
-goog.format.JsonPrettyPrinter.prototype.printSpaces_ = function(indent,
-    outputBuffer) {
+goog.format.JsonPrettyPrinter.prototype.printSpaces_ = function(
+    indent, outputBuffer) {
   outputBuffer.push(goog.string.repeat(this.delimiters_.space, indent));
 };
 
@@ -282,8 +283,7 @@ goog.format.JsonPrettyPrinter.prototype.printSpaces_ = function(indent,
  * the object, which makes it easy to tweak delimiters to specific environments.
  * @constructor
  */
-goog.format.JsonPrettyPrinter.TextDelimiters = function() {
-};
+goog.format.JsonPrettyPrinter.TextDelimiters = function() {};
 
 
 /**
@@ -366,8 +366,8 @@ goog.format.JsonPrettyPrinter.TextDelimiters.prototype.postName = '';
  * @param {string} name The property name.
  * @return {string|!goog.html.SafeHtml}
  */
-goog.format.JsonPrettyPrinter.TextDelimiters.prototype.formatName =
-    function(name) {
+goog.format.JsonPrettyPrinter.TextDelimiters.prototype.formatName = function(
+    name) {
   return this.preName + name + this.postName;
 };
 
@@ -394,8 +394,8 @@ goog.format.JsonPrettyPrinter.TextDelimiters.prototype.postValue = '';
  * @param {string} typeOf The type of the value obtained by goog.typeOf.
  * @return {string|!goog.html.SafeHtml}
  */
-goog.format.JsonPrettyPrinter.TextDelimiters.prototype.formatValue =
-    function(value, typeOf) {
+goog.format.JsonPrettyPrinter.TextDelimiters.prototype.formatValue = function(
+    value, typeOf) {
   return goog.string.format(this.preValue, typeOf) + value + this.postValue;
 };
 
@@ -419,7 +419,8 @@ goog.format.JsonPrettyPrinter.TextDelimiters.prototype.indent = 2;
 goog.format.JsonPrettyPrinter.SafeHtmlDelimiters = function() {
   goog.format.JsonPrettyPrinter.TextDelimiters.call(this);
 };
-goog.inherits(goog.format.JsonPrettyPrinter.SafeHtmlDelimiters,
+goog.inherits(
+    goog.format.JsonPrettyPrinter.SafeHtmlDelimiters,
     goog.format.JsonPrettyPrinter.TextDelimiters);
 
 

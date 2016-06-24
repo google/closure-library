@@ -66,16 +66,14 @@ function testCalledAsync() {
 }
 
 function testSequenceCalledInOrder() {
-  futureCallback1 = new goog.testing.recordFunction(
-      function() {
-        // called before futureCallback2
-        assertEquals(0, futureCallback2.getCallCount());
-      });
-  futureCallback2 = new goog.testing.recordFunction(
-      function() {
-        // called after futureCallback1
-        assertEquals(1, futureCallback1.getCallCount());
-      });
+  futureCallback1 = new goog.testing.recordFunction(function() {
+    // called before futureCallback2
+    assertEquals(0, futureCallback2.getCallCount());
+  });
+  futureCallback2 = new goog.testing.recordFunction(function() {
+    // called after futureCallback1
+    assertEquals(1, futureCallback1.getCallCount());
+  });
   goog.async.run(futureCallback1);
   goog.async.run(futureCallback2);
 
@@ -105,12 +103,11 @@ function testSequenceScheduledTwice() {
 }
 
 function testSequenceCalledSync() {
-  futureCallback1 = new goog.testing.recordFunction(
-      function() {
-        goog.async.run(futureCallback2);
-        // goog.async.run doesn't call the inner callback immediately.
-        assertEquals(0, futureCallback2.getCallCount());
-      });
+  futureCallback1 = new goog.testing.recordFunction(function() {
+    goog.async.run(futureCallback2);
+    // goog.async.run doesn't call the inner callback immediately.
+    assertEquals(0, futureCallback2.getCallCount());
+  });
   goog.async.run(futureCallback1);
 
   // goog.async.run doesn't call the top callback immediately.

@@ -54,13 +54,15 @@ function testRouteMessageThroughWorkers() {
   }
 
   var master = new goog.messaging.PortOperator('main');
-  master.addPort('worker1', new goog.messaging.PortChannel(
-      new Worker('testdata/portnetwork_worker1.js')));
-  master.addPort('worker2', new goog.messaging.PortChannel(
-      new Worker('testdata/portnetwork_worker2.js')));
+  master.addPort(
+      'worker1', new goog.messaging.PortChannel(
+                     new Worker('testdata/portnetwork_worker1.js')));
+  master.addPort(
+      'worker2', new goog.messaging.PortChannel(
+                     new Worker('testdata/portnetwork_worker2.js')));
   master.addPort(
       'frame', goog.messaging.PortChannel.forEmbeddedWindow(
-          window.frames['inner'], '*', timer));
+                   window.frames['inner'], '*', timer));
 
   var promise = new goog.Promise(function(resolve, reject) {
     master.dial('worker1').registerService('result', resolve, true);

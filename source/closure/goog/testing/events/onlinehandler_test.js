@@ -39,46 +39,53 @@ function testInitialValue() {
 
 function testStateChange() {
   createHandler(true);
-  assertEventCounts(0 /* expectedOnlineEvents */,
-      0 /* expectedOfflineEvents */);
+  assertEventCounts(
+      0 /* expectedOnlineEvents */, 0 /* expectedOfflineEvents */);
 
   // Expect no events.
   handler.setOnline(true);
   assertEquals(true, handler.isOnline());
-  assertEventCounts(0 /* expectedOnlineEvents */,
-      0 /* expectedOfflineEvents */);
+  assertEventCounts(
+      0 /* expectedOnlineEvents */, 0 /* expectedOfflineEvents */);
 
   // Expect one offline event.
   handler.setOnline(false);
   assertEquals(false, handler.isOnline());
-  assertEventCounts(0 /* expectedOnlineEvents */,
-      1 /* expectedOfflineEvents */);
+  assertEventCounts(
+      0 /* expectedOnlineEvents */, 1 /* expectedOfflineEvents */);
 
   // Expect no events.
   handler.setOnline(false);
   assertEquals(false, handler.isOnline());
-  assertEventCounts(0 /* expectedOnlineEvents */,
-      1 /* expectedOfflineEvents */);
+  assertEventCounts(
+      0 /* expectedOnlineEvents */, 1 /* expectedOfflineEvents */);
 
   // Expect one online event.
   handler.setOnline(true);
   assertEquals(true, handler.isOnline());
-  assertEventCounts(1 /* expectedOnlineEvents */,
-      1 /* expectedOfflineEvents */);
+  assertEventCounts(
+      1 /* expectedOnlineEvents */, 1 /* expectedOfflineEvents */);
 }
 
 function createHandler(initialValue) {
   handler = new goog.testing.events.OnlineHandler(initialValue);
   observer = new goog.testing.events.EventObserver();
-  goog.events.listen(handler,
-      [goog.net.NetworkStatusMonitor.EventType.ONLINE,
-       goog.net.NetworkStatusMonitor.EventType.OFFLINE],
+  goog.events.listen(
+      handler,
+      [
+        goog.net.NetworkStatusMonitor.EventType.ONLINE,
+        goog.net.NetworkStatusMonitor.EventType.OFFLINE
+      ],
       observer);
 }
 
 function assertEventCounts(expectedOnlineEvents, expectedOfflineEvents) {
-  assertEquals(expectedOnlineEvents, observer.getEvents(
-      goog.net.NetworkStatusMonitor.EventType.ONLINE).length);
-  assertEquals(expectedOfflineEvents, observer.getEvents(
-      goog.net.NetworkStatusMonitor.EventType.OFFLINE).length);
+  assertEquals(
+      expectedOnlineEvents,
+      observer.getEvents(goog.net.NetworkStatusMonitor.EventType.ONLINE)
+          .length);
+  assertEquals(
+      expectedOfflineEvents,
+      observer.getEvents(goog.net.NetworkStatusMonitor.EventType.OFFLINE)
+          .length);
 }

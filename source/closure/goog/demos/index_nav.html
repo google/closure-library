@@ -1,3 +1,7 @@
+---
+{edit_path: '', layout: empty, page: index_nav, section: 3-demos}
+---
+{% raw %}
 <!DOCTYPE html>
 <html>
 <!--
@@ -12,6 +16,7 @@ See the COPYING file for details.
   <script>
     goog.require('goog.ui.tree.TreeControl');
     goog.require('goog.dom');
+    goog.require('goog.html.SafeHtml');
   </script>
   <script>
     var treeData = [
@@ -113,7 +118,6 @@ See the COPYING file for details.
       {name: 'Graphics', childNodes: [
         {name: 'Basic Elements', url: 'graphics/basicelements.html'},
         {name: 'Events', url: 'graphics/events.html'},
-        {name: 'Imageless Rounded Corner', url: 'imagelessroundedcorner.html'},
         {name: 'Modify Elements', url: 'graphics/modifyelements.html'},
         {name: 'Tiger', url: 'graphics/tiger.html'}
       ]},
@@ -130,7 +134,6 @@ See the COPYING file for details.
       ]},
       {name: 'JSON Pretty Printer', url: 'jsonprettyprinter.html'},
       {name: 'Label Input', url: 'labelinput.html'},
-      {name: 'Offline UI', url: 'offline.html'},
       {name: 'Pixel Density Monitor', url: 'pixeldensitymonitor.html'},
       {name: 'Plain Text Spell Checker', url: 'plaintextspellchecker.html'},
       {name: 'Popup', url: 'popup.html'},
@@ -183,12 +186,15 @@ See the COPYING file for details.
           var childNode = parent.getTree().createNode();
           parent.add(childNode);
           if (node.url) {
-            childNode.setHtml('<a href="' + node.url + '" title="' + node.name +
-                '" target="demo">' + node.name + '</a>');
+            childNode.setSafeHtml(goog.html.SafeHtml.create('a', {
+              'href': node.url,
+              'title': node.name,
+              'target': 'demo'
+            }, node.name));
             // Need to prevent BaseNode.onClick_ from calling preventDefault.
             childNode.onClick_ = goog.nullFunction;
           } else if (node.childNodes) {
-            childNode.setHtml(node.name);
+            childNode.setText(node.name);
             buildNode(childNode, node.childNodes);
           }
         }
@@ -253,3 +259,4 @@ See the COPYING file for details.
   <script>initTree();</script>
 </body>
 </html>
+{% endraw %}

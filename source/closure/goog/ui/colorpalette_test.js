@@ -24,9 +24,8 @@ var emptyPalette, samplePalette;
 
 function setUp() {
   emptyPalette = new goog.ui.ColorPalette();
-  samplePalette = new goog.ui.ColorPalette([
-    'red', '#00FF00', 'rgb(0, 0, 255)'
-  ]);
+  samplePalette =
+      new goog.ui.ColorPalette(['red', '#00FF00', 'rgb(0, 0, 255)']);
   samplePalette.setSelectedColor('blue');
 }
 
@@ -60,12 +59,9 @@ function testSampleColorPalette() {
   assertEquals('goog-palette-colorswatch', nodes[0].className);
   assertEquals('goog-palette-colorswatch', nodes[1].className);
   assertEquals('goog-palette-colorswatch', nodes[2].className);
-  assertEquals('#ff0000',
-      goog.color.parse(nodes[0].style.backgroundColor).hex);
-  assertEquals('#00ff00',
-      goog.color.parse(nodes[1].style.backgroundColor).hex);
-  assertEquals('#0000ff',
-      goog.color.parse(nodes[2].style.backgroundColor).hex);
+  assertEquals('#ff0000', goog.color.parse(nodes[0].style.backgroundColor).hex);
+  assertEquals('#00ff00', goog.color.parse(nodes[1].style.backgroundColor).hex);
+  assertEquals('#0000ff', goog.color.parse(nodes[2].style.backgroundColor).hex);
 }
 
 function testGetColors() {
@@ -95,10 +91,8 @@ function testSetColors() {
   assertEquals(2, nodes.length);
   assertEquals('goog-palette-colorswatch', nodes[0].className);
   assertEquals('goog-palette-colorswatch', nodes[1].className);
-  assertEquals('#000000',
-      goog.color.parse(nodes[0].style.backgroundColor).hex);
-  assertEquals('#ffffff',
-      goog.color.parse(nodes[1].style.backgroundColor).hex);
+  assertEquals('#000000', goog.color.parse(nodes[0].style.backgroundColor).hex);
+  assertEquals('#ffffff', goog.color.parse(nodes[1].style.backgroundColor).hex);
   assertEquals('black', nodes[0].title);
   assertEquals('RGB (255, 255, 255)', nodes[1].title);
 
@@ -115,10 +109,10 @@ function testSetColors() {
   assertEquals(2, newNodes.length);
   assertEquals('goog-palette-colorswatch', newNodes[0].className);
   assertEquals('goog-palette-colorswatch', newNodes[1].className);
-  assertEquals('#336699',
-      goog.color.parse(newNodes[0].style.backgroundColor).hex);
-  assertEquals('#00ffff',
-      goog.color.parse(newNodes[1].style.backgroundColor).hex);
+  assertEquals(
+      '#336699', goog.color.parse(newNodes[0].style.backgroundColor).hex);
+  assertEquals(
+      '#00ffff', goog.color.parse(newNodes[1].style.backgroundColor).hex);
 }
 
 function testSetColorsWithLabels() {
@@ -155,16 +149,16 @@ function testSetSelectedColor() {
 
   samplePalette.setSelectedColor('red');
   assertEquals('#ff0000', samplePalette.getSelectedColor());
-  samplePalette.setSelectedColor(17); // Invalid color spec.
+  samplePalette.setSelectedColor(17);  // Invalid color spec.
   assertNull(samplePalette.getSelectedColor());
 
   samplePalette.setSelectedColor('rgb(0, 255, 0)');
   assertEquals('#00ff00', samplePalette.getSelectedColor());
-  samplePalette.setSelectedColor(false); // Invalid color spec.
+  samplePalette.setSelectedColor(false);  // Invalid color spec.
   assertNull(samplePalette.getSelectedColor());
 
   samplePalette.setSelectedColor('#0000FF');
   assertEquals('#0000ff', samplePalette.getSelectedColor());
-  samplePalette.setSelectedColor(null); // Invalid color spec.
+  samplePalette.setSelectedColor(null);  // Invalid color spec.
   assertNull(samplePalette.getSelectedColor());
 }

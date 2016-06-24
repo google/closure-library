@@ -1,0 +1,100 @@
+---
+{edit_path: '', layout: api, page: goog.testing.MockClock, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>MockClock</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.testing.html">goog.testing</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L59" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class MockClock</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.Disposable.html">goog.Disposable</a>
+  &#x2514; goog.testing.MockClock</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code></dl><p>Class for unit testing code that uses setTimeout and clearTimeout.</p>
+<p>NOTE: If you are using MockClock to test code that makes use of
+goog.fx.Animation, then you must either:</p>
+<ol><li>Install and dispose of the MockClock in setUpPage() and tearDownPage()
+respectively (rather than setUp()/tearDown()).</li></ol>
+<p>or</p>
+<ol start="2"><li>Ensure that every test clears the animation queue by calling
+mockClock.tick(x) at the end of each test function (where <code>x</code> is large
+enough to complete all animations).</li></ol>
+<p>Otherwise, if any animation is left pending at the time that
+MockClock.dispose() is called, that will permanently prevent any future
+animations from playing on the page.</p>
+<h3 class="name"><div>new MockClock(<var>opt_autoInstall</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_autoInstall</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Install the MockClock at construction time.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addOnDisposeCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addOnDisposeCallback(<var>callback</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Invokes a callback function when this object is disposed. Callbacks are
+invoked in the order in which they were added. If a callback is added to
+an already disposed Disposable, it will be called immediately.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#addOnDisposeCallback">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(this: T): ?</code><dd><p>The callback function.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dispose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispose()</div></h3></div><div class="body"><p>Disposes of the object. If the object hasn&#39;t already been disposed of, calls
+<a href="goog.testing.MockClock.html#disposeInternal"><code>#disposeInternal</code></a>. Classes that extend <code>goog.Disposable</code> should
+override <a href="goog.testing.MockClock.html#disposeInternal"><code>#disposeInternal</code></a> in order to delete references to COM
+objects, DOM nodes, and other disposable objects. Reentrant.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#dispose">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#dispose">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="disposeInternal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L246" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>disposeInternal()</div></h3></div><div class="body"><p>Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend <code>goog.Disposable</code> should
+override this method.
+Not reentrant. To avoid calling it twice, it must only be called from the
+subclass&#39; <code>disposeInternal</code> method. Everywhere else the public
+<code>dispose</code> method must be used.
+For example:</p>
+ <pre>
+   mypackage.MyClass &#61; function() {
+     mypackage.MyClass.base(this, &#39;constructor&#39;);
+     // Constructor logic specific to MyClass.
+     ...
+   };
+   goog.inherits(mypackage.MyClass, goog.Disposable);
+
+   mypackage.MyClass.prototype.disposeInternal &#61; function() {
+     // Dispose logic specific to MyClass.
+     ...
+     // Call superclass&#39;s disposeInternal at the end of the subclass&#39;s, like
+     // in C&#43;&#43;, to avoid hard-to-catch issues.
+     mypackage.MyClass.base(this, &#39;disposeInternal&#39;);
+   };
+ </pre>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.Disposable.html#disposeInternal">goog.Disposable</a></dd></dl></div></section><section class="property expandable" id="getCurrentTime"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L366" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCurrentTime()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The MockClock&#39;s current time in milliseconds.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L163" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.testing.MockClock.html#isDisposed"><code>#isDisposed</code></a> instead.</p>
+<dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#getDisposed">goog.Disposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTimeoutDelay"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L293" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTimeoutDelay()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>delay The amount of time between when a timeout is
+scheduled to fire and when it actually fires, in milliseconds.  May
+be negative.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTimeoutsMade"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L358" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTimeoutsMade()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of timeouts that have been scheduled.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="install"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L157" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>install()</div></h3></div><div class="body"><p>Installs the MockClock by overriding the global object&#39;s implementation of
+setTimeout, setInterval, clearTimeout and clearInterval.</p>
+</div></section><section class="property expandable" id="isDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#isDisposed">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#isDisposed">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isTimeoutSet"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L380" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isTimeoutSet(<var>timeoutKey</var>)</div></h3></div><div class="body"><dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>timeoutKey</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The timeout key.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the timer has been set and not cleared,
+independent of the timeout&#39;s expiration.  In other words, the timeout
+could have passed or could be scheduled for the future.  Either way,
+this function returns true or false depending only on whether the
+provided timeoutKey represents a timeout that has been set and not
+cleared.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="registerDisposable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDisposable(<var>disposable</var>)</div></h3></div><div class="body"><p>Associates a disposable object with this object so that they will be disposed
+together.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#registerDisposable">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>disposable</var><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><p>that will be disposed when
+this object is disposed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="reset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L258" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>reset()</div></h3></div><div class="body"><p>Resets the MockClock, removing all timeouts that are scheduled and resets
+the fake timer count.</p>
+</div></section><section class="property expandable" id="setTimeoutDelay"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L283" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setTimeoutDelay(<var>delay</var>)</div></h3></div><div class="body"><p>Sets the amount of time between when a timeout is scheduled to fire and when
+it actually fires.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>delay</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The delay in milliseconds.  May be negative.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="tick"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L305" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tick(<var>opt_millis</var>)</div></h3></div><div class="body"><p>Increments the MockClock&#39;s time by a given number of milliseconds, running
+any functions that are now overdue.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_millis</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Number of milliseconds to increment the counter.
+If not specified, clock ticks 1 millisecond.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Current mock time in milliseconds.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="tickPromise"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L330" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> tickPromise(<var>promise</var>, <var>opt_millis</var>)</div></h3></div><div class="body"><p>Takes a promise and then ticks the mock clock. If the promise successfully
+resolves, returns the value produced by the promise. If the promise is
+rejected, it throws the rejection as an exception. If the promise is not
+resolved at all, throws an exception.
+Also ticks the general clock by the specified amount.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>promise</var><code>!<a href="goog.Thenable.html">goog.Thenable</a>&lt;T&gt;</code><dd><p>A promise that should be resolved after
+the mockClock is ticked for the given opt_millis.</p>
+<dt class="type name"><var>opt_millis</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Number of milliseconds to increment the counter.
+If not specified, clock ticks 1 millisecond.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code></dl></dd></dl></div></section><section class="property expandable" id="uninstall"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L234" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>uninstall()</div></h3></div><div class="body"><p>Removes the MockClock&#39;s hooks into the global object&#39;s functions and revert
+to their original values.</p>
+</div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="creationStack"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>creationStack</div></h3></div><div class="body"><p>If monitoring the goog.Disposable instances is enabled, stores the creation
+stack trace of the Disposable instance.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#creationStack">goog.Disposable</a></dd></dl></div></section></section><section class="static-properties"><h2>Static Properties</h2><section class="property expandable" id="MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L99" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT</div></h3></div><div class="body"><p>Default wait timeout for mocking requestAnimationFrame (in milliseconds).</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></dd></dl></div></section><section class="property expandable" id="MockClock.nextId"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/mockclock.js#L107" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>MockClock.nextId</div></h3></div><div class="body"><p>ID to use for next timeout.  Timeout IDs must never be reused, even across
+MockClock instances.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

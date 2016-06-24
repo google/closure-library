@@ -24,8 +24,9 @@ function testCorrectNumberOfInputTypes() {
 
 function testPropertyNamesEqualValues() {
   for (var propertyName in goog.dom.InputType) {
-    assertEquals(propertyName.lower().replace('_', '-'),
-                 goog.dom.InputType[propertyName]);
+    assertEquals(
+        propertyName.lower().replace('_', '-'),
+        goog.dom.InputType[propertyName]);
   }
 }
 
@@ -34,6 +35,6 @@ function testTypes() {
   assertEquals('time', document.getElementById('timeinput').type);
   assertEquals('textarea', document.getElementById('textarea').type);
   assertEquals('select-one', document.getElementById('selectone').type);
-  assertEquals('select-multiple',
-               document.getElementById('selectmultiple').type);
+  assertEquals(
+      'select-multiple', document.getElementById('selectmultiple').type);
 }

@@ -1,0 +1,137 @@
+---
+{edit_path: '', layout: api, page: goog.functions, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.functions</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L23" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.functions</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="FALSE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L41" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>FALSE(<var>arg0</var>)</div></h3></div><div class="body"><p>Always returns false.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arg0</var><code>...?</code></dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code></dl></dd></dl></div></section><section class="property expandable" id="NULL"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L55" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>NULL(<var>arg0</var>)</div></h3></div><div class="body"><p>Always returns NULL.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arg0</var><code>...?</code></dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a></code></dl></dd></dl></div></section><section class="property expandable" id="TRUE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L48" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TRUE(<var>arg0</var>)</div></h3></div><div class="body"><p>Always returns true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arg0</var><code>...?</code></dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code></dl></dd></dl></div></section><section class="property expandable" id="and"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L227" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>and(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates a function that returns true if each of its components evaluates
+to true. The components are evaluated in order, and the evaluation will be
+short-circuited as soon as a function returns false.
+For example, (goog.functions.and(f, g))(x) is equivalent to f(x) &amp;&amp; g(x).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A list of functions.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>A function that ANDs its component
+functions.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="cacheReturnValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L331" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> cacheReturnValue(<var>fn</var>)</div></h3></div><div class="body"><p>Gives a wrapper function that caches the return value of a parameterless
+function when first called.</p>
+<p>When called for the first time, the given function is called and its
+return value is cached (thus this is only appropriate for idempotent
+functions).  Subsequent calls will return the cached return value. This
+allows the evaluation of expensive functions to be delayed until first used.</p>
+<p>To cache the return values of functions with parameters, see goog.memoize.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!function(): T</code><dd><p>A function to lazily evaluate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!function(): T</code><dd><p>A wrapped version the function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="compose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L181" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> compose(<var>fn</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Creates the composition of the functions passed in.
+For example, (goog.functions.compose(f, g))(a) is equivalent to f(g(a)).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>function(...?): T</code><dd><p>The final function.</p>
+<dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A list of functions.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): T</code><dd><p>The composition of all inputs.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="constant"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L32" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> constant(<var>retValue</var>)</div></h3></div><div class="body"><p>Creates a function that always returns the same value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>retValue</var><code>T</code><dd><p>The value to return.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(): T</code><dd><p>The new function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="create"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L289" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> create(<var>constructor</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Generic factory function to construct an object given the constructor
+and the arguments. Intended to be bound to create object factories.</p>
+<p>Example:</p>
+<p>var factory &#61; goog.partial(goog.functions.create, Class);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>constructor</var><code>function(new: T, ...)</code><dd><p>The constructor for the Object.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>The arguments to be passed to the constructor.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code><dd><p>A new instance of the class given in <code>constructor</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="debounce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L394" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;SCOPE&gt;</var> debounce(<var>f</var>, <var>interval</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Wraps a function to allow it to be called, at most, once for each sequence of
+calls fired repeatedly so long as they are fired less than a specified
+interval apart (in milliseconds). Whether it receives one signal or multiple,
+it will always wait until a full interval has elapsed since the last signal
+before performing the action, passing the arguments from the last call of the
+debouncing decorator into the decorated function.</p>
+<p>This is particularly useful for bulking up repeated user actions (e.g. only
+refreshing a view once a user finishes typing rather than updating with every
+keystroke). For more stateful debouncing with support for pausing, resuming,
+and canceling debounced actions, use <code>goog.async.Debouncer</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: SCOPE, ...?)</code><dd><p>Function to call.</p>
+<dt class="type name"><var>interval</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Interval over which to debounce. The function will
+only be called after the full interval has elapsed since the last call.</p>
+<dt class="type name"><var>opt_scope</var><code>SCOPE=</code><dd><p>Object in whose scope to call the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Wrapped function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="equalTo"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L166" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>equalTo(<var>value</var>, <var>opt_useLooseComparison</var>)</div></h3></div><div class="body"><p>Creates a function that returns whether its argument equals the given value.</p>
+<p>Example:
+var key &#61; goog.object.findKey(obj, goog.functions.equalTo(&#39;needle&#39;));</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>*</code><dd><p>The value to compare to.</p>
+<dt class="type name"><var>opt_useLooseComparison</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to use a loose (&#61;&#61;)
+comparison rather than a strict (&#61;&#61;&#61;) one. Defaults to false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(*): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The new function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="error"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L76" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>error(<var>message</var>)</div></h3></div><div class="body"><p>Creates a function that always throws an error with the given message.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>message</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The error message.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The error-throwing function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fail"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L86" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fail(<var>err</var>)</div></h3></div><div class="body"><p>Creates a function that throws the given object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>err</var><code>*</code><dd><p>An object to be thrown.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The error-throwing function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="identity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L66" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> identity(<var>opt_returnValue</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>A simple function that returns the first argument of whatever is passed
+into it.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_returnValue</var><code>T=</code><dd><p>The single value that will be returned.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>Optional trailing arguments. These are ignored.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code><dd><p>The first argument passed in, or undefined if nothing was passed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="lock"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L99" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>lock(<var>f</var>, <var>opt_numArgs</var>)</div></h3></div><div class="body"><p>Given a function, create a function that keeps opt_numArgs arguments and
+silently discards all additional arguments.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The original function.</p>
+<dt class="type name"><var>opt_numArgs</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The number of arguments to keep. Defaults to 0.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A version of f that only keeps the first opt_numArgs
+arguments.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="not"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L271" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>not(<var>f</var>)</div></h3></div><div class="body"><p>Creates a function that returns the Boolean opposite of a provided function.
+For example, (goog.functions.not(f))(x) is equivalent to !f(x).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The original function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>A function that delegates to f and returns
+opposite.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="nth"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L112" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>nth(<var>n</var>)</div></h3></div><div class="body"><p>Creates a function that returns its nth argument.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>n</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The position of the return argument.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A new function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="once"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L360" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>once(<var>f</var>)</div></h3></div><div class="body"><p>Wraps a function to allow it to be called, at most, once. All
+additional calls are no-ops.</p>
+<p>This is particularly useful for initialization functions
+that should be called, at most, once.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(): *</code><dd><p>Function to call.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(): <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Wrapped function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="or"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L250" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>or(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates a function that returns true if any of its components evaluates
+to true. The components are evaluated in order, and the evaluation will be
+short-circuited as soon as a function returns true.
+For example, (goog.functions.or(f, g))(x) is equivalent to f(x) || g(x).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A list of functions.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>A function that ORs its component
+functions.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="partialRight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L132" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>partialRight(<var>fn</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Like goog.partial(), except that arguments are added after arguments to the
+returned function.</p>
+<p>Usage:
+function f(arg1, arg2, arg3, arg4) { ... }
+var g &#61; goog.functions.partialRight(f, arg3, arg4);
+g(arg1, arg2);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function to partially apply.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>Additional arguments that are partially applied to fn
+at the end.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A partially-applied form of the function goog.partial()
+was invoked as a method of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="sequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L205" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>sequence(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates a function that calls the functions passed in in sequence, and
+returns the value of the last function. For example,
+(goog.functions.sequence(f, g))(x) is equivalent to f(x),g(x).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A list of functions.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function that calls all inputs in sequence.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="throttle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L427" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;SCOPE&gt;</var> throttle(<var>f</var>, <var>interval</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Wraps a function to allow it to be called, at most, once per interval
+(specified in milliseconds). If it is called multiple times while it is
+waiting, it will only perform the action once at the end of the interval,
+passing the arguments from the last call of the throttling decorator into the
+decorated function.</p>
+<p>This is particularly useful for limiting repeated user requests (e.g.
+preventing a user from spamming a server with frequent view refreshes). For
+more stateful throttling with support for pausing, resuming, and canceling
+throttled actions, use <code>goog.async.Throttle</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: SCOPE, ...?)</code><dd><p>Function to call.</p>
+<dt class="type name"><var>interval</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Interval over which to throttle. The function can
+only be called once per interval.</p>
+<dt class="type name"><var>opt_scope</var><code>SCOPE=</code><dd><p>Object in whose scope to call the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Wrapped function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="withReturnValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L150" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> withReturnValue(<var>f</var>, <var>retValue</var>)</div></h3></div><div class="body"><p>Given a function, create a new function that swallows its return value
+and replaces it with a new one.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function.</p>
+<dt class="type name"><var>retValue</var><code>T</code><dd><p>A new return value.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(...?): T</code><dd><p>A new function.</p>
+</dl></dd></dl></div></section></section><section class="constants"><h2>Compiler Constants</h2><section class="property expandable" id="goog.functions.CACHE_RETURN_VALUE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L313" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.functions.CACHE_RETURN_VALUE</div></h3></div><div class="body"><p>Whether the return value cache should be used.
+This should only be used to disable caches when testing.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -1,0 +1,88 @@
+---
+{edit_path: '', layout: api, page: goog.dom.query, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.dom.query</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/dojo/dom/query.js#L211" target="_blank">View Source</a></div><h1 class="title deprecated"><div class="tags"><span class="deprecated"></span></div><div>namespace goog.dom.query</div></h1></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>This is an all-software query selector. Use
+document.querySelector. See
+https://developer.mozilla.org/en-US/docs/DOM/Document.querySelector .</p>
+</dl><p>Returns nodes which match the given CSS3 selector, searching the
+entire document by default but optionally taking a node to scope
+the search by.</p>
+<p>dojo.query() is the swiss army knife of DOM node manipulation in
+Dojo. Much like Prototype&#39;s &#34;$$&#34; (bling-bling) function or JQuery&#39;s
+&#34;$&#34; function, dojo.query provides robust, high-performance
+CSS-based node selector support with the option of scoping searches
+to a particular sub-tree of a document.</p>
+<h2>Supported Selectors:</h2>
+<p>dojo.query() supports a rich set of CSS3 selectors, including:</p>
+<ul><li>class selectors (e.g., <code>.foo</code>)</li><li>node type selectors like <code>span</code></li><li><code></code> descendant selectors</li><li><code>&gt;</code> child element selectors</li><li><code>#foo</code> style ID selectors</li><li><code>*</code> universal selector</li><li><code>~</code>, the immediately preceded-by sibling selector</li><li><code>&#43;</code>, the preceded-by sibling selector</li><li>attribute queries:
+<ul><li><code>[foo]</code> attribute presence selector</li><li><code>[foo&#61;&#39;bar&#39;]</code> attribute value exact match</li><li><code>[foo~&#61;&#39;bar&#39;]</code> attribute value list item match</li><li><code>[foo^&#61;&#39;bar&#39;]</code> attribute start match</li><li><code>[foo$&#61;&#39;bar&#39;]</code> attribute end match</li><li><code>[foo*&#61;&#39;bar&#39;]</code> attribute substring match</li></ul>
+</li><li><code>:first-child</code>, <code>:last-child</code> positional selectors</li><li><code>:empty</code> content empty selector</li><li><code>:empty</code> content empty selector</li><li><code>:nth-child(n)</code>, <code>:nth-child(2n&#43;1)</code> style positional calculations</li><li><code>:nth-child(even)</code>, <code>:nth-child(odd)</code> positional selectors</li><li><code>:not(...)</code> negation pseudo selectors</li></ul>
+<p>Any legal combination of these selectors will work with
+<code>dojo.query()</code>, including compound selectors (&#34;,&#34; delimited).
+Very complex and useful searches can be constructed with this
+palette of selectors.</p>
+<h2>Unsupported Selectors:</h2>
+<p>While dojo.query handles many CSS3 selectors, some fall outside of
+what&#39;s reasonable for a programmatic node querying engine to
+handle. Currently unsupported selectors include:</p>
+<ul><li>namespace-differentiated selectors of any form</li><li>all <code>::</code> pseudo-element selectors</li><li>certain pseudo-selectors which don&#39;t get a lot of day-to-day use:
+<ul><li><code>:root</code>, <code>:lang()</code>, <code>:target</code>, <code>:focus</code></li></ul>
+</li><li>all visual and state selectors:
+<ul><li><code>:root</code>, <code>:active</code>, <code>:hover</code>, <code>:visited</code>, <code>:link</code>,
+<code>:enabled</code>, <code>:disabled</code>, <code>:checked</code></li></ul>
+</li><li><code>:*-of-type</code> pseudo selectors</li></ul>
+<h2>dojo.query and XML Documents:</h2>
+<p><code>dojo.query</code> currently only supports searching XML documents
+whose tags and attributes are 100% lower-case. This is a known
+limitation and will [be addressed soon]
+(http://trac.dojotoolkit.org/ticket/3866)</p>
+<h2>Non-selector Queries:</h2>
+<p>If something other than a String is passed for the query,
+<code>dojo.query</code> will return a new array constructed from
+that parameter alone and all further processing will stop. This
+means that if you have a reference to a node or array or nodes, you
+can quickly construct a new array of nodes from the original by
+calling <code>dojo.query(node)</code> or <code>dojo.query(array)</code>.</p>
+<p><strong>Example:</strong> search the entire document for elements with the class &#34;foo&#34;:</p>
+<pre><code>dojo.query(&#34;.foo&#34;);
+</code></pre>
+<p>these elements will match:</p>
+<pre><code>&lt;span class&#61;&#34;foo&#34;&gt;&lt;/span&gt;
+&lt;span class&#61;&#34;foo bar&#34;&gt;&lt;/span&gt;
+&lt;p class&#61;&#34;thud foo&#34;&gt;&lt;/p&gt;
+</code></pre>
+<p><strong>Example:</strong> search the entire document for elements with the classes &#34;foo&#34;
+<em>and</em> &#34;bar&#34;:</p>
+<pre><code>dojo.query(&#34;.foo.bar&#34;);
+</code></pre>
+<p>these elements will match:</p>
+<pre><code>&lt;span class&#61;&#34;foo bar&#34;&gt;&lt;/span&gt;
+</code></pre>
+<p>while these will not:</p>
+<pre><code>&lt;span class&#61;&#34;foo&#34;&gt;&lt;/span&gt;
+&lt;p class&#61;&#34;thud foo&#34;&gt;&lt;/p&gt;
+</code></pre>
+<p><strong>Example:</strong> find <code>&lt;span&gt;</code> elements which are descendants of paragraphs and
+which have a &#34;highlighted&#34; class:</p>
+<pre><code>dojo.query(&#34;p span.highlighted&#34;);
+</code></pre>
+<p>the innermost span in this fragment matches:</p>
+<pre><code>&lt;p class&#61;&#34;foo&#34;&gt;
+  &lt;span&gt;...
+    &lt;span class&#61;&#34;highlighted foo bar&#34;&gt;...&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+</code></pre>
+<p><strong>Example:</strong> find all odd table rows inside of the table <code>#tabular_data</code>,
+using the <code>&gt;</code> (direct child) selector to avoid affecting any nested tables:</p>
+<pre><code>dojo.query(&#34;#tabular_data &gt; tbody &gt; tr:nth-child(odd)&#34;);
+</code></pre>
+<h3 class="name"><div>query(<var>query</var>, <var>opt_root</var>)</div></h3><dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>query</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code><dd><p>The CSS3 expression to match against.
+For details on the syntax of CSS3 selectors, see
+http://www.w3.org/TR/css3-selectors/#selectors.</p>
+<dt class="type name"><var>opt_root</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|Node)=</code><dd><p>A Node (or node id) to scope the search
+from (optional).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>{length: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code><dd><p>The elements that matched the query.</p>
+</dl></dd></dl></div></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

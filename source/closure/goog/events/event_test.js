@@ -35,15 +35,13 @@ function testConstructor() {
   assertNotNull('Event must not be null', e);
   assertEquals('Event type must be as expected', 'eventType', e.type);
   assertEquals('Event target must be as expected', target, e.target);
-  assertEquals('Current target must be as expected', target,
-      e.currentTarget);
+  assertEquals('Current target must be as expected', target, e.currentTarget);
 }
 
 function testStopPropagation() {
   // This test breaks encapsulation because there is no public getter for
   // propagationStopped_.
-  assertFalse('Propagation must not have been stopped',
-      e.propagationStopped_);
+  assertFalse('Propagation must not have been stopped', e.propagationStopped_);
   e.stopPropagation();
   assertTrue('Propagation must have been stopped', e.propagationStopped_);
 }

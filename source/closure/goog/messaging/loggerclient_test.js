@@ -67,8 +67,8 @@ function testCommandWithException() {
       name: 'Error',
       message: ex.message,
       stack: ex.stack,
-      lineNumber: ex.lineNumber || 'Not available',
-      fileName: ex.fileName || window.location.href,
+      lineNumber: ex.lineNumber || ex.line || 'Not available',
+      fileName: ex.fileName || ex.sourceURL || window.location.href,
       message0: ex.message0,
       message1: ex.message1
     }

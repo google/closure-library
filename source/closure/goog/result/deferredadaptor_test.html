@@ -1,3 +1,7 @@
+---
+{edit_path: '', layout: empty, page: deferredadaptor_test, section: x-source}
+---
+{% raw %}
 <!DOCTYPE html>
 <html>
 <!--
@@ -35,7 +39,7 @@ function tearDown() {
   result = deferred = record = null;
 }
 
-function testResultSuccesfulResolution() {
+function testResultSuccessfulResolution() {
   deferred.addCallback(record);
   result.setValue(1);
   assertEquals(1, record.getCallCount());
@@ -85,3 +89,4 @@ function testAddErrbackOnErroredResult() {
 </script>
 </body>
 </html>
+{% endraw %}

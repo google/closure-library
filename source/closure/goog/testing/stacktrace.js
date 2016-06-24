@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.stacktrace');
 goog.provide('goog.testing.stacktrace');
 goog.provide('goog.testing.stacktrace.Frame');
 
@@ -129,8 +130,8 @@ goog.testing.stacktrace.V8_ALIAS_PATTERN_ =
  */
 goog.testing.stacktrace.V8_CONTEXT_PATTERN_ =
     '(?:((?:new )?(?:\\[object Object\\]|' +
-    goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
-    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*))\\.)?';
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '(?:\\.' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*))\\.)?';
 
 
 /**
@@ -139,9 +140,8 @@ goog.testing.stacktrace.V8_CONTEXT_PATTERN_ =
  * @private {string}
  * @const
  */
-goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ =
-    '(?:new )?(?:' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
-    '|<anonymous>)';
+goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ = '(?:new )?(?:' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '|<anonymous>)';
 
 
 /**
@@ -150,9 +150,9 @@ goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ =
  * @private {string}
  * @const
  */
-goog.testing.stacktrace.V8_FUNCTION_CALL_PATTERN_ =
-    ' ' + goog.testing.stacktrace.V8_CONTEXT_PATTERN_ +
-    '(' + goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ + ')' +
+goog.testing.stacktrace.V8_FUNCTION_CALL_PATTERN_ = ' ' +
+    goog.testing.stacktrace.V8_CONTEXT_PATTERN_ + '(' +
+    goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ + ')' +
     goog.testing.stacktrace.V8_ALIAS_PATTERN_;
 
 
@@ -172,8 +172,10 @@ goog.testing.stacktrace.URL_PATTERN_ =
  * @const
  */
 goog.testing.stacktrace.CHROME_URL_PATTERN_ = ' (?:' +
-    '\\(unknown source\\)' + '|' +
-    '\\(native\\)' + '|' +
+    '\\(unknown source\\)' +
+    '|' +
+    '\\(native\\)' +
+    '|' +
     '\\((.+)\\)|(.+))';
 
 
@@ -184,7 +186,8 @@ goog.testing.stacktrace.CHROME_URL_PATTERN_ = ' (?:' +
  * @private {!RegExp}
  * @const
  */
-goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_ = new RegExp('^    at' +
+goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_ = new RegExp(
+    '^    at' +
     '(?:' + goog.testing.stacktrace.V8_FUNCTION_CALL_PATTERN_ + ')?' +
     goog.testing.stacktrace.CHROME_URL_PATTERN_ + '$');
 
@@ -200,9 +203,9 @@ goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_ = new RegExp('^    at' +
  * @private {string}
  * @const
  */
-goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ =
-    '(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
-    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
+goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ = '(' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '(?:\\.' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
     ')?' +
     '(\\(.*\\))?@';
 
@@ -212,9 +215,9 @@ goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ =
  * @private {!RegExp}
  * @const
  */
-goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_ = new RegExp('^' +
-    goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ +
-    '(?::0|' + goog.testing.stacktrace.URL_PATTERN_ + ')$');
+goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_ = new RegExp(
+    '^' + goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ + '(?::0|' +
+    goog.testing.stacktrace.URL_PATTERN_ + ')$');
 
 
 /**
@@ -225,8 +228,8 @@ goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_ = new RegExp('^' +
  */
 goog.testing.stacktrace.OPERA_ANONYMOUS_FUNCTION_NAME_PATTERN_ =
     '<anonymous function(?:\\: ' +
-    '(?:(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
-    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*)\\.)?' +
+    '(?:(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '(?:\\.' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*)\\.)?' +
     '(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '))?>';
 
 
@@ -238,8 +241,8 @@ goog.testing.stacktrace.OPERA_ANONYMOUS_FUNCTION_NAME_PATTERN_ =
  * @private {string}
  * @const
  */
-goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ =
-    '(?:(?:(' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')|' +
+goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ = '(?:(?:(' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')|' +
     goog.testing.stacktrace.OPERA_ANONYMOUS_FUNCTION_NAME_PATTERN_ +
     ')(\\(.*\\)))?@';
 
@@ -251,8 +254,8 @@ goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ =
  * @private {!RegExp}
  * @const
  */
-goog.testing.stacktrace.OPERA_STACK_FRAME_REGEXP_ = new RegExp('^' +
-    goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ +
+goog.testing.stacktrace.OPERA_STACK_FRAME_REGEXP_ = new RegExp(
+    '^' + goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ +
     goog.testing.stacktrace.URL_PATTERN_ + '?$');
 
 
@@ -272,8 +275,8 @@ goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_ = new RegExp(
  * @const
  */
 goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ = '(' +
-    goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
-    '(?:\\.' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '(?:\\.' +
+    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + ')*' +
     '(?:\\s+\\w+)*)';
 
 
@@ -282,8 +285,8 @@ goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ = '(' +
  * @private {!RegExp}
  * @const
  */
-goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp('^   at ' +
-    goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ +
+goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp(
+    '^   at ' + goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ +
     '\\s*\\((eval code:[^)]*|' + goog.testing.stacktrace.URL_PATTERN_ +
     ')\\)?$');
 
@@ -331,8 +334,8 @@ goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
   // This match includes newer versions of Opera (15+).
   var m = frameStr.match(goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_);
   if (m) {
-    return new goog.testing.stacktrace.Frame(m[1] || '', m[2] || '', m[3] || '',
-        m[4] || m[5] || m[6] || '');
+    return new goog.testing.stacktrace.Frame(
+        m[1] || '', m[2] || '', m[3] || '', m[4] || m[5] || m[6] || '');
   }
 
   // TODO(johnlenz): remove this.  It seems like if this was useful it would
@@ -350,8 +353,8 @@ goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
   // Match against Presto Opera 11.68 - 12.17.
   m = frameStr.match(goog.testing.stacktrace.OPERA_STACK_FRAME_REGEXP_);
   if (m) {
-    return new goog.testing.stacktrace.Frame(m[2] || '', m[1] || m[3] || '',
-        '', m[5] || '');
+    return new goog.testing.stacktrace.Frame(
+        m[2] || '', m[1] || m[3] || '', '', m[5] || '');
   }
 
   m = frameStr.match(goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_);
@@ -390,7 +393,8 @@ goog.testing.stacktrace.setDeobfuscateFunctionName = function(fn) {
  */
 goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
   return goog.testing.stacktrace.deobfuscateFunctionName_ ?
-      goog.testing.stacktrace.deobfuscateFunctionName_(name) : name;
+      goog.testing.stacktrace.deobfuscateFunctionName_(name) :
+      name;
 };
 
 
@@ -401,10 +405,10 @@ goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
  * @private
  */
 goog.testing.stacktrace.htmlEscape_ = function(text) {
-  return text.replace(/&/g, '&amp;').
-             replace(/</g, '&lt;').
-             replace(/>/g, '&gt;').
-             replace(/"/g, '&quot;');
+  return text.replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
 };
 
 
@@ -533,14 +537,16 @@ goog.testing.stacktrace.callSitesToFrames_ = function(stack) {
     var callSite = stack[i];
     var functionName = callSite.getFunctionName() || 'unknown';
     var fileName = callSite.getFileName();
-    var path = fileName ? fileName + ':' + callSite.getLineNumber() + ':' +
-        callSite.getColumnNumber() : 'unknown';
-    frames.push(
-        new goog.testing.stacktrace.Frame('', functionName, '', path));
+    var path = fileName ?
+        fileName + ':' + callSite.getLineNumber() + ':' +
+            callSite.getColumnNumber() :
+        'unknown';
+    frames.push(new goog.testing.stacktrace.Frame('', functionName, '', path));
   }
   return frames;
 };
 
 
-goog.exportSymbol('setDeobfuscateFunctionName',
+goog.exportSymbol(
+    'setDeobfuscateFunctionName',
     goog.testing.stacktrace.setDeobfuscateFunctionName);

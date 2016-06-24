@@ -65,8 +65,8 @@ function testSetLabel() {
 function assertLabelValue(labelInput, expectedLabel) {
   assertEquals(
       'label should have aria-label attribute \'' + expectedLabel + '\'',
-      expectedLabel, goog.a11y.aria.getState(labelInput.getElement(),
-          goog.a11y.aria.State.LABEL));
+      expectedLabel, goog.a11y.aria.getState(
+                         labelInput.getElement(), goog.a11y.aria.State.LABEL));
   // When browsers support the placeholder attribute, we use that instead of
   // the value property - and this test will fail.
   if (!isPlaceholderSupported()) {
@@ -83,19 +83,21 @@ function testPlaceholderAttribute() {
 
   // Some browsers don't support the placeholder attribute, in which case we
   // this test will fail.
-  if (! isPlaceholderSupported()) {
+  if (!isPlaceholderSupported()) {
     return;
   }
 
   labelInput.createDom();
   labelInput.enterDocument();
   mockClock.tick(10);
-  assertEquals('label should have placeholder attribute \'search\'', 'search',
+  assertEquals(
+      'label should have placeholder attribute \'search\'', 'search',
       labelInput.getElement().placeholder);
 
   labelInput.setLabel('new label');
-  assertEquals('label should have aria-label attribute \'new label\'',
-      'new label', labelInput.getElement().placeholder);
+  assertEquals(
+      'label should have aria-label attribute \'new label\'', 'new label',
+      labelInput.getElement().placeholder);
 }
 
 function testDecorateElementWithExistingPlaceholderAttribute() {
@@ -110,14 +112,16 @@ function testDecorateElementWithExistingPlaceholderAttribute() {
   // browser supports placeholders. Make sure labels are used for browsers
   // without placeholder support:
   if (isPlaceholderSupported()) {
-    assertEquals('label should have placeholder attribute \'search\'', 'search',
+    assertEquals(
+        'label should have placeholder attribute \'search\'', 'search',
         labelInput.getElement().placeholder);
   } else {
     assertNotNull(labelInput.getElement());
     assertEquals('label is rendered', 'search', labelInput.getElement().value);
-    assertEquals('label should have aria-label attribute \'search\'', 'search',
-        goog.a11y.aria.getState(labelInput.getElement(),
-            goog.a11y.aria.State.LABEL));
+    assertEquals(
+        'label should have aria-label attribute \'search\'', 'search',
+        goog.a11y.aria.getState(
+            labelInput.getElement(), goog.a11y.aria.State.LABEL));
   }
 }
 
@@ -134,13 +138,14 @@ function testDecorateElementWithFocus() {
   labelInput.enterDocument();
   mockClock.tick(10);
 
-  assertEquals('label for pre-focused input should not have LABEL_CLASS_NAME',
-      -1,
+  assertEquals(
+      'label for pre-focused input should not have LABEL_CLASS_NAME', -1,
       labelInput.getElement().className.indexOf(labelInput.labelCssClassName));
 
   if (!isPlaceholderSupported()) {
-    assertEquals('label rendered for pre-focused element',
-        '', labelInput.getElement().value);
+    assertEquals(
+        'label rendered for pre-focused element', '',
+        labelInput.getElement().value);
     // NOTE(user): element.blur() doesn't seem to trigger the BLUR event in
     // IE in the test environment. This could be related to the IE issues with
     // testClassName() below.
@@ -148,14 +153,15 @@ function testDecorateElementWithFocus() {
         new goog.testing.events.Event(
             goog.events.EventType.BLUR, decoratedElement));
     mockClock.tick(10);
-    assertEquals('label not rendered for blurred element',
-        'search', labelInput.getElement().value);
+    assertEquals(
+        'label not rendered for blurred element', 'search',
+        labelInput.getElement().value);
   }
 }
 
 function testDecorateElementWithFocusDelay() {
   if (isPlaceholderSupported()) {
-    return; // Delay only affects the older browsers.
+    return;  // Delay only affects the older browsers.
   }
   var placeholder = 'search';
 
@@ -182,11 +188,13 @@ function testDecorateElementWithFocusDelay() {
           goog.events.EventType.BLUR, decoratedElement));
 
   mockClock.tick(delay - 1);
-  assertEquals('label should not be restored before labelRestoreDelay',
-      '', labelInput.getElement().value);
+  assertEquals(
+      'label should not be restored before labelRestoreDelay', '',
+      labelInput.getElement().value);
 
   mockClock.tick(1);
-  assertEquals('label not rendered for blurred element with labelRestoreDelay',
+  assertEquals(
+      'label not rendered for blurred element with labelRestoreDelay',
       placeholder, labelInput.getElement().value);
 }
 
@@ -206,17 +214,20 @@ function testClassName() {
   labelInput.setLabel('search');
 
   var el = labelInput.getElement();
-  assertTrue('label before focus should have LABEL_CLASS_NAME',
+  assertTrue(
+      'label before focus should have LABEL_CLASS_NAME',
       goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 
   labelInput.getElement().focus();
 
-  assertFalse('label after focus should not have LABEL_CLASS_NAME',
+  assertFalse(
+      'label after focus should not have LABEL_CLASS_NAME',
       goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 
   labelInput.getElement().blur();
 
-  assertTrue('label after blur should have LABEL_CLASS_NAME',
+  assertTrue(
+      'label after blur should have LABEL_CLASS_NAME',
       goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 }
 
@@ -235,16 +246,19 @@ function testEnable() {
   var disabledClass = goog.getCssName(labelInput.labelCssClassName, 'disabled');
 
   assertTrue('label should be enabled', labelInput.isEnabled());
-  assertFalse('label should not have the disabled class',
+  assertFalse(
+      'label should not have the disabled class',
       goog.dom.classlist.contains(labelElement, disabledClass));
 
   labelInput.setEnabled(false);
   assertFalse('label should be disabled', labelInput.isEnabled());
-  assertTrue('label should have the disabled class',
+  assertTrue(
+      'label should have the disabled class',
       goog.dom.classlist.contains(labelElement, disabledClass));
 
   labelInput.setEnabled(true);
   assertTrue('label should be enabled', labelInput.isEnabled());
-  assertFalse('label should not have the disabled class',
+  assertFalse(
+      'label should not have the disabled class',
       goog.dom.classlist.contains(labelElement, disabledClass));
 }

@@ -26,29 +26,26 @@ goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 
 var targets = [
-  { box_: new goog.math.Box(0, 3, 1, 1) },
-  { box_: new goog.math.Box(0, 7, 2, 6) },
-  { box_: new goog.math.Box(2, 2, 3, 1) },
-  { box_: new goog.math.Box(4, 1, 6, 1) },
-  { box_: new goog.math.Box(4, 9, 7, 6) },
-  { box_: new goog.math.Box(9, 9, 10, 1) }
+  {box_: new goog.math.Box(0, 3, 1, 1)}, {box_: new goog.math.Box(0, 7, 2, 6)},
+  {box_: new goog.math.Box(2, 2, 3, 1)}, {box_: new goog.math.Box(4, 1, 6, 1)},
+  {box_: new goog.math.Box(4, 9, 7, 6)},
+  {box_: new goog.math.Box(9, 9, 10, 1)}
 ];
 
 var targets2 = [
-  { box_: new goog.math.Box(10, 50, 20, 10) },
-  { box_: new goog.math.Box(20, 50, 30, 10) },
-  { box_: new goog.math.Box(60, 50, 70, 10) },
-  { box_: new goog.math.Box(70, 50, 80, 10) }
+  {box_: new goog.math.Box(10, 50, 20, 10)},
+  {box_: new goog.math.Box(20, 50, 30, 10)},
+  {box_: new goog.math.Box(60, 50, 70, 10)},
+  {box_: new goog.math.Box(70, 50, 80, 10)}
 ];
 
 var targets3 = [
-  { box_: new goog.math.Box(0, 4, 1, 1) },
-  { box_: new goog.math.Box(1, 6, 4, 5) },
-  { box_: new goog.math.Box(5, 5, 6, 2) },
-  { box_: new goog.math.Box(2, 1, 5, 0) }
+  {box_: new goog.math.Box(0, 4, 1, 1)}, {box_: new goog.math.Box(1, 6, 4, 5)},
+  {box_: new goog.math.Box(5, 5, 6, 2)}, {box_: new goog.math.Box(2, 1, 5, 0)}
 ];
 
 
@@ -85,7 +82,7 @@ RangeOverlap = {
 
 
 /**
- * Computes how two one dimentional ranges overlap.
+ * Computes how two one dimensional ranges overlap.
  *
  * @param {number} left1 Left inclusive bound of the first range.
  * @param {number} right1 Right exclusive bound of the first range.
@@ -113,10 +110,10 @@ function rangeOverlap(left1, right1, left2, right2) {
  * @return {boolean} Whether boxes overlap in any way.
  */
 function boxOverlaps(box1, box2) {
-  var horizontalOverlap = rangeOverlap(
-      box1.left, box1.right, box2.left, box2.right);
-  var verticalOverlap = rangeOverlap(
-      box1.top, box1.bottom, box2.top, box2.bottom);
+  var horizontalOverlap =
+      rangeOverlap(box1.left, box1.right, box2.left, box2.right);
+  var verticalOverlap =
+      rangeOverlap(box1.top, box1.bottom, box2.top, box2.bottom);
   return horizontalOverlap != RangeOverlap.LEFT &&
       horizontalOverlap != RangeOverlap.RIGHT &&
       verticalOverlap != RangeOverlap.LEFT &&
@@ -138,12 +135,12 @@ function testBoxOverlaps() {
   assertTrue('SW overlap', boxOverlaps(new goog.math.Box(3, 2, 5, 0), box2));
 
   // Inside.
-  assertTrue('Inside overlap',
-      boxOverlaps(new goog.math.Box(2, 3, 3, 2), box2));
+  assertTrue(
+      'Inside overlap', boxOverlaps(new goog.math.Box(2, 3, 3, 2), box2));
 
   // Around.
-  assertTrue('Outside overlap',
-      boxOverlaps(new goog.math.Box(0, 5, 5, 0), box2));
+  assertTrue(
+      'Outside overlap', boxOverlaps(new goog.math.Box(0, 5, 5, 0), box2));
 
   // Edge overlaps.
   assertTrue('N overlap', boxOverlaps(new goog.math.Box(0, 3, 2, 2), box2));
@@ -160,52 +157,48 @@ function testBoxOverlaps() {
   var box2 = new goog.math.Box(3, 6, 6, 3);
 
   // Along the edge - shorter.
-  assertFalse('N-in no overlap',
-      boxOverlaps(new goog.math.Box(1, 5, 2, 4), box2));
-  assertFalse('E-in no overlap',
-      boxOverlaps(new goog.math.Box(4, 8, 5, 7), box2));
-  assertFalse('S-in no overlap',
-      boxOverlaps(new goog.math.Box(7, 5, 8, 4), box2));
-  assertFalse('N-in no overlap',
-      boxOverlaps(new goog.math.Box(4, 2, 5, 1), box2));
+  assertFalse(
+      'N-in no overlap', boxOverlaps(new goog.math.Box(1, 5, 2, 4), box2));
+  assertFalse(
+      'E-in no overlap', boxOverlaps(new goog.math.Box(4, 8, 5, 7), box2));
+  assertFalse(
+      'S-in no overlap', boxOverlaps(new goog.math.Box(7, 5, 8, 4), box2));
+  assertFalse(
+      'N-in no overlap', boxOverlaps(new goog.math.Box(4, 2, 5, 1), box2));
 
   // By the corner.
-  assertFalse('NE no overlap',
-      boxOverlaps(new goog.math.Box(1, 8, 2, 7), box2));
-  assertFalse('SE no overlap',
-      boxOverlaps(new goog.math.Box(7, 8, 8, 7), box2));
-  assertFalse('SW no overlap',
-      boxOverlaps(new goog.math.Box(7, 2, 8, 1), box2));
-  assertFalse('NW no overlap',
-      boxOverlaps(new goog.math.Box(1, 2, 2, 1), box2));
+  assertFalse(
+      'NE no overlap', boxOverlaps(new goog.math.Box(1, 8, 2, 7), box2));
+  assertFalse(
+      'SE no overlap', boxOverlaps(new goog.math.Box(7, 8, 8, 7), box2));
+  assertFalse(
+      'SW no overlap', boxOverlaps(new goog.math.Box(7, 2, 8, 1), box2));
+  assertFalse(
+      'NW no overlap', boxOverlaps(new goog.math.Box(1, 2, 2, 1), box2));
 
   // Perpendicular to an edge.
-  assertFalse('NNE no overlap',
-      boxOverlaps(new goog.math.Box(1, 7, 2, 5), box2));
-  assertFalse('NEE no overlap',
-      boxOverlaps(new goog.math.Box(2, 8, 4, 7), box2));
-  assertFalse('SEE no overlap',
-      boxOverlaps(new goog.math.Box(5, 8, 7, 7), box2));
-  assertFalse('SSE no overlap',
-      boxOverlaps(new goog.math.Box(7, 7, 8, 5), box2));
-  assertFalse('SSW no overlap',
-      boxOverlaps(new goog.math.Box(7, 4, 8, 2), box2));
-  assertFalse('SWW no overlap',
-      boxOverlaps(new goog.math.Box(5, 2, 7, 1), box2));
-  assertFalse('NWW no overlap',
-      boxOverlaps(new goog.math.Box(2, 2, 4, 1), box2));
-  assertFalse('NNW no overlap',
-      boxOverlaps(new goog.math.Box(1, 4, 2, 2), box2));
+  assertFalse(
+      'NNE no overlap', boxOverlaps(new goog.math.Box(1, 7, 2, 5), box2));
+  assertFalse(
+      'NEE no overlap', boxOverlaps(new goog.math.Box(2, 8, 4, 7), box2));
+  assertFalse(
+      'SEE no overlap', boxOverlaps(new goog.math.Box(5, 8, 7, 7), box2));
+  assertFalse(
+      'SSE no overlap', boxOverlaps(new goog.math.Box(7, 7, 8, 5), box2));
+  assertFalse(
+      'SSW no overlap', boxOverlaps(new goog.math.Box(7, 4, 8, 2), box2));
+  assertFalse(
+      'SWW no overlap', boxOverlaps(new goog.math.Box(5, 2, 7, 1), box2));
+  assertFalse(
+      'NWW no overlap', boxOverlaps(new goog.math.Box(2, 2, 4, 1), box2));
+  assertFalse(
+      'NNW no overlap', boxOverlaps(new goog.math.Box(1, 4, 2, 2), box2));
 
   // Along the edge - longer.
-  assertFalse('N no overlap',
-      boxOverlaps(new goog.math.Box(0, 7, 1, 2), box2));
-  assertFalse('E no overlap',
-      boxOverlaps(new goog.math.Box(2, 9, 7, 8), box2));
-  assertFalse('S no overlap',
-      boxOverlaps(new goog.math.Box(8, 7, 9, 2), box2));
-  assertFalse('W no overlap',
-      boxOverlaps(new goog.math.Box(2, 1, 7, 0), box2));
+  assertFalse('N no overlap', boxOverlaps(new goog.math.Box(0, 7, 1, 2), box2));
+  assertFalse('E no overlap', boxOverlaps(new goog.math.Box(2, 9, 7, 8), box2));
+  assertFalse('S no overlap', boxOverlaps(new goog.math.Box(8, 7, 9, 2), box2));
+  assertFalse('W no overlap', boxOverlaps(new goog.math.Box(2, 1, 7, 0), box2));
 }
 
 
@@ -218,9 +211,8 @@ function testBoxOverlaps() {
  * @return {boolean} Whether the box overlaps any of the target boxes.
  */
 function boxOverlapsTargets(box, targets) {
-  return goog.array.some(targets, function(target) {
-    return boxOverlaps(box, target.box_);
-  });
+  return goog.array.some(
+      targets, function(target) { return boxOverlaps(box, target.box_); });
 }
 
 
@@ -241,7 +233,7 @@ function testMaybeCreateDummyTargetForPosition() {
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
   assertTrue(testGroup.isInside(2, 7, target.box_));
 
-  testGroup.targetList_.push({ box_: new goog.math.Box(5, 6, 6, 0) });
+  testGroup.targetList_.push({box_: new goog.math.Box(5, 6, 6, 0)});
 
   target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
@@ -275,7 +267,7 @@ function testMaybeCreateDummyTargetForPosition2() {
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
   assertTrue(testGroup.isInside(45, 40, target.box_));
 
-  testGroup.targetList_.push({ box_: new goog.math.Box(40, 50, 50, 40) });
+  testGroup.targetList_.push({box_: new goog.math.Box(40, 50, 50, 40)});
 
   target = testGroup.maybeCreateDummyTargetForPosition_(30, 40);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
@@ -301,12 +293,9 @@ function testMaybeCreateDummyTargetForPosition4() {
   testGroup.targetList_ = targets;
   testGroup.targetBox_ = new goog.math.Box(0, 9, 10, 1);
 
-  for (var x = testGroup.targetBox_.left;
-       x < testGroup.targetBox_.right;
-       x++) {
-    for (var y = testGroup.targetBox_.top;
-        y < testGroup.targetBox_.bottom;
-        y++) {
+  for (var x = testGroup.targetBox_.left; x < testGroup.targetBox_.right; x++) {
+    for (var y = testGroup.targetBox_.top; y < testGroup.targetBox_.bottom;
+         y++) {
       var inRealTarget = false;
       for (var i = 0; i < testGroup.targetList_.length; i++) {
         if (testGroup.isInside(x, y, testGroup.targetList_[i].box_)) {
@@ -317,8 +306,9 @@ function testMaybeCreateDummyTargetForPosition4() {
       if (!inRealTarget) {
         var target = testGroup.maybeCreateDummyTargetForPosition_(x, y);
         if (target) {
-          assertFalse('Fake target for point(' + x + ',' + y + ') should ' +
-              'not overlap any real targets.',
+          assertFalse(
+              'Fake target for point(' + x + ',' + y + ') should ' +
+                  'not overlap any real targets.',
               boxOverlapsTargets(target.box_, testGroup.targetList_));
           assertTrue(testGroup.isInside(x, y, target.box_));
         }
@@ -329,8 +319,8 @@ function testMaybeCreateDummyTargetForPosition4() {
 
 function testMaybeCreateDummyTargetForPosition_NegativePositions() {
   var negTargets = [
-    { box_: new goog.math.Box(-20, 10, -5, 1) },
-    { box_: new goog.math.Box(20, 10, 30, 1) }
+    {box_: new goog.math.Box(-20, 10, -5, 1)},
+    {box_: new goog.math.Box(20, 10, 30, 1)}
   ];
 
   var testGroup = new goog.fx.AbstractDragDrop();
@@ -344,8 +334,8 @@ function testMaybeCreateDummyTargetForPosition_NegativePositions() {
 
 function testMaybeCreateDummyTargetOutsideScrollableContainer() {
   var targets = [
-    { box_: new goog.math.Box(0, 3, 10, 1) },
-    { box_: new goog.math.Box(20, 3, 30, 1) }
+    {box_: new goog.math.Box(0, 3, 10, 1)},
+    {box_: new goog.math.Box(20, 3, 30, 1)}
   ];
   var target = targets[0];
 
@@ -356,7 +346,7 @@ function testMaybeCreateDummyTargetOutsideScrollableContainer() {
   testGroup.addScrollableContainer(document.getElementById('container1'));
   var container = testGroup.scrollableContainers_[0];
   container.containedTargets_.push(target);
-  container.box_ = new goog.math.Box(0, 3, 5, 1); // shorter than target
+  container.box_ = new goog.math.Box(0, 3, 5, 1);  // shorter than target
   target.scrollableContainer_ = container;
 
   // mouse cursor is below scrollable target but not the actual target
@@ -369,8 +359,8 @@ function testMaybeCreateDummyTargetOutsideScrollableContainer() {
 
 function testMaybeCreateDummyTargetInsideScrollableContainer() {
   var targets = [
-    { box_: new goog.math.Box(0, 3, 10, 1) },
-    { box_: new goog.math.Box(20, 3, 30, 1) }
+    {box_: new goog.math.Box(0, 3, 10, 1)},
+    {box_: new goog.math.Box(20, 3, 30, 1)}
   ];
   var target = targets[0];
 
@@ -381,7 +371,7 @@ function testMaybeCreateDummyTargetInsideScrollableContainer() {
   testGroup.addScrollableContainer(document.getElementById('container1'));
   var container = testGroup.scrollableContainers_[0];
   container.containedTargets_.push(target);
-  container.box_ = new goog.math.Box(0, 3, 20, 1); // longer than target
+  container.box_ = new goog.math.Box(0, 3, 20, 1);  // longer than target
   target.scrollableContainer_ = container;
 
   // mouse cursor is below both the scrollable and the actual target
@@ -399,8 +389,9 @@ function testCalculateTargetBox() {
     testGroup.targetList_.push(target);
     testGroup.calculateTargetBox_(target.box_);
   });
-  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-      new goog.math.Box(0, 9, 10, 1)));
+  assertTrue(
+      goog.math.Box.equals(
+          testGroup.targetBox_, new goog.math.Box(0, 9, 10, 1)));
 
   testGroup = new goog.fx.AbstractDragDrop();
   testGroup.targetList_ = [];
@@ -408,8 +399,9 @@ function testCalculateTargetBox() {
     testGroup.targetList_.push(target);
     testGroup.calculateTargetBox_(target.box_);
   });
-  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-      new goog.math.Box(10, 50, 80, 10)));
+  assertTrue(
+      goog.math.Box.equals(
+          testGroup.targetBox_, new goog.math.Box(10, 50, 80, 10)));
 
   testGroup = new goog.fx.AbstractDragDrop();
   testGroup.targetList_ = [];
@@ -417,8 +409,9 @@ function testCalculateTargetBox() {
     testGroup.targetList_.push(target);
     testGroup.calculateTargetBox_(target.box_);
   });
-  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-      new goog.math.Box(0, 6, 6, 0)));
+  assertTrue(
+      goog.math.Box.equals(
+          testGroup.targetBox_, new goog.math.Box(0, 6, 6, 0)));
 }
 
 
@@ -430,31 +423,40 @@ function testIsInside() {
   // 10,30-----20,30
   var box = new goog.math.Box(20, 20, 30, 10);
 
-  assertTrue('A point somewhere in the middle of the box should be inside.',
+  assertTrue(
+      'A point somewhere in the middle of the box should be inside.',
       add.isInside(15, 25, box));
 
-  assertTrue('A point in top-left corner should be inside the box.',
+  assertTrue(
+      'A point in top-left corner should be inside the box.',
       add.isInside(10, 20, box));
 
-  assertTrue('A point on top border should be inside the box.',
+  assertTrue(
+      'A point on top border should be inside the box.',
       add.isInside(15, 20, box));
 
-  assertFalse('A point in top-right corner should be outside the box.',
+  assertFalse(
+      'A point in top-right corner should be outside the box.',
       add.isInside(20, 20, box));
 
-  assertFalse('A point on right border should be outside the box.',
+  assertFalse(
+      'A point on right border should be outside the box.',
       add.isInside(20, 25, box));
 
-  assertFalse('A point in bottom-right corner should be outside the box.',
+  assertFalse(
+      'A point in bottom-right corner should be outside the box.',
       add.isInside(20, 30, box));
 
-  assertFalse('A point on bottom border should be outside the box.',
+  assertFalse(
+      'A point on bottom border should be outside the box.',
       add.isInside(15, 30, box));
 
-  assertFalse('A point in bottom-left corner should be outside the box.',
+  assertFalse(
+      'A point in bottom-left corner should be outside the box.',
       add.isInside(10, 30, box));
 
-  assertTrue('A point on left border should be inside the box.',
+  assertTrue(
+      'A point on left border should be inside the box.',
       add.isInside(10, 25, box));
 
   add.dispose();
@@ -507,6 +509,23 @@ function testScrollableContainersCalculation() {
   assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
 
+function testMouseDownEventDefaultAction() {
+  var group = new goog.fx.AbstractDragDrop();
+  var target = new goog.fx.AbstractDragDrop();
+  group.addTarget(target);
+  var item1 = new goog.fx.DragDropItem(document.getElementById('child1'));
+  group.items_.push(item1);
+  item1.setParent(group);
+  group.init();
+
+  var mousedownDefaultPrevented =
+      !goog.testing.events.fireMouseDownEvent(item1.element);
+
+  assertFalse(
+      'Default action of mousedown event should not be cancelled.',
+      mousedownDefaultPrevented);
+}
+
 // See http://b/7494613.
 function testMouseUpOutsideElement() {
   var group = new goog.fx.AbstractDragDrop();
@@ -556,9 +575,7 @@ function testScrollBeforeMoveDrag() {
   group.startDrag(moveEvent, item);
 
   // Simulate scrolling before the first move drag event.
-  var scrollEvent = {
-    'target': container
-  };
+  var scrollEvent = {'target': container};
   assertNotThrows(goog.bind(group.containerScrollHandler_, group, scrollEvent));
 }
 
@@ -579,21 +596,27 @@ function testMouseMove_mouseOutBeforeThreshold() {
 
   // Test
   var draggedItem = null;
-  add.startDrag = function(event, item) {
-    draggedItem = item;
-  };
+  add.startDrag = function(event, item) { draggedItem = item; };
 
-  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
-    'type': goog.events.EventType.MOUSEOUT, 'target': childEl};
+  var event =
+      new goog.testing.events.Event(goog.events.EventType.MOUSEOUT, childEl);
+  // Drag distance is only 2.
+  event.clientX = 8;
+  event.clientY = 10;
   item.mouseMove_(event);
-  assertEquals('DragStart should not be fired for mouseout on child element.',
-      null, draggedItem);
+  assertEquals(
+      'DragStart should not be fired for mouseout on child element.', null,
+      draggedItem);
 
-  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
-    'type': goog.events.EventType.MOUSEOUT, 'target': itemEl};
+  var event =
+      new goog.testing.events.Event(goog.events.EventType.MOUSEOUT, itemEl);
+  // Drag distance is only 2.
+  event.clientX = 8;
+  event.clientY = 10;
   item.mouseMove_(event);
-  assertEquals('DragStart should be fired for mouseout on main element.',
-      item, draggedItem);
+  assertEquals(
+      'DragStart should be fired for mouseout on main element.', item,
+      draggedItem);
 }
 
 
@@ -604,19 +627,25 @@ function testGetDragElementPosition() {
 
   var pageOffset = goog.style.getPageOffset(sourceEl);
   var pos = testGroup.getDragElementPosition(sourceEl);
-  assertEquals('Drag element position should be source element page offset',
+  assertEquals(
+      'Drag element position should be source element page offset',
       pageOffset.x, pos.x);
-  assertEquals('Drag element position should be source element page offset',
+  assertEquals(
+      'Drag element position should be source element page offset',
       pageOffset.y, pos.y);
 
   sourceEl.style.marginLeft = '5px';
   sourceEl.style.marginTop = '7px';
   pageOffset = goog.style.getPageOffset(sourceEl);
   pos = testGroup.getDragElementPosition(sourceEl);
-  assertEquals('Drag element position should be adjusted for source element ' +
-      'margins', pageOffset.x - 10, pos.x);
-  assertEquals('Drag element position should be adjusted for source element ' +
-      'margins', pageOffset.y - 14, pos.y);
+  assertEquals(
+      'Drag element position should be adjusted for source element ' +
+          'margins',
+      pageOffset.x - 10, pos.x);
+  assertEquals(
+      'Drag element position should be adjusted for source element ' +
+          'margins',
+      pageOffset.y - 14, pos.y);
 }
 
 function testDragEndEvent() {
@@ -646,10 +675,12 @@ function testDragEndEvent() {
     goog.events.listen(
         testGroup, goog.fx.AbstractDragDrop.EventType.DRAGEND, function(event) {
           if (shouldContainItemData) {
-            assertEquals('The drag end event should contain a drop target',
-                         testGroup, event.dropTarget);
-            assertEquals('The drag end event should contain a drop target item',
-                         item, event.dropTargetItem);
+            assertEquals(
+                'The drag end event should contain a drop target', testGroup,
+                event.dropTarget);
+            assertEquals(
+                'The drag end event should contain a drop target item', item,
+                event.dropTargetItem);
             assertEquals(
                 'The drag end event should contain a drop target element',
                 childEl, event.dropTargetElement);

@@ -69,8 +69,7 @@ function tearDown() {
 function expectAfterHide() {
   mockAfterHideHandler.handleEvent(
       new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
-        return arg.type ==
-               goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE;
+        return arg.type == goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE;
       }));
 }
 
@@ -79,8 +78,8 @@ function expectAfterHide() {
  * Sets up the mock event handler to expect an OK event.
  */
 function expectOk() {
-  mockOkHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
+  mockOkHandler.handleEvent(
+      new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type == goog.ui.editor.AbstractDialog.EventType.OK;
       }));
 }
@@ -92,9 +91,7 @@ function expectOk() {
  */
 function expectOkPreventDefault() {
   expectOk();
-  mockOkHandler.$does(function(e) {
-    e.preventDefault();
-  });
+  mockOkHandler.$does(function(e) { e.preventDefault(); });
 }
 
 
@@ -112,8 +109,8 @@ function expectOkReturnFalse() {
  * Sets up the mock event handler to expect a CANCEL event.
  */
 function expectCancel() {
-  mockCancelHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
+  mockCancelHandler.handleEvent(
+      new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type == goog.ui.editor.AbstractDialog.EventType.CANCEL;
       }));
 }
@@ -140,18 +137,16 @@ function expectCustomButton() {
 function createTestDialog() {
   var dialog = new goog.ui.editor.AbstractDialog(new goog.dom.DomHelper());
   builder = new goog.ui.editor.AbstractDialog.Builder(dialog);
-  dialog.createDialogControl = function() {
-    return builder.build();
-  };
+  dialog.createDialogControl = function() { return builder.build(); };
   dialog.createOkEvent = function(e) {
     return new goog.events.Event(goog.ui.editor.AbstractDialog.EventType.OK);
   };
-  dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE,
-                          mockAfterHideHandler);
-  dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
-                          mockOkHandler);
-  dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.CANCEL,
-                          mockCancelHandler);
+  dialog.addEventListener(
+      goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE, mockAfterHideHandler);
+  dialog.addEventListener(
+      goog.ui.editor.AbstractDialog.EventType.OK, mockOkHandler);
+  dialog.addEventListener(
+      goog.ui.editor.AbstractDialog.EventType.CANCEL, mockCancelHandler);
   dialog.addEventListener(CUSTOM_EVENT, mockCustomButtonHandler);
   return dialog;
 }
@@ -189,7 +184,7 @@ function testCreateAndHide() {
   dialog.hide();
   assertNotOpen('Dialog should not be open after hide()', dialog);
 
-  mockCtrl.$verifyAll(); // Verifies AFTER_HIDE was not dispatched.
+  mockCtrl.$verifyAll();  // Verifies AFTER_HIDE was not dispatched.
 }
 
 
@@ -208,7 +203,7 @@ function testShowAndHide() {
   dialog.hide();
   assertNotOpen('Dialog should not be open after hide()', dialog);
 
-  mockCtrl.$verifyAll(); // Verifies AFTER_HIDE was dispatched.
+  mockCtrl.$verifyAll();  // Verifies AFTER_HIDE was dispatched.
 }
 
 
@@ -228,7 +223,7 @@ function testShowAndDispose() {
   dialog.dispose();
   assertNotOpen('Dialog should not be open after dispose()', dialog);
 
-  mockCtrl.$verifyAll(); // Verifies AFTER_HIDE was dispatched.
+  mockCtrl.$verifyAll();  // Verifies AFTER_HIDE was dispatched.
 }
 
 
@@ -245,7 +240,7 @@ function testDisposeWithoutShow() {
   dialog.dispose();
   assertNotOpen('Dialog should not be open after dispose()', dialog);
 
-  mockCtrl.$verifyAll(); // Verifies AFTER_HIDE was NOT dispatched.
+  mockCtrl.$verifyAll();  // Verifies AFTER_HIDE was NOT dispatched.
 }
 
 
@@ -273,19 +268,21 @@ function testBasicLayout() {
   // were swapped this test would still pass!
   assertContains('Dialog html should contain title', '>The Title<', html);
   assertContains('Dialog html should contain content', '>The Content<', html);
-  assertContains('Dialog html should contain custom OK button label',
-                 '>The OK Button<',
-                 html);
-  assertContains('Dialog html should contain default Cancel button label',
-                 '>Cancel<',
-                 html);
-  assertContains('Dialog html should contain custom button label',
-                 '>The Apply Button<',
-                 html);
-  assertTrue('Dialog should have default Closure class',
-             goog.dom.classlist.contains(dialogElem, 'modal-dialog'));
-  assertTrue('Dialog should have our custom class',
-             goog.dom.classlist.contains(dialogElem, 'myClassName'));
+  assertContains(
+      'Dialog html should contain custom OK button label', '>The OK Button<',
+      html);
+  assertContains(
+      'Dialog html should contain default Cancel button label', '>Cancel<',
+      html);
+  assertContains(
+      'Dialog html should contain custom button label', '>The Apply Button<',
+      html);
+  assertTrue(
+      'Dialog should have default Closure class',
+      goog.dom.classlist.contains(dialogElem, 'modal-dialog'));
+  assertTrue(
+      'Dialog should have our custom class',
+      goog.dom.classlist.contains(dialogElem, 'myClassName'));
 
   mockCtrl.$verifyAll();
 }
@@ -320,8 +317,8 @@ function testEnter() {
   mockCtrl.$replayAll();
 
   dialog.show();
-  goog.testing.events.fireKeySequence(dialog.dialogInternal_.getElement(),
-                                      goog.events.KeyCodes.ENTER);
+  goog.testing.events.fireKeySequence(
+      dialog.dialogInternal_.getElement(), goog.events.KeyCodes.ENTER);
   assertNotOpen('Dialog should not be open after hitting enter', dialog);
 
   mockCtrl.$verifyAll();
@@ -359,8 +356,8 @@ function testEscape() {
   mockCtrl.$replayAll();
 
   dialog.show();
-  goog.testing.events.fireKeySequence(dialog.dialogInternal_.getElement(),
-                                      goog.events.KeyCodes.ESC);
+  goog.testing.events.fireKeySequence(
+      dialog.dialogInternal_.getElement(), goog.events.KeyCodes.ESC);
   assertNotOpen('Dialog should not be open after hitting escape', dialog);
 
   mockCtrl.$verifyAll();
@@ -377,17 +374,15 @@ function testCustomButton() {
   expectAfterHide(dialog);
   mockCtrl.$replayAll();
 
-  builder.addButton('My Custom Button',
-      function() {
-        dialog.dispatchEvent(CUSTOM_EVENT);
-      },
-      CUSTOM_BUTTON_ID);
+  builder.addButton('My Custom Button', function() {
+    dialog.dispatchEvent(CUSTOM_EVENT);
+  }, CUSTOM_BUTTON_ID);
 
   dialog.show();
   goog.testing.events.fireClickSequence(
       dialog.getButtonElement(CUSTOM_BUTTON_ID));
-  assertNotOpen('Dialog should not be open after clicking custom button',
-                dialog);
+  assertNotOpen(
+      'Dialog should not be open after clicking custom button', dialog);
 
   mockCtrl.$verifyAll();
 }
@@ -403,8 +398,8 @@ function testOkPreventDefault() {
 
   dialog.show();
   goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
-  assertOpen('Dialog should not be closed because preventDefault was called',
-             dialog);
+  assertOpen(
+      'Dialog should not be closed because preventDefault was called', dialog);
 
   mockCtrl.$verifyAll();
 }
@@ -420,8 +415,8 @@ function testOkReturnFalse() {
 
   dialog.show();
   goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
-  assertOpen('Dialog should not be closed because handler returned false',
-             dialog);
+  assertOpen(
+      'Dialog should not be closed because handler returned false', dialog);
 
   mockCtrl.$verifyAll();
 }
@@ -433,17 +428,17 @@ function testOkReturnFalse() {
  */
 function testCreateOkEventFail() {
   dialog = createTestDialog();
-  dialog.createOkEvent = function() { // Override our mock createOkEvent.
+  dialog.createOkEvent = function() {  // Override our mock createOkEvent.
     return null;
   };
   mockCtrl.$replayAll();
 
   dialog.show();
   goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
-  assertOpen('Dialog should not be closed because OK event creation failed',
-             dialog);
+  assertOpen(
+      'Dialog should not be closed because OK event creation failed', dialog);
 
-  mockCtrl.$verifyAll(); // Verifies that no event was dispatched.
+  mockCtrl.$verifyAll();  // Verifies that no event was dispatched.
 }
 
 
@@ -477,8 +472,8 @@ function testProcessOkAndClosePreventDefault() {
 
   dialog.show();
   dialog.processOkAndClose();
-  assertOpen('Dialog should not be closed because preventDefault was called',
-      dialog);
+  assertOpen(
+      'Dialog should not be closed because preventDefault was called', dialog);
 
   mockCtrl.$verifyAll();
 }

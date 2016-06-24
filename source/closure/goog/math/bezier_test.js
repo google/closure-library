@@ -48,12 +48,15 @@ function testFlip() {
 function testGetPoint() {
   var input = new goog.math.Bezier(0, 1, 1, 2, 2, 3, 3, 4);
 
-  assert(goog.math.Coordinate.equals(input.getPoint(0),
-      new goog.math.Coordinate(0, 1)));
-  assert(goog.math.Coordinate.equals(input.getPoint(1),
-      new goog.math.Coordinate(3, 4)));
-  assert(goog.math.Coordinate.equals(input.getPoint(0.5),
-      new goog.math.Coordinate(1.5, 2.5)));
+  assert(
+      goog.math.Coordinate.equals(
+          input.getPoint(0), new goog.math.Coordinate(0, 1)));
+  assert(
+      goog.math.Coordinate.equals(
+          input.getPoint(1), new goog.math.Coordinate(3, 4)));
+  assert(
+      goog.math.Coordinate.equals(
+          input.getPoint(0.5), new goog.math.Coordinate(1.5, 2.5)));
 }
 
 function testGetPointX() {
@@ -89,8 +92,8 @@ function testSolvePositionFromXValue() {
   var pt = bezier.getPoint(0.5);
   assertRoughlyEquals(0.3125, pt.x, eps);
   assertRoughlyEquals(0.5375, pt.y, eps);
-  assertRoughlyEquals(0.321,
-      bezier.solvePositionFromXValue(bezier.getPoint(0.321).x), eps);
+  assertRoughlyEquals(
+      0.321, bezier.solvePositionFromXValue(bezier.getPoint(0.321).x), eps);
 }
 
 function testSolveYValueFromXValue() {

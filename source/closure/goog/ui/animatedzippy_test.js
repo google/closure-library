@@ -36,8 +36,8 @@ var propertyReplacer;
 function setUp() {
   animatedZippyHeaderEl = goog.dom.getElement('t1');
   goog.asserts.assert(animatedZippyHeaderEl);
-  animatedZippy = new goog.ui.AnimatedZippy(animatedZippyHeaderEl,
-      goog.dom.getElement('c1'));
+  animatedZippy = new goog.ui.AnimatedZippy(
+      animatedZippyHeaderEl, goog.dom.getElement('c1'));
 
   propertyReplacer = new goog.testing.PropertyReplacer();
 }
@@ -59,31 +59,32 @@ function testExpandCollapse() {
     animationsPlayed++;
     this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
   });
-  propertyReplacer.replace(goog.ui.AnimatedZippy.prototype, 'onAnimate_',
-      goog.functions.NULL);
+  propertyReplacer.replace(
+      goog.ui.AnimatedZippy.prototype, 'onAnimate_', goog.functions.NULL);
 
-  goog.events.listenOnce(animatedZippy, goog.ui.Zippy.Events.TOGGLE,
-      function(e) {
+  goog.events.listenOnce(
+      animatedZippy, goog.ui.Zippy.Events.TOGGLE, function(e) {
         toggleEventsFired++;
         assertTrue('TOGGLE event must be for expansion', e.expanded);
-        assertEquals('expanded must be true', true,
-            animatedZippy.isExpanded());
-        assertEquals('aria-expanded must be true', 'true',
-            goog.a11y.aria.getState(animatedZippyHeaderEl,
-                goog.a11y.aria.State.EXPANDED));
+        assertEquals('expanded must be true', true, animatedZippy.isExpanded());
+        assertEquals(
+            'aria-expanded must be true', 'true',
+            goog.a11y.aria.getState(
+                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
       });
 
   animatedZippy.expand();
 
-  goog.events.listenOnce(animatedZippy, goog.ui.Zippy.Events.TOGGLE,
-      function(e) {
+  goog.events.listenOnce(
+      animatedZippy, goog.ui.Zippy.Events.TOGGLE, function(e) {
         toggleEventsFired++;
         assertFalse('TOGGLE event must be for collapse', e.expanded);
-        assertEquals('expanded must be false', false,
-            animatedZippy.isExpanded());
-        assertEquals('aria-expanded must be false', 'false',
-            goog.a11y.aria.getState(animatedZippyHeaderEl,
-            goog.a11y.aria.State.EXPANDED));
+        assertEquals(
+            'expanded must be false', false, animatedZippy.isExpanded());
+        assertEquals(
+            'aria-expanded must be false', 'false',
+            goog.a11y.aria.getState(
+                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
       });
 
   animatedZippy.collapse();

@@ -44,8 +44,8 @@ goog.style.transform.isSupported = goog.functions.cacheReturnValue(function() {
 goog.style.transform.is3dSupported =
     goog.functions.cacheReturnValue(function() {
       return goog.userAgent.WEBKIT || goog.userAgent.EDGE ||
-             (goog.userAgent.GECKO && goog.userAgent.product.isVersion(10)) ||
-             (goog.userAgent.IE && goog.userAgent.product.isVersion(10));
+          (goog.userAgent.GECKO && goog.userAgent.product.isVersion(10)) ||
+          (goog.userAgent.IE && goog.userAgent.product.isVersion(10));
     });
 
 
@@ -84,11 +84,11 @@ goog.style.transform.setTranslation = function(element, x, y) {
   // TODO(user): After http://crbug.com/324107 is fixed, it will be faster to
   // use something like: translation = new CSSMatrix().translate(x, y, 0);
   var translation = goog.style.transform.is3dSupported() ?
-                        'translate3d(' + x + 'px,' + y + 'px,' +
-                            '0px)' :
-                        'translate(' + x + 'px,' + y + 'px)';
-  goog.style.setStyle(element, goog.style.transform.getTransformProperty_(),
-                      translation);
+      'translate3d(' + x + 'px,' + y + 'px,' +
+          '0px)' :
+      'translate(' + x + 'px,' + y + 'px)';
+  goog.style.setStyle(
+      element, goog.style.transform.getTransformProperty_(), translation);
   return true;
 };
 
@@ -127,10 +127,10 @@ goog.style.transform.setScale = function(element, x, y, z) {
     return false;
   }
   var scale = goog.style.transform.is3dSupported() ?
-                  'scale3d(' + x + ',' + y + ',' + z + ')' :
-                  'scale(' + x + ',' + y + ')';
-  goog.style.setStyle(element, goog.style.transform.getTransformProperty_(),
-                      scale);
+      'scale3d(' + x + ',' + y + ',' + z + ')' :
+      'scale(' + x + ',' + y + ')';
+  goog.style.setStyle(
+      element, goog.style.transform.getTransformProperty_(), scale);
   return true;
 };
 
@@ -145,8 +145,8 @@ goog.style.transform.setScale = function(element, x, y, z) {
 goog.style.transform.getTransformProperty_ =
     goog.functions.cacheReturnValue(function() {
       return goog.userAgent.IE && goog.userAgent.DOCUMENT_MODE == 9 ?
-                 '-ms-transform' :
-                 'transform';
+          '-ms-transform' :
+          'transform';
     });
 
 

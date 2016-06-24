@@ -1,0 +1,434 @@
+---
+{edit_path: '', layout: api, page: goog, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L42" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog</div></h1></div><div class="body"><p>Base namespace for the Closure library.  Checks to see goog is already
+defined in the current scope before assigning to prevent clobbering if
+base.js is loaded more than once.</p>
+</div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="abstractMethod"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L740" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>abstractMethod()</div></h3></div><div class="body"><p>When defining a class Foo with an abstract method bar(), you can do:
+Foo.prototype.bar &#61; goog.abstractMethod</p>
+<p>Now if a subclass of Foo fails to override bar(), an error will be thrown
+when bar() is invoked.</p>
+<p>Note: This does not take the name of the function to override as an argument
+because that would make it more difficult to obfuscate our JavaScript code.</p>
+</div></section><section class="property expandable" id="addDependency"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L577" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>addDependency(<var>relPath</var>, <var>provides</var>, <var>requires</var>, <var>opt_loadFlags</var>)</div></h3></div><div class="body"><p>Adds a dependency from a file to the files it requires.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>relPath</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The path to the js file.</p>
+<dt class="type name"><var>provides</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;</code><dd><p>An array of strings with
+the names of the objects this file provides.</p>
+<dt class="type name"><var>requires</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;</code><dd><p>An array of strings with
+the names of the objects this file requires.</p>
+<dt class="type name"><var>opt_loadFlags</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;)=</code><dd><p>Parameters indicating
+how the file must be loaded.  The boolean &#39;true&#39; is equivalent
+to {&#39;module&#39;: &#39;goog&#39;} for backwards-compatibility.  Valid properties
+and values include {&#39;module&#39;: &#39;goog&#39;} and {&#39;lang&#39;: &#39;es6&#39;}.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addSingletonGetter"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L751" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>addSingletonGetter(<var>ctor</var>)</div></h3></div><div class="body"><p>Adds a <code>getInstance</code> static method that always returns the same
+instance object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>ctor</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The constructor for the class to add the static
+method to.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="base"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2447" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>base(<var>me</var>, <var>opt_methodName</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Call up to the superclass.</p>
+<p>If this is called from a constructor, then this calls the superclass
+constructor with arguments 1-N.</p>
+<p>If this is called from a prototype method, then you must pass the name of the
+method as the second argument to this function. If you do not, you will get a
+runtime error. This calls the superclass&#39; method with arguments 2-N.</p>
+<p>This function only works if you use goog.inherits to express inheritance
+relationships between your classes.</p>
+<p>This function is a compiler primitive. At compile-time, the compiler will do
+macro expansion to remove a lot of the extra overhead that this function
+introduces. The compiler will also enforce a lot of the assumptions that this
+function makes, and treat it as a compiler error if you break them.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>me</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Should always be &#34;this&#34;.</p>
+<dt class="type name"><var>opt_methodName</var><code>*=</code><dd><p>The method name if calling a super method.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>The rest of the arguments.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The return value of the superclass method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="bind"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2010" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> bind(<var>fn</var>, <var>selfObj</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Partially applies this function to a particular &#39;this object&#39; and zero or
+more arguments. The result is a new function with some arguments of the first
+function pre-filled and the value of this &#39;pre-specified&#39;.</p>
+<p>Remaining arguments specified at call-time are appended to the pre-specified
+ones.</p>
+<p>Also see: <a href="goog.html#partial"><code>#partial</code></a>.</p>
+<p>Usage:</p>
+ <pre>var barMethBound &#61; goog.bind(myFunction, myObj, &#39;arg1&#39;, &#39;arg2&#39;);
+ barMethBound(&#39;arg3&#39;, &#39;arg4&#39;);</pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>?function(this: T, ...)</code><dd><p>A function to partially apply.</p>
+<dt class="type name"><var>selfObj</var><code>T</code><dd><p>Specifies the object which this should point to when the
+function is run.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>Additional arguments that are partially applied to the
+function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A partially-applied form of the function goog.bind() was
+invoked as a method of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="cloneObject"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1919" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>cloneObject(<var>obj</var>)</div></h3></div><div class="body"><p>Clones a value. The input may be an Object, Array, or basic type. Objects and
+arrays will be cloned recursively.</p>
+<p>WARNINGS:
+<code>goog.cloneObject</code> does not detect reference loops. Objects that
+refer to themselves will cause infinite recursion.</p>
+<p><code>goog.cloneObject</code> is unaware of unique identifiers, and copies
+UIDs created by <code>getUid</code> into cloned results.</p>
+<dl><dt class="spec">Deprecated<dd><p>goog.cloneObject is unsafe. Prefer the goog.object methods.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>*</code><dd><p>The value to clone.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>A clone of the input value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="define"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L157" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>define(<var>name</var>, <var>defaultValue</var>)</div></h3></div><div class="body"><p>Defines a named value. In uncompiled mode, the value is retrieved from
+CLOSURE_DEFINES or CLOSURE_UNCOMPILED_DEFINES if the object is defined and
+has the property specified, and otherwise used the defined defaultValue.
+When compiled the default can be overridden using the compiler
+options or the value set in the CLOSURE_DEFINES object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The distinguished name to provide.</p>
+<dt class="type name"><var>defaultValue</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code></dl></dd></dl></div></section><section class="property expandable" id="defineClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2558" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>defineClass(<var>superClass</var>, <var>def</var>)</div></h3></div><div class="body"><p>Creates a restricted form of a Closure &#34;class&#34;:</p>
+<ul><li>from the compiler&#39;s perspective, the instance returned from the
+constructor is sealed (no new properties may be added).  This enables
+better checks.</li><li>the compiler will rewrite this definition to a form that is optimal
+for type checking and optimization (initially this will be a more
+traditional form).</li></ul>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>superClass</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The superclass, Object or null.</p>
+<dt class="type name"><var>def</var><code>goog.defineClass.ClassDescriptor</code><dd><p>An object literal describing
+the class.  It may have the following properties:
+&#34;constructor&#34;: the constructor function
+&#34;statics&#34;: an object literal containing methods to add to the constructor
+as &#34;static&#34; methods or a function that will receive the constructor
+function as its only parameter to which static properties can
+be added.
+all other properties are added to the prototype.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The class constructor.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="exportProperty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2359" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportProperty(<var>object</var>, <var>publicName</var>, <var>symbol</var>)</div></h3></div><div class="body"><p>Exports a property unobfuscated into the object&#39;s namespace.
+ex. goog.exportProperty(Foo, &#39;staticFunction&#39;, Foo.staticFunction);
+ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>object</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object whose static property is being exported.</p>
+<dt class="type name"><var>publicName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Unobfuscated name to export.</p>
+<dt class="type name"><var>symbol</var><code>*</code><dd><p>Object the name should point to.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="exportSymbol"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2346" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportSymbol(<var>publicPath</var>, <var>object</var>, <var>opt_objectToExportTo</var>)</div></h3></div><div class="body"><p>Exposes an unobfuscated global namespace path for the given object.
+Note that fields of the exported object <em>will</em> be obfuscated, unless they are
+exported in turn via this function or goog.exportProperty.</p>
+<p>Also handy for making public items that are defined in anonymous closures.</p>
+<p>ex. goog.exportSymbol(&#39;public.path.Foo&#39;, Foo);</p>
+<p>ex. goog.exportSymbol(&#39;public.path.Foo.staticFunction&#39;, Foo.staticFunction);
+public.path.Foo.staticFunction();</p>
+<p>ex. goog.exportSymbol(&#39;public.path.Foo.prototype.myMethod&#39;,
+Foo.prototype.myMethod);
+new public.path.Foo().myMethod();</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>publicPath</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Unobfuscated name to export.</p>
+<dt class="type name"><var>object</var><code>*</code><dd><p>Object the name should point to.</p>
+<dt class="type name"><var>opt_objectToExportTo</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object to add the path to; default
+is goog.global.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="forwardDeclare"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L480" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>forwardDeclare(<var>name</var>)</div></h3></div><div class="body"><p>Forward declares a symbol. This is an indication to the compiler that the
+symbol may be used in the source yet is not required and may not be provided
+in compilation.</p>
+<p>The most common usage of forward declaration is code that takes a type as a
+function parameter but does not need to require it. By forward declaring
+instead of requiring, no hard dependency is made, and (if not required
+elsewhere) the namespace may never be required and thus, not be pulled
+into the JavaScript binary. If it is required elsewhere, it will be type
+checked as normal.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The namespace to forward declare in the form of
+&#34;goog.package.part&#34;.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getCssName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2192" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCssName(<var>className</var>, <var>opt_modifier</var>)</div></h3></div><div class="body"><p>Handles strings that are intended to be used as CSS class names.</p>
+<p>This function works in tandem with &#64;see goog.setCssNameMapping.</p>
+<p>Without any mapping set, the arguments are simple joined with a hyphen and
+passed through unaltered.</p>
+<p>When there is a mapping, there are two possible styles in which these
+mappings are used. In the BY_PART style, each part (i.e. in between hyphens)
+of the passed in css name is rewritten according to the map. In the BY_WHOLE
+style, the full css name is looked up in the map directly. If a rewrite is
+not specified by the map, the compiler will output a warning.</p>
+<p>When the mapping is passed to the compiler, it will replace calls to
+goog.getCssName with the strings from the mapping, e.g.
+var x &#61; goog.getCssName(&#39;foo&#39;);
+var y &#61; goog.getCssName(this.baseClass, &#39;active&#39;);
+becomes:
+var x &#61; &#39;foo&#39;;
+var y &#61; this.baseClass &#43; &#39;-active&#39;;</p>
+<p>If one argument is passed it will be processed, if two are passed only the
+modifier will be processed, as it is assumed the first argument was generated
+as a result of calling goog.getCssName.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The class name.</p>
+<dt class="type name"><var>opt_modifier</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>A modifier to be appended to the class name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The class name or the concatenation of the class name and
+the modifier.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getHashCode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1893" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getHashCode(<var>obj</var>)</div></h3></div><div class="body"><p>Adds a hash code field to an object. The hash code is unique for the
+given object.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.getUid instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to get the hash code for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The hash code for the object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getMsg"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2294" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsg(<var>str</var>, <var>opt_values</var>)</div></h3></div><div class="body"><p>Gets a localized message.</p>
+<p>This function is a compiler primitive. If you give the compiler a localized
+message bundle, it will replace the string at compile-time with a localized
+version, and expand goog.getMsg call to a concatenated string.</p>
+<p>Messages must be initialized in the form:
+<code>
+var MSG_NAME &#61; goog.getMsg(&#39;Hello {$placeholder}&#39;, {&#39;placeholder&#39;: &#39;world&#39;});
+</code></p>
+<p>This function produces a string which should be treated as plain text. Use
+<a href="goog.html.SafeHtmlFormatter.html"><code>goog.html.SafeHtmlFormatter</code></a> in conjunction with goog.getMsg to
+produce SafeHtml.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Translatable string, places holders in the form {$foo}.</p>
+<dt class="type name"><var>opt_values</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;=</code><dd><p>Maps place holder name to value.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>message with placeholders filled.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getMsgWithFallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2320" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsgWithFallback(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Gets a localized message. If the message does not have a translation, gives a
+fallback message.</p>
+<p>This is useful when introducing a new message that has not yet been
+translated into all languages.</p>
+<p>This function is a compiler primitive. Must be used in the form:
+<code>var x &#61; goog.getMsgWithFallback(MSG_A, MSG_B);</code>
+where MSG_A and MSG_B were initialized with goog.getMsg.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>a</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The preferred message.</p>
+<dt class="type name"><var>b</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The fallback message.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The best translated message.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getObjectByName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L535" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getObjectByName(<var>name</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Returns an object based on its fully qualified external name.  The object
+is not found if null or undefined.  If you are using a compilation pass that
+renames property names beware that using this function will not find renamed
+properties.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The fully qualified name.</p>
+<dt class="type name"><var>opt_obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object within which to look; default is
+|goog.global|.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The value (object or primitive) or, if not found, null.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getUid"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1823" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getUid(<var>obj</var>)</div></h3></div><div class="body"><p>Gets a unique ID for an object. This mutates the object so that further calls
+with the same object as a parameter returns the same value. The unique ID is
+guaranteed to be unique across the current session amongst objects that are
+passed into <code>getUid</code>. There is no guarantee that the ID is unique or
+consistent across sessions. It is unsafe to generate unique ID for function
+prototypes.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to get the unique ID for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The unique ID for the object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="globalEval"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2092" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>globalEval(<var>script</var>)</div></h3></div><div class="body"><p>Evals JavaScript in the global scope.  In IE this uses execScript, other
+browsers use goog.global.eval. If goog.global.eval does not evaluate in the
+global scope (for example, in Safari), appends a script tag instead.
+Throws an exception if neither execScript or eval is defined.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>script</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>JavaScript string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="globalize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L557" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>globalize(<var>obj</var>, <var>opt_global</var>)</div></h3></div><div class="body"><p>Globalizes a whole namespace, such as goog or goog.lang.</p>
+<dl><dt class="spec">Deprecated<dd><p>Properties may be explicitly exported to the global scope, but
+this should no longer be done in bulk.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The namespace to globalize.</p>
+<dt class="type name"><var>opt_global</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object to add the properties to.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasUid"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1842" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>hasUid(<var>obj</var>)</div></h3></div><div class="body"><p>Whether the given object is already assigned a unique ID.</p>
+<p>This does not modify the object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether there is an assigned unique id for the object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="inherits"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2384" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>inherits(<var>childCtor</var>, <var>parentCtor</var>)</div></h3></div><div class="body"><p>Inherit the prototype methods from one constructor into another.</p>
+<p>Usage:</p>
+ <pre>
+ function ParentClass(a, b) { }
+ ParentClass.prototype.foo &#61; function(a) { };
+
+ function ChildClass(a, b, c) {
+   ChildClass.base(this, &#39;constructor&#39;, a, b);
+ }
+ goog.inherits(ChildClass, ParentClass);
+
+ var child &#61; new ChildClass(&#39;a&#39;, &#39;b&#39;, &#39;see&#39;);
+ child.foo(); // This works.
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>childCtor</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Child class.</p>
+<dt class="type name"><var>parentCtor</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Parent class.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1727" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isArray(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is an array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isArrayLike"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1740" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isArrayLike(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the object looks like an array. To qualify as array like
+the value needs to be either a NodeList or an object with a Number length
+property. As a special case, a function value is not array like, because its
+length property is fixed to correspond to the number of expected arguments.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is an array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isBoolean"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1773" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isBoolean(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is a boolean.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is boolean.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDateLike"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1753" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDateLike(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the object looks like a Date. To qualify as Date-like the
+value needs to be an object and have a getFullYear() function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is a like a Date.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDef"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L99" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDef(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is not undefined.
+WARNING: Do not use this to test if an object has a property. Use the in
+operator instead.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is defined.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDefAndNotNull"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1716" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDefAndNotNull(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is defined and not null.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is defined and not null.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isFunction"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1793" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isFunction(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is a function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is a function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNull"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1706" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNull(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is null.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is null.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNumber"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1783" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNumber(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is a number.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is a number.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isObject"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1804" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isObject(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is an object.  This includes arrays and
+functions.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is an object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1763" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isString(<var>val</var>)</div></h3></div><div class="body"><p>Returns true if the specified value is a string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>val</var><code>?</code><dd><p>Variable to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether variable is a string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="loadModule"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1398" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>loadModule(<var>moduleDef</var>)</div></h3></div><div class="body"><dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>moduleDef</var><code>(function(?): ?|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The module definition.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="loadModuleFromUrl"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1092" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>loadModuleFromUrl(<var>url</var>)</div></h3></div><div class="body"><p>Load a goog.module from the provided URL.  This is not a general purpose
+code loader and does not support late loading code, that is it should only
+be used during page load. This method exists to support unit tests and
+&#34;debug&#34; loaders that would otherwise have inserted script tags. Under the
+hood this needs to use a synchronous XHR and is not recommeneded for
+production code.</p>
+<p>The module&#39;s goog.requires must have already been satisified; an exception
+will be thrown if this is not the case. This assumption is that no
+&#34;deps.js&#34; file exists, so there is no way to discover and locate the
+module-to-be-loaded&#39;s dependencies and no attempt is made to do so.</p>
+<p>There should only be one attempt to load a module.  If
+&#34;goog.loadModuleFromUrl&#34; is called for an already loaded module, an
+exception will be throw.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL from which to attempt to load the goog.module.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="mixin"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2060" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>mixin(<var>target</var>, <var>source</var>)</div></h3></div><div class="body"><p>Copies all the members of a source object to a target object. This method
+does not work on all browsers for all objects that contain keys such as
+toString or hasOwnProperty. Use goog.object.extend for this purpose.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Target.</p>
+<dt class="type name"><var>source</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Source.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="now"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2077" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>now()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>An integer value representing the number of milliseconds
+between midnight, January 1, 1970 and the current time.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="nullFunction"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L724" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>nullFunction()</div></h3></div><div class="body"><p>Null function used for default values of callbacks, etc.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="partial"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2041" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>partial(<var>fn</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Like goog.bind(), except that a &#39;this object&#39; is not required. Useful when
+the target function is already bound.</p>
+<p>Usage:
+var g &#61; goog.partial(f, arg1, arg2);
+g(arg3, arg4);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function to partially apply.</p>
+<dt class="type name"><var>var_args</var><code>...*</code><dd><p>Additional arguments that are partially applied to fn.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A partially-applied form of the function goog.partial()
+was invoked as a method of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="provide"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L269" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>provide(<var>name</var>)</div></h3></div><div class="body"><p>Defines a namespace in Closure.</p>
+<p>A namespace may only be defined once in a codebase. It may be defined using
+goog.provide() or goog.module().</p>
+<p>The presence of one or more goog.provide() calls in a file indicates
+that the file defines the given objects/namespaces.
+Provided symbols must not be null or undefined.</p>
+<p>In addition, goog.provide() creates the object stubs for a namespace
+(for example, goog.provide(&#34;goog.foo.bar&#34;) will create the object
+goog.foo.bar if it does not already exist).</p>
+<p>Build tools also scan for provide/require/module statements
+to discern dependencies, build dependency files (see deps.js), etc.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Namespace provided by this file in the form
+&#34;goog.package.part&#34;.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html#require">goog.require</a></dd><dd><a href="goog.module.html">goog.module</a></dd></dl></div></section><section class="property expandable" id="removeHashCode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1901" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>removeHashCode(<var>obj</var>)</div></h3></div><div class="body"><p>Removes the hash code field from an object.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.removeUid instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to remove the field from.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeUid"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1853" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>removeUid(<var>obj</var>)</div></h3></div><div class="body"><p>Removes the unique ID from an object. This is useful if the object was
+previously mutated using <code>goog.getUid</code> in which case the mutation is
+undone.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to remove the unique ID field from.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="require"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L655" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>require(<var>name</var>)</div></h3></div><div class="body"><p>Implements a system for the dynamic resolution of dependencies that works in
+parallel with the BUILD system. Note that all calls to goog.require will be
+stripped by the JSCompiler when the --process_closure_primitives option is
+used.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Namespace to include (as was given in goog.provide()) in
+the form &#34;goog.package.part&#34;.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>If called within a goog.module file, the associated namespace or
+module otherwise null.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html#provide">goog.provide</a></dd></dl></div></section><section class="property expandable" id="scope"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2509" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>scope(<var>fn</var>)</div></h3></div><div class="body"><p>Allow for aliasing within scope functions.  This function exists for
+uncompiled code - in compiled code the calls will be inlined and the aliases
+applied.  In uncompiled code the function is simply run since the aliases as
+written are valid JavaScript.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>function()</code><dd><p>Function to call.  This function can contain aliases
+to namespaces (e.g. &#34;var dom &#61; goog.dom&#34;) or classes
+(e.g. &#34;var Timer &#61; goog.Timer&#34;).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setCssNameMapping"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2246" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setCssNameMapping(<var>mapping</var>, <var>opt_style</var>)</div></h3></div><div class="body"><p>Sets the map to check when returning a value from goog.getCssName(). Example:</p>
+ <pre>
+ goog.setCssNameMapping({
+   &#34;goog&#34;: &#34;a&#34;,
+   &#34;disabled&#34;: &#34;b&#34;,
+ });
+
+ var x &#61; goog.getCssName(&#39;goog&#39;);
+ // The following evaluates to: &#34;a a-b&#34;.
+ goog.getCssName(&#39;goog&#39;) &#43; &#39; &#39; &#43; goog.getCssName(x, &#39;disabled&#39;)
+ </pre>
+<p>When declared as a map of string literals to string literals, the JSCompiler
+will replace all calls to goog.getCssName() using the supplied map if the
+--process_closure_primitives flag is set.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mapping</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>A map of strings to strings where keys are possible
+arguments to goog.getCssName() and values are the corresponding values
+that should be returned.</p>
+<dt class="type name"><var>opt_style</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>The style of css name mapping. There are two valid
+options: &#39;BY_PART&#39;, and &#39;BY_WHOLE&#39;.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>goog.getCssName for a description.</p>
+</dd></dl></div></section><section class="property expandable" id="setTestOnly"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L454" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setTestOnly(<var>opt_message</var>)</div></h3></div><div class="body"><p>Marks that the current file should only be used for testing, and never for
+live code in production.</p>
+<p>In the case of unit tests, the message may optionally be an exact namespace
+for the test (e.g. &#39;goog.stringTest&#39;). The linter will then ignore the extra
+provide (if not explicitly defined in the code).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_message</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional message to add to the error that&#39;s
+raised when used in production code.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="tagUnsealableClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2716" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tagUnsealableClass(<var>ctr</var>)</div></h3></div><div class="body"><p>Sealing classes breaks the older idiom of assigning properties on the
+prototype rather than in the constructor. As such, goog.defineClass
+must not seal subclasses of these old-style classes until they are fixed.
+Until then, this marks a class as &#34;broken&#34;, instructing defineClass
+not to seal subclasses.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>ctr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The legacy constructor to tag as unsealable.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="typeOf"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L1608" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>typeOf(<var>value</var>)</div></h3></div><div class="body"><p>This is a &#34;fixed&#34; version of the typeof operator.  It differs from the typeof
+operator in such a way that null returns &#39;null&#39; and arrays return &#39;array&#39;.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>?</code><dd><p>The value to get the type of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the type.</p>
+</dl></dd></dl></div></section></section><section class="static-properties"><h2>Properties</h2><section class="property expandable" id="DEPENDENCIES_ENABLED"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L804" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>DEPENDENCIES_ENABLED</div></h3></div><div class="body"><p>True if goog.dependencies_ is available.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="basePath"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L690" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>basePath</div></h3></div><div class="body"><p>Path for included scripts.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="global"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L48" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>global</div></h3></div><div class="body"><p>Reference to the global context.  In most cases this will be &#39;window&#39;.</p>
+<dl><dt class="spec">Type<dd>global this</dd></dl></div></section></section><section class="constants"><h2>Compiler Constants</h2><section class="property expandable" id="goog.DEBUG"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L183" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.DEBUG</div></h3></div><div class="body"><p>DEBUG is provided as a convenience so that debugging code
+that should not be included in a production js_binary can be easily stripped
+by specifying --define goog.DEBUG&#61;false to the JSCompiler. For example, most
+toString() methods should be declared inside an &#34;if (goog.DEBUG)&#34; conditional
+because they are generally used for debugging purposes and it is difficult
+for the JSCompiler to statically determine whether they are used.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.DISALLOW_TEST_ONLY_CODE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L237" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.DISALLOW_TEST_ONLY_CODE</div></h3></div><div class="body"><p>Whether code that calls <a href="goog.html#setTestOnly"><code>goog.setTestOnly</code></a> should
+be disallowed in the compilation unit.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L244" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING</div></h3></div><div class="body"><p>Whether to use a Chrome app CSP-compliant method for
+loading scripts via goog.require. &#64;see appendScriptSrcNode_.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.ENABLE_DEBUG_LOADER"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L630" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.ENABLE_DEBUG_LOADER</div></h3></div><div class="body"><p>Whether to enable the debug loader.</p>
+<p>If enabled, a call to goog.require() will attempt to load the namespace by
+appending a script tag to the DOM (if the namespace has been registered).</p>
+<p>If disabled, goog.require() will simply assert that the namespace has been
+provided (and depend on the fact that some outside tool correctly ordered
+the script).</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.LOAD_MODULE_USING_EVAL"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L782" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.LOAD_MODULE_USING_EVAL</div></h3></div><div class="body"><p>Whether to load goog.modules using <code>eval</code> when using
+the debug loader.  This provides a better debugging experience as the
+source is unmodified and can be edited using Chrome Workspaces or similar.
+However in some environments the use of <code>eval</code> is banned
+so we provide an alternative.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.LOCALE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L205" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.LOCALE</div></h3></div><div class="body"><p>LOCALE defines the locale being used for compilation. It is
+used to select locale specific data to be compiled in js binary. BUILD rule
+can specify this value by &#34;--define goog.LOCALE&#61;&lt;locale_name&gt;&#34; as JSCompiler
+option.</p>
+<p>Take into account that the locale code format is important. You should use
+the canonical Unicode format with hyphen as a delimiter. Language must be
+lowercase, Language Script - Capitalized, Region - UPPERCASE.
+There are few examples: pt-BR, en, en-US, sr-Latin-BO, zh-Hans-CN.</p>
+<p>See more info about locale codes here:
+http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers</p>
+<p>For language codes you should use values defined by ISO 693-1. See it here
+http://www.w3.org/WAI/ER/IG/ert/iso639.htm. There is only one exception from
+this rule: the Hebrew language. For legacy reasons the old code (iw) should
+be used instead of the new code (he), see http://wiki/Main/IIISynonyms.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="goog.NATIVE_ARRAY_PROTOTYPES"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L42" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.NATIVE_ARRAY_PROTOTYPES</div></h3></div><div class="body"><p>NATIVE_ARRAY_PROTOTYPES indicates whether the code should
+rely on Array.prototype functions, if available.</p>
+<p>The Array.prototype functions can be defined by external libraries like
+Prototype and setting this flag to false forces closure to use its own
+goog.array implementation.</p>
+<p>If your javascript can be loaded by a third party site and you are wary about
+relying on the prototype functions, specify
+&#34;--define goog.NATIVE_ARRAY_PROTOTYPES&#61;false&#34; to the JSCompiler.</p>
+<p>Setting goog.TRUSTED_SITE to false will automatically set
+NATIVE_ARRAY_PROTOTYPES to false.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.SEAL_MODULE_EXPORTS"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L789" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.SEAL_MODULE_EXPORTS</div></h3></div><div class="body"><p>Whether the exports of goog.modules should be sealed when
+possible.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="goog.STRICT_MODE_COMPATIBLE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L230" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.STRICT_MODE_COMPATIBLE</div></h3></div><div class="body"><p>Whether a project is expected to be running in strict mode.</p>
+<p>This define can be used to trigger alternate implementations compatible with
+running in EcmaScript Strict mode or warn about unavailable functionality.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd><dt class="spec">See Also</dt><dd><p><a href="https://goo.gl/PudQ4y">https://goo.gl/PudQ4y</a></p>
+</dd></dl></div></section><section class="property expandable" id="goog.TRANSPILE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L816" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.TRANSPILE</div></h3></div><div class="body"><p>How to decide whether to transpile.  Valid values
+are &#39;always&#39;, &#39;never&#39;, and &#39;detect&#39;.  The default (&#39;detect&#39;) is to
+use feature detection to determine which language levels need
+transpilation.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="goog.TRANSPILER"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L823" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.TRANSPILER</div></h3></div><div class="body"><p>Path to the transpiler.  Executing the script at this
+path (relative to base.js) should define a function $jscomp.transpile.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="goog.TRUSTED_SITE"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L219" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.TRUSTED_SITE</div></h3></div><div class="body"><p>Whether this code is running on trusted sites.</p>
+<p>On untrusted sites, several native functions can be defined or overridden by
+external libraries like Prototype, Datejs, and JQuery and setting this flag
+to false forces closure to use its own implementations when possible.</p>
+<p>If your JavaScript can be loaded by a third party site and you are wary about
+relying on non-standard implementations, specify
+&#34;--define goog.TRUSTED_SITE&#61;false&#34; to the JSCompiler.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section></section><section class="types"><h2>Interfaces</h2><ul><li class="summary"><div><a href="goog.Thenable.html">Thenable</a></div></ul></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div class="tags"><span class="deprecated"></span></div><div><a href="goog.Delay.html">Delay</a></div><li class="summary"><div><a href="goog.Disposable.html">Disposable</a></div><li class="summary"><div><a href="goog.History.html">History</a></div><li class="summary"><div><a href="goog.Promise.html">Promise</a></div><li class="summary"><div class="tags"><span class="deprecated"></span></div><div><a href="goog.Throttle.html">Throttle</a></div><li class="summary"><div><a href="goog.Timer.html">Timer</a></div><li class="summary"><div><a href="goog.Uri.html">Uri</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

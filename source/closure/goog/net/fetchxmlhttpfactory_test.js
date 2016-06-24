@@ -119,9 +119,10 @@ function testOpen_notAsync() {
  * Verifies the send method.
  */
 function testSend() {
-  fetchMock(new Request(
-      'https://www.google.com', {headers: new Headers(), method: 'GET'})).
-      $returns(Promise.resolve(createSuccessResponse()));
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'GET'
+  })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
   verifySendSuccess('GET');
@@ -132,12 +133,10 @@ function testSend() {
  * Verifies the send method with POST mode.
  */
 function testSendPost() {
-  fetchMock(new Request(
-      'https://www.google.com', {
-        headers: new Headers(),
-        method: 'POST'
-      })).
-      $returns(Promise.resolve(createSuccessResponse()));
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'POST'
+  })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
   verifySendSuccess('POST');
@@ -150,12 +149,11 @@ function testSendPost() {
 function testSend_includeCredentials() {
   factory = new goog.net.FetchXmlHttpFactory(worker);
   factory.setCredentialsMode(/** @type {RequestCredentials} */ ('include'));
-  fetchMock(new Request(
-      'https://www.google.com', {
-        headers: new Headers(),
-        method: 'POST',
-        credentials: 'include'
-      })).$returns(Promise.resolve(createSuccessResponse()));
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'POST',
+    credentials: 'include'
+  })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
   verifySendSuccess('POST');
@@ -168,12 +166,11 @@ function testSend_includeCredentials() {
 function testSend_setCacheMode() {
   factory = new goog.net.FetchXmlHttpFactory(worker);
   factory.setCacheMode(/** @type {RequestCache} */ ('no-cache'));
-  fetchMock(new Request(
-      'https://www.google.com', {
-        headers: new Headers(),
-        method: 'POST',
-        cache: 'no-cache'
-      })).$returns(Promise.resolve(createSuccessResponse()));
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'POST',
+    cache: 'no-cache'
+  })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
   verifySendSuccess('POST');
@@ -187,8 +184,8 @@ function verifySendSuccess(sendMethod) {
   var xhr = factory.createInstance();
   xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
   xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState,
-        goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
+    assertEquals(
+        xhr.readyState, goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
     assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
@@ -214,17 +211,18 @@ function verifySendSuccess(sendMethod) {
  * Verifies the send method in case of error response.
  */
 function testSend_error() {
-  fetchMock(new Request(
-      'https://www.google.com', {headers: new Headers(), method: 'GET'})).
-      $returns(Promise.resolve(createFailedResponse()));
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'GET'
+  })).$returns(Promise.resolve(createFailedResponse()));
 
   mockControl.$replayAll();
 
   var xhr = factory.createInstance();
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
   xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState,
-        goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
+    assertEquals(
+        xhr.readyState, goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
     assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
@@ -249,12 +247,12 @@ function testSend_error() {
  * Verifies the send method in case of failure to fetch the url.
  */
 function testSend_failToFetch() {
-  var failedPromise = new Promise(function() {
-    throw Error('failed to fetch');
-  });
-  fetchMock(new Request(
-      'https://www.google.com', {headers: new Headers(), method: 'GET'})).
-      $returns(failedPromise);
+  var failedPromise =
+      new Promise(function() { throw Error('failed to fetch'); });
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'GET'
+  })).$returns(failedPromise);
 
   mockControl.$replayAll();
 

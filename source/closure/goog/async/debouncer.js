@@ -49,8 +49,8 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
    * Function to callback
    * @private {function(this: T, ...?)}
    */
-  this.listener_ = opt_handler != null ?
-      goog.bind(listener, opt_handler) : listener;
+  this.listener_ =
+      opt_handler != null ? goog.bind(listener, opt_handler) : listener;
 
   /**
    * Interval for the debounce time
@@ -91,7 +91,7 @@ goog.async.Debouncer = function(listener, interval, opt_handler) {
 
   /**
    * The last arguments passed into {@code fire}.
-   * @private {!Array|!IArrayLike}
+   * @private {!IArrayLike}
    */
   this.args_ = [];
 };

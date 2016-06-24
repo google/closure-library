@@ -35,7 +35,8 @@ function setUp() {
   // as well as the part of the environment that is being tested as part
   // of the test.  Bail if the test is already running.
   if (testing) {
-    return;
+    // This value is used by the testSetupReturnsValue test below
+    return 'hello';
   }
 
   // Temporarily override the initializeTestRunner method to avoid installing
@@ -110,8 +111,8 @@ function testTearDownWithMockControl() {
   var envWithout = new goog.labs.testing.Environment();
 
   var mockControlMock = mockControl.createStrictMock(goog.testing.MockControl);
-  var mockControlCtorMock = mockControl.createMethodMock(goog.testing,
-      'MockControl');
+  var mockControlCtorMock =
+      mockControl.createMethodMock(goog.testing, 'MockControl');
   mockControlCtorMock().$times(1).$returns(mockControlMock);
   // Expecting verify / reset calls twice since two environments use the same
   // mockControl, but only one created it and is allowed to tear it down.
@@ -153,7 +154,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(7, testCase.tests_.length);
+  assertEquals(8, testCase.tests_.length);
 
   testing = false;
 }
@@ -197,6 +198,18 @@ function testTestSuiteTests() {
   testing = false;
 }
 
+function testSetupReturnsValue() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment();
+
+  // Expect the environment to pass on any value returned by the user defined
+  // setUp method.
+  assertEquals('hello', testCase.setUp());
+
+  testCase.tearDown();
+  testing = false;
+}
 
 function testMockClock() {
   testing = true;
@@ -204,9 +217,7 @@ function testMockClock() {
   var env = new goog.labs.testing.Environment().withMockClock();
 
   testCase.addNewTest('testThatThrowsEventually', function() {
-    setTimeout(function() {
-      throw new Error('LateErrorMessage');
-    }, 200);
+    setTimeout(function() { throw new Error('LateErrorMessage'); }, 200);
   });
 
   testCase.runTests();
@@ -237,9 +248,7 @@ function testMock() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
-  var mock = env.mock({
-    test: function() {}
-  });
+  var mock = env.mock({test: function() {}});
 
   testCase.addNewTest('testMockCalled', function() {
     mock.test().$times(2);

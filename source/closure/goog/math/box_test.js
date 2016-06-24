@@ -51,46 +51,54 @@ function testBoxClone() {
 function testBoxRelativePositionX() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
-  assertEquals(0,
-      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 0)));
-  assertEquals(0,
+  assertEquals(
+      0, goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 0)));
+  assertEquals(
+      0,
       goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 75)));
-  assertEquals(0,
+  assertEquals(
+      0,
       goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 105)));
-  assertEquals(-5,
+  assertEquals(
+      -5,
       goog.math.Box.relativePositionX(box, new goog.math.Coordinate(45, 75)));
-  assertEquals(5,
+  assertEquals(
+      5,
       goog.math.Box.relativePositionX(box, new goog.math.Coordinate(105, 75)));
 }
 
 function testBoxRelativePositionY() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
-  assertEquals(0,
-      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(0, 75)));
-  assertEquals(0,
+  assertEquals(
+      0, goog.math.Box.relativePositionY(box, new goog.math.Coordinate(0, 75)));
+  assertEquals(
+      0,
       goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 75)));
-  assertEquals(0,
+  assertEquals(
+      0,
       goog.math.Box.relativePositionY(box, new goog.math.Coordinate(105, 75)));
-  assertEquals(-5,
+  assertEquals(
+      -5,
       goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 45)));
-  assertEquals(5,
+  assertEquals(
+      5,
       goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 105)));
 }
 
 function testBoxDistance() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
-  assertEquals(0,
-               goog.math.Box.distance(box, new goog.math.Coordinate(75, 75)));
-  assertEquals(25,
-               goog.math.Box.distance(box, new goog.math.Coordinate(75, 25)));
-  assertEquals(10,
-               goog.math.Box.distance(box, new goog.math.Coordinate(40, 80)));
-  assertEquals(5,
-               goog.math.Box.distance(box, new goog.math.Coordinate(46, 47)));
-  assertEquals(10,
-               goog.math.Box.distance(box, new goog.math.Coordinate(106, 108)));
+  assertEquals(
+      0, goog.math.Box.distance(box, new goog.math.Coordinate(75, 75)));
+  assertEquals(
+      25, goog.math.Box.distance(box, new goog.math.Coordinate(75, 25)));
+  assertEquals(
+      10, goog.math.Box.distance(box, new goog.math.Coordinate(40, 80)));
+  assertEquals(
+      5, goog.math.Box.distance(box, new goog.math.Coordinate(46, 47)));
+  assertEquals(
+      10, goog.math.Box.distance(box, new goog.math.Coordinate(106, 108)));
 }
 
 function testBoxContains() {
@@ -108,12 +116,14 @@ function testBoxContainsBox() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
   function assertContains(boxB) {
-    assertTrue(box + ' expected to contain ' + boxB,
+    assertTrue(
+        box + ' expected to contain ' + boxB,
         goog.math.Box.contains(box, boxB));
   }
 
   function assertNotContains(boxB) {
-    assertFalse(box + ' expected to not contain ' + boxB,
+    assertFalse(
+        box + ' expected to not contain ' + boxB,
         goog.math.Box.contains(box, boxB));
   }
 
@@ -129,11 +139,13 @@ function testBoxesIntersect() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
   function assertIntersects(boxB) {
-    assertTrue(box + ' expected to intersect ' + boxB,
+    assertTrue(
+        box + ' expected to intersect ' + boxB,
         goog.math.Box.intersects(box, boxB));
   }
   function assertNotIntersects(boxB) {
-    assertFalse(box + ' expected to not intersect ' + boxB,
+    assertFalse(
+        box + ' expected to not intersect ' + boxB,
         goog.math.Box.intersects(box, boxB));
   }
 
@@ -170,12 +182,14 @@ function testBoxesIntersectWithPadding() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
   function assertIntersects(boxB, padding) {
-    assertTrue(box + ' expected to intersect ' + boxB + ' with padding ' +
-        padding, goog.math.Box.intersectsWithPadding(box, boxB, padding));
+    assertTrue(
+        box + ' expected to intersect ' + boxB + ' with padding ' + padding,
+        goog.math.Box.intersectsWithPadding(box, boxB, padding));
   }
   function assertNotIntersects(boxB, padding) {
-    assertFalse(box + ' expected to not intersect ' + boxB + ' with padding ' +
-        padding, goog.math.Box.intersectsWithPadding(box, boxB, padding));
+    assertFalse(
+        box + ' expected to not intersect ' + boxB + ' with padding ' + padding,
+        goog.math.Box.intersectsWithPadding(box, boxB, padding));
   }
 
   assertIntersects(box, 10);
@@ -275,66 +289,65 @@ function testBoundingBox() {
   assertObjectEquals(
       new goog.math.Box(1, 10, 11, 0),
       goog.math.Box.boundingBox(
-          new goog.math.Coordinate(5, 5),
-          new goog.math.Coordinate(5, 11),
-          new goog.math.Coordinate(0, 5),
-          new goog.math.Coordinate(5, 1),
+          new goog.math.Coordinate(5, 5), new goog.math.Coordinate(5, 11),
+          new goog.math.Coordinate(0, 5), new goog.math.Coordinate(5, 1),
           new goog.math.Coordinate(10, 5)));
 }
 
 function testBoxCeil() {
   var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      box, box.ceil());
+  assertEquals(
+      'The function should return the target instance', box, box.ceil());
   assertObjectEquals(new goog.math.Box(12, 27, 18, 10), box);
 }
 
 function testBoxFloor() {
   var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      box, box.floor());
+  assertEquals(
+      'The function should return the target instance', box, box.floor());
   assertObjectEquals(new goog.math.Box(11, 26, 17, 9), box);
 }
 
 function testBoxRound() {
   var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
-  assertEquals('The function should return the target instance',
-      box, box.round());
+  assertEquals(
+      'The function should return the target instance', box, box.round());
   assertObjectEquals(new goog.math.Box(11, 27, 18, 9), box);
 }
 
 function testBoxTranslateCoordinate() {
   var box = new goog.math.Box(10, 30, 20, 5);
   var c = new goog.math.Coordinate(10, 5);
-  assertEquals('The function should return the target instance',
-      box, box.translate(c));
+  assertEquals(
+      'The function should return the target instance', box, box.translate(c));
   assertObjectEquals(new goog.math.Box(15, 40, 25, 15), box);
 }
 
 function testBoxTranslateXY() {
   var box = new goog.math.Box(10, 30, 20, 5);
-  assertEquals('The function should return the target instance',
-      box, box.translate(5, 2));
+  assertEquals(
+      'The function should return the target instance', box,
+      box.translate(5, 2));
   assertObjectEquals(new goog.math.Box(12, 35, 22, 10), box);
 }
 
 function testBoxTranslateX() {
   var box = new goog.math.Box(10, 30, 20, 5);
-  assertEquals('The function should return the target instance',
-      box, box.translate(3));
+  assertEquals(
+      'The function should return the target instance', box, box.translate(3));
   assertObjectEquals(new goog.math.Box(10, 33, 20, 8), box);
 }
 
 function testBoxScaleXY() {
   var box = new goog.math.Box(10, 20, 30, 5);
-  assertEquals('The function should return the target instance',
-      box, box.scale(2, 3));
+  assertEquals(
+      'The function should return the target instance', box, box.scale(2, 3));
   assertObjectEquals(new goog.math.Box(30, 40, 90, 10), box);
 }
 
 function testBoxScaleFactor() {
   var box = new goog.math.Box(10, 20, 30, 5);
-  assertEquals('The function should return the target instance',
-      box, box.scale(2));
+  assertEquals(
+      'The function should return the target instance', box, box.scale(2));
   assertObjectEquals(new goog.math.Box(20, 40, 60, 10), box);
 }

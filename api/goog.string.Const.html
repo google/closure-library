@@ -1,0 +1,56 @@
+---
+{edit_path: '', layout: api, page: goog.string.Const, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>Const</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.string.html">goog.string</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L47" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span><span class="struct"></span></div><div>class Const</div></h1></div><div class="body"><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.string.TypedString.html">goog.string.TypedString</a></code></dl><p>Wrapper for compile-time-constant strings.</p>
+<p>Const is a wrapper for strings that can only be created from program
+constants (i.e., string literals).  This property relies on a custom Closure
+compiler check that <code>goog.string.Const.from</code> is only invoked on
+compile-time-constant expressions.</p>
+<p>Const is useful in APIs whose correct and secure use requires that certain
+arguments are not attacker controlled: Compile-time constants are inherently
+under the control of the application and not under control of external
+attackers, and hence are safe to use in such contexts.</p>
+<p>Instances of this type must be created via its factory method
+<code>goog.string.Const.from</code> and not by invoking its constructor.  The
+constructor intentionally takes no parameters and the type is immutable;
+hence only a default instance corresponding to the empty string can be
+obtained via constructor invocation.</p>
+<h3 class="name"><div>new Const()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd><dt class="spec">See Also</dt><dd><a href="goog.string.Const.html#Const.from">goog.string.Const#from</a></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="getTypedStringValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L84" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTypedStringValue()</div></h3></div><div class="body"><p>Returns this Const&#39;s value a string.</p>
+<p>IMPORTANT: In code where it is security-relevant that an object&#39;s type is
+indeed <code>goog.string.Const</code>, use <code>goog.string.Const.unwrap</code>
+instead of this method.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.string.TypedString.html#getTypedStringValue">goog.string.TypedString</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The wrapped string&#39;s value.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.string.Const.html#Const.unwrap">goog.string.Const#unwrap</a></dd></dl></div></section><section class="property expandable" id="toString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L98" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toString()</div></h3></div><div class="body"><p>Returns a debug-string representation of this value.</p>
+<p>To obtain the actual string value wrapped inside an object of this type,
+use <code>goog.string.Const.unwrap</code>.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code></dl></dd><dt class="spec">See Also</dt><dd><a href="goog.string.Const.html#Const.unwrap">goog.string.Const#unwrap</a></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="implementsGoogStringTypedString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L71" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>implementsGoogStringTypedString</div></h3></div><div class="body"><p>Interface marker of the TypedString interface.</p>
+<p>This property can be used to determine at runtime whether or not an object
+implements this interface.  All implementations of this interface set this
+property to <code>true</code>.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.string.TypedString.html#implementsGoogStringTypedString">goog.string.TypedString</a></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="Const.from"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L157" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Const.from(<var>s</var>)</div></h3></div><div class="body"><p>Creates a Const object from a compile-time constant string.</p>
+<p>It is illegal to invoke this function on an expression whose
+compile-time-contant value cannot be determined by the Closure compiler.</p>
+<p>Correct invocations include,</p>
+ <pre>
+   var s &#61; goog.string.Const.from(&#39;hello&#39;);
+   var t &#61; goog.string.Const.from(&#39;hello&#39; &#43; &#39;world&#39;);
+ </pre>
+<p>In contrast, the following are illegal:</p>
+ <pre>
+   var s &#61; goog.string.Const.from(getHello());
+   var t &#61; goog.string.Const.from(&#39;hello&#39; &#43; world);
+ </pre>
+<p>TODO(xtof): Compile-time checks that this function is only called
+with compile-time constant expressions.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>s</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A constant string from which to create a Const.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.string.Const.html">goog.string.Const</a></code><dd><p>A Const object initialized to stringConst.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="Const.unwrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/string/const.js#L114" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Const.unwrap(<var>stringConst</var>)</div></h3></div><div class="body"><p>Performs a runtime check that the provided object is indeed an instance
+of <code>goog.string.Const</code>, and returns its value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>stringConst</var><code>!<a href="goog.string.Const.html">goog.string.Const</a></code><dd><p>The object to extract from.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The Const object&#39;s contained string, unless the run-time
+type check fails. In that case, <code>unwrap</code> returns an innocuous
+string, or, if assertions are enabled, throws
+<code>goog.asserts.AssertionError</code>.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

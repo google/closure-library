@@ -73,15 +73,17 @@ testSuite({
 
     return Timer.promise(10)
         .then(function() {
-          assertFalse('Monitor should not fire until all iframes have content.',
-                      loaded);
+          assertFalse(
+              'Monitor should not fire until all iframes have content.',
+              loaded);
 
           frames[0].src = TEST_FRAME_SRCS[0];
           return Timer.promise(10);
         })
         .then(function() {
-          assertFalse('Monitor should not fire until all iframes have content.',
-                      loaded);
+          assertFalse(
+              'Monitor should not fire until all iframes have content.',
+              loaded);
 
           frames[1].src = TEST_FRAME_SRCS[1];
           return monitorPromise;

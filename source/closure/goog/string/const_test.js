@@ -44,8 +44,6 @@ function testUnwrap() {
       'evil';
   evil.CONST_STRING_TYPE_MARKER__GOOG_STRING_SECURITY_PRIVATE_ = {};
 
-  var exception = assertThrows(function() {
-    goog.string.Const.unwrap(evil);
-  });
+  var exception = assertThrows(function() { goog.string.Const.unwrap(evil); });
   assertTrue(exception.message.indexOf('expected object of type Const') > 0);
 }

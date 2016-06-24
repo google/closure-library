@@ -22,12 +22,12 @@ goog.require('goog.testing.jsunit');
 
 
 function testValidJson() {
-  var fuzzing = new goog.labs.testing.JsonFuzzing();   // seeded with now()
+  var fuzzing = new goog.labs.testing.JsonFuzzing();  // seeded with now()
 
   for (var i = 0; i < 10; i++) {
     var data = fuzzing.newArray();
     assertTrue(goog.isArray(data));
     // JSON compatible
-    assertNotThrows(function() {goog.json.serialize(data);});
+    assertNotThrows(function() { goog.json.serialize(data); });
   }
 }

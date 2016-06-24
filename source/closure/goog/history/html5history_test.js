@@ -33,15 +33,15 @@ var html5History;
 function setUp() {
   mockControl = new goog.testing.MockControl();
 
-  mockWindow = {
-    location: {}
-  };
+  mockWindow = {location: {}};
   mockWindow.attachEvent = mockControl.createFunctionMock();
-  mockWindow.attachEvent(
-      goog.testing.mockmatchers.ignoreArgument,
-      goog.testing.mockmatchers.ignoreArgument).$anyTimes();
-  var mockHistoryIsSupportedMethod = mockControl.createMethodMock(
-      goog.history.Html5History, 'isSupported');
+  mockWindow
+      .attachEvent(
+          goog.testing.mockmatchers.ignoreArgument,
+          goog.testing.mockmatchers.ignoreArgument)
+      .$anyTimes();
+  var mockHistoryIsSupportedMethod =
+      mockControl.createMethodMock(goog.history.Html5History, 'isSupported');
   mockHistoryIsSupportedMethod(mockWindow).$returns(true).$anyTimes();
 }
 
@@ -78,8 +78,8 @@ function testGetTokenWithoutUsingFragmentWithCustomPathPrefix() {
 
 function testGetTokenWithoutUsingFragmentWithCustomTransformer() {
   mockWindow.location.pathname = '/test/something';
-  var mockTransformer = mockControl.createLooseMock(
-      goog.history.Html5History.TokenTransformer);
+  var mockTransformer =
+      mockControl.createLooseMock(goog.history.Html5History.TokenTransformer);
   mockTransformer.retrieveToken('/', mockWindow.location).$returns('abc/1');
 
   mockControl.$replayAll();
@@ -92,10 +92,10 @@ function testGetTokenWithoutUsingFragmentWithCustomTransformer() {
 
 function testGetTokenWithoutUsingFragmentWithCustomTransformerAndPrefix() {
   mockWindow.location.pathname = '/test/something';
-  var mockTransformer = mockControl.createLooseMock(
-      goog.history.Html5History.TokenTransformer);
-  mockTransformer.retrieveToken('/test/', mockWindow.location).
-      $returns('abc/1');
+  var mockTransformer =
+      mockControl.createLooseMock(goog.history.Html5History.TokenTransformer);
+  mockTransformer.retrieveToken('/test/', mockWindow.location)
+      .$returns('abc/1');
 
   mockControl.$replayAll();
   html5History = new goog.history.Html5History(mockWindow, mockTransformer);
@@ -125,41 +125,41 @@ function testGetUrlWithoutUsingFragmentWithCustomPathPrefix() {
   html5History.setUseFragment(false);
   html5History.setPathPrefix('/test/');
 
-  assertEquals('/test/some/token?q=something',
-               html5History.getUrl_('some/token'));
+  assertEquals(
+      '/test/some/token?q=something', html5History.getUrl_('some/token'));
   mockControl.$verifyAll();
 }
 
 function testGetUrlWithoutUsingFragmentWithCustomTransformer() {
   mockWindow.location.search = '?q=something';
-  var mockTransformer = mockControl.createLooseMock(
-      goog.history.Html5History.TokenTransformer);
-  mockTransformer.createUrl('some/token', '/', mockWindow.location).
-      $returns('/something/else/?different');
+  var mockTransformer =
+      mockControl.createLooseMock(goog.history.Html5History.TokenTransformer);
+  mockTransformer.createUrl('some/token', '/', mockWindow.location)
+      .$returns('/something/else/?different');
 
   mockControl.$replayAll();
   html5History = new goog.history.Html5History(mockWindow, mockTransformer);
   html5History.setUseFragment(false);
 
-  assertEquals('/something/else/?different',
-               html5History.getUrl_('some/token'));
+  assertEquals(
+      '/something/else/?different', html5History.getUrl_('some/token'));
   mockControl.$verifyAll();
 }
 
 function testGetUrlWithoutUsingFragmentWithCustomTransformerAndPrefix() {
   mockWindow.location.search = '?q=something';
-  var mockTransformer = mockControl.createLooseMock(
-      goog.history.Html5History.TokenTransformer);
-  mockTransformer.createUrl('some/token', '/test/', mockWindow.location).
-      $returns('/something/else/?different');
+  var mockTransformer =
+      mockControl.createLooseMock(goog.history.Html5History.TokenTransformer);
+  mockTransformer.createUrl('some/token', '/test/', mockWindow.location)
+      .$returns('/something/else/?different');
 
   mockControl.$replayAll();
   html5History = new goog.history.Html5History(mockWindow, mockTransformer);
   html5History.setUseFragment(false);
   html5History.setPathPrefix('/test/');
 
-  assertEquals('/something/else/?different',
-               html5History.getUrl_('some/token'));
+  assertEquals(
+      '/something/else/?different', html5History.getUrl_('some/token'));
   mockControl.$verifyAll();
 }
 
@@ -193,8 +193,10 @@ function testNavigateFiresOnceWithoutPopstate() {
 
   // Removing POPSTATE to ensure NAVIGATE is triggered in browsers that don't
   // support it.
-  assertTrue(goog.events.unlisten(window, goog.events.EventType.POPSTATE,
-                                  history.onHistoryEvent_, false, history));
+  assertTrue(
+      goog.events.unlisten(
+          window, goog.events.EventType.POPSTATE, history.onHistoryEvent_,
+          false, history));
 
   // Simulate that the user navigates in the history.
   location = '#' + goog.now();

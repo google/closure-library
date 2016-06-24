@@ -1,0 +1,51 @@
+---
+{edit_path: '', layout: api, page: goog.proto2.PbLiteSerializer, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>PbLiteSerializer</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.proto2.html">goog.proto2</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L54" target="_blank">View Source</a></div><h1 class="title"><div>class PbLiteSerializer</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.proto2.Serializer.html">goog.proto2.Serializer</a>
+  &#x2514; <a href="goog.proto2.LazyDeserializer.html">goog.proto2.LazyDeserializer</a>
+      &#x2514; goog.proto2.PbLiteSerializer</pre><p>PB-Lite serializer.</p>
+<h3 class="name"><div>new PbLiteSerializer()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="deserialize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L187" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>deserialize(<var>descriptor</var>, <var>data</var>)</div></h3></div><div class="body"><p>Deserializes a message from the expected format.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.proto2.LazyDeserializer.html#deserialize">goog.proto2.LazyDeserializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>descriptor</var><code><a href="goog.proto2.Descriptor.html">goog.proto2.Descriptor</a></code><dd><p>The descriptor of the message
+to be created.</p>
+<dt class="type name"><var>data</var><code>*</code><dd><p>The data of the message.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.proto2.Message.html">goog.proto2.Message</a></code><dd><p>The message created.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="deserializeField"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L130" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>deserializeField(<var>message</var>, <var>field</var>, <var>data</var>)</div></h3></div><div class="body"><p>Deserializes a message field from the expected format and places the
+data in the given message</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.proto2.LazyDeserializer.html#deserializeField">goog.proto2.LazyDeserializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>message</var><code><a href="goog.proto2.Message.html">goog.proto2.Message</a></code><dd><p>The message in which to
+place the information.</p>
+<dt class="type name"><var>field</var><code><a href="goog.proto2.FieldDescriptor.html">goog.proto2.FieldDescriptor</a></code><dd><p>The field for which to set the
+message value.</p>
+<dt class="type name"><var>data</var><code>*</code><dd><p>The serialized data for the field.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The deserialized data or null for no value found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="deserializeTo"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/lazydeserializer.js#L53" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>deserializeTo(<var>message</var>, <var>data</var>)</div></h3></div><div class="body"><p>Deserializes a message from the expected format and places the
+data in the message.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.proto2.LazyDeserializer.html#deserializeTo">goog.proto2.LazyDeserializer</a></dd><dt class="spec">Overrides</dt><dd><a href="goog.proto2.Serializer.html#deserializeTo">goog.proto2.Serializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>message</var><code><a href="goog.proto2.Message.html">goog.proto2.Message</a></code><dd><p>The message in which to
+place the information.</p>
+<dt class="type name"><var>data</var><code>*</code><dd><p>The data of the message.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDeserializedValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L171" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>getDeserializedValue(<var>field</var>, <var>value</var>)</div></h3></div><div class="body"><p>Returns the deserialized form of the given value for the given field if the
+field is a Message or Group and returns the value, converted or unchanged,
+for primitive field types otherwise.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.proto2.Serializer.html#getDeserializedValue">goog.proto2.Serializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>field</var><code><a href="goog.proto2.FieldDescriptor.html">goog.proto2.FieldDescriptor</a></code><dd><p>The field from which this
+value came.</p>
+<dt class="type name"><var>value</var><code>*</code><dd><p>The value of the field.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getSerializedValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L158" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>getSerializedValue(<var>field</var>, <var>value</var>)</div></h3></div><div class="body"><p>Returns the serialized form of the given value for the given field if the
+field is a Message or Group and returns the value unchanged otherwise, except
+for Infinity, -Infinity and NaN numerical values which are converted to
+string representation.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.proto2.Serializer.html#getSerializedValue">goog.proto2.Serializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>field</var><code><a href="goog.proto2.FieldDescriptor.html">goog.proto2.FieldDescriptor</a></code><dd><p>The field from which this
+value came.</p>
+<dt class="type name"><var>value</var><code>*</code><dd><p>The value of the field.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>The value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="serialize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L89" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>serialize(<var>message</var>)</div></h3></div><div class="body"><p>Serializes a message to a PB-Lite object.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.proto2.Serializer.html#serialize">goog.proto2.Serializer</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>message</var><code><a href="goog.proto2.Message.html">goog.proto2.Message</a></code><dd><p>The message to be serialized.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;</code><dd><p>The serialized form of the message.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setZeroIndexed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/proto2/pbliteserializer.js#L77" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setZeroIndexed(<var>zeroIndexing</var>)</div></h3></div><div class="body"><p>By default, the proto tag with id 1 will have index 1 in the serialized
+array.</p>
+<p>If the serializer is set to use zero-indexing, the tag with id 1 will have
+index 0.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>zeroIndexing</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether this serializer should deal with
+0-indexed protos.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

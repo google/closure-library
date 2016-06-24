@@ -27,8 +27,8 @@ function setUp() {
 }
 
 function testIsAsynchronous() {
-  assertTrue('Must return true for asynchronous state',
-      asyncState.isAsynchronous());
-  assertFalse('Must return false for synchronous state',
-      syncState.isAsynchronous());
+  assertTrue(
+      'Must return true for asynchronous state', asyncState.isAsynchronous());
+  assertFalse(
+      'Must return false for synchronous state', syncState.isAsynchronous());
 }

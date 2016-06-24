@@ -1,0 +1,48 @@
+---
+{edit_path: '', layout: api, page: goog.net.WebChannel.RuntimeProperties, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>RuntimeProperties</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.net.html">goog.net</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L248" target="_blank">View Source</a></div><h1 class="title"><div>interface RuntimeProperties</div></h1></div><div class="body"><p>The runtime properties of the WebChannel instance.</p>
+<p>This class is defined for debugging and monitoring purposes, as well as for
+runtime functions that the application may choose to manage by itself.</p>
+</div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="ackCommit"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L328" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ackCommit(<var>commitId</var>)</div></h3></div><div class="body"><p>This method is used by the application to generate an ack-commit response
+for the given commitId. Commit protocol spec:
+https://github.com/bidiweb/webchannel/blob/master/commit.md</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>commitId</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The commitId which denotes the commit request
+from the server that needs be ack&#39;ed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="commit"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L291" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>commit(<var>callback</var>)</div></h3></div><div class="body"><p>This method generates an in-band commit request to the server, which will
+ack the commit request as soon as all messages sent prior to this commit
+request have been committed by the application.</p>
+<p>Committing a message has a stronger semantics than delivering a message
+to the application. Detail spec:
+https://github.com/bidiweb/webchannel/blob/master/commit.md</p>
+<p>Timeout or cancellation is not supported and the application may have to
+abort the channel if the commit-ack fails to arrive in time.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>!function()</code><dd><p>The callback will be invoked once an
+ack has been received for the current commit or any newly issued commit.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getConcurrentRequestLimit"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L256" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getConcurrentRequestLimit()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The effective limit for the number of concurrent HTTP
+requests that are allowed to be made for sending messages from the client
+to the server. When SPDY is not enabled, this limit will be one.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLastStatusCode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L334" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLastStatusCode()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The last HTTP status code received by the channel.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getNonAckedMessageCount"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L304" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNonAckedMessageCount()</div></h3></div><div class="body"><p>This method may be used by the application to recover from a peer failure
+or to enable sender-initiated flow-control.</p>
+<p>Detail spec: https://github.com/bidiweb/webchannel/blob/master/commit.md</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The total number of messages that have not received
+commit-ack from the server; or if no commit has been issued, the number
+of messages that have not been delivered to the server application.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isSpdyEnabled"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L272" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isSpdyEnabled()</div></h3></div><div class="body"><p>For applications that need support multiple channels (e.g. from
+different tabs) to the same origin, use this method to decide if SPDY is
+enabled and therefore it is safe to open multiple channels.</p>
+<p>If SPDY is disabled, the application may choose to limit the number of active
+channels to one or use other means such as sub-domains to work around
+the browser connection limit.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether SPDY is enabled for the origin against which
+the channel is created.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="onCommit"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/net/webchannel.js#L317" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>onCommit(<var>callback</var>)</div></h3></div><div class="body"><p>This method registers a callback to handle the commit request sent
+by the server. Commit protocol spec:
+https://github.com/bidiweb/webchannel/blob/master/commit.md</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>!function(!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code><dd><p>The callback will take an opaque
+commitId which needs be passed back to the server when an ack-commit
+response is generated by the client application, via ackCommit().</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

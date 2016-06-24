@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Utility for Closure Library dependency calculation.
 
 ClosureBuilder scans source files to build dependency info.  From the
@@ -30,6 +29,7 @@ usage: %prog [options] [file1.js file2.js ...]
 __author__ = 'nnaze@google.com (Nathan Naze)'
 
 
+import io
 import logging
 import optparse
 import os
@@ -143,7 +143,8 @@ def _GetClosureBaseFile(sources):
     The _PathSource representing the base Closure file.
   """
   base_files = [
-      js_source for js_source in sources if _IsClosureBaseFile(js_source)]
+      js_source for js_source in sources if _IsClosureBaseFile(js_source)
+  ]
 
   if not base_files:
     logging.error('No Closure base.js file found.')
@@ -200,9 +201,14 @@ def main():
 
   # Make our output pipe.
   if options.output_file:
-    out = open(options.output_file, 'w')
+    out = io.open(options.output_file, 'wb')
   else:
-    out = sys.stdout
+    version = sys.version_info[:2]
+    if version >= (3, 0):
+      # Write bytes to stdout
+      out = sys.stdout.buffer
+    else:
+      out = sys.stdout
 
   sources = set()
 
@@ -250,7 +256,7 @@ def main():
       src = js_source.GetSource()
       if js_source.is_goog_module:
         src = _WrapGoogModuleSource(src)
-      out.write(src.encode('utf-8') + '\n')
+      out.write(src.encode('utf-8') + b'\n')
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
@@ -259,7 +265,7 @@ is prefererred over using this script for performing JavaScript compilation.
 Please migrate your codebase.
 
 See:
-https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
+https://github.com/google/closure-compiler/wiki/Managing-Dependencies
 """)
 
     # Make sure a .jar is specified.
@@ -269,11 +275,11 @@ https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
       sys.exit(2)
 
     # Will throw an error if the compilation fails.
-    compiled_source = jscompiler.Compile(
-        options.compiler_jar,
-        [js_source.GetPath() for js_source in deps],
-        jvm_flags=options.jvm_flags,
-        compiler_flags=options.compiler_flags)
+    compiled_source = jscompiler.Compile(options.compiler_jar,
+                                         [js_source.GetPath()
+                                          for js_source in deps],
+                                         jvm_flags=options.jvm_flags,
+                                         compiler_flags=options.compiler_flags)
 
     logging.info('JavaScript compilation succeeded.')
     out.write(compiled_source.encode('utf-8'))

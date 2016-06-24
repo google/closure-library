@@ -1,0 +1,121 @@
+---
+{edit_path: '', layout: api, page: goog.structs.LinkedMap, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>LinkedMap</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.structs.html">goog.structs</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L68" target="_blank">View Source</a></div><h1 class="title"><div>class LinkedMap<var class="template">&lt;KEY, VALUE&gt;</var></div></h1></div><div class="body"><p>Class for a LinkedMap datastructure, which combines O(1) map access for
+key/value pairs with a linked list for a consistent iteration order. Sample
+usage:</p>
+ <pre>
+ var m &#61; new LinkedMap();
+ m.set(&#39;param1&#39;, &#39;A&#39;);
+ m.set(&#39;param2&#39;, &#39;B&#39;);
+ m.set(&#39;param3&#39;, &#39;C&#39;);
+ alert(m.getKeys()); // param1, param2, param3
+
+ var c &#61; new LinkedMap(5, true);
+ for (var i &#61; 0; i &lt; 10; i&#43;&#43;) {
+   c.set(&#39;entry&#39; &#43; i, false);
+ }
+ alert(c.getKeys()); // entry9, entry8, entry7, entry6, entry5
+
+ c.set(&#39;entry5&#39;, true);
+ c.set(&#39;entry1&#39;, false);
+ alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
+ </pre>
+<h3 class="name"><div>new LinkedMap(<var>opt_maxCount</var>, <var>opt_cache</var>, <var>opt_evictionCallback</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_maxCount</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The maximum number of objects to store in the
+LinkedMap. If unspecified or 0, there is no maximum.</p>
+<dt class="type name"><var>opt_cache</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>When set, the LinkedMap stores items in order
+from most recently used to least recently used, instead of insertion
+order.</p>
+<dt class="type name"><var>opt_evictionCallback</var><code>function(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, VALUE)=</code><dd><p>Called with the
+removed stringified key as the first argument and value as the second
+argument after the key was evicted from the LRU because the max count
+was reached.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="clear"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L313" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>clear()</div></h3></div><div class="body"><p>Removes all entries in this object.</p>
+</div></section><section class="property expandable" id="contains"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L294" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>contains(<var>value</var>)</div></h3></div><div class="body"><p>Tests whether a provided value is currently in the LinkedMap. This does not
+affect item ordering in cache-style LinkedMaps.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>VALUE</code><dd><p>The value to check for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the value is in the LinkedMap.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="containsKey"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L305" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>containsKey(<var>key</var>)</div></h3></div><div class="body"><p>Tests whether a provided key is currently in the LinkedMap. This does not
+affect item ordering in cache-style LinkedMaps.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The key to check for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the key is in the LinkedMap.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="every"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L398" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> every(<var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function on each item in the LinkedMap and returns true only if every
+function call returns a true-like value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, VALUE, KEY, <a href="goog.structs.LinkedMap.html">goog.structs.LinkedMap</a>&lt;KEY, VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for each item. The function takes
+three arguments: the value, the key, and the Cache, and returns a
+boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The object context to use as &#34;this&#34; for the
+function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether f evaluates to true for every item in the Cache.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.structs.html#some">goog.structs.some</a></dd></dl></div></section><section class="property expandable" id="forEach"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L326" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> forEach(<var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function on each item in the LinkedMap.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, VALUE, KEY, <a href="goog.structs.LinkedMap.html">goog.structs.LinkedMap</a>&lt;KEY, VALUE&gt;)</code><dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The value of &#34;this&#34; inside f.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.structs.html#forEach">goog.structs.forEach</a></dd></dl></div></section><section class="property expandable" id="get"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L120" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>get(<var>key</var>, <var>opt_val</var>)</div></h3></div><div class="body"><p>Retrieves the value for a given key. If this is a caching LinkedMap, the
+entry will become the most recently used.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The key to retrieve the value for.</p>
+<dt class="type name"><var>opt_val</var><code>VALUE=</code><dd><p>A default value that will be returned if the key is
+not found, defaults to undefined.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The retrieved value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getCount"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L231" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCount()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of items currently in the LinkedMap. Sub classes
+may override this to change how items are counted (e.g. to introduce
+per item weight). Truncation will always proceed as long as the count
+returned from this method is higher than the max count for this map.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getKeys"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L274" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getKeys()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;</code><dd><p>The list of the keys in the appropriate order for
+this LinkedMap.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L283" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getValues()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;</code><dd><p>The list of the values in the appropriate order for
+this LinkedMap.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isEmpty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L239" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isEmpty()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the cache is empty, false if it contains any items.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="map"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L348" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, RESULT&gt;</var> map(<var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function on each item in the LinkedMap and returns the results of
+those calls in an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, VALUE, KEY, <a href="goog.structs.LinkedMap.html">goog.structs.LinkedMap</a>&lt;KEY, VALUE&gt;): RESULT</code><dd><p>The function to call for each item. The function takes
+three arguments: the value, the key, and the LinkedMap.</p>
+<dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The object context to use as &#34;this&#34; for the
+function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;RESULT&gt;</code><dd><p>The results of the function calls for each item in
+the LinkedMap.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.structs.html#map">goog.structs.map</a></dd></dl></div></section><section class="property expandable" id="peek"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L162" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>peek()</div></h3></div><div class="body"><p>Returns the value of the first node without making any modifications.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The value of the first node or undefined if the map is empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="peekLast"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L171" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>peekLast()</div></h3></div><div class="body"><p>Returns the value of the last node without making any modifications.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The value of the last node or undefined if the map is empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="peekValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L134" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>peekValue(<var>key</var>, <var>opt_val</var>)</div></h3></div><div class="body"><p>Retrieves the value for a given key without updating the entry to be the
+most recently used.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The key to retrieve the value for.</p>
+<dt class="type name"><var>opt_val</var><code>VALUE=</code><dd><p>A default value that will be returned if the key is
+not found.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The retrieved value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="pop"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L191" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>pop()</div></h3></div><div class="body"><p>Removes the last node from the list and returns its value.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The value of the popped node, or undefined if the map was
+empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="remove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L202" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>remove(<var>key</var>)</div></h3></div><div class="body"><p>Removes a value from the LinkedMap based on its key.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The key to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the entry was removed, false if the key was not
+found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeNode"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L219" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>removeNode(<var>node</var>)</div></h3></div><div class="body"><p>Removes a node from the <code>LinkedMap</code>. It can be overridden to do
+further cleanup such as disposing of the node value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>node</var><code>!<a href="goog.structs.LinkedMap.Node_.html">goog.structs.LinkedMap.Node_</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, VALUE&gt;</code><dd><p>The node to
+remove.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="set"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L146" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>set(<var>key</var>, <var>value</var>)</div></h3></div><div class="body"><p>Sets a value for a given key. If this is a caching LinkedMap, this entry
+will become the most recently used.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Key with which the specified value is to be associated.</p>
+<dt class="type name"><var>value</var><code>VALUE</code><dd><p>Value to be associated with the specified key.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setEvictionCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L251" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setEvictionCallback(<var>evictionCallback</var>)</div></h3></div><div class="body"><p>Sets a callback that fires when an entry is evicted because max entry
+count is reached. The callback is called with the removed stringified key
+as the first argument and value as the second argument after the key was
+evicted from the LRU because the max count was reached.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>evictionCallback</var><code>function(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, VALUE)</code></dl></dd></dl></div></section><section class="property expandable" id="setMaxCount"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L262" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setMaxCount(<var>maxCount</var>)</div></h3></div><div class="body"><p>Sets the maximum number of entries allowed in this object, truncating any
+excess objects if necessary.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>maxCount</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The new maximum number of entries to allow.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="shift"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L181" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>shift()</div></h3></div><div class="body"><p>Removes the first node from the list and returns its value.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The value of the popped node, or undefined if the map was
+empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="some"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L373" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> some(<var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function on each item in the LinkedMap and returns true if any of
+those function calls returns a true-like value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, VALUE, KEY, <a href="goog.structs.LinkedMap.html">goog.structs.LinkedMap</a>&lt;KEY, VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for each item. The function takes
+three arguments: the value, the key, and the LinkedMap, and returns a
+boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The object context to use as &#34;this&#34; for the
+function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether f evaluates to true for at least one item in the
+LinkedMap.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.structs.html#some">goog.structs.some</a></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="head_"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/structs/linkedmap.js#L88" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>head_</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><a href="goog.structs.LinkedMap.Node_.html">goog.structs.LinkedMap.Node_</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined">undefined</a>&gt;</dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.structs.LinkedMap.Node_.html">LinkedMap.Node_</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

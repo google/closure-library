@@ -22,6 +22,7 @@ goog.require('goog.testing.jsunit');
 var COMPLEX_HTML = '<!DOCTYPE root-element [SYSTEM OR PUBLIC FPI] "uri" [' +
     '<!-- internal declarations -->]>' +
     '<html><head><title>My HTML</title><!-- my comment --></head>' +
+    '<script> if(i<0)\nfoo; </script>' +
     '<body><h1>My Header</h1>My text.<br><b>My bold text.</b><hr>' +
     '<pre>My\npreformatted <br> HTML.</pre>5 < 10</body>' +
     '</html>';
@@ -31,9 +32,7 @@ var mockClockTicks;
 function setUp() {
   mockClockTicks = 0;
   mockClock = new goog.testing.MockClock();
-  mockClock.getCurrentTime = function() {
-    return mockClockTicks++;
-  };
+  mockClock.getCurrentTime = function() { return mockClockTicks++; };
   mockClock.install();
 }
 
@@ -64,6 +63,7 @@ function testComplexHtml() {
       '<title>My HTML</title>\n' +
       '<!-- my comment -->' +
       '</head>\n' +
+      '<script> if(i<0)\nfoo; </script>\n' +
       '<body>\n' +
       '<h1>My Header</h1>\n' +
       'My text.<br>\n' +
@@ -84,6 +84,7 @@ function testTimeout() {
       '<!-- internal declarations -->]>\n' +
       '<html>\n' +
       '<head><title>My HTML</title><!-- my comment --></head>' +
+      '<script> if(i<0)\nfoo; </script>' +
       '<body><h1>My Header</h1>My text.<br><b>My bold text.</b><hr>' +
       '<pre>My\npreformatted <br> HTML.</pre>5 < 10</body>' +
       '</html>\n';
@@ -154,10 +155,11 @@ function testRegexMakesProgress() {
     assertEquals('f o o\n', goog.format.HtmlPrettyPrinter.format('f o o'));
 
     // But not this one.
-    var ex = assertThrows('should have failed for invalid regex - endless loop',
+    var ex = assertThrows(
+        'should have failed for invalid regex - endless loop',
         goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
-    assertEquals('Regex failed to make progress through source html.',
-        ex.message);
+    assertEquals(
+        'Regex failed to make progress through source html.', ex.message);
   } finally {
     goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
   }
@@ -197,7 +199,8 @@ function testAvoidDataLoss() {
     assertEquals('foo\n', goog.format.HtmlPrettyPrinter.format('foo'));
 
     // But not this one.
-    var ex = assertThrows('should have failed for invalid regex - data loss',
+    var ex = assertThrows(
+        'should have failed for invalid regex - data loss',
         goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
     assertEquals('Lost data pretty printing html.', ex.message);
   } finally {

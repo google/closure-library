@@ -120,61 +120,84 @@ function testMessageCallbacks() {
   });
   assertNull(handler.logRecord);
 
-  l3.log(goog.debug.Logger.Level.WARNING, function() {return 'heya'});
+  l3.log(goog.debug.Logger.Level.WARNING, function() { return 'heya' });
   assertNotNull(handler.logRecord);
   assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
   assertEquals('heya', handler.logRecord.getMessage());
 }
 
 function testGetPredefinedLevel() {
-  assertEquals(goog.debug.Logger.Level.OFF,
+  assertEquals(
+      goog.debug.Logger.Level.OFF,
       goog.debug.Logger.Level.getPredefinedLevel('OFF'));
-  assertEquals(goog.debug.Logger.Level.SHOUT,
+  assertEquals(
+      goog.debug.Logger.Level.SHOUT,
       goog.debug.Logger.Level.getPredefinedLevel('SHOUT'));
-  assertEquals(goog.debug.Logger.Level.SEVERE,
+  assertEquals(
+      goog.debug.Logger.Level.SEVERE,
       goog.debug.Logger.Level.getPredefinedLevel('SEVERE'));
-  assertEquals(goog.debug.Logger.Level.WARNING,
+  assertEquals(
+      goog.debug.Logger.Level.WARNING,
       goog.debug.Logger.Level.getPredefinedLevel('WARNING'));
-  assertEquals(goog.debug.Logger.Level.INFO,
+  assertEquals(
+      goog.debug.Logger.Level.INFO,
       goog.debug.Logger.Level.getPredefinedLevel('INFO'));
-  assertEquals(goog.debug.Logger.Level.CONFIG,
+  assertEquals(
+      goog.debug.Logger.Level.CONFIG,
       goog.debug.Logger.Level.getPredefinedLevel('CONFIG'));
-  assertEquals(goog.debug.Logger.Level.FINE,
+  assertEquals(
+      goog.debug.Logger.Level.FINE,
       goog.debug.Logger.Level.getPredefinedLevel('FINE'));
-  assertEquals(goog.debug.Logger.Level.FINER,
+  assertEquals(
+      goog.debug.Logger.Level.FINER,
       goog.debug.Logger.Level.getPredefinedLevel('FINER'));
-  assertEquals(goog.debug.Logger.Level.FINEST,
+  assertEquals(
+      goog.debug.Logger.Level.FINEST,
       goog.debug.Logger.Level.getPredefinedLevel('FINEST'));
-  assertEquals(goog.debug.Logger.Level.ALL,
+  assertEquals(
+      goog.debug.Logger.Level.ALL,
       goog.debug.Logger.Level.getPredefinedLevel('ALL'));
 }
 
 function testGetPredefinedLevelByValue() {
-  assertEquals(goog.debug.Logger.Level.OFF,
+  assertEquals(
+      goog.debug.Logger.Level.OFF,
       goog.debug.Logger.Level.getPredefinedLevelByValue(Infinity));
-  assertEquals(goog.debug.Logger.Level.SHOUT,
+  assertEquals(
+      goog.debug.Logger.Level.SHOUT,
       goog.debug.Logger.Level.getPredefinedLevelByValue(1300));
-  assertEquals(goog.debug.Logger.Level.SHOUT,
+  assertEquals(
+      goog.debug.Logger.Level.SHOUT,
       goog.debug.Logger.Level.getPredefinedLevelByValue(1200));
-  assertEquals(goog.debug.Logger.Level.SEVERE,
+  assertEquals(
+      goog.debug.Logger.Level.SEVERE,
       goog.debug.Logger.Level.getPredefinedLevelByValue(1150));
-  assertEquals(goog.debug.Logger.Level.SEVERE,
+  assertEquals(
+      goog.debug.Logger.Level.SEVERE,
       goog.debug.Logger.Level.getPredefinedLevelByValue(1000));
-  assertEquals(goog.debug.Logger.Level.WARNING,
+  assertEquals(
+      goog.debug.Logger.Level.WARNING,
       goog.debug.Logger.Level.getPredefinedLevelByValue(900));
-  assertEquals(goog.debug.Logger.Level.INFO,
+  assertEquals(
+      goog.debug.Logger.Level.INFO,
       goog.debug.Logger.Level.getPredefinedLevelByValue(800));
-  assertEquals(goog.debug.Logger.Level.CONFIG,
+  assertEquals(
+      goog.debug.Logger.Level.CONFIG,
       goog.debug.Logger.Level.getPredefinedLevelByValue(701));
-  assertEquals(goog.debug.Logger.Level.CONFIG,
+  assertEquals(
+      goog.debug.Logger.Level.CONFIG,
       goog.debug.Logger.Level.getPredefinedLevelByValue(700));
-  assertEquals(goog.debug.Logger.Level.FINE,
+  assertEquals(
+      goog.debug.Logger.Level.FINE,
       goog.debug.Logger.Level.getPredefinedLevelByValue(500));
-  assertEquals(goog.debug.Logger.Level.FINER,
+  assertEquals(
+      goog.debug.Logger.Level.FINER,
       goog.debug.Logger.Level.getPredefinedLevelByValue(400));
-  assertEquals(goog.debug.Logger.Level.FINEST,
+  assertEquals(
+      goog.debug.Logger.Level.FINEST,
       goog.debug.Logger.Level.getPredefinedLevelByValue(300));
-  assertEquals(goog.debug.Logger.Level.ALL,
+  assertEquals(
+      goog.debug.Logger.Level.ALL,
       goog.debug.Logger.Level.getPredefinedLevelByValue(0));
   assertNull(goog.debug.Logger.Level.getPredefinedLevelByValue(-1));
 }

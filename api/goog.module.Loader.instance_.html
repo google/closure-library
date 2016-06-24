@@ -1,0 +1,75 @@
+---
+{edit_path: '', layout: api, page: goog.module.Loader.instance_, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>instance_</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.module.html">goog.module</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L46" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class instance_</div></h1></div><div class="body"><dl><dt class="spec">Alias for <code><a href="goog.module.Loader.html">goog.module.Loader</a></code></dl><p>The dynamic loading functionality is defined as a class. The class
+will be used as singleton. There is, however, a two step
+initialization procedure because parameters need to be passed to
+the goog.module.Loader instance.</p>
+<h3 class="name"><div>new instance_()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="init"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L217" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>init(<var>baseUrl</var>, <var>opt_urlFunction</var>)</div></h3></div><div class="body"><p>Initializes the Loader to be fully functional. Also executes load
+requests that were received before initialization. Must be called
+exactly once, with the URL of the base library. Module URLs are
+derived from the URL of the base library by inserting the module
+name, preceded by a period, before the .js prefix of the base URL.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>baseUrl</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the base library.</p>
+<dt class="type name"><var>opt_urlFunction</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>Function that creates the URL for the
+module file. It will be passed the base URL for module files and the
+module name and should return the fully-formed URL to the module file to
+load.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="provide"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L284" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>provide(<var>module</var>, <var>opt_symbol</var>, <var>opt_object</var>)</div></h3></div><div class="body"><p>Registers a symbol in a loaded module. When called without symbol,
+registers the module to be fully loaded and executes all callbacks
+from pending require() callbacks for this module.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>module</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the module. Cf. parameter module
+of method require().</p>
+<dt class="type name"><var>opt_symbol</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)=</code><dd><p>The symbol being defined, or nothing when
+all symbols of the module are defined. Cf. parameter symbol of method
+require().</p>
+<dt class="type name"><var>opt_object</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object bound to the symbol, or nothing when
+all symbols of the module are defined.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="require"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L248" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>require(<var>module</var>, <var>symbol</var>, <var>callback</var>)</div></h3></div><div class="body"><p>Requests the loading of a symbol from a module. When the module is
+loaded, the requested symbol will be passed as argument to the
+function callback.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>module</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the module. Usually, the value
+is defined as a constant whose name starts with MOD_.</p>
+<dt class="type name"><var>symbol</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The ID of the symbol. Usually, the value is
+defined as a constant whose name starts with SYM_.</p>
+<dt class="type name"><var>callback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>This function will be called with the
+resolved symbol as the argument once the module is loaded.</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="instance_.getInstance"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L46" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.getInstance()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.module.Loader.html">goog.module.Loader</a></code></dl></dd></dl></div></section><section class="property expandable" id="instance_.init"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L140" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.init(<var>urlBase</var>, <var>opt_urlFunction</var>)</div></h3></div><div class="body"><p>Wrapper of init() so that we only need to export this single
+identifier instead of three. See method goog.module.Loader.init() for
+explanation of param.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>urlBase</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the base library.</p>
+<dt class="type name"><var>opt_urlFunction</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>Function that creates the URL for the
+module file. It will be passed the base URL for module files and the
+module name and should return the fully-formed URL to the module file to
+load.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="instance_.loaderCall"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L156" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.loaderCall(<var>module</var>, <var>symbol</var>)</div></h3></div><div class="body"><p>Produces a function that delegates all its arguments to a
+dynamically loaded function. This is used to export dynamically
+loaded functions.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>module</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The module to load from.</p>
+<dt class="type name"><var>symbol</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The ID of the symbol to load from the module.
+This symbol must resolve to a function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>A function that forwards all its arguments to
+the dynamically loaded function specified by module and symbol.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="instance_.provide"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L124" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.provide(<var>module</var>, <var>opt_symbol</var>, <var>opt_object</var>)</div></h3></div><div class="body"><p>Wrapper of goog.module.Loader.provide() for use in modules
+See method goog.module.Loader.provide() for explanation of params.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>module</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the module. Cf. parameter module
+of method require().</p>
+<dt class="type name"><var>opt_symbol</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)=</code><dd><p>The symbol being defined, or nothing
+when all symbols of the module are defined. Cf. parameter symbol of
+method require().</p>
+<dt class="type name"><var>opt_object</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object bound to the symbol, or nothing when
+all symbols of the module are defined.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="instance_.require"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L107" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.require(<var>module</var>, <var>symbol</var>, <var>callback</var>)</div></h3></div><div class="body"><p>Wrapper of goog.module.Loader.require() for use in modules.
+See method goog.module.Loader.require() for
+explanation of params.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>module</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the module. Usually, the value
+is defined as a constant whose name starts with MOD_.</p>
+<dt class="type name"><var>symbol</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The ID of the symbol. Usually, the value is
+defined as a constant whose name starts with SYM_.</p>
+<dt class="type name"><var>callback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>This function will be called with the
+resolved symbol as the argument once the module is loaded.</p>
+</dl></dd></dl></div></section></section><section class="static-properties"><h2>Static Properties</h2><section class="property expandable" id="instance_.LOAD_CALLBACK"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L183" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.LOAD_CALLBACK</div></h3></div><div class="body"><p>The globally exported name of the load callback. Matches the
+definition in the js_modular_binary() BUILD rule.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="instance_.instance_"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/module/loader.js#L46" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>instance_.instance_</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><a href="goog.module.Loader.html">goog.module.Loader</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

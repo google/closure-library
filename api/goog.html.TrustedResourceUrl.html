@@ -1,0 +1,75 @@
+---
+{edit_path: '', layout: api, page: goog.html.TrustedResourceUrl, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>TrustedResourceUrl</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.html.html">goog.html</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L55" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span><span class="struct"></span></div><div>class TrustedResourceUrl</div></h1></div><div class="body"><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.i18n.bidi.DirectionalString.html">goog.i18n.bidi.DirectionalString</a></code><dd><code><a href="goog.string.TypedString.html">goog.string.TypedString</a></code></dl><p>A URL which is under application control and from which script, CSS, and
+other resources that represent executable code, can be fetched.</p>
+<p>Given that the URL can only be constructed from strings under application
+control and is used to load resources, bugs resulting in a malformed URL
+should not have a security impact and are likely to be easily detectable
+during testing. Given the wide number of non-RFC compliant URLs in use,
+stricter validation could prevent some applications from being able to use
+this type.</p>
+<p>Instances of this type must be created via the factory method,
+(<code>goog.html.TrustedResourceUrl.fromConstant</code>), and not by invoking its
+constructor. The constructor intentionally takes no parameters and the type
+is immutable; hence only a default instance corresponding to the empty
+string can be obtained via constructor invocation.</p>
+<h3 class="name"><div>new TrustedResourceUrl()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html.TrustedResourceUrl.html#TrustedResourceUrl.fromConstant">goog.html.TrustedResourceUrl#fromConstant</a></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="getDirection"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L121" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDirection()</div></h3></div><div class="body"><p>Returns this URLs directionality, which is always <code>LTR</code>.</p>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.i18n.bidi.DirectionalString.html#getDirection">goog.i18n.bidi.DirectionalString</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The known direction. Null if unknown.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTypedStringValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTypedStringValue()</div></h3></div><div class="body"><p>Returns this TrustedResourceUrl&#39;s value as a string.</p>
+<p>IMPORTANT: In code where it is security relevant that an object&#39;s type is
+indeed <code>TrustedResourceUrl</code>, use
+<code>goog.html.TrustedResourceUrl.unwrap</code> instead of this method. If in
+doubt, assume that it&#39;s security relevant. In particular, note that
+goog.html functions which return a goog.html type do not guarantee that
+the returned instance is of the right type. For example:</p>
+ <pre>
+ var fakeSafeHtml &#61; new String(&#39;fake&#39;);
+ fakeSafeHtml.__proto__ &#61; goog.html.SafeHtml.prototype;
+ var newSafeHtml &#61; goog.html.SafeHtml.htmlEscape(fakeSafeHtml);
+ // newSafeHtml is just an alias for fakeSafeHtml, it&#39;s passed through by
+ // goog.html.SafeHtml.htmlEscape() as fakeSafeHtml instanceof
+ // goog.html.SafeHtml.
+ </pre>
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.string.TypedString.html#getTypedStringValue">goog.string.TypedString</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The wrapped string&#39;s value.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html.TrustedResourceUrl.html#TrustedResourceUrl.unwrap">goog.html.TrustedResourceUrl#unwrap</a></dd></dl></div></section><section class="property expandable" id="toString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L136" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toString()</div></h3></div><div class="body"><p>Returns a debug string-representation of this value.</p>
+<p>To obtain the actual string value wrapped in a TrustedResourceUrl, use
+<code>goog.html.TrustedResourceUrl.unwrap</code>.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code></dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html.TrustedResourceUrl.html#TrustedResourceUrl.unwrap">goog.html.TrustedResourceUrl#unwrap</a></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="implementsGoogI18nBidiDirectionalString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L113" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>implementsGoogI18nBidiDirectionalString</div></h3></div><div class="body"><p>Interface marker of the DirectionalString interface.</p>
+<p>This property can be used to determine at runtime whether or not an object
+implements this interface.  All implementations of this interface set this
+property to <code>true</code>.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.i18n.bidi.DirectionalString.html#implementsGoogI18nBidiDirectionalString">goog.i18n.bidi.DirectionalString</a></dd></dl></div></section><section class="property expandable" id="implementsGoogStringTypedString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L79" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>implementsGoogStringTypedString</div></h3></div><div class="body"><p>Interface marker of the TypedString interface.</p>
+<p>This property can be used to determine at runtime whether or not an object
+implements this interface.  All implementations of this interface set this
+property to <code>true</code>.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.string.TypedString.html#implementsGoogStringTypedString">goog.string.TypedString</a></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L238" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="package"></span></div><div>TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(<var>url</var>)</div></h3></div><div class="body"><p>Package-internal utility method to create TrustedResourceUrl instances.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The string to initialize the TrustedResourceUrl object
+with.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></code><dd><p>The initialized TrustedResourceUrl
+object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="TrustedResourceUrl.fromConstant"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L192" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TrustedResourceUrl.fromConstant(<var>url</var>)</div></h3></div><div class="body"><p>Creates a TrustedResourceUrl object from a compile-time constant string.</p>
+<p>Compile-time constant strings are inherently program-controlled and hence
+trusted.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code>!<a href="goog.string.Const.html">goog.string.Const</a></code><dd><p>A compile-time-constant string from which to
+create a TrustedResourceUrl.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></code><dd><p>A TrustedResourceUrl object
+initialized to <code>url</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="TrustedResourceUrl.fromConstants"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L210" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TrustedResourceUrl.fromConstants(<var>parts</var>)</div></h3></div><div class="body"><p>Creates a TrustedResourceUrl object from a compile-time constant strings.</p>
+<p>Compile-time constant strings are inherently program-controlled and hence
+trusted.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>parts</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="goog.string.Const.html">goog.string.Const</a>&gt;</code><dd><p>Compile-time-constant strings from
+which to create a TrustedResourceUrl.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></code><dd><p>A TrustedResourceUrl object
+initialized to concatenation of <code>parts</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="TrustedResourceUrl.unwrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/trustedresourceurl.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>TrustedResourceUrl.unwrap(<var>trustedResourceUrl</var>)</div></h3></div><div class="body"><p>Performs a runtime check that the provided object is indeed a
+TrustedResourceUrl object, and returns its value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>trustedResourceUrl</var><code>!<a href="goog.html.TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></code><dd><p>The object to
+extract from.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The trustedResourceUrl object&#39;s contained string, unless
+the run-time type check fails. In that case, <code>unwrap</code> returns an
+innocuous string, or, if assertions are enabled, throws
+<code>goog.asserts.AssertionError</code>.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -24,8 +24,7 @@ var setUpCalled = false;
 // the next test is not started before the previous completed.
 var curTestIsDone = true;
 // Use an asynchronous test runner for our tests.
-var asyncTestCase =
-    goog.testing.AsyncTestCase.createAndInstall(document.title);
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
 
 
 /**
@@ -40,9 +39,7 @@ function doAsyncStuff(numAsyncCalls, name) {
     curTestIsDone = false;
     asyncTestCase.waitForAsync(
         'doAsyncStuff-' + name + '(' + numAsyncCalls + ')');
-    window.setTimeout(function() {
-      doAsyncStuff(numAsyncCalls - 1, name);
-    }, 0);
+    window.setTimeout(function() { doAsyncStuff(numAsyncCalls - 1, name); }, 0);
   } else {
     curTestIsDone = true;
     asyncTestCase.continueTesting();
@@ -73,9 +70,9 @@ function test2_asyncContinueThenWait() {
   }
   function async2() {
     asyncTestCase.continueTesting();
-    assertEquals('Did not wait for inner waitForAsync',
-                 activeTest,
-                 asyncTestCase.activeTest_);
+    assertEquals(
+        'Did not wait for inner waitForAsync', activeTest,
+        asyncTestCase.activeTest_);
   }
   asyncTestCase.waitForAsync('1');
   window.setTimeout(async1, 0);
@@ -127,10 +124,8 @@ function testSignalsCallContinueTestingBeforeFinishing() {
   asyncTestCase.waitForSignals(2);
 
   window.setTimeout(function() {
-    var thrown = assertThrows(function() {
-      asyncTestCase.continueTesting();
-    });
+    var thrown = assertThrows(function() { asyncTestCase.continueTesting(); });
     assertEquals('Still waiting for 1 signals.', thrown.message);
   }, 0);
-  doAsyncSignals(); // To not timeout.
+  doAsyncSignals();  // To not timeout.
 }

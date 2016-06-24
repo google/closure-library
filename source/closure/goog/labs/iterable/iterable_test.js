@@ -34,21 +34,13 @@ function createRangeIterator(start, stop) {
   var value = start;
   var next = function() {
     if (value < stop) {
-      return {
-        value: value++,
-        done: false
-      };
+      return {value: value++, done: false};
     }
 
-    return {
-      value: undefined,
-      done: true
-    };
+    return {value: undefined, done: true};
   };
 
-  return {
-    next: next
-  };
+  return {next: next};
 }
 
 function createRangeIterable(start, stop) {
@@ -76,17 +68,11 @@ testSuite({
     var rangeIterator = createRangeIterator(0, 3);
 
     for (var i = 0; i < 3; i++) {
-      assertObjectEquals({
-        value: i,
-        done: false
-      }, rangeIterator.next());
+      assertObjectEquals({value: i, done: false}, rangeIterator.next());
     }
 
     for (var i = 0; i < 3; i++) {
-      assertObjectEquals({
-        value: undefined,
-        done: true
-      }, rangeIterator.next());
+      assertObjectEquals({value: undefined, done: true}, rangeIterator.next());
     }
   },
 
@@ -118,9 +104,7 @@ testSuite({
 
     var range = createRangeIterable(0, 3);
 
-    function addTwo(i) {
-      return i + 2;
-    }
+    function addTwo(i) { return i + 2; }
 
     var newIterable = iterable.map(addTwo, range);
     var newIterator = iterable.getIterator(newIterable);

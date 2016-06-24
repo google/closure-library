@@ -24,6 +24,7 @@ goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
+goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
 
@@ -216,9 +217,8 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
     return safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
     goog.asserts.fail('expected object of type SafeUrl, got \'' +
-                      safeUrl + '\'');
+        safeUrl + '\' of type ' + goog.typeOf(safeUrl));
     return 'type_error:SafeUrl';
-
   }
 };
 
@@ -264,7 +264,8 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ =
  */
 goog.html.SafeUrl.fromBlob = function(blob) {
   var url = goog.html.SAFE_MIME_TYPE_PATTERN_.test(blob.type) ?
-      goog.fs.url.createObjectUrl(blob) : goog.html.SafeUrl.INNOCUOUS_STRING;
+      goog.fs.url.createObjectUrl(blob) :
+      goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
@@ -296,6 +297,25 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
   var valid = match && goog.html.SAFE_MIME_TYPE_PATTERN_.test(match[1]);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       valid ? dataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
+};
+
+
+/**
+ * Creates a SafeUrl wrapping a tel: URL.
+ *
+ * @param {string} telUrl A tel URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromTelUrl = function(telUrl) {
+  // There's a risk that a tel: URL could immediately place a call once
+  // clicked, without requiring user confirmation. For that reason it is
+  // handled in this separate function.
+  if (!goog.string.caseInsensitiveStartsWith(telUrl, 'tel:')) {
+    telUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      telUrl);
 };
 
 
@@ -347,8 +367,7 @@ goog.html.SAFE_URL_PATTERN_ =
 goog.html.SafeUrl.sanitize = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
-  }
-  else if (url.implementsGoogStringTypedString) {
+  } else if (url.implementsGoogStringTypedString) {
     url = url.getTypedStringValue();
   } else {
     url = String(url);
@@ -382,3 +401,12 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
   safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = url;
   return safeUrl;
 };
+
+
+/**
+ * A SafeUrl corresponding to the special about:blank url.
+ * @const {!goog.html.SafeUrl}
+ */
+goog.html.SafeUrl.ABOUT_BLANK =
+    goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+        'about:blank');

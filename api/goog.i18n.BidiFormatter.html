@@ -1,0 +1,216 @@
+---
+{edit_path: '', layout: api, page: goog.i18n.BidiFormatter, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>BidiFormatter</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.i18n.html">goog.i18n</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L85" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class BidiFormatter</div></h1></div><div class="body"><p>Utility class for formatting text for display in a potentially
+opposite-directionality context without garbling. Provides the following
+functionality:</p>
+<ol><li>
+<p>BiDi Wrapping
+When text in one language is mixed into a document in another, opposite-
+directionality language, e.g. when an English business name is embedded in a
+Hebrew web page, both the inserted string and the text following it may be
+displayed incorrectly unless the inserted string is explicitly separated
+from the surrounding text in a &#34;wrapper&#34; that declares its directionality at
+the start and then resets it back at the end. This wrapping can be done in
+HTML mark-up (e.g. a &#39;span dir&#61;&#34;rtl&#34;&#39; tag) or - only in contexts where
+mark-up can not be used - in Unicode BiDi formatting codes (LRE|RLE and PDF).
+Providing such wrapping services is the basic purpose of the BiDi formatter.</p>
+</li><li>
+<p>Directionality estimation
+How does one know whether a string about to be inserted into surrounding
+text has the same directionality? Well, in many cases, one knows that this
+must be the case when writing the code doing the insertion, e.g. when a
+localized message is inserted into a localized page. In such cases there is
+no need to involve the BiDi formatter at all. In the remaining cases, e.g.
+when the string is user-entered or comes from a database, the language of
+the string (and thus its directionality) is not known a priori, and must be
+estimated at run-time. The BiDi formatter does this automatically.</p>
+</li><li>
+<p>Escaping
+When wrapping plain text - i.e. text that is not already HTML or HTML-
+escaped - in HTML mark-up, the text must first be HTML-escaped to prevent XSS
+attacks and other nasty business. This of course is always true, but the
+escaping can not be done after the string has already been wrapped in
+mark-up, so the BiDi formatter also serves as a last chance and includes
+escaping services.</p>
+</li></ol>
+<p>Thus, in a single call, the formatter will escape the input string as
+specified, determine its directionality, and wrap it as necessary. It is
+then up to the caller to insert the return value in the output.</p>
+<p>See http://wiki/Main/TemplatesAndBiDi for more information.</p>
+<h3 class="name"><div>new BidiFormatter(<var>contextDir</var>, <var>opt_alwaysSpan</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>contextDir</var><code>(<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>The context
+directionality, in one of the following formats:
+1. A goog.i18n.bidi.Dir constant. NEUTRAL is treated the same as null,
+i.e. unknown, for backward compatibility with legacy calls.
+2. A number (positive &#61; LTR, negative &#61; RTL, 0 &#61; unknown).
+3. A boolean (true &#61; RTL, false &#61; LTR).
+4. A null for unknown directionality.</p>
+<dt class="type name"><var>opt_alwaysSpan</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <a href="goog.i18n.BidiFormatter.html"><code>#spanWrap</code></a> should always
+use a &#39;span&#39; tag, even when the input directionality is neutral or
+matches the context, so that the DOM structure of the output does not
+depend on the combination of directionalities. Default: false.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="dirAttr"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L251" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dirAttr(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Returns &#39;dir&#61;&#34;ltr&#34;&#39; or &#39;dir&#61;&#34;rtl&#34;&#39;, depending on <code>str</code>&#39;s estimated
+directionality, if it is not the same as the context directionality.
+Otherwise, returns the empty string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Text whose directionality is to be estimated.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#39;dir&#61;&#34;rtl&#34;&#39; for RTL text in non-RTL context; &#39;dir&#61;&#34;ltr&#34;&#39; for
+LTR text in non-LTR context; else, the empty string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dirAttrValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L221" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dirAttrValue(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Returns &#34;rtl&#34; if <code>str</code>&#39;s estimated directionality is RTL, and &#34;ltr&#34; if
+it is LTR. In case it&#39;s NEUTRAL, returns &#34;rtl&#34; if the context directionality
+is RTL, and &#34;ltr&#34; otherwise.
+Needed for GXP, which can&#39;t handle dirAttr.
+Example use case:
+&lt;td expr:dir&#61;&#39;bidiFormatter.dirAttrValue(foo)&#39;&gt;
+&lt;gxp:eval expr&#61;&#39;foo&#39;&gt;
+&lt;/td&gt;</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Text whose directionality is to be estimated.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#34;rtl&#34; or &#34;ltr&#34;, according to the logic described above.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="endEdge"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L552" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>endEdge()</div></h3></div><div class="body"><p>Returns &#39;left&#39; for RTL context directionality. Otherwise (LTR or neutral /
+unknown context directionality) returns &#39;right&#39;.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#39;left&#39; for RTL context directionality and &#39;right&#39; for other
+context directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="estimateDirection"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L155" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>estimateDirection(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Returns the directionality of input argument <code>str</code>.
+Identical to <a href="goog.i18n.bidi.html#estimateDirection"><code>goog.i18n.bidi.estimateDirection</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The input text.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p>Estimated overall directionality of <code>str</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAlwaysSpan"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L116" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAlwaysSpan()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether alwaysSpan is set.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getContextDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L108" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getContextDir()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The context directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="knownDirAttr"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L265" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>knownDirAttr(<var>dir</var>)</div></h3></div><div class="body"><p>Returns &#39;dir&#61;&#34;ltr&#34;&#39; or &#39;dir&#61;&#34;rtl&#34;&#39;, depending on the given directionality, if
+it is not the same as the context directionality. Otherwise, returns the
+empty string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code><a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p>A directionality.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#39;dir&#61;&#34;rtl&#34;&#39; for RTL text in non-RTL context; &#39;dir&#61;&#34;ltr&#34;&#39; for
+LTR text in non-LTR context; else, the empty string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="knownDirAttrValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L234" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>knownDirAttrValue(<var>dir</var>)</div></h3></div><div class="body"><p>Returns &#34;rtl&#34; if the given directionality is RTL, and &#34;ltr&#34; if it is LTR. In
+case it&#39;s NEUTRAL, returns &#34;rtl&#34; if the context directionality is RTL, and
+&#34;ltr&#34; otherwise.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code><a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p>A directionality.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#34;rtl&#34; or &#34;ltr&#34;, according to the logic described above.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="mark"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L520" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>mark()</div></h3></div><div class="body"><p>Returns the Unicode BiDi mark matching the context directionality (LRM for
+LTR context directionality, RLM for RTL context directionality), or the
+empty string for neutral / unknown context directionality.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>LRM for LTR context directionality and RLM for RTL context
+directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="markAfter"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L485" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>markAfter(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Returns a Unicode BiDi mark matching the context directionality (LRM or RLM)
+if the directionality or the exit directionality of <code>str</code> are opposite
+to the context directionality. Otherwise returns the empty string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The input text.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A Unicode bidi mark matching the global directionality or
+the empty string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="markAfterKnownDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L503" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>markAfterKnownDir(<var>dir</var>, <var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Returns a Unicode BiDi mark matching the context directionality (LRM or RLM)
+if the given directionality or the exit directionality of <code>str</code> are
+opposite to the context directionality. Otherwise returns the empty string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code>?<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p><code>str</code>&#39;s overall directionality, or
+null if unknown and needs to be estimated.</p>
+<dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The input text.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A Unicode bidi mark matching the global directionality or
+the empty string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setAlwaysSpan"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L141" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setAlwaysSpan(<var>alwaysSpan</var>)</div></h3></div><div class="body"><dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>alwaysSpan</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether <a href="goog.i18n.BidiFormatter.html"><code>#spanWrap</code></a> should always use a
+&#39;span&#39; tag, even when the input directionality is neutral or matches the
+context, so that the DOM structure of the output does not depend on the
+combination of directionalities.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setContextDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L130" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setContextDir(<var>contextDir</var>)</div></h3></div><div class="body"><dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>contextDir</var><code>(<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>The context
+directionality, in one of the following formats:
+1. A goog.i18n.bidi.Dir constant. NEUTRAL is treated the same as null,
+i.e. unknown.
+2. A number (positive &#61; LTR, negative &#61; RTL, 0 &#61; unknown).
+3. A boolean (true &#61; RTL, false &#61; LTR).
+4. A null for unknown directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="spanWrapSafeHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L296" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>spanWrapSafeHtml(<var>html</var>, <var>opt_dirReset</var>)</div></h3></div><div class="body"><p>Formats a string of unknown directionality for use in HTML output of the
+context directionality, so an opposite-directionality string is neither
+garbled nor garbles what follows it.
+The algorithm: estimates the directionality of input argument <code>html</code>.
+In case its directionality doesn&#39;t match the context directionality, wraps it
+with a &#39;span&#39; tag and adds a &#34;dir&#34; attribute (either &#39;dir&#61;&#34;rtl&#34;&#39; or
+&#39;dir&#61;&#34;ltr&#34;&#39;). If setAlwaysSpan(true) was used, the input is always wrapped
+with &#39;span&#39;, skipping just the dir attribute when it&#39;s not needed.</p>
+<p>If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
+trailing unicode BiDi mark matching the context directionality is appened
+(LRM or RLM).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>html</var><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>The input HTML.</p>
+<dt class="type name"><var>opt_dirReset</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to append a trailing unicode bidi mark
+matching the context directionality, when needed, to prevent the possible
+garbling of whatever may follow <code>html</code>. Default: true.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>Input text after applying the processing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="spanWrapSafeHtmlWithKnownDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L323" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>spanWrapSafeHtmlWithKnownDir(<var>dir</var>, <var>html</var>, <var>opt_dirReset</var>)</div></h3></div><div class="body"><p>Formats a string of given directionality for use in HTML output of the
+context directionality, so an opposite-directionality string is neither
+garbled nor garbles what follows it.
+The algorithm: If <code>dir</code> doesn&#39;t match the context directionality, wraps
+<code>html</code> with a &#39;span&#39; tag and adds a &#34;dir&#34; attribute (either &#39;dir&#61;&#34;rtl&#34;&#39;
+or &#39;dir&#61;&#34;ltr&#34;&#39;). If setAlwaysSpan(true) was used, the input is always wrapped
+with &#39;span&#39;, skipping just the dir attribute when it&#39;s not needed.</p>
+<p>If <code>opt_dirReset</code>, and if <code>dir</code> or the exit directionality of
+<code>html</code> are opposite to the context directionality, a trailing unicode
+BiDi mark matching the context directionality is appened (LRM or RLM).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code>?<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p><code>html</code>&#39;s overall directionality, or
+null if unknown and needs to be estimated.</p>
+<dt class="type name"><var>html</var><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>The input HTML.</p>
+<dt class="type name"><var>opt_dirReset</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to append a trailing unicode bidi mark
+matching the context directionality, when needed, to prevent the possible
+garbling of whatever may follow <code>html</code>. Default: true.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>Input text after applying the processing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="startEdge"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L539" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>startEdge()</div></h3></div><div class="body"><p>Returns &#39;right&#39; for RTL context directionality. Otherwise (LTR or neutral /
+unknown context directionality) returns &#39;left&#39;.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>&#39;right&#39; for RTL context directionality and &#39;left&#39; for other
+context directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unicodeWrap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L397" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unicodeWrap(<var>str</var>, <var>opt_isHtml</var>, <var>opt_dirReset</var>)</div></h3></div><div class="body"><p>Formats a string of unknown directionality for use in plain-text output of
+the context directionality, so an opposite-directionality string is neither
+garbled nor garbles what follows it.
+As opposed to <a href="goog.i18n.BidiFormatter.html"><code>#spanWrap</code></a>, this makes use of unicode BiDi formatting
+characters. In HTML, its <em>only</em> valid use is inside of elements that do not
+allow mark-up, e.g. an &#39;option&#39; tag.
+The algorithm: estimates the directionality of input argument <code>str</code>.
+In case it doesn&#39;t match  the context directionality, wraps it with Unicode
+BiDi formatting characters: RLE<code>str</code>PDF for RTL text, and
+LRE<code>str</code>PDF for LTR text.</p>
+<p>If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
+trailing unicode BiDi mark matching the context directionality is appended
+(LRM or RLM).</p>
+<p>Does <em>not</em> do HTML-escaping regardless of the value of <code>opt_isHtml</code>.
+The return value can be HTML-escaped as necessary.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The input text.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+<dt class="type name"><var>opt_dirReset</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to append a trailing unicode bidi mark
+matching the context directionality, when needed, to prevent the possible
+garbling of whatever may follow <code>str</code>. Default: true.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Input text after applying the above processing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unicodeWrapWithKnownDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidiformatter.js#L432" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unicodeWrapWithKnownDir(<var>dir</var>, <var>str</var>, <var>opt_isHtml</var>, <var>opt_dirReset</var>)</div></h3></div><div class="body"><p>Formats a string of given directionality for use in plain-text output of the
+context directionality, so an opposite-directionality string is neither
+garbled nor garbles what follows it.
+As opposed to <a href="goog.i18n.BidiFormatter.html"><code>#spanWrapWithKnownDir</code></a>, makes use of unicode BiDi
+formatting characters. In HTML, its <em>only</em> valid use is inside of elements
+that do not allow mark-up, e.g. an &#39;option&#39; tag.
+The algorithm: If <code>dir</code> doesn&#39;t match the context directionality, wraps
+<code>str</code> with Unicode BiDi formatting characters: RLE<code>str</code>PDF for
+RTL text, and LRE<code>str</code>PDF for LTR text.</p>
+<p>If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
+trailing unicode BiDi mark matching the context directionality is appended
+(LRM or RLM).</p>
+<p>Does <em>not</em> do HTML-escaping regardless of the value of <code>opt_isHtml</code>.
+The return value can be HTML-escaped as necessary.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code>?<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p><code>str</code>&#39;s overall directionality, or
+null if unknown and needs to be estimated.</p>
+<dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The input text.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether <code>str</code> is HTML / HTML-escaped.
+Default: false.</p>
+<dt class="type name"><var>opt_dirReset</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to append a trailing unicode bidi mark
+matching the context directionality, when needed, to prevent the possible
+garbling of whatever may follow <code>str</code>. Default: true.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Input text after applying the above processing.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

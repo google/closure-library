@@ -1,0 +1,66 @@
+---
+{edit_path: '', layout: api, page: goog.testing.PerformanceTimer, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>PerformanceTimer</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.testing.html">goog.testing</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L43" target="_blank">View Source</a></div><h1 class="title"><div>class PerformanceTimer</div></h1></div><div class="body"><p>Creates a performance timer that runs test functions a number of times to
+generate timing samples, and provides performance statistics (minimum,
+maximum, average, and standard deviation).</p>
+<h3 class="name"><div>new PerformanceTimer(<var>opt_numSamples</var>, <var>opt_timeoutInterval</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_numSamples</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Number of times to run the test function;
+defaults to 10.</p>
+<dt class="type name"><var>opt_timeoutInterval</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Number of milliseconds after which the
+test is to be aborted; defaults to 5 seconds (5,000ms).</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="getNumSamples"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L84" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getNumSamples()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of times the test function will be run.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTimeoutInterval"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L101" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTimeoutInterval()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of milliseconds after which the test times out.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDiscardOutliers"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L130" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDiscardOutliers()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether outlier values are discarded prior to computing
+stats.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="run"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>run(<var>testFn</var>)</div></h3></div><div class="body"><p>Executes the test function the required number of times (or until the
+test run exceeds the timeout interval, whichever comes first).  Returns
+an object containing the following:</p>
+ <pre>
+   {
+     &#39;average&#39;: average execution time (ms)
+     &#39;count&#39;: number of executions (may be fewer than expected due to timeout)
+     &#39;maximum&#39;: longest execution time (ms)
+     &#39;minimum&#39;: shortest execution time (ms)
+     &#39;standardDeviation&#39;: sample standard deviation (ms)
+     &#39;total&#39;: total execution time (ms)
+   }
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>testFn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Test function whose performance is to
+be measured.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object containing performance stats.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="runAsyncTask"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L225" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>runAsyncTask(<var>task</var>)</div></h3></div><div class="body"><p>Executes the test function of the specified task asynchronously. The test
+function is expected to take a callback as input and has to call it to signal
+that it&#39;s done. In addition, if specified, the setUp and tearDown functions
+of the task are invoked before and after each invocation of the test
+function. Note that setUp/tearDown functions take a callback as input and
+must call this callback when they are done.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>task</var><code><a href="goog.testing.PerformanceTimer.Task.html">goog.testing.PerformanceTimer.Task</a></code><dd><p>A task describing the test
+function to invoke.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred result, eventually an object
+containing performance stats.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.testing.PerformanceTimer.html#run">goog.testing.PerformanceTimer#run</a></dd></dl></div></section><section class="property expandable" id="runTask"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L170" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>runTask(<var>task</var>)</div></h3></div><div class="body"><p>Executes the test function of the specified task as described in
+<code>run</code>. In addition, if specified, the set up and tear down functions of
+the task are invoked before and after each invocation of the test function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>task</var><code><a href="goog.testing.PerformanceTimer.Task.html">goog.testing.PerformanceTimer.Task</a></code><dd><p>A task describing the test
+function to invoke.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object containing performance stats.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.testing.PerformanceTimer.html#run">goog.testing.PerformanceTimer#run</a></dd></dl></div></section><section class="property expandable" id="setDiscardOutliers"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L121" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDiscardOutliers(<var>discard</var>)</div></h3></div><div class="body"><p>Sets whether to ignore the smallest and the largest values when computing
+stats.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>discard</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to discard outlier values.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setNumSamples"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L93" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setNumSamples(<var>numSamples</var>)</div></h3></div><div class="body"><p>Sets the number of times the test function will be run.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>numSamples</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Number of times to run the test function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setTimeoutInterval"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L110" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setTimeoutInterval(<var>timeoutInterval</var>)</div></h3></div><div class="body"><p>Sets the number of milliseconds after which the test times out.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>timeoutInterval</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Timeout interval in ms.</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="PerformanceTimer.createResults"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L309" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PerformanceTimer.createResults(<var>samples</var>)</div></h3></div><div class="body"><p>Creates a performance timer results object by analyzing a given array of
+sample timings.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>samples</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>The samples to analyze.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object containing performance stats.</p>
+</dl></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.testing.PerformanceTimer.Task.html">PerformanceTimer.Task</a></div></ul></section><section class="type-defs"><h2>Type Definitions</h2><section id="PerformanceTimer.TestFunction" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/performancetimer.js#L330" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>PerformanceTimer.TestFunction</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>function(): (<a href="goog.async.Deferred.html">goog.async.Deferred</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code></dl><p>A test function whose performance should be measured or a setUp/tearDown
+function. It may optionally return a deferred object. If it does so, the
+test harness will assume the function is asynchronous and it must signal
+that it&#39;s done by setting an (empty) result on the deferred object. If the
+function doesn&#39;t return anything, the test harness will assume it&#39;s
+synchronous.</p>
+</div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

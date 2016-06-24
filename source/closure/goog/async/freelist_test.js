@@ -30,8 +30,8 @@ function setUp() {
         data *= 2;
         return {id: id++, data: data, next: null};
       },
-      function(item) {item.data = null;},
-      2); // max occupancy
+      function(item) { item.data = null; },
+      2);  // max occupancy
 }
 
 
@@ -76,5 +76,3 @@ function testRecycling() {
   // reset method called
   assertNull(item2.data);
 }
-
-

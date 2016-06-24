@@ -48,8 +48,8 @@ function tearDown() {
 function testRepositionWithAdjustAndOnscreenAnchor() {
   // Add so many children that it can't possibly fit onscreen.
   for (var i = 0; i < 200; i++) {
-    menu.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
-                                        null, 'New Item ' + i));
+    menu.appendChild(
+        goog.dom.createDom(goog.dom.TagName.DIV, null, 'New Item ' + i));
   }
 
   var pos = new goog.positioning.MenuAnchoredPosition(
@@ -87,8 +87,8 @@ function testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
 
   // Add so many children that it can't possibly fit onscreen.
   for (var i = 0; i < 200; i++) {
-    menu.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
-                                        null, 'New Item ' + i));
+    menu.appendChild(
+        goog.dom.createDom(goog.dom.TagName.DIV, null, 'New Item ' + i));
   }
 
   var pos = new goog.positioning.MenuAnchoredPosition(

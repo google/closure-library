@@ -1,0 +1,27 @@
+---
+{edit_path: '', layout: api, page: goog.positioning.AnchoredPosition, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>AnchoredPosition</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.positioning.html">goog.positioning</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/positioning/anchoredposition.js#L45" target="_blank">View Source</a></div><h1 class="title"><div>class AnchoredPosition</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.positioning.AbstractPosition.html">goog.positioning.AbstractPosition</a>
+  &#x2514; goog.positioning.AnchoredPosition</pre><p>Encapsulates a popup position where the popup is anchored at a corner of
+an element.</p>
+<p>When using AnchoredPosition, it is recommended that the popup element
+specified in the Popup constructor or Popup.setElement be absolutely
+positioned.</p>
+<h3 class="name"><div>new AnchoredPosition(<var>anchorElement</var>, <var>corner</var>, <var>opt_overflow</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>anchorElement</var><code>Element</code><dd><p>Element the movable element should be
+anchored against.</p>
+<dt class="type name"><var>corner</var><code><a href="goog.positioning.Corner.html">goog.positioning.Corner</a></code><dd><p>Corner of anchored element the
+movable element should be positioned at.</p>
+<dt class="type name"><var>opt_overflow</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Overflow handling mode. Defaults to IGNORE if
+not specified. Bitmap, goog.positioning.Overflow.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="reposition"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/positioning/anchoredposition.js#L82" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>reposition(<var>movableElement</var>, <var>movableCorner</var>, <var>opt_margin</var>, <var>opt_preferredSize</var>)</div></h3></div><div class="body"><p>Repositions the movable element.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.positioning.AbstractPosition.html#reposition">goog.positioning.AbstractPosition</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>movableElement</var><code>Element</code><dd><p>Element to position.</p>
+<dt class="type name"><var>movableCorner</var><code><a href="goog.positioning.Corner.html">goog.positioning.Corner</a></code><dd><p>Corner of the movable element
+that should be positioned adjacent to the anchored element.</p>
+<dt class="type name"><var>opt_margin</var><code><a href="goog.math.Box.html">goog.math.Box</a>=</code><dd><p>A margin specifin pixels.</p>
+<dt class="type name"><var>opt_preferredSize</var><code><a href="goog.math.Size.html">goog.math.Size</a>=</code><dd><p>PreferredSize of the
+movableElement (unused in this class).</p>
+</dl></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="corner"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/positioning/anchoredposition.js#L57" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>corner</div></h3></div><div class="body"><p>Corner of anchored element the movable element should be positioned at.</p>
+<dl><dt class="spec">Type<dd><a href="goog.positioning.Corner.html">goog.positioning.Corner</a></dd></dl></div></section><section class="property expandable" id="element"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/positioning/anchoredposition.js#L51" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>element</div></h3></div><div class="body"><p>Element the movable element should be anchored against.</p>
+<dl><dt class="spec">Type<dd>Element</dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

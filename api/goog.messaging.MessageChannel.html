@@ -1,0 +1,45 @@
+---
+{edit_path: '', layout: api, page: goog.messaging.MessageChannel, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>MessageChannel</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.messaging.html">goog.messaging</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L41" target="_blank">View Source</a></div><h1 class="title"><div>interface MessageChannel</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="connect"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L56" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>connect(<var>opt_connectCb</var>)</div></h3></div><div class="body"><p>Initiates the channel connection. When this method is called, all the
+information needed to connect the channel has to be available.</p>
+<p>Implementers should only require this method to be called if the channel
+needs to be configured in some way between when it&#39;s created and when it
+becomes active. Otherwise, the channel should be immediately active and this
+method should do nothing but immediately call opt_connectCb.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_connectCb</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>Called when the channel has been connected
+and is ready to use.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isConnected"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L68" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isConnected()</div></h3></div><div class="body"><p>Gets whether the channel is connected.</p>
+<p>If <a href="goog.messaging.MessageChannel.html#connect"><code>#connect</code></a> is not required for this class, this should always return
+true. Otherwise, this should return true by the time the callback passed to
+<a href="goog.messaging.MessageChannel.html#connect"><code>#connect</code></a> has been called and always after that.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the channel is connected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="registerDefaultService"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L101" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDefaultService(<var>callback</var>)</div></h3></div><div class="body"><p>Registers a service to be called when a message is received that doesn&#39;t
+match any other services.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code><dd><p>The callback to process
+the incoming messages. Passed the service name and the payload. Since
+some channels can pass objects natively, the payload may be either an
+object or a string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="registerService"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L88" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerService(<var>serviceName</var>, <var>callback</var>, <var>opt_objectPayload</var>)</div></h3></div><div class="body"><p>Registers a service to be called when a message is received.</p>
+<p>Implementers shouldn&#39;t impose any restrictions on the service names that may
+be registered. If some services are needed as control codes,
+<a href="goog.messaging.html"><code>goog.messaging.MultiMessageChannel</code></a> can be used to safely split the
+channel into &#34;public&#34; and &#34;control&#34; virtual channels.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>serviceName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the service.</p>
+<dt class="type name"><var>callback</var><code>function((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code><dd><p>The callback to process the
+incoming messages. Passed the payload. If opt_objectPayload is set, the
+payload is decoded and passed as an object.</p>
+<dt class="type name"><var>opt_objectPayload</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If true, incoming messages for this
+service are expected to contain an object, and will be deserialized from
+a string automatically if necessary. It&#39;s the responsibility of
+implementors of this class to perform the deserialization.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="send"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/messaging/messagechannel.js#L115" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>send(<var>serviceName</var>, <var>payload</var>)</div></h3></div><div class="body"><p>Sends a message over the channel.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>serviceName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the service this message should be
+delivered to.</p>
+<dt class="type name"><var>payload</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code><dd><p>The value of the message. If this is an
+Object, it is serialized to a string before sending if necessary. It&#39;s
+the responsibility of implementors of this class to perform the
+serialization.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

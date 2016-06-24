@@ -100,13 +100,17 @@ goog.vec.Float32Array.prototype.toString = Array.prototype.join;
  * goog.vec.Float32Array as Float32Array.
  */
 if (typeof Float32Array == 'undefined') {
-  goog.exportProperty(goog.vec.Float32Array, 'BYTES_PER_ELEMENT',
-                      goog.vec.Float32Array.BYTES_PER_ELEMENT);
-  goog.exportProperty(goog.vec.Float32Array.prototype, 'BYTES_PER_ELEMENT',
-                      goog.vec.Float32Array.prototype.BYTES_PER_ELEMENT);
-  goog.exportProperty(goog.vec.Float32Array.prototype, 'set',
-                      goog.vec.Float32Array.prototype.set);
-  goog.exportProperty(goog.vec.Float32Array.prototype, 'toString',
-                      goog.vec.Float32Array.prototype.toString);
+  goog.exportProperty(
+      goog.vec.Float32Array, 'BYTES_PER_ELEMENT',
+      goog.vec.Float32Array.BYTES_PER_ELEMENT);
+  goog.exportProperty(
+      goog.vec.Float32Array.prototype, 'BYTES_PER_ELEMENT',
+      goog.vec.Float32Array.prototype.BYTES_PER_ELEMENT);
+  goog.exportProperty(
+      goog.vec.Float32Array.prototype, 'set',
+      goog.vec.Float32Array.prototype.set);
+  goog.exportProperty(
+      goog.vec.Float32Array.prototype, 'toString',
+      goog.vec.Float32Array.prototype.toString);
   goog.exportSymbol('Float32Array', goog.vec.Float32Array);
 }

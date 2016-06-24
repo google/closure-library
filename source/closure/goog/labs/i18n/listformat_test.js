@@ -32,22 +32,12 @@ function setUp() {
 
 function testListFormatterArrayDirect() {
   var fmt = new goog.labs.i18n.ListFormat();
-  assertEquals(
-      'One',
-      fmt.format(['One'])
-  );
-  assertEquals(
-      'One and Two',
-      fmt.format(['One', 'Two'])
-  );
-  assertEquals(
-      'One, Two, and Three',
-      fmt.format(['One', 'Two', 'Three'])
-  );
+  assertEquals('One', fmt.format(['One']));
+  assertEquals('One and Two', fmt.format(['One', 'Two']));
+  assertEquals('One, Two, and Three', fmt.format(['One', 'Two', 'Three']));
   assertEquals(
       'One, Two, Three, Four, Five, and Six',
-      fmt.format(['One', 'Two', 'Three', 'Four', 'Five', 'Six'])
-  );
+      fmt.format(['One', 'Two', 'Three', 'Four', 'Five', 'Six']));
 }
 
 function testListFormatterArrayIndirect() {
@@ -73,22 +63,12 @@ function testListFormatterFrench() {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
 
   var fmt = new goog.labs.i18n.ListFormat();
-  assertEquals(
-      'One',
-      fmt.format(['One'])
-  );
-  assertEquals(
-      'One et Two',
-      fmt.format(['One', 'Two'])
-  );
-  assertEquals(
-      'One, Two et Three',
-      fmt.format(['One', 'Two', 'Three'])
-  );
+  assertEquals('One', fmt.format(['One']));
+  assertEquals('One et Two', fmt.format(['One', 'Two']));
+  assertEquals('One, Two et Three', fmt.format(['One', 'Two', 'Three']));
   assertEquals(
       'One, Two, Three, Four, Five et Six',
-      fmt.format(['One', 'Two', 'Three', 'Four', 'Five', 'Six'])
-  );
+      fmt.format(['One', 'Two', 'Three', 'Four', 'Five', 'Six']));
 
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
 }
@@ -104,7 +84,8 @@ function testListFormatterSpecialLanguages() {
 
   // Only the end pattern is special with Malayalam
   // Escaped for safety, the string is 'One, Two, Three എന്നിവ'
-  assertEquals('One, Two, Three \u0D0E\u0D28\u0D4D\u0D28\u0D3F\u0D35',
+  assertEquals(
+      'One, Two, Three \u0D0E\u0D28\u0D4D\u0D28\u0D3F\u0D35',
       fmt_ml.format(['One', 'Two', 'Three']));
 
   // Only the two items pattern is special with Zulu
@@ -120,8 +101,7 @@ function testVariousObjectTypes() {
   // Array toString does, for instance.
   assertEquals(
       'One, black,white, 42, true, and Five',
-      fmt.format(['One', arrayObject, 42, booleanObject, 'Five'])
-  );
+      fmt.format(['One', arrayObject, 42, booleanObject, 'Five']));
 }
 
 function testListGendersNeutral() {

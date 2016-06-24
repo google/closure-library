@@ -28,12 +28,12 @@ var submechanism = null;
 function setUp() {
   submechanism = new goog.storage.mechanism.HTML5LocalStorage();
   if (submechanism.isAvailable()) {
-    mechanism = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'test');
-    mechanism_shared = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'test');
-    mechanism_separate = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'test2');
+    mechanism =
+        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test');
+    mechanism_shared =
+        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test');
+    mechanism_separate =
+        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test2');
   }
 }
 

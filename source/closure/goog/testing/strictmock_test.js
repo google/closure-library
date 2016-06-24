@@ -19,8 +19,7 @@ goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.jsunit');
 
 // The object that we will be mocking
-var RealObject = function() {
-};
+var RealObject = function() {};
 
 RealObject.prototype.a = function() {
   fail('real object should never be called');
@@ -55,7 +54,7 @@ function testMockFunction() {
 
   mock.$reset();
 
-  assertThrows(function() {mock.x()});
+  assertThrows(function() { mock.x() });
 }
 
 
@@ -82,12 +81,12 @@ function testSimpleExpectations() {
 
 function testFailToSetExpectation() {
   mock.$replay();
-  assertThrows(goog.bind(mock.a, mock));
+  assertThrowsJsUnitException(goog.bind(mock.a, mock));
 
   mock.$reset();
 
   mock.$replay();
-  assertThrows(goog.bind(mock.b, mock));
+  assertThrowsJsUnitException(goog.bind(mock.b, mock));
 }
 
 
@@ -95,20 +94,20 @@ function testUnexpectedCall() {
   mock.a();
   mock.$replay();
   mock.a();
-  assertThrows(goog.bind(mock.a, mock));
+  assertThrowsJsUnitException(goog.bind(mock.a, mock));
 
   mock.$reset();
 
   mock.a();
   mock.$replay();
-  assertThrows(goog.bind(mock.b, mock));
+  assertThrowsJsUnitException(goog.bind(mock.b, mock));
 }
 
 
 function testNotEnoughCalls() {
   mock.a();
   mock.$replay();
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 
   mock.$reset();
 
@@ -116,7 +115,7 @@ function testNotEnoughCalls() {
   mock.b();
   mock.$replay();
   mock.a();
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 }
 
 
@@ -124,7 +123,7 @@ function testOutOfOrderCalls() {
   mock.a();
   mock.b();
   mock.$replay();
-  assertThrows(goog.bind(mock.b, mock));
+  assertThrowsJsUnitException(goog.bind(mock.b, mock));
 }
 
 
@@ -138,7 +137,7 @@ function testVerify() {
 
   mock.a();
   mock.$replay();
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 }
 
 
@@ -147,7 +146,7 @@ function testArgumentMatching() {
   mock.b('bar');
   mock.$replay();
   mock.a('foo');
-  assertThrows(function() {mock.b('foo')});
+  assertThrowsJsUnitException(function() { mock.b('foo') });
 
   mock.$reset();
   mock.a('foo');
@@ -161,7 +160,7 @@ function testArgumentMatching() {
   mock.a('foo');
   mock.a('bar');
   mock.$replay();
-  assertThrows(function() {mock.a('bar')});
+  assertThrowsJsUnitException(function() { mock.a('bar') });
 }
 
 
@@ -181,8 +180,8 @@ function testMultipleReturnValues() {
 
   mock.$replay();
 
-  assertArrayEquals('Mock should return the right value sequence',
-      [3, 2, 1],
+  assertArrayEquals(
+      'Mock should return the right value sequence', [3, 2, 1],
       [mock.a(), mock.a(), mock.a()]);
 
   mock.$verify();
@@ -209,7 +208,7 @@ function testAtMostOnce() {
   mock.a().$atMostOnce();
   mock.$replay();
   mock.a();
-  assertThrows(goog.bind(mock.a, mock));
+  assertThrowsJsUnitException(goog.bind(mock.a, mock));
 
   mock.$reset();
 
@@ -219,7 +218,7 @@ function testAtMostOnce() {
   mock.a();
   mock.$replay();
   mock.b();
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 }
 
 
@@ -227,7 +226,7 @@ function testAtLeastOnce() {
   // atLeastOnce does not mean zero times
   mock.a().$atLeastOnce();
   mock.$replay();
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 
   mock.$reset();
 
@@ -250,7 +249,7 @@ function testAtLeastOnce() {
   mock.a();
   mock.b();
   mock.a();
-  assertThrows(goog.bind(mock.a, mock));
+  assertThrowsJsUnitException(goog.bind(mock.a, mock));
 }
 
 
@@ -270,8 +269,8 @@ function testAtLeastOnceWithArgs() {
   mock.$replay();
   mock.a('asdf');
   mock.a('asdf');
-  assertThrows(function() {mock.a('zxcv')});
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(function() { mock.a('zxcv') });
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 }
 
 
@@ -321,7 +320,7 @@ function testZeroTimes() {
 
   mock.a().$times(0);
   mock.$replay();
-  assertThrows(function() {mock.a()});
+  assertThrowsJsUnitException(function() { mock.a() });
 }
 
 
@@ -334,7 +333,7 @@ function testZeroTimesWithArguments() {
 
   mock.a('foo').$times(0);
   mock.$replay();
-  assertThrows(function() {mock.a('foo')});
+  assertThrowsJsUnitException(function() { mock.a('foo') });
 }
 
 
@@ -343,7 +342,7 @@ function testTooManyCalls() {
   mock.$replay();
   mock.a();
   mock.a();
-  assertThrows(function() {mock.a()});
+  assertThrowsJsUnitException(function() { mock.a() });
 }
 
 
@@ -352,7 +351,7 @@ function testTooManyCallsWithArguments() {
   mock.$replay();
   mock.a('foo');
   mock.a('foo');
-  assertThrows(function() {mock.a('foo')});
+  assertThrowsJsUnitException(function() { mock.a('foo') });
 }
 
 
@@ -386,7 +385,7 @@ function testVerifyThrows() {
   } catch (ex) {
     // this could be an event handler, for example
   }
-  assertThrows(goog.bind(mock.$verify, mock));
+  assertThrowsJsUnitException(goog.bind(mock.$verify, mock));
 }
 
 
@@ -399,7 +398,7 @@ function testThrows() {
 
 
 function testDoes() {
-  mock.a(1, 2).$does(function(a, b) {return a + b;});
+  mock.a(1, 2).$does(function(a, b) { return a + b; });
   mock.$replay();
   assertEquals('Mock should call the function', 3, mock.a(1, 2));
   mock.$verify();

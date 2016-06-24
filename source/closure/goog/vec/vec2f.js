@@ -459,6 +459,5 @@ goog.vec.vec2f.min = function(vec0, limit, resultVec) {
  * @return {boolean} True if the vectors are equal, false otherwise.
  */
 goog.vec.vec2f.equals = function(vec0, vec1) {
-  return vec0.length == vec1.length &&
-      vec0[0] == vec1[0] && vec0[1] == vec1[1];
+  return vec0.length == vec1.length && vec0[0] == vec1[0] && vec0[1] == vec1[1];
 };

@@ -43,7 +43,7 @@ goog.Thenable = function() {};
  *
  * @param {?(function(this:THIS, TYPE): VALUE)=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
- *     is fullfilled.
+ *     is fulfilled.
  * @param {?(function(this:THIS, *): *)=} opt_onRejected A function that will
  *     be invoked with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
@@ -69,8 +69,8 @@ goog.Thenable = function() {};
  *  =:
  *
  */
-goog.Thenable.prototype.then = function(opt_onFulfilled, opt_onRejected,
-    opt_context) {};
+goog.Thenable.prototype.then = function(
+    opt_onFulfilled, opt_onRejected, opt_context) {};
 
 
 /**
@@ -106,7 +106,7 @@ goog.Thenable.addImplementation = function(ctor) {
 
 
 /**
- * @param {*} object
+ * @param {?} object
  * @return {boolean} Whether a given instance implements {@code goog.Thenable}.
  *     The class/superclass of the instance must call {@code addImplementation}.
  */

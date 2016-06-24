@@ -1,0 +1,606 @@
+---
+layout: default
+---
+
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% include favicon.html %}
+<link rel="stylesheet" type="text/css"
+      href="https://fonts.googleapis.com/css?family=Roboto:500,400,300,100">
+<style>
+/* Basic element styles */
+
+#_toc {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: disc outside;
+}
+
+body {
+  color: #212121;
+  font: 400 16px/24px Roboto,sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The header */
+
+header {
+  background-color: #009688;
+  box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+  overflow: hidden;
+  padding-top: 84px;
+  position: static;
+  top: 0;
+  width: 100%;
+  z-index: 10005;
+}
+
+header h1 {
+  color: white;
+  display: inline-block;
+  font: 34px/56px Roboto,sans-serif;
+  letter-spacing: -.01em;
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+  margin-left: 25px;
+}
+
+header h1 a {
+  color: white;
+}
+
+header a.closurelogo {
+  left: 12px;
+  pointer-events: none;
+  position: absolute;
+  top: 13px;
+  transition: left .2s, top .2s;
+}
+
+header a.closurelogo div {
+  height: 150px;
+  width: 150px;
+  transition: height .2s, opacity .2s, width .2s;
+}
+
+/* Horizontal nav buttons in the header */
+
+header nav {
+  font-size: 13pt;
+  height: 48px;
+  overflow-y: hidden;
+  padding: 0 24px 0 0;
+  transition: margin-left .2s;
+  width: 100%;
+}
+
+header nav .closurelogo {
+  display: none;
+  float: left;
+  height: 20px;
+  width: 20px;
+}
+
+header ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+header li a.active {
+  border-bottom-color: white;
+  color: white;
+}
+
+header li a {
+  border-bottom: 2px solid transparent;
+  border-top: 2px solid transparent;
+  color: rgba(255, 255, 255, .7);
+  display: inline-block;
+  font: 500 14px/44px Roboto,sans-serif;
+  margin: 0;
+  outline: 0;
+  padding: 0 24px;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+
+header li a:hover {
+  color: white;
+}
+
+/* Main div */
+
+header+div {
+  margin-top: 24px;
+  padding: 0 24px;
+}
+
+header+div nav.side {
+  position: absolute;
+  top: 212px;
+}
+
+header+div nav.toc.float {
+  position: absolute;
+  right: 24px;
+  top: 212px;
+}
+
+/* Adjustments for header folding */
+
+.scrolled header {
+  position: fixed;
+  top: -140px;
+}
+
+.scrolled header nav {
+  margin-left: 64px;
+}
+
+.scrolled header a.closurelogo {
+  left: 18px;
+  pointer-events: auto;
+  position: absolute;
+  top: 147px;
+  padding: 0 12px;
+}
+
+.scrolled header a.closurelogo div {
+  height: 32px;
+  width: 32px;
+}
+
+.scrolled header a.closurelogo:hover div {
+  opacity: 0.8;
+}
+
+.scrolled header+div {
+  margin-top: 212px; /* 24 + 188 total height height */
+}
+
+.scrolled header+div nav.side {
+  position: fixed;
+  top: 72px;
+}
+
+.scrolled header+div nav.toc.float {
+  position: fixed;
+  right: 24px;
+  top: 72px;
+}
+
+/* Vertical navs (side and toc) */
+
+nav.vertical ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav.vertical li {
+  line-height: 16px;
+  margin: 8px 0 0;
+}
+
+nav.vertical li.heading {
+  font-weight: 500;
+}
+
+nav.vertical li+li.heading {
+  margin-top: 20px;
+}
+
+nav.vertical a.active {
+  color: #03a9f4;
+}
+
+nav.vertical a:hover {
+  color: #03a9f4;
+}
+
+nav.vertical a {
+  color: #212121;
+}
+
+/* Side nav */
+
+nav.side {
+  background: #f7f7f7;
+  float: left;
+  font-size: 13px;
+  padding: 16px 12px 16px 16px;
+  width: 228px;
+}
+
+/* TOCs */
+
+nav.toc {
+  border-left: 4px solid #009688;
+  font-size: 13px;
+  padding-left: 12px;
+}
+
+nav.toc.float {
+  float: right;
+  width: 160px;
+}
+
+nav.toc.inline {
+  display: none;
+  margin: 20px 0 24px;
+}
+
+/* Main article */
+
+article {
+  margin-left: 296px;
+  margin-right: 188px;
+}
+
+article h1 {
+  color: #757575;
+  font: 400 34px/40px Roboto,sans-serif;
+  letter-spacing: -.01em;
+  margin: 24px 0 20px;
+}
+
+article h2 {
+  border-bottom: 1px solid #ebebeb;
+  font: 400 24px/32px Roboto,sans-serif;
+  letter-spacing: -.01em;
+  margin: 40px 0 20px;
+  padding-bottom: 3px;
+}
+
+article nav+h2 {
+  margin-top: 24px;
+}
+
+/* Footer buttons */
+
+footer {
+  bottom: 0;
+  display: block;
+  height: 48px;
+  left: 0;
+  position: fixed;
+  right: 0;
+  transition: bottom .2s;
+  z-index: 10005;
+}
+
+.down footer {
+  bottom: -200px;
+}
+
+footer>a {
+  bottom: 32px;
+  display: none; /* overridden when there's an href */
+  position: absolute;
+}
+
+footer>a[href] {
+  display: block;
+}
+
+footer>a>div {
+  background: #db4437;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,.37);
+  height: 36px;
+  position: relative;
+  transition: box-shadow .2s;
+  width: 36px;
+}
+
+footer>a:hover>div {
+  box-shadow: 0 2px 2px rgba(0,0,0,0.2),0 6px 10px rgba(0,0,0,.3);
+}
+
+footer>a>div>div:first-child {
+  color:transparent;
+  height: 24px;
+  left: 6px;
+  position: absolute;
+  top: 6px;
+  width: 24px;
+}
+
+footer>a>div>div:nth-child(2) {
+  align-items: center;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.37);
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  left: 50%;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  top: 100%;
+  transition: opacity .2s;
+  white-space: nowrap;
+  width: 0;
+}
+
+footer>a:hover>div>div:nth-child(2) {
+  opacity: 1;
+  transition: opacity .2s .2s;
+}
+
+footer>a>div>div:nth-child(2)>div {
+  background: rgba(0,0,0,.7);
+  border-radius: 3px;
+  color: white;
+  line-height: 16px;
+  padding: 0 5px;
+  position: relative;
+  top: 8px;
+}
+
+/* Edit button (specifically) */
+
+footer>a.edit>div>div:first-child {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+footer>a.edit {
+  right: 32px;
+}
+
+/* Closure logo */
+.closurelogo div {
+  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewPort="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c"><rect x="0" y="0" width="100" height="25"/><rect x="0" y="75" width="100" height="25" /><rect x="0" y="0" width="25" height="100" /><rect x="75" y="0" width="25" height="100" /></clipPath></defs><g clip-path="url(#c)"><circle cx="25" cy="25" r="20" stroke="none" fill="white" /><circle cx="75" cy="25" r="20" stroke="none" fill="white" /><circle cx="25" cy="75" r="20" stroke="none" fill="white" /><circle cx="75" cy="75" r="20" stroke="none" fill="white" /></g></svg>');
+  background-size: cover;
+  display: inline-block;
+  opacity: 0.3;
+}
+
+/* Reactive adjustments for smaller screens */
+
+@media(max-width: 1200px) {
+  nav.toc.float {
+    display: none;
+  }
+  nav.toc.inline {
+    display: block;
+  }
+  article {
+    margin-right: 0;
+  }
+}
+
+@media(max-width: 720px) {
+  nav.side {
+    display: none; /* TODO(sdh): collapse w/ roll-out instead of hide */
+  }
+  article {
+    margin-left: 0;
+  }
+}
+
+/* Styles for syntax highlighting */
+
+pre {
+  padding: 6px 10px;
+  background-color: #FAFAFA;
+  border: 1px solid #bbb;
+  font: 1em 'Droid Sans Mono', monospace;
+  line-height: 1.5;
+  margin: 1.5em 0;
+  overflow: auto;
+}
+
+p pre, code {
+  color: #090;
+}
+
+.stx-line { display: block; }
+
+/* Common styles */
+.stx-plain                     { color: #000; }
+.stx-keyword,  .stx-keyword  a { color: #008; }
+.stx-keyword-s, .stx-keyword-s a { color: #6F0465; font-weight: bold; }
+.stx-string,   .stx-string   a { color: #080; }
+.stx-comment,  .stx-comment  a { color: #800; }
+.stx-number,   .stx-number   a { color: #066; }
+.stx-macro,    .stx-macro    a { color: #60B; }
+.stx-class,    .stx-class    a { color: #606; }
+.stx-const,    .stx-const    a { color: #000; }
+.stx-escape,   .stx-escape   a { color: #123456; }
+.stx-deprecated, .stx-deprecated a { text-decoration: line-through; }
+.stx-doctag,   .stx-doctag   a { text-decoration: underline; }
+.stx-docname,  .stx-docname  a { font-weight: bold; }
+.stx-tasktag,  .stx-tasktag  a { font-weight: bold; }
+
+/* markup languages */
+.stx-entity, .stx-entity     a { color: #0000FF; }
+.stx-bold, .stx-bold         a { font-weight: bold; }
+.stx-italic, .stx-italic     a { font-style: italic; }
+.stx-link, .stx-link         a { color: #005900; }
+.stx-codeblock, .stx-codeblock a { color: #002E62; }
+
+/* override markup colors in comments */
+.stx-comment .stx-link, .stx-comment .stx-link  a { color: #800; }
+.stx-comment .stx-keyword, .stx-comment .stx-keyword  a { color: #800; }
+
+.stx-tab                   { position: relative; display: inline; }
+.show-tab .stx-tab:before  { position: absolute; content: "\00bb"; color: #f00; }
+
+.stx-br:after              { content: "\000a"; }
+
+</style>
+
+<title>{{ page.title }}</title>
+
+<body>
+  <header>
+    <a href="{{ page.root_url }}" class="closurelogo"><div></div></a>
+    <h1><a href="{{ page.root_url }}">
+        {{ page.product_name }}
+    </a></h1>
+    <nav>
+      <ul>{% include nav.html active=page.section %}</ul>
+    </nav>
+  </header>
+
+  <div>
+    <nav class="side vertical">
+      {% if page.section %}
+        <ul>{% include nav-{{ page.section }}.html active=page.page %}</ul>
+      {% endif %}
+    </nav>
+    <nav class="toc vertical float">
+      <ul>
+        <li class="heading"><a href="#top_of_page">Contents</a>
+      </ul>
+    </nav>
+    <div id="_toc">
+      <p>[TOC]</p>
+    </div>
+
+    <article>
+      <h1 id="top_of_page">{{ page.heading }}</h1>
+      <nav class="toc vertical inline">
+        <ul>
+          <li class="heading"><a href="#top_of_page">Contents</a>
+        </ul>
+      </nav>
+      {{ content }}
+    </article>
+  </div>
+
+  <footer>
+    <!-- TODO(sdh): abstract this out if we add more buttons. -->
+    {% if page.edit_path && page.github_url %}
+      <a class="edit"
+         href="{{ page.github_url }}/blob/master/{{ page.edit_path }}">
+        <div><div></div><div><div>Edit on GitHub</div></div></div>
+      </a>
+    {% endif %}
+  </footer>
+
+  <script>
+(function(){var k=this,aa=function(){},l=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";
+else if("function"==b&&"undefined"==typeof a.call)return"object";return b},ba=function(a){var b=l(a);return"array"==b||"object"==b&&"number"==typeof a.length},m=function(a){return"string"==typeof a},n=function(a){return"function"==l(a)},p=function(a){var b=typeof a;return"object"==b&&null!=a||"function"==b},ca=function(a,b,c){return a.call.apply(a.bind,arguments)},da=function(a,b,c){if(!a)throw Error();if(2<arguments.length){var d=Array.prototype.slice.call(arguments,2);return function(){var c=Array.prototype.slice.call(arguments);
+Array.prototype.unshift.apply(c,d);return a.apply(b,c)}}return function(){return a.apply(b,arguments)}},r=function(a,b,c){r=Function.prototype.bind&&-1!=Function.prototype.bind.toString().indexOf("native code")?ca:da;return r.apply(null,arguments)},t=function(a,b){function c(){}c.prototype=b.prototype;a.ea=b.prototype;a.prototype=new c;a.da=function(a,c,f){for(var g=Array(arguments.length-2),h=2;h<arguments.length;h++)g[h-2]=arguments[h];return b.prototype[c].apply(a,g)}};var u=function(a,b,c){this.Y=c;this.V=a;this.$=b;this.A=0;this.w=null};u.prototype.get=function(){var a;0<this.A?(this.A--,a=this.w,this.w=a.next,a.next=null):a=this.V();return a};u.prototype.put=function(a){this.$(a);this.A<this.Y&&(this.A++,a.next=this.w,this.w=a)};var v=function(a){if(Error.captureStackTrace)Error.captureStackTrace(this,v);else{var b=Error().stack;b&&(this.stack=b)}a&&(this.message=String(a))};t(v,Error);v.prototype.name="CustomError";var ea=function(a,b){for(var c in a)b.call(void 0,a[c],c,a)},fa="constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf".split(" "),ha=function(a,b){for(var c,d,e=1;e<arguments.length;e++){d=arguments[e];for(c in d)a[c]=d[c];for(var f=0;f<fa.length;f++)c=fa[f],Object.prototype.hasOwnProperty.call(d,c)&&(a[c]=d[c])}};var ia=function(a){a.prototype.then=a.prototype.then;a.prototype.$goog_Thenable=!0},ja=function(a){if(!a)return!1;try{return!!a.$goog_Thenable}catch(b){return!1}};var ka=function(a,b){for(var c=a.split("%s"),d="",e=Array.prototype.slice.call(arguments,1);e.length&&1<c.length;)d+=c.shift()+e.shift();return d+c.join("%s")},la=String.prototype.trim?function(a){return a.trim()}:function(a){return a.replace(/^[\s\xa0]+|[\s\xa0]+$/g,"")},ta=function(a){if(!ma.test(a))return a;-1!=a.indexOf("&")&&(a=a.replace(na,"&amp;"));-1!=a.indexOf("<")&&(a=a.replace(oa,"&lt;"));-1!=a.indexOf(">")&&(a=a.replace(pa,"&gt;"));-1!=a.indexOf('"')&&(a=a.replace(qa,"&quot;"));-1!=a.indexOf("'")&&
+(a=a.replace(ra,"&#39;"));-1!=a.indexOf("\x00")&&(a=a.replace(sa,"&#0;"));return a},na=/&/g,oa=/</g,pa=/>/g,qa=/"/g,ra=/'/g,sa=/\x00/g,ma=/[\x00&<>"']/,w=function(a,b){return a<b?-1:a>b?1:0},ua=function(a){return String(a).replace(/\-([a-z])/g,function(a,c){return c.toUpperCase()})},va=function(a){var b=m(void 0)?"undefined".replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g,"\\$1").replace(/\x08/g,"\\x08"):"\\s";return a.replace(new RegExp("(^"+(b?"|["+b+"]+":"")+")([a-z])","g"),function(a,b,e){return b+e.toUpperCase()})};var x=function(a,b){b.unshift(a);v.call(this,ka.apply(null,b));b.shift()};t(x,v);x.prototype.name="AssertionError";var wa=function(a,b,c,d){var e="Assertion failed";if(c)var e=e+(": "+c),f=d;else a&&(e+=": "+a,f=b);throw new x(""+e,f||[]);},y=function(a,b,c){a||wa("",null,b,Array.prototype.slice.call(arguments,2))},z=function(a,b,c){n(a)||wa("Expected function but got %s: %s.",[l(a),a],b,Array.prototype.slice.call(arguments,2))};var A;a:{var xa=k.navigator;if(xa){var ya=xa.userAgent;if(ya){A=ya;break a}}A=""}var B=function(a){return-1!=A.indexOf(a)};var za=Array.prototype.indexOf?function(a,b,c){y(null!=a.length);return Array.prototype.indexOf.call(a,b,c)}:function(a,b,c){c=null==c?0:0>c?Math.max(0,a.length+c):c;if(m(a))return m(b)&&1==b.length?a.indexOf(b,c):-1;for(;c<a.length;c++)if(c in a&&a[c]===b)return c;return-1},Aa=Array.prototype.forEach?function(a,b,c){y(null!=a.length);Array.prototype.forEach.call(a,b,c)}:function(a,b,c){for(var d=a.length,e=m(a)?a.split(""):a,f=0;f<d;f++)f in e&&b.call(c,e[f],f,a)},Ba=Array.prototype.some?function(a,
+b,c){y(null!=a.length);return Array.prototype.some.call(a,b,c)}:function(a,b,c){for(var d=a.length,e=m(a)?a.split(""):a,f=0;f<d;f++)if(f in e&&b.call(c,e[f],f,a))return!0;return!1},Ca=function(a){var b=a.length;if(0<b){for(var c=Array(b),d=0;d<b;d++)c[d]=a[d];return c}return[]};var C=function(){this.D=this.j=null},Da=new u(function(){return new D},function(a){a.reset()},100);C.prototype.add=function(a,b){var c=Da.get();c.set(a,b);this.D?this.D.next=c:(y(!this.j),this.j=c);this.D=c};C.prototype.remove=function(){var a=null;this.j&&(a=this.j,this.j=this.j.next,this.j||(this.D=null),a.next=null);return a};var D=function(){this.next=this.scope=this.I=null};D.prototype.set=function(a,b){this.I=a;this.scope=b;this.next=null};
+D.prototype.reset=function(){this.next=this.scope=this.I=null};var Ea=function(a){k.setTimeout(function(){throw a;},0)},E,Fa=function(){var a=k.MessageChannel;"undefined"===typeof a&&"undefined"!==typeof window&&window.postMessage&&window.addEventListener&&!B("Presto")&&(a=function(){var a=document.createElement("IFRAME");a.style.display="none";a.src="";document.documentElement.appendChild(a);var b=a.contentWindow,a=b.document;a.open();a.write("");a.close();var c="callImmediate"+Math.random(),d="file:"==b.location.protocol?"*":b.location.protocol+"//"+b.location.host,
+a=r(function(a){if(("*"==d||a.origin==d)&&a.data==c)this.port1.onmessage()},this);b.addEventListener("message",a,!1);this.port1={};this.port2={postMessage:function(){b.postMessage(c,d)}}});if("undefined"!==typeof a&&!B("Trident")&&!B("MSIE")){var b=new a,c={},d=c;b.port1.onmessage=function(){if(void 0!==c.next){c=c.next;var a=c.N;c.N=null;a()}};return function(a){d.next={N:a};d=d.next;b.port2.postMessage(0)}}return"undefined"!==typeof document&&"onreadystatechange"in document.createElement("SCRIPT")?
+function(a){var b=document.createElement("SCRIPT");b.onreadystatechange=function(){b.onreadystatechange=null;b.parentNode.removeChild(b);b=null;a();a=null};document.documentElement.appendChild(b)}:function(a){k.setTimeout(a,0)}};var I=B("Opera")||B("OPR"),J=B("Trident")||B("MSIE"),Ga=B("Edge"),K=B("Gecko")&&!(-1!=A.toLowerCase().indexOf("webkit")&&!B("Edge"))&&!(B("Trident")||B("MSIE"))&&!B("Edge"),L=-1!=A.toLowerCase().indexOf("webkit")&&!B("Edge"),Ha=function(){var a=A;if(K)return/rv\:([^\);]+)(\)|;)/.exec(a);if(Ga)return/Edge\/([\d\.]+)/.exec(a);if(J)return/\b(?:MSIE|rv)[: ]([^\);]+)(\)|;)/.exec(a);if(L)return/WebKit\/(\S+)/.exec(a)},Ia=function(){var a=k.document;return a?a.documentMode:void 0},Ja=function(){if(I&&k.opera){var a;
+var b=k.opera.version;try{a=b()}catch(c){a=b}return a}a="";(b=Ha())&&(a=b?b[1]:"");return J&&(b=Ia(),b>parseFloat(a))?String(b):a}(),Ka={},M=function(a){var b;if(!(b=Ka[a])){b=0;for(var c=la(String(Ja)).split("."),d=la(String(a)).split("."),e=Math.max(c.length,d.length),f=0;0==b&&f<e;f++){var g=c[f]||"",h=d[f]||"",q=RegExp("(\\d*)(\\D*)","g"),F=RegExp("(\\d*)(\\D*)","g");do{var G=q.exec(g)||["","",""],H=F.exec(h)||["","",""];if(0==G[0].length&&0==H[0].length)break;b=w(0==G[1].length?0:parseInt(G[1],
+10),0==H[1].length?0:parseInt(H[1],10))||w(0==G[2].length,0==H[2].length)||w(G[2],H[2])}while(0==b)}b=Ka[a]=0<=b}return b},La=k.document,Ma=La&&J?Ia()||("CSS1Compat"==La.compatMode?parseInt(Ja,10):5):void 0;var Qa=function(a,b){N||Na();Oa||(N(),Oa=!0);Pa.add(a,b)},N,Na=function(){if(k.Promise&&k.Promise.resolve){var a=k.Promise.resolve(void 0);N=function(){a.then(Ra)}}else N=function(){var a=Ra;!n(k.setImmediate)||k.Window&&k.Window.prototype&&!B("Edge")&&k.Window.prototype.setImmediate==k.setImmediate?(E||(E=Fa()),E(a)):k.setImmediate(a)}},Oa=!1,Pa=new C,Ra=function(){for(var a=null;a=Pa.remove();){try{a.I.call(a.scope)}catch(b){Ea(b)}Da.put(a)}Oa=!1};var Sa=!J||9<=Ma;!K&&!J||J&&9<=Ma||K&&M("1.9.1");J&&M("9");J&&M("9");!L||M("528");K&&M("1.9b")||J&&M("8")||I&&M("9.5")||L&&M("528");K&&!M("8")||J&&M("9");J&&M(8);var Ua=function(a,b){ea(b,function(b,d){"style"==d?a.style.cssText=b:"class"==d?a.className=b:"for"==d?a.htmlFor=b:Ta.hasOwnProperty(d)?a.setAttribute(Ta[d],b):0==d.lastIndexOf("aria-",0)||0==d.lastIndexOf("data-",0)?a.setAttribute(d,b):a[d]=b})},Ta={cellpadding:"cellPadding",cellspacing:"cellSpacing",colspan:"colSpan",frameborder:"frameBorder",height:"height",maxlength:"maxLength",role:"role",rowspan:"rowSpan",type:"type",usemap:"useMap",valign:"vAlign",width:"width"},O=function(a,b,c){var d=arguments,
+e=document,f=d[0],g=d[1];if(!Sa&&g&&(g.name||g.type)){f=["<",f];g.name&&f.push(' name="',ta(g.name),'"');if(g.type){f.push(' type="',ta(g.type),'"');var h={};ha(h,g);delete h.type;g=h}f.push(">");f=f.join("")}f=e.createElement(f);g&&(m(g)?f.className=g:"array"==l(g)?f.className=g.join(" "):Ua(f,g));2<d.length&&Va(e,f,d);return f},Va=function(a,b,c){function d(c){c&&b.appendChild(m(c)?a.createTextNode(c):c)}for(var e=2;e<c.length;e++){var f=c[e];!ba(f)||p(f)&&0<f.nodeType?d(f):Aa(Wa(f)?Ca(f):f,d)}},
+Xa=function(a,b){a.appendChild(b)},Za=function(a){var b=[];return Ya(document.body,a,b,!0)?b[0]:void 0},Ya=function(a,b,c,d){if(null!=a)for(a=a.firstChild;a;){if(b(a)&&(c.push(a),d)||Ya(a,b,c,d))return!0;a=a.nextSibling}return!1},Wa=function(a){if(a&&"number"==typeof a.length){if(p(a))return"function"==typeof a.item||"string"==typeof a.item;if(n(a))return"function"==typeof a.item}return!1};var R=function(a,b){this.b=0;this.c=void 0;this.l=this.f=this.a=null;this.v=this.H=!1;if(a!=aa)try{var c=this;a.call(b,function(a){P(c,2,a)},function(a){if(!(a instanceof Q))try{if(a instanceof Error)throw a;throw Error("Promise rejected.");}catch(b){}P(c,3,a)})}catch(d){P(this,3,d)}},$a=function(){this.next=this.context=this.o=this.i=this.g=null;this.u=!1};$a.prototype.reset=function(){this.context=this.o=this.i=this.g=null;this.u=!1};
+var ab=new u(function(){return new $a},function(a){a.reset()},100),bb=function(a,b,c){var d=ab.get();d.i=a;d.o=b;d.context=c;return d};R.prototype.then=function(a,b,c){null!=a&&z(a,"opt_onFulfilled should be a function.");null!=b&&z(b,"opt_onRejected should be a function. Did you pass opt_context as the second argument instead of the third?");return cb(this,n(a)?a:null,n(b)?b:null,c)};ia(R);R.prototype.cancel=function(a){0==this.b&&Qa(function(){var b=new Q(a);db(this,b)},this)};
+var db=function(a,b){if(0==a.b)if(a.a){var c=a.a;if(c.f){for(var d=0,e=null,f=null,g=c.f;g&&(g.u||(d++,g.g==a&&(e=g),!(e&&1<d)));g=g.next)e||(f=g);e&&(0==c.b&&1==d?db(c,b):(f?(d=f,y(c.f),y(null!=d),d.next==c.l&&(c.l=d),d.next=d.next.next):eb(c),fb(c,e,3,b)))}a.a=null}else P(a,3,b)},hb=function(a,b){a.f||2!=a.b&&3!=a.b||gb(a);y(null!=b.i);a.l?a.l.next=b:a.f=b;a.l=b},cb=function(a,b,c,d){var e=bb(null,null,null);e.g=new R(function(a,g){e.i=b?function(c){try{var e=b.call(d,c);a(e)}catch(F){g(F)}}:a;
+e.o=c?function(b){try{var e=c.call(d,b);void 0===e&&b instanceof Q?g(b):a(e)}catch(F){g(F)}}:g});e.g.a=a;hb(a,e);return e.g};R.prototype.ba=function(a){y(1==this.b);this.b=0;P(this,2,a)};R.prototype.ca=function(a){y(1==this.b);this.b=0;P(this,3,a)};
+var P=function(a,b,c){if(0==a.b){a==c&&(b=3,c=new TypeError("Promise cannot resolve to itself"));a.b=1;var d;a:{var e=c,f=a.ba,g=a.ca;if(e instanceof R)null!=f&&z(f,"opt_onFulfilled should be a function."),null!=g&&z(g,"opt_onRejected should be a function. Did you pass opt_context as the second argument instead of the third?"),hb(e,bb(f||aa,g||null,a)),d=!0;else if(ja(e))e.then(f,g,a),d=!0;else{if(p(e))try{var h=e.then;if(n(h)){ib(e,h,f,g,a);d=!0;break a}}catch(q){g.call(a,q);d=!0;break a}d=!1}}d||
+(a.c=c,a.b=b,a.a=null,gb(a),3!=b||c instanceof Q||jb(a,c))}},ib=function(a,b,c,d,e){var f=!1,g=function(a){f||(f=!0,c.call(e,a))},h=function(a){f||(f=!0,d.call(e,a))};try{b.call(a,g,h)}catch(q){h(q)}},gb=function(a){a.H||(a.H=!0,Qa(a.X,a))},eb=function(a){var b=null;a.f&&(b=a.f,a.f=b.next,b.next=null);a.f||(a.l=null);null!=b&&y(null!=b.i);return b};R.prototype.X=function(){for(var a=null;a=eb(this);)fb(this,a,this.b,this.c);this.H=!1};
+var fb=function(a,b,c,d){if(3==c&&b.o&&!b.u)for(;a&&a.v;a=a.a)a.v=!1;if(b.g)b.g.a=null,kb(b,c,d);else try{b.u?b.i.call(b.context):kb(b,c,d)}catch(e){lb.call(null,e)}ab.put(b)},kb=function(a,b,c){2==b?a.i.call(a.context,c):a.o&&a.o.call(a.context,c)},jb=function(a,b){a.v=!0;Qa(function(){a.v&&lb.call(null,b)})},lb=Ea,Q=function(a){v.call(this,a)};t(Q,v);Q.prototype.name="cancel";var S=function(){throw Error("Do not instantiate directly");};S.prototype.O=null;S.prototype.toString=function(){return this.content};var nb=function(a,b,c){var d=mb[c];if(!d){var e=ua(c),d=e;void 0===a.style[e]&&(e=(L?"Webkit":K?"Moz":J?"ms":I?"O":null)+va(e),void 0!==a.style[e]&&(d=e));mb[c]=d}(c=d)&&(a.style[c]=b)},mb={};/*
+ Portions of this code are from MochiKit, received by
+ The Closure Authors under the MIT license. All other code is Copyright
+ 2005-2009 The Closure Authors. All Rights Reserved.
+*/
+var T=function(a,b){this.B=[];this.T=a;this.R=b||null;this.m=this.h=!1;this.c=void 0;this.K=this.M=this.F=!1;this.C=0;this.a=null;this.G=0};
+T.prototype.cancel=function(a){if(this.h)this.c instanceof T&&this.c.cancel();else{if(this.a){var b=this.a;delete this.a;a?b.cancel(a):(b.G--,0>=b.G&&b.cancel())}this.T?this.T.call(this.R,this):this.K=!0;if(!this.h){a=new U;if(this.h){if(!this.K)throw new V;this.K=!1}y(!(a instanceof T),"An execution sequence may not be initiated with a blocking Deferred.");this.h=!0;this.c=a;this.m=!0;ob(this)}}};T.prototype.P=function(a,b){this.F=!1;this.h=!0;this.c=b;this.m=!a;ob(this)};
+var pb=function(a,b,c){y(!a.M,"Blocking Deferreds can not be re-used");a.B.push([b,c,void 0]);a.h&&ob(a)};T.prototype.then=function(a,b,c){var d,e,f=new R(function(a,b){d=a;e=b});pb(this,d,function(a){a instanceof U?f.cancel():e(a)});return f.then(a,b,c)};ia(T);
+var qb=function(a){return Ba(a.B,function(a){return n(a[1])})},ob=function(a){if(a.C&&a.h&&qb(a)){var b=a.C,c=W[b];c&&(k.clearTimeout(c.s),delete W[b]);a.C=0}a.a&&(a.a.G--,delete a.a);for(var b=a.c,d=c=!1;a.B.length&&!a.F;){var e=a.B.shift(),f=e[0],g=e[1],e=e[2];if(f=a.m?g:f)try{var h=f.call(e||a.R,b);void 0!==h&&(a.m=a.m&&(h==b||h instanceof Error),a.c=b=h);if(ja(b)||"function"===typeof k.Promise&&b instanceof k.Promise)d=!0,a.F=!0}catch(q){b=q,a.m=!0,qb(a)||(c=!0)}}a.c=b;d&&(h=r(a.P,a,!0),d=r(a.P,
+a,!1),b instanceof T?(pb(b,h,d),b.M=!0):b.then(h,d));c&&(b=new rb(b),W[b.s]=b,a.C=b.s)},V=function(){v.call(this)};t(V,v);V.prototype.message="Deferred has already fired";V.prototype.name="AlreadyCalledError";var U=function(){v.call(this)};t(U,v);U.prototype.message="Deferred was canceled";U.prototype.name="CanceledError";var rb=function(a){this.s=k.setTimeout(r(this.aa,this),0);this.W=a};
+rb.prototype.aa=function(){y(W[this.s],"Cannot throw an error that is not scheduled.");delete W[this.s];throw this.W;};var W={};var tb=function(){this.L=sb;this.J=2;this.S=3;this.Z="content";this.U="Contents"},sb=["disc","circle"],ub="decimal none none none none none".split(" ");
+tb.prototype.install=function(){var a=this.Z,b=document,a=(m(a)?b.getElementById(a):a)||document.body;y(a);for(var b=[],c=this.J;c<=this.S;++c)b.push("h"+c);a=a.querySelectorAll(b.join(","));b={};for(c=0;c<a.length;++c){var d=a[c];d.id&&0!=d.id.lastIndexOf("toc_",0)||(d.id=d.textContent.toLowerCase().replace(/\W/g,"_").replace(/_+/g,"_").replace(/_$/g,""));d.id in b?(++b[d.id],d.id=d.id+"_"+b[d.id]):b[d.id]=1}for(c=0;c<a.length;++c)d=a[c],1<b[d.id]&&(d.id+="_1");if(this.L==ub)for(b=0;b<a.length;++b)c=
+a[b],"H2"===c.tagName&&(c.classList?c.classList.add("numbered"):(d=c,d.classList?d=!d.classList.contains("numbered"):(d.classList?d=d.classList:(d=d.className,d=m(d)&&d.match(/\S+/g)||[]),d=!(0<=za(d,"numbered"))),d&&(c.className+=0<c.className.length?" numbered":"numbered")));for(var c=b=O("ul"),d=this.J,e=0;e<a.length;++e){for(var f=a[e],g=O("a",{href:"#"+f.id,target:"_self"},f.textContent),g=O("li",void 0,g),f=f.tagName.substr(1);f!=d;)if(f>d){if(!c.lastChild){var h=O("li",{style:"list-style-type: none"});
+c.appendChild(h)}h=O("ul");c.lastChild.appendChild(h);c=h;d++}else c=c.parentNode.parentNode||c,d--;h=g;f={"list-style-type":this.L[(f-this.J)%this.L.length]};if(m(f))nb(h,void 0,f);else{var q=void 0;for(q in f)nb(h,f[q],q)}c.appendChild(g)}vb(this,b)};tb.prototype.max=function(a){this.S=a;return this};
+var vb=function(a,b){var c=O("div","toc");a.U&&Xa(c,O("p",void 0,a.U));c.appendChild(b);var d=Za(function(a){return"[TOC]"===a.textContent.trim()&&"P"===a.nodeName});d&&(d.parentNode&&d.parentNode.insertBefore(c,d),d&&d.parentNode&&d.parentNode.removeChild(d))};var wb=function(){S.call(this)};t(wb,S);(function(a){function b(a){this.content=a}b.prototype=a.prototype;return function(a,d){var e=new b(String(a));void 0!==d&&(e.O=d);return e}})(wb);(function(a){function b(a){this.content=a}b.prototype=a.prototype;return function(a,d){var e=String(a);if(!e)return"";e=new b(e);void 0!==d&&(e.O=d);return e}})(wb);var xb=function(a,b,c){a.timeOfStartCall=(new Date).getTime();var d=c||k;if("help"==a.flow){var e;a:{e=["document","location","href"];for(var f=d||k,g;g=e.shift();)if(null!=f[g])f=f[g];else{e=null;break a}e=f}!a.helpCenterContext&&e&&(a.helpCenterContext=e.substring(0,1200));e=!0;b&&JSON&&JSON.stringify&&(f=JSON.stringify(b),(e=1200>=f.length)&&(a.psdJson=f));e||(b={invalidPsd:!0})}b=[a,b,c];d.GOOGLE_FEEDBACK_START_ARGUMENTS=b;c=a.serverUri||"//www.google.com/tools/feedback";if(e=d.GOOGLE_FEEDBACK_START)e.apply(d,
+b);else{b=c+"/load.js?";for(var h in a)c=a[h],null!=c&&!p(c)&&(b+=encodeURIComponent(h)+"="+encodeURIComponent(c)+"&");a=d.document;d=a.createElement("script");d.src=b;a.body.appendChild(d)}},X=["userfeedback","api","startFeedback"],Y=k;X[0]in Y||!Y.execScript||Y.execScript("var "+X[0]);for(var Z;X.length&&(Z=X.shift());)X.length||void 0===xb?Y=Y[Z]?Y[Z]:Y[Z]={}:Y[Z]=xb;(new tb).install();})();
+
+(function() {
+
+  // Add a scroll listener to handle body.scrolled and body.down
+  var last = void 0;
+  document.addEventListener('scroll', function() {
+    var top = document.body.scrollTop;
+    var threshold = 140;
+    document.body.classList.toggle('scrolled', top > threshold);
+    document.body.classList.toggle('down', top > last);
+    last = top;
+  });
+
+  // Scrolls to the window's current hash.  Note: this is required
+  // because of the {position: fixed} banner at the top, which will
+  // cover the heading if we let the browser scroll on its own.
+  // Instead, we add a delta to ensure that the heading ends up
+  // below the banner.
+  function scrollToHash() {
+    var hash = window.location.hash.substring(1);
+    if (hash) {
+      var el = document.getElementById(hash);
+      var delta = document.body.classList.contains('scrolled') ? 72 : 128;
+      document.body.scrollTop = el.offsetTop - delta;
+    }
+  }
+
+  // Intercept clicks on #-based links and call our own scrollToHash instead.
+  document.addEventListener('click', function(e) {
+    if (!e.target || e.target.tagName != 'A') return;
+    var href = e.target.getAttribute('href');
+    if (href && href[0] == '#') {
+      window.location.hash = href;
+      requestAnimationFrame(scrollToHash);
+      e.preventDefault();
+    }
+  });
+
+  // Also scroll to hash on initial page load.
+  requestAnimationFrame(scrollToHash);
+
+  // Restructure g3doc's TOC.  The 00-toc.js script builds this DOM,
+  // but we need to manipulate it a bit by (1) removing the explicit
+  // list-style-type on the elements, and (2) copying the list into
+  // our own TOC blocks.
+  var toc = document.getElementById('_toc').querySelector('ul');
+  Array.prototype.forEach.call(
+      toc.children,
+      function(c) { c.style.listStyleType = 'none'; });
+  Array.prototype.forEach.call(
+      document.querySelectorAll('nav.toc ul'),
+      function(ul) {
+        if (toc.innerHTML) {
+          ul.innerHTML += toc.innerHTML;
+        } else {
+          ul.parentElement.remove(); // don't bother with the TOC if it's empty
+        }});
+})();
+
+{% if page.ga %}
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', '{{ page.ga }}', 'auto');
+ga('send', 'pageview');
+{% endif %}
+
+</script>
+</body>

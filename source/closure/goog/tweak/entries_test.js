@@ -52,10 +52,11 @@ function testGetValue_nonDefaultValues() {
   strEntry.setValue('foo');
   numEntry.setValue(5);
   assertTrue('wrong value for boolean', boolEntry.getValue());
-  assertEquals('wrong value for string', strEntry.getDefaultValue(),
+  assertEquals(
+      'wrong value for string', strEntry.getDefaultValue(),
       strEntry.getValue());
-  assertEquals('wrong value for num', numEntry.getDefaultValue(),
-      numEntry.getValue());
+  assertEquals(
+      'wrong value for num', numEntry.getDefaultValue(), numEntry.getValue());
 
   // These do not have the restartRequired option set.
   strEnumEntry.setValue('B');

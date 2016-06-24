@@ -94,8 +94,8 @@ goog.vec.mat4f.createIdentity = function() {
  *     chained together.
  */
 goog.vec.mat4f.setFromValues = function(
-    mat, v00, v10, v20, v30, v01, v11, v21, v31, v02, v12, v22, v32,
-    v03, v13, v23, v33) {
+    mat, v00, v10, v20, v30, v01, v11, v21, v31, v02, v12, v22, v32, v03, v13,
+    v23, v33) {
   mat[0] = v00;
   mat[1] = v10;
   mat[2] = v20;
@@ -303,7 +303,7 @@ goog.vec.mat4f.getDiagonal = function(mat, vec, opt_diagonal) {
 /**
  * Sets the specified column with the supplied values.
  *
- * @param {!goog.vec.mat4f.Type} mat The matrix to recieve the values.
+ * @param {!goog.vec.mat4f.Type} mat The matrix to receive the values.
  * @param {number} column The column index to set the values on.
  * @param {number} v0 The value for row 0.
  * @param {number} v1 The value for row 1.
@@ -878,23 +878,12 @@ goog.vec.mat4f.invert = function(mat, resultMat) {
  * @return {boolean} True if the the two matrices are equivalent.
  */
 goog.vec.mat4f.equals = function(mat0, mat1) {
-  return mat0.length == mat1.length &&
-      mat0[0] == mat1[0] &&
-      mat0[1] == mat1[1] &&
-      mat0[2] == mat1[2] &&
-      mat0[3] == mat1[3] &&
-      mat0[4] == mat1[4] &&
-      mat0[5] == mat1[5] &&
-      mat0[6] == mat1[6] &&
-      mat0[7] == mat1[7] &&
-      mat0[8] == mat1[8] &&
-      mat0[9] == mat1[9] &&
-      mat0[10] == mat1[10] &&
-      mat0[11] == mat1[11] &&
-      mat0[12] == mat1[12] &&
-      mat0[13] == mat1[13] &&
-      mat0[14] == mat1[14] &&
-      mat0[15] == mat1[15];
+  return mat0.length == mat1.length && mat0[0] == mat1[0] &&
+      mat0[1] == mat1[1] && mat0[2] == mat1[2] && mat0[3] == mat1[3] &&
+      mat0[4] == mat1[4] && mat0[5] == mat1[5] && mat0[6] == mat1[6] &&
+      mat0[7] == mat1[7] && mat0[8] == mat1[8] && mat0[9] == mat1[9] &&
+      mat0[10] == mat1[10] && mat0[11] == mat1[11] && mat0[12] == mat1[12] &&
+      mat0[13] == mat1[13] && mat0[14] == mat1[14] && mat0[15] == mat1[15];
 };
 
 
@@ -1265,8 +1254,8 @@ goog.vec.mat4f.makeRotationTranslation = function(mat, rotation, translation) {
  * @return {!goog.vec.mat4f.Type} return mat so that operations can be
  *     chained.
  */
-goog.vec.mat4f.makeRotationTranslationScale = function(mat,
-    rotation, translation, scale) {
+goog.vec.mat4f.makeRotationTranslationScale = function(
+    mat, rotation, translation, scale) {
   // Quaternion math
   var x = rotation[0], y = rotation[1], z = rotation[2], w = rotation[3];
   var x2 = 2 * x, y2 = 2 * y, z2 = 2 * z;
@@ -1327,8 +1316,8 @@ goog.vec.mat4f.makeRotationTranslationScale = function(mat,
  * @return {!goog.vec.mat4f.Type} return mat so that operations can be
  *     chained.
  */
-goog.vec.mat4f.makeRotationTranslationScaleOrigin = function(mat,
-    rotation, translation, scale, origin) {
+goog.vec.mat4f.makeRotationTranslationScaleOrigin = function(
+    mat, rotation, translation, scale, origin) {
   // Quaternion math
   var x = rotation[0], y = rotation[1], z = rotation[2], w = rotation[3];
   var x2 = 2 * x, y2 = 2 * y, z2 = 2 * z;
@@ -1412,7 +1401,7 @@ goog.vec.mat4f.makeFrustum = function(
 
 
 /**
- * Makse the given 4x4 matrix  perspective projection matrix given a
+ * Makes the given 4x4 matrix  perspective projection matrix given a
  * field of view and aspect ratio.
  *
  * @param {!goog.vec.mat4f.Type} mat The matrix.
@@ -1542,8 +1531,7 @@ goog.vec.mat4f.makeLookAt = function(mat, eyePt, centerPt, worldUpVec) {
   goog.vec.mat4f.setRow(mat, 1, upVec);
   goog.vec.mat4f.setRow(mat, 2, fwdVec);
   goog.vec.mat4f.setRowValues(mat, 3, 0, 0, 0, 1);
-  goog.vec.mat4f.translate(
-      mat, -eyePt[0], -eyePt[1], -eyePt[2]);
+  goog.vec.mat4f.translate(mat, -eyePt[0], -eyePt[1], -eyePt[2]);
 
   return mat;
 };
@@ -1701,8 +1689,8 @@ goog.vec.mat4f.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
   euler[2] = (euler[2] + Math.PI * 2) % (Math.PI * 2);
   // For theta2 we want the angle to be in [0, pi] or [-pi, 0] depending on
   // signTheta2.
-  euler[1] = ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) *
-      signTheta2;
+  euler[1] =
+      ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) * signTheta2;
 
   return euler;
 };
@@ -1937,27 +1925,19 @@ goog.vec.mat4f.getTranslation = function(mat, translation) {
  * @type {Array<goog.vec.vec3f.Type>}
  * @private
  */
-goog.vec.mat4f.tmpvec3f_ = [
-  goog.vec.vec3f.create(),
-  goog.vec.vec3f.create()
-];
+goog.vec.mat4f.tmpvec3f_ = [goog.vec.vec3f.create(), goog.vec.vec3f.create()];
 
 
 /**
  * @type {Array<goog.vec.vec4f.Type>}
  * @private
  */
-goog.vec.mat4f.tmpvec4f_ = [
-  goog.vec.vec4f.create(),
-  goog.vec.vec4f.create(),
-  goog.vec.vec4f.create()
-];
+goog.vec.mat4f.tmpvec4f_ =
+    [goog.vec.vec4f.create(), goog.vec.vec4f.create(), goog.vec.vec4f.create()];
 
 
 /**
  * @type {Array<goog.vec.mat4f.Type>}
  * @private
  */
-goog.vec.mat4f.tmpmat4f_ = [
-  goog.vec.mat4f.create()
-];
+goog.vec.mat4f.tmpmat4f_ = [goog.vec.mat4f.create()];

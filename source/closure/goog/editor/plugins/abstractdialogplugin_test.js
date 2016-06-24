@@ -64,7 +64,8 @@ function setUpMockRange() {
   mockSavedRange = mockCtrl.createLooseMock(goog.dom.SavedRange);
   mockSavedRange.restore();
 
-  stubs.setPath('goog.editor.range.saveUsingNormalizedCarets',
+  stubs.setPath(
+      'goog.editor.range.saveUsingNormalizedCarets',
       goog.functions.constant(mockSavedRange));
 }
 
@@ -85,7 +86,7 @@ function tearDown() {
 /**
  * Creates a concrete instance of goog.ui.editor.AbstractDialog by adding
  * a plain implementation of createDialogControl().
- * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
+ * @param {goog.dom.DomHelper} domHelper The dom helper to be used to
  *     create the dialog.
  * @return {goog.ui.editor.AbstractDialog} The created dialog.
  */
@@ -122,11 +123,11 @@ function createDialogPlugin() {
 /**
  * Sets up the mock event handler to expect an OPENED event.
  */
-function expectOpened(opt_times) {
-  mockOpenedHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
+function expectOpened(/** number= */ opt_times) {
+  mockOpenedHandler.handleEvent(
+      new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type ==
-               goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED;
+            goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED;
       }));
   mockField.dispatchSelectionChangeEvent();
   if (opt_times) {
@@ -139,11 +140,11 @@ function expectOpened(opt_times) {
 /**
  * Sets up the mock event handler to expect a CLOSED event.
  */
-function expectClosed(opt_times) {
-  mockClosedHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
+function expectClosed(/** number= */ opt_times) {
+  mockClosedHandler.handleEvent(
+      new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.type ==
-               goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED;
+            goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED;
       }));
   mockField.dispatchSelectionChangeEvent();
   if (opt_times) {
@@ -167,17 +168,19 @@ function testExecAndDispose(opt_reuse) {
   if (opt_reuse) {
     plugin.setReuseDialog(true);
   }
-  assertFalse('Dialog should not be open yet',
-              !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertFalse(
+      'Dialog should not be open yet',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   plugin.execCommand(COMMAND);
-  assertTrue('Dialog should be open now',
-             !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertTrue(
+      'Dialog should be open now',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   var tempDialog = plugin.getDialog();
   plugin.dispose();
-  assertFalse('Dialog should not still be open after disposal',
-              tempDialog.isOpen());
+  assertFalse(
+      'Dialog should not still be open after disposal', tempDialog.isOpen());
   mockCtrl.$verifyAll();
 }
 
@@ -194,7 +197,7 @@ function testExecAndDisposeReuse() {
  * Tests the flow of calling execCommand (which opens the dialog) and
  * then hiding it (simulating that a user did somthing to cause the dialog to
  * close).
- * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
+ * @param {boolean=} opt_reuse Whether to set the plugin to reuse its dialog.
  */
 function testExecAndHide(opt_reuse) {
   setUpMockRange();
@@ -205,23 +208,26 @@ function testExecAndHide(opt_reuse) {
   if (opt_reuse) {
     plugin.setReuseDialog(true);
   }
-  assertFalse('Dialog should not be open yet',
-              !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertFalse(
+      'Dialog should not be open yet',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   plugin.execCommand(COMMAND);
-  assertTrue('Dialog should be open now',
-             !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertTrue(
+      'Dialog should be open now',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   var tempDialog = plugin.getDialog();
   plugin.getDialog().hide();
-  assertFalse('Dialog should not still be open after hiding',
-              tempDialog.isOpen());
+  assertFalse(
+      'Dialog should not still be open after hiding', tempDialog.isOpen());
   if (opt_reuse) {
-    assertFalse('Dialog should not be disposed after hiding (will be reused)',
-                tempDialog.isDisposed());
+    assertFalse(
+        'Dialog should not be disposed after hiding (will be reused)',
+        tempDialog.isDisposed());
   } else {
-    assertTrue('Dialog should be disposed after hiding',
-               tempDialog.isDisposed());
+    assertTrue(
+        'Dialog should be disposed after hiding', tempDialog.isDisposed());
   }
   plugin.dispose();
   mockCtrl.$verifyAll();
@@ -243,47 +249,53 @@ function testExecAndHideReuse() {
  * user can't do another execCommand before closing the first dialog. But
  * since the API makes it possible, I thought it would be good to guard
  * against and unit test.
- * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
+ * @param {boolean=} opt_reuse Whether to set the plugin to reuse its dialog.
  */
 function testExecTwice(opt_reuse) {
   setUpMockRange();
   if (opt_reuse) {
-    expectOpened(2); // The second exec should cause a second OPENED event.
+    expectOpened(2);  // The second exec should cause a second OPENED event.
     // But the dialog was not closed between exec calls, so only one CLOSED is
     // expected.
     expectClosed();
     plugin.setReuseDialog(true);
     mockField.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
   } else {
-    expectOpened(2); // The second exec should cause a second OPENED event.
+    expectOpened(2);  // The second exec should cause a second OPENED event.
     // The first dialog will be disposed so there should be two CLOSED events.
     expectClosed(2);
-    mockSavedRange.restore(); // Expected 2x, once already recorded in setup.
-    mockField.focus(); // Expected 2x, once already recorded in setup.
+    mockSavedRange.restore();  // Expected 2x, once already recorded in setup.
+    mockField.focus();         // Expected 2x, once already recorded in setup.
     mockField.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
     mockField.$times(2);
   }
   mockCtrl.$replayAll();
 
-  assertFalse('Dialog should not be open yet',
-              !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertFalse(
+      'Dialog should not be open yet',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   plugin.execCommand(COMMAND);
-  assertTrue('Dialog should be open now',
-             !!plugin.getDialog() && plugin.getDialog().isOpen());
+  assertTrue(
+      'Dialog should be open now',
+      !!plugin.getDialog() && plugin.getDialog().isOpen());
 
   var tempDialog = plugin.getDialog();
   plugin.execCommand(COMMAND);
   if (opt_reuse) {
-    assertTrue('Reused dialog should still be open after second exec',
-               tempDialog.isOpen());
-    assertFalse('Reused dialog should not be disposed after second exec',
+    assertTrue(
+        'Reused dialog should still be open after second exec',
+        tempDialog.isOpen());
+    assertFalse(
+        'Reused dialog should not be disposed after second exec',
         tempDialog.isDisposed());
   } else {
-    assertFalse('First dialog should not still be open after opening second',
-                tempDialog.isOpen());
-    assertTrue('First dialog should be disposed after opening second',
-               tempDialog.isDisposed());
+    assertFalse(
+        'First dialog should not still be open after opening second',
+        tempDialog.isOpen());
+    assertTrue(
+        'First dialog should be disposed after opening second',
+        tempDialog.isDisposed());
   }
   plugin.dispose();
   mockCtrl.$verifyAll();
@@ -313,22 +325,23 @@ function testRestoreSelection() {
   fieldObj.setHtml(false, '12345');
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
-  helper.select('12345', 1, '12345', 4); // Selects '234'.
+  helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
-  assertEquals('Incorrect text selected before dialog is opened',
-               '234',
-               fieldObj.getRange().getText());
+  assertEquals(
+      'Incorrect text selected before dialog is opened', '234',
+      fieldObj.getRange().getText());
   plugin.execCommand(COMMAND);
   if (!goog.userAgent.IE && !goog.userAgent.OPERA) {
     // IE returns some bogus range when field doesn't have selection.
     // Opera can't remove the selection from a whitebox field.
-    assertNull('There should be no selection while dialog is open',
-               fieldObj.getRange());
+    assertNull(
+        'There should be no selection while dialog is open',
+        fieldObj.getRange());
   }
   plugin.getDialog().hide();
-  assertEquals('Incorrect text selected after dialog is closed',
-               '234',
-               fieldObj.getRange().getText());
+  assertEquals(
+      'Incorrect text selected after dialog is closed', '234',
+      fieldObj.getRange().getText());
 }
 
 
@@ -380,10 +393,8 @@ function testDebounceSelectionChange() {
   // Set up a mock event handler to make sure selection change isn't fired
   // more than once on close and a second time on close.
   var count = 0;
-  fieldObj.addEventListener(goog.editor.Field.EventType.SELECTIONCHANGE,
-                            function(e) {
-                              count++;
-                            });
+  fieldObj.addEventListener(
+      goog.editor.Field.EventType.SELECTIONCHANGE, function(e) { count++; });
 
   assertEquals(0, count);
   plugin.execCommand(COMMAND);

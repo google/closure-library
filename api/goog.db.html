@@ -1,0 +1,46 @@
+---
+{edit_path: '', layout: api, page: goog.db, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.db</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/error.js#L21" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.db</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="deleteDatabase"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/db.js#L167" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>deleteDatabase(<var>name</var>, <var>opt_onBlocked</var>)</div></h3></div><div class="body"><p>Deletes a database once all open connections have been closed.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the database to delete.</p>
+<dt class="type name"><var>opt_onBlocked</var><code><a href="goog.db.html#goog.db.BlockedCallback">goog.db.BlockedCallback</a>=</code><dd><p>Called if there are active
+connections to the database.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>A deferred object that will fire once the
+database is deleted.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="openDatabase"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/db.js#L122" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>openDatabase(<var>name</var>, <var>opt_version</var>, <var>opt_onUpgradeNeeded</var>, <var>opt_onBlocked</var>)</div></h3></div><div class="body"><p>Opens a database connection and wraps it.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the database to open.</p>
+<dt class="type name"><var>opt_version</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The expected version of the database. If this is
+larger than the actual version, opt_onUpgradeNeeded will be called
+(possibly after opt_onBlocked; see <a href="goog.db.html#goog.db.BlockedCallback"><code>goog.db.BlockedCallback</code></a>). If
+this is passed, opt_onUpgradeNeeded must be passed as well.</p>
+<dt class="type name"><var>opt_onUpgradeNeeded</var><code><a href="goog.db.html#goog.db.UpgradeNeededCallback">goog.db.UpgradeNeededCallback</a>=</code><dd><p>Called if
+opt_version is greater than the old version of the database. If
+opt_version is passed, this must be passed as well.</p>
+<dt class="type name"><var>opt_onBlocked</var><code><a href="goog.db.html#goog.db.BlockedCallback">goog.db.BlockedCallback</a>=</code><dd><p>Called if there are active
+connections to the database.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred database object.</p>
+</dl></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.db.Cursor.html">Cursor</a></div><li class="summary"><div><a href="goog.db.Error.html">Error</a></div><li class="summary"><div><a href="goog.db.Index.html">Index</a></div><li class="summary"><div><a href="goog.db.IndexedDb.html">IndexedDb</a></div><li class="summary"><div><a href="goog.db.KeyRange.html">KeyRange</a></div><li class="summary"><div><a href="goog.db.ObjectStore.html">ObjectStore</a></div><li class="summary"><div><a href="goog.db.Transaction.html">Transaction</a></div></ul></section><section class="type-defs"><h2>Type Definitions</h2><section id="BlockedCallback" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/db.js#L82" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>BlockedCallback</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>function(!<a href="goog.db.IndexedDb.VersionChangeEvent.html">goog.db.IndexedDb.VersionChangeEvent</a>)</code></dl><p>A callback that&#39;s called if a blocked event is received. When a database is
+supposed to be deleted or upgraded (i.e. versionchange), and there are open
+connections to this database, a block event will be fired to prevent the
+operations from going through until all such open connections are closed.
+This callback can be used to notify users that they should close other tabs
+that have open connections, or to close the connections manually. Databases
+can also listen for the <a href="goog.db.IndexedDb.EventType.html#VERSION_CHANGE"><code>goog.db.IndexedDb.EventType.VERSION_CHANGE</code></a>
+event to automatically close themselves when they&#39;re blocking such
+operations.</p>
+<p>This is passed a VersionChangeEvent that has the version of the database
+before it was deleted, and &#34;null&#34; as the new version.</p>
+</div></section><section id="UpgradeNeededCallback" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/db.js#L104" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>UpgradeNeededCallback</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>function(!<a href="goog.db.IndexedDb.VersionChangeEvent.html">goog.db.IndexedDb.VersionChangeEvent</a>, !<a href="goog.db.IndexedDb.html">goog.db.IndexedDb</a>, !<a href="goog.db.Transaction.html">goog.db.Transaction</a>)</code></dl><p>A callback that&#39;s called when opening a database whose internal version is
+lower than the version passed to <a href="goog.db.html#openDatabase"><code>goog.db.openDatabase</code></a>.</p>
+<p>This callback is passed three arguments: a VersionChangeEvent with both the
+old version and the new version of the database; the database that&#39;s being
+opened, for which you can create and delete object stores; and the version
+change transaction, with which you can abort the version change.</p>
+<p>Note that the transaction is not active, which means that it can&#39;t be used to
+make changes to the database. However, since there is a transaction running,
+you can&#39;t create another one via <a href="goog.db.IndexedDb.html"><code>goog.db.IndexedDb.createTransaction</code></a>.
+This means that it&#39;s not possible to manipulate the database other than
+creating or removing object stores in this callback.</p>
+</div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

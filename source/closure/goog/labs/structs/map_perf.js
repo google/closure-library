@@ -106,20 +106,18 @@ MapPerf.primeMapWithDeletion = function(map) {
 MapPerf.runPerformanceTestForMapGet = function(map, message) {
   MapPerf.fillMap(map, 10000);
 
-  MapPerf.perfTable.run(
-      function() {
-        // Creates local alias for map and keyList.
-        var localMap = map;
-        var localKeyList = MapPerf.keyList;
+  MapPerf.perfTable.run(function() {
+    // Creates local alias for map and keyList.
+    var localMap = map;
+    var localKeyList = MapPerf.keyList;
 
-        for (var i = 0; i < 500; ++i) {
-          var sum = 0;
-          for (var j = 0; j < 10000; ++j) {
-            sum += localMap.get(localKeyList[j]);
-          }
-        }
-      },
-      message);
+    for (var i = 0; i < 500; ++i) {
+      var sum = 0;
+      for (var j = 0; j < 10000; ++j) {
+        sum += localMap.get(localKeyList[j]);
+      }
+    }
+  }, message);
 };
 
 
@@ -129,34 +127,33 @@ MapPerf.runPerformanceTestForMapGet = function(map, message) {
  * @param {string} message Message to be put in performance table.
  */
 MapPerf.runPerformanceTestForMapSet = function(map, message) {
-  MapPerf.perfTable.run(
-      function() {
-        // Creates local alias for map and keyList.
-        var localMap = map;
-        var localKeyList = MapPerf.keyList;
+  MapPerf.perfTable.run(function() {
+    // Creates local alias for map and keyList.
+    var localMap = map;
+    var localKeyList = MapPerf.keyList;
 
-        for (var i = 0; i < 500; ++i) {
-          for (var j = 0; j < 10000; ++j) {
-            localMap.set(localKeyList[i], i);
-          }
-        }
-      },
-      message);
+    for (var i = 0; i < 500; ++i) {
+      for (var j = 0; j < 10000; ++j) {
+        localMap.set(localKeyList[i], i);
+      }
+    }
+  }, message);
 };
 
 
 goog.global['setUpPage'] = function() {
   var content = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(document.body, content, 0);
-  var ua = navigator.userAgent;
-  content.innerHTML =
-      '<h1>Closure Performance Tests - Map</h1>' +
-      '<p><strong>User-agent: </strong><span id="ua">' + ua + '</span></p>' +
-      '<div id="perf-table"></div>' +
-      '<hr>';
+  goog.dom.append(content,
+      goog.dom.createDom('h1', null, 'Closure Performance Tests - Map'),
+      goog.dom.createDom('p', null,
+          goog.dom.createDom('strong', null, 'User-agent: '),
+          goog.dom.createDom('span', {'id': 'ua'}, navigator.userAgent)),
+      goog.dom.createDom('div', {'id': 'perf-table'}),
+      goog.dom.createDom('hr'));
 
-  MapPerf.perfTable = new goog.testing.PerformanceTable(
-      goog.dom.getElement('perf-table'));
+  MapPerf.perfTable =
+      new goog.testing.PerformanceTable(goog.dom.getElement('perf-table'));
 
   // Fills keyList.
   for (var i = 0; i < MapPerf.MAX_NUM_KEY; ++i) {

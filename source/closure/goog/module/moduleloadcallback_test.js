@@ -24,8 +24,8 @@ goog.require('goog.testing.recordFunction');
 
 function testProtectEntryPoint() {
   // Test a callback created before the protect method is called.
-  var callback1 = new goog.module.ModuleLoadCallback(
-      goog.functions.error('callback1'));
+  var callback1 =
+      new goog.module.ModuleLoadCallback(goog.functions.error('callback1'));
 
   var errorFn = goog.testing.recordFunction();
   var errorHandler = new goog.debug.ErrorHandler(errorFn);
@@ -37,8 +37,8 @@ function testProtectEntryPoint() {
   assertContains('callback1', errorFn.getLastCall().getArguments()[0].message);
 
   // Test a callback created after the protect method is called.
-  var callback2 = new goog.module.ModuleLoadCallback(
-      goog.functions.error('callback2'));
+  var callback2 =
+      new goog.module.ModuleLoadCallback(goog.functions.error('callback2'));
   assertThrows(goog.bind(callback1.execute, callback2));
   assertEquals(2, errorFn.getCallCount());
   assertContains('callback2', errorFn.getLastCall().getArguments()[0].message);

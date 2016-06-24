@@ -19,13 +19,15 @@ goog.require('goog.i18n.GraphemeBreak');
 goog.require('goog.testing.jsunit');
 
 function testBreakNormalAscii() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak('a'.charCodeAt(0),
-      'b'.charCodeAt(0), true));
+  assertTrue(
+      goog.i18n.GraphemeBreak.hasGraphemeBreak(
+          'a'.charCodeAt(0), 'b'.charCodeAt(0), true));
 }
 
 function testBreakAsciiWithExtendedChar() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak('a'.charCodeAt(0),
-      0x0300, true));
+  assertFalse(
+      goog.i18n.GraphemeBreak.hasGraphemeBreak(
+          'a'.charCodeAt(0), 0x0300, true));
 }
 
 function testBreakSurrogates() {

@@ -1,0 +1,51 @@
+---
+{edit_path: '', layout: api, page: goog.reflect, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.reflect</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L21" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.reflect</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="cache"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L130" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;K, V&gt;</var> cache(<var>cacheObj</var>, <var>key</var>, <var>valueFn</var>, <var>opt_keyFn</var>)</div></h3></div><div class="body"><p>Retrieves a value from a cache given a key. The compiler provides special
+consideration for this call such that it is generally considered side-effect
+free. However, if the <code>opt_keyFn</code> or <code>valueFn</code> have side-effects
+then the entire call is considered to have side-effects.</p>
+<p>Conventionally storing the value on the cache would be considered a
+side-effect and preclude unused calls from being pruned, ie. even if
+the value was never used, it would still always be stored in the cache.</p>
+<p>Providing a side-effect free <code>valueFn</code> and <code>opt_keyFn</code>
+allows unused calls to <code>goog.cache</code> to be pruned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cacheObj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;K, V&gt;</code><dd><p>The object that contains the cached values.</p>
+<dt class="type name"><var>key</var><code>?</code><dd><p>The key to lookup in the cache. If it is not string or number
+then a <code>opt_keyFn</code> should be provided. The key is also used as the
+parameter to the <code>valueFn</code>.</p>
+<dt class="type name"><var>valueFn</var><code>!function(?): V</code><dd><p>The value provider to use to calculate the
+value to store in the cache. This function should be side-effect free
+to take advantage of the optimization.</p>
+<dt class="type name"><var>opt_keyFn</var><code>function(?): K=</code><dd><p>The key provider to determine the cache
+map key. This should be used if the given key is not a string or number.
+If not provided then the given key is used. This function should be
+side-effect free to take advantage of the optimization.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>V</code><dd><p>The cached or calculated value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="canAccessProperty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L91" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>canAccessProperty(<var>obj</var>, <var>prop</var>)</div></h3></div><div class="body"><p>Check if a property can be accessed without throwing an exception.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The owner of the property.</p>
+<dt class="type name"><var>prop</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The property name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the property is accessible. Will also return true
+if obj is null.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="object"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L36" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>object(<var>type</var>, <var>object</var>)</div></h3></div><div class="body"><p>Syntax for object literal casts.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>type</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Type to cast to.</p>
+<dt class="type name"><var>object</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object literal to cast.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object literal.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://go/jscompiler-renaming">http://go/jscompiler-renaming</a></p>
+</dd><dd><p><a href="https://goo.gl/CRs09P">https://goo.gl/CRs09P</a></p>
+</dd></dl></div></section><section class="property expandable" id="objectProperty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L56" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>objectProperty(<var>prop</var>, <var>object</var>)</div></h3></div><div class="body"><p>Syntax for renaming property strings.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>prop</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Name of the property</p>
+<dt class="type name"><var>object</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Instance of the object whose type will be used
+for renaming</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The renamed property.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://go/jscompiler-renaming">http://go/jscompiler-renaming</a></p>
+</dd><dd><p><a href="https://goo.gl/CRs09P">https://goo.gl/CRs09P</a></p>
+</dd></dl></div></section><section class="property expandable" id="sinkValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/reflect/reflect.js#L71" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> sinkValue(<var>x</var>)</div></h3></div><div class="body"><p>To assert to the compiler that an operation is needed when it would
+otherwise be stripped. For example:
+<code>
+// Force a layout
+goog.reflect.sinkValue(dialog.offsetHeight);
+</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>x</var><code>T</code></dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code></dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

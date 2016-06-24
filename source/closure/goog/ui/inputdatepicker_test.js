@@ -27,8 +27,7 @@ var dateTimeParser = new goog.i18n.DateTimeParse('MM/dd/yyyy');
 var inputDatePicker;
 var popupDatePicker;
 
-function setUp() {
-}
+function setUp() {}
 
 function tearDown() {
   if (inputDatePicker) {
@@ -48,8 +47,8 @@ function tearDown() {
  */
 function test_setPopupParentElementDefault() {
   setPopupParentElement_(null);
-  assertEquals('PopupDatePicker should be parented to the body element',
-      document.body,
+  assertEquals(
+      'PopupDatePicker should be parented to the body element', document.body,
       popupDatePicker.getElement().parentNode);
 }
 
@@ -61,9 +60,9 @@ function test_setPopupParentElementDefault() {
 function test_setPopupParentElement() {
   var popupParentElement = goog.dom.getElement('popupParent');
   setPopupParentElement_(popupParentElement);
-  assertEquals('PopupDatePicker should be parented to the popupParent DIV',
-      popupParentElement,
-      popupDatePicker.getElement().parentNode);
+  assertEquals(
+      'PopupDatePicker should be parented to the popupParent DIV',
+      popupParentElement, popupDatePicker.getElement().parentNode);
 }
 
 
@@ -76,9 +75,8 @@ function test_setPopupParentElement() {
  * @private
  */
 function setPopupParentElement_(el) {
-  inputDatePicker = new goog.ui.InputDatePicker(
-      dateTimeFormatter,
-      dateTimeParser);
+  inputDatePicker =
+      new goog.ui.InputDatePicker(dateTimeFormatter, dateTimeParser);
 
   if (el) {
     inputDatePicker.setPopupParentElement(el);
@@ -90,9 +88,8 @@ function setPopupParentElement_(el) {
 
 
 function test_ItParsesDataCorrectly() {
-  inputDatePicker = new goog.ui.InputDatePicker(
-      dateTimeFormatter,
-      dateTimeParser);
+  inputDatePicker =
+      new goog.ui.InputDatePicker(dateTimeFormatter, dateTimeParser);
   inputDatePicker.render(goog.dom.getElement('renderElement'));
 
   inputDatePicker.createDom();
@@ -100,14 +97,13 @@ function test_ItParsesDataCorrectly() {
 
   var parsedDate = inputDatePicker.getInputValueAsDate_();
   assertEquals(2009, parsedDate.getYear());
-  assertEquals(7, parsedDate.getMonth()); // Months start from 0
+  assertEquals(7, parsedDate.getMonth());  // Months start from 0
   assertEquals(9, parsedDate.getDate());
 }
 
 function test_ItUpdatesItsValueOnPopupShown() {
-  inputDatePicker = new goog.ui.InputDatePicker(
-      dateTimeFormatter,
-      dateTimeParser);
+  inputDatePicker =
+      new goog.ui.InputDatePicker(dateTimeFormatter, dateTimeParser);
 
   setPopupParentElement_(null);
   inputDatePicker.setInputValue('1/1/1');
@@ -118,9 +114,8 @@ function test_ItUpdatesItsValueOnPopupShown() {
 
 function test_ItDoesNotClearInputOnPopupShown() {
   // if popup does not have a date set, don't update input value
-  inputDatePicker = new goog.ui.InputDatePicker(
-      dateTimeFormatter,
-      dateTimeParser);
+  inputDatePicker =
+      new goog.ui.InputDatePicker(dateTimeFormatter, dateTimeParser);
 
   setPopupParentElement_(null);
   inputDatePicker.setInputValue('i_am_not_a_date');

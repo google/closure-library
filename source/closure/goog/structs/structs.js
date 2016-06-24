@@ -131,7 +131,8 @@ goog.structs.isEmpty = function(col) {
     return col.isEmpty();
   }
 
-  // We do not use goog.string.isEmptyOrWhitespace because here we treat the string as
+  // We do not use goog.string.isEmptyOrWhitespace because here we treat the
+  // string as
   // collection and as such even whitespace matters
 
   if (goog.isArrayLike(col) || goog.isString(col)) {
@@ -150,7 +151,7 @@ goog.structs.clear = function(col) {
   if (col.clear && typeof col.clear == 'function') {
     col.clear();
   } else if (goog.isArrayLike(col)) {
-    goog.array.clear(/** @type {goog.array.ArrayLike} */ (col));
+    goog.array.clear(/** @type {IArrayLike<?>} */ (col));
   } else {
     goog.object.clear(col);
   }

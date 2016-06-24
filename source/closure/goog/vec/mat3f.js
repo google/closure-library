@@ -232,7 +232,7 @@ goog.vec.mat3f.setDiagonal = function(mat, vec) {
 /**
  * Sets the specified column with the supplied values.
  *
- * @param {!goog.vec.mat3f.Type} mat The matrix to recieve the values.
+ * @param {!goog.vec.mat3f.Type} mat The matrix to receive the values.
  * @param {number} column The column index to set the values on.
  * @param {number} v0 The value for row 0.
  * @param {number} v1 The value for row 1.
@@ -301,7 +301,7 @@ goog.vec.mat3f.setColumns = function(mat, vec0, vec1, vec2) {
   goog.vec.mat3f.setColumn(mat, 0, vec0);
   goog.vec.mat3f.setColumn(mat, 1, vec1);
   goog.vec.mat3f.setColumn(mat, 2, vec2);
-  return /** @type {!goog.vec.mat3f.Type} */(mat);
+  return /** @type {!goog.vec.mat3f.Type} */ (mat);
 };
 
 
@@ -388,7 +388,7 @@ goog.vec.mat3f.setRows = function(mat, vec0, vec1, vec2) {
   goog.vec.mat3f.setRow(mat, 0, vec0);
   goog.vec.mat3f.setRow(mat, 1, vec1);
   goog.vec.mat3f.setRow(mat, 2, vec2);
-  return /** @type {!goog.vec.mat3f.Type} */(mat);
+  return /** @type {!goog.vec.mat3f.Type} */ (mat);
 };
 
 
@@ -635,10 +635,10 @@ goog.vec.mat3f.invert = function(mat0, resultMat) {
  * @return {boolean} True if the the two matrices are equivalent.
  */
 goog.vec.mat3f.equals = function(mat0, mat1) {
-  return mat0.length == mat1.length &&
-      mat0[0] == mat1[0] && mat0[1] == mat1[1] && mat0[2] == mat1[2] &&
-      mat0[3] == mat1[3] && mat0[4] == mat1[4] && mat0[5] == mat1[5] &&
-      mat0[6] == mat1[6] && mat0[7] == mat1[7] && mat0[8] == mat1[8];
+  return mat0.length == mat1.length && mat0[0] == mat1[0] &&
+      mat0[1] == mat1[1] && mat0[2] == mat1[2] && mat0[3] == mat1[3] &&
+      mat0[4] == mat1[4] && mat0[5] == mat1[5] && mat0[6] == mat1[6] &&
+      mat0[7] == mat1[7] && mat0[8] == mat1[8];
 };
 
 
@@ -1044,8 +1044,8 @@ goog.vec.mat3f.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
   euler[2] = (euler[2] + Math.PI * 2) % (Math.PI * 2);
   // For theta2 we want the angle to be in [0, pi] or [-pi, 0] depending on
   // signTheta2.
-  euler[1] = ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) *
-      signTheta2;
+  euler[1] =
+      ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) * signTheta2;
 
   return euler;
 };

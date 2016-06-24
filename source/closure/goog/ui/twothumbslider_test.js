@@ -27,8 +27,10 @@ function tearDown() {
 
 function testGetCssClass() {
   slider = new goog.ui.TwoThumbSlider();
-  assertEquals('goog-twothumbslider-horizontal',
+  assertEquals(
+      'goog-twothumbslider-horizontal',
       slider.getCssClass(goog.ui.SliderBase.Orientation.HORIZONTAL));
-  assertEquals('goog-twothumbslider-vertical',
+  assertEquals(
+      'goog-twothumbslider-vertical',
       slider.getCssClass(goog.ui.SliderBase.Orientation.VERTICAL));
 }

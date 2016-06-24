@@ -63,21 +63,22 @@ function testSetVisible() {
 
 function testEscapeDismissal() {
   popup.setHideOnEscape(true);
-  assertTrue('Sanity check that getHideOnEscape is true when set to true.',
+  assertTrue(
+      'Sanity check that getHideOnEscape is true when set to true.',
       popup.getHideOnEscape());
   popup.setVisible(true);
-  assertFalse('Escape key should be cancelled',
-      goog.testing.events.fireKeySequence(
-          targetDiv, goog.events.KeyCodes.ESC));
+  assertFalse(
+      'Escape key should be cancelled',
+      goog.testing.events.fireKeySequence(targetDiv, goog.events.KeyCodes.ESC));
   assertFalse(popup.isVisible());
 }
 
 function testEscapeDismissalCanBeDisabled() {
   popup.setHideOnEscape(false);
   popup.setVisible(true);
-  assertTrue('Escape key should be cancelled',
-      goog.testing.events.fireKeySequence(
-          targetDiv, goog.events.KeyCodes.ESC));
+  assertTrue(
+      'Escape key should be cancelled',
+      goog.testing.events.fireKeySequence(targetDiv, goog.events.KeyCodes.ESC));
   assertTrue(popup.isVisible());
 }
 
@@ -89,64 +90,63 @@ function testEscapeDismissalDoesNotRecognizeOtherKeys() {
   popup.setHideOnEscape(true);
   popup.setVisible(true);
   var eventsPropagated = 0;
-  goog.events.listenOnce(goog.dom.getElement('commonAncestor'),
-      [goog.events.EventType.KEYDOWN,
-       goog.events.EventType.KEYUP,
-       goog.events.EventType.KEYPRESS],
-      function() {
-        ++eventsPropagated;
-      });
+  goog.events.listenOnce(
+      goog.dom.getElement('commonAncestor'),
+      [
+        goog.events.EventType.KEYDOWN, goog.events.EventType.KEYUP,
+        goog.events.EventType.KEYPRESS
+      ],
+      function() { ++eventsPropagated; });
   assertTrue('Popup should remain visible', popup.isVisible());
-  assertTrue('The key event default action should not be prevented',
-      goog.testing.events.fireKeySequence(
-          targetDiv, goog.events.KeyCodes.A));
-  assertEquals('Keydown, keyup, and keypress should have all propagated',
-      3, eventsPropagated);
+  assertTrue(
+      'The key event default action should not be prevented',
+      goog.testing.events.fireKeySequence(targetDiv, goog.events.KeyCodes.A));
+  assertEquals(
+      'Keydown, keyup, and keypress should have all propagated', 3,
+      eventsPropagated);
 }
 
 function testEscapeDismissalCanBeCancelledByBeforeHideEvent() {
   popup.setHideOnEscape(true);
   popup.setVisible(true);
   var eventsPropagated = 0;
-  goog.events.listenOnce(goog.dom.getElement('commonAncestor'),
-      goog.events.EventType.KEYDOWN,
-      function() {
-        ++eventsPropagated;
-      });
+  goog.events.listenOnce(
+      goog.dom.getElement('commonAncestor'), goog.events.EventType.KEYDOWN,
+      function() { ++eventsPropagated; });
   // Make a listener so that we stop hiding with an event handler.
-  goog.events.listenOnce(popup, goog.ui.PopupBase.EventType.BEFORE_HIDE,
-      function(e) {
-        e.preventDefault();
-      });
-  assertEquals('The hide should have been cancelled',
-      true, popup.isVisible());
-  assertTrue('The key event default action should not be prevented',
-      goog.testing.events.fireKeySequence(
-          targetDiv, goog.events.KeyCodes.ESC));
-  assertEquals('Keydown should have all propagated',
-      1, eventsPropagated);
+  goog.events.listenOnce(
+      popup, goog.ui.PopupBase.EventType.BEFORE_HIDE,
+      function(e) { e.preventDefault(); });
+  assertEquals('The hide should have been cancelled', true, popup.isVisible());
+  assertTrue(
+      'The key event default action should not be prevented',
+      goog.testing.events.fireKeySequence(targetDiv, goog.events.KeyCodes.ESC));
+  assertEquals('Keydown should have all propagated', 1, eventsPropagated);
 }
 
 function testEscapeDismissalProvidesKeyTargetAsTargetForHideEvents() {
   popup.setHideOnEscape(true);
   popup.setVisible(true);
   var calls = 0;
-  goog.events.listenOnce(popup,
-      [goog.ui.PopupBase.EventType.BEFORE_HIDE,
-       goog.ui.PopupBase.EventType.HIDE],
+  goog.events.listenOnce(
+      popup,
+      [
+        goog.ui.PopupBase.EventType.BEFORE_HIDE,
+        goog.ui.PopupBase.EventType.HIDE
+      ],
       function(e) {
         calls++;
-        assertEquals('The key target should be the hide event target',
-            'targetDiv', e.target.id);
+        assertEquals(
+            'The key target should be the hide event target', 'targetDiv',
+            e.target.id);
       });
-  goog.testing.events.fireKeySequence(
-      targetDiv, goog.events.KeyCodes.ESC);
+  goog.testing.events.fireKeySequence(targetDiv, goog.events.KeyCodes.ESC);
 }
 
 function testAutoHide() {
   popup.setAutoHide(true);
   popup.setVisible(true);
-  clock.tick(1000); // avoid bouncing
+  clock.tick(1000);  // avoid bouncing
   goog.testing.events.fireClickSequence(targetDiv);
   assertFalse(popup.isVisible());
 }
@@ -154,7 +154,7 @@ function testAutoHide() {
 function testAutoHideCanBeDisabled() {
   popup.setAutoHide(false);
   popup.setVisible(true);
-  clock.tick(1000); // avoid bouncing
+  clock.tick(1000);  // avoid bouncing
   goog.testing.events.fireClickSequence(targetDiv);
   assertTrue(
       'Should not be hidden if auto hide is disabled', popup.isVisible());
@@ -169,7 +169,7 @@ function testAutoHideWithPartners() {
   popup.setVisible(true);
   popup.addAutoHidePartner(targetDiv);
   popup.addAutoHidePartner(partnerDiv);
-  clock.tick(1000); // avoid bouncing
+  clock.tick(1000);  // avoid bouncing
 
   goog.testing.events.fireClickSequence(targetDiv);
   assertTrue(popup.isVisible());
@@ -183,21 +183,18 @@ function testAutoHideWithPartners() {
 
 function testCanAddElementDuringBeforeShow() {
   popup.setElement(null);
-  goog.events.listenOnce(popup, goog.ui.PopupBase.EventType.BEFORE_SHOW,
-      function() {
-        popup.setElement(popupDiv);
-      });
+  goog.events.listenOnce(
+      popup, goog.ui.PopupBase.EventType.BEFORE_SHOW,
+      function() { popup.setElement(popupDiv); });
   popup.setVisible(true);
   assertTrue('Popup should be shown', popup.isVisible());
 }
 
 function testShowWithNoElementThrowsException() {
   popup.setElement(null);
-  var e = assertThrows(function() {
-    popup.setVisible(true);
-  });
-  assertEquals('Caller must call setElement before trying to show the popup',
-      e.message);
+  var e = assertThrows(function() { popup.setVisible(true); });
+  assertEquals(
+      'Caller must call setElement before trying to show the popup', e.message);
 }
 
 function testShowEventFiredWithNoTransition() {
@@ -312,15 +309,15 @@ function testMoveOffscreenRTL() {
   originalScrollWidth = goog.dom.getDocumentScrollElement().scrollWidth;
   popup.setVisible(true);
   popup.setVisible(false);
-  assertFalse('Moving a popup offscreen should not cause scrollbars',
+  assertFalse(
+      'Moving a popup offscreen should not cause scrollbars',
       goog.dom.getDocumentScrollElement().scrollWidth != originalScrollWidth);
 }
 
 function testOnDocumentBlurDisabledCrossIframeDismissalWithoutDelay() {
   popup.setEnableCrossIframeDismissal(false);
   popup.setVisible(true);
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
 }
@@ -328,8 +325,7 @@ function testOnDocumentBlurDisabledCrossIframeDismissalWithoutDelay() {
 function testOnDocumentBlurDisabledCrossIframeDismissalWithDelay() {
   popup.setEnableCrossIframeDismissal(false);
   popup.setVisible(true);
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
@@ -341,8 +337,7 @@ function testOnDocumentBlurActiveElementInsidePopupWithoutDelay() {
   goog.dom.append(popupDiv, elementInsidePopup);
   elementInsidePopup.setAttribute('tabIndex', 0);
   elementInsidePopup.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
 }
@@ -353,8 +348,7 @@ function testOnDocumentBlurActiveElementInsidePopupWithDelay() {
   goog.dom.append(popupDiv, elementInsidePopup);
   elementInsidePopup.setAttribute('tabIndex', 0);
   elementInsidePopup.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
@@ -362,24 +356,22 @@ function testOnDocumentBlurActiveElementInsidePopupWithDelay() {
 
 function testOnDocumentBlurActiveElementIsBodyWithoutDelay() {
   popup.setVisible(true);
-  var bodyElement = goog.dom.getDomHelper().
-      getElementsByTagNameAndClass('body')[0];
+  var bodyElement =
+      goog.dom.getDomHelper().getElementsByTagNameAndClass('body')[0];
   bodyElement.setAttribute('tabIndex', 0);
   bodyElement.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
 }
 
 function testOnDocumentBlurActiveElementIsBodyWithDelay() {
   popup.setVisible(true);
-  var bodyElement = goog.dom.getDomHelper().
-      getElementsByTagNameAndClass('body')[0];
+  var bodyElement =
+      goog.dom.getDomHelper().getElementsByTagNameAndClass('body')[0];
   bodyElement.setAttribute('tabIndex', 0);
   bodyElement.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
@@ -387,16 +379,14 @@ function testOnDocumentBlurActiveElementIsBodyWithDelay() {
 
 function testOnDocumentBlurEventTargetNotDocumentWithoutDelay() {
   popup.setVisible(true);
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, targetDiv);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, targetDiv);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
 }
 
 function testOnDocumentBlurEventTargetNotDocumentWithDelay() {
   popup.setVisible(true);
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, targetDiv);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, targetDiv);
   clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should remain visible', popup.isVisible());
@@ -409,8 +399,7 @@ function testOnDocumentBlurShouldDebounceWithoutDelay() {
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should be visible', popup.isVisible());
   goog.dom.removeNode(focusDiv);
@@ -424,8 +413,7 @@ function testOnDocumentBlurShouldNotDebounceWithDelay() {
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertFalse('Popup should be invisible', popup.isVisible());
   goog.dom.removeNode(focusDiv);
@@ -439,8 +427,7 @@ function testOnDocumentBlurShouldNotHideBubbleWithoutDelay() {
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertTrue('Popup should be visible', popup.isVisible());
   goog.dom.removeNode(focusDiv);
@@ -454,8 +441,7 @@ function testOnDocumentBlurShouldHideBubbleWithDelay() {
   focusDiv.setAttribute('tabIndex', 0);
   goog.dom.appendChild(commonAncestor, focusDiv);
   focusDiv.focus();
-  var e = new goog.testing.events.Event(
-      goog.events.EventType.BLUR, document);
+  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, document);
   goog.testing.events.fireBrowserEvent(e);
   assertFalse('Popup should be invisible', popup.isVisible());
   goog.dom.removeNode(focusDiv);

@@ -45,92 +45,110 @@ function tearDown() {
 
 function testIdle() {
   var activityMonitor = new goog.ui.ActivityMonitor();
-  assertEquals('Upon creation, last event time should be creation time',
+  assertEquals(
+      'Upon creation, last event time should be creation time',
       mockClock.getCurrentTime(), activityMonitor.getLastEventTime());
 
   mockClock.tick(1000);
   activityMonitor.resetTimer();
   var resetTime = mockClock.getCurrentTime();
-  assertEquals('Upon reset, last event time should be reset time',
-      resetTime, activityMonitor.getLastEventTime());
-  assertEquals('Upon reset, idle time should be zero',
-      0, activityMonitor.getIdleTime());
+  assertEquals(
+      'Upon reset, last event time should be reset time', resetTime,
+      activityMonitor.getLastEventTime());
+  assertEquals(
+      'Upon reset, idle time should be zero', 0, activityMonitor.getIdleTime());
 
   mockClock.tick(1000);
-  assertEquals('1s after reset, last event time should be reset time',
-      resetTime, activityMonitor.getLastEventTime());
-  assertEquals('1s after reset, idle time should be 1s',
-      1000, activityMonitor.getIdleTime());
+  assertEquals(
+      '1s after reset, last event time should be reset time', resetTime,
+      activityMonitor.getLastEventTime());
+  assertEquals(
+      '1s after reset, idle time should be 1s', 1000,
+      activityMonitor.getIdleTime());
 }
 
 function testEventFired() {
   var activityMonitor = new goog.ui.ActivityMonitor();
   var listener = goog.testing.recordFunction();
-  goog.events.listen(activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY,
-                     listener);
+  goog.events.listen(
+      activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY, listener);
 
   mockClock.tick(1000);
   goog.testing.events.fireClickEvent(mydiv);
-  assertEquals('Activity event should fire when click happens after creation',
-               1, listener.getCallCount());
+  assertEquals(
+      'Activity event should fire when click happens after creation', 1,
+      listener.getCallCount());
 
   mockClock.tick(3000);
   goog.testing.events.fireClickEvent(mydiv);
-  assertEquals('Activity event should not fire when click happens 3s or ' +
-               'less since the last activity', 1, listener.getCallCount());
+  assertEquals(
+      'Activity event should not fire when click happens 3s or ' +
+          'less since the last activity',
+      1, listener.getCallCount());
 
   mockClock.tick(1);
   goog.testing.events.fireClickEvent(mydiv);
-  assertEquals('Activity event should fire when click happens more than ' +
-               '3s since the last activity', 2, listener.getCallCount());
+  assertEquals(
+      'Activity event should fire when click happens more than ' +
+          '3s since the last activity',
+      2, listener.getCallCount());
 }
 
 function testEventFiredWhenPropagationStopped() {
   var activityMonitor = new goog.ui.ActivityMonitor();
   var listener = goog.testing.recordFunction();
-  goog.events.listen(activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY,
-                     listener);
+  goog.events.listen(
+      activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY, listener);
 
-  goog.events.listenOnce(mydiv, goog.events.EventType.CLICK,
-                         goog.events.Event.stopPropagation);
+  goog.events.listenOnce(
+      mydiv, goog.events.EventType.CLICK, goog.events.Event.stopPropagation);
   goog.testing.events.fireClickEvent(mydiv);
-  assertEquals('Activity event should fire despite click propagation ' +
-      'stopped because listening on capture', 1, listener.getCallCount());
+  assertEquals(
+      'Activity event should fire despite click propagation ' +
+          'stopped because listening on capture',
+      1, listener.getCallCount());
 }
 
 function testEventNotFiredWhenPropagationStopped() {
   var activityMonitor = new goog.ui.ActivityMonitor(undefined, true);
   var listener = goog.testing.recordFunction();
-  goog.events.listen(activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY,
-                     listener);
+  goog.events.listen(
+      activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY, listener);
 
-  goog.events.listenOnce(mydiv, goog.events.EventType.CLICK,
-                         goog.events.Event.stopPropagation);
+  goog.events.listenOnce(
+      mydiv, goog.events.EventType.CLICK, goog.events.Event.stopPropagation);
   goog.testing.events.fireClickEvent(mydiv);
-  assertEquals('Activity event should not fire since click propagation ' +
-      'stopped and listening on bubble', 0, listener.getCallCount());
+  assertEquals(
+      'Activity event should not fire since click propagation ' +
+          'stopped and listening on bubble',
+      0, listener.getCallCount());
 }
 
 function testTouchSequenceFired() {
   var activityMonitor = new goog.ui.ActivityMonitor();
   var listener = goog.testing.recordFunction();
-  goog.events.listen(activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY,
-                     listener);
+  goog.events.listen(
+      activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY, listener);
 
   mockClock.tick(1000);
   goog.testing.events.fireTouchSequence(mydiv);
-  assertEquals('Activity event should fire when touch happens after creation',
-               1, listener.getCallCount());
+  assertEquals(
+      'Activity event should fire when touch happens after creation', 1,
+      listener.getCallCount());
 
   mockClock.tick(3000);
   goog.testing.events.fireTouchSequence(mydiv);
-  assertEquals('Activity event should not fire when touch happens 3s or ' +
-               'less since the last activity', 1, listener.getCallCount());
+  assertEquals(
+      'Activity event should not fire when touch happens 3s or ' +
+          'less since the last activity',
+      1, listener.getCallCount());
 
   mockClock.tick(1);
   goog.testing.events.fireTouchSequence(mydiv);
-  assertEquals('Activity event should fire when touch happens more than ' +
-               '3s since the last activity', 2, listener.getCallCount());
+  assertEquals(
+      'Activity event should fire when touch happens more than ' +
+          '3s since the last activity',
+      2, listener.getCallCount());
 }
 
 function testAddDocument_duplicate() {

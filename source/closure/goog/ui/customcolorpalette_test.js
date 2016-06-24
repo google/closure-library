@@ -34,22 +34,25 @@ function tearDown() {
 function testRender() {
   samplePalette.render(document.getElementById('sandbox'));
 
-  assertTrue('Palette must have been rendered',
-             samplePalette.isInDocument());
+  assertTrue('Palette must have been rendered', samplePalette.isInDocument());
 
   var elem = samplePalette.getElement();
   assertNotNull('The palette element should not be null', elem);
-  assertEquals('The palette element should have the right tag name',
-               goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(
+      'The palette element should have the right tag name',
+      goog.dom.TagName.DIV, elem.tagName);
 
-  assertTrue('The custom color palette should have the right class name',
-             goog.dom.classlist.contains(elem, 'goog-palette'));
+  assertTrue(
+      'The custom color palette should have the right class name',
+      goog.dom.classlist.contains(elem, 'goog-palette'));
 }
 
 function testSetColors() {
-  var colorSet = ['#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af',
-    '#6fa8dc', '#8e7cc3'];
+  var colorSet = [
+    '#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af', '#6fa8dc', '#8e7cc3'
+  ];
   samplePalette.setColors(colorSet);
-  assertSameElements('The palette should have the correct set of colors',
-                     colorSet, samplePalette.getColors());
+  assertSameElements(
+      'The palette should have the correct set of colors', colorSet,
+      samplePalette.getColors());
 }

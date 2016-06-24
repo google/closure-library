@@ -99,9 +99,10 @@ goog.ui.tree.TypeAhead.prototype.handleNavigation = function(e) {
     case goog.events.KeyCodes.DOWN:
     case goog.events.KeyCodes.UP:
       if (e.ctrlKey) {
-        this.jumpTo_(e.keyCode == goog.events.KeyCodes.DOWN ?
-                     goog.ui.tree.TypeAhead.Offset.DOWN :
-                     goog.ui.tree.TypeAhead.Offset.UP);
+        this.jumpTo_(
+            e.keyCode == goog.events.KeyCodes.DOWN ?
+                goog.ui.tree.TypeAhead.Offset.DOWN :
+                goog.ui.tree.TypeAhead.Offset.UP);
         handled = true;
       }
       break;
@@ -165,7 +166,8 @@ goog.ui.tree.TypeAhead.prototype.handleTypeAheadChar = function(e) {
  */
 goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
   var labelText = node.getText();
-  if (labelText && !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
+  if (labelText &&
+      !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     // Typeahead is case insensitive, convert to lowercase.
     labelText = labelText.toLowerCase();
 
@@ -188,14 +190,20 @@ goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
  */
 goog.ui.tree.TypeAhead.prototype.removeNodeFromMap = function(node) {
   var labelText = node.getText();
-  if (labelText && !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
+  if (labelText &&
+      !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     labelText = labelText.toLowerCase();
 
     var nodeList = this.nodeMap_.get(labelText);
     if (nodeList) {
+      // Remove the node's descendants from the nodemap.
+      var count = node.getChildCount();
+      for (var i = 0; i < count; i++) {
+        this.removeNodeFromMap(node.getChildAt(i));
+      }
       // Remove the node from the array.
       goog.array.remove(nodeList, node);
-      if (!!nodeList.length) {
+      if (!nodeList.length) {
         this.nodeMap_.remove(labelText);
       }
     }
@@ -269,8 +277,8 @@ goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
       // while going UP select the last item of multiple nodes with same label
       // and while going DOWN select the first item of next set of nodes
       if (nodes && nodes.length && nodeIndexOutOfRange) {
-        this.matchingNodeIndex_ = (offset == goog.ui.tree.TypeAhead.Offset.UP) ?
-                                  nodes.length - 1 : 0;
+        this.matchingNodeIndex_ =
+            (offset == goog.ui.tree.TypeAhead.Offset.UP) ? nodes.length - 1 : 0;
       }
     }
 

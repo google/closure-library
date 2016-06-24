@@ -39,7 +39,7 @@ function testCheckForTimeTravel() {
   stat.checkForTimeTravel_(100);
   stat.checkForTimeTravel_(-1);
 
-  stat.incBy(1, 125); // creates a first bucket, ending at t=140
+  stat.incBy(1, 125);  // creates a first bucket, ending at t=140
 
   // Even though these go backwards in time, our basic fuzzy check passes
   // because we just check that the time is within the latest interval bucket.
@@ -73,7 +73,7 @@ function testConstantIncrementPerSlot() {
     assertEquals(msg, newMax, stat.getMax(now));
     assertEquals(msg, newMin, stat.getMin(now));
 
-    now += 20; // push into the next slots
+    now += 20;  // push into the next slots
   }
 
   // The next increment should cause old data to fall off.
@@ -82,7 +82,7 @@ function testConstantIncrementPerSlot() {
   assertEquals(1, stat.getMin(now));
   assertEquals(1049, stat.getMax(now));
 
-  now += 20; // drop off another bucket
+  now += 20;  // drop off another bucket
   stat.incBy(1, now);
   assertEquals(2000 * 48 + 2, stat.get(now));
   assertEquals(1, stat.getMin(now));
@@ -96,7 +96,7 @@ function testSparseBuckets() {
   stat.incBy(10, now);
   assertEquals(10, stat.get(now));
 
-  now += 5000; // the old slot is now still in memory, but should be ignored
+  now += 5000;  // the old slot is now still in memory, but should be ignored
   stat.incBy(1, now);
   assertEquals(1, stat.get(now));
 }
@@ -109,7 +109,7 @@ function testFuzzy() {
 
   // test over 5 simulated seconds (2 for IE, due to timeouts)
   var simulationDuration = goog.userAgent.IE ? 2000 : 5000;
-  for (var now = 1000; now < simulationDuration; ) {
+  for (var now = 1000; now < simulationDuration;) {
     var count = Math.floor(rand.random() * 2147483648);
     var delay = Math.floor(rand.random() * 25);
     for (var i = 0; i <= delay; ++i) {
@@ -149,17 +149,16 @@ PerfectlySlowStat.prototype.incBy = function(amt, now) {
 PerfectlySlowStat.prototype.getStats = function(now) {
   var end = Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
   var start = end - this.interval_;
-  var events = goog.array.filter(this.events_,
-      function(e) { return e.time >= start });
+  var events =
+      goog.array.filter(this.events_, function(e) { return e.time >= start });
   return {
-    'count': goog.array.reduce(events,
-        function(sum, e) { return sum + e.count },
-        0),
-    'min': goog.array.reduce(events,
-        function(min, e) { return Math.min(min, e.count); },
+    'count':
+        goog.array.reduce(events, function(sum, e) { return sum + e.count }, 0),
+    'min': goog.array.reduce(
+        events, function(min, e) { return Math.min(min, e.count); },
         Number.MAX_VALUE),
-    'max': goog.array.reduce(events,
-        function(max, e) { return Math.max(max, e.count); },
+    'max': goog.array.reduce(
+        events, function(max, e) { return Math.max(max, e.count); },
         Number.MIN_VALUE)
   };
 };

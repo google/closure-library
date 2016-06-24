@@ -44,23 +44,21 @@ function setUp() {
 
   // Update the arg list verifier for dispatchCommandValueChange to
   // correctly compare arguments that are arrays (or other complex objects).
-  mockEditableField.$registerArgumentListVerifier('dispatchEvent',
-      function(expected, args) {
-        return goog.array.equals(expected, args,
-            function(a, b) { assertObjectEquals(a, b); return true; });
+  mockEditableField.$registerArgumentListVerifier(
+      'dispatchEvent', function(expected, args) {
+        return goog.array.equals(expected, args, function(a, b) {
+          assertObjectEquals(a, b);
+          return true;
+        });
       });
-  mockEditableField.getHashCode = function() {
-    return 'fieldId';
-  };
+  mockEditableField.getHashCode = function() { return 'fieldId'; };
 
   undoPlugin = new goog.editor.plugins.UndoRedo();
   undoPlugin.registerFieldObject(mockEditableField);
-  mockState = new goog.testing.StrictMock(
-      goog.editor.plugins.UndoRedo.UndoState_);
+  mockState =
+      new goog.testing.StrictMock(goog.editor.plugins.UndoRedo.UndoState_);
   mockState.fieldHashCode = 'fieldId';
-  mockState.isAsynchronous = function() {
-    return false;
-  };
+  mockState.isAsynchronous = function() { return false; };
   // Don't bother mocking the inherited event target pieces of the state.
   // If we don't do this, then mocked asynchronous undos are a lot harder and
   // that behavior is tested as part of the UndoRedoManager tests.
@@ -70,8 +68,8 @@ function setUp() {
     goog.editor.plugins.UndoRedo.COMMAND.REDO,
     goog.editor.plugins.UndoRedo.COMMAND.UNDO
   ];
-  state = new goog.editor.plugins.UndoRedo.UndoState_('1', '', null,
-      goog.nullFunction);
+  state = new goog.editor.plugins.UndoRedo.UndoState_(
+      '1', '', null, goog.nullFunction);
 
   clock = new goog.testing.MockClock(true);
 
@@ -90,7 +88,8 @@ function tearDown() {
   // it is lame. It manifests its lameness by throwing an exception.
   // Kudos to XT for helping me to figure this out.
   try {
-  } catch (e) {}
+  } catch (e) {
+  }
 
   if (!editableField.isUneditable()) {
     editableField.makeUneditable();
@@ -105,15 +104,18 @@ function tearDown() {
 
 
 function testQueryCommandValue() {
-  assertFalse('Must return false for empty undo stack.',
+  assertFalse(
+      'Must return false for empty undo stack.',
       undoPlugin.queryCommandValue(goog.editor.plugins.UndoRedo.COMMAND.UNDO));
 
-  assertFalse('Must return false for empty redo stack.',
+  assertFalse(
+      'Must return false for empty redo stack.',
       undoPlugin.queryCommandValue(goog.editor.plugins.UndoRedo.COMMAND.REDO));
 
   undoPlugin.undoManager_.addState(mockState);
 
-  assertTrue('Must return true for a non-empty undo stack.',
+  assertTrue(
+      'Must return true for a non-empty undo stack.',
       undoPlugin.queryCommandValue(goog.editor.plugins.UndoRedo.COMMAND.UNDO));
 }
 
@@ -181,8 +183,8 @@ function testHandleKeyboardShortcut_TrogStates() {
 
   mockEditableField.$replay();
   result = undoPlugin.handleKeyboardShortcut(stubUndoEvent, 'f', true);
-  assertFalse('Plugin must return false when it doesn\'t handle shortcut.',
-      result);
+  assertFalse(
+      'Plugin must return false when it doesn\'t handle shortcut.', result);
   mockEditableField.$verify();
 }
 
@@ -200,63 +202,71 @@ function testHandleKeyboardShortcut_NotTrogStates() {
   // redispatches those anytime manager's state changes.
   mockEditableField.dispatchEvent({
     type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
-    commands: commands});
+    commands: commands
+  });
   mockEditableField.$replay();
   var result = undoPlugin.handleKeyboardShortcut(stubUndoEvent, 'z', true);
-  assertTrue('Plugin must return true when it handles shortcut.' , result);
+  assertTrue('Plugin must return true when it handles shortcut.', result);
   mockEditableField.$verify();
 }
 
 function testEnable() {
-  assertFalse('Plugin must start disabled.',
-      undoPlugin.isEnabled(editableField));
+  assertFalse(
+      'Plugin must start disabled.', undoPlugin.isEnabled(editableField));
 
   editableField.makeEditable(editableField);
   editableField.setHtml(false, '<div>a</div>');
   undoPlugin.enable(editableField);
 
   assertTrue(undoPlugin.isEnabled(editableField));
-  assertNotNull('Must have an event handler for enabled field.',
+  assertNotNull(
+      'Must have an event handler for enabled field.',
       undoPlugin.eventHandlers_[fieldHashCode]);
 
   var currentState = undoPlugin.currentStates_[fieldHashCode];
   assertNotNull('Enabled plugin must have a current state.', currentState);
-  assertEquals('After enable, undo content must match the field content.',
+  assertEquals(
+      'After enable, undo content must match the field content.',
       editableField.getElement().innerHTML, currentState.undoContent_);
 
-  assertTrue('After enable, undo cursorPosition must match the field cursor' +
-      'position.', cursorPositionsEqual(getCurrentCursorPosition(),
-          currentState.undoCursorPosition_));
+  assertTrue(
+      'After enable, undo cursorPosition must match the field cursor' +
+          'position.',
+      cursorPositionsEqual(
+          getCurrentCursorPosition(), currentState.undoCursorPosition_));
 
-  assertUndefined('Current state must never have redo content.',
-      currentState.redoContent_);
-  assertUndefined('Current state must never have redo cursor position.',
+  assertUndefined(
+      'Current state must never have redo content.', currentState.redoContent_);
+  assertUndefined(
+      'Current state must never have redo cursor position.',
       currentState.redoCursorPosition_);
 }
 
 function testDisable() {
   editableField.makeEditable(editableField);
   undoPlugin.enable(editableField);
-  assertTrue('Plugin must be enabled so we can test disabling.',
+  assertTrue(
+      'Plugin must be enabled so we can test disabling.',
       undoPlugin.isEnabled(editableField));
 
   var delayedChangeFired = false;
-  goog.events.listenOnce(editableField,
-      goog.editor.Field.EventType.DELAYEDCHANGE,
-      function(e) {
-        delayedChangeFired = true;
-      });
+  goog.events.listenOnce(
+      editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
+      function(e) { delayedChangeFired = true; });
   editableField.setHtml(false, 'foo');
 
   undoPlugin.disable(editableField);
   assertTrue('disable must fire pending delayed changes.', delayedChangeFired);
-  assertEquals('disable must add undo state from pending change.',
-      1, undoPlugin.undoManager_.undoStack_.length);
+  assertEquals(
+      'disable must add undo state from pending change.', 1,
+      undoPlugin.undoManager_.undoStack_.length);
 
   assertFalse(undoPlugin.isEnabled(editableField));
-  assertUndefined('Disabled plugin must not have current state.',
+  assertUndefined(
+      'Disabled plugin must not have current state.',
       undoPlugin.eventHandlers_[fieldHashCode]);
-  assertUndefined('Disabled plugin must not have event handlers.',
+  assertUndefined(
+      'Disabled plugin must not have event handlers.',
       undoPlugin.eventHandlers_[fieldHashCode]);
 }
 
@@ -266,7 +276,8 @@ function testUpdateCurrentState_() {
   editableField.getPluginByClassId('LoremIpsum').usingLorem_ = true;
   undoPlugin.updateCurrentState_(editableField);
   var currentState = undoPlugin.currentStates_[fieldHashCode];
-  assertNotUndefined('Must create empty states for field using lorem ipsum.',
+  assertNotUndefined(
+      'Must create empty states for field using lorem ipsum.',
       undoPlugin.currentStates_[fieldHashCode]);
   assertEquals('', currentState.undoContent_);
   assertNull(currentState.undoCursorPosition_);
@@ -287,56 +298,65 @@ function testUpdateCurrentState_() {
   editableField.setHtml(false, '<div>a</div>');
   // Select some text so we have a valid selection that gets saved in the
   // UndoState.
-  goog.dom.browserrange.createRangeFromNodeContents(
-      editableField.getElement()).select();
+  goog.dom.browserrange.createRangeFromNodeContents(editableField.getElement())
+      .select();
 
   undoPlugin.updateCurrentState_(editableField);
   currentState = undoPlugin.currentStates_[fieldHashCode];
-  assertNotNull('Must create state for field not using lorem ipsum',
-      currentState);
+  assertNotNull(
+      'Must create state for field not using lorem ipsum', currentState);
   assertEquals(fieldHashCode, currentState.fieldHashCode);
   var content = editableField.getElement().innerHTML;
   var cursorPosition = getCurrentCursorPosition();
   assertEquals(content, currentState.undoContent_);
-  assertTrue(cursorPositionsEqual(
-      cursorPosition, currentState.undoCursorPosition_));
+  assertTrue(
+      cursorPositionsEqual(cursorPosition, currentState.undoCursorPosition_));
   assertUndefined(currentState.redoContent_);
   assertUndefined(currentState.redoCursorPosition_);
 
   undoPlugin.updateCurrentState_(editableField);
-  assertEquals('Updating state when state has not changed must not add undo ' +
-      'state to stack.', 1, undoPlugin.undoManager_.undoStack_.length);
-  assertEquals('Updating state when state has not changed must not create ' +
-      'a new state.', currentState, undoPlugin.currentStates_[fieldHashCode]);
-  assertUndefined('Updating state when state has not changed must not add ' +
-      'redo content.', currentState.redoContent_);
-  assertUndefined('Updating state when state has not changed must not add ' +
-      'redo cursor position.', currentState.redoCursorPosition_);
+  assertEquals(
+      'Updating state when state has not changed must not add undo ' +
+          'state to stack.',
+      1, undoPlugin.undoManager_.undoStack_.length);
+  assertEquals(
+      'Updating state when state has not changed must not create ' +
+          'a new state.',
+      currentState, undoPlugin.currentStates_[fieldHashCode]);
+  assertUndefined(
+      'Updating state when state has not changed must not add ' +
+          'redo content.',
+      currentState.redoContent_);
+  assertUndefined(
+      'Updating state when state has not changed must not add ' +
+          'redo cursor position.',
+      currentState.redoCursorPosition_);
 
   editableField.setHtml(false, '<div>b</div>');
   undoPlugin.updateCurrentState_(editableField);
   currentState = undoPlugin.currentStates_[fieldHashCode];
-  assertNotNull('Must create state for field not using lorem ipsum',
-      currentState);
+  assertNotNull(
+      'Must create state for field not using lorem ipsum', currentState);
   assertEquals(fieldHashCode, currentState.fieldHashCode);
   var newContent = editableField.getElement().innerHTML;
   var newCursorPosition = getCurrentCursorPosition();
   assertEquals(newContent, currentState.undoContent_);
-  assertTrue(cursorPositionsEqual(
-      newCursorPosition, currentState.undoCursorPosition_));
+  assertTrue(
+      cursorPositionsEqual(
+          newCursorPosition, currentState.undoCursorPosition_));
   assertUndefined(currentState.redoContent_);
   assertUndefined(currentState.redoCursorPosition_);
 
   var undoState = goog.array.peek(undoPlugin.undoManager_.undoStack_);
-  assertNotNull('Must create state for field not using lorem ipsum',
-      currentState);
+  assertNotNull(
+      'Must create state for field not using lorem ipsum', currentState);
   assertEquals(fieldHashCode, currentState.fieldHashCode);
   assertEquals(content, undoState.undoContent_);
-  assertTrue(cursorPositionsEqual(
-      cursorPosition, undoState.undoCursorPosition_));
+  assertTrue(
+      cursorPositionsEqual(cursorPosition, undoState.undoCursorPosition_));
   assertEquals(newContent, undoState.redoContent_);
-  assertTrue(cursorPositionsEqual(
-      newCursorPosition, undoState.redoCursorPosition_));
+  assertTrue(
+      cursorPositionsEqual(newCursorPosition, undoState.redoCursorPosition_));
 }
 
 
@@ -356,16 +376,19 @@ function testUndoRestartsChangeEvents() {
   clock.tick(1000);
 
   var currentState = undoPlugin.currentStates_[fieldHashCode];
-  stubs.set(editableField, 'setCursorPosition',
+  stubs.set(
+      editableField, 'setCursorPosition',
       goog.functions.error('Faking exception during setCursorPosition()'));
   try {
     currentState.undo();
   } catch (e) {
     fail('Exception should not have been thrown during undo()');
   }
-  assertEquals('Change events should be on', 0,
+  assertEquals(
+      'Change events should be on', 0,
       editableField.stoppedEvents_[goog.editor.Field.EventType.CHANGE]);
-  assertEquals('Delayed change events should be on', 0,
+  assertEquals(
+      'Delayed change events should be on', 0,
       editableField.stoppedEvents_[goog.editor.Field.EventType.DELAYEDCHANGE]);
 }
 
@@ -381,36 +404,41 @@ function testRefreshCurrentState() {
   var content = editableField.getElement().innerHTML;
   var cursorPosition = getCurrentCursorPosition();
   assertEquals(content, currentState.undoContent_);
-  assertTrue(cursorPositionsEqual(
-      cursorPosition, currentState.undoCursorPosition_));
+  assertTrue(
+      cursorPositionsEqual(cursorPosition, currentState.undoCursorPosition_));
 
   // Update the field w/o dispatching delayed change, and verify that the
   // current state hasn't changed to reflect new values.
   editableField.setHtml(false, '<div>b</div>', true);
   clock.tick(1000);
   currentState = undoPlugin.currentStates_[fieldHashCode];
-  assertEquals('Content must match old state.',
-      content, currentState.undoContent_);
-  assertTrue('Cursor position must match old state.',
-      cursorPositionsEqual(
-      cursorPosition, currentState.undoCursorPosition_));
+  assertEquals(
+      'Content must match old state.', content, currentState.undoContent_);
+  assertTrue(
+      'Cursor position must match old state.',
+      cursorPositionsEqual(cursorPosition, currentState.undoCursorPosition_));
 
   undoPlugin.refreshCurrentState(editableField);
-  assertFalse('Refresh must not cause states to go on the undo-redo stack.',
+  assertFalse(
+      'Refresh must not cause states to go on the undo-redo stack.',
       undoPlugin.undoManager_.hasUndoState());
   currentState = undoPlugin.currentStates_[fieldHashCode];
   content = editableField.getElement().innerHTML;
   cursorPosition = getCurrentCursorPosition();
-  assertEquals('Content must match current field state.',
-      content, currentState.undoContent_);
-  assertTrue('Cursor position must match current field state.',
+  assertEquals(
+      'Content must match current field state.', content,
+      currentState.undoContent_);
+  assertTrue(
+      'Cursor position must match current field state.',
       cursorPositionsEqual(cursorPosition, currentState.undoCursorPosition_));
 
   undoPlugin.disable(editableField);
   assertUndefined(undoPlugin.currentStates_[fieldHashCode]);
   undoPlugin.refreshCurrentState(editableField);
-  assertUndefined('Must not refresh current state of fields that do not have ' +
-      'undo-redo enabled.', undoPlugin.currentStates_[fieldHashCode]);
+  assertUndefined(
+      'Must not refresh current state of fields that do not have ' +
+          'undo-redo enabled.',
+      undoPlugin.currentStates_[fieldHashCode]);
 }
 
 
@@ -446,14 +474,16 @@ function cursorPositionsEqual(a, b) {
 function testSetUndoState() {
   state.setUndoState('content', 'position');
   assertEquals('Undo content incorrectly set', 'content', state.undoContent_);
-  assertEquals('Undo cursor position incorrectly set', 'position',
+  assertEquals(
+      'Undo cursor position incorrectly set', 'position',
       state.undoCursorPosition_);
 }
 
 function testSetRedoState() {
   state.setRedoState('content', 'position');
   assertEquals('Redo content incorrectly set', 'content', state.redoContent_);
-  assertEquals('Redo cursor position incorrectly set', 'position',
+  assertEquals(
+      'Redo cursor position incorrectly set', 'position',
       state.redoCursorPosition_);
 }
 
@@ -461,23 +491,28 @@ function testEquals() {
   assertTrue('A state must equal itself', state.equals(state));
 
   var state2 = new goog.editor.plugins.UndoRedo.UndoState_('1', '', null);
-  assertTrue('A state must equal a state with the same hash code and content.',
+  assertTrue(
+      'A state must equal a state with the same hash code and content.',
       state.equals(state2));
 
   state2 = new goog.editor.plugins.UndoRedo.UndoState_('1', '', 'foo');
-  assertTrue('States with different cursor positions must be equal',
+  assertTrue(
+      'States with different cursor positions must be equal',
       state.equals(state2));
 
   state2.setRedoState('bar', null);
-  assertFalse('States with different redo content must not be equal',
+  assertFalse(
+      'States with different redo content must not be equal',
       state.equals(state2));
 
   state2 = new goog.editor.plugins.UndoRedo.UndoState_('3', '', null);
-  assertFalse('States with different field hash codes must not be equal',
+  assertFalse(
+      'States with different field hash codes must not be equal',
       state.equals(state2));
 
   state2 = new goog.editor.plugins.UndoRedo.UndoState_('1', 'baz', null);
-  assertFalse('States with different undoContent must not be equal',
+  assertFalse(
+      'States with different undoContent must not be equal',
       state.equals(state2));
 }
 
@@ -502,14 +537,14 @@ function testClearUndoHistory() {
   editableField.dispatchChange();
 
   var numCalls = 0;
-  goog.events.listen(editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
-      function() {
-        numCalls++;
-      });
+  goog.events.listen(
+      editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
+      function() { numCalls++; });
   undoRedoPlugin.clearHistory();
   // 1 call from stopChangeEvents(). 0 calls from startChangeEvents().
-  assertEquals('clearHistory must not cause delayed change when none pending',
-      1, numCalls);
+  assertEquals(
+      'clearHistory must not cause delayed change when none pending', 1,
+      numCalls);
 
   clock.tick(10000);
   assertFalse(undoRedoPlugin.undoManager_.hasUndoState());

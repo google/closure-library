@@ -63,31 +63,34 @@ function testInvalid() {
 
 function testZhHant() {
   var result = goog.locale.genericFontNames.getList('zh-tw');
-  assertObjectEquals([
-    {
-      'caption': '\u5fae\u8edf\u6b63\u9ed1\u9ad4',
-      'value': 'Microsoft JhengHei,\u5fae\u8edf\u6b63\u9ed1\u9ad4,SimHei,' +
-          '\u9ed1\u4f53,MS Hei,STHeiti,\u534e\u6587\u9ed1\u4f53,Apple ' +
-          'LiGothic Medium,\u860b\u679c\u5137\u4e2d\u9ed1,LiHei Pro Medium,' +
-          '\u5137\u9ed1 Pro,STHeiti Light,\u534e\u6587\u7ec6\u9ed1,AR PL ' +
-          'ZenKai Uni,\u6587\u9f0ePL\u4e2d\u6977Uni,FreeSans,sans-serif'
-    },
-    {
-      'caption': '\u5fae\u8f6f\u96c5\u9ed1\u5b57\u4f53',
-      'value': 'Microsoft YaHei,\u5fae\u8f6f\u96c5\u9ed1\u5b57\u4f53,' +
-          'FreeSans,sans-serif'
-    },
-    {
-      'caption': '\u65b0\u7d30\u660e\u9ad4',
-      'value': 'SimSun,\u5b8b\u4f53,MS Song,STSong,\u534e\u6587\u5b8b\u4f53,' +
-          'Apple LiSung Light,\u860b\u679c\u5137\u7d30\u5b8b,LiSong Pro ' +
-          'Light,\u5137\u5b8b Pro,STFangSong,\u534e\u6587\u4eff\u5b8b,AR PL ' +
-          'ShanHeiSun Uni,\u6587\u9f0ePL\u7ec6\u4e0a\u6d77\u5b8bUni,AR PL New' +
-          ' Sung,\u6587\u9f0e PL \u65b0\u5b8b,FreeSerif,serif'
-    },
-    {
-      'caption': '\u7d30\u660e\u9ad4',
-      'value': 'NSimsun,\u65b0\u5b8b\u4f53,FreeMono,monospace'
-    }],
-  result);
+  assertObjectEquals(
+      [
+        {
+          'caption': '\u5fae\u8edf\u6b63\u9ed1\u9ad4',
+          'value': 'Microsoft JhengHei,\u5fae\u8edf\u6b63\u9ed1\u9ad4,SimHei,' +
+              '\u9ed1\u4f53,MS Hei,STHeiti,\u534e\u6587\u9ed1\u4f53,Apple ' +
+              'LiGothic Medium,\u860b\u679c\u5137\u4e2d\u9ed1,LiHei Pro Medium,' +
+              '\u5137\u9ed1 Pro,STHeiti Light,\u534e\u6587\u7ec6\u9ed1,AR PL ' +
+              'ZenKai Uni,\u6587\u9f0ePL\u4e2d\u6977Uni,FreeSans,sans-serif'
+        },
+        {
+          'caption': '\u5fae\u8f6f\u96c5\u9ed1\u5b57\u4f53',
+          'value': 'Microsoft YaHei,\u5fae\u8f6f\u96c5\u9ed1\u5b57\u4f53,' +
+              'FreeSans,sans-serif'
+        },
+        {
+          'caption': '\u65b0\u7d30\u660e\u9ad4',
+          'value':
+              'SimSun,\u5b8b\u4f53,MS Song,STSong,\u534e\u6587\u5b8b\u4f53,' +
+              'Apple LiSung Light,\u860b\u679c\u5137\u7d30\u5b8b,LiSong Pro ' +
+              'Light,\u5137\u5b8b Pro,STFangSong,\u534e\u6587\u4eff\u5b8b,AR PL ' +
+              'ShanHeiSun Uni,\u6587\u9f0ePL\u7ec6\u4e0a\u6d77\u5b8bUni,AR PL New' +
+              ' Sung,\u6587\u9f0e PL \u65b0\u5b8b,FreeSerif,serif'
+        },
+        {
+          'caption': '\u7d30\u660e\u9ad4',
+          'value': 'NSimsun,\u65b0\u5b8b\u4f53,FreeMono,monospace'
+        }
+      ],
+      result);
 }

@@ -114,7 +114,7 @@ goog.i18n.currency.getGlobalCurrencyPattern = function(currencyCode) {
 goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
   var info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return (currencyCode == info[1]) ? currencyCode :
-      currencyCode + ' ' + info[1];
+                                     currencyCode + ' ' + info[1];
 };
 
 
@@ -210,13 +210,13 @@ goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
     }
   }
   if ((patternNum & goog.i18n.currency.POSITION_FLAG_) == 0) {
-    strParts.unshift((patternNum & goog.i18n.currency.SPACE_FLAG_) ?
-                     "' " : "'");
+    strParts.unshift(
+        (patternNum & goog.i18n.currency.SPACE_FLAG_) ? "' " : "'");
     strParts.unshift(sign);
     strParts.unshift("'");
   } else {
-    strParts.push((patternNum & goog.i18n.currency.SPACE_FLAG_) ? " '" : "'",
-                  sign, "'");
+    strParts.push(
+        (patternNum & goog.i18n.currency.SPACE_FLAG_) ? " '" : "'", sign, "'");
   }
   return strParts.join('');
 };

@@ -17,6 +17,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.fs.FileWriter');
 goog.provide('goog.testing.fs.FileWriter');
 
 goog.require('goog.Timer');
@@ -131,8 +132,7 @@ goog.testing.fs.FileWriter.prototype.abort = function() {
   if (this.readyState_ != goog.fs.FileSaver.ReadyState.WRITING) {
     var msg = 'aborting save of ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error(
-        /** @type {!FileError} */ ({'name': 'InvalidStateError'}),
-        msg);
+        /** @type {!FileError} */ ({'name': 'InvalidStateError'}), msg);
   }
 
   this.aborted_ = true;
@@ -147,8 +147,7 @@ goog.testing.fs.FileWriter.prototype.write = function(blob) {
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
     var msg = 'writing to ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error(
-        /** @type {!FileError} */ ({'name': 'InvalidStateError'}),
-        msg);
+        /** @type {!FileError} */ ({'name': 'InvalidStateError'}), msg);
   }
 
   this.readyState_ = goog.fs.FileSaver.ReadyState.WRITING;
@@ -182,8 +181,7 @@ goog.testing.fs.FileWriter.prototype.truncate = function(size) {
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
     var msg = 'truncating ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error(
-        /** @type {!FileError} */ ({'name': 'InvalidStateError'}),
-        msg);
+        /** @type {!FileError} */ ({'name': 'InvalidStateError'}), msg);
   }
 
   this.readyState_ = goog.fs.FileSaver.ReadyState.WRITING;
@@ -219,8 +217,7 @@ goog.testing.fs.FileWriter.prototype.seek = function(offset) {
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
     var msg = 'truncating ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error(
-        /** @type {!FileError} */ ({name: 'InvalidStateError'}),
-        msg);
+        /** @type {!FileError} */ ({name: 'InvalidStateError'}), msg);
   }
 
   if (offset < 0) {

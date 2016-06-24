@@ -21,27 +21,29 @@ goog.require('goog.ui.emoji.PopupEmojiPicker');
 var emojiGroup1 = [
   'Emoji 1',
   [
-   ['../../demos/emoji/200.gif', 'std.200'],
-   ['../../demos/emoji/201.gif', 'std.201']
-  ]];
+    ['../../demos/emoji/200.gif', 'std.200'],
+    ['../../demos/emoji/201.gif', 'std.201']
+  ]
+];
 
 var emojiGroup2 = [
   'Emoji 2',
   [
-   ['../../demos/emoji/2D0.gif', 'std.2D0'],
-   ['../../demos/emoji/2D1.gif', 'std.2D1']
-  ]];
+    ['../../demos/emoji/2D0.gif', 'std.2D0'],
+    ['../../demos/emoji/2D1.gif', 'std.2D1']
+  ]
+];
 
 var emojiGroup3 = [
   'Emoji 3',
   [
-   ['../../demos/emoji/2E4.gif', 'std.2E4'],
-   ['../../demos/emoji/2E5.gif', 'std.2E5']
-  ]];
+    ['../../demos/emoji/2E4.gif', 'std.2E4'],
+    ['../../demos/emoji/2E5.gif', 'std.2E5']
+  ]
+];
 
 function testConstructAndRenderPopupEmojiPicker() {
-  var picker = new goog.ui.emoji.PopupEmojiPicker(
-      '../../demos/emoji/none.gif');
+  var picker = new goog.ui.emoji.PopupEmojiPicker('../../demos/emoji/none.gif');
   picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
   picker.addEmojiGroup(emojiGroup2[0], emojiGroup2[1]);
   picker.addEmojiGroup(emojiGroup3[0], emojiGroup3[1]);

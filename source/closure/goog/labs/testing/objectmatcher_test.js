@@ -32,12 +32,10 @@ function testObjectEquals() {
 }
 
 function testInstanceOf() {
-  function expected() {
-    this.x = 1;
-  }
+  function expected() { this.x = 1; }
   var input = new expected();
-  goog.labs.testing.assertThat(input, instanceOfClass(expected),
-      'input is an instance of expected');
+  goog.labs.testing.assertThat(
+      input, instanceOfClass(expected), 'input is an instance of expected');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(5, instanceOfClass(function() {}));
@@ -45,8 +43,8 @@ function testInstanceOf() {
 }
 
 function testHasProperty() {
-  goog.labs.testing.assertThat({x: 1}, hasProperty('x'),
-      '{x:1} has property x}');
+  goog.labs.testing.assertThat(
+      {x: 1}, hasProperty('x'), '{x:1} has property x}');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat({x: 1}, hasProperty('y'));
@@ -63,15 +61,15 @@ function testIsNull() {
 
 function testIsNullOrUndefined() {
   var x;
-  goog.labs.testing.assertThat(undefined, isNullOrUndefined(),
-      'undefined is null or undefined');
-  goog.labs.testing.assertThat(x, isNullOrUndefined(),
-      'undefined is null or undefined');
+  goog.labs.testing.assertThat(
+      undefined, isNullOrUndefined(), 'undefined is null or undefined');
+  goog.labs.testing.assertThat(
+      x, isNullOrUndefined(), 'undefined is null or undefined');
   x = null;
-  goog.labs.testing.assertThat(null, isNullOrUndefined(),
-      'null is null or undefined');
-  goog.labs.testing.assertThat(x, isNullOrUndefined(),
-      'null is null or undefined');
+  goog.labs.testing.assertThat(
+      null, isNullOrUndefined(), 'null is null or undefined');
+  goog.labs.testing.assertThat(
+      x, isNullOrUndefined(), 'null is null or undefined');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(5, isNullOrUndefined());
@@ -80,8 +78,8 @@ function testIsNullOrUndefined() {
 
 function testIsUndefined() {
   var x;
-  goog.labs.testing.assertThat(undefined, isUndefined(),
-      'undefined is undefined');
+  goog.labs.testing.assertThat(
+      undefined, isUndefined(), 'undefined is undefined');
   goog.labs.testing.assertThat(x, isUndefined(), 'undefined is undefined');
 
   assertMatcherError(function() {

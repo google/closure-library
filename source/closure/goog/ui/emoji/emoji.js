@@ -37,7 +37,7 @@ goog.provide('goog.ui.emoji.Emoji');
  * @constructor
  * @final
  */
-goog.ui.emoji.Emoji = function(url, id,  opt_height, opt_width, opt_altText) {
+goog.ui.emoji.Emoji = function(url, id, opt_height, opt_width, opt_altText) {
   /**
    * The URL pointing to the source image for the emoji
    *
@@ -135,4 +135,3 @@ goog.ui.emoji.Emoji.prototype.getWidth = function() {
 goog.ui.emoji.Emoji.prototype.getAltText = function() {
   return this.altText_;
 };
-

@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.style.layoutassertsTest');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.style');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 /** @suppress {extraRequire} */
 goog.require('goog.testing.style.layoutasserts');
@@ -28,29 +29,28 @@ var DEFAULT_WIDTH = 200;
 var DEFAULT_HEIGHT = 100;
 
 function setUp() {
-  div1 = goog.dom.createDom(
-      goog.dom.TagName.DIV,
-      {
-        id: 'test',
-        className: 'test',
-        style: 'position:absolute;top:0;left:0;' +
-            'width:' + DEFAULT_WIDTH + 'px;' +
-            'height:' + DEFAULT_HEIGHT + 'px;' +
-                'background-color:#EEE',
-        innerHTML: 'abc'
-      });
-  div2 = goog.dom.createDom(goog.dom.TagName.DIV,
-      {
-        id: 'test2',
-        className: 'test2',
-        style: 'position:absolute;' +
-            'top:0;left:0;' +
-            'width:' + DEFAULT_WIDTH + 'px;' +
-            'height:' + DEFAULT_HEIGHT + 'px;' +
-            'background-color:#F00',
-        innerHTML: 'abc'
-      });
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 
+  div1 = goog.dom.createDom(goog.dom.TagName.DIV, {
+    id: 'test',
+    className: 'test',
+    style: 'position:absolute;top:0;left:0;' +
+        'width:' + DEFAULT_WIDTH + 'px;' +
+        'height:' + DEFAULT_HEIGHT + 'px;' +
+        'background-color:#EEE',
+    innerHTML: 'abc'
+  });
+  div2 = goog.dom.createDom(goog.dom.TagName.DIV, {
+    id: 'test2',
+    className: 'test2',
+    style: 'position:absolute;' +
+        'top:0;left:0;' +
+        'width:' + DEFAULT_WIDTH + 'px;' +
+        'height:' + DEFAULT_HEIGHT + 'px;' +
+        'background-color:#F00',
+    innerHTML: 'abc'
+  });
 }
 
 
@@ -64,8 +64,9 @@ function tearDown() {
  * Tests assertIsVisible.
  */
 function testAssertIsVisible() {
-  assertThrows('Exception should be thrown when asserting visibility.',
-      goog.bind(assertIsVisible, null, null)); // assertIsVisible(null)
+  assertThrows(
+      'Exception should be thrown when asserting visibility.',
+      goog.bind(assertIsVisible, null, null));  // assertIsVisible(null)
 
   // Attach it to BODY tag and assert that it is visible.
   document.body.appendChild(div1);
@@ -74,7 +75,8 @@ function testAssertIsVisible() {
   // Tests with hidden element
   failed = false;
   goog.style.setElementShown(div1, false /* display */);
-  assertThrows('Exception should be thrown when asserting visibility.',
+  assertThrows(
+      'Exception should be thrown when asserting visibility.',
       goog.bind(assertIsVisible, null, div1));
 
   // Clean up.
@@ -92,7 +94,8 @@ function testAssertNotVisible() {
 
   // Attach the element to BODY element, assert should fail.
   document.body.appendChild(div1);
-  assertThrows('Exception should be thrown when asserting non-visibility.',
+  assertThrows(
+      'Exception should be thrown when asserting non-visibility.',
       goog.bind(assertNotVisible, null, div1));
 
   // Clean up.
@@ -110,21 +113,24 @@ function testAssertIntersect() {
   // No intersection
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 500, 500);
-  assertThrows('Exception should be thrown when asserting intersection.',
+  assertThrows(
+      'Exception should be thrown when asserting intersection.',
       goog.bind(assertIntersect, null, div1, div2));
   assertNoIntersect(div1, div2);
 
   // Some intersection
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 50, 50);
-  assertThrows('Exception should be thrown when asserting no intersection.',
+  assertThrows(
+      'Exception should be thrown when asserting no intersection.',
       goog.bind(assertNoIntersect, null, div1, div2));
   assertIntersect(div1, div2);
 
   // Completely superimposed.
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 0, 0);
-  assertThrows('Exception should be thrown when asserting no intersection.',
+  assertThrows(
+      'Exception should be thrown when asserting no intersection.',
       goog.bind(assertNoIntersect, null, div1, div2));
   assertIntersect(div1, div2);
 }
@@ -140,7 +146,8 @@ function testAssertWidth() {
   assertWidth(div1, DEFAULT_WIDTH);
 
   // Test wrong width
-  assertThrows('Exception should be thrown when elements has wrong width',
+  assertThrows(
+      'Exception should be thrown when elements has wrong width',
       goog.bind(assertWidth, null, div1, 400));
 
   // Test a valid tolerance value
@@ -163,7 +170,8 @@ function testAssertHeight() {
   assertHeight(div1, DEFAULT_HEIGHT);
 
   // Test wrong height
-  assertThrows('Exception should be thrown when element has wrong height.',
+  assertThrows(
+      'Exception should be thrown when element has wrong height.',
       goog.bind(assertHeightWithinTolerance, null, div1, 300));
 
   // Test a valid tolerance value
@@ -184,11 +192,12 @@ function testAssertIsLeftOf() {
   document.body.appendChild(div2);
 
   // Test elements of same size & location
-  assertThrows('Exception should be thrown when elements intersect.',
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
       goog.bind(assertIsLeftOf, null, div1, div2));
-  assertThrows('Exception should be thrown when elements intersect.',
-      goog.bind(
-          assertIsStrictlyLeftOf, null, div1, div2));
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
+      goog.bind(assertIsStrictlyLeftOf, null, div1, div2));
 
   // Test elements that are not left to right
   goog.style.setPosition(div1, 100, 0);
@@ -198,16 +207,15 @@ function testAssertIsLeftOf() {
       goog.bind(assertIsLeftOf, null, div1, div2));
   assertThrows(
       'Exception should be thrown when elements are not left to right.',
-      goog.bind(
-          assertIsStrictlyLeftOf, null, div1, div2));
+      goog.bind(assertIsStrictlyLeftOf, null, div1, div2));
 
   // Test elements that intersect, but is left to right
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 100, 0);
   assertIsLeftOf(div1, div2);
-  assertThrows('Exception should be thrown when elements intersect.',
-      goog.bind(
-          assertIsStrictlyLeftOf, null, div1, div2));
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
+      goog.bind(assertIsStrictlyLeftOf, null, div1, div2));
 
   // Test elements that are strictly left to right
   goog.style.setPosition(div1, 0, 0);
@@ -225,11 +233,12 @@ function testAssertIsAbove() {
   document.body.appendChild(div2);
 
   // Test elements of same size & location
-  assertThrows('Exception should be thrown when elements intersect.',
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
       goog.bind(assertIsAbove, null, div1, div2));
-  assertThrows('Exception should be thrown when elements intersect.',
-      goog.bind(
-      assertIsStrictlyAbove, null, div1, div2));
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
+      goog.bind(assertIsStrictlyAbove, null, div1, div2));
 
   // Test elements that are not top to bottom
   goog.style.setPosition(div1, 0, 999);
@@ -239,16 +248,15 @@ function testAssertIsAbove() {
       goog.bind(assertIsAbove, null, div1, div2));
   assertThrows(
       'Exception should be thrown when elements are not top to bottom.',
-      goog.bind(
-      assertIsStrictlyAbove, null, div1, div2));
+      goog.bind(assertIsStrictlyAbove, null, div1, div2));
 
   // Test elements that intersect, but is top to bottom
   goog.style.setPosition(div1, 0, 0);
   goog.style.setPosition(div2, 0, 50);
   assertIsAbove(div1, div2);
-  assertThrows('Exception should be thrown when elements intersect.',
-      goog.bind(
-      assertIsStrictlyAbove, null, div1, div2));
+  assertThrows(
+      'Exception should be thrown when elements intersect.',
+      goog.bind(assertIsStrictlyAbove, null, div1, div2));
 
   // Test elements that are top to bottom
   goog.style.setPosition(div1, 0, 0);

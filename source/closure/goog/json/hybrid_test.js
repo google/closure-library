@@ -50,8 +50,8 @@ function setUp() {
   propertyReplacer.set(goog.json, 'unsafeParse', googJsonUnsafeParse);
   propertyReplacer.set(goog.json, 'serialize', googJsonSerialize);
 
-  jsonParse = goog.testing.recordFunction(
-      goog.global.JSON && goog.global.JSON.parse);
+  jsonParse =
+      goog.testing.recordFunction(goog.global.JSON && goog.global.JSON.parse);
   jsonStringify = goog.testing.recordFunction(
       goog.global.JSON && goog.global.JSON.stringify);
 

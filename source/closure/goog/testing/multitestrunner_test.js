@@ -17,6 +17,7 @@ goog.setTestOnly('goog.testing.MultiTestRunnerTest');
 
 var Promise = goog.require('goog.Promise');
 var events = goog.require('goog.events');
+var testingEvents = goog.require('goog.testing.events');
 var MockControl = goog.require('goog.testing.MockControl');
 var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
@@ -25,8 +26,7 @@ var jsunit = goog.require('goog.testing.jsunit');
 var testSuite = goog.require('goog.testing.testSuite');
 
 var ALL_TESTS = [
-  'testdata/fake_passing_test.html',
-  'testdata/fake_failing_test.html',
+  'testdata/fake_passing_test.html', 'testdata/fake_failing_test.html',
   'testdata/fake_failing_test2.html'
 ];
 var EMPTY_TEST = 'testdata/fake_failing_test3.html';
@@ -63,8 +63,8 @@ function assertArrayContainsMatcher(matcher, array) {
       matching++;
     }
   }
-  assertEquals('Matched ' + matching + ' items in array, but should be 1', 1,
-               matching);
+  assertEquals(
+      'Matched ' + matching + ' items in array, but should be 1', 1, matching);
 }
 
 
@@ -138,7 +138,7 @@ testSuite({
     mockStart();
 
     mocks.$replayAll();
-    goog.testing.events.fireClickSequence(startButton);
+    testingEvents.fireClickSequence(startButton);
     mocks.$verifyAll();
   },
 
@@ -150,18 +150,19 @@ testSuite({
     var startButton = el.querySelectorAll('button')[0];
     var stopButton = el.querySelectorAll('button')[1];
     assertEquals('Stop', stopButton.innerHTML);
-    stubs.replace(goog.testing.MultiTestRunner.TestFrame.prototype, 'runTest',
-                  function() { return; });
+    stubs.replace(
+        MultiTestRunner.TestFrame.prototype, 'runTest', function() { return; });
 
-    goog.testing.events.fireClickSequence(startButton);
-    goog.testing.events.fireClickSequence(stopButton);
+    testingEvents.fireClickSequence(startButton);
+    testingEvents.fireClickSequence(stopButton);
     return promise.then(function(results) {
       // Tests should be halted and marked as "unfinished".
-      assertContains('These tests did not finish:\n' +
-                         'testdata/fake_passing_test.html\n' +
-                         'testdata/fake_failing_test.html\n' +
-                         'testdata/fake_failing_test2.html',
-                     el.innerHTML);
+      assertContains(
+          'These tests did not finish:\n' +
+              'testdata/fake_passing_test.html\n' +
+              'testdata/fake_failing_test.html\n' +
+              'testdata/fake_failing_test2.html',
+          el.innerHTML);
     });
   },
 
@@ -191,19 +192,19 @@ testSuite({
       var testResults = processTestResults(results['allTestResults']);
       var testNames = testResults.testNames;
       assertEquals(3, testNames.length);
-      assertArrayContainsString('testdata/fake_failing_test2:testFail',
-                                testNames);
-      assertArrayContainsString('testdata/fake_failing_test:testFail',
-                                testNames);
-      assertArrayContainsString('testdata/fake_passing_test:testPass',
-                                testNames);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2:testFail', testNames);
+      assertArrayContainsString(
+          'testdata/fake_failing_test:testFail', testNames);
+      assertArrayContainsString(
+          'testdata/fake_passing_test:testPass', testNames);
       var failureReports = testResults.failureReports;
       var failedTests = testRunner.getTestsThatFailed();
       assertEquals(2, failureReports.length);
       assertEquals(2, failedTests.length);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
-      assertArrayContainsString('testdata/fake_failing_test2.html',
-                                failedTests);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2.html', failedTests);
     });
   },
 
@@ -218,14 +219,13 @@ testSuite({
       var testResults = processTestResults(results['allTestResults']);
       var testNames = testResults.testNames;
       assertEquals(4, testNames.length);
-      assertArrayContainsString('testdata/fake_failing_test3',
-                                testNames);
+      assertArrayContainsString('testdata/fake_failing_test3', testNames);
       var failureReports = testResults.failureReports;
       var failedTests = testRunner.getTestsThatFailed();
       assertEquals(3, failureReports.length);
       assertEquals(3, failedTests.length);
-      assertArrayContainsString('testdata/fake_failing_test3.html',
-                                failedTests);
+      assertArrayContainsString(
+          'testdata/fake_failing_test3.html', failedTests);
     });
   },
 
@@ -240,8 +240,7 @@ testSuite({
       var testResults = processTestResults(results['allTestResults']);
       var testNames = testResults.testNames;
       assertEquals(4, testNames.length);
-      assertArrayContainsString('testdata/fake_failing_test4',
-                                testNames);
+      assertArrayContainsString('testdata/fake_failing_test4', testNames);
       var failureReports = testResults.failureReports;
       var failedTests = testRunner.getTestsThatFailed();
       // Test should pass even though its test method is a failure.
@@ -282,8 +281,8 @@ testSuite({
       var failedTests = testRunner.getTestsThatFailed();
       assertEquals(1, failureReports.length);
       assertEquals(1, failedTests.length);
-      assertArrayContainsString('testdata/fake_failing_test2.html',
-                                failedTests);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2.html', failedTests);
     });
   },
 
@@ -311,8 +310,8 @@ testSuite({
       assertContains('timed out', failureReports[2]);
       assertArrayContainsString('testdata/fake_passing_test.html', failedTests);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
-      assertArrayContainsString('testdata/fake_failing_test2.html',
-                                failedTests);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2.html', failedTests);
     });
   },
 
@@ -329,19 +328,19 @@ testSuite({
       var testResults = processTestResults(results['allTestResults']);
       var testNames = testResults.testNames;
       assertEquals(3, testNames.length);
-      assertArrayContainsString('testdata/fake_failing_test2:testFail',
-                                testNames);
-      assertArrayContainsString('testdata/fake_failing_test:testFail',
-                                testNames);
-      assertArrayContainsString('testdata/fake_passing_test:testPass',
-                                testNames);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2:testFail', testNames);
+      assertArrayContainsString(
+          'testdata/fake_failing_test:testFail', testNames);
+      assertArrayContainsString(
+          'testdata/fake_passing_test:testPass', testNames);
       var failureReports = testResults.failureReports;
       var failedTests = testRunner.getTestsThatFailed();
       assertEquals(2, failureReports.length);
       assertEquals(2, failedTests.length);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
-      assertArrayContainsString('testdata/fake_failing_test2.html',
-                                failedTests);
+      assertArrayContainsString(
+          'testdata/fake_failing_test2.html', failedTests);
     });
   },
 

@@ -29,15 +29,17 @@ function testEncodeAllAscii() {
 
 function testEncodeSpecials() {
   assertEquals('=?UTF-8?Q?=3f=5f=3d_?=', goog.i18n.mime.encode('?_= '));
-  assertEquals('=?UTF-8?Q?=3f=5f=3d_=22=22?=',
-      goog.i18n.mime.encode('?_= ""', true));
+  assertEquals(
+      '=?UTF-8?Q?=3f=5f=3d_=22=22?=', goog.i18n.mime.encode('?_= ""', true));
 }
 
 function testEncodeUnicode() {
   // Two-byte UTF-8, plus a special
-  assertEquals('=?UTF-8?Q?=c2=82=de=a0_dude?=',
+  assertEquals(
+      '=?UTF-8?Q?=c2=82=de=a0_dude?=',
       goog.i18n.mime.encode('\u0082\u07a0 dude'));
   // Three-byte UTF-8, plus a special
-  assertEquals('=?UTF-8?Q?=e0=a0=80=ef=bf=bf=3d?=',
+  assertEquals(
+      '=?UTF-8?Q?=e0=a0=80=ef=bf=bf=3d?=',
       goog.i18n.mime.encode('\u0800\uffff='));
 }

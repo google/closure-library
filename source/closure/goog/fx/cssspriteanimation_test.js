@@ -52,17 +52,15 @@ function assertBackgroundPosition(x, y) {
     var message = 'Expected <' + x + 'px ' + y + 'px>, found <' + bgPos + '>';
     if (x == y) {
       // when x and y are the same the browser sometimes collapse the prop
-      assertTrue(message,
-                 bgPos == x || // in case of 0 without a unit
-                 bgPos == x + 'px' ||
-                 bgPos == x + ' ' + y ||
-                 bgPos == x + 'px ' + y + 'px');
+      assertTrue(
+          message,
+          bgPos == x ||  // in case of 0 without a unit
+              bgPos == x + 'px' || bgPos == x + ' ' + y ||
+              bgPos == x + 'px ' + y + 'px');
     } else {
-      assertTrue(message,
-                 bgPos == x + ' ' + y ||
-                 bgPos == x + 'px ' + y ||
-                 bgPos == x + ' ' + y + 'px' ||
-                 bgPos == x + 'px ' + y + 'px');
+      assertTrue(
+          message, bgPos == x + ' ' + y || bgPos == x + 'px ' + y ||
+              bgPos == x + ' ' + y + 'px' || bgPos == x + 'px ' + y + 'px');
     }
   }
 }
@@ -101,8 +99,8 @@ function testAnimation() {
 
 
 function testAnimation_disableLoop() {
-  anim = new goog.fx.CssSpriteAnimation(el, size, box, time, undefined,
-      true /* opt_disableLoop */);
+  anim = new goog.fx.CssSpriteAnimation(
+      el, size, box, time, undefined, true /* opt_disableLoop */);
   anim.play();
 
   assertBackgroundPosition(0, 0);

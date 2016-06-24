@@ -41,7 +41,7 @@ function testSerializationAndDeserialization() {
   assertEquals('110', pblite[10]);
   assertEquals(111.5, pblite[11]);
   assertEquals(112.5, pblite[12]);
-  assertEquals(1, pblite[13]); // true is serialized as 1
+  assertEquals(1, pblite[13]);  // true is serialized as 1
   assertEquals('test', pblite[14]);
   assertEquals('abcd', pblite[15]);
 
@@ -92,7 +92,7 @@ function testZeroBasedSerializationAndDeserialization() {
   assertEquals('110', pblite[9]);
   assertEquals(111.5, pblite[10]);
   assertEquals(112.5, pblite[11]);
-  assertEquals(1, pblite[12]); // true is serialized as 1
+  assertEquals(1, pblite[12]);  // true is serialized as 1
   assertEquals('test', pblite[13]);
   assertEquals('abcd', pblite[14]);
 
@@ -168,33 +168,36 @@ function testDeserializationFromExternalSource() {
   // outside the Closure proto2 library, such as the JsPbLite library, or
   // manually as in this test.
   var pblite = [
-    , // 0
-    101, // 1
-    '102', // 2
-    103, // 3
-    '104', // 4
-    105, // 5
-    '106', // 6
-    107, // 7
-    '108', // 8
-    109, // 9
-    '110', // 10
-    111.5, // 11
-    112.5, // 12
-    1, // 13
-    'test', // 14
-    'abcd', // 15
-    [,,,,,,,,,,,,,,,,, 111], // 16, note the 17 commas so value is index 17
-    , // 17
-    [, 112], // 18
-    ,, // 19-20
-    proto2.TestAllTypes.NestedEnum.FOO, // 21
-    ,,,,,,,,, // 22-30
-    [201, 202], // 31
-    ,,,,,,,,,,,, // 32-43
-    ['foo', 'bar'], // 44
-    ,,,, // 45-49
+    ,        // 0
+    101,     // 1
+    '102',   // 2
+    103,     // 3
+    '104',   // 4
+    105,     // 5
+    '106',   // 6
+    107,     // 7
+    '108',   // 8
+    109,     // 9
+    '110',   // 10
+    111.5,   // 11
+    112.5,   // 12
+    1,       // 13
+    'test',  // 14
+    'abcd',  // 15
+    [
+      , , , , , , , , , , , , , , , , , 111
+    ],        // 16, note the 17 commas so value is index 17
+    ,         // 17
+    [, 112],  // 18
+    ,
+    ,                                    // 19-20
+    proto2.TestAllTypes.NestedEnum.FOO,  // 21
+    , , , , , , , , ,                    // 22-30
+    [201, 202],                          // 31
+    , , , , , , , , , , , ,              // 32-43
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -231,33 +234,36 @@ function testDeserializationFromExternalSource() {
 
 function testModifyLazyDeserializedMessage() {
   var pblite = [
-    , // 0
-    101, // 1
-    '102', // 2
-    103, // 3
-    '104', // 4
-    105, // 5
-    '106', // 6
-    107, // 7
-    '108', // 8
-    109, // 9
-    '110', // 10
-    111.5, // 11
-    112.5, // 12
-    1, // 13
-    'test', // 14
-    'abcd', // 15
-    [,,,,,,,,,,,,,,,,, 111], // 16, note the 17 commas so value is index 17
-    , // 17
-    [, 112], // 18
-    ,, // 19-20
-    proto2.TestAllTypes.NestedEnum.FOO, // 21
-    ,,,,,,,,, // 22-30
-    [201, 202], // 31
-    ,,,,,,,,,,,, // 32-43
-    ['foo', 'bar'], // 44
-    ,,,, // 45-49
+    ,        // 0
+    101,     // 1
+    '102',   // 2
+    103,     // 3
+    '104',   // 4
+    105,     // 5
+    '106',   // 6
+    107,     // 7
+    '108',   // 8
+    109,     // 9
+    '110',   // 10
+    111.5,   // 11
+    112.5,   // 12
+    1,       // 13
+    'test',  // 14
+    'abcd',  // 15
+    [
+      , , , , , , , , , , , , , , , , , 111
+    ],        // 16, note the 17 commas so value is index 17
+    ,         // 17
+    [, 112],  // 18
+    ,
+    ,                                    // 19-20
+    proto2.TestAllTypes.NestedEnum.FOO,  // 21
+    , , , , , , , , ,                    // 22-30
+    [201, 202],                          // 31
+    , , , , , , , , , , , ,              // 32-43
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -297,33 +303,36 @@ function testModifyLazyDeserializedMessage() {
 
 function testModifyLazyDeserializedMessageByAddingMessage() {
   var pblite = [
-    , // 0
-    101, // 1
-    '102', // 2
-    103, // 3
-    '104', // 4
-    105, // 5
-    '106', // 6
-    107, // 7
-    '108', // 8
-    109, // 9
-    '110', // 10
-    111.5, // 11
-    112.5, // 12
-    1, // 13
-    'test', // 14
-    'abcd', // 15
-    [,,,,,,,,,,,,,,,,, 111], // 16, note the 17 commas so value is index 17
-    , // 17
-    [, 112], // 18
-    ,, // 19-20
-    proto2.TestAllTypes.NestedEnum.FOO, // 21
-    ,,,,,,,,, // 22-30
-    [201, 202], // 31
-    ,,,,,,,,,,,, // 32-43
-    ['foo', 'bar'], // 44
-    ,,,, // 45-49
+    ,        // 0
+    101,     // 1
+    '102',   // 2
+    103,     // 3
+    '104',   // 4
+    105,     // 5
+    '106',   // 6
+    107,     // 7
+    '108',   // 8
+    109,     // 9
+    '110',   // 10
+    111.5,   // 11
+    112.5,   // 12
+    1,       // 13
+    'test',  // 14
+    'abcd',  // 15
+    [
+      , , , , , , , , , , , , , , , , , 111
+    ],        // 16, note the 17 commas so value is index 17
+    ,         // 17
+    [, 112],  // 18
+    ,
+    ,                                    // 19-20
+    proto2.TestAllTypes.NestedEnum.FOO,  // 21
+    , , , , , , , , ,                    // 22-30
+    [201, 202],                          // 31
+    , , , , , , , , , , , ,              // 32-43
+    ['foo', 'bar']                       // 44
   ];
+  pblite.length = 50;
 
   // Deserialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -450,8 +459,8 @@ function assertDeserializationMatches(messageCopy) {
 
   assertEquals(112, messageCopy.getOptionalNestedMessage().getB());
 
-  assertEquals(proto2.TestAllTypes.NestedEnum.FOO,
-      messageCopy.getOptionalNestedEnum());
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO, messageCopy.getOptionalNestedEnum());
 
   assertEquals(201, messageCopy.getRepeatedInt32(0));
   assertEquals(202, messageCopy.getRepeatedInt32(1));
@@ -494,6 +503,7 @@ function testMergeFromLazyTarget() {
   expected.addRepeatedInt32(2);
 
   lazyTarget.mergeFrom(source);
-  assertTrue('expected and lazyTarget are equal after mergeFrom',
+  assertTrue(
+      'expected and lazyTarget are equal after mergeFrom',
       lazyTarget.equals(expected));
 }

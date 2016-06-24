@@ -49,7 +49,7 @@ function tearDown() {
 function testAvailability() {
   if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('532.5') ||
       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1') &&
-      window.location.protocol != 'file:' ||
+          window.location.protocol != 'file:' ||
       goog.userAgent.IE && goog.userAgent.isVersionOrHigher('8')) {
     assertNotNull(mechanism);
     assertTrue(mechanism.isAvailable());

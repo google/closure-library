@@ -1,0 +1,131 @@
+---
+{edit_path: '', layout: api, page: goog.net.FileDownloader, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>FileDownloader</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.net.html">goog.net</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L70" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class FileDownloader</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.Disposable.html">goog.Disposable</a>
+  &#x2514; goog.net.FileDownloader</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code></dl><p>A class for downloading remote files and storing them locally using the
+HTML5 filesystem API.</p>
+<h3 class="name"><div>new FileDownloader(<var>dir</var>, <var>opt_pool</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>dir</var><code>!<a href="goog.fs.DirectoryEntry.html">goog.fs.DirectoryEntry</a></code><dd><p>The directory in which the downloaded
+files are stored. This directory should be solely managed by
+FileDownloader.</p>
+<dt class="type name"><var>opt_pool</var><code><a href="goog.net.XhrIoPool.html">goog.net.XhrIoPool</a>=</code><dd><p>The pool of XhrIo objects to use for
+downloading files.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addOnDisposeCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addOnDisposeCallback(<var>callback</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Invokes a callback function when this object is disposed. Callbacks are
+invoked in the order in which they were added. If a callback is added to
+an already disposed Disposable, it will be called immediately.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#addOnDisposeCallback">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(this: T): ?</code><dd><p>The callback function.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dispose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispose()</div></h3></div><div class="body"><p>Disposes of the object. If the object hasn&#39;t already been disposed of, calls
+<a href="goog.net.FileDownloader.html#disposeInternal"><code>#disposeInternal</code></a>. Classes that extend <code>goog.Disposable</code> should
+override <a href="goog.net.FileDownloader.html#disposeInternal"><code>#disposeInternal</code></a> in order to delete references to COM
+objects, DOM nodes, and other disposable objects. Reentrant.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#dispose">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#dispose">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="disposeInternal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L592" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>disposeInternal()</div></h3></div><div class="body"><p>Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend <code>goog.Disposable</code> should
+override this method.
+Not reentrant. To avoid calling it twice, it must only be called from the
+subclass&#39; <code>disposeInternal</code> method. Everywhere else the public
+<code>dispose</code> method must be used.
+For example:</p>
+ <pre>
+   mypackage.MyClass &#61; function() {
+     mypackage.MyClass.base(this, &#39;constructor&#39;);
+     // Constructor logic specific to MyClass.
+     ...
+   };
+   goog.inherits(mypackage.MyClass, goog.Disposable);
+
+   mypackage.MyClass.prototype.disposeInternal &#61; function() {
+     // Dispose logic specific to MyClass.
+     ...
+     // Call superclass&#39;s disposeInternal at the end of the subclass&#39;s, like
+     // in C&#43;&#43;, to avoid hard-to-catch issues.
+     mypackage.MyClass.base(this, &#39;disposeInternal&#39;);
+   };
+ </pre>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.Disposable.html#disposeInternal">goog.Disposable</a></dd></dl></div></section><section class="property expandable" id="download"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L126" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>download(<var>url</var>)</div></h3></div><div class="body"><p>Download a remote file and save its contents to the filesystem. A given file
+is uniquely identified by its URL string; this means that the relative and
+absolute URLs for a single file are considered different for the purposes of
+the FileDownloader.</p>
+<p>Returns a Deferred that will contain the downloaded blob. If there&#39;s an error
+while downloading the URL, this Deferred will be passed the
+<a href="goog.net.FileDownloader.Error.html"><code>goog.net.FileDownloader.Error</code></a> object as an errback.</p>
+<p>If a download is already in progress for the given URL, this will return the
+deferred blob for that download. If the URL has already been downloaded, this
+will fail once it tries to save the downloaded blob.</p>
+<p>When a download is in progress, all Deferreds returned for that download will
+be branches of a single parent. If all such branches are cancelled, or if one
+is cancelled with opt_deepCancel set, then the download will be cancelled as
+well.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the file to download.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred result blob.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L163" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.net.FileDownloader.html#isDisposed"><code>#isDisposed</code></a> instead.</p>
+<dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#getDisposed">goog.Disposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDownloadedBlob"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L181" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDownloadedBlob(<var>url</var>)</div></h3></div><div class="body"><p>Load a downloaded blob from the filesystem. Will fire a deferred error if the
+given URL has not yet been downloaded.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the blob to load.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred Blob object. The callback will be
+passed the blob. If a file API error occurs while loading the blob, that
+error will be passed to the errback.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getLocalUrl"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L205" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getLocalUrl(<var>url</var>)</div></h3></div><div class="body"><p>Get the local filesystem: URL for a downloaded file. This is different from
+the blob: URL that&#39;s available from getDownloadedBlob(). If the end user
+accesses the filesystem: URL, the resulting file&#39;s name will be determined by
+the download filename as opposed to an arbitrary GUID. In addition, the
+filesystem: URL is connected to a filesystem location, so if the download is
+removed then that URL will become invalid.</p>
+<p>Warning: in Chrome 12, some filesystem: URLs are opened inline. This means
+that e.g. HTML pages given to the user via filesystem: URLs will be opened
+and processed by the browser.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the file to get the URL of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred filesystem: URL. The callback
+will be passed the URL. If a file API error occurs while loading the
+blob, that error will be passed to the errback.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#isDisposed">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#isDisposed">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDownloaded"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L222" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDownloaded(<var>url</var>)</div></h3></div><div class="body"><p>Return (deferred) whether or not a URL has been downloaded. Will fire a
+deferred error if something goes wrong when determining this.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred boolean. The callback will be
+passed the boolean. If a file API error occurs while checking the
+existence of the downloaded URL, that error will be passed to the
+errback.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDownloading"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L167" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDownloading(<var>url</var>)</div></h3></div><div class="body"><p>Returns whether or not there is an active download for a given URL.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the download to check.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether or not there is an active download for the URL.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="registerDisposable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDisposable(<var>disposable</var>)</div></h3></div><div class="body"><p>Associates a disposable object with this object so that they will be disposed
+together.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#registerDisposable">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>disposable</var><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><p>that will be disposed when
+this object is disposed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="remove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L248" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>remove(<var>url</var>)</div></h3></div><div class="body"><p>Remove a URL from the FileDownloader.</p>
+<p>This returns a Deferred. If the removal is completed successfully, its
+callback will be called without any value. If the removal fails, its errback
+will be called with the <a href="goog.fs.Error.html"><code>goog.fs.Error</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred used for registering callbacks on
+success or on error.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setBlob"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L274" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setBlob(<var>url</var>, <var>blob</var>, <var>opt_name</var>)</div></h3></div><div class="body"><p>Save a blob for a given URL. This works just as through the blob were
+downloaded form that URL, except you specify the blob and no HTTP request is
+made.</p>
+<p>If the URL is currently being downloaded, it&#39;s indeterminate whether the blob
+being set or the blob being downloaded will end up in the filesystem.
+Whichever one doesn&#39;t get saved will have an error. To ensure that one or the
+other takes precedence, use <a href="goog.net.FileDownloader.html#waitForDownload"><code>#waitForDownload</code></a> to allow the download to
+complete before setting the blob.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL at which to set the blob.</p>
+<dt class="type name"><var>blob</var><code>!Blob</code><dd><p>The blob to set.</p>
+<dt class="type name"><var>opt_name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>The name of the file. If this isn&#39;t given, it&#39;s
+determined from the URL.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred used for registering callbacks on
+success or on error. This can be cancelled just like a <a href="goog.net.FileDownloader.html#download"><code>#download</code></a>
+Deferred. The objects passed to the errback will be
+<a href="goog.net.FileDownloader.Error.html"><code>goog.net.FileDownloader.Error</code></a>s.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="waitForDownload"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/filedownloader.js#L148" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>waitForDownload(<var>url</var>)</div></h3></div><div class="body"><p>Return a Deferred that will fire once no download is active for a given URL.
+If there&#39;s no download active for that URL when this is called, the deferred
+will fire immediately; otherwise, it will fire once the download is complete,
+whether or not it succeeds.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The URL of the download to wait for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The Deferred that will fire when the download
+is complete.</p>
+</dl></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="creationStack"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>creationStack</div></h3></div><div class="body"><p>If monitoring the goog.Disposable instances is enabled, stores the creation
+stack trace of the Disposable instance.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#creationStack">goog.Disposable</a></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.net.FileDownloader.Download_.html">FileDownloader.Download_</a></div><li class="summary"><div><a href="goog.net.FileDownloader.Error.html">FileDownloader.Error</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

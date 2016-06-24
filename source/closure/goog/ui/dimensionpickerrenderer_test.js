@@ -49,7 +49,8 @@ function testSetHighlightedSizeUpdatesLiveRegion() {
 
   assertEquals(1, sayFunction.getCallCount());
 
-  assertTrue(goog.array.equals(
-      ['3 by 7', goog.a11y.aria.LivePriority.ASSERTIVE],
-      sayFunction.getLastCall().getArguments()));
+  assertTrue(
+      goog.array.equals(
+          ['3 by 7', goog.a11y.aria.LivePriority.ASSERTIVE],
+          sayFunction.getLastCall().getArguments()));
 }

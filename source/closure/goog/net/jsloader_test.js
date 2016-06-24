@@ -30,8 +30,8 @@ function setUp() {
 
 function tearDown() {
   // Remove all the fake scripts.
-  var scripts = goog.array.clone(
-      document.getElementsByTagName(goog.dom.TagName.SCRIPT));
+  var scripts =
+      goog.array.clone(document.getElementsByTagName(goog.dom.TagName.SCRIPT));
   for (var i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);
@@ -80,7 +80,8 @@ function testLoadAndVerifyError() {
 
   return result.then(fail, function(error) {
     // Check that the error code is right.
-    assertEquals('verification error', goog.net.jsloader.ErrorCode.VERIFY_ERROR,
+    assertEquals(
+        'verification error', goog.net.jsloader.ErrorCode.VERIFY_ERROR,
         error.code);
   });
 }
@@ -131,13 +132,10 @@ function testLoadMany() {
 function testLoadWithOptions() {
   var testUrl = 'testdata/jsloader_test1.js';
   var options = {
-    attributes: {
-      'data-attr1' : 'enabled',
-      'data-attr2' : 'disabled',
-    },
-    timeout: undefined,  // Use default
+    attributes: {'data-attr1': 'enabled', 'data-attr2': 'disabled'},
+    timeout: undefined,          // Use default
     cleanupWhenDone: undefined,  // Use default
-    document: undefined  // Use default
+    document: undefined          // Use default
   };
   var result = goog.net.jsloader.load(testUrl, options);
 
@@ -148,9 +146,11 @@ function testLoadWithOptions() {
     assertTrue('server URI', script.src.indexOf(testUrl) >= 0);
 
     // Check that the attributes specified are set on the script tag.
-    assertEquals('attribute option not applied for attr1',
-        'enabled', script.getAttribute('data-attr1'));
-    assertEquals('attribute option not applied for attr2',
-        'disabled', script.getAttribute('data-attr2'));
+    assertEquals(
+        'attribute option not applied for attr1', 'enabled',
+        script.getAttribute('data-attr1'));
+    assertEquals(
+        'attribute option not applied for attr2', 'disabled',
+        script.getAttribute('data-attr2'));
   });
 }

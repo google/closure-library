@@ -32,8 +32,7 @@ goog.require('goog.testing.recordFunction');
 
 
 var TEST_EVENT_TYPES = [
-  goog.events.EventType.LOAD,
-  goog.net.EventType.COMPLETE,
+  goog.events.EventType.LOAD, goog.net.EventType.COMPLETE,
   goog.net.EventType.ERROR
 ];
 
@@ -88,8 +87,9 @@ function testDisposeInTheMiddleOfLoadingWorks() {
   var resolver = goog.Promise.withResolver();
 
   goog.events.listen(loader, TEST_EVENT_TYPES, function(e) {
-    assertFalse('Handler is still invoked after loader is disposed.',
-                loader.isDisposed());
+    assertFalse(
+        'Handler is still invoked after loader is disposed.',
+        loader.isDisposed());
 
     switch (e.type) {
       case goog.net.EventType.COMPLETE:
@@ -170,7 +170,7 @@ function assertImagesAreCorrect(results) {
 
 /**
  * Overrides the loader's loadImage_ method so that it dispatches an image
- * loaded event immediately, causing any event listners to receive them
+ * loaded event immediately, causing any event listeners to receive them
  * synchronously.  This allows tests to assume synchronous execution.
  */
 function makeLoaderSynchronous(loader) {
@@ -217,13 +217,16 @@ function testImagesAddedAfterStart() {
       'COMPLETE event should not have been dispatched yet: An image was ' +
           'added after the initial batch was started.',
       0, completeRecordFn.getCallCount());
-  assertEquals('Just the test images should have loaded',
+  assertEquals(
+      'Just the test images should have loaded',
       goog.object.getCount(TEST_IMAGES), loadRecordFn.getCallCount());
 
   loader.start();
-  assertEquals('COMPLETE should have been dispatched once.',
-      1, completeRecordFn.getCallCount());
-  assertEquals('All images should have been loaded',
+  assertEquals(
+      'COMPLETE should have been dispatched once.', 1,
+      completeRecordFn.getCallCount());
+  assertEquals(
+      'All images should have been loaded',
       goog.object.getCount(TEST_IMAGES) + 1, loadRecordFn.getCallCount());
 }
 
@@ -255,9 +258,11 @@ function testImagesAddedAndStartedAfterStart() {
 
   // Start testing.  Make sure all 7 images loaded.
   loader.start();
-  assertEquals('COMPLETE should have been dispatched once.',
-      1, completeRecordFn.getCallCount());
-  assertEquals('All images should have been loaded',
+  assertEquals(
+      'COMPLETE should have been dispatched once.', 1,
+      completeRecordFn.getCallCount());
+  assertEquals(
+      'All images should have been loaded',
       goog.object.getCount(TEST_IMAGES) + 2, loadRecordFn.getCallCount());
 }
 
@@ -288,9 +293,11 @@ function testImagesRemovedAfterStart() {
 
   // Start testing.  Make sure only the 3 images remaining loaded.
   loader.start();
-  assertEquals('COMPLETE should have been dispatched once.',
-      1, completeRecordFn.getCallCount());
-  assertEquals('All images should have been loaded',
+  assertEquals(
+      'COMPLETE should have been dispatched once.', 1,
+      completeRecordFn.getCallCount());
+  assertEquals(
+      'All images should have been loaded',
       goog.object.getCount(TEST_IMAGES) - 2, loadRecordFn.getCallCount());
 }
 

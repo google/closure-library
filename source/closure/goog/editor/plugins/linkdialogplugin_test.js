@@ -59,7 +59,7 @@ var linkObj;
 
 function setUp() {
   testDiv = goog.dom.getDocument().getElementById('test');
-  goog.dom.setTextContent(testDiv, 'Some preceeding text');
+  goog.dom.setTextContent(testDiv, 'Some preceding text');
 
   anchorElem = goog.dom.createElement(goog.dom.TagName.A);
   anchorElem.href = 'http://www.google.com/';
@@ -74,14 +74,13 @@ function setUp() {
   mockAlert = mockCtrl.createGlobalFunctionMock('alert');
 
   isNew = false;
-  mockLink.isNew().$anyTimes().$does(function() {
-    return isNew;
-  });
-  mockLink.
-      setTextAndUrl(goog.testing.mockmatchers.isString,
-          goog.testing.mockmatchers.isString).
-      $anyTimes().
-      $does(function(text, url) {
+  mockLink.isNew().$anyTimes().$does(function() { return isNew; });
+  mockLink
+      .setTextAndUrl(
+          goog.testing.mockmatchers.isString,
+          goog.testing.mockmatchers.isString)
+      .$anyTimes()
+      .$does(function(text, url) {
         anchorElem.innerHTML = text;
         anchorElem.href = url;
       });
@@ -100,8 +99,7 @@ function setUpAnchor(text, href, opt_isNew, opt_target, opt_rel) {
   setUpGivenAnchor(anchorElem, text, href, opt_isNew, opt_target, opt_rel);
 }
 
-function setUpGivenAnchor(
-    anchor, text, href, opt_isNew, opt_target, opt_rel) {
+function setUpGivenAnchor(anchor, text, href, opt_isNew, opt_target, opt_rel) {
   anchor.innerHTML = text;
   anchor.href = href;
   isNew = !!opt_isNew;
@@ -128,8 +126,9 @@ function testCreateDialog() {
   plugin.registerFieldObject(mockField);
 
   var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  assertTrue('Dialog should be of type goog.ui.editor.LinkDialog',
-             dialog instanceof goog.ui.editor.LinkDialog);
+  assertTrue(
+      'Dialog should be of type goog.ui.editor.LinkDialog',
+      dialog instanceof goog.ui.editor.LinkDialog);
 
   mockCtrl.$verifyAll();
 }
@@ -152,15 +151,11 @@ function testOk() {
 
   // Mock of execCommand + clicking OK without actually opening the dialog.
   plugin.currentLink_ = mockLink;
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT,
-      NEW_LINK_URL));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT, NEW_LINK_URL));
 
-  assertEquals('Display text incorrect',
-               NEW_LINK_TEXT,
-               anchorElem.innerHTML);
-  assertEquals('Anchor element href incorrect',
-               NEW_LINK_URL,
-               anchorElem.href);
+  assertEquals('Display text incorrect', NEW_LINK_TEXT, anchorElem.innerHTML);
+  assertEquals('Anchor element href incorrect', NEW_LINK_URL, anchorElem.href);
 
   mockCtrl.$verifyAll();
 }
@@ -181,12 +176,12 @@ function testCancel() {
   plugin.currentLink_ = mockLink;
   dialog.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 
-  assertEquals('Display text should not be changed',
-               OLD_LINK_TEXT,
-               anchorElem.innerHTML);
-  assertEquals('Anchor element href should not be changed',
-               OLD_LINK_URL,
-               anchorElem.href);
+  assertEquals(
+      'Display text should not be changed', OLD_LINK_TEXT,
+      anchorElem.innerHTML);
+  assertEquals(
+      'Anchor element href should not be changed', OLD_LINK_URL,
+      anchorElem.href);
 
   mockCtrl.$verifyAll();
 }
@@ -196,7 +191,7 @@ function testCancel() {
  * Tests that when the Cancel event fires for a new link it gets removed.
  */
 function testCancelNew() {
-  mockField.dispatchChange(); // Should be fired because link was removed.
+  mockField.dispatchChange();  // Should be fired because link was removed.
   mockCtrl.$replayAll();
 
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, true);
@@ -209,16 +204,15 @@ function testCancelNew() {
   plugin.currentLink_ = mockLink;
   dialog.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 
-  assertNotEquals('Anchor element should be removed from document body',
-                  testDiv,
-                  anchorElem.parentNode);
+  assertNotEquals(
+      'Anchor element should be removed from document body', testDiv,
+      anchorElem.parentNode);
   var newElem = prevSib.nextSibling;
-  assertEquals('Link should be replaced by text node',
-               goog.dom.NodeType.TEXT,
-               newElem.nodeType);
-  assertEquals('Original text should be left behind',
-               OLD_LINK_TEXT,
-               newElem.nodeValue);
+  assertEquals(
+      'Link should be replaced by text node', goog.dom.NodeType.TEXT,
+      newElem.nodeType);
+  assertEquals(
+      'Original text should be left behind', OLD_LINK_TEXT, newElem.nodeValue);
 
   mockCtrl.$verifyAll();
 }
@@ -228,30 +222,24 @@ function testCancelNew() {
  * Tests that when the Cancel event fires for a new link it gets removed.
  */
 function testCancelNewMultiple() {
-  mockField.dispatchChange(); // Should be fired because link was removed.
+  mockField.dispatchChange();  // Should be fired because link was removed.
   mockCtrl.$replayAll();
 
   var anchorElem1 = anchorElem;
-  var parent1 = goog.dom.createDom(goog.dom.TagName.DIV, null,
-      anchorElem1);
+  var parent1 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem1);
   goog.dom.appendChild(testDiv, parent1);
-  setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1',
-      true);
+  setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1', true);
 
   anchorElem2 = goog.dom.createDom(goog.dom.TagName.A);
-  var parent2 = goog.dom.createDom(goog.dom.TagName.DIV, null,
-      anchorElem2);
+  var parent2 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem2);
   goog.dom.appendChild(testDiv, parent2);
-  setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2',
-      true);
+  setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2', true);
   extraAnchors.push(anchorElem2);
 
   anchorElem3 = goog.dom.createDom(goog.dom.TagName.A);
-  var parent3 = goog.dom.createDom(goog.dom.TagName.DIV, null,
-      anchorElem3);
+  var parent3 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem3);
   goog.dom.appendChild(testDiv, parent3);
-  setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3',
-      true);
+  setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3', true);
   extraAnchors.push(anchorElem3);
 
   plugin = new goog.editor.plugins.LinkDialogPlugin();
@@ -262,34 +250,34 @@ function testCancelNewMultiple() {
   plugin.currentLink_ = mockLink;
   dialog.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 
-  assertNotEquals('Anchor 1 element should be removed from document body',
-      parent1,
+  assertNotEquals(
+      'Anchor 1 element should be removed from document body', parent1,
       anchorElem1.parentNode);
-  assertNotEquals('Anchor 2 element should be removed from document body',
-      parent2,
+  assertNotEquals(
+      'Anchor 2 element should be removed from document body', parent2,
       anchorElem2.parentNode);
-  assertNotEquals('Anchor 3 element should be removed from document body',
-      parent3,
+  assertNotEquals(
+      'Anchor 3 element should be removed from document body', parent3,
       anchorElem3.parentNode);
 
-  assertEquals('Link 1 should be replaced by text node',
-      goog.dom.NodeType.TEXT,
+  assertEquals(
+      'Link 1 should be replaced by text node', goog.dom.NodeType.TEXT,
       parent1.firstChild.nodeType);
-  assertEquals('Link 2 should be replaced by text node',
-      goog.dom.NodeType.TEXT,
+  assertEquals(
+      'Link 2 should be replaced by text node', goog.dom.NodeType.TEXT,
       parent2.firstChild.nodeType);
-  assertEquals('Link 3 should be replaced by text node',
-      goog.dom.NodeType.TEXT,
+  assertEquals(
+      'Link 3 should be replaced by text node', goog.dom.NodeType.TEXT,
       parent3.firstChild.nodeType);
 
-  assertEquals('Original text 1 should be left behind',
-      OLD_LINK_TEXT + '1',
+  assertEquals(
+      'Original text 1 should be left behind', OLD_LINK_TEXT + '1',
       parent1.firstChild.nodeValue);
-  assertEquals('Original text 2 should be left behind',
-      OLD_LINK_TEXT + '2',
+  assertEquals(
+      'Original text 2 should be left behind', OLD_LINK_TEXT + '2',
       parent2.firstChild.nodeValue);
-  assertEquals('Original text 3 should be left behind',
-      OLD_LINK_TEXT + '3',
+  assertEquals(
+      'Original text 3 should be left behind', OLD_LINK_TEXT + '3',
       parent3.firstChild.nodeValue);
 
   mockCtrl.$verifyAll();
@@ -307,19 +295,16 @@ function testOkNewMultiple() {
   mockCtrl.$replayAll();
 
   var anchorElem1 = anchorElem;
-  setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1',
-      true);
+  setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1', true);
 
   anchorElem2 = goog.dom.createElement(goog.dom.TagName.A);
   goog.dom.appendChild(testDiv, anchorElem2);
-  setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2',
-      true);
+  setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2', true);
   extraAnchors.push(anchorElem2);
 
   anchorElem3 = goog.dom.createElement(goog.dom.TagName.A);
   goog.dom.appendChild(testDiv, anchorElem3);
-  setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3',
-      true);
+  setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3', true);
   extraAnchors.push(anchorElem3);
 
   var prevSib = anchorElem1.previousSibling;
@@ -329,22 +314,24 @@ function testOkNewMultiple() {
 
   // Mock of execCommand + clicking OK without actually opening the dialog.
   plugin.currentLink_ = mockLink;
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT,
-      NEW_LINK_URL));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT, NEW_LINK_URL));
 
-  assertEquals('Display text 1 must update', NEW_LINK_TEXT,
-      anchorElem1.innerHTML);
-  assertEquals('Display text 2 must not update', OLD_LINK_TEXT + '2',
+  assertEquals(
+      'Display text 1 must update', NEW_LINK_TEXT, anchorElem1.innerHTML);
+  assertEquals(
+      'Display text 2 must not update', OLD_LINK_TEXT + '2',
       anchorElem2.innerHTML);
-  assertEquals('Display text 3 must not update', OLD_LINK_TEXT + '3',
+  assertEquals(
+      'Display text 3 must not update', OLD_LINK_TEXT + '3',
       anchorElem3.innerHTML);
 
-  assertEquals('Anchor element 1 href must update', NEW_LINK_URL,
-      anchorElem1.href);
-  assertEquals('Anchor element 2 href must update', NEW_LINK_URL,
-      anchorElem2.href);
-  assertEquals('Anchor element 3 href must update', NEW_LINK_URL,
-      anchorElem3.href);
+  assertEquals(
+      'Anchor element 1 href must update', NEW_LINK_URL, anchorElem1.href);
+  assertEquals(
+      'Anchor element 2 href must update', NEW_LINK_URL, anchorElem2.href);
+  assertEquals(
+      'Anchor element 3 href must update', NEW_LINK_URL, anchorElem3.href);
 
   mockCtrl.$verifyAll();
 }
@@ -369,44 +356,49 @@ function testOkOpenInNewWindow() {
   // Edit a link that doesn't open in a new window and leave it as such.
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
   var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-      NEW_LINK_TEXT, NEW_LINK_URL, false, false));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(
+          NEW_LINK_TEXT, NEW_LINK_URL, false, false));
   assertEquals(
-      'Target should not be set for link that doesn\'t open in new window',
-      '', anchorElem.target);
-  assertFalse('Checked state should stay false',
+      'Target should not be set for link that doesn\'t open in new window', '',
+      anchorElem.target);
+  assertFalse(
+      'Checked state should stay false',
       plugin.getOpenLinkInNewWindowCheckedState());
 
   // Edit a link that doesn't open in a new window and toggle it on.
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
   dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-      NEW_LINK_TEXT, NEW_LINK_URL, true));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT, NEW_LINK_URL, true));
   assertEquals(
       'Target should be set to _blank for link that opens in new window',
       '_blank', anchorElem.target);
-  assertTrue('Checked state should be true after toggling a link on',
+  assertTrue(
+      'Checked state should be true after toggling a link on',
       plugin.getOpenLinkInNewWindowCheckedState());
 
   // Edit a link that doesn't open in a named window and don't touch it.
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, false, 'named');
   dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-      NEW_LINK_TEXT, NEW_LINK_URL, false));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(
+          NEW_LINK_TEXT, NEW_LINK_URL, false));
   assertEquals(
-      'Target should keep its original value',
-      'named', anchorElem.target);
-  assertFalse('Checked state should be false again',
+      'Target should keep its original value', 'named', anchorElem.target);
+  assertFalse(
+      'Checked state should be false again',
       plugin.getOpenLinkInNewWindowCheckedState());
 
   // Edit a link that opens in a new window and toggle it off.
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, false, '_blank');
   dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-      NEW_LINK_TEXT, NEW_LINK_URL, false));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(
+          NEW_LINK_TEXT, NEW_LINK_URL, false));
   assertEquals(
-      'Target should not be set for link that doesn\'t open in new window',
-      '', anchorElem.target);
+      'Target should not be set for link that doesn\'t open in new window', '',
+      anchorElem.target);
 
   mockCtrl.$verifyAll();
 }
@@ -453,8 +445,9 @@ function verifyRelNoFollow(noFollow, originalRel, expectedRel) {
 
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, true, null, originalRel);
   var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
-  dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-      NEW_LINK_TEXT, NEW_LINK_URL, false, noFollow));
+  dialog.dispatchEvent(
+      new goog.ui.editor.LinkDialog.OkEvent(
+          NEW_LINK_TEXT, NEW_LINK_URL, false, noFollow));
   assertEquals(expectedRel, anchorElem.rel);
 
   mockCtrl.$verifyAll();
@@ -471,32 +464,32 @@ function testRestoreSelectionOnOk() {
 
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
-  helper.select('12345', 1, '12345', 4); // Selects '234'.
+  helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
-  assertEquals('Incorrect text selected before dialog is opened',
-               '234',
-               fieldObj.getRange().getText());
+  assertEquals(
+      'Incorrect text selected before dialog is opened', '234',
+      fieldObj.getRange().getText());
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
   if (!goog.userAgent.IE && !goog.userAgent.OPERA) {
     // IE returns some bogus range when field doesn't have selection.
     // You can't remove the selection from a whitebox field in Opera.
-    assertNull('There should be no selection while dialog is open',
-               fieldObj.getRange());
+    assertNull(
+        'There should be no selection while dialog is open',
+        fieldObj.getRange());
   }
-  goog.testing.events.fireClickSequence(
-      plugin.dialog_.getOkButtonElement());
-  assertEquals('No text should be selected after clicking ok',
-               '',
-               fieldObj.getRange().getText());
+  goog.testing.events.fireClickSequence(plugin.dialog_.getOkButtonElement());
+  assertEquals(
+      'No text should be selected after clicking ok', '',
+      fieldObj.getRange().getText());
 
   // Test that the caret is placed at the end of the link text.
   goog.testing.editor.dom.assertRangeBetweenText(
       // If the browser gets stuck in links, an nbsp was added after the link
       // to avoid that, otherwise we just look for the 5.
       goog.editor.BrowserFeature.GETS_STUCK_IN_LINKS ?
-          goog.string.Unicode.NBSP : '5',
-      '',
-      fieldObj.getRange());
+          goog.string.Unicode.NBSP :
+          '5',
+      '', fieldObj.getRange());
 
   // NOTE(user): The functionality to avoid getting stuck in links is
   // tested in editablelink_test.html::testPlaceCursorRightOf().
@@ -515,23 +508,24 @@ function testRestoreSelectionOnCancel(opt_isNew) {
 
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
-  helper.select('12345', 1, '12345', 4); // Selects '234'.
+  helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
-  assertEquals('Incorrect text selected before dialog is opened',
-               '234',
-               fieldObj.getRange().getText());
+  assertEquals(
+      'Incorrect text selected before dialog is opened', '234',
+      fieldObj.getRange().getText());
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
   if (!goog.userAgent.IE && !goog.userAgent.OPERA) {
     // IE returns some bogus range when field doesn't have selection.
     // You can't remove the selection from a whitebox field in Opera.
-    assertNull('There should be no selection while dialog is open',
-               fieldObj.getRange());
+    assertNull(
+        'There should be no selection while dialog is open',
+        fieldObj.getRange());
   }
   goog.testing.events.fireClickSequence(
       plugin.dialog_.getCancelButtonElement());
-  assertEquals('Incorrect text selected after clicking cancel',
-               '234',
-               fieldObj.getRange().getText());
+  assertEquals(
+      'Incorrect text selected after clicking cancel', '234',
+      fieldObj.getRange().getText());
 }
 
 
@@ -569,9 +563,8 @@ function testIsSafeSchemeToOpen() {
   // Urls with no scheme at all are ok too since 'http://' will be prepended.
   var good = [
     'http://google.com', 'http://google.com/', 'https://google.com',
-    'null@google.com', 'http://www.google.com', 'http://site.com',
-    'google.com', 'google', 'http://google', 'HTTP://GOOGLE.COM',
-    'HtTp://www.google.com'
+    'null@google.com', 'http://www.google.com', 'http://site.com', 'google.com',
+    'google', 'http://google', 'HTTP://GOOGLE.COM', 'HtTp://www.google.com'
   ];
 
   var bad = [
@@ -580,12 +573,14 @@ function testIsSafeSchemeToOpen() {
   ];
 
   for (var i = 0; i < good.length; i++) {
-    assertTrue(good[i] + ' should have a safe scheme',
+    assertTrue(
+        good[i] + ' should have a safe scheme',
         plugin.isSafeSchemeToOpen_(good[i]));
   }
 
   for (i = 0; i < bad.length; i++) {
-    assertFalse(bad[i] + ' should have an unsafe scheme',
+    assertFalse(
+        bad[i] + ' should have an unsafe scheme',
         plugin.isSafeSchemeToOpen_(bad[i]));
   }
 }
@@ -593,13 +588,13 @@ function testIsSafeSchemeToOpen() {
 function testShouldOpenWithWhitelist() {
   plugin.setSafeToOpenSchemes(['abc']);
 
-  assertTrue('Scheme should be safe',
-      plugin.shouldOpenUrl('abc://google.com'));
-  assertFalse('Scheme should be unsafe',
-              plugin.shouldOpenUrl('http://google.com'));
+  assertTrue('Scheme should be safe', plugin.shouldOpenUrl('abc://google.com'));
+  assertFalse(
+      'Scheme should be unsafe', plugin.shouldOpenUrl('http://google.com'));
 
   plugin.setBlockOpeningUnsafeSchemes(false);
-  assertTrue('Non-whitelisted should now be safe after disabling blocking',
+  assertTrue(
+      'Non-whitelisted should now be safe after disabling blocking',
       plugin.shouldOpenUrl('http://google.com'));
 }
 
@@ -617,14 +612,14 @@ function testBug1607766() {
 
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
-  helper.select('abc', 1, 'abc', 2); // Selects 'b'.
+  helper.select('abc', 1, 'abc', 2);  // Selects 'b'.
   // Dispatching a selection event causes the field to cache a selection
   // util, which is the root of the bug.
   plugin.fieldObject.dispatchSelectionChangeEvent();
 
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'Abc';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
+      'Abc';
   goog.testing.events.fireClickSequence(plugin.dialog_.getOkButtonElement());
 
   // In IE the unit test somehow doesn't cause a browser focus event, so we
@@ -650,16 +645,15 @@ function testBug2215546() {
   helper.select(anchorElem, 0, elem.firstChild, 1);
 
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
+      'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
   var okButton = plugin.dialog_.getOkButtonElement();
   okButton.disabled = false;
   goog.testing.events.fireClickSequence(okButton);
 
-  assertEquals('Link text should have been inserted',
-               'foo', anchorElem.innerHTML);
+  assertEquals(
+      'Link text should have been inserted', 'foo', anchorElem.innerHTML);
 }
 
 
@@ -687,34 +681,31 @@ function testBug7279077ScrollOnFocus() {
   elem.insertBefore(longTextElem, elem.firstChild);
 
   var helper = new goog.testing.editor.TestHelper(elem);
-  helper.select('12345', 1, '12345', 4); // Selects '234'.
+  helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
   // Scroll down.
   elem.scrollTop = 60;
 
   // Bring up the link insertion dialog, then cancel.
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
+      'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
   var cancelButton = plugin.dialog_.getCancelButtonElement();
   goog.testing.events.fireClickSequence(cancelButton);
 
-  assertEquals('Field should not have scrolled after cancel',
-      60, elem.scrollTop);
+  assertEquals(
+      'Field should not have scrolled after cancel', 60, elem.scrollTop);
 
   // Now let's try it with clicking the OK button.
   plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
-  goog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
+      'foo';
+  goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
   var okButton = plugin.dialog_.getOkButtonElement();
   goog.testing.events.fireClickSequence(okButton);
 
-  assertEquals('Field should not have scrolled after OK',
-      60, elem.scrollTop);
+  assertEquals('Field should not have scrolled after OK', 60, elem.scrollTop);
 }
 
 

@@ -1,0 +1,161 @@
+---
+{edit_path: '', layout: api, page: goog.async.DeferredList, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>DeferredList</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.async.html">goog.async</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferredlist.js#L71" target="_blank">View Source</a></div><h1 class="title"><div>class DeferredList</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.async.Deferred.html">goog.async.Deferred</a>
+  &#x2514; goog.async.DeferredList</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#ithenable">IThenable</a>&lt;TYPE&gt;</code><dd><code><a href="goog.Thenable.html">goog.Thenable</a>&lt;VALUE&gt;</code></dl><p>Constructs an object that waits on the results of multiple asynchronous
+operations and marshals the results. It is itself a <code>Deferred</code>,
+and may have an execution sequence of callback functions added to it. Each
+<code>DeferredList</code> instance is single use and may be fired only once.</p>
+<p>The default behavior of a <code>DeferredList</code> is to wait for a success
+or error result from every <code>Deferred</code> in its input list. Once
+every result is available, the <code>DeferredList</code>&#39;s execution sequence
+is fired with a list of <code>[success, result]</code> array pairs, where
+<code>success</code> is a boolean indicating whether <code>result</code> was
+the product of a callback or errback. The list&#39;s completion criteria and
+result list may be modified by setting one or more of the boolean options
+documented below.</p>
+<p><code>Deferred</code> instances passed into a <code>DeferredList</code> are
+independent, and may have additional callbacks and errbacks added to their
+execution sequences after they are passed as inputs to the list.</p>
+<h3 class="name"><div>new DeferredList(<var>list</var>, <var>opt_fireOnOneCallback</var>, <var>opt_fireOnOneErrback</var>, <var>opt_consumeErrors</var>, <var>opt_canceler</var>, <var>opt_defaultScope</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>list</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&gt;</code><dd><p>An array of deferred results to
+wait for.</p>
+<dt class="type name"><var>opt_fireOnOneCallback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to stop waiting as soon as
+one input completes successfully. In this case, the
+<code>DeferredList</code>&#39;s callback chain will be called with a two
+element array, <code>[index, result]</code>, where <code>index</code>
+identifies which input <code>Deferred</code> produced the successful
+<code>result</code>.</p>
+<dt class="type name"><var>opt_fireOnOneErrback</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether to stop waiting as soon as one
+input reports an error. The failing result is passed to the
+<code>DeferredList</code>&#39;s errback sequence.</p>
+<dt class="type name"><var>opt_consumeErrors</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>When true, any errors fired by a
+<code>Deferred</code> in the input list will be captured and replaced
+with a succeeding null result. Any callbacks added to the
+<code>Deferred</code> after its use in the <code>DeferredList</code> will
+receive null instead of the error.</p>
+<dt class="type name"><var>opt_canceler</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>A function that will be called if the
+<code>DeferredList</code> is canceled. &#64;see goog.async.Deferred#cancel</p>
+<dt class="type name"><var>opt_defaultScope</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The default scope to invoke callbacks or
+errbacks in.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addBoth"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L433" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addBoth(<var>f</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Registers one function as both a callback and errback.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addBoth">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>!function(this: T, ?): ?</code><dd><p>The function to be called on any result.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the function in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L396" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addCallback(<var>cb</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Register a callback function to be called with a successful result. If no
+value is returned by the callback function, the result value is unchanged. If
+a new value is returned, it becomes the Deferred result and will be passed to
+the next callback in the execution sequence.</p>
+<p>If the function throws an error, the error becomes the new result and will be
+passed to the next errback in the execution chain.</p>
+<p>If the function returns a Deferred, the execution sequence will be blocked
+until that Deferred fires. Its result will be passed to the next callback (or
+errback if it is an error result) in this Deferred&#39;s execution sequence.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addCallback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cb</var><code>!function(this: T, VALUE): ?</code><dd><p>The function to be called with a
+successful result.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addCallbacks"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L474" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addCallbacks(<var>cb</var>, <var>eb</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Registers a callback function and an errback function at the same position
+in the execution sequence. Only one of these functions will execute,
+depending on the error state during the execution sequence.</p>
+<p>NOTE: This is not equivalent to <code>def.addCallback().addErrback()</code>! If
+the callback is invoked, the errback will be skipped, and vice versa.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addCallbacks">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cb</var><code>?function(this: T, VALUE): ?</code><dd><p>The function to be called on a
+successful result.</p>
+<dt class="type name"><var>eb</var><code>?function(this: T, ?): ?</code><dd><p>The function to be called on an
+unsuccessful result.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the functions in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addErrback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L420" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addErrback(<var>eb</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Register a callback function to be called with an error result. If no value
+is returned by the function, the error result is unchanged. If a new error
+value is returned or thrown, that error becomes the Deferred result and will
+be passed to the next errback in the execution sequence.</p>
+<p>If the errback function handles the error by returning a non-error value,
+that result will be passed to the next normal callback in the sequence.</p>
+<p>If the function returns a Deferred, the execution sequence will be blocked
+until that Deferred fires. Its result will be passed to the next callback (or
+errback if it is an error result) in this Deferred&#39;s execution sequence.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addErrback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>eb</var><code>!function(this: T, ?): ?</code><dd><p>The function to be called on an
+unsuccessful result.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the errback in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&lt;VALUE&gt;</code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addFinally"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L446" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addFinally(<var>f</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Like addBoth, but propagates uncaught exceptions in the errback.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addFinally">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, ?): ?</code><dd><p>The function to be called on any result.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the function in.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&lt;VALUE&gt;</code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="awaitDeferred"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L543" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>awaitDeferred(<var>otherDeferred</var>)</div></h3></div><div class="body"><p>Makes this Deferred wait for another Deferred&#39;s execution sequence to
+complete before continuing.</p>
+<p>This is equivalent to adding a callback that returns <code>otherDeferred</code>,
+but doesn&#39;t prevent additional callbacks from being added to
+<code>otherDeferred</code>.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#awaitDeferred">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>otherDeferred</var><code>(!<a href="goog.async.Deferred.html">goog.async.Deferred</a>|!<a href="goog.Thenable.html">goog.Thenable</a>)</code><dd><p>The Deferred
+to wait for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="branch"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L569" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>branch(<var>opt_propagateCancel</var>)</div></h3></div><div class="body"><p>Creates a branch off this Deferred&#39;s execution sequence, and returns it as a
+new Deferred. The branched Deferred&#39;s starting result will be shared with the
+parent at the point of the branch, even if further callbacks are added to the
+parent.</p>
+<p>All branches at the same stage in the execution sequence will receive the
+same starting value.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#branch">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_propagateCancel</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If cancel() is called on every child
+branch created with opt_propagateCancel, the parent will be canceled as
+well.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&lt;VALUE&gt;</code><dd><p>A Deferred that will be started with
+the computed result from this stage in the execution sequence.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="callback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L323" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>callback(<var>opt_result</var>)</div></h3></div><div class="body"><p>Fire the execution sequence for this Deferred by passing the starting result
+to the first registered callback.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#callback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_result</var><code>VALUE=</code><dd><p>The starting result.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="cancel"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L228" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>cancel(<var>opt_deepCancel</var>)</div></h3></div><div class="body"><p>Cancels a Deferred that has not yet been fired, or is blocked on another
+deferred operation. If this Deferred is waiting for a blocking Deferred to
+fire, the blocking Deferred will also be canceled.</p>
+<p>If this Deferred was created by calling branch() on a parent Deferred with
+opt_propagateCancel set to true, the parent may also be canceled. If
+opt_deepCancel is set, cancel() will be called on the parent (as well as any
+other ancestors if the parent is also a branch). If one or more branches were
+created with opt_propagateCancel set to true, the parent will be canceled if
+cancel() is called on all of those branches.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#cancel">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_deepCancel</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If true, cancels this Deferred&#39;s parent even
+if cancel() hasn&#39;t been called on some of the parent&#39;s branches. Has no
+effect on a branch without opt_propagateCancel set to true.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="chainDeferred"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L524" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>chainDeferred(<var>otherDeferred</var>)</div></h3></div><div class="body"><p>Links another Deferred to the end of this Deferred&#39;s execution sequence. The
+result of this execution sequence will be passed as the starting result for
+the chained Deferred, invoking either its first callback or errback.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#chainDeferred">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>otherDeferred</var><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The Deferred to chain.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="errback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferredlist.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>errback(<var>opt_result</var>)</div></h3></div><div class="body"><p>Fire the execution sequence for this Deferred by passing the starting error
+result to the first registered errback.</p>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.async.Deferred.html#errback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_result</var><code>*=</code><dd><p>The starting error.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasFired"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L584" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>hasFired()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#hasFired">goog.async.Deferred</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the execution sequence has been started on this
+Deferred by invoking <code>callback</code> or <code>errback</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isError"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L596" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>isError(<var>res</var>)</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#isError">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>res</var><code>*</code><dd><p>The latest result in the execution sequence.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the current result is an error that should cause
+the next errback to fire. May be overridden by subclasses to handle
+special error types.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="then"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L495" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>then(<var>opt_onFulfilled</var>, <var>opt_onRejected</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Implements goog.Thenable for seamless integration with
+goog.Promise.
+Deferred results are mutable and may represent multiple values over
+their lifetime. Calling <code>then</code> on a Deferred returns a Promise
+with the result of the Deferred at that point in its callback chain.
+Note that if the Deferred result is never mutated, and only
+<code>then</code> calls are made, the Deferred will behave like a Promise.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#then">goog.async.Deferred</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.Thenable.html#then">goog.Thenable</a></dd><dd><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#ithenable">IThenable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_onFulfilled</var><code>?function(this: THIS, TYPE): VALUE=</code><dd><p>A
+function that will be invoked with the fulfillment value if the Promise
+is fulfilled.</p>
+<dt class="type name"><var>opt_onRejected</var><code>?function(this: THIS, *): *=</code><dd><p>A function that will
+be invoked with the rejection reason if the Promise is rejected.</p>
+<dt class="type name"><var>opt_context</var><code>THIS=</code><dd><p>An optional context object that will be the
+execution context for the callbacks. By default, functions are executed
+with the default this.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>RESULT</code><dd><p>A new Promise that will receive the result
+of the fulfillment or rejection callback.</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="DeferredList.gatherResults"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferredlist.js#L197" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>DeferredList.gatherResults(<var>list</var>)</div></h3></div><div class="body"><p>Creates a <code>DeferredList</code> that gathers results from multiple
+<code>Deferred</code> inputs. If all inputs succeed, the callback is fired
+with the list of results as a flat array. If any input fails, the list&#39;s
+errback is fired immediately with the offending error, and all other pending
+inputs are canceled.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>list</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&gt;</code><dd><p>The list of <code>Deferred</code>
+inputs to wait for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred list of results from the inputs
+if they all succeed, or the error result of the first input to fail.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -62,51 +62,61 @@ function testCreateDom() {
   button.setValue('foo');
   var element = renderer.createDom(button);
   assertNotNull('Element must not be null', element);
-  assertEquals('Element must be a button',
-      goog.dom.TagName.BUTTON, element.tagName);
-  assertSameElements('Button element must have expected class name',
-      ['goog-button'], goog.dom.classlist.get(element));
+  assertEquals(
+      'Element must be a button', goog.dom.TagName.BUTTON, element.tagName);
+  assertSameElements(
+      'Button element must have expected class name', ['goog-button'],
+      goog.dom.classlist.get(element));
   assertFalse('Button element must be enabled', element.disabled);
-  assertEquals('Button element must have expected title', 'Hello, world!',
+  assertEquals(
+      'Button element must have expected title', 'Hello, world!',
       element.title);
   // Expected to fail on IE.
   expectedFailures.expectFailureFor(goog.userAgent.IE);
   try {
     // See http://www.fourmilab.ch/fourmilog/archives/2007-03/000824.html
     // for a description of the problem.
-    assertEquals('Button element must have expected value', 'foo',
-        element.value);
-    assertEquals('Button element must have expected contents', 'Hello',
+    assertEquals(
+        'Button element must have expected value', 'foo', element.value);
+    assertEquals(
+        'Button element must have expected contents', 'Hello',
         element.innerHTML);
   } catch (e) {
     expectedFailures.handleException(e);
   }
-  assertFalse('Button must not handle its own mouse events',
+  assertFalse(
+      'Button must not handle its own mouse events',
       button.isHandleMouseEvents());
-  assertFalse('Button must not support the custom FOCUSED state',
+  assertFalse(
+      'Button must not support the custom FOCUSED state',
       button.isSupportedState(goog.ui.Component.State.FOCUSED));
 }
 
 function testCanDecorate() {
-  sandbox.innerHTML =
-      '<button id="buttonElement">Button</button>\n' +
+  sandbox.innerHTML = '<button id="buttonElement">Button</button>\n' +
       '<input id="inputButton" type="button" value="Input Button">\n' +
       '<input id="inputSubmit" type="submit" value="Input Submit">\n' +
       '<input id="inputReset" type="reset" value="Input Reset">\n' +
       '<input id="inputText" type="text" size="10">\n' +
       '<div id="divButton" class="goog-button">Hello</div>';
 
-  assertTrue('Must be able to decorate <button>',
+  assertTrue(
+      'Must be able to decorate <button>',
       renderer.canDecorate(goog.dom.getElement('buttonElement')));
-  assertTrue('Must be able to decorate <input type="button">',
+  assertTrue(
+      'Must be able to decorate <input type="button">',
       renderer.canDecorate(goog.dom.getElement('inputButton')));
-  assertTrue('Must be able to decorate <input type="submit">',
+  assertTrue(
+      'Must be able to decorate <input type="submit">',
       renderer.canDecorate(goog.dom.getElement('inputSubmit')));
-  assertTrue('Must be able to decorate <input type="reset">',
+  assertTrue(
+      'Must be able to decorate <input type="reset">',
       renderer.canDecorate(goog.dom.getElement('inputReset')));
-  assertFalse('Must not be able to decorate <input type="text">',
+  assertFalse(
+      'Must not be able to decorate <input type="text">',
       renderer.canDecorate(goog.dom.getElement('inputText')));
-  assertFalse('Must not be able to decorate <div class="goog-button">',
+  assertFalse(
+      'Must not be able to decorate <div class="goog-button">',
       renderer.canDecorate(goog.dom.getElement('divButton')));
 }
 
@@ -117,79 +127,81 @@ function testDecorate() {
       '</button>';
 
   var element = renderer.decorate(button, goog.dom.getElement('foo'));
-  assertEquals('Decorated element must be as expected',
-      goog.dom.getElement('foo'), element);
-  assertEquals('Decorated button title must have expected value', 'Hello!',
+  assertEquals(
+      'Decorated element must be as expected', goog.dom.getElement('foo'),
+      element);
+  assertEquals(
+      'Decorated button title must have expected value', 'Hello!',
       button.getTooltip());
   // Expected to fail on IE.
   expectedFailures.expectFailureFor(goog.userAgent.IE);
   try {
     // See http://www.fourmilab.ch/fourmilog/archives/2007-03/000824.html
     // for a description of the problem.
-    assertEquals('Decorated button value must have expected value', 'bar',
+    assertEquals(
+        'Decorated button value must have expected value', 'bar',
         button.getValue());
   } catch (e) {
     expectedFailures.handleException(e);
   }
-  assertFalse('Button must not handle its own mouse events',
+  assertFalse(
+      'Button must not handle its own mouse events',
       button.isHandleMouseEvents());
-  assertFalse('Button must not support the custom FOCUSED state',
+  assertFalse(
+      'Button must not support the custom FOCUSED state',
       button.isSupportedState(goog.ui.Component.State.FOCUSED));
 
-  element = renderer.decorate(button,
-      goog.dom.getElement('disabledButton'));
+  element = renderer.decorate(button, goog.dom.getElement('disabledButton'));
   assertFalse('Decorated button must be disabled', button.isEnabled());
-  assertSameElements('Decorated button must have expected class names',
-      ['goog-button', 'goog-button-disabled'],
-      goog.dom.classlist.get(element));
+  assertSameElements(
+      'Decorated button must have expected class names',
+      ['goog-button', 'goog-button-disabled'], goog.dom.classlist.get(element));
   // Expected to fail on IE.
   expectedFailures.expectFailureFor(goog.userAgent.IE);
   try {
     // See http://www.fourmilab.ch/fourmilog/archives/2007-03/000824.html
     // for a description of the problem.
-    assertEquals('Decorated button value must have expected value', 'bah',
+    assertEquals(
+        'Decorated button value must have expected value', 'bah',
         button.getValue());
   } catch (e) {
     expectedFailures.handleException(e);
   }
-  assertFalse('Button must not handle its own mouse events',
+  assertFalse(
+      'Button must not handle its own mouse events',
       button.isHandleMouseEvents());
-  assertFalse('Button must not support the custom FOCUSED state',
+  assertFalse(
+      'Button must not support the custom FOCUSED state',
       button.isSupportedState(goog.ui.Component.State.FOCUSED));
 }
 
 function testInitializeDom() {
   var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
-  goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+  var handleAction = function() { dispatchedActionCount++; };
+  goog.events.listen(button, goog.ui.Component.EventType.ACTION, handleAction);
 
   button.render(sandbox);
   goog.testing.events.fireClickSequence(button.getElement());
-  assertEquals('Button must have dispatched ACTION on click', 1,
-      dispatchedActionCount);
+  assertEquals(
+      'Button must have dispatched ACTION on click', 1, dispatchedActionCount);
 
-  goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+  goog.events.unlisten(
+      button, goog.ui.Component.EventType.ACTION, handleAction);
 }
 
 function testIsFocusable() {
-  assertTrue('Enabled button must be focusable',
-      renderer.isFocusable(button));
+  assertTrue('Enabled button must be focusable', renderer.isFocusable(button));
   button.setEnabled(false);
-  assertFalse('Disabled button must not be focusable',
-      renderer.isFocusable(button));
+  assertFalse(
+      'Disabled button must not be focusable', renderer.isFocusable(button));
 }
 
 function testSetState() {
   button.render(sandbox);
-  assertFalse('Button element must not be disabled',
-      button.getElement().disabled);
+  assertFalse(
+      'Button element must not be disabled', button.getElement().disabled);
   renderer.setState(button, goog.ui.Component.State.DISABLED, true);
-  assertTrue('Button element must be disabled',
-      button.getElement().disabled);
+  assertTrue('Button element must be disabled', button.getElement().disabled);
 }
 
 function testGetValue() {
@@ -199,7 +211,8 @@ function testGetValue() {
   try {
     // See http://www.fourmilab.ch/fourmilog/archives/2007-03/000824.html
     // for a description of the problem.
-    assertEquals('Value must be as expected', 'blah',
+    assertEquals(
+        'Value must be as expected', 'blah',
         renderer.getValue(goog.dom.getElement('foo')));
   } catch (e) {
     expectedFailures.handleException(e);
@@ -209,11 +222,12 @@ function testGetValue() {
 function testSetValue() {
   button.render(sandbox);
   renderer.setValue(button.getElement(), 'What?');
-  assertEquals('Button must have expected value', 'What?',
+  assertEquals(
+      'Button must have expected value', 'What?',
       renderer.getValue(button.getElement()));
 }
 
 function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(goog.ui.NativeButtonRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.NativeButtonRenderer);
 }

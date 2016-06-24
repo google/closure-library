@@ -37,23 +37,28 @@ function tearDown() {
 function testConstructor() {
   assertNotNull('Tab must not be null', tab);
   assertEquals('Tab must have expected content', 'Hello', tab.getContent());
-  assertEquals('Tab\'s renderer must default to TabRenderer',
+  assertEquals(
+      'Tab\'s renderer must default to TabRenderer',
       goog.ui.TabRenderer.getInstance(), tab.getRenderer());
-  assertTrue('Tab must support the SELECTED state',
+  assertTrue(
+      'Tab must support the SELECTED state',
       tab.isSupportedState(goog.ui.Component.State.SELECTED));
-  assertTrue('SELECTED must be an auto-state',
+  assertTrue(
+      'SELECTED must be an auto-state',
       tab.isAutoState(goog.ui.Component.State.SELECTED));
-  assertTrue('Tab must dispatch transition events for the DISABLED state',
+  assertTrue(
+      'Tab must dispatch transition events for the DISABLED state',
       tab.isDispatchTransitionEvents(goog.ui.Component.State.DISABLED));
-  assertTrue('Tab must dispatch transition events for the SELECTED state',
+  assertTrue(
+      'Tab must dispatch transition events for the SELECTED state',
       tab.isDispatchTransitionEvents(goog.ui.Component.State.SELECTED));
 }
 
 function testGetSetTooltip() {
   assertUndefined('Tooltip must be undefined by default', tab.getTooltip());
   tab.setTooltip('Hello, world!');
-  assertEquals('Tooltip must have expected value', 'Hello, world!',
-      tab.getTooltip());
+  assertEquals(
+      'Tooltip must have expected value', 'Hello, world!', tab.getTooltip());
 }
 
 function testSetAriaLabel() {
@@ -62,13 +67,17 @@ function testSetAriaLabel() {
   tab.render();
   var element = tab.getElementStrict();
   assertNotNull('Element must not be null', element);
-  assertEquals('Tab element must have expected aria-label', 'My tab',
+  assertEquals(
+      'Tab element must have expected aria-label', 'My tab',
       element.getAttribute('aria-label'));
-  assertEquals('Tab element must have expected aria role', 'tab',
+  assertEquals(
+      'Tab element must have expected aria role', 'tab',
       element.getAttribute('role'));
   tab.setAriaLabel('My new tab');
-  assertEquals('Tab element must have updated aria-label', 'My new tab',
+  assertEquals(
+      'Tab element must have updated aria-label', 'My new tab',
       element.getAttribute('aria-label'));
-  assertEquals('Tab element must have expected aria role', 'tab',
+  assertEquals(
+      'Tab element must have expected aria role', 'tab',
       element.getAttribute('role'));
 }

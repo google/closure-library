@@ -33,8 +33,8 @@ function setUp() {
 
   FIELD = new goog.editor.Field('field');
 
-  PLUGIN = new goog.editor.plugins.LoremIpsum(
-      'The owls are not what they seem.');
+  PLUGIN =
+      new goog.editor.plugins.LoremIpsum('The owls are not what they seem.');
   FIELD.registerPlugin(PLUGIN);
 }
 
@@ -59,18 +59,22 @@ function testUpdateLoremIpsum() {
   var content = '<div>foo</div>';
 
   FIELD.setHtml(false, '', false, /* Don't update lorem */ false);
-  assertFalse('Field started with content, lorem must not be enabled.',
+  assertFalse(
+      'Field started with content, lorem must not be enabled.',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertTrue('Field was set to empty, update must turn on lorem ipsum',
+  assertTrue(
+      'Field was set to empty, update must turn on lorem ipsum',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
 
   FIELD.unregisterPlugin(loremPlugin);
-  FIELD.setHtml(false, content, false,
+  FIELD.setHtml(
+      false, content, false,
       /* Update (turn off) lorem */ true);
   FIELD.setHtml(false, '', false, /* Don't update lorem */ false);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse('Field with no lorem message must not use lorem ipsum',
+  assertFalse(
+      'Field with no lorem message must not use lorem ipsum',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   FIELD.registerPlugin(loremPlugin);
 
@@ -78,7 +82,8 @@ function testUpdateLoremIpsum() {
   FIELD.setHtml(false, '', false, false);
   goog.editor.Field.setActiveFieldId(FIELD.id);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse('Active field must not use lorem ipsum',
+  assertFalse(
+      'Active field must not use lorem ipsum',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   goog.editor.Field.setActiveFieldId(null);
 
@@ -86,7 +91,8 @@ function testUpdateLoremIpsum() {
   FIELD.setHtml(false, '', false, false);
   FIELD.setModalMode(true);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse('Must not turn on lorem ipsum while a dialog is open.',
+  assertFalse(
+      'Must not turn on lorem ipsum while a dialog is open.',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   FIELD.setModalMode(true);
 
@@ -98,7 +104,8 @@ function testLoremIpsumAndGetCleanContents() {
   FIELD.makeEditable();
 
   // test direct getCleanContents
-  assertEquals('field reported wrong contents', 'This is a field',
+  assertEquals(
+      'field reported wrong contents', 'This is a field',
       FIELD.getCleanContents());
 
   // test indirect getCleanContents
@@ -107,16 +114,19 @@ function testLoremIpsumAndGetCleanContents() {
 
   // set field html, but explicitly forbid converting to lorem ipsum text
   FIELD.setHtml(false, '&nbsp;', true, false /* no lorem */);
-  assertEquals('field contains unexpected contents', getNbsp(),
+  assertEquals(
+      'field contains unexpected contents', getNbsp(),
       FIELD.getElement().innerHTML);
-  assertEquals('field reported wrong contents', getNbsp(),
-      FIELD.getCleanContents());
+  assertEquals(
+      'field reported wrong contents', getNbsp(), FIELD.getCleanContents());
 
   // now set field html allowing lorem
   FIELD.setHtml(false, '&nbsp;', true, true /* lorem */);
-  assertEquals('field reported wrong contents', goog.string.Unicode.NBSP,
+  assertEquals(
+      'field reported wrong contents', goog.string.Unicode.NBSP,
       FIELD.getCleanContents());
-  assertEquals('field contains unexpected contents', UPPERCASE_CONTENTS,
+  assertEquals(
+      'field contains unexpected contents', UPPERCASE_CONTENTS,
       FIELD.getElement().innerHTML.toUpperCase());
 }
 
@@ -127,12 +137,14 @@ function testLoremIpsumAndGetCleanContents2() {
   goog.dom.setTextContent(goog.dom.getElement('field'), '   ');
 
   FIELD.makeEditable();
-  assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, FIELD.getElement().innerHTML.toUpperCase());
+  assertEquals(
+      'field contains unexpected contents', UPPERCASE_CONTENTS,
+      FIELD.getElement().innerHTML.toUpperCase());
 
   FIELD.makeUneditable();
-  assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, goog.dom.getElement('field').innerHTML.toUpperCase());
+  assertEquals(
+      'field contains unexpected contents', UPPERCASE_CONTENTS,
+      goog.dom.getElement('field').innerHTML.toUpperCase());
 }
 
 function testLoremIpsumInClickToEditMode() {
@@ -140,17 +152,21 @@ function testLoremIpsumInClickToEditMode() {
   // so we must manage lorem ipsum in uneditable mode too.
   FIELD.makeEditable();
 
-  assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, FIELD.getElement().innerHTML.toUpperCase());
+  assertEquals(
+      'field contains unexpected contents', UPPERCASE_CONTENTS,
+      FIELD.getElement().innerHTML.toUpperCase());
 
   FIELD.makeUneditable();
-  assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, goog.dom.getElement('field').innerHTML.toUpperCase());
+  assertEquals(
+      'field contains unexpected contents', UPPERCASE_CONTENTS,
+      goog.dom.getElement('field').innerHTML.toUpperCase());
 }
 
 function getNbsp() {
   // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
   // innerHTML under some circumstances.
   return (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) ||
-         goog.userAgent.OPERA ? '\u00a0' : '&nbsp;';
+          goog.userAgent.OPERA ?
+      '\u00a0' :
+      '&nbsp;';
 }

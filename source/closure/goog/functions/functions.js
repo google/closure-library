@@ -30,9 +30,7 @@ goog.provide('goog.functions');
  * @template T
  */
 goog.functions.constant = function(retValue) {
-  return function() {
-    return retValue;
-  };
+  return function() { return retValue; };
 };
 
 
@@ -76,9 +74,7 @@ goog.functions.identity = function(opt_returnValue, var_args) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.error = function(message) {
-  return function() {
-    throw Error(message);
-  };
+  return function() { throw Error(message); };
 };
 
 
@@ -88,9 +84,7 @@ goog.functions.error = function(message) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.fail = function(err) {
-  return function() {
-    throw err;
-  }
+  return function() { throw err; };
 };
 
 
@@ -116,8 +110,31 @@ goog.functions.lock = function(f, opt_numArgs) {
  * @return {!Function} A new function.
  */
 goog.functions.nth = function(n) {
+  return function() { return arguments[n]; };
+};
+
+
+/**
+ * Like goog.partial(), except that arguments are added after arguments to the
+ * returned function.
+ *
+ * Usage:
+ * function f(arg1, arg2, arg3, arg4) { ... }
+ * var g = goog.functions.partialRight(f, arg3, arg4);
+ * g(arg1, arg2);
+ *
+ * @param {!Function} fn A function to partially apply.
+ * @param {...*} var_args Additional arguments that are partially applied to fn
+ *     at the end.
+ * @return {!Function} A partially-applied form of the function goog.partial()
+ *     was invoked as a method of.
+ */
+goog.functions.partialRight = function(fn, var_args) {
+  var rightArgs = Array.prototype.slice.call(arguments, 1);
   return function() {
-    return arguments[n];
+    var newArgs = Array.prototype.slice.call(arguments);
+    newArgs.push.apply(newArgs, rightArgs);
+    return fn.apply(this, newArgs);
   };
 };
 
@@ -136,7 +153,7 @@ goog.functions.withReturnValue = function(f, retValue) {
 
 
 /**
- * Creates a function that returns whether its arguement equals the given value.
+ * Creates a function that returns whether its argument equals the given value.
  *
  * Example:
  * var key = goog.object.findKey(obj, goog.functions.equalTo('needle'));
@@ -252,9 +269,7 @@ goog.functions.or = function(var_args) {
  * opposite.
  */
 goog.functions.not = function(f) {
-  return function() {
-    return !f.apply(this, arguments);
-  };
+  return function() { return !f.apply(this, arguments); };
 };
 
 
@@ -328,7 +343,7 @@ goog.functions.cacheReturnValue = function(fn) {
     }
 
     return value;
-  }
+  };
 };
 
 
@@ -384,9 +399,8 @@ goog.functions.debounce = function(f, interval, opt_scope) {
   return /** @type {function(...?)} */ (function(var_args) {
     goog.global.clearTimeout(timeout);
     var args = arguments;
-    timeout = goog.global.setTimeout(function() {
-      f.apply(null, args);
-    }, interval);
+    timeout =
+        goog.global.setTimeout(function() { f.apply(null, args); }, interval);
   });
 };
 

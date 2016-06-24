@@ -75,10 +75,10 @@ function initCard(opt_isAnchor, opt_checkChildren, opt_maxSearchSteps) {
   }
 
   goog.events.listen(card, goog.ui.HoverCard.EventType.TRIGGER, onTrigger);
-  goog.events.listen(card, goog.ui.HoverCard.EventType.CANCEL_TRIGGER,
-                     onCancel);
-  goog.events.listen(card, goog.ui.HoverCard.EventType.BEFORE_SHOW,
-                     onBeforeShow);
+  goog.events.listen(
+      card, goog.ui.HoverCard.EventType.CANCEL_TRIGGER, onCancel);
+  goog.events.listen(
+      card, goog.ui.HoverCard.EventType.BEFORE_SHOW, onBeforeShow);
 
   // This gets around the problem where AdvancedToolTip thinks it's
   // receiving a ghost event because cursor position hasn't moved off of
@@ -122,8 +122,7 @@ function testTrigger() {
   // Mouse over correct element fires trigger
   showDelay = 500;
   goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  assertEquals('Hovercard should have triggered', john,
-               triggeredElement);
+  assertEquals('Hovercard should have triggered', john, triggeredElement);
 
   // Show card after delay
   timer.tick(showDelay - 1);
@@ -215,8 +214,7 @@ function testMultipleTriggers() {
 
   goog.testing.events.fireMouseOutEvent(james, john);
   goog.testing.events.fireMouseOverEvent(john, james);
-  assertEquals('Should still show second card', james,
-               card.getAnchorElement());
+  assertEquals('Should still show second card', james, card.getAnchorElement());
   assertTrue(card.isVisible());
 
   shownCard = null;
@@ -263,9 +261,7 @@ function testManualTrigger() {
  */
 function testIsAnchor() {
   // Initialize card so only bill triggers it.
-  initCard(function(element) {
-    return element == bill;
-  });
+  initCard(function(element) { return element == bill; });
 
   showDelay = 500;
   goog.testing.events.fireMouseOverEvent(bill, elsewhere);
@@ -297,8 +293,8 @@ function testAnchorWithChildren() {
   // Moving from an anchor to a child of that anchor shouldn't cancel
   // or retrigger.
   var childBounds = goog.style.getBounds(child);
-  var inChild = new goog.math.Coordinate(childBounds.left + 1,
-                                         childBounds.top + 1);
+  var inChild =
+      new goog.math.Coordinate(childBounds.left + 1, childBounds.top + 1);
   goog.testing.events.fireMouseOutEvent(james, child);
   goog.testing.events.fireMouseMoveEvent(child, inChild);
   assertNull("Shouldn't cancel trigger", cancelledElement);
@@ -344,12 +340,12 @@ function testPositionAfterSecondTriggerWithMaxSearchSteps() {
   goog.testing.events.fireMouseOverEvent(john, elsewhere);
   timer.tick(showDelay);
   assertTrue('Should trigger card', card.isVisible());
-  assertEquals('Card cursor x coordinate should be 1',
-      card.position_.coordinate.x, 1);
+  assertEquals(
+      'Card cursor x coordinate should be 1', card.position_.coordinate.x, 1);
   card.cursorPosition = new goog.math.Coordinate(2, 2);
   goog.testing.events.fireMouseOverEvent(child, elsewhere);
   timer.tick(showDelay);
   assertTrue('Should trigger card', card.isVisible());
-  assertEquals('Card cursor x coordinate should be 2',
-      card.position_.coordinate.x, 2);
+  assertEquals(
+      'Card cursor x coordinate should be 2', card.position_.coordinate.x, 2);
 }

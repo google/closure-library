@@ -33,8 +33,8 @@ function setUp() {
   events = [];
   eh = new goog.events.EventHandler();
 
-  assertEquals('No listeners registered yet', 0,
-      goog.events.getListeners(a).length);
+  assertEquals(
+      'No listeners registered yet', 0, goog.events.getListeners(a).length);
 }
 
 
@@ -50,13 +50,14 @@ Foo.prototype.test = function(e) {
 function assertListenersExist(el, listenerCount, capt) {
   var EVENT_TYPES = goog.events.ActionEventWrapper_.EVENT_TYPES_;
   for (var i = 0; i < EVENT_TYPES.length; ++i) {
-    assertEquals(listenerCount, goog.events.getListeners(
-        el, EVENT_TYPES[i], capt).length);
+    assertEquals(
+        listenerCount,
+        goog.events.getListeners(el, EVENT_TYPES[i], capt).length);
   }
 }
 
 function testAddActionListener() {
-  var listener = function(e) { events.push(e);};
+  var listener = function(e) { events.push(e); };
   goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
   assertListenersExist(a, 1, false);
@@ -97,16 +98,13 @@ function testAddActionListener() {
   goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
   assertEquals('4 events should have been dispatched', 4, events.length);
 
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      listener);
+  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper, listener);
   assertListenersExist(a, 0, false);
 }
 
 
 function testAddActionListenerForHandleEvent() {
-  var listener = {
-    handleEvent: function(e) { events.push(e); }
-  };
+  var listener = {handleEvent: function(e) { events.push(e); }};
   goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
   assertListenersExist(a, 1, false);
@@ -133,8 +131,7 @@ function testAddActionListenerForHandleEvent() {
   goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
   assertEquals('3 events should have been dispatched', 3, events.length);
 
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      listener);
+  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper, listener);
   assertListenersExist(a, 0, false);
 }
 
@@ -153,11 +150,11 @@ function testAddActionListenerInCaptPhase() {
     count = 0;
   };
 
-  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper,
-      captListener, true);
+  goog.events.listenWithWrapper(
+      a, goog.events.actionEventWrapper, captListener, true);
 
-  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper,
-      bubbleListener);
+  goog.events.listenWithWrapper(
+      a, goog.events.actionEventWrapper, bubbleListener);
 
   assertListenersExist(a, 1, false);
   assertListenersExist(a, 1, true);
@@ -176,10 +173,10 @@ function testAddActionListenerInCaptPhase() {
   goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
   assertEquals('4 events should have been dispatched', 4, events.length);
 
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      captListener, true);
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      bubbleListener);
+  goog.events.unlistenWithWrapper(
+      a, goog.events.actionEventWrapper, captListener, true);
+  goog.events.unlistenWithWrapper(
+      a, goog.events.actionEventWrapper, bubbleListener);
 
   assertListenersExist(a, 0, false);
   assertListenersExist(a, 0, true);
@@ -201,8 +198,7 @@ function testRemoveActionListener() {
   assertEquals('Should be a keypress event', 'keypress', events[0].type);
   assertEquals('Should be an err event', 'err', events[1].type);
 
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      listener2);
+  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper, listener2);
   assertListenersExist(a, 1, false);
 
   events = [];
@@ -210,8 +206,7 @@ function testRemoveActionListener() {
   assertEquals('1 event should have been dispatched', 1, events.length);
   assertEquals('Should be a keypress event', 'keypress', events[0].type);
 
-  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      listener1);
+  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper, listener1);
   assertListenersExist(a, 0, false);
 }
 
@@ -236,8 +231,7 @@ function testEventHandlerActionListener() {
   goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
   assertEquals('2 events should have been dispatched', 2, events.length);
 
-  eh.unlistenWithWrapper(a, goog.events.actionEventWrapper,
-      listener);
+  eh.unlistenWithWrapper(a, goog.events.actionEventWrapper, listener);
   assertListenersExist(a, 0, false);
 }
 

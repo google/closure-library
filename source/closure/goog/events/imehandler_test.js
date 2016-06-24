@@ -39,17 +39,13 @@ function setUp() {
 }
 
 function initImeHandler() {
-  goog.events.ImeHandler.USES_COMPOSITION_EVENTS =
-      goog.userAgent.GECKO ||
+  goog.events.ImeHandler.USES_COMPOSITION_EVENTS = goog.userAgent.GECKO ||
       (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher(532));
   imeHandler = new goog.events.ImeHandler(sandbox);
   eventsFired = [];
   goog.events.listen(
-      imeHandler,
-      goog.object.getValues(goog.events.ImeHandler.EventType),
-      function(e) {
-        eventsFired.push(e.type);
-      });
+      imeHandler, goog.object.getValues(goog.events.ImeHandler.EventType),
+      function(e) { eventsFired.push(e.type); });
 }
 
 function tearDown() {
@@ -65,7 +61,8 @@ function tearDownPage() {
   initImeHandler();
 
   function unshiftEvent(e) {
-    last10Events.unshift(e.type + ':' + e.keyCode + ':' +
+    last10Events.unshift(
+        e.type + ':' + e.keyCode + ':' +
         goog.string.htmlEscape(goog.dom.getTextContent(sandbox)));
     last10Events.length = Math.min(last10Events.length, 10);
     goog.dom.getElement('logger').innerHTML = last10Events.join('<br>');
@@ -73,18 +70,13 @@ function tearDownPage() {
 
   var last10Events = [];
   goog.events.listen(
-      imeHandler,
-      goog.object.getValues(goog.events.ImeHandler.EventType),
+      imeHandler, goog.object.getValues(goog.events.ImeHandler.EventType),
       unshiftEvent);
-  goog.events.listen(
-      sandbox,
-      ['keydown', 'textInput'],
-      unshiftEvent);
+  goog.events.listen(sandbox, ['keydown', 'textInput'], unshiftEvent);
 }
 
 function assertEventsFired(var_args) {
-  assertArrayEquals(
-      goog.array.clone(arguments), eventsFired);
+  assertArrayEquals(goog.array.clone(arguments), eventsFired);
 }
 
 function fireInputEvent(type) {
@@ -100,8 +92,7 @@ function fireKeySequence(keyCode) {
   return (
       goog.testing.events.fireBrowserEvent(
           new goog.testing.events.Event('textInput', sandbox)) &
-      goog.testing.events.fireKeySequence(
-          sandbox, keyCode));
+      goog.testing.events.fireKeySequence(sandbox, keyCode));
 }
 
 function testHandleKeyDown_GeckoCompositionEvents() {
@@ -190,14 +181,13 @@ function testHandlerKeyDownForIme_imeOnOff() {
   fireKeySequence(goog.events.KeyCodes.ENTER);
   assertNotImeMode();
 
-  assertEventsFired(
-      eventTypes.START, eventTypes.END);
+  assertEventsFired(eventTypes.START, eventTypes.END);
 }
 
 
 /**
  * Ensures that IME mode turns off when keyup events which are involved
- * in commiting IME text occurred in Safari.
+ * in committing IME text occurred in Safari.
  */
 function testHandleKeyUpForSafari() {
   setUserAgent('WEBKIT');

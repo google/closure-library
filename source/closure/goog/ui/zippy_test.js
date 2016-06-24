@@ -34,20 +34,20 @@ var dualHeaderZippyCollapsedHeaderEl;
 var dualHeaderZippyExpandedHeaderEl;
 
 function setUp() {
-  zippy = new goog.ui.Zippy(goog.dom.getElement('t1'),
-      goog.dom.getElement('c1'));
+  zippy =
+      new goog.ui.Zippy(goog.dom.getElement('t1'), goog.dom.getElement('c1'));
 
   var fakeControlEl = document.createElement(goog.dom.TagName.BUTTON);
   var fakeContentEl = document.createElement(goog.dom.TagName.DIV);
 
-  fakeZippy1 = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
-      fakeContentEl.cloneNode(true), true);
-  fakeZippy2 = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
-      fakeContentEl.cloneNode(true), false);
-  contentlessZippy = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
-      undefined, true);
-  headerlessZippy = new goog.ui.Zippy(null, fakeContentEl.cloneNode(true),
-      true);
+  fakeZippy1 = new goog.ui.Zippy(
+      fakeControlEl.cloneNode(true), fakeContentEl.cloneNode(true), true);
+  fakeZippy2 = new goog.ui.Zippy(
+      fakeControlEl.cloneNode(true), fakeContentEl.cloneNode(true), false);
+  contentlessZippy =
+      new goog.ui.Zippy(fakeControlEl.cloneNode(true), undefined, true);
+  headerlessZippy =
+      new goog.ui.Zippy(null, fakeContentEl.cloneNode(true), true);
 
   lazyZippyCallCount = 0;
   lazyZippyContentEl = fakeContentEl.cloneNode(true);
@@ -57,8 +57,9 @@ function setUp() {
   });
   dualHeaderZippyCollapsedHeaderEl = fakeControlEl.cloneNode(true);
   dualHeaderZippyExpandedHeaderEl = fakeControlEl.cloneNode(true);
-  dualHeaderZippy = new goog.ui.Zippy(dualHeaderZippyCollapsedHeaderEl,
-      fakeContentEl.cloneNode(true), false, dualHeaderZippyExpandedHeaderEl);
+  dualHeaderZippy = new goog.ui.Zippy(
+      dualHeaderZippyCollapsedHeaderEl, fakeContentEl.cloneNode(true), false,
+      dualHeaderZippyExpandedHeaderEl);
 }
 
 function testConstructor() {
@@ -104,35 +105,40 @@ function testExpandCollapse_lazyZippy() {
   lazyZippy.expand();
   assertEquals('callback should be called once #1.', 1, lazyZippyCallCount);
   assertEquals('expanded must be true', true, lazyZippy.isExpanded());
-  assertEquals('contentEl should be visible', '',
-      lazyZippyContentEl.style.display);
+  assertEquals(
+      'contentEl should be visible', '', lazyZippyContentEl.style.display);
 
   lazyZippy.collapse();
   assertEquals('callback should be called once #2.', 1, lazyZippyCallCount);
   assertEquals('expanded must be false', false, lazyZippy.isExpanded());
-  assertEquals('contentEl should not be visible', 'none',
+  assertEquals(
+      'contentEl should not be visible', 'none',
       lazyZippyContentEl.style.display);
 
   lazyZippy.expand();
   assertEquals('callback should be called once #3.', 1, lazyZippyCallCount);
   assertEquals('expanded must be true #2', true, lazyZippy.isExpanded());
-  assertEquals('contentEl should be visible #2', '',
-      lazyZippyContentEl.style.display);
+  assertEquals(
+      'contentEl should be visible #2', '', lazyZippyContentEl.style.display);
 }
 
 function testExpandCollapse_dualHeaderZippy() {
   dualHeaderZippy.expand();
   assertEquals('expanded must be true', true, dualHeaderZippy.isExpanded());
-  assertFalse('collapsed header should not have state class name #1',
+  assertFalse(
+      'collapsed header should not have state class name #1',
       hasCollapseOrExpandClasses(dualHeaderZippyCollapsedHeaderEl));
-  assertFalse('expanded header should not have state class name #1',
+  assertFalse(
+      'expanded header should not have state class name #1',
       hasCollapseOrExpandClasses(dualHeaderZippyExpandedHeaderEl));
 
   dualHeaderZippy.collapse();
   assertEquals('expanded must be false', false, dualHeaderZippy.isExpanded());
-  assertFalse('collapsed header should not have state class name #2',
+  assertFalse(
+      'collapsed header should not have state class name #2',
       hasCollapseOrExpandClasses(dualHeaderZippyCollapsedHeaderEl));
-  assertFalse('expanded header should not have state class name #2',
+  assertFalse(
+      'expanded header should not have state class name #2',
       hasCollapseOrExpandClasses(dualHeaderZippyExpandedHeaderEl));
 }
 
@@ -143,18 +149,23 @@ function testSetExpand() {
 }
 
 function testCssClassesAndAria() {
-  assertTrue('goog-zippy-header is enabled',
+  assertTrue(
+      'goog-zippy-header is enabled',
       goog.dom.classlist.contains(zippy.elHeader_, 'goog-zippy-header'));
   assertNotNull(zippy.elHeader_);
-  assertEquals('header aria-expanded is false', 'false',
+  assertEquals(
+      'header aria-expanded is false', 'false',
       goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
   zippy.setExpanded(true);
-  assertTrue('goog-zippy-content is enabled',
-      goog.dom.classlist.contains(zippy.getContentElement(),
-      'goog-zippy-content'));
-  assertEquals('header aria role is TAB', 'tab',
+  assertTrue(
+      'goog-zippy-content is enabled',
+      goog.dom.classlist.contains(
+          zippy.getContentElement(), 'goog-zippy-content'));
+  assertEquals(
+      'header aria role is TAB', 'tab',
       goog.a11y.aria.getRole(zippy.elHeader_));
-  assertEquals('header aria-expanded is true', 'true',
+  assertEquals(
+      'header aria-expanded is true', 'true',
       goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
 }
 
@@ -164,10 +175,12 @@ function testHeaderTabIndex() {
 
 function testGetVisibleHeaderElement() {
   dualHeaderZippy.setExpanded(false);
-  assertEquals(dualHeaderZippyCollapsedHeaderEl,
+  assertEquals(
+      dualHeaderZippyCollapsedHeaderEl,
       dualHeaderZippy.getVisibleHeaderElement());
   dualHeaderZippy.setExpanded(true);
-  assertEquals(dualHeaderZippyExpandedHeaderEl,
+  assertEquals(
+      dualHeaderZippyExpandedHeaderEl,
       dualHeaderZippy.getVisibleHeaderElement());
 }
 
@@ -179,9 +192,7 @@ function testToggle() {
 
 function testCustomEventTOGGLE() {
   var dispatchedActionCount;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
+  var handleAction = function() { dispatchedActionCount++; };
 
   var doTest = function(zippyObj) {
     dispatchedActionCount = 0;
@@ -204,12 +215,13 @@ function testActionEvent() {
       toggleEventCount++;
     } else if (e.type == goog.ui.Zippy.Events.ACTION) {
       actionEventCount++;
-      assertTrue('toggle must have been called first',
+      assertTrue(
+          'toggle must have been called first',
           toggleEventCount >= actionEventCount);
     }
   };
-  goog.events.listen(zippy, goog.object.getValues(goog.ui.Zippy.Events),
-      handleEvent);
+  goog.events.listen(
+      zippy, goog.object.getValues(goog.ui.Zippy.Events), handleEvent);
   goog.testing.events.fireClickSequence(zippy.elHeader_);
   assertEquals('Zippy ACTION event fired', 1, actionEventCount);
   assertEquals('Zippy TOGGLE event fired', 1, toggleEventCount);
@@ -221,15 +233,12 @@ function testActionEvent() {
 
 function testBasicZippyBehavior() {
   var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
+  var handleAction = function() { dispatchedActionCount++; };
 
   goog.events.listen(zippy, goog.ui.Zippy.Events.TOGGLE, handleAction);
   goog.testing.events.fireClickSequence(zippy.elHeader_);
-  assertEquals('Zippy  must have dispatched TOGGLE on click', 1,
-      dispatchedActionCount);
-
+  assertEquals(
+      'Zippy  must have dispatched TOGGLE on click', 1, dispatchedActionCount);
 }
 
 function hasCollapseOrExpandClasses(el) {
@@ -241,28 +250,32 @@ function hasCollapseOrExpandClasses(el) {
 function testIsHandleKeyEvent() {
   zippy.setHandleKeyboardEvents(false);
   assertFalse('Zippy is not handling key events', zippy.isHandleKeyEvents());
-  assertTrue('Zippy setHandleKeyEvents does not affect handling mouse events',
+  assertTrue(
+      'Zippy setHandleKeyEvents does not affect handling mouse events',
       zippy.isHandleMouseEvents());
   assertEquals(0, zippy.keyboardEventHandler_.getListenerCount());
 
   zippy.setHandleKeyboardEvents(true);
   assertTrue('Zippy is handling key events', zippy.isHandleKeyEvents());
-  assertTrue('Zippy setHandleKeyEvents does not affect handling mouse events',
+  assertTrue(
+      'Zippy setHandleKeyEvents does not affect handling mouse events',
       zippy.isHandleMouseEvents());
   assertNotEquals(0, zippy.keyboardEventHandler_.getListenerCount());
 }
 
 function testIsHandleMouseEvent() {
   zippy.setHandleMouseEvents(false);
-  assertFalse('Zippy is not handling mouse events',
-      zippy.isHandleMouseEvents());
-  assertTrue('Zippy setHandleMouseEvents does not affect handling key events',
+  assertFalse(
+      'Zippy is not handling mouse events', zippy.isHandleMouseEvents());
+  assertTrue(
+      'Zippy setHandleMouseEvents does not affect handling key events',
       zippy.isHandleKeyEvents());
   assertEquals(0, zippy.mouseEventHandler_.getListenerCount());
 
   zippy.setHandleMouseEvents(true);
   assertTrue('Zippy is handling mouse events', zippy.isHandleMouseEvents());
-  assertTrue('Zippy setHandleMouseEvents does not affect handling key events',
+  assertTrue(
+      'Zippy setHandleMouseEvents does not affect handling key events',
       zippy.isHandleKeyEvents());
   assertNotEquals(0, zippy.mouseEventHandler_.getListenerCount());
 }

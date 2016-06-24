@@ -192,8 +192,8 @@ goog.date.DateRange.today = function(opt_today) {
 goog.date.DateRange.last7Days = function(opt_today) {
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
   var yesterday = goog.date.DateRange.offsetInDays_(today, -1);
-  return new goog.date.DateRange(goog.date.DateRange.offsetInDays_(today, -7),
-      yesterday);
+  return new goog.date.DateRange(
+      goog.date.DateRange.offsetInDays_(today, -7), yesterday);
 };
 
 
@@ -210,8 +210,7 @@ goog.date.DateRange.thisMonth = function(opt_today) {
   return new goog.date.DateRange(
       goog.date.DateRange.offsetInMonths_(today, 0),
       goog.date.DateRange.offsetInDays_(
-          goog.date.DateRange.offsetInMonths_(today, 1),
-          -1));
+          goog.date.DateRange.offsetInMonths_(today, 1), -1));
 };
 
 
@@ -228,8 +227,7 @@ goog.date.DateRange.lastMonth = function(opt_today) {
   return new goog.date.DateRange(
       goog.date.DateRange.offsetInMonths_(today, -1),
       goog.date.DateRange.offsetInDays_(
-          goog.date.DateRange.offsetInMonths_(today, 0),
-          -1));
+          goog.date.DateRange.offsetInMonths_(today, 0), -1));
 };
 
 
@@ -280,8 +278,8 @@ goog.date.DateRange.lastWeek = function(opt_today) {
 goog.date.DateRange.lastBusinessWeek = function(opt_today) {
   // TODO(user): should be i18nized.
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
-  var start = goog.date.DateRange.offsetInDays_(today,
-      - 7 - today.getIsoWeekday());
+  var start =
+      goog.date.DateRange.offsetInDays_(today, -7 - today.getIsoWeekday());
   var end = goog.date.DateRange.offsetInDays_(start, 4);
   return new goog.date.DateRange(start, end);
 };
@@ -297,8 +295,7 @@ goog.date.DateRange.lastBusinessWeek = function(opt_today) {
  */
 goog.date.DateRange.allTime = function(opt_today) {
   return new goog.date.DateRange(
-      goog.date.DateRange.MINIMUM_DATE,
-      goog.date.DateRange.MAXIMUM_DATE);
+      goog.date.DateRange.MINIMUM_DATE, goog.date.DateRange.MAXIMUM_DATE);
 };
 
 

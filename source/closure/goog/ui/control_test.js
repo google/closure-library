@@ -24,6 +24,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -146,7 +147,8 @@ function noEventsDispatched() {
  */
 function getListenerCount(control) {
   return control.googUiComponentHandler_ ?
-      goog.object.getCount(control.getHandler().keys_) : 0;
+      goog.object.getCount(control.getHandler().keys_) :
+      0;
 }
 
 
@@ -181,24 +183,25 @@ function isMacSafari3() {
  */
 function testConstructor() {
   assertNotNull('Constructed control must not be null', control);
-  assertEquals('Content must have expected value', 'Hello',
-      control.getContent());
-  assertEquals('Renderer must default to the registered renderer',
+  assertEquals(
+      'Content must have expected value', 'Hello', control.getContent());
+  assertEquals(
+      'Renderer must default to the registered renderer',
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
-  var content = goog.dom.createDom(goog.dom.TagName.DIV, null, 'Hello',
+  var content = goog.dom.createDom(
+      goog.dom.TagName.DIV, null, 'Hello',
       goog.dom.createDom(goog.dom.TagName.B, null, 'World'));
   var testRenderer = new TestRenderer();
   var fakeDomHelper = {};
   var foo = new goog.ui.Control(content, testRenderer, fakeDomHelper);
   assertNotNull('Constructed object must not be null', foo);
-  assertEquals('Content must have expected value', content,
-      foo.getContent());
-  assertEquals('Renderer must have expected value', testRenderer,
-      foo.getRenderer());
-  assertEquals('DOM helper must have expected value', fakeDomHelper,
-      foo.getDomHelper());
+  assertEquals('Content must have expected value', content, foo.getContent());
+  assertEquals(
+      'Renderer must have expected value', testRenderer, foo.getRenderer());
+  assertEquals(
+      'DOM helper must have expected value', fakeDomHelper, foo.getDomHelper());
   foo.dispose();
 }
 
@@ -207,12 +210,15 @@ function testConstructor() {
  * Tests {@link goog.ui.Control#getHandler}.
  */
 function testGetHandler() {
-  assertUndefined('Event handler must be undefined before getHandler() ' +
-      'is called', control.googUiComponentHandler_);
+  assertUndefined(
+      'Event handler must be undefined before getHandler() ' +
+          'is called',
+      control.googUiComponentHandler_);
   var handler = control.getHandler();
   assertNotNull('Event handler must not be null', handler);
-  assertEquals('getHandler() must return the same instance if called again',
-      handler, control.getHandler());
+  assertEquals(
+      'getHandler() must return the same instance if called again', handler,
+      control.getHandler());
 }
 
 
@@ -220,7 +226,8 @@ function testGetHandler() {
  * Tests {@link goog.ui.Control#isHandleMouseEvents}.
  */
 function testIsHandleMouseEvents() {
-  assertTrue('Controls must handle their own mouse events by default',
+  assertTrue(
+      'Controls must handle their own mouse events by default',
       control.isHandleMouseEvents());
 }
 
@@ -229,22 +236,28 @@ function testIsHandleMouseEvents() {
  * Tests {@link goog.ui.Control#setHandleMouseEvents}.
  */
 function testSetHandleMouseEvents() {
-  assertTrue('Control must handle its own mouse events by default',
+  assertTrue(
+      'Control must handle its own mouse events by default',
       control.isHandleMouseEvents());
   control.setHandleMouseEvents(false);
-  assertFalse('Control must no longer handle its own mouse events',
+  assertFalse(
+      'Control must no longer handle its own mouse events',
       control.isHandleMouseEvents());
   control.setHandleMouseEvents(true);
-  assertTrue('Control must once again handle its own mouse events',
+  assertTrue(
+      'Control must once again handle its own mouse events',
       control.isHandleMouseEvents());
   control.render(sandbox);
-  assertTrue('Rendered control must handle its own mouse events',
+  assertTrue(
+      'Rendered control must handle its own mouse events',
       control.isHandleMouseEvents());
   control.setHandleMouseEvents(false);
-  assertFalse('Rendered control must no longer handle its own mouse events',
+  assertFalse(
+      'Rendered control must no longer handle its own mouse events',
       control.isHandleMouseEvents());
   control.setHandleMouseEvents(true);
-  assertTrue('Rendered control must once again handle its own mouse events',
+  assertTrue(
+      'Rendered control must once again handle its own mouse events',
       control.isHandleMouseEvents());
 }
 
@@ -253,10 +266,12 @@ function testSetHandleMouseEvents() {
  * Tests {@link goog.ui.Control#getKeyEventTarget}.
  */
 function testGetKeyEventTarget() {
-  assertNull('Key event target of control without DOM must be null',
+  assertNull(
+      'Key event target of control without DOM must be null',
       control.getKeyEventTarget());
   control.createDom();
-  assertEquals('Key event target of control with DOM must be its element',
+  assertEquals(
+      'Key event target of control with DOM must be its element',
       control.getElement(), control.getKeyEventTarget());
 }
 
@@ -265,12 +280,16 @@ function testGetKeyEventTarget() {
  * Tests {@link goog.ui.Control#getKeyHandler}.
  */
 function testGetKeyHandler() {
-  assertUndefined('Key handler must be undefined before getKeyHandler() ' +
-      'is called', control.keyHandler_);
+  assertUndefined(
+      'Key handler must be undefined before getKeyHandler() ' +
+          'is called',
+      control.keyHandler_);
   var keyHandler = control.getKeyHandler();
   assertNotNull('Key handler must not be null', keyHandler);
-  assertEquals('getKeyHandler() must return the same instance if called ' +
-      'again', keyHandler, control.getKeyHandler());
+  assertEquals(
+      'getKeyHandler() must return the same instance if called ' +
+          'again',
+      keyHandler, control.getKeyHandler());
 }
 
 
@@ -278,7 +297,8 @@ function testGetKeyHandler() {
  * Tests {@link goog.ui.Control#getRenderer}.
  */
 function testGetRenderer() {
-  assertEquals('Renderer must be the default registered renderer',
+  assertEquals(
+      'Renderer must be the default registered renderer',
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 }
@@ -290,29 +310,29 @@ function testGetRenderer() {
 function testSetRenderer() {
   control.createDom();
   assertNotNull('Control must have a DOM', control.getElement());
-  assertFalse('Control must not be in the document',
-      control.isInDocument());
-  assertEquals('Renderer must be the default registered renderer',
+  assertFalse('Control must not be in the document', control.isInDocument());
+  assertEquals(
+      'Renderer must be the default registered renderer',
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
   var testRenderer = new TestRenderer();
   control.setRenderer(testRenderer);
-  assertNull('Control must not have a DOM after its renderer is reset',
+  assertNull(
+      'Control must not have a DOM after its renderer is reset',
       control.getElement());
-  assertFalse('Control still must not be in the document',
-      control.isInDocument());
-  assertEquals('Renderer must have expected value', testRenderer,
-      control.getRenderer());
+  assertFalse(
+      'Control still must not be in the document', control.isInDocument());
+  assertEquals(
+      'Renderer must have expected value', testRenderer, control.getRenderer());
 
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
 
-  assertThrows('Resetting the renderer after the control has entered ' +
-      'the document must throw error',
-      function() {
-        control.setRenderer({});
-      });
+  assertThrows(
+      'Resetting the renderer after the control has entered ' +
+          'the document must throw error',
+      function() { control.setRenderer({}); });
 }
 
 
@@ -320,7 +340,8 @@ function testSetRenderer() {
  * Tests {@link goog.ui.Control#getExtraClassNames}.
  */
 function testGetExtraClassNames() {
-  assertNull('Control must not have any extra class names by default',
+  assertNull(
+      'Control must not have any extra class names by default',
       control.getExtraClassNames());
 }
 
@@ -330,58 +351,69 @@ function testGetExtraClassNames() {
   * {@link goog.ui.Control#removeExtraClassName}.
   */
 function testAddRemoveClassName() {
-  assertNull('Control must not have any extra class names by default',
+  assertNull(
+      'Control must not have any extra class names by default',
       control.getExtraClassNames());
   control.addClassName('foo');
-  assertArrayEquals('Control must have expected extra class names',
-      ['foo'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Control must have expected extra class names', ['foo'],
+      control.getExtraClassNames());
   assertNull('Control must not have a DOM', control.getElement());
 
   control.createDom();
-  assertSameElements('Control\'s element must have expected class names',
-      ['goog-control', 'foo'],
-      goog.dom.classlist.get(control.getElement()));
+  assertSameElements(
+      'Control\'s element must have expected class names',
+      ['goog-control', 'foo'], goog.dom.classlist.get(control.getElement()));
 
   control.addClassName('bar');
-  assertArrayEquals('Control must have expected extra class names',
-      ['foo', 'bar'], control.getExtraClassNames());
-  assertSameElements('Control\'s element must have expected class names',
+  assertArrayEquals(
+      'Control must have expected extra class names', ['foo', 'bar'],
+      control.getExtraClassNames());
+  assertSameElements(
+      'Control\'s element must have expected class names',
       ['goog-control', 'foo', 'bar'],
       goog.dom.classlist.get(control.getElement()));
 
   control.addClassName('bar');
-  assertArrayEquals('Adding the same class name again must be a no-op',
-      ['foo', 'bar'], control.getExtraClassNames());
-  assertSameElements('Adding the same class name again must be a no-op',
+  assertArrayEquals(
+      'Adding the same class name again must be a no-op', ['foo', 'bar'],
+      control.getExtraClassNames());
+  assertSameElements(
+      'Adding the same class name again must be a no-op',
       ['goog-control', 'foo', 'bar'],
       goog.dom.classlist.get(control.getElement()));
 
   control.addClassName(null);
-  assertArrayEquals('Adding null class name must be a no-op',
-      ['foo', 'bar'], control.getExtraClassNames());
-  assertSameElements('Adding null class name must be a no-op',
-      ['goog-control', 'foo', 'bar'],
+  assertArrayEquals(
+      'Adding null class name must be a no-op', ['foo', 'bar'],
+      control.getExtraClassNames());
+  assertSameElements(
+      'Adding null class name must be a no-op', ['goog-control', 'foo', 'bar'],
       goog.dom.classlist.get(control.getElement()));
 
   control.removeClassName(null);
-  assertArrayEquals('Removing null class name must be a no-op',
-      ['foo', 'bar'], control.getExtraClassNames());
-  assertSameElements('Removing null class name must be a no-op',
+  assertArrayEquals(
+      'Removing null class name must be a no-op', ['foo', 'bar'],
+      control.getExtraClassNames());
+  assertSameElements(
+      'Removing null class name must be a no-op',
       ['goog-control', 'foo', 'bar'],
       goog.dom.classlist.get(control.getElement()));
 
   control.removeClassName('foo');
-  assertArrayEquals('Control must have expected extra class names',
-      ['bar'], control.getExtraClassNames());
-  assertSameElements('Control\'s element must have expected class names',
-      ['goog-control', 'bar'],
-      goog.dom.classlist.get(control.getElement()));
+  assertArrayEquals(
+      'Control must have expected extra class names', ['bar'],
+      control.getExtraClassNames());
+  assertSameElements(
+      'Control\'s element must have expected class names',
+      ['goog-control', 'bar'], goog.dom.classlist.get(control.getElement()));
 
   control.removeClassName('bar');
-  assertNull('Control must not have any extra class names',
+  assertNull(
+      'Control must not have any extra class names',
       control.getExtraClassNames());
-  assertSameElements('Control\'s element must have expected class names',
-      ['goog-control'],
+  assertSameElements(
+      'Control\'s element must have expected class names', ['goog-control'],
       goog.dom.classlist.get(control.getElement()));
 }
 
@@ -390,31 +422,38 @@ function testAddRemoveClassName() {
  * Tests {@link goog.ui.Control#enableClassName}.
  */
 function testEnableClassName() {
-  assertNull('Control must not have any extra class names by default',
+  assertNull(
+      'Control must not have any extra class names by default',
       control.getExtraClassNames());
 
   control.enableClassName('foo', true);
-  assertArrayEquals('Control must have expected extra class names',
-      ['foo'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Control must have expected extra class names', ['foo'],
+      control.getExtraClassNames());
 
   control.enableClassName('bar', true);
-  assertArrayEquals('Control must have expected extra class names',
-      ['foo', 'bar'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Control must have expected extra class names', ['foo', 'bar'],
+      control.getExtraClassNames());
 
   control.enableClassName('bar', true);
-  assertArrayEquals('Enabling the same class name again must be a no-op',
-      ['foo', 'bar'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Enabling the same class name again must be a no-op', ['foo', 'bar'],
+      control.getExtraClassNames());
 
   control.enableClassName(null);
-  assertArrayEquals('Enabling null class name must be a no-op',
-      ['foo', 'bar'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Enabling null class name must be a no-op', ['foo', 'bar'],
+      control.getExtraClassNames());
 
   control.enableClassName('foo', false);
-  assertArrayEquals('Control must have expected extra class names',
-      ['bar'], control.getExtraClassNames());
+  assertArrayEquals(
+      'Control must have expected extra class names', ['bar'],
+      control.getExtraClassNames());
 
   control.enableClassName('bar', false);
-  assertNull('Control must not have any extra class names',
+  assertNull(
+      'Control must not have any extra class names',
       control.getExtraClassNames());
 }
 
@@ -423,27 +462,31 @@ function testEnableClassName() {
  * Tests {@link goog.ui.Control#createDom}.
  */
 function testCreateDom() {
-  assertNull('Control must not have a DOM by default',
-      control.getElement());
-  assertFalse('Control must not allow text selection by default',
+  assertNull('Control must not have a DOM by default', control.getElement());
+  assertFalse(
+      'Control must not allow text selection by default',
       control.isAllowTextSelection());
   assertTrue('Control must be visible by default', control.isVisible());
 
   control.createDom();
   assertNotNull('Control must have a DOM', control.getElement());
-  assertTrue('Control\'s element must be unselectable',
+  assertTrue(
+      'Control\'s element must be unselectable',
       goog.style.isUnselectable(control.getElement()));
-  assertTrue('Control\'s element must be visible',
+  assertTrue(
+      'Control\'s element must be visible',
       control.getElement().style.display != 'none');
 
   control.setAllowTextSelection(true);
   control.createDom();
-  assertFalse('Control\'s element must be selectable',
+  assertFalse(
+      'Control\'s element must be selectable',
       goog.style.isUnselectable(control.getElement()));
 
   control.setVisible(false);
   control.createDom();
-  assertTrue('Control\'s element must be hidden',
+  assertTrue(
+      'Control\'s element must be hidden',
       control.getElement().style.display == 'none');
 }
 
@@ -452,10 +495,12 @@ function testCreateDom() {
  * Tests {@link goog.ui.Control#getContentElement}.
  */
 function testGetContentElement() {
-  assertNull('Unrendered control must not have a content element',
+  assertNull(
+      'Unrendered control must not have a content element',
       control.getContentElement());
   control.createDom();
-  assertEquals('Control\'s content element must equal its root element',
+  assertEquals(
+      'Control\'s content element must equal its root element',
       control.getElement(), control.getContentElement());
 }
 
@@ -475,12 +520,14 @@ function testDecorateInternal() {
   sandbox.innerHTML = '<div id="foo">Hello, <b>World</b>!</div>';
   var foo = goog.dom.getElement('foo');
   control.decorate(foo);
-  assertEquals('Decorated control\'s element must have expected value',
-      foo, control.getElement());
-  assertTrue('Element must be unselectable',
+  assertEquals(
+      'Decorated control\'s element must have expected value', foo,
+      control.getElement());
+  assertTrue(
+      'Element must be unselectable',
       goog.style.isUnselectable(control.getElement()));
-  assertTrue('Element must be visible',
-      control.getElement().style.display != 'none');
+  assertTrue(
+      'Element must be visible', control.getElement().style.display != 'none');
 }
 
 
@@ -493,9 +540,11 @@ function testDecorateInternalForSelectableControl() {
   var foo = goog.dom.getElement('foo');
   control.setAllowTextSelection(true);
   control.decorate(foo);
-  assertEquals('Decorated control\'s element must have expected value',
-      foo, control.getElement());
-  assertFalse('Element must be selectable',
+  assertEquals(
+      'Decorated control\'s element must have expected value', foo,
+      control.getElement());
+  assertFalse(
+      'Element must be selectable',
       goog.style.isUnselectable(control.getElement()));
   assertTrue('Control must be visible', control.isVisible());
 }
@@ -508,9 +557,11 @@ function testDecorateInternalForHiddenElement() {
   sandbox.innerHTML = '<div id="foo" style="display:none">Hello!</div>';
   var foo = goog.dom.getElement('foo');
   control.decorate(foo);
-  assertEquals('Decorated control\'s element must have expected value',
-      foo, control.getElement());
-  assertTrue('Element must be unselectable',
+  assertEquals(
+      'Decorated control\'s element must have expected value', foo,
+      control.getElement());
+  assertTrue(
+      'Element must be unselectable',
       goog.style.isUnselectable(control.getElement()));
   assertFalse('Control must be hidden', control.isVisible());
 }
@@ -522,16 +573,19 @@ function testDecorateInternalForHiddenElement() {
 function testEnterDocument() {
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
-    assertEquals('Control must have 5 mouse & 3 key event listeners on IE',
-        8, getListenerCount(control));
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
+    assertEquals(
+        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
+        getListenerCount(control));
   } else {
-    assertEquals('Control must have 4 mouse and 3 key event listeners', 7,
+    assertEquals(
+        'Control must have 4 mouse and 3 key event listeners', 7,
         getListenerCount(control));
   }
-  assertEquals('Control\'s key event handler must be attached to its ' +
-      'key event target', control.getKeyEventTarget(),
-      control.getKeyHandler().element_);
+  assertEquals(
+      'Control\'s key event handler must be attached to its ' +
+          'key event target',
+      control.getKeyEventTarget(), control.getKeyHandler().element_);
 }
 
 
@@ -543,11 +597,12 @@ function testEnterDocumentForControlWithoutMouseHandling() {
   control.setHandleMouseEvents(false);
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  assertEquals('Control must have 3 key event listeners', 3,
-      getListenerCount(control));
-  assertEquals('Control\'s key event handler must be attached to its ' +
-      'key event target', control.getKeyEventTarget(),
-      control.getKeyHandler().element_);
+  assertEquals(
+      'Control must have 3 key event listeners', 3, getListenerCount(control));
+  assertEquals(
+      'Control\'s key event handler must be attached to its ' +
+          'key event target',
+      control.getKeyEventTarget(), control.getKeyHandler().element_);
 }
 
 
@@ -559,15 +614,17 @@ function testEnterDocumentForNonFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
-    assertEquals('Control must have 5 mouse event listeners on IE', 5,
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
+    assertEquals(
+        'Control must have 5 mouse event listeners on IE8', 5,
         getListenerCount(control));
   } else {
-    assertEquals('Control must have 4 mouse event listeners', 4,
+    assertEquals(
+        'Control must have 4 mouse event listeners', 4,
         getListenerCount(control));
   }
-  assertUndefined('Control must not have a key event handler',
-      control.keyHandler_);
+  assertUndefined(
+      'Control must not have a key event handler', control.keyHandler_);
 }
 
 
@@ -580,12 +637,13 @@ function testEnterDocumentForControlWithoutEventHandlers() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  assertEquals('Control must have 0 event listeners', 0,
-      getListenerCount(control));
-  assertUndefined('Control must not have an event handler',
+  assertEquals(
+      'Control must have 0 event listeners', 0, getListenerCount(control));
+  assertUndefined(
+      'Control must not have an event handler',
       control.googUiComponentHandler_);
-  assertUndefined('Control must not have a key event handler',
-      control.keyHandler_);
+  assertUndefined(
+      'Control must not have a key event handler', control.keyHandler_);
 }
 
 
@@ -595,33 +653,39 @@ function testEnterDocumentForControlWithoutEventHandlers() {
 function testExitDocument() {
   control.render(sandbox);
   assertTrue('Control must be in the document', control.isInDocument());
-  if (goog.userAgent.IE) {
-    assertEquals('Control must have 5 mouse & 3 key event listeners on IE',
-        8, getListenerCount(control));
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
+    assertEquals(
+        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
+        getListenerCount(control));
   } else {
-    assertEquals('Control must have 4 mouse and 3 key event listeners', 7,
+    assertEquals(
+        'Control must have 4 mouse and 3 key event listeners', 7,
         getListenerCount(control));
   }
-  assertEquals('Control\'s key event handler must be attached to its ' +
-      'key event target', control.getKeyEventTarget(),
-      control.getKeyHandler().element_);
+  assertEquals(
+      'Control\'s key event handler must be attached to its ' +
+          'key event target',
+      control.getKeyEventTarget(), control.getKeyHandler().element_);
   // Expected to fail on Mac Safari prior to version 527.
   expectedFailures.expectFailureFor(isMacSafari3());
   try {
-    assertTrue('Control\'s element must support keyboard focus',
+    assertTrue(
+        'Control\'s element must support keyboard focus',
         goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
   } catch (e) {
     expectedFailures.handleException(e);
   }
 
   control.exitDocument();
-  assertFalse('Control must no longer be in the document',
-      control.isInDocument());
-  assertEquals('Control must have no event listeners', 0,
-      getListenerCount(control));
-  assertNull('Control\'s key event handler must be unattached',
+  assertFalse(
+      'Control must no longer be in the document', control.isInDocument());
+  assertEquals(
+      'Control must have no event listeners', 0, getListenerCount(control));
+  assertNull(
+      'Control\'s key event handler must be unattached',
       control.getKeyHandler().element_);
-  assertFalse('Control\'s element must no longer support keyboard focus',
+  assertFalse(
+      'Control\'s element must no longer support keyboard focus',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
 }
 
@@ -634,20 +698,18 @@ function testDispose() {
   var handler = control.getHandler();
   var keyHandler = control.getKeyHandler();
   control.dispose();
-  assertFalse('Control must no longer be in the document',
-      control.isInDocument());
+  assertFalse(
+      'Control must no longer be in the document', control.isInDocument());
   assertTrue('Control must have been disposed of', control.isDisposed());
   assertUndefined('Renderer must have been deleted', control.getRenderer());
   assertNull('Content must be nulled out', control.getContent());
-  assertTrue('Event handler must have been disposed of',
-      handler.isDisposed());
-  assertUndefined('Event handler must have been deleted',
-      control.googUiComponentHandler_);
-  assertTrue('Key handler must have been disposed of',
-      keyHandler.isDisposed());
-  assertUndefined('Key handler must have been deleted',
-      control.keyHandler_);
-  assertNull('Extra class names must have been nulled out',
+  assertTrue('Event handler must have been disposed of', handler.isDisposed());
+  assertUndefined(
+      'Event handler must have been deleted', control.googUiComponentHandler_);
+  assertTrue('Key handler must have been disposed of', keyHandler.isDisposed());
+  assertUndefined('Key handler must have been deleted', control.keyHandler_);
+  assertNull(
+      'Extra class names must have been nulled out',
       control.getExtraClassNames());
 }
 
@@ -656,13 +718,15 @@ function testDispose() {
  * Tests {@link goog.ui.Control#getContent}.
  */
 function testGetContent() {
-  assertNull('Empty control must have null content',
+  assertNull(
+      'Empty control must have null content',
       (new goog.ui.Control(null)).getContent());
-  assertEquals('Control must have expected content', 'Hello',
-      control.getContent());
+  assertEquals(
+      'Control must have expected content', 'Hello', control.getContent());
   control.render(sandbox);
-  assertEquals('Control must have expected content after rendering',
-      'Hello', control.getContent());
+  assertEquals(
+      'Control must have expected content after rendering', 'Hello',
+      control.getContent());
 }
 
 
@@ -670,35 +734,39 @@ function testGetContent() {
  * Tests {@link goog.ui.Control#getContent}.
  */
 function testGetContentForDecoratedControl() {
-  sandbox.innerHTML =
-      '<div id="empty"></div>\n' +
+  sandbox.innerHTML = '<div id="empty"></div>\n' +
       '<div id="text">Hello, world!</div>\n' +
       '<div id="element"><span>Foo</span></div>\n' +
       '<div id="nodelist">Hello, <b>world</b>!</div>\n';
 
   var empty = new goog.ui.Control(null);
   empty.decorate(goog.dom.getElement('empty'));
-  assertNull('Content of control decorating empty DIV must be null',
+  assertNull(
+      'Content of control decorating empty DIV must be null',
       empty.getContent());
   empty.dispose();
 
   var text = new goog.ui.Control(null);
   text.decorate(goog.dom.getElement('text'));
-  assertEquals('Content of control decorating DIV with text contents ' +
-      'must be as expected', 'Hello, world!', text.getContent().nodeValue);
+  assertEquals(
+      'Content of control decorating DIV with text contents ' +
+          'must be as expected',
+      'Hello, world!', text.getContent().nodeValue);
   text.dispose();
 
   var element = new goog.ui.Control(null);
   element.decorate(goog.dom.getElement('element'));
-  assertEquals('Content of control decorating DIV with element child ' +
-      'must be as expected', goog.dom.getElement('element').firstChild,
-      element.getContent());
+  assertEquals(
+      'Content of control decorating DIV with element child ' +
+          'must be as expected',
+      goog.dom.getElement('element').firstChild, element.getContent());
   element.dispose();
 
   var nodelist = new goog.ui.Control(null);
   nodelist.decorate(goog.dom.getElement('nodelist'));
-  assertSameElements('Content of control decorating DIV with mixed ' +
-      'contents must be as expected',
+  assertSameElements(
+      'Content of control decorating DIV with mixed ' +
+          'contents must be as expected',
       goog.dom.getElement('nodelist').childNodes, nodelist.getContent());
   nodelist.dispose();
 }
@@ -708,7 +776,8 @@ function testGetContentForDecoratedControl() {
  * Tests {@link goog.ui.Control#setAriaLabel}.
  */
 function testSetAriaLabel_render() {
-  assertNull('Controls must not have any aria label by default',
+  assertNull(
+      'Controls must not have any aria label by default',
       control.getAriaLabel());
 
   control.setAriaLabel('label');
@@ -718,13 +787,12 @@ function testSetAriaLabel_render() {
 
   var elem = control.getElementStrict();
   assertEquals(
-      'Element must have control\'s aria label after rendering',
-      'label',
+      'Element must have control\'s aria label after rendering', 'label',
       goog.a11y.aria.getLabel(elem));
 
   control.setAriaLabel('new label');
-  assertEquals('Element must have the new aria label',
-      'new label',
+  assertEquals(
+      'Element must have the new aria label', 'new label',
       goog.a11y.aria.getLabel(elem));
 }
 
@@ -733,7 +801,8 @@ function testSetAriaLabel_render() {
  * Tests {@link goog.ui.Control#setAriaLabel}.
  */
 function testSetAriaLabel_decorate() {
-  assertNull('Controls must not have any aria label by default',
+  assertNull(
+      'Controls must not have any aria label by default',
       control.getAriaLabel());
 
   control.setAriaLabel('label');
@@ -745,17 +814,15 @@ function testSetAriaLabel_decorate() {
 
   var elem = control.getElementStrict();
   assertEquals(
-      'Element must have control\'s aria label after rendering',
-      'label',
+      'Element must have control\'s aria label after rendering', 'label',
       goog.a11y.aria.getLabel(elem));
   assertEquals(
-      'Element must have the correct role',
-      'button',
+      'Element must have the correct role', 'button',
       elem.getAttribute('role'));
 
   control.setAriaLabel('new label');
-  assertEquals('Element must have the new aria label',
-      'new label',
+  assertEquals(
+      'Element must have the new aria label', 'new label',
       goog.a11y.aria.getLabel(elem));
 }
 
@@ -765,24 +832,32 @@ function testSetAriaLabel_decorate() {
  */
 function testSetContent() {
   control.setContent('Bye');
-  assertEquals('Unrendered control control must have expected contents',
-      'Bye', control.getContent());
+  assertEquals(
+      'Unrendered control control must have expected contents', 'Bye',
+      control.getContent());
   assertNull('No DOM must be created by setContent', control.getElement());
 
   control.createDom();
-  assertEquals('Rendered control\'s DOM must have expected contents',
-      'Bye', control.getElement().innerHTML);
+  assertEquals(
+      'Rendered control\'s DOM must have expected contents', 'Bye',
+      control.getElement().innerHTML);
 
   control.setContent(null);
-  assertNull('Rendered control must have expected contents',
-      control.getContent());
-  assertEquals('Rendered control\'s DOM must have expected contents',
-      '', control.getElement().innerHTML);
+  assertNull(
+      'Rendered control must have expected contents', control.getContent());
+  assertEquals(
+      'Rendered control\'s DOM must have expected contents', '',
+      control.getElement().innerHTML);
 
-  control.setContent([goog.dom.createDom(goog.dom.TagName.DIV, null,
-      goog.dom.createDom(goog.dom.TagName.SPAN, null, 'Hello')), 'World']);
-  assertHTMLEquals('Control\'s DOM must be updated',
-      '<div><span>Hello</span></div>World', control.getElement().innerHTML);
+  control.setContent([
+    goog.dom.createDom(
+        goog.dom.TagName.DIV, null,
+        goog.dom.createDom(goog.dom.TagName.SPAN, null, 'Hello')),
+    'World'
+  ]);
+  assertHTMLEquals(
+      'Control\'s DOM must be updated', '<div><span>Hello</span></div>World',
+      control.getElement().innerHTML);
 }
 
 
@@ -791,12 +866,14 @@ function testSetContent() {
  */
 function testSetContentInternal() {
   control.render(sandbox);
-  assertEquals('Control must have expected content after rendering',
-      'Hello', control.getContent());
+  assertEquals(
+      'Control must have expected content after rendering', 'Hello',
+      control.getContent());
   control.setContentInternal('Bye');
-  assertEquals('Control must have expected contents',
-      'Bye', control.getContent());
-  assertEquals('Control\'s DOM must be unchanged', 'Hello',
+  assertEquals(
+      'Control must have expected contents', 'Bye', control.getContent());
+  assertEquals(
+      'Control\'s DOM must be unchanged', 'Hello',
       control.getElement().innerHTML);
 }
 
@@ -805,26 +882,31 @@ function testSetContentInternal() {
  * Tests {@link goog.ui.Control#getCaption}.
  */
 function testGetCaption() {
-  assertEquals('Empty control\'s caption must be empty string', '',
+  assertEquals(
+      'Empty control\'s caption must be empty string', '',
       (new goog.ui.Control(null)).getCaption());
 
-  assertEquals('Caption must have expected value', 'Hello',
-      control.getCaption());
+  assertEquals(
+      'Caption must have expected value', 'Hello', control.getCaption());
 
   sandbox.innerHTML = '<div id="nodelist">Hello, <b>world</b>!</div>';
   control.decorate(goog.dom.getElement('nodelist'));
-  assertEquals('Caption must have expected value', 'Hello, world!',
+  assertEquals(
+      'Caption must have expected value', 'Hello, world!',
       control.getCaption());
 
-  var arrayContent = goog.array.clone(goog.dom.htmlToDocumentFragment(
-      ' <b> foo</b><i>  bar</i> ').childNodes);
+  var arrayContent = goog.array.clone(
+      goog.dom.safeHtmlToNode(
+          goog.html.testing.newSafeHtmlForTest(
+              ' <b> foo</b><i>  bar</i> ')).childNodes);
   control.setContent(arrayContent);
-  assertEquals('whitespaces must be normalized in the caption',
-      'foo bar', control.getCaption());
+  assertEquals(
+      'whitespaces must be normalized in the caption', 'foo bar',
+      control.getCaption());
 
   control.setContent('\xa0foo');
-  assertEquals('indenting spaces must be kept', '\xa0foo',
-      control.getCaption());
+  assertEquals(
+      'indenting spaces must be kept', '\xa0foo', control.getCaption());
 }
 
 
@@ -833,8 +915,9 @@ function testGetCaption() {
  */
 function testSetCaption() {
   control.setCaption('Hello, world!');
-  assertEquals('Control must have a string caption "Hello, world!"',
-      'Hello, world!', control.getCaption());
+  assertEquals(
+      'Control must have a string caption "Hello, world!"', 'Hello, world!',
+      control.getCaption());
 }
 
 
@@ -843,19 +926,18 @@ function testSetCaption() {
  */
 function testSetRightToLeft() {
   control.createDom();
-  assertFalse('Control\'s element must not have right-to-left class',
-      goog.dom.classlist.contains(control.getElement(),
-          'goog-control-rtl'));
+  assertFalse(
+      'Control\'s element must not have right-to-left class',
+      goog.dom.classlist.contains(control.getElement(), 'goog-control-rtl'));
   control.setRightToLeft(true);
-  assertTrue('Control\'s element must have right-to-left class',
-      goog.dom.classlist.contains(control.getElement(),
-          'goog-control-rtl'));
+  assertTrue(
+      'Control\'s element must have right-to-left class',
+      goog.dom.classlist.contains(control.getElement(), 'goog-control-rtl'));
   control.render(sandbox);
-  assertThrows('Changing the render direction of a control already in ' +
-      'the document is an error',
-      function() {
-        control.setRightToLeft(false);
-      });
+  assertThrows(
+      'Changing the render direction of a control already in ' +
+          'the document is an error',
+      function() { control.setRightToLeft(false); });
 }
 
 
@@ -863,7 +945,8 @@ function testSetRightToLeft() {
  * Tests {@link goog.ui.Control#isAllowTextSelection}.
  */
 function testIsAllowTextSelection() {
-  assertFalse('Controls must not allow text selection by default',
+  assertFalse(
+      'Controls must not allow text selection by default',
       control.isAllowTextSelection());
 }
 
@@ -872,24 +955,28 @@ function testIsAllowTextSelection() {
  * Tests {@link goog.ui.Control#setAllowTextSelection}.
  */
 function testSetAllowTextSelection() {
-  assertFalse('Controls must not allow text selection by default',
+  assertFalse(
+      'Controls must not allow text selection by default',
       control.isAllowTextSelection());
 
   control.setAllowTextSelection(true);
-  assertTrue('Control must allow text selection',
-      control.isAllowTextSelection());
+  assertTrue(
+      'Control must allow text selection', control.isAllowTextSelection());
 
   control.setAllowTextSelection(false);
-  assertFalse('Control must no longer allow text selection',
+  assertFalse(
+      'Control must no longer allow text selection',
       control.isAllowTextSelection());
 
   control.render(sandbox);
 
-  assertFalse('Control must not allow text selection even after rendered',
+  assertFalse(
+      'Control must not allow text selection even after rendered',
       control.isAllowTextSelection());
 
   control.setAllowTextSelection(true);
-  assertTrue('Control must once again allow text selection',
+  assertTrue(
+      'Control must once again allow text selection',
       control.isAllowTextSelection());
 }
 
@@ -906,20 +993,25 @@ function testIsVisible() {
  * Tests {@link goog.ui.Control#setVisible} before it is rendered.
  */
 function testSetVisible() {
-  assertFalse('setVisible(true) must return false if already visible',
+  assertFalse(
+      'setVisible(true) must return false if already visible',
       control.setVisible(true));
   assertTrue('No events must have been dispatched', noEventsDispatched());
 
-  assertTrue('setVisible(false) must return true if previously visible',
+  assertTrue(
+      'setVisible(false) must return true if previously visible',
       control.setVisible(false));
-  assertEquals('One HIDE event must have been dispatched',
-      1, getEventCount(control, goog.ui.Component.EventType.HIDE));
+  assertEquals(
+      'One HIDE event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.HIDE));
   assertFalse('Control must no longer be visible', control.isVisible());
 
-  assertTrue('setVisible(true) must return true if previously hidden',
+  assertTrue(
+      'setVisible(true) must return true if previously hidden',
       control.setVisible(true));
-  assertEquals('One SHOW event must have been dispatched',
-      1, getEventCount(control, goog.ui.Component.EventType.SHOW));
+  assertEquals(
+      'One SHOW event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.SHOW));
   assertTrue('Control must be visible', control.isVisible());
 }
 
@@ -929,29 +1021,38 @@ function testSetVisible() {
  */
 function testSetVisibleForRenderedControl() {
   control.render(sandbox);
-  assertTrue('No events must have been dispatched during rendering',
+  assertTrue(
+      'No events must have been dispatched during rendering',
       noEventsDispatched());
 
-  assertFalse('setVisible(true) must return false if already visible',
+  assertFalse(
+      'setVisible(true) must return false if already visible',
       control.setVisible(true));
   assertTrue('No events must have been dispatched', noEventsDispatched());
-  assertTrue('Control\'s element must be visible',
+  assertTrue(
+      'Control\'s element must be visible',
       control.getElement().style.display != 'none');
 
-  assertTrue('setVisible(false) must return true if previously visible',
+  assertTrue(
+      'setVisible(false) must return true if previously visible',
       control.setVisible(false));
-  assertEquals('One HIDE event must have been dispatched',
-      1, getEventCount(control, goog.ui.Component.EventType.HIDE));
+  assertEquals(
+      'One HIDE event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.HIDE));
   assertFalse('Control must no longer be visible', control.isVisible());
-  assertTrue('Control\'s element must be hidden',
+  assertTrue(
+      'Control\'s element must be hidden',
       control.getElement().style.display == 'none');
 
-  assertTrue('setVisible(true) must return true if previously hidden',
+  assertTrue(
+      'setVisible(true) must return true if previously hidden',
       control.setVisible(true));
-  assertEquals('One SHOW event must have been dispatched',
-      1, getEventCount(control, goog.ui.Component.EventType.SHOW));
+  assertEquals(
+      'One SHOW event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.SHOW));
   assertTrue('Control must be visible', control.isVisible());
-  assertTrue('Control\'s element must be visible',
+  assertTrue(
+      'Control\'s element must be visible',
       control.getElement().style.display != 'none');
 }
 
@@ -966,21 +1067,26 @@ function testSetVisibleForDisabledNonFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
   assertTrue('Control must be visible', control.isVisible());
-  assertFalse('Control must not have a tab index',
+  assertFalse(
+      'Control must not have a tab index',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
 
   // Visible, disabled, non-focusable control becoming hidden.
   control.getKeyEventTarget().focus();
-  assertEquals('Control must not have dispatched FOCUS', 0,
+  assertEquals(
+      'Control must not have dispatched FOCUS', 0,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
   assertFalse('Control must not have keyboard focus', control.isFocused());
   control.setVisible(false);
   assertFalse('Control must be hidden', control.isVisible());
-  assertFalse('Control must not have a tab index',
+  assertFalse(
+      'Control must not have a tab index',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
-  assertEquals('Control must have dispatched HIDE', 1,
+  assertEquals(
+      'Control must have dispatched HIDE', 1,
       getEventCount(control, goog.ui.Component.EventType.HIDE));
-  assertEquals('Control must not have dispatched BLUR', 0,
+  assertEquals(
+      'Control must not have dispatched BLUR', 0,
       getEventCount(control, goog.ui.Component.EventType.BLUR));
 }
 
@@ -994,21 +1100,26 @@ function testSetVisibleForDisabledFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, true);
   control.render(sandbox);
   assertTrue('Control must be visible', control.isVisible());
-  assertFalse('Control must not have a tab index',
+  assertFalse(
+      'Control must not have a tab index',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
 
   // Visible, disabled, focusable control becoming hidden.
   control.getKeyEventTarget().focus();
-  assertEquals('Control must not have dispatched FOCUS', 0,
+  assertEquals(
+      'Control must not have dispatched FOCUS', 0,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
   assertFalse('Control must not have keyboard focus', control.isFocused());
   control.setVisible(false);
   assertFalse('Control must be hidden', control.isVisible());
-  assertFalse('Control must not have a tab index',
+  assertFalse(
+      'Control must not have a tab index',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
-  assertEquals('Control must have dispatched HIDE', 1,
+  assertEquals(
+      'Control must have dispatched HIDE', 1,
       getEventCount(control, goog.ui.Component.EventType.HIDE));
-  assertEquals('Control must not have dispatched BLUR', 0,
+  assertEquals(
+      'Control must not have dispatched BLUR', 0,
       getEventCount(control, goog.ui.Component.EventType.BLUR));
 }
 
@@ -1023,23 +1134,27 @@ function testSetVisibleForEnabledNonFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
   assertTrue('Control must be visible', control.isVisible());
-  assertFalse('Control must not have a tab index',
+  assertFalse(
+      'Control must not have a tab index',
       goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
 
   if (testFocus) {
     // Visible, enabled, non-focusable control becoming hidden.
     control.getKeyEventTarget().focus();
-    assertEquals('Control must not have dispatched FOCUS', 0,
+    assertEquals(
+        'Control must not have dispatched FOCUS', 0,
         getEventCount(control, goog.ui.Component.EventType.FOCUS));
-    assertFalse('Control must not have keyboard focus',
-        control.isFocused());
+    assertFalse('Control must not have keyboard focus', control.isFocused());
     control.setVisible(false);
     assertFalse('Control must be hidden', control.isVisible());
-    assertFalse('Control must not have a tab index',
+    assertFalse(
+        'Control must not have a tab index',
         goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
-    assertEquals('Control must have dispatched HIDE', 1,
+    assertEquals(
+        'Control must have dispatched HIDE', 1,
         getEventCount(control, goog.ui.Component.EventType.HIDE));
-    assertEquals('Control must not have dispatched BLUR', 0,
+    assertEquals(
+        'Control must not have dispatched BLUR', 0,
         getEventCount(control, goog.ui.Component.EventType.BLUR));
   }
 }
@@ -1061,7 +1176,8 @@ function testSetVisibleForEnabledFocusableControl() {
     try {
       // Mac Safari currently doesn't support tabIndex on arbitrary
       // elements.
-      assertTrue('Control must have a tab index',
+      assertTrue(
+          'Control must have a tab index',
           goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
     } catch (e) {
       expectedFailures.handleException(e);
@@ -1074,7 +1190,8 @@ function testSetVisibleForEnabledFocusableControl() {
     expectedFailures.expectFailureFor(goog.userAgent.IE);
     try {
       // IE dispatches focus and blur events asynchronously!
-      assertEquals('Control must have dispatched FOCUS', 1,
+      assertEquals(
+          'Control must have dispatched FOCUS', 1,
           getEventCount(control, goog.ui.Component.EventType.FOCUS));
       assertTrue('Control must have keyboard focus', control.isFocused());
     } catch (e) {
@@ -1083,19 +1200,22 @@ function testSetVisibleForEnabledFocusableControl() {
 
     control.setVisible(false);
     assertFalse('Control must be hidden', control.isVisible());
-    assertFalse('Control must not have a tab index',
+    assertFalse(
+        'Control must not have a tab index',
         goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
-    assertEquals('Control must have dispatched HIDE', 1,
+    assertEquals(
+        'Control must have dispatched HIDE', 1,
         getEventCount(control, goog.ui.Component.EventType.HIDE));
 
     // Expected to fail on IE.
     expectedFailures.expectFailureFor(goog.userAgent.IE);
     try {
       // IE dispatches focus and blur events asynchronously!
-      assertEquals('Control must have dispatched BLUR', 1,
+      assertEquals(
+          'Control must have dispatched BLUR', 1,
           getEventCount(control, goog.ui.Component.EventType.BLUR));
-      assertFalse('Control must no longer have keyboard focus',
-          control.isFocused());
+      assertFalse(
+          'Control must no longer have keyboard focus', control.isFocused());
     } catch (e) {
       expectedFailures.handleException(e);
     }
@@ -1128,9 +1248,11 @@ function testSetEnabled() {
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
   var elem = control.getElementStrict();
-  assertTrue('Control element must not have aria-disabled',
+  assertTrue(
+      'Control element must not have aria-disabled',
       goog.string.isEmptyOrWhitespace(aria.getState(elem, State.DISABLED)));
-  assertEquals('Control element must have a tabIndex of 0', 0,
+  assertEquals(
+      'Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 
   if (testFocus) {
@@ -1148,15 +1270,18 @@ function testSetEnabled() {
   resetEventCount();
 
   control.setEnabled(false);
-  assertEquals('One DISABLE event must have been dispatched', 1,
+  assertEquals(
+      'One DISABLE event must have been dispatched', 1,
       getEventCount(control, goog.ui.Component.EventType.DISABLE));
   assertFalse('Control must be disabled', control.isEnabled());
   assertFalse('Control must not be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
   assertFalse('Control must not be focused', control.isFocused());
-  assertEquals('Control element must have aria-disabled true', 'true',
+  assertEquals(
+      'Control element must have aria-disabled true', 'true',
       aria.getState(control.getElementStrict(), State.DISABLED));
-  assertNull('Control element must not have a tabIndex',
+  assertNull(
+      'Control element must not have a tabIndex',
       control.getElement().getAttribute('tabIndex'));
 
   control.setEnabled(true);
@@ -1166,15 +1291,19 @@ function testSetEnabled() {
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
-  assertEquals('Control element must have aria-disabled true', 'true',
+  assertEquals(
+      'Control element must have aria-disabled true', 'true',
       aria.getState(control.getElementStrict(), State.DISABLED));
-  assertNull('Control element must not have a tabIndex',
+  assertNull(
+      'Control element must not have a tabIndex',
       control.getElement().getAttribute('tabIndex'));
   control.setEnabled(true);
   elem = control.getElementStrict();
-  assertEquals('Control element must have aria-disabled false', 'false',
+  assertEquals(
+      'Control element must have aria-disabled false', 'false',
       aria.getState(elem, State.DISABLED));
-  assertEquals('Control element must have tabIndex 0', 0,
+  assertEquals(
+      'Control element must have tabIndex 0', 0,
       goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 }
 
@@ -1196,10 +1325,12 @@ function testSetStateWithDisabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
-  assertTrue('Control element must not have aria-disabled',
+  assertTrue(
+      'Control element must not have aria-disabled',
       goog.string.isEmptyOrWhitespace(
           aria.getState(control.getElementStrict(), State.DISABLED)));
-  assertEquals('Control element must have a tabIndex of 0', 0,
+  assertEquals(
+      'Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(
           control.getElement().getAttribute('tabIndex') || ''));
 
@@ -1218,15 +1349,18 @@ function testSetStateWithDisabled() {
   resetEventCount();
 
   control.setState(goog.ui.Component.State.DISABLED, true);
-  assertEquals('One DISABLE event must have been dispatched', 1,
+  assertEquals(
+      'One DISABLE event must have been dispatched', 1,
       getEventCount(control, goog.ui.Component.EventType.DISABLE));
   assertFalse('Control must be disabled', control.isEnabled());
   assertFalse('Control must not be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
   assertFalse('Control must not be focused', control.isFocused());
-  assertEquals('Control element must have aria-disabled true', 'true',
+  assertEquals(
+      'Control element must have aria-disabled true', 'true',
       aria.getState(control.getElementStrict(), State.DISABLED));
-  assertNull('Control element must not have a tabIndex',
+  assertNull(
+      'Control element must not have a tabIndex',
       control.getElement().getAttribute('tabIndex'));
 
   control.setState(goog.ui.Component.State.DISABLED, false);
@@ -1236,15 +1370,19 @@ function testSetStateWithDisabled() {
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
-  assertEquals('Control element must have aria-disabled true', 'true',
+  assertEquals(
+      'Control element must have aria-disabled true', 'true',
       aria.getState(control.getElementStrict(), State.DISABLED));
-  assertNull('Control element must not have a tabIndex',
+  assertNull(
+      'Control element must not have a tabIndex',
       control.getElement().getAttribute('tabIndex'));
   control.setState(goog.ui.Component.State.DISABLED, false);
   elem = control.getElementStrict();
-  assertEquals('Control element must have aria-disabled false', 'false',
+  assertEquals(
+      'Control element must have aria-disabled false', 'false',
       aria.getState(elem, State.DISABLED));
-  assertEquals('Control element must have tabIndex 0', 0,
+  assertEquals(
+      'Control element must have tabIndex 0', 0,
       goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 }
 
@@ -1264,31 +1402,35 @@ function testSetEnabledWithParent() {
   assertTrue('Child must be enabled', child.isEnabled());
 
   child.setEnabled(false);
-  assertTrue('No events must have been dispatched when child is disabled',
+  assertTrue(
+      'No events must have been dispatched when child is disabled',
       noEventsDispatched());
   assertTrue('Child must still be enabled', child.isEnabled());
 
   resetEventCount();
 
   control.setEnabled(true);
-  assertEquals('One ENABLE event must have been dispatched by the parent',
-      1, getEventCount(control, goog.ui.Component.EventType.ENABLE));
+  assertEquals(
+      'One ENABLE event must have been dispatched by the parent', 1,
+      getEventCount(control, goog.ui.Component.EventType.ENABLE));
   assertTrue('Parent must be enabled', control.isEnabled());
   assertTrue('Child must still be enabled', child.isEnabled());
 
   resetEventCount();
 
   child.setEnabled(false);
-  assertEquals('One DISABLE event must have been dispatched by the child',
-      1, getEventCount(child, goog.ui.Component.EventType.DISABLE));
+  assertEquals(
+      'One DISABLE event must have been dispatched by the child', 1,
+      getEventCount(child, goog.ui.Component.EventType.DISABLE));
   assertTrue('Parent must still be enabled', control.isEnabled());
   assertFalse('Child must now be disabled', child.isEnabled());
 
   resetEventCount();
 
   control.setEnabled(false);
-  assertEquals('One DISABLE event must have been dispatched by the parent',
-      1, getEventCount(control, goog.ui.Component.EventType.DISABLE));
+  assertEquals(
+      'One DISABLE event must have been dispatched by the parent', 1,
+      getEventCount(control, goog.ui.Component.EventType.DISABLE));
   assertFalse('Parent must now be disabled', control.isEnabled());
   assertFalse('Child must still be disabled', child.isEnabled());
 
@@ -1300,8 +1442,8 @@ function testSetEnabledWithParent() {
  * Tests {@link goog.ui.Control#isHighlighted}.
  */
 function testIsHighlighted() {
-  assertFalse('Controls must not be highlighted by default',
-      control.isHighlighted());
+  assertFalse(
+      'Controls must not be highlighted by default', control.isHighlighted());
 }
 
 
@@ -1312,34 +1454,41 @@ function testSetHighlighted() {
   control.setSupportedState(goog.ui.Component.State.HOVER, false);
 
   control.setHighlighted(true);
-  assertFalse('Control must not be highlighted, because it isn\'t ' +
-      'highlightable', control.isHighlighted());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertFalse(
+      'Control must not be highlighted, because it isn\'t ' +
+          'highlightable',
+      control.isHighlighted());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.HOVER, true);
 
   control.setHighlighted(true);
   assertTrue('Control must be highlighted', control.isHighlighted());
-  assertEquals('Control must have dispatched a HIGHLIGHT event', 1,
+  assertEquals(
+      'Control must have dispatched a HIGHLIGHT event', 1,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
 
   control.setHighlighted(true);
   assertTrue('Control must still be highlighted', control.isHighlighted());
-  assertEquals('Control must not dispatch more HIGHLIGHT events', 1,
+  assertEquals(
+      'Control must not dispatch more HIGHLIGHT events', 1,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
 
   control.setHighlighted(false);
   assertFalse('Control must not be highlighted', control.isHighlighted());
-  assertEquals('Control must have dispatched an UNHIGHLIGHT event', 1,
+  assertEquals(
+      'Control must have dispatched an UNHIGHLIGHT event', 1,
       getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
 
   control.setHighlighted(true);
-  assertTrue('Control must be highlighted, even when disabled',
+  assertTrue(
+      'Control must be highlighted, even when disabled',
       control.isHighlighted());
-  assertEquals('Control must have dispatched another HIGHLIGHT event', 2,
+  assertEquals(
+      'Control must have dispatched another HIGHLIGHT event', 2,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
 }
 
@@ -1359,27 +1508,31 @@ function testSetActive() {
   control.setSupportedState(goog.ui.Component.State.ACTIVE, false);
 
   control.setActive(true);
-  assertFalse('Control must not be active, because it isn\'t activateable',
+  assertFalse(
+      'Control must not be active, because it isn\'t activateable',
       control.isActive());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.ACTIVE, true);
 
   control.setActive(true);
   assertTrue('Control must be active', control.isActive());
-  assertEquals('Control must have dispatched an ACTIVATE event', 1,
+  assertEquals(
+      'Control must have dispatched an ACTIVATE event', 1,
       getEventCount(control, goog.ui.Component.EventType.ACTIVATE));
 
   control.setActive(true);
   assertTrue('Control must still be active', control.isActive());
-  assertEquals('Control must not dispatch more ACTIVATE events', 1,
+  assertEquals(
+      'Control must not dispatch more ACTIVATE events', 1,
       getEventCount(control, goog.ui.Component.EventType.ACTIVATE));
 
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
   assertFalse('Control must not be active', control.isActive());
-  assertEquals('Control must have dispatched a DEACTIVATE event', 1,
+  assertEquals(
+      'Control must have dispatched a DEACTIVATE event', 1,
       getEventCount(control, goog.ui.Component.EventType.DEACTIVATE));
 }
 
@@ -1388,10 +1541,9 @@ function testSetActive() {
  * Tests disposing the control from an action event handler.
  */
 function testDisposeOnAction() {
-  goog.events.listen(control, goog.ui.Component.EventType.ACTION,
-      function(e) {
-        control.dispose();
-      });
+  goog.events.listen(control, goog.ui.Component.EventType.ACTION, function(e) {
+    control.dispose();
+  });
 
   // Control must not throw an exception if disposed of in an ACTION event
   // handler.
@@ -1405,8 +1557,7 @@ function testDisposeOnAction() {
  * Tests {@link goog.ui.Control#isSelected}.
  */
 function testIsSelected() {
-  assertFalse('Controls must not be selected by default',
-      control.isSelected());
+  assertFalse('Controls must not be selected by default', control.isSelected());
 }
 
 
@@ -1417,34 +1568,39 @@ function testSetSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, false);
 
   control.setSelected(true);
-  assertFalse('Control must not be selected, because it isn\'t selectable',
+  assertFalse(
+      'Control must not be selected, because it isn\'t selectable',
       control.isSelected());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
   control.setSelected(true);
   assertTrue('Control must be selected', control.isSelected());
-  assertEquals('Control must have dispatched a SELECT event', 1,
+  assertEquals(
+      'Control must have dispatched a SELECT event', 1,
       getEventCount(control, goog.ui.Component.EventType.SELECT));
 
   control.setSelected(true);
   assertTrue('Control must still be selected', control.isSelected());
-  assertEquals('Control must not dispatch more SELECT events', 1,
+  assertEquals(
+      'Control must not dispatch more SELECT events', 1,
       getEventCount(control, goog.ui.Component.EventType.SELECT));
 
   control.setSelected(false);
   assertFalse('Control must not be selected', control.isSelected());
-  assertEquals('Control must have dispatched an UNSELECT event', 1,
+  assertEquals(
+      'Control must have dispatched an UNSELECT event', 1,
       getEventCount(control, goog.ui.Component.EventType.UNSELECT));
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
 
   control.setSelected(true);
-  assertTrue('Control must be selected, even when disabled',
-      control.isSelected());
-  assertEquals('Control must have dispatched another SELECT event', 2,
+  assertTrue(
+      'Control must be selected, even when disabled', control.isSelected());
+  assertEquals(
+      'Control must have dispatched another SELECT event', 2,
       getEventCount(control, goog.ui.Component.EventType.SELECT));
 }
 
@@ -1453,8 +1609,7 @@ function testSetSelected() {
  * Tests {@link goog.ui.Control#isChecked}.
  */
 function testIsChecked() {
-  assertFalse('Controls must not be checked by default',
-      control.isChecked());
+  assertFalse('Controls must not be checked by default', control.isChecked());
 }
 
 
@@ -1465,34 +1620,39 @@ function testSetChecked() {
   control.setSupportedState(goog.ui.Component.State.CHECKED, false);
 
   control.setChecked(true);
-  assertFalse('Control must not be checked, because it isn\'t checkable',
+  assertFalse(
+      'Control must not be checked, because it isn\'t checkable',
       control.isChecked());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
 
   control.setChecked(true);
   assertTrue('Control must be checked', control.isChecked());
-  assertEquals('Control must have dispatched a CHECK event', 1,
+  assertEquals(
+      'Control must have dispatched a CHECK event', 1,
       getEventCount(control, goog.ui.Component.EventType.CHECK));
 
   control.setChecked(true);
   assertTrue('Control must still be checked', control.isChecked());
-  assertEquals('Control must not dispatch more CHECK events', 1,
+  assertEquals(
+      'Control must not dispatch more CHECK events', 1,
       getEventCount(control, goog.ui.Component.EventType.CHECK));
 
   control.setChecked(false);
   assertFalse('Control must not be checked', control.isChecked());
-  assertEquals('Control must have dispatched an UNCHECK event', 1,
+  assertEquals(
+      'Control must have dispatched an UNCHECK event', 1,
       getEventCount(control, goog.ui.Component.EventType.UNCHECK));
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
 
   control.setChecked(true);
-  assertTrue('Control must be checked, even when disabled',
-      control.isChecked());
-  assertEquals('Control must have dispatched another CHECK event', 2,
+  assertTrue(
+      'Control must be checked, even when disabled', control.isChecked());
+  assertEquals(
+      'Control must have dispatched another CHECK event', 2,
       getEventCount(control, goog.ui.Component.EventType.CHECK));
 }
 
@@ -1501,8 +1661,7 @@ function testSetChecked() {
  * Tests {@link goog.ui.Control#isFocused}.
  */
 function testIsFocused() {
-  assertFalse('Controls must not be focused by default',
-      control.isFocused());
+  assertFalse('Controls must not be focused by default', control.isFocused());
 }
 
 
@@ -1513,34 +1672,39 @@ function testSetFocused() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
 
   control.setFocused(true);
-  assertFalse('Control must not be focused, because it isn\'t focusable',
+  assertFalse(
+      'Control must not be focused, because it isn\'t focusable',
       control.isFocused());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.FOCUSED, true);
 
   control.setFocused(true);
   assertTrue('Control must be focused', control.isFocused());
-  assertEquals('Control must have dispatched a FOCUS event', 1,
+  assertEquals(
+      'Control must have dispatched a FOCUS event', 1,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
 
   control.setFocused(true);
   assertTrue('Control must still be focused', control.isFocused());
-  assertEquals('Control must not dispatch more FOCUS events', 1,
+  assertEquals(
+      'Control must not dispatch more FOCUS events', 1,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
 
   control.setFocused(false);
   assertFalse('Control must not be focused', control.isFocused());
-  assertEquals('Control must have dispatched an BLUR event', 1,
+  assertEquals(
+      'Control must have dispatched an BLUR event', 1,
       getEventCount(control, goog.ui.Component.EventType.BLUR));
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
 
   control.setFocused(true);
-  assertTrue('Control must be focused, even when disabled',
-      control.isFocused());
-  assertEquals('Control must have dispatched another FOCUS event', 2,
+  assertTrue(
+      'Control must be focused, even when disabled', control.isFocused());
+  assertEquals(
+      'Control must have dispatched another FOCUS event', 2,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
 }
 
@@ -1560,34 +1724,38 @@ function testSetOpen() {
   control.setSupportedState(goog.ui.Component.State.OPENED, false);
 
   control.setOpen(true);
-  assertFalse('Control must not be opened, because it isn\'t openable',
+  assertFalse(
+      'Control must not be opened, because it isn\'t openable',
       control.isOpen());
-  assertTrue('Control must not have dispatched any events',
-      noEventsDispatched());
+  assertTrue(
+      'Control must not have dispatched any events', noEventsDispatched());
 
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
 
   control.setOpen(true);
   assertTrue('Control must be opened', control.isOpen());
-  assertEquals('Control must have dispatched a OPEN event', 1,
+  assertEquals(
+      'Control must have dispatched a OPEN event', 1,
       getEventCount(control, goog.ui.Component.EventType.OPEN));
 
   control.setOpen(true);
   assertTrue('Control must still be opened', control.isOpen());
-  assertEquals('Control must not dispatch more OPEN events', 1,
+  assertEquals(
+      'Control must not dispatch more OPEN events', 1,
       getEventCount(control, goog.ui.Component.EventType.OPEN));
 
   control.setOpen(false);
   assertFalse('Control must not be opened', control.isOpen());
-  assertEquals('Control must have dispatched an CLOSE event', 1,
+  assertEquals(
+      'Control must have dispatched an CLOSE event', 1,
       getEventCount(control, goog.ui.Component.EventType.CLOSE));
   control.setEnabled(false);
   assertFalse('Control must be disabled', control.isEnabled());
 
   control.setOpen(true);
-  assertTrue('Control must be opened, even when disabled',
-      control.isOpen());
-  assertEquals('Control must have dispatched another OPEN event', 2,
+  assertTrue('Control must be opened, even when disabled', control.isOpen());
+  assertEquals(
+      'Control must have dispatched another OPEN event', 2,
       getEventCount(control, goog.ui.Component.EventType.OPEN));
 }
 
@@ -1596,8 +1764,8 @@ function testSetOpen() {
  * Tests {@link goog.ui.Control#getState}.
  */
 function testGetState() {
-  assertEquals('Controls must be in the default state', 0x00,
-      control.getState());
+  assertEquals(
+      'Controls must be in the default state', 0x00, control.getState());
 }
 
 
@@ -1605,19 +1773,26 @@ function testGetState() {
  * Tests {@link goog.ui.Control#hasState}.
  */
 function testHasState() {
-  assertFalse('Control must not be disabled',
+  assertFalse(
+      'Control must not be disabled',
       control.hasState(goog.ui.Component.State.DISABLED));
-  assertFalse('Control must not be in the HOVER state',
+  assertFalse(
+      'Control must not be in the HOVER state',
       control.hasState(goog.ui.Component.State.HOVER));
-  assertFalse('Control must not be active',
+  assertFalse(
+      'Control must not be active',
       control.hasState(goog.ui.Component.State.ACTIVE));
-  assertFalse('Control must not be selected',
+  assertFalse(
+      'Control must not be selected',
       control.hasState(goog.ui.Component.State.SELECTED));
-  assertFalse('Control must not be checked',
+  assertFalse(
+      'Control must not be checked',
       control.hasState(goog.ui.Component.State.CHECKED));
-  assertFalse('Control must not be focused',
+  assertFalse(
+      'Control must not be focused',
       control.hasState(goog.ui.Component.State.FOCUSED));
-  assertFalse('Control must not be open',
+  assertFalse(
+      'Control must not be open',
       control.hasState(goog.ui.Component.State.OPEN));
 }
 
@@ -1629,28 +1804,32 @@ function testSetState() {
   control.createDom();
   control.setSupportedState(goog.ui.Component.State.ACTIVE, false);
 
-  assertFalse('Control must not be active',
+  assertFalse(
+      'Control must not be active',
       control.hasState(goog.ui.Component.State.ACTIVE));
   control.setState(goog.ui.Component.State.ACTIVE, true);
-  assertFalse('Control must still be inactive (because it doesn\'t ' +
-      'support the ACTIVE state)',
+  assertFalse(
+      'Control must still be inactive (because it doesn\'t ' +
+          'support the ACTIVE state)',
       control.hasState(goog.ui.Component.State.ACTIVE));
 
   control.setSupportedState(goog.ui.Component.State.ACTIVE, true);
 
   control.setState(goog.ui.Component.State.ACTIVE, true);
-  assertTrue('Control must be active',
+  assertTrue(
+      'Control must be active',
       control.hasState(goog.ui.Component.State.ACTIVE));
-  assertTrue('Control must have the active CSS style',
-      goog.dom.classlist.contains(control.getElement(),
-          'goog-control-active'));
+  assertTrue(
+      'Control must have the active CSS style',
+      goog.dom.classlist.contains(control.getElement(), 'goog-control-active'));
 
   control.setState(goog.ui.Component.State.ACTIVE, true);
-  assertTrue('Control must still be active',
+  assertTrue(
+      'Control must still be active',
       control.hasState(goog.ui.Component.State.ACTIVE));
-  assertTrue('Control must still have the active CSS style',
-      goog.dom.classlist.contains(control.getElement(),
-          'goog-control-active'));
+  assertTrue(
+      'Control must still have the active CSS style',
+      goog.dom.classlist.contains(control.getElement(), 'goog-control-active'));
 
   assertTrue('No events must have been dispatched', noEventsDispatched());
 }
@@ -1671,19 +1850,26 @@ function testSetStateInternal() {
  * Tests {@link goog.ui.Control#isSupportedState}.
  */
 function testIsSupportedState() {
-  assertTrue('Control must support DISABLED',
+  assertTrue(
+      'Control must support DISABLED',
       control.isSupportedState(goog.ui.Component.State.DISABLED));
-  assertTrue('Control must support HOVER',
+  assertTrue(
+      'Control must support HOVER',
       control.isSupportedState(goog.ui.Component.State.HOVER));
-  assertTrue('Control must support ACTIVE',
+  assertTrue(
+      'Control must support ACTIVE',
       control.isSupportedState(goog.ui.Component.State.ACTIVE));
-  assertTrue('Control must support FOCUSED',
+  assertTrue(
+      'Control must support FOCUSED',
       control.isSupportedState(goog.ui.Component.State.FOCUSED));
-  assertFalse('Control must no support SELECTED',
+  assertFalse(
+      'Control must no support SELECTED',
       control.isSupportedState(goog.ui.Component.State.SELECTED));
-  assertFalse('Control must no support CHECKED',
+  assertFalse(
+      'Control must no support CHECKED',
       control.isSupportedState(goog.ui.Component.State.CHECKED));
-  assertFalse('Control must no support OPENED',
+  assertFalse(
+      'Control must no support OPENED',
       control.isSupportedState(goog.ui.Component.State.OPENED));
 }
 
@@ -1693,18 +1879,22 @@ function testIsSupportedState() {
  */
 function testSetSupportedState() {
   control.setSupportedState(goog.ui.Component.State.HOVER, true);
-  assertTrue('Control must still support HOVER',
+  assertTrue(
+      'Control must still support HOVER',
       control.isSupportedState(goog.ui.Component.State.HOVER));
 
   control.setSupportedState(goog.ui.Component.State.HOVER, false);
-  assertFalse('Control must no longer support HOVER',
+  assertFalse(
+      'Control must no longer support HOVER',
       control.isSupportedState(goog.ui.Component.State.HOVER));
 
   control.setState(goog.ui.Component.State.ACTIVE, true);
   control.setSupportedState(goog.ui.Component.State.ACTIVE, false);
-  assertFalse('Control must no longer support ACTIVE',
+  assertFalse(
+      'Control must no longer support ACTIVE',
       control.isSupportedState(goog.ui.Component.State.ACTIVE));
-  assertFalse('Control must no longer be in the ACTIVE state',
+  assertFalse(
+      'Control must no longer be in the ACTIVE state',
       control.hasState(goog.ui.Component.State.ACTIVE));
 
   control.render(sandbox);
@@ -1712,8 +1902,9 @@ function testSetSupportedState() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, true);
   control.setState(goog.ui.Component.State.FOCUSED, true);
 
-  assertThrows('Must not be able to disable support for the FOCUSED ' +
-      "state for a control that's already in the document and focused",
+  assertThrows(
+      'Must not be able to disable support for the FOCUSED ' +
+          "state for a control that's already in the document and focused",
       function() {
         control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
       });
@@ -1726,20 +1917,27 @@ function testSetSupportedState() {
  * Tests {@link goog.ui.Control#isAutoState}.
  */
 function testIsAutoState() {
-  assertTrue('Control must have DISABLED as an auto-state',
+  assertTrue(
+      'Control must have DISABLED as an auto-state',
       control.isAutoState(goog.ui.Component.State.DISABLED));
-  assertTrue('Control must have HOVER as an auto-state',
+  assertTrue(
+      'Control must have HOVER as an auto-state',
       control.isAutoState(goog.ui.Component.State.HOVER));
-  assertTrue('Control must have ACTIVE as an auto-state',
+  assertTrue(
+      'Control must have ACTIVE as an auto-state',
       control.isAutoState(goog.ui.Component.State.ACTIVE));
-  assertTrue('Control must have FOCUSED as an auto-state',
+  assertTrue(
+      'Control must have FOCUSED as an auto-state',
       control.isAutoState(goog.ui.Component.State.FOCUSED));
 
-  assertFalse('Control must not have SELECTED as an auto-state',
+  assertFalse(
+      'Control must not have SELECTED as an auto-state',
       control.isAutoState(goog.ui.Component.State.SELECTED));
-  assertFalse('Control must not have CHECKED as an auto-state',
+  assertFalse(
+      'Control must not have CHECKED as an auto-state',
       control.isAutoState(goog.ui.Component.State.CHECKED));
-  assertFalse('Control must not have OPENED as an auto-state',
+  assertFalse(
+      'Control must not have OPENED as an auto-state',
       control.isAutoState(goog.ui.Component.State.OPENED));
 
   assertTrue('No events must have been dispatched', noEventsDispatched());
@@ -1751,20 +1949,24 @@ function testIsAutoState() {
  */
 function testSetAutoStates() {
   control.setAutoStates(goog.ui.Component.State.HOVER, false);
-  assertFalse('Control must not have HOVER as an auto-state',
+  assertFalse(
+      'Control must not have HOVER as an auto-state',
       control.isAutoState(goog.ui.Component.State.HOVER));
 
-  control.setAutoStates(goog.ui.Component.State.ACTIVE |
-      goog.ui.Component.State.FOCUSED, false);
-  assertFalse('Control must not have ACTIVE as an auto-state',
+  control.setAutoStates(
+      goog.ui.Component.State.ACTIVE | goog.ui.Component.State.FOCUSED, false);
+  assertFalse(
+      'Control must not have ACTIVE as an auto-state',
       control.isAutoState(goog.ui.Component.State.ACTIVE));
-  assertFalse('Control must not have FOCUSED as an auto-state',
+  assertFalse(
+      'Control must not have FOCUSED as an auto-state',
       control.isAutoState(goog.ui.Component.State.FOCUSED));
 
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.setAutoStates(goog.ui.Component.State.FOCUSED, true);
-  assertFalse('Control must not have FOCUSED as an auto-state if it no ' +
-      'longer supports FOCUSED',
+  assertFalse(
+      'Control must not have FOCUSED as an auto-state if it no ' +
+          'longer supports FOCUSED',
       control.isAutoState(goog.ui.Component.State.FOCUSED));
 
   assertTrue('No events must have been dispatched', noEventsDispatched());
@@ -1775,20 +1977,27 @@ function testSetAutoStates() {
  * Tests {@link goog.ui.Control#isDispatchTransitionEvents}.
  */
 function testIsDispatchTransitionEvents() {
-  assertTrue('Control must dispatch DISABLED transition events',
+  assertTrue(
+      'Control must dispatch DISABLED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.DISABLED));
-  assertTrue('Control must dispatch HOVER transition events',
+  assertTrue(
+      'Control must dispatch HOVER transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.HOVER));
-  assertTrue('Control must dispatch ACTIVE transition events',
+  assertTrue(
+      'Control must dispatch ACTIVE transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.ACTIVE));
-  assertTrue('Control must dispatch FOCUSED transition events',
+  assertTrue(
+      'Control must dispatch FOCUSED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.FOCUSED));
 
-  assertFalse('Control must not dispatch SELECTED transition events',
+  assertFalse(
+      'Control must not dispatch SELECTED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.SELECTED));
-  assertFalse('Control must not dispatch CHECKED transition events',
+  assertFalse(
+      'Control must not dispatch CHECKED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.CHECKED));
-  assertFalse('Control must not dispatch OPENED transition events',
+  assertFalse(
+      'Control must not dispatch OPENED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.OPENED));
 
   assertTrue('No events must have been dispatched', noEventsDispatched());
@@ -1800,13 +2009,14 @@ function testIsDispatchTransitionEvents() {
  */
 function testSetDispatchTransitionEvents() {
   control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, false);
-  assertFalse('Control must not dispatch HOVER transition events',
+  assertFalse(
+      'Control must not dispatch HOVER transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.HOVER));
 
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
-  control.setDispatchTransitionEvents(goog.ui.Component.State.SELECTED,
-      true);
-  assertTrue('Control must dispatch SELECTED transition events',
+  control.setDispatchTransitionEvents(goog.ui.Component.State.SELECTED, true);
+  assertTrue(
+      'Control must dispatch SELECTED transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.SELECTED));
 
   assertTrue('No events must have been dispatched', noEventsDispatched());
@@ -1817,54 +2027,71 @@ function testSetDispatchTransitionEvents() {
  * Tests {@link goog.ui.Control#isTransitionAllowed}.
  */
 function testIsTransitionAllowed() {
-  assertTrue('Control must support the HOVER state',
+  assertTrue(
+      'Control must support the HOVER state',
       control.isSupportedState(goog.ui.Component.State.HOVER));
-  assertFalse('Control must not be in the HOVER state',
+  assertFalse(
+      'Control must not be in the HOVER state',
       control.hasState(goog.ui.Component.State.HOVER));
-  assertTrue('Control must dispatch HOVER transition events',
+  assertTrue(
+      'Control must dispatch HOVER transition events',
       control.isDispatchTransitionEvents(goog.ui.Component.State.HOVER));
 
-  assertTrue('Control must be allowed to transition to the HOVER state',
+  assertTrue(
+      'Control must be allowed to transition to the HOVER state',
       control.isTransitionAllowed(goog.ui.Component.State.HOVER, true));
-  assertEquals('Control must have dispatched one HIGHLIGHT event', 1,
+  assertEquals(
+      'Control must have dispatched one HIGHLIGHT event', 1,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
-  assertFalse('Control must not be highlighted',
+  assertFalse(
+      'Control must not be highlighted',
       control.hasState(goog.ui.Component.State.HOVER));
 
   control.setState(goog.ui.Component.State.HOVER, true);
   control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, false);
 
-  assertTrue('Control must be allowed to transition from the HOVER state',
+  assertTrue(
+      'Control must be allowed to transition from the HOVER state',
       control.isTransitionAllowed(goog.ui.Component.State.HOVER, false));
-  assertEquals('Control must not have dispatched any UNHIGHLIGHT events', 0,
+  assertEquals(
+      'Control must not have dispatched any UNHIGHLIGHT events', 0,
       getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
-  assertTrue('Control must still be highlighted',
+  assertTrue(
+      'Control must still be highlighted',
       control.hasState(goog.ui.Component.State.HOVER));
 
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   resetEventCount();
 
-  assertFalse('Control doesn\'t support the FOCUSED state',
+  assertFalse(
+      'Control doesn\'t support the FOCUSED state',
       control.isSupportedState(goog.ui.Component.State.FOCUSED));
-  assertFalse('Control must not be FOCUSED',
+  assertFalse(
+      'Control must not be FOCUSED',
       control.hasState(goog.ui.Component.State.FOCUSED));
-  assertFalse('Control must not be allowed to transition to the FOCUSED ' +
-      'state',
+  assertFalse(
+      'Control must not be allowed to transition to the FOCUSED ' +
+          'state',
       control.isTransitionAllowed(goog.ui.Component.State.FOCUSED, true));
-  assertEquals('Control must not have dispatched any FOCUS events', 0,
+  assertEquals(
+      'Control must not have dispatched any FOCUS events', 0,
       getEventCount(control, goog.ui.Component.EventType.FOCUS));
 
   control.setEnabled(false);
   resetEventCount();
 
-  assertTrue('Control must support the DISABLED state',
+  assertTrue(
+      'Control must support the DISABLED state',
       control.isSupportedState(goog.ui.Component.State.DISABLED));
-  assertTrue('Control must be DISABLED',
+  assertTrue(
+      'Control must be DISABLED',
       control.hasState(goog.ui.Component.State.DISABLED));
-  assertFalse('Control must not be allowed to transition to the DISABLED ' +
-      'state, because it is already there',
+  assertFalse(
+      'Control must not be allowed to transition to the DISABLED ' +
+          'state, because it is already there',
       control.isTransitionAllowed(goog.ui.Component.State.DISABLED, true));
-  assertEquals('Control must not have dispatched any ENABLE events', 0,
+  assertEquals(
+      'Control must not have dispatched any ENABLE events', 0,
       getEventCount(control, goog.ui.Component.EventType.ENABLE));
 }
 
@@ -1874,20 +2101,20 @@ function testIsTransitionAllowed() {
  */
 function testHandleKeyEvent() {
   control.render();
-  control.isVisible = control.isEnabled = function() {
-    return true;
-  };
+  control.isVisible = control.isEnabled = function() { return true; };
 
 
   goog.testing.events.fireKeySequence(
       control.getKeyEventTarget(), goog.events.KeyCodes.A);
 
-  assertEquals('Control must not have dispatched an ACTION event', 0,
+  assertEquals(
+      'Control must not have dispatched an ACTION event', 0,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 
   goog.testing.events.fireKeySequence(
       control.getKeyEventTarget(), goog.events.KeyCodes.ENTER);
-  assertEquals('Control must have dispatched an ACTION event', 1,
+  assertEquals(
+      'Control must have dispatched an ACTION event', 1,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 }
 
@@ -1905,7 +2132,8 @@ function testPerformActionInternal() {
   assertFalse('Control must not be checked', control.isChecked());
   assertFalse('Control must not be selected', control.isSelected());
   assertFalse('Control must not be open', control.isOpen());
-  assertEquals('Control must have dispatched an ACTION event', 1,
+  assertEquals(
+      'Control must have dispatched an ACTION event', 1,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
@@ -1917,13 +2145,17 @@ function testPerformActionInternal() {
   assertTrue('Control must be checked', control.isChecked());
   assertTrue('Control must be selected', control.isSelected());
   assertTrue('Control must be open', control.isOpen());
-  assertEquals('Control must have dispatched a CHECK event', 1,
+  assertEquals(
+      'Control must have dispatched a CHECK event', 1,
       getEventCount(control, goog.ui.Component.EventType.CHECK));
-  assertEquals('Control must have dispatched a SELECT event', 1,
+  assertEquals(
+      'Control must have dispatched a SELECT event', 1,
       getEventCount(control, goog.ui.Component.EventType.SELECT));
-  assertEquals('Control must have dispatched a OPEN event', 1,
+  assertEquals(
+      'Control must have dispatched a OPEN event', 1,
       getEventCount(control, goog.ui.Component.EventType.OPEN));
-  assertEquals('Control must have dispatched another ACTION event', 2,
+  assertEquals(
+      'Control must have dispatched another ACTION event', 2,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 
   control.performActionInternal();
@@ -1931,13 +2163,17 @@ function testPerformActionInternal() {
   assertFalse('Control must not be checked', control.isChecked());
   assertTrue('Control must be selected', control.isSelected());
   assertFalse('Control must not be open', control.isOpen());
-  assertEquals('Control must have dispatched an UNCHECK event', 1,
+  assertEquals(
+      'Control must have dispatched an UNCHECK event', 1,
       getEventCount(control, goog.ui.Component.EventType.UNCHECK));
-  assertEquals('Control must not have dispatched an UNSELECT event', 0,
+  assertEquals(
+      'Control must not have dispatched an UNSELECT event', 0,
       getEventCount(control, goog.ui.Component.EventType.UNSELECT));
-  assertEquals('Control must have dispatched a CLOSE event', 1,
+  assertEquals(
+      'Control must have dispatched a CLOSE event', 1,
       getEventCount(control, goog.ui.Component.EventType.CLOSE));
-  assertEquals('Control must have dispatched another ACTION event', 3,
+  assertEquals(
+      'Control must have dispatched another ACTION event', 3,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 }
 
@@ -1946,39 +2182,44 @@ function testPerformActionInternal() {
  * Tests {@link goog.ui.Control#handleMouseOver}.
  */
 function testHandleMouseOver() {
-  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
-                                        'Hello'));
+  control.setContent(
+      goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'}, 'Hello'));
   control.render(sandbox);
 
   var element = control.getElement();
   var caption = goog.dom.getElement('caption');
 
   // Verify baseline assumptions.
-  assertTrue('Caption must be contained within the control',
+  assertTrue(
+      'Caption must be contained within the control',
       goog.dom.contains(element, caption));
   assertTrue('Control must be enabled', control.isEnabled());
-  assertTrue('HOVER must be an auto-state',
+  assertTrue(
+      'HOVER must be an auto-state',
       control.isAutoState(goog.ui.Component.State.HOVER));
-  assertFalse('Control must not start out highlighted',
-      control.isHighlighted());
+  assertFalse(
+      'Control must not start out highlighted', control.isHighlighted());
 
   // Scenario 1:  relatedTarget is contained within the control's DOM.
   goog.testing.events.fireMouseOverEvent(element, caption);
-  assertTrue('No events must have been dispatched for internal mouse move',
+  assertTrue(
+      'No events must have been dispatched for internal mouse move',
       noEventsDispatched());
-  assertFalse('Control must not be highlighted for internal mouse move',
+  assertFalse(
+      'Control must not be highlighted for internal mouse move',
       control.isHighlighted());
   resetEventCount();
 
   // Scenario 2:  preventDefault() is called on the ENTER event.
-  var key = goog.events.listen(control, goog.ui.Component.EventType.ENTER,
-      function(e) {
-        e.preventDefault();
-      });
+  var key = goog.events.listen(
+      control, goog.ui.Component.EventType.ENTER,
+      function(e) { e.preventDefault(); });
   goog.testing.events.fireMouseOverEvent(element, sandbox);
-  assertEquals('Control must have dispatched 1 ENTER event', 1,
+  assertEquals(
+      'Control must have dispatched 1 ENTER event', 1,
       getEventCount(control, goog.ui.Component.EventType.ENTER));
-  assertFalse('Control must not be highlighted if ENTER is canceled',
+  assertFalse(
+      'Control must not be highlighted if ENTER is canceled',
       control.isHighlighted());
   goog.events.unlistenByKey(key);
   resetEventCount();
@@ -1986,10 +2227,12 @@ function testHandleMouseOver() {
   // Scenario 3:  Control is disabled.
   control.setEnabled(false);
   goog.testing.events.fireMouseOverEvent(element, sandbox);
-  assertEquals('Control must dispatch ENTER event on mouseover even if ' +
-      'disabled', 1,
-      getEventCount(control, goog.ui.Component.EventType.ENTER));
-  assertFalse('Control must not be highlighted if it is disabled',
+  assertEquals(
+      'Control must dispatch ENTER event on mouseover even if ' +
+          'disabled',
+      1, getEventCount(control, goog.ui.Component.EventType.ENTER));
+  assertFalse(
+      'Control must not be highlighted if it is disabled',
       control.isHighlighted());
   control.setEnabled(true);
   resetEventCount();
@@ -1997,19 +2240,24 @@ function testHandleMouseOver() {
   // Scenario 4:  HOVER is not an auto-state.
   control.setAutoStates(goog.ui.Component.State.HOVER, false);
   goog.testing.events.fireMouseOverEvent(element, sandbox);
-  assertEquals('Control must dispatch ENTER event on mouseover even if ' +
-      'HOVER is not an auto-state', 1,
-      getEventCount(control, goog.ui.Component.EventType.ENTER));
-  assertFalse('Control must not be highlighted if HOVER isn\'t an auto-' +
-      'state', control.isHighlighted());
+  assertEquals(
+      'Control must dispatch ENTER event on mouseover even if ' +
+          'HOVER is not an auto-state',
+      1, getEventCount(control, goog.ui.Component.EventType.ENTER));
+  assertFalse(
+      'Control must not be highlighted if HOVER isn\'t an auto-' +
+          'state',
+      control.isHighlighted());
   control.setAutoStates(goog.ui.Component.State.HOVER, true);
   resetEventCount();
 
   // Scenario 5:  All is well.
   goog.testing.events.fireMouseOverEvent(element, sandbox);
-  assertEquals('Control must dispatch ENTER event on mouseover', 1,
+  assertEquals(
+      'Control must dispatch ENTER event on mouseover', 1,
       getEventCount(control, goog.ui.Component.EventType.ENTER));
-  assertEquals('Control must dispatch HIGHLIGHT event on mouseover', 1,
+  assertEquals(
+      'Control must dispatch HIGHLIGHT event on mouseover', 1,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
   assertTrue('Control must be highlighted', control.isHighlighted());
   resetEventCount();
@@ -2017,9 +2265,11 @@ function testHandleMouseOver() {
   // Scenario 6: relatedTarget is null
   control.setHighlighted(false);
   goog.testing.events.fireMouseOverEvent(element, null);
-  assertEquals('Control must dispatch ENTER event on mouseover', 1,
+  assertEquals(
+      'Control must dispatch ENTER event on mouseover', 1,
       getEventCount(control, goog.ui.Component.EventType.ENTER));
-  assertEquals('Control must dispatch HIGHLIGHT event on mouseover', 1,
+  assertEquals(
+      'Control must dispatch HIGHLIGHT event on mouseover', 1,
       getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
   assertTrue('Control must be highlighted', control.isHighlighted());
   resetEventCount();
@@ -2030,8 +2280,8 @@ function testHandleMouseOver() {
  * Tests {@link goog.ui.Control#handleMouseOut}.
  */
 function testHandleMouseOut() {
-  control.setContent(goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'},
-                                        'Hello'));
+  control.setContent(
+      goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'}, 'Hello'));
   control.setHighlighted(true);
   control.setActive(true);
 
@@ -2043,37 +2293,45 @@ function testHandleMouseOut() {
   var caption = goog.dom.getElement('caption');
 
   // Verify baseline assumptions.
-  assertTrue('Caption must be contained within the control',
+  assertTrue(
+      'Caption must be contained within the control',
       goog.dom.contains(element, caption));
   assertTrue('Control must be enabled', control.isEnabled());
-  assertTrue('HOVER must be an auto-state',
+  assertTrue(
+      'HOVER must be an auto-state',
       control.isAutoState(goog.ui.Component.State.HOVER));
-  assertTrue('ACTIVE must be an auto-state',
+  assertTrue(
+      'ACTIVE must be an auto-state',
       control.isAutoState(goog.ui.Component.State.ACTIVE));
   assertTrue('Control must start out highlighted', control.isHighlighted());
   assertTrue('Control must start out active', control.isActive());
 
   // Scenario 1:  relatedTarget is contained within the control's DOM.
   goog.testing.events.fireMouseOutEvent(element, caption);
-  assertTrue('No events must have been dispatched for internal mouse move',
+  assertTrue(
+      'No events must have been dispatched for internal mouse move',
       noEventsDispatched());
-  assertTrue('Control must not be un-highlighted for internal mouse move',
+  assertTrue(
+      'Control must not be un-highlighted for internal mouse move',
       control.isHighlighted());
-  assertTrue('Control must not be deactivated for internal mouse move',
+  assertTrue(
+      'Control must not be deactivated for internal mouse move',
       control.isActive());
   resetEventCount();
 
   // Scenario 2:  preventDefault() is called on the LEAVE event.
-  var key = goog.events.listen(control, goog.ui.Component.EventType.LEAVE,
-      function(e) {
-        e.preventDefault();
-      });
+  var key = goog.events.listen(
+      control, goog.ui.Component.EventType.LEAVE,
+      function(e) { e.preventDefault(); });
   goog.testing.events.fireMouseOutEvent(element, sandbox);
-  assertEquals('Control must have dispatched 1 LEAVE event', 1,
+  assertEquals(
+      'Control must have dispatched 1 LEAVE event', 1,
       getEventCount(control, goog.ui.Component.EventType.LEAVE));
-  assertTrue('Control must not be un-highlighted if LEAVE is canceled',
+  assertTrue(
+      'Control must not be un-highlighted if LEAVE is canceled',
       control.isHighlighted());
-  assertTrue('Control must not be deactivated if LEAVE is canceled',
+  assertTrue(
+      'Control must not be deactivated if LEAVE is canceled',
       control.isActive());
   goog.events.unlistenByKey(key);
   resetEventCount();
@@ -2081,13 +2339,18 @@ function testHandleMouseOut() {
   // Scenario 3:  ACTIVE is not an auto-state.
   control.setAutoStates(goog.ui.Component.State.ACTIVE, false);
   goog.testing.events.fireMouseOutEvent(element, sandbox);
-  assertEquals('Control must dispatch LEAVE event on mouseout even if ' +
-      'ACTIVE is not an auto-state', 1,
-      getEventCount(control, goog.ui.Component.EventType.LEAVE));
-  assertTrue('Control must not be deactivated if ACTIVE isn\'t an auto-' +
-      'state', control.isActive());
-  assertFalse('Control must be un-highlighted even if ACTIVE isn\'t an ' +
-      'auto-state', control.isHighlighted());
+  assertEquals(
+      'Control must dispatch LEAVE event on mouseout even if ' +
+          'ACTIVE is not an auto-state',
+      1, getEventCount(control, goog.ui.Component.EventType.LEAVE));
+  assertTrue(
+      'Control must not be deactivated if ACTIVE isn\'t an auto-' +
+          'state',
+      control.isActive());
+  assertFalse(
+      'Control must be un-highlighted even if ACTIVE isn\'t an ' +
+          'auto-state',
+      control.isHighlighted());
   control.setAutoStates(goog.ui.Component.State.ACTIVE, true);
   control.setHighlighted(true);
   resetEventCount();
@@ -2095,24 +2358,32 @@ function testHandleMouseOut() {
   // Scenario 4:  HOVER is not an auto-state.
   control.setAutoStates(goog.ui.Component.State.HOVER, false);
   goog.testing.events.fireMouseOutEvent(element, sandbox);
-  assertEquals('Control must dispatch LEAVE event on mouseout even if ' +
-      'HOVER is not an auto-state', 1,
-      getEventCount(control, goog.ui.Component.EventType.LEAVE));
-  assertFalse('Control must be deactivated even if HOVER isn\'t an auto-' +
-      'state', control.isActive());
-  assertTrue('Control must not be un-highlighted if HOVER isn\'t an auto-' +
-      'state', control.isHighlighted());
+  assertEquals(
+      'Control must dispatch LEAVE event on mouseout even if ' +
+          'HOVER is not an auto-state',
+      1, getEventCount(control, goog.ui.Component.EventType.LEAVE));
+  assertFalse(
+      'Control must be deactivated even if HOVER isn\'t an auto-' +
+          'state',
+      control.isActive());
+  assertTrue(
+      'Control must not be un-highlighted if HOVER isn\'t an auto-' +
+          'state',
+      control.isHighlighted());
   control.setAutoStates(goog.ui.Component.State.HOVER, true);
   control.setActive(true);
   resetEventCount();
 
   // Scenario 5:  All is well.
   goog.testing.events.fireMouseOutEvent(element, sandbox);
-  assertEquals('Control must dispatch LEAVE event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch LEAVE event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.LEAVE));
-  assertEquals('Control must dispatch DEACTIVATE event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch DEACTIVATE event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.DEACTIVATE));
-  assertEquals('Control must dispatch UNHIGHLIGHT event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch UNHIGHLIGHT event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
   assertFalse('Control must be deactivated', control.isActive());
   assertFalse('Control must be unhighlighted', control.isHighlighted());
@@ -2122,11 +2393,14 @@ function testHandleMouseOut() {
   control.setActive(true);
   control.setHighlighted(true);
   goog.testing.events.fireMouseOutEvent(element, null);
-  assertEquals('Control must dispatch LEAVE event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch LEAVE event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.LEAVE));
-  assertEquals('Control must dispatch DEACTIVATE event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch DEACTIVATE event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.DEACTIVATE));
-  assertEquals('Control must dispatch UNHIGHLIGHT event on mouseout', 1,
+  assertEquals(
+      'Control must dispatch UNHIGHLIGHT event on mouseout', 1,
       getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
   assertFalse('Control must be deactivated', control.isActive());
   assertFalse('Control must be unhighlighted', control.isHighlighted());
@@ -2140,19 +2414,22 @@ function testIsMouseEventWithinElement() {
 
   var event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = child;
-  assertTrue('Event is within element',
-             goog.ui.Control.isMouseEventWithinElement_(event, parent));
+  assertTrue(
+      'Event is within element',
+      goog.ui.Control.isMouseEventWithinElement_(event, parent));
 
   var event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = notChild;
-  assertFalse('Event is not within element',
-              goog.ui.Control.isMouseEventWithinElement_(event, parent));
+  assertFalse(
+      'Event is not within element',
+      goog.ui.Control.isMouseEventWithinElement_(event, parent));
 }
 
 function testHandleMouseDown() {
   control.render(sandbox);
-  assertFalse('preventDefault() must have been called for control that ' +
-      'doesn\'t support text selection',
+  assertFalse(
+      'preventDefault() must have been called for control that ' +
+          'doesn\'t support text selection',
       fireMouseDownAndFocus(control.getElement()));
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
@@ -2173,8 +2450,9 @@ function testHandleMouseDown() {
 function testHandleMouseDownForDisabledControl() {
   control.setEnabled(false);
   control.render(sandbox);
-  assertFalse('preventDefault() must have been called for control that ' +
-      'doesn\'t support text selection',
+  assertFalse(
+      'preventDefault() must have been called for control that ' +
+          'doesn\'t support text selection',
       fireMouseDownAndFocus(control.getElement()));
   assertFalse('Control must not be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
@@ -2186,8 +2464,9 @@ function testHandleMouseDownForDisabledControl() {
 function testHandleMouseDownForNoHoverAutoState() {
   control.setAutoStates(goog.ui.Component.State.HOVER, false);
   control.render(sandbox);
-  assertFalse('preventDefault() must have been called for control that ' +
-      'doesn\'t support text selection',
+  assertFalse(
+      'preventDefault() must have been called for control that ' +
+          'doesn\'t support text selection',
       fireMouseDownAndFocus(control.getElement()));
   assertFalse('Control must not be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
@@ -2207,9 +2486,11 @@ function testHandleMouseDownForNoHoverAutoState() {
 
 function testHandleMouseDownForRightMouseButton() {
   control.render(sandbox);
-  assertTrue('preventDefault() must not have been called for right ' +
-      'mouse button', fireMouseDownAndFocus(control.getElement(),
-      goog.events.BrowserEvent.MouseButton.RIGHT));
+  assertTrue(
+      'preventDefault() must not have been called for right ' +
+          'mouse button',
+      fireMouseDownAndFocus(
+          control.getElement(), goog.events.BrowserEvent.MouseButton.RIGHT));
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
 
@@ -2229,8 +2510,9 @@ function testHandleMouseDownForRightMouseButton() {
 function testHandleMouseDownForNoActiveAutoState() {
   control.setAutoStates(goog.ui.Component.State.ACTIVE, false);
   control.render(sandbox);
-  assertFalse('preventDefault() must have been called for control that ' +
-      'doesn\'t support text selection',
+  assertFalse(
+      'preventDefault() must have been called for control that ' +
+          'doesn\'t support text selection',
       fireMouseDownAndFocus(control.getElement()));
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
@@ -2251,8 +2533,9 @@ function testHandleMouseDownForNoActiveAutoState() {
 function testHandleMouseDownForNonFocusableControl() {
   control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
   control.render(sandbox);
-  assertFalse('preventDefault() must have been called for control that ' +
-      'doesn\'t support text selection',
+  assertFalse(
+      'preventDefault() must have been called for control that ' +
+          'doesn\'t support text selection',
       fireMouseDownAndFocus(control.getElement()));
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
@@ -2260,7 +2543,7 @@ function testHandleMouseDownForNonFocusableControl() {
 }
 
 // TODO(attila): Find out why this is flaky on FF2/Linux and FF1.5/Win.
-//function testHandleMouseDownForSelectableControl() {
+// function testHandleMouseDownForSelectableControl() {
 //  control.setAllowTextSelection(true);
 //  control.render(sandbox);
 //  assertTrue('preventDefault() must not have been called for control ' +
@@ -2300,18 +2583,21 @@ function testHandleMouseUp() {
 
   // Verify baseline assumptions.
   assertTrue('Control must be enabled', control.isEnabled());
-  assertTrue('HOVER must be an auto-state',
+  assertTrue(
+      'HOVER must be an auto-state',
       control.isAutoState(goog.ui.Component.State.HOVER));
-  assertTrue('ACTIVE must be an auto-state',
+  assertTrue(
+      'ACTIVE must be an auto-state',
       control.isAutoState(goog.ui.Component.State.ACTIVE));
-  assertFalse('Control must not start out highlighted',
-      control.isHighlighted());
+  assertFalse(
+      'Control must not start out highlighted', control.isHighlighted());
   assertTrue('Control must start out active', control.isActive());
 
   // Scenario 1:  Control is disabled.
   control.setEnabled(false);
   goog.testing.events.fireMouseUpEvent(element);
-  assertFalse('Disabled control must not highlight on mouseup',
+  assertFalse(
+      'Disabled control must not highlight on mouseup',
       control.isHighlighted());
   assertFalse('No action must have been performed', actionPerformed);
   control.setActive(true);
@@ -2320,12 +2606,18 @@ function testHandleMouseUp() {
   // Scenario 2:  HOVER is not an auto-state.
   control.setAutoStates(goog.ui.Component.State.HOVER, false);
   goog.testing.events.fireMouseUpEvent(element);
-  assertFalse('Control must not highlight on mouseup if HOVER isn\'t an ' +
-      'auto-state', control.isHighlighted());
-  assertTrue('Action must have been performed even if HOVER isn\'t an ' +
-      'auto-state', actionPerformed);
-  assertFalse('Control must have been deactivated on mouseup even if ' +
-      'HOVER isn\'t an auto-state', control.isActive());
+  assertFalse(
+      'Control must not highlight on mouseup if HOVER isn\'t an ' +
+          'auto-state',
+      control.isHighlighted());
+  assertTrue(
+      'Action must have been performed even if HOVER isn\'t an ' +
+          'auto-state',
+      actionPerformed);
+  assertFalse(
+      'Control must have been deactivated on mouseup even if ' +
+          'HOVER isn\'t an auto-state',
+      control.isActive());
   actionPerformed = false;
   control.setActive(true);
   control.setAutoStates(goog.ui.Component.State.HOVER, true);
@@ -2333,11 +2625,14 @@ function testHandleMouseUp() {
   // Scenario 3:  Control is not active.
   control.setActive(false);
   goog.testing.events.fireMouseUpEvent(element);
-  assertTrue('Control must highlight on mouseup, even if inactive',
+  assertTrue(
+      'Control must highlight on mouseup, even if inactive',
       control.isHighlighted());
-  assertFalse('No action must have been performed if control is inactive',
+  assertFalse(
+      'No action must have been performed if control is inactive',
       actionPerformed);
-  assertFalse('Inactive control must remain inactive after mouseup',
+  assertFalse(
+      'Inactive control must remain inactive after mouseup',
       control.isActive());
   control.setHighlighted(false);
   control.setActive(true);
@@ -2348,12 +2643,15 @@ function testHandleMouseUp() {
     return false;
   };
   goog.testing.events.fireMouseUpEvent(element);
-  assertTrue('Control must highlight on mouseup, even if no action is ' +
-      'performed', control.isHighlighted());
-  assertTrue('performActionInternal must have been called',
-      actionPerformed);
-  assertTrue('Control must not deactivate if performActionInternal ' +
-      'returns false', control.isActive());
+  assertTrue(
+      'Control must highlight on mouseup, even if no action is ' +
+          'performed',
+      control.isHighlighted());
+  assertTrue('performActionInternal must have been called', actionPerformed);
+  assertTrue(
+      'Control must not deactivate if performActionInternal ' +
+          'returns false',
+      control.isActive());
   control.setHighlighted(false);
   actionPerformed = false;
   control.performActionInternal = function() {
@@ -2364,12 +2662,18 @@ function testHandleMouseUp() {
   // Scenario 5:  ACTIVE is not an auto-state.
   control.setAutoStates(goog.ui.Component.State.ACTIVE, false);
   goog.testing.events.fireMouseUpEvent(element);
-  assertTrue('Control must highlight on mouseup even if ACTIVE isn\'t an ' +
-      'auto-state', control.isHighlighted());
-  assertTrue('Action must have been performed even if ACTIVE isn\'t an ' +
-      'auto-state', actionPerformed);
-  assertTrue('Control must not have been deactivated on mouseup if ' +
-      'ACTIVE isn\'t an auto-state', control.isActive());
+  assertTrue(
+      'Control must highlight on mouseup even if ACTIVE isn\'t an ' +
+          'auto-state',
+      control.isHighlighted());
+  assertTrue(
+      'Action must have been performed even if ACTIVE isn\'t an ' +
+          'auto-state',
+      actionPerformed);
+  assertTrue(
+      'Control must not have been deactivated on mouseup if ' +
+          'ACTIVE isn\'t an auto-state',
+      control.isActive());
   actionPerformed = false;
   control.setHighlighted(false);
   control.setAutoStates(goog.ui.Component.State.ACTIVE, true);
@@ -2390,7 +2694,8 @@ function testDefaultConstructor() {
 function assertClickSequenceFires(msg) {
   var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickSequence(control.getKeyEventTarget());
-  assertEquals(msg, actionCount + 1,
+  assertEquals(
+      msg, actionCount + 1,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 }
 
@@ -2398,7 +2703,8 @@ function assertClickSequenceFires(msg) {
 function assertIsolatedClickFires(msg) {
   var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickEvent(control.getKeyEventTarget());
-  assertEquals(msg, actionCount + 1,
+  assertEquals(
+      msg, actionCount + 1,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 }
 
@@ -2406,7 +2712,8 @@ function assertIsolatedClickFires(msg) {
 function assertIsolatedClickDoesNotFire(msg) {
   var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickEvent(control.getKeyEventTarget());
-  assertEquals(msg, actionCount,
+  assertEquals(
+      msg, actionCount,
       getEventCount(control, goog.ui.Component.EventType.ACTION));
 }
 
@@ -2415,8 +2722,7 @@ function testIeMouseEventSequenceSimulator() {
   control.render(sandbox);
 
   // Click sequences and isolated clicks must be handled correctly in any order.
-  assertClickSequenceFires(
-      'ACTION event expected after a click sequence');
+  assertClickSequenceFires('ACTION event expected after a click sequence');
   assertClickSequenceFires(
       'ACTION event expected after a second consecutive click sequence');
   if (goog.userAgent.IE) {
@@ -2455,16 +2761,17 @@ function testIeMouseEventSequenceSimulatorStrictMode() {
 
   var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
   var e = document.createEvent('MouseEvents');
-  e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false,
-      false, false, 0, null);
+  e.initMouseEvent(
+      'click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,
+      null);
   control.getElementStrict().dispatchEvent(e);
   if (goog.userAgent.IE) {
-    assertEquals('ACTION event expected after an isolated click',
-        actionCount + 1,
+    assertEquals(
+        'ACTION event expected after an isolated click', actionCount + 1,
         getEventCount(control, goog.ui.Component.EventType.ACTION));
   } else {
-    assertEquals('No ACTION event expected after an isolated click',
-        actionCount,
+    assertEquals(
+        'No ACTION event expected after an isolated click', actionCount,
         getEventCount(control, goog.ui.Component.EventType.ACTION));
   }
 }

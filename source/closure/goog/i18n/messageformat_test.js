@@ -34,28 +34,27 @@ function testEmptyPattern() {
 }
 
 function testMissingLeftCurlyBrace() {
-  var err = assertThrows(function() {
-    new goog.i18n.MessageFormat('\'\'{}}');
-  });
+  var err =
+      assertThrows(function() { new goog.i18n.MessageFormat('\'\'{}}'); });
   assertEquals('Assertion failed: No matching { for }.', err.message);
 }
 
 function testTooManyLeftCurlyBraces() {
-  var err = assertThrows(function() {
-    new goog.i18n.MessageFormat('{} {');
-  });
-  assertEquals('Assertion failed: There are mismatched { or } in the pattern.',
+  var err = assertThrows(function() { new goog.i18n.MessageFormat('{} {'); });
+  assertEquals(
+      'Assertion failed: There are mismatched { or } in the pattern.',
       err.message);
 }
 
 function testSimpleReplacement() {
   var fmt = new goog.i18n.MessageFormat('New York in {SEASON} is nice.');
-  assertEquals('New York in the Summer is nice.',
-               fmt.format({'SEASON': 'the Summer'}));
+  assertEquals(
+      'New York in the Summer is nice.', fmt.format({'SEASON': 'the Summer'}));
 }
 
 function testSimpleSelect() {
-  var fmt = new goog.i18n.MessageFormat('{GENDER, select,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{GENDER, select,' +
       'male {His} ' +
       'female {Her} ' +
       'other {Its}}' +
@@ -68,55 +67,52 @@ function testSimpleSelect() {
 }
 
 function testSimplePlural() {
-  var fmt = new goog.i18n.MessageFormat('I see {NUM_PEOPLE, plural, offset:1 ' +
+  var fmt = new goog.i18n.MessageFormat(
+      'I see {NUM_PEOPLE, plural, offset:1 ' +
       '=0 {no one at all in {PLACE}.} ' +
       '=1 {{PERSON} in {PLACE}.} ' +
       'one {{PERSON} and one other person in {PLACE}.} ' +
       'other {{PERSON} and # other people in {PLACE}.}}');
 
-  assertEquals('I see no one at all in Belgrade.',
-               fmt.format({'NUM_PEOPLE': 0,
-        'PLACE': 'Belgrade'}));
-  assertEquals('I see Markus in Berlin.',
-               fmt.format({'NUM_PEOPLE': 1,
-        'PERSON': 'Markus',
-        'PLACE': 'Berlin'}));
-  assertEquals('I see Mark and one other person in Athens.',
-               fmt.format({'NUM_PEOPLE': 2,
-        'PERSON': 'Mark',
-        'PLACE': 'Athens'}));
-  assertEquals('I see Cibu and 99 other people in the cubes.',
-               fmt.format({'NUM_PEOPLE': 100,
-        'PERSON': 'Cibu',
-        'PLACE': 'the cubes'}));
+  assertEquals(
+      'I see no one at all in Belgrade.',
+      fmt.format({'NUM_PEOPLE': 0, 'PLACE': 'Belgrade'}));
+  assertEquals(
+      'I see Markus in Berlin.',
+      fmt.format({'NUM_PEOPLE': 1, 'PERSON': 'Markus', 'PLACE': 'Berlin'}));
+  assertEquals(
+      'I see Mark and one other person in Athens.',
+      fmt.format({'NUM_PEOPLE': 2, 'PERSON': 'Mark', 'PLACE': 'Athens'}));
+  assertEquals(
+      'I see Cibu and 99 other people in the cubes.',
+      fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibu', 'PLACE': 'the cubes'}));
 }
 
 function testSimplePluralNoOffset() {
-  var fmt = new goog.i18n.MessageFormat('I see {NUM_PEOPLE, plural, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      'I see {NUM_PEOPLE, plural, ' +
       '=0 {no one at all} ' +
       '=1 {{PERSON}} ' +
       'one {{PERSON} and one other person} ' +
       'other {{PERSON} and # other people}} in {PLACE}.');
 
-  assertEquals('I see no one at all in Belgrade.',
-               fmt.format({'NUM_PEOPLE': 0,
-        'PLACE': 'Belgrade'}));
-  assertEquals('I see Markus in Berlin.',
-               fmt.format({'NUM_PEOPLE': 1,
-        'PERSON': 'Markus',
-        'PLACE': 'Berlin'}));
-  assertEquals('I see Mark and 2 other people in Athens.',
-               fmt.format({'NUM_PEOPLE': 2,
-        'PERSON': 'Mark',
-        'PLACE': 'Athens'}));
-  assertEquals('I see Cibu and 100 other people in the cubes.',
-               fmt.format({'NUM_PEOPLE': 100,
-        'PERSON': 'Cibu',
-        'PLACE': 'the cubes'}));
+  assertEquals(
+      'I see no one at all in Belgrade.',
+      fmt.format({'NUM_PEOPLE': 0, 'PLACE': 'Belgrade'}));
+  assertEquals(
+      'I see Markus in Berlin.',
+      fmt.format({'NUM_PEOPLE': 1, 'PERSON': 'Markus', 'PLACE': 'Berlin'}));
+  assertEquals(
+      'I see Mark and 2 other people in Athens.',
+      fmt.format({'NUM_PEOPLE': 2, 'PERSON': 'Mark', 'PLACE': 'Athens'}));
+  assertEquals(
+      'I see Cibu and 100 other people in the cubes.',
+      fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibu', 'PLACE': 'the cubes'}));
 }
 
 function testSelectNestedInPlural() {
-  var fmt = new goog.i18n.MessageFormat('{CIRCLES, plural, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{CIRCLES, plural, ' +
       'one {{GENDER, select, ' +
       '  female {{WHO} added you to her circle} ' +
       '  other  {{WHO} added you to his circle}}} ' +
@@ -124,20 +120,19 @@ function testSelectNestedInPlural() {
       '  female {{WHO} added you to her # circles} ' +
       '  other  {{WHO} added you to his # circles}}}}');
 
-  assertEquals('Jelena added you to her circle',
-               fmt.format({'GENDER': 'female',
-        'WHO': 'Jelena',
-        'CIRCLES': 1}));
-  assertEquals('Milan added you to his 1,234 circles',
-               fmt.format({'GENDER': 'male',
-        'WHO': 'Milan',
-        'CIRCLES': 1234}));
+  assertEquals(
+      'Jelena added you to her circle',
+      fmt.format({'GENDER': 'female', 'WHO': 'Jelena', 'CIRCLES': 1}));
+  assertEquals(
+      'Milan added you to his 1,234 circles',
+      fmt.format({'GENDER': 'male', 'WHO': 'Milan', 'CIRCLES': 1234}));
 }
 
 function testPluralNestedInSelect() {
   // Added offset just for testing purposes. It doesn't make sense
   // to have it otherwise.
-  var fmt = new goog.i18n.MessageFormat('{GENDER, select, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{GENDER, select, ' +
       'female {{NUM_GROUPS, plural, ' +
       '  one {{WHO} added you to her group} ' +
       '  other {{WHO} added you to her # groups}}} ' +
@@ -145,40 +140,41 @@ function testPluralNestedInSelect() {
       '  one {{WHO} added you to his group} ' +
       '  other {{WHO} added you to his # groups}}}}');
 
-  assertEquals('Jelena added you to her group',
-               fmt.format({'GENDER': 'female',
-        'WHO': 'Jelena',
-        'NUM_GROUPS': 1}));
-  assertEquals('Milan added you to his 1,233 groups',
-               fmt.format({'GENDER': 'male',
-        'WHO': 'Milan',
-        'NUM_GROUPS': 1234}));
+  assertEquals(
+      'Jelena added you to her group',
+      fmt.format({'GENDER': 'female', 'WHO': 'Jelena', 'NUM_GROUPS': 1}));
+  assertEquals(
+      'Milan added you to his 1,233 groups',
+      fmt.format({'GENDER': 'male', 'WHO': 'Milan', 'NUM_GROUPS': 1234}));
 }
 
 function testLiteralOpenCurlyBrace() {
-  var fmt = new goog.i18n.MessageFormat("Anna's house" +
-      " has '{0} and # in the roof' and {NUM_COWS} cows.");
-  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
-               fmt.format({'NUM_COWS': '5'}));
+  var fmt = new goog.i18n.MessageFormat(
+      "Anna's house" + " has '{0} and # in the roof' and {NUM_COWS} cows.");
+  assertEquals(
+      "Anna's house has {0} and # in the roof and 5 cows.",
+      fmt.format({'NUM_COWS': '5'}));
 }
 
 function testLiteralClosedCurlyBrace() {
-  var fmt = new goog.i18n.MessageFormat("Anna's house" +
-      " has '{'0'} and # in the roof' and {NUM_COWS} cows.");
-  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
-               fmt.format({'NUM_COWS': '5'}));
+  var fmt = new goog.i18n.MessageFormat(
+      "Anna's house" + " has '{'0'} and # in the roof' and {NUM_COWS} cows.");
+  assertEquals(
+      "Anna's house has {0} and # in the roof and 5 cows.",
+      fmt.format({'NUM_COWS': '5'}));
 }
 
 function testLiteralPoundSign() {
-  var fmt = new goog.i18n.MessageFormat("Anna's house" +
-      " has '{0}' and '# in the roof' and {NUM_COWS} cows.");
-  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
-               fmt.format({'NUM_COWS': '5'}));
+  var fmt = new goog.i18n.MessageFormat(
+      "Anna's house" + " has '{0}' and '# in the roof' and {NUM_COWS} cows.");
+  assertEquals(
+      "Anna's house has {0} and # in the roof and 5 cows.",
+      fmt.format({'NUM_COWS': '5'}));
 }
 
 function testNoLiteralsForSingleQuotes() {
-  var fmt = new goog.i18n.MessageFormat("Anna's house" +
-      " 'has {NUM_COWS} cows'.");
+  var fmt =
+      new goog.i18n.MessageFormat("Anna's house" + " 'has {NUM_COWS} cows'.");
   assertEquals("Anna's house 'has 5 cows'.", fmt.format({'NUM_COWS': '5'}));
 }
 
@@ -195,7 +191,8 @@ function testConsecutiveSingleQuotesBeforeSpecialCharDontCreateLiteral() {
 function testSerbianSimpleSelect() {
   stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
-  var fmt = new goog.i18n.MessageFormat('{GENDER, select, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{GENDER, select, ' +
       'female {Njen} other {Njegov}} bicikl je ' +
       '{GENDER, select, female {crven} other {plav}}.');
 
@@ -206,7 +203,8 @@ function testSerbianSimpleSelect() {
 function testSerbianSimplePlural() {
   stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
-  var fmt = new goog.i18n.MessageFormat('Ja {NUM_PEOPLE, plural, offset:1 ' +
+  var fmt = new goog.i18n.MessageFormat(
+      'Ja {NUM_PEOPLE, plural, offset:1 ' +
       '=0 {ne vidim nikoga} ' +
       '=1 {vidim {PERSON}} ' +
       'one {vidim {PERSON} i jos # osobu} ' +
@@ -215,31 +213,28 @@ function testSerbianSimplePlural() {
       'other {{PERSON} i jos # osoba}} ' +
       'u {PLACE}.');
 
-  assertEquals('Ja ne vidim nikoga u Beogradu.',
-               fmt.format({'NUM_PEOPLE': 0,
-        'PLACE': 'Beogradu'}));
-  assertEquals('Ja vidim Markusa u Berlinu.',
-               fmt.format({'NUM_PEOPLE': 1,
-        'PERSON': 'Markusa',
-        'PLACE': 'Berlinu'}));
-  assertEquals('Ja vidim Marka i jos 1 osobu u Atini.',
-               fmt.format({'NUM_PEOPLE': 2,
-        'PERSON': 'Marka',
-        'PLACE': 'Atini'}));
-  assertEquals('Ja vidim Petra i jos 3 osobe u muzeju.',
-               fmt.format({'NUM_PEOPLE': 4,
-        'PERSON': 'Petra',
-        'PLACE': 'muzeju'}));
-  assertEquals('Ja vidim Cibua i jos 99 osoba u bazenu.',
-               fmt.format({'NUM_PEOPLE': 100,
-        'PERSON': 'Cibua',
-        'PLACE': 'bazenu'}));
+  assertEquals(
+      'Ja ne vidim nikoga u Beogradu.',
+      fmt.format({'NUM_PEOPLE': 0, 'PLACE': 'Beogradu'}));
+  assertEquals(
+      'Ja vidim Markusa u Berlinu.',
+      fmt.format({'NUM_PEOPLE': 1, 'PERSON': 'Markusa', 'PLACE': 'Berlinu'}));
+  assertEquals(
+      'Ja vidim Marka i jos 1 osobu u Atini.',
+      fmt.format({'NUM_PEOPLE': 2, 'PERSON': 'Marka', 'PLACE': 'Atini'}));
+  assertEquals(
+      'Ja vidim Petra i jos 3 osobe u muzeju.',
+      fmt.format({'NUM_PEOPLE': 4, 'PERSON': 'Petra', 'PLACE': 'muzeju'}));
+  assertEquals(
+      'Ja vidim Cibua i jos 99 osoba u bazenu.',
+      fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibua', 'PLACE': 'bazenu'}));
 }
 
 function testSerbianSimplePluralNoOffset() {
   stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
-  var fmt = new goog.i18n.MessageFormat('Ja {NUM_PEOPLE, plural, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      'Ja {NUM_PEOPLE, plural, ' +
       '=0 {ne vidim nikoga} ' +
       '=1 {vidim {PERSON}} ' +
       'one {vidim {PERSON} i jos # osobu} ' +
@@ -248,32 +243,29 @@ function testSerbianSimplePluralNoOffset() {
       'other {{PERSON} i jos # osoba}} ' +
       'u {PLACE}.');
 
-  assertEquals('Ja ne vidim nikoga u Beogradu.',
-               fmt.format({'NUM_PEOPLE': 0,
-        'PLACE': 'Beogradu'}));
-  assertEquals('Ja vidim Markusa u Berlinu.',
-               fmt.format({'NUM_PEOPLE': 1,
-        'PERSON': 'Markusa',
-        'PLACE': 'Berlinu'}));
-  assertEquals('Ja vidim Marka i jos 21 osobu u Atini.',
-               fmt.format({'NUM_PEOPLE': 21,
-        'PERSON': 'Marka',
-        'PLACE': 'Atini'}));
-  assertEquals('Ja vidim Petra i jos 3 osobe u muzeju.',
-               fmt.format({'NUM_PEOPLE': 3,
-        'PERSON': 'Petra',
-        'PLACE': 'muzeju'}));
-  assertEquals('Ja vidim Cibua i jos 100 osoba u bazenu.',
-               fmt.format({'NUM_PEOPLE': 100,
-        'PERSON': 'Cibua',
-        'PLACE': 'bazenu'}));
+  assertEquals(
+      'Ja ne vidim nikoga u Beogradu.',
+      fmt.format({'NUM_PEOPLE': 0, 'PLACE': 'Beogradu'}));
+  assertEquals(
+      'Ja vidim Markusa u Berlinu.',
+      fmt.format({'NUM_PEOPLE': 1, 'PERSON': 'Markusa', 'PLACE': 'Berlinu'}));
+  assertEquals(
+      'Ja vidim Marka i jos 21 osobu u Atini.',
+      fmt.format({'NUM_PEOPLE': 21, 'PERSON': 'Marka', 'PLACE': 'Atini'}));
+  assertEquals(
+      'Ja vidim Petra i jos 3 osobe u muzeju.',
+      fmt.format({'NUM_PEOPLE': 3, 'PERSON': 'Petra', 'PLACE': 'muzeju'}));
+  assertEquals(
+      'Ja vidim Cibua i jos 100 osoba u bazenu.',
+      fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibua', 'PLACE': 'bazenu'}));
 }
 
 function testSerbianSelectNestedInPlural() {
   stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
   stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_hr);
 
-  var fmt = new goog.i18n.MessageFormat('{CIRCLES, plural, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{CIRCLES, plural, ' +
       'one {{GENDER, select, ' +
       '  female {{WHO} vas je dodala u njen # kruzok} ' +
       '  other  {{WHO} vas je dodao u njegov # kruzok}}} ' +
@@ -287,22 +279,18 @@ function testSerbianSelectNestedInPlural() {
       '  female {{WHO} vas je dodala u njenih # kruzoka} ' +
       '  other  {{WHO} vas je dodao u njegovih # kruzoka}}}}');
 
-  assertEquals('Jelena vas je dodala u njen 21 kruzok',
-               fmt.format({'GENDER': 'female',
-        'WHO': 'Jelena',
-        'CIRCLES': 21}));
-  assertEquals('Jelena vas je dodala u njena 3 kruzoka',
-               fmt.format({'GENDER': 'female',
-        'WHO': 'Jelena',
-        'CIRCLES': 3}));
-  assertEquals('Jelena vas je dodala u njenih 5 kruzoka',
-               fmt.format({'GENDER': 'female',
-        'WHO': 'Jelena',
-        'CIRCLES': 5}));
-  assertEquals('Milan vas je dodao u njegovih 1.235 kruzoka',
-               fmt.format({'GENDER': 'male',
-        'WHO': 'Milan',
-        'CIRCLES': 1235}));
+  assertEquals(
+      'Jelena vas je dodala u njen 21 kruzok',
+      fmt.format({'GENDER': 'female', 'WHO': 'Jelena', 'CIRCLES': 21}));
+  assertEquals(
+      'Jelena vas je dodala u njena 3 kruzoka',
+      fmt.format({'GENDER': 'female', 'WHO': 'Jelena', 'CIRCLES': 3}));
+  assertEquals(
+      'Jelena vas je dodala u njenih 5 kruzoka',
+      fmt.format({'GENDER': 'female', 'WHO': 'Jelena', 'CIRCLES': 5}));
+  assertEquals(
+      'Milan vas je dodao u njegovih 1.235 kruzoka',
+      fmt.format({'GENDER': 'male', 'WHO': 'Milan', 'CIRCLES': 1235}));
 }
 
 function testFallbackToOtherOptionInPlurals() {
@@ -311,7 +299,8 @@ function testFallbackToOtherOptionInPlurals() {
   // does not.
   stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.arSelect_);
 
-  var fmt = new goog.i18n.MessageFormat('{NUM_MINUTES, plural, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{NUM_MINUTES, plural, ' +
       'other {# minutes}}');
 
   // These numbers exercise all cases for the arabic plural rules.
@@ -324,7 +313,8 @@ function testFallbackToOtherOptionInPlurals() {
 }
 
 function testPoundShowsNumberMinusOffsetInAllCases() {
-  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural, offset:1 ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{SOME_NUM, plural, offset:1 ' +
       '=0 {#} =1 {#} =2 {#}one {#} other {#}}');
 
   assertEquals('-1', fmt.format({'SOME_NUM': '0'}));
@@ -334,56 +324,60 @@ function testPoundShowsNumberMinusOffsetInAllCases() {
 }
 
 function testSpecialCharactersInParamaterDontChangeFormat() {
-  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{SOME_NUM, plural,' +
       'other {# {GROUP}}}');
 
   // Test pound sign.
-  assertEquals('10 group#1',
-               fmt.format({'SOME_NUM': '10', 'GROUP': 'group#1'}));
+  assertEquals(
+      '10 group#1', fmt.format({'SOME_NUM': '10', 'GROUP': 'group#1'}));
   // Test other special characters in parameters, like { and }.
   assertEquals('10 } {', fmt.format({'SOME_NUM': '10', 'GROUP': '} {'}));
 }
 
 function testMissingOrInvalidPluralParameter() {
-  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{SOME_NUM, plural,' +
       'other {result}}');
 
   // Key name doesn't match A != SOME_NUM.
-  assertEquals('Undefined or invalid parameter - SOME_NUM',
-               fmt.format({A: '10'}));
+  assertEquals(
+      'Undefined or invalid parameter - SOME_NUM', fmt.format({A: '10'}));
 
   // Value is not a number.
-  assertEquals('Undefined or invalid parameter - SOME_NUM',
-               fmt.format({'SOME_NUM': 'Value'}));
+  assertEquals(
+      'Undefined or invalid parameter - SOME_NUM',
+      fmt.format({'SOME_NUM': 'Value'}));
 }
 
 function testMissingSelectParameter() {
-  var fmt = new goog.i18n.MessageFormat('{GENDER, select,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{GENDER, select,' +
       'other {result}}');
 
   // Key name doesn't match A != GENDER.
-  assertEquals('Undefined parameter - GENDER',
-               fmt.format({A: 'female'}));
+  assertEquals('Undefined parameter - GENDER', fmt.format({A: 'female'}));
 }
 
 function testMissingSimplePlaceholder() {
   var fmt = new goog.i18n.MessageFormat('{result}');
 
   // Key name doesn't match A != result.
-  assertEquals('Undefined parameter - result',
-               fmt.format({A: 'none'}));
+  assertEquals('Undefined parameter - result', fmt.format({A: 'none'}));
 }
 
 function testPluralWithIgnorePound() {
-  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{SOME_NUM, plural,' +
       'other {# {GROUP}}}');
 
   // Test pound sign.
-  assertEquals('# group#1',
-               fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': 'group#1'}));
+  assertEquals(
+      '# group#1',
+      fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': 'group#1'}));
   // Test other special characters in parameters, like { and }.
-  assertEquals('# } {',
-      fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': '} {'}));
+  assertEquals(
+      '# } {', fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': '} {'}));
 }
 
 function testSimplePluralWithIgnorePound() {
@@ -394,36 +388,38 @@ function testSimplePluralWithIgnorePound() {
       'one {{PERSON} and one other person in {PLACE}.} ' +
       'other {{PERSON} and # other people in {PLACE}.}}');
 
-  assertEquals('I see Cibu and # other people in the cubes.',
-               fmt.formatIgnoringPound({'NUM_PEOPLE': 100,
-        'PERSON': 'Cibu',
-        'PLACE': 'the cubes'}));
+  assertEquals(
+      'I see Cibu and # other people in the cubes.',
+      fmt.formatIgnoringPound(
+          {'NUM_PEOPLE': 100, 'PERSON': 'Cibu', 'PLACE': 'the cubes'}));
 }
 
 function testSimpleOrdinal() {
-  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{NUM_FLOOR, selectordinal, ' +
       'one {Take the elevator to the #st floor.}' +
       'two {Take the elevator to the #nd floor.}' +
       'few {Take the elevator to the #rd floor.}' +
       'other {Take the elevator to the #th floor.}}');
 
-  assertEquals('Take the elevator to the 1st floor.',
-               fmt.format({'NUM_FLOOR': 1}));
-  assertEquals('Take the elevator to the 2nd floor.',
-               fmt.format({'NUM_FLOOR': 2}));
-  assertEquals('Take the elevator to the 3rd floor.',
-               fmt.format({'NUM_FLOOR': 3}));
-  assertEquals('Take the elevator to the 4th floor.',
-               fmt.format({'NUM_FLOOR': 4}));
-  assertEquals('Take the elevator to the 23rd floor.',
-               fmt.format({'NUM_FLOOR': 23}));
+  assertEquals(
+      'Take the elevator to the 1st floor.', fmt.format({'NUM_FLOOR': 1}));
+  assertEquals(
+      'Take the elevator to the 2nd floor.', fmt.format({'NUM_FLOOR': 2}));
+  assertEquals(
+      'Take the elevator to the 3rd floor.', fmt.format({'NUM_FLOOR': 3}));
+  assertEquals(
+      'Take the elevator to the 4th floor.', fmt.format({'NUM_FLOOR': 4}));
+  assertEquals(
+      'Take the elevator to the 23rd floor.', fmt.format({'NUM_FLOOR': 23}));
   // Esoteric example.
-  assertEquals('Take the elevator to the 0th floor.',
-               fmt.format({'NUM_FLOOR': 0}));
+  assertEquals(
+      'Take the elevator to the 0th floor.', fmt.format({'NUM_FLOOR': 0}));
 }
 
 function testOrdinalWithNegativeValue() {
-  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{NUM_FLOOR, selectordinal, ' +
       'one {Take the elevator to the #st floor.}' +
       'two {Take the elevator to the #nd floor.}' +
       'few {Take the elevator to the #rd floor.}' +
@@ -432,33 +428,37 @@ function testOrdinalWithNegativeValue() {
   try {
     fmt.format({'NUM_FLOOR': -2});
   } catch (e) {
-    assertEquals('Assertion failed: Argument index smaller than offset.',
-                 e.message);
+    assertEquals(
+        'Assertion failed: Argument index smaller than offset.', e.message);
     return;
   }
   fail('Expected an error to be thrown');
 }
 
 function testSimpleOrdinalWithIgnorePound() {
-  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{NUM_FLOOR, selectordinal, ' +
       'one {Take the elevator to the #st floor.}' +
       'two {Take the elevator to the #nd floor.}' +
       'few {Take the elevator to the #rd floor.}' +
       'other {Take the elevator to the #th floor.}}');
 
-  assertEquals('Take the elevator to the #th floor.',
-               fmt.formatIgnoringPound({'NUM_FLOOR': 100}));
+  assertEquals(
+      'Take the elevator to the #th floor.',
+      fmt.formatIgnoringPound({'NUM_FLOOR': 100}));
 }
 
 function testMissingOrInvalidOrdinalParameter() {
-  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, selectordinal,' +
+  var fmt = new goog.i18n.MessageFormat(
+      '{SOME_NUM, selectordinal,' +
       'other {result}}');
 
   // Key name doesn't match A != SOME_NUM.
-  assertEquals('Undefined or invalid parameter - SOME_NUM',
-               fmt.format({A: '10'}));
+  assertEquals(
+      'Undefined or invalid parameter - SOME_NUM', fmt.format({A: '10'}));
 
   // Value is not a number.
-  assertEquals('Undefined or invalid parameter - SOME_NUM',
-               fmt.format({'SOME_NUM': 'Value'}));
+  assertEquals(
+      'Undefined or invalid parameter - SOME_NUM',
+      fmt.format({'SOME_NUM': 'Value'}));
 }

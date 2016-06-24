@@ -18,6 +18,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.MockRandom');
 goog.provide('goog.testing.MockRandom');
 
 goog.require('goog.Disposable');
@@ -147,7 +148,7 @@ goog.testing.MockRandom.prototype.disposeInternal = function() {
  * @param {boolean} strictlyFromSequence Whether to throw an exception when
  *     Math.random() is called when there is nothing left in the sequence.
  */
-goog.testing.MockRandom.prototype.setStrictlyFromSequence =
-    function(strictlyFromSequence) {
+goog.testing.MockRandom.prototype.setStrictlyFromSequence = function(
+    strictlyFromSequence) {
   this.strictlyFromSequence_ = strictlyFromSequence;
 };

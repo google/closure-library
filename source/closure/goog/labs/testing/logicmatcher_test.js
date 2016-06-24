@@ -24,10 +24,10 @@ goog.require('goog.labs.testing.assertThat');
 goog.require('goog.testing.jsunit');
 
 function testAnyOf() {
-  goog.labs.testing.assertThat(5, anyOf(greaterThan(4), lessThan(3)),
-      '5 > 4 || 5 < 3');
-  goog.labs.testing.assertThat(2, anyOf(greaterThan(4), lessThan(3)),
-      '2 > 4 || 2 < 3');
+  goog.labs.testing.assertThat(
+      5, anyOf(greaterThan(4), lessThan(3)), '5 > 4 || 5 < 3');
+  goog.labs.testing.assertThat(
+      2, anyOf(greaterThan(4), lessThan(3)), '2 > 4 || 2 < 3');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(4, anyOf(greaterThan(5), lessThan(2)));
@@ -35,8 +35,8 @@ function testAnyOf() {
 }
 
 function testAllOf() {
-  goog.labs.testing.assertThat(5, allOf(greaterThan(4), lessThan(6)),
-      '5 > 4 && 5 < 6');
+  goog.labs.testing.assertThat(
+      5, allOf(greaterThan(4), lessThan(6)), '5 > 4 && 5 < 6');
 
   assertMatcherError(function() {
     goog.labs.testing.assertThat(4, allOf(lessThan(5), lessThan(3)));

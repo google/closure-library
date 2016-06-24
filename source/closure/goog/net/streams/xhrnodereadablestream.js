@@ -103,7 +103,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.removeListener = function(
     eventType, callback) {
   var callbacks = this.callbackMap_[eventType];
   if (callbacks) {
-    goog.array.remove(callbacks, callback);   // keep the empty array
+    goog.array.remove(callbacks, callback);  // keep the empty array
   }
 
   var onceCallbacks = this.callbackOnceMap_[eventType];
@@ -139,19 +139,19 @@ goog.net.streams.XhrNodeReadableStream.prototype.once = function(
  * @private
  */
 goog.net.streams.XhrNodeReadableStream.prototype.onData_ = function(messages) {
-  var callbacks = this.callbackMap_[
-      goog.net.streams.NodeReadableStream.EventType.DATA];
+  var callbacks =
+      this.callbackMap_[goog.net.streams.NodeReadableStream.EventType.DATA];
   if (callbacks) {
     this.doMessages_(messages, callbacks);
   }
 
-  var onceCallbacks = this.callbackOnceMap_[
-      goog.net.streams.NodeReadableStream.EventType.DATA];
+  var onceCallbacks =
+      this.callbackOnceMap_[goog.net.streams.NodeReadableStream.EventType.DATA];
   if (onceCallbacks) {
     this.doMessages_(messages, onceCallbacks);
   }
-  this.callbackOnceMap_[
-      goog.net.streams.NodeReadableStream.EventType.DATA] = [];
+  this.callbackOnceMap_[goog.net.streams.NodeReadableStream.EventType.DATA] =
+      [];
 };
 
 
@@ -237,9 +237,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
 
   var onceCallbacks = this.callbackOnceMap_[eventType];
   if (onceCallbacks) {
-    goog.array.forEach(onceCallbacks, function(callback) {
-      callback();
-    });
+    goog.array.forEach(onceCallbacks, function(callback) { callback(); });
   }
 
   this.callbackOnceMap_[eventType] = [];

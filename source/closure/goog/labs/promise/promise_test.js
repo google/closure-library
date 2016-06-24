@@ -41,7 +41,8 @@ function whileLoopIterator(cond, body) {
         } else {
           return {done: false, value: body()};
         }
-      }
+      },
+      'throw': function(error) { throw error; }
     };
   };
 }
@@ -60,21 +61,14 @@ var mockClock;
 var sentinel = {};
 
 testSuite({
-  setUp: function() {
-    mockClock = new MockClock();
-  },
+  setUp: function() { mockClock = new MockClock(); },
 
-  tearDown: function() {
-    mockClock.uninstall();
-  },
+  tearDown: function() { mockClock.uninstall(); },
 
   testWhileLoopIterator: function() {
     var counter = 3;
-    var it = whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-    })();
+    var it = whileLoopIterator(
+        function() { return counter > 0; }, function() { --counter; })();
     assertEquals(3, counter);
     assertFalse(it.next().done);
     assertEquals(2, counter);
@@ -89,28 +83,31 @@ testSuite({
   testRun: function() {
     var counter = 5;
     var resolved = 0;
-    return promise.run(whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-      return Promise.resolve().then(function() { ++resolved; });
-    })).then(function(result) {
-      assertFalse(goog.isDef(result));
-      assertEquals(0, counter);
-      assertEquals(5, resolved);
-    });
+    return promise
+        .run(
+            whileLoopIterator(
+                function() { return counter > 0; },
+                function() {
+                  --counter;
+                  return Promise.resolve().then(function() { ++resolved; });
+                }))
+        .then(function(result) {
+          assertFalse(goog.isDef(result));
+          assertEquals(0, counter);
+          assertEquals(5, resolved);
+        });
   },
 
   testRunWithNonPromise: function() {
     var counter = 5;
-    return promise.run(whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-    })).then(function(result) {
-      assertFalse(goog.isDef(result));
-      assertEquals(0, counter);
-    });
+    return promise
+        .run(
+            whileLoopIterator(
+                function() { return counter > 0; }, function() { --counter; }))
+        .then(function(result) {
+          assertFalse(goog.isDef(result));
+          assertEquals(0, counter);
+        });
   },
 
   testRunWithMockClock: function() {
@@ -119,12 +116,17 @@ testSuite({
     var counter = 3;
     var innerResolved = 0;
     var outerResolved = false;
-    promise.run(whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-      return Timer.promise(10).then(function() { ++innerResolved; });
-    })).then(function() { outerResolved = true; });
+    promise
+        .run(
+            whileLoopIterator(
+                function() { return counter > 0; },
+                function() {
+                  --counter;
+                  return Timer.promise(10).then(function() {
+                    ++innerResolved;
+                  });
+                }))
+        .then(function() { outerResolved = true; });
 
     assertEquals(3, counter);
     assertEquals(0, innerResolved);
@@ -157,61 +159,63 @@ testSuite({
 
   testRunWithRejection: function() {
     var counter = 5;
-    return promise.run(whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-      if (counter == 2) {
-        return Promise.reject(sentinel);
-      }
-      return Promise.resolve();
-    })).then(shouldNotCall, function(error) {
-      assertEquals(2, counter);
-      assertEquals(sentinel, error);
-    });
+    return promise
+        .run(
+            whileLoopIterator(
+                function() { return counter > 0; },
+                function() {
+                  --counter;
+                  if (counter == 2) {
+                    return Promise.reject(sentinel);
+                  }
+                  return Promise.resolve();
+                }))
+        .then(shouldNotCall, function(error) {
+          assertEquals(2, counter);
+          assertEquals(sentinel, error);
+        });
   },
 
   testRunWithException: function() {
     var counter = 5;
-    return promise.run(whileLoopIterator(function() {
-      return counter > 0;
-    }, function() {
-      --counter;
-      if (counter == 2) {
-        throw sentinel;
-      }
-      return Promise.resolve();
-    })).then(shouldNotCall, function(error) {
-      assertEquals(2, counter);
-      assertEquals(sentinel, error);
-    });
+    return promise
+        .run(
+            whileLoopIterator(
+                function() { return counter > 0; },
+                function() {
+                  --counter;
+                  if (counter == 2) {
+                    throw sentinel;
+                  }
+                  return Promise.resolve();
+                }))
+        .then(shouldNotCall, function(error) {
+          assertEquals(2, counter);
+          assertEquals(sentinel, error);
+        });
   },
 
   testRunWithImmediateException: function() {
-    return promise.run(whileLoopIterator(function() {
-      throw sentinel;
-    }, function() {
-    })).then(shouldNotCall, function(error) {
-      assertEquals(sentinel, error);
-    });
+    return promise
+        .run(whileLoopIterator(function() { throw sentinel; }, function() {}))
+        .then(
+            shouldNotCall, function(error) { assertEquals(sentinel, error); });
   },
 
   testRunWithImmediateRejection: function() {
-    return promise.run(whileLoopIterator(function() {
-      return true;
-    }, function() {
-      return Promise.reject(sentinel);
-    })).then(shouldNotCall, function(error) {
-      assertEquals(sentinel, error);
-    });
+    return promise
+        .run(
+            whileLoopIterator(
+                function() { return true; },
+                function() { return Promise.reject(sentinel); }))
+        .then(
+            shouldNotCall, function(error) { assertEquals(sentinel, error); });
   },
 
   testRunWithoutYield: function() {
-    return promise.run(whileLoopIterator(function() {
-      return false;
-    }, goog.nullFunction)).then(function(result) {
-      assertFalse(goog.isDef(result));
-    });
+    return promise
+        .run(whileLoopIterator(function() { return false; }, goog.nullFunction))
+        .then(function(result) { assertFalse(goog.isDef(result)); });
   },
 
   testRunYieldWithValue: function() {
@@ -222,27 +226,67 @@ testSuite({
     //     return x + y;
     //   }).then(result => assertEquals(3, result));
 
-    return promise.run(function() {
-      var step = 0;
-      var x, y;
-      return {
-        next: function(nextArg) {
-          switch (++step) {
-            case 1:
+    return promise
+        .run(function() {
+          var step = 0;
+          var x, y;
+          return {
+            next: function(nextArg) {
+              switch (++step) {
+                case 1:
+                  return {done: false, value: Promise.resolve(1)};
+                case 2:
+                  x = nextArg;
+                  return {done: false, value: Promise.resolve(2)};
+                case 3:
+                  y = nextArg;
+                  return {done: true, value: x + y};
+                default:
+                  return {done: true};
+              }
+            }
+          };
+        })
+        .then(function(result) { assertEquals(3, result); });
+  },
+
+  testRunYieldWithThrow: function() {
+    // ES6 version:
+    //   return promise.run(function*() {
+    //     var x = 0;
+    //     try {
+    //       x = yield Promise.reject('error');
+    //     catch (e) {
+    //       x = yield Promise.resolve(1);
+    //     }
+    //     var y = yield Promise.resolve(2);
+    //     return x + y;
+    //   }).then(result => assertEquals(3, result));
+
+    return promise
+        .run(function() {
+          var step = 0;
+          var x, y;
+          return {
+            next: function(nextArg) {
+              switch (++step) {
+                case 1:
+                  return {done: false, value: Promise.reject('error')};
+                case 2:
+                  x = nextArg;
+                  return {done: false, value: Promise.resolve(2)};
+                case 3:
+                  y = nextArg;
+                  return {done: true, value: x + y};
+                default:
+                  return {done: true};
+              }
+            },
+            'throw': function(error) {
               return {done: false, value: Promise.resolve(1)};
-            case 2:
-              x = nextArg;
-              return {done: false, value: Promise.resolve(2)};
-            case 3:
-              y = nextArg;
-              return {done: true, value: x + y};
-            default:
-              return {done: true};
-          }
-        }
-      };
-    }).then(function(result) {
-      assertEquals(3, result);
-    });
+            }
+          };
+        })
+        .then(function(result) { assertEquals(3, result); });
   }
 });

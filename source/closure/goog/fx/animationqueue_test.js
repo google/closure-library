@@ -49,20 +49,22 @@ function testParallelEvents() {
   var playEvents = 0, beginEvents = 0, resumeEvents = 0, pauseEvents = 0;
   var endEvents = 0, stopEvents = 0, finishEvents = 0;
 
-  goog.events.listen(anim, goog.fx.Transition.EventType.PLAY, function() {
-    ++playEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN, function() {
-    ++beginEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.PLAY, function() { ++playEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.BEGIN, function() { ++beginEvents; });
   goog.events.listen(anim, goog.fx.Transition.EventType.RESUME, function() {
-    ++resumeEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.PAUSE, function() {
-    ++pauseEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.END, function() {
-    ++endEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.STOP, function() {
-    ++stopEvents; });
+    ++resumeEvents;
+  });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.PAUSE, function() { ++pauseEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.END, function() { ++endEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.STOP, function() { ++stopEvents; });
   goog.events.listen(anim, goog.fx.Transition.EventType.FINISH, function() {
-    ++finishEvents; });
+    ++finishEvents;
+  });
 
   // PLAY, BEGIN
   anim.play();
@@ -109,20 +111,22 @@ function testSerialEvents() {
   var playEvents = 0, beginEvents = 0, resumeEvents = 0, pauseEvents = 0;
   var endEvents = 0, stopEvents = 0, finishEvents = 0;
 
-  goog.events.listen(anim, goog.fx.Transition.EventType.PLAY, function() {
-    ++playEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN, function() {
-    ++beginEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.PLAY, function() { ++playEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.BEGIN, function() { ++beginEvents; });
   goog.events.listen(anim, goog.fx.Transition.EventType.RESUME, function() {
-    ++resumeEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.PAUSE, function() {
-    ++pauseEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.END, function() {
-    ++endEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.STOP, function() {
-    ++stopEvents; });
+    ++resumeEvents;
+  });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.PAUSE, function() { ++pauseEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.END, function() { ++endEvents; });
+  goog.events.listen(
+      anim, goog.fx.Transition.EventType.STOP, function() { ++stopEvents; });
   goog.events.listen(anim, goog.fx.Transition.EventType.FINISH, function() {
-    ++finishEvents; });
+    ++finishEvents;
+  });
 
   // PLAY, BEGIN
   anim.play();

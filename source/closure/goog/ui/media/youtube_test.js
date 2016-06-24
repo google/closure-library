@@ -28,8 +28,8 @@ var YOUTUBE_URL = 'http://www.youtube.com/watch?v=' + YOUTUBE_VIDEO_ID;
 var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {
-  var model = new goog.ui.media.YoutubeModel(
-      YOUTUBE_VIDEO_ID, 'evolution of dance');
+  var model =
+      new goog.ui.media.YoutubeModel(YOUTUBE_VIDEO_ID, 'evolution of dance');
   control = goog.ui.media.Youtube.newControl(model);
 }
 
@@ -39,8 +39,8 @@ function tearDown() {
 
 function testBasicRendering() {
   control.render(parent);
-  var el = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.Youtube.CSS_CLASS, parent);
+  var el = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.Youtube.CSS_CLASS, parent);
   assertEquals(1, el.length);
   assertEquals(YOUTUBE_URL, control.getDataModel().getUrl());
 }
@@ -48,28 +48,20 @@ function testBasicRendering() {
 function testParsingUrl() {
   // a simple link
   assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'http://www.youtube.com/watch?v=uddeBVmKTqE');
+      'uddeBVmKTqE', 'http://www.youtube.com/watch?v=uddeBVmKTqE');
   // a simple mobile link
   assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'http://m.youtube.com/watch?v=uddeBVmKTqE');
+      'uddeBVmKTqE', 'http://m.youtube.com/watch?v=uddeBVmKTqE');
   // a secure mobile link
   assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'https://m.youtube.com/watch?v=uddeBVmKTqE');
+      'uddeBVmKTqE', 'https://m.youtube.com/watch?v=uddeBVmKTqE');
   // a simple short link
-  assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'http://youtu.be/uddeBVmKTqE');
+  assertExtractsCorrectly('uddeBVmKTqE', 'http://youtu.be/uddeBVmKTqE');
   // a secure short link
-  assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'https://youtu.be/uddeBVmKTqE');
+  assertExtractsCorrectly('uddeBVmKTqE', 'https://youtu.be/uddeBVmKTqE');
   // a secure short link with a CGI parameter
   assertExtractsCorrectly(
-      'uddeBVmKTqE',
-      'https://youtu.be/uddeBVmKTqE?feature=channel');
+      'uddeBVmKTqE', 'https://youtu.be/uddeBVmKTqE?feature=channel');
   // a channel link
   assertExtractsCorrectly(
       '4Pb9e1uu3EQ',
@@ -92,8 +84,7 @@ function testParsingUrl() {
       'http://www.youtube.com/watch?v=7qL2PuLF0SI&feature=related');
   // with a timestamp
   assertExtractsCorrectly(
-      'siJZXtsdfsf',
-      'http://www.youtube.com/watch?v=siJZXtsdfsf#t=2m59s');
+      'siJZXtsdfsf', 'http://www.youtube.com/watch?v=siJZXtsdfsf#t=2m59s');
   // with a timestamp and multiple hash params
   assertExtractsCorrectly(
       'siJZXtabdef',
@@ -123,13 +114,11 @@ function testParsingUrl() {
       'http://www.youtube.com/watch?usg=AFQjCNFf90T3fekgdVBmPp-Wgya5_CTSaw' +
           '&v=qbce2yN81mE&source=video&vgc=rss');
   assertExtractsCorrectly(
-      'Lc-8onVA5Jk',
-      'http://www.youtube.com/watch?v=Lc-8onVA5Jk&feature=dir');
+      'Lc-8onVA5Jk', 'http://www.youtube.com/watch?v=Lc-8onVA5Jk&feature=dir');
   // Last character in the video ID is '-' (a non-word but valid character)
   // and the video ID is the last query parameter
   assertExtractsCorrectly(
-      'Lc-8onV5Jk-',
-      'http://www.youtube.com/watch?v=Lc-8onV5Jk-');
+      'Lc-8onV5Jk-', 'http://www.youtube.com/watch?v=Lc-8onV5Jk-');
 
   var invalidUrls = [
     'http://invalidUrl/watch?v=dMH0bHeiRNg',
@@ -162,19 +151,17 @@ function testCreatingModel() {
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var preview = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
+      goog.dom.TagName.IMG, goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
       parent);
   assertEquals(1, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Youtube.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.FlashObject.CSS_CLASS);
+  var flash = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS);
   assertEquals(0, flash.length);
 }
 
@@ -182,19 +169,17 @@ function testCreatingDomOnSelectedState() {
   control.render(parent);
   control.setSelected(true);
   var preview = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.media.Youtube.CSS_CLASS + '-preview',
+      goog.dom.TagName.IMG, goog.ui.media.Youtube.CSS_CLASS + '-preview',
       parent);
   assertEquals(0, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Youtube.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.FlashObject.CSS_CLASS, parent);
+  var flash = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }
 
@@ -203,46 +188,42 @@ function testSettingSelectedStateAfterRender() {
   control.setSelected(true);
 
   var preview = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.media.Youtube.CSS_CLASS + '-preview',
+      goog.dom.TagName.IMG, goog.ui.media.Youtube.CSS_CLASS + '-preview',
       parent);
   assertEquals(0, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Youtube.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
-  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.FlashObject.CSS_CLASS, parent);
+  var flash = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 
   control.setSelected(false);
 
   var preview = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG,
-      goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
+      goog.dom.TagName.IMG, goog.ui.media.Youtube.CSS_CLASS + '-thumbnail0',
       parent);
   assertEquals(1, preview.length);
 
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Youtube.CSS_CLASS + '-caption',
+      goog.dom.TagName.DIV, goog.ui.media.Youtube.CSS_CLASS + '-caption',
       parent);
   assertEquals(1, caption.length);
 
   // setting select as false doesn't actually remove the flash movie from
   // the DOM tree, which means that setting selected to true won't actually
   // restart the movie. TODO(user): fix this.
-  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.FlashObject.CSS_CLASS, parent);
+  var flash = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 
   control.setSelected(true);
 
-  var flash = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.DIV,
-      goog.ui.media.FlashObject.CSS_CLASS, parent);
+  var flash = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
   assertEquals(1, flash.length);
 }
 

@@ -1,0 +1,141 @@
+---
+{edit_path: doc/develop/get-started.md, layout: article, page: get-started, section: 1-guide,
+  title: Get Started with the Closure Library}
+---
+{% raw %}
+<!-- Documentation licensed under CC BY 4.0 -->
+
+<!-- License available at https://creativecommons.org/licenses/by/4.0/ -->
+
+<p>This get started guide is designed to teach you some fundamental Closure
+development concepts in the context of creating your first Closure application.
+This guide also provides the steps common to a Closure development workflow.</p>
+
+<a id="download_the_closure_library"></a>
+<h2 id="download-the-closure-library">Download the Closure library</h2>
+
+<p>Execute the following command from the command line to download the Closure
+Library from the Git repository:</p>
+
+<pre><code>git clone https://github.com/google/closure-library
+</code></pre>
+
+<p>A directory named <code>closure-library</code> is created. This directory contains the
+Closure Library code.</p>
+
+<a id="create_closure_javascript"></a>
+<h2 id="create-closure-javascript">Create Closure JavaScript</h2>
+
+<p>Create a <code>hello.js</code> JavaScript file in <code>path/to/myapp/</code> with the
+following contents:</p>
+
+<pre><code class="lang-javascript no-auto-prettify"><span class=stx-comment>/**</span>
+<span class=stx-comment> * @fileoverview Closure getting started tutorial code example.</span>
+<span class=stx-comment> */</span>
+goog.require(<span class=stx-string>'goog.dom'</span>);
+
+<span class=stx-comment>/**</span>
+<span class=stx-comment> * Appends an `h1` tag to the body with the message &quot;Hello world!&quot;.</span>
+<span class=stx-comment> * @export</span>
+<span class=stx-comment> */</span>
+<span class=stx-keyword>function</span> sayHi() {
+  <span class=stx-keyword>var</span> newHeader = goog.dom.createDom(<span class=stx-string>'h1'</span>, {<span class=stx-string>'style'</span>: <span class=stx-string>'background-color:#EEE'</span>},
+    <span class=stx-string>'Hello world!'</span>);
+  goog.dom.appendChild(document.body, newHeader);
+}
+</code></pre>
+
+<p>The <code>hello.js</code> JavaScript calls two Closure Library functions:
+<code>goog.dom.createDom()</code> and <code>goog.dom.appendChild()</code>. These functions are defined
+in the Closure Library's <code>closure/goog/dom/dom.js</code> file. The next steps
+explains how the correct files are loaded to provide access these functions.</p>
+
+<a id="create_an_html_file"></a>
+<h2 id="create-an-html-file">Create an HTML file</h2>
+
+<p>Create a <code>hello.html</code> file in <code>path/to/myapp/</code> with the
+following contents::</p>
+
+<pre><code class="lang-javascript no-auto-prettify">&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src=<span class=stx-string>&quot;closure/goog/base.js&quot;</span>&gt;&lt;/script&gt;
+    &lt;script src=<span class=stx-string>&quot;hello.js&quot;</span>&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body onload=&quot;sayHi()&quot;&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>The first thing this HTML file does is to load <code>base.js</code> which defines the
+function <code>goog.require</code> and other core functionality. Then the HTML file loads
+<code>hello.js</code> (from step 2) which calls <code>goog.require()</code>
+(<code>goog.require(&#39;goog.dom&#39;)</code>) to load <code>dom.js</code> (where <code>goog.dom.createDom()</code> and
+<code>goog.dom.appendChild()</code> are defined). Typically a single <code>goog.require()</code>
+statement will load a JavaScript file and all of its transitive dependencies.</p>
+
+<p>The Closure Library loads required files by dynamically adding a script tag to
+the document for each needed Closure Library file.</p>
+
+<a id="test_your_app_with_a_web_server"></a>
+<h2 id="test-your-app-with-a-web-server">Test your app with a web server</h2>
+
+<p>Use a simple HTTP server, such as the <a href="https://nodejs.org/en/" rel="noreferrer">node.js</a> or
+<a href="https://docs.python.org/2/library/simplehttpserver.html" rel="noreferrer">python simple http server</a>
+to test your application.</p>
+
+<p>For example, start a simple server in your project directory with:</p>
+
+<pre><code>python -m SimpleHTTPServer 8000
+</code></pre>
+
+<p>And visit localhost:8000/path/to/myapp/hello.html.</p>
+
+<a id="compile_your_app"></a>
+<h2 id="compile-your-app">Compile your app</h2>
+
+<p>Use the Closure compiler to compile your application when your app is ready for
+production. The Closure Compiler (also known as JSCompiler) creates a
+single-file version of the application library. This file includes all the
+dependencies your application needs, but  shortens identifier names where
+possible to minimize the size of the code and the time it takes to transmit
+over the network. In addition, the Closure Compiler performs type checking,
+removes dead code, and applies optimizations.</p>
+
+<p>To compile your application:</p>
+
+<ol>
+<li><p>Download and install the latest release of the Closure compiler from the
+<a href="https://github.com/google/closure-compiler" rel="noreferrer">Getting Started section of the compiler&#39;s Git Hub page</a>.</p></li>
+<li><p>Execute the closure compiler on your JavaScript file:</p>
+
+<pre><code>java -jar compiler.jar --js hello.js --js_output_file hello-compiled_dev.js
+</code></pre>
+
+<p><strong>Note:</strong> You can compile multiple JavaScript files at once using the Closure
+Compiler. For example:</p>
+
+<pre><code>java -jar compiler.jar --js_output_file=out.js in1.js in2.js in3.js ...
+</code></pre></li>
+<li><p>Reference the compiled file in your HTML file without using
+<code>base.js</code> to load the dependencies individually (<code>hello_compiled.js</code> includes
+<code>hello.js</code> as well as all of its requirements, in compiled form):</p></li>
+</ol>
+
+<pre><code class="lang-javascript no-auto-prettify">&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src=<span class=stx-string>&quot;/hello_compiled_dev.js&quot;</span>&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body onload=&quot;sayHi()&quot;&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Refer to <a href="https://developers.google.com/closure/compiler/docs/gettingstarted_app#the-hello-world-of%20the-closure-compiler-application">Getting Started with the Closure Compiler Application</a>
+for more information on the Closure Compiler.</p>
+
+<a id="next_steps"></a>
+<h2 id="next-steps">Next Steps</h2>
+
+<p>Continue on with <a href="deps-files.md">Create a Deps File</a> to learn about Closure
+Library namespaces, dependency management, and dependency files.</p>
+{% endraw %}

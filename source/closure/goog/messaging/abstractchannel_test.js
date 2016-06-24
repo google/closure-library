@@ -47,36 +47,32 @@ function testIsConnected() {
 
 function testDeliverString() {
   channel.registerService(
-      'foo',
-      asyncMockControl.asyncAssertEquals(
-          'should pass string to service', 'bar'),
+      'foo', asyncMockControl.asyncAssertEquals(
+                 'should pass string to service', 'bar'),
       false /* opt_json */);
   channel.deliver('foo', 'bar');
 }
 
 function testDeliverDeserializedString() {
   channel.registerService(
-      'foo',
-      asyncMockControl.asyncAssertEquals(
-          'should pass string to service', '{"bar":"baz"}'),
+      'foo', asyncMockControl.asyncAssertEquals(
+                 'should pass string to service', '{"bar":"baz"}'),
       false /* opt_json */);
   channel.deliver('foo', {bar: 'baz'});
 }
 
 function testDeliverObject() {
   channel.registerService(
-      'foo',
-      asyncMockControl.asyncAssertEquals(
-          'should pass string to service', {bar: 'baz'}),
+      'foo', asyncMockControl.asyncAssertEquals(
+                 'should pass string to service', {bar: 'baz'}),
       true /* opt_json */);
   channel.deliver('foo', {bar: 'baz'});
 }
 
 function testDeliverSerializedObject() {
   channel.registerService(
-      'foo',
-      asyncMockControl.asyncAssertEquals(
-          'should pass string to service', {bar: 'baz'}),
+      'foo', asyncMockControl.asyncAssertEquals(
+                 'should pass string to service', {bar: 'baz'}),
       true /* opt_json */);
   channel.deliver('foo', '{"bar":"baz"}');
 }

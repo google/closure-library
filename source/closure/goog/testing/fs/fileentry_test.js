@@ -43,8 +43,8 @@ function testIsDirectory() {
 }
 
 function testFile() {
-  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
-                                               'test', 'hello world');
+  var testFile =
+      new goog.testing.fs.FileEntry(fs, fs.getRoot(), 'test', 'hello world');
   return testFile.file().then(function(f) {
     assertEquals('test', f.name);
     assertEquals('hello world', f.toString());
@@ -55,13 +55,11 @@ function testGetLastModified() {
   // Advance the clock to a known time.
   mockClock.install();
   mockClock.tick(53);
-  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
-                                               'timeTest', 'hello world');
-  var promise = testFile.getLastModified().then(function(date) {
-    assertEquals(53, date.getTime());
-  }).thenAlways(function() {
-    mockClock.uninstall();
-  });
+  var testFile = new goog.testing.fs.FileEntry(
+      fs, fs.getRoot(), 'timeTest', 'hello world');
+  var promise = testFile.getLastModified()
+                    .then(function(date) { assertEquals(53, date.getTime()); })
+                    .thenAlways(function() { mockClock.uninstall(); });
   mockClock.tick();
   return promise;
 }
@@ -70,13 +68,13 @@ function testGetMetadata() {
   // Advance the clock to a known time.
   mockClock.install();
   mockClock.tick(54);
-  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
-                                               'timeTest', 'hello world');
-  var promise = testFile.getMetadata().then(function(metadata) {
-    assertEquals(54, metadata.modificationTime.getTime());
-  }).thenAlways(function() {
-    mockClock.uninstall();
-  });
+  var testFile = new goog.testing.fs.FileEntry(
+      fs, fs.getRoot(), 'timeTest', 'hello world');
+  var promise = testFile.getMetadata()
+                    .then(function(metadata) {
+                      assertEquals(54, metadata.modificationTime.getTime());
+                    })
+                    .thenAlways(function() { mockClock.uninstall(); });
   mockClock.tick();
   return promise;
 }

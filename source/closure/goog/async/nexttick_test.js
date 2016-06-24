@@ -78,7 +78,8 @@ function testNextTickSetImmediate() {
       }
     };
     for (var i = 0; i < max; i++) {
-      goog.async.nextTick(goog.partial(counterStep, i), undefined,
+      goog.async.nextTick(
+          goog.partial(counterStep, i), undefined,
           /* opt_useSetImmediate */ true);
     }
     assertTrue(async);
@@ -111,15 +112,9 @@ function testNextTickContext() {
 function testNextTickMockClock() {
   clock = new goog.testing.MockClock(true);
   var result = '';
-  goog.async.nextTick(function() {
-    result += 'a';
-  });
-  goog.async.nextTick(function() {
-    result += 'b';
-  });
-  goog.async.nextTick(function() {
-    result += 'c';
-  });
+  goog.async.nextTick(function() { result += 'a'; });
+  goog.async.nextTick(function() { result += 'b'; });
+  goog.async.nextTick(function() { result += 'c'; });
   assertEquals('', result);
   clock.tick(0);
   assertEquals('abc', result);
@@ -141,9 +136,7 @@ function testNextTickDoesntSwallowError() {
       return false;
     });
 
-    goog.async.nextTick(function() {
-      throw sentinel;
-    });
+    goog.async.nextTick(function() { throw sentinel; });
   });
 }
 
@@ -158,9 +151,8 @@ function testNextTickProtectEntryPoint() {
     // MS Edge will always use goog.global.setImmediate, so ensure we get
     // to setImmediate_ here. See useSetImmediate_ implementation for details on
     // Edge special casing.
-    propertyReplacer.set(goog.async.nextTick, 'useSetImmediate_', function() {
-      return false;
-    });
+    propertyReplacer.set(
+        goog.async.nextTick, 'useSetImmediate_', function() { return false; });
 
     // This is only testing wrapping the callback with the protected entry
     // point, so it's okay to replace this function with a fake.
@@ -170,8 +162,7 @@ function testNextTickProtectEntryPoint() {
         fail('The callback should have thrown an error.');
       } catch (e) {
         assertTrue(errorHandlerCallbackCalled);
-        assertTrue(
-            e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+        assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
       } finally {
         // Restore setImmediate so it doesn't interfere with Promise behavior.
         propertyReplacer.reset();
@@ -195,9 +186,7 @@ function testNextTick_notStarvedBySetTimeout() {
   // ever fires, the IE specific problem does not occur.
   var timeout;
   function busy() {
-    timeout = setTimeout(function() {
-      busy();
-    }, 0);
+    timeout = setTimeout(function() { busy(); }, 0);
   }
   busy();
 
@@ -230,24 +219,20 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
   propertyReplacer.set(window, 'MessageChannel', undefined);
 
   var callbackCalled = false;
-  goog.async.nextTick(function() {
-    callbackCalled = true;
-  });
+  goog.async.nextTick(function() { callbackCalled = true; });
 
   var frame = document.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
-  frame.contentWindow.postMessage('bogus message',
-      window.location.protocol + '//' + window.location.host);
+  frame.contentWindow.postMessage(
+      'bogus message', window.location.protocol + '//' + window.location.host);
 
   var error = null;
-  frame.contentWindow.onerror = function(e) {
-    error = e;
-  };
-  return goog.Timer.promise(3).then(function() {
-    assert('Callback should have been called.', callbackCalled);
-    assertNull('An unexpected error was thrown.', error);
-  }).thenAlways(function() {
-    goog.dom.removeNode(frame);
-  });
+  frame.contentWindow.onerror = function(e) { error = e; };
+  return goog.Timer.promise(3)
+      .then(function() {
+        assert('Callback should have been called.', callbackCalled);
+        assertNull('An unexpected error was thrown.', error);
+      })
+      .thenAlways(function() { goog.dom.removeNode(frame); });
 }
 
 

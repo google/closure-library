@@ -57,19 +57,20 @@ function testCustomClassName() {
   var customClassPalette =
       new goog.ui.HsvaPalette(null, null, null, customClassName);
   customClassPalette.createDom();
-  assertTrue(goog.dom.classlist.contains(customClassPalette.getElement(),
-      customClassName));
+  assertTrue(
+      goog.dom.classlist.contains(
+          customClassPalette.getElement(), customClassName));
 }
 
 function testSetColor() {
   var color = '#abcdef01';
   samplePalette.setColorRgbaHex(color);
-  assertEquals(color,
-      goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
+  assertEquals(
+      color, goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
   color = 'abcdef01';
   samplePalette.setColorRgbaHex(color);
-  assertEquals('#' + color,
-      goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
+  assertEquals(
+      '#' + color, goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
 }
 
 function testRender() {
@@ -82,12 +83,14 @@ function testRender() {
   assertEquals(goog.dom.TagName.DIV, elem.tagName);
 
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
-    assertSameElements('On IE6, the noalpha class must be present',
+    assertSameElements(
+        'On IE6, the noalpha class must be present',
         ['goog-hsva-palette', 'goog-hsva-palette-noalpha'],
         goog.dom.classlist.get(elem));
   } else {
-    assertEquals('The noalpha class must not be present',
-        'goog-hsva-palette', elem.className);
+    assertEquals(
+        'The noalpha class must not be present', 'goog-hsva-palette',
+        elem.className);
   }
 }
 
@@ -96,8 +99,8 @@ function testInputColor() {
   var color = '#00112233';
   samplePalette.inputElement.value = color;
   samplePalette.handleInput(null);
-  assertEquals(color,
-      goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
+  assertEquals(
+      color, goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
 }
 
 function testHandleMouseMoveAlpha() {

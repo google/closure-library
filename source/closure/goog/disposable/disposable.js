@@ -181,9 +181,10 @@ goog.Disposable.prototype.dispose = function() {
     if (goog.Disposable.MONITORING_MODE != goog.Disposable.MonitoringMode.OFF) {
       var uid = goog.getUid(this);
       if (goog.Disposable.MONITORING_MODE ==
-          goog.Disposable.MonitoringMode.PERMANENT &&
+              goog.Disposable.MonitoringMode.PERMANENT &&
           !goog.Disposable.instances_.hasOwnProperty(uid)) {
-        throw Error(this + ' did not call the goog.Disposable base ' +
+        throw Error(
+            this + ' did not call the goog.Disposable base ' +
             'constructor or was disposed of after a clearUndisposedObjects ' +
             'call');
       }
@@ -214,7 +215,7 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
  */
 goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
   if (this.disposed_) {
-    callback.call(opt_scope);
+    goog.isDef(opt_scope) ? callback.call(opt_scope) : callback();
     return;
   }
   if (!this.onDisposeCallbacks_) {

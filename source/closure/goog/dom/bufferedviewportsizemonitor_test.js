@@ -77,13 +77,14 @@ function testWindowResize() {
       'No resize expected before the delay is fired', 0, resizeEventCount);
   timer.tick(1);
   assertEquals('Expected resize after delay', 1, resizeEventCount);
-  assertTrue(goog.math.Size.equals(
-      new goog.math.Size(100, 100), bufferedVsm.getSize()));
+  assertTrue(
+      goog.math.Size.equals(
+          new goog.math.Size(100, 100), bufferedVsm.getSize()));
 }
 
 function testWindowResize_eventBatching() {
-  assertEquals('No resize calls expected before resize events',
-      0, resizeEventCount);
+  assertEquals(
+      'No resize calls expected before resize events', 0, resizeEventCount);
   resize(100, 100);
   timer.tick(RESIZE_DELAY - 1);
   resize(200, 200);
@@ -104,22 +105,25 @@ function testWindowResize_noChange() {
   timer.tick(RESIZE_DELAY);
   assertEquals(
       'No resize expected when size doesn\'t change', 1, resizeEventCount);
-  assertTrue(goog.math.Size.equals(
-      new goog.math.Size(100, 100), bufferedVsm.getSize()));
+  assertTrue(
+      goog.math.Size.equals(
+          new goog.math.Size(100, 100), bufferedVsm.getSize()));
 }
 
 function testWindowResize_previousSize() {
   resize(100, 100);
   timer.tick(RESIZE_DELAY);
   assertEquals(1, resizeEventCount);
-  assertTrue(goog.math.Size.equals(
-      new goog.math.Size(100, 100), bufferedVsm.getSize()));
+  assertTrue(
+      goog.math.Size.equals(
+          new goog.math.Size(100, 100), bufferedVsm.getSize()));
 
   resize(200, 200);
   timer.tick(RESIZE_DELAY);
   assertEquals(2, resizeEventCount);
-  assertTrue(goog.math.Size.equals(
-      new goog.math.Size(200, 200), bufferedVsm.getSize()));
+  assertTrue(
+      goog.math.Size.equals(
+          new goog.math.Size(200, 200), bufferedVsm.getSize()));
 }
 
 function resize(width, height) {

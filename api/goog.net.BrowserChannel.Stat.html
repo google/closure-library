@@ -1,0 +1,38 @@
+---
+{edit_path: '', layout: api, page: goog.net.BrowserChannel.Stat, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.net.BrowserChannel.Stat</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.net.html">goog.net</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/net/browserchannel.js#L722" target="_blank">View Source</a></div><h1 class="title"><div>enum goog.net.BrowserChannel.Stat</div></h1></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code></dl><p>Enum that identifies events for statistics that are interesting to track.
+TODO(user) - Change name not to use Event or use EventTarget</p>
+</div></section><section class="enum-values"><h2>Values</h2><section class="property"><div id="ACTIVE_X_BLOCKED"><dl><dt>ACTIVE_X_BLOCKED<dd><p>ActiveX is blocked by the machine&#39;s admin settings.</p>
+<dl></dl></dl></div><div id="BACKCHANNEL_DEAD"><dl><dt>BACKCHANNEL_DEAD<dd><p>Event indicating that we have determined that our hanging GET is not
+receiving data when it should be. Thus it is dead dead and will be retried.</p>
+<dl></dl></dl></div><div id="BACKCHANNEL_MISSING"><dl><dt>BACKCHANNEL_MISSING<dd><p>Event indicating that the server never received our hanging GET and so it
+is being retried.</p>
+<dl></dl></dl></div><div id="BROWSER_OFFLINE"><dl><dt>BROWSER_OFFLINE<dd><p>The browser declared itself offline during the lifetime of a request, or
+was offline when a request was initially made.</p>
+<dl></dl></dl></div><div id="CHANNEL_BLOCKED"><dl><dt>CHANNEL_BLOCKED<dd><p>Event indicating the channel is blocked by a network administrator.</p>
+<dl></dl></dl></div><div id="CONNECT_ATTEMPT"><dl><dt>CONNECT_ATTEMPT<dd><p>Event indicating a new connection attempt.</p>
+<dl></dl></dl></div><div id="ERROR_NETWORK"><dl><dt>ERROR_NETWORK<dd><p>Event indicating a connection error due to a general network problem.</p>
+<dl></dl></dl></div><div id="ERROR_OTHER"><dl><dt>ERROR_OTHER<dd><p>Event indicating a connection error that isn&#39;t due to a general network
+problem.</p>
+<dl></dl></dl></div><div id="NOPROXY"><dl><dt>NOPROXY<dd><p>Event indicating that no buffering proxy is likely between the client and
+the server.</p>
+<dl></dl></dl></div><div id="PROXY"><dl><dt>PROXY<dd><p>Event indicating that a buffering proxy is likely between the client and
+the server.</p>
+<dl></dl></dl></div><div id="REQUEST_BAD_DATA"><dl><dt>REQUEST_BAD_DATA<dd><p>Event indicating bad data was received</p>
+<dl></dl></dl></div><div id="REQUEST_BAD_STATUS"><dl><dt>REQUEST_BAD_STATUS<dd><p>Event indicating a bad status code was received.</p>
+<dl></dl></dl></div><div id="REQUEST_INCOMPLETE_DATA"><dl><dt>REQUEST_INCOMPLETE_DATA<dd><p>Event indicating incomplete data was received</p>
+<dl></dl></dl></div><div id="REQUEST_NO_DATA"><dl><dt>REQUEST_NO_DATA<dd><p>Event indicating no data was received when data was expected.</p>
+<dl></dl></dl></div><div id="REQUEST_TIMEOUT"><dl><dt>REQUEST_TIMEOUT<dd><p>Event indicating a request timeout.</p>
+<dl></dl></dl></div><div id="REQUEST_UNKNOWN_SESSION_ID"><dl><dt>REQUEST_UNKNOWN_SESSION_ID<dd><p>Event indicating an unknown SID error.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_ONE_FAILED"><dl><dt>TEST_STAGE_ONE_FAILED<dd><p>Event indicating stage one of the test request failed.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_ONE_START"><dl><dt>TEST_STAGE_ONE_START<dd><p>Event indicating the start of test stage one.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_TWO_DATA_BOTH"><dl><dt>TEST_STAGE_TWO_DATA_BOTH<dd><p>Event indicating both pieces of test data were received simultaneously.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_TWO_DATA_ONE"><dl><dt>TEST_STAGE_TWO_DATA_ONE<dd><p>Event indicating the first piece of test data was received.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_TWO_DATA_TWO"><dl><dt>TEST_STAGE_TWO_DATA_TWO<dd><p>Event indicating that the second piece of test data was received and it was
+received separately from the first.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_TWO_FAILED"><dl><dt>TEST_STAGE_TWO_FAILED<dd><p>Event indicating stage two of the test request failed.</p>
+<dl></dl></dl></div><div id="TEST_STAGE_TWO_START"><dl><dt>TEST_STAGE_TWO_START<dd><p>Event indicating the start of test stage two.</p>
+<dl></dl></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

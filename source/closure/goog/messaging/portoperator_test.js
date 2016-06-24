@@ -62,9 +62,9 @@ function makeMockPort(index, port) {
 }
 
 function testConnectSelfToPortViaRequestConnection() {
-  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
-    success: true, name: 'operator', port: makeMockPort(0, 1)
-  });
+  mockChannel1.send(
+      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
+      {success: true, name: 'operator', port: makeMockPort(0, 1)});
   mockControl.$replayAll();
   mockChannel1.receive(
       goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, 'operator');
@@ -74,9 +74,9 @@ function testConnectSelfToPortViaRequestConnection() {
 }
 
 function testConnectSelfToPortViaGetPort() {
-  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
-    success: true, name: 'operator', port: makeMockPort(0, 1)
-  });
+  mockChannel1.send(
+      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
+      {success: true, name: 'operator', port: makeMockPort(0, 1)});
   mockControl.$replayAll();
   var port = operator.dial('1').port_;
   assertObjectEquals({index: 0, port: 2}, port.id);
@@ -84,12 +84,12 @@ function testConnectSelfToPortViaGetPort() {
 }
 
 function testConnectTwoCallers() {
-  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
-    success: true, name: '2', port: makeMockPort(0, 1)
-  });
-  mockChannel2.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
-    success: true, name: '1', port: makeMockPort(0, 2)
-  });
+  mockChannel1.send(
+      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
+      {success: true, name: '2', port: makeMockPort(0, 1)});
+  mockChannel2.send(
+      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
+      {success: true, name: '1', port: makeMockPort(0, 2)});
   mockControl.$replayAll();
   mockChannel1.receive(
       goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, '2');

@@ -29,20 +29,19 @@ function testEncodeInteger() {
 }
 
 function testEncodeByteArray() {
-  assertEquals(-1497024495,
-      goog.crypt.hash32.encodeByteArray([10, 20, 30, 40]));
-  assertEquals(-961586214,
-      goog.crypt.hash32.encodeByteArray([3, 1, 4, 1, 5, 9]));
-  assertEquals(-1482202299,
-      goog.crypt.hash32.encodeByteArray([127, 0, 0, 0, 123, 45]));
-  assertEquals(170907881,
-      goog.crypt.hash32.encodeByteArray([9, 1, 1]));
+  assertEquals(
+      -1497024495, goog.crypt.hash32.encodeByteArray([10, 20, 30, 40]));
+  assertEquals(
+      -961586214, goog.crypt.hash32.encodeByteArray([3, 1, 4, 1, 5, 9]));
+  assertEquals(
+      -1482202299, goog.crypt.hash32.encodeByteArray([127, 0, 0, 0, 123, 45]));
+  assertEquals(170907881, goog.crypt.hash32.encodeByteArray([9, 1, 1]));
 }
 
 function testKnownByteArrays() {
   for (var i = 0; i < byteArrays.length; i++) {
-    assertEquals(byteArrays[i],
-        goog.crypt.hash32.encodeByteArray(createByteArray(i)));
+    assertEquals(
+        byteArrays[i], goog.crypt.hash32.encodeByteArray(createByteArray(i)));
   }
 }
 
@@ -52,24 +51,25 @@ function testEncodeString() {
 }
 
 function testEncodeStringUtf8() {
-  assertEquals(-937588052,
-      goog.crypt.hash32.encodeStringUtf8('Hello, world'));
+  assertEquals(-937588052, goog.crypt.hash32.encodeStringUtf8('Hello, world'));
   assertEquals(-833263351, goog.crypt.hash32.encodeStringUtf8('Sch\xF6n'));
 
-  assertEquals(-1771620293, goog.crypt.hash32.encodeStringUtf8(
-      '\u043A\u0440'));
+  assertEquals(-1771620293, goog.crypt.hash32.encodeStringUtf8('\u043A\u0440'));
 }
 
 function testEncodeString_ascii() {
-  assertEquals('For ascii characters UTF8 should be the same',
+  assertEquals(
+      'For ascii characters UTF8 should be the same',
       goog.crypt.hash32.encodeStringUtf8('abc123'),
       goog.crypt.hash32.encodeString('abc123'));
 
-  assertEquals('For ascii characters UTF8 should be the same',
+  assertEquals(
+      'For ascii characters UTF8 should be the same',
       goog.crypt.hash32.encodeStringUtf8('The,quick.brown-fox'),
       goog.crypt.hash32.encodeString('The,quick.brown-fox'));
 
-  assertNotEquals('For non-ascii characters UTF-8 encoding is different',
+  assertNotEquals(
+      'For non-ascii characters UTF-8 encoding is different',
       goog.crypt.hash32.encodeStringUtf8('Sch\xF6n'),
       goog.crypt.hash32.encodeString('Sch\xF6n'));
 }

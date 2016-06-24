@@ -1,0 +1,355 @@
+---
+{edit_path: '', layout: api, page: goog.iter, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.iter</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L21" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.iter</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="accumulate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L760" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>accumulate(<var>iterable</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns running totals from the numbers in
+<code>iterable</code>. For example, the array <code>[1, 2, 3, 4, 5]</code> yields
+<code>1 -&gt; 3 -&gt; 6 -&gt; 10 -&gt; 15</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>The iterable of numbers to
+accumulate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>A new iterator that returns the
+numbers in the series.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/3.2/library/itertools.html#itertools.accumulate">http://docs.python.org/3.2/library/itertools.html#itertools.accumulate</a></p>
+</dd></dl></div></section><section class="property expandable" id="chain"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L419" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> chain(<var>var_args</var>)</div></h3></div><div class="body"><p>Takes zero or more iterables and returns one iterator that will iterate over
+them in the order chained.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>Any
+number of iterable objects.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>Returns a new iterator that will
+iterate over all the given iterables&#39; contents.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="chainFromIterable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L434" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> chainFromIterable(<var>iterable</var>)</div></h3></div><div class="body"><p>Takes a single iterable containing zero or more iterables and returns one
+iterator that will iterate over each one in the order given.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code><a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a></code><dd><p>The iterable of iterables to chain.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>Returns a new iterator that will
+iterate over all the contents of the iterables contained within
+<code>iterable</code>.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="https://goo.gl/5NRp5d">https://goo.gl/5NRp5d</a></p>
+</dd></dl></div></section><section class="property expandable" id="combinations"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1225" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> combinations(<var>iterable</var>, <var>length</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns combinations of elements from
+<code>iterable</code>.</p>
+<p>Combinations are obtained by taking the goog.iter#permutations of
+<code>iterable</code> and filtering those whose elements appear in the order they
+are encountered in <code>iterable</code>. For example, the 3-length combinations
+of <code>[0,1,2,3]</code> are <code>[[0,1,2], [0,1,3], [0,2,3], [1,2,3]]</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable from which to generate combinations.</p>
+<dt class="type name"><var>length</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The length of each combination.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>A new iterator containing
+combinations from the <code>iterable</code>.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.combinations">http://docs.python.org/2/library/itertools.html#itertools.combinations</a></p>
+</dd></dl></div></section><section class="property expandable" id="combinationsWithReplacement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1263" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> combinationsWithReplacement(<var>iterable</var>, <var>length</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns combinations of elements from
+<code>iterable</code>, with repeated elements possible.</p>
+<p>Combinations are obtained by taking the Cartesian product of <code>length</code>
+iterables and filtering those whose elements appear in the order they are
+encountered in <code>iterable</code>. For example, the 2-length combinations of
+<code>[1,2,3]</code> are <code>[[1,1], [1,2], [1,3], [2,2], [2,3], [3,3]]</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to combine.</p>
+<dt class="type name"><var>length</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The length of each combination.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>A new iterator containing
+combinations from the <code>iterable</code>.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="https://goo.gl/C0yXe4">https://goo.gl/C0yXe4</a></p>
+</dd><dd><p><a href="https://goo.gl/djOCsk">https://goo.gl/djOCsk</a></p>
+</dd></dl></div></section><section class="property expandable" id="compress"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L872" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> compress(<var>iterable</var>, <var>selectors</var>)</div></h3></div><div class="body"><p>Creates an iterator that filters <code>iterable</code> based on a series of
+<code>selectors</code>. On each call to <code>next()</code>, one item is taken from
+both the <code>iterable</code> and <code>selectors</code> iterators. If the item from
+<code>selectors</code> evaluates to true, the item from <code>iterable</code> is given.
+Otherwise, it is skipped. Once either <code>iterable</code> or <code>selectors</code>
+is exhausted, subsequent calls to <code>next()</code> will throw
+<code>goog.iter.StopIteration</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to filter.</p>
+<dt class="type name"><var>selectors</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>An
+iterable of items to be evaluated in a boolean context to determine if
+the corresponding element in <code>iterable</code> should be included in the
+result.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator that returns the
+filtered values.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.compress">http://docs.python.org/2/library/itertools.html#itertools.compress</a></p>
+</dd></dl></div></section><section class="property expandable" id="consume"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1125" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> consume(<var>iterable</var>, <var>count</var>)</div></h3></div><div class="body"><p>Creates an iterator that is advanced <code>count</code> steps ahead. Consumed
+values are silently discarded. If <code>count</code> is greater than the number
+of elements in <code>iterable</code>, an empty iterator is returned. Subsequent
+calls to <code>next()</code> will throw <code>goog.iter.StopIteration</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to consume.</p>
+<dt class="type name"><var>count</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of elements to consume from the iterator.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>An iterator advanced zero or more steps
+ahead.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="count"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L719" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>count(<var>opt_start</var>, <var>opt_step</var>)</div></h3></div><div class="body"><p>Creates an iterator that counts indefinitely from a starting value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_start</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The starting value. Default is 0.</p>
+<dt class="type name"><var>opt_step</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The number to increment with between each call to
+next. Negative and floating point numbers are allowed. Default is 1.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>A new iterator that returns the values
+in the series.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.count">http://docs.python.org/2/library/itertools.html#itertools.count</a></p>
+</dd></dl></div></section><section class="property expandable" id="cycle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L662" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> cycle(<var>iterable</var>)</div></h3></div><div class="body"><p>Create an iterator to cycle over the iterable&#39;s elements indefinitely.
+For example, ([1, 2, 3]) would return : 1, 2, 3, 1, 2, 3, ...</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable object.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>An iterator that iterates indefinitely
+over the values in <code>iterable</code>.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>: http://docs.python.org/library/itertools.html#itertools.cycle.</p>
+</dd></dl></div></section><section class="property expandable" id="dropWhile"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L475" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> dropWhile(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Builds a new iterator that iterates over the original, but skips elements as
+long as a supplied function returns true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+object.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every value. This function takes 3 arguments
+(the value, undefined, and the iterator) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator that drops elements from
+the original iterator as long as <code>f</code> is true.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enumerate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1077" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> enumerate(<var>iterable</var>, <var>opt_start</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns arrays containing a count and an element
+obtained from the given <code>iterable</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to enumerate.</p>
+<dt class="type name"><var>opt_start</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional starting value. Default is 0.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;&gt;</code><dd><p>A new iterator containing
+count/item pairs.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/functions.html#enumerate">http://docs.python.org/2/library/functions.html#enumerate</a></p>
+</dd></dl></div></section><section class="property expandable" id="equals"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L557" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> equals(<var>iterable1</var>, <var>iterable2</var>, <var>opt_equalsFn</var>)</div></h3></div><div class="body"><p>Iterates over two iterables and returns true if they contain the same
+sequence of elements and have the same length.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable1</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The first
+iterable object.</p>
+<dt class="type name"><var>iterable2</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The second
+iterable object.</p>
+<dt class="type name"><var>opt_equalsFn</var><code>function(VALUE, VALUE): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Optional comparison
+function.
+Should take two arguments to compare, and return true if the arguments
+are equal. Defaults to <a href="goog.array.html#defaultCompareEquality"><code>goog.array.defaultCompareEquality</code></a> which
+compares the elements using the built-in &#39;&#61;&#61;&#61;&#39; operator.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if the iterables contain the same sequence of elements
+and have the same length.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="every"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L392" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> every(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Goes through the values in the iterator. Calls f for each of these and if any
+of them returns false this returns false (without checking the rest). If all
+return true this will return true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+object.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every value. This function takes 3 arguments
+(the value, undefined, and the iterator) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if every value passes the test.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="filter"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L194" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> filter(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for every element in the iterator, and if the function
+returns true adds the element to a new iterator.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to iterate over.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every element. This function takes 3 arguments
+(the element, undefined, and the iterator) and should return a boolean.
+If the return value is true the element will be included in the returned
+iterator.  If it is false the element is not included.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator in which only elements
+that passed the test are present.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="filterFalse"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L227" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> filterFalse(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for every element in the iterator, and if the function
+returns false adds the element to a new iterator.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to iterate over.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every element. This function takes 3 arguments
+(the element, undefined, and the iterator) and should return a boolean.
+If the return value is false the element will be included in the returned
+iterator.  If it is true the element is not included.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator in which only elements
+that did not pass the test are present.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="forEach"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> forEach(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each element in the iterator with the element of the
+iterator passed as argument.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to iterate over. If the iterable is an object <code>toIterator</code> will be
+called on it.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, ?, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;)</code><dd><p>The function to call for every element.  This function takes 3 arguments
+(the element, undefined, and the iterator) and the return value is
+irrelevant.  The reason for passing undefined as the second argument is
+so that the same function can be used in goog.array#forEach as
+well as others.  The third parameter is of type &#34;number&#34; for
+arraylike objects, undefined, otherwise.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="groupBy"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L982" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;KEY, VALUE&gt;</var> groupBy(<var>iterable</var>, <var>opt_keyFunc</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns arrays containing elements from the
+<code>iterable</code> grouped by a key value. For iterables with repeated
+elements (i.e. sorted according to a particular key function), this function
+has a <code>uniq</code>-like effect. For example, grouping the array:
+<code>[A, B, B, C, C, A]</code> produces
+<code>[A, [A]], [B, [B, B]], [C, [C, C]], [A, [A]]</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to group.</p>
+<dt class="type name"><var>opt_keyFunc</var><code>function(VALUE): KEY=</code><dd><p>Optional function for
+determining the key value for each group in the <code>iterable</code>. Default
+is the identity function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;&gt;</code><dd><p>A new iterator that returns
+arrays of consecutive key and groups.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.groupby">http://docs.python.org/2/library/itertools.html#itertools.groupby</a></p>
+</dd></dl></div></section><section class="property expandable" id="join"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L283" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> join(<var>iterable</var>, <var>deliminator</var>)</div></h3></div><div class="body"><p>Joins the values in a iterator with a delimiter.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to get the values from.</p>
+<dt class="type name"><var>deliminator</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The text to put between the values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The joined value string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="limit"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1094" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> limit(<var>iterable</var>, <var>limitSize</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns the first <code>limitSize</code> elements from an
+iterable. If this number is greater than the number of elements in the
+iterable, all the elements are returned.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to limit.</p>
+<dt class="type name"><var>limitSize</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The maximum number of elements to return.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator containing
+<code>limitSize</code> elements.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p>&lt;http://goo.gl/V0sihp Inspired by the limit iterator in Guava.&gt;</p>
+</dd></dl></div></section><section class="property expandable" id="map"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L305" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE, RESULT&gt;</var> map(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>For every element in the iterator call a function and return a new iterator
+with that value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterator to iterate over.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): RESULT</code><dd><p>The function to call for every element.  This function takes 3 arguments
+(the element, undefined, and the iterator) and should return a new value.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;RESULT&gt;</code><dd><p>A new iterator that returns the
+results of applying the function to each element in the original
+iterator.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="nextOrValue"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L576" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> nextOrValue(<var>iterable</var>, <var>defaultValue</var>)</div></h3></div><div class="body"><p>Advances the iterator to the next position, returning the given default value
+instead of throwing an exception if the iterator has no more entries.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterable
+object.</p>
+<dt class="type name"><var>defaultValue</var><code>VALUE</code><dd><p>The value to return if the iterator is empty.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>The next item in the iteration, or defaultValue if the
+iterator was empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="permutations"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1197" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> permutations(<var>iterable</var>, <var>opt_length</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns permutations of elements in
+<code>iterable</code>.</p>
+<p>Permutations are obtained by taking the Cartesian product of
+<code>opt_length</code> iterables and filtering out those with repeated
+elements. For example, the permutations of <code>[1,2,3]</code> are
+<code>[[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable from which to generate permutations.</p>
+<dt class="type name"><var>opt_length</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Length of each permutation. If omitted, defaults
+to the length of <code>iterable</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>A new iterator containing the
+permutations of <code>iterable</code>.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.permutations">http://docs.python.org/2/library/itertools.html#itertools.permutations</a></p>
+</dd></dl></div></section><section class="property expandable" id="product"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L599" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> product(<var>var_args</var>)</div></h3></div><div class="body"><p>Cartesian product of zero or more sets.  Gives an iterator that gives every
+combination of one element chosen from each set.  For example,
+([1, 2], [3, 4]) gives ([1, 3], [1, 4], [2, 3], [2, 4]).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>Zero or more sets, as
+arrays.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>An iterator that gives each
+n-tuple (as an array).</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/library/itertools.html#itertools.product">http://docs.python.org/library/itertools.html#itertools.product</a></p>
+</dd></dl></div></section><section class="property expandable" id="range"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L250" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>range(<var>startOrStop</var>, <var>opt_stop</var>, <var>opt_step</var>)</div></h3></div><div class="body"><p>Creates a new iterator that returns the values in a range.  This function
+can take 1, 2 or 3 arguments:</p>
+ <pre>
+ range(5) same as range(0, 5, 1)
+ range(2, 5) same as range(2, 5, 1)
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>startOrStop</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The stop value if only one argument is provided.
+The start value if 2 or more arguments are provided.  If only one
+argument is used the start value is 0.</p>
+<dt class="type name"><var>opt_stop</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The stop value.  If left out then the first
+argument is used as the stop value.</p>
+<dt class="type name"><var>opt_step</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The number to increment with between each call to
+next.  This can be negative.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>A new iterator that returns the values
+in the range.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="reduce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L334" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> reduce(<var>iterable</var>, <var>f</var>, <var>val</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Passes every element of an iterator into a function and accumulates the
+result.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to iterate over.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, VALUE): VALUE</code><dd><p>The function to call for
+every element. This function takes 2 arguments (the function&#39;s previous
+result or the initial value, and the value of the current element).
+function(previousValue, currentElement) : newValue.</p>
+<dt class="type name"><var>val</var><code>VALUE</code><dd><p>The initial value to pass into the function on the first
+call.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>VALUE</code><dd><p>Result of evaluating f repeatedly across the values of
+the iterator.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="repeat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L741" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> repeat(<var>value</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns the same object or value repeatedly.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>VALUE</code><dd><p>Any object or value to repeat.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator that returns the
+repeated value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="slice"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1150" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> slice(<var>iterable</var>, <var>start</var>, <var>opt_end</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns a range of elements from an iterable.
+Similar to goog.array#slice but does not support negative indexes.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to slice.</p>
+<dt class="type name"><var>start</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the first element to return.</p>
+<dt class="type name"><var>opt_end</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index after the last element to return. If
+defined, must be greater than or equal to <code>start</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator containing a slice of
+the original.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="some"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L358" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> some(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Goes through the values in the iterator. Calls f for each of these, and if
+any of them returns true, this returns true (without checking the rest). If
+all return false this will return false.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+object.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every value. This function takes 3 arguments
+(the value, undefined, and the iterator) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if any value passes the test.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="starMap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1009" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, RESULT&gt;</var> starMap(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Gives an iterator that gives the result of calling the given function
+<code>f</code> with the arguments taken from the next element from
+<code>iterable</code> (the elements are expected to also be iterables).</p>
+<p>Similar to goog.iter#map but allows the function to accept multiple
+arguments from the iterable.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&lt;!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&gt;</code><dd><p>The iterable of
+iterables to iterate over.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, ...*): RESULT</code><dd><p>The function to call for every
+element.  This function takes N&#43;2 arguments, where N represents the
+number of items from the next element of the iterable. The two
+additional arguments passed to the function are undefined and the
+iterator itself. The function should return a new value.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+<code>f</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;RESULT&gt;</code><dd><p>A new iterator that returns the
+results of applying the function to each element in the original
+iterator.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="takeWhile"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L508" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> takeWhile(<var>iterable</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Builds a new iterator that iterates over the original, but only as long as a
+supplied function returns true.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+object.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>, !<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for every value. This function takes 3 arguments
+(the value, undefined, and the iterator) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>This is used as the &#39;this&#39; object in f when called.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>A new iterator that keeps elements in
+the original iterator as long as the function is true.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="tee"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L1032" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> tee(<var>iterable</var>, <var>opt_num</var>)</div></h3></div><div class="body"><p>Returns an array of iterators each of which can iterate over the values in
+<code>iterable</code> without advancing the others.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The
+iterable to tee.</p>
+<dt class="type name"><var>opt_num</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The number of iterators to create. Default is 2.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;&gt;</code><dd><p>An array of iterators.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.tee">http://docs.python.org/2/library/itertools.html#itertools.tee</a></p>
+</dd></dl></div></section><section class="property expandable" id="toArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L529" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> toArray(<var>iterable</var>)</div></h3></div><div class="body"><p>Converts the iterator to an array</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>The iterator
+to convert to an array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;</code><dd><p>An array of the elements the iterator iterates over.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toIterator"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L97" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> toIterator(<var>iterable</var>)</div></h3></div><div class="body"><p>Returns an iterator that knows how to iterate over the values in the object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>If the
+object is an iterator it will be returned as is.  If the object has an
+<code><strong>iterator</strong></code> method that will be called to get the value
+iterator.  If the object is an array-like object we create an iterator
+for that.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;</code><dd><p>An iterator that knows how to iterate
+over the values in <code>iterable</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="zip"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L787" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> zip(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns arrays containing the ith elements from the
+provided iterables. The returned arrays will be the same size as the number
+of iterables given in <code>var_args</code>. Once the shortest iterable is
+exhausted, subsequent calls to <code>next()</code> will throw
+<code>goog.iter.StopIteration</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>Any
+number of iterable objects.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>A new iterator that returns
+arrays of elements from the provided iterables.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.izip">http://docs.python.org/2/library/itertools.html#itertools.izip</a></p>
+</dd></dl></div></section><section class="property expandable" id="zipLongest"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L817" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> zipLongest(<var>fillValue</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns arrays containing the ith elements from the
+provided iterables. The returned arrays will be the same size as the number
+of iterables given in <code>var_args</code>. Shorter iterables will be extended
+with <code>fillValue</code>. Once the longest iterable is exhausted, subsequent
+calls to <code>next()</code> will throw <code>goog.iter.StopIteration</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fillValue</var><code>VALUE</code><dd><p>The object or value used to fill shorter iterables.</p>
+<dt class="type name"><var>var_args</var><code>...(!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;VALUE&gt;|!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>)</code><dd><p>Any
+number of iterable objects.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;&gt;</code><dd><p>A new iterator that returns
+arrays of elements from the provided iterables.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><p><a href="http://docs.python.org/2/library/itertools.html#itertools.izip_longest">http://docs.python.org/2/library/itertools.html#itertools.izip_longest</a></p>
+</dd></dl></div></section></section><section class="static-properties"><h2>Properties</h2><section class="property expandable" id="StopIteration"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L42" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>StopIteration</div></h3></div><div class="body"><p>Singleton Error object that is used to terminate iterations.</p>
+<dl><dt class="spec">Type<dd>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.iter.GroupByIterator_.html">GroupByIterator_</a></div><li class="summary"><div><a href="goog.iter.Iterator.html">Iterator</a></div></ul></section><section class="type-defs"><h2>Type Definitions</h2><section id="Iterable" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L35" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Iterable</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>(<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>|{length: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}|{__iterator__: ?})</code></dl><p>No description.</p></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

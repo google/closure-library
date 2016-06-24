@@ -1,0 +1,114 @@
+---
+{edit_path: '', layout: api, page: goog.math.Matrix, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>Matrix</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.math.html">goog.math</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L57" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span><span class="struct"></span></div><div>class Matrix</div></h1></div><div class="body"><p>Class for representing and manipulating matrices.</p>
+<p>The entry that lies in the i-th row and the j-th column of a matrix is
+typically referred to as the i,j entry of the matrix.</p>
+<p>The m-by-n matrix A would have its entries referred to as:
+[ a0,0   a0,1   a0,2   ...   a0,j  ...  a0,n ]
+[ a1,0   a1,1   a1,2   ...   a1,j  ...  a1,n ]
+[ a2,0   a2,1   a2,2   ...   a2,j  ...  a2,n ]
+[  .      .      .            .          .   ]
+[  .      .      .            .          .   ]
+[  .      .      .            .          .   ]
+[ ai,0   ai,1   ai,2   ...   ai,j  ...  ai,n ]
+[  .      .      .            .          .   ]
+[  .      .      .            .          .   ]
+[  .      .      .            .          .   ]
+[ am,0   am,1   am,2   ...   am,j  ...  am,n ]</p>
+<h3 class="name"><div>new Matrix(<var>m</var>, <var>opt_n</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code>(!<a href="goog.math.Matrix.html">goog.math.Matrix</a>|!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;&gt;|!<a href="goog.math.Size.html">goog.math.Size</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>A matrix to copy, a 2D-array to take as a template, a size object for
+dimensions, or the number of rows.</p>
+<dt class="type name"><var>opt_n</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Number of columns of the matrix (only applicable if
+the first argument is also numeric).</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="add"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L207" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>add(<var>m</var>)</div></h3></div><div class="body"><p>Returns a new matrix that is the sum of this and the provided matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to add to this one.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>Resultant sum.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="appendColumns"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L222" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>appendColumns(<var>m</var>)</div></h3></div><div class="body"><p>Appends the given matrix to the right side of this matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to augment this matrix with.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix with additional columns on the
+right.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="appendRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L244" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>appendRows(<var>m</var>)</div></h3></div><div class="body"><p>Appends the given matrix to the bottom of this matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to augment this matrix with.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix with added columns on the bottom.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="equals"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L267" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>equals(<var>m</var>, <var>opt_tolerance</var>)</div></h3></div><div class="body"><p>Returns whether the given matrix equals this matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to compare to this one.</p>
+<dt class="type name"><var>opt_tolerance</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The tolerance when comparing array entries.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the given matrix equals this matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDeterminant"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L294" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDeterminant()</div></h3></div><div class="body"><p>Returns the determinant of this matrix.  The determinant of a matrix A is
+often denoted as |A| and can only be applied to a square matrix.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The determinant of this matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getInverse"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L308" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getInverse()</div></h3></div><div class="body"><p>Returns the inverse of this matrix if it exists or null if the matrix is
+not invertible.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix which is the inverse of this matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getReducedRowEchelonForm"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L331" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getReducedRowEchelonForm()</div></h3></div><div class="body"><p>Transforms this matrix into reduced row echelon form.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix reduced row echelon form.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getSize"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L381" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getSize()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Size.html">goog.math.Size</a></code><dd><p>The dimensions of the matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTranspose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L392" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTranspose()</div></h3></div><div class="body"><p>Return the transpose of this matrix.  For an m-by-n matrix, the transpose
+is the n-by-m matrix which results from turning rows into columns and columns
+into rows</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix A^T.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getValueAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L407" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getValueAt(<var>i</var>, <var>j</var>)</div></h3></div><div class="body"><p>Retrieves the value of a particular coordinate in the matrix or null if the
+requested coordinates are out of range.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>i</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The i index of the coordinate.</p>
+<dt class="type name"><var>j</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The j index of the coordinate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value at the specified coordinate.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isSquare"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L419" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isSquare()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the horizontal and vertical dimensions of this
+matrix are the same.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multiply"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L456" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multiply(<var>m</var>)</div></h3></div><div class="body"><p>Performs matrix or scalar multiplication on a matrix and returns the
+resultant matrix.</p>
+<p>Matrix multiplication is defined between two matrices only if the number of
+columns of the first matrix is the same as the number of rows of the second
+matrix. If A is an m-by-n matrix and B is an n-by-p matrix, then their
+product AB is an m-by-p matrix</p>
+<p>Scalar multiplication returns a matrix of the same size as the original,
+each value multiplied by the given value.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code>(<a href="goog.math.Matrix.html">goog.math.Matrix</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code><dd><p>Matrix/number to multiply the matrix by.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>Resultant product.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setValueAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L431" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setValueAt(<var>i</var>, <var>j</var>, <var>value</var>)</div></h3></div><div class="body"><p>Sets the value at a particular coordinate (if the coordinate is within the
+bounds of the matrix).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>i</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The i index of the coordinate.</p>
+<dt class="type name"><var>j</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The j index of the coordinate.</p>
+<dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The new value for the coordinate.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="subtract"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L479" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>subtract(<var>m</var>)</div></h3></div><div class="body"><p>Returns a new matrix that is the difference of this and the provided matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>m</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to subtract from this one.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>Resultant difference.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L493" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toArray()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;&gt;</code><dd><p>A 2D internal array representing this
+matrix.  Not a clone.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L510" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toString()</div></h3></div><div class="body"><p>Returns a string representation of the matrix.  e.g.</p>
+ <pre>
+ [ 12  5  9  1 ]
+ [  4 16  0 17 ]
+ [ 12  5  1 23 ]
+ </pre>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string representation of this matrix.</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="Matrix.createIdentityMatrix"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L88" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Matrix.createIdentityMatrix(<var>n</var>)</div></h3></div><div class="body"><p>Creates a square identity matrix. i.e. for n &#61; 3:</p>
+ <pre>
+ [ 1 0 0 ]
+ [ 0 1 0 ]
+ [ 0 0 1 ]
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>n</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The size of the square identity matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>Identity matrix of width and height <code>n</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="Matrix.forEach"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L111" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> Matrix.forEach(<var>matrix</var>, <var>fn</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each cell in a matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to iterate over.</p>
+<dt class="type name"><var>fn</var><code>function(this: T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, !<a href="goog.math.Matrix.html">goog.math.Matrix</a>)</code><dd><p>The function to call for every element. This function
+takes 4 arguments (value, i, j, and the matrix)
+and the return value is irrelevant.</p>
+<dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within <code>fn</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="Matrix.isValidArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L126" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Matrix.isValidArray(<var>arr</var>)</div></h3></div><div class="body"><p>Tests whether an array is a valid matrix.  A valid array is an array of
+arrays where all arrays are of the same length and all elements are numbers.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;&gt;</code><dd><p>An array to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the array is a valid matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="Matrix.map"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/math/matrix.js#L158" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> Matrix.map(<var>matrix</var>, <var>fn</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for every cell in a matrix and inserts the result into a
+new matrix of equal dimensions.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>The matrix to iterate over.</p>
+<dt class="type name"><var>fn</var><code>function(this: T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, !<a href="goog.math.Matrix.html">goog.math.Matrix</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The function to call for every element. This function
+takes 4 arguments (value, i, j and the matrix)
+and should return a number, which will be inserted into a new matrix.</p>
+<dt class="type name"><var>opt_obj</var><code>T=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within <code>fn</code>.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.math.Matrix.html">goog.math.Matrix</a></code><dd><p>A new matrix with the results from <code>fn</code>.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

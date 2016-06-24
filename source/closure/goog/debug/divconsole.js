@@ -24,8 +24,9 @@ goog.require('goog.debug.LogManager');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyleSheet');
+goog.require('goog.string.Const');
 goog.require('goog.style');
-
 
 
 /**
@@ -50,18 +51,19 @@ goog.debug.DivConsole = function(element) {
  * Installs styles for the log messages and its div
  */
 goog.debug.DivConsole.prototype.installStyles = function() {
-  goog.style.installStyles(
-      '.dbg-sev{color:#F00}' +
-      '.dbg-w{color:#C40}' +
-      '.dbg-sh{font-weight:bold;color:#000}' +
-      '.dbg-i{color:#444}' +
-      '.dbg-f{color:#999}' +
-      '.dbg-ev{color:#0A0}' +
-      '.dbg-m{color:#990}' +
-      '.logmsg{border-bottom:1px solid #CCC;padding:2px}' +
-      '.logsep{background-color: #8C8;}' +
-      '.logdiv{border:1px solid #CCC;background-color:#FCFCFC;' +
-      'font:medium monospace}',
+  goog.style.installSafeStyleSheet(
+      goog.html.SafeStyleSheet.fromConstant(goog.string.Const.from(
+          '.dbg-sev{color:#F00}' +
+          '.dbg-w{color:#C40}' +
+          '.dbg-sh{font-weight:bold;color:#000}' +
+          '.dbg-i{color:#444}' +
+          '.dbg-f{color:#999}' +
+          '.dbg-ev{color:#0A0}' +
+          '.dbg-m{color:#990}' +
+          '.logmsg{border-bottom:1px solid #CCC;padding:2px}' +
+          '.logsep{background-color: #8C8;}' +
+          '.logdiv{border:1px solid #CCC;background-color:#FCFCFC;' +
+          'font:medium monospace}')),
       this.element_);
   this.element_.className += ' logdiv';
 };
@@ -97,7 +99,8 @@ goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
     return;
   }
   var scroll = this.element_.scrollHeight - this.element_.scrollTop -
-      this.element_.clientHeight <= 100;
+          this.element_.clientHeight <=
+      100;
 
   var div = this.elementOwnerDocument_.createElement(goog.dom.TagName.DIV);
   div.className = 'logmsg';

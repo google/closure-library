@@ -36,16 +36,16 @@ function listenToEvents(oh) {
   onlineCount = 0;
   offlineCount = 0;
 
-  goog.events.listen(oh, goog.net.NetworkStatusMonitor.EventType.ONLINE,
-                     function(e) {
-                       assertTrue(oh.isOnline());
-                       onlineCount++;
-                     });
-  goog.events.listen(oh, goog.net.NetworkStatusMonitor.EventType.OFFLINE,
-                     function(e) {
-                       assertFalse(oh.isOnline());
-                       offlineCount++;
-                     });
+  goog.events.listen(
+      oh, goog.net.NetworkStatusMonitor.EventType.ONLINE, function(e) {
+        assertTrue(oh.isOnline());
+        onlineCount++;
+      });
+  goog.events.listen(
+      oh, goog.net.NetworkStatusMonitor.EventType.OFFLINE, function(e) {
+        assertFalse(oh.isOnline());
+        offlineCount++;
+      });
 }
 
 function setUp() {
@@ -65,9 +65,9 @@ function testConstructAndDispose() {
 }
 
 function testNoOnlineProperty() {
-  stubs.set(goog.events.BrowserFeature,
-      'HAS_NAVIGATOR_ONLINE_PROPERTY', false);
-  stubs.set(goog.events.EventHandler.prototype, 'listen',
+  stubs.set(goog.events.BrowserFeature, 'HAS_NAVIGATOR_ONLINE_PROPERTY', false);
+  stubs.set(
+      goog.events.EventHandler.prototype, 'listen',
       goog.testing.recordFunction());
 
   var oh = new goog.events.OnlineHandler();
@@ -79,8 +79,8 @@ function testNoOnlineProperty() {
 
 function testNonHtml5() {
   clock.install();
-  stubs.set(goog.events.BrowserFeature,
-      'HAS_HTML5_NETWORK_EVENT_SUPPORT', false);
+  stubs.set(
+      goog.events.BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', false);
 
   var oh = new goog.events.OnlineHandler();
   listenToEvents(oh);
@@ -103,12 +103,12 @@ function testNonHtml5() {
 }
 
 function testHtml5() {
-  stubs.set(goog.events.BrowserFeature,
-      'HAS_HTML5_NETWORK_EVENT_SUPPORT', true);
+  stubs.set(
+      goog.events.BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', true);
 
   // Test for browsers that fire network events on document.body.
-  stubs.set(goog.events.BrowserFeature,
-      'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', true);
+  stubs.set(
+      goog.events.BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', true);
 
   var oh = new goog.events.OnlineHandler();
   listenToEvents(oh);
@@ -130,8 +130,8 @@ function testHtml5() {
   oh.dispose();
 
   // Test for browsers that fire network events on window.
-  stubs.set(goog.events.BrowserFeature,
-      'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', false);
+  stubs.set(
+      goog.events.BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', false);
 
   oh = new goog.events.OnlineHandler();
   listenToEvents(oh);

@@ -31,6 +31,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.TestRunner');
 goog.provide('goog.testing.TestRunner');
 
 goog.require('goog.dom.TagName');
@@ -183,8 +184,9 @@ goog.testing.TestRunner.prototype.logTestFailure = function(ex) {
     this.testCase.logError(testName, ex);
   } else {
     // NOTE: Do not forget to log the original exception raised.
-    throw new Error('Test runner not initialized with a test case. Original ' +
-                    'exception: ' + ex.message);
+    throw new Error(
+        'Test runner not initialized with a test case. Original ' +
+        'exception: ' + ex.message);
   }
 };
 
@@ -243,14 +245,14 @@ goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
  */
 goog.testing.TestRunner.prototype.execute = function() {
   if (!this.testCase) {
-    throw Error('The test runner must be initialized with a test case ' +
-                'before execute can be called.');
+    throw Error(
+        'The test runner must be initialized with a test case ' +
+        'before execute can be called.');
   }
 
   if (this.strict_ && this.testCase.getCount() == 0) {
     throw Error(
-        'No tests found in given test case: ' +
-        this.testCase.getName() + ' ' +
+        'No tests found in given test case: ' + this.testCase.getName() + '. ' +
         'By default, the test runner fails if a test case has no tests. ' +
         'To modify this behavior, see goog.testing.TestRunner\'s ' +
         'setStrict() method, or G_testRunner.setStrict()');
@@ -337,8 +339,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       div.appendChild(document.createTextNode(line));
     }
 
-    var testNameMatch =
-        /(\S+) (\[[^\]]*] )?: (FAILED|ERROR|PASSED)/.exec(line);
+    var testNameMatch = /(\S+) (\[[^\]]*] )?: (FAILED|ERROR|PASSED)/.exec(line);
     if (testNameMatch) {
       // Build a URL to run the test individually.  If this test was already
       // part of another subset test, we need to overwrite the old runTests
@@ -349,9 +350,8 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       if (search) {
         var oldTests = /runTests=([^&]*)/.exec(search);
         if (oldTests) {
-          newSearch = search.substr(0, oldTests.index) +
-                      newSearch +
-                      search.substr(oldTests.index + oldTests[0].length);
+          newSearch = search.substr(0, oldTests.index) + newSearch +
+              search.substr(oldTests.index + oldTests[0].length);
         } else {
           newSearch = search + '&' + newSearch;
         }

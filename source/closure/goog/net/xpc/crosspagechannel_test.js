@@ -64,10 +64,10 @@ function setUpPage() {
     var accessCheckIframes = [];
 
     accessCheckIframes.push(
-        create1x1Iframe('nonexistant', 'testdata/i_am_non_existant.html'));
+        create1x1Iframe('nonexistent', 'testdata/i_am_non_existent.html'));
     window.setTimeout(function() {
       accessCheckIframes.push(
-          create1x1Iframe('existant', 'testdata/access_checker.html'));
+          create1x1Iframe('existent', 'testdata/access_checker.html'));
     }, 10);
 
     // Called from testdata/access_checker.html
@@ -108,16 +108,18 @@ function create1x1Iframe(iframeId, src) {
 function testCreateIframeSpecifyId() {
   driver.createPeerIframe('new_iframe');
 
-  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS)
-      .then(function() { driver.checkPeerIframe(); });
+  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
+    driver.checkPeerIframe();
+  });
 }
 
 
 function testCreateIframeRandomId() {
   driver.createPeerIframe();
 
-  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS)
-      .then(function() { driver.checkPeerIframe(); });
+  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
+    driver.checkPeerIframe();
+  });
 }
 
 
@@ -128,7 +130,8 @@ function testGetRole() {
   // If the configured role is ignored, this will cause the dynamicly
   // determined role to become INNER.
   channel.peerWindowObject_ = window.parent;
-  assertEquals('Channel should use role from the config.',
+  assertEquals(
+      'Channel should use role from the config.',
       goog.net.xpc.CrossPageChannelRole.OUTER, channel.getRole());
   channel.dispose();
 }
@@ -294,14 +297,15 @@ function testLifeCycle_v2_v2_onesided_rev() {
 }
 
 
-function checkLifeCycle(oneSidedHandshake, innerProtocolVersion,
-    outerProtocolVersion, outerFrameReconnectSupported,
-    innerFrameMigrationSupported, reverse) {
-  driver.createPeerIframe('new_iframe', oneSidedHandshake,
-      innerProtocolVersion, outerProtocolVersion);
-  return driver.connect(true /* fullLifeCycleTest */,
-                        outerFrameReconnectSupported,
-                        innerFrameMigrationSupported, reverse);
+function checkLifeCycle(
+    oneSidedHandshake, innerProtocolVersion, outerProtocolVersion,
+    outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
+  driver.createPeerIframe(
+      'new_iframe', oneSidedHandshake, innerProtocolVersion,
+      outerProtocolVersion);
+  return driver.connect(
+      true /* fullLifeCycleTest */, outerFrameReconnectSupported,
+      innerFrameMigrationSupported, reverse);
 }
 
 // testConnectMismatchedNames have been flaky on IEs.
@@ -313,9 +317,9 @@ function testConnectMismatchedNames_v1_v1() {
     return;
   }
 
-  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
-                                     1 /* outerProtocolVersion */,
-                                     false /* reverse */);
+  return checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+      false /* reverse */);
 }
 
 
@@ -324,9 +328,9 @@ function testConnectMismatchedNames_v1_v1_rev() {
     return;
   }
 
-  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
-                                     1 /* outerProtocolVersion */,
-                                     true /* reverse */);
+  return checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+      true /* reverse */);
 }
 
 
@@ -335,9 +339,9 @@ function testConnectMismatchedNames_v1_v2() {
     return;
   }
 
-  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
-                                     2 /* outerProtocolVersion */,
-                                     false /* reverse */);
+  return checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+      false /* reverse */);
 }
 
 
@@ -346,9 +350,9 @@ function testConnectMismatchedNames_v1_v2_rev() {
     return;
   }
 
-  return checkConnectMismatchedNames(1 /* innerProtocolVersion */,
-                                     2 /* outerProtocolVersion */,
-                                     true /* reverse */);
+  return checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+      true /* reverse */);
 }
 
 
@@ -357,9 +361,9 @@ function testConnectMismatchedNames_v2_v1() {
     return;
   }
 
-  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
-                                     1 /* outerProtocolVersion */,
-                                     false /* reverse */);
+  return checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+      false /* reverse */);
 }
 
 
@@ -368,9 +372,9 @@ function testConnectMismatchedNames_v2_v1_rev() {
     return;
   }
 
-  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
-                                     1 /* outerProtocolVersion */,
-                                     true /* reverse */);
+  return checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+      true /* reverse */);
 }
 
 
@@ -379,9 +383,9 @@ function testConnectMismatchedNames_v2_v2() {
     return;
   }
 
-  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
-                                     2 /* outerProtocolVersion */,
-                                     false /* reverse */);
+  return checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+      false /* reverse */);
 }
 
 
@@ -390,16 +394,16 @@ function testConnectMismatchedNames_v2_v2_rev() {
     return;
   }
 
-  return checkConnectMismatchedNames(2 /* innerProtocolVersion */,
-                                     2 /* outerProtocolVersion */,
-                                     true /* reverse */);
+  return checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+      true /* reverse */);
 }
 
 
-function checkConnectMismatchedNames(innerProtocolVersion,
-    outerProtocolVersion, reverse) {
-  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
-      innerProtocolVersion,
+function checkConnectMismatchedNames(
+    innerProtocolVersion, outerProtocolVersion, reverse) {
+  driver.createPeerIframe(
+      'new_iframe', false /* oneSidedHandshake */, innerProtocolVersion,
       outerProtocolVersion, true /* opt_randomChannelNames */);
   return driver.connect(
       false /* fullLifeCycleTest */, false /* outerFrameReconnectSupported */,
@@ -409,13 +413,15 @@ function checkConnectMismatchedNames(innerProtocolVersion,
 
 function testEscapeServiceName() {
   var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
-  assertEquals('Shouldn\'t escape alphanumeric name',
-               'fooBar123', escape('fooBar123'));
-  assertEquals('Shouldn\'t escape most non-alphanumeric characters',
-               '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
-               escape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
-  assertEquals('Should escape %, |, and :',
-               'foo%3ABar%7C123%25', escape('foo:Bar|123%'));
+  assertEquals(
+      'Shouldn\'t escape alphanumeric name', 'fooBar123', escape('fooBar123'));
+  assertEquals(
+      'Shouldn\'t escape most non-alphanumeric characters',
+      '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+      escape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+  assertEquals(
+      'Should escape %, |, and :', 'foo%3ABar%7C123%25',
+      escape('foo:Bar|123%'));
   assertEquals('Should escape tp', '%25tp', escape('tp'));
   assertEquals('Should escape %tp', '%25%25tp', escape('%tp'));
   assertEquals('Should not escape stp', 'stp', escape('stp'));
@@ -424,8 +430,9 @@ function testEscapeServiceName() {
 
 
 function testSameDomainCheck_noMessageOrigin() {
-  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  var channel = new goog.net.xpc.CrossPageChannel(
+      goog.object.create(
+          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertTrue(channel.isMessageOriginAcceptable_(undefined));
 }
 
@@ -443,28 +450,33 @@ function testSameDomainCheck_unconfigured() {
 
 
 function testSameDomainCheck_originsMatch() {
-  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  var channel = new goog.net.xpc.CrossPageChannel(
+      goog.object.create(
+          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertTrue(channel.isMessageOriginAcceptable_('http://foo.com'));
 }
 
 
 function testSameDomainCheck_originsMismatch() {
-  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  var channel = new goog.net.xpc.CrossPageChannel(
+      goog.object.create(
+          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertFalse(channel.isMessageOriginAcceptable_('http://nasty.com'));
 }
 
 
 function testUnescapeServiceName() {
   var unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
-  assertEquals('Shouldn\'t modify alphanumeric name',
-               'fooBar123', unescape('fooBar123'));
-  assertEquals('Shouldn\'t modify most non-alphanumeric characters',
-               '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
-               unescape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
-  assertEquals('Should unescape URL-escapes',
-               'foo:Bar|123%', unescape('foo%3ABar%7C123%25'));
+  assertEquals(
+      'Shouldn\'t modify alphanumeric name', 'fooBar123',
+      unescape('fooBar123'));
+  assertEquals(
+      'Shouldn\'t modify most non-alphanumeric characters',
+      '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+      unescape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+  assertEquals(
+      'Should unescape URL-escapes', 'foo:Bar|123%',
+      unescape('foo%3ABar%7C123%25'));
   assertEquals('Should unescape tp', 'tp', unescape('%25tp'));
   assertEquals('Should unescape %tp', '%tp', unescape('%25%25tp'));
   assertEquals('Should not escape stp', 'stp', unescape('stp'));
@@ -482,9 +494,9 @@ function testDisposeBeforeConnect() {
     return;
   }
 
-  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
-      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
-      true /* opt_randomChannelNames */);
+  driver.createPeerIframe(
+      'new_iframe', false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */, true /* opt_randomChannelNames */);
   return driver.connectOuterAndDispose();
 }
 
@@ -608,9 +620,10 @@ Driver.prototype.getInnerPeer_ = function() {
  * @return {string} The name of the created channel.
  * @private
  */
-Driver.prototype.setConfiguration_ = function(opt_iframeId,
-    opt_oneSidedHandshake, opt_channelName, opt_innerProtocolVersion,
-    opt_outerProtocolVersion, opt_randomChannelNames) {
+Driver.prototype.setConfiguration_ = function(
+    opt_iframeId, opt_oneSidedHandshake, opt_channelName,
+    opt_innerProtocolVersion, opt_outerProtocolVersion,
+    opt_randomChannelNames) {
   var cfg = {};
   if (opt_iframeId) {
     cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
@@ -634,8 +647,8 @@ Driver.prototype.setConfiguration_ = function(opt_iframeId,
   resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
   this.outerFrameCfg_ = cfg;
   this.innerFrameCfg_ = goog.object.clone(cfg);
-  this.innerFrameCfg_[
-      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+  this.innerFrameCfg_[goog.net.xpc.CfgFields
+                          .NATIVE_TRANSPORT_PROTOCOL_VERSION] =
       opt_innerProtocolVersion;
 };
 
@@ -649,10 +662,9 @@ Driver.prototype.createChannel_ = function() {
     this.channel_.dispose();
   }
   this.channel_ = new goog.net.xpc.CrossPageChannel(this.outerFrameCfg_);
-  this.channel_.registerService('echo',
-      goog.bind(this.echoHandler_, this));
-  this.channel_.registerService('response',
-      goog.bind(this.responseHandler_, this));
+  this.channel_.registerService('echo', goog.bind(this.echoHandler_, this));
+  this.channel_.registerService(
+      'response', goog.bind(this.responseHandler_, this));
 
   return this.channel_.name;
 };
@@ -665,8 +677,8 @@ Driver.prototype.createChannel_ = function() {
 Driver.prototype.checkChannelNames_ = function() {
   var outerName = this.channel_.name;
   var innerName = this.getInnerPeer_().channel.name;
-  var configName = this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] ||
-      null;
+  var configName =
+      this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] || null;
 
   // The outer channel never changes its name.
   assertEquals(this.initialOuterChannelName_, outerName);
@@ -704,9 +716,9 @@ Driver.prototype.getInnerFrameConfiguration = function() {
  * @return {!Array<string>} The id of the created iframe and the name of the
  *     created channel.
  */
-Driver.prototype.createPeerIframe = function(opt_iframeId,
-    opt_oneSidedHandshake, opt_innerProtocolVersion, opt_outerProtocolVersion,
-    opt_randomChannelNames) {
+Driver.prototype.createPeerIframe = function(
+    opt_iframeId, opt_oneSidedHandshake, opt_innerProtocolVersion,
+    opt_outerProtocolVersion, opt_randomChannelNames) {
   var expectedIframeId;
 
   if (opt_iframeId) {
@@ -718,12 +730,14 @@ Driver.prototype.createPeerIframe = function(opt_iframeId,
     });
     expectedIframeId = 'xpcpeer4';
   }
-  assertNull('element[id=' + expectedIframeId + '] exists',
+  assertNull(
+      'element[id=' + expectedIframeId + '] exists',
       goog.dom.getElement(expectedIframeId));
 
-  this.setConfiguration_(opt_iframeId, opt_oneSidedHandshake,
-      undefined /* opt_channelName */, opt_innerProtocolVersion,
-      opt_outerProtocolVersion, opt_randomChannelNames);
+  this.setConfiguration_(
+      opt_iframeId, opt_oneSidedHandshake, undefined /* opt_channelName */,
+      opt_innerProtocolVersion, opt_outerProtocolVersion,
+      opt_randomChannelNames);
   var channelName = this.createChannel_();
   this.initialOuterChannelName_ = channelName;
   this.iframe_ = this.channel_.createPeerIframe(document.body);
@@ -746,8 +760,9 @@ Driver.prototype.checkPeerIframe = function() {
 /**
  * Starts the connection. The connection happens asynchronously.
  */
-Driver.prototype.connect = function(fullLifeCycleTest,
-    outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
+Driver.prototype.connect = function(
+    fullLifeCycleTest, outerFrameReconnectSupported,
+    innerFrameMigrationSupported, reverse) {
   if (!this.isTransportTestable_()) {
     return;
   }
@@ -755,13 +770,14 @@ Driver.prototype.connect = function(fullLifeCycleTest,
   // Set the criteria for the initial handshake portion of the test.
   this.reinitializePromises_();
 
-  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
-                                                this);
+  this.innerFrameResponseReceived_.promise.then(
+      this.checkChannelNames_, null, this);
 
   if (fullLifeCycleTest) {
     this.innerFrameResponseReceived_.promise.then(
-        goog.bind(this.testReconnects_, this, outerFrameReconnectSupported,
-                  innerFrameMigrationSupported));
+        goog.bind(
+            this.testReconnects_, this, outerFrameReconnectSupported,
+            innerFrameMigrationSupported));
   }
 
   this.continueConnect_(reverse);
@@ -781,11 +797,13 @@ Driver.prototype.continueConnect_ = function(reverse) {
     return;
   }
 
-  var connectFromOuterFrame = goog.bind(this.channel_.connect, this.channel_,
+  var connectFromOuterFrame = goog.bind(
+      this.channel_.connect, this.channel_,
       goog.bind(this.outerFrameConnected_, this));
   var innerConfig = this.innerFrameCfg_;
-  var connectFromInnerFrame = goog.bind(this.getInnerPeer_().instantiateChannel,
-      this.getInnerPeer_(), innerConfig);
+  var connectFromInnerFrame = goog.bind(
+      this.getInnerPeer_().instantiateChannel, this.getInnerPeer_(),
+      innerConfig);
 
   // Take control of the timing and reverse of each frame's first SETUP call. If
   // these happen to fire right on top of each other, that tends to mask
@@ -800,8 +818,7 @@ Driver.prototype.continueConnect_ = function(reverse) {
  * @private
  */
 Driver.prototype.outerFrameConnected_ = function() {
-  var payload = this.outerFrameEchoPayload_ =
-      goog.net.xpc.getRandomString(10);
+  var payload = this.outerFrameEchoPayload_ = goog.net.xpc.getRandomString(10);
   this.channel_.send('echo', payload);
 };
 
@@ -810,8 +827,7 @@ Driver.prototype.outerFrameConnected_ = function() {
  * Called by the inner frame connection callback in inner_peer.html.
  */
 Driver.prototype.innerFrameConnected = function() {
-  var payload = this.innerFrameEchoPayload_ =
-      goog.net.xpc.getRandomString(10);
+  var payload = this.innerFrameEchoPayload_ = goog.net.xpc.getRandomString(10);
   this.getInnerPeer_().sendEcho(payload);
 };
 
@@ -863,19 +879,21 @@ Driver.prototype.innerFrameGotResponse = function(payload) {
  *     are supported, and should be tested.
  * @private
  */
-Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported,
-    innerFrameMigrationSupported) {
+Driver.prototype.testReconnects_ = function(
+    outerFrameReconnectSupported, innerFrameMigrationSupported) {
   G_testRunner.log('Performing inner frame reconnect');
   this.reinitializePromises_();
-  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
-                                                this);
+  this.innerFrameResponseReceived_.promise.then(
+      this.checkChannelNames_, null, this);
 
   if (outerFrameReconnectSupported) {
-    this.innerFrameResponseReceived_.promise.then(goog.bind(
-        this.performOuterFrameReconnect_, this, innerFrameMigrationSupported));
+    this.innerFrameResponseReceived_.promise.then(
+        goog.bind(
+            this.performOuterFrameReconnect_, this,
+            innerFrameMigrationSupported));
   } else if (innerFrameMigrationSupported) {
-    this.innerFrameResponseReceived_.promise.then(this.migrateInnerFrame_, null,
-                                                  this);
+    this.innerFrameResponseReceived_.promise.then(
+        this.migrateInnerFrame_, null, this);
   }
 
   this.performInnerFrameReconnect_();
@@ -929,11 +947,11 @@ Driver.prototype.performOuterFrameReconnect_ = function(
 
   G_testRunner.log('Reconnecting outer frame');
   this.reinitializePromises_();
-  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
-                                                this);
+  this.innerFrameResponseReceived_.promise.then(
+      this.checkChannelNames_, null, this);
   if (innerFrameMigrationSupported) {
-    this.outerFrameResponseReceived_.promise.then(this.migrateInnerFrame_, null,
-                                                  this);
+    this.outerFrameResponseReceived_.promise.then(
+        this.migrateInnerFrame_, null, this);
   }
   this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
 };
@@ -946,12 +964,13 @@ Driver.prototype.performOuterFrameReconnect_ = function(
 Driver.prototype.migrateInnerFrame_ = function() {
   G_testRunner.log('Migrating inner frame');
   this.reinitializePromises_();
-  var innerFrameProtoVersion = this.innerFrameCfg_[
-      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION];
-  this.innerFrameResponseReceived_.promise.then(this.checkChannelNames_, null,
-                                                this);
-  this.innerFrameCfg_[
-      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+  var innerFrameProtoVersion =
+      this.innerFrameCfg_[goog.net.xpc.CfgFields
+                              .NATIVE_TRANSPORT_PROTOCOL_VERSION];
+  this.innerFrameResponseReceived_.promise.then(
+      this.checkChannelNames_, null, this);
+  this.innerFrameCfg_[goog.net.xpc.CfgFields
+                          .NATIVE_TRANSPORT_PROTOCOL_VERSION] =
       innerFrameProtoVersion == 1 ? 2 : 1;
   this.performInnerFrameReconnect_();
 };

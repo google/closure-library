@@ -48,8 +48,8 @@ function tearDown() {
 function testAfterHighlightListener() {
   palette.setHighlightedIndex(0);
   var handler = new goog.testing.recordFunction();
-  goog.events.listen(palette,
-      goog.ui.Palette.EventType.AFTER_HIGHLIGHT, handler);
+  goog.events.listen(
+      palette, goog.ui.Palette.EventType.AFTER_HIGHLIGHT, handler);
   palette.setHighlightedIndex(2);
   assertEquals(1, handler.getCallCount());
   palette.setHighlightedIndex(-1);
@@ -62,17 +62,20 @@ function testHighlightItemUpdatesParentA11yActiveDescendant() {
   container.addChild(palette, true);
 
   palette.setHighlightedItem(nodes[0]);
-  assertEquals('Node 0 cell should be the container\'s active descendant',
+  assertEquals(
+      'Node 0 cell should be the container\'s active descendant',
       palette.getRenderer().getCellForItem(nodes[0]),
       goog.a11y.aria.getActiveDescendant(container.getElement()));
 
   palette.setHighlightedItem(nodes[1]);
-  assertEquals('Node 1 cell should be the container\'s active descendant',
+  assertEquals(
+      'Node 1 cell should be the container\'s active descendant',
       palette.getRenderer().getCellForItem(nodes[1]),
       goog.a11y.aria.getActiveDescendant(container.getElement()));
 
   palette.setHighlightedItem();
-  assertNull('Container should have no active descendant',
+  assertNull(
+      'Container should have no active descendant',
       goog.a11y.aria.getActiveDescendant(container.getElement()));
 
   container.dispose();
@@ -90,17 +93,22 @@ function testHighlightCellEvents() {
     events.push(e);
     targetElements.push(e.target.getElement());
   };
-  palette.getHandler().listen(palette, [
-    this, goog.ui.Component.EventType.HIGHLIGHT,
-    this, goog.ui.Component.EventType.UNHIGHLIGHT
-  ], handleEvent);
+  palette.getHandler().listen(
+      palette,
+      [
+        this, goog.ui.Component.EventType.HIGHLIGHT, this,
+        goog.ui.Component.EventType.UNHIGHLIGHT
+      ],
+      handleEvent);
 
   // Test highlight events on first selection
   palette.setHighlightedItem(nodes[0]);
   assertEquals('Should have fired 1 event', 1, events.length);
-  assertEquals('HIGHLIGHT event should be fired',
-      goog.ui.Component.EventType.HIGHLIGHT, events[0].type);
-  assertEquals('Event should be fired for node[0] cell',
+  assertEquals(
+      'HIGHLIGHT event should be fired', goog.ui.Component.EventType.HIGHLIGHT,
+      events[0].type);
+  assertEquals(
+      'Event should be fired for node[0] cell',
       renderer.getCellForItem(nodes[0]), targetElements[0]);
 
   events = [];
@@ -115,13 +123,17 @@ function testHighlightCellEvents() {
   assertEquals('Should have fired 2 events', 2, events.length);
   var unhighlightEvent = events.shift();
   var highlightEvent = events.shift();
-  assertEquals('UNHIGHLIGHT should be fired first',
+  assertEquals(
+      'UNHIGHLIGHT should be fired first',
       goog.ui.Component.EventType.UNHIGHLIGHT, unhighlightEvent.type);
-  assertEquals('UNHIGHLIGHT should be fired for node[0] cell',
+  assertEquals(
+      'UNHIGHLIGHT should be fired for node[0] cell',
       renderer.getCellForItem(nodes[0]), targetElements[0]);
-  assertEquals('HIGHLIGHT should be fired after UNHIGHLIGHT',
+  assertEquals(
+      'HIGHLIGHT should be fired after UNHIGHLIGHT',
       goog.ui.Component.EventType.HIGHLIGHT, highlightEvent.type);
-  assertEquals('HIGHLIGHT should be fired for node[1] cell',
+  assertEquals(
+      'HIGHLIGHT should be fired for node[1] cell',
       renderer.getCellForItem(nodes[1]), targetElements[1]);
 
   events = [];
@@ -131,18 +143,19 @@ function testHighlightCellEvents() {
   palette.setHighlightedItem();
 
   assertEquals('Should have fired 1 event', 1, events.length);
-  assertEquals('UNHIGHLIGHT event should be fired',
+  assertEquals(
+      'UNHIGHLIGHT event should be fired',
       goog.ui.Component.EventType.UNHIGHLIGHT, events[0].type);
-  assertEquals('Event should be fired for node[1] cell',
+  assertEquals(
+      'Event should be fired for node[1] cell',
       renderer.getCellForItem(nodes[1]), targetElements[0]);
 }
 
 function testHandleKeyEventLoops() {
   palette.setHighlightedIndex(0);
   var createKeyEvent = function(keyCode) {
-    return new goog.events.KeyEvent(keyCode,
-        0 /* charCode */,
-        false /* repeat */,
+    return new goog.events.KeyEvent(
+        keyCode, 0 /* charCode */, false /* repeat */,
         new goog.testing.events.Event(goog.events.EventType.KEYDOWN));
   };
   palette.handleKeyEvent(createKeyEvent(goog.events.KeyCodes.LEFT));
@@ -171,18 +184,42 @@ function testSetHighlight() {
   assertEquals(5, palette.getHighlightedIndex());
 }
 
+function testPerformActionInternal() {
+  var container = new goog.ui.Container();
+  container.render(document.getElementById('sandbox'));
+  container.addChild(palette, true);
+  palette.setActive(true);
+  palette.setSelectedIndex(1);
+  palette.setHighlightedIndex(3);
+  palette.setHighlighted(true);
+  assertEquals(1, palette.getSelectedIndex());
+  assertEquals(3, palette.getHighlightedIndex());
+
+  // Click somewhere in the palette, but not inside a cell.
+  var mouseUp = new goog.events.BrowserEvent(
+      {type: 'mouseup', button: 1, target: palette});
+  palette.handleMouseUp(mouseUp);
+
+  // Highlight and selection are both unchanged (user did not select anything).
+  assertEquals(1, palette.getSelectedIndex());
+  assertEquals(3, palette.getHighlightedIndex());
+}
+
 function testSetAriaLabel() {
-  assertNull('Palette must not have aria label by default',
-      palette.getAriaLabel());
+  assertNull(
+      'Palette must not have aria label by default', palette.getAriaLabel());
   palette.setAriaLabel('My Palette');
   palette.render();
   var element = palette.getElementStrict();
   assertNotNull('Element must not be null', element);
-  assertEquals('Palette element must have expected aria-label', 'My Palette',
+  assertEquals(
+      'Palette element must have expected aria-label', 'My Palette',
       element.getAttribute('aria-label'));
-  assertEquals('Palette element must have expected aria role', 'grid',
+  assertEquals(
+      'Palette element must have expected aria role', 'grid',
       element.getAttribute('role'));
   palette.setAriaLabel('My new Palette');
-  assertEquals('Palette element must have updated aria-label', 'My new Palette',
+  assertEquals(
+      'Palette element must have updated aria-label', 'My new Palette',
       element.getAttribute('aria-label'));
 }

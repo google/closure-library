@@ -64,24 +64,19 @@ function setUp() {
   isNew = false;
   mockLink.isNew();
   mockLink.$anyTimes();
-  mockLink.$does(function() {
-    return isNew;
-  });
+  mockLink.$does(function() { return isNew; });
   mockLink.getCurrentText();
   mockLink.$anyTimes();
-  mockLink.$does(function() {
-    return anchorElem.innerHTML;
-  });
-  mockLink.setTextAndUrl(goog.testing.mockmatchers.isString,
-      goog.testing.mockmatchers.isString);
+  mockLink.$does(function() { return anchorElem.innerHTML; });
+  mockLink.setTextAndUrl(
+      goog.testing.mockmatchers.isString, goog.testing.mockmatchers.isString);
   mockLink.$anyTimes();
   mockLink.$does(function(text, url) {
     anchorElem.innerHTML = text;
     anchorElem.href = url;
   });
-  mockLink.$registerArgumentListVerifier('placeCursorRightOf', function() {
-    return true;
-  });
+  mockLink.$registerArgumentListVerifier(
+      'placeCursorRightOf', function() { return true; });
   mockLink.placeCursorRightOf(goog.testing.mockmatchers.iBoolean);
   mockLink.$anyTimes();
   mockLink.getAnchor();
@@ -121,16 +116,16 @@ function setUpAnchor(href, text, opt_isNew, opt_target, opt_rel) {
  *     shown.
  */
 function createAndShow(opt_document, opt_openInNewWindow, opt_noFollow) {
-  dialog = new goog.ui.editor.LinkDialog(new goog.dom.DomHelper(opt_document),
-                                         mockLink);
+  dialog = new goog.ui.editor.LinkDialog(
+      new goog.dom.DomHelper(opt_document), mockLink);
   if (opt_openInNewWindow) {
     dialog.showOpenLinkInNewWindow(false);
   }
   if (opt_noFollow) {
     dialog.showRelNoFollow();
   }
-  dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
-      mockOkHandler);
+  dialog.addEventListener(
+      goog.ui.editor.AbstractDialog.EventType.OK, mockOkHandler);
   dialog.show();
 }
 
@@ -140,17 +135,17 @@ function createAndShow(opt_document, opt_openInNewWindow, opt_noFollow) {
  * and url.
  */
 function expectOk(linkText, linkUrl, opt_openInNewWindow, opt_noFollow) {
-  mockOkHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
-        return arg.type == goog.ui.editor.AbstractDialog.EventType.OK &&
-               arg.linkText == linkText &&
-               arg.linkUrl == linkUrl &&
-               arg.openInNewWindow == !!opt_openInNewWindow &&
-               arg.noFollow == !!opt_noFollow;
-      },
-      '{linkText: ' + linkText + ', linkUrl: ' + linkUrl +
-          ', openInNewWindow: ' + opt_openInNewWindow +
-          ', noFollow: ' + opt_noFollow + '}'));
+  mockOkHandler.handleEvent(
+      new goog.testing.mockmatchers.ArgumentMatcher(
+          function(arg) {
+            return arg.type == goog.ui.editor.AbstractDialog.EventType.OK &&
+                arg.linkText == linkText && arg.linkUrl == linkUrl &&
+                arg.openInNewWindow == !!opt_openInNewWindow &&
+                arg.noFollow == !!opt_noFollow;
+          },
+          '{linkText: ' + linkText + ', linkUrl: ' + linkUrl +
+              ', openInNewWindow: ' + opt_openInNewWindow + ', noFollow: ' +
+              opt_noFollow + '}'));
 }
 
 
@@ -172,18 +167,19 @@ function useActiveElement() {
  */
 function testShowNewLinkSwitchToUrl(opt_document) {
   mockCtrl.$replayAll();
-  setUpAnchor('', '', true); // Must be done before creating the dialog.
+  setUpAnchor('', '', true);  // Must be done before creating the dialog.
   createAndShow(opt_document);
 
-  var webRadio = dialog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB).firstChild;
-  var emailRadio = dialog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_TAB).firstChild;
+  var webRadio = dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB)
+                     .firstChild;
+  var emailRadio =
+      dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_TAB)
+          .firstChild;
   assertTrue('Web Radio Button selected', webRadio.checked);
   assertFalse('Email Radio Button selected', emailRadio.checked);
   if (useActiveElement()) {
-    assertEquals('Focus should be on url input',
-        getUrlInput(),
+    assertEquals(
+        'Focus should be on url input', getUrlInput(),
         dialog.dom.getActiveElement());
   }
 
@@ -191,8 +187,8 @@ function testShowNewLinkSwitchToUrl(opt_document) {
   assertFalse('Web Radio Button selected', webRadio.checked);
   assertTrue('Email Radio Button selected', emailRadio.checked);
   if (useActiveElement()) {
-    assertEquals('Focus should be on url input',
-        getEmailInput(),
+    assertEquals(
+        'Focus should be on url input', getEmailInput(),
         dialog.dom.getActiveElement());
   }
 
@@ -208,22 +204,19 @@ function testShowNewLinkSwitchToUrl(opt_document) {
  */
 function testShowForNewLink(opt_document) {
   mockCtrl.$replayAll();
-  setUpAnchor('', '', true); // Must be done before creating the dialog.
+  setUpAnchor('', '', true);  // Must be done before creating the dialog.
   createAndShow(opt_document);
 
-  assertEquals('Display text input field should be empty',
-               '',
-               getDisplayInputText());
-  assertEquals('Url input field should be empty',
-               '',
-               getUrlInputText());
-  assertEquals('On the web tab should be selected',
-               goog.ui.editor.LinkDialog.Id_.ON_WEB,
-               dialog.curTabId_);
+  assertEquals(
+      'Display text input field should be empty', '', getDisplayInputText());
+  assertEquals('Url input field should be empty', '', getUrlInputText());
+  assertEquals(
+      'On the web tab should be selected', goog.ui.editor.LinkDialog.Id_.ON_WEB,
+      dialog.curTabId_);
   if (useActiveElement()) {
-    assertEquals('Focus should be on url input',
-                 getUrlInput(),
-                 dialog.dom.getActiveElement());
+    assertEquals(
+        'Focus should be on url input', getUrlInput(),
+        dialog.dom.getActiveElement());
   }
 
   mockCtrl.$verifyAll();
@@ -248,19 +241,18 @@ function testShowForUrlLink() {
   setUpAnchor(ANCHOR_URL, ANCHOR_TEXT);
   createAndShow();
 
-  assertEquals('Display text input field should be filled in',
-               ANCHOR_TEXT,
-               getDisplayInputText());
-  assertEquals('Url input field should be filled in',
-               ANCHOR_URL,
-               getUrlInputText());
-  assertEquals('On the web tab should be selected',
-               goog.ui.editor.LinkDialog.Id_.ON_WEB,
-               dialog.curTabId_);
+  assertEquals(
+      'Display text input field should be filled in', ANCHOR_TEXT,
+      getDisplayInputText());
+  assertEquals(
+      'Url input field should be filled in', ANCHOR_URL, getUrlInputText());
+  assertEquals(
+      'On the web tab should be selected', goog.ui.editor.LinkDialog.Id_.ON_WEB,
+      dialog.curTabId_);
   if (useActiveElement()) {
-    assertEquals('Focus should be on url input',
-                 getUrlInput(),
-                 dialog.dom.getActiveElement());
+    assertEquals(
+        'Focus should be on url input', getUrlInput(),
+        dialog.dom.getActiveElement());
   }
 
   mockCtrl.$verifyAll();
@@ -276,19 +268,20 @@ function testShowForMailtoLink() {
   setUpAnchor(ANCHOR_MAILTO, ANCHOR_TEXT);
   createAndShow();
 
-  assertEquals('Display text input field should be filled in',
-               ANCHOR_TEXT,
-               getDisplayInputText());
-  assertEquals('Email input field should be filled in',
-               ANCHOR_EMAIL, // The 'mailto:' is not in the input!
-               getEmailInputText());
-  assertEquals('Email tab should be selected',
-               goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS,
-               dialog.curTabId_);
+  assertEquals(
+      'Display text input field should be filled in', ANCHOR_TEXT,
+      getDisplayInputText());
+  assertEquals(
+      'Email input field should be filled in',
+      ANCHOR_EMAIL,  // The 'mailto:' is not in the input!
+      getEmailInputText());
+  assertEquals(
+      'Email tab should be selected',
+      goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS, dialog.curTabId_);
   if (useActiveElement()) {
-    assertEquals('Focus should be on email input',
-                 getEmailInput(),
-                 dialog.dom.getActiveElement());
+    assertEquals(
+        'Focus should be on email input', getEmailInput(),
+        dialog.dom.getActiveElement());
   }
 
   mockCtrl.$verifyAll();
@@ -306,26 +299,26 @@ function testAutogeneration() {
 
   // Simulate typing a url when everything is empty, should autogen.
   setUrlInputText(ANCHOR_URL);
-  assertEquals('Display text should have been autogenerated',
-               ANCHOR_URL,
-               getDisplayInputText());
+  assertEquals(
+      'Display text should have been autogenerated', ANCHOR_URL,
+      getDisplayInputText());
 
   // Simulate typing text when url is set, afterwards should not autogen.
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_MAILTO);
-  assertNotEquals('Display text should not have been autogenerated',
-                  ANCHOR_MAILTO,
-                  getDisplayInputText());
-  assertEquals('Display text should have remained the same',
-               ANCHOR_TEXT,
-               getDisplayInputText());
+  assertNotEquals(
+      'Display text should not have been autogenerated', ANCHOR_MAILTO,
+      getDisplayInputText());
+  assertEquals(
+      'Display text should have remained the same', ANCHOR_TEXT,
+      getDisplayInputText());
 
   // Simulate typing text equal to existing url, afterwards should autogen.
   setDisplayInputText(ANCHOR_MAILTO);
   setUrlInputText(ANCHOR_URL);
-  assertEquals('Display text should have been autogenerated',
-               ANCHOR_URL,
-               getDisplayInputText());
+  assertEquals(
+      'Display text should have been autogenerated', ANCHOR_URL,
+      getDisplayInputText());
 
   mockCtrl.$verifyAll();
 }
@@ -346,27 +339,27 @@ function testAutogenerationOff() {
 
   // Simulate typing a url when everything is empty, should not autogen.
   setUrlInputText(ANCHOR_URL);
-  assertEquals('Display text should not have been autogenerated',
-               '',
-               getDisplayInputText());
+  assertEquals(
+      'Display text should not have been autogenerated', '',
+      getDisplayInputText());
 
   // Simulate typing text when url is set, afterwards should not autogen.
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_MAILTO);
-  assertNotEquals('Display text should not have been autogenerated',
-                  ANCHOR_MAILTO,
-                  getDisplayInputText());
-  assertEquals('Display text should have remained the same',
-               ANCHOR_TEXT,
-               getDisplayInputText());
+  assertNotEquals(
+      'Display text should not have been autogenerated', ANCHOR_MAILTO,
+      getDisplayInputText());
+  assertEquals(
+      'Display text should have remained the same', ANCHOR_TEXT,
+      getDisplayInputText());
 
   // Simulate typing text equal to existing url, afterwards should not
   // autogen.
   setDisplayInputText(ANCHOR_MAILTO);
   setUrlInputText(ANCHOR_URL);
-  assertEquals('Display text should not have been autogenerated',
-               ANCHOR_MAILTO,
-               getDisplayInputText());
+  assertEquals(
+      'Display text should not have been autogenerated', ANCHOR_MAILTO,
+      getDisplayInputText());
 
   mockCtrl.$verifyAll();
 }
@@ -441,10 +434,12 @@ function testOpenLinkInNewWindowNewLink() {
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_URL);
 
-  assertFalse('"Open in new window" should start unchecked',
+  assertFalse(
+      '"Open in new window" should start unchecked',
       getOpenInNewWindowCheckboxChecked());
   setOpenInNewWindowCheckboxChecked(true);
-  assertTrue('"Open in new window" should have gotten checked',
+  assertTrue(
+      '"Open in new window" should have gotten checked',
       getOpenInNewWindowCheckboxChecked());
   goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
 
@@ -454,10 +449,12 @@ function testOpenLinkInNewWindowNewLink() {
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_URL);
 
-  assertTrue('"Open in new window" should remember it was checked',
+  assertTrue(
+      '"Open in new window" should remember it was checked',
       getOpenInNewWindowCheckboxChecked());
   setOpenInNewWindowCheckboxChecked(false);
-  assertFalse('"Open in new window" should have gotten unchecked',
+  assertFalse(
+      '"Open in new window" should have gotten unchecked',
       getOpenInNewWindowCheckboxChecked());
   goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
 }
@@ -472,7 +469,8 @@ function testOpenLinkInNewWindowExistingLink() {
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_URL);
 
-  assertTrue('"Open in new window" should start checked for existing link',
+  assertTrue(
+      '"Open in new window" should start checked for existing link',
       getOpenInNewWindowCheckboxChecked());
 
   mockCtrl.$verifyAll();
@@ -488,7 +486,8 @@ function testRelNoFollowNewLink() {
   dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_URL);
-  assertFalse('rel=nofollow should start unchecked',
+  assertFalse(
+      'rel=nofollow should start unchecked',
       dialog.relNoFollowCheckbox_.checked);
 
   // Check rel=nofollow and close the dialog.
@@ -501,7 +500,8 @@ function testRelNoFollowNewLink() {
   dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
   setDisplayInputText(ANCHOR_TEXT);
   setUrlInputText(ANCHOR_URL);
-  assertTrue('rel=nofollow should start checked when reopening the dialog',
+  assertTrue(
+      'rel=nofollow should start checked when reopening the dialog',
       dialog.relNoFollowCheckbox_.checked);
 }
 
@@ -510,7 +510,8 @@ function testRelNoFollowExistingLink() {
 
   setUpAnchor('', '', null, null, 'foo nofollow bar');
   createAndShow(null, null, true);
-  assertTrue('rel=nofollow should start checked for existing link',
+  assertTrue(
+      'rel=nofollow should start checked for existing link',
       dialog.relNoFollowCheckbox_.checked);
 
   mockCtrl.$verifyAll();
@@ -528,9 +529,11 @@ function testWebTestButton() {
   }
 
   var width, height;
-  mockWindowOpen(ANCHOR_URL, '_blank',
+  mockWindowOpen(
+      ANCHOR_URL, '_blank',
       new goog.testing.mockmatchers.ArgumentMatcher(function(str) {
-        return str == 'width=' + width + ',height=' + height +
+        return str ==
+            'width=' + width + ',height=' + height +
             ',toolbar=1,scrollbars=1,location=1,statusbar=0,' +
             'menubar=1,resizable=1';
       }, '3rd arg: (string) window.open() options'));
@@ -563,8 +566,8 @@ function testWebTestButtonPreventDefault() {
   setUpAnchor(ANCHOR_URL, ANCHOR_TEXT);
   createAndShow();
 
-  goog.events.listen(dialog,
-      goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK,
+  goog.events.listen(
+      dialog, goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK,
       function(e) {
         assertEquals(e.url, ANCHOR_URL);
         e.preventDefault();
@@ -587,14 +590,14 @@ function testSetTextToDisplayVisible() {
   setUpAnchor('', '', true);
   createAndShow();
 
-  assertNotEquals('none',
-                  goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
+  assertNotEquals(
+      'none', goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
   dialog.setTextToDisplayVisible(false);
-  assertEquals('none',
-               goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
+  assertEquals(
+      'none', goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
   dialog.setTextToDisplayVisible(true);
-  assertNotEquals('none',
-                  goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
+  assertNotEquals(
+      'none', goog.style.getStyle(dialog.textToDisplayDiv_, 'display'));
 
   mockCtrl.$verifyAll();
 }
@@ -632,8 +635,8 @@ function setUrlInputText(text) {
 }
 
 function getEmailInput() {
-  var elt = dialog.dom.getElement(
-      goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT);
+  var elt =
+      dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT);
   assertNotNullNorUndefined('EmailInput must be found', elt);
   return elt;
 }
@@ -658,8 +661,8 @@ function setOpenInNewWindowCheckboxChecked(checked) {
 }
 
 function fireInputEvent(input, keyCode) {
-  var inputEvent = new goog.testing.events.Event(goog.events.EventType.INPUT,
-      input);
+  var inputEvent =
+      new goog.testing.events.Event(goog.events.EventType.INPUT, input);
   inputEvent.keyCode = keyCode;
   inputEvent.charCode = keyCode;
   goog.testing.events.fireBrowserEvent(inputEvent);

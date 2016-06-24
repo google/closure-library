@@ -1,0 +1,119 @@
+---
+{edit_path: '', layout: api, page: goog.labs.pubsub.BroadcastPubSub, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>BroadcastPubSub</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.labs.pubsub.html">goog.labs.pubsub</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L66" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="struct"></span></div><div>class BroadcastPubSub</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.Disposable.html">goog.Disposable</a>
+  &#x2514; goog.labs.pubsub.BroadcastPubSub</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code></dl><p>Topic-based publish/subscribe messaging implementation that provides
+communication between browsing contexts that share the same origin.</p>
+<p>Wrapper around PubSub that utilizes localStorage to broadcast publications to
+all browser windows with the same origin as the publishing context. This
+allows for topic-based publish/subscribe implementation of strings shared by
+all browser contexts that share the same origin.</p>
+<p>Delivery is guaranteed on all browsers except IE8 where topics expire after a
+timeout. Publishing of a topic within a callback function provides no
+guarantee on ordering in that there is a possibility that separate origin
+contexts may see topics in a different order.</p>
+<p>This class is not secure and in certain cases (e.g., a browser crash) data
+that is published can persist in localStorage indefinitely. Do not use this
+class to communicate private or confidential information.</p>
+<p>On IE8, localStorage is shared by the http and https origins. An attacker
+could possibly leverage this to publish to the secure origin.</p>
+<p>goog.labs.pubsub.BroadcastPubSub wraps an instance of PubSub rather than
+subclassing because the base PubSub class allows publishing of arbitrary
+objects.</p>
+<p>Special handling is done for the IE8 browsers. See the IE8_EVENTS_KEY_
+constant and the <code>publish</code> function for more information.</p>
+<h3 class="name"><div>new BroadcastPubSub()</div></h3><dt class="spec">Parameters</dt><dd><dl><dd><p>None.</p></dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addOnDisposeCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addOnDisposeCallback(<var>callback</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Invokes a callback function when this object is disposed. Callbacks are
+invoked in the order in which they were added. If a callback is added to
+an already disposed Disposable, it will be called immediately.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#addOnDisposeCallback">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(this: T): ?</code><dd><p>The callback function.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="clear"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L317" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>clear(<var>opt_topic</var>)</div></h3></div><div class="body"><p>Clears the subscription list for a topic, or all topics if unspecified.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Topic to clear (all topics if unspecified).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dispose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispose()</div></h3></div><div class="body"><p>Disposes of the object. If the object hasn&#39;t already been disposed of, calls
+<a href="goog.labs.pubsub.BroadcastPubSub.html#disposeInternal"><code>#disposeInternal</code></a>. Classes that extend <code>goog.Disposable</code> should
+override <a href="goog.labs.pubsub.BroadcastPubSub.html#disposeInternal"><code>#disposeInternal</code></a> in order to delete references to COM
+objects, DOM nodes, and other disposable objects. Reentrant.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#dispose">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#dispose">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="disposeInternal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L323" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>disposeInternal()</div></h3></div><div class="body"><p>Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend <code>goog.Disposable</code> should
+override this method.
+Not reentrant. To avoid calling it twice, it must only be called from the
+subclass&#39; <code>disposeInternal</code> method. Everywhere else the public
+<code>dispose</code> method must be used.
+For example:</p>
+ <pre>
+   mypackage.MyClass &#61; function() {
+     mypackage.MyClass.base(this, &#39;constructor&#39;);
+     // Constructor logic specific to MyClass.
+     ...
+   };
+   goog.inherits(mypackage.MyClass, goog.Disposable);
+
+   mypackage.MyClass.prototype.disposeInternal &#61; function() {
+     // Dispose logic specific to MyClass.
+     ...
+     // Call superclass&#39;s disposeInternal at the end of the subclass&#39;s, like
+     // in C&#43;&#43;, to avoid hard-to-catch issues.
+     mypackage.MyClass.base(this, &#39;disposeInternal&#39;);
+   };
+ </pre>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.Disposable.html#disposeInternal">goog.Disposable</a></dd></dl></div></section><section class="property expandable" id="getCount"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L308" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCount(<var>opt_topic</var>)</div></h3></div><div class="body"><p>Returns the number of subscriptions to the given topic (or all topics if
+unspecified). This number will not change while publishing any messages.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>The topic (all topics if unspecified).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Number of subscriptions to the topic.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L163" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.labs.pubsub.BroadcastPubSub.html#isDisposed"><code>#isDisposed</code></a> instead.</p>
+<dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#getDisposed">goog.Disposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#isDisposed">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#isDisposed">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="publish"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L166" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>publish(<var>topic</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Publishes a message to a topic. Remote subscriptions in other tabs/windows
+are dispatched via local storage events. Local subscriptions are called
+asynchronously via Timer event in order to simulate remote behavior locally.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Topic to publish to.</p>
+<dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String arguments that are applied to each
+subscription function.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="registerDisposable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDisposable(<var>disposable</var>)</div></h3></div><div class="body"><p>Associates a disposable object with this object so that they will be disposed
+together.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#registerDisposable">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>disposable</var><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><p>that will be disposed when
+this object is disposed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="subscribe"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L277" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>subscribe(<var>topic</var>, <var>fn</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Subscribes a function to a topic. The function is invoked as a method on the
+given <code>opt_context</code> object, or in the global scope if no context is
+specified. Subscribing the same function to the same topic multiple times
+will result in multiple function invocations while publishing. Returns a
+subscription key that can be used to unsubscribe the function from the topic
+via <a href="goog.labs.pubsub.BroadcastPubSub.html#unsubscribeByKey"><code>#unsubscribeByKey</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Topic to subscribe to.</p>
+<dt class="type name"><var>fn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Function to be invoked when a message is published to
+the given topic.</p>
+<dt class="type name"><var>opt_context</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Object in whose context the function is to be
+called (the global scope if none).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Subscription key.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="subscribeOnce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L296" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>subscribeOnce(<var>topic</var>, <var>fn</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Subscribes a single-use function to a topic. The function is invoked as a
+method on the given <code>opt_context</code> object, or in the global scope if no
+context is specified, and is then unsubscribed. Returns a subscription key
+that can be used to unsubscribe the function from the topic via <a href="goog.labs.pubsub.BroadcastPubSub.html"><code>#unsubscribeByKey</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Topic to subscribe to.</p>
+<dt class="type name"><var>fn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Function to be invoked once and then unsubscribed when
+a message is published to the given topic.</p>
+<dt class="type name"><var>opt_context</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Object in whose context the function is to be
+called (the global scope if none).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Subscription key.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unsubscribe"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L245" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unsubscribe(<var>topic</var>, <var>fn</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Unsubscribes a function from a topic. Only deletes the first match found.
+Returns a Boolean indicating whether a subscription was removed.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>topic</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Topic to unsubscribe from.</p>
+<dt class="type name"><var>fn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Function to unsubscribe.</p>
+<dt class="type name"><var>opt_context</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Object in whose context the function was to be
+called (the global scope if none).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether a matching subscription was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="unsubscribeByKey"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L258" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>unsubscribeByKey(<var>key</var>)</div></h3></div><div class="body"><p>Removes a subscription based on the key returned by <a href="goog.labs.pubsub.BroadcastPubSub.html#subscribe"><code>#subscribe</code></a>. No-op
+if no matching subscription is found. Returns a Boolean indicating whether a
+subscription was removed.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Subscription key.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether a matching subscription was removed.</p>
+</dl></dd></dl></div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="creationStack"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>creationStack</div></h3></div><div class="body"><p>If monitoring the goog.Disposable instances is enabled, stores the creation
+stack trace of the Disposable instance.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#creationStack">goog.Disposable</a></dd></dl></div></section></section><section class="type-defs"><h2>Type Definitions</h2><section id="BroadcastPubSub.Ie8Event_" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/labs/pubsub/broadcastpubsub.js#L395" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="private"></span></div><div>BroadcastPubSub.Ie8Event_</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>{timestamp: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, args: !<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;}</code></dl><p>All instances of this object should access elements using strings and not
+attributes. Since we are communicating across browser tabs we could be
+dealing with different versions of javascript and thus may have different
+obfuscation in each tab.</p>
+</div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

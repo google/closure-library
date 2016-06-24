@@ -1,0 +1,84 @@
+---
+{edit_path: '', layout: api, page: goog.async.ConditionalDelay, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>ConditionalDelay</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.async.html">goog.async</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L72" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="struct"></span></div><div>class ConditionalDelay</div></h1></div><div class="body"><pre class="inheritance"><a href="goog.Disposable.html">goog.Disposable</a>
+  &#x2514; goog.async.ConditionalDelay</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code></dl><p>A ConditionalDelay object invokes the associated function after a specified
+interval delay and checks its return value. If the function returns
+<code>true</code> the conditional delay is cancelled and #onSuccess
+is called. Otherwise this object keeps to invoke the deferred function until
+either it returns <code>true</code> or the timeout is exceeded. In the latter case
+the #onFailure method will be called.</p>
+<p>The interval duration and timeout can be specified each time the delay is
+started. Calling start on an active delay will reset the timer.</p>
+<h3 class="name"><div>new ConditionalDelay(<var>listener</var>, <var>opt_handler</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>listener</var><code>function(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Function to call when the delay
+completes. Should return a value that type-converts to <code>true</code> if
+the call succeeded and this delay should be stopped.</p>
+<dt class="type name"><var>opt_handler</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>The object scope to invoke the function in.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addOnDisposeCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L216" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addOnDisposeCallback(<var>callback</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Invokes a callback function when this object is disposed. Callbacks are
+invoked in the order in which they were added. If a callback is added to
+an already disposed Disposable, it will be called immediately.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#addOnDisposeCallback">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(this: T): ?</code><dd><p>The callback function.</p>
+<dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="dispose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>dispose()</div></h3></div><div class="body"><p>Disposes of the object. If the object hasn&#39;t already been disposed of, calls
+<a href="goog.async.ConditionalDelay.html#disposeInternal"><code>#disposeInternal</code></a>. Classes that extend <code>goog.Disposable</code> should
+override <a href="goog.async.ConditionalDelay.html#disposeInternal"><code>#disposeInternal</code></a> in order to delete references to COM
+objects, DOM nodes, and other disposable objects. Reentrant.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#dispose">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#dispose">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Nothing.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="disposeInternal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L119" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>disposeInternal()</div></h3></div><div class="body"><p>Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend <code>goog.Disposable</code> should
+override this method.
+Not reentrant. To avoid calling it twice, it must only be called from the
+subclass&#39; <code>disposeInternal</code> method. Everywhere else the public
+<code>dispose</code> method must be used.
+For example:</p>
+ <pre>
+   mypackage.MyClass &#61; function() {
+     mypackage.MyClass.base(this, &#39;constructor&#39;);
+     // Constructor logic specific to MyClass.
+     ...
+   };
+   goog.inherits(mypackage.MyClass, goog.Disposable);
+
+   mypackage.MyClass.prototype.disposeInternal &#61; function() {
+     // Dispose logic specific to MyClass.
+     ...
+     // Call superclass&#39;s disposeInternal at the end of the subclass&#39;s, like
+     // in C&#43;&#43;, to avoid hard-to-catch issues.
+     mypackage.MyClass.base(this, &#39;disposeInternal&#39;);
+   };
+ </pre>
+<dl><dt class="spec">Overrides</dt><dd><a href="goog.Disposable.html#disposeInternal">goog.Disposable</a></dd></dl></div></section><section class="property expandable" id="getDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L163" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>getDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Deprecated<dd><p>Use <a href="goog.async.ConditionalDelay.html#isDisposed"><code>#isDisposed</code></a> instead.</p>
+<dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#getDisposed">goog.Disposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isActive"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L164" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isActive()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the delay is currently active, false otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDisposed"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L154" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDisposed()</div></h3></div><div class="body"><dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#isDisposed">goog.Disposable</a></dd><dt class="spec">Specified by</dt><dd><a href="goog.disposable.IDisposable.html#isDisposed">goog.disposable.IDisposable</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the object has been disposed of.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isDone"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L173" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isDone()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the listener has been executed and returned
+<code>true</code> since the last call to #start.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="onFailure"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L195" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>onFailure()</div></h3></div><div class="body"><p>Called when this delayed call is cancelled because the timeout has been
+exceeded, and the listener has never returned <code>true</code>.
+Designed for inheritance, should be overridden by subclasses or on the
+instances if they care.</p>
+</div></section><section class="property expandable" id="onSuccess"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L184" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>onSuccess()</div></h3></div><div class="body"><p>Called when the listener has been successfully executed and returned
+<code>true</code>. The #isDone method should return <code>true</code> by now.
+Designed for inheritance, should be overridden by subclasses or on the
+instances if they care.</p>
+</div></section><section class="property expandable" id="registerDisposable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L203" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>registerDisposable(<var>disposable</var>)</div></h3></div><div class="body"><p>Associates a disposable object with this object so that they will be disposed
+together.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#registerDisposable">goog.Disposable</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>disposable</var><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><p>that will be disposed when
+this object is disposed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="start"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L139" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>start(<var>opt_interval</var>, <var>opt_timeout</var>)</div></h3></div><div class="body"><p>Starts the delay timer. The provided listener function will be called
+repeatedly after the specified interval until the function returns
+<code>true</code> or the timeout is exceeded. Calling start on an active timer
+will stop the timer first.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_interval</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The time interval between the function
+invocations (in milliseconds). Default is 0.</p>
+<dt class="type name"><var>opt_timeout</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The timeout interval (in milliseconds). Takes
+precedence over the <code>opt_interval</code>, i.e. if the timeout is less
+than the invocation interval, the function will be called when the
+timeout is exceeded. A negative value means no timeout. Default is 0.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="stop"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/async/conditionaldelay.js#L156" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>stop()</div></h3></div><div class="body"><p>Stops the delay timer if it is active. No action is taken if the timer is not
+in use.</p>
+</div></section></section><section class="instance-properties"><h2>Instance Properties</h2><section class="property expandable" id="creationStack"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/disposable/disposable.js#L147" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>creationStack</div></h3></div><div class="body"><p>If monitoring the goog.Disposable instances is enabled, stores the creation
+stack trace of the Disposable instance.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd><dt class="spec">Defined by</dt><dd><a href="goog.Disposable.html#creationStack">goog.Disposable</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

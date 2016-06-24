@@ -29,8 +29,7 @@ function testInvalidStrings() {
   assertEquals(null, goog.net.IpAddress.fromString('016'));
   assertEquals(null, goog.net.IpAddress.fromString('000.000.000.000'));
   assertEquals(null, goog.net.IpAddress.fromString('000'));
-  assertEquals(null,
-      goog.net.IpAddress.fromString('0x0a.0x0a.0x0a.0x0a'));
+  assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a.0x0a.0x0a'));
   assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a.0x0a'));
   assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a'));
   assertEquals(null, goog.net.IpAddress.fromString('0x0a'));
@@ -51,8 +50,8 @@ function testInvalidStrings() {
   assertEquals(null, goog.net.IpAddress.fromString('bogus'));
   assertEquals(null, goog.net.IpAddress.fromString('bogus.com'));
   assertEquals(null, goog.net.IpAddress.fromString('192.168.0.1.com'));
-  assertEquals(null,
-      goog.net.IpAddress.fromString('12345.67899.-54321.-98765'));
+  assertEquals(
+      null, goog.net.IpAddress.fromString('12345.67899.-54321.-98765'));
   assertEquals(null, goog.net.IpAddress.fromString('257.0.0.0'));
   assertEquals(null, goog.net.IpAddress.fromString('42.42.42.-42'));
   assertEquals(null, goog.net.IpAddress.fromString('3ff3:::1'));
@@ -69,8 +68,7 @@ function testInvalidStrings() {
   assertEquals(null, goog.net.IpAddress.fromString('7:6:5:4:3:2:1:0::'));
   assertEquals(null, goog.net.IpAddress.fromString('9:8:7:6:5:4:3::2:1'));
   assertEquals(null, goog.net.IpAddress.fromString('0:1:2:3::4:5:6:7'));
-  assertEquals(null,
-      goog.net.IpAddress.fromString('3ffe:0:0:0:0:0:0:0:1'));
+  assertEquals(null, goog.net.IpAddress.fromString('3ffe:0:0:0:0:0:0:0:1'));
   assertEquals(null, goog.net.IpAddress.fromString('3ffe::10000'));
   assertEquals(null, goog.net.IpAddress.fromString('3ffe::goog'));
   assertEquals(null, goog.net.IpAddress.fromString('3ffe::-0'));
@@ -101,67 +99,72 @@ function testVersion() {
 }
 
 function testStringIpv4Address() {
-  assertEquals('192.168.1.1',
-      new goog.net.Ipv4Address('192.168.1.1').toString());
-  assertEquals('1.1.1.1',
-      new goog.net.Ipv4Address('1.1.1.1').toString());
-  assertEquals('224.56.33.2',
-      new goog.net.Ipv4Address('224.56.33.2').toString());
-  assertEquals('255.255.255.255',
+  assertEquals(
+      '192.168.1.1', new goog.net.Ipv4Address('192.168.1.1').toString());
+  assertEquals('1.1.1.1', new goog.net.Ipv4Address('1.1.1.1').toString());
+  assertEquals(
+      '224.56.33.2', new goog.net.Ipv4Address('224.56.33.2').toString());
+  assertEquals(
+      '255.255.255.255',
       new goog.net.Ipv4Address('255.255.255.255').toString());
-  assertEquals('0.0.0.0',
-      new goog.net.Ipv4Address('0.0.0.0').toString());
+  assertEquals('0.0.0.0', new goog.net.Ipv4Address('0.0.0.0').toString());
 }
 
 function testIntIpv4Address() {
   var ip4Str = new goog.net.Ipv4Address('1.1.1.1');
-  var ip4Int = new goog.net.Ipv4Address(
-      new goog.math.Integer([16843009], 0));
+  var ip4Int = new goog.net.Ipv4Address(new goog.math.Integer([16843009], 0));
 
   assertTrue(ip4Str.equals(ip4Int));
   assertEquals(ip4Str.toString(), ip4Int.toString());
 
-  assertThrows('Ipv4(-1)', goog.partial(goog.net.Ipv4Address,
-                                        goog.math.Integer.fromInt(-1)));
-  assertThrows('Ipv4(2**32)',
-               goog.partial(goog.net.Ipv4Address,
-                            goog.math.Integer.ONE.shiftLeft(32)));
+  assertThrows(
+      'Ipv4(-1)',
+      goog.partial(goog.net.Ipv4Address, goog.math.Integer.fromInt(-1)));
+  assertThrows(
+      'Ipv4(2**32)',
+      goog.partial(goog.net.Ipv4Address, goog.math.Integer.ONE.shiftLeft(32)));
 }
 
 function testStringIpv6Address() {
-  assertEquals('1:2:3:4:5:6:7:8',
+  assertEquals(
+      '1:2:3:4:5:6:7:8',
       new goog.net.Ipv6Address('1:2:3:4:5:6:7:8').toString());
-  assertEquals('::1:2:3:4:5:6:7',
+  assertEquals(
+      '::1:2:3:4:5:6:7',
       new goog.net.Ipv6Address('::1:2:3:4:5:6:7').toString());
-  assertEquals('1:2:3:4:5:6:7::',
+  assertEquals(
+      '1:2:3:4:5:6:7::',
       new goog.net.Ipv6Address('1:2:3:4:5:6:7:0').toString());
-  assertEquals('2001:0:0:4::8',
+  assertEquals(
+      '2001:0:0:4::8',
       new goog.net.Ipv6Address('2001:0:0:4:0:0:0:8').toString());
-  assertEquals('2001::4:5:6:7:8',
+  assertEquals(
+      '2001::4:5:6:7:8',
       new goog.net.Ipv6Address('2001:0:0:4:5:6:7:8').toString());
-  assertEquals('2001::3:4:5:6:7:8',
+  assertEquals(
+      '2001::3:4:5:6:7:8',
       new goog.net.Ipv6Address('2001:0:3:4:5:6:7:8').toString());
-  assertEquals('0:0:3::ffff',
-      new goog.net.Ipv6Address('0:0:3:0:0:0:0:ffff').toString());
-  assertEquals('::4:0:0:0:ffff',
+  assertEquals(
+      '0:0:3::ffff', new goog.net.Ipv6Address('0:0:3:0:0:0:0:ffff').toString());
+  assertEquals(
+      '::4:0:0:0:ffff',
       new goog.net.Ipv6Address('0:0:0:4:0:0:0:ffff').toString());
-  assertEquals('::5:0:0:ffff',
+  assertEquals(
+      '::5:0:0:ffff',
       new goog.net.Ipv6Address('0:0:0:0:5:0:0:ffff').toString());
-  assertEquals('1::4:0:0:7:8',
-      new goog.net.Ipv6Address('1:0:0:4:0:0:7:8').toString());
-  assertEquals('::',
-      new goog.net.Ipv6Address('0:0:0:0:0:0:0:0').toString());
-  assertEquals('::1',
-      new goog.net.Ipv6Address('0:0:0:0:0:0:0:1').toString());
-  assertEquals('2001:658:22a:cafe::',
-      new goog.net.Ipv6Address(
-          '2001:0658:022a:cafe:0000:0000:0000:0000').toString());
-  assertEquals('::102:304',
-      new goog.net.Ipv6Address('::1.2.3.4').toString());
-  assertEquals('::ffff:303:303',
-      new goog.net.Ipv6Address('::ffff:3.3.3.3').toString());
-  assertEquals('::ffff:ffff',
-      new goog.net.Ipv6Address('::255.255.255.255').toString());
+  assertEquals(
+      '1::4:0:0:7:8', new goog.net.Ipv6Address('1:0:0:4:0:0:7:8').toString());
+  assertEquals('::', new goog.net.Ipv6Address('0:0:0:0:0:0:0:0').toString());
+  assertEquals('::1', new goog.net.Ipv6Address('0:0:0:0:0:0:0:1').toString());
+  assertEquals(
+      '2001:658:22a:cafe::',
+      new goog.net.Ipv6Address('2001:0658:022a:cafe:0000:0000:0000:0000')
+          .toString());
+  assertEquals('::102:304', new goog.net.Ipv6Address('::1.2.3.4').toString());
+  assertEquals(
+      '::ffff:303:303', new goog.net.Ipv6Address('::ffff:3.3.3.3').toString());
+  assertEquals(
+      '::ffff:ffff', new goog.net.Ipv6Address('::255.255.255.255').toString());
 }
 
 function testIntIpv6Address() {
@@ -172,12 +175,12 @@ function testIntIpv6Address() {
   assertTrue(ip6Str.equals(ip6Int));
   assertEquals(ip6Str.toString(), ip6Int.toString());
 
-  assertThrows('Ipv6(-1)', goog.partial(goog.net.Ipv6Address,
-                                        goog.math.Integer.fromInt(-1)));
-  assertThrows('Ipv6(2**128)',
-               goog.partial(goog.net.Ipv6Address,
-                            goog.math.Integer.ONE.shiftLeft(128)));
-
+  assertThrows(
+      'Ipv6(-1)',
+      goog.partial(goog.net.Ipv6Address, goog.math.Integer.fromInt(-1)));
+  assertThrows(
+      'Ipv6(2**128)',
+      goog.partial(goog.net.Ipv6Address, goog.math.Integer.ONE.shiftLeft(128)));
 }
 
 function testDottedQuadIpv6() {

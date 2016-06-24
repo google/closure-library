@@ -1,0 +1,11 @@
+baseurl: ''
+defaults:
+- scope: {path: ''}
+  values: {ga: UA-64923423-1, github_url: 'https://github.com/google/closure-library',
+    product_name: Closure Library, root_url: /closure-library}
+description: Documentation for Google Closure Library.
+destination: closure-library
+email: sdh@google.com
+github_username: google
+title: Closure Library
+url: http://google.github.com/closure-library

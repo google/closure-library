@@ -26,6 +26,7 @@ goog.require('goog.asserts');
 goog.require('goog.crypt');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 // Static lookup maps, lazily populated by init_()
 
@@ -59,8 +60,7 @@ goog.crypt.base64.byteToCharMapWebSafe_ = null;
  * ENCODED_VALS and ENCODED_VALS_WEBSAFE
  * @type {string}
  */
-goog.crypt.base64.ENCODED_VALS_BASE =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+goog.crypt.base64.ENCODED_VALS_BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
     'abcdefghijklmnopqrstuvwxyz' +
     '0123456789';
 
@@ -69,8 +69,7 @@ goog.crypt.base64.ENCODED_VALS_BASE =
  * Our default alphabet. Value 64 (=) is special; it means "nothing."
  * @type {string}
  */
-goog.crypt.base64.ENCODED_VALS =
-    goog.crypt.base64.ENCODED_VALS_BASE + '+/=';
+goog.crypt.base64.ENCODED_VALS = goog.crypt.base64.ENCODED_VALS_BASE + '+/=';
 
 
 /**
@@ -87,8 +86,9 @@ goog.crypt.base64.ENCODED_VALS_WEBSAFE =
  * removal in per-browser compilations.
  * @private {boolean}
  */
-goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ =
-    goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA;
+goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ = goog.userAgent.GECKO ||
+    (goog.userAgent.WEBKIT && !goog.userAgent.product.SAFARI) ||
+    goog.userAgent.OPERA;
 
 
 /**
@@ -108,7 +108,8 @@ goog.crypt.base64.HAS_NATIVE_ENCODE_ =
  */
 goog.crypt.base64.HAS_NATIVE_DECODE_ =
     goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ ||
-    (!goog.userAgent.IE && typeof(goog.global.atob) == 'function');
+    (!goog.userAgent.product.SAFARI && !goog.userAgent.IE &&
+     typeof(goog.global.atob) == 'function');
 
 
 /**
@@ -123,14 +124,13 @@ goog.crypt.base64.HAS_NATIVE_DECODE_ =
 goog.crypt.base64.encodeByteArray = function(input, opt_webSafe) {
   // Assert avoids runtime dependency on goog.isArrayLike, which helps reduce
   // size of jscompiler output, and which yields slight performance increase.
-  goog.asserts.assert(goog.isArrayLike(input),
-                      'encodeByteArray takes an array as a parameter');
+  goog.asserts.assert(
+      goog.isArrayLike(input), 'encodeByteArray takes an array as a parameter');
 
   goog.crypt.base64.init_();
 
-  var byteToCharMap = opt_webSafe ?
-                      goog.crypt.base64.byteToCharMapWebSafe_ :
-                      goog.crypt.base64.byteToCharMap_;
+  var byteToCharMap = opt_webSafe ? goog.crypt.base64.byteToCharMapWebSafe_ :
+                                    goog.crypt.base64.byteToCharMap_;
 
   var output = [];
 
@@ -154,10 +154,9 @@ goog.crypt.base64.encodeByteArray = function(input, opt_webSafe) {
       }
     }
 
-    output.push(byteToCharMap[outByte1],
-                byteToCharMap[outByte2],
-                byteToCharMap[outByte3],
-                byteToCharMap[outByte4]);
+    output.push(
+        byteToCharMap[outByte1], byteToCharMap[outByte2],
+        byteToCharMap[outByte3], byteToCharMap[outByte4]);
   }
 
   return output.join('');
@@ -276,8 +275,11 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
   goog.crypt.base64.init_();
 
   var nextCharIndex = 0;
-  /** @return {?number} The next 6-bit value, or null for end-of-input. */
-  function getByte() {
+  /**
+   * @param {number} default_val Used for end-of-input.
+   * @return {number} The next 6-bit value, or the default for end-of-input.
+   */
+  function getByte(default_val) {
     while (nextCharIndex < input.length) {
       var ch = input.charAt(nextCharIndex++);
       var b = goog.crypt.base64.charToByteMap_[ch];
@@ -289,28 +291,26 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
       }
       // We encountered whitespace: loop around to the next input char.
     }
-    return null;  // No more input remaining.
+    return default_val;  // No more input remaining.
   }
 
   while (true) {
-    var byte1 = getByte();
-    var byte2 = getByte();
-    var byte3 = getByte();
-    var byte4 = getByte();
+    var byte1 = getByte(-1);
+    var byte2 = getByte(0);
+    var byte3 = getByte(64);
+    var byte4 = getByte(64);
 
     // The common case is that all four bytes are present, so if we have byte4
     // we can skip over the truncated input special case handling.
-    if (byte4 == null) {
-      if (byte1 == null) {
+    if (byte4 === 64) {
+      if (byte1 === -1) {
         return;  // Terminal case: no input left to decode.
       }
-      // Here we know an intermediate number of bytes are missing, so apply the
-      // inferred padding rules per the public API documentation. i.e: 1 byte
+      // Here we know an intermediate number of bytes are missing.
+      // The defaults for byte2, byte3 and byte4 apply the inferred padding
+      // rules per the public API documentation. i.e: 1 byte
       // missing should yield 2 bytes of output, but 2 or 3 missing bytes yield
       // a single byte of output. (Recall that 64 corresponds the padding char).
-      byte4 = 64;
-      byte3 = byte3 != null ? byte3 : 64;
-      byte2 = byte2 != null ? byte2 : 0;
     }
 
     var outByte1 = (byte1 << 2) | (byte2 >> 4);
@@ -350,8 +350,9 @@ goog.crypt.base64.init_ = function() {
 
       // Be forgiving when decoding and correctly decode both encodings.
       if (i >= goog.crypt.base64.ENCODED_VALS_BASE.length) {
-        goog.crypt.base64.charToByteMap_[
-            goog.crypt.base64.ENCODED_VALS_WEBSAFE.charAt(i)] = i;
+        goog.crypt.base64
+            .charToByteMap_[goog.crypt.base64.ENCODED_VALS_WEBSAFE.charAt(i)] =
+            i;
       }
     }
   }

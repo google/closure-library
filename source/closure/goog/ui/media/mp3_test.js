@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.media.Mp3Test');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
@@ -31,7 +32,8 @@ function setUp() {
   mp3 = goog.ui.media.Mp3.getInstance();
   var flashUrl = goog.ui.media.Mp3.buildFlashUrl(MP3_URL);
   var model = new goog.ui.media.MediaModel(MP3_URL, 'mp3 caption', '');
-  model.setPlayer(new goog.ui.media.MediaModel.Player(flashUrl));
+  model.setPlayer(new goog.ui.media.MediaModel.Player(
+      goog.html.testing.newTrustedResourceUrlForTest(flashUrl)));
   control = new goog.ui.media.Media(model, mp3);
   control.setSelected(true);
 }
@@ -49,16 +51,13 @@ function testBasicRendering() {
 
 function testParsingUrl() {
   assertTrue(goog.ui.media.Mp3.MATCHER.test(MP3_URL));
-  assertFalse(
-      goog.ui.media.Mp3.MATCHER.test('http://invalidUrl/filename.doc'));
+  assertFalse(goog.ui.media.Mp3.MATCHER.test('http://invalidUrl/filename.doc'));
 }
 
 function testCreatingDomOnInitialState() {
   control.render(parent);
   var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV,
-      goog.ui.media.Mp3.CSS_CLASS + '-caption',
-      parent);
+      goog.dom.TagName.DIV, goog.ui.media.Mp3.CSS_CLASS + '-caption', parent);
   assertEquals(1, caption.length);
 
   var flash = goog.dom.getElementsByTagNameAndClass(

@@ -79,9 +79,9 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
 
-    var key =
-        this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME ?
-        field.getName() : field.getTag();
+    var key = this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME ?
+        field.getName() :
+        field.getTag();
 
 
     if (message.has(field)) {
@@ -100,17 +100,15 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   }
 
   // Add the unknown fields, if any.
-  message.forEachUnknown(function(tag, value) {
-    objectValue[tag] = value;
-  });
+  message.forEachUnknown(function(tag, value) { objectValue[tag] = value; });
 
   return objectValue;
 };
 
 
 /** @override */
-goog.proto2.ObjectSerializer.prototype.getDeserializedValue =
-    function(field, value) {
+goog.proto2.ObjectSerializer.prototype.getDeserializedValue = function(
+    field, value) {
 
   // Gracefully handle the case where a boolean is represented by 0/1.
   // Some serialization libraries, such as GWT, can use this notation.
@@ -147,20 +145,26 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
     } else {
       // We must be in Key == NAME mode to lookup by name.
       goog.asserts.assert(
-          this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME);
+          this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME,
+          'Key mode ' + this.keyOption_ + 'for key ' + key + ' is not ' +
+              goog.proto2.ObjectSerializer.KeyOption.NAME);
 
       field = descriptor.findFieldByName(key);
     }
 
     if (field) {
       if (field.isRepeated()) {
-        goog.asserts.assert(goog.isArray(value));
+        goog.asserts.assert(
+            goog.isArray(value),
+            'Value for repeated field ' + field + ' must be an array.');
 
         for (var j = 0; j < value.length; j++) {
           message.add(field, this.getDeserializedValue(field, value[j]));
         }
       } else {
-        goog.asserts.assert(!goog.isArray(value));
+        goog.asserts.assert(
+            !goog.isArray(value),
+            'Value for non-repeated field ' + field + ' must not be an array.');
         message.set(field, this.getDeserializedValue(field, value));
       }
     } else {

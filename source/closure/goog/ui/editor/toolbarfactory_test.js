@@ -57,14 +57,15 @@ function testGetLegacySizeFromPx() {
   try {
     var fieldElem = goog.dom.getElement('myField');
     // Start from 1 because size 0 is bogus (becomes 16px, legacy size 3).
-    for (var i = 1; i <
-        goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_.length; i++) {
+    for (var i = 1;
+         i < goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_.length; i++) {
       helper.select(fieldElem, 0, fieldElem, 1);
       document.execCommand('fontSize', false, i);
       helper.select('foo', 1);
       var value = document.queryCommandValue('fontSize');
-      assertEquals('Px size ' + value + ' should convert to legacy size ' + i,
-          i, goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
+      assertEquals(
+          'Px size ' + value + ' should convert to legacy size ' + i, i,
+          goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
               parseInt(value, 10)));
     }
   } catch (e) {

@@ -25,12 +25,8 @@ var errorFn;
 
 function setUp() {
   lastError = null;
-  errorFn = function(message) {
-    throw {message: message};
-  };
-  errorHandler = new goog.debug.ErrorHandler(function(ex) {
-    lastError = ex;
-  });
+  errorFn = function(message) { throw {message: message}; };
+  errorHandler = new goog.debug.ErrorHandler(function(ex) { lastError = ex; });
   goog.debug.entryPointRegistry.refList_ = [];
 }
 
@@ -70,9 +66,11 @@ function testRegisterAfterMonitor() {
 
 function testInvalidUnmonitor() {
   goog.debug.entryPointRegistry.monitorAll(errorHandler);
-  var e = assertThrows('expected error', goog.partial(
-      goog.debug.entryPointRegistry.unmonitorAllIfPossible,
-      new goog.debug.ErrorHandler()));
+  var e = assertThrows(
+      'expected error',
+      goog.partial(
+          goog.debug.entryPointRegistry.unmonitorAllIfPossible,
+          new goog.debug.ErrorHandler()));
   assertEquals(
       'Assertion failed: Only the most recent monitor can be unwrapped.',
       e.message);

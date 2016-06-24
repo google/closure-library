@@ -47,10 +47,10 @@ function testIsVisible() {
 function testFiresShowAndHideEvents() {
   var showHandler = goog.testing.recordFunction();
   var hideHandler = goog.testing.recordFunction();
-  goog.events.listen(popupDatePicker, goog.ui.PopupBase.EventType.SHOW,
-      showHandler);
-  goog.events.listen(popupDatePicker, goog.ui.PopupBase.EventType.HIDE,
-      hideHandler);
+  goog.events.listen(
+      popupDatePicker, goog.ui.PopupBase.EventType.SHOW, showHandler);
+  goog.events.listen(
+      popupDatePicker, goog.ui.PopupBase.EventType.HIDE, hideHandler);
   popupDatePicker.createDom();
   popupDatePicker.render();
   assertEquals(0, showHandler.getCallCount());

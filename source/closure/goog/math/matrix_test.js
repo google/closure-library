@@ -125,7 +125,8 @@ function testIsValidArrayWithGoodArrays() {
       '3x3 array should be fine', fn([[1, 2, 3], [3, 5, 6], [10, 10, 10]]));
   assertTrue('[[1]] should be fine', fn([[1]]));
   assertTrue('1D array should work', fn([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]));
-  assertTrue('Negs and decimals should be ok',
+  assertTrue(
+      'Negs and decimals should be ok',
       fn([[0], [-4], [-10], [1.2345], [123.53]]));
   assertTrue('Hex, Es and decimals are ok', fn([[0x100, 10E-2], [1.213, 213]]));
 }
@@ -160,9 +161,7 @@ function testForEach() {
 
 function testMap() {
   var m1 = new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
-  var m2 = goog.math.Matrix.map(m1, function(val, x, y) {
-    return val + 1;
-  });
+  var m2 = goog.math.Matrix.map(m1, function(val, x, y) { return val + 1; });
   assertArrayEquals([[2, 3, 4], [5, 6, 7], [8, 9, 10]], m2.toArray());
 }
 
@@ -183,8 +182,7 @@ function testGetValueAt() {
   for (var x = 0; x < 3; x++) {
     for (var y = 0; y < 3; y++) {
       assertEquals(
-          'Value at (x, y) should equal 3x - y',
-          3 * x - y, m.getValueAt(x, y));
+          'Value at (x, y) should equal 3x - y', 3 * x - y, m.getValueAt(x, y));
     }
   }
   assertNull('Out of bounds value should be null', m.getValueAt(-1, 2));
@@ -196,20 +194,24 @@ function testGetValueAt() {
 function testSum1() {
   var m1 = new goog.math.Matrix([[1, 1, 1], [2, 2, 2], [3, 3, 3]]);
   var m2 = new goog.math.Matrix([[3, 3, 3], [2, 2, 2], [1, 1, 1]]);
-  assertArrayEquals('Sum should be all the 4s',
-      [[4, 4, 4], [4, 4, 4], [4, 4, 4]], m1.add(m2).toArray());
-  assertArrayEquals('Addition should be commutative',
-      m1.add(m2).toArray(), m2.add(m1).toArray());
+  assertArrayEquals(
+      'Sum should be all the 4s', [[4, 4, 4], [4, 4, 4], [4, 4, 4]],
+      m1.add(m2).toArray());
+  assertArrayEquals(
+      'Addition should be commutative', m1.add(m2).toArray(),
+      m2.add(m1).toArray());
 }
 
 
 function testSum2() {
   var m1 = new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
   var m2 = new goog.math.Matrix([[-1, -2, -3], [-4, -5, -6], [-7, -8, -9]]);
-  assertArrayEquals('Sum should be all 0s',
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0]], m1.add(m2).toArray());
-  assertArrayEquals('Addition should be commutative',
-      m1.add(m2).toArray(), m2.add(m1).toArray());
+  assertArrayEquals(
+      'Sum should be all 0s', [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      m1.add(m2).toArray());
+  assertArrayEquals(
+      'Addition should be commutative', m1.add(m2).toArray(),
+      m2.add(m1).toArray());
 }
 
 
@@ -217,20 +219,21 @@ function testSubtract1() {
   var m1 = new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
   var m2 = new goog.math.Matrix([[5, 5, 5], [5, 5, 5], [5, 5, 5]]);
 
-  assertArrayEquals([[-4, -3, -2], [-1, 0, 1], [2, 3, 4]],
-                    m1.subtract(m2).toArray());
-  assertArrayEquals([[4, 3, 2], [1, 0, -1], [-2, -3, -4]],
-                    m2.subtract(m1).toArray());
+  assertArrayEquals(
+      [[-4, -3, -2], [-1, 0, 1], [2, 3, 4]], m1.subtract(m2).toArray());
+  assertArrayEquals(
+      [[4, 3, 2], [1, 0, -1], [-2, -3, -4]], m2.subtract(m1).toArray());
 }
 
 
 function testSubtract2() {
   var m1 = new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
   var m2 = new goog.math.Matrix([[-1, -2, -3], [-4, -5, -6], [-7, -8, -9]]);
-  assertArrayEquals([[2, 4, 6], [8, 10, 12], [14, 16, 18]],
-                    m1.subtract(m2).toArray());
-  assertArrayEquals([[-2, -4, -6], [-8, -10, -12], [-14, -16, -18]],
-                    m2.subtract(m1).toArray());
+  assertArrayEquals(
+      [[2, 4, 6], [8, 10, 12], [14, 16, 18]], m1.subtract(m2).toArray());
+  assertArrayEquals(
+      [[-2, -4, -6], [-8, -10, -12], [-14, -16, -18]],
+      m2.subtract(m1).toArray());
 }
 
 
@@ -253,29 +256,31 @@ function testMatrixMultiplication() {
   var m1 = new goog.math.Matrix([[1, 2], [3, 4]]);
   var m2 = new goog.math.Matrix([[3, 4], [5, 6]]);
   // m1 * m2
-  assertArrayEquals([[1 * 3 + 2 * 5, 1 * 4 + 2 * 6],
-                     [3 * 3 + 4 * 5, 3 * 4 + 4 * 6]],
-                    m1.multiply(m2).toArray());
+  assertArrayEquals(
+      [[1 * 3 + 2 * 5, 1 * 4 + 2 * 6], [3 * 3 + 4 * 5, 3 * 4 + 4 * 6]],
+      m1.multiply(m2).toArray());
   // m2 * m1 != m1 * m2
-  assertArrayEquals([[3 * 1 + 4 * 3, 3 * 2 + 4 * 4],
-                     [5 * 1 + 6 * 3, 5 * 2 + 6 * 4]],
-                    m2.multiply(m1).toArray());
-  var m3 = new goog.math.Matrix([[1, 2, 3, 4],
-                                 [5, 6, 7, 8]]);
-  var m4 = new goog.math.Matrix([[1, 2, 3],
-                                 [4, 5, 6],
-                                 [7, 8, 9],
-                                 [10, 11, 12]]);
+  assertArrayEquals(
+      [[3 * 1 + 4 * 3, 3 * 2 + 4 * 4], [5 * 1 + 6 * 3, 5 * 2 + 6 * 4]],
+      m2.multiply(m1).toArray());
+  var m3 = new goog.math.Matrix([[1, 2, 3, 4], [5, 6, 7, 8]]);
+  var m4 =
+      new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]);
   // m3 * m4
-  assertArrayEquals([[1 * 1 + 2 * 4 + 3 * 7 + 4 * 10,
-                      1 * 2 + 2 * 5 + 3 * 8 + 4 * 11,
-                      1 * 3 + 2 * 6 + 3 * 9 + 4 * 12],
-  [5 * 1 + 6 * 4 + 7 * 7 + 8 * 10,
-   5 * 2 + 6 * 5 + 7 * 8 + 8 * 11,
-   5 * 3 + 6 * 6 + 7 * 9 + 8 * 12]],
-  m3.multiply(m4).toArray());
-  assertThrows('Matrix dimensions should not line up.',
-               function() { m4.multiply(m3); });
+  assertArrayEquals(
+      [
+        [
+          1 * 1 + 2 * 4 + 3 * 7 + 4 * 10, 1 * 2 + 2 * 5 + 3 * 8 + 4 * 11,
+          1 * 3 + 2 * 6 + 3 * 9 + 4 * 12
+        ],
+        [
+          5 * 1 + 6 * 4 + 7 * 7 + 8 * 10, 5 * 2 + 6 * 5 + 7 * 8 + 8 * 11,
+          5 * 3 + 6 * 6 + 7 * 9 + 8 * 12
+        ]
+      ],
+      m3.multiply(m4).toArray());
+  assertThrows(
+      'Matrix dimensions should not line up.', function() { m4.multiply(m3); });
 }
 
 function testMatrixMultiplicationIsAssociative() {
@@ -283,9 +288,9 @@ function testMatrixMultiplicationIsAssociative() {
   var B = new goog.math.Matrix([[3, 4], [5, 6]]);
   var C = new goog.math.Matrix([[2, 7], [9, 1]]);
 
-  assertArrayEquals('A(BC) == (AB)C',
-                    A.multiply(B.multiply(C)).toArray(),
-                    A.multiply(B).multiply(C).toArray());
+  assertArrayEquals(
+      'A(BC) == (AB)C', A.multiply(B.multiply(C)).toArray(),
+      A.multiply(B).multiply(C).toArray());
 }
 
 
@@ -294,13 +299,13 @@ function testMatrixMultiplicationIsDistributive() {
   var B = new goog.math.Matrix([[3, 4], [5, 6]]);
   var C = new goog.math.Matrix([[2, 7], [9, 1]]);
 
-  assertArrayEquals('A(B + C) = AB + AC',
-                    A.multiply(B.add(C)).toArray(),
-                    A.multiply(B).add(A.multiply(C)).toArray());
+  assertArrayEquals(
+      'A(B + C) = AB + AC', A.multiply(B.add(C)).toArray(),
+      A.multiply(B).add(A.multiply(C)).toArray());
 
-  assertArrayEquals('(A + B)C = AC + BC',
-                    A.add(B).multiply(C).toArray(),
-                    A.multiply(C).add(B.multiply(C)).toArray());
+  assertArrayEquals(
+      '(A + B)C = AC + BC', A.add(B).multiply(C).toArray(),
+      A.multiply(C).add(B.multiply(C)).toArray());
 }
 
 
@@ -328,8 +333,8 @@ function testAppendRows() {
 
 
 function testSubmatrixByDeletion() {
-  var m = new goog.math.Matrix([[1, 2, 3, 4], [5, 6, 7, 8],
-        [9, 10, 11, 12], [13, 14, 15, 16]]);
+  var m = new goog.math.Matrix(
+      [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]);
   var arr = [[1, 2, 3], [5, 6, 7], [13, 14, 15]];
   assertArrayEquals(arr, m.getSubmatrixByDeletion_(2, 3).toArray());
 }
@@ -360,12 +365,10 @@ function testDeterminant() {
 
 
 function testGetSubmatrix() {
-  var m = new goog.math.Matrix([[2, -1, 0, 1, 0, 0],
-                                [-1, 2, -1, 0, 1, 0],
-                                [0, -1, 2, 0, 0, 1]]);
+  var m = new goog.math.Matrix(
+      [[2, -1, 0, 1, 0, 0], [-1, 2, -1, 0, 1, 0], [0, -1, 2, 0, 0, 1]]);
   var sub1 = [[2, -1, 0], [-1, 2, -1], [0, -1, 2]];
-  assertArrayEquals(sub1,
-                    m.getSubmatrixByCoordinates_(0, 0, 2, 2).toArray());
+  assertArrayEquals(sub1, m.getSubmatrixByCoordinates_(0, 0, 2, 2).toArray());
 
   var sub2 = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
   assertArrayEquals(sub2, m.getSubmatrixByCoordinates_(0, 3).toArray());
@@ -373,34 +376,26 @@ function testGetSubmatrix() {
 
 
 function testGetReducedRowEchelonForm() {
-  var m = new goog.math.Matrix([[2, -1, 0, 1, 0, 0],
-                                [-1, 2, -1, 0, 1, 0],
-                                [0, -1, 2, 0, 0, 1]]);
+  var m = new goog.math.Matrix(
+      [[2, -1, 0, 1, 0, 0], [-1, 2, -1, 0, 1, 0], [0, -1, 2, 0, 0, 1]]);
 
-  var expected = new goog.math.Matrix([[1, 0, 0, .75, .5, .25],
-                                       [0, 1, 0, .5, 1, .5],
-                                       [0, 0, 1, .25, .5, .75]]);
+  var expected = new goog.math.Matrix(
+      [[1, 0, 0, .75, .5, .25], [0, 1, 0, .5, 1, .5], [0, 0, 1, .25, .5, .75]]);
 
   assertTrue(expected.equals(m.getReducedRowEchelonForm()));
 }
 
 
 function testInverse() {
-  var m1 = new goog.math.Matrix([[2, -1, 0],
-                                 [-1, 2, -1],
-                                 [0, -1, 2]]);
-  var expected1 = new goog.math.Matrix([[.75, .5, .25],
-                                        [.5, 1, .5],
-                                        [.25, .5, .75]]);
+  var m1 = new goog.math.Matrix([[2, -1, 0], [-1, 2, -1], [0, -1, 2]]);
+  var expected1 =
+      new goog.math.Matrix([[.75, .5, .25], [.5, 1, .5], [.25, .5, .75]]);
   assertTrue(expected1.equals(m1.getInverse()));
 
-  var m2 = new goog.math.Matrix([[4, 8],
-                                 [7, -2]]);
-  var expected2 = new goog.math.Matrix([[.03125, .125],
-                                        [.10936, -.0625]]);
+  var m2 = new goog.math.Matrix([[4, 8], [7, -2]]);
+  var expected2 = new goog.math.Matrix([[.03125, .125], [.10936, -.0625]]);
   assertTrue(expected2.equals(m2.getInverse(), .0001));
-  var m3 = new goog.math.Matrix([[0, 0],
-                                 [0, 0]]);
+  var m3 = new goog.math.Matrix([[0, 0], [0, 0]]);
   assertNull(m3.getInverse());
   var m4 = new goog.math.Matrix([[2]]);
   var expected4 = new goog.math.Matrix([[.5]]);
@@ -411,17 +406,15 @@ function testInverse() {
 
 
 function testEquals() {
-  var a1 = new goog.math.Matrix([[1, 0, 0, .75, .5, .25],
-                                 [0, 1, 0, .5, 1, .5],
-                                 [0, 0, 1, .25, .5, .75]]);
+  var a1 = new goog.math.Matrix(
+      [[1, 0, 0, .75, .5, .25], [0, 1, 0, .5, 1, .5], [0, 0, 1, .25, .5, .75]]);
 
-  var a2 = new goog.math.Matrix([[1, 0, 0, .75, .5, .25],
-                                 [0, 1, 0, .5, 1, .5],
-                                 [0, 0, 1, .25, .5, .75]]);
+  var a2 = new goog.math.Matrix(
+      [[1, 0, 0, .75, .5, .25], [0, 1, 0, .5, 1, .5], [0, 0, 1, .25, .5, .75]]);
 
-  var a3 = new goog.math.Matrix([[1, 0, 0, .749, .5, .25],
-                                 [0, 1, 0, .5, 1, .5],
-                                 [0, 0, 1, .25, .5, .75]]);
+  var a3 = new goog.math.Matrix([
+    [1, 0, 0, .749, .5, .25], [0, 1, 0, .5, 1, .5], [0, 0, 1, .25, .5, .75]
+  ]);
 
   assertTrue(a1.equals(a2));
   assertTrue(a1.equals(a3, .01));

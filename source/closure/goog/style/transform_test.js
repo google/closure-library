@@ -25,7 +25,7 @@ goog.require('goog.userAgent.product.isVersion');
 
 /**
  * Element being transformed.
- * @type {Element}
+ * @type {!Element}
  */
 var element;
 

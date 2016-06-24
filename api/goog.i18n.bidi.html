@@ -1,0 +1,212 @@
+---
+{edit_path: '', layout: api, page: goog.i18n.bidi, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.i18n.bidi</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L23" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.i18n.bidi</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="detectRtlDirectionality"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L798" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>detectRtlDirectionality(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check the directionality of a piece of text, return true if the piece of
+text should be laid out in RTL direction.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The piece of text that need to be detected.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether this piece of text should be laid out in RTL.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="endsWithLtr"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L458" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>endsWithLtr(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check if the exit directionality a piece of text is LTR, i.e. if the last
+strongly-directional character in the string is LTR.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether LTR exit directionality was detected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="endsWithRtl"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L484" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>endsWithRtl(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check if the exit directionality a piece of text is RTL, i.e. if the last
+strongly-directional character in the string is RTL.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether RTL exit directionality was detected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enforceLtrInHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L610" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>enforceLtrInHtml(<var>html</var>)</div></h3></div><div class="body"><p>Enforce the html snippet in RTL directionality regardless overall context.
+If the html piece was enclosed by tag, dir will be applied to existing
+tag, otherwise a span tag will be added as wrapper. For this reason, if
+html snippet start with with tag, this tag must enclose the whole piece. If
+the tag already has a dir specified, this new one will override existing
+one in behavior (tested on FF and IE).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>html</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The string that need to be processed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The processed string, with directionality enforced to RTL.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enforceLtrInText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L625" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>enforceLtrInText(<var>text</var>)</div></h3></div><div class="body"><p>Enforce LTR on both end of the given text piece using unicode BiDi formatting
+characters LRE and PDF.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>text</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The piece of text that need to be wrapped.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The wrapped string after process.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enforceRtlInHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L580" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>enforceRtlInHtml(<var>html</var>)</div></h3></div><div class="body"><p>Enforce the html snippet in RTL directionality regardless overall context.
+If the html piece was enclosed by tag, dir will be applied to existing
+tag, otherwise a span tag will be added as wrapper. For this reason, if
+html snippet start with with tag, this tag must enclose the whole piece. If
+the tag already has a dir specified, this new one will override existing
+one in behavior (tested on FF and IE).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>html</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The string that need to be processed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The processed string, with directionality enforced to RTL.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enforceRtlInText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L595" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>enforceRtlInText(<var>text</var>)</div></h3></div><div class="body"><p>Enforce RTL on both end of the given text piece using unicode BiDi formatting
+characters RLE and PDF.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>text</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The piece of text that need to be wrapped.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The wrapped string after process.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="estimateDirection"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L762" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>estimateDirection(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Estimates the directionality of a string based on relative word counts.
+If the number of RTL words is above a certain percentage of the total number
+of strongly directional words, returns RTL.
+Otherwise, if any words are strongly or weakly LTR, returns LTR.
+Otherwise, returns UNKNOWN, which is used to mean &#34;neutral&#34;.
+Numbers are counted as weakly LTR.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The string to be checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a></code><dd><p>Estimated overall directionality of <code>str</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="guardBracketInText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L562" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>guardBracketInText(<var>s</var>, <var>opt_isRtlContext</var>)</div></h3></div><div class="body"><p>Apply bracket guard using LRM and RLM. This is to address the problem of
+messy bracket display frequently happens in RTL layout.
+This function works for plain text, not for HTML. In HTML, the opening
+bracket might be in a different context than the closing bracket (such as
+an attribute value).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>s</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The string that need to be processed.</p>
+<dt class="type name"><var>opt_isRtlContext</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>specifies default direction (usually
+direction of the UI).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The processed string, with all bracket guarded.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasAnyLtr"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L278" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>hasAnyLtr(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Test whether the given string has any LTR characters in it.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the string contains LTR characters.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasAnyRtl"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L256" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>hasAnyRtl(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Test whether the given string has any RTL characters in it.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the string contains RTL characters.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="hasRtlChar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L268" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>hasRtlChar(<var>str</var>)</div></h3></div><div class="body"><p>Test whether the given string has any RTL characters in it.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use hasAnyRtl.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the string contains RTL characters.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isLtrChar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L317" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isLtrChar(<var>str</var>)</div></h3></div><div class="body"><p>Check if the first character in the string is LTR or not.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the first character in str is an LTR char.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isLtrExitText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L473" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>isLtrExitText(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check if the exit directionality a piece of text is LTR, i.e. if the last
+strongly-directional character in the string is LTR.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use endsWithLtr.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether LTR exit directionality was detected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isLtrText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L401" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>isLtrText(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check whether the first strongly directional character (if any) is LTR.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use startsWithLtr.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether LTR directionality is detected using the first
+strongly-directional character method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNeutralChar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L327" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNeutralChar(<var>str</var>)</div></h3></div><div class="body"><p>Check if the first character in the string is neutral or not.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the first character in str is a neutral char.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isNeutralText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L423" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isNeutralText(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check whether the input string either contains no strongly directional
+characters or looks like a url.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether neutral directionality is detected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isRtlChar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L307" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isRtlChar(<var>str</var>)</div></h3></div><div class="body"><p>Check if the first character in the string is RTL or not.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The given string that need to be tested.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the first character in str is an RTL char.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isRtlExitText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L499" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>isRtlExitText(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check if the exit directionality a piece of text is RTL, i.e. if the last
+strongly-directional character in the string is RTL.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use endsWithRtl.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether RTL exit directionality was detected.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isRtlLanguage"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L537" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isRtlLanguage(<var>lang</var>)</div></h3></div><div class="body"><p>Check if a BCP 47 / III language code indicates an RTL language, i.e. either:</p>
+<ul><li>a language code explicitly specifying one of the right-to-left scripts,
+e.g. &#34;az-Arab&#34;, or<p></p></li><li>a language code specifying one of the languages normally written in a
+right-to-left script, e.g. &#34;fa&#34; (Farsi), except ones explicitly specifying
+Latin or Cyrillic script (which are the usual LTR alternatives).<p>
+The list of right-to-left scripts appears in the 100-199 range in
+http://www.unicode.org/iso15924/iso15924-num.html, of which Arabic and
+Hebrew are by far the most widely used. We also recognize Thaana, N&#39;Ko, and
+Tifinagh, which also have significant modern usage. The rest (Syriac,
+Samaritan, Mandaic, etc.) seem to have extremely limited or no modern usage
+and are not recognized to save on code size.
+The languages usually written in a right-to-left script are taken as those
+with Suppress-Script: Hebr|Arab|Thaa|Nkoo|Tfng  in
+http://www.iana.org/assignments/language-subtag-registry,
+as well as Central (or Sorani) Kurdish (ckb), Sindhi (sd) and Uyghur (ug).
+Other subtags of the language code, e.g. regions like EG (Egypt), are
+ignored.</p></li></ul>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>lang</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>BCP 47 (a.k.a III) language code.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the language code is an RTL language.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isRtlText"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L375" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>isRtlText(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check whether the first strongly directional character (if any) is RTL.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use startsWithRtl.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether RTL directionality is detected using the first
+strongly-directional character method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="mirrorCSS"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L671" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>mirrorCSS(<var>cssStr</var>)</div></h3></div><div class="body"><p>Swap location parameters and &#39;left&#39;/&#39;right&#39; in CSS specification. The
+processed string will be suited for RTL layout. Though this function can
+cover most cases, there are always exceptions. It is suggested to put
+those exceptions in separate group of CSS string.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cssStr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>CSS spefication string.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Processed CSS specification string.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="normalizeHebrewQuote"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L707" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>normalizeHebrewQuote(<var>str</var>)</div></h3></div><div class="body"><p>Replace the double and single quote directly after a Hebrew character with
+GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String that need to be processed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Processed string with double/single quote replaced.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setElementDirAndAlign"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L816" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setElementDirAndAlign(<var>element</var>, <var>dir</var>)</div></h3></div><div class="body"><p>Sets text input element&#39;s directionality and text alignment based on a
+given directionality. Does nothing if the given directionality is unknown or
+neutral.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Input field element to set directionality to.</p>
+<dt class="type name"><var>dir</var><code>(<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>Desired directionality,
+given in one of the following formats:
+1. A goog.i18n.bidi.Dir constant.
+2. A number (positive &#61; LRT, negative &#61; RTL, 0 &#61; neutral).
+3. A boolean (true &#61; RTL, false &#61; LTR).
+4. A null for unknown directionality.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setElementDirByTextDirectionality"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L834" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setElementDirByTextDirectionality(<var>element</var>, <var>text</var>)</div></h3></div><div class="body"><p>Sets element dir based on estimated directionality of the given text.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>!Element</code><dt class="type name"><var>text</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code></dl></dd></dl></div></section><section class="property expandable" id="startsWithLtr"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L386" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>startsWithLtr(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check whether the first strongly directional character (if any) is LTR.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether LTR directionality is detected using the first
+strongly-directional character method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="startsWithRtl"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L360" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>startsWithRtl(<var>str</var>, <var>opt_isHtml</var>)</div></h3></div><div class="body"><p>Check whether the first strongly directional character (if any) is RTL.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>String being checked.</p>
+<dt class="type name"><var>opt_isHtml</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether str is HTML / HTML-escaped.
+Default: false.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether RTL directionality is detected using the first
+strongly-directional character method.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toDir"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L167" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toDir(<var>givenDir</var>, <var>opt_noNeutral</var>)</div></h3></div><div class="body"><p>Convert a directionality given in various formats to a goog.i18n.bidi.Dir
+constant. Useful for interaction with different standards of directionality
+representation.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>givenDir</var><code>(<a href="goog.i18n.bidi.Dir.html">goog.i18n.bidi.Dir</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>Directionality given
+in one of the following formats:
+1. A goog.i18n.bidi.Dir constant.
+2. A number (positive &#61; LTR, negative &#61; RTL, 0 &#61; neutral).
+3. A boolean (true &#61; RTL, false &#61; LTR).
+4. A null for unknown directionality.</p>
+<dt class="type name"><var>opt_noNeutral</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether a givenDir of zero or
+goog.i18n.bidi.Dir.NEUTRAL should be treated as null, i.e. unknown, in
+order to preserve legacy behavior.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>A goog.i18n.bidi.Dir constant matching the
+given directionality. If given null, returns null (i.e. unknown).</p>
+</dl></dd></dl></div></section></section><section class="static-properties"><h2>Properties</h2><section class="property expandable" id="I18N_LEFT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L146" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>I18N_LEFT</div></h3></div><div class="body"><p>&#39;right&#39; if locale is RTL, &#39;left&#39; if not.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="I18N_RIGHT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L138" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>I18N_RIGHT</div></h3></div><div class="body"><p>&#39;left&#39; if locale is RTL, &#39;right&#39; if not.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="IS_RTL"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L62" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>IS_RTL</div></h3></div><div class="body"><p>Constant that defines whether or not the current locale is a RTL locale.
+If <a href="goog.i18n.bidi.html#goog.i18n.bidi.FORCE_RTL"><code>goog.i18n.bidi.FORCE_RTL</code></a> is not true, this constant will default
+to check that <a href="goog.html#goog.LOCALE"><code>goog.LOCALE</code></a> is one of a few major RTL locales.</p>
+ <p>This is designed to be a maximally efficient compile-time constant. For
+ example, for the default goog.LOCALE, compiling
+ &#34;if (goog.i18n.bidi.IS_RTL) alert(&#39;rtl&#39;) else {}&#34; should produce no code. It
+ is this design consideration that limits the implementation to only
+ supporting a few major RTL locales, as opposed to the broader repertoire of
+ something like goog.i18n.bidi.isRtlLanguage.
+ </p><p>Since this constant refers to the directionality of the locale, it is up
+ to the caller to determine if this constant should also be used for the
+ direction of the UI.
+</p><p>goog.LOCALE</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section><section class="property expandable" id="LEFT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L131" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>LEFT</div></h3></div><div class="body"><p>&#39;left&#39; string constant.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="RIGHT"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L124" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>RIGHT</div></h3></div><div class="body"><p>&#39;right&#39; string constant.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section></section><section class="constants"><h2>Compiler Constants</h2><section class="property expandable" id="goog.i18n.bidi.FORCE_RTL"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/i18n/bidi.js#L37" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.i18n.bidi.FORCE_RTL</div></h3></div><div class="body"><p>FORCE_RTL forces the <a href="goog.i18n.bidi.html#IS_RTL"><code>goog.i18n.bidi.IS_RTL</code></a> constant
+to say that the current locale is a RTL locale.  This should only be used
+if you want to override the default behavior for deciding whether the
+current locale is RTL or not.</p>
+<p>goog.i18n.bidi.IS_RTL</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section></section><section class="types"><h2>Interfaces</h2><ul><li class="summary"><div><a href="goog.i18n.bidi.DirectionalString.html">DirectionalString</a></div></ul></section><section class="types"><h2>Enumerations</h2><ul><li class="summary"><div><a href="goog.i18n.bidi.Dir.html">Dir</a></div><li class="summary"><div><a href="goog.i18n.bidi.Format.html">Format</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -69,9 +69,7 @@ function testInputWithPlaceholder_someKeys() {
 function listenToInput(inputHandler) {
   var callback = goog.testing.recordFunction();
   eventHandler.listen(
-      inputHandler,
-      goog.events.InputHandler.EventType.INPUT,
-      callback);
+      inputHandler, goog.events.InputHandler.EventType.INPUT, callback);
   return callback;
 }
 
@@ -86,9 +84,8 @@ function fireFakeInputEvent(input) {
 }
 
 function fireInputEvent(input, keyCode) {
-  var inputEvent = new goog.testing.events.Event(
-      goog.events.EventType.INPUT,
-      input);
+  var inputEvent =
+      new goog.testing.events.Event(goog.events.EventType.INPUT, input);
   inputEvent.keyCode = keyCode;
   inputEvent.charCode = keyCode;
   goog.testing.events.fireBrowserEvent(inputEvent);

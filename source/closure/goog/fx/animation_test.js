@@ -37,9 +37,8 @@ function testPauseLogic() {
     assertRoughlyEquals(e.progress, progress, 1e-6);
     nFrames++;
   });
-  goog.events.listen(anim, goog.fx.Animation.EventType.END, function(e) {
-    nFrames++;
-  });
+  goog.events.listen(
+      anim, goog.fx.Animation.EventType.END, function(e) { nFrames++; });
   var nSteps = 10;
   for (var i = 0; i < nSteps; i++) {
     progress = i / (nSteps - 1);

@@ -26,17 +26,18 @@ goog.provide('goog.net.cookies');
 
 /**
  * A class for handling browser cookies.
- * @param {Document} context The context document to get/set cookies on.
+ * @param {?Document} context The context document to get/set cookies on.
  * @constructor
  * @final
  */
 goog.net.Cookies = function(context) {
   /**
-   * The context document to get/set cookies on
-   * @type {Document}
-   * @private
-   */
-  this.document_ = context;
+  * The context document to get/set cookies on. If no document context is
+  * passed, use a fake one with only the "cookie" attribute. This allows
+  * this class to be instantiated safely in web worker environments.
+  * @private {{cookie: string}}
+  */
+  this.document_ = context || {cookie: ''};
 };
 
 
@@ -157,9 +158,9 @@ goog.net.Cookies.prototype.set = function(
   if (opt_maxAge < 0) {
     expiresStr = '';
 
-  // Case 2: Remove the cookie.
-  // Note: We don't tell people about this option in the function doc because
-  // we prefer people to use remove() to remove cookies.
+    // Case 2: Remove the cookie.
+    // Note: We don't tell people about this option in the function doc because
+    // we prefer people to use remove() to remove cookies.
   } else if (opt_maxAge == 0) {
     // Note: Don't use Jan 1, 1970 for date because NS 4.76 will try to convert
     // it to local time, and if the local time is before Jan 1, 1970, then the
@@ -167,14 +168,14 @@ goog.net.Cookies.prototype.set = function(
     var pastDate = new Date(1970, 1 /*Feb*/, 1);  // Feb 1, 1970
     expiresStr = ';expires=' + pastDate.toUTCString();
 
-  // Case 3: Set a persistent cookie.
+    // Case 3: Set a persistent cookie.
   } else {
     var futureDate = new Date(goog.now() + opt_maxAge * 1000);
     expiresStr = ';expires=' + futureDate.toUTCString();
   }
 
-  this.setCookie_(name + '=' + value + domainStr + pathStr +
-                  expiresStr + secureStr);
+  this.setCookie_(
+      name + '=' + value + domainStr + pathStr + expiresStr + secureStr);
 };
 
 
@@ -327,14 +328,14 @@ goog.net.Cookies.prototype.getCookie_ = function() {
  * @private
  */
 goog.net.Cookies.prototype.getParts_ = function() {
-  return (this.getCookie_() || '').
-      split(goog.net.Cookies.SPLIT_RE_);
+  return (this.getCookie_() || '').split(goog.net.Cookies.SPLIT_RE_);
 };
 
 
 /**
  * Gets the names and values for all the cookies.
- * @return {!Object} An object with keys and values.
+ * @return {!{keys:!Array<string>, values:!Array<string>}} An object with keys
+ *     and values.
  * @private
  */
 goog.net.Cookies.prototype.getKeyValues_ = function() {
@@ -343,7 +344,7 @@ goog.net.Cookies.prototype.getKeyValues_ = function() {
   for (var i = 0; part = parts[i]; i++) {
     index = part.indexOf('=');
 
-    if (index == -1) { // empty name
+    if (index == -1) {  // empty name
       keys.push('');
       values.push(part);
     } else {
@@ -355,11 +356,14 @@ goog.net.Cookies.prototype.getKeyValues_ = function() {
 };
 
 
+// TODO(b/23687502): This should be a singleton getter instead of a static
+// instance.
 /**
  * A static default instance.
  * @type {goog.net.Cookies}
  */
-goog.net.cookies = new goog.net.Cookies(document);
+goog.net.cookies =
+    new goog.net.Cookies(typeof document == 'undefined' ? null : document);
 
 
 /**

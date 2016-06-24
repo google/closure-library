@@ -38,10 +38,7 @@ goog.require('goog.structs.PriorityPool');
  * @extends {goog.structs.PriorityPool}
  */
 goog.net.XhrIoPool = function(
-    opt_headers,
-    opt_minCount,
-    opt_maxCount,
-    opt_withCredentials) {
+    opt_headers, opt_minCount, opt_maxCount, opt_withCredentials) {
   /**
    * Map of default headers to add to every request.
    * @type {goog.structs.Map|undefined}
@@ -79,9 +76,7 @@ goog.net.XhrIoPool.prototype.createObject = function() {
   var xhrIo = new goog.net.XhrIo();
   var headers = this.headers_;
   if (headers) {
-    headers.forEach(function(value, key) {
-      xhrIo.headers.set(key, value);
-    });
+    headers.forEach(function(value, key) { xhrIo.headers.set(key, value); });
   }
   if (this.withCredentials_) {
     xhrIo.setWithCredentials(true);

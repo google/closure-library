@@ -53,7 +53,8 @@ function testHashing() {
       'hijkijkljklmklmnlmnomnopnopq' +
       'asdfljhr78yasdfljh45opa78sdf' +
       '120839414104897aavnasdfafasd';
-  assertTrue(biggerThanOneBlock.length > goog.crypt.Sha2.BLOCKSIZE_ &&
+  assertTrue(
+      biggerThanOneBlock.length > goog.crypt.Sha2.BLOCKSIZE_ &&
       biggerThanOneBlock.length < 2 * goog.crypt.Sha2.BLOCKSIZE_);
   sha224.update(goog.crypt.stringToByteArray(biggerThanOneBlock));
   assertEquals(

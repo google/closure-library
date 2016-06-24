@@ -21,7 +21,7 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 
-var opt_domHelper;
+var domHelper;
 var mock_doc;
 var stubs;
 
@@ -43,8 +43,7 @@ function setUp() {
 function testGetFullScreenElement() {
   var element = {};
   mock_doc.webkitFullscreenElement = element;
-  assertEquals(element,
-               goog.dom.fullscreen.getFullScreenElement(domHelper));
+  assertEquals(element, goog.dom.fullscreen.getFullScreenElement(domHelper));
 }
 
 function testGetFullScreenElementNotFullScreen() {

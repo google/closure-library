@@ -1,0 +1,301 @@
+---
+{edit_path: '', layout: api, page: goog.vec.mat3d, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.vec.mat3d</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L36" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.vec.mat3d</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="addMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L461" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>addMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Performs a per-component addition of the matrices mat0 and mat1, storing
+the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The first addend.</p>
+<dt class="type name"><var>mat1</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The second addend.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to
+receive the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="create"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L50" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>create()</div></h3></div><div class="body"><p>Creates a mat3d with all elements initialized to zero.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The new mat3d.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createIdentity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L60" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createIdentity()</div></h3></div><div class="body"><p>Creates a mat3d identity matrix.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The new mat3d.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="equals"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L637" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>equals(<var>mat0</var>, <var>mat1</var>)</div></h3></div><div class="body"><p>Returns true if the components of mat0 are equal to the components of mat1.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The first matrix.</p>
+<dt class="type name"><var>mat1</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The second matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the the two matrices are equivalent.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getColumn"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L281" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getColumn(<var>mat</var>, <var>column</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Retrieves the specified column from the matrix into the given vector
+array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix supplying the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column to get the values from.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector elements to receive the
+column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>return vec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getColumns"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L317" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getColumns(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>)</div></h3></div><div class="body"><p>Retrieves the column values from the given matrix into the given vector
+elements.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix supplying the columns.</p>
+<dt class="type name"><var>vec0</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive column 0.</p>
+<dt class="type name"><var>vec1</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive column 1.</p>
+<dt class="type name"><var>vec2</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive column 2.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L176" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElement(<var>mat</var>, <var>row</var>, <var>column</var>)</div></h3></div><div class="body"><p>Retrieves the element at the requested row and column.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix containing the value to
+retrieve.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The row index.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The element value at the requested row, column indices.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L369" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRow(<var>mat</var>, <var>row</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Retrieves the row values into the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix supplying the values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row supplying the values.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive the row.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>return vec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L403" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRows(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>)</div></h3></div><div class="body"><p>Retrieves the rows of the matrix into the supplied vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to supplying the values.</p>
+<dt class="type name"><var>vec0</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive row 0.</p>
+<dt class="type name"><var>vec1</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive row 1.</p>
+<dt class="type name"><var>vec2</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to receive row 2.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="invert"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L601" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>invert(<var>mat0</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Computes the inverse of mat0 storing the result into resultMat. If the
+inverse is defined, this function returns true, false otherwise.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to invert.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive
+the result (may be mat0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the inverse is defined. If false is returned,
+resultMat is not modified.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeEulerZXZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L980" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeEulerZXZ(<var>mat</var>, <var>theta1</var>, <var>theta2</var>, <var>theta3</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a rotation matrix given Euler angles using
+the ZXZ convention.
+Given the euler angles [theta1, theta2, theta3], the rotation is defined as
+rotation &#61; rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+rotation_x(theta) means rotation around the X axis of theta radians.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>theta1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the Z axis in radians.</p>
+<dt class="type name"><var>theta2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the X axis in radians.</p>
+<dt class="type name"><var>theta3</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the Z axis in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeIdentity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L436" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeIdentity(<var>mat</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix the identity matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so operations can be chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L726" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotate(<var>mat</var>, <var>angle</var>, <var>ax</var>, <var>ay</var>, <var>az</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a rotation matrix with the given rotation
+angle about the axis defined by the vector (ax, ay, az).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+<dt class="type name"><var>ax</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x component of the rotation axis.</p>
+<dt class="type name"><var>ay</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The y component of the rotation axis.</p>
+<dt class="type name"><var>az</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The z component of the rotation axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateX"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L754" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateX(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a rotation matrix with the given rotation
+angle about the X axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateY"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L781" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateY(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a rotation matrix with the given rotation
+angle about the Y axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L808" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateZ(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a rotation matrix with the given rotation
+angle about the Z axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeScale"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L700" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeScale(<var>mat</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a scale matrix with x, y, and z scale factors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The 3x3 (9-element) matrix
+array to receive the new scale matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the x axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the y axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the z axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeTranslate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L675" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeTranslate(<var>mat</var>, <var>x</var>, <var>y</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix a translation matrix with x and y
+translation values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the x axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the y axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeZero"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L416" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeZero(<var>mat</var>)</div></h3></div><div class="body"><p>Makes the given 3x3 matrix the zero matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so operations can be chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L536" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Multiplies the two matrices mat0 and mat1 using matrix multiplication,
+storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The first (left hand) matrix.</p>
+<dt class="type name"><var>mat1</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The second (right hand) matrix.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive
+the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multScalar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L511" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multScalar(<var>mat</var>, <var>scalar</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Multiplies matrix mat0 with the given scalar, storing the result
+into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>scalar</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scalar value to multiple to each element of mat.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive
+the results (may be mat).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multVec3"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L656" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multVec3(<var>mat</var>, <var>vec</var>, <var>resultVec</var>)</div></h3></div><div class="body"><p>Transforms the given vector with the given matrix storing the resulting,
+transformed matrix into resultVec.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix supplying the transformation.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to transform.</p>
+<dt class="type name"><var>resultVec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector to
+receive the results (may be vec).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>return resultVec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L841" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotate(<var>mat</var>, <var>angle</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the x,y,z axis.  Equivalent to:
+goog.vec.mat3d.multMat(
+mat,
+goog.vec.mat3d.makeRotate(goog.vec.mat3d.create(), angle, x, y, z),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x component of the rotation axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The y component of the rotation axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The z component of the rotation axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateX"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L887" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateX(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the x axis.  Equivalent to:
+goog.vec.mat3d.multMat(
+mat,
+goog.vec.mat3d.makeRotateX(goog.vec.mat3d.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateY"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L917" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateY(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the y axis.  Equivalent to:
+goog.vec.mat3d.multMat(
+mat,
+goog.vec.mat3d.makeRotateY(goog.vec.mat3d.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L947" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateZ(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the z axis.  Equivalent to:
+goog.vec.mat3d.multMat(
+mat,
+goog.vec.mat3d.makeRotateZ(goog.vec.mat3d.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumn"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L261" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumn(<var>mat</var>, <var>column</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the specified column with the value from the supplied array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index to set the values on.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector elements for the column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumnValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L243" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumnValues(<var>mat</var>, <var>column</var>, <var>v0</var>, <var>v1</var>, <var>v2</var>)</div></h3></div><div class="body"><p>Sets the specified column with the supplied values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index to set the values on.</p>
+<dt class="type name"><var>v0</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 0.</p>
+<dt class="type name"><var>v1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 1.</p>
+<dt class="type name"><var>v2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 2.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumns"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L300" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumns(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>)</div></h3></div><div class="body"><p>Sets the columns of the matrix from the set of vector elements.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec0</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for column 0.</p>
+<dt class="type name"><var>vec1</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for column 1.</p>
+<dt class="type name"><var>vec2</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for column 2.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setDiagonal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L224" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDiagonal(<var>mat</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the diagonal values of the matrix from the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector containing the values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setDiagonalValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L208" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDiagonalValues(<var>mat</var>, <var>v00</var>, <var>v11</var>, <var>v22</var>)</div></h3></div><div class="body"><p>Sets the diagonal values of the matrix from the given values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (0, 0).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (1, 1).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (2, 2).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L192" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setElement(<var>mat</var>, <var>row</var>, <var>column</var>, <var>value</var>)</div></h3></div><div class="body"><p>Sets the element at the requested row and column.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix containing the value to
+retrieve.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The row index.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index.</p>
+<dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value to set at the requested row, column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L153" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromArray(<var>mat</var>, <var>src</var>)</div></h3></div><div class="body"><p>Initializes mat3d mat from Array src.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The destination matrix.</p>
+<dt class="type name"><var>src</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>The source matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>Return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromMat3d"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L108" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromMat3d(<var>mat</var>, <var>src</var>)</div></h3></div><div class="body"><p>Initializes mat3d mat from mat3d src.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The destination matrix.</p>
+<dt class="type name"><var>src</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The source matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>Return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromMat3f"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L131" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromMat3f(<var>mat</var>, <var>src</var>)</div></h3></div><div class="body"><p>Initializes mat3d mat from mat3f src (typed as a Float32Array to
+avoid circular goog.requires).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The destination matrix.</p>
+<dt class="type name"><var>src</var><code>Float32Array</code><dd><p>The source matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>Return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L85" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromValues(<var>mat</var>, <var>v00</var>, <var>v10</var>, <var>v20</var>, <var>v01</var>, <var>v11</var>, <var>v21</var>, <var>v02</var>, <var>v12</var>, <var>v22</var>)</div></h3></div><div class="body"><p>Initializes the matrix from the set of values. Note the values supplied are
+in column major order.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the
+values.</p>
+<dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 0).</p>
+<dt class="type name"><var>v10</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 0).</p>
+<dt class="type name"><var>v20</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 0).</p>
+<dt class="type name"><var>v01</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 1).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 1).</p>
+<dt class="type name"><var>v21</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 1).</p>
+<dt class="type name"><var>v02</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 2).</p>
+<dt class="type name"><var>v12</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 2).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 2).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L352" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRow(<var>mat</var>, <var>row</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the row values from the supplied vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the row values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row.</p>
+<dt class="type name"><var>vec</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The vector containing the values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRowValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L335" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRowValues(<var>mat</var>, <var>row</var>, <var>v0</var>, <var>v1</var>, <var>v2</var>)</div></h3></div><div class="body"><p>Sets the row values from the supplied values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row to receive the values.</p>
+<dt class="type name"><var>v0</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 0.</p>
+<dt class="type name"><var>v1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 1.</p>
+<dt class="type name"><var>v2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 2.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L387" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRows(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>)</div></h3></div><div class="body"><p>Sets the rows of the matrix from the supplied vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec0</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for row 0.</p>
+<dt class="type name"><var>vec1</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for row 1.</p>
+<dt class="type name"><var>vec2</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The values for row 2.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="subMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L486" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>subMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Performs a per-component subtraction of the matrices mat0 and mat1,
+storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The minuend.</p>
+<dt class="type name"><var>mat1</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The subtrahend.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive
+the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toEulerZXZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L1020" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toEulerZXZ(<var>mat</var>, <var>euler</var>, <var>opt_theta2IsNegative</var>)</div></h3></div><div class="body"><p>Decomposes a rotation matrix into Euler angles using the ZXZ convention so
+that rotation &#61; rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+rotation_x(theta) means rotation around the X axis of theta radians.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>euler</var><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>The ZXZ Euler angles in
+radians as [theta1, theta2, theta3].</p>
+<dt class="type name"><var>opt_theta2IsNegative</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether theta2 is in [-pi, 0] instead
+of the default [0, pi].</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.vec3d.html#goog.vec.vec3d.Type">goog.vec.vec3d.Type</a></code><dd><p>return euler so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="transpose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L567" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>transpose(<var>mat</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Transposes the given matrix mat storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to transpose.</p>
+<dt class="type name"><var>resultMat</var><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>The matrix to receive
+the results (may be mat).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.mat3d.html#goog.vec.mat3d.Type">goog.vec.mat3d.Type</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section></section><section class="type-defs"><h2>Type Definitions</h2><section id="Type" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat3d.js#L42" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Type</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.Float64">goog.vec.Float64</a></code></dl><p>No description.</p></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

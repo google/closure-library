@@ -24,18 +24,15 @@ goog.require('goog.testing');
 goog.require('goog.testing.jsunit');
 
 function setUp() {
-  var newListenableFn = function() {
-    return new goog.events.EventTarget();
-  };
+  var newListenableFn = function() { return new goog.events.EventTarget(); };
   var unlistenByKeyFn = function(src, key) {
     return goog.events.unlistenByKey(key);
   };
   goog.events.eventTargetTester.setUp(
       newListenableFn, goog.events.listen, goog.events.unlisten,
       unlistenByKeyFn, goog.events.listenOnce, goog.events.dispatchEvent,
-      goog.events.removeAll, goog.events.getListeners,
-      goog.events.getListener, goog.events.hasListener,
-      goog.events.eventTargetTester.KeyType.NUMBER,
+      goog.events.removeAll, goog.events.getListeners, goog.events.getListener,
+      goog.events.hasListener, goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, true);
 }
 

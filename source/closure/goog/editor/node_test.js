@@ -110,9 +110,10 @@ function testGetCompatModeQuirks() {
   expectedFailures.expectFailureFor(
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('530')) ||
       (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
-          !goog.userAgent.isVersionOrHigher('11')));
+       !goog.userAgent.isVersionOrHigher('11')));
   expectedFailures.run(function() {
-    assertFalse('Empty sourceless iframe is quirks mode, not standards mode',
+    assertFalse(
+        'Empty sourceless iframe is quirks mode, not standards mode',
         goog.editor.node.isStandardsMode(
             goog.dom.getFrameContentDocument(quirksIfr)));
   });
@@ -126,7 +127,8 @@ function testGetCompatModeStandards() {
   doc.open();
   doc.write('<!DOCTYPE HTML><html><head></head><body>&nbsp;</body></html>');
   doc.close();
-  assertTrue('Iframe with DOCTYPE written in is standards mode',
+  assertTrue(
+      'Iframe with DOCTYPE written in is standards mode',
       goog.editor.node.isStandardsMode(doc));
   document.body.removeChild(standardsIfr);
 }
@@ -138,16 +140,21 @@ function testGetCompatModeStandards() {
 function testGetLeftMostLeaf() {
   setUpDomTree();
 
-  assertEquals('Should skip ws node', gChildMixedNode1,
-               goog.editor.node.getLeftMostLeaf(parentNode));
-  assertEquals('Should skip ws node', gChildMixedNode1,
-               goog.editor.node.getLeftMostLeaf(childNode1));
-  assertEquals('Has no non ws leaves', childNode2,
-               goog.editor.node.getLeftMostLeaf(childNode2));
-  assertEquals('Should return first child', gChildTextNode3a,
-               goog.editor.node.getLeftMostLeaf(childNode3));
-  assertEquals('Has no children', gChildTextNode1,
-               goog.editor.node.getLeftMostLeaf(gChildTextNode1));
+  assertEquals(
+      'Should skip ws node', gChildMixedNode1,
+      goog.editor.node.getLeftMostLeaf(parentNode));
+  assertEquals(
+      'Should skip ws node', gChildMixedNode1,
+      goog.editor.node.getLeftMostLeaf(childNode1));
+  assertEquals(
+      'Has no non ws leaves', childNode2,
+      goog.editor.node.getLeftMostLeaf(childNode2));
+  assertEquals(
+      'Should return first child', gChildTextNode3a,
+      goog.editor.node.getLeftMostLeaf(childNode3));
+  assertEquals(
+      'Has no children', gChildTextNode1,
+      goog.editor.node.getLeftMostLeaf(gChildTextNode1));
 
   tearDownDomTree();
 }
@@ -159,16 +166,21 @@ function testGetLeftMostLeaf() {
 function testGetRightMostLeaf() {
   setUpDomTree();
 
-  assertEquals("Should return child3's rightmost child", gChildTextNode3b,
-               goog.editor.node.getRightMostLeaf(parentNode));
-  assertEquals('Should skip ws node', gChildTextNode1,
-               goog.editor.node.getRightMostLeaf(childNode1));
-  assertEquals('Has no non ws leaves', childNode2,
-               goog.editor.node.getRightMostLeaf(childNode2));
-  assertEquals('Should return last child', gChildTextNode3b,
-               goog.editor.node.getRightMostLeaf(childNode3));
-  assertEquals('Has no children', gChildTextNode1,
-               goog.editor.node.getRightMostLeaf(gChildTextNode1));
+  assertEquals(
+      "Should return child3's rightmost child", gChildTextNode3b,
+      goog.editor.node.getRightMostLeaf(parentNode));
+  assertEquals(
+      'Should skip ws node', gChildTextNode1,
+      goog.editor.node.getRightMostLeaf(childNode1));
+  assertEquals(
+      'Has no non ws leaves', childNode2,
+      goog.editor.node.getRightMostLeaf(childNode2));
+  assertEquals(
+      'Should return last child', gChildTextNode3b,
+      goog.editor.node.getRightMostLeaf(childNode3));
+  assertEquals(
+      'Has no children', gChildTextNode1,
+      goog.editor.node.getRightMostLeaf(gChildTextNode1));
 
   tearDownDomTree();
 }
@@ -181,18 +193,23 @@ function testGetRightMostLeaf() {
 function testGetFirstChild() {
   setUpDomTree();
 
-  assertNull('Has no none ws children',
-      goog.editor.node.getFirstChild(childNode2));
-  assertEquals('Should skip first child, as it is ws', gChildMixedNode1,
+  assertNull(
+      'Has no none ws children', goog.editor.node.getFirstChild(childNode2));
+  assertEquals(
+      'Should skip first child, as it is ws', gChildMixedNode1,
       goog.editor.node.getFirstChild(childNode1));
-  assertEquals('Should just return first child', gChildTextNode3a,
+  assertEquals(
+      'Should just return first child', gChildTextNode3a,
       goog.editor.node.getFirstChild(childNode3));
-  assertEquals('Should return first child', childNode1,
+  assertEquals(
+      'Should return first child', childNode1,
       goog.editor.node.getFirstChild(parentNode));
 
-  assertNull('First child of a text node should return null',
+  assertNull(
+      'First child of a text node should return null',
       goog.editor.node.getFirstChild(gChildTextNode1));
-  assertNull('First child of null should return null',
+  assertNull(
+      'First child of null should return null',
       goog.editor.node.getFirstChild(null));
 
   tearDownDomTree();
@@ -206,18 +223,23 @@ function testGetFirstChild() {
 function testGetLastChild() {
   setUpDomTree();
 
-  assertNull('Has no none ws children',
-      goog.editor.node.getLastChild(childNode2));
-  assertEquals('Should skip last child, as it is ws', gChildTextNode1,
-               goog.editor.node.getLastChild(childNode1));
-  assertEquals('Should just return last child', gChildTextNode3b,
-               goog.editor.node.getLastChild(childNode3));
-  assertEquals('Should return last child', childNode3,
-               goog.editor.node.getLastChild(parentNode));
+  assertNull(
+      'Has no none ws children', goog.editor.node.getLastChild(childNode2));
+  assertEquals(
+      'Should skip last child, as it is ws', gChildTextNode1,
+      goog.editor.node.getLastChild(childNode1));
+  assertEquals(
+      'Should just return last child', gChildTextNode3b,
+      goog.editor.node.getLastChild(childNode3));
+  assertEquals(
+      'Should return last child', childNode3,
+      goog.editor.node.getLastChild(parentNode));
 
-  assertNull('Last child of a text node should return null',
+  assertNull(
+      'Last child of a text node should return null',
       goog.editor.node.getLastChild(gChildTextNode1));
-  assertNull('Last child of null should return null',
+  assertNull(
+      'Last child of null should return null',
       goog.editor.node.getLastChild(gChildTextNode1));
 
   tearDownDomTree();
@@ -230,16 +252,16 @@ function testGetLastChild() {
  */
 function testIsImportant() {
   var wsNode = document.createTextNode(' \t\r\n');
-  assertFalse('White space node is ignorable',
-      goog.editor.node.isImportant(wsNode));
+  assertFalse(
+      'White space node is ignorable', goog.editor.node.isImportant(wsNode));
   var textNode = document.createTextNode('Hello');
   assertTrue('Text node is important', goog.editor.node.isImportant(textNode));
   var nbspNode = document.createTextNode('\u00a0');
-  assertTrue('Node with nbsp is important',
-      goog.editor.node.isImportant(nbspNode));
+  assertTrue(
+      'Node with nbsp is important', goog.editor.node.isImportant(nbspNode));
   var imageNode = document.createElement(goog.dom.TagName.IMG);
-  assertTrue('Image node is important',
-      goog.editor.node.isImportant(imageNode));
+  assertTrue(
+      'Image node is important', goog.editor.node.isImportant(imageNode));
 }
 
 
@@ -249,14 +271,16 @@ function testIsImportant() {
  */
 function testIsAllNonNbspWhiteSpace() {
   var wsNode = document.createTextNode(' \t\r\n');
-  assertTrue('String is all non nbsp',
+  assertTrue(
+      'String is all non nbsp',
       goog.editor.node.isAllNonNbspWhiteSpace(wsNode));
   var textNode = document.createTextNode('Hello');
-  assertFalse('String should not be whitespace',
-              goog.editor.node.isAllNonNbspWhiteSpace(textNode));
+  assertFalse(
+      'String should not be whitespace',
+      goog.editor.node.isAllNonNbspWhiteSpace(textNode));
   var nbspNode = document.createTextNode('\u00a0');
-  assertFalse('String has nbsp',
-      goog.editor.node.isAllNonNbspWhiteSpace(nbspNode));
+  assertFalse(
+      'String has nbsp', goog.editor.node.isAllNonNbspWhiteSpace(nbspNode));
 }
 
 
@@ -267,26 +291,36 @@ function testIsAllNonNbspWhiteSpace() {
 function testGetPreviousSibling() {
   setUpDomTree();
 
-  assertNull('No previous sibling',
-             goog.editor.node.getPreviousSibling(gChildTextNode3a));
-  assertEquals('Should have text sibling', gChildTextNode3a,
-               goog.editor.node.getPreviousSibling(gChildWsNode3));
-  assertEquals('Should skip over white space sibling', gChildTextNode3a,
-               goog.editor.node.getPreviousSibling(gChildTextNode3b));
-  assertNull('No previous sibling',
-             goog.editor.node.getPreviousSibling(gChildMixedNode1));
-  assertEquals('Should have mixed text sibling', gChildMixedNode1,
-               goog.editor.node.getPreviousSibling(gChildWsNode1));
-  assertEquals('Should skip over white space sibling', gChildMixedNode1,
-               goog.editor.node.getPreviousSibling(gChildNbspNode1));
-  assertNotEquals('Should not move past ws and nbsp', gChildMixedNode1,
-                  goog.editor.node.getPreviousSibling(gChildTextNode1));
-  assertEquals('Should go to child 2', childNode2,
-               goog.editor.node.getPreviousSibling(childNode3));
-  assertEquals('Should go to child 1', childNode1,
-               goog.editor.node.getPreviousSibling(childNode2));
-  assertNull('Only has white space siblings',
-             goog.editor.node.getPreviousSibling(gChildWsNode2b));
+  assertNull(
+      'No previous sibling',
+      goog.editor.node.getPreviousSibling(gChildTextNode3a));
+  assertEquals(
+      'Should have text sibling', gChildTextNode3a,
+      goog.editor.node.getPreviousSibling(gChildWsNode3));
+  assertEquals(
+      'Should skip over white space sibling', gChildTextNode3a,
+      goog.editor.node.getPreviousSibling(gChildTextNode3b));
+  assertNull(
+      'No previous sibling',
+      goog.editor.node.getPreviousSibling(gChildMixedNode1));
+  assertEquals(
+      'Should have mixed text sibling', gChildMixedNode1,
+      goog.editor.node.getPreviousSibling(gChildWsNode1));
+  assertEquals(
+      'Should skip over white space sibling', gChildMixedNode1,
+      goog.editor.node.getPreviousSibling(gChildNbspNode1));
+  assertNotEquals(
+      'Should not move past ws and nbsp', gChildMixedNode1,
+      goog.editor.node.getPreviousSibling(gChildTextNode1));
+  assertEquals(
+      'Should go to child 2', childNode2,
+      goog.editor.node.getPreviousSibling(childNode3));
+  assertEquals(
+      'Should go to child 1', childNode1,
+      goog.editor.node.getPreviousSibling(childNode2));
+  assertNull(
+      'Only has white space siblings',
+      goog.editor.node.getPreviousSibling(gChildWsNode2b));
 
   tearDownDomTree();
 }
@@ -299,26 +333,34 @@ function testGetPreviousSibling() {
 function testGetNextSibling() {
   setUpDomTree();
 
-  assertEquals('Child 1 should have Child 2', childNode2,
-               goog.editor.node.getNextSibling(childNode1));
-  assertEquals('Child 2 should have child 3', childNode3,
-               goog.editor.node.getNextSibling(childNode2));
-  assertNull('Child 3 has no next sibling',
+  assertEquals(
+      'Child 1 should have Child 2', childNode2,
+      goog.editor.node.getNextSibling(childNode1));
+  assertEquals(
+      'Child 2 should have child 3', childNode3,
+      goog.editor.node.getNextSibling(childNode2));
+  assertNull(
+      'Child 3 has no next sibling',
       goog.editor.node.getNextSibling(childNode3));
-  assertNotEquals('Should not skip ws and nbsp nodes', gChildTextNode1,
-                  goog.editor.node.getNextSibling(gChildMixedNode1));
-  assertNotEquals('Should not skip nbsp node', gChildTextNode1,
-                  goog.editor.node.getNextSibling(gChildWsNode1));
-  assertEquals('Should have sibling', gChildTextNode1,
-               goog.editor.node.getNextSibling(gChildNbspNode1));
-  assertNull('Should have no next sibling',
-             goog.editor.node.getNextSibling(gChildTextNode1));
-  assertNull('Only has ws sibling',
-      goog.editor.node.getNextSibling(gChildWsNode2a));
-  assertNull('Has no next sibling',
-      goog.editor.node.getNextSibling(gChildWsNode2b));
-  assertEquals('Should skip ws node', gChildTextNode3b,
-               goog.editor.node.getNextSibling(gChildTextNode3a));
+  assertNotEquals(
+      'Should not skip ws and nbsp nodes', gChildTextNode1,
+      goog.editor.node.getNextSibling(gChildMixedNode1));
+  assertNotEquals(
+      'Should not skip nbsp node', gChildTextNode1,
+      goog.editor.node.getNextSibling(gChildWsNode1));
+  assertEquals(
+      'Should have sibling', gChildTextNode1,
+      goog.editor.node.getNextSibling(gChildNbspNode1));
+  assertNull(
+      'Should have no next sibling',
+      goog.editor.node.getNextSibling(gChildTextNode1));
+  assertNull(
+      'Only has ws sibling', goog.editor.node.getNextSibling(gChildWsNode2a));
+  assertNull(
+      'Has no next sibling', goog.editor.node.getNextSibling(gChildWsNode2b));
+  assertEquals(
+      'Should skip ws node', gChildTextNode3b,
+      goog.editor.node.getNextSibling(gChildTextNode3a));
 
   tearDownDomTree();
 }
@@ -326,54 +368,60 @@ function testGetNextSibling() {
 
 function testIsEmpty() {
   var textNode = document.createTextNode('');
-  assertTrue('Text node with no content should be empty',
+  assertTrue(
+      'Text node with no content should be empty',
       goog.editor.node.isEmpty(textNode));
   textNode.data = '\xa0';
-  assertTrue('Text node with nbsp should be empty',
+  assertTrue(
+      'Text node with nbsp should be empty',
       goog.editor.node.isEmpty(textNode));
-  assertFalse('Text node with nbsp should not be empty when prohibited',
+  assertFalse(
+      'Text node with nbsp should not be empty when prohibited',
       goog.editor.node.isEmpty(textNode, true));
 
   textNode.data = '     ';
-  assertTrue('Text node with whitespace should be empty',
+  assertTrue(
+      'Text node with whitespace should be empty',
       goog.editor.node.isEmpty(textNode));
   textNode.data = 'notEmpty';
-  assertFalse('Text node with text should not be empty',
+  assertFalse(
+      'Text node with text should not be empty',
       goog.editor.node.isEmpty(textNode));
 
   var div = document.createElement(goog.dom.TagName.DIV);
-  assertTrue('Empty div should be empty',
-      goog.editor.node.isEmpty(div));
+  assertTrue('Empty div should be empty', goog.editor.node.isEmpty(div));
   div.innerHTML = '<iframe></iframe>';
-  assertFalse('Div containing an iframe is not empty',
-      goog.editor.node.isEmpty(div));
+  assertFalse(
+      'Div containing an iframe is not empty', goog.editor.node.isEmpty(div));
   div.innerHTML = '<img></img>';
-  assertFalse('Div containing an image is not empty',
-      goog.editor.node.isEmpty(div));
+  assertFalse(
+      'Div containing an image is not empty', goog.editor.node.isEmpty(div));
   div.innerHTML = '<embed></embed>';
-  assertFalse('Div containing an embed is not empty',
-      goog.editor.node.isEmpty(div));
+  assertFalse(
+      'Div containing an embed is not empty', goog.editor.node.isEmpty(div));
   div.innerHTML = '<div><span></span></div>';
-  assertTrue('Div containing other empty tags is empty',
+  assertTrue(
+      'Div containing other empty tags is empty',
       goog.editor.node.isEmpty(div));
   div.innerHTML = '<div><span>  </span></div>';
-  assertTrue('Div containing other empty tags and whitespace is empty',
+  assertTrue(
+      'Div containing other empty tags and whitespace is empty',
       goog.editor.node.isEmpty(div));
   div.innerHTML = '<div><span>Not empty</span></div>';
-  assertFalse('Div containing tags and text is not empty',
+  assertFalse(
+      'Div containing tags and text is not empty',
       goog.editor.node.isEmpty(div));
 
   var img = document.createElement(goog.dom.TagName.IMG);
-  assertFalse('Empty img should not be empty',
-      goog.editor.node.isEmpty(img));
+  assertFalse('Empty img should not be empty', goog.editor.node.isEmpty(img));
 
   var iframe = document.createElement(goog.dom.TagName.IFRAME);
-  assertFalse('Empty iframe should not be empty',
-      goog.editor.node.isEmpty(iframe));
+  assertFalse(
+      'Empty iframe should not be empty', goog.editor.node.isEmpty(iframe));
 
   var embed = document.createElement(goog.dom.TagName.EMBED);
-  assertFalse('Empty embed should not be empty',
-      goog.editor.node.isEmpty(embed));
+  assertFalse(
+      'Empty embed should not be empty', goog.editor.node.isEmpty(embed));
 }
 
 
@@ -385,8 +433,8 @@ function testIsEmpty() {
 function testGetLength() {
   var parentNode = document.createElement(goog.dom.TagName.P);
 
-  assertEquals('Length 0 and no children', 0,
-      goog.editor.node.getLength(parentNode));
+  assertEquals(
+      'Length 0 and no children', 0, goog.editor.node.getLength(parentNode));
 
   var childNode1 = document.createTextNode('node 1');
   var childNode2 = document.createTextNode('node number 2');
@@ -394,22 +442,21 @@ function testGetLength() {
   parentNode.appendChild(childNode1);
   parentNode.appendChild(childNode2);
   parentNode.appendChild(childNode3);
-  assertEquals('Length 0 and 3 children', 3,
-      goog.editor.node.getLength(parentNode));
-  assertEquals('Text node, length 6', 6,
-      goog.editor.node.getLength(childNode1));
-  assertEquals('Text node, length 0', 0,
-      goog.editor.node.getLength(childNode3));
+  assertEquals(
+      'Length 0 and 3 children', 3, goog.editor.node.getLength(parentNode));
+  assertEquals(
+      'Text node, length 6', 6, goog.editor.node.getLength(childNode1));
+  assertEquals(
+      'Text node, length 0', 0, goog.editor.node.getLength(childNode3));
 }
 
 function testFindInChildrenSuccess() {
   var parentNode = document.createElement(goog.dom.TagName.DIV);
   parentNode.innerHTML = '<div>foo</div><b>foo2</b>';
 
-  var index = goog.editor.node.findInChildren(parentNode,
-      function(node) {
-        return node.tagName == goog.dom.TagName.B;
-      });
+  var index = goog.editor.node.findInChildren(parentNode, function(node) {
+    return node.tagName == goog.dom.TagName.B;
+  });
   assertEquals('Should find second child', index, 1);
 }
 
@@ -417,10 +464,8 @@ function testFindInChildrenFailure() {
   var parentNode = document.createElement(goog.dom.TagName.DIV);
   parentNode.innerHTML = '<div>foo</div><b>foo2</b>';
 
-  var index = goog.editor.node.findInChildren(parentNode,
-      function(node) {
-        return false;
-      });
+  var index = goog.editor.node.findInChildren(
+      parentNode, function(node) { return false; });
   assertNull("Shouldn't find a child", index);
 }
 
@@ -432,61 +477,46 @@ function testFindHighestMatchingAncestor() {
   var node = goog.editor.node.findHighestMatchingAncestor(
       gChildTextNode3a, predicateFunc);
   assertNotNull('Should return an ancestor', node);
-  assertEquals('Should have found "parentNode" as the last ' +
-               'ancestor matching the predicate',
-               parentNode,
-               node);
+  assertEquals(
+      'Should have found "parentNode" as the last ' +
+          'ancestor matching the predicate',
+      parentNode, node);
 
-  predicateFunc = function(node) {
-    return node.childNodes.length == 1;
-  };
-  node = goog.editor.node.findHighestMatchingAncestor(gChildTextNode3a,
-                                                      predicateFunc);
+  predicateFunc = function(node) { return node.childNodes.length == 1; };
+  node = goog.editor.node.findHighestMatchingAncestor(
+      gChildTextNode3a, predicateFunc);
   assertNull("Shouldn't return an ancestor", node);
 
   tearDownDomTree();
 }
 
 function testIsBlock() {
-  var blockDisplays = ['block', 'list-item', 'table', 'table-caption',
-    'table-cell', 'table-column', 'table-column-group', 'table-footer',
-    'table-footer-group', 'table-header-group', 'table-row',
-    'table-row-group'];
+  var blockDisplays = [
+    'block', 'list-item', 'table', 'table-caption', 'table-cell',
+    'table-column', 'table-column-group', 'table-footer', 'table-footer-group',
+    'table-header-group', 'table-row', 'table-row-group'
+  ];
 
   var structuralTags = [
-    goog.dom.TagName.BODY,
-    goog.dom.TagName.FRAME,
-    goog.dom.TagName.FRAMESET,
-    goog.dom.TagName.HEAD,
-    goog.dom.TagName.HTML
+    goog.dom.TagName.BODY, goog.dom.TagName.FRAME, goog.dom.TagName.FRAMESET,
+    goog.dom.TagName.HEAD, goog.dom.TagName.HTML
   ];
 
   // The following tags are considered inline in IE, except LEGEND which is
   // only a block element in WEBKIT.
   var ambiguousTags = [
-    goog.dom.TagName.DETAILS,
-    goog.dom.TagName.HR,
-    goog.dom.TagName.ISINDEX,
-    goog.dom.TagName.LEGEND,
-    goog.dom.TagName.MAP,
-    goog.dom.TagName.NOFRAMES,
-    goog.dom.TagName.OPTGROUP,
-    goog.dom.TagName.OPTION,
-    goog.dom.TagName.SUMMARY
+    goog.dom.TagName.DETAILS, goog.dom.TagName.HR, goog.dom.TagName.ISINDEX,
+    goog.dom.TagName.LEGEND, goog.dom.TagName.MAP, goog.dom.TagName.NOFRAMES,
+    goog.dom.TagName.OPTGROUP, goog.dom.TagName.OPTION, goog.dom.TagName.SUMMARY
   ];
 
   // Older versions of IE and Gecko consider the following elements to be
   // inline, but IE9+ and Gecko 2.0+ recognize the new elements.
   var legacyAmbiguousTags = [
-    goog.dom.TagName.ARTICLE,
-    goog.dom.TagName.ASIDE,
-    goog.dom.TagName.FIGCAPTION,
-    goog.dom.TagName.FIGURE,
-    goog.dom.TagName.FOOTER,
-    goog.dom.TagName.HEADER,
-    goog.dom.TagName.HGROUP,
-    goog.dom.TagName.NAV,
-    goog.dom.TagName.SECTION
+    goog.dom.TagName.ARTICLE, goog.dom.TagName.ASIDE,
+    goog.dom.TagName.FIGCAPTION, goog.dom.TagName.FIGURE,
+    goog.dom.TagName.FOOTER, goog.dom.TagName.HEADER, goog.dom.TagName.HGROUP,
+    goog.dom.TagName.NAV, goog.dom.TagName.SECTION
   ];
 
   var tagsToIgnore = goog.array.flatten(structuralTags, ambiguousTags);
@@ -514,15 +544,17 @@ function testIsBlock() {
     var el = goog.dom.createElement(tag);
     document.body.appendChild(el);
     var display = goog.style.getCascadedStyle(el, 'display') ||
-                  goog.style.getComputedStyle(el, 'display');
+        goog.style.getComputedStyle(el, 'display');
     goog.dom.removeNode(el);
 
     if (goog.editor.node.isBlockTag(el)) {
-      assertContains('Display for ' + tag + ' should be block-like',
-          display, blockDisplays);
+      assertContains(
+          'Display for ' + tag + ' should be block-like', display,
+          blockDisplays);
     } else {
-      assertNotContains('Display for ' + tag + ' should not be block-like',
-          display, blockDisplays);
+      assertNotContains(
+          'Display for ' + tag + ' should not be block-like', display,
+          blockDisplays);
     }
   }
 }
@@ -536,43 +568,54 @@ function createDivWithTextNodes(var_args) {
 }
 
 function testSkipEmptyTextNodes() {
-  assertNull('skipEmptyTextNodes should gracefully handle null',
+  assertNull(
+      'skipEmptyTextNodes should gracefully handle null',
       goog.editor.node.skipEmptyTextNodes(null));
 
   var dom1 = createDivWithTextNodes('abc', '', 'xyz', '', '');
-  assertEquals('expected not to skip first child', dom1.firstChild,
+  assertEquals(
+      'expected not to skip first child', dom1.firstChild,
       goog.editor.node.skipEmptyTextNodes(dom1.firstChild));
-  assertEquals('expected to skip second child', dom1.childNodes[2],
+  assertEquals(
+      'expected to skip second child', dom1.childNodes[2],
       goog.editor.node.skipEmptyTextNodes(dom1.childNodes[1]));
-  assertNull('expected to skip all the rest of the children',
+  assertNull(
+      'expected to skip all the rest of the children',
       goog.editor.node.skipEmptyTextNodes(dom1.childNodes[3]));
 }
 
 function testIsEditableContainer() {
   var editableContainerElement = document.getElementById('editableTest');
-  assertTrue('Container element should be considered editable container',
+  assertTrue(
+      'Container element should be considered editable container',
       goog.editor.node.isEditableContainer(editableContainerElement));
 
   var nonEditableContainerElement = document.getElementById('parentNode');
-  assertFalse('Other element should not be considered editable container',
+  assertFalse(
+      'Other element should not be considered editable container',
       goog.editor.node.isEditableContainer(nonEditableContainerElement));
 }
 
 function testIsEditable() {
   var editableContainerElement = document.getElementById('editableTest');
   var childNode = editableContainerElement.firstChild;
-  var childElement = editableContainerElement.getElementsByTagName(
-      goog.dom.TagName.SPAN)[0];
+  var childElement =
+      editableContainerElement.getElementsByTagName(goog.dom.TagName.SPAN)[0];
 
-  assertFalse('Container element should not be considered editable',
+  assertFalse(
+      'Container element should not be considered editable',
       goog.editor.node.isEditable(editableContainerElement));
-  assertTrue('Child text node should be considered editable',
+  assertTrue(
+      'Child text node should be considered editable',
       goog.editor.node.isEditable(childNode));
-  assertTrue('Child element should be considered editable',
+  assertTrue(
+      'Child element should be considered editable',
       goog.editor.node.isEditable(childElement));
-  assertTrue('Grandchild node should be considered editable',
+  assertTrue(
+      'Grandchild node should be considered editable',
       goog.editor.node.isEditable(childElement.firstChild));
-  assertFalse('Other element should not be considered editable',
+  assertFalse(
+      'Other element should not be considered editable',
       goog.editor.node.isEditable(document.getElementById('parentNode')));
 }
 
@@ -581,24 +624,24 @@ function testFindTopMostEditableAncestor() {
   var span = root.getElementsByTagName(goog.dom.TagName.SPAN)[0];
   var textNode = span.firstChild;
 
-  assertEquals('Should return self if self is matched.',
-      textNode, goog.editor.node.findTopMostEditableAncestor(textNode,
-      function(node) {
+  assertEquals(
+      'Should return self if self is matched.', textNode,
+      goog.editor.node.findTopMostEditableAncestor(textNode, function(node) {
         return node.nodeType == goog.dom.NodeType.TEXT;
       }));
-  assertEquals('Should not walk out of editable node.',
-      null, goog.editor.node.findTopMostEditableAncestor(textNode,
-      function(node) {
+  assertEquals(
+      'Should not walk out of editable node.', null,
+      goog.editor.node.findTopMostEditableAncestor(textNode, function(node) {
         return node.tagName == goog.dom.TagName.BODY;
       }));
-  assertEquals('Should not match editable container.',
-      null, goog.editor.node.findTopMostEditableAncestor(textNode,
-      function(node) {
+  assertEquals(
+      'Should not match editable container.', null,
+      goog.editor.node.findTopMostEditableAncestor(textNode, function(node) {
         return node.tagName == goog.dom.TagName.DIV;
       }));
-  assertEquals('Should find node in editable container.',
-      span, goog.editor.node.findTopMostEditableAncestor(textNode,
-      function(node) {
+  assertEquals(
+      'Should find node in editable container.', span,
+      goog.editor.node.findTopMostEditableAncestor(textNode, function(node) {
         return node.tagName == goog.dom.TagName.SPAN;
       }));
 }
@@ -616,8 +659,7 @@ function testSplitDomTreeAt() {
   root.innerHTML = innerHTML;
   result = goog.editor.node.splitDomTreeAt(
       root.getElementsByTagName(goog.dom.TagName.B)[0],
-      goog.dom.createTextNode('and'),
-      root);
+      goog.dom.createTextNode('and'), root);
   goog.testing.dom.assertHtmlContentsMatch('<p>1<b>2</b></p>', root);
   goog.testing.dom.assertHtmlContentsMatch('<p>and3</p>', result);
 }

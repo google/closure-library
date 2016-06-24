@@ -1,0 +1,528 @@
+---
+{edit_path: '', layout: api, page: goog.vec.Mat4, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.vec.Mat4</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L26" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.vec.Mat4</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="addMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L772" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>addMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Performs a per-component addition of the matrix mat0 and mat1, storing
+the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The first addend.</p>
+<dt class="type name"><var>mat1</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The second addend.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to
+receive the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="clone"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L305" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>clone(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a clone of a 4x4 matrix of Float32.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use cloneFloat32.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.Mat4Like">goog.vec.Mat4.Mat4Like</a></code><dd><p>The source 4x4 matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Type">goog.vec.Mat4.Type</a></code><dd><p>The new 4x4 element matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="cloneFloat32"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L194" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>cloneFloat32(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a clone of a 4x4 matrix of Float32.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The source 4x4 matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The new 4x4 element matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="cloneFloat64"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L249" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>cloneFloat64(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a clone of a 4x4 matrix of Float64.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The source 4x4 matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The new 4x4 element matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="create"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L87" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>create()</div></h3></div><div class="body"><p>Creates the array representation of a 4x4 matrix of Float32.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use createFloat32.</p>
+<dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Type">goog.vec.Mat4.Type</a></code><dd><p>The new matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat32"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L50" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat32()</div></h3></div><div class="body"><p>Creates the array representation of a 4x4 matrix of Float32.
+The use of the array directly instead of a class reduces overhead.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The new matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat32FromArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L149" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat32FromArray(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float32 initialized from the given array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The array containing the
+matrix values in column major order.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The new, 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat32FromValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L177" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat32FromValues(<var>v00</var>, <var>v10</var>, <var>v20</var>, <var>v30</var>, <var>v01</var>, <var>v11</var>, <var>v21</var>, <var>v31</var>, <var>v02</var>, <var>v12</var>, <var>v22</var>, <var>v32</var>, <var>v03</var>, <var>v13</var>, <var>v23</var>, <var>v33</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float32 initialized from the given values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 0).</p>
+<dt class="type name"><var>v10</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 0).</p>
+<dt class="type name"><var>v20</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 0).</p>
+<dt class="type name"><var>v30</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 0).</p>
+<dt class="type name"><var>v01</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 1).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 1).</p>
+<dt class="type name"><var>v21</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 1).</p>
+<dt class="type name"><var>v31</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 1).</p>
+<dt class="type name"><var>v02</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 2).</p>
+<dt class="type name"><var>v12</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 2).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 2).</p>
+<dt class="type name"><var>v32</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 2).</p>
+<dt class="type name"><var>v03</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 3).</p>
+<dt class="type name"><var>v13</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 3).</p>
+<dt class="type name"><var>v23</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 3).</p>
+<dt class="type name"><var>v33</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 3).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The new, 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat32Identity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L97" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat32Identity()</div></h3></div><div class="body"><p>Creates a 4x4 identity matrix of Float32.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float32">goog.vec.Mat4.Float32</a></code><dd><p>The new 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat64"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L61" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat64()</div></h3></div><div class="body"><p>Creates the array representation of a 4x4 matrix of Float64.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The new matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat64FromArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L204" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat64FromArray(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float64 initialized from the given array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The array containing the
+matrix values in column major order.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The new, nine element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat64FromValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L232" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat64FromValues(<var>v00</var>, <var>v10</var>, <var>v20</var>, <var>v30</var>, <var>v01</var>, <var>v11</var>, <var>v21</var>, <var>v31</var>, <var>v02</var>, <var>v12</var>, <var>v22</var>, <var>v32</var>, <var>v03</var>, <var>v13</var>, <var>v23</var>, <var>v33</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float64 initialized from the given values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 0).</p>
+<dt class="type name"><var>v10</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 0).</p>
+<dt class="type name"><var>v20</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 0).</p>
+<dt class="type name"><var>v30</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 0).</p>
+<dt class="type name"><var>v01</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 1).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 1).</p>
+<dt class="type name"><var>v21</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 1).</p>
+<dt class="type name"><var>v31</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 1).</p>
+<dt class="type name"><var>v02</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 2).</p>
+<dt class="type name"><var>v12</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 2).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 2).</p>
+<dt class="type name"><var>v32</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 2).</p>
+<dt class="type name"><var>v03</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 3).</p>
+<dt class="type name"><var>v13</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 3).</p>
+<dt class="type name"><var>v23</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 3).</p>
+<dt class="type name"><var>v33</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 3).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The new, 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFloat64Identity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L109" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createFloat64Identity()</div></h3></div><div class="body"><p>Creates a 4x4 identity matrix of Float64.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Float64">goog.vec.Mat4.Float64</a></code><dd><p>The new 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFromArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L260" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>createFromArray(<var>matrix</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float32 initialized from the given array.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use createFloat32FromArray.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>matrix</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.Mat4Like">goog.vec.Mat4.Mat4Like</a></code><dd><p>The array containing the
+matrix values in column major order.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Type">goog.vec.Mat4.Type</a></code><dd><p>The new, nine element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createFromValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L289" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>createFromValues(<var>v00</var>, <var>v10</var>, <var>v20</var>, <var>v30</var>, <var>v01</var>, <var>v11</var>, <var>v21</var>, <var>v31</var>, <var>v02</var>, <var>v12</var>, <var>v22</var>, <var>v32</var>, <var>v03</var>, <var>v13</var>, <var>v23</var>, <var>v33</var>)</div></h3></div><div class="body"><p>Creates a 4x4 matrix of Float32 initialized from the given values.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use createFloat32FromValues.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 0).</p>
+<dt class="type name"><var>v10</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 0).</p>
+<dt class="type name"><var>v20</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 0).</p>
+<dt class="type name"><var>v30</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 0).</p>
+<dt class="type name"><var>v01</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 1).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 1).</p>
+<dt class="type name"><var>v21</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 1).</p>
+<dt class="type name"><var>v31</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 1).</p>
+<dt class="type name"><var>v02</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 2).</p>
+<dt class="type name"><var>v12</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 2).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 2).</p>
+<dt class="type name"><var>v32</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 2).</p>
+<dt class="type name"><var>v03</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 3).</p>
+<dt class="type name"><var>v13</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 3).</p>
+<dt class="type name"><var>v23</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 3).</p>
+<dt class="type name"><var>v33</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 3).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Type">goog.vec.Mat4.Type</a></code><dd><p>The new, 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createIdentity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L137" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>createIdentity()</div></h3></div><div class="body"><p>Creates the array representation of a 4x4 matrix of Float32.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use createFloat32Identity.</p>
+<dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Type">goog.vec.Mat4.Type</a></code><dd><p>The new 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createNumber"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L72" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createNumber()</div></h3></div><div class="body"><p>Creates the array representation of a 4x4 matrix of Number.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Number">goog.vec.Mat4.Number</a></code><dd><p>The new matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createNumberIdentity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L122" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createNumberIdentity()</div></h3></div><div class="body"><p>Creates a 4x4 identity matrix of Number.
+The returned matrix is cleared to all zeros.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.Number">goog.vec.Mat4.Number</a></code><dd><p>The new 16 element array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="determinant"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L959" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>determinant(<var>mat</var>)</div></h3></div><div class="body"><p>Computes the determinant of the matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to compute the matrix for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The determinant of the matrix.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="equals"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1044" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>equals(<var>mat0</var>, <var>mat1</var>)</div></h3></div><div class="body"><p>Returns true if the components of mat0 are equal to the components of mat1.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The first matrix.</p>
+<dt class="type name"><var>mat1</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The second matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the the two matrices are equivalent.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getColumn"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L566" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getColumn(<var>mat</var>, <var>column</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Retrieves the specified column from the matrix into the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column to get the values from.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector of elements to
+receive the column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>return vec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getColumns"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L605" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getColumns(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>, <var>vec3</var>)</div></h3></div><div class="body"><p>Retrieves the column values from the given matrix into the given vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the columns.</p>
+<dt class="type name"><var>vec0</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive column 0.</p>
+<dt class="type name"><var>vec1</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive column 1.</p>
+<dt class="type name"><var>vec2</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive column 2.</p>
+<dt class="type name"><var>vec3</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive column 3.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDiagonal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L498" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDiagonal(<var>mat</var>, <var>vec</var>, <var>opt_diagonal</var>)</div></h3></div><div class="body"><p>Gets the diagonal values of the matrix into the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix containing the values.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive the values.</p>
+<dt class="type name"><var>opt_diagonal</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Which diagonal to get. A value of 0 selects the
+main diagonal, a positive number selects a super diagonal and a negative
+number selects a sub diagonal.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>return vec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L317" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getElement(<var>mat</var>, <var>row</var>, <var>column</var>)</div></h3></div><div class="body"><p>Retrieves the element at the requested row and column.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix containing the
+value to retrieve.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The row index.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The element value at the requested row, column indices.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L661" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRow(<var>mat</var>, <var>row</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Retrieves the row values into the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row supplying the values.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive the row.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>return vec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L699" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getRows(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>, <var>vec3</var>)</div></h3></div><div class="body"><p>Retrieves the rows of the matrix into the supplied vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to supply the values.</p>
+<dt class="type name"><var>vec0</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive row 0.</p>
+<dt class="type name"><var>vec1</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive row 1.</p>
+<dt class="type name"><var>vec2</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive row 2.</p>
+<dt class="type name"><var>vec3</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to receive row 3.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getTranslation"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1733" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getTranslation(<var>mat</var>, <var>translation</var>)</div></h3></div><div class="body"><p>Retrieves the translation component of the transformation matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The transformation matrix.</p>
+<dt class="type name"><var>translation</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The vector for storing the
+result.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="invert"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L992" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>invert(<var>mat</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Computes the inverse of mat storing the result into resultMat. If the
+inverse is defined, this function returns true, false otherwise.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to invert.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive
+the result (may be mat).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the inverse is defined. If false is returned,
+resultMat is not modified.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeEulerZXZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1451" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeEulerZXZ(<var>mat</var>, <var>theta1</var>, <var>theta2</var>, <var>theta3</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a rotation matrix given Euler angles using
+the ZXZ convention.
+Given the euler angles [theta1, theta2, theta3], the rotation is defined as
+rotation &#61; rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+rotation_x(theta) means rotation around the X axis of theta radians,</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>theta1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the Z axis in radians.</p>
+<dt class="type name"><var>theta2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the X axis in radians.</p>
+<dt class="type name"><var>theta3</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle of rotation around the Z axis in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeFrustum"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1266" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeFrustum(<var>mat</var>, <var>left</var>, <var>right</var>, <var>bottom</var>, <var>top</var>, <var>near</var>, <var>far</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a perspective projection matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>left</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the left clipping plane.</p>
+<dt class="type name"><var>right</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the right clipping plane.</p>
+<dt class="type name"><var>bottom</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the bottom clipping plane.</p>
+<dt class="type name"><var>top</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the top clipping plane.</p>
+<dt class="type name"><var>near</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the near clipping plane.</p>
+<dt class="type name"><var>far</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the far clipping plane.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeIdentity"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L740" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeIdentity(<var>mat</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix the identity matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so operations can be chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeLookAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1346" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeLookAt(<var>mat</var>, <var>eyePt</var>, <var>centerPt</var>, <var>worldUpVec</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a modelview matrix of a camera so that
+the camera is &#39;looking at&#39; the given center point.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>eyePt</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The position of the eye point
+(camera origin).</p>
+<dt class="type name"><var>centerPt</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The point to aim the camera at.</p>
+<dt class="type name"><var>worldUpVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The vector that identifies
+the up direction for the camera.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeOrtho"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1320" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeOrtho(<var>mat</var>, <var>left</var>, <var>right</var>, <var>bottom</var>, <var>top</var>, <var>near</var>, <var>far</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix an orthographic projection matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>left</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the left clipping plane.</p>
+<dt class="type name"><var>right</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the right clipping plane.</p>
+<dt class="type name"><var>bottom</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the bottom clipping plane.</p>
+<dt class="type name"><var>top</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The coordinate of the top clipping plane.</p>
+<dt class="type name"><var>near</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the near clipping plane.</p>
+<dt class="type name"><var>far</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the far clipping plane.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makePerspective"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1292" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makePerspective(<var>mat</var>, <var>fovy</var>, <var>aspect</var>, <var>near</var>, <var>far</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix  perspective projection matrix given a
+field of view and aspect ratio.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>fovy</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The field of view along the y (vertical) axis in
+radians.</p>
+<dt class="type name"><var>aspect</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x (width) to y (height) aspect ratio.</p>
+<dt class="type name"><var>near</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the near clipping plane.</p>
+<dt class="type name"><var>far</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The distance to the far clipping plane.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1186" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotate(<var>mat</var>, <var>angle</var>, <var>ax</var>, <var>ay</var>, <var>az</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a rotation matrix with the given rotation
+angle about the axis defined by the vector (ax, ay, az).</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+<dt class="type name"><var>ax</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x component of the rotation axis.</p>
+<dt class="type name"><var>ay</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The y component of the rotation axis.</p>
+<dt class="type name"><var>az</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The z component of the rotation axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateX"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1211" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateX(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a rotation matrix with the given rotation
+angle about the X axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateY"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1228" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateY(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a rotation matrix with the given rotation
+angle about the Y axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeRotateZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1245" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeRotateZ(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a rotation matrix with the given rotation
+angle about the Z axis.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The rotation angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeScale"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1168" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeScale(<var>mat</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix as a scale matrix with x, y and z scale factors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the x axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the y axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scale along the z axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeTranslate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1152" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeTranslate(<var>mat</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix a translation matrix with x, y and z
+translation factors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the x axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the y axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the z axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="makeZero"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L713" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>makeZero(<var>mat</var>)</div></h3></div><div class="body"><p>Makes the given 4x4 matrix the zero matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so operations can be chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L868" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Multiplies the two matrices mat0 and mat1 using matrix multiplication,
+storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The first (left hand) matrix.</p>
+<dt class="type name"><var>mat1</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The second (right hand) matrix.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive
+the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multScalar"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L836" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multScalar(<var>mat</var>, <var>scalar</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Multiplies matrix mat with the given scalar, storing the result
+into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>scalar</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The scalar value to multiply to each element of mat.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive
+the results (may be mat).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multVec3"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1066" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multVec3(<var>mat</var>, <var>vec</var>, <var>resultVec</var>)</div></h3></div><div class="body"><p>Transforms the given vector with the given matrix storing the resulting,
+transformed vector into resultVec. The input vector is multiplied against the
+upper 3x4 matrix omitting the projective component.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the transformation.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector to transform.</p>
+<dt class="type name"><var>resultVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector to
+receive the results (may be vec).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>return resultVec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multVec3NoTranslate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1088" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multVec3NoTranslate(<var>mat</var>, <var>vec</var>, <var>resultVec</var>)</div></h3></div><div class="body"><p>Transforms the given vector with the given matrix storing the resulting,
+transformed vector into resultVec. The input vector is multiplied against the
+upper 3x3 matrix omitting the projective component and translation
+components.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the transformation.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector to transform.</p>
+<dt class="type name"><var>resultVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector to
+receive the results (may be vec).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>return resultVec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multVec3Projective"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1110" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multVec3Projective(<var>mat</var>, <var>vec</var>, <var>resultVec</var>)</div></h3></div><div class="body"><p>Transforms the given vector with the given matrix storing the resulting,
+transformed vector into resultVec. The input vector is multiplied against the
+full 4x4 matrix with the homogeneous divide applied to reduce the 4 element
+vector to a 3 element vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the transformation.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector to transform.</p>
+<dt class="type name"><var>resultVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The 3 element vector
+to receive the results (may be vec).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>return resultVec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="multVec4"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1131" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>multVec4(<var>mat</var>, <var>vec</var>, <var>resultVec</var>)</div></h3></div><div class="body"><p>Transforms the given vector with the given matrix storing the resulting,
+transformed vector into resultVec.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix supplying the transformation.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to transform.</p>
+<dt class="type name"><var>resultVec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector to
+receive the results (may be vec).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>return resultVec so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1593" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotate(<var>mat</var>, <var>angle</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the x,y,z axis.  Equivalent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeRotate(goog.vec.Mat4.create(), angle, x, y, z),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x component of the rotation axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The y component of the rotation axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The z component of the rotation axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateX"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1640" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateX(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the x axis.  Equivalent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeRotateX(goog.vec.Mat4.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateY"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1672" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateY(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the y axis.  Equivalent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeRotateY(goog.vec.Mat4.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotateZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1704" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>rotateZ(<var>mat</var>, <var>angle</var>)</div></h3></div><div class="body"><p>Rotate the given matrix by angle about the z axis.  Equivalent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeRotateZ(goog.vec.Mat4.create(), angle),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>angle</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The angle in radians.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="scale"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1570" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>scale(<var>mat</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Scales the given matrix by x,y,z.  Equivalent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeScale(goog.vec.Mat4.create(), x, y, z),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The x scale factor.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The y scale factor.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The z scale factor.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumn"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L546" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumn(<var>mat</var>, <var>column</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the specified column with the value from the supplied vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index to set the values on.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector of elements for the column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumnValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L527" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumnValues(<var>mat</var>, <var>column</var>, <var>v0</var>, <var>v1</var>, <var>v2</var>, <var>v3</var>)</div></h3></div><div class="body"><p>Sets the specified column with the supplied values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index to set the values on.</p>
+<dt class="type name"><var>v0</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 0.</p>
+<dt class="type name"><var>v1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 1.</p>
+<dt class="type name"><var>v2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 2.</p>
+<dt class="type name"><var>v3</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for row 3.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setColumns"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L587" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setColumns(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>, <var>vec3</var>)</div></h3></div><div class="body"><p>Sets the columns of the matrix from the given vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec0</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for column 0.</p>
+<dt class="type name"><var>vec1</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for column 1.</p>
+<dt class="type name"><var>vec2</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for column 2.</p>
+<dt class="type name"><var>vec3</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for column 3.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setDiagonal"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L478" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDiagonal(<var>mat</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the diagonal values of the matrix from the given vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector containing the values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setDiagonalValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L461" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDiagonalValues(<var>mat</var>, <var>v00</var>, <var>v11</var>, <var>v22</var>, <var>v33</var>)</div></h3></div><div class="body"><p>Sets the diagonal values of the matrix from the given values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (0, 0).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (1, 1).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (2, 2).</p>
+<dt class="type name"><var>v33</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values for (3, 3).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L332" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setElement(<var>mat</var>, <var>row</var>, <var>column</var>, <var>value</var>)</div></h3></div><div class="body"><p>Sets the element at the requested row and column.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to set the value on.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The row index.</p>
+<dt class="type name"><var>column</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The column index.</p>
+<dt class="type name"><var>value</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value to set at the requested row, column.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L395" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromArray(<var>mat</var>, <var>values</var>)</div></h3></div><div class="body"><p>Sets the matrix from the array of values stored in column major order.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>values</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The column major ordered
+array of values to store in the matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromRowMajorArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L425" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromRowMajorArray(<var>mat</var>, <var>values</var>)</div></h3></div><div class="body"><p>Sets the matrix from the array of values stored in row major order.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>values</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The row major ordered array of
+values to store in the matrix.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setFromValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L363" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setFromValues(<var>mat</var>, <var>v00</var>, <var>v10</var>, <var>v20</var>, <var>v30</var>, <var>v01</var>, <var>v11</var>, <var>v21</var>, <var>v31</var>, <var>v02</var>, <var>v12</var>, <var>v22</var>, <var>v32</var>, <var>v03</var>, <var>v13</var>, <var>v23</var>, <var>v33</var>)</div></h3></div><div class="body"><p>Initializes the matrix from the set of values. Note the values supplied are
+in column major order.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the
+values.</p>
+<dt class="type name"><var>v00</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 0).</p>
+<dt class="type name"><var>v10</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 0).</p>
+<dt class="type name"><var>v20</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 0).</p>
+<dt class="type name"><var>v30</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 0).</p>
+<dt class="type name"><var>v01</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 1).</p>
+<dt class="type name"><var>v11</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 1).</p>
+<dt class="type name"><var>v21</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 1).</p>
+<dt class="type name"><var>v31</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 1).</p>
+<dt class="type name"><var>v02</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 2).</p>
+<dt class="type name"><var>v12</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 2).</p>
+<dt class="type name"><var>v22</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 2).</p>
+<dt class="type name"><var>v32</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 2).</p>
+<dt class="type name"><var>v03</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (0, 3).</p>
+<dt class="type name"><var>v13</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (1, 3).</p>
+<dt class="type name"><var>v23</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (2, 3).</p>
+<dt class="type name"><var>v33</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The values at (3, 3).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRow"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L643" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRow(<var>mat</var>, <var>row</var>, <var>vec</var>)</div></h3></div><div class="body"><p>Sets the row values from the supplied vector.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the row values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row.</p>
+<dt class="type name"><var>vec</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The vector containing the values.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRowValues"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L625" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRowValues(<var>mat</var>, <var>row</var>, <var>v0</var>, <var>v1</var>, <var>v2</var>, <var>v3</var>)</div></h3></div><div class="body"><p>Sets the row values from the supplied values.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>row</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the row to receive the values.</p>
+<dt class="type name"><var>v0</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 0.</p>
+<dt class="type name"><var>v1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 1.</p>
+<dt class="type name"><var>v2</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 2.</p>
+<dt class="type name"><var>v3</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The value for column 3.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setRows"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L681" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setRows(<var>mat</var>, <var>vec0</var>, <var>vec1</var>, <var>vec2</var>, <var>vec3</var>)</div></h3></div><div class="body"><p>Sets the rows of the matrix from the supplied vectors.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive the values.</p>
+<dt class="type name"><var>vec0</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for row 0.</p>
+<dt class="type name"><var>vec1</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for row 1.</p>
+<dt class="type name"><var>vec2</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for row 2.</p>
+<dt class="type name"><var>vec3</var><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>The values for row 3.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="subMat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L804" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>subMat(<var>mat0</var>, <var>mat1</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Performs a per-component subtraction of the matrix mat0 and mat1,
+storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat0</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The minuend.</p>
+<dt class="type name"><var>mat1</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The subtrahend.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive
+the results (may be either mat0 or mat1).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toEulerZXZ"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1499" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toEulerZXZ(<var>mat</var>, <var>euler</var>, <var>opt_theta2IsNegative</var>)</div></h3></div><div class="body"><p>Decomposes a rotation matrix into Euler angles using the ZXZ convention so
+that rotation &#61; rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+rotation_x(theta) means rotation around the X axis of theta radians.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>euler</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The ZXZ Euler angles in
+radians as [theta1, theta2, theta3].</p>
+<dt class="type name"><var>opt_theta2IsNegative</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether theta2 is in [-pi, 0] instead
+of the default [0, pi].</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Vec4.html#goog.vec.Vec4.AnyType">goog.vec.Vec4.AnyType</a></code><dd><p>return euler so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toLookAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1395" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>toLookAt(<var>mat</var>, <var>eyePt</var>, <var>fwdVec</var>, <var>worldUpVec</var>)</div></h3></div><div class="body"><p>Decomposes a matrix into the lookAt vectors eyePt, fwdVec and worldUpVec.
+The matrix represents the modelview matrix of a camera. It is the inverse
+of lookAt except for the output of the fwdVec instead of centerPt.
+The centerPt itself cannot be recovered from a modelview matrix.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>eyePt</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The position of the eye point
+(camera origin).</p>
+<dt class="type name"><var>fwdVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The vector describing where
+the camera points to.</p>
+<dt class="type name"><var>worldUpVec</var><code><a href="goog.vec.Vec3.html#goog.vec.Vec3.AnyType">goog.vec.Vec3.AnyType</a></code><dd><p>The vector that
+identifies the up direction for the camera.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the method succeeds, false otherwise.
+The method can only fail if the inverse of viewMatrix is not defined.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="translate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L1547" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>translate(<var>mat</var>, <var>x</var>, <var>y</var>, <var>z</var>)</div></h3></div><div class="body"><p>Translates the given matrix by x,y,z.  Equvialent to:
+goog.vec.Mat4.multMat(
+mat,
+goog.vec.Mat4.makeTranslate(goog.vec.Mat4.create(), x, y, z),
+mat);</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix.</p>
+<dt class="type name"><var>x</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the x axis.</p>
+<dt class="type name"><var>y</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the y axis.</p>
+<dt class="type name"><var>z</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The translation along the z axis.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return mat so that operations can be
+chained.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="transpose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L911" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>transpose(<var>mat</var>, <var>resultMat</var>)</div></h3></div><div class="body"><p>Transposes the given matrix mat storing the result into resultMat.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>mat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to transpose.</p>
+<dt class="type name"><var>resultMat</var><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>The matrix to receive
+the results (may be mat).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.vec.Mat4.html#goog.vec.Mat4.AnyType">goog.vec.Mat4.AnyType</a></code><dd><p>return resultMat so that operations can be
+chained together.</p>
+</dl></dd></dl></div></section></section><section class="type-defs"><h2>Type Definitions</h2><section id="AnyType" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L36" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>AnyType</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.AnyType">goog.vec.AnyType</a></code></dl><p>No description.</p></div></section><section id="Float32" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L33" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Float32</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.Float32">goog.vec.Float32</a></code></dl><p>No description.</p></div></section><section id="Float64" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L34" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Float64</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.Float64">goog.vec.Float64</a></code></dl><p>No description.</p></div></section><section id="Mat4Like" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L40" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Mat4Like</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.ArrayType">goog.vec.ArrayType</a></code></dl><p>No description.</p></div></section><section id="Number" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L35" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Number</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code><a href="goog.vec.html#goog.vec.Number">goog.vec.Number</a></code></dl><p>No description.</p></div></section><section id="Type" class="property expandable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/vec/mat4.js#L39" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>Type</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><code>!Float32Array</code></dl><p>No description.</p></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

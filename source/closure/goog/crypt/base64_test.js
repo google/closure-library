@@ -20,6 +20,7 @@ goog.require('goog.crypt.base64');
 goog.require('goog.testing.jsunit');
 
 // Static test data
+// clang-format off
 var tests = [
   '', '',
   'f', 'Zg==',
@@ -33,7 +34,7 @@ var tests = [
   '\xe4\xb8\x80\xe4\xba\x8c\xe4\xb8\x89\xe5\x9b\x9b\xe4\xba\x94\xe5' +
       '\x85\xad\xe4\xb8\x83\xe5\x85\xab\xe4\xb9\x9d\xe5\x8d\x81',
   '5LiA5LqM5LiJ5Zub5LqU5YWt5LiD5YWr5Lmd5Y2B'];
-
+// clang-format on
 
 /**
  * Asserts that `encoded` matches `expected` when base64 decoded as byte array.
@@ -130,10 +131,8 @@ function testMultipleIterations() {
 
   var numIterations = 100;
   for (var i = 0; i < numIterations; i++) {
-
     var input = [];
-    for (var j = 0; j < i; j++)
-      input[j] = j % 256;
+    for (var j = 0; j < i; j++) input[j] = j % 256;
 
     var encoded = goog.crypt.base64.encodeByteArray(input);
     assertDecodeToByteArrayEquals(input, encoded);
@@ -176,12 +175,8 @@ function testWebSafeEncoding() {
 function testDecodeIgnoresSpace() {
   var spaceTests = [
     // [encoded, expected decoded]
-    [' \n\t\r', ''],
-    ['Z g =\n=', 'f'],
-    ['Zm 8=', 'fo'],
-    [' Zm 9v', 'foo'],
-    ['Zm9v Yg ==\t ', 'foob'],
-    ['\nZ m9  vYm\n E=', 'fooba'],
+    [' \n\t\r', ''], ['Z g =\n=', 'f'], ['Zm 8=', 'fo'], [' Zm 9v', 'foo'],
+    ['Zm9v Yg ==\t ', 'foob'], ['\nZ m9  vYm\n E=', 'fooba'],
     ['  \nZ \tm9v YmFy  ', 'foobar']
   ];
 

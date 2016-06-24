@@ -27,41 +27,20 @@ function toInt32s(arr) {
 }
 
 // Note that these are in numerical order.
-var TEST_BITS = [0x80000000, 0x00000000,
-  0xb776d5f5, 0x5634e2db,
-  0xffefffff, 0xffffffff,
-  0xfff00000, 0x00000000,
-  0xfffeffff, 0xffffffff,
-  0xffff0000, 0x00000000,
-  0xfffffffe, 0xffffffff,
-  0xffffffff, 0x00000000,
-  0xffffffff, 0xfeffffff,
-  0xffffffff, 0xff000000,
-  0xffffffff, 0xfffeffff,
-  0xffffffff, 0xffff0000,
-  0xffffffff, 0xffff7fff,
-  0xffffffff, 0xffff8000,
-  0xffffffff, 0xfffffffe,
-  0xffffffff, 0xffffffff,
-  0x00000000, 0x00000000,
-  0x00000000, 0x00000001,
-  0x00000000, 0x00000002,
-  0x00000000, 0x00007fff,
-  0x00000000, 0x00008000,
-  0x00000000, 0x0000ffff,
-  0x00000000, 0x00010000,
-  0x00000000, 0x00ffffff,
-  0x00000000, 0x01000000,
-  0x00000000, 0x5634e2db,
-  0x00000000, 0xb776d5f5,
-  0x00000000, 0xffffffff,
-  0x00000001, 0x00000000,
-  0x0000ffff, 0xffffffff,
-  0x00010000, 0x00000000,
-  0x000fffff, 0xffffffff,
-  0x00100000, 0x00000000,
-  0x5634e2db, 0xb776d5f5,
-  0x7fffffff, 0xffffffff];
+var TEST_BITS = [
+  0x80000000, 0x00000000, 0xb776d5f5, 0x5634e2db, 0xffefffff, 0xffffffff,
+  0xfff00000, 0x00000000, 0xfffeffff, 0xffffffff, 0xffff0000, 0x00000000,
+  0xfffffffe, 0xffffffff, 0xffffffff, 0x00000000, 0xffffffff, 0xfeffffff,
+  0xffffffff, 0xff000000, 0xffffffff, 0xfffeffff, 0xffffffff, 0xffff0000,
+  0xffffffff, 0xffff7fff, 0xffffffff, 0xffff8000, 0xffffffff, 0xfffffffe,
+  0xffffffff, 0xffffffff, 0x00000000, 0x00000000, 0x00000000, 0x00000001,
+  0x00000000, 0x00000002, 0x00000000, 0x00007fff, 0x00000000, 0x00008000,
+  0x00000000, 0x0000ffff, 0x00000000, 0x00010000, 0x00000000, 0x00ffffff,
+  0x00000000, 0x01000000, 0x00000000, 0x5634e2db, 0x00000000, 0xb776d5f5,
+  0x00000000, 0xffffffff, 0x00000001, 0x00000000, 0x0000ffff, 0xffffffff,
+  0x00010000, 0x00000000, 0x000fffff, 0xffffffff, 0x00100000, 0x00000000,
+  0x5634e2db, 0xb776d5f5, 0x7fffffff, 0xffffffff
+];
 toInt32s(TEST_BITS);
 
 var TEST_ADD_BITS = [
@@ -1340,7 +1319,8 @@ function testToFromInt() {
 function testToFromNumber() {
   for (var i = 0; i < TEST_BITS.length; i += 2) {
     var num = TEST_BITS[i] * Math.pow(2, 32) + TEST_BITS[i + 1] >= 0 ?
-        TEST_BITS[i + 1] : Math.pow(2, 32) + TEST_BITS[i + 1];
+        TEST_BITS[i + 1] :
+        Math.pow(2, 32) + TEST_BITS[i + 1];
     var val = goog.math.Integer.fromNumber(num);
     assertEquals(num, val.toNumber());
   }
@@ -1460,16 +1440,18 @@ function createTestBitOperations(i) {
 
     for (var len = 1; len < 64; ++len) {
       if (len < 32) {
-        assertEquals((TEST_BITS[i] << len) | (TEST_BITS[i + 1] >>> (32 - len)),
-                     vi.shiftLeft(len).getBits(1));
+        assertEquals(
+            (TEST_BITS[i] << len) | (TEST_BITS[i + 1] >>> (32 - len)),
+            vi.shiftLeft(len).getBits(1));
         assertEquals(TEST_BITS[i + 1] << len, vi.shiftLeft(len).getBits(0));
 
         assertEquals(TEST_BITS[i] >> len, vi.shiftRight(len).getBits(1));
-        assertEquals((TEST_BITS[i + 1] >>> len) | (TEST_BITS[i] << (32 - len)),
-                     vi.shiftRight(len).getBits(0));
+        assertEquals(
+            (TEST_BITS[i + 1] >>> len) | (TEST_BITS[i] << (32 - len)),
+            vi.shiftRight(len).getBits(0));
       } else {
-        assertEquals(TEST_BITS[i + 1] << (len - 32),
-                     vi.shiftLeft(len).getBits(1));
+        assertEquals(
+            TEST_BITS[i + 1] << (len - 32), vi.shiftLeft(len).getBits(1));
         assertEquals(0, vi.shiftLeft(len).getBits(0));
 
         assertEquals(TEST_BITS[i] >= 0 ? 0 : -1, vi.shiftRight(len).getBits(1));
@@ -1479,10 +1461,10 @@ function createTestBitOperations(i) {
 
     assertEquals(0, vi.shiftLeft(64).getBits(1));
     assertEquals(0, vi.shiftLeft(64).getBits(0));
-    assertEquals(TEST_BITS[i] & (1 << 31) ? -1 : 0,
-                 vi.shiftRight(64).getBits(1));
-    assertEquals(TEST_BITS[i] & (1 << 31) ? -1 : 0,
-                 vi.shiftRight(64).getBits(0));
+    assertEquals(
+        TEST_BITS[i] & (1 << 31) ? -1 : 0, vi.shiftRight(64).getBits(1));
+    assertEquals(
+        TEST_BITS[i] & (1 << 31) ? -1 : 0, vi.shiftRight(64).getBits(0));
   };
 }
 
@@ -1594,17 +1576,18 @@ function createTestToFromString(i) {
     var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
     var str = vi.toString(10);
     assertEquals(TEST_STRINGS[i / 2], str);
-    assertEquals(TEST_BITS[i],
-                 goog.math.Integer.fromString(str, 10).getBits(1));
-    assertEquals(TEST_BITS[i + 1],
-                 goog.math.Integer.fromString(str, 10).getBits(0));
+    assertEquals(
+        TEST_BITS[i], goog.math.Integer.fromString(str, 10).getBits(1));
+    assertEquals(
+        TEST_BITS[i + 1], goog.math.Integer.fromString(str, 10).getBits(0));
 
     for (var radix = 2; radix <= 36; ++radix) {
       var result = vi.toString(radix);
-      assertEquals(TEST_BITS[i],
-                   goog.math.Integer.fromString(result, radix).getBits(1));
-      assertEquals(TEST_BITS[i + 1],
-                   goog.math.Integer.fromString(result, radix).getBits(0));
+      assertEquals(
+          TEST_BITS[i], goog.math.Integer.fromString(result, radix).getBits(1));
+      assertEquals(
+          TEST_BITS[i + 1],
+          goog.math.Integer.fromString(result, radix).getBits(0));
     }
   };
 }
@@ -1616,85 +1599,81 @@ for (var i = 0; i < TEST_BITS.length; i += 2) {
 function testBigMultiply() {
   var a = goog.math.Integer.fromString('2389428394283434234234');
   var b = goog.math.Integer.fromString('895489472863784783');
-  assertEquals('2139707973242632227811083664960586861222',
-               a.multiply(b).toString());
-  assertEquals('2139707973242632227811083664960586861222',
-               b.multiply(a).toString());
+  assertEquals(
+      '2139707973242632227811083664960586861222', a.multiply(b).toString());
+  assertEquals(
+      '2139707973242632227811083664960586861222', b.multiply(a).toString());
 
   a = goog.math.Integer.fromString('123940932409302930429304');
   b = goog.math.Integer.fromString('-23940239409234');
-  assertEquals('-2967175594482401511466585794961793136',
-               a.multiply(b).toString());
+  assertEquals(
+      '-2967175594482401511466585794961793136', a.multiply(b).toString());
 
   a = goog.math.Integer.fromString('-4895849540949');
   b = goog.math.Integer.fromString('5906390354334334989');
-  assertEquals('-28916798504933355408364838964561',
-               a.multiply(b).toString());
+  assertEquals('-28916798504933355408364838964561', a.multiply(b).toString());
 
   a = goog.math.Integer.fromString('-23489238492334893');
   b = goog.math.Integer.fromString('-2930482394829348293489234');
-  assertEquals('68834799869735267747353413198446618041962',
-               a.multiply(b).toString());
+  assertEquals(
+      '68834799869735267747353413198446618041962', a.multiply(b).toString());
 
   a = goog.math.Integer.fromString('-39403940');
   b = goog.math.Integer.fromString('-90689586573473848347384834');
-  assertEquals('3573527027965969111849451155845960',
-               a.multiply(b).toString());
+  assertEquals('3573527027965969111849451155845960', a.multiply(b).toString());
 
   // regression test for https://github.com/google/closure-library/issues/500
-  a = goog.math.Integer.fromString('13096940572375952535991073728029631156727' +
-                                   '45889511394745914382575458603399133344113' +
-                                   '55124789839721800834794626807105252175636' +
-                                   '59874572877651812163757781047754345758394' +
-                                   '12393743854289058');
-  b = goog.math.Integer.fromString('27919529936136212349610129940926086216581' +
-                                   '64496528137102143826264378516364143418101' +
-                                   '17954848423382367899187410977857170099434' +
-                                   '88954503636036324930799550973655515139183' +
-                                   '49748613352617850');
-  assertEquals('3656604243822473465231854689622824622925110708289864374262496' +
-               '6011714112304568802330367011373499705061131532809869274041668' +
-               '6403682258958556744594010497630468513209942389833344943567584' +
-               '9711887715782124066353351659885600959610314392971398216556707' +
-               '9177967386189614814272449310787401834779505072200615609456609' +
-               '84075750394399200851742167944560567661447926674910485300',
-               a.multiply(b).toString());
+  a = goog.math.Integer.fromString(
+      '13096940572375952535991073728029631156727' +
+      '45889511394745914382575458603399133344113' +
+      '55124789839721800834794626807105252175636' +
+      '59874572877651812163757781047754345758394' +
+      '12393743854289058');
+  b = goog.math.Integer.fromString(
+      '27919529936136212349610129940926086216581' +
+      '64496528137102143826264378516364143418101' +
+      '17954848423382367899187410977857170099434' +
+      '88954503636036324930799550973655515139183' +
+      '49748613352617850');
+  assertEquals(
+      '3656604243822473465231854689622824622925110708289864374262496' +
+          '6011714112304568802330367011373499705061131532809869274041668' +
+          '6403682258958556744594010497630468513209942389833344943567584' +
+          '9711887715782124066353351659885600959610314392971398216556707' +
+          '9177967386189614814272449310787401834779505072200615609456609' +
+          '84075750394399200851742167944560567661447926674910485300',
+      a.multiply(b).toString());
 }
 
 function testSlowDivideThrowsWithNegativeIntegers() {
   var a = goog.math.Integer.fromString('-10');
   var b = goog.math.Integer.fromString('2');
 
-  assertThrows(function() {
-    a.slowDivide_(b);
-  });
+  assertThrows(function() { a.slowDivide_(b); });
 
   a = goog.math.Integer.fromString('10');
   b = goog.math.Integer.fromString('-2');
 
-  assertThrows(function() {
-    a.slowDivide_(b);
-  });
+  assertThrows(function() { a.slowDivide_(b); });
 
   a = goog.math.Integer.fromString('-10');
   b = goog.math.Integer.fromString('-2');
 
-  assertThrows(function() {
-    a.slowDivide_(b);
-  });
+  assertThrows(function() { a.slowDivide_(b); });
 }
 
 function testBigShift() {
   var a = goog.math.Integer.fromString('3735928559');
-  assertEquals('591981510028266767381876356163880091648',
-               a.shiftLeft(97).toString());
-  assertEquals('-591981510028266767381876356163880091648',
-               a.negate().shiftLeft(97).toString());
+  assertEquals(
+      '591981510028266767381876356163880091648', a.shiftLeft(97).toString());
+  assertEquals(
+      '-591981510028266767381876356163880091648',
+      a.negate().shiftLeft(97).toString());
 }
 
 // Regression test for
 // https://github.com/google/closure-library/pull/498
 function testBase36ToString() {
-  assertEquals('zzzzzz',
-               goog.math.Integer.fromString('zzzzzz', 36).toString(36));
+  assertEquals(
+      'zzzzzz', goog.math.Integer.fromString('zzzzzz', 36).toString(36));
 }

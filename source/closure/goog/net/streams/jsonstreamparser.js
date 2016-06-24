@@ -151,14 +151,14 @@ Parser.State_ = {
   STRING: 6,
   KEY_START: 7,
   KEY_END: 8,
-  TRUE1: 9,     // T and expecting RUE ...
+  TRUE1: 9,  // T and expecting RUE ...
   TRUE2: 10,
   TRUE3: 11,
-  FALSE1: 12,   // F and expecting ALSE ...
+  FALSE1: 12,  // F and expecting ALSE ...
   FALSE2: 13,
   FALSE3: 14,
   FALSE4: 15,
-  NULL1: 16,    // N and expecting ULL ...
+  NULL1: 16,  // N and expecting ULL ...
   NULL2: 17,
   NULL3: 18,
   NUM_DECIMAL_POINT: 19,
@@ -190,8 +190,8 @@ Parser.prototype.getErrorMessage = function() {
  * @private
  */
 Parser.prototype.error_ = function(input, pos) {
-  this.errorMessage_ = 'The stream is broken @' +
-      this.pos_ + '/' + pos + '. With input:\n' + input;
+  this.errorMessage_ = 'The stream is broken @' + this.pos_ + '/' + pos +
+      '. With input:\n' + input;
   throw Error(this.errorMessage_);
 };
 
@@ -209,7 +209,7 @@ Parser.prototype.parse = function(input) {
   /** @type {!Array<!Object>} */
   var result = parser.result_;
   var pattern = parser.stringInputPattern_;
-  var State = Parser.State_;   // enums
+  var State = Parser.State_;  // enums
 
   var num = input.length;
 
@@ -254,7 +254,7 @@ Parser.prototype.parse = function(input) {
 
         if (parser.depth_ === 0 && parser.state_ == State.ARRAY_END) {
           parser.streamState_ = Parser.StreamState_.ARRAY_END;
-          parser.buffer_ = '';    // TODO(wenboz): discard anything after ']'?
+          parser.buffer_ = '';  // TODO(wenboz): discard anything after ']'?
         } else {
           if (msgStart === -1) {
             parser.buffer_ += input.substring(streamStart);
@@ -309,7 +309,6 @@ Parser.prototype.parse = function(input) {
    * Parse the input JSON elements with a streamed state machine.
    */
   function parseData() {
-
     var current;
 
     while (true) {
@@ -403,12 +402,18 @@ Parser.prototype.parse = function(input) {
               stack.push(State.ARRAY_END);
             }
           }
-          if (current === '"') parser.state_ = State.STRING;
-          else if (current === '{') parser.state_ = State.OBJECT_OPEN;
-          else if (current === '[') parser.state_ = State.ARRAY_OPEN;
-          else if (current === 't') parser.state_ = State.TRUE1;
-          else if (current === 'f') parser.state_ = State.FALSE1;
-          else if (current === 'n') parser.state_ = State.NULL1;
+          if (current === '"')
+            parser.state_ = State.STRING;
+          else if (current === '{')
+            parser.state_ = State.OBJECT_OPEN;
+          else if (current === '[')
+            parser.state_ = State.ARRAY_OPEN;
+          else if (current === 't')
+            parser.state_ = State.TRUE1;
+          else if (current === 'f')
+            parser.state_ = State.FALSE1;
+          else if (current === 'n')
+            parser.state_ = State.NULL1;
           else if (current === '-') {
             // continue
           } else if ('0123456789'.indexOf(current) !== -1) {
@@ -424,7 +429,7 @@ Parser.prototype.parse = function(input) {
             parser.state_ = State.VALUE;
 
             if (parser.depth_ === 1) {
-              msgStart = i;   // skip ',', including a leading one
+              msgStart = i;  // skip ',', including a leading one
             }
           } else if (current === ']') {
             parser.depth_--;
@@ -444,7 +449,6 @@ Parser.prototype.parse = function(input) {
           var old = i;
 
           STRING_LOOP: while (true) {
-
             while (parser.unicodeCount_ > 0) {
               current = input[i++];
               if (parser.unicodeCount_ === 4) {
@@ -478,8 +482,7 @@ Parser.prototype.parse = function(input) {
               start = i - 1;
               if (!current) {
                 break;
-              }
-              else {
+              } else {
                 continue;
               }
             }

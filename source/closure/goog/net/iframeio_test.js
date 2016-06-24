@@ -82,8 +82,9 @@ function checkForError(doc) {
 
 /** Logs the status of an iframeIo object */
 function logStatus(i) {
-  goog.log.fine(testLogger, 'Is complete/success/active: ' +
-      [i.isComplete(), i.isSuccess(), i.isActive()].join('/'));
+  goog.log.fine(
+      testLogger, 'Is complete/success/active: ' +
+          [i.isComplete(), i.isSuccess(), i.isActive()].join('/'));
 }
 
 function onSuccess(e) {
@@ -97,8 +98,8 @@ function onError(e) {
 }
 
 function onReady(e) {
-  goog.log.info(testLogger,
-      'Test finished and iframe ready, disposing test object');
+  goog.log.info(
+      testLogger, 'Test finished and iframe ready, disposing test object');
   e.target.dispose();
 }
 
@@ -153,8 +154,8 @@ function jsonEcho(method) {
 function onJsonComplete(e) {
   goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
   var json = e.target.getResponseJson();
-  goog.log.info(testLogger,
-      'ResponseJson:\n' + goog.debug.deepExpose(json, true));
+  goog.log.info(
+      testLogger, 'ResponseJson:\n' + goog.debug.deepExpose(json, true));
 }
 
 
@@ -205,8 +206,8 @@ function localUrl2() {
 }
 
 function onLocalSuccess(e) {
-  goog.log.info(testLogger,
-      'The file was found:\n' + e.target.getResponseText());
+  goog.log.info(
+      testLogger, 'The file was found:\n' + e.target.getResponseText());
 }
 
 function getServerTime(noCache) {
@@ -250,7 +251,7 @@ function incremental() {
 
 window['P'] = function(iframe, data) {
   var iframeIo = goog.net.IframeIo.getInstanceByName(iframe.name);
-  goog.log.info(testLogger, 'Data recieved - ' + data);
+  goog.log.info(testLogger, 'Data received - ' + data);
 };
 
 
@@ -307,8 +308,9 @@ function testNotIgnoringResponse() {
   var iframeIo = new goog.net.IframeIo();
   iframeIo.send('about:blank');
   // Simulate the frame finishing loading.
-  goog.testing.events.fireBrowserEvent(new goog.testing.events.Event(
-      goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
+  goog.testing.events.fireBrowserEvent(
+      new goog.testing.events.Event(
+          goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
   assertTrue(iframeIo.isComplete());
 }
 
@@ -317,8 +319,9 @@ function testIgnoreResponse() {
   iframeIo.setIgnoreResponse(true);
   iframeIo.send('about:blank');
   // Simulate the frame finishing loading.
-  goog.testing.events.fireBrowserEvent(new goog.testing.events.Event(
-      goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
+  goog.testing.events.fireBrowserEvent(
+      new goog.testing.events.Event(
+          goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
   // Although the request is complete, the IframeIo isn't paying attention.
   assertFalse(iframeIo.isComplete());
 }

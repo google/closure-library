@@ -43,8 +43,8 @@ function testLinear() {
   interp.setData(x, y);
 
   var xi = [0, 0.5, 1, 2, 3, 4, 5, 6, 7];
-  var expected = [0, 0.4207, 0.8415, 0.4913, 0.1411, 0.0009, -0.1392,
-    -0.2794, 0.657];
+  var expected =
+      [0, 0.4207, 0.8415, 0.4913, 0.1411, 0.0009, -0.1392, -0.2794, 0.657];
   var result = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for (var i = 0; i < xi.length; ++i) {
     result[i] = interp.interpolate(xi[i]);

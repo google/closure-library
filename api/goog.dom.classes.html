@@ -1,0 +1,67 @@
+---
+{edit_path: '', layout: api, page: goog.dom.classes, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.dom.classes</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L29" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.dom.classes</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="add"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L68" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>add(<var>element</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Adds a class or classes to an element. Does not add multiples of class names.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.add or goog.dom.classlist.addAll instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to add class to.</p>
+<dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class names to add.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether class was added (or all classes were added).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="addRemove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>addRemove(<var>element</var>, <var>classesToRemove</var>, <var>classesToAdd</var>)</div></h3></div><div class="body"><p>Adds zero or more classes to an element and removes zero or more as a single
+operation. Unlike calling <a href="goog.dom.classes.html#add"><code>goog.dom.classes.add</code></a> and
+<a href="goog.dom.classes.html#remove"><code>goog.dom.classes.remove</code></a> separately, this is more efficient as it only
+parses the class property once.</p>
+<p>If a class is in both the remove and add lists, it will be added. Thus,
+you can use this instead of <a href="goog.dom.classes.html#swap"><code>goog.dom.classes.swap</code></a> when you have
+more than two class names that you want to swap.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.addRemove instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to swap classes on.</p>
+<dt class="type name"><var>classesToRemove</var><code>?(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;)</code><dd><p>Class or classes to
+remove, if null no classes are removed.</p>
+<dt class="type name"><var>classesToAdd</var><code>?(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;)</code><dd><p>Class or classes to add, if
+null no classes are added.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L215" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>enable(<var>element</var>, <var>className</var>, <var>enabled</var>)</div></h3></div><div class="body"><p>Adds or removes a class depending on the enabled argument.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.enable or goog.dom.classlist.enableAll
+instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to add or remove the class on.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class name to add or remove.</p>
+<dt class="type name"><var>enabled</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to add or remove the class (true adds,
+false removes).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="get"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L52" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>get(<var>element</var>)</div></h3></div><div class="body"><p>Gets an array of class names on an element</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.get instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to get class of.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;</code><dd><p>Class names on <code>element</code>. Some browsers add extra
+properties to the array. Do not depend on any of these!</p>
+</dl></dd></dl></div></section><section class="property expandable" id="has"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L201" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>has(<var>element</var>, <var>className</var>)</div></h3></div><div class="body"><p>Returns true if an element has a class.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.contains instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to test.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class name to test for.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether element has the class.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="remove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L87" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>remove(<var>element</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Removes a class or classes from an element.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.remove or goog.dom.classlist.removeAll
+instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to remove class from.</p>
+<dt class="type name"><var>var_args</var><code>...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class name(s) to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether all classes in <code>var_args</code> were found and
+removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="set"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L40" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>set(<var>element</var>, <var>className</var>)</div></h3></div><div class="body"><p>Sets the entire class name of an element.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.set instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to set class of.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class name(s) to apply to element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="swap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L138" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>swap(<var>element</var>, <var>fromClass</var>, <var>toClass</var>)</div></h3></div><div class="body"><p>Switches a class on an element from one to another without disturbing other
+classes. If the fromClass isn&#39;t removed, the toClass won&#39;t be added.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.swap instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to swap classes on.</p>
+<dt class="type name"><var>fromClass</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class to remove.</p>
+<dt class="type name"><var>toClass</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class to add.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether classes were switched.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toggle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/dom/classes.js#L234" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="deprecated"></span></div><div>toggle(<var>element</var>, <var>className</var>)</div></h3></div><div class="body"><p>Removes a class if an element has it, and adds it the element doesn&#39;t have
+it.  Won&#39;t affect other classes on the node.</p>
+<dl><dt class="spec">Deprecated<dd><p>Use goog.dom.classlist.toggle instead.</p>
+<dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Node</code><dd><p>DOM node to toggle class on.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Class to toggle.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if class was added, false if it was removed
+(in other words, whether element has the class after this function has
+been called).</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

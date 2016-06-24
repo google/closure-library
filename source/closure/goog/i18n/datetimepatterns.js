@@ -33,10 +33,11 @@
  * usages. If simple pattern works fine, it won't be covered here either.
  * For example, pattern 'MMM' will work well to get short month name for
  * almost all locales thus won't be included here.
+ * @suppress {const}
  */
 
 // clang-format off
-/* File generated from CLDR ver. 28.0 */
+/* File generated from CLDR ver. 29.0 */
 
 goog.provide('goog.i18n.DateTimePatterns');
 
@@ -526,7 +527,7 @@ goog.i18n.DateTimePatterns_en_AU = {
   MONTH_DAY_MEDIUM: 'd MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM,y',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -996,9 +997,9 @@ goog.i18n.DateTimePatterns_he = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd בMMM',
-  MONTH_DAY_FULL: 'MMMM dd',
+  MONTH_DAY_FULL: 'dd בMMMM',
   MONTH_DAY_SHORT: 'd.M',
-  MONTH_DAY_MEDIUM: 'MMMM d',
+  MONTH_DAY_MEDIUM: 'd בMMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd בMMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d בMMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d בMMM y',
@@ -1167,9 +1168,9 @@ goog.i18n.DateTimePatterns_iw = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd בMMM',
-  MONTH_DAY_FULL: 'MMMM dd',
+  MONTH_DAY_FULL: 'dd בMMMM',
   MONTH_DAY_SHORT: 'd.M',
-  MONTH_DAY_MEDIUM: 'MMMM d',
+  MONTH_DAY_MEDIUM: 'd בMMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd בMMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d בMMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d בMMM y',
@@ -1488,7 +1489,7 @@ goog.i18n.DateTimePatterns_ms = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'G y',
   YEAR_MONTH_ABBR: 'MMM y',
-  YEAR_MONTH_FULL: 'y MMMM',
+  YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd-M',

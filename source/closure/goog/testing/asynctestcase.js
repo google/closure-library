@@ -107,6 +107,7 @@
  * @author agrieve@google.com (Andrew Grieve)
  */
 
+goog.setTestOnly('goog.testing.AsyncTestCase');
 goog.provide('goog.testing.AsyncTestCase');
 goog.provide('goog.testing.AsyncTestCase.ControlBreakingException');
 
@@ -170,8 +171,8 @@ goog.testing.AsyncTestCase.ControlBreakingException.TO_STRING =
  * Marks this object as a ControlBreakingException
  * @type {boolean}
  */
-goog.testing.AsyncTestCase.ControlBreakingException.prototype.
-    isControlBreakingException = true;
+goog.testing.AsyncTestCase.ControlBreakingException.prototype
+    .isControlBreakingException = true;
 
 
 /** @override */
@@ -415,8 +416,8 @@ goog.testing.AsyncTestCase.prototype.endCurrentStep_ = function() {
  *    continuing testing.
  * @param {string=} opt_name A description of what we are waiting for.
  */
-goog.testing.AsyncTestCase.prototype.waitForSignals =
-    function(times, opt_name) {
+goog.testing.AsyncTestCase.prototype.waitForSignals = function(
+    times, opt_name) {
   this.expectedSignalCount_ += times;
   if (this.receivedSignalCount_ < this.expectedSignalCount_) {
     this.waitForAsync(opt_name);
@@ -455,8 +456,8 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
 
   // doError() uses test.name. Here, we create a dummy test and give it a more
   // helpful name based on the step we're currently on.
-  var fakeTestObj = new goog.testing.TestCase.Test(this.curStepName_,
-                                                   goog.nullFunction);
+  var fakeTestObj =
+      new goog.testing.TestCase.Test(this.curStepName_, goog.nullFunction);
   if (this.activeTest) {
     fakeTestObj.name = this.activeTest.name + ' [' + fakeTestObj.name + ']';
   }
@@ -472,7 +473,8 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
   // This is a potential entry point, so we pump. We also add in a bit of a
   // delay to try and prevent any async behavior from the failed test from
   // causing the next test to fail.
-  this.timeout(goog.bind(this.pump_, this, this.doAsyncErrorTearDown_),
+  this.timeout(
+      goog.bind(this.pump_, this, this.doAsyncErrorTearDown_),
       this.timeToSleepAfterFailure);
 
   // We just caught an exception, so we do not want the code above us on the
@@ -481,7 +483,8 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
   // not in the stack and let pump_ increment the count when it batches them.
   if (!this.returnWillPump_) {
     this.numControlExceptionsExpected_ += 1;
-    this.dbgLog_('doAsynError: numControlExceptionsExpected_ = ' +
+    this.dbgLog_(
+        'doAsynError: numControlExceptionsExpected_ = ' +
         this.numControlExceptionsExpected_ + ' and throwing exception.');
   }
 
@@ -561,8 +564,7 @@ goog.testing.AsyncTestCase.prototype.dbgLog_ = function(message) {
  *     failure or a string.
  * @private
  */
-goog.testing.AsyncTestCase.prototype.doTopOfStackAsyncError_ =
-    function(opt_e) {
+goog.testing.AsyncTestCase.prototype.doTopOfStackAsyncError_ = function(opt_e) {
   /** @preserveTry */
   try {
     this.doAsyncError(opt_e);
@@ -571,7 +573,8 @@ goog.testing.AsyncTestCase.prototype.doTopOfStackAsyncError_ =
     // throw this exception in this case.
     if (e.isControlBreakingException) {
       this.numControlExceptionsExpected_ -= 1;
-      this.dbgLog_('doTopOfStackAsyncError_: numControlExceptionsExpected_ = ' +
+      this.dbgLog_(
+          'doTopOfStackAsyncError_: numControlExceptionsExpected_ = ' +
           this.numControlExceptionsExpected_ + ' and catching exception.');
     } else {
       throw e;
@@ -663,12 +666,12 @@ goog.testing.AsyncTestCase.prototype.hookOnError_ = function() {
     var self = this;
     window.onerror = function(error, url, line) {
       // Ignore exceptions that we threw on purpose.
-      var cbe =
-          goog.testing.AsyncTestCase.ControlBreakingException.TO_STRING;
+      var cbe = goog.testing.AsyncTestCase.ControlBreakingException.TO_STRING;
       if (String(error).indexOf(cbe) != -1 &&
           self.numControlExceptionsExpected_) {
         self.numControlExceptionsExpected_ -= 1;
-        self.dbgLog_('window.onerror: numControlExceptionsExpected_ = ' +
+        self.dbgLog_(
+            'window.onerror: numControlExceptionsExpected_ = ' +
             self.numControlExceptionsExpected_ + ' and ignoring exception. ' +
             error);
         // Tell the browser not to compain about the error.
@@ -712,7 +715,8 @@ goog.testing.AsyncTestCase.prototype.startTimeoutTimer_ = function() {
       this.dbgLog_('Timeout timer fired with id ' + this.timeoutHandle_);
       this.timeoutHandle_ = 0;
 
-      this.doTopOfStackAsyncError_('Timed out while waiting for ' +
+      this.doTopOfStackAsyncError_(
+          'Timed out while waiting for ' +
           'continueTesting() to be called.');
     }, this, null), this.stepTimeout);
     this.dbgLog_('Started timeout timer with id ' + this.timeoutHandle_);
@@ -796,7 +800,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
     // 1. Our timeout callback will be called.
     // 2. The tests will call continueTesting(), which will call pump_() again.
     while (this.isReady_ && this.nextStepFunc_ &&
-        !topFuncResult.controlBreakingExceptionThrown) {
+           !topFuncResult.controlBreakingExceptionThrown) {
       this.curStepFunc_ = this.nextStepFunc_;
       this.curStepName_ = this.nextStepName_;
       this.nextStepFunc_ = null;
@@ -804,7 +808,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
 
       this.dbgLog_('Performing step: ' + this.curStepName_);
       topFuncResult =
-          this.callTopOfStackFunc_(/** @type {Function} */(this.curStepFunc_));
+          this.callTopOfStackFunc_(/** @type {Function} */ (this.curStepFunc_));
 
       // If the max run time is exceeded call this function again async so as
       // not to block the browser.
@@ -825,7 +829,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
 
 
 /**
- * Sets up the test page and then waits untill the test case has been marked
+ * Sets up the test page and then waits until the test case has been marked
  * as ready before executing the tests.
  * @private
  */
@@ -898,5 +902,5 @@ goog.testing.AsyncTestCase.prototype.doTearDown_ = function() {
  */
 goog.testing.AsyncTestCase.prototype.doNext_ = function() {
   this.setNextStep_(this.doIteration_, 'doIteration');
-  this.doSuccess(/** @type {goog.testing.TestCase.Test} */(this.activeTest));
+  this.doSuccess(/** @type {goog.testing.TestCase.Test} */ (this.activeTest));
 };

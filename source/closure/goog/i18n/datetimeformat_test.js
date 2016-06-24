@@ -65,8 +65,7 @@ function timezoneString(date) {
 }
 
 function timezoneId(date) {
-  var timeZone = goog.i18n.TimeZone.createTimeZone(
-      date.getTimezoneOffset());
+  var timeZone = goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return timeZone.getTimeZoneId(date);
 }
 
@@ -84,28 +83,29 @@ function timezoneStringRFC(date) {
 // and only data for that time zone should be provided.
 var americaLosAngelesData = {
   'transitions': [
-    2770, 60, 7137, 0, 11506, 60, 16041, 0, 20410, 60, 24777, 0, 29146, 60,
-    33513, 0, 35194, 60, 42249, 0, 45106, 60, 50985, 0, 55354, 60, 59889, 0,
-    64090, 60, 68625, 0, 72994, 60, 77361, 0, 81730, 60, 86097, 0, 90466, 60,
-    94833, 0, 99202, 60, 103569, 0, 107938, 60, 112473, 0, 116674, 60, 121209,
-    0, 125578, 60, 129945, 0, 134314, 60, 138681, 0, 143050, 60, 147417, 0,
-    151282, 60, 156153, 0, 160018, 60, 165057, 0, 168754, 60, 173793, 0,
-    177490, 60, 182529, 0, 186394, 60, 191265, 0, 195130, 60, 200001, 0,
-    203866, 60, 208905, 0, 212602, 60, 217641, 0, 221338, 60, 226377, 0,
-    230242, 60, 235113, 0, 238978, 60, 243849, 0, 247714, 60, 252585, 0,
-    256450, 60, 261489, 0, 265186, 60, 270225, 0, 273922, 60, 278961, 0,
-    282826, 60, 287697, 0, 291562, 60, 296433, 0, 300298, 60, 305337, 0,
-    309034, 60, 314073, 0, 317770, 60, 322809, 0, 326002, 60, 331713, 0,
-    334738, 60, 340449, 0, 343474, 60, 349185, 0, 352378, 60, 358089, 0,
-    361114, 60, 366825, 0, 369850, 60, 375561, 0, 378586, 60, 384297, 0,
-    387322, 60, 393033, 0, 396058, 60, 401769, 0, 404962, 60, 410673, 0,
-    413698, 60, 419409, 0, 422434, 60, 428145, 0, 431170, 60, 436881, 0,
-    439906, 60, 445617, 0, 448810, 60, 454521, 0, 457546, 60, 463257, 0,
-    466282, 60, 471993, 0, 475018, 60, 480729, 0, 483754, 60, 489465, 0,
-    492490, 60, 498201, 0, 501394, 60, 507105, 0, 510130, 60, 515841, 0,
-    518866, 60, 524577, 0, 527602, 60, 533313, 0, 536338, 60, 542049, 0,
-    545242, 60, 550953, 0, 553978, 60, 559689, 0, 562714, 60, 568425, 0,
-    571450, 60, 577161, 0, 580186, 60, 585897, 0, 588922, 60, 594633, 0
+    2770,   60, 7137,   0, 11506,  60, 16041,  0, 20410,  60, 24777,  0,
+    29146,  60, 33513,  0, 35194,  60, 42249,  0, 45106,  60, 50985,  0,
+    55354,  60, 59889,  0, 64090,  60, 68625,  0, 72994,  60, 77361,  0,
+    81730,  60, 86097,  0, 90466,  60, 94833,  0, 99202,  60, 103569, 0,
+    107938, 60, 112473, 0, 116674, 60, 121209, 0, 125578, 60, 129945, 0,
+    134314, 60, 138681, 0, 143050, 60, 147417, 0, 151282, 60, 156153, 0,
+    160018, 60, 165057, 0, 168754, 60, 173793, 0, 177490, 60, 182529, 0,
+    186394, 60, 191265, 0, 195130, 60, 200001, 0, 203866, 60, 208905, 0,
+    212602, 60, 217641, 0, 221338, 60, 226377, 0, 230242, 60, 235113, 0,
+    238978, 60, 243849, 0, 247714, 60, 252585, 0, 256450, 60, 261489, 0,
+    265186, 60, 270225, 0, 273922, 60, 278961, 0, 282826, 60, 287697, 0,
+    291562, 60, 296433, 0, 300298, 60, 305337, 0, 309034, 60, 314073, 0,
+    317770, 60, 322809, 0, 326002, 60, 331713, 0, 334738, 60, 340449, 0,
+    343474, 60, 349185, 0, 352378, 60, 358089, 0, 361114, 60, 366825, 0,
+    369850, 60, 375561, 0, 378586, 60, 384297, 0, 387322, 60, 393033, 0,
+    396058, 60, 401769, 0, 404962, 60, 410673, 0, 413698, 60, 419409, 0,
+    422434, 60, 428145, 0, 431170, 60, 436881, 0, 439906, 60, 445617, 0,
+    448810, 60, 454521, 0, 457546, 60, 463257, 0, 466282, 60, 471993, 0,
+    475018, 60, 480729, 0, 483754, 60, 489465, 0, 492490, 60, 498201, 0,
+    501394, 60, 507105, 0, 510130, 60, 515841, 0, 518866, 60, 524577, 0,
+    527602, 60, 533313, 0, 536338, 60, 542049, 0, 545242, 60, 550953, 0,
+    553978, 60, 559689, 0, 562714, 60, 568425, 0, 571450, 60, 577161, 0,
+    580186, 60, 585897, 0, 588922, 60, 594633, 0
   ],
   'names': ['PST', 'Pacific Standard Time', 'PDT', 'Pacific Daylight Time'],
   'names_ext': {
@@ -120,7 +120,7 @@ var americaLosAngelesData = {
 
 var europeBerlinData = {
   'transitions': [
-    89953, 60, 94153, 0, 98521, 60, 102889, 0, 107257, 60, 111625, 0,
+    89953,  60, 94153,  0, 98521,  60, 102889, 0, 107257, 60, 111625, 0,
     115993, 60, 120361, 0, 124729, 60, 129265, 0, 133633, 60, 138001, 0,
     142369, 60, 146737, 0, 151105, 60, 155473, 0, 159841, 60, 164209, 0,
     168577, 60, 172945, 0, 177313, 60, 181849, 0, 186217, 60, 190585, 0,
@@ -139,9 +139,12 @@ var europeBerlinData = {
     510457, 60, 515665, 0, 519193, 60, 524401, 0, 528097, 60, 533137, 0,
     536833, 60, 541873, 0, 545569, 60, 550777, 0, 554305, 60, 559513, 0,
     563041, 60, 568249, 0, 571777, 60, 576985, 0, 580681, 60, 585721, 0,
-    589417, 60, 594457, 0],
-  'names': ['MEZ', 'Mitteleurop\u00e4ische Zeit',
-            'MESZ', 'Mitteleurop\u00e4ische Sommerzeit'],
+    589417, 60, 594457, 0
+  ],
+  'names': [
+    'MEZ', 'Mitteleurop\u00e4ische Zeit', 'MESZ',
+    'Mitteleurop\u00e4ische Sommerzeit'
+  ],
   'names_ext': {
     STD_LONG_NAME_GMT: 'GMT+01:00',
     STD_GENERIC_LOCATION: 'Deutschland Zeit',
@@ -190,11 +193,11 @@ function testyyyyMMddG() {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10, 250));
-  var timeZone = goog.i18n.TimeZone.createTimeZone(420,
-      goog.i18n.DateTimeSymbols_de);
+  var timeZone =
+      goog.i18n.TimeZone.createTimeZone(420, goog.i18n.DateTimeSymbols_de);
   var fmt = new goog.i18n.DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-  assertEquals('2006.07.27 n. Chr. at 06:10:10 Etc/GMT+7',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '2006.07.27 n. Chr. at 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
 }
 
 function testyyyyyMMMMM() {
@@ -274,8 +277,7 @@ function testMMddyyyyHHmmsszzz() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-  assertEquals('07/27/2006 13:10:10 ' + timezoneString(date),
-      fmt.format(date));
+  assertEquals('07/27/2006 13:10:10 ' + timezoneString(date), fmt.format(date));
 }
 
 function testMMddyyyyHHmmssZ() {
@@ -283,16 +285,16 @@ function testMMddyyyyHHmmssZ() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-  assertEquals('07/27/2006 13:10:10 ' + timezoneStringRFC(date),
-      fmt.format(date));
+  assertEquals(
+      '07/27/2006 13:10:10 ' + timezoneStringRFC(date), fmt.format(date));
 }
 
 function testPatternMonthDayMedium() {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
-  var fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
+  var fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
   assertEquals('27. Juli', fmt.format(date));
 }
 
@@ -361,36 +363,37 @@ function testFractionalSeconds() {
 function testPredefinedFormatter() {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
-  date = new Date(2006, 7, 4, 13, 49, 24, 000);
-  var fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.FULL_DATE);
+  date = new Date(2006, 7, 4, 13, 49, 24, 0);
+  var fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
   assertEquals('Freitag, 4. August 2006', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.LONG_DATE);
   assertEquals('4. August 2006', fmt.format(date));
-  fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.MEDIUM_DATE);
+  fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.MEDIUM_DATE);
   assertEquals('04.08.2006', fmt.format(date));
-  fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.SHORT_DATE);
+  fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.SHORT_DATE);
   assertEquals('04.08.06', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_TIME);
   assertEquals('13:49:24 ' + timezoneString(date), fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.LONG_TIME);
   assertEquals('13:49:24 ' + timezoneString(date), fmt.format(date));
-  fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.MEDIUM_TIME);
+  fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.MEDIUM_TIME);
   assertEquals('13:49:24', fmt.format(date));
-  fmt = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.SHORT_TIME);
+  fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.SHORT_TIME);
   assertEquals('13:49', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
-  assertEquals('Freitag, 4. August 2006 um 13:49:24 ' + timezoneString(date),
+  assertEquals(
+      'Freitag, 4. August 2006 um 13:49:24 ' + timezoneString(date),
       fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.LONG_DATETIME);
-  assertEquals('4. August 2006 um 13:49:24 ' + timezoneString(date),
-      fmt.format(date));
+  assertEquals(
+      '4. August 2006 um 13:49:24 ' + timezoneString(date), fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
   assertEquals('04.08.2006, 13:49:24', fmt.format(date));
@@ -467,8 +470,8 @@ function testMMddyyyyHHmmsszCommonTimeZone() {
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
   assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-  assertEquals('07/27/2006 06:10:10 Pacific Daylight Time',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 Pacific Daylight Time', fmt.format(date, timeZone));
   date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
@@ -477,14 +480,15 @@ function testMMddyyyyHHmmsszCommonTimeZone() {
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
   assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-  assertEquals('02/27/2006 05:10:10 Pacific Standard Time',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '02/27/2006 05:10:10 Pacific Standard Time', fmt.format(date, timeZone));
 
   timeZone = goog.i18n.TimeZone.createTimeZone(europeBerlinData);
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('02/27/2006 14:10:10 MEZ', fmt.format(date, timeZone));
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-  assertEquals('02/27/2006 14:10:10 Mitteleurop\u00e4ische Zeit',
+  assertEquals(
+      '02/27/2006 14:10:10 Mitteleurop\u00e4ische Zeit',
       fmt.format(date, timeZone));
 }
 
@@ -494,17 +498,17 @@ function testMMddyyyyHHmmssvCommonTimeZone() {
   var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
   var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
 }
 
 function testMMddyyyyHHmmssvSimpleTimeZone() {
@@ -528,17 +532,17 @@ function testMMddyyyyHHmmssVCommonTimeZone() {
   var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
   var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
-  assertEquals('07/27/2006 06:10:10 America/Los_Angeles',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
-  assertEquals('07/27/2006 06:10:10 Los Angeles Time',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
-  assertEquals('07/27/2006 06:10:10 Los Angeles Time',
-      fmt.format(date, timeZone));
+  assertEquals(
+      '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
 }
 
 function testMMddyyyyHHmmssVSimpleTimeZone() {
@@ -562,12 +566,13 @@ function test_yyyyMMddG() {
   var date = new Date(Date.UTC(2006, 6, 27, 20, 10, 10));
   var timeZone = goog.i18n.TimeZone.createTimeZone(420);
   var fmt = new goog.i18n.DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-  assertEquals('2006.07.27 n. Chr. at 13:10:10 Etc/GMT+7',
-               fmt.format(date, timeZone));
+  assertEquals(
+      '2006.07.27 n. Chr. at 13:10:10 Etc/GMT+7', fmt.format(date, timeZone));
 
   timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
   fmt = new goog.i18n.DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-  assertEquals('2006.07.27 n. Chr. at 13:10:10 America/Los_Angeles',
+  assertEquals(
+      '2006.07.27 n. Chr. at 13:10:10 America/Los_Angeles',
       fmt.format(date, timeZone));
 }
 
@@ -581,10 +586,10 @@ function test_daylightTimeTransition() {
   var date = new Date(Date.UTC(2006, 4 - 1, 2, 9, 59, 0));
   var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 01:59:00 PST', fmt.format(date, timeZone));
-  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 01, 0));
+  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 1, 0));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 03:01:00 PDT', fmt.format(date, timeZone));
-  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 00, 0));
+  date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 0, 0));
   fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
   assertEquals('04/02/2006 03:00:00 PDT', fmt.format(date, timeZone));
 }
@@ -614,7 +619,7 @@ function testTimeDisplayOnDaylightTimeTransitionDayChange() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
 
   // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
-  var date = new Date(Date.UTC(2015, 11 - 1, 01, 11, 0, 1));
+  var date = new Date(Date.UTC(2015, 11 - 1, 1, 11, 0, 1));
   // Convert to GMT-12, across DST transition.
   // The date should also change, but does not change when subtracting 4 hours
   // from PST/PDT due to the extra hour from switching DST.
@@ -680,8 +685,9 @@ function test_dateTimeConcatenation() {
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
   // {1} 'at' {0}
-  assertEquals('Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time',
-               fmt.format(date, timeZone));
+  assertEquals(
+      'Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time',
+      fmt.format(date, timeZone));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.LONG_DATETIME);
   assertEquals('April 1, 2006 at 6:30:00 PM PST', fmt.format(date, timeZone));
@@ -699,13 +705,13 @@ function testNotUsingGlobalSymbols() {
 
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
-  var fmtFr = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.FULL_DATE);
+  var fmtFr =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
 
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
-  var fmtDe = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.FULL_DATE);
+  var fmtDe =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
 
   // The two formatters should return different results (French & German)
   assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
@@ -716,12 +722,10 @@ function testConstructorSymbols() {
   date = new Date(2013, 10, 15);
 
   var fmtFr = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.FULL_DATE,
-      goog.i18n.DateTimeSymbols_fr);
+      goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_fr);
 
   var fmtDe = new goog.i18n.DateTimeFormat(
-      goog.i18n.DateTimeFormat.Format.FULL_DATE,
-      goog.i18n.DateTimeSymbols_de);
+      goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_de);
 
   // The two formatters should return different results (French & German)
   assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
@@ -800,7 +804,7 @@ function testSupportForYearAndEra() {
 
 // Creates a string by concatenating the week number for 7 successive days
 function weekInYearFor7Days() {
-  var date = new Date(2013, 0, 1); // January
+  var date = new Date(2013, 0, 1);  // January
   var fmt = new goog.i18n.DateTimeFormat('w');
   var result = '';
   for (var i = 1; i <= 7; ++i) {
@@ -857,7 +861,8 @@ function test_variousDateTypes() {
   try {
     fmt.format(gdate);
     fail('Should have thrown exception.');
-  } catch (e) {}
+  } catch (e) {
+  }
 }
 
 function testExceptionWhenFormattingNull() {
@@ -865,5 +870,6 @@ function testExceptionWhenFormattingNull() {
   try {
     fmt.format(null);
     fail('Should have thrown exception.');
-  } catch (e) {}
+  } catch (e) {
+  }
 }

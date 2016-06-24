@@ -1,0 +1,113 @@
+---
+{edit_path: '', layout: api, page: goog.ui.ContainerRenderer, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>ContainerRenderer</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.ui.html">goog.ui</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L43" target="_blank">View Source</a></div><h1 class="title"><div>class ContainerRenderer</div></h1></div><div class="body"><p>Default renderer for <a href="goog.ui.Container.html"><code>goog.ui.Container</code></a>.  Can be used as-is, but
+subclasses of Container will probably want to use renderers specifically
+tailored for them by extending this class.</p>
+<h3 class="name"><div>new ContainerRenderer(<var>opt_ariaRole</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_ariaRole</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional ARIA role used for the element.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="canDecorate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L159" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>canDecorate(<var>element</var>)</div></h3></div><div class="body"><p>Default implementation of <code>canDecorate</code>; returns true if the element
+is a DIV, false otherwise.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to decorate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the renderer can decorate the element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createDom"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L135" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createDom(<var>container</var>)</div></h3></div><div class="body"><p>Creates and returns the container&#39;s root element.  The default
+simply creates a DIV and applies the renderer&#39;s own CSS class name to it.
+To be overridden in subclasses.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container to render.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>Root element for the container.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="decorate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L172" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>decorate(<var>container</var>, <var>element</var>)</div></h3></div><div class="body"><p>Default implementation of <code>decorate</code> for <a href="goog.ui.Container.html"><code>goog.ui.Container</code></a>s.
+Decorates the element with the container, and attempts to decorate its child
+elements.  Returns the decorated element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container to decorate the element.</p>
+<dt class="type name"><var>element</var><code>Element</code><dd><p>Element to decorate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!Element</code><dd><p>Decorated element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="decorateChildren"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L239" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>decorateChildren(<var>container</var>, <var>element</var>, <var>opt_firstChild</var>)</div></h3></div><div class="body"><p>Takes a container and an element that may contain child elements, decorates
+the child elements, and adds the corresponding components to the container
+as child components.  Any non-element child nodes (e.g. empty text nodes
+introduced by line breaks in the HTML source) are removed from the element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container whose children are to be
+discovered.</p>
+<dt class="type name"><var>element</var><code>Element</code><dd><p>Element whose children are to be decorated.</p>
+<dt class="type name"><var>opt_firstChild</var><code>Element=</code><dd><p>the first child to be decorated.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="enableTabIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L121" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>enableTabIndex(<var>element</var>, <var>enable</var>)</div></h3></div><div class="body"><p>Enables or disables the tab index of the element.  Only elements with a
+valid tab index can receive focus.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element whose tab index is to be changed.</p>
+<dt class="type name"><var>enable</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether to add or remove the element&#39;s tab index.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAriaRole"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L110" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAriaRole()</div></h3></div><div class="body"><p>Returns the ARIA role to be applied to the container.
+See http://wiki/Main/ARIA for more info.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>ARIA role.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getClassNames"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L348" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getClassNames(<var>container</var>)</div></h3></div><div class="body"><p>Returns all CSS class names applicable to the given container, based on its
+state.  The array of class names returned includes the renderer&#39;s own CSS
+class, followed by a CSS class indicating the container&#39;s orientation,
+followed by any state-specific CSS classes.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container whose CSS classes are to be
+returned.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;</code><dd><p>Array of CSS class names applicable to the
+container.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getContentElement"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L148" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getContentElement(<var>element</var>)</div></h3></div><div class="body"><p>Returns the DOM element into which child components are to be rendered,
+or null if the container hasn&#39;t been rendered yet.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Root element of the container whose content element
+is to be returned.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>Element to contain child elements (null if none).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getCssClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L333" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getCssClass()</div></h3></div><div class="body"><p>Returns the CSS class to be applied to the root element of containers
+rendered using this renderer.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Renderer-specific CSS class.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDecoratorForChild"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L282" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDecoratorForChild(<var>element</var>)</div></h3></div><div class="body"><p>Inspects the element, and creates an instance of <a href="goog.ui.Control.html"><code>goog.ui.Control</code></a> or
+an appropriate subclass best suited to decorate it.  Returns the control (or
+null if no suitable class was found).  This default implementation uses the
+element&#39;s CSS class to find the appropriate control class to instantiate.
+May be overridden in subclasses.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to decorate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.Control.html">goog.ui.Control</a></code><dd><p>A new control suitable to decorate the element
+(null if none).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDefaultOrientation"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L369" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDefaultOrientation()</div></h3></div><div class="body"><p>Returns the default orientation of containers rendered or decorated by this
+renderer.  The base class implementation returns <code>VERTICAL</code>.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.Container.Orientation.html">goog.ui.Container.Orientation</a></code><dd><p>Default orientation for containers
+created or decorated by this renderer.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getKeyEventTarget"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L323" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getKeyEventTarget(<var>container</var>)</div></h3></div><div class="body"><p>Returns the element within the container&#39;s DOM that should receive keyboard
+focus (null if none).  The default implementation returns the container&#39;s
+root element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container whose key event target is
+to be returned.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>Element</code><dd><p>Key event target (null if none).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="initializeDom"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L294" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>initializeDom(<var>container</var>)</div></h3></div><div class="body"><p>Initializes the container&#39;s DOM when the container enters the document.
+Called from <a href="goog.ui.Container.html#enterDocument"><code>goog.ui.Container#enterDocument</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container whose DOM is to be initialized
+as it enters the document.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setStateFromClassName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L217" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="protected"></span></div><div>setStateFromClassName(<var>container</var>, <var>className</var>, <var>baseClass</var>)</div></h3></div><div class="body"><p>Sets the container&#39;s state based on the given CSS class name, encountered
+during decoration.  CSS class names that don&#39;t represent container states
+are ignored.  Considered protected; subclasses should override this method
+to support more states and CSS class names.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>container</var><code><a href="goog.ui.Container.html">goog.ui.Container</a></code><dd><p>Container to update.</p>
+<dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>CSS class name.</p>
+<dt class="type name"><var>baseClass</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Base class name used as the root of state-specific
+class names (typically the renderer&#39;s own class name).</p>
+</dl></dd></dl></div></section></section><section class="static-functions"><h2>Static Functions</h2><section class="property expandable" id="ContainerRenderer.getCustomRenderer"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L83" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ContainerRenderer.getCustomRenderer(<var>ctor</var>, <var>cssClassName</var>)</div></h3></div><div class="body"><p>Constructs a new renderer and sets the CSS class that the renderer will use
+as the base CSS class to apply to all elements rendered by that renderer.
+An example to use this function using a menu is:</p>
+ <pre>
+ var myCustomRenderer &#61; goog.ui.ContainerRenderer.getCustomRenderer(
+     goog.ui.MenuRenderer, &#39;my-special-menu&#39;);
+ var newMenu &#61; new goog.ui.Menu(opt_domHelper, myCustomRenderer);
+ </pre>
+<p>Your styles for the menu can now be:</p>
+ <pre>
+ .my-special-menu { }
+ </pre>
+<p><em>instead</em> of</p>
+ <pre>
+ .CSS_MY_SPECIAL_MENU .goog-menu { }
+ </pre>
+<p>You would want to use this functionality when you want an instance of a
+component to have specific styles different than the other components of the
+same type in your application.  This avoids using descendant selectors to
+apply the specific styles to this component.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>ctor</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The constructor of the renderer you want to create.</p>
+<dt class="type name"><var>cssClassName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the CSS class for this renderer.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.ContainerRenderer.html">goog.ui.ContainerRenderer</a></code><dd><p>An instance of the desired renderer with
+its getCssClass() method overridden to return the supplied custom CSS
+class name.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="ContainerRenderer.getInstance"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L43" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ContainerRenderer.getInstance()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.ContainerRenderer.html">goog.ui.ContainerRenderer</a></code></dl></dd></dl></div></section></section><section class="static-properties"><h2>Static Properties</h2><section class="property expandable" id="ContainerRenderer.CSS_CLASS"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L102" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ContainerRenderer.CSS_CLASS</div></h3></div><div class="body"><p>Default CSS class to be applied to the root element of containers rendered
+by this renderer.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></dd></dl></div></section><section class="property expandable" id="ContainerRenderer.instance_"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/containerrenderer.js#L43" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>ContainerRenderer.instance_</div></h3></div><div class="body"><dl><dt class="spec">Type<dd><a href="goog.ui.ContainerRenderer.html">goog.ui.ContainerRenderer</a></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.ui.ContainerRenderer.instance_.html">ContainerRenderer.instance_</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -1,0 +1,40 @@
+---
+{edit_path: '', layout: api, page: goog.html.legacyconversions, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.html.legacyconversions</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L70" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.html.legacyconversions</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="safeHtmlFromString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L89" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>safeHtmlFromString(<var>html</var>)</div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; from string to SafeHtml for legacy API
+purposes.</p>
+<p>Please read fileoverview documentation before using.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>html</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string to be converted to SafeHtml.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>The value of html, wrapped in a SafeHtml
+object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="safeStyleFromString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L106" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>safeStyleFromString(<var>style</var>)</div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; from string to SafeStyle for legacy API
+purposes.</p>
+<p>Please read fileoverview documentation before using.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>style</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string to be converted to SafeStyle.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeStyle.html">goog.html.SafeStyle</a></code><dd><p>The value of style, wrapped in a SafeStyle
+object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="safeStyleSheetFromString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L123" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>safeStyleSheetFromString(<var>styleSheet</var>)</div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; from string to SafeStyleSheet for legacy
+API purposes.</p>
+<p>Please read fileoverview documentation before using.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>styleSheet</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string to be converted to SafeStyleSheet.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeStyleSheet.html">goog.html.SafeStyleSheet</a></code><dd><p>The value of style sheet, wrapped in
+a SafeStyleSheet object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="safeUrlFromString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L140" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>safeUrlFromString(<var>url</var>)</div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; from string to SafeUrl for legacy API
+purposes.</p>
+<p>Please read fileoverview documentation before using.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string to be converted to SafeUrl.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeUrl.html">goog.html.SafeUrl</a></code><dd><p>The value of url, wrapped in a SafeUrl
+object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setReportCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L175" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setReportCallback(<var>callback</var>)</div></h3></div><div class="body"><p>Sets a function that will be called every time a legacy conversion is
+performed. The function is called with no parameters but it can use
+goog.debug.getStacktrace to get a stacktrace.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>callback</var><code>function(): <a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a></code><dd><p>Error callback as defined above.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="trustedResourceUrlFromString"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/legacyconversions.js#L156" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>trustedResourceUrlFromString(<var>url</var>)</div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; from string to TrustedResourceUrl for
+legacy API purposes.</p>
+<p>Please read fileoverview documentation before using.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>url</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>A string to be converted to TrustedResourceUrl.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></code><dd><p>The value of url, wrapped in a
+TrustedResourceUrl object.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

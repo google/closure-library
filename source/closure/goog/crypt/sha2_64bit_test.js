@@ -40,48 +40,34 @@ goog.require('goog.userAgent');
 var TEST_VECTOR = [
   {
     // Make sure the algorithm correctly handles the empty string
-    source:
-        '',
-    512:
-        'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
+    source: '',
+    512: 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
         '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e'
   },
   {
-    source:
-        'abc',
-    512:
-        'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a' +
+    source: 'abc',
+    512: 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a' +
         '2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f',
-    384:
-        'cb00753f45a35e8bb5a03d699ac65007272c32ab0eded163' +
+    384: 'cb00753f45a35e8bb5a03d699ac65007272c32ab0eded163' +
         '1a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7',
-    256:
-        '53048e2681941ef99b2e29b76b4c7dabe4c2d0c634fc6d46e0e2f13107e7af23'
+    256: '53048e2681941ef99b2e29b76b4c7dabe4c2d0c634fc6d46e0e2f13107e7af23'
   },
   {
-    source:
-        'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn' +
+    source: 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn' +
         'hijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu',
-    512:
-        '8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018' +
+    512: '8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018' +
         '501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909',
-    384:
-        '09330c33f71147e83d192fc782cd1b4753111b173b3b05d2' +
+    384: '09330c33f71147e83d192fc782cd1b4753111b173b3b05d2' +
         '2fa08086e3b0f712fcc7c71a557e2db966c3e9fa91746039',
-    256:
-        '3928e184fb8690f840da3988121d31be65cb9d3ef83ee6146feac861e19b563a'
+    256: '3928e184fb8690f840da3988121d31be65cb9d3ef83ee6146feac861e19b563a'
   },
   {
-    source:
-        'The quick brown fox jumps over the lazy dog',
-    512:
-        '07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb64' +
+    source: 'The quick brown fox jumps over the lazy dog',
+    512: '07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb64' +
         '2e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6',
-    384:
-        'ca737f1014a48f4c0b6dd43cb177b0afd9e5169367544c49' +
+    384: 'ca737f1014a48f4c0b6dd43cb177b0afd9e5169367544c49' +
         '4011e3317dbf9a509cb1e5dc1e85a941bbee3d7f2afbc9b1',
-    256:
-        'dd9d67b371519c339ed8dbd25af90e976a1eeefd4ad3d889005e532fc5bef04d'
+    256: 'dd9d67b371519c339ed8dbd25af90e976a1eeefd4ad3d889005e532fc5bef04d'
   }
 ];
 
@@ -91,17 +77,13 @@ var TEST_VECTOR = [
  * consisting of N repetitions of the character 'a'.
  */
 var TEST_FENCEPOST_VECTOR = {
-  110:
-      'c825949632e509824543f7eaf159fb6041722fce3c1cdcbb613b3d37ff107c51' +
+  110: 'c825949632e509824543f7eaf159fb6041722fce3c1cdcbb613b3d37ff107c51' +
       '9417baac32f8e74fe29d7f4823bf6886956603dca5354a6ed6e4a542e06b7d28',
-  111:
-      'fa9121c7b32b9e01733d034cfc78cbf67f926c7ed83e82200ef8681819692176' +
+  111: 'fa9121c7b32b9e01733d034cfc78cbf67f926c7ed83e82200ef8681819692176' +
       '0b4beff48404df811b953828274461673c68d04e297b0eb7b2b4d60fc6b566a2',
-  112:
-      'c01d080efd492776a1c43bd23dd99d0a2e626d481e16782e75d54c2503b5dc32' +
+  112: 'c01d080efd492776a1c43bd23dd99d0a2e626d481e16782e75d54c2503b5dc32' +
       'bd05f0f1ba33e568b88fd2d970929b719ecbb152f58f130a407c8830604b70ca',
-  113:
-      '55ddd8ac210a6e18ba1ee055af84c966e0dbff091c43580ae1be703bdb85da31' +
+  113: '55ddd8ac210a6e18ba1ee055af84c966e0dbff091c43580ae1be703bdb85da31' +
       'acf6948cf5bd90c55a20e5450f22fb89bd8d0085e39f85a86cc46abbca75e24d'
 };
 
@@ -217,9 +199,7 @@ function testHashing512Large() {
 /** Check that the code throws an error for bad input */
 function testBadInput_nullNotAllowed() {
   var hasher = new goog.crypt.Sha512();
-  assertThrows('Null input not allowed', function() {
-    hasher.update({});
-  });
+  assertThrows('Null input not allowed', function() { hasher.update({}); });
 }
 
 function testBadInput_noFloatingPoint() {
@@ -262,9 +242,7 @@ function testHasherNeedsReset_beforeDigest() {
   var hasher = new goog.crypt.Sha512();
   hasher.update('abc');
   hasher.digest();
-  assertThrows('Need reset after digest', function() {
-    hasher.digest();
-  });
+  assertThrows('Need reset after digest', function() { hasher.digest(); });
 }
 
 
@@ -272,7 +250,26 @@ function testHasherNeedsReset_beforeUpdate() {
   var hasher = new goog.crypt.Sha512();
   hasher.update('abc');
   hasher.digest();
-  assertThrows('Need reset after digest', function() {
-    hasher.update('abc');
-  });
+  assertThrows('Need reset after digest', function() { hasher.update('abc'); });
+}
+
+function testHashingArrayLike() {
+  // Create array-like object
+  var obj = {};
+  obj.length = 26;
+  for (var i = 0; i < 26; i++) {
+    obj[i] = 97 + i;
+  }
+
+  // Check hashing
+  var hasher = new goog.crypt.Sha512();
+  hasher.update(obj);
+  var digest1 = hasher.digest();
+
+  hasher.reset();
+
+  hasher.update('abcdefghijklmnopqrstuvwxyz', 26);
+  var digest2 = hasher.digest();
+
+  assertElementsEquals(digest1, digest2);
 }

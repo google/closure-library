@@ -74,7 +74,7 @@ goog.labs.html.Sanitizer = function() {
 };
 
 
-// TODO(user): Should the return type be goog.html.SafeHtml?
+// TODO(msamuel): Should the return type be goog.html.SafeHtml?
 // If we receive a safe HTML string as input, should we simply rebalance
 // tags?
 /**
@@ -191,8 +191,8 @@ goog.labs.html.Sanitizer.prototype.allowElements = function(var_args) {
  *
  * @return {!goog.labs.html.Sanitizer} {@code this}.
  */
-goog.labs.html.Sanitizer.prototype.allowAttributes =
-    function(elementNames, attrNames, opt_rewriteValue) {
+goog.labs.html.Sanitizer.prototype.allowAttributes = function(
+    elementNames, attrNames, opt_rewriteValue) {
   if (!goog.isArray(elementNames)) {
     elementNames = [elementNames];
   }
@@ -208,10 +208,10 @@ goog.labs.html.Sanitizer.prototype.allowAttributes =
     var elementName = elementNames[ei].toLowerCase();
     goog.asserts.assert(
         goog.labs.html.Sanitizer.isValidHtmlName_(elementName) ||
-        '*' === elementName,
+            '*' === elementName,
         elementName);
     // If the element has not been white-listed then panic.
-    // TODO(user): allow allow{Elements,Attributes} to be called in any
+    // TODO(msamuel): allow allow{Elements,Attributes} to be called in any
     // order if someone needs it.
     if (!Object.prototype.hasOwnProperty.call(whitelist, elementName)) {
       throw new Error(elementName);
@@ -336,7 +336,7 @@ goog.labs.html.Sanitizer.chain_ = function(f, g) {
  * minimal safety properties.
  *
  * <p>
- * For url atributes, it checks that any protocol is on a safe set that
+ * For url attributes, it checks that any protocol is on a safe set that
  * doesn't allow script execution.
  * <p>
  * It also blanket disallows CSS and event handler attributes.
@@ -349,7 +349,7 @@ goog.labs.html.Sanitizer.defaultRewriterForAttr_ = function(attrName) {
   if ('href' === attrName || 'src' === attrName) {
     return goog.labs.html.Sanitizer.checkUrl_;
   } else if ('style' === attrName || 'on' === attrName.substr(0, 2)) {
-    // TODO(user): delegate to a CSS sanitizer if one is available.
+    // TODO(msamuel): delegate to a CSS sanitizer if one is available.
     return goog.labs.html.Sanitizer.disallow_;
   }
   return goog.labs.html.Sanitizer.valueIdentity_;

@@ -1,0 +1,88 @@
+---
+{edit_path: '', layout: api, page: goog.db.ObjectStore, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>ObjectStore</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="parentlink"><b>Namespace:</b> <a href="goog.db.html">goog.db</a></div><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L50" target="_blank">View Source</a></div><h1 class="title"><div class="tags"><span class="final"></span></div><div>class ObjectStore</div></h1></div><div class="body"><p>Creates an IDBObjectStore wrapper object. Object stores have methods for
+storing and retrieving records, and are accessed through a transaction
+object. They also have methods for creating indexes associated with the
+object store. They can only be created when setting the version of the
+database. Should not be created directly, access object stores through
+transactions.</p>
+<h3 class="name"><div>new ObjectStore(<var>store</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>store</var><code>!IDBObjectStore</code><dd><p>The backing IndexedDb object.</p>
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.db.html#goog.db.UpgradeNeededCallback">goog.db.UpgradeNeededCallback</a></dd><dd><a href="goog.db.Transaction.html#objectStore">goog.db.Transaction#objectStore</a></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="add"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L139" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>add(<var>value</var>, <var>opt_key</var>)</div></h3></div><div class="body"><p>Adds an object to the object store. Requires that there is no object with
+the same key already present.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>*</code><dd><p>The value to add.</p>
+<dt class="type name"><var>opt_key</var><code>IDBKeyType=</code><dd><p>The key to use. Cannot be used if the
+keyPath was specified for the object store. If the keyPath was not
+specified but autoIncrement was not enabled, it must be used.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred add request.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="clear"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L283" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>clear()</div></h3></div><div class="body"><p>Deletes all objects from the store.</p>
+<dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred clear request.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="count"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L367" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>count(<var>opt_range</var>)</div></h3></div><div class="body"><p>Gets number of records within a key range.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_range</var><code>!<a href="goog.db.KeyRange.html">goog.db.KeyRange</a>=</code><dd><p>The key range. If undefined, this will
+count all records in the object store.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred number of records.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="createIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L314" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>createIndex(<var>name</var>, <var>keyPath</var>, <var>opt_parameters</var>)</div></h3></div><div class="body"><p>Creates an index in this object store. Can only be called inside a
+<a href="goog.db.html#goog.db.UpgradeNeededCallback"><code>goog.db.UpgradeNeededCallback</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Name of the index to create.</p>
+<dt class="type name"><var>keyPath</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Attribute to index on.</p>
+<dt class="type name"><var>opt_parameters</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Optional parameters object. The only
+available option is unique, which defaults to false. If unique is true,
+the index will enforce that there is only ever one object in the object
+store for each unique value it indexes on.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.db.Index.html">goog.db.Index</a></code><dd><p>The newly created, wrapped index.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="goog.db.Error.html">goog.db.Error</a></code><dd><p>In case of an error creating the index.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="deleteIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L350" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>deleteIndex(<var>name</var>)</div></h3></div><div class="body"><p>Deletes an index from the object store. Can only be called inside a
+<a href="goog.db.html#goog.db.UpgradeNeededCallback"><code>goog.db.UpgradeNeededCallback</code></a>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Name of the index to delete.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="goog.db.Error.html">goog.db.Error</a></code><dd><p>In case of an error deleting the index.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="get"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L181" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>get(<var>key</var>)</div></h3></div><div class="body"><p>Gets an object from the store. If no object is present with that key
+the result is <code>undefined</code>.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code>IDBKeyType</code><dd><p>The key to look up.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred get request.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getAll"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L212" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getAll(<var>opt_range</var>, <var>opt_direction</var>)</div></h3></div><div class="body"><p>Gets all objects from the store and returns them as an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_range</var><code>!<a href="goog.db.KeyRange.html">goog.db.KeyRange</a>=</code><dd><p>The key range. If undefined iterates
+over the whole object store.</p>
+<dt class="type name"><var>opt_direction</var><code>!<a href="goog.db.Cursor.Direction.html">goog.db.Cursor.Direction</a>=</code><dd><p>The direction. If undefined
+moves in a forward direction with duplicates.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred getAll request.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L333" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getIndex(<var>name</var>)</div></h3></div><div class="body"><p>Gets an index.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Name of the index to fetch.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.db.Index.html">goog.db.Index</a></code><dd><p>The requested wrapped index.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="goog.db.Error.html">goog.db.Error</a></code><dd><p>In case of an error getting the index.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L64" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getName()</div></h3></div><div class="body"><dl><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The name of the object store.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="openCursor"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L273" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>openCursor(<var>opt_range</var>, <var>opt_direction</var>)</div></h3></div><div class="body"><p>Opens a cursor over the specified key range. Returns a cursor object which is
+able to iterate over the given range.</p>
+<p>Example usage:</p>
+ <code>
+  var cursor &#61; objectStore.openCursor(goog.db.Range.bound(&#39;a&#39;, &#39;c&#39;));
+</code><code><p>var key &#61; goog.events.listen(
+cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+// Do something with data.
+cursor.next();
+});</p>
+</code><code><p>goog.events.listenOnce(
+cursor, goog.db.Cursor.EventType.COMPLETE, function() {
+// Clean up listener, and perform a finishing operation on the data.
+goog.events.unlistenByKey(key);
+});
+</p></code>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_range</var><code>!<a href="goog.db.KeyRange.html">goog.db.KeyRange</a>=</code><dd><p>The key range. If undefined iterates
+over the whole object store.</p>
+<dt class="type name"><var>opt_direction</var><code>!<a href="goog.db.Cursor.Direction.html">goog.db.Cursor.Direction</a>=</code><dd><p>The direction. If undefined
+moves in a forward direction with duplicates.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.db.Cursor.html">goog.db.Cursor</a></code><dd><p>The cursor.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="goog.db.Error.html">goog.db.Error</a></code><dd><p>If there was a problem opening the cursor.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="put"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L123" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>put(<var>value</var>, <var>opt_key</var>)</div></h3></div><div class="body"><p>Adds an object to the object store. Replaces existing objects with the
+same key.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>*</code><dd><p>The value to put.</p>
+<dt class="type name"><var>opt_key</var><code>IDBKeyType=</code><dd><p>The key to use. Cannot be used if the
+keyPath was specified for the object store. If the keyPath was not
+specified but autoIncrement was not enabled, it must be used.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred put request.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="remove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/db/objectstore.js#L152" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>remove(<var>key</var>)</div></h3></div><div class="body"><p>Removes an object from the store. No-op if there is no object present with
+the given key.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>key</var><code>IDBKeyType</code><dd><p>The key to remove objects under.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>The deferred remove request.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

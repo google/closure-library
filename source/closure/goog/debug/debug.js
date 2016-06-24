@@ -55,8 +55,7 @@ goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
   // workaround still needs to be skipped in Safari after the webkit change
   // gets pushed out in Safari.
   // See https://bugs.webkit.org/show_bug.cgi?id=67119
-  if (goog.userAgent.WEBKIT &&
-      !goog.userAgent.isVersionOrHigher('535.3')) {
+  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('535.3')) {
     retVal = !retVal;
   }
 
@@ -245,11 +244,12 @@ goog.debug.exposeExceptionAsHtml = function(err, opt_fn) {
     var error = goog.html.SafeHtml.concat(
         goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
             'Message: ' + e.message + '\nUrl: '),
-        goog.html.SafeHtml.create('a',
-            {href: viewSourceUrl, target: '_new'}, e.fileName),
+        goog.html.SafeHtml.create(
+            'a', {href: viewSourceUrl, target: '_new'}, e.fileName),
         goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-            '\nLine: ' + e.lineNumber + '\n\nBrowser stack:\n' +
-            e.stack + '-> ' + '[end]\n\nJS stack traversal:\n' +
+            '\nLine: ' + e.lineNumber + '\n\nBrowser stack:\n' + e.stack +
+            '-> ' +
+            '[end]\n\nJS stack traversal:\n' +
             goog.debug.getStacktrace(opt_fn) + '-> '));
     return error;
   } catch (e2) {
@@ -274,8 +274,8 @@ goog.debug.createViewSourceUrl_ = function(opt_fileName) {
         goog.string.Const.from('sanitizedviewsrc'));
   }
   var sanitizedFileName = goog.html.SafeUrl.sanitize(opt_fileName);
-  return goog.html.uncheckedconversions.
-      safeUrlFromStringKnownToSatisfyTypeContract(
+  return goog.html.uncheckedconversions
+      .safeUrlFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from('view-source scheme plus HTTP/HTTPS URL'),
           'view-source:' + goog.html.SafeUrl.unwrap(sanitizedFileName));
 };
@@ -284,7 +284,13 @@ goog.debug.createViewSourceUrl_ = function(opt_fileName) {
 /**
  * Normalizes the error/exception object between browsers.
  * @param {Object} err Raw error object.
- * @return {!Object} Normalized error object.
+ * @return {!{
+ *    message: (?|undefined),
+ *    name: (?|undefined),
+ *    lineNumber: (?|undefined),
+ *    fileName: (?|undefined),
+ *    stack: (?|undefined)
+ * }} Normalized error object.
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
@@ -335,7 +341,8 @@ goog.debug.normalizeErrorObject = function(err) {
   }
 
   // Standards error object
-  return err;
+  // Typed !Object. Should be a subtype of the return type, but it's not.
+  return /** @type {?} */ (err);
 };
 
 
@@ -476,8 +483,8 @@ goog.debug.getStacktrace = function(opt_fn) {
   if (!stack) {
     // NOTE: browsers that have strict mode support also have native "stack"
     // properties. This function will throw in strict mode.
-    stack = goog.debug.getStacktraceHelper_(
-        opt_fn || arguments.callee.caller, []);
+    stack =
+        goog.debug.getStacktraceHelper_(opt_fn || arguments.callee.caller, []);
   }
   return stack;
 };
@@ -499,7 +506,7 @@ goog.debug.getStacktraceHelper_ = function(fn, visited) {
   if (goog.array.contains(visited, fn)) {
     sb.push('[...circular reference...]');
 
-  // Traverse the call stack until function not found or max depth is reached
+    // Traverse the call stack until function not found or max depth is reached
   } else if (fn && visited.length < goog.debug.MAX_STACK_DEPTH) {
     sb.push(goog.debug.getFunctionName(fn) + '(');
     var args = fn.arguments;

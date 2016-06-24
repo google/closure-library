@@ -54,8 +54,8 @@ function setUp() {
     'id': 'background_rtl',
     'style': 'width: 10000px;height:50px;position:absolute;color:blue;'
   }));
-  sandboxRtl.appendChild(goog.dom.createDom(goog.dom.TagName.DIV,
-                                            {id: 'handle_rtl'}));
+  sandboxRtl.appendChild(
+      goog.dom.createDom(goog.dom.TagName.DIV, {id: 'handle_rtl'}));
 }
 
 function tearDown() {
@@ -94,29 +94,32 @@ function runStartDragTest(handleId, targetElement) {
 
   dragger.startDrag(e);
 
-  assertTrue('Start drag with no hysteresis must actually start the drag.',
+  assertTrue(
+      'Start drag with no hysteresis must actually start the drag.',
       dragger.isDragging());
   if (handleId == 'handle_rtl') {
     assertEquals(10, goog.style.bidi.getOffsetStart(targetElement));
   }
-  assertEquals('Dragger startX must match event\'s clientX.',
-      1, dragger.startX);
-  assertEquals('Dragger clientX must match event\'s clientX',
-      1, dragger.clientX);
-  assertEquals('Dragger startY must match event\'s clientY.',
-      2, dragger.startY);
-  assertEquals('Dragger clientY must match event\'s clientY',
-      2, dragger.clientY);
-  assertEquals('Dragger deltaX must match target\'s offsetLeft',
-      10, dragger.deltaX);
-  assertEquals('Dragger deltaY must match target\'s offsetTop',
-      15, dragger.deltaY);
+  assertEquals(
+      'Dragger startX must match event\'s clientX.', 1, dragger.startX);
+  assertEquals(
+      'Dragger clientX must match event\'s clientX', 1, dragger.clientX);
+  assertEquals(
+      'Dragger startY must match event\'s clientY.', 2, dragger.startY);
+  assertEquals(
+      'Dragger clientY must match event\'s clientY', 2, dragger.clientY);
+  assertEquals(
+      'Dragger deltaX must match target\'s offsetLeft', 10, dragger.deltaX);
+  assertEquals(
+      'Dragger deltaY must match target\'s offsetTop', 15, dragger.deltaY);
 
   dragger = new goog.fx.Dragger(targetElement, goog.dom.getElement(handleId));
   dragger.setHysteresis(1);
   dragger.startDrag(e);
-  assertFalse('Start drag with a valid non-zero hysteresis should not start ' +
-      'the drag.', dragger.isDragging());
+  assertFalse(
+      'Start drag with a valid non-zero hysteresis should not start ' +
+          'the drag.',
+      dragger.isDragging());
   e.$verify();
 }
 
@@ -141,14 +144,16 @@ function testStartDrag_Cancel() {
 
   dragger.startDrag(e);
 
-  assertFalse('Start drag must have been cancelled.',
-      dragger.isDragging());
-  assertFalse('Dragger must not have registered mousemove handlers.',
-      goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
-  assertFalse('Dragger must not have registered mouseup handlers.',
-      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+  assertFalse('Start drag must have been cancelled.', dragger.isDragging());
+  assertFalse(
+      'Dragger must not have registered mousemove handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEMOVE,
           !HAS_SET_CAPTURE));
+  assertFalse(
+      'Dragger must not have registered mouseup handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEUP, !HAS_SET_CAPTURE));
   e.$verify();
 }
 
@@ -172,14 +177,15 @@ function testStartDrag_LeftMouseDownOnly() {
 
   dragger.startDrag(e);
 
-  assertFalse('Start drag must have been cancelled.',
-      dragger.isDragging());
-  assertFalse('Dragger must not have registered mousemove handlers.',
-      goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, true));
-  assertFalse('Dragger must not have registered mouseup handlers.',
-      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
-          true));
+  assertFalse('Start drag must have been cancelled.', dragger.isDragging());
+  assertFalse(
+      'Dragger must not have registered mousemove handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEMOVE, true));
+  assertFalse(
+      'Dragger must not have registered mouseup handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEUP, true));
   e.$verify();
 }
 
@@ -194,7 +200,7 @@ function testStartDrag_MouseMove() {
   e.type = goog.events.EventType.MOUSEMOVE;
   e.clientX = 1;
   e.clientY = 2;
-  e.preventDefault();
+  // preventDefault is not called.
   e.$replay();
 
   var startDragFired = false;
@@ -206,12 +212,73 @@ function testStartDrag_MouseMove() {
 
   assertTrue('Dragging should be in progress.', dragger.isDragging());
   assertTrue('Start drag event should have fired.', startDragFired);
-  assertTrue('Dragger must have registered mousemove handlers.',
-      goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
-  assertTrue('Dragger must have registered mouseup handlers.',
-      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+  assertTrue(
+      'Dragger must have registered mousemove handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEMOVE,
           !HAS_SET_CAPTURE));
+  assertTrue(
+      'Dragger must have registered mouseup handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEUP, !HAS_SET_CAPTURE));
+  e.$verify();
+}
+
+
+/**
+ * Tests that preventDefault is not called for TOUCHSTART event.
+ */
+function testStartDrag_TouchStart() {
+  var dragger = new goog.fx.Dragger(target);
+
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.TOUCHSTART;
+  // preventDefault is not called.
+  e.$replay();
+
+  var startDragFired = false;
+  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+    startDragFired = true;
+  });
+
+  dragger.startDrag(e);
+
+  assertTrue('Dragging should be in progress.', dragger.isDragging());
+  assertTrue('Start drag event should have fired.', startDragFired);
+  assertTrue(
+      'Dragger must have registered touchstart listener.',
+      goog.events.hasListener(
+          dragger.handle, goog.events.EventType.TOUCHSTART, false /*opt_cap*/));
+  e.$verify();
+}
+
+
+/**
+ * Tests that preventDefault is not called for TOUCHSTART event when hysteresis
+ * is set to be greater than zero.
+ */
+function testStartDrag_TouchStart_NonZeroHysteresis() {
+  var dragger = new goog.fx.Dragger(target);
+  dragger.setHysteresis(5);
+  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  e.type = goog.events.EventType.TOUCHSTART;
+  // preventDefault is not called.
+  e.$replay();
+
+  var startDragFired = false;
+  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+    startDragFired = true;
+  });
+
+  dragger.startDrag(e);
+
+  assertFalse(
+      'Start drag must not start drag because of hysterisis.',
+      dragger.isDragging());
+  assertTrue(
+      'Dragger must have registered touchstart listener.',
+      goog.events.hasListener(
+          dragger.handle, goog.events.EventType.TOUCHSTART, false /*opt_cap*/));
   e.$verify();
 }
 
@@ -231,30 +298,35 @@ function testHandleMove_Cancel() {
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.clientX = 1;
   e.clientY = 2;
-  e.isMouseActionButton().$returns(true).
-      $anyTimes();
-  e.preventDefault();
+  e.isMouseActionButton().$returns(true).$anyTimes();
+  // preventDefault is not called.
   e.$replay();
   dragger.startDrag(e);
-  assertFalse('Start drag must not start drag because of hysterisis.',
+  assertFalse(
+      'Start drag must not start drag because of hysterisis.',
       dragger.isDragging());
-  assertTrue('Dragger must have registered mousemove handlers.',
-      goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
-  assertTrue('Dragger must have registered mouseup handlers.',
-      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+  assertTrue(
+      'Dragger must have registered mousemove handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEMOVE,
           !HAS_SET_CAPTURE));
+  assertTrue(
+      'Dragger must have registered mouseup handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEUP, !HAS_SET_CAPTURE));
 
   e.clientX = 10;
   e.clientY = 10;
   dragger.handleMove_(e);
   assertFalse('Drag must be cancelled.', dragger.isDragging());
-  assertFalse('Dragger must unregistered mousemove handlers.',
-      goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, true));
-  assertFalse('Dragger must unregistered mouseup handlers.',
-      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
-          true));
+  assertFalse(
+      'Dragger must unregistered mousemove handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEMOVE, true));
+  assertFalse(
+      'Dragger must unregistered mouseup handlers.',
+      goog.events.hasListener(
+          dragger.document_, goog.events.EventType.MOUSEUP, true));
   e.$verify();
 }
 
@@ -274,14 +346,15 @@ function testIeDragStartCancelling() {
   var e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
   e.clientX = 1;
   e.clientY = 2;
-  e.button = 1; // IE only constant for left button.
+  e.button = 1;  // IE only constant for left button.
   var be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
   assertTrue('The drag should have started.', dragger.isDragging());
 
   e = new goog.events.Event(goog.events.EventType.DRAGSTART);
   e.target = dragger.document_.documentElement;
-  assertTrue('The event should not be canceled.',
+  assertTrue(
+      'The event should not be canceled.',
       goog.testing.events.fireBrowserEvent(e));
 
   dragger.dispose();
@@ -293,15 +366,15 @@ function testIeDragStartCancelling() {
   e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
   e.clientX = 1;
   e.clientY = 2;
-  e.button = 1; // IE only constant for left button.
+  e.button = 1;  // IE only constant for left button.
   be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
   assertTrue('The drag should have started.', dragger.isDragging());
 
   e = new goog.events.Event(goog.events.EventType.DRAGSTART);
   e.target = dragger.document_.documentElement;
-  assertFalse('The event should be canceled.',
-      goog.testing.events.fireBrowserEvent(e));
+  assertFalse(
+      'The event should be canceled.', goog.testing.events.fireBrowserEvent(e));
 
   dragger.dispose();
 }
@@ -409,13 +482,14 @@ function testBlur() {
 
 function testCloneNode() {
   var element = goog.dom.createDom(goog.dom.TagName.DIV);
-  element.innerHTML =
-      '<input type="hidden" value="v0">' +
+  element.innerHTML = '<input type="hidden" value="v0">' +
       '<textarea>v1</textarea>' +
       '<textarea>v2</textarea>';
   element.childNodes[0].value = '\'new\'\n"value"';
-  element.childNodes[1].value = '<' + '/textarea>&lt;3';
-  element.childNodes[2].value = '<script>\n\talert("oops!");<' + '/script>';
+  element.childNodes[1].value = '<' +
+      '/textarea>&lt;3';
+  element.childNodes[2].value = '<script>\n\talert("oops!");<' +
+      '/script>';
   var clone = goog.fx.Dragger.cloneNode(element);
   assertEquals(element.childNodes[0].value, clone.childNodes[0].value);
   assertEquals(element.childNodes[1].value, clone.childNodes[1].value);

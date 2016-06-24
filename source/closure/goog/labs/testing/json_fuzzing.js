@@ -48,13 +48,8 @@ goog.labs.testing.JsonFuzzing = function(opt_options, opt_seed) {
    * The config options.
    * @private {!goog.labs.testing.JsonFuzzing.Options}
    */
-  this.options_ = opt_options ||
-      {
-        jsonSize: 10,
-        numFields: 5,
-        arraySize: 5,
-        maxDepth: 5
-      };
+  this.options_ =
+      opt_options || {jsonSize: 10, numFields: 5, arraySize: 5, maxDepth: 5};
 
   /**
    * The random generator
@@ -215,9 +210,12 @@ goog.labs.testing.JsonFuzzing.prototype.nextFieldType_ = function() {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextElm_ = function(depth) {
   switch (this.nextElmType_()) {
-    case 0: return this.nextMessage_(depth);
-    case 1: return this.nextArray_(depth);
-    default: throw Error('invalid elm type encounted.');
+    case 0:
+      return this.nextMessage_(depth);
+    case 1:
+      return this.nextArray_(depth);
+    default:
+      throw Error('invalid elm type encounted.');
   }
 };
 

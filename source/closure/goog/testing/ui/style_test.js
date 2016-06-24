@@ -16,6 +16,7 @@ goog.provide('goog.testing.ui.styleTest');
 goog.setTestOnly('goog.testing.ui.styleTest');
 
 goog.require('goog.dom');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ui.style');
 
@@ -23,6 +24,11 @@ goog.require('goog.testing.ui.style');
 // compare the generated markup to the reference markup.
 var refPath = 'style_reference.html';
 goog.testing.ui.style.writeReferenceFrame(refPath);
+
+function setUp() {
+  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+}
 
 // assertStructureMatchesReference should succeed if the structure, node
 // names, and classes match.
@@ -34,8 +40,7 @@ function testCorrect() {
 // assertStructureMatchesReference should fail if one of the nodes is
 // missing a class.
 function testMissingClass() {
-  var el = goog.dom.getFirstElementChild(
-      goog.dom.getElement('missing-class'));
+  var el = goog.dom.getFirstElementChild(goog.dom.getElement('missing-class'));
   var e = assertThrows(function() {
     goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
   });
@@ -45,16 +50,14 @@ function testMissingClass() {
 // assertStructureMatchesReference should NOT fail if one of the nodes has
 // an additional class.
 function testExtraClass() {
-  var el = goog.dom.getFirstElementChild(
-      goog.dom.getElement('extra-class'));
+  var el = goog.dom.getFirstElementChild(goog.dom.getElement('extra-class'));
   goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
 }
 
 // assertStructureMatchesReference should fail if there is a missing child
 // node somewhere in the DOM structure.
 function testMissingChild() {
-  var el = goog.dom.getFirstElementChild(
-      goog.dom.getElement('missing-child'));
+  var el = goog.dom.getFirstElementChild(goog.dom.getElement('missing-child'));
   var e = assertThrows(function() {
     goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
   });
@@ -64,8 +67,7 @@ function testMissingChild() {
 // assertStructureMatchesReference should fail if there is an extra child
 // node somewhere in the DOM structure.
 function testExtraChild() {
-  var el = goog.dom.getFirstElementChild(
-      goog.dom.getElement('extra-child'));
+  var el = goog.dom.getFirstElementChild(goog.dom.getElement('extra-child'));
   var e = assertThrows(function() {
     goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
   });

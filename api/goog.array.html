@@ -1,0 +1,588 @@
+---
+{edit_path: '', layout: api, page: goog.array, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.array</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L22" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.array</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="binaryInsert"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1338" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> binaryInsert(<var>array</var>, <var>value</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Inserts a value into a sorted array. The array is not modified if the
+value is already present.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>value</var><code>VALUE</code><dd><p>The object to insert.</p>
+<dt class="type name"><var>opt_compareFn</var><code>function(VALUE, VALUE): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison
+function by which the array is ordered. Should take 2 arguments to
+compare, and return a negative number, zero, or a positive number
+depending on whether the first argument is less than, equal to, or
+greater than the second.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was inserted.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="binaryRemove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1360" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> binaryRemove(<var>array</var>, <var>value</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Removes a value from a sorted array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>value</var><code>VALUE</code><dd><p>The object to remove.</p>
+<dt class="type name"><var>opt_compareFn</var><code>function(VALUE, VALUE): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison
+function by which the array is ordered. Should take 2 arguments to
+compare, and return a negative number, zero, or a positive number
+depending on whether the first argument is less than, equal to, or
+greater than the second.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="binarySearch"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1003" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;TARGET, VALUE&gt;</var> binarySearch(<var>arr</var>, <var>target</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Searches the specified array for the specified target using the binary
+search algorithm.  If no opt_compareFn is specified, elements are compared
+using <code>goog.array.defaultCompare</code>, which compares the elements
+using the built in &lt; and &gt; operators.  This will produce the expected
+behavior for homogeneous arrays of String(s) and Number(s). The array
+specified <b>must</b> be sorted in ascending order (as defined by the
+comparison function).  If the array is not sorted, results are undefined.
+If the array contains multiple instances of the specified target value, any
+of these instances may be found.</p>
+<p>Runtime: O(log n)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The array to be searched.</p>
+<dt class="type name"><var>target</var><code>TARGET</code><dd><p>The sought value.</p>
+<dt class="type name"><var>opt_compareFn</var><code>function(TARGET, VALUE): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison
+function by which the array is ordered. Should take 2 arguments to
+compare, and return a negative number, zero, or a positive number
+depending on whether the first argument is less than, equal to, or
+greater than the second.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Lowest index of the target value if found, otherwise
+(-(insertion point) - 1). The insertion point is where the value should
+be inserted into arr to preserve the sorted property.  Return value &gt;&#61; 0
+iff target is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="binarySelect"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1034" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE&gt;</var> binarySelect(<var>arr</var>, <var>evaluator</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Selects an index in the specified array using the binary search algorithm.
+The evaluator receives an element and determines whether the desired index
+is before, at, or after it.  The evaluator must be consistent (formally,
+goog.array.map(goog.array.map(arr, evaluator, opt_obj), goog.math.sign)
+must be monotonically non-increasing).</p>
+<p>Runtime: O(log n)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The array to be searched.</p>
+<dt class="type name"><var>evaluator</var><code>function(this: THIS, VALUE, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Evaluator function that receives 3 arguments (the element, the index and
+the array). Should return a negative number, zero, or a positive number
+depending on whether the desired index is before, at, or after the
+element passed to it.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within evaluator.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Index of the leftmost element matched by the evaluator, if
+such exists; otherwise (-(insertion point) - 1). The insertion point is
+the index of the first element for which the evaluator returns negative,
+or arr.length if no such element exists. The return value is non-negative
+iff a match is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="bucket"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1380" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> bucket(<var>array</var>, <var>sorter</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Splits an array into disjoint buckets according to a splitting function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array.</p>
+<dt class="type name"><var>sorter</var><code>function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;): ?</code><dd><p>Function to call for
+every element.  This takes 3 arguments (the element, the index and the
+array) and must return a valid object key (a string, number, etc), or
+undefined, if that object should not be placed in a bucket.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39; within
+sorter.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>An object, with keys being all of the unique return values
+of sorter, and values being arrays containing the items for
+which the splitter returned that key.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="clear"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L600" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>clear(<var>arr</var>)</div></h3></div><div class="body"><p>Clears the array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>Array or array like object to clear.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="clone"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L843" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> clone(<var>arr</var>)</div></h3></div><div class="body"><p>Does a shallow copy of an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array-like object to
+clone.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>Clone of the input array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="compare3"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1271" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> compare3(<var>arr1</var>, <var>arr2</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>3-way array compare function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr1</var><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The first array to
+compare.</p>
+<dt class="type name"><var>arr2</var><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;</code><dd><p>The second array to
+compare.</p>
+<dt class="type name"><var>opt_compareFn</var><code>function(VALUE, VALUE): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison
+function by which the array is to be ordered. Should take 2 arguments to
+compare, and return a negative number, zero, or a positive number
+depending on whether the first argument is less than, equal to, or
+greater than the second.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Negative number, zero, or a positive number depending on
+whether the first argument is less than, equal to, or greater than the
+second.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="concat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L793" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>concat(<var>var_args</var>)</div></h3></div><div class="body"><p>Returns a new array that is the result of joining the arguments.  If arrays
+are passed then their items are added, however, if non-arrays are passed they
+will be added to the return array as is.</p>
+<p>Note that ArrayLike objects will be added as is, rather than having their
+items added.</p>
+<p>goog.array.concat([1, 2], [3, 4]) -&gt; [1, 2, 3, 4]
+goog.array.concat(0, [1, 2]) -&gt; [0, 1, 2]
+goog.array.concat([1, 2], null) -&gt; [1, 2, null]</p>
+<p>There is bug in all current versions of IE (6, 7 and 8) where arrays created
+in an iframe become corrupted soon (not immediately) after the iframe is
+destroyed. This is common if loading data via goog.net.IframeIo, for example.
+This corruption only affects the concat method which will start throwing
+Catastrophic Errors (#-2147418113).</p>
+<p>See http://endoflow.com/scratch/corrupted-arrays.html for a test case.</p>
+<p>Internally goog.array should use this, so that all methods will continue to
+work on these broken array objects.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...*</code><dd><p>Items to concatenate.  Arrays will have each item
+added, while primitives and objects will be added as is.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;</code><dd><p>The new resultant array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="concatMap"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1663" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE, RESULT&gt;</var> concatMap(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Maps each element of the input array into zero or more elements of the output
+array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array like object
+over which to iterate.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): !<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;RESULT&gt;</code><dd><p>The function
+to call for every element. This function takes 3 arguments (the element,
+the index and the array) and should return an array. The result will be
+used to extend a new array.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;RESULT&gt;</code><dd><p>a new array with the concatenation of all arrays
+returned from f.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="contains"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L581" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>contains(<var>arr</var>, <var>obj</var>)</div></h3></div><div class="body"><p>Whether the array contains the given object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array to test for the presence of the
+element.</p>
+<dt class="type name"><var>obj</var><code>*</code><dd><p>The object for which to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if obj is present.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="copyByIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1641" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> copyByIndex(<var>arr</var>, <var>index_arr</var>)</div></h3></div><div class="body"><p>Returns a new array of elements from arr, based on the indexes of elements
+provided by index_arr. For example, the result of index copying
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;] with index_arr [1,0,0,2] is [&#39;b&#39;, &#39;a&#39;, &#39;a&#39;, &#39;c&#39;].</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to get a indexed copy from.</p>
+<dt class="type name"><var>index_arr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>An array of indexes to get from arr.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>A new array of elements from arr in index_arr order.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="count"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L472" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> count(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Counts the array elements that fulfill the predicate, i.e. for which the
+callback function returns true. Skips holes in the array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array like object
+over which to iterate.</p>
+<dt class="type name"><var>f</var><code>function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for
+every element. Takes 3 arguments (the element, the index and the array).</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39; within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of the matching elements.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="defaultCompare"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1294" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> defaultCompare(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Compares its two arguments for order, using the built in &lt; and &gt;
+operators.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>a</var><code>VALUE</code><dd><p>The first object to be compared.</p>
+<dt class="type name"><var>b</var><code>VALUE</code><dd><p>The second object to be compared.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>A negative number, zero, or a positive number as the first
+argument is less than, equal to, or greater than the second,
+respectively.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="defaultCompareEquality"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1320" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>defaultCompareEquality(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Compares its two arguments for equality, using the built in &#61;&#61;&#61; operator.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>a</var><code>*</code><dd><p>The first object to compare.</p>
+<dt class="type name"><var>b</var><code>*</code><dd><p>The second object to compare.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if the two arguments are equal, false otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="equals"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1239" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>equals(<var>arr1</var>, <var>arr2</var>, <var>opt_equalsFn</var>)</div></h3></div><div class="body"><p>Compares two arrays for equality. Two arrays are considered equal if they
+have the same length and their corresponding elements are equal according to
+the comparison function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr1</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The first array to compare.</p>
+<dt class="type name"><var>arr2</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The second array to compare.</p>
+<dt class="type name"><var>opt_equalsFn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>Optional comparison function.
+Should take 2 arguments to compare, and return true if the arguments
+are equal. Defaults to <a href="goog.array.html#defaultCompareEquality"><code>goog.array.defaultCompareEquality</code></a> which
+compares the elements using the built-in &#39;&#61;&#61;&#61;&#39; operator.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the two arrays are equal.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="every"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L441" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> every(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Call f for each element of an array. If all calls return true, every()
+returns true. If any call returns false, every() returns false and
+does not continue to check the remaining elements.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-every</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for
+for every element. This function takes 3 arguments (the element, the
+index and the array) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>false if any element fails the test.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="extend"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L862" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> extend(<var>arr1</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Extends an array with another array, element, or &#34;array like&#34; object.
+This function operates &#39;in-place&#39;, it does not create a new Array.</p>
+<p>Example:
+var a &#61; [];
+goog.array.extend(a, [0, 1]);
+a; // [0, 1]
+goog.array.extend(a, 2);
+a; // [0, 1, 2]</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr1</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>var_args</var><code>...(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;|VALUE)</code><dd><p>The elements or arrays of elements
+to add to arr1.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="filter"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L241" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> filter(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each element in an array, and if the function returns
+true adds the element to a new array.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-filter</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for
+every element. This function
+takes 3 arguments (the element, the index and the array) and must
+return a Boolean. If the return value is true the element is added to the
+result array. If it is false the element is not included.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>a new array in which only elements that passed the test
+are present.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="find"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L496" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> find(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Search an array for the first element that satisfies a given condition and
+return that element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call
+for every element. This function takes 3 arguments (the element, the
+index and the array) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(T|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>The first array element that passes the test, or null if no
+element is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="findIndex"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L516" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> findIndex(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Search an array for the first element that satisfies a given condition and
+return its index.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for
+every element. This function
+takes 3 arguments (the element, the index and the array) and should
+return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the first array element that passes the test,
+or -1 if no element is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="findIndexRight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L562" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> findIndexRight(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Search an array (in reverse order) for the last element that satisfies a
+given condition and return its index.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call
+for every element. This function
+takes 3 arguments (the element, the index and the array) and should
+return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the last array element that passes the test,
+or -1 if no element is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="findRight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L542" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> findRight(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Search an array (in reverse order) for the last element that satisfies a
+given condition and return that element.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call
+for every element. This function
+takes 3 arguments (the element, the index and the array) and should
+return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>(T|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null">null</a>)</code><dd><p>The last array element that passes the test, or null if no
+element is found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="flatten"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1495" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>flatten(<var>var_args</var>)</div></h3></div><div class="body"><p>Returns an array consisting of every argument with all arrays
+expanded in-place recursively.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...*</code><dd><p>The values to flatten.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;</code><dd><p>An array containing the flattened values.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="forEach"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L179" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> forEach(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each element in an array. Skips holes in the array.
+See <code>http://tinyurl.com/developer-mozilla-org-array-foreach</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array like object over
+which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): ?</code><dd><p>The function to call for every
+element. This function takes 3 arguments (the element, the index and the
+array). The return value is ignored.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39; within f.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="forEachRight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L211" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> forEachRight(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each element in an array, starting from the last
+element rather than the first.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): ?</code><dd><p>The function to call for every
+element. This function
+takes 3 arguments (the element, the index and the array). The return
+value is ignored.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="indexOf"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L94" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> indexOf(<var>arr</var>, <var>obj</var>, <var>opt_fromIndex</var>)</div></h3></div><div class="body"><p>Returns the index of the first element of an array with a specified value, or
+-1 if the element is not present in the array.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-indexof</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array to be searched.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>The object for which we are searching.</p>
+<dt class="type name"><var>opt_fromIndex</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index at which to start the search. If
+omitted the search starts at index 0.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the first matching array element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insert"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L618" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> insert(<var>arr</var>, <var>obj</var>)</div></h3></div><div class="body"><p>Pushes an item into an array, if it&#39;s not already in the array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>Array into which to insert the item.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>Value to add.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertArrayAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L644" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>insertArrayAt(<var>arr</var>, <var>elementsToAdd</var>, <var>opt_i</var>)</div></h3></div><div class="body"><p>Inserts at the given index of the array, all elements of another array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>elementsToAdd</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The array of elements to add.</p>
+<dt class="type name"><var>opt_i</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index at which to insert the object. If omitted,
+treated as 0. A negative index is counted from the end of the array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L632" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>insertAt(<var>arr</var>, <var>obj</var>, <var>opt_i</var>)</div></h3></div><div class="body"><p>Inserts an object at the given index of the array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>obj</var><code>*</code><dd><p>The object to insert.</p>
+<dt class="type name"><var>opt_i</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index at which to insert the object. If omitted,
+treated as 0. A negative index is counted from the end of the array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="insertBefore"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L657" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> insertBefore(<var>arr</var>, <var>obj</var>, <var>opt_obj2</var>)</div></h3></div><div class="body"><p>Inserts an object into an array before a specified object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>The object to insert.</p>
+<dt class="type name"><var>opt_obj2</var><code>T=</code><dd><p>The object before which obj should be inserted. If obj2
+is omitted or not found, obj is inserted at the end of the array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="inverseDefaultCompare"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1309" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> inverseDefaultCompare(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Compares its two arguments for inverse order, using the built in &lt; and &gt;
+operators.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>a</var><code>VALUE</code><dd><p>The first object to be compared.</p>
+<dt class="type name"><var>b</var><code>VALUE</code><dd><p>The second object to be compared.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>A negative number, zero, or a positive number as the first
+argument is greater than, equal to, or less than the second,
+respectively.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isEmpty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L591" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>isEmpty(<var>arr</var>)</div></h3></div><div class="body"><p>Whether the array is empty.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array to test.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if empty.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="isSorted"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1214" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> isSorted(<var>arr</var>, <var>opt_compareFn</var>, <var>opt_strict</var>)</div></h3></div><div class="body"><p>Tells if the array is sorted.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array.</p>
+<dt class="type name"><var>opt_compareFn</var><code>?function(T, T): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Function to compare the
+array elements.
+Should take 2 arguments to compare, and return a negative number, zero,
+or a positive number depending on whether the first argument is less
+than, equal to, or greater than the second.</p>
+<dt class="type name"><var>opt_strict</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>If true no equal elements are allowed.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether the array is sorted.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="join"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L804" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> join(<var>var_args</var>)</div></h3></div><div class="body"><p>Returns a new array that contains the contents of all the arrays passed.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code></dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code></dl></dd></dl></div></section><section class="property expandable" id="last"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L72" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> last(<var>array</var>)</div></h3></div><div class="body"><p>Returns the last element in an array without removing it.
+Same as goog.array.peek.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code><dd><p>Last item in array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="lastIndexOf"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L135" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> lastIndexOf(<var>arr</var>, <var>obj</var>, <var>opt_fromIndex</var>)</div></h3></div><div class="body"><p>Returns the index of the last element of an array with a specified value, or
+-1 if the element is not present in the array.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-lastindexof</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array to be searched.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>The object for which we are searching.</p>
+<dt class="type name"><var>opt_fromIndex</var><code>?<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index at which to start the search. If
+omitted the search starts at the end of the array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the last matching array element.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="map"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L281" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS, VALUE, RESULT&gt;</var> map(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls a function for each element in an array and inserts the result into a
+new array.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-map</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;VALUE&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array like object
+over which to iterate.</p>
+<dt class="type name"><var>f</var><code>function(this: THIS, VALUE, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): RESULT</code><dd><p>The function to call
+for every element. This function takes 3 arguments (the element,
+the index and the array) and should return something. The result will be
+inserted into a new array.</p>
+<dt class="type name"><var>opt_obj</var><code>THIS=</code><dd><p>The object to be used as the value of &#39;this&#39; within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;RESULT&gt;</code><dd><p>a new array with the results from f.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="moveItem"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1556" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>moveItem(<var>arr</var>, <var>fromIndex</var>, <var>toIndex</var>)</div></h3></div><div class="body"><p>Moves one item of an array to a new position keeping the order of the rest
+of the items. Example use case: keeping a list of JavaScript objects
+synchronized with the corresponding list of DOM elements after one of the
+elements has been dragged to a new position.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>fromIndex</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Index of the item to move between 0 and
+<code>arr.length - 1</code>.</p>
+<dt class="type name"><var>toIndex</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>Target index between 0 and <code>arr.length - 1</code>.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="peek"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L60" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> peek(<var>array</var>)</div></h3></div><div class="body"><p>Returns the last element in an array without removing it.
+Same as goog.array.last.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>T</code><dd><p>Last item in array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="range"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1443" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>range(<var>startOrEnd</var>, <var>opt_end</var>, <var>opt_step</var>)</div></h3></div><div class="body"><p>Creates a range of numbers in an arithmetic progression.</p>
+<p>Range takes 1, 2, or 3 arguments:</p>
+ <pre>
+ range(5) is the same as range(0, 5, 1) and produces [0, 1, 2, 3, 4]
+ range(2, 5) is the same as range(2, 5, 1) and produces [2, 3, 4]
+ range(-2, -5, -1) produces [-2, -3, -4]
+ range(-2, -5, 1) produces [], since stepping by 1 wouldn&#39;t ever reach -5.
+ </pre>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>startOrEnd</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The starting value of the range if an end argument
+is provided. Otherwise, the start value is 0, and this is the end value.</p>
+<dt class="type name"><var>opt_end</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The optional end value of the range.</p>
+<dt class="type name"><var>opt_step</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The step size between range values. Defaults to 1
+if opt_step is undefined or 0.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>An array of numbers for the requested range. May be
+an empty array if adding the step would not converge toward the end
+value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="reduce"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L325" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S, R&gt;</var> reduce(<var>arr</var>, <var>f</var>, <var>val</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Passes every element of an array into a function and accumulates the result.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-reduce</code></p>
+<p>For example:
+var a &#61; [1, 2, 3, 4];
+goog.array.reduce(a, function(r, v, i, arr) {return r &#43; v;}, 0);
+returns 10</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>function(this: S, R, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): R</code><dd><p>The function to call for
+every element. This function
+takes 4 arguments (the function&#39;s previous result or the initial value,
+the value of the current array element, the current array index, and the
+array itself)
+function(previousValue, currentValue, index, array).</p>
+<dt class="type name"><var>val</var><code>?</code><dd><p>The initial value to pass into the function on the first call.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>R</code><dd><p>Result of evaluating f repeatedly across the values of the array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="reduceRight"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L369" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S, R&gt;</var> reduceRight(<var>arr</var>, <var>f</var>, <var>val</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Passes every element of an array into a function and accumulates the result,
+starting from the last element and working towards the first.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-reduceright</code></p>
+<p>For example:
+var a &#61; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+goog.array.reduceRight(a, function(r, v, i, arr) {return r &#43; v;}, &#39;&#39;);
+returns &#39;cba&#39;</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, R, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): R</code><dd><p>The function to call for
+every element. This function
+takes 4 arguments (the function&#39;s previous result or the initial value,
+the value of the current array element, the current array index, and the
+array itself)
+function(previousValue, currentValue, index, array).</p>
+<dt class="type name"><var>val</var><code>?</code><dd><p>The initial value to pass into the function on the first call.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>R</code><dd><p>Object returned as a result of evaluating f repeatedly across the
+values of the array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="remove"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L675" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> remove(<var>arr</var>, <var>obj</var>)</div></h3></div><div class="body"><p>Removes the first occurrence of a particular value from an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>Array from which to remove
+value.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>Object to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeAllIf"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L753" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> removeAllIf(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Removes all values that satisfy the given condition.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call
+for every element. This function
+takes 3 arguments (the element, the index and the array) and should
+return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The number of items removed</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeAt"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L709" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>removeAt(<var>arr</var>, <var>i</var>)</div></h3></div><div class="body"><p>Removes from an array the element at index i</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>Array or array like object from which to
+remove value.</p>
+<dt class="type name"><var>i</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeDuplicates"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L954" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> removeDuplicates(<var>arr</var>, <var>opt_rv</var>, <var>opt_hashFn</var>)</div></h3></div><div class="body"><p>Removes all duplicates from an array (retaining only the first
+occurrence of each array element).  This function modifies the
+array in place and doesn&#39;t change the order of the non-duplicate items.</p>
+<p>For objects, duplicates are identified as having the same unique ID as
+defined by <a href="goog.html#getUid"><code>goog.getUid</code></a>.</p>
+<p>Alternatively you can specify a custom hash function that returns a unique
+value for each item in the array it should consider unique.</p>
+<p>Runtime: N,
+Worstcase space: 2N (no dupes)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>The array from which to remove
+duplicates.</p>
+<dt class="type name"><var>opt_rv</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>=</code><dd><p>An optional array in which to return the results,
+instead of performing the removal inplace.  If specified, the original
+array will remain unchanged.</p>
+<dt class="type name"><var>opt_hashFn</var><code>function(T): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>An optional function to use to
+apply to every item in the array. This function should return a unique
+value for each item in the array it should consider unique.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeIf"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L731" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> removeIf(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Removes the first value that satisfies the given condition.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call
+for every element. This function
+takes 3 arguments (the element, the index and the array) and should
+return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>An optional &#34;this&#34; context for the function.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="removeLast"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L692" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> removeLast(<var>arr</var>, <var>obj</var>)</div></h3></div><div class="body"><p>Removes the last occurrence of a particular value from an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>Array from which to remove value.</p>
+<dt class="type name"><var>obj</var><code>T</code><dd><p>Object to remove.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True if an element was removed.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="repeat"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1479" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;VALUE&gt;</var> repeat(<var>value</var>, <var>n</var>)</div></h3></div><div class="body"><p>Returns an array consisting of the given value repeated N times.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>value</var><code>VALUE</code><dd><p>The value to repeat.</p>
+<dt class="type name"><var>n</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The repeat count.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;VALUE&gt;</code><dd><p>An array with the repeated value.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="rotate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1531" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> rotate(<var>array</var>, <var>n</var>)</div></h3></div><div class="body"><p>Rotates an array in-place. After calling this method, the element at
+index i will be the element previously at index (i - n) %
+array.length, for all values of i between 0 and array.length - 1,
+inclusive.</p>
+<p>For example, suppose list comprises [t, a, n, k, s]. After invoking
+rotate(array, 1) (or rotate(array, -4)), array will comprise [s, t, a, n, k].</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>array</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to rotate.</p>
+<dt class="type name"><var>n</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The amount to rotate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="shuffle"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1617" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>shuffle(<var>arr</var>, <var>opt_randFn</var>)</div></h3></div><div class="body"><p>Shuffles the values in the specified array using the Fisher-Yates in-place
+shuffle (also known as the Knuth Shuffle). By default, calls Math.random()
+and so resets the state of that random number generator. Similarly, may reset
+the state of the any other specified random number generator.</p>
+<p>Runtime: O(n)</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;</code><dd><p>The array to be shuffled.</p>
+<dt class="type name"><var>opt_randFn</var><code>function(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional random function to use for
+shuffling.
+Takes no arguments, and returns a random number on the interval [0, 1).
+Defaults to Math.random() using JavaScript&#39;s built-in Math library.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="slice"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L915" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> slice(<var>arr</var>, <var>start</var>, <var>opt_end</var>)</div></h3></div><div class="body"><p>Returns a new array from a segment of an array. This is a generic version of
+Array slice. This means that it might work on other objects similar to
+arrays, such as the arguments object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The array from
+which to copy a segment.</p>
+<dt class="type name"><var>start</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The index of the first element to copy.</p>
+<dt class="type name"><var>opt_end</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>The index after the last element to copy.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>A new array containing the specified segment of the
+original array.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="some"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L405" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> some(<var>arr</var>, <var>f</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Calls f for each element of an array. If any call returns true, some()
+returns true (without checking the remaining elements). If all calls
+return false, some() returns false.</p>
+<p>See <code>http://tinyurl.com/developer-mozilla-org-array-some</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>Array or array
+like object over which to iterate.</p>
+<dt class="type name"><var>f</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The function to call for
+for every element. This function takes 3 arguments (the element, the
+index and the array) and should return a boolean.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within f.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>true if any element passes the test.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="sort"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1120" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> sort(<var>arr</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Sorts the specified array into ascending order.  If no opt_compareFn is
+specified, elements are compared using
+<code>goog.array.defaultCompare</code>, which compares the elements using
+the built in &lt; and &gt; operators.  This will produce the expected behavior
+for homogeneous arrays of String(s) and Number(s), unlike the native sort,
+but will give unpredictable results for heterogeneous lists of strings and
+numbers with different numbers of digits.</p>
+<p>This sort is not guaranteed to be stable.</p>
+<p>Runtime: Same as <code>Array.prototype.sort</code></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to be sorted.</p>
+<dt class="type name"><var>opt_compareFn</var><code>?function(T, T): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison
+function by which the
+array is to be ordered. Should take 2 arguments to compare, and return a
+negative number, zero, or a positive number depending on whether the
+first argument is less than, equal to, or greater than the second.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="sortByKey"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1179" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, K&gt;</var> sortByKey(<var>arr</var>, <var>keyFn</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Sort the specified array into ascending order based on item keys
+returned by the specified key function.
+If no opt_compareFn is specified, the keys are compared in ascending order
+using <code>goog.array.defaultCompare</code>.</p>
+<p>Runtime: O(S(f(n)), where S is runtime of <code>goog.array.sort</code>
+and f(n) is runtime of the key function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to be sorted.</p>
+<dt class="type name"><var>keyFn</var><code>function(T): K</code><dd><p>Function taking array element and returning
+a key used for sorting this element.</p>
+<dt class="type name"><var>opt_compareFn</var><code>?function(K, K): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison function
+by which the keys are to be ordered. Should take 2 arguments to compare,
+and return a negative number, zero, or a positive number depending on
+whether the first argument is less than, equal to, or greater than the
+second.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="sortObjectsByKey"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1197" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>sortObjectsByKey(<var>arr</var>, <var>key</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Sorts an array of objects by the specified object key and compare
+function. If no compare function is provided, the key values are
+compared in ascending order using <code>goog.array.defaultCompare</code>.
+This won&#39;t work for keys that get renamed by the compiler. So use
+{&#39;foo&#39;: 1, &#39;bar&#39;: 2} rather than {foo: 1, bar: 2}.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&gt;</code><dd><p>An array of objects to sort.</p>
+<dt class="type name"><var>key</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The object key to sort by.</p>
+<dt class="type name"><var>opt_compareFn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>=</code><dd><p>The function to use to compare key
+values.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="splice"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L895" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> splice(<var>arr</var>, <var>index</var>, <var>howMany</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Adds or removes elements from an array. This is a generic version of Array
+splice. This means that it might work on other objects similar to arrays,
+such as the arguments object.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>The array to modify.</p>
+<dt class="type name"><var>index</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href=".globals.html#PredicateFunctionType">PredicateFunctionType</a>)</code><dd><p>The index at which to start changing the
+array. If not defined, treated as 0.</p>
+<dt class="type name"><var>howMany</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>How many elements to remove (0 means no removal. A
+value below 0 is treated as zero and so is any other non number. Numbers
+are floored).</p>
+<dt class="type name"><var>var_args</var><code>...T</code><dd><p>Optional, additional elements to insert into the
+array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>the removed elements.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="stableSort"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1144" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> stableSort(<var>arr</var>, <var>opt_compareFn</var>)</div></h3></div><div class="body"><p>Sorts the specified array into ascending order in a stable way.  If no
+opt_compareFn is specified, elements are compared using
+<code>goog.array.defaultCompare</code>, which compares the elements using
+the built in &lt; and &gt; operators.  This will produce the expected behavior
+for homogeneous arrays of String(s) and Number(s).</p>
+<p>Runtime: Same as <code>Array.prototype.sort</code>, plus an additional
+O(n) overhead of copying the array twice.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The array to be sorted.</p>
+<dt class="type name"><var>opt_compareFn</var><code>?function(T, T): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Optional comparison function
+by which the array is to be ordered. Should take 2 arguments to compare,
+and return a negative number, zero, or a positive number depending on
+whether the first argument is less than, equal to, or greater than the
+second.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toArray"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L819" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> toArray(<var>object</var>)</div></h3></div><div class="body"><p>Converts an object to an array.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>object</var><code>(<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code><dd><p>The object to convert to an
+array.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;T&gt;</code><dd><p>The object converted into an array. If object has a
+length property, every property indexed with a non-negative number
+less than length will be included in the result. If object does not
+have a length property, an empty array will be returned.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="toObject"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1413" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T, S&gt;</var> toObject(<var>arr</var>, <var>keyFunc</var>, <var>opt_obj</var>)</div></h3></div><div class="body"><p>Creates a new object built from the provided array and the key-generation
+function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>arr</var><code><a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;T&gt;</code><dd><p>Array or array like object over
+which to iterate whose elements will be the values in the new object.</p>
+<dt class="type name"><var>keyFunc</var><code>?function(this: S, T, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The function to
+call for every element. This function takes 3 arguments (the element, the
+index and the array) and should return a string that will be used as the
+key for the element in the new object. If the function returns the same
+key for more than one element, the value for that key is
+implementation-defined.</p>
+<dt class="type name"><var>opt_obj</var><code>S=</code><dd><p>The object to be used as the value of &#39;this&#39;
+within keyFunc.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;T&gt;</code><dd><p>The new object.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="zip"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L1581" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>zip(<var>var_args</var>)</div></h3></div><div class="body"><p>Creates a new array for which the element at position i is an array of the
+ith element of the provided arrays.  The returned array will only be as long
+as the shortest array provided; additional values are ignored.  For example,
+the result of zipping [1, 2] and [3, 4, 5] is [[1,3], [2, 4]].</p>
+<p>This is similar to the zip() function in Python.  See <a href="goog.array.html"><code>http://docs.python.org/library/functions.html#zip</code></a></p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>var_args</var><code>...!<a href="https://github.com/google/closure-compiler/wiki/Special-types-in-the-Closure-Type-System#iarraylike">IArrayLike</a>&lt;?&gt;</code><dd><p>Arrays to be combined.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;?&gt;&gt;</code><dd><p>A new array of arrays created from
+provided arrays.</p>
+</dl></dd></dl></div></section></section><section class="constants"><h2>Compiler Constants</h2><section class="property expandable" id="goog.array.ASSUME_NATIVE_FUNCTIONS"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/array/array.js#L50" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div class="tags"><span class="const"></span></div><div>goog.array.ASSUME_NATIVE_FUNCTIONS</div></h3></div><div class="body"><p>If true, JSCompiler will use the native implementation of
+array functions where appropriate (e.g., <code>Array#filter</code>) and remove the
+unused pure JS implementation.</p>
+<dl><dt class="spec">Type<dd><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

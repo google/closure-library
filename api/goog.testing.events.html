@@ -1,0 +1,196 @@
+---
+{edit_path: '', layout: api, page: goog.testing.events, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.testing.events</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L40" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.testing.events</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="fireBlurEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L606" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireBlurEvent(<var>target</var>)</div></h3></div><div class="body"><p>Simulate a blur event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The value returned by firing the blur browser event,
+which returns false iff &#39;preventDefault&#39; was invoked.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireBrowserEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L644" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireBrowserEvent(<var>event</var>)</div></h3></div><div class="body"><p>Simulates an event&#39;s capturing and bubbling phases.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>event</var><code>Event</code><dd><p>A simulated native event. It will be wrapped in a
+normalized BrowserEvent and dispatched to Closure listeners on all
+ancestors of its target (inclusive).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireClickEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L460" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireClickEvent(<var>target</var>, <var>opt_button</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a click event on the given target. IE only supports click with
+the left mouse button.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_button</var><code><a href="goog.events.BrowserEvent.MouseButton.html">goog.events.BrowserEvent.MouseButton</a>=</code><dd><p>Mouse button;
+defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireClickSequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L170" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireClickSequence(<var>target</var>, <var>opt_button</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a mousedown, mouseup, and then click on the given event target,
+with the left mouse button.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_button</var><code><a href="goog.events.BrowserEvent.MouseButton.html">goog.events.BrowserEvent.MouseButton</a>=</code><dd><p>Mouse button;
+defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireContextMenuEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L525" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireContextMenuEvent(<var>target</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a contextmenu event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireContextMenuSequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L549" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireContextMenuSequence(<var>target</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mousedown, contextmenu, and the mouseup on the given event
+target, with the right mouse button.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireDoubleClickEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L480" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireDoubleClickEvent(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a double-click event on the given target. Always double-clicks
+with the left mouse button since no browser supports double-clicking with
+any other buttons.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireDoubleClickSequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L194" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireDoubleClickSequence(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates the sequence of events fired by the browser when the user double-
+clicks the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireFocusEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L618" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireFocusEvent(<var>target</var>)</div></h3></div><div class="body"><p>Simulate a focus event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The value returned by firing the focus browser event,
+which returns false iff &#39;preventDefault&#39; was invoked.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireFocusInEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L630" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireFocusInEvent(<var>target</var>)</div></h3></div><div class="body"><p>Simulate a focus-in event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>!EventTarget</code><dd><p>The target for the event.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The value returned by firing the focus-in browser event,
+which returns false iff &#39;preventDefault&#39; was invoked.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireKeySequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L233" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireKeySequence(<var>target</var>, <var>keyCode</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a complete keystroke (keydown, keypress, and keyup). Note that
+if preventDefault is called on the keydown, the keypress will not fire.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>keyCode</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The keycode of the key pressed.</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseDownEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L410" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseDownEvent(<var>target</var>, <var>opt_button</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a mousedown event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_button</var><code><a href="goog.events.BrowserEvent.MouseButton.html">goog.events.BrowserEvent.MouseButton</a>=</code><dd><p>Mouse button;
+defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseEnterEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L311" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseEnterEvent(<var>target</var>, <var>relatedTarget</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mouseenter event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>!EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>relatedTarget</var><code>?EventTarget</code><dd><p>The related target for the event (e.g.,
+the node that the mouse is being moved out of).</p>
+<dt class="type name"><var>opt_coords</var><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to
+event&#39;s target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseLeaveEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L331" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseLeaveEvent(<var>target</var>, <var>relatedTarget</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mouseleave event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>!EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>relatedTarget</var><code>?EventTarget</code><dd><p>The related target for the event (e.g.,
+the node that the mouse is being moved into).</p>
+<dt class="type name"><var>opt_coords</var><code>!<a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to
+event&#39;s target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseMoveEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L369" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseMoveEvent(<var>target</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mousemove event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseOutEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L388" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseOutEvent(<var>target</var>, <var>relatedTarget</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mouseout event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>relatedTarget</var><code>EventTarget</code><dd><p>The related target for the event (e.g.,
+the node that the mouse is being moved into).</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseOverEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L351" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseOverEvent(<var>target</var>, <var>relatedTarget</var>, <var>opt_coords</var>)</div></h3></div><div class="body"><p>Simulates a mouseover event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>relatedTarget</var><code>EventTarget</code><dd><p>The related target for the event (e.g.,
+the node that the mouse is being moved out of).</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireMouseUpEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L435" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireMouseUpEvent(<var>target</var>, <var>opt_button</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a mouseup event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_button</var><code><a href="goog.events.BrowserEvent.MouseButton.html">goog.events.BrowserEvent.MouseButton</a>=</code><dd><p>Mouse button;
+defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Mouse position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireNonAsciiKeySequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L253" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireNonAsciiKeySequence(<var>target</var>, <var>keyCode</var>, <var>keyPressKeyCode</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a complete keystroke (keydown, keypress, and keyup) when typing
+a non-ASCII character. Same as fireKeySequence, the keypress will not fire
+if preventDefault is called on the keydown.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>keyCode</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The keycode of the keydown and keyup events.</p>
+<dt class="type name"><var>keyPressKeyCode</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The keycode of the keypress event.</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="firePopStateEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L593" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>firePopStateEvent(<var>target</var>, <var>state</var>)</div></h3></div><div class="body"><p>Simulates a popstate event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>state</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>History state object.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireTouchEndEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L728" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireTouchEndEvent(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a touchend event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Touch position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireTouchMoveEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L705" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireTouchMoveEvent(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a touchmove event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Touch position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireTouchSequence"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L751" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireTouchSequence(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a simple touch sequence on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Touch position. Defaults to event
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the sequence: false if preventDefault()
+was called on any of the events, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="fireTouchStartEvent"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L682" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>fireTouchStartEvent(<var>target</var>, <var>opt_coords</var>, <var>opt_eventProperties</var>)</div></h3></div><div class="body"><p>Simulates a touchstart event on the given target.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>target</var><code>EventTarget</code><dd><p>The target for the event.</p>
+<dt class="type name"><var>opt_coords</var><code><a href="goog.math.Coordinate.html">goog.math.Coordinate</a>=</code><dd><p>Touch position. Defaults to event&#39;s
+target&#39;s position (if available), otherwise (0, 0).</p>
+<dt class="type name"><var>opt_eventProperties</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>=</code><dd><p>Event properties to be mixed into the
+BrowserEvent.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>The returnValue of the event: false if preventDefault() was
+called on it, true otherwise.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="mixinListenable"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/testing/events/events.js#L770" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>mixinListenable(<var>obj</var>)</div></h3></div><div class="body"><p>Mixins a listenable into the given object. This turns the object
+into a goog.events.Listenable. This is useful, for example, when
+you need to mock a implementation of listenable and still want it
+to work with goog.events.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to mixin into.</p>
+</dl></dd></dl></div></section></section><section class="types"><h2>Classes</h2><ul><li class="summary"><div><a href="goog.testing.events.Event.html">Event</a></div><li class="summary"><div><a href="goog.testing.events.EventMatcher.html">EventMatcher</a></div><li class="summary"><div><a href="goog.testing.events.EventObserver.html">EventObserver</a></div><li class="summary"><div><a href="goog.testing.events.OnlineHandler.html">OnlineHandler</a></div></ul></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

@@ -82,19 +82,15 @@ function remoteStorageEvent(data) {
     goog.testing.events.fireBrowserEvent(event);
   } else {
     var uniqueKey =
-        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ +
-        '1234567890';
+        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ + '1234567890';
     var ie8Events = mockHtml5LocalStorage.get(uniqueKey);
     if (goog.isDefAndNotNull(ie8Events)) {
       ie8Events = goog.json.parse(ie8Events);
       // Events should never overlap in IE8 mode.
       if (ie8Events.length > 0 &&
-          ie8Events[ie8Events.length - 1]['timestamp'] >=
-          data['timestamp']) {
-        data['timestamp'] =
-            ie8Events[ie8Events.length - 1]['timestamp'] +
-            goog.labs.pubsub.BroadcastPubSub.
-            IE8_TIMESTAMP_UNIQUE_OFFSET_MS_;
+          ie8Events[ie8Events.length - 1]['timestamp'] >= data['timestamp']) {
+        data['timestamp'] = ie8Events[ie8Events.length - 1]['timestamp'] +
+            goog.labs.pubsub.BroadcastPubSub.IE8_TIMESTAMP_UNIQUE_OFFSET_MS_;
       }
     } else {
       ie8Events = [];
@@ -118,8 +114,8 @@ function setUp() {
   mockHtml5LocalStorage = new goog.structs.Map();
 
   // The builtin localStorage returns null instead of undefined.
-  var originalGetFn = goog.bind(mockHtml5LocalStorage.get,
-      mockHtml5LocalStorage);
+  var originalGetFn =
+      goog.bind(mockHtml5LocalStorage.get, mockHtml5LocalStorage);
   mockHtml5LocalStorage.get = function(key) {
     var value = originalGetFn(key);
     if (!goog.isDef(value)) {
@@ -130,18 +126,16 @@ function setUp() {
   mockHtml5LocalStorage.key = function(idx) {
     return mockHtml5LocalStorage.getKeys()[idx];
   };
-  mockHtml5LocalStorage.isAvailable = function() {
-    return true;
-  };
+  mockHtml5LocalStorage.isAvailable = function() { return true; };
 
 
   // IE has problems. IE9+ still dispatches storage events locally. IE8 also
-  // doesn't include the key/value information. So for IE, everytime we get a
+  // doesn't include the key/value information. So for IE, every time we get a
   // "set" on localStorage we simulate for the appropriate browser.
   if (goog.userAgent.IE) {
     var target = isIe8 ? document : window;
-    var originalSetFn = goog.bind(mockHtml5LocalStorage.set,
-        mockHtml5LocalStorage);
+    var originalSetFn =
+        goog.bind(mockHtml5LocalStorage.set, mockHtml5LocalStorage);
     mockHtml5LocalStorage.set = function(key, value) {
       originalSetFn(key, value);
       var event = new goog.testing.events.Event('storage', target);
@@ -152,7 +146,6 @@ function setUp() {
       goog.testing.events.fireBrowserEvent(event);
     };
   }
-
 }
 
 function tearDown() {
@@ -169,7 +162,8 @@ function testConstructor() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
   assertNotNullNorUndefined(
       'BroadcastChannel instance must not be null', broadcastPubSub);
-  assertTrue('BroadcastChannel instance must have the expected type',
+  assertTrue(
+      'BroadcastChannel instance must have the expected type',
       broadcastPubSub instanceof goog.labs.pubsub.BroadcastPubSub);
   assertArrayEquals(
       goog.labs.pubsub.BroadcastPubSub.instances_, [broadcastPubSub]);
@@ -183,15 +177,15 @@ function testConstructor() {
 
 
 function testConstructor_noLocalStorage() {
-  mockHTML5LocalStorageCtor().$returns({isAvailable: function() {
-    return false;
-  }});
+  mockHTML5LocalStorageCtor().$returns(
+      {isAvailable: function() { return false; }});
   mockControl.$replayAll();
   broadcastPubSub = new goog.labs.pubsub.BroadcastPubSub();
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
   assertNotNullNorUndefined(
       'BroadcastChannel instance must not be null', broadcastPubSub);
-  assertTrue('BroadcastChannel instance must have the expected type',
+  assertTrue(
+      'BroadcastChannel instance must have the expected type',
       broadcastPubSub instanceof goog.labs.pubsub.BroadcastPubSub);
   assertArrayEquals(
       goog.labs.pubsub.BroadcastPubSub.instances_, [broadcastPubSub]);
@@ -209,15 +203,14 @@ function testDispose() {
   mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
   var mockStorage = mockControl.createLooseMock(goog.storage.Storage);
 
-  var mockStorageCtor = mockControl.createConstructorMock(
-      goog.storage, 'Storage');
+  var mockStorageCtor =
+      mockControl.createConstructorMock(goog.storage, 'Storage');
 
   mockStorageCtor(mockHtml5LocalStorage).$returns(mockStorage);
   mockStorageCtor(mockHtml5LocalStorage).$returns(mockStorage);
 
   if (isIe8) {
-    mockStorage.remove(
-        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
+    mockStorage.remove(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
   }
 
   mockControl.$replayAll();
@@ -225,23 +218,29 @@ function testDispose() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   var broadcastPubSubExtra = new goog.labs.pubsub.BroadcastPubSub();
-  assertArrayEquals(goog.labs.pubsub.BroadcastPubSub.instances_,
+  assertArrayEquals(
+      goog.labs.pubsub.BroadcastPubSub.instances_,
       [broadcastPubSub, broadcastPubSubExtra]);
 
-  assertFalse('BroadcastChannel extra instance must not have been disposed of',
+  assertFalse(
+      'BroadcastChannel extra instance must not have been disposed of',
       broadcastPubSubExtra.isDisposed());
   broadcastPubSubExtra.dispose();
-  assertTrue('BroadcastChannel extra instance must have been disposed of',
+  assertTrue(
+      'BroadcastChannel extra instance must have been disposed of',
       broadcastPubSubExtra.isDisposed());
-  assertFalse('BroadcastChannel instance must not have been disposed of',
+  assertFalse(
+      'BroadcastChannel instance must not have been disposed of',
       broadcastPubSub.isDisposed());
 
   assertArrayEquals(
       goog.labs.pubsub.BroadcastPubSub.instances_, [broadcastPubSub]);
-  assertFalse('BroadcastChannel instance must not have been disposed of',
+  assertFalse(
+      'BroadcastChannel instance must not have been disposed of',
       broadcastPubSub.isDisposed());
   broadcastPubSub.dispose();
-  assertTrue('BroadcastChannel instance must have been disposed of',
+  assertTrue(
+      'BroadcastChannel instance must have been disposed of',
       broadcastPubSub.isDisposed());
   assertArrayEquals(goog.labs.pubsub.BroadcastPubSub.instances_, []);
   mockControl.$verifyAll();
@@ -263,10 +262,7 @@ function testHandleRemoteEvent() {
   mockControl.$replayAll();
   broadcastPubSub = new goog.labs.pubsub.BroadcastPubSub();
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
-  var eventData = {
-    'args': ['someTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  };
+  var eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
 
   broadcastPubSub.subscribe('someTopic', foo);
   broadcastPubSub.subscribe('someTopic', bar, context);
@@ -309,18 +305,17 @@ function testHandleRemoteEventSubscribeOnce() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribeOnce('someTopic', foo);
-  assertEquals('BroadcastChannel must have one subscriber',
-      1, broadcastPubSub.getCount());
+  assertEquals(
+      'BroadcastChannel must have one subscriber', 1,
+      broadcastPubSub.getCount());
 
-  remoteStorageEvent({
-    'args': ['someTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  });
+  remoteStorageEvent(
+      {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()});
   mockClock.tick();
 
   assertEquals(
-      'BroadcastChannel must have no subscribers after receiving the event',
-      0, broadcastPubSub.getCount());
+      'BroadcastChannel must have no subscribers after receiving the event', 0,
+      broadcastPubSub.getCount());
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
 }
@@ -341,16 +336,10 @@ function testHandleQueuedRemoteEvents() {
   broadcastPubSub.subscribe('fooTopic', foo);
   broadcastPubSub.subscribe('barTopic', bar);
 
-  var eventData = {
-    'args': ['fooTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  };
+  var eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
 
-  var eventData = {
-    'args': ['barTopic', 'd', 'c'],
-    'timestamp': goog.now()
-  };
+  eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
   mockClock.tick();
 
@@ -375,17 +364,11 @@ function testHandleRemoteEventsUnsubscribe() {
   broadcastPubSub.subscribe('fooTopic', foo);
   broadcastPubSub.subscribe('barTopic', bar);
 
-  var eventData = {
-    'args': ['fooTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  };
+  var eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
   mockClock.tick();
 
-  var eventData = {
-    'args': ['barTopic', 'd', 'c'],
-    'timestamp': goog.now()
-  };
+  eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
   mockClock.tick();
 
@@ -405,17 +388,11 @@ function testHandleRemoteEventsCalledOnce() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
   broadcastPubSub.subscribeOnce('someTopic', foo);
 
-  var eventData = {
-    'args': ['someTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  };
+  var eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
   mockClock.tick();
 
-  var eventData = {
-    'args': ['someTopic', 'x', 'y'],
-    'timestamp': goog.now()
-  };
+  eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
   remoteStorageEvent(eventData);
   mockClock.tick();
 
@@ -428,17 +405,12 @@ function testHandleRemoteEventNestedPublish() {
   mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
   var foo1 = mockControl.createFunctionMock();
   foo1().$does(function() {
-    remoteStorageEvent({
-      'args': ['bar'],
-      'timestamp': goog.now()
-    });
+    remoteStorageEvent({'args': ['bar'], 'timestamp': goog.now()});
   });
   var foo2 = mockControl.createFunctionMock();
   foo2();
   var bar1 = mockControl.createFunctionMock();
-  bar1().$does(function() {
-    broadcastPubSub.publish('baz');
-  });
+  bar1().$does(function() { broadcastPubSub.publish('baz'); });
   var bar2 = mockControl.createFunctionMock();
   bar2();
   var baz1 = mockControl.createFunctionMock();
@@ -457,10 +429,7 @@ function testHandleRemoteEventNestedPublish() {
   broadcastPubSub.subscribe('baz', baz1);
   broadcastPubSub.subscribe('baz', baz2);
 
-  remoteStorageEvent({
-    'args': ['foo'],
-    'timestamp': goog.now()
-  });
+  remoteStorageEvent({'args': ['foo'], 'timestamp': goog.now()});
   mockClock.tick();
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -535,48 +504,50 @@ function testLocalStorageData() {
   mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
   var mockStorage = mockControl.createLooseMock(goog.storage.Storage);
 
-  var mockStorageCtor = mockControl.createConstructorMock(
-      goog.storage, 'Storage');
+  var mockStorageCtor =
+      mockControl.createConstructorMock(goog.storage, 'Storage');
 
   mockStorageCtor(mockHtml5LocalStorage).$returns(mockStorage);
   if (!isIe8) {
-    mockStorage.set(goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_,
+    mockStorage.set(
+        goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_,
         {'args': [topic, '10'], 'timestamp': now});
     mockStorage.remove(goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_);
-    mockStorage.set(goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_,
+    mockStorage.set(
+        goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_,
         {'args': [anotherTopic, '13'], 'timestamp': now});
     mockStorage.remove(goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_);
   } else {
-    var firstEventArray = [
-      {'args': [topic, '10'], 'timestamp': now}
-    ];
+    var firstEventArray = [{'args': [topic, '10'], 'timestamp': now}];
     var secondEventArray = [
-      {'args': [topic, '10'], 'timestamp': now},
-      {'args': [anotherTopic, '13'], 'timestamp': now +
-            goog.labs.pubsub.BroadcastPubSub.
-            IE8_TIMESTAMP_UNIQUE_OFFSET_MS_}
+      {'args': [topic, '10'], 'timestamp': now}, {
+        'args': [anotherTopic, '13'],
+        'timestamp': now +
+            goog.labs.pubsub.BroadcastPubSub.IE8_TIMESTAMP_UNIQUE_OFFSET_MS_
+      }
     ];
 
-    mockStorage.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_).
-        $returns(null);
-    mockStorage.set(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_,
+    mockStorage.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_)
+        .$returns(null);
+    mockStorage.set(
+        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_,
         new goog.testing.mockmatchers.ArgumentMatcher(function(val) {
           return goog.testing.mockmatchers.flexibleArrayMatcher(
               firstEventArray, val);
         }, 'First event array'));
 
     // Make sure to clone or you're going to have a bad time.
-    mockStorage.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_).
-        $returns(goog.array.clone(firstEventArray));
+    mockStorage.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_)
+        .$returns(goog.array.clone(firstEventArray));
 
-    mockStorage.set(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_,
+    mockStorage.set(
+        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_,
         new goog.testing.mockmatchers.ArgumentMatcher(function(val) {
           return goog.testing.mockmatchers.flexibleArrayMatcher(
               secondEventArray, val);
         }, 'Second event array'));
 
-    mockStorage.remove(
-        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
+    mockStorage.remove(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
   }
 
   var fn = goog.testing.recordFunction();
@@ -607,10 +578,7 @@ function testBrokenTimestamp() {
 
   broadcastPubSub.subscribe('someTopic', fn);
 
-  remoteStorageEvent({
-    'args': 'WAT?',
-    'timestamp': 'wat?'
-  });
+  remoteStorageEvent({'args': 'WAT?', 'timestamp': 'wat?'});
   mockClock.tick();
 
   broadcastPubSub.dispose();
@@ -635,8 +603,7 @@ function testBrokenEvent() {
     goog.testing.events.fireBrowserEvent(event);
   } else {
     var uniqueKey =
-        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ +
-        '1234567890';
+        goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ + '1234567890';
     // This will cause an event.
     mockHtml5LocalStorage.set(uniqueKey, 'Toothpaste!');
   }
@@ -727,9 +694,9 @@ function testSubscribeWhilePublishing() {
 
   var fn1 = mockControl.createFunctionMock();
   var fn2 = mockControl.createFunctionMock();
-  fn1().$does(function() {
-    broadcastPubSub.subscribe('someTopic', fn2);
-  }).$times(2);
+  fn1()
+      .$does(function() { broadcastPubSub.subscribe('someTopic', fn2); })
+      .$times(2);
   fn2();
 
   mockControl.$replayAll();
@@ -737,19 +704,22 @@ function testSubscribeWhilePublishing() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribe('someTopic', fn1);
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic');
   mockClock.tick();
 
-  assertEquals('Topic must have two subscribers', 2,
+  assertEquals(
+      'Topic must have two subscribers', 2,
       broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic');
   mockClock.tick();
 
-  assertEquals('Topic must have three subscribers', 3,
+  assertEquals(
+      'Topic must have three subscribers', 3,
       broadcastPubSub.getCount('someTopic'));
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -768,16 +738,20 @@ function testUnsubscribeWhilePublishing() {
   var fn3 = mockControl.createFunctionMock();
 
   fn1().$does(function() {
-    assertTrue('unsubscribe() must return true when removing a topic',
+    assertTrue(
+        'unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('X', fn2));
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
+    assertEquals(
+        'Topic "X" must still have 3 subscribers', 3,
         broadcastPubSub.getCount('X'));
   });
   fn2().$times(0);
   fn3().$does(function() {
-    assertTrue('unsubscribe() must return true when removing a topic',
+    assertTrue(
+        'unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('X', fn1));
-    assertEquals('Topic "X" must still have 3 subscribers', 3,
+    assertEquals(
+        'Topic "X" must still have 3 subscribers', 3,
         broadcastPubSub.getCount('X'));
   });
 
@@ -789,17 +763,18 @@ function testUnsubscribeWhilePublishing() {
   broadcastPubSub.subscribe('X', fn2);
   broadcastPubSub.subscribe('X', fn3);
 
-  assertEquals('Topic "X" must have 3 subscribers', 3,
-      broadcastPubSub.getCount('X'));
+  assertEquals(
+      'Topic "X" must have 3 subscribers', 3, broadcastPubSub.getCount('X'));
 
   broadcastPubSub.publish('X');
   mockClock.tick();
 
-  assertEquals('Topic "X" must have 1 subscriber after publishing', 1,
+  assertEquals(
+      'Topic "X" must have 1 subscriber after publishing', 1,
       broadcastPubSub.getCount('X'));
   assertEquals(
-      'BroadcastChannel must not have any subscriptions pending removal',
-      0, broadcastPubSub.pubSub_.pendingKeys_.length);
+      'BroadcastChannel must not have any subscriptions pending removal', 0,
+      broadcastPubSub.pubSub_.pendingKeys_.length);
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
 }
@@ -812,9 +787,11 @@ function testUnsubscribeSelfWhilePublishing() {
 
   var fn = mockControl.createFunctionMock();
   fn().$does(function() {
-    assertTrue('unsubscribe() must return true when removing a topic',
+    assertTrue(
+        'unsubscribe() must return true when removing a topic',
         broadcastPubSub.unsubscribe('someTopic', fn));
-    assertEquals('Topic must still have 1 subscriber', 1,
+    assertEquals(
+        'Topic must still have 1 subscriber', 1,
         broadcastPubSub.getCount('someTopic'));
   });
 
@@ -823,17 +800,18 @@ function testUnsubscribeSelfWhilePublishing() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribe('someTopic', fn);
-  assertEquals('Topic must have 1 subscriber', 1,
-      broadcastPubSub.getCount('someTopic'));
+  assertEquals(
+      'Topic must have 1 subscriber', 1, broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic');
   mockClock.tick();
 
-  assertEquals('Topic must have no subscribers after publishing', 0,
+  assertEquals(
+      'Topic must have no subscribers after publishing', 0,
       broadcastPubSub.getCount('someTopic'));
   assertEquals(
-      'BroadcastChannel must not have any subscriptions pending removal',
-      0, broadcastPubSub.pubSub_.pendingKeys_.length);
+      'BroadcastChannel must not have any subscriptions pending removal', 0,
+      broadcastPubSub.pubSub_.pendingKeys_.length);
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
 }
@@ -882,47 +860,50 @@ function testSubscribeOnce() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
   broadcastPubSub.subscribeOnce('someTopic', fn);
 
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic');
   mockClock.tick();
 
-  assertEquals('Topic must have no subscribers', 0,
+  assertEquals(
+      'Topic must have no subscribers', 0,
       broadcastPubSub.getCount('someTopic'));
 
   var context = {'foo': 'bar'};
   broadcastPubSub.subscribeOnce('someTopic', fn, context);
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
-  assertEquals('Subscriber must not have been called yet',
-      1, fn.getCallCount());
+  assertEquals(
+      'Subscriber must not have been called yet', 1, fn.getCallCount());
 
   broadcastPubSub.publish('someTopic');
   mockClock.tick();
 
-  assertEquals('Topic must have no subscribers', 0,
+  assertEquals(
+      'Topic must have no subscribers', 0,
       broadcastPubSub.getCount('someTopic'));
-  assertEquals('Subscriber must have been called',
-      2, fn.getCallCount());
+  assertEquals('Subscriber must have been called', 2, fn.getCallCount());
   assertEquals(context, fn.getLastCall().getThis());
   assertArrayEquals([], fn.getLastCall().getArguments());
 
   context = {'foo': 'bar'};
   broadcastPubSub.subscribeOnce('someTopic', fn, context);
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
-  assertEquals('Subscriber must not have been called',
-      2, fn.getCallCount());
+  assertEquals('Subscriber must not have been called', 2, fn.getCallCount());
 
   broadcastPubSub.publish('someTopic', '17');
   mockClock.tick();
 
-  assertEquals('Topic must have no subscribers', 0,
+  assertEquals(
+      'Topic must have no subscribers', 0,
       broadcastPubSub.getCount('someTopic'));
   assertEquals(context, fn.getLastCall().getThis());
-  assertEquals('Subscriber must have been called',
-      3, fn.getCallCount());
+  assertEquals('Subscriber must have been called', 3, fn.getCallCount());
   assertArrayEquals(['17'], fn.getLastCall().getArguments());
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -939,20 +920,21 @@ function testSubscribeOnce_boundFn() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribeOnce('someTopic', goog.bind(fn, context));
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
-  assertNull('Subscriber must not have been called yet',
-      fn.getLastCall());
+  assertNull('Subscriber must not have been called yet', fn.getLastCall());
 
   broadcastPubSub.publish('someTopic', '17');
   mockClock.tick();
-  assertEquals('Topic must have no subscribers', 0,
+  assertEquals(
+      'Topic must have no subscribers', 0,
       broadcastPubSub.getCount('someTopic'));
   assertEquals('Subscriber must have been called', 1, fn.getCallCount());
-  assertEquals('Must receive correct argument.',
-      '17', fn.getLastCall().getArgument(0));
-  assertEquals('Must have appropriate context.',
-      context, fn.getLastCall().getThis());
+  assertEquals(
+      'Must receive correct argument.', '17', fn.getLastCall().getArgument(0));
+  assertEquals(
+      'Must have appropriate context.', context, fn.getLastCall().getThis());
 
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -969,13 +951,15 @@ function testSubscribeOnce_partialFn() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribeOnce('someTopic', goog.partial(fullFn, true));
-  assertEquals('Topic must have one subscriber', 1,
+  assertEquals(
+      'Topic must have one subscriber', 1,
       broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic', '17');
   mockClock.tick();
 
-  assertEquals('Topic must have no subscribers', 0,
+  assertEquals(
+      'Topic must have no subscribers', 0,
       broadcastPubSub.getCount('someTopic'));
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -997,28 +981,31 @@ function testSelfResubscribe() {
   broadcastPubSub.logger_.setLevel(goog.debug.Logger.Level.OFF);
 
   broadcastPubSub.subscribeOnce('someTopic', resubscribeFn);
-  assertEquals('Topic must have 1 subscriber', 1,
-      broadcastPubSub.getCount('someTopic'));
+  assertEquals(
+      'Topic must have 1 subscriber', 1, broadcastPubSub.getCount('someTopic'));
 
   broadcastPubSub.publish('someTopic', 'foo');
   mockClock.tick();
-  assertEquals('Topic must have 1 subscriber', 1,
-      broadcastPubSub.getCount('someTopic'));
-  assertEquals('BroadcastChannel must not have any pending unsubscribe keys', 0,
+  assertEquals(
+      'Topic must have 1 subscriber', 1, broadcastPubSub.getCount('someTopic'));
+  assertEquals(
+      'BroadcastChannel must not have any pending unsubscribe keys', 0,
       broadcastPubSub.pubSub_.pendingKeys_.length);
 
   broadcastPubSub.publish('someTopic', 'bar');
   mockClock.tick();
-  assertEquals('Topic must have 1 subscriber', 1,
-      broadcastPubSub.getCount('someTopic'));
-  assertEquals('BroadcastChannel must not have any pending unsubscribe keys', 0,
+  assertEquals(
+      'Topic must have 1 subscriber', 1, broadcastPubSub.getCount('someTopic'));
+  assertEquals(
+      'BroadcastChannel must not have any pending unsubscribe keys', 0,
       broadcastPubSub.pubSub_.pendingKeys_.length);
 
   broadcastPubSub.publish('someTopic', 'baz');
   mockClock.tick();
-  assertEquals('Topic must have 1 subscriber', 1,
-      broadcastPubSub.getCount('someTopic'));
-  assertEquals('BroadcastChannel must not have any pending unsubscribe keys', 0,
+  assertEquals(
+      'Topic must have 1 subscriber', 1, broadcastPubSub.getCount('someTopic'));
+  assertEquals(
+      'BroadcastChannel must not have any pending unsubscribe keys', 0,
       broadcastPubSub.pubSub_.pendingKeys_.length);
   broadcastPubSub.dispose();
   mockControl.$verifyAll();
@@ -1035,21 +1022,23 @@ function testClear() {
   goog.array.forEach(['V', 'W', 'X', 'Y', 'Z'], function(topic) {
     broadcastPubSub.subscribe(topic, fn);
   });
-  assertEquals('BroadcastChannel must have 5 subscribers', 5,
+  assertEquals(
+      'BroadcastChannel must have 5 subscribers', 5,
       broadcastPubSub.getCount());
 
   broadcastPubSub.clear('W');
-  assertEquals('BroadcastChannel must have 4 subscribers', 4,
+  assertEquals(
+      'BroadcastChannel must have 4 subscribers', 4,
       broadcastPubSub.getCount());
 
-  goog.array.forEach(['X', 'Y'], function(topic) {
-    broadcastPubSub.clear(topic);
-  });
-  assertEquals('BroadcastChannel must have 2 subscriber', 2,
-      broadcastPubSub.getCount());
+  goog.array.forEach(
+      ['X', 'Y'], function(topic) { broadcastPubSub.clear(topic); });
+  assertEquals(
+      'BroadcastChannel must have 2 subscriber', 2, broadcastPubSub.getCount());
 
   broadcastPubSub.clear();
-  assertEquals('BroadcastChannel must have no subscribers', 0,
+  assertEquals(
+      'BroadcastChannel must have no subscribers', 0,
       broadcastPubSub.getCount());
   broadcastPubSub.dispose();
   mockControl.$verifyAll();

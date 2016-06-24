@@ -32,11 +32,9 @@ function setUp() {
   };
   goog.events.eventTargetTester.setUp(
       newListenableFn, goog.events.listen, goog.events.unlisten,
-      unlistenByKeyFn,
-      goog.events.listenOnce, goog.events.dispatchEvent,
-      goog.events.removeAll, goog.events.getListeners,
-      goog.events.getListener, goog.events.hasListener,
-      goog.events.eventTargetTester.KeyType.NUMBER,
+      unlistenByKeyFn, goog.events.listenOnce, goog.events.dispatchEvent,
+      goog.events.removeAll, goog.events.getListeners, goog.events.getListener,
+      goog.events.hasListener, goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, true);
 }
 

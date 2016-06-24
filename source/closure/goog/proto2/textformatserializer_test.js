@@ -131,10 +131,7 @@ function testSerializationOfUnknownParsedFromObject() {
     31: [201, 202],
     1000: 301,
     1001: 302,
-    1002: {
-      31: [301, 302],
-      2000: 401
-    }
+    1002: {31: [301, 302], 2000: 401}
   };
 
   // Deserialize that representation into a TestAllTypes message.
@@ -144,18 +141,17 @@ function testSerializationOfUnknownParsedFromObject() {
 
   // Check that the text format matches what we expect.
   var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
-  var expected = (
-      'optional_int32: 101\n' +
-      'repeated_int32: 201\n' +
-      'repeated_int32: 202\n' +
-      '1000: 301\n' +
-      '1001: 302\n' +
-      '1002 {\n' +
-      '  31: 301\n' +
-      '  31: 302\n' +
-      '  2000: 401\n' +
-      '}\n'
-      );
+  var expected =
+      ('optional_int32: 101\n' +
+       'repeated_int32: 201\n' +
+       'repeated_int32: 202\n' +
+       '1000: 301\n' +
+       '1001: 302\n' +
+       '1002 {\n' +
+       '  31: 301\n' +
+       '  31: 302\n' +
+       '  2000: 401\n' +
+       '}\n');
   assertEquals(expected, simplified);
 }
 
@@ -197,20 +193,16 @@ function assertToken(expected, found) {
 function testTokenizer() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
   assertTokens('{ 123 }', [
-    { type: types.OPEN_BRACE },
-    { type: types.WHITESPACE, value: ' ' },
-    { type: types.NUMBER, value: '123' },
-    { type: types.WHITESPACE, value: ' '},
-    { type: types.CLOSE_BRACE }
+    {type: types.OPEN_BRACE}, {type: types.WHITESPACE, value: ' '},
+    {type: types.NUMBER, value: '123'}, {type: types.WHITESPACE, value: ' '},
+    {type: types.CLOSE_BRACE}
   ]);
   // The c++ proto serializer might represent a float in exponential
   // notation:
   assertTokens('{ 1.2345e+3 }', [
-    { type: types.OPEN_BRACE },
-    { type: types.WHITESPACE, value: ' ' },
-    { type: types.NUMBER, value: '1.2345e+3' },
-    { type: types.WHITESPACE, value: ' '},
-    { type: types.CLOSE_BRACE }
+    {type: types.OPEN_BRACE}, {type: types.WHITESPACE, value: ' '},
+    {type: types.NUMBER, value: '1.2345e+3'},
+    {type: types.WHITESPACE, value: ' '}, {type: types.CLOSE_BRACE}
   ]);
 }
 
@@ -220,63 +212,66 @@ function testTokenizerExponentialFloatProblem() {
       '    taxes      : 2.17199e+06\n' +
       '}';
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens(input, [
-    { type: types.IDENTIFIER, value: 'merchant' },
-    { type: types.COLON, value: ':' },
-    { type: types.OPEN_BRACE, value: '{' },
-    { type: types.COMMENT, value: '# blah blah' },
-    { type: types.IDENTIFIER, value: 'total_price' },
-    { type: types.COLON, value: ':' },
-    { type: types.NUMBER, value: '3.2186e+06' },
-    { type: types.COMMENT, value: '# 3_218_600; 3.07Mi' },
-    { type: types.IDENTIFIER, value: 'taxes' },
-    { type: types.COLON, value: ':' },
-    { type: types.NUMBER, value: '2.17199e+06' },
-    { type: types.CLOSE_BRACE, value: '}' }
-  ],
-  true);
+  assertTokens(
+      input,
+      [
+        {type: types.IDENTIFIER, value: 'merchant'},
+        {type: types.COLON, value: ':'}, {type: types.OPEN_BRACE, value: '{'},
+        {type: types.COMMENT, value: '# blah blah'},
+        {type: types.IDENTIFIER, value: 'total_price'},
+        {type: types.COLON, value: ':'},
+        {type: types.NUMBER, value: '3.2186e+06'},
+        {type: types.COMMENT, value: '# 3_218_600; 3.07Mi'},
+        {type: types.IDENTIFIER, value: 'taxes'},
+        {type: types.COLON, value: ':'},
+        {type: types.NUMBER, value: '2.17199e+06'},
+        {type: types.CLOSE_BRACE, value: '}'}
+      ],
+      true);
 }
 
 function testTokenizerNoWhitespace() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens('{ "hello world" }', [
-    { type: types.OPEN_BRACE },
-    { type: types.STRING, value: '"hello world"' },
-    { type: types.CLOSE_BRACE }
-  ], true);
+  assertTokens(
+      '{ "hello world" }',
+      [
+        {type: types.OPEN_BRACE}, {type: types.STRING, value: '"hello world"'},
+        {type: types.CLOSE_BRACE}
+      ],
+      true);
 }
 
 
 function assertIdentifier(identifier) {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens(identifier, { type: types.IDENTIFIER, value: identifier });
+  assertTokens(identifier, {type: types.IDENTIFIER, value: identifier});
 }
 
 function assertComment(comment) {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens(comment, { type: types.COMMENT, value: comment });
+  assertTokens(comment, {type: types.COMMENT, value: comment});
 }
 
 function assertString(str) {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens(str, { type: types.STRING, value: str });
+  assertTokens(str, {type: types.STRING, value: str});
 }
 
 function assertNumber(num) {
   num = num.toString();
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens(num, { type: types.NUMBER, value: num });
+  assertTokens(num, {type: types.NUMBER, value: num});
 }
 
 function testTokenizerSingleTokens() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
-  assertTokens('{', { type: types.OPEN_BRACE });
-  assertTokens('}', { type: types.CLOSE_BRACE });
-  assertTokens('<', { type: types.OPEN_TAG });
-  assertTokens('>', { type: types.CLOSE_TAG });
-  assertTokens(':', { type: types.COLON });
-  assertTokens(',', { type: types.COMMA });
-  assertTokens(';', { type: types.SEMI });
+  assertTokens('{', {type: types.OPEN_BRACE});
+  assertTokens('}', {type: types.CLOSE_BRACE});
+  assertTokens('<', {type: types.OPEN_TAG});
+  assertTokens('>', {type: types.CLOSE_TAG});
+  assertTokens(':', {type: types.COLON});
+  assertTokens(',', {type: types.COMMA});
+  assertTokens(';', {type: types.SEMI});
 
   assertIdentifier('abcd');
   assertIdentifier('Abcd');
@@ -510,7 +505,7 @@ function testDeserializationSkipUnknownNestedInvalid() {
   var value = 'optional_int32: 101\n' +
       'repeated_int32: 201\n' +
       'some_unknown: <\n' +
-      '  a: \n' + // Missing value.
+      '  a: \n' +  // Missing value.
       '  b: 2\n' +
       '>\n' +
       'repeated_int32: 202\n' +
@@ -527,7 +522,7 @@ function testDeserializationSkipUnknownNestedInvalid2() {
       'some_unknown: <\n' +
       '  a: 2\n' +
       '  b: 2\n' +
-      '}\n' + // Delimiter mismatch
+      '}\n' +  // Delimiter mismatch
       'repeated_int32: 202\n' +
       'optional_float: 123.4';
 
@@ -553,14 +548,13 @@ function testDeserializationLegacyFormat() {
 
 function testDeserializationVariedNumbers() {
   var message = new proto2.TestAllTypes();
-  var value = (
-      'repeated_int32: 23\n' +
-      'repeated_int32: -3\n' +
-      'repeated_int32: 0xdeadbeef\n' +
-      'repeated_float: 123.0\n' +
-      'repeated_float: -3.27\n' +
-      'repeated_float: -35.5f\n'
-      );
+  var value =
+      ('repeated_int32: 23\n' +
+       'repeated_int32: -3\n' +
+       'repeated_int32: 0xdeadbeef\n' +
+       'repeated_float: 123.0\n' +
+       'repeated_float: -3.27\n' +
+       'repeated_float: -35.5f\n');
 
   new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
 
@@ -626,14 +620,12 @@ function testParseNumericalConstant() {
 }
 
 function testDeserializationOfNumericalConstants() {
-
   var message = new proto2.TestAllTypes();
-  var value = (
-      'repeated_float: inf\n' +
-      'repeated_float: -inf\n' +
-      'repeated_float: nan\n' +
-      'repeated_float: 300.2\n'
-      );
+  var value =
+      ('repeated_float: inf\n' +
+       'repeated_float: -inf\n' +
+       'repeated_float: nan\n' +
+       'repeated_float: 300.2\n');
 
   new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
 
@@ -643,16 +635,16 @@ function testDeserializationOfNumericalConstants() {
   assertEquals(300.2, message.getRepeatedFloat(3));
 }
 
-var floatFormatCases = [{given: '1.69e+06', expect: 1.69e+06},
-                        {given: '1.69e6', expect: 1.69e+06},
-                        {given: '2.468e-2', expect: 0.02468}
-                       ];
+var floatFormatCases = [
+  {given: '1.69e+06', expect: 1.69e+06}, {given: '1.69e6', expect: 1.69e+06},
+  {given: '2.468e-2', expect: 0.02468}
+];
 
 function testGetNumberFromStringExponentialNotation() {
   for (var i = 0; i < floatFormatCases.length; ++i) {
     var thistest = floatFormatCases[i];
-    var result = goog.proto2.TextFormatSerializer.Parser.
-        getNumberFromString_(thistest.given);
+    var result = goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(
+        thistest.given);
     assertEquals(thistest.expect, result);
   }
 }

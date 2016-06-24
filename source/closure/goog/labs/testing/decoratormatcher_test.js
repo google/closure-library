@@ -34,8 +34,9 @@ function testIs() {
 
 function testDescribedAs() {
   var e = assertThrows(function() {
-    goog.labs.testing.assertThat(4, describedAs('this is a test',
-        greaterThan(6)))});
+    goog.labs.testing.assertThat(
+        4, describedAs('this is a test', greaterThan(6)))
+  });
   assertTrue(e instanceof goog.labs.testing.MatcherError);
   assertEquals('this is a test', e.message);
 }

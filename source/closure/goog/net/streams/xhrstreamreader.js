@@ -16,7 +16,7 @@
  * @fileoverview the XHR stream reader implements a low-level stream
  * reader for handling a streamed XHR response body. The reader takes a
  * StreamParser which may support JSON or any other formats as confirmed by
- * the Content-Type of the response. The reader may used as polyfill for
+ * the Content-Type of the response. The reader may be used as polyfill for
  * different streams APIs such as Node streams or whatwg streams (Fetch).
  *
  * The first version of this implementation only covers functions necessary
@@ -38,6 +38,7 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.net.streams.JsonStreamParser');
+goog.require('goog.net.streams.PbStreamParser');
 goog.require('goog.userAgent');
 
 
@@ -113,8 +114,8 @@ goog.net.streams.XhrStreamReader = function(xhr) {
 
 
   // register the XHR event handler
-  this.eventHandler_.listen(this.xhr_,
-      goog.net.EventType.READY_STATE_CHANGE,
+  this.eventHandler_.listen(
+      this.xhr_, goog.net.EventType.READY_STATE_CHANGE,
       this.readyStateChangeHandler_);
 };
 
@@ -207,10 +208,12 @@ goog.net.streams.XhrStreamReader.isStreamingSupported = function() {
  */
 goog.net.streams.XhrStreamReader.prototype.getParserByContentType_ =
     function() {
-  var contentType = this.xhr_.getResponseHeader(
-      goog.net.XhrIo.CONTENT_TYPE_HEADER);
+  var contentType =
+      this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
   if (contentType == 'application/json') {
     return new goog.net.streams.JsonStreamParser();
+  } else if (contentType == 'application/x-protobuf') {
+    return new goog.net.streams.PbStreamParser();
   }
 
   // TODO(user): caller to specify the C-T (ctor)
@@ -255,8 +258,7 @@ goog.net.streams.XhrStreamReader.prototype.setStatusHandler = function(
  *
  * @param {!function(!Array<!Object>)} handler The handler for new data.
  */
-goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(
-    handler) {
+goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
   this.dataHandler_ = handler;
 };
 
@@ -269,8 +271,8 @@ goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(
  * @param {!goog.events.Event} event The event.
  * @private
  */
-goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ =
-    function(event) {
+goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
+    event) {
 
   var xhr = /** @type {goog.net.XhrIo} */ (event.target);
 
@@ -282,8 +284,9 @@ goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ =
       goog.log.warning(this.logger_, 'Called back with an unexpected xhr.');
     }
   } catch (ex) {
-    goog.log.error(this.logger_, 'readyStateChangeHandler_ thrown exception' +
-        ' ' + ex);
+    goog.log.error(
+        this.logger_, 'readyStateChangeHandler_ thrown exception' +
+            ' ' + ex);
     // no rethrow
     this.updateStatus_(
         goog.net.streams.XhrStreamReader.Status.HANDLER_EXCEPTION);
@@ -313,9 +316,9 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   }
 
   // TODO(user): white-list other 2xx responses with application payload
-  var successful = (
-      statusCode == goog.net.HttpStatus.OK ||
-      statusCode == goog.net.HttpStatus.PARTIAL_CONTENT);
+  var successful =
+      (statusCode == goog.net.HttpStatus.OK ||
+       statusCode == goog.net.HttpStatus.PARTIAL_CONTENT);
 
   if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
     if (errorCode == goog.net.ErrorCode.TIMEOUT) {
@@ -328,15 +331,17 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   }
 
   if (successful && !responseText) {
-    goog.log.warning(this.logger_, 'No response text for xhr ' +
-        this.xhr_.getLastUri() + ' status ' + statusCode);
+    goog.log.warning(
+        this.logger_, 'No response text for xhr ' + this.xhr_.getLastUri() +
+            ' status ' + statusCode);
   }
 
   if (!this.parser_) {
     this.parser_ = this.getParserByContentType_();
     if (this.parser_ == null) {
-      goog.log.warning(this.logger_, 'Invalid response content-type: ' +
-          this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER));
+      goog.log.warning(
+          this.logger_, 'Invalid response content-type: ' +
+              this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER));
       this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
     }
   }
@@ -366,8 +371,8 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
           }
         }
       } catch (ex) {
-        goog.log.error(this.logger_,
-            'Invalid response ' + ex + '\n' + responseText);
+        goog.log.error(
+            this.logger_, 'Invalid response ' + ex + '\n' + responseText);
         this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
       }
     }

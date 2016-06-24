@@ -77,7 +77,8 @@ function testArrayMultipleElements() {
 
 
 function testFunction() {
-  assertEquals('{\n  "a": "1",\n  "b": ""\n}',
+  assertEquals(
+      '{\n  "a": "1",\n  "b": ""\n}',
       formatter.format({'a': '1', 'b': function() { return null; }}));
 }
 
@@ -88,19 +89,27 @@ function testObject() {
 
 
 function testObjectMultipleProperties() {
-  assertEquals('{\n  "a": null,\n  "b": true,\n  "c": 1,\n  "d": "d",\n  "e":' +
-      ' [\n    1,\n    2,\n    3\n  ],\n  "f": {\n    "g": 1,\n    "h": "h"\n' +
-      '  }\n}',
-      formatter.format({'a': null, 'b': true, 'c': 1, 'd': 'd', 'e': [1, 2, 3],
-        'f': {'g': 1, 'h': 'h'}}));
+  assertEquals(
+      '{\n  "a": null,\n  "b": true,\n  "c": 1,\n  "d": "d",\n  "e":' +
+          ' [\n    1,\n    2,\n    3\n  ],\n  "f": {\n    "g": 1,\n    "h": "h"\n' +
+          '  }\n}',
+      formatter.format({
+        'a': null,
+        'b': true,
+        'c': 1,
+        'd': 'd',
+        'e': [1, 2, 3],
+        'f': {'g': 1, 'h': 'h'}
+      }));
 }
 
 
 function testSafeHtmlDelimiters() {
   var htmlFormatter = new goog.format.JsonPrettyPrinter(
       new goog.format.JsonPrettyPrinter.SafeHtmlDelimiters());
-  assertEquals('{\n  <span class="goog-jsonprettyprinter-propertyname">&quot;' +
-      'a&lt;b&quot;</span>: <span class="goog-jsonprettyprinter-propertyvalue' +
-      '-string">&quot;&gt;&quot;</span>\n}',
+  assertEquals(
+      '{\n  <span class="goog-jsonprettyprinter-propertyname">&quot;' +
+          'a&lt;b&quot;</span>: <span class="goog-jsonprettyprinter-propertyvalue' +
+          '-string">&quot;&gt;&quot;</span>\n}',
       htmlFormatter.formatSafeHtml({'a<b': '>'}).getTypedStringValue());
 }

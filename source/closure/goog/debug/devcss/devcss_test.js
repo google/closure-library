@@ -37,10 +37,10 @@ function testGetIe6CombinedSelectorText() {
   var css = '.class2 { -goog-ie6-selector:".class1_class2"; prop: val; }';
   var newCss = devcssInstance.getIe6CombinedSelectorText_(css);
   assertEquals('.class1_class2', newCss);
-  assertArrayEquals(['class1', 'class2'],
-      devcssInstance.ie6CombinedMatches_[0].classNames);
-  assertEquals('class1_class2',
-      devcssInstance.ie6CombinedMatches_[0].combinedClassName);
+  assertArrayEquals(
+      ['class1', 'class2'], devcssInstance.ie6CombinedMatches_[0].classNames);
+  assertEquals(
+      'class1_class2', devcssInstance.ie6CombinedMatches_[0].combinedClassName);
 
   devcssInstance = new goog.debug.DevCss();
   devcssInstance.ie6CombinedMatches_ = [];
@@ -48,9 +48,11 @@ function testGetIe6CombinedSelectorText() {
       'prop: val; }';
   newCss = devcssInstance.getIe6CombinedSelectorText_(css);
   assertEquals('.class1_class2_class3', newCss);
-  assertArrayEquals(['class1', 'class2', 'class3'],
+  assertArrayEquals(
+      ['class1', 'class2', 'class3'],
       devcssInstance.ie6CombinedMatches_[0].classNames);
-  assertEquals('class1_class2_class3',
+  assertEquals(
+      'class1_class2_class3',
       devcssInstance.ie6CombinedMatches_[0].combinedClassName);
 
   devcssInstance = new goog.debug.DevCss();
@@ -60,14 +62,16 @@ function testGetIe6CombinedSelectorText() {
       'prop: val; }';
   newCss = devcssInstance.getIe6CombinedSelectorText_(css);
   assertEquals('.class1_class2_class3, .class4_class5', newCss);
-  assertArrayEquals(['class1', 'class2', 'class3'],
+  assertArrayEquals(
+      ['class1', 'class2', 'class3'],
       devcssInstance.ie6CombinedMatches_[0].classNames);
-  assertEquals('class1_class2_class3',
+  assertEquals(
+      'class1_class2_class3',
       devcssInstance.ie6CombinedMatches_[0].combinedClassName);
-  assertArrayEquals(['class4', 'class5'],
-      devcssInstance.ie6CombinedMatches_[1].classNames);
-  assertEquals('class4_class5',
-      devcssInstance.ie6CombinedMatches_[1].combinedClassName);
+  assertArrayEquals(
+      ['class4', 'class5'], devcssInstance.ie6CombinedMatches_[1].classNames);
+  assertEquals(
+      'class4_class5', devcssInstance.ie6CombinedMatches_[1].combinedClassName);
 }
 
 function testAddIe6CombinedClassNames() {
@@ -79,16 +83,13 @@ function testAddIe6CombinedClassNames() {
 
   var devcssInstance = new goog.debug.DevCss();
   devcssInstance.ie6CombinedMatches_ = [
-    {
-      classNames: ['ie6-2', 'ie6-1'],
-      combinedClassName: 'ie6-1_ie6-2',
-      els: []
-    },
+    {classNames: ['ie6-2', 'ie6-1'], combinedClassName: 'ie6-1_ie6-2', els: []},
     {
       classNames: ['ie6-2', 'ie6-3', 'ie6-1'],
       combinedClassName: 'ie6-1_ie6-2_ie6-3',
       els: []
-    }];
+    }
+  ];
 
   devcssInstance.addIe6CombinedClassNames_();
   assertEquals(-1, el_notcombined1.className.indexOf('ie6-1_ie6-2'));
@@ -137,12 +138,12 @@ function testActivateBrowserSpecificCssWithVersion() {
 function testActivateBrowserSpecificCssGteInvalid() {
   // WEBKIT_GTE255
   var marginBox = goog.style.getMarginBox(el);
-  assertEquals(1, marginBox.top); // should still be 1
+  assertEquals(1, marginBox.top);  // should still be 1
 
   var devcssInstance = new goog.debug.DevCss('WEBKIT', 254);
   devcssInstance.activateBrowserSpecificCssRules(false);
   var marginBox = goog.style.getMarginBox(el);
-  assertEquals(1, marginBox.top); // should still be 1
+  assertEquals(1, marginBox.top);  // should still be 1
 }
 
 function testActivateBrowserSpecificCssGteValid() {
@@ -155,12 +156,12 @@ function testActivateBrowserSpecificCssGteValid() {
 function testActivateBrowserSpecificCssLteInvalid() {
   // IE_LTE6
   var marginBox = goog.style.getMarginBox(el);
-  assertEquals(1, marginBox.left); // should still be 1
+  assertEquals(1, marginBox.left);  // should still be 1
 
   var devcssInstance = new goog.debug.DevCss('WEBKIT', 202);
   devcssInstance.activateBrowserSpecificCssRules(false);
   var marginBox = goog.style.getMarginBox(el);
-  assertEquals(1, marginBox.left); // should still be 1
+  assertEquals(1, marginBox.left);  // should still be 1
 }
 
 function testActivateBrowserSpecificCssLteValid() {
@@ -176,12 +177,11 @@ function testReplaceIe6Selectors() {
 
   // It should correctly be transparent, even in IE6.
   var compound2El = document.getElementById('devcss-test-compound2');
-  var backgroundColor = spaceless(
-      goog.style.getBackgroundColor(compound2El));
+  var backgroundColor = spaceless(goog.style.getBackgroundColor(compound2El));
 
-  assertTrue('Unexpected background color: ' + backgroundColor,
-      'transparent' == backgroundColor ||
-      'rgba(0,0,0,0)' == backgroundColor);
+  assertTrue(
+      'Unexpected background color: ' + backgroundColor,
+      'transparent' == backgroundColor || 'rgba(0,0,0,0)' == backgroundColor);
 
   // And this one should have the combined selector working, even in
   // IE6.

@@ -1,0 +1,40 @@
+---
+{edit_path: '', layout: api, page: goog.ui.registry, section: 2-api}
+---
+{% raw %}
+<!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.ui.registry</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L20" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.ui.registry</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="getDecorator"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L135" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDecorator(<var>element</var>)</div></h3></div><div class="body"><p>Returns an instance of <a href="goog.ui.Component.html"><code>goog.ui.Component</code></a> or a subclass suitable to
+decorate the given element, based on its CSS class.</p>
+<p>TODO(nnaze): Type of element should be {!Element}.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>element</var><code>Element</code><dd><p>Element to decorate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.Component.html">goog.ui.Component</a></code><dd><p>Component to decorate the element (null if
+none).</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDecoratorByClassName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L95" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDecoratorByClassName(<var>className</var>)</div></h3></div><div class="body"><p>Returns the <a href="goog.ui.Component.html"><code>goog.ui.Component</code></a> instance created by the decorator
+factory function registered for the given CSS class name, or null if no
+decorator factory function was found.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>CSS class name.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.Component.html">goog.ui.Component</a></code><dd><p>Component instance.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getDefaultRenderer"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L36" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getDefaultRenderer(<var>componentCtor</var>)</div></h3></div><div class="body"><p>Given a <a href="goog.ui.Component.html"><code>goog.ui.Component</code></a> constructor, returns an instance of its
+default renderer.  If the default renderer is a singleton, returns the
+singleton instance; otherwise returns a new instance of the renderer class.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>componentCtor</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Component constructor function (for example
+<code>goog.ui.Button</code>).</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="goog.ui.ControlRenderer.html">goog.ui.ControlRenderer</a></code><dd><p>Renderer instance (for example the
+singleton instance of <code>goog.ui.ButtonRenderer</code>), or null if
+no default renderer was found.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="reset"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L151" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>reset()</div></h3></div><div class="body"><p>Resets the global renderer and decorator registry.</p>
+</div></section><section class="property expandable" id="setDecoratorByClassName"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L111" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDecoratorByClassName(<var>className</var>, <var>decoratorFn</var>)</div></h3></div><div class="body"><p>Maps a CSS class name to a function that returns a new instance of
+<a href="goog.ui.Component.html"><code>goog.ui.Component</code></a> or a subclass, suitable to decorate an element
+that has the specified CSS class.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>className</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>CSS class name.</p>
+<dt class="type name"><var>decoratorFn</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>No-argument function that returns a new
+instance of a <a href="goog.ui.Component.html"><code>goog.ui.Component</code></a> to decorate an element.</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></code><dd><p>If the class name or the decorator function is invalid.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setDefaultRenderer"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/ui/registry.js#L72" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setDefaultRenderer(<var>componentCtor</var>, <var>rendererCtor</var>)</div></h3></div><div class="body"><p>Sets the default renderer for the given <a href="goog.ui.Component.html"><code>goog.ui.Component</code></a>
+constructor.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>componentCtor</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Component constructor function (for example
+<code>goog.ui.Button</code>).</p>
+<dt class="type name"><var>rendererCtor</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>Renderer constructor function (for example
+<code>goog.ui.ButtonRenderer</code>).</p>
+</dl></dd><dt class="spec">Throws</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></code><dd><p>If the arguments aren&#39;t functions.</p>
+</dl></dd></dl></div></section></section></article></main><footer><div><a href="https://github.com/jleyba/js-dossier">Generated by dossier</a></div></footer></div><nav class="dossier-nav"><section><a class="title" href="index.html" tabindex="2">Overview</a></section><section class="types"><div class="toggle"><div class="title"><span class="item" tabindex="2">Types</span><i class="material-icons">expand_more</i></div></div></section></nav><script src="types.js"></script><script src="dossier.js"></script>
+{% endraw %}

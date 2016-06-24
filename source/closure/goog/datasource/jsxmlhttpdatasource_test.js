@@ -26,18 +26,14 @@ var TEXT_POSTFIX = null;
 var INDEX_OF_URI_ENTRY = 1;
 var INDEX_OF_CONTENT_ENTRY = 3;
 
-function setUp() {
-}
+function setUp() {}
 
-function tearDown() {
-}
+function tearDown() {}
 
 function testLoad_WithPostAndQueryDataSet() {
-
   var USE_POST = true;
-  var dataSource =
-      new goog.ds.JsXmlHttpDataSource(
-          'uri', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+  var dataSource = new goog.ds.JsXmlHttpDataSource(
+      'uri', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
   var testQueue = new goog.testing.TestQueue();
   dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
@@ -54,11 +50,9 @@ function testLoad_WithPostAndQueryDataSet() {
 }
 
 function testLoad_WithPostAndNoQueryDataSet() {
-
   var USE_POST = true;
-  var dataSource =
-      new goog.ds.JsXmlHttpDataSource(
-          'uri?a=1&b=2', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+  var dataSource = new goog.ds.JsXmlHttpDataSource(
+      'uri?a=1&b=2', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
   var testQueue = new goog.testing.TestQueue();
   dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
@@ -73,12 +67,10 @@ function testLoad_WithPostAndNoQueryDataSet() {
 }
 
 function testLoad_WithGet() {
-
   var USE_GET = false;
   var expectedUri = 'uri?a=1&b=2';
-  var dataSource =
-      new goog.ds.JsXmlHttpDataSource(
-          expectedUri, 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
+  var dataSource = new goog.ds.JsXmlHttpDataSource(
+      expectedUri, 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
 
   var testQueue = new goog.testing.TestQueue();
   dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);

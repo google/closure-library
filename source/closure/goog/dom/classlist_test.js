@@ -48,20 +48,17 @@ function testGet() {
 function testContainsWithNewlines() {
   var el = goog.dom.getElement('p1');
   assertTrue('Should not have SOMECLASS', classlist.contains(el, 'SOMECLASS'));
-  assertTrue('Should also have OTHERCLASS',
-      classlist.contains(el, 'OTHERCLASS'));
-  assertFalse('Should not have WEIRDCLASS',
-      classlist.contains(el, 'WEIRDCLASS'));
+  assertTrue(
+      'Should also have OTHERCLASS', classlist.contains(el, 'OTHERCLASS'));
+  assertFalse(
+      'Should not have WEIRDCLASS', classlist.contains(el, 'WEIRDCLASS'));
 }
 
 function testContainsCaseSensitive() {
   var el = goog.dom.getElement('p2');
-  assertFalse('Should not have camelcase',
-      classlist.contains(el, 'camelcase'));
-  assertFalse('Should not have CAMELCASE',
-      classlist.contains(el, 'CAMELCASE'));
-  assertTrue('Should have camelCase',
-      classlist.contains(el, 'camelCase'));
+  assertFalse('Should not have camelcase', classlist.contains(el, 'camelcase'));
+  assertFalse('Should not have CAMELCASE', classlist.contains(el, 'CAMELCASE'));
+  assertTrue('Should have camelCase', classlist.contains(el, 'camelCase'));
 }
 
 function testAddNotAddingMultiples() {
@@ -164,20 +161,20 @@ function testEnable() {
   classlist.set(el, 'SOMECLASS FIRST');
 
   assertTrue('Should have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
 
   classlist.enable(el, 'FIRST', false);
 
   assertFalse('Should not have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
 
   classlist.enable(el, 'FIRST', true);
 
   assertTrue('Should have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
 }
 
 function testEnableNotAddingMultiples() {
@@ -240,21 +237,21 @@ function testToggle() {
   classlist.set(el, 'SOMECLASS FIRST');
 
   assertTrue('Should have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
 
   var ret = classlist.toggle(el, 'FIRST');
 
   assertFalse('Should not have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
   assertFalse('Return value should have been false', ret);
 
   ret = classlist.toggle(el, 'FIRST');
 
   assertTrue('Should have FIRST class', classlist.contains(el, 'FIRST'));
-  assertTrue('Should have SOMECLASS class',
-      classlist.contains(el, 'SOMECLASS'));
+  assertTrue(
+      'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
   assertTrue('Return value should have been true', ret);
 }
 

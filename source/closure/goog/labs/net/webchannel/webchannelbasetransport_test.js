@@ -46,8 +46,7 @@ function shouldRunTests() {
 }
 
 
-function setUp() {
-}
+function setUp() {}
 
 
 function tearDown() {
@@ -60,7 +59,8 @@ function tearDown() {
  * Stubs goog.labs.net.webChannel.ChannelRequest.
  */
 function stubChannelRequest() {
-  stubs.set(goog.labs.net.webChannel.ChannelRequest, 'supportsXhrStreaming',
+  stubs.set(
+      goog.labs.net.webChannel.ChannelRequest, 'supportsXhrStreaming',
       goog.functions.FALSE);
 }
 
@@ -81,10 +81,9 @@ function testOpenWithUrl() {
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
   var eventFired = false;
-  goog.events.listen(webChannel, goog.net.WebChannel.EventType.OPEN,
-      function(e) {
-        eventFired = true;
-      });
+  goog.events.listen(
+      webChannel, goog.net.WebChannel.EventType.OPEN,
+      function(e) { eventFired = true; });
 
   webChannel.open();
   assertFalse(eventFired);
@@ -181,10 +180,9 @@ function testOpenWithCorsEnabled() {
 
 function testSendRawJson() {
   var channelMsg;
-  stubs.set(goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
-      function(message) {
-        channelMsg = message;
-      });
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
+      function(message) { channelMsg = message; });
 
   var webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
@@ -204,10 +202,9 @@ function testOpenThenCloseChannel() {
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
   var eventFired = false;
-  goog.events.listen(webChannel, goog.net.WebChannel.EventType.CLOSE,
-      function(e) {
-        eventFired = true;
-      });
+  goog.events.listen(
+      webChannel, goog.net.WebChannel.EventType.CLOSE,
+      function(e) { eventFired = true; });
 
   webChannel.open();
   assertFalse(eventFired);
@@ -226,8 +223,8 @@ function testChannelError() {
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
   var eventFired = false;
-  goog.events.listen(webChannel, goog.net.WebChannel.EventType.ERROR,
-      function(e) {
+  goog.events.listen(
+      webChannel, goog.net.WebChannel.EventType.ERROR, function(e) {
         eventFired = true;
         assertEquals(goog.net.WebChannel.ErrorStatus.NETWORK_ERROR, e.status);
       });
@@ -250,8 +247,8 @@ function testChannelMessage() {
 
   var eventFired = false;
   var data = 'foo';
-  goog.events.listen(webChannel, goog.net.WebChannel.EventType.MESSAGE,
-      function(e) {
+  goog.events.listen(
+      webChannel, goog.net.WebChannel.EventType.MESSAGE, function(e) {
         eventFired = true;
         assertEquals(e.data, data);
       });

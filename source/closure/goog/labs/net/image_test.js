@@ -30,7 +30,7 @@ goog.setTestOnly('goog.labs.net.imageTest');
 
 
 function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000; // 10s
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
 }
 
 function testValidImage() {
@@ -43,20 +43,16 @@ function testValidImage() {
 }
 
 function testInvalidImage() {
-  var url = 'testdata/invalid.gif'; // This file does not exist.
+  var url = 'testdata/invalid.gif';  // This file does not exist.
 
-  return goog.labs.net.image.load(url).then(function() {
-    fail('Invalid image should not resolve');
-  }, function(errResult) {
-    assertNull(errResult);
-  });
+  return goog.labs.net.image.load(url).then(
+      function() { fail('Invalid image should not resolve'); },
+      function(errResult) { assertNull(errResult); });
 }
 
 function testImageFactory() {
   var returnedImage = new Image();
-  var factory = function() {
-    return returnedImage;
-  };
+  var factory = function() { return returnedImage; };
   var countedFactory = goog.testing.recordFunction(factory);
 
   var url = 'testdata/cleardot.gif';

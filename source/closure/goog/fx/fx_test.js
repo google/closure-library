@@ -65,22 +65,27 @@ function testAnimationConstructor() {
 function testPlayAndStopDoesNotLeaveAnyActiveAnimations() {
   anim = new Animation([0], [1], 1000);
 
-  assertTrue('There should be no active animations',
-             goog.object.isEmpty(goog.fx.anim.activeAnimations_));
+  assertTrue(
+      'There should be no active animations',
+      goog.object.isEmpty(goog.fx.anim.activeAnimations_));
 
   anim.play();
-  assertEquals('There should be one active animations',
-               1, goog.object.getCount(goog.fx.anim.activeAnimations_));
+  assertEquals(
+      'There should be one active animations', 1,
+      goog.object.getCount(goog.fx.anim.activeAnimations_));
 
   anim.stop();
-  assertTrue('There should be no active animations',
-             goog.object.isEmpty(goog.fx.anim.activeAnimations_));
+  assertTrue(
+      'There should be no active animations',
+      goog.object.isEmpty(goog.fx.anim.activeAnimations_));
 
   anim.play();
-  assertEquals('There should be one active animations',
-               1, goog.object.getCount(goog.fx.anim.activeAnimations_));
+  assertEquals(
+      'There should be one active animations', 1,
+      goog.object.getCount(goog.fx.anim.activeAnimations_));
 
   anim.pause();
-  assertTrue('There should be no active animations',
-             goog.object.isEmpty(goog.fx.anim.activeAnimations_));
+  assertTrue(
+      'There should be no active animations',
+      goog.object.isEmpty(goog.fx.anim.activeAnimations_));
 }
