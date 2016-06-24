@@ -134,9 +134,3 @@ To compile your application:
 Refer to [Getting Started with the Closure Compiler Application](https://developers.google.com/closure/compiler/docs/gettingstarted_app#the-hello-world-of the-closure-compiler-application)
 for more information on the Closure Compiler.
 
-
-## Next Steps
-
-Continue on with [Create a Deps File](deps-files.md) to learn about Closure
-Library namespaces, dependency management, and dependency files.
-
