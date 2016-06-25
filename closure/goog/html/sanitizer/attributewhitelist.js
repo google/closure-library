@@ -25,6 +25,14 @@ goog.provide('goog.html.sanitizer.AttributeWhitelist');
  * @const @dict {boolean}
  */
 goog.html.sanitizer.AttributeWhitelist = {
+  '* ARIA-CHECKED': true,
+  '* ARIA-DESCRIBEDBY': true,
+  '* ARIA-DISABLED': true,
+  '* ARIA-LABEL': true,
+  '* ARIA-LABELLEDBY': true,
+  '* ARIA-READONLY': true,
+  '* ARIA-REQUIRED': true,
+  '* ARIA-SELECTED': true,
   '* ABBR': true,
   '* ACCEPT': true,
   '* ACCESSKEY': true,
