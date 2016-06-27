@@ -348,6 +348,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
  * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  * @deprecated Use {@link goog.dom.getElementsByTagNameAndClass} instead.
+ * @template T
  */
 goog.dom.$$ = goog.dom.getElementsByTagNameAndClass;
 
