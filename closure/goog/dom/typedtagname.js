@@ -38,6 +38,15 @@ goog.dom.TypedTagName.prototype.toString = function() {
 };
 
 
+// Closure Compiler unconditionally converts the following constants to their
+// string value (goog.dom.TypedTagName.A -> 'A'). These are the consequences:
+// 1. Don't add any members or static members to goog.dom.TypedTagName as they
+//    couldn't be accessed after this optimization.
+// 2. Keep the constant name and its string value the same:
+//    goog.dom.TypedTagName.X = new goog.dom.TypedTagName('Y');
+//    is converted to 'X', not 'Y'.
+
+
 /** @type {!goog.dom.TypedTagName<!HTMLAnchorElement>} */
 goog.dom.TypedTagName.A = new goog.dom.TypedTagName('A');
 
