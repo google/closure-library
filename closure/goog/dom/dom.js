@@ -192,11 +192,12 @@ goog.dom.$ = goog.dom.getElement;
  *
  * @see {goog.dom.query}
  *
- * @param {?string=} opt_tag Element tag name.
+ * @param {(?string|!goog.dom.TypedTagName<T>)=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
+ * @template T
  */
 goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
   return goog.dom.getElementsByTagNameAndClass_(
@@ -276,11 +277,12 @@ goog.dom.canUseQuerySelector_ = function(parent) {
 /**
  * Helper for {@code getElementsByTagNameAndClass}.
  * @param {!Document} doc The document to get the elements in.
- * @param {?string=} opt_tag Element tag name.
+ * @param {(?string|!goog.dom.TypedTagName<T>)=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
+ * @template T
  * @private
  */
 goog.dom.getElementsByTagNameAndClass_ = function(
@@ -340,7 +342,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
 
 /**
  * Alias for {@code getElementsByTagNameAndClass}.
- * @param {?string=} opt_tag Element tag name.
+ * @param {(?string|!goog.dom.TypedTagName<T>)=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
  * @param {Element=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
@@ -2318,11 +2320,13 @@ goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
  *
  * @see goog.dom.query
  *
- * @param {?string=} opt_tag Element tag name or * for all tags.
+ * @param {(?string|!goog.dom.TypedTagName<T>)=} opt_tag Element tag name or *
+ *     for all tags.
  * @param {?string=} opt_class Optional class name.
  * @param {(Document|Element)=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
+ * @template T
  */
 goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
     opt_tag, opt_class, opt_el) {
