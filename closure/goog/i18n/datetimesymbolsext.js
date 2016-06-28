@@ -12863,8 +12863,6 @@ goog.i18n.DateTimeSymbols_zu_ZA = goog.i18n.DateTimeSymbols_zu;
 /**
  * Selected date/time formatting symbols by locale.
  */
-goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
-
 if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_af_NA;
 }

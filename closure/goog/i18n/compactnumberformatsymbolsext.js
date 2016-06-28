@@ -11755,8 +11755,6 @@ goog.i18n.CompactNumberFormatSymbols_zu_ZA = goog.i18n.CompactNumberFormatSymbol
 /**
  * Select compact number formatting symbols by locale.
  */
-goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_en;
-
 if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_af_NA;
 }

@@ -11528,8 +11528,6 @@ goog.i18n.NumberFormatSymbols_zu_ZA = goog.i18n.NumberFormatSymbols_zu;
 /**
  * Selected number formatting symbols by locale.
  */
-goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
-
 if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_af_NA;
 }

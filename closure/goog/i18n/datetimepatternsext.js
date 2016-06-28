@@ -7411,8 +7411,6 @@ goog.i18n.DateTimePatterns_zu_ZA = goog.i18n.DateTimePatterns_zu;
 /**
  * Select date/time pattern by locale.
  */
-goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
-
 if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_af_NA;
 }
