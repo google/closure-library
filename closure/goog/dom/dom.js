@@ -354,7 +354,25 @@ goog.dom.$$ = goog.dom.getElementsByTagNameAndClass;
 
 
 /**
- * Sets multiple properties on a node.
+ * Sets multiple properties, and sometimes attributes, on an element. Note that
+ * properties are simply object properties on the element instance, while
+ * attributes are visible in the DOM. Many properties map to attributes with the
+ * same names, some with different names, and there are also unmappable cases.
+ *
+ * This method sets properties by default (which means that custom attributes
+ * are not supported). These are the exeptions (some of which is legacy):
+ * - "style": Even though this is an attribute name, it is translated to a
+ *   property, "style.cssText". Note that this property sanitizes and formats
+ *   its value, unlike the attribute.
+ * - "class": This is an attribute name, it is translated to the "className"
+ *   property.
+ * - "for": This is an attribute name, it is translated to the "htmlFor"
+ *   property.
+ * - Entries in {@see goog.dom.DIRECT_ATTRIBUTE_MAP_} are set as attributes,
+ *   this is probably due to browser quirks.
+ * - "aria-*", "data-*": Always set as attributes, they have no property
+ *   counterparts.
+ *
  * @param {Element} element DOM node to set properties on.
  * @param {Object} properties Hash of property:value pairs.
  */
@@ -695,9 +713,12 @@ goog.dom.getWindow_ = function(doc) {
  * <code>createDom('div', null, createDom('p'), createDom('p'));</code>
  * would return a div with two child paragraphs
  *
+ * For passing properties, please see {@link goog.dom.setProperties} for more
+ * information.
+ *
  * @param {string|!goog.dom.TypedTagName<T>} tagName Tag to create.
- * @param {(Object|Array<string>|string)=} opt_attributes If object, then a map
- *     of name-value pairs for attributes. If a string, then this is the
+ * @param {(Object|Array<string>|string)=} opt_properties If object, then a map
+ *     of name-value pairs for properties. If a string, then this is the
  *     className of the new element. If an array, the elements will be joined
  *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
@@ -706,7 +727,7 @@ goog.dom.getWindow_ = function(doc) {
  * @return {!Element} Reference to a DOM node.
  * @template T
  */
-goog.dom.createDom = function(tagName, opt_attributes, var_args) {
+goog.dom.createDom = function(tagName, opt_properties, var_args) {
   return goog.dom.createDom_(document, arguments);
 };
 
@@ -828,8 +849,8 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
 /**
  * Alias for {@code createDom}.
  * @param {string|!goog.dom.TypedTagName<T>} tagName Tag to create.
- * @param {(string|Object)=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
+ * @param {(string|Object)=} opt_properties If object, then a map of name-value
+ *     pairs for properties. If a string, then this is the className of the new
  *     element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array, its
