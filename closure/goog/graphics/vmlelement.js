@@ -114,10 +114,11 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
   style.height = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizePx(height);
 
-  element.coordsize = /** @suppress {missingRequire} */
-      goog.graphics.VmlGraphics.toSizeCoord(width) + ' ' +
-      /** @suppress {missingRequire} */
+  var coordWith = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizeCoord(width);
+  var coordHeight = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizeCoord(height);
+  element.coordsize = coordWith + ' ' + coordHeight;
 
   // Don't overwrite the root element's origin.
   if (!this.isRootElement_()) {
@@ -272,10 +273,9 @@ goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
  */
 goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
-  style.width = /** @suppress {missingRequire} */
-      goog.graphics.VmlGraphics.toSizePx(width);
-  style.height = /** @suppress {missingRequire} */
-      goog.graphics.VmlGraphics.toSizePx(height);
+  /** @suppress {missingRequire} */
+  style.width = goog.graphics.VmlGraphics.toSizePx(width);
+  style.height = goog.graphics.VmlGraphics.toSizePx(height);
 };
 
 
