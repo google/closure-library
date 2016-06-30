@@ -5,7 +5,7 @@
 <!DOCTYPE html><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="Content-Language" content="en"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><title>goog.iter</title><link href="dossier.css" rel="stylesheet" type="text/css"><header><button class="dossier-menu"><i class="material-icons">menu</i></button><form><input type="search" placeholder="Search" tabindex="1"><i class="material-icons">search</i></form></header><div class="content"><main><article><section class="intro"><div class="header"><div class="codelink"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L21" target="_blank">View Source</a></div><h1 class="title"><div>namespace goog.iter</div></h1></div><div class="body"><p>No description available.</p></div></section><section class="static-functions"><h2>Functions</h2><section class="property expandable" id="accumulate"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/iter/iter.js#L760" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>accumulate(<var>iterable</var>)</div></h3></div><div class="body"><p>Creates an iterator that returns running totals from the numbers in
 <code>iterable</code>. For example, the array <code>[1, 2, 3, 4, 5]</code> yields
 <code>1 -&gt; 3 -&gt; 6 -&gt; 10 -&gt; 15</code>.</p>
-<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>The iterable of numbers to
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a></code><dd><p>The iterable of numbers to
 accumulate.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.iter.Iterator.html">goog.iter.Iterator</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;</code><dd><p>A new iterator that returns the
 numbers in the series.</p>
@@ -289,7 +289,7 @@ object.</p>
 <code>iterable</code> (the elements are expected to also be iterables).</p>
 <p>Similar to goog.iter#map but allows the function to accept multiple
 arguments from the iterable.</p>
-<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&lt;!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a>&gt;</code><dd><p>The iterable of
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>iterable</var><code>!<a href="goog.iter.html#goog.iter.Iterable">goog.iter.Iterable</a></code><dd><p>The iterable of
 iterables to iterate over.</p>
 <dt class="type name"><var>f</var><code>function(this: THIS, ...*): RESULT</code><dd><p>The function to call for every
 element.  This function takes N&#43;2 arguments, where N represents the

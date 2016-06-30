@@ -219,6 +219,9 @@ goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
 
 /**
  * Sets number of significant digits to show. Only fractions will be rounded.
+ * Regardless of the number of significant digits set, the number of fractional
+ * digits shown will always be capped by the maximum number of fractional digits
+ * set on {@link #setMaximumFractionDigits}.
  * @param {number} number The number of significant digits to include.
  * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
