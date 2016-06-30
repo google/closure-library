@@ -35,6 +35,7 @@
 goog.provide('goog.ds.Expr');
 
 goog.require('goog.ds.BasicNodeList');
+goog.require('goog.ds.DataManager');
 goog.require('goog.ds.EmptyNodeList');
 goog.require('goog.string');
 

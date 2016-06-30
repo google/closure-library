@@ -34,6 +34,7 @@ goog.require('goog.graphics.ImageElement');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
+goog.require('goog.graphics.VmlGraphics');
 
 
 /**
