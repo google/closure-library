@@ -161,20 +161,17 @@ goog.graphics.VmlEllipseElement = function(
    */
   this.cx = cx;
 
-
   /**
    * Y coordinate of the ellipse center.
    * @type {number}
    */
   this.cy = cy;
 
-
   /**
    * Radius length for the x-axis.
    * @type {number}
    */
   this.rx = rx;
-
 
   /**
    * Radius length for the y-axis.
@@ -274,6 +271,7 @@ goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
  */
 goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
+
   style.width = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizePx(width);
   style.height = /** @suppress {missingRequire} */
@@ -420,6 +418,7 @@ goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
  */
 goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
+
   style.width = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toPosPx(width);
   style.height = /** @suppress {missingRequire} */
