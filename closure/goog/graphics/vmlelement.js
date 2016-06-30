@@ -115,6 +115,7 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
 
   element.coordsize = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizeCoord(width) + ' ' +
+      /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizeCoord(height);
 
   // Don't overwrite the root element's origin.
