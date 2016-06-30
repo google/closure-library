@@ -1268,6 +1268,7 @@ goog.ui.tree.BaseNode.prototype.updateIcon_ = function() {
   }
 };
 
+
 /**
  * Handles mouse down event.
  * @param {!goog.events.BrowserEvent} e The browser event.
@@ -1385,7 +1386,6 @@ goog.ui.tree.BaseNode.prototype.onKeyDown = function(e) {
 
   return handled;
 };
-
 
 
 /**
