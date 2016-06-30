@@ -575,8 +575,6 @@ var _allTests = [
   'closure/goog/vec/mat4d_test.html',
   'closure/goog/vec/mat4f_test.html',
   'closure/goog/vec/mat4_test.html',
-  'closure/goog/vec/matrix3_test.html',
-  'closure/goog/vec/matrix4_test.html',
   'closure/goog/vec/quaternion_test.html',
   'closure/goog/vec/ray_test.html',
   'closure/goog/vec/vec2d_test.html',

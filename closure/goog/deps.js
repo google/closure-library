@@ -1492,8 +1492,6 @@ goog.addDependency('vec/mat3f.js', ['goog.vec.mat3f', 'goog.vec.mat3f.Type'], ['
 goog.addDependency('vec/mat4.js', ['goog.vec.Mat4'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4'], {});
 goog.addDependency('vec/mat4d.js', ['goog.vec.mat4d', 'goog.vec.mat4d.Type'], ['goog.vec', 'goog.vec.Quaternion', 'goog.vec.vec3d', 'goog.vec.vec4d'], {});
 goog.addDependency('vec/mat4f.js', ['goog.vec.mat4f', 'goog.vec.mat4f.Type'], ['goog.vec', 'goog.vec.Quaternion', 'goog.vec.vec3f', 'goog.vec.vec4f'], {});
-goog.addDependency('vec/matrix3.js', ['goog.vec.Matrix3'], [], {});
-goog.addDependency('vec/matrix4.js', ['goog.vec.Matrix4'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4'], {});
 goog.addDependency('vec/quaternion.js', ['goog.vec.Quaternion', 'goog.vec.Quaternion.AnyType'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4'], {});
 goog.addDependency('vec/ray.js', ['goog.vec.Ray'], ['goog.vec.Vec3'], {});
 goog.addDependency('vec/vec.js', ['goog.vec', 'goog.vec.AnyType', 'goog.vec.ArrayType', 'goog.vec.Float32', 'goog.vec.Float64', 'goog.vec.Number'], ['goog.vec.Float32Array', 'goog.vec.Float64Array'], {});
