@@ -35,7 +35,6 @@
 goog.provide('goog.ds.Expr');
 
 goog.require('goog.ds.BasicNodeList');
-goog.require('goog.ds.DataManager');
 goog.require('goog.ds.EmptyNodeList');
 goog.require('goog.string');
 
@@ -191,13 +190,13 @@ goog.ds.Expr.prototype.getNext = function() {
  * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
  * @return {*} Value of the node, or null if doesn't exist.
- * @suppress {missingRequire} Cannot depend on goog.ds.DataManager because
- *     it creates a circular dependency.
  */
 goog.ds.Expr.prototype.getValue = function(opt_ds) {
   if (opt_ds == null) {
+    /** @suppress {missingRequire} */
     opt_ds = goog.ds.DataManager.getInstance();
   } else if (this.isAbsolute_) {
+    /** @suppress {missingRequire} */
     opt_ds = opt_ds.getDataRoot ? opt_ds.getDataRoot() :
                                   goog.ds.DataManager.getInstance();
   }
@@ -265,14 +264,14 @@ goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
  * @return {goog.ds.DataNode|goog.ds.DataNodeList} Matching node or nodes,
  *     depending on value of opt_selectOne.
  * @private
- * @suppress {missingRequire} Cannot depend on goog.ds.DataManager because
- *     it creates a circular dependency.
  */
 goog.ds.Expr.prototype.getNodes_ = function(
     opt_ds, opt_selectOne, opt_canCreate) {
   if (opt_ds == null) {
+    /** @suppress {missingRequire} */
     opt_ds = goog.ds.DataManager.getInstance();
   } else if (this.isAbsolute_) {
+    /** @suppress {missingRequire} */
     opt_ds = opt_ds.getDataRoot ? opt_ds.getDataRoot() :
                                   goog.ds.DataManager.getInstance();
   }

@@ -34,7 +34,6 @@ goog.require('goog.graphics.ImageElement');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
-goog.require('goog.graphics.VmlGraphics');
 
 
 /**
@@ -104,16 +103,18 @@ goog.graphics.VmlGroupElement.prototype.isRootElement_ = function() {
  * @param {number|string} width The width of the group element.
  * @param {number|string} height The height of the group element.
  * @override
- * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
   var element = this.getElement();
 
   var style = element.style;
-  style.width = goog.graphics.VmlGraphics.toSizePx(width);
-  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+  style.width = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(width);
+  style.height = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(height);
 
-  element.coordsize = goog.graphics.VmlGraphics.toSizeCoord(width) + ' ' +
+  element.coordsize = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizeCoord(width) + ' ' +
       goog.graphics.VmlGraphics.toSizeCoord(height);
 
   // Don't overwrite the root element's origin.
@@ -269,12 +270,13 @@ goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
  * @param {number} width Width of rectangle.
  * @param {number} height Height of rectangle.
  * @override
- * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
-  style.width = goog.graphics.VmlGraphics.toSizePx(width);
-  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+  style.width = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(width);
+  style.height = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(height);
 };
 
 
@@ -414,12 +416,13 @@ goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
  * @param {number} width Width of rectangle.
  * @param {number} height Height of rectangle.
  * @override
- * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
-  style.width = goog.graphics.VmlGraphics.toPosPx(width);
-  style.height = goog.graphics.VmlGraphics.toPosPx(height);
+  style.width = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toPosPx(width);
+  style.height = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toPosPx(height);
 };
 
 

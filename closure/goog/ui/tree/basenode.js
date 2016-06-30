@@ -1294,7 +1294,6 @@ goog.ui.tree.BaseNode.prototype.onMouseDown = function(e) {
  * Handles a click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @protected
- * @private
  */
 goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
 
