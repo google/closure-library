@@ -26,6 +26,7 @@ goog.provide('goog.fx.AbstractDragDrop.EventType');
 goog.provide('goog.fx.DragDropEvent');
 goog.provide('goog.fx.DragDropItem');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
@@ -256,6 +257,20 @@ goog.fx.AbstractDragDrop.prototype.addTarget = function(target) {
   this.targets_.push(target);
   target.isTarget_ = true;
   this.isSource_ = true;
+};
+
+
+/**
+ * Removes the specified target from the list of drop targets.
+ *
+ * @param {!goog.fx.AbstractDragDrop} target Target to remove.
+ */
+goog.fx.AbstractDragDrop.prototype.removeTarget = function(target) {
+  goog.array.remove(this.targets_, target);
+  if (this.activeTarget_ && this.activeTarget_.target_ == target) {
+    this.activeTarget_ = null;
+  }
+  this.recalculateDragTargets();
 };
 
 
