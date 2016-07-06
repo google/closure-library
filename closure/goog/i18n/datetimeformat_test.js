@@ -732,6 +732,20 @@ function testConstructorSymbols() {
   assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
 }
 
+function testQuotedPattern() {
+  // Regression test for b/29990921.
+  date = new Date(2013, 10, 15);
+
+  var fmt =
+      new goog.i18n.DateTimeFormat('MMM \'\'yy', goog.i18n.DateTimeSymbols_en);
+  assertEquals('Nov \'13', fmt.format(date));
+
+  assertThrows('Malformed pattern part: \'yy', function() {
+    var fmt2 =
+        new goog.i18n.DateTimeFormat('MMM \'yy', goog.i18n.DateTimeSymbols_en);
+  });
+}
+
 function testSupportForWeekInYear() {
   var date = new Date(2013, 1, 25);
 
