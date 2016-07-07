@@ -17,6 +17,7 @@
 goog.setTestOnly();
 
 goog.require('goog.array');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.string');
@@ -89,8 +90,9 @@ function assertCSSTextEquals(expectedCssText, actualCssText) {
  */
 function getSanitizedInlineStyle(sourceCss, opt_urlRewrite) {
   try {
-    return goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
-               getStyleFromCssText(sourceCss), opt_urlRewrite) ||
+    return goog.html.SafeStyle.unwrap(
+               goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
+                   getStyleFromCssText(sourceCss), opt_urlRewrite)) ||
         '';
   } catch (err) {
     // IE8 doesn't like setting invalid properties. It throws an "Invalid
