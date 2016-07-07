@@ -621,11 +621,9 @@ goog.style.getContainerOffsetToScrollInto = function(
   // How much the element can move in the container, i.e. the difference between
   // the element's bottom-right-most and top-left-most position where it's
   // fully visible.
-  var spaceX = container.clientWidth -
-      /** @type {HTMLElement} */ (element).offsetWidth;
-  var spaceY = container.clientHeight -
-      /** @type {HTMLElement} */ (element).offsetHeight;
-
+  var elementSize = goog.style.getSizeWithDisplay_(element);
+  var spaceX = container.clientWidth - elementSize.width;
+  var spaceY = container.clientHeight - elementSize.height;
   var scrollLeft = container.scrollLeft;
   var scrollTop = container.scrollTop;
   if (opt_center) {
