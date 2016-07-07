@@ -23,8 +23,6 @@
 goog.provide('goog.html.sanitizer.CssSanitizer');
 
 goog.require('goog.array');
-goog.require('goog.html.SafeStyle');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
 
@@ -209,12 +207,13 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
  * @param {?CSSStyleDeclaration} cssStyle A CSS style object.
  * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
  *    returns an unwrapped goog.html.SafeUrl.
- * @return {!goog.html.SafeStyle} A sanitized inline cssText.
+ * @return {?string} A sanitized inline cssText.
+ * @package
  */
 goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
     cssStyle, opt_uriRewriter) {
   if (!cssStyle) {
-    return goog.html.SafeStyle.EMPTY;
+    return null;
   }
 
   var cleanCssStyle = document.createElement('div').style;
@@ -234,10 +233,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
           cleanCssStyle, propName, sanitizedValue);
     }
   }
-  return goog.html.uncheckedconversions
-      .safeStyleFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Output of CSS sanitizer'),
-          cleanCssStyle.cssText || '');
+  return cleanCssStyle.cssText || null;
 };
 
 
