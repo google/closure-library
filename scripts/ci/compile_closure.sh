@@ -2,10 +2,14 @@
 #
 # Compiles pertinent Closure library files.
 
+# TODO(joeltine): Make strictMissingRequire an error when 
+# @suppress {missingRequire} works for it.
+
 java -Xmx1G -jar ../closure-compiler/build/compiler.jar \
   -O ADVANCED \
   --warning_level VERBOSE \
   --jscomp_error='*' \
+  --jscomp_error=strictMissingRequire \
   --jscomp_off=inferredConstCheck \
   --jscomp_off=extraRequire \
   --jscomp_off=unnecessaryCasts \
