@@ -40,6 +40,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.functions');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.AttributeWhitelist');
 goog.require('goog.html.sanitizer.CssSanitizer');
@@ -527,8 +528,10 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_ = function(
         policyHints.cssProperty = prop;
         return policySanitizeUrl(uri, policyHints);
       });
-  return goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
-      policyContext.cssStyle, naiveUriRewriter);
+  var sanitizedStyle = goog.html.SafeStyle.unwrap(
+      goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
+          policyContext.cssStyle, naiveUriRewriter));
+  return sanitizedStyle == '' ? null : sanitizedStyle;
 };
 
 
