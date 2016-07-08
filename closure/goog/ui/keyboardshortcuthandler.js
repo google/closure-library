@@ -22,6 +22,7 @@
 goog.provide('goog.ui.KeyboardShortcutEvent');
 goog.provide('goog.ui.KeyboardShortcutHandler');
 goog.provide('goog.ui.KeyboardShortcutHandler.EventType');
+goog.provide('goog.ui.KeyboardShortcutHandler.Modifiers');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
