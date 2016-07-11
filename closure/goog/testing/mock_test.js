@@ -248,3 +248,50 @@ function testBindNonEnumerableFunctions() {
   assertEquals('valueOf', mock.valueOf());
   mockControl.$verifyAll();
 }
+
+function testMockInheritedMethods() {
+  var SubType = function() {};
+  goog.inherits(SubType, RealObject);
+  SubType.prototype.c = function() {
+    fail('real object should never be called');
+  };
+
+  var mockControl = new goog.testing.MockControl();
+  var mock = mockControl.createLooseMock(SubType);
+  mock.a().$returns('a');
+  mock.b().$returns('b');
+  mock.c().$returns('c');
+
+  // Execute and assert that the Mock is working correctly.
+  mockControl.$replayAll();
+  assertEquals('a', mock.a());
+  assertEquals('b', mock.b());
+  assertEquals('c', mock.c());
+  mockControl.$verifyAll();
+}
+
+function testMockEs6ClassMethods() {
+  // Create an ES6 class via eval so we can bail out if it's a syntax error in
+  // browsers that don't support ES6 classes.
+  try {
+    eval(
+        'var Foo = class {' +
+        '  a() {' +
+        '    fail(\'real object should never be called\');' +
+        '  }' +
+        '}');
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      return;
+    }
+  }
+
+  var mockControl = new goog.testing.MockControl();
+  var mock = mockControl.createLooseMock(Foo);
+  mock.a().$returns('a');
+
+  // Execute and assert that the Mock is working correctly.
+  mockControl.$replayAll();
+  assertEquals('a', mock.a());
+  mockControl.$verifyAll();
+}
