@@ -69,6 +69,7 @@ function testEmptyStreamMore() {
 
   parser = new goog.net.streams.JsonStreamParser();
   assertThrows(function() { parser.parse(' a [   '); });
+  assertThrows(function() { parser.parse(' [ ] '); });
 
   parser = new goog.net.streams.JsonStreamParser();
   parser.parse(' [   ');

@@ -528,9 +528,10 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_ = function(
         policyHints.cssProperty = prop;
         return policySanitizeUrl(uri, policyHints);
       });
-  return goog.html.SafeStyle.unwrap(
+  var sanitizedStyle = goog.html.SafeStyle.unwrap(
       goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
           policyContext.cssStyle, naiveUriRewriter));
+  return sanitizedStyle == '' ? null : sanitizedStyle;
 };
 
 

@@ -540,7 +540,33 @@ function testDefaultValueNumbersOrStrings() {
       '1000000000000000001', message.getOptionalInt64StringOrDefault());
 }
 
-function testBooleanAsNumberFalse() {
+function testSerializationBooleanAsNumberFalse() {
+  // Some libraries, such as GWT, can expect boolean field values as 0/1
+
+  var message = new proto2.TestAllTypes();
+  message.setOptionalBool(false);
+
+  var serializer = new goog.proto2.ObjectSerializer(
+      goog.proto2.ObjectSerializer.KeyOption.TAG,
+      true /* opt_serializeBooleanAsNumber */);
+  var simplified = serializer.serialize(message);
+
+  assertEquals(0, simplified[13]);
+}
+
+function testSerializationBooleanAsNumberTrue() {
+  var message = new proto2.TestAllTypes();
+  message.setOptionalBool(true);
+
+  var serializer = new goog.proto2.ObjectSerializer(
+      goog.proto2.ObjectSerializer.KeyOption.TAG,
+      true /* opt_serializeBooleanAsNumber */);
+  var simplified = serializer.serialize(message);
+
+  assertEquals(1, simplified[13]);
+}
+
+function testDeserializationBooleanAsNumberFalse() {
   // Some libraries, such as GWT, can serialize boolean values as 0/1
 
   var simplified = {13: 0};
@@ -555,7 +581,7 @@ function testBooleanAsNumberFalse() {
   assertFalse(message.getOptionalBool());
 }
 
-function testBooleanAsNumberTrue() {
+function testDeserializationBooleanAsNumberTrue() {
   var simplified = {13: 1};
 
   var serializer = new goog.proto2.ObjectSerializer();

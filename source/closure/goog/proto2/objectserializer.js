@@ -33,11 +33,15 @@ goog.require('goog.string');
  *
  * @param {goog.proto2.ObjectSerializer.KeyOption=} opt_keyOption If specified,
  *     which key option to use when serializing/deserializing.
+ * @param {boolean=} opt_serializeBooleanAsNumber If specified and true, the
+ *     serializer will convert boolean values to 0/1 representation.
  * @constructor
  * @extends {goog.proto2.Serializer}
  */
-goog.proto2.ObjectSerializer = function(opt_keyOption) {
+goog.proto2.ObjectSerializer = function(
+    opt_keyOption, opt_serializeBooleanAsNumber) {
   this.keyOption_ = opt_keyOption;
+  this.serializeBooleanAsNumber_ = opt_serializeBooleanAsNumber;
 };
 goog.inherits(goog.proto2.ObjectSerializer, goog.proto2.Serializer);
 
@@ -103,6 +107,23 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   message.forEachUnknown(function(tag, value) { objectValue[tag] = value; });
 
   return objectValue;
+};
+
+
+/** @override */
+goog.proto2.ObjectSerializer.prototype.getSerializedValue = function(
+    field, value) {
+
+  // Handle the case where a boolean should be serialized as 0/1.
+  // Some deserialization libraries, such as GWT, can use this notation.
+  if (this.serializeBooleanAsNumber_ &&
+      field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL &&
+      goog.isBoolean(value)) {
+    return value ? 1 : 0;
+  }
+
+  return goog.proto2.ObjectSerializer.base(
+      this, 'getSerializedValue', field, value);
 };
 
 
