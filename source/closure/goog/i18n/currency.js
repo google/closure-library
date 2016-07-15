@@ -310,7 +310,7 @@ goog.i18n.currency.CurrencyInfo = {
   'NOK': [50, 'kr', 'NOkr'],
   'PAB': [2, 'B/.', 'B/.'],
   'PEN': [2, 'S/.', 'S/.'],
-  'PHP': [2, '\u20B1', 'Php'],
+  'PHP': [2, '\u20B1', 'PHP'],
   'PKR': [0, 'Rs', 'PKRs.'],
   'PLN': [50, 'z\u0142', 'z\u0142'],
   'RON': [2, 'RON', 'RON'],
