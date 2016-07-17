@@ -12,10 +12,10 @@ For more information, visit the
 Download the latest stable version on our [releases page](https://github.com/google/closure-library/releases).
 
 Developers, please see the
-[Generated API Documentation](http://google.github.io/closure-library/api/).
+[Generated API Documentation](https://google.github.io/closure-library/api/).
 
 See also the
-[goog.ui Demos](http://google.github.io/closure-library/source/closure/goog/demos/)
+[goog.ui Demos](https://google.github.io/closure-library/source/closure/goog/demos/)
 
 ## Using with Node.js
 Install the [official package](https://www.npmjs.com/package/google-closure-library) from npm.
