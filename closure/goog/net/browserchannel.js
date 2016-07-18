@@ -814,14 +814,6 @@ goog.net.BrowserChannel.Stat = {
 
 
 /**
- * The normal response for forward channel requests.
- * Used only before version 8 of the protocol.
- * @type {string}
- */
-goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE = 'y2f%';
-
-
-/**
  * A guess at a cutoff at which to no longer assume the backchannel is dead
  * when we are slow to receive data. Number in bytes.
  *
@@ -1803,7 +1795,7 @@ goog.net.BrowserChannel.prototype.onRequestData = function(
         this.channelDebug_.debug('Bad POST response data returned');
         this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
       }
-    } else if (responseText != goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
+    } else if (responseText != goog.net.ChannelDebug.MAGIC_RESPONSE_COOKIE) {
       this.channelDebug_.debug(
           'Bad data returned - missing/invald ' +
           'magic cookie');
