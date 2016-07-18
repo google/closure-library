@@ -1215,6 +1215,8 @@ goog.ui.Container.prototype.getHighlightedIndex = function() {
  *     highlight).
  */
 goog.ui.Container.prototype.setHighlightedIndex = function(index) {
+  this.highlightedIndex_ = index;
+
   var child = this.getChildAt(index);
   if (child) {
     child.setHighlighted(true);
