@@ -35,7 +35,8 @@ function setUp() {
   // as well as the part of the environment that is being tested as part
   // of the test.  Bail if the test is already running.
   if (testing) {
-    return;
+    // This value is used by the testSetupReturnsValue test below
+    return 'hello';
   }
 
   // Temporarily override the initializeTestRunner method to avoid installing
@@ -153,7 +154,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(7, testCase.tests_.length);
+  assertEquals(8, testCase.tests_.length);
 
   testing = false;
 }
@@ -197,6 +198,18 @@ function testTestSuiteTests() {
   testing = false;
 }
 
+function testSetupReturnsValue() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment();
+
+  // Expect the environment to pass on any value returned by the user defined
+  // setUp method.
+  assertEquals('hello', testCase.setUp());
+
+  testCase.tearDown();
+  testing = false;
+}
 
 function testMockClock() {
   testing = true;

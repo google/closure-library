@@ -317,7 +317,7 @@ goog.ui.ProgressBar.prototype.updateUi_ = function() {
       // using percentages or bottom. We therefore first set the height to
       // 100% and measure that and base the top and height on that size instead.
       if (goog.userAgent.IE && goog.userAgent.VERSION < 7) {
-        this.thumbElement_.style.top = 0;
+        this.thumbElement_.style.top = '0';
         this.thumbElement_.style.height = '100%';
         var h = this.thumbElement_.offsetHeight;
         var bottom = Math.round(ratio * h);
@@ -342,10 +342,10 @@ goog.ui.ProgressBar.prototype.updateUi_ = function() {
 goog.ui.ProgressBar.prototype.initializeUi_ = function() {
   var tStyle = this.thumbElement_.style;
   if (this.orientation_ == goog.ui.ProgressBar.Orientation.VERTICAL) {
-    tStyle.left = 0;
+    tStyle.left = '0';
     tStyle.width = '100%';
   } else {
-    tStyle.top = tStyle.left = 0;
+    tStyle.top = tStyle.left = '0';
     tStyle.height = '100%';
   }
 };

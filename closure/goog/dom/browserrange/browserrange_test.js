@@ -21,6 +21,7 @@ goog.require('goog.dom.Range');
 goog.require('goog.dom.RangeEndpoint');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.browserrange');
+goog.require('goog.html.testing');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -207,7 +208,8 @@ function testDiv() {
 function testEmptyNodeHtmlInsert() {
   var range = goog.dom.browserrange.createRangeFromNodeContents(empty);
   var html = '<b>hello</b>';
-  range.insertNode(goog.dom.htmlToDocumentFragment(html));
+  range.insertNode(goog.dom.safeHtmlToNode(
+      goog.html.testing.newSafeHtmlForTest(html)));
   assertEquals(
       'Html is not inserted correctly', html, normalizeHtml(empty.innerHTML));
   goog.dom.removeChildren(empty);

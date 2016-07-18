@@ -3,7 +3,8 @@ email: sdh@google.com
 description: Documentation for Google Closure Library.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://google.github.com/closure-library"
-github_username:  google
+github_username: google
+destination: closure-library
 
 # Defaults to plug into all Jekyll frontmatters
 defaults:

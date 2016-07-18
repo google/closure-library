@@ -42,6 +42,15 @@ goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
 
 
 /**
+ * Type definition for strict Soy templates. Very useful when passing a template
+ * as an argument.
+ * @typedef {function(?, null=, ?Object<string, *>=):
+ *     !goog.soy.data.SanitizedContent}
+ */
+goog.soy.StrictTemplate;
+
+
+/**
  * Sets the processed template as the innerHTML of an element. It is recommended
  * to use this helper function instead of directly setting innerHTML in your
  * hand-written code, so that it will be easier to audit the code for cross-site

@@ -18,6 +18,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.fs.DirectoryEntry');
 goog.provide('goog.testing.fs.DirectoryEntry');
 goog.provide('goog.testing.fs.Entry');
 goog.provide('goog.testing.fs.FileEntry');

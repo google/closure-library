@@ -73,6 +73,7 @@ goog.ui.ImagelessButtonRenderer.CSS_CLASS =
 
 /**
  * Returns the button's contents wrapped in the following DOM structure:
+ *
  *    <div class="goog-inline-block goog-imageless-button">
  *      <div class="goog-inline-block goog-imageless-button-outer-box">
  *        <div class="goog-imageless-button-inner-box">
@@ -100,14 +101,16 @@ goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
 /**
  * Takes a text caption or existing DOM structure, and returns the content
  * wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
- *  <div class="goog-inline-block goog-imageless-button-outer-box">
- *    <div class="goog-inline-block goog-imageless-button-inner-box">
- *      <div class="goog-imageless-button-pos">
- *        <div class="goog-imageless-button-top-shadow">&nbsp;</div>
- *        <div class="goog-imageless-button-content">Contents...</div>
+ *
+ *    <div class="goog-inline-block goog-imageless-button-outer-box">
+ *      <div class="goog-inline-block goog-imageless-button-inner-box">
+ *        <div class="goog-imageless-button-pos">
+ *          <div class="goog-imageless-button-top-shadow">&nbsp;</div>
+ *          <div class="goog-imageless-button-content">Contents...</div>
+ *        </div>
  *      </div>
  *    </div>
- *  </div>
+ *
  * Used by both {@link #createDom} and {@link #decorate}.  To be overridden
  * by subclasses.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap

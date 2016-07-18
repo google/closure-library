@@ -29,9 +29,14 @@
  * please, please email closure-tech first to explain your use case before you
  * sink time into this.
  *
+ * TODO(b/8933952): Migrate to explicitly non-nullable types. At present, many
+ *     functions in this file expect non-null inputs but do not explicitly
+ *     indicate this.
+ *
  * @author nicksantos@google.com (Nick Santos)
  */
 
+goog.setTestOnly('goog.testing.events');
 goog.provide('goog.testing.events');
 goog.provide('goog.testing.events.Event');
 
@@ -612,6 +617,18 @@ goog.testing.events.fireBlurEvent = function(target) {
  */
 goog.testing.events.fireFocusEvent = function(target) {
   var e = new goog.testing.events.Event(goog.events.EventType.FOCUS, target);
+  return goog.testing.events.fireBrowserEvent(e);
+};
+
+
+/**
+ * Simulate a focus-in event on the given target.
+ * @param {!EventTarget} target The target for the event.
+ * @return {boolean} The value returned by firing the focus-in browser event,
+ *     which returns false iff 'preventDefault' was invoked.
+ */
+goog.testing.events.fireFocusInEvent = function(target) {
+  var e = new goog.testing.events.Event(goog.events.EventType.FOCUSIN, target);
   return goog.testing.events.fireBrowserEvent(e);
 };
 

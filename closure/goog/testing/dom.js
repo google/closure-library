@@ -18,6 +18,7 @@
  * @author robbyw@google.com (Robby Walker)
  */
 
+goog.setTestOnly('goog.testing.dom');
 goog.provide('goog.testing.dom');
 
 goog.require('goog.array');

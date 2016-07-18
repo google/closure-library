@@ -747,7 +747,7 @@ goog.net.BrowserChannel.Stat = {
 
   /**
    * Event indicating that the second piece of test data was received and it was
-   * recieved separately from the first.
+   * received separately from the first.
    */
   TEST_STAGE_TWO_DATA_TWO: 7,
 

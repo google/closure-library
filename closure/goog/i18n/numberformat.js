@@ -219,6 +219,9 @@ goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
 
 /**
  * Sets number of significant digits to show. Only fractions will be rounded.
+ * Regardless of the number of significant digits set, the number of fractional
+ * digits shown will always be capped by the maximum number of fractional digits
+ * set on {@link #setMaximumFractionDigits}.
  * @param {number} number The number of significant digits to include.
  * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
@@ -496,7 +499,11 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       sawExponent = true;
     } else if (ch == '+' || ch == '-') {
       normalizedText += ch;
-    } else if (ch == goog.i18n.NumberFormatSymbols.PERCENT.charAt(0)) {
+    } else if (
+        this.multiplier_ == 1 &&
+        ch == goog.i18n.NumberFormatSymbols.PERCENT.charAt(0)) {
+      // Parse the percent character as part of the number only when it's
+      // not already included in the pattern.
       if (scale != 1) {
         break;
       }
@@ -505,7 +512,11 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
         pos[0]++;  // eat this character if parse end here
         break;
       }
-    } else if (ch == goog.i18n.NumberFormatSymbols.PERMILL.charAt(0)) {
+    } else if (
+        this.multiplier_ == 1 &&
+        ch == goog.i18n.NumberFormatSymbols.PERMILL.charAt(0)) {
+      // Parse the permill character as part of the number only when it's
+      // not already included in the pattern.
       if (scale != 1) {
         break;
       }
@@ -518,6 +529,13 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       break;
     }
   }
+
+  // Scale the number when the percent/permill character was included in
+  // the pattern.
+  if (this.multiplier_ != 1) {
+    scale = this.multiplier_;
+  }
+
   return parseFloat(normalizedText) / scale;
 };
 

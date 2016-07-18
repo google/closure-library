@@ -397,7 +397,7 @@ goog.structs.AvlTree.prototype.inOrderTraverse = function(
 
   // Depth traverse the tree to find node to begin in-order traversal from
   var startNode;
-  if (opt_startValue) {
+  if (opt_startValue !== undefined) {
     this.traverse_(function(node) {
       var retNode = null;
       var comparison = this.comparator_(node.value, opt_startValue);
@@ -457,7 +457,7 @@ goog.structs.AvlTree.prototype.reverseOrderTraverse = function(
 
   // Depth traverse the tree to find node to begin reverse-order traversal from
   var startNode;
-  if (opt_startValue) {
+  if (opt_startValue !== undefined) {
     this.traverse_(goog.bind(function(node) {
       var retNode = null;
       var comparison = this.comparator_(node.value, opt_startValue);

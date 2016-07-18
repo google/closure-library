@@ -12,6 +12,7 @@ See the COPYING file for details.
   <script>
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.html.testing');
     goog.require('goog.ui.Dialog');
   </script>
   <link rel="stylesheet" href="css/demo.css">
@@ -112,14 +113,15 @@ See the COPYING file for details.
     });
 
     var dialog1 = new goog.ui.Dialog();
-    dialog1.setContent('<img src="http://images.icanhascheezburger.com/' +
+    dialog1.setSafeHtmlContent(goog.html.testing.newSafeHtmlForTest(
+        '<img src="http://images.icanhascheezburger.com/' +
         'completestore/2009/3/25/128825075025577352.jpg" ' +
         'width="400" height="255"><br>' +
         'Lorem ipsum dolor sit amet, consectetuer' +
         'adipiscing elit. Aenean sollicitudin ultrices urna. Proin vehicula ' +
         'mauris ac est. Ut scelerisque, risus ut facilisis dictum, est massa ' +
         'lacinia lorem, in fermentum purus ligula quis nunc. Duis porttitor ' +
-        'euismod risus. Nam hendrerit lacus vehicula augue. Duis ante.');
+        'euismod risus. Nam hendrerit lacus vehicula augue. Duis ante.'));
     dialog1.setTitle('My favorite LOLCat');
 
     dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL);
@@ -130,8 +132,8 @@ See the COPYING file for details.
 
 
     var dialog2 = new goog.ui.Dialog(null, true);
-    dialog2.setContent('Some windowed elements leak through standard divs so ' +
-        'we add an iframe to mask the nasties.');
+    dialog2.setTextContent('Some windowed elements leak through standard ' +
+        'divs so we add an iframe to mask the nasties.');
     dialog2.setTitle('I have an Iframe mask :)');
 
     dialog2.setButtonSet(goog.ui.Dialog.ButtonSet.YES_NO_CANCEL);

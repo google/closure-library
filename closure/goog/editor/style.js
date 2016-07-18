@@ -185,16 +185,16 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
  * This may cause certain text nodes which should be unselectable, to become
  * selectable. For example:
  *
- * <div id=div1 style="-moz-user-select: none">
- *   Text1
- *   <span id=span1>Text2</span>
- * </div>
+ *    <div id=div1 style="-moz-user-select: none">
+ *      Text1
+ *      <span id=span1>Text2</span>
+ *    </div>
  *
  * If we call makeSelectable on span1, then it will cause "Text1" to become
  * selectable, since it had to make div1 selectable in order for span1 to be
  * selectable.
  *
- * If "Text1" were enclosed within a <p> or <span>, then this problem would
+ * If "Text1" were enclosed within a `<p>` or `<span>`, then this problem would
  * not arise.  Text nodes do not have styles, so its style can't be set to
  * unselectable.
  *

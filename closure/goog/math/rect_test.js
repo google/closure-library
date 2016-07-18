@@ -33,8 +33,30 @@ function assertRectsEqual(expected, actual) {
   }
 }
 
+/**
+ * Create a goog.math.Rect with given coordinates.
+ *
+ * @param {Array<number>} a Array of numbers with given coordinates for rect,
+ *   with expected order [x1, y1, x2, y2].
+ * @return {?goog.math.Rect} A rectangle, if coordinates were given.
+ */
 function createRect(a) {
   return a ? new goog.math.Rect(a[0], a[1], a[2] - a[0], a[3] - a[1]) : null;
+}
+
+/**
+ * Create a rect like object.
+ *
+ * @param {Array<number>} a Array of numbers with given coordinates for rect,
+ *    with expected order [x1, y1, x2, y2].
+ * @return {?{left: number, top: number, width: number, height: number}} A rect
+ *    like object.
+ */
+function createIRect(a) {
+  if (a) {
+    return {left: a[0], top: a[1], width: a[2] - a[0], height: a[3] - a[1]};
+  }
+  return null;
 }
 
 function testRectClone() {
@@ -54,13 +76,8 @@ function testRectIntersection() {
     [[0, 0, 1, 1], [10, 11, 12, 13], null],
     [[11, 12, 98, 99], [22, 23, 34, 35], [22, 23, 34, 35]]
   ];
-  for (var i = 0; i < tests.length; ++i) {
-    var t = tests[i];
-    var r0 = createRect(t[0]);
-    var r1 = createRect(t[1]);
 
-    var expected = createRect(t[2]);
-
+  var intersectTest = function(r0, r1, expected) {
     assertRectsEqual(expected, goog.math.Rect.intersection(r0, r1));
     assertRectsEqual(expected, goog.math.Rect.intersection(r1, r0));
 
@@ -68,7 +85,32 @@ function testRectIntersection() {
     var clone = r0.clone();
 
     assertRectsEqual(expected, clone.intersection(r1) ? clone : null);
-    assertRectsEqual(expected, r1.intersection(r0) ? r1 : null);
+
+    if (r1.intersection) {
+      assertRectsEqual(expected, r1.intersection(r0) ? r1 : null);
+    }
+  };
+
+  for (var i = 0; i < tests.length; ++i) {
+    var t = tests[i];
+    var r0 = createRect(t[0]);
+    var r1 = createRect(t[1]);
+
+    var expected = createRect(t[2]);
+
+    intersectTest(r0, r1, expected);
+  }
+
+  // Run same tests with IRects.
+
+  for (var i = 0; i < tests.length; ++i) {
+    var t = tests[i];
+    var r0 = createRect(t[0]);
+    var r1 = createIRect(t[1]);
+
+    var expected = createRect(t[2]);
+
+    intersectTest(r0, r1, expected);
   }
 }
 
@@ -76,16 +118,29 @@ function testRectIntersects() {
   var r0 = createRect([10, 10, 20, 20]);
   var r1 = createRect([15, 15, 25, 25]);
   var r2 = createRect([0, 0, 1, 1]);
+  var ri0 = createIRect([10, 10, 20, 20]);
+  var ri1 = createIRect([15, 15, 25, 25]);
+  var ri2 = createIRect([0, 0, 1, 1]);
 
   assertTrue(goog.math.Rect.intersects(r0, r1));
   assertTrue(goog.math.Rect.intersects(r1, r0));
   assertTrue(r0.intersects(r1));
   assertTrue(r1.intersects(r0));
 
+  assertTrue(goog.math.Rect.intersects(r0, ri1));
+  assertTrue(goog.math.Rect.intersects(ri0, ri1));
+  assertTrue(goog.math.Rect.intersects(ri1, r0));
+  assertTrue(r0.intersects(ri1));
+
   assertFalse(goog.math.Rect.intersects(r0, r2));
   assertFalse(goog.math.Rect.intersects(r2, r0));
   assertFalse(r0.intersects(r2));
   assertFalse(r2.intersects(r0));
+
+  assertFalse(goog.math.Rect.intersects(ri0, ri2));
+  assertFalse(goog.math.Rect.intersects(ri2, ri0));
+  assertFalse(r0.intersects(ri2));
+  assertFalse(r2.intersects(ri0));
 }
 
 function testRectBoundingRect() {

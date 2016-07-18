@@ -17,6 +17,7 @@ goog.setTestOnly('goog.testing.MultiTestRunnerTest');
 
 var Promise = goog.require('goog.Promise');
 var events = goog.require('goog.events');
+var testingEvents = goog.require('goog.testing.events');
 var MockControl = goog.require('goog.testing.MockControl');
 var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
@@ -137,7 +138,7 @@ testSuite({
     mockStart();
 
     mocks.$replayAll();
-    goog.testing.events.fireClickSequence(startButton);
+    testingEvents.fireClickSequence(startButton);
     mocks.$verifyAll();
   },
 
@@ -150,11 +151,10 @@ testSuite({
     var stopButton = el.querySelectorAll('button')[1];
     assertEquals('Stop', stopButton.innerHTML);
     stubs.replace(
-        goog.testing.MultiTestRunner.TestFrame.prototype, 'runTest',
-        function() { return; });
+        MultiTestRunner.TestFrame.prototype, 'runTest', function() { return; });
 
-    goog.testing.events.fireClickSequence(startButton);
-    goog.testing.events.fireClickSequence(stopButton);
+    testingEvents.fireClickSequence(startButton);
+    testingEvents.fireClickSequence(stopButton);
     return promise.then(function(results) {
       // Tests should be halted and marked as "unfinished".
       assertContains(

@@ -104,7 +104,7 @@ function testSetTextMultipleLines() {
   goog.dom.selection.setText(textarea, message);
   assertEquals(message, goog.dom.selection.getText(textarea));
 
-  // Select the text upto the point just after the \r\n combination
+  // Select the text up to the point just after the \r\n combination
   // or \n in GECKO.
   var endOfNewline = isLegacyIE ? 15 : 14;
   var selectedMessage = message.substring(0, endOfNewline);

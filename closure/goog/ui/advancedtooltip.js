@@ -359,6 +359,6 @@ goog.ui.AdvancedTooltip.prototype.getHideDelayMs = function() {
 /**
  * Forces the recalculation of the hotspot on the next mouse over event.
  * @deprecated Not ever necessary to call this function. Hot spot is calculated
- *     as neccessary.
+ *     as necessary.
  */
 goog.ui.AdvancedTooltip.prototype.resetHotSpot = goog.nullFunction;

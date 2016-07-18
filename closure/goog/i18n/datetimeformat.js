@@ -194,6 +194,7 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
   }
   // lex the pattern, once for all uses
   while (pattern) {
+    var previousPattern = pattern;
     for (var i = 0; i < goog.i18n.DateTimeFormat.TOKENS_.length; ++i) {
       var m = pattern.match(goog.i18n.DateTimeFormat.TOKENS_[i]);
       if (m) {
@@ -210,6 +211,10 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
         this.patternParts_.push({text: part, type: i});
         break;
       }
+    }
+    if (previousPattern === pattern) {
+      // On every iteration, part of the pattern string must be consumed.
+      throw new Error('Malformed pattern part: ' + pattern);
     }
   }
 };

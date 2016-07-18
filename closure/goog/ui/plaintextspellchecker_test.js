@@ -115,7 +115,7 @@ function testPlainTextSpellCheckerNoQuotes() {
     text += generateRandomString(10, false) + '\n';
   }
   el.value = text;
-  // Yes this looks bizzare. This is for '\n' processing.
+  // Yes this looks bizarre. This is for '\n' processing.
   // They get converted to CRLF as part of the above statement.
   text = el.value;
 
@@ -150,7 +150,7 @@ function testPlainTextSpellCheckerWithQuotes() {
     text += generateRandomString(10, true) + '\n';
   }
   el.value = text;
-  // Yes this looks bizzare. This is for '\n' processing.
+  // Yes this looks bizarre. This is for '\n' processing.
   // They get converted to CRLF as part of the above statement.
   text = el.value;
 
@@ -258,7 +258,7 @@ function testPlainTextSpellCheckerKeyboardNavigateNext() {
   goog.testing.events.fireKeySequence(
       container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  // Test moving from first to second mispelled word.
+  // Test moving from first to second misspelled word.
   var defaultExecuted = goog.testing.events.fireKeySequence(
       container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
@@ -396,7 +396,7 @@ function testPlainTextSpellCheckerKeyboardNavigatePrevious() {
   goog.testing.events.fireKeySequence(
       container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  // Test moving from third to second mispelled word.
+  // Test moving from third to second misspelled word.
   var defaultExecuted = goog.testing.events.fireKeySequence(
       container, goog.events.KeyCodes.LEFT, keyEventProperties);
 

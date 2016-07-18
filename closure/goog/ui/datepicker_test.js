@@ -163,6 +163,25 @@ function testGetActiveMonth() {
       picker.getActiveMonth());
 }
 
+function testGetActiveMonthBeforeYear100() {
+  var date = new Date(23, 5, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  date.setFullYear(23);
+
+  var expectedMonth = new goog.date.Date(23, 5, 1);
+  expectedMonth.setFullYear(23);
+
+  picker = new goog.ui.DatePicker(date);
+  var month = picker.getActiveMonth();
+  assertObjectEquals(expectedMonth, month);
+
+  month.setMonth(10);
+  assertObjectEquals(
+      'modifying the returned object is safe', expectedMonth,
+      picker.getActiveMonth());
+}
+
 function testGetDate() {
   picker = new goog.ui.DatePicker(new Date(2000, 0, 1));
   var date = picker.getDate();
@@ -175,6 +194,71 @@ function testGetDate() {
 
   picker.setDate(null);
   assertNull('no date is selected', picker.getDate());
+}
+
+function testGetDateBeforeYear100() {
+  var inputDate = new Date(23, 5, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  inputDate.setFullYear(23);
+  picker = new goog.ui.DatePicker(inputDate);
+  var date = picker.getDate();
+
+  var expectedDate = new goog.date.Date(23, 5, 5);
+  expectedDate.setFullYear(23);
+  assertObjectEquals(expectedDate, date);
+
+  picker.setDate(inputDate);
+  assertObjectEquals(expectedDate, picker.getDate());
+  var expectedMonth = new goog.date.Date(23, 5, 1);
+  expectedMonth.setFullYear(23);
+  assertObjectEquals(expectedMonth, picker.getActiveMonth());
+}
+
+function testGridForDecember23() {
+  // Initialize picker to December 23.
+  var inputDate = new Date(23, 11, 5);
+  // Above statement will create date with year 1923, need to set full year
+  // explicitly.
+  inputDate.setFullYear(23);
+  picker = new goog.ui.DatePicker(inputDate);
+  picker.create(sandbox);
+
+  // Grid start with last days of November 23, shows December 23 and first days
+  // of January 24.
+  for (var i = 0; i < 6; i++) {
+    for (var j = 0; j < 7; j++) {
+      var date = picker.getDateAt(i, j);
+      if (date.getMonth() == 0) {
+        assertEquals(24, date.getFullYear());
+      } else {
+        assertEquals(23, date.getFullYear());
+      }
+    }
+  }
+}
+
+function testGridForJanuary22() {
+  // Initialize picker to January 22.
+  var inputDate = new Date(22, 0, 5);
+  // Above statement will create date with year 1922, need to set full year
+  // explicitly.
+  inputDate.setFullYear(22);
+  picker = new goog.ui.DatePicker(inputDate);
+  picker.create(sandbox);
+
+  // Grid start with last days of December 21, shows January 22 and first days
+  // of February 22.
+  for (var i = 0; i < 6; i++) {
+    for (var j = 0; j < 7; j++) {
+      var date = picker.getDateAt(i, j);
+      if (date.getMonth() == 11) {
+        assertEquals(21, date.getFullYear());
+      } else {
+        assertEquals(22, date.getFullYear());
+      }
+    }
+  }
 }
 
 function testGetDateAt() {
@@ -335,6 +419,21 @@ function testUserSelectableDates() {
   assertFalse(
       'should not be selectable date',
       picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 28)));
+}
+
+function testGetUserSelectableDateRange() {
+  picker = new goog.ui.DatePicker();
+  var dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'default date range is all time',
+      goog.date.DateRange.equals(dateRange, goog.date.DateRange.allTime()));
+  var newDateRange = new goog.date.DateRange(
+      new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
+  picker.setUserSelectableDateRange(newDateRange);
+  dateRange = picker.getUserSelectableDateRange();
+  assertTrue(
+      'should be equal to updated date range',
+      goog.date.DateRange.equals(dateRange, newDateRange));
 }
 
 function testUniqueCellIds() {

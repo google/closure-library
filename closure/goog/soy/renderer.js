@@ -37,9 +37,11 @@ goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
+goog.require('goog.string.Const');
 
 
 
@@ -244,6 +246,33 @@ goog.soy.Renderer.prototype.renderSafeHtml = function(
     template, opt_templateData) {
   var result = this.renderStrict(template, opt_templateData);
   return result.toSafeHtml();
+};
+
+
+/**
+ * Renders a strict Soy template of kind="css" and returns the result as
+ * a goog.html.SafeStyleSheet object.
+ *
+ * Rendering a template that is not a strict template of kind="css" results in
+ * a runtime and compile-time error.
+ *
+ * @param {?function(ARG_TYPES, null=, Object<string, *>=):
+ *     !goog.soy.data.SanitizedCss} template The Soy template to render.
+ * @param {ARG_TYPES=} opt_templateData The data for the template.
+ * @return {!goog.html.SafeStyleSheet}
+ * @template ARG_TYPES
+ */
+goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
+    template, opt_templateData) {
+  var result = this.renderStrict(
+      template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
+  // TODO(user): Call result.toSafeStyleSheet() once that exists.
+  return goog.html.uncheckedconversions
+      .safeStyleSheetFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy templates of kind CSS produce ' +
+              'SafeStyleSheet-contract-compliant value.'),
+          result.toString());
 };
 
 

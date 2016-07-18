@@ -214,6 +214,22 @@ function testPercentAndPerMillAdvance() {
   assertEquals(4, pos[0]);
 }
 
+function testPercentAndPerMillParsing() {
+  var implicitFmt = new goog.i18n.NumberFormat('0;(0)');
+  assertEquals(123 / 100, implicitFmt.parse("123%"));
+  assertEquals(-123 / 100, implicitFmt.parse("(123%)"));
+  assertEquals(123 / 1000, implicitFmt.parse("123‰"));
+  assertEquals(-123 / 1000, implicitFmt.parse("(123‰)"));
+
+  var explicitFmtPercent = new goog.i18n.NumberFormat('0%;(0%)');
+  assertEquals(123 / 100, explicitFmtPercent.parse("123%"));
+  assertEquals(-123 / 100, explicitFmtPercent.parse("(123%)"));
+
+  var explicitFmtPermill = new goog.i18n.NumberFormat('0‰;(0‰)');
+  assertEquals(123 / 1000, explicitFmtPermill.parse("123‰"));
+  assertEquals(-123 / 1000, explicitFmtPermill.parse("(123‰)"));
+}
+
 function testInfinityParse() {
   var value;
   var fmt = new goog.i18n.NumberFormat('0.0;(0.0)');

@@ -16,6 +16,7 @@
  * @fileoverview Mock of XhrIo for unit testing.
  */
 
+goog.setTestOnly('goog.testing.net.XhrIo');
 goog.provide('goog.testing.net.XhrIo');
 
 goog.require('goog.array');

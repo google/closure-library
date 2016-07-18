@@ -1024,7 +1024,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
     var uniqueId = goog.string.createUniqueString();
     this.execCommandHelper_('CreateLink', uniqueId);
     var setHrefAndLink = function(element, index, arr) {
-      // We can't do straight comparision since the href can contain the
+      // We can't do straight comparison since the href can contain the
       // absolute url.
       if (goog.string.endsWith(element.href, uniqueId)) {
         anchors.push(element);

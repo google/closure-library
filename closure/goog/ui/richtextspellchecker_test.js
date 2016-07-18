@@ -203,7 +203,7 @@ function testKeyboardNavigateNext() {
   goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  // Test moving from first to second mispelled word.
+  // Test moving from first to second misspelled word.
   var defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 

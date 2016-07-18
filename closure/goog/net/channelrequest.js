@@ -1119,15 +1119,16 @@ goog.net.ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
  * completes in time.
  * @param {number} time The number of milliseconds to wait.
  * @private
+ * @suppress {missingRequire} goog.net.BrowserChannel
  */
 goog.net.ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
   if (this.watchDogTimerId_ != null) {
     // assertion
     throw Error('WatchDog timer not null');
   }
-  this.watchDogTimerId_ = /** @suppress {missingRequire} */ (
-      goog.net.BrowserChannel.setTimeout(
-          goog.bind(this.onWatchDogTimeout_, this), time));
+  /** @private @suppress {missingRequire} Circular dep. */
+  this.watchDogTimerId_ = goog.net.BrowserChannel.setTimeout(
+      goog.bind(this.onWatchDogTimeout_, this), time);
 };
 
 

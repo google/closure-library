@@ -19,15 +19,19 @@
 /** @suppress {extraProvide} */
 goog.provide('goog.dom.dom_test');
 
+goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.TypedTagName');
 goog.require('goog.functions');
 goog.require('goog.html.testing');
 goog.require('goog.object');
+goog.require('goog.string.Const');
 goog.require('goog.string.Unicode');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
@@ -467,6 +471,23 @@ function testCreateDomWithClassName() {
   assertEquals('ClassName should be empty', '', el.className);
 }
 
+function testCreateTypedDom() {
+  var a = goog.dom.createDom(goog.dom.TypedTagName.A);
+  goog.asserts.assertInstanceof(a, HTMLAnchorElement);
+
+  a = goog.dom.getDomHelper().createDom(goog.dom.TypedTagName.A);
+  goog.asserts.assertInstanceof(a, HTMLAnchorElement);
+}
+
+function testCreateUntypedDom() {
+  var level = 1;
+  var heading = goog.dom.createUntypedDom('H' + level);
+  assertEquals('H1', heading.tagName);
+
+  heading = goog.dom.getDomHelper().createUntypedDom('H' + level);
+  assertEquals('H1', heading.tagName);
+}
+
 function testCompareNodeOrder() {
   var b1 = $('b1');
   var b2 = $('b2');
@@ -878,12 +899,12 @@ function testGetChildren() {
 }
 
 function testGetNextNode() {
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
 
   assertNull(goog.dom.getNextNode(null));
 
@@ -907,12 +928,12 @@ function testGetNextNode() {
 }
 
 function testGetPreviousNode() {
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
 
   assertNull(goog.dom.getPreviousNode(null));
 
@@ -1534,26 +1555,85 @@ function testSafeHtmlToNode() {
   }
 }
 
-function testHtmlToDocumentFragment() {
-  var docFragment = goog.dom.htmlToDocumentFragment('<a>1</a><b>2</b>');
-  assertNull(docFragment.parentNode);
-  assertEquals(2, docFragment.childNodes.length);
-
-  var div = goog.dom.htmlToDocumentFragment('<div>3</div>');
-  assertEquals(goog.dom.TagName.DIV, div.tagName);
-
-  var script = goog.dom.htmlToDocumentFragment('<script></script>');
-  assertEquals(goog.dom.TagName.SCRIPT, script.tagName);
-
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
-    // Removing an Element from a DOM tree in IE sets its parentNode to a new
-    // DocumentFragment. Bizarre!
-    assertEquals(
-        goog.dom.NodeType.DOCUMENT_FRAGMENT,
-        goog.dom.removeNode(div).parentNode.nodeType);
-  } else {
-    assertNull(div.parentNode);
+/**
+ * Assert that the given goog.string.Const, when converted to a Node,
+ * stringifies in one of the specified ways.
+ *
+ * @param{!Array<string>} potentialStringifications
+ * @param{...!goog.string.Const} var_args The constants to use.
+ */
+function assertConstHtmlToNodeStringifiesToOneOf(
+    potentialStringifications, var_args) {
+  var node =
+      goog.dom.constHtmlToNode.apply(undefined, goog.array.slice(arguments, 1));
+  var stringified = goog.dom.getOuterHtml(node);
+  if (goog.array.find(potentialStringifications, function(element) {
+        return element == stringified;
+      }) === null) {
+    fail(
+        'Unexpected stringification for a node built from "' +
+        goog.array.map(goog.array.slice(arguments, 1), goog.string.Const.unwrap)
+            .join('') +
+        '": "' + stringified + '"');
   }
+}
+
+function testRegularConstHtmlToNodeStringifications() {
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo</b>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<br>', '<BR>'], goog.string.Const.from('<br>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      [
+        '<SVG></B>', '<svg></svg>', '<svg xmlns="http://www.w3.org/2000/svg" />'
+      ],
+      goog.string.Const.from('<svg></b>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<unknown></unknown>', '<unknown>', '<UNKNOWN />'],
+      goog.string.Const.from('<unknown />'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['&lt;"&amp;', '&lt;"'], goog.string.Const.from('<"&'));
+}
+
+function testConcatenatedConstHtmlToNodeStringifications() {
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo<'),
+      goog.string.Const.from('/b>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<b>foo</b>', '<B>foo</B>'], goog.string.Const.from('<b>foo</b>'),
+      goog.string.Const.from(''));
+
+  assertConstHtmlToNodeStringifiesToOneOf(['']);
+}
+
+function testSpecialConstHtmlToNodeStringifications() {
+  // body one is IE8, \r\n is opera.
+  assertConstHtmlToNodeStringifiesToOneOf(
+      [
+        '<script></script>', '<SCRIPT></SCRIPT>', '<script></body></script>',
+        '\r\n' +
+            '<SCRIPT></SCRIPT>'
+      ],
+      goog.string.Const.from('<script>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['&lt;% %&gt;', '<% %>'], goog.string.Const.from('<% %>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['&lt;% <script> %></script>', '<% <script> %>'],
+      goog.string.Const.from('<% <script> %>'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['</ hi />', '<!-- hi /-->', ''], goog.string.Const.from('</ hi />'));
+
+  assertConstHtmlToNodeStringifiesToOneOf(
+      ['<!-- <script --> /&gt;', '</ <script>/&gt;', ' /&gt;'],
+      goog.string.Const.from('</ <script > />'));
 }
 
 function testAppend() {
@@ -1643,7 +1723,7 @@ function testDefaultToScrollingElement() {
   var dh = new goog.dom.DomHelper(fakeDocument);
 
   // When scrollingElement isn't supported or is null (no element causes
-  // scrolling), then behavior is UA-dependant for maximum compatibility.
+  // scrolling), then behavior is UA-dependent for maximum compatibility.
   assertTrue(
       dh.getDocumentScrollElement() == fakeDocument.body ||
       dh.getDocumentScrollElement() == fakeDocument.documentElement);
@@ -1680,12 +1760,12 @@ function testParentElement() {
   var documentNotAnElement = goog.dom.getParentElement(htmlEl);
   assertNull(documentNotAnElement);
 
-  var tree = goog.dom.htmlToDocumentFragment(
+  var tree = goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
       '<div>' +
       '<p>Some text</p>' +
       '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
       '<address><!-- comment -->Foo</address>' +
-      '</div>');
+      '</div>'));
   assertNull(goog.dom.getParentElement(tree));
   pEl = goog.dom.getNextNode(tree);
   var fragmentRootEl = goog.dom.getParentElement(pEl);

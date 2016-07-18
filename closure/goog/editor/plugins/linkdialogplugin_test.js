@@ -59,7 +59,7 @@ var linkObj;
 
 function setUp() {
   testDiv = goog.dom.getDocument().getElementById('test');
-  goog.dom.setTextContent(testDiv, 'Some preceeding text');
+  goog.dom.setTextContent(testDiv, 'Some preceding text');
 
   anchorElem = goog.dom.createElement(goog.dom.TagName.A);
   anchorElem.href = 'http://www.google.com/';

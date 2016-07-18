@@ -16,6 +16,7 @@ goog.provide('goog.string.linkifyTest');
 goog.setTestOnly('goog.string.linkifyTest');
 
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.string');
 goog.require('goog.string.linkify');
@@ -25,10 +26,6 @@ goog.require('goog.testing.jsunit');
 var div = document.createElement(goog.dom.TagName.DIV);
 
 function assertLinkify(comment, input, expected, opt_preserveNewlines) {
-  assertEquals(
-      comment, expected,
-      goog.string.linkify.linkifyPlainText(
-          input, {rel: '', target: ''}, opt_preserveNewlines));
   assertEquals(
       comment, expected,
       goog.html.SafeHtml.unwrap(
@@ -300,7 +297,8 @@ function testProtocolWhitelistingEffective() {
 }
 
 function testLinkifyNoOptions() {
-  div.innerHTML = goog.string.linkify.linkifyPlainText('http://www.google.com');
+  goog.dom.safe.setInnerHtml(div,
+      goog.string.linkify.linkifyPlainTextAsHtml('http://www.google.com'));
   goog.testing.dom.assertHtmlContentsMatch(
       '<a href="http://www.google.com" target="_blank" rel="nofollow">' +
           'http://www.google.com<\/a>',
@@ -308,10 +306,10 @@ function testLinkifyNoOptions() {
 }
 
 function testLinkifyOptionsNoAttributes() {
-  div.innerHTML = goog.string.linkify.linkifyPlainText(
+  goog.dom.safe.setInnerHtml(div, goog.string.linkify.linkifyPlainTextAsHtml(
       'The link for www.google.com is located somewhere in ' +
           'https://www.google.fr/?hl=en, you should find it easily.',
-      {rel: '', target: ''});
+      {rel: '', target: ''}));
   goog.testing.dom.assertHtmlContentsMatch(
       'The link for <a href="http://www.google.com">www.google.com<\/a> is ' +
           'located somewhere in ' +
@@ -321,8 +319,8 @@ function testLinkifyOptionsNoAttributes() {
 }
 
 function testLinkifyOptionsClassName() {
-  div.innerHTML = goog.string.linkify.linkifyPlainText(
-      'Attribute with <class> name www.w3c.org.', {'class': 'link-added'});
+  goog.dom.safe.setInnerHtml(div, goog.string.linkify.linkifyPlainTextAsHtml(
+      'Attribute with <class> name www.w3c.org.', {'class': 'link-added'}));
   goog.testing.dom.assertHtmlContentsMatch(
       'Attribute with &lt;class&gt; name <a href="http://www.w3c.org" ' +
           'target="_blank" rel="nofollow" class="link-added">www.w3c.org<\/a>.',

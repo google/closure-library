@@ -23,6 +23,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.testing');
 goog.require('goog.math.Coordinate');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
@@ -145,8 +146,8 @@ function testGetSetCaptionAfterCreateDom() {
   assertEquals('Caption must have expected value', 'Foo', item.getCaption());
 
   var arrayContent = goog.array.clone(
-      goog.dom.htmlToDocumentFragment(' <b> \xa0foo</b><i>  bar</i> ')
-          .childNodes);
+      goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
+          ' <b> \xa0foo</b><i>  bar</i> ')).childNodes);
   item.setContent(arrayContent);
   assertEquals(
       'whitespaces must be normalized in the caption', '\xa0foo bar',

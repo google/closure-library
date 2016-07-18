@@ -1229,7 +1229,7 @@ goog.ui.Control.prototype.handleContextMenu = goog.nullFunction;
 
 
 /**
- * Checks if a mouse event (mouseover or mouseout) occured below an element.
+ * Checks if a mouse event (mouseover or mouseout) occurred below an element.
  * @param {goog.events.BrowserEvent} e Mouse event (should be mouseover or
  *     mouseout).
  * @param {Element} elem The ancestor element.

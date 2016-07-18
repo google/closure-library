@@ -182,6 +182,7 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
  * The WebChannelBase only supports object types.
  *
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
+ *
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.send = function(message) {
@@ -367,7 +368,7 @@ WebChannelBaseTransport.ChannelProperties.prototype.isSpdyEnabled = function() {
 /**
  * @override
  */
-WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
+WebChannelBaseTransport.ChannelProperties.prototype.commit =
     goog.abstractMethod;
 
 
@@ -375,6 +376,20 @@ WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
  * @override
  */
 WebChannelBaseTransport.ChannelProperties.prototype.getNonAckedMessageCount =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.onCommit =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.ackCommit =
     goog.abstractMethod;
 
 

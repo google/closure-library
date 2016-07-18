@@ -187,7 +187,7 @@ function testHandlerKeyDownForIme_imeOnOff() {
 
 /**
  * Ensures that IME mode turns off when keyup events which are involved
- * in commiting IME text occurred in Safari.
+ * in committing IME text occurred in Safari.
  */
 function testHandleKeyUpForSafari() {
   setUserAgent('WEBKIT');

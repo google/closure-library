@@ -45,6 +45,7 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.OPERA = goog.labs.userAgent.browser.isOpera();
   goog.userAgent.IE = goog.labs.userAgent.browser.isIE();
   goog.userAgent.EDGE = goog.labs.userAgent.engine.isEdge();
+  goog.userAgent.EDGE_OR_IE = goog.userAgent.EDGE || goog.userAgent.IE;
   goog.userAgent.GECKO = goog.labs.userAgent.engine.isGecko();
   goog.userAgent.WEBKIT = goog.labs.userAgent.engine.isWebKit();
   goog.userAgent.MOBILE = goog.userAgent.isMobile_();
@@ -60,6 +61,7 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.ANDROID = goog.labs.userAgent.platform.isAndroid();
   goog.userAgent.IPAD = goog.labs.userAgent.platform.isIpad();
   goog.userAgent.IPHONE = goog.labs.userAgent.platform.isIphone();
+  goog.userAgent.IPOD = goog.labs.userAgent.platform.isIpod();
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
   // Platform in goog.userAgent.platform.

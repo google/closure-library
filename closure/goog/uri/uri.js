@@ -144,7 +144,7 @@ goog.Uri = function(opt_uri, opt_ignoreCase) {
     this.ignoreCase_ = !!opt_ignoreCase;
 
     // Set the parts -- decoding as we do so.
-    // COMPATABILITY NOTE - In IE, unmatched fields may be empty strings,
+    // COMPATIBILITY NOTE - In IE, unmatched fields may be empty strings,
     // whereas in other browsers they will be undefined.
     this.setScheme(m[goog.uri.utils.ComponentIndex.SCHEME] || '', true);
     this.setUserInfo(m[goog.uri.utils.ComponentIndex.USER_INFO] || '', true);

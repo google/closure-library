@@ -25,15 +25,17 @@ goog.provide('goog.i18n.currencyCodeMapTier2');
 
 
 /**
+ * Deprecated.
  * The mapping of currency symbol through intl currency code.
  * The source of information is mostly from wikipedia and CLDR. Since there is
- * no authoritive source, items are judged by personal perception.
+ * no authoritative source, items are judged by personal perception.
 
  * If an application need currency support that available in tier2, it
  * should extend currencyCodeMap to include tier2 data by doing this:
  *     goog.object.extend(goog.i18n.currencyCodeMap,
  *                        goog.i18n.currencyCodeMapTier2);
  *
+ * @deprecated Use {@link goog.i18n.currency.getLocalCurrencyPattern} instead.
  * @const {!Object<string, string>}
  */
 goog.i18n.currencyCodeMap = {

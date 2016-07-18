@@ -23,6 +23,92 @@ goog.provide('goog.dom.forms');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.TagName');
 goog.require('goog.structs.Map');
+goog.require('goog.window');
+
+
+
+/**
+ * Submits form data via a new window. This hides references to the parent
+ * window and should be used when submitting forms to untrusted 3rd party urls.
+ * By default, this uses the action and method of the specified form
+ * element. It is possible to override the default action and method if an
+ * optional submit element with formaction and/or formmethod attributes is
+ * provided.
+ * @param {!HTMLFormElement} form The form.
+ * @param {!HTMLElement=} opt_submitElement The `<button>` or `<input>` element
+ *     used to submit the form. The element should have a submit type.
+ * @return {boolean} true If the form was submitted succesfully.
+ * @throws {!Error} If opt_submitElement is not a valid form submit element.
+ */
+goog.dom.forms.submitFormInNewWindow = function(form, opt_submitElement) {
+  var formData = goog.dom.forms.getFormDataMap(form);
+  var action = form.action;
+  var method = form.method;
+
+  if (opt_submitElement) {
+    if (goog.dom.InputType.SUBMIT != opt_submitElement.type.toLowerCase()) {
+      throw Error('opt_submitElement does not have a valid type.');
+    }
+
+
+    var submitValue =
+        /** @type {?string} */ (goog.dom.forms.getValue(opt_submitElement));
+    if (submitValue != null) {
+      goog.dom.forms.addFormDataToMap_(
+          formData, opt_submitElement.name, submitValue);
+    }
+
+    if (opt_submitElement.getAttribute('formaction')) {
+      action = opt_submitElement.getAttribute('formaction');
+    }
+
+    if (opt_submitElement.getAttribute('formmethod')) {
+      method = opt_submitElement.getAttribute('formmethod');
+    }
+  }
+
+  return goog.dom.forms.submitFormDataInNewWindow(action, method, formData);
+};
+
+/**
+ * Submits form data via a new window. This hides references to the parent
+ * window and should be used when submitting forms to untrusted 3rd party urls.
+ * @param {string} actionUri uri to submit form content to.
+ * @param {string} method HTTP method used to submit the form.
+ * @param {!goog.structs.Map<string, !Array<string>>} formData A map of the form
+ *     data as field name to arrays of values.
+ * @return {boolean} true If the form was submitted succesfully.
+ */
+goog.dom.forms.submitFormDataInNewWindow = function(
+    actionUri, method, formData) {
+  var newWin = goog.window.openBlank('', {noreferrer: true});
+
+  // This could be null if a new window could not be opened. e.g. if it was
+  // stopped by a popup blocker.
+  if (!newWin) {
+    return false;
+  }
+
+  var newDocument = newWin.document;
+
+  var newForm = newDocument.createElement('form');
+  newForm.method = method;
+  newForm.action = actionUri;
+
+  formData.forEach(function(fieldValues, fieldName) {
+    for (var i = 0; i < fieldValues.length; i++) {
+      var fieldValue = fieldValues[i];
+      var newInput = newDocument.createElement('input');
+      newInput.name = fieldName;
+      newInput.value = fieldValue;
+      newInput.type = 'hidden';
+      newForm.appendChild(newInput);
+    }
+  });
+
+  newForm.submit();
+  return true;
+};
 
 
 /**
@@ -303,7 +389,9 @@ goog.dom.forms.getInputChecked_ = function(el) {
  */
 goog.dom.forms.getSelectSingle_ = function(el) {
   var selectedIndex = /** @type {!HTMLSelectElement} */ (el).selectedIndex;
-  return selectedIndex >= 0 ? el.options[selectedIndex].value : null;
+  return selectedIndex >= 0 ?
+      /** @type {!HTMLSelectElement} */ (el).options[selectedIndex].value :
+      null;
 };
 
 

@@ -35,7 +35,7 @@ function tearDown() {
   result = deferred = record = null;
 }
 
-function testResultSuccesfulResolution() {
+function testResultSuccessfulResolution() {
   deferred.addCallback(record);
   result.setValue(1);
   assertEquals(1, record.getCallCount());

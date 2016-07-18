@@ -130,7 +130,7 @@ function setUp() {
 
 
   // IE has problems. IE9+ still dispatches storage events locally. IE8 also
-  // doesn't include the key/value information. So for IE, everytime we get a
+  // doesn't include the key/value information. So for IE, every time we get a
   // "set" on localStorage we simulate for the appropriate browser.
   if (goog.userAgent.IE) {
     var target = isIe8 ? document : window;

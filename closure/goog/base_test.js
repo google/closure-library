@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview Unit tests for Closure's base.js.
- *
- * @nocompile
  */
 
 goog.provide('goog.baseTest');
@@ -28,6 +26,7 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
+goog.require('goog.object');
 goog.require('goog.test_module');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -36,6 +35,10 @@ goog.require('goog.userAgent');
 
 var earlyTestModuleGet = goog.module.get('goog.test_module');
 
+/**
+ * @param {?} name
+ * @return {?}
+ */
 function getFramedVars(name) {
   var w = window.frames[name];
   var doc = w.document;
@@ -127,6 +130,7 @@ function testProvideStrictness() {
   delete goog.xyz;
 }
 
+/** @param {?} namespace */
 function assertProvideFails(namespace) {
   assertThrows(
       'goog.provide(' + namespace + ') should have failed',
@@ -410,10 +414,13 @@ function testIsArrayLike() {
 }
 
 
-// Use mock date in testIsDateLike() rather than a real goog.date.Date to
-// minimize dependencies in this unit test.
+/**
+ * Use mock date in testIsDateLike() rather than a real goog.date.Date to
+ * minimize dependencies in this unit test.
+ */
 function MockGoogDate() {}
 
+/** @return {number} */
 MockGoogDate.prototype.getFullYear = function() {
   return 2007;
 };
@@ -555,8 +562,8 @@ function testRemoveUidFromNode() {
 }
 
 function testConstructorUid() {
-  function BaseClass(){};
-  function SubClass(){};
+  function BaseClass() {}
+  function SubClass() {}
   goog.inherits(SubClass, BaseClass);
 
   var baseClassUid = goog.getUid(BaseClass);
@@ -669,6 +676,11 @@ function testCloneFunctions() {
 var foo = 'global';
 var obj = {foo: 'obj'};
 
+/**
+ * @param {?} arg1
+ * @param {?} arg2
+ * @return {?}
+ */
 function getFoo(arg1, arg2) {
   return {foo: this.foo, arg1: arg1, arg2: arg2};
 }
@@ -760,6 +772,10 @@ function testBindDefault() {
   assertEquals(3, goog.bind(add, null, 1, 2)());
 }
 
+/**
+ * @param {...?} var_args
+ * @return {?}
+ */
 function add(var_args) {
   var sum = Number(this) || 0;
   for (var i = 0; i < arguments.length; i++) {
@@ -870,8 +886,8 @@ function testGlobalEvalWithHtml() {
 //=== tests for inherits ===
 
 function testInherits() {
-  function Foo(){};
-  function Bar(){};
+  function Foo() {}
+  function Bar() {}
   goog.inherits(Bar, Foo);
   var bar = new Bar();
 
@@ -880,8 +896,8 @@ function testInherits() {
 }
 
 function testInherits_constructor() {
-  function Foo(){};
-  function Bar(){};
+  function Foo() {}
+  function Bar() {}
   goog.inherits(Bar, Foo);
   var bar = new Bar();
 
@@ -896,7 +912,7 @@ function testInherits_constructor() {
 
 //=== tests for makeSingleton ===
 function testMakeSingleton() {
-  function Foo(){};
+  function Foo() {}
   goog.addSingletonGetter(Foo);
 
   assertNotNull('Should add get instance function', Foo.getInstance);
@@ -1091,7 +1107,8 @@ function testAddDependencyModule() {
     assertEquals(2, args.length);
     assertEquals('', args[0]);
     assertRegExp(
-        '^goog\\.retrieveAndExecModule_\\(".*/' + module + '"\\);$', args[1]);
+        '^goog\\.retrieveAndExec_\\(".*/' + module + '", true, false\\);$',
+        args[1]);
   };
 
   require('testDep.mod');
@@ -1107,6 +1124,37 @@ function testAddDependencyModule() {
   require('testDep.goog');
   assertEquals(3, load.getCallCount());
   assertModuleLoad('mod-goog.js', load.getCalls()[2].getArguments());
+
+  // Unset provided namespace so the test can be re-run.
+  testDep = undefined;
+}
+
+function testAddDependencyEs6() {
+  var script = null;
+  goog.transpiledLanguages_ = {'es5': false, 'es6-impl': false, 'es6': true};
+  stubs.set(goog, 'writeScriptTag_', function(src, scriptText) {
+    if (script != null) {
+      throw new Error('Multiple scripts written');
+    }
+    script = scriptText;
+  });
+
+  goog.addDependency(
+      'fancy.js', ['testDep.fancy'], [],
+      {'lang': 'es6-impl', 'module': 'goog'});
+  goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es6'});
+
+  // To differentiate this call from the real one.
+  var require = goog.require;
+
+  require('testDep.fancy');
+  assertRegExp(
+      /^goog\.retrieveAndExec_\(".*\/fancy\.js", true, false\);$/, script);
+  script = null;
+
+  require('testDep.superFancy');
+  assertRegExp(
+      /^goog\.retrieveAndExec_\(".*\/super\.js", false, true\);$/, script);
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
@@ -1297,6 +1345,9 @@ function testGoogRequireCheck() {
   delete far;
 }
 
+/**
+ * @return {?}
+ */
 function diables_testCspSafeGoogRequire() {
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
     return;
@@ -1353,6 +1404,7 @@ function testDefineClass() {
 }
 
 function testDefineClass_interface() {
+  /** @interface */
   var Interface =
       goog.defineClass(null, {statics: {foo: 'bar'}, qux: function() {}});
   assertEquals('bar', Interface.foo);
@@ -1381,6 +1433,43 @@ function testDefineClass_unsealable() {
   var der = new Derived();
   der.setFoo('bar');
   assertEquals('bar', der.foo);
+}
+
+function testDefineClass_constructorIsNotWrappedWhenSealingIsDisabled() {
+  var org = goog.defineClass;
+  var ctr = null;
+  var replacement = function(superClass, def) {
+    ctr = def.constructor;
+    return org(superClass, def);
+  };
+  // copy all the properties
+  goog.object.extend(replacement, org);
+  replacement.SEAL_CLASS_INSTANCES = false;
+
+  stubs.replace(goog, 'defineClass', replacement);
+  var MyClass = goog.defineClass(null, {constructor: function() {}});
+  assertEquals('The constructor should not be wrapped.', ctr, MyClass);
+}
+
+function testDefineClass_unsealableConstructorIsWrapped() {
+  var LegacyBase = function() {};
+  LegacyBase.prototype.foo = null;
+  LegacyBase.prototype.setFoo = function(foo) { this.foo = foo; };
+  goog.tagUnsealableClass(LegacyBase);
+
+  var org = goog.defineClass;
+  var ctr = null;
+  var replacement = function(superClass, def) {
+    ctr = def.constructor;
+    return org(superClass, def);
+  };
+  // copy all the properties
+  goog.object.extend(replacement, org);
+
+  stubs.replace(goog, 'defineClass', replacement);
+  var Derived = goog.defineClass(LegacyBase, {constructor: function() {}});
+
+  assertNotEquals('The constructor should be wrapped.', ctr, Derived);
 }
 
 // Validate the behavior of goog.module when used from traditional files.
@@ -1423,6 +1512,10 @@ function testGoogLoadModuleByUrl() {
     // IE before 10 don't report an error.
     return;
   }
+
+  stubs.set(goog, 'loadFileSync_', function(src) {
+    return 'closure load file sync: ' + src;
+  });
 
   // "goog.loadModuleByUrl" is not a general purpose code loader, it can
   // not be used to late load code.

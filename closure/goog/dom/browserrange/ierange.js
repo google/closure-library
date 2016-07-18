@@ -115,7 +115,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNode_ = function(node) {
     // range.htmlText includes the element's outerHTML. The range created above
     // is not collapsed, and should be collapsed explicitly.
     // Example : node = <div></div>
-    // But if the node is sth like <br>, it shouldnt be collapsed.
+    // But if the node is sth like <br>, it shouldn't be collapsed.
     if (goog.dom.browserrange.canContainRangeEndpoint(node) &&
         !node.childNodes.length) {
       nodeRange.collapse(false);
@@ -605,6 +605,7 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(
  */
 goog.dom.browserrange.IeRange.prototype.compareNodeEndpoints_ = function(
     node, thisEndpoint, otherEndpoint) {
+  /** @suppress {missingRequire} Circular dep with browserrange */
   return this.range_.compareEndPoints(
       (thisEndpoint == goog.dom.RangeEndpoint.START ? 'Start' : 'End') + 'To' +
           (otherEndpoint == goog.dom.RangeEndpoint.START ? 'Start' : 'End'),
@@ -638,6 +639,7 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(
     for (var i = edge; i >= 0 && i < len; i += sign) {
       var child = children[i];
       // Ignore the child nodes, which could be end point containers.
+      /** @suppress {missingRequire} Circular dep with browserrange */
       if (goog.dom.browserrange.canContainRangeEndpoint(child)) {
         continue;
       }

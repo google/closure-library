@@ -78,7 +78,7 @@ goog.require('goog.functions');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
-  /**
+/**
    * Returns nodes which match the given CSS3 selector, searching the
    * entire document by default but optionally taking a node to scope
    * the search by.
@@ -103,12 +103,12 @@ goog.require('goog.userAgent');
    *   * `~`, the immediately preceded-by sibling selector
    *   * `+`, the preceded-by sibling selector
    *   * attribute queries:
-   *   |  * `[foo]` attribute presence selector
-   *   |  * `[foo='bar']` attribute value exact match
-   *   |  * `[foo~='bar']` attribute value list item match
-   *   |  * `[foo^='bar']` attribute start match
-   *   |  * `[foo$='bar']` attribute end match
-   *   |  * `[foo*='bar']` attribute substring match
+   *      * `[foo]` attribute presence selector
+   *      * `[foo='bar']` attribute value exact match
+   *      * `[foo~='bar']` attribute value list item match
+   *      * `[foo^='bar']` attribute start match
+   *      * `[foo$='bar']` attribute end match
+   *      * `[foo*='bar']` attribute substring match
    *   * `:first-child`, `:last-child` positional selectors
    *   * `:empty` content empty selector
    *   * `:empty` content empty selector
@@ -131,9 +131,9 @@ goog.require('goog.userAgent');
    *   * namespace-differentiated selectors of any form
    *   * all `::` pseudo-element selectors
    *   * certain pseudo-selectors which don't get a lot of day-to-day use:
-   *   |  * `:root`, `:lang()`, `:target`, `:focus`
+   *      * `:root`, `:lang()`, `:target`, `:focus`
    *   * all visual and state selectors:
-   *   |  * `:root`, `:active`, `:hover`, `:visited`, `:link`,
+   *      * `:root`, `:active`, `:hover`, `:visited`, `:link`,
    *       `:enabled`, `:disabled`, `:checked`
    *   * `:*-of-type` pseudo selectors
    *
@@ -155,37 +155,47 @@ goog.require('goog.userAgent');
    * can quickly construct a new array of nodes from the original by
    * calling `dojo.query(node)` or `dojo.query(array)`.
    *
-   * example:
-   *   search the entire document for elements with the class "foo":
-   * |  dojo.query(".foo");
-   *   these elements will match:
-   * |  <span class="foo"></span>
-   * |  <span class="foo bar"></span>
-   * |  <p class="thud foo"></p>
-   * example:
-   *   search the entire document for elements with the classes "foo" *and*
-   *   "bar":
-   * |  dojo.query(".foo.bar");
-   *   these elements will match:
-   * |  <span class="foo bar"></span>
-   *   while these will not:
-   * |  <span class="foo"></span>
-   * |  <p class="thud foo"></p>
-   * example:
-   *   find `<span>` elements which are descendants of paragraphs and
-   *   which have a "highlighted" class:
-   * |  dojo.query("p span.highlighted");
-   *   the innermost span in this fragment matches:
-   * |  <p class="foo">
-   * |    <span>...
-   * |      <span class="highlighted foo bar">...</span>
-   * |    </span>
-   * |  </p>
-   * example:
-   *   find all odd table rows inside of the table
-   *   `#tabular_data`, using the `>` (direct child) selector to avoid
-   *   affecting any nested tables:
-   * |  dojo.query("#tabular_data > tbody > tr:nth-child(odd)");
+   * __Example:__ search the entire document for elements with the class "foo":
+   *
+   *    dojo.query(".foo");
+   *
+   * these elements will match:
+   *
+   *    <span class="foo"></span>
+   *    <span class="foo bar"></span>
+   *    <p class="thud foo"></p>
+   *
+   * __Example:__ search the entire document for elements with the classes "foo"
+   * _and_ "bar":
+   *
+   *    dojo.query(".foo.bar");
+   *
+   * these elements will match:
+   *
+   *    <span class="foo bar"></span>
+   *
+   * while these will not:
+   *
+   *    <span class="foo"></span>
+   *    <p class="thud foo"></p>
+   *
+   * __Example:__ find `<span>` elements which are descendants of paragraphs and
+   * which have a "highlighted" class:
+   *
+   *    dojo.query("p span.highlighted");
+   *
+   * the innermost span in this fragment matches:
+   *
+   *    <p class="foo">
+   *      <span>...
+   *        <span class="highlighted foo bar">...</span>
+   *      </span>
+   *    </p>
+   *
+   * __Example:__ find all odd table rows inside of the table `#tabular_data`,
+   * using the `>` (direct child) selector to avoid affecting any nested tables:
+   *
+   *    dojo.query("#tabular_data > tbody > tr:nth-child(odd)");
    *
    * @param {string|Array} query The CSS3 expression to match against.
    *     For details on the syntax of CSS3 selectors, see

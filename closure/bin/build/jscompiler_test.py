@@ -13,13 +13,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 """Unit test for depstree."""
 
 __author__ = 'nnaze@google.com (Nathan Naze)'
 
-
+import os
 import unittest
 
 import jscompiler
@@ -28,32 +26,37 @@ import jscompiler
 class JsCompilerTestCase(unittest.TestCase):
   """Unit tests for jscompiler module."""
 
+  def testGetFlagFile(self):
+    flags_file = jscompiler._GetFlagFile(
+        ['path/to/src1.js', 'path/to/src2.js'], ['--test_compiler_flag'])
+
+    def file_get_contents(filename):
+      with open(filename) as f:
+        content = f.read()
+        f.close()
+        return content
+
+    flags_file_content = file_get_contents(flags_file.name)
+    os.remove(flags_file.name)
+
+    self.assertEqual(
+        '--js path/to/src1.js --js path/to/src2.js --test_compiler_flag',
+        flags_file_content)
+
   def testGetJsCompilerArgs(self):
 
     original_check = jscompiler._JavaSupports32BitMode
     jscompiler._JavaSupports32BitMode = lambda: False
-    args = jscompiler._GetJsCompilerArgs(
-        'path/to/jscompiler.jar',
-        (1, 7),
-        ['path/to/src1.js', 'path/to/src2.js'],
-        ['--test_jvm_flag'],
-        ['--test_compiler_flag']
-        )
+    args = jscompiler._GetJsCompilerArgs('path/to/jscompiler.jar', (1, 7),
+                                         ['--test_jvm_flag'])
 
     self.assertEqual(
-        ['java', '-client', '--test_jvm_flag',
-         '-jar', 'path/to/jscompiler.jar',
-         '--js', 'path/to/src1.js',
-         '--js', 'path/to/src2.js', '--test_compiler_flag'],
-        args)
+        ['java', '-client', '--test_jvm_flag', '-jar',
+         'path/to/jscompiler.jar'], args)
 
     def CheckJava15RaisesError():
-      jscompiler._GetJsCompilerArgs(
-          'path/to/jscompiler.jar',
-          (1, 5),
-          ['path/to/src1.js', 'path/to/src2.js'],
-          ['--test_jvm_flag'],
-          ['--test_compiler_flag'])
+      jscompiler._GetJsCompilerArgs('path/to/jscompiler.jar', (1, 5),
+                                    ['--test_jvm_flag'])
 
     self.assertRaises(jscompiler.JsCompilerError, CheckJava15RaisesError)
     jscompiler._JavaSupports32BitMode = original_check
@@ -65,38 +68,22 @@ class JsCompilerTestCase(unittest.TestCase):
     # Should include the -d32 flag only if 32-bit Java is supported by the
     # system.
     jscompiler._JavaSupports32BitMode = lambda: True
-    args = jscompiler._GetJsCompilerArgs(
-        'path/to/jscompiler.jar',
-        (1, 7),
-        ['path/to/src1.js', 'path/to/src2.js'],
-        ['--test_jvm_flag'],
-        ['--test_compiler_flag'])
+    args = jscompiler._GetJsCompilerArgs('path/to/jscompiler.jar', (1, 7),
+                                         ['--test_jvm_flag'])
 
     self.assertEqual(
-        ['java', '-d32', '-client', '--test_jvm_flag',
-         '-jar', 'path/to/jscompiler.jar',
-         '--js', 'path/to/src1.js',
-         '--js', 'path/to/src2.js',
-         '--test_compiler_flag'],
-        args)
+        ['java', '-d32', '-client', '--test_jvm_flag', '-jar',
+         'path/to/jscompiler.jar'], args)
 
     # Should exclude the -d32 flag if 32-bit Java is not supported by the
     # system.
     jscompiler._JavaSupports32BitMode = lambda: False
-    args = jscompiler._GetJsCompilerArgs(
-        'path/to/jscompiler.jar',
-        (1, 7),
-        ['path/to/src1.js', 'path/to/src2.js'],
-        ['--test_jvm_flag'],
-        ['--test_compiler_flag'])
+    args = jscompiler._GetJsCompilerArgs('path/to/jscompiler.jar', (1, 7),
+                                         ['--test_jvm_flag'])
 
     self.assertEqual(
-        ['java', '-client', '--test_jvm_flag',
-         '-jar', 'path/to/jscompiler.jar',
-         '--js', 'path/to/src1.js',
-         '--js', 'path/to/src2.js',
-         '--test_compiler_flag'],
-        args)
+        ['java', '-client', '--test_jvm_flag', '-jar',
+         'path/to/jscompiler.jar'], args)
 
     jscompiler._JavaSupports32BitMode = original_check
 

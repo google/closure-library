@@ -21,6 +21,8 @@
 
 goog.provide('goog.math.Long');
 
+goog.require('goog.reflect');
+
 
 
 /**
@@ -69,7 +71,7 @@ goog.math.Long = function(low, high) {
 
 /**
  * A cache of the Long representations of small integer values.
- * @type {!Object}
+ * @type {!Object<number, !goog.math.Long>}
  * @private
  */
 goog.math.Long.IntCache_ = {};
@@ -77,7 +79,7 @@ goog.math.Long.IntCache_ = {};
 
 /**
  * A cache of the Long representations of common values.
- * @type {!Object}
+ * @type {!Object<goog.math.Long.ValueCacheId_, !goog.math.Long>}
  * @private
  */
 goog.math.Long.valueCache_ = {};
@@ -90,28 +92,24 @@ goog.math.Long.valueCache_ = {};
  */
 goog.math.Long.fromInt = function(value) {
   if (-128 <= value && value < 128) {
-    var cachedObj = goog.math.Long.IntCache_[value];
-    if (cachedObj) {
-      return cachedObj;
-    }
+    return goog.reflect.cache(goog.math.Long.IntCache_, value, function(val) {
+      return new goog.math.Long(val | 0, val < 0 ? -1 : 0);
+    });
+  } else {
+    return new goog.math.Long(value | 0, value < 0 ? -1 : 0);
   }
-
-  var obj = new goog.math.Long(value | 0, value < 0 ? -1 : 0);
-  if (-128 <= value && value < 128) {
-    goog.math.Long.IntCache_[value] = obj;
-  }
-  return obj;
 };
 
 
 /**
- * Returns a Long representing the given value, provided that it is a finite
- * number.  Otherwise, zero is returned.
+ * Returns a Long representing the given value.
+ * NaN will be returned as zero. Infinity is converted to max value and
+ * -Infinity to min value.
  * @param {number} value The number in question.
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromNumber = function(value) {
-  if (isNaN(value) || !isFinite(value)) {
+  if (isNaN(value)) {
     return goog.math.Long.getZero();
   } else if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
     return goog.math.Long.getMinValue();
@@ -223,11 +221,9 @@ goog.math.Long.TWO_PWR_63_DBL_ = goog.math.Long.TWO_PWR_64_DBL_ / 2;
  * @public
  */
 goog.math.Long.getZero = function() {
-  var idZero = goog.math.Long.ValueCacheId_.ZERO;
-  if (!goog.math.Long.valueCache_[idZero]) {
-    goog.math.Long.valueCache_[idZero] = goog.math.Long.fromInt(0);
-  }
-  return goog.math.Long.valueCache_[idZero];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.ZERO,
+      function() { return goog.math.Long.fromInt(0); });
 };
 
 
@@ -236,11 +232,9 @@ goog.math.Long.getZero = function() {
  * @public
  */
 goog.math.Long.getOne = function() {
-  var idOne = goog.math.Long.ValueCacheId_.ONE;
-  if (!goog.math.Long.valueCache_[idOne]) {
-    goog.math.Long.valueCache_[idOne] = goog.math.Long.fromInt(1);
-  }
-  return goog.math.Long.valueCache_[idOne];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.ONE,
+      function() { return goog.math.Long.fromInt(1); });
 };
 
 
@@ -249,11 +243,9 @@ goog.math.Long.getOne = function() {
  * @public
  */
 goog.math.Long.getNegOne = function() {
-  var idNegOne = goog.math.Long.ValueCacheId_.NEG_ONE;
-  if (!goog.math.Long.valueCache_[idNegOne]) {
-    goog.math.Long.valueCache_[idNegOne] = goog.math.Long.fromInt(-1);
-  }
-  return goog.math.Long.valueCache_[idNegOne];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.NEG_ONE,
+      function() { return goog.math.Long.fromInt(-1); });
 };
 
 
@@ -262,12 +254,11 @@ goog.math.Long.getNegOne = function() {
  * @public
  */
 goog.math.Long.getMaxValue = function() {
-  var idMaxValue = goog.math.Long.ValueCacheId_.MAX_VALUE;
-  if (!goog.math.Long.valueCache_[idMaxValue]) {
-    goog.math.Long.valueCache_[idMaxValue] =
-        goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
-  }
-  return goog.math.Long.valueCache_[idMaxValue];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MAX_VALUE,
+      function() {
+        return goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
+      });
 };
 
 
@@ -276,12 +267,9 @@ goog.math.Long.getMaxValue = function() {
  * @public
  */
 goog.math.Long.getMinValue = function() {
-  var idMinValue = goog.math.Long.ValueCacheId_.MIN_VALUE;
-  if (!goog.math.Long.valueCache_[idMinValue]) {
-    goog.math.Long.valueCache_[idMinValue] =
-        goog.math.Long.fromBits(0, 0x80000000 | 0);
-  }
-  return goog.math.Long.valueCache_[idMinValue];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MIN_VALUE,
+      function() { return goog.math.Long.fromBits(0, 0x80000000 | 0); });
 };
 
 
@@ -290,11 +278,9 @@ goog.math.Long.getMinValue = function() {
  * @public
  */
 goog.math.Long.getTwoPwr24 = function() {
-  var idTwoPwr24 = goog.math.Long.ValueCacheId_.TWO_PWR_24;
-  if (!goog.math.Long.valueCache_[idTwoPwr24]) {
-    goog.math.Long.valueCache_[idTwoPwr24] = goog.math.Long.fromInt(1 << 24);
-  }
-  return goog.math.Long.valueCache_[idTwoPwr24];
+  return goog.reflect.cache(
+      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.TWO_PWR_24,
+      function() { return goog.math.Long.fromInt(1 << 24); });
 };
 
 

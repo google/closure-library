@@ -932,7 +932,7 @@ function testDragEvents() {
       handler);
 
   // Since the order of the events between value and extent is not guaranteed
-  // accross browsers, we need to allow for both here and once we have
+  // across browsers, we need to allow for both here and once we have
   // them all, make sure that they were different.
   function isValueOrExtentDragStart(type) {
     return type == goog.ui.SliderBase.EventType.DRAG_VALUE_START ||

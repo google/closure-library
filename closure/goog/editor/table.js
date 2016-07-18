@@ -20,7 +20,6 @@
  * high level table modifications: Adding and deleting rows and columns,
  * and merging and splitting cells.
  *
- * @supported IE6+, WebKit 525+, Firefox 2+.
  */
 
 goog.provide('goog.editor.Table');
@@ -522,7 +521,7 @@ goog.editor.Table.DEFAULT_BORDER_COLOR = '#888';
  * @param {number} columns Number of columns in the table.
  * @param {number} rows Number of rows in the table.
  * @param {Object=} opt_tableStyle Object containing borderWidth and borderColor
- *    properties, used to set the inital style of the table.
+ *    properties, used to set the initial style of the table.
  * @return {!Element} a table element.
  */
 goog.editor.Table.createDomTable = function(

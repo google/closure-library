@@ -285,8 +285,12 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
     // remove parentNodes of the span while they are empty.
 
     if (goog.userAgent.GECKO) {
+      // Escape dollars passed in second argument of String.proto.replace.
+      // And since we're using that to replace, we need to escape those as well,
+      // hence the 2*2 dollar signs.
       goog.editor.node.replaceInnerHtml(
-          parent, parent.innerHTML.replace(dummyImageNodePattern, html));
+          parent, parent.innerHTML.replace(
+                      dummyImageNodePattern, html.replace(/\$/g, '$$$$')));
     } else {
       goog.editor.node.replaceInnerHtml(
           parent,
@@ -311,7 +315,9 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
       }
       goog.editor.node.replaceInnerHtml(
           parent,
-          parent.innerHTML.replace(new RegExp(dummySpanText, 'i'), html));
+          // Escape dollars passed in second argument of String.proto.replace
+          parent.innerHTML.replace(
+              new RegExp(dummySpanText, 'i'), html.replace(/\$/g, '$$$$')));
     }
   }
 
@@ -329,7 +335,7 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
  * Gets the html inside the selection to send off for further processing.
  *
  * TODO(user): Make this general so that it can be moved into
- * goog.editor.range.  The main reason it can't be moved is becuase we need to
+ * goog.editor.range.  The main reason it can't be moved is because we need to
  * get the range before we do the execCommand and continue to operate on that
  * same range (reasons are documented above).
  *
@@ -442,7 +448,7 @@ goog.editor.plugins.RemoveFormatting.prototype.putCaretInCave_ = function(
  * Restore carets that were hidden away by adding them back into the dom.
  * Note: this does not restore to the original dom location, as that
  * will likely have been modified with remove formatting.  The only
- * guarentees here are that start will still be before end, and that
+ * guarantees here are that start will still be before end, and that
  * they will be in the editable region.  This should only be used when
  * you don't actually intend to USE the caret again.
  * @private
@@ -754,7 +760,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
 
 
 /**
- * Handle per node special processing if neccessary. If this function returns
+ * Handle per node special processing if necessary. If this function returns
  * null then standard cleanup is applied. Otherwise this node and all children
  * are assumed to be cleaned.
  * NOTE(user): If an alternate RemoveFormatting processor is provided

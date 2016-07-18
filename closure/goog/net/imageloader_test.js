@@ -170,7 +170,7 @@ function assertImagesAreCorrect(results) {
 
 /**
  * Overrides the loader's loadImage_ method so that it dispatches an image
- * loaded event immediately, causing any event listners to receive them
+ * loaded event immediately, causing any event listeners to receive them
  * synchronously.  This allows tests to assume synchronous execution.
  */
 function makeLoaderSynchronous(loader) {

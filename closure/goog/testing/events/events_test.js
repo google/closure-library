@@ -167,6 +167,11 @@ function testFocus() {
   assertEventTypes(['focus']);
 }
 
+function testFocusIn() {
+  goog.testing.events.fireFocusInEvent(root);
+  assertEventTypes([goog.events.EventType.FOCUSIN]);
+}
+
 function testBlur() {
   goog.testing.events.fireBlurEvent(root);
   assertEventTypes(['blur']);

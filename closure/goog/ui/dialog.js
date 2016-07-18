@@ -45,7 +45,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Dragger');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Rect');
 goog.require('goog.string');
 goog.require('goog.structs.Map');
@@ -262,16 +261,6 @@ goog.ui.Dialog.prototype.setTitle = function(title) {
  */
 goog.ui.Dialog.prototype.getTitle = function() {
   return this.title_;
-};
-
-
-/**
- * Allows arbitrary HTML to be set in the content element.
- * @param {string} html Content HTML.
- * @deprecated Use setSafeHtmlContent or setTextContent.
- */
-goog.ui.Dialog.prototype.setContent = function(html) {
-  this.setSafeHtmlContent(goog.html.legacyconversions.safeHtmlFromString(html));
 };
 
 

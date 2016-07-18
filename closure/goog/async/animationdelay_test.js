@@ -16,56 +16,58 @@ goog.module('goog.async.AnimationDelayTest');
 goog.setTestOnly('goog.async.AnimationDelayTest');
 
 var AnimationDelay = goog.require('goog.async.AnimationDelay');
+var Promise = goog.require('goog.Promise');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var Timer = goog.require('goog.Timer');
 var jsunit = goog.require('goog.testing.jsunit');
-var recordFunction = goog.require('goog.testing.recordFunction');
 var testSuite = goog.require('goog.testing.testSuite');
 
-var TEST_DELAY = 20;
+var TEST_DELAY = 50;
 var stubs = new PropertyReplacer();
 
 testSuite({
   tearDown: function() { stubs.reset(); },
 
   testStart: function() {
-    var callCount = 0;
+    var resolver = Promise.withResolver();
     var start = goog.now();
-    var delay = new AnimationDelay(function(end) { callCount++; });
+    var delay = new AnimationDelay(function(end) {
+      assertNotNull(resolver);  // fail if called multiple times
+      resolver.resolve();
+      resolver = null;
+    });
 
     delay.start();
 
-    return Timer.promise(TEST_DELAY).then(function() {
-      assertEquals(1, callCount);
-    });
+    return resolver.promise;
   },
 
   testStop: function() {
-    var callCount = 0;
+    var resolver = Promise.withResolver();
     var start = goog.now();
-    var delay = new AnimationDelay(function(end) { callCount++; });
+    var delay = new AnimationDelay(function(end) { resolver.reject(); });
 
     delay.start();
     delay.stop();
 
     return Timer.promise(TEST_DELAY).then(function() {
-      assertEquals(0, callCount);
+      resolver.resolve();
+      return resolver.promise;
     });
   },
 
   testAlwaysUseGoogNowForHandlerTimestamp: function() {
+    var resolver = Promise.withResolver();
     var expectedValue = 12345.1;
     stubs.set(goog, 'now', function() { return expectedValue; });
 
-    var handler = recordFunction(function(timestamp) {
+    var delay = new AnimationDelay(function(timestamp) {
       assertEquals(expectedValue, timestamp);
+      resolver.resolve();
     });
-    var delay = new AnimationDelay(handler);
 
     delay.start();
 
-    return Timer.promise(TEST_DELAY).then(function() {
-      assertEquals(1, handler.getCallCount());
-    });
+    return resolver.promise;
   }
 });

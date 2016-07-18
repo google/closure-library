@@ -43,7 +43,7 @@ function setUp() {
 // ensure the test case doesn't fail because of it.
 var originalOnError = window.onerror;
 window.onerror = function(msg, url, line) {
-  // TODO(user): Safari 3 on the farm returns an object instead of the typcial
+  // TODO(user): Safari 3 on the farm returns an object instead of the typical
   // params.  Pass through errors for safari for now.
   if (goog.userAgent.WEBKIT ||
       msg == 'Error loading script' && url.indexOf('fake-site') != -1) {

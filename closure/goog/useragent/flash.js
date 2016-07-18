@@ -73,7 +73,8 @@ goog.userAgent.flash.init_ = function() {
 
   if (navigator.mimeTypes && navigator.mimeTypes.length) {
     var mimeType = navigator.mimeTypes['application/x-shockwave-flash'];
-    goog.userAgent.flash.detectedFlash_ = !!mimeType && mimeType.enabledPlugin;
+    goog.userAgent.flash.detectedFlash_ =
+        !!(mimeType && mimeType.enabledPlugin);
     if (goog.userAgent.flash.detectedFlash_) {
       goog.userAgent.flash.detectedFlashVersion_ =
           goog.userAgent.flash.getVersion_(mimeType.enabledPlugin.description);

@@ -31,6 +31,8 @@ goog.require('goog.dispose');
 goog.require('goog.log');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
+/** @suppress {extraRequire} interface */
+goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
 goog.require('goog.object');
@@ -767,7 +769,7 @@ goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
  */
 goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ = function(
     id) {
-  // NOTE(user): We want the earliest occurrance of a module, not the first
+  // NOTE(user): We want the earliest occurrence of a module, not the first
   // dependency we find. Therefore we strip duplicates at the end rather than
   // during.  See the tests for concrete examples.
   var ids = [];

@@ -718,7 +718,7 @@ goog.net.xpc.IframePollingTransport.prototype.MAX_FRAME_LENGTH_ = 3800;
 /**
  * Sends a message. Splits it in multiple frames if too long (exceeds IE's
  * URL-length maximum.
- * Wireformat: <seq>[,<frame_no>/<#frames>]|<frame_content>
+ * Wireformat: `<seq>[,<frame_no>/<#frames>]|<frame_content>`
  *
  * @param {string} service Name of service this the message has to be delivered.
  * @param {string} payload The message content.

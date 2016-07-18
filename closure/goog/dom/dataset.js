@@ -95,7 +95,11 @@ goog.dom.dataset.get = function(element, key) {
  */
 goog.dom.dataset.remove = function(element, key) {
   if (goog.dom.dataset.ALLOWED_ && element.dataset) {
-    delete element.dataset[key];
+    // In strict mode Safari will trigger an error when trying to delete a
+    // property which does not exist.
+    if (goog.dom.dataset.has(element, key)) {
+      delete element.dataset[key];
+    }
   } else {
     element.removeAttribute(
         goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key));

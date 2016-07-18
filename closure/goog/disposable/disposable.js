@@ -215,7 +215,7 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
  */
 goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
   if (this.disposed_) {
-    callback.call(opt_scope);
+    goog.isDef(opt_scope) ? callback.call(opt_scope) : callback();
     return;
   }
   if (!this.onDisposeCallbacks_) {

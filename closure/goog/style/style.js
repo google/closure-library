@@ -609,7 +609,7 @@ goog.style.getContainerOffsetToScrollInto = function(
     var relY = elementPos.y - container.scrollTop;
     if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
       // In older versions of IE getPageOffset(element) does not include the
-      // container border so it has to be added to accomodate.
+      // container border so it has to be added to accommodate.
       relX += containerBorder.left;
       relY += containerBorder.top;
     }
@@ -621,11 +621,9 @@ goog.style.getContainerOffsetToScrollInto = function(
   // How much the element can move in the container, i.e. the difference between
   // the element's bottom-right-most and top-left-most position where it's
   // fully visible.
-  var spaceX = container.clientWidth -
-      /** @type {HTMLElement} */ (element).offsetWidth;
-  var spaceY = container.clientHeight -
-      /** @type {HTMLElement} */ (element).offsetHeight;
-
+  var elementSize = goog.style.getSizeWithDisplay_(element);
+  var spaceX = container.clientWidth - elementSize.width;
+  var spaceY = container.clientHeight - elementSize.height;
   var scrollLeft = container.scrollLeft;
   var scrollTop = container.scrollTop;
   if (opt_center) {
@@ -1374,11 +1372,10 @@ goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
     // selector was invalid or there were CSS comments.  Setting the cssText of
     // the style node works fine and ignores CSS that IE doesn't understand.
     // However IE >= 11 doesn't support cssText any more, so we make sure that
-    // cssText is a defined property and otherwise fall back to setTextContent.
+    // cssText is a defined property and otherwise fall back to innerHTML.
     element.cssText = stylesString;
   } else {
-    // NOTE: We could also set textContent directly here.
-    goog.dom.setTextContent(/** @type {!Element} */ (element), stylesString);
+    element.innerHTML = stylesString;
   }
 };
 

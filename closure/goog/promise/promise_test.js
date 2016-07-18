@@ -483,6 +483,23 @@ function testResolveAndReject() {
 }
 
 
+function testResolveWithSelfRejects() {
+  var r;
+  var p = new goog.Promise(function(resolve) { r = resolve; });
+  r(p);
+  return p.then(shouldNotCall, function(e) {
+    assertEquals(e.message, 'Promise cannot resolve to itself');
+  });
+}
+
+
+function testResolveWithObjectStringResolves() {
+  return goog.Promise.resolve('[object Object]').then(function(v) {
+    assertEquals(v, '[object Object]');
+  });
+}
+
+
 function testRejectAndResolve() {
   return new goog
       .Promise(function(resolve, reject) {

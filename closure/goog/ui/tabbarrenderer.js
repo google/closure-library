@@ -33,11 +33,11 @@ goog.require('goog.ui.ContainerRenderer');
  * code.  The tab bar's DOM structure is determined by its orientation and
  * location relative to tab contents.  For example, a horizontal tab bar
  * located above tab contents looks like this:
- * <pre>
- *   <div class="goog-tab-bar goog-tab-bar-horizontal goog-tab-bar-top">
- *     ...(tabs here)...
- *   </div>
- * </pre>
+ *
+ *    <div class="goog-tab-bar goog-tab-bar-horizontal goog-tab-bar-top">
+ *      ...(tabs here)...
+ *    </div>
+ *
  * @constructor
  * @extends {goog.ui.ContainerRenderer}
  */

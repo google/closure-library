@@ -23,6 +23,7 @@
  *
  */
 
+goog.setTestOnly('goog.testing.TestCase');
 goog.provide('goog.testing.TestCase');
 goog.provide('goog.testing.TestCase.Error');
 goog.provide('goog.testing.TestCase.Order');
@@ -1187,6 +1188,10 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
         this.addNewTest(name, testMethod, obj);
       }
     }
+  }
+
+  if (obj['getTestName']) {
+    this.name_ = obj['getTestName']();
   }
 
   this.autoDiscoverLifecycle(obj);

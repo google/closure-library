@@ -409,7 +409,7 @@ goog.fx.Animation.prototype.cycle = function(now) {
 
 /**
  * Calculates current coordinates, based on the current state.  Applies
- * the accelleration function if it exists.
+ * the acceleration function if it exists.
  * @param {number} t Percentage of the way through the animation as a decimal.
  * @private
  */

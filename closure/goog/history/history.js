@@ -119,7 +119,7 @@
  *
  * Opera (through version 9.02):
  *
- * Navigating through pages at a rate faster than some threshhold causes Opera
+ * Navigating through pages at a rate faster than some threshold causes Opera
  * to cancel all outstanding timeouts and intervals, including the location
  * polling loop. Since this condition cannot be detected, common input events
  * are captured to cause the loop to restart.

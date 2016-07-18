@@ -20,6 +20,7 @@
  * @author attila@google.com (Attila Bodis)
  */
 
+goog.setTestOnly('goog.testing.PerformanceTimer');
 goog.provide('goog.testing.PerformanceTimer');
 goog.provide('goog.testing.PerformanceTimer.Task');
 

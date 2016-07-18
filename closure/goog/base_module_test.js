@@ -115,6 +115,15 @@ testSuite({
     assertTrue('module failed: testModule', goog.isFunction(testModule));
   },
 
-  testThisInModule:
-      goog.bind(function() { assertEquals(this, goog.global); }, this)
+  testThisInModule: goog.bind(
+      function() {
+        // IE9 and below don't support "strict" mode and "undefined" gets
+        // coersed to "window".
+        if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10')) {
+          assertEquals(this, undefined);
+        } else {
+          assertEquals(this, goog.global);
+        }
+      },
+      this)
 });
