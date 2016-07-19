@@ -38,6 +38,8 @@ goog.require('goog.labs.mock.verification');
 goog.require('goog.labs.mock.verification.VerificationMode');
 goog.require('goog.object');
 
+goog.setTestOnly('goog.labs.mock');
+
 
 /**
  * Mocks a given object or class.

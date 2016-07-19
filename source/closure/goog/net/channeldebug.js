@@ -211,10 +211,7 @@ goog.net.ChannelDebug.prototype.severe = function(text) {
 goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
   // first check if it's not JS - the only non-JS should be the magic cookie
   if (!responseText ||
-      /** @suppress {missingRequire}.  The require creates a circular
-       *  dependency.
-       */
-      responseText == goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
+      responseText == goog.net.ChannelDebug.MAGIC_RESPONSE_COOKIE) {
     return responseText;
   }
   /** @preserveTry */
@@ -295,3 +292,11 @@ goog.net.ChannelDebug.prototype.maybeRedactPostData_ = function(data) {
   }
   return out;
 };
+
+
+/**
+ * The normal response for forward channel requests.
+ * Used only before version 8 of the protocol.
+ * @const
+ */
+goog.net.ChannelDebug.MAGIC_RESPONSE_COOKIE = 'y2f%';

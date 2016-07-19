@@ -20,14 +20,12 @@
 goog.provide('goog.dom.dom_test');
 
 goog.require('goog.array');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.TypedTagName');
 goog.require('goog.functions');
 goog.require('goog.html.testing');
 goog.require('goog.object');
@@ -469,14 +467,6 @@ function testCreateDomWithClassName() {
 
   el = goog.dom.createDom(goog.dom.TagName.DIV, '');
   assertEquals('ClassName should be empty', '', el.className);
-}
-
-function testCreateTypedDom() {
-  var a = goog.dom.createDom(goog.dom.TypedTagName.A);
-  goog.asserts.assertInstanceof(a, HTMLAnchorElement);
-
-  a = goog.dom.getDomHelper().createDom(goog.dom.TypedTagName.A);
-  goog.asserts.assertInstanceof(a, HTMLAnchorElement);
 }
 
 function testCreateUntypedDom() {

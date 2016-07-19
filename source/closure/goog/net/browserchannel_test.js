@@ -366,7 +366,7 @@ function completeBackChannel() {
 function responseVersion7() {
   browserChannel.onRequestData(
       browserChannel.forwardChannelRequest_,
-      goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE);
+      goog.net.ChannelDebug.MAGIC_RESPONSE_COOKIE);
   browserChannel.onRequestComplete(browserChannel.forwardChannelRequest_);
   mockClock.tick(0);
 }
