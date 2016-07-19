@@ -39,6 +39,7 @@
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tokenization.html
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tree-construction.html
  *
+ * @author msamuel@google.com (Mike Samuel)
  * @supported IE6+, FF1.5+, Chrome 3.0+, Safari and Opera 10.
  */
 

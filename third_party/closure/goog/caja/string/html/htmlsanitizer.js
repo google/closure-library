@@ -43,6 +43,7 @@
  * htmlSanitize is relatively heavy considering that it is designed to parse
  * large html files.
  *
+ * @author msamuel@google.com (Mike Samuel)
  */
 
 goog.provide('goog.string.html.HtmlSanitizer');

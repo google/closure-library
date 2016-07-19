@@ -15,6 +15,7 @@
 /**
  * @fileoverview Unit tests for goog.Uri.
  *
+ * @author msamuel@google.com (Mike Samuel)
  */
 
 goog.provide('goog.UriTest');
