@@ -657,33 +657,33 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           sb.push(nodeValue);
           continue;
 
-        case goog.dom.TagName.P:
+        case String(goog.dom.TagName.P):
           goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           break;  // break (not continue) so that child nodes are processed.
 
-        case goog.dom.TagName.BR:
+        case String(goog.dom.TagName.BR):
           goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           continue;
 
-        case goog.dom.TagName.TABLE:
+        case String(goog.dom.TagName.TABLE):
           goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           tableStack[tableLevel++] = sp;
           break;
 
-        case goog.dom.TagName.PRE:
+        case String(goog.dom.TagName.PRE):
         case 'XMP':
           // This doesn't fully handle xmp, since
           // it doesn't actually ignore tags within the xmp tag.
           preTagStack[preTagLevel++] = sp;
           break;
 
-        case goog.dom.TagName.STYLE:
-        case goog.dom.TagName.SCRIPT:
-        case goog.dom.TagName.SELECT:
+        case String(goog.dom.TagName.STYLE):
+        case String(goog.dom.TagName.SCRIPT):
+        case String(goog.dom.TagName.SELECT):
           continue;
 
-        case goog.dom.TagName.A:
+        case String(goog.dom.TagName.A):
           if (node.href && node.href != '') {
             sb.push("<a href='");
             sb.push(node.href);
@@ -695,7 +695,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
             break;  // Take care of the children.
           }
 
-        case goog.dom.TagName.IMG:
+        case String(goog.dom.TagName.IMG):
           sb.push("<img src='");
           sb.push(node.src);
           sb.push("'");
@@ -708,7 +708,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           sb.push('>');
           continue;
 
-        case goog.dom.TagName.TD:
+        case String(goog.dom.TagName.TD):
           // Don't add a space for the first TD, we only want spaces to
           // separate td's.
           if (node.previousSibling) {
@@ -716,14 +716,14 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           }
           break;
 
-        case goog.dom.TagName.TR:
+        case String(goog.dom.TagName.TR):
           // Don't add a newline for the first TR.
           if (node.previousSibling) {
             goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           }
           break;
 
-        case goog.dom.TagName.DIV:
+        case String(goog.dom.TagName.DIV):
           var parent = node.parentNode;
           if (parent.firstChild == node &&
               goog.editor.plugins.RemoveFormatting.BLOCK_RE_.test(
