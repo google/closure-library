@@ -582,3 +582,26 @@ function testGetUid() {
   assertEquals(goog.labs.mock.getUid(obj1), goog.labs.mock.getUid(obj1));
   assertEquals(goog.labs.mock.getUid(func1), goog.labs.mock.getUid(func1));
 }
+
+function testMockEs6ClassMethods() {
+  // Create an ES6 class via eval so we can bail out if it's a syntax error in
+  // browsers that don't support ES6 classes.
+  try {
+    eval(
+        'var Foo = class {' +
+        '  a() {' +
+        '    fail(\'real object should never be called\');' +
+        '  }' +
+        '}');
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      return;
+    }
+  }
+
+  var mockObj = goog.labs.mock.mock(Foo);
+  goog.labs.mock.when(mockObj).a().thenReturn('a');
+  assertThrowsJsUnitException(function() { new Foo().a(); });
+  assertEquals('a', mockObj.a());
+  goog.labs.mock.verify(mockObj).a();
+}

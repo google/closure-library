@@ -238,18 +238,18 @@ goog.fx.Dragger.cloneNode = function(sourceEl) {
     dragTexts[i].value = origTexts[i].value;
   }
   switch (sourceEl.tagName) {
-    case goog.dom.TagName.TR:
+    case String(goog.dom.TagName.TR):
       return goog.dom.createDom(
           goog.dom.TagName.TABLE, null,
           goog.dom.createDom(goog.dom.TagName.TBODY, null, clonedEl));
-    case goog.dom.TagName.TD:
-    case goog.dom.TagName.TH:
+    case String(goog.dom.TagName.TD):
+    case String(goog.dom.TagName.TH):
       return goog.dom.createDom(
           goog.dom.TagName.TABLE, null,
           goog.dom.createDom(
               goog.dom.TagName.TBODY, null,
               goog.dom.createDom(goog.dom.TagName.TR, null, clonedEl)));
-    case goog.dom.TagName.TEXTAREA:
+    case String(goog.dom.TagName.TEXTAREA):
       clonedEl.value = sourceEl.value;
     default:
       return clonedEl;

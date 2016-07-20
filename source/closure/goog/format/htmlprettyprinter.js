@@ -134,7 +134,7 @@ goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
  */
 goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
     goog.dom.TagName.BR, goog.dom.TagName.DD, goog.dom.TagName.DT,
-    goog.dom.TagName.BR, goog.dom.TagName.LI, goog.dom.TagName.NOFRAMES);
+    goog.dom.TagName.LI, goog.dom.TagName.NOFRAMES);
 
 
 /**
