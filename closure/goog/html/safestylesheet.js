@@ -110,7 +110,9 @@ goog.html.SafeStyleSheet.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 /**
  * Creates a new SafeStyleSheet object by concatenating values.
- * @param {...(!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>)}
+
+{: ...(!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>)}
+ * @param 
  *     var_args Values to concatenate.
  * @return {!goog.html.SafeStyleSheet}
  */

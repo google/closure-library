@@ -7,7 +7,6 @@ This get started guide is designed to teach you some fundamental Closure
 development concepts in the context of creating your first Closure application.
 This guide also provides the steps common to a Closure development workflow.
 
-[TOC]
 
 ## Download the Closure library
 
