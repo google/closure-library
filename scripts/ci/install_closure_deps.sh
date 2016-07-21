@@ -23,8 +23,7 @@ if [ ! -d "closure-compiler" ]; then
   git clone --depth 1 https://github.com/google/closure-compiler.git
 fi
 cd closure-compiler
-ant jar
-ant linter
+mvn install -DskipTests=true
 
 cd ../closure-library
 
