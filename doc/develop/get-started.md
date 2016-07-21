@@ -1,6 +1,11 @@
 <!-- Documentation licensed under CC BY 4.0 -->
 <!-- License available at https://creativecommons.org/licenses/by/4.0/ -->
 
+---
+section: develop
+---
+
+
 # Get Started with the Closure Library
 
 This get started guide is designed to teach you some fundamental Closure
