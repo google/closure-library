@@ -288,7 +288,7 @@ goog.i18n.currency.CurrencyInfo = {
   'DOP': [2, 'RD$', 'RD$'],
   'EGP': [2, '£', 'LE'],
   'ETB': [2, 'Birr', 'Birr'],
-  'EUR': [2, '€', '€'],
+  'EUR': [50, '€', '€'],
   'GBP': [2, '£', 'GB£'],
   'HKD': [2, '$', 'HK$'],
   'HRK': [2, 'kn', 'kn'],
@@ -431,7 +431,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'XAF': [0, 'FCFA', 'FCFA'],
   'XCD': [2, '$', 'EC$'],
   'XOF': [0, 'CFA', 'CFA'],
-  'XPF': [0, 'FCFP', 'FCFP'],
+  'XPF': [48, 'F', 'F CFP'],
   'ZMW': [0, 'ZMW', 'ZMW'],
   'ZWD': [0, '$', 'Z$']
 };
