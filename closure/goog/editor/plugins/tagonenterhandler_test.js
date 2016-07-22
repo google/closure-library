@@ -405,7 +405,7 @@ function makeField(id, opt_tag) {
  */
 function helpTestSplit_(
     offset, firstHalfString, secondHalfString, isAppend, opt_goToBody) {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<b>begin bold<i>italic</i>end bold</b>';
   document.body.appendChild(node);
 
@@ -468,7 +468,7 @@ function testSplitDomAndAppend() {
 
 
 function testSplitDomAtElement() {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -483,7 +483,7 @@ function testSplitDomAtElement() {
 
 
 function testSplitDomAtElementStart() {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -498,7 +498,7 @@ function testSplitDomAtElementStart() {
 
 
 function testSplitDomAtChildlessElement() {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
@@ -513,7 +513,7 @@ function testSplitDomAtChildlessElement() {
 }
 
 function testReplaceWhiteSpaceWithNbsp() {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   var textNode = document.createTextNode('');
   node.appendChild(textNode);
 
