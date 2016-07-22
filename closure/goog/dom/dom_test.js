@@ -129,6 +129,23 @@ function testGetRequiredElementByClassDomHelper() {
   });
 }
 
+function testGetElementsByTagName() {
+  var divs = goog.dom.getElementsByTagName(goog.dom.TagName.DIV);
+  assertTrue(divs.length > 0);
+  var el = goog.dom.getRequiredElement('testEl');
+  var spans = goog.dom.getElementsByTagName(goog.dom.TagName.SPAN, el);
+  assertTrue(spans.length > 0);
+}
+
+function testGetElementsByTagNameDomHelper() {
+  var domHelper = new goog.dom.DomHelper();
+  var divs = domHelper.getElementsByTagName(goog.dom.TagName.DIV);
+  assertTrue(divs.length > 0);
+  var el = domHelper.getRequiredElement('testEl');
+  var spans = domHelper.getElementsByTagName(goog.dom.TagName.SPAN, el);
+  assertTrue(spans.length > 0);
+}
+
 function testGetElementsByTagNameAndClass() {
   assertEquals(
       'Should get 6 spans',
