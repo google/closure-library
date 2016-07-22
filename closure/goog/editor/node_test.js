@@ -96,7 +96,7 @@ function tearDownDomTree() {
 }
 
 function testGetCompatModeQuirks() {
-  var quirksIfr = document.createElement(goog.dom.TagName.IFRAME);
+  var quirksIfr = goog.dom.createElement(goog.dom.TagName.IFRAME);
   document.body.appendChild(quirksIfr);
   // Webkit used to default to standards mode, but fixed this in
   // Safari 4/Chrome 2, aka, WebKit 530.
@@ -121,7 +121,7 @@ function testGetCompatModeQuirks() {
 }
 
 function testGetCompatModeStandards() {
-  var standardsIfr = document.createElement(goog.dom.TagName.IFRAME);
+  var standardsIfr = goog.dom.createElement(goog.dom.TagName.IFRAME);
   document.body.appendChild(standardsIfr);
   var doc = goog.dom.getFrameContentDocument(standardsIfr);
   doc.open();
@@ -259,7 +259,7 @@ function testIsImportant() {
   var nbspNode = document.createTextNode('\u00a0');
   assertTrue(
       'Node with nbsp is important', goog.editor.node.isImportant(nbspNode));
-  var imageNode = document.createElement(goog.dom.TagName.IMG);
+  var imageNode = goog.dom.createElement(goog.dom.TagName.IMG);
   assertTrue(
       'Image node is important', goog.editor.node.isImportant(imageNode));
 }
@@ -388,7 +388,7 @@ function testIsEmpty() {
       'Text node with text should not be empty',
       goog.editor.node.isEmpty(textNode));
 
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   assertTrue('Empty div should be empty', goog.editor.node.isEmpty(div));
   div.innerHTML = '<iframe></iframe>';
   assertFalse(
@@ -412,14 +412,14 @@ function testIsEmpty() {
       'Div containing tags and text is not empty',
       goog.editor.node.isEmpty(div));
 
-  var img = document.createElement(goog.dom.TagName.IMG);
+  var img = goog.dom.createElement(goog.dom.TagName.IMG);
   assertFalse('Empty img should not be empty', goog.editor.node.isEmpty(img));
 
-  var iframe = document.createElement(goog.dom.TagName.IFRAME);
+  var iframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
   assertFalse(
       'Empty iframe should not be empty', goog.editor.node.isEmpty(iframe));
 
-  var embed = document.createElement(goog.dom.TagName.EMBED);
+  var embed = goog.dom.createElement(goog.dom.TagName.EMBED);
   assertFalse(
       'Empty embed should not be empty', goog.editor.node.isEmpty(embed));
 }
@@ -431,7 +431,7 @@ function testIsEmpty() {
  * and the length of the node if the node does have length
  */
 function testGetLength() {
-  var parentNode = document.createElement(goog.dom.TagName.P);
+  var parentNode = goog.dom.createElement(goog.dom.TagName.P);
 
   assertEquals(
       'Length 0 and no children', 0, goog.editor.node.getLength(parentNode));
@@ -451,7 +451,7 @@ function testGetLength() {
 }
 
 function testFindInChildrenSuccess() {
-  var parentNode = document.createElement(goog.dom.TagName.DIV);
+  var parentNode = goog.dom.createElement(goog.dom.TagName.DIV);
   parentNode.innerHTML = '<div>foo</div><b>foo2</b>';
 
   var index = goog.editor.node.findInChildren(parentNode, function(node) {
@@ -461,7 +461,7 @@ function testFindInChildrenSuccess() {
 }
 
 function testFindInChildrenFailure() {
-  var parentNode = document.createElement(goog.dom.TagName.DIV);
+  var parentNode = goog.dom.createElement(goog.dom.TagName.DIV);
   parentNode.innerHTML = '<div>foo</div><b>foo2</b>';
 
   var index = goog.editor.node.findInChildren(
