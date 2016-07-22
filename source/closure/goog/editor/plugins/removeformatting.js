@@ -28,6 +28,7 @@ goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -37,7 +38,6 @@ goog.require('goog.userAgent');
  * A plugin to handle removing formatting from selected text.
  * @constructor
  * @extends {goog.editor.Plugin}
- * @final
  */
 goog.editor.plugins.RemoveFormatting = function() {
   goog.editor.Plugin.call(this);
@@ -49,6 +49,14 @@ goog.editor.plugins.RemoveFormatting = function() {
    * @private
    */
   this.optRemoveFormattingFunc_ = null;
+
+  /**
+   * The key code that this plugin triggers on (along with the platform modifier
+   * key). Can be set by calling {@link #setKeyboardShortcutKeyCode}.
+   * @type {!goog.events.KeyCodes}
+   * @private
+   */
+  this.keyboardShortcutKeyCode_ = goog.events.KeyCodes.SPACE;
 };
 goog.inherits(goog.editor.plugins.RemoveFormatting, goog.editor.Plugin);
 
@@ -129,13 +137,23 @@ goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
     return false;
   }
 
-  if (key == ' ') {
+  if (e.keyCode == this.keyboardShortcutKeyCode_) {
     this.getFieldObject().execCommand(
         goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);
     return true;
   }
 
   return false;
+};
+
+
+/**
+ * See {@link #keyboardShortcutKeyCode_}.
+ * @param {!goog.events.KeyCodes} keyCode
+ */
+goog.editor.plugins.RemoveFormatting.prototype.setKeyboardShortcutKeyCode =
+    function(keyCode) {
+  this.keyboardShortcutKeyCode_ = keyCode;
 };
 
 

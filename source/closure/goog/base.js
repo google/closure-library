@@ -2652,7 +2652,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
 
 /**
  * @param {Function} ctr The constructor to test.
- * @returns {boolean} Whether the constructor has been tagged as unsealable
+ * @return {boolean} Whether the constructor has been tagged as unsealable
  *     using goog.tagUnsealableClass.
  * @private
  */

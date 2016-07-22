@@ -41,7 +41,7 @@ var mockClock;
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
-  bodyChildElement = document.createElement(goog.dom.TagName.DIV);
+  bodyChildElement = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(bodyChildElement);
   dialog = new goog.ui.Dialog();
   var buttons = new goog.ui.Dialog.ButtonSet();
@@ -364,7 +364,7 @@ function testShiftTabAtTopSetsUpWrapAndDoesNotPreventPropagation() {
 function testButtonsWithContentsDispatchSelectEvents() {
   var aButton = dialog.getButtonElement().getElementsByTagName(
       goog.dom.TagName.BUTTON)[0];
-  var aSpan = document.createElement(goog.dom.TagName.SPAN);
+  var aSpan = goog.dom.createElement(goog.dom.TagName.SPAN);
   aButton.appendChild(aSpan);
   var wasCalled = false;
   var callRecorder = function() { wasCalled = true; };

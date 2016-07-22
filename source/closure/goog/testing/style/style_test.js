@@ -63,7 +63,7 @@ function testIsVisible() {
 }
 
 function testIsOnScreen() {
-  var el = document.createElement(goog.dom.TagName.DIV);
+  var el = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(el);
 
   var dom = goog.dom.getDomHelper(el);
@@ -113,7 +113,7 @@ function testIsOnScreen() {
       'An element partially off the bottom of the screen is on screen.',
       goog.testing.style.isOnScreen(el));
 
-  var el2 = document.createElement(goog.dom.TagName.DIV);
+  var el2 = goog.dom.createElement(goog.dom.TagName.DIV);
   el2.style.position = 'absolute';
   goog.style.setSize(el2, 100, 100);
   goog.style.setPosition(el2, winScroll.x, winScroll.y);

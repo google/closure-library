@@ -261,7 +261,9 @@ goog.object.getKeys = function(obj) {
  * Example usage: getValueByKeys(jsonObj, 'foo', 'entries', 3)
  *
  * @param {!Object} obj An object to get the value from.  Can be array-like.
- * @param {...(string|number|!IArrayLike<number|string>)}
+
+{: ...(string|number|!IArrayLike<number|string>)}
+ * @param 
  *     var_args A number of keys
  *     (as strings, or numbers, for array-like objects).  Can also be
  *     specified as a single array of keys.

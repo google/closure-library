@@ -37,8 +37,8 @@ function setUp() {
   zippy =
       new goog.ui.Zippy(goog.dom.getElement('t1'), goog.dom.getElement('c1'));
 
-  var fakeControlEl = document.createElement(goog.dom.TagName.BUTTON);
-  var fakeContentEl = document.createElement(goog.dom.TagName.DIV);
+  var fakeControlEl = goog.dom.createElement(goog.dom.TagName.BUTTON);
+  var fakeContentEl = goog.dom.createElement(goog.dom.TagName.DIV);
 
   fakeZippy1 = new goog.ui.Zippy(
       fakeControlEl.cloneNode(true), fakeContentEl.cloneNode(true), true);
