@@ -62,3 +62,15 @@ function testGetComparatorForSpecificLocale() {
   // 'côte' and 'coté' sort differently for en and fr-CA.
   assertTrue(compare('côte', 'coté') < 0);
 }
+
+function testGetNumericComparator() {
+  var compare = goog.i18n.collation.createComparator('en', {numeric: true});
+  if (!goog.i18n.collation.hasNativeComparator('en')) return;
+  assertTrue(compare('2', '10') < 0);
+}
+
+function testGetNonNumericComparator() {
+  var compare = goog.i18n.collation.createComparator('en', {numeric: false});
+  if (!goog.i18n.collation.hasNativeComparator('en')) return;
+  assertTrue(compare('2', '10') > 0);
+}
