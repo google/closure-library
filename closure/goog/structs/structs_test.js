@@ -16,6 +16,7 @@ goog.provide('goog.structsTest');
 goog.setTestOnly('goog.structsTest');
 
 goog.require('goog.array');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -54,7 +55,7 @@ var node;
 
 
 function addNode() {
-  node = document.createElement(goog.dom.TagName.SPAN);
+  node = goog.dom.createElement(goog.dom.TagName.SPAN);
   getTestElement().appendChild(node);
 }
 
