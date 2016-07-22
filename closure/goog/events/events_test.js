@@ -101,7 +101,7 @@ function testSelfRemove() {
 }
 
 function testHasListener() {
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   assertFalse(goog.events.hasListener(div));
 
   var key = goog.events.listen(div, 'click', function() {});
@@ -351,7 +351,7 @@ function testCreationStack() {
   if (!new Error().stack) return;
   propertyReplacer.replace(goog.events.Listener, 'ENABLE_MONITORING', true);
 
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   var key =
       goog.events.listen(div, goog.events.EventType.CLICK, goog.nullFunction);
   var listenerStack = key.creationStack;
@@ -577,7 +577,7 @@ function testPropagationStoppedDuringCapture() {
   var bubbleHandler = goog.testing.recordFunction();
 
   var body = document.body;
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   body.appendChild(div);
   try {
     goog.events.listen(body, 'click', captureHandler, true);
@@ -606,7 +606,7 @@ function testPropagationStoppedDuringBubble() {
   var bubbleHandler2 = goog.testing.recordFunction();
 
   var body = document.body;
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   body.appendChild(div);
   try {
     goog.events.listen(body, 'click', captureHandler, true);
@@ -626,7 +626,7 @@ function testPropagationStoppedDuringBubble() {
 
 function testAddingCaptureListenerDuringBubbleShouldNotFireTheListener() {
   var body = document.body;
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   body.appendChild(div);
 
   var captureHandler1 = goog.testing.recordFunction();
@@ -655,7 +655,7 @@ function testAddingCaptureListenerDuringBubbleShouldNotFireTheListener() {
 
 function testRemovingCaptureListenerDuringBubbleWouldNotFireListenerTwice() {
   var body = document.body;
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   body.appendChild(div);
 
   var captureHandler = goog.testing.recordFunction();
