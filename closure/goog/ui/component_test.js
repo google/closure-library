@@ -293,7 +293,7 @@ function testDecorate() {
 
 function testDecorate_AllowDetached_NotInDocument() {
   goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
-  var element = document.createElement(goog.dom.TagName.DIV);
+  var element = goog.dom.createElement(goog.dom.TagName.DIV);
   component.decorate(element);
   assertFalse(
       'Component should not call enterDocument when decorated ' +
@@ -304,7 +304,7 @@ function testDecorate_AllowDetached_NotInDocument() {
 
 function testDecorate_AllowDetached_InDocument() {
   goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
-  var element = document.createElement(goog.dom.TagName.DIV);
+  var element = goog.dom.createElement(goog.dom.TagName.DIV);
   sandbox.appendChild(element);
   component.decorate(element);
   assertTrue(
