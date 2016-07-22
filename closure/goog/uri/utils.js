@@ -755,9 +755,7 @@ goog.uri.utils.buildQueryDataFromMap = function(map) {
  * fact that URL's generally can't exceed 2kb.
  *
  * @param {string} uri The original URI, which may already have query data.
-
-{: ...(goog.uri.utils.QueryArray|string|goog.uri.utils.QueryValue)}
- * @param 
+ * @param {...(goog.uri.utils.QueryArray|string|goog.uri.utils.QueryValue)}
  * var_args
  *     An array or argument list conforming to goog.uri.utils.QueryArray.
  * @return {string} The URI with all query parameters added.
