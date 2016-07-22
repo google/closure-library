@@ -50,7 +50,7 @@ goog.testing.net.XhrIo = function(opt_testQueue) {
   /**
    * Map of default headers to add to every request, use:
    * XhrIo.headers.set(name, value)
-   * @type {goog.structs.Map}
+   * @type {!goog.structs.Map}
    */
   this.headers = new goog.structs.Map();
 
