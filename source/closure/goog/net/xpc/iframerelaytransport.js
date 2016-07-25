@@ -339,7 +339,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ = function(
   // handler is not triggered
   if (goog.userAgent.IE) {
     var div = this.getWindow().document.createElement(goog.dom.TagName.DIV);
-    // TODO(user): It might be possible to set the sandbox attribute
+    // TODO(mlourenco): It might be possible to set the sandbox attribute
     // to restrict the privileges of the created iframe.
     goog.dom.safe.setInnerHtml(
         div, goog.html.SafeHtml.createIframe(null, null, {

@@ -171,6 +171,19 @@ goog.dom.$ = goog.dom.getElement;
 
 
 /**
+ * Gets elements by tag name.
+ * @param {goog.dom.TagName} tagName
+ * @param {(!Document|!Element)=} opt_parent Parent element or document where to
+ *     look for elements. Defaults to document.
+ * @return {!IArrayLike<!Element>}
+ */
+goog.dom.getElementsByTagName = function(tagName, opt_parent) {
+  var parent = opt_parent || document;
+  return parent.getElementsByTagName(tagName);
+};
+
+
+/**
  * Looks up elements by both tag and class name, using browser native functions
  * ({@code querySelectorAll}, {@code getElementsByTagName} or
  * {@code getElementsByClassName}) where possible. This function
@@ -882,7 +895,7 @@ goog.dom.createTextNode = function(content) {
  * @return {!Element} The created table.
  */
 goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
-  // TODO(user): Return HTMLTableElement, also in prototype function.
+  // TODO(mlourenco): Return HTMLTableElement, also in prototype function.
   // Callers need to be updated to e.g. not assign numbers to table.cellSpacing.
   return goog.dom.createTable_(document, rows, columns, !!opt_fillWithNbsp);
 };
@@ -2344,6 +2357,20 @@ goog.dom.DomHelper.prototype.getRequiredElement = function(id) {
  * @deprecated Use {@link goog.dom.DomHelper.prototype.getElement} instead.
  */
 goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
+
+
+/**
+ * Gets elements by tag name.
+ * @param {goog.dom.TagName} tagName
+ * @param {(!Document|!Element)=} opt_parent Parent element or document where to
+ *     look for elements. Defaults to document of this DomHelper.
+ * @return {!IArrayLike<!Element>}
+ */
+goog.dom.DomHelper.prototype.getElementsByTagName =
+    function(tagName, opt_parent) {
+  var parent = opt_parent || this.document_;
+  return parent.getElementsByTagName(tagName);
+};
 
 
 /**

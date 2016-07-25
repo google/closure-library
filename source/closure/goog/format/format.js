@@ -400,7 +400,7 @@ goog.format.insertWordBreaksGeneric_ = function(
  * @param {number=} opt_maxlen Maximum length after which to ensure there is a
  *     break.  Default is 10 characters.
  * @return {string} The string including word breaks.
- * @deprecated Prefer wrapping with CSS white-space: pre-wrap.
+ * @deprecated Prefer wrapping with CSS word-wrap: break-word.
  */
 goog.format.insertWordBreaks = function(str, opt_maxlen) {
   return goog.format.insertWordBreaksGeneric_(
@@ -451,7 +451,7 @@ goog.format.conservativelyHasGraphemeBreak_ = function(
  * @param {number=} opt_maxlen Maximum length after which to ensure there is a
  *     break.  Default is 10 characters.
  * @return {string} The string including word breaks.
- * @deprecated Prefer wrapping with CSS white-space: pre-wrap.
+ * @deprecated Prefer wrapping with CSS word-wrap: break-word.
  */
 goog.format.insertWordBreaksBasic = function(str, opt_maxlen) {
   return goog.format.insertWordBreaksGeneric_(

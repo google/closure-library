@@ -315,7 +315,7 @@ function testDontLinkifyInvalidScheme() {
   FIELDMOCK.$replay();
   linkBubble.enable(FIELDMOCK);
 
-  var badLink = document.createElement(goog.dom.TagName.A);
+  var badLink = goog.dom.createElement(goog.dom.TagName.A);
   badLink.href = 'javascript:alert(1)';
   goog.dom.setTextContent(badLink, 'bad link');
 
@@ -383,7 +383,7 @@ function testLongUrlTestLinkAnchorTextCorrect() {
       'becauseitistoolong.com';
   var truncatedLongUrl = goog.string.truncateMiddle(longUrl, 48);
 
-  var longLink = document.createElement(goog.dom.TagName.A);
+  var longLink = goog.dom.createElement(goog.dom.TagName.A);
   longLink.href = longUrl;
   goog.dom.setTextContent(longLink, 'Google');
   fieldDiv.appendChild(longLink);

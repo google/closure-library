@@ -183,10 +183,10 @@ Parser.prototype.getErrorMessage = function() {
 
 
 /**
- * @param {string|!ArrayBuffer} input The current input string (always)
+ * @param {string|!ArrayBuffer|!Array<number>} input
+ *     The current input string (always)
  * @param {number} pos The position in the current input that triggers the error
- * @throws {Error} Throws an error message indicating where
- *     the stream is broken.
+ * @throws {!Error} Throws an error indicating where the stream is broken
  * @private
  */
 Parser.prototype.error_ = function(input, pos) {

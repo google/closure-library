@@ -15,6 +15,7 @@
 goog.provide('goog.string.linkifyTest');
 goog.setTestOnly('goog.string.linkifyTest');
 
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
@@ -23,7 +24,7 @@ goog.require('goog.string.linkify');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 
-var div = document.createElement(goog.dom.TagName.DIV);
+var div = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function assertLinkify(comment, input, expected, opt_preserveNewlines) {
   assertEquals(

@@ -8,7 +8,7 @@
 characters where it is legal to insert word breaks; however, this table
 comes at a 2.5k pre-gzip (~1k post-gzip) size cost.  Consider using
 insertWordBreaksBasic to minimize the size impact.</p>
-<dl><dt class="spec">Deprecated<dd><p>Prefer wrapping with CSS white-space: pre-wrap.</p>
+<dl><dt class="spec">Deprecated<dd><p>Prefer wrapping with CSS word-wrap: break-word.</p>
 <dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>HTML to insert word breaks into.</p>
 <dt class="type name"><var>opt_maxlen</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Maximum length after which to ensure there is a
 break.  Default is 10 characters.</p>
@@ -20,7 +20,7 @@ However, this is good enough for the common case of URLs.  It also
 works for all Latin and Cyrillic languages, plus CJK has no need for word
 breaks.  When this method is used, goog.i18n.GraphemeBreak may be dead
 code eliminated.</p>
-<dl><dt class="spec">Deprecated<dd><p>Prefer wrapping with CSS white-space: pre-wrap.</p>
+<dl><dt class="spec">Deprecated<dd><p>Prefer wrapping with CSS word-wrap: break-word.</p>
 <dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>HTML to insert word breaks into.</p>
 <dt class="type name"><var>opt_maxlen</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>=</code><dd><p>Maximum length after which to ensure there is a
 break.  Default is 10 characters.</p>

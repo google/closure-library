@@ -266,7 +266,7 @@ goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
   var result = this.renderStrict(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
-  // TODO(user): Call result.toSafeStyleSheet() once that exists.
+  // TODO(mlourenco): Call result.toSafeStyleSheet() once that exists.
   return goog.html.uncheckedconversions
       .safeStyleSheetFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from(
