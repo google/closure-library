@@ -820,6 +820,7 @@ goog.addDependency('net/streams/jsonstreamparser.js', ['goog.net.streams.JsonStr
 goog.addDependency('net/streams/jsonstreamparser_test.js', ['goog.net.streams.JsonStreamParserTest'], ['goog.array', 'goog.json', 'goog.labs.testing.JsonFuzzing', 'goog.net.streams.JsonStreamParser', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.uri.utils'], {});
 goog.addDependency('net/streams/nodereadablestream.js', ['goog.net.streams.NodeReadableStream'], [], {});
 goog.addDependency('net/streams/pbstreamparser.js', ['goog.net.streams.PbStreamParser'], ['goog.asserts', 'goog.net.streams.StreamParser'], {});
+goog.addDependency('net/streams/pbstreamparser_test.js', ['goog.net.streams.PbStreamParserTest'], [], {});
 goog.addDependency('net/streams/streamfactory.js', ['goog.net.streams.createXhrNodeReadableStream'], ['goog.asserts', 'goog.net.streams.XhrNodeReadableStream', 'goog.net.streams.XhrStreamReader'], {});
 goog.addDependency('net/streams/streamparser.js', ['goog.net.streams.StreamParser'], [], {});
 goog.addDependency('net/streams/xhrnodereadablestream.js', ['goog.net.streams.XhrNodeReadableStream'], ['goog.array', 'goog.log', 'goog.net.streams.NodeReadableStream', 'goog.net.streams.XhrStreamReader'], {});
