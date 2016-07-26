@@ -1001,7 +1001,37 @@ function testKeyboardShortcut_other() {
   FIELDMOCK.$replay();
 
   var e = {};
-  var key = 'a';
+  var key = 'x';
+  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  assertFalse(result);
+
+  FIELDMOCK.$verify();
+}
+
+function testCustomKeyboardShortcut_custom() {
+  FIELDMOCK.$reset();
+
+  FIELDMOCK.execCommand(
+      goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);
+
+  FIELDMOCK.$replay();
+
+  var e = {};
+  var key = '\\';
+  FORMATTER.setKeyboardShortcutKey(key);
+  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  assertTrue(result);
+
+  FIELDMOCK.$verify();
+}
+
+function testCustomKeyboardShortcut_default() {
+  FIELDMOCK.$reset();
+  FIELDMOCK.$replay();
+
+  var e = {};
+  var key = ' ';
+  FORMATTER.setKeyboardShortcutKey('\\');
   var result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 

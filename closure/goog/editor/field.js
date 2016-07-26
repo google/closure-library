@@ -1410,6 +1410,11 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
         e.getBrowserEvent().key == ' ') {
       stringKey = ' ';
     }
+    // Converting the keyCode for "\" using fromCharCode creates "u", so we need
+    // to look out for it specifically.
+    if (e.keyCode == goog.events.KeyCodes.BACKSLASH) {
+      stringKey = '\\';
+    }
 
     if (this.invokeShortCircuitingOp_(
             goog.editor.Plugin.Op.SHORTCUT, e, stringKey, isModifierPressed)) {
