@@ -972,7 +972,7 @@ goog.labs.mock.MethodBinding_.prototype.matches = function(
       goog.array.equals(calls, specs, function(arg, spec) {
         // Duck-type to see if this is an object that implements the
         // goog.labs.testing.Matcher interface.
-        if (goog.isFunction(spec.matches)) {
+        if (spec && goog.isFunction(spec.matches)) {
           return spec.matches(arg);
         } else {
           return goog.array.defaultCompareEquality(spec, arg);
