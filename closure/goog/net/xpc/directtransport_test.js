@@ -82,7 +82,7 @@ var debugDiv;
 
 function setUpPage() {
   // Show debug log
-  debugDiv = document.createElement(goog.dom.TagName.DIV);
+  debugDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   var logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
@@ -120,7 +120,7 @@ function tearDown() {
 
 
 function createIframe() {
-  peerIframe = document.createElement(goog.dom.TagName.IFRAME);
+  peerIframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
   peerIframe.id = PEER_IFRAME_ID;
   document.body.insertBefore(peerIframe, document.body.firstChild);
 }
