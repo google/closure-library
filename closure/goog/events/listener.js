@@ -41,10 +41,7 @@ goog.events.Listener = function(
     this.creationStack = new Error().stack;
   }
 
-  /**
-   * Callback function.
-   * @type {Function}
-   */
+  /** @override */
   this.listener = listener;
 
   /**
