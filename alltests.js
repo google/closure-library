@@ -313,6 +313,7 @@ var _allTests = [
   'closure/goog/net/jsonp_test.html',
   'closure/goog/net/multiiframeloadmonitor_test.html',
   'closure/goog/net/networktester_test.html',
+  'closure/goog/net/streams/base64streamdecoder_test.html',
   'closure/goog/net/streams/jsonstreamparser_test.html',
   'closure/goog/net/streams/pbstreamparser_test.html',
   'closure/goog/net/streams/xhrnodereadablestream_test.html',

@@ -20,6 +20,7 @@ goog.require('goog.object');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 
+// clang-format off
 var testMessage1 = {
   data: [
     0x0a, 0x00,                                            // msg: ''
@@ -41,6 +42,7 @@ var testMessage1 = {
          0x6e, 0x67, 0x2d, 0x69, 0x73, 0x2d, 0x77, 0x72, 0x6f, 0x6e, 0x67]}
   ]
 };
+// clang-format on
 
 /**
  * @param {!Array<number>} bytes The input bytes
