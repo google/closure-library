@@ -271,10 +271,11 @@ goog.events.KeyCodes.firesKeyPressEvent = function(
   if (goog.isNumber(opt_heldKeyCode)) {
     opt_heldKeyCode = goog.events.KeyCodes.normalizeKeyCode(opt_heldKeyCode);
   }
-  if (!opt_shiftKey &&
-      (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
-       opt_heldKeyCode == goog.events.KeyCodes.ALT ||
-       goog.userAgent.MAC && opt_heldKeyCode == goog.events.KeyCodes.META)) {
+  var heldKeyIsModifier = opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
+      opt_heldKeyCode == goog.events.KeyCodes.ALT ||
+      opt_heldKeyCode == goog.events.KeyCodes.SHIFT ||
+      goog.userAgent.MAC && opt_heldKeyCode == goog.events.KeyCodes.META;
+  if ((!opt_shiftKey || goog.userAgent.MAC) && heldKeyIsModifier) {
     return false;
   }
 
