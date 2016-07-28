@@ -2593,7 +2593,6 @@ goog.defineClass = function(superClass, def) {
  *   constructor: (!Function|undefined),
  *   statics: (Object|undefined|function(Function):void)
  * }}
- * @suppress {missingProvide}
  */
 goog.defineClass.ClassDescriptor;
 
