@@ -24,6 +24,7 @@ goog.setTestOnly('goog.baseTest');
 goog.require('goog.Promise');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.object');
@@ -553,7 +554,7 @@ function testRemoveUidFromObjectWithoutUid() {
 }
 
 function testRemoveUidFromNode() {
-  var node = document.createElement(goog.dom.TagName.DIV);
+  var node = goog.dom.createElement(goog.dom.TagName.DIV);
   var nodeUid = goog.getUid(node);
   goog.removeUid(node);
   assertNotEquals(
@@ -594,7 +595,7 @@ function testConstructorUid() {
  * property set but undefined. See bug 1252508.
  */
 function testUidNotUndefinedOnReusedElement() {
-  var div = document.createElement(goog.dom.TagName.DIV);
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(div);
   div.innerHTML = '<form id="form"></form>';
   var span = div.getElementsByTagName(goog.dom.TagName.FORM)[0];
