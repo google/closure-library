@@ -57,6 +57,7 @@ See the COPYING file for details.
     goog.require('goog.userAgent.jscript');
     goog.require('goog.userAgent.product');
     goog.require('goog.userAgent.product.isVersion');
+    goog.require('goog.dom.TagName');
   </script>
 
 </head>
@@ -143,9 +144,9 @@ See the COPYING file for details.
   function addSection(parent, title, ns, properties) {
     goog.dom.appendChild(
         parent,
-        goog.dom.createDom('tr',
+        goog.dom.createDom(goog.dom.TagName.TR,
                            null,
-                           goog.dom.createDom('th',
+                           goog.dom.createDom(goog.dom.TagName.TH,
                                               {'colspan': 2, 'class': 'section'},
                                               title)));
 
@@ -167,7 +168,7 @@ See the COPYING file for details.
     var row = goog.dom.createElement('tr');
     goog.dom.appendChild(parent, row);
 
-    var nameCell = goog.dom.createDom('th', null, name);
+    var nameCell = goog.dom.createDom(goog.dom.TagName.TH, null, name);
     goog.dom.appendChild(row, nameCell);
 
     var valueCell = goog.dom.createElement('td');

@@ -22,6 +22,7 @@ See the COPYING file for details.
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.CustomColorPalette');
     goog.require('goog.ui.Palette');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/palette.css">
@@ -203,7 +204,7 @@ See the COPYING file for details.
 
 
     function createColorPaletteDemo(colors, width, caption) {
-      goog.dom.getElement('cp').appendChild(goog.dom.createDom('p', null, caption));
+      goog.dom.getElement('cp').appendChild(goog.dom.createDom(goog.dom.TagName.P, null, caption));
       var cp = new goog.ui.ColorPalette(colors);
       cp.setSize(width); // If we only set the columns, the rows are calculated.
       cp.render(goog.dom.getElement('cp'));
@@ -247,25 +248,25 @@ See the COPYING file for details.
     // Hack for the demo, don't try this at home, kids!
     var cpc = goog.dom.getElement('cp');
     cpc.appendChild(document.createTextNode('Change: '));
-    cpc.appendChild(goog.dom.createDom('span',
+    cpc.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN,
         {'class': 'fakelink', 'onclick': function() {
           cpg.setColors(
               ['#000', '#400', '#600', '#900', '#A00', '#C00', '#E00', '#F00']);
         }}, 'Reds'));
     cpc.appendChild(document.createTextNode(', '));
-    cpc.appendChild(goog.dom.createDom('span',
+    cpc.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN,
         {'class': 'fakelink', 'onclick': function() {
           cpg.setColors(
               ['#000', '#040', '#060', '#090', '#0A0', '#0C0', '#0E0', '#0F0']);
         }}, 'Greens'));
     cpc.appendChild(document.createTextNode(', '));
-    cpc.appendChild(goog.dom.createDom('span',
+    cpc.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN,
         {'class': 'fakelink', 'onclick': function() {
           cpg.setColors(
               ['#000', '#004', '#006', '#009', '#00A', '#00C', '#00E', '#00F']);
         }}, 'Blues'));
     cpc.appendChild(document.createTextNode(', '));
-    cpc.appendChild(goog.dom.createDom('span',
+    cpc.appendChild(goog.dom.createDom(goog.dom.TagName.SPAN,
         {'class': 'fakelink', 'onclick': function() {
           cpg.setColors(
               ['#000', '#444', '#666', '#999', '#AAA', '#CCC', '#EEE', '#FFF']);

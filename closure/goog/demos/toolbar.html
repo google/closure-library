@@ -35,6 +35,7 @@ See the COPYING file for details.
     goog.require('goog.ui.ToolbarSelect');
     goog.require('goog.ui.ToolbarSeparator');
     goog.require('goog.ui.ToolbarToggleButton');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/menu.css">
@@ -561,7 +562,7 @@ See the COPYING file for details.
     t1.addChild(new goog.ui.ToolbarButton('Disabled'), true);
     t1.getChildAt(3).setEnabled(false);
     t1.addChild(new goog.ui.ToolbarButton('YetAnotherButton'), true);
-    var toggleButton = new goog.ui.ToolbarToggleButton(goog.dom.createDom('div',
+    var toggleButton = new goog.ui.ToolbarToggleButton(goog.dom.createDom(goog.dom.TagName.DIV,
         'icon goog-edit-bold'));
     toggleButton.setChecked(true);
     t1.addChild(toggleButton, true);
@@ -599,7 +600,7 @@ See the COPYING file for details.
     // For reasons unknown, on FF2, we have to inject an &nbsp; character into
     // the icon div for RTL positioning to work.  FF2 BiDi sucks!
     var rtlToggleButton = new goog.ui.ToolbarToggleButton(goog.dom.createDom(
-        'div', 'icon goog-edit-bold', '\u00A0'));
+        goog.dom.TagName.DIV, 'icon goog-edit-bold', '\u00A0'));
     rtlToggleButton.setChecked(true);
     t1rtl.addChild(rtlToggleButton, true);
     var btnLeftRtl = new goog.ui.ToolbarButton('Left');

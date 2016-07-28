@@ -23,6 +23,7 @@ See the COPYING file for details.
     goog.require('goog.ui.CheckBoxMenuItem');
     goog.require('goog.ui.Menu');
     goog.require('goog.ui.MenuItem');
+    goog.require('goog.dom.TagName');
   </script>
 </head>
 <body>
@@ -192,7 +193,7 @@ See the COPYING file for details.
 
     function createCheckBoxItem(label, shortcut) {
       return new goog.ui.CheckBoxMenuItem([
-        goog.dom.createDom('div', 'goog-menuitem-accel', shortcut),
+        goog.dom.createDom(goog.dom.TagName.DIV, 'goog-menuitem-accel', shortcut),
         goog.dom.createTextNode(label)
       ]);
     }

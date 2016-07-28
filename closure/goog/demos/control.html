@@ -21,6 +21,7 @@ See the COPYING file for details.
     goog.require('goog.ui.ControlRenderer');
     goog.require('goog.ui.decorate');
     goog.require('goog.ui.registry');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <style>
@@ -301,8 +302,8 @@ See the COPYING file for details.
 
     // Create the first control programmatically, and make it focusable.
     var c1 = new goog.ui.Control(
-        goog.dom.createDom('span', null, 'Hello, ',
-            goog.dom.createDom('b', null, 'world'),
+        goog.dom.createDom(goog.dom.TagName.SPAN, null, 'Hello, ',
+            goog.dom.createDom(goog.dom.TagName.B, null, 'world'),
             '!'));
     c1.render(goog.dom.getElement('c1'));
     goog.events.listen(c1, EVENTS, logEvent);
@@ -326,10 +327,10 @@ See the COPYING file for details.
       var baseClass = this.getCssClass();
       var classNames = this.getClassNamesForState(control.getState());
       var dom = control.dom_;
-      return dom.createDom('div', classNames.join(' '),
-          dom.createDom('div', baseClass + '-outer-box',
-              dom.createDom('div', baseClass + '-inner-box',
-                  dom.createDom('div', baseClass + '-content',
+      return dom.createDom(goog.dom.TagName.DIV, classNames.join(' '),
+          dom.createDom(goog.dom.TagName.DIV, baseClass + '-outer-box',
+              dom.createDom(goog.dom.TagName.DIV, baseClass + '-inner-box',
+                  dom.createDom(goog.dom.TagName.DIV, baseClass + '-content',
                       control.getContent()))));
     };
 
@@ -338,9 +339,9 @@ See the COPYING file for details.
       var baseClass = this.getCssClass();
       var dom = control.dom_;
       element.appendChild(
-          dom.createDom('div', baseClass + '-outer-box',
-              dom.createDom('div', baseClass + '-inner-box',
-                  dom.createDom('div', baseClass + '-content',
+          dom.createDom(goog.dom.TagName.DIV, baseClass + '-outer-box',
+              dom.createDom(goog.dom.TagName.DIV, baseClass + '-inner-box',
+                  dom.createDom(goog.dom.TagName.DIV, baseClass + '-content',
                       element.childNodes))));
       return SampleCustomRenderer.superClass_.decorate.call(this, control,
           element);

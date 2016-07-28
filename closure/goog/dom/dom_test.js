@@ -1207,7 +1207,7 @@ function testIsFocusable() {
 
   // Make sure IE doesn't throw for detached elements. IE can't measure detached
   // elements, and calling getBoundingClientRect() will throw Unspecified Error.
-  goog.dom.isFocusable(goog.dom.createDom('button'));
+  goog.dom.isFocusable(goog.dom.createDom(goog.dom.TagName.BUTTON));
 }
 
 function testGetTextContent() {

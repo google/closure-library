@@ -14,6 +14,7 @@ See the COPYING file for details.
     goog.require('goog.object');
     goog.require('goog.ui.MenuItem');
     goog.require('goog.ui.PopupMenu');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/menu.css">
@@ -95,7 +96,7 @@ See the COPYING file for details.
         goog.positioning.Corner.TOP_LEFT);
 
     function logEvent(e) {
-      var entry = goog.dom.createDom('div', null,
+      var entry = goog.dom.createDom(goog.dom.TagName.DIV, null,
           'type: ' + e.type +
           ', target: ' + e.target.constructor.name +
           (e.target.getCaption ? ', caption: ' + e.target.getCaption() : ''));

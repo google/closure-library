@@ -22,6 +22,7 @@ See the COPYING file for details.
     goog.require('goog.ui.ImagelessButtonRenderer');
     goog.require('goog.ui.ToggleButton');
     goog.require('goog.ui.decorate');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/imagelessbutton.css">
@@ -199,7 +200,7 @@ See the COPYING file for details.
 
     // Use a DIV with a background image as the icon, and a SPAN as the caption.
     var iconbutton1 = new goog.ui.ToggleButton([
-      goog.dom.createDom('div', 'icon insert-image-icon goog-inline-block'),
+      goog.dom.createDom(goog.dom.TagName.DIV, 'icon insert-image-icon goog-inline-block'),
       'Insert Image'
     ], goog.ui.ImagelessButtonRenderer.getInstance());
     iconbutton1.render(goog.dom.getElement('iconbuttons'));
@@ -207,7 +208,7 @@ See the COPYING file for details.
 
     // Add a custom style, too.
     var iconbutton2 = new goog.ui.ToggleButton([
-      goog.dom.createDom('div', 'icon highlight-icon goog-inline-block'),
+      goog.dom.createDom(goog.dom.TagName.DIV, 'icon highlight-icon goog-inline-block'),
       'Highlight Text'
     ], goog.ui.ImagelessButtonRenderer.getInstance());
     iconbutton2.addClassName('default-button');

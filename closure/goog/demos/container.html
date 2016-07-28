@@ -29,6 +29,7 @@ See the COPYING file for details.
     goog.require('goog.ui.Select');
     goog.require('goog.ui.Separator');
     goog.require('goog.ui.ToggleButton');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/button.css">
@@ -579,19 +580,19 @@ See the COPYING file for details.
     sizeMenu.addClassName('goog-edit-font-size');
     tb.addChild(sizeMenu, true);
 
-    var boldButton = new goog.ui.ToggleButton(goog.dom.createDom('div',
+    var boldButton = new goog.ui.ToggleButton(goog.dom.createDom(goog.dom.TagName.DIV,
         'goog-edit-bold', '\u00A0'));
     boldButton.setId('Bold Button');
     boldButton.setTooltip('Bold');
     tb.addChild(boldButton, true);
 
-    var italicButton = new goog.ui.ToggleButton(goog.dom.createDom('div',
+    var italicButton = new goog.ui.ToggleButton(goog.dom.createDom(goog.dom.TagName.DIV,
         'goog-edit-italic', '\u00A0'));
     italicButton.setId('Italic Button');
     italicButton.setTooltip('Italic');
     tb.addChild(italicButton, true);
 
-    var underlineButton = new goog.ui.ToggleButton(goog.dom.createDom('div',
+    var underlineButton = new goog.ui.ToggleButton(goog.dom.createDom(goog.dom.TagName.DIV,
         'goog-edit-underline', '\u00A0'));
     underlineButton.setId('Underline Button');
     underlineButton.setTooltip('Underline');
