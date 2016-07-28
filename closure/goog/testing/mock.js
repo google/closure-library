@@ -40,10 +40,9 @@ goog.provide('goog.testing.Mock');
 goog.provide('goog.testing.MockExpectation');
 
 goog.require('goog.array');
-goog.require('goog.object');
-goog.require('goog.structs.Set');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MockInterface');
+goog.require('goog.testing.MockUtil');
 goog.require('goog.testing.mockmatchers');
 
 
@@ -279,7 +278,8 @@ goog.testing.Mock.prototype.$threwException_ = null;
  */
 goog.testing.Mock.prototype.$initializeFunctions_ = function(objectToMock) {
   // Gets the object properties.
-  var enumerableProperties = this.$getProperties_(objectToMock);
+  var enumerableProperties =
+      goog.testing.MockUtil.getAllProperties(objectToMock);
 
   // The non enumerable properties are added if they override the ones in the
   // Object prototype. This is due to the fact that IE8 does not enumerate any
@@ -304,40 +304,6 @@ goog.testing.Mock.prototype.$initializeFunctions_ = function(objectToMock) {
       }
     }
   }
-};
-
-
-/**
- * Get all properties of an object.
- *
- * <p> Depending on the browser this will return both enumerable and
- * non-enumerable properties, or only enumerable properties. It will not,
- * however, get the properties on the {@code Object.prototype} since some tests
- * depend on things like {@code toString()} to not be mocked if it has not been
- * overridden.
- *
- * @param {Object} obj The object to get the properties of.
- * @return {!Array<string>}
- * @private
- */
-goog.testing.Mock.prototype.$getProperties_ = function(obj) {
-  if (!obj || obj === Object.prototype) {
-    return [];
-  }
-
-  if (!Object.getOwnPropertyNames || !Object.getPrototypeOf) {
-    return goog.object.getKeys(obj);
-  }
-
-  var visited = new goog.structs.Set();
-  visited.addAll(Object.getOwnPropertyNames(obj));
-
-  var proto = Object.getPrototypeOf(obj);
-  if (proto) {
-    visited.addAll(this.$getProperties_(proto));
-  }
-
-  return visited.getValues();
 };
 
 
