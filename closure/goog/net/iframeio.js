@@ -930,9 +930,9 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
         goog.dom.TagName.SELECT, /** @type {!Element} */ (clone));
     for (var i = 0, n = selects.length; i < n; i++) {
       var selectsOptions =
-          selects[i].getElementsByTagName(goog.dom.TagName.OPTION);
+          goog.dom.getElementsByTagName(goog.dom.TagName.OPTION, selects[i]);
       var clonesOptions =
-          clones[i].getElementsByTagName(goog.dom.TagName.OPTION);
+          goog.dom.getElementsByTagName(goog.dom.TagName.OPTION, clones[i]);
       for (var j = 0, m = selectsOptions.length; j < m; j++) {
         clonesOptions[j].selected = selectsOptions[j].selected;
       }

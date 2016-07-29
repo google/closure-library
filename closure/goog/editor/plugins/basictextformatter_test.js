@@ -824,7 +824,8 @@ function testConvertBreaksToDivsKeepsP() {
   FORMATTER.convertBreaksToDivs_();
   assertEquals(
       'There should still be a <p> tag', 1,
-      FIELDMOCK.getElement().getElementsByTagName(goog.dom.TagName.P).length);
+      goog.dom.getElementsByTagName(goog.dom.TagName.P, FIELDMOCK.getElement())
+          .length);
   var html = FIELDMOCK.getElement().innerHTML.toLowerCase();
   assertNotBadBrElements(html);
   assertNotContains(

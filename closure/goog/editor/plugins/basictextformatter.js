@@ -513,7 +513,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsHtml = function(
     // i starts at 1 so we don't copy in the original, legitimate <head>.
     var numHeads = heads.length;
     for (var i = 1; i < numHeads; ++i) {
-      var styles = heads[i].getElementsByTagName(goog.dom.TagName.STYLE);
+      var styles =
+          goog.dom.getElementsByTagName(goog.dom.TagName.STYLE, heads[i]);
       var numStyles = styles.length;
       for (var j = 0; j < numStyles; ++j) {
         stylesHtmlArr.push(styles[j].outerHTML);
@@ -1032,8 +1033,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
     };
 
     goog.array.forEach(
-        this.getFieldObject().getElement().getElementsByTagName(
-            goog.dom.TagName.A),
+        goog.dom.getElementsByTagName(
+            goog.dom.TagName.A,
+            /** @type {!Element} */ (this.getFieldObject().getElement())),
         setHrefAndLink);
     if (anchors.length) {
       anchor = anchors.pop();
@@ -1397,13 +1399,11 @@ goog.editor.plugins.BasicTextFormatter.prototype.fixIELists_ = function() {
     container = container.parentNode;
   }
   if (!container) return;
-  var lists = goog.array.toArray(
-      /** @type {!Element} */ (container).getElementsByTagName(
-          goog.dom.TagName.UL));
+  var lists = goog.array.toArray(goog.dom.getElementsByTagName(
+      goog.dom.TagName.UL, /** @type {!Element} */ (container)));
   goog.array.extend(
-      lists, goog.array.toArray(
-                 /** @type {!Element} */ (container).getElementsByTagName(
-                     goog.dom.TagName.OL)));
+      lists, goog.array.toArray(goog.dom.getElementsByTagName(
+                 goog.dom.TagName.OL, /** @type {!Element} */ (container))));
   // Fix the lists
   goog.array.forEach(lists, function(node) {
     var type = node.type;

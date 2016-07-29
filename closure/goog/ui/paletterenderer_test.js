@@ -80,8 +80,8 @@ function testCellA11yLabels() {
 
 function testA11yActiveDescendant() {
   palette.render();
-  var cells =
-      palette.getElementStrict().getElementsByTagName(goog.dom.TagName.TD);
+  var cells = goog.dom.getElementsByTagName(
+      goog.dom.TagName.TD, palette.getElementStrict());
 
   renderer.highlightCell(palette, cells[1].firstChild, true);
   assertEquals(

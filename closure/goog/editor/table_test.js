@@ -424,13 +424,13 @@ function testMergeCellsInRow() {
       goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic);
   assertEquals(
       'Cells merged', 1,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH).length);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0]).length);
   assertEquals(
       'Merged cell has correct colspan', 3,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].colSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0])[0].colSpan);
   assertEquals(
       'Merged cell has correct rowspan', 1,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].rowSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0])[0].rowSpan);
 }
 
 function testMergeCellsInColumn() {
@@ -440,13 +440,13 @@ function testMergeCellsInColumn() {
       goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic);
   assertEquals(
       'Other cells still in row', 3,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH).length);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0]).length);
   assertEquals(
       'Merged cell has correct colspan', 1,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].colSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0])[0].colSpan);
   assertEquals(
       'Merged cell has correct rowspan', 3,
-      trs[0].getElementsByTagName(goog.dom.TagName.TH)[0].rowSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[0])[0].rowSpan);
   assert(
       'Cell appears in multiple rows after merge',
       testObjects.basic.rows[0].columns[0] ==
@@ -458,7 +458,8 @@ function testMergeCellsInRowAndColumn() {
   tableSanityCheck(testObjects.basic, 4, 3);
   var trs =
       goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic);
-  var mergedCell = trs[1].getElementsByTagName(goog.dom.TagName.TD)[1];
+  var mergedCell =
+      goog.dom.getElementsByTagName(goog.dom.TagName.TD, trs[1])[1];
   assertEquals('Merged cell has correct rowspan', 3, mergedCell.rowSpan);
   assertEquals('Merged cell has correct colspan', 2, mergedCell.colSpan);
 }
@@ -468,7 +469,8 @@ function testMergeCellsAlreadyMerged() {
   tableSanityCheck(testObjects.torture, 9, 3);
   var trs =
       goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.torture);
-  var mergedCell = trs[5].getElementsByTagName(goog.dom.TagName.TH)[0];
+  var mergedCell =
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, trs[5])[0];
   assertEquals('Merged cell has correct rowspan', 4, mergedCell.rowSpan);
   assertEquals('Merged cell has correct colspan', 3, mergedCell.colSpan);
 }
@@ -524,8 +526,8 @@ function testChildTableRowsNotCountedInParentTable() {
   // The following code is left in here for reference in implementing
   // this TODO.
 
-    var tds = goog.dom.getElement('test1').getElementsByTagName(
-        goog.dom.TagName.TD);
+    var tds = goog.dom.getElementsByTagName(
+        goog.dom.TagName.TD, goog.dom.getElement('test1'));
     var range = goog.dom.Range.createFromNodes(tds[7], tds[9]);
     range.select();
     var cellSelection = new goog.editor.Table.CellSelection(range);
