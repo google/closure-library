@@ -356,7 +356,7 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
       opt_domHelper ? opt_domHelper.getDocument() : goog.dom.getDocument();
   var cssNode = goog.dom.createElement(goog.dom.TagName.STYLE);
   cssNode.type = 'text/css';
-  var head = document.getElementsByTagName(goog.dom.TagName.HEAD)[0];
+  var head = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, document)[0];
   head.appendChild(cssNode);
   if (cssNode.styleSheet) {
     // IE.

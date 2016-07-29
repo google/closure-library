@@ -598,11 +598,11 @@ function testUidNotUndefinedOnReusedElement() {
   var div = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(div);
   div.innerHTML = '<form id="form"></form>';
-  var span = div.getElementsByTagName(goog.dom.TagName.FORM)[0];
+  var span = goog.dom.getElementsByTagName(goog.dom.TagName.FORM, div)[0];
   goog.getUid(span);
 
   div.innerHTML = '<form id="form"></form>';
-  var span2 = div.getElementsByTagName(goog.dom.TagName.FORM)[0];
+  var span2 = goog.dom.getElementsByTagName(goog.dom.TagName.FORM, div)[0];
   assertNotUndefined(goog.getUid(span2));
 }
 

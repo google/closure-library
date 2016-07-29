@@ -190,7 +190,7 @@ function testWebKitList() {
     goog.dom.Range.createFromNodeContents(ul).select();
 
     FORMATTER.fixSafariLists_();
-    var childULs = ul.getElementsByTagName(goog.dom.TagName.UL);
+    var childULs = goog.dom.getElementsByTagName(goog.dom.TagName.UL, ul);
     assertEquals('UL should have one child UL', 1, childULs.length);
     tearDownListAndBlockquoteTests();
   }

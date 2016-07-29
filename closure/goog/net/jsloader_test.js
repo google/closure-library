@@ -31,7 +31,7 @@ function setUp() {
 function tearDown() {
   // Remove all the fake scripts.
   var scripts =
-      goog.array.clone(document.getElementsByTagName(goog.dom.TagName.SCRIPT));
+      goog.array.clone(goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT));
   for (var i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);

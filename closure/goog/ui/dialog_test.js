@@ -69,8 +69,8 @@ function testCrossFrameFocus() {
   }
   dialog.setVisible(false);
   var iframeWindow = goog.dom.getElement('f').contentWindow;
-  var iframeInput =
-      iframeWindow.document.getElementsByTagName(goog.dom.TagName.INPUT)[0];
+  var iframeInput = goog.dom.getElementsByTagName(
+      goog.dom.TagName.INPUT, iframeWindow.document)[0];
   dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   var dialogElement = dialog.getElement();
   var focusCounter = 0;

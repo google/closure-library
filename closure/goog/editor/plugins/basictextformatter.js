@@ -473,7 +473,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.prepareContentsHtml = function(
  */
 goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsDom = function(
     fieldCopy) {
-  var images = fieldCopy.getElementsByTagName(goog.dom.TagName.IMG);
+  var images = goog.dom.getElementsByTagName(goog.dom.TagName.IMG, fieldCopy);
   for (var i = 0, image; image = images[i]; i++) {
     if (goog.editor.BrowserFeature.SHOWS_CUSTOM_ATTRS_IN_INNER_HTML) {
       // Only need to remove these attributes in IE because
@@ -621,8 +621,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
           '<p$1 ' + attribute + '="' + value + '">');
       goog.editor.node.replaceInnerHtml(parent, newHtml);
 
-      var paragraphs =
-          goog.array.toArray(parent.getElementsByTagName(goog.dom.TagName.P));
+      var paragraphs = goog.array.toArray(
+          goog.dom.getElementsByTagName(goog.dom.TagName.P, parent));
       goog.iter.forEach(paragraphs, function(paragraph) {
         if (paragraph.getAttribute(attribute) == value) {
           paragraph.removeAttribute(attribute);

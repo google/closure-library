@@ -409,7 +409,8 @@ function helpTestSplit_(
   node.innerHTML = '<b>begin bold<i>italic</i>end bold</b>';
   document.body.appendChild(node);
 
-  var italic = node.getElementsByTagName(goog.dom.TagName.I)[0].firstChild;
+  var italic =
+      goog.dom.getElementsByTagName(goog.dom.TagName.I, node)[0].firstChild;
 
   var splitFn = isAppend ?
       goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_ :
@@ -502,7 +503,7 @@ function testSplitDomAtChildlessElement() {
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
-  var br = node.getElementsByTagName(goog.dom.TagName.BR)[0];
+  var br = goog.dom.getElementsByTagName(goog.dom.TagName.BR, node)[0];
   goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_(
       br, 0, node.firstChild);
 

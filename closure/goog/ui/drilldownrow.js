@@ -393,7 +393,8 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
       row, selfObj.isExpanded() ? goog.getCssName('goog-drilldown-expanded') :
                                   goog.getCssName('goog-drilldown-collapsed'));
   // Default mouse event handling:
-  var toggler = fragment.getElementsByTagName(goog.dom.TagName.DIV)[0];
+  var toggler =
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV, fragment)[0];
   var key = selfObj.getHandler().listen(toggler, 'click', function(event) {
     selfObj.setExpanded(!selfObj.isExpanded());
   });

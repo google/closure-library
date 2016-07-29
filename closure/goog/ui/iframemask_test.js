@@ -46,7 +46,7 @@ function tearDown() {
 }
 
 function findOneAndOnlyIframe() {
-  var iframes = document.getElementsByTagName(goog.dom.TagName.IFRAME);
+  var iframes = goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME);
   assertEquals(
       'There should be exactly 1 iframe in the document', 1, iframes.length);
   return iframes[0];

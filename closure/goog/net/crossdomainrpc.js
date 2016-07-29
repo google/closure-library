@@ -268,7 +268,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
 
   // find a style sheet if not on IE, which will attempt to save style sheet
   if (goog.userAgent.GECKO) {
-    var links = document.getElementsByTagName(goog.dom.TagName.LINK);
+    var links = goog.dom.getElementsByTagName(goog.dom.TagName.LINK);
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
       // find a link which is on the same domain as this page
@@ -282,7 +282,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
     }
   }
 
-  var images = document.getElementsByTagName(goog.dom.TagName.IMG);
+  var images = goog.dom.getElementsByTagName(goog.dom.TagName.IMG);
   for (var i = 0; i < images.length; i++) {
     var image = images[i];
     // find a link which is on the same domain as this page

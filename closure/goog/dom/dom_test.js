@@ -1034,7 +1034,7 @@ function testFindNode() {
   });
   assertEquals(expected, result);
 
-  expected = document.getElementsByTagName(goog.dom.TagName.P)[0];
+  expected = goog.dom.getElementsByTagName(goog.dom.TagName.P)[0];
   result = goog.dom.findNode(document, function(n) {
     return n.nodeType == goog.dom.NodeType.ELEMENT &&
         n.tagName == goog.dom.TagName.P;
@@ -1046,7 +1046,7 @@ function testFindNode() {
 }
 
 function testFindNodes() {
-  var expected = document.getElementsByTagName(goog.dom.TagName.P);
+  var expected = goog.dom.getElementsByTagName(goog.dom.TagName.P);
   var result = goog.dom.findNodes(document, function(n) {
     return n.nodeType == goog.dom.NodeType.ELEMENT &&
         n.tagName == goog.dom.TagName.P;
@@ -1375,14 +1375,14 @@ function testIsNodeList() {
 }
 
 function testGetFrameContentDocument() {
-  var iframe = document.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
+  var iframe = goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
   var name = iframe.name;
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   assertEquals(window.frames[name].document, iframeDoc);
 }
 
 function testGetFrameContentWindow() {
-  var iframe = document.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
+  var iframe = goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
   var name = iframe.name;
   var iframeWin = goog.dom.getFrameContentWindow(iframe);
   assertEquals(window.frames[name], iframeWin);
@@ -1520,21 +1520,29 @@ function testGetAncestorByTagNameAndClass() {
 
 function testCreateTable() {
   var table = goog.dom.createTable(2, 3, true);
-  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
   assertEquals(
-      3, table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
-  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+      2, goog.dom.getElementsByTagName(goog.dom.TagName.TR, table).length);
+  assertEquals(
+      3, goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0]
+             .childNodes.length);
+  assertEquals(
+      6, goog.dom.getElementsByTagName(goog.dom.TagName.TD, table).length);
   assertEquals(
       goog.string.Unicode.NBSP,
-      table.getElementsByTagName(goog.dom.TagName.TD)[0].firstChild.nodeValue);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TD, table)[0]
+          .firstChild.nodeValue);
 
   table = goog.dom.createTable(2, 3, false);
-  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
   assertEquals(
-      3, table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
-  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+      2, goog.dom.getElementsByTagName(goog.dom.TagName.TR, table).length);
   assertEquals(
-      0, table.getElementsByTagName(goog.dom.TagName.TD)[0].childNodes.length);
+      3, goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0]
+             .childNodes.length);
+  assertEquals(
+      6, goog.dom.getElementsByTagName(goog.dom.TagName.TD, table).length);
+  assertEquals(
+      0, goog.dom.getElementsByTagName(goog.dom.TagName.TD, table)[0]
+             .childNodes.length);
 }
 
 function testSafeHtmlToNode() {

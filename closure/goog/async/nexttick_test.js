@@ -221,7 +221,7 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
   var callbackCalled = false;
   goog.async.nextTick(function() { callbackCalled = true; });
 
-  var frame = document.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
+  var frame = goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME)[0];
   frame.contentWindow.postMessage(
       'bogus message', window.location.protocol + '//' + window.location.host);
 

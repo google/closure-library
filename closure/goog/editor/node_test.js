@@ -537,7 +537,7 @@ function testIsBlock() {
   }
 
   for (var tag in goog.dom.TagName) {
-    if (goog.array.contains(tagsToIgnore, tag)) {
+    if (goog.array.contains(tagsToIgnore, goog.dom.TagName[tag])) {
       continue;
     }
 
@@ -599,8 +599,8 @@ function testIsEditableContainer() {
 function testIsEditable() {
   var editableContainerElement = document.getElementById('editableTest');
   var childNode = editableContainerElement.firstChild;
-  var childElement =
-      editableContainerElement.getElementsByTagName(goog.dom.TagName.SPAN)[0];
+  var childElement = goog.dom.getElementsByTagName(
+      goog.dom.TagName.SPAN, editableContainerElement)[0];
 
   assertFalse(
       'Container element should not be considered editable',
@@ -621,7 +621,7 @@ function testIsEditable() {
 
 function testFindTopMostEditableAncestor() {
   var root = document.getElementById('editableTest');
-  var span = root.getElementsByTagName(goog.dom.TagName.SPAN)[0];
+  var span = goog.dom.getElementsByTagName(goog.dom.TagName.SPAN, root)[0];
   var textNode = span.firstChild;
 
   assertEquals(
@@ -652,13 +652,13 @@ function testSplitDomTreeAt() {
 
   root.innerHTML = innerHTML;
   var result = goog.editor.node.splitDomTreeAt(
-      root.getElementsByTagName(goog.dom.TagName.B)[0], null, root);
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, root)[0], null, root);
   goog.testing.dom.assertHtmlContentsMatch('<p>1<b>2</b></p>', root);
   goog.testing.dom.assertHtmlContentsMatch('<p>3</p>', result);
 
   root.innerHTML = innerHTML;
   result = goog.editor.node.splitDomTreeAt(
-      root.getElementsByTagName(goog.dom.TagName.B)[0],
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, root)[0],
       goog.dom.createTextNode('and'), root);
   goog.testing.dom.assertHtmlContentsMatch('<p>1<b>2</b></p>', root);
   goog.testing.dom.assertHtmlContentsMatch('<p>and3</p>', result);
@@ -674,17 +674,17 @@ function testTransferChildren() {
   var root2 = goog.dom.createElement(goog.dom.TagName.P);
   root2.innerHTML = prefix;
 
-  var b = root1.getElementsByTagName(goog.dom.TagName.B)[0];
+  var b = goog.dom.getElementsByTagName(goog.dom.TagName.B, root1)[0];
 
   // Transfer the children.
   goog.editor.node.transferChildren(root2, root1);
   assertEquals(0, root1.childNodes.length);
   goog.testing.dom.assertHtmlContentsMatch(prefix + innerHTML, root2);
-  assertEquals(b, root2.getElementsByTagName(goog.dom.TagName.B)[1]);
+  assertEquals(b, goog.dom.getElementsByTagName(goog.dom.TagName.B, root2)[1]);
 
   // Transfer them back.
   goog.editor.node.transferChildren(root1, root2);
   assertEquals(0, root2.childNodes.length);
   goog.testing.dom.assertHtmlContentsMatch(prefix + innerHTML, root1);
-  assertEquals(b, root1.getElementsByTagName(goog.dom.TagName.B)[1]);
+  assertEquals(b, goog.dom.getElementsByTagName(goog.dom.TagName.B, root1)[1]);
 }

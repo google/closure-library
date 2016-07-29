@@ -277,7 +277,7 @@ function testGetForm() {
 function testAddFormInputs() {
   var form = goog.dom.createElement(goog.dom.TagName.FORM);
   goog.net.IframeIo.addFormInputs_(form, {'a': 1, 'b': 2, 'c': 3});
-  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
+  var inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
   assertEquals(3, inputs.length);
   for (var i = 0; i < inputs.length; i++) {
     assertEquals('hidden', inputs[i].type);
@@ -290,7 +290,7 @@ function testAddFormArrayInputs() {
   var form = goog.dom.createElement(goog.dom.TagName.FORM);
   var data = {'a': ['blue', 'green'], 'b': ['red', 'pink', 'white']};
   goog.net.IframeIo.addFormInputs_(form, data);
-  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
+  var inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
   assertEquals(5, inputs.length);
   for (var i = 0; i < inputs.length; i++) {
     assertEquals('hidden', inputs[i].type);
