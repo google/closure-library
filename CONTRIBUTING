@@ -36,10 +36,9 @@ verify that the CLA has been signed.
 
 Oftentimes, the pull request will not be directly merged, but patched to
 the internal Google codebase to verify that unit and integration tests
-will Closure pass before submitting (and optionally make changes to
-the patch to match style, fix text, or to make the code or comments
-clearer). In this case, the issue associated with the pull request
-will be closed when the patch pushed to the repository via the MOE
-(Make Open Easy) system.
+will pass before submitting (and optionally make changes to the patch to
+match style, fix text, or to make the code or comments clearer). In this
+case, the issue associated with the pull request will be closed when the
+patch is pushed to the repository via the MOE (Make Open Easy) system.
 
 https://github.com/google/MOE/
