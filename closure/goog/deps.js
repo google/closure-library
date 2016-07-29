@@ -816,6 +816,8 @@ goog.addDependency('net/multiiframeloadmonitor_test.js', ['goog.net.MultiIframeL
 goog.addDependency('net/networkstatusmonitor.js', ['goog.net.NetworkStatusMonitor'], ['goog.events.Listenable'], {});
 goog.addDependency('net/networktester.js', ['goog.net.NetworkTester'], ['goog.Timer', 'goog.Uri', 'goog.log'], {});
 goog.addDependency('net/networktester_test.js', ['goog.net.NetworkTesterTest'], ['goog.Uri', 'goog.net.NetworkTester', 'goog.testing.MockClock', 'goog.testing.jsunit'], {});
+goog.addDependency('net/streams/base64pbstreamparser.js', ['goog.net.streams.Base64PbStreamParser'], ['goog.asserts', 'goog.net.streams.Base64StreamDecoder', 'goog.net.streams.PbStreamParser', 'goog.net.streams.StreamParser'], {'module': 'goog'});
+goog.addDependency('net/streams/base64pbstreamparser_test.js', ['goog.net.streams.Base64PbStreamParserTest'], ['goog.crypt.base64', 'goog.net.streams.Base64PbStreamParser', 'goog.object', 'goog.testing.testSuite'], {'module': 'goog'});
 goog.addDependency('net/streams/base64streamdecoder.js', ['goog.net.streams.Base64StreamDecoder'], ['goog.asserts', 'goog.crypt.base64'], {});
 goog.addDependency('net/streams/base64streamdecoder_test.js', ['goog.net.streams.Base64StreamDecoderTest'], ['goog.net.streams.Base64StreamDecoder', 'goog.testing.asserts', 'goog.testing.jsunit'], {});
 goog.addDependency('net/streams/jsonstreamparser.js', ['goog.net.streams.JsonStreamParser'], ['goog.asserts', 'goog.json', 'goog.net.streams.StreamParser'], {});
