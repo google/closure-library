@@ -230,10 +230,6 @@ goog.i18n.DateTimeParse.prototype.applyPattern_ = function(pattern) {
     this.patternParts_.push({text: buf, count: 0, abutStart: false});
   }
 
-  if (inQuote) {
-    throw new Error('Malformed pattern: closing \' mark missing');
-  }
-
   this.markAbutStart_();
 };
 
