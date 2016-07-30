@@ -58,7 +58,8 @@ function testSelectionIsControlRange() {
   // Only IE supports control ranges
   if (c.document.body.createControlRange) {
     var controlRange = c.document.body.createControlRange();
-    controlRange.add(c.document.getElementsByTagName(goog.dom.TagName.IMG)[0]);
+    controlRange.add(
+        goog.dom.getElementsByTagName(goog.dom.TagName.IMG, c.document)[0]);
     controlRange.select();
     var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(c);
     assertNotNull('Selection must not be null', selection);

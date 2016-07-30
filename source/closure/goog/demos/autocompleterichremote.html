@@ -15,6 +15,7 @@ See the COPYING file for details.
     goog.require("goog.array");
     goog.require("goog.dom");
     goog.require("goog.ui.ac.RichRemote");
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/autocomplete.css">
@@ -69,10 +70,10 @@ See the COPYING file for details.
 
       item.render = function(node, token) {
         var dom_ = goog.dom.getDomHelper(node);
-        var typeNode = dom_.createDom("span", itemClassName);
+        var typeNode = dom_.createDom(goog.dom.TagName.SPAN, itemClassName);
         dom_.appendChild(typeNode, dom_.createTextNode(itemType));
 
-        var nameNode = dom_.createDom("span");
+        var nameNode = dom_.createDom(goog.dom.TagName.SPAN);
         dom_.appendChild(nameNode, dom_.createTextNode(item.name));
 
         dom_.appendChild(node, typeNode);

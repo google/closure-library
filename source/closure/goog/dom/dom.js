@@ -716,7 +716,7 @@ goog.dom.getWindow_ = function(doc) {
  * first node as childNodes.
  *
  * So:
- * <code>createDom('div', null, createDom('p'), createDom('p'));</code>
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
  * would return a div with two child paragraphs
  *
  * For passing properties, please see {@link goog.dom.setProperties} for more
@@ -1042,7 +1042,7 @@ goog.dom.isCss1CompatMode_ = function(doc) {
  * the behavior is inconsistent:
  *
  * <pre>
- *   var a = document.createElement(goog.dom.TagName.BR);
+ *   var a = goog.dom.createElement(goog.dom.TagName.BR);
  *   a.appendChild(document.createTextNode('foo'));
  *   a.appendChild(document.createTextNode('bar'));
  *   console.log(a.childNodes.length);  // 2
@@ -2496,12 +2496,12 @@ goog.dom.Appendable;
  * first node as childNodes.
  *
  * So:
- * <code>createDom('div', null, createDom('p'), createDom('p'));</code>
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
  * would return a div with two child paragraphs
  *
  * An easy way to move all child nodes of an existing element to a new parent
  * element is:
- * <code>createDom('div', null, oldElement.childNodes);</code>
+ * <code>createDom(goog.dom.TagName.DIV, null, oldElement.childNodes);</code>
  * which will remove all child nodes from the old element and add them as
  * child nodes of the new DIV.
  *

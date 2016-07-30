@@ -58,9 +58,8 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
    * {@code this.blocksize} bytes, we feed it into [@code computeChunk_}.
    * @private {!Uint8Array|!Array<number>}
    */
-  this.chunk_ = goog.isDef(goog.global.Uint8Array) ?
-      new Uint8Array(goog.crypt.Sha2_64bit.BLOCK_SIZE_) :
-      new Array(goog.crypt.Sha2_64bit.BLOCK_SIZE_);
+  this.chunk_ = goog.global['Uint8Array'] ? new Uint8Array(this.blockSize) :
+                                            new Array(this.blockSize);
 
   /**
    * Current number of bytes in {@code this.chunk_}.

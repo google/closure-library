@@ -175,7 +175,7 @@ function testReplaceContents() {
       'Hello <input type="text" value="World">' +
       '</div>';
   range = goog.dom.ControlRange.createFromElements(
-      outer.getElementsByTagName(goog.dom.TagName.INPUT)[0]);
+      goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, outer)[0]);
   goog.dom.ControlRange.createFromElements(table);
   range.replaceContentsWithNode(goog.dom.createTextNode('World'));
   assertEquals('Hello World', outer.firstChild.innerHTML);

@@ -152,7 +152,7 @@ goog.i18n.DateTimeFormat.Format = {
  */
 goog.i18n.DateTimeFormat.TOKENS_ = [
   // quote string
-  /^\'(?:[^\']|\'\')*\'/,
+  /^\'(?:[^\']|\'\')*(\'|$)/,
   // pattern chars
   /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
   // and all the other chars
@@ -204,8 +204,10 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
           if (part == "''") {
             part = "'";  // '' -> '
           } else {
-            part = part.substring(1, part.length - 1);  // strip quotes
-            part = part.replace(/\'\'/, "'");
+            part = part.substring(
+                1,
+                m[1] == '\'' ? part.length - 1 : part.length);  // strip quotes
+            part = part.replace(/\'\'/g, '\'');
           }
         }
         this.patternParts_.push({text: part, type: i});

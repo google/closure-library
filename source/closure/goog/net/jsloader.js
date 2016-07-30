@@ -299,7 +299,7 @@ goog.net.jsloader.loadAndVerify = function(uri, verificationObjName, options) {
  * @private
  */
 goog.net.jsloader.getScriptParentElement_ = function(doc) {
-  var headElements = doc.getElementsByTagName(goog.dom.TagName.HEAD);
+  var headElements = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, doc);
   if (!headElements || goog.array.isEmpty(headElements)) {
     return doc.documentElement;
   } else {

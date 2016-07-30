@@ -110,7 +110,7 @@ goog.reflect.canAccessProperty = function(obj, prop) {
  * the value was never used, it would still always be stored in the cache.
  *
  * Providing a side-effect free {@code valueFn} and {@code opt_keyFn}
- * allows unused calls to {@code goog.cache} to be pruned.
+ * allows unused calls to {@code goog.reflect.cache} to be pruned.
  *
  * @param {!Object<K, V>} cacheObj The object that contains the cached values.
  * @param {?} key The key to lookup in the cache. If it is not string or number

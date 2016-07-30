@@ -120,8 +120,8 @@ function getEntryDiv(entry) {
 
 function getEntryInput(entry) {
   var div = getEntryDiv(entry);
-  return div.getElementsByTagName(goog.dom.TagName.INPUT)[0] ||
-      div.getElementsByTagName(goog.dom.TagName.SELECT)[0];
+  return goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, div)[0] ||
+      goog.dom.getElementsByTagName(goog.dom.TagName.SELECT, div)[0];
 }
 
 function testCreate() {
@@ -135,7 +135,7 @@ function testCreate() {
   assertTrue('checkbox should be checked 2', getEntryInput(boolEntry2).checked);
   // Enusre custom labels are being used.
   var html =
-      document.getElementsByTagName(goog.dom.TagName.BUTTON)[0].innerHTML;
+      goog.dom.getElementsByTagName(goog.dom.TagName.BUTTON)[0].innerHTML;
   assertTrue('Button label is wrong', html.indexOf('&lt;btn&gt;') > -1);
   html = getEntryDiv(numEnumEntry).innerHTML;
   assertTrue('Enum2 label is wrong', html.indexOf('second&amp;') > -1);
@@ -209,7 +209,7 @@ function testClickBooleanSetting() {
 
 function testToggleDescriptions() {
   createUi(false);
-  var toggleLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
+  var toggleLink = goog.dom.getElementsByTagName(goog.dom.TagName.A, root)[0];
   var heightBefore = root.offsetHeight;
   toggleLink.onclick();
   assertTrue(
@@ -269,7 +269,7 @@ function testCollapsibleIsLazy() {
   if (document.createEvent) {
     createUi(true);
     assertEquals('Expected no entry divs.', 0, getAllEntryDivs().length);
-    var showLink = root.getElementsByTagName(goog.dom.TagName.A)[0];
+    var showLink = goog.dom.getElementsByTagName(goog.dom.TagName.A, root)[0];
     var event = document.createEvent('MouseEvents');
     event.initMouseEvent(
         'click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false,

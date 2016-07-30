@@ -268,7 +268,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
 
   // find a style sheet if not on IE, which will attempt to save style sheet
   if (goog.userAgent.GECKO) {
-    var links = document.getElementsByTagName(goog.dom.TagName.LINK);
+    var links = goog.dom.getElementsByTagName(goog.dom.TagName.LINK);
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
       // find a link which is on the same domain as this page
@@ -282,7 +282,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
     }
   }
 
-  var images = document.getElementsByTagName(goog.dom.TagName.IMG);
+  var images = goog.dom.getElementsByTagName(goog.dom.TagName.IMG);
   for (var i = 0; i < images.length; i++) {
     var image = images[i];
     // find a link which is on the same domain as this page
@@ -398,7 +398,7 @@ goog.net.CrossDomainRpc.prototype.sendRequest = function(
     uri, opt_method, opt_params, opt_headers) {
   // create request frame
   var requestFrame = this.requestFrame_ = /** @type {!HTMLIFrameElement} */ (
-      document.createElement(goog.dom.TagName.IFRAME));
+      goog.dom.createElement(goog.dom.TagName.IFRAME));
   var requestId = goog.net.CrossDomainRpc.nextRequestId_++;
   requestFrame.id = goog.net.CrossDomainRpc.REQUEST_MARKER_ + '-' + requestId;
   if (!goog.net.CrossDomainRpc.debugMode_) {
@@ -785,7 +785,7 @@ goog.net.CrossDomainRpc.sendResponse = function(
       var chunk = chunkEnd > data.length ? data.substring(chunkStart) :
                                            data.substring(chunkStart, chunkEnd);
 
-      var responseFrame = document.createElement(goog.dom.TagName.IFRAME);
+      var responseFrame = goog.dom.createElement(goog.dom.TagName.IFRAME);
       responseFrame.src = dummyUri +
           goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +
           goog.net.CrossDomainRpc.CHUNK_PREFIX_ + chunk;
@@ -813,7 +813,7 @@ goog.net.CrossDomainRpc.sendResponse = function(
  */
 goog.net.CrossDomainRpc.createResponseInfo_ = function(
     dummyUri, numChunks, isDataJson, status, headers) {
-  var responseInfoFrame = document.createElement(goog.dom.TagName.IFRAME);
+  var responseInfoFrame = goog.dom.createElement(goog.dom.TagName.IFRAME);
   document.body.appendChild(responseInfoFrame);
   responseInfoFrame.src = dummyUri +
       goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +

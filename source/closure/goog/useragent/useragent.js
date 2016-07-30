@@ -27,6 +27,7 @@ goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.labs.userAgent.util');
+goog.require('goog.reflect');
 goog.require('goog.string');
 
 
@@ -508,9 +509,11 @@ goog.userAgent.isVersionOrHigherCache_ = {};
  */
 goog.userAgent.isVersionOrHigher = function(version) {
   return goog.userAgent.ASSUME_ANY_VERSION ||
-      goog.userAgent.isVersionOrHigherCache_[version] ||
-      (goog.userAgent.isVersionOrHigherCache_[version] =
-           goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0);
+      goog.reflect.cache(
+          goog.userAgent.isVersionOrHigherCache_, version, function() {
+            return goog.string.compareVersions(
+                       goog.userAgent.VERSION, version) >= 0;
+          });
 };
 
 

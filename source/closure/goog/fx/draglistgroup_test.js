@@ -85,7 +85,8 @@ function setUp() {
   initialListenerCount = goog.object.getCount(dlg.eventHandler_.keys_);
 
   event = new goog.events.BrowserEvent();
-  event.currentTarget = list.getElementsByTagName(goog.dom.TagName.DIV)[0];
+  event.currentTarget =
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV, list)[0];
 
   firedEventTypes = [];
   goog.events.listen(

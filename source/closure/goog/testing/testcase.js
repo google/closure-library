@@ -35,6 +35,7 @@ goog.require('goog.Promise');
 goog.require('goog.Thenable');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
 goog.require('goog.testing.JsUnitException');
@@ -1291,7 +1292,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
  * @private
  */
 goog.testing.TestCase.prototype.countNumFilesLoaded_ = function() {
-  var scripts = document.getElementsByTagName(goog.dom.TagName.SCRIPT);
+  var scripts = goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT);
   var count = 0;
   for (var i = 0, n = scripts.length; i < n; i++) {
     if (scripts[i].src) {

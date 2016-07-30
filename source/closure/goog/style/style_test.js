@@ -412,7 +412,7 @@ function testGetClientPositionOfOffscreenElement() {
 }
 
 function testGetClientPositionOfOrphanElement() {
-  var orphanElem = document.createElement(goog.dom.TagName.DIV);
+  var orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
   var pos = goog.style.getClientPosition(orphanElem);
   assertEquals(0, pos.x);
   assertEquals(0, pos.y);
@@ -903,7 +903,7 @@ function hasWebkitTransform() {
 }
 
 function testGetSizeOfOrphanElement() {
-  var orphanElem = document.createElement(goog.dom.TagName.DIV);
+  var orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
   var size = goog.style.getSize(orphanElem);
   assertEquals(0, size.width);
   assertEquals(0, size.height);
@@ -1308,7 +1308,7 @@ function testGetPaddingBox() {
 }
 
 function testGetPaddingBoxUnattached() {
-  var el = document.createElement(goog.dom.TagName.DIV);
+  var el = goog.dom.createElement(goog.dom.TagName.DIV);
   var box = goog.style.getPaddingBox(el);
   if (goog.userAgent.WEBKIT) {
     assertTrue(isNaN(box.top));

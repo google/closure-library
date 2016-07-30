@@ -903,7 +903,8 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     }
 
     // Fix text areas, since importNode won't clone changes to the value
-    var textareas = this.form_.getElementsByTagName(goog.dom.TagName.TEXTAREA);
+    var textareas = goog.dom.getElementsByTagName(
+        goog.dom.TagName.TEXTAREA, goog.asserts.assert(this.form_));
     for (var i = 0, n = textareas.length; i < n; i++) {
       // The childnodes represent the initial child nodes for the text area
       // appending a text node essentially resets the initial value ready for
@@ -923,13 +924,15 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     doc.body.appendChild(clone);
 
     // Fix select boxes, importNode won't override the default value
-    var selects = this.form_.getElementsByTagName(goog.dom.TagName.SELECT);
-    var clones = clone.getElementsByTagName(goog.dom.TagName.SELECT);
+    var selects = goog.dom.getElementsByTagName(
+        goog.dom.TagName.SELECT, goog.asserts.assert(this.form_));
+    var clones = goog.dom.getElementsByTagName(
+        goog.dom.TagName.SELECT, /** @type {!Element} */ (clone));
     for (var i = 0, n = selects.length; i < n; i++) {
       var selectsOptions =
-          selects[i].getElementsByTagName(goog.dom.TagName.OPTION);
+          goog.dom.getElementsByTagName(goog.dom.TagName.OPTION, selects[i]);
       var clonesOptions =
-          clones[i].getElementsByTagName(goog.dom.TagName.OPTION);
+          goog.dom.getElementsByTagName(goog.dom.TagName.OPTION, clones[i]);
       for (var j = 0, m = selectsOptions.length; j < m; j++) {
         clonesOptions[j].selected = selectsOptions[j].selected;
       }
@@ -939,8 +942,10 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     // attribute for <input type="file"> nodes, which results in an empty
     // upload if the clone is submitted.  Check, and if the clone failed, submit
     // using the original form instead.
-    var inputs = this.form_.getElementsByTagName(goog.dom.TagName.INPUT);
-    var inputClones = clone.getElementsByTagName(goog.dom.TagName.INPUT);
+    var inputs = goog.dom.getElementsByTagName(
+        goog.dom.TagName.INPUT, goog.asserts.assert(this.form_));
+    var inputClones = goog.dom.getElementsByTagName(
+        goog.dom.TagName.INPUT, /** @type {!Element} */ (clone));
     for (var i = 0, n = inputs.length; i < n; i++) {
       if (inputs[i].type == goog.dom.InputType.FILE) {
         if (inputs[i].value != inputClones[i].value) {

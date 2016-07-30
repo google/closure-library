@@ -14,6 +14,7 @@ See the COPYING file for details.
     goog.require('goog.fx.DragDrop');
     goog.require('goog.fx.DragDropGroup');
     goog.require('goog.dom');
+    goog.require('goog.dom.TagName');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <style>
@@ -116,7 +117,7 @@ List 2 (source only, can be dropped on list 1 or button 2)
   goog.inherits(FooDrag, goog.fx.DragDrop);
 
   FooDrag.prototype.createDragElement = function(sourceEl) {
-    return goog.dom.createDom('div', 'foo', 'Custom drag element');
+    return goog.dom.createDom(goog.dom.TagName.DIV, 'foo', 'Custom drag element');
   };
 
   FooDrag.prototype.getDragElementPosition = function(sourceEl, el, event) {

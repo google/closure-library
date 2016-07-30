@@ -93,7 +93,7 @@ function tearDown() {
 
   // Remove all the fake scripts.
   var scripts =
-      goog.array.clone(document.getElementsByTagName(goog.dom.TagName.SCRIPT));
+      goog.array.clone(goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT));
   for (var i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);
@@ -194,7 +194,7 @@ function testLoadDebugModuleAThenB() {
         assertLoaded('modB');
 
         var scripts = goog.array.clone(
-            document.getElementsByTagName(goog.dom.TagName.SCRIPT));
+            goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT));
         var seenLastScriptOfModuleA = false;
         for (var i = 0; i < scripts.length; i++) {
           var uri = scripts[i].src;

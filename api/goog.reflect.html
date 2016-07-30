@@ -6,7 +6,7 @@ then the entire call is considered to have side-effects.</p>
 side-effect and preclude unused calls from being pruned, ie. even if
 the value was never used, it would still always be stored in the cache.</p>
 <p>Providing a side-effect free <code>valueFn</code> and <code>opt_keyFn</code>
-allows unused calls to <code>goog.cache</code> to be pruned.</p>
+allows unused calls to <code>goog.reflect.cache</code> to be pruned.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cacheObj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;K, V&gt;</code><dd><p>The object that contains the cached values.</p>
 <dt class="type name"><var>key</var><code>?</code><dd><p>The key to lookup in the cache. If it is not string or number
 then a <code>opt_keyFn</code> should be provided. The key is also used as the

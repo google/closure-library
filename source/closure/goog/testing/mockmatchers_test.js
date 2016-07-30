@@ -190,10 +190,10 @@ function testIsArray() {
 
 function testIsArrayLike() {
   var nodeList = (function() {
-    var div = document.createElement(goog.dom.TagName.DIV);
-    div.appendChild(document.createElement(goog.dom.TagName.P));
-    div.appendChild(document.createElement(goog.dom.TagName.P));
-    return div.getElementsByTagName(goog.dom.TagName.DIV);
+    var div = goog.dom.createElement(goog.dom.TagName.DIV);
+    div.appendChild(goog.dom.createElement(goog.dom.TagName.P));
+    div.appendChild(goog.dom.createElement(goog.dom.TagName.P));
+    return goog.dom.getElementsByTagName(goog.dom.TagName.DIV, div);
   })();
 
   assertTrue(matchers.isArrayLike.matches([]));

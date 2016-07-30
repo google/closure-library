@@ -157,7 +157,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     Channel = function() {
       // Make an empty, invisible iframe.
       var iframe = /** @type {!HTMLIFrameElement} */ (
-          document.createElement(goog.dom.TagName.IFRAME));
+          document.createElement(String(goog.dom.TagName.IFRAME)));
       iframe.style.display = 'none';
       iframe.src = '';
       document.documentElement.appendChild(iframe);
@@ -220,9 +220,10 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Implementation for IE6 to IE10: Script elements fire an asynchronous
   // onreadystatechange event when inserted into the DOM.
   if (typeof document !== 'undefined' &&
-      'onreadystatechange' in document.createElement(goog.dom.TagName.SCRIPT)) {
+      'onreadystatechange' in
+          document.createElement(String(goog.dom.TagName.SCRIPT))) {
     return function(cb) {
-      var script = document.createElement(goog.dom.TagName.SCRIPT);
+      var script = document.createElement(String(goog.dom.TagName.SCRIPT));
       script.onreadystatechange = function() {
         // Clean up and call the callback.
         script.onreadystatechange = null;

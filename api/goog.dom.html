@@ -36,7 +36,7 @@ for canHaveChildren.</p>
 <p>In practice all non-IE browsers allow you to add children to any node, but
 the behavior is inconsistent:</p>
  <pre>
-   var a &#61; document.createElement(goog.dom.TagName.BR);
+   var a &#61; goog.dom.createElement(goog.dom.TagName.BR);
    a.appendChild(document.createTextNode(&#39;foo&#39;));
    a.appendChild(document.createTextNode(&#39;bar&#39;));
    console.log(a.childNodes.length);  // 2
@@ -67,7 +67,7 @@ convert into a node.</p>
 for subsequent nodes to be added.  Subsequent nodes will be added to the
 first node as childNodes.</p>
 <p>So:
-<code>createDom(&#39;div&#39;, null, createDom(&#39;p&#39;), createDom(&#39;p&#39;));</code>
+<code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
 would return a div with two child paragraphs</p>
 <p>For passing properties, please see <a href="goog.dom.html#setProperties"><code>goog.dom.setProperties</code></a> for more
 information.</p>

@@ -653,7 +653,7 @@ Parser.prototype.parse = function(input) {
   }
 
   /**
-   * @param {(!Object|!string)=} opt_data The message to add
+   * @param {(!Object|string)=} opt_data The message to add
    */
   function addMessage(opt_data) {
     if (parser.depth_ > 1) {

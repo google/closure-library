@@ -1410,6 +1410,11 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
         e.getBrowserEvent().key == ' ') {
       stringKey = ' ';
     }
+    // Converting the keyCode for "\" using fromCharCode creates "u", so we need
+    // to look out for it specifically.
+    if (e.keyCode == goog.events.KeyCodes.BACKSLASH) {
+      stringKey = '\\';
+    }
 
     if (this.invokeShortCircuitingOp_(
             goog.editor.Plugin.Op.SHORTCUT, e, stringKey, isModifierPressed)) {
@@ -2225,8 +2230,8 @@ goog.editor.Field.prototype.setInnerHtml_ = function(html) {
     // Note:  We punt on this issue for the non iframe case since
     // we don't want to screw with the main document.
     if (this.usesIframe() && goog.editor.BrowserFeature.MOVES_STYLE_TO_HEAD) {
-      var heads =
-          field.ownerDocument.getElementsByTagName(goog.dom.TagName.HEAD);
+      var heads = goog.dom.getElementsByTagName(
+          goog.dom.TagName.HEAD, goog.asserts.assert(field.ownerDocument));
       for (var i = heads.length - 1; i >= 1; --i) {
         heads[i].parentNode.removeChild(heads[i]);
       }

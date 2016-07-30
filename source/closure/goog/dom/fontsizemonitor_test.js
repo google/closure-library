@@ -82,18 +82,18 @@ function testFontSizeChanged() {
 function testCreateAndDispose() {
   var frameCount = window.frames.length;
   var iframeElementCount =
-      document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
   var divElementCount =
-      document.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
   var monitor = new goog.dom.FontSizeMonitor();
   monitor.dispose();
 
   var newFrameCount = window.frames.length;
   var newIframeElementCount =
-      document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
   var newDivElementCount =
-      document.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
   assertEquals(
       'There should be no trailing frames', frameCount + isBuggyGecko(),
@@ -109,17 +109,17 @@ function testCreateAndDispose() {
 function testWithDomHelper() {
   var frameCount = window.frames.length;
   var iframeElementCount =
-      document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
   var divElementCount =
-      document.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
   var monitor = new goog.dom.FontSizeMonitor(goog.dom.getDomHelper());
 
   var newFrameCount = window.frames.length;
   var newIframeElementCount =
-      document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
   var newDivElementCount =
-      document.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
   if (goog.userAgent.IE) {
     assertEquals(
@@ -143,16 +143,17 @@ function testWithDomHelper() {
 
   var frameCount2 = win.frames.length;
   var iframeElementCount2 =
-      doc.getElementsByTagName(goog.dom.TagName.IFRAME).length;
-  var divElementCount2 = doc.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME, doc).length;
+  var divElementCount2 =
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV, doc).length;
 
   var monitor2 = new goog.dom.FontSizeMonitor(domHelper);
 
   var newFrameCount2 = win.frames.length;
   var newIframeElementCount2 =
-      doc.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME, doc).length;
   var newDivElementCount2 =
-      doc.getElementsByTagName(goog.dom.TagName.DIV).length;
+      goog.dom.getElementsByTagName(goog.dom.TagName.DIV, doc).length;
 
   if (goog.userAgent.IE) {
     assertEquals(
@@ -211,18 +212,18 @@ function testFirefox2WorkAroundFirefox3() {
 
     var frameCount = window.frames.length;
     var iframeElementCount =
-        document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
     var divElementCount =
-        document.getElementsByTagName(goog.dom.TagName.DIV).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
     var monitor = new goog.dom.FontSizeMonitor();
     monitor.dispose();
 
     var newFrameCount = window.frames.length;
     var newIframeElementCount =
-        document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
     var newDivElementCount =
-        document.getElementsByTagName(goog.dom.TagName.DIV).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
     assertEquals(
         'There should be no trailing frames', frameCount, newFrameCount);
@@ -250,18 +251,18 @@ function testFirefox2WorkAroundFirefox2() {
 
     var frameCount = window.frames.length;
     var iframeElementCount =
-        document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
     var divElementCount =
-        document.getElementsByTagName(goog.dom.TagName.DIV).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
     var monitor = new goog.dom.FontSizeMonitor();
     monitor.dispose();
 
     var newFrameCount = window.frames.length;
     var newIframeElementCount =
-        document.getElementsByTagName(goog.dom.TagName.IFRAME).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.IFRAME).length;
     var newDivElementCount =
-        document.getElementsByTagName(goog.dom.TagName.DIV).length;
+        goog.dom.getElementsByTagName(goog.dom.TagName.DIV).length;
 
     assertEquals(
         'There should be no trailing frames', frameCount + 1, newFrameCount);

@@ -1293,7 +1293,8 @@ goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
   }
 
   this.element_ = element;
-  var buttons = this.element_.getElementsByTagName(goog.dom.TagName.BUTTON);
+  var buttons =
+      goog.dom.getElementsByTagName(goog.dom.TagName.BUTTON, this.element_);
   for (var i = 0, button, key, caption; button = buttons[i]; i++) {
     // Buttons should have a "name" attribute and have their caption defined by
     // their innerHTML, but not everyone knows this, and we should play nice.
@@ -1385,10 +1386,11 @@ goog.ui.Dialog.ButtonSet.prototype.getButton = function(key) {
 
 /**
  * Returns all the HTML Button elements in the button set container.
- * @return {!NodeList<?>} A live NodeList of the buttons.
+ * @return {!IArrayLike<!Element>} A live NodeList of the buttons.
  */
 goog.ui.Dialog.ButtonSet.prototype.getAllButtons = function() {
-  return this.element_.getElementsByTagName(goog.dom.TagName.BUTTON);
+  return goog.dom.getElementsByTagName(
+      goog.dom.TagName.BUTTON, goog.asserts.assert(this.element_));
 };
 
 

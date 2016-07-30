@@ -327,7 +327,8 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
 
   if (goog.events.KeyHandler.USES_KEYDOWN_ &&
       !goog.events.KeyCodes.firesKeyPressEvent(
-          e.keyCode, this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey)) {
+          e.keyCode, this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey,
+          e.metaKey)) {
     this.handleEvent(e);
   } else {
     this.keyCode_ = goog.events.KeyCodes.normalizeKeyCode(e.keyCode);

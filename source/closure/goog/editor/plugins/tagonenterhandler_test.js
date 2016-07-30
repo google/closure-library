@@ -182,7 +182,8 @@ function testEnterInEmptyListItemInEmptyList() {
   if (goog.userAgent.GECKO) {
     field1.setHtml(false, '<ul><li>&nbsp;</li></ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[0];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[0];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -200,7 +201,8 @@ function testEnterInEmptyListItemAtBeginningOfList() {
             '<li>2</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[0];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[0];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -219,7 +221,8 @@ function testEnterInEmptyListItemAtEndOfList() {
             '<li>&nbsp;</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[2];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[2];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -238,7 +241,8 @@ function testEnterInEmptyListItemInMiddleOfList() {
             '<li>2</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[1];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[1];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -263,7 +267,8 @@ function testEnterInEmptyListItemInSublist() {
             '<li>B</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[2];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[2];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -292,7 +297,8 @@ function testEnterInEmptyListItemAtBeginningOfSublist() {
             '<li>B</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[1];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[1];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -320,7 +326,8 @@ function testEnterInEmptyListItemAtEndOfSublist() {
             '<li>B</li>' +
             '</ul>');
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
-    var li = field1.getElement().getElementsByTagName(goog.dom.TagName.LI)[3];
+    var li = goog.dom.getElementsByTagName(
+        goog.dom.TagName.LI, field1.getElement())[3];
     helper.select(li.firstChild, 0);
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -409,7 +416,8 @@ function helpTestSplit_(
   node.innerHTML = '<b>begin bold<i>italic</i>end bold</b>';
   document.body.appendChild(node);
 
-  var italic = node.getElementsByTagName(goog.dom.TagName.I)[0].firstChild;
+  var italic =
+      goog.dom.getElementsByTagName(goog.dom.TagName.I, node)[0].firstChild;
 
   var splitFn = isAppend ?
       goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_ :
@@ -502,7 +510,7 @@ function testSplitDomAtChildlessElement() {
   node.innerHTML = '<div>abc<br>def</div>';
   document.body.appendChild(node);
 
-  var br = node.getElementsByTagName(goog.dom.TagName.BR)[0];
+  var br = goog.dom.getElementsByTagName(goog.dom.TagName.BR, node)[0];
   goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_(
       br, 0, node.firstChild);
 

@@ -136,7 +136,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // Notice that the "A" tag does NOT have to be added to the DOM.
 
     var a = /** @type {!HTMLAnchorElement} */
-        (parentWin.document.createElement(goog.dom.TagName.A));
+        (parentWin.document.createElement(String(goog.dom.TagName.A)));
     goog.dom.safe.setAnchorHref(a, safeLinkRef);
 
     a.setAttribute('target', target);

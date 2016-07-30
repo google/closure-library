@@ -33,9 +33,10 @@ function setUpPage() {
 function setUp() {
   goog.dom.getElement('content').innerHTML = oldHtml;
   table = goog.dom.getElement('sortable');
-  alphaHeader = table.getElementsByTagName(goog.dom.TagName.TH)[0];
-  numberHeader = table.getElementsByTagName(goog.dom.TagName.TH)[1];
-  notSortableHeader = table.getElementsByTagName(goog.dom.TagName.TH)[2];
+  alphaHeader = goog.dom.getElementsByTagName(goog.dom.TagName.TH, table)[0];
+  numberHeader = goog.dom.getElementsByTagName(goog.dom.TagName.TH, table)[1];
+  notSortableHeader =
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, table)[2];
 
   tableSorter = new goog.ui.TableSorter();
   tableSorter.setSortFunction(0, goog.ui.TableSorter.alphaSort);
@@ -224,7 +225,8 @@ function assertOrder(arr, opt_table) {
   var tbl = opt_table || table;
   var actual = [];
   goog.array.forEach(
-      tbl.getElementsByTagName(goog.dom.TagName.TD), function(td, idx) {
+      goog.dom.getElementsByTagName(goog.dom.TagName.TD, tbl),
+      function(td, idx) {
         var txt = goog.dom.getTextContent(td);
         if (txt) {
           actual.push(txt);

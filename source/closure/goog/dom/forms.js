@@ -190,7 +190,7 @@ goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   }
 
   // input[type=image] are not included in the elements collection
-  var inputs = form.getElementsByTagName(goog.dom.TagName.INPUT);
+  var inputs = form.getElementsByTagName(String(goog.dom.TagName.INPUT));
   for (var input, i = 0; input = inputs[i]; i++) {
     if (input.form == form &&
         input.type.toLowerCase() == goog.dom.InputType.IMAGE) {

@@ -201,7 +201,7 @@ function testRemoveRows() {
       goog.editor.plugins.TableEditor.COMMAND.REMOVE_ROWS);
   assertEquals(
       'The table should have been removed', 0,
-      field.getElementsByTagName(goog.dom.TagName.TABLE).length);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, field).length);
   fieldMock.$verify();
 }
 
@@ -224,7 +224,7 @@ function testRemoveColumns() {
       goog.editor.plugins.TableEditor.COMMAND.REMOVE_COLUMNS);
   assertEquals(
       'The table should have been removed', 0,
-      field.getElementsByTagName(goog.dom.TagName.TABLE).length);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, field).length);
   fieldMock.$verify();
 }
 
@@ -257,7 +257,7 @@ function testMergeCells() {
   goog.dom.setTextContent(selectedCell, 'foo');
   goog.dom.setTextContent(selectedCell.nextSibling, 'bar');
   var range = goog.dom.Range.createFromNodeContents(
-      table.getElementsByTagName(goog.dom.TagName.TR)[0]);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0]);
   range.select();
   plugin.execCommandInternal(
       goog.editor.plugins.TableEditor.COMMAND.MERGE_CELLS);
@@ -304,7 +304,7 @@ function createTableAndSelectCell(opt_tableProps) {
       goog.editor.plugins.TableEditor.COMMAND.TABLE, opt_tableProps);
   if (goog.userAgent.IE) {
     var range = goog.dom.Range.createFromNodeContents(
-        field.getElementsByTagName(goog.dom.TagName.TD)[0]);
+        goog.dom.getElementsByTagName(goog.dom.TagName.TD, field)[0]);
     range.select();
   }
 }

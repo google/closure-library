@@ -83,8 +83,9 @@ function testWriteInitialIframeContentBlendedStandardsGrowing() {
 
   assertEquals(500, doc.body.firstChild.offsetTop);
   assert(
-      doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
-          '-moz-force-broken-image-icon') != -1);  // standards
+      goog.dom.getElementsByTagName(goog.dom.TagName.STYLE, doc)[0]
+          .innerHTML.indexOf('-moz-force-broken-image-icon') !=
+      -1);  // standards
 }
 
 function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
@@ -109,8 +110,8 @@ function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
   assertEquals('-2px', realIframe.style.marginTop);
   assertEquals('-5px', realIframe.style.marginLeft);
   assert(
-      doc.getElementsByTagName(goog.dom.TagName.STYLE)[0].innerHTML.indexOf(
-          '-moz-force-broken-image-icon') == -1);  // quirks
+      goog.dom.getElementsByTagName(goog.dom.TagName.STYLE, doc)[0]
+          .innerHTML.indexOf('-moz-force-broken-image-icon') == -1);  // quirks
 }
 
 function testWhiteboxStandardsFixedRtl() {

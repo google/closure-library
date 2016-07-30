@@ -53,16 +53,16 @@ function tearDown() {
 function testGridA11yRoles() {
   var grid = renderer.createDom(palette);
   assertEquals(goog.a11y.aria.Role.GRID, goog.a11y.aria.getRole(grid));
-  var table = grid.getElementsByTagName(goog.dom.TagName.TABLE)[0];
-  var row = table.getElementsByTagName(goog.dom.TagName.TR)[0];
+  var table = goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, grid)[0];
+  var row = goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0];
   assertEquals(goog.a11y.aria.Role.ROW, goog.a11y.aria.getRole(row));
-  var cell = row.getElementsByTagName(goog.dom.TagName.TD)[0];
+  var cell = goog.dom.getElementsByTagName(goog.dom.TagName.TD, row)[0];
   assertEquals(goog.a11y.aria.Role.GRIDCELL, goog.a11y.aria.getRole(cell));
 }
 
 function testCellA11yLabels() {
   var grid = renderer.createDom(palette);
-  var cells = grid.getElementsByTagName(goog.dom.TagName.TD);
+  var cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, grid);
 
   assertEquals(
       'An aria-label is used as a label', 'label-0',
@@ -80,8 +80,8 @@ function testCellA11yLabels() {
 
 function testA11yActiveDescendant() {
   palette.render();
-  var cells =
-      palette.getElementStrict().getElementsByTagName(goog.dom.TagName.TD);
+  var cells = goog.dom.getElementsByTagName(
+      goog.dom.TagName.TD, palette.getElementStrict());
 
   renderer.highlightCell(palette, cells[1].firstChild, true);
   assertEquals(

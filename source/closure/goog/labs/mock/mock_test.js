@@ -141,6 +141,15 @@ function testMockFunctions() {
   assertEquals(25, mockedFunc(50));
 }
 
+function testMockFunctionsWithNullableParameters() {
+  var func = function(nullableObject) { return 0; };
+  var mockedFunc = goog.labs.mock.mockFunction(func);
+  goog.labs.mock.when(mockedFunc)(null).thenReturn(-1);
+
+  assertEquals(0, func(null));
+  assertEquals(-1, mockedFunc(null));
+}
+
 function testMockConstructor() {
   var Ctor = function() { this.isMock = false; };
   var mockInstance = {isMock: true};
@@ -303,6 +312,19 @@ function testVerifyForFunctions() {
   goog.labs.mock.verify(mockFunc)(lessThan(3));
 
   var e = assertThrows(goog.partial(goog.labs.mock.verify(mockFunc), 3));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+}
+
+function testVerifyForFunctionsWithNullableParameters() {
+  var func = function(nullableObject) {};
+  var mockFuncCalled = goog.labs.mock.mockFunction(func);
+  var mockFuncNotCalled = goog.labs.mock.mockFunction(func);
+
+  mockFuncCalled(null);
+
+  goog.labs.mock.verify(mockFuncCalled)(null);
+  var e = assertThrows(
+      goog.partial(goog.labs.mock.verify(mockFuncNotCalled), null));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 

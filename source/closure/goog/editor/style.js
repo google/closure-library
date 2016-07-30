@@ -32,6 +32,7 @@
 goog.provide('goog.editor.style');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
@@ -157,7 +158,8 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
   goog.style.setUnselectable(element, true);
 
   // Make inputs and text areas selectable.
-  var inputs = element.getElementsByTagName(goog.dom.TagName.INPUT);
+  var inputs = goog.dom.getElementsByTagName(
+      goog.dom.TagName.INPUT, goog.asserts.assert(element));
   for (var i = 0, len = inputs.length; i < len; i++) {
     var input = inputs[i];
     if (input.type in goog.editor.style.SELECTABLE_INPUT_TYPES_) {
@@ -165,7 +167,8 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
     }
   }
   goog.array.forEach(
-      element.getElementsByTagName(goog.dom.TagName.TEXTAREA),
+      goog.dom.getElementsByTagName(
+          goog.dom.TagName.TEXTAREA, goog.asserts.assert(element)),
       goog.editor.style.makeSelectable);
 };
 

@@ -349,7 +349,7 @@ for the test (e.g. &#39;goog.stringTest&#39;). The linter will then ignore the e
 provide (if not explicitly defined in the code).</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_message</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional message to add to the error that&#39;s
 raised when used in production code.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="tagUnsealableClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2716" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tagUnsealableClass(<var>ctr</var>)</div></h3></div><div class="body"><p>Sealing classes breaks the older idiom of assigning properties on the
+</dl></dd></dl></div></section><section class="property expandable" id="tagUnsealableClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2715" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tagUnsealableClass(<var>ctr</var>)</div></h3></div><div class="body"><p>Sealing classes breaks the older idiom of assigning properties on the
 prototype rather than in the constructor. As such, goog.defineClass
 must not seal subclasses of these old-style classes until they are fixed.
 Until then, this marks a class as &#34;broken&#34;, instructing defineClass

@@ -91,9 +91,9 @@ goog.string.caseInsensitiveStartsWith = function(str, prefix) {
  *     case).
  */
 goog.string.caseInsensitiveEndsWith = function(str, suffix) {
-  return goog.string.caseInsensitiveCompare(
-             suffix, str.substr(str.length - suffix.length, suffix.length)) ==
-      0;
+  return (
+      goog.string.caseInsensitiveCompare(
+          suffix, str.substr(str.length - suffix.length, suffix.length)) == 0);
 };
 
 
@@ -1251,14 +1251,12 @@ goog.string.compareVersions = function(version1, version2) {
     var v1Sub = v1Subs[subIdx] || '';
     var v2Sub = v2Subs[subIdx] || '';
 
-    // Split the subversions into pairs of numbers and qualifiers (like 'b').
-    // Two different RegExp objects are needed because they are both using
-    // the 'g' flag.
-    var v1CompParser = new RegExp('(\\d*)(\\D*)', 'g');
-    var v2CompParser = new RegExp('(\\d*)(\\D*)', 'g');
     do {
-      var v1Comp = v1CompParser.exec(v1Sub) || ['', '', ''];
-      var v2Comp = v2CompParser.exec(v2Sub) || ['', '', ''];
+      // Split the subversions into pairs of numbers and qualifiers (like 'b').
+      // Two different RegExp objects are use to make it clear the code
+      // is side-effect free
+      var v1Comp = /(\d*)(\D*)(.*)/.exec(v1Sub) || ['', '', '', ''];
+      var v2Comp = /(\d*)(\D*)(.*)/.exec(v2Sub) || ['', '', '', ''];
       // Break if there are no more matches.
       if (v1Comp[0].length == 0 && v2Comp[0].length == 0) {
         break;
@@ -1278,6 +1276,9 @@ goog.string.compareVersions = function(version1, version2) {
               v1Comp[2].length == 0, v2Comp[2].length == 0) ||
           goog.string.compareElements_(v1Comp[2], v2Comp[2]);
       // Stop as soon as an inequality is discovered.
+
+      v1Sub = v1Comp[3];
+      v2Sub = v2Comp[3];
     } while (order == 0);
   }
 

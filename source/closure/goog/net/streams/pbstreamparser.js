@@ -12,6 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @fileoverview The default Protobuf stream parser.
+ *
+ * The default Protobuf parser decodes the input stream (binary) under the
+ * following rules:
+ * 1. The data stream as a whole represents a valid proto message,
+ *    defined as following:
+ *
+ *    message StreamBody {
+ *      repeated bytes messages = 1;
+ *      google.rpc.Status status = 2;
+ *      repeated bytes padding = 15;
+ *    }
+ *
+ *    Padding are noop messages may be generated as base64 padding (for
+ *    browsers) or as a way to keep the connection alive. Its tag-id is
+ *    reserved as the maximum value allowed for a single-byte tag-id.
+ *
+ * 2. The only things that are significant to this parser in the above
+ *    definition are the specification of the tag ids and wire types (all fields
+ *    having length-delimited wire type). The parser doesn't fail if status
+ *    appears more than once, i.e. the validity of StreamBody (other than tag
+ *    ids and wire types) is not checked.
+ *
+ * 3. The wire format looks like:
+ *
+ *    (<tag-id> <wire-type> <length> <message-bytes>)... EOF
+ *
+ *    For details of Protobuf wire format see
+ *    https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ *    A message with unknown tag or with length larger than 2^32 - 1 will
+ *    invalidate the whole stream.
+ *
+ * 4. All decoded messages and status in the buffer will be delivered in
+ *    a batch (array), with each constructed as {tag-id: opaque-byte-array}.
+ *    No-op data, e.g. padding, will be immediately discarded.
+ *
+ * 5. If a high-level API does not support batch delivery (e.g. grpc), then
+ *    a wrapper is expected to deliver individual message separately in order.
+ */
 
 goog.provide('goog.net.streams.PbStreamParser');
 

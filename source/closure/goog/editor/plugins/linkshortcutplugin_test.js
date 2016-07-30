@@ -65,7 +65,8 @@ function testShortcutCreatesALink() {
   goog.testing.events.fireKeySequence(
       field.getElement(), goog.events.KeyCodes.K, {ctrlKey: true});
 
-  var href = field.getElement().getElementsByTagName(goog.dom.TagName.A)[0];
+  var href =
+      goog.dom.getElementsByTagName(goog.dom.TagName.A, field.getElement())[0];
   assertEquals('http://www.google.com/', href.href);
   var bubbleLink =
       document.getElementById(goog.editor.plugins.LinkBubble.TEST_LINK_ID_);
