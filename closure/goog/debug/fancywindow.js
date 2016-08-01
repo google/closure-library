@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
 
 
 
-// TODO(user): Introduce goog.scope for goog.html.SafeHtml once b/12014412
+// TODO(mlourenco): Introduce goog.scope for goog.html.SafeHtml once b/12014412
 // is fixed.
 /**
  * Provides a Fancy extension to the DebugWindow class.  Allows filtering based

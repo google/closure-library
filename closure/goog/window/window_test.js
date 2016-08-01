@@ -121,7 +121,7 @@ function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
   if (encodeUrlParam_opt) {
     urlParam = encodeURIComponent(urlParam);
   }
-  // TODO(user): target is set because goog.window.open() will currently
+  // TODO(mlourenco): target is set because goog.window.open() will currently
   // allow it to be undefined, which in IE seems to result in the same window
   // being reused, instead of a new one being created. If goog.window.open()
   // is fixed to use "_blank" by default then target can be removed here.

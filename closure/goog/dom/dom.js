@@ -895,7 +895,7 @@ goog.dom.createTextNode = function(content) {
  * @return {!Element} The created table.
  */
 goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
-  // TODO(user): Return HTMLTableElement, also in prototype function.
+  // TODO(mlourenco): Return HTMLTableElement, also in prototype function.
   // Callers need to be updated to e.g. not assign numbers to table.cellSpacing.
   return goog.dom.createTable_(document, rows, columns, !!opt_fillWithNbsp);
 };
