@@ -354,7 +354,7 @@ goog.cssom.removeCssRule = function(cssStyleSheet, index) {
 goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var document =
       opt_domHelper ? opt_domHelper.getDocument() : goog.dom.getDocument();
-  var cssNode = goog.dom.createElement(goog.dom.TagName.STYLE);
+  var cssNode = document.createElement(goog.dom.TagName.STYLE);
   cssNode.type = 'text/css';
   var head = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, document)[0];
   head.appendChild(cssNode);
