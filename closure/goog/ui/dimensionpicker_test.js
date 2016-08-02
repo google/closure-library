@@ -53,7 +53,7 @@ function testRender() {
 
   assertEquals('Should create 1 child', 1, render.childNodes.length);
   assertEquals(
-      'Should be a div', goog.dom.TagName.DIV, render.firstChild.tagName);
+      'Should be a div', String(goog.dom.TagName.DIV), render.firstChild.tagName);
 }
 
 function testDecorate() {

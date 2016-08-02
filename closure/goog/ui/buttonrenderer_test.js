@@ -85,7 +85,8 @@ function testGetAriaRole() {
 function testCreateDom() {
   var element = buttonRenderer.createDom(button);
   assertNotNull('Element must not be null', element);
-  assertEquals('Element must be a DIV', goog.dom.TagName.DIV, element.tagName);
+  assertEquals('Element must be a DIV',
+      String(goog.dom.TagName.DIV), element.tagName);
   assertHTMLEquals(
       'Element must have expected structure',
       '<div class="goog-button">Hello</div>', goog.dom.getOuterHtml(element));

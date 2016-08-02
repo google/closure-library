@@ -62,8 +62,8 @@ function testCreateDom() {
   button.setValue('foo');
   var element = renderer.createDom(button);
   assertNotNull('Element must not be null', element);
-  assertEquals(
-      'Element must be a button', goog.dom.TagName.BUTTON, element.tagName);
+  assertEquals('Element must be a button',
+      String(goog.dom.TagName.BUTTON), element.tagName);
   assertSameElements(
       'Button element must have expected class name', ['goog-button'],
       goog.dom.classlist.get(element));

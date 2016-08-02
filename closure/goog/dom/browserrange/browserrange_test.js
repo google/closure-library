@@ -162,7 +162,7 @@ function testTextNodes() {
       'Selection should end at offset 5', 'Part2'.length, range.getEndOffset());
 
   assertEquals(
-      'Container should be DIV', goog.dom.TagName.DIV,
+      'Container should be DIV', String(goog.dom.TagName.DIV),
       range.getContainer().tagName);
 
   assertEquals(

@@ -116,7 +116,7 @@ function testSkipTagDoesNotSkipEnd() {
   assertEquals('T', node.nodeValue);
 
   node = iterator.next();
-  assertEquals(goog.dom.TagName.B, node.tagName);
+  assertEquals(String(goog.dom.TagName.B), node.tagName);
 
   iterator.skipTag();
 
@@ -134,7 +134,7 @@ function testSkipTagSkipsEnd() {
   assertEquals('T', node.nodeValue);
 
   node = iterator.next();
-  assertEquals(goog.dom.TagName.B, node.tagName);
+  assertEquals(String(goog.dom.TagName.B), node.tagName);
 
   var ex = assertThrows('Should stop iteration when skipping B', function() {
     iterator.skipTag();
