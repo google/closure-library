@@ -199,9 +199,9 @@ goog.uri.utils.splitRe_ = new RegExp(
     '(?::([0-9]+))?' +   // port
     '(?=[/#?]|$)' +      // authority-terminating character
     ')?' +
-    '([^?#]+)?' +        // path
-    '(?:\\?([^#]*))?' +  // query
-    '(?:#(.*))?' +       // fragment
+    '([^?#]+)?' +          // path
+    '(?:\\?([^#]*))?' +    // query
+    '(?:#([\\s\\S]*))?' +  // fragment
     '$');
 
 
