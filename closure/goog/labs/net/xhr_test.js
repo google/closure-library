@@ -203,7 +203,9 @@ function testGetBlob() {
     return;
   }
 
-  return xhr.getBlob(TEST_IMAGE)
+  var options = {withCredentials: true};
+
+  return xhr.getBlob(TEST_IMAGE, options)
       .then(function(blob) {
         var reader = new FileReader();
         return new goog.Promise(function(resolve, reject) {
@@ -213,6 +215,9 @@ function testGetBlob() {
       })
       .then(function(e) {
         assertElementsEquals(TEST_IMAGE_BYTES, new Uint8Array(e.target.result));
+        assertObjectEquals(
+            'input options should not have mutated.', {withCredentials: true},
+            options);
       });
 }
 
@@ -228,8 +233,13 @@ function testGetBytes() {
     return;
   }
 
+  var options = {withCredentials: true};
+
   return xhr.getBytes(TEST_IMAGE).then(function(bytes) {
     assertElementsEquals(TEST_IMAGE_BYTES, bytes);
+    assertObjectEquals(
+        'input options should not have mutated.', {withCredentials: true},
+        options);
   });
 }
 
