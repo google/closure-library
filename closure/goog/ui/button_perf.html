@@ -22,6 +22,7 @@ Author:  attila@google.com (Attila Bodis)
     goog.require('goog.testing.PerformanceTable');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Button');
+    goog.require('goog.dom.TagName');
   </script>
 </head>
 <body>
@@ -79,7 +80,7 @@ Author:  attila@google.com (Attila Bodis)
     function setUpDecorateTest(opt_count) {
       var count = opt_count || 1000;
       for (var i = 0; i < count; i++) {
-        decorateSandbox.appendChild(goog.dom.createDom('button', 'goog-button',
+        decorateSandbox.appendChild(goog.dom.createDom(goog.dom.TagName.BUTTON, 'goog-button',
             'W00t!'));
       }
       elementToDecorate = decorateSandbox.firstChild;

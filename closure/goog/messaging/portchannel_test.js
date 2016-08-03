@@ -18,6 +18,7 @@ goog.setTestOnly('goog.messaging.PortChannelTest');
 goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -425,7 +426,7 @@ function assertPortsEntangled(port1, port2) {
  *     loaded iframe.
  */
 function createIframe(opt_url) {
-  var iframe = goog.dom.createDom('iframe', {
+  var iframe = goog.dom.createDom(goog.dom.TagName.IFRAME, {
     style: 'display: none',
     src: opt_url || 'testdata/portchannel_inner.html'
   });
