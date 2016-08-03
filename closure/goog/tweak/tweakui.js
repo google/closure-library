@@ -657,9 +657,11 @@ goog.tweak.EntriesPanel.prototype.createComboBoxDom_ = function(
   ret.appendChild(selectElem);
 
   // Set the value and add a callback.
-  selectElem.value = tweak.getNewValue();
+  selectElem.value = String(tweak.getNewValue());
   selectElem.onchange = onchangeFunc;
-  tweak.addCallback(function() { selectElem.value = tweak.getNewValue(); });
+  tweak.addCallback(function() {
+    selectElem.value = String(tweak.getNewValue());
+  });
   return ret;
 };
 
@@ -745,13 +747,15 @@ goog.tweak.EntriesPanel.prototype.createTextBoxDom_ = function(
   var ret = dh.getDocument().createDocumentFragment();
   ret.appendChild(dh.createTextNode(label + ': '));
   var textBox = dh.createDom(goog.dom.TagName.INPUT, {
-    value: tweak.getNewValue(),
+    value: String(tweak.getNewValue()),
     // TODO(agrieve): Make size configurable or autogrow.
     size: 5,
     onblur: onchangeFunc
   });
   ret.appendChild(textBox);
-  tweak.addCallback(function() { textBox.value = tweak.getNewValue(); });
+  tweak.addCallback(function() {
+    textBox.value = String(tweak.getNewValue());
+  });
   return ret;
 };
 
