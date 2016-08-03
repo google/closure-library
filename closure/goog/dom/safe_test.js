@@ -12,11 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.dom.safe.
- * @suppress {accessControls} Private methods are accessed for test purposes.
- */
-
 goog.provide('goog.dom.safeTest');
 goog.setTestOnly('goog.dom.safeTest');
 
@@ -26,10 +21,8 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
-goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.testing');
-goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.jsunit');
 
 
@@ -85,7 +78,7 @@ function testDocumentWrite() {
 
 
 function testsetLinkHrefAndRel_trustedResourceUrl() {
-  var mockLink = /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+  var mockLink = /** @type {HTMLLinkElement} */ ({'href': null, 'rel': null});
 
   var url = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
@@ -99,7 +92,7 @@ function testsetLinkHrefAndRel_trustedResourceUrl() {
 
 
 function testsetLinkHrefAndRel_safeUrl() {
-  var mockLink = /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+  var mockLink = /** @type {HTMLLinkElement} */ ({'href': null, 'rel': null});
 
   var url = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
@@ -113,7 +106,7 @@ function testsetLinkHrefAndRel_safeUrl() {
 
 
 function testsetLinkHrefAndRel_string() {
-  var mockLink = /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+  var mockLink = /** @type {HTMLLinkElement} */ ({'href': null, 'rel': null});
 
   assertThrows(function() {
     goog.dom.safe.setLinkHrefAndRel(
@@ -139,23 +132,12 @@ function testSetLocationHref() {
 
 
 function testSetAnchorHref() {
-  var anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
-  goog.dom.safe.setAnchorHref(anchor, 'javascript:evil();');
-  assertEquals('about:invalid#zClosurez', anchor.href);
-
-  anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
-  var safeUrl = goog.html.SafeUrl.fromConstant(
-      goog.string.Const.from('javascript:trusted();'));
-  goog.dom.safe.setAnchorHref(anchor, safeUrl);
-  assertEquals('javascript:trusted();', anchor.href);
-
-  // Works with mocks too.
   var mockAnchor = /** @type {!HTMLAnchorElement} */ ({'href': 'blarg'});
   goog.dom.safe.setAnchorHref(mockAnchor, 'javascript:evil();');
   assertEquals('about:invalid#zClosurez', mockAnchor.href);
 
   mockAnchor = /** @type {!HTMLAnchorElement} */ ({'href': 'blarg'});
-  safeUrl = goog.html.SafeUrl.fromConstant(
+  var safeUrl = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setAnchorHref(mockAnchor, safeUrl);
   assertEquals('javascript:trusted();', mockAnchor.href);
@@ -182,8 +164,7 @@ function testSetImageSrc_withHttpsUrl() {
 }
 
 function testOpenInWindow() {
-  mockWindowOpen =
-      /** @type {?} */ (goog.testing.createMethodMock(window, 'open'));
+  mockWindowOpen = goog.testing.createMethodMock(window, 'open');
   var fakeWindow = {};
 
   mockWindowOpen('about:invalid#zClosurez', 'name', 'specs', true)
@@ -209,153 +190,4 @@ function testOpenInWindow() {
   mockWindowOpen.$verify();
   assertEquals(
       'openInWindow should return the created window', fakeWindow, retVal);
-}
-
-function testAssertIsLocation() {
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsLocation_(window.location);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() { goog.dom.safe.assertIsLocation_(o); });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(window.location);
-  assertNotThrows(function() { goog.dom.safe.assertIsLocation_(mock); });
-
-  var linkElement = document.createElement('LINK');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsLocation_(linkElement);
-  });
-  assert(goog.string.contains(ex.message, 'Argument is not a Location'));
-}
-
-function testAssertIsHtmlAnchorElement() {
-  var anchorElement = document.createElement('A');
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsHTMLAnchorElement_(anchorElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLAnchorElement_(o); });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(anchorElement);
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsHTMLAnchorElement_(mock);
-  });
-
-  var otherElement = document.createElement('LINK');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLAnchorElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLAnchorElement'));
-}
-
-function testAssertIsHtmlLinkElement() {
-  var linkElement = document.createElement('LINK');
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsHTMLLinkElement_(linkElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLLinkElement_(o); });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(linkElement);
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLLinkElement_(mock); });
-
-  var otherElement = document.createElement('A');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLLinkElement_(otherElement);
-  });
-  assert(goog.string.contains(ex.message, 'Argument is not a HTMLLinkElement'));
-}
-
-function testAssertIsHtmlImageElement() {
-  var imgElement = document.createElement('IMG');
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsHTMLImageElement_(imgElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLImageElement_(o); });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(imgElement);
-  assertNotThrows(function() {
-    goog.dom.safe.assertIsHTMLImageElement_(mock);
-  });
-
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLImageElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
-}
-
-function testAssertIsHtmlEmbedElement() {
-  var el = document.createElement('EMBED');
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLEmbedElement_(el); });
-
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLEmbedElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLEmbedElement'));
-}
-
-function testAssertIsHtmlFrameElement() {
-  var el = document.createElement('FRAME');
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLFrameElement_(el); });
-
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLFrameElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLFrameElement'));
-}
-
-function testAssertIsHtmlIFrameElement() {
-  var el = document.createElement('IFRAME');
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLIFrameElement_(el); });
-
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLIFrameElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLIFrameElement'));
-}
-
-function testAssertIsHtmlObjectElement() {
-  var el = document.createElement('OBJECT');
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLObjectElement_(el); });
-
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLObjectElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLObjectElement'));
-}
-
-function testAssertIsHtmlScriptElement() {
-  var el = document.createElement('SCRIPT');
-  assertNotThrows(function() { goog.dom.safe.assertIsHTMLScriptElement_(el); });
-
-  var otherElement = document.createElement('IMG');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLScriptElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLScriptElement'));
 }
