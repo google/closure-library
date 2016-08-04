@@ -484,7 +484,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsDom = function(
 
       // Declare oldTypeIndex for the compiler. The associated plugin may not be
       // included in the compiled bundle.
-      /** @type {string} */ image.oldTabIndex;
+      /** @type {number} */ image.oldTabIndex;
 
       // oldTabIndex will only be set if
       // goog.editor.BrowserFeature.TABS_THROUGH_IMAGES is true and we're in
