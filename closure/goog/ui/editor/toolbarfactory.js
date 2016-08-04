@@ -207,7 +207,7 @@ goog.ui.editor.ToolbarFactory.addFormatOption = function(button, caption, tag) {
   var buttonDom = button.getDomHelper();
   var option = new goog.ui.Option(
       buttonDom.createDom(goog.dom.TagName.DIV, null, caption), tag, buttonDom);
-  option.setId(tag);
+  option.setId(String(tag));
   button.addItem(option);
 };
 
