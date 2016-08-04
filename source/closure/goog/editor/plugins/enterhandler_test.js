@@ -441,7 +441,7 @@ function testDeleteBrBeforeBlock() {
     range = field1.getRange();
     assertEquals(
         'The selected range should be contained within the <span>',
-        goog.dom.TagName.SPAN, range.getContainerElement().tagName);
+        String(goog.dom.TagName.SPAN), range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     // Verify that the cursor is placed inside the span at the beginning of bar.
     focusNode = range.getFocusNode();
@@ -466,7 +466,7 @@ function testDeleteBrBeforeBlock() {
     // Verify that the cursor is placed inside the LI at the text node "one".
     assertEquals(
         'The selected range should be contained within the <li>',
-        goog.dom.TagName.LI, range.getContainerElement().tagName);
+        String(goog.dom.TagName.LI), range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     focusNode = range.getFocusNode();
     assertTrue(
@@ -491,7 +491,7 @@ function testDeleteBrBeforeBlock() {
     range = field1.getRange();
     assertEquals(
         'The selected range should be contained within the <li>',
-        goog.dom.TagName.LI, range.getContainerElement().tagName);
+        String(goog.dom.TagName.LI), range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     focusNode = range.getFocusNode();
     assertTrue(
@@ -534,7 +534,7 @@ function testDeleteBeforeBlockquote() {
     assertEquals(
         'The selected range should be contained within the ' +
             '<blockquote>',
-        goog.dom.TagName.BLOCKQUOTE, range.getContainerElement().tagName);
+        String(goog.dom.TagName.BLOCKQUOTE), range.getContainerElement().tagName);
     assertTrue('The selected range should be collapsed', range.isCollapsed());
     var focusNode = range.getFocusNode();
     assertTrue(

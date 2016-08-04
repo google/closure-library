@@ -918,16 +918,16 @@ function testGetNextNode() {
   var node = tree;
   var next = function() { return node = goog.dom.getNextNode(node); };
 
-  assertEquals(goog.dom.TagName.P, next().tagName);
+  assertEquals(String(goog.dom.TagName.P), next().tagName);
   assertEquals('Some text', next().nodeValue);
-  assertEquals(goog.dom.TagName.BLOCKQUOTE, next().tagName);
+  assertEquals(String(goog.dom.TagName.BLOCKQUOTE), next().tagName);
   assertEquals('Some ', next().nodeValue);
-  assertEquals(goog.dom.TagName.I, next().tagName);
+  assertEquals(String(goog.dom.TagName.I), next().tagName);
   assertEquals('special', next().nodeValue);
   assertEquals(' ', next().nodeValue);
-  assertEquals(goog.dom.TagName.B, next().tagName);
+  assertEquals(String(goog.dom.TagName.B), next().tagName);
   assertEquals('text', next().nodeValue);
-  assertEquals(goog.dom.TagName.ADDRESS, next().tagName);
+  assertEquals(String(goog.dom.TagName.ADDRESS), next().tagName);
   assertEquals(goog.dom.NodeType.COMMENT, next().nodeType);
   assertEquals('Foo', next().nodeValue);
 
@@ -948,17 +948,17 @@ function testGetPreviousNode() {
   var previous = function() { return node = goog.dom.getPreviousNode(node); };
 
   assertEquals(goog.dom.NodeType.COMMENT, previous().nodeType);
-  assertEquals(goog.dom.TagName.ADDRESS, previous().tagName);
+  assertEquals(String(goog.dom.TagName.ADDRESS), previous().tagName);
   assertEquals('text', previous().nodeValue);
-  assertEquals(goog.dom.TagName.B, previous().tagName);
+  assertEquals(String(goog.dom.TagName.B), previous().tagName);
   assertEquals(' ', previous().nodeValue);
   assertEquals('special', previous().nodeValue);
-  assertEquals(goog.dom.TagName.I, previous().tagName);
+  assertEquals(String(goog.dom.TagName.I), previous().tagName);
   assertEquals('Some ', previous().nodeValue);
-  assertEquals(goog.dom.TagName.BLOCKQUOTE, previous().tagName);
+  assertEquals(String(goog.dom.TagName.BLOCKQUOTE), previous().tagName);
   assertEquals('Some text', previous().nodeValue);
-  assertEquals(goog.dom.TagName.P, previous().tagName);
-  assertEquals(goog.dom.TagName.DIV, previous().tagName);
+  assertEquals(String(goog.dom.TagName.P), previous().tagName);
+  assertEquals(String(goog.dom.TagName.DIV), previous().tagName);
 
   if (!goog.userAgent.IE) {
     // Internet Explorer maintains a parentNode for Elements after they are
@@ -1553,11 +1553,11 @@ function testSafeHtmlToNode() {
 
   var div = goog.dom.safeHtmlToNode(
       goog.html.testing.newSafeHtmlForTest('<div>3</div>'));
-  assertEquals(goog.dom.TagName.DIV, div.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), div.tagName);
 
   var script = goog.dom.safeHtmlToNode(
       goog.html.testing.newSafeHtmlForTest('<script></script>'));
-  assertEquals(goog.dom.TagName.SCRIPT, script.tagName);
+  assertEquals(String(goog.dom.TagName.SCRIPT), script.tagName);
 
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     // Removing an Element from a DOM tree in IE sets its parentNode to a new

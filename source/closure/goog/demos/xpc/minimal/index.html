@@ -11,6 +11,7 @@ See the COPYING file for details.
 <script type="text/javascript">
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.net.xpc.CrossPageChannel');
 
@@ -27,7 +28,7 @@ var logEl;
 function log(msg) {
   logEl || (logEl = goog.dom.getElement('log'));
 
-  var msgEl = goog.dom.createDom('div');
+  var msgEl = goog.dom.createDom(goog.dom.TagName.DIV);
   msgEl.innerHTML = msg;
   logEl.insertBefore(msgEl, logEl.firstChild);
 }

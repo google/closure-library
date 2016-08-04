@@ -2212,11 +2212,16 @@ goog.getCssName = function(className, opt_modifier) {
     rename = function(a) { return a; };
   }
 
-  if (opt_modifier) {
-    return className + '-' + rename(opt_modifier);
-  } else {
-    return rename(className);
+  var result =
+      opt_modifier ? className + '-' + rename(opt_modifier) : rename(className);
+
+  // The special CLOSURE_CSS_NAME_MAP_FN allows users to specify further
+  // processing of the class name.
+  if (goog.global.CLOSURE_CSS_NAME_MAP_FN) {
+    return goog.global.CLOSURE_CSS_NAME_MAP_FN(result);
   }
+
+  return result;
 };
 
 

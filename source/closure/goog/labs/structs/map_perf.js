@@ -144,13 +144,17 @@ MapPerf.runPerformanceTestForMapSet = function(map, message) {
 goog.global['setUpPage'] = function() {
   var content = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(document.body, content, 0);
-  goog.dom.append(content,
-      goog.dom.createDom('h1', null, 'Closure Performance Tests - Map'),
-      goog.dom.createDom('p', null,
-          goog.dom.createDom('strong', null, 'User-agent: '),
-          goog.dom.createDom('span', {'id': 'ua'}, navigator.userAgent)),
-      goog.dom.createDom('div', {'id': 'perf-table'}),
-      goog.dom.createDom('hr'));
+  goog.dom.append(
+      content,
+      goog.dom.createDom(
+          goog.dom.TagName.H1, null, 'Closure Performance Tests - Map'),
+      goog.dom.createDom(
+          goog.dom.TagName.P, null,
+          goog.dom.createDom(goog.dom.TagName.STRONG, null, 'User-agent: '),
+          goog.dom.createDom(
+              goog.dom.TagName.SPAN, {'id': 'ua'}, navigator.userAgent)),
+      goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'perf-table'}),
+      goog.dom.createDom(goog.dom.TagName.HR));
 
   MapPerf.perfTable =
       new goog.testing.PerformanceTable(goog.dom.getElement('perf-table'));

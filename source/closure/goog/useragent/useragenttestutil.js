@@ -23,6 +23,7 @@ goog.provide('goog.userAgentTestUtil.UserAgents');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
+goog.require('goog.object');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.keyboard');
 goog.require('goog.userAgent.platform');
@@ -85,6 +86,9 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   // goog.userAgent.keyboard
   goog.userAgent.keyboard.MAC_KEYBOARD =
       goog.userAgent.keyboard.determineMacKeyboard_();
+
+  // Reset cache so calls to isVersionOrHigher don't use cached version.
+  goog.object.clear(goog.userAgent.isVersionOrHigherCache_);
 };
 
 

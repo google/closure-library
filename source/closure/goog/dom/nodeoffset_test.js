@@ -40,7 +40,8 @@ function testElementOffset() {
   var recovered = nodeOffset.findTargetNode(test2);
   assertNotNull('Should recover a node.', recovered);
   assertEquals(
-      'Should recover an I node.', goog.dom.TagName.I, recovered.tagName);
+      'Should recover an I node.', String(goog.dom.TagName.I),
+      recovered.tagName);
   assertTrue(
       'Should recover a child of test2', goog.dom.contains(test2, recovered));
   assertFalse(

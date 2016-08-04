@@ -4,7 +4,7 @@
           &#x2514; <a href="goog.editor.plugins.EnterHandler.html">goog.editor.plugins.EnterHandler</a>
               &#x2514; goog.editor.plugins.TagOnEnterHandler</pre><dl><dt class="spec">All implemented interfaces<dd><code><a href="goog.disposable.IDisposable.html">goog.disposable.IDisposable</a></code><dd><code><a href="goog.events.Listenable.html">goog.events.Listenable</a></code></dl><p>Plugin to handle enter keys. This subclass normalizes all browsers to use
 the given block tag on enter.</p>
-<h3 class="name"><div>new TagOnEnterHandler(<var>tag</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tag</var><code><a href="goog.dom.TagName.html">goog.dom.TagName</a></code><dd><p>The type of tag to add on enter.</p>
+<h3 class="name"><div>new TagOnEnterHandler(<var>tag</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tag</var><code>!<a href="goog.dom.TagName.html">goog.dom.TagName</a></code><dd><p>The type of tag to add on enter.</p>
 </dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="activeOnUneditableFields"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/editor/plugins/tagonenterhandler.js#L81" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>activeOnUneditableFields()</div></h3></div><div class="body"><p>This plugin is active on uneditable fields so it can provide a value for
 queryCommandValue calls asking for goog.editor.Command.BLOCKQUOTE.</p>
 <dl><dt class="spec">Overrides</dt><dd><a href="goog.editor.Plugin.html#activeOnUneditableFields">goog.editor.Plugin</a></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>True.</p>
@@ -81,7 +81,7 @@ entering to turn into blocks.
 Example:  html is: <code>&lt;h2&gt;foo[cursor]&lt;/h2&gt;</code>, and the user hits enter.  We
 don&#39;t want to format the h2, but we do want to format the P that is
 created on enter.  The P node is not available until keyup.</p>
-<dl><dt class="spec">Defined by</dt><dd><a href="goog.editor.plugins.EnterHandler.html#ensureBlockIeOpera">goog.editor.plugins.EnterHandler</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tag</var><code><a href="goog.dom.TagName.html">goog.dom.TagName</a></code><dd><p>The tag name to convert to.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.editor.plugins.EnterHandler.html#ensureBlockIeOpera">goog.editor.plugins.EnterHandler</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>tag</var><code>!<a href="goog.dom.TagName.html">goog.dom.TagName</a></code><dd><p>The tag name to convert to.</p>
 <dt class="type name"><var>opt_keyUp</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>=</code><dd><p>Whether the function is being called on key up.
 When called on key up, the cursor is in the newly created node, so the
 semantics for when to change it to a block are different.  Specifically,

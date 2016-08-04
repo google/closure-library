@@ -140,7 +140,7 @@ function testExcludeMarkers() {
   assertArrayEquals(
       ['goog-quote', 'goog-comment', 'goog-note'], spellChecker.excludeMarker);
   assertArrayEquals(
-      [goog.dom.TagName.DIV, undefined, goog.dom.TagName.SPAN],
+      [String(goog.dom.TagName.DIV), undefined, String(goog.dom.TagName.SPAN)],
       spellChecker.excludeTags);
   el.innerHTML = '<div class="goog-quote">misspelling</div>' +
       '<div class="goog-yes">misspelling</div>' +

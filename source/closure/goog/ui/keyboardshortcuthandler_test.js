@@ -575,7 +575,7 @@ function testAltGraphKeyOnUSLayout() {
   listener.shortcutFired('letterThree');
   listener.shortcutFired('letterFour');
   listener.shortcutFired('letterFive');
-  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+  if (goog.userAgent.WINDOWS) {
     listener.$replay();
 
     handler.registerShortcut('letterOne', 'ctrl+alt+1');
@@ -600,7 +600,7 @@ function testAltGraphKeyOnFrenchLayout() {
   // French layout. This test verifies we fire shortcut events only when
   // we type ctrl+alt+1 keys on the French layout.
   listener.shortcutFired('letterOne');
-  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+  if (goog.userAgent.WINDOWS) {
     listener.$replay();
 
     handler.registerShortcut('letterOne', 'ctrl+alt+1');
@@ -624,7 +624,7 @@ function testAltGraphKeyOnSpanishLayout() {
   // Windows assigns printable characters to ctrl+alt+[1-5] keys of the
   // Spanish layout. This test verifies we do not fire shortcut events at
   // all when typing ctrl+alt+[1-5] keys on the Spanish layout.
-  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+  if (goog.userAgent.WINDOWS) {
     listener.$replay();
 
     handler.registerShortcut('letterOne', 'ctrl+alt+1');
@@ -648,7 +648,7 @@ function testAltGraphKeyOnPolishLayout_withShift() {
   // Windows assigns printable characters to ctrl+alt+shift+A key in polish
   // layout. This test verifies that we do not fire shortcut events for A, but
   // does fire for Q which does not have a printable character.
-  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+  if (goog.userAgent.WINDOWS) {
     listener.shortcutFired('letterQ');
     listener.$replay();
 

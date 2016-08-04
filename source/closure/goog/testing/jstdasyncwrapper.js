@@ -26,6 +26,32 @@ goog.provide('goog.testing.JsTdAsyncWrapper');
 goog.require('goog.Promise');
 
 
+/**
+ * @param {Function|string} callback
+ * @param {number=} opt_delay
+ * @param {...*} var_args
+ * @return {number}
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_FN_ = goog.global.setTimeout;
+
+
+/**
+ * Calls a function after a specified timeout. This uses the original setTimeout
+ * to be resilient to tests that override it.
+ * @param {Function} fn The function to call.
+ * @param {number} timeout Timeout time in ms.
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_ = function(fn, timeout) {
+  // Setting timeout into a variable is necessary to invoke the function in the
+  // default global context. Inlining breaks chrome since it requires setTimeout
+  // to be called with the global context, and IE8 doesn't support the call
+  // method on setTimeout.
+  var setTimeoutFn = goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_FN_;
+  setTimeoutFn(fn, timeout);
+};
+
 
 /**
  * Wraps an object's methods by passing in a Queue that is based on the JSTD
@@ -43,7 +69,7 @@ goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj = function(original) {
     return function() {
       var queue = new goog.testing.JsTdAsyncWrapper.Queue_(this);
       fn.call(this, queue);
-      return queue.chain;
+      return queue.startExecuting();
     };
   };
 
@@ -68,13 +94,14 @@ goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj = function(original) {
  *     object is passed into queue callbacks as the "this" object.
  * @constructor
  * @private
+ * @final
  */
 goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
   /**
-   * The chain of testing step promises.
-   * @type {!goog.Promise<undefined>}
+   * The queue steps.
+   * @private {!Array<!goog.testing.JsTdAsyncWrapper.Step_>}
    */
-  this.chain = goog.Promise.resolve();
+  this.steps_ = [];
 
   /**
    * A delegate that is used within a defer call.
@@ -112,24 +139,109 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(
     this.delegate_.defer(stepName, fn);
     return;
   }
-  this.chain =
-      this.chain
-          .then(goog.bind(
-              function() {
-                this.delegate_ =
-                    new goog.testing.JsTdAsyncWrapper.Queue_(this.testObj_);
-                var pool =
-                    new goog.testing.JsTdAsyncWrapper.Pool_(this.testObj_);
-                fn.call(this.testObj_, pool);
-                return pool.poolComplete();
-              },
-              this))
-          .then(goog.bind(function() { return this.delegate_.chain; }, this))
-          .then(goog.bind(function() { this.delegate_ = null; }, this))
-          .then(undefined, function(e) {
-            e.message = 'In step ' + stepName + ', error: ' + e.message;
-            throw e;
-          });
+  this.steps_.push(new goog.testing.JsTdAsyncWrapper.Step_(
+      /** @type {string} */ (stepName),
+      /** @type {function(!goog.testing.JsTdAsyncWrapper.Pool_=)} */ (fn)));
+};
+
+
+/**
+ * Starts the execution.
+ * @return {!goog.Promise<void>}
+ */
+goog.testing.JsTdAsyncWrapper.Queue_.prototype.startExecuting = function() {
+  return new goog.Promise(goog.bind(function(resolve, reject) {
+    this.executeNextStep_(resolve, reject);
+  }, this));
+};
+
+
+/**
+ * Executes the next step on the queue waiting for all pool callbacks and then
+ * starts executing any delegate queues before it finishes.
+ * @param {function()} callback
+ * @param {function(*)} errback
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeNextStep_ = function(
+    callback, errback) {
+  // Note: From this point on, we can no longer use goog.Promise (which uses
+  // the goog.async.run queue) because it conflicts with MockClock, and we can't
+  // use the native Promise because it is not supported on IE. So we revert to
+  // using callbacks and setTimeout.
+  if (!this.steps_.length) {
+    callback();
+    return;
+  }
+  var step = this.steps_.shift();
+  this.delegate_ = new goog.testing.JsTdAsyncWrapper.Queue_(this.testObj_);
+  var pool = new goog.testing.JsTdAsyncWrapper.Pool_(
+      this.testObj_, goog.bind(function() {
+        goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_(goog.bind(function() {
+          this.executeDelegate_(callback, errback);
+        }, this), 0);
+      }, this), goog.bind(function(reason) {
+        this.handleError_(errback, reason, step.name);
+      }, this));
+  try {
+    step.fn.call(this.testObj_, pool);
+  } catch (e) {
+    this.handleError_(errback, e, step.name);
+  }
+  pool.maybeComplete();
+};
+
+
+/**
+ * Execute the delegate queue.
+ * @param {function()} callback
+ * @param {function(*)} errback
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeDelegate_ = function(
+    callback, errback) {
+  // Wait till the delegate queue completes before moving on to the
+  // next step.
+  if (!this.delegate_) {
+    this.executeNextStep_(callback, errback);
+    return;
+  }
+  this.delegate_.executeNextStep_(goog.bind(function() {
+    this.delegate_ = null;
+    goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_(goog.bind(function() {
+      this.executeNextStep_(callback, errback);
+    }, this), 0);
+  }, this), errback);
+};
+
+
+/**
+ * @param {function(*)} errback
+ * @param {*} reason
+ * @param {string} stepName
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.Queue_.prototype.handleError_ = function(
+    errback, reason, stepName) {
+  var error = reason instanceof Error ? reason : Error(reason);
+  error.message = 'In step ' + stepName + ', error: ' + error.message;
+  errback(reason);
+};
+
+
+
+/**
+ * A step to be executed.
+ * @param {string} name
+ * @param {function(!goog.testing.JsTdAsyncWrapper.Pool_=)} fn
+ * @constructor
+ * @private
+ */
+goog.testing.JsTdAsyncWrapper.Step_ = function(name, fn) {
+  /** @final {string} */
+  this.name = name;
+  /** @final {function(!goog.testing.JsTdAsyncWrapper.Pool_=)} */
+  this.fn = fn;
 };
 
 
@@ -138,16 +250,22 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(
  * A fake pool that mimics the JSTD AsyncTestCase's pool object.
  * @param {!Object} testObj The test object containing all test methods. This
  *     object is passed into queue callbacks as the "this" object.
+ * @param {function()} callback
+ * @param {function(*)} errback
  * @constructor
  * @private
+ * @final
  */
-goog.testing.JsTdAsyncWrapper.Pool_ = function(testObj) {
+goog.testing.JsTdAsyncWrapper.Pool_ = function(testObj, callback, errback) {
 
   /** @private {number} */
   this.outstandingCallbacks_ = 0;
 
-  /** @private {!goog.promise.Resolver<undefined>} */
-  this.poolComplete_ = goog.Promise.withResolver();
+  /** @private {function()} */
+  this.callback_ = callback;
+
+  /** @private {function(*)} */
+  this.errback_ = errback;
 
   /**
    * thisArg that should be used by default for defer function calls.
@@ -201,11 +319,11 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addCallback = function(
       if (opt_description) {
         e.message = opt_description + e.message;
       }
-      this.poolComplete_.reject(e);
+      this.errback_(e);
     }
     this.outstandingCallbacks_ = this.outstandingCallbacks_ - 1;
     if (this.outstandingCallbacks_ == 0) {
-      this.poolComplete_.resolve();
+      this.callback_();
     }
   }, this);
 };
@@ -229,20 +347,16 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addErrback = function(msg) {
       }
       errorMsg += ')';
     }
-    this.poolComplete_.reject(errorMsg);
+    this.errback_(errorMsg);
   }, this);
 };
 
 
 /**
- * @return {!goog.Promise<undefined>} A promise that fires when all promise
- *     of the pool are fullfilled and rejects if any one promise rejects. Since
- *     new promises can be added during a the chain that leads the the initial
- *     "round" of completions remaining callbacks are processed recursively.
+ * Completes the pool if there are no outstanding callbacks.
  */
-goog.testing.JsTdAsyncWrapper.Pool_.prototype.poolComplete = function() {
+goog.testing.JsTdAsyncWrapper.Pool_.prototype.maybeComplete = function() {
   if (this.outstandingCallbacks_ == 0) {
-    this.poolComplete_.resolve();
+    this.callback_();
   }
-  return this.poolComplete_.promise;
 };

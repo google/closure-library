@@ -119,8 +119,8 @@ function testSetBoldText() {
       'Should point to http://docs.google.com/', 'http://docs.google.com/',
       anchor.href);
   assertEquals('Should have correct text', 'Text', link.getCurrentText());
-  assertEquals(
-      'Should still be bold', goog.dom.TagName.B, anchor.firstChild.tagName);
+  assertEquals('Should still be bold',
+      String(goog.dom.TagName.B), anchor.firstChild.tagName);
 }
 
 function testLinkImgTag() {
@@ -135,7 +135,7 @@ function testLinkImgTag() {
       anchor.href);
 
   assertEquals(
-      'Should still have img tag', goog.dom.TagName.IMG,
+      'Should still have img tag', String(goog.dom.TagName.IMG),
       anchor.firstChild.tagName);
 
   assertEquals(

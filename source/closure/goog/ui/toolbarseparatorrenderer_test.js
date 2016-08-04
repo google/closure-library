@@ -52,8 +52,8 @@ function testGetCssClass() {
 function testCreateDom() {
   var element = renderer.createDom(separator);
   assertNotNull('Created element must not be null', element);
-  assertEquals(
-      'Created element must be a DIV', goog.dom.TagName.DIV, element.tagName);
+  assertEquals('Created element must be a DIV',
+      String(goog.dom.TagName.DIV), element.tagName);
   assertSameElements(
       'Created element must have expected class names',
       [

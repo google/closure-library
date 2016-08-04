@@ -352,11 +352,11 @@ goog.cssom.removeCssRule = function(cssStyleSheet, index) {
  * @return {!Element} The newly created STYLE element.
  */
 goog.cssom.addCssText = function(cssText, opt_domHelper) {
-  var document =
-      opt_domHelper ? opt_domHelper.getDocument() : goog.dom.getDocument();
-  var cssNode = goog.dom.createElement(goog.dom.TagName.STYLE);
+  var domHelper = opt_domHelper || goog.dom.getDomHelper();
+  var document = domHelper.getDocument();
+  var cssNode = domHelper.createElement(goog.dom.TagName.STYLE);
   cssNode.type = 'text/css';
-  var head = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, document)[0];
+  var head = domHelper.getElementsByTagName(goog.dom.TagName.HEAD)[0];
   head.appendChild(cssNode);
   if (cssNode.styleSheet) {
     // IE.

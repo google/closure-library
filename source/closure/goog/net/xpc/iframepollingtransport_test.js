@@ -232,7 +232,7 @@ function createMockPeerWindow(url) {
 
   // Update the appendChild method to use a mock frame window.
   mockPeer.document.body.appendChild = function(el) {
-    assertEquals(goog.dom.TagName.IFRAME, el.tagName);
+    assertEquals(String(goog.dom.TagName.IFRAME), el.tagName);
     mockPeer.frames[el.name] = createMockWindow(el.src);
     mockPeer.document.body.element.appendChild(el);
   };

@@ -18,6 +18,7 @@ goog.setTestOnly('goog.fsTest');
 goog.require('goog.Promise');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.fs');
 goog.require('goog.fs.DirectoryEntry');
@@ -54,7 +55,7 @@ function setUpPage() {
     }
     var body = goog.dom.getDocument().body;
     goog.dom.insertSiblingBefore(
-        goog.dom.createDom('h1', {}, msg), body.childNodes[0]);
+        goog.dom.createDom(goog.dom.TagName.H1, {}, msg), body.childNodes[0]);
   });
 }
 

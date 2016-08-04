@@ -1074,6 +1074,16 @@ function testGetCssName() {
   assertEquals('goog-disabled', goog.getCssName('goog-disabled'));
 }
 
+function testGetCssName_nameMapFn() {
+  assertEquals('classname', goog.getCssName('classname'));
+
+  goog.global.CLOSURE_CSS_NAME_MAP_FN = function(classname) {
+    return classname + '!';
+  };
+
+  assertEquals('classname!', goog.getCssName('classname'));
+}
+
 function testAddDependency() {
   stubs.set(goog, 'writeScriptTag_', goog.nullFunction);
 

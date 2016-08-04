@@ -1,5 +1,4 @@
 ---
-section: 1-guide
 layout: empty
 ---
 

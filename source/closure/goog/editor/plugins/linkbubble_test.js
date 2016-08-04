@@ -179,7 +179,7 @@ function testDeleteClicked() {
       goog.dom.$(goog.editor.plugins.LinkBubble.DELETE_LINK_ID_));
   var element = goog.userAgent.GECKO ? document.body : fieldDiv;
   assertNotEquals(
-      'Link removed', element.firstChild.nodeName, goog.dom.TagName.A);
+      'Link removed', element.firstChild.nodeName, String(goog.dom.TagName.A));
   assertNoBubble();
   var range = goog.dom.Range.createFromWindow();
   assertEquals('Link selection on link text', linkChild, range.getEndNode());
@@ -209,7 +209,7 @@ function testDeletePressed() {
   assertTrue(defaultPrevented);
   var element = goog.userAgent.GECKO ? document.body : fieldDiv;
   assertNotEquals(
-      'Link removed', element.firstChild.nodeName, goog.dom.TagName.A);
+      'Link removed', element.firstChild.nodeName, String(goog.dom.TagName.A));
   assertNoBubble();
   var range = goog.dom.Range.createFromWindow();
   assertEquals('Link selection on link text', linkChild, range.getEndNode());

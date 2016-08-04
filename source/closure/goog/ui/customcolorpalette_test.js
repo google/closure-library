@@ -40,7 +40,7 @@ function testRender() {
   assertNotNull('The palette element should not be null', elem);
   assertEquals(
       'The palette element should have the right tag name',
-      goog.dom.TagName.DIV, elem.tagName);
+      String(goog.dom.TagName.DIV), elem.tagName);
 
   assertTrue(
       'The custom color palette should have the right class name',

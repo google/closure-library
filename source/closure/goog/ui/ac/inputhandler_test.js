@@ -19,6 +19,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.selection');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -735,7 +736,7 @@ function testMultipleSeparatorUsesEmptyDefaults() {
 
 
 function testAriaTags() {
-  var target = goog.dom.createDom('div');
+  var target = goog.dom.createDom(goog.dom.TagName.DIV);
   mh.attachInput(target);
 
   assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(target));

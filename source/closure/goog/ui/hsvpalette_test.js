@@ -115,7 +115,7 @@ function testRender() {
 
   var elem = samplePalette.getElement();
   assertNotNull(elem);
-  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
 
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
     assertSameElements(

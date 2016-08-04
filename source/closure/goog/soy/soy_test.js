@@ -76,7 +76,7 @@ function testRenderAsFragmentSingleRoot() {
   var fragment =
       goog.soy.renderAsFragment(example.singleRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
-  assertEquals(goog.dom.TagName.SPAN, fragment.tagName);
+  assertEquals(String(goog.dom.TagName.SPAN), fragment.tagName);
   assertEquals('Boo', fragment.innerHTML);
 }
 
@@ -99,7 +99,7 @@ function testRenderAsFragmentNoData() {
 function testRenderAsElementTextNode() {
   var elem = goog.soy.renderAsElement(example.textNodeTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
   assertEquals('Boo', elementToInnerHtml(elem));
 }
 
@@ -107,7 +107,7 @@ function testRenderAsElementInjectedData() {
   var elem = goog.soy.renderAsElement(
       example.injectedDataTemplate, {name: 'Boo'}, {name: 'ijBoo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
   assertEquals('BooijBoo', elementToInnerHtml(elem));
 }
 
@@ -116,7 +116,7 @@ function testRenderAsElementSingleRoot() {
   var elem =
       goog.soy.renderAsElement(example.singleRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(goog.dom.TagName.SPAN, elem.tagName);
+  assertEquals(String(goog.dom.TagName.SPAN), elem.tagName);
   assertEquals('Boo', elementToInnerHtml(elem));
 }
 
@@ -124,7 +124,7 @@ function testRenderAsElementSingleRoot() {
 function testRenderAsElementMultiRoot() {
   var elem = goog.soy.renderAsElement(example.multiRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
   assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(elem));
 }
 
@@ -136,7 +136,7 @@ function testRenderAsElementWithNoData() {
 function testConvertToElement() {
   var elem = goog.soy.convertToElement(example.sanitizedHtmlTemplate());
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
   assertEquals('hello <b>world</b>', elem.innerHTML.toLowerCase());
 }
 

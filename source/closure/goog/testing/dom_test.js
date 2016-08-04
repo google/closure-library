@@ -54,19 +54,19 @@ function findNodeWithHierarchy() {
   // Test a more complicated hierarchy.
   root.innerHTML = '<div>a<p>b<span>c</span>d</p>e</div>';
   assertEquals(
-      goog.dom.TagName.DIV,
+      String(goog.dom.TagName.DIV),
       goog.testing.dom.findTextNode('a', root).parentNode.tagName);
   assertEquals(
-      goog.dom.TagName.P,
+      String(goog.dom.TagName.P),
       goog.testing.dom.findTextNode('b', root).parentNode.tagName);
   assertEquals(
-      goog.dom.TagName.SPAN,
+      String(goog.dom.TagName.SPAN),
       goog.testing.dom.findTextNode('c', root).parentNode.tagName);
   assertEquals(
-      goog.dom.TagName.P,
+      String(goog.dom.TagName.P),
       goog.testing.dom.findTextNode('d', root).parentNode.tagName);
   assertEquals(
-      goog.dom.TagName.DIV,
+      String(goog.dom.TagName.DIV),
       goog.testing.dom.findTextNode('e', root).parentNode.tagName);
 }
 

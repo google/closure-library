@@ -237,7 +237,7 @@ function testSwitchListType() {
   goog.dom.Range.createFromNodeContents(list).select();
   FORMATTER.execCommandInternal('insertunorderedlist');
   list = goog.dom.getFirstElementChild(parent);
-  assertEquals(goog.dom.TagName.UL, list.tagName);
+  assertEquals(String(goog.dom.TagName.UL), list.tagName);
   assertEquals(
       3, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.LI, null, list)
              .length);
@@ -245,7 +245,7 @@ function testSwitchListType() {
   goog.dom.Range.createFromNodeContents(list).select();
   FORMATTER.execCommandInternal('insertorderedlist');
   list = goog.dom.getFirstElementChild(parent);
-  assertEquals(goog.dom.TagName.OL, list.tagName);
+  assertEquals(String(goog.dom.TagName.OL), list.tagName);
   assertEquals(
       3, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.LI, null, list)
              .length);
@@ -916,9 +916,8 @@ function testConvertBreaksToDivsKeepsId() {
   assertNotBadBrElements(html);
   var idBr = document.getElementById('br1');
   assertNotNull('There should still be a tag with id="br1"', idBr);
-  assertEquals(
-      'The tag with id="br1" should be a <div> now', goog.dom.TagName.DIV,
-      idBr.tagName);
+  assertEquals('The tag with id="br1" should be a <div> now',
+      String(goog.dom.TagName.DIV), idBr.tagName);
   assertNull(
       'There should not be any tag with id="temp_br"',
       document.getElementById('temp_br'));
