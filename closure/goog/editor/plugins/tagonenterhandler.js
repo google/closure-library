@@ -41,7 +41,7 @@ goog.require('goog.userAgent');
 /**
  * Plugin to handle enter keys. This subclass normalizes all browsers to use
  * the given block tag on enter.
- * @param {goog.dom.TagName} tag The type of tag to add on enter.
+ * @param {!goog.dom.TagName} tag The type of tag to add on enter.
  * @constructor
  * @extends {goog.editor.plugins.EnterHandler}
  */

@@ -199,7 +199,7 @@ goog.ui.editor.ToolbarFactory.addFormatOptions = function(button, formats) {
  * Adds a menu item to the given "Format block" menu button.
  * @param {!goog.ui.Select} button "Format block" menu button.
  * @param {string} caption Caption to show in the menu.
- * @param {goog.dom.TagName} tag Corresponding block format tag.
+ * @param {!goog.dom.TagName} tag Corresponding block format tag.
  */
 goog.ui.editor.ToolbarFactory.addFormatOption = function(button, caption, tag) {
   // Construct the option, and add it to the button.

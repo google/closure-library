@@ -98,7 +98,7 @@ function testInteresting() {
 
 /**
  * Constructs the HTML of an element from the given tag and content.
- * @param {goog.dom.TagName} tag The HTML tagName for the element.
+ * @param {!goog.dom.TagName} tag The HTML tagName for the element.
  * @param {string} content The content.
  * @param {number=} opt_copies Optional number of copies to make.
  * @param {number=} opt_tabIndex Optional tabIndex to give the element.
