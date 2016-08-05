@@ -1717,7 +1717,7 @@ goog.editor.plugins.BasicTextFormatter.getNodeJustification_ = function(
  * Returns true if a selection contained in the node should set the appropriate
  * toolbar state for the given nodeName, e.g. if the node is contained in a
  * strong element and nodeName is "strong", then it will return true.
- * @param {string} nodeName The type of node to check for.
+ * @param {!goog.dom.TagName} nodeName The type of node to check for.
  * @return {boolean} Whether the user's selection is in the given state.
  * @private
  */

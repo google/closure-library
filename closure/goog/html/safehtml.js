@@ -360,8 +360,9 @@ goog.html.SafeHtml.AttributeValue;
  *   which are not supported by this function are applet, base, embed, iframe,
  *   link, math, object, script, style, svg, and template.
  *
- * @param {string} tagName The name of the tag. Only tag names consisting of
- *     [a-zA-Z0-9-] are allowed. Tag names documented above are disallowed.
+ * @param {!goog.dom.TagName|string} tagName The name of the tag. Only tag names
+ *     consisting of [a-zA-Z0-9-] are allowed. Tag names documented above are
+ *     disallowed.
  * @param {?Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  *     Mapping from attribute names to their values. Only attribute names
  *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
@@ -376,9 +377,9 @@ goog.html.SafeHtml.AttributeValue;
  * @throws {goog.asserts.AssertionError} If content for void tag is provided.
  */
 goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
-  goog.html.SafeHtml.verifyTagName(tagName);
+  goog.html.SafeHtml.verifyTagName(String(tagName));
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
-      tagName, opt_attributes, opt_content);
+      String(tagName), opt_attributes, opt_content);
 };
 
 
