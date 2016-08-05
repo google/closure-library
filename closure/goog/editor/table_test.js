@@ -361,15 +361,17 @@ function testRemoveRowAtSpanningRowSpan() {
 }
 
 function _testRemoveColumn(index) {
+  var tr =
+      goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic)[0];
   var sampleCell =
-      goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic)[0]
-          .getElementsByTagName(goog.dom.TagName.TH)[index];
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[index];
   testObjects.basic.removeColumn(index);
   tableSanityCheck(testObjects.basic, 4, 2);
+  tr =
+      goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic)[0];
   assertNotEquals(
       'Test cell removed from column', sampleCell,
-      goog.dom.getElementsByTagName(goog.dom.TagName.TR, testElements.basic)[0]
-          .getElementsByTagName(goog.dom.TagName.TH)[index]);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[index]);
 }
 
 function testRemoveFirstColumn() {
@@ -387,34 +389,31 @@ function testRemoveLastColumn() {
 function testRemoveColumnAtStartingColSpan() {
   testObjects.torture.removeColumn(0);
   tableSanityCheck(testObjects.torture, 9, 2);
+  var tr = goog.dom.getElementsByTagName(
+      goog.dom.TagName.TR, testElements.torture)[5]
   assertEquals(
       'Colspan was decremented correctly', 1,
-      goog.dom
-          .getElementsByTagName(goog.dom.TagName.TR, testElements.torture)[5]
-          .getElementsByTagName(goog.dom.TagName.TH)[0]
-          .colSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[0].colSpan);
 }
 
 function testRemoveColumnAtEndingColSpan() {
   testObjects.torture.removeColumn(2);
   tableSanityCheck(testObjects.torture, 9, 2);
+  var tr = goog.dom.getElementsByTagName(
+      goog.dom.TagName.TR, testElements.torture)[1];
   assertEquals(
       'Colspan was decremented correctly', 1,
-      goog.dom
-          .getElementsByTagName(goog.dom.TagName.TR, testElements.torture)[1]
-          .getElementsByTagName(goog.dom.TagName.TD)[0]
-          .colSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TD, tr)[0].colSpan);
 }
 
 function testRemoveColumnAtSpanningColSpan() {
   testObjects.torture.removeColumn(2);
   tableSanityCheck(testObjects.torture, 9, 2);
+  var tr = goog.dom.getElementsByTagName(
+      goog.dom.TagName.TR, testElements.torture)[4]
   assertEquals(
       'Colspan was decremented correctly', 2,
-      goog.dom
-          .getElementsByTagName(goog.dom.TagName.TR, testElements.torture)[4]
-          .getElementsByTagName(goog.dom.TagName.TH)[0]
-          .colSpan);
+      goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[0].colSpan);
 }
 
 function testMergeCellsInRow() {
