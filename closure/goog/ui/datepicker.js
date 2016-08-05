@@ -942,7 +942,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   var tfoot = this.dom_.createElement(goog.dom.TagName.TFOOT);
 
   goog.a11y.aria.setRole(tbody, 'grid');
-  tbody.tabIndex = '0';
+  tbody.tabIndex = 0;
 
   // As per comment in colorpicker: table.tBodies and table.tFoot should not be
   // used because of a bug in Safari, hence using an instance variable
