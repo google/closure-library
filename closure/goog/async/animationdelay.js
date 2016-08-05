@@ -249,7 +249,7 @@ goog.async.AnimationDelay.prototype.getRaf_ = function() {
 
 
 /**
- * @return {?function(number): number} The cancelAnimationFrame function,
+ * @return {?function(number): undefined} The cancelAnimationFrame function,
  *     or null if not available on this browser.
  * @private
  */
