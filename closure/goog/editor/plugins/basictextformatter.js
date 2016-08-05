@@ -594,6 +594,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
   var range = this.getRange_();
   var parent = range.getContainerElement();
   var doc = this.getDocument_();
+  var dom = this.getFieldDomHelper();
 
   goog.editor.plugins.BasicTextFormatter.BR_REGEXP_.lastIndex = 0;
   // Only mess with the HTML/selection if it contains a BR.
@@ -637,7 +638,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
             // &nbsp; in IE.
             var child = goog.userAgent.IE ?
                 doc.createTextNode(goog.string.Unicode.NBSP) :
-                doc.createElement(goog.dom.TagName.BR);
+                dom.createElement(goog.dom.TagName.BR);
             paragraph.appendChild(child);
           }
           goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_(

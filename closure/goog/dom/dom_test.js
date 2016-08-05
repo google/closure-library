@@ -1660,8 +1660,9 @@ function testAppend() {
 }
 
 function testAppend2() {
-  var div = myIframeDoc.createElement(goog.dom.TagName.DIV);
-  var b = myIframeDoc.createElement(goog.dom.TagName.B);
+  var dom = new goog.dom.DomHelper(myIframeDoc);
+  var div = dom.createElement(goog.dom.TagName.DIV);
+  var b = dom.createElement(goog.dom.TagName.B);
   var c = myIframeDoc.createTextNode('c');
   goog.dom.append(div, 'a', b, c);
   assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);

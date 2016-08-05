@@ -130,7 +130,7 @@ goog.dom.annotate.annotateTermsInNode_ = function(
       // element as a side effect, we'll only actually use the temporary node's
       // children.
       var tempNode =
-          goog.dom.getOwnerDocument(node).createElement(goog.dom.TagName.SPAN);
+          goog.dom.getDomHelper(node).createElement(goog.dom.TagName.SPAN);
       goog.dom.safe.setInnerHtml(tempNode, html);
 
       var parentNode = node.parentNode;

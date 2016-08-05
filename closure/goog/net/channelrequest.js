@@ -952,7 +952,7 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.trident_.parentWindow['rpcClose'] =
       goog.bind(this.onTridentDone_, this, false);
 
-  var div = this.trident_.createElement(goog.dom.TagName.DIV);
+  var div = this.trident_.createElement(String(goog.dom.TagName.DIV));
   this.trident_.parentWindow.document.body.appendChild(div);
 
   var safeUrl = goog.html.SafeUrl.sanitize(this.requestUri_.toString());
