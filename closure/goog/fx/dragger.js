@@ -450,7 +450,8 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
   } else {
-    this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
+    this.dragging_ = false;
+    this.endDrag(e);
   }
 };
 
