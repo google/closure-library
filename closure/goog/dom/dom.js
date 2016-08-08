@@ -2282,6 +2282,17 @@ goog.dom.matchesPixelRatio_ = function(pixelRatio) {
 };
 
 
+/**
+ * Gets '2d' context of a canvas. Shortcut for canvas.getContext('2d') with a
+ * type information.
+ * @param {!HTMLCanvasElement} canvas
+ * @return {!CanvasRenderingContext2D}
+ */
+goog.dom.getCanvasContext2D = function(canvas) {
+  return /** @type {!CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+};
+
+
 
 /**
  * Create an instance of a DOM helper with a new document object.
@@ -3082,3 +3093,12 @@ goog.dom.DomHelper.prototype.getAncestorByClass = goog.dom.getAncestorByClass;
  *     no match.
  */
 goog.dom.DomHelper.prototype.getAncestor = goog.dom.getAncestor;
+
+
+/**
+ * Gets '2d' context of a canvas. Shortcut for canvas.getContext('2d') with a
+ * type information.
+ * @param {!HTMLCanvasElement} canvas
+ * @return {!CanvasRenderingContext2D}
+ */
+goog.dom.DomHelper.prototype.getCanvasContext2D = goog.dom.getCanvasContext2D;
