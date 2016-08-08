@@ -1677,3 +1677,25 @@ function testBase36ToString() {
   assertEquals(
       'zzzzzz', goog.math.Integer.fromString('zzzzzz', 36).toString(36));
 }
+
+// Regression test for
+// https://github.com/google/closure-library/issues/703
+function testMultiplicationWithCascadingCarry() {
+  // original bug reported
+  var s1 = 'f729d763a14ecd55ffffebab43f38' +
+           '8d0f7cbae584d3765d509b5557d6048ea0c';
+  var s2 = 'eea1c478f4683b323f0953c9c8e067e3967d97e7ed0bf05862cecac60f300' +
+           '77f170e480beee2cd0c1d5516764d58bc260cafe5705bc6b6df63cf4c057c' +
+           'b9f090';
+  var b = goog.math.Integer.fromString(s1, 16);
+  assertEquals(s2, b.multiply(b).toString(16));
+
+  // smallest case I could finde
+  var xs = 'ffffffff00000001';
+  var ys = '1ffffffffffffffff';
+  var zs = '1fffffffe0000000100000000ffffffff';
+  var x = goog.math.Integer.fromString(xs, 16);
+  var y = goog.math.Integer.fromString(ys, 16);
+  var z = x.multiply(y);
+  assertEquals(zs, z.toString(16));
+}
