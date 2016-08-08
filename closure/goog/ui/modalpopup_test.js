@@ -22,13 +22,11 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
-goog.require('goog.events.EventType');
 goog.require('goog.fx.Transition');
 goog.require('goog.fx.css3');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
-goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ModalPopup');
 goog.require('goog.ui.PopupBase');
@@ -48,28 +46,6 @@ function tearDown() {
   goog.dispose(popup);
   mockClock.dispose();
   goog.a11y.aria.removeState(main, goog.a11y.aria.State.HIDDEN);
-}
-
-
-function testOrientationChange() {
-  var i = 0;
-  popup = new goog.ui.ModalPopup();
-  popup.resizeBackgroundTask_ = function() { i++; };
-  popup.render();
-  popup.setVisible(true);
-  var event = new goog.events.Event(
-      goog.events.EventType.ORIENTATIONCHANGE,
-      popup.getDomHelper().getWindow());
-
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(1, i);
-
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(2, i);
-
-  popup.setVisible(false);
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(2, i);
 }
 
 
