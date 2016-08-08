@@ -43,6 +43,10 @@ function assertModuleFails(namespace) {
       goog.partial(goog.module, namespace));
 }
 
+function assertLoadModule(msg, moduleDef) {
+  assertNotThrows(msg, goog.partial(goog.loadModule, moduleDef));
+}
+
 testSuite({
   teardown: function() { stubs.reset(); },
 
@@ -81,6 +85,14 @@ testSuite({
     goog.exportSymbol('nodots', date);
     assertEquals(date, nodots);  // globals are accessible from within a module.
     nodots = undefined;
+  },
+
+  testLoadModule: function() {
+    assertLoadModule(
+        'Loading a module that exports a typedef should succeed',
+        'goog.module(\'goog.test_module_typedef\');' +
+            'var typedef;' +
+            'exports = typedef;');
   },
 
   //=== tests for Require logic ===
