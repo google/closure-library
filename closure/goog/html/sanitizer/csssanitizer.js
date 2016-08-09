@@ -242,6 +242,51 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
 
 
 /**
+ * Sanitizes inline CSS text and returns it as a SafeStyle object. When adequate
+ * browser support is not available, such as for IE9 and below, a
+ * SafeStyle-wrapped empty string is returned.
+ * @param {string} cssText CSS text to be sanitized.
+ * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
+ *    returns an unwrapped goog.html.SafeUrl.
+ * @return {!goog.html.SafeStyle} A sanitized inline cssText.
+ */
+goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString = function(
+    cssText, opt_uriRewriter) {
+  // same check as in goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_
+  if (goog.userAgent.IE && document.documentMode < 10) {
+    return new goog.html.SafeStyle();
+  }
+
+  var div = goog.html.sanitizer.CssSanitizer
+      .createInertDocument_()
+      .createElement('DIV');
+  div.style.cssText = cssText;
+  return goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
+      div.style, opt_uriRewriter);
+};
+
+
+/**
+ * Creates an DOM Document object that will not execute scripts or make
+ * network requests while parsing HTML.
+ * @return {!Document}
+ * @private
+ */
+goog.html.sanitizer.CssSanitizer.createInertDocument_ = function() {
+  // Documents created using window.document.implementation.createHTMLDocument()
+  // use the same custom component registry as their parent document. This means
+  // that parsing arbitrary HTML can result in calls to user-defined JavaScript.
+  // This is worked around by creating a template element and its content's
+  // document. See https://github.com/cure53/DOMPurify/issues/47.
+  var doc = document;
+  if (typeof HTMLTemplateElement === 'function') {
+    doc = document.createElement('template').content.ownerDocument;
+  }
+  return doc.implementation.createHTMLDocument('');
+};
+
+
+/**
  * Provides a cross-browser way to get a CSS property names.
  * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
  * @return {!Array<string>} CSS property names.
