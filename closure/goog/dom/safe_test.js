@@ -62,12 +62,27 @@ function testInsertAdjacentHtml() {
 
 
 function testSetInnerHtml() {
-  var mockElement = /** @type {!Element} */ ({'innerHTML': 'blarg'});
+  var mockElement =
+      /** @type {!Element} */ ({'tagName': 'DIV', 'innerHTML': 'blarg'});
   var html = '<script>somethingTrusted();<' +
       '/script>';
   var safeHtml = goog.html.testing.newSafeHtmlForTest(html);
   goog.dom.safe.setInnerHtml(mockElement, safeHtml);
   assertEquals(html, mockElement.innerHTML);
+}
+
+function testSetInnerHtml_doesntAllowScript() {
+  var script =
+      /** @type {!Element} */ ({'tagName': 'SCRIPT', 'innerHTML': 'blarg'});
+  var safeHtml = goog.html.testing.newSafeHtmlForTest('alert(1);');
+  assertThrows(function() { goog.dom.safe.setInnerHtml(script, safeHtml); });
+}
+
+function testSetInnerHtml_doesntAllowStyle() {
+  var style =
+      /** @type {!Element} */ ({'tagName': 'STYLE', 'innerHTML': 'blarg'});
+  var safeHtml = goog.html.testing.newSafeHtmlForTest('A { color: red; }');
+  assertThrows(function() { goog.dom.safe.setInnerHtml(style, safeHtml); });
 }
 
 function testDocumentWrite() {
