@@ -19,6 +19,7 @@ goog.require('goog.asserts');
 goog.require('goog.debug.Console');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
@@ -57,6 +58,9 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
     /** @const {!goog.debug.Console} */
     this.console = goog.labs.testing.Environment.console_;
+
+    /** @const {!goog.testing.PropertyReplacer} */
+    this.replacer = new goog.testing.PropertyReplacer();
   },
 
 
@@ -92,6 +96,8 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockClock.reset();
       }
     }
+    // Reset all changes made by the PropertyReplacer.
+    this.replacer.reset();
     // Make sure the user did not forget to call $replayAll & $verifyAll in
     // their test. This is a noop if they did.
     // This is important because:

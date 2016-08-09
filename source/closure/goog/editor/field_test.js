@@ -1163,8 +1163,9 @@ function testRestoreSavedRange() {
 
   // Create another node to take the focus later.
   var doc = goog.dom.getOwnerDocument(editableField.getElement());
-  var otherElem = doc.createElement(goog.dom.TagName.DIV);
-  otherElem.tabIndex = '1';  // Make it focusable.
+  var dom = goog.dom.getDomHelper(editableField.getElement());
+  var otherElem = dom.createElement(goog.dom.TagName.DIV);
+  otherElem.tabIndex = 1;  // Make it focusable.
   editableField.getElement().parentNode.appendChild(otherElem);
 
   // Initially place selection not at the start of the editable field.

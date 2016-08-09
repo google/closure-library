@@ -92,7 +92,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.isSupportedCommand = function(
 /** @override */
 goog.editor.plugins.TagOnEnterHandler.prototype.queryCommandValue = function(
     command) {
-  return command == goog.editor.Command.DEFAULT_TAG ? this.tag : null;
+  return command == goog.editor.Command.DEFAULT_TAG ? String(this.tag) : null;
 };
 
 
@@ -216,7 +216,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.ensureNodeIsWrappedW3c_ =
     var isChildOfFn = function(child) { return container == child.parentNode; };
     var nodeToWrap = goog.dom.getAncestor(node, isChildOfFn, true);
     container = goog.editor.plugins.TagOnEnterHandler.wrapInContainerW3c_(
-        this.tag, {node: nodeToWrap, offset: 0}, container);
+        String(this.tag), {node: nodeToWrap, offset: 0}, container);
   }
   return container;
 };

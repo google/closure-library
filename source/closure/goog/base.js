@@ -1425,7 +1425,8 @@ goog.loadModule = function(moduleDef) {
     // another namespace
     if (goog.moduleLoaderState_.declareLegacyNamespace) {
       goog.constructNamespace_(moduleName, exports);
-    } else if (goog.SEAL_MODULE_EXPORTS && Object.seal) {
+    } else if (
+        goog.SEAL_MODULE_EXPORTS && Object.seal && goog.isObject(exports)) {
       Object.seal(exports);
     }
 

@@ -21,6 +21,7 @@ goog.provide('goog.debug.DivConsole');
 
 goog.require('goog.debug.HtmlFormatter');
 goog.require('goog.debug.LogManager');
+goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
@@ -42,6 +43,7 @@ goog.debug.DivConsole = function(element) {
   this.element_ = element;
   this.elementOwnerDocument_ =
       this.element_.ownerDocument || this.element_.document;
+  this.domHelper_ = new goog.dom.DomHelper(this.elementOwnerDocument_);
 
   this.installStyles();
 };
@@ -102,7 +104,7 @@ goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
           this.element_.clientHeight <=
       100;
 
-  var div = this.elementOwnerDocument_.createElement(goog.dom.TagName.DIV);
+  var div = this.domHelper_.createElement(goog.dom.TagName.DIV);
   div.className = 'logmsg';
   goog.dom.safe.setInnerHtml(
       div, this.formatter_.formatRecordAsHtml(logRecord));
@@ -137,7 +139,7 @@ goog.debug.DivConsole.prototype.setFormatter = function(formatter) {
  * Adds a separator to the debug window.
  */
 goog.debug.DivConsole.prototype.addSeparator = function() {
-  var div = this.elementOwnerDocument_.createElement(goog.dom.TagName.DIV);
+  var div = this.domHelper_.createElement(goog.dom.TagName.DIV);
   div.className = 'logmsg logsep';
   this.element_.appendChild(div);
 };

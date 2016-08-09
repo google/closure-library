@@ -486,15 +486,6 @@ function testCreateDomWithClassName() {
   assertEquals('ClassName should be empty', '', el.className);
 }
 
-function testCreateUntypedDom() {
-  var level = 1;
-  var heading = goog.dom.createUntypedDom('H' + level);
-  assertEquals('H1', heading.tagName);
-
-  heading = goog.dom.getDomHelper().createUntypedDom('H' + level);
-  assertEquals('H1', heading.tagName);
-}
-
 function testCompareNodeOrder() {
   var b1 = $('b1');
   var b2 = $('b2');
@@ -1660,8 +1651,9 @@ function testAppend() {
 }
 
 function testAppend2() {
-  var div = myIframeDoc.createElement(goog.dom.TagName.DIV);
-  var b = myIframeDoc.createElement(goog.dom.TagName.B);
+  var dom = new goog.dom.DomHelper(myIframeDoc);
+  var div = dom.createElement(goog.dom.TagName.DIV);
+  var b = dom.createElement(goog.dom.TagName.B);
   var c = myIframeDoc.createTextNode('c');
   goog.dom.append(div, 'a', b, c);
   assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);

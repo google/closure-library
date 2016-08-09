@@ -34,7 +34,8 @@ function assertStartTag(type) {
   assertTrue('isStartTag should return true', it.isStartTag());
   assertFalse('isEndTag should return false', it.isEndTag());
   assertFalse('isNonElement should return false', it.isNonElement());
-  assertEquals('Position ' + pos + ' should be ' + type, type, it.node.tagName);
+  assertEquals(
+      'Position ' + pos + ' should be ' + type, String(type), it.node.tagName);
 }
 
 function assertEndTag(type) {
@@ -44,7 +45,8 @@ function assertEndTag(type) {
   assertFalse('isStartTag should return false', it.isStartTag());
   assertTrue('isEndTag should return true', it.isEndTag());
   assertFalse('isNonElement should return false', it.isNonElement());
-  assertEquals('Position ' + pos + ' should be ' + type, type, it.node.tagName);
+  assertEquals(
+      'Position ' + pos + ' should be ' + type, String(type), it.node.tagName);
 }
 
 function assertTextNode(value) {

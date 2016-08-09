@@ -420,9 +420,8 @@ goog.editor.plugins.EnterHandler.DO_NOT_ENSURE_BLOCK_NODES_ =
  */
 goog.editor.plugins.EnterHandler.isBrElem = function(node) {
   return goog.editor.node.isEmpty(node) &&
-      /** @type {!Element} */ (node)
-          .getElementsByTagName(goog.dom.TagName.BR)
-          .length == 1;
+      goog.dom.getElementsByTagName(
+          goog.dom.TagName.BR, /** @type {!Element} */ (node)).length == 1;
 };
 
 

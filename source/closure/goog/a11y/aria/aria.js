@@ -54,14 +54,14 @@ goog.a11y.aria.ROLE_ATTRIBUTE_ = 'role';
  * they don't contain content to be made accessible.
  * @private
  */
-goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_ = [
+goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_ = goog.object.createSet([
   goog.dom.TagName.A, goog.dom.TagName.AREA, goog.dom.TagName.BUTTON,
   goog.dom.TagName.HEAD, goog.dom.TagName.INPUT, goog.dom.TagName.LINK,
   goog.dom.TagName.MENU, goog.dom.TagName.META, goog.dom.TagName.OPTGROUP,
   goog.dom.TagName.OPTION, goog.dom.TagName.PROGRESS, goog.dom.TagName.STYLE,
   goog.dom.TagName.SELECT, goog.dom.TagName.SOURCE, goog.dom.TagName.TEXTAREA,
   goog.dom.TagName.TITLE, goog.dom.TagName.TRACK
-];
+]);
 
 
 /**
@@ -279,8 +279,7 @@ goog.a11y.aria.setLabel = function(element, label) {
  * the roles.
  */
 goog.a11y.aria.assertRoleIsSetInternalUtil = function(element, allowedRoles) {
-  if (goog.array.contains(
-          goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_, element.tagName)) {
+  if (goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_[element.tagName]) {
     return;
   }
   var elementRole = /** @type {string}*/ (goog.a11y.aria.getRole(element));

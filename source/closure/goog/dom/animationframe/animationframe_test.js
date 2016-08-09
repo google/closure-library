@@ -197,32 +197,19 @@ function testCreateTask_args() {
   mockClock.tick(NEXT_FRAME);
   assertEquals('foo', result);
 
-  var dynamicContext = goog.dom.animationFrame.createTask({
-    measure: function(state) { assertEquals(context, this); },
-    mutate: function(state) {
-      assertEquals(context, this);
-      result += 'bar';
-    }
-  });
-  dynamicContext.call(context);
-  mockClock.tick(NEXT_FRAME);
-  assertEquals('foobar', result);
-
   var moreArgs = goog.dom.animationFrame.createTask({
     measure: function(event, state) {
-      assertEquals(context, this);
       assertEquals('event', event);
       state.baz = 'baz';
     },
     mutate: function(event, state) {
       assertEquals('event', event);
-      assertEquals(context, this);
       result += state.baz;
     }
   });
-  moreArgs.call(context, 'event');
+  moreArgs('event');
   mockClock.tick(NEXT_FRAME);
-  assertEquals('foobarbaz', result);
+  assertEquals('foobaz', result);
 }
 
 function testIsRunning() {
