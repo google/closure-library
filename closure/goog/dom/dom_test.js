@@ -486,15 +486,6 @@ function testCreateDomWithClassName() {
   assertEquals('ClassName should be empty', '', el.className);
 }
 
-function testCreateUntypedDom() {
-  var level = 1;
-  var heading = goog.dom.createUntypedDom('H' + level);
-  assertEquals('H1', heading.tagName);
-
-  heading = goog.dom.getDomHelper().createUntypedDom('H' + level);
-  assertEquals('H1', heading.tagName);
-}
-
 function testCompareNodeOrder() {
   var b1 = $('b1');
   var b2 = $('b2');

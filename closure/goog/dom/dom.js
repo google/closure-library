@@ -738,27 +738,6 @@ goog.dom.createDom = function(tagName, opt_properties, var_args) {
 
 
 /**
- * A version of createDom where the tag name is a plain string and not a member
- * of goog.dom.TagName. Currently, this function is the same as createDom but in
- * the future, createDom will return a more specific type (e.g. HTMLImageElement
- * for goog.TagName.IMG) while createUntypedDom will still return Element.
- *
- * @param {string} tagName Tag to create.
- * @param {(Object|Array<string>|string)=} opt_attributes If object, then a map
- *     of name-value pairs for attributes. If a string, then this is the
- *     className of the new element. If an array, the elements will be joined
- *     together as the className of the new element.
- * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
- *     strings for text nodes. If one of the var_args is an array or NodeList,
- *     its elements will be added as childNodes instead.
- * @return {!Element} Reference to a DOM node.
- */
-goog.dom.createUntypedDom = function(tagName, opt_attributes, var_args) {
-  return goog.dom.createDom_(document, arguments);
-};
-
-
-/**
  * Helper for {@code createDom}.
  * @param {!Document} doc The document to create the DOM in.
  * @param {!Arguments} args Argument object passed from the callers. See
@@ -2526,28 +2505,6 @@ goog.dom.Appendable;
  * @return {!Element} Reference to a DOM node.
  */
 goog.dom.DomHelper.prototype.createDom = function(
-    tagName, opt_attributes, var_args) {
-  return goog.dom.createDom_(this.document_, arguments);
-};
-
-
-/**
- * A version of createDom where the tag name is a plain string and not a member
- * of goog.dom.TagName. Currently, this function is the same as createDom but in
- * the future, createDom will return a more specific type (e.g. HTMLImageElement
- * for goog.TagName.IMG) while createUntypedDom will still return Element.
- *
- * @param {string} tagName Tag to create.
- * @param {(Object|Array<string>|string)=} opt_attributes If object, then a map
- *     of name-value pairs for attributes. If a string, then this is the
- *     className of the new element. If an array, the elements will be joined
- *     together as the className of the new element.
- * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
- *     strings for text nodes. If one of the var_args is an array or NodeList,
- *     its elements will be added as childNodes instead.
- * @return {!Element} Reference to a DOM node.
- */
-goog.dom.DomHelper.prototype.createUntypedDom = function(
     tagName, opt_attributes, var_args) {
   return goog.dom.createDom_(this.document_, arguments);
 };
