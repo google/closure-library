@@ -341,13 +341,14 @@ function testInertDocument() {
     return;  // skip test
   }
 
+  window.xssFiredInertDocument = false;
   var doc = goog.html.sanitizer.CssSanitizer.createInertDocument_();
   try {
-    doc.write('<script> window.xssFired = true; </script>');
+    doc.write('<script> window.xssFiredInertDocument = true; </script>');
   } catch (e) {
     // ignore
   }
-  assertUndefined(window.xssFired);
+  assertFalse(window.xssFiredInertDocument);
 }
 
 
