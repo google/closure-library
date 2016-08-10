@@ -125,6 +125,15 @@ function testsetLinkHrefAndRel_string() {
 }
 
 
+/**
+ * Returns a link element, incorrectly typed as a Location.
+ * @return {!Location}
+ * @suppress {checkTypes}
+ */
+function makeLinkElementTypedAsLocation() {
+  return document.createElement('LINK');
+}
+
 function testSetLocationHref() {
   var mockLoc = /** @type {!Location} */ ({'href': 'blarg'});
   goog.dom.safe.setLocationHref(mockLoc, 'javascript:evil();');
@@ -135,6 +144,12 @@ function testSetLocationHref() {
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setLocationHref(mockLoc, safeUrl);
   assertEquals('javascript:trusted();', mockLoc.href);
+
+  // Asserts correct runtime type.
+  var ex = assertThrows(function() {
+    goog.dom.safe.setLocationHref(makeLinkElementTypedAsLocation(), safeUrl);
+  });
+  assert(goog.string.contains(ex.message, 'Argument is not a Location'));
 }
 
 

@@ -312,6 +312,7 @@ goog.dom.safe.setScriptSrc = function(script, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setLocationHref = function(loc, url) {
+  goog.dom.safe.assertIsLocation_(loc);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
