@@ -79,7 +79,6 @@ goog.html.sanitizer.TagWhitelist = {
   'INPUT': true,     // HTMLInputElement
   'INS': true,       // HTMLModElement
   'KBD': true,       // HTMLElement
-  'KEYGEN': true,    // HTMLKeygenElement
   'LABEL': true,     // HTMLLabelElement
   'LEGEND': true,    // HTMLLegendElement
   'LI': true,        // HTMLLIElement
