@@ -537,9 +537,8 @@ goog.object.clone = function(obj) {
  * <code>goog.object.unsafeClone</code> is unaware of unique identifiers, and
  * copies UIDs created by <code>getUid</code> into cloned results.
  *
- * @param {T} obj The value to clone.
- * @return {T} A clone of the input value.
- * @template T
+ * @param {*} obj The value to clone.
+ * @return {*} A clone of the input value.
  */
 goog.object.unsafeClone = function(obj) {
   var type = goog.typeOf(obj);
