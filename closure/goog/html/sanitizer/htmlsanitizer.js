@@ -112,7 +112,7 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
 
 
 /**
- * List of property descriptors we use to avoid looking up the prototypes
+ * Map of property descriptors we use to avoid looking up the prototypes
  * multiple times.
  * @private {!Object<string, !ObjectPropertyDescriptor>}
  * @const
@@ -681,6 +681,8 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
       false);
 };
 
+// TODO(user): both getAttribute* functions accept a Node but are defined on
+// Element. Investigate.
 
 /**
  * Provides a way to get an element's attributes without falling prey to things
@@ -701,6 +703,24 @@ goog.html.sanitizer.HtmlSanitizer.getAttributes_ = function(node) {
   }
 };
 
+/**
+ * Provides a way to get a specific attribute from an element without falling
+ * prey to clobbering.
+ * Usage: goog.html.sanitizer.HtmlSanitizer.getAttribute(elem, attr_name)
+ * @param {!Node} node
+ * @param {string} name
+ * @return {string}
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.getAttribute_ = function(node, name) {
+  var protoFn = Element.prototype.getAttribute;
+  if (protoFn) {
+    var ret = protoFn.call(/** @type {!Element} */ (node), name);
+    return ret ? ret : '';  // FF returns null
+  } else {
+    return '';
+  }
+};
 
 /**
  * Provides a way to set an element's attributes without falling prey to things
@@ -902,11 +922,9 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     if (isSanitizedParent || goog.isNull(dirtyParent)) {
       target = sanitizedParent;
     } else {
-      target = elementMap
-          [goog.html.sanitizer.HtmlSanitizer
-               .getAttributes_(dirtyParent)
-                   [goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_]
-               .value];
+      target = elementMap[goog.html.sanitizer.HtmlSanitizer.getAttribute_(
+          dirtyParent,
+          goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_)];
     }
     if (target.content) {
       target = target.content;
