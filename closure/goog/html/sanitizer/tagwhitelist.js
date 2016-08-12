@@ -45,7 +45,6 @@ goog.html.sanitizer.TagWhitelist = {
   'CODE': true,        // HTMLElement
   'COL': true,         // HTMLTableColElement
   'COLGROUP': true,    // HTMLTableColElement
-  'COMMAND': true,     // HTMLCommandElement
   'DATA': true,        // HTMLElement
   'DATALIST': true,    // HTMLDataListElement
   'DD': true,          // HTMLElement
@@ -118,7 +117,6 @@ goog.html.sanitizer.TagWhitelist = {
   'THEAD': true,     // HTMLTableSectionElement
   'TIME': true,      // HTMLTimeElement
   'TR': true,        // HTMLTableRowElement
-  'TRACK': true,     // HTMLTrackElement
   'TT': true,        // HTMLElement
   'U': true,         // HTMLElement
   'UL': true,        // HTMLUListElement
