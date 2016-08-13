@@ -1072,6 +1072,14 @@ function testGetCssName() {
   assertEquals('a', g);
   assertEquals('a-b', goog.getCssName(g, 'active'));
   assertEquals('goog-disabled', goog.getCssName('goog-disabled'));
+
+  e = assertThrows(function() { goog.getCssName('.name'); });
+  assertEquals(
+      'className passed in goog.getCssName must not start with ".".' +
+          ' You passed: .name',
+      e.message);
+
+  assertNull(goog.getCssName(null));
 }
 
 function testGetCssName_nameMapFn() {

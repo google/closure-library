@@ -284,16 +284,6 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.noop = function() {
 
 
 /**
- * @param {function(...*):*} fn A function that should be wrapped in a callback.
- *     The pool will wait on all callbacks to be executed.
- * @return {function(...*):*}
- */
-goog.testing.JsTdAsyncWrapper.Pool_.prototype.add = function(fn) {
-  return this.addCallback(fn);
-};
-
-
-/**
  * @param {function(...*):*} fn The function to add to the pool.
  * @param {?number=} opt_n The number of permitted uses of the given callback;
  *     defaults to one.
@@ -327,6 +317,20 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addCallback = function(
     }
   }, this);
 };
+
+
+/**
+ * @param {function(...*):*} fn The function to add to the pool.
+ * @param {?number=} opt_n The number of permitted uses of the given callback;
+ *     defaults to one.
+ * @param {?number=} opt_timeout The timeout in milliseconds.
+ *     This is not supported in the adapter for now. Specifying this argument
+ *     will result in a test failure.
+ * @param {?string=} opt_description The callback description.
+ * @return {function()}
+ */
+goog.testing.JsTdAsyncWrapper.Pool_.prototype.add =
+    goog.testing.JsTdAsyncWrapper.Pool_.prototype.addCallback;
 
 
 /**

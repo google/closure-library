@@ -419,8 +419,9 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
 
   goog.debug.Logger.logToProfilers('Start : ' + comment);
 
+  /** @const */
   var event =
-      /** @type {goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
+      /** @type {!goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
   event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
   event.id = Number(this.idPool_.getObject());

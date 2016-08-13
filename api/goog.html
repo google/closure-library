@@ -21,7 +21,7 @@ and values include {&#39;module&#39;: &#39;goog&#39;} and {&#39;lang&#39;: &#39;
 instance object.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>ctor</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The constructor for the class to add the static
 method to.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="base"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2453" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>base(<var>me</var>, <var>opt_methodName</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Call up to the superclass.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="base"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2462" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>base(<var>me</var>, <var>opt_methodName</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Call up to the superclass.</p>
 <p>If this is called from a constructor, then this calls the superclass
 constructor with arguments 1-N.</p>
 <p>If this is called from a prototype method, then you must pass the name of the
@@ -69,7 +69,7 @@ has the property specified, and otherwise used the defined defaultValue.
 When compiled the default can be overridden using the compiler
 options or the value set in the CLOSURE_DEFINES object.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>name</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>The distinguished name to provide.</p>
-<dt class="type name"><var>defaultValue</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code></dl></dd></dl></div></section><section class="property expandable" id="defineClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2564" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>defineClass(<var>superClass</var>, <var>def</var>)</div></h3></div><div class="body"><p>Creates a restricted form of a Closure &#34;class&#34;:</p>
+<dt class="type name"><var>defaultValue</var><code>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code></dl></dd></dl></div></section><section class="property expandable" id="defineClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2573" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>defineClass(<var>superClass</var>, <var>def</var>)</div></h3></div><div class="body"><p>Creates a restricted form of a Closure &#34;class&#34;:</p>
 <ul><li>from the compiler&#39;s perspective, the instance returned from the
 constructor is sealed (no new properties may be added).  This enables
 better checks.</li><li>the compiler will rewrite this definition to a form that is optimal
@@ -85,13 +85,13 @@ function as its only parameter to which static properties can
 be added.
 all other properties are added to the prototype.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></code><dd><p>The class constructor.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="exportProperty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2365" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportProperty(<var>object</var>, <var>publicName</var>, <var>symbol</var>)</div></h3></div><div class="body"><p>Exports a property unobfuscated into the object&#39;s namespace.
+</dl></dd></dl></div></section><section class="property expandable" id="exportProperty"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2374" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportProperty(<var>object</var>, <var>publicName</var>, <var>symbol</var>)</div></h3></div><div class="body"><p>Exports a property unobfuscated into the object&#39;s namespace.
 ex. goog.exportProperty(Foo, &#39;staticFunction&#39;, Foo.staticFunction);
 ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>object</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>Object whose static property is being exported.</p>
 <dt class="type name"><var>publicName</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Unobfuscated name to export.</p>
 <dt class="type name"><var>symbol</var><code>*</code><dd><p>Object the name should point to.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="exportSymbol"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2352" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportSymbol(<var>publicPath</var>, <var>object</var>, <var>opt_objectToExportTo</var>)</div></h3></div><div class="body"><p>Exposes an unobfuscated global namespace path for the given object.
+</dl></dd></dl></div></section><section class="property expandable" id="exportSymbol"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2361" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>exportSymbol(<var>publicPath</var>, <var>object</var>, <var>opt_objectToExportTo</var>)</div></h3></div><div class="body"><p>Exposes an unobfuscated global namespace path for the given object.
 Note that fields of the exported object <em>will</em> be obfuscated, unless they are
 exported in turn via this function or goog.exportProperty.</p>
 <p>Also handy for making public items that are defined in anonymous closures.</p>
@@ -144,7 +144,7 @@ given object.</p>
 <dl><dt class="spec">Deprecated<dd><p>Use goog.getUid instead.</p>
 <dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to get the hash code for.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code><dd><p>The hash code for the object.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="getMsg"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2300" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsg(<var>str</var>, <var>opt_values</var>)</div></h3></div><div class="body"><p>Gets a localized message.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="getMsg"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2309" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsg(<var>str</var>, <var>opt_values</var>)</div></h3></div><div class="body"><p>Gets a localized message.</p>
 <p>This function is a compiler primitive. If you give the compiler a localized
 message bundle, it will replace the string at compile-time with a localized
 version, and expand goog.getMsg call to a concatenated string.</p>
@@ -158,7 +158,7 @@ produce SafeHtml.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>str</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Translatable string, places holders in the form {$foo}.</p>
 <dt class="type name"><var>opt_values</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;=</code><dd><p>Maps place holder name to value.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>message with placeholders filled.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="getMsgWithFallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2326" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsgWithFallback(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Gets a localized message. If the message does not have a translation, gives a
+</dl></dd></dl></div></section><section class="property expandable" id="getMsgWithFallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2335" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>getMsgWithFallback(<var>a</var>, <var>b</var>)</div></h3></div><div class="body"><p>Gets a localized message. If the message does not have a translation, gives a
 fallback message.</p>
 <p>This is useful when introducing a new message that has not yet been
 translated into all languages.</p>
@@ -198,7 +198,7 @@ this should no longer be done in bulk.</p>
 <p>This does not modify the object.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>obj</var><code>!<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code><dd><p>The object to check.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code><dd><p>Whether there is an assigned unique id for the object.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="inherits"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2390" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>inherits(<var>childCtor</var>, <var>parentCtor</var>)</div></h3></div><div class="body"><p>Inherit the prototype methods from one constructor into another.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="inherits"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2399" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>inherits(<var>childCtor</var>, <var>parentCtor</var>)</div></h3></div><div class="body"><p>Inherit the prototype methods from one constructor into another.</p>
 <p>Usage:</p>
  <pre>
  function ParentClass(a, b) { }
@@ -315,14 +315,14 @@ used.</p>
 the form &#34;goog.package.part&#34;.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><dd><p>If called within a goog.module file, the associated namespace or
 module otherwise null.</p>
-</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html#provide">goog.provide</a></dd></dl></div></section><section class="property expandable" id="scope"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2515" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>scope(<var>fn</var>)</div></h3></div><div class="body"><p>Allow for aliasing within scope functions.  This function exists for
+</dl></dd><dt class="spec">See Also</dt><dd><a href="goog.html#provide">goog.provide</a></dd></dl></div></section><section class="property expandable" id="scope"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2524" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>scope(<var>fn</var>)</div></h3></div><div class="body"><p>Allow for aliasing within scope functions.  This function exists for
 uncompiled code - in compiled code the calls will be inlined and the aliases
 applied.  In uncompiled code the function is simply run since the aliases as
 written are valid JavaScript.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>function()</code><dd><p>Function to call.  This function can contain aliases
 to namespaces (e.g. &#34;var dom &#61; goog.dom&#34;) or classes
 (e.g. &#34;var Timer &#61; goog.Timer&#34;).</p>
-</dl></dd></dl></div></section><section class="property expandable" id="setCssNameMapping"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2252" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setCssNameMapping(<var>mapping</var>, <var>opt_style</var>)</div></h3></div><div class="body"><p>Sets the map to check when returning a value from goog.getCssName(). Example:</p>
+</dl></dd></dl></div></section><section class="property expandable" id="setCssNameMapping"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2261" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>setCssNameMapping(<var>mapping</var>, <var>opt_style</var>)</div></h3></div><div class="body"><p>Sets the map to check when returning a value from goog.getCssName(). Example:</p>
  <pre>
  goog.setCssNameMapping({
    &#34;goog&#34;: &#34;a&#34;,
@@ -349,7 +349,7 @@ for the test (e.g. &#39;goog.stringTest&#39;). The linter will then ignore the e
 provide (if not explicitly defined in the code).</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_message</var><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>=</code><dd><p>Optional message to add to the error that&#39;s
 raised when used in production code.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="tagUnsealableClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2721" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tagUnsealableClass(<var>ctr</var>)</div></h3></div><div class="body"><p>Sealing classes breaks the older idiom of assigning properties on the
+</dl></dd></dl></div></section><section class="property expandable" id="tagUnsealableClass"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/base.js#L2730" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>tagUnsealableClass(<var>ctr</var>)</div></h3></div><div class="body"><p>Sealing classes breaks the older idiom of assigning properties on the
 prototype rather than in the constructor. As such, goog.defineClass
 must not seal subclasses of these old-style classes until they are fixed.
 Until then, this marks a class as &#34;broken&#34;, instructing defineClass
