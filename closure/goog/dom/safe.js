@@ -143,6 +143,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setImageSrc = function(imageElement, url) {
+  goog.dom.safe.assertIsHTMLImageElement_(imageElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {

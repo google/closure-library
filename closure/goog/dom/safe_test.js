@@ -186,6 +186,15 @@ function testSetImageSrc_withSafeUrlObject() {
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setImageSrc(mockImageElement, safeUrl);
   assertEquals('javascript:trusted();', mockImageElement.src);
+
+  // Asserts correct runtime type.
+  var otherElement = document.createElement('SCRIPT');
+  var ex = assertThrows(function() {
+    goog.dom.safe.setImageSrc(
+        /** @type {!HTMLImageElement} */ (otherElement), safeUrl);
+  });
+  assert(
+      goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
 }
 
 function testSetImageSrc_withHttpsUrl() {
