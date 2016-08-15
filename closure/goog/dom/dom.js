@@ -2236,9 +2236,10 @@ goog.dom.getPixelRatio = function() {
   if (goog.isDef(win.devicePixelRatio)) {
     return win.devicePixelRatio;
   } else if (win.matchMedia) {
-    return goog.dom.matchesPixelRatio_(.75) ||
-        goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(2) ||
-        goog.dom.matchesPixelRatio_(3) || 1;
+    // Should be for IE10 and FF6-17
+    return goog.dom.matchesPixelRatio_(3) || goog.dom.matchesPixelRatio_(2) ||
+        goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
+        .75;
   }
   return 1;
 };
