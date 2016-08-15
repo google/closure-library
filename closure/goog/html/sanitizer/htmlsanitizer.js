@@ -112,6 +112,17 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
 
 
 /**
+ * String defining the name of the attribute added to div tags that replace
+ * unknown tags. The value of this attribute is the name of the tag before the
+ * sanitization occurred.
+ * @private
+ * @const
+ */
+goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_ =
+    goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'original-tag';
+
+
+/**
  * Map of property descriptors we use to avoid looking up the prototypes
  * multiple times.
  * @private {!Object<string, !ObjectPropertyDescriptor>}
@@ -154,6 +165,11 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
    * @private {!Object<string, boolean>}
    */
   this.tagWhitelist_ = goog.object.clone(opt_builder.tagWhitelist_);
+
+  /**
+   * @private {boolean}
+   */
+  this.shouldAddOriginalTagNames_ = opt_builder.shouldAddOriginalTagNames_;
 
   // Add whitelist data-* attributes from the builder to the attributeHandlers
   // with a default cleanUpAttribute function. data-* attributes are inert as
@@ -238,6 +254,13 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
    * @private {!Object<string, boolean>}
    */
   this.tagWhitelist_ = goog.html.sanitizer.TagWhitelist;
+
+  /**
+   * If true, non-whitelisted, non-blacklisted tags that have been converted
+   * to <div> tags will contain the original tag in a data attribute.
+   * @private {boolean}
+   */
+  this.shouldAddOriginalTagNames_ = false;
 
   /**
    * A function to be applied to urls found on the parsing process which do not
@@ -325,6 +348,19 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
           'goog.html.sanitizer.TagWhitelist');
     }
   }, this);
+  return this;
+};
+
+
+/**
+ * When unknown tags are sanitized to <div>, pass the original tag name in
+ * the data attribute 'original-tag', so that caller can distinguish them from
+ * actual <div> tags.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.addOriginalTagNames =
+    function() {
+  this.shouldAddOriginalTagNames_ = true;
   return this;
 };
 
@@ -954,19 +990,35 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
   // Non text nodes get an empty node based on black/white lists.
   var elemName =
       goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyNode).toUpperCase();
+  var sanitized = false;
   var cleanElemName;
   if (elemName in goog.html.sanitizer.TagBlacklist ||
       elemName in this.tagBlacklist_) {
     // If it's in the inert blacklist, replace with template.
+    // Note that this node will not be added to the final output, i.e. the
+    // template tag is only an internal representation, and eventually will be
+    // deleted.
     cleanElemName = 'template';
+    // TODO(user): use the same attribute used for div tags to distinguish
+    // between input template tags and template tags used for bookkeeping,
+    // and finally add support for input template tags.
   } else if (this.tagWhitelist_[elemName]) {
     // If it's in the whitelist, keep as is.
     cleanElemName = elemName;
   } else {
-    // If it's not in any list, replace with div.
+    // If it's not in any list, replace with div. If the relevant builder
+    // option is enabled, they will bear the original tag name in a data
+    // attribute.
     cleanElemName = 'div';
+    sanitized = true;
   }
-  return document.createElement(cleanElemName);
+  var cleanElem = document.createElement(cleanElemName);
+  if (this.shouldAddOriginalTagNames_ && sanitized) {
+    goog.html.sanitizer.HtmlSanitizer.setAttribute_(
+        cleanElem, goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_,
+        elemName.toLowerCase());
+  }
+  return cleanElem;
 };
 
 

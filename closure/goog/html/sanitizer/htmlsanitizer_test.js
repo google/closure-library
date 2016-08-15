@@ -1117,3 +1117,50 @@ function testOverridingBookKeepingAttribute() {
   var expected = '<div>Hello</div>';
   assertSanitizedHtml(input, expected);
 }
+
+
+// shorthand for sanitized tags
+function otag(tag) {
+  return 'data-sanitizer-original-tag="' + tag + '"';
+}
+
+
+function testOriginalTag() {
+  var input = '<p>Line1<magic></magic></p>';
+  var expected = '<p>Line1<div ' + otag('magic') + '></div></p>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .addOriginalTagNames()
+                           .build());
+}
+
+
+function testOriginalTagOverwrite() {
+  var input = '<div id="qqq">hello' +
+      '<a:b id="hi" class="hnn a" boo="3">qqq</a:b></div>';
+  var expected = '<div>hello<div ' + otag('a:b') + ' id="HI" class="hnn a">' +
+      'qqq</div></div>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .addOriginalTagNames()
+                           .withCustomTokenPolicy(function(token, hints) {
+                             var an = hints.attributeName;
+                             if (an === 'id' && token === 'hi') {
+                               return 'HI';
+                             } else if (an === 'class') {
+                               return token;
+                             }
+                             return null;
+                           })
+                           .build());
+}
+
+
+function testOriginalTagClobber() {
+  var input = '<a:b data-sanitizer-original-tag="xss"></a:b>';
+  var expected = '<div ' + otag('a:b') + '></div>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .addOriginalTagNames()
+                           .build());
+}
