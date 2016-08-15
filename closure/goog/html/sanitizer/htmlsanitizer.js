@@ -100,7 +100,6 @@ goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ =
 goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ = 'data-sanitizer-';
 
 
-
 /**
  * String defining the temporary attribute name in which html sanitizer uses for
  * bookkeeping.
@@ -112,7 +111,7 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
 
 
 /**
- * String defining the name of the attribute added to div tags that replace
+ * String defining the name of the attribute added to span tags that replace
  * unknown tags. The value of this attribute is the name of the tag before the
  * sanitization occurred.
  * @private
@@ -257,7 +256,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
 
   /**
    * If true, non-whitelisted, non-blacklisted tags that have been converted
-   * to <div> tags will contain the original tag in a data attribute.
+   * to <span> tags will contain the original tag in a data attribute.
    * @private {boolean}
    */
   this.shouldAddOriginalTagNames_ = false;
@@ -328,7 +327,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
  * Allows only the provided whitelist of tags. Tags still need to be in the
  * TagWhitelist to be allowed.
  * <p>
- * DIV tags are ALWAYS ALLOWED as part of the mechanism required to preserve
+ * SPAN tags are ALWAYS ALLOWED as part of the mechanism required to preserve
  * the HTML tree structure (when removing non-blacklisted tags and
  * non-whitelisted tags).
  * @param {!Array<string>} tagWhitelist
@@ -337,7 +336,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
     tagWhitelist) {
-  this.tagWhitelist_ = {'DIV': true};
+  this.tagWhitelist_ = {'SPAN': true};
   goog.array.forEach(tagWhitelist, function(tag) {
     tag = tag.toUpperCase();
     if (goog.html.sanitizer.TagWhitelist[tag]) {
@@ -353,9 +352,9 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
 
 
 /**
- * When unknown tags are sanitized to <div>, pass the original tag name in
+ * When unknown tags are sanitized to <span>, pass the original tag name in
  * the data attribute 'original-tag', so that caller can distinguish them from
- * actual <div> tags.
+ * actual <span> tags.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.addOriginalTagNames =
@@ -863,12 +862,13 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
   var sanitizedParent = this.sanitizeToDomNode(unsanitizedHtml);
   var sanitizedString = new XMLSerializer().serializeToString(sanitizedParent);
 
-  // Remove the outer div added by XMLSerializer. We could create an element
-  // from it and then pull out the innerHtml, but this is more performant.
-  if (goog.string.startsWith(sanitizedString, '<div')) {
-    if (goog.string.endsWith(sanitizedString, '</div>')) {
+  // Remove the outer span added in sanitizeToDomNode. We could create an
+  // element from it and then pull out the innerHtml, but this is more
+  // performant.
+  if (goog.string.startsWith(sanitizedString, '<span')) {
+    if (goog.string.endsWith(sanitizedString, '</span>')) {
       sanitizedString = sanitizedString.slice(
-          sanitizedString.indexOf('>') + 1, -1 * ('</div>'.length));
+          sanitizedString.indexOf('>') + 1, -1 * ('</span>'.length));
     } else if (goog.string.endsWith(sanitizedString, '/>')) {
       sanitizedString = '';
     }
@@ -883,17 +883,20 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
 /**
  * Causes the browser to parse the DOM tree of a given HTML string, then walks
  * the tree. For each element, it creates a new sanitized version, applies
- * sanitized attributes, and returns a sanitized NodeList.
+ * sanitized attributes, and returns a span element containing the sanitized
+ * content.
  * @param {?string} unsanitizedHtml
- * @return {!Element} Sanitized HTML
+ * @return {!HTMLSpanElement} Sanitized HTML
  * @final
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     unsanitizedHtml) {
-  var sanitizedParent = document.createElement('div');
+  var sanitizedParent =
+      /** @type {!HTMLSpanElement} */ (document.createElement('span'));
+
   if (!goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ || !unsanitizedHtml) {
     // TODO(danesh): IE9 or earlier versions don't provide an easy way to
-    // parse HTML inertly. Handle in a way other than an empty div perhaps.
+    // parse HTML inertly. Handle in a way other than an empty span perhaps.
     return sanitizedParent;
   }
 
@@ -999,17 +1002,17 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
     // template tag is only an internal representation, and eventually will be
     // deleted.
     cleanElemName = 'template';
-    // TODO(user): use the same attribute used for div tags to distinguish
+    // TODO(user): use the same attribute used for span tags to distinguish
     // between input template tags and template tags used for bookkeeping,
     // and finally add support for input template tags.
   } else if (this.tagWhitelist_[elemName]) {
     // If it's in the whitelist, keep as is.
     cleanElemName = elemName;
   } else {
-    // If it's not in any list, replace with div. If the relevant builder
+    // If it's not in any list, replace with span. If the relevant builder
     // option is enabled, they will bear the original tag name in a data
     // attribute.
-    cleanElemName = 'div';
+    cleanElemName = 'span';
     sanitized = true;
   }
   var cleanElem = document.createElement(cleanElemName);
