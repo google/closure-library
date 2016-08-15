@@ -2238,8 +2238,8 @@ goog.dom.getPixelRatio = function() {
   } else if (win.matchMedia) {
     // Should be for IE10 and FF6-17 (this basically clamps to lower)
     return goog.dom.matchesPixelRatio_(3) || goog.dom.matchesPixelRatio_(2) ||
-        goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
-        .75;
+           goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
+           .75;
   }
   return 1;
 };
@@ -2261,13 +2261,13 @@ goog.dom.matchesPixelRatio_ = function(pixelRatio) {
    */
   var dpiPerDppx = 96;
   var query =
-       // FF16-17
-       '(min-resolution: ' + pixelRatio + 'dppx),' +
-       // FF6-15
-       '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
-       // IE10 (this also works for two browsers above too but I don't want to
-       // trust the 1:96 fixed ratio magic.
-       '(min-resolution: ' + (pixelRatio * dpiPerDppx) + 'dpi)';
+      // FF16-17
+      '(min-resolution: ' + pixelRatio + 'dppx),' +
+      // FF6-15
+      '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
+      // IE10 (this also works for two browsers above too but I don't want to
+      // trust the 1:96 fixed ratio magic.
+      '(min-resolution: ' + (pixelRatio * dpiPerDppx) + 'dpi)';
   return win.matchMedia(query).matches ? pixelRatio : 0;
 };
 
