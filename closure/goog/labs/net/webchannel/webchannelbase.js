@@ -76,7 +76,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
     opt_options, opt_clientVersion, opt_conn) {
   /**
    * The application specific version that is passed to the server.
-   * @private {?number}
+   * @private {number}
    */
   this.clientVersion_ = opt_clientVersion || 0;
 
@@ -1085,8 +1085,6 @@ WebChannelBase.prototype.open_ = function() {
   if (this.clientVersion_ > 0) {
     // TODO(user): use CVER parameter after server compatibility is fixed
     // uri.setParameterValue('CVER', this.clientVersion_);
-
-    request.setExtraHeaders({'X-WebChannel-CVER': this.clientVersion_});
   }
 
   // Add the reconnect parameters.
