@@ -62,10 +62,6 @@ goog.require('goog.string.Const');
  *     unknown directionality.
  * @return {!goog.html.SafeHtml} The value of html, wrapped in a SafeHtml
  *     object.
- * @suppress {visibility} For access to SafeHtml.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     within goog.html.  DO NOT call SafeHtml.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
     function(justification, html, opt_dir) {

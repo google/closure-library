@@ -14,15 +14,14 @@ set of delimiters for different environments.  For example, the JSON object:</p>
 ]
 }
 }</code></p>
-<h3 class="name"><div>new JsonPrettyPrinter(<var>delimiters</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>delimiters</var><code><a href="goog.format.JsonPrettyPrinter.TextDelimiters.html">goog.format.JsonPrettyPrinter.TextDelimiters</a></code><dd><p>Container
-for the various strings to use to delimit objects, arrays, newlines, and
-other pieces of the output.</p>
-</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="format"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/format/jsonprettyprinter.js#L84" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>format(<var>json</var>)</div></h3></div><div class="body"><p>Formats a JSON object as a string, properly indented for display.</p>
+<h3 class="name"><div>new JsonPrettyPrinter(<var>opt_delimiters</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>opt_delimiters</var><code>?<a href="goog.format.JsonPrettyPrinter.TextDelimiters.html">goog.format.JsonPrettyPrinter.TextDelimiters</a>=</code><dd><p>Container for the various strings to use to delimit objects, arrays,
+newlines, and other pieces of the output.</p>
+</dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="format"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/format/jsonprettyprinter.js#L82" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>format(<var>json</var>)</div></h3></div><div class="body"><p>Formats a JSON object as a string, properly indented for display.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>json</var><code>*</code><dd><p>The object to pretty print. It could be a JSON object, a
 string representing a JSON object, or any other type.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code><dd><p>Returns a string of the JSON object, properly indented for
 display.</p>
-</dl></dd></dl></div></section><section class="property expandable" id="formatSafeHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/format/jsonprettyprinter.js#L103" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>formatSafeHtml(<var>json</var>)</div></h3></div><div class="body"><p>Formats a JSON object as a SafeHtml, properly indented for display.</p>
+</dl></dd></dl></div></section><section class="property expandable" id="formatSafeHtml"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/format/jsonprettyprinter.js#L101" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div>formatSafeHtml(<var>json</var>)</div></h3></div><div class="body"><p>Formats a JSON object as a SafeHtml, properly indented for display.</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>json</var><code>*</code><dd><p>The object to pretty print. It could be a JSON object, a
 string representing a JSON object, or any other type.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.html.SafeHtml.html">goog.html.SafeHtml</a></code><dd><p>A HTML code of the JSON object.</p>
