@@ -175,7 +175,7 @@ goog.dom.$ = goog.dom.getElement;
  * @param {goog.dom.TagName} tagName
  * @param {(!Document|!Element)=} opt_parent Parent element or document where to
  *     look for elements. Defaults to document.
- * @return {!IArrayLike<!Element>}
+ * @return {!NodeList<!Element>}
  */
 goog.dom.getElementsByTagName = function(tagName, opt_parent) {
   var parent = opt_parent || document;
@@ -2354,7 +2354,7 @@ goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
  * @param {goog.dom.TagName} tagName
  * @param {(!Document|!Element)=} opt_parent Parent element or document where to
  *     look for elements. Defaults to document of this DomHelper.
- * @return {!IArrayLike<!Element>}
+ * @return {!NodeList<!Element>}
  */
 goog.dom.DomHelper.prototype.getElementsByTagName =
     function(tagName, opt_parent) {
