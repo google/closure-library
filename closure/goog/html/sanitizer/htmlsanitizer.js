@@ -213,6 +213,7 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_ = function(customUrlPolicy) {
 
 /**
  * A builder class for the Html Sanitizer. All methods except build return this.
+ * @final
  * @constructor @struct
  */
 goog.html.sanitizer.HtmlSanitizer.Builder = function() {
