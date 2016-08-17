@@ -31,6 +31,7 @@ goog.require('goog.string.Const');
 goog.require('goog.testing');
 goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 
 var mockWindowOpen;
@@ -161,10 +162,12 @@ function testSetLocationHref() {
   assertEquals('javascript:trusted();', mockLoc.href);
 
   // Asserts correct runtime type.
-  var ex = assertThrows(function() {
-    goog.dom.safe.setLocationHref(makeLinkElementTypedAsLocation(), safeUrl);
-  });
-  assert(goog.string.contains(ex.message, 'Argument is not a Location'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var ex = assertThrows(function() {
+      goog.dom.safe.setLocationHref(makeLinkElementTypedAsLocation(), safeUrl);
+    });
+    assert(goog.string.contains(ex.message, 'Argument is not a Location'));
+  }
 }
 
 
@@ -203,13 +206,15 @@ function testSetImageSrc_withSafeUrlObject() {
   assertEquals('javascript:trusted();', mockImageElement.src);
 
   // Asserts correct runtime type.
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.setImageSrc(
-        /** @type {!HTMLImageElement} */ (otherElement), safeUrl);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setImageSrc(
+          /** @type {!HTMLImageElement} */ (otherElement), safeUrl);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
+  }
 }
 
 function testSetImageSrc_withHttpsUrl() {
@@ -263,11 +268,13 @@ function testAssertIsLocation() {
   var mock = new goog.testing.StrictMock(window.location);
   assertNotThrows(function() { goog.dom.safe.assertIsLocation_(mock); });
 
-  var linkElement = document.createElement('LINK');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsLocation_(linkElement);
-  });
-  assert(goog.string.contains(ex.message, 'Argument is not a Location'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var linkElement = document.createElement('LINK');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsLocation_(linkElement);
+    });
+    assert(goog.string.contains(ex.message, 'Argument is not a Location'));
+  }
 }
 
 function testAssertIsHtmlAnchorElement() {
@@ -286,12 +293,14 @@ function testAssertIsHtmlAnchorElement() {
     goog.dom.safe.assertIsHTMLAnchorElement_(mock);
   });
 
-  var otherElement = document.createElement('LINK');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLAnchorElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLAnchorElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('LINK');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLAnchorElement_(otherElement);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLAnchorElement'));
+  }
 }
 
 function testAssertIsHtmlLinkElement() {
@@ -308,11 +317,14 @@ function testAssertIsHtmlLinkElement() {
   var mock = new goog.testing.StrictMock(linkElement);
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLLinkElement_(mock); });
 
-  var otherElement = document.createElement('A');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLLinkElement_(otherElement);
-  });
-  assert(goog.string.contains(ex.message, 'Argument is not a HTMLLinkElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('A');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLLinkElement_(otherElement);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLLinkElement'));
+  }
 }
 
 function testAssertIsHtmlImageElement() {
@@ -331,70 +343,82 @@ function testAssertIsHtmlImageElement() {
     goog.dom.safe.assertIsHTMLImageElement_(mock);
   });
 
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLImageElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLImageElement_(otherElement);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLImageElement'));
+  }
 }
 
 function testAssertIsHtmlEmbedElement() {
   var el = document.createElement('EMBED');
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLEmbedElement_(el); });
 
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLEmbedElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLEmbedElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLEmbedElement_(otherElement);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLEmbedElement'));
+  }
 }
 
 function testAssertIsHtmlFrameElement() {
   var el = document.createElement('FRAME');
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLFrameElement_(el); });
 
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLFrameElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLFrameElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLFrameElement_(otherElement);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLFrameElement'));
+  }
 }
 
 function testAssertIsHtmlIFrameElement() {
   var el = document.createElement('IFRAME');
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLIFrameElement_(el); });
 
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLIFrameElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLIFrameElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLIFrameElement_(otherElement);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLIFrameElement'));
+  }
 }
 
 function testAssertIsHtmlObjectElement() {
   var el = document.createElement('OBJECT');
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLObjectElement_(el); });
 
-  var otherElement = document.createElement('SCRIPT');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLObjectElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLObjectElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLObjectElement_(otherElement);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLObjectElement'));
+  }
 }
 
 function testAssertIsHtmlScriptElement() {
   var el = document.createElement('SCRIPT');
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLScriptElement_(el); });
 
-  var otherElement = document.createElement('IMG');
-  var ex = assertThrows(function() {
-    goog.dom.safe.assertIsHTMLScriptElement_(otherElement);
-  });
-  assert(
-      goog.string.contains(ex.message, 'Argument is not a HTMLScriptElement'));
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMG');
+    var ex = assertThrows(function() {
+      goog.dom.safe.assertIsHTMLScriptElement_(otherElement);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLScriptElement'));
+  }
 }
