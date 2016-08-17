@@ -29,12 +29,12 @@
  *
  * For example, assigning to an element's .innerHTML property a string that is
  * derived (even partially) from untrusted input typically results in an XSS
- * vulnerability. The type-safe wrapper goog.html.setInnerHtml consumes a value
- * of type goog.html.SafeHtml, whose contract states that using its values in a
- * HTML context will not result in XSS. Hence a program that is free of direct
- * assignments to any element's innerHTML property (with the exception of the
- * assignment to .innerHTML in this file) is guaranteed to be free of XSS due to
- * assignment of untrusted strings to the innerHTML property.
+ * vulnerability. The type-safe wrapper goog.dom.safe.setInnerHtml consumes a
+ * value of type goog.html.SafeHtml, whose contract states that using its values
+ * in a HTML context will not result in XSS. Hence a program that is free of
+ * direct assignments to any element's innerHTML property (with the exception of
+ * the assignment to .innerHTML in this file) is guaranteed to be free of XSS
+ * due to assignment of untrusted strings to the innerHTML property.
  */
 
 goog.provide('goog.dom.safe');
