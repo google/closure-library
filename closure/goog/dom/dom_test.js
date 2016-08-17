@@ -342,10 +342,12 @@ function testCreateDom() {
               'has a link'),
           ', how cool is this?'));
 
-  assertEquals('Tagname should be a DIV', goog.dom.TagName.DIV, el.tagName);
+  assertEquals(
+      'Tagname should be a DIV', String(goog.dom.TagName.DIV), el.tagName);
   assertEquals('Style width should be 50%', '50%', el.style.width);
   assertEquals(
-      'first child is a P tag', goog.dom.TagName.P, el.childNodes[0].tagName);
+      'first child is a P tag', String(goog.dom.TagName.P),
+      el.childNodes[0].tagName);
   assertEquals('second child .innerHTML', 'Para 2', el.childNodes[1].innerHTML);
 
   assertEquals(goog.dom.createDom, goog.dom.createDom);
@@ -375,7 +377,7 @@ function testCreateDomAcceptsArray() {
   var ul = goog.dom.createDom(goog.dom.TagName.UL, {}, items);
   assertEquals('List should have two children', 2, ul.childNodes.length);
   assertEquals(
-      'First child should be an LI tag', goog.dom.TagName.LI,
+      'First child should be an LI tag', String(goog.dom.TagName.LI),
       ul.firstChild.tagName);
   assertEquals('Item 1', ul.childNodes[0].innerHTML);
   assertEquals('Item 2', ul.childNodes[1].innerHTML);
@@ -435,7 +437,7 @@ function testCreateDomNodeListArg() {
       el.childNodes[0].nodeValue);
   assertEquals(
       'childNodes[1] should be an element node with tagName "B"',
-      goog.dom.TagName.B, el.childNodes[1].tagName);
+      String(goog.dom.TagName.B), el.childNodes[1].tagName);
   assertEquals(
       'childNodes[2] should be a text node with value "!"', '!',
       el.childNodes[2].nodeValue);
@@ -479,7 +481,8 @@ function testContains() {
 function testCreateDomWithClassName() {
   var el = goog.dom.createDom(goog.dom.TagName.DIV, 'cls');
   assertNull('firstChild should be null', el.firstChild);
-  assertEquals('Tagname should be a DIV', goog.dom.TagName.DIV, el.tagName);
+  assertEquals(
+      'Tagname should be a DIV', String(goog.dom.TagName.DIV), el.tagName);
   assertEquals('ClassName should be cls', 'cls', el.className);
 
   el = goog.dom.createDom(goog.dom.TagName.DIV, '');
