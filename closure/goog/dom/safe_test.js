@@ -177,6 +177,17 @@ function testSetAnchorHref() {
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setAnchorHref(mockAnchor, safeUrl);
   assertEquals('javascript:trusted();', mockAnchor.href);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('LINK');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setAnchorHref(
+          /** @type {!HTMLAnchorElement} */ (otherElement), safeUrl);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLAnchorElement'));
+  }
 }
 
 function testSetImageSrc_withSafeUrlObject() {
