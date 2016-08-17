@@ -70,11 +70,34 @@ goog.dom.safe.insertAdjacentHtml = function(node, position, html) {
 
 
 /**
+ * Tags not allowed in goog.dom.safe.setInnerHtml.
+ * @private @const {!Object<string, boolean>}
+ */
+goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_ = {
+  'MATH': true,
+  'SCRIPT': true,
+  'STYLE': true,
+  'SVG': true,
+  'TEMPLATE': true
+};
+
+
+/**
  * Assigns known-safe HTML to an element's innerHTML property.
  * @param {!Element} elem The element whose innerHTML is to be assigned to.
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
+ * @throws {Error} If called with one of these tags: math, script, style, svg,
+ *     template.
  */
 goog.dom.safe.setInnerHtml = function(elem, html) {
+  if (goog.asserts.ENABLE_ASSERTS) {
+    var tagName = elem.tagName.toUpperCase();
+    if (goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_[tagName]) {
+      throw Error(
+          'goog.dom.safe.setInnerHtml cannot be used to set content of ' +
+          elem.tagName + '.');
+    }
+  }
   elem.innerHTML = goog.html.SafeHtml.unwrap(html);
 };
 
