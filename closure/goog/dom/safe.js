@@ -42,6 +42,7 @@ goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
@@ -109,6 +110,17 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
  */
 goog.dom.safe.setOuterHtml = function(elem, html) {
   elem.outerHTML = goog.html.SafeHtml.unwrap(html);
+};
+
+
+/**
+ * Sets the given element's style property to the contents of the provided
+ * SafeStyle object.
+ * @param {!Element} elem
+ * @param {!goog.html.SafeStyle} style
+ */
+goog.dom.safe.setStyle = function(elem, style) {
+  elem.style.cssText = goog.html.SafeStyle.unwrap(style);
 };
 
 

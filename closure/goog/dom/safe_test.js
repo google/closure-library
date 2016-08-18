@@ -23,6 +23,7 @@ goog.setTestOnly('goog.dom.safeTest');
 goog.require('goog.dom.safe');
 goog.require('goog.dom.safe.InsertAdjacentHtmlPosition');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
@@ -84,6 +85,16 @@ function testSetInnerHtml_doesntAllowStyle() {
       /** @type {!Element} */ ({'tagName': 'STYLE', 'innerHTML': 'blarg'});
   var safeHtml = goog.html.SafeHtml.htmlEscape('A { color: red; }');
   assertThrows(function() { goog.dom.safe.setInnerHtml(style, safeHtml); });
+}
+
+function testSetStyle() {
+  var style =
+      goog.html.SafeStyle.fromConstant(goog.string.Const.from('color: red;'));
+  var elem = document.createElement('div');
+  assertEquals('', elem.style.color);  // sanity check
+
+  goog.dom.safe.setStyle(elem, style);
+  assertEquals('red', elem.style.color);
 }
 
 function testDocumentWrite() {
