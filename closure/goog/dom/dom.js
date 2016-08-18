@@ -2236,9 +2236,10 @@ goog.dom.getPixelRatio = function() {
   if (goog.isDef(win.devicePixelRatio)) {
     return win.devicePixelRatio;
   } else if (win.matchMedia) {
-    return goog.dom.matchesPixelRatio_(.75) ||
-        goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(2) ||
-        goog.dom.matchesPixelRatio_(3) || 1;
+    // Should be for IE10 and FF6-17 (this basically clamps to lower)
+    return goog.dom.matchesPixelRatio_(3) || goog.dom.matchesPixelRatio_(2) ||
+           goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
+           .75;
   }
   return 1;
 };
@@ -2253,10 +2254,20 @@ goog.dom.getPixelRatio = function() {
  */
 goog.dom.matchesPixelRatio_ = function(pixelRatio) {
   var win = goog.dom.getWindow();
+  /**
+   * Due to the 1:96 fixed ratio of CSS in to CSS px, 1dppx is equivalent to
+   * 96dpi.
+   * @const {number}
+   */
+  var dpiPerDppx = 96;
   var query =
-      ('(-webkit-min-device-pixel-ratio: ' + pixelRatio + '),' +
-       '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
-       '(min-resolution: ' + pixelRatio + 'dppx)');
+      // FF16-17
+      '(min-resolution: ' + pixelRatio + 'dppx),' +
+      // FF6-15
+      '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
+      // IE10 (this also works for two browsers above too but I don't want to
+      // trust the 1:96 fixed ratio magic.
+      '(min-resolution: ' + (pixelRatio * dpiPerDppx) + 'dpi)';
   return win.matchMedia(query).matches ? pixelRatio : 0;
 };
 
