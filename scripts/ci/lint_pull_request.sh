@@ -12,7 +12,9 @@ CHANGED_FILES=$(git diff --name-only --diff-filter=AM master..$CURRENT_BRANCH |
 
 if [[ -n "$CHANGED_FILES" ]]; then
   set -x
-  java -jar ../closure-compiler/build/linter.jar $CHANGED_FILES
+  java -jar \
+      ../closure-compiler/target/closure-compiler-linter-1.0-SNAPSHOT.jar \
+      $CHANGED_FILES
 else
   echo "No .js files found to lint in this Pull Request."
 fi
