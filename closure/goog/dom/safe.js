@@ -194,6 +194,7 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setEmbedSrc = function(embed, url) {
+  goog.dom.safe.assertIsHTMLEmbedElement_(embed);
   embed.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -213,6 +214,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setFrameSrc = function(frame, url) {
+  goog.dom.safe.assertIsHTMLFrameElement_(frame);
   frame.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -232,6 +234,7 @@ goog.dom.safe.setFrameSrc = function(frame, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setIframeSrc = function(iframe, url) {
+  goog.dom.safe.assertIsHTMLIFrameElement_(iframe);
   iframe.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -262,6 +265,7 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
+  goog.dom.safe.assertIsHTMLLinkElement_(link);
   link.rel = rel;
   if (goog.string.caseInsensitiveContains(rel, 'stylesheet')) {
     goog.asserts.assert(
@@ -294,12 +298,13 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setObjectData = function(object, url) {
+  goog.dom.safe.assertIsHTMLObjectElement_(object);
   object.data = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
 
 /**
- * Safely assigns a URL to an iframe element's src property.
+ * Safely assigns a URL to an script element's src property.
  *
  * Example usage:
  *   goog.dom.safe.setScriptSrc(scriptEl, url);
@@ -313,6 +318,7 @@ goog.dom.safe.setObjectData = function(object, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setScriptSrc = function(script, url) {
+  goog.dom.safe.assertIsHTMLScriptElement_(script);
   script.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 

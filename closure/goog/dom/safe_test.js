@@ -140,6 +140,18 @@ function testsetLinkHrefAndRel_string() {
   assertEquals('about:invalid#zClosurez', mockLink.href);
 }
 
+function testsetLinkHrefAndRel_assertsType() {
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('A');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setLinkHrefAndRel(
+          /** @type {!HTMLLinkElement} */ (otherElement), 'http://example.com/',
+          'author');
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLLinkElement'));
+  }
+}
 
 /**
  * Returns a link element, incorrectly typed as a Location.
@@ -236,6 +248,101 @@ function testSetImageSrc_withHttpsUrl() {
   assertEquals(safeUrl, mockImageElement.src);
 }
 
+function testSetEmbedSrc() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  var mockElement = /** @type {!HTMLEmbedElement} */ ({'src': 'blarg'});
+  goog.dom.safe.setEmbedSrc(mockElement, url);
+  assertEquals('javascript:trusted();', mockElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setEmbedSrc(
+          /** @type {!HTMLEmbedElement} */ (otherElement), url);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLEmbedElement'));
+  }
+}
+
+function testSetFrameSrc() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  var mockElement = /** @type {!HTMLFrameElement} */ ({'src': 'blarg'});
+  goog.dom.safe.setFrameSrc(mockElement, url);
+  assertEquals('javascript:trusted();', mockElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setFrameSrc(
+          /** @type {!HTMLFrameElement} */ (otherElement), url);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLFrameElement'));
+  }
+}
+
+function testSetIframeSrc() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  var mockElement = /** @type {!HTMLIFrameElement} */ ({'src': 'blarg'});
+  goog.dom.safe.setIframeSrc(mockElement, url);
+  assertEquals('javascript:trusted();', mockElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setIframeSrc(
+          /** @type {!HTMLIFrameElement} */ (otherElement), url);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLIFrameElement'));
+  }
+}
+
+function testSetObjectData() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  var mockElement = /** @type {!HTMLObjectElement} */ ({'data': 'blarg'});
+  goog.dom.safe.setObjectData(mockElement, url);
+  assertEquals('javascript:trusted();', mockElement.data);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setObjectData(
+          /** @type {!HTMLObjectElement} */ (otherElement), url);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLObjectElement'));
+  }
+}
+
+function testSetScriptSrc() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  var mockElement = /** @type {!HTMLScriptElement} */ ({'src': 'blarg'});
+  goog.dom.safe.setScriptSrc(mockElement, url);
+  assertEquals('javascript:trusted();', mockElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setScriptSrc(
+          /** @type {!HTMLScriptElement} */ (otherElement), url);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLScriptElement'));
+  }
+}
+
 function testOpenInWindow() {
   mockWindowOpen =
       /** @type {?} */ (goog.testing.createMethodMock(window, 'open'));
@@ -297,7 +404,6 @@ function testAssertIsHtmlAnchorElement() {
   // Ad-hoc mock objects are allowed.
   var o = {foo: 'bar'};
   assertNotThrows(function() { goog.dom.safe.assertIsHTMLAnchorElement_(o); });
-
   // So are fancy mocks.
   var mock = new goog.testing.StrictMock(anchorElement);
   assertNotThrows(function() {
