@@ -689,7 +689,7 @@ goog.crypt.Aes.INV_SBOX_ = [
 
 /**
  * Precomputed RCon lookup.
- * @type {!Array<number>}
+ * @type {!Array<!Array<number>>}
  * @private
  */
 goog.crypt.Aes.RCON_ = [
