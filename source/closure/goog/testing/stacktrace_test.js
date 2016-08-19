@@ -319,6 +319,14 @@ function testParseStackFrameInIE10() {
   assertObjectEquals('nested eval', expected, frame);
 }
 
+function testParseStackFrameInIE11() {
+  var frameString = '   at a.b.c (Unknown script code:150:3)';
+  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  var expected = new goog.testing.stacktrace.Frame(
+      '', 'a.b.c', '', 'Unknown script code:150:3');
+  assertObjectEquals('name and path', expected, frame);
+}
+
 function testParseStackFrameInEdge() {
   frameString = '   at a.b.c (http://host.com:80/some/file.js:101:2)';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);

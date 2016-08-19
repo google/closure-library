@@ -74,6 +74,15 @@ See the COPYING file for details.
       .USERAGENT-IE-6 #devcss-test-ie6 {
         background-color: rgb(255,192,203); /* aka pink */
       }
+
+      @keyframes spin {
+        0% {
+          @mixin transform(rotate(0deg));
+        }
+        100% {
+          @mixin transform(rotate(360deg));
+        }
+      }
   </style>
   <style>
    @import "devcss_test_import_2.css";

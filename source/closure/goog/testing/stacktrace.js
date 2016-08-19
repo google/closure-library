@@ -286,9 +286,12 @@ goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ = '(' +
  * @const
  */
 goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp(
-    '^   at ' + goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ +
-    '\\s*\\((eval code:[^)]*|' + goog.testing.stacktrace.URL_PATTERN_ +
-    ')\\)?$');
+    '^   at ' + goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ + '\\s*\\(' +
+    '(' +
+    'eval code:[^)]*' +
+    '|' +
+    'Unknown script code:[^)]*' +
+    '|' + goog.testing.stacktrace.URL_PATTERN_ + ')\\)?$');
 
 
 /**

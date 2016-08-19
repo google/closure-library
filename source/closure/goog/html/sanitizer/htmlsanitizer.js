@@ -83,6 +83,17 @@ goog.html.sanitizer.HtmlSanitizerPolicy;
 
 
 /**
+ * Type for attribute policy configuration.
+ * @typedef {{
+ *     tagName: string,
+ *     attributeName: string,
+ *     policy: ?goog.html.sanitizer.HtmlSanitizerPolicy
+ * }}
+ */
+goog.html.sanitizer.HtmlSanitizerAttributePolicy;
+
+
+/**
  * Boolean for whether the HTML sanitizer is supported. For now mainly exclude
  * IE9 or below where we know the sanitizer is insecure.
  * @private {boolean}
@@ -253,7 +264,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
    * dom.
    * @private {!Object<string, boolean>}
    */
-  this.tagWhitelist_ = goog.html.sanitizer.TagWhitelist;
+  this.tagWhitelist_ = goog.object.clone(goog.html.sanitizer.TagWhitelist);
 
   /**
    * If true, non-whitelisted, non-blacklisted tags that have been converted
@@ -320,6 +331,46 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
   this.allowFormTag_ = true;
+  return this;
+};
+
+
+/**
+ * Package-internal utility method to extend the tag whitelist.
+ *
+ * @param {!Array<string>} tags The list of tags to be added to the whitelist.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ * @package
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype
+    .alsoAllowTagsPrivateDoNotAccessOrElse = function(tags) {
+  goog.array.forEach(tags, function(tag) {
+    this.tagWhitelist_[tag.toUpperCase()] = true;
+  }, this);
+  return this;
+};
+
+
+/**
+ * Package-internal utility method to extend the attribute whitelist.
+ *
+ * @param {!Array<(string|!goog.html.sanitizer.HtmlSanitizerAttributePolicy)>}
+ *     attrs The list of attributes to be added to the whitelist.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ * @package
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype
+    .alsoAllowAttributesPrivateDoNotAccessOrElse = function(attrs) {
+  goog.array.forEach(attrs, function(attr) {
+    if (goog.isString(attr)) {
+      attr = {tagName: '*', attributeName: attr, policy: null};
+    }
+    this.attributeWhitelist_[goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
+        attr.tagName, attr.attributeName)] = attr.policy ?
+        attr.policy :
+        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+            goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+  }, this);
   return this;
 };
 

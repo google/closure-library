@@ -797,13 +797,7 @@ goog.testing.net.XhrIo.prototype.getAllResponseHeaders = function() {
   if (!this.isComplete()) {
     return '';
   }
-
-  var headers = [];
-  goog.object.forEach(this.responseHeaders_, function(value, name) {
-    headers.push(name + ': ' + value);
-  });
-
-  return headers.join('\r\n');
+  return this.getAllStreamingResponseHeaders();
 };
 
 
@@ -829,4 +823,32 @@ goog.testing.net.XhrIo.prototype.getResponseHeaders = function() {
     }
   });
   return headersObject;
+};
+
+
+/**
+ * Get the value of the response-header with the given name from the Xhr object.
+ * As opposed to {@link #getResponseHeader}, this method does not require that
+ * the request has completed.
+ * @param {string} key The name of the response-header to retrieve.
+ * @return {?string} The value of the response-header, or null if it is
+ *     unavailable.
+ */
+goog.testing.net.XhrIo.prototype.getStreamingResponseHeader = function(key) {
+  return key in this.responseHeaders_ ? this.responseHeaders_[key] : null;
+};
+
+
+/**
+ * Gets the text of all the headers in the response. As opposed to
+ * {@link #getAllResponseHeaders}, this method does not require that the request
+ * has completed.
+ * @return {string} The value of the response headers or empty string.
+ */
+goog.testing.net.XhrIo.prototype.getAllStreamingResponseHeaders = function() {
+  var headers = [];
+  goog.object.forEach(this.responseHeaders_, function(value, name) {
+    headers.push(name + ': ' + value);
+  });
+  return headers.join('\r\n');
 };

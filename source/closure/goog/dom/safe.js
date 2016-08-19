@@ -29,12 +29,12 @@
  *
  * For example, assigning to an element's .innerHTML property a string that is
  * derived (even partially) from untrusted input typically results in an XSS
- * vulnerability. The type-safe wrapper goog.html.setInnerHtml consumes a value
- * of type goog.html.SafeHtml, whose contract states that using its values in a
- * HTML context will not result in XSS. Hence a program that is free of direct
- * assignments to any element's innerHTML property (with the exception of the
- * assignment to .innerHTML in this file) is guaranteed to be free of XSS due to
- * assignment of untrusted strings to the innerHTML property.
+ * vulnerability. The type-safe wrapper goog.dom.safe.setInnerHtml consumes a
+ * value of type goog.html.SafeHtml, whose contract states that using its values
+ * in a HTML context will not result in XSS. Hence a program that is free of
+ * direct assignments to any element's innerHTML property (with the exception of
+ * the assignment to .innerHTML in this file) is guaranteed to be free of XSS
+ * due to assignment of untrusted strings to the innerHTML property.
  */
 
 goog.provide('goog.dom.safe');
@@ -42,6 +42,7 @@ goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
@@ -70,11 +71,34 @@ goog.dom.safe.insertAdjacentHtml = function(node, position, html) {
 
 
 /**
+ * Tags not allowed in goog.dom.safe.setInnerHtml.
+ * @private @const {!Object<string, boolean>}
+ */
+goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_ = {
+  'MATH': true,
+  'SCRIPT': true,
+  'STYLE': true,
+  'SVG': true,
+  'TEMPLATE': true
+};
+
+
+/**
  * Assigns known-safe HTML to an element's innerHTML property.
  * @param {!Element} elem The element whose innerHTML is to be assigned to.
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
+ * @throws {Error} If called with one of these tags: math, script, style, svg,
+ *     template.
  */
 goog.dom.safe.setInnerHtml = function(elem, html) {
+  if (goog.asserts.ENABLE_ASSERTS) {
+    var tagName = elem.tagName.toUpperCase();
+    if (goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_[tagName]) {
+      throw Error(
+          'goog.dom.safe.setInnerHtml cannot be used to set content of ' +
+          elem.tagName + '.');
+    }
+  }
   elem.innerHTML = goog.html.SafeHtml.unwrap(html);
 };
 
@@ -86,6 +110,17 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
  */
 goog.dom.safe.setOuterHtml = function(elem, html) {
   elem.outerHTML = goog.html.SafeHtml.unwrap(html);
+};
+
+
+/**
+ * Sets the given element's style property to the contents of the provided
+ * SafeStyle object.
+ * @param {!Element} elem
+ * @param {!goog.html.SafeStyle} style
+ */
+goog.dom.safe.setStyle = function(elem, style) {
+  elem.style.cssText = goog.html.SafeStyle.unwrap(style);
 };
 
 
@@ -119,6 +154,7 @@ goog.dom.safe.documentWrite = function(doc, html) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setAnchorHref = function(anchor, url) {
+  goog.dom.safe.assertIsHTMLAnchorElement_(anchor);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -170,6 +206,7 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setEmbedSrc = function(embed, url) {
+  goog.dom.safe.assertIsHTMLEmbedElement_(embed);
   embed.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -189,6 +226,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setFrameSrc = function(frame, url) {
+  goog.dom.safe.assertIsHTMLFrameElement_(frame);
   frame.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -208,6 +246,7 @@ goog.dom.safe.setFrameSrc = function(frame, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setIframeSrc = function(iframe, url) {
+  goog.dom.safe.assertIsHTMLIFrameElement_(iframe);
   iframe.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -238,6 +277,7 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
+  goog.dom.safe.assertIsHTMLLinkElement_(link);
   link.rel = rel;
   if (goog.string.caseInsensitiveContains(rel, 'stylesheet')) {
     goog.asserts.assert(
@@ -270,12 +310,13 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setObjectData = function(object, url) {
+  goog.dom.safe.assertIsHTMLObjectElement_(object);
   object.data = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
 
 /**
- * Safely assigns a URL to an iframe element's src property.
+ * Safely assigns a URL to an script element's src property.
  *
  * Example usage:
  *   goog.dom.safe.setScriptSrc(scriptEl, url);
@@ -289,6 +330,7 @@ goog.dom.safe.setObjectData = function(object, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setScriptSrc = function(script, url) {
+  goog.dom.safe.assertIsHTMLScriptElement_(script);
   script.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -421,10 +463,13 @@ goog.dom.safe.openInWindow = function(
  * @private
  */
 goog.dom.safe.assertIsLocation_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof Location || !(o instanceof Element)),
-      'Argument is not a Location (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof Location != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof Location || !(o instanceof Element)),
+        'Argument is not a Location (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!Location} */ (o);
 };
 
@@ -440,11 +485,14 @@ goog.dom.safe.assertIsLocation_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLAnchorElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLAnchorElement ||
-            !((o instanceof Location) || (o instanceof Element))),
-      'Argument is not a HTMLAnchorElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLAnchorElement != 'undefined' &&
+      typeof Location != 'undefined' && typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLAnchorElement ||
+              !((o instanceof Location) || (o instanceof Element))),
+        'Argument is not a HTMLAnchorElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLAnchorElement} */ (o);
 };
 
@@ -459,11 +507,14 @@ goog.dom.safe.assertIsHTMLAnchorElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLLinkElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLLinkElement ||
-            !((o instanceof Location) || (o instanceof Element))),
-      'Argument is not a HTMLLinkElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLLinkElement != 'undefined' &&
+      typeof Location != 'undefined' && typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLLinkElement ||
+              !((o instanceof Location) || (o instanceof Element))),
+        'Argument is not a HTMLLinkElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLLinkElement} */ (o);
 };
 
@@ -478,10 +529,13 @@ goog.dom.safe.assertIsHTMLLinkElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLImageElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLImageElement || !(o instanceof Element)),
-      'Argument is not a HTMLImageElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLImageElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLImageElement || !(o instanceof Element)),
+        'Argument is not a HTMLImageElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLImageElement} */ (o);
 };
 
@@ -496,10 +550,13 @@ goog.dom.safe.assertIsHTMLImageElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLEmbedElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLEmbedElement || !(o instanceof Element)),
-      'Argument is not a HTMLEmbedElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLEmbedElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLEmbedElement || !(o instanceof Element)),
+        'Argument is not a HTMLEmbedElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLEmbedElement} */ (o);
 };
 
@@ -514,10 +571,13 @@ goog.dom.safe.assertIsHTMLEmbedElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLFrameElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLFrameElement || !(o instanceof Element)),
-      'Argument is not a HTMLFrameElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLFrameElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLFrameElement || !(o instanceof Element)),
+        'Argument is not a HTMLFrameElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLFrameElement} */ (o);
 };
 
@@ -532,10 +592,13 @@ goog.dom.safe.assertIsHTMLFrameElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLIFrameElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLIFrameElement || !(o instanceof Element)),
-      'Argument is not a HTMLIFrameElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLIFrameElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLIFrameElement || !(o instanceof Element)),
+        'Argument is not a HTMLIFrameElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLIFrameElement} */ (o);
 };
 
@@ -550,10 +613,13 @@ goog.dom.safe.assertIsHTMLIFrameElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLObjectElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLObjectElement || !(o instanceof Element)),
-      'Argument is not a HTMLObjectElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLObjectElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLObjectElement || !(o instanceof Element)),
+        'Argument is not a HTMLObjectElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLObjectElement} */ (o);
 };
 
@@ -568,10 +634,13 @@ goog.dom.safe.assertIsHTMLObjectElement_ = function(o) {
  * @private
  */
 goog.dom.safe.assertIsHTMLScriptElement_ = function(o) {
-  goog.asserts.assert(
-      o && (o instanceof HTMLScriptElement || !(o instanceof Element)),
-      'Argument is not a HTMLScriptElement (or a non-Element mock); got: %s',
-      goog.dom.safe.debugStringForType_(o));
+  if (goog.asserts.ENABLE_ASSERTS && typeof HTMLScriptElement != 'undefined' &&
+      typeof Element != 'undefined') {
+    goog.asserts.assert(
+        o && (o instanceof HTMLScriptElement || !(o instanceof Element)),
+        'Argument is not a HTMLScriptElement (or a non-Element mock); got: %s',
+        goog.dom.safe.debugStringForType_(o));
+  }
   return /** @type {!HTMLScriptElement} */ (o);
 };
 
