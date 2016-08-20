@@ -118,7 +118,7 @@ function testHtmlSanitizeSafeHtml() {
 }
 
 
-// TODO(user): name of test does not make sense
+// TODO(pelizzi): name of test does not make sense
 function testDefaultCssSanitizeImage() {
   var html = '<div></div>';
   assertSanitizedHtml(html, html);

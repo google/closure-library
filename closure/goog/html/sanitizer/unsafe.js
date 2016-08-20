@@ -87,7 +87,7 @@ goog.html.sanitizer.unsafe.alsoAllowTags = function(
  *     The tag and attribute names are case-insensitive.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
-// TODO(user): use the new changes in onlyAllowAttributes to support relaxing
+// TODO(pelizzi): use the new changes in onlyAllowAttributes to support relaxing
 // existing attributes
 goog.html.sanitizer.unsafe.alsoAllowAttributes = function(
     justification, builder, attrs) {

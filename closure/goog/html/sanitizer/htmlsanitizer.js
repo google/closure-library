@@ -768,7 +768,7 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
       false);
 };
 
-// TODO(user): both getAttribute* functions accept a Node but are defined on
+// TODO(pelizzi): both getAttribute* functions accept a Node but are defined on
 // Element. Investigate.
 
 /**
@@ -1054,7 +1054,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
     // template tag is only an internal representation, and eventually will be
     // deleted.
     cleanElemName = 'template';
-    // TODO(user): use the same attribute used for span tags to distinguish
+    // TODO(pelizzi): use the same attribute used for span tags to distinguish
     // between input template tags and template tags used for bookkeeping,
     // and finally add support for input template tags.
   } else if (this.tagWhitelist_[elemName]) {
