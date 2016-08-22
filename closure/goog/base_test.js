@@ -1320,14 +1320,14 @@ function testClassBaseOnMethodAndBaseCtor() {
 }
 
 function testGoogRequireCheck() {
-  stubs.set(goog, 'ENABLE_DEBUG_LOADER', false);
+  stubs.set(goog, 'ENABLE_DEBUG_LOADER', true);
   stubs.set(goog, 'useStrictRequires', true);
   stubs.set(goog, 'implicitNamespaces_', {});
 
   // Aliased so that build tools do not mistake this for an actual call.
   var require = goog.require;
   assertThrows('Requiring non-required namespace should fail', function() {
-    require('far.out');
+    require('far.outnotprovided');
   });
 
   assertUndefined(goog.global.far);
