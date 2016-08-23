@@ -79,7 +79,7 @@ function testTrustedResourceUrlFromString() {
 
 /**
  * Asserts that conversionFunction calls the report callback.
- * @param {!function(string) : *} conversionFunction
+ * @param {function(string) : *} conversionFunction
  */
 function assertFunctionReports(conversionFunction) {
   var reported = false;

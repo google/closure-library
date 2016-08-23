@@ -316,7 +316,7 @@ goog.fx.DragListGroup.prototype.setFunctionToGetHandleForDragItem = function(
 /**
  * Sets a user-supplied CSS class to add to a drag item on hover (not during a
  * drag action).
- * @param {...!string} var_args The CSS class or classes.
+ * @param {...string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
   goog.asserts.assert(!this.isInitialized_);
@@ -327,7 +327,7 @@ goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
 /**
  * Sets a user-supplied CSS class to add to a drag item handle on hover (not
  * during a drag action).
- * @param {...!string} var_args The CSS class or classes.
+ * @param {...string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
     var_args) {
@@ -345,7 +345,7 @@ goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
  * If this class is set by the user, then the default behavior does not happen
  * (unless, of course, the class also contains visibility:hidden).
  *
- * @param {...!string} var_args The CSS class or classes.
+ * @param {...string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
   goog.asserts.assert(!this.isInitialized_);

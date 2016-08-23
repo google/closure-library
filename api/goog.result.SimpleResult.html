@@ -39,7 +39,7 @@ with the default this.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>RESULT</code><dd><p>A new Promise that will receive the result
 of the fulfillment or rejection callback.</p>
 </dl></dd></dl></div></section><section class="property expandable" id="wait"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/result/simpleresult.js#L133" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> wait(<var>handler</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Attaches handlers to be called when the value of this Result is available.</p>
-<dl><dt class="spec">Specified by</dt><dd><a href="goog.result.Result.html#wait">goog.result.Result</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>handler</var><code>!function(this: T, !<a href="goog.result.SimpleResult.html">goog.result.SimpleResult</a>)</code><dd><p>The function
+<dl><dt class="spec">Specified by</dt><dd><a href="goog.result.Result.html#wait">goog.result.Result</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>handler</var><code>function(this: T, !<a href="goog.result.SimpleResult.html">goog.result.SimpleResult</a>)</code><dd><p>The function
 called when the value is available. The function is passed the Result
 object as the only argument.</p>
 <dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>Optional scope for the handler.</p>

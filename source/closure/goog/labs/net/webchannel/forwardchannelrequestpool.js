@@ -256,7 +256,7 @@ ForwardChannelRequestPool.prototype.hasPendingRequest = function() {
  * Need go through the standard onRequestComplete logic to expose the max-retry
  * failure in the standard way.
  *
- * @param {!function(!ChannelRequest)} onComplete The completion callback.
+ * @param {function(!ChannelRequest)} onComplete The completion callback.
  * @return {boolean} true if any request has been forced to complete.
  */
 ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {

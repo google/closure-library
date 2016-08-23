@@ -15,8 +15,8 @@ return value is cached (thus this is only appropriate for idempotent
 functions).  Subsequent calls will return the cached return value. This
 allows the evaluation of expensive functions to be delayed until first used.</p>
 <p>To cache the return values of functions with parameters, see goog.memoize.</p>
-<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>!function(): T</code><dd><p>A function to lazily evaluate.</p>
-</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!function(): T</code><dd><p>A wrapped version the function.</p>
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>function(): T</code><dd><p>A function to lazily evaluate.</p>
+</dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>function(): T</code><dd><p>A wrapped version the function.</p>
 </dl></dd></dl></div></section><section class="property expandable" id="compose"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/functions/functions.js#L181" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> compose(<var>fn</var>, <var>var_args</var>)</div></h3></div><div class="body"><p>Creates the composition of the functions passed in.
 For example, (goog.functions.compose(f, g))(a) is equivalent to f(g(a)).</p>
 <dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>fn</var><code>function(...?): T</code><dd><p>The final function.</p>

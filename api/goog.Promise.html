@@ -77,7 +77,7 @@ in the global scope.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.Promise.html">goog.Promise</a>&lt;TYPE&gt;</code><dd><p>This Promise, for chaining additional calls.</p>
 </dl></dd></dl></div></section><section class="property expandable" id="thenCatch"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/closure/goog/promise/promise.js#L669" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;THIS&gt;</var> thenCatch(<var>onRejected</var>, <var>opt_context</var>)</div></h3></div><div class="body"><p>Adds a callback that will be invoked only if the Promise is rejected. This
 is equivalent to <code>then(null, onRejected)</code>.</p>
-<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>onRejected</var><code>!function(this: THIS, *): *</code><dd><p>A function that will be
+<dl><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>onRejected</var><code>function(this: THIS, *): *</code><dd><p>A function that will be
 invoked with the rejection reason if the Promise is rejected.</p>
 <dt class="type name"><var>opt_context</var><code>THIS=</code><dd><p>An optional context object that will be the
 execution context for the callbacks. By default, functions are executed

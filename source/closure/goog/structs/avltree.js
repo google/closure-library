@@ -269,7 +269,7 @@ goog.structs.AvlTree.prototype.contains = function(value) {
  * is returned.
  *
  * @param {T} value Value in the tree whose in-order index is returned.
- * @return {!number} The in-order index of the given value in the
+ * @return {number} The in-order index of the given value in the
  *     tree or -1 if the value is not found.
  */
 goog.structs.AvlTree.prototype.indexOf = function(value) {

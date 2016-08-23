@@ -662,23 +662,20 @@ goog.require = function(name) {
     if (goog.isProvided_(name)) {
       if (goog.isInModuleLoader_()) {
         return goog.module.getInternal_(name);
-      } else {
-        return null;
       }
-    }
-
-    if (goog.ENABLE_DEBUG_LOADER) {
+    } else if (goog.ENABLE_DEBUG_LOADER) {
       var path = goog.getPathFromDeps_(name);
       if (path) {
         goog.writeScripts_(path);
-        return null;
+      } else {
+        var errorMessage = 'goog.require could not find: ' + name;
+        goog.logToConsole_(errorMessage);
+
+        throw Error(errorMessage);
       }
     }
 
-    var errorMessage = 'goog.require could not find: ' + name;
-    goog.logToConsole_(errorMessage);
-
-    throw Error(errorMessage);
+    return null;
   }
 };
 

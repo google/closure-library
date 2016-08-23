@@ -11,7 +11,7 @@ allows unused calls to <code>goog.reflect.cache</code> to be pruned.</p>
 <dt class="type name"><var>key</var><code>?</code><dd><p>The key to lookup in the cache. If it is not string or number
 then a <code>opt_keyFn</code> should be provided. The key is also used as the
 parameter to the <code>valueFn</code>.</p>
-<dt class="type name"><var>valueFn</var><code>!function(?): V</code><dd><p>The value provider to use to calculate the
+<dt class="type name"><var>valueFn</var><code>function(?): V</code><dd><p>The value provider to use to calculate the
 value to store in the cache. This function should be side-effect free
 to take advantage of the optimization.</p>
 <dt class="type name"><var>opt_keyFn</var><code>function(?): K=</code><dd><p>The key provider to determine the cache

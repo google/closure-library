@@ -3,7 +3,7 @@
 </dl><p>An adaptor from Result to a Deferred, for use with existing Deferred chains.</p>
 <h3 class="name"><div>new DeferredAdaptor(<var>result</var>)</div></h3><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>result</var><code>!<a href="goog.result.Result.html">goog.result.Result</a></code><dd><p>A result.</p>
 </dl></dd></div></section><section class="instance-methods"><h2>Instance Methods</h2><section class="property expandable" id="addBoth"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L433" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addBoth(<var>f</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Registers one function as both a callback and errback.</p>
-<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addBoth">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>!function(this: T, ?): ?</code><dd><p>The function to be called on any result.</p>
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addBoth">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>f</var><code>function(this: T, ?): ?</code><dd><p>The function to be called on any result.</p>
 <dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the function in.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
 </dl></dd></dl></div></section><section class="property expandable" id="addCallback"><div class="header"><div class="code-link"><a href="https://github.com/google/closure-library/blob/master/third_party/closure/goog/mochikit/async/deferred.js#L396" target="_blank" title="View source"><i class="material-icons">code</i></a></div><h3 class="name"><div><var class="template">&lt;T&gt;</var> addCallback(<var>cb</var>, <var>opt_scope</var>)</div></h3></div><div class="body"><p>Register a callback function to be called with a successful result. If no
@@ -15,7 +15,7 @@ passed to the next errback in the execution chain.</p>
 <p>If the function returns a Deferred, the execution sequence will be blocked
 until that Deferred fires. Its result will be passed to the next callback (or
 errback if it is an error result) in this Deferred&#39;s execution sequence.</p>
-<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addCallback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cb</var><code>!function(this: T, VALUE): ?</code><dd><p>The function to be called with a
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addCallback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>cb</var><code>function(this: T, VALUE): ?</code><dd><p>The function to be called with a
 successful result.</p>
 <dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the callback in.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a></code><dd><p>This Deferred.</p>
@@ -39,7 +39,7 @@ that result will be passed to the next normal callback in the sequence.</p>
 <p>If the function returns a Deferred, the execution sequence will be blocked
 until that Deferred fires. Its result will be passed to the next callback (or
 errback if it is an error result) in this Deferred&#39;s execution sequence.</p>
-<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addErrback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>eb</var><code>!function(this: T, ?): ?</code><dd><p>The function to be called on an
+<dl><dt class="spec">Defined by</dt><dd><a href="goog.async.Deferred.html#addErrback">goog.async.Deferred</a></dd><dt class="spec">Parameters</dt><dd><dl><dt class="type name"><var>eb</var><code>function(this: T, ?): ?</code><dd><p>The function to be called on an
 unsuccessful result.</p>
 <dt class="type name"><var>opt_scope</var><code>T=</code><dd><p>An optional scope to call the errback in.</p>
 </dl></dd><dt class="spec">Returns</dt><dd><dl><dt class="type"><code>!<a href="goog.async.Deferred.html">goog.async.Deferred</a>&lt;VALUE&gt;</code><dd><p>This Deferred.</p>

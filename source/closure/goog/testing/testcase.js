@@ -892,7 +892,7 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
  * Logs all of the exceptions generated from failing assertions, and returns a
  * generic exception informing the user that one or more exceptions were not
  * propagated, causing the test to erroneously pass.
- * @param {!string} testName The test function's name.
+ * @param {string} testName The test function's name.
  * @return {!goog.testing.JsUnitException}
  * @private
  */

@@ -116,7 +116,7 @@ goog.reflect.canAccessProperty = function(obj, prop) {
  * @param {?} key The key to lookup in the cache. If it is not string or number
  *     then a {@code opt_keyFn} should be provided. The key is also used as the
  *     parameter to the {@code valueFn}.
- * @param {!function(?):V} valueFn The value provider to use to calculate the
+ * @param {function(?):V} valueFn The value provider to use to calculate the
  *     value to store in the cache. This function should be side-effect free
  *     to take advantage of the optimization.
  * @param {function(?):K=} opt_keyFn The key provider to determine the cache

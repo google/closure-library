@@ -677,7 +677,7 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ = function(
 /**
  * Attempts to convert a string to a number.
  * @param {string} num in hexadecimal or float format.
- * @return {!number} The converted number or null on error.
+ * @return {number} The converted number or null on error.
  * @private
  */
 goog.proto2.TextFormatSerializer.Parser.getNumberFromString_ = function(num) {
