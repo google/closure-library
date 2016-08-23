@@ -57,8 +57,8 @@ function getStyleFromCssText(cssText) {
 
 /**
  * Asserts that the expected CSS text is equal to the actual CSS text.
- * @param {!string} expectedCssText Expected CSS text.
- * @param {!string} actualCssText Actual CSS text.
+ * @param {string} expectedCssText Expected CSS text.
+ * @param {string} actualCssText Actual CSS text.
  */
 function assertCSSTextEquals(expectedCssText, actualCssText) {
   if (isIE8()) {

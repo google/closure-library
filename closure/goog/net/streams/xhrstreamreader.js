@@ -245,7 +245,7 @@ goog.net.streams.XhrStreamReader.prototype.getStatus = function() {
 /**
  * Sets the status handler.
  *
- * @param {!function()} handler The handler for any status change.
+ * @param {function()} handler The handler for any status change.
  */
 goog.net.streams.XhrStreamReader.prototype.setStatusHandler = function(
     handler) {
@@ -256,7 +256,7 @@ goog.net.streams.XhrStreamReader.prototype.setStatusHandler = function(
 /**
  * Sets the data handler.
  *
- * @param {!function(!Array<!Object>)} handler The handler for new data.
+ * @param {function(!Array<!Object>)} handler The handler for new data.
  */
 goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
   this.dataHandler_ = handler;

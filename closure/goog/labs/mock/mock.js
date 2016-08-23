@@ -271,7 +271,7 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
  *
  * @param {Array<!goog.labs.mock.MethodBinding_>} recordedCalls
  *     The recorded calls that didn't match the expectation.
- * @param {!string} methodName The expected method call.
+ * @param {string} methodName The expected method call.
  * @param {!goog.labs.mock.verification.VerificationMode} verificationMode The
  *     expected verification mode which failed verification.
  * @param {!Array<?>} args The expected arguments.
@@ -311,7 +311,7 @@ goog.labs.mock.PROTOTYPE_FIELDS_ = [
  * @private
  * @param {Array<!goog.labs.mock.MethodBinding_>} recordedCalls
  *     The recorded calls that didn't match the expectation.
- * @param {!string} methodName The expected method call.
+ * @param {string} methodName The expected method call.
  * @param {!goog.labs.mock.verification.VerificationMode} verificationMode The
  *     expected verification mode that failed verification.
  * @param {!Array<?>} args The expected arguments.

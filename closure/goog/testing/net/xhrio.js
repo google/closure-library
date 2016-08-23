@@ -554,9 +554,9 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
 
 /**
  * Simulates the Xhr progress event.
- * @param {!boolean} lengthComputable Whether progress is measurable.
- * @param {!number} loaded Amount of work already performed.
- * @param {!number} total Total amount of work to perform.
+ * @param {boolean} lengthComputable Whether progress is measurable.
+ * @param {number} loaded Amount of work already performed.
+ * @param {number} total Total amount of work to perform.
  * @param {boolean=} opt_isDownload Whether the progress is from a download or
  *     upload.
  */

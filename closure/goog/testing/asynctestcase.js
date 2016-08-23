@@ -342,7 +342,7 @@ goog.testing.AsyncTestCase.prototype.numControlExceptionsExpected_ = 0;
 
 /**
  * The current step name.
- * @return {!string} Step name.
+ * @return {string} Step name.
  * @protected
  */
 goog.testing.AsyncTestCase.prototype.getCurrentStepName = function() {

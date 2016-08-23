@@ -245,7 +245,7 @@ goog.i18n.MessageFormat.prototype.format_ = function(
  * @param {boolean} ignorePound If true, treat '#' in plural messages as a
  *     literary character, else treat it as an ICU syntax character, resolving
  *     to the number (plural_variable - offset).
- * @param {!Array<!string>} result Each formatting stage appends its product
+ * @param {!Array<string>} result Each formatting stage appends its product
  *     to the result.
  * @private
  */
@@ -287,7 +287,7 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
  * Formats simple placeholder.
  * @param {!Object} parsedPattern JSON object containing placeholder info.
  * @param {!Object} namedParameters Parameters that are used as actual data.
- * @param {!Array<!string>} result Each formatting stage appends its product
+ * @param {!Array<string>} result Each formatting stage appends its product
  *     to the result.
  * @private
  */
@@ -315,7 +315,7 @@ goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
  * @param {boolean} ignorePound If true, treat '#' in plural messages as a
  *     literary character, else treat it as an ICU syntax character, resolving
  *     to the number (plural_variable - offset).
- * @param {!Array<!string>} result Each formatting stage appends its product
+ * @param {!Array<string>} result Each formatting stage appends its product
  *     to the result.
  * @private
  */
@@ -345,13 +345,13 @@ goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
  *     containing plural block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
- * @param {!function(number, number=):string} pluralSelector  A select function
+ * @param {function(number, number=):string} pluralSelector  A select function
  *     from goog.i18n.pluralRules or goog.i18n.ordinalRules which determines
  *     which plural/ordinal form to use based on the input number's cardinality.
  * @param {boolean} ignorePound If true, treat '#' in plural messages as a
  *     literary character, else treat it as an ICU syntax character, resolving
  *     to the number (plural_variable - offset).
- * @param {!Array<!string>} result Each formatting stage appends its product
+ * @param {!Array<string>} result Each formatting stage appends its product
  *     to the result.
  * @private
  */

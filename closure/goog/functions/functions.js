@@ -324,8 +324,8 @@ goog.define('goog.functions.CACHE_RETURN_VALUE', true);
  *
  * To cache the return values of functions with parameters, see goog.memoize.
  *
- * @param {!function():T} fn A function to lazily evaluate.
- * @return {!function():T} A wrapped version the function.
+ * @param {function():T} fn A function to lazily evaluate.
+ * @return {function():T} A wrapped version the function.
  * @template T
  */
 goog.functions.cacheReturnValue = function(fn) {

@@ -42,7 +42,7 @@ exports.getIterator = function(iterable) {
  * Warning: this function will never halt if given an iterable that
  * is never exhausted.
  *
- * @param {!function(VALUE): void} f
+ * @param {function(VALUE): void} f
  * @param {!Iterable<VALUE>} iterable
  * @template VALUE
  */
@@ -65,7 +65,7 @@ exports.forEach = function(f, iterable) {
  * function {@code f} with the next value of the given iterable
  * {@code iterable} until the given iterable is exhausted.
  *
- * @param {!function(this: THIS, VALUE): RESULT} f
+ * @param {function(this: THIS, VALUE): RESULT} f
  * @param {!Iterable<VALUE>} iterable
  * @return {!Iterable<RESULT>} The created iterable that gives the mapped
  *     values.
@@ -82,7 +82,7 @@ exports.map = function(f, iterable) {
 
 /**
  * Helper class for {@code map}.
- * @param {!function(VALUE): RESULT} f
+ * @param {function(VALUE): RESULT} f
  * @param {!Iterator<VALUE>} iterator
  * @constructor
  * @implements {Iterator<RESULT>}

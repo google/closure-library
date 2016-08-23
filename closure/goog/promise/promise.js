@@ -657,7 +657,7 @@ goog.Promise.prototype.thenAlways = function(onSettled, opt_context) {
  * Adds a callback that will be invoked only if the Promise is rejected. This
  * is equivalent to {@code then(null, onRejected)}.
  *
- * @param {!function(this:THIS, *): *} onRejected A function that will be
+ * @param {function(this:THIS, *): *} onRejected A function that will be
  *     invoked with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed

@@ -557,7 +557,7 @@ function testFailOnUnreportedAsserts_EnabledByDefault() {
  *     test function fails.
  * </ol>
  * @param {boolean} shouldPassWithFlagEnabled
- * @param {!function(): !goog.Promise} testFunction
+ * @param {function(): !goog.Promise} testFunction
  * @return {!goog.Promise}
  */
 function verifyTestOutcomeForFailOnUnreportedAssertsFlag(
