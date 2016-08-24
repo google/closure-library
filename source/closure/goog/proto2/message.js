@@ -23,6 +23,8 @@ goog.require('goog.asserts');
 goog.require('goog.proto2.Descriptor');
 goog.require('goog.proto2.FieldDescriptor');
 
+goog.forwardDeclare('goog.proto2.LazyDeserializer');  // circular reference
+
 
 
 /**
