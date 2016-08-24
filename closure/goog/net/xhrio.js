@@ -257,6 +257,13 @@ goog.net.XhrIo.CONTENT_TYPE_HEADER = 'Content-Type';
 
 
 /**
+ * The Content-Transfer-Encoding HTTP header name
+ * @type {string}
+ */
+goog.net.XhrIo.CONTENT_TRANSFER_ENCODING = 'Content-Transfer-Encoding';
+
+
+/**
  * The pattern matching the 'http' and 'https' URI schemes
  * @type {!RegExp}
  */
