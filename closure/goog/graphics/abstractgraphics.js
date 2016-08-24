@@ -22,6 +22,7 @@
 goog.provide('goog.graphics.AbstractGraphics');
 
 goog.require('goog.dom');
+goog.require('goog.graphics.Font');
 goog.require('goog.graphics.Path');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
