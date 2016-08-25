@@ -31,6 +31,7 @@ goog.require('goog.graphics.CanvasImageElement');
 goog.require('goog.graphics.CanvasPathElement');
 goog.require('goog.graphics.CanvasRectElement');
 goog.require('goog.graphics.CanvasTextElement');
+goog.require('goog.graphics.Font');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.math.Size');
 goog.require('goog.style');
