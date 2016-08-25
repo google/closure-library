@@ -29,6 +29,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.graphics.AbstractGraphics');
+goog.require('goog.graphics.Font');
 goog.require('goog.graphics.LinearGradient');
 goog.require('goog.graphics.Path');
 goog.require('goog.graphics.SolidFill');
