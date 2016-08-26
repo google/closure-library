@@ -452,7 +452,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'XAF': [0, 'FCFA', 'FCFA'],
   'XCD': [2, '$', 'EC$'],
   'XOF': [0, 'CFA', 'CFA'],
-  'XPF': [0, 'FCFP', 'FCFP'],
+  'XPF': [48, 'FCFP', 'FCFP'],
   'ZMW': [0, 'ZMW', 'ZMW'],
   'ZWD': [0, '$', 'Z$']
 };
