@@ -37,16 +37,10 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
-goog.require('goog.net.streams.Base64PbStreamParser');
 goog.require('goog.net.streams.JsonStreamParser');
 goog.require('goog.net.streams.PbStreamParser');
-goog.require('goog.string');
 goog.require('goog.userAgent');
 
-goog.scope(function() {
-
-var Base64PbStreamParser =
-    goog.module.get('goog.net.streams.Base64PbStreamParser');
 
 
 /**
@@ -67,6 +61,7 @@ goog.net.streams.XhrStreamReader = function(xhr) {
    * @private {?goog.log.Logger} the logger.
    */
   this.logger_ = goog.log.getLogger('goog.net.streams.XhrStreamReader');
+
 
   /**
    * The xhr object passed by the application.
@@ -117,6 +112,7 @@ goog.net.streams.XhrStreamReader = function(xhr) {
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
+
   // register the XHR event handler
   this.eventHandler_.listen(
       this.xhr_, goog.net.EventType.READY_STATE_CHANGE,
@@ -135,12 +131,12 @@ goog.net.streams.XhrStreamReader.Status = {
   INIT: 0,
 
   /**
-   * XHR being sent.
+   * XHR being sent..
    */
   ACTIVE: 1,
 
   /**
-   * The request was successful, after the request successfully completes.
+   * The request was successful, after the request successfully completes
    */
   SUCCESS: 2,
 
@@ -204,44 +200,24 @@ goog.net.streams.XhrStreamReader.isStreamingSupported = function() {
 
 
 /**
- * Returns a parser that supports the given content-type (mime) and
- * content-transfer-encoding.
+ * Returns a parser that supports the given content-type (mime).
  *
  * @return {?goog.net.streams.StreamParser} a parser or null if the content
- *    type or transfer encoding is unsupported.
+ *    type is not supported.
  * @private
  */
-goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
+goog.net.streams.XhrStreamReader.prototype.getParserByContentType_ =
     function() {
   var contentType =
-      this.xhr_.getStreamingResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
-  if (!contentType) {
-    goog.log.warning(this.logger_, 'Content-Type unavailable: ' + contentType);
-    return null;
-  }
-  contentType = contentType.toLowerCase();
-
+      this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
   if (contentType == 'application/json') {
     return new goog.net.streams.JsonStreamParser();
+  } else if (contentType == 'application/x-protobuf') {
+    return new goog.net.streams.PbStreamParser();
   }
 
-  if (goog.string.startsWith(contentType, 'application/x-protobuf')) {
-    var encoding = this.xhr_.getStreamingResponseHeader(
-        goog.net.XhrIo.CONTENT_TRANSFER_ENCODING);
-    if (!encoding) {
-      return new goog.net.streams.PbStreamParser();
-    }
-    if (encoding.toLowerCase() == 'base64') {
-      return new Base64PbStreamParser();
-    }
-    goog.log.warning(
-        this.logger_, 'Unsupported Content-Transfer-Encoding: ' + encoding +
-            '\nFor Content-Type: ' + contentType);
-    return null;
-  }
-
-  goog.log.warning(this.logger_, 'Unsupported Content-Type: ' + contentType);
-  return null;
+  // TODO(user): caller to specify the C-T (ctor)
+  return new goog.net.streams.JsonStreamParser();
 };
 
 
@@ -297,6 +273,7 @@ goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
  */
 goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
     event) {
+
   var xhr = /** @type {goog.net.XhrIo} */ (event.target);
 
   /** @preserveTry */
@@ -326,6 +303,7 @@ goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
 goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   var readyState = this.xhr_.getReadyState();
   var errorCode = this.xhr_.getLastErrorCode();
+
   var statusCode = this.xhr_.getStatus();
   var responseText = this.xhr_.getResponseText();
 
@@ -359,8 +337,11 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   }
 
   if (!this.parser_) {
-    this.parser_ = this.getParserByResponseHeader_();
+    this.parser_ = this.getParserByContentType_();
     if (this.parser_ == null) {
+      goog.log.warning(
+          this.logger_, 'Invalid response content-type: ' +
+              this.xhr_.getResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER));
       this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
     }
   }
@@ -443,5 +424,3 @@ goog.net.streams.XhrStreamReader.prototype.clear_ = function() {
     xhr.dispose();
   }
 };
-
-});  // goog.scope
