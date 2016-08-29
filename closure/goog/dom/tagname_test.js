@@ -25,6 +25,6 @@ function testCorrectNumberOfTagNames() {
 
 function testPropertyNamesEqualValues() {
   for (var propertyName in goog.dom.TagName) {
-    assertEquals(propertyName, goog.dom.TagName[propertyName]);
+    assertEquals(propertyName, String(goog.dom.TagName[propertyName]));
   }
 }
