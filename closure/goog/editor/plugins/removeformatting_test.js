@@ -27,6 +27,7 @@ goog.require('goog.testing.editor.FieldMock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 var SAVED_HTML;
 var FIELDMOCK;
@@ -63,8 +64,12 @@ function setUpPage() {
     insertImageBoldGarbage = '<b><br/></b>';
     insertImageFontGarbage = '<font size="1"><br/></font>';
   } else if (goog.userAgent.EDGE) {
-    insertImageFontGarbage =
-        '<fontsize="-1"><font class="p" size="-1"></font></fontsize="-1">';
+    if (goog.userAgent.product.isVersion(14)) {
+      insertImageFontGarbage = '<fontsize="-1"></fontsize="-1">';
+    } else {
+      insertImageFontGarbage =
+          '<fontsize="-1"><font class="p" size="-1"></font></fontsize="-1">';
+    }
   }
   // Extra html to add to test html to make sure removeformatting is actually
   // getting called when you're testing if it leaves certain styles alone
@@ -436,10 +441,13 @@ function testPartialListRemoveFormat() {
       goog.userAgent.IE, 'IE leaves behind an empty LI.');
   expectedFailures.expectFailureFor(
       goog.userAgent.WEBKIT, 'WebKit completely loses the "one".');
-  expectedFailures.expectFailureFor(
-      goog.userAgent.EDGE,
-      'Edge leaves "two" and "threeafter" orphaned outside of an li ' +
-          'but inside the ul (invalid HTML).');
+  if (goog.userAgent.EDGE) {
+    // Edge leaves "two" and "threeafter" orphaned outside of an li but inside
+    // the ul (invalid HTML).
+    // Skip this test instead of using expectedFailures because this failure
+    // mode wrecks the DOM and causes later tests to fail as well.
+    return;
+  }
 
   expectedFailures.run(function() {
     FORMATTER.removeFormatting_();
