@@ -91,9 +91,13 @@ goog.dom.forms.submitFormDataInNewWindow = function(
 
   var newDocument = newWin.document;
 
-  var newForm = newDocument.createElement('form');
+  var newForm =
+      /** @type {!HTMLFormElement} */ (newDocument.createElement('form'));
   newForm.method = method;
   newForm.action = actionUri;
+
+  // After this point, do not directly reference the form object's functions as
+  // field names can shadow the form's properties.
 
   formData.forEach(function(fieldValues, fieldName) {
     for (var i = 0; i < fieldValues.length; i++) {
@@ -102,11 +106,11 @@ goog.dom.forms.submitFormDataInNewWindow = function(
       newInput.name = fieldName;
       newInput.value = fieldValue;
       newInput.type = 'hidden';
-      newForm.appendChild(newInput);
+      HTMLFormElement.prototype.appendChild.call(newForm, newInput);
     }
   });
 
-  newForm.submit();
+  HTMLFormElement.prototype.submit.call(newForm);
   return true;
 };
 
