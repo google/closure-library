@@ -20,6 +20,8 @@ goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
+
+goog.require('goog.html.sanitizer.TagBlacklist');
 goog.require('goog.html.sanitizer.unsafe');
 goog.require('goog.string.Const');
 goog.require('goog.testing.dom');
@@ -176,4 +178,44 @@ function testWhitelistAliasing() {
   assertUndefined(goog.html.sanitizer.AttributeWhitelist['* QQQ']);
   assertUndefined(goog.html.sanitizer.AttributeWhitelist['* QqQ']);
   assertUndefined(goog.html.sanitizer.AttributeWhitelist['* qqq']);
+}
+
+
+function testTemplateUnsanitized() {
+  if (!goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED) {
+    return;
+  }
+  var input = '<template><div>a</div><script>qqq</script>' +
+      '<template>a</template></template>';
+  // TODO(pelizzi): use unblockTag once it's available
+  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  goog.html.sanitizer.unsafe.keepUnsanitizedTemplateContents(just, builder);
+  assertSanitizedHtml(input, input, ['TEMPLATE'], null, builder);
+  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
+}
+
+
+function testTemplateSanitizedUnsanitizedXSS() {
+  if (!goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED) {
+    return;
+  }
+  var input = '<template><p>a</p><script>aaaa;</script></template>';
+  var expected = '<span><p>a</p></span>';
+  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  goog.html.sanitizer.unsafe.keepUnsanitizedTemplateContents(just, builder);
+  assertSanitizedHtml(input, expected, null, null, builder);
+  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
+}
+
+
+function testTemplateUnsanitizedThrowsIE() {
+  if (goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED) {
+    return;
+  }
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  assertThrows(function() {
+    goog.html.sanitizer.unsafe.keepUnsanitizedTemplateContents(just, builder);
+  });
 }
