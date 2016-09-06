@@ -34,6 +34,7 @@ goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 var stubs;
 
@@ -405,10 +406,15 @@ function testLinks() {
 
   HELPER.select(url1, 0, url2, url2.length);
   FORMATTER.execCommandInternal(goog.editor.Command.LINK);
+  var expectDialogUrl = false;
+  if (goog.userAgent.IE ||
+      (goog.userAgent.EDGE && !goog.userAgent.product.isVersion(14))) {
+    expectDialogUrl = true;
+  }
   HELPER.assertHtmlMatches(
       '<p><a href="' + url1 + '">' + url1 + '</a></p><p>' +
-      '<a href="' + dialogUrl + '">' +
-      (goog.userAgent.EDGE_OR_IE ? dialogUrl : url2) + '</a></p>');
+      '<a href="' + dialogUrl + '">' + (expectDialogUrl ? dialogUrl : url2) +
+      '</a></p>');
 }
 
 function testSelectedLink() {

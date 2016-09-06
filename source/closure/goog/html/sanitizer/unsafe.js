@@ -98,3 +98,36 @@ goog.html.sanitizer.unsafe.alsoAllowAttributes = function(
       'must provide non-empty justification');
   return builder.alsoAllowAttributesPrivateDoNotAccessOrElse(attrs);
 };
+
+
+/**
+ * Turns off sanitization of TEMPLATE tag descendants. The output is still
+ * safe to consume as a whole, but clients need to handle the contents of
+ * TEMPLATE nodes carefully, hence its definition in the unsafe package.
+ *
+ * Note that this only applies to descendants of unsanitized template tags, not
+ * to the tag itself, which must be manually added to the whitelist and removed
+ * from the blacklist.
+ *
+ * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
+ * that the new tags do not introduce untrusted code execution or unsanctioned
+ * network activity.
+ *
+ * @param {!goog.string.Const} justification A constant string explaining why
+ *     the templates should not be sanitized, and why this is safe. May include
+ *     a security review ticket number.
+ * @param {!goog.html.sanitizer.HtmlSanitizer.Builder} builder The builder
+ *     whose template tag descendants should not be sanitized.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ * @throws {Error} Thrown if the browser does not support TEMPLATE tags.
+ *     In this case, careful post-sanitization handling wouldn't matter.
+ */
+goog.html.sanitizer.unsafe.keepUnsanitizedTemplateContents = function(
+    justification, builder) {
+  goog.asserts.assertString(
+      goog.string.Const.unwrap(justification), 'must provide justification');
+  goog.asserts.assert(
+      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      'must provide non-empty justification');
+  return builder.keepUnsanitizedTemplateContentsPrivateDoNotAccessOrElse();
+};

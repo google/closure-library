@@ -352,7 +352,13 @@ goog.module = function(name) {
     throw Error('Invalid module identifier');
   }
   if (!goog.isInModuleLoader_()) {
-    throw Error('Module ' + name + ' has been loaded incorrectly.');
+    throw Error(
+        'Module ' + name + ' has been loaded incorrectly. Note, ' +
+        'modules cannot be loaded as normal scripts. They require some kind of ' +
+        'pre-processing step. You\'re likely trying to load a module via a ' +
+        'script tag or as a part of a concatenated bundle without rewriting the ' +
+        'module. For more info see: ' +
+        'https://github.com/google/closure-library/wiki/goog.module:-an-ES6-module-like-alternative-to-goog.provide.');
   }
   if (goog.moduleLoaderState_.moduleName) {
     throw Error('goog.module may only be called once per module.');

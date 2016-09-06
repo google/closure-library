@@ -24,6 +24,7 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
 goog.require('goog.html.sanitizer.TagWhitelist');
+goog.require('goog.html.sanitizer.unsafe');
 goog.require('goog.html.testing');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
@@ -1265,4 +1266,48 @@ function testSpanNotCorrectedByBrowsersInner() {
         }
         assertAfterInsertionEquals(input, input);
       });
+}
+
+function testTemplateTagToSpan() {
+  var input = '<template alt="yes"><p>q</p></template>';
+  var expected = '<span alt="yes"><p>q</p></span>';
+  // TODO(pelizzi): use unblockTag once it's available
+  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
+  assertSanitizedHtml(input, expected);
+  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
+}
+
+
+var just = goog.string.Const.from('test');
+
+
+function testTemplateTagWhitelisted() {
+  var input = '<div><template alt="yes"><p>q</p></template></div>';
+  // TODO(pelizzi): use unblockTag once it's available
+  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, ['TEMPLATE']);
+  assertSanitizedHtml(input, input, builder.build());
+  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
+}
+
+
+function testTemplateTagFake() {
+  var input = '<template data-sanitizer-original-tag="template">a</template>';
+  var expected = '';
+  assertSanitizedHtml(input, expected);
+}
+
+
+function testTemplateNested() {
+  var input = '<template><p>a</p><zzz alt="a"/><script>z</script><template>' +
+      '<p>a</p><zzz alt="a"/><script>z</script></template></template>';
+  var expected = '<template><p>a</p><span alt="a"></span><template>' +
+      '<p>a</p><span alt="a"></span></template></template>';
+  // TODO(pelizzi): use unblockTag once it's available
+  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, ['TEMPLATE']);
+  assertSanitizedHtml(input, expected, builder.build());
+  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
 }
