@@ -2174,12 +2174,12 @@ goog.dom.isNodeList = function(val) {
  *     match only based on tag name).
  * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
  *     dom.
- * @return {R} The first ancestor that matches the passed criteria, or
+ * @return {?R} The first ancestor that matches the passed criteria, or
  *     null if no match is found. The return type is {?Element} if opt_tag is
  *     not a member of goog.dom.TagName or a more specific type if it is (e.g.
  *     {?HTMLAnchorElement} for goog.dom.TagName.A).
  * @template T
- * @template R := union('null', cond(isUnknown(T), 'Element', T)) =:
+ * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.getAncestorByTagNameAndClass = function(
     element, opt_tag, opt_class, opt_maxSearchSteps) {
@@ -3094,12 +3094,12 @@ goog.dom.DomHelper.prototype.isNodeList = goog.dom.isNodeList;
  *     match only based on tag name).
  * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
  *     dom.
- * @return {R} The first ancestor that matches the passed criteria, or
+ * @return {?R} The first ancestor that matches the passed criteria, or
  *     null if no match is found. The return type is {?Element} if opt_tag is
  *     not a member of goog.dom.TagName or a more specific type if it is (e.g.
  *     {?HTMLAnchorElement} for goog.dom.TagName.A).
  * @template T
- * @template R := union('null', cond(isUnknown(T), 'Element', T)) =:
+ * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
     goog.dom.getAncestorByTagNameAndClass;
