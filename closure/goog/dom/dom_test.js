@@ -1822,6 +1822,10 @@ function isIE8OrHigher() {
   return goog.userAgent.IE && goog.userAgent.product.isVersion('8');
 }
 
+/**
+ * Stub out goog.dom.getWindow with passed object.
+ * @param {!Object} win Fake window object.
+ */
 function setWindow(win) {
   stubs.set(goog.dom, 'getWindow', goog.functions.constant(win));
 }
