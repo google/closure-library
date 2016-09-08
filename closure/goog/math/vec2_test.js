@@ -141,6 +141,7 @@ function testEquals() {
   var a = new goog.math.Vec2(1, 2);
 
   assertFalse(a.equals(null));
+  assertFalse(a.equals({}));
   assertFalse(a.equals(new goog.math.Vec2(1, 3)));
   assertFalse(a.equals(new goog.math.Vec2(2, 2)));
 

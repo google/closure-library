@@ -83,6 +83,18 @@ function testCoordinateClone() {
   assertEquals(c.toString(), c.clone().toString());
 }
 
+function testCoordinateEquals() {
+  var a = new goog.math.Coordinate(1, 2);
+
+  assertFalse(a.equals(null));
+  assertFalse(a.equals({}));
+  assertFalse(a.equals(new goog.math.Coordinate(1, 3)));
+  assertFalse(a.equals(new goog.math.Coordinate(2, 2)));
+
+  assertTrue(a.equals(a));
+  assertTrue(a.equals(new goog.math.Coordinate(1, 2)));
+}
+
 function testCoordinateDifference() {
   assertObjectEquals(
       new goog.math.Coordinate(3, -40),
