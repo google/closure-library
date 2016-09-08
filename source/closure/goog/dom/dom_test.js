@@ -1822,22 +1822,29 @@ function isIE8OrHigher() {
   return goog.userAgent.IE && goog.userAgent.product.isVersion('8');
 }
 
+/**
+ * Stub out goog.dom.getWindow with passed object.
+ * @param {!Object} win Fake window object.
+ */
+function setWindow(win) {
+  stubs.set(goog.dom, 'getWindow', goog.functions.constant(win));
+}
 
 function testDevicePixelRatio() {
-  stubs.set(goog.dom, 'getWindow', goog.functions.constant({
-    matchMedia: function(query) { return {matches: query.indexOf('1.5') >= 0}; }
-  }));
+  var devicePixelRatio = 1.5;
+  setWindow({
+    'matchMedia': function(query) {
+      return {
+        'matches': devicePixelRatio >= parseFloat(query.split(': ')[1], 10)
+      };
+    }
+  });
 
-  stubs.set(goog.functions, 'CACHE_RETURN_VALUE', false);
+  assertEquals(devicePixelRatio, goog.dom.getPixelRatio());
 
-  assertEquals(goog.dom.getPixelRatio(), 1.5);
+  setWindow({'devicePixelRatio': 2.0});
+  assertEquals(2, goog.dom.getPixelRatio());
 
-  stubs.set(
-      goog.dom, 'getWindow', goog.functions.constant({devicePixelRatio: 2.0}));
-  goog.dom.devicePixelRatio_ = null;
-  assertEquals(goog.dom.getPixelRatio(), 2);
-
-  stubs.set(goog.dom, 'getWindow', goog.functions.constant({}));
-  goog.dom.devicePixelRatio_ = null;
-  assertEquals(goog.dom.getPixelRatio(), 1);
+  setWindow({});
+  assertEquals(1, goog.dom.getPixelRatio());
 }

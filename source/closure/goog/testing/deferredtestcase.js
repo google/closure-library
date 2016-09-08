@@ -129,7 +129,7 @@ goog.testing.DeferredTestCase.prototype.addWaitForAsync = function(msg, d) {
 /**
  * Wires up given Deferred object to the test case, then starts the
  * goog.async.Deferred object's callback.
- * @param {string|goog.async.Deferred} a The wait status message or the
+ * @param {string|!goog.async.Deferred} a The wait status message or the
  *     deferred object to wait for.
  * @param {goog.async.Deferred=} opt_b The deferred object to wait for.
  */

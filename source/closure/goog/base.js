@@ -1222,23 +1222,12 @@ if (goog.DEPENDENCIES_ENABLED) {
       /** @preserveTry */
       try {
         // Perform some quick conformance checks, to distinguish
-        // between browsers that support es5, es6-impl, or es6.
+        // between browsers that support es5, or es6.
 
         // Identify ES3-only browsers by their incorrect treatment of commas.
         goog.transpiledLanguages_['es5'] = eval('[1,].length!=1');
 
-        // As browsers mature, features will be moved from the full test
-        // into the impl test.  This must happen before the corresponding
-        // features are changed in the Closure Compiler's FeatureSet object.
-
-        // Test 1: es6-impl [FF49, Edge 13, Chrome 49]
-        //   (a) let/const keyword, (b) class expressions, (c) Map object,
-        //   (d) iterable arguments, (e) spread operator
-        var es6implTest =
-            'let a={};const X=class{constructor(){}x(z){return new Map([' +
-            '...arguments]).get(z[0])==3}};return new X().x([a,3])';
-
-        // Test 2: es6 [FF50 (?), Edge 14 (?), Chrome 50]
+        // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
         //   (a) default params (specifically shadowing locals),
         //   (b) destructuring, (c) block-scoped functions,
         //   (d) for-of (const), (e) new.target/Reflect.construct
@@ -1249,11 +1238,10 @@ if (goog.DEPENDENCIES_ENABLED) {
             'f(z={a}){let a=0;return z.a}{function f(){return 0;}}return f()' +
             '==3}';
 
-        if (eval('(()=>{"use strict";' + es6implTest + '})()')) {
-          goog.transpiledLanguages_['es6-impl'] = false;
-        }
         if (eval('(()=>{"use strict";' + es6fullTest + '})()')) {
           goog.transpiledLanguages_['es6'] = false;
+          // TODO(joeltine): Remove es6-impl references for http://31340605.
+          goog.transpiledLanguages_['es6-impl'] = false;
         }
       } catch (err) {
       }
