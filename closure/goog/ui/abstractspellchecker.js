@@ -779,8 +779,8 @@ goog.ui.AbstractSpellChecker.prototype.createWordElement = function(
     parameters['tabIndex'] = -1;
   }
 
-  var el = /** @type {!HTMLSpanElement} */
-      (this.getDomHelper().createDom(goog.dom.TagName.SPAN, parameters, word));
+  var el =
+      this.getDomHelper().createDom(goog.dom.TagName.SPAN, parameters, word);
   goog.a11y.aria.setRole(el, 'menuitem');
   goog.a11y.aria.setState(el, 'haspopup', true);
   this.registerWordElement(word, el);

@@ -331,8 +331,7 @@ goog.net.IframeIo.getNextName_ = function() {
  */
 goog.net.IframeIo.getForm_ = function() {
   if (!goog.net.IframeIo.form_) {
-    goog.net.IframeIo.form_ = /** @type {!HTMLFormElement} */ (
-        goog.dom.createDom(goog.dom.TagName.FORM));
+    goog.net.IframeIo.form_ = goog.dom.createDom(goog.dom.TagName.FORM);
     goog.net.IframeIo.form_.acceptCharset = 'utf-8';
 
     // Hide the form and move it off screen
@@ -1213,9 +1212,8 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
     iframeAttributes.src = 'javascript:""';
   }
 
-  this.iframe_ = /** @type {!HTMLIFrameElement} */ (
-      goog.dom.getDomHelper(this.form_)
-          .createDom(goog.dom.TagName.IFRAME, iframeAttributes));
+  this.iframe_ = goog.dom.getDomHelper(this.form_).createDom(
+      goog.dom.TagName.IFRAME, iframeAttributes);
 
   var s = this.iframe_.style;
   s.visibility = 'hidden';

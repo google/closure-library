@@ -2621,9 +2621,8 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
     html = this.reduceOp_(
         goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML, html, styles);
 
-    var iframe = /** @type {!HTMLIFrameElement} */ (
-        this.originalDomHelper.createDom(
-            goog.dom.TagName.IFRAME, this.getIframeAttributes()));
+    var iframe = this.originalDomHelper.createDom(
+        goog.dom.TagName.IFRAME, this.getIframeAttributes());
 
     // TODO(nicksantos): Figure out if this is ever needed in SAFARI?
     // In IE over HTTPS we need to wait for a load event before we set up the

@@ -397,8 +397,8 @@ goog.net.CrossDomainRpc.REQUEST_MARKER_ = 'xdrq';
 goog.net.CrossDomainRpc.prototype.sendRequest = function(
     uri, opt_method, opt_params, opt_headers) {
   // create request frame
-  var requestFrame = this.requestFrame_ = /** @type {!HTMLIFrameElement} */ (
-      goog.dom.createElement(goog.dom.TagName.IFRAME));
+  var requestFrame = this.requestFrame_ =
+      goog.dom.createElement(goog.dom.TagName.IFRAME);
   var requestId = goog.net.CrossDomainRpc.nextRequestId_++;
   requestFrame.id = goog.net.CrossDomainRpc.REQUEST_MARKER_ + '-' + requestId;
   if (!goog.net.CrossDomainRpc.debugMode_) {

@@ -512,10 +512,9 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
       },
       [goog.ui.editor.messages.MSG_TEXT_TO_DISPLAY, goog.string.Unicode.NBSP]);
   goog.dom.safe.setInnerHtml(table.rows[0].cells[0], html);
-  this.textToDisplayInput_ = /** @type {!HTMLInputElement} */ (
-      this.dom.createDom(
-          goog.dom.TagName.INPUT,
-          {id: goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY}));
+  this.textToDisplayInput_ = this.dom.createDom(
+      goog.dom.TagName.INPUT,
+      {id: goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY});
   var textInput = this.textToDisplayInput_;
   // 98% prevents scroll bars in standards mode.
   // TODO(robbyw): Is this necessary for quirks mode?
@@ -546,9 +545,8 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildOpenInNewWindowDiv_ = function() {
-  this.openInNewWindowCheckbox_ = /** @type {!HTMLInputElement} */ (
-      this.dom.createDom(
-          goog.dom.TagName.INPUT, {'type': goog.dom.InputType.CHECKBOX}));
+  this.openInNewWindowCheckbox_ = this.dom.createDom(
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.CHECKBOX});
   return this.dom.createDom(
       goog.dom.TagName.DIV, null,
       this.dom.createDom(
@@ -576,9 +574,8 @@ goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
         'linkEnd': formatter.endTag('a')
       });
 
-  this.relNoFollowCheckbox_ = /** @type {!HTMLInputElement} */ (
-      this.dom.createDom(
-          goog.dom.TagName.INPUT, {'type': goog.dom.InputType.CHECKBOX}));
+  this.relNoFollowCheckbox_ = this.dom.createDom(
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.CHECKBOX});
   return this.dom.createDom(
       goog.dom.TagName.DIV, null,
       this.dom.createDom(
