@@ -194,7 +194,7 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
         message.setUnknown(Number(key), value);
       } else {
         // Named fields must be present.
-        goog.asserts.fail('Failed to find field: ' + field);
+        goog.asserts.fail('Failed to find field: ' + key);
       }
     }
   }
