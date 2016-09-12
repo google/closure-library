@@ -33,6 +33,7 @@ goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.WebChannelTransport');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.string.path');
 
 
@@ -144,6 +145,20 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
    * @private {boolean} Whether to send raw Json and bypass v8 wire format.
    */
   this.sendRawJson_ = (opt_options && opt_options.sendRawJson) || false;
+
+  // Note that httpSessionIdParam will be ignored if the same parameter name
+  // has already been specified with messageUrlParams
+  var httpSessionIdParam = opt_options && opt_options.httpSessionIdParam;
+  if (httpSessionIdParam &&
+      !goog.string.isEmptyOrWhitespace(httpSessionIdParam)) {
+    this.channel_.setHttpSessionIdParam(httpSessionIdParam);
+    if (goog.object.containsKey(this.messageUrlParams_, httpSessionIdParam)) {
+      goog.object.remove(this.messageUrlParams_, httpSessionIdParam);
+      goog.log.warning(this.logger_,
+          'Ignore httpSessionIdParam also specified with messageUrlParams: '
+          + httpSessionIdParam);
+    }
+  }
 
   /**
    * The channel handler.
@@ -362,6 +377,15 @@ WebChannelBaseTransport.ChannelProperties.prototype.getConcurrentRequestLimit =
  */
 WebChannelBaseTransport.ChannelProperties.prototype.isSpdyEnabled = function() {
   return this.getConcurrentRequestLimit() > 1;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.getHttpSessionId =
+    function() {
+  return this.channel_.getHttpSessionId();
 };
 
 

@@ -119,6 +119,19 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.extraParams_ = null;
 
   /**
+   * Parameter name for the http session id.
+   * @private {?string}
+   */
+  this.httpSessionIdParam_ = null;
+
+  /**
+   * The http session id, to be sent with httpSessionIdParam_ with each
+   * request after the initial handshake.
+   * @private {?string}
+   */
+  this.httpSessionId_ = null;
+
+  /**
    * The ChannelRequest object for the backchannel.
    * @private {ChannelRequest}
    */
@@ -650,6 +663,38 @@ WebChannelBase.prototype.getExtraHeaders = function() {
  */
 WebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
   this.extraHeaders_ = extraHeaders;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBase.prototype.setHttpSessionIdParam = function(httpSessionIdParam) {
+  this.httpSessionIdParam_ = httpSessionIdParam;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBase.prototype.getHttpSessionIdParam = function() {
+  return this.httpSessionIdParam_;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBase.prototype.setHttpSessionId = function(httpSessionId) {
+  this.httpSessionId_ = httpSessionId;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBase.prototype.getHttpSessionId = function() {
+  return this.httpSessionId_;
 };
 
 
@@ -1815,6 +1860,12 @@ WebChannelBase.prototype.createDataUri = function(
     goog.object.forEach(this.extraParams_, function(value, key) {
       uri.setParameterValue(key, value);
     });
+  }
+
+  var param = this.getHttpSessionIdParam();
+  var value = this.getHttpSessionId();
+  if (param && value) {
+    uri.setParameterValue(param, value);
   }
 
   // Add the protocol version to the URI.

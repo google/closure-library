@@ -168,6 +168,34 @@ function testOpenWithCustomParams() {
   assertNotNullNorUndefined(extraParams);
 }
 
+function testOpenWithHttpSessionIdParam() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'httpSessionIdParam': 'xsessionid'};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
+  assertEquals('xsessionid', httpSessionIdParam);
+}
+
+function testOpenWithDuplicatedHttpSessionIdParam() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {
+    'messageUrlParams': {'xsessionid': 'abcd1234'},
+    'httpSessionIdParam': 'xsessionid'
+  };
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
+  assertEquals('xsessionid', httpSessionIdParam);
+
+  var extraParams = webChannel.channel_.extraParams_;
+  assertUndefined(extraParams['xsessionid']);
+}
+
 function testOpenWithCorsEnabled() {
   var webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
