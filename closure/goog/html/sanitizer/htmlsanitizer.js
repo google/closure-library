@@ -43,6 +43,7 @@ goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.sanitizer.AttributeSanitizedWhitelist');
 goog.require('goog.html.sanitizer.AttributeWhitelist');
 goog.require('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.html.sanitizer.TagBlacklist');
@@ -268,6 +269,27 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
    * @private {!Object<string, goog.html.sanitizer.HtmlSanitizerPolicy>}
    */
   this.attributeWhitelist_ = {};
+  goog.array.forEach(
+      [
+        goog.html.sanitizer.AttributeWhitelist,
+        goog.html.sanitizer.AttributeSanitizedWhitelist
+      ],
+      function(wl) {
+        goog.array.forEach(goog.object.getKeys(wl), function(attr) {
+          this.attributeWhitelist_[attr] =
+              /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
+              (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+        }, this);
+      },
+      this);
+
+  /**
+   * A set of attribute handlers that should not inherit their default policy
+   * during build().
+   * @private {!Object<string, boolean>}
+   */
+  this.attributeOverrideList_ = {};
+
 
   /**
    * Keeps track of whether we allow form tags.
@@ -402,11 +424,13 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     if (goog.isString(attr)) {
       attr = {tagName: '*', attributeName: attr, policy: null};
     }
-    this.attributeWhitelist_[goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
-        attr.tagName, attr.attributeName)] = attr.policy ?
+    var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
+        attr.tagName, attr.attributeName);
+    this.attributeWhitelist_[handlerName] = attr.policy ?
         attr.policy :
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
             goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+    this.attributeOverrideList_[handlerName] = true;
   }, this);
   return this;
 };
@@ -455,6 +479,58 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
           'Only whitelisted tags can be allowed. See ' +
           'goog.html.sanitizer.TagWhitelist');
     }
+  }, this);
+  return this;
+};
+
+
+/**
+ * Allows only the provided whitelist of attributes, possibly setting a custom
+ * policy for them. The set of tag/attribute combinations need to be a subset of
+ * the currently allowed combinations.
+ *
+ * Note that you cannot define a generic handler for an attribute if only a
+ * tag-specific one is present, and viceversa. To configure the sanitizer to
+ * accept an attribute only for a specific tag when only a generic handler is
+ * whitelisted, use the goog.html.sanitizer.HtmlSanitizerPolicyHints parameter
+ * and simply reject the attribute in unwanted tags.
+ *
+ * Also note that the sanitizer's policy is still called after the provided one,
+ * to ensure that supplying misconfigured policy cannot introduce
+ * vulnerabilities. To completely override an existing attribute policy or to
+ * allow new attributes, see the goog.html.sanitizer.unsafe package.
+ *
+ * @param {!Array<(string|!goog.html.sanitizer.HtmlSanitizerAttributePolicy)>}
+ *     attrWhitelist The subset of attributes that the sanitizer will accept.
+ *     Attributes can come in of two forms:
+ *     - string: allow all values for this attribute on all tags.
+ *     - HtmlSanitizerAttributePolicy: allows specifying a policy for a
+ *         particular tag. The tagName can be "*", which means all tags. If no
+ *         policy is passed, the default is to allow all values.
+ *     The tag and attribute names are case-insensitive.
+ *     Note that the policy for id, URLs, names etc is controlled separately
+ *     (using withCustom* methods).
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ * @throws {Error} Thrown if an attempt is made to allow a non-whitelisted
+ *     attribute.
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowAttributes =
+    function(attrWhitelist) {
+  var oldWhitelist = this.attributeWhitelist_;
+  this.attributeWhitelist_ = {};
+  goog.array.forEach(attrWhitelist, function(attr) {
+    if (goog.typeOf(attr) === 'string') {
+      attr = {tagName: '*', attributeName: attr.toUpperCase(), policy: null};
+    }
+    var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
+        attr.tagName, attr.attributeName);
+    if (!oldWhitelist[handlerName]) {
+      throw new Error('Only whitelisted attributes can be allowed.');
+    }
+    this.attributeWhitelist_[handlerName] = attr.policy ?
+        attr.policy :
+        /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+            goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
   }, this);
   return this;
 };
@@ -537,6 +613,51 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
 
 
 /**
+ * Wraps a custom policy function with the sanitizer's default policy.
+ * @param {?goog.html.sanitizer.HtmlSanitizerPolicy} customPolicy The custom
+ *     policy for the tag/attribute combination.
+ * @param {!goog.html.sanitizer.HtmlSanitizerPolicy} defaultPolicy The
+ *     sanitizer's policy that is always called after the custom policy.
+ * @return {!goog.html.sanitizer.HtmlSanitizerPolicy}
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.wrapPolicy_ = function(
+    customPolicy, defaultPolicy) {
+  return /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (function(
+      value, hints, ctx, policy) {
+    var result = customPolicy(value, hints, ctx, policy);
+    if (goog.isNull(result)) {
+      return null;
+    }
+    return defaultPolicy(result, hints, ctx, policy);
+  });
+};
+
+
+/**
+ * Installs the sanitizer's default policy for a specific tag/attribute
+ * combination on the provided whitelist, but only if a policy already exists.
+ *
+ * @param {!Object<string, goog.html.sanitizer.HtmlSanitizerPolicy>} wl The
+ *     whitelist to modify.
+ * @param {!Object<string, boolean>} ol The set of attributes handlers that
+ *     should not be wrapped with a default policy.
+ * @param {string} key The tag/attribute combination
+ * @param {!goog.html.sanitizer.HtmlSanitizerPolicy} defaultPolicy The
+ * sanitizer's
+ *     policy.
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.installDefaultPolicy_ = function(
+    wl, ol, key, defaultPolicy) {
+  if (wl[key] && !ol[key]) {
+    wl[key] =
+        goog.html.sanitizer.HtmlSanitizer.wrapPolicy_(wl[key], defaultPolicy);
+  }
+};
+
+
+/**
  * Build and return a goog.html.sanitizer.HtmlSanitizer object.
  * @return {!goog.html.sanitizer.HtmlSanitizer}
  */
@@ -545,15 +666,20 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
     this.tagBlacklist_['FORM'] = true;
   }
 
+  var installPolicy = goog.html.sanitizer.HtmlSanitizer.installDefaultPolicy_;
+
   // Binding all the non-trivial attribute sanitizers to the appropriate,
   // potentially customizable, handling functions at build().
-  this.attributeWhitelist_['* USEMAP'] =
+  installPolicy(
+      this.attributeWhitelist_, this.attributeOverrideList_, '* USEMAP',
       /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
-          goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_);
+          goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_));
 
   var urlAttributes = ['* ACTION', '* CITE', '* HREF'];
   goog.array.forEach(urlAttributes, function(attribute) {
-    this.attributeWhitelist_[attribute] = this.urlPolicy_;
+    installPolicy(
+        this.attributeWhitelist_, this.attributeOverrideList_, attribute,
+        this.urlPolicy_);
   }, this);
 
   var networkUrlAttributes = [
@@ -561,34 +687,46 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
     '* LONGDESC', '* SRC', 'LINK HREF'
   ];
   goog.array.forEach(networkUrlAttributes, function(attribute) {
-    this.attributeWhitelist_[attribute] = this.networkRequestUrlPolicy_;
+    installPolicy(
+        this.attributeWhitelist_, this.attributeOverrideList_, attribute,
+        this.networkRequestUrlPolicy_);
   }, this);
 
   var nameAttributes = ['* FOR', '* HEADERS', '* NAME'];
   goog.array.forEach(nameAttributes, function(attribute) {
-    this.attributeWhitelist_[attribute] =
+    installPolicy(
+        this.attributeWhitelist_, this.attributeOverrideList_, attribute,
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
-            goog.html.sanitizer.HtmlSanitizer.sanitizeName_, this.namePolicy_));
+            goog.html.sanitizer.HtmlSanitizer.sanitizeName_,
+            this.namePolicy_)));
   }, this);
 
-  this.attributeWhitelist_['A TARGET'] =
+  installPolicy(
+      this.attributeWhitelist_, this.attributeOverrideList_, 'A TARGET',
       /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.allowedAttributeValues_,
-          ['_blank', '_self']));
+          ['_blank', '_self'])));
 
-  this.attributeWhitelist_['* CLASS'] =
+  installPolicy(
+      this.attributeWhitelist_, this.attributeOverrideList_, '* CLASS',
       /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeClasses_,
-          this.tokenPolicy_));
+          this.tokenPolicy_)));
 
-  this.attributeWhitelist_['* ID'] =
+  installPolicy(
+      this.attributeWhitelist_, this.attributeOverrideList_, '* ID',
       /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
-          goog.html.sanitizer.HtmlSanitizer.sanitizeId_, this.tokenPolicy_));
+          goog.html.sanitizer.HtmlSanitizer.sanitizeId_, this.tokenPolicy_)));
 
   if (this.sanitizeCssPolicy_) {
-    this.attributeWhitelist_['* STYLE'] =
+    installPolicy(
+        this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
-            this.sanitizeCssPolicy_, this.networkRequestUrlPolicy_));
+            this.sanitizeCssPolicy_, this.networkRequestUrlPolicy_)));
+  } else {
+    installPolicy(
+        this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
+        goog.functions.NULL);
   }
 
   return new goog.html.sanitizer.HtmlSanitizer(this);
@@ -1275,9 +1413,6 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttribute_ = function(
   if (genericHandlerIndex in this.attributeHandlers_) {
     var handler = this.attributeHandlers_[genericHandlerIndex];
     return handler(unsanitizedAttrValue, policyHints, policyContext);
-  } else if (genericHandlerIndex in goog.html.sanitizer.AttributeWhitelist) {
-    return goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(
-        unsanitizedAttrValue, policyHints);
   }
   return null;
 };
