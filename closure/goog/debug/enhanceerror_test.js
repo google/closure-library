@@ -23,6 +23,7 @@ var THROW_NPE = 2;
 var THROW_ERROR = 3;
 var THROW_ENHANCED_ERROR = 4;
 var THROW_ENHANCED_STRING = 5;
+var THROW_OBJECT = 6;
 
 if (typeof debug == 'undefined') {
   function debug(str) {
@@ -34,7 +35,7 @@ function testEnhanceError() {
   // Tests are like this:
   // [test num, expect something in the stack, expect an extra message]
   var tests = [
-    [THROW_STRING], [THROW_NPE], [THROW_ERROR],
+    [THROW_STRING], [THROW_OBJECT], [THROW_NPE], [THROW_ERROR],
     [THROW_ENHANCED_ERROR, 'throwEnhancedError', 'an enhanced error'],
     [THROW_ENHANCED_STRING, 'throwEnhancedString']
   ];
@@ -106,6 +107,9 @@ function baz(testNum) {
       case THROW_ENHANCED_STRING:
         throwEnhancedString();
         break;
+      case THROW_OBJECT:
+        throwObject();
+        break;
     }
   } catch (e) {
     throw goog.debug.enhanceError(e, 'message from baz');
@@ -131,4 +135,11 @@ function throwEnhancedError() {
 
 function throwEnhancedString() {
   throw goog.debug.enhanceError('oh nos!');
+}
+
+/**
+ * @throws {*}
+ */
+function throwObject() {
+  throw {property: 'value'};
 }

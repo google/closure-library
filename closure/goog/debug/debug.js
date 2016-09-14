@@ -347,19 +347,18 @@ goog.debug.normalizeErrorObject = function(err) {
 
 
 /**
- * Converts an object to an Error if it's a String,
- * adds a stacktrace if there isn't one,
- * and optionally adds an extra message.
- * @param {Error|string} err  the original thrown object or string.
+ * Converts an object to an Error using the object's toString if it's not
+ * already an Error, adds a stacktrace if there isn't one, and optionally adds
+ * an extra message.
+ * @param {*} err The original thrown error, object, or string.
  * @param {string=} opt_message  optional additional message to add to the
  *     error.
- * @return {!Error} If err is a string, it is used to create a new Error,
- *     which is enhanced and returned.  Otherwise err itself is enhanced
- *     and returned.
+ * @return {!Error} If err is an Error, it is enhanced and returned. Otherwise,
+ *     it is converted to an Error which is enhanced and returned.
  */
 goog.debug.enhanceError = function(err, opt_message) {
   var error;
-  if (typeof err == 'string') {
+  if (!(err instanceof Error)) {
     error = Error(err);
     if (Error.captureStackTrace) {
       // Trim this function off the call stack, if we can.
