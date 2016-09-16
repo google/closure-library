@@ -88,6 +88,60 @@ function testGetParserByResponseHeader() {
 }
 
 
+function testNoData() {
+  xhrReader.setDataHandler(function(messages) {
+    fail('Received unexpected messages: ' + messages);
+  });
+
+  var streamStatus = [];
+  var httpStatus = [];
+  xhrReader.setStatusHandler(function() {
+    streamStatus.push(xhrReader.getStatus());
+    httpStatus.push(xhrIo.getStatus());
+  });
+
+  var headers = {'Content-Type': 'application/json'};
+  xhrIo.send('/foo/bar');
+  xhrIo.simulateResponse(goog.net.HttpStatus.OK, '', headers);
+
+  assertElementsEquals([Status.NO_DATA], streamStatus);
+
+  // TODO(user): make this assertion pass (b/31500692)
+  // assertElementsEquals([goog.net.HttpStatus.OK], httpStatus);
+}
+
+
+function testRetrieveHttpStatusInStatusHandler() {
+  var received = [];
+  xhrReader.setDataHandler(function(messages) {
+    received.push(messages);
+  });
+
+  var streamStatus = [];
+  var httpStatus = [];
+  xhrReader.setStatusHandler(function() {
+    console.log('in setStatusHandler');
+    streamStatus.push(xhrReader.getStatus());
+    httpStatus.push(xhrIo.getStatus());
+  });
+
+  var headers = {'Content-Type': 'application/json'};
+  xhrIo.send('/foo/bar');
+  xhrIo.simulateResponse(goog.net.HttpStatus.OK, '[{"1" : "b"}]', headers);
+
+  assertEquals(1, received.length);
+  assertEquals(1, received[0].length);
+  assertElementsEquals(['1'], goog.object.getKeys(received[0][0]));
+  assertElementsEquals('b', received[0][0][1]);
+
+  assertElementsEquals([Status.ACTIVE, Status.SUCCESS], streamStatus);
+
+  // TODO(user): make this assertion pass (b/31500692)
+  // assertElementsEquals(
+  //     [goog.net.HttpStatus.OK, goog.net.HttpStatus.OK], httpStatus);
+}
+
+
 function testParsingSingleMessage() {
   var received = [];
   xhrReader.setDataHandler(function(messages) { received.push(messages); });
@@ -97,7 +151,8 @@ function testParsingSingleMessage() {
     'Content-Type': 'application/x-protobuf',
     'Content-Transfer-Encoding': 'BASE64'
   };
-  xhrIo.simulateResponse(200, body, headers);
+  xhrIo.send('/foo/bar');
+  xhrIo.simulateResponse(goog.net.HttpStatus.OK, body, headers);
 
   assertEquals(1, received.length);
   assertEquals(1, received[0].length);
@@ -127,6 +182,8 @@ function testParsingMultipleMessages() {
     'Content-Type': 'application/x-protobuf',
     'Content-Transfer-Encoding': 'BASE64'
   };
+
+  xhrIo.send('/foo/bar');
 
   xhrIo.simulatePartialResponse(chunk1, headers);
   assertEquals(0, received.length);
