@@ -429,11 +429,11 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
       }
     }
   } else if (
-      be.keyIdentifier &&
-      be.keyIdentifier in goog.events.KeyHandler.keyIdentifier_) {
+      be.key &&
+      be.key in goog.events.KeyHandler.keyIdentifier_) {
     // This is needed for Safari Windows because it currently doesn't give a
     // keyCode/which for non printable keys.
-    key = goog.events.KeyHandler.keyIdentifier_[be.keyIdentifier];
+    key = goog.events.KeyHandler.keyIdentifier_[be.key];
   }
 
   // If we get the same keycode as a keydown/keypress without having seen a
