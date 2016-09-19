@@ -19,12 +19,13 @@
 
 goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
 goog.require('goog.html.sanitizer.TagWhitelist');
 goog.require('goog.html.sanitizer.unsafe');
+
+goog.require('goog.dom');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.html.testing');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
@@ -1268,6 +1269,7 @@ function testSpanNotCorrectedByBrowsersInner() {
       });
 }
 
+
 function testTemplateTagToSpan() {
   var input = '<template alt="yes"><p>q</p></template>';
   var expected = '<span alt="yes"><p>q</p></span>';
@@ -1310,4 +1312,135 @@ function testTemplateNested() {
   goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, ['TEMPLATE']);
   assertSanitizedHtml(input, expected, builder.build());
   goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
+}
+
+
+function testOnlyAllowEmptyAttrList() {
+  var input = '<p alt="nope" aria-checked="true" zzz="1">b</p>' +
+      '<a target="_blank">c</a>';
+  var expected = '<p>b</p><a>c</a>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .onlyAllowAttributes([])
+                           .build());
+}
+
+
+function testOnlyAllowUnWhitelistedAttr() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes(
+        ['alt', 'zzz']);
+  });
+}
+
+
+function testOnlyAllowAttributeWildCard() {
+  var input =
+      '<div alt="yes" aria-checked="true"><img alt="yep" avbb="no" /></div>';
+  var expected = '<div alt="yes"><img alt="yep" /></div>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([{tagName: '*', attributeName: 'alt'}])
+          .build());
+}
+
+
+function testOnlyAllowAttributeLabelForA() {
+  var input = '<a label="3" aria-checked="4">fff</a><img label="3" />';
+  var expected = '<a label="3">fff</a><img />';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .onlyAllowAttributes([{
+                             tagName: '*',
+                             attributeName: 'label',
+                             policy: function(value, hints) {
+                               if (hints.tagName !== 'a') {
+                                 return null;
+                               }
+                               return value;
+                             }
+                           }])
+                           .build());
+}
+
+
+function testOnlyAllowAttributePolicy() {
+  var input = '<img alt="yes" /><img alt="no" />';
+  var expected = '<img alt="yes" /><img />';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .onlyAllowAttributes([{
+                             tagName: '*',
+                             attributeName: 'alt',
+                             policy: function(value, hints) {
+                               assertEquals(hints.attributeName, 'alt');
+                               return value === 'yes' ? value : null;
+                             }
+                           }])
+                           .build());
+}
+
+
+function testOnlyAllowAttributePolicyPipe1() {
+  var input = '<a target="hello">b</a>';
+  var expected = '<a target="_blank">b</a>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .onlyAllowAttributes([{
+                             tagName: 'a',
+                             attributeName: 'target',
+                             policy: function(value, hints) {
+                               assertEquals(hints.attributeName, 'target');
+                               return '_blank';
+                             }
+                           }])
+                           .build());
+}
+
+
+function testOnlyAllowAttributePolicyPipe2() {
+  var input = '<a target="hello">b</a>';
+  var expected = '<a>b</a>';
+  assertSanitizedHtml(
+      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
+                           .onlyAllowAttributes([{
+                             tagName: 'a',
+                             attributeName: 'target',
+                             policy: function(value, hints) {
+                               assertEquals(hints.attributeName, 'target');
+                               return 'nope';
+                             }
+                           }])
+                           .build());
+}
+
+
+function testOnlyAllowAttributeSpecificPolicyThrows() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([
+      {tagName: 'img', attributeName: 'src', policy: goog.functions.identity}
+    ])
+  });
+}
+
+
+function testOnlyAllowAttributeGenericPolicyThrows() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([
+      {tagName: '*', attributeName: 'target', policy: goog.functions.identity}
+    ])
+  });
+}
+
+
+function testOnlyAllowAttributeRefineThrows() {
+  var builder =
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes(
+              ['aria-checked', {tagName: 'LINK', attributeName: 'HREF'}])
+          .onlyAllowAttributes(['aria-checked']);
+  assertThrows(function() {
+    builder.onlyAllowAttributes(['alt']);
+  });
 }

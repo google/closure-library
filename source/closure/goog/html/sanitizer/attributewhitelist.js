@@ -14,14 +14,17 @@
 
 
 /**
- * @fileoverview Contains the attribute whitelist for use in the Html sanitizer.
+ * @fileoverview Contains the attribute whitelists for use in the Html
+ * sanitizer.
  */
 
+goog.provide('goog.html.sanitizer.AttributeSanitizedWhitelist');
 goog.provide('goog.html.sanitizer.AttributeWhitelist');
 
 
 /**
- * A tag whitelist for allowed attributes.
+ * A whitelist for attributes that are always safe and allowed by default.
+ * The sanitizer only applies whitespace trimming to these.
  * @const @dict {boolean}
  */
 goog.html.sanitizer.AttributeWhitelist = {
@@ -91,4 +94,38 @@ goog.html.sanitizer.AttributeWhitelist = {
   '* VALUE': true,
   '* VSPACE': true,
   '* WIDTH': true
+};
+
+/**
+ * A whitelist for attributes that are not safe to allow unrestricted, but are
+ * made safe by default policies installed by the sanitizer in
+ * goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build, and thus allowed
+ * by default under these policies.
+ * @const @dict {boolean}
+ */
+goog.html.sanitizer.AttributeSanitizedWhitelist = {
+
+  // Attributes which can contain URL fragments
+  '* USEMAP': true,
+  // Attributes which can contain URLs
+  '* ACTION': true,
+  '* CITE': true,
+  '* HREF': true,
+  // Attributes which can cause network requests
+  '* LONGDESC': true,
+  '* SRC': true,
+  'LINK HREF': true,
+  // Prevents clobbering
+  '* FOR': true,
+  '* HEADERS': true,
+  '* NAME': true,
+  // Controls where a window is opened. Prevents tab-nabbing
+  'A TARGET': true,
+
+  // Attributes which could cause UI redressing.
+  '* CLASS': true,
+  '* ID': true,
+
+  // CSS style can cause network requests and XSSs
+  '* STYLE': true
 };

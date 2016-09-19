@@ -102,6 +102,14 @@ goog.net.WebChannel = function() {};
  * deprecated after v9 wire protocol is introduced. Only safe to set if the
  * server is known to support this feature.
  *
+ * httpSessionIdParam: the URL parameter name that contains the session id (
+ * for sticky routing of HTTP requests). When this param is specified, a server
+ * that supports this option will respond with an opaque session id as part of
+ * the initial handshake (via the X-HTTP-Session-Id header); and all the
+ * subsequent requests will contain the httpSessionIdParam. This option will
+ * take precedence over any duplicated parameter specified with
+ * messageUrlParams, whose value will be ignored.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   messageUrlParams: (!Object<string, string>|undefined),
@@ -109,7 +117,8 @@ goog.net.WebChannel = function() {};
  *   concurrentRequestLimit: (number|undefined),
  *   supportsCrossDomainXhr: (boolean|undefined),
  *   testUrl: (string|undefined),
- *   sendRawJson: (boolean|undefined)
+ *   sendRawJson: (boolean|undefined),
+ *   httpSessionIdParam: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
@@ -274,6 +283,16 @@ goog.net.WebChannel.RuntimeProperties.prototype.isSpdyEnabled =
 
 
 /**
+ * For applications to query the current HTTP session id, sent by the server
+ * during the initial handshake.
+ *
+ * @return {?string} the HTTP session id or null if no HTTP session is in use.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
+    goog.abstractMethod;
+
+
+/**
  * This method generates an in-band commit request to the server, which will
  * ack the commit request as soon as all messages sent prior to this commit
  * request have been committed by the application.
@@ -336,7 +355,7 @@ goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
 
 
 /**
- * A special header to indicate to the server what messaging protocol
+ * A request header to indicate to the server the messaging protocol
  * each HTTP message is speaking.
  *
  * @type {string}
@@ -350,3 +369,24 @@ goog.net.WebChannel.X_CLIENT_PROTOCOL = 'X-Client-Protocol';
  * @type {string}
  */
 goog.net.WebChannel.X_CLIENT_PROTOCOL_WEB_CHANNEL = 'webchannel';
+
+
+/**
+ * A response header for the server to signal the wire-protocol that
+ * the browser establishes with the server (or proxy), e.g. "spdy" (aka http/2)
+ * "quic". This information avoids the need to use private APIs to decide if
+ * HTTP requests are multiplexed etc.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_CLIENT_WIRE_PROTOCOL = 'X-Client-Wire-Protocol';
+
+
+/**
+ * A response header for the server to send back the HTTP session id as part of
+ * the initial handshake. The value of the HTTP session id is opaque to the
+ * WebChannel protocol.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_HTTP_SESSION_ID = 'X-HTTP-Session-Id';

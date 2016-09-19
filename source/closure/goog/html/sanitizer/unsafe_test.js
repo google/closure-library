@@ -20,9 +20,9 @@ goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
-
 goog.require('goog.html.sanitizer.TagBlacklist');
 goog.require('goog.html.sanitizer.unsafe');
+
 goog.require('goog.string.Const');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
@@ -218,4 +218,31 @@ function testTemplateUnsanitizedThrowsIE() {
   assertThrows(function() {
     goog.html.sanitizer.unsafe.keepUnsanitizedTemplateContents(just, builder);
   });
+}
+
+
+function testAllowRelaxExistingAttributePolicyWildcard() {
+  var input = '<a href="javascript:alert(1)"></a>';
+  // define a tag-specific one, takes precedence
+  assertSanitizedHtml(
+      input, input, null,
+      [{tagName: 'a', attributeName: 'href', policy: goog.functions.identity}]);
+  // overwrite the global one
+  assertSanitizedHtml(
+      input, input, null,
+      [{tagName: '*', attributeName: 'href', policy: goog.functions.identity}]);
+}
+
+
+function testAllowRelaxExistingAttributePolicySpecific() {
+  var input = '<a target="foo"></a>';
+  var expected = '<a></a>';
+  // overwrite the global one, the specific one still has precedence
+  assertSanitizedHtml(input, expected, null, [
+    {tagName: '*', attributeName: 'target', policy: goog.functions.identity}
+  ]);
+  // overwrite the tag-specific one, this one should take precedence
+  assertSanitizedHtml(input, input, null, [
+    {tagName: 'a', attributeName: 'target', policy: goog.functions.identity}
+  ]);
 }
