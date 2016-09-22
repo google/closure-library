@@ -445,20 +445,27 @@ goog.debug.MAX_STACK_DEPTH = 50;
  */
 goog.debug.getNativeStackTrace_ = function(fn) {
   var tempErr = new Error();
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(tempErr, fn);
-    return String(tempErr.stack);
-  } else {
-    // IE10, only adds stack traces when an exception is thrown.
+  if (Error.captureStackTrace) {  // intended for Google Chrome
     try {
-      throw tempErr;
+      Error.captureStackTrace(tempErr, fn);
+      return String(tempErr.stack);
     } catch (e) {
-      tempErr = e;
+      // It's higly suspicious that some Firefox add-ons use a library that
+      // implements Error.captureStackTrace but not properly, and calling it can
+      // result in an exception.
+      // Falling back to the reporting code below in that case.
+      // TODO(user): Revisit this after we see the results. See b/31031162.
     }
-    var stack = tempErr.stack;
-    if (stack) {
-      return String(stack);
-    }
+  }
+  // IE10, only adds stack traces when an exception is thrown.
+  try {
+    throw tempErr;
+  } catch (e) {
+    tempErr = e;
+  }
+  var stack = tempErr.stack;
+  if (stack) {
+    return String(stack);
   }
   return null;
 };
