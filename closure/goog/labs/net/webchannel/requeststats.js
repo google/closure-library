@@ -17,6 +17,7 @@
  * ChannelRequest.
  *
  * @visibility {:internal}
+ * @visibility {:legacy_users}
  */
 
 
