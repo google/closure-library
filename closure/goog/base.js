@@ -1218,7 +1218,14 @@ if (goog.DEPENDENCIES_ENABLED) {
     } else if (goog.TRANSPILE == 'never') {
       return false;
     } else if (!goog.transpiledLanguages_) {
-      goog.transpiledLanguages_ = {'es5': true, 'es6': true, 'es6-impl': true};
+      goog.transpiledLanguages_ = {
+        'es3': false,
+        'es5': true,
+        'es6': true,
+        'es6-impl': true,
+        'es7': true,
+        'es8': true
+      };
       /** @preserveTry */
       try {
         // Perform some quick conformance checks, to distinguish
@@ -1243,6 +1250,11 @@ if (goog.DEPENDENCIES_ENABLED) {
           // TODO(joeltine): Remove es6-impl references for http://31340605.
           goog.transpiledLanguages_['es6-impl'] = false;
         }
+
+        // ** and **= are the only new features in 'es7'
+        goog.transpiledLanguages_['es7'] = !eval('2**2==4');
+        // async functions are the only new features in 'es8'
+        goog.transpiledLanguages_['es8'] = !eval('async () => 1, true');
       } catch (err) {
       }
     }
