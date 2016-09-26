@@ -1575,7 +1575,20 @@ goog.transpile_ = function(code, path) {
       // need it, we're about to load and write the ES6 code synchronously,
       // so a normal script-tag load will be too slow.
       eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
-      // Note: transpile.js reassigns goog.global['$jscomp'] so pull it again.
+      // Even though the transpiler is optional, if $gwtExport is found, it's
+      // a sign the transpiler was loaded and the $jscomp.transpile *should*
+      // be there.
+      if (goog.global['$gwtExport'] && goog.global['$gwtExport']['$jscomp'] &&
+          !goog.global['$gwtExport']['$jscomp']['transpile']) {
+        throw new Error(
+            'The transpiler did not properly export the "transpile" ' +
+            'method. $gwtExport: ' + JSON.stringify(goog.global['$gwtExport']));
+      }
+      // transpile.js only exports a single $jscomp function, transpile. We
+      // grab just that and add it to the existing definition of $jscomp which
+      // contains the polyfills.
+      goog.global['$jscomp'].transpile =
+          goog.global['$gwtExport']['$jscomp']['transpile'];
       jscomp = goog.global['$jscomp'];
       transpile = jscomp.transpile;
     }
