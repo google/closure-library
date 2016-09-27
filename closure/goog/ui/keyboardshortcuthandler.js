@@ -454,8 +454,8 @@ goog.ui.KeyboardShortcutHandler.prototype.setAllowSpaceKeyOnButtons = function(
  *
  * param {number} keyCode Numeric code for key
  * param {number=} opt_modifiers Bitmap indicating required modifier keys.
- *                goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
- *                ALT, or META.
+ *                goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CTRL, ALT,
+ *                or META.
  *
  * The last two parameters can be repeated any number of times to create a
  * shortcut using a sequence of strokes. Instead of varagrs the second parameter
@@ -496,8 +496,8 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  *
  * param {number} keyCode Numeric code for key
  * param {number=} opt_modifiers Bitmap indicating required modifier keys.
- *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
- *                 ALT, or META.
+ *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CTRL, ALT,
+ *                 or META.
  *
  * The two parameters can be repeated any number of times to create a shortcut
  * using a sequence of strokes.
@@ -523,8 +523,8 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
  *
  * param {number} keyCode Numeric code for key
  * param {number=} opt_modifiers Bitmap indicating required modifier keys.
- *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
- *                 ALT, or META.
+ *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CTRL, ALT,
+ *                 or META.
  *
  * The two parameters can be repeated any number of times to create a shortcut
  * using a sequence of strokes.
