@@ -1105,15 +1105,14 @@ goog.string.removeAt = function(s, index, stringLength) {
 
 
 /**
- *  Removes the first occurrence of a substring from a string.
- *  @param {string} s The base string from which to remove.
- *  @param {string} ss The string to remove.
- *  @return {string} A copy of {@code s} with {@code ss} removed or the full
- *      string if nothing is removed.
+ * Removes the first occurrence of a substring from a string.
+ * @param {string} str The base string from which to remove.
+ * @param {string} substr The string to remove.
+ * @return {string} A copy of {@code str} with {@code substr} removed or the
+ *     full string if nothing is removed.
  */
-goog.string.remove = function(s, ss) {
-  var re = new RegExp(goog.string.regExpEscape(ss), '');
-  return s.replace(re, '');
+goog.string.remove = function(str, substr) {
+  return str.replace(substr, '');
 };
 
 
