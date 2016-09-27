@@ -98,6 +98,24 @@ function testGetLocalizedCountryName() {
   assertEquals('und', result);
 }
 
+
+function testGetLocalizedRegionNameFromRegionCode() {
+  var result = goog.locale.getLocalizedRegionNameFromRegionCode('ES');
+  assertEquals('Spanien', result);
+
+  result = goog.locale.getLocalizedRegionNameFromRegionCode(
+      'ES', LocaleNameConstants_en);
+  assertEquals('Spain', result);
+
+  result = goog.locale.getLocalizedRegionNameFromRegionCode('CN');
+  assertEquals('China', result);
+
+  // 'XX' is a non-existing country code, default behavior is to
+  // return the code itself if no mapping is found.
+  result = goog.locale.getLocalizedRegionNameFromRegionCode('XX');
+  assertEquals('XX', result);
+}
+
 function testGetNativeLanguageName() {
   var result = goog.locale.getNativeLanguageName('fr');
   assertEquals('fran\u00E7ais', result);
