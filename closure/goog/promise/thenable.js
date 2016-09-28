@@ -95,7 +95,10 @@ goog.Thenable.IMPLEMENTED_BY_PROP = '$goog_Thenable';
  *     corresponding class must have already implemented the interface.
  */
 goog.Thenable.addImplementation = function(ctor) {
-  goog.exportProperty(ctor.prototype, 'then', ctor.prototype.then);
+  // Use bracket notation instead of goog.exportSymbol() so that the compiler
+  // won't create a 'var ctor;' extern when the "create externs from exports"
+  // mode is enabled.
+  ctor.prototype['then'] = ctor.prototype.then;
   if (COMPILED) {
     ctor.prototype[goog.Thenable.IMPLEMENTED_BY_PROP] = true;
   } else {
