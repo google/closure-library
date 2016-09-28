@@ -52,17 +52,17 @@ able to iterate over the given range.</p>
 <p>Example usage:</p>
  <code>
   var cursor &#61; objectStore.openCursor(goog.db.Range.bound(&#39;a&#39;, &#39;c&#39;));
-</code><code><p>var key &#61; goog.events.listen(
+</code><p><code>var key &#61; goog.events.listen(
 cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
 // Do something with data.
 cursor.next();
-});</p>
-</code><code><p>goog.events.listenOnce(
+});</code></p>
+<p><code>goog.events.listenOnce(
 cursor, goog.db.Cursor.EventType.COMPLETE, function() {
 // Clean up listener, and perform a finishing operation on the data.
 goog.events.unlistenByKey(key);
 });
-</p></code>
+</code></p>
 <table class="info"><tr class="info-row block" ><th class="info-head">Parameters</th><td class="info-cell" ><table class="info detail"><tr class="info-row" ><td class="info-cell" ><var>opt_range</var></td><td class="info-cell" ><code class="expression">(<a href="goog.db.KeyRange.html">goog.db.KeyRange</a>|undefined)</code></td></tr><tr class="info-row" ><td class="info-cell" ></td><td class="info-cell" ><p>The key range. If undefined iterates
 over the whole object store.</p>
 </td></tr><tr class="info-row" ><td class="info-cell" ><var>opt_direction</var></td><td class="info-cell" ><code class="expression">(<a href="goog.db.Cursor.Direction.html">goog.db.Cursor.Direction</a>|undefined)</code></td></tr><tr class="info-row" ><td class="info-cell" ></td><td class="info-cell" ><p>The direction. If undefined
