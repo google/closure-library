@@ -15,12 +15,16 @@ See the COPYING file for details.
    Closure Unit Tests - goog.ui.ac.Renderer
   </title>
   <style type="text/css">
-   #viewport {
-  width: 400px;
-  height: 200px;
-  overflow: hidden; /* Suppress scroll bars to get consistent cross-browser resizing */
-  position: relative;
-}
+    #widthProvider {
+      width: 100px;
+    }
+
+    #viewport {
+      width: 400px;
+      height: 200px;
+      overflow: hidden; /* Suppress scroll bars to get consistent cross-browser resizing */
+      position: relative;
+    }
   </style>
   <script src="../../base.js">
   </script>
@@ -30,6 +34,7 @@ See the COPYING file for details.
  </head>
  <body>
   <div id="someElement">Click target</div>
+  <div id="widthProvider">Providing width</div>
   <div id="target">Target</div>
   <div id="viewport">
     Parent (viewport) element for some tests

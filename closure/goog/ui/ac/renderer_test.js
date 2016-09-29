@@ -35,6 +35,7 @@ var someElement;
 var target;
 var viewport;
 var viewportTarget;
+var widthProvder;
 var propertyReplacer;
 
 function setUpPage() {
@@ -42,6 +43,7 @@ function setUpPage() {
   target = goog.dom.getElement('target');
   viewport = goog.dom.getElement('viewport');
   viewportTarget = goog.dom.getElement('viewportTarget');
+  widthProvder = goog.dom.getElement('widthProvider');
   propertyReplacer = new goog.testing.PropertyReplacer();
 }
 
@@ -610,6 +612,34 @@ function testReposition() {
   assertEquals(0 + targetOffset.x, rendererOffset.x);
   assertRoughlyEquals(targetOffset.y + targetSize.height, rendererOffset.y, 1);
 }
+
+function testSetWidthProvider() {
+  renderer.setWidthProvider(widthProvder);
+  renderer.renderRows(rendRows, '');
+  var el = renderer.getElement();
+  el.style.width = '1px';
+
+  renderer.redraw();
+
+  var rendererSize = goog.style.getSize(el);
+  var widthProviderSize = goog.style.getSize(widthProvder);
+  assertEquals(rendererSize.width, widthProviderSize.width);
+}
+
+function testSetWidthProviderWithBorderWidth() {
+  var borderWidth = 5;
+  renderer.setWidthProvider(widthProvder, borderWidth);
+  renderer.renderRows(rendRows, '');
+  var el = renderer.getElement();
+  el.style.width = '1px';
+
+  renderer.redraw();
+
+  var rendererSize = goog.style.getSize(el);
+  var widthProviderSize = goog.style.getSize(widthProvder);
+  assertEquals(rendererSize.width, widthProviderSize.width - borderWidth);
+}
+
 
 function testRepositionWithRightAlign() {
   renderer.renderRows(rendRows, '', target);
