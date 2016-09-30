@@ -179,6 +179,132 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
 
 
 /**
+ * Creates a TrustedResourceUrl from a format string and arguments.
+ *
+ * The arguments for interpolation into the format string map labels to values.
+ * Values of type goog.string.Const are interpolated without modifcation.
+ * Values of other types are cast to string and encoded with
+ * encodeURIComponent.
+ *
+ * %{<label>} markers are used in the format string to indicate locations
+ * to be interpolated with the valued mapped to the given label. <label>
+ * must contain only alphanumeric and '_' characters.
+ *
+ * The format string must start with one of the following:
+ * - https://<origin>/<pathStart>
+ * - //<origin>/<pathStart>
+ * - /<pathStart>
+ *
+ * <origin> must contain only alphanumeric, '-', .', ':', '[', and ']'.
+ * <pathStart> must contain only alphanumeric, '_', '~', and '-'. If other
+ * characters follow it, it must end with '/', '#' or '?'.
+ *
+ * Example usage:
+ * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *     'https://www.google.com/search?q=%{query}), {query: searchTerm});
+ *
+ * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *    '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
+ *        videoId: videoId,
+ *        autoplay: opt_autoplay ?
+ *            goog.string.Const.EMPTY : goog.string.Const.from('autoplay=1')
+ *    });
+ *
+ * While this function can be used to create a TrustedResourceUrl from only
+ * constants, fromConstant() and fromConstants() are generally preferable for
+ * that purpose.
+ *
+ * @param {!goog.string.Const} format The format string.
+ * @param {!Object<string, (string|number|!goog.string.Const)>} args Mapping
+ *     of labels to values to be interpolated into the format string.
+ *     goog.string.Const values are interpolated without encoding.
+ * @return {!goog.html.TrustedResourceUrl}
+ * @throws {!Error} On an invalid format string or if a label used in the
+ *     the format string is not present in args.
+ *
+ */
+goog.html.TrustedResourceUrl.format = function(format, args) {
+  var formatStr = goog.string.Const.unwrap(format);
+  if (!goog.html.TrustedResourceUrl.BASE_URL_.test(formatStr)) {
+    throw new Error('Invalid TrustedResourceUrl format: ' + formatStr);
+  }
+  var result = formatStr.replace(
+      goog.html.TrustedResourceUrl.FORMAT_MARKER_, function(match, id) {
+        if (!Object.prototype.hasOwnProperty.call(args, id)) {
+          throw new Error(
+              'Found marker, "' + id + '", in format string, "' + formatStr +
+              '", but no valid label mapping found ' +
+              'in args: ' + JSON.stringify(args));
+        }
+        var arg = args[id];
+        if (arg instanceof goog.string.Const) {
+          return goog.string.Const.unwrap(arg);
+        } else {
+          return encodeURIComponent(String(arg));
+        }
+      });
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(result);
+};
+
+
+/**
+ * @private @const {!RegExp}
+ */
+goog.html.TrustedResourceUrl.FORMAT_MARKER_ = /%{(\w+)}/g;
+
+
+/**
+ * The URL must be absolute, scheme-relative or path-absolute. So it must
+ * start with:
+ * - https:// followed by allowed origin characters.
+ * - // followed by allowed origin characters.
+ * - Nothing (no scheme and origin). There will only be an absolute path.
+ *
+ * We don't enforce a well-formed domain name. So '.' or '1.2' are valid.
+ * That's ok because the origin comes from a compile-time constant.
+ * @private @const {string}
+ */
+goog.html.TrustedResourceUrl.SCHEME_AND_ORIGIN_ =
+    '(?:(?:https:)?//[0-9a-z.:[\\]-]+)?';
+
+
+/**
+ * The URL must have a first, constant, absolute-path segment. So the path
+ * must start with /, followed by allowed path characters and a final:
+ * - /, ? or #. These introduce places where it's safe to interpolate --
+ *   a new path segment, the query or the fragment.
+ * - The regexp $ metacharacter, indicating that nothing else follows.
+ *
+ * The characters allowed in the path are unreserved characters:
+ * https://tools.ietf.org/html/rfc3986#section-2.3. '.' is excluded to
+ * disallow "/./" as a path.
+ * @private @const {string}
+ */
+goog.html.TrustedResourceUrl.BASE_ABSOLUTE_PATH_ =
+    '(?:/[0-9a-z_~-]+(?:[/#?]|$))';
+
+
+/**
+ * A regular expression is used instead of goog.uri for several reasons:
+ * - Strictness. E.g. we don't want any userinfo component and we don't
+ *   want '/./, nor \' in the first path component.
+ * - Small trusted base. goog.uri is generic and might need to change,
+ *   reasoning about all the ways it can parse a URL now and in the future
+ *   is error-prone.
+ * - Code size. We expect many calls to .format(), many of which might
+ *   not be using goog.uri.
+ * - Simplicity. Using goog.uri would likely not result in simpler nor shorter
+ *   code.
+ * @private @const {!RegExp}
+ */
+goog.html.TrustedResourceUrl.BASE_URL_ = new RegExp(
+    '^' + goog.html.TrustedResourceUrl.SCHEME_AND_ORIGIN_ +
+        goog.html.TrustedResourceUrl.BASE_ABSOLUTE_PATH_,
+    'i');
+
+
+/**
  * Creates a TrustedResourceUrl object from a compile-time constant string.
  *
  * Compile-time constant strings are inherently program-controlled and hence
