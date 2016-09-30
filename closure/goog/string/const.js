@@ -177,3 +177,10 @@ goog.string.Const.create__googStringSecurityPrivate_ = function(s) {
       s;
   return stringConst;
 };
+
+
+/**
+ * A Const instance wrapping the empty string.
+ * @const {!goog.string.Const}
+ */
+goog.string.Const.EMPTY = goog.string.Const.from('');
