@@ -205,6 +205,7 @@ goog.ui.ac.InputHandler = function(
   this.lastKeyCode_ = -1;  // Initialize to a non-existent value.
 };
 goog.inherits(goog.ui.ac.InputHandler, goog.Disposable);
+goog.tagUnsealableClass(goog.ui.ac.InputHandler);
 
 
 /**
