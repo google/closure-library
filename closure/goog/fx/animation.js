@@ -381,9 +381,14 @@ goog.fx.Animation.prototype.cycle = function(now) {
   goog.asserts.assertNumber(this.startTime);
   goog.asserts.assertNumber(this.endTime);
   goog.asserts.assertNumber(this.lastFrame);
+  // Happens in rare system clock reset.
+  if (now < this.startTime) {
+    this.endTime = now + this.endTime - this.startTime;
+    this.startTime = now;
+  }
   this.progress = (now - this.startTime) / (this.endTime - this.startTime);
 
-  if (this.progress >= 1) {
+  if (this.progress > 1) {
     this.progress = 1;
   }
 
