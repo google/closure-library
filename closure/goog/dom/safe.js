@@ -645,7 +645,7 @@ goog.dom.safe.assertIsHTMLScriptElement_ = function(o) {
 };
 
 /**
- * Returns a string representation of a value's type. 
+ * Returns a string representation of a value's type.
  *
  * @param {*} value An object, or primitive.
  * @return {string} The best display name for the value.
