@@ -711,20 +711,6 @@ function testGeckoShortcuts() {
   listener.$verify();
 }
 
-function testWindowsWithoutFFMultiKeyShortcuts() {
-  listener.shortcutFired('1');
-
-  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
-    listener.$replay();
-
-    handler.registerShortcut('1', 'ctrl+alt+n c');
-    fire(KeyCodes.N, {ctrlKey: true, altKey: true});
-    fire(KeyCodes.C);
-
-    listener.$verify();
-  }
-}
-
 function testRegisterShortcut_modifierOnly() {
   assertThrows(
       'Registering a shortcut with just modifiers should fail.',

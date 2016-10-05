@@ -967,6 +967,14 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (!this.isValidShortcut_(event)) {
     return;
   }
+  // For possible printable-key events, we cannot identify whether the events
+  // are used for typing characters until we receive respective keyup events.
+  // Therefore, we handle this event when we receive a succeeding keyup event
+  // to verify this event is not used for typing characters.
+  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
+    this.isPrintableKey_ = false;
+    return;
+  }
 
   var keyCode = goog.events.KeyCodes.normalizeKeyCode(event.keyCode);
 
@@ -998,16 +1006,6 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     event.preventDefault();
     return;
   }
-
-  // For possible printable-key events, we cannot identify whether the events
-  // are used for typing characters until we receive respective keyup events.
-  // Therefore, we handle this event when we receive a succeeding keyup event
-  // to verify this event is not used for typing characters.
-  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
-    this.isPrintableKey_ = false;
-    return;
-  }
-
   // This stroke triggers a shortcut. Any active sequence has been completed, so
   // reset the sequence tree.
   this.setCurrentTree_(this.shortcuts_);
