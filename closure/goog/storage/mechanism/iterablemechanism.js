@@ -20,7 +20,6 @@
 
 goog.provide('goog.storage.mechanism.IterableMechanism');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.iter');
 goog.require('goog.storage.mechanism.Mechanism');
@@ -78,7 +77,7 @@ goog.storage.mechanism.IterableMechanism.prototype.__iterator__ =
  * efficient - it iterates over all keys.
  */
 goog.storage.mechanism.IterableMechanism.prototype.clear = function() {
-  var keys = goog.iter.toArray(this.__iterator__(true));
-  var selfObj = this;
-  goog.array.forEach(keys, function(key) { selfObj.remove(key); });
+  goog.iter.forEach(this.__iterator__(true), goog.bind(function(key) {
+    this.remove(key);
+  }, this));
 };
