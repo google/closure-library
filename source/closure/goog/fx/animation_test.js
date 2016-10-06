@@ -99,6 +99,30 @@ function testPauseOffset() {
   assertEquals(goog.fx.Animation.State.STOPPED, anim.getStateInternal());
 }
 
+function testClockReset() {
+  var anim = new goog.fx.Animation([0], [1000], 1000);
+  anim.play();
+
+  assertEquals(0, anim.coords[0]);
+  assertRoughlyEquals(0, anim.progress, 1e-4);
+
+  // Possible when clock is reset.
+  clock.tick(-200000);
+  anim.pause();
+  anim.play();
+
+  assertEquals(0, anim.coords[0]);
+  assertRoughlyEquals(0, anim.progress, 1e-4);
+
+  // Animation shoud still only last a second.
+  clock.tick(900);
+  anim.pause();
+  anim.play();
+
+  assertEquals(900, anim.coords[0]);
+  assertRoughlyEquals(0.9, anim.progress, 1e-4);
+}
+
 function testSetProgress() {
   var anim = new goog.fx.Animation([0], [1000], 3000);
   var nFrames = 0;

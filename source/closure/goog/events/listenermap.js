@@ -22,7 +22,6 @@
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
  * @visibility {//closure/goog/events:__pkg__}
  * @visibility {//closure/goog/labs/events:__pkg__}
- * @visibility {:legacy_users}
  */
 
 goog.provide('goog.events.ListenerMap');
