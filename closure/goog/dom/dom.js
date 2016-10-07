@@ -1911,11 +1911,14 @@ goog.dom.isFocusable = function(element) {
  * @private
  */
 goog.dom.hasSpecifiedTabIndex_ = function(element) {
-  // IE returns 0 for an unset tabIndex, so we must use getAttributeNode(),
-  // which returns an object with a 'specified' property if tabIndex is
-  // specified.  This works on other browsers, too.
-  var attrNode = element.getAttributeNode('tabindex');  // Must be lowercase!
-  return goog.isDefAndNotNull(attrNode) && attrNode.specified;
+  // IE7 and below don't support hasAttribute(), instead check whether the
+  // 'tabindex' attributeNode is specified. Otherwise check hasAttribute().
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
+    var attrNode = element.getAttributeNode('tabindex');  // Must be lowercase!
+    return goog.isDefAndNotNull(attrNode) && attrNode.specified;
+  } else {
+    return element.hasAttribute('tabindex');
+  }
 };
 
 
