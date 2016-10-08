@@ -110,6 +110,8 @@ MockChannelRequest.prototype.postData_ = null;
 
 MockChannelRequest.prototype.requestStartTime_ = null;
 
+MockChannelRequest.prototype.requestUri_ = null;
+
 MockChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {};
 
 MockChannelRequest.prototype.setTimeout = function(timeout) {};
@@ -129,11 +131,13 @@ MockChannelRequest.prototype.xmlHttpGet = function(
     uri, decodeChunks, opt_noClose) {
   this.channelDebug_.debug(
       '<--- GET: ' + uri + ', ' + decodeChunks + ', ' + opt_noClose);
+  this.requestUri_ = uri;
   this.requestStartTime_ = goog.now();
 };
 
 MockChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
   this.channelDebug_.debug('<---GET (T): ' + uri);
+  this.requestUri_ = uri;
   this.requestStartTime_ = goog.now();
 };
 
@@ -1266,6 +1270,7 @@ function testCreateXhrIo() {
   assertTrue(xhr.getWithCredentials());
 }
 
+
 function testSetParser() {
   var recordUnsafeParse = goog.testing.recordFunction(goog.json.unsafeParse);
   var parser = {};
@@ -1287,4 +1292,35 @@ function testSetParser() {
 
   assertEquals(1, call3.getArguments().length);
   assertEquals('[[1,["foo"]]]', call3.getArgument(0));
+}
+
+
+function testAsyncTest() {
+  browserChannel.asyncTest_ = true;
+  browserChannel.connect('/test', '/bind');
+  mockClock.tick(0);
+
+  // We first establish the channel, assuming it is buffered.
+  assertNotNull(browserChannel.forwardChannelRequest_);
+  assertNull(browserChannel.connectionTest_);
+  assertTrue(browserChannel.isBuffered());
+
+  // Since we're assuming the channel is buferred, the "Close Immediately" flag
+  // should be set.
+  completeForwardChannel();
+  assertEquals(
+      '1', browserChannel.backChannelRequest_.requestUri_.queryData_.get('CI'));
+
+  mockClock.tick(100);
+
+  // Now, we perform the test which reveals the channel is not buffered.
+  assertNotNull(browserChannel.connectionTest_);
+  completeForwardTestConnection();
+  completeBackTestConnection();
+  assertFalse(browserChannel.isBuffered());
+
+  // From now on, the "Close Immediately" flag should not be set.
+  completeBackChannel();
+  assertEquals(
+      '0', browserChannel.backChannelRequest_.requestUri_.queryData_.get('CI'));
 }
