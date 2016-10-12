@@ -69,3 +69,15 @@ function testMockUserAgentNavigator() {
   assertTrue(mockUserAgent.installed_);
   assertEquals(fakeNavigator, goog.userAgent.getNavigator());
 }
+
+function testMockUserAgentDocumentMode() {
+  var fakeDocumentMode = -1;
+
+  mockUserAgent = new goog.testing.MockUserAgent();
+  mockUserAgent.setDocumentMode(fakeDocumentMode);
+  mockUserAgent.install();
+
+  assertTrue(mockUserAgent.installed_);
+  assertEquals(fakeDocumentMode, goog.userAgent.getDocumentMode_());
+  assertEquals(fakeDocumentMode, goog.userAgent.DOCUMENT_MODE);
+}
