@@ -1244,8 +1244,12 @@ goog.net.XhrIo.prototype.getResponse = function() {
  * @return {string|undefined} The value of the response-header named key.
  */
 goog.net.XhrIo.prototype.getResponseHeader = function(key) {
-  return this.xhr_ && this.isComplete() ? this.xhr_.getResponseHeader(key) :
-                                          undefined;
+  if (!this.xhr_ || !this.isComplete()) {
+    return undefined;
+  }
+
+  var value = this.xhr_.getResponseHeader(key);
+  return goog.isNull(value) ? undefined : value;
 };
 
 

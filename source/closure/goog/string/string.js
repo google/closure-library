@@ -1130,6 +1130,20 @@ goog.string.removeAll = function(s, ss) {
 
 
 /**
+ *  Replaces all occurrences of a substring of a string with a new substring.
+ *  @param {string} s The base string from which to remove.
+ *  @param {string} ss The string to replace.
+ *  @param {string} replacement The replacement string.
+ *  @return {string} A copy of {@code s} with {@code ss} replaced by
+ *      {@code replacement} or the original string if nothing is replaced.
+ */
+goog.string.replaceAll = function(s, ss, replacement) {
+  var re = new RegExp(goog.string.regExpEscape(ss), 'g');
+  return s.replace(re, replacement.replace(/\$/g, '$$$$'));
+};
+
+
+/**
  * Escapes characters in the string that are not safe to use in a RegExp.
  * @param {*} s The string to escape. If not a string, it will be casted
  *     to one.

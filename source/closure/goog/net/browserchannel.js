@@ -71,10 +71,15 @@ goog.require('goog.structs.CircularBuffer');
  *        of the first browser channel test.
  * @param {boolean=} opt_secondTestResults Previously determined results
  *        of the second browser channel test.
+ * @param {boolean=} opt_asyncTest Whether to perform the test requests
+ *        asynchronously. While the test is performed, we'll assume the worst
+ *        (connection is buffered), in order to avoid delaying the connection
+ *        until the test is performed.
  * @constructor
  */
 goog.net.BrowserChannel = function(
-    opt_clientVersion, opt_firstTestResults, opt_secondTestResults) {
+    opt_clientVersion, opt_firstTestResults, opt_secondTestResults,
+    opt_asyncTest) {
   /**
    * The application specific version that is passed to the server.
    * @type {?string}
@@ -137,6 +142,14 @@ goog.net.BrowserChannel = function(
   this.secondTestResults_ = goog.isDefAndNotNull(opt_secondTestResults) ?
       opt_secondTestResults :
       null;
+
+  /**
+   * Whether to perform the test requests asynchronously. While the test is
+   * performed, we'll assume the worst (connection is buffered), in order to
+   * avoid delaying the connection until the test is performed.
+   * @private {boolean}
+   */
+  this.asyncTest_ = opt_asyncTest || false;
 };
 
 
@@ -932,7 +945,13 @@ goog.net.BrowserChannel.prototype.connect = function(
     this.extraParams_['OAID'] = opt_oldArrayId;
   }
 
-  this.connectTest_(testPath);
+  if (this.asyncTest_) {
+    goog.net.BrowserChannel.setTimeout(
+        goog.bind(this.connectTest_, this, testPath), 100);
+    this.connectChannel_();
+  } else {
+    this.connectTest_(testPath);
+  }
 };
 
 
@@ -1735,7 +1754,10 @@ goog.net.BrowserChannel.prototype.testConnectionFinished = function(
 
   this.useChunked_ = this.allowChunkedMode_ && useChunked;
   this.lastStatusCode_ = testChannel.getLastStatusCode();
-  this.connectChannel_();
+  // When using asynchronous test, the channel is already open by connect().
+  if (!this.asyncTest_) {
+    this.connectChannel_();
+  }
 };
 
 
