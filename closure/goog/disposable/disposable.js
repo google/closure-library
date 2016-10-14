@@ -20,7 +20,9 @@
 
 
 goog.provide('goog.Disposable');
+/** @suppress {extraProvide} */
 goog.provide('goog.dispose');
+/** @suppress {extraProvide} */
 goog.provide('goog.disposeAll');
 
 goog.require('goog.disposable.IDisposable');
@@ -44,7 +46,7 @@ goog.Disposable = function() {
   }
   // Support sealing
   this.disposed_ = this.disposed_;
-  this.disposeItems_ = this.disposeItems_;
+  this.onDisposeCallbacks_ = this.onDisposeCallbacks_;
 };
 
 
@@ -130,11 +132,11 @@ goog.Disposable.prototype.disposed_ = false;
 
 
 /**
- * Callbacks to invoke, or objects to dispose, when this object is disposed.
- * @type {!Array<function()|!goog.disposable.IDisposable>}
+ * Callbacks to invoke when this object is disposed.
+ * @type {Array<!Function>}
  * @private
  */
-goog.Disposable.prototype.disposeItems_;
+goog.Disposable.prototype.onDisposeCallbacks_;
 
 
 /**
@@ -199,19 +201,7 @@ goog.Disposable.prototype.dispose = function() {
  *     this object is disposed.
  */
 goog.Disposable.prototype.registerDisposable = function(disposable) {
-  if (!goog.Disposable.isDisposable(disposable) || disposable.isDisposed()) {
-    return;
-  }
-  if (this.disposed_) {
-    disposable.dispose();
-    return;
-  }
-
-  if (!this.disposeItems_) {
-    this.disposeItems_ = [];
-  }
-
-  this.disposeItems_.push(disposable);
+  this.addOnDisposeCallback(goog.partial(goog.dispose, disposable));
 };
 
 
@@ -228,11 +218,11 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
     goog.isDef(opt_scope) ? callback.call(opt_scope) : callback();
     return;
   }
-  if (!this.disposeItems_) {
-    this.disposeItems_ = [];
+  if (!this.onDisposeCallbacks_) {
+    this.onDisposeCallbacks_ = [];
   }
 
-  this.disposeItems_.push(
+  this.onDisposeCallbacks_.push(
       goog.isDef(opt_scope) ? goog.bind(callback, opt_scope) : callback);
 };
 
@@ -264,27 +254,11 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
-  if (this.disposeItems_) {
-    while (this.disposeItems_.length) {
-      var item = this.disposeItems_.shift();
-      if (typeof item === 'function') {
-        item();
-      } else {
-        item.dispose();
-      }
+  if (this.onDisposeCallbacks_) {
+    while (this.onDisposeCallbacks_.length) {
+      this.onDisposeCallbacks_.shift()();
     }
   }
-};
-
-
-/**
- * Returns True if an object "looks like" a disposable.
- * @param {*} obj The object to investigate.
- * @return {boolean}
- */
-goog.Disposable.isDisposable = function(obj) {
-  return !!obj && typeof obj.isDisposed == 'function' &&
-      typeof obj.dispose == 'function';
 };
 
 
