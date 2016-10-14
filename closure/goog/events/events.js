@@ -718,7 +718,7 @@ goog.events.fireListeners_ = function(obj, type, capture, eventObject) {
  *
  * @param {goog.events.Listener} listener The listener object to call.
  * @param {Object} eventObject The event object to pass to the listener.
- * @return {boolean} Result of listener.
+ * @return {*} Result of listener.
  */
 goog.events.fireListener = function(listener, eventObject) {
   var listenerFn = listener.listener;
@@ -789,7 +789,7 @@ goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
  * @param {goog.events.Listener} listener The listener object.
  * @param {Event=} opt_evt Optional event object that gets passed in via the
  *     native event handlers.
- * @return {boolean} Result of the event handler.
+ * @return {*} Result of the event handler.
  * @this {EventTarget} The object or Element that fired the event.
  * @private
  */
@@ -804,7 +804,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     var ieEvent = opt_evt ||
         /** @type {Event} */ (goog.getObjectByName('window.event'));
     var evt = new goog.events.BrowserEvent(ieEvent, this);
-    /** @type {boolean} */
+    /** @type {*} */
     var retval = true;
 
     if (goog.events.CAPTURE_SIMULATION_MODE ==
