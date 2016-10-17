@@ -967,14 +967,6 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (!this.isValidShortcut_(event)) {
     return;
   }
-  // For possible printable-key events, we cannot identify whether the events
-  // are used for typing characters until we receive respective keyup events.
-  // Therefore, we handle this event when we receive a succeeding keyup event
-  // to verify this event is not used for typing characters.
-  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
-    this.isPrintableKey_ = false;
-    return;
-  }
 
   var keyCode = goog.events.KeyCodes.normalizeKeyCode(event.keyCode);
 
@@ -992,20 +984,31 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   }
 
   var node = this.currentTree_[stroke];
-  if (!node) {
-    // This stroke does not correspond to a shortcut or continued sequence.
-    return;
-  }
-  if (node.next) {
+  if (node && node.next) {
     // This stroke does not trigger a shortcut, but entered stroke(s) are a part
     // of a sequence. Progress in the sequence tree and record time to allow the
     // following stroke(s) to trigger the shortcut.
     this.setCurrentTree_(node.next);
+  }
+
+  // For possible printable-key events, we cannot identify whether the events
+  // are used for typing characters until we receive respective keyup events.
+  // Therefore, we handle this event when we receive a succeeding keyup event
+  // to verify this event is not used for typing characters. preventDefault is
+  // not called on the event to avoid disrupting a character input.
+  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
+    this.isPrintableKey_ = false;
+    return;
+  } else if (!node) {
+    // This stroke does not correspond to a shortcut or continued sequence.
+    return;
+  } else if (node.next) {
     // Prevent default action so that the rest of the stroke sequence can be
     // completed.
     event.preventDefault();
     return;
   }
+
   // This stroke triggers a shortcut. Any active sequence has been completed, so
   // reset the sequence tree.
   this.setCurrentTree_(this.shortcuts_);
