@@ -47,6 +47,18 @@ function fire(keycode, opt_extraProperties, opt_element) {
       opt_element || targetDiv, keycode, opt_extraProperties);
 }
 
+/**
+ * Simulates a complete keystroke (keydown, keypress, and keyup) when typing
+ * a non-ASCII character.
+ *
+ * @param {number} keycode The keycode of the keydown and keyup events.
+ * @param {number} keyPressKeyCode The keycode of the keypress event.
+ * @param {Object=} opt_extraProperties Event properties to be mixed into the
+ *     BrowserEvent.
+ * @param {EventTarget=} opt_element Optional target for the event.
+ * @return {boolean} The returnValue of the sequence: false if preventDefault()
+ *     was called on any of the events, true otherwise.
+ */
 function fireAltGraphKey(
     keycode, keyPressKeyCode, opt_extraProperties, opt_element) {
   return goog.testing.events.fireNonAsciiKeySequence(
@@ -656,10 +668,10 @@ function testAltGraphKeyOnPolishLayout_withShift() {
     handler.registerShortcut('letterQ', 'ctrl+alt+shift+Q');
 
     // Send key events on the Polish (Programmer) layout.
-    fireAltGraphKey(
-        KeyCodes.A, 0x0104, {ctrlKey: true, altKey: true, shiftKey: true});
-    fireAltGraphKey(
-        KeyCodes.Q, 0, {ctrlKey: true, altKey: true, shiftKey: true});
+    assertTrue(fireAltGraphKey(
+        KeyCodes.A, 0x0104, {ctrlKey: true, altKey: true, shiftKey: true}));
+    assertFalse(fireAltGraphKey(
+        KeyCodes.Q, 0, {ctrlKey: true, altKey: true, shiftKey: true}));
 
     listener.$verify();
   }
@@ -709,6 +721,33 @@ function testGeckoShortcuts() {
   }
 
   listener.$verify();
+}
+
+function testWindows_multiKeyShortcuts() {
+  if (goog.userAgent.WINDOWS) {
+    listener.shortcutFired('1');
+    listener.$replay();
+
+    handler.registerShortcut('1', 'ctrl+alt+n c');
+    fire(KeyCodes.N, {ctrlKey: true, altKey: true});
+    fire(KeyCodes.C);
+
+    listener.$verify();
+  }
+}
+
+function testWindows_multikeyShortcuts_polishKey() {
+  if (goog.userAgent.WINDOWS) {
+    listener.$replay();
+
+    handler.registerShortcut('announceCursorLocation', 'ctrl+alt+a l');
+
+    // If a Polish key is a subsection of a keyboard shortcut, then
+    // the key should still be written.
+    assertTrue(fireAltGraphKey(
+        KeyCodes.A, 0x0104, {ctrlKey: true, altKey: true}));
+    listener.$verify();
+  }
 }
 
 function testRegisterShortcut_modifierOnly() {
