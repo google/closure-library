@@ -386,6 +386,15 @@ goog.userAgent.IPOD = goog.userAgent.PLATFORM_KNOWN_ ?
 
 
 /**
+ * Whether the user agent is running on iOS.
+ * @type {boolean}
+ */
+goog.userAgent.IOS = goog.userAgent.PLATFORM_KNOWN_ ?
+    (goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD ||
+     goog.userAgent.ASSUME_IPOD) :
+    goog.labs.userAgent.platform.isIos();
+
+/**
  * @return {string} The string that describes the version number of the user
  *     agent.
  * @private
