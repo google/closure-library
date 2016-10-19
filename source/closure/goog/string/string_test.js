@@ -1006,10 +1006,10 @@ function testRegExpEscape() {
   var re = new RegExp('^' + goog.string.regExpEscape(s) + '$');
   assertTrue('All ASCII', re.test(s));
   s = '';
-  var re = new RegExp('^' + goog.string.regExpEscape(s) + '$');
+  re = new RegExp('^' + goog.string.regExpEscape(s) + '$');
   assertTrue('empty string', re.test(s));
   s = allChars(0, 10000);
-  var re = new RegExp('^' + goog.string.regExpEscape(s) + '$');
+  re = new RegExp('^' + goog.string.regExpEscape(s) + '$');
   assertTrue('Unicode', re.test(s));
 }
 
