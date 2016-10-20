@@ -1228,89 +1228,6 @@ if (goog.DEPENDENCIES_ENABLED) {
     }
   };
 
-
-  /**
-   * Returns a newly created map from language mode string to a boolean
-   * indicating whether transpilation should be done for that mode.
-   *
-   * Guaranteed invariant:
-   * For any two modes, l1 and l2 where l2 is a newer mode than l1,
-   * `map[l1] == true` implies that `map[l2] == true`.
-   * @private
-   * @return {!Object<string, boolean>}
-   */
-  goog.createRequiresTranspilation_ = function() {
-    var /** !Object<string, boolean> */ requiresTranspilation = {'es3': false};
-    var transpilationRequiredForAllLaterModes = false;
-
-    /**
-     * Adds an entry to requiresTranspliation for the given language mode.
-     *
-     * IMPORTANT: Calls must be made in order from oldest to newest language
-     * mode.
-     * @param {string} modeName
-     * @param {function(): boolean} isSupported Returns true if the JS engine
-     *     supports the given mode.
-     */
-    function addNewerLanguageTranspilationCheck(modeName, isSupported) {
-      if (transpilationRequiredForAllLaterModes) {
-        requiresTranspilation[modeName] = true;
-      } else if (isSupported()) {
-        requiresTranspilation[modeName] = false;
-      } else {
-        requiresTranspilation[modeName] = true;
-        transpilationRequiredForAllLaterModes = true;
-      }
-    }
-
-    /**
-     * Does the given code evaluate without syntax errors and return a truthy
-     * result?
-     */
-    function /** boolean */ evalCheck(/** string */ code) {
-      try {
-        return !!eval(code);
-      } catch (ignored) {
-        return false;
-      }
-    }
-
-    // Identify ES3-only browsers by their incorrect treatment of commas.
-    addNewerLanguageTranspilationCheck('es5', function() {
-      return evalCheck('[1,].length==1');
-    });
-    addNewerLanguageTranspilationCheck('es6', function() {
-      // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
-      //   (a) default params (specifically shadowing locals),
-      //   (b) destructuring, (c) block-scoped functions,
-      //   (d) for-of (const), (e) new.target/Reflect.construct
-      var es6fullTest =
-          'class X{constructor(){if(new.target!=String)throw 1;this.x=42}}' +
-          'let q=Reflect.construct(X,[],String);if(q.x!=42||!(q instanceof ' +
-          'String))throw 1;for(const a of[2,3]){if(a==2)continue;function ' +
-          'f(z={a}){let a=0;return z.a}{function f(){return 0;}}return f()' +
-          '==3}';
-
-      return evalCheck('(()=>{"use strict";' + es6fullTest + '})()');
-    });
-    // TODO(joeltine): Remove es6-impl references for b/31340605.
-    // Consider es6-impl (widely-implemented es6 features) to be supported
-    // whenever es6 is supported. Technically es6-impl is a lower level of
-    // support than es6, but we don't have tests specifically for it.
-    addNewerLanguageTranspilationCheck('es6-impl', function() {
-      return true;
-    });
-    // ** and **= are the only new features in 'es7'
-    addNewerLanguageTranspilationCheck('es7', function() {
-      return evalCheck('2 ** 2 == 4');
-    });
-    // async functions are the only new features in 'es8'
-    addNewerLanguageTranspilationCheck('es8', function() {
-      return evalCheck('async () => 1, true');
-    });
-    return requiresTranspilation;
-  };
-
   /** @private {?Object<string, boolean>} */
   goog.requiresTranspilation_ = null;
 
@@ -2805,3 +2722,86 @@ goog.tagUnsealableClass = function(ctr) {
  * @const @private {string}
  */
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
+
+
+/**
+ * Returns a newly created map from language mode string to a boolean
+ * indicating whether transpilation should be done for that mode.
+ *
+ * Guaranteed invariant:
+ * For any two modes, l1 and l2 where l2 is a newer mode than l1,
+ * `map[l1] == true` implies that `map[l2] == true`.
+ * @private
+ * @return {!Object<string, boolean>}
+ */
+goog.createRequiresTranspilation_ = function() {
+  var /** !Object<string, boolean> */ requiresTranspilation = {'es3': false};
+  var transpilationRequiredForAllLaterModes = false;
+
+  /**
+   * Adds an entry to requiresTranspliation for the given language mode.
+   *
+   * IMPORTANT: Calls must be made in order from oldest to newest language
+   * mode.
+   * @param {string} modeName
+   * @param {function(): boolean} isSupported Returns true if the JS engine
+   *     supports the given mode.
+   */
+  function addNewerLanguageTranspilationCheck(modeName, isSupported) {
+    if (transpilationRequiredForAllLaterModes) {
+      requiresTranspilation[modeName] = true;
+    } else if (isSupported()) {
+      requiresTranspilation[modeName] = false;
+    } else {
+      requiresTranspilation[modeName] = true;
+      transpilationRequiredForAllLaterModes = true;
+    }
+  }
+
+  /**
+   * Does the given code evaluate without syntax errors and return a truthy
+   * result?
+   */
+  function /** boolean */ evalCheck(/** string */ code) {
+    try {
+      return !!eval(code);
+    } catch (ignored) {
+      return false;
+    }
+  }
+
+  // Identify ES3-only browsers by their incorrect treatment of commas.
+  addNewerLanguageTranspilationCheck('es5', function() {
+    return evalCheck('[1,].length==1');
+  });
+  addNewerLanguageTranspilationCheck('es6', function() {
+    // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
+    //   (a) default params (specifically shadowing locals),
+    //   (b) destructuring, (c) block-scoped functions,
+    //   (d) for-of (const), (e) new.target/Reflect.construct
+    var es6fullTest =
+        'class X{constructor(){if(new.target!=String)throw 1;this.x=42}}' +
+        'let q=Reflect.construct(X,[],String);if(q.x!=42||!(q instanceof ' +
+        'String))throw 1;for(const a of[2,3]){if(a==2)continue;function ' +
+        'f(z={a}){let a=0;return z.a}{function f(){return 0;}}return f()' +
+        '==3}';
+
+    return evalCheck('(()=>{"use strict";' + es6fullTest + '})()');
+  });
+  // TODO(joeltine): Remove es6-impl references for b/31340605.
+  // Consider es6-impl (widely-implemented es6 features) to be supported
+  // whenever es6 is supported. Technically es6-impl is a lower level of
+  // support than es6, but we don't have tests specifically for it.
+  addNewerLanguageTranspilationCheck('es6-impl', function() {
+    return true;
+  });
+  // ** and **= are the only new features in 'es7'
+  addNewerLanguageTranspilationCheck('es7', function() {
+    return evalCheck('2 ** 2 == 4');
+  });
+  // async functions are the only new features in 'es8'
+  addNewerLanguageTranspilationCheck('es8', function() {
+    return evalCheck('async () => 1, true');
+  });
+  return requiresTranspilation;
+};
