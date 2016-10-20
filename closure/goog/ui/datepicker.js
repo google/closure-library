@@ -28,6 +28,7 @@ goog.require('goog.asserts');
 goog.require('goog.date.Date');
 goog.require('goog.date.DateRange');
 goog.require('goog.date.Interval');
+goog.require('goog.date.UtcDateTime');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
@@ -297,6 +298,14 @@ goog.ui.DatePicker.prototype.elMonthYear_ = null;
  */
 goog.ui.DatePicker.prototype.elFootRow_ = null;
 
+/**
+ * The offset from GMT/UTC time in minutes.
+ * Example: EDT would be 240 and JST -540.
+ * @type {number}
+ * @private
+ */
+goog.ui.DatePicker.prototype.timezoneOffset_ = null;
+
 
 /**
  * Generator for unique table cell IDs.
@@ -343,6 +352,33 @@ goog.ui.DatePicker.Events = {
 goog.ui.DatePicker.prototype.isCreated =
     goog.ui.DatePicker.prototype.isInDocument;
 
+/**
+ * @return {number} The timezone offset from UTC in minutes.
+ */
+goog.ui.DatePicker.prototype.getTimezoneOffset = function() {
+  return this.timezoneOffset_;
+};
+
+/**
+ * @return {number} The timezone offset from UTC in milliseconds.
+ * @private
+ */
+goog.ui.DatePicker.prototype.getTimezoneOffsetMs_ = function() {
+  return this.timezoneOffset_ * 60 * 1000;
+};
+
+/**
+* @return {goog.date.Date} The Date object for today.
+* @private
+*/
+goog.ui.DatePicker.prototype.getToday_ = function() {
+  if (goog.isNull(this.timezoneOffset_)) {
+    return new goog.date.Date();
+  }
+  var date = new goog.date.UtcDateTime();
+  date.setTime(date.getTime() - this.getTimezoneOffsetMs_());
+  return date;
+};
 
 /**
  * @return {number} The first day of week, 0 = Monday, 6 = Sunday.
@@ -431,6 +467,15 @@ goog.ui.DatePicker.prototype.getBaseCssClass = function() {
   return goog.ui.DatePicker.BASE_CSS_CLASS_;
 };
 
+
+/**
+ * Sets the timezone offset.
+ *
+ * @param {number} offset The timezone offset from UTC in minutes.
+ */
+goog.ui.DatePicker.prototype.setTimezoneOffset = function(offset) {
+  this.timezoneOffset_ = offset;
+};
 
 /**
  * Sets the first day of week
@@ -689,7 +734,7 @@ goog.ui.DatePicker.prototype.nextYear = function() {
  * Selects the current date.
  */
 goog.ui.DatePicker.prototype.selectToday = function() {
-  this.setDate(new goog.date.Date());
+  this.setDate(this.getToday_());
 };
 
 
@@ -1423,7 +1468,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
   }
 
   var month = this.activeMonth_.getMonth();
-  var today = new goog.date.Date();
+  var today = this.getToday_();
   var todayYear = today.getFullYear();
   var todayMonth = today.getMonth();
   var todayDate = today.getDate();
