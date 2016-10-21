@@ -205,8 +205,8 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  *
  * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
  *    '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
- *        videoId: videoId,
- *        autoplay: opt_autoplay ?
+ *        'videoId': videoId,
+ *        'autoplay': opt_autoplay ?
  *            goog.string.Const.EMPTY : goog.string.Const.from('autoplay=1')
  *    });
  *
