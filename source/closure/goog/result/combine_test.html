@@ -59,7 +59,8 @@ function tearDown() {
 function testSynchronousCombine() {
   resolveAllGivenResultsToSuccess();
 
-  newCombinedResult = goog.result.combine(result1, result2, result3, result4);
+  var newCombinedResult =
+      goog.result.combine(result1, result2, result3, result4);
 
   goog.result.wait(newCombinedResult, resultCallback);
 

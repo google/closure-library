@@ -63,8 +63,8 @@ var url &#61; goog.html.TrustedResourceUrl.format(goog.string.Const.from(
 &#39;https://www.google.com/search?q&#61;%{query}), {query: searchTerm});</p>
 <p>var url &#61; goog.html.TrustedResourceUrl.format(goog.string.Const.from(
 &#39;//www.youtube.com/v/%{videoId}?hl&#61;en&amp;fs&#61;1%{autoplay}&#39;), {
-videoId: videoId,
-autoplay: opt_autoplay ?
+&#39;videoId&#39;: videoId,
+&#39;autoplay&#39;: opt_autoplay ?
 goog.string.Const.EMPTY : goog.string.Const.from(&#39;autoplay&#61;1&#39;)
 });</p>
 <p>While this function can be used to create a TrustedResourceUrl from only

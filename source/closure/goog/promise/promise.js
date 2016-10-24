@@ -25,6 +25,14 @@ goog.require('goog.promise.Resolver');
 
 
 /**
+ * NOTE: This class was created in anticipation of the built-in Promise type
+ * being standardized and implemented across browsers. Now that Promise is
+ * available in modern browsers, and is automatically polyfilled by the Closure
+ * Compiler, by default, most new code should use native {@code Promise}
+ * instead of {@code goog.Promise}. However, {@code goog.Promise} has the
+ * concept of cancellation which native Promises do not yet have. So code
+ * needing cancellation may still want to use {@code goog.Promise}.
+ *
  * Promises provide a result that may be resolved asynchronously. A Promise may
  * be resolved by being fulfilled with a fulfillment value, rejected with a
  * rejection reason, or blocked by another Promise. A Promise is said to be

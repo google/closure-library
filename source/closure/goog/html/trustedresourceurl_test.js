@@ -83,9 +83,9 @@ function assertValidFormat(format) {
 function testFormat_args() {
   var url = goog.html.TrustedResourceUrl.format(
       goog.string.Const.from('/path/%{dir1}/%{dir2}?n1=v1%{opt_param}'), {
-        dir1: 'd%/?#=',
-        dir2: 2,
-        opt_param: goog.string.Const.from('n2=v2%/?#=')
+        'dir1': 'd%/?#=',
+        'dir2': 2,
+        'opt_param': goog.string.Const.from('n2=v2%/?#=')
       });
   assertEquals(
       '/path/d%25%2F%3F%23%3D/2?n1=v1n2=v2%/?#=',
@@ -103,7 +103,7 @@ function testFormat_missingArgs() {
   var exception = assertThrows(function() {
     goog.html.TrustedResourceUrl.format(
         goog.string.Const.from('https://www.google.com/path/%{arg1}'),
-        {arg2: 'irrelevant'});
+        {'arg2': 'irrelevant'});
   });
   assertContains('no valid label mapping found', exception.message);
 }
