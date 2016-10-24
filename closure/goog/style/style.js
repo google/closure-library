@@ -86,7 +86,8 @@ goog.style.setStyle_ = function(element, value, style) {
   var propertyName = goog.style.getVendorJsStyleName_(element, style);
 
   if (propertyName) {
-    element.style[propertyName] = value;
+    // TODO(johnlenz): coerce to string?
+    element.style[propertyName] = /** @type {?} */ (value);
   }
 };
 
@@ -1669,7 +1670,7 @@ goog.style.getIePixelValue_ = function(element, value, name, pixelName) {
     // restore
     element.style[name] = oldStyleValue;
     element.runtimeStyle[name] = oldRuntimeValue;
-    return pixelValue;
+    return +pixelValue;
   }
 };
 
