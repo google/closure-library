@@ -370,43 +370,37 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
     return;
   }
 
-  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
-    this.clear_();
-  }
-
-  // parse and deliver any new data, with error status
-  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
-      responseText.length == 0) {
-    this.updateStatus_(goog.net.streams.XhrStreamReader.Status.NO_DATA);
-  } else {
-    if (responseText.length > this.pos_) {
-      var newData = responseText.substr(this.pos_);
-      this.pos_ = responseText.length;
-      try {
-        var messages = this.parser_.parse(newData);
-        if (messages != null) {
-          if (this.dataHandler_) {
-            this.dataHandler_(messages);
-          }
+  // Parses and delivers any new data, with error status.
+  if (responseText.length > this.pos_) {
+    var newData = responseText.substr(this.pos_);
+    this.pos_ = responseText.length;
+    try {
+      var messages = this.parser_.parse(newData);
+      if (messages != null) {
+        if (this.dataHandler_) {
+          this.dataHandler_(messages);
         }
-      } catch (ex) {
-        goog.log.error(
-            this.logger_, 'Invalid response ' + ex + '\n' + responseText);
-        this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
       }
+    } catch (ex) {
+      goog.log.error(
+          this.logger_, 'Invalid response ' + ex + '\n' + responseText);
+      this.updateStatus_(goog.net.streams.XhrStreamReader.Status.BAD_DATA);
+      this.clear_();
+      return;
     }
   }
 
-  if (this.status_ > goog.net.streams.XhrStreamReader.Status.SUCCESS) {
+  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
+    if (responseText.length == 0) {
+      this.updateStatus_(goog.net.streams.XhrStreamReader.Status.NO_DATA);
+    } else {
+      this.updateStatus_(goog.net.streams.XhrStreamReader.Status.SUCCESS);
+    }
     this.clear_();
     return;
   }
 
-  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
-    this.updateStatus_(goog.net.streams.XhrStreamReader.Status.SUCCESS);
-  } else {
-    this.updateStatus_(goog.net.streams.XhrStreamReader.Status.ACTIVE);
-  }
+  this.updateStatus_(goog.net.streams.XhrStreamReader.Status.ACTIVE);
 };
 
 
