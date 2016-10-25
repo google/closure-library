@@ -444,6 +444,20 @@ goog.uri.utils.getHost = function(uri) {
 
 
 /**
+ * Returns the origin for a given URL.
+ * @param {string} uri The URI string.
+ * @return {string} Everything up to and including the port.
+ */
+goog.uri.utils.getOrigin = function(uri) {
+  var pieces = goog.uri.utils.split(uri);
+  return goog.uri.utils.buildFromEncodedParts(
+      pieces[goog.uri.utils.ComponentIndex.SCHEME], null /* opt_userInfo */,
+      pieces[goog.uri.utils.ComponentIndex.DOMAIN],
+      pieces[goog.uri.utils.ComponentIndex.PORT]);
+};
+
+
+/**
  * Extracts the path of the URL and everything after.
  * @param {string} uri The URI string.
  * @return {string} The URI, starting at the path and including the query
