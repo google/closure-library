@@ -131,6 +131,13 @@ function testSplitIntoHostAndPath() {
 }
 
 
+function testGetOrigin() {
+  var uri =
+      'http://foo:pw@www.google.com:80/path%20path+path?q=query&hl=en#fragment';
+  assertEquals('http://www.google.com:80', goog.uri.utils.getOrigin(uri));
+}
+
+
 function testRelativeUrisHaveNoPath() {
   assertNull(utils.getPathEncoded('?hello'));
 }

@@ -214,8 +214,8 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
 goog.cssom.getCssRuleIndexInParentStyleSheet = function(
     cssRule, opt_parentStyleSheet) {
   // Look for our special style.ruleIndex property from getAllCss.
-  if (cssRule.style && cssRule.style['-closure-rule-index']) {
-    return cssRule.style['-closure-rule-index'];
+  if (cssRule.style && /** @type {!Object} */ (cssRule.style)['-closure-rule-index']) {
+    return (/** @type {!Object} */ (cssRule.style))['-closure-rule-index'];
   }
 
   var parentStyleSheet =
@@ -249,7 +249,8 @@ goog.cssom.getCssRuleIndexInParentStyleSheet = function(
  */
 goog.cssom.getParentStyleSheet = function(cssRule) {
   return cssRule.parentStyleSheet ||
-      cssRule.style && cssRule.style['-closure-parent-stylesheet'];
+      cssRule.style &&
+      (/** @type {!Object} */ (cssRule.style))['-closure-parent-stylesheet'];
 };
 
 
@@ -428,7 +429,8 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
             // Unfortunately we have to use the style object to store these
             // pieces of info since the rule object is read-only.
             if (!cssRule.parentStyleSheet) {
-              cssRule.style['-closure-parent-stylesheet'] = styleSheet;
+              (/** @type {!Object} */ (cssRule.style))[
+                '-closure-parent-stylesheet'] = styleSheet;
             }
 
             // This is a hack to help with possible removal of the rule later,
@@ -436,7 +438,7 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
             // onto the style object as a property.
             // Unfortunately we have to use the style object to store these
             // pieces of info since the rule object is read-only.
-            cssRule.style['-closure-rule-index'] =
+            (/** @type {!Object} */ (cssRule.style))['-closure-rule-index'] =
                 isTextOutput ? undefined : ruleIndex;
           }
           cssOut.push(cssRule);
