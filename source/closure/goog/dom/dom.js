@@ -2232,7 +2232,7 @@ goog.dom.getAncestorByClass = function(element, className, opt_maxSearchSteps) {
  */
 goog.dom.getAncestor = function(
     element, matcher, opt_includeNode, opt_maxSearchSteps) {
-  if (!opt_includeNode) {
+  if (element && !opt_includeNode) {
     element = element.parentNode;
   }
   var steps = 0;

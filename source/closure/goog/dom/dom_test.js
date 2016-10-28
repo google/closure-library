@@ -1421,6 +1421,14 @@ function testCanHaveChildren() {
   }
 }
 
+function testGetAncestorNoElement() {
+  assertNull(goog.dom.getAncestor(
+      null /* element */, goog.functions.TRUE /* matcher */));
+  assertNull(goog.dom.getAncestor(
+      null /* element */, goog.functions.TRUE /* matcher */,
+      true /* opt_includeNode */));
+}
+
 function testGetAncestorNoMatch() {
   var elem = goog.dom.getElement('nestedElement');
   assertNull(goog.dom.getAncestor(elem, function() { return false; }));
