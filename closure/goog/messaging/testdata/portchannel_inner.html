@@ -18,7 +18,8 @@ goog.require('goog.messaging.PortChannel');
 <body>
 <script>
 
-var channel = goog.messaging.PortChannel.forGlobalWindow('*');
+var peerOrigin = window.location.protocol + '//' + window.location.host;
+var channel = goog.messaging.PortChannel.forGlobalWindow(peerOrigin);
 channel.registerService('ping', function(msg) {
   channel.send('pong', msg);
 });

@@ -57,9 +57,10 @@ function testRouteMessageThroughWorkers() {
   master.addPort(
       'worker2', new goog.messaging.PortChannel(
                      new Worker('testdata/portnetwork_worker2.js')));
+  var peerOrigin = window.location.protocol + '//' + window.location.host;
   master.addPort(
       'frame', goog.messaging.PortChannel.forEmbeddedWindow(
-                   window.frames['inner'], '*', timer));
+                   window.frames['inner'], peerOrigin, timer));
 
   var promise = new goog.Promise(function(resolve, reject) {
     master.dial('worker1').registerService('result', resolve, true);
