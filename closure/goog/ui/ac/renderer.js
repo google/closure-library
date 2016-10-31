@@ -607,7 +607,8 @@ goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elem) {
 goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
   if (!this.element_) {
     // Make element and add it to the parent
-    var el = this.dom_.createDom(goog.dom.TagName.DIV, {style: 'display:none'});
+    var elementStyle = 'display:none; top:0;';
+    var el = this.dom_.createDom(goog.dom.TagName.DIV, {style: elementStyle});
     if (this.showScrollbarsIfTooLarge_) {
       // Make sure that the dropdown will get scrollbars if it isn't large
       // enough to show all rows.
