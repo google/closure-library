@@ -433,7 +433,6 @@ var _allTests = [
   'closure/goog/testing/mockstorage_test.html',
   'closure/goog/testing/mock_test.html',
   'closure/goog/testing/mockuseragent_test.html',
-  'closure/goog/testing/mockutil_test.html',
   'closure/goog/testing/multitestrunner_test.html',
   'closure/goog/testing/net/xhrio_test.html',
   'closure/goog/testing/parallel_closure_test_suite_test.html',
