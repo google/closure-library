@@ -296,7 +296,9 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
 
     /** @preserveTry */
     try {
-      var respArray = this.channel_.getWireCodec().decodeMessage(responseText);
+      var channel = /** @type {!goog.labs.net.webChannel.WebChannelBase} */ (
+          this.channel_);
+      var respArray = channel.getWireCodec().decodeMessage(responseText);
     } catch (e) {
       this.channelDebug_.dumpException(e);
       this.channel_.testConnectionFailure(this, ChannelRequest.Error.BAD_DATA);

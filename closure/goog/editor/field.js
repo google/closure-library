@@ -1517,7 +1517,8 @@ goog.editor.Field.prototype.handleDomAttrChange = function(
 
   // For XUL elements, since we don't care what they are doing
   try {
-    if (e.originalTarget.prefix || e.originalTarget.nodeName == 'scrollbar') {
+    if (e.originalTarget.prefix ||
+        /** @type {!Element} */ (e.originalTarget).nodeName == 'scrollbar') {
       return;
     }
   } catch (ex1) {

@@ -233,8 +233,8 @@ goog.events.listen_ = function(
         new goog.events.ListenerMap(src);
   }
 
-  var listenerObj =
-      listenerMap.add(type, listener, callOnce, opt_capt, opt_handler);
+  var listenerObj = /** @type {goog.events.Listener} */ (
+      listenerMap.add(type, listener, callOnce, opt_capt, opt_handler));
 
   // If the listenerObj already has a proxy, it has been set up
   // previously. We simply return.
@@ -461,7 +461,7 @@ goog.events.unlistenByKey = function(key) {
       src[goog.events.LISTENER_MAP_PROP_] = null;
     }
   } else {
-    listener.markAsRemoved();
+    /** @type {!goog.events.Listener} */ (listener).markAsRemoved();
   }
 
   return true;
