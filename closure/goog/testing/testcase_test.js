@@ -750,3 +750,27 @@ function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
   mockRecordError.$verify();
   mockRecordError.$tearDown();
 }
+
+
+function testSetObj() {
+  var testCase = new goog.testing.TestCase();
+  assertEquals(0, testCase.getCount());
+  testCase.setTestObj({testOk: ok, somethingElse: fail});
+  assertEquals(1, testCase.getCount());
+}
+
+
+function testSetObj_es6Class() {
+  var FooTest;
+  try {
+    eval(
+        'FooTest = class { testOk() {assertTrue(true); } somethingElse() {} }');
+  } catch (ex) {
+    // IE cannot parse ES6.
+    return;
+  }
+  var testCase = new goog.testing.TestCase();
+  assertEquals(0, testCase.getCount());
+  testCase.setTestObj(new FooTest());
+  assertEquals(1, testCase.getCount());
+}
