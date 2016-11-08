@@ -27,6 +27,11 @@ goog.require('goog.testing.TestCase');
  *     methods, and optional setUp, tearDown and getTestName methods, etc.
  */
 goog.testing.testSuite = function(obj) {
+  if (goog.isFunction(obj)) {
+    throw new Error(
+        'testSuite should be called with an object. ' +
+        'Did you forget to initialize a class?');
+  }
   var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||
       new goog.testing.TestCase(document.title);
   testCase.setTestObj(obj);

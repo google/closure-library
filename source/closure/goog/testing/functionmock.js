@@ -81,13 +81,23 @@ goog.testing.MethodMock = function(scope, functionName, opt_strictness) {
   return fn;
 };
 
+/**
+ * @private
+ * @record @extends {goog.testing.MockInterface}
+ */
+goog.testing.MethodMock.MockInternalInterface_ = function() {};
+
+/** @const {!goog.testing.PropertyReplacer} */
+goog.testing.MethodMock.MockInternalInterface_.prototype.$propertyReplacer_;
+
 
 /**
  * Resets the global function that we mocked back to its original state.
  * @this {goog.testing.MockInterface}
  */
 goog.testing.MethodMock.$tearDown = function() {
-  this.$propertyReplacer_.reset();
+  /** @type {!goog.testing.MethodMock.MockInternalInterface_} */ (this)
+      .$propertyReplacer_.reset();
 };
 
 

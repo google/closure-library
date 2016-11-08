@@ -137,7 +137,8 @@ goog.testing.events.assertEventTarget_ = function(target) {
  */
 goog.testing.events.setEventClientXY_ = function(event, opt_coords) {
   if (!opt_coords && event.target &&
-      event.target.nodeType == goog.dom.NodeType.ELEMENT) {
+      /** @type {!Node} */ (event.target).nodeType ==
+          goog.dom.NodeType.ELEMENT) {
     try {
       opt_coords =
           goog.style.getClientPosition(/** @type {!Element} **/ (event.target));

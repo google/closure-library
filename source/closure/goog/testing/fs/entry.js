@@ -146,7 +146,8 @@ goog.testing.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
   return this.checkNotDeleted(msg).addCallback(function() {
     var name = opt_newName || self.getName();
     var entry = self.clone();
-    parent.children[name] = entry;
+    /** @type {!goog.testing.fs.DirectoryEntry} */ (parent).children[name] =
+        entry;
     parent.lastModifiedTimestamp_ = goog.now();
     entry.name_ = name;
     entry.parent = /** @type {!goog.testing.fs.DirectoryEntry} */ (parent);

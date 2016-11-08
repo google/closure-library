@@ -1182,7 +1182,9 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
       this.tests_.length == 0, 'Test methods have already been configured.');
 
   var regex = new RegExp('^' + this.getAutoDiscoveryPrefix());
-  for (var name in obj) {
+  var properties = goog.object.getAllPropertyNames(obj);
+  for (var i = 0; i < properties.length; i++) {
+    var name = properties[i];
     if (regex.test(name)) {
       var testMethod = obj[name];
       if (goog.isFunction(testMethod)) {

@@ -1253,6 +1253,11 @@ function testSpanNotCorrectedByBrowsersInner() {
         if (goog.array.contains(['COL', 'COLGROUP'], tag)) {
           return;  // potential problems
         }
+        // TODO(pelizzi): Skip testing for FORM tags on Chrome until b/32550695
+        // is fixed.
+        if (tag == 'FORM' && goog.userAgent.WEBKIT) {
+          return;
+        }
         var input;
         if (goog.array.contains(
                 [

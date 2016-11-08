@@ -325,7 +325,8 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * See {@link goog.net.XhrIo#setWithCredentials}.
    * @private {boolean}
    */
-  this.supportsCrossDomainXhrs_ = false;
+  this.supportsCrossDomainXhrs_ =
+      (opt_options && opt_options.supportsCrossDomainXhr) || false;
 
   /**
    * The current session id.

@@ -624,10 +624,6 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     return;
   }
 
-  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
-    this.cleanup_();
-  }
-
   if (this.decodeChunks_) {
     this.decodeNextChunks_(readyState, responseText);
     if (goog.userAgent.OPERA && this.successful_ &&
@@ -638,6 +634,10 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     this.channelDebug_.xmlHttpChannelResponseText(
         this.rid_, responseText, null);
     this.safeOnRequestData_(responseText);
+  }
+
+  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
+    this.cleanup_();
   }
 
   if (!this.successful_) {

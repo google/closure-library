@@ -20,8 +20,9 @@ goog.require('goog.messaging.PortChannel');
 </head>
 <body>
 <script>
+var peerOrigin = window.location.protocol + '//' + window.location.host;
 var caller = new goog.messaging.PortCaller(
-    goog.messaging.PortChannel.forGlobalWindow('*'));
+    goog.messaging.PortChannel.forGlobalWindow(peerOrigin));
 
 caller.dial('worker2').registerService('sendToWorker1', function(msg) {
   msg.push('frame');
