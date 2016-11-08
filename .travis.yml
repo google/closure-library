@@ -29,7 +29,12 @@ script:
   - ./scripts/ci/check_code_format.sh
   - travis_wait 30 ./scripts/ci/run_all_tests.sh
 
+after_success:
+  - ./scripts/ci/generate_latest_docs.sh
+
 env:
   global:
     - SAUCE_USERNAME=closure-sauce
     - SAUCE_ACCESS_KEY=dfd98f70a612-e69a-ad34-6149-3ca056f8
+    - secure: "b8289sSnG5fwT2FPWEFIm1eLsfnjrIdGu0XRiTCR8bFAERZXWY2FdLdhGexhWoYc7R7euahaXoZ/UYc/fG1j6gggpYxEjbyfb/ib/25AK4UEbPFGG8M25xO9nERJ01BzeIaVy08U4CTVsoTR84m5yc1IhlEIRWeH1CfizsDW4U0="
+
