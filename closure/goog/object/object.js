@@ -629,7 +629,7 @@ goog.object.extend = function(target, var_args) {
 /**
  * Creates a new object built from the key-value pairs provided as arguments.
  * @param {...*} var_args If only one argument is provided and it is an array
- *     then this is used as the arguments,  otherwise even arguments are used as
+ *     then this is used as the arguments, otherwise even arguments are used as
  *     the property names and odd arguments are used as the property values.
  * @return {!Object} The new object.
  * @throws {Error} If there are uneven number of arguments or there is only one
@@ -657,7 +657,7 @@ goog.object.create = function(var_args) {
  * Creates a new object where the property names come from the arguments but
  * the value is always set to true
  * @param {...*} var_args If only one argument is provided and it is an array
- *     then this is used as the arguments,  otherwise the arguments are used
+ *     then this is used as the arguments, otherwise the arguments are used
  *     as the property names.
  * @return {!Object} The new object.
  */
