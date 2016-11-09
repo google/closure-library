@@ -136,6 +136,38 @@ function testCacheSize() {
   mockControl.$resetAll();
 }
 
+function testClearCache() {
+  // First we populate the cache.
+  mockHandler('foo', []);
+  mockHandler('foo', ['foo111', 'foo222'], ignoreArgument);
+  mockMatcher.requestMatchingRows('foo', 100, ignoreArgument)
+      .$does(function(token, maxResults, matchHandler) {
+        matchHandler('foo', ['foo111', 'foo222', 'bar333']);
+      });
+  mockControl.$replayAll();
+  matcher.requestMatchingRows('foo', 12, mockHandler);
+  matcher.throttledTriggerBaseMatch_.permitOne();
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+
+  // Now we verify the cache is populated.
+  mockHandler('foo1', ['foo111']);
+  mockControl.$replayAll();
+  matcher.requestMatchingRows('foo1', 12, mockHandler);
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+
+  // Now we clear the cache.
+  matcher.clearCache();
+
+  // Now check that the cache is empty.
+  mockHandler('foo11', []);
+  mockControl.$replayAll();
+  matcher.requestMatchingRows('foo11', 12, mockHandler);
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+}
+
 function testSimilarMatchingDoesntReorderResults() {
   // Populate the cache. We get two prefix matches.
   mockHandler('ba', []);
