@@ -988,8 +988,6 @@ goog.History.EventType = goog.history.EventType;
 
 /**
  * Constant for the history change event type.
- * @param {string} token The string identifying the new history state.
- * @extends {goog.events.Event}
  * @constructor
  * @deprecated Use goog.history.Event.
  * @final
