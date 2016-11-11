@@ -186,25 +186,29 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  * Values of other types are cast to string and encoded with
  * encodeURIComponent.
  *
- * %{<label>} markers are used in the format string to indicate locations
- * to be interpolated with the valued mapped to the given label. <label>
+ * `%{<label>}` markers are used in the format string to indicate locations
+ * to be interpolated with the valued mapped to the given label. `<label>`
  * must contain only alphanumeric and '_' characters.
  *
  * The format string must start with one of the following:
- * - https://<origin>/<pathStart>
- * - //<origin>/<pathStart>
- * - /<pathStart>
+ * - `https://<origin>/<pathStart>`
+ * - `//<origin>/<pathStart>`
+ * - `/<pathStart>`
  *
- * <origin> must contain only alphanumeric, '-', .', ':', '[', and ']'.
- * <pathStart> must contain only alphanumeric, '_', '~', and '-'. If other
- * characters follow it, it must end with '/', '#' or '?'.
+ * `<origin>` must contain only alphanumeric, {@code '-', '.', ':', '['}, and
+ * {@code ']'}.
+ * `<pathStart>` must contain only alphanumeric, {@code '_', '~'}, and
+ * {@code '-'}.
+ * If other  * characters follow it, it must end with {@code '/', '#'} or
+ * {@code '?'}.
  *
  * Example usage:
- * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
- *     'https://www.google.com/search?q=%{query}'), {query: searchTerm});
  *
- * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
- *    '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
+ *    var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *        'https://www.google.com/search?q=%{query}), {query: searchTerm});
+ *
+ *    var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *        '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
  *        'videoId': videoId,
  *        'autoplay': opt_autoplay ?
  *            goog.string.Const.EMPTY : goog.string.Const.from('autoplay=1')
