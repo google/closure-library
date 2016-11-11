@@ -15,6 +15,7 @@
 goog.provide('goog.net.IpAddressTest');
 goog.setTestOnly('goog.net.IpAddressTest');
 
+goog.require('goog.array');
 goog.require('goog.math.Integer');
 goog.require('goog.net.IpAddress');
 goog.require('goog.net.Ipv4Address');
@@ -205,7 +206,6 @@ function testMappedIpv4Address() {
   assertTrue(ipv4.equals(ip2.getMappedIpv4Address()));
 }
 
-
 function testUriString() {
   var ip4Str = '192.168.1.1';
   var ip4Uri = goog.net.IpAddress.fromUriString(ip4Str);
@@ -220,4 +220,44 @@ function testUriString() {
   assertTrue(ip6Uri.equals(ip6));
   assertEquals(ip6Uri.toString(), ip6Str);
   assertEquals(ip6Uri.toUriString(), '[' + ip6Str + ']');
+}
+
+function testIsSiteLocal() {
+  var siteLocalAddresses = [
+    '10.0.0.0', '10.255.255.255', '172.16.0.0', '172.31.255.255', '192.168.0.0',
+    '192.168.255.255', 'fd00::', 'fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'
+  ];
+  goog.array.forEach(siteLocalAddresses, function(siteLocalAddress) {
+    assertTrue(goog.net.IpAddress.fromString(siteLocalAddress).isSiteLocal());
+  });
+
+  var nonSiteLocalAddresses = [
+    '9.255.255.255', '11.0.0.0', '172.15.255.255', '172.32.0.0',
+    '192.167.255.255', '192.169.0.0', 'fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+    'fe00::'
+  ];
+  goog.array.forEach(nonSiteLocalAddresses, function(nonSiteLocalAddress) {
+    assertFalse(
+        goog.net.IpAddress.fromString(nonSiteLocalAddress).isSiteLocal());
+
+  });
+}
+
+function testIsLinkLocal() {
+  var linkLocalAddresses = [
+    '169.254.0.0', '169.254.255.255', 'fe80::',
+    'febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff'
+  ];
+  goog.array.forEach(linkLocalAddresses, function(linkLocalAddress) {
+    assertTrue(goog.net.IpAddress.fromString(linkLocalAddress).isLinkLocal());
+  });
+
+  var nonLinkLocalAddresses = [
+    '169.253.255.255', '169.255.0.0', 'fe7f:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+    'fec0::'
+  ];
+  goog.array.forEach(nonLinkLocalAddresses, function(nonLinkLocalAddress) {
+    assertFalse(
+        goog.net.IpAddress.fromString(nonLinkLocalAddress).isLinkLocal());
+  });
 }
