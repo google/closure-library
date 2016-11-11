@@ -339,7 +339,7 @@ goog.db.Error.fromRequest = function(request, message) {
     return new goog.db.Error(request.error, message);
   } else if ('name' in request) {
     // Chrome 22+.
-    var errorName = goog.db.Error.getName(request.errorCode);
+    var errorName = goog.db.Error.getName(request.error.severity);
     return new goog.db.Error(
         /**@type {!DOMError} */ ({name: errorName}), message);
   } else {

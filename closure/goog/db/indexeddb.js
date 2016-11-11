@@ -91,7 +91,7 @@ goog.db.IndexedDb.prototype.open_ = true;
 goog.db.IndexedDb.prototype.dispatchError_ = function(ev) {
   this.dispatchEvent({
     type: goog.db.IndexedDb.EventType.ERROR,
-    errorCode: /** @type {IDBRequest} */ (ev.target).errorCode
+    errorCode: /** @type {IDBRequest} */ (ev.target).error.severity
   });
 };
 
