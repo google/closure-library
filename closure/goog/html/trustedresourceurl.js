@@ -182,25 +182,22 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  * Creates a TrustedResourceUrl from a format string and arguments.
  *
  * The arguments for interpolation into the format string map labels to values.
- * Values of type goog.string.Const are interpolated without modifcation.
+ * Values of type `goog.string.Const` are interpolated without modifcation.
  * Values of other types are cast to string and encoded with
  * encodeURIComponent.
  *
  * `%{<label>}` markers are used in the format string to indicate locations
  * to be interpolated with the valued mapped to the given label. `<label>`
- * must contain only alphanumeric and '_' characters.
+ * must contain only alphanumeric and `_` characters.
  *
  * The format string must start with one of the following:
  * - `https://<origin>/<pathStart>`
  * - `//<origin>/<pathStart>`
  * - `/<pathStart>`
  *
- * `<origin>` must contain only alphanumeric, {@code '-', '.', ':', '['}, and
- * {@code ']'}.
- * `<pathStart>` must contain only alphanumeric, {@code '_', '~'}, and
- * {@code '-'}.
- * If other  * characters follow it, it must end with {@code '/', '#'} or
- * {@code '?'}.
+ * `<origin>` must contain only alphanumeric or any of the following: `-.:[]`.
+ * `<pathStart>` must contain only alphanumeric or any of the following: `_~-`.
+ * If other characters follow it, it must end with one of: `/#?`.
  *
  * Example usage:
  *
