@@ -182,29 +182,30 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  * Creates a TrustedResourceUrl from a format string and arguments.
  *
  * The arguments for interpolation into the format string map labels to values.
- * Values of type goog.string.Const are interpolated without modifcation.
+ * Values of type `goog.string.Const` are interpolated without modifcation.
  * Values of other types are cast to string and encoded with
  * encodeURIComponent.
  *
- * %{<label>} markers are used in the format string to indicate locations
- * to be interpolated with the valued mapped to the given label. <label>
- * must contain only alphanumeric and '_' characters.
+ * `%{<label>}` markers are used in the format string to indicate locations
+ * to be interpolated with the valued mapped to the given label. `<label>`
+ * must contain only alphanumeric and `_` characters.
  *
  * The format string must start with one of the following:
- * - https://<origin>/<pathStart>
- * - //<origin>/<pathStart>
- * - /<pathStart>
+ * - `https://<origin>/<pathStart>`
+ * - `//<origin>/<pathStart>`
+ * - `/<pathStart>`
  *
- * <origin> must contain only alphanumeric, '-', .', ':', '[', and ']'.
- * <pathStart> must contain only alphanumeric, '_', '~', and '-'. If other
- * characters follow it, it must end with '/', '#' or '?'.
+ * `<origin>` must contain only alphanumeric or any of the following: `-.:[]`.
+ * `<pathStart>` must contain only alphanumeric or any of the following: `_~-`.
+ * If other characters follow it, it must end with one of: `/#?`.
  *
  * Example usage:
- * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
- *     'https://www.google.com/search?q=%{query}'), {query: searchTerm});
  *
- * var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
- *    '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
+ *    var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *        'https://www.google.com/search?q=%{query}), {query: searchTerm});
+ *
+ *    var url = goog.html.TrustedResourceUrl.format(goog.string.Const.from(
+ *        '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
  *        'videoId': videoId,
  *        'autoplay': opt_autoplay ?
  *            goog.string.Const.EMPTY : goog.string.Const.from('autoplay=1')
