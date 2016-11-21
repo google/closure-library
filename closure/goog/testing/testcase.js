@@ -853,13 +853,15 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
     var retval = fn.call(this);
     if (goog.Thenable.isImplementedBy(retval) ||
         goog.isFunction(retval && retval['then'])) {
+      // Resolve Thenable into a proper Promise to avoid hard to debug problems.
+      var promise = goog.Promise.resolve(retval);
       var self = this;
-      retval = this.rejectIfPromiseTimesOut_(
-          retval, self.promiseTimeout,
+      promise = this.rejectIfPromiseTimesOut_(
+          promise, self.promiseTimeout,
           'Timed out while waiting for a promise returned from ' + fnName +
               ' to resolve. Set goog.testing.TestCase.getActiveTestCase()' +
               '.promiseTimeout to adjust the timeout.');
-      retval.then(
+      promise.then(
           function() {
             self.resetBatchTimeAfterPromise_();
             if (testCase.thrownAssertionExceptions_.length == 0) {
@@ -1725,7 +1727,7 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
 /**
  * Wraps provided promise and returns a new promise which will be rejected
  * if the original promise does not settle within the given timeout.
- * @param {!IThenable<T>} promise
+ * @param {!goog.Promise<T>} promise
  * @param {number} timeoutInMs Number of milliseconds to wait for the promise to
  *     settle before failing it with a timeout error.
  * @param {string} errorMsg Error message to use if the promise times out.
