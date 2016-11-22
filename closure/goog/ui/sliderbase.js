@@ -136,7 +136,9 @@ goog.ui.SliderBase.EventType = {
   /** User started dragging a thumb */
   DRAG_START: goog.events.getUniqueId('dragstart'),
   /** User is done dragging a thumb */
-  DRAG_END: goog.events.getUniqueId('dragend')
+  DRAG_END: goog.events.getUniqueId('dragend'),
+  /** Animation on the value thumb ends */
+  ANIMATION_END: goog.events.getUniqueId('animationend')
 };
 
 
@@ -1287,6 +1289,7 @@ goog.ui.SliderBase.prototype.addRangeHighlightAnimations_ = function(
  */
 goog.ui.SliderBase.prototype.endAnimation_ = function(e) {
   this.isAnimating_ = false;
+  this.dispatchEvent(goog.ui.SliderBase.EventType.ANIMATION_END);
 };
 
 
