@@ -1325,8 +1325,8 @@ goog.net.ChannelRequest.prototype.safeOnRequestData_ = function(data) {
   /** @preserveTry */
   try {
     this.channel_.onRequestData(this, data);
+    /** @suppress {missingRequire} goog.net.BrowserChannel */
     this.channel_.notifyServerReachabilityEvent(
-        /** @suppress {missingRequire} */
         goog.net.BrowserChannel.ServerReachability.BACK_CHANNEL_ACTIVITY);
   } catch (e) {
     // Dump debug info, but keep going without closing the channel.

@@ -38,6 +38,7 @@ goog.require('goog.events');
 goog.require('goog.i18n.uChar');
 goog.require('goog.i18n.uChar.NameFetcher');
 goog.require('goog.log');
+goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.structs.Map');
 
