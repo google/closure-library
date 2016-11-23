@@ -1655,16 +1655,21 @@ WebChannelBase.prototype.onInput_ = function(respArray) {
             this.hostPrefix_, /** @type {string} */ (this.path_));
         // Open connection to receive data
         this.ensureBackChannel_();
-      } else if (nextArray[0] == 'stop') {
+      } else if (nextArray[0] == 'stop' || nextArray[0] == 'close') {
+        // treat close also as an abort
         this.signalError_(WebChannelBase.Error.STOP);
       }
     } else if (this.state_ == WebChannelBase.State.OPENED) {
-      if (nextArray[0] == 'stop') {
+      if (nextArray[0] == 'stop' || nextArray[0] == 'close') {
         if (batch && !goog.array.isEmpty(batch)) {
           this.handler_.channelHandleMultipleArrays(this, batch);
           batch.length = 0;
         }
-        this.signalError_(WebChannelBase.Error.STOP);
+        if (nextArray[0] == 'stop') {
+          this.signalError_(WebChannelBase.Error.STOP);
+        } else {
+          this.disconnect();
+        }
       } else if (nextArray[0] == 'noop') {
         // ignore - noop to keep connection happy
       } else {
