@@ -2,49 +2,75 @@
 
 # Rebuild gh-pages branch, adapted from
 # https://github.com/google/dagger/blob/master/util/generate-latest-docs.sh
+# See also http://stackoverflow.com/a/22977235 for ssh-based deploy.
+
+if [ "$TRAVIS_REPO_SLUG" != "google/closure-library" -o \
+     "$TRAVIS_PULL_REQUEST" != "false" -o \
+     "$TRAVIS_BRANCH" != "master" ]; then
+  exit 0
+fi
+
+echo "Publishing documentation..."
 
 DIR=$(mktemp -d)
 mkdir -p "$DIR"
 
-if [ "$TRAVIS_REPO_SLUG" = "google/closure-library" -a \
-     "$TRAVIS_PULL_REQUEST" = "false" -a \
-     "$TRAVIS_BRANCH" = "master" ]; then
-  echo -e "Publishing documentation...\n"
+# Do everything in a subshell so that we can cleanup afterwards.
+(
+  set -e
 
   # Files to omit from documentation
+  BLACKLIST_FILES=(
+    events/eventtargettester.js
+    i18n/compactnumberformatsymbolsext.js
+    i18n/datetimepatternsext.js
+    i18n/listsymbolsext.js
+    i18n/numberformatsymbolsext.js
+    promise/testsuiteadapter.js
+    proto2/package_test.pb.js
+    proto2/test.pb.js
+    soy/soy_testhelper.js
+    style/stylescrollbartester.js
+    testing/parallel_closure_test_suite.js
+    test_module.js
+    test_module_dep.js
+    tweak/testhelpers.js
+    useragent/useragenttestutil.js
+  )
   declare -A BLACKLIST
-  BLACKLIST['events/eventtargettester.js']=true
-  BLACKLIST['i18n/compactnumberformatsymbolsext.js']=true
-  BLACKLIST['i18n/datetimepatternsext.js']=true
-  BLACKLIST['i18n/numberformatsymbolsext.js']=true
-  BLACKLIST['i18n/listsymbolsext.js']=true
-  BLACKLIST['promise/testsuiteadapter.js']=true
-  BLACKLIST['proto2/package_test.pb.js']=true
-  BLACKLIST['proto2/test.pb.js']=true
-  BLACKLIST['soy/soy_testhelper.js']=true
-  BLACKLIST['style/stylescrollbartester.js']=true
-  BLACKLIST['testing/parallel_closure_test_suite.js']=true
-  BLACKLIST['test_module.js']=true
-  BLACKLIST['test_module_dep.js']=true
-  BLACKLIST['tweak/testhelpers.js']=true
-  BLACKLIST['useragent/useragenttestutil.js']=true
+  for file in "${BLACKLIST_FILES[@]}"; do
+     BLACKLIST["$file"]=true
+  done
+
+  # Start by decrypting the deploy password, and pre-populate GitHub's
+  # RSA key to avoid needing to manually accept it when connecting.
+  openssl aes-256-cbc -k "$deploy_password" -d -a \
+          -in ./scripts/ci/deploy.enc -out ./scripts/ci/deploy \
+          &> /dev/null
+  echo -e "Host github.com\n  IdentityFile $PWD/scripts/ci/deploy" > ~/.ssh/config
+  echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6Tb
+        Qa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsd
+        lLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+S
+        e8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOz
+        QgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA
+        8VJiS5ap43JXiUFFAaQ==" | sed 's/^ *//' | tr -d '\n' > ~/.ssh/known_hosts
 
   (
     # Wipe out any existing documentation entirely.
     cd "$DIR"
-    git clone --quiet --branch=gh-pages \
-        "https://${GH_TOKEN}@github.com/google/closure-library gh-pages" > /dev/null
-    git config --global user.email "travis@travis-ci.org"
-    git config --global user.name "travis-ci"
-    cd gh-pages
+    git init
+    git remote add origin git@github.com:google/closure-library.git
+    git pull origin gh-pages > /dev/null
+    git config user.email "travis@travis-ci.org"
+    git config user.name "travis-ci"
     find . -path ./.git -prune -o -exec rm -rf {} \; 2> /dev/null || true
   )
 
   # Rearrange files from the repo.
-  cp -r doc/* "$DIR/gh-pages/"
-  mkdir -p "$DIR/gh-pages/source/closure"
-  cp -r closure/* "$DIR/gh-pages/source/closure/"
-  mkdir -p "$DIR/gh-pages/api"
+  cp -r doc/* "$DIR/"
+  mkdir -p "$DIR/source/closure"
+  cp -r closure/* "$DIR/source/closure/"
+  mkdir -p "$DIR/api"
 
   # Download the latest js-dossier release.
   npm install js-dossier
@@ -52,7 +78,7 @@ if [ "$TRAVIS_REPO_SLUG" = "google/closure-library" -a \
   # Build up the dossier command line.
   command=(
     java -jar node_modules/js-dossier/dossier.jar
-    --output "$DIR/gh-pages/api"
+    --output "$DIR/api"
     --readme scripts/ci/dossier_readme.md
     --source_url_template
         'https://github.com/google/closure-library/blob/master/%path%#L%line%'
@@ -74,9 +100,9 @@ if [ "$TRAVIS_REPO_SLUG" = "google/closure-library" -a \
   # Run dossier.
   "${command[@]}"
 
-  # Make a commit and push it.
   (
-    cd "$DIR/gh-pages"
+    # Make a commit and push it.
+    cd "$DIR"
     git add -A
     git commit -m "Latest documentation auto-pushed to gh-pages
 
@@ -85,4 +111,10 @@ Built from commit $TRAVIS_COMMIT after successful travis build $TRAVIS_BUILD_NUM
   )
 
   echo -e "Published gh-pages.\n";
-fi
+)
+CODE=$?
+
+# Clean up by deleting the repository and the decrypted key
+rm -rf "$DIR"
+rm -f ./scripts/ci/deploy
+exit "$CODE"
