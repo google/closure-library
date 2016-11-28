@@ -297,7 +297,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
       this.testobj_['tearDown']();
     } catch (e) {
       if (!firstException) {
-        firstException = e;
+        firstException = e || new Error('Exception thrown: ' + String(e));
       }
     }
   }
@@ -311,7 +311,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
       env.tearDown();
     } catch (e) {
       if (!firstException) {
-        firstException = e;
+        firstException = e || new Error('Exception thrown: ' + String(e));
       }
     }
   });
