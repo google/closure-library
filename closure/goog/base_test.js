@@ -196,8 +196,12 @@ function testExportSymbol() {
 goog.exportSymbol('exceptionTest', function() { throw Error('ERROR'); });
 
 function testExportSymbolExceptions() {
-  var e = assertThrows(
-      'Exception wasn\'t thrown by exported function', exceptionTest);
+  var inner = function() {
+    // If exceptionTest wasn't exported using execScript, IE8 will throw "Object
+    // doesn't support this property or method" instead.
+    exceptionTest();
+  };
+  var e = assertThrows('Exception wasn\'t thrown by exported function', inner);
   assertEquals('Unexpected error thrown', 'ERROR', e.message);
 }
 
