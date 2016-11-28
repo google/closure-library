@@ -3,9 +3,8 @@
 # Use of this source code is governed by the Apache License, Version 2.0.
 # See the LICENSE file for details.
 
-# Use new container-based infrastructure.
 language: node_js
-sudo: false
+sudo: required
 
 cache:
   directories:
