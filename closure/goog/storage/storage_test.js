@@ -18,10 +18,16 @@
  */
 
 goog.provide('goog.storage.storage_test');
+goog.setTestOnly('goog.storage.storage_test');
 
+goog.require('goog.functions');
+goog.require('goog.storage.ErrorCode');
+goog.require('goog.storage.Storage');
+goog.require('goog.storage.mechanism.mechanismfactory');
 goog.require('goog.structs.Map');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('storage_test');
+goog.require('goog.testing.jsunit');
+goog.require('goog.testing.storage.FakeMechanism');
 
 
 goog.storage.storage_test.runBasicTests = function(storage) {
@@ -57,3 +63,38 @@ goog.storage.storage_test.runBasicTests = function(storage) {
   assertUndefined(storage.get('second'));
   assertUndefined(storage.get('third'));
 };
+
+function testBasicOperations() {
+  var mechanism = new goog.testing.storage.FakeMechanism();
+  var storage = new goog.storage.Storage(mechanism);
+  goog.storage.storage_test.runBasicTests(storage);
+}
+
+function testMechanismCommunication() {
+  var mechanism = new goog.testing.storage.FakeMechanism();
+  var storage = new goog.storage.Storage(mechanism);
+
+  // Invalid JSON.
+  mechanism.set('first', '');
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
+               assertThrows(function() {storage.get('first')}));
+  mechanism.set('second', '(');
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
+               assertThrows(function() {storage.get('second')}));
+
+  // Cleaning up.
+  storage.remove('first');
+  storage.remove('second');
+  assertUndefined(storage.get('first'));
+  assertUndefined(storage.get('second'));
+  assertNull(mechanism.get('first'));
+  assertNull(mechanism.get('second'));
+}
+
+function testMechanismFailsGracefullyOnInvalidValue() {
+  var mechanism = {
+    get: goog.functions.error('Invalid value')
+  };
+  var storage = new goog.storage.Storage(mechanism);
+  assertUndefined(storage.get('foobar'));
+}
