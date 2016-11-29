@@ -44,6 +44,8 @@ mkdir -p "$DIR"
 
   # Start by decrypting the deploy password, and pre-populate GitHub's
   # RSA key to avoid needing to manually accept it when connecting.
+  touch ./scripts/ci/deploy
+  chmod 600 ./scripts/ci/deploy
   openssl aes-256-cbc -k "$deploy_password" -d -a \
           -in ./scripts/ci/deploy.enc -out ./scripts/ci/deploy \
           &> /dev/null
