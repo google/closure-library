@@ -25,6 +25,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.tags');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
@@ -526,6 +527,12 @@ goog.html.SafeHtml.canUseSandboxIframe = function() {
  *     opt_attributes contains the src attribute.
  */
 goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
+  // TODO(mlourenco): The charset attribute should probably be blocked. If
+  // its value is attacker controlled, the script contains attacker controlled
+  // sub-strings (even if properly escaped) and the server does not set charset
+  // then XSS is likely possible.
+  // https://html.spec.whatwg.org/multipage/scripting.html#dom-script-charset
+
   // Check whether this is really TrustedResourceUrl.
   goog.html.TrustedResourceUrl.unwrap(src);
 
@@ -535,6 +542,44 @@ goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
       fixedAttributes, defaultAttributes, opt_attributes);
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'script', attributes);
+};
+
+
+/**
+ * Creates a SafeHtml representing a script tag. Does not allow the language,
+ * src, text or type attributes to be set.
+ * @param {!goog.html.SafeScript|!Array<!goog.html.SafeScript>}
+ *     script Content to put inside the tag. Array elements are
+ *     concatenated.
+ * @param {?Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ *     Mapping from attribute names to their values. Only attribute names
+ *     consisting of [a-zA-Z0-9-] are allowed. Value of null or undefined causes
+ *     the attribute to be omitted.
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ * @throws {Error} If invalid attribute name or attribute value is provided. If
+ *     opt_attributes contains the language, src, text or type attribute.
+ */
+goog.html.SafeHtml.createScript = function(script, opt_attributes) {
+  for (var attr in opt_attributes) {
+    var attrLower = attr.toLowerCase();
+    if (attrLower == 'language' || attrLower == 'src' || attrLower == 'text' ||
+        attrLower == 'type') {
+      throw Error('Cannot set "' + attrLower + '" attribute');
+    }
+  }
+
+  var content = '';
+  script = goog.array.concat(script);
+  for (var i = 0; i < script.length; i++) {
+    content += goog.html.SafeScript.unwrap(script[i]);
+  }
+  // Convert to SafeHtml so that it's not HTML-escaped. This is safe because
+  // as part of its contract, SafeScript should have no dangerous '<'.
+  var htmlContent =
+      goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+          content, goog.i18n.bidi.Dir.NEUTRAL);
+  return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+      'script', opt_attributes, htmlContent);
 };
 
 
@@ -637,7 +682,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     throw Error(
         'Attribute "' + name + '" requires goog.string.Const value, "' + value +
         '" given.');
-    // URL attributes handled differently accroding to tag.
+    // URL attributes handled differently according to tag.
   } else if (name.toLowerCase() in goog.html.SafeHtml.URL_ATTRIBUTES_) {
     if (value instanceof goog.html.TrustedResourceUrl) {
       value = goog.html.TrustedResourceUrl.unwrap(value);

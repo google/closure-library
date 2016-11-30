@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeHtmlTest');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
@@ -370,6 +371,54 @@ function testSafeHtmlCanUseIframeSandbox() {
   }
 }
 
+
+function testSafeHtmlCreateScript() {
+  var script =
+      goog.html.SafeScript.fromConstant(goog.string.Const.from('function1();'));
+  var scriptHtml = goog.html.SafeHtml.createScript(script);
+  assertSameHtml('<script>function1();</script>', scriptHtml);
+
+  // Two pieces of script.
+  var otherScript =
+      goog.html.SafeScript.fromConstant(goog.string.Const.from('function2();'));
+  scriptHtml = goog.html.SafeHtml.createScript([script, otherScript]);
+  assertSameHtml('<script>function1();function2();</script>', scriptHtml);
+
+  // Set attribute.
+  scriptHtml = goog.html.SafeHtml.createScript(script, {'id': 'test'});
+  assertContains('id="test"', goog.html.SafeHtml.unwrap(scriptHtml));
+
+  // Set attribute to null.
+  scriptHtml =
+      goog.html.SafeHtml.createScript(goog.html.SafeScript.EMPTY, {'id': null});
+  assertSameHtml('<script></script>', scriptHtml);
+
+  // Set attribute to invalid value.
+  var exception = assertThrows(function() {
+    goog.html.SafeHtml.createScript(
+        goog.html.SafeScript.EMPTY, {'invalid.': 'cantdothis'});
+  });
+  assertContains('Invalid attribute name', exception.message);
+
+  // Cannot override type attribute.
+  exception = assertThrows(function() {
+    goog.html.SafeHtml.createScript(
+        goog.html.SafeScript.EMPTY, {'Type': 'cantdothis'});
+  });
+  assertContains('Cannot set "type"', exception.message);
+
+  // Cannot set src attribute.
+  exception = assertThrows(function() {
+    goog.html.SafeHtml.createScript(
+        goog.html.SafeScript.EMPTY, {'src': 'cantdothis'});
+  });
+  assertContains('Cannot set "src"', exception.message);
+
+  // Directionality.
+  assertEquals(goog.i18n.bidi.Dir.NEUTRAL, scriptHtml.getDirection());
+}
+
+
 /** @suppress {checkTypes} */
 function testSafeHtmlCreateScriptSrc() {
   var url = goog.html.TrustedResourceUrl.fromConstant(
@@ -460,8 +509,8 @@ function testSafeHtmlCreateStyle() {
   // Set attribute.
   styleHtml = goog.html.SafeHtml.createStyle(styleSheet, {'id': 'test'});
   var styleHtmlString = goog.html.SafeHtml.unwrap(styleHtml);
-  assertTrue(styleHtmlString, styleHtmlString.indexOf('id="test"') != -1);
-  assertTrue(styleHtmlString, styleHtmlString.indexOf('type="text/css"') != -1);
+  assertContains('id="test"', styleHtmlString);
+  assertContains('type="text/css"', styleHtmlString);
 
   // Set attribute to null.
   styleHtml = goog.html.SafeHtml.createStyle(
@@ -469,16 +518,18 @@ function testSafeHtmlCreateStyle() {
   assertSameHtml('<style type="text/css"></style>', styleHtml);
 
   // Set attribute to invalid value.
-  assertThrows(function() {
-    styleHtml = goog.html.SafeHtml.createStyle(
+  var exception = assertThrows(function() {
+    goog.html.SafeHtml.createStyle(
         goog.html.SafeStyleSheet.EMPTY, {'invalid.': 'cantdothis'});
   });
+  assertContains('Invalid attribute name', exception.message);
 
   // Cannot override type attribute.
-  assertThrows(function() {
-    styleHtml = goog.html.SafeHtml.createStyle(
+  exception = assertThrows(function() {
+    goog.html.SafeHtml.createStyle(
         goog.html.SafeStyleSheet.EMPTY, {'Type': 'cantdothis'});
   });
+  assertContains('Cannot override "type"', exception.message);
 
   // Directionality.
   assertEquals(goog.i18n.bidi.Dir.NEUTRAL, styleHtml.getDirection());
