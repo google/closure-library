@@ -6,11 +6,17 @@
 language: node_js
 sudo: required
 
+# This is required for Java 8 in non-java image
+dist: trusty
+
 cache:
   directories:
     - node_modules
 
 install:
+  # We need jdk8 for JsDossier; but this needs to come first because
+  # otherwise there is no java at all.
+  - jdk_switcher use oraclejdk8
   - ./scripts/ci/install_closure_deps.sh
 
 before_script:
@@ -21,16 +27,28 @@ before_script:
   # clang-format-diff.py invokes "clang-format" with no option of specifying
   # a binary path.
   - export PATH=$PWD/../clang/bin/:$PATH
+  # Make a directory for gh-pages; will be used by both generate_latest_docs.sh
+  # and deploy_latest_docs.sh.
+  - export GH_PAGES=$(mktemp -d)
 
 script:
+  - ./scripts/ci/generate_latest_docs.sh
   - ./scripts/ci/compile_closure.sh
   - ./scripts/ci/lint_pull_request.sh
   - ./scripts/ci/check_code_format.sh
   - travis_wait 30 ./scripts/ci/run_all_tests.sh
-  - ./scripts/ci/generate_latest_docs.sh
+
+after_success:
+  - ./scripts/ci/push_latest_docs.sh
 
 env:
   global:
     - SAUCE_USERNAME=closure-sauce
     - SAUCE_ACCESS_KEY=dfd98f70a612-e69a-ad34-6149-3ca056f8
     - secure: "aEv7CF6ZvD2Fa67yv6yYtgFGjafCkpSP2Y+Dk2AyJCFLF3+L5ZFXpFoCtgYgCWezVDbeGpoojFeCzLu0ycWwnIwJpUQ/C8NBDR/x2Lqz2I6M2PfkEy91UhSE5nXe1RJMnna1715zeBmustiFKjdETWFZrpvxkHixBHbLfY3cJZw="
+
+addons:
+  apt:
+    packages:
+      # Required for jdk_switcher use oraclejdk8
+      - oracle-java8-installer
