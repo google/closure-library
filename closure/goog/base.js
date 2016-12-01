@@ -479,6 +479,9 @@ goog.setTestOnly = function(opt_message) {
  * into the JavaScript binary. If it is required elsewhere, it will be type
  * checked as normal.
  *
+ * Before using goog.forwardDeclare, please read the documentation at
+ * https://github.com/google/closure-compiler/wiki/Bad-Type-Annotation to
+ * understand the options and tradeoffs when working with forward declarations.
  *
  * @param {string} name The namespace to forward declare in the form of
  *     "goog.package.part".
