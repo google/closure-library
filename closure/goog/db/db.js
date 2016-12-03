@@ -56,7 +56,7 @@ goog.require('goog.db.Transaction');
 /**
  * The IndexedDB factory object.
  *
- * @type {!IDBFactory|undefined}
+ * @type {IDBFactory}
  * @private
  */
 goog.db.indexedDb_ = goog.global.indexedDB || goog.global.mozIndexedDB ||
