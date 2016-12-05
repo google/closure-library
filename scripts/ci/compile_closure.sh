@@ -12,7 +12,6 @@ java -Xmx1G -jar ../closure-compiler/target/closure-compiler-1.0-SNAPSHOT.jar \
   --jscomp_off=strictMissingRequire \
   --jscomp_off=inferredConstCheck \
   --jscomp_off=extraRequire \
-  --jscomp_off=unnecessaryCasts \
   --jscomp_off=deprecated \
   --jscomp_off=lintChecks \
   --jscomp_off=analyzerChecks \
