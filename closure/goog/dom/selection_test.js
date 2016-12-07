@@ -44,10 +44,7 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.dom.removeNode(input);
-  goog.dom.removeNode(textarea);
-  goog.dom.removeNode(hiddenInput);
-  goog.dom.removeNode(hiddenTextarea);
+  goog.dom.removeChildren(document.body);
 }
 
 
@@ -60,6 +57,19 @@ function testGetStartInput() {
 
 function testGetStartTextarea() {
   getStartHelper(textarea, hiddenTextarea);
+}
+
+/**
+ * Tests that getStart routine does not error for elements that are neither
+ * text inputs nor text areas.
+ */
+function testGetStartOther() {
+  var button = goog.dom.createDom(goog.dom.TagName.BUTTON);
+  var hiddenButton =
+      goog.dom.createDom(goog.dom.TagName.BUTTON, {style: 'display: none'});
+  document.body.appendChild(button);
+  document.body.appendChild(hiddenButton);
+  getStartHelper(button, hiddenButton);
 }
 
 function getStartHelper(field, hiddenField) {
