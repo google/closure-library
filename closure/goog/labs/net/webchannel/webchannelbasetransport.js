@@ -88,8 +88,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   /**
    * @private {!WebChannelBase} The underlying channel object.
    */
-  this.channel_ = new WebChannelBase(
-      opt_options, goog.net.WebChannelTransport.CLIENT_VERSION);
+  this.channel_ = new WebChannelBase(opt_options);
 
   /**
    * @private {string} The URL of the target server end-point.
