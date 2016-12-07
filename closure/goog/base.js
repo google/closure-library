@@ -399,14 +399,14 @@ goog.module.get = function(name) {
  */
 goog.module.getInternal_ = function(name) {
   if (!COMPILED) {
-    if (goog.isProvided_(name)) {
-      // goog.require only return a value with-in goog.module files.
-      return name in goog.loadedModules_ ? goog.loadedModules_[name] :
-                                           goog.getObjectByName(name);
-    } else {
-      return null;
+    if (name in goog.loadedModules_) {
+      return goog.loadedModules_[name];
+    } else if (!goog.implicitNamespaces_[name]) {
+      var ns = goog.getObjectByName(name);
+      return ns != null ? ns : null;
     }
   }
+  return null;
 };
 
 
