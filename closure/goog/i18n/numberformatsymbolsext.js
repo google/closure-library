@@ -28,7 +28,9 @@
  * to incorporate changes before we could fix CLDR. All manual
  * modification must be documented in this section, and should be
  * removed after those changes land to CLDR.
- * @suppress {const}
+ * @suppress {const,missingRequire} Missing requires for names like
+ *     goog.i18n.NumberFormatSymbols_af though they are included by requiring
+ *     goog.i18n.NumberFormatSymbols.
  */
 
 // clang-format off
