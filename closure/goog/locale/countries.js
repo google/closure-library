@@ -21,7 +21,7 @@
  *   //depot/google3/i18n/tools/java/com/google/i18n/generator:generator
  * using the --for_closure flag.
  *
- * File generated from CLDR ver. 29
+ * File generated from CLDR ver. 30.0.2
  * go/js-locale-data-update
  *
  * Before checking, this file could have been manually edited. This is
