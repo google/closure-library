@@ -85,6 +85,15 @@ goog.html.sanitizer.HtmlSanitizerPolicy;
 
 
 /**
+ * Type for a URL policy function.
+ *
+ * @typedef {function(string, !goog.html.sanitizer.HtmlSanitizerPolicyHints=):
+ *     ?goog.html.SafeUrl}
+ */
+goog.html.sanitizer.HtmlSanitizerUrlPolicy;
+
+
+/**
  * Type for attribute policy configuration.
  * @typedef {{
  *     tagName: string,
@@ -231,8 +240,7 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 
 /**
  * Returns a function which unwraps SafeUrl from an almost HtmlSanitizerPolicy.
- * @param {!function(string, goog.html.sanitizer.HtmlSanitizerPolicyHints=)
- *     :?goog.html.SafeUrl} customUrlPolicy
+ * @param {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} customUrlPolicy
  * @return {!goog.html.sanitizer.HtmlSanitizerPolicy}
  * @private
  */
@@ -551,8 +559,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.addOriginalTagNames =
 
 /**
  * Sets a custom network URL policy.
- * @param {!function(string, goog.html.sanitizer.HtmlSanitizerPolicyHints=)
- *     :?goog.html.SafeUrl} customNetworkReqUrlPolicy
+ * @param {!goog.html.sanitizer.HtmlSanitizerUrlPolicy}
+ * customNetworkReqUrlPolicy
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype
@@ -565,8 +573,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
 
 /**
  * Sets a custom non-network URL policy.
- * @param {!function(string, goog.html.sanitizer.HtmlSanitizerPolicyHints=)
- *     :?goog.html.SafeUrl} customUrlPolicy
+ * @param {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} customUrlPolicy
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withCustomUrlPolicy =
@@ -623,7 +630,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
  */
 goog.html.sanitizer.HtmlSanitizer.wrapPolicy_ = function(
     customPolicy, defaultPolicy) {
-  return /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (function(
+  return /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (function(
       value, hints, ctx, policy) {
     var result = customPolicy(value, hints, ctx, policy);
     if (goog.isNull(result)) {
@@ -638,7 +645,7 @@ goog.html.sanitizer.HtmlSanitizer.wrapPolicy_ = function(
  * Installs the sanitizer's default policy for a specific tag/attribute
  * combination on the provided whitelist, but only if a policy already exists.
  *
- * @param {!Object<string, goog.html.sanitizer.HtmlSanitizerPolicy>} wl The
+ * @param {!Object<string, !goog.html.sanitizer.HtmlSanitizerPolicy>} wl The
  *     whitelist to modify.
  * @param {!Object<string, boolean>} ol The set of attributes handlers that
  *     should not be wrapped with a default policy.
@@ -1018,7 +1025,15 @@ goog.html.sanitizer.HtmlSanitizer.setAttribute_ = function(node, name, value) {
   var attrDescriptor =
       goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['setAttribute'];
   if (attrDescriptor && attrDescriptor.value) {
-    attrDescriptor.value.call(node, name, value);
+    try {
+      attrDescriptor.value.call(node, name, value);
+    } catch (e) {
+      // IE throws an exception if the src attribute contains HTTP credentials.
+      // However the attribute gets set anyway.
+      if (e.message.indexOf('A security problem occurred') == -1) {
+        throw e;
+      }
+    }
   }
 };
 
