@@ -22,6 +22,7 @@
 
 goog.provide('goog.dom.dataset');
 
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.string');
 goog.require('goog.userAgent.product');
 
@@ -41,7 +42,7 @@ goog.require('goog.userAgent.product');
  * @private
  */
 goog.dom.dataset.ALLOWED_ =
-    !goog.userAgent.product.IE && !goog.userAgent.product.SAFARI;
+    !goog.userAgent.product.IE && !goog.labs.userAgent.browser.isSafari();
 
 
 /**
