@@ -191,13 +191,12 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  * must contain only alphanumeric and `_` characters.
  *
  * The format string must start with one of the following:
- * - `https://<origin>/<pathStart>`
- * - `//<origin>/<pathStart>`
+ * - `https://<origin>/`
+ * - `//<origin>/`
  * - `/<pathStart>`
  *
  * `<origin>` must contain only alphanumeric or any of the following: `-.:[]`.
- * `<pathStart>` must contain only alphanumeric or any of the following: `_~-`.
- * If other characters follow it, it must end with one of: `/#?`.
+ * `<pathStart>` is any character except `/` and `\`.
  *
  * Example usage:
  *
@@ -260,33 +259,16 @@ goog.html.TrustedResourceUrl.FORMAT_MARKER_ = /%{(\w+)}/g;
  * start with:
  * - https:// followed by allowed origin characters.
  * - // followed by allowed origin characters.
- * - Nothing (no scheme and origin). There will only be an absolute path.
+ * - / not followed by / or \. There will only be an absolute path.
+ *
+ * Based on
+ * https://url.spec.whatwg.org/commit-snapshots/56b74ce7cca8883eab62e9a12666e2fac665d03d/#url-parsing
+ * an initial / which is not followed by another / or \ will end up in the "path
+ * state" and from there it can only go to "fragment state" and "query state".
  *
  * We don't enforce a well-formed domain name. So '.' or '1.2' are valid.
  * That's ok because the origin comes from a compile-time constant.
- * @private @const {string}
- */
-goog.html.TrustedResourceUrl.SCHEME_AND_ORIGIN_ =
-    '(?:(?:https:)?//[0-9a-z.:[\\]-]+)?';
-
-
-/**
- * The URL must have a first, constant, absolute-path segment. So the path
- * must start with /, followed by allowed path characters and a final:
- * - /, ? or #. These introduce places where it's safe to interpolate --
- *   a new path segment, the query or the fragment.
- * - The regexp $ metacharacter, indicating that nothing else follows.
  *
- * The characters allowed in the path are unreserved characters:
- * https://tools.ietf.org/html/rfc3986#section-2.3. '.' is excluded to
- * disallow "/./" as a path.
- * @private @const {string}
- */
-goog.html.TrustedResourceUrl.BASE_ABSOLUTE_PATH_ =
-    '(?:/[0-9a-z_~-]+(?:[/#?]|$))';
-
-
-/**
  * A regular expression is used instead of goog.uri for several reasons:
  * - Strictness. E.g. we don't want any userinfo component and we don't
  *   want '/./, nor \' in the first path component.
@@ -299,10 +281,8 @@ goog.html.TrustedResourceUrl.BASE_ABSOLUTE_PATH_ =
  *   code.
  * @private @const {!RegExp}
  */
-goog.html.TrustedResourceUrl.BASE_URL_ = new RegExp(
-    '^' + goog.html.TrustedResourceUrl.SCHEME_AND_ORIGIN_ +
-        goog.html.TrustedResourceUrl.BASE_ABSOLUTE_PATH_,
-    'i');
+goog.html.TrustedResourceUrl.BASE_URL_ =
+    /^(?:https:)?\/\/[0-9a-z.:[\]-]+\/|^\/[^\/\\]/i;
 
 
 /**
