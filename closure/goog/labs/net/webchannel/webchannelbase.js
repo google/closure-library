@@ -64,7 +64,7 @@ var requestStats = goog.labs.net.webChannel.requestStats;
  *
  * @param {!goog.net.WebChannel.Options=} opt_options Configuration for the
  *        WebChannel instance.
- * @param {string=} opt_clientVersion An application-specific version number
+ * @param {number=} opt_clientVersion An application-specific version number
  *        that is sent to the server when connected.
  * @param {!ConnectionState=} opt_conn Previously determined connection
  *        conditions.
@@ -76,9 +76,9 @@ goog.labs.net.webChannel.WebChannelBase = function(
     opt_options, opt_clientVersion, opt_conn) {
   /**
    * The application specific version that is passed to the server.
-   * @private {?string}
+   * @private {?number}
    */
-  this.clientVersion_ = opt_clientVersion || null;
+  this.clientVersion_ = opt_clientVersion || 0;
 
   /**
    * An array of queued maps that need to be sent to the server.
@@ -1082,8 +1082,11 @@ WebChannelBase.prototype.open_ = function() {
   var requestText = this.dequeueOutgoingMaps_();
   var uri = this.forwardChannelUri_.clone();
   uri.setParameterValue('RID', rid);
-  if (this.clientVersion_) {
-    uri.setParameterValue('CVER', this.clientVersion_);
+  if (this.clientVersion_ > 0) {
+    // TODO(user): use CVER parameter after server compatibility is fixed
+    // uri.setParameterValue('CVER', this.clientVersion_);
+
+    request.setExtraHeaders({'X-WebChannel-CVER': this.clientVersion_});
   }
 
   // Add the reconnect parameters.
