@@ -16,6 +16,7 @@ goog.provide('goog.testing.AsyncTestCaseAsyncTest');
 goog.setTestOnly('goog.testing.AsyncTestCaseAsyncTest');
 
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
 // Has the setUp() function been called.
@@ -128,4 +129,37 @@ function testSignalsCallContinueTestingBeforeFinishing() {
     assertEquals('Still waiting for 1 signals.', thrown.message);
   }, 0);
   doAsyncSignals();  // To not timeout.
+}
+
+function testCurrentTestName() {
+  var currentTestName = goog.testing.TestCase.currentTestName;
+  assertEquals('testCurrentTestName', currentTestName);
+}
+
+function testCurrentTestNameAsync() {
+  var getAssertSameTest = function() {
+    var expectedTestCase = goog.testing.TestCase.getActiveTestCase();
+    var expectedTestName = (expectedTestCase ? expectedTestCase.getName() :
+                                               '<no active TestCase>') +
+        '.' +
+        (goog.testing.TestCase.currentTestName || '<no active test name>');
+    var assertSameTest = function() {
+      var currentTestCase = goog.testing.TestCase.getActiveTestCase();
+      var currentTestName = (currentTestCase ? currentTestCase.getName() :
+                                               '<no active TestCase>') +
+              '.' + goog.testing.TestCase.currentTestName ||
+          '<no active test name>';
+      assertEquals(expectedTestName, currentTestName);
+      assertEquals(expectedTestCase, currentTestCase);
+    };
+    return assertSameTest;
+  };
+  var assertSameTest = getAssertSameTest();
+  // do something asynchronously...
+  asyncTestCase.waitForSignals(1, 'Awaiting asynchronous callback');
+  setTimeout(function() {
+    // ... and ensure the later half runs during the same test:
+    assertSameTest();
+    asyncTestCase.signal();
+  });
 }
