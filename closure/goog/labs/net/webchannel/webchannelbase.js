@@ -1082,10 +1082,12 @@ WebChannelBase.prototype.open_ = function() {
   var requestText = this.dequeueOutgoingMaps_();
   var uri = this.forwardChannelUri_.clone();
   uri.setParameterValue('RID', rid);
-  if (this.clientVersion_ > 0) {
-    // TODO(user): use CVER parameter after server compatibility is fixed
-    // uri.setParameterValue('CVER', this.clientVersion_);
-  }
+
+  // TODO(user): use CVER parameter after server compatibility is fixed
+
+  // if (this.clientVersion_ > 0) {
+  //   uri.setParameterValue('CVER', this.clientVersion_);
+  // }
 
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
