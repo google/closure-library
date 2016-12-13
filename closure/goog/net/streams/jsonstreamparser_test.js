@@ -70,10 +70,6 @@ function testEmptyStreamMore() {
   parser = new goog.net.streams.JsonStreamParser();
   assertThrows(function() { parser.parse(' a [   '); });
   assertThrows(function() { parser.parse(' [ ] '); });
-
-  parser = new goog.net.streams.JsonStreamParser();
-  parser.parse(' [   ');
-  assertThrows(function() { parser.parse(' ]  a   '); });
 }
 
 function testSingleMessage() {
@@ -235,4 +231,62 @@ function testRandomlyChunkedFuzzyMessages() {
   goog.array.forEach(data, function(elm, index) {
     assertObjectEquals(dataString + '\n@' + index, elm, result[index]);
   });
+}
+
+
+// TODO(user): add a fuzzy test for this.
+
+function testGetExtraInput() {
+  var parser = new goog.net.streams.JsonStreamParser();
+  var result = parser.parse('[] , [[1, 2, 3]]');
+  assertNull(result);
+  assertTrue(parser.done());
+  assertEquals(' , [[1, 2, 3]]', parser.getExtraInput());
+
+  parser = new goog.net.streams.JsonStreamParser();
+  assertFalse(parser.done());
+  parser.parse(' [{"a" : "b"}, {"c" : "d"   ');
+  assertFalse(parser.done());
+  parser.parse(' } ]  a   ');
+  assertTrue(parser.done());
+  assertEquals('  a   ', parser.getExtraInput());
+}
+
+
+function testDeliverMessageAsRawString() {
+  var parser = new goog.net.streams.JsonStreamParser(
+      {'deliverMessageAsRawString': true});
+  var result = parser.parse(' [{"a" : "b"}, {"c" : "d"},[],{}] ');
+  assertEquals(4, result.length);
+  assertEquals('{"a" : "b"}', result[0]);
+  assertEquals(' {"c" : "d"}', result[1]);
+  assertEquals('[]', result[2]);
+  assertEquals('{}', result[3]);
+}
+
+
+function testCompactJsonArrayFormat() {
+  var message1 = '{"a" : [1, ,2]}';
+  var message2 = '[,  1,2,,  ,null,  ,,"abc"]';
+  var message3 = '[ , ]';
+  var stream = '[' + message1 + ',' + message2 + ',' + message3 + ']';
+
+  var parser = new goog.net.streams.JsonStreamParser(
+      {'allowCompactJsonArrayFormat': true});
+  result = parser.parse(stream);
+  // clang-format off
+  assertEquals(3, result.length);
+  assertElementsEquals([1, , 2], result[0].a);
+  assertElementsEquals([, 1, 2, , , null, , , 'abc'], result[1]);
+  assertElementsEquals([ , ], result[2]);
+  // clang-format on
+
+  // Raw message strings
+  parser = new goog.net.streams.JsonStreamParser(
+      {'allowCompactJsonArrayFormat': true, 'deliverMessageAsRawString': true});
+  result = parser.parse(stream);
+  assertEquals(3, result.length);
+  assertEquals(message1, result[0]);
+  assertEquals(message2, result[1]);
+  assertEquals(message3, result[2]);
 }

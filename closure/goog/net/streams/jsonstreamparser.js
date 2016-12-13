@@ -17,8 +17,11 @@
  *
  * The default JSON parser decodes the input stream (string) under the
  * following rules:
- * 1. The stream must start with a '[' and an array is assumed, and each
- *     element will be decoded as a JS object and delivered.
+ * 1. The stream represents a valid JSON array (must start with a "[" and close
+ *    with the corresponding "]"). Each element of this array is assumed to be
+ *    either an array or an object, and will be decoded as a JS object and
+ *    delivered. Compact array format that is not valid JSON is also supported,
+ *    e.g. [1,,2].
  * 2. All JSON elements in the buffer will be decoded and delivered in a batch.
  * 3. If a high-level API does not support batch delivery (e.g. grpc), then
  *    a wrapper is expected to deliver individual elements separately
@@ -36,6 +39,7 @@
  */
 
 goog.provide('goog.net.streams.JsonStreamParser');
+goog.provide('goog.net.streams.JsonStreamParser.Options');
 
 goog.require('goog.asserts');
 goog.require('goog.json');
@@ -44,17 +48,18 @@ goog.require('goog.net.streams.StreamParser');
 goog.scope(function() {
 
 
-
 /**
  * The default JSON stream parser.
  *
+ * @param {!goog.net.streams.JsonStreamParser.Options=} opt_options
+ *     Configuration for the new JsonStreamParser instance.
  * @constructor
  * @struct
  * @implements {goog.net.streams.StreamParser}
  * @final
  * @package
  */
-goog.net.streams.JsonStreamParser = function() {
+goog.net.streams.JsonStreamParser = function(opt_options) {
   /**
    * The current error message, if any.
    * @private {?string}
@@ -63,7 +68,7 @@ goog.net.streams.JsonStreamParser = function() {
 
   /**
    * The currently buffered result (parsed JSON objects).
-   * @private {!Array<!Object>}
+   * @private {!Array<string|!Object>}
    */
   this.result_ = [];
 
@@ -120,7 +125,40 @@ goog.net.streams.JsonStreamParser = function() {
    * @private {goog.net.streams.JsonStreamParser.State_}
    */
   this.state_ = Parser.State_.INIT;
+
+  /**
+   * Whether allows compact JSON array format, e.g. "[1, ,2]".
+   * @private {boolean}
+   */
+  this.allowCompactJsonArrayFormat_ =
+      !!(opt_options && opt_options.allowCompactJsonArrayFormat);
+
+  /**
+   * Whether to deliver the raw message string without decoding into JS object.
+   * @private {boolean}
+   */
+  this.deliverMessageAsRawString_ =
+      !!(opt_options && opt_options.deliverMessageAsRawString);
 };
+
+
+/**
+ * Configuration spec for newly created JSON stream parser:
+ *
+ * allowCompactJsonArrayFormat: whether allows compact JSON array format, where
+ *     null is represented as empty string, e.g. "[1, ,2]".
+ *
+ * deliverMessageAsRawString: whether to deliver the raw message string without
+ *     decoding into JS object. Semantically insignificant whitespaces in the
+ *     input may be kept or ignored.
+ *
+ * @typedef {{
+ *   allowCompactJsonArrayFormat: (boolean|undefined),
+ *   deliverMessageAsRawString: (boolean|undefined),
+ * }}
+ */
+goog.net.streams.JsonStreamParser.Options;
+
 
 var Parser = goog.net.streams.JsonStreamParser;
 
@@ -183,6 +221,29 @@ Parser.prototype.getErrorMessage = function() {
 
 
 /**
+ * @return {boolean} Whether the parser has reached the end of the stream
+ *
+ * TODO(updogliu): move this API to the base type.
+ */
+Parser.prototype.done = function() {
+  return this.streamState_ === Parser.StreamState_.ARRAY_END;
+};
+
+
+/**
+ * Get the part of input that is after the end of the stream. Call this only
+ * when {@code this.done()} is true.
+ *
+ * @return {string} The extra input
+ *
+ * TODO(updogliu): move this API to the base type.
+ */
+Parser.prototype.getExtraInput = function() {
+  return this.buffer_;
+};
+
+
+/**
  * @param {string|!ArrayBuffer|!Array<number>} input
  *     The current input string (always)
  * @param {number} pos The position in the current input that triggers the error
@@ -207,8 +268,6 @@ Parser.prototype.parse = function(input) {
   // captures
   var parser = this;
   var stack = parser.stack_;
-  /** @type {!Array<!Object>} */
-  var result = parser.result_;
   var pattern = parser.stringInputPattern_;
   var State = Parser.State_;  // enums
 
@@ -255,7 +314,7 @@ Parser.prototype.parse = function(input) {
 
         if (parser.depth_ === 0 && parser.state_ == State.ARRAY_END) {
           parser.streamState_ = Parser.StreamState_.ARRAY_END;
-          parser.buffer_ = '';  // TODO(wenboz): discard anything after ']'?
+          parser.buffer_ = input.substring(i);
         } else {
           if (msgStart === -1) {
             parser.buffer_ += input.substring(streamStart);
@@ -272,6 +331,8 @@ Parser.prototype.parse = function(input) {
         return null;
     }
   }
+
+  return null;
 
   /**
    * @return {boolean} true if the parser needs parse more data
@@ -340,7 +401,7 @@ Parser.prototype.parse = function(input) {
             stack.push(State.KEY_END);
           } else {
             if (current === '}') {
-              addMessage({});
+              addMessage('{}');
               parser.state_ = nextState();
               continue;
             } else {
@@ -392,10 +453,10 @@ Parser.prototype.parse = function(input) {
               parser.depth_--;
               if (parser.depth_ === 0) {
                 parser.state_ = State.ARRAY_END;
-                break;
+                return;
               }
 
-              addMessage([]);
+              addMessage('[]');
 
               parser.state_ = nextState();
               continue;
@@ -419,6 +480,12 @@ Parser.prototype.parse = function(input) {
             // continue
           } else if ('0123456789'.indexOf(current) !== -1) {
             parser.state_ = State.NUM_DIGIT;
+          } else if (current === ',' && parser.allowCompactJsonArrayFormat_) {
+            parser.state_ = State.VALUE;
+          } else if (current === ']' && parser.allowCompactJsonArrayFormat_) {
+            i--;
+            parser.pos_--;
+            parser.state_ = nextState();
           } else {
             parser.error_(input, i);
           }
@@ -434,7 +501,9 @@ Parser.prototype.parse = function(input) {
             }
           } else if (current === ']') {
             parser.depth_--;
-            if (parser.depth_ === 0) break;
+            if (parser.depth_ === 0) {
+              return;
+            }
 
             addMessage();
             parser.state_ = nextState();
@@ -653,14 +722,15 @@ Parser.prototype.parse = function(input) {
   }
 
   /**
-   * @param {(!Object|string)=} opt_data The message to add
+   * @param {(string)=} opt_data The message to add
    */
   function addMessage(opt_data) {
     if (parser.depth_ > 1) {
       return;
     }
 
-    // '' not possible
+    goog.asserts.assert(opt_data !== '');  // '' not possible
+
     if (!opt_data) {
       if (msgStart === -1) {
         opt_data = parser.buffer_ + input.substring(streamStart, i);
@@ -668,16 +738,15 @@ Parser.prototype.parse = function(input) {
         opt_data = input.substring(msgStart, i);
       }
     }
-    if (goog.isString(opt_data)) {
-      result.push(
-          goog.asserts.assertInstanceof(goog.json.parse(opt_data), Object));
+
+    if (parser.deliverMessageAsRawString_) {
+      parser.result_.push(opt_data);
     } else {
-      result.push(opt_data);
+      parser.result_.push(
+          goog.asserts.assertInstanceof(goog.json.parse(opt_data), Object));
     }
     msgStart = i;
   }
-
-  return null;  // Parser.prototype.parse()
 };
 
 });  // goog.scope
