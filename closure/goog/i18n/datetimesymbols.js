@@ -267,7 +267,7 @@ goog.i18n.DateTimeSymbols_ar = {
   DATEFORMATS: ['EEEE، d MMMM، y', 'd MMMM، y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
-  FIRSTDAYOFWEEK: 5,
+  FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [4, 5],
   FIRSTWEEKCUTOFFDAY: 4
 };
