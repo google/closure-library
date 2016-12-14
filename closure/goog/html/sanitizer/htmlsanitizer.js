@@ -1462,8 +1462,10 @@ goog.html.sanitizer.HtmlSanitizer.prototype.processTemplateContents_ = function(
     // cleanNode.innerHTML =
     //     goog.html.SafeHtml.unwrap(this.sanitize(dirtyNode.innerHTML));
   } else {
-    var templateDoc = cleanNode.content.ownerDocument;
-    var dirtyCopy = templateDoc.importNode(dirtyNode, true);
+    var templateDoc =
+        /** @type {!HTMLTemplateElement} */ (cleanNode).content.ownerDocument;
+    var dirtyCopy =
+        goog.asserts.assert(templateDoc.importNode(dirtyNode, true));
     var dirtyCopyChildren =
         goog.html.sanitizer.HtmlSanitizer.getChildNodes_(dirtyCopy);
     goog.array.forEach(

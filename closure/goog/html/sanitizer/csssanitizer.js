@@ -23,6 +23,8 @@
 goog.provide('goog.html.sanitizer.CssSanitizer');
 
 goog.require('goog.array');
+goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
@@ -280,7 +282,8 @@ goog.html.sanitizer.CssSanitizer.createInertDocument_ = function() {
   // document. See https://github.com/cure53/DOMPurify/issues/47.
   var doc = document;
   if (typeof HTMLTemplateElement === 'function') {
-    doc = document.createElement('template').content.ownerDocument;
+    doc =
+        goog.dom.createElement(goog.dom.TagName.TEMPLATE).content.ownerDocument;
   }
   return doc.implementation.createHTMLDocument('');
 };
