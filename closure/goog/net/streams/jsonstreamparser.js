@@ -44,8 +44,13 @@ goog.provide('goog.net.streams.JsonStreamParser.Options');
 goog.require('goog.asserts');
 goog.require('goog.json');
 goog.require('goog.net.streams.StreamParser');
+goog.require('goog.net.streams.utils');
+
 
 goog.scope(function() {
+
+
+var utils = goog.module.get('goog.net.streams.utils');
 
 
 /**
@@ -348,23 +353,13 @@ Parser.prototype.parse = function(input) {
    */
   function skipWhitespace() {
     while (i < input.length) {
-      if (isWhitespace(input[i])) {
+      if (utils.isJsonWhitespace(input[i])) {
         i++;
         parser.pos_++;
         continue;
       }
       break;
     }
-  }
-
-  /**
-   * TODO(wenboz): 0xa0 for IE?
-   *
-   * @param {string} c The char to check
-   * @return {boolean} true if a char is a whitespace
-   */
-  function isWhitespace(c) {
-    return c == '\r' || c == '\n' || c == ' ' || c == '\t';
   }
 
   /**
@@ -387,14 +382,14 @@ Parser.prototype.parse = function(input) {
             parser.state_ = State.OBJECT_OPEN;
           } else if (current === '[') {
             parser.state_ = State.ARRAY_OPEN;
-          } else if (!isWhitespace(current)) {
+          } else if (!utils.isJsonWhitespace(current)) {
             parser.error_(input, i);
           }
           continue;
 
         case State.KEY_START:
         case State.OBJECT_OPEN:
-          if (isWhitespace(current)) {
+          if (utils.isJsonWhitespace(current)) {
             continue;
           }
           if (parser.state_ === State.KEY_START) {
@@ -418,7 +413,7 @@ Parser.prototype.parse = function(input) {
 
         case State.KEY_END:
         case State.OBJECT_END:
-          if (isWhitespace(current)) {
+          if (utils.isJsonWhitespace(current)) {
             continue;
           }
           if (current === ':') {
@@ -443,7 +438,7 @@ Parser.prototype.parse = function(input) {
 
         case State.ARRAY_OPEN:
         case State.VALUE:
-          if (isWhitespace(current)) {
+          if (utils.isJsonWhitespace(current)) {
             continue;
           }
           if (parser.state_ === State.ARRAY_OPEN) {
@@ -507,7 +502,7 @@ Parser.prototype.parse = function(input) {
 
             addMessage();
             parser.state_ = nextState();
-          } else if (isWhitespace(current)) {
+          } else if (utils.isJsonWhitespace(current)) {
             continue;
           } else {
             parser.error_(input, i);
