@@ -755,6 +755,10 @@ goog.abstractMethod = function() {
  *     method to.
  */
 goog.addSingletonGetter = function(ctor) {
+  // instance_ is immediately set to prevent issues with sealed constructors
+  // such as are encountered when a constructor is returned as the export object
+  // of a goog.module in unoptimized code.
+  ctor.instance_ = undefined;
   ctor.getInstance = function() {
     if (ctor.instance_) {
       return ctor.instance_;
