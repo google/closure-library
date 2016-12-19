@@ -15,6 +15,7 @@ java -Xmx1G -jar ../closure-compiler/target/closure-compiler-1.0-SNAPSHOT.jar \
   --jscomp_off=deprecated \
   --jscomp_off=lintChecks \
   --jscomp_off=analyzerChecks \
+  --jscomp_warning=unusedLocal \
   --js='**.js' \
   --js='!**_test.js' \
   --js='!**_perf.js' \
