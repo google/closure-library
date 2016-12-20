@@ -22,6 +22,7 @@ var IGNORED_TESTS = [
   'closure/goog/net/crossdomainrpc_test.html',
   // Causes flaky Adobe Acrobat update popups.
   'closure/goog/useragent/flash_test.html'
+  'closure/goog/useragent/jscript_test.html'
 ];
 
 describe('Run all Closure unit tests', function() {
