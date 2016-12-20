@@ -709,6 +709,56 @@ function testDragEndEvent() {
   testDragEndEventInternal(true);
 }
 
+function testDropEventHasBrowserEvent() {
+  var testGroup = new goog.fx.AbstractDragDrop();
+
+  var childEl = document.getElementById('child1');
+  var item = new goog.fx.DragDropItem(childEl);
+  item.currentDragElement_ = childEl;
+
+  testGroup.items_.push(item);
+  testGroup.recalculateDragTargets();
+
+  // Simulate starting a drag
+  var startBrowserEvent = {
+    'clientX': 0,
+    'clientY': 0,
+    'type': goog.events.EventType.MOUSEMOVE,
+    'relatedTarget': childEl,
+    'preventDefault': function() {},
+  };
+  testGroup.startDrag(startBrowserEvent, item);
+
+  testGroup.activeTarget_ = new goog.fx.ActiveDropTarget_(
+      new goog.math.Box(0, 0, 0, 0), testGroup, item, childEl);
+
+  var endBrowserEvent = {
+    'clientX': 0,
+    'clientY': 0,
+    'type': goog.events.EventType.MOUSEUP,
+    'ctrlKey': false,
+    'altKey': true
+  };
+
+  goog.events.listen(
+      testGroup, goog.fx.AbstractDragDrop.EventType.DROP, function(event) {
+        var browserEvent = event.browserEvent;
+        assertEquals(
+            'The drop event should contain the browser event', endBrowserEvent,
+            browserEvent);
+      });
+
+  testGroup.endDrag({
+    'clientX': 0,
+    'clientY': 0,
+    'dragCanceled': false,
+    'browserEvent': endBrowserEvent
+  });
+
+  testGroup.dispose();
+  item.dispose();
+}
+
 // Helper function for manual debugging.
 function drawTargets(targets, multiplier) {
   var colors = ['green', 'blue', 'red', 'lime', 'pink', 'silver', 'orange'];
