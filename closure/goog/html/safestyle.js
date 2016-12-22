@@ -126,7 +126,7 @@ goog.html.SafeStyle = function() {
   /**
    * A type marker used to implement additional run-time type checking.
    * @see goog.html.SafeStyle#unwrap
-   * @const
+   * @const {!Object}
    * @private
    */
   this.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =

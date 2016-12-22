@@ -56,7 +56,7 @@ goog.string.Const = function() {
   /**
    * A type marker used to implement additional run-time type checking.
    * @see goog.string.Const#unwrap
-   * @const
+   * @const {!Object}
    * @private
    */
   this.STRING_CONST_TYPE_MARKER__GOOG_STRING_SECURITY_PRIVATE_ =

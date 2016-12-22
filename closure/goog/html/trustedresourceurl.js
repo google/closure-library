@@ -64,7 +64,7 @@ goog.html.TrustedResourceUrl = function() {
   /**
    * A type marker used to implement additional run-time type checking.
    * @see goog.html.TrustedResourceUrl#unwrap
-   * @const
+   * @const {!Object}
    * @private
    */
   this.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =

@@ -79,7 +79,7 @@ goog.html.SafeUrl = function() {
   /**
    * A type marker used to implement additional run-time type checking.
    * @see goog.html.SafeUrl#unwrap
-   * @const
+   * @const {!Object}
    * @private
    */
   this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
