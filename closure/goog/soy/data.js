@@ -27,7 +27,9 @@ goog.provide('goog.soy.data.SanitizedCss');
 goog.provide('goog.soy.data.UnsanitizedText');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.uncheckedconversions');
+goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
 
 
@@ -167,27 +169,66 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
 
 
 /**
- * An intermediary base class to allow the type system to specify text templates
- * without referencing the soydata package.
+ * Unsanitized plain text string.
+ *
+ * While all strings are effectively safe to use as a plain text, there are no
+ * guarantees about safety in any other context such as HTML. This is
+ * sometimes used to mark that should never be used unescaped.
+ *
+ * @param {*} content Plain text with no guarantees.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
  * @extends {goog.soy.data.SanitizedContent}
  * @constructor
  */
-goog.soy.data.UnsanitizedText = function() {
-  // TODO(gboyer): Delete this class after moving soydata to Closure.
-  goog.soy.data.UnsanitizedText.base(this, 'constructor');
+goog.soy.data.UnsanitizedText = function(content, opt_contentDir) {
+  // Not calling the superclass constructor which just throws an exception.
+
+  /** @override */
+  this.content = String(content);
+  this.contentDir = opt_contentDir != null ? opt_contentDir : null;
 };
 goog.inherits(goog.soy.data.UnsanitizedText, goog.soy.data.SanitizedContent);
 
 
+/** @override */
+goog.soy.data.UnsanitizedText.prototype.contentKind =
+    goog.soy.data.SanitizedContentKind.TEXT;
+
+
 
 /**
- * An intermediary base class to allow the type system to specify CSS templates
- * without referencing the soydata package.
+ * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
+ *
+ * The content is non-attacker-exploitable CSS, such as {@code color:#c3d9ff}.
+ * The content direction is LTR.
+ *
  * @extends {goog.soy.data.SanitizedContent}
  * @constructor
  */
 goog.soy.data.SanitizedCss = function() {
-  // TODO(gboyer): Delete this class after moving soydata to Closure.
   goog.soy.data.SanitizedCss.base(this, 'constructor');
 };
 goog.inherits(goog.soy.data.SanitizedCss, goog.soy.data.SanitizedContent);
+
+
+/** @override */
+goog.soy.data.SanitizedCss.prototype.contentKind =
+    goog.soy.data.SanitizedContentKind.CSS;
+
+
+/** @override */
+goog.soy.data.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
+
+/**
+ * Checks if the value could be used as the Soy type {css}.
+ * @param {*} value
+ * @return {boolean}
+ */
+goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
+  return goog.isString(value) ||
+      value instanceof goog.soy.data.SanitizedCss ||
+      value instanceof goog.soy.data.UnsanitizedText ||
+      value instanceof goog.html.SafeStyle;
+};
