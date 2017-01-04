@@ -1045,3 +1045,17 @@ function testCustomKeyboardShortcut_default() {
 
   FIELDMOCK.$verify();
 }
+
+function testKeyboardShortcut_withBothModifierKeys() {
+  FIELDMOCK.$reset();
+  FIELDMOCK.$replay();
+
+  var e = {};
+  e.metaKey = true;
+  e.ctrlKey = true;
+  var key = ' ';
+  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  assertFalse(result);
+
+  FIELDMOCK.$verify();
+}
