@@ -143,6 +143,13 @@ goog.net.xpc.NativeMessagingTransport = function(
    */
   this.peerEndpointId_ = null;
 
+  /**
+   * The key returned by listen() when this transport listens for the
+   * postMessage event.
+   * @private {?goog.events.Key}
+   */
+  this.postMessageListenerKey_ = null;
+
   // We don't want to mark ourselves connected until we have sent whatever
   // message will cause our counterpart in the other frame to also declare
   // itself connected, if there is such a message.  Otherwise we risk a user
@@ -199,14 +206,6 @@ goog.net.xpc.NativeMessagingTransport.prototype.peerProtocolVersion_ = null;
 
 
 /**
- * Flag indicating if this instance of the transport has been initialized.
- * @type {boolean}
- * @private
- */
-goog.net.xpc.NativeMessagingTransport.prototype.initialized_ = false;
-
-
-/**
  * The transport type.
  * @type {number}
  * @override
@@ -259,34 +258,52 @@ goog.net.xpc.NativeMessagingTransport.prototype.couldPeerVersionBe_ = function(
 /**
  * Initializes this transport. Registers a listener for 'message'-events
  * on the document.
+ * @param {string} peerHostname The hostname (protocol, domain, and port) of the
+ *     peer.
  * @param {Window} listenWindow The window to listen to events on.
+ * @return {?goog.events.Key} The key if we add a listener for postMessages.
  * @private
  */
-goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
+goog.net.xpc.NativeMessagingTransport.initialize_ = function(
+    peerHostname, listenWindow) {
   var uid = goog.getUid(listenWindow);
   var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
   if (!goog.isNumber(value)) {
     value = 0;
   }
+  var postMessageListenerKey = null;
   if (value == 0) {
     // Listen for message-events. These are fired on window in FF3 and on
     // document in Opera.
-    goog.events.listen(
+    postMessageListenerKey = goog.events.listen(
         listenWindow.postMessage ? listenWindow : listenWindow.document,
-        'message', goog.net.xpc.NativeMessagingTransport.messageReceived_,
+        'message',
+        goog.partial(
+            goog.net.xpc.NativeMessagingTransport.messageReceived_,
+            peerHostname),
         false, goog.net.xpc.NativeMessagingTransport);
   }
   goog.net.xpc.NativeMessagingTransport.activeCount_[uid] = value + 1;
+  return postMessageListenerKey;
 };
 
 
 /**
  * Processes an incoming message-event.
+ * @param {string} peerHostname The hostname (protocol, domain, and port) of the
+ *     peer.
  * @param {goog.events.BrowserEvent} msgEvt The message event.
  * @return {boolean} True if message was successfully delivered to a channel.
  * @private
  */
-goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
+goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(
+    peerHostname, msgEvt) {
+  // If the peerHostname is not a wildcard, then use it to verify the origin of
+  // the message.
+  if (peerHostname != '*' && peerHostname != msgEvt.getBrowserEvent().origin) {
+    return false;
+  }
+
   var data = msgEvt.getBrowserEvent().data;
 
   if (!goog.isString(data)) {
@@ -484,8 +501,9 @@ goog.net.xpc.NativeMessagingTransport.prototype.setPeerProtocolVersion_ =
  * @override
  */
 goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
-  goog.net.xpc.NativeMessagingTransport.initialize_(this.getWindow());
-  this.initialized_ = true;
+  this.postMessageListenerKey_ =
+      goog.net.xpc.NativeMessagingTransport.initialize_(
+          this.peerHostname_, this.getWindow());
   this.maybeAttemptToConnect_();
 };
 
@@ -591,16 +609,14 @@ goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
 
 /** @override */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
-  if (this.initialized_) {
+  if (this.postMessageListenerKey_ != null) {
     var listenWindow = this.getWindow();
     var uid = goog.getUid(listenWindow);
     var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
     goog.net.xpc.NativeMessagingTransport.activeCount_[uid] = value - 1;
     if (value == 1) {
-      goog.events.unlisten(
-          listenWindow.postMessage ? listenWindow : listenWindow.document,
-          'message', goog.net.xpc.NativeMessagingTransport.messageReceived_,
-          false, goog.net.xpc.NativeMessagingTransport);
+      goog.events.unlistenByKey(this.postMessageListenerKey_);
+      this.postMessageListenerKey_ = null;
     }
   }
 

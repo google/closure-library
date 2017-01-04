@@ -129,15 +129,60 @@ function testDisposeWithDom() {
 }
 
 
+// This is a regression test that ensures untrusted origins are ignored when
+// a peerHostname is supplied to CrossPageChannel. b/33746803.
+function testMultipleChannelsSendingMessages() {
+  var xpc = getTestChannel();
+  var serviceResult, payloadResult;
+  xpc.xpcDeliver = function(service, payload) {
+    serviceResult = service;
+    payloadResult = payload;
+  };
+  xpc.getRole = function() {
+    return goog.net.xpc.CrossPageChannelRole.INNER;
+  };
+  var t = new goog.net.xpc.NativeMessagingTransport(
+      xpc, 'http://g.com', false /* opt_oneSidedHandshake */,
+      2 /* opt_protocolVersion */);
+
+  var e = createMockEvent('origin_b', 'channel_b|tp:SETUP');
+  assertFalse(
+      goog.net.xpc.NativeMessagingTransport.messageReceived_('origin_a', e));
+  assertEquals(
+      'Channel name should not change from untrusted origin', 'test_channel',
+      t.channel_.name);
+
+  e = createMockEvent('origin_a', 'test_channel|tp:SETUP');
+  assertTrue(
+      goog.net.xpc.NativeMessagingTransport.messageReceived_('origin_a', e));
+
+  e = createMockEvent('origin_c', 'test_channel|some_service:some_payload');
+  assertFalse(
+      goog.net.xpc.NativeMessagingTransport.messageReceived_('origin_a', e));
+  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
+  assertEquals('some_service', serviceResult);
+  assertEquals('some_payload', payloadResult);
+
+  e = createMockEvent('origin_a', 'different_channel|tp:SETUP');
+  assertTrue(
+      goog.net.xpc.NativeMessagingTransport.messageReceived_('origin_a', e));
+  assertEquals(
+      'Channel name should change when from a trusted origin',
+      'different_channel', t.channel_.name);
+
+  xpc.dispose();
+}
+
+
 function testBogusMessages() {
-  var e = createMockEvent('bogus_message');
-  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+  var e = createMockEvent('origin_unknown', 'bogus_message');
+  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
 
-  e = createMockEvent('bogus|message');
-  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+  e = createMockEvent('origin_unknown', 'bogus|message');
+  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
 
-  e = createMockEvent('bogus|message:data');
-  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+  e = createMockEvent('origin_unknown', 'bogus|message:data');
+  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
 }
 
 
@@ -158,8 +203,9 @@ function testSendingMessagesToUnconnectedInnerPeer() {
       2 /* opt_protocolVersion */);
 
   // Test a valid message.
-  var e = createMockEvent('test_channel|test_service:test_payload');
-  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+  var e = createMockEvent(
+      'origin_unknown', 'test_channel|test_service:test_payload');
+  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
   assertEquals('test_service', serviceResult);
   assertEquals('test_payload', payloadResult);
   assertEquals(
@@ -167,8 +213,8 @@ function testSendingMessagesToUnconnectedInnerPeer() {
       t.channel_.name);
 
   // Test updating a stale inner peer.
-  var e = createMockEvent('new_channel|tp:SETUP');
-  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+  var e = createMockEvent('origin_unknown', 'new_channel|tp:SETUP');
+  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_('*', e));
   assertEquals('tp', serviceResult);
   assertEquals('SETUP', payloadResult);
   assertEquals(
@@ -274,10 +320,16 @@ function checkSignalConnected(
 }
 
 
-function createMockEvent(data) {
+/**
+ * Creates a Mock Event object used to test browser events.
+ * @param {string} origin The URI origin, or '*', of the event.
+ * @param {string} data The data to associate with the event.
+ * @return {Object} The created object representing a browser event.
+ */
+function createMockEvent(origin, data) {
   var event = {};
   event.getBrowserEvent = function() {
-    return { data: data }
+    return {origin: origin, data: data};
   };
   return event;
 }
