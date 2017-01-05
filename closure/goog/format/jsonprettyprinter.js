@@ -59,14 +59,14 @@ goog.format.JsonPrettyPrinter = function(opt_delimiters) {
 
   /**
    * The set of characters to use as delimiters.
-   * @private @const
+   * @private @const {!goog.format.JsonPrettyPrinter.TextDelimiters}
    */
   this.delimiters_ =
       opt_delimiters || new goog.format.JsonPrettyPrinter.TextDelimiters();
 
   /**
    * Used to serialize property names and values.
-   * @private @const
+   * @private @const {!goog.json.Serializer}
    */
   this.jsonSerializer_ = new goog.json.Serializer();
 };

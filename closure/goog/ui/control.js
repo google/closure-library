@@ -1459,7 +1459,9 @@ goog.ui.Control.IeMouseEventSequenceSimulator_ = function(control) {
   /** @private {boolean} */
   this.clickExpected_ = false;
 
-  /** @private @const */
+  /** @private @const {!goog.events.EventHandler<
+   *                       !goog.ui.Control.IeMouseEventSequenceSimulator_>}
+   */
   this.handler_ = new goog.events.EventHandler(this);
   this.registerDisposable(this.handler_);
 

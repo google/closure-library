@@ -49,7 +49,7 @@ goog.require('goog.userAgent');
 /**
  * Whether this browser supports weak collections, using either the native or
  * shim implementation.
- * @const
+ * @const {boolean}
  */
 // Only test for shim, since ES6 native WeakMap/Set imply ES5 shim dependencies
 goog.structs.weak.SUPPORTED_BROWSER = Object.defineProperty &&
