@@ -1434,6 +1434,10 @@ goog.i18n.NumberFormat.prototype.getUnitAfterRounding_ = function(
  * @private
  */
 goog.i18n.NumberFormat.prototype.intLog10_ = function(number) {
+  // Handle infinity.
+  if (!isFinite(number)) {
+    return number > 0 ? number : 0;
+  }
   // Turns out Math.log(1000000)/Math.LN10 is strictly less than 6.
   var i = 0;
   while ((number /= 10) >= 1) i++;

@@ -96,6 +96,12 @@ function testVeryBigNumber() {
   assertEquals('\u221e', str);
   str = fmt.format(-Infinity);
   assertEquals('-\u221e', str);
+
+  fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+  str = fmt.format(Infinity);
+  assertEquals('\u221eT', str);
+  str = fmt.format(-Infinity);
+  assertEquals('-\u221eT', str);
 }
 
 function testStandardFormat() {
