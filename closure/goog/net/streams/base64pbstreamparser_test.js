@@ -15,10 +15,10 @@
 goog.module('goog.net.streams.Base64PbStreamParserTest');
 goog.setTestOnly('goog.net.streams.Base64PbStreamParserTest');
 
-var testSuite = goog.require('goog.testing.testSuite');
+var Base64PbStreamParser = goog.require('goog.net.streams.Base64PbStreamParser');
 var base64 = goog.require('goog.crypt.base64');
 var object = goog.require('goog.object');
-var Base64PbStreamParser = goog.require('goog.net.streams.Base64PbStreamParser');
+var testSuite = goog.require('goog.testing.testSuite');
 
 // Static test data
 // clang-format off

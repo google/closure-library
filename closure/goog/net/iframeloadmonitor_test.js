@@ -15,13 +15,12 @@
 goog.module('goog.net.IframeLoadMonitorTest');
 goog.setTestOnly('goog.net.IframeLoadMonitorTest');
 
+var IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
 var Promise = goog.require('goog.Promise');
+var TagName = goog.require('goog.dom.TagName');
 var Timer = goog.require('goog.Timer');
 var dom = goog.require('goog.dom');
-var TagName = goog.require('goog.dom.TagName');
 var events = goog.require('goog.events');
-var IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
-var jsunit = goog.require('goog.testing.jsunit');
 var testSuite = goog.require('goog.testing.testSuite');
 
 
