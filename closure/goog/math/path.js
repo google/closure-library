@@ -23,6 +23,7 @@ goog.provide('goog.math.Path.Segment');
 
 goog.require('goog.array');
 goog.require('goog.math');
+goog.require('goog.math.AffineTransform');
 
 
 
