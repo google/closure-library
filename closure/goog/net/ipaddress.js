@@ -176,6 +176,13 @@ goog.net.IpAddress.fromUriString = function(address) {
  * @final
  */
 goog.net.Ipv4Address = function(address) {
+  /**
+   * The cached string representation of the IP Address.
+   * @type {?string}
+   * @private
+   */
+  this.ipStr_ = null;
+
   var ip = goog.math.Integer.ZERO;
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 || address.lessThan(goog.math.Integer.ZERO) ||
@@ -300,6 +307,13 @@ goog.net.Ipv4Address.prototype.isLinkLocal = function() {
  * @final
  */
 goog.net.Ipv6Address = function(address) {
+  /**
+   * The cached string representation of the IP Address.
+   * @type {?string}
+   * @private
+   */
+  this.ipStr_ = null;
+
   var ip = goog.math.Integer.ZERO;
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 || address.lessThan(goog.math.Integer.ZERO) ||
