@@ -345,6 +345,7 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
  *
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part", is expected but not required.
+ * @return {void}
  */
 goog.module = function(name) {
   if (!goog.isString(name) || !name ||

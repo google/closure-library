@@ -28,4 +28,8 @@ goog.provide('goog.module');
 // entire package to goog.loader and then we can delete this file.
 //
 // However, note that it is tricky to do that without breaking the world.
+/**
+ * @suppress {duplicate}
+ * @type {function(string):void}
+ */
 goog.module = goog.module || {};
