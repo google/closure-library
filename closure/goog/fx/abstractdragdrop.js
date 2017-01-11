@@ -392,7 +392,16 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
 
   // Dispatch DRAGSTART event
   var dragStartEvent = new goog.fx.DragDropEvent(
-      goog.fx.AbstractDragDrop.EventType.DRAGSTART, this, this.dragItem_);
+      goog.fx.AbstractDragDrop.EventType.DRAGSTART, this, this.dragItem_,
+      undefined,  // opt_target
+      undefined,  // opt_targetItem
+      undefined,  // opt_targetElement
+      undefined,  // opt_clientX
+      undefined,  // opt_clientY
+      undefined,  // opt_x
+      undefined,  // opt_y
+      undefined,  // opt_subtarget
+      event);
   if (this.dispatchEvent(dragStartEvent) == false) {
     this.dragItem_ = null;
     return;
