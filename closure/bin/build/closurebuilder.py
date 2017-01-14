@@ -186,7 +186,7 @@ class _PathSource(source.Source):
 
 
 def _WrapGoogModuleSource(src):
-  return ('goog.loadModule(function(exports) {{'
+  return (u'goog.loadModule(function(exports) {{'
           '"use strict";'
           '{0}'
           '\n'  # terminate any trailing single line comment.
