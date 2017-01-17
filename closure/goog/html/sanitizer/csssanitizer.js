@@ -73,13 +73,13 @@ goog.html.sanitizer.CssSanitizer.normalizeUrlChar_ = function(ch) {
 
 
 /**
- * Constructs a safe URI from a given uri and prop using a given uriRewriter
+ * Constructs a safe URI from a given URI and prop using a given uriRewriter
  * function.
- * @param {string} uri Uri to be sanitized.
- * @param {string} propName Property name which contained the Uri.
+ * @param {string} uri URI to be sanitized.
+ * @param {string} propName Property name which contained the URI.
  * @param {?function(string, string):?string} uriRewriter A URI rewriter that
  *    returns an unwrapped goog.html.SafeUrl.
- * @return {?string} Safe Uri for use in CSS.
+ * @return {?string} Safe URI for use in CSS.
  * @private
  */
 goog.html.sanitizer.CssSanitizer.getSafeUri_ = function(
@@ -157,11 +157,11 @@ goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
 
 
 /**
- * Given a browser-parsed CSS value sanitizes the value.
+ * Sanitizes the value for a given a browser-parsed CSS value.
  * @param {string} propName A property name.
  * @param {string} propValue Value of the property as parsed by the browser.
  * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
- *    returns an unwrapped goog.html.SafeUrl.
+ *     returns an unwrapped goog.html.SafeUrl.
  * @return {?string} Sanitized property value or null.
  * @private
  */
@@ -177,7 +177,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
     if (opt_uriRewriter) {
       // Preserve original case
       propertyValue = goog.string.trim(propValue);
-      // TODO(danesh): Check if we need to resolve this Uri.
+      // TODO(danesh): Check if we need to resolve this URI.
       var uri = goog.string.stripQuotes(
           propertyValue.substring(4, propertyValue.length - 1), '"\'');
 
@@ -192,9 +192,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
               goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_,
               propertyValue.substring(0, propertyValue.indexOf('('))) &&
           goog.string.endsWith(propertyValue, ')'))) {
-      // Functions start at a token like "name(" and end with a ")" taking
-      // into account nesting.
-      // TODO(danesh): Handle functions that may need recursing or that may
+      // TODO(b/34222379): Handle functions that may need recursing or that may
       // appear in the middle of a string. For now, just allow functions which
       // aren't nested.
       propertyValue = null;
@@ -210,7 +208,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
  * prefixed styles.
  * @param {?CSSStyleDeclaration} cssStyle A CSS style object.
  * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
- *    returns an unwrapped goog.html.SafeUrl.
+ *     returns an unwrapped goog.html.SafeUrl.
  * @return {!goog.html.SafeStyle} A sanitized inline cssText.
  */
 goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
@@ -300,7 +298,7 @@ goog.html.sanitizer.CssSanitizer.getCssPropNames_ = function(cssStyle) {
   if (goog.isArrayLike(cssStyle)) {
     // Gets property names via item().
     // https://drafts.csswg.org/cssom/#dom-cssstyledeclaration-item
-    propNames = Array.prototype.slice.call(cssStyle);
+    propNames = goog.array.toArray(cssStyle);
   } else {
     // In IE8 and other older browers we have to iterate over all the property
     // names.
