@@ -16,10 +16,7 @@
  * @fileoverview Mock of IframeIo for unit testing.
  */
 
-goog.setTestOnly('goog.net.MockIFrameIo');
 goog.provide('goog.net.MockIFrameIo');
-
-goog.require('goog.Uri');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
@@ -29,7 +26,7 @@ goog.require('goog.net.IframeIo');
 
 
 /**
- * Mock implementation of goog.net.IframeIo. This doesn't provide a mock
+ * Mock implenetation of goog.net.IframeIo. This doesn't provide a mock
  * implementation for all cases, but it's not too hard to add them as needed.
  * @param {goog.testing.TestQueue} testQueue Test queue for inserting test
  *     events.
@@ -128,7 +125,6 @@ goog.net.MockIFrameIo.prototype.send = function(
   }
 
   this.testQueue_.enqueue(['s', uri, opt_method, opt_noCache, opt_data]);
-  this.lastUri_ = new goog.Uri(uri);
   this.complete_ = false;
   this.active_ = true;
 };
@@ -149,7 +145,6 @@ goog.net.MockIFrameIo.prototype.sendFromForm = function(
   }
 
   this.testQueue_.enqueue(['s', form, opt_uri, opt_noCache]);
-  this.lastUri_ = opt_uri ? new goog.Uri(opt_uri) : null;
   this.complete_ = false;
   this.active_ = true;
 };
@@ -186,10 +181,8 @@ goog.net.MockIFrameIo.prototype.simulateIncrementalData = function(data) {
  * Simulates the iframe is done.
  * @param {goog.net.ErrorCode} errorCode The error code for any error that
  *     should be simulated.
- * @param {string=} opt_responseText Simulated response.
  */
-goog.net.MockIFrameIo.prototype.simulateDone = function(
-    errorCode, opt_responseText) {
+goog.net.MockIFrameIo.prototype.simulateDone = function(errorCode) {
   if (errorCode) {
     this.success_ = false;
     this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
@@ -198,11 +191,9 @@ goog.net.MockIFrameIo.prototype.simulateDone = function(
   } else {
     this.success_ = true;
     this.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-    this.lastContent_ = opt_responseText || '';
     this.dispatchEvent(goog.net.EventType.SUCCESS);
   }
   this.complete_ = true;
-  this.active_ = false;
   this.dispatchEvent(goog.net.EventType.COMPLETE);
 };
 
