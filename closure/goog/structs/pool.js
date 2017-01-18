@@ -136,7 +136,7 @@ goog.structs.Pool.prototype.setMinimumCount = function(min) {
 
 /**
  * Sets the maximum count of the pool.
- * If max is less than the max count of the pool, an error is thrown.
+ * If max is less than the min count of the pool, an error is thrown.
  * @param {number} max The maximum count of the pool.
  */
 goog.structs.Pool.prototype.setMaximumCount = function(max) {
