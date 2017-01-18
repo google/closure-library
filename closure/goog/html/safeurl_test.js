@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeUrlTest');
 
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.object');
 goog.require('goog.string.Const');
@@ -176,6 +177,15 @@ function assertTelUrlIsSafe(url, isSafe) {
   assertEquals(
       isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(safeUrl));
+}
+
+
+function testFromTrustedResourceUrl() {
+  var url = goog.string.Const.from('test');
+  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(url);
+  var safeUrl = goog.html.SafeUrl.fromTrustedResourceUrl(trustedResourceUrl);
+  assertEquals(
+      goog.string.Const.unwrap(url), goog.html.SafeUrl.unwrap(safeUrl));
 }
 
 
