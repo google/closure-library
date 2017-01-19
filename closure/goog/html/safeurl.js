@@ -22,6 +22,7 @@ goog.provide('goog.html.SafeUrl');
 
 goog.require('goog.asserts');
 goog.require('goog.fs.url');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string');
@@ -316,6 +317,19 @@ goog.html.SafeUrl.fromTelUrl = function(telUrl) {
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       telUrl);
+};
+
+
+/**
+ * Creates a SafeUrl from TrustedResourceUrl. This is safe because
+ * TrustedResourceUrl is more tightly restricted than SafeUrl.
+ *
+ * @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
+ * @return {!goog.html.SafeUrl}
+ */
+goog.html.SafeUrl.fromTrustedResourceUrl = function(trustedResourceUrl) {
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
 };
 
 
