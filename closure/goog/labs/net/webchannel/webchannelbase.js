@@ -1090,11 +1090,9 @@ WebChannelBase.prototype.open_ = function() {
   var uri = this.forwardChannelUri_.clone();
   uri.setParameterValue('RID', rid);
 
-  // TODO(user): use CVER parameter after server compatibility is fixed
-
-  // if (this.clientVersion_ > 0) {
-  //   uri.setParameterValue('CVER', this.clientVersion_);
-  // }
+  if (this.clientVersion_ > 0) {
+    uri.setParameterValue('CVER', this.clientVersion_);
+  }
 
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
