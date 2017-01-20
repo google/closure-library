@@ -1,6 +1,8 @@
 // Documentation licensed under CC BY 4.0
 // License available at https://creativecommons.org/licenses/by/4.0/
 
+goog.setTestOnly();
+
 goog.require('goog.testing.dom');
 goog.require('goog.testing.testSuite');
 

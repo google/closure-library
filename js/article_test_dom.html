@@ -171,7 +171,10 @@
   </div>
 
   <script type="process">
-    window['_JEKYLL_DATA'] = {'page': {'toc': {'min': 1, 'max': 4}}};
+    window['_JEKYLL_DATA'] = {
+      'page.toc.min': 1,
+      'page.toc.max': 4,
+    };
     closure.docs.buildToc();
   </script>
 
@@ -304,7 +307,7 @@
   </div>
 
   <script type="process">
-    window['_JEKYLL_DATA'] = {'site': {'github': {'url': '/gh'}}};
+    window['_JEKYLL_DATA'] = {'site.github.url': '/gh'};
     closure.docs.LOCATION = 'http://google.github.io/lib/foo/bar';
     closure.docs.markActiveNav();
   </script>
@@ -336,8 +339,8 @@
 
   <script type="process">
     window['_JEKYLL_DATA'] = {
-      'site': {'github': {'url': 'http://google.github.io/lib'}},
-      'page': {'section': '/bar'}
+      'site.github.url': 'http://google.github.io/lib',
+      'page.section': '/bar',
     };
     closure.docs.LOCATION = 'http://google.github.io/lib/foo/bar';
     closure.docs.markActiveNav();

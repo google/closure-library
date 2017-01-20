@@ -1,6 +1,3 @@
----
-layout: default
----
 <!DOCTYPE html>
 
 <!-- Documentation licensed under CC BY 4.0 -->
@@ -11,15 +8,15 @@ layout: default
 {% include favicon.html %}
 <link rel="stylesheet" type="text/css"
       href="https://fonts.googleapis.com/css?family=Roboto:500,400,300,100">
-<link rel="stylesheet" type="text/css" href="{{site.github.url}}/css/article.css">
-<link rel="stylesheet" type="text/css" href="{{site.github.url}}/css/syntax.css">
+<link rel="stylesheet" type="text/css" href="{{site.baseurl}}/css/article.css">
+<link rel="stylesheet" type="text/css" href="{{site.baseurl}}/css/syntax.css">
 
 <title>{{page.title}}</title>
 
 <body>
   <header>
-    <a href="{{site.github.url}}" class="closurelogo"><div></div></a>
-    <h1><a href="{{site.github.url}}">
+    <a href="{{site.baseurl}}" class="closurelogo"><div></div></a>
+    <h1><a href="{{site.baseurl}}">
         {{page.product_name}}
     </a></h1>
     <nav>
@@ -56,7 +53,7 @@ layout: default
   </div>
 
   <footer>
-    <!-- TODO(user): abstract this out if we add more buttons. -->
+    <!-- TODO(sdh): abstract this out if we add more buttons. -->
     <a class="edit">
       <div><div></div><div><div>Edit on GitHub</div></div></div>
     </a>
@@ -64,10 +61,14 @@ layout: default
 
   <script>
     window['_JEKYLL_DATA'] = {
-      'site': {{site|jsonify}},
-      'page': {{page|jsonify}},
+      'page.ga': '{{page.ga}}',
+      'page.section': '{{page.section}}',
+      {% if page.toc.max %}'page.toc.max': {{page.toc.max}},{% endif %}
+      {% if page.toc.min %}'page.toc.min': {{page.toc.min}},{% endif %}
+      'site.baseurl': '{{site.baseurl}}',
+      '': ''
     };
   </script>
-  <script src="{{site.github.url}}/js/article.js"></script>
+  <script src="{{site.baseurl}}/js/article.js"></script>
   <script>closure.docs.initialize();</script>
 </body>

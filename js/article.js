@@ -1,7 +1,7 @@
 // Documentation licensed under CC BY 4.0
 // License available at https://creativecommons.org/licenses/by/4.0/
 
-// TODO(user): Bring in Closure library and compiler.
+// TODO(sdh): Bring in Closure library and compiler.
 
 var closure = window.closure || {};
 closure.docs = closure.docs || {};
@@ -20,12 +20,7 @@ closure.docs.LOCATION = String(window.location);
  * @return {*} Result, or undefined.
  */
 closure.docs.get = function(param) {
-  var obj = window['_JEKYLL_DATA'];
-  var split = param.split('.');
-  while (obj != null && split.length) {
-    obj = obj[split.shift()];
-  }
-  return obj;
+  return window['_JEKYLL_DATA'][param];
 };
 
 
@@ -155,8 +150,7 @@ closure.docs.autoNumber = function() {
     nums[nums.length - 1]++;
     // Auto-generate an ID if necessary.
     if (!heading.id) {
-      var base =
-          '_' +
+      var base = '_' +
           heading.textContent.toLowerCase()
               .replace(/[^a-z]+/g, '-')
               .replace(/^-|-$/g, '');
@@ -181,15 +175,13 @@ closure.docs.autoNumber = function() {
  * triggered by links whose text is exactly two or more question marks.
  */
 closure.docs.fixLinkText = function() {
-  closure.docs.forEachElement(
-      'a',
-      function(link) {
-        var href = link.getAttribute('href');
-        if (!/^#/.test(href) || !/^\?\?+$/.test(link.textContent)) return;
-        var heading = document.getElementById(href.substring(1));
-        if (heading) link.textContent = heading.textContent;
-        // TODO(user): allow including/excluding the number?
-      });
+  closure.docs.forEachElement('a', function(link) {
+    var href = link.getAttribute('href');
+    if (!/^#/.test(href) || !/^\?\?+$/.test(link.textContent)) return;
+    var heading = document.getElementById(href.substring(1));
+    if (heading) link.textContent = heading.textContent;
+    // TODO(sdh): allow including/excluding the number?
+  });
 };
 
 
@@ -201,44 +193,41 @@ closure.docs.buildToc = function() {
   // Read a few page-level parameters to customize.
   var min = Number(closure.docs.get('page.toc.min') || 2);
   var max = Number(closure.docs.get('page.toc.max') || 3);
-  // TODO(user): allow further customization of numbering?
+  // TODO(sdh): allow further customization of numbering?
   var stack = [];
-  closure.docs.forEachHeading(
-      function(heading, level) {
-        if (level < min || level > max) return;
-        var depth = level - min + 1;
-        while (stack.length > depth) {
-          stack.pop();
-        }
-        while (stack.length < depth) {
-          var list = document.createElement('ul');
-          // Add to the most recent 'li' item (unless this is the first entry).
-          var prev = stack[stack.length - 1];
-          if (prev) {
-            if (!prev.lastChild) prev.appendChild(document.createElement('li'));
-            prev.lastChild.appendChild(list);
-          }
-          stack.push(list);
-        }
-        var item = document.createElement('li');
-        stack[stack.length - 1].appendChild(item);
-        var link = document.createElement('a');
-        item.appendChild(link);
-        link.href = '#' + heading.id;
-        link.textContent = heading.textContent;
-      });
+  closure.docs.forEachHeading(function(heading, level) {
+    if (level < min || level > max) return;
+    var depth = level - min + 1;
+    while (stack.length > depth) {
+      stack.pop();
+    }
+    while (stack.length < depth) {
+      var list = document.createElement('ul');
+      // Add to the most recent 'li' item (unless this is the first entry).
+      var prev = stack[stack.length - 1];
+      if (prev) {
+        if (!prev.lastChild) prev.appendChild(document.createElement('li'));
+        prev.lastChild.appendChild(list);
+      }
+      stack.push(list);
+    }
+    var item = document.createElement('li');
+    stack[stack.length - 1].appendChild(item);
+    var link = document.createElement('a');
+    item.appendChild(link);
+    link.href = '#' + heading.id;
+    link.textContent = heading.textContent;
+  });
 
   // Finally add the toc to our toc elements.
   var toc = stack[0];
-  closure.docs.forEachElement(
-      'nav.toc ul',
-      function(ul) {
-        if (toc && toc.innerHTML) {
-          ul.innerHTML += toc.innerHTML;
-        } else {
-          ul.parentElement.remove(); // don't bother with TOC if it's empty
-        }
-      });
+  closure.docs.forEachElement('nav.toc ul', function(ul) {
+    if (toc && toc.innerHTML) {
+      ul.innerHTML += toc.innerHTML;
+    } else {
+      ul.parentElement.remove();  // don't bother with TOC if it's empty
+    }
+  });
 };
 
 
@@ -250,11 +239,9 @@ closure.docs.buildToc = function() {
  * that is followed by an open-paren and changes it to 'nf'.
  */
 closure.docs.fixSyntaxHighlighting = function() {
-  closure.docs.forEachElement(
-      '.highlight .nx+.p',
-      function(p) {
-        if (p.textContent[0] == '(') p.previousElementSibling.className = 'nf';
-      });
+  closure.docs.forEachElement('.highlight .nx+.p', function(p) {
+    if (p.textContent[0] == '(') p.previousElementSibling.className = 'nf';
+  });
 };
 
 
@@ -265,12 +252,10 @@ closure.docs.fixSyntaxHighlighting = function() {
  * '*' is 'note', 'tip', 'warning', etc.
  */
 closure.docs.highlightCallouts = function() {
-  closure.docs.forEachElement(
-      'p',
-      function(p) {
-        var match = /^([A-Za-z]+):/.exec(p.textContent);
-        if (match) p.classList.add('callout-' + match[1].toLowerCase());
-      });
+  closure.docs.forEachElement('p', function(p) {
+    var match = /^([A-Za-z]+):/.exec(p.textContent);
+    if (match) p.classList.add('callout-' + match[1].toLowerCase());
+  });
 };
 
 
@@ -282,9 +267,10 @@ closure.docs.setEditLink = function() {
   var match =
       /\/\/([^.]+).github.io\/([^/]+)\/(.*)$/.exec(closure.docs.LOCATION);
   if (!match || !link) return;
-  link.href =
-      ['https://github.com', match[1], match[2],
-       'edit/master/doc', match[3] + '.md'].join('/');
+  link.href = [
+    'https://github.com', match[1], match[2], 'edit/master/doc',
+    match[3] + '.md'
+  ].join('/');
 };
 
 
@@ -304,7 +290,8 @@ closure.docs.markActiveNav = function() {
   // Checks for a prefix, returns everything after it if it exists
   var suffix = function(prefix, string) {
     return string.substring(0, prefix.length) == prefix ?
-        string.substring(prefix.length) : '';
+        string.substring(prefix.length) :
+        '';
   };
 
   // Figure out the current page/section.
@@ -315,7 +302,7 @@ closure.docs.markActiveNav = function() {
   // If section was overridden in the page frontmatter, use that instead.
   var sectionParameter = closure.docs.get('page.section');
   if (sectionParameter != null) {
-    var root = closure.docs.get('site.github.url') || '/';
+    var root = closure.docs.get('site.baseurl;') || '/';
     if (root.length > 1 && root[root.length - 1] == '/') {
       root = root.substring(0, root.length - 1);
     }
@@ -323,20 +310,16 @@ closure.docs.markActiveNav = function() {
   }
 
   // Set links active if we're currently visiting them.
-  closure.docs.forEachElement(
-      'header nav a',
-      function(a) {
-        if (/^\/[^/]*$/.test(suffix(section, a.href))) {
-          a.classList.add('active');
-        }
-      });
-  closure.docs.forEachElement(
-      'nav.side a',
-      function(a) {
-        if (/^(\.html|\.md)?$/.test(suffix(page, a.href))) {
-          a.classList.add('active');
-        }
-      });
+  closure.docs.forEachElement('header nav a', function(a) {
+    if (/^\/[^/]*$/.test(suffix(section, a.href))) {
+      a.classList.add('active');
+    }
+  });
+  closure.docs.forEachElement('nav.side a', function(a) {
+    if (/^(\.html|\.md)?$/.test(suffix(page, a.href))) {
+      a.classList.add('active');
+    }
+  });
 };
 
 
@@ -357,12 +340,8 @@ closure.docs.startAnalytics = function() {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m);
-  })(
-      window,
-      document,
-      'script',
-      '//www.google-analytics.com/analytics.js',
-      'ga');
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js',
+     'ga');
   window['ga']('create', productKey, 'auto');
   window['ga']('send', 'pageview');
 };

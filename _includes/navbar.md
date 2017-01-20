@@ -12,4 +12,4 @@
 [Home]: {{site.github.url}}/index
 [Develop]: {{site.github.url}}/develop
 [API]: {{site.github.url}}/api
-[Demos]: {{site.github.url}}/demos
+[Demos]: {{site.github.url}}/source/closure/goog/demos
