@@ -12,4 +12,4 @@
 [Home]: /closure/goog/g3doc/index
 [Develop]: /closure/goog/g3doc/develop
 [API]: /closure/goog/g3doc/api
-[Demos]: /closure/goog/g3doc/demos
+[Demos]: /closure/goog/g3doc/source/closure/goog/demos
