@@ -513,13 +513,10 @@ goog.uri.utils.haveSameDomain = function(uri1, uri2) {
  * @private
  */
 goog.uri.utils.assertNoFragmentsOrQueries_ = function(uri) {
-  // NOTE: would use goog.asserts here, but jscompiler doesn't know that
-  // indexOf has no side effects.
-  if (goog.DEBUG && (uri.indexOf('#') >= 0 || uri.indexOf('?') >= 0)) {
-    throw Error(
-        'goog.uri.utils: Fragment or query identifiers are not ' +
-        'supported: [' + uri + ']');
-  }
+  goog.asserts.assert(
+      uri.indexOf('#') < 0 && uri.indexOf('?') < 0,
+      'goog.uri.utils: Fragment or query identifiers are not supported: [%s]',
+      uri);
 };
 
 
