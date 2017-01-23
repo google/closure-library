@@ -98,6 +98,8 @@ function testDefine() {
 
   goog.define('ns.SOME_DEFINE', 123);  // overridden by 456
   assertEquals(SOME_DEFINE, 456);
+  goog.provide('yt.tv.watch');
+  assertNotUndefined('provide failed: yt.tv.watch.a', yt.tv.watch);
 
   goog.define('ns.SOME_OTHER_DEFINE', 123);  // not overridden
   assertEquals(SOME_OTHER_DEFINE, 123);
@@ -113,9 +115,17 @@ function testProvide() {
   // ensure that providing 'goog.test.name' doesn't throw an exception
   goog.provide('goog.test');
   goog.provide('goog.test.name');
-
   delete goog.test;
 }
+
+// "watch" is a native member of Object.prototype on Firefox
+// Ensure it can still be added as a namespace
+function testProvideWatch() {
+  goog.provide('goog.yoddle.watch');
+  assertNotUndefined('provide failed: goog.yoddle.watch', goog.yoddle.watch);
+  delete goog.test;
+}
+
 
 function testProvideStrictness() {
   goog.provide('goog.xy');

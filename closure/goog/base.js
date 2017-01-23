@@ -135,7 +135,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
     if (!parts.length && goog.isDef(opt_object)) {
       // last part and we have an object; use it
       cur[part] = opt_object;
-    } else if (cur[part]) {
+    } else if (cur[part] && Object.prototype.hasOwnProperty.call(cur, part)) {
       cur = cur[part];
     } else {
       cur = cur[part] = {};
