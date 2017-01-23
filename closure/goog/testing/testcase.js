@@ -726,12 +726,7 @@ goog.testing.TestCase.prototype.getTestResults = function() {
  * by the test to indicate it has finished.
  */
 goog.testing.TestCase.prototype.runTests = function() {
-  try {
-    this.setUpPage();
-  } catch (e) {
-    this.exceptionBeforeTest = e;
-  }
-  this.execute();
+  this.runSetUpPage_(this.execute);
 };
 
 
@@ -743,21 +738,33 @@ goog.testing.TestCase.prototype.runTests = function() {
  * @package
  */
 goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
-  try {
-    this.setUpPage();
-  } catch (e) {
-    this.exceptionBeforeTest = e;
-  }
-  if (!this.prepareForRun_()) {
-    return goog.Promise.resolve(this.result_);
-  }
-  this.log('Starting tests: ' + this.name_);
-  this.saveMessage('Start');
-  this.batchTime_ = this.now();
   return new goog.Promise(function(resolve) {
-    this.runNextTestCallback_ = resolve;
-    this.runNextTest_();
+    this.runSetUpPage_(function() {
+      if (!this.prepareForRun_()) {
+        resolve(this.result_);
+        return;
+      }
+      this.log('Starting tests: ' + this.name_);
+      this.saveMessage('Start');
+      this.batchTime_ = this.now();
+      this.runNextTestCallback_ = resolve;
+      this.runNextTest_();
+    });
   }, this);
+};
+
+
+/**
+ * Runs the setUpPage methods.
+ * @param {!function(this:goog.testing.TestCase)} runTestsFn Callback to invoke
+ *     after setUpPage has completed.
+ * @private
+ */
+goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
+  this.invokeTestFunction_(this.setUpPage, runTestsFn, function(e) {
+    this.exceptionBeforeTest = e;
+    runTestsFn.call(this);
+  }, 'setUpPage');
 };
 
 
@@ -1075,6 +1082,7 @@ goog.testing.TestCase.invalidateAssertionException = function(e) {
 /**
  * Gets called before any tests are executed.  Can be overridden to set up the
  * environment for the whole test case.
+ * @return {!Thenable|undefined}
  */
 goog.testing.TestCase.prototype.setUpPage = function() {};
 
