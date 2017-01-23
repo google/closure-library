@@ -224,6 +224,7 @@ goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
   contentType = contentType.toLowerCase();
 
   if (goog.string.startsWith(contentType, 'application/json')) {
+    // New code should use "application/x-protobuf+json" instead.
     if (goog.string.startsWith(contentType, 'application/json+protobuf')) {
       return new PbJsonStreamParser();
     }
@@ -231,6 +232,10 @@ goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
   }
 
   if (goog.string.startsWith(contentType, 'application/x-protobuf')) {
+    if (goog.string.startsWith(contentType, 'application/x-protobuf+json')) {
+      return new PbJsonStreamParser();
+    }
+
     var encoding = this.xhr_.getStreamingResponseHeader(
         goog.net.XhrIo.CONTENT_TRANSFER_ENCODING);
     if (!encoding) {

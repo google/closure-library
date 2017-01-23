@@ -17,12 +17,20 @@ goog.setTestOnly('goog.net.streams.XhrStreamReaderTest');
 
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.XmlHttp');
+goog.require('goog.net.streams.Base64PbStreamParser');
+goog.require('goog.net.streams.JsonStreamParser');
+goog.require('goog.net.streams.PbJsonStreamParser');
+goog.require('goog.net.streams.PbStreamParser');
 goog.require('goog.net.streams.XhrStreamReader');
 goog.require('goog.object');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 
+
+var Base64PbStreamParser =
+    goog.module.get('goog.net.streams.Base64PbStreamParser');
+var PbJsonStreamParser = goog.module.get('goog.net.streams.PbJsonStreamParser');
 
 var xhrReader;
 var xhrIo;
@@ -65,26 +73,40 @@ function testGetParserByResponseHeader() {
     if (key == CONTENT_TYPE_HEADER) return 'application/json';
     return null;
   };
-  assertNotNull(xhrReader.getParserByResponseHeader_());
+  assertTrue(
+      xhrReader.getParserByResponseHeader_() instanceof
+      goog.net.streams.JsonStreamParser);
 
   xhrIo.getStreamingResponseHeader = function(key) {
     if (key == CONTENT_TYPE_HEADER) return 'application/json; charset=utf-8';
     return null;
   };
-  assertNotNull(xhrReader.getParserByResponseHeader_());
+  assertTrue(
+      xhrReader.getParserByResponseHeader_() instanceof
+      goog.net.streams.JsonStreamParser);
 
   xhrIo.getStreamingResponseHeader = function(key) {
     if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf';
     return null;
   };
-  assertNotNull(xhrReader.getParserByResponseHeader_());
+  assertTrue(
+      xhrReader.getParserByResponseHeader_() instanceof
+      goog.net.streams.PbStreamParser);
 
   xhrIo.getStreamingResponseHeader = function(key) {
     if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf';
     if (key == CONTENT_TRANSFER_ENCODING) return 'BASE64';
     return null;
   };
-  assertNotNull(xhrReader.getParserByResponseHeader_());
+  assertTrue(
+      xhrReader.getParserByResponseHeader_() instanceof Base64PbStreamParser);
+
+  xhrIo.getStreamingResponseHeader = function(key) {
+    if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf+json';
+    return null;
+  };
+  assertTrue(
+      xhrReader.getParserByResponseHeader_() instanceof PbJsonStreamParser);
 }
 
 
