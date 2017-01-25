@@ -185,10 +185,10 @@ function testIntIpv6Address() {
 }
 
 function testDottedQuadIpv6() {
-  var ip6 = new goog.net.Ipv6Address('7::0.128.0.127');
-  ip6 = new goog.net.Ipv6Address('7::0.128.0.128');
-  ip6 = new goog.net.Ipv6Address('7::128.128.0.127');
-  ip6 = new goog.net.Ipv6Address('7::0.128.128.127');
+  new goog.net.Ipv6Address('7::0.128.0.127');
+  new goog.net.Ipv6Address('7::0.128.0.128');
+  new goog.net.Ipv6Address('7::128.128.0.127');
+  new goog.net.Ipv6Address('7::0.128.128.127');
 }
 
 function testMappedIpv4Address() {

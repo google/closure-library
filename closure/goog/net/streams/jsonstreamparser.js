@@ -510,7 +510,6 @@ Parser.prototype.parse = function(input) {
           continue;
 
         case State.STRING:
-          var start = i - 1;
           var old = i;
 
           STRING_LOOP: while (true) {
@@ -518,7 +517,6 @@ Parser.prototype.parse = function(input) {
               current = input[i++];
               if (parser.unicodeCount_ === 4) {
                 parser.unicodeCount_ = 0;
-                start = i - 1;
               } else {
                 parser.unicodeCount_++;
               }
@@ -544,7 +542,6 @@ Parser.prototype.parse = function(input) {
                 parser.unicodeCount_ = 1;
               }
               current = input[i++];
-              start = i - 1;
               if (!current) {
                 break;
               } else {

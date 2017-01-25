@@ -404,7 +404,6 @@ DirectTransport.prototype.connect = function() {
  * @private
  */
 DirectTransport.prototype.maybeAttemptToConnect_ = function() {
-  var outerRole = this.channel_.getRole() == CrossPageChannelRole.OUTER;
   if (this.channel_.isConnected()) {
     this.maybeAttemptToConnectTimer_.stop();
     return;

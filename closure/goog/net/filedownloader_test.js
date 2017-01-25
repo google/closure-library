@@ -179,10 +179,13 @@ function testIsDownloadedDuringDownload() {
   var hasDownloaded = false;
   downloader.download('/foo/bar').then(function() { hasDownloaded = true; });
 
-  var promise =
-      downloader.waitForDownload('/foo/bar')
-          .then(function() { return downloader.isDownloaded('/foo/bar'); })
-          .then(assertTrue);
+  var promise = downloader.waitForDownload('/foo/bar')
+                    .then(function() {
+                      return downloader.isDownloaded('/foo/bar');
+                    })
+                    .then(function() {
+                      assertTrue(hasDownloaded);
+                    });
 
   xhr.simulateResponse(200, 'data');
   return promise;

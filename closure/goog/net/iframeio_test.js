@@ -250,7 +250,7 @@ function incremental() {
 }
 
 window['P'] = function(iframe, data) {
-  var iframeIo = goog.net.IframeIo.getInstanceByName(iframe.name);
+  goog.net.IframeIo.getInstanceByName(iframe.name);
   goog.log.info(testLogger, 'Data received - ' + data);
 };
 
