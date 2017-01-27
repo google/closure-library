@@ -136,6 +136,13 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   this.channel_.setExtraHeaders(messageHeaders);
 
+  var httpHeadersOverwriteParam =
+      opt_options && opt_options.httpHeadersOverwriteParam;
+  if (httpHeadersOverwriteParam &&
+      !goog.string.isEmptyOrWhitespace(httpHeadersOverwriteParam)) {
+    this.channel_.setHttpHeadersOverwriteParam(httpHeadersOverwriteParam);
+  }
+
   /**
    * @private {boolean} Whether to enable CORS.
    */

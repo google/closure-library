@@ -38,6 +38,7 @@ goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
 goog.require('goog.log');
 goog.require('goog.net.XhrIo');
+goog.require('goog.net.rpc.HttpCors');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
@@ -55,6 +56,7 @@ var WireV8 = goog.labs.net.webChannel.WireV8;
 var netUtils = goog.labs.net.webChannel.netUtils;
 var requestStats = goog.labs.net.webChannel.requestStats;
 
+var httpCors = goog.module.get('goog.net.rpc.HttpCors');
 
 
 /**
@@ -118,6 +120,12 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {Object}
    */
   this.extraHeaders_ = null;
+
+  /**
+   * @private {?string} The URL param name to overwrite custom HTTP headers
+   * to bypass CORS preflight.
+   */
+  this.httpHeadersOverwriteParam_ = null;
 
   /**
    * Extra parameters to add to all the requests sent to the server.
@@ -605,8 +613,18 @@ WebChannelBase.prototype.connectTest_ = function(testPath) {
     return;  // channel is cancelled
   }
   this.connectionTest_ = new BaseTestChannel(this, this.channelDebug_);
-  this.connectionTest_.setExtraHeaders(this.extraHeaders_);
-  this.connectionTest_.connect(testPath);
+
+  if (this.httpHeadersOverwriteParam_ === null) {
+    this.connectionTest_.setExtraHeaders(this.extraHeaders_);
+  }
+
+  var urlPath = testPath;
+  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
+    urlPath = httpCors.setHttpHeadersWithOverwriteParam(
+        testPath, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+  }
+
+  this.connectionTest_.connect(/** @type {string} */ (urlPath));
 };
 
 
@@ -671,6 +689,17 @@ WebChannelBase.prototype.getExtraHeaders = function() {
  */
 WebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
   this.extraHeaders_ = extraHeaders;
+};
+
+
+/**
+ * Sets the URL param name to overwrite custom HTTP headers.
+ *
+ * @param {string} httpHeadersOverwriteParam The URL param name.
+ */
+WebChannelBase.prototype.setHttpHeadersOverwriteParam = function(
+    httpHeadersOverwriteParam) {
+  this.httpHeadersOverwriteParam_ = httpHeadersOverwriteParam;
 };
 
 
@@ -1085,7 +1114,11 @@ WebChannelBase.prototype.open_ = function() {
   var rid = this.nextRid_++;
   var request =
       ChannelRequest.createChannelRequest(this, this.channelDebug_, '', rid);
-  request.setExtraHeaders(this.extraHeaders_);
+
+  if (this.httpHeadersOverwriteParam_ === null) {
+    request.setExtraHeaders(this.extraHeaders_);
+  }
+
   var requestText = this.dequeueOutgoingMaps_();
   var uri = this.forwardChannelUri_.clone();
   uri.setParameterValue('RID', rid);
@@ -1096,6 +1129,11 @@ WebChannelBase.prototype.open_ = function() {
 
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
+
+  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
+    httpCors.setHttpHeadersWithOverwriteParam(
+        uri, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+  }
 
   this.forwardChannelRequestPool_.addRequest(request);
   request.xmlHttpPost(uri, requestText, true);
@@ -1127,10 +1165,18 @@ WebChannelBase.prototype.makeForwardChannelRequest_ = function(
   // Add the additional reconnect parameters.
   this.addAdditionalParams_(uri);
 
+  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
+    httpCors.setHttpHeadersWithOverwriteParam(
+        uri, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+  }
+
   var request = ChannelRequest.createChannelRequest(
       this, this.channelDebug_, this.sid_, rid,
       this.forwardChannelRetryCount_ + 1);
-  request.setExtraHeaders(this.extraHeaders_);
+
+  if (this.httpHeadersOverwriteParam_ === null) {
+    request.setExtraHeaders(this.extraHeaders_);
+  }
 
   // Randomize from 50%-100% of the forward channel timeout to avoid
   // a big hit if servers happen to die at once.
@@ -1263,7 +1309,11 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   this.channelDebug_.debug('Creating new HttpRequest');
   this.backChannelRequest_ = ChannelRequest.createChannelRequest(
       this, this.channelDebug_, this.sid_, 'rpc', this.backChannelAttemptId_);
-  this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
+
+  if (this.httpHeadersOverwriteParam_ === null) {
+    this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
+  }
+
   this.backChannelRequest_.setReadyStateChangeThrottle(
       this.readyStateChangeThrottleMs_);
   var uri = this.backChannelUri_.clone();
@@ -1276,6 +1326,12 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   this.addAdditionalParams_(uri);
 
   uri.setParameterValue('TYPE', 'xmlhttp');
+
+  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
+    httpCors.setHttpHeadersWithOverwriteParam(
+        uri, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+  }
+
   this.backChannelRequest_.xmlHttpGet(
       uri, true /* decodeChunks */, this.hostPrefix_, false /* opt_noClose */);
 

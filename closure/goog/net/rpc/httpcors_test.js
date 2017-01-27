@@ -16,6 +16,8 @@ goog.module('goog.net.rpc.HttpCorsTest');
 goog.setTestOnly('goog.net.rpc.HttpCorsTest');
 
 var HttpCors = goog.require('goog.net.rpc.HttpCors');
+var googUri = goog.require('goog.Uri');
+
 var testSuite = goog.require('goog.testing.testSuite');
 
 
@@ -36,5 +38,65 @@ testSuite({
     var encoded_value =
         HttpCors.generateEncodedHttpHeadersOverwriteParam(headers);
     assertEquals('foo1%3Abar1%0D%0Afoo2%3Abar2%0D%0A', encoded_value);
+  },
+
+  testSetUrl: function() {
+    var headers = {'foo': 'bar'};
+    var urlString = '/example.com/';
+    var newUrlString = HttpCors.setHttpHeadersWithOverwriteParam(
+        urlString, '$httpHeaders', headers);
+    assertEquals('/example.com/?%24httpHeaders=foo%3Abar%0D%0A', newUrlString);
+
+    var url = new googUri(urlString);
+    var newUrl =
+        HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
+    assertEquals(
+        '/example.com/?%24httpHeaders=foo%3Abar%0D%0A', newUrl.toString());
+  },
+
+  testSetUrlAppend: function() {
+    var headers = {'foo': 'bar'};
+    var urlString = '/example.com/?abc=12';
+    var newUrlString = HttpCors.setHttpHeadersWithOverwriteParam(
+        urlString, '$httpHeaders', headers);
+    assertEquals(
+        '/example.com/?abc=12&%24httpHeaders=foo%3Abar%0D%0A', newUrlString);
+
+    var url = new googUri(urlString);
+    var newUrl =
+        HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
+    assertEquals(
+        '/example.com/?abc=12&%24httpHeaders=foo%3Abar%0D%0A',
+        newUrl.toString());
+  },
+
+  testSetUrlMultiHeaders: function() {
+    var headers = {'foo1': 'bar1', 'foo2': 'bar2'};
+    var urlString = '/example.com/';
+    var newUrlString = HttpCors.setHttpHeadersWithOverwriteParam(
+        urlString, '$httpHeaders', headers);
+    assertEquals(
+        '/example.com/?%24httpHeaders=foo1%3Abar1%0D%0Afoo2%3Abar2%0D%0A',
+        newUrlString);
+
+    var url = new googUri(urlString);
+    var newUrl =
+        HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
+    assertEquals(
+        '/example.com/?%24httpHeaders=foo1%3Abar1%0D%0Afoo2%3Abar2%0D%0A',
+        newUrl.toString());
+  },
+
+  testSetUrlEmptyHeaders: function() {
+    var headers = {};
+    var urlString = '/example.com/';
+    var newUrlString = HttpCors.setHttpHeadersWithOverwriteParam(
+        urlString, '$httpHeaders', headers);
+    assertEquals('/example.com/', newUrlString);
+
+    var url = new googUri(urlString);
+    var newUrl =
+        HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
+    assertEquals('/example.com/', newUrl.toString());
   }
 });

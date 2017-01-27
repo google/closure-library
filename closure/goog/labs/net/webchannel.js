@@ -110,6 +110,10 @@ goog.net.WebChannel = function() {};
  * take precedence over any duplicated parameter specified with
  * messageUrlParams, whose value will be ignored.
  *
+ * httpHeadersOverwriteParam: the URL parameter name to allow custom HTTP
+ * headers to be overwritten as a URL param to bypass CORS preflight.
+ * goog.net.rpc.HttpCors is used to encode the HTTP headers.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   messageUrlParams: (!Object<string, string>|undefined),
@@ -118,7 +122,8 @@ goog.net.WebChannel = function() {};
  *   supportsCrossDomainXhr: (boolean|undefined),
  *   testUrl: (string|undefined),
  *   sendRawJson: (boolean|undefined),
- *   httpSessionIdParam: (string|undefined)
+ *   httpSessionIdParam: (string|undefined),
+ *   httpHeadersOverwriteParam: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;

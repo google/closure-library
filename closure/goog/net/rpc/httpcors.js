@@ -25,6 +25,9 @@ goog.module('goog.net.rpc.HttpCors');
 
 var googObject = goog.require('goog.object');
 var googString = goog.require('goog.string');
+var googUri = goog.require('goog.Uri');
+var googUriUtils = goog.require('goog.uri.utils');
+
 
 /**
  * The default URL parameter name to overwrite http headers with a URL param
@@ -66,4 +69,29 @@ exports.generateHttpHeadersOverwriteParam = function(headers) {
 exports.generateEncodedHttpHeadersOverwriteParam = function(headers) {
   return googString.urlEncode(
       exports.generateHttpHeadersOverwriteParam(headers));
+};
+
+
+/**
+ * Sets custom HTTP headers via an overwrite URL param.
+ *
+ * @param {!googUri|string} url The URI object or a string path.
+ * @param {string} urlParam The URL param name.
+ * @param {!Object<string, string>} extraHeaders The HTTP headers.
+ * @return {!googUri|string} The URI object or a string path with headers
+ * encoded as a url param.
+ */
+exports.setHttpHeadersWithOverwriteParam = function(
+    url, urlParam, extraHeaders) {
+  if (googObject.isEmpty(extraHeaders)) {
+    return url;
+  }
+  var httpHeaders = exports.generateHttpHeadersOverwriteParam(extraHeaders);
+  if (goog.isString(url)) {
+    return googUriUtils.appendParam(
+        url, googString.urlEncode(urlParam), httpHeaders);
+  } else {
+    url.setParameterValue(urlParam, httpHeaders);  // duplicate removed!
+    return url;
+  }
 };
