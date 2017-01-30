@@ -107,7 +107,6 @@ goog.labs.useragent.verifier.getIEVersion_ = function(userAgent) {
     return Number(rv[1]);
   }
 
-  var version = '';
   var msie = /MSIE +([\d\.]+)/.exec(userAgent);
   if (msie && msie[1]) {
     // IE in compatibility mode usually identifies itself as MSIE 7.0; in this

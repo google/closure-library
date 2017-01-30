@@ -220,11 +220,10 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
   }
 
   var result = [];
-  var key =
-      goog.events.listen(cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
-        result.push(cursor.getValue());
-        cursor.next();
-      });
+  goog.events.listen(cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+    result.push(cursor.getValue());
+    cursor.next();
+  });
 
   goog.events.listenOnce(
       cursor,

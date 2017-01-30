@@ -740,7 +740,6 @@ goog.ui.CharPicker.prototype.setSelectedCategory_ = function(
   }
 
   var subcategories = this.data_.subcategories[category];
-  var charList = this.data_.charList[category];
   for (var i = 0; i < subcategories.length; i++) {
     var item = this.createMenuItem_(i, subcategories[i]);
     this.submenu_.addChild(item, true);

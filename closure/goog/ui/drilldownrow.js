@@ -394,7 +394,7 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
   // Default mouse event handling:
   var toggler =
       goog.dom.getElementsByTagName(goog.dom.TagName.DIV, fragment)[0];
-  var key = selfObj.getHandler().listen(toggler, 'click', function(event) {
+  selfObj.getHandler().listen(toggler, 'click', function(event) {
     selfObj.setExpanded(!selfObj.isExpanded());
   });
 };

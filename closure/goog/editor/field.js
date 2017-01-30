@@ -2306,8 +2306,7 @@ goog.editor.Field.prototype.installStyles = function() {
  * @private
  */
 goog.editor.Field.prototype.dispatchLoadEvent_ = function() {
-  var field = this.getElement();
-
+  this.getElement();
   this.installStyles();
   this.startChangeEvents();
   goog.log.info(this.logger, 'Dispatching load ' + this.id);

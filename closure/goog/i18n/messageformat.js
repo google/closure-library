@@ -461,7 +461,6 @@ goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
  */
 goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
   var prevPos = 0;
-  var inBlock = false;
   var braceStack = [];
   var results = [];
 
@@ -483,11 +482,9 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
         part.value = pattern.substring(prevPos, pos);
         results.push(part);
         prevPos = pos + 1;
-        inBlock = false;
       }
     } else {
       if (braceStack.length == 0) {
-        inBlock = true;
         var substring = pattern.substring(prevPos, pos);
         if (substring != '') {
           results.push({

@@ -127,7 +127,6 @@ goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ = '__closure_tweak_installed_';
 goog.tweak.TweakUi.CSS_STYLES_ = (function() {
   var MOBILE = goog.userAgent.MOBILE;
   var IE = goog.userAgent.IE;
-  var ENTRY_CLASS = '.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_;
   var ROOT_PANEL_CLASS = '.' + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
   var GOOG_INLINE_BLOCK_CLASS = '.' + goog.getCssName('goog-inline-block');
   var ret = ROOT_PANEL_CLASS + '{background:#ffc; padding:0 4px}';
