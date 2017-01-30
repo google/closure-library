@@ -19,6 +19,9 @@
  * global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects to
  * include their own deps file(s) from different locations.
  *
+ * Avoid including base.js more than once. This is strictly discouraged and not
+ * supported. goog.require(...) won't work properly in that case.
+ *
  * @author arv@google.com (Erik Arvidsson)
  *
  * @provideGoog
