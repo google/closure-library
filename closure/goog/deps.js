@@ -57,7 +57,7 @@ goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.Wor
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.jsunit'], {});
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'module': 'goog'});
-goog.addDependency('base_test.js', ['an.existing.path', 'dup.base', 'far.out', 'goog.baseTest', 'goog.explicit', 'goog.implicit.explicit', 'goog.test', 'goog.test.name', 'goog.test.name.space', 'goog.xy', 'goog.xy.z', 'goog.yoddle.watch', 'ns', 'testDep.bar', 'yt.tv.watch'], ['goog.Promise', 'goog.Timer', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
+goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.Promise', 'goog.Timer', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});
 goog.addDependency('color/alpha_test.js', ['goog.color.alphaTest'], ['goog.array', 'goog.color', 'goog.color.alpha', 'goog.testing.jsunit'], {});
 goog.addDependency('color/color.js', ['goog.color', 'goog.color.Hsl', 'goog.color.Hsv', 'goog.color.Rgb'], ['goog.color.names', 'goog.math'], {});
