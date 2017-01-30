@@ -729,10 +729,6 @@ goog.date.Interval.prototype.add = function(interval) {
  * Closure APIs should accept goog.date.DateLike instead of the real Date
  * object.
  *
- * To allow goog.date.Date objects to be passed as arguments to methods
- * expecting Date objects this class is marked as extending the built in Date
- * object even though that's not strictly true.
- *
  * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like
  *     object. If not set, the created object will contain the date
  *     determined by goog.now().
