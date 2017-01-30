@@ -278,6 +278,10 @@ goog.testing.TestRunner.shouldUsePromises_ = function(testCase) {
 };
 
 
+/** @const {string} The ID of the element to log output to. */
+goog.testing.TestRunner.TEST_LOG_ID = 'closureTestRunnerLog';
+
+
 /**
  * Writes the results to the document when the test case completes.
  * @private
@@ -289,9 +293,10 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   }
 
   if (!this.logEl_) {
-    var el = document.getElementById('closureTestRunnerLog');
+    var el = document.getElementById(goog.testing.TestRunner.TEST_LOG_ID);
     if (el == null) {
-      el = goog.dom.createElement(goog.dom.TagName.DIV);
+      el = goog.dom.createDom(
+          goog.dom.TagName.DIV, {id: goog.testing.TestRunner.TEST_LOG_ID});
       document.body.appendChild(el);
     }
     this.logEl_ = el;
