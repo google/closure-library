@@ -209,7 +209,7 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
  *     defaults to goog.soy.data.SanitizedContentKind.HTML).
  * @return {RETURN_TYPE} The SanitizedContent object. This return type is
  *     generic based on the return type of the template, such as
- *     soydata.SanitizedHtml.
+ *     goog.soy.data.SanitizedHtml.
  * @template ARG_TYPES, RETURN_TYPE
  */
 goog.soy.Renderer.prototype.renderStrict = function(
