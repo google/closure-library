@@ -132,6 +132,7 @@ goog.text.LoremIpsum.prototype.generateChains_ = function(sample) {
   var words = goog.text.LoremIpsum.splitWords_(sample);
   var wordInfo = goog.array.map(words, goog.text.LoremIpsum.getWordInfo_);
 
+  /** @type {!Array<number>} */
   var previous = [0, 0];
   var previousKey = previous.join('-');
   var chains = new goog.structs.Map();
