@@ -295,8 +295,8 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   if (!this.logEl_) {
     var el = document.getElementById(goog.testing.TestRunner.TEST_LOG_ID);
     if (el == null) {
-      el = goog.dom.createDom(
-          goog.dom.TagName.DIV, {id: goog.testing.TestRunner.TEST_LOG_ID});
+      el = goog.dom.createElement(goog.dom.TagName.DIV);
+      el.id = goog.testing.TestRunner.TEST_LOG_ID;
       document.body.appendChild(el);
     }
     this.logEl_ = el;
