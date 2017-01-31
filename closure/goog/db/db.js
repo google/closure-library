@@ -53,11 +53,10 @@ goog.require('goog.db.IndexedDb');
 goog.require('goog.db.Transaction');
 
 
-// TODO(jakubvrana): Disallow null.
 /**
  * The IndexedDB factory object.
  *
- * @type {?IDBFactory|undefined}
+ * @type {!IDBFactory|undefined}
  * @private
  */
 goog.db.indexedDb_ = goog.global.indexedDB || goog.global.mozIndexedDB ||
