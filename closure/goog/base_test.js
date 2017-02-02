@@ -1668,6 +1668,27 @@ function testGoogLoadModuleByUrl() {
 }
 
 
+function testModuleExportSealed() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
+    // IE before 9 don't support sealing objects
+    return;
+  }
+
+  goog.loadModule('goog.module("a.b.supplied"); exports.foo = {};');
+  var exports0 = goog.module.get('a.b.supplied');
+  assertTrue(Object.isSealed(exports0));
+
+  goog.loadModule('goog.module("a.b.object"); exports = {};');
+  var exports1 = goog.module.get('a.b.object');
+  assertTrue(Object.isSealed(exports1));
+
+
+  goog.loadModule('goog.module("a.b.fn"); exports = function() {};');
+  var exports2 = goog.module.get('a.b.fn');
+  assertFalse(Object.isSealed(exports2));
+}
+
+
 function testLoadFileSync() {
   var fileContents = goog.loadFileSync_('deps.js');
   assertTrue(
