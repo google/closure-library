@@ -223,7 +223,9 @@ goog.events.EventType = {
 
   // Native IMEs/input tools events.
   TEXT: 'text',
-  TEXTINPUT: 'textInput',
+  // The textInput event is supported in IE9+, but only in lower case. All other
+  // browsers use the camel-case event name.
+  TEXTINPUT: goog.userAgent.IE ? 'textinput' : 'textInput',
   COMPOSITIONSTART: 'compositionstart',
   COMPOSITIONUPDATE: 'compositionupdate',
   COMPOSITIONEND: 'compositionend',
