@@ -205,6 +205,7 @@ var _allTests = [
   'closure/goog/i18n/charlistdecompressor_test.html',
   'closure/goog/i18n/collation_test.html',
   'closure/goog/i18n/currency_test.html',
+  'closure/goog/i18n/dateintervalformat_test.html',
   'closure/goog/i18n/datetimeformat_test.html',
   'closure/goog/i18n/datetimeparse_test.html',
   'closure/goog/i18n/graphemebreak_test.html',
