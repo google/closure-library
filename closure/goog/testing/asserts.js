@@ -664,14 +664,39 @@ goog.testing.asserts.findDifferences = function(
             'but got a ' + var2.length + '-element array');
       } else {
         var childPath = path + (isArray ? '[%s]' : (path ? '.%s' : '%s'));
+        // These type checks do not use _trueTypeOf because that does not work
+        // for polyfilled Map/Set. Note that these checks may potentially fail
+        // if var1 comes from a different window.
+        if ((typeof Map != 'undefined' && var1 instanceof Map) ||
+            (typeof Set != 'undefined' && var1 instanceof Set)) {
+          var1.forEach(function(value, key) {
+            if (var2.has(key)) {
+              // For a map, the values must be compared, but with Set, checking
+              // that the second set contains the first set's "keys" is
+              // sufficient.
+              if (var2.get) {
+                innerAssertWithCycleCheck(
+                    value, var2.get(key), childPath.replace('%s', key));
+              }
+            } else {
+              failures.push(
+                  key + ' not present in actual ' + (path || typeOfVar2));
+            }
+          });
 
-        // if an object has an __iterator__ property, we have no way of
-        // actually inspecting its raw properties, and JS 1.7 doesn't
-        // overload [] to make it possible for someone to generically
-        // use what the iterator returns to compare the object-managed
-        // properties. This gets us into deep poo with things like
-        // goog.structs.Map, at least on systems that support iteration.
-        if (!var1['__iterator__']) {
+          var2.forEach(function(value, key) {
+            if (!var1.has(key)) {
+              failures.push(
+                  key + ' not present in expected ' + (path || typeOfVar1));
+            }
+          });
+        } else if (!var1['__iterator__']) {
+          // if an object has an __iterator__ property, we have no way of
+          // actually inspecting its raw properties, and JS 1.7 doesn't
+          // overload [] to make it possible for someone to generically
+          // use what the iterator returns to compare the object-managed
+          // properties. This gets us into deep poo with things like
+          // goog.structs.Map, at least on systems that support iteration.
           for (var prop in var1) {
             if (isArray && goog.testing.asserts.isArrayIndexProp_(prop)) {
               // Skip array indices for now. We'll handle them later.
