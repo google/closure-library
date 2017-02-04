@@ -62,6 +62,7 @@
 
 goog.provide('goog.i18n.MessageFormat');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.i18n.ordinalRules');
@@ -80,6 +81,14 @@ goog.i18n.MessageFormat = function(pattern) {
   /**
    * All encountered literals during parse stage. Indices tell us the order of
    * replacement.
+   * @const {!Array<string>}
+   * @private
+   */
+  this.initialLiterals_ = [];
+
+  /**
+   * Working array with all encountered literals during parse and format stages.
+   * Indices tell us the order of replacement.
    * @type {!Array<string>}
    * @private
    */
@@ -218,6 +227,7 @@ goog.i18n.MessageFormat.prototype.format_ = function(
   if (this.parsedPattern_.length == 0) {
     return '';
   }
+  this.literals_ = goog.array.clone(this.initialLiterals_);
 
   var result = [];
   this.formatBlock_(this.parsedPattern_, namedParameters, ignorePound, result);
@@ -432,7 +442,7 @@ goog.i18n.MessageFormat.prototype.parsePattern_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
-  var literals = this.literals_;
+  var literals = this.initialLiterals_;
   var buildPlaceholder = goog.bind(this.buildPlaceholder_, this);
 
   // First replace '' with single quote placeholder since they can be found

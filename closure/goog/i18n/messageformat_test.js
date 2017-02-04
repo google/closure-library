@@ -162,6 +162,10 @@ function testLiteralClosedCurlyBrace() {
   assertEquals(
       "Anna's house has {0} and # in the roof and 5 cows.",
       fmt.format({'NUM_COWS': '5'}));
+  // Regression for: b/34764827
+  assertEquals(
+      'Anna\'s house has {0} and # in the roof and 8 cows.',
+      fmt.format({'NUM_COWS': '8'}));
 }
 
 function testLiteralPoundSign() {
@@ -170,6 +174,10 @@ function testLiteralPoundSign() {
   assertEquals(
       "Anna's house has {0} and # in the roof and 5 cows.",
       fmt.format({'NUM_COWS': '5'}));
+  // Regression for: b/34764827
+  assertEquals(
+      'Anna\'s house has {0} and # in the roof and 10 cows.',
+      fmt.format({'NUM_COWS': '10'}));
 }
 
 function testNoLiteralsForSingleQuotes() {
