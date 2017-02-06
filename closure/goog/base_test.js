@@ -1688,6 +1688,59 @@ function testModuleExportSealed() {
   assertFalse(Object.isSealed(exports2));
 }
 
+function testWorkaroundSafari10EvalBug0() {
+  // Validate the safari module loading workaround isn't triggered for
+  // browsers we know it isn't needed.
+  if (goog.userAgent.SAFARI) {
+    return;
+  }
+  assertFalse(goog.useSafari10Workaround());
+}
+
+function testWorkaroundSafari10EvalBug1() {
+  assertEquals(
+      '(function(){' +  // no \n
+          'goog.module(\'foo\');\n' +
+          '\n;})();\n',
+      goog.workaroundSafari10EvalBug(
+          'goog.module(\'foo\');\n'));
+}
+
+
+function testWorkaroundSafari10EvalBug2() {
+  assertEquals(
+      '(function(){' +  // no \n
+          'goog.module(\'foo\');\n' +
+          'alert("//# sourceMappingURL a.b.c.map")\n' +
+          'alert("//# sourceURL a.b.c.js")\n' +
+          '\n;})();\n',
+      goog.workaroundSafari10EvalBug(
+          'goog.module(\'foo\');\n' +
+          'alert("//# sourceMappingURL a.b.c.map")\n' +
+          'alert("//# sourceURL a.b.c.js")\n'));
+}
+
+function testGoogLoadModuleInSafari10() {
+  try {
+    eval('let es6 = 1');
+  } catch (e) {
+    // If ES6 block scope syntax isn't supported, don't run the rest of the
+    // test.
+    return;
+  }
+
+  goog.loadModule(
+      'goog.module("a.safari.test");' +
+      'let x = true;' +
+      'function fn() { return x }' +
+      'exports.fn = fn;');
+  var exports = goog.module.get('a.safari.test');
+
+  // Safari 10 will throw an exception if the module being loaded is eval'd
+  // without a containing function.
+  assertNotThrows(exports.fn);
+}
+
 
 function testLoadFileSync() {
   var fileContents = goog.loadFileSync_('deps.js');
