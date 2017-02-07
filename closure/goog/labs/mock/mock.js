@@ -145,7 +145,7 @@ goog.labs.mock.getFunctionName_ = function(func) {
 
 
 /**
- * Returns a nicely formatted, readble representation of a method call.
+ * Returns a nicely formatted, readable representation of a method call.
  * @private
  * @param {string} methodName The name of the method.
  * @param {Array<?>=} opt_args The method arguments.
