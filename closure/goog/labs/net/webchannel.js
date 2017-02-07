@@ -78,6 +78,11 @@ goog.net.WebChannel = function() {};
  * server. This object is mutable, and custom headers may be changed, removed,
  * or added during the runtime after a channel has been opened.
  *
+ * initMessageHeaders: similar to messageHeaders, but any custom headers will
+ * be sent only once when the channel is opened. Typical usage is to send
+ * an auth header to the server, which only checks the auth header at the time
+ * when the channel is opened.
+ *
  * messageUrlParams: custom url query parameters to be added to every message
  * sent to the server. This object is mutable, and custom parameters may be
  * changed, removed or added during the runtime after a channel has been opened.
@@ -116,6 +121,7 @@ goog.net.WebChannel = function() {};
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
+ *   initMessageHeaders: (!Object<string, string>|undefined),
  *   messageUrlParams: (!Object<string, string>|undefined),
  *   clientProtocolHeaderRequired: (boolean|undefined),
  *   concurrentRequestLimit: (number|undefined),

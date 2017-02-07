@@ -122,6 +122,12 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.extraHeaders_ = null;
 
   /**
+   * Extra HTTP headers to add to the init request(s) sent to the server.
+   * @private {Object}
+   */
+  this.initHeaders_ = null;
+
+  /**
    * @private {?string} The URL param name to overwrite custom HTTP headers
    * to bypass CORS preflight.
    */
@@ -693,6 +699,27 @@ WebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
+ * Returns the extra HTTP headers to add to the init requests
+ * sent to the server.
+ *
+ * @return {Object} The HTTP headers, or null.
+ */
+WebChannelBase.prototype.getInitHeaders = function() {
+  return this.initHeaders_;
+};
+
+
+/**
+ * Sets extra HTTP headers to add to the init requests sent to the server.
+ *
+ * @param {Object} initHeaders The HTTP headers, or null.
+ */
+WebChannelBase.prototype.setInitHeaders = function(initHeaders) {
+  this.initHeaders_ = initHeaders;
+};
+
+
+/**
  * Sets the URL param name to overwrite custom HTTP headers.
  *
  * @param {string} httpHeadersOverwriteParam The URL param name.
@@ -1115,8 +1142,19 @@ WebChannelBase.prototype.open_ = function() {
   var request =
       ChannelRequest.createChannelRequest(this, this.channelDebug_, '', rid);
 
+  // mix the init headers
+  var extraHeaders = this.extraHeaders_;
+  if (this.initHeaders_) {
+    if (extraHeaders) {
+      extraHeaders = goog.object.clone(extraHeaders);
+      goog.object.extend(extraHeaders, this.initHeaders_);
+    } else {
+      extraHeaders = this.initHeaders_;
+    }
+  }
+
   if (this.httpHeadersOverwriteParam_ === null) {
-    request.setExtraHeaders(this.extraHeaders_);
+    request.setExtraHeaders(extraHeaders);
   }
 
   var requestText = this.dequeueOutgoingMaps_();
@@ -1130,9 +1168,9 @@ WebChannelBase.prototype.open_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
+  if (this.httpHeadersOverwriteParam_ && extraHeaders) {
     httpCors.setHttpHeadersWithOverwriteParam(
-        uri, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+        uri, this.httpHeadersOverwriteParam_, extraHeaders);
   }
 
   this.forwardChannelRequestPool_.addRequest(request);

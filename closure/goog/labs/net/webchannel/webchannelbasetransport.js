@@ -136,6 +136,9 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   this.channel_.setExtraHeaders(messageHeaders);
 
+  var initHeaders = (opt_options && opt_options.initMessageHeaders) || null;
+  this.channel_.setInitHeaders(initHeaders);
+
   var httpHeadersOverwriteParam =
       opt_options && opt_options.httpHeadersOverwriteParam;
   if (httpHeadersOverwriteParam &&
