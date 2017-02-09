@@ -482,3 +482,21 @@ function testKeyboardNavigation() {
   changeEvents.assertCallCount(1);
   selectEvents.assertCallCount(1);
 }
+
+
+function testDayGridHasNonEmptyAriaLabels() {
+  picker = new goog.ui.DatePicker(new Date(2017, 8, 9));
+  picker.render(goog.dom.getElement('sandbox'));
+
+  var cells = goog.dom.getElementsByTagNameAndClass(
+      goog.dom.TagName.TD, undefined, picker.getElement());
+  var numCells = cells.length;
+  for (var i = 0; i < numCells; i++) {
+    assertNotNull(cells[i]);
+    if (goog.a11y.aria.getRole(cells[i]) == goog.a11y.aria.Role.GRIDCELL) {
+      assertNonEmptyString(
+          'Aria label in date cell should not be empty',
+          goog.a11y.aria.getLabel(cells[i]));
+    }
+  }
+}
