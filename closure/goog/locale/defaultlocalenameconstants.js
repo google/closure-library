@@ -123,7 +123,7 @@ goog.locale.defaultLocaleNameConstants = {
     'CW': 'Cura\u00e7ao',
     'CX': 'Christmas Island',
     'CY': 'Cyprus',
-    'CZ': 'Czech Republic',
+    'CZ': 'Czechia',
     'DE': 'Germany',
     'DG': 'Diego Garcia',
     'DJ': 'Djibouti',
