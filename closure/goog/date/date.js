@@ -927,7 +927,7 @@ goog.date.Date.prototype.getUTCHours = function() {
 
 
 /**
- * @return {number} The hours value according to universal time.
+ * @return {number} The minutes value according to universal time.
  */
 goog.date.Date.prototype.getUTCMinutes = function() {
   return this.date.getUTCMinutes();
