@@ -1852,9 +1852,7 @@ WebChannelBase.prototype.testNetworkCallback_ = function(networkUp) {
   } else {
     this.channelDebug_.info('Failed to ping google.com');
     requestStats.notifyStatEvent(requestStats.Stat.ERROR_NETWORK);
-    // We call onError_ here instead of signalError_ because the latter just
-    // calls notifyStatEvent, and we don't want to have another stat event.
-    this.onError_(WebChannelBase.Error.NETWORK);
+    // Do not call onError_ again to eliminate duplicated Error events.
   }
 };
 
