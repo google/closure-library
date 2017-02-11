@@ -213,6 +213,38 @@ goog.net.WebChannel.MessageEvent.prototype.data;
 
 /**
  * WebChannel level error conditions.
+ *
+ * Summary of error debugging and reporting in WebChannel:
+ *
+ * Network Error
+ * 1. By default the webchannel library will set the error status to
+ *    NETWORK_ERROR when a channel has to be aborted or closed. NETWORK_ERROR
+ *    may be recovered by the application by retrying and opening a new channel.
+ * 2. There may be lost messages (not acked by the server) when a channel is
+ *    aborted. Currently we don't have a public API to retrieve messages that
+ *    are waiting to be acked on the client side. File a bug if you think it
+ *    is useful to expose such an API.
+ * 3. Details of why a channel fails are available via closure debug logs,
+ *    and stats events (see webchannel/requeststats.js). Those are internal
+ *    stats and are subject to change. File a bug if you think it's useful to
+ *    version and expose such stats as part of the WebChannel API.
+ *
+ * Server Error
+ * 1. SERVER_ERROR is intended to indicate a non-recoverable condition, e.g.
+ *    when auth fails.
+ * 2. We don't currently generate any such errors, because most of time,
+ *    it's the responsibility of upper-layer frameworks or the application
+ *    itself to indicate to the client why a webchannel request has failed.
+ * 3. When a channel is closed by the server explicitly, we still signal
+ *    NETWORK_ERROR to the client. Explicit server close may happen when the
+ *    server does a fail-over, or becomes overloaded, or conducts a graceful
+ *    shutdown etc.
+ *
+ *  RuntimeProperties.getLastStatusCode is a useful state that we expose to
+ *  the client to indicate the HTTP response status code of the last HTTP
+ *  request initiated by the WebChannel client library, for debugging
+ *  purposes only.
+ *
  * @enum {number}
  */
 goog.net.WebChannel.ErrorStatus = {
