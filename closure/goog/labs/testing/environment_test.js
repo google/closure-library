@@ -348,5 +348,5 @@ function testMock() {
 }
 
 function assertTestFailure(testCase, name, message) {
-  assertContains(message, testCase.result_.resultsByName[name][0]);
+  assertContains(message, testCase.result_.resultsByName[name][0].toString());
 }
