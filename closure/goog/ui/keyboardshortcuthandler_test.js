@@ -98,6 +98,16 @@ function testAllowsSingleLetterKeyBindingsSpecifiedAsString() {
   listener.$verify();
 }
 
+function testAllowsSingleLetterKeyBindingsSpecifiedAsStringKeyValue() {
+  listener.shortcutFired('lettergee');
+  listener.$replay();
+
+  handler.registerShortcut('lettergee', 'g');
+  fire('g');
+
+  listener.$verify();
+}
+
 function testAllowsSingleLetterKeyBindingsSpecifiedAsKeyCode() {
   listener.shortcutFired('lettergee');
   listener.$replay();
@@ -113,6 +123,7 @@ function testDoesntFireWhenWrongKeyIsPressed() {
 
   handler.registerShortcut('letterjay', 'j');
   fire(KeyCodes.G);
+  fire('g');
 
   listener.$verify();
 }
@@ -123,6 +134,16 @@ function testAllowsControlAndLetterSpecifiedAsAString() {
 
   handler.registerShortcut('lettergee', 'ctrl+g');
   fire(KeyCodes.G, {ctrlKey: true});
+
+  listener.$verify();
+}
+
+function testAllowsControlAndLetterSpecifiedAsAStringKeyValue() {
+  listener.shortcutFired('lettergee');
+  listener.$replay();
+
+  handler.registerShortcut('lettergee', 'ctrl+g');
+  fire('g', {ctrlKey: true});
 
   listener.$verify();
 }
