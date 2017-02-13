@@ -232,13 +232,16 @@ goog.net.WebChannel.MessageEvent.prototype.data;
  * Server Error
  * 1. SERVER_ERROR is intended to indicate a non-recoverable condition, e.g.
  *    when auth fails.
- * 2. We don't currently generate any such errors, because most of time,
+ * 2. We don't currently generate any such errors, because most of the time
  *    it's the responsibility of upper-layer frameworks or the application
- *    itself to indicate to the client why a webchannel request has failed.
- * 3. When a channel is closed by the server explicitly, we still signal
- *    NETWORK_ERROR to the client. Explicit server close may happen when the
- *    server does a fail-over, or becomes overloaded, or conducts a graceful
+ *    itself to indicate to the client why a webchannel has been failed
+ *    by the server.
+ * 3. When a channel is failed by the server explicitly, we still signal
+ *    NETWORK_ERROR to the client. Explicit server failure may happen when the
+ *    server does a fail-over, or becomes overloaded, or conducts a forced
  *    shutdown etc.
+ * 4. We use some heuristic to decide if the network (aka cloud) is down
+ *    v.s. the actual server is down.
  *
  *  RuntimeProperties.getLastStatusCode is a useful state that we expose to
  *  the client to indicate the HTTP response status code of the last HTTP
@@ -254,7 +257,7 @@ goog.net.WebChannel.ErrorStatus = {
   /** Communication to the server has failed. */
   NETWORK_ERROR: 1,
 
-  /** The server fails to accept the WebChannel. */
+  /** The server fails to accept or process the WebChannel. */
   SERVER_ERROR: 2
 };
 
