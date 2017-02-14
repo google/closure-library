@@ -178,6 +178,24 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
 
 
 /**
+ * Converts sanitized content of kind URI into SafeUrl without modification.
+ * @return {!goog.html.SafeUrl}
+ * @throws {Error} when the content kind is not URI.
+ */
+goog.soy.data.SanitizedContent.prototype.toSafeUrl = function() {
+  if (this.contentKind !== goog.soy.data.SanitizedContentKind.URI) {
+    throw Error('Sanitized content was not of kind URI.');
+  }
+  return goog.html.uncheckedconversions
+      .safeUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedContent of kind URI produces ' +
+              'SafeHtml-contract-compliant value.'),
+          this.toString());
+};
+
+
+/**
  * Unsanitized plain text string.
  *
  * While all strings are effectively safe to use as a plain text, there are no
