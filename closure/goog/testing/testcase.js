@@ -1840,8 +1840,8 @@ goog.testing.TestCase.Error.prototype.toString = function() {
  */
 goog.testing.TestCase.Error.prototype.toObject_ = function() {
   return {
-    source: this.source,
-    message: this.message,
-    stacktrace: this.stack || ''
+    'source': this.source,
+    'message': this.message,
+    'stacktrace': this.stack || ''
   };
 };
