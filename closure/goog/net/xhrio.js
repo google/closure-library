@@ -342,7 +342,7 @@ goog.net.XhrIo.send = function(
 
   var x;
   if(opt_xmlHttpFactory) {
-    x = = new goog.net.XhrIo(opt_xmlHttpFactory);
+    x = new goog.net.XhrIo(opt_xmlHttpFactory);
   }else{
     x = new goog.net.XhrIo();
   }
