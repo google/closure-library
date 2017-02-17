@@ -1371,3 +1371,4 @@ goog.debug.entryPointRegistry.register(
       goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ =
           transformer(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
     });
+
