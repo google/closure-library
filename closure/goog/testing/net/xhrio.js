@@ -315,7 +315,7 @@ goog.testing.net.XhrIo.prototype.progressEventsEnabled_ = false;
  * @type {boolean}
  * @private
  */
-goog.testing.net.XhrIo.prototype.xhr_ = false;
+goog.testing.net.XhrIo.prototype.xhr_ = null;
 
 
 /**
@@ -568,7 +568,7 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(
  */
 goog.testing.net.XhrIo.prototype.simulateReady = function() {
   this.active_ = false;
-  this.xhr_ = false;
+  this.xhr_ = null;
   this.dispatchEvent(goog.net.EventType.READY);
 };
 

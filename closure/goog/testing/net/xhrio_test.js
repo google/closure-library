@@ -60,7 +60,7 @@ function testStaticSendWithFactory() {
   var wrapperFactory = new goog.net.WrapperXmlHttpFactory(
       function() {
         xhrFactoryCalled++;
-        return xhr;
+        return goog.net.XmlHttp();
       },
       function() {
         optionsFactoryCalled++;
