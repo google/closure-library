@@ -92,6 +92,7 @@ class JsCompilerTestCase(unittest.TestCase):
     def assertVersion(expected, version_string):
       self.assertEquals(expected, jscompiler._ParseJavaVersion(version_string))
 
+    assertVersion((9, 0), _TEST_JAVA_JEP_223_VERSION_STRING)
     assertVersion((1, 7), _TEST_JAVA_VERSION_STRING)
     assertVersion((1, 6), _TEST_JAVA_NESTED_VERSION_STRING)
     assertVersion((1, 4), 'java version "1.4.0_03-ea"')
@@ -108,6 +109,12 @@ Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
 java version "1.6.0_35"
 Java(TM) SE Runtime Environment (build 1.6.0_35-b10-428-11M3811)
 Java HotSpot(TM) Client VM (build 20.10-b01-428, mixed mode)
+"""
+
+_TEST_JAVA_JEP_223_VERSION_STRING = """\
+openjdk version "9-Ubuntu"
+OpenJDK Runtime Environment (build 9-Ubuntu+0-9b134-2ubuntu1)
+OpenJDK 64-Bit Server VM (build 9-Ubuntu+0-9b134-2ubuntu1, mixed mode)
 """
 
 if __name__ == '__main__':

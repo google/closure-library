@@ -20,9 +20,9 @@ import subprocess
 import tempfile
 
 # Pulls just the major and minor version numbers from the first line of
-# 'java -version'. Versions are in the format of [0-9]+\.[0-9]+\..* See:
-# http://www.oracle.com/technetwork/java/javase/versioning-naming-139433.html
-_VERSION_REGEX = re.compile(r'"([0-9]+)\.([0-9]+)')
+# 'java -version'. Versions are in the format of [0-9]+(\.[0-9]+)? See:
+# http://openjdk.java.net/jeps/223
+_VERSION_REGEX = re.compile(r'"([0-9]+)(?:\.([0-9]+))?')
 
 
 class JsCompilerError(Exception):
@@ -46,7 +46,7 @@ def _ParseJavaVersion(version_string):
   """
   match = _VERSION_REGEX.search(version_string)
   if match:
-    version = tuple(int(x, 10) for x in match.groups())
+    version = tuple(int(x or 0) for x in match.groups())
     assert len(version) == 2
     return version
 
