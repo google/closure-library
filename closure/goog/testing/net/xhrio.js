@@ -41,10 +41,12 @@ goog.require('goog.uri.utils');
  * implementation for all cases, but it's not too hard to add them as needed.
  * @param {goog.testing.TestQueue=} opt_testQueue Test queue for inserting test
  *     events.
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
+ *     creating XMLHttpRequest objects.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.testing.net.XhrIo = function(opt_testQueue) {
+goog.testing.net.XhrIo = function(opt_testQueue, opt_xmlHttpFactory) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -60,7 +62,14 @@ goog.testing.net.XhrIo = function(opt_testQueue) {
    * @private
    */
   this.testQueue_ = opt_testQueue || null;
+
+  /**
+   * Optional XmlHttpFactory
+   * @private {goog.net.XmlHttpFactory}
+   */
+  this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
+
 goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
 
 
@@ -134,7 +143,7 @@ goog.testing.net.XhrIo.send = function(
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
   var x;
   if(opt_xmlHttpFactory) {
-    x = new goog.testing.net.XhrIo(opt_xmlHttpFactory);
+    x = new goog.testing.net.XhrIo(undefined, opt_xmlHttpFactory);
   }else{
     x = new goog.testing.net.XhrIo();
   }
@@ -460,7 +469,10 @@ goog.testing.net.XhrIo.prototype.send = function(
   if (this.testQueue_) {
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
-  this.xhr_ = true;
+
+  this.xhr_ = this.createXhr();
+  this.xhrOptions_ = this.xmlHttpFactory_ ? this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
+
   this.active_ = true;
   this.readyState_ = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
   this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.LOADING);
@@ -474,7 +486,8 @@ goog.testing.net.XhrIo.prototype.send = function(
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {
-  return goog.net.XmlHttp();
+  return this.xmlHttpFactory_ ? this.xmlHttpFactory_.createInstance() :
+                                goog.net.XmlHttp();
 };
 
 
