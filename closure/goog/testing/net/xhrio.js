@@ -315,7 +315,7 @@ goog.testing.net.XhrIo.prototype.progressEventsEnabled_ = false;
  * @type {boolean}
  * @private
  */
-goog.testing.net.XhrIo.prototype.xhr_ = null;
+goog.testing.net.XhrIo.prototype.xhr_ = false;
 
 
 /**
@@ -470,9 +470,11 @@ goog.testing.net.XhrIo.prototype.send = function(
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
 
-  this.xhr_ = this.createXhr();
-  this.xhrOptions_ = this.xmlHttpFactory_ ? this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
+  // not interested in what factory does to create object. Contention is simply to create an instance.
+  this.createXhr();
+  this.xmlHttpFactory_ ? this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
 
+  this.xhr_ = true;
   this.active_ = true;
   this.readyState_ = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
   this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.LOADING);
@@ -568,7 +570,7 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(
  */
 goog.testing.net.XhrIo.prototype.simulateReady = function() {
   this.active_ = false;
-  this.xhr_ = null;
+  this.xhr_ = false;
   this.dispatchEvent(goog.net.EventType.READY);
 };
 
