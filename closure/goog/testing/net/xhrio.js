@@ -134,9 +134,9 @@ goog.testing.net.XhrIo.send = function(
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
   var x;
   if(opt_xmlHttpFactory) {
-    x = new goog.net.XhrIo(opt_xmlHttpFactory);
+    x = new goog.testing.net.XhrIo(opt_xmlHttpFactory);
   }else{
-    x = new goog.net.XhrIo();
+    x = new goog.testing.net.XhrIo();
   }
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
