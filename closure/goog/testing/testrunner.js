@@ -438,3 +438,14 @@ goog.testing.TestRunner.prototype.getTestResults = function() {
 };
 
 
+/**
+ * Returns the test results as json.
+ * This is called by the testing infrastructure through G_testrunner.
+ * @return {?string} Tests results object.
+ */
+goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
+  if (this.testCase) {
+    return this.testCase.getTestResultsAsJson();
+  }
+  return null;
+};

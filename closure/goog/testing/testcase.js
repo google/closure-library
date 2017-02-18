@@ -729,6 +729,26 @@ goog.testing.TestCase.prototype.getTestResults = function() {
   return map;
 };
 
+/**
+ * Returns the test results as json.
+ * This is called by the testing infrastructure through G_testrunner.
+ * @return {string} Tests results object.
+ */
+goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
+  var map = {};
+  goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
+    // Make sure we only use properties on the actual map
+    if (!Object.prototype.hasOwnProperty.call(
+            this.result_.resultsByName, key)) {
+      return;
+    }
+    map[key] = [];
+    for (var j = 0; j < resultArray.length; j++) {
+      map[key].push(resultArray[j].toObject_());
+    }
+  }, this);
+  return goog.json.serialize(map);
+};
 
 /**
  * Executes each of the tests, yielding asynchronously if execution time
