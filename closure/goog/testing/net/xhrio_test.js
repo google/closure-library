@@ -68,7 +68,8 @@ function testStaticSendWithFactory() {
       });
 
   sendInstances = goog.testing.net.XhrIo.getSendInstances();
-  var returnedXhr = goog.testing.net.XhrIo.send('url', undefined, "GET", "", undefined, 0, false, wrapperFactory);
+  var returnedXhr = goog.testing.net.XhrIo.send(
+      'url', undefined, 'GET', '', undefined, 0, false, wrapperFactory);
   assertEquals('sendInstances_ after send', 1, sendInstances.length);
   xhr = sendInstances[sendInstances.length - 1];
   assertTrue('isActive after request', xhr.isActive());
@@ -88,7 +89,8 @@ function testStaticSendWithFactory() {
 
   // check if all wrapperFactory is used during send
   assertEquals('XHR factory should have been called', 1, xhrFactoryCalled);
-  assertEquals('Options factory should have been called', 1, optionsFactoryCalled);
+  assertEquals(
+      'Options factory should have been called', 1, optionsFactoryCalled);
 }
 
 function testStaticSendWithException() {
