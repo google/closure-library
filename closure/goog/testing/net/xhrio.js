@@ -141,12 +141,8 @@ goog.testing.net.XhrIo.cleanup = function() {
 goog.testing.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
-  var x;
-  if (opt_xmlHttpFactory) {
-    x = new goog.testing.net.XhrIo(undefined, opt_xmlHttpFactory);
-  } else {
-    x = new goog.testing.net.XhrIo();
-  }
+  var x = new goog.testing.net.XhrIo(null, opt_xmlHttpFactory);
+
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback);
@@ -470,11 +466,12 @@ goog.testing.net.XhrIo.prototype.send = function(
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
 
-  // not interested in what factory does to create object. Contention is simply
-  // to create an instance.
   this.createXhr();
-  this.xmlHttpFactory_ ? this.xmlHttpFactory_.getOptions() :
-                         goog.net.XmlHttp.getOptions();
+  if (this.xmlHttpFactory_) {
+    this.xmlHttpFactory_.getOptions();
+  } else {
+    goog.net.XmlHttp.getOptions();
+  }
 
   this.xhr_ = true;
   this.active_ = true;
