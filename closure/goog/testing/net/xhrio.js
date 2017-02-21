@@ -468,7 +468,7 @@ goog.testing.net.XhrIo.prototype.send = function(
 
   this.createXhr();
   if (this.xmlHttpFactory_) {
-    this.xmlHttpFactory_.getOptions():
+    this.xmlHttpFactory_.getOptions();
   } else {
     goog.net.XmlHttp.getOptions();
   }
