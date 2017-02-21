@@ -99,6 +99,8 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
     goog.exportSymbol('G_testRunner.setStrict', tr.setStrict);
     goog.exportSymbol('G_testRunner.logTestFailure', tr.logTestFailure);
     goog.exportSymbol('G_testRunner.getTestResults', tr.getTestResults);
+    goog.exportSymbol(
+        'G_testRunner.getTestResultsAsJson', tr.getTestResultsAsJson);
 
     // Export debug as a global function for JSUnit compatibility.  This just
     // calls log on the current test case.
