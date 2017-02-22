@@ -339,9 +339,7 @@ goog.net.XhrIo.sendInstances_ = [];
 goog.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
-
   var x = new goog.net.XhrIo(opt_xmlHttpFactory);
-
   goog.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     x.listen(goog.net.EventType.COMPLETE, opt_callback);

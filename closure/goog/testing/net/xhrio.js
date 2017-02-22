@@ -69,7 +69,6 @@ goog.testing.net.XhrIo = function(opt_testQueue, opt_xmlHttpFactory) {
    */
   this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
-
 goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
 
 
@@ -141,8 +140,7 @@ goog.testing.net.XhrIo.cleanup = function() {
 goog.testing.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
-  var x = new goog.testing.net.XhrIo(null, opt_xmlHttpFactory);
-
+  var x = new goog.testing.net.XhrIo(opt_xmlHttpFactory);
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback);
@@ -466,11 +464,9 @@ goog.testing.net.XhrIo.prototype.send = function(
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
 
-  this.createXhr();
   if (this.xmlHttpFactory_) {
+    this.xmlHttpFactory_.createInstance();
     this.xmlHttpFactory_.getOptions();
-  } else {
-    goog.net.XmlHttp.getOptions();
   }
 
   this.xhr_ = true;
@@ -487,8 +483,7 @@ goog.testing.net.XhrIo.prototype.send = function(
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {
-  return this.xmlHttpFactory_ ? this.xmlHttpFactory_.createInstance() :
-                                goog.net.XmlHttp();
+  return goog.net.XmlHttp();
 };
 
 
