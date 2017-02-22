@@ -140,7 +140,7 @@ goog.testing.net.XhrIo.cleanup = function() {
 goog.testing.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
     opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
-  var x = new goog.testing.net.XhrIo(opt_xmlHttpFactory);
+  var x = new goog.testing.net.XhrIo(null, opt_xmlHttpFactory);
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback);
