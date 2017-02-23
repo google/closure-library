@@ -112,6 +112,11 @@ function testApplyClientProtocol() {
   pool.applyClientProtocol('quic/x');
   assertTrue(pool.getMaxSize() > 1);
 
+  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
+  assertEquals(1, pool.getMaxSize());
+  pool.applyClientProtocol('h2');
+  assertTrue(pool.getMaxSize() > 1);
+
   stubSpdyCheck(true);
 
   pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();

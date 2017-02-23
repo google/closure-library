@@ -174,7 +174,8 @@ BaseTestChannel.prototype.connect = function(path) {
   sendDataUri.setParameterValues('MODE', 'init');
 
   // http-session-id to be generated as the response
-  if (this.channel_.getHttpSessionIdParam()) {
+  if (!this.channel_.getBackgroundChannelTest() &&
+      this.channel_.getHttpSessionIdParam()) {
     sendDataUri.setParameterValues(WebChannel.X_HTTP_SESSION_ID,
         this.channel_.getHttpSessionIdParam());
   }
@@ -389,6 +390,10 @@ BaseTestChannel.prototype.onRequestComplete = function(req) {
  * @private
  */
 BaseTestChannel.prototype.applyControlHeaders_ = function(req) {
+  if (this.channel_.getBackgroundChannelTest()) {
+    return;
+  }
+
   var xhr = req.getXhr();
   if (xhr) {
     var protocolHeader = xhr.getStreamingResponseHeader(
@@ -519,4 +524,10 @@ BaseTestChannel.prototype.setHttpSessionId = goog.abstractMethod;
  * @override
  */
 BaseTestChannel.prototype.getHttpSessionId = goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+BaseTestChannel.prototype.getBackgroundChannelTest = goog.abstractMethod;
 });  // goog.scope

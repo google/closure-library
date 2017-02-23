@@ -119,6 +119,11 @@ goog.net.WebChannel = function() {};
  * headers to be overwritten as a URL param to bypass CORS preflight.
  * goog.net.rpc.HttpCors is used to encode the HTTP headers.
  *
+ * backgroundChannelTest: whether to run the channel test (detecting networking
+ * conditions) as a background process so the OPEN event will be fired sooner
+ * to reduce the initial handshake delay. This option defaults to false now.
+ * Eventually we may turn this flag on by default.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   initMessageHeaders: (!Object<string, string>|undefined),
@@ -129,7 +134,8 @@ goog.net.WebChannel = function() {};
  *   testUrl: (string|undefined),
  *   sendRawJson: (boolean|undefined),
  *   httpSessionIdParam: (string|undefined),
- *   httpHeadersOverwriteParam: (string|undefined)
+ *   httpHeadersOverwriteParam: (string|undefined),
+ *   backgroundChannelTest: (boolean|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
