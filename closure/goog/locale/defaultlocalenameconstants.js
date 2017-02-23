@@ -943,6 +943,7 @@ goog.locale.defaultLocaleNameConstants = {
     'zh': 'Mandarin Chinese',
     'zh_Hans': 'Simplified Chinese',
     'zh_Hant': 'Traditional Chinese',
+    'zh_TW': 'Mandarin Chinese (Taiwan)',
     'zu': 'Zulu',
     'zun': 'Zuni',
     'zxx': 'No linguistic content',
