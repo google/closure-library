@@ -189,7 +189,8 @@ goog.net.Cookies.prototype.set = function(
 goog.net.Cookies.prototype.get = function(name, opt_default) {
   var nameEq = name + '=';
   var parts = this.getParts_();
-  for (var i = 0, part; part = parts[i]; i++) {
+  for (var i = 0, part; i < parts.length; i++) {
+    part = parts[i];
     // startsWith
     if (part.lastIndexOf(nameEq, 0) == 0) {
       return part.substr(nameEq.length);
@@ -341,7 +342,8 @@ goog.net.Cookies.prototype.getParts_ = function() {
 goog.net.Cookies.prototype.getKeyValues_ = function() {
   var parts = this.getParts_();
   var keys = [], values = [], index, part;
-  for (var i = 0; part = parts[i]; i++) {
+  for (var i = 0; i < parts.length; i++) {
+    part = parts[i];
     index = part.indexOf('=');
 
     if (index == -1) {  // empty name
