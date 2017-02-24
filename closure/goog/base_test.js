@@ -132,6 +132,27 @@ function testProvideWatch() {
   delete goog.yoddle;
 }
 
+// Namespaces should not conflict with elements added to the window based on
+// their id
+function testConflictingSymbolAndId() {
+  // Create a div with a given id
+  var divElement = document.createElement('div');
+  divElement.id = 'clashingname';
+  document.body.appendChild(divElement);
+
+  // The object at window.clashingname is the element with that id
+  assertEquals(window.clashingname, divElement);
+
+  // Export a symbol to a sub-namespace of that id
+  var symbolObject = {};
+  goog.exportSymbol('clashingname.symbolname', symbolObject);
+
+  // The symbol has been added...
+  assertEquals(window.clashingname.symbolname, symbolObject);
+
+  // ...and has not affected the original div
+  assertEquals(window.clashingname, divElement);
+}
 
 function testProvideStrictness() {
   // alias to avoid the being picked up by the deps scanner.
