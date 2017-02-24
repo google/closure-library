@@ -230,6 +230,11 @@ goog.events.EventType = {
   COMPOSITIONUPDATE: 'compositionupdate',
   COMPOSITIONEND: 'compositionend',
 
+  // The beforeinput event is initially only supported in Safari. See
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=342670 for Chrome
+  // implementation tracking.
+  BEFOREINPUT: 'beforeinput',
+
   // Webview tag events
   // See http://developer.chrome.com/dev/apps/webview_tag.html
   EXIT: 'exit',
