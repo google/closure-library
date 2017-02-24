@@ -329,8 +329,10 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
     var color;
-    var isFailOrError = /FAILED/.test(line) || /ERROR/.test(line);
-    if (/PASSED/.test(line)) {
+    var isPassed = /PASSED/.test(line);
+    var isFailOrError =
+        /FAILED/.test(line) || /ERROR/.test(line) || /NO TESTS RUN/.test(line);
+    if (isPassed) {
       color = 'darkgreen';
     } else if (isFailOrError) {
       color = 'darkred';
@@ -388,12 +390,15 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       // Highlight the first line as a header that indicates the test outcome.
       div.style.padding = '20px';
       div.style.marginBottom = '10px';
-      if (isFailOrError) {
+      if (isPassed) {
+        div.style.border = '1px solid ' + color;
+        div.style.backgroundColor = '#eeffee';
+      } else if (isFailOrError) {
         div.style.border = '5px solid ' + color;
         div.style.backgroundColor = '#ffeeee';
       } else {
         div.style.border = '1px solid black';
-        div.style.backgroundColor = '#eeffee';
+        div.style.backgroundColor = '#eeeeee';
       }
     }
 

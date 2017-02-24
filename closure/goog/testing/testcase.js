@@ -654,6 +654,8 @@ goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
 
   if (this.running) {
     rv.push(this.name_ + ' [RUNNING]');
+  } else if (this.result_.runCount == 0) {
+    rv.push(this.name_ + ' [NO TESTS RUN]');
   } else {
     var label = this.result_.isSuccess() ? 'PASSED' : 'FAILED';
     rv.push(this.name_ + ' [' + label + ']');
