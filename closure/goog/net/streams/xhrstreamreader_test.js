@@ -102,7 +102,7 @@ function testGetParserByResponseHeader() {
       xhrReader.getParserByResponseHeader_() instanceof Base64PbStreamParser);
 
   xhrIo.getStreamingResponseHeader = function(key) {
-    if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf+json';
+    if (key == CONTENT_TYPE_HEADER) return 'application/json+protobuf';
     return null;
   };
   assertTrue(
