@@ -220,7 +220,8 @@ goog.style.getComputedStyle = function(element, property) {
  */
 goog.style.getCascadedStyle = function(element, style) {
   // TODO(nicksantos): This should be documented to return null. #fixTypes
-  return element.currentStyle ? element.currentStyle[style] : null;
+  return /** @type {string} */ (
+      element.currentStyle ? element.currentStyle[style] : null);
 };
 
 
@@ -1571,9 +1572,11 @@ goog.style.getContentBoxSize = function(element) {
     // If IE in CSS1Compat mode than just use the width and height.
     // If we have a boxSizing then fall back on measuring the borders etc.
     var width = goog.style.getIePixelValue_(
-        element, ieCurrentStyle.width, 'width', 'pixelWidth');
+        element, /** @type {string} */ (ieCurrentStyle.width), 'width',
+        'pixelWidth');
     var height = goog.style.getIePixelValue_(
-        element, ieCurrentStyle.height, 'height', 'pixelHeight');
+        element, /** @type {string} */ (ieCurrentStyle.height), 'height',
+        'pixelHeight');
     return new goog.math.Size(width, height);
   } else {
     var borderBoxSize = goog.style.getBorderBoxSize(element);
