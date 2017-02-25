@@ -22,6 +22,8 @@
 goog.provide('goog.net.Cookies');
 goog.provide('goog.net.cookies');
 
+goog.require('goog.string');
+
 
 
 /**
@@ -49,14 +51,6 @@ goog.net.Cookies = function(context) {
  * @type {number}
  */
 goog.net.Cookies.MAX_COOKIE_LENGTH = 3950;
-
-
-/**
- * RegExp used to split the cookies string.
- * @type {RegExp}
- * @private
- */
-goog.net.Cookies.SPLIT_RE_ = /\s*;\s*/;
 
 
 /**
@@ -189,7 +183,8 @@ goog.net.Cookies.prototype.set = function(
 goog.net.Cookies.prototype.get = function(name, opt_default) {
   var nameEq = name + '=';
   var parts = this.getParts_();
-  for (var i = 0, part; part = parts[i]; i++) {
+  for (var i = 0, part; i < parts.length; i++) {
+    part = goog.string.trim(parts[i]);
     // startsWith
     if (part.lastIndexOf(nameEq, 0) == 0) {
       return part.substr(nameEq.length);
@@ -328,7 +323,7 @@ goog.net.Cookies.prototype.getCookie_ = function() {
  * @private
  */
 goog.net.Cookies.prototype.getParts_ = function() {
-  return (this.getCookie_() || '').split(goog.net.Cookies.SPLIT_RE_);
+  return (this.getCookie_() || '').split(';');
 };
 
 
@@ -341,7 +336,8 @@ goog.net.Cookies.prototype.getParts_ = function() {
 goog.net.Cookies.prototype.getKeyValues_ = function() {
   var parts = this.getParts_();
   var keys = [], values = [], index, part;
-  for (var i = 0; part = parts[i]; i++) {
+  for (var i = 0; i < parts.length; i++) {
+    part = goog.string.trim(parts[i]);
     index = part.indexOf('=');
 
     if (index == -1) {  // empty name
