@@ -29,7 +29,7 @@ Require the package and use goog.require normally.
 ```
 require("google-closure-library");
 
-goog.require("goog.crypt.Sha1");
+goog.require("goog.crypt.Sha2");
 
 var sha1 = new goog.crypt.Sha2();
 sha2.update("foobar");
