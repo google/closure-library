@@ -2843,11 +2843,22 @@ goog.createRequiresTranspilation_ = function() {
     }
   }
 
+  var userAgent = goog.global.navigator && goog.global.navigator.userAgent ?
+      goog.global.navigator.userAgent :
+      '';
+
   // Identify ES3-only browsers by their incorrect treatment of commas.
   addNewerLanguageTranspilationCheck('es5', function() {
     return evalCheck('[1,].length==1');
   });
   addNewerLanguageTranspilationCheck('es6', function() {
+    // Edge has a non-deterministic (i.e., not reproducible) bug with ES6:
+    // https://github.com/Microsoft/ChakraCore/issues/1496.
+    var re = /Edge\/(\d+)(\.\d)*/i;
+    var edgeUserAgent = userAgent.match(re);
+    if (edgeUserAgent && Number(edgeUserAgent[1]) < 15) {
+      return false;
+    }
     // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
     //   (a) default params (specifically shadowing locals),
     //   (b) destructuring, (c) block-scoped functions,
