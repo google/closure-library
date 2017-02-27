@@ -23,6 +23,8 @@ goog.provide('goog.json.Replacer');
 goog.provide('goog.json.Reviver');
 goog.provide('goog.json.Serializer');
 
+goog.require('goog.log');
+
 
 /**
  * @define {boolean} If true, use the native JSON parsing API.
@@ -32,6 +34,13 @@ goog.provide('goog.json.Serializer');
  * faster and safer than the default implementation using {@code eval}.
  */
 goog.define('goog.json.USE_NATIVE_JSON', false);
+
+/**
+ * @define {boolean} If true, try the native JSON parsing API first. If it
+ * fails, log an error and use {@code eval} instead. This is useful when
+ * transitioning to {@code goog.json.USE_NATIVE_JSON}.
+ */
+goog.define('goog.json.TRY_NATIVE_JSON', false);
 
 
 /**
@@ -97,19 +106,30 @@ goog.json.isValid = function(s) {
  */
 goog.json.parse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
-                                      function(s) {
-                                        var o = String(s);
-                                        if (goog.json.isValid(o)) {
-                                          /** @preserveTry */
-                                          try {
-                                            return /** @type {Object} */ (
-                                                eval('(' + o + ')'));
-                                          } catch (ex) {
-                                          }
-                                        }
-                                        throw Error(
-                                            'Invalid JSON string: ' + o);
-                                      };
+    function(s) {
+      var error;
+      if (goog.json.TRY_NATIVE_JSON) {
+        try {
+          return goog.global['JSON']['parse'](s);
+        } catch (ex) {
+          error = ex;
+        }
+      }
+      var o = String(s);
+      if (goog.json.isValid(o)) {
+        /** @preserveTry */
+        try {
+          var result = /** @type {?Object} */ (eval('(' + o + ')'));
+          if (error) {
+            var logger = goog.log.getLogger('goog.json');
+            goog.log.error(logger, 'Invalid JSON: ' + s, error);
+          }
+          return result;
+        } catch (ex) {
+        }
+      }
+      throw Error('Invalid JSON string: ' + o);
+    };
 
 
 /**
@@ -121,10 +141,26 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
  */
 goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(string):Object} */ (goog.global['JSON']['parse']) :
-                                           function(s) {
-                                             return /** @type {Object} */ (
-                                                 eval('(' + s + ')'));
-                                           };
+    function(s) {
+      var error;
+      if (goog.json.TRY_NATIVE_JSON) {
+        try {
+          return goog.global['JSON']['parse'](s);
+        } catch (ex) {
+          error = ex;
+        }
+      }
+      try {
+        var result = /** @type {?Object} */ (eval('(' + s + ')'));
+        if (error) {
+          var logger = goog.log.getLogger('goog.json');
+          goog.log.error(logger, 'Invalid JSON: ' + s, error);
+        }
+        return result;
+      } catch (ex) {
+        throw ex;
+      }
+    };
 
 
 /**
