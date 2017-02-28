@@ -43,7 +43,7 @@
     "platform" : "Windows 7",
     "timeZone": "Pacific",
     "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat"
+      "executable": "https://raw.githubusercontent.com/shicks/closure-library-temp/master/CloseAdobeDialog.exe"
     }
   }
 ]
