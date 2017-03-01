@@ -377,6 +377,27 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
 
 
 /**
+ * A low water-mark message count to notify the application when the
+ * flow-control condition is cleared, that is, when the application is
+ * able to send more messages.
+ *
+ * We expect the application to configure a high water-mark message count,
+ * which is checked via getNonAckedMessageCount(). When the high water-mark
+ * is exceeded, the application should install a callback via this method
+ * to be notified when to start to send new messages.
+ *
+ * @param {number} count The low water-mark count. It is an error to pass
+ * a non-positive value.
+ * @param {!function()} callback The call back to notify the application
+ * when NonAckedMessageCount is below the specified low water-mark count.
+ * Any previously registered callback is cleared. This new callback will
+ * be cleared once it has been fired, or when the channel is closed or aborted.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.notifyNonAckedMessageCount =
+    goog.abstractMethod;
+
+
+/**
  * This method registers a callback to handle the commit request sent
  * by the server. Commit protocol spec:
  * https://github.com/bidiweb/webchannel/blob/master/commit.md

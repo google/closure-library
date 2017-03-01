@@ -417,6 +417,13 @@ WebChannelBaseTransport.ChannelProperties.prototype.getNonAckedMessageCount =
 /**
  * @override
  */
+WebChannelBaseTransport.ChannelProperties.prototype.notifyNonAckedMessageCount =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
 WebChannelBaseTransport.ChannelProperties.prototype.onCommit =
     goog.abstractMethod;
 
