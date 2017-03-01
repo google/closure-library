@@ -354,11 +354,9 @@ goog.db.Error.fromRequest = function(request, message) {
  * Constructs an goog.db.Error instance from an DOMException. This abstraction
  * is necessary to provide backwards compatibility with Chrome21.
  *
- * @param {!IDBDatabaseException} ex The exception that was thrown.
+ * @param {!DOMError|!DOMException} ex The exception that was thrown.
  * @param {string} message The error message to add to err if it's wrapped.
  * @return {!goog.db.Error} The error that caused the failure.
- * @suppress {invalidCasts} The cast from IDBDatabaseException to DOMError
- *     is invalid and will not compile.
  */
 goog.db.Error.fromException = function(ex, message) {
   if ('name' in ex) {
