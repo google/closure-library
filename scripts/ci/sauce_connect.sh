@@ -3,7 +3,7 @@
 set -e -o pipefail
 
 # Setup and start Sauce Connect for your TravisCI build
-CONNECT_URL="https://saucelabs.com/downloads/sc-4.3.12-linux.tar.gz"
+CONNECT_URL="https://saucelabs.com/downloads/sc-4.4.3-linux.tar.gz"
 CONNECT_DIR="/tmp/sauce-connect-$RANDOM"
 CONNECT_DOWNLOAD="sc-latest-linux.tar.gz"
 

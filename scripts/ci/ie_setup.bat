@@ -45,3 +45,12 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" ^
 :: Disable cross-origin XHRs. Sauce enables this in IE by default.
 @ECHO OFF
 REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /v 1406 /t REG_DWORD /d 3 /f
+
+setlocal
+
+set "URL=https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/CloseAdobeDialog.exe"
+set "SaveAs=C:\Users\Administrator\Desktop\CloseAdobeDialog.exe"
+powershell "Import-Module BitsTransfer; Start-BitsTransfer '%URL%' '%SaveAs%'"
+
+start C:\Users\Administrator\Desktop\CloseAdobeDialog.exe
+exit
