@@ -49,7 +49,7 @@ REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Se
 @echo off
 setlocal
 
-set "URL=https://raw.githubusercontent.com/shicks/closure-library-temp/master/CloseAdobeDialog.exe"
+set "URL=https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/CloseAdobeDialog.exe"
 set "SaveAs=C:\Users\Administrator\Desktop\CloseAdobeDialog.exe"
 powershell "Import-Module BitsTransfer; Start-BitsTransfer '%URL%' '%SaveAs%'"
 
