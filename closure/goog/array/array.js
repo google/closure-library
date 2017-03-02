@@ -791,7 +791,7 @@ goog.array.removeAllIf = function(arr, f, opt_obj) {
  * @return {!Array<?>} The new resultant array.
  */
 goog.array.concat = function(var_args) {
-  return Array.prototype.concat.apply(Array.prototype, arguments);
+  return Array.prototype.concat.apply([], arguments);
 };
 
 
@@ -802,7 +802,7 @@ goog.array.concat = function(var_args) {
  * @template T
  */
 goog.array.join = function(var_args) {
-  return Array.prototype.concat.apply(Array.prototype, arguments);
+  return Array.prototype.concat.apply([], arguments);
 };
 
 
