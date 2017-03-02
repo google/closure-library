@@ -131,6 +131,8 @@ function testSafeUrlFromDataUrl_withUnsafeType() {
   assertDataUrlIsSafe('data:video/mp4;baze64,z=', false);
   assertDataUrlIsSafe('data:video/mp4;,z=', false);
   assertDataUrlIsSafe('data:text/html,sdfsdfsdfsfsdfs;base64,anything', false);
+  // Valid base64 image URL, but with disallowed mime-type.
+  assertDataUrlIsSafe('data:image/svg+xml;base64,abc', false);
 }
 
 
