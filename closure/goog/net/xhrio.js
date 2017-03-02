@@ -1161,6 +1161,7 @@ goog.net.XhrIo.prototype.getResponseXml = function() {
  * @param {string=} opt_xssiPrefix Optional XSSI prefix string to use for
  *     stripping of the response before parsing. This needs to be set only if
  *     your backend server prepends the same prefix string to the JSON response.
+ * @throws Error if the response text is invalid JSON.
  * @return {Object|undefined} JavaScript object.
  */
 goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
