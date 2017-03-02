@@ -264,7 +264,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       object = object.valueOf();
       // Fall through to switch below.
     } else {
-      this.serializeObject_(/** @type {Object} */ (object), sb);
+      this.serializeObject_(/** @type {!Object} */ (object), sb);
       return;
     }
   }
@@ -379,7 +379,7 @@ goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
 /**
  * Serializes an object to a JSON string
  * @private
- * @param {Object} obj The object to serialize.
+ * @param {!Object} obj The object to serialize.
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {

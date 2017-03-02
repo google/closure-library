@@ -78,7 +78,8 @@ goog.date.month = {
 goog.date.formatMonthAndYear = function(monthName, yearNum) {
   /** @desc Month/year format given the month name and the numeric year. */
   var MSG_MONTH_AND_YEAR = goog.getMsg(
-      '{$monthName} {$yearNum}', {'monthName': monthName, 'yearNum': yearNum});
+      '{$monthName} {$yearNum}',
+      {'monthName': monthName, 'yearNum': String(yearNum)});
   return MSG_MONTH_AND_YEAR;
 };
 

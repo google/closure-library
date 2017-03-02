@@ -442,7 +442,7 @@ goog.text.LoremIpsum.arrayLength_ = function(array) {
 goog.text.LoremIpsum.chooseClosest = function(values, target) {
   var closest = Number(values[0]);
   goog.array.forEach(values, function(value) {
-    if (Math.abs(target - value) < Math.abs(target - closest)) {
+    if (Math.abs(target - Number(value)) < Math.abs(target - closest)) {
       closest = value;
     }
   });
