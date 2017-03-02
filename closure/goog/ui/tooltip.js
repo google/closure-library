@@ -658,7 +658,7 @@ goog.ui.Tooltip.prototype.positionAndShow_ = function(el, opt_pos) {
 /**
  * Called by timer from mouse out handler. Hides tooltip if cursor is still
  * outside element and tooltip, or if a child of tooltip has the focus.
- * @param {Element} el Tooltip's anchor when hide timer was started.
+ * @param {?Element|undefined} el Tooltip's anchor when hide timer was started.
  */
 goog.ui.Tooltip.prototype.maybeHide = function(el) {
   this.hideTimer = undefined;
