@@ -24,50 +24,15 @@ goog.require('goog.functions');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.Storage');
 goog.require('goog.storage.mechanism.mechanismfactory');
-goog.require('goog.structs.Map');
+goog.require('goog.storage.storageTester');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.storage.FakeMechanism');
 
-
-goog.storage.storage_test.runBasicTests = function(storage) {
-  // Simple Objects.
-  storage.set('first', 'Hello world!');
-  storage.set('second', ['one', 'two', 'three']);
-  storage.set('third', {'a': 97, 'b': 98});
-  assertEquals('Hello world!', storage.get('first'));
-  assertObjectEquals(['one', 'two', 'three'], storage.get('second'));
-  assertObjectEquals({'a': 97, 'b': 98}, storage.get('third'));
-
-  // Some more complex fun with a Map.
-  var map = new goog.structs.Map();
-  map.set('Alice', 'Hello world!');
-  map.set('Bob', ['one', 'two', 'three']);
-  map.set('Cecile', {'a': 97, 'b': 98});
-  storage.set('first', map.toObject());
-  assertObjectEquals(map.toObject(), storage.get('first'));
-
-  // Setting weird values.
-  storage.set('second', null);
-  assertEquals(null, storage.get('second'));
-  storage.set('second', undefined);
-  assertEquals(undefined, storage.get('second'));
-  storage.set('second', '');
-  assertEquals('', storage.get('second'));
-
-  // Clean up.
-  storage.remove('first');
-  storage.remove('second');
-  storage.remove('third');
-  assertUndefined(storage.get('first'));
-  assertUndefined(storage.get('second'));
-  assertUndefined(storage.get('third'));
-};
-
 function testBasicOperations() {
   var mechanism = new goog.testing.storage.FakeMechanism();
   var storage = new goog.storage.Storage(mechanism);
-  goog.storage.storage_test.runBasicTests(storage);
+  goog.storage.storageTester.runBasicTests(storage);
 }
 
 function testMechanismCommunication() {
@@ -76,11 +41,13 @@ function testMechanismCommunication() {
 
   // Invalid JSON.
   mechanism.set('first', '');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
-               assertThrows(function() {storage.get('first')}));
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
+                 storage.get('first');
+               }));
   mechanism.set('second', '(');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
-               assertThrows(function() {storage.get('second')}));
+  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
+                 storage.get('second');
+               }));
 
   // Cleaning up.
   storage.remove('first');

@@ -17,14 +17,14 @@ goog.setTestOnly('goog.storage.RichStorageTest');
 
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
-goog.require('goog.storage.storage_test');
+goog.require('goog.storage.storageTester');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.storage.FakeMechanism');
 
 function testBasicOperations() {
   var mechanism = new goog.testing.storage.FakeMechanism();
   var storage = new goog.storage.RichStorage(mechanism);
-  goog.storage.storage_test.runBasicTests(storage);
+  goog.storage.storageTester.runBasicTests(storage);
 }
 
 function testWrapping() {
@@ -54,11 +54,11 @@ function testWrapping() {
   // Invalid wrappings.
   mechanism.set('third', 'null');
   assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
-                 storage.get('third')
+                 storage.get('third');
                }));
   mechanism.set('third', '{"meta": "data"}');
   assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
-                 storage.get('third')
+                 storage.get('third');
                }));
 
   // Weird values.

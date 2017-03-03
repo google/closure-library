@@ -16,7 +16,7 @@ goog.provide('goog.storage.ExpiringStorageTest');
 goog.setTestOnly('goog.storage.ExpiringStorageTest');
 
 goog.require('goog.storage.ExpiringStorage');
-goog.require('goog.storage.storage_test');
+goog.require('goog.storage.storageTester');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.storage.FakeMechanism');
@@ -24,7 +24,7 @@ goog.require('goog.testing.storage.FakeMechanism');
 function testBasicOperations() {
   var mechanism = new goog.testing.storage.FakeMechanism();
   var storage = new goog.storage.ExpiringStorage(mechanism);
-  goog.storage.storage_test.runBasicTests(storage);
+  goog.storage.storageTester.runBasicTests(storage);
 }
 
 function testExpiration() {
