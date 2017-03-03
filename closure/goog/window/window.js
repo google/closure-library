@@ -51,6 +51,15 @@ goog.window.DEFAULT_POPUP_TARGET = 'google_popup';
 
 
 /**
+ * @return {!Window}
+ * @suppress {checkTypes}
+ * @private
+ */
+goog.window.createFakeWindow_ = function() {
+  return /** @type {!Window} */ ({});
+};
+
+/**
  * Opens a new window.
  *
  * @param {goog.html.SafeUrl|string|Object} linkRef If an Object with an 'href'
@@ -156,7 +165,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // general, it will appear to most of clients as a Window for a different
     // origin. Since iOS standalone web apps are run in their own sandbox, this
     // is the most appropriate return value.
-    newWin = /** @type {!Window} */ ({});
+    newWin = goog.window.createFakeWindow_();
   } else if (opt_options['noreferrer']) {
     // Use a meta-refresh to stop the referrer from being included in the
     // request headers. This seems to be the only cross-browser way to
