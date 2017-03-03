@@ -220,6 +220,18 @@ example.unsanitizedTextTemplate = function(data, opt_sb, opt_injectedData) {
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
+ * @param {?Object<string, *>=} opt_injectedData
+ * @return {!SanitizedContentSubclass}
+ */
+example.sanitizedUriTemplate = function(data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'https://example.com', goog.soy.data.SanitizedContentKind.URI);
+};
+
+
+/**
+ * @param {{name: string}} data
+ * @param {null=} opt_sb
  * @param {Object<string, *>=} opt_injectedData
  * @return {!SanitizedContentSubclass}
  */
