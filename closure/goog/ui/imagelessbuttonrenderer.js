@@ -51,14 +51,6 @@ goog.ui.ImagelessButtonRenderer = function() {
   goog.ui.CustomButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ImagelessButtonRenderer, goog.ui.CustomButtonRenderer);
-
-
-/**
- * The singleton instance of this renderer class.
- * @type {goog.ui.ImagelessButtonRenderer?}
- * @private
- */
-goog.ui.ImagelessButtonRenderer.instance_ = null;
 goog.addSingletonGetter(goog.ui.ImagelessButtonRenderer);
 
 
