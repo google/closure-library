@@ -221,6 +221,7 @@ goog.debug.exposeArray = function(arr) {
  * @param {Object} err Error object or string.
  * @param {Function=} opt_fn Optional function to start stack trace from.
  * @return {string} Details of exception, as HTML.
+ * @deprecated use goog.debug.HtmlFormatter.exposeException instead
  */
 goog.debug.exposeException = function(err, opt_fn) {
   var html = goog.debug.exposeExceptionAsHtml(err, opt_fn);
@@ -234,6 +235,7 @@ goog.debug.exposeException = function(err, opt_fn) {
  * @param {Object} err Error object or string.
  * @param {Function=} opt_fn Optional function to start stack trace from.
  * @return {!goog.html.SafeHtml} Details of exception.
+ * @deprecated use goog.debug.HtmlFormatter.exposeExceptionAsHtml instead
  */
 goog.debug.exposeExceptionAsHtml = function(err, opt_fn) {
   /** @preserveTry */

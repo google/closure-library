@@ -139,7 +139,7 @@ goog.require('goog.Timer');
 goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.debug');
+goog.require('goog.debug.HtmlFormatter');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.TagName');
@@ -981,7 +981,8 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
 
       goog.log.error(
           this.logger_,
-          'Error when submitting form: ' + goog.debug.exposeException(e));
+          'Error when submitting form: ' +
+              goog.debug.HtmlFormatter.exposeException(e));
 
       if (!this.ignoreResponse_) {
         goog.events.unlisten(
