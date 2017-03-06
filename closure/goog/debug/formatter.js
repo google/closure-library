@@ -223,12 +223,14 @@ goog.inherits(goog.debug.HtmlFormatter, goog.debug.Formatter);
  * Exposes an exception that has been caught by a try...catch and outputs the
  * error as HTML with a stack trace.
  *
- * @param {Object} err Error object or string.
- * @param {Function=} opt_fn Optional function to start stack trace from.
+ * @param {*} err Error object or string.
+ * @param {?Function=} fn If provided, when collecting the stack trace all
+ *     frames above the topmost call to this function, including that call,
+ *     will be left out of the stack trace.
  * @return {string} Details of exception, as HTML.
  */
-goog.debug.HtmlFormatter.exposeException = function(err, opt_fn) {
-  var html = goog.debug.HtmlFormatter.exposeExceptionAsHtml(err, opt_fn);
+goog.debug.HtmlFormatter.exposeException = function(err, fn) {
+  var html = goog.debug.HtmlFormatter.exposeExceptionAsHtml(err, fn);
   return goog.html.SafeHtml.unwrap(html);
 };
 
@@ -237,12 +239,13 @@ goog.debug.HtmlFormatter.exposeException = function(err, opt_fn) {
  * Exposes an exception that has been caught by a try...catch and outputs the
  * error with a stack trace.
  *
- * @param {Object} err Error object or string.
- * @param {Function=} opt_fn Optional function to start stack trace from.
+ * @param {*} err Error object or string.
+ * @param {?Function=} fn If provided, when collecting the stack trace all
+ *     frames above the topmost call to this function, including that call,
+ *     will be left out of the stack trace.
  * @return {!goog.html.SafeHtml} Details of exception.
  */
-goog.debug.HtmlFormatter.exposeExceptionAsHtml = function(err, opt_fn) {
-  /** @preserveTry */
+goog.debug.HtmlFormatter.exposeExceptionAsHtml = function(err, fn) {
   try {
     var e = goog.debug.normalizeErrorObject(err);
     // Create the error message
@@ -256,8 +259,8 @@ goog.debug.HtmlFormatter.exposeExceptionAsHtml = function(err, opt_fn) {
         goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
             '\nLine: ' + e.lineNumber + '\n\nBrowser stack:\n' + e.stack +
             '-> ' +
-            '[end]\n\nJS stack traversal:\n' +
-            goog.debug.getStacktrace(opt_fn) + '-> '));
+            '[end]\n\nJS stack traversal:\n' + goog.debug.getStacktrace(fn) +
+            '-> '));
     return error;
   } catch (e2) {
     return goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
@@ -267,20 +270,20 @@ goog.debug.HtmlFormatter.exposeExceptionAsHtml = function(err, opt_fn) {
 
 
 /**
- * @param {?string=} opt_fileName
+ * @param {?string=} fileName
  * @return {!goog.html.SafeUrl} SafeUrl with view-source scheme, pointing at
  *     fileName.
  * @private
  */
-goog.debug.HtmlFormatter.createViewSourceUrl_ = function(opt_fileName) {
-  if (!goog.isDefAndNotNull(opt_fileName)) {
-    opt_fileName = '';
+goog.debug.HtmlFormatter.createViewSourceUrl_ = function(fileName) {
+  if (!goog.isDefAndNotNull(fileName)) {
+    fileName = '';
   }
-  if (!/^https?:\/\//i.test(opt_fileName)) {
+  if (!/^https?:\/\//i.test(fileName)) {
     return goog.html.SafeUrl.fromConstant(
         goog.string.Const.from('sanitizedviewsrc'));
   }
-  var sanitizedFileName = goog.html.SafeUrl.sanitize(opt_fileName);
+  var sanitizedFileName = goog.html.SafeUrl.sanitize(fileName);
   return goog.html.uncheckedconversions
       .safeUrlFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from('view-source scheme plus HTTP/HTTPS URL'),
