@@ -20,9 +20,7 @@
 
 
 goog.provide('goog.Disposable');
-/** @suppress {extraProvide} */
 goog.provide('goog.dispose');
-/** @suppress {extraProvide} */
 goog.provide('goog.disposeAll');
 
 goog.require('goog.disposable.IDisposable');
