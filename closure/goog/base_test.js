@@ -1663,6 +1663,10 @@ function testGoogModuleGet() {
   var testModuleExports = goog.module.get('goog.test_module');
   assertTrue(goog.isFunction(testModuleExports));
 
+  // Test that any escaping of </script> in test files is correct. Escape the
+  // / in </script> here so that any such code does not affect it here.
+  assertEquals('<\/script>', testModuleExports.CLOSING_SCRIPT_TAG);
+
   // Validate that the module exports object has not changed
   assertEquals(earlyTestModuleGet, testModuleExports);
 }

@@ -1227,7 +1227,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.protectScriptTag_ = function(str) {
-    return str.replace(/<\/(SCRIPT)/ig, '\\x3c\\$1');
+    return str.replace(/<\/(SCRIPT)/ig, '\\x3c/$1');
   };
 
   /**

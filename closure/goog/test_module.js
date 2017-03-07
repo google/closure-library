@@ -32,4 +32,10 @@ var aScriptTagShouldntBreakAnything = '<script>hello</script>world';
 
 
 /** @constructor */
-exports = function() {};
+var test = function() {};
+
+// Verify that when this module loads the script tag is not modified by
+// escaping code in base.js.
+test.CLOSING_SCRIPT_TAG = '</script>';
+
+exports = test;

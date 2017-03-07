@@ -125,6 +125,11 @@ testSuite({
     // The test module is available under its alias
     assertNotUndefined('testModule is loaded', testModule);
     assertTrue('module failed: testModule', goog.isFunction(testModule));
+
+
+    // Test that any escaping of </script> in test files is correct. Escape the
+    // / in </script> here so that any such code does not affect it here.
+    assertEquals('<\/script>', testModule.CLOSING_SCRIPT_TAG);
   },
 
   testThisInModule: goog.bind(
