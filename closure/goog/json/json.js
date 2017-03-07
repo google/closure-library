@@ -23,8 +23,6 @@ goog.provide('goog.json.Replacer');
 goog.provide('goog.json.Reviver');
 goog.provide('goog.json.Serializer');
 
-goog.require('goog.log');
-
 
 /**
  * @define {boolean} If true, use the native JSON parsing API.
@@ -38,7 +36,9 @@ goog.define('goog.json.USE_NATIVE_JSON', false);
 /**
  * @define {boolean} If true, try the native JSON parsing API first. If it
  * fails, log an error and use {@code eval} instead. This is useful when
- * transitioning to {@code goog.json.USE_NATIVE_JSON}.
+ * transitioning to {@code goog.json.USE_NATIVE_JSON}. The error logger needs to
+ * be set by {@code goog.json.setErrorLogger}. If it is not set then the error
+ * is ignored.
  */
 goog.define('goog.json.TRY_NATIVE_JSON', false);
 
@@ -92,6 +92,25 @@ goog.json.isValid = function(s) {
           .replace(openBracketsRe, ''));
 };
 
+/**
+ * Logs a parsing error in {@code JSON.parse} solvable by using {@code eval}
+ * if {@code goog.json.TRY_NATIVE_JSON} is enabled.
+ * @private {function(string, !Error)} The first parameter is the error message,
+ *     the second is the exception thrown by {@code JSON.parse}.
+ */
+goog.json.errorLogger_ = goog.nullFunction;
+
+
+/**
+ * Sets an error logger to use if there's a recoverable parsing error and {@code
+ * goog.json.TRY_NATIVE_JSON} is enabled.
+ * @param {function(string, !Error)} errorLogger The first parameter is the
+ *     error message, the second is the exception thrown by {@code JSON.parse}.
+ */
+goog.json.setErrorLogger = function(errorLogger) {
+  goog.json.errorLogger_ = errorLogger;
+};
+
 
 /**
  * Parses a JSON string and returns the result. This throws an exception if
@@ -121,8 +140,7 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
         try {
           var result = /** @type {?Object} */ (eval('(' + o + ')'));
           if (error) {
-            var logger = goog.log.getLogger('goog.json');
-            goog.log.error(logger, 'Invalid JSON: ' + s, error);
+            goog.json.errorLogger_('Invalid JSON: ' + o, error);
           }
           return result;
         } catch (ex) {
@@ -150,16 +168,11 @@ goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
           error = ex;
         }
       }
-      try {
-        var result = /** @type {?Object} */ (eval('(' + s + ')'));
-        if (error) {
-          var logger = goog.log.getLogger('goog.json');
-          goog.log.error(logger, 'Invalid JSON: ' + s, error);
-        }
-        return result;
-      } catch (ex) {
-        throw /** @type {!Error} */ (ex);
+      var result = /** @type {?Object} */ (eval('(' + s + ')'));
+      if (error) {
+        goog.json.errorLogger_('Invalid JSON: ' + s, error);
       }
+      return result;
     };
 
 

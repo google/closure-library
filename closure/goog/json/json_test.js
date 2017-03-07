@@ -17,16 +17,8 @@ goog.setTestOnly('goog.jsonTest');
 
 goog.require('goog.functions');
 goog.require('goog.json');
-goog.require('goog.log');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
-
-var stubs = new goog.testing.PropertyReplacer();
-
-function tearDown() {
-  stubs.reset();
-}
 
 function allChars(start, end) {
   var sb = [];
@@ -536,7 +528,7 @@ function testToJSONSerialize() {
 function testTryNativeJson() {
   goog.json.TRY_NATIVE_JSON = true;
   var error;
-  stubs.set(goog.log, 'error', function(logger, message, ex) {
+  goog.json.setErrorLogger(function(message, ex) {
     error = message;
   });
 
@@ -548,6 +540,7 @@ function testTryNativeJson() {
   assertEquals('Invalid JSON: {"a":[,1]}', error);
 
   goog.json.TRY_NATIVE_JSON = false;
+  goog.json.setErrorLogger(goog.nullFunction);
 }
 
 
