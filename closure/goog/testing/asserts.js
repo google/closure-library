@@ -11,11 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.setTestOnly('goog.testing.JsUnitException');
-goog.provide('goog.testing.JsUnitException');
-goog.provide('goog.testing.asserts');
 
-goog.require('goog.testing.stacktrace');
+goog.provide('goog.testing.asserts');
+goog.setTestOnly();
+
+goog.require('goog.testing.JsUnitException');
 
 // TODO(user): Copied from JsUnit with some small modifications, we should
 // reimplement the asserters.
@@ -1295,39 +1295,6 @@ goog.testing.asserts.raiseException = function(comment, opt_message) {
  */
 goog.testing.asserts.isArrayIndexProp_ = function(prop) {
   return (prop | 0) == prop;
-};
-
-
-
-/**
- * @param {string} comment A summary for the exception.
- * @param {?string=} opt_message A description of the exception.
- * @constructor
- * @extends {Error}
- * @final
- */
-goog.testing.JsUnitException = function(comment, opt_message) {
-  this.isJsUnitException = true;
-  this.message = (comment ? comment : '') +
-      (comment && opt_message ? '\n' : '') + (opt_message ? opt_message : '');
-  this.stackTrace = goog.testing.stacktrace.get();
-  // These fields are for compatibility with jsUnitTestManager.
-  this.comment = comment || null;
-  this.jsUnitMessage = opt_message || '';
-
-  // Ensure there is a stack trace.
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, goog.testing.JsUnitException);
-  } else {
-    this.stack = new Error().stack || '';
-  }
-};
-goog.inherits(goog.testing.JsUnitException, Error);
-
-
-/** @override */
-goog.testing.JsUnitException.prototype.toString = function() {
-  return this.message;
 };
 
 
