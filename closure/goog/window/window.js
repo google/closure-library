@@ -62,12 +62,12 @@ goog.window.createFakeWindow_ = function() {
 /**
  * Opens a new window.
  *
- * @param {goog.html.SafeUrl|string|Object} linkRef If an Object with an 'href'
+ * @param {?goog.html.SafeUrl|string|?Object} linkRef If an Object with an 'href'
  *     attribute (such as HTMLAnchorElement) is passed then the value of 'href'
  *     is used, otherwise its toString method is called. Note that if a
  *     string|Object is used, it will be sanitized with SafeUrl.sanitize().
  *
- * @param {Object=} opt_options supports the following options:
+ * @param {?Object=} opt_options supports the following options:
  *  'target': (string) target (window name). If null, linkRef.target will
  *          be used.
  *  'width': (number) window width.
@@ -84,10 +84,10 @@ goog.window.createFakeWindow_ = function() {
  *      from the request headers. Does this by opening a blank window that
  *      then redirects to the target url, so users may see some flickering.
  *
- * @param {Window=} opt_parentWin Parent window that should be used to open the
+ * @param {?Window=} opt_parentWin Parent window that should be used to open the
  *                 new window.
  *
- * @return {Window} Returns the window object that was opened. This returns
+ * @return {?Window} Returns the window object that was opened. This returns
  *                  null if a popup blocker prevented the window from being
  *                  opened. In case when a new window is opened in a different
  *                  browser sandbox (such as iOS standalone mode), the returned
@@ -247,11 +247,11 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
  *
  * @param {string=} opt_message String to show in the new window. This string
  *     will be HTML-escaped to avoid XSS issues.
- * @param {Object=} opt_options Options to open window with.
+ * @param {?Object=} opt_options Options to open window with.
  *     {@see goog.window.open for exact option semantics}.
- * @param {Window=} opt_parentWin Parent window that should be used to open the
+ * @param {?Window=} opt_parentWin Parent window that should be used to open the
  *                 new window.
- * @return {Window} Returns the window object that was opened. This returns
+ * @return {?Window} Returns the window object that was opened. This returns
  *                  null if a popup blocker prevented the window from being
  *                  opened.
  */
@@ -282,7 +282,7 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
                     goog.string.Const.from(
                         'b/12014412, encoded string in javascript: URL'),
                     'javascript:"' + encodeURI(loadingMessage) + '"');
-  return /** @type {Window} */ (
+  return /** @type {?Window} */ (
       goog.window.open(url, opt_options, opt_parentWin));
 };
 
@@ -292,12 +292,12 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
  *
  * (If your project is using GXPs, consider using {@link PopUpLink.gxp}.)
  *
-* @param {goog.html.SafeUrl|string|Object} linkRef If an Object with an 'href'
+* @param {?goog.html.SafeUrl|string|?Object} linkRef If an Object with an 'href'
  *     attribute (such as HTMLAnchorElement) is passed then the value of 'href'
  *     is used, otherwise  otherwise its toString method is called. Note that
  *     if a string|Object is used, it will be sanitized with SafeUrl.sanitize().
  *
- * @param {Object=} opt_options Options to open window with.
+ * @param {?Object=} opt_options Options to open window with.
  *     {@see goog.window.open for exact option semantics}
  *     Additional wrinkles to the options:
  *     - if 'target' field is null, linkRef.target will be used. If *that's*

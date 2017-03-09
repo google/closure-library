@@ -99,7 +99,7 @@ goog.userAgent.getUserAgentString = function() {
 
 /**
  * TODO(nnaze): Change type to "Navigator" and update compilation targets.
- * @return {Object} The native navigator object.
+ * @return {?Object} The native navigator object.
  */
 goog.userAgent.getNavigator = function() {
   // Need a local navigator reference instead of using the global one,
