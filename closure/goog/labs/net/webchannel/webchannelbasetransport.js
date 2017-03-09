@@ -182,6 +182,29 @@ goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
 
 
 /**
+ * @override
+ * @suppress {checkTypes}
+ */
+WebChannelBaseTransport.Channel.prototype.addEventListener = function(
+    type, handler, /** boolean= */ opt_capture, opt_handlerScope) {
+  WebChannelBaseTransport.Channel.base(
+      this, 'addEventListener', type, handler, opt_capture, opt_handlerScope);
+};
+
+
+/**
+ * @override
+ * @suppress {checkTypes}
+ */
+WebChannelBaseTransport.Channel.prototype.removeEventListener = function(
+    type, handler, /** boolean= */ opt_capture, opt_handlerScope) {
+  WebChannelBaseTransport.Channel.base(
+      this, 'removeEventListener', type, handler, opt_capture,
+      opt_handlerScope);
+};
+
+
+/**
  * Test path is always set to "/url/test".
  *
  * @override
