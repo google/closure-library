@@ -1698,17 +1698,7 @@ goog.date.DateTime.prototype.toUsTimeString = function(
 
   // by default, show am/pm suffix
   if (opt_showAmPm) {
-    /**
-     * @desc Suffix for morning times.
-     */
-    var MSG_TIME_AM = goog.getMsg('am');
-
-    /**
-     * @desc Suffix for afternoon times.
-     */
-    var MSG_TIME_PM = goog.getMsg('pm');
-
-    label += isPM ? MSG_TIME_PM : MSG_TIME_AM;
+    label += isPM ? 'pm' : 'am';
   }
   return label;
 };
