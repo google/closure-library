@@ -338,8 +338,11 @@ function testPutRecord() {
       .addCallback(function(db) {
         var initialPutTx =
             db.createTransaction(['store'], TransactionMode.READ_WRITE);
-        initialPutTx.objectStore('store').put(
+        var putOperation = initialPutTx.objectStore('store').put(
             {key: 'initial', value: 'value1'}, 'putKey');
+        putOperation.addCallback(function(key) {
+          assertEquals('putKey', key);
+        });
         return transactionToPromise(db, initialPutTx);
       })
       .addCallback(function(db) {
@@ -354,8 +357,11 @@ function testPutRecord() {
       .addCallback(function(db) {
         var overwriteTx =
             db.createTransaction(['store'], TransactionMode.READ_WRITE);
-        overwriteTx.objectStore('store').put(
+        var putOperation = overwriteTx.objectStore('store').put(
             {key: 'overwritten', value: 'value2'}, 'putKey');
+        putOperation.addCallback(function(key) {
+          assertEquals('putKey', key);
+        });
         return transactionToPromise(db, overwriteTx);
       })
       .addCallback(function(db) {
@@ -382,8 +388,11 @@ function testAddRecord() {
       .addCallback(function(db) {
         var initialAddTx =
             db.createTransaction(['store'], TransactionMode.READ_WRITE);
-        initialAddTx.objectStore('store').add(
+        var addOperation = initialAddTx.objectStore('store').add(
             {key: 'hi', value: 'something'}, 'stuff');
+        addOperation.addCallback(function(key) {
+          assertEquals('stuff', key);
+        });
         return transactionToPromise(db, initialAddTx);
       })
       .addCallback(function(db) {
@@ -433,7 +442,11 @@ function testPutRecordKeyPathStore() {
       .addCallback(function(db) {
         var putTx =
             db.createTransaction(['keyStore'], TransactionMode.READ_WRITE);
-        putTx.objectStore('keyStore').put({key: 'hi', value: 'something'});
+        var putOperation =
+            putTx.objectStore('keyStore').put({key: 'hi', value: 'something'});
+        putOperation.addCallback(function(key) {
+          assertEquals('hi', key);
+        });
         return transactionToPromise(db, putTx);
       })
       .addCallback(function(db) {
@@ -489,9 +502,18 @@ function testPutRecordAutoIncrementStore() {
       })
       .addCallback(function(db) {
         var tx = db.createTransaction(['aiStore'], TransactionMode.READ_WRITE);
-        tx.objectStore('aiStore').put('1');
-        tx.objectStore('aiStore').put('2');
-        tx.objectStore('aiStore').put('3');
+        var putOperation1 = tx.objectStore('aiStore').put('1');
+        var putOperation2 = tx.objectStore('aiStore').put('2');
+        var putOperation3 = tx.objectStore('aiStore').put('3');
+        putOperation1.addCallback(function(key) {
+          assertNotUndefined(key);
+        });
+        putOperation2.addCallback(function(key) {
+          assertNotUndefined(key);
+        });
+        putOperation3.addCallback(function(key) {
+          assertNotUndefined(key);
+        });
         return transactionToPromise(db, tx);
       })
       .addCallback(function(db) {
@@ -523,9 +545,14 @@ function testPutRecordKeyPathAndAutoIncrementStore() {
       .addCallback(function(db) {
         var tx =
             db.createTransaction(['hybridStore'], TransactionMode.READ_WRITE);
-        return tx.objectStore('hybridStore')
-            .put({value: 'whatever'})
-            .addCallback(function() { return db; });
+        var putOperation =
+            tx.objectStore('hybridStore').put({value: 'whatever'});
+        putOperation.addCallback(function(key) {
+          assertNotUndefined(key);
+        });
+        return putOperation.addCallback(function() {
+          return db;
+        });
       })
       .addCallback(function(db) {
         var tx = db.createTransaction(['hybridStore']);
