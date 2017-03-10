@@ -72,9 +72,9 @@ goog.locale.countries = [
   'BZ', // Belize
   'CA', // Canada
   'CC', // Cocos (Keeling) Islands
-  'CD', // Congo (DRC)
+  'CD', // Congo - Kinshasa
   'CF', // Central African Republic
-  'CG', // Congo (Republic)
+  'CG', // Congo - Brazzaville
   'CH', // Switzerland
   'CI', // Côte d’Ivoire
   'CK', // Cook Islands
@@ -107,7 +107,7 @@ goog.locale.countries = [
   'ET', // Ethiopia
   'FI', // Finland
   'FJ', // Fiji
-  'FK', // Falkland Islands (Islas Malvinas)
+  'FK', // Falkland Islands
   'FM', // Micronesia
   'FO', // Faroe Islands
   'FR', // France
@@ -180,7 +180,7 @@ goog.locale.countries = [
   'MF', // St. Martin
   'MG', // Madagascar
   'MH', // Marshall Islands
-  'MK', // Macedonia (FYROM)
+  'MK', // Macedonia
   'ML', // Mali
   'MM', // Myanmar (Burma)
   'MN', // Mongolia
