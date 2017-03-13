@@ -769,7 +769,7 @@ goog.dom.browserrange.IeRange.prototype.removeContents = function() {
     // the other browsers.
     var newStartNode = this.getStartNode();
     var newStartOffset = this.getStartOffset();
-    /** @preserveTry */
+
     try {
       var sibling = startNode.nextSibling;
       if (startNode == endNode && startNode.parentNode &&

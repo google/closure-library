@@ -68,7 +68,7 @@ goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
  * @type {boolean}
  */
 goog.debug.FancyWindow.HAS_LOCAL_STORE = (function() {
-  /** @preserveTry */
+
   try {
     return !!window['localStorage'].getItem;
   } catch (e) {

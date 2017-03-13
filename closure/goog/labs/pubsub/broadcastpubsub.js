@@ -179,7 +179,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
     } else {
       // With IE8 we need to manage our own events queue.
       var events = null;
-      /** @preserveTry */
+
       try {
         events =
             this.storage_.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
@@ -507,7 +507,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
     }
 
     var events = null;
-    /** @preserveTry */
+
     try {
       events = this.storage_.get(key);
     } catch (ex) {
@@ -531,7 +531,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
 goog.labs.pubsub.BroadcastPubSub.prototype.cleanupIe8StorageEvents_ = function(
     timestamp) {
   var events = null;
-  /** @preserveTry */
+
   try {
     events =
         this.storage_.get(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);

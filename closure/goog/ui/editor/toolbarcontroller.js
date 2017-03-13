@@ -246,7 +246,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
 
   var state;
 
-  /** @preserveTry */
+
   try {
     /** @type {Array<string>} */
     e.commands;  // Added by dispatchEvent.

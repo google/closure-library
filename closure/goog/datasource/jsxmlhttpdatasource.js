@@ -173,7 +173,7 @@ goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
     }
 
     // Parse result.
-    /** @preserveTry */
+
     try {
       var jsonObj = goog.json.parse(text);
       this.extendWith(jsonObj);

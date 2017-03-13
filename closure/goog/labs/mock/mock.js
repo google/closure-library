@@ -214,7 +214,7 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
       return output.replace(/\n/g, '\n');
     };
 
-    /** @preserveTry */
+
     try {
       if (!goog.isDef(obj)) {
         output.push('undefined');

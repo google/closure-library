@@ -1916,7 +1916,7 @@ goog.removeUid = function(obj) {
   if (obj !== null && 'removeAttribute' in obj) {
     obj.removeAttribute(goog.UID_PROPERTY_);
   }
-  /** @preserveTry */
+
   try {
     delete obj[goog.UID_PROPERTY_];
   } catch (ex) {

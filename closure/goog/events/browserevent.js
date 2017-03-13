@@ -370,7 +370,7 @@ goog.events.BrowserEvent.prototype.preventDefault = function() {
   if (!be.preventDefault) {
     be.returnValue = false;
     if (goog.events.BrowserFeature.SET_KEY_CODE_TO_PREVENT_DEFAULT) {
-      /** @preserveTry */
+
       try {
         // Most keys can be prevented using returnValue. Some special keys
         // require setting the keyCode to -1 as well:

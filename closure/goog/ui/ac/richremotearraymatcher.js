@@ -85,7 +85,7 @@ goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows = function(
   // myMatchHandler to RemoteArrayMatcher.requestMatchingRows which maps,
   // filters, and then calls matchHandler.
   var myMatchHandler = goog.bind(function(token, matches) {
-    /** @preserveTry */
+
     try {
       var rows = [];
       for (var i = 0; i < matches.length; i++) {
