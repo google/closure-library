@@ -379,9 +379,10 @@ goog.math.isInt = function(num) {
  * Returns whether the supplied number is finite and not NaN.
  * @param {number} num The number to test.
  * @return {boolean} Whether {@code num} is a finite number.
+ * @deprecated Use {@link isFinite} instead.
  */
 goog.math.isFiniteNumber = function(num) {
-  return isFinite(num) && !isNaN(num);
+  return isFinite(num);
 };
 
 
