@@ -198,24 +198,19 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
 };
 
 
-// TODO(jakubvrana): Remove opt_kind and change RETURN_TYPE to SanitizedHtml.
 /**
- * Renders a strict Soy template and returns the output SanitizedContent object.
- *
- * @param {?function(ARG_TYPES, null=, Object<string, *>=):RETURN_TYPE}
- *     template The Soy template to render.
+ * Renders a strict Soy HTML template and returns the output SanitizedHtml
+ * object.
+ * @param {?function(ARG_TYPES, null=, Object<string, *>=):
+ *     !goog.soy.data.SanitizedHtml} template The Soy template to render.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
- * @param {goog.soy.data.SanitizedContentKind=} opt_kind The output kind to
- *     assert. If null, the template must be of kind="html" (i.e., opt_kind
- *     defaults to goog.soy.data.SanitizedContentKind.HTML).
- * @return {RETURN_TYPE} The SanitizedContent object. This return type is
- *     generic based on the return type of the template, such as
- *     goog.soy.data.SanitizedHtml.
- * @template ARG_TYPES, RETURN_TYPE
+ * @return {!goog.soy.data.SanitizedHtml}
+ * @template ARG_TYPES
  */
 goog.soy.Renderer.prototype.renderStrict = function(
-    template, opt_templateData, opt_kind) {
-  return this.renderStrictOfKind(template, opt_templateData, opt_kind);
+    template, opt_templateData) {
+  return this.renderStrictOfKind(
+      template, opt_templateData, goog.soy.data.SanitizedContentKind.HTML);
 };
 
 
@@ -274,7 +269,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
  * a runtime error.
  *
  * @param {?function(ARG_TYPES, null=, Object<string, *>=):
- *     goog.soy.data.SanitizedContent} template The Soy template to render.
+ *     !goog.soy.data.SanitizedHtml} template The Soy template to render.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {!goog.html.SafeHtml}
  * @template ARG_TYPES
@@ -282,6 +277,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
 goog.soy.Renderer.prototype.renderSafeHtml = function(
     template, opt_templateData) {
   var result = this.renderStrict(template, opt_templateData);
+  // Convert from SanitizedHtml to SafeHtml.
   return result.toSafeHtml();
 };
 
