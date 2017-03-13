@@ -644,7 +644,7 @@ goog.async.Deferred.prototype.fire_ = function() {
 
     var f = this.hadError_ ? errback : callback;
     if (f) {
-      /** @preserveTry */
+
       try {
         var ret = f.call(scope || this.defaultScope_, res);
 
