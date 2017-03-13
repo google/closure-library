@@ -366,7 +366,7 @@ goog.dom.TextRange.prototype.containsRange = function(
 goog.dom.TextRange.isAttachedNode = function(node) {
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     var returnValue = false;
-    /** @preserveTry */
+
     try {
       returnValue = node.parentNode;
     } catch (e) {

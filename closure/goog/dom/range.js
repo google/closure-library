@@ -57,7 +57,7 @@ goog.dom.Range.createFromBrowserSelection = function(selection) {
   var range;
   var isReversed = false;
   if (selection.createRange) {
-    /** @preserveTry */
+
     try {
       range = selection.createRange();
     } catch (e) {

@@ -446,7 +446,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
           this, goog.net.ChannelRequest.Error.BAD_DATA);
       return;
     }
-    /** @preserveTry */
+
     try {
       var respArray = this.parser_.parse(responseText);
     } catch (e) {

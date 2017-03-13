@@ -483,7 +483,7 @@ goog.net.xpc.IframePollingTransport.prototype.isRcvFrameReady_ = function(
   goog.log.log(
       goog.net.xpc.logger, goog.log.Level.FINEST,
       'checking for receive frame: ' + frameName);
-  /** @preserveTry */
+
   try {
     var winObj = this.getPeerFrame_(frameName);
     if (!winObj || winObj.location.href.indexOf(this.rcvUri_) != 0) {
@@ -805,7 +805,7 @@ goog.net.xpc.IframePollingTransport.receive_ = function() {
   var receiver;
   var rcvd = false;
 
-  /** @preserveTry */
+
   try {
     for (var i = 0; receiver = receivers[i]; i++) {
       rcvd = rcvd || receiver.receive();
@@ -926,7 +926,7 @@ goog.net.xpc.IframePollingTransport.Sender.prototype.send = function(payload) {
       this.sanitizedSendUri_ + '#' + this.cycle_ + encodeURIComponent(payload);
 
   // TODO(user) Find out if try/catch is still needed
-  /** @preserveTry */
+
   try {
     // safari doesn't allow to call location.replace()
     if (goog.userAgent.WEBKIT) {
