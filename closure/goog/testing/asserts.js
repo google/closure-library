@@ -662,6 +662,12 @@ goog.testing.asserts.findDifferences = function(
         failures.push(
             path + ': Expected ' + var1.length + '-element array ' +
             'but got a ' + var2.length + '-element array');
+      } else if (typeOfVar1 == 'String') {
+        if (var1 != var2) {
+          failures.push(
+              path + ': Expected String "' + var1 + '" ' +
+              'but got "' + var2 + '"');
+        }
       } else {
         var childPath = path + (isArray ? '[%s]' : (path ? '.%s' : '%s'));
         // These type checks do not use _trueTypeOf because that does not work
