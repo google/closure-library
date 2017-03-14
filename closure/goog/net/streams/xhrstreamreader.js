@@ -304,7 +304,7 @@ goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
     event) {
   var xhr = /** @type {goog.net.XhrIo} */ (event.target);
 
-  /** @preserveTry */
+
   try {
     if (xhr == this.xhr_) {
       this.onReadyStateChanged_();

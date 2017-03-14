@@ -179,7 +179,7 @@ WebChannelDebug.prototype.redactResponse_ = function(responseText) {
   if (!responseText) {
     return null;
   }
-  /** @preserveTry */
+
   try {
     var responseArray = goog.json.unsafeParse(responseText);
     if (responseArray) {
