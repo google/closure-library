@@ -21,8 +21,6 @@
 
 goog.provide('goog.math.AffineTransform');
 
-goog.require('goog.math');
-
 
 
 /**
@@ -440,8 +438,8 @@ goog.math.AffineTransform.prototype.getDeterminant = function() {
  */
 goog.math.AffineTransform.prototype.isInvertible = function() {
   var det = this.getDeterminant();
-  return goog.math.isFiniteNumber(det) && goog.math.isFiniteNumber(this.m02_) &&
-      goog.math.isFiniteNumber(this.m12_) && det != 0;
+  return isFinite(det) && isFinite(this.m02_) && isFinite(this.m12_) &&
+      det != 0;
 };
 
 
