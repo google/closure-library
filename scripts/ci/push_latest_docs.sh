@@ -30,6 +30,8 @@ if [ "$TRAVIS_REPO_SLUG" == "google/closure-library" -a \
   fi
 
   # Push the commit and delete the repo.
+  export GIT_WORK_TREE="$GH_PAGES"
+  export GIT_DIR="$GH_PAGES/.git"
   git push -fq origin gh-pages > /dev/null
   rm -f scripts/ci/deploy
   rm -rf "$GH_PAGES"
