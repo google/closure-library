@@ -521,6 +521,13 @@ function testCurrency() {
   assertEquals('BRL 1,234.56', str);
   str = fmt.format(-1234.56);
   assertEquals('(BRL 1,234.56)', str);
+
+  // Test implicit negative pattern.
+  fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00');
+  str = fmt.format(1234.56);
+  assertEquals('$1,234.56', str);
+  str = fmt.format(-1234.56);
+  assertEquals('-$1,234.56', str);
 }
 
 function testQuotes() {
@@ -536,11 +543,11 @@ function testQuotes() {
 
   fmt = new goog.i18n.NumberFormat('a\'fo\'\'o\'b#');
   str = fmt.format(-123);
-  assertEquals('afo\'ob-123', str);
+  assertEquals('-afo\'ob123', str);
 
   fmt = new goog.i18n.NumberFormat('a\'\'b#');
   str = fmt.format(-123);
-  assertEquals('a\'b-123', str);
+  assertEquals('-a\'b123', str);
 }
 
 function testZeros() {
