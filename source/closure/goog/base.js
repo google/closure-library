@@ -19,6 +19,9 @@
  * global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects to
  * include their own deps file(s) from different locations.
  *
+ * Avoid including base.js more than once. This is strictly discouraged and not
+ * supported. goog.require(...) won't work properly in that case.
+ *
  * @author arv@google.com (Erik Arvidsson)
  *
  * @provideGoog
@@ -135,7 +138,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
     if (!parts.length && goog.isDef(opt_object)) {
       // last part and we have an object; use it
       cur[part] = opt_object;
-    } else if (cur[part]) {
+    } else if (cur[part] && cur[part] !== Object.prototype[part]) {
       cur = cur[part];
     } else {
       cur = cur[part] = {};
@@ -345,6 +348,7 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
  *
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part", is expected but not required.
+ * @return {void}
  */
 goog.module = function(name) {
   if (!goog.isString(name) || !name ||
@@ -399,14 +403,14 @@ goog.module.get = function(name) {
  */
 goog.module.getInternal_ = function(name) {
   if (!COMPILED) {
-    if (goog.isProvided_(name)) {
-      // goog.require only return a value with-in goog.module files.
-      return name in goog.loadedModules_ ? goog.loadedModules_[name] :
-                                           goog.getObjectByName(name);
-    } else {
-      return null;
+    if (name in goog.loadedModules_) {
+      return goog.loadedModules_[name];
+    } else if (!goog.implicitNamespaces_[name]) {
+      var ns = goog.getObjectByName(name);
+      return ns != null ? ns : null;
     }
   }
+  return null;
 };
 
 
@@ -479,6 +483,9 @@ goog.setTestOnly = function(opt_message) {
  * into the JavaScript binary. If it is required elsewhere, it will be type
  * checked as normal.
  *
+ * Before using goog.forwardDeclare, please read the documentation at
+ * https://github.com/google/closure-compiler/wiki/Bad-Type-Annotation to
+ * understand the options and tradeoffs when working with forward declarations.
  *
  * @param {string} name The namespace to forward declare in the form of
  *     "goog.package.part".
@@ -752,6 +759,10 @@ goog.abstractMethod = function() {
  *     method to.
  */
 goog.addSingletonGetter = function(ctor) {
+  // instance_ is immediately set to prevent issues with sealed constructors
+  // such as are encountered when a constructor is returned as the export object
+  // of a goog.module in unoptimized code.
+  ctor.instance_ = undefined;
   ctor.getInstance = function() {
     if (ctor.instance_) {
       return ctor.instance_;
@@ -1188,8 +1199,8 @@ if (goog.DEPENDENCIES_ENABLED) {
             goog.writeScriptSrcNode_(src);
           }
         } else {
-          var state = " onreadystatechange='goog.onScriptLoad_(this, " +
-              ++goog.lastNonModuleScriptIndex_ + ")' ";
+          var state = ' onreadystatechange=\'goog.onScriptLoad_(this, ' +
+              ++goog.lastNonModuleScriptIndex_ + ')\' ';
           doc.write(
               '<script type="text/javascript" src="' + src + '"' + state +
               '></' +
@@ -1197,7 +1208,8 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       } else {
         doc.write(
-            '<script type="text/javascript">' + opt_sourceText + '</' +
+            '<script type="text/javascript">' +
+            goog.protectScriptTag_(opt_sourceText) + '</' +
             'script>');
       }
       return true;
@@ -1206,6 +1218,17 @@ if (goog.DEPENDENCIES_ENABLED) {
     }
   };
 
+  /**
+   * Rewrites closing script tags in input to avoid ending an enclosing script
+   * tag.
+   *
+   * @param {string} str
+   * @return {string}
+   * @private
+   */
+  goog.protectScriptTag_ = function(str) {
+    return str.replace(/<\/(SCRIPT)/ig, '\\x3c/$1');
+  };
 
   /**
    * Determines whether the given language needs to be transpiled.
@@ -1363,6 +1386,48 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
 /**
+ * @package {?boolean}
+ * Visible for testing.
+ */
+goog.hasBadLetScoping = null;
+
+
+/**
+ * @return {boolean}
+ * @package Visible for testing.
+ */
+goog.useSafari10Workaround = function() {
+  if (goog.hasBadLetScoping == null) {
+    var hasBadLetScoping;
+    try {
+      hasBadLetScoping = !eval(
+          '"use strict";' +
+          'let x = 1; function f() { return typeof x; };' +
+          'f() == "number";');
+    } catch (e) {
+      // Assume that ES6 syntax isn't supported.
+      hasBadLetScoping = false;
+    }
+    goog.hasBadLetScoping = hasBadLetScoping;
+  }
+  return goog.hasBadLetScoping;
+};
+
+
+/**
+ * @param {string} moduleDef
+ * @return {string}
+ * @package Visible for testing.
+ */
+goog.workaroundSafari10EvalBug = function(moduleDef) {
+  return '(function(){' + moduleDef +
+      '\n' +  // Terminate any trailing single line comment.
+      ';' +   // Terminate any trailing expression.
+      '})();\n';
+};
+
+
+/**
  * @param {function(?):?|string} moduleDef The module definition.
  */
 goog.loadModule = function(moduleDef) {
@@ -1381,6 +1446,10 @@ goog.loadModule = function(moduleDef) {
     if (goog.isFunction(moduleDef)) {
       exports = moduleDef.call(undefined, {});
     } else if (goog.isString(moduleDef)) {
+      if (goog.useSafari10Workaround()) {
+        moduleDef = goog.workaroundSafari10EvalBug(moduleDef);
+      }
+
       exports = goog.loadModuleFromSource_.call(undefined, moduleDef);
     } else {
       throw Error('Invalid module definition');
@@ -1396,7 +1465,8 @@ goog.loadModule = function(moduleDef) {
     if (goog.moduleLoaderState_.declareLegacyNamespace) {
       goog.constructNamespace_(moduleName, exports);
     } else if (
-        goog.SEAL_MODULE_EXPORTS && Object.seal && goog.isObject(exports)) {
+        goog.SEAL_MODULE_EXPORTS && Object.seal && typeof exports == 'object' &&
+        exports != null) {
       Object.seal(exports);
     }
 
@@ -1408,21 +1478,16 @@ goog.loadModule = function(moduleDef) {
 
 
 /**
- * @private @const {function(string):?}
- *
- * The new type inference warns because this function has no formal
- * parameters, but its jsdoc says that it takes one argument.
- * (The argument is used via arguments[0], but NTI does not detect this.)
- * @suppress {newCheckTypes}
+ * @private @const
  */
-goog.loadModuleFromSource_ = function() {
+goog.loadModuleFromSource_ = /** @type {function(string):?} */ (function() {
   // NOTE: we avoid declaring parameters or local variables here to avoid
   // masking globals or leaking values into the module definition.
   'use strict';
   var exports = {};
   eval(arguments[0]);
   return exports;
-};
+});
 
 
 /**
@@ -1448,6 +1513,15 @@ goog.normalizePath_ = function(path) {
   }
   return components.join('/');
 };
+
+
+/**
+ * Provides a hook for loading a file when using Closure's goog.require() API
+ * with goog.modules.  In particular this hook is provided to support Node.js.
+ *
+ * @type {(function(string):string)|undefined}
+ */
+goog.global.CLOSURE_LOAD_FILE_SYNC;
 
 
 /**
@@ -1919,17 +1993,15 @@ goog.cloneObject = function(obj) {
 
 /**
  * A native implementation of goog.bind.
- * @param {Function} fn A function to partially apply.
- * @param {Object|undefined} selfObj Specifies the object which this should
- *     point to when the function is run.
+ * @param {?function(this:T, ...)} fn A function to partially apply.
+ * @param {T} selfObj Specifies the object which this should point to when the
+ *     function is run.
  * @param {...*} var_args Additional arguments that are partially applied to the
  *     function.
- * @return {!Function} A partially-applied form of the function bind() was
+ * @return {!Function} A partially-applied form of the function goog.bind() was
  *     invoked as a method of.
+ * @template T
  * @private
- * @suppress {deprecated} The compiler thinks that Function.prototype.bind is
- *     deprecated because some people have declared a pure-JS version.
- *     Only the pure-JS version is truly deprecated.
  */
 goog.bindNative_ = function(fn, selfObj, var_args) {
   return /** @type {!Function} */ (fn.call.apply(fn.bind, arguments));
@@ -1938,13 +2010,14 @@ goog.bindNative_ = function(fn, selfObj, var_args) {
 
 /**
  * A pure-JS implementation of goog.bind.
- * @param {Function} fn A function to partially apply.
- * @param {Object|undefined} selfObj Specifies the object which this should
- *     point to when the function is run.
+ * @param {?function(this:T, ...)} fn A function to partially apply.
+ * @param {T} selfObj Specifies the object which this should point to when the
+ *     function is run.
  * @param {...*} var_args Additional arguments that are partially applied to the
  *     function.
- * @return {!Function} A partially-applied form of the function bind() was
+ * @return {!Function} A partially-applied form of the function goog.bind() was
  *     invoked as a method of.
+ * @template T
  * @private
  */
 goog.bindJs_ = function(fn, selfObj, var_args) {
@@ -1962,7 +2035,9 @@ goog.bindJs_ = function(fn, selfObj, var_args) {
     };
 
   } else {
-    return function() { return fn.apply(selfObj, arguments); };
+    return function() {
+      return fn.apply(selfObj, arguments);
+    };
   }
 };
 
@@ -2142,6 +2217,17 @@ goog.cssNameMapping_;
 goog.cssNameMappingStyle_;
 
 
+
+/**
+ * A hook for modifying the default behavior goog.getCssName. The function
+ * if present, will recieve the standard output of the goog.getCssName as
+ * its input.
+ *
+ * @type {(function(string):string)|undefined}
+ */
+goog.global.CLOSURE_CSS_NAME_MAP_FN;
+
+
 /**
  * Handles strings that are intended to be used as CSS class names.
  *
@@ -2175,8 +2261,7 @@ goog.cssNameMappingStyle_;
  */
 goog.getCssName = function(className, opt_modifier) {
   // String() is used for compatibility with compiled soy where the passed
-  // className can be non-string objects like here
-  // http://google3/java/com/google/privacy/accountcentral/common/ui/client/cards/popupcard.soy?l=74&rcl=94079467
+  // className can be non-string objects.
   if (String(className).charAt(0) == '.') {
     throw new Error(
         'className passed in goog.getCssName must not start with ".".' +
@@ -2202,7 +2287,9 @@ goog.getCssName = function(className, opt_modifier) {
     rename =
         goog.cssNameMappingStyle_ == 'BY_WHOLE' ? getMapping : renameByParts;
   } else {
-    rename = function(a) { return a; };
+    rename = function(a) {
+      return a;
+    };
   }
 
   var result =
@@ -2770,11 +2857,22 @@ goog.createRequiresTranspilation_ = function() {
     }
   }
 
+  var userAgent = goog.global.navigator && goog.global.navigator.userAgent ?
+      goog.global.navigator.userAgent :
+      '';
+
   // Identify ES3-only browsers by their incorrect treatment of commas.
   addNewerLanguageTranspilationCheck('es5', function() {
     return evalCheck('[1,].length==1');
   });
   addNewerLanguageTranspilationCheck('es6', function() {
+    // Edge has a non-deterministic (i.e., not reproducible) bug with ES6:
+    // https://github.com/Microsoft/ChakraCore/issues/1496.
+    var re = /Edge\/(\d+)(\.\d)*/i;
+    var edgeUserAgent = userAgent.match(re);
+    if (edgeUserAgent && Number(edgeUserAgent[1]) < 15) {
+      return false;
+    }
     // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
     //   (a) default params (specifically shadowing locals),
     //   (b) destructuring, (c) block-scoped functions,

@@ -150,7 +150,7 @@ goog.soy.Renderer.prototype.renderElement = function(
  * Renders a Soy template and returns the output string.
  * If the template is strict, it must be of kind HTML. To render strict
  * templates of other kinds, use {@code renderText} (for {@code kind="text"}) or
- * {@code renderStrict}.
+ * {@code renderStrictOfKind}.
  *
  * @param {?function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template to render.
@@ -198,6 +198,7 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
 };
 
 
+// TODO(jakubvrana): Remove opt_kind and change RETURN_TYPE to SanitizedHtml.
 /**
  * Renders a strict Soy template and returns the output SanitizedContent object.
  *
@@ -209,10 +210,46 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
  *     defaults to goog.soy.data.SanitizedContentKind.HTML).
  * @return {RETURN_TYPE} The SanitizedContent object. This return type is
  *     generic based on the return type of the template, such as
- *     soydata.SanitizedHtml.
+ *     goog.soy.data.SanitizedHtml.
  * @template ARG_TYPES, RETURN_TYPE
  */
 goog.soy.Renderer.prototype.renderStrict = function(
+    template, opt_templateData, opt_kind) {
+  return this.renderStrictOfKind(template, opt_templateData, opt_kind);
+};
+
+
+/**
+ * Renders a strict Soy template and returns the output SanitizedUri object.
+ *
+ * @param {!function(ARG_TYPES, null=, ?Object<string, *>=):
+ *     !goog.soy.data.SanitizedUri} template The Soy template to render.
+ * @param {ARG_TYPES=} opt_templateData The data for the template.
+ * @return {!goog.soy.data.SanitizedUri}
+ * @template ARG_TYPES
+ */
+goog.soy.Renderer.prototype.renderStrictUri = function(
+    template, opt_templateData) {
+  return this.renderStrictOfKind(
+      template, opt_templateData, goog.soy.data.SanitizedContentKind.URI);
+};
+
+
+/**
+ * Renders a strict Soy template and returns the output SanitizedContent object.
+ *
+ * @param {?function(ARG_TYPES, null=, ?Object<string, *>=): RETURN_TYPE}
+ *     template The Soy template to render.
+ * @param {ARG_TYPES=} opt_templateData The data for the template.
+ * @param {goog.soy.data.SanitizedContentKind=} opt_kind The output kind to
+ *     assert. If null, the template must be of kind="html" (i.e., opt_kind
+ *     defaults to goog.soy.data.SanitizedContentKind.HTML).
+ * @return {RETURN_TYPE} The SanitizedContent object. This return type is
+ *     generic based on the return type of the template, such as
+ *     goog.soy.data.SanitizedHtml.
+ * @template ARG_TYPES, RETURN_TYPE
+ */
+goog.soy.Renderer.prototype.renderStrictOfKind = function(
     template, opt_templateData, opt_kind) {
   var result =
       template(opt_templateData || {}, undefined, this.getInjectedData_());
@@ -264,7 +301,7 @@ goog.soy.Renderer.prototype.renderSafeHtml = function(
  */
 goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
-  var result = this.renderStrict(
+  var result = this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
   // TODO(mlourenco): Call result.toSafeStyleSheet() once that exists.
   return goog.html.uncheckedconversions

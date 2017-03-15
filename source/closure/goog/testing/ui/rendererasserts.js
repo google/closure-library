@@ -49,7 +49,8 @@ goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor =
     return TestControlRenderer.superClass_.getCssClass.call(this);
   };
 
-  var testControlRenderer = new TestControlRenderer();
+  // Looking for the side-effects caused by the construction here:
+  new TestControlRenderer();
 
   assertEquals(
       'Constructors should not call getCssClass, ' +

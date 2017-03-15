@@ -19,16 +19,20 @@
  *   //depot/google3/i18n/tools/java/com/google/i18n/generator:generator
  * using the --for_closure flag.
  *
- * File generated from CLDR ver. 29
- *
- * This file covers those locales that are not covered in
- * "numberformatsymbols.js".
+ * File generated from CLDR ver. 30.0.2
+ * go/js-locale-data-update
  *
  * Before checking, this file could have been manually edited. This is
  * to incorporate changes before we could fix CLDR. All manual
  * modification must be documented in this section, and should be
  * removed after those changes land to CLDR.
- * @suppress {const}
+ *
+ * This file covers those locales that are not covered in
+ * "numberformatsymbols.js".
+ *
+ * @suppress {const,missingRequire} Missing requires for names like
+ *     goog.i18n.NumberFormatSymbols_af though they are included by requiring
+ *     goog.i18n.NumberFormatSymbols.
  */
 
 // clang-format off
@@ -111,6 +115,9 @@ goog.provide('goog.i18n.NumberFormatSymbols_ce_RU');
 goog.provide('goog.i18n.NumberFormatSymbols_cgg');
 goog.provide('goog.i18n.NumberFormatSymbols_cgg_UG');
 goog.provide('goog.i18n.NumberFormatSymbols_chr_US');
+goog.provide('goog.i18n.NumberFormatSymbols_ckb');
+goog.provide('goog.i18n.NumberFormatSymbols_ckb_IQ');
+goog.provide('goog.i18n.NumberFormatSymbols_ckb_IR');
 goog.provide('goog.i18n.NumberFormatSymbols_cs_CZ');
 goog.provide('goog.i18n.NumberFormatSymbols_cy_GB');
 goog.provide('goog.i18n.NumberFormatSymbols_da_DK');
@@ -119,6 +126,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_dav');
 goog.provide('goog.i18n.NumberFormatSymbols_dav_KE');
 goog.provide('goog.i18n.NumberFormatSymbols_de_BE');
 goog.provide('goog.i18n.NumberFormatSymbols_de_DE');
+goog.provide('goog.i18n.NumberFormatSymbols_de_IT');
 goog.provide('goog.i18n.NumberFormatSymbols_de_LI');
 goog.provide('goog.i18n.NumberFormatSymbols_de_LU');
 goog.provide('goog.i18n.NumberFormatSymbols_dje');
@@ -239,6 +247,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_en_ZW');
 goog.provide('goog.i18n.NumberFormatSymbols_eo');
 goog.provide('goog.i18n.NumberFormatSymbols_es_AR');
 goog.provide('goog.i18n.NumberFormatSymbols_es_BO');
+goog.provide('goog.i18n.NumberFormatSymbols_es_BR');
 goog.provide('goog.i18n.NumberFormatSymbols_es_CL');
 goog.provide('goog.i18n.NumberFormatSymbols_es_CO');
 goog.provide('goog.i18n.NumberFormatSymbols_es_CR');
@@ -456,6 +465,9 @@ goog.provide('goog.i18n.NumberFormatSymbols_nb_NO');
 goog.provide('goog.i18n.NumberFormatSymbols_nb_SJ');
 goog.provide('goog.i18n.NumberFormatSymbols_nd');
 goog.provide('goog.i18n.NumberFormatSymbols_nd_ZW');
+goog.provide('goog.i18n.NumberFormatSymbols_nds');
+goog.provide('goog.i18n.NumberFormatSymbols_nds_DE');
+goog.provide('goog.i18n.NumberFormatSymbols_nds_NL');
 goog.provide('goog.i18n.NumberFormatSymbols_ne_IN');
 goog.provide('goog.i18n.NumberFormatSymbols_ne_NP');
 goog.provide('goog.i18n.NumberFormatSymbols_nl_AW');
@@ -490,8 +502,11 @@ goog.provide('goog.i18n.NumberFormatSymbols_pl_PL');
 goog.provide('goog.i18n.NumberFormatSymbols_ps');
 goog.provide('goog.i18n.NumberFormatSymbols_ps_AF');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_AO');
+goog.provide('goog.i18n.NumberFormatSymbols_pt_CH');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_CV');
+goog.provide('goog.i18n.NumberFormatSymbols_pt_GQ');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_GW');
+goog.provide('goog.i18n.NumberFormatSymbols_pt_LU');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_MO');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_MZ');
 goog.provide('goog.i18n.NumberFormatSymbols_pt_ST');
@@ -764,18 +779,18 @@ goog.i18n.NumberFormatSymbols_ar_001 = goog.i18n.NumberFormatSymbols_ar;
 goog.i18n.NumberFormatSymbols_ar_AE = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'AED'
 };
 
@@ -787,18 +802,18 @@ goog.i18n.NumberFormatSymbols_ar_AE = {
 goog.i18n.NumberFormatSymbols_ar_BH = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.000;-¤ #,##0.000',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.000 ¤;-#,##0.000 ¤',
   DEF_CURRENCY_CODE: 'BHD'
 };
 
@@ -810,18 +825,18 @@ goog.i18n.NumberFormatSymbols_ar_BH = {
 goog.i18n.NumberFormatSymbols_ar_DJ = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'DJF'
 };
 
@@ -833,7 +848,7 @@ goog.i18n.NumberFormatSymbols_ar_DJ = {
 goog.i18n.NumberFormatSymbols_ar_DZ = {
   DECIMAL_SEP: ',',
   GROUP_SEP: '.',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎-',
@@ -863,7 +878,7 @@ goog.i18n.NumberFormatSymbols_ar_EG = goog.i18n.NumberFormatSymbols_ar;
 goog.i18n.NumberFormatSymbols_ar_EH = {
   DECIMAL_SEP: '.',
   GROUP_SEP: ',',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎-',
@@ -886,18 +901,18 @@ goog.i18n.NumberFormatSymbols_ar_EH = {
 goog.i18n.NumberFormatSymbols_ar_ER = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'ERN'
 };
 
@@ -909,18 +924,18 @@ goog.i18n.NumberFormatSymbols_ar_ER = {
 goog.i18n.NumberFormatSymbols_ar_IL = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'ILS'
 };
 
@@ -932,18 +947,18 @@ goog.i18n.NumberFormatSymbols_ar_IL = {
 goog.i18n.NumberFormatSymbols_ar_IQ = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'IQD'
 };
 
@@ -955,18 +970,18 @@ goog.i18n.NumberFormatSymbols_ar_IQ = {
 goog.i18n.NumberFormatSymbols_ar_JO = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.000;-¤ #,##0.000',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.000 ¤;-#,##0.000 ¤',
   DEF_CURRENCY_CODE: 'JOD'
 };
 
@@ -978,18 +993,18 @@ goog.i18n.NumberFormatSymbols_ar_JO = {
 goog.i18n.NumberFormatSymbols_ar_KM = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'KMF'
 };
 
@@ -1001,18 +1016,18 @@ goog.i18n.NumberFormatSymbols_ar_KM = {
 goog.i18n.NumberFormatSymbols_ar_KW = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.000;-¤ #,##0.000',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.000 ¤;-#,##0.000 ¤',
   DEF_CURRENCY_CODE: 'KWD'
 };
 
@@ -1024,18 +1039,18 @@ goog.i18n.NumberFormatSymbols_ar_KW = {
 goog.i18n.NumberFormatSymbols_ar_LB = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'LBP'
 };
 
@@ -1047,7 +1062,7 @@ goog.i18n.NumberFormatSymbols_ar_LB = {
 goog.i18n.NumberFormatSymbols_ar_LY = {
   DECIMAL_SEP: ',',
   GROUP_SEP: '.',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎-',
@@ -1070,7 +1085,7 @@ goog.i18n.NumberFormatSymbols_ar_LY = {
 goog.i18n.NumberFormatSymbols_ar_MA = {
   DECIMAL_SEP: ',',
   GROUP_SEP: '.',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎-',
@@ -1093,18 +1108,18 @@ goog.i18n.NumberFormatSymbols_ar_MA = {
 goog.i18n.NumberFormatSymbols_ar_MR = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'MRO'
 };
 
@@ -1116,18 +1131,18 @@ goog.i18n.NumberFormatSymbols_ar_MR = {
 goog.i18n.NumberFormatSymbols_ar_OM = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.000;-¤ #,##0.000',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.000 ¤;-#,##0.000 ¤',
   DEF_CURRENCY_CODE: 'OMR'
 };
 
@@ -1139,18 +1154,18 @@ goog.i18n.NumberFormatSymbols_ar_OM = {
 goog.i18n.NumberFormatSymbols_ar_PS = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'ILS'
 };
 
@@ -1162,18 +1177,18 @@ goog.i18n.NumberFormatSymbols_ar_PS = {
 goog.i18n.NumberFormatSymbols_ar_QA = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'QAR'
 };
 
@@ -1185,18 +1200,18 @@ goog.i18n.NumberFormatSymbols_ar_QA = {
 goog.i18n.NumberFormatSymbols_ar_SA = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'SAR'
 };
 
@@ -1208,18 +1223,18 @@ goog.i18n.NumberFormatSymbols_ar_SA = {
 goog.i18n.NumberFormatSymbols_ar_SD = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'SDG'
 };
 
@@ -1231,18 +1246,18 @@ goog.i18n.NumberFormatSymbols_ar_SD = {
 goog.i18n.NumberFormatSymbols_ar_SO = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'SOS'
 };
 
@@ -1254,18 +1269,18 @@ goog.i18n.NumberFormatSymbols_ar_SO = {
 goog.i18n.NumberFormatSymbols_ar_SS = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00;-¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'SSP'
 };
 
@@ -1277,18 +1292,18 @@ goog.i18n.NumberFormatSymbols_ar_SS = {
 goog.i18n.NumberFormatSymbols_ar_SY = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'SYP'
 };
 
@@ -1300,18 +1315,18 @@ goog.i18n.NumberFormatSymbols_ar_SY = {
 goog.i18n.NumberFormatSymbols_ar_TD = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'XAF'
 };
 
@@ -1323,7 +1338,7 @@ goog.i18n.NumberFormatSymbols_ar_TD = {
 goog.i18n.NumberFormatSymbols_ar_TN = {
   DECIMAL_SEP: ',',
   GROUP_SEP: '.',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎-',
@@ -1353,18 +1368,18 @@ goog.i18n.NumberFormatSymbols_ar_XB = goog.i18n.NumberFormatSymbols_ar;
 goog.i18n.NumberFormatSymbols_ar_YE = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '٠',
-  PLUS_SIGN: '‏+',
-  MINUS_SIGN: '‏-',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
   EXP_SYMBOL: 'اس',
   PERMILL: '؉',
   INFINITY: '∞',
   NAN: 'ليس رقم',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
   DEF_CURRENCY_CODE: 'YER'
 };
 
@@ -1553,23 +1568,7 @@ goog.i18n.NumberFormatSymbols_bas_CM = {
  * Number formatting symbols for locale be_BY.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_be_BY = {
-  DECIMAL_SEP: ',',
-  GROUP_SEP: ' ',
-  PERCENT: '%',
-  ZERO_DIGIT: '0',
-  PLUS_SIGN: '+',
-  MINUS_SIGN: '-',
-  EXP_SYMBOL: 'E',
-  PERMILL: '‰',
-  INFINITY: '∞',
-  NAN: 'NaN',
-  DECIMAL_PATTERN: '#,##0.###',
-  SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##0 %',
-  CURRENCY_PATTERN: '#,##0 ¤',
-  DEF_CURRENCY_CODE: 'BYR'
-};
+goog.i18n.NumberFormatSymbols_be_BY = goog.i18n.NumberFormatSymbols_be;
 
 
 /**
@@ -1722,10 +1721,10 @@ goog.i18n.NumberFormatSymbols_bn_IN = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'সংখ্যা না',
+  NAN: 'NaN',
   DECIMAL_PATTERN: '#,##,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##,##0%',
+  PERCENT_PATTERN: '#,##0%',
   CURRENCY_PATTERN: '#,##,##0.00¤',
   DEF_CURRENCY_CODE: 'INR'
 };
@@ -1825,14 +1824,46 @@ goog.i18n.NumberFormatSymbols_brx_IN = goog.i18n.NumberFormatSymbols_brx;
  * Number formatting symbols for locale bs_Cyrl.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_bs_Cyrl = goog.i18n.NumberFormatSymbols_bs;
+goog.i18n.NumberFormatSymbols_bs_Cyrl = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: '.',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'BAM'
+};
 
 
 /**
  * Number formatting symbols for locale bs_Cyrl_BA.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_bs_Cyrl_BA = goog.i18n.NumberFormatSymbols_bs;
+goog.i18n.NumberFormatSymbols_bs_Cyrl_BA = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: '.',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'BAM'
+};
 
 
 /**
@@ -1961,6 +1992,75 @@ goog.i18n.NumberFormatSymbols_chr_US = goog.i18n.NumberFormatSymbols_chr;
 
 
 /**
+ * Number formatting symbols for locale ckb.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ckb = {
+  DECIMAL_SEP: '٫',
+  GROUP_SEP: '٬',
+  PERCENT: '٪',
+  ZERO_DIGIT: '٠',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
+  EXP_SYMBOL: 'اس',
+  PERMILL: '؉',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0;-#E0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤;-#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'IQD'
+};
+
+
+/**
+ * Number formatting symbols for locale ckb_IQ.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ckb_IQ = {
+  DECIMAL_SEP: '٫',
+  GROUP_SEP: '٬',
+  PERCENT: '٪',
+  ZERO_DIGIT: '٠',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
+  EXP_SYMBOL: 'اس',
+  PERMILL: '؉',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0;-#E0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
+  DEF_CURRENCY_CODE: 'IQD'
+};
+
+
+/**
+ * Number formatting symbols for locale ckb_IR.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ckb_IR = {
+  DECIMAL_SEP: '٫',
+  GROUP_SEP: '٬',
+  PERCENT: '٪',
+  ZERO_DIGIT: '٠',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
+  EXP_SYMBOL: 'اس',
+  PERMILL: '؉',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0;-#E0',
+  PERCENT_PATTERN: '#,##0 %;-#,##0 %',
+  CURRENCY_PATTERN: '#,##0 ¤;-#,##0 ¤',
+  DEF_CURRENCY_CODE: 'IRR'
+};
+
+
+/**
  * Number formatting symbols for locale cs_CZ.
  * @enum {string}
  */
@@ -2030,6 +2130,13 @@ goog.i18n.NumberFormatSymbols_de_BE = goog.i18n.NumberFormatSymbols_de;
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_de_DE = goog.i18n.NumberFormatSymbols_de;
+
+
+/**
+ * Number formatting symbols for locale de_IT.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_de_IT = goog.i18n.NumberFormatSymbols_de;
 
 
 /**
@@ -4224,7 +4331,7 @@ goog.i18n.NumberFormatSymbols_en_US_POSIX = {
   PLUS_SIGN: '+',
   MINUS_SIGN: '-',
   EXP_SYMBOL: 'E',
-  PERMILL: '0',
+  PERMILL: '‰',
   INFINITY: 'INF',
   NAN: 'NaN',
   DECIMAL_PATTERN: '#0.######',
@@ -4425,6 +4532,29 @@ goog.i18n.NumberFormatSymbols_es_BO = {
 
 
 /**
+ * Number formatting symbols for locale es_BR.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_es_BR = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0 %',
+  CURRENCY_PATTERN: '¤#,##0.00',
+  DEF_CURRENCY_CODE: 'BRL'
+};
+
+
+/**
  * Number formatting symbols for locale es_CL.
  * @enum {string}
  */
@@ -4488,7 +4618,7 @@ goog.i18n.NumberFormatSymbols_es_CR = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0 %',
-  CURRENCY_PATTERN: '¤#,##0',
+  CURRENCY_PATTERN: '¤#,##0.00',
   DEF_CURRENCY_CODE: 'CRC'
 };
 
@@ -4919,9 +5049,9 @@ goog.i18n.NumberFormatSymbols_ewo_CM = {
 goog.i18n.NumberFormatSymbols_fa_AF = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '۰',
-  PLUS_SIGN: '‎+‎',
+  PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎−',
   EXP_SYMBOL: '×۱۰^',
   PERMILL: '؉',
@@ -4929,8 +5059,8 @@ goog.i18n.NumberFormatSymbols_fa_AF = {
   NAN: 'ناعدد',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '‎¤#,##0;-‎¤#,##0',
+  PERCENT_PATTERN: '% #,##0;% -#,##0',
+  CURRENCY_PATTERN: '¤ #,##0;-¤ #,##0',
   DEF_CURRENCY_CODE: 'AFN'
 };
 
@@ -4942,9 +5072,9 @@ goog.i18n.NumberFormatSymbols_fa_AF = {
 goog.i18n.NumberFormatSymbols_fa_IR = {
   DECIMAL_SEP: '٫',
   GROUP_SEP: '٬',
-  PERCENT: '٪',
+  PERCENT: '%',
   ZERO_DIGIT: '۰',
-  PLUS_SIGN: '‎+‎',
+  PLUS_SIGN: '‎+',
   MINUS_SIGN: '‎−',
   EXP_SYMBOL: '×۱۰^',
   PERMILL: '؉',
@@ -4952,8 +5082,8 @@ goog.i18n.NumberFormatSymbols_fa_IR = {
   NAN: 'ناعدد',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##0%;-#,##0%',
-  CURRENCY_PATTERN: '‎¤#,##0;-‎¤#,##0',
+  PERCENT_PATTERN: '% #,##0;% -#,##0',
+  CURRENCY_PATTERN: '#,##0 ؜¤;؜-#,##0 ؜¤',
   DEF_CURRENCY_CODE: 'IRR'
 };
 
@@ -5128,23 +5258,7 @@ goog.i18n.NumberFormatSymbols_fo_FO = goog.i18n.NumberFormatSymbols_fo;
  * Number formatting symbols for locale fr_BE.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_fr_BE = {
-  DECIMAL_SEP: ',',
-  GROUP_SEP: '.',
-  PERCENT: '%',
-  ZERO_DIGIT: '0',
-  PLUS_SIGN: '+',
-  MINUS_SIGN: '-',
-  EXP_SYMBOL: 'E',
-  PERMILL: '‰',
-  INFINITY: '∞',
-  NAN: 'NaN',
-  DECIMAL_PATTERN: '#,##0.###',
-  SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##0 %',
-  CURRENCY_PATTERN: '#,##0.00 ¤',
-  DEF_CURRENCY_CODE: 'EUR'
-};
+goog.i18n.NumberFormatSymbols_fr_BE = goog.i18n.NumberFormatSymbols_fr;
 
 
 /**
@@ -6377,7 +6491,7 @@ goog.i18n.NumberFormatSymbols_hu_HU = goog.i18n.NumberFormatSymbols_hu;
  */
 goog.i18n.NumberFormatSymbols_hy_AM = {
   DECIMAL_SEP: ',',
-  GROUP_SEP: '.',
+  GROUP_SEP: ' ',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
@@ -6385,8 +6499,8 @@ goog.i18n.NumberFormatSymbols_hy_AM = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'NaN',
-  DECIMAL_PATTERN: '#0.###',
+  NAN: 'ՈչԹ',
+  DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
   CURRENCY_PATTERN: '¤ #,##0',
@@ -7834,7 +7948,7 @@ goog.i18n.NumberFormatSymbols_mg = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤#,##0.00',
+  CURRENCY_PATTERN: '¤ #,##0.00',
   DEF_CURRENCY_CODE: 'MGA'
 };
 
@@ -7857,7 +7971,7 @@ goog.i18n.NumberFormatSymbols_mg_MG = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤#,##0',
+  CURRENCY_PATTERN: '¤ #,##0',
   DEF_CURRENCY_CODE: 'MGA'
 };
 
@@ -8106,7 +8220,7 @@ goog.i18n.NumberFormatSymbols_my_MM = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0',
+  CURRENCY_PATTERN: '#,##0 ¤',
   DEF_CURRENCY_CODE: 'MMK'
 };
 
@@ -8229,6 +8343,43 @@ goog.i18n.NumberFormatSymbols_nd = {
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_nd_ZW = goog.i18n.NumberFormatSymbols_nd;
+
+
+/**
+ * Number formatting symbols for locale nds.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_nds = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤ #,##0.00',
+  DEF_CURRENCY_CODE: 'EUR'
+};
+
+
+/**
+ * Number formatting symbols for locale nds_DE.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_nds_DE = goog.i18n.NumberFormatSymbols_nds;
+
+
+/**
+ * Number formatting symbols for locale nds_NL.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_nds_NL = goog.i18n.NumberFormatSymbols_nds;
 
 
 /**
@@ -8854,6 +9005,29 @@ goog.i18n.NumberFormatSymbols_pt_AO = {
 
 
 /**
+ * Number formatting symbols for locale pt_CH.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_pt_CH = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: ' ',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'CHF'
+};
+
+
+/**
  * Number formatting symbols for locale pt_CV.
  * @enum {string}
  */
@@ -8877,6 +9051,29 @@ goog.i18n.NumberFormatSymbols_pt_CV = {
 
 
 /**
+ * Number formatting symbols for locale pt_GQ.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_pt_GQ = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: ' ',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0 ¤',
+  DEF_CURRENCY_CODE: 'XAF'
+};
+
+
+/**
  * Number formatting symbols for locale pt_GW.
  * @enum {string}
  */
@@ -8896,6 +9093,29 @@ goog.i18n.NumberFormatSymbols_pt_GW = {
   PERCENT_PATTERN: '#,##0%',
   CURRENCY_PATTERN: '#,##0 ¤',
   DEF_CURRENCY_CODE: 'XOF'
+};
+
+
+/**
+ * Number formatting symbols for locale pt_LU.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_pt_LU = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: ' ',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'EUR'
 };
 
 
@@ -9237,8 +9457,8 @@ goog.i18n.NumberFormatSymbols_ru_BY = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0 %',
-  CURRENCY_PATTERN: '#,##0 ¤',
-  DEF_CURRENCY_CODE: 'BYR'
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'BYN'
 };
 
 
@@ -9438,8 +9658,8 @@ goog.i18n.NumberFormatSymbols_rwk_TZ = {
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_sah = {
-  DECIMAL_SEP: '.',
-  GROUP_SEP: ',',
+  DECIMAL_SEP: ',',
+  GROUP_SEP: ' ',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
@@ -9447,11 +9667,11 @@ goog.i18n.NumberFormatSymbols_sah = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'NaN',
+  NAN: 'чыыһыла буотах',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'RUB'
 };
 
@@ -9550,7 +9770,7 @@ goog.i18n.NumberFormatSymbols_se = {
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
   MINUS_SIGN: '−',
-  EXP_SYMBOL: '×10^',
+  EXP_SYMBOL: '·10^',
   PERMILL: '‰',
   INFINITY: '∞',
   NAN: '¤¤¤',
@@ -9573,7 +9793,7 @@ goog.i18n.NumberFormatSymbols_se_FI = {
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
   MINUS_SIGN: '−',
-  EXP_SYMBOL: '×10^',
+  EXP_SYMBOL: '·10^',
   PERMILL: '‰',
   INFINITY: '∞',
   NAN: '¤¤¤',
@@ -9603,7 +9823,7 @@ goog.i18n.NumberFormatSymbols_se_SE = {
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
   MINUS_SIGN: '−',
-  EXP_SYMBOL: '×10^',
+  EXP_SYMBOL: '·10^',
   PERMILL: '‰',
   INFINITY: '∞',
   NAN: '¤¤¤',
@@ -9814,8 +10034,8 @@ goog.i18n.NumberFormatSymbols_sl_SI = goog.i18n.NumberFormatSymbols_sl;
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_smn = {
-  DECIMAL_SEP: '.',
-  GROUP_SEP: ',',
+  DECIMAL_SEP: ',',
+  GROUP_SEP: ' ',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
@@ -9826,8 +10046,8 @@ goog.i18n.NumberFormatSymbols_smn = {
   NAN: 'epiloho',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00',
+  PERCENT_PATTERN: '#,##0 %',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'EUR'
 };
 
@@ -10649,7 +10869,7 @@ goog.i18n.NumberFormatSymbols_tr_CY = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '%#,##0',
-  CURRENCY_PATTERN: '#,##0.00 ¤',
+  CURRENCY_PATTERN: '¤#,##0.00',
   DEF_CURRENCY_CODE: 'EUR'
 };
 
@@ -10658,23 +10878,7 @@ goog.i18n.NumberFormatSymbols_tr_CY = {
  * Number formatting symbols for locale tr_TR.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_tr_TR = {
-  DECIMAL_SEP: ',',
-  GROUP_SEP: '.',
-  PERCENT: '%',
-  ZERO_DIGIT: '0',
-  PLUS_SIGN: '+',
-  MINUS_SIGN: '-',
-  EXP_SYMBOL: 'E',
-  PERMILL: '‰',
-  INFINITY: '∞',
-  NAN: 'NaN',
-  DECIMAL_PATTERN: '#,##0.###',
-  SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '%#,##0',
-  CURRENCY_PATTERN: '¤#,##0.00',
-  DEF_CURRENCY_CODE: 'TRY'
-};
+goog.i18n.NumberFormatSymbols_tr_TR = goog.i18n.NumberFormatSymbols_tr;
 
 
 /**
@@ -10807,7 +11011,7 @@ goog.i18n.NumberFormatSymbols_ur_IN = {
   NAN: 'NaN',
   DECIMAL_PATTERN: '#,##0.###;-#,##0.###',
   SCIENTIFIC_PATTERN: '#E0;-#E0',
-  PERCENT_PATTERN: '#,##,##0%;-#,##,##0%',
+  PERCENT_PATTERN: '#,##0%;-#,##0%',
   CURRENCY_PATTERN: '¤ #,##,##0.00;-¤ #,##,##0.00',
   DEF_CURRENCY_CODE: 'INR'
 };
@@ -10896,11 +11100,11 @@ goog.i18n.NumberFormatSymbols_uz_Cyrl = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'NaN',
+  NAN: 'ҳақиқий сон эмас',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'UZS'
 };
 
@@ -10919,11 +11123,11 @@ goog.i18n.NumberFormatSymbols_uz_Cyrl_UZ = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'NaN',
+  NAN: 'ҳақиқий сон эмас',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0',
+  CURRENCY_PATTERN: '#,##0 ¤',
   DEF_CURRENCY_CODE: 'UZS'
 };
 
@@ -11836,6 +12040,18 @@ if (goog.LOCALE == 'chr_US' || goog.LOCALE == 'chr-US') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_chr_US;
 }
 
+if (goog.LOCALE == 'ckb') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ckb;
+}
+
+if (goog.LOCALE == 'ckb_IQ' || goog.LOCALE == 'ckb-IQ') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ckb_IQ;
+}
+
+if (goog.LOCALE == 'ckb_IR' || goog.LOCALE == 'ckb-IR') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ckb_IR;
+}
+
 if (goog.LOCALE == 'cs_CZ' || goog.LOCALE == 'cs-CZ') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_cs_CZ;
 }
@@ -11866,6 +12082,10 @@ if (goog.LOCALE == 'de_BE' || goog.LOCALE == 'de-BE') {
 
 if (goog.LOCALE == 'de_DE' || goog.LOCALE == 'de-DE') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de_DE;
+}
+
+if (goog.LOCALE == 'de_IT' || goog.LOCALE == 'de-IT') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de_IT;
 }
 
 if (goog.LOCALE == 'de_LI' || goog.LOCALE == 'de-LI') {
@@ -12346,6 +12566,10 @@ if (goog.LOCALE == 'es_AR' || goog.LOCALE == 'es-AR') {
 
 if (goog.LOCALE == 'es_BO' || goog.LOCALE == 'es-BO') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_BO;
+}
+
+if (goog.LOCALE == 'es_BR' || goog.LOCALE == 'es-BR') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_BR;
 }
 
 if (goog.LOCALE == 'es_CL' || goog.LOCALE == 'es-CL') {
@@ -13216,6 +13440,18 @@ if (goog.LOCALE == 'nd_ZW' || goog.LOCALE == 'nd-ZW') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nd_ZW;
 }
 
+if (goog.LOCALE == 'nds') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nds;
+}
+
+if (goog.LOCALE == 'nds_DE' || goog.LOCALE == 'nds-DE') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nds_DE;
+}
+
+if (goog.LOCALE == 'nds_NL' || goog.LOCALE == 'nds-NL') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nds_NL;
+}
+
 if (goog.LOCALE == 'ne_IN' || goog.LOCALE == 'ne-IN') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ne_IN;
 }
@@ -13352,12 +13588,24 @@ if (goog.LOCALE == 'pt_AO' || goog.LOCALE == 'pt-AO') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_AO;
 }
 
+if (goog.LOCALE == 'pt_CH' || goog.LOCALE == 'pt-CH') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_CH;
+}
+
 if (goog.LOCALE == 'pt_CV' || goog.LOCALE == 'pt-CV') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_CV;
 }
 
+if (goog.LOCALE == 'pt_GQ' || goog.LOCALE == 'pt-GQ') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_GQ;
+}
+
 if (goog.LOCALE == 'pt_GW' || goog.LOCALE == 'pt-GW') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_GW;
+}
+
+if (goog.LOCALE == 'pt_LU' || goog.LOCALE == 'pt-LU') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_LU;
 }
 
 if (goog.LOCALE == 'pt_MO' || goog.LOCALE == 'pt-MO') {

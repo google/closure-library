@@ -15,6 +15,7 @@
 goog.provide('goog.ui.tree.BaseNodeTest');
 goog.setTestOnly('goog.ui.tree.BaseNodeTest');
 
+goog.require('goog.a11y.aria');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
@@ -47,6 +48,41 @@ function testAdd() {
   assertEquals('node2 has 1 child', 1, node2.getChildCount());
   assertEquals('the child of node2 is node4', node4, node2.getChildAt(0));
   assertEquals('the parent of node4 is node2', node2, node4.getParent());
+}
+
+function testAriaExpandedFalseSetByDefaultOnParentAfterAddChild() {
+  var tree = new goog.ui.tree.TreeControl('root');
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var nodeA = new goog.ui.tree.TreeNode('nodeA');
+  tree.render(goog.dom.createDom(goog.dom.TagName.DIV));
+  tree.addChild(node1);
+  assertFalse(
+      'node1 should not have aria-expanded state',
+      goog.a11y.aria.hasState(node1.getElement(), 'expanded'));
+
+  node1.add(nodeA);
+
+  assertEquals(
+      'node1 should have aria-expanded state', 'false',
+      goog.a11y.aria.getState(node1.getElement(), 'expanded'));
+}
+
+function testAriaExpandedSetProperlyAfterSetExpandedCalledOnLeafNode() {
+  var tree = new goog.ui.tree.TreeControl('root');
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var nodeA = new goog.ui.tree.TreeNode('nodeA');
+  tree.render(goog.dom.createDom(goog.dom.TagName.DIV));
+  tree.addChild(node1);
+  assertFalse(
+      'node1 should not have aria-expanded state',
+      goog.a11y.aria.hasState(node1.getElement(), 'expanded'));
+
+  node1.setExpanded(true);
+  node1.add(nodeA);
+
+  assertEquals(
+      'node1 should have aria-expanded=true', 'true',
+      goog.a11y.aria.getState(node1.getElement(), 'expanded'));
 }
 
 function testExpandIconAfterAddChild() {
@@ -147,6 +183,40 @@ function testExpandEventsPreventDefault2() {
   });
   n.setExpanded(!expanded);
   assertEquals(1, callCount);
+}
+
+function testRemoveChild() {
+  var tree = new goog.ui.tree.TreeControl('root');
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var nodeA = new goog.ui.tree.TreeNode('nodeA');
+  var nodeB = new goog.ui.tree.TreeNode('nodeB');
+  tree.render(goog.dom.createDom(goog.dom.TagName.DIV));
+  tree.addChild(node1);
+  node1.add(nodeA);
+  node1.add(nodeB);
+
+  node1.removeChild(nodeA);
+
+  assertFalse(
+      'nodeA should be removed from tree of node1', node1.contains(nodeA));
+  assertTrue(
+      'node1 still has children; node1 should still have aria-expanded state',
+      goog.a11y.aria.hasState(node1.getElement(), 'expanded'));
+}
+
+function testRemoveLastChildRemovesAriaExpandedState() {
+  var tree = new goog.ui.tree.TreeControl('root');
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var node2 = new goog.ui.tree.TreeNode('node2');
+  tree.render(goog.dom.createDom(goog.dom.TagName.DIV));
+  tree.addChild(node1);
+  node1.add(node2);
+
+  node1.removeChild(node2);
+
+  assertFalse(
+      'node1 has no more children; node1 should not have aria-expanded state',
+      goog.a11y.aria.hasState(node1.getElement(), 'expanded'));
 }
 
 function testGetNextShownNode() {

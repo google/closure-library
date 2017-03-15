@@ -17,7 +17,7 @@ goog.setTestOnly('goog.labs.storage.BoundedCollectableStorageTest');
 
 goog.require('goog.labs.storage.BoundedCollectableStorage');
 goog.require('goog.storage.collectableStorageTester');
-goog.require('goog.storage.storage_test');
+goog.require('goog.storage.storageTester');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.storage.FakeMechanism');
@@ -25,7 +25,7 @@ goog.require('goog.testing.storage.FakeMechanism');
 function testBasicOperations() {
   var mechanism = new goog.testing.storage.FakeMechanism();
   var storage = new goog.labs.storage.BoundedCollectableStorage(mechanism, 5);
-  goog.storage.storage_test.runBasicTests(storage);
+  goog.storage.storageTester.runBasicTests(storage);
 }
 
 function testExpiredKeyCollection() {

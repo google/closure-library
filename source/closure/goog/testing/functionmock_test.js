@@ -20,6 +20,7 @@ goog.require('goog.string');
 goog.require('goog.testing');
 goog.require('goog.testing.FunctionMock');
 goog.require('goog.testing.Mock');
+goog.require('goog.testing.ObjectPropertyString');
 goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
@@ -368,6 +369,16 @@ function testMethodMockCallOrdering() {
   mynamespace.myMethod(1);
   mynamespace.myMethod.$verify();
   mynamespace.myMethod.$tearDown();
+}
+
+function testMocksMethodFromObjectPropertyString() {
+  mockMethod = goog.testing.MethodMock.fromObjectPropertyString(
+      new goog.testing.ObjectPropertyString(mynamespace, 'myMethod'));
+  mockMethod().$returns('I have been mocked!');
+
+  mockMethod.$replay();
+  assertEquals('I have been mocked!', mynamespace.myMethod());
+  mockMethod.$verify();
 }
 
 //----- Functions for goog.testing.createConstructorMock to mock

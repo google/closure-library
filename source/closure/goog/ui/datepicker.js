@@ -79,6 +79,9 @@ goog.ui.DatePicker = function(
       new goog.i18n.DateTimeFormat('dd', this.symbols_);
   this.i18nDateFormatterWeek_ =
       new goog.i18n.DateTimeFormat('w', this.symbols_);
+  // Formatter for day grid aria label.
+  this.i18nDateFormatterDayAriaLabel_ =
+      new goog.i18n.DateTimeFormat('M d', this.symbols_);
 
   // Previous implementation did not use goog.i18n.DateTimePatterns,
   // so it is likely most developers did not set it.
@@ -842,9 +845,27 @@ goog.ui.DatePicker.prototype.updateNavigationRow_ = function() {
     this.addPreventDefaultClickHandler_(
         row, goog.getCssName(this.getBaseCssClass(), 'previousMonth'),
         this.previousMonth);
+    var previousMonthElement = goog.dom.getElementByClass(
+        goog.getCssName(this.getBaseCssClass(), 'previousMonth'), row);
+    if (previousMonthElement) {
+      // Note: we're hiding the next and previous month buttons from screen
+      // readers because keyboard navigation doesn't currently work correctly
+      // with them. If that is fixed, we can show the buttons again.
+      goog.a11y.aria.setState(
+          previousMonthElement, goog.a11y.aria.State.HIDDEN, true);
+      previousMonthElement.tabIndex = -1;
+    }
+
     this.addPreventDefaultClickHandler_(
         row, goog.getCssName(this.getBaseCssClass(), 'nextMonth'),
         this.nextMonth);
+    var nextMonthElement = goog.dom.getElementByClass(
+        goog.getCssName(this.getBaseCssClass(), 'nextMonth'), row);
+    if (nextMonthElement) {
+      goog.a11y.aria.setState(
+          nextMonthElement, goog.a11y.aria.State.HIDDEN, true);
+      nextMonthElement.tabIndex = -1;
+    }
 
     this.elMonthYear_ = goog.dom.getElementByClass(
         goog.getCssName(this.getBaseCssClass(), 'monthyear'), row);
@@ -1454,6 +1475,10 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       }
       goog.asserts.assert(el, 'The table DOM element cannot be null.');
       goog.a11y.aria.setRole(el, 'gridcell');
+      // Set the aria label of the grid cell to the month plus the day.
+      goog.a11y.aria.setLabel(
+          el, this.i18nDateFormatterDayAriaLabel_.format(o));
+
       var classes = [goog.getCssName(this.getBaseCssClass(), 'date')];
       if (!this.isUserSelectableDate_(o)) {
         classes.push(

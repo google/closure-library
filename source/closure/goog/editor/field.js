@@ -49,6 +49,8 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.string');
@@ -2162,8 +2164,28 @@ goog.editor.Field.prototype.getFieldCopy = function() {
  * @param {boolean=} opt_dontFireDelayedChange True to make this content change
  *    not fire a delayed change event.
  * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.
+ * @deprecated Use setSafeHtml instead.
  */
 goog.editor.Field.prototype.setHtml = function(
+    addParas, html, opt_dontFireDelayedChange, opt_applyLorem) {
+  var safeHtml =
+      html ? goog.html.legacyconversions.safeHtmlFromString(html) : null;
+  this.setSafeHtml(
+      addParas, safeHtml, opt_dontFireDelayedChange, opt_applyLorem);
+};
+
+
+/**
+ * Sets the contents of the field.
+ * @param {boolean} addParas Boolean to specify whether to add paragraphs
+ *    to long fields.
+ * @param {?goog.html.SafeHtml} html html to insert.  If html=null, then this
+ *    defaults to a nsbp for mozilla and an empty string for IE.
+ * @param {boolean=} opt_dontFireDelayedChange True to make this content change
+ *    not fire a delayed change event.
+ * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.
+ */
+goog.editor.Field.prototype.setSafeHtml = function(
     addParas, html, opt_dontFireDelayedChange, opt_applyLorem) {
   if (this.isLoading()) {
     goog.log.error(this.logger, "Can't set html while loading Trogedit");
@@ -2176,7 +2198,7 @@ goog.editor.Field.prototype.setHtml = function(
   }
 
   if (html && addParas) {
-    html = '<p>' + html + '</p>';
+    html = goog.html.SafeHtml.create('p', {}, html);
   }
 
   // If we don't want change events to fire, we have to turn off change events
@@ -2219,7 +2241,7 @@ goog.editor.Field.prototype.setHtml = function(
 /**
  * Sets the inner HTML of the field. Works on both editable and
  * uneditable fields.
- * @param {?string} html The new inner HTML of the field.
+ * @param {?goog.html.SafeHtml} html The new inner HTML of the field.
  * @private
  */
 goog.editor.Field.prototype.setInnerHtml_ = function(html) {
@@ -2242,7 +2264,7 @@ goog.editor.Field.prototype.setInnerHtml_ = function(html) {
   }
 
   if (field) {
-    this.injectContents(html, field);
+    this.injectContents(html && goog.html.SafeHtml.unwrap(html), field);
   }
 };
 
@@ -2284,8 +2306,7 @@ goog.editor.Field.prototype.installStyles = function() {
  * @private
  */
 goog.editor.Field.prototype.dispatchLoadEvent_ = function() {
-  var field = this.getElement();
-
+  this.getElement();
   this.installStyles();
   this.startChangeEvents();
   goog.log.info(this.logger, 'Dispatching load ' + this.id);

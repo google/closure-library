@@ -300,7 +300,7 @@ function testNonce() {
   var script = getScriptElement(result);
   assertEquals(
       'Nonce attribute should have been added to script element.', 'foo',
-      script.getAttribute('nonce'));
+      (script['nonce'] || script.getAttribute('nonce')));
 
   checkCleanup();
   timeoutHandler();

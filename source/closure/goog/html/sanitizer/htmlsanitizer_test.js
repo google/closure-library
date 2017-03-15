@@ -19,14 +19,17 @@
 
 goog.setTestOnly();
 
-goog.require('goog.html.sanitizer.HtmlSanitizer');
-goog.require('goog.html.sanitizer.TagWhitelist');
-goog.require('goog.html.sanitizer.unsafe');
-
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.sanitizer.HtmlSanitizer');
+goog.require('goog.html.sanitizer.HtmlSanitizer.Builder');
+goog.require('goog.html.sanitizer.TagWhitelist');
+goog.require('goog.html.sanitizer.unsafe');
 goog.require('goog.html.testing');
+goog.require('goog.object');
+goog.require('goog.string.Const');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -564,16 +567,6 @@ function testHtmlSanitizeXSS() {
   xssHtml = '<DIV STYLE="background-image: url(javascript:alert(window))">';
   assertSanitizedHtml(xssHtml, safeHtml);
 
-  // DIV background-image with unicoded XSS exploit (this has been modified
-  // slightly to obfuscate the url parameter). The original vulnerability was
-  // found by Renaud Lifchitz as a vulnerability in Hotmail:
-  // Browser support: [IE6.0|NS8.1-IE]
-  safeHtml = '<div></div>';
-  xssHtml = '<DIV STYLE="background-image:\0075\0072\006C\0028\'\006a\0061' +
-      '\0076\0061\0073\0063\0072\0069\0070\0074\003a\0061\006c\0065\0072\0074' +
-      '\0028.1027\0058.1053\0053\0027\0029\'\0029">';
-  assertSanitizedHtml(xssHtml, safeHtml);
-
   // DIV background-image plus extra characters. I built a quick XSS fuzzer to
   // detect any erroneous characters that are allowed after the open parenthesis
   // but before the JavaScript directive in IE and Netscape 8.1 in secure site
@@ -849,7 +842,7 @@ function testOnlyAllowTags() {
 
 function testDisallowNonWhitelistedTags() {
   assertThrows('Should error on elements not whitelisted', function() {
-    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowTags(['x'])
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowTags(['x']);
   });
 }
 
@@ -1134,7 +1127,11 @@ function testTemplateRemoved() {
 }
 
 
-// shorthand for sanitized tags
+/**
+ * Shorthand for sanitized tags
+ * @param {string} tag
+ * @return {string}
+ */
 function otag(tag) {
   return 'data-sanitizer-original-tag="' + tag + '"';
 }
@@ -1186,8 +1183,13 @@ function testOriginalTagClobber() {
 // problems (e.g. cannot be a child of <p>)
 
 
-// let the browser apply its own HTML tree correction, it only does it after
-// you attach the tree to the document.
+/**
+ * Sanitize content, let the browser apply its own HTML tree correction by
+ * attaching the content to the document, and then assert it matches the
+ * expected value.
+ * @param {string} expected
+ * @param {string} input
+ */
 function assertAfterInsertionEquals(expected, input) {
   var sanitizer =
       new goog.html.sanitizer.HtmlSanitizer.Builder().allowFormTag().build();
@@ -1425,16 +1427,18 @@ function testOnlyAllowAttributeSpecificPolicyThrows() {
   assertThrows(function() {
     new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([
       {tagName: 'img', attributeName: 'src', policy: goog.functions.identity}
-    ])
+    ]);
   });
 }
 
 
 function testOnlyAllowAttributeGenericPolicyThrows() {
   assertThrows(function() {
-    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([
-      {tagName: '*', attributeName: 'target', policy: goog.functions.identity}
-    ])
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([{
+      tagName: '*',
+      attributeName: 'target',
+      policy: goog.functions.identity
+    }]);
   });
 }
 
@@ -1448,4 +1452,30 @@ function testOnlyAllowAttributeRefineThrows() {
   assertThrows(function() {
     builder.onlyAllowAttributes(['alt']);
   });
+}
+
+
+function testUrlWithCredentials() {
+  if (isIE8() || isIE9()) {
+    return;
+  }
+  // IE has trouble getting and setting URL attributes with credentials. Both
+  // HTMLSanitizer and assertHtmlMatches are affected by the bug, hence the use
+  // of plain string matching.
+  var url = 'http://foo:bar@example.com';
+  var input = '<div style="background-image: url(\'' + url + '\');">' +
+      '<img src="' + url + '" /></div>';
+  var expectedIE = '<div style="background-image: url(&quot;' + url +
+      '&quot;);"><img src="' + url + '" /></div>';
+  var sanitizer =
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .allowCssStyles()
+          .build();
+  if (goog.userAgent.EDGE_OR_IE) {
+    assertEquals(
+        expectedIE, goog.html.SafeHtml.unwrap(sanitizer.sanitize(input)));
+  } else {
+    assertSanitizedHtml(input, input, sanitizer);
+  }
 }

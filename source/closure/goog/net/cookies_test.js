@@ -209,6 +209,17 @@ function testGetEmptyCookieIE() {
   assertEquals('', cookies.get('test3'));
 }
 
+function testGetReallyEmptyCookieIE() {
+  stubs.set(cookies, 'getCookie_', function() {
+    return 'test1; ; test3';
+  });
+
+  assertEquals('', cookies.get('test1'));
+  assertEquals('', cookies.get(''));
+  assertEquals('', cookies.get('test3'));
+  assertEquals(3, cookies.getCount());
+}
+
 // TODO(chrisn): Testing max age > 0 requires a mock clock.
 
 function mockSetCookie(var_args) {

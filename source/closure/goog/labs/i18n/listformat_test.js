@@ -89,7 +89,7 @@ function testListFormatterSpecialLanguages() {
       fmt_ml.format(['One', 'Two', 'Three']));
 
   // Only the two items pattern is special with Zulu
-  assertEquals('I-One ne-Two', fmt_zu.format(['One', 'Two']));
+  assertEquals('One ne-Two', fmt_zu.format(['One', 'Two']));
 }
 
 function testVariousObjectTypes() {

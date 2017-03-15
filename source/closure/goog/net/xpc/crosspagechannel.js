@@ -710,7 +710,7 @@ goog.net.xpc.CrossPageChannel.prototype.xpcDeliver = function(
   }
 
   // Check whether the origin of the message is as expected.
-  if (!this.isMessageOriginAcceptable_(opt_origin)) {
+  if (!this.isMessageOriginAcceptable(opt_origin)) {
     goog.log.warning(
         goog.net.xpc.logger, 'Message received from unapproved origin "' +
             opt_origin + '" - rejected.');
@@ -816,9 +816,9 @@ goog.net.xpc.CrossPageChannel.prototype.updateChannelNameAndCatalog = function(
  * or the message is unacceptable.
  * @param {string=} opt_origin The origin associated with the incoming message.
  * @return {boolean} Whether the message is acceptable.
- * @private
+ * @package
  */
-goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
+goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable = function(
     opt_origin) {
   var peerHostname = this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
   return goog.string.isEmptyOrWhitespace(goog.string.makeSafe(opt_origin)) ||

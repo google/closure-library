@@ -78,7 +78,8 @@ goog.date.month = {
 goog.date.formatMonthAndYear = function(monthName, yearNum) {
   /** @desc Month/year format given the month name and the numeric year. */
   var MSG_MONTH_AND_YEAR = goog.getMsg(
-      '{$monthName} {$yearNum}', {'monthName': monthName, 'yearNum': yearNum});
+      '{$monthName} {$yearNum}',
+      {'monthName': monthName, 'yearNum': String(yearNum)});
   return MSG_MONTH_AND_YEAR;
 };
 
@@ -729,10 +730,6 @@ goog.date.Interval.prototype.add = function(interval) {
  * Closure APIs should accept goog.date.DateLike instead of the real Date
  * object.
  *
- * To allow goog.date.Date objects to be passed as arguments to methods
- * expecting Date objects this class is marked as extending the built in Date
- * object even though that's not strictly true.
- *
  * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like
  *     object. If not set, the created object will contain the date
  *     determined by goog.now().
@@ -931,7 +928,7 @@ goog.date.Date.prototype.getUTCHours = function() {
 
 
 /**
- * @return {number} The hours value according to universal time.
+ * @return {number} The minutes value according to universal time.
  */
 goog.date.Date.prototype.getUTCMinutes = function() {
   return this.date.getUTCMinutes();
@@ -1701,17 +1698,7 @@ goog.date.DateTime.prototype.toUsTimeString = function(
 
   // by default, show am/pm suffix
   if (opt_showAmPm) {
-    /**
-     * @desc Suffix for morning times.
-     */
-    var MSG_TIME_AM = goog.getMsg('am');
-
-    /**
-     * @desc Suffix for afternoon times.
-     */
-    var MSG_TIME_PM = goog.getMsg('pm');
-
-    label += isPM ? MSG_TIME_PM : MSG_TIME_AM;
+    label += isPM ? 'pm' : 'am';
   }
   return label;
 };

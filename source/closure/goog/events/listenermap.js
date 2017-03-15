@@ -20,6 +20,7 @@
  * WARNING: Do not use this class from outside goog.events package.
  *
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
+ * @visibility {//closure/goog:__pkg__}
  * @visibility {//closure/goog/events:__pkg__}
  * @visibility {//closure/goog/labs/events:__pkg__}
  */

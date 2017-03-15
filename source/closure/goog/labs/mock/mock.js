@@ -236,7 +236,6 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
         } else {
           previous.push(obj);
           output.push('{');
-          var inner_obj = [];
           for (var x in obj) {
             output.push(' ');
             output.push(

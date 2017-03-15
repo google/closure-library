@@ -143,6 +143,7 @@ goog.async.nextTick.setImmediate_;
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
+  /** @type {!Function|undefined} */
   var Channel = goog.global['MessageChannel'];
   // If MessageChannel is not available and we are in a browser, implement
   // an iframe based polyfill in browsers that have postMessage and
@@ -193,7 +194,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       };
     };
   }
-  if (typeof Channel !== 'undefined' && (!goog.labs.userAgent.browser.isIE())) {
+  if (typeof Channel !== 'undefined' && !goog.labs.userAgent.browser.isIE()) {
     // Exclude all of IE due to
     // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
     // which allows starving postMessage with a busy setTimeout loop.

@@ -6,5 +6,5 @@
 
 <!-- URLS -->
 
-[Getting Started]: {{site.github.url}}/develop/get-started
+[Getting Started]: /closure/goog/g3doc/develop/get-started
 

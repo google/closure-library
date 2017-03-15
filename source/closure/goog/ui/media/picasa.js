@@ -149,8 +149,6 @@ goog.ui.media.PicasaAlbum.prototype.createDom = function(c) {
 
   var picasaAlbum =
       /** @type {goog.ui.media.PicasaAlbumModel} */ (control.getDataModel());
-  var authParam =
-      picasaAlbum.getAuthKey() ? ('&authkey=' + picasaAlbum.getAuthKey()) : '';
   var flash = new goog.ui.media.FlashObject(
       picasaAlbum.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.addFlashVars(picasaAlbum.getPlayer().getVars());

@@ -584,6 +584,105 @@ function testThrottleArgumentAndScopeBinding() {
 }
 
 
+function testRateLimit() {
+  // Encoded sequences of commands to perform mapped to expected # of calls.
+  //   f: fire
+  //   w: wait (for the timer to elapse)
+  assertAsyncDecoratorCommandSequenceCalls(goog.functions.rateLimit, {
+    'f': 1,
+    'ff': 1,
+    'fff': 1,
+    'fw': 1,
+    'ffw': 1,
+    'fwf': 2,
+    'fffw': 1,
+    'fwfff': 2,
+    'fwfffw': 2,
+    'fwffwf': 3,
+    'ffwf': 2,
+    'ffwff': 2,
+    'ffwfw': 2,
+    'ffwffwf': 3,
+    'ffwffwff': 3,
+    'ffwffwffw': 3,
+    'ffwwwffwwfw': 3,
+    'ffwwwffwwfwf': 4
+  });
+}
+
+
+function testRateLimitScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'y': 0};
+  goog.functions.rateLimit(function() {
+    ++this['y'];
+  }, interval, x)();
+  assertEquals(1, x['y']);
+
+  mockClock.uninstall();
+}
+
+
+function testRateLimitArgumentBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var calls = 0;
+  var rateLimitedFn = goog.functions.rateLimit(function(a, b, c) {
+    ++calls;
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval);
+
+  rateLimitedFn(3, 'string', false);
+  assertEquals(1, calls);
+
+  // goog.functions.rateLimit should always pass the first arguments passed to
+  // the
+  // decorator into the decorated function, even if called multiple times.
+  rateLimitedFn();
+  mockClock.tick(interval / 2);
+  rateLimitedFn(8, null, true);
+  mockClock.tick(interval);
+  rateLimitedFn(3, 'string', false);
+  assertEquals(2, calls);
+
+  mockClock.uninstall();
+}
+
+
+function testRateLimitArgumentAndScopeBinding() {
+  var interval = 500;
+  var mockClock = new goog.testing.MockClock(true);
+
+  var x = {'calls': 0};
+  var rateLimitedFn = goog.functions.rateLimit(function(a, b, c) {
+    ++this['calls'];
+    assertEquals(3, a);
+    assertEquals('string', b);
+    assertEquals(false, c);
+  }, interval, x);
+
+  rateLimitedFn(3, 'string', false);
+  assertEquals(1, x['calls']);
+
+  // goog.functions.rateLimit should always pass the last arguments passed to
+  // the
+  // decorator into the decorated function, even if called multiple times.
+  rateLimitedFn();
+  mockClock.tick(interval / 2);
+  rateLimitedFn(8, null, true);
+  mockClock.tick(interval);
+  rateLimitedFn(3, 'string', false);
+  assertEquals(2, x['calls']);
+
+  mockClock.uninstall();
+}
+
+
 /**
  * Wraps a {@code goog.testing.recordFunction} with the specified decorator and
  * executes a list of command sequences, asserting that in each case the

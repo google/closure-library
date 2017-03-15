@@ -333,6 +333,9 @@ function testAssertObjectNotEquals() {
 
   // Check with obj5 and obj4 as first and second arguments respectively.
   assertObjectNotEquals(obj5, obj4);
+
+  assertObjectNotEquals(new Map([['a', '1']]), new Map([['b', '1']]));
+  assertObjectNotEquals(new Set(['a', 'b']), new Set(['a']));
 }
 
 function testAssertObjectEquals2() {
@@ -964,6 +967,10 @@ function testFindDifferences_equal() {
       goog.testing.asserts.findDifferences([{a: 1, b: 2}], [{b: 2, a: 1}]));
   assertNull(goog.testing.asserts.findDifferences(null, null));
   assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
+  assertNull(goog.testing.asserts.findDifferences(
+      new Map([['a', 1], ['b', 2]]), new Map([['b', 2], ['a', 1]])));
+  assertNull(goog.testing.asserts.findDifferences(
+      new Set(['a', 'b']), new Set(['b', 'a'])));
 }
 
 function testFindDifferences_unequal() {
@@ -974,6 +981,31 @@ function testFindDifferences_unequal() {
       goog.testing.asserts.findDifferences([{a: 1}], [{a: 1, b: [2]}]));
   assertNotNull(
       goog.testing.asserts.findDifferences([{a: 1, b: [2]}], [{a: 1}]));
+
+  assertNotNull(
+      'Second map is missing key "a"; first map is missing key "b"',
+      goog.testing.asserts.findDifferences(
+          new Map([['a', 1]]), new Map([['b', 2]])));
+  assertNotNull(
+      'Value for key "a" differs by value',
+      goog.testing.asserts.findDifferences(
+          new Map([['a', '1']]), new Map([['a', '2']])));
+  assertNotNull(
+      'Value for key "a" differs by type',
+      goog.testing.asserts.findDifferences(
+          new Map([['a', '1']]), new Map([['a', 1]])));
+
+  assertNotNull(
+      'Second set is missing key "a"',
+      goog.testing.asserts.findDifferences(
+          new Set(['a', 'b']), new Set(['b'])));
+  assertNotNull(
+      'First set is missing key "b"',
+      goog.testing.asserts.findDifferences(
+          new Set(['a']), new Set(['a', 'b'])));
+  assertNotNull(
+      'Values have different types"',
+      goog.testing.asserts.findDifferences(new Set(['1']), new Set([1])));
 }
 
 function testFindDifferences_objectsAndNull() {

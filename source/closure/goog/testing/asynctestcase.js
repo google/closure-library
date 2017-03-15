@@ -508,6 +508,7 @@ goog.testing.AsyncTestCase.prototype.runTests = function() {
   this.hookAssert_();
   this.hookOnError_();
 
+  goog.testing.TestCase.currentTestName = null;
   this.setNextStep_(this.doSetUpPage_, 'setUpPage');
   // We are an entry point, so we pump.
   this.pump_();
@@ -847,6 +848,8 @@ goog.testing.AsyncTestCase.prototype.doIteration_ = function() {
   this.expectedSignalCount_ = 0;
   this.receivedSignalCount_ = 0;
   this.activeTest = this.next();
+  goog.testing.TestCase.currentTestName =
+      this.activeTest ? this.activeTest.name : null;
   if (this.activeTest && this.running) {
     this.result_.runCount++;
     // If this test should be marked as having failed, doIteration will go

@@ -19,7 +19,13 @@
  *   //depot/google3/i18n/tools/java/com/google/i18n/generator:generator
  * using the --for_closure flag.
  *
- * File generated from CLDR ver. 29
+ * File generated from CLDR ver. 30.0.2
+ * go/js-locale-data-update
+ *
+ * Before checking, this file could have been manually edited. This is
+ * to incorporate changes before we could fix CLDR. All manual
+ * modification must be documented in this section, and should be
+ * removed after those changes land to CLDR.
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -29,10 +35,6 @@
  * "datetimepatternsext.js", which will be generated at
  * the same time together with this file.
  *
- * Before checking, this file could have been manually edited. This is
- * to incorporate changes before we could fix CLDR. All manual
- * modification must be documented in this section, and should be
- * removed after those changes land to CLDR.
  * @suppress {const}
  */
 
@@ -243,7 +245,7 @@ goog.i18n.DateTimePatterns_az = {
  */
 goog.i18n.DateTimePatterns_be = {
   YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_FULL_WITH_ERA: 'y \'г\'. G',
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL y',
   MONTH_DAY_ABBR: 'd MMM',
@@ -300,7 +302,7 @@ goog.i18n.DateTimePatterns_bn = {
  */
 goog.i18n.DateTimePatterns_br = {
   YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_FULL_WITH_ERA: 'G y',
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'y MMMM',
   MONTH_DAY_ABBR: 'd MMM',
@@ -322,14 +324,14 @@ goog.i18n.DateTimePatterns_bs = {
   YEAR_FULL_WITH_ERA: 'y. G',
   YEAR_MONTH_ABBR: 'MMM y.',
   YEAR_MONTH_FULL: 'LLLL y.',
-  MONTH_DAY_ABBR: 'dd. MMM',
+  MONTH_DAY_ABBR: 'd. MMM',
   MONTH_DAY_FULL: 'dd. MMMM',
-  MONTH_DAY_SHORT: 'dd.MM.',
+  MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
-  DAY_ABBR: 'd'
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -345,7 +347,7 @@ goog.i18n.DateTimePatterns_ca = {
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd LLL y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
   DAY_ABBR: 'd'
@@ -365,7 +367,7 @@ goog.i18n.DateTimePatterns_chr = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
   DAY_ABBR: 'd'
 };
@@ -466,7 +468,7 @@ goog.i18n.DateTimePatterns_el = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'y G',
   YEAR_MONTH_ABBR: 'MMM y',
-  YEAR_MONTH_FULL: 'MMMM y',
+  YEAR_MONTH_FULL: 'LLLL y',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd/M',
@@ -548,7 +550,7 @@ goog.i18n.DateTimePatterns_en_GB = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
   DAY_ABBR: 'd'
 };
@@ -875,16 +877,16 @@ goog.i18n.DateTimePatterns_ga = {
  */
 goog.i18n.DateTimePatterns_gl = {
   YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'G y',
-  YEAR_MONTH_ABBR: 'MMM y',
-  YEAR_MONTH_FULL: 'MMMM y',
-  MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM',
-  MONTH_DAY_SHORT: 'd-M',
-  MONTH_DAY_MEDIUM: 'd MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'LLL \'de\' y',
+  YEAR_MONTH_FULL: 'LLLL \'de\' y',
+  MONTH_DAY_ABBR: 'd \'de\' MMM',
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd \'de\' MMM \'de\' y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d \'de\' MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'ccc, d \'de\' MMM \'de\' y',
   DAY_ABBR: 'd'
 };
 
@@ -994,7 +996,7 @@ goog.i18n.DateTimePatterns_hr = {
   YEAR_MONTH_FULL: 'LLLL y.',
   MONTH_DAY_ABBR: 'd. MMM',
   MONTH_DAY_FULL: 'dd. MMMM',
-  MONTH_DAY_SHORT: 'dd.MM.',
+  MONTH_DAY_SHORT: 'dd. MM.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
@@ -1027,16 +1029,16 @@ goog.i18n.DateTimePatterns_hu = {
  */
 goog.i18n.DateTimePatterns_hy = {
   YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'G yթ.',
-  YEAR_MONTH_ABBR: 'yթ. LLL',
+  YEAR_FULL_WITH_ERA: 'G y թ.',
+  YEAR_MONTH_ABBR: 'y թ. LLL',
   YEAR_MONTH_FULL: 'yթ․ MMMM',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'MMMM dd',
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'MMMM d',
-  MONTH_DAY_YEAR_MEDIUM: 'd MMM, yթ.',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y թ.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMM, EEE',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'yթ. MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y թ. MMM d, EEE',
   DAY_ABBR: 'd'
 };
 
@@ -1203,7 +1205,7 @@ goog.i18n.DateTimePatterns_km = {
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'MMMM dd',
-  MONTH_DAY_SHORT: 'd-M',
+  MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
@@ -1257,11 +1259,11 @@ goog.i18n.DateTimePatterns_ky = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'G y-\'ж\'.',
   YEAR_MONTH_ABBR: 'y-\'ж\'. MMM',
-  YEAR_MONTH_FULL: 'y MMMM',
+  YEAR_MONTH_FULL: 'y-\'ж\'., MMMM',
   MONTH_DAY_ABBR: 'd-MMM',
-  MONTH_DAY_FULL: 'MMMM dd',
+  MONTH_DAY_FULL: 'dd-MMMM',
   MONTH_DAY_SHORT: 'dd-MM',
-  MONTH_DAY_MEDIUM: 'MMMM d',
+  MONTH_DAY_MEDIUM: 'd-MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'y-\'ж\'. d-MMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd-MMM, EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y-\'ж\'. d-MMM, EEE',
@@ -1358,7 +1360,7 @@ goog.i18n.DateTimePatterns_mk = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
@@ -1447,7 +1449,7 @@ goog.i18n.DateTimePatterns_ms = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'G y',
   YEAR_MONTH_ABBR: 'MMM y',
-  YEAR_MONTH_FULL: 'MMMM y',
+  YEAR_MONTH_FULL: 'y MMMM',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd-M',
@@ -1465,15 +1467,15 @@ goog.i18n.DateTimePatterns_ms = {
 goog.i18n.DateTimePatterns_mt = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'G y',
-  YEAR_MONTH_ABBR: 'y MMM',
-  YEAR_MONTH_FULL: 'y MMMM',
+  YEAR_MONTH_ABBR: 'MMM y',
+  YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd',
+  MONTH_DAY_FULL: 'dd \'ta\'’ MMMM',
   MONTH_DAY_SHORT: 'MM-dd',
-  MONTH_DAY_MEDIUM: 'MMMM d',
-  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_MEDIUM: 'd \'ta\'’ MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd \'ta\'’ MMM, y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d \'ta\'’ MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'ta\'’ MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1487,12 +1489,12 @@ goog.i18n.DateTimePatterns_my = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM',
+  MONTH_DAY_FULL: 'MMMM dd',
   MONTH_DAY_SHORT: 'd/M',
-  MONTH_DAY_MEDIUM: 'd MMMM',
+  MONTH_DAY_MEDIUM: 'MMMM d',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE၊ d MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE၊ d MMM y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d ရက် EEEနေ့',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM y EEEနေ့',
   DAY_ABBR: 'd'
 };
 
@@ -1623,15 +1625,15 @@ goog.i18n.DateTimePatterns_pa = {
 goog.i18n.DateTimePatterns_pl = {
   YEAR_FULL: 'y',
   YEAR_FULL_WITH_ERA: 'y G',
-  YEAR_MONTH_ABBR: 'MM.y',
+  YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL y',
-  MONTH_DAY_ABBR: 'd.MM',
+  MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'd.MM.y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d.MM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d.MM.y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1728,7 +1730,7 @@ goog.i18n.DateTimePatterns_sh = {
   YEAR_MONTH_FULL: 'MMMM y.',
   MONTH_DAY_ABBR: 'd. MMM',
   MONTH_DAY_FULL: 'dd. MMMM',
-  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
@@ -1784,9 +1786,9 @@ goog.i18n.DateTimePatterns_sl = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd MMMM',
+  MONTH_DAY_FULL: 'dd. MMMM',
   MONTH_DAY_SHORT: 'd. M.',
-  MONTH_DAY_MEDIUM: 'd MMMM',
+  MONTH_DAY_MEDIUM: 'd. MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
@@ -1823,7 +1825,7 @@ goog.i18n.DateTimePatterns_sr = {
   YEAR_MONTH_FULL: 'MMMM y.',
   MONTH_DAY_ABBR: 'd. MMM',
   MONTH_DAY_FULL: 'dd. MMMM',
-  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
@@ -1962,9 +1964,9 @@ goog.i18n.DateTimePatterns_tr = {
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
-  MONTH_DAY_SHORT: 'dd/MM',
-  MONTH_DAY_MEDIUM: 'dd MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMMM EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM y EEE',
   DAY_ABBR: 'd'
@@ -2120,7 +2122,7 @@ goog.i18n.DateTimePatterns_zu = {
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'MMM d',
   MONTH_DAY_FULL: 'MMMM dd',
-  MONTH_DAY_SHORT: 'M/d',
+  MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',

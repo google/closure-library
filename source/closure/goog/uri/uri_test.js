@@ -125,6 +125,13 @@ function testAbsolutePathResolution() {
       'http://www.google.com:8080/foo/bar',
       goog.Uri.resolve('http://www.google.com:8080/search/', '/foo/bar')
           .toString());
+
+  assertEquals(
+      'http://www.google.com:8080/path?q=que%2Br%20y#fragmento',
+      goog.Uri
+          .resolve(
+              'http://www.google.com:8080/', '/path?q=que%2Br%20y#fragmento')
+          .toString());
 }
 
 function testRelativePathResolution() {

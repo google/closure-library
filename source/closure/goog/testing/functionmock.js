@@ -81,6 +81,24 @@ goog.testing.MethodMock = function(scope, functionName, opt_strictness) {
   return fn;
 };
 
+
+/**
+ * Mocks an existing function. Creates a goog.testing.FunctionMock
+ * and registers it according to scopeFunctionName.
+ * @param {!goog.testing.ObjectPropertyString} scopeFunctionName Scope and
+ *     function name.
+ * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
+ *     goog.testing.Mock.STRICT. The default is STRICT.
+ * @return {!goog.testing.MockInterface} The mocked method.
+ */
+goog.testing.MethodMock.fromObjectPropertyString = function(
+    scopeFunctionName, opt_strictness) {
+  return goog.testing.MethodMock(
+      scopeFunctionName.getObject(), scopeFunctionName.getPropertyString(),
+      opt_strictness);
+};
+
+
 /**
  * @private
  * @record @extends {goog.testing.MockInterface}

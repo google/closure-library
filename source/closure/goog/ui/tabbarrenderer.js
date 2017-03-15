@@ -135,6 +135,7 @@ goog.ui.TabBarRenderer.prototype.createClassByLocationMap_ = function() {
    * and string concatenation.
    * @type {Object}
    * @private
+   * @suppress {missingRequire} goog.ui.TabBar
    */
   this.classByLocation_ = goog.object.create(
       goog.ui.TabBar.Location.TOP, goog.getCssName(baseClass, 'top'),

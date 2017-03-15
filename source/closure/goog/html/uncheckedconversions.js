@@ -100,7 +100,7 @@ goog.html.uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract =
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmpty(goog.string.Const.unwrap(justification)),
+      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
       script);

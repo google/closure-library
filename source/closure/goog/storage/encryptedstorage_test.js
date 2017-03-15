@@ -20,7 +20,7 @@ goog.require('goog.storage.EncryptedStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
 goog.require('goog.storage.collectableStorageTester');
-goog.require('goog.storage.storage_test');
+goog.require('goog.storage.storageTester');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PseudoRandom');
 goog.require('goog.testing.jsunit');
@@ -59,7 +59,7 @@ function hammingDistance(a, b) {
 function testBasicOperations() {
   var mechanism = new goog.testing.storage.FakeMechanism();
   var storage = new goog.storage.EncryptedStorage(mechanism, 'secret');
-  goog.storage.storage_test.runBasicTests(storage);
+  goog.storage.storageTester.runBasicTests(storage);
 }
 
 
@@ -117,8 +117,9 @@ function testEncryption() {
       storage.hashKeyWithSecret_('first'),
       goog.json.serialize(encryptedWrapper));
   assertEquals(
-      goog.storage.ErrorCode.DECRYPTION_ERROR,
-      assertThrows(function() { storage.get('first') }));
+      goog.storage.ErrorCode.DECRYPTION_ERROR, assertThrows(function() {
+        storage.get('first');
+      }));
 
   // Test garbage collection.
   storage.collect();

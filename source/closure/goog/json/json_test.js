@@ -525,6 +525,25 @@ function testToJSONSerialize() {
 }
 
 
+function testTryNativeJson() {
+  goog.json.TRY_NATIVE_JSON = true;
+  var error;
+  goog.json.setErrorLogger(function(message, ex) {
+    error = message;
+  });
+
+  goog.json.unsafeParse('{"a":[,1]}');
+  assertEquals('Invalid JSON: {"a":[,1]}', error);
+
+  error = undefined;
+  goog.json.parse('{"a":[,1]}');
+  assertEquals('Invalid JSON: {"a":[,1]}', error);
+
+  goog.json.TRY_NATIVE_JSON = false;
+  goog.json.setErrorLogger(goog.nullFunction);
+}
+
+
 /**
  * Asserts that the given object serializes to the given value.
  * If the current browser has an implementation of JSON.serialize,

@@ -81,7 +81,7 @@ function assertCSSTextEquals(expectedCssText, actualCssText) {
 }
 
 /**
- * Get sanitized inline style.
+ * Gets sanitized inline style.
  * @param {string} sourceCss CSS to be sanitized.
  * @param {function (string, string):?string=} opt_urlRewrite URL rewriter that
  *     only returns an unwrapped goog.html.SafeUrl.
@@ -106,7 +106,7 @@ function getSanitizedInlineStyle(sourceCss, opt_urlRewrite) {
 
 
 /**
- * Function that mimics sanitization done by the Html sanitizer.
+ * Mimics sanitization done by the Html sanitizer.
  * @param {string} url Original url
  * @return {?string} Sanitized url
  * @private

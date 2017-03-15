@@ -51,6 +51,15 @@ goog.soy.StrictTemplate;
 
 
 /**
+ * Type definition for strict Soy HTML templates. Very useful when passing
+ * a template as an argument.
+ * @typedef {function(?, null=, ?Object<string, *>=):
+ *     !goog.soy.data.SanitizedHtml}
+ */
+goog.soy.StrictHtmlTemplate;
+
+
+/**
  * Sets the processed template as the innerHTML of an element. It is recommended
  * to use this helper function instead of directly setting innerHTML in your
  * hand-written code, so that it will be easier to audit the code for cross-site

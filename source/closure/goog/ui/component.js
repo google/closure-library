@@ -887,7 +887,7 @@ goog.ui.Component.prototype.makeId = function(idFragment) {
  * object's values are the id fragments and the new values are the generated
  * ids.  The key will remain the same.
  * @param {Object} object The object that will be used to create the ids.
- * @return {!Object} An object of id keys to generated ids.
+ * @return {!Object<string, string>} An object of id keys to generated ids.
  */
 goog.ui.Component.prototype.makeIds = function(object) {
   var ids = {};

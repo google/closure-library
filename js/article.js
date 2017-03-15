@@ -1,7 +1,7 @@
 // Documentation licensed under CC BY 4.0
 // License available at https://creativecommons.org/licenses/by/4.0/
 
-// TODO(sdh): Bring in Closure library and compiler.
+// TODO(user): Bring in Closure library and compiler.
 
 var closure = window.closure || {};
 closure.docs = closure.docs || {};
@@ -20,7 +20,8 @@ closure.docs.LOCATION = String(window.location);
  * @return {*} Result, or undefined.
  */
 closure.docs.get = function(param) {
-  return window['_JEKYLL_DATA'][param];
+  var data = window['_JEKYLL_DATA'];
+  return data && data[param];
 };
 
 
@@ -180,7 +181,7 @@ closure.docs.fixLinkText = function() {
     if (!/^#/.test(href) || !/^\?\?+$/.test(link.textContent)) return;
     var heading = document.getElementById(href.substring(1));
     if (heading) link.textContent = heading.textContent;
-    // TODO(sdh): allow including/excluding the number?
+    // TODO(user): allow including/excluding the number?
   });
 };
 
@@ -193,7 +194,7 @@ closure.docs.buildToc = function() {
   // Read a few page-level parameters to customize.
   var min = Number(closure.docs.get('page.toc.min') || 2);
   var max = Number(closure.docs.get('page.toc.max') || 3);
-  // TODO(sdh): allow further customization of numbering?
+  // TODO(user): allow further customization of numbering?
   var stack = [];
   closure.docs.forEachHeading(function(heading, level) {
     if (level < min || level > max) return;

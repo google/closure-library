@@ -15,7 +15,9 @@
 goog.provide('goog.labs.testing.environmentTest');
 goog.setTestOnly('goog.labs.testing.environmentTest');
 
+goog.require('goog.Promise');
 goog.require('goog.labs.testing.Environment');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
@@ -104,6 +106,87 @@ function testLifecycle() {
   testing = false;
 }
 
+function testLifecycle_withPromises() {
+  var mockClock = new goog.testing.MockClock(true /* autoinstall */);
+  testing = true;
+
+  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+  testCase.registerEnvironment_(envOne);
+  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+  testCase.registerEnvironment_(envTwo);
+  var testObj = {
+    'configureEnvironment':
+        mockControl.createFunctionMock('configureEnvironment'),
+    'setUpPage': mockControl.createFunctionMock('setUpPage'),
+    'setUp': mockControl.createFunctionMock('setUp'),
+    'tearDown': mockControl.createFunctionMock('tearDown'),
+    'tearDownPage': mockControl.createFunctionMock('tearDownPage'),
+    'testFoo': mockControl.createFunctionMock('testFoo')
+  };
+  testCase.setTestObj(testObj);
+
+  // Make the testCase.runTestsReturningPromise() a pending operation so we can
+  // use assertNextCall also for checking the first call.
+  var resultPromise;
+  var pendingOp = goog.Promise.withResolver();
+  pendingOp.promise.then(function() {
+    resultPromise = testCase.runTestsReturningPromise();
+  });
+  var nextOp = null;
+  var finishPendingOp = function() {
+    pendingOp.resolve();
+    pendingOp = nextOp;
+    nextOp = null;
+    mockClock.tick();
+  };
+  var expectCallTo = function(expectedCall) {
+    assertNull(nextOp);
+    mockControl.$resetAll();
+    nextOp = goog.Promise.withResolver();
+    expectedCall().$returns(nextOp.promise);
+    mockControl.$replayAll();
+    finishPendingOp();
+    mockControl.$verifyAll();
+  };
+  // Make sure there are no hanging expecations dropped by the first $resetAll.
+  mockControl.$replayAll();
+  mockControl.$verifyAll();
+
+  expectCallTo(envOne.setUpPage);
+  expectCallTo(envTwo.setUpPage);
+  expectCallTo(testObj.setUpPage);
+  expectCallTo(testObj.configureEnvironment);
+  expectCallTo(envOne.setUp);
+  expectCallTo(envTwo.setUp);
+  expectCallTo(testObj.setUp);
+  expectCallTo(testObj.testFoo);
+
+  mockControl.$resetAll();
+  testObj.tearDown();
+  envTwo.tearDown();
+  envOne.tearDown();
+  testObj.tearDownPage();
+  envTwo.tearDownPage();
+  envOne.tearDownPage();
+  mockControl.$replayAll();
+  finishPendingOp();
+  var result = mockClock.tickPromise(resultPromise);
+  mockControl.$verifyAll();
+  assertTrue(result.complete);
+  assertEquals(1, result.totalCount);
+  assertEquals(1, result.runCount);
+  assertEquals(1, result.successCount);
+  // We expect 1 error from the test because the mockClock is set by the outer
+  // test and is only cleared at the end of this method.
+  assertEquals(1, result.errors.length);
+  assertEquals(
+      'ERROR: Test did not restore setTimeout and clearTimeout',
+      result.errors[0].message);
+
+  testing = false;
+  mockClock.uninstall();
+}
+
 function testTearDownWithMockControl() {
   testing = true;
 
@@ -154,7 +237,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(8, testCase.tests_.length);
+  assertEquals(9, testCase.tests_.length);
 
   testing = false;
 }
@@ -265,5 +348,5 @@ function testMock() {
 }
 
 function assertTestFailure(testCase, name, message) {
-  assertContains(message, testCase.result_.resultsByName[name][0]);
+  assertContains(message, testCase.result_.resultsByName[name][0].toString());
 }

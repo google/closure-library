@@ -114,6 +114,7 @@ goog.events.EventType = {
   BEFOREUNLOAD: 'beforeunload',
   CONSOLEMESSAGE: 'consolemessage',
   CONTEXTMENU: 'contextmenu',
+  DEVICEMOTION: 'devicemotion',
   DEVICEORIENTATION: 'deviceorientation',
   DOMCONTENTLOADED: 'DOMContentLoaded',
   ERROR: 'error',
@@ -222,10 +223,17 @@ goog.events.EventType = {
 
   // Native IMEs/input tools events.
   TEXT: 'text',
-  TEXTINPUT: 'textInput',
+  // The textInput event is supported in IE9+, but only in lower case. All other
+  // browsers use the camel-case event name.
+  TEXTINPUT: goog.userAgent.IE ? 'textinput' : 'textInput',
   COMPOSITIONSTART: 'compositionstart',
   COMPOSITIONUPDATE: 'compositionupdate',
   COMPOSITIONEND: 'compositionend',
+
+  // The beforeinput event is initially only supported in Safari. See
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=342670 for Chrome
+  // implementation tracking.
+  BEFOREINPUT: 'beforeinput',
 
   // Webview tag events
   // See http://developer.chrome.com/dev/apps/webview_tag.html

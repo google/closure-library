@@ -513,13 +513,10 @@ goog.uri.utils.haveSameDomain = function(uri1, uri2) {
  * @private
  */
 goog.uri.utils.assertNoFragmentsOrQueries_ = function(uri) {
-  // NOTE: would use goog.asserts here, but jscompiler doesn't know that
-  // indexOf has no side effects.
-  if (goog.DEBUG && (uri.indexOf('#') >= 0 || uri.indexOf('?') >= 0)) {
-    throw Error(
-        'goog.uri.utils: Fragment or query identifiers are not ' +
-        'supported: [' + uri + ']');
-  }
+  goog.asserts.assert(
+      uri.indexOf('#') < 0 && uri.indexOf('?') < 0,
+      'goog.uri.utils: Fragment or query identifiers are not supported: [%s]',
+      uri);
 };
 
 
@@ -638,13 +635,14 @@ goog.uri.utils.appendQueryData_ = function(buffer) {
 
 /**
  * Appends key=value pairs to an array, supporting multi-valued objects.
- * @param {string} key The key prefix.
+ * @param {*} key The key prefix.
  * @param {goog.uri.utils.QueryValue} value The value to serialize.
  * @param {!Array<string>} pairs The array to which the 'key=value' strings
  *     should be appended.
  * @private
  */
 goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
+  goog.asserts.assertString(key);
   if (goog.isArray(value)) {
     // Convince the compiler it's an array.
     goog.asserts.assertArray(value);

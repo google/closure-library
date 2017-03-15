@@ -98,7 +98,9 @@ goog.db.ObjectStore.prototype.insert_ = function(fn, msg, value, opt_key) {
     d.errback(goog.db.Error.fromException(ex, msg));
     return d;
   }
-  request.onsuccess = function(ev) { d.callback(); };
+  request.onsuccess = function(ev) {
+    d.callback(ev.target.result);
+  };
   request.onerror = function(ev) {
     msg += goog.debug.deepExpose(value);
     if (opt_key) {
@@ -220,11 +222,10 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
   }
 
   var result = [];
-  var key =
-      goog.events.listen(cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
-        result.push(cursor.getValue());
-        cursor.next();
-      });
+  goog.events.listen(cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+    result.push(cursor.getValue());
+    cursor.next();
+  });
 
   goog.events.listenOnce(
       cursor,

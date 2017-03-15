@@ -392,7 +392,16 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
 
   // Dispatch DRAGSTART event
   var dragStartEvent = new goog.fx.DragDropEvent(
-      goog.fx.AbstractDragDrop.EventType.DRAGSTART, this, this.dragItem_);
+      goog.fx.AbstractDragDrop.EventType.DRAGSTART, this, this.dragItem_,
+      undefined,  // opt_target
+      undefined,  // opt_targetItem
+      undefined,  // opt_targetElement
+      undefined,  // opt_clientX
+      undefined,  // opt_clientY
+      undefined,  // opt_x
+      undefined,  // opt_y
+      undefined,  // opt_subtarget
+      event);
   if (this.dispatchEvent(dragStartEvent) == false) {
     this.dragItem_ = null;
     return;
@@ -530,7 +539,7 @@ goog.fx.AbstractDragDrop.prototype.endDrag = function(event) {
     var dropEvent = new goog.fx.DragDropEvent(
         goog.fx.AbstractDragDrop.EventType.DROP, this, this.dragItem_,
         activeTarget.target_, activeTarget.item_, activeTarget.element_,
-        clientX, clientY, x, y, subtarget);
+        clientX, clientY, x, y, subtarget, event.browserEvent);
     activeTarget.target_.dispatchEvent(dropEvent);
   }
 
@@ -1184,13 +1193,15 @@ goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
  * @param {number=} opt_x X-Position relative to the viewport.
  * @param {number=} opt_y Y-Position relative to the viewport.
  * @param {Object=} opt_subtarget The currently active subtarget.
+ * @param {goog.events.BrowserEvent=} opt_browserEvent The browser event
+ *     that caused this dragdrop event.
  * @extends {goog.events.Event}
  * @constructor
  * @struct
  */
 goog.fx.DragDropEvent = function(
     type, source, sourceItem, opt_target, opt_targetItem, opt_targetElement,
-    opt_clientX, opt_clientY, opt_x, opt_y, opt_subtarget) {
+    opt_clientX, opt_clientY, opt_x, opt_y, opt_subtarget, opt_browserEvent) {
   // TODO(eae): Get rid of all the optional parameters and have the caller set
   // the fields directly instead.
   goog.fx.DragDropEvent.base(this, 'constructor', type);
@@ -1255,6 +1266,12 @@ goog.fx.DragDropEvent = function(
    * @type {Object|undefined}
    */
   this.subtarget = opt_subtarget;
+
+  /**
+   * The browser event that caused this dragdrop event.
+   * @const
+   */
+  this.browserEvent = opt_browserEvent;
 };
 goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
 

@@ -22,10 +22,10 @@
 
 goog.module('goog.net.streams.Base64PbStreamParser');
 
-var asserts = goog.require('goog.asserts');
 var Base64StreamDecoder = goog.require('goog.net.streams.Base64StreamDecoder');
 var PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
 var StreamParser = goog.require('goog.net.streams.StreamParser');
+var asserts = goog.require('goog.asserts');
 
 
 /**
@@ -51,7 +51,7 @@ var Base64PbStreamParser = function() {
 
   /**
    * Base64 stream decoder
-   * @private @const
+   * @private @const {!Base64StreamDecoder}
    */
   this.base64Decoder_ = new Base64StreamDecoder();
 

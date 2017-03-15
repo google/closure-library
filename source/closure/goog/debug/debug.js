@@ -221,6 +221,7 @@ goog.debug.exposeArray = function(arr) {
  * @param {Object} err Error object or string.
  * @param {Function=} opt_fn Optional function to start stack trace from.
  * @return {string} Details of exception, as HTML.
+ * @deprecated use goog.debug.HtmlFormatter.exposeException instead
  */
 goog.debug.exposeException = function(err, opt_fn) {
   var html = goog.debug.exposeExceptionAsHtml(err, opt_fn);
@@ -234,6 +235,7 @@ goog.debug.exposeException = function(err, opt_fn) {
  * @param {Object} err Error object or string.
  * @param {Function=} opt_fn Optional function to start stack trace from.
  * @return {!goog.html.SafeHtml} Details of exception.
+ * @deprecated use goog.debug.HtmlFormatter.exposeExceptionAsHtml instead
  */
 goog.debug.exposeExceptionAsHtml = function(err, opt_fn) {
   /** @preserveTry */
@@ -283,7 +285,7 @@ goog.debug.createViewSourceUrl_ = function(opt_fileName) {
 
 /**
  * Normalizes the error/exception object between browsers.
- * @param {Object} err Raw error object.
+ * @param {*} err Raw error object.
  * @return {!{
  *    message: (?|undefined),
  *    name: (?|undefined),
@@ -467,23 +469,23 @@ goog.debug.getNativeStackTrace_ = function(fn) {
 /**
  * Gets the current stack trace, either starting from the caller or starting
  * from a specified function that's currently on the call stack.
- * @param {Function=} opt_fn Optional function to start getting the trace from.
- *     If not provided, defaults to the function that called this.
+ * @param {?Function=} fn If provided, when collecting the stack trace all
+ *     frames above the topmost call to this function, including that call,
+ *     will be left out of the stack trace.
  * @return {string} Stack trace.
  * @suppress {es5Strict}
  */
-goog.debug.getStacktrace = function(opt_fn) {
+goog.debug.getStacktrace = function(fn) {
   var stack;
   if (!goog.debug.FORCE_SLOPPY_STACKS) {
     // Try to get the stack trace from the environment if it is available.
-    var contextFn = opt_fn || goog.debug.getStacktrace;
+    var contextFn = fn || goog.debug.getStacktrace;
     stack = goog.debug.getNativeStackTrace_(contextFn);
   }
   if (!stack) {
     // NOTE: browsers that have strict mode support also have native "stack"
     // properties. This function will throw in strict mode.
-    stack =
-        goog.debug.getStacktraceHelper_(opt_fn || arguments.callee.caller, []);
+    stack = goog.debug.getStacktraceHelper_(fn || arguments.callee.caller, []);
   }
   return stack;
 };
@@ -491,7 +493,9 @@ goog.debug.getStacktrace = function(opt_fn) {
 
 /**
  * Private helper for getStacktrace().
- * @param {Function} fn Function to start getting the trace from.
+ * @param {?Function} fn If provided, when collecting the stack trace all
+ *     frames above the topmost call to this function, including that call,
+ *     will be left out of the stack trace.
  * @param {Array<!Function>} visited List of functions visited so far.
  * @return {string} Stack trace starting from function fn.
  * @suppress {es5Strict}

@@ -70,7 +70,7 @@ goog.a11y.aria.TAGS_WITH_ASSUMED_ROLES_ = goog.object.createSet([
  * to manage their active descendants or children. See
  * {@link http://www.w3.org/TR/wai-aria/states_and_properties
  * #aria-activedescendant} for more information.
- * @private @const
+ * @private @const {!Array<goog.a11y.aria.Role>}
  */
 goog.a11y.aria.CONTAINER_ROLES_ = [
   goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.Role.GRID,
@@ -113,7 +113,7 @@ goog.a11y.aria.setRole = function(element, roleName) {
 /**
  * Gets role of an element.
  * @param {!Element} element DOM element to get role of.
- * @return {goog.a11y.aria.Role} ARIA Role name.
+ * @return {?goog.a11y.aria.Role} ARIA Role name.
  */
 goog.a11y.aria.getRole = function(element) {
   var role = element.getAttribute(goog.a11y.aria.ROLE_ATTRIBUTE_);

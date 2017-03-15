@@ -130,6 +130,12 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
   this.button = 0;
 
   /**
+   * Key of key press.
+   * @type {string}
+   */
+  this.key = '';
+
+  /**
    * Keycode of key press.
    * @type {number}
    */
@@ -281,6 +287,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.button = e.button;
 
   this.keyCode = e.keyCode || 0;
+  this.key = e.key || '';
   this.charCode = e.charCode || (type == 'keypress' ? e.keyCode : 0);
   this.ctrlKey = e.ctrlKey;
   this.altKey = e.altKey;

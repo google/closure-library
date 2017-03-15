@@ -316,6 +316,24 @@ function testSetIframeSrc() {
   }
 }
 
+function testSetIframeSrcdoc() {
+  var html = goog.html.SafeHtml.create('div', {}, 'foobar');
+  var mockIframe = /** @type {!HTMLIFrameElement} */ ({'srcdoc': ''});
+  goog.dom.safe.setIframeSrcdoc(mockIframe, html);
+  assertEquals('<div>foobar</div>', mockIframe.srcdoc);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('IMAGE');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setIframeSrcdoc(
+          /** @type {!HTMLIFrameElement} */ (otherElement), html);
+    });
+    assert(goog.string.contains(
+        ex.message, 'Argument is not a HTMLIFrameElement'));
+  }
+}
+
 function testSetObjectData() {
   var url = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));

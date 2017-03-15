@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeUrlTest');
 
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.object');
 goog.require('goog.string.Const');
@@ -130,6 +131,8 @@ function testSafeUrlFromDataUrl_withUnsafeType() {
   assertDataUrlIsSafe('data:video/mp4;baze64,z=', false);
   assertDataUrlIsSafe('data:video/mp4;,z=', false);
   assertDataUrlIsSafe('data:text/html,sdfsdfsdfsfsdfs;base64,anything', false);
+  // Valid base64 image URL, but with disallowed mime-type.
+  assertDataUrlIsSafe('data:image/svg+xml;base64,abc', false);
 }
 
 
@@ -176,6 +179,15 @@ function assertTelUrlIsSafe(url, isSafe) {
   assertEquals(
       isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(safeUrl));
+}
+
+
+function testFromTrustedResourceUrl() {
+  var url = goog.string.Const.from('test');
+  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(url);
+  var safeUrl = goog.html.SafeUrl.fromTrustedResourceUrl(trustedResourceUrl);
+  assertEquals(
+      goog.string.Const.unwrap(url), goog.html.SafeUrl.unwrap(safeUrl));
 }
 
 

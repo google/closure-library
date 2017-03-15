@@ -168,6 +168,34 @@ example.sanitizedHtmlAttributesTemplate = function(
 /**
  * @param {{name: string}} data
  * @param {null=} opt_sb
+ * @param {?Object<string, *>=} opt_injectedData
+ * @return {!SanitizedContentSubclass}
+ */
+example.sanitizedSmsUrlTemplate = function(data, opt_sb, opt_injectedData) {
+  // Test the SanitizedContent constructor.
+  var sanitized = makeSanitizedContent(
+      'sms:123456789', goog.soy.data.SanitizedContentKind.URI);
+  return sanitized;
+};
+
+
+/**
+ * @param {{name: string}} data
+ * @param {null=} opt_sb
+ * @param {?Object<string, *>=} opt_injectedData
+ * @return {!SanitizedContentSubclass}
+ */
+example.sanitizedHttpUrlTemplate = function(data, opt_sb, opt_injectedData) {
+  // Test the SanitizedContent constructor.
+  var sanitized = makeSanitizedContent(
+      'https://google.com/foo?n=917', goog.soy.data.SanitizedContentKind.URI);
+  return sanitized;
+};
+
+
+/**
+ * @param {{name: string}} data
+ * @param {null=} opt_sb
  * @param {Object<string, *>=} opt_injectedData
  * @return {!SanitizedContentSubclass}
  */
@@ -186,6 +214,18 @@ example.sanitizedCssTemplate = function(data, opt_sb, opt_injectedData) {
 example.unsanitizedTextTemplate = function(data, opt_sb, opt_injectedData) {
   return makeSanitizedContent(
       'I <3 Puppies & Kittens', goog.soy.data.SanitizedContentKind.TEXT);
+};
+
+
+/**
+ * @param {{name: string}} data
+ * @param {null=} opt_sb
+ * @param {?Object<string, *>=} opt_injectedData
+ * @return {!SanitizedContentSubclass}
+ */
+example.sanitizedUriTemplate = function(data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent(
+      'https://example.com', goog.soy.data.SanitizedContentKind.URI);
 };
 
 

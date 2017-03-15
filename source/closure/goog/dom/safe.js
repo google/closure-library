@@ -252,6 +252,25 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
 
 
 /**
+ * Safely assigns HTML to an iframe element's srcdoc property.
+ *
+ * Example usage:
+ *   goog.dom.safe.setIframeSrcdoc(iframeEl, safeHtml);
+ * which is a safe alternative to
+ *   iframeEl.srcdoc = html;
+ * The latter can result in loading untrusted code.
+ *
+ * @param {!HTMLIFrameElement} iframe The iframe element whose srcdoc property
+ *     is to be assigned to.
+ * @param {!goog.html.SafeHtml} html The HTML to assign.
+ */
+goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
+  goog.dom.safe.assertIsHTMLIFrameElement_(iframe);
+  iframe.srcdoc = goog.html.SafeHtml.unwrap(html);
+};
+
+
+/**
  * Safely sets a link element's href and rel properties. Whether or not
  * the URL assigned to href has to be a goog.html.TrustedResourceUrl
  * depends on the value of the rel property. If rel contains "stylesheet"

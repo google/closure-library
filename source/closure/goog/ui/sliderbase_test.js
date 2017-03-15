@@ -916,7 +916,9 @@ function testDragEvents() {
   offset.x += size.width / 2;
   offset.y += size.height / 2;
   var event_types = [];
-  var handler = function(evt) { event_types.push(evt.type); };
+  var handler = function(evt) {
+    event_types.push(evt.type);
+  };
 
   goog.events.listen(
       oneThumbSlider,
@@ -993,5 +995,41 @@ function testDragEvents() {
 
   // Early listener removal, do not wait for tearDown, to avoid building up
   // arrays of events unnecessarilly in further tests.
+  goog.events.removeAll(oneThumbSlider);
+}
+
+
+/**
+ * Tests animationend event after click.
+ */
+function testAnimationEndEventAfterClick() {
+  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  offset.x += size.width / 2;
+  offset.y += size.height / 2;
+  var event_types = [];
+  var handler = function(evt) {
+    event_types.push(evt.type);
+  };
+  var animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
+  if (goog.userAgent.IE) {
+    // For some reason, (probably due to how timing works), IE7 and IE8 will not
+    // stop if we don't wait for it.
+    animationDelay = 250;
+  }
+  oneThumbSlider.setMoveToPointEnabled(true);
+  goog.events.listen(
+      oneThumbSlider, goog.ui.SliderBase.EventType.ANIMATION_END, handler);
+
+  function isAnimationEndType(type) {
+    return type == goog.ui.SliderBase.EventType.ANIMATION_END;
+  }
+  offset.x += 100;
+  goog.testing.events.fireClickSequence(
+      oneThumbSlider.getElement(), /* opt_button */ undefined, offset);
+
+  mockClock.tick(animationDelay);
+  assertEquals(1, event_types.length);
+  assertTrue(isAnimationEndType(event_types[0]));
   goog.events.removeAll(oneThumbSlider);
 }

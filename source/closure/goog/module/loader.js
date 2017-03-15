@@ -177,7 +177,7 @@ goog.module.Loader.prototype.getModuleUrl_ = function(urlBase, module) {
 
 /**
  * The globally exported name of the load callback. Matches the
- * definition in the js_modular_binary() BUILD rule.
+ * definition in the js_module_binary() BUILD rule.
  * @type {string}
  */
 goog.module.Loader.LOAD_CALLBACK = '__gjsload__';

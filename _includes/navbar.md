@@ -9,7 +9,7 @@
 
 <!-- URLS -->
 
-[Home]: {{site.github.url}}/index
-[Develop]: {{site.github.url}}/develop
-[API]: {{site.github.url}}/api
-[Demos]: {{site.github.url}}/source/closure/goog/demos
+[Home]: /closure/goog/g3doc/index
+[Develop]: /closure/goog/g3doc/develop
+[API]: /closure/goog/g3doc/api
+[Demos]: /closure/goog/g3doc/source/closure/goog/demos

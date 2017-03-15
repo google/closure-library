@@ -16,6 +16,7 @@ goog.provide('goog.testing.TestCaseTest');
 goog.setTestOnly('goog.testing.TestCaseTest');
 
 goog.require('goog.Promise');
+goog.require('goog.Timer');
 goog.require('goog.functions');
 goog.require('goog.string');
 goog.require('goog.testing.ExpectedFailures');
@@ -352,6 +353,48 @@ function testTestCaseReturningPromise_GoogPromiseResolve_PromiseReject() {
     assertEquals(1, result.successCount);
     assertEquals(1, result.errors.length);
     assertEquals('bar', result.errors[0].source);
+  });
+}
+
+function testTestCaseReturningPromise_PromisesInSetUpAndTest() {
+  if (!('Promise' in goog.global)) {
+    return;
+  }
+  var testCase = new goog.testing.TestCase();
+  var events = [];
+  testCase.setUpPage = function() {
+    events.push('setUpPage-called');
+    return goog.Timer.promise().then(function() {
+      events.push('setUpPage-promiseFinished');
+    });
+  };
+  testCase.setUp = function() {
+    events.push('setUp-called');
+    return goog.Timer.promise().then(function() {
+      events.push('setUp-promiseFinished');
+    });
+  };
+  testCase.addNewTest('foo', function() {
+    events.push('foo-called');
+    return goog.Timer.promise().then(function() {
+      events.push('foo-promiseFinished');
+    });
+  });
+
+  // Initially only setUpPage should have been called.
+  return testCase.runTestsReturningPromise().then(function(result) {
+    assertTrue(result.complete);
+    assertEquals(1, result.totalCount);
+    assertEquals(1, result.runCount);
+    assertEquals(1, result.successCount);
+    assertEquals(0, result.errors.length);
+
+    assertArrayEquals(
+        [
+          'setUpPage-called', 'setUpPage-promiseFinished', 'setUp-called',
+          'setUp-promiseFinished', 'foo-called', 'foo-promiseFinished'
+        ],
+        events);
   });
 }
 
@@ -773,4 +816,46 @@ function testSetObj_es6Class() {
   assertEquals(0, testCase.getCount());
   testCase.setTestObj(new FooTest());
   assertEquals(1, testCase.getCount());
+}
+
+
+function testCurrentTestName() {
+  var currentTestName = goog.testing.TestCase.currentTestName;
+  assertEquals('testCurrentTestName', currentTestName);
+}
+
+
+function testCurrentTestNamePromise() {
+  var getAssertSameTest = function() {
+    var expectedTestCase = goog.testing.TestCase.getActiveTestCase();
+    var expectedTestName = (expectedTestCase ? expectedTestCase.getName() :
+                                               '<no active TestCase>') +
+        '.' +
+        (goog.testing.TestCase.currentTestName || '<no active test name>');
+    var assertSameTest = function() {
+      var currentTestCase = goog.testing.TestCase.getActiveTestCase();
+      var currentTestName = (currentTestCase ? currentTestCase.getName() :
+                                               '<no active TestCase>') +
+              '.' + goog.testing.TestCase.currentTestName ||
+          '<no active test name>';
+      assertEquals(expectedTestName, currentTestName);
+      assertEquals(expectedTestCase, currentTestCase);
+    };
+    return assertSameTest;
+  };
+  var assertSameTest = getAssertSameTest();
+  // do something asynchronously...
+  return new goog.Promise(function(resolve, reject) {
+    // ... ensure the earlier half runs during the same test ...
+    assertSameTest();
+    setTimeout(function() {
+      // ... and also ensure the later half runs during the same test:
+      try {
+        assertSameTest();
+        resolve();
+      } catch (assertionFailureOrResolveException) {
+        reject(assertionFailureOrResolveException);
+      }
+    });
+  });
 }

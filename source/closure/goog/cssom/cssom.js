@@ -140,7 +140,8 @@ goog.cssom.getAllCssStyleSheets = function(
     // http://dev.w3.org/csswg/cssom/#the-stylesheetlist
     for (var i = 0, n = styleSheet.length; i < n; i++) {
       goog.array.extend(
-          styleSheetsOutput, goog.cssom.getAllCssStyleSheets(styleSheet[i]));
+          styleSheetsOutput, goog.cssom.getAllCssStyleSheets(
+              /** @type {!CSSStyleSheet} */ (styleSheet[i])));
     }
   } else {
     // We need to walk through rules in browsers which implement .cssRules

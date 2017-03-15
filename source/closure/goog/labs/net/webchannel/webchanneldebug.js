@@ -216,7 +216,7 @@ WebChannelDebug.prototype.maybeRedactArray_ = function(array) {
   }
 
   var type = dataPart[0];
-  if (type != 'noop' && type != 'stop') {
+  if (type != 'noop' && type != 'stop' && type != 'close') {
     // redact all fields in the array
     for (var i = 1; i < dataPart.length; i++) {
       dataPart[i] = '';

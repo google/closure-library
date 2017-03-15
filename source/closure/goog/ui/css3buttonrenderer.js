@@ -53,14 +53,6 @@ goog.ui.Css3ButtonRenderer = function() {
   goog.ui.ButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.Css3ButtonRenderer, goog.ui.ButtonRenderer);
-
-
-/**
- * The singleton instance of this renderer class.
- * @type {goog.ui.Css3ButtonRenderer?}
- * @private
- */
-goog.ui.Css3ButtonRenderer.instance_ = null;
 goog.addSingletonGetter(goog.ui.Css3ButtonRenderer);
 
 
