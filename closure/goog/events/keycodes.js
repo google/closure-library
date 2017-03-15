@@ -171,7 +171,15 @@ goog.events.KeyCodes = {
 
 
 /**
- * Returns true if the event contains a text modifying key.
+ * Returns false if the event does not contain a text modifying key.
+ *
+ * When it returns true, the event might be text modifying. It is infeasible to
+ * say for sure because of the many different keyboard layouts, so this method
+ * errs on the side of assuming a key event is text-modifiable if we cannot be
+ * certain it is not. As an example, it will return true for ctrl+a, though in
+ * many standard keyboard layouts that key combination would mean "select all",
+ * and not actually modify the text.
+ *
  * @param {goog.events.BrowserEvent} e A key event.
  * @return {boolean} Whether it's a text modifying key.
  */
