@@ -540,7 +540,6 @@ goog.net.XhrIo.prototype.send = function(
   /**
    * Try to open the XMLHttpRequest (always async), if an error occurs here it
    * is generally permission denied
-   * @preserveTry
    */
   try {
     goog.log.fine(this.logger_, this.formatMsg_('Opening Xhr'));
@@ -603,7 +602,6 @@ goog.net.XhrIo.prototype.send = function(
 
   /**
    * Try to send the request, or other wise report an error (404 not found).
-   * @preserveTry
    */
   try {
     this.cleanUpTimeoutTimer_();  // Paranoid, should never be running.
@@ -1042,7 +1040,6 @@ goog.net.XhrIo.prototype.getStatus = function() {
    * IE doesn't like you checking status until the readystate is greater than 2
    * (i.e. it is receiving or complete).  The try/catch is used for when the
    * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
-   * @preserveTry
    */
   try {
     return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ?
@@ -1064,7 +1061,6 @@ goog.net.XhrIo.prototype.getStatusText = function() {
    * IE doesn't like you checking status until the readystate is greater than 2
    * (i.e. it is receiving or complete).  The try/catch is used for when the
    * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
-   * @preserveTry
    */
   try {
     return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ?
@@ -1092,7 +1088,6 @@ goog.net.XhrIo.prototype.getLastUri = function() {
  * @return {string} Result from the server, or '' if no result available.
  */
 goog.net.XhrIo.prototype.getResponseText = function() {
-
   try {
     return this.xhr_ ? this.xhr_.responseText : '';
   } catch (e) {
