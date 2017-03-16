@@ -77,6 +77,17 @@ goog.define('goog.userAgent.ASSUME_ANY_VERSION', false);
 
 
 /**
+ * Whether we know the browser engine at compile-time.
+ * @type {boolean}
+ * @private
+ */
+goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE ||
+    goog.userAgent.ASSUME_EDGE || goog.userAgent.ASSUME_GECKO ||
+    goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.ASSUME_WEBKIT ||
+    goog.userAgent.ASSUME_OPERA;
+
+
+/**
  * Returns the userAgent string for the current browser.
  *
  * @return {string} The userAgent string.
@@ -88,7 +99,7 @@ goog.userAgent.getUserAgentString = function() {
 
 /**
  * TODO(nnaze): Change type to "Navigator" and update compilation targets.
- * @return {?Object} The native navigator object.
+ * @return {Object} The native navigator object.
  */
 goog.userAgent.getNavigator = function() {
   // Need a local navigator reference instead of using the global one,
@@ -105,7 +116,8 @@ goog.userAgent.getNavigator = function() {
  * Whether the user agent is Opera.
  * @type {boolean}
  */
-goog.userAgent.OPERA = goog.userAgent.ASSUME_OPERA ? true :
+goog.userAgent.OPERA = goog.userAgent.BROWSER_KNOWN_ ?
+    goog.userAgent.ASSUME_OPERA :
     goog.labs.userAgent.browser.isOpera();
 
 
@@ -113,7 +125,8 @@ goog.userAgent.OPERA = goog.userAgent.ASSUME_OPERA ? true :
  * Whether the user agent is Internet Explorer.
  * @type {boolean}
  */
-goog.userAgent.IE = goog.userAgent.ASSUME_IE ? true :
+goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ?
+    goog.userAgent.ASSUME_IE :
     goog.labs.userAgent.browser.isIE();
 
 
@@ -121,7 +134,8 @@ goog.userAgent.IE = goog.userAgent.ASSUME_IE ? true :
  * Whether the user agent is Microsoft Edge.
  * @type {boolean}
  */
-goog.userAgent.EDGE = goog.userAgent.ASSUME_EDGE ? true :
+goog.userAgent.EDGE = goog.userAgent.BROWSER_KNOWN_ ?
+    goog.userAgent.ASSUME_EDGE :
     goog.labs.userAgent.engine.isEdge();
 
 
@@ -137,7 +151,8 @@ goog.userAgent.EDGE_OR_IE = goog.userAgent.EDGE || goog.userAgent.IE;
  * Mozilla, Firefox, and others.
  * @type {boolean}
  */
-goog.userAgent.GECKO = goog.userAgent.ASSUME_GECKO ? true :
+goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ?
+    goog.userAgent.ASSUME_GECKO :
     goog.labs.userAgent.engine.isGecko();
 
 
@@ -146,7 +161,8 @@ goog.userAgent.GECKO = goog.userAgent.ASSUME_GECKO ? true :
  * Safari, Android and others use.
  * @type {boolean}
  */
-goog.userAgent.WEBKIT = goog.userAgent.ASSUME_WEBKIT ? true :
+goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ?
+    goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_MOBILE_WEBKIT :
     goog.labs.userAgent.engine.isWebKit();
 
 
@@ -194,12 +210,12 @@ goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
  * @private
  */
 goog.userAgent.determinePlatform_ = function() {
-  const nav = goog.userAgent.getNavigator();
-  if (nav === null || !('platform' in nav)) {
+  var nav = goog.userAgent.getNavigator();
+  if (!nav || !nav['platform']) {
     return '';
   }
 
-  return /** @type {string} */ (navigator['platform']);
+  return /** @type {string} */ (nav['platform']);
 };
 
 
@@ -265,10 +281,22 @@ goog.define('goog.userAgent.ASSUME_IPOD', false);
 
 
 /**
+ * @type {boolean}
+ * @private
+ */
+goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC ||
+    goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX ||
+    goog.userAgent.ASSUME_X11 || goog.userAgent.ASSUME_ANDROID ||
+    goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD ||
+    goog.userAgent.ASSUME_IPOD;
+
+
+/**
  * Whether the user agent is running on a Macintosh operating system.
  * @type {boolean}
  */
-goog.userAgent.MAC = goog.userAgent.ASSUME_MAC ? true :
+goog.userAgent.MAC = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_MAC :
     goog.labs.userAgent.platform.isMacintosh();
 
 
@@ -276,7 +304,8 @@ goog.userAgent.MAC = goog.userAgent.ASSUME_MAC ? true :
  * Whether the user agent is running on a Windows operating system.
  * @type {boolean}
  */
-goog.userAgent.WINDOWS = goog.userAgent.ASSUME_WINDOWS ? true :
+goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_WINDOWS :
     goog.labs.userAgent.platform.isWindows();
 
 
@@ -302,7 +331,8 @@ goog.userAgent.isLegacyLinux_ = function() {
  *
  * @type {boolean}
  */
-goog.userAgent.LINUX = goog.userAgent.ASSUME_LINUX ? true :
+goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_LINUX :
     goog.userAgent.isLegacyLinux_();
 
 
@@ -311,12 +341,12 @@ goog.userAgent.LINUX = goog.userAgent.ASSUME_LINUX ? true :
  * @private
  */
 goog.userAgent.isX11_ = function() {
-  const nav = goog.userAgent.getNavigator();
-  if (nav === null || !('appVersion' in nav)) {
+  var nav = goog.userAgent.getNavigator();
+  if (!nav || !nav['appVersion']) {
     return false;
   }
 
-  const appVersion = /** @type {string} */ (nav['appVersion']);
+  var appVersion = /** @type {string} */ (nav['appVersion']);
   return goog.string.contains(appVersion, 'X11');
 };
 
@@ -325,7 +355,8 @@ goog.userAgent.isX11_ = function() {
  * Whether the user agent is running on a X11 windowing system.
  * @type {boolean}
  */
-goog.userAgent.X11 = goog.userAgent.ASSUME_X11 ? true :
+goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_X11 :
     goog.userAgent.isX11_();
 
 
@@ -333,7 +364,8 @@ goog.userAgent.X11 = goog.userAgent.ASSUME_X11 ? true :
  * Whether the user agent is running on Android.
  * @type {boolean}
  */
-goog.userAgent.ANDROID = goog.userAgent.ASSUME_ANDROID ? true :
+goog.userAgent.ANDROID = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_ANDROID :
     goog.labs.userAgent.platform.isAndroid();
 
 
@@ -341,7 +373,8 @@ goog.userAgent.ANDROID = goog.userAgent.ASSUME_ANDROID ? true :
  * Whether the user agent is running on an iPhone.
  * @type {boolean}
  */
-goog.userAgent.IPHONE = goog.userAgent.ASSUME_IPHONE ? true :
+goog.userAgent.IPHONE = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPHONE :
     goog.labs.userAgent.platform.isIphone();
 
 
@@ -349,7 +382,8 @@ goog.userAgent.IPHONE = goog.userAgent.ASSUME_IPHONE ? true :
  * Whether the user agent is running on an iPad.
  * @type {boolean}
  */
-goog.userAgent.IPAD = goog.userAgent.ASSUME_IPAD ? true :
+goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPAD :
     goog.labs.userAgent.platform.isIpad();
 
 
@@ -357,7 +391,8 @@ goog.userAgent.IPAD = goog.userAgent.ASSUME_IPAD ? true :
  * Whether the user agent is running on an iPod.
  * @type {boolean}
  */
-goog.userAgent.IPOD = goog.userAgent.ASSUME_IPOD ? true :
+goog.userAgent.IPOD = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPOD :
     goog.labs.userAgent.platform.isIpod();
 
 
@@ -365,9 +400,10 @@ goog.userAgent.IPOD = goog.userAgent.ASSUME_IPOD ? true :
  * Whether the user agent is running on iOS.
  * @type {boolean}
  */
-goog.userAgent.IOS = goog.userAgent.ASSUME_IPHONE ||
-    goog.userAgent.ASSUME_IPAD || goog.userAgent.ASSUME_IPOD;
-
+goog.userAgent.IOS = goog.userAgent.PLATFORM_KNOWN_ ?
+    (goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD ||
+     goog.userAgent.ASSUME_IPOD) :
+    goog.labs.userAgent.platform.isIos();
 
 /**
  * @return {string} The string that describes the version number of the user
@@ -379,8 +415,8 @@ goog.userAgent.determineVersion_ = function() {
   // different naming schemes.
   // version is a string rather than a number because it may contain 'b', 'a',
   // and so on.
-  const arr = goog.userAgent.getVersionRegexResult_();
-  let version = arr ? arr[1] : '';
+  var arr = goog.userAgent.getVersionRegexResult_();
+  var version = arr ? arr[1] : '';
 
   if (goog.userAgent.IE) {
     // IE9 can be in document mode 9 but be reporting an inconsistent user agent
@@ -442,9 +478,9 @@ goog.userAgent.getDocumentMode_ = function() {
     return undefined;
   }
   /** @type {!HTMLDocument} */
-  const doc = goog.global['document'];
+  var doc = goog.global['document'];
 
-  if ('documentMode' in doc) {
+  if (doc['documentMode']) {
     return doc['documentMode'];
   }
 
@@ -484,9 +520,8 @@ goog.userAgent.compare = function(v1, v2) {
  * Cache for {@link goog.userAgent.isVersionOrHigher}.
  * Calls to compareVersions are surprisingly expensive and, as a browser's
  * version number is unlikely to change during a session, we cache the results.
- * @const
+ * @const {!Object<(string|number), boolean>}
  * @private
- * @type {!Object<(string|number), boolean>}
  */
 goog.userAgent.isVersionOrHigherCache_ = {};
 
