@@ -72,6 +72,10 @@ function assertIsBrowser(currentBrowser) {
       return;
     }
 
+    if (currentBrowser == 'CHROME' && browserKey == 'IPHONE') {
+      return;
+    }
+
     if (currentBrowser != browserKey) {
       assertFalse(
           'Current browser key is ' + currentBrowser +
@@ -233,6 +237,15 @@ function testChrome() {
       versions: [
         {num: 18, truth: true}, {num: '0.2.153', truth: true},
         {num: 29, truth: false}, {num: '18.0.1025.133', truth: true}
+      ]
+    },
+    {
+      ua: 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) ' +
+          'AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.79 ' +
+          'Mobile/14D27 Safari/602.1',
+      versions: [
+        {num: '56.1.2924.79', truth: false},
+        {num: '56.0.2924.79', truth: true}
       ]
     }
   ];
