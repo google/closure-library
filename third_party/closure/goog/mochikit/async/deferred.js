@@ -444,9 +444,8 @@ goog.async.Deferred.prototype.addBoth = function(f, opt_scope) {
  * @template T
  */
 goog.async.Deferred.prototype.addFinally = function(f, opt_scope) {
-  var self = this;
   return this.addCallbacks(f, function(err) {
-    var result = f.call(self, err);
+    var result = f.call(/** @type {?} */ (this), err);
     if (!goog.isDef(result)) {
       throw err;
     }

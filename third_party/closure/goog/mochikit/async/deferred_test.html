@@ -17,6 +17,7 @@ goog.require('goog.string');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 
 </script>
 </head>
@@ -1122,7 +1123,9 @@ function testAddBothDoesNotPropagateUncaughtExceptions() {
 
 function testAddFinally() {
   var deferred = new goog.async.Deferred();
-  deferred.addFinally(goog.nullFunction);
+  var callback = goog.testing.recordFunction();
+  var thisArg = {};
+  deferred.addFinally(callback, thisArg);
   deferred.errback(new Error('my error'));
 
   try {
@@ -1130,6 +1133,7 @@ function testAddFinally() {
   } catch (e) {
     assertEquals('my error', e.message);
   }
+  assertEquals(thisArg, callback.getCalls()[0].getThis());
 }
 </script>
 </body>
