@@ -58,7 +58,7 @@ goog.db.Index.prototype.getName = function() {
 
 
 /**
- * @return {string} Key path of the index.
+ * @return {*} Key path of the index.
  */
 goog.db.Index.prototype.getKeyPath = function() {
   return this.index_.keyPath;
