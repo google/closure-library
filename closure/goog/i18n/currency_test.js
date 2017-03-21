@@ -35,6 +35,13 @@ function tearDown() {
   stubs.reset();
 }
 
+function testIsAvailable() {
+  assertTrue(goog.i18n.currency.isAvailable('USD'));
+  assertTrue(goog.i18n.currency.isAvailable('CLP'));
+  assertFalse(goog.i18n.currency.isAvailable('LRD'));
+  assertFalse(goog.i18n.currency.isAvailable('XYZ'));
+}
+
 function testAddTier2Support() {
   assertFalse('LRD' in goog.i18n.currency.CurrencyInfo);
   assertThrows(function() {
