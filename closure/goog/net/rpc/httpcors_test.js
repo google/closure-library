@@ -15,9 +15,8 @@
 goog.module('goog.net.rpc.HttpCorsTest');
 goog.setTestOnly('goog.net.rpc.HttpCorsTest');
 
+var GoogUri = goog.require('goog.Uri');
 var HttpCors = goog.require('goog.net.rpc.HttpCors');
-var googUri = goog.require('goog.Uri');
-
 var testSuite = goog.require('goog.testing.testSuite');
 
 
@@ -47,7 +46,7 @@ testSuite({
         urlString, '$httpHeaders', headers);
     assertEquals('/example.com/?%24httpHeaders=foo%3Abar%0D%0A', newUrlString);
 
-    var url = new googUri(urlString);
+    var url = new GoogUri(urlString);
     var newUrl =
         HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
     assertEquals(
@@ -62,7 +61,7 @@ testSuite({
     assertEquals(
         '/example.com/?abc=12&%24httpHeaders=foo%3Abar%0D%0A', newUrlString);
 
-    var url = new googUri(urlString);
+    var url = new GoogUri(urlString);
     var newUrl =
         HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
     assertEquals(
@@ -79,7 +78,7 @@ testSuite({
         '/example.com/?%24httpHeaders=foo1%3Abar1%0D%0Afoo2%3Abar2%0D%0A',
         newUrlString);
 
-    var url = new googUri(urlString);
+    var url = new GoogUri(urlString);
     var newUrl =
         HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
     assertEquals(
@@ -94,7 +93,7 @@ testSuite({
         urlString, '$httpHeaders', headers);
     assertEquals('/example.com/', newUrlString);
 
-    var url = new googUri(urlString);
+    var url = new GoogUri(urlString);
     var newUrl =
         HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
     assertEquals('/example.com/', newUrl.toString());
