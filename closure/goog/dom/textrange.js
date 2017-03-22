@@ -358,6 +358,14 @@ goog.dom.TextRange.prototype.containsRange = function(
 };
 
 
+/** @override */
+goog.dom.TextRange.prototype.containsNode = function(node, opt_allowPartial) {
+  return this.containsRange(
+      goog.dom.TextRange.createFromNodeContents(node), opt_allowPartial);
+};
+
+
+
 /**
  * Tests if the given node is in a document.
  * @param {Node} node The node to check.
