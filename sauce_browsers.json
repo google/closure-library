@@ -39,15 +39,5 @@
       "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat",
       "background": true
     }
-  },
-  {
-    "browserName" : "internet explorer",
-    "version" : "8.0",
-    "platform" : "Windows 7",
-    "timeZone": "Pacific",
-    "prerun": {
-      "executable": "https://raw.githubusercontent.com/google/closure-library/master/scripts/ci/ie_setup.bat",
-      "background": true
-    }
   }
 ]
