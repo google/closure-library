@@ -25,6 +25,9 @@ goog.setTestOnly('goog.testing.MockClock');
 goog.provide('goog.testing.MockClock');
 
 goog.require('goog.Disposable');
+/** @suppress {extraRequire} */
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.async.run');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
