@@ -144,6 +144,13 @@ goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
     return false;
   }
 
+  // Disregard the shortcut if the shift key is also pressed because the user
+  // may have intended a different shortcut (for example Chrome OS uses shiftKey
+  // + ctrlKey + space to toggle input languages.
+  if (e.shiftKey) {
+    return false;
+  }
+
   if (key == this.keyboardShortcutKey_) {
     this.getFieldObject().execCommand(
         goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);

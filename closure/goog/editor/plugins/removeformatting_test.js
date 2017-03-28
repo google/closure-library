@@ -1059,3 +1059,33 @@ function testKeyboardShortcut_withBothModifierKeys() {
 
   FIELDMOCK.$verify();
 }
+
+
+function testKeyboardShortcut_withMetaKeyAndShiftKey() {
+  FIELDMOCK.$reset();
+  FIELDMOCK.$replay();
+
+  var e = {};
+  e.metaKey = true;
+  e.shiftKey = true;
+  var key = ' ';
+  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  assertFalse(result);
+
+  FIELDMOCK.$verify();
+}
+
+
+function testKeyboardShortcut_withCtrlKeyAndShiftKey() {
+  FIELDMOCK.$reset();
+  FIELDMOCK.$replay();
+
+  var e = {};
+  e.ctrlKey = true;
+  e.shiftKey = true;
+  var key = ' ';
+  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  assertFalse(result);
+
+  FIELDMOCK.$verify();
+}
