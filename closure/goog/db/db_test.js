@@ -665,6 +665,31 @@ function testDeleteRecord() {
       .addCallback(function(result) { assertUndefined(result); });
 }
 
+function testDeleteRange() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3'];
+  var keys = ['a', 'b', 'c'];
+
+  var addData = goog.partial(populateStore, values, keys);
+  var checkStore = goog.partial(assertStoreValues, ['1']);
+
+  return globalDb.branch()
+      .addCallback(addStore)
+      .addCallback(addData)
+      .addCallback(function(db) {
+        return db.createTransaction(['store'], TransactionMode.READ_WRITE)
+            .objectStore('store')
+            .remove(goog.db.KeyRange.bound('b', 'c'))
+            .then(function() {
+              return db;
+            });
+      })
+      .addCallback(checkStore);
+}
+
 function testGetAll() {
   if (!idbSupported) {
     return;

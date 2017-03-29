@@ -149,17 +149,20 @@ goog.db.ObjectStore.prototype.add = function(value, opt_key) {
  * Removes an object from the store. No-op if there is no object present with
  * the given key.
  *
- * @param {IDBKeyType} key The key to remove objects under.
+ * @param {IDBKeyType|!goog.db.KeyRange} keyOrRange The key or range to remove
+ *     objects under.
  * @return {!goog.async.Deferred} The deferred remove request.
  */
-goog.db.ObjectStore.prototype.remove = function(key) {
+goog.db.ObjectStore.prototype.remove = function(keyOrRange) {
   var d = new goog.async.Deferred();
   var request;
   try {
-    request = this.store_['delete'](key);
+    request = this.store_['delete'](
+        keyOrRange instanceof goog.db.KeyRange ? keyOrRange.range() :
+                                                 keyOrRange);
   } catch (err) {
     var msg = 'removing from ' + this.getName() + ' with key ' +
-        goog.debug.deepExpose(key);
+        goog.debug.deepExpose(keyOrRange);
     d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
@@ -167,7 +170,7 @@ goog.db.ObjectStore.prototype.remove = function(key) {
   var self = this;
   request.onerror = function(ev) {
     var msg = 'removing from ' + self.getName() + ' with key ' +
-        goog.debug.deepExpose(key);
+        goog.debug.deepExpose(keyOrRange);
     d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
