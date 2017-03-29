@@ -21,6 +21,13 @@ goog.require('goog.labs.testing.MatcherError');
 goog.require('goog.labs.testing.assertThat');
 goog.require('goog.testing.jsunit');
 
+function testAnyNumber() {
+  goog.labs.testing.assertThat(0, anyNumber(3), 'typeof 0 == "number"');
+  assertMatcherError(function() {
+    goog.labs.testing.assertThat('chicken', anyNumber());
+  }, 'typeof "chicken" == "number"');
+}
+
 function testGreaterThan() {
   goog.labs.testing.assertThat(4, greaterThan(3), '4 > 3');
   assertMatcherError(function() {

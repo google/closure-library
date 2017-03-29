@@ -21,6 +21,13 @@ goog.require('goog.labs.testing.ObjectEqualsMatcher');
 goog.require('goog.labs.testing.assertThat');
 goog.require('goog.testing.jsunit');
 
+function testAnyObject() {
+  goog.labs.testing.assertThat({}, anyObject(), 'typeof {} == "object"');
+  assertMatcherError(function() {
+    goog.labs.testing.assertThat(null, anyObject());
+  }, 'typeof null == "object"');
+}
+
 function testObjectEquals() {
   var obj1 = {x: 1};
   var obj2 = obj1;
