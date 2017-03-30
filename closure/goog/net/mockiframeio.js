@@ -22,7 +22,7 @@ goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
-goog.require('goog.testing.TestQueue');
+goog.forwardDeclare('goog.testing.TestQueue');
 
 
 
