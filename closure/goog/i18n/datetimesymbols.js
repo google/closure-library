@@ -3391,6 +3391,10 @@ goog.i18n.DateTimeSymbols;
  */
 goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 
+if (goog.LOCALE == 'en_ISO' || goog.LOCALE == 'en-ISO') {
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ISO;
+}
+
 if (goog.LOCALE == 'af') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_af;
 }
