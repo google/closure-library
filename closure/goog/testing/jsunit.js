@@ -115,17 +115,37 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
       tr.setErrorFilter(goog.global['G_errorFilter']);
     }
 
+    function maybeGetStack(error) {
+      if (typeof error == 'object') {
+        var stack = error.stack;
+        if (stack && typeof stack == 'string') {
+          // non-empty string
+          return stack;
+        }
+      }
+      return '';
+    }
+
     // Add an error handler to report errors that may occur during
     // initialization of the page.
     var onerror = window.onerror;
-    window.onerror = function(error, url, line) {
+    window.onerror = function(messageOrEvent, url, line) {
+      // TODO(johnlenz): fix this function parameters once the "onerror"
+      // definition has been corrected.
+      // colno and errObj were added later.
+      var colno = arguments[3];
+      var errObj = arguments[4];
       // Call any existing onerror handlers.
       if (onerror) {
-        onerror(error, url, line);
+        onerror.apply(window, arguments);
       }
-      if (typeof error == 'object') {
-        // Webkit started passing an event object as the only argument to
-        // window.onerror.  It doesn't contain an error message, url or line
+      var stack = maybeGetStack(errObj || messageOrEvent);
+      if (stack) {
+        tr.logError(stack);
+      } else if (typeof messageOrEvent == 'object') {
+        var error = messageOrEvent;
+        // Some older webkit browsers pass an event object as the only argument
+        // to window.onerror.  It doesn't contain an error message, url or line
         // number.  We therefore log as much info as we can.
         if (error.target && error.target.tagName == goog.dom.TagName.SCRIPT) {
           tr.logError('UNKNOWN ERROR: Script ' + error.target.src);
@@ -133,7 +153,11 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
           tr.logError('UNKNOWN ERROR: No error information available.');
         }
       } else {
-        tr.logError('JS ERROR: ' + error + '\nURL: ' + url + '\nLine: ' + line);
+        // Add the column if it is available, older browsers won't have it.
+        var colstr = colno != null ? '\nColumn: ' + colno : '';
+        tr.logError(
+            'JS ERROR: ' + messageOrEvent + '\nURL: ' + url +
+            '\nLine: ' + line + colstr);
       }
     };
 
