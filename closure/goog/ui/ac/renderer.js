@@ -269,8 +269,7 @@ goog.ui.ac.Renderer.prototype.target_;
 
 /**
  * The element on which to base the width of the autocomplete.
- * @type {Node}
- * @private
+ * @protected {Node}
  */
 goog.ui.ac.Renderer.prototype.widthProvider_;
 
