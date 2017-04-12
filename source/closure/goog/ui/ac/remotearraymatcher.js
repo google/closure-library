@@ -196,7 +196,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
   var matches = [];
   // If there is no response text, unsafeParse will throw a syntax error.
   if (responseText) {
-    /** @preserveTry */
+
     try {
       matches = goog.json.unsafeParse(responseText);
     } catch (exception) {

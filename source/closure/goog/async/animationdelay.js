@@ -161,6 +161,16 @@ goog.async.AnimationDelay.prototype.start = function() {
 
 
 /**
+ * Starts the delay timer if it's not already active.
+ */
+goog.async.AnimationDelay.prototype.startIfNotActive = function() {
+  if (!this.isActive()) {
+    this.start();
+  }
+};
+
+
+/**
  * Stops the delay timer if it is active. No action is taken if the timer is not
  * in use.
  */

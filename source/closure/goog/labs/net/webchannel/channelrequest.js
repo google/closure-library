@@ -529,7 +529,7 @@ ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
 ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   requestStats.onStartExecution();
 
-  /** @preserveTry */
+
   try {
     if (xmlhttp == this.xmlHttp_) {
       this.onXmlHttpReadyStateChanged_();
@@ -1051,7 +1051,7 @@ ChannelRequest.prototype.getRequestStartTime = function() {
  * @private
  */
 ChannelRequest.prototype.safeOnRequestData_ = function(data) {
-  /** @preserveTry */
+
   try {
     this.channel_.onRequestData(this, data);
     var stats = requestStats.ServerReachability;

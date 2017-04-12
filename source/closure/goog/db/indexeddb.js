@@ -138,10 +138,12 @@ goog.db.IndexedDb.prototype.getName = function() {
 
 
 /**
- * @return {string} The current database version.
+ * @return {number} The current database version.
  */
 goog.db.IndexedDb.prototype.getVersion = function() {
-  return this.db_.version;
+  // TODO(bradfordcsmith): drop Number() call once closure compiler's externs
+  // are updated
+  return Number(this.db_.version);
 };
 
 

@@ -66,6 +66,21 @@ goog.i18n.currency.tier2Enabled_ = false;
 
 
 /**
+ * Tests if currency is available.
+ *
+ * Note: If the currency is not available it might be in the tier2 currency set:
+ * {@link goog.i18n.currency.CurrencyInfoTier2}. If that is the case call
+ * {@link goog.i18n.currency.addTier2Support} before calling any other function
+ * in this namespace.
+ *
+ * @param {string} currencyCode Currency code to tested.
+ * @return {boolean} If the currency is available.
+ */
+goog.i18n.currency.isAvailable = function(currencyCode) {
+  return currencyCode in goog.i18n.currency.CurrencyInfo;
+};
+
+/**
  * This function will add tier2 currency support. Be default, only tier1
  * (most popular currencies) are supported. If an application really needs
  * to support some of the rarely used currencies, it should call this function
@@ -355,6 +370,11 @@ goog.i18n.currency.CurrencyInfo = {
 
 /**
  * Tier 2 currency information.
+ *
+ * It's not recommended to read this data directly. Format numbers using
+ * {@link goog.i18n.NumberFormat} with
+ * {@link goog.i18n.NumberFormat.Format.CURRENCY} instead.
+ *
  * @const {!Object<!Array<?>>}
  */
 goog.i18n.currency.CurrencyInfoTier2 = {

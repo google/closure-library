@@ -67,7 +67,7 @@ goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj = function(original) {
   // into the test function.
   var queueWrapperFn = function(fn) {
     return function() {
-      var queue = new goog.testing.JsTdAsyncWrapper.Queue_(this);
+      var queue = new goog.testing.JsTdAsyncWrapper.Queue(this);
       fn.call(this, queue);
       return queue.startExecuting();
     };
@@ -93,10 +93,9 @@ goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj = function(original) {
  * @param {!Object} testObj The test object containing all test methods. This
  *     object is passed into queue callbacks as the "this" object.
  * @constructor
- * @private
  * @final
  */
-goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
+goog.testing.JsTdAsyncWrapper.Queue = function(testObj) {
   /**
    * The queue steps.
    * @private {!Array<!goog.testing.JsTdAsyncWrapper.Step_>}
@@ -105,7 +104,7 @@ goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
 
   /**
    * A delegate that is used within a defer call.
-   * @private {?goog.testing.JsTdAsyncWrapper.Queue_}
+   * @private {?goog.testing.JsTdAsyncWrapper.Queue}
    */
   this.delegate_ = null;
 
@@ -124,7 +123,7 @@ goog.testing.JsTdAsyncWrapper.Queue_ = function(testObj) {
  * @param {function(!goog.testing.JsTdAsyncWrapper.Pool_=)=} opt_fn A function
  *   that will be called.
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(
+goog.testing.JsTdAsyncWrapper.Queue.prototype.defer = function(
     stepName, opt_fn) {
   var fn = opt_fn;
   if (!opt_fn && typeof stepName == 'function') {
@@ -149,7 +148,7 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.defer = function(
  * Starts the execution.
  * @return {!goog.Promise<void>}
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.startExecuting = function() {
+goog.testing.JsTdAsyncWrapper.Queue.prototype.startExecuting = function() {
   return new goog.Promise(goog.bind(function(resolve, reject) {
     this.executeNextStep_(resolve, reject);
   }, this));
@@ -163,7 +162,7 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.startExecuting = function() {
  * @param {function(*)} errback
  * @private
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeNextStep_ = function(
+goog.testing.JsTdAsyncWrapper.Queue.prototype.executeNextStep_ = function(
     callback, errback) {
   // Note: From this point on, we can no longer use goog.Promise (which uses
   // the goog.async.run queue) because it conflicts with MockClock, and we can't
@@ -174,7 +173,7 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeNextStep_ = function(
     return;
   }
   var step = this.steps_.shift();
-  this.delegate_ = new goog.testing.JsTdAsyncWrapper.Queue_(this.testObj_);
+  this.delegate_ = new goog.testing.JsTdAsyncWrapper.Queue(this.testObj_);
   var pool = new goog.testing.JsTdAsyncWrapper.Pool_(
       this.testObj_, goog.bind(function() {
         goog.testing.JsTdAsyncWrapper.REAL_SET_TIMEOUT_(goog.bind(function() {
@@ -198,7 +197,7 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeNextStep_ = function(
  * @param {function(*)} errback
  * @private
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeDelegate_ = function(
+goog.testing.JsTdAsyncWrapper.Queue.prototype.executeDelegate_ = function(
     callback, errback) {
   // Wait till the delegate queue completes before moving on to the
   // next step.
@@ -221,7 +220,7 @@ goog.testing.JsTdAsyncWrapper.Queue_.prototype.executeDelegate_ = function(
  * @param {string} stepName
  * @private
  */
-goog.testing.JsTdAsyncWrapper.Queue_.prototype.handleError_ = function(
+goog.testing.JsTdAsyncWrapper.Queue.prototype.handleError_ = function(
     errback, reason, stepName) {
   var error = reason instanceof Error ? reason : Error(reason);
   error.message = 'In step ' + stepName + ', error: ' + error.message;

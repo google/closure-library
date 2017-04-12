@@ -38,6 +38,8 @@ goog.require('goog.messaging.MessageChannel');  // interface
  */
 goog.messaging.DeferredChannel = function(deferredChannel) {
   goog.messaging.DeferredChannel.base(this, 'constructor');
+
+  /** @private {!goog.async.Deferred<!goog.messaging.MessageChannel>} */
   this.deferred_ = deferredChannel;
 };
 goog.inherits(goog.messaging.DeferredChannel, goog.Disposable);

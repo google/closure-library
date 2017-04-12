@@ -313,7 +313,7 @@ goog.testing.stacktrace.followCallChain_ = function() {
 
     frames.push(new goog.testing.stacktrace.Frame('', functionName, '', ''));
 
-    /** @preserveTry */
+
     try {
       fn = fn.caller;
     } catch (e) {

@@ -82,7 +82,7 @@ goog.userAgent.flash.init_ = function() {
     }
   }
 
-  /** @preserveTry */
+
   try {
     // Try 7 first, since we know we can use GetVariable with it
     var ax = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.7');
@@ -95,7 +95,7 @@ goog.userAgent.flash.init_ = function() {
   }
 
   // Try 6 next, some versions are known to crash with GetVariable calls
-  /** @preserveTry */
+
   try {
     var ax = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6');
     goog.userAgent.flash.detectedFlash_ = true;
@@ -106,7 +106,7 @@ goog.userAgent.flash.init_ = function() {
     /* Fall through */
   }
 
-  /** @preserveTry */
+
   try {
     // Try the default activeX
     var ax = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');

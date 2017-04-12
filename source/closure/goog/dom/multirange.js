@@ -477,7 +477,7 @@ goog.dom.MultiRangeIterator.prototype.isLast = function() {
 
 /** @override */
 goog.dom.MultiRangeIterator.prototype.next = function() {
-  /** @preserveTry */
+
   try {
     var it = this.iterators_[this.currentIdx_];
     var next = it.next();

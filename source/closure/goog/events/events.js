@@ -880,7 +880,7 @@ goog.events.markIeEvent_ = function(e) {
     // We could test that that is the case but that would allocate 3 objects.
     // If we use try/catch we will only allocate extra objects in the case of a
     // failure.
-    /** @preserveTry */
+
     try {
       e.keyCode = -1;
       return;

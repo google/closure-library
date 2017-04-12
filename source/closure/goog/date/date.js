@@ -1656,7 +1656,7 @@ goog.date.DateTime.prototype.toString = function() {
 
 
 /**
- * Generates time label for the datetime, e.g., '5:30am'.
+ * Generates time label for the datetime, e.g., '5:30 AM'.
  * By default this does not pad hours (e.g., to '05:30') and it does add
  * an am/pm suffix.
  * TODO(user): i18n -- hardcoding time format like this is bad.  E.g., in CJK
@@ -1698,7 +1698,7 @@ goog.date.DateTime.prototype.toUsTimeString = function(
 
   // by default, show am/pm suffix
   if (opt_showAmPm) {
-    label += isPM ? 'pm' : 'am';
+    label += isPM ? ' PM' : ' AM';
   }
   return label;
 };

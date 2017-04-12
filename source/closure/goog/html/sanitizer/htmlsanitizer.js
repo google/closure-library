@@ -184,6 +184,8 @@ goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_ =
 goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
   var builder = opt_builder || new goog.html.sanitizer.HtmlSanitizer.Builder();
 
+  builder.installPolicies_();
+
   /** @private {boolean} */
   this.shouldSanitizeTemplateContents_ =
       builder.shouldSanitizeTemplateContents_;
@@ -356,6 +358,12 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
    *     !goog.html.sanitizer.HtmlSanitizerPolicyContext):?string)}
    */
   this.sanitizeCssPolicy_ = undefined;
+
+  /**
+   * True iff policies have been installed for the instance.
+   * @private {boolean}
+   */
+  this.policiesInstalled_ = false;
 };
 
 
@@ -640,6 +648,20 @@ goog.html.sanitizer.HtmlSanitizer.installDefaultPolicy_ = function(
  * @return {!goog.html.sanitizer.HtmlSanitizer}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
+  return new goog.html.sanitizer.HtmlSanitizer(this);
+};
+
+/**
+ * Installs the sanitization policies for the attributes.
+ * May only be called once.
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
+    function() {
+  if (this.policiesInstalled_) {
+    throw new Error('HtmlSanitizer.Builder.build() can only be used once.');
+  }
+
   if (!this.allowFormTag_) {
     this.tagBlacklist_['FORM'] = true;
   }
@@ -706,8 +728,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
         this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
         goog.functions.NULL);
   }
-
-  return new goog.html.sanitizer.HtmlSanitizer(this);
+  this.policiesInstalled_ = true;
 };
 
 

@@ -36,6 +36,8 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.testing.asserts');
 
+goog.forwardDeclare('goog.testing.MockExpectation'); // circular
+
 
 
 /**

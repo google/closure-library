@@ -292,9 +292,14 @@ WebChannelBaseTransport.Channel.ErrorEvent = function(error) {
   WebChannelBaseTransport.Channel.ErrorEvent.base(this, 'constructor');
 
   /**
-   * Transport specific error code is not to be propagated with the event.
+   * High-level status code.
    */
   this.status = goog.net.WebChannel.ErrorStatus.NETWORK_ERROR;
+
+  /**
+   * @const {WebChannelBase.Error} Internal error code, for debugging use only.
+   */
+  this.errorCode = error;
 };
 goog.inherits(
     WebChannelBaseTransport.Channel.ErrorEvent, goog.net.WebChannel.ErrorEvent);

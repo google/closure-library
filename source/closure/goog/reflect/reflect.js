@@ -89,7 +89,7 @@ goog.reflect.sinkValue[' '] = goog.nullFunction;
  *     if obj is null.
  */
 goog.reflect.canAccessProperty = function(obj, prop) {
-  /** @preserveTry */
+
   try {
     goog.reflect.sinkValue(obj[prop]);
     return true;

@@ -630,7 +630,7 @@ goog.ui.KeyboardShortcutHandler.prototype.disposeInternal = function() {
 /**
  * Returns event type for a specific shortcut.
  * @param {string} identifier Identifier for the shortcut task.
- * @return {string} Theh event type.
+ * @return {string} The event type.
  */
 goog.ui.KeyboardShortcutHandler.prototype.getEventType = function(identifier) {
 

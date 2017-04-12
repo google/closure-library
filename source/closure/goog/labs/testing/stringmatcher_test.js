@@ -21,6 +21,13 @@ goog.require('goog.labs.testing.StringContainsInOrderMatcher');
 goog.require('goog.labs.testing.assertThat');
 goog.require('goog.testing.jsunit');
 
+function testAnyString() {
+  goog.labs.testing.assertThat('foo', anyString(), 'typeof "foo" == "string"');
+  assertMatcherError(function() {
+    goog.labs.testing.assertThat(1, anyString());
+  }, 'typeof 1 == "string"');
+}
+
 function testContainsString() {
   goog.labs.testing.assertThat(
       'hello', containsString('ell'), 'hello contains ell');

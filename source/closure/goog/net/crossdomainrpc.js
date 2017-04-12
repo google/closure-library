@@ -589,7 +589,7 @@ goog.net.CrossDomainRpc.prototype.detectResponse_ = function(
  * @private
  */
 goog.net.CrossDomainRpc.isResponseInfoFrame_ = function(frame) {
-  /** @preserveTry */
+
   try {
     return goog.net.CrossDomainRpc.getFramePayload_(frame).indexOf(
                goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_) == 1;

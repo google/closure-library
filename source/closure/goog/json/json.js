@@ -136,7 +136,7 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
       }
       var o = String(s);
       if (goog.json.isValid(o)) {
-        /** @preserveTry */
+
         try {
           var result = /** @type {?Object} */ (eval('(' + o + ')'));
           if (error) {

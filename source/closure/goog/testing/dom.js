@@ -37,6 +37,8 @@ goog.require('goog.style');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.dom.AbstractRange');
+
 
 /**
  * @return {!Node} A DIV node with a unique ID identifying the

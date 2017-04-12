@@ -295,7 +295,7 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
       return;
     }
 
-    /** @preserveTry */
+
     try {
       var channel = /** @type {!goog.labs.net.webChannel.WebChannelBase} */ (
           this.channel_);

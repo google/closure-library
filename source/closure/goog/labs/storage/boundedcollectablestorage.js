@@ -88,7 +88,7 @@ goog.labs.storage.BoundedCollectableStorage.prototype.rebuildIndex_ =
         }
 
         var wrapper;
-        /** @preserveTry */
+
         try {
           wrapper = this.getWrapper(key, true);
         } catch (ex) {

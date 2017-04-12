@@ -23,9 +23,9 @@
 
 goog.module('goog.net.rpc.HttpCors');
 
+var GoogUri = goog.require('goog.Uri');
 var googObject = goog.require('goog.object');
 var googString = goog.require('goog.string');
-var googUri = goog.require('goog.Uri');
 var googUriUtils = goog.require('goog.uri.utils');
 
 
@@ -75,10 +75,10 @@ exports.generateEncodedHttpHeadersOverwriteParam = function(headers) {
 /**
  * Sets custom HTTP headers via an overwrite URL param.
  *
- * @param {!googUri|string} url The URI object or a string path.
+ * @param {!GoogUri|string} url The URI object or a string path.
  * @param {string} urlParam The URL param name.
  * @param {!Object<string, string>} extraHeaders The HTTP headers.
- * @return {!googUri|string} The URI object or a string path with headers
+ * @return {!GoogUri|string} The URI object or a string path with headers
  * encoded as a url param.
  */
 exports.setHttpHeadersWithOverwriteParam = function(

@@ -82,7 +82,7 @@ xhr.Options;
 
 /**
  * Defines the types that are allowed as post data.
- * @typedef {(ArrayBuffer|Blob|Document|FormData|null|string|undefined)}
+ * @typedef {(ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined)}
  */
 xhr.PostData;
 

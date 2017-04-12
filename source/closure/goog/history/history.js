@@ -818,7 +818,7 @@ goog.History.prototype.getIframeToken_ = function() {
     var contentWindow = this.iframe_.contentWindow;
     if (contentWindow) {
       var hash;
-      /** @preserveTry */
+
       try {
         // Iframe tokens are urlEncoded
         hash = goog.string.urlDecode(this.getLocationFragment_(contentWindow));

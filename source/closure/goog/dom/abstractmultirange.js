@@ -25,6 +25,7 @@ goog.provide('goog.dom.AbstractMultiRange');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.AbstractRange');
+goog.require('goog.dom.TextRange');
 
 
 
@@ -54,6 +55,15 @@ goog.dom.AbstractMultiRange.prototype.containsRange = function(
     });
   });
 };
+
+
+/** @override */
+goog.dom.AbstractMultiRange.prototype.containsNode = function(
+    node, opt_allowPartial) {
+  return this.containsRange(
+      goog.dom.TextRange.createFromNodeContents(node), opt_allowPartial);
+};
+
 
 
 /** @override */

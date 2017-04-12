@@ -75,6 +75,16 @@ function assertSanitizedHtml(originalHtml, expectedHtml, opt_sanitizer) {
       throw err;
     }
   }
+  if (!opt_sanitizer) {
+    // Retry with raw sanitizer created without the builder.
+    assertSanitizedHtml(
+        originalHtml, expectedHtml, new goog.html.sanitizer.HtmlSanitizer());
+    // Retry with an explicitly passed in Builder.
+    var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+    assertSanitizedHtml(
+        originalHtml, expectedHtml,
+        new goog.html.sanitizer.HtmlSanitizer(builder));
+  }
 }
 
 
@@ -127,6 +137,18 @@ function testHtmlSanitizeSafeHtml() {
 function testDefaultCssSanitizeImage() {
   var html = '<div></div>';
   assertSanitizedHtml(html, html);
+}
+
+
+function testBuilderCanOnlyBeUsedOnce() {
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  var sanitizer = builder.build();
+  assertThrows(function() {
+    builder.build();
+  });
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer(builder);
+  });
 }
 
 

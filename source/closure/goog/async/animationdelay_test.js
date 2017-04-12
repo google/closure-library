@@ -69,5 +69,21 @@ testSuite({
     delay.start();
 
     return resolver.promise;
+  },
+
+  testStartIfActive: function() {
+    var delay = new AnimationDelay(goog.nullFunction);
+    delay.start();
+
+    var startWasCalled = false;
+    stubs.set(AnimationDelay.prototype, 'start', function() {
+      startWasCalled = true;
+    });
+
+    delay.startIfNotActive();
+    assertEquals(startWasCalled, false);
+    delay.stop();
+    delay.startIfNotActive();
+    assertEquals(startWasCalled, true);
   }
 });

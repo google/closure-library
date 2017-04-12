@@ -32,6 +32,7 @@ goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
+goog.require('goog.testing.TestQueue');
 goog.require('goog.uri.utils');
 
 

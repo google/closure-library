@@ -934,6 +934,17 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
+   * Whether IE9 or earlier is waiting on a dependency.  This ensures that
+   * deferred modules that have no non-deferred dependencies actually get
+   * loaded, since if we defer them and then never pull in a non-deferred
+   * script, then `goog.loadQueuedModules_` will never be called.  Instead,
+   * if not waiting on anything we simply don't defer in the first place.
+   * @private {boolean}
+   */
+  goog.oldIeWaiting_ = false;
+
+
+  /**
    * Given a URL initiate retrieval and execution of a script that needs
    * pre-processing.
    * @param {string} src Script source URL.
@@ -1017,6 +1028,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         goog.maybeProcessDeferredPath_(path);
       }
     }
+    goog.oldIeWaiting_ = false;
   };
 
 
@@ -1199,6 +1211,7 @@ if (goog.DEPENDENCIES_ENABLED) {
             goog.writeScriptSrcNode_(src);
           }
         } else {
+          goog.oldIeWaiting_ = true;
           var state = ' onreadystatechange=\'goog.onScriptLoad_(this, ' +
               ++goog.lastNonModuleScriptIndex_ + ')\' ';
           doc.write(
@@ -1585,7 +1598,7 @@ goog.retrieveAndExec_ = function(src, isModule, needsTranspile) {
       scriptText += '\n//# sourceURL=' + src;
     }
     var isOldIE = goog.IS_OLD_IE_;
-    if (isOldIE) {
+    if (isOldIE && goog.oldIeWaiting_) {
       goog.dependencies_.deferred[originalPath] = scriptText;
       goog.queuedModules_.push(originalPath);
     } else {
@@ -1916,7 +1929,7 @@ goog.removeUid = function(obj) {
   if (obj !== null && 'removeAttribute' in obj) {
     obj.removeAttribute(goog.UID_PROPERTY_);
   }
-  /** @preserveTry */
+
   try {
     delete obj[goog.UID_PROPERTY_];
   } catch (ex) {

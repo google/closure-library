@@ -147,7 +147,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.connect = function() {
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
   var retry = true;
-  /** @preserveTry */
+
   try {
     if (!this.iframeElm_) {
       // throws security exception when called too early

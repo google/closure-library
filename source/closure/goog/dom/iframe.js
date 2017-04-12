@@ -37,7 +37,7 @@ goog.require('goog.userAgent');
  * Security Policy (CSP). According to http://www.w3.org/TR/CSP/ CSP does not
  * allow inline javascript by default.
  *
- * @type {string}
+ * @const {string}
  */
 goog.dom.iframe.BLANK_SOURCE =
     goog.userAgent.IE ? 'javascript:""' : 'about:blank';
@@ -69,7 +69,7 @@ goog.dom.iframe.BLANK_SOURCE =
  * throws an error with 'javascript:undefined'. Webkit browsers will reload the
  * iframe when setting this source on an existing iframe.
  *
- * @type {string}
+ * @const {string}
  */
 goog.dom.iframe.BLANK_SOURCE_NEW_FRAME =
     goog.userAgent.IE ? 'javascript:""' : 'javascript:undefined';
@@ -77,7 +77,7 @@ goog.dom.iframe.BLANK_SOURCE_NEW_FRAME =
 
 /**
  * Styles to help ensure an undecorated iframe.
- * @type {string}
+ * @const {string}
  * @private
  */
 goog.dom.iframe.STYLES_ = 'border:0;vertical-align:bottom;';

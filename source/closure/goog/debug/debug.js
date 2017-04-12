@@ -21,10 +21,6 @@
 goog.provide('goog.debug');
 
 goog.require('goog.array');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeUrl');
-goog.require('goog.html.uncheckedconversions');
-goog.require('goog.string.Const');
 goog.require('goog.structs.Set');
 goog.require('goog.userAgent');
 
@@ -123,7 +119,7 @@ goog.debug.expose = function(obj, opt_showFn) {
       continue;
     }
     var s = x + ' = ';
-    /** @preserveTry */
+
     try {
       s += obj[x];
     } catch (e) {
@@ -157,7 +153,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
       return str.replace(/\n/g, '\n' + space);
     };
 
-    /** @preserveTry */
+
     try {
       if (!goog.isDef(obj)) {
         str.push('undefined');
@@ -212,74 +208,6 @@ goog.debug.exposeArray = function(arr) {
     }
   }
   return '[ ' + str.join(', ') + ' ]';
-};
-
-
-/**
- * Exposes an exception that has been caught by a try...catch and outputs the
- * error as HTML with a stack trace.
- * @param {Object} err Error object or string.
- * @param {Function=} opt_fn Optional function to start stack trace from.
- * @return {string} Details of exception, as HTML.
- * @deprecated use goog.debug.HtmlFormatter.exposeException instead
- */
-goog.debug.exposeException = function(err, opt_fn) {
-  var html = goog.debug.exposeExceptionAsHtml(err, opt_fn);
-  return goog.html.SafeHtml.unwrap(html);
-};
-
-
-/**
- * Exposes an exception that has been caught by a try...catch and outputs the
- * error with a stack trace.
- * @param {Object} err Error object or string.
- * @param {Function=} opt_fn Optional function to start stack trace from.
- * @return {!goog.html.SafeHtml} Details of exception.
- * @deprecated use goog.debug.HtmlFormatter.exposeExceptionAsHtml instead
- */
-goog.debug.exposeExceptionAsHtml = function(err, opt_fn) {
-  /** @preserveTry */
-  try {
-    var e = goog.debug.normalizeErrorObject(err);
-    // Create the error message
-    var viewSourceUrl = goog.debug.createViewSourceUrl_(e.fileName);
-    var error = goog.html.SafeHtml.concat(
-        goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-            'Message: ' + e.message + '\nUrl: '),
-        goog.html.SafeHtml.create(
-            'a', {href: viewSourceUrl, target: '_new'}, e.fileName),
-        goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-            '\nLine: ' + e.lineNumber + '\n\nBrowser stack:\n' + e.stack +
-            '-> ' +
-            '[end]\n\nJS stack traversal:\n' +
-            goog.debug.getStacktrace(opt_fn) + '-> '));
-    return error;
-  } catch (e2) {
-    return goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-        'Exception trying to expose exception! You win, we lose. ' + e2);
-  }
-};
-
-
-/**
- * @param {?string=} opt_fileName
- * @return {!goog.html.SafeUrl} SafeUrl with view-source scheme, pointing at
- *     fileName.
- * @private
- */
-goog.debug.createViewSourceUrl_ = function(opt_fileName) {
-  if (!goog.isDefAndNotNull(opt_fileName)) {
-    opt_fileName = '';
-  }
-  if (!/^https?:\/\//i.test(opt_fileName)) {
-    return goog.html.SafeUrl.fromConstant(
-        goog.string.Const.from('sanitizedviewsrc'));
-  }
-  var sanitizedFileName = goog.html.SafeUrl.sanitize(opt_fileName);
-  return goog.html.uncheckedconversions
-      .safeUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('view-source scheme plus HTTP/HTTPS URL'),
-          'view-source:' + goog.html.SafeUrl.unwrap(sanitizedFileName));
 };
 
 
@@ -410,7 +338,7 @@ goog.debug.getStacktraceSimple = function(opt_depth) {
   while (fn && (!opt_depth || depth < opt_depth)) {
     sb.push(goog.debug.getFunctionName(fn));
     sb.push('()\n');
-    /** @preserveTry */
+
     try {
       fn = fn.caller;
     } catch (e) {
@@ -555,7 +483,7 @@ goog.debug.getStacktraceHelper_ = function(fn, visited) {
     }
     visited.push(fn);
     sb.push(')\n');
-    /** @preserveTry */
+
     try {
       sb.push(goog.debug.getStacktraceHelper_(fn.caller, visited));
     } catch (e) {

@@ -597,7 +597,7 @@ goog.net.ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   /** @suppress {missingRequire} */
   goog.net.BrowserChannel.onStartExecution();
 
-  /** @preserveTry */
+
   try {
     if (xmlhttp == this.xmlHttp_) {
       this.onXmlHttpReadyStateChanged_();
@@ -1322,7 +1322,7 @@ goog.net.ChannelRequest.prototype.getRequestStartTime = function() {
  * @private
  */
 goog.net.ChannelRequest.prototype.safeOnRequestData_ = function(data) {
-  /** @preserveTry */
+
   try {
     this.channel_.onRequestData(this, data);
     /** @suppress {missingRequire} goog.net.BrowserChannel */

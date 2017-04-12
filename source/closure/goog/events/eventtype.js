@@ -147,6 +147,17 @@ goog.events.EventType = {
   VOLUMECHANGE: 'volumechange',
   WAITING: 'waiting',
 
+  // Media Source Extensions events
+  // https://www.w3.org/TR/media-source/#mediasource-events
+  SOURCEOPEN: 'sourceopen',
+  SOURCEENDED: 'sourceended',
+  SOURCECLOSED: 'sourceclosed',
+  // https://www.w3.org/TR/media-source/#sourcebuffer-events
+  ABORT: 'abort',
+  UPDATE: 'update',
+  UPDATESTART: 'updatestart',
+  UPDATEEND: 'updateend',
+
   // HTML 5 History events
   // See http://www.w3.org/TR/html5/browsers.html#event-definitions-0
   HASHCHANGE: 'hashchange',
