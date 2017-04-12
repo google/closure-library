@@ -1059,7 +1059,7 @@ goog.i18n.NumberFormat.PATTERN_EXPONENT_ = 'E';
 
 
 /**
- * An plus character.
+ * A plus character.
  * @type {string}
  * @private
  */
@@ -1067,7 +1067,7 @@ goog.i18n.NumberFormat.PATTERN_PLUS_ = '+';
 
 
 /**
- * A quote character.
+ * A generic currency sign character.
  * @type {string}
  * @private
  */
