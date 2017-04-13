@@ -720,8 +720,8 @@ goog.addDependency('math/interpolator/spline1_test.js', ['goog.math.interpolator
 goog.addDependency('math/irect.js', ['goog.math.IRect'], [], {});
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/line_test.js', ['goog.math.LineTest'], ['goog.math.Coordinate', 'goog.math.Line', 'goog.testing.jsunit'], {});
-goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.reflect'], {});
-goog.addDependency('math/long_test.js', ['goog.math.LongTest'], ['goog.math.Long', 'goog.testing.jsunit'], {});
+goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.asserts', 'goog.reflect'], {});
+goog.addDependency('math/long_test.js', ['goog.math.LongTest'], ['goog.asserts', 'goog.math.Long', 'goog.testing.jsunit'], {});
 goog.addDependency('math/math.js', ['goog.math'], ['goog.array', 'goog.asserts'], {});
 goog.addDependency('math/math_test.js', ['goog.mathTest'], ['goog.math', 'goog.testing.jsunit'], {});
 goog.addDependency('math/matrix.js', ['goog.math.Matrix'], ['goog.array', 'goog.asserts', 'goog.math', 'goog.math.Size', 'goog.string'], {});
