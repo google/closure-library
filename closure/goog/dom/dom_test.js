@@ -228,6 +228,7 @@ function testSetProperties() {
     'name': 'test3',
     'title': 'A title',
     'random': 'woop',
+    'other-random': null,
     'href': goog.html.SafeUrl.sanitize('https://google.com')
   };
   var el = $('testEl');
