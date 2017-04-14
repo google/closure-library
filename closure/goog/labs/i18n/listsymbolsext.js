@@ -46,7 +46,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_ar_001');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_AE');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_BH');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_DJ');
-goog.provide('goog.labs.i18n.ListFormatSymbols_ar_DZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_EG');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_EH');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar_ER');
@@ -774,18 +773,6 @@ goog.labs.i18n.ListFormatSymbols_ar_BH = {
  * List formatting symbols for locale ar_DJ.
  */
 goog.labs.i18n.ListFormatSymbols_ar_DJ = {
-  GENDER_STYLE: 2,
-  LIST_TWO: '{0} و{1}',
-  LIST_START: '{0}، {1}',
-  LIST_MIDDLE: '{0}، {1}',
-  LIST_END: '{0}، و{1}'
-};
-
-
-/**
- * List formatting symbols for locale ar_DZ.
- */
-goog.labs.i18n.ListFormatSymbols_ar_DZ = {
   GENDER_STYLE: 2,
   LIST_TWO: '{0} و{1}',
   LIST_START: '{0}، {1}',
@@ -8027,10 +8014,6 @@ if (goog.LOCALE == 'ar_BH' || goog.LOCALE == 'ar-BH') {
 
 if (goog.LOCALE == 'ar_DJ' || goog.LOCALE == 'ar-DJ') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ar_DJ;
-}
-
-if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ar_DZ;
 }
 
 if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {

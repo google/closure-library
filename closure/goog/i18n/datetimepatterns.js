@@ -46,6 +46,7 @@ goog.provide('goog.i18n.DateTimePatterns');
 goog.provide('goog.i18n.DateTimePatterns_af');
 goog.provide('goog.i18n.DateTimePatterns_am');
 goog.provide('goog.i18n.DateTimePatterns_ar');
+goog.provide('goog.i18n.DateTimePatterns_ar_DZ');
 goog.provide('goog.i18n.DateTimePatterns_az');
 goog.provide('goog.i18n.DateTimePatterns_be');
 goog.provide('goog.i18n.DateTimePatterns_bg');
@@ -209,6 +210,12 @@ goog.i18n.DateTimePatterns_ar = {
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
   DAY_ABBR: 'd'
 };
+
+
+/**
+ * Extended set of localized date/time patterns for locale ar_DZ.
+ */
+goog.i18n.DateTimePatterns_ar_DZ = goog.i18n.DateTimePatterns_ar;
 
 
 /**
@@ -2136,6 +2143,10 @@ if (goog.LOCALE == 'am') {
 
 if (goog.LOCALE == 'ar') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar;
+}
+
+if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_DZ;
 }
 
 if (goog.LOCALE == 'az') {

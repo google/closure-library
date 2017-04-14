@@ -51,7 +51,6 @@ goog.provide('goog.i18n.DateTimePatterns_ar_001');
 goog.provide('goog.i18n.DateTimePatterns_ar_AE');
 goog.provide('goog.i18n.DateTimePatterns_ar_BH');
 goog.provide('goog.i18n.DateTimePatterns_ar_DJ');
-goog.provide('goog.i18n.DateTimePatterns_ar_DZ');
 goog.provide('goog.i18n.DateTimePatterns_ar_EG');
 goog.provide('goog.i18n.DateTimePatterns_ar_EH');
 goog.provide('goog.i18n.DateTimePatterns_ar_ER');
@@ -744,12 +743,6 @@ goog.i18n.DateTimePatterns_ar_BH = goog.i18n.DateTimePatterns_ar;
  * Extended set of localized date/time patterns for locale ar_DJ.
  */
 goog.i18n.DateTimePatterns_ar_DJ = goog.i18n.DateTimePatterns_ar;
-
-
-/**
- * Extended set of localized date/time patterns for locale ar_DZ.
- */
-goog.i18n.DateTimePatterns_ar_DZ = goog.i18n.DateTimePatterns_ar;
 
 
 /**
@@ -7628,10 +7621,6 @@ if (goog.LOCALE == 'ar_BH' || goog.LOCALE == 'ar-BH') {
 
 if (goog.LOCALE == 'ar_DJ' || goog.LOCALE == 'ar-DJ') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_DJ;
-}
-
-if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
-  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_DZ;
 }
 
 if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {

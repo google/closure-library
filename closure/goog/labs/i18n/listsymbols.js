@@ -38,6 +38,7 @@ goog.provide('goog.labs.i18n.ListFormatSymbols');
 goog.provide('goog.labs.i18n.ListFormatSymbols_af');
 goog.provide('goog.labs.i18n.ListFormatSymbols_am');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar');
+goog.provide('goog.labs.i18n.ListFormatSymbols_ar_DZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_az');
 goog.provide('goog.labs.i18n.ListFormatSymbols_be');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bg');
@@ -174,6 +175,18 @@ goog.labs.i18n.ListFormatSymbols_am = {
  * List formatting symbols for locale ar.
  */
 goog.labs.i18n.ListFormatSymbols_ar = {
+  GENDER_STYLE: 2,
+  LIST_TWO: '{0} و{1}',
+  LIST_START: '{0}، {1}',
+  LIST_MIDDLE: '{0}، {1}',
+  LIST_END: '{0}، و{1}'
+};
+
+
+/**
+ * List formatting symbols for locale ar_DZ.
+ */
+goog.labs.i18n.ListFormatSymbols_ar_DZ = {
   GENDER_STYLE: 2,
   LIST_TWO: '{0} و{1}',
   LIST_START: '{0}، {1}',
@@ -1473,6 +1486,10 @@ if (goog.LOCALE == 'am') {
 
 if (goog.LOCALE == 'ar') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ar;
+}
+
+if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ar_DZ;
 }
 
 if (goog.LOCALE == 'az') {
