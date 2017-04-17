@@ -572,6 +572,34 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
 
 
 /**
+ * Split array into two arrays: one that satisfies the given condition,
+ * and one that does not satisfy the condition.
+ * @param {Array<T>|goog.array.ArrayLike} arr Array or array
+ *     like object over which to iterate.
+ * @param {?function(this:S, T, number, ?) : boolean} f The function to call
+ *     for every element. This function
+ *     takes 3 arguments (the element, the index and the array) and should
+ *     return a boolean.
+ * @param {S=} opt_obj An optional "this" context for the function.
+ * @return {Array<Array<T>>} An array of 2 elements: values of
+ *       arr which satisfies the condition and ones which does not.
+ * @template T,S
+ */
+goog.array.partition = function(arr, f, opt_obj) {
+  var trues = [];
+  var falses = [];
+  goog.array.forEach(arr, function(val, index) {
+    if (f.call(opt_obj, val, index, arr)) {
+      trues.push(val);
+    } else {
+      falses.push(val);
+    }
+  });
+  return [trues, falses];
+};
+
+
+/**
  * Whether the array contains the given object.
  * @param {IArrayLike<?>|string} arr The array to test for the presence of the
  *     element.
