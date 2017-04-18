@@ -356,7 +356,8 @@ goog.net.Cookies.prototype.getKeyValues_ = function() {
 // instance.
 /**
  * A static default instance.
- * @type {goog.net.Cookies}
+ * @type {!goog.net.Cookies}
+ * @const
  */
 goog.net.cookies =
     new goog.net.Cookies(typeof document == 'undefined' ? null : document);
