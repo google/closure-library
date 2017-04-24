@@ -91,7 +91,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
     tr.setErrorFilter(goog.global['G_errorFilter']);
   }
 
-  function maybeGetStack(error) {
+  var maybeGetStack = function(error) {
     if (typeof error == 'object') {
       var stack = error.stack;
       if (stack && typeof stack == 'string') {
@@ -100,7 +100,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
       }
     }
     return '';
-  }
+  };
 
   // Add an error handler to report errors that may occur during
   // initialization of the page.
