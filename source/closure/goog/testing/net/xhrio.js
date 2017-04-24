@@ -68,11 +68,9 @@ goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
  * To emulate the behavior of the actual XhrIo, we do not allow access to the
  * XhrIo's properties outside the event callbacks. For backwards compatibility,
  * we allow tests to allow access by setting this value to true.
- * This value is temporarily set to true, so that its introduction is separated
- * from callers needing to set it.
  * @type {boolean}
  */
-goog.testing.net.XhrIo.allowUnsafeAccessToXhrIoOutsideCallbacks = true;
+goog.testing.net.XhrIo.allowUnsafeAccessToXhrIoOutsideCallbacks = false;
 
 
 /**

@@ -716,10 +716,13 @@ goog.object.isImmutableView = function(obj) {
  * @param {?Object} obj The object to get the properties of.
  * @param {boolean=} opt_includeObjectPrototype Whether properties defined on
  *     {@code Object.prototype} should be included in the result.
+ * @param {boolean=} opt_includeFunctionPrototype Whether properties defined on
+ *     {@code Function.prototype} should be included in the result.
  * @return {!Array<string>}
  * @public
  */
-goog.object.getAllPropertyNames = function(obj, opt_includeObjectPrototype) {
+goog.object.getAllPropertyNames = function(
+    obj, opt_includeObjectPrototype, opt_includeFunctionPrototype) {
   if (!obj) {
     return [];
   }
@@ -735,7 +738,8 @@ goog.object.getAllPropertyNames = function(obj, opt_includeObjectPrototype) {
   // Traverse the prototype chain and add all properties to the visited set.
   var proto = obj;
   while (proto &&
-         (proto !== Object.prototype || !!opt_includeObjectPrototype)) {
+         (proto !== Object.prototype || !!opt_includeObjectPrototype) &&
+         (proto !== Function.prototype || !!opt_includeFunctionPrototype)) {
     var names = Object.getOwnPropertyNames(proto);
     for (var i = 0; i < names.length; i++) {
       visitedSet[names[i]] = true;

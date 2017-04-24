@@ -59,7 +59,7 @@ must contain only alphanumeric and <code>_</code> characters.</p>
 <code>&lt;pathStart&gt;</code> is any character except <code>/</code> and <code>\</code>.</p>
 <p>Example usage:</p>
 <pre><code>var url &#61; goog.html.TrustedResourceUrl.format(goog.string.Const.from(
-    &#39;https://www.google.com/search?q&#61;%{query}), {query: searchTerm});
+    &#39;https://www.google.com/search?q&#61;%{query}), {&#39;query&#39;: searchTerm});
 
 var url &#61; goog.html.TrustedResourceUrl.format(goog.string.Const.from(
     &#39;//www.youtube.com/v/%{videoId}?hl&#61;en&amp;fs&#61;1%{autoplay}&#39;), {

@@ -27,6 +27,7 @@ goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string.Const');
@@ -223,13 +224,20 @@ function testGetElementByClass() {
 }
 
 function testSetProperties() {
-  var attrs = {'name': 'test3', 'title': 'A title', 'random': 'woop'};
+  var attrs = {
+    'name': 'test3',
+    'title': 'A title',
+    'random': 'woop',
+    'other-random': null,
+    'href': goog.html.SafeUrl.sanitize('https://google.com')
+  };
   var el = $('testEl');
 
-  var res = goog.dom.setProperties(el, attrs);
-  assertEquals('Should be equal', el.name, 'test3');
-  assertEquals('Should be equal', el.title, 'A title');
-  assertEquals('Should be equal', el.random, 'woop');
+  goog.dom.setProperties(el, attrs);
+  assertEquals(el.name, 'test3');
+  assertEquals(el.title, 'A title');
+  assertEquals(el.random, 'woop');
+  assertEquals(el.href, 'https://google.com');
 }
 
 function testSetPropertiesDirectAttributeMap() {
@@ -326,7 +334,7 @@ function testCreateDom() {
   var el = goog.dom.createDom(
       goog.dom.TagName.DIV, {
         style: 'border: 1px solid black; width: 50%; background-color: #EEE;',
-        onclick: "alert('woo')"
+        onclick: 'alert(\'woo\')'
       },
       goog.dom.createDom(
           goog.dom.TagName.P, {style: 'font: normal 12px arial; color: red; '},
@@ -338,7 +346,10 @@ function testCreateDom() {
           goog.dom.TagName.P,
           {style: 'font: normal 24px monospace; color: green'}, 'Para 3 ',
           goog.dom.createDom(
-              goog.dom.TagName.A, {name: 'link', href: 'http://bbc.co.uk'},
+              goog.dom.TagName.A, {
+                name: 'link',
+                href: goog.html.SafeUrl.sanitize('http://bbc.co.uk/')
+              },
               'has a link'),
           ', how cool is this?'));
 
@@ -349,8 +360,9 @@ function testCreateDom() {
       'first child is a P tag', String(goog.dom.TagName.P),
       el.childNodes[0].tagName);
   assertEquals('second child .innerHTML', 'Para 2', el.childNodes[1].innerHTML);
-
-  assertEquals(goog.dom.createDom, goog.dom.createDom);
+  assertEquals(
+      'Link href as SafeUrl', 'http://bbc.co.uk/',
+      el.childNodes[2].childNodes[1].href);
 }
 
 function testCreateDomNoChildren() {

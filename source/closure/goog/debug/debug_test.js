@@ -77,14 +77,24 @@ function assertContainsSubstring(substring, text) {
 function testDeepExpose() {
   var a = {};
   var b = {};
+  var c = {};
   a.ancestor = a;
   a.otherObject = b;
   a.otherObjectAgain = b;
+  b.nextLevel = c;
+  // Add Uid to a before deepExpose.
+  var aUid = goog.getUid(a);
 
   var deepExpose = goog.debug.deepExpose(a);
 
   assertContainsSubstring(
-      'ancestor = ... reference loop detected ...', deepExpose);
+      'ancestor = ... reference loop detected .id=' + aUid + '. ...',
+      deepExpose);
 
   assertContainsSubstring('otherObjectAgain = {', deepExpose);
+
+  // Make sure we've reset Uids after the deepExpose call.
+  assert(goog.hasUid(a));
+  assertFalse(goog.hasUid(b));
+  assertFalse(goog.hasUid(c));
 }

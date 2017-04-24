@@ -39,7 +39,6 @@ goog.provide('goog.i18n.DateTimeSymbols_ar_001');
 goog.provide('goog.i18n.DateTimeSymbols_ar_AE');
 goog.provide('goog.i18n.DateTimeSymbols_ar_BH');
 goog.provide('goog.i18n.DateTimeSymbols_ar_DJ');
-goog.provide('goog.i18n.DateTimeSymbols_ar_DZ');
 goog.provide('goog.i18n.DateTimeSymbols_ar_EG');
 goog.provide('goog.i18n.DateTimeSymbols_ar_EH');
 goog.provide('goog.i18n.DateTimeSymbols_ar_ER');
@@ -825,36 +824,6 @@ goog.i18n.DateTimeSymbols_ar_DJ = {
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 5,
   WEEKENDRANGE: [5, 6],
-  FIRSTWEEKCUTOFFDAY: 4
-};
-
-
-/**
- * Date/time formatting symbols for locale ar_DZ.
- */
-goog.i18n.DateTimeSymbols_ar_DZ = {
-  ERAS: ['ق.م', 'م'],
-  ERANAMES: ['قبل الميلاد', 'ميلادي'],
-  NARROWMONTHS: ['ج', 'ف', 'م', 'أ', 'م', 'ج', 'ج', 'أ', 'س', 'أ', 'ن', 'د'],
-  STANDALONENARROWMONTHS: ['ج', 'ف', 'م', 'أ', 'م', 'ج', 'ج', 'أ', 'س', 'أ', 'ن', 'د'],
-  MONTHS: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  STANDALONEMONTHS: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  SHORTMONTHS: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  STANDALONESHORTMONTHS: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
-  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
-  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
-  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
-  AMPMS: ['ص', 'م'],
-  DATEFORMATS: ['EEEE، d MMMM، y', 'd MMMM، y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
-  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
-  FIRSTDAYOFWEEK: 5,
-  WEEKENDRANGE: [4, 5],
   FIRSTWEEKCUTOFFDAY: 4
 };
 
@@ -13218,10 +13187,6 @@ if (goog.LOCALE == 'ar_BH' || goog.LOCALE == 'ar-BH') {
 
 if (goog.LOCALE == 'ar_DJ' || goog.LOCALE == 'ar-DJ') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_DJ;
-}
-
-if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_DZ;
 }
 
 if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {

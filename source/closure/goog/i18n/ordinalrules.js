@@ -463,6 +463,9 @@ if (goog.LOCALE == 'am') {
 if (goog.LOCALE == 'ar') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
+if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
 if (goog.LOCALE == 'az') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.azSelect_;
 }

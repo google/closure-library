@@ -30,21 +30,6 @@ goog.require('goog.testing.TestRunner');
 
 
 /**
- * Base path for JsUnit app files, relative to Closure's base path.
- * @type {string}
- */
-goog.testing.jsunit.BASE_PATH = '../../third_party/java/jsunit/core/app/';
-
-
-/**
- * Filename for the core JS Unit script.
- * @type {string}
- */
-goog.testing.jsunit.CORE_SCRIPT =
-    goog.testing.jsunit.BASE_PATH + 'jsUnitCore.js';
-
-
-/**
  * @define {boolean} If this code is being parsed by JsTestC, we let it disable
  * the onload handler to avoid running the test in JsTestC.
  */
@@ -74,115 +59,105 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
   /** @type {!Function} */
   var realTimeout = window.setTimeout;
 
-  // Check for JsUnit's test runner (need to check for >2.2 and <=2.2)
-  if (top['JsUnitTestManager'] || top['jsUnitTestManager']) {
-    // Running inside JsUnit so add support code.
-    var path = goog.basePath + goog.testing.jsunit.CORE_SCRIPT;
-    document.write(
-        '<script type="text/javascript" src="' + path + '"></' +
-        'script>');
+  // Create a test runner.
+  var tr = new goog.testing.TestRunner();
 
-  } else {
-    // Create a test runner.
-    var tr = new goog.testing.TestRunner();
+  // Export it so that it can be queried by Selenium and tests that use a
+  // compiled test runner.
+  goog.exportSymbol('G_testRunner', tr);
+  goog.exportSymbol('G_testRunner.initialize', tr.initialize);
+  goog.exportSymbol('G_testRunner.isInitialized', tr.isInitialized);
+  goog.exportSymbol('G_testRunner.isFinished', tr.isFinished);
+  goog.exportSymbol('G_testRunner.isSuccess', tr.isSuccess);
+  goog.exportSymbol('G_testRunner.getReport', tr.getReport);
+  goog.exportSymbol('G_testRunner.getRunTime', tr.getRunTime);
+  goog.exportSymbol('G_testRunner.getNumFilesLoaded', tr.getNumFilesLoaded);
+  goog.exportSymbol('G_testRunner.setStrict', tr.setStrict);
+  goog.exportSymbol('G_testRunner.logTestFailure', tr.logTestFailure);
+  goog.exportSymbol('G_testRunner.getTestResults', tr.getTestResults);
+  goog.exportSymbol(
+      'G_testRunner.getTestResultsAsJson', tr.getTestResultsAsJson);
 
-    // Export it so that it can be queried by Selenium and tests that use a
-    // compiled test runner.
-    goog.exportSymbol('G_testRunner', tr);
-    goog.exportSymbol('G_testRunner.initialize', tr.initialize);
-    goog.exportSymbol('G_testRunner.isInitialized', tr.isInitialized);
-    goog.exportSymbol('G_testRunner.isFinished', tr.isFinished);
-    goog.exportSymbol('G_testRunner.isSuccess', tr.isSuccess);
-    goog.exportSymbol('G_testRunner.getReport', tr.getReport);
-    goog.exportSymbol('G_testRunner.getRunTime', tr.getRunTime);
-    goog.exportSymbol('G_testRunner.getNumFilesLoaded', tr.getNumFilesLoaded);
-    goog.exportSymbol('G_testRunner.setStrict', tr.setStrict);
-    goog.exportSymbol('G_testRunner.logTestFailure', tr.logTestFailure);
-    goog.exportSymbol('G_testRunner.getTestResults', tr.getTestResults);
-    goog.exportSymbol(
-        'G_testRunner.getTestResultsAsJson', tr.getTestResultsAsJson);
+  // Export debug as a global function for JSUnit compatibility.  This just
+  // calls log on the current test case.
+  if (!goog.global['debug']) {
+    goog.exportSymbol('debug', goog.bind(tr.log, tr));
+  }
 
-    // Export debug as a global function for JSUnit compatibility.  This just
-    // calls log on the current test case.
-    if (!goog.global['debug']) {
-      goog.exportSymbol('debug', goog.bind(tr.log, tr));
-    }
+  // If the application has defined a global error filter, set it now.  This
+  // allows users who use a base test include to set the error filter before
+  // the testing code is loaded.
+  if (goog.global['G_errorFilter']) {
+    tr.setErrorFilter(goog.global['G_errorFilter']);
+  }
 
-    // If the application has defined a global error filter, set it now.  This
-    // allows users who use a base test include to set the error filter before
-    // the testing code is loaded.
-    if (goog.global['G_errorFilter']) {
-      tr.setErrorFilter(goog.global['G_errorFilter']);
-    }
-
-    function maybeGetStack(error) {
-      if (typeof error == 'object') {
-        var stack = error.stack;
-        if (stack && typeof stack == 'string') {
-          // non-empty string
-          return stack;
-        }
+  function maybeGetStack(error) {
+    if (typeof error == 'object') {
+      var stack = error.stack;
+      if (stack && typeof stack == 'string') {
+        // non-empty string
+        return stack;
       }
-      return '';
     }
+    return '';
+  }
 
-    // Add an error handler to report errors that may occur during
-    // initialization of the page.
-    var onerror = window.onerror;
-    window.onerror = function(messageOrEvent, url, line) {
-      // TODO(johnlenz): fix this function parameters once the "onerror"
-      // definition has been corrected.
-      // colno and errObj were added later.
-      var colno = arguments[3];
-      var errObj = arguments[4];
-      // Call any existing onerror handlers.
-      if (onerror) {
-        onerror.apply(window, arguments);
-      }
-      var stack = maybeGetStack(errObj || messageOrEvent);
-      if (stack) {
-        tr.logError(stack);
-      } else if (typeof messageOrEvent == 'object') {
-        var error = messageOrEvent;
-        // Some older webkit browsers pass an event object as the only argument
-        // to window.onerror.  It doesn't contain an error message, url or line
-        // number.  We therefore log as much info as we can.
-        if (error.target && error.target.tagName == goog.dom.TagName.SCRIPT) {
-          tr.logError('UNKNOWN ERROR: Script ' + error.target.src);
-        } else {
-          tr.logError('UNKNOWN ERROR: No error information available.');
-        }
+  // Add an error handler to report errors that may occur during
+  // initialization of the page.
+  var onerror = window.onerror;
+  window.onerror = function(messageOrEvent, url, line) {
+    // TODO(johnlenz): fix this function parameters once the "onerror"
+    // definition has been corrected.
+    // colno and errObj were added later.
+    var colno = arguments[3];
+    var errObj = arguments[4];
+    // Call any existing onerror handlers.
+    if (onerror) {
+      onerror.apply(window, arguments);
+    }
+    var stack = maybeGetStack(errObj || messageOrEvent);
+    if (stack) {
+      tr.logError(stack);
+    } else if (typeof messageOrEvent == 'object') {
+      var error = messageOrEvent;
+      // Some older webkit browsers pass an event object as the only argument
+      // to window.onerror.  It doesn't contain an error message, url or line
+      // number.  We therefore log as much info as we can.
+      if (error.target && error.target.tagName == goog.dom.TagName.SCRIPT) {
+        tr.logError('UNKNOWN ERROR: Script ' + error.target.src);
       } else {
-        // Add the column if it is available, older browsers won't have it.
-        var colstr = colno != null ? '\nColumn: ' + colno : '';
-        tr.logError(
-            'JS ERROR: ' + messageOrEvent + '\nURL: ' + url +
-            '\nLine: ' + line + colstr);
+        tr.logError('UNKNOWN ERROR: No error information available.');
       }
-    };
-
-    // Create an onload handler, if the test runner hasn't been initialized then
-    // no test has been registered with the test runner by the test file.  We
-    // then create a new test case and auto discover any tests in the global
-    // scope. If this code is being parsed by JsTestC, we let it disable the
-    // onload handler to avoid running the test in JsTestC.
-    if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
-      var onload = window.onload;
-      window.onload = function(e) {
-        // Call any existing onload handlers.
-        if (onload) {
-          onload(e);
-        }
-        // Wait so that we don't interfere with WebDriver.
-        realTimeout(function() {
-          if (!tr.initialized) {
-            var testCase = new goog.testing.TestCase(document.title);
-            goog.testing.TestCase.initializeTestRunner(testCase);
-          }
-          tr.execute();
-        }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
-        window.onload = null;
-      };
+    } else {
+      // Add the column if it is available, older browsers won't have it.
+      var colstr = colno != null ? '\nColumn: ' + colno : '';
+      tr.logError(
+          'JS ERROR: ' + messageOrEvent + '\nURL: ' + url + '\nLine: ' + line +
+          colstr);
     }
+  };
+
+  // Create an onload handler, if the test runner hasn't been initialized then
+  // no test has been registered with the test runner by the test file.  We
+  // then create a new test case and auto discover any tests in the global
+  // scope. If this code is being parsed by JsTestC, we let it disable the
+  // onload handler to avoid running the test in JsTestC.
+  if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
+    var onload = window.onload;
+    window.onload = function(e) {
+      // Call any existing onload handlers.
+      if (onload) {
+        onload(e);
+      }
+      // Wait so that we don't interfere with WebDriver.
+      realTimeout(function() {
+        if (!tr.initialized) {
+          var testCase = new goog.testing.TestCase(document.title);
+          goog.testing.TestCase.initializeTestRunner(testCase);
+        }
+        tr.execute();
+      }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
+      window.onload = null;
+    };
   }
 })();

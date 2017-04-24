@@ -84,7 +84,7 @@ function newCleanupGuard() {
           'script cleanup', bodyChildCount, document.body.childNodes.length);
       assertEquals('window jsonp array empty', 0, propCounter);
     }, 0);
-  }
+  };
 }
 
 function getScriptElement(result) {

@@ -270,6 +270,24 @@ function testMockInheritedMethods() {
   mockControl.$verifyAll();
 }
 
+function testMockStaticMethods() {
+  var SomeType = function() {};
+  SomeType.staticMethod = function() {
+    fail('real object should never be called');
+  };
+
+  var mockControl = new goog.testing.MockControl();
+  var mock = mockControl.createLooseMock(
+      SomeType, false /* opt_ignoreUnexpectedCalls */,
+      true /* opt_mockStaticMethods */);
+  mock.staticMethod().$returns('staticMethod');
+
+  // Execute and assert that the Mock is working correctly.
+  mockControl.$replayAll();
+  assertEquals('staticMethod', mock.staticMethod());
+  mockControl.$verifyAll();
+}
+
 function testMockEs6ClassMethods() {
   // Create an ES6 class via eval so we can bail out if it's a syntax error in
   // browsers that don't support ES6 classes.
@@ -293,5 +311,38 @@ function testMockEs6ClassMethods() {
   // Execute and assert that the Mock is working correctly.
   mockControl.$replayAll();
   assertEquals('a', mock.a());
+  mockControl.$verifyAll();
+}
+
+function testMockEs6ClassStaticMethods() {
+  // Create an ES6 class via eval so we can bail out if it's a syntax error in
+  // browsers that don't support ES6 classes.
+  try {
+    eval(
+        'var Foo = class {' +
+        '  static a() {' +
+        '    fail(\'real object should never be called\');' +
+        '  }' +
+        '  static apply() {' +
+        '    fail(\'real object should never be called\');' +
+        '  }' +
+        '}');
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      return;
+    }
+  }
+
+  var mockControl = new goog.testing.MockControl();
+  var mock = mockControl.createLooseMock(
+      Foo, false /* opt_ignoreUnexpectedCalls */,
+      true /* opt_mockStaticMethods */);
+  mock.a().$returns('a');
+  mock.apply().$returns('apply');
+
+  // Execute and assert that the Mock is working correctly.
+  mockControl.$replayAll();
+  assertEquals('a', mock.a());
+  assertEquals('apply', mock.apply());
   mockControl.$verifyAll();
 }

@@ -34,6 +34,7 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_af');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_am');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar');
+goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_DZ');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_az');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_be');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_bg');
@@ -389,6 +390,12 @@ goog.i18n.CompactNumberFormatSymbols_ar = {
     }
   }
 };
+
+
+/**
+ * Compact number formatting symbols for locale ar_DZ.
+ */
+goog.i18n.CompactNumberFormatSymbols_ar_DZ = goog.i18n.CompactNumberFormatSymbols_ar;
 
 
 /**
@@ -7781,6 +7788,10 @@ if (goog.LOCALE == 'am') {
 
 if (goog.LOCALE == 'ar') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ar;
+}
+
+if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ar_DZ;
 }
 
 if (goog.LOCALE == 'az') {

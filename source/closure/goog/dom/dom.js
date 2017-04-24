@@ -403,9 +403,14 @@ goog.dom.$$ = goog.dom.getElementsByTagNameAndClass;
  *
  * @param {Element} element DOM node to set properties on.
  * @param {Object} properties Hash of property:value pairs.
+ *     Property values can be strings or goog.string.TypedString values (such as
+ *     goog.html.SafeUrl).
  */
 goog.dom.setProperties = function(element, properties) {
   goog.object.forEach(properties, function(val, key) {
+    if (val && val.implementsGoogStringTypedString) {
+      val = val.getTypedStringValue();
+    }
     if (key == 'style') {
       element.style.cssText = val;
     } else if (key == 'class') {

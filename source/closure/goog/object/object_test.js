@@ -606,6 +606,7 @@ function testGetAllPropertyNames_es6ClassProperties() {
         'Foo.prototype.b = null;' +
         'var Bar = class extends Foo {' +
         '  c() {}' +
+        '  static d() {}' +
         '};');
   } catch (e) {
     if (e instanceof SyntaxError) {
@@ -619,6 +620,17 @@ function testGetAllPropertyNames_es6ClassProperties() {
   assertSameElements(
       ['a', 'b', 'c', 'constructor'],
       goog.object.getAllPropertyNames(Bar.prototype));
+
+  var expectedBarProperties = ['d', 'prototype', 'length', 'name'];
+
+  // Some versions of Firefox don't find the name property via
+  // getOwnPropertyNames.
+  if (!goog.array.contains(Object.getOwnPropertyNames(Bar), 'name')) {
+    goog.array.remove(expectedBarProperties, 'name');
+  }
+
+  assertSameElements(
+      expectedBarProperties, goog.object.getAllPropertyNames(Bar));
 }
 
 function testGetAllPropertyNames_includeObjectPrototype() {
@@ -635,4 +647,21 @@ function testGetAllPropertyNames_includeObjectPrototype() {
   assertSameElements(
       ['a', 'b', 'c'].concat(additionalProps),
       goog.object.getAllPropertyNames(obj, true));
+}
+
+function testGetAllPropertyNames_includeFunctionPrototype() {
+  var obj = function() {};
+  obj.a = function() {};
+
+  // There's slightly different behavior depending on what APIs the browser
+  // under test supports.
+  var additionalProps = !!Object.getOwnPropertyNames ?
+      Object.getOwnPropertyNames(Function.prototype).concat(['prototype']) :
+      [];
+
+  var expectedElements = ['a'].concat(additionalProps);
+  goog.array.removeDuplicates(expectedElements);
+
+  assertSameElements(
+      expectedElements, goog.object.getAllPropertyNames(obj, false, true));
 }
