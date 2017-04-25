@@ -378,7 +378,7 @@ goog.labs.pubsub.BroadcastPubSub.IE8_TIMESTAMP_UNIQUE_OFFSET_MS_ = .01;
  * publish} function to make sure timestamps are unique even within the same
  * millisecond.
  *
- * @private @const
+ * @private @const {string}
  */
 goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_ =
     goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ +

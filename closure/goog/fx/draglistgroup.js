@@ -1013,7 +1013,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
   // item in the hover drag list is not always the same. It changes based on
   // the growth direction of the hover drag list in question.
   /** @type {number} */
-  var relevantCoord;
+  var relevantCoord = 0;
   var getRelevantBoundFn;
   var isBeforeFn;
   var pickClosestRow = false;

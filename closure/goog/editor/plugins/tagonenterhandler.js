@@ -595,7 +595,7 @@ goog.editor.plugins.TagOnEnterHandler.splitDom_ = function(
 
   // Split the node.
   var textSplit = positionNode.nodeType == goog.dom.NodeType.TEXT;
-  var secondHalfOfSplitNode;
+  var secondHalfOfSplitNode = null;
   if (textSplit) {
     if (goog.userAgent.IE && positionOffset == positionNode.nodeValue.length) {
       // Since splitText fails in IE at the end of a node, we split it manually.
