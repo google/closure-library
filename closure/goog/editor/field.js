@@ -2295,7 +2295,9 @@ goog.editor.Field.prototype.turnOnDesignModeGecko = function() {
  */
 goog.editor.Field.prototype.installStyles = function() {
   if (this.cssStyles && this.shouldLoadAsynchronously()) {
-    goog.style.installStyles(this.cssStyles, this.getElement());
+    goog.style.installSafeStyleSheet(
+        goog.html.legacyconversions.safeStyleSheetFromString(this.cssStyles),
+        this.getElement());
   }
 };
 
