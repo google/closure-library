@@ -300,6 +300,7 @@ function testRemoveCurrentDragItemClasses() {
  * @param {!goog.fx.DragListGroup} dlg The DragListGroup to examine.
  */
 function assertIdle(dlg) {
+  assertFalse(dlg.isDragging());
   assertNull('dragger element has been cleaned up', dlg.draggerEl_);
   assertNull('dragger has been cleaned up', dlg.dragger_);
   assertEquals(
@@ -347,6 +348,7 @@ function testFiredEventsWithHysteresis() {
         goog.fx.DragListGroup.EventType.DRAGMOVE
       ],
       firedEventTypes);
+  assertTrue(dlg.isDragging());
 
   firedEventTypes.length = 0;
   goog.testing.events.fireMouseUpEvent(
