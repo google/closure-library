@@ -300,9 +300,11 @@ goog.html.sanitizer.CssSanitizer.getCssPropNames_ = function(cssStyle) {
     // https://drafts.csswg.org/cssom/#dom-cssstyledeclaration-item
     propNames = goog.array.toArray(cssStyle);
   } else {
-    // In IE8 and other older browers we have to iterate over all the property
-    // names.
+    // In IE8 and other older browsers we have to iterate over all the property
+    // names. We skip cssText because it contains the unsanitized CSS, which
+    // defeats the purpose.
     propNames = goog.object.getKeys(cssStyle);
+    goog.array.remove(propNames, 'cssText');
   }
   return propNames;
 };
@@ -326,7 +328,7 @@ goog.html.sanitizer.CssSanitizer.getCssValue_ = function(cssStyle, propName) {
     return getPropDescriptor.value.call(cssStyle, propName) || '';
   } else if (cssStyle.getAttribute) {
     // In IE8 and other older browers we make a direct call to getAttribute.
-    return String(cssStyle.getAttribute(propName));
+    return String(cssStyle.getAttribute(propName) || '');
   } else {
     // Unsupported, likely quite old, browser.
     return '';
