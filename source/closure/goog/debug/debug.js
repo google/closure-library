@@ -21,11 +21,6 @@
 goog.provide('goog.debug');
 
 goog.require('goog.array');
-/**
- * This is a workaround for projects with an indirect dependency.
- * @suppress {extraRequire}
- */
-goog.require('goog.structs.Set');
 goog.require('goog.userAgent');
 
 

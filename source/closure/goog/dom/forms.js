@@ -337,14 +337,6 @@ goog.dom.forms.getValue = function(el) {
 
 
 /**
- * Alias for goog.dom.form.element.getValue
- * @type {Function}
- * @deprecated Use {@link goog.dom.forms.getValue} instead.
- */
-goog.dom.$F = goog.dom.forms.getValue;
-
-
-/**
  * Returns the value of the named form field. In the case of radio buttons,
  * returns the value of the checked button with the given name.
  *

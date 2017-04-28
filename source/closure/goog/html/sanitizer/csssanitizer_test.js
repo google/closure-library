@@ -136,6 +136,7 @@ function testValidCss() {
   if (isIE8()) {
     // IE8 doesn't like sub-pixels
     // https://blogs.msdn.microsoft.com/ie/2010/11/03/sub-pixel-fonts-in-ie9/
+    expectedCSS = expectedCSS.replace('-0.5px', '0px');
     expectedCSS = expectedCSS.replace('-1.25px', '-1px');
   }
   assertCSSTextEquals(expectedCSS, getSanitizedInlineStyle(actualCSS));
@@ -215,7 +216,13 @@ function testCssBackground() {
 }
 
 function testVendorPrefixed() {
-  var actualCSS = '-webkit-text-stroke: calc(3px - 2px) red';
+  var actualCSS = '-webkit-text-stroke: 1px red';
+  var expectedCSS = '';
+  assertCSSTextEquals(expectedCSS, getSanitizedInlineStyle(actualCSS));
+}
+
+function testDisallowedFunction() {
+  var actualCSS = 'border-width: calc(10px + 20px)';
   var expectedCSS = '';
   assertCSSTextEquals(expectedCSS, getSanitizedInlineStyle(actualCSS));
 }

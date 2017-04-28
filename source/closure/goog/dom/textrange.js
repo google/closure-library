@@ -343,16 +343,18 @@ goog.dom.TextRange.prototype.containsRange = function(
         otherRange.getBrowserRangeWrapper_(), opt_allowPartial);
   } else if (otherRangeType == goog.dom.RangeType.CONTROL) {
     var elements = otherRange.getElements();
-    /**
-     * @param {!Array<!Element>} array
-     * @param {function(this: T, !Element)} fn
-     * @param {T} scope
-     * @template T
-     */
     var fn = opt_allowPartial ? goog.array.some : goog.array.every;
-    return fn(elements, function(el) {
-      return this.containsNode(el, opt_allowPartial);
-    }, this);
+    return fn(
+        elements,
+        /**
+         * @this {goog.dom.TextRange}
+         * @param {!Element} el
+         * @return {boolean}
+         */
+        function(el) {
+          return this.containsNode(el, opt_allowPartial);
+        },
+        this);
   }
   return false;
 };
