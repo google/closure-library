@@ -15,22 +15,19 @@
 /**
  * @fileoverview Bootstrap for the Google JS Library (Closure).
  *
- * In uncompiled mode base.js will write out Closure's deps file, unless the
- * global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects to
- * include their own deps file(s) from different locations.
+ * In uncompiled mode base.js will attempt to load Closure's deps file, unless
+ * the global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects
+ * to include their own deps file(s) from different locations.
  *
  * Avoid including base.js more than once. This is strictly discouraged and not
  * supported. goog.require(...) won't work properly in that case.
- *
- * @author arv@google.com (Erik Arvidsson)
  *
  * @provideGoog
  */
 
 
 /**
- * @define {boolean} Overridden to true by the compiler when
- *     --process_closure_primitives is specified.
+ * @define {boolean} Overridden to true by the compiler.
  */
 var COMPILED = false;
 
@@ -93,8 +90,6 @@ goog.global.CLOSURE_DEFINES;
 
 /**
  * Returns true if the specified value is not undefined.
- * WARNING: Do not use this to test if an object has a property. Use the in
- * operator instead.
  *
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is defined.
@@ -114,7 +109,7 @@ goog.isDef = function(val) {
  * @param {string} name name of the object that this file defines.
  * @param {*=} opt_object the object to expose at the end of the path.
  * @param {Object=} opt_objectToExportTo The object to add the path to; default
- *     is |goog.global|.
+ *     is `goog.global`.
  * @private
  */
 goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
@@ -128,12 +123,6 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
     cur.execScript('var ' + parts[0]);
   }
 
-  // Certain browsers cannot parse code in the form for((a in b); c;);
-  // This pattern is produced by the JSCompiler when it collapses the
-  // statement above into the conditional loop below. To prevent this from
-  // happening, use a for-loop and reserve the init logic as below.
-
-  // Parentheses added to eliminate strict JS warning in Firefox.
   for (var part; parts.length && (part = parts.shift());) {
     if (!parts.length && goog.isDef(opt_object)) {
       // last part and we have an object; use it
@@ -177,11 +166,12 @@ goog.define = function(name, defaultValue) {
 
 /**
  * @define {boolean} DEBUG is provided as a convenience so that debugging code
- * that should not be included in a production js_binary can be easily stripped
- * by specifying --define goog.DEBUG=false to the JSCompiler. For example, most
- * toString() methods should be declared inside an "if (goog.DEBUG)" conditional
- * because they are generally used for debugging purposes and it is difficult
- * for the JSCompiler to statically determine whether they are used.
+ * that should not be included in a production. It can be easily stripped
+ * by specifying --define goog.DEBUG=false to the Closure Compiler aka
+ * JSCompiler. For example, most toString() methods should be declared inside an
+ * "if (goog.DEBUG)" conditional because they are generally used for debugging
+ * purposes and it is difficult for the JSCompiler to statically determine
+ * whether they are used.
  */
 goog.define('goog.DEBUG', true);
 
@@ -189,7 +179,7 @@ goog.define('goog.DEBUG', true);
 /**
  * @define {string} LOCALE defines the locale being used for compilation. It is
  * used to select locale specific data to be compiled in js binary. BUILD rule
- * can specify this value by "--define goog.LOCALE=<locale_name>" as JSCompiler
+ * can specify this value by "--define goog.LOCALE=<locale_name>" as a compiler
  * option.
  *
  * Take into account that the locale code format is important. You should use
@@ -203,7 +193,8 @@ goog.define('goog.DEBUG', true);
  * For language codes you should use values defined by ISO 693-1. See it here
  * http://www.w3.org/WAI/ER/IG/ert/iso639.htm. There is only one exception from
  * this rule: the Hebrew language. For legacy reasons the old code (iw) should
- * be used instead of the new code (he), see http://wiki/Main/IIISynonyms.
+ * be used instead of the new code (he).
+ *
  */
 goog.define('goog.LOCALE', 'en');  // default to en
 
@@ -217,7 +208,7 @@ goog.define('goog.LOCALE', 'en');  // default to en
  *
  * If your JavaScript can be loaded by a third party site and you are wary about
  * relying on non-standard implementations, specify
- * "--define goog.TRUSTED_SITE=false" to the JSCompiler.
+ * "--define goog.TRUSTED_SITE=false" to the compiler.
  */
 goog.define('goog.TRUSTED_SITE', true);
 
@@ -657,8 +648,7 @@ goog.logToConsole_ = function(msg) {
 /**
  * Implements a system for the dynamic resolution of dependencies that works in
  * parallel with the BUILD system. Note that all calls to goog.require will be
- * stripped by the JSCompiler when the --process_closure_primitives option is
- * used.
+ * stripped by the compiler.
  * @see goog.provide
  * @param {string} name Namespace to include (as was given in goog.provide()) in
  *     the form "goog.package.part".
@@ -708,7 +698,8 @@ goog.global.CLOSURE_BASE_PATH;
 
 
 /**
- * Whether to write out Closure's deps file. By default, the deps are written.
+ * Whether to attempt to load Closure's deps file. By default, when uncompiled,
+ * deps files will attempt to be loaded.
  * @type {boolean|undefined}
  */
 goog.global.CLOSURE_NO_DEPS;
@@ -740,9 +731,6 @@ goog.nullFunction = function() {};
  *
  * Now if a subclass of Foo fails to override bar(), an error will be thrown
  * when bar() is invoked.
- *
- * Note: This does not take the name of the function to override as an argument
- * because that would make it more difficult to obfuscate our JavaScript code.
  *
  * @type {!Function}
  * @throws {Error} when invoked to indicate the method should be overridden.
