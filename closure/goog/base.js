@@ -2529,6 +2529,9 @@ goog.inherits = function(childCtor, parentCtor) {
  * @return {*} The return value of the superclass method.
  * @suppress {es5Strict} This method can not be used in strict mode, but
  *     all Closure Library consumers must depend on this file.
+ * @deprecated goog.base is not strict mode compatible.  Prefer the static
+ *     "base" method added to the constructor by goog.inherits
+ *     or ES6 classes and the "super" keyword.
  */
 goog.base = function(me, opt_methodName, var_args) {
   var caller = arguments.callee.caller;
