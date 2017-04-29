@@ -32,6 +32,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventId');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
@@ -217,15 +218,15 @@ goog.fx.DragListDirection = {
 
 /**
  * Events dispatched by this class.
- * @const
+ * @enum {!goog.events.EventId<!goog.fx.DragListGroupEvent>}
  */
 goog.fx.DragListGroup.EventType = {
-  BEFOREDRAGSTART: 'beforedragstart',
-  DRAGSTART: 'dragstart',
-  BEFOREDRAGMOVE: 'beforedragmove',
-  DRAGMOVE: 'dragmove',
-  BEFOREDRAGEND: 'beforedragend',
-  DRAGEND: 'dragend'
+  BEFOREDRAGSTART: new goog.events.EventId('beforedragstart'),
+  DRAGSTART: new goog.events.EventId('dragstart'),
+  BEFOREDRAGMOVE: new goog.events.EventId('beforedragmove'),
+  DRAGMOVE: new goog.events.EventId('dragmove'),
+  BEFOREDRAGEND: new goog.events.EventId('beforedragend'),
+  DRAGEND: new goog.events.EventId('dragend')
 };
 
 
@@ -1214,7 +1215,7 @@ goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
  * The fields draggerElCenter, hoverList, and hoverNextItem are only available
  * for the BEFOREDRAGMOVE and DRAGMOVE events.
  *
- * @param {string} type The event type string.
+ * @param {goog.fx.DragListGroup.EventType} type
  * @param {goog.fx.DragListGroup} dragListGroup A reference to the associated
  *     DragListGroup object.
  * @param {goog.events.BrowserEvent|goog.fx.DragEvent} event The event fired
