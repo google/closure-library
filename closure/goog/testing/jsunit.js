@@ -111,8 +111,8 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
     // colno and errObj were added later.
     var colno = arguments[3];
     var errObj = arguments[4];
-    // Call any existing onerror handlers.
-    if (onerror) {
+    // Call any existing onerror handlers, except our boot handler.
+    if (onerror && onerror != window.__onerror_at_boot) {
       onerror.apply(window, arguments);
     }
     var stack = maybeGetStack(errObj || messageOrEvent);
@@ -136,6 +136,23 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
           colstr);
     }
   };
+
+  /**
+   * The onerror handler that may have been set by the test runner.
+   *  @type {function(string, string=, number=, number=, Object=)}
+   */
+  window.__onerror_at_boot = window.__onerror_at_boot;
+  /**
+   * The arguments for any call to window.onerror occuring before this point.
+   * @type {Array<Array<?>>} */
+  window.__errors_since_boot = window.__errors_since_boot;
+
+  if (window.__onerror_at_boot) {
+    window.__errors_since_boot.forEach(function(args) {
+      window.onerror.apply(window, args);
+    });
+    delete window.__onerror_at_boot;
+  }
 
   // Create an onload handler, if the test runner hasn't been initialized then
   // no test has been registered with the test runner by the test file.  We
