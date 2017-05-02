@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date interval formatting symbols for all locales.
  *
- * File generated from CLDR ver. 30.0.2
+ * File generated from CLDR ver. 31.0.1
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -4826,7 +4826,7 @@ exports.DateIntervalSymbols_sh = {
   },
   SHORT_TIME: {
     'Mdy': 'd.M.y. HH:mm',
-    'ahm': 'HH.mm–HH.mm',
+    'ahm': 'HH:mm–HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
@@ -4839,7 +4839,7 @@ exports.DateIntervalSymbols_sh = {
     '_': 'dd.MM.y. HH:mm:ss'
   },
   SHORT_DATETIME: {
-    'ahm': 'd.M.yy. HH.mm–HH.mm',
+    'ahm': 'd.M.yy. HH:mm–HH:mm',
     '_': 'd.M.yy. HH:mm'
   },
   FALLBACK: '{0} – {1}'
@@ -5096,7 +5096,7 @@ exports.DateIntervalSymbols_sr = {
   },
   SHORT_TIME: {
     'Mdy': 'd.M.y. HH:mm',
-    'ahm': 'HH.mm–HH.mm',
+    'ahm': 'HH:mm–HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
@@ -5109,7 +5109,7 @@ exports.DateIntervalSymbols_sr = {
     '_': 'dd.MM.y. HH:mm:ss'
   },
   SHORT_DATETIME: {
-    'ahm': 'd.M.yy. HH.mm–HH.mm',
+    'ahm': 'd.M.yy. HH:mm–HH:mm',
     '_': 'd.M.yy. HH:mm'
   },
   FALLBACK: '{0} – {1}'
@@ -5148,7 +5148,7 @@ exports.DateIntervalSymbols_sr_Latn = {
   },
   SHORT_TIME: {
     'Mdy': 'd.M.y. HH:mm',
-    'ahm': 'HH.mm–HH.mm',
+    'ahm': 'HH:mm–HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
@@ -5161,7 +5161,7 @@ exports.DateIntervalSymbols_sr_Latn = {
     '_': 'dd.MM.y. HH:mm:ss'
   },
   SHORT_DATETIME: {
-    'ahm': 'd.M.yy. HH.mm–HH.mm',
+    'ahm': 'd.M.yy. HH:mm–HH:mm',
     '_': 'd.M.yy. HH:mm'
   },
   FALLBACK: '{0} – {1}'

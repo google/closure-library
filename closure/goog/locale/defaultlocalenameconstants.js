@@ -15,7 +15,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 30.0.2
+ * File generated from CLDR ver. 31.0.1
  *
  */
 
@@ -349,6 +349,7 @@ goog.locale.defaultLocaleNameConstants = {
     'arc': 'Aramaic',
     'arn': 'Mapuche',
     'arp': 'Arapaho',
+    'ars': 'Najdi Arabic',
     'arw': 'Arawak',
     'as': 'Assamese',
     'asa': 'Asu',

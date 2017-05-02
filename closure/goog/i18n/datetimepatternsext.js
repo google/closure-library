@@ -15,7 +15,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 30.0.2
+ * File generated from CLDR ver. 31.0.1
  *
  * This file covers those locales that are not covered in
  * "datetimepatterns.js".
@@ -249,6 +249,7 @@ goog.provide('goog.i18n.DateTimePatterns_eo');
 goog.provide('goog.i18n.DateTimePatterns_es_AR');
 goog.provide('goog.i18n.DateTimePatterns_es_BO');
 goog.provide('goog.i18n.DateTimePatterns_es_BR');
+goog.provide('goog.i18n.DateTimePatterns_es_BZ');
 goog.provide('goog.i18n.DateTimePatterns_es_CL');
 goog.provide('goog.i18n.DateTimePatterns_es_CO');
 goog.provide('goog.i18n.DateTimePatterns_es_CR');
@@ -368,6 +369,7 @@ goog.provide('goog.i18n.DateTimePatterns_is_IS');
 goog.provide('goog.i18n.DateTimePatterns_it_CH');
 goog.provide('goog.i18n.DateTimePatterns_it_IT');
 goog.provide('goog.i18n.DateTimePatterns_it_SM');
+goog.provide('goog.i18n.DateTimePatterns_it_VA');
 goog.provide('goog.i18n.DateTimePatterns_ja_JP');
 goog.provide('goog.i18n.DateTimePatterns_jgo');
 goog.provide('goog.i18n.DateTimePatterns_jgo_CM');
@@ -3455,6 +3457,25 @@ goog.i18n.DateTimePatterns_es_BR = {
 
 
 /**
+ * Extended set of localized date/time patterns for locale es_BZ.
+ */
+goog.i18n.DateTimePatterns_es_BZ = {
+  YEAR_FULL: 'y',
+  YEAR_FULL_WITH_ERA: 'y G',
+  YEAR_MONTH_ABBR: 'MMMM \'de\' y',
+  YEAR_MONTH_FULL: 'MMMM \'de\' y',
+  MONTH_DAY_ABBR: 'd MMM',
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
+  MONTH_DAY_YEAR_MEDIUM: 'd \'de\' MMMM \'de\' y',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMM \'de\' y',
+  DAY_ABBR: 'd'
+};
+
+
+/**
  * Extended set of localized date/time patterns for locale es_CL.
  */
 goog.i18n.DateTimePatterns_es_CL = {
@@ -4556,6 +4577,12 @@ goog.i18n.DateTimePatterns_it_IT = goog.i18n.DateTimePatterns_it;
  * Extended set of localized date/time patterns for locale it_SM.
  */
 goog.i18n.DateTimePatterns_it_SM = goog.i18n.DateTimePatterns_it;
+
+
+/**
+ * Extended set of localized date/time patterns for locale it_VA.
+ */
+goog.i18n.DateTimePatterns_it_VA = goog.i18n.DateTimePatterns_it;
 
 
 /**
@@ -8415,6 +8442,10 @@ if (goog.LOCALE == 'es_BR' || goog.LOCALE == 'es-BR') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_BR;
 }
 
+if (goog.LOCALE == 'es_BZ' || goog.LOCALE == 'es-BZ') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_BZ;
+}
+
 if (goog.LOCALE == 'es_CL' || goog.LOCALE == 'es-CL') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_es_CL;
 }
@@ -8889,6 +8920,10 @@ if (goog.LOCALE == 'it_IT' || goog.LOCALE == 'it-IT') {
 
 if (goog.LOCALE == 'it_SM' || goog.LOCALE == 'it-SM') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_it_SM;
+}
+
+if (goog.LOCALE == 'it_VA' || goog.LOCALE == 'it-VA') {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_it_VA;
 }
 
 if (goog.LOCALE == 'ja_JP' || goog.LOCALE == 'ja-JP') {
