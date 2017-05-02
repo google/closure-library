@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date interval formatting patterns for all locales.
  *
- * File generated from CLDR ver. 30.0.2
+ * File generated from CLDR ver. 31.0.1
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -345,8 +345,7 @@ exports.DateIntervalPatterns_az = {
   },
   YEAR_MONTH_FULL: {
     'M': 'MMMM–MMMM y',
-    'y': 'MMMM y – MMMM y',
-    '_': 'y MMMM'
+    '_': 'MMMM y'
   },
   MONTH_DAY_ABBR: {
     'd': 'd–d MMM',
@@ -4029,7 +4028,7 @@ exports.DateIntervalPatterns_lo = {
   YEAR_MONTH_FULL: {
     'M': 'MM/y – MM',
     'y': 'MM/y – MM/y',
-    '_': 'y MMMM'
+    '_': 'MMMM y'
   },
   MONTH_DAY_ABBR: {
     'Md': 'd/MM – d/MM',
@@ -5100,8 +5099,7 @@ exports.DateIntervalPatterns_pa = {
   },
   YEAR_MONTH_FULL: {
     'M': 'MMMM–MMMM y',
-    'y': 'MMMM y – MMMM y',
-    '_': 'y MMMM'
+    '_': 'MMMM y'
   },
   MONTH_DAY_ABBR: {
     'd': 'd–d MMM',
@@ -6486,8 +6484,7 @@ exports.DateIntervalPatterns_ur = {
   },
   YEAR_MONTH_FULL: {
     'M': 'MMMM–MMMM y',
-    'y': 'MMMM y – MMMM y',
-    '_': 'y MMMM'
+    '_': 'MMMM y'
   },
   MONTH_DAY_ABBR: {
     'd': 'd–d MMM',

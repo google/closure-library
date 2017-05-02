@@ -33,7 +33,10 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ControlContent');
 goog.require('goog.userAgent');
+
+goog.forwardDeclare('goog.ui.Control');  // circular
 
 
 

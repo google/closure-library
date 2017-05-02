@@ -40,6 +40,8 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 
+goog.forwardDeclare('goog.ui.tree.TreeControl');  // circular
+
 
 
 /**
