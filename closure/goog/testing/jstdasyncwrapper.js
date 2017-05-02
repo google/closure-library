@@ -271,6 +271,9 @@ goog.testing.JsTdAsyncWrapper.Pool_ = function(testObj, callback, errback) {
    * @private {!Object}
    */
   this.testObj_ = testObj;
+
+  /** @private {boolean} */
+  this.callbackCalled_ = false;
 };
 
 
@@ -311,9 +314,7 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addCallback = function(
       this.errback_(e);
     }
     this.outstandingCallbacks_ = this.outstandingCallbacks_ - 1;
-    if (this.outstandingCallbacks_ == 0) {
-      this.callback_();
-    }
+    this.maybeComplete();
   }, this);
 };
 
@@ -359,7 +360,8 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addErrback = function(msg) {
  * Completes the pool if there are no outstanding callbacks.
  */
 goog.testing.JsTdAsyncWrapper.Pool_.prototype.maybeComplete = function() {
-  if (this.outstandingCallbacks_ == 0) {
+  if (this.outstandingCallbacks_ == 0 && !this.callbackCalled_) {
+    this.callbackCalled_ = true;
     this.callback_();
   }
 };
