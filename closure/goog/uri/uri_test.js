@@ -153,7 +153,6 @@ function testRelativePathResolution() {
   var uri4 = new goog.Uri('foo');
   assertEquals('bar', uri4.resolve(new goog.Uri('bar')).toString());
 
-  var uri5 = new goog.Uri('http://www.google.com:8080/search/');
   assertEquals(
       'http://www.google.com:8080/search/..%2ffoo/bar',
       uri3.resolve(new goog.Uri('..%2ffoo/bar')).toString());
@@ -812,6 +811,21 @@ function testQueryDataGetKeys() {
   qd.add('d', 'D');
   qd.add('D', 'D');
   assertEquals('bbcdd', qd.getKeys().join(''));
+}
+
+function testQueryDataForEach() {
+  var qd = new goog.Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C=extra');
+
+  var calls = [];
+  qd.forEach(function(value, key) {
+    calls.push([value, key]);
+  });
+  assertArrayEquals(
+      [
+        // value, key
+        ['A', 'a'], ['A2', 'a'], ['B', 'b'], ['B2', 'b'], ['C=extra', 'c']
+      ],
+      calls);
 }
 
 function testQueryDataGetValues() {

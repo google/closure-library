@@ -502,6 +502,8 @@ goog.net.XhrIo.prototype.getProgressEventsEnabled = function() {
  *     opt_content Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
+ * @suppress {deprecated} Use deprecated goog.structs.forEach to allow different
+ * types of parameters for opt_headers.
  */
 goog.net.XhrIo.prototype.send = function(
     url, opt_method, opt_content, opt_headers) {
