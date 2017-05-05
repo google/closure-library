@@ -1276,6 +1276,24 @@ goog.Uri.QueryData.prototype.containsValue = function(value) {
 
 
 /**
+ * Runs a callback on every key-value pair in the map, including duplicate keys.
+ * This won't maintain original order when duplicate keys are interspersed (like
+ * getKeys() / getValues()).
+ * @param {function(this:SCOPE, ?, string, !goog.Uri.QueryData)} f
+ * @param {SCOPE=} opt_scope The value of "this" inside f.
+ * @template SCOPE
+ */
+goog.Uri.QueryData.prototype.forEach = function(f, opt_scope) {
+  this.ensureKeyMapInitialized_();
+  this.keyMap_.forEach(function(values, key) {
+    goog.array.forEach(values, function(value) {
+      f.call(opt_scope, value, key, this);
+    }, this);
+  }, this);
+};
+
+
+/**
  * Returns all the keys of the parameters. If a key is used multiple times
  * it will be included multiple times in the returned array
  * @return {!Array<string>} All the keys of the parameters.
@@ -1515,8 +1533,10 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
  * Extends a query data object with another query data or map like object. This
  * operates 'in-place', it does not create a new QueryData object.
  *
- * @param {...(goog.Uri.QueryData|goog.structs.Map<?, ?>|Object)} var_args
+ * @param {...(?goog.Uri.QueryData|?goog.structs.Map<?, ?>|?Object)} var_args
  *     The object from which key value pairs will be copied.
+ * @suppress {deprecated} Use deprecated goog.structs.forEach to allow different
+ * types of parameters.
  */
 goog.Uri.QueryData.prototype.extend = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {

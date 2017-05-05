@@ -27,7 +27,7 @@ SafeScript object.</p>
 </td></tr></table></td></tr></table><div class="source"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/uncheckedconversions.js#L96" target="_blank" title="View source">VIEW SOURCE</a></div></div></section><section class="property expandable"  id="safeStyleFromStringKnownToSatisfyTypeContract"><div class="header"><div class="more"><i class="material-icons">expand_more</i></div><h3 class="name"><div>safeStyleFromStringKnownToSatisfyTypeContract( <var>justification</var>, <var>style</var> ) <var class="yield">→</var> <code class="expression"><a href="goog.html.SafeStyle.html">goog.html.SafeStyle</a></code></div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; to SafeStyle from a plain string that is
 known to satisfy the SafeStyle type contract.</p>
 <p>IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
-that the value of <code>style</code> satisfies the SafeUrl type contract in all
+that the value of <code>style</code> satisfies the SafeStyle type contract in all
 possible program states.</p>
 <table class="info"><tr class="info-row block" ><th class="info-head">Parameters</th><td class="info-cell" ><table class="info detail"><tr class="info-row" ><td class="info-cell" ><var>justification</var></td><td class="info-cell" ><code class="expression"><a href="goog.string.Const.html">goog.string.Const</a></code></td></tr><tr class="info-row" ><td class="info-cell" ></td><td class="info-cell" ><p>A constant string explaining why
 this use of this method is safe. May include a security review ticket
@@ -38,8 +38,8 @@ SafeStyle object.</p>
 </td></tr></table></td></tr></table><div class="source"><a href="https://github.com/google/closure-library/blob/master/closure/goog/html/uncheckedconversions.js#L126" target="_blank" title="View source">VIEW SOURCE</a></div></div></section><section class="property expandable"  id="safeStyleSheetFromStringKnownToSatisfyTypeContract"><div class="header"><div class="more"><i class="material-icons">expand_more</i></div><h3 class="name"><div>safeStyleSheetFromStringKnownToSatisfyTypeContract( <var>justification</var>, <var>styleSheet</var> ) <var class="yield">→</var> <code class="expression"><a href="goog.html.SafeStyleSheet.html">goog.html.SafeStyleSheet</a></code></div></h3></div><div class="body"><p>Performs an &#34;unchecked conversion&#34; to SafeStyleSheet from a plain string
 that is known to satisfy the SafeStyleSheet type contract.</p>
 <p>IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
-that the value of <code>styleSheet</code> satisfies the SafeUrl type contract in
-all possible program states.</p>
+that the value of <code>styleSheet</code> satisfies the SafeStyleSheet type
+contract in all possible program states.</p>
 <table class="info"><tr class="info-row block" ><th class="info-head">Parameters</th><td class="info-cell" ><table class="info detail"><tr class="info-row" ><td class="info-cell" ><var>justification</var></td><td class="info-cell" ><code class="expression"><a href="goog.string.Const.html">goog.string.Const</a></code></td></tr><tr class="info-row" ><td class="info-cell" ></td><td class="info-cell" ><p>A constant string explaining why
 this use of this method is safe. May include a security review ticket
 number.</p>

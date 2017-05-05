@@ -803,12 +803,15 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_ = function(
   if (!policyContext.cssStyle) {
     return null;
   }
-
-  var naiveUriRewriter = /** @type {function(string, string): string} */
-      (function(uri, prop) {
-        policyHints.cssProperty = prop;
-        return policySanitizeUrl(uri, policyHints);
-      });
+  var naiveUriRewriter = function(uri, prop) {
+    policyHints.cssProperty = prop;
+    return goog.html.uncheckedconversions
+        .safeUrlFromStringKnownToSatisfyTypeContract(
+            goog.string.Const.from(
+                'HtmlSanitizerPolicy created with networkRequestUrlPolicy_ ' +
+                'when installing \'* STYLE\' handler.'),
+            policySanitizeUrl(uri, policyHints) || '');
+  };
   var sanitizedStyle = goog.html.SafeStyle.unwrap(
       goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
           policyContext.cssStyle, naiveUriRewriter));

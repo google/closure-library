@@ -112,7 +112,7 @@ goog.html.uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract =
  * known to satisfy the SafeStyle type contract.
  *
  * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
- * that the value of {@code style} satisfies the SafeUrl type contract in all
+ * that the value of {@code style} satisfies the SafeStyle type contract in all
  * possible program states.
  *
  *
@@ -142,8 +142,8 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
  * that is known to satisfy the SafeStyleSheet type contract.
  *
  * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
- * that the value of {@code styleSheet} satisfies the SafeUrl type contract in
- * all possible program states.
+ * that the value of {@code styleSheet} satisfies the SafeStyleSheet type
+ * contract in all possible program states.
  *
  *
  * @param {!goog.string.Const} justification A constant string explaining why

@@ -20,6 +20,7 @@ goog.require('goog.array');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.CssSanitizer');
+goog.require('goog.html.testing');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -83,8 +84,8 @@ function assertCSSTextEquals(expectedCssText, actualCssText) {
 /**
  * Gets sanitized inline style.
  * @param {string} sourceCss CSS to be sanitized.
- * @param {function (string, string):?string=} opt_urlRewrite URL rewriter that
- *     only returns an unwrapped goog.html.SafeUrl.
+ * @param {function (string, string):?goog.html.SafeUrl=} opt_urlRewrite URL
+ *     rewriter that only returns a goog.html.SafeUrl.
  * @return {string} Sanitized inline style.
  * @private
  */
@@ -102,21 +103,6 @@ function getSanitizedInlineStyle(sourceCss, opt_urlRewrite) {
     }
     return '';
   }
-}
-
-
-/**
- * Mimics sanitization done by the Html sanitizer.
- * @param {string} url Original url
- * @return {?string} Sanitized url
- * @private
- */
-function originalUrl(url) {
-  var sanitizedUrl = goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url));
-  if (sanitizedUrl == goog.html.SafeUrl.INNOCUOUS_STRING) {
-    return null;
-  }
-  return sanitizedUrl;
 }
 
 
@@ -181,7 +167,8 @@ function testInvalidCssRemoved() {
 
   actualCSS = 'background: bogus url("foo.png") transparent';
   assertCSSTextEquals(
-      expectedCSS, getSanitizedInlineStyle(actualCSS, originalUrl));
+      expectedCSS,
+      getSanitizedInlineStyle(actualCSS, goog.html.SafeUrl.sanitize));
 
   // expression(...) is not allowed for font so is rejected wholesale -- the
   // internal string "pwned" is not passed through.
@@ -194,13 +181,17 @@ function testInvalidCssRemoved() {
 function testCssBackground() {
   var actualCSS, expectedCSS;
 
-  function proxyUrl(url) { return 'https://goo.gl/proxy?url=' + url; }
+  function proxyUrl(url) {
+    return goog.html.testing.newSafeUrlForTest(
+        'https://goo.gl/proxy?url=' + url);
+  }
 
   // Don't require the URL sanitizer to protect string boundaries.
   actualCSS = 'background-image: url("javascript:evil(1337)")';
   expectedCSS = '';
   assertCSSTextEquals(
-      expectedCSS, getSanitizedInlineStyle(actualCSS, originalUrl));
+      expectedCSS,
+      getSanitizedInlineStyle(actualCSS, goog.html.SafeUrl.sanitize));
 
   actualCSS = 'background-image: url("http://goo.gl/foo.png")';
   expectedCSS =
@@ -314,13 +305,15 @@ function testSanitizeInlineStyleString() {
       // disallowed URL
       inputCss: 'background-image: url("http://example.com")',
       sanitizedCss: '',
-      uriRewriter: function(uri) { return null; }
+      uriRewriter: function(uri) {
+        return null;
+      }
     },
     {
       // allowed URL
       inputCss: 'background-image: url("http://example.com")',
       sanitizedCss: 'background-image: url("http://example.com");',
-      uriRewriter: function(uri) { return uri; }
+      uriRewriter: goog.html.SafeUrl.sanitize
     }
   ];
 

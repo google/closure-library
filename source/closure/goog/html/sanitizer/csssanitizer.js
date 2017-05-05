@@ -26,6 +26,7 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -77,8 +78,8 @@ goog.html.sanitizer.CssSanitizer.normalizeUrlChar_ = function(ch) {
  * function.
  * @param {string} uri URI to be sanitized.
  * @param {string} propName Property name which contained the URI.
- * @param {?function(string, string):?string} uriRewriter A URI rewriter that
- *    returns an unwrapped goog.html.SafeUrl.
+ * @param {?function(string, string):?goog.html.SafeUrl} uriRewriter A URI
+ *    rewriter that returns a goog.html.SafeUrl.
  * @return {?string} Safe URI for use in CSS.
  * @private
  */
@@ -88,9 +89,10 @@ goog.html.sanitizer.CssSanitizer.getSafeUri_ = function(
     return null;
   }
   var safeUri = uriRewriter(uri, propName);
-  if (safeUri) {
+  if (safeUri &&
+      goog.html.SafeUrl.unwrap(safeUri) != goog.html.SafeUrl.INNOCUOUS_STRING) {
     return 'url("' +
-        safeUri.replace(
+        goog.html.SafeUrl.unwrap(safeUri).replace(
             goog.html.sanitizer.CssSanitizer.NORM_URL_REGEXP_,
             goog.html.sanitizer.CssSanitizer.normalizeUrlChar_) +
         '")';
@@ -160,8 +162,8 @@ goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
  * Sanitizes the value for a given a browser-parsed CSS value.
  * @param {string} propName A property name.
  * @param {string} propValue Value of the property as parsed by the browser.
- * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
- *     returns an unwrapped goog.html.SafeUrl.
+ * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
+ *     rewriter that returns an unwrapped goog.html.SafeUrl.
  * @return {?string} Sanitized property value or null.
  * @private
  */
@@ -207,8 +209,8 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
  * their individual elements. Note: The sanitizer does not output vendor
  * prefixed styles.
  * @param {?CSSStyleDeclaration} cssStyle A CSS style object.
- * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
- *     returns an unwrapped goog.html.SafeUrl.
+ * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
+ *     rewriter that returns a goog.html.SafeUrl.
  * @return {!goog.html.SafeStyle} A sanitized inline cssText.
  */
 goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
@@ -246,8 +248,8 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
  * browser support is not available, such as for IE9 and below, a
  * SafeStyle-wrapped empty string is returned.
  * @param {string} cssText CSS text to be sanitized.
- * @param {function(string, string)=} opt_uriRewriter A URI rewriter that
- *    returns an unwrapped goog.html.SafeUrl.
+ * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
+ *     rewriter that returns a goog.html.SafeUrl.
  * @return {!goog.html.SafeStyle} A sanitized inline cssText.
  */
 goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString = function(
