@@ -155,7 +155,7 @@ goog.net.xpc.IframePollingTransport.prototype.ackIframeElm_;
 goog.net.xpc.IframePollingTransport.prototype.ackWinObj_;
 
 
-/** @private */
+/** @private {!Function|undefined} */
 goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresentCb_;
 
 

@@ -88,7 +88,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.transportType =
     goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
 
 
-/** @private */
+/** @private {!Function|undefined} */
 goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetupCb_;
 
 
