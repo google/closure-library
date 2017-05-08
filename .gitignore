@@ -11,4 +11,9 @@
 # python
 *.pyc
 
+# Node JS
 node_modules/
+npm-debug.log
+
+# General
+.DS_Store

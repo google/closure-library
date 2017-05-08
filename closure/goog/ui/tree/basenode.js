@@ -188,16 +188,16 @@ goog.ui.tree.BaseNode.prototype.initAccessibility = function() {
     }
 
     var img = this.getIconElement();
-    if (img) {
+    if (img && img.setAttribute) {
       goog.a11y.aria.setRole(img, 'presentation');
     }
     var ei = this.getExpandIconElement();
-    if (ei) {
+    if (ei && ei.setAttribute) {
       goog.a11y.aria.setRole(ei, 'presentation');
     }
 
     var ce = this.getChildrenElement();
-    if (ce) {
+    if (ce && ce.setAttribute) {
       goog.a11y.aria.setRole(ce, 'group');
 
       // In case the children will be created lazily.
@@ -474,7 +474,7 @@ goog.ui.tree.BaseNode.prototype.setDepth_ = function(depth) {
   if (depth != this.depth_) {
     this.depth_ = depth;
     var row = this.getRowElement();
-    if (row) {
+    if (row && row.style) {
       var indent = this.getPixelIndent_() + 'px';
       if (this.isRightToLeft()) {
         row.style.paddingRight = indent;
@@ -683,7 +683,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
     }
   } else {
     ce = this.getChildrenElement();
-    if (ce) {
+    if (ce && ce.style) {
       goog.style.setElementShown(ce, false);
     }
   }
@@ -1275,7 +1275,10 @@ goog.ui.tree.BaseNode.prototype.updateExpandIcon = function() {
  * @private
  */
 goog.ui.tree.BaseNode.prototype.updateIcon_ = function() {
-  this.getIconElement().className = this.getCalculatedIconClass();
+  var iconElement = this.getIconElement();
+  if (iconElement) {
+    iconElement.className = this.getCalculatedIconClass();
+  }
 };
 
 
@@ -1304,7 +1307,6 @@ goog.ui.tree.BaseNode.prototype.onMouseDown = function(e) {
  * Handles a click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @protected
- * @suppress {underscore|visibility}
  */
 goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
 
@@ -1396,7 +1398,6 @@ goog.ui.tree.BaseNode.prototype.onKeyDown = function(e) {
 
   return handled;
 };
-
 
 
 /**

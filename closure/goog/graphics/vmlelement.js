@@ -109,11 +109,16 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
   var element = this.getElement();
 
   var style = element.style;
-  style.width = goog.graphics.VmlGraphics.toSizePx(width);
-  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+  style.width = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(width);
+  style.height = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizePx(height);
 
-  element.coordsize = goog.graphics.VmlGraphics.toSizeCoord(width) + ' ' +
+  var coordWith = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toSizeCoord(width);
+  var coordHeight = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toSizeCoord(height);
+  element.coordsize = coordWith + ' ' + coordHeight;
 
   // Don't overwrite the root element's origin.
   if (!this.isRootElement_()) {
@@ -158,20 +163,17 @@ goog.graphics.VmlEllipseElement = function(
    */
   this.cx = cx;
 
-
   /**
    * Y coordinate of the ellipse center.
    * @type {number}
    */
   this.cy = cy;
 
-
   /**
    * Radius length for the x-axis.
    * @type {number}
    */
   this.rx = rx;
-
 
   /**
    * Radius length for the y-axis.
@@ -255,7 +257,6 @@ goog.graphics.VmlRectElement.prototype.getElement =
  */
 goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
   var style = this.getElement().style;
-
   style.left = /** @suppress {missingRequire} */
       goog.graphics.VmlGraphics.toPosPx(x);
   style.top = /** @suppress {missingRequire} */
@@ -272,6 +273,7 @@ goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
  */
 goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
+  /** @suppress {missingRequire} */
   style.width = goog.graphics.VmlGraphics.toSizePx(width);
   style.height = goog.graphics.VmlGraphics.toSizePx(height);
 };
@@ -417,8 +419,11 @@ goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
  */
 goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
   var style = this.getElement().style;
-  style.width = goog.graphics.VmlGraphics.toPosPx(width);
-  style.height = goog.graphics.VmlGraphics.toPosPx(height);
+
+  style.width = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toPosPx(width);
+  style.height = /** @suppress {missingRequire} */
+      goog.graphics.VmlGraphics.toPosPx(height);
 };
 
 
