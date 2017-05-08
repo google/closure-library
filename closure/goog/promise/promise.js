@@ -523,17 +523,20 @@ goog.Promise.firstFulfilled = function(promises) {
 
 
 /**
+ * @param {RESOLVER_CONTEXT=} opt_context An optional context for executing the
+ *     resolver function. If unspecified, the resolver function will be executed
+ *     in the default scope.
  * @return {!goog.promise.Resolver<TYPE>} Resolver wrapping the promise and its
  *     resolve / reject functions. Resolving or rejecting the resolver
  *     resolves or rejects the promise.
  * @template TYPE
  */
-goog.Promise.withResolver = function() {
+goog.Promise.withResolver = function(opt_context) {
   var resolve, reject;
   var promise = new goog.Promise(function(rs, rj) {
     resolve = rs;
     reject = rj;
-  });
+  }, opt_context);
   return new goog.Promise.Resolver_(promise, resolve, reject);
 };
 
