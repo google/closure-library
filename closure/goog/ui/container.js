@@ -1218,8 +1218,10 @@ goog.ui.Container.prototype.setHighlightedIndex = function(index) {
   var child = this.getChildAt(index);
   if (child) {
     child.setHighlighted(true);
+    this.highlightedIndex_ = index;
   } else if (this.highlightedIndex_ > -1) {
     this.getHighlighted().setHighlighted(false);
+    this.highlightedIndex_ = -1;
   }
 };
 
