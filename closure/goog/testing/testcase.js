@@ -710,7 +710,6 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
  * Returns the test results object: a map from test names to a list of test
  * failures (if any exist).
  * @return {!Object<string, !Array<string>>} Tests results object.
- * @deprecated
  */
 // TODO(dankurka): Delete this once testing infrastructure has been updated
 // and released
