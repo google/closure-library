@@ -24,7 +24,6 @@ goog.require('goog.dom.browserrange');
 goog.require('goog.html.testing');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
 
 var test1;
 var test2;
@@ -59,7 +58,8 @@ function testRangeEndPoints() {
   var endNode = selRange.getEndNode();
   var startOffset = selRange.getStartOffset();
   var endOffset = selRange.getEndOffset();
-  if (goog.userAgent.WEBKIT) {
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals(
         'Start node should have text: abc', 'abc', startNode.nodeValue);
     assertEquals('End node should have text: abc', 'abc', endNode.nodeValue);
@@ -78,6 +78,10 @@ function testCreateFromNodeContents() {
   goog.testing.dom.assertRangeEquals(onlybrdiv, 0, onlybrdiv, 1, range);
 }
 
+/**
+ * @param {string} str
+ * @return {string}
+ */
 function normalizeHtml(str) {
   return str.toLowerCase().replace(/[\n\r\f"]/g, '');
 }
@@ -396,11 +400,11 @@ function testRangeEndingWithBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Start node should be span', spanElem, startNode);
-  } else {
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Startnode should have text:123', '123', startNode.nodeValue);
+  } else {
+    assertEquals('Start node should be span', spanElem, startNode);
   }
   assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
   var endNode = selRange.getEndNode();
@@ -421,15 +425,16 @@ function testRangeEndingWithBR2() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Start node should be span', spanElem, startNode);
-  } else {
+  var endNode = selRange.getEndNode();
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Start node should have text:123', '123', startNode.nodeValue);
+  } else {
+    assertEquals('Start node should be span', spanElem, startNode);
   }
   assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
-  var endNode = selRange.getEndNode();
-  if (goog.userAgent.WEBKIT) {
+  if (endNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Endnode should have text', '123', endNode.nodeValue);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
   } else {
@@ -450,21 +455,21 @@ function testRangeEndingBeforeBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Start node should be span', spanElem, startNode);
-  } else {
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Startnode should have text:123', '123', startNode.nodeValue);
+  } else {
+    assertEquals('Start node should be span', spanElem, startNode);
   }
   assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Endnode should be span', spanElem, endNode);
-    assertEquals('Endoffset should be 1', 1, selRange.getEndOffset());
-  } else {
+  if (endNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Endnode should have text:123', '123', endNode.nodeValue);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+  } else {
+    assertEquals('Endnode should be span', spanElem, endNode);
+    assertEquals('Endoffset should be 1', 1, selRange.getEndOffset());
   }
 }
 
@@ -481,15 +486,20 @@ function testRangeStartingWithBR() {
   range.select();
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  assertEquals('Start node should be span', spanElem, startNode);
-  assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Endnode should be span', spanElem, endNode);
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
+    assertEquals('Start node should be text:123', '123', startNode.nodeValue);
+    assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
+  } else {
+    assertEquals('Start node should be span', spanElem, startNode);
+    assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
+  }
+  if (endNode.nodeType == goog.dom.NodeType.TEXT) {
+    assertEquals('Endnode should have text:456', '456', endNode.nodeValue);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
   } else {
-    assertEquals('Endnode should have text:456', '456', endNode.nodeValue);
+    assertEquals('Endnode should be span', spanElem, endNode);
     assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
   }
 }
@@ -507,23 +517,23 @@ function testRangeStartingAfterBR() {
 
   var selRange = goog.dom.Range.createFromWindow();
   var startNode = selRange.getStartNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Start node should be span', spanElem, startNode);
-    assertEquals('Startoffset should be 2', 2, selRange.getStartOffset());
-  } else {
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals(
         'Startnode should have text:4567', '4567', startNode.nodeValue);
     assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
+  } else {
+    assertEquals('Start node should be span', spanElem, startNode);
+    assertEquals('Startoffset should be 2', 2, selRange.getStartOffset());
   }
   var endNode = selRange.getEndNode();
-  if (goog.userAgent.GECKO || goog.userAgent.EDGE ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9))) {
-    assertEquals('Endnode should be span', spanElem, endNode);
-    assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
-  } else {
+  if (startNode.nodeType == goog.dom.NodeType.TEXT) {
+    // Special case for Webkit (up to Chrome 57) and IE8.
     assertEquals('Endnode should have text:4567', '4567', endNode.nodeValue);
     assertEquals('Endoffset should be 4', 4, selRange.getEndOffset());
+  } else {
+    assertEquals('Endnode should be span', spanElem, endNode);
+    assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
   }
 }
 
