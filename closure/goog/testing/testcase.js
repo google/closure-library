@@ -707,35 +707,22 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
 
 
 /**
- * Returns the test results object: a map from test names to a list of test
- * failures (if any exist).
- * @return {!Object<string, !Array<string>>} Tests results object.
- * @deprecated
+ * Represents a test result.
+ * @typedef {{
+ *     'source': string,
+ *     'message': string,
+ *     'stacktrace': string
+ * }}
  */
-// TODO(dankurka): Delete this once testing infrastructure has been updated
-// and released
-goog.testing.TestCase.prototype.getTestResults = function() {
-  var map = {};
-  goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
-    // Make sure we only use properties on the actual map
-    if (!Object.prototype.hasOwnProperty.call(
-            this.result_.resultsByName, key)) {
-      return;
-    }
-    map[key] = [];
-    for (var j = 0; j < resultArray.length; j++) {
-      map[key].push(resultArray[j].toString());
-    }
-  }, this);
-  return map;
-};
+goog.testing.TestCase.IResult;
 
 /**
- * Returns the test results as json.
- * This is called by the testing infrastructure through G_testrunner.
- * @return {string} Tests results object.
+ * Returns the test results object: a map from test names to a list of test
+ * failures (if any exist).
+ * @return {!Object<string, !Array<goog.testing.TestCase.IResult>>} Test
+ *     results object.
  */
-goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
+goog.testing.TestCase.prototype.getTestResults = function() {
   var map = {};
   goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
     // Make sure we only use properties on the actual map
@@ -748,7 +735,16 @@ goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
       map[key].push(resultArray[j].toObject_());
     }
   }, this);
-  return goog.json.serialize(map);
+  return map;
+};
+
+/**
+ * Returns the test results as json.
+ * This is called by the testing infrastructure through G_testrunner.
+ * @return {string} Tests results object.
+ */
+goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
+  return goog.json.serialize(this.getTestResults());
 };
 
 /**
@@ -1854,7 +1850,7 @@ goog.testing.TestCase.Error.prototype.toString = function() {
 
 /**
  * Returns an object representing the error suitable for JSON serialization.
- * @return {{source: string, message: string, stacktrace: string}} An object
+ * @return {!goog.testing.TestCase.IResult} An object
  *     representation of the error.
  * @private
  */

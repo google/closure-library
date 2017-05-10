@@ -432,8 +432,9 @@ goog.testing.TestRunner.prototype.log = function(s) {
 // TODO(nnaze): Properly handle serving test results when multiple test cases
 // are run.
 /**
- * @return {Object<string, !Array<string>>} A map of test names to a list of
- * test failures (if any) to provide formatted data for the test runner.
+ * @return {Object<string, !Array<!goog.testing.TestCase.IResult>>} A map of
+ * test names to a list of test failures (if any) to provide formatted data
+ * for the test runner.
  */
 goog.testing.TestRunner.prototype.getTestResults = function() {
   if (this.testCase) {

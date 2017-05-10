@@ -84,7 +84,7 @@ function createEventPromise(target, eventType) {
 
 /**
  * @typedef {{
- *   failureReports: !Array<string>,
+ *   failureReports: !Array<TestCase.IResult>,
  *   testNames: !Array<string>
  * }}
  */
@@ -94,8 +94,8 @@ var TestResults;
 /**
  * Processes the test results returned from MultiTestRunner and creates a
  * consolidated test result object.
- * @param {!Array<!Object<string,!Array<string>>>} testResults The list of
- *     individual test results from MultiTestRunner.
+ * @param {!Array<!Object<string,!Array<TestCase.IResult>>>}
+ *     testResults The list of individual test results from MultiTestRunner.
  * @return {!TestResults} Consolidated test results for all individual tests.
  */
 function processTestResults(testResults) {
@@ -305,9 +305,9 @@ testSuite({
       var failedTests = testRunner.getTestsThatFailed();
       assertEquals(3, failureReports.length);
       assertEquals(3, failedTests.length);
-      assertContains('timed out', failureReports[0]);
-      assertContains('timed out', failureReports[1]);
-      assertContains('timed out', failureReports[2]);
+      assertContains('timed out', failureReports[0]['message']);
+      assertContains('timed out', failureReports[1]['message']);
+      assertContains('timed out', failureReports[2]['message']);
       assertArrayContainsString('testdata/fake_passing_test.html', failedTests);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
       assertArrayContainsString(
