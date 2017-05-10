@@ -137,7 +137,7 @@ goog.ui.Menu.prototype.allowAutoFocus_ = true;
 
 
 /**
- * Whether the menu should use windows syle behavior and allow disabled menu
+ * Whether the menu should use windows style behavior and allow disabled menu
  * items to be highlighted (though not selectable).  Defaults to false
  * @type {boolean}
  * @private
