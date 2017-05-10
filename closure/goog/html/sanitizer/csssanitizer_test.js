@@ -234,10 +234,7 @@ function testColor() {
   for (var i = 0; i < colors.length; ++i) {
     var validColorValue = 'color: ' + colors[i];
     assertCSSTextEquals(
-        // Firefox doesn't "normalize" the CSS text unless a property is
-        // modified, so need to lower case it prior to comparison.
-        validColorValue.toLowerCase(),
-        getSanitizedInlineStyle(validColorValue));
+        validColorValue, getSanitizedInlineStyle(validColorValue));
   }
 
   for (var i = 0; i < notcolors.length; ++i) {
@@ -314,6 +311,11 @@ function testSanitizeInlineStyleString() {
       inputCss: 'background-image: url("http://example.com")',
       sanitizedCss: 'background-image: url("http://example.com");',
       uriRewriter: goog.html.SafeUrl.sanitize
+    },
+    {
+      // preserves case
+      inputCss: 'font-family: Roboto, sans-serif',
+      sanitizedCss: 'font-family: Roboto, sans-serif'
     }
   ];
 
