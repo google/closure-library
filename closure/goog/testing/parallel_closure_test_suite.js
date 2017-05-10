@@ -123,7 +123,7 @@ var testObj = {
     };
 
     window['G_testRunner']['getTestResultsAsJson'] = function() {
-      return json.stringify(allResults);
+      return json.serialize(allResults);
     };
 
     return failurePromise.then(function(failures) {
