@@ -68,7 +68,8 @@ goog.debug.logRecordSerializer.serialize = function(record) {
  * @return {!goog.debug.LogRecord} The deserialized record.
  */
 goog.debug.logRecordSerializer.parse = function(s) {
-  return goog.debug.logRecordSerializer.reconstitute_(goog.json.parse(s));
+  return goog.debug.logRecordSerializer.reconstitute_(
+      /** @type {!Object} */ (JSON.parse(s)));
 };
 
 
@@ -78,6 +79,7 @@ goog.debug.logRecordSerializer.parse = function(s) {
  * your way.
  * @param {string} s The JSON serialized record.
  * @return {!goog.debug.LogRecord} The deserialized record.
+ * @deprecated Use goog.debug.logRecordSerializer.parse.
  */
 goog.debug.logRecordSerializer.unsafeParse = function(s) {
   return goog.debug.logRecordSerializer.reconstitute_(goog.json.unsafeParse(s));
