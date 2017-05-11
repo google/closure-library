@@ -42,6 +42,7 @@ goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
@@ -335,7 +336,7 @@ goog.dom.safe.setObjectData = function(object, url) {
 
 
 /**
- * Safely assigns a URL to an script element's src property.
+ * Safely assigns a URL to a script element's src property.
  *
  * Example usage:
  *   goog.dom.safe.setScriptSrc(scriptEl, url);
@@ -351,6 +352,26 @@ goog.dom.safe.setObjectData = function(object, url) {
 goog.dom.safe.setScriptSrc = function(script, url) {
   goog.dom.safe.assertIsHTMLScriptElement_(script);
   script.src = goog.html.TrustedResourceUrl.unwrap(url);
+};
+
+
+/**
+ * Safely assigns a value to a script element's content.
+ *
+ * Example usage:
+ *   goog.dom.safe.setScriptContent(scriptEl, content);
+ * which is a safe alternative to
+ *   scriptEl.text = content;
+ * The latter can result in executing untrusted code unless it is ensured that
+ * the code is loaded from a trustworthy resource.
+ *
+ * @param {!HTMLScriptElement} script The script element whose content is being
+ *     set.
+ * @param {!goog.html.SafeScript} content The content to assign.
+ */
+goog.dom.safe.setScriptContent = function(script, content) {
+  goog.dom.safe.assertIsHTMLScriptElement_(script);
+  script.text = goog.html.SafeScript.unwrap(content);
 };
 
 

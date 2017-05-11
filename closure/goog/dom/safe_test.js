@@ -23,6 +23,7 @@ goog.setTestOnly('goog.dom.safeTest');
 goog.require('goog.dom.safe');
 goog.require('goog.dom.safe.InsertAdjacentHtmlPosition');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
@@ -370,6 +371,15 @@ function testSetScriptSrc() {
     assert(goog.string.contains(
         ex.message, 'Argument is not a HTMLScriptElement'));
   }
+}
+
+function testSetScriptContent() {
+  var mockScriptElement = /** @type {!HTMLScriptElement} */ ({});
+
+  var content =
+      goog.html.SafeScript.fromConstant(goog.string.Const.from('alert(1);'));
+  goog.dom.safe.setScriptContent(mockScriptElement, content);
+  assertEquals(goog.html.SafeScript.unwrap(content), mockScriptElement.text);
 }
 
 function testOpenInWindow() {
