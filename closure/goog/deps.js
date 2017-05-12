@@ -214,6 +214,7 @@ goog.addDependency('dom/forms.js', ['goog.dom.forms'], ['goog.dom.InputType', 'g
 goog.addDependency('dom/forms_test.js', ['goog.dom.formsTest'], ['goog.dom', 'goog.dom.forms', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/fullscreen.js', ['goog.dom.fullscreen', 'goog.dom.fullscreen.EventType'], ['goog.dom', 'goog.userAgent'], {});
 goog.addDependency('dom/fullscreen_test.js', ['goog.dom.fullscreen_test'], ['goog.dom.DomHelper', 'goog.dom.fullscreen', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit'], {});
+goog.addDependency('dom/htmlelement.js', ['goog.dom.HtmlElement'], [], {});
 goog.addDependency('dom/iframe.js', ['goog.dom.iframe'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyle', 'goog.userAgent'], {});
 goog.addDependency('dom/iframe_test.js', ['goog.dom.iframeTest'], ['goog.dom', 'goog.dom.iframe', 'goog.html.SafeHtml', 'goog.html.SafeStyle', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/inputtype.js', ['goog.dom.InputType'], [], {});
@@ -258,7 +259,7 @@ goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputT
 goog.addDependency('dom/selection_test.js', ['goog.dom.selectionTest'], ['goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.selection', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('dom/tagiterator.js', ['goog.dom.TagIterator', 'goog.dom.TagWalkType'], ['goog.dom', 'goog.dom.NodeType', 'goog.iter.Iterator', 'goog.iter.StopIteration'], {});
 goog.addDependency('dom/tagiterator_test.js', ['goog.dom.TagIteratorTest'], ['goog.dom', 'goog.dom.TagIterator', 'goog.dom.TagName', 'goog.dom.TagWalkType', 'goog.iter', 'goog.iter.StopIteration', 'goog.testing.dom', 'goog.testing.jsunit'], {});
-goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], [], {});
+goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], ['goog.dom.HtmlElement'], {});
 goog.addDependency('dom/tagname_test.js', ['goog.dom.TagNameTest'], ['goog.dom.TagName', 'goog.object', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/tags.js', ['goog.dom.tags'], ['goog.object'], {});
 goog.addDependency('dom/tags_test.js', ['goog.dom.tagsTest'], ['goog.dom.tags', 'goog.testing.jsunit'], {});
@@ -799,7 +800,7 @@ goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], [
 goog.addDependency('net/cookies_test.js', ['goog.net.cookiesTest'], ['goog.array', 'goog.net.cookies', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('net/corsxmlhttpfactory.js', ['goog.net.CorsXmlHttpFactory', 'goog.net.IeCorsXhrAdapter'], ['goog.net.HttpStatus', 'goog.net.XhrLike', 'goog.net.XmlHttp', 'goog.net.XmlHttpFactory'], {});
 goog.addDependency('net/corsxmlhttpfactory_test.js', ['goog.net.CorsXmlHttpFactoryTest'], ['goog.net.CorsXmlHttpFactory', 'goog.net.IeCorsXhrAdapter', 'goog.testing.jsunit', 'goog.userAgent'], {});
-goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.SafeHtml', 'goog.json', 'goog.log', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.string', 'goog.userAgent'], {});
+goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.SafeHtml', 'goog.log', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('net/crossdomainrpc_test.js', ['goog.net.CrossDomainRpcTest'], ['goog.Promise', 'goog.log', 'goog.net.CrossDomainRpc', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {});
 goog.addDependency('net/errorcode.js', ['goog.net.ErrorCode'], [], {});
 goog.addDependency('net/eventtype.js', ['goog.net.EventType'], [], {});

@@ -30,6 +30,10 @@ function testDomTagNameTypes() {
 
   /** @type {!IArrayLike<!HTMLAnchorElement>} */
   var anchors = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.A);
+
+  // Check that goog.dom.HtmlElement is assignable to HTMLElement.
+  /** @type {!HTMLElement} */
+  var b = goog.dom.createElement(goog.dom.TagName.B);
 }
 
 
