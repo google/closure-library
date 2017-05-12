@@ -74,7 +74,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
@@ -553,8 +552,8 @@ goog.net.CrossDomainRpc.prototype.detectResponse_ = function(
     this.status = Number(params.get('status'));
     this.responseText = responseData;
     this.responseTextIsJson_ = params.get('isDataJson') == 'true';
-    this.responseHeaders = goog.json.unsafeParse(
-        /** @type {string} */ (params.get('headers')));
+    this.responseHeaders = /** @type {?Object} */ (JSON.parse(
+        /** @type {string} */ (params.get('headers'))));
 
     this.dispatchEvent(goog.net.EventType.READY);
     this.dispatchEvent(goog.net.EventType.COMPLETE);
@@ -627,8 +626,9 @@ goog.net.CrossDomainRpc.getFramePayload_ = function(frame) {
  *     or undefined.
  */
 goog.net.CrossDomainRpc.prototype.getResponseJson = function() {
-  return this.responseTextIsJson_ ? goog.json.unsafeParse(this.responseText) :
-                                    undefined;
+  return this.responseTextIsJson_ ?
+      /** @type {?Object} */ (JSON.parse(this.responseText)) :
+      undefined;
 };
 
 
