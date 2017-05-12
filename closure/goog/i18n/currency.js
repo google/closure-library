@@ -466,7 +466,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'TTD': [2, '$', 'TT$'],
   'UGX': [0, 'UGX', 'UGX'],
   'UZS': [0, 'so\u02bcm', 'UZS'],
-  'VEF': [2, 'Bs', 'Bs'],
+  'VEF': [2, 'Bsf.', 'Bsf.'],
   'VUV': [0, 'VUV', 'VUV'],
   'WST': [2, 'WST', 'WST'],
   'XAF': [0, 'FCFA', 'FCFA'],
