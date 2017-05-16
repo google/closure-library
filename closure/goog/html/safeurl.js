@@ -39,10 +39,11 @@ goog.require('goog.string.TypedString');
  * when evaluated as a hyperlink URL in a browser.
  *
  * Values of this type are guaranteed to be safe to use in URL/hyperlink
- * contexts, such as, assignment to URL-valued DOM properties, or
- * interpolation into a HTML template in URL context (e.g., inside a href
- * attribute), in the sense that the use will not result in a
- * Cross-Site-Scripting vulnerability.
+ * contexts, such as assignment to URL-valued DOM properties, in the sense that
+ * the use will not result in a Cross-Site-Scripting vulnerability. Similarly,
+ * SafeUrls can be interpolated into the URL context of an HTML template (e.g.,
+ * inside a href attribute). However, appropriate HTML-escaping must still be
+ * applied.
  *
  * Note that, as documented in {@code goog.html.SafeUrl.unwrap}, this type's
  * contract does not guarantee that instances are safe to interpolate into HTML
@@ -350,19 +351,11 @@ goog.html.SafeUrl.fromTrustedResourceUrl = function(trustedResourceUrl) {
  *     Otherwise, a colon after a double solidus (//) must be in the authority
  *     (before port).
  *
- * The pattern disallows &, used in HTML entity declarations before
- * one of the characters in [/?#]. This disallows HTML entities used in the
- * protocol name, which should never happen, e.g. "h&#116;tp" for "http".
- * It also disallows HTML entities in the first path part of a relative path,
- * e.g. "foo&lt;bar/baz".  Our existing escaping functions should not produce
- * that. More importantly, it disallows masking of a colon,
- * e.g. "javascript&#58;...".
- *
  * @private
  * @const {!RegExp}
  */
 goog.html.SAFE_URL_PATTERN_ =
-    /^(?:(?:https?|mailto|ftp):|[^&:/?#]*(?:[/?#]|$))/i;
+    /^(?:(?:https?|mailto|ftp):|[^:/?#]*(?:[/?#]|$))/i;
 
 
 /**
