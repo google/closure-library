@@ -1174,6 +1174,29 @@ function testIsDateLikeWithGoogDateTime() {
 }
 
 
+function testToUTCRfc3339String() {
+  var date = goog.date.fromIsoString('19850412T232050Z');
+  date.setUTCMilliseconds(52);
+  assertEquals(date.toUTCRfc3339String(), '1985-04-12T23:20:50.52Z');
+  assertNotEquals(
+      'Diverges from ISO 8601', date.toUTCRfc3339String(),
+      date.toUTCIsoString(true, true));
+
+  var date = goog.date.fromIsoString('19901231T235959Z');
+  assertEquals(date.toUTCRfc3339String(), '1990-12-31T23:59:59Z');
+  assertNotEquals(
+      'Diverges from ISO 8601', date.toUTCRfc3339String(),
+      date.toUTCIsoString(true, true));
+
+  var date = goog.date.fromIsoString('19370101T120027Z');
+  date.setUTCMilliseconds(87);
+  assertEquals(date.toUTCRfc3339String(), '1937-01-01T12:00:27.87Z');
+  assertNotEquals(
+      'Diverges from ISO 8601', date.toUTCRfc3339String(),
+      date.toUTCIsoString(true, true));
+}
+
+
 function testDateTimezone() {
   var d = new goog.date.DateTime(2006, 1, 1, 12, 0, 0);
   d.add(
