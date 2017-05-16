@@ -52,6 +52,15 @@ goog.ui.ac.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
    */
   this.rowFilter_ = null;
 
+  /**
+   * A function(type, response) converting the type and the server response to
+   * an object with two methods: render(node, token) and select(target).
+   * @private {goog.ui.ac.RichRemoteArrayMatcher.RowBuilder}
+   */
+  this.rowBuilder_ = function(type, response) {
+    var func = /** @type {!Function} */ (eval(type));
+    return func(response);
+  };
 };
 goog.inherits(goog.ui.ac.RichRemoteArrayMatcher, goog.ui.ac.RemoteArrayMatcher);
 
@@ -63,6 +72,27 @@ goog.inherits(goog.ui.ac.RichRemoteArrayMatcher, goog.ui.ac.RemoteArrayMatcher);
  */
 goog.ui.ac.RichRemoteArrayMatcher.prototype.setRowFilter = function(rowFilter) {
   this.rowFilter_ = rowFilter;
+};
+
+
+/**
+ * @typedef {function(string, *): {
+ *   render: (function(!Element, string)|undefined),
+ *   select: (function(!Element)|undefined)
+ * }}
+ */
+goog.ui.ac.RichRemoteArrayMatcher.RowBuilder;
+
+
+/**
+ * Sets the function building the rows.
+ * @param {goog.ui.ac.RichRemoteArrayMatcher.RowBuilder} rowBuilder
+ *     A function(type, response) converting the type and the server response to
+ *     an object with two methods: render(node, token) and select(target).
+ */
+goog.ui.ac.RichRemoteArrayMatcher.prototype.setRowBuilder = function(
+    rowBuilder) {
+  this.rowBuilder_ = rowBuilder;
 };
 
 
@@ -89,9 +119,8 @@ goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows = function(
     try {
       var rows = [];
       for (var i = 0; i < matches.length; i++) {
-        var func = /** @type {!Function} */ (eval(matches[i][0]));
         for (var j = 1; j < matches[i].length; j++) {
-          var richRow = func(matches[i][j]);
+          var richRow = this.rowBuilder_(matches[i][0], matches[i][j]);
           rows.push(richRow);
 
           // If no render function was provided, set the node's textContent.

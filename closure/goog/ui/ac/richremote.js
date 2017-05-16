@@ -70,16 +70,14 @@ goog.ui.ac.RichRemote = function(url, input, opt_multi, opt_useSimilar) {
    * @type {goog.ui.ac.Renderer}
    * @private
    */
-  var renderer = new goog.ui.ac.Renderer(null, customRenderer);
-  this.renderer_ = renderer;
+  this.renderer_ = new goog.ui.ac.Renderer(null, customRenderer);
 
   /**
    * A remote matcher that parses rich results returned by the server.
    * @type {goog.ui.ac.RichRemoteArrayMatcher}
    * @private
    */
-  var matcher = new goog.ui.ac.RichRemoteArrayMatcher(url, !opt_useSimilar);
-  this.matcher_ = matcher;
+  this.matcher_ = new goog.ui.ac.RichRemoteArrayMatcher(url, !opt_useSimilar);
 
   /**
    * An input handler that calls select on a row when it is selected.
@@ -90,7 +88,8 @@ goog.ui.ac.RichRemote = function(url, input, opt_multi, opt_useSimilar) {
       new goog.ui.ac.RichInputHandler(null, null, !!opt_multi, 300);
 
   // Create the widget and connect it to the input handler.
-  goog.ui.ac.AutoComplete.call(this, matcher, renderer, inputhandler);
+  goog.ui.ac.AutoComplete.call(
+      this, this.matcher_, this.renderer_, inputhandler);
   inputhandler.attachAutoComplete(this);
   inputhandler.attachInputs(input);
 };
@@ -104,4 +103,15 @@ goog.inherits(goog.ui.ac.RichRemote, goog.ui.ac.Remote);
  */
 goog.ui.ac.RichRemote.prototype.setRowFilter = function(rowFilter) {
   this.matcher_.setRowFilter(rowFilter);
+};
+
+
+/**
+ * Sets the function building the rows.
+ * @param {goog.ui.ac.RichRemoteArrayMatcher.RowBuilder} rowBuilder
+ *     A function(type, response) converting the type and the server response to
+ *     an object with two methods: render(node, token) and select(target).
+ */
+goog.ui.ac.RichRemote.prototype.setRowBuilder = function(rowBuilder) {
+  this.matcher_.setRowBuilder(rowBuilder);
 };

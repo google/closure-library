@@ -460,6 +460,7 @@ var _allTests = [
   'closure/goog/ui/ac/inputhandler_test.html',
   'closure/goog/ui/ac/remotearraymatcher_test.html',
   'closure/goog/ui/ac/renderer_test.html',
+  'closure/goog/ui/ac/richremotearraymatcher_test.html',
   'closure/goog/ui/advancedtooltip_test.html',
   'closure/goog/ui/animatedzippy_test.html',
   'closure/goog/ui/bidiinput_test.html',
