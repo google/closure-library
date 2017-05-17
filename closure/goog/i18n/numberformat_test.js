@@ -26,6 +26,7 @@ goog.require('goog.i18n.NumberFormatSymbols_en');
 goog.require('goog.i18n.NumberFormatSymbols_fr');
 goog.require('goog.i18n.NumberFormatSymbols_pl');
 goog.require('goog.i18n.NumberFormatSymbols_ro');
+goog.require('goog.string');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -947,6 +948,15 @@ function testFractionDigitsInvalid() {
   }
 }
 
+function testFractionDigitsTooHigh() {
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  fmt.setMaximumFractionDigits(308);
+  var err = assertThrows(function() {
+    fmt.setMaximumFractionDigits(309);
+  });
+  assertEquals('Unsupported maximum fraction digits: 309', err.message);
+}
+
 function testSignificantDigitsEqualToMax() {
   var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(0);
@@ -1259,4 +1269,39 @@ function testVerySmallNumberScientific() {  // See b/30990076.
   var f = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
   var result = f.format(5e-324);
   assertEquals('5E-324', result);
+}
+
+function testVerySmallNumberDecimal() {
+  var f = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  f.setSignificantDigits(3);
+  f.setMaximumFractionDigits(100);
+
+  var expected = '0.' + goog.string.repeat('0', 89) + '387';
+  assertEquals(expected, f.format(3.87e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '387';
+  assertEquals(expected, f.format(3.87e-9));
+  expected = '0.' + goog.string.repeat('0', 89) + '342';
+  assertEquals(expected, f.format(3.42e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '342';
+  assertEquals(expected, f.format(3.42e-9));
+
+  f.setSignificantDigits(2);
+  expected = '0.' + goog.string.repeat('0', 89) + '39';
+  assertEquals(expected, f.format(3.87e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '39';
+  assertEquals(expected, f.format(3.87e-9));
+  expected = '0.' + goog.string.repeat('0', 89) + '34';
+  assertEquals(expected, f.format(3.42e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '34';
+  assertEquals(expected, f.format(3.42e-9));
+
+  f.setSignificantDigits(1);
+  expected = '0.' + goog.string.repeat('0', 89) + '4';
+  assertEquals(expected, f.format(3.87e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '4';
+  assertEquals(expected, f.format(3.87e-9));
+  expected = '0.' + goog.string.repeat('0', 89) + '3';
+  assertEquals(expected, f.format(3.42e-90));
+  expected = '0.' + goog.string.repeat('0', 8) + '3';
+  assertEquals(expected, f.format(3.42e-9));
 }
