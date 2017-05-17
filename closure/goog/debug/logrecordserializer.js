@@ -74,7 +74,7 @@ goog.debug.logRecordSerializer.parse = function(s) {
 
 
 /**
- * Common reconsitution method for for parse and unsafeParse.
+ * Reconstitutes LogRecord from the JSON object.
  * @param {Object} o The JSON object.
  * @return {!goog.debug.LogRecord} The reconstituted record.
  * @private
