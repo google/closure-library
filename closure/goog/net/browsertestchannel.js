@@ -26,7 +26,7 @@
 
 goog.provide('goog.net.BrowserTestChannel');
 
-goog.require('goog.json.EvalJsonProcessor');
+goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.net.ChannelRequest');
 goog.require('goog.net.ChannelRequest.Error');
 goog.require('goog.net.tmpnetwork');
@@ -60,12 +60,11 @@ goog.net.BrowserTestChannel = function(channel, channelDebug) {
   this.channelDebug_ = channelDebug;
 
   /**
-   * Parser for a response payload. Defaults to use
-   * {@code goog.json.unsafeParse}. The parser should return an array.
+   * Parser for a response payload. The parser should return an array.
    * @type {goog.string.Parser}
    * @private
    */
-  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
+  this.parser_ = new goog.json.NativeJsonProcessor();
 };
 
 
@@ -239,9 +238,7 @@ goog.net.BrowserTestChannel.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
- * Sets a new parser for the response payload. A custom parser may be set to
- * avoid using eval(), for example.
- * By default, the parser uses {@code goog.json.unsafeParse}.
+ * Sets a new parser for the response payload.
  * @param {!goog.string.Parser} parser Parser.
  */
 goog.net.BrowserTestChannel.prototype.setParser = function(parser) {
