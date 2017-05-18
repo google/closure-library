@@ -148,9 +148,11 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
   window["__errors_since_boot"] = window["__errors_since_boot"] || null;
 
   if (window["__onerror_at_boot"]) {
-    for(var i = 0; i < window["__errors_since_boot"].length; i++) {
-      var args = window["__errors_since_boot"][i];
-      window.onerror.apply(window, args);
+    if (window['__errors_since_boot']) {
+      for (var i = 0; i < window['__errors_since_boot'].length; i++) {
+        var args = window['__errors_since_boot'][i];
+        window.onerror.apply(window, args);
+      }
     }
     // http://perfectionkills.com/understanding-delete/#ie_bugs
     window["__onerror_at_boot"] = null;
