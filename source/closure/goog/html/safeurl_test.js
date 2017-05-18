@@ -256,8 +256,7 @@ function testSafeUrlSanitize_validatesUrl() {
   assertGoodUrl('p//ath');
   assertGoodUrl('p//ath?foo=bar#baz');
   assertGoodUrl('#baz');
-  // Restricted characters ('&', ':', \') after [/?#].
-  assertGoodUrl('/&');
+  // Restricted character ':' after [/?#].
   assertGoodUrl('?:');
 
   // .sanitize() works on program constants.
@@ -267,8 +266,7 @@ function testSafeUrlSanitize_validatesUrl() {
   assertBadUrl('javascript:evil();');
   assertBadUrl('javascript:evil();//\nhttp://good.com/');
   assertBadUrl('data:blah');
-  // Restricted characters before [/?#].
-  assertBadUrl('&');
+  // Restricted character before [/?#].
   assertBadUrl(':');
   // '\' is not treated like '/': no restricted characters allowed after it.
   assertBadUrl('\\:');

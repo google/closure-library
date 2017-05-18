@@ -100,6 +100,35 @@ goog.isDef = function(val) {
   return val !== void 0;
 };
 
+/**
+ * Returns true if the specified value is a string.
+ * @param {?} val Variable to test.
+ * @return {boolean} Whether variable is a string.
+ */
+goog.isString = function(val) {
+  return typeof val == 'string';
+};
+
+
+/**
+ * Returns true if the specified value is a boolean.
+ * @param {?} val Variable to test.
+ * @return {boolean} Whether variable is boolean.
+ */
+goog.isBoolean = function(val) {
+  return typeof val == 'boolean';
+};
+
+
+/**
+ * Returns true if the specified value is a number.
+ * @param {?} val Variable to test.
+ * @return {boolean} Whether variable is a number.
+ */
+goog.isNumber = function(val) {
+  return typeof val == 'number';
+};
+
 
 /**
  * Builds an object structure for the provided namespace path, ensuring that
@@ -150,11 +179,16 @@ goog.define = function(name, defaultValue) {
   var value = defaultValue;
   if (!COMPILED) {
     if (goog.global.CLOSURE_UNCOMPILED_DEFINES &&
+        // Anti DOM-clobbering runtime check (b/37736576).
+        /** @type {?} */ (goog.global.CLOSURE_UNCOMPILED_DEFINES).nodeType ===
+            undefined &&
         Object.prototype.hasOwnProperty.call(
             goog.global.CLOSURE_UNCOMPILED_DEFINES, name)) {
       value = goog.global.CLOSURE_UNCOMPILED_DEFINES[name];
     } else if (
         goog.global.CLOSURE_DEFINES &&
+        // Anti DOM-clobbering runtime check (b/37736576).
+        /** @type {?} */ (goog.global.CLOSURE_DEFINES).nodeType === undefined &&
         Object.prototype.hasOwnProperty.call(
             goog.global.CLOSURE_DEFINES, name)) {
       value = goog.global.CLOSURE_DEFINES[name];
@@ -872,7 +906,9 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.findBasePath_ = function() {
-    if (goog.isDef(goog.global.CLOSURE_BASE_PATH)) {
+    if (goog.isDef(goog.global.CLOSURE_BASE_PATH) &&
+        // Anti DOM-clobbering runtime check (b/37736576).
+        goog.isString(goog.global.CLOSURE_BASE_PATH)) {
       goog.basePath = goog.global.CLOSURE_BASE_PATH;
       return;
     } else if (!goog.inHtmlDocument_()) {
@@ -880,7 +916,13 @@ if (goog.DEPENDENCIES_ENABLED) {
     }
     /** @type {Document} */
     var doc = goog.global.document;
-    var scripts = doc.getElementsByTagName('SCRIPT');
+    // If we have a currentScript available, use it exclusively.
+    var currentScript = doc.currentScript;
+    if (currentScript) {
+      var scripts = [currentScript];
+    } else {
+      var scripts = doc.getElementsByTagName('SCRIPT');
+    }
     // Search backwards since the current script is in almost all cases the one
     // that has base.js.
     for (var i = scripts.length - 1; i >= 0; --i) {
@@ -1811,36 +1853,6 @@ goog.isArrayLike = function(val) {
  */
 goog.isDateLike = function(val) {
   return goog.isObject(val) && typeof val.getFullYear == 'function';
-};
-
-
-/**
- * Returns true if the specified value is a string.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a string.
- */
-goog.isString = function(val) {
-  return typeof val == 'string';
-};
-
-
-/**
- * Returns true if the specified value is a boolean.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is boolean.
- */
-goog.isBoolean = function(val) {
-  return typeof val == 'boolean';
-};
-
-
-/**
- * Returns true if the specified value is a number.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a number.
- */
-goog.isNumber = function(val) {
-  return typeof val == 'number';
 };
 
 

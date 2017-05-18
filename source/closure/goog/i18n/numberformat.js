@@ -29,6 +29,7 @@ goog.require('goog.i18n.CompactNumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.currency');
 goog.require('goog.math');
+goog.require('goog.string');
 
 
 
@@ -212,6 +213,10 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
  * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
+  if (max > 308) {
+    // Math.pow(10, 309) becomes Infinity which breaks the logic in this class.
+    throw Error('Unsupported maximum fraction digits: ' + max);
+  }
   this.maximumFractionDigits_ = max;
   return this;
 };
@@ -785,7 +790,6 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ = function(
   }
 
   var rounded = this.roundNumber_(number);
-  var power = Math.pow(10, this.maximumFractionDigits_);
   var intValue = rounded.intValue;
   var fracValue = rounded.fracValue;
 
@@ -854,7 +858,27 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ = function(
     parts.push(decimal);
   }
 
-  var fracPart = '' + (fracValue + power);
+  var fracPart = String(fracValue);
+  // Handle case where fracPart is in scientific notation.
+  var fracPartSplit = fracPart.split('e+');
+  if (fracPartSplit.length == 2) {
+    // Only keep significant digits.
+    var floatFrac = parseFloat(fracPartSplit[0]);
+    fracPart = String(
+        this.roundToSignificantDigits_(floatFrac, this.significantDigits_, 1));
+    fracPart = fracPart.replace('.', '');
+    // Append zeroes based on the exponent.
+    var exp = parseInt(fracPartSplit[1], 10);
+    fracPart += goog.string.repeat('0', exp - fracPart.length + 1);
+  }
+
+  // Add Math.pow(10, this.maximumFractionDigits) to fracPart. Uses string ops
+  // to avoid complexity with scientific notation and overflows.
+  if (this.maximumFractionDigits_ + 1 > fracPart.length) {
+    var zeroesToAdd = this.maximumFractionDigits_ - fracPart.length;
+    fracPart = '1' + goog.string.repeat('0', zeroesToAdd) + fracPart;
+  }
+
   var fracLen = fracPart.length;
   while (fracPart.charAt(fracLen - 1) == '0' &&
          fracLen > minimumFractionDigits + 1) {

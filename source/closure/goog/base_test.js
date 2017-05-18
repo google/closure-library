@@ -1074,6 +1074,65 @@ function testLoadBaseWithQueryParamOk() {
   }
 }
 
+function testLoadBaseFromGlobalVariableOk() {
+  var savedGoogGlobal = goog.global;
+  try {
+    goog.global = {};
+    goog.global.document = {
+      write: goog.nullFunction,
+      getElementsByTagName:
+          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
+    };
+    goog.global.CLOSURE_BASE_PATH = '/from/constant/';
+    goog.findBasePath_();
+    assertEquals(goog.global.CLOSURE_BASE_PATH, goog.basePath);
+  } finally {
+    // Restore context to respect other tests.
+    goog.global = savedGoogGlobal;
+  }
+}
+
+function testLoadBaseFromGlobalVariableDOMClobbered() {
+  var savedGoogGlobal = goog.global;
+  try {
+    goog.global = {};
+    goog.global.document = {
+      write: goog.nullFunction,
+      getElementsByTagName:
+          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
+    };
+    // Make goog.global.CLOSURE_BASE_PATH an object with a toString, like
+    // it would be if it were a DOM clobbered HTMLElement.
+    goog.global.CLOSURE_BASE_PATH = {};
+    goog.global.CLOSURE_BASE_PATH.toString = function() {
+      return '/from/constant/';
+    };
+    goog.findBasePath_();
+    assertEquals('/path/to/', goog.basePath);
+  } finally {
+    // Restore context to respect other tests.
+    goog.global = savedGoogGlobal;
+  }
+}
+
+function testLoadBaseFromCurrentScriptIgnoringOthers() {
+  var savedGoogGlobal = goog.global;
+  try {
+    goog.global = {};
+    goog.global.document = {
+      write: goog.nullFunction,
+      currentScript: {src: '/currentScript/base.js?zx=5'},
+      getElementsByTagName:
+          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
+    };
+    goog.findBasePath_();
+    assertEquals('/currentScript/', goog.basePath);
+  } finally {
+    // Restore context to respect other tests.
+    goog.global = savedGoogGlobal;
+  }
+}
+
 //=== tests for getmsg ===
 function testGetMsgWithDollarSigns() {
   var msg = goog.getMsg('{$amount} per minute', {amount: '$0.15'});

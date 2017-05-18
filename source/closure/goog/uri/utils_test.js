@@ -381,10 +381,13 @@ function testAppendParam() {
   assertEquals(
       'http://foo.com?q=1&r=2&s=3#preserve',
       utils.appendParam('http://foo.com?q=1&r=2#preserve', 's', 3));
+  assertEquals('?q=1#preserve', utils.appendParam('#preserve', 'q', 1));
+}
+
+function testBuildQueryData() {
   assertEquals(
       'q=1&r=2&s=3&s=4', utils.buildQueryData(['q', 1, 'r', 2, 's', [3, 4]]));
   assertEquals('', utils.buildQueryData([]));
-  assertEquals('?q=1#preserve', utils.appendParam('#preserve', 'q', 1));
 }
 
 function testAppendParams() {
@@ -408,6 +411,10 @@ function testAppendParams() {
       'A question mark must not be appended if there are no ' +
           'parameters, otherwise repeated appends will be broken.',
       'http://foo.com#test', utils.appendParams('http://foo.com#test'));
+  assertEquals(
+      'If a ? is already in the URL, it should be preserved when appending ' +
+          '0 params',
+      'http://foo.com?#test', utils.appendParams('http://foo.com?#test'));
   assertEquals(
       'should handle objects with to-string', 'http://foo.com?q=a&r=b',
       utils.appendParams(
@@ -587,6 +594,85 @@ function testSetParam() {
       utils.setParam('http://foo.com?r=1#?s=1&s=1', 's', 999));
 }
 
+function testSetParamsFromMap() {
+  // These helper assertions are needed because the input is an Object and
+  // we cannot gaurauntee an order.
+  function assertQueryEquals(message, expected, actual) {
+    var expectedQuery = goog.uri.utils.getQueryData(expected);
+    var actualQuery = goog.uri.utils.getQueryData(actual);
+    assertEquals(
+        'Unmatched param count. ' + message, expectedQuery.split('&').length,
+        actualQuery.split('&').length);
+
+    // Build a map of all of the params for actual.
+    var actualParams = {};
+    goog.uri.utils.parseQueryData(actualQuery, function(key, value) {
+      if (actualParams[key]) {
+        actualParams[key].push(value);
+      } else {
+        actualParams[key] = [value];
+      }
+    });
+
+    for (key in actualParams) {
+      var expectedParams = goog.uri.utils.getParamValues(actual, key);
+      assertArrayEquals(
+          'Unmatched param ' + key + ', ' + message, expectedParams.sort(),
+          actualParams[key].sort());
+    }
+  }
+
+  function assertUriEquals(message, expected, actual) {
+    message = ' for expected URI: "' + expected + '", actual: "' + actual + '"';
+    var expectedComps = utils.split(expected);
+    var actualComps = utils.split(actual);
+    for (var i = 1; i < expectedComps.length; i++) {
+      if (i === goog.uri.utils.ComponentIndex.QUERY_DATA) {
+        assertQueryEquals(message, expected, actual);
+      } else {
+        assertEquals(message, expectedComps[i], actualComps[i]);
+      }
+    }
+  }
+
+  assertEquals(
+      'remove some params', 'http://foo.com/bar?b=2#b=5',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com/bar?a=1&b=2&c=3#b=5', {a: null, c: undefined}));
+  assertEquals(
+      'remove all params', 'http://foo.com#b=5',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&c=3#b=5', {a: null, b: null, c: undefined}));
+  assertEquals(
+      'update one param', 'http://foo.com?b=2&c=3&a=999#b=5',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&c=3#b=5', {a: 999}));
+  assertEquals(
+      'remove one param, update one param', 'http://foo.com?b=2&a=999',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&c=3', {a: 999, c: null}));
+  assertEquals(
+      'multiple params unmodified', 'http://foo.com?b=2&b=20&b&a=999',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&b=20&b', {a: 999}));
+  assertEquals(
+      'update multiple values', 'http://foo.com?a=1&c=3&b=5&b&b=10',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&c=3', {b: [5, '', 10]}));
+  // Tests that update/add multiple params must use assertUriEquals.
+  assertUriEquals(
+      'add from blank query', 'http://foo.com?a=100&b=200#hash',
+      goog.uri.utils.setParamsFromMap('http://foo.com#hash', {a: 100, b: 200}));
+  assertUriEquals(
+      'replace multiple params', 'http://foo.com?d=4&a=100&b=200&c=300',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&b=20&c=3&d=4', {a: 100, b: 200, c: 300}));
+  // update 1, remove b, keep c as is, add d.
+  assertUriEquals(
+      'add, remove and update', 'http://foo.com?a=100&c=3&d=400',
+      goog.uri.utils.setParamsFromMap(
+          'http://foo.com?a=1&b=2&b=20&c=3', {a: 100, b: null, d: 400}));
+}
 
 function testModifyQueryParams() {
   var uri = 'http://foo.com?a=A&a=A2&b=B&b=B2&c=C';

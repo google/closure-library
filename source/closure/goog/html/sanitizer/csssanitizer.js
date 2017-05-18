@@ -102,6 +102,22 @@ goog.html.sanitizer.CssSanitizer.getSafeUri_ = function(
 
 
 /**
+ * Used to detect the beginning of the argument list of a CSS property value
+ * containing a CSS function call.
+ * @private @const {string}
+ */
+goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_BEGIN_ = '(';
+
+
+/**
+ * Used to detect the end of the argument list of a CSS property value
+ * containing a CSS function call.
+ * @private @const {string}
+ */
+goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_ = ')';
+
+
+/**
  * Allowed CSS functions
  * @const @private {!Array<string>}
  */
@@ -169,38 +185,51 @@ goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
  */
 goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
     propName, propValue, opt_uriRewriter) {
-  var propertyValue = goog.string.trim(propValue).toLowerCase();
-  if (propertyValue === '') {
+  var outputPropValue = goog.string.trim(propValue);
+  if (outputPropValue == '') {
     return null;
   }
 
-  if (goog.string.startsWith(propertyValue, 'url(')) {
-    // Handle url("...") by rewriting the body.
-    if (opt_uriRewriter) {
-      // Preserve original case
-      propertyValue = goog.string.trim(propValue);
-      // TODO(danesh): Check if we need to resolve this URI.
-      var uri = goog.string.stripQuotes(
-          propertyValue.substring(4, propertyValue.length - 1), '"\'');
-
-      propertyValue = goog.html.sanitizer.CssSanitizer.getSafeUri_(
-          uri, propName, opt_uriRewriter);
-    } else {
-      propertyValue = null;
+  if (goog.string.caseInsensitiveStartsWith(outputPropValue, 'url(')) {
+    // Urls are rewritten according to the policy implemented in
+    // opt_uriRewriter.
+    // TODO(pelizzi): use HtmlSanitizerUrlPolicy for opt_uriRewriter.
+    if (!opt_uriRewriter) {
+      return null;
     }
-  } else if (propertyValue.indexOf('(') > 0) {
-    if (goog.string.countOf(propertyValue, '(') > 1 ||
+    // TODO(danesh): Check if we need to resolve this URI.
+    var uri = goog.string.stripQuotes(
+        outputPropValue.substring(4, outputPropValue.length - 1), '"\'');
+
+    return goog.html.sanitizer.CssSanitizer.getSafeUri_(
+        uri, propName, opt_uriRewriter);
+  } else if (outputPropValue.indexOf('(') > 0) {
+    // Functions are filtered through a whitelist. Nesting whitelisted functions
+    // is not supported.
+    if (goog.string.countOf(
+            outputPropValue,
+            goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_BEGIN_) > 1 ||
         !(goog.array.contains(
               goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_,
-              propertyValue.substring(0, propertyValue.indexOf('('))) &&
-          goog.string.endsWith(propertyValue, ')'))) {
+              outputPropValue
+                  .substring(
+                      0,
+                      outputPropValue.indexOf(goog.html.sanitizer.CssSanitizer
+                                                  .FUNCTION_ARGUMENTS_BEGIN_))
+                  .toLowerCase()) &&
+          goog.string.endsWith(
+              outputPropValue,
+              goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_))) {
       // TODO(b/34222379): Handle functions that may need recursing or that may
       // appear in the middle of a string. For now, just allow functions which
       // aren't nested.
-      propertyValue = null;
+      return null;
     }
+    return outputPropValue;
+  } else {
+    // Everything else is allowed.
+    return outputPropValue;
   }
-  return propertyValue;
 };
 
 

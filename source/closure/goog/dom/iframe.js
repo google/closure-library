@@ -26,6 +26,8 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 
 
@@ -37,10 +39,21 @@ goog.require('goog.userAgent');
  * Security Policy (CSP). According to http://www.w3.org/TR/CSP/ CSP does not
  * allow inline javascript by default.
  *
+ * @const {!goog.html.TrustedResourceUrl}
+ */
+goog.dom.iframe.BLANK_SOURCE_URL = goog.userAgent.IE ?
+    goog.html.TrustedResourceUrl.fromConstant(
+        goog.string.Const.from('javascript:""')) :
+    goog.html.TrustedResourceUrl.fromConstant(
+        goog.string.Const.from('about:blank'));
+
+
+/**
+ * Legacy version of goog.dom.iframe.BLANK_SOURCE_URL.
  * @const {string}
  */
 goog.dom.iframe.BLANK_SOURCE =
-    goog.userAgent.IE ? 'javascript:""' : 'about:blank';
+    goog.html.TrustedResourceUrl.unwrap(goog.dom.iframe.BLANK_SOURCE_URL);
 
 
 /**
@@ -69,10 +82,21 @@ goog.dom.iframe.BLANK_SOURCE =
  * throws an error with 'javascript:undefined'. Webkit browsers will reload the
  * iframe when setting this source on an existing iframe.
  *
+ * @const {!goog.html.TrustedResourceUrl}
+ */
+goog.dom.iframe.BLANK_SOURCE_NEW_FRAME_URL = goog.userAgent.IE ?
+    goog.html.TrustedResourceUrl.fromConstant(
+        goog.string.Const.from('javascript:""')) :
+    goog.html.TrustedResourceUrl.fromConstant(
+        goog.string.Const.from('javascript:undefined'));
+
+
+/**
+ * Legacy version of goog.dom.iframe.BLANK_SOURCE_NEW_FRAME_URL.
  * @const {string}
  */
-goog.dom.iframe.BLANK_SOURCE_NEW_FRAME =
-    goog.userAgent.IE ? 'javascript:""' : 'javascript:undefined';
+goog.dom.iframe.BLANK_SOURCE_NEW_FRAME = goog.html.TrustedResourceUrl.unwrap(
+    goog.dom.iframe.BLANK_SOURCE_NEW_FRAME_URL);
 
 
 /**

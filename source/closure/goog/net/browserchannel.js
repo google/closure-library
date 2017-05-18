@@ -48,7 +48,7 @@ goog.require('goog.debug.TextFormatter');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
-goog.require('goog.json.EvalJsonProcessor');
+goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.log');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
@@ -119,12 +119,11 @@ goog.net.BrowserChannel = function(
   this.channelDebug_ = new goog.net.ChannelDebug();
 
   /**
-   * Parser for a response payload. Defaults to use
-   * {@code goog.json.unsafeParse}. The parser should return an array.
+   * Parser for a response payload. The parser should return an array.
    * @type {!goog.string.Parser}
    * @private
    */
-  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
+  this.parser_ = new goog.json.NativeJsonProcessor();
 
   /**
    * An array of results for the first browser channel test call.
@@ -1208,7 +1207,7 @@ goog.net.BrowserChannel.prototype.sendMap = function(map, opt_context) {
     // what's causing them. Afterwards can change to warning().
     this.channelDebug_.severe(
         'Already have ' + goog.net.BrowserChannel.MAX_MAPS_PER_REQUEST_ +
-        ' queued maps upon queueing ' + goog.json.serialize(map));
+        ' queued maps upon queueing ' + this.parser_.stringify(map));
   }
 
   this.outgoingMaps_.push(
@@ -1336,9 +1335,7 @@ goog.net.BrowserChannel.prototype.hasOutstandingRequests = function() {
 
 
 /**
- * Sets a new parser for the response payload. A custom parser may be set to
- * avoid using eval(), for example. By default, the parser uses
- * {@code goog.json.unsafeParse}.
+ * Sets a new parser for the response payload.
  * @param {!goog.string.Parser} parser Parser.
  */
 goog.net.BrowserChannel.prototype.setParser = function(parser) {

@@ -161,6 +161,12 @@ goog.testing.TestCase = function(opt_name) {
   this.testsToRun_ = null;
 
   /**
+   * A call back for each test.
+   * @private {?function(goog.testing.TestCase.Test, !Array<string>)}
+   */
+  this.testDone_ = null;
+
+  /**
    * The order to run the auto-discovered tests in.
    * @type {string}
    */
@@ -707,35 +713,22 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
 
 
 /**
- * Returns the test results object: a map from test names to a list of test
- * failures (if any exist).
- * @return {!Object<string, !Array<string>>} Tests results object.
- * @deprecated
+ * Represents a test result.
+ * @typedef {{
+ *     'source': string,
+ *     'message': string,
+ *     'stacktrace': string
+ * }}
  */
-// TODO(dankurka): Delete this once testing infrastructure has been updated
-// and released
-goog.testing.TestCase.prototype.getTestResults = function() {
-  var map = {};
-  goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
-    // Make sure we only use properties on the actual map
-    if (!Object.prototype.hasOwnProperty.call(
-            this.result_.resultsByName, key)) {
-      return;
-    }
-    map[key] = [];
-    for (var j = 0; j < resultArray.length; j++) {
-      map[key].push(resultArray[j].toString());
-    }
-  }, this);
-  return map;
-};
+goog.testing.TestCase.IResult;
 
 /**
- * Returns the test results as json.
- * This is called by the testing infrastructure through G_testrunner.
- * @return {string} Tests results object.
+ * Returns the test results object: a map from test names to a list of test
+ * failures (if any exist).
+ * @return {!Object<string, !Array<goog.testing.TestCase.IResult>>} Test
+ *     results object.
  */
-goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
+goog.testing.TestCase.prototype.getTestResults = function() {
   var map = {};
   goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
     // Make sure we only use properties on the actual map
@@ -748,7 +741,16 @@ goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
       map[key].push(resultArray[j].toObject_());
     }
   }, this);
-  return goog.json.serialize(map);
+  return map;
+};
+
+/**
+ * Returns the test results as json.
+ * This is called by the testing infrastructure through G_testrunner.
+ * @return {string} Tests results object.
+ */
+goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
+  return goog.json.serialize(this.getTestResults());
 };
 
 /**
@@ -1086,15 +1088,22 @@ goog.testing.TestCase.getGlobals = function(opt_prefix) {
 
 
 /**
+ * @private {?goog.testing.TestCase}
+ */
+goog.testing.TestCase.activeTestCase_ = null;
+
+
+/**
  * @return {?goog.testing.TestCase} currently active test case or null if not
- *     test is currently running.
+ *     test is currently running. Tries the G_testRunner first then the stored
+ *     value (when run outside of G_testRunner.
  */
 goog.testing.TestCase.getActiveTestCase = function() {
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner && gTestRunner.testCase) {
     return gTestRunner.testCase;
   } else {
-    return null;
+    return goog.testing.TestCase.activeTestCase_;
   }
 };
 
@@ -1448,6 +1457,9 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
   var message = test.name + ' : PASSED';
   this.saveMessage(message);
   this.log(message);
+  if (this.testDone_) {
+    this.testDone_(test, []);
+  }
 };
 
 
@@ -1480,7 +1492,18 @@ goog.testing.TestCase.prototype.recordError_ = function(testName, opt_e) {
  * @protected
  */
 goog.testing.TestCase.prototype.doError = function(test, opt_e) {
+  if (!test || !test.name) {
+    console.error('no name!' + opt_e);
+  }
   this.recordError_(test.name, opt_e);
+  if (this.testDone_) {
+    var results = this.result_.resultsByName[test.name];
+    var errMsgs = [];
+    for (var i = 0; i < results.length; i++) {
+      errMsgs.push(results[i].toString());
+    }
+    this.testDone_(test, errMsgs);
+  }
 };
 
 
@@ -1705,10 +1728,22 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
 
 
 /**
- * Initializes the given test case with the global test runner 'G_testRunner'.
- * @param {goog.testing.TestCase} testCase The test case to install.
+ * @param {function(goog.testing.TestCase.Test, !Array<string>)} testDone
  */
-goog.testing.TestCase.initializeTestRunner = function(testCase) {
+goog.testing.TestCase.prototype.setTestDoneCallback = function(testDone) {
+  this.testDone_ = testDone;
+};
+
+/** Initializes the TestCase.
+ * @param {goog.testing.TestCase} testCase The test case to install.
+ * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
+ *     Called when each test completes.
+ */
+goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
+  if (opt_testDone) {
+    testCase.setTestDoneCallback(opt_testDone);
+  }
+
   testCase.autoDiscoverTests();
 
   if (goog.global.location) {
@@ -1718,6 +1753,18 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
         goog.testing.TestCase.Order.SORTED);
     testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
   }
+  goog.testing.TestCase.activeTestCase_ = testCase;
+};
+
+
+/**
+ * Initializes the given test case with the global test runner 'G_testRunner'.
+ * @param {goog.testing.TestCase} testCase The test case to install.
+ * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
+ *     Called when each test completes.
+ */
+goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
+  goog.testing.TestCase.initializeTestCase(testCase, opt_testDone);
 
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner) {
@@ -1854,7 +1901,7 @@ goog.testing.TestCase.Error.prototype.toString = function() {
 
 /**
  * Returns an object representing the error suitable for JSON serialization.
- * @return {{source: string, message: string, stacktrace: string}} An object
+ * @return {!goog.testing.TestCase.IResult} An object
  *     representation of the error.
  * @private
  */

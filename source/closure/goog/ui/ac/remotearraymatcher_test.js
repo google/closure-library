@@ -15,7 +15,6 @@
 goog.provide('goog.ui.ac.RemoteArrayMatcherTest');
 goog.setTestOnly('goog.ui.ac.RemoteArrayMatcherTest');
 
-goog.require('goog.json');
 goog.require('goog.net.XhrIo');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
@@ -26,8 +25,8 @@ var token = 'goog';
 var maxMatches = 5;
 var fullToken = 'google';
 
-var responseJsonText = "['eric', 'larry', 'sergey', 'marissa', 'pupius']";
-var responseJson = goog.json.unsafeParse(responseJsonText);
+var responseJsonText = '["eric", "larry", "sergey", "marissa", "pupius"]';
+var responseJson = JSON.parse(responseJsonText);
 
 var mockControl;
 var mockMatchHandler;

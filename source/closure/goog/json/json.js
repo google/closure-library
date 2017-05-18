@@ -156,6 +156,7 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
  *
  * @param {string} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
+ * @deprecated Use JSON.parse if possible or goog.json.parse.
  */
 goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(string):Object} */ (goog.global['JSON']['parse']) :

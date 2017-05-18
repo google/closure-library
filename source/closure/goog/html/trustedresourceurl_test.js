@@ -62,6 +62,8 @@ function testFormat_validFormatString() {
   assertValidFormat(goog.string.Const.from('/path?x'));
   // Mixed case.
   assertValidFormat(goog.string.Const.from('httpS://www.google.cOm/pAth'));
+  assertValidFormat(goog.string.Const.from('about:blank'));
+  assertValidFormat(goog.string.Const.from('about:blank#x'));
 }
 
 
@@ -128,6 +130,7 @@ function testFormat_invalidFormatString() {
   assertInvalidFormat(goog.string.Const.from('/\\'));
   // Relative path.
   assertInvalidFormat(goog.string.Const.from('abc'));
+  assertInvalidFormat(goog.string.Const.from('about:blankX'));
 }
 
 

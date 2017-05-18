@@ -31,9 +31,11 @@
 
 goog.provide('goog.html.sanitizer.HtmlSanitizer');
 goog.provide('goog.html.sanitizer.HtmlSanitizer.Builder');
+goog.provide('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
 goog.provide('goog.html.sanitizer.HtmlSanitizerPolicy');
 goog.provide('goog.html.sanitizer.HtmlSanitizerPolicyContext');
 goog.provide('goog.html.sanitizer.HtmlSanitizerPolicyHints');
+goog.provide('goog.html.sanitizer.HtmlSanitizerUrlPolicy');
 
 goog.require('goog.array');
 goog.require('goog.asserts');

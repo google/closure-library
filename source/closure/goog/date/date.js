@@ -1634,6 +1634,18 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
 
 
 /**
+ * Returns RFC 3339 string representation of datetime in UTC.
+ *
+ * @return {string} A UTC datetime expressed in RFC 3339 format.
+ */
+goog.date.DateTime.prototype.toUTCRfc3339String = function() {
+  var date = this.toUTCIsoString(true).replace(' ', 'T');
+  var millis = this.getUTCMilliseconds();
+  return (millis ? date + '.' + millis : date) + 'Z';
+};
+
+
+/**
  * Tests whether given datetime is exactly equal to this DateTime.
  *
  * @param {goog.date.Date} other The datetime to compare.

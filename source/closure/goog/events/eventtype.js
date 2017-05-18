@@ -185,6 +185,21 @@ goog.events.EventType = {
   MESSAGE: 'message',
   CONNECT: 'connect',
 
+  // Service Worker Events - ServiceWorkerGlobalScope context
+  // See https://w3c.github.io/ServiceWorker/#execution-context-events
+  // Note: message event defined in worker events section
+  INSTALL: 'install',
+  ACTIVATE: 'activate',
+  FETCH: 'fetch',
+  FOREIGNFETCH: 'foreignfetch',
+  MESSAGEERROR: 'messageerror',
+
+  // Service Worker Events - Document context
+  // See https://w3c.github.io/ServiceWorker/#document-context-events
+  STATECHANGE: 'statechange',
+  UPDATEFOUND: 'updatefound',
+  CONTROLLERCHANGE: 'controllerchange',
+
   // CSS animation events.
   /** @suppress {missingRequire} */
   ANIMATIONSTART: goog.events.getVendorPrefixedName_('AnimationStart'),
