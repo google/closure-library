@@ -1304,7 +1304,7 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * A readystatechange handler for legacy IE
-   * @param {!HTMLScriptElement} script
+   * @param {?} script
    * @param {number} scriptIndex
    * @return {boolean}
    * @private
