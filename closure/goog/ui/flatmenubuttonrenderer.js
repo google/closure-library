@@ -78,11 +78,9 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
 goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
   var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
-  var attributes = {
-    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' ')
-  };
-  var element =
-      button.getDomHelper().createDom(goog.dom.TagName.DIV, attributes, [
+  var element = button.getDomHelper().createDom(
+      goog.dom.TagName.DIV,
+      goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '), [
         this.createCaption(button.getContent(), button.getDomHelper()),
         this.createDropdown(button.getDomHelper())
       ]);

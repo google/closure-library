@@ -75,7 +75,7 @@ goog.ui.ProgressBar.Orientation = {
 
 /**
  * Map from progress bar orientation to CSS class names.
- * @type {Object}
+ * @type {!Object<string, string>}
  * @private
  */
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_ = {};
@@ -93,10 +93,10 @@ goog.ui.ProgressBar
  */
 goog.ui.ProgressBar.prototype.createDom = function() {
   this.thumbElement_ = this.createThumb_();
-  var cs = goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[this.orientation_];
-  this.setElementInternal(
-      this.getDomHelper().createDom(
-          goog.dom.TagName.DIV, cs, this.thumbElement_));
+  this.setElementInternal(this.getDomHelper().createDom(
+      goog.dom.TagName.DIV,
+      goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[this.orientation_],
+      this.thumbElement_));
   this.setValueState_();
   this.setMinimumState_();
   this.setMaximumState_();

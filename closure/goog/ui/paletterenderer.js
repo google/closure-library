@@ -93,7 +93,7 @@ goog.ui.PaletteRenderer.CSS_CLASS = goog.getCssName('goog-palette');
 goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
   var classNames = this.getClassNames(palette);
   var element = palette.getDomHelper().createDom(
-      goog.dom.TagName.DIV, classNames ? classNames.join(' ') : null,
+      goog.dom.TagName.DIV, classNames,
       this.createGrid(
           /** @type {Array<Node>} */ (palette.getContent()), palette.getSize(),
           palette.getDomHelper()));
