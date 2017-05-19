@@ -313,9 +313,11 @@ function testFiredEvents() {
   assertArrayEquals(
       'event types in case of zero distance dragging',
       [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
         goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString(),
         goog.fx.DragListGroup.EventType.DRAGSTART.toString(),
         goog.fx.DragListGroup.EventType.BEFOREDRAGEND.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString(),
         goog.fx.DragListGroup.EventType.DRAGEND.toString()
       ],
       firedEventTypes);
@@ -327,7 +329,13 @@ function testFiredEventsWithHysteresis() {
 
   goog.testing.events.fireClickSequence(list.firstChild);
   assertArrayEquals(
-      'no events fired on click if hysteresis is enabled', [], firedEventTypes);
+      'only clone events are fired on click if hysteresis is enabled',
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
+      firedEventTypes);
+  firedEventTypes.length = 0;
   assertIdle(dlg);
 
   goog.testing.events.fireMouseDownEvent(
@@ -335,7 +343,10 @@ function testFiredEventsWithHysteresis() {
   goog.testing.events.fireMouseMoveEvent(
       list.firstChild, new goog.math.Coordinate(1, 0));
   assertArrayEquals(
-      'no events fired below hysteresis distance', [], firedEventTypes);
+      'only potential-start event is fired on click if hysteresis is enabled',
+      [goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString()],
+      firedEventTypes);
+  firedEventTypes.length = 0;
 
   goog.testing.events.fireMouseMoveEvent(
       list.firstChild, new goog.math.Coordinate(3, 0));
@@ -357,6 +368,7 @@ function testFiredEventsWithHysteresis() {
       'end events are fired on mouseup',
       [
         goog.fx.DragListGroup.EventType.BEFOREDRAGEND.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString(),
         goog.fx.DragListGroup.EventType.DRAGEND.toString()
       ],
       firedEventTypes);
@@ -371,7 +383,11 @@ function testPreventDefaultBeforeDragStart() {
   goog.testing.events.fireMouseDownEvent(list.firstChild);
   assertArrayEquals(
       'event types if dragging is prevented',
-      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString()],
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
       firedEventTypes);
   assertIdle(dlg);
 }
@@ -388,7 +404,11 @@ function testPreventDefaultBeforeDragStartWithHysteresis() {
       list.firstChild, new goog.math.Coordinate(10, 0));
   assertArrayEquals(
       'event types if dragging is prevented',
-      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString()],
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
       firedEventTypes);
   assertIdle(dlg);
 }
@@ -399,7 +419,13 @@ function testRightClick() {
   goog.testing.events.fireMouseUpEvent(
       list.firstChild, goog.events.BrowserEvent.MouseButton.RIGHT);
 
-  assertArrayEquals('no events fired', [], firedEventTypes);
+  assertArrayEquals(
+      'only clone events are fired on right click',
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
+      firedEventTypes);
   assertIdle(dlg);
 }
 
@@ -424,7 +450,11 @@ function testAddItemToDragList() {
   goog.testing.events.fireMouseDownEvent(item);
   assertArrayEquals(
       'Should fire beforedragstart event when clicked',
-      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString()],
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
       firedEventTypes);
 }
 
@@ -449,6 +479,10 @@ function testInsertItemInDragList() {
   goog.testing.events.fireMouseDownEvent(item);
   assertArrayEquals(
       'Should fire beforedragstart event when clicked',
-      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString()],
+      [
+        goog.fx.DragListGroup.EventType.DRAGGERCREATED.toString(),
+        goog.fx.DragListGroup.EventType.BEFOREDRAGSTART.toString(),
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED.toString()
+      ],
       firedEventTypes);
 }
