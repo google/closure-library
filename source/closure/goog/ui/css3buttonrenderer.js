@@ -85,12 +85,12 @@ goog.ui.Css3ButtonRenderer.prototype.getContentElement = function(element) {
 goog.ui.Css3ButtonRenderer.prototype.createDom = function(control) {
   var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
-  var attr = {
-    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
-    'title': button.getTooltip() || ''
-  };
   return button.getDomHelper().createDom(
-      goog.dom.TagName.DIV, attr, button.getContent());
+      goog.dom.TagName.DIV, {
+        'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
+        'title': button.getTooltip() || ''
+      },
+      button.getContent());
 };
 
 

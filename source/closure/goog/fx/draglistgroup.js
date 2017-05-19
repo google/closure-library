@@ -221,12 +221,29 @@ goog.fx.DragListDirection = {
  * @enum {!goog.events.EventId<!goog.fx.DragListGroupEvent>}
  */
 goog.fx.DragListGroup.EventType = {
+  /**
+   * Raised on mouse down, when the dragger is first created.  Handle this event
+   * to customize the dragger element even if the drag never actually starts (if
+   * the mouse never moves beyond hysteresis).
+   */
+  DRAGGERCREATED:
+      new goog.events.EventId(goog.events.getUniqueId('draggercreated')),
   BEFOREDRAGSTART: new goog.events.EventId('beforedragstart'),
   DRAGSTART: new goog.events.EventId('dragstart'),
   BEFOREDRAGMOVE: new goog.events.EventId('beforedragmove'),
   DRAGMOVE: new goog.events.EventId('dragmove'),
   BEFOREDRAGEND: new goog.events.EventId('beforedragend'),
-  DRAGEND: new goog.events.EventId('dragend')
+  /** Raised after the dragged item is moved to the new spot. */
+  DRAGEND: new goog.events.EventId('dragend'),
+  /**
+   * Raised whenever the dragger element is removed:
+   *  - When a drag completes successfully.
+   *  - If the drag never started due to mouseup within hysteresis.
+   *  - If the drag was cancelled by a BEFORE* event.
+   *  - If the drag was cancelled due to focus loss.
+   */
+  DRAGGERREMOVED:
+      new goog.events.EventId(goog.events.getUniqueId('draggerremoved'))
 };
 
 
@@ -560,6 +577,9 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   goog.events.listen(
       this.dragger_, goog.fx.Dragger.EventType.EARLY_CANCEL, this.cleanup_,
       false, this);
+  this.dispatchEvent(new goog.fx.DragListGroupEvent(
+      goog.fx.DragListGroup.EventType.DRAGGERCREATED, this, e,
+      this.currDragItem_, this.draggerEl_, this.dragger_));
   this.dragger_.startDrag(e);
 };
 
@@ -811,6 +831,7 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
   // Disposes of the dragger and remove the cloned drag item.
   goog.dispose(this.dragger_);
+  var hadDragger = this.draggerEl_ && this.draggerEl_.parentElement;
   if (this.draggerEl_) {
     goog.dom.removeNode(this.draggerEl_);
   }
@@ -840,6 +861,11 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
       goog.dom.classlist.remove(
           goog.asserts.assert(dragList), dragList.dlgDragHoverClass_);
     }
+  }
+  if (hadDragger) {
+    this.dispatchEvent(new goog.fx.DragListGroupEvent(
+        goog.fx.DragListGroup.EventType.DRAGGERREMOVED, this, null,
+        this.currDragItem_, this.draggerEl_, this.dragger_));
   }
 };
 
@@ -1215,7 +1241,7 @@ goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
  * The fields draggerElCenter, hoverList, and hoverNextItem are only available
  * for the BEFOREDRAGMOVE and DRAGMOVE events.
  *
- * @param {goog.fx.DragListGroup.EventType} type
+ * @param {!goog.fx.DragListGroup.EventType} type
  * @param {goog.fx.DragListGroup} dragListGroup A reference to the associated
  *     DragListGroup object.
  * @param {goog.events.BrowserEvent|goog.fx.DragEvent} event The event fired

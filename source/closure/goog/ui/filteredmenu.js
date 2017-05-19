@@ -33,7 +33,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
-goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
@@ -180,11 +179,10 @@ goog.ui.FilteredMenu.prototype.createDom = function() {
   var element = this.getElement();
   dom.appendChild(element, el);
   var contentElementId = this.makeId(goog.ui.FilteredMenu.Id_.CONTENT_ELEMENT);
-  this.contentElement_ = dom.createDom(
-      goog.dom.TagName.DIV,
-      goog.object.create(
-          'class', goog.getCssName(this.getRenderer().getCssClass(), 'content'),
-          'id', contentElementId));
+  this.contentElement_ = dom.createDom(goog.dom.TagName.DIV, {
+    'class': goog.getCssName(this.getRenderer().getCssClass(), 'content'),
+    'id': contentElementId
+  });
   dom.appendChild(element, this.contentElement_);
 
   this.initFilterInput_();
