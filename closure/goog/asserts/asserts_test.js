@@ -19,19 +19,19 @@ goog.require('goog.asserts');
 goog.require('goog.asserts.AssertionError');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.labs.userAgent.browser');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+/**
+ * Test that the function throws an error with the given message.
+ * @param {function()} failFunc
+ * @param {string} expectedMsg
+ */
 function doTestMessage(failFunc, expectedMsg) {
   var error = assertThrows('failFunc should throw.', failFunc);
   // Test error message.
-  // Opera 10 adds cruft to the end of the message, so do a startsWith check.
-  assertTrue(
-      'Message check failed. Expected: ' + expectedMsg + ' Actual: ' +
-          error.message,
-      goog.string.startsWith(error.message, expectedMsg));
+  assertEquals(expectedMsg, error.message);
 }
 
 function testAssert() {
@@ -176,12 +176,12 @@ function testInstanceof() {
   /** @constructor */
   var F = function() {};
   goog.asserts.assertInstanceof(new F(), F);
-  assertThrows(
+  var error = assertThrows(
       'assertInstanceof({}, F)',
       goog.partial(goog.asserts.assertInstanceof, {}, F));
   // IE lacks support for function.name and will fallback to toString().
-  var object = goog.userAgent.IE ? '[object Object]' : 'Object';
-  var name = goog.labs.userAgent.browser.isChrome() ? 'F' : 'unknown type name';
+  var object = /object/.test(error.message) ? '[object Object]' : 'Object';
+  var name = /F/.test(error.message) ? 'F' : 'unknown type name';
 
   // Test error messages.
   doTestMessage(

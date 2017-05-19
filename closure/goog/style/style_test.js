@@ -841,7 +841,12 @@ function testGetSizeSvgDocument() {
   var doc = goog.dom.getFrameContentDocument(frame);
   var rect = doc.getElementById('rect');
   var dims = goog.style.getSize(rect);
-  if (!goog.userAgent.EDGE_OR_IE) {
+  if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher(53)) {
+    // Firefox >= 53 auto-scales iframe SVG content to fit the frame
+    // b/38432885 | https://bugzilla.mozilla.org/show_bug.cgi?id=1366126
+    assertEquals(75, dims.width);
+    assertEquals(75, dims.height);
+  } else if (!goog.userAgent.EDGE_OR_IE) {
     assertEquals(50, dims.width);
     assertEquals(50, dims.height);
   } else {
@@ -1009,9 +1014,13 @@ function testIsUnselectable() {
   assertEquals(
       goog.userAgent.IE || goog.userAgent.OPERA,
       goog.style.isUnselectable($('unselectable-ie')));
-  assertEquals(
-      goog.userAgent.WEBKIT || goog.userAgent.EDGE,
-      goog.style.isUnselectable($('unselectable-webkit')));
+  // Note: Firefox can go either way here - newer versions see -webkit-*
+  // properties and automatically add Moz* to the style object.
+  if (!goog.userAgent.GECKO) {
+    assertEquals(
+        goog.userAgent.WEBKIT || goog.userAgent.EDGE,
+        goog.style.isUnselectable($('unselectable-webkit')));
+  }
 }
 
 function testSetUnselectable() {
