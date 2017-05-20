@@ -58,8 +58,7 @@ goog.ui.ac.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
    * @private {goog.ui.ac.RichRemoteArrayMatcher.RowBuilder}
    */
   this.rowBuilder_ = function(type, response) {
-    var func = /** @type {!Function} */ (eval(type));
-    return func(response);
+    return /** @type {!Object} */ (response);
   };
 };
 goog.inherits(goog.ui.ac.RichRemoteArrayMatcher, goog.ui.ac.RemoteArrayMatcher);
