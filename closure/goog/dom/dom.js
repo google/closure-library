@@ -741,15 +741,16 @@ goog.dom.getWindow_ = function(doc) {
  * first node as childNodes.
  *
  * So:
- * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
- * would return a div with two child paragraphs
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P),
+ * createDom(goog.dom.TagName.P));</code> would return a div with two child
+ * paragraphs
  *
  * For passing properties, please see {@link goog.dom.setProperties} for more
  * information.
  *
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(Object|Array<string>|string)=} opt_properties If object, then a map
- *     of name-value pairs for properties. If a string, then this is the
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
  *     className of the new element. If an array, the elements will be joined
  *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
@@ -761,7 +762,7 @@ goog.dom.getWindow_ = function(doc) {
  * @template T
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
-goog.dom.createDom = function(tagName, opt_properties, var_args) {
+goog.dom.createDom = function(tagName, opt_attributes, var_args) {
   return goog.dom.createDom_(document, arguments);
 };
 
@@ -862,9 +863,10 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
 /**
  * Alias for {@code createDom}.
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(string|Object)=} opt_properties If object, then a map of name-value
- *     pairs for properties. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array, its
  *     children will be added as childNodes instead.
@@ -2574,8 +2576,9 @@ goog.dom.Appendable;
  * first node as childNodes.
  *
  * So:
- * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
- * would return a div with two child paragraphs
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P),
+ * createDom(goog.dom.TagName.P));</code> would return a div with two child
+ * paragraphs
  *
  * An easy way to move all child nodes of an existing element to a new parent
  * element is:
@@ -2584,9 +2587,10 @@ goog.dom.Appendable;
  * child nodes of the new DIV.
  *
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {Object|string=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...goog.dom.Appendable} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array or
  *     NodeList, its elements will be added as childNodes instead.
@@ -2605,9 +2609,10 @@ goog.dom.DomHelper.prototype.createDom = function(
 /**
  * Alias for {@code createDom}.
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(Object|string)=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...goog.dom.Appendable} var_args Further DOM nodes or strings for
  *     text nodes.  If one of the var_args is an array, its children will be
  *     added as childNodes instead.
