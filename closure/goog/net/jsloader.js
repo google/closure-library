@@ -171,6 +171,7 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
  *     callbacks and/or cancel the transmission.
  *     The error callback will be called with a single goog.net.jsloader.Error
  *     parameter.
+ * @deprecated Use safeLoad instead.
  */
 goog.net.jsloader.load = function(uri, opt_options) {
   var trustedUri =
