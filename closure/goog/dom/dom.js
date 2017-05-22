@@ -225,6 +225,24 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 
 
 /**
+ * Gets the first element matching the tag and the class.
+ *
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ */
+goog.dom.getElementByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
+  return goog.dom.getElementByTagNameAndClass_(
+      document, opt_tag, opt_class, opt_el);
+};
+
+
+/**
  * Returns a static, array-like list of the elements with the provided
  * className.
  * @see {goog.dom.query}
@@ -254,11 +272,9 @@ goog.dom.getElementByClass = function(className, opt_el) {
   var retVal = null;
   if (parent.getElementsByClassName) {
     retVal = parent.getElementsByClassName(className)[0];
-  } else if (goog.dom.canUseQuerySelector_(parent)) {
-    retVal = parent.querySelector('.' + className);
   } else {
-    retVal = goog.dom.getElementsByTagNameAndClass_(
-        document, '*', className, opt_el)[0];
+    retVal =
+        goog.dom.getElementByTagNameAndClass_(document, '*', className, opt_el);
   }
   return retVal || null;
 };
@@ -362,6 +378,34 @@ goog.dom.getElementsByTagNameAndClass_ = function(
     return els;
   }
 };
+
+
+/**
+ * Helper for goog.dom.getElementByTagNameAndClass.
+ *
+ * @param {!Document} doc The document to get the elements in.
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ * @private
+ */
+goog.dom.getElementByTagNameAndClass_ = function(
+    doc, opt_tag, opt_class, opt_el) {
+  var parent = opt_el || doc;
+  var tag = (opt_tag && opt_tag != '*') ? String(opt_tag).toUpperCase() : '';
+  if (goog.dom.canUseQuerySelector_(parent) && (tag || opt_class)) {
+    return parent.querySelector(tag + (opt_class ? '.' + opt_class : ''));
+  }
+  var elements =
+      goog.dom.getElementsByTagNameAndClass_(doc, opt_tag, opt_class, opt_el);
+  return elements[0] || null;
+};
+
 
 
 /**
@@ -2465,6 +2509,25 @@ goog.dom.DomHelper.prototype.getElementsByTagName =
 goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
     opt_tag, opt_class, opt_el) {
   return goog.dom.getElementsByTagNameAndClass_(
+      this.document_, opt_tag, opt_class, opt_el);
+};
+
+
+/**
+ * Gets the first element matching the tag and the class.
+ *
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ */
+goog.dom.DomHelper.prototype.getElementByTagNameAndClass = function(
+    opt_tag, opt_class, opt_el) {
+  return goog.dom.getElementByTagNameAndClass_(
       this.document_, opt_tag, opt_class, opt_el);
 };
 

@@ -223,6 +223,17 @@ function testGetElementByClass() {
   assertNotNull(goog.dom.getElementByClass('test1', container));
 }
 
+function testGetElementByTagNameAndClass() {
+  assertNotNull(goog.dom.getElementByTagNameAndClass('', 'test1'));
+  assertNotNull(goog.dom.getElementByTagNameAndClass('*', 'test1'));
+  assertNotNull(goog.dom.getElementByTagNameAndClass('span', 'test1'));
+  assertNull(goog.dom.getElementByTagNameAndClass('div', 'test1'));
+  assertNull(goog.dom.getElementByTagNameAndClass('*', 'nonexistant'));
+
+  var container = goog.dom.getElement('span-container');
+  assertNotNull(goog.dom.getElementByTagNameAndClass('*', 'test1', container));
+}
+
 function testSetProperties() {
   var attrs = {
     'name': 'test3',
