@@ -28,6 +28,7 @@ goog.require('goog.async.Deferred');
 goog.require('goog.debug.Error');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.object');
@@ -242,14 +243,12 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   };
 
   var properties = options.attributes || {};
-  goog.object.extend(properties, {
-    'type': 'text/javascript',
-    'charset': 'UTF-8',
-    // NOTE(user): Safari never loads the script if we don't set
-    // the src attribute before appending.
-    'src': uri
-  });
+  goog.object.extend(
+      properties, {'type': 'text/javascript', 'charset': 'UTF-8'});
   goog.dom.setProperties(script, properties);
+  // NOTE(user): Safari never loads the script if we don't set the src
+  // attribute before appending.
+  goog.dom.safe.setScriptSrc(script, trustedUri);
   var scriptParent = goog.net.jsloader.getScriptParentElement_(doc);
   scriptParent.appendChild(script);
 
