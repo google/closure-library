@@ -1139,10 +1139,12 @@ function testGetMultipleRecordsFromIndex() {
     promises.push(index.getAllKeys().addCallback(function(results) {
       assertNotUndefined(results);
       assertEquals(3, results.length);
+      assertArrayEquals(['1', '2', '3'], results);
     }));
     promises.push(index.getAllKeys('b').addCallback(function(results) {
       assertNotUndefined(results);
       assertEquals(1, results.length);
+      assertArrayEquals(['3'], results);
     }));
 
     return goog.Promise.all(promises).then(function() { return db; });
