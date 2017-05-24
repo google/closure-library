@@ -463,6 +463,7 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
   var sawDecimal = false;
   var sawExponent = false;
   var sawDigit = false;
+  var exponentPos = -1;
   var scale = 1;
   var decimal = goog.i18n.NumberFormatSymbols.DECIMAL_SEP;
   var grouping = goog.i18n.NumberFormatSymbols.GROUP_SEP;
@@ -502,7 +503,13 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       }
       normalizedText += 'E';
       sawExponent = true;
+      exponentPos = pos[0];
     } else if (ch == '+' || ch == '-') {
+      // Stop parsing if a '+' or '-' sign is found after digits have been found
+      // but it's not located right after an exponent sign.
+      if (sawDigit && exponentPos != pos[0] - 1) {
+        break;
+      }
       normalizedText += ch;
     } else if (
         this.multiplier_ == 1 &&
