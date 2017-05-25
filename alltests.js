@@ -74,6 +74,7 @@ var _allTests = [
   'closure/goog/disposable/disposable_test.html',
   'closure/goog/dom/abstractrange_test.html',
   'closure/goog/dom/annotate_test.html',
+  'closure/goog/dom/asserts_test.html',
   'closure/goog/dom/browserrange/browserrange_test.html',
   'closure/goog/dom/bufferedviewportsizemonitor_test.html',
   'closure/goog/dom/classes_quirks_test.html',
