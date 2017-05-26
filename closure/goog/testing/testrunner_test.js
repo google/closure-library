@@ -36,38 +36,13 @@ function testInitialize() {
 
 function testIsFinished() {
   testRunner.initialize(testCase);
-  // uuid is optional
   assert(!testRunner.isFinished());
-  // If provided, uuid is remembered.
-  assert(!testRunner.isFinished(1.0));
-  // If provided, uuid is checked.
-  assert(!testRunner.isFinished(1.0));
-  assertThrows(function() {
-    testRunner.isFinished(2.0);
-  });
+  testRunner.logError('oops');
+  assert(testRunner.isFinished());
 }
 
-function testGetUuid() {
-  testRunner.getSearchString = () => '?goop';
-  assertEquals(testRunner.getUuid(), null);
-  testRunner.getSearchString = () => '?uuid=1.0';
-  assertEquals(testRunner.getUuid(), 1.0);
-  testRunner.getSearchString = () => '?uuid=.1';
-  assertEquals(testRunner.getUuid(), .1);
-  testRunner.getSearchString = () => '?uuid=.1111';
-  assertEquals(testRunner.getUuid(), .1111);
-  testRunner.getSearchString = () => '?uuid=.1111&foo=bar';
-  assertEquals(testRunner.getUuid(), .1111);
-}
-
-function testInitializeUuid() {
-  assert(!testRunner.isInitialized());
-  testRunner.getSearchString = () => '?uuid=.111';
-  testRunner.initialize(testCase);
-  // We can poll for isFinished multiple times if the uuid matches.
-  assert(!testRunner.isFinished(.111));
-  assert(!testRunner.isFinished(.111));
-  assertThrows(function() {
-    testRunner.isFinished(2.0);
-  });
+function testGetUniqueId() {
+  // We only really care that this string is unique to instances.
+  const anotherRunner = new goog.testing.TestRunner();
+  assert(anotherRunner.getUniqueId() != testRunner.getUniqueId());
 }
