@@ -201,3 +201,21 @@ function testAssertIsHtmlScriptElement() {
     assertContains('Argument is not a HTMLScriptElement', ex.message);
   }
 }
+
+function testInOtherWindow() {
+  var iframe = document.createElement('IFRAME');
+  document.body.appendChild(iframe);
+  var el = iframe.contentWindow.document.createElement('SCRIPT');
+  assertNotThrows(function() {
+    goog.dom.asserts.assertIsHTMLScriptElement(el);
+  });
+
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var ex = assertThrows(function() {
+      goog.dom.asserts.assertIsHTMLImageElement(el);
+    });
+    assertContains('Argument is not a HTMLImageElement', ex.message);
+  }
+
+  document.body.removeChild(iframe);
+}
