@@ -43,9 +43,8 @@ import subprocess
 import sys
 
 
-_BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
-req_regex = re.compile(_BASE_REGEX_STRING % 'require')
-prov_regex = re.compile(_BASE_REGEX_STRING % 'provide')
+req_regex = re.compile('^(?:[^=]+=)?\s*goog\.require\(\s*[\'"](.+)[\'"]\s*\)')
+prov_regex = re.compile('^\s*goog\.(?:provide|module)\(\s*[\'"](.+)[\'"]\s*\)')
 ns_regex = re.compile('^ns:((\w+\.)*(\w+))$')
 version_regex = re.compile('[\.0-9]+')
 
