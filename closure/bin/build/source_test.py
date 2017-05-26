@@ -57,7 +57,7 @@ class SourceTestCase(unittest.TestCase):
 
     self.assertEqual(set(['foo']),
                      test_source.provides)
-    self.assertEqual(set(['bar']),
+    self.assertEqual(set(['bar', 'foo', 'foobar']),
                      test_source.requires)
     self.assertTrue(test_source.is_goog_module)
 
@@ -89,6 +89,8 @@ class SourceTestCase(unittest.TestCase):
 _TEST_MODULE_SOURCE = """
 goog.module('foo');
 var b = goog.require('bar');
+const {foo} = goog.require('foo');
+const {a, b} = goog.require('foobar');
 """
 
 
