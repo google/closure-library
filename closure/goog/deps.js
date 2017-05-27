@@ -133,7 +133,7 @@ goog.addDependency('date/utcdatetime_test.js', ['goog.date.UtcDateTimeTest'], ['
 goog.addDependency('db/cursor.js', ['goog.db.Cursor'], ['goog.async.Deferred', 'goog.db.Error', 'goog.db.KeyRange', 'goog.debug', 'goog.events.EventTarget'], {});
 goog.addDependency('db/db.js', ['goog.db', 'goog.db.BlockedCallback', 'goog.db.UpgradeNeededCallback'], ['goog.asserts', 'goog.async.Deferred', 'goog.db.Error', 'goog.db.IndexedDb', 'goog.db.Transaction'], {});
 goog.addDependency('db/db_test.js', ['goog.dbTest'], ['goog.Disposable', 'goog.Promise', 'goog.array', 'goog.db', 'goog.db.Cursor', 'goog.db.Error', 'goog.db.IndexedDb', 'goog.db.KeyRange', 'goog.db.Transaction', 'goog.events', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent.product'], {});
-goog.addDependency('db/error.js', ['goog.db.DomErrorLike', 'goog.db.Error', 'goog.db.Error.ErrorCode', 'goog.db.Error.ErrorName', 'goog.db.Error.VersionChangeBlockedError'], ['goog.debug.Error'], {});
+goog.addDependency('db/error.js', ['goog.db.DomErrorLike', 'goog.db.Error', 'goog.db.Error.ErrorCode', 'goog.db.Error.ErrorName', 'goog.db.Error.VersionChangeBlockedError'], ['goog.asserts', 'goog.debug.Error'], {});
 goog.addDependency('db/index.js', ['goog.db.Index'], ['goog.async.Deferred', 'goog.db.Cursor', 'goog.db.Error', 'goog.db.KeyRange', 'goog.debug'], {});
 goog.addDependency('db/indexeddb.js', ['goog.db.IndexedDb'], ['goog.db.Error', 'goog.db.ObjectStore', 'goog.db.Transaction', 'goog.events.Event', 'goog.events.EventHandler', 'goog.events.EventTarget'], {});
 goog.addDependency('db/keyrange.js', ['goog.db.KeyRange'], [], {});
