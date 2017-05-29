@@ -292,16 +292,6 @@ goog.testing.TestCase.protectedDate_ = Date;
 
 
 /**
- * Saved string referencing goog.global.setTimeout's string serialization.  IE
- * sometimes fails to uphold equality for setTimeout, but the string version
- * stays the same.
- * @type {string}
- * @private
- */
-goog.testing.TestCase.setTimeoutAsString_ = String(goog.global.setTimeout);
-
-
-/**
  * TODO(user) replace this with prototype.currentTest.
  * Name of the current test that is running, or null if none is running.
  * @type {?string}
@@ -557,25 +547,6 @@ goog.testing.TestCase.prototype.finalize = function() {
 
   this.tearDownPage();
 
-  var restoredSetTimeout =
-      goog.testing.TestCase.protectedSetTimeout_ == goog.global.setTimeout &&
-      goog.testing.TestCase.protectedClearTimeout_ == goog.global.clearTimeout;
-  if (!restoredSetTimeout && goog.testing.TestCase.IS_IE &&
-      String(goog.global.setTimeout) ==
-          goog.testing.TestCase.setTimeoutAsString_) {
-    // In strange cases, IE's value of setTimeout *appears* to change, but
-    // the string representation stays stable.
-    restoredSetTimeout = true;
-  }
-
-  if (!restoredSetTimeout) {
-    var message = 'ERROR: Test did not restore setTimeout and clearTimeout';
-    this.saveMessage(message);
-    var err = new goog.testing.TestCase.Error(this.name_, message);
-    this.result_.errors.push(err);
-  }
-  goog.global.clearTimeout = goog.testing.TestCase.protectedClearTimeout_;
-  goog.global.setTimeout = goog.testing.TestCase.protectedSetTimeout_;
   this.endTime_ = this.now();
   this.running = false;
   this.result_.runTime = this.endTime_ - this.startTime_;
