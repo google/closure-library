@@ -225,6 +225,24 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 
 
 /**
+ * Gets the first element matching the tag and the class.
+ *
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ */
+goog.dom.getElementByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
+  return goog.dom.getElementByTagNameAndClass_(
+      document, opt_tag, opt_class, opt_el);
+};
+
+
+/**
  * Returns a static, array-like list of the elements with the provided
  * className.
  * @see {goog.dom.query}
@@ -254,11 +272,9 @@ goog.dom.getElementByClass = function(className, opt_el) {
   var retVal = null;
   if (parent.getElementsByClassName) {
     retVal = parent.getElementsByClassName(className)[0];
-  } else if (goog.dom.canUseQuerySelector_(parent)) {
-    retVal = parent.querySelector('.' + className);
   } else {
-    retVal = goog.dom.getElementsByTagNameAndClass_(
-        document, '*', className, opt_el)[0];
+    retVal =
+        goog.dom.getElementByTagNameAndClass_(document, '*', className, opt_el);
   }
   return retVal || null;
 };
@@ -362,6 +378,34 @@ goog.dom.getElementsByTagNameAndClass_ = function(
     return els;
   }
 };
+
+
+/**
+ * Helper for goog.dom.getElementByTagNameAndClass.
+ *
+ * @param {!Document} doc The document to get the elements in.
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ * @private
+ */
+goog.dom.getElementByTagNameAndClass_ = function(
+    doc, opt_tag, opt_class, opt_el) {
+  var parent = opt_el || doc;
+  var tag = (opt_tag && opt_tag != '*') ? String(opt_tag).toUpperCase() : '';
+  if (goog.dom.canUseQuerySelector_(parent) && (tag || opt_class)) {
+    return parent.querySelector(tag + (opt_class ? '.' + opt_class : ''));
+  }
+  var elements =
+      goog.dom.getElementsByTagNameAndClass_(doc, opt_tag, opt_class, opt_el);
+  return elements[0] || null;
+};
+
 
 
 /**
@@ -741,15 +785,16 @@ goog.dom.getWindow_ = function(doc) {
  * first node as childNodes.
  *
  * So:
- * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
- * would return a div with two child paragraphs
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P),
+ * createDom(goog.dom.TagName.P));</code> would return a div with two child
+ * paragraphs
  *
  * For passing properties, please see {@link goog.dom.setProperties} for more
  * information.
  *
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(Object|Array<string>|string)=} opt_properties If object, then a map
- *     of name-value pairs for properties. If a string, then this is the
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
  *     className of the new element. If an array, the elements will be joined
  *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
@@ -761,7 +806,7 @@ goog.dom.getWindow_ = function(doc) {
  * @template T
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
-goog.dom.createDom = function(tagName, opt_properties, var_args) {
+goog.dom.createDom = function(tagName, opt_attributes, var_args) {
   return goog.dom.createDom_(document, arguments);
 };
 
@@ -862,9 +907,10 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
 /**
  * Alias for {@code createDom}.
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(string|Object)=} opt_properties If object, then a map of name-value
- *     pairs for properties. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...(Object|string|Array|NodeList)} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array, its
  *     children will be added as childNodes instead.
@@ -2468,6 +2514,25 @@ goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
 
 
 /**
+ * Gets the first element matching the tag and the class.
+ *
+ * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
+ * @param {?string=} opt_class Optional class name.
+ * @param {(Document|Element)=} opt_el Optional element to look in.
+ * @return {?R} Reference to a DOM node. The return type is {?Element} if
+ *     tagName is a string or a more specific type if it is a member of
+ *     goog.dom.TagName (e.g. {?HTMLAnchorElement} for goog.dom.TagName.A).
+ * @template T
+ * @template R := cond(isUnknown(T), 'Element', T) =:
+ */
+goog.dom.DomHelper.prototype.getElementByTagNameAndClass = function(
+    opt_tag, opt_class, opt_el) {
+  return goog.dom.getElementByTagNameAndClass_(
+      this.document_, opt_tag, opt_class, opt_el);
+};
+
+
+/**
  * Returns an array of all the elements with the provided className.
  * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
@@ -2574,8 +2639,9 @@ goog.dom.Appendable;
  * first node as childNodes.
  *
  * So:
- * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P), createDom(goog.dom.TagName.P));</code>
- * would return a div with two child paragraphs
+ * <code>createDom(goog.dom.TagName.DIV, null, createDom(goog.dom.TagName.P),
+ * createDom(goog.dom.TagName.P));</code> would return a div with two child
+ * paragraphs
  *
  * An easy way to move all child nodes of an existing element to a new parent
  * element is:
@@ -2584,9 +2650,10 @@ goog.dom.Appendable;
  * child nodes of the new DIV.
  *
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {Object|string=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...goog.dom.Appendable} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array or
  *     NodeList, its elements will be added as childNodes instead.
@@ -2605,9 +2672,10 @@ goog.dom.DomHelper.prototype.createDom = function(
 /**
  * Alias for {@code createDom}.
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
- * @param {(Object|string)=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
- *     element.
+ * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...goog.dom.Appendable} var_args Further DOM nodes or strings for
  *     text nodes.  If one of the var_args is an array, its children will be
  *     added as childNodes instead.
