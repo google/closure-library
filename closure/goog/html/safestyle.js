@@ -321,6 +321,10 @@ goog.html.SafeStyle.INNOCUOUS_STRING = 'zClosurez';
 
 /**
  * Mapping of property names to their values.
+ * We don't support numbers even though some values might be numbers (e.g.
+ * line-height or 0 for any length). The reason is that most numeric values need
+ * units (e.g. '1px') and allowing numbers could cause users forgetting about
+ * them.
  * @typedef {!Object<string, goog.string.Const|string>}
  */
 goog.html.SafeStyle.PropertyMap;
