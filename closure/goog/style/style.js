@@ -1376,6 +1376,7 @@ goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
     // cssText is a defined property and otherwise fall back to innerHTML.
     element.cssText = stylesString;
   } else {
+    // Setting textContent doesn't work in Safari, see b/29340337.
     element.innerHTML = stylesString;
   }
 };
