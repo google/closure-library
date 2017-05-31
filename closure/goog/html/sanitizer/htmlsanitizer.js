@@ -1377,8 +1377,8 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeAttribute_ = function(
     dirtyNode, attribute) {
   var attributeName = attribute.name;
   if (goog.string.startsWith(
-          goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_,
-          attributeName)) {
+          attributeName,
+          goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_)) {
     return null;
   }
 
