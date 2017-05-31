@@ -377,7 +377,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.backgroundChannelTest_ =
-      (opt_options && opt_options.backgroundChannelTest) || false;
+      (opt_options && opt_options.backgroundChannelTest) || true;
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;

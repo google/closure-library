@@ -130,7 +130,7 @@ var MockChannelRequest = function(
   this.lastStatusCode_ = 200;
 
   // For debugging, keep track of whether this is a back or forward channel.
-  this.isBack = !!(opt_requestId == 'rpc');
+  this.isBack = opt_requestId === 'rpc';
   this.isForward = !this.isBack;
 };
 
@@ -242,6 +242,9 @@ function setUp() {
 
   mockClock = new goog.testing.MockClock(true);
   channel = new goog.labs.net.webChannel.WebChannelBase('1');
+  // restore channel-test for tests that rely on the channel-test state
+  channel.backgroundChannelTest_ = false;
+
   gotError = false;
 
   handler = new goog.labs.net.webChannel.WebChannelBase.Handler();
