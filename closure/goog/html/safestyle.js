@@ -361,8 +361,8 @@ goog.html.SafeStyle.create = function(map) {
       goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
     } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
       goog.asserts.fail(
-          'String value allows only [-,."\'%_!# a-zA-Z0-9], rgb() and ' +
-          'rgba(), got: ' + value);
+          'String value allows only [-,."\'%_!# a-zA-Z0-9] and simple ' +
+          'functions, got: ' + value);
       value = goog.html.SafeStyle.INNOCUOUS_STRING;
     } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
       goog.asserts.fail('String value requires balanced quotes, got: ' + value);
@@ -415,13 +415,14 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
  * (e.g. background-attachment or font-family) and hence could allow
  * multiple values to get injected, but that should pose no risk of XSS.
  *
- * The rgb() and rgba() expression checks only for XSS safety, not for CSS
- * validity.
+ * The expression inside () checks only for XSS safety, not for CSS validity.
  * @const {!RegExp}
  * @private
  */
-goog.html.SafeStyle.VALUE_RE_ =
-    /^([-,."'%_!# a-zA-Z0-9]+|(?:rgb|hsl)a?\([0-9.%, ]+\))$/;
+goog.html.SafeStyle.VALUE_RE_ = new RegExp(
+    '^([-,."\'%_!# a-zA-Z0-9]+|(hsl|hsla|rgb|rgba' +
+    '|(rotate|scale|translate)(X|Y|Z|3d)?)' +
+    '\\([-0-9a-z.%, ]+\\))$');
 
 
 /**

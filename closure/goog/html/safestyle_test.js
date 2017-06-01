@@ -135,6 +135,26 @@ function testCreate_allowsRgba() {
 }
 
 
+function testCreate_allowsScale() {
+  var style = goog.html.SafeStyle.create({'transform': 'scale(.5, 2)'});
+  assertEquals('transform:scale(.5, 2);', goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testCreate_allowsRotate() {
+  var style = goog.html.SafeStyle.create({'transform': 'rotate(45deg)'});
+  assertEquals('transform:rotate(45deg);', goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testCreate_allowsTranslate() {
+  var style = goog.html.SafeStyle.create({'transform': 'translate(10px)'});
+  assertEquals('transform:translate(10px);', goog.html.SafeStyle.unwrap(style));
+  var style = goog.html.SafeStyle.create({'transform': 'translateX(5px)'});
+  assertEquals('transform:translateX(5px);', goog.html.SafeStyle.unwrap(style));
+}
+
+
 function testCreate_throwsOnForbiddenCharacters() {
   assertThrows(function() { goog.html.SafeStyle.create({'<': '0'}); });
   assertThrows(function() {
