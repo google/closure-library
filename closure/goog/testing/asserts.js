@@ -1351,3 +1351,4 @@ goog.exportSymbol('assertRoughlyEquals', assertRoughlyEquals);
 goog.exportSymbol('assertContains', assertContains);
 goog.exportSymbol('assertNotContains', assertNotContains);
 goog.exportSymbol('assertRegExp', assertRegExp);
+goog.exportSymbol('_displayStringForValue', _displayStringForValue);
