@@ -68,6 +68,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
   goog.exportSymbol('G_testRunner.initialize', tr.initialize);
   goog.exportSymbol('G_testRunner.isInitialized', tr.isInitialized);
   goog.exportSymbol('G_testRunner.isFinished', tr.isFinished);
+  goog.exportSymbol('G_testRunner.getUniqueId', tr.getUniqueId);
   goog.exportSymbol('G_testRunner.isSuccess', tr.isSuccess);
   goog.exportSymbol('G_testRunner.getReport', tr.getReport);
   goog.exportSymbol('G_testRunner.getRunTime', tr.getRunTime);
