@@ -130,7 +130,7 @@ var MockChannelRequest = function(
   this.lastStatusCode_ = 200;
 
   // For debugging, keep track of whether this is a back or forward channel.
-  this.isBack = opt_requestId === 'rpc';
+  this.isBack = !!(opt_requestId == 'rpc');
   this.isForward = !this.isBack;
 };
 

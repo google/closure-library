@@ -121,7 +121,7 @@ goog.net.WebChannel = function() {};
  *
  * backgroundChannelTest: whether to run the channel test (detecting networking
  * conditions) as a background process so the OPEN event will be fired sooner
- * to reduce the initial handshake delay. This option defaults to true.
+ * to reduce the initial handshake delay. This option defaults to false.
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
