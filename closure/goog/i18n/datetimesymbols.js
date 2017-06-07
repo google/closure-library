@@ -3526,6 +3526,10 @@ if (goog.LOCALE == 'en_IN' || goog.LOCALE == 'en-IN') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IN;
 }
 
+if (goog.LOCALE == 'en_ISO' || goog.LOCALE == 'en-ISO') {
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ISO;
+}
+
 if (goog.LOCALE == 'en_SG' || goog.LOCALE == 'en-SG') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_SG;
 }
