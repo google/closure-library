@@ -41,10 +41,12 @@ goog.require('goog.uri.utils');
  * implementation for all cases, but it's not too hard to add them as needed.
  * @param {goog.testing.TestQueue=} opt_testQueue Test queue for inserting test
  *     events.
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
+ *     creating XMLHttpRequest objects.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.testing.net.XhrIo = function(opt_testQueue) {
+goog.testing.net.XhrIo = function(opt_testQueue, opt_xmlHttpFactory) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -60,6 +62,12 @@ goog.testing.net.XhrIo = function(opt_testQueue) {
    * @private
    */
   this.testQueue_ = opt_testQueue || null;
+
+  /**
+   * Optional XmlHttpFactory
+   * @private {goog.net.XmlHttpFactory}
+   */
+  this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
 goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
 
@@ -134,12 +142,14 @@ goog.testing.net.XhrIo.cleanup = function() {
  *     incomplete request will be aborted; 0 means no timeout is set.
  * @param {boolean=} opt_withCredentials Whether to send credentials with the
  *     request. Default to false. See {@link goog.net.XhrIo#setWithCredentials}.
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
+ *     creating XMLHttpRequest objects
  * @return {!goog.testing.net.XhrIo} The mocked sent XhrIo.
  */
 goog.testing.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
-    opt_timeoutInterval, opt_withCredentials) {
-  var x = new goog.testing.net.XhrIo();
+    opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
+  var x = new goog.testing.net.XhrIo(null, opt_xmlHttpFactory);
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback);
@@ -462,6 +472,12 @@ goog.testing.net.XhrIo.prototype.send = function(
   if (this.testQueue_) {
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
+
+  if (this.xmlHttpFactory_) {
+    this.xmlHttpFactory_.createInstance();
+    this.xmlHttpFactory_.getOptions();
+  }
+
   this.xhr_ = true;
   this.active_ = true;
   this.readyState_ = goog.net.XmlHttp.ReadyState.UNINITIALIZED;

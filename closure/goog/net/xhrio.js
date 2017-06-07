@@ -332,12 +332,14 @@ goog.net.XhrIo.sendInstances_ = [];
  *     incomplete request will be aborted; 0 means no timeout is set.
  * @param {boolean=} opt_withCredentials Whether to send credentials with the
  *     request. Default to false. See {@link goog.net.XhrIo#setWithCredentials}.
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
+ *     creating XMLHttpRequest objects
  * @return {!goog.net.XhrIo} The sent XhrIo.
  */
 goog.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
-    opt_timeoutInterval, opt_withCredentials) {
-  var x = new goog.net.XhrIo();
+    opt_timeoutInterval, opt_withCredentials, opt_xmlHttpFactory) {
+  var x = new goog.net.XhrIo(opt_xmlHttpFactory);
   goog.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     x.listen(goog.net.EventType.COMPLETE, opt_callback);
@@ -532,8 +534,9 @@ goog.net.XhrIo.prototype.send = function(
 
   // Set up upload/download progress events, if progress events are supported.
   if (this.getProgressEventsEnabled() && 'onprogress' in this.xhr_) {
-    this.xhr_.onprogress =
-        goog.bind(function(e) { this.onProgressHandler_(e, true); }, this);
+    this.xhr_.onprogress = goog.bind(function(e) {
+      this.onProgressHandler_(e, true);
+    }, this);
     if (this.xhr_.upload) {
       this.xhr_.upload.onprogress = goog.bind(this.onProgressHandler_, this);
     }
@@ -564,8 +567,9 @@ goog.net.XhrIo.prototype.send = function(
 
   // Add headers specific to this request
   if (opt_headers) {
-    goog.structs.forEach(
-        opt_headers, function(value, key) { headers.set(key, value); });
+    goog.structs.forEach(opt_headers, function(value, key) {
+      headers.set(key, value);
+    });
   }
 
   // Find whether a content type header is set, ignoring case.
@@ -610,9 +614,10 @@ goog.net.XhrIo.prototype.send = function(
     if (this.timeoutInterval_ > 0) {
       this.useXhr2Timeout_ = goog.net.XhrIo.shouldUseXhr2Timeout_(this.xhr_);
       goog.log.fine(
-          this.logger_, this.formatMsg_(
-                            'Will abort after ' + this.timeoutInterval_ +
-                            'ms if incomplete, xhr2 ' + this.useXhr2Timeout_));
+          this.logger_,
+          this.formatMsg_(
+              'Will abort after ' + this.timeoutInterval_ +
+              'ms if incomplete, xhr2 ' + this.useXhr2Timeout_));
       if (this.useXhr2Timeout_) {
         this.xhr_[goog.net.XhrIo.XHR2_TIMEOUT_] = this.timeoutInterval_;
         this.xhr_[goog.net.XhrIo.XHR2_ON_TIMEOUT_] =
@@ -896,10 +901,10 @@ goog.net.XhrIo.prototype.onProgressHandler_ = function(e, opt_isDownload) {
       'goog.net.EventType.PROGRESS is of the same type as raw XHR progress.');
   this.dispatchEvent(
       goog.net.XhrIo.buildProgressEvent_(e, goog.net.EventType.PROGRESS));
-  this.dispatchEvent(
-      goog.net.XhrIo.buildProgressEvent_(
-          e, opt_isDownload ? goog.net.EventType.DOWNLOAD_PROGRESS :
-                              goog.net.EventType.UPLOAD_PROGRESS));
+  this.dispatchEvent(goog.net.XhrIo.buildProgressEvent_(
+      e,
+      opt_isDownload ? goog.net.EventType.DOWNLOAD_PROGRESS :
+                       goog.net.EventType.UPLOAD_PROGRESS));
 };
 
 
@@ -1027,8 +1032,7 @@ goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
 goog.net.XhrIo.prototype.getReadyState = function() {
   return this.xhr_ ?
       /** @type {goog.net.XmlHttp.ReadyState} */ (this.xhr_.readyState) :
-                                                 goog.net.XmlHttp.ReadyState
-                                                     .UNINITIALIZED;
+      goog.net.XmlHttp.ReadyState.UNINITIALIZED;
 };
 
 
@@ -1224,7 +1228,8 @@ goog.net.XhrIo.prototype.getResponse = function() {
     }
     // Fell through to a response type that is not supported on this browser.
     goog.log.error(
-        this.logger_, 'Response type ' + this.responseType_ + ' is not ' +
+        this.logger_,
+        'Response type ' + this.responseType_ + ' is not ' +
             'supported on this browser');
     return null;
   } catch (e) {

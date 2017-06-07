@@ -59,6 +59,28 @@ function testStaticSend() {
   assertEquals('sendInstances_ after READY', 0, sendInstances.length);
 }
 
+function testStaticSendWithFactory() {
+  var xhrFactoryCalled = 0;
+  var optionsFactoryCalled = 0;
+
+  var wrapperFactory = new goog.net.WrapperXmlHttpFactory(
+      function() {
+        xhrFactoryCalled++;
+        return {};
+      },
+      function() {
+        optionsFactoryCalled++;
+        return {};
+      });
+
+  goog.testing.net.XhrIo.send(
+      'url', null, 'GET', '', null, 0, false, wrapperFactory);
+  assertEquals(
+      'XHR factory should be used to generate XmlHttp instance', 1,
+      xhrFactoryCalled);
+  assertEquals('Options factory should be used', 1, optionsFactoryCalled);
+}
+
 function testStaticSendWithException() {
   goog.testing.net.XhrIo.send('url', function() {
     if (!this.isSuccess()) {
