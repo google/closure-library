@@ -42,19 +42,19 @@ goog.require('goog.string.TypedString');
  * is immutable; hence only a default instance corresponding to the empty string
  * can be obtained via constructor invocation.
  *
- * A SafeStyle's string representation ({@link #getTypedStringValue()}) can
- * safely:
+ * SafeStyle's string representation can safely be:
  * <ul>
- *   <li>Be interpolated as the entire content of a *quoted* HTML style
- *       attribute, or before already existing properties. The SafeStyle string
- *       *must be HTML-attribute-escaped* (where " and ' are escaped) before
+ *   <li>Interpolated as the content of a *quoted* HTML style attribute.
+ *       However, the SafeStyle string *must be HTML-attribute-escaped* before
  *       interpolation.
- *   <li>Be interpolated as the entire content of a {}-wrapped block within a
- *       stylesheet, or before already existing properties. The SafeStyle string
- *       should not be escaped before interpolation. SafeStyle's contract also
- *       guarantees that the string will not be able to introduce new properties
- *       or elide existing ones.
- *   <li>Be assigned to the style property of a DOM node. The SafeStyle string
+ *   <li>Interpolated as the content of a {}-wrapped block within a stylesheet.
+ *       '<' characters in the SafeStyle string *must be CSS-escaped* before
+ *       interpolation. The SafeStyle string is also guaranteed not to be able
+ *       to introduce new properties or elide existing ones.
+ *   <li>Interpolated as the content of a {}-wrapped block within an HTML
+ *       <style> element. '<' characters in the SafeStyle string
+ *       *must be CSS-escaped* before interpolation.
+ *   <li>Assigned to the style property of a DOM node. The SafeStyle string
  *       should not be escaped before being assigned to the property.
  * </ul>
  *
