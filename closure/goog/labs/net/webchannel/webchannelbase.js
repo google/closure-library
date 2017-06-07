@@ -35,7 +35,6 @@ goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.labs.net.webChannel.WireV8');
 goog.require('goog.labs.net.webChannel.netUtils');
 goog.require('goog.labs.net.webChannel.requestStats');
-goog.require('goog.labs.net.webChannel.requestStats.Stat');
 goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.XhrIo');
@@ -1087,7 +1086,9 @@ WebChannelBase.prototype.maybeRetryForwardChannel_ = function(request) {
     return false;
   }
 
-  if (this.state_ == WebChannelBase.State.INIT ||  // no retry open_()
+  // No retry for open_() and fail-fast
+  if (this.state_ == WebChannelBase.State.INIT ||
+      this.state_ == WebChannelBase.State.OPENING ||
       (this.forwardChannelRetryCount_ >= this.getForwardChannelMaxRetries())) {
     return false;
   }
