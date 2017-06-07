@@ -690,7 +690,7 @@ goog.logToConsole_ = function(msg) {
  *     module otherwise null.
  */
 goog.require = function(name) {
-  // If the object already exists we do not need do do anything.
+  // If the object already exists we do not need to do anything.
   if (!COMPILED) {
     if (goog.ENABLE_DEBUG_LOADER && goog.IS_OLD_IE_) {
       goog.maybeProcessDeferredDep_(name);
