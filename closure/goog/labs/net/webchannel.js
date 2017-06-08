@@ -186,7 +186,13 @@ goog.net.WebChannel.EventType = {
   /** Dispatched when the channel is closed. */
   CLOSE: goog.events.getUniqueId('close'),
 
-  /** Dispatched when the channel is aborted due to errors. */
+  /**
+   * Dispatched when the channel is aborted due to errors.
+   *
+   * For backward compatibility reasons, a CLOSE event will also be
+   * dispatched, following the ERROR event, which indicates that the channel
+   * has been completely shutdown .
+   */
   ERROR: goog.events.getUniqueId('error'),
 
   /** Dispatched when the channel has received a new message. */
