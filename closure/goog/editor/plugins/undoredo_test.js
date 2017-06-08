@@ -214,7 +214,7 @@ function testEnable() {
   assertFalse(
       'Plugin must start disabled.', undoPlugin.isEnabled(editableField));
 
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
   editableField.setHtml(false, '<div>a</div>');
   undoPlugin.enable(editableField);
 
@@ -243,7 +243,7 @@ function testEnable() {
 }
 
 function testDisable() {
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
   undoPlugin.enable(editableField);
   assertTrue(
       'Plugin must be enabled so we can test disabling.',
@@ -272,7 +272,7 @@ function testDisable() {
 
 function testUpdateCurrentState_() {
   editableField.registerPlugin(new goog.editor.plugins.LoremIpsum('LOREM'));
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
   editableField.getPluginByClassId('LoremIpsum').usingLorem_ = true;
   undoPlugin.updateCurrentState_(editableField);
   var currentState = undoPlugin.currentStates_[fieldHashCode];
@@ -366,7 +366,7 @@ function testUpdateCurrentState_() {
  */
 function testUndoRestartsChangeEvents() {
   undoPlugin.registerFieldObject(editableField);
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
   editableField.setHtml(false, '<div>a</div>');
   clock.tick(1000);
   undoPlugin.enable(editableField);
@@ -393,7 +393,7 @@ function testUndoRestartsChangeEvents() {
 }
 
 function testRefreshCurrentState() {
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
   editableField.setHtml(false, '<div>a</div>');
   clock.tick(1000);
   undoPlugin.enable(editableField);
@@ -521,7 +521,7 @@ function testEquals() {
 function testClearUndoHistory() {
   var undoRedoPlugin = new goog.editor.plugins.UndoRedo();
   editableField.registerPlugin(undoRedoPlugin);
-  editableField.makeEditable(editableField);
+  editableField.makeEditable();
 
   editableField.dispatchChange();
   clock.tick(10000);

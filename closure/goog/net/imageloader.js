@@ -241,6 +241,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
     return;
   }
 
+  /** @type {!HTMLImageElement} */
   var image;
   if (this.parent_) {
     var dom = goog.dom.getDomHelper(this.parent_);

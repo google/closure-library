@@ -1757,7 +1757,7 @@ goog.dom.setTextContent = function(node, text) {
   if ('textContent' in node) {
     node.textContent = text;
   } else if (node.nodeType == goog.dom.NodeType.TEXT) {
-    node.data = text;
+    /** @type {!Text} */ (node).data = String(text);
   } else if (
       node.firstChild && node.firstChild.nodeType == goog.dom.NodeType.TEXT) {
     // If the first child is a text node we just change its data and remove the
@@ -1765,7 +1765,7 @@ goog.dom.setTextContent = function(node, text) {
     while (node.lastChild != node.firstChild) {
       node.removeChild(node.lastChild);
     }
-    node.firstChild.data = text;
+    /** @type {!Text} */ (node.firstChild).data = String(text);
   } else {
     goog.dom.removeChildren(node);
     var doc = goog.dom.getOwnerDocument(node);
