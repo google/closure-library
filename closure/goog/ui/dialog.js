@@ -1201,6 +1201,13 @@ goog.ui.Dialog.ButtonSet.prototype.element_ = null;
 goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
 
 
+/** @override */
+goog.ui.Dialog.ButtonSet.prototype.clear = function() {
+  goog.structs.Map.prototype.clear.call(this);
+  this.defaultButton_ = this.cancelButton_ = null;
+};
+
+
 /**
  * Adds a button to the button set.  Buttons will be displayed in the order they
  * are added.
