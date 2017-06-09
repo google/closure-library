@@ -218,7 +218,6 @@ var _allTests = [
   'closure/goog/i18n/uchar/localnamefetcher_test.html',
   'closure/goog/i18n/uchar/remotenamefetcher_test.html',
   'closure/goog/i18n/uchar_test.html',
-  'closure/goog/iter/es6_test.html',
   'closure/goog/iter/iter_test.html',
   'closure/goog/json/hybrid_test.html',
   'closure/goog/json/json_test.html',

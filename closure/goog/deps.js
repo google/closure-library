@@ -582,8 +582,6 @@ goog.addDependency('i18n/uchar/remotenamefetcher_test.js', ['goog.i18n.uChar.Rem
 goog.addDependency('i18n/uchar_test.js', ['goog.i18n.uCharTest'], ['goog.i18n.uChar', 'goog.testing.jsunit'], {});
 goog.addDependency('i18n/ucharnames.js', ['goog.i18n.uCharNames'], ['goog.i18n.uChar'], {});
 goog.addDependency('i18n/ucharnames_test.js', ['goog.i18n.uCharNamesTest'], ['goog.i18n.uCharNames', 'goog.testing.jsunit'], {});
-goog.addDependency('iter/es6.js', ['goog.iter.es6'], ['goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.math'], {});
 goog.addDependency('iter/iter_test.js', ['goog.iterTest'], ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.testing.jsunit'], {});
 goog.addDependency('json/evaljsonprocessor.js', ['goog.json.EvalJsonProcessor'], ['goog.json', 'goog.json.Processor', 'goog.json.Serializer'], {});
