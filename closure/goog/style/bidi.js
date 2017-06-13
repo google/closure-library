@@ -22,8 +22,6 @@ goog.provide('goog.style.bidi');
 goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
-goog.require('goog.userAgent.product.isVersion');
 
 
 /**
@@ -35,9 +33,7 @@ goog.require('goog.userAgent.product.isVersion');
  */
 goog.style.bidi.getScrollLeft = function(element) {
   var isRtl = goog.style.isRightToLeft(element);
-  var isSafari10Plus =
-      goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(10);
-  if (isRtl && (goog.userAgent.GECKO || isSafari10Plus)) {
+  if (isRtl && goog.userAgent.GECKO) {
     // ScrollLeft starts at 0 and then goes negative as the element is scrolled
     // towards the left.
     return -element.scrollLeft;
