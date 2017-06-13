@@ -308,7 +308,8 @@ goog.db.ObjectStore.prototype.clear = function() {
  * {@link goog.db.UpgradeNeededCallback}.
  *
  * @param {string} name Name of the index to create.
- * @param {string} keyPath Attribute to index on.
+ * @param {string|!Array<string>} keyPath Attribute or array of attributes to
+ *     index on.
  * @param {!Object=} opt_parameters Optional parameters object. The only
  *     available option is unique, which defaults to false. If unique is true,
  *     the index will enforce that there is only ever one object in the object
