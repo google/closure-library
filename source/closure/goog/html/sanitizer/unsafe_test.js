@@ -167,6 +167,14 @@ function testAllowOverwriteAttrPolicy() {
 }
 
 
+function testAllowDAttribute() {
+  var input = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
+  var expected = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
+  assertSanitizedHtml(
+      input, expected, ['path'], [{tagName: 'path', attributeName: 'd'}]);
+}
+
+
 function testWhitelistAliasing() {
   var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
   goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, ['QqQ']);

@@ -176,12 +176,7 @@ function testLifecycle_withPromises() {
   assertEquals(1, result.totalCount);
   assertEquals(1, result.runCount);
   assertEquals(1, result.successCount);
-  // We expect 1 error from the test because the mockClock is set by the outer
-  // test and is only cleared at the end of this method.
-  assertEquals(1, result.errors.length);
-  assertEquals(
-      'ERROR: Test did not restore setTimeout and clearTimeout',
-      result.errors[0].message);
+  assertEquals(0, result.errors.length);
 
   testing = false;
   mockClock.uninstall();

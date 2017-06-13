@@ -116,8 +116,7 @@ goog.json.setErrorLogger = function(errorLogger) {
  * Parses a JSON string and returns the result. This throws an exception if
  * the string is an invalid JSON string.
  *
- * Note that this is very slow on large strings. If you trust the source of
- * the string then you should use unsafeParse instead.
+ * Note that this is very slow on large strings. Use JSON.parse if possible.
  *
  * @param {*} s The JSON string to parse.
  * @throws Error if s is invalid JSON.

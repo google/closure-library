@@ -674,3 +674,14 @@ function testQuotedPattern() {
   parser = new goog.i18n.DateTimeParse('MMM dd\'th\'\'');
   assertParsedDateEquals(y, m, d, parser, 'Nov 15th\'', date);
 }
+
+function testNullDate() {
+  var date = new Date();
+  var parser = new goog.i18n.DateTimeParse('MM/dd, yyyyG');
+  assertNotThrows(function() {
+    parser.parse('11/22, 1999', date);
+  });
+  assertThrows(function() {
+    parser.parse('11/22, 1999', null);
+  });
+}

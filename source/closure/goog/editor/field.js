@@ -35,6 +35,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
+goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
@@ -2160,7 +2161,7 @@ goog.editor.Field.prototype.getFieldCopy = function() {
  * @param {boolean} addParas Boolean to specify whether to add paragraphs
  *    to long fields.
  * @param {?string} html html to insert.  If html=null, then this defaults
- *    to a nsbp for mozilla and an empty string for IE.
+ *    to a nbsp for mozilla and an empty string for IE.
  * @param {boolean=} opt_dontFireDelayedChange True to make this content change
  *    not fire a delayed change event.
  * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.
@@ -2443,7 +2444,8 @@ goog.editor.Field.prototype.restoreSavedRange = function(opt_range) {
 /**
  * Makes a field editable.
  *
- * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+ * @param {!goog.html.TrustedResourceUrl|string=} opt_iframeSrc URL to set the
+ *     iframe src to if necessary.
  */
 goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
   this.loadState_ = goog.editor.Field.LoadState_.LOADING;
@@ -2459,14 +2461,23 @@ goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
 
   goog.dom.classlist.add(field, 'editable');
 
-  this.makeEditableInternal(opt_iframeSrc);
+  var iframeSrc;
+  if (goog.isString(opt_iframeSrc)) {
+    iframeSrc =
+        goog.html.legacyconversions.trustedResourceUrlFromString(opt_iframeSrc);
+  } else {
+    iframeSrc = opt_iframeSrc;
+  }
+
+  this.makeEditableInternal(iframeSrc);
 };
 
 
 /**
  * Handles actually making something editable - creating necessary nodes,
  * injecting content, etc.
- * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+ * @param {!goog.html.TrustedResourceUrl=} opt_iframeSrc URL to set the iframe
+ *     src to if necessary.
  * @protected
  */
 goog.editor.Field.prototype.makeEditableInternal = function(opt_iframeSrc) {
@@ -2628,7 +2639,8 @@ goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
  * Start the editable iframe creation process for Mozilla or IE whitebox.
  * The iframes load asynchronously.
  *
- * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+ * @param {!goog.html.TrustedResourceUrl=} opt_iframeSrc URL to set the iframe
+ *     src to if necessary.
  * @private
  */
 goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
@@ -2666,7 +2678,7 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
           goog.events.listen(iframe, goog.events.EventType.LOAD, onLoad, true);
 
       if (opt_iframeSrc) {
-        iframe.src = opt_iframeSrc;
+        goog.dom.safe.setIframeSrc(iframe, opt_iframeSrc);
       }
     }
 

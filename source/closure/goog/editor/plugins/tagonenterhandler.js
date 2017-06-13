@@ -446,7 +446,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.removeBrIfNecessary_ = function(
   if (focusNode.nodeType == goog.dom.NodeType.TEXT) {
     // Sometimes firefox inserts extra whitespace. Do our best to deal.
     // This is buggy though.
-    focusNode.data =
+    /** @type {!Text} */ (focusNode).data =
         goog.editor.plugins.TagOnEnterHandler.trimTabsAndLineBreaks_(
             focusNode.data);
     // When we strip whitespace, make sure that our cursor is still at

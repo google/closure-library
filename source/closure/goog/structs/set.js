@@ -47,6 +47,7 @@ goog.require('goog.structs.Map');
  * @implements {goog.structs.Collection<T>}
  * @final
  * @template T
+ * @deprecated This type is misleading: use ES6 Set instead.
  */
 goog.structs.Set = function(opt_values) {
   this.map_ = new goog.structs.Map;

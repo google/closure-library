@@ -24,6 +24,7 @@ goog.provide('goog.db.Error.ErrorCode');
 goog.provide('goog.db.Error.ErrorName');
 goog.provide('goog.db.Error.VersionChangeBlockedError');
 
+goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 
 
@@ -342,12 +343,8 @@ goog.db.Error.getName = function(code) {
  */
 goog.db.Error.fromRequest = function(request, message) {
   if ('error' in request) {
-    // Chrome 21 and before.
-    return new goog.db.Error(request.error, message);
-  } else if ('name' in request) {
-    // Chrome 22+.
-    var errorName = goog.db.Error.getName(request.error.severity);
-    return new goog.db.Error({name: errorName}, message);
+    // Chrome 22+
+    return new goog.db.Error(goog.asserts.assert(request.error), message);
   } else {
     return new goog.db.Error(
         {name: goog.db.Error.ErrorName.UNKNOWN_ERR}, message);

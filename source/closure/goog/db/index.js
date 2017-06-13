@@ -161,7 +161,13 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_key) {
   request.onsuccess = function(ev) {
     var cursor = ev.target.result;
     if (cursor) {
-      result.push(cursor.value);
+      if (fn == 'openKeyCursor') {
+        // openKeyCursor returns a cursor with undefined key/value. See
+        // https://w3c.github.io/IndexedDB/#dom-idbobjectstore-openkeycursor.
+        result.push(cursor.primaryKey);
+      } else {
+        result.push(cursor.value);
+      }
       cursor['continue']();
     } else {
       d.callback(result);

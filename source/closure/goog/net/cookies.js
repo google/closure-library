@@ -363,6 +363,15 @@ goog.net.cookies =
 
 
 /**
+ * Getter for the static instance of goog.net.Cookies.
+ * @return {!goog.net.Cookies}
+ */
+goog.net.Cookies.getInstance = function() {
+  return goog.net.cookies;
+};
+
+
+/**
  * Define the constant on the instance in order not to break many references to
  * it.
  * @type {number}

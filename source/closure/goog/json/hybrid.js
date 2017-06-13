@@ -88,16 +88,3 @@ goog.json.hybrid.parse =
                                                                    jsonString) {
       return goog.json.hybrid.parse_(jsonString, goog.json.parse);
     };
-
-
-/**
- * Attempts to parse the JSON string natively, falling back to
- * {@code goog.json.unsafeParse} if unsuccessful.
- * @param {string} jsonString JSON string to parse.
- * @return {!Object} Resulting JSON object.
- */
-goog.json.hybrid.unsafeParse =
-    goog.json.USE_NATIVE_JSON ? goog.global['JSON']['parse'] : function(
-                                                                   jsonString) {
-      return goog.json.hybrid.parse_(jsonString, goog.json.unsafeParse);
-    };

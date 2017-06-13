@@ -175,15 +175,6 @@ goog.testing.TestCase = function(opt_name) {
   /** @private {function(!goog.testing.TestCase.Result)} */
   this.runNextTestCallback_ = goog.nullFunction;
 
-  /**
-   * The number of {@link runNextTest_} frames currently on the stack.
-   * When this exceeds {@link MAX_STACK_DEPTH_}, test execution is rescheduled
-   * for a later tick of the event loop.
-   * @see {finishTestInvocation_}
-   * @private {number}
-   */
-  this.depth_ = 0;
-
   /** @private {goog.testing.TestCase.Test} */
   this.curTest_ = null;
 
@@ -254,17 +245,6 @@ goog.testing.TestCase.maxRunTime = 200;
 
 
 /**
- * The maximum number of {@link runNextTest_} frames that can be on the stack
- * before the test case is forced to yield and reschedule. Although modern
- * browsers can handle thousands of stack frames, this is set conservatively
- * because maximum stack depth has never been standardized, and engine-specific
- * techniques like tail cail optimization can affect the exact depth.
- * @private @const
- */
-goog.testing.TestCase.MAX_STACK_DEPTH_ = 50;
-
-
-/**
  * Save a reference to {@code window.setTimeout}, so any code that overrides the
  * default behavior (the MockClock, for example) doesn't affect our runner.
  * @type {function((Function|string), number=, *=): number}
@@ -289,16 +269,6 @@ goog.testing.TestCase.protectedClearTimeout_ = goog.global.clearTimeout;
  * @private
  */
 goog.testing.TestCase.protectedDate_ = Date;
-
-
-/**
- * Saved string referencing goog.global.setTimeout's string serialization.  IE
- * sometimes fails to uphold equality for setTimeout, but the string version
- * stays the same.
- * @type {string}
- * @private
- */
-goog.testing.TestCase.setTimeoutAsString_ = String(goog.global.setTimeout);
 
 
 /**
@@ -557,25 +527,6 @@ goog.testing.TestCase.prototype.finalize = function() {
 
   this.tearDownPage();
 
-  var restoredSetTimeout =
-      goog.testing.TestCase.protectedSetTimeout_ == goog.global.setTimeout &&
-      goog.testing.TestCase.protectedClearTimeout_ == goog.global.clearTimeout;
-  if (!restoredSetTimeout && goog.testing.TestCase.IS_IE &&
-      String(goog.global.setTimeout) ==
-          goog.testing.TestCase.setTimeoutAsString_) {
-    // In strange cases, IE's value of setTimeout *appears* to change, but
-    // the string representation stays stable.
-    restoredSetTimeout = true;
-  }
-
-  if (!restoredSetTimeout) {
-    var message = 'ERROR: Test did not restore setTimeout and clearTimeout';
-    this.saveMessage(message);
-    var err = new goog.testing.TestCase.Error(this.name_, message);
-    this.result_.errors.push(err);
-  }
-  goog.global.clearTimeout = goog.testing.TestCase.protectedClearTimeout_;
-  goog.global.setTimeout = goog.testing.TestCase.protectedSetTimeout_;
   this.endTime_ = this.now();
   this.running = false;
   this.result_.runTime = this.endTime_ - this.startTime_;
@@ -765,7 +716,7 @@ goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
  * by the test to indicate it has finished.
  */
 goog.testing.TestCase.prototype.runTests = function() {
-  this.runSetUpPage_(this.execute);
+  goog.testing.Continuation_.run(this.runSetUpPage_(this.execute));
 };
 
 
@@ -778,7 +729,7 @@ goog.testing.TestCase.prototype.runTests = function() {
  */
 goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
   return new goog.Promise(function(resolve) {
-    this.runSetUpPage_(function() {
+    goog.testing.Continuation_.run(this.runSetUpPage_(function() {
       if (!this.prepareForRun_()) {
         resolve(this.result_);
         return;
@@ -787,20 +738,21 @@ goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
       this.saveMessage('Start');
       this.batchTime_ = this.now();
       this.runNextTestCallback_ = resolve;
-      this.runNextTest_();
-    });
+      goog.testing.Continuation_.run(this.runNextTest_());
+    }));
   }, this);
 };
 
 
 /**
  * Runs the setUpPage methods.
- * @param {!function(this:goog.testing.TestCase)} runTestsFn Callback to invoke
+ * @param {function(this:goog.testing.TestCase)} runTestsFn Callback to invoke
  *     after setUpPage has completed.
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
-  this.invokeTestFunction_(this.setUpPage, runTestsFn, function(e) {
+  return this.invokeTestFunction_(this.setUpPage, runTestsFn, function(e) {
     this.exceptionBeforeTest = e;
     runTestsFn.call(this);
   }, 'setUpPage');
@@ -820,33 +772,35 @@ goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
  * executes synchronously until the first promise is returned from a
  * test method (or until a resource limit is reached; see
  * {@link finishTestInvocation_}).
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.runNextTest_ = function() {
   this.curTest_ = this.next();
   if (!this.curTest_ || !this.running) {
     this.finalize();
-    this.runNextTestCallback_(this.result_);
-    return;
+    return new goog.testing.Continuation_(
+        goog.bind(this.runNextTestCallback_, this, this.result_));
   }
   this.result_.runCount++;
   this.log('Running test: ' + this.curTest_.name);
   if (this.maybeFailTestEarly(this.curTest_)) {
-    this.finishTestInvocation_();
-    return;
+    return new goog.testing.Continuation_(
+        goog.bind(this.finishTestInvocation_, this));
   }
   goog.testing.TestCase.currentTestName = this.curTest_.name;
-  this.invokeTestFunction_(
+  return this.invokeTestFunction_(
       this.setUp, this.safeRunTest_, this.safeTearDown_, 'setUp');
 };
 
 
 /**
  * Calls the given test function, handling errors appropriately.
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.safeRunTest_ = function() {
-  this.invokeTestFunction_(
+  return this.invokeTestFunction_(
       goog.bind(this.curTest_.ref, this.curTest_.scope), this.safeTearDown_,
       this.safeTearDown_, this.curTest_.name);
 };
@@ -855,13 +809,14 @@ goog.testing.TestCase.prototype.safeRunTest_ = function() {
 /**
  * Calls {@link tearDown}, handling errors appropriately.
  * @param {*=} opt_error Error associated with the test, if any.
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
   if (arguments.length == 1) {
     this.doError(this.curTest_, opt_error);
   }
-  this.invokeTestFunction_(
+  return this.invokeTestFunction_(
       this.tearDown, this.finishTestInvocation_, this.finishTestInvocation_,
       'tearDown');
 };
@@ -886,9 +841,10 @@ goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
  * the TestCase instance as the method receiver.
  *
  * @param {function()} fn The function to call.
- * @param {function()} onSuccess Success callback.
- * @param {function(*)} onFailure Failure callback.
+ * @param {function(): (?goog.testing.Continuation_|undefined)} onSuccess
+ * @param {function(*): (?goog.testing.Continuation_|undefined)} onFailure
  * @param {string} fnName Name of the function being invoked e.g. 'setUp'.
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.invokeTestFunction_ = function(
@@ -911,27 +867,29 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
           function() {
             self.resetBatchTimeAfterPromise_();
             if (testCase.thrownAssertionExceptions_.length == 0) {
-              onSuccess.call(self);
+              goog.testing.Continuation_.run(onSuccess.call(self));
             } else {
-              onFailure.call(
+              goog.testing.Continuation_.run(onFailure.call(
                   self,
-                  testCase.reportUnpropagatedAssertionExceptions_(fnName));
+                  testCase.reportUnpropagatedAssertionExceptions_(fnName)));
             }
           },
           function(e) {
             self.resetBatchTimeAfterPromise_();
-            onFailure.call(self, e);
+            goog.testing.Continuation_.run(onFailure.call(self, e));
           });
+      return null;
     } else {
       if (this.thrownAssertionExceptions_.length == 0) {
-        onSuccess.call(this);
+        return new goog.testing.Continuation_(goog.bind(onSuccess, this));
       } else {
-        onFailure.call(
-            this, this.reportUnpropagatedAssertionExceptions_(fnName));
+        return new goog.testing.Continuation_(goog.bind(
+            onFailure, this,
+            this.reportUnpropagatedAssertionExceptions_(fnName)));
       }
     }
   } catch (e) {
-    onFailure.call(this, e);
+    return new goog.testing.Continuation_(goog.bind(onFailure, this, e));
   }
 };
 
@@ -973,6 +931,7 @@ goog.testing.TestCase.prototype.resetBatchTimeAfterPromise_ = function() {
  * Finishes up bookkeeping for the current test function, and schedules
  * the next test function to run, either immediately or asychronously.
  * @param {*=} opt_error Optional error resulting from the test invocation.
+ * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
@@ -990,13 +949,12 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
 
   // If the test case has consumed too much time or stack space,
   // yield to avoid blocking the browser. Otherwise, proceed to the next test.
-  if (this.depth_ > goog.testing.TestCase.MAX_STACK_DEPTH_ ||
-      this.now() - this.batchTime_ > goog.testing.TestCase.maxRunTime) {
+  if (this.now() - this.batchTime_ > goog.testing.TestCase.maxRunTime) {
     this.saveMessage('Breaking async');
     this.timeout(goog.bind(this.startNextBatch_, this), 0);
+    return null;
   } else {
-    ++this.depth_;
-    this.runNextTest_();
+    return new goog.testing.Continuation_(goog.bind(this.runNextTest_, this));
   }
 };
 
@@ -1007,8 +965,7 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
  */
 goog.testing.TestCase.prototype.startNextBatch_ = function() {
   this.batchTime_ = this.now();
-  this.depth_ = 0;
-  this.runNextTest_();
+  goog.testing.Continuation_.run(this.runNextTest_());
 };
 
 
@@ -1338,7 +1295,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
     this.runNextTestCallback_ = goog.nullFunction;
     // Kick off the tests. runNextTest_ will schedule all of the tests,
     // using a mixture of synchronous and asynchronous strategies.
-    this.runNextTest_();
+    goog.testing.Continuation_.run(this.runNextTest_());
   }
 };
 
@@ -1556,6 +1513,12 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
     }
   } else {
     errMsg = 'An unknown error occurred';
+  }
+  if (stack) {
+    // Remove extra goog.testing.TestCase frames from the end.
+    stack = stack.replace(
+        /\n.*goog\.testing\.TestCase\.(prototype\.)?invokeTestFunction[^\0]*/m,
+        '');
   }
   var err = new goog.testing.TestCase.Error(name, errMsg, stack);
 
@@ -1911,4 +1874,26 @@ goog.testing.TestCase.Error.prototype.toObject_ = function() {
     'message': this.message,
     'stacktrace': this.stack || ''
   };
+};
+
+
+
+/**
+ * @constructor
+ * @param {!function(): (?goog.testing.Continuation_|undefined)} fn
+ * @private
+ */
+goog.testing.Continuation_ = function(fn) {
+  /** @private @const */
+  this.fn_ = fn;
+};
+
+
+/** @param {?goog.testing.Continuation_|undefined} continuation */
+goog.testing.Continuation_.run = function(continuation) {
+  var fn = continuation && continuation.fn_;
+  while (fn) {
+    continuation = fn();
+    fn = continuation && continuation.fn_;
+  }
 };

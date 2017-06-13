@@ -285,6 +285,38 @@ function testGroupingParse() {
   assertEquals(1234567890, value);
 }
 
+function testParsingStop() {
+  var pos = [0];
+  var fmt = new goog.i18n.NumberFormat('###0.###E0');
+
+  assertEquals(123.457, fmt.parse('123.457', pos));
+  assertEquals(7, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(123.457, fmt.parse('+123.457', pos));
+  assertEquals(8, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(123, fmt.parse('123 cars in the parking lot.', pos));
+  assertEquals(3, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(12, fmt.parse('12 + 12', pos));
+  assertEquals(2, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(12, fmt.parse('12+12', pos));
+  assertEquals(2, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(120, fmt.parse('1.2E+2', pos));
+  assertEquals(6, pos[0]);
+
+  pos[0] = 0;
+  assertEquals(120, fmt.parse('1.2E+2-12', pos));
+  assertEquals(6, pos[0]);
+}
+
 function testBasicFormat() {
   var fmt = new goog.i18n.NumberFormat('0.0000');
   var str = fmt.format(123.45789179565757);

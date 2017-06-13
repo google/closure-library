@@ -87,10 +87,11 @@ goog.testing.TestRunner = function() {
   this.strict_ = true;
 
   /**
-   * An id assigned by the test driver. Throw if it changes.
-   * @private {?number}
+   * An id unique to this runner. Checked by the server during polling to
+   * verify that the page was not reloaded.
+   * @private {!string}
    */
-  this.uuid_ = null;
+  this.uniqueId_ = Math.random() + '';
 };
 
 /**
@@ -103,15 +104,11 @@ goog.testing.TestRunner.prototype.getSearchString = function() {
 };
 
 /**
- * Extracts the uuid from url.
- * @return {?number}
+ * Returns the unique id for this test page.
+ * @return {!string}
  */
-goog.testing.TestRunner.prototype.getUuid = function() {
-  var m = this.getSearchString().match(/uuid=(\d+\.\d*|\.?\d+)/);
-  if (m && m[1]) {
-    return parseFloat(m[1]);
-  }
-  return null;
+goog.testing.TestRunner.prototype.getUniqueId = function() {
+  return this.uniqueId_;
 };
 
 /**
@@ -123,7 +120,6 @@ goog.testing.TestRunner.prototype.initialize = function(testCase) {
     throw Error('The test runner is already waiting for a test to complete');
   }
   this.testCase = testCase;
-  this.uuid_ = this.getUuid();
   this.initialized = true;
 };
 
@@ -161,18 +157,9 @@ goog.testing.TestRunner.prototype.isInitialized = function() {
 /**
  * Returns true if the test runner is finished.
  * Used by Selenium Hooks.
- * @param {?number=} opt_uuid
  * @return {boolean} Whether the test runner is active.
  */
-goog.testing.TestRunner.prototype.isFinished = function(opt_uuid) {
-  if (opt_uuid && !this.uuid_) {
-    this.uuid_ = opt_uuid;
-  } else {
-    if (this.uuid_ != opt_uuid) {
-      throw new Error(
-          'Test id mismatch: did the test navigate or reload the page?');
-    }
-  }
+goog.testing.TestRunner.prototype.isFinished = function() {
   return this.errors.length > 0 ||
       this.initialized && !!this.testCase && this.testCase.started &&
       !this.testCase.running;

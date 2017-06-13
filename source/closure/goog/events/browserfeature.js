@@ -21,6 +21,8 @@
 goog.provide('goog.events.BrowserFeature');
 
 goog.require('goog.userAgent');
+goog.scope(function() {
+
 
 
 /**
@@ -80,5 +82,41 @@ goog.events.BrowserFeature = {
           'ontouchstart' in document.documentElement) ||
        // IE10 uses non-standard touch events, so it has a different check.
        !!(goog.global['navigator'] &&
-          goog.global['navigator']['msMaxTouchPoints']))
+          goog.global['navigator']['msMaxTouchPoints'])),
+
+  /**
+   * Whether addEventListener supports {passive: true}.
+   * https://developers.google.com/web/updates/2016/06/passive-event-listeners
+   */
+  PASSIVE_EVENTS: purify(function() {
+    // If we're in a web worker or other custom environment, we can't tell.
+    if (!goog.global.addEventListener || !Object.defineProperty) {  // IE 8
+      return false;
+    }
+
+    var passive = false;
+    var options = Object.defineProperty({}, 'passive', {
+      get: function() {
+        passive = true;
+      }
+    });
+    goog.global.addEventListener('test', null, options);
+    goog.global.removeEventListener('test', null, options);
+
+    return passive;
+  })
 };
+
+
+/**
+ * Tricks Closure Compiler into believing that a function is pure.  The compiler
+ * assumes that any `valueOf` function is pure, without analyzing its contents.
+ *
+ * @param {function(): T} fn
+ * @return {T}
+ * @template T
+ */
+function purify(fn) {
+  return ({valueOf: fn}).valueOf();
+}
+});  // goog.scope

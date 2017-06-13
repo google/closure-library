@@ -34,7 +34,6 @@ var propertyReplacer = new goog.testing.PropertyReplacer();
 var jsonParse;
 var jsonStringify;
 var googJsonParse;
-var googJsonUnsafeParse;
 var googJsonSerialize;
 
 function isIe7() {
@@ -43,11 +42,9 @@ function isIe7() {
 
 function setUp() {
   googJsonParse = goog.testing.recordFunction(goog.json.parse);
-  googJsonUnsafeParse = goog.testing.recordFunction(goog.json.unsafeParse);
   googJsonSerialize = goog.testing.recordFunction(goog.json.serialize);
 
   propertyReplacer.set(goog.json, 'parse', googJsonParse);
-  propertyReplacer.set(goog.json, 'unsafeParse', googJsonUnsafeParse);
   propertyReplacer.set(goog.json, 'serialize', googJsonSerialize);
 
   jsonParse =
@@ -70,26 +67,9 @@ function parseJson() {
   assertObjectEquals({'a': 2}, obj);
 }
 
-function unsafeParseJson() {
-  var obj = goog.json.hybrid.unsafeParse('{"a": 2}');
-  assertObjectEquals({'a': 2}, obj);
-}
-
 function serializeJson() {
   var str = goog.json.hybrid.stringify({b: 2});
   assertEquals('{"b":2}', str);
-}
-
-function testUnsafeParseNativeJsonPresent() {
-  // No native JSON in IE7
-  if (isIe7()) {
-    return;
-  }
-
-  unsafeParseJson();
-  assertEquals(1, jsonParse.getCallCount());
-  assertEquals(0, googJsonParse.getCallCount());
-  assertEquals(0, googJsonUnsafeParse.getCallCount());
 }
 
 function testParseNativeJsonPresent() {
@@ -98,10 +78,9 @@ function testParseNativeJsonPresent() {
     return;
   }
 
-  unsafeParseJson();
+  parseJson();
   assertEquals(1, jsonParse.getCallCount());
   assertEquals(0, googJsonParse.getCallCount());
-  assertEquals(0, googJsonUnsafeParse.getCallCount());
 }
 
 function testStringifyNativeJsonPresent() {
@@ -124,7 +103,6 @@ function testParseNativeJsonAbsent() {
   assertEquals(0, jsonParse.getCallCount());
   assertEquals(0, jsonStringify.getCallCount());
   assertEquals(1, googJsonParse.getCallCount());
-  assertEquals(0, googJsonUnsafeParse.getCallCount());
 }
 
 function testStringifyNativeJsonAbsent() {
@@ -140,14 +118,6 @@ function testParseCurrentBrowserParse() {
   parseJson();
   assertEquals(isIe7() ? 0 : 1, jsonParse.getCallCount());
   assertEquals(isIe7() ? 1 : 0, googJsonParse.getCallCount());
-  assertEquals(0, googJsonUnsafeParse.getCallCount());
-}
-
-function testParseCurrentBrowserUnsafeParse() {
-  unsafeParseJson();
-  assertEquals(isIe7() ? 0 : 1, jsonParse.getCallCount());
-  assertEquals(0, googJsonParse.getCallCount());
-  assertEquals(isIe7() ? 1 : 0, googJsonUnsafeParse.getCallCount());
 }
 
 function testParseCurrentBrowserStringify() {
