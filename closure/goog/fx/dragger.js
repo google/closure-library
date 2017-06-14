@@ -469,7 +469,7 @@ goog.fx.Dragger.prototype.setupDragHandlers = function() {
 
   this.eventHandler_.listen(
       doc, [goog.events.EventType.TOUCHMOVE, goog.events.EventType.MOUSEMOVE],
-      this.handleMove_, useCapture);
+      this.handleMove_, {capture: useCapture, passive: false});
   this.eventHandler_.listen(
       doc, [goog.events.EventType.TOUCHEND, goog.events.EventType.MOUSEUP],
       this.endDrag, useCapture);
