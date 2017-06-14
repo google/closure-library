@@ -5,7 +5,7 @@
 # TODO(joeltine): Make strictMissingRequire an error when 
 # @suppress {missingRequire} works for it.
 
-java -Xmx1G -jar ../closure-compiler/target/closure-compiler-1.0-SNAPSHOT.jar \
+java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   -O ADVANCED \
   --warning_level VERBOSE \
   --jscomp_error='*' \
