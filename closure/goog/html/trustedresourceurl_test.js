@@ -161,6 +161,17 @@ function testFromConstants() {
 }
 
 
+function testFormatWithParams() {
+  var url = goog.html.TrustedResourceUrl.formatWithParams(
+      goog.string.Const.from('https://example.com/'), {}, {'a': 'x'});
+  assertEquals('https://example.com/?a=x', url.getTypedStringValue());
+  url = goog.html.TrustedResourceUrl.formatWithParams(
+      goog.string.Const.from('https://example.com/%{file}'), {'file': 'abc'},
+      {'b': 1, 'c': null, 'd': undefined});
+  assertEquals('https://example.com/abc?b=1', url.getTypedStringValue());
+}
+
+
 /** @suppress {checkTypes} */
 function testUnwrap() {
   var privateFieldName =
