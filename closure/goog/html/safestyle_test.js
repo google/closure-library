@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeStyleTest');
 
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
@@ -162,6 +163,40 @@ function testCreate_allowsTranslate() {
 }
 
 
+function testCreate_allowsUrl() {
+  assertCreateEquals(
+      'background:url(http://example.com);',
+      {'background': 'url(http://example.com)'});
+  assertCreateEquals(
+      'background:url("http://example.com");',
+      {'background': 'url("http://example.com")'});
+  assertCreateEquals(
+      'background:url( \'http://example.com\' );',
+      {'background': 'url( \'http://example.com\' )'});
+  assertCreateEquals(
+      'background:url(http://example.com) red;',
+      {'background': 'url(http://example.com) red'});
+  assertCreateEquals(
+      'background:url(' + goog.html.SafeUrl.INNOCUOUS_STRING + ');',
+      {'background': 'url(javascript:alert)'});
+  assertCreateEquals(
+      'background:url(")");',  // Expected.
+      {'background': 'url(")")'});
+  assertCreateEquals(
+      'background:url(" ");',  // Expected.
+      {'background': 'url(" ")'});
+  assertThrows(function() {
+    goog.html.SafeStyle.create({'background': 'url(\'http://example.com\'"")'});
+  });
+  assertThrows(function() {
+    goog.html.SafeStyle.create({'background': 'url("\\\\")'});
+  });
+  assertThrows(function() {
+    goog.html.SafeStyle.create({'background': 'url(a""b)'});
+  });
+}
+
+
 function testCreate_throwsOnForbiddenCharacters() {
   assertThrows(function() { goog.html.SafeStyle.create({'<': '0'}); });
   assertThrows(function() {
@@ -184,8 +219,7 @@ function testCreate_values() {
   }
 
   var invalids = [
-    '', 'expression(alert(1))', 'url(i.png)', '"', '"\'"\'',
-    goog.string.Const.from('red;')
+    '', 'expression(alert(1))', '"', '"\'"\'', goog.string.Const.from('red;')
   ];
   for (var i = 0; i < invalids.length; i++) {
     var value = invalids[i];

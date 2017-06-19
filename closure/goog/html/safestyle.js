@@ -22,6 +22,7 @@ goog.provide('goog.html.SafeStyle');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
@@ -335,7 +336,8 @@ goog.html.SafeStyle.PropertyMap;
  * @param {goog.html.SafeStyle.PropertyMap} map Mapping of property names to
  *     their values, for example {'margin': '1px'}. Names must consist of
  *     [-_a-zA-Z0-9]. Values might be strings consisting of
- *     [-,.'"%_!# a-zA-Z0-9], where " and ' must be properly balanced.
+ *     [-,.'"%_!# a-zA-Z0-9], where " and ' must be properly balanced. We also
+ *     allow simple functions like rgb() and url() which sanitizes its contents.
  *     Other values must be wrapped in goog.string.Const. Null value causes
  *     skipping the property.
  * @return {!goog.html.SafeStyle}
@@ -359,14 +361,21 @@ goog.html.SafeStyle.create = function(map) {
       // These characters can be used to change context and we don't want that
       // even with const values.
       goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
-    } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
-      goog.asserts.fail(
-          'String value allows only [-,."\'%_!# a-zA-Z0-9] and simple ' +
-          'functions, got: ' + value);
-      value = goog.html.SafeStyle.INNOCUOUS_STRING;
-    } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
-      goog.asserts.fail('String value requires balanced quotes, got: ' + value);
-      value = goog.html.SafeStyle.INNOCUOUS_STRING;
+    } else {
+      value = String(value);
+      if (!goog.html.SafeStyle.VALUE_RE_.test(
+              value.replace(goog.html.SafeUrl.URL_RE_, 'url'))) {
+        goog.asserts.fail(
+            'String value allows only [-,."\'%_!# a-zA-Z0-9] and simple ' +
+            'functions, got: ' + value);
+        value = goog.html.SafeStyle.INNOCUOUS_STRING;
+      } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
+        goog.asserts.fail(
+            'String value requires balanced quotes, got: ' + value);
+        value = goog.html.SafeStyle.INNOCUOUS_STRING;
+      } else {
+        value = goog.html.SafeStyle.sanitizeUrl_(value);
+      }
     }
     style += name + ':' + value + ';';
   }
@@ -423,6 +432,50 @@ goog.html.SafeStyle.VALUE_RE_ = new RegExp(
     '^([-,."\'%_!# a-zA-Z0-9]+|(hsl|hsla|rgb|rgba' +
     '|(rotate|scale|translate)(X|Y|Z|3d)?)' +
     '\\([-0-9a-z.%, ]+\\))$');
+
+
+/**
+ * Regular expression for url(). We support URLs allowed by
+ * https://www.w3.org/TR/css-syntax-3/#url-token-diagram without using escape
+ * sequences. Use percent-encoding if you need to use special characters like
+ * backslash.
+ * @private @const {!RegExp}
+ */
+goog.html.SafeUrl.URL_RE_ = new RegExp(
+    '\\b(url\\([ \t\n]*)(' +
+        '\'[ -&(-\\[\\]-~]*\'' +  // Printable characters except ' and \.
+        '|"[ !#-\\[\\]-~]*"' +    // Printable characters except " and \.
+        '|[!#-&*-\\[\\]-~]*' +    // Printable characters except [ "'()\\].
+        ')([ \t\n]*\\))',
+    'g');
+
+
+/**
+ * Sanitize URLs inside url().
+ *
+ * NOTE: We could also consider using CSS.escape once that's available in the
+ * browsers. However, loosely matching URL e.g. with url\(.*\) and then escaping
+ * the contents would result in a slightly different language than CSS leading
+ * to confusion of users. E.g. url(")") is valid in CSS but it would be invalid
+ * as seen by our parser. On the other hand, url(\) is invalid in CSS but our
+ * parser would be fine with it.
+ *
+ * @param {string} value Untrusted CSS property value.
+ * @return {string}
+ * @private
+ */
+goog.html.SafeStyle.sanitizeUrl_ = function(value) {
+  return value.replace(
+      goog.html.SafeUrl.URL_RE_, function(match, before, url, after) {
+        var quote = '';
+        url = url.replace(/^(['"])(.*)\1$/, function(match, start, inside) {
+          quote = start;
+          return inside;
+        });
+        var sanitized = goog.html.SafeUrl.sanitize(url).getTypedStringValue();
+        return before + quote + sanitized + quote + after;
+      });
+};
 
 
 /**

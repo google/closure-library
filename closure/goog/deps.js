@@ -507,8 +507,8 @@ goog.addDependency('html/safehtmlformatter.js', ['goog.html.SafeHtmlFormatter'],
 goog.addDependency('html/safehtmlformatter_test.js', ['goog.html.safeHtmlFormatterTest'], ['goog.html.SafeHtml', 'goog.html.SafeHtmlFormatter', 'goog.string', 'goog.testing.jsunit'], {});
 goog.addDependency('html/safescript.js', ['goog.html.SafeScript'], ['goog.asserts', 'goog.string.Const', 'goog.string.TypedString'], {});
 goog.addDependency('html/safescript_test.js', ['goog.html.safeScriptTest'], ['goog.html.SafeScript', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 'goog.asserts', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
-goog.addDependency('html/safestyle_test.js', ['goog.html.safeStyleTest'], ['goog.html.SafeStyle', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
+goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 'goog.asserts', 'goog.html.SafeUrl', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
+goog.addDependency('html/safestyle_test.js', ['goog.html.safeStyleTest'], ['goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/safestylesheet.js', ['goog.html.SafeStyleSheet'], ['goog.array', 'goog.asserts', 'goog.html.SafeStyle', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
 goog.addDependency('html/safestylesheet_test.js', ['goog.html.safeStyleSheetTest'], ['goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
