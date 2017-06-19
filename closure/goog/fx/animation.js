@@ -126,6 +126,14 @@ goog.inherits(goog.fx.Animation, goog.fx.TransitionBase);
 
 
 /**
+ * @return {number} The duration of this animation in milliseconds.
+ */
+goog.fx.Animation.prototype.getDuration = function() {
+  return this.duration;
+};
+
+
+/**
  * Sets whether the animation should use "right" rather than "left" to position
  * elements.  This is a temporary flag to allow clients to transition
  * to the new component at their convenience.  At some point "right" will be
