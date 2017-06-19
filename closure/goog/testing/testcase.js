@@ -270,6 +270,15 @@ goog.testing.TestCase.protectedClearTimeout_ = goog.global.clearTimeout;
  */
 goog.testing.TestCase.protectedDate_ = Date;
 
+/**
+ * Save a reference to {@code window.performance}, so any code that overrides
+ * the default behavior doesn't affect our runner.
+ * @type {?Performance}
+ * @private
+ */
+goog.testing.TestCase.protectedPerformance_ =
+    window.performance && window.performance.now ? performance : null;
+
 
 /**
  * TODO(user) replace this with prototype.currentTest.
@@ -782,6 +791,7 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
     return new goog.testing.Continuation_(
         goog.bind(this.runNextTestCallback_, this, this.result_));
   }
+  this.curTest_.started();
   this.result_.runCount++;
   this.log('Running test: ' + this.curTest_.name);
   if (this.maybeFailTestEarly(this.curTest_)) {
@@ -1347,11 +1357,24 @@ goog.testing.TestCase.prototype.clearTimeout = function(id) {
 
 
 /**
- * @return {number} The current time in milliseconds, don't use goog.now as some
- *     tests override it.
+ * @return {number} The current time in milliseconds.
  * @protected
  */
 goog.testing.TestCase.prototype.now = function() {
+  return goog.testing.TestCase.now();
+};
+
+
+/**
+ * @return {number} The current time in milliseconds.
+ * @protected
+ */
+goog.testing.TestCase.now = function() {
+  // don't use goog.now as some tests override it.
+  if (goog.testing.TestCase.protectedPerformance_) {
+    return goog.testing.TestCase.protectedPerformance_.now();
+  }
+  // Fallback for IE8
   // Cannot use "new goog.testing.TestCase.protectedDate_()" due to b/8323223.
   var protectedDate = goog.testing.TestCase.protectedDate_;
   return new protectedDate().getTime();
@@ -1415,7 +1438,7 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
   this.saveMessage(message);
   this.log(message);
   if (this.testDone_) {
-    this.testDone_(test, []);
+    this.doTestDone_(test, []);
   }
 };
 
@@ -1459,7 +1482,7 @@ goog.testing.TestCase.prototype.doError = function(test, opt_e) {
     for (var i = 0; i < results.length; i++) {
       errMsgs.push(results[i].toString());
     }
-    this.testDone_(test, errMsgs);
+    this.doTestDone_(test, errMsgs);
   }
 };
 
@@ -1562,6 +1585,20 @@ goog.testing.TestCase.Test = function(name, ref, opt_scope) {
    * @type {Object}
    */
   this.scope = opt_scope || null;
+
+  /**
+   * Timestamp just before the test begins execution.
+   * @type {number}
+   * @private
+   */
+  this.startTime_;
+
+  /**
+   * Timestamp just after the test ends execution.
+   * @type {number}
+   * @private
+   */
+  this.stoppedTime_;
 };
 
 
@@ -1573,6 +1610,27 @@ goog.testing.TestCase.Test.prototype.execute = function() {
   this.ref.call(this.scope);
 };
 
+/**
+ * Sets the start time
+ */
+goog.testing.TestCase.Test.prototype.started = function() {
+  this.startTime_ = goog.testing.TestCase.now();
+};
+
+/**
+ * Sets the stop time
+ */
+goog.testing.TestCase.Test.prototype.stopped = function() {
+  this.stoppedTime_ = goog.testing.TestCase.now();
+};
+
+/**
+ * Returns the runtime for this test function
+ * @return {number} milliseconds takenn by the test.
+ */
+goog.testing.TestCase.Test.prototype.getElapsedTime = function() {
+  return this.stoppedTime_ - this.startTime_;
+};
 
 
 /**
@@ -1696,6 +1754,18 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
 goog.testing.TestCase.prototype.setTestDoneCallback = function(testDone) {
   this.testDone_ = testDone;
 };
+
+
+/**
+ * @param {goog.testing.TestCase.Test} test
+ * @param {!Array<string>} errMsgs
+ * @private
+ */
+goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
+  test.stopped();
+  this.testDone_(test, errMsgs);
+};
+
 
 /** Initializes the TestCase.
  * @param {goog.testing.TestCase} testCase The test case to install.

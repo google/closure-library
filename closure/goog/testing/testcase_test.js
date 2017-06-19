@@ -862,6 +862,7 @@ function testCurrentTestNamePromise() {
 
 var testDoneTestsSeen = [];
 var testDoneErrorsSeen = {};
+var testDoneRuntime = {};
 /**
  * @param {goog.testing.TestCase} test
  * @param {Array<string>} errors
@@ -872,6 +873,7 @@ function storeCallsAndErrors(test, errors) {
   for (var i = 0; i < errors.length; i++) {
     testDoneErrorsSeen[test.name].push(errors[i].split('\n')[0]);
   }
+  testDoneRuntime[test.name] = test.getElapsedTime();
 }
 /**
  * @param {Array<goog.testing.TestCase>} expectedTests
@@ -882,12 +884,14 @@ function assertStoreCallsAndErrors(expectedTests, expectedErrors) {
   for (var i = 0; i < expectedTests.length; i++) {
     var name = expectedTests[i];
     assertArrayEquals(expectedErrors, testDoneErrorsSeen[name]);
+    assertEquals(typeof testDoneRuntime[testDoneTestsSeen[i]], 'number');
   }
 }
-/*
+
 function testCallbackToTestDoneOk() {
   testDoneTestsSeen = [];
   testDoneErrorsSeen = {};
+  testDoneRuntime = {};
   var testCase = new goog.testing.TestCase('fooCase');
   testCase.addNewTest('foo', okGoogPromise);
   testCase.setTestDoneCallback(storeCallsAndErrors);
@@ -899,6 +903,7 @@ function testCallbackToTestDoneOk() {
 function testCallbackToTestDoneFail() {
   testDoneTestsSeen = [];
   testDoneErrorsSeen = [];
+  testDoneRuntime = {};
   var testCase = new goog.testing.TestCase('fooCase');
   testCase.addNewTest('foo', failGoogPromise);
   testCase.setTestDoneCallback(storeCallsAndErrors);
@@ -906,7 +911,7 @@ function testCallbackToTestDoneFail() {
     assertStoreCallsAndErrors(['foo'], ['ERROR in foo']);
   });
 }
-*/
+
 /**
  * @return {!Promise<null>}
  */
