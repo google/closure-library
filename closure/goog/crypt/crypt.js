@@ -33,7 +33,7 @@ goog.crypt.stringToByteArray = function(str) {
   var output = [], p = 0;
   for (var i = 0; i < str.length; i++) {
     var c = str.charCodeAt(i);
-    while (c > 0xff) {
+    if (c > 0xff) {
       output[p++] = c & 0xff;
       c >>= 8;
     }
