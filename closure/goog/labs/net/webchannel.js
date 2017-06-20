@@ -121,7 +121,11 @@ goog.net.WebChannel = function() {};
  *
  * backgroundChannelTest: whether to run the channel test (detecting networking
  * conditions) as a background process so the OPEN event will be fired sooner
- * to reduce the initial handshake delay. This option defaults to false.
+ * to reduce the initial handshake delay. This option defaults to true.
+ *
+ * fastHandshake: experimental feature to speed up the initial handshake, e.g.
+ * leveraging QUIC 0-RTT, in-band version negotiation. This option defaults
+ * to false.
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
@@ -134,7 +138,8 @@ goog.net.WebChannel = function() {};
  *   sendRawJson: (boolean|undefined),
  *   httpSessionIdParam: (string|undefined),
  *   httpHeadersOverwriteParam: (string|undefined),
- *   backgroundChannelTest: (boolean|undefined)
+ *   backgroundChannelTest: (boolean|undefined),
+ *   fastHandshake: (boolean|undefined)
  * }}
  */
 goog.net.WebChannel.Options;

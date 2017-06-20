@@ -376,7 +376,16 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.backgroundChannelTest_ =
-      (opt_options && opt_options.backgroundChannelTest) || false;
+      opt_options && goog.isDef(opt_options.backgroundChannelTest) ?
+      opt_options.backgroundChannelTest :
+      true;
+
+  /**
+   * Whether to turn on the fast handshake behavior.
+   *
+   * @private {boolean}
+   */
+  this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
