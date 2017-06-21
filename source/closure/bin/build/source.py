@@ -28,7 +28,7 @@ _BASE_REGEX_STRING = r'^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 _MODULE_REGEX = re.compile(_BASE_REGEX_STRING % 'module')
 _PROVIDE_REGEX = re.compile(_BASE_REGEX_STRING % 'provide')
 
-_REQUIRE_REGEX_STRING = (r'^\s*(?:(?:var|let|const)\s+[a-zA-Z_$][a-zA-Z0-9$_]*'
+_REQUIRE_REGEX_STRING = (r'^\s*(?:(?:var|let|const)\s+[a-zA-Z0-9$_,:{}\s]*'
                          r'\s*=\s*)?goog\.require\(\s*[\'"](.+)[\'"]\s*\)')
 _REQUIRES_REGEX = re.compile(_REQUIRE_REGEX_STRING)
 

@@ -31,14 +31,17 @@
 // clang-format off
 
 goog.provide('goog.i18n.NumberFormatSymbols');
+goog.provide('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_af');
 goog.provide('goog.i18n.NumberFormatSymbols_am');
 goog.provide('goog.i18n.NumberFormatSymbols_ar');
+goog.provide('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DZ');
 goog.provide('goog.i18n.NumberFormatSymbols_az');
 goog.provide('goog.i18n.NumberFormatSymbols_be');
 goog.provide('goog.i18n.NumberFormatSymbols_bg');
 goog.provide('goog.i18n.NumberFormatSymbols_bn');
+goog.provide('goog.i18n.NumberFormatSymbols_bn_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_br');
 goog.provide('goog.i18n.NumberFormatSymbols_bs');
 goog.provide('goog.i18n.NumberFormatSymbols_ca');
@@ -67,6 +70,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_es_US');
 goog.provide('goog.i18n.NumberFormatSymbols_et');
 goog.provide('goog.i18n.NumberFormatSymbols_eu');
 goog.provide('goog.i18n.NumberFormatSymbols_fa');
+goog.provide('goog.i18n.NumberFormatSymbols_fa_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_fi');
 goog.provide('goog.i18n.NumberFormatSymbols_fil');
 goog.provide('goog.i18n.NumberFormatSymbols_fr');
@@ -102,11 +106,14 @@ goog.provide('goog.i18n.NumberFormatSymbols_ml');
 goog.provide('goog.i18n.NumberFormatSymbols_mn');
 goog.provide('goog.i18n.NumberFormatSymbols_mo');
 goog.provide('goog.i18n.NumberFormatSymbols_mr');
+goog.provide('goog.i18n.NumberFormatSymbols_mr_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ms');
 goog.provide('goog.i18n.NumberFormatSymbols_mt');
 goog.provide('goog.i18n.NumberFormatSymbols_my');
+goog.provide('goog.i18n.NumberFormatSymbols_my_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_nb');
 goog.provide('goog.i18n.NumberFormatSymbols_ne');
+goog.provide('goog.i18n.NumberFormatSymbols_ne_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_nl');
 goog.provide('goog.i18n.NumberFormatSymbols_no');
 goog.provide('goog.i18n.NumberFormatSymbols_no_NO');
@@ -208,6 +215,29 @@ goog.i18n.NumberFormatSymbols_ar = {
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0 %',
   CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'EGP'
+};
+
+
+/**
+ * Number formatting symbols for locale ar_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ar_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '‎%‎',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '‎+',
+  MINUS_SIGN: '‎-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'ليس رقمًا',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤ #,##0.00',
   DEF_CURRENCY_CODE: 'EGP'
 };
 
@@ -322,6 +352,29 @@ goog.i18n.NumberFormatSymbols_bn = {
   DECIMAL_PATTERN: '#,##,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##,##0.00¤',
+  DEF_CURRENCY_CODE: 'BDT'
+};
+
+
+/**
+ * Number formatting symbols for locale bn_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_bn_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##,##0%',
   CURRENCY_PATTERN: '#,##,##0.00¤',
   DEF_CURRENCY_CODE: 'BDT'
 };
@@ -935,6 +988,29 @@ goog.i18n.NumberFormatSymbols_fa = {
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '% #,##0;% -#,##0',
   CURRENCY_PATTERN: '#,##0.00 ؜¤;؜-#,##0.00 ؜¤',
+  DEF_CURRENCY_CODE: 'IRR'
+};
+
+
+/**
+ * Number formatting symbols for locale fa_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_fa_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '‎+',
+  MINUS_SIGN: '‎−',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'ناعدد',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '‎¤ #,##0.00',
   DEF_CURRENCY_CODE: 'IRR'
 };
 
@@ -1745,6 +1821,29 @@ goog.i18n.NumberFormatSymbols_mr = {
 
 
 /**
+ * Number formatting symbols for locale mr_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_mr_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##,##0.###',
+  SCIENTIFIC_PATTERN: '[#E0]',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤#,##0.00',
+  DEF_CURRENCY_CODE: 'INR'
+};
+
+
+/**
  * Number formatting symbols for locale ms.
  * @enum {string}
  */
@@ -1814,6 +1913,29 @@ goog.i18n.NumberFormatSymbols_my = {
 
 
 /**
+ * Number formatting symbols for locale my_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_my_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'ဂဏန်းမဟုတ်သော',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'MMK'
+};
+
+
+/**
  * Number formatting symbols for locale nb.
  * @enum {string}
  */
@@ -1845,6 +1967,29 @@ goog.i18n.NumberFormatSymbols_ne = {
   GROUP_SEP: ',',
   PERCENT: '%',
   ZERO_DIGIT: '०',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤ #,##0.00',
+  DEF_CURRENCY_CODE: 'NPR'
+};
+
+
+/**
+ * Number formatting symbols for locale ne_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ne_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
   MINUS_SIGN: '-',
   EXP_SYMBOL: 'E',
@@ -2581,443 +2726,554 @@ goog.i18n.NumberFormatSymbols_zu = {
  * Selected number formatting symbols by locale.
  */
 goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en;
 
 if (goog.LOCALE == 'af') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_af;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_af;
 }
 
 if (goog.LOCALE == 'am') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_am;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_am;
 }
 
 if (goog.LOCALE == 'ar') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
 }
 
 if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_DZ;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_DZ;
 }
 
 if (goog.LOCALE == 'az') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_az;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_az;
 }
 
 if (goog.LOCALE == 'be') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_be;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_be;
 }
 
 if (goog.LOCALE == 'bg') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_bg;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_bg;
 }
 
 if (goog.LOCALE == 'bn') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_bn;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_bn_u_nu_latn;
 }
 
 if (goog.LOCALE == 'br') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_br;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_br;
 }
 
 if (goog.LOCALE == 'bs') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_bs;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_bs;
 }
 
 if (goog.LOCALE == 'ca') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ca;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ca;
 }
 
 if (goog.LOCALE == 'chr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_chr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_chr;
 }
 
 if (goog.LOCALE == 'cs') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_cs;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_cs;
 }
 
 if (goog.LOCALE == 'cy') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_cy;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_cy;
 }
 
 if (goog.LOCALE == 'da') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_da;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_da;
 }
 
 if (goog.LOCALE == 'de') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_de;
 }
 
 if (goog.LOCALE == 'de_AT' || goog.LOCALE == 'de-AT') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de_AT;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_de_AT;
 }
 
 if (goog.LOCALE == 'de_CH' || goog.LOCALE == 'de-CH') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de_CH;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_de_CH;
 }
 
 if (goog.LOCALE == 'el') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_el;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_el;
 }
 
 if (goog.LOCALE == 'en') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en;
 }
 
 if (goog.LOCALE == 'en_AU' || goog.LOCALE == 'en-AU') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_AU;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_AU;
 }
 
 if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_CA;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_CA;
 }
 
 if (goog.LOCALE == 'en_GB' || goog.LOCALE == 'en-GB') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_GB;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_GB;
 }
 
 if (goog.LOCALE == 'en_IE' || goog.LOCALE == 'en-IE') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_IE;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_IE;
 }
 
 if (goog.LOCALE == 'en_IN' || goog.LOCALE == 'en-IN') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_IN;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_IN;
 }
 
 if (goog.LOCALE == 'en_SG' || goog.LOCALE == 'en-SG') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_SG;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_SG;
 }
 
 if (goog.LOCALE == 'en_US' || goog.LOCALE == 'en-US') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_US;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_US;
 }
 
 if (goog.LOCALE == 'en_ZA' || goog.LOCALE == 'en-ZA') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_ZA;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_en_ZA;
 }
 
 if (goog.LOCALE == 'es') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_es;
 }
 
 if (goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_419;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_es_419;
 }
 
 if (goog.LOCALE == 'es_ES' || goog.LOCALE == 'es-ES') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_ES;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_es_ES;
 }
 
 if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_MX;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_es_MX;
 }
 
 if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_US;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_es_US;
 }
 
 if (goog.LOCALE == 'et') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_et;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_et;
 }
 
 if (goog.LOCALE == 'eu') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_eu;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_eu;
 }
 
 if (goog.LOCALE == 'fa') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fa;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fa_u_nu_latn;
 }
 
 if (goog.LOCALE == 'fi') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fi;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fi;
 }
 
 if (goog.LOCALE == 'fil') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fil;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fil;
 }
 
 if (goog.LOCALE == 'fr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fr;
 }
 
 if (goog.LOCALE == 'fr_CA' || goog.LOCALE == 'fr-CA') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr_CA;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fr_CA;
 }
 
 if (goog.LOCALE == 'ga') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ga;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ga;
 }
 
 if (goog.LOCALE == 'gl') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_gl;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_gl;
 }
 
 if (goog.LOCALE == 'gsw') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_gsw;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_gsw;
 }
 
 if (goog.LOCALE == 'gu') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_gu;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_gu;
 }
 
 if (goog.LOCALE == 'haw') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_haw;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_haw;
 }
 
 if (goog.LOCALE == 'he') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_he;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_he;
 }
 
 if (goog.LOCALE == 'hi') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_hi;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_hi;
 }
 
 if (goog.LOCALE == 'hr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_hr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_hr;
 }
 
 if (goog.LOCALE == 'hu') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_hu;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_hu;
 }
 
 if (goog.LOCALE == 'hy') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_hy;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_hy;
 }
 
 if (goog.LOCALE == 'id') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_id;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_id;
 }
 
 if (goog.LOCALE == 'in') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_in;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_in;
 }
 
 if (goog.LOCALE == 'is') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_is;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_is;
 }
 
 if (goog.LOCALE == 'it') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_it;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_it;
 }
 
 if (goog.LOCALE == 'iw') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_iw;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_iw;
 }
 
 if (goog.LOCALE == 'ja') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ja;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ja;
 }
 
 if (goog.LOCALE == 'ka') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ka;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ka;
 }
 
 if (goog.LOCALE == 'kk') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_kk;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_kk;
 }
 
 if (goog.LOCALE == 'km') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_km;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_km;
 }
 
 if (goog.LOCALE == 'kn') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_kn;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_kn;
 }
 
 if (goog.LOCALE == 'ko') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ko;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ko;
 }
 
 if (goog.LOCALE == 'ky') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ky;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ky;
 }
 
 if (goog.LOCALE == 'ln') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ln;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ln;
 }
 
 if (goog.LOCALE == 'lo') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_lo;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_lo;
 }
 
 if (goog.LOCALE == 'lt') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_lt;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_lt;
 }
 
 if (goog.LOCALE == 'lv') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_lv;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_lv;
 }
 
 if (goog.LOCALE == 'mk') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_mk;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_mk;
 }
 
 if (goog.LOCALE == 'ml') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ml;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ml;
 }
 
 if (goog.LOCALE == 'mn') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_mn;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_mn;
 }
 
 if (goog.LOCALE == 'mo') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_mo;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_mo;
 }
 
 if (goog.LOCALE == 'mr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_mr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_mr_u_nu_latn;
 }
 
 if (goog.LOCALE == 'ms') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ms;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ms;
 }
 
 if (goog.LOCALE == 'mt') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_mt;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_mt;
 }
 
 if (goog.LOCALE == 'my') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_my;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_my_u_nu_latn;
 }
 
 if (goog.LOCALE == 'nb') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nb;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_nb;
 }
 
 if (goog.LOCALE == 'ne') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ne;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ne_u_nu_latn;
 }
 
 if (goog.LOCALE == 'nl') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_nl;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_nl;
 }
 
 if (goog.LOCALE == 'no') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_no;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_no;
 }
 
 if (goog.LOCALE == 'no_NO' || goog.LOCALE == 'no-NO') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_no_NO;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_no_NO;
 }
 
 if (goog.LOCALE == 'or') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_or;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_or;
 }
 
 if (goog.LOCALE == 'pa') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pa;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_pa;
 }
 
 if (goog.LOCALE == 'pl') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pl;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_pl;
 }
 
 if (goog.LOCALE == 'pt') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_pt;
 }
 
 if (goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_BR;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_pt_BR;
 }
 
 if (goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pt_PT;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_pt_PT;
 }
 
 if (goog.LOCALE == 'ro') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ro;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ro;
 }
 
 if (goog.LOCALE == 'ru') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ru;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ru;
 }
 
 if (goog.LOCALE == 'sh') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sh;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sh;
 }
 
 if (goog.LOCALE == 'si') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_si;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_si;
 }
 
 if (goog.LOCALE == 'sk') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sk;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sk;
 }
 
 if (goog.LOCALE == 'sl') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sl;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sl;
 }
 
 if (goog.LOCALE == 'sq') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sq;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sq;
 }
 
 if (goog.LOCALE == 'sr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sr;
 }
 
 if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sr_Latn;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sr_Latn;
 }
 
 if (goog.LOCALE == 'sv') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sv;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sv;
 }
 
 if (goog.LOCALE == 'sw') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_sw;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_sw;
 }
 
 if (goog.LOCALE == 'ta') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ta;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ta;
 }
 
 if (goog.LOCALE == 'te') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_te;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_te;
 }
 
 if (goog.LOCALE == 'th') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_th;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_th;
 }
 
 if (goog.LOCALE == 'tl') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_tl;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_tl;
 }
 
 if (goog.LOCALE == 'tr') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_tr;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_tr;
 }
 
 if (goog.LOCALE == 'uk') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_uk;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_uk;
 }
 
 if (goog.LOCALE == 'ur') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ur;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ur;
 }
 
 if (goog.LOCALE == 'uz') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_uz;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_uz;
 }
 
 if (goog.LOCALE == 'vi') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_vi;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_vi;
 }
 
 if (goog.LOCALE == 'zh') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zh;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_zh;
 }
 
 if (goog.LOCALE == 'zh_CN' || goog.LOCALE == 'zh-CN') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zh_CN;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_zh_CN;
 }
 
 if (goog.LOCALE == 'zh_HK' || goog.LOCALE == 'zh-HK') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zh_HK;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_zh_HK;
 }
 
 if (goog.LOCALE == 'zh_TW' || goog.LOCALE == 'zh-TW') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zh_TW;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_zh_TW;
 }
 
 if (goog.LOCALE == 'zu') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zu;
+  goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_zu;
 }

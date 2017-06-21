@@ -72,7 +72,8 @@ function assertCreateRuleEquals(expected, selector, style) {
 
 
 function testCreateRule() {
-  assertCreateRuleEquals('#id{top:0;left:0;}', '#id', {'top': 0, 'left': 0});
+  assertCreateRuleEquals(
+      '#id{top:0;left:0;}', '#id', {'top': '0', 'left': '0'});
   assertCreateRuleEquals(
       '.class{margin-left:5px;}',
       '.class', goog.html.SafeStyle.create({'margin-left': '5px'}));

@@ -61,6 +61,12 @@ class SourceTestCase(unittest.TestCase):
                      test_source.requires)
     self.assertTrue(test_source.is_goog_module)
 
+  def testSourceScanModuleAlias(self):
+    test_source = source.Source(_TEST_MODULE_ALIAS_SOURCE)
+
+    self.assertEqual(set(['goog.dom', 'goog.events']), test_source.requires)
+    self.assertTrue(test_source.is_goog_module)
+
   def testStripComments(self):
     self.assertEquals(
         '\nvar foo = function() {}',
@@ -84,6 +90,13 @@ class SourceTestCase(unittest.TestCase):
     self.assertTrue(source.Source._HasProvideGoogFlag(_TEST_BASE_SOURCE))
     self.assertTrue(source.Source._HasProvideGoogFlag(_TEST_BAD_BASE_SOURCE))
     self.assertFalse(source.Source._HasProvideGoogFlag(_TEST_COMMENT_SOURCE))
+
+
+_TEST_MODULE_ALIAS_SOURCE = """
+goog.module('foo');
+const {createDom: domCreator} = goog.require('goog.dom');
+const {listen} = goog.require('goog.events');
+"""
 
 
 _TEST_MODULE_SOURCE = """

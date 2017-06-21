@@ -209,18 +209,32 @@ goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
  *     alter. See the constraints in the class description.
  * @param {string} key The key to change the value for. It has to be present
  *     either in {@code obj} or in its prototype chain.
- * @param {*} value The new value to set. It has to have the same type as the
- *     original value. The types are compared with {@link goog.typeOf}.
+ * @param {*} value The new value to set.
+ * @param {boolean=} opt_allowNullOrUndefined By default, this method requires
+ *     {@code value} to match the type of the existing value, as determined by
+ *     {@link goog.typeOf}. Setting opt_allowNullOrUndefined to {@code true}
+ *     allows an existing value to be replaced by {@code null} or
+       {@code undefined}, or vice versa.
  * @throws {Error} In case of missing key or type mismatch.
  */
-goog.testing.PropertyReplacer.prototype.replace = function(obj, key, value) {
+goog.testing.PropertyReplacer.prototype.replace = function(
+    obj, key, value, opt_allowNullOrUndefined) {
   if (!(key in obj)) {
     throw Error('Cannot replace missing property "' + key + '" in ' + obj);
   }
-  if (goog.typeOf(obj[key]) != goog.typeOf(value)) {
-    throw Error(
-        'Cannot replace property "' + key + '" in ' + obj +
-        ' with a value of different type');
+  // If opt_allowNullOrUndefined is true, then we do not check the types if
+  // either the original or new value is null or undefined.
+  var shouldCheckTypes = !opt_allowNullOrUndefined ||
+      (goog.isDefAndNotNull(obj[key]) && goog.isDefAndNotNull(value));
+  if (shouldCheckTypes) {
+    var originalType = goog.typeOf(obj[key]);
+    var newType = goog.typeOf(value);
+    if (originalType != newType) {
+      throw Error(
+          'Cannot replace property "' + key + '" in ' + obj +
+          ' with a value of different type (expected ' + originalType +
+          ', found ' + newType + ')');
+    }
   }
   this.set(obj, key, value);
 };

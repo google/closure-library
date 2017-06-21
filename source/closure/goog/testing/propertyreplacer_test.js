@@ -124,7 +124,7 @@ function testPrototype() {
 
   // Simple inheritance.
   var a = {a: 0};
-  function B(){};
+  function B() {}
   B.prototype = a;
   var b = new B();
 
@@ -136,13 +136,13 @@ function testPrototype() {
 
   // Inheritance with goog.inherits.
   var c = {a: 0};
-  function C(){};
+  function C() {}
   C.prototype = c;
-  function D(){};
+  function D() {}
   goog.inherits(D, C);
   var d = new D();
 
-  var stubs = new goog.testing.PropertyReplacer();
+  stubs = new goog.testing.PropertyReplacer();
   stubs.set(c, 'a', 1);
   stubs.set(d, 'a', 2);
   stubs.reset();
@@ -191,7 +191,7 @@ function testHasKey() {
   assertFalse('{}.a', f({}, 'a'));
   assertTrue('{a:0}.a', f({a: 0}, 'a'));
 
-  function C(){};
+  function C() {}
   C.prototype.a = 0;
   assertFalse('C.prototype.a set, is C.a own?', f(C, 'a'));
   assertTrue('C.prototype.a', f(C.prototype, 'a'));
@@ -227,15 +227,15 @@ function testHasKey() {
   assertFalse('Math, invalid key', f(Math, 'no such key'));
   assertTrue('Math.random', f(Math, 'random'));
 
-  function Parent(){};
+  function Parent() {}
   Parent.prototype.a = 0;
-  function Child(){};
+  function Child() {}
   goog.inherits(Child, Parent);
   assertFalse('goog.inherits, parent prototype', f(new Child, 'a'));
   Child.prototype.a = 1;
   assertFalse('goog.inherits, child prototype', f(new Child, 'a'));
 
-  function OverwrittenProto(){};
+  function OverwrittenProto() {}
   OverwrittenProto.prototype = {a: 0};
   assertFalse(f(new OverwrittenProto, 'a'));
 }
@@ -453,7 +453,9 @@ function testMathRandom() {
 // Tests the replace method of PropertyReplacer.
 function testReplace() {
   var stubs = new goog.testing.PropertyReplacer();
-  function C() { this.a = 1; };
+  function C() {
+    this.a = 1;
+  }
   C.prototype.b = 1;
   C.prototype.toString = function() { return 'obj'; };
   var obj = new C();
@@ -474,13 +476,50 @@ function testReplace() {
       'Cannot replace missing property "unknown" in obj', error.message);
   assertFalse('object not touched', 'unknown' in obj);
 
-  var error = assertThrows(
+  error = assertThrows(
       'cannot change value type',
       goog.bind(stubs.replace, stubs, obj, 'a', '3'));
   assertContains(
       'error message for type mismatch',
       'Cannot replace property "a" in obj with a value of different type',
       error.message);
+
+  assertThrows(
+      'cannot change value type to null',
+      goog.bind(stubs.replace, stubs, obj, 'a', null));
+
+  assertThrows(
+      'cannot change value type to undefined',
+      goog.bind(stubs.replace, stubs, obj, 'a', undefined));
+}
+
+function testReplaceAllowNullOrUndefined() {
+  var stubs = new goog.testing.PropertyReplacer();
+  var obj = {value: 1, zero: 0, emptyString: ''};
+
+  stubs.replace(obj, 'value', undefined, true);
+  assertUndefined(
+      'Expected int value to be replaced with undefined', obj.value);
+
+  stubs.replace(obj, 'value', 'b', true);
+  assertEquals(
+      'Expected undefined value to be replace with string', 'b', obj.value);
+
+  stubs.replace(obj, 'value', null, true);
+  assertNull('Expected string value to be replaced with null', obj.value);
+
+  stubs.replace(obj, 'value', 1, true);
+  assertEquals(
+      'Expected null value to be replaced with non-null', 1, obj.value);
+
+  // Replacing 0 with a string or empty string with a number is not allowed.
+  assertThrows(
+      'Cannot change value type',
+      goog.bind(stubs.replace, stubs, obj, 'zero', 'a', true));
+
+  assertThrows(
+      'Cannot change value type',
+      goog.bind(stubs.replace, stubs, obj, 'emptyString', 1, true));
 }
 
 // Tests altering complete namespace paths.
