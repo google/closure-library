@@ -199,7 +199,8 @@ goog.format.numericValueToString_ = function(
  * @type {RegExp}
  * @private
  */
-goog.format.SCALED_NUMERIC_RE_ = /^([-]?\d+\.?\d*)([K,M,G,T,P,k,m,u,n]?)[B]?$/;
+goog.format.SCALED_NUMERIC_RE_ =
+    /^([-]?\d+\.?\d*)([K,M,G,T,P,E,Z,Y,k,m,u,n]?)[B]?$/;
 
 
 /**
@@ -207,7 +208,7 @@ goog.format.SCALED_NUMERIC_RE_ = /^([-]?\d+\.?\d*)([K,M,G,T,P,k,m,u,n]?)[B]?$/;
  * @private {Array<string>}
  */
 goog.format.NUMERIC_SCALE_PREFIXES_ =
-    ['P', 'T', 'G', 'M', 'K', '', 'm', 'u', 'n'];
+    ['Y', 'Z', 'E', 'P', 'T', 'G', 'M', 'K', '', 'm', 'u', 'n'];
 
 
 /**
@@ -225,7 +226,10 @@ goog.format.NUMERIC_SCALES_SI_ = {
   'M': 1e6,
   'G': 1e9,
   'T': 1e12,
-  'P': 1e15
+  'P': 1e15,
+  'E': 1e18,
+  'Z': 1e21,
+  'Y': 1e24
 };
 
 
@@ -245,7 +249,10 @@ goog.format.NUMERIC_SCALES_BINARY_ = {
   'M': Math.pow(1024, 2),
   'G': Math.pow(1024, 3),
   'T': Math.pow(1024, 4),
-  'P': Math.pow(1024, 5)
+  'P': Math.pow(1024, 5),
+  'E': Math.pow(1024, 6),
+  'Z': Math.pow(1024, 7),
+  'Y': Math.pow(1024, 8)
 };
 
 

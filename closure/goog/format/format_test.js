@@ -66,6 +66,9 @@ function testIsConvertableScaledNumber() {
   assertTrue(isConvertableScaledNumber('45GB'));
   assertTrue(isConvertableScaledNumber('45T'));
   assertTrue(isConvertableScaledNumber('2.33P'));
+  assertTrue(isConvertableScaledNumber('3.45E'));
+  assertTrue(isConvertableScaledNumber('5.33Z'));
+  assertTrue(isConvertableScaledNumber('7.22Y'));
   assertTrue(isConvertableScaledNumber('45m'));
   assertTrue(isConvertableScaledNumber('45u'));
   assertTrue(isConvertableScaledNumber('-5.0n'));
@@ -98,6 +101,10 @@ function testNumericValueToString() {
   assertEquals('1.07G', numericValueToString(1024 * 1024 * 1024));
   assertEquals('6.44G', numericValueToString(6 * 1024 * 1024 * 1024));
   assertEquals('13.26T', numericValueToString(12345.6789 * 1024 * 1024 * 1024));
+  assertEquals('50.67P', numericValueToString(45 * Math.pow(1024, 5)));
+  assertEquals('57.65E', numericValueToString(50 * Math.pow(1024, 6)));
+  assertEquals('77.33Z', numericValueToString(65.5 * Math.pow(1024, 7)));
+  assertEquals('97.56Y', numericValueToString(80.7 * Math.pow(1024, 8)));
 
   assertEquals('23.4m', numericValueToString(0.0234));
   assertEquals('1.23u', numericValueToString(0.00000123));
@@ -120,6 +127,10 @@ function testFormatNumBytes() {
   assertEquals('1MB', numBytesToString(1024 * 1024));
   assertEquals('6GB', numBytesToString(6 * 1024 * 1024 * 1024));
   assertEquals('12.06TB', numBytesToString(12345.6789 * 1024 * 1024 * 1024));
+  assertEquals('45PB', numBytesToString(45 * Math.pow(1024, 5)));
+  assertEquals('50EB', numBytesToString(50 * Math.pow(1024, 6)));
+  assertEquals('65.5ZB', numBytesToString(65.5 * Math.pow(1024, 7)));
+  assertEquals('80.7YB', numBytesToString(80.7 * Math.pow(1024, 8)));
 
   assertEquals('454', numBytesToString(454, 2, true, true));
   assertEquals('5 KB', numBytesToString(5 * 1024, 2, true, true));
@@ -149,6 +160,7 @@ function testStringToNumeric() {
 
 function testStringToNumBytes() {
   var stringToNumBytes = goog.format.stringToNumBytes;
+  var epsilon = 0.1;
 
   assertEquals(45, stringToNumBytes('45'));
   assertEquals(454, stringToNumBytes('454'));
@@ -157,6 +169,8 @@ function testStringToNumBytes() {
   assertEquals(1024 * 1024, stringToNumBytes('1M'));
   assertEquals(6 * 1024 * 1024 * 1024, stringToNumBytes('6G'));
   assertEquals(13260110230978.56, stringToNumBytes('12.06T'));
+  assertTrue(
+      Math.abs(3.191564163782621e+24 - stringToNumBytes('2.64Y')) < epsilon);
 }
 
 function testInsertWordBreaks() {
