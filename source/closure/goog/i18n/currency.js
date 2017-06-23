@@ -397,6 +397,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'BWP': [2, 'P', 'pula'],
   'BYR': [48, 'p.', 'BYR'],
   'BZD': [2, '$', 'BZ$'],
+  'CNH': [2, '¥', 'RMB¥'],
   'CUC': [1, '$', 'CUC$'],
   'CUP': [2, '$', 'CU$'],
   'CVE': [2, 'CVE', 'Esc'],

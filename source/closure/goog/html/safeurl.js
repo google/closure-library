@@ -385,6 +385,38 @@ goog.html.SafeUrl.sanitize = function(url) {
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
+/**
+ * Creates a SafeUrl object from {@code url}. If {@code url} is a
+ * goog.html.SafeUrl then it is simply returned. Otherwise the input string is
+ * validated to match a pattern of commonly used safe URLs.
+ *
+ * {@code url} may be a URL with the http, https, mailto or ftp scheme,
+ * or a relative URL (i.e., a URL without a scheme; specifically, a
+ * scheme-relative, absolute-path-relative, or path-relative URL).
+ *
+ * This function asserts (using goog.asserts) that the URL matches this pattern.
+ * If it does not, in addition to failing the assert, an innocous URL will be
+ * returned.
+ *
+ * @see http://url.spec.whatwg.org/#concept-relative-url
+ * @param {string|!goog.string.TypedString} url The URL to validate.
+ * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
+ */
+goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
+  if (url instanceof goog.html.SafeUrl) {
+    return url;
+  } else if (url.implementsGoogStringTypedString) {
+    url = url.getTypedStringValue();
+  } else {
+    url = String(url);
+  }
+  if (!goog.asserts.assert(goog.html.SAFE_URL_PATTERN_.test(url))) {
+    url = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
 
 /**
  * Type marker for the SafeUrl type, used to implement additional run-time

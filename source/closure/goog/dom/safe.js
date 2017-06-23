@@ -162,7 +162,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitize(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   anchor.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -187,7 +187,7 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitize(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   imageElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -311,7 +311,8 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
     link.href = goog.html.SafeUrl.unwrap(url);
   } else {  // string
     // SafeUrl.sanitize must return legitimate SafeUrl when passed a string.
-    link.href = goog.html.SafeUrl.sanitize(url).getTypedStringValue();
+    link.href =
+        goog.html.SafeUrl.sanitizeAssertUnchanged(url).getTypedStringValue();
   }
 };
 
@@ -402,7 +403,7 @@ goog.dom.safe.setLocationHref = function(loc, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitize(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   loc.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -443,7 +444,7 @@ goog.dom.safe.openInWindow = function(
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitize(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   var win = opt_openerWin || window;
   return win.open(

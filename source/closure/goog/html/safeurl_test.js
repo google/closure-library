@@ -217,8 +217,10 @@ function assertGoodUrl(url) {
     expected = url.getTypedStringValue();
   }
   var safeUrl = goog.html.SafeUrl.sanitize(url);
+  var safeUrlAssertedUnchanged = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   var extracted = goog.html.SafeUrl.unwrap(safeUrl);
   assertEquals(expected, extracted);
+  assertEquals(expected, goog.html.SafeUrl.unwrap(safeUrlAssertedUnchanged));
 }
 
 
@@ -230,6 +232,9 @@ function assertBadUrl(url) {
   assertEquals(
       goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url)));
+  assertThrows(function() {
+    goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  });
 }
 
 

@@ -19,6 +19,7 @@
 goog.provide('goog.dom.safeTest');
 goog.setTestOnly('goog.dom.safeTest');
 
+goog.require('goog.asserts');
 goog.require('goog.dom.safe');
 goog.require('goog.dom.safe.InsertAdjacentHtmlPosition');
 goog.require('goog.html.SafeHtml');
@@ -145,8 +146,9 @@ function testsetLinkHrefAndRel_string() {
     goog.dom.safe.setLinkHrefAndRel(
         mockLink, 'javascript:evil();', 'foo, stylesheet, bar');
   });
-
-  goog.dom.safe.setLinkHrefAndRel(mockLink, 'javascript:evil();', 'foo, bar');
+  withAssertionFailure(function() {
+    goog.dom.safe.setLinkHrefAndRel(mockLink, 'javascript:evil();', 'foo, bar');
+  });
   assertEquals('about:invalid#zClosurez', mockLink.href);
 }
 
@@ -174,7 +176,9 @@ function makeLinkElementTypedAsLocation() {
 
 function testSetLocationHref() {
   var mockLoc = /** @type {!Location} */ ({'href': 'blarg'});
-  goog.dom.safe.setLocationHref(mockLoc, 'javascript:evil();');
+  withAssertionFailure(function() {
+    goog.dom.safe.setLocationHref(mockLoc, 'javascript:evil();');
+  });
   assertEquals('about:invalid#zClosurez', mockLoc.href);
 
   mockLoc = /** @type {!Location} */ ({'href': 'blarg'});
@@ -195,7 +199,9 @@ function testSetLocationHref() {
 
 function testSetAnchorHref() {
   var anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
-  goog.dom.safe.setAnchorHref(anchor, 'javascript:evil();');
+  withAssertionFailure(function() {
+    goog.dom.safe.setAnchorHref(anchor, 'javascript:evil();');
+  });
   assertEquals('about:invalid#zClosurez', anchor.href);
 
   anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
@@ -206,7 +212,9 @@ function testSetAnchorHref() {
 
   // Works with mocks too.
   var mockAnchor = /** @type {!HTMLAnchorElement} */ ({'href': 'blarg'});
-  goog.dom.safe.setAnchorHref(mockAnchor, 'javascript:evil();');
+  withAssertionFailure(function() {
+    goog.dom.safe.setAnchorHref(mockAnchor, 'javascript:evil();');
+  });
   assertEquals('about:invalid#zClosurez', mockAnchor.href);
 
   mockAnchor = /** @type {!HTMLAnchorElement} */ ({'href': 'blarg'});
@@ -229,7 +237,9 @@ function testSetAnchorHref() {
 
 function testSetImageSrc_withSafeUrlObject() {
   var mockImageElement = /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
-  goog.dom.safe.setImageSrc(mockImageElement, 'javascript:evil();');
+  withAssertionFailure(function() {
+    goog.dom.safe.setImageSrc(mockImageElement, 'javascript:evil();');
+  });
   assertEquals('about:invalid#zClosurez', mockImageElement.src);
 
   mockImageElement = /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
@@ -388,9 +398,11 @@ function testOpenInWindow() {
   mockWindowOpen('about:invalid#zClosurez', 'name', 'specs', true)
       .$returns(fakeWindow);
   mockWindowOpen.$replay();
-  var retVal = goog.dom.safe.openInWindow(
-      'javascript:evil();', window, goog.string.Const.from('name'), 'specs',
-      true);
+  var retVal = withAssertionFailure(function() {
+    return goog.dom.safe.openInWindow(
+        'javascript:evil();', window, goog.string.Const.from('name'), 'specs',
+        true);
+  });
   mockWindowOpen.$verify();
   assertEquals(
       'openInWindow should return the created window', fakeWindow, retVal);
@@ -408,4 +420,21 @@ function testOpenInWindow() {
   mockWindowOpen.$verify();
   assertEquals(
       'openInWindow should return the created window', fakeWindow, retVal);
+}
+
+/**
+ * Tests that f raises an AssertionError and runs f while disabling assertion
+ * errors.
+ *
+ * @param {function():*} f function with a failing assertion.
+ * @return {*} the return value of f.
+ */
+function withAssertionFailure(f) {
+  assertThrows(f);
+  goog.asserts.setErrorHandler(function(error) {});
+  try {
+    return f();
+  } finally {
+    goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
+  }
 }
