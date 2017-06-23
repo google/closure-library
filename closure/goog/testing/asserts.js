@@ -178,11 +178,27 @@ var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
   _assert(null, valid, 'Incorrect arguments passed to assert function');
 };
 
+/**
+ * @return {?Object} goog.testing.TestCase or null
+ * We suppress the lint error and we explicitly do not goog.require()
+ * goog.testing.TestCase to avoid a build time dependency cycle.
+ * @suppress {missingRequire|undefinedNames|undefinedVars|missingProperties}
+ * @private
+ */
 var _getCurrentTestCase = function() {
-  // We can't call goog.testing.TestCase.getActiveTestCase because there would
-  // be a dependency cycle; this effectively does the same thing.
-  var testRunner = goog.global['G_testRunner'];
-  return testRunner ? testRunner.testCase : null;
+  // Some users of goog.testing.asserts do not use goog.testing.TestRunner and
+  // they do not include goog.testing.TestCase. Exceptions will not be
+  // completely correct for these users.
+  if (!goog.testing.TestCase) {
+    if (goog.global.console) {
+      goog.global.console.error(
+          'Missing goog.testing.TestCase, ' +
+          'add /* @suppress {extraRequire} */' +
+          'goog.require(\'goog.testing.TestCase\'');
+    }
+    return null;
+  }
+  return goog.testing.TestCase.getActiveTestCase();
 };
 
 var _assert = function(comment, booleanValue, failureMessage) {
