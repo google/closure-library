@@ -126,6 +126,12 @@ function testCreate_allowsRgb() {
   assertCreateEquals(
       'color:rgb(10%, 20%, 30%);',  // expected
       {'color': 'rgb(10%, 20%, 30%)'});
+  assertCreateEquals(
+      'background:0 5px rgb(10,20,30);',  // expected
+      {'background': '0 5px rgb(10,20,30)'});
+  assertCreateEquals(
+      'background:rgb(10,0,0), rgb(0,0,30);',
+      {'background': 'rgb(10,0,0), rgb(0,0,30)'});
 }
 
 
