@@ -363,10 +363,13 @@ goog.html.SafeStyle.create = function(map) {
       goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
     } else {
       value = String(value);
-      if (!goog.html.SafeStyle.VALUE_RE_.test(
-              value.replace(goog.html.SafeUrl.URL_RE_, 'url'))) {
+      var valueWithoutFunctions =
+          value.replace(goog.html.SafeUrl.FUNCTIONS_RE_, '$1')
+              .replace(goog.html.SafeUrl.URL_RE_, 'url');
+      if (!goog.html.SafeStyle.VALUE_RE_.test(valueWithoutFunctions)) {
         goog.asserts.fail(
-            'String value allows only [-,."\'%_!# a-zA-Z0-9] and simple ' +
+            'String value allows only ' +
+            goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ + ' and simple ' +
             'functions, got: ' + value);
         value = goog.html.SafeStyle.INNOCUOUS_STRING;
       } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
@@ -413,7 +416,13 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
 };
 
 
-// Keep in sync with the error string in create().
+/**
+ * Characters allowed in goog.html.SafeStyle.VALUE_RE_.
+ * @private {string}
+ */
+goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ = '[-,."\'%_!# a-zA-Z0-9]';
+
+
 /**
  * Regular expression for safe values.
  *
@@ -424,14 +433,12 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
  * (e.g. background-attachment or font-family) and hence could allow
  * multiple values to get injected, but that should pose no risk of XSS.
  *
- * The expression inside () checks only for XSS safety, not for CSS validity.
+ * The expression checks only for XSS safety, not for CSS validity.
  * @const {!RegExp}
  * @private
  */
-goog.html.SafeStyle.VALUE_RE_ = new RegExp(
-    '^([-,."\'%_!# a-zA-Z0-9]+|(hsl|hsla|rgb|rgba' +
-    '|(rotate|scale|translate)(X|Y|Z|3d)?)' +
-    '\\([-0-9a-z.%, ]+\\))$');
+goog.html.SafeStyle.VALUE_RE_ =
+    new RegExp('^' + goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ + '+$');
 
 
 /**
@@ -447,6 +454,16 @@ goog.html.SafeUrl.URL_RE_ = new RegExp(
         '|"[ !#-\\[\\]-~]*"' +    // Printable characters except " and \.
         '|[!#-&*-\\[\\]-~]*' +    // Printable characters except [ "'()\\].
         ')([ \t\n]*\\))',
+    'g');
+
+
+/**
+ * Regular expression for simple functions.
+ * @private @const {!RegExp}
+ */
+goog.html.SafeUrl.FUNCTIONS_RE_ = new RegExp(
+    '\\b(hsl|hsla|rgb|rgba|(rotate|scale|translate)(X|Y|Z|3d)?)' +
+        '\\([-0-9a-z.%, ]+\\)',
     'g');
 
 
