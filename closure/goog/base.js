@@ -650,7 +650,7 @@ goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
 // Externally: https://developers.google.com/closure/library/docs/depswriter
 //
 // Because of legacy clients, the DOM loader can't be easily removed from
-// base.js.  Work is being done to make it disableable or replaceable for
+// base.js.  Work was done to make it disableable or replaceable for
 // different environments (DOM-less JavaScript interpreters like Rhino or V8,
 // for example). See bootstrap/ for more information.
 
