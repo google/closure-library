@@ -143,10 +143,25 @@ goog.ui.media.FlashObject.IeSwfReadyStates_ = {
  * The different modes for displaying a SWF. Note that different wmodes
  * can result in different bugs in different browsers and also that
  * both OPAQUE and TRANSPARENT will result in a performance hit.
+ * 
+ * Talked about at:
+ * https://helpx.adobe.com/flash/kb/flash-object-embed-tag-attributes.html
  *
  * @enum {string}
  */
 goog.ui.media.FlashObject.Wmodes = {
+  /**
+   * Best performance. With support for hardware accelerated presentation. Does
+   * not allow for z-ordering of the SWF.
+   */
+  DIRECT: 'direct',
+  
+  /**
+   * Additional hardware acceleration support on TVs and mobile devices. Does
+   * not allow for z-ordering of the SWF.
+   */
+  GPU: 'gpu',
+  
   /**
    * Allows for z-ordering of the SWF.
    */
