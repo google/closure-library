@@ -440,7 +440,6 @@ goog.dom.forms.setValue = function(el, opt_value) {
   }
   // Not every element with a value has a type, for example meter and progress.
   el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';
-  return;
 };
 
 
