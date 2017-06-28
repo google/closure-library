@@ -418,22 +418,23 @@ function testSetValueInput() {
 }
 
 function testGetValueMeter() {
-  var el = goog.dom.getElement('met');
-  assertEquals(2.3, goog.dom.forms.getValue(el));
+  var min = 0;
+  var max = 3;
+  var val = 2.3;
+  var el = goog.dom.createDom('meter', {'min': min, 'max': max, 'value': val);
+  assertEquals(val, goog.dom.forms.getValue(el));
 }
 
 function testSetValueMeter() {
-  var el = goog.dom.getElement('met');
-  var initialValue = goog.dom.forms.getValue(el);
-  var max = el.getAttribute('max');
-  var min = el.getAttribute('min');
+  var min = 1;
+  var max = 5;
+  var el = goog.dom.createDom('meter', {'min': min, 'max': max});
 
-  var newValue = Math.random() * (max - min) + min;
+  assertEquals(null, goog.dom.forms.getValue(el));
+
+  var newValue = (Math.random() * (max - min) + min).toPrecision(3);
   goog.dom.forms.setValue(el, newValue);
   assertEquals(newValue, goog.dom.forms.getValue(el));
-
-  // Cleanup.
-  goog.dom.forms.setValue(el, initialValue);
 }
 
 function testGetValuePassword() {
