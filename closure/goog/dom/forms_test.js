@@ -428,9 +428,9 @@ function testGetValueMeter() {
 function testSetValueMeter() {
   var min = 1;
   var max = 5;
-  var el = goog.dom.createDom('meter', {'min': min, 'max': max});
+  var el = goog.dom.createDom('meter', {'min': min, 'max': max, 'value': 3});
 
-  // assertEquals(null, goog.dom.forms.getValue(el));
+  assertEquals(3, goog.dom.forms.getValue(el));
 
   var newValue = +(Math.random() * (max - min) + min).toPrecision(3);
   goog.dom.forms.setValue(el, newValue);
