@@ -432,7 +432,7 @@ function testSetValueMeter() {
 
   assertEquals(min, goog.dom.forms.getValue(el));
 
-  var newValue = (Math.random() * (max - min) + min).toPrecision(3);
+  var newValue = +(Math.random() * (max - min) + min).toPrecision(3);
   goog.dom.forms.setValue(el, newValue);
   assertEquals(newValue, goog.dom.forms.getValue(el));
 }
