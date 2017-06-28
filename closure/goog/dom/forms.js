@@ -318,21 +318,21 @@ goog.dom.forms.hasValueByName = function(form, name) {
  *     (or null).
  */
 goog.dom.forms.getValue = function(el) {
+  // Elements with a type may need more specialized logic.
   var type = /** @type {!HTMLInputElement} */ (el).type;
-  if (!goog.isDef(type)) {
-    return null;
+  if (goog.isDef(type)) {
+    switch (type.toLowerCase()) {
+      case goog.dom.InputType.CHECKBOX:
+      case goog.dom.InputType.RADIO:
+        return goog.dom.forms.getInputChecked_(el);
+      case goog.dom.InputType.SELECT_ONE:
+        return goog.dom.forms.getSelectSingle_(el);
+      case goog.dom.InputType.SELECT_MULTIPLE:
+        return goog.dom.forms.getSelectMultiple_(el);
+    }
   }
-  switch (type.toLowerCase()) {
-    case goog.dom.InputType.CHECKBOX:
-    case goog.dom.InputType.RADIO:
-      return goog.dom.forms.getInputChecked_(el);
-    case goog.dom.InputType.SELECT_ONE:
-      return goog.dom.forms.getSelectSingle_(el);
-    case goog.dom.InputType.SELECT_MULTIPLE:
-      return goog.dom.forms.getSelectMultiple_(el);
-    default:
-      return goog.isDef(el.value) ? el.value : null;
-  }
+  // Not every element with a value has a type, for example meter and progress.
+  return goog.isDef(el.value) ? el.value : null;
 };
 
 
@@ -416,6 +416,7 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
  *     an array for setting the value of select multiple elements.
  */
 goog.dom.forms.setValue = function(el, opt_value) {
+  // Elements with a type may need more specialized logic.
   var type = /** @type {!HTMLInputElement} */ (el).type;
   if (goog.isDef(type)) {
     switch (type.toLowerCase()) {
@@ -424,21 +425,22 @@ goog.dom.forms.setValue = function(el, opt_value) {
         goog.dom.forms.setInputChecked_(
             el,
             /** @type {string} */ (opt_value));
-        break;
+        return;
       case goog.dom.InputType.SELECT_ONE:
         goog.dom.forms.setSelectSingle_(
             el,
             /** @type {string} */ (opt_value));
-        break;
+        return;
       case goog.dom.InputType.SELECT_MULTIPLE:
         goog.dom.forms.setSelectMultiple_(
             el,
             /** @type {Array<string>} */ (opt_value));
-        break;
-      default:
-        el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';
+        return;
     }
   }
+  // Not every element with a value has a type, for example meter and progress.
+  el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';
+  return;
 };
 
 

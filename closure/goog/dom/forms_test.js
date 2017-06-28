@@ -417,6 +417,23 @@ function testSetValueInput() {
   assertEquals('', goog.dom.forms.getValue(el));
 }
 
+function testGetValueMeter() {
+  var el = goog.dom.getElement('met');
+  assertEquals(2.3, goog.dom.forms.getValue(el));
+}
+
+function testSetValueMeter() {
+  var el = goog.dom.getElement('met');
+  var initialValue = goog.dom.forms.getValue(el);
+
+  var newValue = Math.random() * (el.getAttribute('max') - el.getAttribute('min')) + el.getAttribute('min');
+  goog.dom.forms.setValue(el, newValue);
+  assertEquals(newValue, goog.dom.forms.getValue(el));
+
+  // Cleanup.
+  goog.dom.forms.setValue(el, initialValue);
+}
+
 function testGetValuePassword() {
   var el = goog.dom.getElement('pass');
   var result = goog.dom.forms.getValue(el);
