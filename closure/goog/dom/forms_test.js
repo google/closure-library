@@ -421,7 +421,7 @@ function testGetValueMeter() {
   var min = 0;
   var max = 3;
   var val = 2.3;
-  var el = goog.dom.createDom('meter', {'min': min, 'max': max, 'value': val);
+  var el = goog.dom.createDom('meter', {'min': min, 'max': max, 'value': val});
   assertEquals(val, goog.dom.forms.getValue(el));
 }
 
