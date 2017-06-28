@@ -425,8 +425,10 @@ function testGetValueMeter() {
 function testSetValueMeter() {
   var el = goog.dom.getElement('met');
   var initialValue = goog.dom.forms.getValue(el);
+  var max = el.getAttribute('max');
+  var min = el.getAttribute('min');
 
-  var newValue = Math.random() * (el.getAttribute('max') - el.getAttribute('min')) + el.getAttribute('min');
+  var newValue = Math.random() * (max - min) + min;
   goog.dom.forms.setValue(el, newValue);
   assertEquals(newValue, goog.dom.forms.getValue(el));
 
