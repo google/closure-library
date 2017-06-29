@@ -419,19 +419,16 @@ goog.dom.forms.setValue = function(el, opt_value) {
   switch (goog.isDef(type) && type.toLowerCase()) {
     case goog.dom.InputType.CHECKBOX:
     case goog.dom.InputType.RADIO:
-      goog.dom.forms.setInputChecked_(
-          el,
-          /** @type {string} */ (opt_value));
+      goog.dom.forms.setInputChecked_(el,
+                                      /** @type {string} */ (opt_value));
       return;
     case goog.dom.InputType.SELECT_ONE:
-      goog.dom.forms.setSelectSingle_(
-          el,
-          /** @type {string} */ (opt_value));
+      goog.dom.forms.setSelectSingle_(el,
+                                      /** @type {string} */ (opt_value));
       return;
     case goog.dom.InputType.SELECT_MULTIPLE:
-      goog.dom.forms.setSelectMultiple_(
-          el,
-          /** @type {Array<string>} */ (opt_value));
+      goog.dom.forms.setSelectMultiple_(el,
+                                        /** @type {Array<string>} */ (opt_value));
       return;
   }
   // Not every element with a value has a type, for example meter and progress.
