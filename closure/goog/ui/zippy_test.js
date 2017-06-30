@@ -216,6 +216,8 @@ function testActionEvent() {
       toggleEventCount++;
     } else if (e.type == goog.ui.Zippy.Events.ACTION) {
       actionEventCount++;
+      assertNotNull(
+          'action event must have triggering event', e.triggeringEvent);
       assertTrue(
           'toggle must have been called first',
           toggleEventCount >= actionEventCount);
