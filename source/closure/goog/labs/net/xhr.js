@@ -266,13 +266,14 @@ xhr.postJson = function(url, data, opt_options) {
  *     resolved with the XHR object once the request completes.
  */
 xhr.send = function(method, url, data, opt_options) {
-  return new goog.Promise(function(resolve, reject) {
-    var options = opt_options || {};
+  var options = opt_options || {};
+  var request = options.xmlHttpFactory ?
+      options.xmlHttpFactory.createInstance() :
+      goog.net.XmlHttp();
+
+  var result = new goog.Promise(function(resolve, reject) {
     var timer;
 
-    var request = options.xmlHttpFactory ?
-        options.xmlHttpFactory.createInstance() :
-        goog.net.XmlHttp();
     try {
       request.open(method, url, true);
     } catch (e) {
@@ -362,6 +363,12 @@ xhr.send = function(method, url, data, opt_options) {
       goog.global.clearTimeout(timer);
       reject(new xhr.Error('Error sending XHR: ' + e.message, url, request));
     }
+  });
+  return result.thenCatch(function(error) {
+    if (error instanceof goog.Promise.CancellationError) {
+      request.abort();
+    }
+    throw error;
   });
 };
 

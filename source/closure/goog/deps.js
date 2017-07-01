@@ -637,7 +637,7 @@ goog.addDependency('labs/net/webchannel/wirev8_test.js', ['goog.labs.net.webChan
 goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTransport'], [], {});
 goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.labs.net.webChannel.WebChannelBaseTransport'], {});
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.Options', 'goog.labs.net.xhr.PostData', 'goog.labs.net.xhr.ResponseType', 'goog.labs.net.xhr.TimeoutError'], ['goog.Promise', 'goog.asserts', 'goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.object', 'goog.string', 'goog.uri.utils', 'goog.userAgent'], {});
-goog.addDependency('labs/net/xhr_test.js', ['goog.labs.net.xhrTest'], ['goog.Promise', 'goog.events', 'goog.events.EventType', 'goog.labs.net.xhr', 'goog.net.WrapperXmlHttpFactory', 'goog.net.XmlHttp', 'goog.testing.MockClock', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('labs/net/xhr_test.js', ['goog.labs.net.xhrTest'], ['goog.Promise', 'goog.events', 'goog.events.EventType', 'goog.labs.net.xhr', 'goog.net.WrapperXmlHttpFactory', 'goog.net.XhrLike', 'goog.net.XmlHttp', 'goog.testing.MockClock', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('labs/promise/promise.js', ['goog.labs.promise'], ['goog.Promise'], {'module': 'goog'});
 goog.addDependency('labs/promise/promise_test.js', ['goog.labs.promiseTest'], ['goog.Promise', 'goog.Timer', 'goog.labs.promise', 'goog.testing.MockClock', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'module': 'goog'});
 goog.addDependency('labs/pubsub/broadcastpubsub.js', ['goog.labs.pubsub.BroadcastPubSub'], ['goog.Disposable', 'goog.Timer', 'goog.array', 'goog.async.run', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.json', 'goog.log', 'goog.math', 'goog.pubsub.PubSub', 'goog.storage.Storage', 'goog.storage.mechanism.HTML5LocalStorage', 'goog.string', 'goog.userAgent'], {});
@@ -1048,8 +1048,6 @@ goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.arra
 goog.addDependency('structs/treenode_test.js', ['goog.structs.TreeNodeTest'], ['goog.structs.TreeNode', 'goog.testing.jsunit'], {});
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs'], {});
 goog.addDependency('structs/trie_test.js', ['goog.structs.TrieTest'], ['goog.object', 'goog.structs', 'goog.structs.Trie', 'goog.testing.jsunit'], {});
-goog.addDependency('structs/weak/weak.js', ['goog.structs.weak'], ['goog.userAgent'], {});
-goog.addDependency('structs/weak/weak_test.js', ['goog.structs.weakTest'], ['goog.array', 'goog.structs.weak', 'goog.testing.jsunit'], {});
 goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.dom', 'goog.style', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
 goog.addDependency('style/bidi_test.js', ['goog.style.bidiTest'], ['goog.dom', 'goog.style', 'goog.style.bidi', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent'], {});

@@ -20,6 +20,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.labs.net.xhr');
 goog.require('goog.net.WrapperXmlHttpFactory');
+goog.require('goog.net.XhrLike');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.TestCase');
@@ -43,6 +44,14 @@ function setUpPage() {
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
 }
 
+/**
+ * @param {number} status HTTP status code.
+ * @param {string=} opt_responseText
+ * @param {number=} opt_latency
+ *     Milliseconds between sending a request and receiving the response.
+ * @return {!goog.net.XhrLike}
+ *     The XHR stub that will be returned from the factory.
+ */
 function stubXhrToReturn(status, opt_responseText, opt_latency) {
   if (goog.isDefAndNotNull(opt_latency)) {
     mockClock = new goog.testing.MockClock(true);
@@ -85,12 +94,21 @@ function stubXhrToReturn(status, opt_responseText, opt_latency) {
   };
 
   stubXmlHttpWith(stubXhr);
+  return stubXhr;
 }
 
+/**
+ * @param {!Error} err Error to be thrown when sending the stub XHR.
+ */
 function stubXhrToThrow(err) {
   stubXmlHttpWith(buildThrowingStubXhr(err));
 }
 
+/**
+ * @param {!Error} err Error to be thrown when sending this stub XHR.
+ * @return {!goog.net.XhrLike}
+ *     The XHR stub that will be returned from the factory.
+ */
 function buildThrowingStubXhr(err) {
   return {
     sent: false,
@@ -108,6 +126,10 @@ function buildThrowingStubXhr(err) {
   };
 }
 
+/**
+ * Replace goog.net.XmlHttp with a function that returns a stub XHR.
+ * @param {!goog.net.XhrLike.OrNative} stubXhr
+ */
 function stubXmlHttpWith(stubXhr) {
   goog.net.XmlHttp = function() { return stubXhr; };
   for (var x in originalXmlHttp) {
@@ -451,11 +473,12 @@ function testSendWithTimeoutHit() {
 }
 
 function testCancelRequest() {
-  stubXhrToReturn(200);
+  var request = stubXhrToReturn(200);
   var promise =
       xhr.send('GET', 'test-url')
           .then(fail /* opt_onResolved */, function(error) {
             assertTrue(error instanceof goog.Promise.CancellationError);
+            assertTrue('XHR should have been aborted', request.aborted);
             return null;  // Return a non-error value for the test runner.
           });
   promise.cancel();
@@ -463,7 +486,7 @@ function testCancelRequest() {
 }
 
 function testGetJson() {
-  var stubXhr = stubXhrToReturn(200, '{"a": 1, "b": 2}');
+  stubXhrToReturn(200, '{"a": 1, "b": 2}');
   xhr.getJson('test-url').then(function(responseObj) {
     assertObjectEquals({a: 1, b: 2}, responseObj);
   });
