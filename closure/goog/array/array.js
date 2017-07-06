@@ -1372,7 +1372,7 @@ goog.array.binaryRemove = function(array, value, opt_compareFn) {
  *     undefined, if that object should not be placed in a bucket.
  * @param {S=} opt_obj The object to be used as the value of 'this' within
  *     sorter.
- * @return {!Object} An object, with keys being all of the unique return values
+ * @return {!Object<!Array<T>>} An object, with keys being all of the unique return values
  *     of sorter, and values being arrays containing the items for
  *     which the splitter returned that key.
  * @template T,S
