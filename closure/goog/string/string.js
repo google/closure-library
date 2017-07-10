@@ -994,7 +994,7 @@ goog.string.quote = function(s) {
 
 
 /**
- * Takes a string and returns the escaped string for that character.
+ * Takes a string and returns the escaped string for that input string.
  * @param {string} str The string to escape.
  * @return {string} An escaped string representing {@code str}.
  */
