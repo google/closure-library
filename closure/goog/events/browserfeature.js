@@ -100,8 +100,8 @@ goog.events.BrowserFeature = {
         passive = true;
       }
     });
-    goog.global.addEventListener('test', null, options);
-    goog.global.removeEventListener('test', null, options);
+    goog.global.addEventListener('test', goog.nullFunction, options);
+    goog.global.removeEventListener('test', goog.nullFunction, options);
 
     return passive;
   })
