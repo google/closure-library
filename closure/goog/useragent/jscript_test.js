@@ -35,6 +35,10 @@ function ScriptEngineBuildVersion() {
   return 3456;
 }
 
+function setUpPage() {
+  goog.userAgent.jscript.init();
+}
+
 function testHasJscript() {
   assertTrue('Should have jscript', goog.userAgent.jscript.HAS_JSCRIPT);
 }
