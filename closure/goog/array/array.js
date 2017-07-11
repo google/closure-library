@@ -1366,14 +1366,14 @@ goog.array.binaryRemove = function(array, value, opt_compareFn) {
 /**
  * Splits an array into disjoint buckets according to a splitting function.
  * @param {Array<T>} array The array.
- * @param {function(this:S, T,number,Array<T>):?} sorter Function to call for
+ * @param {function(this:S, T, number, !Array<T>):?} sorter Function to call for
  *     every element.  This takes 3 arguments (the element, the index and the
  *     array) and must return a valid object key (a string, number, etc), or
  *     undefined, if that object should not be placed in a bucket.
  * @param {S=} opt_obj The object to be used as the value of 'this' within
  *     sorter.
- * @return {!Object} An object, with keys being all of the unique return values
- *     of sorter, and values being arrays containing the items for
+ * @return {!Object<!Array<T>>} An object, with keys being all of the unique
+ *     return values of sorter, and values being arrays containing the items for
  *     which the splitter returned that key.
  * @template T,S
  */
