@@ -257,30 +257,6 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
 
 
 /**
- * This function is deprecated, please use safeLoadAndVerify instead.
- *
- * @param {string} uri The URI of the JavaScript.
- * @param {string} verificationObjName The name of the verification object that
- *     the loaded script should set.
- * @param {goog.net.jsloader.Options} options Optional parameters. See
- *     goog.net.jsloader.Options documentation for details.
- * @return {!goog.async.Deferred} The deferred result, that may be used to add
- *     callbacks and/or cancel the transmission.
- *     The success callback will be called with a single parameter containing
- *     the value of the verification object.
- *     The error callback will be called with a single goog.net.jsloader.Error
- *     parameter.
- * @deprecated
- */
-goog.net.jsloader.loadAndVerify = function(uri, verificationObjName, options) {
-  var trustedUri =
-      goog.html.legacyconversions.trustedResourceUrlFromString(uri);
-  return goog.net.jsloader.safeLoadAndVerify(
-      trustedUri, verificationObjName, options);
-};
-
-
-/**
  * Loads a JavaScript file and verifies it was evaluated successfully, using a
  * verification object.
  * The verification object is set by the loaded JavaScript at the end of the

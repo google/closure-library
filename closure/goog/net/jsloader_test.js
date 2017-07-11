@@ -86,8 +86,8 @@ function testLoad() {
 }
 
 
-// Sunny day scenario for loadAndVerify function.
-function testLoadAndVerify() {
+// Sunny day scenario for safeLoadAndVerify function.
+function testSafeLoadAndVerify() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'test2');
@@ -100,7 +100,7 @@ function testLoadAndVerify() {
 
 
 // What happens when the verification object is not set by the loaded script?
-function testLoadAndVerifyError() {
+function testSafeLoadAndVerifyError() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'fake');
@@ -115,7 +115,7 @@ function testLoadAndVerifyError() {
 
 
 // Tests that callers can cancel the deferred without error.
-function testLoadAndVerifyCanceled() {
+function testSafeLoadAndVerifyCanceled() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'test2');
