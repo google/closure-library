@@ -123,8 +123,8 @@ function testSafeLoadAndVerifyCanceled() {
 }
 
 
-// Test the loadMany function.
-function testLoadMany() {
+// Test the safeLoadMany function.
+function testSafeLoadMany() {
   window.test1 = null;
   window.test4 = null;
 

@@ -36,6 +36,7 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventId');
 goog.require('goog.events.EventTarget');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.module.AbstractModuleLoader');
@@ -305,7 +306,8 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
     // another domain.
     // The scripts need to load serially, so this is much slower than parallel
     // script loads with source url injection.
-    goog.net.jsloader.loadMany(uris);
+    goog.net.jsloader.safeLoadMany(goog.array.map(
+        uris, goog.html.legacyconversions.trustedResourceUrlFromString));
   } else {
     var loadStatus = this.loadingModulesStatus_[ids];
     loadStatus.requestUris = uris;

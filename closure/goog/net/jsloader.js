@@ -90,23 +90,6 @@ goog.net.jsloader.scriptLoadingDeferred_;
 
 
 /**
- * This is deprecated, please use safeLoadMany.
- *
- * @param {Array<string>} uris The URIs to load.
- * @param {goog.net.jsloader.Options=} opt_options Optional parameters. See
- *     goog.net.jsloader.options documentation for details.
- * @return {!goog.async.Deferred} The deferred result, that may be used to add
- *     callbacks
- * @deprecated
- */
-goog.net.jsloader.loadMany = function(uris, opt_options) {
-  var trustedUris = goog.array.map(
-      uris, goog.html.legacyconversions.trustedResourceUrlFromString);
-  return goog.net.jsloader.safeLoadMany(trustedUris, opt_options);
-};
-
-
-/**
  * Loads and evaluates the JavaScript files at the specified URIs, guaranteeing
  * the order of script loads.
  *
