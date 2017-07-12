@@ -940,7 +940,7 @@ var assertArrayEquals = function(a, b, opt_c) {
  * each element is equal.
  * @param {string|Object} a Failure message (3 arguments)
  *     or object #1 (2 arguments).
- * @param {Object} b Object #1 (2 arguments) or object #2 (3 arguments).
+ * @param {Object} b Object #2 (2 arguments) or object #1 (3 arguments).
  * @param {Object=} opt_c Object #2 (3 arguments).
  */
 var assertElementsEquals = function(a, b, opt_c) {
