@@ -12,22 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.LOCALE = 'en_US';
 goog.provide('goog.date.relativeCommonTests');
 goog.setTestOnly('goog.date.relativeCommonTests');
 
 goog.require('goog.date.DateTime');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 // Timestamp to base times for test on.
 var baseTime = new Date(2009, 2, 23, 14, 31, 6).getTime();
 
-// Ensure goog.now returns a constant timestamp.
-goog.now = function() {
-  return baseTime;
-};
+function setUpPage() {
+  var propertyReplacer = new goog.testing.PropertyReplacer();
+  // Ensure goog.now returns a constant timestamp.
+  propertyReplacer.replace(goog, 'now', function() {
+    return baseTime;
+  });
+  propertyReplacer.replace(goog, 'LOCALE', 'en_US');
+}
 
 
 function testFormatRelativeForPastDates() {

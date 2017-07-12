@@ -18,13 +18,16 @@ goog.setTestOnly('goog.i18n.collationTest');
 
 goog.require('goog.i18n.collation');
 goog.require('goog.testing.ExpectedFailures');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 var expectedFailures;
+var propertyReplacer;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
+  propertyReplacer = new goog.testing.PropertyReplacer();
 }
 
 function tearDown() {
@@ -32,7 +35,7 @@ function tearDown() {
 }
 
 function testGetEnComparator() {
-  goog.LOCALE = 'en';
+  propertyReplacer.replace(goog, 'LOCALE', 'en');
   var compare = goog.i18n.collation.createComparator();
   // The côte/coté comparison fails in FF/Linux (v19.0) because
   // calling 'côte'.localeCompare('coté')  gives a negative number (wrong)
@@ -49,14 +52,14 @@ function testGetEnComparator() {
 }
 
 function testGetFrComparator() {
-  goog.LOCALE = 'fr-CA';
+  propertyReplacer.replace(goog, 'LOCALE', 'fr-CA');
   var compare = goog.i18n.collation.createComparator();
   if (!goog.i18n.collation.hasNativeComparator()) return;
   assertTrue(compare('côte', 'coté') < 0);
 }
 
 function testGetComparatorForSpecificLocale() {
-  goog.LOCALE = 'en';
+  propertyReplacer.replace(goog, 'LOCALE', 'en');
   var compare = goog.i18n.collation.createComparator('fr-CA');
   if (!goog.i18n.collation.hasNativeComparator('fr-CA')) return;
   // 'côte' and 'coté' sort differently for en and fr-CA.

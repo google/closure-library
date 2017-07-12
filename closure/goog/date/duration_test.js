@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.LOCALE = 'en_US';
 goog.provide('goog.date.durationTest');
 goog.setTestOnly('goog.date.durationTest');
 
@@ -22,6 +21,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeSymbols_bn');  // Bengali
 goog.require('goog.i18n.DateTimeSymbols_en');
 goog.require('goog.i18n.DateTimeSymbols_fa');  // Persian
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 var MINUTE_MS = 60000;
@@ -29,6 +29,12 @@ var HOUR_MS = 60 * MINUTE_MS;
 var DAY_MS = 24 * HOUR_MS;
 
 var duration = goog.date.duration.format;
+
+
+function setUpPage() {
+  var propertyReplacer = new goog.testing.PropertyReplacer();
+  propertyReplacer.replace(goog, 'LOCALE', 'en_US');
+}
 
 function testFormatDurationZeroMinutes() {
   assertEquals('0 minutes', duration(0));
