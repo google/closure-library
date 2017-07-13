@@ -171,11 +171,13 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
       if (onload) {
         onload(e);
       }
-      // Wait so that we don't interfere with WebDriver.
+      // Execute the test on the next turn, to allow the WebDriver.get()
+      // operation to return to the test runner and begin polling.
       realTimeout(function() {
         if (!tr.initialized) {
           var testCase = new goog.testing.TestCase(document.title);
-          goog.testing.TestCase.initializeTestRunner(testCase);
+          goog.testing.TestCase.initializeTestCase(testCase);
+          tr.initialize(testCase);
         }
         tr.execute();
       }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
