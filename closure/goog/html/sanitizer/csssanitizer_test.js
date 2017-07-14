@@ -14,6 +14,7 @@
 
 /** @fileoverview testcases for CSS Sanitizer.*/
 
+goog.provide('goog.html.CssSanitizerTest');
 goog.setTestOnly();
 
 goog.require('goog.array');

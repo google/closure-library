@@ -17,6 +17,7 @@
  * @fileoverview Unit tests for HTML Sanitizer
  */
 
+goog.provide('goog.html.HtmlSanitizerTest');
 goog.setTestOnly();
 
 goog.require('goog.array');

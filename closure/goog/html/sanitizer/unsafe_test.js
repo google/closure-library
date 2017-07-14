@@ -16,6 +16,7 @@
  * @fileoverview Unit Test for the unsafe API of the HTML Sanitizer.
  */
 
+goog.provide('goog.html.UnsafeTest');
 goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
