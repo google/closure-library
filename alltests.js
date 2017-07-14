@@ -60,6 +60,7 @@ var _allTests = [
   'closure/goog/debug/devcss/devcss_test.html',
   'closure/goog/debug/enhanceerror_test.html',
   'closure/goog/debug/entrypointregistry_test.html',
+  'closure/goog/debug/errorcontext_test.html',
   'closure/goog/debug/errorhandler_async_test.html',
   'closure/goog/debug/errorhandler_test.html',
   'closure/goog/debug/errorreporter_test.html',

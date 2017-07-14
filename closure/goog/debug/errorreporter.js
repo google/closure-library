@@ -26,6 +26,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.Error');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -307,11 +308,18 @@ goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
  *     include in the error report.
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e, opt_context) {
-  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
+  var errorcontext = goog.module.get('goog.debug.errorcontext');
 
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
   var context = opt_context ? goog.object.clone(opt_context) : {};
+  if (e instanceof Error) {
+    goog.object.extend(
+        context, errorcontext.getErrorContext(/** @type {!Error} */ (e)));
+  }
+
+  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
+
   if (this.contextProvider_) {
     try {
       this.contextProvider_(error, context);
