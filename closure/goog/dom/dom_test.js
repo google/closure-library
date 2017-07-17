@@ -322,8 +322,6 @@ function testGetViewportSize() {
 function testGetViewportSizeInIframe() {
   var iframe = /** @type {HTMLIFrameElement} */ (goog.dom.getElement('iframe'));
   var contentDoc = goog.dom.getFrameContentDocument(iframe);
-  contentDoc.write('<body></body>');
-
   var outerSize = goog.dom.getViewportSize();
   var innerSize = (new goog.dom.DomHelper(contentDoc)).getViewportSize();
   assert('Viewport sizes must not match', innerSize.width != outerSize.width);
