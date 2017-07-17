@@ -34,6 +34,7 @@
 goog.provide('goog.net.Jsonp');
 
 goog.require('goog.Uri');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.net.jsloader');
 
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
@@ -229,7 +230,9 @@ goog.net.Jsonp.prototype.send = function(
     options.attributes = {'nonce': this.nonce_};
   }
 
-  var deferred = goog.net.jsloader.load(uri.toString(), options);
+  var deferred = goog.net.jsloader.safeLoad(
+      goog.html.legacyconversions.trustedResourceUrlFromString(uri.toString()),
+      options);
   var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
   deferred.addErrback(error);
 
