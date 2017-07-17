@@ -382,6 +382,16 @@ ChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
+ * Overrides the default HTTP method.
+ *
+ * @param {string} verb The HTTP method
+ */
+ChannelRequest.prototype.setVerb = function(verb) {
+  this.verb_ = verb;
+};
+
+
+/**
  * Sets the timeout for a request
  *
  * @param {number} timeout   The timeout in MS for when we fail the request.
@@ -406,7 +416,7 @@ ChannelRequest.prototype.setReadyStateChangeThrottle = function(throttle) {
  * Uses XMLHTTP to send an HTTP POST to the server.
  *
  * @param {goog.Uri} uri  The uri of the request.
- * @param {string} postData  The data for the post body.
+ * @param {?string} postData  The data for the post body.
  * @param {boolean} decodeChunks  Whether to the result is expected to be
  *     encoded for chunking and thus requires decoding.
  */
@@ -480,7 +490,9 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
 
   var headers = this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
   if (this.postData_) {
-    this.verb_ = 'POST';
+    if (!this.verb_) {
+      this.verb_ = 'POST';
+    }
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
     this.xmlHttp_.send(this.requestUri_, this.verb_, this.postData_, headers);
   } else {

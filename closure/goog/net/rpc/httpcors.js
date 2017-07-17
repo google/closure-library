@@ -41,6 +41,17 @@ exports.HTTP_HEADERS_PARAM_NAME = '$httpHeaders';
 
 
 /**
+ * The default URL parameter name to overwrite http method with a URL param
+ * to avoid CORS preflight.
+ *
+ * See https://github.com/whatwg/fetch/issues/210#issue-129531743 for the spec.
+ *
+ * @type {string}
+ */
+exports.HTTP_METHOD_PARAM_NAME = '$httpMethod';
+
+
+/**
  * Generates the URL parameter value with custom headers encoded as
  * HTTP/1.1 headers block.
  *

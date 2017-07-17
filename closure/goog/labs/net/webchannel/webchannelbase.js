@@ -1206,7 +1206,7 @@ WebChannelBase.prototype.open_ = function() {
 
   // http-session-id to be generated as the response
   if (this.getBackgroundChannelTest() && this.getHttpSessionIdParam()) {
-    uri.setParameterValues(
+    uri.setParameterValue(
         WebChannel.X_HTTP_SESSION_ID, this.getHttpSessionIdParam());
   }
 
@@ -1219,7 +1219,14 @@ WebChannelBase.prototype.open_ = function() {
   }
 
   this.forwardChannelRequestPool_.addRequest(request);
-  request.xmlHttpPost(uri, requestText, true);
+
+  // Check the option and use GET to enable QUIC 0-RTT
+  if (this.fastHandshake_) {
+    uri.setParameterValue('$req', requestText);
+    request.xmlHttpPost(uri, null, true);  // Send as a GET
+  } else {
+    request.xmlHttpPost(uri, requestText, true);
+  }
 };
 
 
