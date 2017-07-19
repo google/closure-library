@@ -47,11 +47,12 @@ var isBorderBox = goog.dom.isCss1CompatMode() ?
     (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('6')) :
     true;
 var EPSILON = 2;
-var expectedFailures = new goog.testing.ExpectedFailures();
+var expectedFailures;
 var $ = goog.dom.getElement;
 var mockUserAgent;
 
 function setUpPage() {
+  expectedFailures = new goog.testing.ExpectedFailures();
   // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
   goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 

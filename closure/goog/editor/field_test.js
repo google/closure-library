@@ -43,14 +43,10 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.events');
 goog.require('goog.testing.events.Event');
+goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 goog.setTestOnly('Tests for goog.editor.*Field');
-
-
-/** Constructor to use for creating the field. Set by the test HTML file. */
-var FieldConstructor;
-
 
 /** Hard-coded HTML for the tests. */
 var HTML = '<div id="testField">I am text.</div>';
