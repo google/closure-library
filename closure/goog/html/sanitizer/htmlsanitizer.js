@@ -219,28 +219,32 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 };
 
 
-
 /**
- * Converts a HtmlSanitizerUrlPolicy to a HtmlSanitizerPolicy by calling the
- * HtmlSanitizerUrlPolicy with the required arguments and unwrapping the
- * returned SafeUrl.
- * @param {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} customUrlPolicy
+ * Transforms a {@link HtmlSanitizerUrlPolicy} into a
+ * {@link HtmlSanitizerPolicy} by returning a wrapper that calls the {@link
+ * HtmlSanitizerUrlPolicy} with the required arguments and unwraps the returned
+ * {@link SafeUrl}. This is necessary because internally the sanitizer works
+ * with {@HtmlSanitizerPolicy} to sanitize attributes, but its public API must
+ * use {@HtmlSanitizerUrlPolicy} to ensure that callers do not violate SafeHtml
+ * invariants in their custom handlers.
+ * @param {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} urlPolicy
  * @return {!goog.html.sanitizer.HtmlSanitizerPolicy}
  * @private
  */
-goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_ = function(customUrlPolicy) {
-  return /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
-      function(url, policyHints) {
-        var trimmed = goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(
-            url, policyHints);
-        var safeUrl = customUrlPolicy(trimmed, policyHints);
-        if (safeUrl && goog.html.SafeUrl.unwrap(safeUrl) !=
+goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_ = function(urlPolicy) {
+  return /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (function(
+      url, policyHints) {
+    var trimmed =
+        goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(url, policyHints);
+    var safeUrl = urlPolicy(trimmed, policyHints);
+    if (safeUrl &&
+        goog.html.SafeUrl.unwrap(safeUrl) !=
             goog.html.SafeUrl.INNOCUOUS_STRING) {
-          return goog.html.SafeUrl.unwrap(safeUrl);
-        } else {
-          return null;
-        }
-      });
+      return goog.html.SafeUrl.unwrap(safeUrl);
+    } else {
+      return null;
+    }
+  });
 };
 
 
@@ -326,14 +330,14 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   /**
    * A function to be applied to URLs found on the parsing process which do not
    * trigger requests.
-   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerUrlPolicy}
    */
   this.urlPolicy_ = goog.html.sanitizer.HtmlSanitizer.defaultUrlPolicy_;
 
   /**
    * A function to be applied to urls found on the parsing process which may
    * trigger requests.
-   * @private {!goog.html.sanitizer.HtmlSanitizerPolicy}
+   * @private {!goog.html.sanitizer.HtmlSanitizerUrlPolicy}
    */
   this.networkRequestUrlPolicy_ =
       goog.html.sanitizer.HtmlSanitizer.defaultNetworkRequestUrlPolicy_;
@@ -551,8 +555,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.addOriginalTagNames =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     .withCustomNetworkRequestUrlPolicy = function(customNetworkReqUrlPolicy) {
-  this.networkRequestUrlPolicy_ =
-      goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_(customNetworkReqUrlPolicy);
+  this.networkRequestUrlPolicy_ = customNetworkReqUrlPolicy;
   return this;
 };
 
@@ -564,8 +567,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withCustomUrlPolicy =
     function(customUrlPolicy) {
-  this.urlPolicy_ =
-      goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_(customUrlPolicy);
+  this.urlPolicy_ = customUrlPolicy;
   return this;
 };
 
@@ -653,6 +655,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build = function() {
   return new goog.html.sanitizer.HtmlSanitizer(this);
 };
 
+
 /**
  * Installs the sanitization policies for the attributes.
  * May only be called once.
@@ -678,20 +681,25 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
           goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_));
 
   var urlAttributes = ['* ACTION', '* CITE', '* HREF'];
+  var urlPolicy =
+      goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_(this.urlPolicy_);
   goog.array.forEach(urlAttributes, function(attribute) {
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, attribute,
-        this.urlPolicy_);
+        urlPolicy);
   }, this);
 
   var networkUrlAttributes = [
     // LONGDESC can result in a network request. See b/23381636.
     '* LONGDESC', '* SRC', 'LINK HREF'
   ];
+  var networkRequestUrlPolicy =
+      goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_(
+          this.networkRequestUrlPolicy_);
   goog.array.forEach(networkUrlAttributes, function(attribute) {
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, attribute,
-        this.networkRequestUrlPolicy_);
+        networkRequestUrlPolicy);
   }, this);
 
   var nameAttributes = ['* FOR', '* HEADERS', '* NAME'];
@@ -723,8 +731,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
   if (this.sanitizeCssPolicy_) {
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
-        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
-            this.sanitizeCssPolicy_, this.networkRequestUrlPolicy_)));
+        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
+        (goog.partial(this.sanitizeCssPolicy_, networkRequestUrlPolicy)));
   } else {
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
@@ -737,11 +745,11 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
 /**
  * The default policy for URLs: allow any.
  * @param {string} token The URL to undergo this policy.
- * @return {?string}
+ * @return {?goog.html.SafeUrl}
  * @private
  */
 goog.html.sanitizer.HtmlSanitizer.defaultUrlPolicy_ =
-    goog.html.sanitizer.HtmlSanitizer.sanitizeUrl_(goog.html.SafeUrl.sanitize);
+    goog.html.SafeUrl.sanitize;
 
 
 /**
