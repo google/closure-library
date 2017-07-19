@@ -361,20 +361,16 @@ goog.debug.Logger.getLogger = function(name) {
  */
 goog.debug.Logger.logToProfilers = function(msg) {
   // Using goog.global, as loggers might be used in window-less contexts.
-  if (goog.global['console']) {
-    if (goog.global['console']['timeStamp']) {
-      // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
-      goog.global['console']['timeStamp'](msg);
-    } else if (goog.global['console']['markTimeline']) {
-      // TODO(user): markTimeline is deprecated. Drop this else clause entirely
-      // after Chrome M14 hits stable.
-      goog.global['console']['markTimeline'](msg);
-    }
+  var console = goog.global['console'];
+  if (console && console['timeStamp']) {
+    // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
+    console['timeStamp'](msg);
   }
 
-  if (goog.global['msWriteProfilerMark']) {
+  var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
+  if (msWriteProfilerMark) {
     // Logs a message to the Microsoft profiler
-    goog.global['msWriteProfilerMark'](msg);
+    msWriteProfilerMark(msg);
   }
 };
 
