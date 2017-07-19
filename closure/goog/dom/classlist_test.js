@@ -25,8 +25,12 @@ goog.require('goog.dom.classlist');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
 
-var expectedFailures = new goog.testing.ExpectedFailures();
+var expectedFailures;
 var classlist = goog.dom.classlist;
+
+function setUpPage() {
+  expectedFailures = new goog.testing.ExpectedFailures();
+}
 
 function tearDown() {
   expectedFailures.handleTearDown();

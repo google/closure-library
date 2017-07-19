@@ -48,11 +48,15 @@ var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0.1;
 // in reporting them.
 var EPSILON = 2;
 
-var expectedFailures = new goog.testing.ExpectedFailures();
+var expectedFailures;
 
 var corner = goog.positioning.Corner;
 var overflow = goog.positioning.Overflow;
 var testArea;
+
+function setUpPage() {
+  expectedFailures = new goog.testing.ExpectedFailures();
+}
 
 function setUp() {
   window.scrollTo(0, 0);
