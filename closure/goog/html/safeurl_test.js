@@ -50,6 +50,7 @@ function testSafeUrlFromBlob_withSafeType() {
   if (isIE9OrLower()) {
     return;
   }
+  assertBlobTypeIsSafe('audio/ogg', true);
   assertBlobTypeIsSafe('image/png', true);
   assertBlobTypeIsSafe('iMage/pNg', true);
   assertBlobTypeIsSafe('video/mpeg', true);
@@ -104,6 +105,7 @@ function testSafeUrlFromDataUrl_withSafeType() {
       true);
   assertDataUrlIsSafe('dATa:iMage/pNg;bASe64,abc===', true);
   assertDataUrlIsSafe('data:image/webp;base64,abc===', true);
+  assertDataUrlIsSafe('data:audio/ogg;base64,abc', true);
   assertDataUrlIsSafe('data:video/mpeg;base64,abc', true);
   assertDataUrlIsSafe('data:video/ogg;base64,z=', true);
   assertDataUrlIsSafe('data:video/mp4;base64,z=', true);
@@ -118,10 +120,13 @@ function testSafeUrlFromDataUrl_withUnsafeType() {
   assertDataUrlIsSafe('data:', false);
   assertDataUrlIsSafe('not-data:image/png;base64,z=', false);
   assertDataUrlIsSafe(' data:image/png;base64,z=', false);
+  assertDataUrlIsSafe('data:image/;base64,z=', false);
   assertDataUrlIsSafe('data:image/png;base64,z= ', false);
   assertDataUrlIsSafe('data:ximage/png', false);
   assertDataUrlIsSafe('data:ximage/png;base64,z=', false);
   assertDataUrlIsSafe('data:image/pngx;base64,z=', false);
+  assertDataUrlIsSafe('data:audio/whatever;base64,z=', false);
+  assertDataUrlIsSafe('data:audio/;base64,z=', false);
   assertDataUrlIsSafe('data:video/whatever;base64,z=', false);
   assertDataUrlIsSafe('data:video/;base64,z=', false);
   assertDataUrlIsSafe('data:image/png;base64,', false);
