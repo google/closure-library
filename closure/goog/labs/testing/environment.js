@@ -65,7 +65,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   },
 
 
-  /** Runs immediately before the setUpPage phase of JsUnit tests. */
+  /**
+   * Runs immediately before the setUpPage phase of JsUnit tests.
+   * @return {!goog.Promise<?>|undefined} An optional Promise which must be
+   *     resolved before the test is executed.
+   */
   setUpPage: function() {
     if (this.mockClock && this.mockClock.isDisposed()) {
       this.mockClock = new goog.testing.MockClock(true);
@@ -81,7 +85,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     }
   },
 
-  /** Runs immediately before the setUp phase of JsUnit tests. */
+  /**
+   * Runs immediately before the setUp phase of JsUnit tests.
+   * @return {!goog.Promise<?>|undefined} An optional Promise which must be
+   *     resolved before the test case is executed.
+   */
   setUp: goog.nullFunction,
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
