@@ -45,7 +45,6 @@ var _allTests = [
   'closure/goog/crypt/sha224_test.html',
   'closure/goog/crypt/sha256_test.html',
   'closure/goog/crypt/sha2_64bit_test.html',
-  'closure/goog/cssom/cssom_test.html',
   'closure/goog/cssom/iframe/style_test.html',
   'closure/goog/datasource/datasource_test.html',
   'closure/goog/datasource/expr_test.html',
