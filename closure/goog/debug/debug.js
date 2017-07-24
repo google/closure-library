@@ -21,6 +21,7 @@
 goog.provide('goog.debug');
 
 goog.require('goog.array');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.userAgent');
 
 
@@ -323,6 +324,28 @@ goog.debug.enhanceError = function(err, opt_message) {
       ++x;
     }
     error['message' + x] = String(opt_message);
+  }
+  return error;
+};
+
+
+/**
+ * Converts an object to an Error using the object's toString if it's not
+ * already an Error, adds a stacktrace if there isn't one, and optionally adds
+ * context to the Error, which is reported by the closure error reporter.
+ * @param {*} err The original thrown error, object, or string.
+ * @param {!Object<string, string>=} opt_context Key-value context to add to the
+ *     Error.
+ * @return {!Error} If err is an Error, it is enhanced and returned. Otherwise,
+ *     it is converted to an Error which is enhanced and returned.
+ */
+goog.debug.enhanceErrorWithContext = function(err, opt_context) {
+  var errorcontext = goog.module.get('goog.debug.errorcontext');
+  var error = goog.debug.enhanceError(err);
+  if (opt_context) {
+    for (var key in opt_context) {
+      errorcontext.addErrorContext(error, key, opt_context[key]);
+    }
   }
   return error;
 };

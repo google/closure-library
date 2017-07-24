@@ -16,6 +16,7 @@ goog.provide('goog.debugTest');
 goog.setTestOnly('goog.debugTest');
 
 goog.require('goog.debug');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
 
@@ -97,4 +98,25 @@ function testDeepExpose() {
   assert(goog.hasUid(a));
   assertFalse(goog.hasUid(b));
   assertFalse(goog.hasUid(c));
+}
+
+
+function testEnhanceErrorWithContext() {
+  var errorcontext = goog.module.get('goog.debug.errorcontext');
+  var err = 'abc';
+  var context = {firstKey: 'first', secondKey: 'another key'};
+  var errorWithContext = goog.debug.enhanceErrorWithContext(err, context);
+  assertObjectEquals(context, errorcontext.getErrorContext(errorWithContext));
+}
+
+
+function testEnhanceErrorWithContext_combinedContext() {
+  var errorcontext = goog.module.get('goog.debug.errorcontext');
+  var err = new Error('abc');
+  errorcontext.addErrorContext(err, 'a', '123');
+  var context = {b: '456', c: '789'};
+  var errorWithContext = goog.debug.enhanceErrorWithContext(err, context);
+  assertObjectEquals(
+      {a: '123', b: '456', c: '789'},
+      errorcontext.getErrorContext(errorWithContext));
 }
