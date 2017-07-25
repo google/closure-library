@@ -80,7 +80,8 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
   /** @private {string} */
   this.positiveSuffix_ = '';
   /** @private {string} */
-  this.negativePrefix_ = '-';
+  this.negativePrefix_ =
+      goog.i18n.NumberFormat.getNumberFormatSymbols_().MINUS_SIGN;
   /** @private {string} */
   this.negativeSuffix_ = '';
 
@@ -175,6 +176,8 @@ goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
 
 /**
  * Set if the usage of Ascii digits in formatting should be enforced.
+ * NOTE: This function must be called before constructing NumberFormat.
+ *
  * @param {boolean} doEnforce Boolean value about if Ascii digits should be
  *     enforced.
  */
