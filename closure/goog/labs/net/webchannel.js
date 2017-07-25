@@ -158,7 +158,7 @@ goog.net.WebChannel.Options;
  * Unicode strings (sent by the server) may or may not need be escaped, as
  * decided by the server.
  *
- * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
+ * @typedef {(ArrayBuffer|Blob|Object<string, Object|string>|Array)}
  */
 goog.net.WebChannel.MessageData;
 
