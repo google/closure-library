@@ -248,7 +248,7 @@ goog.html.SafeUrl.fromConstant = function(url) {
  * @private
  */
 goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
-    '^(?:audio/(?:aac|midi|ogg|x-wav|webm)|' +
+    '^(?:audio/(?:3gpp|3gpp2|aac|midi|mp4|mpeg|ogg|x-wav|webm)|' +
         'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|' +
         'video/(?:mpeg|mp4|ogg|webm))$',
     'i');
