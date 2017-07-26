@@ -746,13 +746,32 @@ function testGeckoShortcuts() {
 
 function testWindows_multiKeyShortcuts() {
   if (goog.userAgent.WINDOWS) {
-    listener.shortcutFired('1');
+    listener.shortcutFired('nextComment');
     listener.$replay();
 
-    handler.registerShortcut('1', 'ctrl+alt+n c');
-    fire(KeyCodes.N, {ctrlKey: true, altKey: true});
-    fire(KeyCodes.C);
+    handler.registerShortcut('nextComment', 'ctrl+alt+n ctrl+alt+c');
+    // We need to specify a keyPressKeyCode of 0 here because on Windows,
+    // keystrokes that don't produce printable characters don't cause a keyPress
+    // event to fire.
+    assertFalse(fireAltGraphKey(KeyCodes.N, 0, {ctrlKey: true, altKey: true}));
+    assertFalse(fireAltGraphKey(KeyCodes.C, 0, {ctrlKey: true, altKey: true}));
+    listener.$verify();
+  }
+}
 
+function testWindows_multikeyShortcuts_repeatedKeyDoesntInterfere() {
+  if (goog.userAgent.WINDOWS) {
+    listener.shortcutFired('announceCursorLocation');
+    listener.$replay();
+
+    handler.registerShortcut('announceAnchorText', 'ctrl+alt+a ctrl+alt+a');
+    handler.registerShortcut('announceCursorLocation', 'ctrl+alt+a ctrl+alt+l');
+
+    // We need to specify a keyPressKeyCode of 0 here because on Windows,
+    // keystrokes that don't produce printable characters don't cause a keyPress
+    // event to fire.
+    assertFalse(fireAltGraphKey(KeyCodes.A, 0, {ctrlKey: true, altKey: true}));
+    assertFalse(fireAltGraphKey(KeyCodes.L, 0, {ctrlKey: true, altKey: true}));
     listener.$verify();
   }
 }
@@ -761,12 +780,12 @@ function testWindows_multikeyShortcuts_polishKey() {
   if (goog.userAgent.WINDOWS) {
     listener.$replay();
 
-    handler.registerShortcut('announceCursorLocation', 'ctrl+alt+a l');
+    handler.registerShortcut('announceCursorLocation', 'ctrl+alt+a ctrl+alt+l');
 
     // If a Polish key is a subsection of a keyboard shortcut, then
     // the key should still be written.
-    assertTrue(fireAltGraphKey(
-        KeyCodes.A, 0x0104, {ctrlKey: true, altKey: true}));
+    assertTrue(
+        fireAltGraphKey(KeyCodes.A, 0x0105, {ctrlKey: true, altKey: true}));
     listener.$verify();
   }
 }
