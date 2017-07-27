@@ -280,6 +280,24 @@ goog.testing.PerformanceTimer.prototype.runAsyncTaskSample_ = function(
 
 
 /**
+ * Return the median of the samples.
+ * @param {!Array<number>} samples
+ * @return {number}
+ */
+goog.testing.PerformanceTimer.median = function(samples) {
+  samples.sort(function(a, b) {
+    return a - b;
+  });
+  let half = Math.floor(samples.length / 2);
+  if (samples.length % 2) {
+    return samples[half];
+  } else {
+    return (samples[half - 1] + samples[half]) / 2.0;
+  }
+};
+
+
+/**
  * Execute a function that optionally returns a deferred object and continue
  * with the given continuation function only once the deferred object has a
  * result.
@@ -310,6 +328,7 @@ goog.testing.PerformanceTimer.createResults = function(samples) {
   return {
     'average': goog.math.average.apply(null, samples),
     'count': samples.length,
+    'median': goog.testing.PerformanceTimer.median(samples),
     'maximum': Math.max.apply(null, samples),
     'minimum': Math.min.apply(null, samples),
     'standardDeviation': goog.math.standardDeviation.apply(null, samples),

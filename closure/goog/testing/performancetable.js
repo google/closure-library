@@ -96,6 +96,7 @@ goog.testing.PerformanceTable.prototype.initRoot_ = function() {
       '    </tr>' +
       '    <tr>' +
       '      <th>Average</th>' +
+      '      <th>Median</th>' +
       '      <th>Std Dev</th>' +
       '      <th>Minimum</th>' +
       '      <th>Maximum</th>' +
@@ -166,13 +167,16 @@ goog.testing.PerformanceTable.prototype.recordResults = function(
   var standardDeviation = results['standardDeviation'];
   var isSuspicious = average < 0 || standardDeviation > average * .5;
   var resultsRow = goog.dom.createDom(
-      goog.dom.TagName.TR, null, goog.dom.createDom(
-                                     goog.dom.TagName.TD, 'test-description',
-                                     opt_desc || 'No description'),
+      goog.dom.TagName.TR, null,
+      goog.dom.createDom(
+          goog.dom.TagName.TD, 'test-description',
+          opt_desc || 'No description'),
       goog.dom.createDom(
           goog.dom.TagName.TD, 'test-count', String(results['count'])),
       goog.dom.createDom(
           goog.dom.TagName.TD, 'test-average', this.round_(average)),
+      goog.dom.createDom(
+          goog.dom.TagName.TD, 'test-median', String(results['median'])),
       goog.dom.createDom(
           goog.dom.TagName.TD, 'test-standard-deviation',
           this.round_(standardDeviation)),
