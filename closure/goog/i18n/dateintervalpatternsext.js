@@ -38538,1230 +38538,2344 @@ exports.DateIntervalPatterns_zu_ZA = {
   }
 };
 
-if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
-  defaultPatterns = exports.DateIntervalPatterns_af_NA;
-} else if (goog.LOCALE == 'af_ZA' || goog.LOCALE == 'af-ZA') {
-  defaultPatterns = exports.DateIntervalPatterns_af_ZA;
-} else if (goog.LOCALE == 'agq') {
-  defaultPatterns = exports.DateIntervalPatterns_agq;
-} else if (goog.LOCALE == 'agq_CM' || goog.LOCALE == 'agq-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_agq_CM;
-} else if (goog.LOCALE == 'ak') {
-  defaultPatterns = exports.DateIntervalPatterns_ak;
-} else if (goog.LOCALE == 'ak_GH' || goog.LOCALE == 'ak-GH') {
-  defaultPatterns = exports.DateIntervalPatterns_ak_GH;
-} else if (goog.LOCALE == 'am_ET' || goog.LOCALE == 'am-ET') {
-  defaultPatterns = exports.DateIntervalPatterns_am_ET;
-} else if (goog.LOCALE == 'ar_001' || goog.LOCALE == 'ar-001') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_001;
-} else if (goog.LOCALE == 'ar_AE' || goog.LOCALE == 'ar-AE') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_AE;
-} else if (goog.LOCALE == 'ar_BH' || goog.LOCALE == 'ar-BH') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_BH;
-} else if (goog.LOCALE == 'ar_DJ' || goog.LOCALE == 'ar-DJ') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_DJ;
-} else if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_EG;
-} else if (goog.LOCALE == 'ar_EH' || goog.LOCALE == 'ar-EH') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_EH;
-} else if (goog.LOCALE == 'ar_ER' || goog.LOCALE == 'ar-ER') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_ER;
-} else if (goog.LOCALE == 'ar_IL' || goog.LOCALE == 'ar-IL') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_IL;
-} else if (goog.LOCALE == 'ar_IQ' || goog.LOCALE == 'ar-IQ') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_IQ;
-} else if (goog.LOCALE == 'ar_JO' || goog.LOCALE == 'ar-JO') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_JO;
-} else if (goog.LOCALE == 'ar_KM' || goog.LOCALE == 'ar-KM') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_KM;
-} else if (goog.LOCALE == 'ar_KW' || goog.LOCALE == 'ar-KW') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_KW;
-} else if (goog.LOCALE == 'ar_LB' || goog.LOCALE == 'ar-LB') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_LB;
-} else if (goog.LOCALE == 'ar_LY' || goog.LOCALE == 'ar-LY') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_LY;
-} else if (goog.LOCALE == 'ar_MA' || goog.LOCALE == 'ar-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_MA;
-} else if (goog.LOCALE == 'ar_MR' || goog.LOCALE == 'ar-MR') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_MR;
-} else if (goog.LOCALE == 'ar_OM' || goog.LOCALE == 'ar-OM') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_OM;
-} else if (goog.LOCALE == 'ar_PS' || goog.LOCALE == 'ar-PS') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_PS;
-} else if (goog.LOCALE == 'ar_QA' || goog.LOCALE == 'ar-QA') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_QA;
-} else if (goog.LOCALE == 'ar_SA' || goog.LOCALE == 'ar-SA') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_SA;
-} else if (goog.LOCALE == 'ar_SD' || goog.LOCALE == 'ar-SD') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_SD;
-} else if (goog.LOCALE == 'ar_SO' || goog.LOCALE == 'ar-SO') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_SO;
-} else if (goog.LOCALE == 'ar_SS' || goog.LOCALE == 'ar-SS') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_SS;
-} else if (goog.LOCALE == 'ar_SY' || goog.LOCALE == 'ar-SY') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_SY;
-} else if (goog.LOCALE == 'ar_TD' || goog.LOCALE == 'ar-TD') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_TD;
-} else if (goog.LOCALE == 'ar_TN' || goog.LOCALE == 'ar-TN') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_TN;
-} else if (goog.LOCALE == 'ar_XB' || goog.LOCALE == 'ar-XB') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_XB;
-} else if (goog.LOCALE == 'ar_YE' || goog.LOCALE == 'ar-YE') {
-  defaultPatterns = exports.DateIntervalPatterns_ar_YE;
-} else if (goog.LOCALE == 'as') {
-  defaultPatterns = exports.DateIntervalPatterns_as;
-} else if (goog.LOCALE == 'as_IN' || goog.LOCALE == 'as-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_as_IN;
-} else if (goog.LOCALE == 'asa') {
-  defaultPatterns = exports.DateIntervalPatterns_asa;
-} else if (goog.LOCALE == 'asa_TZ' || goog.LOCALE == 'asa-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_asa_TZ;
-} else if (goog.LOCALE == 'ast') {
-  defaultPatterns = exports.DateIntervalPatterns_ast;
-} else if (goog.LOCALE == 'ast_ES' || goog.LOCALE == 'ast-ES') {
-  defaultPatterns = exports.DateIntervalPatterns_ast_ES;
-} else if (goog.LOCALE == 'az_Cyrl' || goog.LOCALE == 'az-Cyrl') {
-  defaultPatterns = exports.DateIntervalPatterns_az_Cyrl;
-} else if (goog.LOCALE == 'az_Cyrl_AZ' || goog.LOCALE == 'az-Cyrl-AZ') {
-  defaultPatterns = exports.DateIntervalPatterns_az_Cyrl_AZ;
-} else if (goog.LOCALE == 'az_Latn' || goog.LOCALE == 'az-Latn') {
-  defaultPatterns = exports.DateIntervalPatterns_az_Latn;
-} else if (goog.LOCALE == 'az_Latn_AZ' || goog.LOCALE == 'az-Latn-AZ') {
-  defaultPatterns = exports.DateIntervalPatterns_az_Latn_AZ;
-} else if (goog.LOCALE == 'bas') {
-  defaultPatterns = exports.DateIntervalPatterns_bas;
-} else if (goog.LOCALE == 'bas_CM' || goog.LOCALE == 'bas-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_bas_CM;
-} else if (goog.LOCALE == 'be_BY' || goog.LOCALE == 'be-BY') {
-  defaultPatterns = exports.DateIntervalPatterns_be_BY;
-} else if (goog.LOCALE == 'bem') {
-  defaultPatterns = exports.DateIntervalPatterns_bem;
-} else if (goog.LOCALE == 'bem_ZM' || goog.LOCALE == 'bem-ZM') {
-  defaultPatterns = exports.DateIntervalPatterns_bem_ZM;
-} else if (goog.LOCALE == 'bez') {
-  defaultPatterns = exports.DateIntervalPatterns_bez;
-} else if (goog.LOCALE == 'bez_TZ' || goog.LOCALE == 'bez-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_bez_TZ;
-} else if (goog.LOCALE == 'bg_BG' || goog.LOCALE == 'bg-BG') {
-  defaultPatterns = exports.DateIntervalPatterns_bg_BG;
-} else if (goog.LOCALE == 'bm') {
-  defaultPatterns = exports.DateIntervalPatterns_bm;
-} else if (goog.LOCALE == 'bm_ML' || goog.LOCALE == 'bm-ML') {
-  defaultPatterns = exports.DateIntervalPatterns_bm_ML;
-} else if (goog.LOCALE == 'bn_BD' || goog.LOCALE == 'bn-BD') {
-  defaultPatterns = exports.DateIntervalPatterns_bn_BD;
-} else if (goog.LOCALE == 'bn_IN' || goog.LOCALE == 'bn-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_bn_IN;
-} else if (goog.LOCALE == 'bo') {
-  defaultPatterns = exports.DateIntervalPatterns_bo;
-} else if (goog.LOCALE == 'bo_CN' || goog.LOCALE == 'bo-CN') {
-  defaultPatterns = exports.DateIntervalPatterns_bo_CN;
-} else if (goog.LOCALE == 'bo_IN' || goog.LOCALE == 'bo-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_bo_IN;
-} else if (goog.LOCALE == 'br_FR' || goog.LOCALE == 'br-FR') {
-  defaultPatterns = exports.DateIntervalPatterns_br_FR;
-} else if (goog.LOCALE == 'brx') {
-  defaultPatterns = exports.DateIntervalPatterns_brx;
-} else if (goog.LOCALE == 'brx_IN' || goog.LOCALE == 'brx-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_brx_IN;
-} else if (goog.LOCALE == 'bs_Cyrl' || goog.LOCALE == 'bs-Cyrl') {
-  defaultPatterns = exports.DateIntervalPatterns_bs_Cyrl;
-} else if (goog.LOCALE == 'bs_Cyrl_BA' || goog.LOCALE == 'bs-Cyrl-BA') {
-  defaultPatterns = exports.DateIntervalPatterns_bs_Cyrl_BA;
-} else if (goog.LOCALE == 'bs_Latn' || goog.LOCALE == 'bs-Latn') {
-  defaultPatterns = exports.DateIntervalPatterns_bs_Latn;
-} else if (goog.LOCALE == 'bs_Latn_BA' || goog.LOCALE == 'bs-Latn-BA') {
-  defaultPatterns = exports.DateIntervalPatterns_bs_Latn_BA;
-} else if (goog.LOCALE == 'ca_AD' || goog.LOCALE == 'ca-AD') {
-  defaultPatterns = exports.DateIntervalPatterns_ca_AD;
-} else if (goog.LOCALE == 'ca_ES' || goog.LOCALE == 'ca-ES') {
-  defaultPatterns = exports.DateIntervalPatterns_ca_ES;
-} else if (goog.LOCALE == 'ca_FR' || goog.LOCALE == 'ca-FR') {
-  defaultPatterns = exports.DateIntervalPatterns_ca_FR;
-} else if (goog.LOCALE == 'ca_IT' || goog.LOCALE == 'ca-IT') {
-  defaultPatterns = exports.DateIntervalPatterns_ca_IT;
-} else if (goog.LOCALE == 'ce') {
-  defaultPatterns = exports.DateIntervalPatterns_ce;
-} else if (goog.LOCALE == 'ce_RU' || goog.LOCALE == 'ce-RU') {
-  defaultPatterns = exports.DateIntervalPatterns_ce_RU;
-} else if (goog.LOCALE == 'cgg') {
-  defaultPatterns = exports.DateIntervalPatterns_cgg;
-} else if (goog.LOCALE == 'cgg_UG' || goog.LOCALE == 'cgg-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_cgg_UG;
-} else if (goog.LOCALE == 'chr_US' || goog.LOCALE == 'chr-US') {
-  defaultPatterns = exports.DateIntervalPatterns_chr_US;
-} else if (goog.LOCALE == 'ckb') {
-  defaultPatterns = exports.DateIntervalPatterns_ckb;
-} else if (goog.LOCALE == 'ckb_IQ' || goog.LOCALE == 'ckb-IQ') {
-  defaultPatterns = exports.DateIntervalPatterns_ckb_IQ;
-} else if (goog.LOCALE == 'ckb_IR' || goog.LOCALE == 'ckb-IR') {
-  defaultPatterns = exports.DateIntervalPatterns_ckb_IR;
-} else if (goog.LOCALE == 'cs_CZ' || goog.LOCALE == 'cs-CZ') {
-  defaultPatterns = exports.DateIntervalPatterns_cs_CZ;
-} else if (goog.LOCALE == 'cy_GB' || goog.LOCALE == 'cy-GB') {
-  defaultPatterns = exports.DateIntervalPatterns_cy_GB;
-} else if (goog.LOCALE == 'da_DK' || goog.LOCALE == 'da-DK') {
-  defaultPatterns = exports.DateIntervalPatterns_da_DK;
-} else if (goog.LOCALE == 'da_GL' || goog.LOCALE == 'da-GL') {
-  defaultPatterns = exports.DateIntervalPatterns_da_GL;
-} else if (goog.LOCALE == 'dav') {
-  defaultPatterns = exports.DateIntervalPatterns_dav;
-} else if (goog.LOCALE == 'dav_KE' || goog.LOCALE == 'dav-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_dav_KE;
-} else if (goog.LOCALE == 'de_BE' || goog.LOCALE == 'de-BE') {
-  defaultPatterns = exports.DateIntervalPatterns_de_BE;
-} else if (goog.LOCALE == 'de_DE' || goog.LOCALE == 'de-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_de_DE;
-} else if (goog.LOCALE == 'de_IT' || goog.LOCALE == 'de-IT') {
-  defaultPatterns = exports.DateIntervalPatterns_de_IT;
-} else if (goog.LOCALE == 'de_LI' || goog.LOCALE == 'de-LI') {
-  defaultPatterns = exports.DateIntervalPatterns_de_LI;
-} else if (goog.LOCALE == 'de_LU' || goog.LOCALE == 'de-LU') {
-  defaultPatterns = exports.DateIntervalPatterns_de_LU;
-} else if (goog.LOCALE == 'dje') {
-  defaultPatterns = exports.DateIntervalPatterns_dje;
-} else if (goog.LOCALE == 'dje_NE' || goog.LOCALE == 'dje-NE') {
-  defaultPatterns = exports.DateIntervalPatterns_dje_NE;
-} else if (goog.LOCALE == 'dsb') {
-  defaultPatterns = exports.DateIntervalPatterns_dsb;
-} else if (goog.LOCALE == 'dsb_DE' || goog.LOCALE == 'dsb-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_dsb_DE;
-} else if (goog.LOCALE == 'dua') {
-  defaultPatterns = exports.DateIntervalPatterns_dua;
-} else if (goog.LOCALE == 'dua_CM' || goog.LOCALE == 'dua-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_dua_CM;
-} else if (goog.LOCALE == 'dyo') {
-  defaultPatterns = exports.DateIntervalPatterns_dyo;
-} else if (goog.LOCALE == 'dyo_SN' || goog.LOCALE == 'dyo-SN') {
-  defaultPatterns = exports.DateIntervalPatterns_dyo_SN;
-} else if (goog.LOCALE == 'dz') {
-  defaultPatterns = exports.DateIntervalPatterns_dz;
-} else if (goog.LOCALE == 'dz_BT' || goog.LOCALE == 'dz-BT') {
-  defaultPatterns = exports.DateIntervalPatterns_dz_BT;
-} else if (goog.LOCALE == 'ebu') {
-  defaultPatterns = exports.DateIntervalPatterns_ebu;
-} else if (goog.LOCALE == 'ebu_KE' || goog.LOCALE == 'ebu-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_ebu_KE;
-} else if (goog.LOCALE == 'ee') {
-  defaultPatterns = exports.DateIntervalPatterns_ee;
-} else if (goog.LOCALE == 'ee_GH' || goog.LOCALE == 'ee-GH') {
-  defaultPatterns = exports.DateIntervalPatterns_ee_GH;
-} else if (goog.LOCALE == 'ee_TG' || goog.LOCALE == 'ee-TG') {
-  defaultPatterns = exports.DateIntervalPatterns_ee_TG;
-} else if (goog.LOCALE == 'el_CY' || goog.LOCALE == 'el-CY') {
-  defaultPatterns = exports.DateIntervalPatterns_el_CY;
-} else if (goog.LOCALE == 'el_GR' || goog.LOCALE == 'el-GR') {
-  defaultPatterns = exports.DateIntervalPatterns_el_GR;
-} else if (goog.LOCALE == 'en_001' || goog.LOCALE == 'en-001') {
-  defaultPatterns = exports.DateIntervalPatterns_en_001;
-} else if (goog.LOCALE == 'en_150' || goog.LOCALE == 'en-150') {
-  defaultPatterns = exports.DateIntervalPatterns_en_150;
-} else if (goog.LOCALE == 'en_AG' || goog.LOCALE == 'en-AG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_AG;
-} else if (goog.LOCALE == 'en_AI' || goog.LOCALE == 'en-AI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_AI;
-} else if (goog.LOCALE == 'en_AS' || goog.LOCALE == 'en-AS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_AS;
-} else if (goog.LOCALE == 'en_AT' || goog.LOCALE == 'en-AT') {
-  defaultPatterns = exports.DateIntervalPatterns_en_AT;
-} else if (goog.LOCALE == 'en_BB' || goog.LOCALE == 'en-BB') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BB;
-} else if (goog.LOCALE == 'en_BE' || goog.LOCALE == 'en-BE') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BE;
-} else if (goog.LOCALE == 'en_BI' || goog.LOCALE == 'en-BI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BI;
-} else if (goog.LOCALE == 'en_BM' || goog.LOCALE == 'en-BM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BM;
-} else if (goog.LOCALE == 'en_BS' || goog.LOCALE == 'en-BS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BS;
-} else if (goog.LOCALE == 'en_BW' || goog.LOCALE == 'en-BW') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BW;
-} else if (goog.LOCALE == 'en_BZ' || goog.LOCALE == 'en-BZ') {
-  defaultPatterns = exports.DateIntervalPatterns_en_BZ;
-} else if (goog.LOCALE == 'en_CC' || goog.LOCALE == 'en-CC') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CC;
-} else if (goog.LOCALE == 'en_CH' || goog.LOCALE == 'en-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CH;
-} else if (goog.LOCALE == 'en_CK' || goog.LOCALE == 'en-CK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CK;
-} else if (goog.LOCALE == 'en_CM' || goog.LOCALE == 'en-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CM;
-} else if (goog.LOCALE == 'en_CX' || goog.LOCALE == 'en-CX') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CX;
-} else if (goog.LOCALE == 'en_CY' || goog.LOCALE == 'en-CY') {
-  defaultPatterns = exports.DateIntervalPatterns_en_CY;
-} else if (goog.LOCALE == 'en_DE' || goog.LOCALE == 'en-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_en_DE;
-} else if (goog.LOCALE == 'en_DG' || goog.LOCALE == 'en-DG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_DG;
-} else if (goog.LOCALE == 'en_DK' || goog.LOCALE == 'en-DK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_DK;
-} else if (goog.LOCALE == 'en_DM' || goog.LOCALE == 'en-DM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_DM;
-} else if (goog.LOCALE == 'en_ER' || goog.LOCALE == 'en-ER') {
-  defaultPatterns = exports.DateIntervalPatterns_en_ER;
-} else if (goog.LOCALE == 'en_FI' || goog.LOCALE == 'en-FI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_FI;
-} else if (goog.LOCALE == 'en_FJ' || goog.LOCALE == 'en-FJ') {
-  defaultPatterns = exports.DateIntervalPatterns_en_FJ;
-} else if (goog.LOCALE == 'en_FK' || goog.LOCALE == 'en-FK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_FK;
-} else if (goog.LOCALE == 'en_FM' || goog.LOCALE == 'en-FM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_FM;
-} else if (goog.LOCALE == 'en_GD' || goog.LOCALE == 'en-GD') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GD;
-} else if (goog.LOCALE == 'en_GG' || goog.LOCALE == 'en-GG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GG;
-} else if (goog.LOCALE == 'en_GH' || goog.LOCALE == 'en-GH') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GH;
-} else if (goog.LOCALE == 'en_GI' || goog.LOCALE == 'en-GI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GI;
-} else if (goog.LOCALE == 'en_GM' || goog.LOCALE == 'en-GM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GM;
-} else if (goog.LOCALE == 'en_GU' || goog.LOCALE == 'en-GU') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GU;
-} else if (goog.LOCALE == 'en_GY' || goog.LOCALE == 'en-GY') {
-  defaultPatterns = exports.DateIntervalPatterns_en_GY;
-} else if (goog.LOCALE == 'en_HK' || goog.LOCALE == 'en-HK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_HK;
-} else if (goog.LOCALE == 'en_IL' || goog.LOCALE == 'en-IL') {
-  defaultPatterns = exports.DateIntervalPatterns_en_IL;
-} else if (goog.LOCALE == 'en_IM' || goog.LOCALE == 'en-IM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_IM;
-} else if (goog.LOCALE == 'en_IO' || goog.LOCALE == 'en-IO') {
-  defaultPatterns = exports.DateIntervalPatterns_en_IO;
-} else if (goog.LOCALE == 'en_JE' || goog.LOCALE == 'en-JE') {
-  defaultPatterns = exports.DateIntervalPatterns_en_JE;
-} else if (goog.LOCALE == 'en_JM' || goog.LOCALE == 'en-JM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_JM;
-} else if (goog.LOCALE == 'en_KE' || goog.LOCALE == 'en-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_en_KE;
-} else if (goog.LOCALE == 'en_KI' || goog.LOCALE == 'en-KI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_KI;
-} else if (goog.LOCALE == 'en_KN' || goog.LOCALE == 'en-KN') {
-  defaultPatterns = exports.DateIntervalPatterns_en_KN;
-} else if (goog.LOCALE == 'en_KY' || goog.LOCALE == 'en-KY') {
-  defaultPatterns = exports.DateIntervalPatterns_en_KY;
-} else if (goog.LOCALE == 'en_LC' || goog.LOCALE == 'en-LC') {
-  defaultPatterns = exports.DateIntervalPatterns_en_LC;
-} else if (goog.LOCALE == 'en_LR' || goog.LOCALE == 'en-LR') {
-  defaultPatterns = exports.DateIntervalPatterns_en_LR;
-} else if (goog.LOCALE == 'en_LS' || goog.LOCALE == 'en-LS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_LS;
-} else if (goog.LOCALE == 'en_MG' || goog.LOCALE == 'en-MG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MG;
-} else if (goog.LOCALE == 'en_MH' || goog.LOCALE == 'en-MH') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MH;
-} else if (goog.LOCALE == 'en_MO' || goog.LOCALE == 'en-MO') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MO;
-} else if (goog.LOCALE == 'en_MP' || goog.LOCALE == 'en-MP') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MP;
-} else if (goog.LOCALE == 'en_MS' || goog.LOCALE == 'en-MS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MS;
-} else if (goog.LOCALE == 'en_MT' || goog.LOCALE == 'en-MT') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MT;
-} else if (goog.LOCALE == 'en_MU' || goog.LOCALE == 'en-MU') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MU;
-} else if (goog.LOCALE == 'en_MW' || goog.LOCALE == 'en-MW') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MW;
-} else if (goog.LOCALE == 'en_MY' || goog.LOCALE == 'en-MY') {
-  defaultPatterns = exports.DateIntervalPatterns_en_MY;
-} else if (goog.LOCALE == 'en_NA' || goog.LOCALE == 'en-NA') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NA;
-} else if (goog.LOCALE == 'en_NF' || goog.LOCALE == 'en-NF') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NF;
-} else if (goog.LOCALE == 'en_NG' || goog.LOCALE == 'en-NG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NG;
-} else if (goog.LOCALE == 'en_NL' || goog.LOCALE == 'en-NL') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NL;
-} else if (goog.LOCALE == 'en_NR' || goog.LOCALE == 'en-NR') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NR;
-} else if (goog.LOCALE == 'en_NU' || goog.LOCALE == 'en-NU') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NU;
-} else if (goog.LOCALE == 'en_NZ' || goog.LOCALE == 'en-NZ') {
-  defaultPatterns = exports.DateIntervalPatterns_en_NZ;
-} else if (goog.LOCALE == 'en_PG' || goog.LOCALE == 'en-PG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PG;
-} else if (goog.LOCALE == 'en_PH' || goog.LOCALE == 'en-PH') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PH;
-} else if (goog.LOCALE == 'en_PK' || goog.LOCALE == 'en-PK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PK;
-} else if (goog.LOCALE == 'en_PN' || goog.LOCALE == 'en-PN') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PN;
-} else if (goog.LOCALE == 'en_PR' || goog.LOCALE == 'en-PR') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PR;
-} else if (goog.LOCALE == 'en_PW' || goog.LOCALE == 'en-PW') {
-  defaultPatterns = exports.DateIntervalPatterns_en_PW;
-} else if (goog.LOCALE == 'en_RW' || goog.LOCALE == 'en-RW') {
-  defaultPatterns = exports.DateIntervalPatterns_en_RW;
-} else if (goog.LOCALE == 'en_SB' || goog.LOCALE == 'en-SB') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SB;
-} else if (goog.LOCALE == 'en_SC' || goog.LOCALE == 'en-SC') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SC;
-} else if (goog.LOCALE == 'en_SD' || goog.LOCALE == 'en-SD') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SD;
-} else if (goog.LOCALE == 'en_SE' || goog.LOCALE == 'en-SE') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SE;
-} else if (goog.LOCALE == 'en_SH' || goog.LOCALE == 'en-SH') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SH;
-} else if (goog.LOCALE == 'en_SI' || goog.LOCALE == 'en-SI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SI;
-} else if (goog.LOCALE == 'en_SL' || goog.LOCALE == 'en-SL') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SL;
-} else if (goog.LOCALE == 'en_SS' || goog.LOCALE == 'en-SS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SS;
-} else if (goog.LOCALE == 'en_SX' || goog.LOCALE == 'en-SX') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SX;
-} else if (goog.LOCALE == 'en_SZ' || goog.LOCALE == 'en-SZ') {
-  defaultPatterns = exports.DateIntervalPatterns_en_SZ;
-} else if (goog.LOCALE == 'en_TC' || goog.LOCALE == 'en-TC') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TC;
-} else if (goog.LOCALE == 'en_TK' || goog.LOCALE == 'en-TK') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TK;
-} else if (goog.LOCALE == 'en_TO' || goog.LOCALE == 'en-TO') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TO;
-} else if (goog.LOCALE == 'en_TT' || goog.LOCALE == 'en-TT') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TT;
-} else if (goog.LOCALE == 'en_TV' || goog.LOCALE == 'en-TV') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TV;
-} else if (goog.LOCALE == 'en_TZ' || goog.LOCALE == 'en-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_en_TZ;
-} else if (goog.LOCALE == 'en_UG' || goog.LOCALE == 'en-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_UG;
-} else if (goog.LOCALE == 'en_UM' || goog.LOCALE == 'en-UM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_UM;
-} else if (goog.LOCALE == 'en_US_POSIX' || goog.LOCALE == 'en-US-POSIX') {
-  defaultPatterns = exports.DateIntervalPatterns_en_US_POSIX;
-} else if (goog.LOCALE == 'en_VC' || goog.LOCALE == 'en-VC') {
-  defaultPatterns = exports.DateIntervalPatterns_en_VC;
-} else if (goog.LOCALE == 'en_VG' || goog.LOCALE == 'en-VG') {
-  defaultPatterns = exports.DateIntervalPatterns_en_VG;
-} else if (goog.LOCALE == 'en_VI' || goog.LOCALE == 'en-VI') {
-  defaultPatterns = exports.DateIntervalPatterns_en_VI;
-} else if (goog.LOCALE == 'en_VU' || goog.LOCALE == 'en-VU') {
-  defaultPatterns = exports.DateIntervalPatterns_en_VU;
-} else if (goog.LOCALE == 'en_WS' || goog.LOCALE == 'en-WS') {
-  defaultPatterns = exports.DateIntervalPatterns_en_WS;
-} else if (goog.LOCALE == 'en_XA' || goog.LOCALE == 'en-XA') {
-  defaultPatterns = exports.DateIntervalPatterns_en_XA;
-} else if (goog.LOCALE == 'en_ZM' || goog.LOCALE == 'en-ZM') {
-  defaultPatterns = exports.DateIntervalPatterns_en_ZM;
-} else if (goog.LOCALE == 'en_ZW' || goog.LOCALE == 'en-ZW') {
-  defaultPatterns = exports.DateIntervalPatterns_en_ZW;
-} else if (goog.LOCALE == 'eo') {
-  defaultPatterns = exports.DateIntervalPatterns_eo;
-} else if (goog.LOCALE == 'es_AR' || goog.LOCALE == 'es-AR') {
-  defaultPatterns = exports.DateIntervalPatterns_es_AR;
-} else if (goog.LOCALE == 'es_BO' || goog.LOCALE == 'es-BO') {
-  defaultPatterns = exports.DateIntervalPatterns_es_BO;
-} else if (goog.LOCALE == 'es_BR' || goog.LOCALE == 'es-BR') {
-  defaultPatterns = exports.DateIntervalPatterns_es_BR;
-} else if (goog.LOCALE == 'es_BZ' || goog.LOCALE == 'es-BZ') {
-  defaultPatterns = exports.DateIntervalPatterns_es_BZ;
-} else if (goog.LOCALE == 'es_CL' || goog.LOCALE == 'es-CL') {
-  defaultPatterns = exports.DateIntervalPatterns_es_CL;
-} else if (goog.LOCALE == 'es_CO' || goog.LOCALE == 'es-CO') {
-  defaultPatterns = exports.DateIntervalPatterns_es_CO;
-} else if (goog.LOCALE == 'es_CR' || goog.LOCALE == 'es-CR') {
-  defaultPatterns = exports.DateIntervalPatterns_es_CR;
-} else if (goog.LOCALE == 'es_CU' || goog.LOCALE == 'es-CU') {
-  defaultPatterns = exports.DateIntervalPatterns_es_CU;
-} else if (goog.LOCALE == 'es_DO' || goog.LOCALE == 'es-DO') {
-  defaultPatterns = exports.DateIntervalPatterns_es_DO;
-} else if (goog.LOCALE == 'es_EA' || goog.LOCALE == 'es-EA') {
-  defaultPatterns = exports.DateIntervalPatterns_es_EA;
-} else if (goog.LOCALE == 'es_EC' || goog.LOCALE == 'es-EC') {
-  defaultPatterns = exports.DateIntervalPatterns_es_EC;
-} else if (goog.LOCALE == 'es_GQ' || goog.LOCALE == 'es-GQ') {
-  defaultPatterns = exports.DateIntervalPatterns_es_GQ;
-} else if (goog.LOCALE == 'es_GT' || goog.LOCALE == 'es-GT') {
-  defaultPatterns = exports.DateIntervalPatterns_es_GT;
-} else if (goog.LOCALE == 'es_HN' || goog.LOCALE == 'es-HN') {
-  defaultPatterns = exports.DateIntervalPatterns_es_HN;
-} else if (goog.LOCALE == 'es_IC' || goog.LOCALE == 'es-IC') {
-  defaultPatterns = exports.DateIntervalPatterns_es_IC;
-} else if (goog.LOCALE == 'es_NI' || goog.LOCALE == 'es-NI') {
-  defaultPatterns = exports.DateIntervalPatterns_es_NI;
-} else if (goog.LOCALE == 'es_PA' || goog.LOCALE == 'es-PA') {
-  defaultPatterns = exports.DateIntervalPatterns_es_PA;
-} else if (goog.LOCALE == 'es_PE' || goog.LOCALE == 'es-PE') {
-  defaultPatterns = exports.DateIntervalPatterns_es_PE;
-} else if (goog.LOCALE == 'es_PH' || goog.LOCALE == 'es-PH') {
-  defaultPatterns = exports.DateIntervalPatterns_es_PH;
-} else if (goog.LOCALE == 'es_PR' || goog.LOCALE == 'es-PR') {
-  defaultPatterns = exports.DateIntervalPatterns_es_PR;
-} else if (goog.LOCALE == 'es_PY' || goog.LOCALE == 'es-PY') {
-  defaultPatterns = exports.DateIntervalPatterns_es_PY;
-} else if (goog.LOCALE == 'es_SV' || goog.LOCALE == 'es-SV') {
-  defaultPatterns = exports.DateIntervalPatterns_es_SV;
-} else if (goog.LOCALE == 'es_UY' || goog.LOCALE == 'es-UY') {
-  defaultPatterns = exports.DateIntervalPatterns_es_UY;
-} else if (goog.LOCALE == 'es_VE' || goog.LOCALE == 'es-VE') {
-  defaultPatterns = exports.DateIntervalPatterns_es_VE;
-} else if (goog.LOCALE == 'et_EE' || goog.LOCALE == 'et-EE') {
-  defaultPatterns = exports.DateIntervalPatterns_et_EE;
-} else if (goog.LOCALE == 'eu_ES' || goog.LOCALE == 'eu-ES') {
-  defaultPatterns = exports.DateIntervalPatterns_eu_ES;
-} else if (goog.LOCALE == 'ewo') {
-  defaultPatterns = exports.DateIntervalPatterns_ewo;
-} else if (goog.LOCALE == 'ewo_CM' || goog.LOCALE == 'ewo-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_ewo_CM;
-} else if (goog.LOCALE == 'fa_AF' || goog.LOCALE == 'fa-AF') {
-  defaultPatterns = exports.DateIntervalPatterns_fa_AF;
-} else if (goog.LOCALE == 'fa_IR' || goog.LOCALE == 'fa-IR') {
-  defaultPatterns = exports.DateIntervalPatterns_fa_IR;
-} else if (goog.LOCALE == 'ff') {
-  defaultPatterns = exports.DateIntervalPatterns_ff;
-} else if (goog.LOCALE == 'ff_CM' || goog.LOCALE == 'ff-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_ff_CM;
-} else if (goog.LOCALE == 'ff_GN' || goog.LOCALE == 'ff-GN') {
-  defaultPatterns = exports.DateIntervalPatterns_ff_GN;
-} else if (goog.LOCALE == 'ff_MR' || goog.LOCALE == 'ff-MR') {
-  defaultPatterns = exports.DateIntervalPatterns_ff_MR;
-} else if (goog.LOCALE == 'ff_SN' || goog.LOCALE == 'ff-SN') {
-  defaultPatterns = exports.DateIntervalPatterns_ff_SN;
-} else if (goog.LOCALE == 'fi_FI' || goog.LOCALE == 'fi-FI') {
-  defaultPatterns = exports.DateIntervalPatterns_fi_FI;
-} else if (goog.LOCALE == 'fil_PH' || goog.LOCALE == 'fil-PH') {
-  defaultPatterns = exports.DateIntervalPatterns_fil_PH;
-} else if (goog.LOCALE == 'fo') {
-  defaultPatterns = exports.DateIntervalPatterns_fo;
-} else if (goog.LOCALE == 'fo_DK' || goog.LOCALE == 'fo-DK') {
-  defaultPatterns = exports.DateIntervalPatterns_fo_DK;
-} else if (goog.LOCALE == 'fo_FO' || goog.LOCALE == 'fo-FO') {
-  defaultPatterns = exports.DateIntervalPatterns_fo_FO;
-} else if (goog.LOCALE == 'fr_BE' || goog.LOCALE == 'fr-BE') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_BE;
-} else if (goog.LOCALE == 'fr_BF' || goog.LOCALE == 'fr-BF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_BF;
-} else if (goog.LOCALE == 'fr_BI' || goog.LOCALE == 'fr-BI') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_BI;
-} else if (goog.LOCALE == 'fr_BJ' || goog.LOCALE == 'fr-BJ') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_BJ;
-} else if (goog.LOCALE == 'fr_BL' || goog.LOCALE == 'fr-BL') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_BL;
-} else if (goog.LOCALE == 'fr_CD' || goog.LOCALE == 'fr-CD') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CD;
-} else if (goog.LOCALE == 'fr_CF' || goog.LOCALE == 'fr-CF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CF;
-} else if (goog.LOCALE == 'fr_CG' || goog.LOCALE == 'fr-CG') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CG;
-} else if (goog.LOCALE == 'fr_CH' || goog.LOCALE == 'fr-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CH;
-} else if (goog.LOCALE == 'fr_CI' || goog.LOCALE == 'fr-CI') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CI;
-} else if (goog.LOCALE == 'fr_CM' || goog.LOCALE == 'fr-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_CM;
-} else if (goog.LOCALE == 'fr_DJ' || goog.LOCALE == 'fr-DJ') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_DJ;
-} else if (goog.LOCALE == 'fr_DZ' || goog.LOCALE == 'fr-DZ') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_DZ;
-} else if (goog.LOCALE == 'fr_FR' || goog.LOCALE == 'fr-FR') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_FR;
-} else if (goog.LOCALE == 'fr_GA' || goog.LOCALE == 'fr-GA') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_GA;
-} else if (goog.LOCALE == 'fr_GF' || goog.LOCALE == 'fr-GF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_GF;
-} else if (goog.LOCALE == 'fr_GN' || goog.LOCALE == 'fr-GN') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_GN;
-} else if (goog.LOCALE == 'fr_GP' || goog.LOCALE == 'fr-GP') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_GP;
-} else if (goog.LOCALE == 'fr_GQ' || goog.LOCALE == 'fr-GQ') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_GQ;
-} else if (goog.LOCALE == 'fr_HT' || goog.LOCALE == 'fr-HT') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_HT;
-} else if (goog.LOCALE == 'fr_KM' || goog.LOCALE == 'fr-KM') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_KM;
-} else if (goog.LOCALE == 'fr_LU' || goog.LOCALE == 'fr-LU') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_LU;
-} else if (goog.LOCALE == 'fr_MA' || goog.LOCALE == 'fr-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MA;
-} else if (goog.LOCALE == 'fr_MC' || goog.LOCALE == 'fr-MC') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MC;
-} else if (goog.LOCALE == 'fr_MF' || goog.LOCALE == 'fr-MF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MF;
-} else if (goog.LOCALE == 'fr_MG' || goog.LOCALE == 'fr-MG') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MG;
-} else if (goog.LOCALE == 'fr_ML' || goog.LOCALE == 'fr-ML') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_ML;
-} else if (goog.LOCALE == 'fr_MQ' || goog.LOCALE == 'fr-MQ') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MQ;
-} else if (goog.LOCALE == 'fr_MR' || goog.LOCALE == 'fr-MR') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MR;
-} else if (goog.LOCALE == 'fr_MU' || goog.LOCALE == 'fr-MU') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_MU;
-} else if (goog.LOCALE == 'fr_NC' || goog.LOCALE == 'fr-NC') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_NC;
-} else if (goog.LOCALE == 'fr_NE' || goog.LOCALE == 'fr-NE') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_NE;
-} else if (goog.LOCALE == 'fr_PF' || goog.LOCALE == 'fr-PF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_PF;
-} else if (goog.LOCALE == 'fr_PM' || goog.LOCALE == 'fr-PM') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_PM;
-} else if (goog.LOCALE == 'fr_RE' || goog.LOCALE == 'fr-RE') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_RE;
-} else if (goog.LOCALE == 'fr_RW' || goog.LOCALE == 'fr-RW') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_RW;
-} else if (goog.LOCALE == 'fr_SC' || goog.LOCALE == 'fr-SC') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_SC;
-} else if (goog.LOCALE == 'fr_SN' || goog.LOCALE == 'fr-SN') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_SN;
-} else if (goog.LOCALE == 'fr_SY' || goog.LOCALE == 'fr-SY') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_SY;
-} else if (goog.LOCALE == 'fr_TD' || goog.LOCALE == 'fr-TD') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_TD;
-} else if (goog.LOCALE == 'fr_TG' || goog.LOCALE == 'fr-TG') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_TG;
-} else if (goog.LOCALE == 'fr_TN' || goog.LOCALE == 'fr-TN') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_TN;
-} else if (goog.LOCALE == 'fr_VU' || goog.LOCALE == 'fr-VU') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_VU;
-} else if (goog.LOCALE == 'fr_WF' || goog.LOCALE == 'fr-WF') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_WF;
-} else if (goog.LOCALE == 'fr_YT' || goog.LOCALE == 'fr-YT') {
-  defaultPatterns = exports.DateIntervalPatterns_fr_YT;
-} else if (goog.LOCALE == 'fur') {
-  defaultPatterns = exports.DateIntervalPatterns_fur;
-} else if (goog.LOCALE == 'fur_IT' || goog.LOCALE == 'fur-IT') {
-  defaultPatterns = exports.DateIntervalPatterns_fur_IT;
-} else if (goog.LOCALE == 'fy') {
-  defaultPatterns = exports.DateIntervalPatterns_fy;
-} else if (goog.LOCALE == 'fy_NL' || goog.LOCALE == 'fy-NL') {
-  defaultPatterns = exports.DateIntervalPatterns_fy_NL;
-} else if (goog.LOCALE == 'ga_IE' || goog.LOCALE == 'ga-IE') {
-  defaultPatterns = exports.DateIntervalPatterns_ga_IE;
-} else if (goog.LOCALE == 'gd') {
-  defaultPatterns = exports.DateIntervalPatterns_gd;
-} else if (goog.LOCALE == 'gd_GB' || goog.LOCALE == 'gd-GB') {
-  defaultPatterns = exports.DateIntervalPatterns_gd_GB;
-} else if (goog.LOCALE == 'gl_ES' || goog.LOCALE == 'gl-ES') {
-  defaultPatterns = exports.DateIntervalPatterns_gl_ES;
-} else if (goog.LOCALE == 'gsw_CH' || goog.LOCALE == 'gsw-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_gsw_CH;
-} else if (goog.LOCALE == 'gsw_FR' || goog.LOCALE == 'gsw-FR') {
-  defaultPatterns = exports.DateIntervalPatterns_gsw_FR;
-} else if (goog.LOCALE == 'gsw_LI' || goog.LOCALE == 'gsw-LI') {
-  defaultPatterns = exports.DateIntervalPatterns_gsw_LI;
-} else if (goog.LOCALE == 'gu_IN' || goog.LOCALE == 'gu-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_gu_IN;
-} else if (goog.LOCALE == 'guz') {
-  defaultPatterns = exports.DateIntervalPatterns_guz;
-} else if (goog.LOCALE == 'guz_KE' || goog.LOCALE == 'guz-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_guz_KE;
-} else if (goog.LOCALE == 'gv') {
-  defaultPatterns = exports.DateIntervalPatterns_gv;
-} else if (goog.LOCALE == 'gv_IM' || goog.LOCALE == 'gv-IM') {
-  defaultPatterns = exports.DateIntervalPatterns_gv_IM;
-} else if (goog.LOCALE == 'ha') {
-  defaultPatterns = exports.DateIntervalPatterns_ha;
-} else if (goog.LOCALE == 'ha_GH' || goog.LOCALE == 'ha-GH') {
-  defaultPatterns = exports.DateIntervalPatterns_ha_GH;
-} else if (goog.LOCALE == 'ha_NE' || goog.LOCALE == 'ha-NE') {
-  defaultPatterns = exports.DateIntervalPatterns_ha_NE;
-} else if (goog.LOCALE == 'ha_NG' || goog.LOCALE == 'ha-NG') {
-  defaultPatterns = exports.DateIntervalPatterns_ha_NG;
-} else if (goog.LOCALE == 'haw_US' || goog.LOCALE == 'haw-US') {
-  defaultPatterns = exports.DateIntervalPatterns_haw_US;
-} else if (goog.LOCALE == 'he_IL' || goog.LOCALE == 'he-IL') {
-  defaultPatterns = exports.DateIntervalPatterns_he_IL;
-} else if (goog.LOCALE == 'hi_IN' || goog.LOCALE == 'hi-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_hi_IN;
-} else if (goog.LOCALE == 'hr_BA' || goog.LOCALE == 'hr-BA') {
-  defaultPatterns = exports.DateIntervalPatterns_hr_BA;
-} else if (goog.LOCALE == 'hr_HR' || goog.LOCALE == 'hr-HR') {
-  defaultPatterns = exports.DateIntervalPatterns_hr_HR;
-} else if (goog.LOCALE == 'hsb') {
-  defaultPatterns = exports.DateIntervalPatterns_hsb;
-} else if (goog.LOCALE == 'hsb_DE' || goog.LOCALE == 'hsb-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_hsb_DE;
-} else if (goog.LOCALE == 'hu_HU' || goog.LOCALE == 'hu-HU') {
-  defaultPatterns = exports.DateIntervalPatterns_hu_HU;
-} else if (goog.LOCALE == 'hy_AM' || goog.LOCALE == 'hy-AM') {
-  defaultPatterns = exports.DateIntervalPatterns_hy_AM;
-} else if (goog.LOCALE == 'id_ID' || goog.LOCALE == 'id-ID') {
-  defaultPatterns = exports.DateIntervalPatterns_id_ID;
-} else if (goog.LOCALE == 'ig') {
-  defaultPatterns = exports.DateIntervalPatterns_ig;
-} else if (goog.LOCALE == 'ig_NG' || goog.LOCALE == 'ig-NG') {
-  defaultPatterns = exports.DateIntervalPatterns_ig_NG;
-} else if (goog.LOCALE == 'ii') {
-  defaultPatterns = exports.DateIntervalPatterns_ii;
-} else if (goog.LOCALE == 'ii_CN' || goog.LOCALE == 'ii-CN') {
-  defaultPatterns = exports.DateIntervalPatterns_ii_CN;
-} else if (goog.LOCALE == 'is_IS' || goog.LOCALE == 'is-IS') {
-  defaultPatterns = exports.DateIntervalPatterns_is_IS;
-} else if (goog.LOCALE == 'it_CH' || goog.LOCALE == 'it-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_it_CH;
-} else if (goog.LOCALE == 'it_IT' || goog.LOCALE == 'it-IT') {
-  defaultPatterns = exports.DateIntervalPatterns_it_IT;
-} else if (goog.LOCALE == 'it_SM' || goog.LOCALE == 'it-SM') {
-  defaultPatterns = exports.DateIntervalPatterns_it_SM;
-} else if (goog.LOCALE == 'it_VA' || goog.LOCALE == 'it-VA') {
-  defaultPatterns = exports.DateIntervalPatterns_it_VA;
-} else if (goog.LOCALE == 'ja_JP' || goog.LOCALE == 'ja-JP') {
-  defaultPatterns = exports.DateIntervalPatterns_ja_JP;
-} else if (goog.LOCALE == 'jgo') {
-  defaultPatterns = exports.DateIntervalPatterns_jgo;
-} else if (goog.LOCALE == 'jgo_CM' || goog.LOCALE == 'jgo-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_jgo_CM;
-} else if (goog.LOCALE == 'jmc') {
-  defaultPatterns = exports.DateIntervalPatterns_jmc;
-} else if (goog.LOCALE == 'jmc_TZ' || goog.LOCALE == 'jmc-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_jmc_TZ;
-} else if (goog.LOCALE == 'ka_GE' || goog.LOCALE == 'ka-GE') {
-  defaultPatterns = exports.DateIntervalPatterns_ka_GE;
-} else if (goog.LOCALE == 'kab') {
-  defaultPatterns = exports.DateIntervalPatterns_kab;
-} else if (goog.LOCALE == 'kab_DZ' || goog.LOCALE == 'kab-DZ') {
-  defaultPatterns = exports.DateIntervalPatterns_kab_DZ;
-} else if (goog.LOCALE == 'kam') {
-  defaultPatterns = exports.DateIntervalPatterns_kam;
-} else if (goog.LOCALE == 'kam_KE' || goog.LOCALE == 'kam-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_kam_KE;
-} else if (goog.LOCALE == 'kde') {
-  defaultPatterns = exports.DateIntervalPatterns_kde;
-} else if (goog.LOCALE == 'kde_TZ' || goog.LOCALE == 'kde-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_kde_TZ;
-} else if (goog.LOCALE == 'kea') {
-  defaultPatterns = exports.DateIntervalPatterns_kea;
-} else if (goog.LOCALE == 'kea_CV' || goog.LOCALE == 'kea-CV') {
-  defaultPatterns = exports.DateIntervalPatterns_kea_CV;
-} else if (goog.LOCALE == 'khq') {
-  defaultPatterns = exports.DateIntervalPatterns_khq;
-} else if (goog.LOCALE == 'khq_ML' || goog.LOCALE == 'khq-ML') {
-  defaultPatterns = exports.DateIntervalPatterns_khq_ML;
-} else if (goog.LOCALE == 'ki') {
-  defaultPatterns = exports.DateIntervalPatterns_ki;
-} else if (goog.LOCALE == 'ki_KE' || goog.LOCALE == 'ki-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_ki_KE;
-} else if (goog.LOCALE == 'kk_KZ' || goog.LOCALE == 'kk-KZ') {
-  defaultPatterns = exports.DateIntervalPatterns_kk_KZ;
-} else if (goog.LOCALE == 'kkj') {
-  defaultPatterns = exports.DateIntervalPatterns_kkj;
-} else if (goog.LOCALE == 'kkj_CM' || goog.LOCALE == 'kkj-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_kkj_CM;
-} else if (goog.LOCALE == 'kl') {
-  defaultPatterns = exports.DateIntervalPatterns_kl;
-} else if (goog.LOCALE == 'kl_GL' || goog.LOCALE == 'kl-GL') {
-  defaultPatterns = exports.DateIntervalPatterns_kl_GL;
-} else if (goog.LOCALE == 'kln') {
-  defaultPatterns = exports.DateIntervalPatterns_kln;
-} else if (goog.LOCALE == 'kln_KE' || goog.LOCALE == 'kln-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_kln_KE;
-} else if (goog.LOCALE == 'km_KH' || goog.LOCALE == 'km-KH') {
-  defaultPatterns = exports.DateIntervalPatterns_km_KH;
-} else if (goog.LOCALE == 'kn_IN' || goog.LOCALE == 'kn-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_kn_IN;
-} else if (goog.LOCALE == 'ko_KP' || goog.LOCALE == 'ko-KP') {
-  defaultPatterns = exports.DateIntervalPatterns_ko_KP;
-} else if (goog.LOCALE == 'ko_KR' || goog.LOCALE == 'ko-KR') {
-  defaultPatterns = exports.DateIntervalPatterns_ko_KR;
-} else if (goog.LOCALE == 'kok') {
-  defaultPatterns = exports.DateIntervalPatterns_kok;
-} else if (goog.LOCALE == 'kok_IN' || goog.LOCALE == 'kok-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_kok_IN;
-} else if (goog.LOCALE == 'ks') {
-  defaultPatterns = exports.DateIntervalPatterns_ks;
-} else if (goog.LOCALE == 'ks_IN' || goog.LOCALE == 'ks-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_ks_IN;
-} else if (goog.LOCALE == 'ksb') {
-  defaultPatterns = exports.DateIntervalPatterns_ksb;
-} else if (goog.LOCALE == 'ksb_TZ' || goog.LOCALE == 'ksb-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_ksb_TZ;
-} else if (goog.LOCALE == 'ksf') {
-  defaultPatterns = exports.DateIntervalPatterns_ksf;
-} else if (goog.LOCALE == 'ksf_CM' || goog.LOCALE == 'ksf-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_ksf_CM;
-} else if (goog.LOCALE == 'ksh') {
-  defaultPatterns = exports.DateIntervalPatterns_ksh;
-} else if (goog.LOCALE == 'ksh_DE' || goog.LOCALE == 'ksh-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_ksh_DE;
-} else if (goog.LOCALE == 'kw') {
-  defaultPatterns = exports.DateIntervalPatterns_kw;
-} else if (goog.LOCALE == 'kw_GB' || goog.LOCALE == 'kw-GB') {
-  defaultPatterns = exports.DateIntervalPatterns_kw_GB;
-} else if (goog.LOCALE == 'ky_KG' || goog.LOCALE == 'ky-KG') {
-  defaultPatterns = exports.DateIntervalPatterns_ky_KG;
-} else if (goog.LOCALE == 'lag') {
-  defaultPatterns = exports.DateIntervalPatterns_lag;
-} else if (goog.LOCALE == 'lag_TZ' || goog.LOCALE == 'lag-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_lag_TZ;
-} else if (goog.LOCALE == 'lb') {
-  defaultPatterns = exports.DateIntervalPatterns_lb;
-} else if (goog.LOCALE == 'lb_LU' || goog.LOCALE == 'lb-LU') {
-  defaultPatterns = exports.DateIntervalPatterns_lb_LU;
-} else if (goog.LOCALE == 'lg') {
-  defaultPatterns = exports.DateIntervalPatterns_lg;
-} else if (goog.LOCALE == 'lg_UG' || goog.LOCALE == 'lg-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_lg_UG;
-} else if (goog.LOCALE == 'lkt') {
-  defaultPatterns = exports.DateIntervalPatterns_lkt;
-} else if (goog.LOCALE == 'lkt_US' || goog.LOCALE == 'lkt-US') {
-  defaultPatterns = exports.DateIntervalPatterns_lkt_US;
-} else if (goog.LOCALE == 'ln_AO' || goog.LOCALE == 'ln-AO') {
-  defaultPatterns = exports.DateIntervalPatterns_ln_AO;
-} else if (goog.LOCALE == 'ln_CD' || goog.LOCALE == 'ln-CD') {
-  defaultPatterns = exports.DateIntervalPatterns_ln_CD;
-} else if (goog.LOCALE == 'ln_CF' || goog.LOCALE == 'ln-CF') {
-  defaultPatterns = exports.DateIntervalPatterns_ln_CF;
-} else if (goog.LOCALE == 'ln_CG' || goog.LOCALE == 'ln-CG') {
-  defaultPatterns = exports.DateIntervalPatterns_ln_CG;
-} else if (goog.LOCALE == 'lo_LA' || goog.LOCALE == 'lo-LA') {
-  defaultPatterns = exports.DateIntervalPatterns_lo_LA;
-} else if (goog.LOCALE == 'lrc') {
-  defaultPatterns = exports.DateIntervalPatterns_lrc;
-} else if (goog.LOCALE == 'lrc_IQ' || goog.LOCALE == 'lrc-IQ') {
-  defaultPatterns = exports.DateIntervalPatterns_lrc_IQ;
-} else if (goog.LOCALE == 'lrc_IR' || goog.LOCALE == 'lrc-IR') {
-  defaultPatterns = exports.DateIntervalPatterns_lrc_IR;
-} else if (goog.LOCALE == 'lt_LT' || goog.LOCALE == 'lt-LT') {
-  defaultPatterns = exports.DateIntervalPatterns_lt_LT;
-} else if (goog.LOCALE == 'lu') {
-  defaultPatterns = exports.DateIntervalPatterns_lu;
-} else if (goog.LOCALE == 'lu_CD' || goog.LOCALE == 'lu-CD') {
-  defaultPatterns = exports.DateIntervalPatterns_lu_CD;
-} else if (goog.LOCALE == 'luo') {
-  defaultPatterns = exports.DateIntervalPatterns_luo;
-} else if (goog.LOCALE == 'luo_KE' || goog.LOCALE == 'luo-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_luo_KE;
-} else if (goog.LOCALE == 'luy') {
-  defaultPatterns = exports.DateIntervalPatterns_luy;
-} else if (goog.LOCALE == 'luy_KE' || goog.LOCALE == 'luy-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_luy_KE;
-} else if (goog.LOCALE == 'lv_LV' || goog.LOCALE == 'lv-LV') {
-  defaultPatterns = exports.DateIntervalPatterns_lv_LV;
-} else if (goog.LOCALE == 'mas') {
-  defaultPatterns = exports.DateIntervalPatterns_mas;
-} else if (goog.LOCALE == 'mas_KE' || goog.LOCALE == 'mas-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_mas_KE;
-} else if (goog.LOCALE == 'mas_TZ' || goog.LOCALE == 'mas-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_mas_TZ;
-} else if (goog.LOCALE == 'mer') {
-  defaultPatterns = exports.DateIntervalPatterns_mer;
-} else if (goog.LOCALE == 'mer_KE' || goog.LOCALE == 'mer-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_mer_KE;
-} else if (goog.LOCALE == 'mfe') {
-  defaultPatterns = exports.DateIntervalPatterns_mfe;
-} else if (goog.LOCALE == 'mfe_MU' || goog.LOCALE == 'mfe-MU') {
-  defaultPatterns = exports.DateIntervalPatterns_mfe_MU;
-} else if (goog.LOCALE == 'mg') {
-  defaultPatterns = exports.DateIntervalPatterns_mg;
-} else if (goog.LOCALE == 'mg_MG' || goog.LOCALE == 'mg-MG') {
-  defaultPatterns = exports.DateIntervalPatterns_mg_MG;
-} else if (goog.LOCALE == 'mgh') {
-  defaultPatterns = exports.DateIntervalPatterns_mgh;
-} else if (goog.LOCALE == 'mgh_MZ' || goog.LOCALE == 'mgh-MZ') {
-  defaultPatterns = exports.DateIntervalPatterns_mgh_MZ;
-} else if (goog.LOCALE == 'mgo') {
-  defaultPatterns = exports.DateIntervalPatterns_mgo;
-} else if (goog.LOCALE == 'mgo_CM' || goog.LOCALE == 'mgo-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_mgo_CM;
-} else if (goog.LOCALE == 'mk_MK' || goog.LOCALE == 'mk-MK') {
-  defaultPatterns = exports.DateIntervalPatterns_mk_MK;
-} else if (goog.LOCALE == 'ml_IN' || goog.LOCALE == 'ml-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_ml_IN;
-} else if (goog.LOCALE == 'mn_MN' || goog.LOCALE == 'mn-MN') {
-  defaultPatterns = exports.DateIntervalPatterns_mn_MN;
-} else if (goog.LOCALE == 'mr_IN' || goog.LOCALE == 'mr-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_mr_IN;
-} else if (goog.LOCALE == 'ms_BN' || goog.LOCALE == 'ms-BN') {
-  defaultPatterns = exports.DateIntervalPatterns_ms_BN;
-} else if (goog.LOCALE == 'ms_MY' || goog.LOCALE == 'ms-MY') {
-  defaultPatterns = exports.DateIntervalPatterns_ms_MY;
-} else if (goog.LOCALE == 'ms_SG' || goog.LOCALE == 'ms-SG') {
-  defaultPatterns = exports.DateIntervalPatterns_ms_SG;
-} else if (goog.LOCALE == 'mt_MT' || goog.LOCALE == 'mt-MT') {
-  defaultPatterns = exports.DateIntervalPatterns_mt_MT;
-} else if (goog.LOCALE == 'mua') {
-  defaultPatterns = exports.DateIntervalPatterns_mua;
-} else if (goog.LOCALE == 'mua_CM' || goog.LOCALE == 'mua-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_mua_CM;
-} else if (goog.LOCALE == 'my_MM' || goog.LOCALE == 'my-MM') {
-  defaultPatterns = exports.DateIntervalPatterns_my_MM;
-} else if (goog.LOCALE == 'mzn') {
-  defaultPatterns = exports.DateIntervalPatterns_mzn;
-} else if (goog.LOCALE == 'mzn_IR' || goog.LOCALE == 'mzn-IR') {
-  defaultPatterns = exports.DateIntervalPatterns_mzn_IR;
-} else if (goog.LOCALE == 'naq') {
-  defaultPatterns = exports.DateIntervalPatterns_naq;
-} else if (goog.LOCALE == 'naq_NA' || goog.LOCALE == 'naq-NA') {
-  defaultPatterns = exports.DateIntervalPatterns_naq_NA;
-} else if (goog.LOCALE == 'nb_NO' || goog.LOCALE == 'nb-NO') {
-  defaultPatterns = exports.DateIntervalPatterns_nb_NO;
-} else if (goog.LOCALE == 'nb_SJ' || goog.LOCALE == 'nb-SJ') {
-  defaultPatterns = exports.DateIntervalPatterns_nb_SJ;
-} else if (goog.LOCALE == 'nd') {
-  defaultPatterns = exports.DateIntervalPatterns_nd;
-} else if (goog.LOCALE == 'nd_ZW' || goog.LOCALE == 'nd-ZW') {
-  defaultPatterns = exports.DateIntervalPatterns_nd_ZW;
-} else if (goog.LOCALE == 'nds') {
-  defaultPatterns = exports.DateIntervalPatterns_nds;
-} else if (goog.LOCALE == 'nds_DE' || goog.LOCALE == 'nds-DE') {
-  defaultPatterns = exports.DateIntervalPatterns_nds_DE;
-} else if (goog.LOCALE == 'nds_NL' || goog.LOCALE == 'nds-NL') {
-  defaultPatterns = exports.DateIntervalPatterns_nds_NL;
-} else if (goog.LOCALE == 'ne_IN' || goog.LOCALE == 'ne-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_ne_IN;
-} else if (goog.LOCALE == 'ne_NP' || goog.LOCALE == 'ne-NP') {
-  defaultPatterns = exports.DateIntervalPatterns_ne_NP;
-} else if (goog.LOCALE == 'nl_AW' || goog.LOCALE == 'nl-AW') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_AW;
-} else if (goog.LOCALE == 'nl_BE' || goog.LOCALE == 'nl-BE') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_BE;
-} else if (goog.LOCALE == 'nl_BQ' || goog.LOCALE == 'nl-BQ') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_BQ;
-} else if (goog.LOCALE == 'nl_CW' || goog.LOCALE == 'nl-CW') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_CW;
-} else if (goog.LOCALE == 'nl_NL' || goog.LOCALE == 'nl-NL') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_NL;
-} else if (goog.LOCALE == 'nl_SR' || goog.LOCALE == 'nl-SR') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_SR;
-} else if (goog.LOCALE == 'nl_SX' || goog.LOCALE == 'nl-SX') {
-  defaultPatterns = exports.DateIntervalPatterns_nl_SX;
-} else if (goog.LOCALE == 'nmg') {
-  defaultPatterns = exports.DateIntervalPatterns_nmg;
-} else if (goog.LOCALE == 'nmg_CM' || goog.LOCALE == 'nmg-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_nmg_CM;
-} else if (goog.LOCALE == 'nn') {
-  defaultPatterns = exports.DateIntervalPatterns_nn;
-} else if (goog.LOCALE == 'nn_NO' || goog.LOCALE == 'nn-NO') {
-  defaultPatterns = exports.DateIntervalPatterns_nn_NO;
-} else if (goog.LOCALE == 'nnh') {
-  defaultPatterns = exports.DateIntervalPatterns_nnh;
-} else if (goog.LOCALE == 'nnh_CM' || goog.LOCALE == 'nnh-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_nnh_CM;
-} else if (goog.LOCALE == 'nus') {
-  defaultPatterns = exports.DateIntervalPatterns_nus;
-} else if (goog.LOCALE == 'nus_SS' || goog.LOCALE == 'nus-SS') {
-  defaultPatterns = exports.DateIntervalPatterns_nus_SS;
-} else if (goog.LOCALE == 'nyn') {
-  defaultPatterns = exports.DateIntervalPatterns_nyn;
-} else if (goog.LOCALE == 'nyn_UG' || goog.LOCALE == 'nyn-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_nyn_UG;
-} else if (goog.LOCALE == 'om') {
-  defaultPatterns = exports.DateIntervalPatterns_om;
-} else if (goog.LOCALE == 'om_ET' || goog.LOCALE == 'om-ET') {
-  defaultPatterns = exports.DateIntervalPatterns_om_ET;
-} else if (goog.LOCALE == 'om_KE' || goog.LOCALE == 'om-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_om_KE;
-} else if (goog.LOCALE == 'or_IN' || goog.LOCALE == 'or-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_or_IN;
-} else if (goog.LOCALE == 'os') {
-  defaultPatterns = exports.DateIntervalPatterns_os;
-} else if (goog.LOCALE == 'os_GE' || goog.LOCALE == 'os-GE') {
-  defaultPatterns = exports.DateIntervalPatterns_os_GE;
-} else if (goog.LOCALE == 'os_RU' || goog.LOCALE == 'os-RU') {
-  defaultPatterns = exports.DateIntervalPatterns_os_RU;
-} else if (goog.LOCALE == 'pa_Arab' || goog.LOCALE == 'pa-Arab') {
-  defaultPatterns = exports.DateIntervalPatterns_pa_Arab;
-} else if (goog.LOCALE == 'pa_Arab_PK' || goog.LOCALE == 'pa-Arab-PK') {
-  defaultPatterns = exports.DateIntervalPatterns_pa_Arab_PK;
-} else if (goog.LOCALE == 'pa_Guru' || goog.LOCALE == 'pa-Guru') {
-  defaultPatterns = exports.DateIntervalPatterns_pa_Guru;
-} else if (goog.LOCALE == 'pa_Guru_IN' || goog.LOCALE == 'pa-Guru-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_pa_Guru_IN;
-} else if (goog.LOCALE == 'pl_PL' || goog.LOCALE == 'pl-PL') {
-  defaultPatterns = exports.DateIntervalPatterns_pl_PL;
-} else if (goog.LOCALE == 'ps') {
-  defaultPatterns = exports.DateIntervalPatterns_ps;
-} else if (goog.LOCALE == 'ps_AF' || goog.LOCALE == 'ps-AF') {
-  defaultPatterns = exports.DateIntervalPatterns_ps_AF;
-} else if (goog.LOCALE == 'pt_AO' || goog.LOCALE == 'pt-AO') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_AO;
-} else if (goog.LOCALE == 'pt_CH' || goog.LOCALE == 'pt-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_CH;
-} else if (goog.LOCALE == 'pt_CV' || goog.LOCALE == 'pt-CV') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_CV;
-} else if (goog.LOCALE == 'pt_GQ' || goog.LOCALE == 'pt-GQ') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_GQ;
-} else if (goog.LOCALE == 'pt_GW' || goog.LOCALE == 'pt-GW') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_GW;
-} else if (goog.LOCALE == 'pt_LU' || goog.LOCALE == 'pt-LU') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_LU;
-} else if (goog.LOCALE == 'pt_MO' || goog.LOCALE == 'pt-MO') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_MO;
-} else if (goog.LOCALE == 'pt_MZ' || goog.LOCALE == 'pt-MZ') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_MZ;
-} else if (goog.LOCALE == 'pt_ST' || goog.LOCALE == 'pt-ST') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_ST;
-} else if (goog.LOCALE == 'pt_TL' || goog.LOCALE == 'pt-TL') {
-  defaultPatterns = exports.DateIntervalPatterns_pt_TL;
-} else if (goog.LOCALE == 'qu') {
-  defaultPatterns = exports.DateIntervalPatterns_qu;
-} else if (goog.LOCALE == 'qu_BO' || goog.LOCALE == 'qu-BO') {
-  defaultPatterns = exports.DateIntervalPatterns_qu_BO;
-} else if (goog.LOCALE == 'qu_EC' || goog.LOCALE == 'qu-EC') {
-  defaultPatterns = exports.DateIntervalPatterns_qu_EC;
-} else if (goog.LOCALE == 'qu_PE' || goog.LOCALE == 'qu-PE') {
-  defaultPatterns = exports.DateIntervalPatterns_qu_PE;
-} else if (goog.LOCALE == 'rm') {
-  defaultPatterns = exports.DateIntervalPatterns_rm;
-} else if (goog.LOCALE == 'rm_CH' || goog.LOCALE == 'rm-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_rm_CH;
-} else if (goog.LOCALE == 'rn') {
-  defaultPatterns = exports.DateIntervalPatterns_rn;
-} else if (goog.LOCALE == 'rn_BI' || goog.LOCALE == 'rn-BI') {
-  defaultPatterns = exports.DateIntervalPatterns_rn_BI;
-} else if (goog.LOCALE == 'ro_MD' || goog.LOCALE == 'ro-MD') {
-  defaultPatterns = exports.DateIntervalPatterns_ro_MD;
-} else if (goog.LOCALE == 'ro_RO' || goog.LOCALE == 'ro-RO') {
-  defaultPatterns = exports.DateIntervalPatterns_ro_RO;
-} else if (goog.LOCALE == 'rof') {
-  defaultPatterns = exports.DateIntervalPatterns_rof;
-} else if (goog.LOCALE == 'rof_TZ' || goog.LOCALE == 'rof-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_rof_TZ;
-} else if (goog.LOCALE == 'ru_BY' || goog.LOCALE == 'ru-BY') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_BY;
-} else if (goog.LOCALE == 'ru_KG' || goog.LOCALE == 'ru-KG') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_KG;
-} else if (goog.LOCALE == 'ru_KZ' || goog.LOCALE == 'ru-KZ') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_KZ;
-} else if (goog.LOCALE == 'ru_MD' || goog.LOCALE == 'ru-MD') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_MD;
-} else if (goog.LOCALE == 'ru_RU' || goog.LOCALE == 'ru-RU') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_RU;
-} else if (goog.LOCALE == 'ru_UA' || goog.LOCALE == 'ru-UA') {
-  defaultPatterns = exports.DateIntervalPatterns_ru_UA;
-} else if (goog.LOCALE == 'rw') {
-  defaultPatterns = exports.DateIntervalPatterns_rw;
-} else if (goog.LOCALE == 'rw_RW' || goog.LOCALE == 'rw-RW') {
-  defaultPatterns = exports.DateIntervalPatterns_rw_RW;
-} else if (goog.LOCALE == 'rwk') {
-  defaultPatterns = exports.DateIntervalPatterns_rwk;
-} else if (goog.LOCALE == 'rwk_TZ' || goog.LOCALE == 'rwk-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_rwk_TZ;
-} else if (goog.LOCALE == 'sah') {
-  defaultPatterns = exports.DateIntervalPatterns_sah;
-} else if (goog.LOCALE == 'sah_RU' || goog.LOCALE == 'sah-RU') {
-  defaultPatterns = exports.DateIntervalPatterns_sah_RU;
-} else if (goog.LOCALE == 'saq') {
-  defaultPatterns = exports.DateIntervalPatterns_saq;
-} else if (goog.LOCALE == 'saq_KE' || goog.LOCALE == 'saq-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_saq_KE;
-} else if (goog.LOCALE == 'sbp') {
-  defaultPatterns = exports.DateIntervalPatterns_sbp;
-} else if (goog.LOCALE == 'sbp_TZ' || goog.LOCALE == 'sbp-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_sbp_TZ;
-} else if (goog.LOCALE == 'se') {
-  defaultPatterns = exports.DateIntervalPatterns_se;
-} else if (goog.LOCALE == 'se_FI' || goog.LOCALE == 'se-FI') {
-  defaultPatterns = exports.DateIntervalPatterns_se_FI;
-} else if (goog.LOCALE == 'se_NO' || goog.LOCALE == 'se-NO') {
-  defaultPatterns = exports.DateIntervalPatterns_se_NO;
-} else if (goog.LOCALE == 'se_SE' || goog.LOCALE == 'se-SE') {
-  defaultPatterns = exports.DateIntervalPatterns_se_SE;
-} else if (goog.LOCALE == 'seh') {
-  defaultPatterns = exports.DateIntervalPatterns_seh;
-} else if (goog.LOCALE == 'seh_MZ' || goog.LOCALE == 'seh-MZ') {
-  defaultPatterns = exports.DateIntervalPatterns_seh_MZ;
-} else if (goog.LOCALE == 'ses') {
-  defaultPatterns = exports.DateIntervalPatterns_ses;
-} else if (goog.LOCALE == 'ses_ML' || goog.LOCALE == 'ses-ML') {
-  defaultPatterns = exports.DateIntervalPatterns_ses_ML;
-} else if (goog.LOCALE == 'sg') {
-  defaultPatterns = exports.DateIntervalPatterns_sg;
-} else if (goog.LOCALE == 'sg_CF' || goog.LOCALE == 'sg-CF') {
-  defaultPatterns = exports.DateIntervalPatterns_sg_CF;
-} else if (goog.LOCALE == 'shi') {
-  defaultPatterns = exports.DateIntervalPatterns_shi;
-} else if (goog.LOCALE == 'shi_Latn' || goog.LOCALE == 'shi-Latn') {
-  defaultPatterns = exports.DateIntervalPatterns_shi_Latn;
-} else if (goog.LOCALE == 'shi_Latn_MA' || goog.LOCALE == 'shi-Latn-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_shi_Latn_MA;
-} else if (goog.LOCALE == 'shi_Tfng' || goog.LOCALE == 'shi-Tfng') {
-  defaultPatterns = exports.DateIntervalPatterns_shi_Tfng;
-} else if (goog.LOCALE == 'shi_Tfng_MA' || goog.LOCALE == 'shi-Tfng-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_shi_Tfng_MA;
-} else if (goog.LOCALE == 'si_LK' || goog.LOCALE == 'si-LK') {
-  defaultPatterns = exports.DateIntervalPatterns_si_LK;
-} else if (goog.LOCALE == 'sk_SK' || goog.LOCALE == 'sk-SK') {
-  defaultPatterns = exports.DateIntervalPatterns_sk_SK;
-} else if (goog.LOCALE == 'sl_SI' || goog.LOCALE == 'sl-SI') {
-  defaultPatterns = exports.DateIntervalPatterns_sl_SI;
-} else if (goog.LOCALE == 'smn') {
-  defaultPatterns = exports.DateIntervalPatterns_smn;
-} else if (goog.LOCALE == 'smn_FI' || goog.LOCALE == 'smn-FI') {
-  defaultPatterns = exports.DateIntervalPatterns_smn_FI;
-} else if (goog.LOCALE == 'sn') {
-  defaultPatterns = exports.DateIntervalPatterns_sn;
-} else if (goog.LOCALE == 'sn_ZW' || goog.LOCALE == 'sn-ZW') {
-  defaultPatterns = exports.DateIntervalPatterns_sn_ZW;
-} else if (goog.LOCALE == 'so') {
-  defaultPatterns = exports.DateIntervalPatterns_so;
-} else if (goog.LOCALE == 'so_DJ' || goog.LOCALE == 'so-DJ') {
-  defaultPatterns = exports.DateIntervalPatterns_so_DJ;
-} else if (goog.LOCALE == 'so_ET' || goog.LOCALE == 'so-ET') {
-  defaultPatterns = exports.DateIntervalPatterns_so_ET;
-} else if (goog.LOCALE == 'so_KE' || goog.LOCALE == 'so-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_so_KE;
-} else if (goog.LOCALE == 'so_SO' || goog.LOCALE == 'so-SO') {
-  defaultPatterns = exports.DateIntervalPatterns_so_SO;
-} else if (goog.LOCALE == 'sq_AL' || goog.LOCALE == 'sq-AL') {
-  defaultPatterns = exports.DateIntervalPatterns_sq_AL;
-} else if (goog.LOCALE == 'sq_MK' || goog.LOCALE == 'sq-MK') {
-  defaultPatterns = exports.DateIntervalPatterns_sq_MK;
-} else if (goog.LOCALE == 'sq_XK' || goog.LOCALE == 'sq-XK') {
-  defaultPatterns = exports.DateIntervalPatterns_sq_XK;
-} else if (goog.LOCALE == 'sr_Cyrl' || goog.LOCALE == 'sr-Cyrl') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl;
-} else if (goog.LOCALE == 'sr_Cyrl_BA' || goog.LOCALE == 'sr-Cyrl-BA') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_BA;
-} else if (goog.LOCALE == 'sr_Cyrl_ME' || goog.LOCALE == 'sr-Cyrl-ME') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_ME;
-} else if (goog.LOCALE == 'sr_Cyrl_RS' || goog.LOCALE == 'sr-Cyrl-RS') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_RS;
-} else if (goog.LOCALE == 'sr_Cyrl_XK' || goog.LOCALE == 'sr-Cyrl-XK') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_XK;
-} else if (goog.LOCALE == 'sr_Latn_BA' || goog.LOCALE == 'sr-Latn-BA') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Latn_BA;
-} else if (goog.LOCALE == 'sr_Latn_ME' || goog.LOCALE == 'sr-Latn-ME') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Latn_ME;
-} else if (goog.LOCALE == 'sr_Latn_RS' || goog.LOCALE == 'sr-Latn-RS') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Latn_RS;
-} else if (goog.LOCALE == 'sr_Latn_XK' || goog.LOCALE == 'sr-Latn-XK') {
-  defaultPatterns = exports.DateIntervalPatterns_sr_Latn_XK;
-} else if (goog.LOCALE == 'sv_AX' || goog.LOCALE == 'sv-AX') {
-  defaultPatterns = exports.DateIntervalPatterns_sv_AX;
-} else if (goog.LOCALE == 'sv_FI' || goog.LOCALE == 'sv-FI') {
-  defaultPatterns = exports.DateIntervalPatterns_sv_FI;
-} else if (goog.LOCALE == 'sv_SE' || goog.LOCALE == 'sv-SE') {
-  defaultPatterns = exports.DateIntervalPatterns_sv_SE;
-} else if (goog.LOCALE == 'sw_CD' || goog.LOCALE == 'sw-CD') {
-  defaultPatterns = exports.DateIntervalPatterns_sw_CD;
-} else if (goog.LOCALE == 'sw_KE' || goog.LOCALE == 'sw-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_sw_KE;
-} else if (goog.LOCALE == 'sw_TZ' || goog.LOCALE == 'sw-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_sw_TZ;
-} else if (goog.LOCALE == 'sw_UG' || goog.LOCALE == 'sw-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_sw_UG;
-} else if (goog.LOCALE == 'ta_IN' || goog.LOCALE == 'ta-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_ta_IN;
-} else if (goog.LOCALE == 'ta_LK' || goog.LOCALE == 'ta-LK') {
-  defaultPatterns = exports.DateIntervalPatterns_ta_LK;
-} else if (goog.LOCALE == 'ta_MY' || goog.LOCALE == 'ta-MY') {
-  defaultPatterns = exports.DateIntervalPatterns_ta_MY;
-} else if (goog.LOCALE == 'ta_SG' || goog.LOCALE == 'ta-SG') {
-  defaultPatterns = exports.DateIntervalPatterns_ta_SG;
-} else if (goog.LOCALE == 'te_IN' || goog.LOCALE == 'te-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_te_IN;
-} else if (goog.LOCALE == 'teo') {
-  defaultPatterns = exports.DateIntervalPatterns_teo;
-} else if (goog.LOCALE == 'teo_KE' || goog.LOCALE == 'teo-KE') {
-  defaultPatterns = exports.DateIntervalPatterns_teo_KE;
-} else if (goog.LOCALE == 'teo_UG' || goog.LOCALE == 'teo-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_teo_UG;
-} else if (goog.LOCALE == 'th_TH' || goog.LOCALE == 'th-TH') {
-  defaultPatterns = exports.DateIntervalPatterns_th_TH;
-} else if (goog.LOCALE == 'ti') {
-  defaultPatterns = exports.DateIntervalPatterns_ti;
-} else if (goog.LOCALE == 'ti_ER' || goog.LOCALE == 'ti-ER') {
-  defaultPatterns = exports.DateIntervalPatterns_ti_ER;
-} else if (goog.LOCALE == 'ti_ET' || goog.LOCALE == 'ti-ET') {
-  defaultPatterns = exports.DateIntervalPatterns_ti_ET;
-} else if (goog.LOCALE == 'to') {
-  defaultPatterns = exports.DateIntervalPatterns_to;
-} else if (goog.LOCALE == 'to_TO' || goog.LOCALE == 'to-TO') {
-  defaultPatterns = exports.DateIntervalPatterns_to_TO;
-} else if (goog.LOCALE == 'tr_CY' || goog.LOCALE == 'tr-CY') {
-  defaultPatterns = exports.DateIntervalPatterns_tr_CY;
-} else if (goog.LOCALE == 'tr_TR' || goog.LOCALE == 'tr-TR') {
-  defaultPatterns = exports.DateIntervalPatterns_tr_TR;
-} else if (goog.LOCALE == 'twq') {
-  defaultPatterns = exports.DateIntervalPatterns_twq;
-} else if (goog.LOCALE == 'twq_NE' || goog.LOCALE == 'twq-NE') {
-  defaultPatterns = exports.DateIntervalPatterns_twq_NE;
-} else if (goog.LOCALE == 'tzm') {
-  defaultPatterns = exports.DateIntervalPatterns_tzm;
-} else if (goog.LOCALE == 'tzm_MA' || goog.LOCALE == 'tzm-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_tzm_MA;
-} else if (goog.LOCALE == 'ug') {
-  defaultPatterns = exports.DateIntervalPatterns_ug;
-} else if (goog.LOCALE == 'ug_CN' || goog.LOCALE == 'ug-CN') {
-  defaultPatterns = exports.DateIntervalPatterns_ug_CN;
-} else if (goog.LOCALE == 'uk_UA' || goog.LOCALE == 'uk-UA') {
-  defaultPatterns = exports.DateIntervalPatterns_uk_UA;
-} else if (goog.LOCALE == 'ur_IN' || goog.LOCALE == 'ur-IN') {
-  defaultPatterns = exports.DateIntervalPatterns_ur_IN;
-} else if (goog.LOCALE == 'ur_PK' || goog.LOCALE == 'ur-PK') {
-  defaultPatterns = exports.DateIntervalPatterns_ur_PK;
-} else if (goog.LOCALE == 'uz_Arab' || goog.LOCALE == 'uz-Arab') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Arab;
-} else if (goog.LOCALE == 'uz_Arab_AF' || goog.LOCALE == 'uz-Arab-AF') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Arab_AF;
-} else if (goog.LOCALE == 'uz_Cyrl' || goog.LOCALE == 'uz-Cyrl') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Cyrl;
-} else if (goog.LOCALE == 'uz_Cyrl_UZ' || goog.LOCALE == 'uz-Cyrl-UZ') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Cyrl_UZ;
-} else if (goog.LOCALE == 'uz_Latn' || goog.LOCALE == 'uz-Latn') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Latn;
-} else if (goog.LOCALE == 'uz_Latn_UZ' || goog.LOCALE == 'uz-Latn-UZ') {
-  defaultPatterns = exports.DateIntervalPatterns_uz_Latn_UZ;
-} else if (goog.LOCALE == 'vai') {
-  defaultPatterns = exports.DateIntervalPatterns_vai;
-} else if (goog.LOCALE == 'vai_Latn' || goog.LOCALE == 'vai-Latn') {
-  defaultPatterns = exports.DateIntervalPatterns_vai_Latn;
-} else if (goog.LOCALE == 'vai_Latn_LR' || goog.LOCALE == 'vai-Latn-LR') {
-  defaultPatterns = exports.DateIntervalPatterns_vai_Latn_LR;
-} else if (goog.LOCALE == 'vai_Vaii' || goog.LOCALE == 'vai-Vaii') {
-  defaultPatterns = exports.DateIntervalPatterns_vai_Vaii;
-} else if (goog.LOCALE == 'vai_Vaii_LR' || goog.LOCALE == 'vai-Vaii-LR') {
-  defaultPatterns = exports.DateIntervalPatterns_vai_Vaii_LR;
-} else if (goog.LOCALE == 'vi_VN' || goog.LOCALE == 'vi-VN') {
-  defaultPatterns = exports.DateIntervalPatterns_vi_VN;
-} else if (goog.LOCALE == 'vun') {
-  defaultPatterns = exports.DateIntervalPatterns_vun;
-} else if (goog.LOCALE == 'vun_TZ' || goog.LOCALE == 'vun-TZ') {
-  defaultPatterns = exports.DateIntervalPatterns_vun_TZ;
-} else if (goog.LOCALE == 'wae') {
-  defaultPatterns = exports.DateIntervalPatterns_wae;
-} else if (goog.LOCALE == 'wae_CH' || goog.LOCALE == 'wae-CH') {
-  defaultPatterns = exports.DateIntervalPatterns_wae_CH;
-} else if (goog.LOCALE == 'xog') {
-  defaultPatterns = exports.DateIntervalPatterns_xog;
-} else if (goog.LOCALE == 'xog_UG' || goog.LOCALE == 'xog-UG') {
-  defaultPatterns = exports.DateIntervalPatterns_xog_UG;
-} else if (goog.LOCALE == 'yav') {
-  defaultPatterns = exports.DateIntervalPatterns_yav;
-} else if (goog.LOCALE == 'yav_CM' || goog.LOCALE == 'yav-CM') {
-  defaultPatterns = exports.DateIntervalPatterns_yav_CM;
-} else if (goog.LOCALE == 'yi') {
-  defaultPatterns = exports.DateIntervalPatterns_yi;
-} else if (goog.LOCALE == 'yi_001' || goog.LOCALE == 'yi-001') {
-  defaultPatterns = exports.DateIntervalPatterns_yi_001;
-} else if (goog.LOCALE == 'yo') {
-  defaultPatterns = exports.DateIntervalPatterns_yo;
-} else if (goog.LOCALE == 'yo_BJ' || goog.LOCALE == 'yo-BJ') {
-  defaultPatterns = exports.DateIntervalPatterns_yo_BJ;
-} else if (goog.LOCALE == 'yo_NG' || goog.LOCALE == 'yo-NG') {
-  defaultPatterns = exports.DateIntervalPatterns_yo_NG;
-} else if (goog.LOCALE == 'yue') {
-  defaultPatterns = exports.DateIntervalPatterns_yue;
-} else if (goog.LOCALE == 'yue_HK' || goog.LOCALE == 'yue-HK') {
-  defaultPatterns = exports.DateIntervalPatterns_yue_HK;
-} else if (goog.LOCALE == 'zgh') {
-  defaultPatterns = exports.DateIntervalPatterns_zgh;
-} else if (goog.LOCALE == 'zgh_MA' || goog.LOCALE == 'zgh-MA') {
-  defaultPatterns = exports.DateIntervalPatterns_zgh_MA;
-} else if (goog.LOCALE == 'zh_Hans' || goog.LOCALE == 'zh-Hans') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hans;
-} else if (goog.LOCALE == 'zh_Hans_CN' || goog.LOCALE == 'zh-Hans-CN') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hans_CN;
-} else if (goog.LOCALE == 'zh_Hans_HK' || goog.LOCALE == 'zh-Hans-HK') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hans_HK;
-} else if (goog.LOCALE == 'zh_Hans_MO' || goog.LOCALE == 'zh-Hans-MO') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hans_MO;
-} else if (goog.LOCALE == 'zh_Hans_SG' || goog.LOCALE == 'zh-Hans-SG') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hans_SG;
-} else if (goog.LOCALE == 'zh_Hant' || goog.LOCALE == 'zh-Hant') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hant;
-} else if (goog.LOCALE == 'zh_Hant_HK' || goog.LOCALE == 'zh-Hant-HK') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hant_HK;
-} else if (goog.LOCALE == 'zh_Hant_MO' || goog.LOCALE == 'zh-Hant-MO') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hant_MO;
-} else if (goog.LOCALE == 'zh_Hant_TW' || goog.LOCALE == 'zh-Hant-TW') {
-  defaultPatterns = exports.DateIntervalPatterns_zh_Hant_TW;
-} else if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
-  defaultPatterns = exports.DateIntervalPatterns_zu_ZA;
+switch (goog.LOCALE) {
+  case 'af_NA':
+  case 'af-NA':
+    defaultPatterns = exports.DateIntervalPatterns_af_NA;
+    break;
+  case 'af_ZA':
+  case 'af-ZA':
+    defaultPatterns = exports.DateIntervalPatterns_af_ZA;
+    break;
+  case 'agq':
+    defaultPatterns = exports.DateIntervalPatterns_agq;
+    break;
+  case 'agq_CM':
+  case 'agq-CM':
+    defaultPatterns = exports.DateIntervalPatterns_agq_CM;
+    break;
+  case 'ak':
+    defaultPatterns = exports.DateIntervalPatterns_ak;
+    break;
+  case 'ak_GH':
+  case 'ak-GH':
+    defaultPatterns = exports.DateIntervalPatterns_ak_GH;
+    break;
+  case 'am_ET':
+  case 'am-ET':
+    defaultPatterns = exports.DateIntervalPatterns_am_ET;
+    break;
+  case 'ar_001':
+  case 'ar-001':
+    defaultPatterns = exports.DateIntervalPatterns_ar_001;
+    break;
+  case 'ar_AE':
+  case 'ar-AE':
+    defaultPatterns = exports.DateIntervalPatterns_ar_AE;
+    break;
+  case 'ar_BH':
+  case 'ar-BH':
+    defaultPatterns = exports.DateIntervalPatterns_ar_BH;
+    break;
+  case 'ar_DJ':
+  case 'ar-DJ':
+    defaultPatterns = exports.DateIntervalPatterns_ar_DJ;
+    break;
+  case 'ar_EG':
+  case 'ar-EG':
+    defaultPatterns = exports.DateIntervalPatterns_ar_EG;
+    break;
+  case 'ar_EH':
+  case 'ar-EH':
+    defaultPatterns = exports.DateIntervalPatterns_ar_EH;
+    break;
+  case 'ar_ER':
+  case 'ar-ER':
+    defaultPatterns = exports.DateIntervalPatterns_ar_ER;
+    break;
+  case 'ar_IL':
+  case 'ar-IL':
+    defaultPatterns = exports.DateIntervalPatterns_ar_IL;
+    break;
+  case 'ar_IQ':
+  case 'ar-IQ':
+    defaultPatterns = exports.DateIntervalPatterns_ar_IQ;
+    break;
+  case 'ar_JO':
+  case 'ar-JO':
+    defaultPatterns = exports.DateIntervalPatterns_ar_JO;
+    break;
+  case 'ar_KM':
+  case 'ar-KM':
+    defaultPatterns = exports.DateIntervalPatterns_ar_KM;
+    break;
+  case 'ar_KW':
+  case 'ar-KW':
+    defaultPatterns = exports.DateIntervalPatterns_ar_KW;
+    break;
+  case 'ar_LB':
+  case 'ar-LB':
+    defaultPatterns = exports.DateIntervalPatterns_ar_LB;
+    break;
+  case 'ar_LY':
+  case 'ar-LY':
+    defaultPatterns = exports.DateIntervalPatterns_ar_LY;
+    break;
+  case 'ar_MA':
+  case 'ar-MA':
+    defaultPatterns = exports.DateIntervalPatterns_ar_MA;
+    break;
+  case 'ar_MR':
+  case 'ar-MR':
+    defaultPatterns = exports.DateIntervalPatterns_ar_MR;
+    break;
+  case 'ar_OM':
+  case 'ar-OM':
+    defaultPatterns = exports.DateIntervalPatterns_ar_OM;
+    break;
+  case 'ar_PS':
+  case 'ar-PS':
+    defaultPatterns = exports.DateIntervalPatterns_ar_PS;
+    break;
+  case 'ar_QA':
+  case 'ar-QA':
+    defaultPatterns = exports.DateIntervalPatterns_ar_QA;
+    break;
+  case 'ar_SA':
+  case 'ar-SA':
+    defaultPatterns = exports.DateIntervalPatterns_ar_SA;
+    break;
+  case 'ar_SD':
+  case 'ar-SD':
+    defaultPatterns = exports.DateIntervalPatterns_ar_SD;
+    break;
+  case 'ar_SO':
+  case 'ar-SO':
+    defaultPatterns = exports.DateIntervalPatterns_ar_SO;
+    break;
+  case 'ar_SS':
+  case 'ar-SS':
+    defaultPatterns = exports.DateIntervalPatterns_ar_SS;
+    break;
+  case 'ar_SY':
+  case 'ar-SY':
+    defaultPatterns = exports.DateIntervalPatterns_ar_SY;
+    break;
+  case 'ar_TD':
+  case 'ar-TD':
+    defaultPatterns = exports.DateIntervalPatterns_ar_TD;
+    break;
+  case 'ar_TN':
+  case 'ar-TN':
+    defaultPatterns = exports.DateIntervalPatterns_ar_TN;
+    break;
+  case 'ar_XB':
+  case 'ar-XB':
+    defaultPatterns = exports.DateIntervalPatterns_ar_XB;
+    break;
+  case 'ar_YE':
+  case 'ar-YE':
+    defaultPatterns = exports.DateIntervalPatterns_ar_YE;
+    break;
+  case 'as':
+    defaultPatterns = exports.DateIntervalPatterns_as;
+    break;
+  case 'as_IN':
+  case 'as-IN':
+    defaultPatterns = exports.DateIntervalPatterns_as_IN;
+    break;
+  case 'asa':
+    defaultPatterns = exports.DateIntervalPatterns_asa;
+    break;
+  case 'asa_TZ':
+  case 'asa-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_asa_TZ;
+    break;
+  case 'ast':
+    defaultPatterns = exports.DateIntervalPatterns_ast;
+    break;
+  case 'ast_ES':
+  case 'ast-ES':
+    defaultPatterns = exports.DateIntervalPatterns_ast_ES;
+    break;
+  case 'az_Cyrl':
+  case 'az-Cyrl':
+    defaultPatterns = exports.DateIntervalPatterns_az_Cyrl;
+    break;
+  case 'az_Cyrl_AZ':
+  case 'az-Cyrl-AZ':
+    defaultPatterns = exports.DateIntervalPatterns_az_Cyrl_AZ;
+    break;
+  case 'az_Latn':
+  case 'az-Latn':
+    defaultPatterns = exports.DateIntervalPatterns_az_Latn;
+    break;
+  case 'az_Latn_AZ':
+  case 'az-Latn-AZ':
+    defaultPatterns = exports.DateIntervalPatterns_az_Latn_AZ;
+    break;
+  case 'bas':
+    defaultPatterns = exports.DateIntervalPatterns_bas;
+    break;
+  case 'bas_CM':
+  case 'bas-CM':
+    defaultPatterns = exports.DateIntervalPatterns_bas_CM;
+    break;
+  case 'be_BY':
+  case 'be-BY':
+    defaultPatterns = exports.DateIntervalPatterns_be_BY;
+    break;
+  case 'bem':
+    defaultPatterns = exports.DateIntervalPatterns_bem;
+    break;
+  case 'bem_ZM':
+  case 'bem-ZM':
+    defaultPatterns = exports.DateIntervalPatterns_bem_ZM;
+    break;
+  case 'bez':
+    defaultPatterns = exports.DateIntervalPatterns_bez;
+    break;
+  case 'bez_TZ':
+  case 'bez-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_bez_TZ;
+    break;
+  case 'bg_BG':
+  case 'bg-BG':
+    defaultPatterns = exports.DateIntervalPatterns_bg_BG;
+    break;
+  case 'bm':
+    defaultPatterns = exports.DateIntervalPatterns_bm;
+    break;
+  case 'bm_ML':
+  case 'bm-ML':
+    defaultPatterns = exports.DateIntervalPatterns_bm_ML;
+    break;
+  case 'bn_BD':
+  case 'bn-BD':
+    defaultPatterns = exports.DateIntervalPatterns_bn_BD;
+    break;
+  case 'bn_IN':
+  case 'bn-IN':
+    defaultPatterns = exports.DateIntervalPatterns_bn_IN;
+    break;
+  case 'bo':
+    defaultPatterns = exports.DateIntervalPatterns_bo;
+    break;
+  case 'bo_CN':
+  case 'bo-CN':
+    defaultPatterns = exports.DateIntervalPatterns_bo_CN;
+    break;
+  case 'bo_IN':
+  case 'bo-IN':
+    defaultPatterns = exports.DateIntervalPatterns_bo_IN;
+    break;
+  case 'br_FR':
+  case 'br-FR':
+    defaultPatterns = exports.DateIntervalPatterns_br_FR;
+    break;
+  case 'brx':
+    defaultPatterns = exports.DateIntervalPatterns_brx;
+    break;
+  case 'brx_IN':
+  case 'brx-IN':
+    defaultPatterns = exports.DateIntervalPatterns_brx_IN;
+    break;
+  case 'bs_Cyrl':
+  case 'bs-Cyrl':
+    defaultPatterns = exports.DateIntervalPatterns_bs_Cyrl;
+    break;
+  case 'bs_Cyrl_BA':
+  case 'bs-Cyrl-BA':
+    defaultPatterns = exports.DateIntervalPatterns_bs_Cyrl_BA;
+    break;
+  case 'bs_Latn':
+  case 'bs-Latn':
+    defaultPatterns = exports.DateIntervalPatterns_bs_Latn;
+    break;
+  case 'bs_Latn_BA':
+  case 'bs-Latn-BA':
+    defaultPatterns = exports.DateIntervalPatterns_bs_Latn_BA;
+    break;
+  case 'ca_AD':
+  case 'ca-AD':
+    defaultPatterns = exports.DateIntervalPatterns_ca_AD;
+    break;
+  case 'ca_ES':
+  case 'ca-ES':
+    defaultPatterns = exports.DateIntervalPatterns_ca_ES;
+    break;
+  case 'ca_FR':
+  case 'ca-FR':
+    defaultPatterns = exports.DateIntervalPatterns_ca_FR;
+    break;
+  case 'ca_IT':
+  case 'ca-IT':
+    defaultPatterns = exports.DateIntervalPatterns_ca_IT;
+    break;
+  case 'ce':
+    defaultPatterns = exports.DateIntervalPatterns_ce;
+    break;
+  case 'ce_RU':
+  case 'ce-RU':
+    defaultPatterns = exports.DateIntervalPatterns_ce_RU;
+    break;
+  case 'cgg':
+    defaultPatterns = exports.DateIntervalPatterns_cgg;
+    break;
+  case 'cgg_UG':
+  case 'cgg-UG':
+    defaultPatterns = exports.DateIntervalPatterns_cgg_UG;
+    break;
+  case 'chr_US':
+  case 'chr-US':
+    defaultPatterns = exports.DateIntervalPatterns_chr_US;
+    break;
+  case 'ckb':
+    defaultPatterns = exports.DateIntervalPatterns_ckb;
+    break;
+  case 'ckb_IQ':
+  case 'ckb-IQ':
+    defaultPatterns = exports.DateIntervalPatterns_ckb_IQ;
+    break;
+  case 'ckb_IR':
+  case 'ckb-IR':
+    defaultPatterns = exports.DateIntervalPatterns_ckb_IR;
+    break;
+  case 'cs_CZ':
+  case 'cs-CZ':
+    defaultPatterns = exports.DateIntervalPatterns_cs_CZ;
+    break;
+  case 'cy_GB':
+  case 'cy-GB':
+    defaultPatterns = exports.DateIntervalPatterns_cy_GB;
+    break;
+  case 'da_DK':
+  case 'da-DK':
+    defaultPatterns = exports.DateIntervalPatterns_da_DK;
+    break;
+  case 'da_GL':
+  case 'da-GL':
+    defaultPatterns = exports.DateIntervalPatterns_da_GL;
+    break;
+  case 'dav':
+    defaultPatterns = exports.DateIntervalPatterns_dav;
+    break;
+  case 'dav_KE':
+  case 'dav-KE':
+    defaultPatterns = exports.DateIntervalPatterns_dav_KE;
+    break;
+  case 'de_BE':
+  case 'de-BE':
+    defaultPatterns = exports.DateIntervalPatterns_de_BE;
+    break;
+  case 'de_DE':
+  case 'de-DE':
+    defaultPatterns = exports.DateIntervalPatterns_de_DE;
+    break;
+  case 'de_IT':
+  case 'de-IT':
+    defaultPatterns = exports.DateIntervalPatterns_de_IT;
+    break;
+  case 'de_LI':
+  case 'de-LI':
+    defaultPatterns = exports.DateIntervalPatterns_de_LI;
+    break;
+  case 'de_LU':
+  case 'de-LU':
+    defaultPatterns = exports.DateIntervalPatterns_de_LU;
+    break;
+  case 'dje':
+    defaultPatterns = exports.DateIntervalPatterns_dje;
+    break;
+  case 'dje_NE':
+  case 'dje-NE':
+    defaultPatterns = exports.DateIntervalPatterns_dje_NE;
+    break;
+  case 'dsb':
+    defaultPatterns = exports.DateIntervalPatterns_dsb;
+    break;
+  case 'dsb_DE':
+  case 'dsb-DE':
+    defaultPatterns = exports.DateIntervalPatterns_dsb_DE;
+    break;
+  case 'dua':
+    defaultPatterns = exports.DateIntervalPatterns_dua;
+    break;
+  case 'dua_CM':
+  case 'dua-CM':
+    defaultPatterns = exports.DateIntervalPatterns_dua_CM;
+    break;
+  case 'dyo':
+    defaultPatterns = exports.DateIntervalPatterns_dyo;
+    break;
+  case 'dyo_SN':
+  case 'dyo-SN':
+    defaultPatterns = exports.DateIntervalPatterns_dyo_SN;
+    break;
+  case 'dz':
+    defaultPatterns = exports.DateIntervalPatterns_dz;
+    break;
+  case 'dz_BT':
+  case 'dz-BT':
+    defaultPatterns = exports.DateIntervalPatterns_dz_BT;
+    break;
+  case 'ebu':
+    defaultPatterns = exports.DateIntervalPatterns_ebu;
+    break;
+  case 'ebu_KE':
+  case 'ebu-KE':
+    defaultPatterns = exports.DateIntervalPatterns_ebu_KE;
+    break;
+  case 'ee':
+    defaultPatterns = exports.DateIntervalPatterns_ee;
+    break;
+  case 'ee_GH':
+  case 'ee-GH':
+    defaultPatterns = exports.DateIntervalPatterns_ee_GH;
+    break;
+  case 'ee_TG':
+  case 'ee-TG':
+    defaultPatterns = exports.DateIntervalPatterns_ee_TG;
+    break;
+  case 'el_CY':
+  case 'el-CY':
+    defaultPatterns = exports.DateIntervalPatterns_el_CY;
+    break;
+  case 'el_GR':
+  case 'el-GR':
+    defaultPatterns = exports.DateIntervalPatterns_el_GR;
+    break;
+  case 'en_001':
+  case 'en-001':
+    defaultPatterns = exports.DateIntervalPatterns_en_001;
+    break;
+  case 'en_150':
+  case 'en-150':
+    defaultPatterns = exports.DateIntervalPatterns_en_150;
+    break;
+  case 'en_AG':
+  case 'en-AG':
+    defaultPatterns = exports.DateIntervalPatterns_en_AG;
+    break;
+  case 'en_AI':
+  case 'en-AI':
+    defaultPatterns = exports.DateIntervalPatterns_en_AI;
+    break;
+  case 'en_AS':
+  case 'en-AS':
+    defaultPatterns = exports.DateIntervalPatterns_en_AS;
+    break;
+  case 'en_AT':
+  case 'en-AT':
+    defaultPatterns = exports.DateIntervalPatterns_en_AT;
+    break;
+  case 'en_BB':
+  case 'en-BB':
+    defaultPatterns = exports.DateIntervalPatterns_en_BB;
+    break;
+  case 'en_BE':
+  case 'en-BE':
+    defaultPatterns = exports.DateIntervalPatterns_en_BE;
+    break;
+  case 'en_BI':
+  case 'en-BI':
+    defaultPatterns = exports.DateIntervalPatterns_en_BI;
+    break;
+  case 'en_BM':
+  case 'en-BM':
+    defaultPatterns = exports.DateIntervalPatterns_en_BM;
+    break;
+  case 'en_BS':
+  case 'en-BS':
+    defaultPatterns = exports.DateIntervalPatterns_en_BS;
+    break;
+  case 'en_BW':
+  case 'en-BW':
+    defaultPatterns = exports.DateIntervalPatterns_en_BW;
+    break;
+  case 'en_BZ':
+  case 'en-BZ':
+    defaultPatterns = exports.DateIntervalPatterns_en_BZ;
+    break;
+  case 'en_CC':
+  case 'en-CC':
+    defaultPatterns = exports.DateIntervalPatterns_en_CC;
+    break;
+  case 'en_CH':
+  case 'en-CH':
+    defaultPatterns = exports.DateIntervalPatterns_en_CH;
+    break;
+  case 'en_CK':
+  case 'en-CK':
+    defaultPatterns = exports.DateIntervalPatterns_en_CK;
+    break;
+  case 'en_CM':
+  case 'en-CM':
+    defaultPatterns = exports.DateIntervalPatterns_en_CM;
+    break;
+  case 'en_CX':
+  case 'en-CX':
+    defaultPatterns = exports.DateIntervalPatterns_en_CX;
+    break;
+  case 'en_CY':
+  case 'en-CY':
+    defaultPatterns = exports.DateIntervalPatterns_en_CY;
+    break;
+  case 'en_DE':
+  case 'en-DE':
+    defaultPatterns = exports.DateIntervalPatterns_en_DE;
+    break;
+  case 'en_DG':
+  case 'en-DG':
+    defaultPatterns = exports.DateIntervalPatterns_en_DG;
+    break;
+  case 'en_DK':
+  case 'en-DK':
+    defaultPatterns = exports.DateIntervalPatterns_en_DK;
+    break;
+  case 'en_DM':
+  case 'en-DM':
+    defaultPatterns = exports.DateIntervalPatterns_en_DM;
+    break;
+  case 'en_ER':
+  case 'en-ER':
+    defaultPatterns = exports.DateIntervalPatterns_en_ER;
+    break;
+  case 'en_FI':
+  case 'en-FI':
+    defaultPatterns = exports.DateIntervalPatterns_en_FI;
+    break;
+  case 'en_FJ':
+  case 'en-FJ':
+    defaultPatterns = exports.DateIntervalPatterns_en_FJ;
+    break;
+  case 'en_FK':
+  case 'en-FK':
+    defaultPatterns = exports.DateIntervalPatterns_en_FK;
+    break;
+  case 'en_FM':
+  case 'en-FM':
+    defaultPatterns = exports.DateIntervalPatterns_en_FM;
+    break;
+  case 'en_GD':
+  case 'en-GD':
+    defaultPatterns = exports.DateIntervalPatterns_en_GD;
+    break;
+  case 'en_GG':
+  case 'en-GG':
+    defaultPatterns = exports.DateIntervalPatterns_en_GG;
+    break;
+  case 'en_GH':
+  case 'en-GH':
+    defaultPatterns = exports.DateIntervalPatterns_en_GH;
+    break;
+  case 'en_GI':
+  case 'en-GI':
+    defaultPatterns = exports.DateIntervalPatterns_en_GI;
+    break;
+  case 'en_GM':
+  case 'en-GM':
+    defaultPatterns = exports.DateIntervalPatterns_en_GM;
+    break;
+  case 'en_GU':
+  case 'en-GU':
+    defaultPatterns = exports.DateIntervalPatterns_en_GU;
+    break;
+  case 'en_GY':
+  case 'en-GY':
+    defaultPatterns = exports.DateIntervalPatterns_en_GY;
+    break;
+  case 'en_HK':
+  case 'en-HK':
+    defaultPatterns = exports.DateIntervalPatterns_en_HK;
+    break;
+  case 'en_IL':
+  case 'en-IL':
+    defaultPatterns = exports.DateIntervalPatterns_en_IL;
+    break;
+  case 'en_IM':
+  case 'en-IM':
+    defaultPatterns = exports.DateIntervalPatterns_en_IM;
+    break;
+  case 'en_IO':
+  case 'en-IO':
+    defaultPatterns = exports.DateIntervalPatterns_en_IO;
+    break;
+  case 'en_JE':
+  case 'en-JE':
+    defaultPatterns = exports.DateIntervalPatterns_en_JE;
+    break;
+  case 'en_JM':
+  case 'en-JM':
+    defaultPatterns = exports.DateIntervalPatterns_en_JM;
+    break;
+  case 'en_KE':
+  case 'en-KE':
+    defaultPatterns = exports.DateIntervalPatterns_en_KE;
+    break;
+  case 'en_KI':
+  case 'en-KI':
+    defaultPatterns = exports.DateIntervalPatterns_en_KI;
+    break;
+  case 'en_KN':
+  case 'en-KN':
+    defaultPatterns = exports.DateIntervalPatterns_en_KN;
+    break;
+  case 'en_KY':
+  case 'en-KY':
+    defaultPatterns = exports.DateIntervalPatterns_en_KY;
+    break;
+  case 'en_LC':
+  case 'en-LC':
+    defaultPatterns = exports.DateIntervalPatterns_en_LC;
+    break;
+  case 'en_LR':
+  case 'en-LR':
+    defaultPatterns = exports.DateIntervalPatterns_en_LR;
+    break;
+  case 'en_LS':
+  case 'en-LS':
+    defaultPatterns = exports.DateIntervalPatterns_en_LS;
+    break;
+  case 'en_MG':
+  case 'en-MG':
+    defaultPatterns = exports.DateIntervalPatterns_en_MG;
+    break;
+  case 'en_MH':
+  case 'en-MH':
+    defaultPatterns = exports.DateIntervalPatterns_en_MH;
+    break;
+  case 'en_MO':
+  case 'en-MO':
+    defaultPatterns = exports.DateIntervalPatterns_en_MO;
+    break;
+  case 'en_MP':
+  case 'en-MP':
+    defaultPatterns = exports.DateIntervalPatterns_en_MP;
+    break;
+  case 'en_MS':
+  case 'en-MS':
+    defaultPatterns = exports.DateIntervalPatterns_en_MS;
+    break;
+  case 'en_MT':
+  case 'en-MT':
+    defaultPatterns = exports.DateIntervalPatterns_en_MT;
+    break;
+  case 'en_MU':
+  case 'en-MU':
+    defaultPatterns = exports.DateIntervalPatterns_en_MU;
+    break;
+  case 'en_MW':
+  case 'en-MW':
+    defaultPatterns = exports.DateIntervalPatterns_en_MW;
+    break;
+  case 'en_MY':
+  case 'en-MY':
+    defaultPatterns = exports.DateIntervalPatterns_en_MY;
+    break;
+  case 'en_NA':
+  case 'en-NA':
+    defaultPatterns = exports.DateIntervalPatterns_en_NA;
+    break;
+  case 'en_NF':
+  case 'en-NF':
+    defaultPatterns = exports.DateIntervalPatterns_en_NF;
+    break;
+  case 'en_NG':
+  case 'en-NG':
+    defaultPatterns = exports.DateIntervalPatterns_en_NG;
+    break;
+  case 'en_NL':
+  case 'en-NL':
+    defaultPatterns = exports.DateIntervalPatterns_en_NL;
+    break;
+  case 'en_NR':
+  case 'en-NR':
+    defaultPatterns = exports.DateIntervalPatterns_en_NR;
+    break;
+  case 'en_NU':
+  case 'en-NU':
+    defaultPatterns = exports.DateIntervalPatterns_en_NU;
+    break;
+  case 'en_NZ':
+  case 'en-NZ':
+    defaultPatterns = exports.DateIntervalPatterns_en_NZ;
+    break;
+  case 'en_PG':
+  case 'en-PG':
+    defaultPatterns = exports.DateIntervalPatterns_en_PG;
+    break;
+  case 'en_PH':
+  case 'en-PH':
+    defaultPatterns = exports.DateIntervalPatterns_en_PH;
+    break;
+  case 'en_PK':
+  case 'en-PK':
+    defaultPatterns = exports.DateIntervalPatterns_en_PK;
+    break;
+  case 'en_PN':
+  case 'en-PN':
+    defaultPatterns = exports.DateIntervalPatterns_en_PN;
+    break;
+  case 'en_PR':
+  case 'en-PR':
+    defaultPatterns = exports.DateIntervalPatterns_en_PR;
+    break;
+  case 'en_PW':
+  case 'en-PW':
+    defaultPatterns = exports.DateIntervalPatterns_en_PW;
+    break;
+  case 'en_RW':
+  case 'en-RW':
+    defaultPatterns = exports.DateIntervalPatterns_en_RW;
+    break;
+  case 'en_SB':
+  case 'en-SB':
+    defaultPatterns = exports.DateIntervalPatterns_en_SB;
+    break;
+  case 'en_SC':
+  case 'en-SC':
+    defaultPatterns = exports.DateIntervalPatterns_en_SC;
+    break;
+  case 'en_SD':
+  case 'en-SD':
+    defaultPatterns = exports.DateIntervalPatterns_en_SD;
+    break;
+  case 'en_SE':
+  case 'en-SE':
+    defaultPatterns = exports.DateIntervalPatterns_en_SE;
+    break;
+  case 'en_SH':
+  case 'en-SH':
+    defaultPatterns = exports.DateIntervalPatterns_en_SH;
+    break;
+  case 'en_SI':
+  case 'en-SI':
+    defaultPatterns = exports.DateIntervalPatterns_en_SI;
+    break;
+  case 'en_SL':
+  case 'en-SL':
+    defaultPatterns = exports.DateIntervalPatterns_en_SL;
+    break;
+  case 'en_SS':
+  case 'en-SS':
+    defaultPatterns = exports.DateIntervalPatterns_en_SS;
+    break;
+  case 'en_SX':
+  case 'en-SX':
+    defaultPatterns = exports.DateIntervalPatterns_en_SX;
+    break;
+  case 'en_SZ':
+  case 'en-SZ':
+    defaultPatterns = exports.DateIntervalPatterns_en_SZ;
+    break;
+  case 'en_TC':
+  case 'en-TC':
+    defaultPatterns = exports.DateIntervalPatterns_en_TC;
+    break;
+  case 'en_TK':
+  case 'en-TK':
+    defaultPatterns = exports.DateIntervalPatterns_en_TK;
+    break;
+  case 'en_TO':
+  case 'en-TO':
+    defaultPatterns = exports.DateIntervalPatterns_en_TO;
+    break;
+  case 'en_TT':
+  case 'en-TT':
+    defaultPatterns = exports.DateIntervalPatterns_en_TT;
+    break;
+  case 'en_TV':
+  case 'en-TV':
+    defaultPatterns = exports.DateIntervalPatterns_en_TV;
+    break;
+  case 'en_TZ':
+  case 'en-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_en_TZ;
+    break;
+  case 'en_UG':
+  case 'en-UG':
+    defaultPatterns = exports.DateIntervalPatterns_en_UG;
+    break;
+  case 'en_UM':
+  case 'en-UM':
+    defaultPatterns = exports.DateIntervalPatterns_en_UM;
+    break;
+  case 'en_US_POSIX':
+  case 'en-US-POSIX':
+    defaultPatterns = exports.DateIntervalPatterns_en_US_POSIX;
+    break;
+  case 'en_VC':
+  case 'en-VC':
+    defaultPatterns = exports.DateIntervalPatterns_en_VC;
+    break;
+  case 'en_VG':
+  case 'en-VG':
+    defaultPatterns = exports.DateIntervalPatterns_en_VG;
+    break;
+  case 'en_VI':
+  case 'en-VI':
+    defaultPatterns = exports.DateIntervalPatterns_en_VI;
+    break;
+  case 'en_VU':
+  case 'en-VU':
+    defaultPatterns = exports.DateIntervalPatterns_en_VU;
+    break;
+  case 'en_WS':
+  case 'en-WS':
+    defaultPatterns = exports.DateIntervalPatterns_en_WS;
+    break;
+  case 'en_XA':
+  case 'en-XA':
+    defaultPatterns = exports.DateIntervalPatterns_en_XA;
+    break;
+  case 'en_ZM':
+  case 'en-ZM':
+    defaultPatterns = exports.DateIntervalPatterns_en_ZM;
+    break;
+  case 'en_ZW':
+  case 'en-ZW':
+    defaultPatterns = exports.DateIntervalPatterns_en_ZW;
+    break;
+  case 'eo':
+    defaultPatterns = exports.DateIntervalPatterns_eo;
+    break;
+  case 'es_AR':
+  case 'es-AR':
+    defaultPatterns = exports.DateIntervalPatterns_es_AR;
+    break;
+  case 'es_BO':
+  case 'es-BO':
+    defaultPatterns = exports.DateIntervalPatterns_es_BO;
+    break;
+  case 'es_BR':
+  case 'es-BR':
+    defaultPatterns = exports.DateIntervalPatterns_es_BR;
+    break;
+  case 'es_BZ':
+  case 'es-BZ':
+    defaultPatterns = exports.DateIntervalPatterns_es_BZ;
+    break;
+  case 'es_CL':
+  case 'es-CL':
+    defaultPatterns = exports.DateIntervalPatterns_es_CL;
+    break;
+  case 'es_CO':
+  case 'es-CO':
+    defaultPatterns = exports.DateIntervalPatterns_es_CO;
+    break;
+  case 'es_CR':
+  case 'es-CR':
+    defaultPatterns = exports.DateIntervalPatterns_es_CR;
+    break;
+  case 'es_CU':
+  case 'es-CU':
+    defaultPatterns = exports.DateIntervalPatterns_es_CU;
+    break;
+  case 'es_DO':
+  case 'es-DO':
+    defaultPatterns = exports.DateIntervalPatterns_es_DO;
+    break;
+  case 'es_EA':
+  case 'es-EA':
+    defaultPatterns = exports.DateIntervalPatterns_es_EA;
+    break;
+  case 'es_EC':
+  case 'es-EC':
+    defaultPatterns = exports.DateIntervalPatterns_es_EC;
+    break;
+  case 'es_GQ':
+  case 'es-GQ':
+    defaultPatterns = exports.DateIntervalPatterns_es_GQ;
+    break;
+  case 'es_GT':
+  case 'es-GT':
+    defaultPatterns = exports.DateIntervalPatterns_es_GT;
+    break;
+  case 'es_HN':
+  case 'es-HN':
+    defaultPatterns = exports.DateIntervalPatterns_es_HN;
+    break;
+  case 'es_IC':
+  case 'es-IC':
+    defaultPatterns = exports.DateIntervalPatterns_es_IC;
+    break;
+  case 'es_NI':
+  case 'es-NI':
+    defaultPatterns = exports.DateIntervalPatterns_es_NI;
+    break;
+  case 'es_PA':
+  case 'es-PA':
+    defaultPatterns = exports.DateIntervalPatterns_es_PA;
+    break;
+  case 'es_PE':
+  case 'es-PE':
+    defaultPatterns = exports.DateIntervalPatterns_es_PE;
+    break;
+  case 'es_PH':
+  case 'es-PH':
+    defaultPatterns = exports.DateIntervalPatterns_es_PH;
+    break;
+  case 'es_PR':
+  case 'es-PR':
+    defaultPatterns = exports.DateIntervalPatterns_es_PR;
+    break;
+  case 'es_PY':
+  case 'es-PY':
+    defaultPatterns = exports.DateIntervalPatterns_es_PY;
+    break;
+  case 'es_SV':
+  case 'es-SV':
+    defaultPatterns = exports.DateIntervalPatterns_es_SV;
+    break;
+  case 'es_UY':
+  case 'es-UY':
+    defaultPatterns = exports.DateIntervalPatterns_es_UY;
+    break;
+  case 'es_VE':
+  case 'es-VE':
+    defaultPatterns = exports.DateIntervalPatterns_es_VE;
+    break;
+  case 'et_EE':
+  case 'et-EE':
+    defaultPatterns = exports.DateIntervalPatterns_et_EE;
+    break;
+  case 'eu_ES':
+  case 'eu-ES':
+    defaultPatterns = exports.DateIntervalPatterns_eu_ES;
+    break;
+  case 'ewo':
+    defaultPatterns = exports.DateIntervalPatterns_ewo;
+    break;
+  case 'ewo_CM':
+  case 'ewo-CM':
+    defaultPatterns = exports.DateIntervalPatterns_ewo_CM;
+    break;
+  case 'fa_AF':
+  case 'fa-AF':
+    defaultPatterns = exports.DateIntervalPatterns_fa_AF;
+    break;
+  case 'fa_IR':
+  case 'fa-IR':
+    defaultPatterns = exports.DateIntervalPatterns_fa_IR;
+    break;
+  case 'ff':
+    defaultPatterns = exports.DateIntervalPatterns_ff;
+    break;
+  case 'ff_CM':
+  case 'ff-CM':
+    defaultPatterns = exports.DateIntervalPatterns_ff_CM;
+    break;
+  case 'ff_GN':
+  case 'ff-GN':
+    defaultPatterns = exports.DateIntervalPatterns_ff_GN;
+    break;
+  case 'ff_MR':
+  case 'ff-MR':
+    defaultPatterns = exports.DateIntervalPatterns_ff_MR;
+    break;
+  case 'ff_SN':
+  case 'ff-SN':
+    defaultPatterns = exports.DateIntervalPatterns_ff_SN;
+    break;
+  case 'fi_FI':
+  case 'fi-FI':
+    defaultPatterns = exports.DateIntervalPatterns_fi_FI;
+    break;
+  case 'fil_PH':
+  case 'fil-PH':
+    defaultPatterns = exports.DateIntervalPatterns_fil_PH;
+    break;
+  case 'fo':
+    defaultPatterns = exports.DateIntervalPatterns_fo;
+    break;
+  case 'fo_DK':
+  case 'fo-DK':
+    defaultPatterns = exports.DateIntervalPatterns_fo_DK;
+    break;
+  case 'fo_FO':
+  case 'fo-FO':
+    defaultPatterns = exports.DateIntervalPatterns_fo_FO;
+    break;
+  case 'fr_BE':
+  case 'fr-BE':
+    defaultPatterns = exports.DateIntervalPatterns_fr_BE;
+    break;
+  case 'fr_BF':
+  case 'fr-BF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_BF;
+    break;
+  case 'fr_BI':
+  case 'fr-BI':
+    defaultPatterns = exports.DateIntervalPatterns_fr_BI;
+    break;
+  case 'fr_BJ':
+  case 'fr-BJ':
+    defaultPatterns = exports.DateIntervalPatterns_fr_BJ;
+    break;
+  case 'fr_BL':
+  case 'fr-BL':
+    defaultPatterns = exports.DateIntervalPatterns_fr_BL;
+    break;
+  case 'fr_CD':
+  case 'fr-CD':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CD;
+    break;
+  case 'fr_CF':
+  case 'fr-CF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CF;
+    break;
+  case 'fr_CG':
+  case 'fr-CG':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CG;
+    break;
+  case 'fr_CH':
+  case 'fr-CH':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CH;
+    break;
+  case 'fr_CI':
+  case 'fr-CI':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CI;
+    break;
+  case 'fr_CM':
+  case 'fr-CM':
+    defaultPatterns = exports.DateIntervalPatterns_fr_CM;
+    break;
+  case 'fr_DJ':
+  case 'fr-DJ':
+    defaultPatterns = exports.DateIntervalPatterns_fr_DJ;
+    break;
+  case 'fr_DZ':
+  case 'fr-DZ':
+    defaultPatterns = exports.DateIntervalPatterns_fr_DZ;
+    break;
+  case 'fr_FR':
+  case 'fr-FR':
+    defaultPatterns = exports.DateIntervalPatterns_fr_FR;
+    break;
+  case 'fr_GA':
+  case 'fr-GA':
+    defaultPatterns = exports.DateIntervalPatterns_fr_GA;
+    break;
+  case 'fr_GF':
+  case 'fr-GF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_GF;
+    break;
+  case 'fr_GN':
+  case 'fr-GN':
+    defaultPatterns = exports.DateIntervalPatterns_fr_GN;
+    break;
+  case 'fr_GP':
+  case 'fr-GP':
+    defaultPatterns = exports.DateIntervalPatterns_fr_GP;
+    break;
+  case 'fr_GQ':
+  case 'fr-GQ':
+    defaultPatterns = exports.DateIntervalPatterns_fr_GQ;
+    break;
+  case 'fr_HT':
+  case 'fr-HT':
+    defaultPatterns = exports.DateIntervalPatterns_fr_HT;
+    break;
+  case 'fr_KM':
+  case 'fr-KM':
+    defaultPatterns = exports.DateIntervalPatterns_fr_KM;
+    break;
+  case 'fr_LU':
+  case 'fr-LU':
+    defaultPatterns = exports.DateIntervalPatterns_fr_LU;
+    break;
+  case 'fr_MA':
+  case 'fr-MA':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MA;
+    break;
+  case 'fr_MC':
+  case 'fr-MC':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MC;
+    break;
+  case 'fr_MF':
+  case 'fr-MF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MF;
+    break;
+  case 'fr_MG':
+  case 'fr-MG':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MG;
+    break;
+  case 'fr_ML':
+  case 'fr-ML':
+    defaultPatterns = exports.DateIntervalPatterns_fr_ML;
+    break;
+  case 'fr_MQ':
+  case 'fr-MQ':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MQ;
+    break;
+  case 'fr_MR':
+  case 'fr-MR':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MR;
+    break;
+  case 'fr_MU':
+  case 'fr-MU':
+    defaultPatterns = exports.DateIntervalPatterns_fr_MU;
+    break;
+  case 'fr_NC':
+  case 'fr-NC':
+    defaultPatterns = exports.DateIntervalPatterns_fr_NC;
+    break;
+  case 'fr_NE':
+  case 'fr-NE':
+    defaultPatterns = exports.DateIntervalPatterns_fr_NE;
+    break;
+  case 'fr_PF':
+  case 'fr-PF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_PF;
+    break;
+  case 'fr_PM':
+  case 'fr-PM':
+    defaultPatterns = exports.DateIntervalPatterns_fr_PM;
+    break;
+  case 'fr_RE':
+  case 'fr-RE':
+    defaultPatterns = exports.DateIntervalPatterns_fr_RE;
+    break;
+  case 'fr_RW':
+  case 'fr-RW':
+    defaultPatterns = exports.DateIntervalPatterns_fr_RW;
+    break;
+  case 'fr_SC':
+  case 'fr-SC':
+    defaultPatterns = exports.DateIntervalPatterns_fr_SC;
+    break;
+  case 'fr_SN':
+  case 'fr-SN':
+    defaultPatterns = exports.DateIntervalPatterns_fr_SN;
+    break;
+  case 'fr_SY':
+  case 'fr-SY':
+    defaultPatterns = exports.DateIntervalPatterns_fr_SY;
+    break;
+  case 'fr_TD':
+  case 'fr-TD':
+    defaultPatterns = exports.DateIntervalPatterns_fr_TD;
+    break;
+  case 'fr_TG':
+  case 'fr-TG':
+    defaultPatterns = exports.DateIntervalPatterns_fr_TG;
+    break;
+  case 'fr_TN':
+  case 'fr-TN':
+    defaultPatterns = exports.DateIntervalPatterns_fr_TN;
+    break;
+  case 'fr_VU':
+  case 'fr-VU':
+    defaultPatterns = exports.DateIntervalPatterns_fr_VU;
+    break;
+  case 'fr_WF':
+  case 'fr-WF':
+    defaultPatterns = exports.DateIntervalPatterns_fr_WF;
+    break;
+  case 'fr_YT':
+  case 'fr-YT':
+    defaultPatterns = exports.DateIntervalPatterns_fr_YT;
+    break;
+  case 'fur':
+    defaultPatterns = exports.DateIntervalPatterns_fur;
+    break;
+  case 'fur_IT':
+  case 'fur-IT':
+    defaultPatterns = exports.DateIntervalPatterns_fur_IT;
+    break;
+  case 'fy':
+    defaultPatterns = exports.DateIntervalPatterns_fy;
+    break;
+  case 'fy_NL':
+  case 'fy-NL':
+    defaultPatterns = exports.DateIntervalPatterns_fy_NL;
+    break;
+  case 'ga_IE':
+  case 'ga-IE':
+    defaultPatterns = exports.DateIntervalPatterns_ga_IE;
+    break;
+  case 'gd':
+    defaultPatterns = exports.DateIntervalPatterns_gd;
+    break;
+  case 'gd_GB':
+  case 'gd-GB':
+    defaultPatterns = exports.DateIntervalPatterns_gd_GB;
+    break;
+  case 'gl_ES':
+  case 'gl-ES':
+    defaultPatterns = exports.DateIntervalPatterns_gl_ES;
+    break;
+  case 'gsw_CH':
+  case 'gsw-CH':
+    defaultPatterns = exports.DateIntervalPatterns_gsw_CH;
+    break;
+  case 'gsw_FR':
+  case 'gsw-FR':
+    defaultPatterns = exports.DateIntervalPatterns_gsw_FR;
+    break;
+  case 'gsw_LI':
+  case 'gsw-LI':
+    defaultPatterns = exports.DateIntervalPatterns_gsw_LI;
+    break;
+  case 'gu_IN':
+  case 'gu-IN':
+    defaultPatterns = exports.DateIntervalPatterns_gu_IN;
+    break;
+  case 'guz':
+    defaultPatterns = exports.DateIntervalPatterns_guz;
+    break;
+  case 'guz_KE':
+  case 'guz-KE':
+    defaultPatterns = exports.DateIntervalPatterns_guz_KE;
+    break;
+  case 'gv':
+    defaultPatterns = exports.DateIntervalPatterns_gv;
+    break;
+  case 'gv_IM':
+  case 'gv-IM':
+    defaultPatterns = exports.DateIntervalPatterns_gv_IM;
+    break;
+  case 'ha':
+    defaultPatterns = exports.DateIntervalPatterns_ha;
+    break;
+  case 'ha_GH':
+  case 'ha-GH':
+    defaultPatterns = exports.DateIntervalPatterns_ha_GH;
+    break;
+  case 'ha_NE':
+  case 'ha-NE':
+    defaultPatterns = exports.DateIntervalPatterns_ha_NE;
+    break;
+  case 'ha_NG':
+  case 'ha-NG':
+    defaultPatterns = exports.DateIntervalPatterns_ha_NG;
+    break;
+  case 'haw_US':
+  case 'haw-US':
+    defaultPatterns = exports.DateIntervalPatterns_haw_US;
+    break;
+  case 'he_IL':
+  case 'he-IL':
+    defaultPatterns = exports.DateIntervalPatterns_he_IL;
+    break;
+  case 'hi_IN':
+  case 'hi-IN':
+    defaultPatterns = exports.DateIntervalPatterns_hi_IN;
+    break;
+  case 'hr_BA':
+  case 'hr-BA':
+    defaultPatterns = exports.DateIntervalPatterns_hr_BA;
+    break;
+  case 'hr_HR':
+  case 'hr-HR':
+    defaultPatterns = exports.DateIntervalPatterns_hr_HR;
+    break;
+  case 'hsb':
+    defaultPatterns = exports.DateIntervalPatterns_hsb;
+    break;
+  case 'hsb_DE':
+  case 'hsb-DE':
+    defaultPatterns = exports.DateIntervalPatterns_hsb_DE;
+    break;
+  case 'hu_HU':
+  case 'hu-HU':
+    defaultPatterns = exports.DateIntervalPatterns_hu_HU;
+    break;
+  case 'hy_AM':
+  case 'hy-AM':
+    defaultPatterns = exports.DateIntervalPatterns_hy_AM;
+    break;
+  case 'id_ID':
+  case 'id-ID':
+    defaultPatterns = exports.DateIntervalPatterns_id_ID;
+    break;
+  case 'ig':
+    defaultPatterns = exports.DateIntervalPatterns_ig;
+    break;
+  case 'ig_NG':
+  case 'ig-NG':
+    defaultPatterns = exports.DateIntervalPatterns_ig_NG;
+    break;
+  case 'ii':
+    defaultPatterns = exports.DateIntervalPatterns_ii;
+    break;
+  case 'ii_CN':
+  case 'ii-CN':
+    defaultPatterns = exports.DateIntervalPatterns_ii_CN;
+    break;
+  case 'is_IS':
+  case 'is-IS':
+    defaultPatterns = exports.DateIntervalPatterns_is_IS;
+    break;
+  case 'it_CH':
+  case 'it-CH':
+    defaultPatterns = exports.DateIntervalPatterns_it_CH;
+    break;
+  case 'it_IT':
+  case 'it-IT':
+    defaultPatterns = exports.DateIntervalPatterns_it_IT;
+    break;
+  case 'it_SM':
+  case 'it-SM':
+    defaultPatterns = exports.DateIntervalPatterns_it_SM;
+    break;
+  case 'it_VA':
+  case 'it-VA':
+    defaultPatterns = exports.DateIntervalPatterns_it_VA;
+    break;
+  case 'ja_JP':
+  case 'ja-JP':
+    defaultPatterns = exports.DateIntervalPatterns_ja_JP;
+    break;
+  case 'jgo':
+    defaultPatterns = exports.DateIntervalPatterns_jgo;
+    break;
+  case 'jgo_CM':
+  case 'jgo-CM':
+    defaultPatterns = exports.DateIntervalPatterns_jgo_CM;
+    break;
+  case 'jmc':
+    defaultPatterns = exports.DateIntervalPatterns_jmc;
+    break;
+  case 'jmc_TZ':
+  case 'jmc-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_jmc_TZ;
+    break;
+  case 'ka_GE':
+  case 'ka-GE':
+    defaultPatterns = exports.DateIntervalPatterns_ka_GE;
+    break;
+  case 'kab':
+    defaultPatterns = exports.DateIntervalPatterns_kab;
+    break;
+  case 'kab_DZ':
+  case 'kab-DZ':
+    defaultPatterns = exports.DateIntervalPatterns_kab_DZ;
+    break;
+  case 'kam':
+    defaultPatterns = exports.DateIntervalPatterns_kam;
+    break;
+  case 'kam_KE':
+  case 'kam-KE':
+    defaultPatterns = exports.DateIntervalPatterns_kam_KE;
+    break;
+  case 'kde':
+    defaultPatterns = exports.DateIntervalPatterns_kde;
+    break;
+  case 'kde_TZ':
+  case 'kde-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_kde_TZ;
+    break;
+  case 'kea':
+    defaultPatterns = exports.DateIntervalPatterns_kea;
+    break;
+  case 'kea_CV':
+  case 'kea-CV':
+    defaultPatterns = exports.DateIntervalPatterns_kea_CV;
+    break;
+  case 'khq':
+    defaultPatterns = exports.DateIntervalPatterns_khq;
+    break;
+  case 'khq_ML':
+  case 'khq-ML':
+    defaultPatterns = exports.DateIntervalPatterns_khq_ML;
+    break;
+  case 'ki':
+    defaultPatterns = exports.DateIntervalPatterns_ki;
+    break;
+  case 'ki_KE':
+  case 'ki-KE':
+    defaultPatterns = exports.DateIntervalPatterns_ki_KE;
+    break;
+  case 'kk_KZ':
+  case 'kk-KZ':
+    defaultPatterns = exports.DateIntervalPatterns_kk_KZ;
+    break;
+  case 'kkj':
+    defaultPatterns = exports.DateIntervalPatterns_kkj;
+    break;
+  case 'kkj_CM':
+  case 'kkj-CM':
+    defaultPatterns = exports.DateIntervalPatterns_kkj_CM;
+    break;
+  case 'kl':
+    defaultPatterns = exports.DateIntervalPatterns_kl;
+    break;
+  case 'kl_GL':
+  case 'kl-GL':
+    defaultPatterns = exports.DateIntervalPatterns_kl_GL;
+    break;
+  case 'kln':
+    defaultPatterns = exports.DateIntervalPatterns_kln;
+    break;
+  case 'kln_KE':
+  case 'kln-KE':
+    defaultPatterns = exports.DateIntervalPatterns_kln_KE;
+    break;
+  case 'km_KH':
+  case 'km-KH':
+    defaultPatterns = exports.DateIntervalPatterns_km_KH;
+    break;
+  case 'kn_IN':
+  case 'kn-IN':
+    defaultPatterns = exports.DateIntervalPatterns_kn_IN;
+    break;
+  case 'ko_KP':
+  case 'ko-KP':
+    defaultPatterns = exports.DateIntervalPatterns_ko_KP;
+    break;
+  case 'ko_KR':
+  case 'ko-KR':
+    defaultPatterns = exports.DateIntervalPatterns_ko_KR;
+    break;
+  case 'kok':
+    defaultPatterns = exports.DateIntervalPatterns_kok;
+    break;
+  case 'kok_IN':
+  case 'kok-IN':
+    defaultPatterns = exports.DateIntervalPatterns_kok_IN;
+    break;
+  case 'ks':
+    defaultPatterns = exports.DateIntervalPatterns_ks;
+    break;
+  case 'ks_IN':
+  case 'ks-IN':
+    defaultPatterns = exports.DateIntervalPatterns_ks_IN;
+    break;
+  case 'ksb':
+    defaultPatterns = exports.DateIntervalPatterns_ksb;
+    break;
+  case 'ksb_TZ':
+  case 'ksb-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_ksb_TZ;
+    break;
+  case 'ksf':
+    defaultPatterns = exports.DateIntervalPatterns_ksf;
+    break;
+  case 'ksf_CM':
+  case 'ksf-CM':
+    defaultPatterns = exports.DateIntervalPatterns_ksf_CM;
+    break;
+  case 'ksh':
+    defaultPatterns = exports.DateIntervalPatterns_ksh;
+    break;
+  case 'ksh_DE':
+  case 'ksh-DE':
+    defaultPatterns = exports.DateIntervalPatterns_ksh_DE;
+    break;
+  case 'kw':
+    defaultPatterns = exports.DateIntervalPatterns_kw;
+    break;
+  case 'kw_GB':
+  case 'kw-GB':
+    defaultPatterns = exports.DateIntervalPatterns_kw_GB;
+    break;
+  case 'ky_KG':
+  case 'ky-KG':
+    defaultPatterns = exports.DateIntervalPatterns_ky_KG;
+    break;
+  case 'lag':
+    defaultPatterns = exports.DateIntervalPatterns_lag;
+    break;
+  case 'lag_TZ':
+  case 'lag-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_lag_TZ;
+    break;
+  case 'lb':
+    defaultPatterns = exports.DateIntervalPatterns_lb;
+    break;
+  case 'lb_LU':
+  case 'lb-LU':
+    defaultPatterns = exports.DateIntervalPatterns_lb_LU;
+    break;
+  case 'lg':
+    defaultPatterns = exports.DateIntervalPatterns_lg;
+    break;
+  case 'lg_UG':
+  case 'lg-UG':
+    defaultPatterns = exports.DateIntervalPatterns_lg_UG;
+    break;
+  case 'lkt':
+    defaultPatterns = exports.DateIntervalPatterns_lkt;
+    break;
+  case 'lkt_US':
+  case 'lkt-US':
+    defaultPatterns = exports.DateIntervalPatterns_lkt_US;
+    break;
+  case 'ln_AO':
+  case 'ln-AO':
+    defaultPatterns = exports.DateIntervalPatterns_ln_AO;
+    break;
+  case 'ln_CD':
+  case 'ln-CD':
+    defaultPatterns = exports.DateIntervalPatterns_ln_CD;
+    break;
+  case 'ln_CF':
+  case 'ln-CF':
+    defaultPatterns = exports.DateIntervalPatterns_ln_CF;
+    break;
+  case 'ln_CG':
+  case 'ln-CG':
+    defaultPatterns = exports.DateIntervalPatterns_ln_CG;
+    break;
+  case 'lo_LA':
+  case 'lo-LA':
+    defaultPatterns = exports.DateIntervalPatterns_lo_LA;
+    break;
+  case 'lrc':
+    defaultPatterns = exports.DateIntervalPatterns_lrc;
+    break;
+  case 'lrc_IQ':
+  case 'lrc-IQ':
+    defaultPatterns = exports.DateIntervalPatterns_lrc_IQ;
+    break;
+  case 'lrc_IR':
+  case 'lrc-IR':
+    defaultPatterns = exports.DateIntervalPatterns_lrc_IR;
+    break;
+  case 'lt_LT':
+  case 'lt-LT':
+    defaultPatterns = exports.DateIntervalPatterns_lt_LT;
+    break;
+  case 'lu':
+    defaultPatterns = exports.DateIntervalPatterns_lu;
+    break;
+  case 'lu_CD':
+  case 'lu-CD':
+    defaultPatterns = exports.DateIntervalPatterns_lu_CD;
+    break;
+  case 'luo':
+    defaultPatterns = exports.DateIntervalPatterns_luo;
+    break;
+  case 'luo_KE':
+  case 'luo-KE':
+    defaultPatterns = exports.DateIntervalPatterns_luo_KE;
+    break;
+  case 'luy':
+    defaultPatterns = exports.DateIntervalPatterns_luy;
+    break;
+  case 'luy_KE':
+  case 'luy-KE':
+    defaultPatterns = exports.DateIntervalPatterns_luy_KE;
+    break;
+  case 'lv_LV':
+  case 'lv-LV':
+    defaultPatterns = exports.DateIntervalPatterns_lv_LV;
+    break;
+  case 'mas':
+    defaultPatterns = exports.DateIntervalPatterns_mas;
+    break;
+  case 'mas_KE':
+  case 'mas-KE':
+    defaultPatterns = exports.DateIntervalPatterns_mas_KE;
+    break;
+  case 'mas_TZ':
+  case 'mas-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_mas_TZ;
+    break;
+  case 'mer':
+    defaultPatterns = exports.DateIntervalPatterns_mer;
+    break;
+  case 'mer_KE':
+  case 'mer-KE':
+    defaultPatterns = exports.DateIntervalPatterns_mer_KE;
+    break;
+  case 'mfe':
+    defaultPatterns = exports.DateIntervalPatterns_mfe;
+    break;
+  case 'mfe_MU':
+  case 'mfe-MU':
+    defaultPatterns = exports.DateIntervalPatterns_mfe_MU;
+    break;
+  case 'mg':
+    defaultPatterns = exports.DateIntervalPatterns_mg;
+    break;
+  case 'mg_MG':
+  case 'mg-MG':
+    defaultPatterns = exports.DateIntervalPatterns_mg_MG;
+    break;
+  case 'mgh':
+    defaultPatterns = exports.DateIntervalPatterns_mgh;
+    break;
+  case 'mgh_MZ':
+  case 'mgh-MZ':
+    defaultPatterns = exports.DateIntervalPatterns_mgh_MZ;
+    break;
+  case 'mgo':
+    defaultPatterns = exports.DateIntervalPatterns_mgo;
+    break;
+  case 'mgo_CM':
+  case 'mgo-CM':
+    defaultPatterns = exports.DateIntervalPatterns_mgo_CM;
+    break;
+  case 'mk_MK':
+  case 'mk-MK':
+    defaultPatterns = exports.DateIntervalPatterns_mk_MK;
+    break;
+  case 'ml_IN':
+  case 'ml-IN':
+    defaultPatterns = exports.DateIntervalPatterns_ml_IN;
+    break;
+  case 'mn_MN':
+  case 'mn-MN':
+    defaultPatterns = exports.DateIntervalPatterns_mn_MN;
+    break;
+  case 'mr_IN':
+  case 'mr-IN':
+    defaultPatterns = exports.DateIntervalPatterns_mr_IN;
+    break;
+  case 'ms_BN':
+  case 'ms-BN':
+    defaultPatterns = exports.DateIntervalPatterns_ms_BN;
+    break;
+  case 'ms_MY':
+  case 'ms-MY':
+    defaultPatterns = exports.DateIntervalPatterns_ms_MY;
+    break;
+  case 'ms_SG':
+  case 'ms-SG':
+    defaultPatterns = exports.DateIntervalPatterns_ms_SG;
+    break;
+  case 'mt_MT':
+  case 'mt-MT':
+    defaultPatterns = exports.DateIntervalPatterns_mt_MT;
+    break;
+  case 'mua':
+    defaultPatterns = exports.DateIntervalPatterns_mua;
+    break;
+  case 'mua_CM':
+  case 'mua-CM':
+    defaultPatterns = exports.DateIntervalPatterns_mua_CM;
+    break;
+  case 'my_MM':
+  case 'my-MM':
+    defaultPatterns = exports.DateIntervalPatterns_my_MM;
+    break;
+  case 'mzn':
+    defaultPatterns = exports.DateIntervalPatterns_mzn;
+    break;
+  case 'mzn_IR':
+  case 'mzn-IR':
+    defaultPatterns = exports.DateIntervalPatterns_mzn_IR;
+    break;
+  case 'naq':
+    defaultPatterns = exports.DateIntervalPatterns_naq;
+    break;
+  case 'naq_NA':
+  case 'naq-NA':
+    defaultPatterns = exports.DateIntervalPatterns_naq_NA;
+    break;
+  case 'nb_NO':
+  case 'nb-NO':
+    defaultPatterns = exports.DateIntervalPatterns_nb_NO;
+    break;
+  case 'nb_SJ':
+  case 'nb-SJ':
+    defaultPatterns = exports.DateIntervalPatterns_nb_SJ;
+    break;
+  case 'nd':
+    defaultPatterns = exports.DateIntervalPatterns_nd;
+    break;
+  case 'nd_ZW':
+  case 'nd-ZW':
+    defaultPatterns = exports.DateIntervalPatterns_nd_ZW;
+    break;
+  case 'nds':
+    defaultPatterns = exports.DateIntervalPatterns_nds;
+    break;
+  case 'nds_DE':
+  case 'nds-DE':
+    defaultPatterns = exports.DateIntervalPatterns_nds_DE;
+    break;
+  case 'nds_NL':
+  case 'nds-NL':
+    defaultPatterns = exports.DateIntervalPatterns_nds_NL;
+    break;
+  case 'ne_IN':
+  case 'ne-IN':
+    defaultPatterns = exports.DateIntervalPatterns_ne_IN;
+    break;
+  case 'ne_NP':
+  case 'ne-NP':
+    defaultPatterns = exports.DateIntervalPatterns_ne_NP;
+    break;
+  case 'nl_AW':
+  case 'nl-AW':
+    defaultPatterns = exports.DateIntervalPatterns_nl_AW;
+    break;
+  case 'nl_BE':
+  case 'nl-BE':
+    defaultPatterns = exports.DateIntervalPatterns_nl_BE;
+    break;
+  case 'nl_BQ':
+  case 'nl-BQ':
+    defaultPatterns = exports.DateIntervalPatterns_nl_BQ;
+    break;
+  case 'nl_CW':
+  case 'nl-CW':
+    defaultPatterns = exports.DateIntervalPatterns_nl_CW;
+    break;
+  case 'nl_NL':
+  case 'nl-NL':
+    defaultPatterns = exports.DateIntervalPatterns_nl_NL;
+    break;
+  case 'nl_SR':
+  case 'nl-SR':
+    defaultPatterns = exports.DateIntervalPatterns_nl_SR;
+    break;
+  case 'nl_SX':
+  case 'nl-SX':
+    defaultPatterns = exports.DateIntervalPatterns_nl_SX;
+    break;
+  case 'nmg':
+    defaultPatterns = exports.DateIntervalPatterns_nmg;
+    break;
+  case 'nmg_CM':
+  case 'nmg-CM':
+    defaultPatterns = exports.DateIntervalPatterns_nmg_CM;
+    break;
+  case 'nn':
+    defaultPatterns = exports.DateIntervalPatterns_nn;
+    break;
+  case 'nn_NO':
+  case 'nn-NO':
+    defaultPatterns = exports.DateIntervalPatterns_nn_NO;
+    break;
+  case 'nnh':
+    defaultPatterns = exports.DateIntervalPatterns_nnh;
+    break;
+  case 'nnh_CM':
+  case 'nnh-CM':
+    defaultPatterns = exports.DateIntervalPatterns_nnh_CM;
+    break;
+  case 'nus':
+    defaultPatterns = exports.DateIntervalPatterns_nus;
+    break;
+  case 'nus_SS':
+  case 'nus-SS':
+    defaultPatterns = exports.DateIntervalPatterns_nus_SS;
+    break;
+  case 'nyn':
+    defaultPatterns = exports.DateIntervalPatterns_nyn;
+    break;
+  case 'nyn_UG':
+  case 'nyn-UG':
+    defaultPatterns = exports.DateIntervalPatterns_nyn_UG;
+    break;
+  case 'om':
+    defaultPatterns = exports.DateIntervalPatterns_om;
+    break;
+  case 'om_ET':
+  case 'om-ET':
+    defaultPatterns = exports.DateIntervalPatterns_om_ET;
+    break;
+  case 'om_KE':
+  case 'om-KE':
+    defaultPatterns = exports.DateIntervalPatterns_om_KE;
+    break;
+  case 'or_IN':
+  case 'or-IN':
+    defaultPatterns = exports.DateIntervalPatterns_or_IN;
+    break;
+  case 'os':
+    defaultPatterns = exports.DateIntervalPatterns_os;
+    break;
+  case 'os_GE':
+  case 'os-GE':
+    defaultPatterns = exports.DateIntervalPatterns_os_GE;
+    break;
+  case 'os_RU':
+  case 'os-RU':
+    defaultPatterns = exports.DateIntervalPatterns_os_RU;
+    break;
+  case 'pa_Arab':
+  case 'pa-Arab':
+    defaultPatterns = exports.DateIntervalPatterns_pa_Arab;
+    break;
+  case 'pa_Arab_PK':
+  case 'pa-Arab-PK':
+    defaultPatterns = exports.DateIntervalPatterns_pa_Arab_PK;
+    break;
+  case 'pa_Guru':
+  case 'pa-Guru':
+    defaultPatterns = exports.DateIntervalPatterns_pa_Guru;
+    break;
+  case 'pa_Guru_IN':
+  case 'pa-Guru-IN':
+    defaultPatterns = exports.DateIntervalPatterns_pa_Guru_IN;
+    break;
+  case 'pl_PL':
+  case 'pl-PL':
+    defaultPatterns = exports.DateIntervalPatterns_pl_PL;
+    break;
+  case 'ps':
+    defaultPatterns = exports.DateIntervalPatterns_ps;
+    break;
+  case 'ps_AF':
+  case 'ps-AF':
+    defaultPatterns = exports.DateIntervalPatterns_ps_AF;
+    break;
+  case 'pt_AO':
+  case 'pt-AO':
+    defaultPatterns = exports.DateIntervalPatterns_pt_AO;
+    break;
+  case 'pt_CH':
+  case 'pt-CH':
+    defaultPatterns = exports.DateIntervalPatterns_pt_CH;
+    break;
+  case 'pt_CV':
+  case 'pt-CV':
+    defaultPatterns = exports.DateIntervalPatterns_pt_CV;
+    break;
+  case 'pt_GQ':
+  case 'pt-GQ':
+    defaultPatterns = exports.DateIntervalPatterns_pt_GQ;
+    break;
+  case 'pt_GW':
+  case 'pt-GW':
+    defaultPatterns = exports.DateIntervalPatterns_pt_GW;
+    break;
+  case 'pt_LU':
+  case 'pt-LU':
+    defaultPatterns = exports.DateIntervalPatterns_pt_LU;
+    break;
+  case 'pt_MO':
+  case 'pt-MO':
+    defaultPatterns = exports.DateIntervalPatterns_pt_MO;
+    break;
+  case 'pt_MZ':
+  case 'pt-MZ':
+    defaultPatterns = exports.DateIntervalPatterns_pt_MZ;
+    break;
+  case 'pt_ST':
+  case 'pt-ST':
+    defaultPatterns = exports.DateIntervalPatterns_pt_ST;
+    break;
+  case 'pt_TL':
+  case 'pt-TL':
+    defaultPatterns = exports.DateIntervalPatterns_pt_TL;
+    break;
+  case 'qu':
+    defaultPatterns = exports.DateIntervalPatterns_qu;
+    break;
+  case 'qu_BO':
+  case 'qu-BO':
+    defaultPatterns = exports.DateIntervalPatterns_qu_BO;
+    break;
+  case 'qu_EC':
+  case 'qu-EC':
+    defaultPatterns = exports.DateIntervalPatterns_qu_EC;
+    break;
+  case 'qu_PE':
+  case 'qu-PE':
+    defaultPatterns = exports.DateIntervalPatterns_qu_PE;
+    break;
+  case 'rm':
+    defaultPatterns = exports.DateIntervalPatterns_rm;
+    break;
+  case 'rm_CH':
+  case 'rm-CH':
+    defaultPatterns = exports.DateIntervalPatterns_rm_CH;
+    break;
+  case 'rn':
+    defaultPatterns = exports.DateIntervalPatterns_rn;
+    break;
+  case 'rn_BI':
+  case 'rn-BI':
+    defaultPatterns = exports.DateIntervalPatterns_rn_BI;
+    break;
+  case 'ro_MD':
+  case 'ro-MD':
+    defaultPatterns = exports.DateIntervalPatterns_ro_MD;
+    break;
+  case 'ro_RO':
+  case 'ro-RO':
+    defaultPatterns = exports.DateIntervalPatterns_ro_RO;
+    break;
+  case 'rof':
+    defaultPatterns = exports.DateIntervalPatterns_rof;
+    break;
+  case 'rof_TZ':
+  case 'rof-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_rof_TZ;
+    break;
+  case 'ru_BY':
+  case 'ru-BY':
+    defaultPatterns = exports.DateIntervalPatterns_ru_BY;
+    break;
+  case 'ru_KG':
+  case 'ru-KG':
+    defaultPatterns = exports.DateIntervalPatterns_ru_KG;
+    break;
+  case 'ru_KZ':
+  case 'ru-KZ':
+    defaultPatterns = exports.DateIntervalPatterns_ru_KZ;
+    break;
+  case 'ru_MD':
+  case 'ru-MD':
+    defaultPatterns = exports.DateIntervalPatterns_ru_MD;
+    break;
+  case 'ru_RU':
+  case 'ru-RU':
+    defaultPatterns = exports.DateIntervalPatterns_ru_RU;
+    break;
+  case 'ru_UA':
+  case 'ru-UA':
+    defaultPatterns = exports.DateIntervalPatterns_ru_UA;
+    break;
+  case 'rw':
+    defaultPatterns = exports.DateIntervalPatterns_rw;
+    break;
+  case 'rw_RW':
+  case 'rw-RW':
+    defaultPatterns = exports.DateIntervalPatterns_rw_RW;
+    break;
+  case 'rwk':
+    defaultPatterns = exports.DateIntervalPatterns_rwk;
+    break;
+  case 'rwk_TZ':
+  case 'rwk-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_rwk_TZ;
+    break;
+  case 'sah':
+    defaultPatterns = exports.DateIntervalPatterns_sah;
+    break;
+  case 'sah_RU':
+  case 'sah-RU':
+    defaultPatterns = exports.DateIntervalPatterns_sah_RU;
+    break;
+  case 'saq':
+    defaultPatterns = exports.DateIntervalPatterns_saq;
+    break;
+  case 'saq_KE':
+  case 'saq-KE':
+    defaultPatterns = exports.DateIntervalPatterns_saq_KE;
+    break;
+  case 'sbp':
+    defaultPatterns = exports.DateIntervalPatterns_sbp;
+    break;
+  case 'sbp_TZ':
+  case 'sbp-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_sbp_TZ;
+    break;
+  case 'se':
+    defaultPatterns = exports.DateIntervalPatterns_se;
+    break;
+  case 'se_FI':
+  case 'se-FI':
+    defaultPatterns = exports.DateIntervalPatterns_se_FI;
+    break;
+  case 'se_NO':
+  case 'se-NO':
+    defaultPatterns = exports.DateIntervalPatterns_se_NO;
+    break;
+  case 'se_SE':
+  case 'se-SE':
+    defaultPatterns = exports.DateIntervalPatterns_se_SE;
+    break;
+  case 'seh':
+    defaultPatterns = exports.DateIntervalPatterns_seh;
+    break;
+  case 'seh_MZ':
+  case 'seh-MZ':
+    defaultPatterns = exports.DateIntervalPatterns_seh_MZ;
+    break;
+  case 'ses':
+    defaultPatterns = exports.DateIntervalPatterns_ses;
+    break;
+  case 'ses_ML':
+  case 'ses-ML':
+    defaultPatterns = exports.DateIntervalPatterns_ses_ML;
+    break;
+  case 'sg':
+    defaultPatterns = exports.DateIntervalPatterns_sg;
+    break;
+  case 'sg_CF':
+  case 'sg-CF':
+    defaultPatterns = exports.DateIntervalPatterns_sg_CF;
+    break;
+  case 'shi':
+    defaultPatterns = exports.DateIntervalPatterns_shi;
+    break;
+  case 'shi_Latn':
+  case 'shi-Latn':
+    defaultPatterns = exports.DateIntervalPatterns_shi_Latn;
+    break;
+  case 'shi_Latn_MA':
+  case 'shi-Latn-MA':
+    defaultPatterns = exports.DateIntervalPatterns_shi_Latn_MA;
+    break;
+  case 'shi_Tfng':
+  case 'shi-Tfng':
+    defaultPatterns = exports.DateIntervalPatterns_shi_Tfng;
+    break;
+  case 'shi_Tfng_MA':
+  case 'shi-Tfng-MA':
+    defaultPatterns = exports.DateIntervalPatterns_shi_Tfng_MA;
+    break;
+  case 'si_LK':
+  case 'si-LK':
+    defaultPatterns = exports.DateIntervalPatterns_si_LK;
+    break;
+  case 'sk_SK':
+  case 'sk-SK':
+    defaultPatterns = exports.DateIntervalPatterns_sk_SK;
+    break;
+  case 'sl_SI':
+  case 'sl-SI':
+    defaultPatterns = exports.DateIntervalPatterns_sl_SI;
+    break;
+  case 'smn':
+    defaultPatterns = exports.DateIntervalPatterns_smn;
+    break;
+  case 'smn_FI':
+  case 'smn-FI':
+    defaultPatterns = exports.DateIntervalPatterns_smn_FI;
+    break;
+  case 'sn':
+    defaultPatterns = exports.DateIntervalPatterns_sn;
+    break;
+  case 'sn_ZW':
+  case 'sn-ZW':
+    defaultPatterns = exports.DateIntervalPatterns_sn_ZW;
+    break;
+  case 'so':
+    defaultPatterns = exports.DateIntervalPatterns_so;
+    break;
+  case 'so_DJ':
+  case 'so-DJ':
+    defaultPatterns = exports.DateIntervalPatterns_so_DJ;
+    break;
+  case 'so_ET':
+  case 'so-ET':
+    defaultPatterns = exports.DateIntervalPatterns_so_ET;
+    break;
+  case 'so_KE':
+  case 'so-KE':
+    defaultPatterns = exports.DateIntervalPatterns_so_KE;
+    break;
+  case 'so_SO':
+  case 'so-SO':
+    defaultPatterns = exports.DateIntervalPatterns_so_SO;
+    break;
+  case 'sq_AL':
+  case 'sq-AL':
+    defaultPatterns = exports.DateIntervalPatterns_sq_AL;
+    break;
+  case 'sq_MK':
+  case 'sq-MK':
+    defaultPatterns = exports.DateIntervalPatterns_sq_MK;
+    break;
+  case 'sq_XK':
+  case 'sq-XK':
+    defaultPatterns = exports.DateIntervalPatterns_sq_XK;
+    break;
+  case 'sr_Cyrl':
+  case 'sr-Cyrl':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl;
+    break;
+  case 'sr_Cyrl_BA':
+  case 'sr-Cyrl-BA':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_BA;
+    break;
+  case 'sr_Cyrl_ME':
+  case 'sr-Cyrl-ME':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_ME;
+    break;
+  case 'sr_Cyrl_RS':
+  case 'sr-Cyrl-RS':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_RS;
+    break;
+  case 'sr_Cyrl_XK':
+  case 'sr-Cyrl-XK':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Cyrl_XK;
+    break;
+  case 'sr_Latn_BA':
+  case 'sr-Latn-BA':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Latn_BA;
+    break;
+  case 'sr_Latn_ME':
+  case 'sr-Latn-ME':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Latn_ME;
+    break;
+  case 'sr_Latn_RS':
+  case 'sr-Latn-RS':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Latn_RS;
+    break;
+  case 'sr_Latn_XK':
+  case 'sr-Latn-XK':
+    defaultPatterns = exports.DateIntervalPatterns_sr_Latn_XK;
+    break;
+  case 'sv_AX':
+  case 'sv-AX':
+    defaultPatterns = exports.DateIntervalPatterns_sv_AX;
+    break;
+  case 'sv_FI':
+  case 'sv-FI':
+    defaultPatterns = exports.DateIntervalPatterns_sv_FI;
+    break;
+  case 'sv_SE':
+  case 'sv-SE':
+    defaultPatterns = exports.DateIntervalPatterns_sv_SE;
+    break;
+  case 'sw_CD':
+  case 'sw-CD':
+    defaultPatterns = exports.DateIntervalPatterns_sw_CD;
+    break;
+  case 'sw_KE':
+  case 'sw-KE':
+    defaultPatterns = exports.DateIntervalPatterns_sw_KE;
+    break;
+  case 'sw_TZ':
+  case 'sw-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_sw_TZ;
+    break;
+  case 'sw_UG':
+  case 'sw-UG':
+    defaultPatterns = exports.DateIntervalPatterns_sw_UG;
+    break;
+  case 'ta_IN':
+  case 'ta-IN':
+    defaultPatterns = exports.DateIntervalPatterns_ta_IN;
+    break;
+  case 'ta_LK':
+  case 'ta-LK':
+    defaultPatterns = exports.DateIntervalPatterns_ta_LK;
+    break;
+  case 'ta_MY':
+  case 'ta-MY':
+    defaultPatterns = exports.DateIntervalPatterns_ta_MY;
+    break;
+  case 'ta_SG':
+  case 'ta-SG':
+    defaultPatterns = exports.DateIntervalPatterns_ta_SG;
+    break;
+  case 'te_IN':
+  case 'te-IN':
+    defaultPatterns = exports.DateIntervalPatterns_te_IN;
+    break;
+  case 'teo':
+    defaultPatterns = exports.DateIntervalPatterns_teo;
+    break;
+  case 'teo_KE':
+  case 'teo-KE':
+    defaultPatterns = exports.DateIntervalPatterns_teo_KE;
+    break;
+  case 'teo_UG':
+  case 'teo-UG':
+    defaultPatterns = exports.DateIntervalPatterns_teo_UG;
+    break;
+  case 'th_TH':
+  case 'th-TH':
+    defaultPatterns = exports.DateIntervalPatterns_th_TH;
+    break;
+  case 'ti':
+    defaultPatterns = exports.DateIntervalPatterns_ti;
+    break;
+  case 'ti_ER':
+  case 'ti-ER':
+    defaultPatterns = exports.DateIntervalPatterns_ti_ER;
+    break;
+  case 'ti_ET':
+  case 'ti-ET':
+    defaultPatterns = exports.DateIntervalPatterns_ti_ET;
+    break;
+  case 'to':
+    defaultPatterns = exports.DateIntervalPatterns_to;
+    break;
+  case 'to_TO':
+  case 'to-TO':
+    defaultPatterns = exports.DateIntervalPatterns_to_TO;
+    break;
+  case 'tr_CY':
+  case 'tr-CY':
+    defaultPatterns = exports.DateIntervalPatterns_tr_CY;
+    break;
+  case 'tr_TR':
+  case 'tr-TR':
+    defaultPatterns = exports.DateIntervalPatterns_tr_TR;
+    break;
+  case 'twq':
+    defaultPatterns = exports.DateIntervalPatterns_twq;
+    break;
+  case 'twq_NE':
+  case 'twq-NE':
+    defaultPatterns = exports.DateIntervalPatterns_twq_NE;
+    break;
+  case 'tzm':
+    defaultPatterns = exports.DateIntervalPatterns_tzm;
+    break;
+  case 'tzm_MA':
+  case 'tzm-MA':
+    defaultPatterns = exports.DateIntervalPatterns_tzm_MA;
+    break;
+  case 'ug':
+    defaultPatterns = exports.DateIntervalPatterns_ug;
+    break;
+  case 'ug_CN':
+  case 'ug-CN':
+    defaultPatterns = exports.DateIntervalPatterns_ug_CN;
+    break;
+  case 'uk_UA':
+  case 'uk-UA':
+    defaultPatterns = exports.DateIntervalPatterns_uk_UA;
+    break;
+  case 'ur_IN':
+  case 'ur-IN':
+    defaultPatterns = exports.DateIntervalPatterns_ur_IN;
+    break;
+  case 'ur_PK':
+  case 'ur-PK':
+    defaultPatterns = exports.DateIntervalPatterns_ur_PK;
+    break;
+  case 'uz_Arab':
+  case 'uz-Arab':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Arab;
+    break;
+  case 'uz_Arab_AF':
+  case 'uz-Arab-AF':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Arab_AF;
+    break;
+  case 'uz_Cyrl':
+  case 'uz-Cyrl':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Cyrl;
+    break;
+  case 'uz_Cyrl_UZ':
+  case 'uz-Cyrl-UZ':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Cyrl_UZ;
+    break;
+  case 'uz_Latn':
+  case 'uz-Latn':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Latn;
+    break;
+  case 'uz_Latn_UZ':
+  case 'uz-Latn-UZ':
+    defaultPatterns = exports.DateIntervalPatterns_uz_Latn_UZ;
+    break;
+  case 'vai':
+    defaultPatterns = exports.DateIntervalPatterns_vai;
+    break;
+  case 'vai_Latn':
+  case 'vai-Latn':
+    defaultPatterns = exports.DateIntervalPatterns_vai_Latn;
+    break;
+  case 'vai_Latn_LR':
+  case 'vai-Latn-LR':
+    defaultPatterns = exports.DateIntervalPatterns_vai_Latn_LR;
+    break;
+  case 'vai_Vaii':
+  case 'vai-Vaii':
+    defaultPatterns = exports.DateIntervalPatterns_vai_Vaii;
+    break;
+  case 'vai_Vaii_LR':
+  case 'vai-Vaii-LR':
+    defaultPatterns = exports.DateIntervalPatterns_vai_Vaii_LR;
+    break;
+  case 'vi_VN':
+  case 'vi-VN':
+    defaultPatterns = exports.DateIntervalPatterns_vi_VN;
+    break;
+  case 'vun':
+    defaultPatterns = exports.DateIntervalPatterns_vun;
+    break;
+  case 'vun_TZ':
+  case 'vun-TZ':
+    defaultPatterns = exports.DateIntervalPatterns_vun_TZ;
+    break;
+  case 'wae':
+    defaultPatterns = exports.DateIntervalPatterns_wae;
+    break;
+  case 'wae_CH':
+  case 'wae-CH':
+    defaultPatterns = exports.DateIntervalPatterns_wae_CH;
+    break;
+  case 'xog':
+    defaultPatterns = exports.DateIntervalPatterns_xog;
+    break;
+  case 'xog_UG':
+  case 'xog-UG':
+    defaultPatterns = exports.DateIntervalPatterns_xog_UG;
+    break;
+  case 'yav':
+    defaultPatterns = exports.DateIntervalPatterns_yav;
+    break;
+  case 'yav_CM':
+  case 'yav-CM':
+    defaultPatterns = exports.DateIntervalPatterns_yav_CM;
+    break;
+  case 'yi':
+    defaultPatterns = exports.DateIntervalPatterns_yi;
+    break;
+  case 'yi_001':
+  case 'yi-001':
+    defaultPatterns = exports.DateIntervalPatterns_yi_001;
+    break;
+  case 'yo':
+    defaultPatterns = exports.DateIntervalPatterns_yo;
+    break;
+  case 'yo_BJ':
+  case 'yo-BJ':
+    defaultPatterns = exports.DateIntervalPatterns_yo_BJ;
+    break;
+  case 'yo_NG':
+  case 'yo-NG':
+    defaultPatterns = exports.DateIntervalPatterns_yo_NG;
+    break;
+  case 'yue':
+    defaultPatterns = exports.DateIntervalPatterns_yue;
+    break;
+  case 'yue_HK':
+  case 'yue-HK':
+    defaultPatterns = exports.DateIntervalPatterns_yue_HK;
+    break;
+  case 'zgh':
+    defaultPatterns = exports.DateIntervalPatterns_zgh;
+    break;
+  case 'zgh_MA':
+  case 'zgh-MA':
+    defaultPatterns = exports.DateIntervalPatterns_zgh_MA;
+    break;
+  case 'zh_Hans':
+  case 'zh-Hans':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hans;
+    break;
+  case 'zh_Hans_CN':
+  case 'zh-Hans-CN':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hans_CN;
+    break;
+  case 'zh_Hans_HK':
+  case 'zh-Hans-HK':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hans_HK;
+    break;
+  case 'zh_Hans_MO':
+  case 'zh-Hans-MO':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hans_MO;
+    break;
+  case 'zh_Hans_SG':
+  case 'zh-Hans-SG':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hans_SG;
+    break;
+  case 'zh_Hant':
+  case 'zh-Hant':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hant;
+    break;
+  case 'zh_Hant_HK':
+  case 'zh-Hant-HK':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hant_HK;
+    break;
+  case 'zh_Hant_MO':
+  case 'zh-Hant-MO':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hant_MO;
+    break;
+  case 'zh_Hant_TW':
+  case 'zh-Hant-TW':
+    defaultPatterns = exports.DateIntervalPatterns_zh_Hant_TW;
+    break;
+  case 'zu_ZA':
+  case 'zu-ZA':
+    defaultPatterns = exports.DateIntervalPatterns_zu_ZA;
+    break;
 }
 
 if (defaultPatterns != null) {
