@@ -372,9 +372,6 @@ goog.html.SafeStyle.create = function(map) {
     } else {
       value = goog.html.SafeStyle.sanitizePropertyValue_(value);
     }
-    // These characters can be used to change context and we don't want that
-    // even with const values.
-    goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
     style += name + ':' + value + ';';
   }
   if (!style) {
@@ -393,13 +390,27 @@ goog.html.SafeStyle.create = function(map) {
  * @private
  */
 goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
-  if (value instanceof goog.string.Const) {
-    return goog.string.Const.unwrap(value);
-  } else if (value instanceof goog.html.SafeUrl) {
+  if (value instanceof goog.html.SafeUrl) {
     var url = goog.html.SafeUrl.unwrap(value);
     return 'url("' + url.replace(/</g, '%3c').replace(/[\\"]/g, '\\$&') + '")';
   }
-  value = String(value);
+  var result = value instanceof goog.string.Const ?
+      goog.string.Const.unwrap(value) :
+      goog.html.SafeStyle.sanitizePropertyValueString_(String(value));
+  // These characters can be used to change context and we don't want that even
+  // with const values.
+  goog.asserts.assert(!/[{;}]/.test(result), 'Value does not allow [{;}].');
+  return result;
+};
+
+
+/**
+ * Checks string value.
+ * @param {string} value
+ * @return {string}
+ * @private
+ */
+goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
   var valueWithoutFunctions =
       value.replace(goog.html.SafeUrl.FUNCTIONS_RE_, '$1')
           .replace(goog.html.SafeUrl.URL_RE_, 'url');

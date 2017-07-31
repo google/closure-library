@@ -186,6 +186,10 @@ function testCreate_allowsSafeUrlWithSpecialCharacters() {
     'background': goog.html.SafeUrl.fromConstant(
         goog.string.Const.from('http://example.com/<'))
   });
+  assertCreateEquals('background:url("http://example.com/;");', {
+    'background': goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('http://example.com/;'))
+  });
 }
 
 
