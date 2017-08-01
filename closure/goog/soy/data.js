@@ -32,9 +32,11 @@ goog.provide('goog.soy.data.SanitizedUri');
 goog.provide('goog.soy.data.UnsanitizedText');
 
 goog.require('goog.Uri');
+goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.uncheckedconversions');
@@ -439,5 +441,29 @@ goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
   return goog.isString(value) ||
       value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.soy.data.UnsanitizedText ||
-      value instanceof goog.html.SafeStyle;
+      value instanceof goog.html.SafeStyle ||
+      value instanceof goog.html.SafeStyleSheet;
+};
+
+
+/**
+ * Converts SanitizedCss into SafeStyleSheet.
+ * Note: SanitizedCss in Soy represents both SafeStyle and SafeStyleSheet in
+ * Closure. It's about to be split so that SanitizedCss represents only
+ * SafeStyleSheet.
+ * @return {!goog.html.SafeStyleSheet}
+ */
+goog.soy.data.SanitizedCss.prototype.toSafeStyleSheet = function() {
+  var value = this.toString();
+  // TODO(jakubvrana): Remove this check when there's a separate type for style
+  // declaration.
+  goog.asserts.assert(
+      /[@{]|^\s*$/.test(value),
+      'value doesn\'t look like style sheet: ' + value);
+  return goog.html.uncheckedconversions
+      .safeStyleSheetFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedCss produces SafeStyleSheet-contract-compliant ' +
+              'value.'),
+          value);
 };

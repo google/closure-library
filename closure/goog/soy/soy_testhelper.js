@@ -25,6 +25,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
+goog.require('goog.soy.data.SanitizedCss');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -48,6 +49,21 @@ function SanitizedContentSubclass(content, kind) {
   this.contentKind = kind;
 }
 goog.inherits(SanitizedContentSubclass, goog.soy.data.SanitizedContent);
+
+
+/**
+ * Instantiable subclass of SanitizedCss.
+ * @param {string} content
+ * @constructor
+ * @extends {goog.soy.data.SanitizedCss}
+ * @suppress {missingProvide}
+ */
+function SanitizedCssSubclass(content) {
+  // IMPORTANT! No superclass chaining to avoid exception being thrown.
+  this.content = content;
+  this.contentKind = goog.soy.data.SanitizedContentKind.CSS;
+}
+goog.inherits(SanitizedCssSubclass, goog.soy.data.SanitizedCss);
 
 
 /**
@@ -197,11 +213,10 @@ example.sanitizedHttpUrlTemplate = function(data, opt_sb, opt_injectedData) {
  * @param {{name: string}} data
  * @param {null=} opt_sb
  * @param {Object<string, *>=} opt_injectedData
- * @return {!SanitizedContentSubclass}
+ * @return {!goog.soy.data.SanitizedCss}
  */
 example.sanitizedCssTemplate = function(data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent(
-      'display:none', goog.soy.data.SanitizedContentKind.CSS);
+  return new SanitizedCssSubclass('html{display:none}');
 };
 
 

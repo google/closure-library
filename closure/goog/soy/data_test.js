@@ -16,6 +16,7 @@ goog.provide('goog.soy.dataTest');
 goog.setTestOnly('goog.soy.dataTest');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 /** @suppress {extraRequire} */
 goog.require('goog.soy.testHelper');
@@ -41,4 +42,9 @@ function testToSafeUrl() {
 
   url = example.sanitizedHttpUrlTemplate().toSafeUrl();
   assertEquals('https://google.com/foo?n=917', goog.html.SafeUrl.unwrap(url));
+}
+
+function testToSafeStyleSheet() {
+  var url = example.sanitizedCssTemplate().toSafeStyleSheet();
+  assertEquals('html{display:none}', goog.html.SafeStyleSheet.unwrap(url));
 }
