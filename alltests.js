@@ -619,12 +619,7 @@ var _allTests = [
   'closure/goog/dom/classes_quirks_test.html',
   'closure/goog/editor/seamlessfield_quirks_test.html',
   'closure/goog/style/style_quirks_test.html',
-  'closure/goog/useragent/useragent_quirks_test.html',
-  'closure/goog/dojo/dom/query_test.html',
-  'closure/goog/loremipsum/text/loremipsum_test.html',
-  'closure/goog/mochikit/async/deferred_async_test.html',
-  'closure/goog/mochikit/async/deferredlist_test.html',
-  'closure/goog/mochikit/async/deferred_test.html'
+  'closure/goog/useragent/useragent_quirks_test.html'
 ];
 
 // If we're running in a nodejs context, export tests. Used when running tests

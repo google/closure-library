@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html>
-<!--
-  Copyright 2009 The Closure Library Authors. All Rights Reserved.
-  Author: brenneman@google.com (Shawn Brenneman)
--->
-<head>
-<title>Closure Unit Tests - goog.async.DeferredList</title>
-<script src="../../../../../closure/goog/base.js"></script>
-<script>
+/**
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ * Author: brenneman@google.com (Shawn Brenneman)
+ */
+
+goog.setTestOnly();
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.async.DeferredList');
 goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
 
 var Deferred = goog.async.Deferred;
 var DeferredList = goog.async.DeferredList;
@@ -64,7 +56,9 @@ function tearDown() {
   checkCatchAll();
 }
 
-
+/**
+ * @param {*} res
+ */
 function neverHappen(res) {
   fail('This should not happen');
 }
@@ -107,7 +101,6 @@ function testNoInputsAndFireOnOneCallback() {
 
 function testDeferredList() {
   var count = 0;
-  var results;
 
   var a = new Deferred();
   var b = new Deferred();
@@ -386,7 +379,7 @@ function testErrorCancelsPendingChildrenWhenFireOnFirstError() {
 
   addCatchAll(dl);
 
-  a.callback('a')
+  a.callback('a');
   b.errback();
 
   assertTrue('Errback should be called', firedErrback);
@@ -422,9 +415,9 @@ function testErrorDoesNotCancelPendingChildrenForVanillaLists() {
 
   addCatchAll(dl);
 
-  a.callback('a')
+  a.callback('a');
   b.errback();
-  c.callback('c')
+  c.callback('c');
 
   assertFalse('Errback should not be called', firedErrback);
   assertTrue('Callback should be called', firedCallback);
@@ -498,7 +491,3 @@ function testInputDeferredsStillUsable() {
 
   addCatchAll(dl);
 }
-
-</script>
-</body>
-</html>
