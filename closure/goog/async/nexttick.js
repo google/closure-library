@@ -173,7 +173,6 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       var message = 'callImmediate' + Math.random();
       // The same origin policy rejects attempts to postMessage from file: urls
       // unless the origin is '*'.
-      // TODO(b/16335441): Use '*' origin for data: and other similar protocols.
       var origin = win.location.protocol == 'file:' ?
           '*' :
           win.location.protocol + '//' + win.location.host;
