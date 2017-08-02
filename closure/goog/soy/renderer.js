@@ -37,11 +37,9 @@ goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
-goog.require('goog.string.Const');
 
 
 
@@ -309,13 +307,7 @@ goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
   var result = this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
-  // TODO(mlourenco): Call result.toSafeStyleSheet() once that exists.
-  return goog.html.uncheckedconversions
-      .safeStyleSheetFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from(
-              'Soy templates of kind CSS produce ' +
-              'SafeStyleSheet-contract-compliant value.'),
-          result.toString());
+  return result.toSafeStyleSheet();
 };
 
 
