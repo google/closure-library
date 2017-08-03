@@ -1,28 +1,16 @@
-<!DOCTYPE html>
-<html>
-<!--
-  Copyright 2009 The Closure Library Authors. All Rights Reserved.
-  Author: arv@google.com (Erik Arvidsson)
--->
-<head>
-<title>Closure Unit Tests - goog.async.Deferred</title>
-<script src="../../../../../closure/goog/base.js"></script>
-<script>
+/**
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ * Author: arv@google.com (Erik Arvidsson)
+ */
 
+goog.setTestOnly();
 goog.require('goog.Promise');
 goog.require('goog.Thenable');
-goog.require('goog.array');
 goog.require('goog.async.Deferred');
-goog.require('goog.string');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
-
-</script>
-</head>
-<body>
-<script>
 
 var Deferred = goog.async.Deferred;
 var AlreadyCalledError = Deferred.AlreadyCalledError;
@@ -43,6 +31,13 @@ function tearDown() {
   stubs.reset();
 }
 
+/**
+ * @param {string} msg Message to show upon failure.
+ * @param {T} expected Expected value.
+ * @return {!function(T): T} Function to be called with the actual value that
+ *     will assert that it is equal to the expected value.
+ * @template T
+ */
 function assertEqualsCallback(msg, expected) {
   return function(res) {
     assertEquals(msg, expected, res);
@@ -53,22 +48,40 @@ function assertEqualsCallback(msg, expected) {
   };
 }
 
+/**
+ * @param {number} res
+ * @return {number}
+ */
 function increment(res) {
   return res + 1;
 }
 
+/**
+ * @param {*} res
+ */
 function throwStuff(res) {
   throw res;
 }
 
+/**
+ * @param {*} res
+ * @return {*}
+ */
 function catchStuff(res) {
   return res;
 }
 
+/**
+ * @param {*} res
+ * @return {!Error}
+ */
 function returnError(res) {
   return Error(res);
 }
 
+/**
+ * @param {?} res
+ */
 function neverHappen(res) {
   fail('This should not happen');
 }
@@ -86,7 +99,7 @@ function testNormal() {
   d.addCallback(returnError);
   d.addCallback(neverHappen);
   d.addErrback(catchStuff);
-  d.addCallback(assertEqualsCallback('return -> err, catch -> success', 2));
+  d.addCallback(assertEqualsCallback('return -> err, catch -> succcess', 2));
 }
 
 function testCancel() {
@@ -425,7 +438,7 @@ function testStrictBlockedErrors() {
 function testStrictCanceledErrors() {
   stubs.replace(Deferred, 'STRICT_ERRORS', true);
 
-  var d = Deferred.canceled();
+  Deferred.canceled();
   assertNotThrows(
       'CanceledErrors should not be rethrown to the global scope.',
       function() { mockClock.tick(); });
@@ -807,7 +820,7 @@ function testDeepCancelOnBranch() {
 function testCancelOnRoot() {
   var wasCanceled = false;
   var d = new Deferred(function() { wasCanceled = true; });
-  var branch = d.branch(true).branch(true).branch(true);
+  d.branch(true).branch(true).branch(true);
 
   d.cancel();
   assertTrue(wasCanceled);
@@ -968,7 +981,7 @@ function testThen() {
 }
 
 function testThen_reject() {
-  var result, error, error2;
+  var result, error;
   var d = new Deferred();
   assertEquals(d.then, d['then']);
   d.then(function(r) {
@@ -1088,7 +1101,7 @@ function testPromiseFromCanceledDeferred() {
   var d = new Deferred();
   d.cancel();
 
-  var p = d.then(neverHappen, function(reason) {
+  d.then(neverHappen, function(reason) {
     result = reason;
   });
 
@@ -1135,6 +1148,3 @@ function testAddFinally() {
   }
   assertEquals(thisArg, callback.getCalls()[0].getThis());
 }
-</script>
-</body>
-</html>

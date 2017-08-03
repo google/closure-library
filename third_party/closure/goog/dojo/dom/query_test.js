@@ -1,8 +1,10 @@
-goog.setTestOnly('query_test');
+goog.setTestOnly('goog.dom.query_test');
+goog.provide('goog.dom.query_test');
 
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.testing.asserts');
+goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 function testBasicSelectors() {

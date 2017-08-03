@@ -1,29 +1,15 @@
-<!DOCTYPE html>
-<html>
-<!--
-  Copyright 2013 The Closure Library Authors. All Rights Reserved.
--->
-<head>
-<title>Closure Unit Tests - goog.async.Deferred</title>
-<script src="../../../../../closure/goog/base.js"></script>
-<script>
+/**
+ * Copyright 2013 The Closure Library Authors. All Rights Reserved.
+ * Author: malteubl@google.com (Malte Ubl)
+ */
 
+goog.setTestOnly();
 goog.require('goog.async.Deferred');
 goog.require('goog.testing.jsunit');
 
-</script>
-</head>
-<body>
-<script>
 function shouldRunTests() {
   return !!Error.captureStackTrace;
 }
-
-
-function setUpPage() {
-  goog.async.Deferred.LONG_STACK_TRACES = true;
-}
-
 
 function testErrorStack() {
   var d;
@@ -102,6 +88,3 @@ function testErrorStack_doesNotTouchCustomStack() {
 
   return d.then(fail, function(error) { assertEquals('STACK', error.stack); });
 }
-</script>
-</body>
-</html>
