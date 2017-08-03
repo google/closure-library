@@ -67,7 +67,7 @@ goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
       goog.asserts.assertObject(obj);
       return obj;
     } catch (e) {
-      // Native parse failed.  Fall through to retry with goog.json.unsafeParse.
+      // Native parse failed.  Fall through to retry with goog.json.parse.
     }
   }
 
