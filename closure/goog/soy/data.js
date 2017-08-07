@@ -27,6 +27,7 @@ goog.provide('goog.soy.data.SanitizedCss');
 goog.provide('goog.soy.data.SanitizedHtml');
 goog.provide('goog.soy.data.SanitizedHtmlAttribute');
 goog.provide('goog.soy.data.SanitizedJs');
+goog.provide('goog.soy.data.SanitizedStyle');
 goog.provide('goog.soy.data.SanitizedTrustedResourceUri');
 goog.provide('goog.soy.data.SanitizedUri');
 goog.provide('goog.soy.data.UnsanitizedText');
@@ -89,6 +90,9 @@ goog.soy.data.SanitizedContentKind = {
    * A CSS3 declaration, property, value or group of semicolon separated
    * declarations.
    */
+  STYLE: goog.DEBUG ? {sanitizedContentStyle: true} : {},
+
+  /** A CSS3 style sheet (list of rules). */
   CSS: goog.DEBUG ? {sanitizedContentCss: true} : {},
 
   /**
@@ -409,9 +413,47 @@ goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
 
 
 /**
- * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
+ * Content of type {@link goog.soy.data.SanitizedContentKind.STYLE}.
  *
  * The content is non-attacker-exploitable CSS, such as {@code color:#c3d9ff}.
+ * The content direction is LTR.
+ *
+ * @extends {goog.soy.data.SanitizedContent}
+ * @constructor
+ */
+goog.soy.data.SanitizedStyle = function() {
+  goog.soy.data.SanitizedStyle.base(this, 'constructor');
+};
+goog.inherits(goog.soy.data.SanitizedStyle, goog.soy.data.SanitizedContent);
+
+
+/** @override */
+goog.soy.data.SanitizedStyle.prototype.contentKind =
+    goog.soy.data.SanitizedContentKind.STYLE;
+
+
+/** @override */
+goog.soy.data.SanitizedStyle.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
+
+/**
+ * Checks if the value could be used as the Soy type {css}.
+ * @param {*} value
+ * @return {boolean}
+ */
+goog.soy.data.SanitizedStyle.isCompatibleWith = function(value) {
+  return goog.isString(value) ||
+      value instanceof goog.soy.data.SanitizedStyle ||
+      value instanceof goog.soy.data.UnsanitizedText ||
+      value instanceof goog.html.SafeStyle;
+};
+
+
+
+/**
+ * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
+ *
+ * The content is non-attacker-exploitable CSS, such as {@code @import url(x)}.
  * The content direction is LTR.
  *
  * @extends {goog.soy.data.SanitizedContent}
@@ -441,7 +483,7 @@ goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
   return goog.isString(value) ||
       value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.soy.data.UnsanitizedText ||
-      value instanceof goog.html.SafeStyle ||
+      value instanceof goog.html.SafeStyle ||  // TODO(jakubvrana): Delete.
       value instanceof goog.html.SafeStyleSheet;
 };
 
