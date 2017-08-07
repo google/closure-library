@@ -307,5 +307,5 @@ goog.dom.asserts.debugStringForType_ = function(value) {
 goog.dom.asserts.getWindow_ = function(o) {
   var doc = o && o.ownerDocument;
   var win = doc && /** @type {?Window} */ (doc.defaultView || doc.parentWindow);
-  return win || window;
+  return win || /** @type {!Window} */ (goog.global);
 };
