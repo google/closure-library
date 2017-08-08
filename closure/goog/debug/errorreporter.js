@@ -308,14 +308,13 @@ goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
  *     include in the error report.
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e, opt_context) {
-  var errorcontext = goog.module.get('goog.debug.errorcontext');
-
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
   var context = opt_context ? goog.object.clone(opt_context) : {};
   if (e instanceof Error) {
     goog.object.extend(
-        context, errorcontext.getErrorContext(/** @type {!Error} */ (e)));
+        context,
+        goog.debug.errorcontext.getErrorContext(/** @type {!Error} */ (e)));
   }
 
   var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));

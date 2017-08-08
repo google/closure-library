@@ -16,7 +16,7 @@
  * @fileoverview Provides methods dealing with context on error objects.
  */
 
-goog.module('goog.debug.errorcontext');
+goog.provide('goog.debug.errorcontext');
 
 
 /**
@@ -25,30 +25,25 @@ goog.module('goog.debug.errorcontext');
  * @param {string} contextKey Key for the context to be added.
  * @param {string} contextValue Value for the context to be added.
  */
-function addErrorContext(err, contextKey, contextValue) {
-  if (!err[CONTEXT_KEY]) {
-    err[CONTEXT_KEY] = {};
+goog.debug.errorcontext.addErrorContext = function(
+    err, contextKey, contextValue) {
+  if (!err[goog.debug.errorcontext.CONTEXT_KEY_]) {
+    err[goog.debug.errorcontext.CONTEXT_KEY_] = {};
   }
-  err[CONTEXT_KEY][contextKey] = contextValue;
-}
+  err[goog.debug.errorcontext.CONTEXT_KEY_][contextKey] = contextValue;
+};
 
 
 /**
  * @param {!Error} err The error to get context from.
  * @return {!Object<string, string>} The context of the provided error.
  */
-function getErrorContext(err) {
-  return err[CONTEXT_KEY] || {};
-}
+goog.debug.errorcontext.getErrorContext = function(err) {
+  return err[goog.debug.errorcontext.CONTEXT_KEY_] || {};
+};
 
 
 // TODO(user): convert this to a Symbol once goog.debug.ErrorReporter is
 // able to use ES6.
-/** @const {string} */
-var CONTEXT_KEY = '__closure__error__context__984382';
-
-
-exports = {
-  addErrorContext: addErrorContext,
-  getErrorContext: getErrorContext,
-};
+/** @private @const {string} */
+goog.debug.errorcontext.CONTEXT_KEY_ = '__closure__error__context__984382';

@@ -292,13 +292,11 @@ function testContextProvider_withOtherContext() {
 }
 
 function testErrorWithContext() {
-  var errorcontext = goog.module.get('goog.debug.errorcontext');
-
   errorReporter = goog.debug.ErrorReporter.install('/errorreporter');
   var loggedErrors = 0;
   var testError = new Error('test error');
-  errorcontext.addErrorContext(testError, 'key1', 'value1');
-  errorcontext.addErrorContext(testError, 'animalType', 'dog');
+  goog.debug.errorcontext.addErrorContext(testError, 'key1', 'value1');
+  goog.debug.errorcontext.addErrorContext(testError, 'animalType', 'dog');
   goog.events.listen(
       errorReporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
       function(event) {
@@ -314,15 +312,14 @@ function testErrorWithContext() {
 }
 
 function testErrorWithDifferentContextSources() {
-  var errorcontext = goog.module.get('goog.debug.errorcontext');
-
   errorReporter = goog.debug.ErrorReporter.install(
       '/errorreporter', function(error, context) {
         context.providedContext = 'provided ctx';
       });
   var loggedErrors = 0;
   var testError = new Error('test error');
-  errorcontext.addErrorContext(testError, 'addErrorContext', 'some value');
+  goog.debug.errorcontext.addErrorContext(
+      testError, 'addErrorContext', 'some value');
   goog.events.listen(
       errorReporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
       function(event) {
