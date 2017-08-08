@@ -23,6 +23,7 @@ goog.provide('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.async.run');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.BaseTestChannel');
@@ -1343,8 +1344,12 @@ WebChannelBase.prototype.ensureBackChannel_ = function() {
   }
 
   this.backChannelAttemptId_ = 1;
-  this.backChannelTimerId_ = requestStats.setTimeout(
-      goog.bind(this.onStartBackChannelTimer_, this), 0);
+
+  // Use async.run instead of setTimeout(0) to avoid the 1s message delay
+  // from chrome/firefox background tabs
+  // backChannelTimerId_ stays unset, as with setTimeout(0)
+  goog.async.run(this.onStartBackChannelTimer_, this);
+
   this.backChannelRetryCount_ = 0;
 };
 
