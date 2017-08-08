@@ -31,7 +31,7 @@ goog.require('goog.userAgent');
 goog.dom.fullscreen.EventType = {
   /** Dispatched by the Document when the fullscreen status changes. */
   CHANGE: (function() {
-    if (goog.userAgent.WEBKIT) {
+    if (goog.userAgent.WEBKIT || goog.userAgent.EDGE) {
       return 'webkitfullscreenchange';
     }
     if (goog.userAgent.GECKO) {
