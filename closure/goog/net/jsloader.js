@@ -30,7 +30,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.object');
 
 
@@ -98,7 +97,7 @@ goog.net.jsloader.scriptLoadingDeferred_;
  * the network fetches in parallel.
  *
  * If you need to load a large number of scripts but dependency order doesn't
- * matter, you should just call goog.net.jsloader.load N times.
+ * matter, you should just call goog.net.jsloader.safeLoad N times.
  *
  * If you need to load a large number of scripts on the same domain,
  * you may want to use goog.module.ModuleLoader.
@@ -142,25 +141,6 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
   };
   goog.net.jsloader.scriptLoadingDeferred_ = popAndLoadNextScript();
   return goog.net.jsloader.scriptLoadingDeferred_;
-};
-
-
-/**
- * This is deprecated, please use safeLoad instead.
- *
- * @param {string} uri The URI of the JavaScript.
- * @param {goog.net.jsloader.Options=} opt_options Optional parameters. See
- *     goog.net.jsloader.Options documentation for details.
- * @return {!goog.async.Deferred} The deferred result, that may be used to add
- *     callbacks and/or cancel the transmission.
- *     The error callback will be called with a single goog.net.jsloader.Error
- *     parameter.
- * @deprecated Use safeLoad instead.
- */
-goog.net.jsloader.load = function(uri, opt_options) {
-  var trustedUri =
-      goog.html.legacyconversions.trustedResourceUrlFromString(uri);
-  return goog.net.jsloader.safeLoad(trustedUri, opt_options);
 };
 
 
