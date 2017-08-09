@@ -497,13 +497,7 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
     this.xmlHttp_.send(this.requestUri_, this.verb_, this.postData_, headers);
   } else {
     this.verb_ = 'GET';
-
-    // If the user agent is webkit, we cannot send the close header since it is
-    // disallowed by the browser.  If we attempt to set the "Connection: close"
-    // header in WEBKIT browser, it will actually causes an error message.
-    if (this.sendClose_ && !goog.userAgent.WEBKIT) {
-      headers['Connection'] = 'close';
-    }
+    // TODO(user): remove sendClose_ and opt_close everywhere
     this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
   }
   requestStats.notifyServerReachabilityEvent(
