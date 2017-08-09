@@ -422,6 +422,15 @@ WebChannelBaseTransport.ChannelProperties.prototype.isSpdyEnabled = function() {
 /**
  * @override
  */
+WebChannelBaseTransport.ChannelProperties.prototype.getPendingRequestCount =
+    function() {
+  return this.channel_.getForwardChannelRequestPool().getRequestCount();
+};
+
+
+/**
+ * @override
+ */
 WebChannelBaseTransport.ChannelProperties.prototype.getHttpSessionId =
     function() {
   return this.channel_.getHttpSessionId();

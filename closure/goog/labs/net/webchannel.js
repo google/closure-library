@@ -349,6 +349,16 @@ goog.net.WebChannel.RuntimeProperties.prototype.isSpdyEnabled =
 
 
 /**
+ * @return {number} The number of requests (for sending messages to the server)
+ * that are pending. If this number is approaching the value of
+ * getConcurrentRequestLimit(), client-to-server message delivery may experience
+ * a higher latency.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getPendingRequestCount =
+    goog.abstractMethod;
+
+
+/**
  * For applications to query the current HTTP session id, sent by the server
  * during the initial handshake.
  *
