@@ -39,10 +39,9 @@ goog.require('goog.editor.icontent.FieldStyleInfo');
 goog.require('goog.editor.node');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.log');
-goog.require('goog.string.Const');
 goog.require('goog.style');
 
 
@@ -680,11 +679,8 @@ goog.editor.SeamlessField.prototype.attachIframe = function(iframe) {
     var doc = iframe.contentWindow.document;
     if (goog.editor.node.isStandardsMode(iframe.ownerDocument)) {
       doc.open();
-      var emptyHtml =
-          goog.html.uncheckedconversions
-              .safeHtmlFromStringKnownToSatisfyTypeContract(
-                  goog.string.Const.from('HTML from constant string'),
-                  '<!DOCTYPE HTML><html></html>');
+      var emptyHtml = goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.DOCTYPE_HTML, goog.html.SafeHtml.create('html'));
       goog.dom.safe.documentWrite(doc, emptyHtml);
       doc.close();
     }
