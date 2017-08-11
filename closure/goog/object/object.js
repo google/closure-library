@@ -266,7 +266,7 @@ goog.object.getKeys = function(obj) {
  *     (as strings, or numbers, for array-like objects).  Can also be
  *     specified as a single array of keys.
  * @return {*} The resulting value.  If, at any point, the value for a key
- *     is undefined, returns undefined.
+ *     in the current object is null or undefined, returns undefined.
  */
 goog.object.getValueByKeys = function(obj, var_args) {
   var isArrayLike = goog.isArrayLike(var_args);
@@ -274,10 +274,8 @@ goog.object.getValueByKeys = function(obj, var_args) {
 
   // Start with the 2nd parameter for the variable parameters syntax.
   for (var i = isArrayLike ? 0 : 1; i < keys.length; i++) {
+    if (obj == null) return undefined;
     obj = obj[keys[i]];
-    if (!goog.isDef(obj)) {
-      break;
-    }
   }
 
   return obj;
