@@ -1275,22 +1275,6 @@ goog.style.isElementShown = function(el) {
 
 
 /**
- * Installs the styles string into the window that contains opt_node.  If
- * opt_node is null, the main window is used.
- * @param {string} stylesString The style string to install.
- * @param {Node=} opt_node Node whose parent document should have the
- *     styles installed.
- * @return {!Element|!StyleSheet} The style element created.
- * @deprecated Use {@link #installSafeStyleSheet} instead.
- */
-goog.style.installStyles = function(stylesString, opt_node) {
-  return goog.style.installSafeStyleSheet(
-      goog.html.legacyconversions.safeStyleSheetFromString(stylesString),
-      opt_node);
-};
-
-
-/**
  * Installs the style sheet into the window that contains opt_node.  If
  * opt_node is null, the main window is used.
  * @param {!goog.html.SafeStyleSheet} safeStyleSheet The style sheet to install.

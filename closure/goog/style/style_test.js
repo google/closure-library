@@ -930,20 +930,6 @@ function testGetBounds() {
   assertEquals(pos.y, rect.top);
 }
 
-function testInstallStyles() {
-  var el = $('installTest0');
-  var originalBackground = goog.style.getBackgroundColor(el);
-
-  // Uses background-color because it's easy to get the computed value
-  var result = goog.style.installStyles(
-      '#installTest0 { background-color: rgb(255, 192, 203); }');
-
-  assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
-
-  goog.style.uninstallStyles(result);
-  assertEquals(originalBackground, goog.style.getBackgroundColor(el));
-}
-
 function testInstallSafeStyleSheet() {
   var el = $('installTest0');
   var originalBackground = goog.style.getBackgroundColor(el);
@@ -963,8 +949,9 @@ function testSetStyles() {
   var el = $('installTest1');
 
   // Change to pink
-  var ss = goog.style.installStyles(
-      '#installTest1 { background-color: rgb(255, 192, 203); }');
+  var ss = goog.style.installSafeStyleSheet(
+      goog.html.testing.newSafeStyleSheetForTest(
+          '#installTest1 { background-color: rgb(255, 192, 203); }'));
 
   assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
 
