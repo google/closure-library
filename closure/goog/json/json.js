@@ -145,7 +145,7 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
         } catch (ex) {
         }
       }
-      throw Error('Invalid JSON string: ' + o);
+      throw new Error('Invalid JSON string: ' + o);
     };
 
 
@@ -296,7 +296,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       sb.push('null');
       break;
     default:
-      throw Error('Unknown type: ' + typeof object);
+      throw new Error('Unknown type: ' + typeof object);
   }
 };
 

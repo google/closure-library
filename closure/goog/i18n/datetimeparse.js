@@ -1054,7 +1054,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date, validation) {
   // Throw exception if date if null.
   if (date == null) {
-    throw Error('Parameter \'date\' should not be null.');
+    throw new Error('Parameter \'date\' should not be null.');
   }
 
   // year 0 is 1 BC, and so on.

@@ -1259,9 +1259,11 @@ function testDisplayStringForValue() {
 
 function testDisplayStringForValue_exception() {
   assertEquals(
-      '<toString failed: foo message> (Object)',
-      _displayStringForValue(
-          {toString: function() { throw Error('foo message'); }}));
+      '<toString failed: foo message> (Object)', _displayStringForValue({
+        toString: function() {
+          throw new Error('foo message');
+        }
+      }));
 }
 
 function testDisplayStringForValue_cycle() {

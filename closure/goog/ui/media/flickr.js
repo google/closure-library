@@ -273,7 +273,7 @@ goog.ui.media.FlickrSetModel.newInstance = function(
     return new goog.ui.media.FlickrSetModel(
         data[1], data[2], opt_caption, opt_description);
   }
-  throw Error('failed to parse flickr url: ' + flickrSetUrl);
+  throw new Error('failed to parse flickr url: ' + flickrSetUrl);
 };
 
 

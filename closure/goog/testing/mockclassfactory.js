@@ -274,7 +274,7 @@ goog.testing.MockClassFactory.prototype.getClassName_ = function(
     }
   }
 
-  throw Error('Class is not a part of the given namespace');
+  throw new Error('Class is not a part of the given namespace');
 };
 
 
@@ -306,7 +306,7 @@ goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
     if (!this.$mock_) {
       // The "arguments" variable is not a proper Array so it must be converted.
       var args = Array.prototype.slice.call(arguments, 0);
-      throw Error(
+      throw new Error(
           'No mock found for ' + className + ' with arguments ' +
           args.join(', '));
     }
@@ -420,7 +420,7 @@ goog.testing.MockClassFactory.prototype.getMockClass_ = function(
     } else {
       var instance = this.findMockInstance_(className, ctorArgs);
       if (instance) {
-        throw Error(
+        throw new Error(
             'Mock instance already created for ' + className +
             ' with arguments ' + ctorArgs.join(', '));
       }
@@ -429,7 +429,7 @@ goog.testing.MockClassFactory.prototype.getMockClass_ = function(
 
     return mock;
   } else {
-    throw Error(
+    throw new Error(
         'Cannot create a mock class for ' + className + ' of type ' +
         typeof classToMock);
   }
@@ -532,7 +532,7 @@ goog.testing.MockClassFactory.prototype.getStaticMock_ = function(
         var mockType =
             mock instanceof goog.testing.StrictMock ? 'strict' : 'loose';
         var requestedType = isStrict ? 'strict' : 'loose';
-        throw Error(
+        throw new Error(
             'Requested a ' + requestedType + ' static mock, but a ' + mockType +
             ' mock already exists.');
       }
@@ -540,7 +540,7 @@ goog.testing.MockClassFactory.prototype.getStaticMock_ = function(
       return mock;
     }
   } else {
-    throw Error(
+    throw new Error(
         'Cannot create a mock for the static functions of ' + className +
         ' of type ' + typeof classToMock);
   }

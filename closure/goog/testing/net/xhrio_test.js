@@ -62,7 +62,7 @@ function testStaticSend() {
 function testStaticSendWithException() {
   goog.testing.net.XhrIo.send('url', function() {
     if (!this.isSuccess()) {
-      throw Error('The xhr did not complete successfully!');
+      throw new Error('The xhr did not complete successfully!');
     }
   });
   var sendInstances = goog.testing.net.XhrIo.getSendInstances();

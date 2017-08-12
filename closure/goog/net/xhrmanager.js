@@ -197,7 +197,7 @@ goog.net.XhrManager.prototype.send = function(
   var requests = this.requests_;
   // Check if there is already a request with the given id.
   if (requests.get(id)) {
-    throw Error(goog.net.XhrManager.ERROR_ID_IN_USE_);
+    throw new Error(goog.net.XhrManager.ERROR_ID_IN_USE_);
   }
 
   // Make the Request object.

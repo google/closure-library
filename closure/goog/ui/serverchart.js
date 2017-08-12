@@ -1094,7 +1094,7 @@ goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {
 goog.ui.ServerChart.prototype.setVennSeries = function(
     weights, opt_legendText, opt_colors) {
   if (this.getType() != goog.ui.ServerChart.ChartType.VENN) {
-    throw Error('Can only set a weight function for a Venn diagram.');
+    throw new Error('Can only set a weight function for a Venn diagram.');
   }
   var dataMin = this.arrayMin_(weights);
   if (dataMin < this.minValue_) {
@@ -1500,7 +1500,7 @@ goog.ui.ServerChart.prototype.addDataSet = function(
 
   if (goog.isDef(opt_legendText)) {
     if (this.setLegendTexts_.length < this.dataSets_.length) {
-      throw Error('Cannot start adding legends text after first element.');
+      throw new Error('Cannot start adding legends text after first element.');
     }
     this.setLegendTexts_.push(opt_legendText);
     this.uri_.setParameterValue(

@@ -117,7 +117,8 @@ goog.testing.TestRunner.prototype.getUniqueId = function() {
  */
 goog.testing.TestRunner.prototype.initialize = function(testCase) {
   if (this.testCase && this.testCase.running) {
-    throw Error('The test runner is already waiting for a test to complete');
+    throw new Error(
+        'The test runner is already waiting for a test to complete');
   }
   this.testCase = testCase;
   this.initialized = true;
@@ -269,13 +270,13 @@ goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
  */
 goog.testing.TestRunner.prototype.execute = function() {
   if (!this.testCase) {
-    throw Error(
+    throw new Error(
         'The test runner must be initialized with a test case ' +
         'before execute can be called.');
   }
 
   if (this.strict_ && this.testCase.getCount() == 0) {
-    throw Error(
+    throw new Error(
         'No tests found in given test case: ' + this.testCase.getName() + '. ' +
         'By default, the test runner fails if a test case has no tests. ' +
         'To modify this behavior, see goog.testing.TestRunner\'s ' +

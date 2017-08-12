@@ -416,7 +416,7 @@ goog.ui.Component.getStateTransitionEvent = function(state, isEntering) {
   }
 
   // Invalid state.
-  throw Error(goog.ui.Component.Error.STATE_INVALID);
+  throw new Error(goog.ui.Component.Error.STATE_INVALID);
 };
 
 
@@ -576,14 +576,14 @@ goog.ui.Component.prototype.getHandler = function() {
 goog.ui.Component.prototype.setParent = function(parent) {
   if (this == parent) {
     // Attempting to add a child to itself is an error.
-    throw Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw new Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   if (parent && this.parent_ && this.id_ && this.parent_.getChild(this.id_) &&
       this.parent_ != parent) {
     // This component is already the child of some parent, so it should be
     // removed using removeChild/removeChildAt first.
-    throw Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw new Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   this.parent_ = parent;
@@ -607,7 +607,7 @@ goog.ui.Component.prototype.getParent = function() {
  */
 goog.ui.Component.prototype.setParentEventTarget = function(parent) {
   if (this.parent_ && this.parent_ != parent) {
-    throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
+    throw new Error(goog.ui.Component.Error.NOT_SUPPORTED);
   }
   goog.ui.Component.superClass_.setParentEventTarget.call(this, parent);
 };
@@ -694,7 +694,7 @@ goog.ui.Component.prototype.renderBefore = function(sibling) {
 goog.ui.Component.prototype.render_ = function(
     opt_parentElement, opt_beforeNode) {
   if (this.inDocument_) {
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   if (!this.element_) {
@@ -729,7 +729,7 @@ goog.ui.Component.prototype.render_ = function(
  */
 goog.ui.Component.prototype.decorate = function(element) {
   if (this.inDocument_) {
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   } else if (element && this.canDecorate(element)) {
     this.wasDecorated_ = true;
 
@@ -748,7 +748,7 @@ goog.ui.Component.prototype.decorate = function(element) {
       this.enterDocument();
     }
   } else {
-    throw Error(goog.ui.Component.Error.DECORATE_INVALID);
+    throw new Error(goog.ui.Component.Error.DECORATE_INVALID);
   }
 };
 
@@ -936,7 +936,7 @@ goog.ui.Component.prototype.getFragmentFromId = function(id) {
  */
 goog.ui.Component.prototype.getElementByFragment = function(idFragment) {
   if (!this.inDocument_) {
-    throw Error(goog.ui.Component.Error.NOT_IN_DOCUMENT);
+    throw new Error(goog.ui.Component.Error.NOT_IN_DOCUMENT);
   }
   return this.dom_.getElement(this.makeId(idFragment));
 };
@@ -1011,12 +1011,12 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
     // Adding a child that's already in the document is an error, except if the
     // parent is also in the document and opt_render is false (e.g. decorate()).
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   if (index < 0 || index > this.getChildCount()) {
     // Allowing sparse child arrays would lead to strange behavior, so we don't.
-    throw Error(goog.ui.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
+    throw new Error(goog.ui.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
   }
 
   // Create the index and the child array on first use.
@@ -1117,7 +1117,7 @@ goog.ui.Component.prototype.isRightToLeft = function() {
  */
 goog.ui.Component.prototype.setRightToLeft = function(rightToLeft) {
   if (this.inDocument_) {
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
   this.rightToLeft_ = rightToLeft;
 };
@@ -1260,7 +1260,7 @@ goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
   }
 
   if (!child) {
-    throw Error(goog.ui.Component.Error.NOT_OUR_CHILD);
+    throw new Error(goog.ui.Component.Error.NOT_OUR_CHILD);
   }
 
   return /** @type {!goog.ui.Component} */ (child);

@@ -84,7 +84,7 @@ Decoder.prototype.isInputValid = function() {
  */
 Decoder.prototype.error_ = function(input, errorMsg) {
   this.isInputValid_ = false;
-  throw Error(
+  throw new Error(
       'The stream is broken @' + this.streamPos_ + '. Error: ' + errorMsg +
       '. With input:\n' + input);
 };

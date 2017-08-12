@@ -154,7 +154,7 @@ goog.html.flash.verifyKeysNotInMaps = function(
         var keyToCheck = keys[i];
         goog.asserts.assert(keyToCheck.toLowerCase() == keyToCheck);
         if (keyMapLower == keyToCheck) {
-          throw Error(
+          throw new Error(
               'Cannot override "' + keyToCheck + '" ' + type + ', got "' +
               keyMap + '" with value "' + map[keyMap] + '"');
         }

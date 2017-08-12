@@ -55,7 +55,7 @@ goog.net.CorsXmlHttpFactory.prototype.createInstance = function() {
   } else if (typeof XDomainRequest != 'undefined') {
     return new goog.net.IeCorsXhrAdapter();
   } else {
-    throw Error('Unsupported browser');
+    throw new Error('Unsupported browser');
   }
 };
 

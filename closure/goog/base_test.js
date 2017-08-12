@@ -244,7 +244,7 @@ function testExportSymbol() {
 }
 
 goog.exportSymbol('exceptionTest', function() {
-  throw Error('ERROR');
+  throw new Error('ERROR');
 });
 
 function testExportSymbolExceptions() {

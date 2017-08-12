@@ -542,8 +542,9 @@ function testProtectEntryPointCalledOnAsyncSend() {
   goog.net.XhrIo.protectEntryPoints(errorHandler);
 
   var x = new goog.net.XhrIo;
-  goog.events.listen(
-      x, goog.net.EventType.READY_STATE_CHANGE, function(e) { throw Error(); });
+  goog.events.listen(x, goog.net.EventType.READY_STATE_CHANGE, function(e) {
+    throw new Error();
+  });
 
   x.send('url');
   assertThrows(function() { lastMockXmlHttp.complete(); });
@@ -558,8 +559,9 @@ function testXHRIsDiposedEvenIfAListenerThrowsAnExceptionOnComplete() {
 
   var x = new goog.net.XhrIo;
 
-  goog.events.listen(
-      x, goog.net.EventType.COMPLETE, function(e) { throw Error(); }, false, x);
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+    throw new Error();
+  }, false, x);
 
   x.send('url');
   assertThrows(function() { lastMockXmlHttp.complete(); });

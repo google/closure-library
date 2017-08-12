@@ -53,7 +53,7 @@ goog.color.alpha.parse = function(str) {
       }
     }
   }
-  throw Error(str + ' is not a valid color string');
+  throw new Error(str + ' is not a valid color string');
 };
 
 
@@ -84,7 +84,7 @@ goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
     var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
     return normalizedColor.substring(startIdx, endIdx);
   } else {
-    throw Error(colorWithAlpha + ' is not a valid 8-hex color string');
+    throw new Error(colorWithAlpha + ' is not a valid 8-hex color string');
   }
 };
 
@@ -128,7 +128,7 @@ goog.color.alpha.hexQuadrupletRe_ = /#(.)(.)(.)(.)/;
  */
 goog.color.alpha.normalizeAlphaHex_ = function(hexColor) {
   if (!goog.color.alpha.isValidAlphaHexColor_(hexColor)) {
-    throw Error("'" + hexColor + "' is not a valid alpha hex color");
+    throw new Error('\'' + hexColor + '\' is not a valid alpha hex color');
   }
   if (hexColor.length == 5) {  // of the form #RGBA
     hexColor = hexColor.replace(
@@ -170,7 +170,7 @@ goog.color.alpha.rgbaToHex = function(r, g, b, a) {
   var intAlpha = Math.floor(a * 255);
   if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
     // TODO(user): The CSS spec says the value should be clamped.
-    throw Error(
+    throw new Error(
         '"(' + r + ',' + g + ',' + b + ',' + a +
         '") is not a valid RGBA color');
   }
@@ -191,7 +191,7 @@ goog.color.alpha.hslaToHex = function(h, s, l, a) {
   var intAlpha = Math.floor(a * 255);
   if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
     // TODO(user): The CSS spec says the value should be clamped.
-    throw Error(
+    throw new Error(
         '"(' + h + ',' + s + ',' + l + ',' + a +
         '") is not a valid HSLA color');
   }
@@ -222,7 +222,7 @@ goog.color.alpha.rgbaArrayToHex = function(rgba) {
 goog.color.alpha.rgbaToRgbaStyle = function(r, g, b, a) {
   if (isNaN(r) || r < 0 || r > 255 || isNaN(g) || g < 0 || g > 255 ||
       isNaN(b) || b < 0 || b > 255 || isNaN(a) || a < 0 || a > 1) {
-    throw Error(
+    throw new Error(
         '"(' + r + ',' + g + ',' + b + ',' + a +
         ')" is not a valid RGBA color');
   }

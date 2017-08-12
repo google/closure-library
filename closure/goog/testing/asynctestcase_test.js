@@ -54,7 +54,9 @@ function testControlBreakingExceptionThrown() {
 function testMaybeFailTestEarly() {
   var message = 'Error in setUpPage().';
   var asyncTestCase = new goog.testing.AsyncTestCase();
-  asyncTestCase.setUpPage = function() { throw Error(message); };
+  asyncTestCase.setUpPage = function() {
+    throw new Error(message);
+  };
   asyncTestCase.addNewTest('test', function() { assertTrue(true); });
   asyncTestCase.runTests();
   window.setTimeout(function() {

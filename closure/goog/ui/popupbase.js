@@ -438,7 +438,7 @@ goog.ui.PopupBase.prototype.getHandler = function() {
  */
 goog.ui.PopupBase.prototype.ensureNotVisible_ = function() {
   if (this.isVisible_) {
-    throw Error('Can not change this state of the popup while showing.');
+    throw new Error('Can not change this state of the popup while showing.');
   }
 };
 
@@ -522,7 +522,8 @@ goog.ui.PopupBase.prototype.show_ = function() {
 
   // Allow callers to set the element in the BEFORE_SHOW event.
   if (!this.element_) {
-    throw Error('Caller must call setElement before trying to show the popup');
+    throw new Error(
+        'Caller must call setElement before trying to show the popup');
   }
 
   // Call reposition after onBeforeShow, as it may change the style and/or

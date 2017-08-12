@@ -2096,7 +2096,7 @@ WebChannelBase.prototype.createDataUri = function(
  */
 WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
   if (hostPrefix && !this.supportsCrossDomainXhrs_) {
-    throw Error('Can\'t create secondary domain capable XhrIo object.');
+    throw new Error('Can\'t create secondary domain capable XhrIo object.');
   }
   var xhr = new goog.net.XhrIo();
   xhr.setWithCredentials(this.supportsCrossDomainXhrs_);

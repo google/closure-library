@@ -80,7 +80,7 @@ goog.structs.Map = function(opt_map, var_args) {
 
   if (argLength > 1) {
     if (argLength % 2) {
-      throw Error('Uneven number of arguments');
+      throw new Error('Uneven number of arguments');
     }
     for (var i = 0; i < argLength; i += 2) {
       this.set(arguments[i], arguments[i + 1]);
@@ -433,7 +433,7 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
   var newIter = new goog.iter.Iterator;
   newIter.next = function() {
     if (version != selfObj.version_) {
-      throw Error('The map has changed since the iterator was created');
+      throw new Error('The map has changed since the iterator was created');
     }
     if (i >= selfObj.keys_.length) {
       throw goog.iter.StopIteration;

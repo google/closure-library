@@ -62,7 +62,7 @@ goog.fs.url.getUrlObject_ = function() {
   if (urlObject != null) {
     return urlObject;
   } else {
-    throw Error('This browser doesn\'t seem to support blob URLs');
+    throw new Error('This browser doesn\'t seem to support blob URLs');
   }
 };
 

@@ -150,7 +150,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
 
   // Make sure this hasher is usable.
   if (this.needsReset_) {
-    throw Error('this hasher needs to be reset');
+    throw new Error('this hasher needs to be reset');
   }
   // Process the message from left to right up to |length| bytes.
   // When we get a 512-bit chunk, compute the hash of it and reset
@@ -165,7 +165,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
     for (var i = 0; i < length; i++) {
       var b = message.charCodeAt(i);
       if (b > 255) {
-        throw Error('Characters must be in range [0,255]');
+        throw new Error('Characters must be in range [0,255]');
       }
       this.chunk_[chunkBytes++] = b;
       if (chunkBytes == this.blockSize) {
@@ -179,7 +179,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
       // Hack:  b|0 coerces b to an integer, so the last part confirms that
       // b has no fractional part.
       if (!goog.isNumber(b) || b < 0 || b > 255 || b != (b | 0)) {
-        throw Error('message must be a byte array');
+        throw new Error('message must be a byte array');
       }
       this.chunk_[chunkBytes++] = b;
       if (chunkBytes == this.blockSize) {
@@ -188,7 +188,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
       }
     }
   } else {
-    throw Error('message must be string or array');
+    throw new Error('message must be string or array');
   }
 
   // Record the current bytes in chunk to support partial update.
@@ -202,7 +202,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
 /** @override */
 goog.crypt.Sha2_64bit.prototype.digest = function() {
   if (this.needsReset_) {
-    throw Error('this hasher needs to be reset');
+    throw new Error('this hasher needs to be reset');
   }
   var totalBits = this.total_ * 8;
 

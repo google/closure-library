@@ -159,7 +159,7 @@ goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
   // control.createDom has to be called before any state is set.
   // Use control.setStateInternal if you need to set states
   if (!control.getElement()) {
-    throw Error(goog.ui.Component.Error.STATE_INVALID);
+    throw new Error(goog.ui.Component.Error.STATE_INVALID);
   }
 
   var domHelper = control.getDomHelper();
@@ -293,7 +293,7 @@ goog.ui.media.YoutubeModel.newInstance = function(
         videoId, opt_caption, opt_description);
   }
 
-  throw Error('failed to parse video id from youtube url: ' + youtubeUrl);
+  throw new Error('failed to parse video id from youtube url: ' + youtubeUrl);
 };
 
 

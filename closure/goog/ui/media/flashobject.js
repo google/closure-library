@@ -501,7 +501,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
     goog.log.warning(
         this.logger_,
         'Required flash version not found:' + this.getRequiredVersion());
-    throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
+    throw new Error(goog.ui.Component.Error.NOT_SUPPORTED);
   }
 
   var element = this.getDomHelper().createElement(goog.dom.TagName.DIV);

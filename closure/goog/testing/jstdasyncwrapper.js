@@ -299,7 +299,7 @@ goog.testing.JsTdAsyncWrapper.Pool_.prototype.addCallback = function(
     fn, opt_n, opt_timeout, opt_description) {
   // TODO(mtragut): This could be fixed if required by test cases.
   if (opt_timeout || opt_description) {
-    throw Error(
+    throw new Error(
         'Setting timeout or description in a pool callback is not supported.');
   }
   var numCallbacks = opt_n || 1;

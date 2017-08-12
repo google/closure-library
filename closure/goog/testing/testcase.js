@@ -361,7 +361,7 @@ goog.testing.TestCase.prototype.onCompleteCallback_ = null;
 goog.testing.TestCase.prototype.add = function(test) {
   goog.asserts.assert(test);
   if (this.started) {
-    throw Error(
+    throw new Error(
         'Tests cannot be added after execute() has been called. ' +
         'Test: ' + test.name);
   }
@@ -1803,7 +1803,7 @@ goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
   if (gTestRunner) {
     gTestRunner['initialize'](testCase);
   } else {
-    throw Error(
+    throw new Error(
         'G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }

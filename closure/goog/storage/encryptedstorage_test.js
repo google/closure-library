@@ -44,7 +44,7 @@ function decryptWrapper(storage, key, wrapper) {
 
 function hammingDistance(a, b) {
   if (a.length != b.length) {
-    throw Error('Lengths must be the same for Hamming distance');
+    throw new Error('Lengths must be the same for Hamming distance');
   }
   var distance = 0;
   for (var i = 0; i < a.length; ++i) {

@@ -123,7 +123,7 @@ goog.net.MockIFrameIo.prototype.complete_;
 goog.net.MockIFrameIo.prototype.send = function(
     uri, opt_method, opt_noCache, opt_data) {
   if (this.active_) {
-    throw Error('[goog.net.IframeIo] Unable to send, already active.');
+    throw new Error('[goog.net.IframeIo] Unable to send, already active.');
   }
 
   this.testQueue_.enqueue(['s', uri, opt_method, opt_noCache, opt_data]);
@@ -143,7 +143,7 @@ goog.net.MockIFrameIo.prototype.send = function(
 goog.net.MockIFrameIo.prototype.sendFromForm = function(
     form, opt_uri, opt_noCache) {
   if (this.active_) {
-    throw Error('[goog.net.IframeIo] Unable to send, already active.');
+    throw new Error('[goog.net.IframeIo] Unable to send, already active.');
   }
 
   this.testQueue_.enqueue(['s', form, opt_uri, opt_noCache]);

@@ -508,7 +508,7 @@ goog.net.XhrIo.prototype.getProgressEventsEnabled = function() {
 goog.net.XhrIo.prototype.send = function(
     url, opt_method, opt_content, opt_headers) {
   if (this.xhr_) {
-    throw Error(
+    throw new Error(
         '[goog.net.XhrIo] Object is active with another request=' +
         this.lastUri_ + '; newUri=' + url);
   }

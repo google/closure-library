@@ -296,13 +296,13 @@ goog.define('goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', false);
  */
 goog.provide = function(name) {
   if (goog.isInModuleLoader_()) {
-    throw Error('goog.provide can not be used within a goog.module.');
+    throw new Error('goog.provide can not be used within a goog.module.');
   }
   if (!COMPILED) {
     // Ensure that the same namespace isn't provided twice.
     // A goog.module/goog.provide maps a goog.require to a specific file
     if (goog.isProvided_(name)) {
-      throw Error('Namespace "' + name + '" already declared.');
+      throw new Error('Namespace "' + name + '" already declared.');
     }
   }
 
@@ -378,10 +378,10 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
 goog.module = function(name) {
   if (!goog.isString(name) || !name ||
       name.search(goog.VALID_MODULE_RE_) == -1) {
-    throw Error('Invalid module identifier');
+    throw new Error('Invalid module identifier');
   }
   if (!goog.isInModuleLoader_()) {
-    throw Error(
+    throw new Error(
         'Module ' + name + ' has been loaded incorrectly. Note, ' +
         'modules cannot be loaded as normal scripts. They require some kind of ' +
         'pre-processing step. You\'re likely trying to load a module via a ' +
@@ -390,7 +390,7 @@ goog.module = function(name) {
         'https://github.com/google/closure-library/wiki/goog.module:-an-ES6-module-like-alternative-to-goog.provide.');
   }
   if (goog.moduleLoaderState_.moduleName) {
-    throw Error('goog.module may only be called once per module.');
+    throw new Error('goog.module may only be called once per module.');
   }
 
   // Store the module name for the loader.
@@ -399,7 +399,7 @@ goog.module = function(name) {
     // Ensure that the same namespace isn't provided twice.
     // A goog.module/goog.provide maps a goog.require to a specific file
     if (goog.isProvided_(name)) {
-      throw Error('Namespace "' + name + '" already declared.');
+      throw new Error('Namespace "' + name + '" already declared.');
     }
     delete goog.implicitNamespaces_[name];
   }
@@ -467,7 +467,7 @@ goog.module.declareLegacyNamespace = function() {
         'within a goog.module');
   }
   if (!COMPILED && !goog.moduleLoaderState_.moduleName) {
-    throw Error(
+    throw new Error(
         'goog.module must be called prior to ' +
         'goog.module.declareLegacyNamespace.');
   }
@@ -489,7 +489,7 @@ goog.module.declareLegacyNamespace = function() {
 goog.setTestOnly = function(opt_message) {
   if (goog.DISALLOW_TEST_ONLY_CODE) {
     opt_message = opt_message || '';
-    throw Error(
+    throw new Error(
         'Importing test-only code into non-debug environment' +
         (opt_message ? ': ' + opt_message : '.'));
   }
@@ -708,7 +708,7 @@ goog.require = function(name) {
         var errorMessage = 'goog.require could not find: ' + name;
         goog.logToConsole_(errorMessage);
 
-        throw Error(errorMessage);
+        throw new Error(errorMessage);
       }
     }
 
@@ -770,7 +770,7 @@ goog.nullFunction = function() {};
  * @throws {Error} when invoked to indicate the method should be overridden.
  */
 goog.abstractMethod = function() {
-  throw Error('unimplemented abstract method');
+  throw new Error('unimplemented abstract method');
 };
 
 
@@ -1229,7 +1229,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         if (isDeps) {
           return false;
         } else {
-          throw Error('Cannot write "' + src + '" after document load');
+          throw new Error('Cannot write "' + src + '" after document load');
         }
       }
 
@@ -1354,7 +1354,7 @@ if (goog.DEPENDENCIES_ENABLED) {
             if (requireName in deps.nameToPath) {
               visitNode(deps.nameToPath[requireName]);
             } else {
-              throw Error('Undefined nameToPath for ' + requireName);
+              throw new Error('Undefined nameToPath for ' + requireName);
             }
           }
         }
@@ -1395,7 +1395,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       } else {
         goog.moduleLoaderState_ = moduleState;
-        throw Error('Undefined script input');
+        throw new Error('Undefined script input');
       }
     }
 
@@ -1495,12 +1495,12 @@ goog.loadModule = function(moduleDef) {
 
       exports = goog.loadModuleFromSource_.call(undefined, moduleDef);
     } else {
-      throw Error('Invalid module definition');
+      throw new Error('Invalid module definition');
     }
 
     var moduleName = goog.moduleLoaderState_.moduleName;
     if (!goog.isString(moduleName) || !moduleName) {
-      throw Error('Invalid module name \"' + moduleName + '\"');
+      throw new Error('Invalid module name \"' + moduleName + '\"');
     }
 
     // Don't seal legacy namespaces as they may be uses as a parent of
@@ -2196,7 +2196,7 @@ goog.globalEval = function(script) {
       doc.body.removeChild(scriptElt);
     }
   } else {
-    throw Error('goog.globalEval not available');
+    throw new Error('goog.globalEval not available');
   }
 };
 
@@ -2549,7 +2549,7 @@ goog.base = function(me, opt_methodName, var_args) {
   var caller = arguments.callee.caller;
 
   if (goog.STRICT_MODE_COMPATIBLE || (goog.DEBUG && !caller)) {
-    throw Error(
+    throw new Error(
         'arguments.caller not defined.  goog.base() cannot be used ' +
         'with strict mode code. See ' +
         'http://www.ecma-international.org/ecma-262/5.1/#sec-C');
@@ -2589,7 +2589,7 @@ goog.base = function(me, opt_methodName, var_args) {
   if (me[opt_methodName] === caller) {
     return me.constructor.prototype[opt_methodName].apply(me, args);
   } else {
-    throw Error(
+    throw new Error(
         'goog.base called from a method of one name ' +
         'to a method of a different name');
   }
@@ -2609,7 +2609,7 @@ goog.base = function(me, opt_methodName, var_args) {
  */
 goog.scope = function(fn) {
   if (goog.isInModuleLoader_()) {
-    throw Error('goog.scope is not supported within a goog.module.');
+    throw new Error('goog.scope is not supported within a goog.module.');
   }
   fn.call(goog.global);
 };
@@ -2663,7 +2663,8 @@ goog.defineClass = function(superClass, def) {
   // Wrap the constructor prior to setting up the prototype and static methods.
   if (!constructor || constructor == Object.prototype.constructor) {
     constructor = function() {
-      throw Error('cannot instantiate an interface (no constructor defined).');
+      throw new Error(
+          'cannot instantiate an interface (no constructor defined).');
     };
   }
 

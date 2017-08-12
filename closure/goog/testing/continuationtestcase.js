@@ -362,7 +362,7 @@ goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
  */
 goog.testing.ContinuationTestCase.prototype.addStep_ = function(func) {
   if (!this.currentTest_) {
-    throw Error('Cannot add test steps outside of a running test.');
+    throw new Error('Cannot add test steps outside of a running test.');
   }
 
   var step = new goog.testing.ContinuationTestCase.Step(
@@ -556,7 +556,7 @@ goog.testing.ContinuationTestCase.ContinuationTest.prototype.addStep = function(
   if (phase) {
     phase.push(step);
   } else {
-    throw Error('Attempted to add a step to a completed test.');
+    throw new Error('Attempted to add a step to a completed test.');
   }
 };
 

@@ -916,7 +916,7 @@ goog.style.setSize = function(element, w, opt_h) {
     w = w.width;
   } else {
     if (opt_h == undefined) {
-      throw Error('missing height argument');
+      throw new Error('missing height argument');
     }
     h = opt_h;
   }

@@ -275,7 +275,7 @@ goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
     // using typeof to prevent strict js warning
     listener = goog.bind(listener.handleEvent, listener);
   } else {
-    throw Error('Invalid listener argument');
+    throw new Error('Invalid listener argument');
   }
 
   if (Number(opt_delay) > goog.Timer.MAX_TIMEOUT_) {

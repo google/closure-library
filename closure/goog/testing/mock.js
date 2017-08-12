@@ -182,9 +182,9 @@ goog.testing.Mock = function(
   } else if (
       opt_createProxy && opt_mockStaticMethods &&
       goog.isFunction(objectToMock)) {
-    throw Error('Cannot create a proxy when opt_mockStaticMethods is true');
+    throw new Error('Cannot create a proxy when opt_mockStaticMethods is true');
   } else if (opt_createProxy && !goog.isFunction(objectToMock)) {
-    throw Error('Must have a constructor to create a proxy');
+    throw new Error('Must have a constructor to create a proxy');
   }
 
   if (goog.isFunction(objectToMock) && !opt_mockStaticMethods) {

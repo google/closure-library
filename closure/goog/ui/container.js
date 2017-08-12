@@ -257,7 +257,7 @@ goog.ui.Container.prototype.setKeyEventTarget = function(element) {
       this.enableFocusHandling_(true);
     }
   } else {
-    throw Error(
+    throw new Error(
         'Can\'t set key event target for container ' +
         'that doesn\'t support keyboard focus!');
   }
@@ -295,7 +295,7 @@ goog.ui.Container.prototype.getRenderer = function() {
 goog.ui.Container.prototype.setRenderer = function(renderer) {
   if (this.getElement()) {
     // Too late.
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   this.renderer_ = renderer;
@@ -1016,7 +1016,7 @@ goog.ui.Container.prototype.getOrientation = function() {
 goog.ui.Container.prototype.setOrientation = function(orientation) {
   if (this.getElement()) {
     // Too late.
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   this.orientation_ = orientation;

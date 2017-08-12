@@ -247,8 +247,9 @@ function testSend_error() {
  * Verifies the send method in case of failure to fetch the url.
  */
 function testSend_failToFetch() {
-  var failedPromise =
-      new Promise(function() { throw Error('failed to fetch'); });
+  var failedPromise = new Promise(function() {
+    throw new Error('failed to fetch');
+  });
   fetchMock(new Request('https://www.google.com', {
     headers: new Headers(),
     method: 'GET'

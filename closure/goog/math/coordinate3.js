@@ -166,5 +166,5 @@ goog.math.Coordinate3.fromArray = function(a) {
     return new goog.math.Coordinate3(a[0], a[1], a[2]);
   }
 
-  throw Error('Conversion from an array requires an array of length 3');
+  throw new Error('Conversion from an array requires an array of length 3');
 };

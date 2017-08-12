@@ -47,7 +47,7 @@ goog.dom.forms.submitFormInNewWindow = function(form, opt_submitElement) {
 
   if (opt_submitElement) {
     if (goog.dom.InputType.SUBMIT != opt_submitElement.type.toLowerCase()) {
-      throw Error('opt_submitElement does not have a valid type.');
+      throw new Error('opt_submitElement does not have a valid type.');
     }
 
 

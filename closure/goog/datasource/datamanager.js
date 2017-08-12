@@ -179,7 +179,7 @@ goog.ds.DataManager.prototype.get = function() {
 
 /** @override */
 goog.ds.DataManager.prototype.set = function(value) {
-  throw Error('Can\'t set on DataManager');
+  throw new Error('Can\'t set on DataManager');
 };
 
 
@@ -496,7 +496,7 @@ goog.ds.DataManager.prototype.getListenerCount = function() {
  */
 goog.ds.DataManager.prototype.runWithoutFiringDataChanges = function(callback) {
   if (this.disableFiring_) {
-    throw Error('Can not nest calls to runWithoutFiringDataChanges');
+    throw new Error('Can not nest calls to runWithoutFiringDataChanges');
   }
 
   this.disableFiring_ = true;

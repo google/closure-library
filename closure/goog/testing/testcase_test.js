@@ -547,7 +547,9 @@ function testRunTests_byIndex() {
 function testMaybeFailTestEarly() {
   var message = 'Error in setUpPage().';
   var testCase = new goog.testing.TestCase();
-  testCase.setUpPage = function() { throw Error(message); };
+  testCase.setUpPage = function() {
+    throw new Error(message);
+  };
   testCase.addNewTest('test', ok);
   testCase.runTests();
   assertFalse(testCase.isSuccess());

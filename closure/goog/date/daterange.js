@@ -355,7 +355,7 @@ goog.date.DateRange.standardDateRange = function(dateRangeKey, opt_today) {
       return goog.date.DateRange.allTime(opt_today);
 
     default:
-      throw Error('no such date range key: ' + dateRangeKey);
+      throw new Error('no such date range key: ' + dateRangeKey);
   }
 };
 

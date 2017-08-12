@@ -349,7 +349,7 @@ goog.ui.PopupMenu.prototype.detachAll = function() {
  */
 goog.ui.PopupMenu.prototype.detach = function(element) {
   if (!this.isAttachTarget(element)) {
-    throw Error('Menu not attached to provided element, unable to detach.');
+    throw new Error('Menu not attached to provided element, unable to detach.');
   }
 
   var key = goog.getUid(element);

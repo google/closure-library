@@ -877,7 +877,7 @@ goog.labs.mock.StubBinderImpl_.prototype.thenReturn = function(value) {
  * goog.labs.mock.when(mockObj).getFoo(3)
  *     .thenReturn(4)
  *     .then(function() {
- *         throw Error('exceptional case');
+ *         throw new Error('exceptional case');
  *     });
  *
  * @param {!Object} mockObject The mocked object.

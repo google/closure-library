@@ -74,7 +74,9 @@ goog.functions.identity = function(opt_returnValue, var_args) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.error = function(message) {
-  return function() { throw Error(message); };
+  return function() {
+    throw new Error(message);
+  };
 };
 
 

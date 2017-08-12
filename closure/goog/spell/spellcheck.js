@@ -330,7 +330,7 @@ goog.spell.SpellCheck.prototype.processPending = function() {
  */
 goog.spell.SpellCheck.prototype.processPending_ = function() {
   if (!this.lookupFunction_) {
-    throw Error('No lookup function provided for spell checker.');
+    throw new Error('No lookup function provided for spell checker.');
   }
 
   if (this.unknownWords_.getCount()) {

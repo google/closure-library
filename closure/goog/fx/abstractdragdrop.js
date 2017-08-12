@@ -1329,7 +1329,7 @@ goog.fx.DragDropItem = function(element, opt_data) {
   this.startPosition_;
 
   if (!this.element) {
-    throw Error('Invalid argument');
+    throw new Error('Invalid argument');
   }
 };
 goog.inherits(goog.fx.DragDropItem, goog.events.EventTarget);

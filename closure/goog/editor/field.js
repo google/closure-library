@@ -2527,7 +2527,7 @@ goog.editor.Field.prototype.handleFieldLoad = function() {
  */
 goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
   if (this.isUneditable()) {
-    throw Error('makeUneditable: Field is already uneditable');
+    throw new Error('makeUneditable: Field is already uneditable');
   }
 
   // Fire any events waiting on a timeout.

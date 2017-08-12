@@ -855,7 +855,7 @@ ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
 ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
   if (this.watchDogTimerId_ != null) {
     // assertion
-    throw Error('WatchDog timer not null');
+    throw new Error('WatchDog timer not null');
   }
   this.watchDogTimerId_ =
       requestStats.setTimeout(goog.bind(this.onWatchDogTimeout_, this), time);

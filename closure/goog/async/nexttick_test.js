@@ -172,7 +172,7 @@ function testNextTickProtectEntryPoint() {
 
     goog.debug.entryPointRegistry.monitorAll(errorHandler);
     goog.async.nextTick(function() {
-      throw Error('This should be caught by the protected function.');
+      throw new Error('This should be caught by the protected function.');
     });
   });
 }

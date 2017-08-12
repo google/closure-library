@@ -405,7 +405,7 @@ goog.object.remove = function(obj, key) {
  */
 goog.object.add = function(obj, key, val) {
   if (obj !== null && key in obj) {
-    throw Error('The object already contains the key "' + key + '"');
+    throw new Error('The object already contains the key "' + key + '"');
   }
   goog.object.set(obj, key, val);
 };
@@ -640,7 +640,7 @@ goog.object.create = function(var_args) {
   }
 
   if (argLength % 2) {
-    throw Error('Uneven number of arguments');
+    throw new Error('Uneven number of arguments');
   }
 
   var rv = {};

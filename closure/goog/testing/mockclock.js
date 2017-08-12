@@ -525,7 +525,7 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
     funcToCall, opt_millis) {
   var millis = opt_millis || 0;
   if (millis > goog.testing.MockClock.MAX_INT_) {
-    throw Error(
+    throw new Error(
         'Bad timeout value: ' + millis + '.  Timeouts over MAX_INT ' +
         '(24.8 days) cause timeouts to be fired ' +
         'immediately in most browsers, except for IE.');

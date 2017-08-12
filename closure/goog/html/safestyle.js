@@ -360,7 +360,7 @@ goog.html.SafeStyle.create = function(map) {
   var style = '';
   for (var name in map) {
     if (!/^[-_a-zA-Z0-9]+$/.test(name)) {
-      throw Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
+      throw new Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
     }
     var value = map[name];
     if (value == null) {

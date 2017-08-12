@@ -1039,7 +1039,7 @@ goog.fx.DragListGroup.prototype.insertCurrHoverItem = function() {
 goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
     hoverList, draggerElCenter) {
   if (hoverList == null) {
-    throw Error('getHoverNextItem_ called with null hoverList.');
+    throw new Error('getHoverNextItem_ called with null hoverList.');
   }
 
   // The definition of what it means for the draggerEl to be "before" a given

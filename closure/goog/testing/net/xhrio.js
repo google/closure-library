@@ -441,7 +441,7 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
 goog.testing.net.XhrIo.prototype.send = function(
     url, opt_method, opt_content, opt_headers) {
   if (this.xhr_) {
-    throw Error('[goog.net.XhrIo] Object is active with another request');
+    throw new Error('[goog.net.XhrIo] Object is active with another request');
   }
 
   this.lastUri_ = url;
@@ -487,7 +487,7 @@ goog.testing.net.XhrIo.prototype.createXhr = function() {
 goog.testing.net.XhrIo.prototype.simulateReadyStateChange = function(
     readyState) {
   if (readyState < this.readyState_) {
-    throw Error('Readystate cannot go backwards');
+    throw new Error('Readystate cannot go backwards');
   }
 
   // INTERACTIVE can be dispatched repeatedly as more data is reported.

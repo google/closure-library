@@ -222,7 +222,7 @@ goog.i18n.NumberFormat.prototype.getCurrencyCode_ = function() {
  */
 goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
   if (this.significantDigits_ > 0 && min > 0) {
-    throw Error(
+    throw new Error(
         'Can\'t combine significant digits and minimum fraction digits');
   }
   this.minimumFractionDigits_ = min;
@@ -238,7 +238,7 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
   if (max > 308) {
     // Math.pow(10, 309) becomes Infinity which breaks the logic in this class.
-    throw Error('Unsupported maximum fraction digits: ' + max);
+    throw new Error('Unsupported maximum fraction digits: ' + max);
   }
   this.maximumFractionDigits_ = max;
   return this;
@@ -255,7 +255,7 @@ goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
  */
 goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
   if (this.minimumFractionDigits_ > 0 && number >= 0) {
-    throw Error(
+    throw new Error(
         'Can\'t combine significant digits and minimum fraction digits');
   }
   this.significantDigits_ = number;
@@ -386,7 +386,7 @@ goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
       this.applyCompactStyle_(goog.i18n.NumberFormat.CompactStyle.LONG);
       break;
     default:
-      throw Error('Unsupported pattern type.');
+      throw new Error('Unsupported pattern type.');
   }
 };
 
@@ -424,7 +424,7 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
   var pos = opt_pos || [0];
 
   if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
-    throw Error('Parsing of compact numbers is unimplemented');
+    throw new Error('Parsing of compact numbers is unimplemented');
   }
 
   var ret = NaN;
@@ -499,7 +499,7 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
       goog.i18n.NumberFormat.getNumberFormatSymbols_().EXP_SYMBOL;
 
   if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
-    throw Error('Parsing of compact style numbers is not implemented');
+    throw new Error('Parsing of compact style numbers is not implemented');
   }
 
   var normalizedText = '';
@@ -822,7 +822,7 @@ goog.i18n.NumberFormat.formatNumberGroupingNonRepeatingDigitsParts_ = function(
 goog.i18n.NumberFormat.prototype.subformatFixed_ = function(
     number, minIntDigits, parts) {
   if (this.minimumFractionDigits_ > this.maximumFractionDigits_) {
-    throw Error('Min value must be less than max value');
+    throw new Error('Min value must be less than max value');
   }
 
   if (!parts) {
@@ -1210,10 +1210,10 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
           break;
         case goog.i18n.NumberFormat.PATTERN_PERCENT_:
           if (!this.negativePercentSignExpected_ && this.multiplier_ != 1) {
-            throw Error('Too many percent/permill');
+            throw new Error('Too many percent/permill');
           } else if (
               this.negativePercentSignExpected_ && this.multiplier_ != 100) {
-            throw Error('Inconsistent use of percent/permill characters');
+            throw new Error('Inconsistent use of percent/permill characters');
           }
           this.multiplier_ = 100;
           this.negativePercentSignExpected_ = false;
@@ -1221,10 +1221,10 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
           break;
         case goog.i18n.NumberFormat.PATTERN_PER_MILLE_:
           if (!this.negativePercentSignExpected_ && this.multiplier_ != 1) {
-            throw Error('Too many percent/permill');
+            throw new Error('Too many percent/permill');
           } else if (
               this.negativePercentSignExpected_ && this.multiplier_ != 1000) {
-            throw Error('Inconsistent use of percent/permill characters');
+            throw new Error('Inconsistent use of percent/permill characters');
           }
           this.multiplier_ = 1000;
           this.negativePercentSignExpected_ = false;
@@ -1270,7 +1270,7 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
         break;
       case goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_:
         if (digitRightCount > 0) {
-          throw Error('Unexpected "0" in pattern "' + pattern + '"');
+          throw new Error('Unexpected "0" in pattern "' + pattern + '"');
         }
         zeroDigitCount++;
         if (groupingCount >= 0 && decimalPos < 0) {
@@ -1285,14 +1285,14 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
         break;
       case goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_:
         if (decimalPos >= 0) {
-          throw Error(
+          throw new Error(
               'Multiple decimal separators in pattern "' + pattern + '"');
         }
         decimalPos = digitLeftCount + zeroDigitCount + digitRightCount;
         break;
       case goog.i18n.NumberFormat.PATTERN_EXPONENT_:
         if (this.useExponentialNotation_) {
-          throw Error(
+          throw new Error(
               'Multiple exponential symbols in pattern "' + pattern + '"');
         }
         this.useExponentialNotation_ = true;
@@ -1317,7 +1317,7 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
 
         if ((digitLeftCount + zeroDigitCount) < 1 ||
             this.minExponentDigits_ < 1) {
-          throw Error('Malformed exponential pattern "' + pattern + '"');
+          throw new Error('Malformed exponential pattern "' + pattern + '"');
         }
         loop = false;
         break;
@@ -1344,7 +1344,7 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
       decimalPos >= 0 && (decimalPos < digitLeftCount ||
                           decimalPos > digitLeftCount + zeroDigitCount) ||
       groupingCount == 0) {
-    throw Error('Malformed pattern "' + pattern + '"');
+    throw new Error('Malformed pattern "' + pattern + '"');
   }
   var totalDigits = digitLeftCount + zeroDigitCount + digitRightCount;
 

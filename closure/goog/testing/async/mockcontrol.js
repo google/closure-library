@@ -171,6 +171,6 @@ goog.testing.async.MockControl.prototype.assertDeferredEquals = function(
   } else if (actual instanceof goog.async.Deferred) {
     actual.addCallback(this.asyncAssertEquals(message, expected));
   } else {
-    throw Error('Either expected or actual must be deferred');
+    throw new Error('Either expected or actual must be deferred');
   }
 };

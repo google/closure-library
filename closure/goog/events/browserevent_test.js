@@ -39,7 +39,7 @@ function testInvalidNodeBug() {
   var event = {};
   event.relatedTarget = {};
   event.relatedTarget.__defineGetter__('nodeName', function() {
-    throw Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
+    throw new Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
   });
   assertThrows(function() { return event.relatedTarget.nodeName; });
 

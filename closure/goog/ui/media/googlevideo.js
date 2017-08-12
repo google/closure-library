@@ -233,7 +233,7 @@ goog.ui.media.GoogleVideoModel.newInstance = function(
         data[1], opt_caption, opt_description, opt_autoplay);
   }
 
-  throw Error(
+  throw new Error(
       'failed to parse video id from GoogleVideo url: ' + googleVideoUrl);
 };
 

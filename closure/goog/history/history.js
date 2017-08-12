@@ -234,7 +234,8 @@ goog.History = function(
   goog.events.EventTarget.call(this);
 
   if (opt_invisible && !opt_blankPageUrl) {
-    throw Error('Can\'t use invisible history without providing a blank page.');
+    throw new Error(
+        'Can\'t use invisible history without providing a blank page.');
   }
 
   var input;

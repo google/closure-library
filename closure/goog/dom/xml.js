@@ -87,7 +87,7 @@ goog.dom.xml.ACTIVEX_SUPPORT =
 goog.dom.xml.createDocument = function(
     opt_rootTagName, opt_namespaceUri, opt_preferActiveX) {
   if (opt_namespaceUri && !opt_rootTagName) {
-    throw Error("Can't create document with namespace and no root tag");
+    throw new Error('Can\'t create document with namespace and no root tag');
   }
   // If document.implementation.createDocument is available and they haven't
   // explicitly opted to use ActiveXObject when possible.
@@ -107,7 +107,7 @@ goog.dom.xml.createDocument = function(
       return doc;
     }
   }
-  throw Error('Your browser does not support creating new documents');
+  throw new Error('Your browser does not support creating new documents');
 };
 
 
@@ -130,7 +130,7 @@ goog.dom.xml.loadXml = function(xml, opt_preferActiveX) {
     doc.loadXML(xml);
     return doc;
   }
-  throw Error('Your browser does not support loading xml documents');
+  throw new Error('Your browser does not support loading xml documents');
 };
 
 
@@ -150,7 +150,7 @@ goog.dom.xml.serialize = function(xml) {
   if (typeof XMLSerializer != 'undefined') {
     return new XMLSerializer().serializeToString(xml);
   }
-  throw Error('Your browser does not support serializing XML documents');
+  throw new Error('Your browser does not support serializing XML documents');
 };
 
 

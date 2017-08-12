@@ -313,7 +313,7 @@ goog.ui.Control.prototype.getRenderer = function() {
 goog.ui.Control.prototype.setRenderer = function(renderer) {
   if (this.isInDocument()) {
     // Too late.
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   if (this.getElement()) {
@@ -1084,7 +1084,7 @@ goog.ui.Control.prototype.isSupportedState = function(state) {
 goog.ui.Control.prototype.setSupportedState = function(state, support) {
   if (this.isInDocument() && this.hasState(state) && !support) {
     // Since we hook up event handlers in enterDocument(), this is an error.
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   if (!support && this.hasState(state)) {

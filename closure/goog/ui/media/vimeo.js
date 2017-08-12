@@ -228,7 +228,7 @@ goog.ui.media.VimeoModel.newInstance = function(
     return new goog.ui.media.VimeoModel(
         data[1], opt_caption, opt_description, opt_autoplay);
   }
-  throw Error('failed to parse vimeo url: ' + vimeoUrl);
+  throw new Error('failed to parse vimeo url: ' + vimeoUrl);
 };
 
 

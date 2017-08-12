@@ -215,7 +215,7 @@ goog.events.listen = function(src, type, listener, opt_options, opt_handler) {
 goog.events.listen_ = function(
     src, type, listener, callOnce, opt_options, opt_handler) {
   if (!type) {
-    throw Error('Invalid event type');
+    throw new Error('Invalid event type');
   }
 
   var capture =
@@ -269,7 +269,7 @@ goog.events.listen_ = function(
     // earlier still version that caused excess allocations on IE6.
     src.attachEvent(goog.events.getOnString_(type.toString()), proxy);
   } else {
-    throw Error('addEventListener and attachEvent are unavailable.');
+    throw new Error('addEventListener and attachEvent are unavailable.');
   }
 
   goog.events.listenerCountEstimate_++;

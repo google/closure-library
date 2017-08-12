@@ -235,7 +235,7 @@ goog.net.DefaultXmlHttpFactory.prototype.getProgId_ = function() {
     }
 
     // couldn't find any matches
-    throw Error(
+    throw new Error(
         'Could not create ActiveXObject. ActiveX might be disabled,' +
         ' or MSXML might not be installed');
   }

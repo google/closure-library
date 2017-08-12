@@ -96,7 +96,7 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
   if (goog.asserts.ENABLE_ASSERTS) {
     var tagName = elem.tagName.toUpperCase();
     if (goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_[tagName]) {
-      throw Error(
+      throw new Error(
           'goog.dom.safe.setInnerHtml cannot be used to set content of ' +
           elem.tagName + '.');
     }

@@ -153,18 +153,18 @@ goog.math.Integer.fromBits = function(bits) {
  */
 goog.math.Integer.fromString = function(str, opt_radix) {
   if (str.length == 0) {
-    throw Error('number format error: empty string');
+    throw new Error('number format error: empty string');
   }
 
   var radix = opt_radix || 10;
   if (radix < 2 || 36 < radix) {
-    throw Error('radix out of range: ' + radix);
+    throw new Error('radix out of range: ' + radix);
   }
 
   if (str.charAt(0) == '-') {
     return goog.math.Integer.fromString(str.substring(1), radix).negate();
   } else if (str.indexOf('-') >= 0) {
-    throw Error('number format error: interior "-" character');
+    throw new Error('number format error: interior "-" character');
   }
 
   // Do several (8) digits each time through the loop, so as to
@@ -244,7 +244,7 @@ goog.math.Integer.prototype.toNumber = function() {
 goog.math.Integer.prototype.toString = function(opt_radix) {
   var radix = opt_radix || 10;
   if (radix < 2 || 36 < radix) {
-    throw Error('radix out of range: ' + radix);
+    throw new Error('radix out of range: ' + radix);
   }
 
   if (this.isZero()) {
@@ -589,7 +589,7 @@ goog.math.Integer.carry16_ = function(bits, index) {
  */
 goog.math.Integer.prototype.slowDivide_ = function(other) {
   if (this.isNegative() || other.isNegative()) {
-    throw Error('slowDivide_ only works with positive integers.');
+    throw new Error('slowDivide_ only works with positive integers.');
   }
 
   var twoPower = goog.math.Integer.ONE;
@@ -636,7 +636,7 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
  */
 goog.math.Integer.prototype.divide = function(other) {
   if (other.isZero()) {
-    throw Error('division by zero');
+    throw new Error('division by zero');
   } else if (this.isZero()) {
     return goog.math.Integer.ZERO;
   }

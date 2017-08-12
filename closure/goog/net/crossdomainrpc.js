@@ -169,7 +169,7 @@ if (goog.net.CrossDomainRpc.isInResponseIframe_()) {
   } else if (goog.userAgent.GECKO) {
     window.stop();
   } else {
-    throw Error('stopped');
+    throw new Error('stopped');
   }
 }
 
@@ -294,7 +294,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
   }
 
   if (!goog.net.CrossDomainRpc.useFallBackDummyResource_) {
-    throw Error(
+    throw new Error(
         'No suitable dummy resource specified or detected for this page');
   }
 

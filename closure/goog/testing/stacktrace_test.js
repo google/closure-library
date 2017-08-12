@@ -129,7 +129,7 @@ function testParseStackFrameInOpera() {
   expected = new goog.testing.stacktrace.Frame('', '', '', 'file:///foo:42');
   assertObjectEquals('path only', expected, frame);
 
-  // (function go() { throw Error() })()
+  // (function go() { throw new Error() })()
   // var c = go; c()
   frameString = 'go([arguments not available])@';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
@@ -141,20 +141,20 @@ function testParseStackFrameInOpera() {
   expected = new goog.testing.stacktrace.Frame('', 'go', '', 'file:///foo:42');
   assertObjectEquals('name and path', expected, frame);
 
-  // (function() { throw Error() })()
+  // (function() { throw new Error() })()
   frameString =
       '<anonymous function>([arguments not available])@file:///foo:42';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected = new goog.testing.stacktrace.Frame('', '', '', 'file:///foo:42');
   assertObjectEquals('anonymous function', expected, frame);
 
-  // var b = {foo: function() { throw Error() }}
+  // var b = {foo: function() { throw new Error() }}
   frameString = '<anonymous function: foo>()@file:///foo:42';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected = new goog.testing.stacktrace.Frame('', 'foo', '', 'file:///foo:42');
   assertObjectEquals('object literal function', expected, frame);
 
-  // var c = {}; c.foo = function() { throw Error() }
+  // var c = {}; c.foo = function() { throw new Error() }
   frameString = '<anonymous function: c.foo>()@file:///foo:42';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected =

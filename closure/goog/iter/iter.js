@@ -122,7 +122,7 @@ goog.iter.toIterator = function(iterable) {
 
 
   // TODO(arv): Should we fall back on goog.structs.getValues()?
-  throw Error('Not implemented');
+  throw new Error('Not implemented');
 };
 
 
@@ -256,7 +256,7 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
     stop = opt_stop;
   }
   if (step == 0) {
-    throw Error('Range step argument must not be zero');
+    throw new Error('Range step argument must not be zero');
   }
 
   var newIter = new goog.iter.Iterator;

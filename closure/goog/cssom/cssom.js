@@ -225,7 +225,7 @@ goog.cssom.getCssRuleIndexInParentStyleSheet = function(
   if (!parentStyleSheet) {
     // We could call getAllCssStyleRules() here to get our special indexes on
     // the style object, but that seems like it could be wasteful.
-    throw Error('Cannot find a parentStyleSheet.');
+    throw new Error('Cannot find a parentStyleSheet.');
   }
 
   var cssRuleList = goog.cssom.getCssRulesFromStyleSheet(parentStyleSheet);
@@ -281,10 +281,10 @@ goog.cssom.replaceCssRule = function(
       goog.cssom.removeCssRule(parentStyleSheet, index);
       goog.cssom.addCssRule(parentStyleSheet, cssText, index);
     } else {
-      throw Error('Cannot proceed without the index of the cssRule.');
+      throw new Error('Cannot proceed without the index of the cssRule.');
     }
   } else {
-    throw Error('Cannot proceed without the parentStyleSheet.');
+    throw new Error('Cannot proceed without the parentStyleSheet.');
   }
 };
 
@@ -323,7 +323,7 @@ goog.cssom.addCssRule = function(cssStyleSheet, cssText, opt_index) {
       var style = matches[2];
       cssStyleSheet.addRule(selector, style, index);
     } else {
-      throw Error('Your CSSRule appears to be ill-formatted.');
+      throw new Error('Your CSSRule appears to be ill-formatted.');
     }
   }
 };

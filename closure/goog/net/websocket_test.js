@@ -257,8 +257,9 @@ function testErrorHandlerCalled() {
 
   webSocket = new goog.net.WebSocket();
   goog.events.listenOnce(
-      webSocket, goog.net.WebSocket.EventType.OPENED,
-      function() { throw Error(); });
+      webSocket, goog.net.WebSocket.EventType.OPENED, function() {
+        throw new Error();
+      });
 
   webSocket.open(testUrl);
   var ws = webSocket.webSocket_;

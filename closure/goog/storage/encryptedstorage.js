@@ -112,7 +112,7 @@ goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
 goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
     salt, key, value) {
   if (!(salt.length > 0)) {
-    throw Error('Non-empty salt must be provided');
+    throw new Error('Non-empty salt must be provided');
   }
   var sha1 = new goog.crypt.Sha1();
   sha1.update(goog.crypt.stringToByteArray(key));

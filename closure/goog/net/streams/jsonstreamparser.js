@@ -259,7 +259,7 @@ Parser.prototype.error_ = function(input, pos) {
   this.streamState_ = Parser.StreamState_.INVALID;
   this.errorMessage_ = 'The stream is broken @' + this.pos_ + '/' + pos +
       '. With input:\n' + input;
-  throw Error(this.errorMessage_);
+  throw new Error(this.errorMessage_);
 };
 
 

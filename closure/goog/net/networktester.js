@@ -242,7 +242,7 @@ goog.net.NetworkTester.prototype.isRunning = function() {
  */
 goog.net.NetworkTester.prototype.start = function() {
   if (this.running_) {
-    throw Error('NetworkTester.start called when already running');
+    throw new Error('NetworkTester.start called when already running');
   }
   this.running_ = true;
 

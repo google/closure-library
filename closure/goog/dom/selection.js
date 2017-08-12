@@ -325,7 +325,7 @@ goog.dom.selection.setText = function(textfield, text) {
     selectionRange.setEndPoint('StartToStart', range2);
     selectionRange.select();
   } else {
-    throw Error('Cannot set the selection end');
+    throw new Error('Cannot set the selection end');
   }
 };
 
@@ -355,7 +355,7 @@ goog.dom.selection.getText = function(textfield) {
     return selectionRange.text;
   }
 
-  throw Error('Cannot get the selection text');
+  throw new Error('Cannot get the selection text');
 };
 
 

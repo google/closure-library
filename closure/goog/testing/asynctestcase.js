@@ -384,7 +384,7 @@ goog.testing.AsyncTestCase.prototype.waitForAsync = function(opt_name) {
 goog.testing.AsyncTestCase.prototype.continueTesting = function() {
   if (this.receivedSignalCount_ < this.expectedSignalCount_) {
     var remaining = this.expectedSignalCount_ - this.receivedSignalCount_;
-    throw Error('Still waiting for ' + remaining + ' signals.');
+    throw new Error('Still waiting for ' + remaining + ' signals.');
   }
   this.endCurrentStep_();
 };

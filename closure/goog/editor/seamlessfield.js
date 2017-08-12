@@ -696,7 +696,7 @@ goog.editor.SeamlessField.prototype.getFieldFormatInfo = function(extraStyles) {
         this.id, goog.editor.node.isStandardsMode(originalElement), true,
         this.isFixedHeight(), extraStyles);
   }
-  throw Error('no field');
+  throw new Error('no field');
 };
 
 

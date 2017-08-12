@@ -884,7 +884,7 @@ goog.net.xpc.IframePollingTransport.Sender = function(url, windowObj) {
   // elsewhere than IframePollingTransport the url needs to be sanitized
   // here too.
   if (!/^https?:\/\//.test(url)) {
-    throw Error('URL ' + url + ' is invalid');
+    throw new Error('URL ' + url + ' is invalid');
   }
 
   /**

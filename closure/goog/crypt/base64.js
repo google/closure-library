@@ -287,7 +287,7 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
         return b;  // Common case: decoded the char.
       }
       if (!goog.string.isEmptyOrWhitespace(ch)) {
-        throw Error('Unknown base64 encoding at char: ' + ch);
+        throw new Error('Unknown base64 encoding at char: ' + ch);
       }
       // We encountered whitespace: loop around to the next input char.
     }

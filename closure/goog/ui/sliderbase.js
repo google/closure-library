@@ -848,7 +848,7 @@ goog.ui.SliderBase.prototype.getThumbPosition_ = function(thumb) {
   } else if (thumb == this.extentThumb) {
     return this.rangeModel.getValue() + this.rangeModel.getExtent();
   } else {
-    throw Error('Illegal thumb element. Neither minThumb nor maxThumb');
+    throw new Error('Illegal thumb element. Neither minThumb nor maxThumb');
   }
 };
 
