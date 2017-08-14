@@ -1066,7 +1066,8 @@ function testGetObjectByName() {
     one: 1,
     two: {three: 3, four: {five: 5}},
     'six|seven': '6|7',
-    'eight.nine': 8.9
+    'eight.nine': 8.9,
+    '': {b: 42},
   };
   goog.global.m = m;
 
@@ -1089,6 +1090,8 @@ function testGetObjectByName() {
   assertEquals(goog.getObjectByName('six|seven', m), '6|7');
   assertNull(goog.getObjectByName('eight.nine', m));
   assertNull(goog.getObjectByName('notThere', m));
+  assertNull(goog.getObjectByName('./invalid', m));
+  assertEquals(goog.getObjectByName('.b', m), 42);
 }
 
 
