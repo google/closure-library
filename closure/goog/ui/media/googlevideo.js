@@ -32,7 +32,7 @@
  *
  * <pre>
  *   var video = goog.ui.media.GoogleVideoModel.newInstance(
- *       'http://video.google.com/videoplay?docid=6698933542780842398');
+ *       'https://video.google.com/videoplay?docid=6698933542780842398');
  *   goog.ui.media.GoogleVideo.newControl(video).render();
  * </pre>
  *
@@ -208,7 +208,7 @@ goog.inherits(goog.ui.media.GoogleVideoModel, goog.ui.media.MediaModel);
  * @const
  */
 goog.ui.media.GoogleVideoModel.MATCHER_ =
-    /^http:\/\/(?:www\.)?video\.google\.com\/videoplay.*[\?#]docid=(-?[0-9]+)#?$/i;
+    /^https?:\/\/(?:www\.)?video\.google\.com\/videoplay.*[\?#]docid=(-?[0-9]+)#?$/i;
 
 
 /**
@@ -246,7 +246,7 @@ goog.ui.media.GoogleVideoModel.newInstance = function(
  * @return {string} The GoogleVideo URL.
  */
 goog.ui.media.GoogleVideoModel.buildUrl = function(videoId) {
-  return 'http://video.google.com/videoplay?docid=' +
+  return 'https://video.google.com/videoplay?docid=' +
       goog.string.urlEncode(videoId);
 };
 
@@ -263,10 +263,10 @@ goog.ui.media.GoogleVideoModel.buildUrl = function(videoId) {
  */
 goog.ui.media.GoogleVideoModel.buildFlashUrl = function(videoId, opt_autoplay) {
   var autoplay = opt_autoplay ? '&autoplay=1' : '';
-    return goog.html.uncheckedconversions.
-      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+  return goog.html.uncheckedconversions
+      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from('Fixed domain, encoded path.'),
-          'http://video.google.com/googleplayer.swf?docid=' +
+          'https://video.google.com/googleplayer.swf?docid=' +
               goog.string.urlEncode(videoId) + '&hl=en&fs=true' + autoplay);
 };
 

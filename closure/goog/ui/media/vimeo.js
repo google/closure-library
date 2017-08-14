@@ -32,8 +32,8 @@
  * Example of usage:
  *
  * <pre>
- *   var video = goog.ui.media.VimeoModel.newInstance('http://vimeo.com/30012');
- *   goog.ui.media.Vimeo.newControl(video).render();
+ * var video = goog.ui.media.VimeoModel.newInstance('https://vimeo.com/30012');
+ * goog.ui.media.Vimeo.newControl(video).render();
  * </pre>
  *
  * Vimeo medias currently support the following states:
@@ -240,7 +240,7 @@ goog.ui.media.VimeoModel.newInstance = function(
  * @return {string} The vimeo URL.
  */
 goog.ui.media.VimeoModel.buildUrl = function(videoId) {
-  return 'http://vimeo.com/' + goog.string.urlEncode(videoId);
+  return 'https://vimeo.com/' + goog.string.urlEncode(videoId);
 };
 
 
@@ -254,10 +254,10 @@ goog.ui.media.VimeoModel.buildUrl = function(videoId) {
  */
 goog.ui.media.VimeoModel.buildFlashUrl = function(videoId, opt_autoplay) {
   var autoplay = opt_autoplay ? '&autoplay=1' : '';
-  return goog.html.uncheckedconversions.
-      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+  return goog.html.uncheckedconversions
+      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from('Fixed domain, encoded parameters.'),
-          'http://vimeo.com/moogaloop.swf?clip_id=' +
+          'https://vimeo.com/moogaloop.swf?clip_id=' +
               goog.string.urlEncode(videoId) +
               '&server=vimeo.com&show_title=1&show_byline=1&' +
               'show_portrait=0color=&fullscreen=1' + autoplay);
