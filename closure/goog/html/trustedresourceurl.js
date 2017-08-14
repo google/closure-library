@@ -209,7 +209,7 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  *        '//www.youtube.com/v/%{videoId}?hl=en&fs=1%{autoplay}'), {
  *        'videoId': videoId,
  *        'autoplay': opt_autoplay ?
- *            goog.string.Const.EMPTY : goog.string.Const.from('&autoplay=1')
+ *            goog.string.Const.from('&autoplay=1') : goog.string.Const.EMPTY
  *    });
  *
  * While this function can be used to create a TrustedResourceUrl from only
