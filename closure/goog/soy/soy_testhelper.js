@@ -26,6 +26,7 @@ goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.soy.data.SanitizedCss');
+goog.require('goog.soy.data.SanitizedTrustedResourceUri');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -77,6 +78,29 @@ function makeSanitizedContent(content, kind) {
       content,
       /** @type {goog.soy.data.SanitizedContentKind} */ (kind));
 }
+
+
+
+/**
+ * Instantiable subclass of SanitizedTrustedResourceUri.
+ *
+ * This is a spoof for trusted resource URI that isn't robust enough to get
+ * through Soy's escaping functions but is good enough for the checks here.
+ *
+ * @param {string} content The URI.
+ * @constructor
+ * @extends {goog.soy.data.SanitizedTrustedResourceUri}
+ * @suppress {missingProvide}
+ * @final
+ */
+function SanitizedTrustedResourceUriSubclass(content) {
+  // IMPORTANT! No superclass chaining to avoid exception being thrown.
+  this.content = content;
+  this.contentKind = goog.soy.data.SanitizedContentKind.TRUSTED_RESOURCE_URI;
+}
+goog.inherits(
+    SanitizedTrustedResourceUriSubclass,
+    goog.soy.data.SanitizedTrustedResourceUri);
 
 
 
@@ -206,6 +230,18 @@ example.sanitizedHttpUrlTemplate = function(data, opt_sb, opt_injectedData) {
   var sanitized = makeSanitizedContent(
       'https://google.com/foo?n=917', goog.soy.data.SanitizedContentKind.URI);
   return sanitized;
+};
+
+
+/**
+ * @param {{name: string}} data
+ * @param {null=} opt_sb
+ * @param {?Object<string, *>=} opt_injectedData
+ * @return {!goog.soy.data.SanitizedTrustedResourceUri}
+ */
+example.sanitizedTrustedResourceUriTemplate = function(
+    data, opt_sb, opt_injectedData) {
+  return new SanitizedTrustedResourceUriSubclass('https://google.com/a.js');
 };
 
 

@@ -363,6 +363,20 @@ goog.soy.data.SanitizedTrustedResourceUri.prototype.contentDir =
     goog.i18n.bidi.Dir.LTR;
 
 /**
+ * Converts sanitized content into TrustedResourceUrl without modification.
+ * @return {!goog.html.TrustedResourceUrl}
+ */
+goog.soy.data.SanitizedTrustedResourceUri.prototype.toTrustedResourceUrl =
+    function() {
+  return goog.html.uncheckedconversions
+      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedContent of kind TRUSTED_RESOURCE_URI produces ' +
+              'TrustedResourceUrl-contract-compliant value.'),
+          this.toString());
+};
+
+/**
  * Checks if the value could be used as the Soy type {trusted_resource_uri}.
  * @param {*} value
  * @return {boolean}

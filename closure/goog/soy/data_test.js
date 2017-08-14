@@ -18,6 +18,7 @@ goog.setTestOnly('goog.soy.dataTest');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 /** @suppress {extraRequire} */
 goog.require('goog.soy.testHelper');
 goog.require('goog.testing.jsunit');
@@ -47,4 +48,12 @@ function testToSafeUrl() {
 function testToSafeStyleSheet() {
   var url = example.sanitizedCssTemplate().toSafeStyleSheet();
   assertEquals('html{display:none}', goog.html.SafeStyleSheet.unwrap(url));
+}
+
+function testToTrustedResourceUrl() {
+  var url;
+
+  url = example.sanitizedTrustedResourceUriTemplate({}).toTrustedResourceUrl();
+  assertEquals(
+      'https://google.com/a.js', goog.html.TrustedResourceUrl.unwrap(url));
 }
