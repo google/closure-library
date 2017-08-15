@@ -111,6 +111,7 @@ var _allTests = [
   'closure/goog/dom/tags_test.html',
   'closure/goog/dom/textrangeiterator_test.html',
   'closure/goog/dom/textrange_test.html',
+  'closure/goog/dom/uri_test.html',
   'closure/goog/dom/vendor_test.html',
   'closure/goog/dom/viewportsizemonitor_test.html',
   'closure/goog/dom/xml_test.html',
