@@ -188,22 +188,6 @@ function testStringParse() {
   assertEquals('number as a string', goog.json.parse('"0"'), '0');
 }
 
-function testStringUnsafeParse() {
-  assertEquals('Empty string', goog.json.unsafeParse('""'), '');
-  assertEquals('whitespace string', goog.json.unsafeParse('" "'), ' ');
-
-  // unicode
-  var str = allChars(32, 1000);
-  var jsonString = goog.json.serialize(str);
-  var a = eval(jsonString);
-  assertEquals('unicode string', goog.json.unsafeParse(jsonString), a);
-
-  assertEquals('true as a string', goog.json.unsafeParse('"true"'), 'true');
-  assertEquals('false as a string', goog.json.unsafeParse('"false"'), 'false');
-  assertEquals('null as a string', goog.json.unsafeParse('"null"'), 'null');
-  assertEquals('number as a string', goog.json.unsafeParse('"0"'), '0');
-}
-
 function testNullParse() {
   assertEquals('null', goog.json.parse(null), null);
   assertEquals('null', goog.json.parse('null'), null);
@@ -211,15 +195,6 @@ function testNullParse() {
   assertNotEquals('0', goog.json.parse('0'), null);
   assertNotEquals('""', goog.json.parse('""'), null);
   assertNotEquals('false', goog.json.parse('false'), null);
-}
-
-function testNullUnsafeParse() {
-  assertEquals('null', goog.json.unsafeParse(null), null);
-  assertEquals('null', goog.json.unsafeParse('null'), null);
-
-  assertNotEquals('0', goog.json.unsafeParse('0'), null);
-  assertNotEquals('""', goog.json.unsafeParse('""'), null);
-  assertNotEquals('false', goog.json.unsafeParse('false'), null);
 }
 
 function testNumberParse() {
@@ -240,24 +215,6 @@ function testNumberParse() {
   assertEquals(1e-50, goog.json.parse('1E-50'));
 }
 
-function testNumberUnsafeParse() {
-  assertEquals('0', goog.json.unsafeParse('0'), 0);
-  assertEquals('12345', goog.json.unsafeParse('12345'), 12345);
-  assertEquals('-12345', goog.json.unsafeParse('-12345'), -12345);
-
-  assertEquals('0.1', goog.json.unsafeParse('0.1'), 0.1);
-
-  // either format is OK
-  assertEquals(1e50, goog.json.unsafeParse('1e50'));
-  assertEquals(1e50, goog.json.unsafeParse('1E50'));
-  assertEquals(1e50, goog.json.unsafeParse('1e+50'));
-  assertEquals(1e50, goog.json.unsafeParse('1E+50'));
-
-  // either format is OK
-  assertEquals(1e-50, goog.json.unsafeParse('1e-50'));
-  assertEquals(1e-50, goog.json.unsafeParse('1E-50'));
-}
-
 function testBooleanParse() {
   assertEquals('true', goog.json.parse('true'), true);
   assertEquals('false', goog.json.parse('false'), false);
@@ -270,20 +227,6 @@ function testBooleanParse() {
   assertNotEquals('"true"', goog.json.parse('"true"'), true);
   assertNotEquals('{}', goog.json.parse('{}'), true);
   assertNotEquals('[]', goog.json.parse('[]'), true);
-}
-
-function testBooleanUnsafeParse() {
-  assertEquals('true', goog.json.unsafeParse('true'), true);
-  assertEquals('false', goog.json.unsafeParse('false'), false);
-
-  assertNotEquals('0', goog.json.unsafeParse('0'), false);
-  assertNotEquals('"false"', goog.json.unsafeParse('"false"'), false);
-  assertNotEquals('null', goog.json.unsafeParse('null'), false);
-
-  assertNotEquals('1', goog.json.unsafeParse('1'), true);
-  assertNotEquals('"true"', goog.json.unsafeParse('"true"'), true);
-  assertNotEquals('{}', goog.json.unsafeParse('{}'), true);
-  assertNotEquals('[]', goog.json.unsafeParse('[]'), true);
 }
 
 function testArrayParse() {
@@ -300,30 +243,6 @@ function testArrayParse() {
 
   // make sure we do not get an array for something that looks like an array
   assertFalse('{length:0}', 'push' in goog.json.parse('{"length":0}'));
-}
-
-function testArrayUnsafeParse() {
-  function arrayEquals(a1, a2) {
-    if (a1.length != a2.length) {
-      return false;
-    }
-    for (var i = 0; i < a1.length; i++) {
-      if (a1[i] != a2[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  assertTrue('[]', arrayEquals(goog.json.unsafeParse('[]'), []));
-  assertTrue('[1]', arrayEquals(goog.json.unsafeParse('[1]'), [1]));
-  assertTrue('[1,2]', arrayEquals(goog.json.unsafeParse('[1,2]'), [1, 2]));
-  assertTrue(
-      '[1,2,3]', arrayEquals(goog.json.unsafeParse('[1,2,3]'), [1, 2, 3]));
-  assertTrue('[[]]', arrayEquals(goog.json.unsafeParse('[[]]')[0], []));
-
-  // make sure we do not get an array for something that looks like an array
-  assertFalse('{length:0}', 'push' in goog.json.unsafeParse('{"length":0}'));
 }
 
 function testObjectParse() {
@@ -347,32 +266,6 @@ function testObjectParse() {
   // make sure we do not get an Object when it is really an array
   assertTrue('[0,1]', 'length' in goog.json.parse('[0,1]'));
 }
-
-function testObjectUnsafeParse() {
-  function objectEquals(a1, a2) {
-    for (var key in a1) {
-      if (a1[key] != a2[key]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  assertTrue('{}', objectEquals(goog.json.unsafeParse('{}'), {}));
-  assertTrue(
-      '{"a":"b"}', objectEquals(goog.json.unsafeParse('{"a":"b"}'), {a: 'b'}));
-  assertTrue(
-      '{"a":"b","c":"d"}',
-      objectEquals(
-          goog.json.unsafeParse('{"a":"b","c":"d"}'), {a: 'b', c: 'd'}));
-  assertTrue(
-      '{" ":" "}',
-      objectEquals(goog.json.unsafeParse('{" ":" "}'), {' ': ' '}));
-
-  // make sure we do not get an Object when it is really an array
-  assertTrue('[0,1]', 'length' in goog.json.unsafeParse('[0,1]'));
-}
-
 
 function testForValidJson() {
   function error_(msg, s) {
@@ -531,9 +424,6 @@ function testTryNativeJson() {
   goog.json.setErrorLogger(function(message, ex) {
     error = message;
   });
-
-  goog.json.unsafeParse('{"a":[,1]}');
-  assertEquals('Invalid JSON: {"a":[,1]}', error);
 
   error = undefined;
   goog.json.parse('{"a":[,1]}');
