@@ -68,8 +68,9 @@ goog.provide('goog.ui.media.Youtube');
 goog.provide('goog.ui.media.YoutubeModel');
 
 goog.require('goog.dom.TagName');
-goog.require('goog.html.uncheckedconversions');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
@@ -338,16 +339,16 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
  *     page.
  */
 goog.ui.media.YoutubeModel.getFlashUrl = function(videoId, opt_autoplay) {
-  var autoplay = opt_autoplay ? '&autoplay=1' : '';
   // YouTube video ids are extracted from youtube URLs, which are user
-  // generated input. the video id is later used to embed a flash object,
-  // which is generated through HTML construction. We goog.string.urlEncode
-  // the video id to make sure the URL is safe to be embedded.
-  return goog.html.uncheckedconversions
-      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Fixed domain, encoded path.'),
-          'https://www.youtube.com/v/' + goog.string.urlEncode(videoId) +
-              '&hl=en&fs=1' + autoplay);
+  // generated input. The video id is later used to embed a flash object,
+  // which is generated through HTML construction.
+  return goog.html.TrustedResourceUrl.format(
+      goog.string.Const.from(
+          'https://www.youtube.com/v/%{v}&hl=en&fs=1%{autoplay}'),
+      {
+        'v': videoId,
+        'autoplay': opt_autoplay ? goog.string.Const.from('&autoplay=1') : ''
+      });
 };
 
 

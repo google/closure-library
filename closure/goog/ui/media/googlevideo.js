@@ -59,8 +59,9 @@
 goog.provide('goog.ui.media.GoogleVideo');
 goog.provide('goog.ui.media.GoogleVideoModel');
 
-goog.require('goog.html.uncheckedconversions');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaModel');
@@ -262,12 +263,14 @@ goog.ui.media.GoogleVideoModel.buildUrl = function(videoId) {
  *     page.
  */
 goog.ui.media.GoogleVideoModel.buildFlashUrl = function(videoId, opt_autoplay) {
-  var autoplay = opt_autoplay ? '&autoplay=1' : '';
-  return goog.html.uncheckedconversions
-      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Fixed domain, encoded path.'),
-          'https://video.google.com/googleplayer.swf?docid=' +
-              goog.string.urlEncode(videoId) + '&hl=en&fs=true' + autoplay);
+  return goog.html.TrustedResourceUrl.format(
+      goog.string.Const.from(
+          'https://video.google.com/googleplayer.swf?docid=%{docid}' +
+          '&hl=en&fs=true%{autoplay}'),
+      {
+        'docid': videoId,
+        'autoplay': opt_autoplay ? goog.string.Const.from('&autoplay=1') : ''
+      });
 };
 
 
