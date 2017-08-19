@@ -121,6 +121,7 @@ goog.json.setErrorLogger = function(errorLogger) {
  * @param {*} s The JSON string to parse.
  * @throws Error if s is invalid JSON.
  * @return {Object} The object generated from the JSON string, or null.
+ * @deprecated Use JSON.parse.
  */
 goog.json.parse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
