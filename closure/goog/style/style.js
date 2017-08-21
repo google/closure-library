@@ -32,7 +32,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.vendor');
 goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -1323,21 +1322,6 @@ goog.style.uninstallStyles = function(styleSheet) {
   var node = styleSheet.ownerNode || styleSheet.owningElement ||
       /** @type {Element} */ (styleSheet);
   goog.dom.removeNode(node);
-};
-
-
-/**
- * Sets the content of a style element.  The style element can be any valid
- * style element.  This element will have its content completely replaced by
- * the stylesString.
- * @param {Element|StyleSheet} element A stylesheet element as returned by
- *     installStyles.
- * @param {string} stylesString The new content of the stylesheet.
- * @deprecated Use {@link #setSafeStyleSheet} instead.
- */
-goog.style.setStyles = function(element, stylesString) {
-  goog.style.setSafeStyleSheet(/** @type {!Element|!StyleSheet} */ (element),
-      goog.html.legacyconversions.safeStyleSheetFromString(stylesString));
 };
 
 
