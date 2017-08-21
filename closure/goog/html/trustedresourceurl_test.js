@@ -163,12 +163,17 @@ function testFromConstants() {
 
 function testFormatWithParams() {
   var url = goog.html.TrustedResourceUrl.formatWithParams(
-      goog.string.Const.from('https://example.com/'), {}, {'a': 'x'});
-  assertEquals('https://example.com/?a=x', url.getTypedStringValue());
+      goog.string.Const.from('https://example.com/'), {}, {'a': '&'});
+  assertEquals('https://example.com/?a=%26', url.getTypedStringValue());
+
   url = goog.html.TrustedResourceUrl.formatWithParams(
       goog.string.Const.from('https://example.com/%{file}'), {'file': 'abc'},
       {'b': 1, 'c': null, 'd': undefined});
   assertEquals('https://example.com/abc?b=1', url.getTypedStringValue());
+
+  url = goog.html.TrustedResourceUrl.formatWithParams(
+      goog.string.Const.from('https://example.com/'), {}, {'a': ['x', 'y']});
+  assertEquals('https://example.com/?a=x&a=y', url.getTypedStringValue());
 }
 
 

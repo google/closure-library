@@ -319,9 +319,10 @@ goog.html.TrustedResourceUrl.BASE_URL_ =
  *     goog.string.Const values are interpolated without encoding.
  * @param {!Object<string, *>} params Parameters to add to URL. Parameters with
  *     value {@code null} or {@code undefined} are skipped. Both keys and values
- *     are encoded. Note that JavaScript doesn't guarantee the order of values
- *     in an object which might result in non-deterministic order of the
- *     parameters. However, browsers currently preserve the order.
+ *     are encoded. If the value is an array then the same parameter is added
+ *     for every element in the array. Note that JavaScript doesn't guarantee
+ *     the order of values in an object which might result in non-deterministic
+ *     order of the parameters. However, browsers currently preserve the order.
  * @return {!goog.html.TrustedResourceUrl}
  * @throws {!Error} On an invalid format string or if a label used in the
  *     the format string is not present in args.
@@ -330,12 +331,15 @@ goog.html.TrustedResourceUrl.formatWithParams = function(format, args, params) {
   var url = goog.html.TrustedResourceUrl.format_(format, args);
   var separator = /\?/.test(url) ? '&' : '?';
   for (var key in params) {
-    if (params[key] == null) {
-      continue;
+    var values = goog.isArray(params[key]) ? params[key] : [params[key]];
+    for (var i = 0; i < values.length; i++) {
+      if (values[i] == null) {
+        continue;
+      }
+      url += separator + encodeURIComponent(key) + '=' +
+          encodeURIComponent(String(values[i]));
+      separator = '&';
     }
-    url += separator + encodeURIComponent(key) + '=' +
-        encodeURIComponent(String(params[key]));
-    separator = '&';
   }
   return goog.html.TrustedResourceUrl
       .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
