@@ -82,7 +82,8 @@ goog.events.BrowserFeature = {
           'ontouchstart' in document.documentElement) ||
        // IE10 uses non-standard touch events, so it has a different check.
        !!(goog.global['navigator'] &&
-          goog.global['navigator']['msMaxTouchPoints'])),
+          (goog.global['navigator']['maxTouchPoints'] ||
+           goog.global['navigator']['msMaxTouchPoints']))),
 
   /**
    * Whether addEventListener supports {passive: true}.
