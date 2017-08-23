@@ -26,7 +26,6 @@ var _allTests = [
   'closure/goog/async/run_test.html',
   'closure/goog/async/throttle_test.html',
   'closure/goog/async/workqueue_test.html',
-  'closure/goog/base_debug_loader_test.html',
   'closure/goog/base_module_test.html',
   'closure/goog/base_test.html',
   'closure/goog/color/alpha_test.html',
