@@ -36,6 +36,7 @@ goog.provide('goog.testing.TestRunner');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.testing.TestCase');
 
 
@@ -402,7 +403,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       a.innerHTML = '(run individually)';
       a.style.fontSize = '0.8em';
       a.style.color = '#888';
-      a.href = href;
+      goog.dom.safe.setAnchorHref(a, href);
       div.appendChild(document.createTextNode(' '));
       div.appendChild(a);
     }

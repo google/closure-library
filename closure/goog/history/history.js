@@ -176,6 +176,7 @@ goog.require('goog.history.Event');
 goog.require('goog.history.EventType');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.labs.userAgent.device');
 goog.require('goog.memoize');
 goog.require('goog.string');
@@ -735,7 +736,8 @@ goog.History.prototype.setHash_ = function(token, opt_replace) {
     if (opt_replace) {
       loc.replace(url);
     } else {
-      loc.href = url;
+      goog.dom.safe.setLocationHref(
+          loc, goog.html.legacyconversions.safeUrlFromString(url));
     }
   }
 };
@@ -789,7 +791,7 @@ goog.History.prototype.setIframeToken_ = function(
         if (opt_replace) {
           contentWindow.location.replace(url);
         } else {
-          contentWindow.location.href = url;
+          goog.dom.safe.setLocationHref(contentWindow.location, url);
         }
       }
     }
