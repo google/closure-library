@@ -119,7 +119,7 @@ goog.format.JsonPrettyPrinter.prototype.format_ = function(json) {
       return [];
     }
     // Try to coerce a string into a JSON object.
-    json = goog.json.parse(json);
+    json = JSON.parse(json);
   }
   var outputBuffer = [];
   this.printObject_(json, outputBuffer, 0);
