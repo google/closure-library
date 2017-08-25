@@ -31,7 +31,6 @@ goog.require('goog.ds.FastDataNode');
 goog.require('goog.ds.LoadState');
 goog.require('goog.ds.logger');
 goog.require('goog.events');
-goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
@@ -175,7 +174,7 @@ goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
     // Parse result.
 
     try {
-      var jsonObj = goog.json.parse(text);
+      var jsonObj = /** @type {!Object} */ (JSON.parse(text));
       this.extendWith(jsonObj);
       this.loadState_ = goog.ds.LoadState.LOADED;
     } catch (ex) {
