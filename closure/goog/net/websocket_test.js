@@ -106,6 +106,23 @@ function testOpenAndClose() {
   assertFalse(webSocket.isOpen());
 }
 
+function testOpenAndCloseWithOptions() {
+  webSocket = new goog.net.WebSocket({
+    autoReconnect: true,
+    getNextReconnect: linearBackOff,
+    binaryType: goog.net.WebSocket.BinaryType.ARRAY_BUFFER
+  });
+  assertFalse(webSocket.isOpen());
+  webSocket.open(testUrl);
+  var ws = webSocket.webSocket_;
+  simulateOpenEvent(ws);
+  assertTrue(webSocket.isOpen());
+  assertEquals(testUrl, ws.url);
+  webSocket.close();
+  simulateCloseEvent(ws);
+  assertFalse(webSocket.isOpen());
+}
+
 function testReconnectionDisabled() {
   // Construct the web socket and disable reconnection.
   webSocket = new goog.net.WebSocket(false);
