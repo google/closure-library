@@ -39,11 +39,13 @@ goog.debug.Error = function(opt_msg) {
   } else {
     var stack = new Error().stack;
     if (stack) {
+      /** @override */
       this.stack = stack;
     }
   }
 
   if (opt_msg) {
+    /** @override */
     this.message = String(opt_msg);
   }
 
