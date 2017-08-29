@@ -25,7 +25,6 @@ goog.provide('goog.proto2.TextFormatSerializer');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.json');
 goog.require('goog.math');
 goog.require('goog.object');
 goog.require('goog.proto2.FieldDescriptor');
@@ -1037,10 +1036,10 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeString_ = function() {
     return null;
   }
 
-  var stringValue = goog.json.parse(value).toString();
+  var stringValue = JSON.parse(/** @type {string} */ (value)).toString();
   while (this.lookingAtType_(types.STRING)) {
     value = this.consumeToken_(types.STRING);
-    stringValue += goog.json.parse(value).toString();
+    stringValue += JSON.parse(/** @type {string} */ (value)).toString();
   }
 
   return stringValue;
