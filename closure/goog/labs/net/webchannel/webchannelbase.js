@@ -1428,7 +1428,7 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   }
 
   this.backChannelRequest_.xmlHttpGet(
-      uri, true /* decodeChunks */, this.hostPrefix_, false /* opt_noClose */);
+      uri, true /* decodeChunks */, this.hostPrefix_);
 
   this.channelDebug_.debug('New Request created');
 };
