@@ -76,6 +76,8 @@ var _allTests = [
   'closure/goog/debug/logrecordserializer_test.html',
   'closure/goog/debug/tracer_test.html',
   'closure/goog/defineclass_test.html',
+  'closure/goog/delegate/delegateregistry_test.html',
+  'closure/goog/delegate/delegates_test.html',
   'closure/goog/disposable/disposable_test.html',
   'closure/goog/dom/abstractrange_test.html',
   'closure/goog/dom/animationframe/animationframe_test.html',
