@@ -57,23 +57,21 @@ goog.json.hybrid.stringify =
  * @param {string} jsonString JSON string to parse.
  * @param {function(string):Object} fallbackParser Fallback JSON parser used
  *     if native
- * @return {!Object} Resulting JSON object.
+ * @return {?Object} Resulting JSON object.
  * @private
  */
 goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
   if (goog.global.JSON) {
     try {
       var obj = goog.global.JSON.parse(jsonString);
-      goog.asserts.assertObject(obj);
-      return obj;
+      goog.asserts.assert(typeof obj == 'object');
+      return /** @type {?Object} */ (obj);
     } catch (e) {
       // Native parse failed.  Fall through to retry with goog.json.parse.
     }
   }
 
-  var obj = fallbackParser(jsonString);
-  goog.asserts.assert(obj);
-  return obj;
+  return fallbackParser(jsonString);
 };
 
 
@@ -81,7 +79,7 @@ goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
  * Attempts to parse the JSON string natively, falling back to
  * {@code goog.json.parse} if unsuccessful.
  * @param {string} jsonString JSON string to parse.
- * @return {!Object} Resulting JSON object.
+ * @return {?Object} Resulting JSON object.
  */
 goog.json.hybrid.parse =
     goog.json.USE_NATIVE_JSON ? goog.global['JSON']['parse'] : function(
