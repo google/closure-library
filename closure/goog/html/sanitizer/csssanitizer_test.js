@@ -26,6 +26,7 @@ goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+goog.require('goog.userAgent.product.isVersion');
 
 
 /**
@@ -38,11 +39,11 @@ function isIE8() {
 
 
 /**
- * @return {boolean} Returns if the browser is Safari.
+ * @return {boolean} Returns if the browser is Safari and is before version 10.
  * @private
  */
-function isSafari() {
-  return goog.userAgent.product.SAFARI;
+function isSafari9OrOlder() {
+  return goog.userAgent.product.SAFARI && !goog.userAgent.product.isVersion(10);
 }
 
 
@@ -130,8 +131,8 @@ function testValidCss() {
 
   actualCSS = 'quotes: "{" "}" "<" ">"';
   expectedCSS = 'quotes: "{" "}" "<" ">";';
-  if (isSafari()) {
-    // TODO(danesh): Figure out what is wrong with WebKit (Safari).
+  if (isSafari9OrOlder()) {
+    // We never figured out why Safari didn't work here, but it's obsolete now.
     expectedCSS = 'quotes: \'{\';';
   }
   assertCSSTextEquals(expectedCSS, getSanitizedInlineStyle(actualCSS));
