@@ -36,12 +36,7 @@ goog.require('goog.userAgent.product.isVersion');
  */
 goog.style.bidi.getScrollLeft = function(element) {
   var isRtl = goog.style.isRightToLeft(element);
-  var isSafari10Plus =
-      goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(10);
-  var isIOS10Plus = goog.userAgent.IOS && goog.userAgent.platform.isVersion(10);
-  if (isRtl && (goog.userAgent.GECKO || isSafari10Plus || isIOS10Plus)) {
-    // ScrollLeft starts at 0 and then goes negative as the element is scrolled
-    // towards the left.
+  if (isRtl && goog.style.bidi.usesNegativeScrollLeftInRtl_()) {
     return -element.scrollLeft;
   } else if (
       isRtl &&
@@ -156,8 +151,7 @@ goog.style.bidi.setScrollOffset = function(element, offsetStart) {
   // Otherwise, in RTL, we need to account for different browser behavior.
   if (!goog.style.isRightToLeft(element)) {
     element.scrollLeft = offsetStart;
-  } else if (goog.userAgent.GECKO) {
-    // Negative scroll-left positions in RTL.
+  } else if (goog.style.bidi.usesNegativeScrollLeftInRtl_()) {
     element.scrollLeft = -offsetStart;
   } else if (
       !(goog.userAgent.EDGE_OR_IE && goog.userAgent.isVersionOrHigher('8'))) {
@@ -169,6 +163,20 @@ goog.style.bidi.setScrollOffset = function(element, offsetStart) {
   } else {
     element.scrollLeft = offsetStart;
   }
+};
+
+
+/**
+ * @return {boolean} Whether the current browser returns negative scrollLeft
+ *     values for RTL elements. If true, then scrollLeft starts at 0 and then
+ *     becomes more negative as the element is scrolled towards the left.
+ * @private
+ */
+goog.style.bidi.usesNegativeScrollLeftInRtl_ = function() {
+  var isSafari10Plus =
+      goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(10);
+  var isIOS10Plus = goog.userAgent.IOS && goog.userAgent.platform.isVersion(10);
+  return goog.userAgent.GECKO || isSafari10Plus || isIOS10Plus;
 };
 
 
