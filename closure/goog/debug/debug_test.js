@@ -119,3 +119,24 @@ function testEnhanceErrorWithContext_combinedContext() {
       {a: '123', b: '456', c: '789'},
       goog.debug.errorcontext.getErrorContext(errorWithContext));
 }
+
+
+function testFreeze_nonDebug() {
+  if (goog.DEBUG && typeof Object.freeze == 'function') return;
+  var a = {};
+  assertEquals(a, goog.debug.freeze(a));
+  a.foo = 42;
+  assertEquals(42, a.foo);
+}
+
+
+function testFreeze_debug() {
+  if (goog.DEBUG || typeof Object.freeze != 'function') return;
+  var a = {};
+  assertEquals(a, goog.debug.freeze(a));
+  try {
+    a.foo = 42;
+  } catch (expectedInStrictMode) {
+  }
+  assertUndefined(a.foo);
+}

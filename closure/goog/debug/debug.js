@@ -630,3 +630,16 @@ goog.debug.fnNameCache_ = {};
  * @private
  */
 goog.debug.fnNameResolver_;
+
+
+/**
+ * Freezes the given object, but only in debug mode (and in browsers that
+ * support it).  Note that this is a shallow freeze, so for deeply nested
+ * objects it must be called at every level to ensure deep immutability.
+ * @param {T} arg
+ * @return {T}
+ * @template T
+ */
+goog.debug.freeze = goog.DEBUG && Object.freeze || function(arg) {
+  return arg;
+};
