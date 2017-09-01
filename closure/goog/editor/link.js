@@ -21,12 +21,10 @@
 goog.provide('goog.editor.Link');
 
 goog.require('goog.array');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Field');
@@ -120,7 +118,7 @@ goog.editor.Link.prototype.isNew = function() {
  * @param {string} url A URL.
  */
 goog.editor.Link.prototype.initializeUrl = function(url) {
-  goog.dom.safe.setAnchorHref(goog.asserts.assert(this.getAnchor()), url);
+  this.getAnchor().href = url;
 };
 
 
@@ -147,7 +145,7 @@ goog.editor.Link.prototype.removeLink = function() {
  */
 goog.editor.Link.prototype.setTextAndUrl = function(newText, newUrl) {
   var anchor = this.getAnchor();
-  goog.dom.safe.setAnchorHref(goog.asserts.assert(anchor), newUrl);
+  anchor.href = newUrl;
 
   // If the text did not change, don't update link text.
   var currentText = this.getCurrentText();

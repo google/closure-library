@@ -22,9 +22,7 @@
 goog.provide('goog.editor.plugins.LinkDialogPlugin');
 
 goog.require('goog.array');
-goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.safe');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.EventHandler');
@@ -333,8 +331,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
   this.touchUpAnchorOnOk_(anchor, e);
   var extraAnchors = this.currentLink_.getExtraAnchors();
   for (var i = 0; i < extraAnchors.length; ++i) {
-    goog.dom.safe.setAnchorHref(
-        goog.asserts.assert(extraAnchors[i]), anchor.href);
+    extraAnchors[i].href = anchor.href;
     this.touchUpAnchorOnOk_(extraAnchors[i], e);
   }
 
