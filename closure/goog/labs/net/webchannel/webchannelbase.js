@@ -930,8 +930,9 @@ WebChannelBase.prototype.sendMap = function(map, opt_context) {
 
   this.outgoingMaps_.push(
       new Wire.QueuedMap(this.nextMapId_++, map, opt_context));
-  if (this.state_ == WebChannelBase.State.OPENING ||
-      this.state_ == WebChannelBase.State.OPENED) {
+
+  // Messages need be buffered during OPENING to avoid server-side race
+  if (this.state_ == WebChannelBase.State.OPENED) {
     this.ensureForwardChannel_();
   }
 };
