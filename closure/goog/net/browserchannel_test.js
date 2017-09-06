@@ -1272,7 +1272,7 @@ function testCreateXhrIo() {
 
 
 function testSetParser() {
-  var recordParse = goog.testing.recordFunction(goog.json.parse);
+  var recordParse = goog.testing.recordFunction(JSON.parse);
   var parser = {};
   parser.parse = recordParse;
   browserChannel.setParser(parser);

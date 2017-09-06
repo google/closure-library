@@ -23,7 +23,6 @@ goog.require('goog.array');
 goog.require('goog.dom.xml');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
-goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
@@ -781,7 +780,7 @@ goog.testing.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
     responseText = responseText.substring(opt_xssiPrefix.length);
   }
 
-  return goog.json.parse(responseText);
+  return /** @type {!Object} */ (JSON.parse(responseText));
 };
 
 

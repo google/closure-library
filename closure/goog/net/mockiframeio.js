@@ -18,7 +18,6 @@
 
 goog.provide('goog.net.MockIFrameIo');
 goog.require('goog.events.EventTarget');
-goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
@@ -248,7 +247,7 @@ goog.net.MockIFrameIo.prototype.getResponseText = function() {
  * @return {Object} The parsed content.
  */
 goog.net.MockIFrameIo.prototype.getResponseJson = function() {
-  return goog.json.parse(this.lastContent_);
+  return /** @type {!Object} */ (JSON.parse(this.lastContent_));
 };
 
 
