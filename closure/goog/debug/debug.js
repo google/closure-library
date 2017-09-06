@@ -633,6 +633,18 @@ goog.debug.fnNameResolver_;
 
 
 /**
+ * Private internal function to support goog.debug.freeze.
+ * @param {T} arg
+ * @return {T}
+ * @template T
+ * @private
+ */
+goog.debug.freezeInternal_ = goog.DEBUG && Object.freeze || function(arg) {
+  return arg;
+};
+
+
+/**
  * Freezes the given object, but only in debug mode (and in browsers that
  * support it).  Note that this is a shallow freeze, so for deeply nested
  * objects it must be called at every level to ensure deep immutability.
@@ -640,6 +652,13 @@ goog.debug.fnNameResolver_;
  * @return {T}
  * @template T
  */
-goog.debug.freeze = goog.DEBUG && Object.freeze || function(arg) {
-  return arg;
+goog.debug.freeze = function(arg) {
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // freezeInternal_ from the compiler so that the entire call can be
+  // removed if the result is not used.
+  return {
+    valueOf: function() {
+      return goog.debug.freezeInternal_(arg);
+    }
+  }.valueOf();
 };
