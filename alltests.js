@@ -156,6 +156,7 @@ var _allTests = [
   'closure/goog/events/eventtarget_via_googevents_test.html',
   'closure/goog/events/eventtarget_via_w3cinterface_test.html',
   'closure/goog/events/event_test.html',
+  'closure/goog/events/eventtype_test.html',
   'closure/goog/events/filedrophandler_test.html',
   'closure/goog/events/imehandler_test.html',
   'closure/goog/events/inputhandler_test.html',

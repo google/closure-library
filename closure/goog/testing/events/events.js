@@ -427,7 +427,7 @@ goog.testing.events.fireMouseDownEvent = function(
 
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IEButtonMap[button] :
+      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
       button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEDOWN, target, button, opt_coords,
@@ -451,7 +451,7 @@ goog.testing.events.fireMouseUpEvent = function(
     target, opt_button, opt_coords, opt_eventProperties) {
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IEButtonMap[button] :
+      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
       button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEUP, target, button, opt_coords,
@@ -544,7 +544,7 @@ goog.testing.events.fireContextMenuEvent = function(target, opt_coords) {
   var contextmenu =
       new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
   contextmenu.button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IEButtonMap[button] :
+      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
       button;
   contextmenu.ctrlKey = goog.userAgent.MAC;
   goog.testing.events.setEventClientXY_(contextmenu, opt_coords);
