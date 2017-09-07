@@ -50,9 +50,6 @@ goog.require('goog.string');
  * change time zone setting, dynamic retrieval should be the method to use.
  * In case only time zone offset is known, there is a decent fallback
  * that only use the time zone offset to create a TimeZone object.
- * A whole set of time zone information array was available under
- * http://go/js_locale_data. It is generated based on CLDR/ICU and
- * Olson time zone data base, and will be updated timely.
  *
  * @constructor
  * @final
