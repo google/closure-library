@@ -102,12 +102,7 @@ goog.net.WebSocket.BinaryType = {
 };
 
 
-/**
- * @record
- * TODO(b/64952649): Remove this suppression needed to prevent 'interface
- * functions must have an empty body' lint message.
- * @suppress{lintChecks}
- * */
+/** @record */
 goog.net.WebSocket.Options = function() {
 
   /**
