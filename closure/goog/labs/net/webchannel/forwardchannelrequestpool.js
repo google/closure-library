@@ -30,6 +30,8 @@ goog.scope(function() {
 /** @suppress {missingRequire} type checking only */
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 
+/** @suppress {missingRequire} type checking only */
+var Wire = goog.labs.net.webChannel.Wire;
 
 
 /**
@@ -79,6 +81,13 @@ goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
    * @private {ChannelRequest}
    */
   this.request_ = null;
+
+  /**
+   * Saved pending messages when the pool is cancelled.
+   *
+   * @private {!Array<Wire.QueuedMap>}
+   */
+  this.pendingMessages_ = [];
 };
 
 var ForwardChannelRequestPool =
@@ -228,6 +237,9 @@ ForwardChannelRequestPool.prototype.removeRequest = function(req) {
  * Clears the pool and cancel all the pending requests.
  */
 ForwardChannelRequestPool.prototype.cancel = function() {
+  // save any pending messages
+  this.pendingMessages_ = this.getPendingMessages();
+
   if (this.request_) {
     this.request_.cancel();
     this.request_ = null;
@@ -248,6 +260,45 @@ ForwardChannelRequestPool.prototype.cancel = function() {
 ForwardChannelRequestPool.prototype.hasPendingRequest = function() {
   return (this.request_ != null) ||
       (this.requestPool_ != null && !this.requestPool_.isEmpty());
+};
+
+
+/**
+ * @return {!Array<Wire.QueuedMap>} All the pending messages from the pool,
+ *     as a new array.
+ */
+ForwardChannelRequestPool.prototype.getPendingMessages = function() {
+  if (this.request_ != null) {
+    return this.pendingMessages_.concat(this.request_.getPendingMessages());
+  }
+
+  if (this.requestPool_ != null && !this.requestPool_.isEmpty()) {
+    var result = this.pendingMessages_;
+    goog.array.forEach(this.requestPool_.getValues(), function(val) {
+      result = result.concat(val.getPendingMessages());
+    });
+    return result;
+  }
+
+  return goog.array.clone(this.pendingMessages_);
+};
+
+
+/**
+ * Records pending messages, e.g. when a request receives a failed response.
+ *
+ * @param {!Array<Wire.QueuedMap>} messages Pending messages.
+ */
+ForwardChannelRequestPool.prototype.addPendingMessages = function(messages) {
+  this.pendingMessages_ = this.pendingMessages_.concat(messages);
+};
+
+
+/**
+ * Clears any recorded pending messages.
+ */
+ForwardChannelRequestPool.prototype.clearPendingMessages = function() {
+  this.pendingMessages_.length = 0;
 };
 
 

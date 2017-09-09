@@ -169,6 +169,14 @@ goog.labs.net.webChannel.ChannelRequest = function(
   this.postData_ = null;
 
   /**
+   * An array of pending messages that we have either received a non-successful
+   * response for, or no response at all, and which therefore may or may not
+   * have been received by the server.
+   * @private {!Array<goog.labs.net.webChannel.Wire.QueuedMap>}
+   */
+  this.pendingMessages_ = [];
+
+  /**
    * The XhrLte request if the request is using XMLHTTP
    * @private {goog.net.XhrIo}
    */
@@ -401,6 +409,28 @@ ChannelRequest.prototype.setTimeout = function(timeout) {
  */
 ChannelRequest.prototype.setReadyStateChangeThrottle = function(throttle) {
   this.readyStateChangeThrottleMs_ = throttle;
+};
+
+
+/**
+ * Sets the pending messages that this request is handling.
+ *
+ * @param {!Array<goog.labs.net.webChannel.Wire.QueuedMap>} pendingMessages
+ *     The pending messages for this request.
+ */
+ChannelRequest.prototype.setPendingMessages = function(pendingMessages) {
+  this.pendingMessages_ = pendingMessages;
+};
+
+
+/**
+ * Gets the pending messages that this request is handling, in case of a retry.
+ *
+ * @return {!Array<goog.labs.net.webChannel.Wire.QueuedMap>} The pending
+ *     messages for this request.
+ */
+ChannelRequest.prototype.getPendingMessages = function() {
+  return this.pendingMessages_;
 };
 
 
