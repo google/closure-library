@@ -340,6 +340,27 @@ goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
 
 
 /**
+ * Checks whether the value is a finite number, if goog.asserts.ENABLE_ASSERTS
+ * is true.
+ *
+ * @param {*} value The value to check.
+ * @param {string=} opt_message Error message in case of failure.
+ * @param {...*} var_args The items to substitute into the failure message.
+ * @throws {goog.asserts.AssertionError} When the value is not a number, or is
+ *     a non-finite number such as NaN, Infinity or -Infinity.
+ * @return {number} The value initially passed in.
+ */
+goog.asserts.assertFinite = function(value, opt_message, var_args) {
+  if (goog.asserts.ENABLE_ASSERTS &&
+      (typeof value != 'number' || !isFinite(value))) {
+    goog.asserts.doAssertFailure_(
+        'Expected %s to be a finite number but it is not.', [value],
+        opt_message, Array.prototype.slice.call(arguments, 2));
+  }
+  return /** @type {number} */ (value);
+};
+
+/**
  * Checks that no enumerable keys are present in Object.prototype. Such keys
  * would break most code that use {@code for (var ... in ...)} loops.
  */
