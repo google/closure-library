@@ -13,267 +13,251 @@
 // limitations under the License.
 
 /**
- * @fileoverview Unit tests for
- * goog.labs.net.webChannel.ForwardChannelRequestPool.
+ * @fileoverview Unit tests for ForwardChannelRequestPool.
  * @suppress {accessControls} Private methods are accessed for test purposes.
  *
  */
 
+goog.module('goog.labs.net.webChannel.ForwardChannelRequestPoolTest');
+goog.setTestOnly('goog.labs.net.webChannel.ForwardChannelRequestPoolTest');
+
+var ChannelRequest = goog.require('goog.labs.net.webChannel.ChannelRequest');
+var ForwardChannelRequestPool = goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
+var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+var testSuite = goog.require('goog.testing.testSuite');
+
+var propertyReplacer = new PropertyReplacer();
+var req = new ChannelRequest(null, null);
+
+testSuite({
+  shouldRunTests: function() {
+    return ChannelRequest.supportsXhrStreaming();
+  },
+
+  setUp: function() {},
+
+  tearDown: function() {
+    propertyReplacer.reset();
+  },
+
+  stubSpdyCheck: function(spdyEnabled) {
+    propertyReplacer.set(
+        ForwardChannelRequestPool, 'isSpdyEnabled_', function() {
+          return spdyEnabled;
+        });
+  },
+
+  testSpdyEnabled: function() {
+    this.stubSpdyCheck(true);
+
+    var pool = new ForwardChannelRequestPool();
+    assertFalse(pool.isFull());
+    assertEquals(0, pool.getRequestCount());
+    pool.addRequest(req);
+    assertTrue(pool.hasPendingRequest());
+    assertTrue(pool.hasRequest(req));
+    pool.removeRequest(req);
+    assertFalse(pool.hasPendingRequest());
+
+    for (var i = 0; i < pool.getMaxSize(); i++) {
+      pool.addRequest(new ChannelRequest(null, null));
+    }
+    assertTrue(pool.isFull());
+
+    // do not fail
+    pool.addRequest(req);
+    assertTrue(pool.isFull());
+  },
+
+  testSpdyNotEnabled: function() {
+    this.stubSpdyCheck(false);
+
+    var pool = new ForwardChannelRequestPool();
+    assertFalse(pool.isFull());
+    assertEquals(0, pool.getRequestCount());
+    pool.addRequest(req);
+    assertTrue(pool.hasPendingRequest());
+    assertTrue(pool.hasRequest(req));
+    assertTrue(pool.isFull());
+    pool.removeRequest(req);
+    assertFalse(pool.hasPendingRequest());
+
+    // do not fail
+    pool.addRequest(req);
+    assertTrue(pool.isFull());
+  },
+
+  testApplyClientProtocol: function() {
+    this.stubSpdyCheck(false);
+
+    var pool = new ForwardChannelRequestPool();
+    assertEquals(1, pool.getMaxSize());
+    pool.applyClientProtocol('spdy/3');
+    assertTrue(pool.getMaxSize() > 1);
+    pool.applyClientProtocol('foo-bar');  // no effect
+    assertTrue(pool.getMaxSize() > 1);
+
+    pool = new ForwardChannelRequestPool();
+    assertEquals(1, pool.getMaxSize());
+    pool.applyClientProtocol('quic/x');
+    assertTrue(pool.getMaxSize() > 1);
+
+    pool = new ForwardChannelRequestPool();
+    assertEquals(1, pool.getMaxSize());
+    pool.applyClientProtocol('h2');
+    assertTrue(pool.getMaxSize() > 1);
 
-goog.provide('goog.labs.net.webChannel.forwardChannelRequestPoolTest');
+    this.stubSpdyCheck(true);
+
+    pool = new ForwardChannelRequestPool();
+    assertTrue(pool.getMaxSize() > 1);
+    pool.applyClientProtocol('foo/3');  // no effect
+    assertTrue(pool.getMaxSize() > 1);
+  },
 
-goog.require('goog.labs.net.webChannel.ChannelRequest');
-goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+  testPendingMessagesWithSpdyDisabled: function() {
+    this.stubSpdyCheck(false);
 
-goog.setTestOnly('goog.labs.net.webChannel.forwardChannelRequestPoolTest');
+    var pool = new ForwardChannelRequestPool();
+    assertEquals(1, pool.getMaxSize());
+    assertEquals(0, pool.getPendingMessages().length);
 
+    var req = new ChannelRequest(null, null);
+    pool.addRequest(req);
 
-var propertyReplacer = new goog.testing.PropertyReplacer();
-var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
+    assertEquals(0, pool.getPendingMessages().length);
 
+    req.setPendingMessages([null, null]);  // null represents the message
+    assertEquals(2, pool.getPendingMessages().length);
 
-function shouldRunTests() {
-  return goog.labs.net.webChannel.ChannelRequest.supportsXhrStreaming();
-}
+    req = new ChannelRequest(null, null);
+    req.setPendingMessages([null]);
+    pool.addRequest(req);
+    assertEquals(1, pool.getPendingMessages().length);
 
+    pool.removeRequest(req);
+    assertEquals(0, pool.getPendingMessages().length);
+  },
 
-function setUp() {}
+  testCanelAndPendingMessagesWithSpdyDisabled: function() {
+    this.stubSpdyCheck(false);
 
+    var pool = new ForwardChannelRequestPool();
 
-function tearDown() {
-  propertyReplacer.reset();
-}
+    var req = new ChannelRequest(null, null);
+    req.setPendingMessages([null, null]);  // null represents the message
+    pool.addRequest(req);
+    assertEquals(2, pool.getPendingMessages().length);
 
+    var req1 = new ChannelRequest(null, null);
+    pool.addRequest(req1);
+    req1.setPendingMessages([null]);
+    assertEquals(1, pool.getPendingMessages().length);
 
-function stubSpdyCheck(spdyEnabled) {
-  propertyReplacer.set(
-      goog.labs.net.webChannel.ForwardChannelRequestPool, 'isSpdyEnabled_',
-      function() { return spdyEnabled; });
-}
+    pool.cancel();
+    assertEquals(0, pool.getRequestCount());
 
+    assertEquals(1, pool.getPendingMessages().length);
+  },
 
-function testSpdyEnabled() {
-  stubSpdyCheck(true);
+  testAddPendingMessagesWithSpdyEnabled: function() {
+    this.stubSpdyCheck(false);
 
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertFalse(pool.isFull());
-  assertEquals(0, pool.getRequestCount());
-  pool.addRequest(req);
-  assertTrue(pool.hasPendingRequest());
-  assertTrue(pool.hasRequest(req));
-  pool.removeRequest(req);
-  assertFalse(pool.hasPendingRequest());
+    var pool = new ForwardChannelRequestPool();
 
-  for (var i = 0; i < pool.getMaxSize(); i++) {
-    pool.addRequest(new goog.labs.net.webChannel.ChannelRequest(null, null));
-  }
-  assertTrue(pool.isFull());
+    pool.addPendingMessages([null, null]);
+    assertEquals(2, pool.getPendingMessages().length);
 
-  // do not fail
-  pool.addRequest(req);
-  assertTrue(pool.isFull());
-}
+    var req = new ChannelRequest(null, null);
+    req.setPendingMessages([null, null]);  // null represents the message
+    pool.addRequest(req);
 
+    assertEquals(4, pool.getPendingMessages().length);
 
-function testSpdyNotEnabled() {
-  stubSpdyCheck(false);
+    pool.addPendingMessages([null]);
+    assertEquals(5, pool.getPendingMessages().length);
+  },
 
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertFalse(pool.isFull());
-  assertEquals(0, pool.getRequestCount());
-  pool.addRequest(req);
-  assertTrue(pool.hasPendingRequest());
-  assertTrue(pool.hasRequest(req));
-  assertTrue(pool.isFull());
-  pool.removeRequest(req);
-  assertFalse(pool.hasPendingRequest());
+  testPendingMessagesWithSpdyEnabled: function() {
+    this.stubSpdyCheck(true);
 
-  // do not fail
-  pool.addRequest(req);
-  assertTrue(pool.isFull());
-}
+    var pool = new ForwardChannelRequestPool();
+    assertTrue(pool.getMaxSize() > 1);
+    assertEquals(0, pool.getPendingMessages().length);
 
+    var req = new ChannelRequest(null, null);
+    pool.addRequest(req);
 
-function testApplyClientProtocol() {
-  stubSpdyCheck(false);
+    assertEquals(0, pool.getPendingMessages().length);
 
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertEquals(1, pool.getMaxSize());
-  pool.applyClientProtocol('spdy/3');
-  assertTrue(pool.getMaxSize() > 1);
-  pool.applyClientProtocol('foo-bar');  // no effect
-  assertTrue(pool.getMaxSize() > 1);
+    req.setPendingMessages([null, null]);  // null represents the message
+    assertEquals(2, pool.getPendingMessages().length);
 
-  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertEquals(1, pool.getMaxSize());
-  pool.applyClientProtocol('quic/x');
-  assertTrue(pool.getMaxSize() > 1);
+    var req1 = new ChannelRequest(null, null);
+    pool.addRequest(req1);
+    assertEquals(2, pool.getPendingMessages().length);
+    req1.setPendingMessages([null]);
+    assertEquals(3, pool.getPendingMessages().length);
 
-  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertEquals(1, pool.getMaxSize());
-  pool.applyClientProtocol('h2');
-  assertTrue(pool.getMaxSize() > 1);
+    pool.removeRequest(req1);
+    assertEquals(2, pool.getPendingMessages().length);
 
-  stubSpdyCheck(true);
+    pool.removeRequest(req);
+    assertEquals(0, pool.getPendingMessages().length);
+  },
 
-  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertTrue(pool.getMaxSize() > 1);
-  pool.applyClientProtocol('foo/3');  // no effect
-  assertTrue(pool.getMaxSize() > 1);
-}
+  testCanelAndPendingMessagesWithSpdyEnabled: function() {
+    this.stubSpdyCheck(true);
 
+    var pool = new ForwardChannelRequestPool();
 
-function testPendingMessagesWithSpdyDisabled() {
-  stubSpdyCheck(false);
+    var req = new ChannelRequest(null, null);
+    req.setPendingMessages([null, null]);  // null represents the message
+    pool.addRequest(req);
 
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertEquals(1, pool.getMaxSize());
-  assertEquals(0, pool.getPendingMessages().length);
+    var req1 = new ChannelRequest(null, null);
+    pool.addRequest(req1);
+    req1.setPendingMessages([null]);
 
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req);
+    assertEquals(3, pool.getPendingMessages().length);
 
-  assertEquals(0, pool.getPendingMessages().length);
+    pool.cancel();
+    assertEquals(0, pool.getRequestCount());
 
-  req.setPendingMessages([null, null]);  // null represents the message
-  assertEquals(2, pool.getPendingMessages().length);
+    assertEquals(3, pool.getPendingMessages().length);
+  },
 
-  req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  req.setPendingMessages([null]);
-  pool.addRequest(req);
-  assertEquals(1, pool.getPendingMessages().length);
+  testAddAndSetPendingMessagesWithSpdyEnabled: function() {
+    this.stubSpdyCheck(true);
 
-  pool.removeRequest(req);
-  assertEquals(0, pool.getPendingMessages().length);
-}
+    var pool = new ForwardChannelRequestPool();
 
+    pool.addPendingMessages([null, null]);
+    assertEquals(2, pool.getPendingMessages().length);
 
-function testCanelAndPendingMessagesWithSpdyDisabled() {
-  stubSpdyCheck(false);
+    var req = new ChannelRequest(null, null);
+    req.setPendingMessages([null, null]);  // null represents the message
+    pool.addRequest(req);
 
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
+    var req1 = new ChannelRequest(null, null);
+    pool.addRequest(req1);
+    req1.setPendingMessages([null]);
 
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  req.setPendingMessages([null, null]);  // null represents the message
-  pool.addRequest(req);
-  assertEquals(2, pool.getPendingMessages().length);
+    assertEquals(5, pool.getPendingMessages().length);
 
-  var req1 = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req1);
-  req1.setPendingMessages([null]);
-  assertEquals(1, pool.getPendingMessages().length);
+    pool.addPendingMessages([null, null]);
+    assertEquals(7, pool.getPendingMessages().length);
+  },
 
-  pool.cancel();
-  assertEquals(0, pool.getRequestCount());
+  testClearPendingMessages: function() {
+    this.stubSpdyCheck(true);
 
-  assertEquals(1, pool.getPendingMessages().length);
-}
+    var pool = new ForwardChannelRequestPool();
 
+    pool.addPendingMessages([null, null]);
+    assertEquals(2, pool.getPendingMessages().length);
 
-function testAddPendingMessagesWithSpdyEnabled() {
-  stubSpdyCheck(false);
-
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-
-  pool.addPendingMessages([null, null]);
-  assertEquals(2, pool.getPendingMessages().length);
-
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  req.setPendingMessages([null, null]);  // null represents the message
-  pool.addRequest(req);
-
-  assertEquals(4, pool.getPendingMessages().length);
-
-  pool.addPendingMessages([null]);
-  assertEquals(5, pool.getPendingMessages().length);
-}
-
-
-function testPendingMessagesWithSpdyEnabled() {
-  stubSpdyCheck(true);
-
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-  assertTrue(pool.getMaxSize() > 1);
-  assertEquals(0, pool.getPendingMessages().length);
-
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req);
-
-  assertEquals(0, pool.getPendingMessages().length);
-
-  req.setPendingMessages([null, null]);  // null represents the message
-  assertEquals(2, pool.getPendingMessages().length);
-
-  var req1 = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req1);
-  assertEquals(2, pool.getPendingMessages().length);
-  req1.setPendingMessages([null]);
-  assertEquals(3, pool.getPendingMessages().length);
-
-  pool.removeRequest(req1);
-  assertEquals(2, pool.getPendingMessages().length);
-
-  pool.removeRequest(req);
-  assertEquals(0, pool.getPendingMessages().length);
-}
-
-
-function testCanelAndPendingMessagesWithSpdyEnabled() {
-  stubSpdyCheck(true);
-
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  req.setPendingMessages([null, null]);  // null represents the message
-  pool.addRequest(req);
-
-  var req1 = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req1);
-  req1.setPendingMessages([null]);
-
-  assertEquals(3, pool.getPendingMessages().length);
-
-  pool.cancel();
-  assertEquals(0, pool.getRequestCount());
-
-  assertEquals(3, pool.getPendingMessages().length);
-}
-
-
-function testAddPendingMessagesWithSpdyEnabled() {
-  stubSpdyCheck(true);
-
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-
-  pool.addPendingMessages([null, null]);
-  assertEquals(2, pool.getPendingMessages().length);
-
-  var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  req.setPendingMessages([null, null]);  // null represents the message
-  pool.addRequest(req);
-
-  var req1 = new goog.labs.net.webChannel.ChannelRequest(null, null);
-  pool.addRequest(req1);
-  req1.setPendingMessages([null]);
-
-  assertEquals(5, pool.getPendingMessages().length);
-
-  pool.addPendingMessages([null, null]);
-  assertEquals(7, pool.getPendingMessages().length);
-}
-
-
-function testClearPendingMessages() {
-  stubSpdyCheck(true);
-
-  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
-
-  pool.addPendingMessages([null, null]);
-  assertEquals(2, pool.getPendingMessages().length);
-
-  pool.clearPendingMessages();
-  assertEquals(0, pool.getPendingMessages().length);
-}
+    pool.clearPendingMessages();
+    assertEquals(0, pool.getPendingMessages().length);
+  },
+});

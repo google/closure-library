@@ -19,19 +19,15 @@
  * @visibility {:internal}
  */
 
+goog.module('goog.labs.net.webChannel.ForwardChannelRequestPool');
 
-goog.provide('goog.labs.net.webChannel.ForwardChannelRequestPool');
+goog.module.declareLegacyNamespace();
 
-goog.require('goog.array');
-goog.require('goog.string');
-goog.require('goog.structs.Set');
-
-goog.scope(function() {
-/** @suppress {missingRequire} type checking only */
-var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
-
-/** @suppress {missingRequire} type checking only */
-var Wire = goog.labs.net.webChannel.Wire;
+var ChannelRequest = goog.require('goog.labs.net.webChannel.ChannelRequest');
+var Set = goog.require('goog.structs.Set');
+var Wire = goog.require('goog.labs.net.webChannel.Wire');
+var array = goog.require('goog.array');
+var googString = goog.require('goog.string');
 
 
 /**
@@ -39,17 +35,16 @@ var Wire = goog.labs.net.webChannel.Wire;
  *
  * @param {number=} opt_maxPoolSize The maximum pool size.
  *
- * @constructor
- * @final
+ * @struct @constructor @final
  */
-goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
+var ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
-   * THe max pool size as configured.
+   * The max pool size as configured.
    *
    * @private {number}
    */
-  this.maxPoolSizeConfigured_ = opt_maxPoolSize ||
-      goog.labs.net.webChannel.ForwardChannelRequestPool.MAX_POOL_SIZE_;
+  this.maxPoolSizeConfigured_ =
+      opt_maxPoolSize || ForwardChannelRequestPool.MAX_POOL_SIZE_;
 
   /**
    * The current size limit of the request pool. This limit is meant to be
@@ -67,12 +62,12 @@ goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The container for all the pending request objects.
    *
-   * @private {goog.structs.Set<ChannelRequest>}
+   * @private {Set<ChannelRequest>}
    */
   this.requestPool_ = null;
 
   if (this.maxSize_ > 1) {
-    this.requestPool_ = new goog.structs.Set();
+    this.requestPool_ = new Set();
   }
 
   /**
@@ -89,9 +84,6 @@ goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
    */
   this.pendingMessages_ = [];
 };
-
-var ForwardChannelRequestPool =
-    goog.labs.net.webChannel.ForwardChannelRequestPool;
 
 
 /**
@@ -128,11 +120,11 @@ ForwardChannelRequestPool.prototype.applyClientProtocol = function(
     return;
   }
 
-  if (goog.string.contains(clientProtocol, 'spdy') ||
-      goog.string.contains(clientProtocol, 'quic') ||
-      goog.string.contains(clientProtocol, 'h2')) {
+  if (googString.contains(clientProtocol, 'spdy') ||
+      googString.contains(clientProtocol, 'quic') ||
+      googString.contains(clientProtocol, 'h2')) {
     this.maxSize_ = this.maxPoolSizeConfigured_;
-    this.requestPool_ = new goog.structs.Set();
+    this.requestPool_ = new Set();
     if (this.request_) {
       this.addRequest(this.request_);
       this.request_ = null;
@@ -247,8 +239,9 @@ ForwardChannelRequestPool.prototype.cancel = function() {
   }
 
   if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    goog.array.forEach(
-        this.requestPool_.getValues(), function(val) { val.cancel(); });
+    array.forEach(this.requestPool_.getValues(), function(val) {
+      val.cancel();
+    });
     this.requestPool_.clear();
   }
 };
@@ -274,13 +267,13 @@ ForwardChannelRequestPool.prototype.getPendingMessages = function() {
 
   if (this.requestPool_ != null && !this.requestPool_.isEmpty()) {
     var result = this.pendingMessages_;
-    goog.array.forEach(this.requestPool_.getValues(), function(val) {
+    array.forEach(this.requestPool_.getValues(), function(val) {
       result = result.concat(val.getPendingMessages());
     });
     return result;
   }
 
-  return goog.array.clone(this.pendingMessages_);
+  return array.clone(this.pendingMessages_);
 };
 
 
@@ -319,7 +312,7 @@ ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
   }
 
   if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    goog.array.forEach(this.requestPool_.getValues(), function(val) {
+    array.forEach(this.requestPool_.getValues(), function(val) {
       val.cancel();
       onComplete(val);
     });
@@ -328,4 +321,5 @@ ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
 
   return false;
 };
-});  // goog.scope
+
+exports = ForwardChannelRequestPool;
