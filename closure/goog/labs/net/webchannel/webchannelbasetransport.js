@@ -137,6 +137,19 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   this.channel_.setExtraHeaders(messageHeaders);
 
   var initHeaders = (opt_options && opt_options.initMessageHeaders) || null;
+
+  if (opt_options && opt_options.messageContentType) {
+    if (initHeaders) {
+      goog.object.set(
+          initHeaders, goog.net.WebChannel.X_WEBCHANNEL_CONTENT_TYPE,
+          opt_options.messageContentType);
+    } else {
+      initHeaders = goog.object.create(
+          goog.net.WebChannel.X_WEBCHANNEL_CONTENT_TYPE,
+          opt_options.messageContentType);
+    }
+  }
+
   this.channel_.setInitHeaders(initHeaders);
 
   var httpHeadersOverwriteParam =
@@ -235,9 +248,15 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.send = function(message) {
-  goog.asserts.assert(goog.isObject(message), 'only object type expected');
+  goog.asserts.assert(
+      goog.isObject(message) || goog.isString(message),
+      'only object type or raw string is supported');
 
-  if (this.sendRawJson_) {
+  if (goog.isString(message)) {
+    var rawJson = {};
+    rawJson['__data__'] = message;
+    this.channel_.sendMap(rawJson);
+  } else if (this.sendRawJson_) {
     var rawJson = {};
     rawJson['__data__'] = goog.json.serialize(message);
     this.channel_.sendMap(rawJson);
