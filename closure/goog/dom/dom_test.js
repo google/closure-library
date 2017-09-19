@@ -1421,8 +1421,10 @@ function testCanHaveChildren() {
       goog.dom.TagName.SCRIPT, goog.dom.TagName.SOURCE, goog.dom.TagName.STYLE,
       goog.dom.TagName.TRACK, goog.dom.TagName.WBR);
 
-  // IE opens a dialog warning about using Java content if an EMBED is created.
-  var IE_ILLEGAL_ELEMENTS = goog.object.createSet(goog.dom.TagName.EMBED);
+  // IE opens a dialog warning about using Java content if the following
+  // elements are created.
+  var IE_ILLEGAL_ELEMENTS =
+      goog.object.createSet(goog.dom.TagName.APPLET, goog.dom.TagName.EMBED);
 
   for (var tag in goog.dom.TagName) {
     if (goog.userAgent.IE && tag in IE_ILLEGAL_ELEMENTS) {
