@@ -382,8 +382,7 @@ goog.testing.TestCase.prototype.add = function(test) {
  *     called in.
  */
 goog.testing.TestCase.prototype.addNewTest = function(name, ref, opt_scope) {
-  var test = new goog.testing.TestCase.Test(name, ref, opt_scope || this);
-  this.add(test);
+  this.add(this.createTest(name, ref, opt_scope || this));
 };
 
 
@@ -1159,7 +1158,20 @@ goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
  */
 goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction = function(
     name, ref) {
-  return new goog.testing.TestCase.Test(name, ref, goog.global);
+  return this.createTest(name, ref, goog.global);
+};
+
+/**
+ * Creates a {@code goog.testing.TestCase.Test} from an auto-discovered
+ *     function.
+ * @param {string} name The name of the function.
+ * @param {!Function} ref The auto-discovered function.
+ * @param {!Object=} opt_scope The scope to attach to the test.
+ * @return {!goog.testing.TestCase.Test} The newly created test.
+ * @protected
+ */
+goog.testing.TestCase.prototype.createTest = function(name, ref, opt_scope) {
+  return new goog.testing.TestCase.Test(name, ref, opt_scope);
 };
 
 
