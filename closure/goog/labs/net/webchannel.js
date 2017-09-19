@@ -134,6 +134,10 @@ goog.net.WebChannel = function() {};
  * messages may be encoded as part of URL and therefore there will be a size
  * limit for those immediate messages (e.g. 4KB).
  *
+ * disableRedact: whether to disable logging redact. By default, redact is
+ * enabled to remove any message payload or user-provided info
+ * from closure logs.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   initMessageHeaders: (!Object<string, string>|undefined),
@@ -147,7 +151,8 @@ goog.net.WebChannel = function() {};
  *   httpSessionIdParam: (string|undefined),
  *   httpHeadersOverwriteParam: (string|undefined),
  *   backgroundChannelTest: (boolean|undefined),
- *   fastHandshake: (boolean|undefined)
+ *   fastHandshake: (boolean|undefined),
+ *   enableRedact: (boolean|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
