@@ -308,6 +308,10 @@ goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
  *     include in the error report.
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e, opt_context) {
+  // goog.debug.catchErrors passes the actual error object (in some browsers) in
+  // the error property. If we have that, use that instead of the incomplete set
+  // of random properties passed to window.onerror.
+  e = e.error || e;
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
   var context = opt_context ? goog.object.clone(opt_context) : {};
