@@ -188,20 +188,22 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 
   builder.installPolicies_();
 
-  /** @private {boolean} */
+  /** @private @const {boolean} */
   this.shouldSanitizeTemplateContents_ =
       builder.shouldSanitizeTemplateContents_;
 
-  /** @private {!Object<string, !goog.html.sanitizer.HtmlSanitizerPolicy>} */
+  /**
+   * @private @const {!Object<string, !goog.html.sanitizer.HtmlSanitizerPolicy>}
+   */
   this.attributeHandlers_ = goog.object.clone(builder.attributeWhitelist_);
 
-  /** @private {!Object<string, boolean>} */
+  /** @private @const {!Object<string, boolean>} */
   this.tagBlacklist_ = goog.object.clone(builder.tagBlacklist_);
 
-  /** @private {!Object<string, boolean>} */
+  /** @private @const {!Object<string, boolean>} */
   this.tagWhitelist_ = goog.object.clone(builder.tagWhitelist_);
 
-  /** @private {boolean} */
+  /** @private @const {boolean} */
   this.shouldAddOriginalTagNames_ = builder.shouldAddOriginalTagNames_;
 
   // Add whitelist data-* attributes from the builder to the attributeHandlers
@@ -281,16 +283,9 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   /**
    * A set of attribute handlers that should not inherit their default policy
    * during build().
-   * @private {!Object<string, boolean>}
+   * @private @const {!Object<string, boolean>}
    */
   this.attributeOverrideList_ = {};
-
-
-  /**
-   * Keeps track of whether we allow form tags.
-   * @private {boolean}
-   */
-  this.allowFormTag_ = false;
 
   /**
    * Whether the content of TEMPLATE tags (assuming TEMPLATE is whitelisted)
@@ -302,16 +297,16 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   /**
    * List of data attributes to whitelist. Data-attributes are inert and don't
    * require sanitization.
-   * @private {!Array<string>}
+   * @private @const {!Array<string>}
    */
   this.dataAttributeWhitelist_ = [];
 
   /**
    * A tag blacklist, to effectively remove an element and its children from the
    * dom.
-   * @private {!Object<string, boolean>}
+   * @private @const {!Object<string, boolean>}
    */
-  this.tagBlacklist_ = {};
+  this.tagBlacklist_ = goog.object.clone(goog.html.sanitizer.TagBlacklist);
 
   /**
    * A tag whitelist, to effectively allow an element and its children from the
@@ -391,7 +386,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
-  this.allowFormTag_ = true;
+  delete this.tagBlacklist_['FORM'];
   return this;
 };
 
@@ -665,10 +660,6 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
     function() {
   if (this.policiesInstalled_) {
     throw new Error('HtmlSanitizer.Builder.build() can only be used once.');
-  }
-
-  if (!this.allowFormTag_) {
-    this.tagBlacklist_['FORM'] = true;
   }
 
   var installPolicy = goog.html.sanitizer.HtmlSanitizer.installDefaultPolicy_;
@@ -1313,8 +1304,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
   var sanitized = false;
   var blacklisted = false;
   var cleanElemName;
-  if (elemName in goog.html.sanitizer.TagBlacklist ||
-      elemName in this.tagBlacklist_) {
+  if (elemName in this.tagBlacklist_) {
     // If it's in the inert blacklist, replace with template (and then add a
     // special data attribute to distinguish it from real template tags).
     // Note that this node will not be added to the final output, i.e. the

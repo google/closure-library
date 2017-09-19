@@ -34,6 +34,8 @@ goog.html.sanitizer.TagBlacklist = {
   'BASE': true,
   'BGSOUND': true,
   'EMBED': true,
+  // Blacklisted by default, can be allowed using allowFormTag.
+  'FORM': true,
   // NOTE: can remove this for old browser behavior
   'IFRAME': true,
   // Can result in network requests
