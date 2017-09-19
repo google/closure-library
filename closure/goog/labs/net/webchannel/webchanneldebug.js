@@ -41,6 +41,12 @@ goog.labs.net.webChannel.WebChannelDebug = function() {
    * @private
    */
   this.logger_ = goog.log.getLogger('goog.labs.net.webChannel.WebChannelDebug');
+
+  /**
+   * Whether to enable redact. Defaults to true.
+   * @private {boolean}
+   */
+  this.redactEnabled_ = true;
 };
 
 
@@ -54,6 +60,14 @@ var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
  */
 WebChannelDebug.prototype.getLogger = function() {
   return this.logger_;
+};
+
+
+/**
+ * Turns off redact.
+ */
+WebChannelDebug.prototype.disableRedact = function() {
+  this.redactEnabled_ = false;
 };
 
 
@@ -176,6 +190,10 @@ WebChannelDebug.prototype.severe = function(text) {
  * @private
  */
 WebChannelDebug.prototype.redactResponse_ = function(responseText) {
+  if (!this.redactEnabled_) {
+    return responseText;
+  }
+
   if (!responseText) {
     return null;
   }
@@ -233,6 +251,10 @@ WebChannelDebug.prototype.maybeRedactArray_ = function(array) {
  * @private
  */
 WebChannelDebug.prototype.maybeRedactPostData_ = function(data) {
+  if (!this.redactEnabled_) {
+    return data;
+  }
+
   if (!data) {
     return null;
   }

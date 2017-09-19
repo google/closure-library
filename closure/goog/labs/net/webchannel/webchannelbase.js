@@ -379,6 +379,10 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
+
+  if (opt_options && opt_options.disableRedact) {
+    this.channelDebug_.disableRedact();
+  }
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -1078,15 +1082,25 @@ WebChannelBase.prototype.ensureForwardChannel_ = function() {
 /**
  * Schedules a forward-channel retry for the specified request, unless the max
  * retries has been reached.
- * @param {ChannelRequest} request The failed request to retry.
+ * @param {!ChannelRequest} request The failed request to retry.
  * @return {boolean} true iff a retry was scheduled.
  * @private
  */
 WebChannelBase.prototype.maybeRetryForwardChannel_ = function(request) {
-  if (this.forwardChannelRequestPool_.isFull() || this.forwardChannelTimerId_) {
+  if (this.forwardChannelRequestPool_.getRequestCount() >=
+      this.forwardChannelRequestPool_.getMaxSize() -
+          (this.forwardChannelTimerId_ ? 1 : 0)) {
     // Should be impossible to be called in this state.
-    this.channelDebug_.severe('Request already in progress');
+    this.channelDebug_.severe('Unexpected retry request is scheduled.');
     return false;
+  }
+
+  if (this.forwardChannelTimerId_) {
+    this.channelDebug_.debug(
+        'Use the retry request that is already scheduled.');
+    this.outgoingMaps_ =
+        request.getPendingMessages().concat(this.outgoingMaps_);
+    return true;
   }
 
   // No retry for open_() and fail-fast
