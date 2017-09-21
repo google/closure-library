@@ -1152,19 +1152,6 @@ goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
  * Creates a {@code goog.testing.TestCase.Test} from an auto-discovered
  *     function.
  * @param {string} name The name of the function.
- * @param {function() : void} ref The auto-discovered function.
- * @return {!goog.testing.TestCase.Test} The newly created test.
- * @protected
- */
-goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction = function(
-    name, ref) {
-  return this.createTest(name, ref, goog.global);
-};
-
-/**
- * Creates a {@code goog.testing.TestCase.Test} from an auto-discovered
- *     function.
- * @param {string} name The name of the function.
  * @param {!Function} ref The auto-discovered function.
  * @param {!Object=} opt_scope The scope to attach to the test.
  * @return {!goog.testing.TestCase.Test} The newly created test.
@@ -1262,7 +1249,7 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
         }
 
         if (goog.isFunction(ref)) {
-          foundTests.push(this.createTestFromAutoDiscoveredFunction(name, ref));
+          foundTests.push(this.createTest(name, ref, goog.global));
         }
       }
     }
