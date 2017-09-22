@@ -362,13 +362,15 @@ svgpan.SvgPan.prototype.handleMouseDown_ = function(evt) {
     // Pan mode
     this.state_ = svgpan.SvgPan.State.PAN;
     this.stateTf_ = g.getCTM().inverse();
-    this.stateOrigin_ = this.getEventPoint_(evt).matrixTransform(this.stateTf_);
+    this.stateOrigin_ = this.getEventPoint_(evt).matrixTransform(
+        /** @type {!SVGMatrix} */ (this.stateTf_));
   } else {
     // Drag mode
     this.state_ = svgpan.SvgPan.State.DRAG;
     this.stateTarget_ = /** @type {Element} */ (evt.target);
     this.stateTf_ = g.getCTM().inverse();
-    this.stateOrigin_ = this.getEventPoint_(evt).matrixTransform(this.stateTf_);
+    this.stateOrigin_ = this.getEventPoint_(evt).matrixTransform(
+        /** @type {!SVGMatrix} */ (this.stateTf_));
   }
 };
 
