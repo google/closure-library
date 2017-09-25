@@ -55,6 +55,7 @@ goog.date.UtcDateTime = function(
   } else {
     timestamp = opt_year ? opt_year.getTime() : goog.now();
   }
+  /** @override */
   this.date = new Date(timestamp);
 };
 goog.inherits(goog.date.UtcDateTime, goog.date.DateTime);
