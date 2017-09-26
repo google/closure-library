@@ -1249,7 +1249,7 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
         }
 
         if (goog.isFunction(ref)) {
-          foundTests.push(this.createTest(name, ref, goog.global));
+          foundTests.push(this.createTest(name, ref, testSource));
         }
       }
     }
