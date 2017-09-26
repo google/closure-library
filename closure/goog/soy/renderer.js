@@ -56,20 +56,20 @@ goog.require('goog.soy.data.SanitizedContentKind');
  */
 goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
   /**
-   * @type {goog.dom.DomHelper}
+   * @const {!goog.dom.DomHelper}
    * @private
    */
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 
   /**
-   * @type {goog.soy.InjectedDataSupplier}
+   * @const {?goog.soy.InjectedDataSupplier}
    * @private
    */
   this.supplier_ = opt_injectedDataSupplier || null;
 
   /**
    * Map from template name to the data used to render that template.
-   * @type {!goog.soy.Renderer.SavedTemplateRender}
+   * @const {!goog.soy.Renderer.SavedTemplateRender}
    * @private
    */
   this.savedTemplateRenders_ = [];
