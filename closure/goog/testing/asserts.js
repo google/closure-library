@@ -175,7 +175,13 @@ var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
   var valid = args.length == expectedNumberOfNonCommentArgs ||
       args.length == expectedNumberOfNonCommentArgs + 1 &&
           goog.isString(args[0]);
-  _assert(null, valid, 'Incorrect arguments passed to assert function');
+  if (!valid) {
+    goog.testing.asserts.raiseException(
+        'Incorrect arguments passed to assert function.\n' +
+        'Expected ' + expectedNumberOfNonCommentArgs + ' argument(s) plus ' +
+        'optional comment; got ' + args.length + '.');
+  }
+
 };
 
 /**
