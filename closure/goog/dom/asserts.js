@@ -74,6 +74,46 @@ goog.dom.asserts.assertIsLocation = function(o) {
   return /** @type {!Location} */ (o);
 };
 
+
+/**
+ * Asserts that a given object is either the given subtype of Element
+ * or a non-Element, non-Location Mock.
+ *
+ * To permit this assertion to pass in the context of tests where DOM
+ * APIs might be mocked, also accepts any other type except for
+ * subtypes of {!Element}.  This is to ensure that, for instance,
+ * HTMLScriptElement is not being used in place of a HTMLImageElement,
+ * since this could result in security bugs due to stronger contracts
+ * required for assignments to the src property of the latter.
+ *
+ * The DOM type is looked up in the window the object belongs to.  In
+ * some contexts, this might not be possible (e.g. when running tests
+ * outside a browser, cross-domain lookup). In this case, the
+ * assertions are skipped.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @param {string} typename The name of the DOM type.
+ * @return {!Element} The object.
+ * @private
+ */
+// TODO(bangert): Make an analog of goog.dom.TagName to correctly handle casts?
+goog.dom.asserts.assertIsElementType_ = function(o, typename) {
+  if (goog.asserts.ENABLE_ASSERTS) {
+    var win = goog.dom.asserts.getWindow_(o);
+    if (typeof win[typename] != 'undefined' &&
+        typeof win.Location != 'undefined' &&
+        typeof win.Element != 'undefined') {
+      goog.asserts.assert(
+          o &&
+              (o instanceof win[typename] ||
+               !((o instanceof win.Location) || (o instanceof win.Element))),
+          'Argument is not a %s (or a non-Element, non-Location mock); got: %s',
+          typename, goog.dom.asserts.debugStringForType_(o));
+    }
+  }
+  return /** @type {!Element} */ (o);
+};
+
 /**
  * Asserts that a given object is a HTMLAnchorElement.
  *
@@ -85,21 +125,22 @@ goog.dom.asserts.assertIsLocation = function(o) {
  * @return {!HTMLAnchorElement}
  */
 goog.dom.asserts.assertIsHTMLAnchorElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLAnchorElement != 'undefined' &&
-        typeof win.Location != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLAnchorElement ||
-               !((o instanceof win.Location) || (o instanceof win.Element))),
-          'Argument is not a HTMLAnchorElement (or a non-Element mock); ' +
-              'got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLAnchorElement} */ (o);
+  return /** @type {!HTMLAnchorElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLAnchorElement'));
+};
+
+/**
+ * Asserts that a given object is a HTMLButtonElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLButtonElement}
+ */
+goog.dom.asserts.assertIsHTMLButtonElement = function(o) {
+  return /** @type {!HTMLButtonElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLButtonElement'));
 };
 
 /**
@@ -112,20 +153,8 @@ goog.dom.asserts.assertIsHTMLAnchorElement = function(o) {
  * @return {!HTMLLinkElement}
  */
 goog.dom.asserts.assertIsHTMLLinkElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLLinkElement != 'undefined' &&
-        typeof win.Location != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLLinkElement ||
-               !((o instanceof win.Location) || (o instanceof win.Element))),
-          'Argument is not a HTMLLinkElement (or a non-Element mock); got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLLinkElement} */ (o);
+  return /** @type {!HTMLLinkElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLLinkElement'));
 };
 
 /**
@@ -138,19 +167,22 @@ goog.dom.asserts.assertIsHTMLLinkElement = function(o) {
  * @return {!HTMLImageElement}
  */
 goog.dom.asserts.assertIsHTMLImageElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLImageElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLImageElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLImageElement (or a non-Element mock); got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLImageElement} */ (o);
+  return /** @type {!HTMLImageElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLImageElement'));
+};
+
+/**
+ * Asserts that a given object is a HTMLInputElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLInputElement}
+ */
+goog.dom.asserts.assertIsHTMLInputElement = function(o) {
+  return /** @type {!HTMLInputElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLInputElement'));
 };
 
 /**
@@ -163,19 +195,22 @@ goog.dom.asserts.assertIsHTMLImageElement = function(o) {
  * @return {!HTMLEmbedElement}
  */
 goog.dom.asserts.assertIsHTMLEmbedElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLEmbedElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLEmbedElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLEmbedElement (or a non-Element mock); got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLEmbedElement} */ (o);
+  return /** @type {!HTMLEmbedElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLEmbedElement'));
+};
+
+/**
+ * Asserts that a given object is a HTMLFormElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLFormElement}
+ */
+goog.dom.asserts.assertIsHTMLFormElement = function(o) {
+  return /** @type {!HTMLFormElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLFormElement'));
 };
 
 /**
@@ -188,19 +223,8 @@ goog.dom.asserts.assertIsHTMLEmbedElement = function(o) {
  * @return {!HTMLFrameElement}
  */
 goog.dom.asserts.assertIsHTMLFrameElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLFrameElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLFrameElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLFrameElement (or a non-Element mock); got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLFrameElement} */ (o);
+  return /** @type {!HTMLFrameElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLFrameElement'));
 };
 
 /**
@@ -213,20 +237,8 @@ goog.dom.asserts.assertIsHTMLFrameElement = function(o) {
  * @return {!HTMLIFrameElement}
  */
 goog.dom.asserts.assertIsHTMLIFrameElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLIFrameElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLIFrameElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLIFrameElement (or a non-Element mock); ' +
-              'got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLIFrameElement} */ (o);
+  return /** @type {!HTMLIFrameElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLIFrameElement'));
 };
 
 /**
@@ -239,20 +251,8 @@ goog.dom.asserts.assertIsHTMLIFrameElement = function(o) {
  * @return {!HTMLObjectElement}
  */
 goog.dom.asserts.assertIsHTMLObjectElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLObjectElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLObjectElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLObjectElement (or a non-Element mock); ' +
-              'got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLObjectElement} */ (o);
+  return /** @type {!HTMLObjectElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLObjectElement'));
 };
 
 /**
@@ -265,20 +265,8 @@ goog.dom.asserts.assertIsHTMLObjectElement = function(o) {
  * @return {!HTMLScriptElement}
  */
 goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
-  if (goog.asserts.ENABLE_ASSERTS) {
-    var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.HTMLScriptElement != 'undefined' &&
-        typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win.HTMLScriptElement ||
-               !(o instanceof win.Element)),
-          'Argument is not a HTMLScriptElement (or a non-Element mock); ' +
-              'got: %s',
-          goog.dom.asserts.debugStringForType_(o));
-    }
-  }
-  return /** @type {!HTMLScriptElement} */ (o);
+  return /** @type {!HTMLScriptElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLScriptElement'));
 };
 
 /**
