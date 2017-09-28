@@ -293,6 +293,15 @@ goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
 
 
 /**
+ * @return {!goog.dom.DomHelper}
+ * @protected
+ */
+goog.soy.Renderer.prototype.getDom = function() {
+  return this.dom_;
+};
+
+
+/**
  * Observes rendering of templates by this renderer.
  * @param {Node=} opt_node Relevant node, if available. The node may or may
  *     not be in the document, depending on whether Soy is creating an element
