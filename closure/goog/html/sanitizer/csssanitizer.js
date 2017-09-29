@@ -26,10 +26,13 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 
 /**
@@ -60,6 +63,38 @@ goog.html.sanitizer.CssSanitizer.NORM_URL_REPLACEMENTS_ = {
   '<': '%3c',
   '>': '%3e'
 };
+
+
+/**
+ * A regular expression to match each selector in a CSS rule. Selectors are
+ * separated by commas, but can have strings within them (e.g. foo[name="bar"])
+ * that can contain commas and escaped quotes.
+ * @private {?RegExp}
+ */
+goog.html.sanitizer.CssSanitizer.SELECTOR_REGEX_ =
+    // Don't even evaluate it on older browsers (IE8 and IE9), it throws a
+    // syntax error and we don't use it anyway.
+    !(goog.userAgent.IE && document.documentMode < 10) ?
+    new RegExp(
+        '\\s*' +              // Discard initial space
+            '([^\\s\'",]+' +  // Beginning of the match. Anything but a comma,
+                              // spaces or a string delimiter. This is the only
+                              // non-optional component of the regex.
+            '[^\'",]*' +      // Spaces are fine afterwards (e.g. "a > b").
+            ('(' +  // A series of optional strings with matching delimiters
+                    // that can contain anything, and optional non-quoted text
+                    // without commas.
+             '(\'([^\'\\r\\n\\f\\\\]|\\\\[^])*\')|' +  // Optional single-quoted
+                                                       // string.
+             '("([^"\\r\\n\\f\\\\]|\\\\[^])*")|' +     // Optional double-quoted
+                                                       // string.
+             '[^\'",]' +  // Optional non-string content.
+             ')*') +      // String and non-string
+                          // content can come in any
+                          // order.
+            ')',          // End of the match.
+        'g') :
+    null;
 
 
 /**
@@ -230,6 +265,92 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
     // Everything else is allowed.
     return outputPropValue;
   }
+};
+
+
+/**
+ * Sanitizes a {@link CSSStyleSheet}.
+ * @param {!CSSStyleSheet} cssStyleDeclaration
+ * @param {?string} containerId An ID to restrict the scope of the rules being
+ *     sanitized. If null, no restriction is applied.
+ * @param {function(string, string):?goog.html.SafeUrl|undefined} uriRewriter A
+ *     URI rewriter that returns a goog.html.SafeUrl.
+ * @return {!goog.html.SafeStyleSheet}
+ * @private
+ */
+goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
+    cssStyleDeclaration, containerId, uriRewriter) {
+  var sanitizedRules = [];
+  for (var i = 0; i < cssStyleDeclaration.cssRules.length; i++) {
+    var cssRule = cssStyleDeclaration.cssRules[i];
+    if (!(cssRule instanceof CSSStyleRule) ||
+        cssRule.type != CSSRule.STYLE_RULE) {
+      // Filter out at-rules like @media, @font, etc.
+      // TODO(pelizzi): some of these at-rules are safe, consider adding partial
+      // support for them.
+      continue;
+    }
+    if (containerId && !/[a-zA-Z][\w-:\.]*/.test(containerId)) {
+      // Sanity check on the element ID that will confine the new CSS rules.
+      throw new Error('Invalid container id');
+    }
+    if (containerId && goog.userAgent.product.IE &&
+        document.documentMode == 10 && /\\['"]/.test(cssRule.selectorText)) {
+      // If a container ID was specified, drop selectors with escaped quotes in
+      // strings on IE 10 due to a regex bug.
+      continue;
+    }
+    // If a container ID was specified, restrict all selectors in this rule to
+    // be descendants of the node with such an ID. Use a regex to exclude commas
+    // within selector strings.
+    var scopedSelector = containerId ?
+        cssRule.selectorText.replace(
+            goog.html.sanitizer.CssSanitizer.SELECTOR_REGEX_,
+            '#' + containerId + ' $1') :
+        cssRule.selectorText;
+    sanitizedRules.push(goog.html.SafeStyleSheet.createRule(
+        scopedSelector,
+        goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
+            cssRule.style, uriRewriter)));
+  }
+  return goog.html.SafeStyleSheet.concat(sanitizedRules);
+};
+
+
+/**
+ * Sanitizes the contents of a STYLE tag.
+ * @param {string} textContent The textual content of the STYLE tag.
+ * @param {?string=} opt_containerId The ID of a node that will contain the
+ *     STYLE tag that includes the sanitized content, to restrict the effects of
+ *     the rules being sanitized to descendants of this node.
+ * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
+ *     rewriter that returns a goog.html.SafeUrl.
+ * @return {!goog.html.SafeStyleSheet}
+ * @supported IE 10+, Chrome 26+, Firefox 22+, Safari 7.1+, Opera 15+. On IE10,
+ *     support for escaped quotes inside quoted strings (e.g. `a[name="it\'s"]`)
+ *     is unreliable, and some (but not all!) rules containing these are
+ *     silently dropped.
+ */
+goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString = function(
+    textContent, opt_containerId, opt_uriRewriter) {
+  if ((goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10)) ||
+      typeof goog.global.DOMParser != 'function') {
+    return goog.html.SafeStyleSheet.EMPTY;
+  }
+  // In this package we prefer using the TEMPLATE tag over DOMParser for safe
+  // HTML parsing, but at least on Chrome the inert STYLE tag does not have a
+  // CSSStyleSheet object attached to it.
+  var parser = new DOMParser();
+  var sheet = parser
+                  .parseFromString(
+                      '<html><head></head><body><style>' + textContent +
+                          '</style></body></html>',
+                      'text/html')
+                  .body.children[0]
+                  .sheet;
+  var containerId = opt_containerId != undefined ? opt_containerId : null;
+  return goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_(
+      sheet, containerId, opt_uriRewriter);
 };
 
 

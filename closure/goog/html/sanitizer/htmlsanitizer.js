@@ -44,6 +44,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.AttributeSanitizedWhitelist');
 goog.require('goog.html.sanitizer.AttributeWhitelist');
@@ -169,10 +170,13 @@ goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_ =
       'innerHTML':
           Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML'),
       'nodeName': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName'),
+      'nodeType': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType'),
       'parentNode':
           Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode'),
       'childNodes':
           Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes'),
+      'textContent':
+          Object.getOwnPropertyDescriptor(Node.prototype, 'textContent'),
       'style': Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style')
     } :
                                                     {};
@@ -218,6 +222,12 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
             goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
   }, this);
+
+  /** @private @const {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} */
+  this.networkRequestUrlPolicy_ = builder.networkRequestUrlPolicy_;
+
+  /** @private @const {?string} */
+  this.styleContainer_ = builder.styleContainer_;
 };
 
 
@@ -351,14 +361,21 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.tokenPolicy_ = goog.html.sanitizer.HtmlSanitizer.defaultTokenPolicy_;
 
   /**
-   * A function to sanitize inline CSS styles.
-   * @private {(undefined|function(
+   * A function to sanitize inline CSS styles. Defaults to deny all.
+   * @private {function(
    *     !goog.html.sanitizer.HtmlSanitizerPolicy,
    *     string,
    *     !goog.html.sanitizer.HtmlSanitizerPolicyHints,
-   *     !goog.html.sanitizer.HtmlSanitizerPolicyContext):?string)}
+   *     !goog.html.sanitizer.HtmlSanitizerPolicyContext):?string}
    */
-  this.sanitizeCssPolicy_ = undefined;
+  this.sanitizeInlineCssPolicy_ = goog.functions.NULL;
+
+  /**
+   * An optional ID to restrict the scope of CSS rules when STYLE tags are
+   * allowed.
+   * @private {?string}
+   */
+  this.styleContainer_ = null;
 
   /**
    * True iff policies have been installed for the instance.
@@ -387,6 +404,24 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
   delete this.tagBlacklist_['FORM'];
+  return this;
+};
+
+
+/**
+ * Allows STYLE tags. If opt_styleContainer is defined, the sanitizer will
+ * modify the CSS selectors in the stylesheet rules to only affect descendants
+ * of a specific node.
+ * @param {string=} opt_styleContainer An optional container ID to restrict the
+ *     scope of any CSS rule found in STYLE tags.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function(
+    opt_styleContainer) {
+  delete this.tagBlacklist_['STYLE'];
+  if (goog.isDef(opt_styleContainer)) {
+    this.styleContainer_ = opt_styleContainer;
+  }
   return this;
 };
 
@@ -597,7 +632,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withCustomTokenPolicy =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
     function() {
-  this.sanitizeCssPolicy_ = goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_;
+  this.sanitizeInlineCssPolicy_ =
+      goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_;
   return this;
 };
 
@@ -719,25 +755,18 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
       /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeId_, this.tokenPolicy_)));
 
-  if (this.sanitizeCssPolicy_) {
-    installPolicy(
-        this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
-        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-        (goog.partial(this.sanitizeCssPolicy_, networkRequestUrlPolicy)));
-  } else {
-    installPolicy(
-        this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
-        goog.functions.NULL);
-  }
+  installPolicy(
+      this.attributeWhitelist_, this.attributeOverrideList_, '* STYLE',
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
+      (goog.partial(this.sanitizeInlineCssPolicy_, networkRequestUrlPolicy)));
+
   this.policiesInstalled_ = true;
 };
 
 
 /**
  * The default policy for URLs: allow any.
- * @param {string} token The URL to undergo this policy.
- * @return {?goog.html.SafeUrl}
- * @private
+ * @private @const {!goog.html.sanitizer.HtmlSanitizerUrlPolicy}
  */
 goog.html.sanitizer.HtmlSanitizer.defaultUrlPolicy_ =
     goog.html.SafeUrl.sanitize;
@@ -745,9 +774,7 @@ goog.html.sanitizer.HtmlSanitizer.defaultUrlPolicy_ =
 
 /**
  * The default policy for URLs which cause network requests: drop all.
- * @param {string} token The URL to undergo this policy.
- * @return {null}
- * @private
+ * @private @const {!goog.html.sanitizer.HtmlSanitizerUrlPolicy}
  */
 goog.html.sanitizer.HtmlSanitizer.defaultNetworkRequestUrlPolicy_ =
     goog.functions.NULL;
@@ -755,18 +782,14 @@ goog.html.sanitizer.HtmlSanitizer.defaultNetworkRequestUrlPolicy_ =
 
 /**
  * The default policy for attribute names: drop all.
- * @param {string} token The name to undergo this policy.
- * @return {?string}
- * @private
+ * @private @const {!goog.html.sanitizer.HtmlSanitizerPolicy}
  */
 goog.html.sanitizer.HtmlSanitizer.defaultNamePolicy_ = goog.functions.NULL;
 
 
 /**
  * The default policy for other tokens (i.e. class names and IDs): drop all.
- * @param {string} token The token to undergo this policy.
- * @return {?string}
- * @private
+ * @private @const {!goog.html.sanitizer.HtmlSanitizerPolicy}
  */
 goog.html.sanitizer.HtmlSanitizer.defaultTokenPolicy_ = goog.functions.NULL;
 
@@ -791,7 +814,7 @@ goog.html.sanitizer.HtmlSanitizer.attrIdentifier_ = function(
 
 
 /**
- * Sanitizes a block of CSS rules.
+ * Sanitizes a list of CSS declarations.
  * @param {goog.html.sanitizer.HtmlSanitizerPolicy} policySanitizeUrl
  * @param {string} attrValue
  * @param {goog.html.sanitizer.HtmlSanitizerPolicyHints} policyHints
@@ -799,7 +822,7 @@ goog.html.sanitizer.HtmlSanitizer.attrIdentifier_ = function(
  * @return {?string} sanitizedCss from the policyContext
  * @private
  */
-goog.html.sanitizer.HtmlSanitizer.sanitizeCssBlock_ = function(
+goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_ = function(
     policySanitizeUrl, attrValue, policyHints, policyContext) {
   if (!policyContext.cssStyle) {
     return null;
@@ -965,8 +988,7 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
 
 /**
  * Returns an element's attributes without falling prey to things like
- * &lt;form&gt;&lt;input name="attributes"&gt;
- * &lt;input name="attributes"&gt;&lt;/form&gt;.
+ * <form><input name="attributes"><input name="attributes"></form>.
  * @param {!Node} node
  * @return {?NamedNodeMap}
  * @private
@@ -1001,8 +1023,7 @@ goog.html.sanitizer.HtmlSanitizer.getAttribute_ = function(node, attrName) {
 
 /**
  * Sets an element's attributes without falling prey to things like
- * &lt;form&gt;&lt;input name="attributes"&gt;
- * &lt;input name="attributes"&gt;&lt;/form&gt;.
+ * <form><input name="attributes"><input name="attributes"</form>.
  * @param {!Node} node
  * @param {string} name
  * @param {string} value
@@ -1044,8 +1065,7 @@ goog.html.sanitizer.HtmlSanitizer.getInnerHTML_ = function(node) {
 
 /**
  * Returns an element's style without falling prey to things like
- * &lt;form&gt;&lt;input name="style"&gt;
- * &lt;input name="style"&gt;&lt;/form&gt;.
+ * <form><input name="style"><input name="style"></form>.
  * @param {!Node} node
  * @return {?CSSStyleDeclaration}
  * @private
@@ -1063,7 +1083,7 @@ goog.html.sanitizer.HtmlSanitizer.getStyle_ = function(node) {
 
 /**
  * Returns a node's nodeName without falling prey to things like
- * &lt;form&gt;&lt;input name="nodeName"&gt;&lt;/form&gt;.
+ * <form><input name="nodeName"></form>.
  * @param {!Node} node
  * @return {string}
  * @private
@@ -1080,8 +1100,26 @@ goog.html.sanitizer.HtmlSanitizer.getNodeName_ = function(node) {
 
 
 /**
+ * Returns a node's nodeType without falling prey to things like
+ * `<form><input name="nodeType"></form>`.
+ * @param {!Node} node
+ * @return {number}
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.getNodeType_ = function(node) {
+  var nodeTypeDescriptor =
+      goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_['nodeType'];
+  if (nodeTypeDescriptor && nodeTypeDescriptor.get) {
+    return nodeTypeDescriptor.get.apply(node);
+  } else {
+    return node.nodeType;
+  }
+};
+
+
+/**
  * Returns a node's parentNode without falling prey to things like
- * &lt;form&gt;&lt;input name="parentNode"&gt;&lt;/form&gt;.
+ * <form><input name="parentNode"></form>.
  * @param {?Node} node
  * @return {?Node}
  * @private
@@ -1197,7 +1235,8 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
 
     // Get a clean (sanitized) version of the dirty node.
     var cleanNode = this.sanitizeElement_(dirtyNode);
-    if (cleanNode.nodeType != goog.dom.NodeType.TEXT) {
+    if (goog.html.sanitizer.HtmlSanitizer.getNodeType_(cleanNode) !=
+        goog.dom.NodeType.TEXT) {
       this.sanitizeAttrs_(dirtyNode, cleanNode);
       elementMap[elemNum] = cleanNode;
       goog.html.sanitizer.HtmlSanitizer.setAttribute_(
@@ -1241,12 +1280,14 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     } else if (
         goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyParent)
                 .toLowerCase() == 'body' ||
-        dirtyParent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT) {
+        goog.html.sanitizer.HtmlSanitizer.getNodeType_(dirtyParent) ==
+            goog.dom.NodeType.DOCUMENT_FRAGMENT) {
       var dirtyGrandParent =
           goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyParent);
       // The following checks if target is an immediate child of the inert
       // parent template element
-      if (dirtyParent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT &&
+      if (goog.html.sanitizer.HtmlSanitizer.getNodeType_(dirtyParent) ==
+              goog.dom.NodeType.DOCUMENT_FRAGMENT &&
           goog.isNull(dirtyGrandParent)) {
         isSanitizedParent = true;
       } else if (
@@ -1294,10 +1335,35 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
     dirtyNode) {
-  // Text nodes don't need to be sanitized.
-  if (dirtyNode.nodeType == goog.dom.NodeType.TEXT) {
-    return document.createTextNode(dirtyNode.data);
+  // Text nodes don't need to be sanitized, unless they are children of STYLE
+  // and STYLE tags are allowed.
+  if (goog.html.sanitizer.HtmlSanitizer.getNodeType_(dirtyNode) ==
+      goog.dom.NodeType.TEXT) {
+    var textContent = dirtyNode.data;
+    // If STYLE is allowed, apply a policy to its text content. Ideally
+    // sanitizing text content of tags shouldn't be hardcoded for STYLE, but we
+    // have no plans to support sanitizing the text content of other nodes for
+    // now.
+    var dirtyParent =
+        goog.html.sanitizer.HtmlSanitizer.getParentNode_(dirtyNode);
+    if (dirtyParent &&
+        goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyParent)
+                .toLowerCase() == 'style' &&
+        !('STYLE' in this.tagBlacklist_) && 'STYLE' in this.tagWhitelist_) {
+      // Note that we don't have access to the parsed CSS declarations inside a
+      // TEMPLATE tag, so the CSS sanitizer accepts a string and parses it
+      // on its own using DOMParser.
+      textContent = goog.html.SafeStyleSheet.unwrap(
+          goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString(
+              textContent, this.styleContainer_,
+              goog.bind(function(uri, propName) {
+                return this.networkRequestUrlPolicy_(
+                    uri, {cssProperty: propName});
+              }, this)));
+    }
+    return document.createTextNode(textContent);
   }
+
   // Non text nodes get an empty node based on black/white lists.
   var elemName =
       goog.html.sanitizer.HtmlSanitizer.getNodeName_(dirtyNode).toUpperCase();

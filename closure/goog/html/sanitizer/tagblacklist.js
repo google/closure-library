@@ -50,6 +50,7 @@ goog.html.sanitizer.TagBlacklist = {
   // Can result in an XSS in FF
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1205631
   'SVG': true,
+  // Blacklisted by default, can be allowed using allowStyleTag.
   'STYLE': true,
   'TEMPLATE': true,
   'VIDEO': true
