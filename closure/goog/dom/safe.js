@@ -116,6 +116,98 @@ goog.dom.safe.setOuterHtml = function(elem, html) {
 
 
 /**
+ * Safely assigns a URL a form element's action property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * anchor's href property.  If url is of type string however, it is first
+ * sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.setFormElementAction(formEl, url);
+ * which is a safe alternative to
+ *   formEl.action = url;
+ * The latter can result in XSS vulnerabilities if url is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!Element} form The form element whose action property
+ *     is to be assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setFormElementAction = function(form, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  }
+  goog.dom.asserts.assertIsHTMLFormElement(form).action =
+      goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+/**
+ * Safely assigns a URL to a button element's formaction property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * anchor's href property.  If url is of type string however, it is first
+ * sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.setButtonFormAction(buttonEl, url);
+ * which is a safe alternative to
+ *   buttonEl.action = url;
+ * The latter can result in XSS vulnerabilities if url is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!Element} button The button element whose action property
+ *     is to be assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setButtonFormAction = function(button, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  }
+  goog.dom.asserts.assertIsHTMLButtonElement(button).formaction =
+      goog.html.SafeUrl.unwrap(safeUrl);
+};
+/**
+ * Safely assigns a URL to an input element's formaction property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * anchor's href property.  If url is of type string however, it is first
+ * sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.setInputFormAction(inputEl, url);
+ * which is a safe alternative to
+ *   inputEl.action = url;
+ * The latter can result in XSS vulnerabilities if url is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!Element} input The input element whose action property
+ *     is to be assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setInputFormAction = function(input, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  }
+  goog.dom.asserts.assertIsHTMLInputElement(input).formaction =
+      goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+/**
  * Sets the given element's style property to the contents of the provided
  * SafeStyle object.
  * @param {!Element} elem
@@ -406,6 +498,37 @@ goog.dom.safe.setLocationHref = function(loc, url) {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   loc.href = goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+
+/**
+ * Safely replaces the URL of a Location object.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and
+ * passed to Location#replace. If url is of type string however, it is
+ * first sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.replaceHref(document.location, newUrl);
+ * which is a safe alternative to
+ *   document.location.replace(newUrl);
+ * The latter can result in XSS vulnerabilities if newUrl is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!Location} loc The Location object which is to be replaced.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.replaceLocation = function(loc, url) {
+  goog.dom.asserts.assertIsLocation(loc);
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  }
+  loc.replace(goog.html.SafeUrl.unwrap(safeUrl));
 };
 
 
