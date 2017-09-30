@@ -1648,7 +1648,7 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
 goog.date.DateTime.prototype.toUTCRfc3339String = function() {
   var date = this.toUTCIsoString(true).replace(' ', 'T');
   var millis = this.getUTCMilliseconds();
-  return (millis ? date + '.' + millis : date) + 'Z';
+  return (millis ? date + '.' + goog.string.padNumber(millis, 3) : date) + 'Z';
 };
 
 
