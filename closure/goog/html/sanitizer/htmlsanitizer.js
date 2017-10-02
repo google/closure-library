@@ -1170,7 +1170,7 @@ goog.html.sanitizer.HtmlSanitizer.getChildNodes_ = function(node) {
  * Parses the DOM tree of a given HTML string, then walks the tree. For each
  * element, it creates a new sanitized version, applies sanitized attributes,
  * and returns a SafeHtml object representing the sanitized tree.
- * @param {?string} unsanitizedHtml
+ * @param {string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} Sanitized HTML
  * @final
  */
@@ -1201,7 +1201,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
  * Parses the DOM tree of a given HTML string, then walks the tree. For each
  * element, it creates a new sanitized version, applies sanitized attributes,
  * and returns a span element containing the sanitized content.
- * @param {?string} unsanitizedHtml
+ * @param {string} unsanitizedHtml
  * @return {!HTMLSpanElement} Sanitized HTML
  * @final
  */
@@ -1210,7 +1210,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
   var sanitizedParent =
       /** @type {!HTMLSpanElement} */ (document.createElement('span'));
 
-  if (!goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ || !unsanitizedHtml) {
+  if (!goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_) {
     // TODO(danesh): IE9 or earlier versions don't provide an easy way to
     // parse HTML inertly. Handle in a way other than an empty span perhaps.
     return sanitizedParent;
