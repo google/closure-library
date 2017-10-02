@@ -2166,7 +2166,10 @@ goog.globalEval = function(script) {
   } else if (goog.global.eval) {
     // Test to see if eval works
     if (goog.evalWorksForGlobals_ == null) {
-      goog.global.eval('var _evalTest_ = 1;');
+      try {
+        goog.global.eval('var _evalTest_ = 1;');
+      } catch (ignore) {
+      }
       if (typeof goog.global['_evalTest_'] != 'undefined') {
         try {
           delete goog.global['_evalTest_'];
@@ -2191,8 +2194,8 @@ goog.globalEval = function(script) {
       // Note(user): can't use .innerHTML since "t('<test>')" will fail and
       // .text doesn't work in Safari 2.  Therefore we append a text node.
       scriptElt.appendChild(doc.createTextNode(script));
-      doc.body.appendChild(scriptElt);
-      doc.body.removeChild(scriptElt);
+      doc.head.appendChild(scriptElt);
+      doc.head.removeChild(scriptElt);
     }
   } else {
     throw new Error('goog.globalEval not available');
