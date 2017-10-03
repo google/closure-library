@@ -506,6 +506,8 @@ goog.addDependency('history/history.js', ['goog.History', 'goog.History.Event', 
 goog.addDependency('history/history_test.js', ['goog.HistoryTest'], ['goog.History', 'goog.dispose', 'goog.dom', 'goog.html.TrustedResourceUrl', 'goog.string.Const', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('history/html5history.js', ['goog.history.Html5History', 'goog.history.Html5History.TokenTransformer'], ['goog.asserts', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event'], {});
 goog.addDependency('history/html5history_test.js', ['goog.history.Html5HistoryTest'], ['goog.Timer', 'goog.events', 'goog.events.EventType', 'goog.history.EventType', 'goog.history.Html5History', 'goog.testing.MockControl', 'goog.testing.jsunit', 'goog.testing.mockmatchers', 'goog.testing.recordFunction'], {});
+goog.addDependency('html/cssspecificity.js', ['goog.html.CssSpecificity'], ['goog.userAgent', 'goog.userAgent.product'], {'module': 'goog'});
+goog.addDependency('html/cssspecificity_test.js', ['goog.html.CssSpecificityTest'], ['goog.html.CssSpecificity', 'goog.testing.testSuite', 'goog.userAgent', 'goog.userAgent.product'], {'module': 'goog'});
 goog.addDependency('html/flash.js', ['goog.html.flash'], ['goog.asserts', 'goog.html.SafeHtml'], {});
 goog.addDependency('html/flash_test.js', ['goog.html.flashTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/legacyconversions.js', ['goog.html.legacyconversions'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl'], {});

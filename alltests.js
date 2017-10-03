@@ -199,6 +199,7 @@ var _allTests = [
   'closure/goog/graphics/svggraphics_test.html',
   'closure/goog/history/history_test.html',
   'closure/goog/history/html5history_test.html',
+  'closure/goog/html/cssspecificity_test.html',
   'closure/goog/html/flash_test.html',
   'closure/goog/html/legacyconversions_test.html',
   'closure/goog/html/safehtmlformatter_test.html',
