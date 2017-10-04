@@ -360,17 +360,19 @@ goog.debug.Logger.getLogger = function(name) {
  * @param {string} msg The message to log.
  */
 goog.debug.Logger.logToProfilers = function(msg) {
+  var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
+  if (msWriteProfilerMark) {
+    // Logs a message to the Microsoft profiler
+    // On IE, console['timeStamp'] may output to console
+    msWriteProfilerMark(msg);
+    return;
+  }
+
   // Using goog.global, as loggers might be used in window-less contexts.
   var console = goog.global['console'];
   if (console && console['timeStamp']) {
     // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
     console['timeStamp'](msg);
-  }
-
-  var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
-  if (msWriteProfilerMark) {
-    // Logs a message to the Microsoft profiler
-    msWriteProfilerMark(msg);
   }
 };
 
