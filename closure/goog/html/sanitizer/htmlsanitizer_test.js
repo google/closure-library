@@ -50,23 +50,27 @@ var justification = goog.string.Const.from('test');
 
 /**
  * Sanitizes the original HTML and asserts that it is the same as the expected
- * HTML. If present the config is passed through to the sanitizer.
+ * HTML. If present the config is passed through to the sanitizer. Supports
+ * approximate matching using a RegExp.
  * @param {string} originalHtml
- * @param {string} expectedHtml
+ * @param {string|!RegExp} expectedHtml
  * @param {?goog.html.sanitizer.HtmlSanitizer=} opt_sanitizer
  */
 function assertSanitizedHtml(originalHtml, expectedHtml, opt_sanitizer) {
   var sanitizer =
       opt_sanitizer || new goog.html.sanitizer.HtmlSanitizer.Builder().build();
   try {
-    var sanitized = sanitizer.sanitize(originalHtml);
+    var sanitized = goog.html.SafeHtml.unwrap(sanitizer.sanitize(originalHtml));
     if (isIE9) {
-      assertEquals('', goog.html.SafeHtml.unwrap(sanitized));
+      assertEquals('', sanitized);
       return;
     }
-    goog.testing.dom.assertHtmlMatches(
-        expectedHtml, goog.html.SafeHtml.unwrap(sanitized),
-        true /* opt_strictAttributes */);
+    if (typeof expectedHtml == 'string') {
+      goog.testing.dom.assertHtmlMatches(
+          expectedHtml, sanitized, true /* opt_strictAttributes */);
+    } else {
+      assertRegExp(expectedHtml, sanitized);
+    }
   } catch (err) {
     if (!isIE8) {
       throw err;
@@ -113,7 +117,8 @@ function otag(tag) {
  * @param {string} input
  */
 function assertAfterInsertionEquals(expected, input) {
-  var sanitizer = new Builder().allowFormTag().allowStyleTag().build();
+  var sanitizer =
+      new Builder().allowFormTag().allowStyleTag().withStyleContainer().build();
   input = SafeHtml.unwrap(sanitizer.sanitize(input));
   var div = document.createElement('div');
   document.body.appendChild(div);
@@ -1206,29 +1211,61 @@ function testOriginalTagOverwrite() {
 }
 
 
-function testStyleTag_basic() {
+function testStyleTag_default() {
   var input = '<style>a { color: red; qqq: z; ' +
       'background-image: url("http://foo.com") }</style>';
-  var expected = '<style>a{color: red;}</style>';
-  assertSanitizedHtml(
-      input, expected,
-      new goog.html.sanitizer.HtmlSanitizer.Builder().allowStyleTag().build());
-
-  input = '<style>a { color: red; qqq: z; ' +
-      'background-image: url("http://foo.com") }</style>';
-  expected = '';
+  var expected = '';
   assertSanitizedHtml(
       input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder().build());
 }
 
 
-function testStyleTag_restricted() {
+function testStyleTag_random() {
+  var input = '<style>a { color: red; }</style>';
+  var expected =
+      /^<SPAN id="(sanitizer-\w+)"><style>#\1 a{color: red;}<\/style><\/SPAN>$/;
+  var sanitizer =
+      new goog.html.sanitizer.HtmlSanitizer.Builder().allowStyleTag().build();
+  assertSanitizedHtml(input, expected, sanitizer);
+}
+
+
+function testStyleTag_withStyleWithoutAllow() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().withStyleContainer('foo');
+  });
+}
+
+
+function testStyleTag_withStyleInvalid() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder().withStyleContainer(
+        '<script>');
+  });
+}
+
+
+function testStyleTag_wrappingDisabled() {
+  var input = '<style>a { color: red; qqq: z; ' +
+      'background-image: url("http://foo.com") }</style>';
+  var expected = '<style>a{color: red;}</style>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowStyleTag()
+          .withStyleContainer()
+          .build());
+}
+
+
+function testStyleTag_withStyleContainer() {
   var input = '<style>a { color: red; }</style>';
   var expected = '<style>#foo a{color: red;}</style>';
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .allowStyleTag('foo')
+          .allowStyleTag()
+          .withStyleContainer('foo')
           .build());
 }
 
@@ -1243,6 +1280,7 @@ function testStyleTag_networkUrlPolicy() {
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
           .allowStyleTag()
+          .withStyleContainer()
           .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
           .build());
 }

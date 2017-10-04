@@ -41,6 +41,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
@@ -110,7 +111,7 @@ goog.html.sanitizer.HtmlSanitizerAttributePolicy;
 /**
  * Whether the HTML sanitizer is supported. For now mainly exclude
  * IE9 or below where we know the sanitizer is insecure.
- * @const @private {boolean}
+ * @private @const {boolean}
  */
 goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ =
     !goog.userAgent.IE || document.documentMode >= 10;
@@ -118,7 +119,7 @@ goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ =
 
 /**
  * Whether the template tag is supported.
- * @const @package
+ * @package @const {boolean}
  */
 goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED =
     !goog.userAgent.IE || document.documentMode == null;
@@ -126,14 +127,14 @@ goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED =
 
 /**
  * Prefix used by all internal html sanitizer booking properties.
- * @const @private {string}
+ * @private @const {string}
  */
 goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ = 'data-sanitizer-';
 
 
 /**
  * Temporary attribute name in which html sanitizer uses for bookkeeping.
- * @const @private {string}
+ * @private @const {string}
  */
 goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
     goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'elem-num';
@@ -142,7 +143,7 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_ =
 /**
  * Attribute name added to span tags that replace unknown tags. The value of
  * this attribute is the name of the tag before the sanitization occurred.
- * @const @private
+ * @private @const {string}
  */
 goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_ =
     goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'original-tag';
@@ -150,7 +151,7 @@ goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_ =
 
 /**
  * Attribute name added to blacklisted tags to then filter them from the output.
- * @const @private
+ * @private @const {string}
  */
 goog.html.sanitizer.HTML_SANITIZER_BLACKLISTED_TAG_ =
     goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'blacklisted-tag';
@@ -159,7 +160,7 @@ goog.html.sanitizer.HTML_SANITIZER_BLACKLISTED_TAG_ =
 /**
  * Map of property descriptors we use to avoid looking up the prototypes
  * multiple times.
- * @const @private {!Object<string, !ObjectPropertyDescriptor>}
+ * @private @const {!Object<string, !ObjectPropertyDescriptor>}
  */
 goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_ =
     goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_ ? {
@@ -180,6 +181,14 @@ goog.html.sanitizer.HTML_SANITIZER_PROPERTY_DESCRIPTORS_ =
       'style': Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style')
     } :
                                                     {};
+
+
+/**
+ * Special value for the STYLE container ID, which makes the sanitizer choose
+ * a new random ID on each call to {@link sanitize}.
+ * @private @const {string}
+ */
+goog.html.sanitizer.RANDOM_CONTAINER_ = '*';
 
 
 /**
@@ -409,18 +418,42 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
 
 
 /**
- * Allows STYLE tags. If opt_styleContainer is defined, the sanitizer will
- * modify the CSS selectors in the stylesheet rules to only affect descendants
- * of a specific node.
+ * Allows STYLE tags. Note that the sanitizer wraps the output of each call to
+ * {@link sanitize} with a SPAN tag, give it a random ID unique across multiple
+ * calls, and then restrict all CSS rules found inside STYLE tags to only apply
+ * to children of the SPAN tag. This means that CSS rules in STYLE tags will
+ * only apply to content provided in the same call to {@link sanitize}.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function() {
+  delete this.tagBlacklist_['STYLE'];
+  this.styleContainer_ = goog.html.sanitizer.RANDOM_CONTAINER_;
+  return this;
+};
+
+
+/**
+ * Fixes the ID of the style container used for CSS rules found in STYLE tags,
+ * and disables automatic wrapping with the container. This allows multiple
+ * calls to {@link sanitize} to share STYLE rules. If opt_styleContainer is
+ * missing, the sanitizer will stop restricting the scope of CSS rules
+ * altogether.
  * @param {string=} opt_styleContainer An optional container ID to restrict the
  *     scope of any CSS rule found in STYLE tags.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
-goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function(
-    opt_styleContainer) {
-  delete this.tagBlacklist_['STYLE'];
-  if (goog.isDef(opt_styleContainer)) {
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withStyleContainer =
+    function(opt_styleContainer) {
+  if ('STYLE' in this.tagBlacklist_) {
+    throw new Error('STYLE tags must be allowed through allowStyleTag');
+  }
+  if (opt_styleContainer != undefined) {
+    if (!/^[a-zA-Z][\w-:\.]*$/.test(opt_styleContainer)) {
+      throw new Error('Invalid ID');
+    }
     this.styleContainer_ = opt_styleContainer;
+  } else {
+    this.styleContainer_ = null;
   }
   return this;
 };
@@ -1172,28 +1205,34 @@ goog.html.sanitizer.HtmlSanitizer.getChildNodes_ = function(node) {
  * and returns a SafeHtml object representing the sanitized tree.
  * @param {string} unsanitizedHtml
  * @return {!goog.html.SafeHtml} Sanitized HTML
- * @final
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
     unsanitizedHtml) {
-  var sanitizedParent = this.sanitizeToDomNode(unsanitizedHtml);
+  var styleContainer = this.getStyleContainerId_();
+  var sanitizedParent =
+      this.sanitizeToDomNode_(unsanitizedHtml, styleContainer);
   var sanitizedString = new XMLSerializer().serializeToString(sanitizedParent);
 
   // Remove the outer span added in sanitizeToDomNode. We could create an
   // element from it and then pull out the innerHTML, but this is more
   // performant.
-  if (goog.string.startsWith(sanitizedString, '<span')) {
-    if (goog.string.endsWith(sanitizedString, '</span>')) {
-      sanitizedString = sanitizedString.slice(
-          sanitizedString.indexOf('>') + 1, -1 * ('</span>'.length));
-    } else if (goog.string.endsWith(sanitizedString, '/>')) {
-      sanitizedString = '';
-    }
+  sanitizedString = sanitizedString.slice(
+      sanitizedString.indexOf('>') + 1, sanitizedString.lastIndexOf('</'));
+  if (sanitizedString == '') {
+    return goog.html.SafeHtml.EMPTY;
   }
 
-  return goog.html.uncheckedconversions
-      .safeHtmlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Output of HTML sanitizer'), sanitizedString);
+  var safeHtml = goog.html.uncheckedconversions
+                     .safeHtmlFromStringKnownToSatisfyTypeContract(
+                         goog.string.Const.from('Output of HTML sanitizer'),
+                         sanitizedString);
+  // If appropriate, rewrap the output with a style container.
+  if (this.styleContainer_ == goog.html.sanitizer.RANDOM_CONTAINER_) {
+    safeHtml = goog.html.SafeHtml.create(
+        goog.dom.TagName.SPAN, {id: styleContainer}, safeHtml);
+  }
+
+  return safeHtml;
 };
 
 
@@ -1203,17 +1242,37 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitize = function(
  * and returns a span element containing the sanitized content.
  * @param {string} unsanitizedHtml
  * @return {!HTMLSpanElement} Sanitized HTML
- * @final
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     unsanitizedHtml) {
+  return this.sanitizeToDomNode_(unsanitizedHtml);
+};
+
+
+/**
+ * Private variant of {@link sanitizeToDomNode} that allows passing a style
+ * container. If used with an unsafe style container, it can cause an XSS and
+ * thus we keep it private. Use the {@link withStyleContainer} builder function
+ * to set a name for the style container.
+ * @param {string} unsanitizedHtml
+ * @param {?string=} opt_styleContainer
+ * @return {!HTMLSpanElement} Sanitized HTML
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
+    unsanitizedHtml, opt_styleContainer) {
   var sanitizedParent =
       /** @type {!HTMLSpanElement} */ (document.createElement('span'));
 
   if (!goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_) {
-    // TODO(danesh): IE9 or earlier versions don't provide an easy way to
-    // parse HTML inertly. Handle in a way other than an empty span perhaps.
     return sanitizedParent;
+  }
+
+  var styleContainer = opt_styleContainer != undefined ?
+      opt_styleContainer :
+      this.getStyleContainerId_();
+  if (styleContainer) {
+    sanitizedParent.id = styleContainer;
   }
 
   // Get the treeWalker initialized.
@@ -1234,7 +1293,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
     elemNum++;
 
     // Get a clean (sanitized) version of the dirty node.
-    var cleanNode = this.sanitizeElement_(dirtyNode);
+    var cleanNode = this.sanitizeElement_(dirtyNode, styleContainer);
     if (goog.html.sanitizer.HtmlSanitizer.getNodeType_(cleanNode) !=
         goog.dom.NodeType.TEXT) {
       this.sanitizeAttrs_(dirtyNode, cleanNode);
@@ -1327,14 +1386,35 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode = function(
 
 
 /**
+ * Gets the style container ID for the sanitized output, or creates a new random
+ * one. If no style container is necessary or style containment is disabled,
+ * returns null.
+ * @return {?string}
+ * @private
+ */
+goog.html.sanitizer.HtmlSanitizer.prototype.getStyleContainerId_ = function() {
+  var randomStyleContainmentEnabled =
+      this.styleContainer_ == goog.html.sanitizer.RANDOM_CONTAINER_;
+  var randomStyleContainmentNecessary =
+      !('STYLE' in this.tagBlacklist_) && 'STYLE' in this.tagWhitelist_;
+  // If the builder was configured to create a random unique ID, create one, but
+  // do so only if STYLE is allowed to begin with.
+  return randomStyleContainmentEnabled && randomStyleContainmentNecessary ?
+      'sanitizer-' + goog.string.getRandomString() :
+      this.styleContainer_;
+};
+
+
+/**
  * Returns a sanitized version of an element, with no children or user-provided
  * attributes.
  * @param {!Node} dirtyNode
+ * @param {?string} styleContainer
  * @return {!Node}
  * @private
  */
 goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
-    dirtyNode) {
+    dirtyNode, styleContainer) {
   // Text nodes don't need to be sanitized, unless they are children of STYLE
   // and STYLE tags are allowed.
   if (goog.html.sanitizer.HtmlSanitizer.getNodeType_(dirtyNode) ==
@@ -1355,8 +1435,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeElement_ = function(
       // on its own using DOMParser.
       textContent = goog.html.SafeStyleSheet.unwrap(
           goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString(
-              textContent, this.styleContainer_,
-              goog.bind(function(uri, propName) {
+              textContent, styleContainer, goog.bind(function(uri, propName) {
                 return this.networkRequestUrlPolicy_(
                     uri, {cssProperty: propName});
               }, this)));
