@@ -63,9 +63,23 @@ var neverResolvedGoogPromise = function() {
   return new goog.Promise(function() {});
 };
 
+/** @type {!Array<string>} */
+var events;
+
 function setUp() {
   // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
   goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+  events = [];
+}
+
+/**
+ * @param {string} name
+ * @return {function()}
+ */
+function event(name) {
+  return function() {
+    events.push(name);
+  };
 }
 
 function testEmptyTestCase() {
@@ -361,23 +375,22 @@ function testTestCaseReturningPromise_PromisesInSetUpAndTest() {
     return;
   }
   var testCase = new goog.testing.TestCase();
-  var events = [];
   testCase.setUpPage = function() {
-    events.push('setUpPage-called');
+    event('setUpPage-called')();
     return goog.Timer.promise().then(function() {
-      events.push('setUpPage-promiseFinished');
+      event('setUpPage-promiseFinished')();
     });
   };
   testCase.setUp = function() {
-    events.push('setUp-called');
+    event('setUp-called')();
     return goog.Timer.promise().then(function() {
-      events.push('setUp-promiseFinished');
+      event('setUp-promiseFinished')();
     });
   };
   testCase.addNewTest('foo', function() {
-    events.push('foo-called');
+    event('foo-called')();
     return goog.Timer.promise().then(function() {
-      events.push('foo-promiseFinished');
+      event('foo-promiseFinished')();
     });
   });
 
@@ -804,6 +817,74 @@ function testSetObj() {
   assertEquals(1, testCase.getCount());
 }
 
+function testSetObj_Nested() {
+  var testCase = new goog.testing.TestCase();
+  assertEquals(0, testCase.getCount());
+  testCase.setTestObj({
+    setUp: event('setUp1'),
+    testOk: event('testOk'),
+    somethingElse: fail,
+    testNested: {
+      setUp: event('setUp2'),
+      test: event('testNested'),
+      tearDown: event('tearDown2')
+    },
+    testNestedSuite: {
+      setUp: event('setUp3'),
+      testA: event('testNestedSuite_A'),
+      testB: event('testNestedSuite_B'),
+      testSuperNestedSuite: {
+        setUp: event('setUp4'),
+        testC: event('testNestedSuite_SuperNestedSuite_C'),
+        tearDown: event('tearDown4')
+      },
+      tearDown: event('tearDown3')
+    },
+    tearDown: event('tearDown1')
+  });
+  assertEquals(5, testCase.getCount());
+  var tests = testCase.getTests();
+  var names = [];
+  for (var i = 0; i < tests.length; i++) {
+    names.push(tests[i].name);
+  }
+  assertArrayEquals(
+      [
+        'testOk', 'testNested', 'testNestedSuite_A', 'testNestedSuite_B',
+        'testNestedSuite_SuperNestedSuite_C'
+      ],
+      names);
+  testCase.runTests();
+  assertArrayEquals(
+      [
+        'setUp1',
+        'testOk',
+        'tearDown1',
+        'setUp1',
+        'setUp2',
+        'testNested',
+        'tearDown2',
+        'tearDown1',
+        'setUp1',
+        'setUp3',
+        'testNestedSuite_A',
+        'tearDown3',
+        'tearDown1',
+        'setUp1',
+        'setUp3',
+        'testNestedSuite_B',
+        'tearDown3',
+        'tearDown1',
+        'setUp1',
+        'setUp3',
+        'setUp4',
+        'testNestedSuite_SuperNestedSuite_C',
+        'tearDown4',
+        'tearDown3',
+        'tearDown1'
+      ],
+      events);
+}
 
 function testSetObj_es6Class() {
   var FooTest;
@@ -940,5 +1021,19 @@ function testInitializeTestCase() {
   testCase.setTestsToRun(null);
   return testCase.runTestsReturningPromise().then(function() {
     assertStoreCallsAndErrors(['mockTestName'], ['ERROR in mockTestName']);
+  });
+}
+
+function testChainSetupTestCase() {
+  var objectChain = [
+    {setUp: event('setUp1'), tearDown: event('tearDown1')},
+    {setUp: event('setUp2'), tearDown: event('tearDown2')}
+  ];
+
+  var testCase = new goog.testing.TestCase('fooCase');
+  testCase.addNewTest('foo', okGoogPromise, undefined, objectChain);
+
+  return testCase.runTestsReturningPromise().then(function() {
+    assertArrayEquals(['setUp1', 'setUp2', 'tearDown2', 'tearDown1'], events);
   });
 }
