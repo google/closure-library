@@ -50,6 +50,13 @@ goog.inherits(goog.proto2.ObjectSerializer, goog.proto2.Serializer);
  * An enumeration of the options for how to emit the keys in
  * the generated simplified object.
  *
+ * For serialization, the option specifies the keys to use in the serialized
+ * object.
+ *
+ * For deserialization, the option specifies which keys are allowed; an object
+ * serialized by TAG may be deserialized by TAG or by NAME, but an object
+ * serialized by NAME must be deserialized by NAME.
+ *
  * @enum {number}
  */
 goog.proto2.ObjectSerializer.KeyOption = {
