@@ -1619,7 +1619,7 @@ function testGoogLoadModuleInSafari10() {
 
 
 function testLoadFileSync() {
-  var fileContents = goog.loadFileSync_('deps.js');
+  var fileContents = goog.loadFileSync_('base.js');
   assertTrue(
       'goog.loadFileSync_ returns string', typeof fileContents === 'string');
   assertTrue('goog.loadFileSync_ string length > 0', fileContents.length > 0);
