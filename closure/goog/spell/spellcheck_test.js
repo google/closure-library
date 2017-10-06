@@ -37,6 +37,11 @@ var TEST_DATA = {
   'ignoerd': [goog.spell.SpellCheck.WordStatus.INVALID, []]
 };
 
+/**
+ * @param {!Array<string>} words
+ * @param {!Object} spellChecker
+ * @param {!Function} callback
+ */
 function mockSpellCheckingFunction(words, spellChecker, callback) {
   var len = words.length;
   var data = [];
@@ -81,7 +86,6 @@ function testSetWordStatusValid() {
 function testSetWordStatusInvalid() {
   var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
 
-  var valid = goog.spell.SpellCheck.WordStatus.VALID;
   var invalid = goog.spell.SpellCheck.WordStatus.INVALID;
 
   spell.checkBlock('Testing set status invalid.');
@@ -109,4 +113,20 @@ function testGetSuggestions() {
   spell.checkBlock('Test strnig wtih a few misspeled words.');
   var suggestions = spell.getSuggestions('misspeled');
   assertEquals(3, suggestions.length);
+}
+
+function testWordBoundaryRegex() {
+  var regex = goog.spell.SpellCheck.WORD_BOUNDARY_REGEX;
+  assertEquals(3, 'one two three'.split(regex).length);
+  assertEquals(3, 'one/two/three'.split(regex).length);
+  assertEquals(3, 'one-two-three'.split(regex).length);
+  assertEquals(3, 'one.two.three'.split(regex).length);
+  assertEquals(3, 'one,two,three'.split(regex).length);
+  assertEquals(3, 'one[two]three'.split(regex).length);
+  assertEquals(3, 'one\\two\\three'.split(regex).length);
+  assertEquals(3, 'one\rtwo\nthree'.split(regex).length);
+  assertEquals(3, 'one\ttwo\tthree'.split(regex).length);
+  assertEquals(3, 'one!two~three'.split(regex).length);
+  assertEquals(18, 'A"1#B$2%C!3(D)4*E+5:F;6<G>7=H?8@I^9'.split(regex).length);
+  assertEquals(6, 'a_two`z{four|Z}six'.split(regex).length);
 }
