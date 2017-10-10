@@ -228,9 +228,9 @@ goog.structs.QuadTree.prototype.forEach = function(fn, opt_obj) {
  * order (NE, SE, SW, NW).  The provided function will be called for each
  * leaf node that is encountered.
  * @param {goog.structs.QuadTree.Node} node The current node.
- * @param {function(goog.structs.QuadTree.Node)} fn The function to call
- *     for each leaf node. This function takes the node as an argument, and its
- *     return value is irrelevant.
+ * @param {function(this:goog.structs.QuadTree, goog.structs.QuadTree.Node)} fn
+ *     The function to call for each leaf node. This function takes the node as
+ *     an argument, and its return value is irrelevant.
  * @private
  */
 goog.structs.QuadTree.prototype.traverse_ = function(node, fn) {
