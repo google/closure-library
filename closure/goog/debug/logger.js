@@ -109,6 +109,13 @@ goog.debug.Logger.ROOT_LOGGER_NAME = '';
 goog.define('goog.debug.Logger.ENABLE_HIERARCHY', true);
 
 
+/**
+ * @define {boolean} Toggles whether active log statements are also recorded
+ *     to the profiler.
+ */
+goog.define('goog.debug.Logger.ENABLE_PROFILER_LOGGING', false);
+
+
 if (!goog.debug.Logger.ENABLE_HIERARCHY) {
   /**
    * @type {!Array<Function>}
@@ -360,19 +367,23 @@ goog.debug.Logger.getLogger = function(name) {
  * @param {string} msg The message to log.
  */
 goog.debug.Logger.logToProfilers = function(msg) {
-  var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
-  if (msWriteProfilerMark) {
-    // Logs a message to the Microsoft profiler
-    // On IE, console['timeStamp'] may output to console
-    msWriteProfilerMark(msg);
-    return;
-  }
+  // Some browsers also log timeStamp calls to the console, only log
+  // if actually asked.
+  if (goog.debug.Logger.ENABLE_PROFILER_LOGGING) {
+    var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
+    if (msWriteProfilerMark) {
+      // Logs a message to the Microsoft profiler
+      // On IE, console['timeStamp'] may output to console
+      msWriteProfilerMark(msg);
+      return;
+    }
 
-  // Using goog.global, as loggers might be used in window-less contexts.
-  var console = goog.global['console'];
-  if (console && console['timeStamp']) {
-    // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
-    console['timeStamp'](msg);
+    // Using goog.global, as loggers might be used in window-less contexts.
+    var console = goog.global['console'];
+    if (console && console['timeStamp']) {
+      // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
+      console['timeStamp'](msg);
+    }
   }
 };
 
@@ -697,7 +708,9 @@ goog.debug.Logger.prototype.logRecord = function(logRecord) {
  * @private
  */
 goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
-  goog.debug.Logger.logToProfilers('log:' + logRecord.getMessage());
+  if (goog.debug.Logger.ENABLE_PROFILER_LOGGING) {
+    goog.debug.Logger.logToProfilers('log:' + logRecord.getMessage());
+  }
   if (goog.debug.Logger.ENABLE_HIERARCHY) {
     var target = this;
     while (target) {
