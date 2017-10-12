@@ -29,6 +29,7 @@ BLACKLIST_FILES=(
   test_module.js
   test_module_dep.js
   tweak/testhelpers.js
+  transpile.js
   useragent/useragenttestutil.js
 )
 declare -A BLACKLIST
