@@ -20,6 +20,7 @@ java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   --js='!**_perf.js' \
   --js='!**tester.js' \
   --js='!**promise/testsuiteadapter.js' \
+  --js='!**relativecommontests.js' \
   --js='!**osapi/osapi.js' \
   --js='!**svgpan/svgpan.js' \
   --js='!**alltests.js' \
