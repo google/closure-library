@@ -36,7 +36,8 @@ script:
   - ./scripts/ci/compile_closure.sh
   - ./scripts/ci/lint_pull_request.sh
   - ./scripts/ci/check_code_format.sh
-  - travis_wait 30 ./scripts/ci/run_all_tests.sh
+  # Disable unit tests
+  # - travis_wait 30 ./scripts/ci/run_all_tests.sh
 
 after_success:
   - ./scripts/ci/push_latest_docs.sh
