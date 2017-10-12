@@ -118,10 +118,11 @@ xpcdemo.initOuter = function() {
  */
 xpcdemo.initInner = function() {
   // Get the channel configuration passed by the containing document.
-  var cfg =
-      JSON.parse((new goog.Uri(window.location.href)).getParameterValue('xpc'));
+  var cfg = JSON.parse(
+      (new goog.Uri(window.location.href)).getParameterValue('xpc') || '');
 
-  xpcdemo.channel = new goog.net.xpc.CrossPageChannel(cfg);
+  xpcdemo.channel = new goog.net.xpc.CrossPageChannel(
+      /** @type {Object} */ (cfg));
 
   xpcdemo.initCommon_();
 };
