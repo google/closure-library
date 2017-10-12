@@ -32,7 +32,8 @@ goog.require('goog.structs.Set');
  * Support class for spell checker components. Provides basic functionality
  * such as word lookup and caching.
  *
- * @param {Function=} opt_lookupFunction Function to use for word lookup. Must
+ * @param {function(!Array<string>, !goog.spell.SpellCheck, !Function)=}
+ *     opt_lookupFunction Function to use for word lookup. Must
  *     accept an array of words, an object reference and a callback function as
  *     parameters. It must also call the callback function (as a method on the
  *     object), once ready, with an array containing the original words, their
@@ -47,7 +48,7 @@ goog.spell.SpellCheck = function(opt_lookupFunction, opt_language) {
 
   /**
    * Function used to lookup spelling of words.
-   * @private {Function}
+   * @private {?function(!Array<string>, !goog.spell.SpellCheck, !Function)}
    */
   this.lookupFunction_ = opt_lookupFunction || null;
 
