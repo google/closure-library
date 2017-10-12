@@ -24,6 +24,7 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.html.testing');
 goog.require('goog.string');
+goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -107,12 +108,14 @@ function getSanitizedInlineStyle(sourceCss, opt_urlRewrite) {
  * sanitization using {@link CssSanitizer.sanitizeStyleSheetString}.
  * @param {string} expectedCssText
  * @param {string} inputCssText
+ * @param {?string=} opt_containerId
  * @param {function(string, string):?SafeUrl=} opt_uriRewriter
  */
 function assertSanitizedCssEquals(
-    expectedCssText, inputCssText, opt_uriRewriter) {
+    expectedCssText, inputCssText, opt_containerId, opt_uriRewriter) {
   assertBrowserSanitizedCssEquals(
-      {chrome: expectedCssText}, inputCssText, opt_uriRewriter);
+      {chrome: expectedCssText}, inputCssText, opt_containerId,
+      opt_uriRewriter);
 }
 
 
@@ -131,10 +134,11 @@ function assertSanitizedCssEquals(
  *     optional. If a browser is missing, the chrome expected value is used
  *     instead.
  * @param {string} inputCssText
+ * @param {?string=} opt_containerId
  * @param {function(string, string):?SafeUrl=} opt_uriRewriter
  */
 function assertBrowserSanitizedCssEquals(
-    expectedCssTextByBrowser, inputCssText, opt_uriRewriter) {
+    expectedCssTextByBrowser, inputCssText, opt_containerId, opt_uriRewriter) {
   var expectedCssText = undefined;
   if (goog.userAgent.product.CHROME) {
     expectedCssText = expectedCssTextByBrowser.chrome;
@@ -161,7 +165,43 @@ function assertBrowserSanitizedCssEquals(
       expectedCssText,
       goog.html.SafeStyleSheet.unwrap(
           goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString(
-              inputCssText, 'foo', opt_uriRewriter)));
+              inputCssText,
+              opt_containerId === undefined ? 'foo' : opt_containerId,
+              opt_uriRewriter)));
+}
+
+
+/**
+ * Converts rules in STYLE tags into style attributes on the tags they apply to,
+ * and returns a new string.
+ * @param {string} html
+ * @return {string}
+ */
+function inlineStyleRulesString(html) {
+  var tree = goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
+      '<span>' + html + '</span>');
+  if (tree == null) {
+    return '';
+  }
+  goog.html.sanitizer.CssSanitizer.inlineStyleRules(tree);
+  return tree.innerHTML;
+}
+
+
+/**
+ * Inlines the rules in STYLE tags in the original HTML and asserts that it is
+ * the same as the expected HTML.
+ * @param {string} expectedHtml
+ * @param {string} originalHtml
+ */
+function assertInlinedStyles(expectedHtml, originalHtml) {
+  var inlinedHtml = inlineStyleRulesString(originalHtml);
+  if (!supportsDomParser) {
+    assertEquals('', inlinedHtml);
+    return;
+  }
+  goog.testing.dom.assertHtmlMatches(
+      expectedHtml, inlinedHtml, true /* opt_strictAttributes */);
 }
 
 
@@ -447,6 +487,12 @@ function testSanitizeStyleSheetString_basic() {
 }
 
 
+function testSanitizeInlineStyleString_noSelector() {
+  var input = 'a{color: red;}';
+  assertSanitizedCssEquals(input, input, null /* opt_containerId */);
+}
+
+
 function testSanitizeStyleSheetString_comma() {
   var input = 'a, b, c > d {color: red}';
   var expected = '#foo a,#foo b,#foo c > d{color: red;}';
@@ -475,15 +521,25 @@ function testSanitizeStyleSheetString_urlRewrite() {
   // Safari will strip quotes if they are not needed and add a slash.
   var unquoted = '#foo a{background-image: url(http://bar.com/);}';
   assertBrowserSanitizedCssEquals(
-      {safari: unquoted, chrome: quoted}, input, urlRewriter);
+      {safari: unquoted, chrome: quoted}, input,
+      undefined /* opt_containerId */, urlRewriter);
 
   input = 'a {background-image: url("http://nope.com")}';
   var expected = '#foo a{}';
-  assertSanitizedCssEquals(expected, input, urlRewriter);
+  assertSanitizedCssEquals(
+      expected, input, undefined /* opt_containerId */, urlRewriter);
 
   input = 'a{background-image: url("javascript:alert(\"bar\")")}';
   expected = '#foo a{}';
-  assertSanitizedCssEquals(expected, input, urlRewriter);
+  assertSanitizedCssEquals(
+      expected, input, undefined /* opt_containerId */, urlRewriter);
+}
+
+
+function testSanitizeStyleSheetString_unrecognized() {
+  var input = 'a {mso-font-size: 2px; color: black}';
+  var expected = 'a{color: black;}';
+  assertSanitizedCssEquals(expected, input, null /* opt_containerId */);
 }
 
 
@@ -606,4 +662,51 @@ function testSanitizeInlineStyleString_invalidSelector() {
           input, '</style>');
     });
   }
+}
+
+
+function testInlineStyleRules_empty() {
+  assertInlinedStyles('', '');
+}
+
+
+function testInlineStyleRules_basic() {
+  var input = '<style>a{color:red}</style><a>foo</a>';
+  var expected = '<a style="color:red;">foo</a>';
+  assertInlinedStyles(expected, input);
+}
+
+
+function testInlineStyleRules_onlyStyle() {
+  var input = '<style>a{color:red}</style>';
+  assertInlinedStyles('', input);
+}
+
+
+function testInlineStyleRules_noStyle() {
+  var input = '<a>hi</a>';
+  assertInlinedStyles(input, input);
+}
+
+
+function testInlineStyleRules_onlyText() {
+  var input = 'hello';
+  assertInlinedStyles(input, input);
+}
+
+
+function testInlineStyleRules_specificity() {
+  var input = '<style>a{color: red; border: 1px}' +
+      '#foo{color: white; border: 2px}</style>' +
+      '<a id="foo" style="color: black">foo</a>';
+  var expected = '<a id="foo" style="color: black; border: 2px">foo</a>';
+  assertInlinedStyles(expected, input);
+}
+
+
+function testInlineStyleRules_media() {
+  var input = '<style>a{color: red;} @media screen { border: 1px; }</style>' +
+      '<a id="foo">foo</a>';
+  var expected = '<a id="foo" style="color: red;">foo</a>';
+  assertInlinedStyles(expected, input);
 }

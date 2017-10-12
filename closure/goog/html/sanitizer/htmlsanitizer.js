@@ -237,6 +237,9 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 
   /** @private @const {?string} */
   this.styleContainer_ = builder.styleContainer_;
+
+  /** @private @const {boolean} */
+  this.inlineStyleRules_ = builder.inlineStyleRules_;
 };
 
 
@@ -387,6 +390,18 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.styleContainer_ = null;
 
   /**
+   * Whether {@link withStyleContainer} was called.
+   * @private {boolean}
+   */
+  this.withStyleContainerCalled_ = false;
+
+  /**
+   * Whether rules in STYLE tags should be inlined into style attributes.
+   * @private {boolean}
+   */
+  this.inlineStyleRules_ = false;
+
+  /**
    * True iff policies have been installed for the instance.
    * @private {boolean}
    */
@@ -437,15 +452,20 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function() {
  * and disables automatic wrapping with the container. This allows multiple
  * calls to {@link sanitize} to share STYLE rules. If opt_styleContainer is
  * missing, the sanitizer will stop restricting the scope of CSS rules
- * altogether.
+ * altogether. Requires {@link allowStyleTag} to be called first, and is not
+ * compatible with {@link inlineStyleRules}.
  * @param {string=} opt_styleContainer An optional container ID to restrict the
  *     scope of any CSS rule found in STYLE tags.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withStyleContainer =
     function(opt_styleContainer) {
+  this.withStyleContainerCalled_ = true;
   if ('STYLE' in this.tagBlacklist_) {
     throw new Error('STYLE tags must be allowed through allowStyleTag');
+  }
+  if (this.inlineStyleRules_) {
+    throw new Error('The container is useless if styles are inlined');
   }
   if (opt_styleContainer != undefined) {
     if (!/^[a-zA-Z][\w-:\.]*$/.test(opt_styleContainer)) {
@@ -455,6 +475,41 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withStyleContainer =
   } else {
     this.styleContainer_ = null;
   }
+  return this;
+};
+
+
+/**
+ * Converts rules in STYLE tags into style attributes on the tags they apply to.
+ * This feature is not compatible with {@link withStyleContainer}. Note that
+ * this method does not allow existing style attributes through, it only allows
+ * style declarations found in STYLE tags. If style attributes are required, use
+ * {@link allowCssStyles}.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.inlineStyleRules =
+    function() {
+  // inlineStyleRules implies allowStyleTag, but STYLE tags will not make it to
+  // the output since we'll now configure the builder to inline them.
+  this.allowStyleTag();
+  this.styleContainer_ = null;
+  if (this.withStyleContainerCalled_) {
+    throw new Error(
+        'Cannot inline styles and use a container at the same time');
+  }
+  this.inlineStyleRules_ = true;
+  return this;
+};
+
+
+/**
+ * Allows inline CSS styles.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
+    function() {
+  this.sanitizeInlineCssPolicy_ =
+      goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_;
   return this;
 };
 
@@ -655,18 +710,6 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withCustomNamePolicy =
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withCustomTokenPolicy =
     function(customTokenPolicy) {
   this.tokenPolicy_ = customTokenPolicy;
-  return this;
-};
-
-
-/**
- * Allows inline CSS styles.
- * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
- */
-goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
-    function() {
-  this.sanitizeInlineCssPolicy_ =
-      goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_;
   return this;
 };
 
@@ -1012,12 +1055,14 @@ goog.html.sanitizer.HtmlSanitizer.getDomTreeWalker_ = function(
     doc.body.innerHTML = unsanitizedHtml;
   }
   return document.createTreeWalker(
-      iteratorParent, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null,
-      false);
+      iteratorParent, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      null /* filter */, false /* entityReferenceExpansion */);
 };
+
 
 // TODO(pelizzi): both getAttribute* functions accept a Node but are defined on
 // Element. Investigate.
+
 
 /**
  * Returns an element's attributes without falling prey to things like
@@ -1036,6 +1081,7 @@ goog.html.sanitizer.HtmlSanitizer.getAttributes_ = function(node) {
   }
 };
 
+
 /**
  * Returns a specific attribute from an element without falling prey to
  * clobbering.
@@ -1053,6 +1099,7 @@ goog.html.sanitizer.HtmlSanitizer.getAttribute_ = function(node, attrName) {
     return '';
   }
 };
+
 
 /**
  * Sets an element's attributes without falling prey to things like
@@ -1379,6 +1426,18 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
             goog.html.sanitizer.HTML_SANITIZER_BLACKLISTED_TAG_)) {
       target.appendChild(cleanNode);
     }
+  }
+
+  if (this.inlineStyleRules_) {
+    // Cannot sanitize the DOM nodes directly, TEMPLATE inert documents do not
+    // have stylesheet information on STYLE tags.
+    var sanitizedCopy = /** @type {?HTMLSpanElement} */ (
+        goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
+            sanitizedParent.outerHTML));
+    goog.asserts.assert(
+        sanitizedCopy, 'Older browsers should not get to this branch');
+    goog.html.sanitizer.CssSanitizer.inlineStyleRules(sanitizedCopy);
+    sanitizedParent = sanitizedCopy;
   }
 
   return sanitizedParent;

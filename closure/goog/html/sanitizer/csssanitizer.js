@@ -25,6 +25,7 @@ goog.provide('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.html.CssSpecificity');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
@@ -270,7 +271,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
 
 /**
  * Sanitizes a {@link CSSStyleSheet}.
- * @param {!CSSStyleSheet} cssStyleDeclaration
+ * @param {!CSSStyleSheet} cssStyleSheet
  * @param {?string} containerId An ID to restrict the scope of the rules being
  *     sanitized. If null, no restriction is applied.
  * @param {function(string, string):?goog.html.SafeUrl|undefined} uriRewriter A
@@ -279,17 +280,11 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
  * @private
  */
 goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
-    cssStyleDeclaration, containerId, uriRewriter) {
+    cssStyleSheet, containerId, uriRewriter) {
   var sanitizedRules = [];
-  for (var i = 0; i < cssStyleDeclaration.cssRules.length; i++) {
-    var cssRule = cssStyleDeclaration.cssRules[i];
-    if (!(cssRule instanceof CSSStyleRule) ||
-        cssRule.type != CSSRule.STYLE_RULE) {
-      // Filter out at-rules like @media, @font, etc.
-      // TODO(pelizzi): some of these at-rules are safe, consider adding partial
-      // support for them.
-      continue;
-    }
+  var cssRules = goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_(
+      goog.array.toArray(cssStyleSheet.cssRules));
+  goog.array.forEach(cssRules, function(cssRule) {
     if (containerId && !/[a-zA-Z][\w-:\.]*/.test(containerId)) {
       // Sanity check on the element ID that will confine the new CSS rules.
       throw new Error('Invalid container id');
@@ -298,7 +293,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
         document.documentMode == 10 && /\\['"]/.test(cssRule.selectorText)) {
       // If a container ID was specified, drop selectors with escaped quotes in
       // strings on IE 10 due to a regex bug.
-      continue;
+      return;
     }
     // If a container ID was specified, restrict all selectors in this rule to
     // be descendants of the node with such an ID. Use a regex to exclude commas
@@ -312,8 +307,26 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
         scopedSelector,
         goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
             cssRule.style, uriRewriter)));
-  }
+  });
   return goog.html.SafeStyleSheet.concat(sanitizedRules);
+};
+
+
+/**
+ * Used to filter out at-rules like @media, @font, etc. Currently, none of these
+ * are supported.
+ * @param {!Array<!CSSRule>} cssRules
+ * @return {!Array<!CSSStyleRule>}
+ * @private
+ */
+// TODO(pelizzi): some of these at-rules are safe, consider adding partial
+// support for them.
+goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_ = function(cssRules) {
+  return /** @type {!Array<!CSSStyleRule>} */ (
+      goog.array.filter(cssRules, function(cssRule) {
+        return cssRule instanceof CSSStyleRule ||
+            cssRule.type == CSSRule.STYLE_RULE;
+      }));
 };
 
 
@@ -333,24 +346,40 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
  */
 goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString = function(
     textContent, opt_containerId, opt_uriRewriter) {
-  if ((goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10)) ||
-      typeof goog.global.DOMParser != 'function') {
+  var styleTag =
+      goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
+          '<style>' + textContent + '</style>');
+  if (styleTag == null) {
     return goog.html.SafeStyleSheet.EMPTY;
   }
-  // In this package we prefer using the TEMPLATE tag over DOMParser for safe
-  // HTML parsing, but at least on Chrome the inert STYLE tag does not have a
-  // CSSStyleSheet object attached to it.
-  var parser = new DOMParser();
-  var sheet = parser
-                  .parseFromString(
-                      '<html><head></head><body><style>' + textContent +
-                          '</style></body></html>',
-                      'text/html')
-                  .body.children[0]
-                  .sheet;
   var containerId = opt_containerId != undefined ? opt_containerId : null;
   return goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_(
-      sheet, containerId, opt_uriRewriter);
+      styleTag.sheet, containerId, opt_uriRewriter);
+};
+
+
+/**
+ * Returns an inert DOM tree produced by parsing the provided html using
+ * DOMParser. "Inert" here means that merely parsing the string won't execute
+ * scripts or load images. If you attach this tree to a non-inert document, it
+ * will execute these side effects! In this package we prefer using the TEMPLATE
+ * tag over DOMParser to produce inert trees, but at least on Chrome the inert
+ * STYLE tag does not have a CSSStyleSheet object attached to it.
+ * @param {string} html
+ * @return {?Element}
+ * @package
+ */
+goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement = function(
+    html) {
+  if ((goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10)) ||
+      typeof goog.global.DOMParser != 'function') {
+    return null;
+  }
+  var parser = new DOMParser();
+  return parser
+      .parseFromString(
+          '<html><head></head><body>' + html + '</body></html>', 'text/html')
+      .body.children[0];
 };
 
 
@@ -415,6 +444,89 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString = function(
   div.style.cssText = cssText;
   return goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
       div.style, opt_uriRewriter);
+};
+
+
+/**
+ * Converts rules in STYLE tags into style attributes on the tags they apply to.
+ * Modifies the provided DOM subtree in-place.
+ * @param {!Element} element
+ * @package
+ */
+goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
+  // Note that Webkit used to offer the perfect function for the job:
+  // getMatchedCSSRules. Unfortunately, it was never supported cross-browser and
+  // is deprecated now. On the other hand, getComputedStyle cannot be used to
+  // differentiate property values that are set by a style sheet from those set
+  // by a style attribute or default values. This algorithm with
+  // O(nr_of_elements * nr_of_rules) complexity that has to manually sort
+  // selectors by specificity is the best we can do.
+
+  // Extract all rules from STYLE tags found in the subtree.
+  var styleTags = element.getElementsByTagName('STYLE');
+  var cssRules = goog.array.concatMap(styleTags, function(styleTag) {
+    return goog.array.toArray(styleTag.sheet.cssRules);
+  });
+  cssRules = goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_(cssRules);
+  // Sort the rules by descending specificity.
+  cssRules.sort(function(a, b) {
+    var aSpecificity = goog.html.CssSpecificity.getSpecificity(a.selectorText);
+    var bSpecificity = goog.html.CssSpecificity.getSpecificity(b.selectorText);
+    return -goog.array.compare3(aSpecificity, bSpecificity);
+  });
+  // For each element, apply the matching rules to the element style attribute.
+  // If a property is already explicitly defined, do not update it. This
+  // guarantees that the rule with selectors with the highest priority (or the
+  // properties defined in the style attribute itself) have precedence over
+  // lower priority ones.
+  var subTreeWalker = document.createTreeWalker(
+      element, NodeFilter.SHOW_ELEMENT, null /* filter */,
+      false /* entityReferenceExpansion */);
+  var currentElement;
+  while (currentElement = /** @type {!Element} */ (subTreeWalker.nextNode())) {
+    goog.array.forEach(cssRules, function(rule) {
+      var matchingMethod =
+          Element.prototype.matches || Element.prototype.msMatchesSelector;
+      if (!matchingMethod.call(currentElement, rule.selectorText)) {
+        return;
+      }
+      if (!rule.style) {
+        return;
+      }
+      goog.html.sanitizer.CssSanitizer.mergeStyleDeclarations_(
+          currentElement, rule.style);
+    });
+  }
+  // Delete the STYLE tags.
+  goog.array.forEach(styleTags, goog.dom.removeNode);
+};
+
+
+/**
+ * Merges style properties from {@code styleDeclaration} into
+ * {@code element.style}.
+ * @param {!Element} element
+ * @param {!CSSStyleDeclaration} styleDeclaration
+ * @private
+ */
+goog.html.sanitizer.CssSanitizer.mergeStyleDeclarations_ = function(
+    element, styleDeclaration) {
+  var existingPropNames =
+      goog.html.sanitizer.CssSanitizer.getCssPropNames_(element.style);
+  var newPropNames =
+      goog.html.sanitizer.CssSanitizer.getCssPropNames_(styleDeclaration);
+
+  goog.array.forEach(newPropNames, function(propName) {
+    if (existingPropNames.indexOf(propName) >= 0) {
+      // This was either a property set by the style attribute or a stylesheet
+      // rule with a higher priority. Leave the existing value.
+      return;
+    }
+    var propValue = goog.html.sanitizer.CssSanitizer.getCssValue_(
+        styleDeclaration, propName);
+    goog.html.sanitizer.CssSanitizer.setCssValue_(
+        element.style, propName, propValue);
+  });
 };
 
 

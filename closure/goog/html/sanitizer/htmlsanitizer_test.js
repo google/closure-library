@@ -1286,6 +1286,103 @@ function testStyleTag_networkUrlPolicy() {
 }
 
 
+function testInlineStyleRules_basic() {
+  var input = '<style>a{color:red}</style><a>foo</a>';
+  var expected = '<a style="color:red;">foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .inlineStyleRules()
+          .build());
+}
+
+
+function testInlineStyleRules_specificity() {
+  var input = '<style>a{color: red; border-width: 1px}' +
+      '#foo{color: white; border-width: 2px}</style>' +
+      '<a id="foo" style="color: black">foo</a>';
+  // Not matching the #foo rule because id="foo" was dropped.
+  var expected = '<a style="color: black; border-width: 1px">foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .build());
+
+  input = '<style>a{color: red; border-width: 1px}' +
+      '#foo{color: white;}</style>' +
+      '<a id="foo">foo</a>';
+  expected = '<a id="foo" style="color: white; border-width: 1px">foo</a>';
+  // Now #foo matches.
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .withCustomTokenPolicy(goog.functions.identity)
+          .build());
+}
+
+
+function testInlineStyleRules_incompatible() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowStyleTag()
+        .withStyleContainer()
+        .inlineStyleRules();
+  });
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowStyleTag()
+        .inlineStyleRules()
+        .withStyleContainer();
+  });
+}
+
+
+function testInlineStyleRules_doesNotAllowStyleAttribute() {
+  var input = '<style>a{color:red}</style><a style="font-weight: bold">foo</a>';
+  var expected = '<a style="color:red;">foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowStyleTag()
+          .inlineStyleRules()
+          .build());
+}
+
+
+function testInlineStyleRules_networkRequestUrlPolicy() {
+  var input =
+      '<style>a{background-image: url("http://foo.com")}</style><a>foo</a>';
+  var expected = '<a>foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .inlineStyleRules()
+          .build());
+
+  expected = '<a style="background-image: url(\'http://foo.com\')">foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .inlineStyleRules()
+          .build());
+
+  input = '<style>a{background-image: url("javascript:alert(1)")}</style>' +
+      '<a>foo</a>';
+  expected = '<a>foo</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .inlineStyleRules()
+          .build());
+}
+
+
 function testOriginalTagClobber() {
   var input = '<a:b data-sanitizer-original-tag="xss"></a:b>';
   var expected = '<span ' + otag('a:b') + '></span>';
