@@ -204,11 +204,12 @@ BaseTestChannel.prototype.checkBufferingProxy_ = function() {
   var bufferingProxyResult =
       this.channel_.getConnectionState().bufferingProxyResult;
   if (goog.isDefAndNotNull(bufferingProxyResult)) {
-    this.channelDebug_.debug(
-        'TestConnection: skipping stage 2, precomputed result is ' +
-                bufferingProxyResult ?
-            'Buffered' :
-            'Unbuffered');
+    this.channelDebug_.debug(function() {
+      return 'TestConnection: skipping stage 2, precomputed result is ' +
+              bufferingProxyResult ?
+          'Buffered' :
+          'Unbuffered';
+    });
     requestStats.notifyStatEvent(requestStats.Stat.TEST_STAGE_TWO_START);
     if (bufferingProxyResult) {  // Buffered/Proxy connection
       requestStats.notifyStatEvent(requestStats.Stat.PROXY);

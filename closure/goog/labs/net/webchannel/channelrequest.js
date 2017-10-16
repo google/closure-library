@@ -562,8 +562,10 @@ ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   } catch (ex) {
     this.channelDebug_.debug('Failed call to OnXmlHttpReadyStateChanged_');
     if (this.xmlHttp_ && this.xmlHttp_.getResponseText()) {
-      this.channelDebug_.dumpException(
-          ex, 'ResponseText: ' + this.xmlHttp_.getResponseText());
+      var channelRequest = this;
+      this.channelDebug_.dumpException(ex, function() {
+        return 'ResponseText: ' + channelRequest.xmlHttp_.getResponseText();
+      });
     } else {
       this.channelDebug_.dumpException(ex, 'No response text');
     }
@@ -615,8 +617,11 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   this.lastStatusCode_ = status;
   var responseText = this.xmlHttp_.getResponseText();
   if (!responseText) {
-    this.channelDebug_.debug(
-        'No response text for uri ' + this.requestUri_ + ' status ' + status);
+    var channelRequest = this;
+    this.channelDebug_.debug(function() {
+      return 'No response text for uri ' + channelRequest.requestUri_ +
+          ' status ' + status;
+    });
   }
   this.successful_ = (status == 200);
 

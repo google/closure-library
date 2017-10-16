@@ -919,9 +919,10 @@ WebChannelBase.prototype.sendMap = function(map, opt_context) {
   if (this.outgoingMaps_.length == WebChannelBase.MAX_MAPS_PER_REQUEST_) {
     // severe() is temporary so that we get these uploaded and can figure out
     // what's causing them. Afterwards can change to warning().
-    this.channelDebug_.severe(
-        'Already have ' + WebChannelBase.MAX_MAPS_PER_REQUEST_ +
-        ' queued maps upon queueing ' + goog.json.serialize(map));
+    this.channelDebug_.severe(function() {
+      return 'Already have ' + WebChannelBase.MAX_MAPS_PER_REQUEST_ +
+          ' queued maps upon queueing ' + goog.json.serialize(map);
+    });
   }
 
   this.outgoingMaps_.push(
@@ -946,9 +947,12 @@ WebChannelBase.prototype.setFailFast = function(failFast) {
   if ((this.forwardChannelRequestPool_.hasPendingRequest() ||
        this.forwardChannelTimerId_) &&
       this.forwardChannelRetryCount_ > this.getForwardChannelMaxRetries()) {
-    this.channelDebug_.info(
-        'Retry count ' + this.forwardChannelRetryCount_ + ' > new maxRetries ' +
-        this.getForwardChannelMaxRetries() + '. Fail immediately!');
+    var self = this;
+    this.channelDebug_.info(function() {
+      return 'Retry count ' + self.forwardChannelRetryCount_ +
+          ' > new maxRetries ' + self.getForwardChannelMaxRetries() +
+          '. Fail immediately!';
+    });
 
     if (!this.forwardChannelRequestPool_.forceComplete(
             goog.bind(this.onRequestComplete, this))) {
@@ -1729,9 +1733,11 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   var lastError = request.getLastError();
   if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
     // Maybe retry.
-    this.channelDebug_.debug(
-        'Maybe retrying, last error: ' +
-        ChannelRequest.errorStringFromCode(lastError, this.lastStatusCode_));
+    var self = this;
+    this.channelDebug_.debug(function() {
+      return 'Maybe retrying, last error: ' +
+          ChannelRequest.errorStringFromCode(lastError, self.lastStatusCode_);
+    });
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       if (this.maybeRetryForwardChannel_(request)) {
         return;
@@ -2017,10 +2023,12 @@ WebChannelBase.prototype.onClose_ = function() {
     if (pendingMessages.length == 0 && this.outgoingMaps_.length == 0) {
       this.handler_.channelClosed(this);
     } else {
-      this.channelDebug_.debug(
-          'Number of undelivered maps' +
-          ', pending: ' + pendingMessages.length +
-          ', outgoing: ' + this.outgoingMaps_.length);
+      var self = this;
+      this.channelDebug_.debug(function() {
+        return 'Number of undelivered maps' +
+            ', pending: ' + pendingMessages.length +
+            ', outgoing: ' + self.outgoingMaps_.length;
+      });
 
       this.forwardChannelRequestPool_.clearPendingMessages();
 
