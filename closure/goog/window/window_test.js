@@ -382,3 +382,17 @@ function testOpenNoReferrerEscapesUrl() {
       'Does not contain expected HTML-escaped string: ' + documentWriteHtml,
       /hello&amp;world/, documentWriteHtml);
 }
+
+function testOpenNewWindowNoopener() {
+  newWin = goog.window.open(
+      REDIRECT_URL_PREFIX + 'theBest', {'target': '_blank', 'noopener': true});
+
+  // This mode cannot return a new window.
+  assertNotNull(newWin);
+  assertNotEquals(undefined, newWin.document);
+  assertNull(newWin.opener);
+
+  return waitForTestWindow(newWin).then(function(win) {
+    verifyWindow(win, false, 'theBest');
+  });
+}
