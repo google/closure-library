@@ -124,6 +124,35 @@ goog.html.TrustedResourceUrl.prototype.getDirection = function() {
 };
 
 
+/**
+ * Creates a new TrustedResourceUrl with params added to URL.
+ * @param {!Object<string, *>} params Parameters to add to URL. Parameters with
+ *     value {@code null} or {@code undefined} are skipped. Both keys and values
+ *     are encoded. If the value is an array then the same parameter is added
+ *     for every element in the array. Note that JavaScript doesn't guarantee
+ *     the order of values in an object which might result in non-deterministic
+ *     order of the parameters. However, browsers currently preserve the order.
+ * @return {!goog.html.TrustedResourceUrl} New TrustedResourceUrl with params.
+ */
+goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(params) {
+  var url = goog.html.TrustedResourceUrl.unwrap(this);
+  var separator = /\?/.test(url) ? '&' : '?';
+  for (var key in params) {
+    var values = goog.isArray(params[key]) ? params[key] : [params[key]];
+    for (var i = 0; i < values.length; i++) {
+      if (values[i] == null) {
+        continue;
+      }
+      url += separator + encodeURIComponent(key) + '=' +
+          encodeURIComponent(String(values[i]));
+      separator = '&';
+    }
+  }
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
 if (goog.DEBUG) {
   /**
    * Returns a debug string-representation of this value.
@@ -225,26 +254,11 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  *     the format string is not present in args.
  */
 goog.html.TrustedResourceUrl.format = function(format, args) {
-  var result = goog.html.TrustedResourceUrl.format_(format, args);
-  return goog.html.TrustedResourceUrl
-      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(result);
-};
-
-
-/**
- * String version of TrustedResourceUrl.format.
- * @param {!goog.string.Const} format
- * @param {!Object<string, (string|number|!goog.string.Const)>} args
- * @return {string}
- * @throws {!Error}
- * @private
- */
-goog.html.TrustedResourceUrl.format_ = function(format, args) {
   var formatStr = goog.string.Const.unwrap(format);
   if (!goog.html.TrustedResourceUrl.BASE_URL_.test(formatStr)) {
     throw new Error('Invalid TrustedResourceUrl format: ' + formatStr);
   }
-  return formatStr.replace(
+  var result = formatStr.replace(
       goog.html.TrustedResourceUrl.FORMAT_MARKER_, function(match, id) {
         if (!Object.prototype.hasOwnProperty.call(args, id)) {
           throw new Error(
@@ -259,6 +273,8 @@ goog.html.TrustedResourceUrl.format_ = function(format, args) {
           return encodeURIComponent(String(arg));
         }
       });
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(result);
 };
 
 
@@ -328,21 +344,8 @@ goog.html.TrustedResourceUrl.BASE_URL_ =
  *     the format string is not present in args.
  */
 goog.html.TrustedResourceUrl.formatWithParams = function(format, args, params) {
-  var url = goog.html.TrustedResourceUrl.format_(format, args);
-  var separator = /\?/.test(url) ? '&' : '?';
-  for (var key in params) {
-    var values = goog.isArray(params[key]) ? params[key] : [params[key]];
-    for (var i = 0; i < values.length; i++) {
-      if (values[i] == null) {
-        continue;
-      }
-      url += separator + encodeURIComponent(key) + '=' +
-          encodeURIComponent(String(values[i]));
-      separator = '&';
-    }
-  }
-  return goog.html.TrustedResourceUrl
-      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
+  var url = goog.html.TrustedResourceUrl.format(format, args);
+  return url.cloneWithParams(params);
 };
 
 

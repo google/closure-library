@@ -161,6 +161,31 @@ function testFromConstants() {
 }
 
 
+function testCloneWithParams() {
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/'));
+
+  assertEquals(
+      'https://example.com/?a=%26',
+      url.cloneWithParams({'a': '&'}).getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?b=1',
+      url.cloneWithParams({'b': 1, 'c': null, 'd': undefined})
+          .getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x&a=y',
+      url.cloneWithParams({'a': ['x', 'y']}).getTypedStringValue());
+
+  url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/?a=x'));
+  assertEquals(
+      'https://example.com/?a=x&b=y',
+      url.cloneWithParams({'b': 'y'}).getTypedStringValue());
+}
+
+
 function testFormatWithParams() {
   var url = goog.html.TrustedResourceUrl.formatWithParams(
       goog.string.Const.from('https://example.com/'), {}, {'a': '&'});
