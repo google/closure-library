@@ -143,6 +143,31 @@ function testLoadBaseFromCurrentScriptIgnoringOthers() {
   }
 }
 
+
+function testAddDependency() {
+  /** @suppress {missingRequire} */
+  stubs.set(goog.debugLoader_, 'writeScriptTag_', goog.nullFunction);
+
+  goog.addDependency('foo.js', ['testDep.foo'], ['testDep.bar']);
+
+  // alias to avoid the being picked up by the deps scanner.
+  var provide = goog.provide;
+
+  provide('testDep.bar');
+
+  // To differentiate this call from the real one.
+  var require = goog.require;
+
+  // this used to throw an exception
+  require('testDep.foo');
+
+  assertTrue(goog.isObject(testDep.bar));
+
+  // Unset provided namespace so the test can be re-run.
+  testDep = undefined;
+}
+
+
 function testAddDependencyModule() {
   var load = goog.testing.recordFunction();
   stubs.set(goog.debugLoader_, 'writeScriptTag_', load);
