@@ -25,7 +25,6 @@ goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
-goog.require('goog.userAgent');
 
 var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
@@ -51,6 +50,7 @@ function testInHtmlDocument() {
   }
 }
 
+/** @suppress {missingRequire|visibility} */
 function testLoadInNonHtmlNotThrows() {
   var savedGoogGlobal = goog.global;
   try {
@@ -59,7 +59,7 @@ function testLoadInNonHtmlNotThrows() {
     assertFalse(goog.inHtmlDocument_());
     // The goog code which is executed at load.
     goog.findBasePath_();
-    goog.writeScriptTag_(goog.basePath + 'deps.js');
+    goog.debugLoader_.writeScriptTag_(goog.basePath + 'deps.js');
   } finally {
     // Restore context to respect other tests.
     goog.global = savedGoogGlobal;
@@ -145,7 +145,7 @@ function testLoadBaseFromCurrentScriptIgnoringOthers() {
 
 function testAddDependencyModule() {
   var load = goog.testing.recordFunction();
-  stubs.set(goog, 'writeScriptTag_', load);
+  stubs.set(goog.debugLoader_, 'writeScriptTag_', load);
 
   goog.addDependency('mod.js', ['testDep.mod'], [], true);
   goog.addDependency('empty.js', ['testDep.empty'], [], {});
@@ -158,7 +158,8 @@ function testAddDependencyModule() {
     assertEquals(2, args.length);
     assertEquals('', args[0]);
     assertRegExp(
-        '^goog\\.retrieveAndExec_\\(".*/' + module + '", true, false\\);$',
+        '^goog\\.debugLoader_\\.retrieveAndExec_\\(".*/' + module +
+            '", true, false\\);$',
         args[1]);
   };
 
@@ -183,10 +184,10 @@ function testAddDependencyModule() {
 function testAddDependencyEs6() {
   var script = null;
   var requireTranspilation = false;
-  stubs.set(goog, 'needsTranspile_', function() {
+  stubs.set(goog.transpiler_, 'needsTranspile', function() {
     return requireTranspilation;
   });
-  stubs.set(goog, 'writeScriptTag_', function(src, scriptText) {
+  stubs.set(goog.debugLoader_, 'writeScriptTag_', function(src, scriptText) {
     if (script != null) {
       throw new Error('Multiple scripts written');
     }
@@ -204,13 +205,17 @@ function testAddDependencyEs6() {
   requireTranspilation = false;
   require('testDep.fancy');
   assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/fancy\.js", true, false\);$/, script);
+      '^goog\\.debugLoader_\\.retrieveAndExec_\\(' +
+          '".*\\/fancy\\.js", true, false\\);$',
+      script);
   script = null;
 
   requireTranspilation = true;
   require('testDep.superFancy');
   assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/super\.js", false, true\);$/, script);
+      '^goog\\.debugLoader_\\.retrieveAndExec_\\(' +
+          '".*\\/super\\.js", false, true\\);$',
+      script);
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
@@ -225,24 +230,4 @@ function testLateRequireProtection() {
   });
 
   assertContains('after document load', e.message);
-}
-
-// Validate the behavior of goog.module when used from traditional files.
-function testGoogLoadModuleByUrl() {
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
-    // IE before 10 don't report an error.
-    return;
-  }
-
-  stubs.set(goog, 'loadFileSync_', function(src) {
-    return 'closure load file sync: ' + src;
-  });
-
-  // "goog.loadModuleByUrl" is not a general purpose code loader, it can
-  // not be used to late load code.
-  var err =
-      assertThrows('loadModuleFromUrl should not hide failures', function() {
-        goog.loadModuleFromUrl('bogus url');
-      });
-  assertContains('Cannot write "bogus url" after document load', err.message);
 }
