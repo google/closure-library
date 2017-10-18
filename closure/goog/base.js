@@ -920,8 +920,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       contents += '\n//# sourceURL=' + srcUrl;
       goog.globalEval(contents);
     } else {
-      throw new Error('Could not retrieve file ' +
-      // srcUrl);
+      throw new Error('Could not retrieve file ' + srcUrl);
     }
   };
 
