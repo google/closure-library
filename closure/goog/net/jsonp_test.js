@@ -15,7 +15,9 @@
 goog.provide('goog.net.JsonpTest');
 goog.setTestOnly('goog.net.JsonpTest');
 
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.net.Jsonp');
+goog.require('goog.string.Const');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -26,7 +28,7 @@ goog.require('goog.userAgent');
 var timeoutWasCalled;
 var timeoutHandler;
 
-var fakeUrl = 'http://fake-site.eek/';
+var fakeUrl = 'https://fake-site.eek/';
 
 var originalTimeout;
 function setUp() {
@@ -275,6 +277,39 @@ function testCancel() {
   timeoutHandler();
 }
 
+function testSafeUrl() {
+  var checkCleanup = newCleanupGuard();
+
+  var jsonp = new goog.net.Jsonp(goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from(fakeUrl)));
+  var callbackId = goog.net.Jsonp.getCallbackId_('cb');
+  var result;
+  var script;
+
+  function replyCallback() {}
+
+  result = jsonp.send();
+  script = getScriptElement(result);
+  assertEquals(fakeUrl, script.src);
+
+  result = jsonp.send({'foo': 'bar'});
+  script = getScriptElement(result);
+  assertEquals(fakeUrl + '?foo=bar', script.src);
+
+  result = jsonp.send(undefined, replyCallback, undefined, 'cb');
+  script = getScriptElement(result);
+  assertEquals(fakeUrl + '?callback=' + callbackId, script.src);
+
+  result = jsonp.send({'foo': 'bar'}, replyCallback, undefined, 'cb');
+  script = getScriptElement(result);
+  assertRegExp(/[?&]foo=bar(&|$)/, script.src);
+  assertRegExp(RegExp('[?&]callback=' + callbackId + '(&|$)'), script.src);
+
+  checkCleanup();
+  timeoutHandler();
+}
+
+
 function testPayloadParameters() {
   var checkCleanup = newCleanupGuard();
 
@@ -329,7 +364,7 @@ function testOptionalPayload() {
 
   var errorCallbackArguments = errorCallback.getLastCall().getArguments();
   assertEquals(1, errorCallbackArguments.length);
-  assertNull(errorCallbackArguments[0]);
+  assertObjectEquals({}, errorCallbackArguments[0]);
 
   checkCleanup();
   stubs.reset();
