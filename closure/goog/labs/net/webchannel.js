@@ -180,8 +180,34 @@ goog.net.WebChannel.prototype.open = goog.abstractMethod;
 
 /**
  * Close the WebChannel.
+ *
+ * This is a full close (shutdown) with no guarantee of FIFO delivery in respect
+ * to any in-flight messages sent to the server.
+ *
+ * If you need such a guarantee, see the Half the halfClose() method.
  */
 goog.net.WebChannel.prototype.close = goog.abstractMethod;
+
+
+/**
+ * Half-close the WebChannel.
+ *
+ * Half-close semantics:
+ * 1. delivered as a regular message in FIFO programming order
+ * 2. the server is expected to return a half-close too (with or without
+ *    application involved), which will trigger a full close (shutdown)
+ *    on the client side
+ * 3. for now, the half-close event defined for server-initiated
+ *    half-close is not exposed to the client application
+ * 4. a client-side half-close may be triggered internally when the client
+ *    receives a half-close from the server; and the client is expected to
+ *    do a full close after the half-close is acked and delivered
+ *    on the server-side.
+ * 5. Full close is always a forced one. See the close() method.
+ *
+ * New messages sent after halfClose() will be dropped.
+ */
+goog.net.WebChannel.prototype.halfClose = goog.abstractMethod;
 
 
 /**

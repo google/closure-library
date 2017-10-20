@@ -241,6 +241,15 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
 
 
 /**
+ * @override
+ */
+WebChannelBaseTransport.Channel.prototype.halfClose = function() {
+  // to be implemented
+  this.close();
+};
+
+
+/**
  * The WebChannelBase only supports object types.
  *
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
