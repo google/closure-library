@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview A test file for testing goog.module.
+ * @suppress {unusedLocalVariables}
  */
 
 goog.module('goog.test_module');
