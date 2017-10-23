@@ -63,7 +63,7 @@ goog.cssom.getAllCssText = function(opt_styleSheet) {
  * StyleSheet.
  * Note that this excludes any CSSImportRules, CSSMediaRules, etc..
  * @param {(StyleSheet|StyleSheetList)=} opt_styleSheet
- * @return {Array<CSSStyleRule>} A list of CSSStyleRules.
+ * @return {!Array<CSSStyleRule>} A list of CSSStyleRules.
  */
 goog.cssom.getAllCssStyleRules = function(opt_styleSheet) {
   var styleSheet = opt_styleSheet || document.styleSheets;
