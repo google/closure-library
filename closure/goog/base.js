@@ -1059,56 +1059,10 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @return {string} The transpiled code.
    */
   goog.Transpiler.prototype.transpile = function(code, path) {
-    var jscomp = goog.global['$jscomp'];
-    if (!jscomp) {
-      goog.global['$jscomp'] = jscomp = {};
-    }
-    var transpile = jscomp.transpile;
-    if (!transpile) {
-      var transpilerPath = goog.basePath + goog.TRANSPILER;
-      var transpilerCode = goog.loadFileSync_(transpilerPath);
-      if (transpilerCode) {
-        // This must be executed synchronously, since by the time we know we
-        // need it, we're about to load and write the ES6 code synchronously,
-        // so a normal script-tag load will be too slow. Wrapped in a function
-        // so that code is eval'd in the global scope.
-        (function() {
-          eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
-        }).call(goog.global);
-        // Even though the transpiler is optional, if $gwtExport is found, it's
-        // a sign the transpiler was loaded and the $jscomp.transpile *should*
-        // be there.
-        if (goog.global['$gwtExport'] && goog.global['$gwtExport']['$jscomp'] &&
-            !goog.global['$gwtExport']['$jscomp']['transpile']) {
-          throw new Error(
-              'The transpiler did not properly export the "transpile" ' +
-              'method. $gwtExport: ' +
-              JSON.stringify(goog.global['$gwtExport']));
-        }
-        // transpile.js only exports a single $jscomp function, transpile. We
-        // grab just that and add it to the existing definition of $jscomp which
-        // contains the polyfills.
-        goog.global['$jscomp'].transpile =
-            goog.global['$gwtExport']['$jscomp']['transpile'];
-        jscomp = goog.global['$jscomp'];
-        transpile = jscomp.transpile;
-      }
-    }
-    if (!transpile) {
-      // The transpiler is an optional component.  If it's not available then
-      // replace it with a pass-through function that simply logs.
-      var suffix = ' requires transpilation but no transpiler was found.';
-      transpile = jscomp.transpile = goog.bind(function(code, path) {
-        // TODO(user): figure out some way to get this error to show up
-        // in test results, noting that the failure may occur in many
-        // different ways, including in loadModule() before the test
-        // runner even comes up.
-        goog.logToConsole_(path + suffix);
-        return code;
-      }, this);
-    }
-    // Note: any transpilation errors/warnings will be logged to the console.
-    return transpile(code, path);
+    // TODO(user): We should delete goog.transpile_ and just have this
+    // function. But there's some compile error atm where goog.global is being
+    // stripped incorrectly without this.
+    return goog.transpile_(code, path);
   };
 
 
@@ -1934,6 +1888,65 @@ goog.loadFileSync_ = function(src) {
   }
 };
 
+
+/**
+ * Lazily retrieves the transpiler and applies it to the source.
+ * @param {string} code JS code.
+ * @param {string} path Path to the code.
+ * @return {string} The transpiled code.
+ * @private
+ */
+goog.transpile_ = function(code, path) {
+  var jscomp = goog.global['$jscomp'];
+  if (!jscomp) {
+    goog.global['$jscomp'] = jscomp = {};
+  }
+  var transpile = jscomp.transpile;
+  if (!transpile) {
+    var transpilerPath = goog.basePath + goog.TRANSPILER;
+    var transpilerCode = goog.loadFileSync_(transpilerPath);
+    if (transpilerCode) {
+      // This must be executed synchronously, since by the time we know we
+      // need it, we're about to load and write the ES6 code synchronously,
+      // so a normal script-tag load will be too slow. Wrapped in a function
+      // so that code is eval'd in the global scope.
+      (function() {
+        eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
+      }).call(goog.global);
+      // Even though the transpiler is optional, if $gwtExport is found, it's
+      // a sign the transpiler was loaded and the $jscomp.transpile *should*
+      // be there.
+      if (goog.global['$gwtExport'] && goog.global['$gwtExport']['$jscomp'] &&
+          !goog.global['$gwtExport']['$jscomp']['transpile']) {
+        throw new Error(
+            'The transpiler did not properly export the "transpile" ' +
+            'method. $gwtExport: ' + JSON.stringify(goog.global['$gwtExport']));
+      }
+      // transpile.js only exports a single $jscomp function, transpile. We
+      // grab just that and add it to the existing definition of $jscomp which
+      // contains the polyfills.
+      goog.global['$jscomp'].transpile =
+          goog.global['$gwtExport']['$jscomp']['transpile'];
+      jscomp = goog.global['$jscomp'];
+      transpile = jscomp.transpile;
+    }
+  }
+  if (!transpile) {
+    // The transpiler is an optional component.  If it's not available then
+    // replace it with a pass-through function that simply logs.
+    var suffix = ' requires transpilation but no transpiler was found.';
+    transpile = jscomp.transpile = function(code, path) {
+      // TODO(user): figure out some way to get this error to show up
+      // in test results, noting that the failure may occur in many
+      // different ways, including in loadModule() before the test
+      // runner even comes up.
+      goog.logToConsole_(path + suffix);
+      return code;
+    };
+  }
+  // Note: any transpilation errors/warnings will be logged to the console.
+  return transpile(code, path);
+};
 
 //==============================================================================
 // Language Enhancements
