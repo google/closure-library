@@ -821,7 +821,7 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
  */
 goog.testing.TestCase.prototype.safeSetUp_ = function() {
   var setUps =
-      this.curTest_.setUps.length ? this.curTest_.setUps : [this.setUp];
+      this.curTest_.setUps.length ? this.curTest_.setUps.slice() : [this.setUp];
   return this.safeSetUpHelper_(setUps).call(this);
 };
 
@@ -862,8 +862,9 @@ goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
   if (arguments.length == 1) {
     this.doError(this.curTest_, opt_error);
   }
-  var tearDowns = this.curTest_.tearDowns.length ? this.curTest_.tearDowns :
-                                                   [this.tearDown];
+  var tearDowns = this.curTest_.tearDowns.length ?
+      this.curTest_.tearDowns.slice() :
+      [this.tearDown];
   return this.safeTearDownHelper_(tearDowns).call(this);
 };
 
