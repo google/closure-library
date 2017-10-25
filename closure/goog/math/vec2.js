@@ -116,9 +116,11 @@ goog.math.Vec2.prototype.squaredMagnitude = function() {
 
 
 /**
- * @return {!goog.math.Vec2} This coordinate after scaling.
+ * @return {!goog.math.Vec2} This vector after scaling.
  * @override
  */
+// Since the implementation of Coordinate.scale() returns "this", we
+// can reuse that implementation here, and just recast the return type.
 goog.math.Vec2.prototype.scale =
     /** @type {function(number, number=):!goog.math.Vec2} */
     (goog.math.Coordinate.prototype.scale);
@@ -290,4 +292,18 @@ goog.math.Vec2.determinant = function(a, b) {
 goog.math.Vec2.lerp = function(a, b, x) {
   return new goog.math.Vec2(
       goog.math.lerp(a.x, b.x, x), goog.math.lerp(a.y, b.y, x));
+};
+
+
+/**
+ * Returns a new Vec2 that is a copy of the vector a, but rescaled by a factors
+ * sx and sy in the x and y directions. If only sx is specified, then y is
+ * scaled by the same factor as x.
+ * @param {!goog.math.Coordinate} a Vector a.
+ * @param {number} sx X scale factor.
+ * @param {number=} sy Y scale factor (optional).
+ * @return {!goog.math.Vec2} A new rescaled vector.
+ */
+goog.math.Vec2.rescaled = function(a, sx, sy = sx) {
+  return new goog.math.Vec2(a.x * sx, a.y * sy);
 };

@@ -230,6 +230,15 @@ function testLerp() {
   }
 }
 
+function testRescaled() {
+  const a = new goog.math.Vec2(1, 2);
+  const b = goog.math.Vec2.rescaled(a, 3);
+  assertVectorEquals(new goog.math.Vec2(3, 6), b);
+
+  const c = goog.math.Vec2.rescaled(a, 3, -2);
+  assertVectorEquals(new goog.math.Vec2(3, -4), c);
+  assertVectorEquals(new goog.math.Vec2(1, 2), a);
+}
 
 function testToString() {
   testEquals('(0, 0)', new goog.math.Vec2(0, 0).toString());
