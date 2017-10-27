@@ -77,8 +77,9 @@ goog.editor.ContentEditableField.prototype.turnOnDesignModeGecko =
 /** @override */
 goog.editor.ContentEditableField.prototype.installStyles = function() {
   goog.asserts.assert(
-      !this.cssStyles, 'ContentEditableField does not support' +
-          ' CSS styles; instead just write plain old CSS on the main page.');
+      !this.cssStyles.getTypedStringValue(),
+      'ContentEditableField does not support CSS styles; instead just write ' +
+          'plain old CSS on the main page.');
 };
 
 

@@ -558,11 +558,8 @@ goog.editor.SeamlessField.prototype.turnOnDesignModeGecko = function() {
 goog.editor.SeamlessField.prototype.installStyles = function() {
   if (!this.usesIframe()) {
     if (!goog.editor.SeamlessField.haveInstalledCss_) {
-      if (this.cssStyles) {
-        goog.style.installSafeStyleSheet(
-            goog.html.legacyconversions.safeStyleSheetFromString(
-                this.cssStyles),
-            this.getElement());
+      if (this.cssStyles.getTypedStringValue()) {
+        goog.style.installSafeStyleSheet(this.cssStyles, this.getElement());
       }
 
       // TODO(user): this should be reset to false when the editor is quit.
@@ -708,7 +705,8 @@ goog.editor.SeamlessField.prototype.writeIframeContent = function(
   goog.style.setStyle(iframe, 'visibility', 'hidden');
   var formatInfo = this.getFieldFormatInfo(extraStyles);
   var styleInfo = new goog.editor.icontent.FieldStyleInfo(
-      this.getOriginalElement(), this.cssStyles + this.getIframeableCss());
+      this.getOriginalElement(),
+      this.cssStyles.getTypedStringValue() + this.getIframeableCss());
   goog.editor.icontent.writeNormalInitialBlendedIframe(
       formatInfo, innerHtml, styleInfo, iframe);
   this.doFieldSizingGecko();
