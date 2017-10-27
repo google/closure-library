@@ -276,6 +276,14 @@ goog.net.WebChannel.MessageEvent.prototype.data;
 
 
 /**
+ * The metadata key when the MESSAGE event represents a metadata message.
+ *
+ * @type {string|undefined}
+ */
+goog.net.WebChannel.MessageEvent.prototype.metadataKey;
+
+
+/**
  * WebChannel level error conditions.
  *
  * Summary of error debugging and reporting in WebChannel:

@@ -292,7 +292,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
 /**
  * The message event.
  *
- * @param {!Array<?>} array The data array from the underlying channel.
+ * @param {!Array<?>|!Object} array The data array from the underlying channel.
  * @constructor
  * @extends {goog.net.WebChannel.MessageEvent}
  * @final
@@ -300,7 +300,18 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
 WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   WebChannelBaseTransport.Channel.MessageEvent.base(this, 'constructor');
 
-  this.data = array;
+  // single-metadata only
+  var metadata = array['__sm__'];
+  if (metadata) {
+    this.metadataKey = goog.object.getAnyKey(metadata);
+    if (this.metadataKey) {
+      this.data = goog.object.get(metadata, this.metadataKey);
+    } else {
+      this.data = metadata;  // empty
+    }
+  } else {
+    this.data = array;
+  }
 };
 goog.inherits(
     WebChannelBaseTransport.Channel.MessageEvent,
