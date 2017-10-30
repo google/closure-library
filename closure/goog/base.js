@@ -2489,7 +2489,7 @@ goog.cssNameMappingStyle_;
 
 /**
  * A hook for modifying the default behavior goog.getCssName. The function
- * if present, will recieve the standard output of the goog.getCssName as
+ * if present, will receive the standard output of the goog.getCssName as
  * its input.
  *
  * @type {(function(string):string)|undefined}
