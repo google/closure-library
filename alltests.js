@@ -255,7 +255,6 @@ var _allTests = [
   'closure/goog/labs/net/webchannel/webchannelbasetransport_test.html',
   'closure/goog/labs/net/webchannel/wirev8_test.html',
   'closure/goog/labs/net/xhr_test.html',
-  'closure/goog/labs/promise/promise_test.html',
   'closure/goog/labs/pubsub/broadcastpubsub_test.html',
   'closure/goog/labs/storage/boundedcollectablestorage_test.html',
   'closure/goog/labs/structs/map_test.html',
