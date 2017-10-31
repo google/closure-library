@@ -28,6 +28,9 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.userAgent');
 
+// Delay running the tests after page load. This test has some asynchronous
+// behavior that interacts with page load detection.
+goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 var FLASH_URL = goog.html.testing.newTrustedResourceUrlForTest(
     'http://www.youtube.com/v/RbI7cCp0v6w&hl=en&fs=1');
