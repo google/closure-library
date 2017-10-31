@@ -79,9 +79,12 @@ goog.ui.DatePicker = function(
       new goog.i18n.DateTimeFormat('dd', this.symbols_);
   this.i18nDateFormatterWeek_ =
       new goog.i18n.DateTimeFormat('w', this.symbols_);
-  // Formatter for day grid aria label.
+  // Formatter for day grid aria label. This should always have the day first so
+  // that a screenreader user can rapidly navigate within a month without always
+  // hearing the month. It should read the month name instead of number to avoid
+  // confusing people who are used to different orders.
   this.i18nDateFormatterDayAriaLabel_ =
-      new goog.i18n.DateTimeFormat('M d', this.symbols_);
+      new goog.i18n.DateTimeFormat('d MMM', this.symbols_);
 
   // Previous implementation did not use goog.i18n.DateTimePatterns,
   // so it is likely most developers did not set it.
@@ -174,6 +177,9 @@ goog.ui.DatePicker = function(
   /** @private {Element} */
   this.menuSelected_;
 
+  /** @private {?Element} */
+  this.selectedCell_;
+
   /** @private {function(Element)} */
   this.menuCallback_;
 };
@@ -209,7 +215,7 @@ goog.ui.DatePicker.prototype.userSelectableDateRange_ =
 /**
  * Flag indicating if extra week(s) always should be added at the end. If not
  * set the extra week is added at the beginning if the number of days shown
- * from the previous month is less then the number from the next month.
+ * from the previous month is less than the number from the next month.
  * @type {boolean}
  * @private
  */
@@ -957,12 +963,12 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.asserts.assert(el);
   goog.dom.classlist.add(el, this.getBaseCssClass());
 
-  var table = this.dom_.createElement(goog.dom.TagName.TABLE);
-  var thead = this.dom_.createElement(goog.dom.TagName.THEAD);
-  var tbody = this.dom_.createElement(goog.dom.TagName.TBODY);
-  var tfoot = this.dom_.createElement(goog.dom.TagName.TFOOT);
+  var table =
+      this.dom_.createDom(goog.dom.TagName.TABLE, {'role': 'presentation'});
+  var thead = this.dom_.createDom(goog.dom.TagName.THEAD);
+  var tbody = this.dom_.createDom(goog.dom.TagName.TBODY, {'role': 'grid'});
+  var tfoot = this.dom_.createDom(goog.dom.TagName.TFOOT);
 
-  goog.a11y.aria.setRole(tbody, 'grid');
   tbody.tabIndex = 0;
 
   // As per comment in colorpicker: table.tBodies and table.tFoot should not be
@@ -970,7 +976,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   this.tableBody_ = tbody;
   this.tableFoot_ = tfoot;
 
-  var row = this.dom_.createElement(goog.dom.TagName.TR);
+  var row = this.dom_.createDom(goog.dom.TagName.TR, {'role': 'row'});
   row.className = goog.getCssName(this.getBaseCssClass(), 'head');
   this.elNavRow_ = row;
   this.updateNavigationRow_();
@@ -989,6 +995,10 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
             goog.getCssName(this.getBaseCssClass(), 'week') :
             goog.getCssName(this.getBaseCssClass(), 'wday');
         goog.a11y.aria.setRole(cell, j == 0 ? 'rowheader' : 'columnheader');
+      } else if (i !== 0 && j !== 0) {
+        goog.a11y.aria.setRole(cell, 'gridcell');
+        // Make the cells programmatically-focusable (see focus() call below).
+        cell.setAttribute('tabindex', '-1');
       }
       row.appendChild(cell);
       this.elTable_[i][j] = cell;
@@ -1150,6 +1160,9 @@ goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
   }
   if (this.isUserSelectableDate_(date)) {
     this.setDate_(date, false /* fireSelection */);
+    // Focus the currently-selected cell to surface its aria-label for assistive
+    // tech, (eg) allowing unsighted users to see what the arrow keys are doing.
+    this.selectedCell_.focus();
   }
 };
 
@@ -1509,7 +1522,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
           classes.push(goog.getCssName(this.getBaseCssClass(), 'selected'));
           goog.asserts.assert(
               this.tableBody_, 'The table body DOM element cannot be null');
-          goog.a11y.aria.setState(this.tableBody_, 'activedescendant', el.id);
+          this.selectedCell_ = el;
         }
 
         // Custom decorator
@@ -1521,10 +1534,10 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
         }
 
         // Set cell text to the date and apply classes.
-        var formatedDate = this.longDateFormat_ ?
+        var formattedDate = this.longDateFormat_ ?
             this.i18nDateFormatterDay2_.format(o) :
             this.i18nDateFormatterDay_.format(o);
-        goog.dom.setTextContent(el, formatedDate);
+        goog.dom.setTextContent(el, formattedDate);
         // Date belongs to previous or next month and showOtherMonths is false,
         // clear text and classes.
       } else {
