@@ -268,6 +268,13 @@ goog.events.listen_ = function(
     // incarnation of this code, from 2007, indicates that it replaced an
     // earlier still version that caused excess allocations on IE6.
     src.attachEvent(goog.events.getOnString_(type.toString()), proxy);
+  } else if (src.addListener && src.removeListener) {
+    // In IE, MediaQueryList uses addListener() insteadd of addEventListener. In
+    // Safari, there is no global for the MediaQueryList constructor, so we just
+    // check whether the object "looks like" MediaQueryList.
+    goog.asserts.assert(
+        type === 'change', 'MediaQueryList only has a change event');
+    src.addListener(proxy);
   } else {
     throw new Error('addEventListener and attachEvent are unavailable.');
   }
@@ -457,6 +464,8 @@ goog.events.unlistenByKey = function(key) {
     src.removeEventListener(type, proxy, listener.capture);
   } else if (src.detachEvent) {
     src.detachEvent(goog.events.getOnString_(type), proxy);
+  } else if (src.addListener && src.removeListener) {
+    src.removeListener(proxy);
   }
   goog.events.listenerCountEstimate_--;
 
