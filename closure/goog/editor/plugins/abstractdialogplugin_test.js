@@ -23,6 +23,7 @@ goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
@@ -323,7 +324,7 @@ function testExecTwiceReuse() {
 function testRestoreSelection() {
   setUpRealEditableField();
 
-  fieldObj.setHtml(false, '12345');
+  fieldObj.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('12345'));
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4);  // Selects '234'.

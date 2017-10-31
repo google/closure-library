@@ -24,6 +24,7 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Link');
 goog.require('goog.editor.plugins.LinkDialogPlugin');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.testing.MockControl');
@@ -635,7 +636,10 @@ function testBug2215546() {
   setUpRealEditableField();
 
   var elem = fieldObj.getElement();
-  fieldObj.setHtml(false, '<div><a href="/"></a></div>');
+  fieldObj.setSafeHtml(
+      false,
+      goog.html.SafeHtml.create(
+          'div', {}, goog.html.SafeHtml.create('a', {'href': '/'}, '')));
   anchorElem = elem.firstChild.firstChild;
   linkObj = new goog.editor.Link(anchorElem, true);
 

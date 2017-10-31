@@ -23,6 +23,7 @@ goog.require('goog.editor.plugins.LoremIpsum');
 goog.require('goog.editor.plugins.UndoRedo');
 goog.require('goog.events');
 goog.require('goog.functions');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.StrictMock');
@@ -215,7 +216,7 @@ function testEnable() {
       'Plugin must start disabled.', undoPlugin.isEnabled(editableField));
 
   editableField.makeEditable();
-  editableField.setHtml(false, '<div>a</div>');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'a'));
   undoPlugin.enable(editableField);
 
   assertTrue(undoPlugin.isEnabled(editableField));
@@ -253,7 +254,7 @@ function testDisable() {
   goog.events.listenOnce(
       editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
       function(e) { delayedChangeFired = true; });
-  editableField.setHtml(false, 'foo');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('foo'));
 
   undoPlugin.disable(editableField);
   assertTrue('disable must fire pending delayed changes.', delayedChangeFired);
@@ -289,13 +290,13 @@ function testUpdateCurrentState_() {
   editableField.getInjectableContents = function(contents, styles) {
     return contents == '' ? 'foo' : contents;
   };
-  editableField.setHtml(false, 'foo');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('foo'));
   undoPlugin.updateCurrentState_(editableField);
   assertEquals(currentState, undoPlugin.currentStates_[fieldHashCode]);
 
-  // NOTE(user): Because there is already a current state, this setHtml will add
-  // a state to the undo stack.
-  editableField.setHtml(false, '<div>a</div>');
+  // NOTE(user): Because there is already a current state, this setSafeHtml will
+  // add a state to the undo stack.
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'a'));
   // Select some text so we have a valid selection that gets saved in the
   // UndoState.
   goog.dom.browserrange.createRangeFromNodeContents(editableField.getElement())
@@ -332,7 +333,7 @@ function testUpdateCurrentState_() {
           'redo cursor position.',
       currentState.redoCursorPosition_);
 
-  editableField.setHtml(false, '<div>b</div>');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'b'));
   undoPlugin.updateCurrentState_(editableField);
   currentState = undoPlugin.currentStates_[fieldHashCode];
   assertNotNull(
@@ -367,12 +368,12 @@ function testUpdateCurrentState_() {
 function testUndoRestartsChangeEvents() {
   undoPlugin.registerFieldObject(editableField);
   editableField.makeEditable();
-  editableField.setHtml(false, '<div>a</div>');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'a'));
   clock.tick(1000);
   undoPlugin.enable(editableField);
 
   // Change content so we can undo it.
-  editableField.setHtml(false, '<div>b</div>');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'b'));
   clock.tick(1000);
 
   var currentState = undoPlugin.currentStates_[fieldHashCode];
@@ -394,7 +395,7 @@ function testUndoRestartsChangeEvents() {
 
 function testRefreshCurrentState() {
   editableField.makeEditable();
-  editableField.setHtml(false, '<div>a</div>');
+  editableField.setSafeHtml(false, goog.html.SafeHtml.create('div', {}, 'a'));
   clock.tick(1000);
   undoPlugin.enable(editableField);
 
@@ -409,7 +410,8 @@ function testRefreshCurrentState() {
 
   // Update the field w/o dispatching delayed change, and verify that the
   // current state hasn't changed to reflect new values.
-  editableField.setHtml(false, '<div>b</div>', true);
+  editableField.setSafeHtml(
+      false, goog.html.SafeHtml.create('div', {}, 'b'), true);
   clock.tick(1000);
   currentState = undoPlugin.currentStates_[fieldHashCode];
   assertEquals(

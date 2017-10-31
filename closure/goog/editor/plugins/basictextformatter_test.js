@@ -24,6 +24,7 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.plugins.BasicTextFormatter');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
@@ -944,7 +945,7 @@ var JUSTIFICATION_COMMANDS = [
 ];
 function doTestIsJustification(command) {
   setUpRealField();
-  REAL_FIELD.setHtml(false, 'foo');
+  REAL_FIELD.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('foo'));
   selectRealField();
   REAL_FIELD.execCommand(command);
 
@@ -1021,7 +1022,8 @@ function testIsJustificationEmptySelection() {
 
 function testIsJustificationSimple1() {
   setUpRealField();
-  REAL_FIELD.setHtml(false, '<div align="right">foo</div>');
+  REAL_FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.create('div', {'align': 'right'}, 'foo'));
   selectRealField();
 
   assertFalse(
@@ -1034,7 +1036,10 @@ function testIsJustificationSimple1() {
 
 function testIsJustificationSimple2() {
   setUpRealField();
-  REAL_FIELD.setHtml(false, '<div style="text-align: right;">foo</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.create(
+          'div', {'style': {'text-align': 'right'}}, 'foo'));
   selectRealField();
 
   assertFalse(
@@ -1047,8 +1052,11 @@ function testIsJustificationSimple2() {
 
 function testIsJustificationComplete1() {
   setUpRealField();
-  REAL_FIELD.setHtml(
-      false, '<div align="left">a</div><div align="right">b</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('div', {'align': 'left'}, 'a'),
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'b')));
   selectRealField();
 
   assertFalse(
@@ -1061,8 +1069,11 @@ function testIsJustificationComplete1() {
 
 function testIsJustificationComplete2() {
   setUpRealField();
-  REAL_FIELD.setHtml(
-      false, '<div align="left">a</div><div align="left">b</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('div', {'align': 'left'}, 'a'),
+          goog.html.SafeHtml.create('div', {'align': 'left'}, 'b')));
   selectRealField();
 
   assertTrue(
@@ -1075,8 +1086,11 @@ function testIsJustificationComplete2() {
 
 function testIsJustificationComplete3() {
   setUpRealField();
-  REAL_FIELD.setHtml(
-      false, '<div align="right">a</div><div align="right">b</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'a'),
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'b')));
   selectRealField();
 
   assertFalse(
@@ -1089,9 +1103,13 @@ function testIsJustificationComplete3() {
 
 function testIsJustificationComplete4() {
   setUpRealField();
-  REAL_FIELD.setHtml(
-      false, '<div align="right"><div align="left">a</div></div>' +
-          '<div align="right">b</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create(
+              'div', {'align': 'right'},
+              goog.html.SafeHtml.create('div', {'align': 'left'}, 'a')),
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'b')));
   selectRealField();
 
   assertFalse(
@@ -1104,9 +1122,11 @@ function testIsJustificationComplete4() {
 
 function testIsJustificationComplete5() {
   setUpRealField();
-  REAL_FIELD.setHtml(
-      false, '<div align="right">a</div>b' +
-          '<div align="right">c</div>');
+  REAL_FIELD.setSafeHtml(
+      false,
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'a'), 'b',
+          goog.html.SafeHtml.create('div', {'align': 'right'}, 'c')));
   selectRealField();
 
   assertFalse(
@@ -1121,10 +1141,16 @@ function testIsJustificationComplete5() {
 /** @bug 2472589 */
 function doTestIsJustificationPInDiv(useCss, align, command) {
   setUpRealField();
-  var html = '<div ' + (useCss ? 'style="text-align:' : 'align="') + align +
-      '"><p>foo</p></div>';
+  var attrs = {};
+  if (useCss) {
+    attrs['style'] = {'text-align': align};
+  } else {
+    attrs['align'] = align;
+  }
+  var html = goog.html.SafeHtml.create(
+      'div', attrs, goog.html.SafeHtml.create('p', {}, 'foo'));
 
-  REAL_FIELD.setHtml(false, html);
+  REAL_FIELD.setSafeHtml(false, html);
   selectRealField();
   assertTrue(
       'P inside ' + align + ' aligned' + (useCss ? ' (using CSS)' : '') +
@@ -1250,7 +1276,8 @@ function testIEExecCommandFixes() {
   }
 
   setUpRealField();
-  REAL_FIELD.setHtml(false, '<blockquote>hi</blockquote>');
+  REAL_FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.create('blockquote', {}, 'hi'));
   goog.dom.Range.createFromNodeContents(REAL_FIELD.getElement()).select();
 
   var nodes = REAL_PLUGIN.applyExecCommandIEFixes_('insertOrderedList');

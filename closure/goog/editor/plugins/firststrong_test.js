@@ -21,6 +21,7 @@ goog.require('goog.editor.Field');
 goog.require('goog.editor.plugins.FirstStrong');
 goog.require('goog.editor.range');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.testing');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.events');
@@ -63,7 +64,9 @@ function tearDown() {
 }
 
 function testFirstCharacter_RTL() {
-  field.setHtml(false, '<div id="text">&nbsp;</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest('<div id="text">&nbsp;</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -71,14 +74,20 @@ function testFirstCharacter_RTL() {
 }
 
 function testFirstCharacter_LTR() {
-  field.setHtml(false, '<div dir="rtl" id="text">&nbsp;</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text">&nbsp;</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertLTR();
 }
 
 function testFirstStrongCharacter_RTL() {
-  field.setHtml(false, '<div id="text">123.7 3121, <b><++{}></b> - $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text">123.7 3121, <b><++{}></b> - $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -86,29 +95,40 @@ function testFirstStrongCharacter_RTL() {
 }
 
 function testFirstStrongCharacter_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text">123.7 3121, <b><++{}></b> - $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text">123.7 3121, <b><++{}></b> - $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertLTR();
 }
 
 function testNotStrongCharacter_RTL() {
-  field.setHtml(false, '<div id="text">123.7 3121, - $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text">123.7 3121, - $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.NINE);
   assertNoCommand();
 }
 
 function testNotStrongCharacter_LTR() {
-  field.setHtml(false, '<div dir="rtl" id="text">123.7 3121 $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text">123.7 3121 $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.NINE);
   assertNoCommand();
 }
 
 function testNotFirstStrongCharacter_RTL() {
-  field.setHtml(false, '<div id="text">123.7 3121, <b>English</b> - $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text">123.7 3121, <b>English</b> - $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -116,18 +136,22 @@ function testNotFirstStrongCharacter_RTL() {
 }
 
 function testNotFirstStrongCharacter_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text">123.7 3121, <b>עברית</b> - $45</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text">123.7 3121, <b>עברית</b> - $45</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertNoCommand();
 }
 
 function testFirstStrongCharacterWithInnerDiv_RTL() {
-  field.setHtml(
-      false, '<div id="text">123.7 3121, <b id="b"><++{}></b>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text">123.7 3121, <b id="b"><++{}></b>' +
           '<div id="inner">English</div>' +
-          '</div>');
+          '</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -135,10 +159,12 @@ function testFirstStrongCharacterWithInnerDiv_RTL() {
 }
 
 function testFirstStrongCharacterWithInnerDiv_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text">123.7 3121, <b id="b"><++{}></b>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text">123.7 3121, <b id="b"><++{}></b>' +
           '<div id="inner">English</div>' +
-          '</div>');
+          '</div>'));
   field.focusAndPlaceCursorAtStart();
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertLTR();
@@ -149,7 +175,10 @@ function testFirstStrongCharacterWithInnerDiv_LTR() {
  * Regression test for {@link http://b/7549696}
  */
 function testFirstStrongCharacterInNewLine_RTL() {
-  field.setHtml(false, '<div><b id="cur">English<br>1</b></div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div><b id="cur">English<br>1</b></div>'));
   goog.dom.Range.createCaret(dom.$('cur'), 2).select();
 
   goog.testing.events.fireNonAsciiKeySequence(
@@ -163,10 +192,12 @@ function testFirstStrongCharacterInNewLine_RTL() {
 }
 
 function testFirstStrongCharacterInParagraph_RTL() {
-  field.setHtml(
-      false, '<div id="text1">1&gt; English</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text1">1&gt; English</div>' +
           '<div id="text2">2&gt;</div>' +
-          '<div id="text3">3&gt;</div>');
+          '<div id="text3">3&gt;</div>'));
   goog.dom.Range.createCaret(dom.$('text2'), 0).select();
 
   goog.testing.events.fireNonAsciiKeySequence(
@@ -175,10 +206,12 @@ function testFirstStrongCharacterInParagraph_RTL() {
 }
 
 function testFirstStrongCharacterInParagraph_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text1">1&gt; עברית</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text1">1&gt; עברית</div>' +
           '<div dir="rtl" id="text2">2&gt;</div>' +
-          '<div dir="rtl" id="text3">3&gt;</div>');
+          '<div dir="rtl" id="text3">3&gt;</div>'));
   goog.dom.Range.createCaret(dom.$('text2'), 0).select();
 
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
@@ -186,14 +219,16 @@ function testFirstStrongCharacterInParagraph_LTR() {
 }
 
 function testFirstStrongCharacterInList_RTL() {
-  field.setHtml(
-      false, '<div id="text1">1&gt; English</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text1">1&gt; English</div>' +
           '<ul id="list">' +
           '<li>10&gt;</li>' +
           '<li id="li2"></li>' +
           '<li>30</li>' +
           '</ul>' +
-          '<div id="text3">3&gt;</div>');
+          '<div id="text3">3&gt;</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('li2'), true);
 
   goog.testing.events.fireNonAsciiKeySequence(
@@ -202,14 +237,16 @@ function testFirstStrongCharacterInList_RTL() {
 }
 
 function testFirstStrongCharacterInList_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text1">1&gt; English</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text1">1&gt; English</div>' +
           '<ul dir="rtl" id="list">' +
           '<li>10&gt;</li>' +
           '<li id="li2"></li>' +
           '<li>30</li>' +
           '</ul>' +
-          '<div dir="rtl" id="text3">3&gt;</div>');
+          '<div dir="rtl" id="text3">3&gt;</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('li2'), true);
 
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
@@ -217,14 +254,16 @@ function testFirstStrongCharacterInList_LTR() {
 }
 
 function testNotFirstStrongCharacterInList_RTL() {
-  field.setHtml(
-      false, '<div id="text1">1</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text1">1</div>' +
           '<ul id="list">' +
           '<li>10&gt;</li>' +
           '<li id="li2"></li>' +
           '<li>30<b>3<i>Hidden English</i>32</b></li>' +
           '</ul>' +
-          '<div id="text3">3&gt;</div>');
+          '<div id="text3">3&gt;</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('li2'), true);
 
   goog.testing.events.fireNonAsciiKeySequence(
@@ -233,14 +272,16 @@ function testNotFirstStrongCharacterInList_RTL() {
 }
 
 function testNotFirstStrongCharacterInList_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="text1">1&gt; English</div>' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text1">1&gt; English</div>' +
           '<ul dir="rtl" id="list">' +
           '<li>10&gt;</li>' +
           '<li id="li2"></li>' +
           '<li>30<b>3<i>עברית סמויה</i>32</b></li>' +
           '</ul>' +
-          '<div dir="rtl" id="text3">3&gt;</div>');
+          '<div dir="rtl" id="text3">3&gt;</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('li2'), true);
 
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
@@ -248,8 +289,10 @@ function testNotFirstStrongCharacterInList_LTR() {
 }
 
 function testFirstStrongCharacterWithBR_RTL() {
-  field.setHtml(
-      false, '<div id="container">' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="container">' +
           '<div id="text1">ABC</div>' +
           '<div id="text2">' +
           '1<br>' +
@@ -258,7 +301,7 @@ function testFirstStrongCharacterWithBR_RTL() {
           '10' +
           '</div>' +
           '<div id="text3">11</div>' +
-          '</div>');
+          '</div>'));
 
   goog.editor.range.placeCursorNextTo(dom.$('inner'), true);
   goog.testing.events.fireNonAsciiKeySequence(
@@ -267,8 +310,10 @@ function testFirstStrongCharacterWithBR_RTL() {
 }
 
 function testFirstStrongCharacterWithBR_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="container">' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="container">' +
           '<div dir="rtl" id="text1">אבג</div>' +
           '<div dir="rtl" id="text2">' +
           '1<br>' +
@@ -277,7 +322,7 @@ function testFirstStrongCharacterWithBR_LTR() {
           '10' +
           '</div>' +
           '<div dir="rtl" id="text3">11</div>' +
-          '</div>');
+          '</div>'));
 
   goog.editor.range.placeCursorNextTo(dom.$('inner'), true);
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
@@ -285,8 +330,10 @@ function testFirstStrongCharacterWithBR_LTR() {
 }
 
 function testNotFirstStrongCharacterInBR_RTL() {
-  field.setHtml(
-      false, '<div id="container">' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="container">' +
           '<div id="text1">ABC</div>' +
           '<div id="text2">' +
           '1<br>' +
@@ -295,7 +342,7 @@ function testNotFirstStrongCharacterInBR_RTL() {
           '10' +
           '</div>' +
           '<div id="text3">11</div>' +
-          '</div>');
+          '</div>'));
 
   goog.editor.range.placeCursorNextTo(dom.$('inner'), true);
   goog.testing.events.fireNonAsciiKeySequence(
@@ -304,8 +351,10 @@ function testNotFirstStrongCharacterInBR_RTL() {
 }
 
 function testNotFirstStrongCharacterInBR_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl" id="container">' +
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="container">' +
           '<div dir="rtl" id="text1">ABC</div>' +
           '<div dir="rtl" id="text2">' +
           '1<br>' +
@@ -314,7 +363,7 @@ function testNotFirstStrongCharacterInBR_LTR() {
           '10' +
           '</div>' +
           '<div dir="rtl" id="text3">11</div>' +
-          '</div>');
+          '</div>'));
 
   goog.editor.range.placeCursorNextTo(dom.$('inner'), true);
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
@@ -326,7 +375,10 @@ function testNotFirstStrongCharacterInBR_LTR() {
  * Regression test for {@link http://b/7530985}
  */
 function testFirstStrongCharacterWithPreviousBlockSibling_RTL() {
-  field.setHtml(false, '<div>Te<div>xt</div>1<b id="cur">2</b>3</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div>Te<div>xt</div>1<b id="cur">2</b>3</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -334,15 +386,20 @@ function testFirstStrongCharacterWithPreviousBlockSibling_RTL() {
 }
 
 function testFirstStrongCharacterWithPreviousBlockSibling_LTR() {
-  field.setHtml(
-      false, '<div dir="rtl">טק<div>סט</div>1<b id="cur">2</b>3</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl">טק<div>סט</div>1<b id="cur">2</b>3</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertLTR();
 }
 
 function testFirstStrongCharacterWithFollowingBlockSibling_RTL() {
-  field.setHtml(false, '<div>1<b id="cur">2</b>3<div>Te</div>xt</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div>1<b id="cur">2</b>3<div>Te</div>xt</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
   goog.testing.events.fireNonAsciiKeySequence(
       fieldElement, goog.events.KeyCodes.T, ALEPH_KEYCODE);
@@ -350,14 +407,20 @@ function testFirstStrongCharacterWithFollowingBlockSibling_RTL() {
 }
 
 function testFirstStrongCharacterWithFollowingBlockSibling_RTL() {
-  field.setHtml(false, '<div dir="rtl">1<b id="cur">2</b>3<div>א</div>ב</div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl">1<b id="cur">2</b>3<div>א</div>ב</div>'));
   goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
   goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
   assertLTR();
 }
 
 function testFirstStrongCharacterFromIME_RTL() {
-  field.setHtml(false, '<div id="text">123.7 3121, </div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div id="text">123.7 3121, </div>'));
   field.focusAndPlaceCursorAtStart();
   var attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'אבג';
@@ -372,7 +435,10 @@ function testFirstStrongCharacterFromIME_RTL() {
 }
 
 function testFirstCharacterFromIME_LTR() {
-  field.setHtml(false, '<div dir="rtl" id="text"> 1234 </div>');
+  field.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<div dir="rtl" id="text"> 1234 </div>'));
   field.focusAndPlaceCursorAtStart();
   var attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'ABC';
