@@ -40,7 +40,6 @@ goog.require('goog.editor.node');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.log');
 goog.require('goog.style');
 
@@ -406,33 +405,6 @@ goog.editor.SeamlessField.prototype.setIframeableCss = function(iframeableCss) {
  * @private
  */
 goog.editor.SeamlessField.haveInstalledCss_ = false;
-
-
-/**
- * Applies CSS from the wrapper-div to the field iframe.
- */
-goog.editor.SeamlessField.prototype.inheritBlendedCSS = function() {
-  // No-op if the field isn't using an iframe.
-  if (!this.usesIframe()) {
-    return;
-  }
-  var field = this.getElement();
-  var head = goog.dom.getDomHelper(field).getElementsByTagNameAndClass(
-      goog.dom.TagName.HEAD)[0];
-  if (head) {
-    // We created this <head>, and we know the only thing we put in there
-    // is a <style> block.  So it's safe to blow away all the children
-    // as part of rewriting the styles.
-    goog.dom.removeChildren(head);
-  }
-
-  // Force a cache-clearing in CssUtil - this function was called because
-  // we're applying the 'blend' for the first time, or because we
-  // *need* to recompute the blend.
-  var newCSS = this.getIframeableCss(true);
-  goog.style.installSafeStyleSheet(
-      goog.html.legacyconversions.safeStyleSheetFromString(newCSS), field);
-};
 
 
 // Overridden methods.
