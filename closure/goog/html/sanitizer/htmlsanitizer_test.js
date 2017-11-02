@@ -22,6 +22,7 @@ goog.setTestOnly();
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
@@ -1692,4 +1693,19 @@ function testUrlWithCredentials() {
   } else {
     assertSanitizedHtml(input, input, sanitizer);
   }
+}
+
+
+function testClobberedForm() {
+  var input = '<form><input name="nodeType" /></form>';
+  // Passing a string in assertSanitizedHtml uses assertHtmlMatches, which is
+  // also vulnerable to clobbering. We use a regexp to fall back to simple
+  // string matching.
+  var expected = new RegExp('<form><input name="nodeType" /></form>');
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowFormTag()
+          .withCustomNamePolicy(goog.functions.identity)
+          .build());
 }

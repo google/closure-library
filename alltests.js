@@ -210,6 +210,7 @@ var _allTests = [
   'closure/goog/html/safeurl_test.html',
   'closure/goog/html/sanitizer/csssanitizer_test.html',
   'closure/goog/html/sanitizer/htmlsanitizer_test.html',
+  'closure/goog/html/sanitizer/noclobber_test.html',
   'closure/goog/html/sanitizer/unsafe_test.html',
   'closure/goog/html/silverlight_test.html',
   'closure/goog/html/textextractor_test.html',

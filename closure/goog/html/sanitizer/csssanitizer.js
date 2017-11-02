@@ -29,6 +29,7 @@ goog.require('goog.html.CssSpecificity');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.sanitizer.noclobber');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -406,13 +407,14 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
     var propName =
         goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_(cssPropNames[i]);
     if (!goog.html.sanitizer.CssSanitizer.isDisallowedPropertyName_(propName)) {
-      var propValue =
-          goog.html.sanitizer.CssSanitizer.getCssValue_(cssStyle, propName);
+      var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
+          cssStyle, propName, true /* opt_optionalAntiClobbering */);
 
       var sanitizedValue = goog.html.sanitizer.CssSanitizer.sanitizeProperty_(
           propName, propValue, opt_uriRewriter);
-      goog.html.sanitizer.CssSanitizer.setCssValue_(
-          cleanCssStyle, propName, sanitizedValue);
+      goog.html.sanitizer.noclobber.setCssProperty(
+          cleanCssStyle, propName, sanitizedValue,
+          true /* opt_optionalAntiClobbering */);
     }
   }
   return goog.html.uncheckedconversions
@@ -522,9 +524,9 @@ goog.html.sanitizer.CssSanitizer.mergeStyleDeclarations_ = function(
       // rule with a higher priority. Leave the existing value.
       return;
     }
-    var propValue = goog.html.sanitizer.CssSanitizer.getCssValue_(
+    var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
         styleDeclaration, propName);
-    goog.html.sanitizer.CssSanitizer.setCssValue_(
+    goog.html.sanitizer.noclobber.setCssProperty(
         element.style, propName, propValue);
   });
 };
@@ -571,58 +573,6 @@ goog.html.sanitizer.CssSanitizer.getCssPropNames_ = function(cssStyle) {
     goog.array.remove(propNames, 'cssText');
   }
   return propNames;
-};
-
-
-/**
- * Provides a way to get a CSS value without falling prey to things like
- * &lt;form&gt;&lt;input name="propertyValue"&gt;
- * &lt;input name="propertyValue"&gt;&lt;/form&gt;. If not available,
- * likely only older browsers, fallback to a direct call.
- * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
- * @param {string} propName A property name.
- * @return {string} Value of the property as parsed by the browser.
- * @private
- */
-goog.html.sanitizer.CssSanitizer.getCssValue_ = function(cssStyle, propName) {
-  var getPropDescriptor = Object.getOwnPropertyDescriptor(
-      CSSStyleDeclaration.prototype, 'getPropertyValue');
-  if (getPropDescriptor && cssStyle.getPropertyValue) {
-    // getPropertyValue on Safari can return null
-    return getPropDescriptor.value.call(cssStyle, propName) || '';
-  } else if (cssStyle.getAttribute) {
-    // In IE8 and other older browers we make a direct call to getAttribute.
-    return String(cssStyle.getAttribute(propName) || '');
-  } else {
-    // Unsupported, likely quite old, browser.
-    return '';
-  }
-};
-
-
-/**
- * Provides a way to set a CSS value without falling prey to things like
- * &lt;form&gt;&lt;input name="property"&gt;
- * &lt;input name="property"&gt;&lt;/form&gt;. If not available,
- * likely only older browsers, fallback to a direct call.
- * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
- * @param {string} propName A property name.
- * @param {?string} sanitizedValue Sanitized value of the property to be set
- *     on the CSS style object.
- * @private
- */
-goog.html.sanitizer.CssSanitizer.setCssValue_ = function(
-    cssStyle, propName, sanitizedValue) {
-  if (sanitizedValue) {
-    var setPropDescriptor = Object.getOwnPropertyDescriptor(
-        CSSStyleDeclaration.prototype, 'setProperty');
-    if (setPropDescriptor && cssStyle.setProperty) {
-      setPropDescriptor.value.call(cssStyle, propName, sanitizedValue);
-    } else if (cssStyle.setAttribute) {
-      // In IE8 and other older browers we make a direct call to setAttribute.
-      cssStyle.setAttribute(propName, sanitizedValue);
-    }
-  }
 };
 
 
