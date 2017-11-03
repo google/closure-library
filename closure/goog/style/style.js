@@ -504,7 +504,9 @@ goog.style.getOffsetParent = function(element) {
        parent = parent.parentNode) {
     // Skip shadowDOM roots.
     if (parent.nodeType == goog.dom.NodeType.DOCUMENT_FRAGMENT && parent.host) {
-      parent = parent.host;
+      // Cast because the assignment is not type safe, and without a cast we
+      // start typing parent loosely and get bad disambiguation.
+      parent = /** @type {!Element} */ (parent.host);
     }
     positionStyle =
         goog.style.getStyle_(/** @type {!Element} */ (parent), 'position');
