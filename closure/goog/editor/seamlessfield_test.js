@@ -32,6 +32,7 @@ goog.require('goog.editor.Field');
 goog.require('goog.editor.SeamlessField');
 goog.require('goog.events');
 goog.require('goog.functions');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockRange');
@@ -125,7 +126,10 @@ function testIframeHeightGrowsOnWrap() {
       blendedField = initSeamlessField(
           '', {'border': '1px solid black', 'height': '20px'});
       blendedField.makeEditable();
-      blendedField.setHtml(false, 'Content that should wrap after resize.');
+      blendedField.setSafeHtml(
+          false,
+          goog.html.SafeHtml.htmlEscape(
+              'Content that should wrap after resize.'));
 
       // Ensure that the field was fully loaded and sized before measuring.
       clock.tick(1);
@@ -165,7 +169,10 @@ function testDispatchIframeResizedForWrapperHeight() {
 
     try {
       blendedField.makeEditable();
-      blendedField.setHtml(false, 'Content that should wrap after resize.');
+      blendedField.setSafeHtml(
+          false,
+          goog.html.SafeHtml.htmlEscape(
+              'Content that should wrap after resize.'));
 
       // Ensure that the field was fully loaded and sized before measuring.
       clock.tick(1);
@@ -197,7 +204,10 @@ function testDispatchIframeResizedForBodyHeight() {
 
     try {
       blendedField.makeEditable();
-      blendedField.setHtml(false, 'Content that should wrap after resize.');
+      blendedField.setSafeHtml(
+          false,
+          goog.html.SafeHtml.htmlEscape(
+              'Content that should wrap after resize.'));
 
       // Ensure that the field was fully loaded and sized before measuring.
       clock.tick(1);
