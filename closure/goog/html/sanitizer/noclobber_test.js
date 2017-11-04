@@ -27,13 +27,21 @@ const antiClobberingSupported =
     !userAgentProduct.IE || document.documentMode >= 10;
 
 /**
+ * @param {string} html
+ * @return {!Element}
+ */
+function htmlToElement(html) {
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  return div.children[0];
+}
+
+/**
  * @param {string} name
  * @return {!Element}
  */
 function getClobberedElement(name) {
-  var div = document.createElement('div');
-  div.innerHTML = '<form id="foo"><input name="' + name + '"></form>';
-  return div.children[0];
+  return htmlToElement('<form id="foo"><input name="' + name + '"></form>');
 }
 
 testSuite({
@@ -74,6 +82,21 @@ testSuite({
       assertNull(style);
     }
 
+    element = getClobberedElement('getElementsByTagName');
+    assertArrayEquals(
+        Array.from(element.children),
+        noclobber.getElementsByTagName(element, 'input'));
+
+    element = htmlToElement(
+        '<form><input name="sheet"><style>color:red</style></form>');
+    document.body.appendChild(element);  // needs to be rooted into the DOM.
+    assertEquals(
+        element.children[1].sheet,
+        noclobber.getElementStyleSheet(element.children[1]));
+
+    element = getClobberedElement('matches');
+    assertTrue(noclobber.elementMatches(element, '#foo'));
+    assertFalse(noclobber.elementMatches(element, '#bar'));
   },
 
   testNode() {

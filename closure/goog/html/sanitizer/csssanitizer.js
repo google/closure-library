@@ -408,13 +408,13 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
         goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_(cssPropNames[i]);
     if (!goog.html.sanitizer.CssSanitizer.isDisallowedPropertyName_(propName)) {
       var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
-          cssStyle, propName, true /* opt_optionalAntiClobbering */);
+          cssStyle, propName, true /* opt_allowClobbering */);
 
       var sanitizedValue = goog.html.sanitizer.CssSanitizer.sanitizeProperty_(
           propName, propValue, opt_uriRewriter);
       goog.html.sanitizer.noclobber.setCssProperty(
           cleanCssStyle, propName, sanitizedValue,
-          true /* opt_optionalAntiClobbering */);
+          true /* opt_allowClobbering */);
     }
   }
   return goog.html.uncheckedconversions
@@ -465,9 +465,12 @@ goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
   // selectors by specificity is the best we can do.
 
   // Extract all rules from STYLE tags found in the subtree.
-  var styleTags = element.getElementsByTagName('STYLE');
+  /** @type {!Array<!HTMLStyleElement>} */
+  var styleTags =
+      goog.html.sanitizer.noclobber.getElementsByTagName(element, 'STYLE');
   var cssRules = goog.array.concatMap(styleTags, function(styleTag) {
-    return goog.array.toArray(styleTag.sheet.cssRules);
+    return goog.array.toArray(
+        goog.html.sanitizer.noclobber.getElementStyleSheet(styleTag).cssRules);
   });
   cssRules = goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_(cssRules);
   // Sort the rules by descending specificity.
@@ -487,9 +490,8 @@ goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
   var currentElement;
   while (currentElement = /** @type {!Element} */ (subTreeWalker.nextNode())) {
     goog.array.forEach(cssRules, function(rule) {
-      var matchingMethod =
-          Element.prototype.matches || Element.prototype.msMatchesSelector;
-      if (!matchingMethod.call(currentElement, rule.selectorText)) {
+      if (!goog.html.sanitizer.noclobber.elementMatches(
+              currentElement, rule.selectorText)) {
         return;
       }
       if (!rule.style) {

@@ -38,12 +38,17 @@ var propertyDescriptors = !userAgent.IE || document.documentMode >= 10 ? {
   'setAttribute':
       Object.getOwnPropertyDescriptor(Element.prototype, 'setAttribute'),
   'innerHTML': Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML'),
+  'getElementsByTagName': Object.getOwnPropertyDescriptor(
+      Element.prototype, 'getElementsByTagName'),
+  'matches': Object.getOwnPropertyDescriptor(Element.prototype, 'matches') ||
+      Object.getOwnPropertyDescriptor(Element.prototype, 'msMatchesSelector'),
   'nodeName': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName'),
   'nodeType': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType'),
   'parentNode': Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode'),
   'childNodes': Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes'),
   'textContent': Object.getOwnPropertyDescriptor(Node.prototype, 'textContent'),
   'style': Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style'),
+  'sheet': Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet'),
   'getPropertyValue': Object.getOwnPropertyDescriptor(
       CSSStyleDeclaration.prototype, 'getPropertyValue'),
   'setProperty': Object.getOwnPropertyDescriptor(
@@ -138,6 +143,57 @@ function getElementStyle(element) {
     return styleDescriptor.get.apply(element);
   } else {
     return element.style instanceof CSSStyleDeclaration ? element.style : null;
+  }
+}
+
+/**
+ * Get the children of a specific tag matching the provided tag name without
+ * falling prey to things like <form><input name="getElementsByTagName"></form>.
+ * Equivalent to {@code element.getElementsByTagName("foo")}.
+ * @param {!Element} element
+ * @param {string} name
+ * @return {!Array<!Element>}
+ */
+function getElementsByTagName(element, name) {
+  var descriptor = propertyDescriptors['getElementsByTagName'];
+  if (descriptor && descriptor.value) {
+    return Array.from(descriptor.value.call(element, name));
+  } else {
+    return (typeof element.getElementsByTagName == 'function') ?
+        Array.from(element.getElementsByTagName(name)) :
+        [];
+  }
+}
+
+/**
+ * Returns an element's style without falling prey to things like
+ * <form><input name="style"></form>.
+ * @param {!Element} element
+ * @return {?CSSStyleSheet}
+ */
+function getElementStyleSheet(element) {
+  var descriptor = propertyDescriptors['sheet'];
+  if (element instanceof HTMLStyleElement && descriptor && descriptor.get) {
+    return descriptor.get.apply(element);
+  } else {
+    return element.sheet instanceof CSSStyleSheet ? element.sheet : null;
+  }
+}
+
+/**
+ * Returns true if the element would be selected by the provided selector,
+ * without falling prey to things like <form><input name="setAttribute"></form>.
+ * Equivalent to {@code element.matches("foo")}.
+ * @param {!Element} element
+ * @param {string} selector
+ * @return {boolean}
+ */
+function elementMatches(element, selector) {
+  var descriptor = propertyDescriptors['matches'];
+  if (descriptor && descriptor.value) {
+    return descriptor.value.call(element, selector);
+  } else {
+    return false;
   }
 }
 
@@ -297,6 +353,9 @@ exports = {
   setElementAttribute: setElementAttribute,
   getElementInnerHTML: getElementInnerHTML,
   getElementStyle: getElementStyle,
+  getElementsByTagName: getElementsByTagName,
+  getElementStyleSheet: getElementStyleSheet,
+  elementMatches: elementMatches,
   assertNodeIsElement: assertNodeIsElement,
   isNodeElement: isNodeElement,
   getNodeName: getNodeName,
