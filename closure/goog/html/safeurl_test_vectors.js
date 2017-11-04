@@ -17,7 +17,7 @@
 goog.provide('goog.html.safeUrlTestVectors');
 goog.setTestOnly('goog.html.safeUrlTestVectors');
 
-goog.html.safeUrlTestVectors.VECTORS = [
+goog.html.safeUrlTestVectors.BASE_VECTORS = [
   {input: '', expected: '', safe: true},
   {input: 'http://example.com/', expected: 'http://example.com/', safe: true},
   {input: 'https://example.com', expected: 'https://example.com', safe: true},
@@ -249,4 +249,26 @@ goog.html.safeUrlTestVectors.VECTORS = [
     expected: 'data:video/webm;base64,z=',
     safe: true
   }
+];
+
+goog.html.safeUrlTestVectors.TEL_VECTORS = [
+  {
+    input: 'tEl:+1(23)129-29192A.ABC#;eXt=29',
+    expected: 'tEl:+1(23)129-29192A.ABC#;eXt=29',
+    safe: true
+  },
+  {
+    input: 'tEL:123;randmomparam=123',
+    expected: 'tEL:123;randmomparam=123',
+    safe: true
+  },
+  {input: ':', expected: 'about:invalid#zClosurez', safe: false},
+  {input: 'tell:', expected: 'about:invalid#zClosurez', safe: false},
+  {input: 'not-tel:+1', expected: 'about:invalid#zClosurez', safe: false},
+  {input: ' tel:+1', expected: 'about:invalid#zClosurez', safe: false}, {
+    input: 'javascript:evil()',
+    expected: 'about:invalid#zClosurez',
+    safe: false
+  },
+  {input: 'tel:+1234567890', expected: 'tel:+1234567890', safe: true}
 ];

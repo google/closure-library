@@ -99,33 +99,13 @@ function assertBlobTypeIsSafe(type, isSafe) {
 }
 
 
-function testSafeUrlFromTelUrl_withSafeType() {
-  assertTelUrlIsSafe('tEl:+1(23)129-29192A.ABC#;eXt=29', true);
-  assertTelUrlIsSafe('tEL:123;randmomparam=123', true);
-}
-
-
-function testSafeUrlFromTelUrl_withUnsafeType() {
-  assertTelUrlIsSafe('', false);
-  assertTelUrlIsSafe(':', false);
-  assertTelUrlIsSafe('tell:', false);
-  assertTelUrlIsSafe('not-tel:+1', false);
-  assertTelUrlIsSafe(' tel:+1', false);
-}
-
-
-/**
- * Tests creating a SafeUrl from a tel URL, asserting whether or not the
- * SafeUrl returned is innocuous or not depending on the given boolean.
- * @param {string} url URL to test.
- * @param {boolean} isSafe Whether the given URL type should be considered safe
- *     by {@link SafeUrl.fromTelUrl}.
- */
-function assertTelUrlIsSafe(url, isSafe) {
-  var safeUrl = goog.html.SafeUrl.fromTelUrl(url);
-  assertEquals(
-      isSafe ? url : goog.html.SafeUrl.INNOCUOUS_STRING,
-      goog.html.SafeUrl.unwrap(safeUrl));
+function testSafeUrlSanitize_sanitizeTelUrl() {
+  var vectors = goog.html.safeUrlTestVectors.TEL_VECTORS;
+  for (var i = 0; i < vectors.length; ++i) {
+    var v = vectors[i];
+    var observed = goog.html.SafeUrl.fromTelUrl(v.input);
+    assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
+  }
 }
 
 
@@ -155,7 +135,7 @@ function testUnwrap() {
 
 
 function testSafeUrlSanitize_sanitizeUrl() {
-  var vectors = goog.html.safeUrlTestVectors.VECTORS;
+  var vectors = goog.html.safeUrlTestVectors.BASE_VECTORS;
   for (var i = 0; i < vectors.length; ++i) {
     var v = vectors[i];
     if (v.input.match(/^data:/i)) {
