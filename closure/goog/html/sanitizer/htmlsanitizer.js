@@ -365,12 +365,6 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.styleContainer_ = null;
 
   /**
-   * Whether {@link withStyleContainer} was called.
-   * @private {boolean}
-   */
-  this.withStyleContainerCalled_ = false;
-
-  /**
    * Whether rules in STYLE tags should be inlined into style attributes.
    * @private {boolean}
    */
@@ -412,10 +406,14 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowFormTag = function() {
  * {@link sanitize} with a SPAN tag, give it a random ID unique across multiple
  * calls, and then restrict all CSS rules found inside STYLE tags to only apply
  * to children of the SPAN tag. This means that CSS rules in STYLE tags will
- * only apply to content provided in the same call to {@link sanitize}.
+ * only apply to content provided in the same call to {@link sanitize}. This
+ * feature is not compatible with {@link inlineStyleRules}.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function() {
+  if (this.inlineStyleRules_) {
+    throw new Error('Rules from STYLE tags are already being inlined.');
+  }
   delete this.tagBlacklist_['STYLE'];
   this.styleContainer_ = goog.html.sanitizer.RANDOM_CONTAINER_;
   return this;
@@ -427,24 +425,19 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowStyleTag = function() {
  * and disables automatic wrapping with the container. This allows multiple
  * calls to {@link sanitize} to share STYLE rules. If opt_styleContainer is
  * missing, the sanitizer will stop restricting the scope of CSS rules
- * altogether. Requires {@link allowStyleTag} to be called first, and is not
- * compatible with {@link inlineStyleRules}.
+ * altogether. Requires {@link allowStyleTag} to be called first.
  * @param {string=} opt_styleContainer An optional container ID to restrict the
  *     scope of any CSS rule found in STYLE tags.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withStyleContainer =
     function(opt_styleContainer) {
-  this.withStyleContainerCalled_ = true;
   if ('STYLE' in this.tagBlacklist_) {
-    throw new Error('STYLE tags must be allowed through allowStyleTag');
-  }
-  if (this.inlineStyleRules_) {
-    throw new Error('The container is useless if styles are inlined');
+    throw new Error('STYLE tags must first be allowed through allowStyleTag.');
   }
   if (opt_styleContainer != undefined) {
     if (!/^[a-zA-Z][\w-:\.]*$/.test(opt_styleContainer)) {
-      throw new Error('Invalid ID');
+      throw new Error('Invalid ID.');
     }
     this.styleContainer_ = opt_styleContainer;
   } else {
@@ -456,21 +449,24 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.withStyleContainer =
 
 /**
  * Converts rules in STYLE tags into style attributes on the tags they apply to.
- * This feature is not compatible with {@link withStyleContainer}. Note that
- * this method does not allow existing style attributes through, it only allows
- * style declarations found in STYLE tags. If style attributes are required, use
- * {@link allowCssStyles}.
+ * This feature is not compatible with {@link withStyleContainer} and {@link
+ * allowStyleTag}. This method requires {@link allowCssStyles} (otherwise rules
+ * would be deleted after being inlined), and is not compatible with {@link
+ * allowStyleTag}.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.inlineStyleRules =
     function() {
-  // inlineStyleRules implies allowStyleTag, but STYLE tags will not make it to
-  // the output since we'll now configure the builder to inline them.
-  this.allowStyleTag();
-  this.styleContainer_ = null;
-  if (this.withStyleContainerCalled_) {
+  if (this.sanitizeInlineCssPolicy_ == goog.functions.NULL) {
     throw new Error(
-        'Cannot inline styles and use a container at the same time');
+        'Inlining style rules requires allowing STYLE attributes ' +
+        'first.');
+  }
+  if (!('STYLE' in this.tagBlacklist_)) {
+    throw new Error(
+        'You have already configured the builder to allow STYLE tags in the ' +
+        'output. Inlining style rules would prevent STYLE tags from ' +
+        'appearing in the output and conflict with such directive.');
   }
   this.inlineStyleRules_ = true;
   return this;
@@ -541,7 +537,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
   if (!goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED) {
     throw new Error(
         'Cannot let unsanitized template contents through on ' +
-        'browsers that do not support TEMPLATE');
+        'browsers that do not support TEMPLATE.');
   }
   this.shouldSanitizeTemplateContents_ = false;
   return this;
@@ -569,7 +565,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
     } else {
       throw new Error(
           'Only whitelisted tags can be allowed. See ' +
-          'goog.html.sanitizer.TagWhitelist');
+          'goog.html.sanitizer.TagWhitelist.');
     }
   }, this);
   return this;
@@ -880,12 +876,16 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_ = function(
   }
   var naiveUriRewriter = function(uri, prop) {
     policyHints.cssProperty = prop;
+    var sanitizedUrl = policySanitizeUrl(uri, policyHints);
+    if (sanitizedUrl == null) {
+      return null;
+    }
     return goog.html.uncheckedconversions
         .safeUrlFromStringKnownToSatisfyTypeContract(
             goog.string.Const.from(
                 'HtmlSanitizerPolicy created with networkRequestUrlPolicy_ ' +
                 'when installing \'* STYLE\' handler.'),
-            policySanitizeUrl(uri, policyHints) || '');
+            sanitizedUrl);
   };
   var sanitizedStyle = goog.html.SafeStyle.unwrap(
       goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
@@ -1104,6 +1104,28 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
     return sanitizedParent;
   }
 
+  // Inline style rules on the unsanitized input, so that we don't have to
+  // worry about customTokenPolicy and customNamePolicy interferring with
+  // selectors.
+  if (this.inlineStyleRules_) {
+    // TODO(pelizzi): we are going to parse the document into a DOM tree twice,
+    // once with DOMParser here, and once with TEMPLATE in the main sanitization
+    // loop. It would be best if we used one technique consistently and parse it
+    // once, but the decision to use TEMPLATE in the main body predates the work
+    // on supporting STYLE tags, and we later found on that TEMPLATE inert
+    // documents do not have computed stylesheet information on STYLE tags.
+    var inertUnsanitizedDom =
+        goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
+            '<span>' + unsanitizedHtml + '</span>');
+    goog.asserts.assert(
+        inertUnsanitizedDom,
+        'Older browsers that don\'t support inert ' +
+            'parsing should not get to this branch');
+    goog.html.sanitizer.CssSanitizer.inlineStyleRules(inertUnsanitizedDom);
+    unsanitizedHtml = inertUnsanitizedDom.innerHTML;
+  }
+
+
   var styleContainer = opt_styleContainer != undefined ?
       opt_styleContainer :
       this.getStyleContainerId_();
@@ -1211,19 +1233,6 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
       target.appendChild(cleanNode);
     }
   }
-
-  if (this.inlineStyleRules_) {
-    // Cannot sanitize the DOM nodes directly, TEMPLATE inert documents do not
-    // have stylesheet information on STYLE tags.
-    var sanitizedCopy = /** @type {?HTMLSpanElement} */ (
-        goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
-            sanitizedParent.outerHTML));
-    goog.asserts.assert(
-        sanitizedCopy, 'Older browsers should not get to this branch');
-    goog.html.sanitizer.CssSanitizer.inlineStyleRules(sanitizedCopy);
-    sanitizedParent = sanitizedCopy;
-  }
-
   return sanitizedParent;
 };
 

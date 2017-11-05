@@ -1293,6 +1293,7 @@ function testInlineStyleRules_basic() {
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
           .inlineStyleRules()
           .build());
 }
@@ -1300,22 +1301,9 @@ function testInlineStyleRules_basic() {
 
 function testInlineStyleRules_specificity() {
   var input = '<style>a{color: red; border-width: 1px}' +
-      '#foo{color: white; border-width: 2px}</style>' +
-      '<a id="foo" style="color: black">foo</a>';
-  // Not matching the #foo rule because id="foo" was dropped.
-  var expected = '<a style="color: black; border-width: 1px">foo</a>';
-  assertSanitizedHtml(
-      input, expected,
-      new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .allowCssStyles()
-          .inlineStyleRules()
-          .build());
-
-  input = '<style>a{color: red; border-width: 1px}' +
       '#foo{color: white;}</style>' +
       '<a id="foo">foo</a>';
-  expected = '<a id="foo" style="color: white; border-width: 1px">foo</a>';
-  // Now #foo matches.
+  var expected = '<a id="foo" style="color: white; border-width: 1px">foo</a>';
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
@@ -1326,33 +1314,55 @@ function testInlineStyleRules_specificity() {
 }
 
 
-function testInlineStyleRules_incompatible() {
+function testInlineStyleRules_required() {
   assertThrows(function() {
     new goog.html.sanitizer.HtmlSanitizer.Builder()
-        .allowStyleTag()
-        .withStyleContainer()
         .inlineStyleRules();
-  });
-  assertThrows(function() {
-    new goog.html.sanitizer.HtmlSanitizer.Builder()
-        .allowStyleTag()
-        .inlineStyleRules()
-        .withStyleContainer();
   });
 }
 
 
-function testInlineStyleRules_doesNotAllowStyleAttribute() {
+function testInlineStyleRules_incompatible() {
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowCssStyles()
+        .inlineStyleRules()
+        .allowStyleTag();
+  });
+  assertThrows(function() {
+    new goog.html.sanitizer.HtmlSanitizer.Builder()
+        .allowStyleTag()
+        .allowCssStyles()
+        .inlineStyleRules();
+  });
+}
+
+
+function testInlineStyleRules_allowsExistingStyleAttributes() {
   var input = '<style>a{color:red}</style><a style="font-weight: bold">foo</a>';
-  var expected = '<a style="color:red;">foo</a>';
+  var expected = '<a style="color: red; font-weight: bold">foo</a>';
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .allowStyleTag()
+          .allowCssStyles()
           .inlineStyleRules()
           .build());
 }
 
+
+function testInlineStyleRules_inlinedBeforeRenaming() {
+  var input = '<style>#bar{color:red}</style><a id="bar">baz</a>';
+  var expected = '<a id="foo-bar" style="color:red">baz</a>';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .withCustomTokenPolicy(function(id) {
+            return 'foo-' + id;
+          })
+          .build());
+}
 
 function testInlineStyleRules_networkRequestUrlPolicy() {
   var input =
@@ -1361,6 +1371,7 @@ function testInlineStyleRules_networkRequestUrlPolicy() {
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
           .inlineStyleRules()
           .build());
 
@@ -1368,8 +1379,9 @@ function testInlineStyleRules_networkRequestUrlPolicy() {
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .allowCssStyles()
           .inlineStyleRules()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
           .build());
 
   input = '<style>a{background-image: url("javascript:alert(1)")}</style>' +
@@ -1378,8 +1390,9 @@ function testInlineStyleRules_networkRequestUrlPolicy() {
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .allowCssStyles()
           .inlineStyleRules()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
           .build());
 }
 
