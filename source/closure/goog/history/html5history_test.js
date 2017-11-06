@@ -15,6 +15,10 @@
 goog.provide('goog.history.Html5HistoryTest');
 goog.setTestOnly('goog.history.Html5HistoryTest');
 
+// Delay running the tests after page load. This test has some asynchronous
+// behavior that interacts with page load detection.
+goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
+
 goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
