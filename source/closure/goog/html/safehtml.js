@@ -394,10 +394,10 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  */
 goog.html.SafeHtml.verifyTagName = function(tagName) {
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
-    throw Error('Invalid tag name <' + tagName + '>.');
+    throw new Error('Invalid tag name <' + tagName + '>.');
   }
   if (tagName.toUpperCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
-    throw Error('Tag name <' + tagName + '> is not allowed for SafeHtml.');
+    throw new Error('Tag name <' + tagName + '> is not allowed for SafeHtml.');
   }
 };
 
@@ -564,7 +564,7 @@ goog.html.SafeHtml.createScript = function(script, opt_attributes) {
     var attrLower = attr.toLowerCase();
     if (attrLower == 'language' || attrLower == 'src' || attrLower == 'text' ||
         attrLower == 'type') {
-      throw Error('Cannot set "' + attrLower + '" attribute');
+      throw new Error('Cannot set "' + attrLower + '" attribute');
     }
   }
 
@@ -679,7 +679,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     value = goog.html.SafeHtml.getStyleValue_(value);
   } else if (/^on/i.test(name)) {
     // TODO(jakubvrana): Disallow more attributes with a special meaning.
-    throw Error(
+    throw new Error(
         'Attribute "' + name + '" requires goog.string.Const value, "' + value +
         '" given.');
     // URL attributes handled differently according to tag.
@@ -691,7 +691,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     } else if (goog.isString(value)) {
       value = goog.html.SafeUrl.sanitize(value).getTypedStringValue();
     } else {
-      throw Error(
+      throw new Error(
           'Attribute "' + name + '" on tag "' + tagName +
           '" requires goog.html.SafeUrl, goog.string.Const, or string,' +
           ' value "' + value + '" given.');
@@ -724,7 +724,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
   if (!goog.isObject(value)) {
-    throw Error(
+    throw new Error(
         'The "style" attribute requires goog.html.SafeStyle or map ' +
         'of style properties, ' + (typeof value) + ' given: ' + value);
   }
@@ -912,7 +912,7 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
   if (opt_attributes) {
     for (var name in opt_attributes) {
       if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(name)) {
-        throw Error('Invalid attribute name "' + name + '".');
+        throw new Error('Invalid attribute name "' + name + '".');
       }
       var value = opt_attributes[name];
       if (!goog.isDefAndNotNull(value)) {
@@ -953,7 +953,7 @@ goog.html.SafeHtml.combineAttributes = function(
   for (name in opt_attributes) {
     var nameLower = name.toLowerCase();
     if (nameLower in fixedAttributes) {
-      throw Error(
+      throw new Error(
           'Cannot override "' + nameLower + '" attribute, got "' + name +
           '" with value "' + opt_attributes[name] + '"');
     }

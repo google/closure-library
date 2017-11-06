@@ -121,6 +121,7 @@ goog.json.setErrorLogger = function(errorLogger) {
  * @param {*} s The JSON string to parse.
  * @throws Error if s is invalid JSON.
  * @return {Object} The object generated from the JSON string, or null.
+ * @deprecated Use JSON.parse.
  */
 goog.json.parse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
@@ -145,34 +146,7 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
         } catch (ex) {
         }
       }
-      throw Error('Invalid JSON string: ' + o);
-    };
-
-
-/**
- * Parses a JSON string and returns the result. This uses eval so it is open
- * to security issues and it should only be used if you trust the source.
- *
- * @param {string} s The JSON string to parse.
- * @return {Object} The object generated from the JSON string.
- * @deprecated Use JSON.parse if possible or goog.json.parse.
- */
-goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
-    /** @type {function(string):Object} */ (goog.global['JSON']['parse']) :
-    function(s) {
-      var error;
-      if (goog.json.TRY_NATIVE_JSON) {
-        try {
-          return goog.global['JSON']['parse'](s);
-        } catch (ex) {
-          error = ex;
-        }
-      }
-      var result = /** @type {?Object} */ (eval('(' + s + ')'));
-      if (error) {
-        goog.json.errorLogger_('Invalid JSON: ' + s, error);
-      }
-      return result;
+      throw new Error('Invalid JSON string: ' + o);
     };
 
 
@@ -296,7 +270,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       sb.push('null');
       break;
     default:
-      throw Error('Unknown type: ' + typeof object);
+      throw new Error('Unknown type: ' + typeof object);
   }
 };
 

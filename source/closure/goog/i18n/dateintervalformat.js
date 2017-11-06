@@ -309,10 +309,11 @@ DateIntervalFormat.prototype.formatRange = function(dateRange, opt_timeZone) {
   var startDate = dateRange.getStartDate();
   var endDate = dateRange.getEndDate();
   if (startDate == null) {
-    throw Error('The dateRange\'s startDate should be defined and non-null.');
+    throw new Error(
+        'The dateRange\'s startDate should be defined and non-null.');
   }
   if (endDate == null) {
-    throw Error('The dateRange\'s endDate should be defined and non-null.');
+    throw new Error('The dateRange\'s endDate should be defined and non-null.');
   }
   return this.format(startDate, endDate, opt_timeZone);
 };

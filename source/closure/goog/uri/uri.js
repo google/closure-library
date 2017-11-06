@@ -465,7 +465,7 @@ goog.Uri.prototype.setPort = function(newPort) {
   if (newPort) {
     newPort = Number(newPort);
     if (isNaN(newPort) || newPort < 0) {
-      throw Error('Bad port number ' + newPort);
+      throw new Error('Bad port number ' + newPort);
     }
     this.port_ = newPort;
   } else {
@@ -763,7 +763,7 @@ goog.Uri.prototype.isReadOnly = function() {
  */
 goog.Uri.prototype.enforceReadOnly = function() {
   if (this.isReadOnly_) {
-    throw Error('Tried to modify a read-only Uri');
+    throw new Error('Tried to modify a read-only Uri');
   }
 };
 
@@ -1135,7 +1135,7 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
 goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
   var keys = goog.structs.getKeys(map);
   if (typeof keys == 'undefined') {
-    throw Error('Keys are undefined');
+    throw new Error('Keys are undefined');
   }
 
   var queryData = new goog.Uri.QueryData(null, null, opt_ignoreCase);
@@ -1169,7 +1169,7 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
 goog.Uri.QueryData.createFromKeysValues = function(
     keys, values, opt_uri, opt_ignoreCase) {
   if (keys.length != values.length) {
-    throw Error('Mismatched lengths for keys/values');
+    throw new Error('Mismatched lengths for keys/values');
   }
   var queryData = new goog.Uri.QueryData(null, null, opt_ignoreCase);
   for (var i = 0; i < keys.length; i++) {

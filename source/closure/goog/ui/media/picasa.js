@@ -266,7 +266,8 @@ goog.ui.media.PicasaAlbumModel.newInstance = function(
     return new goog.ui.media.PicasaAlbumModel(
         data[1], data[2], data[3], opt_caption, opt_description, opt_autoplay);
   }
-  throw Error('failed to parse user and album from picasa url: ' + picasaUrl);
+  throw new Error(
+      'failed to parse user and album from picasa url: ' + picasaUrl);
 };
 
 

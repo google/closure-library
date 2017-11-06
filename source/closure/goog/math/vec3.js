@@ -307,3 +307,15 @@ goog.math.Vec3.lerp = function(a, b, x) {
       goog.math.lerp(a.x, b.x, x), goog.math.lerp(a.y, b.y, x),
       goog.math.lerp(a.z, b.z, x));
 };
+
+
+/**
+ * Returns a new Vec3 that is a copy of the vector a, but rescaled by a factor s
+ * in all dimensions.
+ * @param {!goog.math.Vec3} a Vector a.
+ * @param {number} s Scale factor.
+ * @return {!goog.math.Vec3} A new rescaled vector.
+ */
+goog.math.Vec3.rescaled = function(a, s) {
+  return new goog.math.Vec3(a.x * s, a.y * s, a.z * s);
+};

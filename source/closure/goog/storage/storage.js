@@ -80,7 +80,7 @@ goog.storage.Storage.prototype.get = function(key) {
   }
 
   try {
-    return goog.json.parse(json);
+    return JSON.parse(json);
   } catch (e) {
     throw goog.storage.ErrorCode.INVALID_VALUE;
   }

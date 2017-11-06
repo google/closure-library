@@ -23,8 +23,13 @@ goog.require('goog.testing.TestCase');
  * the given object. For use in tests that are written as JavaScript modules
  * or goog.modules.
  *
- * @param {!Object<string, function()>} obj An object with one or more test
- *     methods, and optional setUp, tearDown and getTestName methods, etc.
+ * @param {!Object<string, function()|!Object>} obj An object with one or more
+ *     test methods, and optional setUp, tearDown and getTestName methods. The
+ *     object may also have nested Objects that will be treated as nested
+ *     testSuites. Any additional setUp will run after parent setUps, any
+ *     additional tearDown will run before parent tearDowns. The this object
+ *     refers to the object that the functions were defined on, not the full
+ *     testSuite object.
  */
 goog.testing.testSuite = function(obj) {
   if (goog.isFunction(obj)) {

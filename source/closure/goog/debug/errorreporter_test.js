@@ -17,6 +17,7 @@ goog.setTestOnly('goog.debug.ErrorReporterTest');
 
 goog.require('goog.debug.Error');
 goog.require('goog.debug.ErrorReporter');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
@@ -284,6 +285,56 @@ function testContextProvider_withOtherContext() {
         loggedErrors++;
       });
   errorReporter.handleException(testError, {'otherContext': 'value'});
+  assertEquals(
+      'Expected 1 error. ' +
+          '(Ensure an exception was not swallowed.)',
+      1, loggedErrors);
+}
+
+function testErrorWithContext() {
+  errorReporter = goog.debug.ErrorReporter.install('/errorreporter');
+  var loggedErrors = 0;
+  var testError = new Error('test error');
+  goog.debug.errorcontext.addErrorContext(testError, 'key1', 'value1');
+  goog.debug.errorcontext.addErrorContext(testError, 'animalType', 'dog');
+  goog.events.listen(
+      errorReporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+      function(event) {
+        assertNotNullNorUndefined(event.error);
+        assertObjectEquals({key1: 'value1', animalType: 'dog'}, event.context);
+        loggedErrors++;
+      });
+  errorReporter.handleException(testError);
+  assertEquals(
+      'Expected 1 error. ' +
+          '(Ensure an exception was not swallowed.)',
+      1, loggedErrors);
+}
+
+function testErrorWithDifferentContextSources() {
+  errorReporter = goog.debug.ErrorReporter.install(
+      '/errorreporter', function(error, context) {
+        context.providedContext = 'provided ctx';
+      });
+  var loggedErrors = 0;
+  var testError = new Error('test error');
+  goog.debug.errorcontext.addErrorContext(
+      testError, 'addErrorContext', 'some value');
+  goog.events.listen(
+      errorReporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+      function(event) {
+        assertNotNullNorUndefined(event.error);
+        assertObjectEquals(
+            {
+              addErrorContext: 'some value',
+              providedContext: 'provided ctx',
+              handleExceptionContext: 'another value'
+            },
+            event.context);
+        loggedErrors++;
+      });
+  errorReporter.handleException(
+      testError, {handleExceptionContext: 'another value'});
   assertEquals(
       'Expected 1 error. ' +
           '(Ensure an exception was not swallowed.)',

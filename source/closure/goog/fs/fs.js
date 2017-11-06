@@ -201,7 +201,7 @@ goog.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
     }
     return new Blob(parts, properties);
   } else {
-    throw Error('This browser doesn\'t seem to support creating Blobs');
+    throw new Error('This browser doesn\'t seem to support creating Blobs');
   }
 };
 

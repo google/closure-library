@@ -321,12 +321,20 @@ goog.html.SafeStyle.INNOCUOUS_STRING = 'zClosurez';
 
 
 /**
+ * A single property value.
+ * @typedef {string|!goog.string.Const|!goog.html.SafeUrl}
+ */
+goog.html.SafeStyle.PropertyValue;
+
+
+/**
  * Mapping of property names to their values.
  * We don't support numbers even though some values might be numbers (e.g.
  * line-height or 0 for any length). The reason is that most numeric values need
  * units (e.g. '1px') and allowing numbers could cause users forgetting about
  * them.
- * @typedef {!Object<string, goog.string.Const|string>}
+ * @typedef {!Object<string, ?goog.html.SafeStyle.PropertyValue|
+ *     ?Array<!goog.html.SafeStyle.PropertyValue>>}
  */
 goog.html.SafeStyle.PropertyMap;
 
@@ -338,8 +346,10 @@ goog.html.SafeStyle.PropertyMap;
  *     [-_a-zA-Z0-9]. Values might be strings consisting of
  *     [-,.'"%_!# a-zA-Z0-9], where " and ' must be properly balanced. We also
  *     allow simple functions like rgb() and url() which sanitizes its contents.
- *     Other values must be wrapped in goog.string.Const. Null value causes
- *     skipping the property.
+ *     Other values must be wrapped in goog.string.Const. URLs might be passed
+ *     as goog.html.SafeUrl which will be wrapped into url(""). We also support
+ *     array whose elements are joined with ' '. Null value causes skipping the
+ *     property.
  * @return {!goog.html.SafeStyle}
  * @throws {Error} If invalid name is provided.
  * @throws {goog.asserts.AssertionError} If invalid value is provided. With
@@ -350,35 +360,17 @@ goog.html.SafeStyle.create = function(map) {
   var style = '';
   for (var name in map) {
     if (!/^[-_a-zA-Z0-9]+$/.test(name)) {
-      throw Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
+      throw new Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
     }
     var value = map[name];
     if (value == null) {
       continue;
     }
-    if (value instanceof goog.string.Const) {
-      value = goog.string.Const.unwrap(value);
-      // These characters can be used to change context and we don't want that
-      // even with const values.
-      goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
+    if (goog.isArray(value)) {
+      value = goog.array.map(value, goog.html.SafeStyle.sanitizePropertyValue_)
+                  .join(' ');
     } else {
-      value = String(value);
-      var valueWithoutFunctions =
-          value.replace(goog.html.SafeUrl.FUNCTIONS_RE_, '$1')
-              .replace(goog.html.SafeUrl.URL_RE_, 'url');
-      if (!goog.html.SafeStyle.VALUE_RE_.test(valueWithoutFunctions)) {
-        goog.asserts.fail(
-            'String value allows only ' +
-            goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ + ' and simple ' +
-            'functions, got: ' + value);
-        value = goog.html.SafeStyle.INNOCUOUS_STRING;
-      } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
-        goog.asserts.fail(
-            'String value requires balanced quotes, got: ' + value);
-        value = goog.html.SafeStyle.INNOCUOUS_STRING;
-      } else {
-        value = goog.html.SafeStyle.sanitizeUrl_(value);
-      }
+      value = goog.html.SafeStyle.sanitizePropertyValue_(value);
     }
     style += name + ':' + value + ';';
   }
@@ -388,6 +380,50 @@ goog.html.SafeStyle.create = function(map) {
   goog.html.SafeStyle.checkStyle_(style);
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
+};
+
+
+/**
+ * Checks and converts value to string.
+ * @param {!goog.html.SafeStyle.PropertyValue} value
+ * @return {string}
+ * @private
+ */
+goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
+  if (value instanceof goog.html.SafeUrl) {
+    var url = goog.html.SafeUrl.unwrap(value);
+    return 'url("' + url.replace(/</g, '%3c').replace(/[\\"]/g, '\\$&') + '")';
+  }
+  var result = value instanceof goog.string.Const ?
+      goog.string.Const.unwrap(value) :
+      goog.html.SafeStyle.sanitizePropertyValueString_(String(value));
+  // These characters can be used to change context and we don't want that even
+  // with const values.
+  goog.asserts.assert(!/[{;}]/.test(result), 'Value does not allow [{;}].');
+  return result;
+};
+
+
+/**
+ * Checks string value.
+ * @param {string} value
+ * @return {string}
+ * @private
+ */
+goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
+  var valueWithoutFunctions =
+      value.replace(goog.html.SafeUrl.FUNCTIONS_RE_, '$1')
+          .replace(goog.html.SafeUrl.URL_RE_, 'url');
+  if (!goog.html.SafeStyle.VALUE_RE_.test(valueWithoutFunctions)) {
+    goog.asserts.fail(
+        'String value allows only ' + goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ +
+        ' and simple functions, got: ' + value);
+    return goog.html.SafeStyle.INNOCUOUS_STRING;
+  } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
+    goog.asserts.fail('String value requires balanced quotes, got: ' + value);
+    return goog.html.SafeStyle.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeStyle.sanitizeUrl_(value);
 };
 
 

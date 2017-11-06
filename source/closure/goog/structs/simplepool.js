@@ -141,7 +141,8 @@ goog.structs.SimplePool.prototype.releaseObject = function(obj) {
  */
 goog.structs.SimplePool.prototype.createInitial_ = function(initialCount) {
   if (initialCount > this.maxCount_) {
-    throw Error('[goog.structs.SimplePool] Initial cannot be greater than max');
+    throw new Error(
+        '[goog.structs.SimplePool] Initial cannot be greater than max');
   }
   for (var i = 0; i < initialCount; i++) {
     this.freeQueue_.push(this.createObject());

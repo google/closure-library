@@ -131,6 +131,36 @@ function testOpenWithInitHeaders() {
   assertEquals('foo-value', initHeaders_['foo-key']);
 }
 
+function testOpenWithMessageContentType() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'messageContentType': 'application/protobuf+json'};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var initHeaders_ = webChannel.channel_.initHeaders_;
+  assertNotNullNorUndefined(initHeaders_);
+  assertEquals(
+      'application/protobuf+json', initHeaders_['X-WebChannel-Content-Type']);
+}
+
+function testOpenWithMessageContentTypeAndInitHeaders() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {
+    'messageContentType': 'application/protobuf+json',
+    'initMessageHeaders': {'foo-key': 'foo-value'}
+  };
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var initHeaders_ = webChannel.channel_.initHeaders_;
+  assertNotNullNorUndefined(initHeaders_);
+  assertEquals(
+      'application/protobuf+json', initHeaders_['X-WebChannel-Content-Type']);
+  assertEquals('foo-value', initHeaders_['foo-key']);
+}
+
 function testClientProtocolHeaderRequired() {
   var webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();

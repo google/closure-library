@@ -20,7 +20,9 @@
 
 
 goog.provide('goog.events.EventType');
+goog.provide('goog.events.PointerFallbackEventType');
 
+goog.require('goog.events.BrowserFeature');
 goog.require('goog.userAgent');
 
 
@@ -292,4 +294,66 @@ goog.events.EventType = {
   // Print events.
   BEFOREPRINT: 'beforeprint',
   AFTERPRINT: 'afterprint'
+};
+
+
+/**
+ * Returns one of the given pointer fallback event names in order of preference:
+ *   1. pointerEventName
+ *   2. msPointerEventName
+ *   3. mouseEventName
+ * @param {string} pointerEventName
+ * @param {string} msPointerEventName
+ * @param {string} mouseEventName
+ * @return {string} The supported pointer or mouse event name.
+ * @private
+ */
+goog.events.getPointerFallbackEventName_ = function(
+    pointerEventName, msPointerEventName, mouseEventName) {
+  if (goog.events.BrowserFeature.POINTER_EVENTS) {
+    return pointerEventName;
+  }
+  if (goog.events.BrowserFeature.MSPOINTER_EVENTS) {
+    return msPointerEventName;
+  }
+  return mouseEventName;
+};
+
+
+/**
+ * Constants for pointer event names that fall back to corresponding mouse event
+ * names on unsupported platforms. These are intended to be drop-in replacements
+ * for corresponding values in {@code goog.events.EventType}.
+ * @enum {string}
+ */
+goog.events.PointerFallbackEventType = {
+  POINTERDOWN: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERDOWN, goog.events.EventType.MSPOINTERDOWN,
+      goog.events.EventType.MOUSEDOWN),
+  POINTERUP: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERUP, goog.events.EventType.MSPOINTERUP,
+      goog.events.EventType.MOUSEUP),
+  POINTERCANCEL: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERCANCEL,
+      goog.events.EventType.MSPOINTERCANCEL,
+      // When falling back to mouse events, there is no MOUSECANCEL equivalent
+      // of POINTERCANCEL. In this case POINTERUP already falls back to MOUSEUP
+      // which represents both UP and CANCEL. POINTERCANCEL does not fall back
+      // to MOUSEUP to prevent listening twice on the same event.
+      'mousecancel'),  // non-existent event; will never fire
+  POINTERMOVE: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERMOVE, goog.events.EventType.MSPOINTERMOVE,
+      goog.events.EventType.MOUSEMOVE),
+  POINTEROVER: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTEROVER, goog.events.EventType.MSPOINTEROVER,
+      goog.events.EventType.MOUSEOVER),
+  POINTEROUT: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTEROUT, goog.events.EventType.MSPOINTEROUT,
+      goog.events.EventType.MOUSEOUT),
+  POINTERENTER: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERENTER, goog.events.EventType.MSPOINTERENTER,
+      goog.events.EventType.MOUSEENTER),
+  POINTERLEAVE: goog.events.getPointerFallbackEventName_(
+      goog.events.EventType.POINTERLEAVE, goog.events.EventType.MSPOINTERLEAVE,
+      goog.events.EventType.MOUSELEAVE)
 };

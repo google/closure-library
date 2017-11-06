@@ -70,12 +70,12 @@ netUtils.testNetwork = function(callback, opt_imageUri) {
  * @param {number} timeout Milliseconds before giving up.
  * @param {function(boolean)} callback Function to call with results.
  * @param {number} retries The number of times to retry.
+ * @param {!WebChannelDebug} channelDebug The debug object
  * @param {number=} opt_pauseBetweenRetriesMS Optional number of milliseconds
  *     between retries - defaults to 0.
  */
 netUtils.testLoadImageWithRetries = function(
-    url, timeout, callback, retries, opt_pauseBetweenRetriesMS) {
-  var channelDebug = new WebChannelDebug();
+    url, timeout, callback, retries, channelDebug, opt_pauseBetweenRetriesMS) {
   channelDebug.debug('TestLoadImageWithRetries: ' + opt_pauseBetweenRetriesMS);
   if (retries == 0) {
     // no more retries, give up
@@ -92,7 +92,7 @@ netUtils.testLoadImageWithRetries = function(
       // try again
       goog.global.setTimeout(function() {
         netUtils.testLoadImageWithRetries(
-            url, timeout, callback, retries, pauseBetweenRetries);
+            url, timeout, callback, retries, channelDebug, pauseBetweenRetries);
       }, pauseBetweenRetries);
     }
   });

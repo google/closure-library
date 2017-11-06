@@ -33245,1230 +33245,2344 @@ exports.DateIntervalSymbols_zu_ZA = {
   FALLBACK: '{0} – {1}'
 };
 
-if (goog.LOCALE == 'af_NA' || goog.LOCALE == 'af-NA') {
-  defaultSymbols = exports.DateIntervalSymbols_af_NA;
-} else if (goog.LOCALE == 'af_ZA' || goog.LOCALE == 'af-ZA') {
-  defaultSymbols = exports.DateIntervalSymbols_af_ZA;
-} else if (goog.LOCALE == 'agq') {
-  defaultSymbols = exports.DateIntervalSymbols_agq;
-} else if (goog.LOCALE == 'agq_CM' || goog.LOCALE == 'agq-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_agq_CM;
-} else if (goog.LOCALE == 'ak') {
-  defaultSymbols = exports.DateIntervalSymbols_ak;
-} else if (goog.LOCALE == 'ak_GH' || goog.LOCALE == 'ak-GH') {
-  defaultSymbols = exports.DateIntervalSymbols_ak_GH;
-} else if (goog.LOCALE == 'am_ET' || goog.LOCALE == 'am-ET') {
-  defaultSymbols = exports.DateIntervalSymbols_am_ET;
-} else if (goog.LOCALE == 'ar_001' || goog.LOCALE == 'ar-001') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_001;
-} else if (goog.LOCALE == 'ar_AE' || goog.LOCALE == 'ar-AE') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_AE;
-} else if (goog.LOCALE == 'ar_BH' || goog.LOCALE == 'ar-BH') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_BH;
-} else if (goog.LOCALE == 'ar_DJ' || goog.LOCALE == 'ar-DJ') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_DJ;
-} else if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_EG;
-} else if (goog.LOCALE == 'ar_EH' || goog.LOCALE == 'ar-EH') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_EH;
-} else if (goog.LOCALE == 'ar_ER' || goog.LOCALE == 'ar-ER') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_ER;
-} else if (goog.LOCALE == 'ar_IL' || goog.LOCALE == 'ar-IL') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_IL;
-} else if (goog.LOCALE == 'ar_IQ' || goog.LOCALE == 'ar-IQ') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_IQ;
-} else if (goog.LOCALE == 'ar_JO' || goog.LOCALE == 'ar-JO') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_JO;
-} else if (goog.LOCALE == 'ar_KM' || goog.LOCALE == 'ar-KM') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_KM;
-} else if (goog.LOCALE == 'ar_KW' || goog.LOCALE == 'ar-KW') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_KW;
-} else if (goog.LOCALE == 'ar_LB' || goog.LOCALE == 'ar-LB') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_LB;
-} else if (goog.LOCALE == 'ar_LY' || goog.LOCALE == 'ar-LY') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_LY;
-} else if (goog.LOCALE == 'ar_MA' || goog.LOCALE == 'ar-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_MA;
-} else if (goog.LOCALE == 'ar_MR' || goog.LOCALE == 'ar-MR') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_MR;
-} else if (goog.LOCALE == 'ar_OM' || goog.LOCALE == 'ar-OM') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_OM;
-} else if (goog.LOCALE == 'ar_PS' || goog.LOCALE == 'ar-PS') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_PS;
-} else if (goog.LOCALE == 'ar_QA' || goog.LOCALE == 'ar-QA') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_QA;
-} else if (goog.LOCALE == 'ar_SA' || goog.LOCALE == 'ar-SA') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_SA;
-} else if (goog.LOCALE == 'ar_SD' || goog.LOCALE == 'ar-SD') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_SD;
-} else if (goog.LOCALE == 'ar_SO' || goog.LOCALE == 'ar-SO') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_SO;
-} else if (goog.LOCALE == 'ar_SS' || goog.LOCALE == 'ar-SS') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_SS;
-} else if (goog.LOCALE == 'ar_SY' || goog.LOCALE == 'ar-SY') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_SY;
-} else if (goog.LOCALE == 'ar_TD' || goog.LOCALE == 'ar-TD') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_TD;
-} else if (goog.LOCALE == 'ar_TN' || goog.LOCALE == 'ar-TN') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_TN;
-} else if (goog.LOCALE == 'ar_XB' || goog.LOCALE == 'ar-XB') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_XB;
-} else if (goog.LOCALE == 'ar_YE' || goog.LOCALE == 'ar-YE') {
-  defaultSymbols = exports.DateIntervalSymbols_ar_YE;
-} else if (goog.LOCALE == 'as') {
-  defaultSymbols = exports.DateIntervalSymbols_as;
-} else if (goog.LOCALE == 'as_IN' || goog.LOCALE == 'as-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_as_IN;
-} else if (goog.LOCALE == 'asa') {
-  defaultSymbols = exports.DateIntervalSymbols_asa;
-} else if (goog.LOCALE == 'asa_TZ' || goog.LOCALE == 'asa-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_asa_TZ;
-} else if (goog.LOCALE == 'ast') {
-  defaultSymbols = exports.DateIntervalSymbols_ast;
-} else if (goog.LOCALE == 'ast_ES' || goog.LOCALE == 'ast-ES') {
-  defaultSymbols = exports.DateIntervalSymbols_ast_ES;
-} else if (goog.LOCALE == 'az_Cyrl' || goog.LOCALE == 'az-Cyrl') {
-  defaultSymbols = exports.DateIntervalSymbols_az_Cyrl;
-} else if (goog.LOCALE == 'az_Cyrl_AZ' || goog.LOCALE == 'az-Cyrl-AZ') {
-  defaultSymbols = exports.DateIntervalSymbols_az_Cyrl_AZ;
-} else if (goog.LOCALE == 'az_Latn' || goog.LOCALE == 'az-Latn') {
-  defaultSymbols = exports.DateIntervalSymbols_az_Latn;
-} else if (goog.LOCALE == 'az_Latn_AZ' || goog.LOCALE == 'az-Latn-AZ') {
-  defaultSymbols = exports.DateIntervalSymbols_az_Latn_AZ;
-} else if (goog.LOCALE == 'bas') {
-  defaultSymbols = exports.DateIntervalSymbols_bas;
-} else if (goog.LOCALE == 'bas_CM' || goog.LOCALE == 'bas-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_bas_CM;
-} else if (goog.LOCALE == 'be_BY' || goog.LOCALE == 'be-BY') {
-  defaultSymbols = exports.DateIntervalSymbols_be_BY;
-} else if (goog.LOCALE == 'bem') {
-  defaultSymbols = exports.DateIntervalSymbols_bem;
-} else if (goog.LOCALE == 'bem_ZM' || goog.LOCALE == 'bem-ZM') {
-  defaultSymbols = exports.DateIntervalSymbols_bem_ZM;
-} else if (goog.LOCALE == 'bez') {
-  defaultSymbols = exports.DateIntervalSymbols_bez;
-} else if (goog.LOCALE == 'bez_TZ' || goog.LOCALE == 'bez-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_bez_TZ;
-} else if (goog.LOCALE == 'bg_BG' || goog.LOCALE == 'bg-BG') {
-  defaultSymbols = exports.DateIntervalSymbols_bg_BG;
-} else if (goog.LOCALE == 'bm') {
-  defaultSymbols = exports.DateIntervalSymbols_bm;
-} else if (goog.LOCALE == 'bm_ML' || goog.LOCALE == 'bm-ML') {
-  defaultSymbols = exports.DateIntervalSymbols_bm_ML;
-} else if (goog.LOCALE == 'bn_BD' || goog.LOCALE == 'bn-BD') {
-  defaultSymbols = exports.DateIntervalSymbols_bn_BD;
-} else if (goog.LOCALE == 'bn_IN' || goog.LOCALE == 'bn-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_bn_IN;
-} else if (goog.LOCALE == 'bo') {
-  defaultSymbols = exports.DateIntervalSymbols_bo;
-} else if (goog.LOCALE == 'bo_CN' || goog.LOCALE == 'bo-CN') {
-  defaultSymbols = exports.DateIntervalSymbols_bo_CN;
-} else if (goog.LOCALE == 'bo_IN' || goog.LOCALE == 'bo-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_bo_IN;
-} else if (goog.LOCALE == 'br_FR' || goog.LOCALE == 'br-FR') {
-  defaultSymbols = exports.DateIntervalSymbols_br_FR;
-} else if (goog.LOCALE == 'brx') {
-  defaultSymbols = exports.DateIntervalSymbols_brx;
-} else if (goog.LOCALE == 'brx_IN' || goog.LOCALE == 'brx-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_brx_IN;
-} else if (goog.LOCALE == 'bs_Cyrl' || goog.LOCALE == 'bs-Cyrl') {
-  defaultSymbols = exports.DateIntervalSymbols_bs_Cyrl;
-} else if (goog.LOCALE == 'bs_Cyrl_BA' || goog.LOCALE == 'bs-Cyrl-BA') {
-  defaultSymbols = exports.DateIntervalSymbols_bs_Cyrl_BA;
-} else if (goog.LOCALE == 'bs_Latn' || goog.LOCALE == 'bs-Latn') {
-  defaultSymbols = exports.DateIntervalSymbols_bs_Latn;
-} else if (goog.LOCALE == 'bs_Latn_BA' || goog.LOCALE == 'bs-Latn-BA') {
-  defaultSymbols = exports.DateIntervalSymbols_bs_Latn_BA;
-} else if (goog.LOCALE == 'ca_AD' || goog.LOCALE == 'ca-AD') {
-  defaultSymbols = exports.DateIntervalSymbols_ca_AD;
-} else if (goog.LOCALE == 'ca_ES' || goog.LOCALE == 'ca-ES') {
-  defaultSymbols = exports.DateIntervalSymbols_ca_ES;
-} else if (goog.LOCALE == 'ca_FR' || goog.LOCALE == 'ca-FR') {
-  defaultSymbols = exports.DateIntervalSymbols_ca_FR;
-} else if (goog.LOCALE == 'ca_IT' || goog.LOCALE == 'ca-IT') {
-  defaultSymbols = exports.DateIntervalSymbols_ca_IT;
-} else if (goog.LOCALE == 'ce') {
-  defaultSymbols = exports.DateIntervalSymbols_ce;
-} else if (goog.LOCALE == 'ce_RU' || goog.LOCALE == 'ce-RU') {
-  defaultSymbols = exports.DateIntervalSymbols_ce_RU;
-} else if (goog.LOCALE == 'cgg') {
-  defaultSymbols = exports.DateIntervalSymbols_cgg;
-} else if (goog.LOCALE == 'cgg_UG' || goog.LOCALE == 'cgg-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_cgg_UG;
-} else if (goog.LOCALE == 'chr_US' || goog.LOCALE == 'chr-US') {
-  defaultSymbols = exports.DateIntervalSymbols_chr_US;
-} else if (goog.LOCALE == 'ckb') {
-  defaultSymbols = exports.DateIntervalSymbols_ckb;
-} else if (goog.LOCALE == 'ckb_IQ' || goog.LOCALE == 'ckb-IQ') {
-  defaultSymbols = exports.DateIntervalSymbols_ckb_IQ;
-} else if (goog.LOCALE == 'ckb_IR' || goog.LOCALE == 'ckb-IR') {
-  defaultSymbols = exports.DateIntervalSymbols_ckb_IR;
-} else if (goog.LOCALE == 'cs_CZ' || goog.LOCALE == 'cs-CZ') {
-  defaultSymbols = exports.DateIntervalSymbols_cs_CZ;
-} else if (goog.LOCALE == 'cy_GB' || goog.LOCALE == 'cy-GB') {
-  defaultSymbols = exports.DateIntervalSymbols_cy_GB;
-} else if (goog.LOCALE == 'da_DK' || goog.LOCALE == 'da-DK') {
-  defaultSymbols = exports.DateIntervalSymbols_da_DK;
-} else if (goog.LOCALE == 'da_GL' || goog.LOCALE == 'da-GL') {
-  defaultSymbols = exports.DateIntervalSymbols_da_GL;
-} else if (goog.LOCALE == 'dav') {
-  defaultSymbols = exports.DateIntervalSymbols_dav;
-} else if (goog.LOCALE == 'dav_KE' || goog.LOCALE == 'dav-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_dav_KE;
-} else if (goog.LOCALE == 'de_BE' || goog.LOCALE == 'de-BE') {
-  defaultSymbols = exports.DateIntervalSymbols_de_BE;
-} else if (goog.LOCALE == 'de_DE' || goog.LOCALE == 'de-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_de_DE;
-} else if (goog.LOCALE == 'de_IT' || goog.LOCALE == 'de-IT') {
-  defaultSymbols = exports.DateIntervalSymbols_de_IT;
-} else if (goog.LOCALE == 'de_LI' || goog.LOCALE == 'de-LI') {
-  defaultSymbols = exports.DateIntervalSymbols_de_LI;
-} else if (goog.LOCALE == 'de_LU' || goog.LOCALE == 'de-LU') {
-  defaultSymbols = exports.DateIntervalSymbols_de_LU;
-} else if (goog.LOCALE == 'dje') {
-  defaultSymbols = exports.DateIntervalSymbols_dje;
-} else if (goog.LOCALE == 'dje_NE' || goog.LOCALE == 'dje-NE') {
-  defaultSymbols = exports.DateIntervalSymbols_dje_NE;
-} else if (goog.LOCALE == 'dsb') {
-  defaultSymbols = exports.DateIntervalSymbols_dsb;
-} else if (goog.LOCALE == 'dsb_DE' || goog.LOCALE == 'dsb-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_dsb_DE;
-} else if (goog.LOCALE == 'dua') {
-  defaultSymbols = exports.DateIntervalSymbols_dua;
-} else if (goog.LOCALE == 'dua_CM' || goog.LOCALE == 'dua-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_dua_CM;
-} else if (goog.LOCALE == 'dyo') {
-  defaultSymbols = exports.DateIntervalSymbols_dyo;
-} else if (goog.LOCALE == 'dyo_SN' || goog.LOCALE == 'dyo-SN') {
-  defaultSymbols = exports.DateIntervalSymbols_dyo_SN;
-} else if (goog.LOCALE == 'dz') {
-  defaultSymbols = exports.DateIntervalSymbols_dz;
-} else if (goog.LOCALE == 'dz_BT' || goog.LOCALE == 'dz-BT') {
-  defaultSymbols = exports.DateIntervalSymbols_dz_BT;
-} else if (goog.LOCALE == 'ebu') {
-  defaultSymbols = exports.DateIntervalSymbols_ebu;
-} else if (goog.LOCALE == 'ebu_KE' || goog.LOCALE == 'ebu-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_ebu_KE;
-} else if (goog.LOCALE == 'ee') {
-  defaultSymbols = exports.DateIntervalSymbols_ee;
-} else if (goog.LOCALE == 'ee_GH' || goog.LOCALE == 'ee-GH') {
-  defaultSymbols = exports.DateIntervalSymbols_ee_GH;
-} else if (goog.LOCALE == 'ee_TG' || goog.LOCALE == 'ee-TG') {
-  defaultSymbols = exports.DateIntervalSymbols_ee_TG;
-} else if (goog.LOCALE == 'el_CY' || goog.LOCALE == 'el-CY') {
-  defaultSymbols = exports.DateIntervalSymbols_el_CY;
-} else if (goog.LOCALE == 'el_GR' || goog.LOCALE == 'el-GR') {
-  defaultSymbols = exports.DateIntervalSymbols_el_GR;
-} else if (goog.LOCALE == 'en_001' || goog.LOCALE == 'en-001') {
-  defaultSymbols = exports.DateIntervalSymbols_en_001;
-} else if (goog.LOCALE == 'en_150' || goog.LOCALE == 'en-150') {
-  defaultSymbols = exports.DateIntervalSymbols_en_150;
-} else if (goog.LOCALE == 'en_AG' || goog.LOCALE == 'en-AG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_AG;
-} else if (goog.LOCALE == 'en_AI' || goog.LOCALE == 'en-AI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_AI;
-} else if (goog.LOCALE == 'en_AS' || goog.LOCALE == 'en-AS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_AS;
-} else if (goog.LOCALE == 'en_AT' || goog.LOCALE == 'en-AT') {
-  defaultSymbols = exports.DateIntervalSymbols_en_AT;
-} else if (goog.LOCALE == 'en_BB' || goog.LOCALE == 'en-BB') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BB;
-} else if (goog.LOCALE == 'en_BE' || goog.LOCALE == 'en-BE') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BE;
-} else if (goog.LOCALE == 'en_BI' || goog.LOCALE == 'en-BI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BI;
-} else if (goog.LOCALE == 'en_BM' || goog.LOCALE == 'en-BM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BM;
-} else if (goog.LOCALE == 'en_BS' || goog.LOCALE == 'en-BS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BS;
-} else if (goog.LOCALE == 'en_BW' || goog.LOCALE == 'en-BW') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BW;
-} else if (goog.LOCALE == 'en_BZ' || goog.LOCALE == 'en-BZ') {
-  defaultSymbols = exports.DateIntervalSymbols_en_BZ;
-} else if (goog.LOCALE == 'en_CC' || goog.LOCALE == 'en-CC') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CC;
-} else if (goog.LOCALE == 'en_CH' || goog.LOCALE == 'en-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CH;
-} else if (goog.LOCALE == 'en_CK' || goog.LOCALE == 'en-CK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CK;
-} else if (goog.LOCALE == 'en_CM' || goog.LOCALE == 'en-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CM;
-} else if (goog.LOCALE == 'en_CX' || goog.LOCALE == 'en-CX') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CX;
-} else if (goog.LOCALE == 'en_CY' || goog.LOCALE == 'en-CY') {
-  defaultSymbols = exports.DateIntervalSymbols_en_CY;
-} else if (goog.LOCALE == 'en_DE' || goog.LOCALE == 'en-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_en_DE;
-} else if (goog.LOCALE == 'en_DG' || goog.LOCALE == 'en-DG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_DG;
-} else if (goog.LOCALE == 'en_DK' || goog.LOCALE == 'en-DK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_DK;
-} else if (goog.LOCALE == 'en_DM' || goog.LOCALE == 'en-DM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_DM;
-} else if (goog.LOCALE == 'en_ER' || goog.LOCALE == 'en-ER') {
-  defaultSymbols = exports.DateIntervalSymbols_en_ER;
-} else if (goog.LOCALE == 'en_FI' || goog.LOCALE == 'en-FI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_FI;
-} else if (goog.LOCALE == 'en_FJ' || goog.LOCALE == 'en-FJ') {
-  defaultSymbols = exports.DateIntervalSymbols_en_FJ;
-} else if (goog.LOCALE == 'en_FK' || goog.LOCALE == 'en-FK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_FK;
-} else if (goog.LOCALE == 'en_FM' || goog.LOCALE == 'en-FM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_FM;
-} else if (goog.LOCALE == 'en_GD' || goog.LOCALE == 'en-GD') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GD;
-} else if (goog.LOCALE == 'en_GG' || goog.LOCALE == 'en-GG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GG;
-} else if (goog.LOCALE == 'en_GH' || goog.LOCALE == 'en-GH') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GH;
-} else if (goog.LOCALE == 'en_GI' || goog.LOCALE == 'en-GI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GI;
-} else if (goog.LOCALE == 'en_GM' || goog.LOCALE == 'en-GM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GM;
-} else if (goog.LOCALE == 'en_GU' || goog.LOCALE == 'en-GU') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GU;
-} else if (goog.LOCALE == 'en_GY' || goog.LOCALE == 'en-GY') {
-  defaultSymbols = exports.DateIntervalSymbols_en_GY;
-} else if (goog.LOCALE == 'en_HK' || goog.LOCALE == 'en-HK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_HK;
-} else if (goog.LOCALE == 'en_IL' || goog.LOCALE == 'en-IL') {
-  defaultSymbols = exports.DateIntervalSymbols_en_IL;
-} else if (goog.LOCALE == 'en_IM' || goog.LOCALE == 'en-IM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_IM;
-} else if (goog.LOCALE == 'en_IO' || goog.LOCALE == 'en-IO') {
-  defaultSymbols = exports.DateIntervalSymbols_en_IO;
-} else if (goog.LOCALE == 'en_JE' || goog.LOCALE == 'en-JE') {
-  defaultSymbols = exports.DateIntervalSymbols_en_JE;
-} else if (goog.LOCALE == 'en_JM' || goog.LOCALE == 'en-JM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_JM;
-} else if (goog.LOCALE == 'en_KE' || goog.LOCALE == 'en-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_en_KE;
-} else if (goog.LOCALE == 'en_KI' || goog.LOCALE == 'en-KI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_KI;
-} else if (goog.LOCALE == 'en_KN' || goog.LOCALE == 'en-KN') {
-  defaultSymbols = exports.DateIntervalSymbols_en_KN;
-} else if (goog.LOCALE == 'en_KY' || goog.LOCALE == 'en-KY') {
-  defaultSymbols = exports.DateIntervalSymbols_en_KY;
-} else if (goog.LOCALE == 'en_LC' || goog.LOCALE == 'en-LC') {
-  defaultSymbols = exports.DateIntervalSymbols_en_LC;
-} else if (goog.LOCALE == 'en_LR' || goog.LOCALE == 'en-LR') {
-  defaultSymbols = exports.DateIntervalSymbols_en_LR;
-} else if (goog.LOCALE == 'en_LS' || goog.LOCALE == 'en-LS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_LS;
-} else if (goog.LOCALE == 'en_MG' || goog.LOCALE == 'en-MG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MG;
-} else if (goog.LOCALE == 'en_MH' || goog.LOCALE == 'en-MH') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MH;
-} else if (goog.LOCALE == 'en_MO' || goog.LOCALE == 'en-MO') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MO;
-} else if (goog.LOCALE == 'en_MP' || goog.LOCALE == 'en-MP') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MP;
-} else if (goog.LOCALE == 'en_MS' || goog.LOCALE == 'en-MS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MS;
-} else if (goog.LOCALE == 'en_MT' || goog.LOCALE == 'en-MT') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MT;
-} else if (goog.LOCALE == 'en_MU' || goog.LOCALE == 'en-MU') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MU;
-} else if (goog.LOCALE == 'en_MW' || goog.LOCALE == 'en-MW') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MW;
-} else if (goog.LOCALE == 'en_MY' || goog.LOCALE == 'en-MY') {
-  defaultSymbols = exports.DateIntervalSymbols_en_MY;
-} else if (goog.LOCALE == 'en_NA' || goog.LOCALE == 'en-NA') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NA;
-} else if (goog.LOCALE == 'en_NF' || goog.LOCALE == 'en-NF') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NF;
-} else if (goog.LOCALE == 'en_NG' || goog.LOCALE == 'en-NG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NG;
-} else if (goog.LOCALE == 'en_NL' || goog.LOCALE == 'en-NL') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NL;
-} else if (goog.LOCALE == 'en_NR' || goog.LOCALE == 'en-NR') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NR;
-} else if (goog.LOCALE == 'en_NU' || goog.LOCALE == 'en-NU') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NU;
-} else if (goog.LOCALE == 'en_NZ' || goog.LOCALE == 'en-NZ') {
-  defaultSymbols = exports.DateIntervalSymbols_en_NZ;
-} else if (goog.LOCALE == 'en_PG' || goog.LOCALE == 'en-PG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PG;
-} else if (goog.LOCALE == 'en_PH' || goog.LOCALE == 'en-PH') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PH;
-} else if (goog.LOCALE == 'en_PK' || goog.LOCALE == 'en-PK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PK;
-} else if (goog.LOCALE == 'en_PN' || goog.LOCALE == 'en-PN') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PN;
-} else if (goog.LOCALE == 'en_PR' || goog.LOCALE == 'en-PR') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PR;
-} else if (goog.LOCALE == 'en_PW' || goog.LOCALE == 'en-PW') {
-  defaultSymbols = exports.DateIntervalSymbols_en_PW;
-} else if (goog.LOCALE == 'en_RW' || goog.LOCALE == 'en-RW') {
-  defaultSymbols = exports.DateIntervalSymbols_en_RW;
-} else if (goog.LOCALE == 'en_SB' || goog.LOCALE == 'en-SB') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SB;
-} else if (goog.LOCALE == 'en_SC' || goog.LOCALE == 'en-SC') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SC;
-} else if (goog.LOCALE == 'en_SD' || goog.LOCALE == 'en-SD') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SD;
-} else if (goog.LOCALE == 'en_SE' || goog.LOCALE == 'en-SE') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SE;
-} else if (goog.LOCALE == 'en_SH' || goog.LOCALE == 'en-SH') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SH;
-} else if (goog.LOCALE == 'en_SI' || goog.LOCALE == 'en-SI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SI;
-} else if (goog.LOCALE == 'en_SL' || goog.LOCALE == 'en-SL') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SL;
-} else if (goog.LOCALE == 'en_SS' || goog.LOCALE == 'en-SS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SS;
-} else if (goog.LOCALE == 'en_SX' || goog.LOCALE == 'en-SX') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SX;
-} else if (goog.LOCALE == 'en_SZ' || goog.LOCALE == 'en-SZ') {
-  defaultSymbols = exports.DateIntervalSymbols_en_SZ;
-} else if (goog.LOCALE == 'en_TC' || goog.LOCALE == 'en-TC') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TC;
-} else if (goog.LOCALE == 'en_TK' || goog.LOCALE == 'en-TK') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TK;
-} else if (goog.LOCALE == 'en_TO' || goog.LOCALE == 'en-TO') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TO;
-} else if (goog.LOCALE == 'en_TT' || goog.LOCALE == 'en-TT') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TT;
-} else if (goog.LOCALE == 'en_TV' || goog.LOCALE == 'en-TV') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TV;
-} else if (goog.LOCALE == 'en_TZ' || goog.LOCALE == 'en-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_en_TZ;
-} else if (goog.LOCALE == 'en_UG' || goog.LOCALE == 'en-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_UG;
-} else if (goog.LOCALE == 'en_UM' || goog.LOCALE == 'en-UM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_UM;
-} else if (goog.LOCALE == 'en_US_POSIX' || goog.LOCALE == 'en-US-POSIX') {
-  defaultSymbols = exports.DateIntervalSymbols_en_US_POSIX;
-} else if (goog.LOCALE == 'en_VC' || goog.LOCALE == 'en-VC') {
-  defaultSymbols = exports.DateIntervalSymbols_en_VC;
-} else if (goog.LOCALE == 'en_VG' || goog.LOCALE == 'en-VG') {
-  defaultSymbols = exports.DateIntervalSymbols_en_VG;
-} else if (goog.LOCALE == 'en_VI' || goog.LOCALE == 'en-VI') {
-  defaultSymbols = exports.DateIntervalSymbols_en_VI;
-} else if (goog.LOCALE == 'en_VU' || goog.LOCALE == 'en-VU') {
-  defaultSymbols = exports.DateIntervalSymbols_en_VU;
-} else if (goog.LOCALE == 'en_WS' || goog.LOCALE == 'en-WS') {
-  defaultSymbols = exports.DateIntervalSymbols_en_WS;
-} else if (goog.LOCALE == 'en_XA' || goog.LOCALE == 'en-XA') {
-  defaultSymbols = exports.DateIntervalSymbols_en_XA;
-} else if (goog.LOCALE == 'en_ZM' || goog.LOCALE == 'en-ZM') {
-  defaultSymbols = exports.DateIntervalSymbols_en_ZM;
-} else if (goog.LOCALE == 'en_ZW' || goog.LOCALE == 'en-ZW') {
-  defaultSymbols = exports.DateIntervalSymbols_en_ZW;
-} else if (goog.LOCALE == 'eo') {
-  defaultSymbols = exports.DateIntervalSymbols_eo;
-} else if (goog.LOCALE == 'es_AR' || goog.LOCALE == 'es-AR') {
-  defaultSymbols = exports.DateIntervalSymbols_es_AR;
-} else if (goog.LOCALE == 'es_BO' || goog.LOCALE == 'es-BO') {
-  defaultSymbols = exports.DateIntervalSymbols_es_BO;
-} else if (goog.LOCALE == 'es_BR' || goog.LOCALE == 'es-BR') {
-  defaultSymbols = exports.DateIntervalSymbols_es_BR;
-} else if (goog.LOCALE == 'es_BZ' || goog.LOCALE == 'es-BZ') {
-  defaultSymbols = exports.DateIntervalSymbols_es_BZ;
-} else if (goog.LOCALE == 'es_CL' || goog.LOCALE == 'es-CL') {
-  defaultSymbols = exports.DateIntervalSymbols_es_CL;
-} else if (goog.LOCALE == 'es_CO' || goog.LOCALE == 'es-CO') {
-  defaultSymbols = exports.DateIntervalSymbols_es_CO;
-} else if (goog.LOCALE == 'es_CR' || goog.LOCALE == 'es-CR') {
-  defaultSymbols = exports.DateIntervalSymbols_es_CR;
-} else if (goog.LOCALE == 'es_CU' || goog.LOCALE == 'es-CU') {
-  defaultSymbols = exports.DateIntervalSymbols_es_CU;
-} else if (goog.LOCALE == 'es_DO' || goog.LOCALE == 'es-DO') {
-  defaultSymbols = exports.DateIntervalSymbols_es_DO;
-} else if (goog.LOCALE == 'es_EA' || goog.LOCALE == 'es-EA') {
-  defaultSymbols = exports.DateIntervalSymbols_es_EA;
-} else if (goog.LOCALE == 'es_EC' || goog.LOCALE == 'es-EC') {
-  defaultSymbols = exports.DateIntervalSymbols_es_EC;
-} else if (goog.LOCALE == 'es_GQ' || goog.LOCALE == 'es-GQ') {
-  defaultSymbols = exports.DateIntervalSymbols_es_GQ;
-} else if (goog.LOCALE == 'es_GT' || goog.LOCALE == 'es-GT') {
-  defaultSymbols = exports.DateIntervalSymbols_es_GT;
-} else if (goog.LOCALE == 'es_HN' || goog.LOCALE == 'es-HN') {
-  defaultSymbols = exports.DateIntervalSymbols_es_HN;
-} else if (goog.LOCALE == 'es_IC' || goog.LOCALE == 'es-IC') {
-  defaultSymbols = exports.DateIntervalSymbols_es_IC;
-} else if (goog.LOCALE == 'es_NI' || goog.LOCALE == 'es-NI') {
-  defaultSymbols = exports.DateIntervalSymbols_es_NI;
-} else if (goog.LOCALE == 'es_PA' || goog.LOCALE == 'es-PA') {
-  defaultSymbols = exports.DateIntervalSymbols_es_PA;
-} else if (goog.LOCALE == 'es_PE' || goog.LOCALE == 'es-PE') {
-  defaultSymbols = exports.DateIntervalSymbols_es_PE;
-} else if (goog.LOCALE == 'es_PH' || goog.LOCALE == 'es-PH') {
-  defaultSymbols = exports.DateIntervalSymbols_es_PH;
-} else if (goog.LOCALE == 'es_PR' || goog.LOCALE == 'es-PR') {
-  defaultSymbols = exports.DateIntervalSymbols_es_PR;
-} else if (goog.LOCALE == 'es_PY' || goog.LOCALE == 'es-PY') {
-  defaultSymbols = exports.DateIntervalSymbols_es_PY;
-} else if (goog.LOCALE == 'es_SV' || goog.LOCALE == 'es-SV') {
-  defaultSymbols = exports.DateIntervalSymbols_es_SV;
-} else if (goog.LOCALE == 'es_UY' || goog.LOCALE == 'es-UY') {
-  defaultSymbols = exports.DateIntervalSymbols_es_UY;
-} else if (goog.LOCALE == 'es_VE' || goog.LOCALE == 'es-VE') {
-  defaultSymbols = exports.DateIntervalSymbols_es_VE;
-} else if (goog.LOCALE == 'et_EE' || goog.LOCALE == 'et-EE') {
-  defaultSymbols = exports.DateIntervalSymbols_et_EE;
-} else if (goog.LOCALE == 'eu_ES' || goog.LOCALE == 'eu-ES') {
-  defaultSymbols = exports.DateIntervalSymbols_eu_ES;
-} else if (goog.LOCALE == 'ewo') {
-  defaultSymbols = exports.DateIntervalSymbols_ewo;
-} else if (goog.LOCALE == 'ewo_CM' || goog.LOCALE == 'ewo-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_ewo_CM;
-} else if (goog.LOCALE == 'fa_AF' || goog.LOCALE == 'fa-AF') {
-  defaultSymbols = exports.DateIntervalSymbols_fa_AF;
-} else if (goog.LOCALE == 'fa_IR' || goog.LOCALE == 'fa-IR') {
-  defaultSymbols = exports.DateIntervalSymbols_fa_IR;
-} else if (goog.LOCALE == 'ff') {
-  defaultSymbols = exports.DateIntervalSymbols_ff;
-} else if (goog.LOCALE == 'ff_CM' || goog.LOCALE == 'ff-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_ff_CM;
-} else if (goog.LOCALE == 'ff_GN' || goog.LOCALE == 'ff-GN') {
-  defaultSymbols = exports.DateIntervalSymbols_ff_GN;
-} else if (goog.LOCALE == 'ff_MR' || goog.LOCALE == 'ff-MR') {
-  defaultSymbols = exports.DateIntervalSymbols_ff_MR;
-} else if (goog.LOCALE == 'ff_SN' || goog.LOCALE == 'ff-SN') {
-  defaultSymbols = exports.DateIntervalSymbols_ff_SN;
-} else if (goog.LOCALE == 'fi_FI' || goog.LOCALE == 'fi-FI') {
-  defaultSymbols = exports.DateIntervalSymbols_fi_FI;
-} else if (goog.LOCALE == 'fil_PH' || goog.LOCALE == 'fil-PH') {
-  defaultSymbols = exports.DateIntervalSymbols_fil_PH;
-} else if (goog.LOCALE == 'fo') {
-  defaultSymbols = exports.DateIntervalSymbols_fo;
-} else if (goog.LOCALE == 'fo_DK' || goog.LOCALE == 'fo-DK') {
-  defaultSymbols = exports.DateIntervalSymbols_fo_DK;
-} else if (goog.LOCALE == 'fo_FO' || goog.LOCALE == 'fo-FO') {
-  defaultSymbols = exports.DateIntervalSymbols_fo_FO;
-} else if (goog.LOCALE == 'fr_BE' || goog.LOCALE == 'fr-BE') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_BE;
-} else if (goog.LOCALE == 'fr_BF' || goog.LOCALE == 'fr-BF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_BF;
-} else if (goog.LOCALE == 'fr_BI' || goog.LOCALE == 'fr-BI') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_BI;
-} else if (goog.LOCALE == 'fr_BJ' || goog.LOCALE == 'fr-BJ') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_BJ;
-} else if (goog.LOCALE == 'fr_BL' || goog.LOCALE == 'fr-BL') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_BL;
-} else if (goog.LOCALE == 'fr_CD' || goog.LOCALE == 'fr-CD') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CD;
-} else if (goog.LOCALE == 'fr_CF' || goog.LOCALE == 'fr-CF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CF;
-} else if (goog.LOCALE == 'fr_CG' || goog.LOCALE == 'fr-CG') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CG;
-} else if (goog.LOCALE == 'fr_CH' || goog.LOCALE == 'fr-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CH;
-} else if (goog.LOCALE == 'fr_CI' || goog.LOCALE == 'fr-CI') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CI;
-} else if (goog.LOCALE == 'fr_CM' || goog.LOCALE == 'fr-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_CM;
-} else if (goog.LOCALE == 'fr_DJ' || goog.LOCALE == 'fr-DJ') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_DJ;
-} else if (goog.LOCALE == 'fr_DZ' || goog.LOCALE == 'fr-DZ') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_DZ;
-} else if (goog.LOCALE == 'fr_FR' || goog.LOCALE == 'fr-FR') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_FR;
-} else if (goog.LOCALE == 'fr_GA' || goog.LOCALE == 'fr-GA') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_GA;
-} else if (goog.LOCALE == 'fr_GF' || goog.LOCALE == 'fr-GF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_GF;
-} else if (goog.LOCALE == 'fr_GN' || goog.LOCALE == 'fr-GN') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_GN;
-} else if (goog.LOCALE == 'fr_GP' || goog.LOCALE == 'fr-GP') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_GP;
-} else if (goog.LOCALE == 'fr_GQ' || goog.LOCALE == 'fr-GQ') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_GQ;
-} else if (goog.LOCALE == 'fr_HT' || goog.LOCALE == 'fr-HT') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_HT;
-} else if (goog.LOCALE == 'fr_KM' || goog.LOCALE == 'fr-KM') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_KM;
-} else if (goog.LOCALE == 'fr_LU' || goog.LOCALE == 'fr-LU') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_LU;
-} else if (goog.LOCALE == 'fr_MA' || goog.LOCALE == 'fr-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MA;
-} else if (goog.LOCALE == 'fr_MC' || goog.LOCALE == 'fr-MC') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MC;
-} else if (goog.LOCALE == 'fr_MF' || goog.LOCALE == 'fr-MF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MF;
-} else if (goog.LOCALE == 'fr_MG' || goog.LOCALE == 'fr-MG') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MG;
-} else if (goog.LOCALE == 'fr_ML' || goog.LOCALE == 'fr-ML') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_ML;
-} else if (goog.LOCALE == 'fr_MQ' || goog.LOCALE == 'fr-MQ') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MQ;
-} else if (goog.LOCALE == 'fr_MR' || goog.LOCALE == 'fr-MR') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MR;
-} else if (goog.LOCALE == 'fr_MU' || goog.LOCALE == 'fr-MU') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_MU;
-} else if (goog.LOCALE == 'fr_NC' || goog.LOCALE == 'fr-NC') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_NC;
-} else if (goog.LOCALE == 'fr_NE' || goog.LOCALE == 'fr-NE') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_NE;
-} else if (goog.LOCALE == 'fr_PF' || goog.LOCALE == 'fr-PF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_PF;
-} else if (goog.LOCALE == 'fr_PM' || goog.LOCALE == 'fr-PM') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_PM;
-} else if (goog.LOCALE == 'fr_RE' || goog.LOCALE == 'fr-RE') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_RE;
-} else if (goog.LOCALE == 'fr_RW' || goog.LOCALE == 'fr-RW') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_RW;
-} else if (goog.LOCALE == 'fr_SC' || goog.LOCALE == 'fr-SC') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_SC;
-} else if (goog.LOCALE == 'fr_SN' || goog.LOCALE == 'fr-SN') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_SN;
-} else if (goog.LOCALE == 'fr_SY' || goog.LOCALE == 'fr-SY') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_SY;
-} else if (goog.LOCALE == 'fr_TD' || goog.LOCALE == 'fr-TD') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_TD;
-} else if (goog.LOCALE == 'fr_TG' || goog.LOCALE == 'fr-TG') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_TG;
-} else if (goog.LOCALE == 'fr_TN' || goog.LOCALE == 'fr-TN') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_TN;
-} else if (goog.LOCALE == 'fr_VU' || goog.LOCALE == 'fr-VU') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_VU;
-} else if (goog.LOCALE == 'fr_WF' || goog.LOCALE == 'fr-WF') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_WF;
-} else if (goog.LOCALE == 'fr_YT' || goog.LOCALE == 'fr-YT') {
-  defaultSymbols = exports.DateIntervalSymbols_fr_YT;
-} else if (goog.LOCALE == 'fur') {
-  defaultSymbols = exports.DateIntervalSymbols_fur;
-} else if (goog.LOCALE == 'fur_IT' || goog.LOCALE == 'fur-IT') {
-  defaultSymbols = exports.DateIntervalSymbols_fur_IT;
-} else if (goog.LOCALE == 'fy') {
-  defaultSymbols = exports.DateIntervalSymbols_fy;
-} else if (goog.LOCALE == 'fy_NL' || goog.LOCALE == 'fy-NL') {
-  defaultSymbols = exports.DateIntervalSymbols_fy_NL;
-} else if (goog.LOCALE == 'ga_IE' || goog.LOCALE == 'ga-IE') {
-  defaultSymbols = exports.DateIntervalSymbols_ga_IE;
-} else if (goog.LOCALE == 'gd') {
-  defaultSymbols = exports.DateIntervalSymbols_gd;
-} else if (goog.LOCALE == 'gd_GB' || goog.LOCALE == 'gd-GB') {
-  defaultSymbols = exports.DateIntervalSymbols_gd_GB;
-} else if (goog.LOCALE == 'gl_ES' || goog.LOCALE == 'gl-ES') {
-  defaultSymbols = exports.DateIntervalSymbols_gl_ES;
-} else if (goog.LOCALE == 'gsw_CH' || goog.LOCALE == 'gsw-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_gsw_CH;
-} else if (goog.LOCALE == 'gsw_FR' || goog.LOCALE == 'gsw-FR') {
-  defaultSymbols = exports.DateIntervalSymbols_gsw_FR;
-} else if (goog.LOCALE == 'gsw_LI' || goog.LOCALE == 'gsw-LI') {
-  defaultSymbols = exports.DateIntervalSymbols_gsw_LI;
-} else if (goog.LOCALE == 'gu_IN' || goog.LOCALE == 'gu-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_gu_IN;
-} else if (goog.LOCALE == 'guz') {
-  defaultSymbols = exports.DateIntervalSymbols_guz;
-} else if (goog.LOCALE == 'guz_KE' || goog.LOCALE == 'guz-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_guz_KE;
-} else if (goog.LOCALE == 'gv') {
-  defaultSymbols = exports.DateIntervalSymbols_gv;
-} else if (goog.LOCALE == 'gv_IM' || goog.LOCALE == 'gv-IM') {
-  defaultSymbols = exports.DateIntervalSymbols_gv_IM;
-} else if (goog.LOCALE == 'ha') {
-  defaultSymbols = exports.DateIntervalSymbols_ha;
-} else if (goog.LOCALE == 'ha_GH' || goog.LOCALE == 'ha-GH') {
-  defaultSymbols = exports.DateIntervalSymbols_ha_GH;
-} else if (goog.LOCALE == 'ha_NE' || goog.LOCALE == 'ha-NE') {
-  defaultSymbols = exports.DateIntervalSymbols_ha_NE;
-} else if (goog.LOCALE == 'ha_NG' || goog.LOCALE == 'ha-NG') {
-  defaultSymbols = exports.DateIntervalSymbols_ha_NG;
-} else if (goog.LOCALE == 'haw_US' || goog.LOCALE == 'haw-US') {
-  defaultSymbols = exports.DateIntervalSymbols_haw_US;
-} else if (goog.LOCALE == 'he_IL' || goog.LOCALE == 'he-IL') {
-  defaultSymbols = exports.DateIntervalSymbols_he_IL;
-} else if (goog.LOCALE == 'hi_IN' || goog.LOCALE == 'hi-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_hi_IN;
-} else if (goog.LOCALE == 'hr_BA' || goog.LOCALE == 'hr-BA') {
-  defaultSymbols = exports.DateIntervalSymbols_hr_BA;
-} else if (goog.LOCALE == 'hr_HR' || goog.LOCALE == 'hr-HR') {
-  defaultSymbols = exports.DateIntervalSymbols_hr_HR;
-} else if (goog.LOCALE == 'hsb') {
-  defaultSymbols = exports.DateIntervalSymbols_hsb;
-} else if (goog.LOCALE == 'hsb_DE' || goog.LOCALE == 'hsb-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_hsb_DE;
-} else if (goog.LOCALE == 'hu_HU' || goog.LOCALE == 'hu-HU') {
-  defaultSymbols = exports.DateIntervalSymbols_hu_HU;
-} else if (goog.LOCALE == 'hy_AM' || goog.LOCALE == 'hy-AM') {
-  defaultSymbols = exports.DateIntervalSymbols_hy_AM;
-} else if (goog.LOCALE == 'id_ID' || goog.LOCALE == 'id-ID') {
-  defaultSymbols = exports.DateIntervalSymbols_id_ID;
-} else if (goog.LOCALE == 'ig') {
-  defaultSymbols = exports.DateIntervalSymbols_ig;
-} else if (goog.LOCALE == 'ig_NG' || goog.LOCALE == 'ig-NG') {
-  defaultSymbols = exports.DateIntervalSymbols_ig_NG;
-} else if (goog.LOCALE == 'ii') {
-  defaultSymbols = exports.DateIntervalSymbols_ii;
-} else if (goog.LOCALE == 'ii_CN' || goog.LOCALE == 'ii-CN') {
-  defaultSymbols = exports.DateIntervalSymbols_ii_CN;
-} else if (goog.LOCALE == 'is_IS' || goog.LOCALE == 'is-IS') {
-  defaultSymbols = exports.DateIntervalSymbols_is_IS;
-} else if (goog.LOCALE == 'it_CH' || goog.LOCALE == 'it-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_it_CH;
-} else if (goog.LOCALE == 'it_IT' || goog.LOCALE == 'it-IT') {
-  defaultSymbols = exports.DateIntervalSymbols_it_IT;
-} else if (goog.LOCALE == 'it_SM' || goog.LOCALE == 'it-SM') {
-  defaultSymbols = exports.DateIntervalSymbols_it_SM;
-} else if (goog.LOCALE == 'it_VA' || goog.LOCALE == 'it-VA') {
-  defaultSymbols = exports.DateIntervalSymbols_it_VA;
-} else if (goog.LOCALE == 'ja_JP' || goog.LOCALE == 'ja-JP') {
-  defaultSymbols = exports.DateIntervalSymbols_ja_JP;
-} else if (goog.LOCALE == 'jgo') {
-  defaultSymbols = exports.DateIntervalSymbols_jgo;
-} else if (goog.LOCALE == 'jgo_CM' || goog.LOCALE == 'jgo-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_jgo_CM;
-} else if (goog.LOCALE == 'jmc') {
-  defaultSymbols = exports.DateIntervalSymbols_jmc;
-} else if (goog.LOCALE == 'jmc_TZ' || goog.LOCALE == 'jmc-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_jmc_TZ;
-} else if (goog.LOCALE == 'ka_GE' || goog.LOCALE == 'ka-GE') {
-  defaultSymbols = exports.DateIntervalSymbols_ka_GE;
-} else if (goog.LOCALE == 'kab') {
-  defaultSymbols = exports.DateIntervalSymbols_kab;
-} else if (goog.LOCALE == 'kab_DZ' || goog.LOCALE == 'kab-DZ') {
-  defaultSymbols = exports.DateIntervalSymbols_kab_DZ;
-} else if (goog.LOCALE == 'kam') {
-  defaultSymbols = exports.DateIntervalSymbols_kam;
-} else if (goog.LOCALE == 'kam_KE' || goog.LOCALE == 'kam-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_kam_KE;
-} else if (goog.LOCALE == 'kde') {
-  defaultSymbols = exports.DateIntervalSymbols_kde;
-} else if (goog.LOCALE == 'kde_TZ' || goog.LOCALE == 'kde-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_kde_TZ;
-} else if (goog.LOCALE == 'kea') {
-  defaultSymbols = exports.DateIntervalSymbols_kea;
-} else if (goog.LOCALE == 'kea_CV' || goog.LOCALE == 'kea-CV') {
-  defaultSymbols = exports.DateIntervalSymbols_kea_CV;
-} else if (goog.LOCALE == 'khq') {
-  defaultSymbols = exports.DateIntervalSymbols_khq;
-} else if (goog.LOCALE == 'khq_ML' || goog.LOCALE == 'khq-ML') {
-  defaultSymbols = exports.DateIntervalSymbols_khq_ML;
-} else if (goog.LOCALE == 'ki') {
-  defaultSymbols = exports.DateIntervalSymbols_ki;
-} else if (goog.LOCALE == 'ki_KE' || goog.LOCALE == 'ki-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_ki_KE;
-} else if (goog.LOCALE == 'kk_KZ' || goog.LOCALE == 'kk-KZ') {
-  defaultSymbols = exports.DateIntervalSymbols_kk_KZ;
-} else if (goog.LOCALE == 'kkj') {
-  defaultSymbols = exports.DateIntervalSymbols_kkj;
-} else if (goog.LOCALE == 'kkj_CM' || goog.LOCALE == 'kkj-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_kkj_CM;
-} else if (goog.LOCALE == 'kl') {
-  defaultSymbols = exports.DateIntervalSymbols_kl;
-} else if (goog.LOCALE == 'kl_GL' || goog.LOCALE == 'kl-GL') {
-  defaultSymbols = exports.DateIntervalSymbols_kl_GL;
-} else if (goog.LOCALE == 'kln') {
-  defaultSymbols = exports.DateIntervalSymbols_kln;
-} else if (goog.LOCALE == 'kln_KE' || goog.LOCALE == 'kln-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_kln_KE;
-} else if (goog.LOCALE == 'km_KH' || goog.LOCALE == 'km-KH') {
-  defaultSymbols = exports.DateIntervalSymbols_km_KH;
-} else if (goog.LOCALE == 'kn_IN' || goog.LOCALE == 'kn-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_kn_IN;
-} else if (goog.LOCALE == 'ko_KP' || goog.LOCALE == 'ko-KP') {
-  defaultSymbols = exports.DateIntervalSymbols_ko_KP;
-} else if (goog.LOCALE == 'ko_KR' || goog.LOCALE == 'ko-KR') {
-  defaultSymbols = exports.DateIntervalSymbols_ko_KR;
-} else if (goog.LOCALE == 'kok') {
-  defaultSymbols = exports.DateIntervalSymbols_kok;
-} else if (goog.LOCALE == 'kok_IN' || goog.LOCALE == 'kok-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_kok_IN;
-} else if (goog.LOCALE == 'ks') {
-  defaultSymbols = exports.DateIntervalSymbols_ks;
-} else if (goog.LOCALE == 'ks_IN' || goog.LOCALE == 'ks-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_ks_IN;
-} else if (goog.LOCALE == 'ksb') {
-  defaultSymbols = exports.DateIntervalSymbols_ksb;
-} else if (goog.LOCALE == 'ksb_TZ' || goog.LOCALE == 'ksb-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_ksb_TZ;
-} else if (goog.LOCALE == 'ksf') {
-  defaultSymbols = exports.DateIntervalSymbols_ksf;
-} else if (goog.LOCALE == 'ksf_CM' || goog.LOCALE == 'ksf-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_ksf_CM;
-} else if (goog.LOCALE == 'ksh') {
-  defaultSymbols = exports.DateIntervalSymbols_ksh;
-} else if (goog.LOCALE == 'ksh_DE' || goog.LOCALE == 'ksh-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_ksh_DE;
-} else if (goog.LOCALE == 'kw') {
-  defaultSymbols = exports.DateIntervalSymbols_kw;
-} else if (goog.LOCALE == 'kw_GB' || goog.LOCALE == 'kw-GB') {
-  defaultSymbols = exports.DateIntervalSymbols_kw_GB;
-} else if (goog.LOCALE == 'ky_KG' || goog.LOCALE == 'ky-KG') {
-  defaultSymbols = exports.DateIntervalSymbols_ky_KG;
-} else if (goog.LOCALE == 'lag') {
-  defaultSymbols = exports.DateIntervalSymbols_lag;
-} else if (goog.LOCALE == 'lag_TZ' || goog.LOCALE == 'lag-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_lag_TZ;
-} else if (goog.LOCALE == 'lb') {
-  defaultSymbols = exports.DateIntervalSymbols_lb;
-} else if (goog.LOCALE == 'lb_LU' || goog.LOCALE == 'lb-LU') {
-  defaultSymbols = exports.DateIntervalSymbols_lb_LU;
-} else if (goog.LOCALE == 'lg') {
-  defaultSymbols = exports.DateIntervalSymbols_lg;
-} else if (goog.LOCALE == 'lg_UG' || goog.LOCALE == 'lg-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_lg_UG;
-} else if (goog.LOCALE == 'lkt') {
-  defaultSymbols = exports.DateIntervalSymbols_lkt;
-} else if (goog.LOCALE == 'lkt_US' || goog.LOCALE == 'lkt-US') {
-  defaultSymbols = exports.DateIntervalSymbols_lkt_US;
-} else if (goog.LOCALE == 'ln_AO' || goog.LOCALE == 'ln-AO') {
-  defaultSymbols = exports.DateIntervalSymbols_ln_AO;
-} else if (goog.LOCALE == 'ln_CD' || goog.LOCALE == 'ln-CD') {
-  defaultSymbols = exports.DateIntervalSymbols_ln_CD;
-} else if (goog.LOCALE == 'ln_CF' || goog.LOCALE == 'ln-CF') {
-  defaultSymbols = exports.DateIntervalSymbols_ln_CF;
-} else if (goog.LOCALE == 'ln_CG' || goog.LOCALE == 'ln-CG') {
-  defaultSymbols = exports.DateIntervalSymbols_ln_CG;
-} else if (goog.LOCALE == 'lo_LA' || goog.LOCALE == 'lo-LA') {
-  defaultSymbols = exports.DateIntervalSymbols_lo_LA;
-} else if (goog.LOCALE == 'lrc') {
-  defaultSymbols = exports.DateIntervalSymbols_lrc;
-} else if (goog.LOCALE == 'lrc_IQ' || goog.LOCALE == 'lrc-IQ') {
-  defaultSymbols = exports.DateIntervalSymbols_lrc_IQ;
-} else if (goog.LOCALE == 'lrc_IR' || goog.LOCALE == 'lrc-IR') {
-  defaultSymbols = exports.DateIntervalSymbols_lrc_IR;
-} else if (goog.LOCALE == 'lt_LT' || goog.LOCALE == 'lt-LT') {
-  defaultSymbols = exports.DateIntervalSymbols_lt_LT;
-} else if (goog.LOCALE == 'lu') {
-  defaultSymbols = exports.DateIntervalSymbols_lu;
-} else if (goog.LOCALE == 'lu_CD' || goog.LOCALE == 'lu-CD') {
-  defaultSymbols = exports.DateIntervalSymbols_lu_CD;
-} else if (goog.LOCALE == 'luo') {
-  defaultSymbols = exports.DateIntervalSymbols_luo;
-} else if (goog.LOCALE == 'luo_KE' || goog.LOCALE == 'luo-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_luo_KE;
-} else if (goog.LOCALE == 'luy') {
-  defaultSymbols = exports.DateIntervalSymbols_luy;
-} else if (goog.LOCALE == 'luy_KE' || goog.LOCALE == 'luy-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_luy_KE;
-} else if (goog.LOCALE == 'lv_LV' || goog.LOCALE == 'lv-LV') {
-  defaultSymbols = exports.DateIntervalSymbols_lv_LV;
-} else if (goog.LOCALE == 'mas') {
-  defaultSymbols = exports.DateIntervalSymbols_mas;
-} else if (goog.LOCALE == 'mas_KE' || goog.LOCALE == 'mas-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_mas_KE;
-} else if (goog.LOCALE == 'mas_TZ' || goog.LOCALE == 'mas-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_mas_TZ;
-} else if (goog.LOCALE == 'mer') {
-  defaultSymbols = exports.DateIntervalSymbols_mer;
-} else if (goog.LOCALE == 'mer_KE' || goog.LOCALE == 'mer-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_mer_KE;
-} else if (goog.LOCALE == 'mfe') {
-  defaultSymbols = exports.DateIntervalSymbols_mfe;
-} else if (goog.LOCALE == 'mfe_MU' || goog.LOCALE == 'mfe-MU') {
-  defaultSymbols = exports.DateIntervalSymbols_mfe_MU;
-} else if (goog.LOCALE == 'mg') {
-  defaultSymbols = exports.DateIntervalSymbols_mg;
-} else if (goog.LOCALE == 'mg_MG' || goog.LOCALE == 'mg-MG') {
-  defaultSymbols = exports.DateIntervalSymbols_mg_MG;
-} else if (goog.LOCALE == 'mgh') {
-  defaultSymbols = exports.DateIntervalSymbols_mgh;
-} else if (goog.LOCALE == 'mgh_MZ' || goog.LOCALE == 'mgh-MZ') {
-  defaultSymbols = exports.DateIntervalSymbols_mgh_MZ;
-} else if (goog.LOCALE == 'mgo') {
-  defaultSymbols = exports.DateIntervalSymbols_mgo;
-} else if (goog.LOCALE == 'mgo_CM' || goog.LOCALE == 'mgo-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_mgo_CM;
-} else if (goog.LOCALE == 'mk_MK' || goog.LOCALE == 'mk-MK') {
-  defaultSymbols = exports.DateIntervalSymbols_mk_MK;
-} else if (goog.LOCALE == 'ml_IN' || goog.LOCALE == 'ml-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_ml_IN;
-} else if (goog.LOCALE == 'mn_MN' || goog.LOCALE == 'mn-MN') {
-  defaultSymbols = exports.DateIntervalSymbols_mn_MN;
-} else if (goog.LOCALE == 'mr_IN' || goog.LOCALE == 'mr-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_mr_IN;
-} else if (goog.LOCALE == 'ms_BN' || goog.LOCALE == 'ms-BN') {
-  defaultSymbols = exports.DateIntervalSymbols_ms_BN;
-} else if (goog.LOCALE == 'ms_MY' || goog.LOCALE == 'ms-MY') {
-  defaultSymbols = exports.DateIntervalSymbols_ms_MY;
-} else if (goog.LOCALE == 'ms_SG' || goog.LOCALE == 'ms-SG') {
-  defaultSymbols = exports.DateIntervalSymbols_ms_SG;
-} else if (goog.LOCALE == 'mt_MT' || goog.LOCALE == 'mt-MT') {
-  defaultSymbols = exports.DateIntervalSymbols_mt_MT;
-} else if (goog.LOCALE == 'mua') {
-  defaultSymbols = exports.DateIntervalSymbols_mua;
-} else if (goog.LOCALE == 'mua_CM' || goog.LOCALE == 'mua-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_mua_CM;
-} else if (goog.LOCALE == 'my_MM' || goog.LOCALE == 'my-MM') {
-  defaultSymbols = exports.DateIntervalSymbols_my_MM;
-} else if (goog.LOCALE == 'mzn') {
-  defaultSymbols = exports.DateIntervalSymbols_mzn;
-} else if (goog.LOCALE == 'mzn_IR' || goog.LOCALE == 'mzn-IR') {
-  defaultSymbols = exports.DateIntervalSymbols_mzn_IR;
-} else if (goog.LOCALE == 'naq') {
-  defaultSymbols = exports.DateIntervalSymbols_naq;
-} else if (goog.LOCALE == 'naq_NA' || goog.LOCALE == 'naq-NA') {
-  defaultSymbols = exports.DateIntervalSymbols_naq_NA;
-} else if (goog.LOCALE == 'nb_NO' || goog.LOCALE == 'nb-NO') {
-  defaultSymbols = exports.DateIntervalSymbols_nb_NO;
-} else if (goog.LOCALE == 'nb_SJ' || goog.LOCALE == 'nb-SJ') {
-  defaultSymbols = exports.DateIntervalSymbols_nb_SJ;
-} else if (goog.LOCALE == 'nd') {
-  defaultSymbols = exports.DateIntervalSymbols_nd;
-} else if (goog.LOCALE == 'nd_ZW' || goog.LOCALE == 'nd-ZW') {
-  defaultSymbols = exports.DateIntervalSymbols_nd_ZW;
-} else if (goog.LOCALE == 'nds') {
-  defaultSymbols = exports.DateIntervalSymbols_nds;
-} else if (goog.LOCALE == 'nds_DE' || goog.LOCALE == 'nds-DE') {
-  defaultSymbols = exports.DateIntervalSymbols_nds_DE;
-} else if (goog.LOCALE == 'nds_NL' || goog.LOCALE == 'nds-NL') {
-  defaultSymbols = exports.DateIntervalSymbols_nds_NL;
-} else if (goog.LOCALE == 'ne_IN' || goog.LOCALE == 'ne-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_ne_IN;
-} else if (goog.LOCALE == 'ne_NP' || goog.LOCALE == 'ne-NP') {
-  defaultSymbols = exports.DateIntervalSymbols_ne_NP;
-} else if (goog.LOCALE == 'nl_AW' || goog.LOCALE == 'nl-AW') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_AW;
-} else if (goog.LOCALE == 'nl_BE' || goog.LOCALE == 'nl-BE') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_BE;
-} else if (goog.LOCALE == 'nl_BQ' || goog.LOCALE == 'nl-BQ') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_BQ;
-} else if (goog.LOCALE == 'nl_CW' || goog.LOCALE == 'nl-CW') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_CW;
-} else if (goog.LOCALE == 'nl_NL' || goog.LOCALE == 'nl-NL') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_NL;
-} else if (goog.LOCALE == 'nl_SR' || goog.LOCALE == 'nl-SR') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_SR;
-} else if (goog.LOCALE == 'nl_SX' || goog.LOCALE == 'nl-SX') {
-  defaultSymbols = exports.DateIntervalSymbols_nl_SX;
-} else if (goog.LOCALE == 'nmg') {
-  defaultSymbols = exports.DateIntervalSymbols_nmg;
-} else if (goog.LOCALE == 'nmg_CM' || goog.LOCALE == 'nmg-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_nmg_CM;
-} else if (goog.LOCALE == 'nn') {
-  defaultSymbols = exports.DateIntervalSymbols_nn;
-} else if (goog.LOCALE == 'nn_NO' || goog.LOCALE == 'nn-NO') {
-  defaultSymbols = exports.DateIntervalSymbols_nn_NO;
-} else if (goog.LOCALE == 'nnh') {
-  defaultSymbols = exports.DateIntervalSymbols_nnh;
-} else if (goog.LOCALE == 'nnh_CM' || goog.LOCALE == 'nnh-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_nnh_CM;
-} else if (goog.LOCALE == 'nus') {
-  defaultSymbols = exports.DateIntervalSymbols_nus;
-} else if (goog.LOCALE == 'nus_SS' || goog.LOCALE == 'nus-SS') {
-  defaultSymbols = exports.DateIntervalSymbols_nus_SS;
-} else if (goog.LOCALE == 'nyn') {
-  defaultSymbols = exports.DateIntervalSymbols_nyn;
-} else if (goog.LOCALE == 'nyn_UG' || goog.LOCALE == 'nyn-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_nyn_UG;
-} else if (goog.LOCALE == 'om') {
-  defaultSymbols = exports.DateIntervalSymbols_om;
-} else if (goog.LOCALE == 'om_ET' || goog.LOCALE == 'om-ET') {
-  defaultSymbols = exports.DateIntervalSymbols_om_ET;
-} else if (goog.LOCALE == 'om_KE' || goog.LOCALE == 'om-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_om_KE;
-} else if (goog.LOCALE == 'or_IN' || goog.LOCALE == 'or-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_or_IN;
-} else if (goog.LOCALE == 'os') {
-  defaultSymbols = exports.DateIntervalSymbols_os;
-} else if (goog.LOCALE == 'os_GE' || goog.LOCALE == 'os-GE') {
-  defaultSymbols = exports.DateIntervalSymbols_os_GE;
-} else if (goog.LOCALE == 'os_RU' || goog.LOCALE == 'os-RU') {
-  defaultSymbols = exports.DateIntervalSymbols_os_RU;
-} else if (goog.LOCALE == 'pa_Arab' || goog.LOCALE == 'pa-Arab') {
-  defaultSymbols = exports.DateIntervalSymbols_pa_Arab;
-} else if (goog.LOCALE == 'pa_Arab_PK' || goog.LOCALE == 'pa-Arab-PK') {
-  defaultSymbols = exports.DateIntervalSymbols_pa_Arab_PK;
-} else if (goog.LOCALE == 'pa_Guru' || goog.LOCALE == 'pa-Guru') {
-  defaultSymbols = exports.DateIntervalSymbols_pa_Guru;
-} else if (goog.LOCALE == 'pa_Guru_IN' || goog.LOCALE == 'pa-Guru-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_pa_Guru_IN;
-} else if (goog.LOCALE == 'pl_PL' || goog.LOCALE == 'pl-PL') {
-  defaultSymbols = exports.DateIntervalSymbols_pl_PL;
-} else if (goog.LOCALE == 'ps') {
-  defaultSymbols = exports.DateIntervalSymbols_ps;
-} else if (goog.LOCALE == 'ps_AF' || goog.LOCALE == 'ps-AF') {
-  defaultSymbols = exports.DateIntervalSymbols_ps_AF;
-} else if (goog.LOCALE == 'pt_AO' || goog.LOCALE == 'pt-AO') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_AO;
-} else if (goog.LOCALE == 'pt_CH' || goog.LOCALE == 'pt-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_CH;
-} else if (goog.LOCALE == 'pt_CV' || goog.LOCALE == 'pt-CV') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_CV;
-} else if (goog.LOCALE == 'pt_GQ' || goog.LOCALE == 'pt-GQ') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_GQ;
-} else if (goog.LOCALE == 'pt_GW' || goog.LOCALE == 'pt-GW') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_GW;
-} else if (goog.LOCALE == 'pt_LU' || goog.LOCALE == 'pt-LU') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_LU;
-} else if (goog.LOCALE == 'pt_MO' || goog.LOCALE == 'pt-MO') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_MO;
-} else if (goog.LOCALE == 'pt_MZ' || goog.LOCALE == 'pt-MZ') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_MZ;
-} else if (goog.LOCALE == 'pt_ST' || goog.LOCALE == 'pt-ST') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_ST;
-} else if (goog.LOCALE == 'pt_TL' || goog.LOCALE == 'pt-TL') {
-  defaultSymbols = exports.DateIntervalSymbols_pt_TL;
-} else if (goog.LOCALE == 'qu') {
-  defaultSymbols = exports.DateIntervalSymbols_qu;
-} else if (goog.LOCALE == 'qu_BO' || goog.LOCALE == 'qu-BO') {
-  defaultSymbols = exports.DateIntervalSymbols_qu_BO;
-} else if (goog.LOCALE == 'qu_EC' || goog.LOCALE == 'qu-EC') {
-  defaultSymbols = exports.DateIntervalSymbols_qu_EC;
-} else if (goog.LOCALE == 'qu_PE' || goog.LOCALE == 'qu-PE') {
-  defaultSymbols = exports.DateIntervalSymbols_qu_PE;
-} else if (goog.LOCALE == 'rm') {
-  defaultSymbols = exports.DateIntervalSymbols_rm;
-} else if (goog.LOCALE == 'rm_CH' || goog.LOCALE == 'rm-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_rm_CH;
-} else if (goog.LOCALE == 'rn') {
-  defaultSymbols = exports.DateIntervalSymbols_rn;
-} else if (goog.LOCALE == 'rn_BI' || goog.LOCALE == 'rn-BI') {
-  defaultSymbols = exports.DateIntervalSymbols_rn_BI;
-} else if (goog.LOCALE == 'ro_MD' || goog.LOCALE == 'ro-MD') {
-  defaultSymbols = exports.DateIntervalSymbols_ro_MD;
-} else if (goog.LOCALE == 'ro_RO' || goog.LOCALE == 'ro-RO') {
-  defaultSymbols = exports.DateIntervalSymbols_ro_RO;
-} else if (goog.LOCALE == 'rof') {
-  defaultSymbols = exports.DateIntervalSymbols_rof;
-} else if (goog.LOCALE == 'rof_TZ' || goog.LOCALE == 'rof-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_rof_TZ;
-} else if (goog.LOCALE == 'ru_BY' || goog.LOCALE == 'ru-BY') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_BY;
-} else if (goog.LOCALE == 'ru_KG' || goog.LOCALE == 'ru-KG') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_KG;
-} else if (goog.LOCALE == 'ru_KZ' || goog.LOCALE == 'ru-KZ') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_KZ;
-} else if (goog.LOCALE == 'ru_MD' || goog.LOCALE == 'ru-MD') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_MD;
-} else if (goog.LOCALE == 'ru_RU' || goog.LOCALE == 'ru-RU') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_RU;
-} else if (goog.LOCALE == 'ru_UA' || goog.LOCALE == 'ru-UA') {
-  defaultSymbols = exports.DateIntervalSymbols_ru_UA;
-} else if (goog.LOCALE == 'rw') {
-  defaultSymbols = exports.DateIntervalSymbols_rw;
-} else if (goog.LOCALE == 'rw_RW' || goog.LOCALE == 'rw-RW') {
-  defaultSymbols = exports.DateIntervalSymbols_rw_RW;
-} else if (goog.LOCALE == 'rwk') {
-  defaultSymbols = exports.DateIntervalSymbols_rwk;
-} else if (goog.LOCALE == 'rwk_TZ' || goog.LOCALE == 'rwk-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_rwk_TZ;
-} else if (goog.LOCALE == 'sah') {
-  defaultSymbols = exports.DateIntervalSymbols_sah;
-} else if (goog.LOCALE == 'sah_RU' || goog.LOCALE == 'sah-RU') {
-  defaultSymbols = exports.DateIntervalSymbols_sah_RU;
-} else if (goog.LOCALE == 'saq') {
-  defaultSymbols = exports.DateIntervalSymbols_saq;
-} else if (goog.LOCALE == 'saq_KE' || goog.LOCALE == 'saq-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_saq_KE;
-} else if (goog.LOCALE == 'sbp') {
-  defaultSymbols = exports.DateIntervalSymbols_sbp;
-} else if (goog.LOCALE == 'sbp_TZ' || goog.LOCALE == 'sbp-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_sbp_TZ;
-} else if (goog.LOCALE == 'se') {
-  defaultSymbols = exports.DateIntervalSymbols_se;
-} else if (goog.LOCALE == 'se_FI' || goog.LOCALE == 'se-FI') {
-  defaultSymbols = exports.DateIntervalSymbols_se_FI;
-} else if (goog.LOCALE == 'se_NO' || goog.LOCALE == 'se-NO') {
-  defaultSymbols = exports.DateIntervalSymbols_se_NO;
-} else if (goog.LOCALE == 'se_SE' || goog.LOCALE == 'se-SE') {
-  defaultSymbols = exports.DateIntervalSymbols_se_SE;
-} else if (goog.LOCALE == 'seh') {
-  defaultSymbols = exports.DateIntervalSymbols_seh;
-} else if (goog.LOCALE == 'seh_MZ' || goog.LOCALE == 'seh-MZ') {
-  defaultSymbols = exports.DateIntervalSymbols_seh_MZ;
-} else if (goog.LOCALE == 'ses') {
-  defaultSymbols = exports.DateIntervalSymbols_ses;
-} else if (goog.LOCALE == 'ses_ML' || goog.LOCALE == 'ses-ML') {
-  defaultSymbols = exports.DateIntervalSymbols_ses_ML;
-} else if (goog.LOCALE == 'sg') {
-  defaultSymbols = exports.DateIntervalSymbols_sg;
-} else if (goog.LOCALE == 'sg_CF' || goog.LOCALE == 'sg-CF') {
-  defaultSymbols = exports.DateIntervalSymbols_sg_CF;
-} else if (goog.LOCALE == 'shi') {
-  defaultSymbols = exports.DateIntervalSymbols_shi;
-} else if (goog.LOCALE == 'shi_Latn' || goog.LOCALE == 'shi-Latn') {
-  defaultSymbols = exports.DateIntervalSymbols_shi_Latn;
-} else if (goog.LOCALE == 'shi_Latn_MA' || goog.LOCALE == 'shi-Latn-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_shi_Latn_MA;
-} else if (goog.LOCALE == 'shi_Tfng' || goog.LOCALE == 'shi-Tfng') {
-  defaultSymbols = exports.DateIntervalSymbols_shi_Tfng;
-} else if (goog.LOCALE == 'shi_Tfng_MA' || goog.LOCALE == 'shi-Tfng-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_shi_Tfng_MA;
-} else if (goog.LOCALE == 'si_LK' || goog.LOCALE == 'si-LK') {
-  defaultSymbols = exports.DateIntervalSymbols_si_LK;
-} else if (goog.LOCALE == 'sk_SK' || goog.LOCALE == 'sk-SK') {
-  defaultSymbols = exports.DateIntervalSymbols_sk_SK;
-} else if (goog.LOCALE == 'sl_SI' || goog.LOCALE == 'sl-SI') {
-  defaultSymbols = exports.DateIntervalSymbols_sl_SI;
-} else if (goog.LOCALE == 'smn') {
-  defaultSymbols = exports.DateIntervalSymbols_smn;
-} else if (goog.LOCALE == 'smn_FI' || goog.LOCALE == 'smn-FI') {
-  defaultSymbols = exports.DateIntervalSymbols_smn_FI;
-} else if (goog.LOCALE == 'sn') {
-  defaultSymbols = exports.DateIntervalSymbols_sn;
-} else if (goog.LOCALE == 'sn_ZW' || goog.LOCALE == 'sn-ZW') {
-  defaultSymbols = exports.DateIntervalSymbols_sn_ZW;
-} else if (goog.LOCALE == 'so') {
-  defaultSymbols = exports.DateIntervalSymbols_so;
-} else if (goog.LOCALE == 'so_DJ' || goog.LOCALE == 'so-DJ') {
-  defaultSymbols = exports.DateIntervalSymbols_so_DJ;
-} else if (goog.LOCALE == 'so_ET' || goog.LOCALE == 'so-ET') {
-  defaultSymbols = exports.DateIntervalSymbols_so_ET;
-} else if (goog.LOCALE == 'so_KE' || goog.LOCALE == 'so-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_so_KE;
-} else if (goog.LOCALE == 'so_SO' || goog.LOCALE == 'so-SO') {
-  defaultSymbols = exports.DateIntervalSymbols_so_SO;
-} else if (goog.LOCALE == 'sq_AL' || goog.LOCALE == 'sq-AL') {
-  defaultSymbols = exports.DateIntervalSymbols_sq_AL;
-} else if (goog.LOCALE == 'sq_MK' || goog.LOCALE == 'sq-MK') {
-  defaultSymbols = exports.DateIntervalSymbols_sq_MK;
-} else if (goog.LOCALE == 'sq_XK' || goog.LOCALE == 'sq-XK') {
-  defaultSymbols = exports.DateIntervalSymbols_sq_XK;
-} else if (goog.LOCALE == 'sr_Cyrl' || goog.LOCALE == 'sr-Cyrl') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl;
-} else if (goog.LOCALE == 'sr_Cyrl_BA' || goog.LOCALE == 'sr-Cyrl-BA') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_BA;
-} else if (goog.LOCALE == 'sr_Cyrl_ME' || goog.LOCALE == 'sr-Cyrl-ME') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_ME;
-} else if (goog.LOCALE == 'sr_Cyrl_RS' || goog.LOCALE == 'sr-Cyrl-RS') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_RS;
-} else if (goog.LOCALE == 'sr_Cyrl_XK' || goog.LOCALE == 'sr-Cyrl-XK') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_XK;
-} else if (goog.LOCALE == 'sr_Latn_BA' || goog.LOCALE == 'sr-Latn-BA') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Latn_BA;
-} else if (goog.LOCALE == 'sr_Latn_ME' || goog.LOCALE == 'sr-Latn-ME') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Latn_ME;
-} else if (goog.LOCALE == 'sr_Latn_RS' || goog.LOCALE == 'sr-Latn-RS') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Latn_RS;
-} else if (goog.LOCALE == 'sr_Latn_XK' || goog.LOCALE == 'sr-Latn-XK') {
-  defaultSymbols = exports.DateIntervalSymbols_sr_Latn_XK;
-} else if (goog.LOCALE == 'sv_AX' || goog.LOCALE == 'sv-AX') {
-  defaultSymbols = exports.DateIntervalSymbols_sv_AX;
-} else if (goog.LOCALE == 'sv_FI' || goog.LOCALE == 'sv-FI') {
-  defaultSymbols = exports.DateIntervalSymbols_sv_FI;
-} else if (goog.LOCALE == 'sv_SE' || goog.LOCALE == 'sv-SE') {
-  defaultSymbols = exports.DateIntervalSymbols_sv_SE;
-} else if (goog.LOCALE == 'sw_CD' || goog.LOCALE == 'sw-CD') {
-  defaultSymbols = exports.DateIntervalSymbols_sw_CD;
-} else if (goog.LOCALE == 'sw_KE' || goog.LOCALE == 'sw-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_sw_KE;
-} else if (goog.LOCALE == 'sw_TZ' || goog.LOCALE == 'sw-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_sw_TZ;
-} else if (goog.LOCALE == 'sw_UG' || goog.LOCALE == 'sw-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_sw_UG;
-} else if (goog.LOCALE == 'ta_IN' || goog.LOCALE == 'ta-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_ta_IN;
-} else if (goog.LOCALE == 'ta_LK' || goog.LOCALE == 'ta-LK') {
-  defaultSymbols = exports.DateIntervalSymbols_ta_LK;
-} else if (goog.LOCALE == 'ta_MY' || goog.LOCALE == 'ta-MY') {
-  defaultSymbols = exports.DateIntervalSymbols_ta_MY;
-} else if (goog.LOCALE == 'ta_SG' || goog.LOCALE == 'ta-SG') {
-  defaultSymbols = exports.DateIntervalSymbols_ta_SG;
-} else if (goog.LOCALE == 'te_IN' || goog.LOCALE == 'te-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_te_IN;
-} else if (goog.LOCALE == 'teo') {
-  defaultSymbols = exports.DateIntervalSymbols_teo;
-} else if (goog.LOCALE == 'teo_KE' || goog.LOCALE == 'teo-KE') {
-  defaultSymbols = exports.DateIntervalSymbols_teo_KE;
-} else if (goog.LOCALE == 'teo_UG' || goog.LOCALE == 'teo-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_teo_UG;
-} else if (goog.LOCALE == 'th_TH' || goog.LOCALE == 'th-TH') {
-  defaultSymbols = exports.DateIntervalSymbols_th_TH;
-} else if (goog.LOCALE == 'ti') {
-  defaultSymbols = exports.DateIntervalSymbols_ti;
-} else if (goog.LOCALE == 'ti_ER' || goog.LOCALE == 'ti-ER') {
-  defaultSymbols = exports.DateIntervalSymbols_ti_ER;
-} else if (goog.LOCALE == 'ti_ET' || goog.LOCALE == 'ti-ET') {
-  defaultSymbols = exports.DateIntervalSymbols_ti_ET;
-} else if (goog.LOCALE == 'to') {
-  defaultSymbols = exports.DateIntervalSymbols_to;
-} else if (goog.LOCALE == 'to_TO' || goog.LOCALE == 'to-TO') {
-  defaultSymbols = exports.DateIntervalSymbols_to_TO;
-} else if (goog.LOCALE == 'tr_CY' || goog.LOCALE == 'tr-CY') {
-  defaultSymbols = exports.DateIntervalSymbols_tr_CY;
-} else if (goog.LOCALE == 'tr_TR' || goog.LOCALE == 'tr-TR') {
-  defaultSymbols = exports.DateIntervalSymbols_tr_TR;
-} else if (goog.LOCALE == 'twq') {
-  defaultSymbols = exports.DateIntervalSymbols_twq;
-} else if (goog.LOCALE == 'twq_NE' || goog.LOCALE == 'twq-NE') {
-  defaultSymbols = exports.DateIntervalSymbols_twq_NE;
-} else if (goog.LOCALE == 'tzm') {
-  defaultSymbols = exports.DateIntervalSymbols_tzm;
-} else if (goog.LOCALE == 'tzm_MA' || goog.LOCALE == 'tzm-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_tzm_MA;
-} else if (goog.LOCALE == 'ug') {
-  defaultSymbols = exports.DateIntervalSymbols_ug;
-} else if (goog.LOCALE == 'ug_CN' || goog.LOCALE == 'ug-CN') {
-  defaultSymbols = exports.DateIntervalSymbols_ug_CN;
-} else if (goog.LOCALE == 'uk_UA' || goog.LOCALE == 'uk-UA') {
-  defaultSymbols = exports.DateIntervalSymbols_uk_UA;
-} else if (goog.LOCALE == 'ur_IN' || goog.LOCALE == 'ur-IN') {
-  defaultSymbols = exports.DateIntervalSymbols_ur_IN;
-} else if (goog.LOCALE == 'ur_PK' || goog.LOCALE == 'ur-PK') {
-  defaultSymbols = exports.DateIntervalSymbols_ur_PK;
-} else if (goog.LOCALE == 'uz_Arab' || goog.LOCALE == 'uz-Arab') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Arab;
-} else if (goog.LOCALE == 'uz_Arab_AF' || goog.LOCALE == 'uz-Arab-AF') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Arab_AF;
-} else if (goog.LOCALE == 'uz_Cyrl' || goog.LOCALE == 'uz-Cyrl') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Cyrl;
-} else if (goog.LOCALE == 'uz_Cyrl_UZ' || goog.LOCALE == 'uz-Cyrl-UZ') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Cyrl_UZ;
-} else if (goog.LOCALE == 'uz_Latn' || goog.LOCALE == 'uz-Latn') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Latn;
-} else if (goog.LOCALE == 'uz_Latn_UZ' || goog.LOCALE == 'uz-Latn-UZ') {
-  defaultSymbols = exports.DateIntervalSymbols_uz_Latn_UZ;
-} else if (goog.LOCALE == 'vai') {
-  defaultSymbols = exports.DateIntervalSymbols_vai;
-} else if (goog.LOCALE == 'vai_Latn' || goog.LOCALE == 'vai-Latn') {
-  defaultSymbols = exports.DateIntervalSymbols_vai_Latn;
-} else if (goog.LOCALE == 'vai_Latn_LR' || goog.LOCALE == 'vai-Latn-LR') {
-  defaultSymbols = exports.DateIntervalSymbols_vai_Latn_LR;
-} else if (goog.LOCALE == 'vai_Vaii' || goog.LOCALE == 'vai-Vaii') {
-  defaultSymbols = exports.DateIntervalSymbols_vai_Vaii;
-} else if (goog.LOCALE == 'vai_Vaii_LR' || goog.LOCALE == 'vai-Vaii-LR') {
-  defaultSymbols = exports.DateIntervalSymbols_vai_Vaii_LR;
-} else if (goog.LOCALE == 'vi_VN' || goog.LOCALE == 'vi-VN') {
-  defaultSymbols = exports.DateIntervalSymbols_vi_VN;
-} else if (goog.LOCALE == 'vun') {
-  defaultSymbols = exports.DateIntervalSymbols_vun;
-} else if (goog.LOCALE == 'vun_TZ' || goog.LOCALE == 'vun-TZ') {
-  defaultSymbols = exports.DateIntervalSymbols_vun_TZ;
-} else if (goog.LOCALE == 'wae') {
-  defaultSymbols = exports.DateIntervalSymbols_wae;
-} else if (goog.LOCALE == 'wae_CH' || goog.LOCALE == 'wae-CH') {
-  defaultSymbols = exports.DateIntervalSymbols_wae_CH;
-} else if (goog.LOCALE == 'xog') {
-  defaultSymbols = exports.DateIntervalSymbols_xog;
-} else if (goog.LOCALE == 'xog_UG' || goog.LOCALE == 'xog-UG') {
-  defaultSymbols = exports.DateIntervalSymbols_xog_UG;
-} else if (goog.LOCALE == 'yav') {
-  defaultSymbols = exports.DateIntervalSymbols_yav;
-} else if (goog.LOCALE == 'yav_CM' || goog.LOCALE == 'yav-CM') {
-  defaultSymbols = exports.DateIntervalSymbols_yav_CM;
-} else if (goog.LOCALE == 'yi') {
-  defaultSymbols = exports.DateIntervalSymbols_yi;
-} else if (goog.LOCALE == 'yi_001' || goog.LOCALE == 'yi-001') {
-  defaultSymbols = exports.DateIntervalSymbols_yi_001;
-} else if (goog.LOCALE == 'yo') {
-  defaultSymbols = exports.DateIntervalSymbols_yo;
-} else if (goog.LOCALE == 'yo_BJ' || goog.LOCALE == 'yo-BJ') {
-  defaultSymbols = exports.DateIntervalSymbols_yo_BJ;
-} else if (goog.LOCALE == 'yo_NG' || goog.LOCALE == 'yo-NG') {
-  defaultSymbols = exports.DateIntervalSymbols_yo_NG;
-} else if (goog.LOCALE == 'yue') {
-  defaultSymbols = exports.DateIntervalSymbols_yue;
-} else if (goog.LOCALE == 'yue_HK' || goog.LOCALE == 'yue-HK') {
-  defaultSymbols = exports.DateIntervalSymbols_yue_HK;
-} else if (goog.LOCALE == 'zgh') {
-  defaultSymbols = exports.DateIntervalSymbols_zgh;
-} else if (goog.LOCALE == 'zgh_MA' || goog.LOCALE == 'zgh-MA') {
-  defaultSymbols = exports.DateIntervalSymbols_zgh_MA;
-} else if (goog.LOCALE == 'zh_Hans' || goog.LOCALE == 'zh-Hans') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hans;
-} else if (goog.LOCALE == 'zh_Hans_CN' || goog.LOCALE == 'zh-Hans-CN') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hans_CN;
-} else if (goog.LOCALE == 'zh_Hans_HK' || goog.LOCALE == 'zh-Hans-HK') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hans_HK;
-} else if (goog.LOCALE == 'zh_Hans_MO' || goog.LOCALE == 'zh-Hans-MO') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hans_MO;
-} else if (goog.LOCALE == 'zh_Hans_SG' || goog.LOCALE == 'zh-Hans-SG') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hans_SG;
-} else if (goog.LOCALE == 'zh_Hant' || goog.LOCALE == 'zh-Hant') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hant;
-} else if (goog.LOCALE == 'zh_Hant_HK' || goog.LOCALE == 'zh-Hant-HK') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hant_HK;
-} else if (goog.LOCALE == 'zh_Hant_MO' || goog.LOCALE == 'zh-Hant-MO') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hant_MO;
-} else if (goog.LOCALE == 'zh_Hant_TW' || goog.LOCALE == 'zh-Hant-TW') {
-  defaultSymbols = exports.DateIntervalSymbols_zh_Hant_TW;
-} else if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
-  defaultSymbols = exports.DateIntervalSymbols_zu_ZA;
+switch (goog.LOCALE) {
+  case 'af_NA':
+  case 'af-NA':
+    defaultSymbols = exports.DateIntervalSymbols_af_NA;
+    break;
+  case 'af_ZA':
+  case 'af-ZA':
+    defaultSymbols = exports.DateIntervalSymbols_af_ZA;
+    break;
+  case 'agq':
+    defaultSymbols = exports.DateIntervalSymbols_agq;
+    break;
+  case 'agq_CM':
+  case 'agq-CM':
+    defaultSymbols = exports.DateIntervalSymbols_agq_CM;
+    break;
+  case 'ak':
+    defaultSymbols = exports.DateIntervalSymbols_ak;
+    break;
+  case 'ak_GH':
+  case 'ak-GH':
+    defaultSymbols = exports.DateIntervalSymbols_ak_GH;
+    break;
+  case 'am_ET':
+  case 'am-ET':
+    defaultSymbols = exports.DateIntervalSymbols_am_ET;
+    break;
+  case 'ar_001':
+  case 'ar-001':
+    defaultSymbols = exports.DateIntervalSymbols_ar_001;
+    break;
+  case 'ar_AE':
+  case 'ar-AE':
+    defaultSymbols = exports.DateIntervalSymbols_ar_AE;
+    break;
+  case 'ar_BH':
+  case 'ar-BH':
+    defaultSymbols = exports.DateIntervalSymbols_ar_BH;
+    break;
+  case 'ar_DJ':
+  case 'ar-DJ':
+    defaultSymbols = exports.DateIntervalSymbols_ar_DJ;
+    break;
+  case 'ar_EG':
+  case 'ar-EG':
+    defaultSymbols = exports.DateIntervalSymbols_ar_EG;
+    break;
+  case 'ar_EH':
+  case 'ar-EH':
+    defaultSymbols = exports.DateIntervalSymbols_ar_EH;
+    break;
+  case 'ar_ER':
+  case 'ar-ER':
+    defaultSymbols = exports.DateIntervalSymbols_ar_ER;
+    break;
+  case 'ar_IL':
+  case 'ar-IL':
+    defaultSymbols = exports.DateIntervalSymbols_ar_IL;
+    break;
+  case 'ar_IQ':
+  case 'ar-IQ':
+    defaultSymbols = exports.DateIntervalSymbols_ar_IQ;
+    break;
+  case 'ar_JO':
+  case 'ar-JO':
+    defaultSymbols = exports.DateIntervalSymbols_ar_JO;
+    break;
+  case 'ar_KM':
+  case 'ar-KM':
+    defaultSymbols = exports.DateIntervalSymbols_ar_KM;
+    break;
+  case 'ar_KW':
+  case 'ar-KW':
+    defaultSymbols = exports.DateIntervalSymbols_ar_KW;
+    break;
+  case 'ar_LB':
+  case 'ar-LB':
+    defaultSymbols = exports.DateIntervalSymbols_ar_LB;
+    break;
+  case 'ar_LY':
+  case 'ar-LY':
+    defaultSymbols = exports.DateIntervalSymbols_ar_LY;
+    break;
+  case 'ar_MA':
+  case 'ar-MA':
+    defaultSymbols = exports.DateIntervalSymbols_ar_MA;
+    break;
+  case 'ar_MR':
+  case 'ar-MR':
+    defaultSymbols = exports.DateIntervalSymbols_ar_MR;
+    break;
+  case 'ar_OM':
+  case 'ar-OM':
+    defaultSymbols = exports.DateIntervalSymbols_ar_OM;
+    break;
+  case 'ar_PS':
+  case 'ar-PS':
+    defaultSymbols = exports.DateIntervalSymbols_ar_PS;
+    break;
+  case 'ar_QA':
+  case 'ar-QA':
+    defaultSymbols = exports.DateIntervalSymbols_ar_QA;
+    break;
+  case 'ar_SA':
+  case 'ar-SA':
+    defaultSymbols = exports.DateIntervalSymbols_ar_SA;
+    break;
+  case 'ar_SD':
+  case 'ar-SD':
+    defaultSymbols = exports.DateIntervalSymbols_ar_SD;
+    break;
+  case 'ar_SO':
+  case 'ar-SO':
+    defaultSymbols = exports.DateIntervalSymbols_ar_SO;
+    break;
+  case 'ar_SS':
+  case 'ar-SS':
+    defaultSymbols = exports.DateIntervalSymbols_ar_SS;
+    break;
+  case 'ar_SY':
+  case 'ar-SY':
+    defaultSymbols = exports.DateIntervalSymbols_ar_SY;
+    break;
+  case 'ar_TD':
+  case 'ar-TD':
+    defaultSymbols = exports.DateIntervalSymbols_ar_TD;
+    break;
+  case 'ar_TN':
+  case 'ar-TN':
+    defaultSymbols = exports.DateIntervalSymbols_ar_TN;
+    break;
+  case 'ar_XB':
+  case 'ar-XB':
+    defaultSymbols = exports.DateIntervalSymbols_ar_XB;
+    break;
+  case 'ar_YE':
+  case 'ar-YE':
+    defaultSymbols = exports.DateIntervalSymbols_ar_YE;
+    break;
+  case 'as':
+    defaultSymbols = exports.DateIntervalSymbols_as;
+    break;
+  case 'as_IN':
+  case 'as-IN':
+    defaultSymbols = exports.DateIntervalSymbols_as_IN;
+    break;
+  case 'asa':
+    defaultSymbols = exports.DateIntervalSymbols_asa;
+    break;
+  case 'asa_TZ':
+  case 'asa-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_asa_TZ;
+    break;
+  case 'ast':
+    defaultSymbols = exports.DateIntervalSymbols_ast;
+    break;
+  case 'ast_ES':
+  case 'ast-ES':
+    defaultSymbols = exports.DateIntervalSymbols_ast_ES;
+    break;
+  case 'az_Cyrl':
+  case 'az-Cyrl':
+    defaultSymbols = exports.DateIntervalSymbols_az_Cyrl;
+    break;
+  case 'az_Cyrl_AZ':
+  case 'az-Cyrl-AZ':
+    defaultSymbols = exports.DateIntervalSymbols_az_Cyrl_AZ;
+    break;
+  case 'az_Latn':
+  case 'az-Latn':
+    defaultSymbols = exports.DateIntervalSymbols_az_Latn;
+    break;
+  case 'az_Latn_AZ':
+  case 'az-Latn-AZ':
+    defaultSymbols = exports.DateIntervalSymbols_az_Latn_AZ;
+    break;
+  case 'bas':
+    defaultSymbols = exports.DateIntervalSymbols_bas;
+    break;
+  case 'bas_CM':
+  case 'bas-CM':
+    defaultSymbols = exports.DateIntervalSymbols_bas_CM;
+    break;
+  case 'be_BY':
+  case 'be-BY':
+    defaultSymbols = exports.DateIntervalSymbols_be_BY;
+    break;
+  case 'bem':
+    defaultSymbols = exports.DateIntervalSymbols_bem;
+    break;
+  case 'bem_ZM':
+  case 'bem-ZM':
+    defaultSymbols = exports.DateIntervalSymbols_bem_ZM;
+    break;
+  case 'bez':
+    defaultSymbols = exports.DateIntervalSymbols_bez;
+    break;
+  case 'bez_TZ':
+  case 'bez-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_bez_TZ;
+    break;
+  case 'bg_BG':
+  case 'bg-BG':
+    defaultSymbols = exports.DateIntervalSymbols_bg_BG;
+    break;
+  case 'bm':
+    defaultSymbols = exports.DateIntervalSymbols_bm;
+    break;
+  case 'bm_ML':
+  case 'bm-ML':
+    defaultSymbols = exports.DateIntervalSymbols_bm_ML;
+    break;
+  case 'bn_BD':
+  case 'bn-BD':
+    defaultSymbols = exports.DateIntervalSymbols_bn_BD;
+    break;
+  case 'bn_IN':
+  case 'bn-IN':
+    defaultSymbols = exports.DateIntervalSymbols_bn_IN;
+    break;
+  case 'bo':
+    defaultSymbols = exports.DateIntervalSymbols_bo;
+    break;
+  case 'bo_CN':
+  case 'bo-CN':
+    defaultSymbols = exports.DateIntervalSymbols_bo_CN;
+    break;
+  case 'bo_IN':
+  case 'bo-IN':
+    defaultSymbols = exports.DateIntervalSymbols_bo_IN;
+    break;
+  case 'br_FR':
+  case 'br-FR':
+    defaultSymbols = exports.DateIntervalSymbols_br_FR;
+    break;
+  case 'brx':
+    defaultSymbols = exports.DateIntervalSymbols_brx;
+    break;
+  case 'brx_IN':
+  case 'brx-IN':
+    defaultSymbols = exports.DateIntervalSymbols_brx_IN;
+    break;
+  case 'bs_Cyrl':
+  case 'bs-Cyrl':
+    defaultSymbols = exports.DateIntervalSymbols_bs_Cyrl;
+    break;
+  case 'bs_Cyrl_BA':
+  case 'bs-Cyrl-BA':
+    defaultSymbols = exports.DateIntervalSymbols_bs_Cyrl_BA;
+    break;
+  case 'bs_Latn':
+  case 'bs-Latn':
+    defaultSymbols = exports.DateIntervalSymbols_bs_Latn;
+    break;
+  case 'bs_Latn_BA':
+  case 'bs-Latn-BA':
+    defaultSymbols = exports.DateIntervalSymbols_bs_Latn_BA;
+    break;
+  case 'ca_AD':
+  case 'ca-AD':
+    defaultSymbols = exports.DateIntervalSymbols_ca_AD;
+    break;
+  case 'ca_ES':
+  case 'ca-ES':
+    defaultSymbols = exports.DateIntervalSymbols_ca_ES;
+    break;
+  case 'ca_FR':
+  case 'ca-FR':
+    defaultSymbols = exports.DateIntervalSymbols_ca_FR;
+    break;
+  case 'ca_IT':
+  case 'ca-IT':
+    defaultSymbols = exports.DateIntervalSymbols_ca_IT;
+    break;
+  case 'ce':
+    defaultSymbols = exports.DateIntervalSymbols_ce;
+    break;
+  case 'ce_RU':
+  case 'ce-RU':
+    defaultSymbols = exports.DateIntervalSymbols_ce_RU;
+    break;
+  case 'cgg':
+    defaultSymbols = exports.DateIntervalSymbols_cgg;
+    break;
+  case 'cgg_UG':
+  case 'cgg-UG':
+    defaultSymbols = exports.DateIntervalSymbols_cgg_UG;
+    break;
+  case 'chr_US':
+  case 'chr-US':
+    defaultSymbols = exports.DateIntervalSymbols_chr_US;
+    break;
+  case 'ckb':
+    defaultSymbols = exports.DateIntervalSymbols_ckb;
+    break;
+  case 'ckb_IQ':
+  case 'ckb-IQ':
+    defaultSymbols = exports.DateIntervalSymbols_ckb_IQ;
+    break;
+  case 'ckb_IR':
+  case 'ckb-IR':
+    defaultSymbols = exports.DateIntervalSymbols_ckb_IR;
+    break;
+  case 'cs_CZ':
+  case 'cs-CZ':
+    defaultSymbols = exports.DateIntervalSymbols_cs_CZ;
+    break;
+  case 'cy_GB':
+  case 'cy-GB':
+    defaultSymbols = exports.DateIntervalSymbols_cy_GB;
+    break;
+  case 'da_DK':
+  case 'da-DK':
+    defaultSymbols = exports.DateIntervalSymbols_da_DK;
+    break;
+  case 'da_GL':
+  case 'da-GL':
+    defaultSymbols = exports.DateIntervalSymbols_da_GL;
+    break;
+  case 'dav':
+    defaultSymbols = exports.DateIntervalSymbols_dav;
+    break;
+  case 'dav_KE':
+  case 'dav-KE':
+    defaultSymbols = exports.DateIntervalSymbols_dav_KE;
+    break;
+  case 'de_BE':
+  case 'de-BE':
+    defaultSymbols = exports.DateIntervalSymbols_de_BE;
+    break;
+  case 'de_DE':
+  case 'de-DE':
+    defaultSymbols = exports.DateIntervalSymbols_de_DE;
+    break;
+  case 'de_IT':
+  case 'de-IT':
+    defaultSymbols = exports.DateIntervalSymbols_de_IT;
+    break;
+  case 'de_LI':
+  case 'de-LI':
+    defaultSymbols = exports.DateIntervalSymbols_de_LI;
+    break;
+  case 'de_LU':
+  case 'de-LU':
+    defaultSymbols = exports.DateIntervalSymbols_de_LU;
+    break;
+  case 'dje':
+    defaultSymbols = exports.DateIntervalSymbols_dje;
+    break;
+  case 'dje_NE':
+  case 'dje-NE':
+    defaultSymbols = exports.DateIntervalSymbols_dje_NE;
+    break;
+  case 'dsb':
+    defaultSymbols = exports.DateIntervalSymbols_dsb;
+    break;
+  case 'dsb_DE':
+  case 'dsb-DE':
+    defaultSymbols = exports.DateIntervalSymbols_dsb_DE;
+    break;
+  case 'dua':
+    defaultSymbols = exports.DateIntervalSymbols_dua;
+    break;
+  case 'dua_CM':
+  case 'dua-CM':
+    defaultSymbols = exports.DateIntervalSymbols_dua_CM;
+    break;
+  case 'dyo':
+    defaultSymbols = exports.DateIntervalSymbols_dyo;
+    break;
+  case 'dyo_SN':
+  case 'dyo-SN':
+    defaultSymbols = exports.DateIntervalSymbols_dyo_SN;
+    break;
+  case 'dz':
+    defaultSymbols = exports.DateIntervalSymbols_dz;
+    break;
+  case 'dz_BT':
+  case 'dz-BT':
+    defaultSymbols = exports.DateIntervalSymbols_dz_BT;
+    break;
+  case 'ebu':
+    defaultSymbols = exports.DateIntervalSymbols_ebu;
+    break;
+  case 'ebu_KE':
+  case 'ebu-KE':
+    defaultSymbols = exports.DateIntervalSymbols_ebu_KE;
+    break;
+  case 'ee':
+    defaultSymbols = exports.DateIntervalSymbols_ee;
+    break;
+  case 'ee_GH':
+  case 'ee-GH':
+    defaultSymbols = exports.DateIntervalSymbols_ee_GH;
+    break;
+  case 'ee_TG':
+  case 'ee-TG':
+    defaultSymbols = exports.DateIntervalSymbols_ee_TG;
+    break;
+  case 'el_CY':
+  case 'el-CY':
+    defaultSymbols = exports.DateIntervalSymbols_el_CY;
+    break;
+  case 'el_GR':
+  case 'el-GR':
+    defaultSymbols = exports.DateIntervalSymbols_el_GR;
+    break;
+  case 'en_001':
+  case 'en-001':
+    defaultSymbols = exports.DateIntervalSymbols_en_001;
+    break;
+  case 'en_150':
+  case 'en-150':
+    defaultSymbols = exports.DateIntervalSymbols_en_150;
+    break;
+  case 'en_AG':
+  case 'en-AG':
+    defaultSymbols = exports.DateIntervalSymbols_en_AG;
+    break;
+  case 'en_AI':
+  case 'en-AI':
+    defaultSymbols = exports.DateIntervalSymbols_en_AI;
+    break;
+  case 'en_AS':
+  case 'en-AS':
+    defaultSymbols = exports.DateIntervalSymbols_en_AS;
+    break;
+  case 'en_AT':
+  case 'en-AT':
+    defaultSymbols = exports.DateIntervalSymbols_en_AT;
+    break;
+  case 'en_BB':
+  case 'en-BB':
+    defaultSymbols = exports.DateIntervalSymbols_en_BB;
+    break;
+  case 'en_BE':
+  case 'en-BE':
+    defaultSymbols = exports.DateIntervalSymbols_en_BE;
+    break;
+  case 'en_BI':
+  case 'en-BI':
+    defaultSymbols = exports.DateIntervalSymbols_en_BI;
+    break;
+  case 'en_BM':
+  case 'en-BM':
+    defaultSymbols = exports.DateIntervalSymbols_en_BM;
+    break;
+  case 'en_BS':
+  case 'en-BS':
+    defaultSymbols = exports.DateIntervalSymbols_en_BS;
+    break;
+  case 'en_BW':
+  case 'en-BW':
+    defaultSymbols = exports.DateIntervalSymbols_en_BW;
+    break;
+  case 'en_BZ':
+  case 'en-BZ':
+    defaultSymbols = exports.DateIntervalSymbols_en_BZ;
+    break;
+  case 'en_CC':
+  case 'en-CC':
+    defaultSymbols = exports.DateIntervalSymbols_en_CC;
+    break;
+  case 'en_CH':
+  case 'en-CH':
+    defaultSymbols = exports.DateIntervalSymbols_en_CH;
+    break;
+  case 'en_CK':
+  case 'en-CK':
+    defaultSymbols = exports.DateIntervalSymbols_en_CK;
+    break;
+  case 'en_CM':
+  case 'en-CM':
+    defaultSymbols = exports.DateIntervalSymbols_en_CM;
+    break;
+  case 'en_CX':
+  case 'en-CX':
+    defaultSymbols = exports.DateIntervalSymbols_en_CX;
+    break;
+  case 'en_CY':
+  case 'en-CY':
+    defaultSymbols = exports.DateIntervalSymbols_en_CY;
+    break;
+  case 'en_DE':
+  case 'en-DE':
+    defaultSymbols = exports.DateIntervalSymbols_en_DE;
+    break;
+  case 'en_DG':
+  case 'en-DG':
+    defaultSymbols = exports.DateIntervalSymbols_en_DG;
+    break;
+  case 'en_DK':
+  case 'en-DK':
+    defaultSymbols = exports.DateIntervalSymbols_en_DK;
+    break;
+  case 'en_DM':
+  case 'en-DM':
+    defaultSymbols = exports.DateIntervalSymbols_en_DM;
+    break;
+  case 'en_ER':
+  case 'en-ER':
+    defaultSymbols = exports.DateIntervalSymbols_en_ER;
+    break;
+  case 'en_FI':
+  case 'en-FI':
+    defaultSymbols = exports.DateIntervalSymbols_en_FI;
+    break;
+  case 'en_FJ':
+  case 'en-FJ':
+    defaultSymbols = exports.DateIntervalSymbols_en_FJ;
+    break;
+  case 'en_FK':
+  case 'en-FK':
+    defaultSymbols = exports.DateIntervalSymbols_en_FK;
+    break;
+  case 'en_FM':
+  case 'en-FM':
+    defaultSymbols = exports.DateIntervalSymbols_en_FM;
+    break;
+  case 'en_GD':
+  case 'en-GD':
+    defaultSymbols = exports.DateIntervalSymbols_en_GD;
+    break;
+  case 'en_GG':
+  case 'en-GG':
+    defaultSymbols = exports.DateIntervalSymbols_en_GG;
+    break;
+  case 'en_GH':
+  case 'en-GH':
+    defaultSymbols = exports.DateIntervalSymbols_en_GH;
+    break;
+  case 'en_GI':
+  case 'en-GI':
+    defaultSymbols = exports.DateIntervalSymbols_en_GI;
+    break;
+  case 'en_GM':
+  case 'en-GM':
+    defaultSymbols = exports.DateIntervalSymbols_en_GM;
+    break;
+  case 'en_GU':
+  case 'en-GU':
+    defaultSymbols = exports.DateIntervalSymbols_en_GU;
+    break;
+  case 'en_GY':
+  case 'en-GY':
+    defaultSymbols = exports.DateIntervalSymbols_en_GY;
+    break;
+  case 'en_HK':
+  case 'en-HK':
+    defaultSymbols = exports.DateIntervalSymbols_en_HK;
+    break;
+  case 'en_IL':
+  case 'en-IL':
+    defaultSymbols = exports.DateIntervalSymbols_en_IL;
+    break;
+  case 'en_IM':
+  case 'en-IM':
+    defaultSymbols = exports.DateIntervalSymbols_en_IM;
+    break;
+  case 'en_IO':
+  case 'en-IO':
+    defaultSymbols = exports.DateIntervalSymbols_en_IO;
+    break;
+  case 'en_JE':
+  case 'en-JE':
+    defaultSymbols = exports.DateIntervalSymbols_en_JE;
+    break;
+  case 'en_JM':
+  case 'en-JM':
+    defaultSymbols = exports.DateIntervalSymbols_en_JM;
+    break;
+  case 'en_KE':
+  case 'en-KE':
+    defaultSymbols = exports.DateIntervalSymbols_en_KE;
+    break;
+  case 'en_KI':
+  case 'en-KI':
+    defaultSymbols = exports.DateIntervalSymbols_en_KI;
+    break;
+  case 'en_KN':
+  case 'en-KN':
+    defaultSymbols = exports.DateIntervalSymbols_en_KN;
+    break;
+  case 'en_KY':
+  case 'en-KY':
+    defaultSymbols = exports.DateIntervalSymbols_en_KY;
+    break;
+  case 'en_LC':
+  case 'en-LC':
+    defaultSymbols = exports.DateIntervalSymbols_en_LC;
+    break;
+  case 'en_LR':
+  case 'en-LR':
+    defaultSymbols = exports.DateIntervalSymbols_en_LR;
+    break;
+  case 'en_LS':
+  case 'en-LS':
+    defaultSymbols = exports.DateIntervalSymbols_en_LS;
+    break;
+  case 'en_MG':
+  case 'en-MG':
+    defaultSymbols = exports.DateIntervalSymbols_en_MG;
+    break;
+  case 'en_MH':
+  case 'en-MH':
+    defaultSymbols = exports.DateIntervalSymbols_en_MH;
+    break;
+  case 'en_MO':
+  case 'en-MO':
+    defaultSymbols = exports.DateIntervalSymbols_en_MO;
+    break;
+  case 'en_MP':
+  case 'en-MP':
+    defaultSymbols = exports.DateIntervalSymbols_en_MP;
+    break;
+  case 'en_MS':
+  case 'en-MS':
+    defaultSymbols = exports.DateIntervalSymbols_en_MS;
+    break;
+  case 'en_MT':
+  case 'en-MT':
+    defaultSymbols = exports.DateIntervalSymbols_en_MT;
+    break;
+  case 'en_MU':
+  case 'en-MU':
+    defaultSymbols = exports.DateIntervalSymbols_en_MU;
+    break;
+  case 'en_MW':
+  case 'en-MW':
+    defaultSymbols = exports.DateIntervalSymbols_en_MW;
+    break;
+  case 'en_MY':
+  case 'en-MY':
+    defaultSymbols = exports.DateIntervalSymbols_en_MY;
+    break;
+  case 'en_NA':
+  case 'en-NA':
+    defaultSymbols = exports.DateIntervalSymbols_en_NA;
+    break;
+  case 'en_NF':
+  case 'en-NF':
+    defaultSymbols = exports.DateIntervalSymbols_en_NF;
+    break;
+  case 'en_NG':
+  case 'en-NG':
+    defaultSymbols = exports.DateIntervalSymbols_en_NG;
+    break;
+  case 'en_NL':
+  case 'en-NL':
+    defaultSymbols = exports.DateIntervalSymbols_en_NL;
+    break;
+  case 'en_NR':
+  case 'en-NR':
+    defaultSymbols = exports.DateIntervalSymbols_en_NR;
+    break;
+  case 'en_NU':
+  case 'en-NU':
+    defaultSymbols = exports.DateIntervalSymbols_en_NU;
+    break;
+  case 'en_NZ':
+  case 'en-NZ':
+    defaultSymbols = exports.DateIntervalSymbols_en_NZ;
+    break;
+  case 'en_PG':
+  case 'en-PG':
+    defaultSymbols = exports.DateIntervalSymbols_en_PG;
+    break;
+  case 'en_PH':
+  case 'en-PH':
+    defaultSymbols = exports.DateIntervalSymbols_en_PH;
+    break;
+  case 'en_PK':
+  case 'en-PK':
+    defaultSymbols = exports.DateIntervalSymbols_en_PK;
+    break;
+  case 'en_PN':
+  case 'en-PN':
+    defaultSymbols = exports.DateIntervalSymbols_en_PN;
+    break;
+  case 'en_PR':
+  case 'en-PR':
+    defaultSymbols = exports.DateIntervalSymbols_en_PR;
+    break;
+  case 'en_PW':
+  case 'en-PW':
+    defaultSymbols = exports.DateIntervalSymbols_en_PW;
+    break;
+  case 'en_RW':
+  case 'en-RW':
+    defaultSymbols = exports.DateIntervalSymbols_en_RW;
+    break;
+  case 'en_SB':
+  case 'en-SB':
+    defaultSymbols = exports.DateIntervalSymbols_en_SB;
+    break;
+  case 'en_SC':
+  case 'en-SC':
+    defaultSymbols = exports.DateIntervalSymbols_en_SC;
+    break;
+  case 'en_SD':
+  case 'en-SD':
+    defaultSymbols = exports.DateIntervalSymbols_en_SD;
+    break;
+  case 'en_SE':
+  case 'en-SE':
+    defaultSymbols = exports.DateIntervalSymbols_en_SE;
+    break;
+  case 'en_SH':
+  case 'en-SH':
+    defaultSymbols = exports.DateIntervalSymbols_en_SH;
+    break;
+  case 'en_SI':
+  case 'en-SI':
+    defaultSymbols = exports.DateIntervalSymbols_en_SI;
+    break;
+  case 'en_SL':
+  case 'en-SL':
+    defaultSymbols = exports.DateIntervalSymbols_en_SL;
+    break;
+  case 'en_SS':
+  case 'en-SS':
+    defaultSymbols = exports.DateIntervalSymbols_en_SS;
+    break;
+  case 'en_SX':
+  case 'en-SX':
+    defaultSymbols = exports.DateIntervalSymbols_en_SX;
+    break;
+  case 'en_SZ':
+  case 'en-SZ':
+    defaultSymbols = exports.DateIntervalSymbols_en_SZ;
+    break;
+  case 'en_TC':
+  case 'en-TC':
+    defaultSymbols = exports.DateIntervalSymbols_en_TC;
+    break;
+  case 'en_TK':
+  case 'en-TK':
+    defaultSymbols = exports.DateIntervalSymbols_en_TK;
+    break;
+  case 'en_TO':
+  case 'en-TO':
+    defaultSymbols = exports.DateIntervalSymbols_en_TO;
+    break;
+  case 'en_TT':
+  case 'en-TT':
+    defaultSymbols = exports.DateIntervalSymbols_en_TT;
+    break;
+  case 'en_TV':
+  case 'en-TV':
+    defaultSymbols = exports.DateIntervalSymbols_en_TV;
+    break;
+  case 'en_TZ':
+  case 'en-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_en_TZ;
+    break;
+  case 'en_UG':
+  case 'en-UG':
+    defaultSymbols = exports.DateIntervalSymbols_en_UG;
+    break;
+  case 'en_UM':
+  case 'en-UM':
+    defaultSymbols = exports.DateIntervalSymbols_en_UM;
+    break;
+  case 'en_US_POSIX':
+  case 'en-US-POSIX':
+    defaultSymbols = exports.DateIntervalSymbols_en_US_POSIX;
+    break;
+  case 'en_VC':
+  case 'en-VC':
+    defaultSymbols = exports.DateIntervalSymbols_en_VC;
+    break;
+  case 'en_VG':
+  case 'en-VG':
+    defaultSymbols = exports.DateIntervalSymbols_en_VG;
+    break;
+  case 'en_VI':
+  case 'en-VI':
+    defaultSymbols = exports.DateIntervalSymbols_en_VI;
+    break;
+  case 'en_VU':
+  case 'en-VU':
+    defaultSymbols = exports.DateIntervalSymbols_en_VU;
+    break;
+  case 'en_WS':
+  case 'en-WS':
+    defaultSymbols = exports.DateIntervalSymbols_en_WS;
+    break;
+  case 'en_XA':
+  case 'en-XA':
+    defaultSymbols = exports.DateIntervalSymbols_en_XA;
+    break;
+  case 'en_ZM':
+  case 'en-ZM':
+    defaultSymbols = exports.DateIntervalSymbols_en_ZM;
+    break;
+  case 'en_ZW':
+  case 'en-ZW':
+    defaultSymbols = exports.DateIntervalSymbols_en_ZW;
+    break;
+  case 'eo':
+    defaultSymbols = exports.DateIntervalSymbols_eo;
+    break;
+  case 'es_AR':
+  case 'es-AR':
+    defaultSymbols = exports.DateIntervalSymbols_es_AR;
+    break;
+  case 'es_BO':
+  case 'es-BO':
+    defaultSymbols = exports.DateIntervalSymbols_es_BO;
+    break;
+  case 'es_BR':
+  case 'es-BR':
+    defaultSymbols = exports.DateIntervalSymbols_es_BR;
+    break;
+  case 'es_BZ':
+  case 'es-BZ':
+    defaultSymbols = exports.DateIntervalSymbols_es_BZ;
+    break;
+  case 'es_CL':
+  case 'es-CL':
+    defaultSymbols = exports.DateIntervalSymbols_es_CL;
+    break;
+  case 'es_CO':
+  case 'es-CO':
+    defaultSymbols = exports.DateIntervalSymbols_es_CO;
+    break;
+  case 'es_CR':
+  case 'es-CR':
+    defaultSymbols = exports.DateIntervalSymbols_es_CR;
+    break;
+  case 'es_CU':
+  case 'es-CU':
+    defaultSymbols = exports.DateIntervalSymbols_es_CU;
+    break;
+  case 'es_DO':
+  case 'es-DO':
+    defaultSymbols = exports.DateIntervalSymbols_es_DO;
+    break;
+  case 'es_EA':
+  case 'es-EA':
+    defaultSymbols = exports.DateIntervalSymbols_es_EA;
+    break;
+  case 'es_EC':
+  case 'es-EC':
+    defaultSymbols = exports.DateIntervalSymbols_es_EC;
+    break;
+  case 'es_GQ':
+  case 'es-GQ':
+    defaultSymbols = exports.DateIntervalSymbols_es_GQ;
+    break;
+  case 'es_GT':
+  case 'es-GT':
+    defaultSymbols = exports.DateIntervalSymbols_es_GT;
+    break;
+  case 'es_HN':
+  case 'es-HN':
+    defaultSymbols = exports.DateIntervalSymbols_es_HN;
+    break;
+  case 'es_IC':
+  case 'es-IC':
+    defaultSymbols = exports.DateIntervalSymbols_es_IC;
+    break;
+  case 'es_NI':
+  case 'es-NI':
+    defaultSymbols = exports.DateIntervalSymbols_es_NI;
+    break;
+  case 'es_PA':
+  case 'es-PA':
+    defaultSymbols = exports.DateIntervalSymbols_es_PA;
+    break;
+  case 'es_PE':
+  case 'es-PE':
+    defaultSymbols = exports.DateIntervalSymbols_es_PE;
+    break;
+  case 'es_PH':
+  case 'es-PH':
+    defaultSymbols = exports.DateIntervalSymbols_es_PH;
+    break;
+  case 'es_PR':
+  case 'es-PR':
+    defaultSymbols = exports.DateIntervalSymbols_es_PR;
+    break;
+  case 'es_PY':
+  case 'es-PY':
+    defaultSymbols = exports.DateIntervalSymbols_es_PY;
+    break;
+  case 'es_SV':
+  case 'es-SV':
+    defaultSymbols = exports.DateIntervalSymbols_es_SV;
+    break;
+  case 'es_UY':
+  case 'es-UY':
+    defaultSymbols = exports.DateIntervalSymbols_es_UY;
+    break;
+  case 'es_VE':
+  case 'es-VE':
+    defaultSymbols = exports.DateIntervalSymbols_es_VE;
+    break;
+  case 'et_EE':
+  case 'et-EE':
+    defaultSymbols = exports.DateIntervalSymbols_et_EE;
+    break;
+  case 'eu_ES':
+  case 'eu-ES':
+    defaultSymbols = exports.DateIntervalSymbols_eu_ES;
+    break;
+  case 'ewo':
+    defaultSymbols = exports.DateIntervalSymbols_ewo;
+    break;
+  case 'ewo_CM':
+  case 'ewo-CM':
+    defaultSymbols = exports.DateIntervalSymbols_ewo_CM;
+    break;
+  case 'fa_AF':
+  case 'fa-AF':
+    defaultSymbols = exports.DateIntervalSymbols_fa_AF;
+    break;
+  case 'fa_IR':
+  case 'fa-IR':
+    defaultSymbols = exports.DateIntervalSymbols_fa_IR;
+    break;
+  case 'ff':
+    defaultSymbols = exports.DateIntervalSymbols_ff;
+    break;
+  case 'ff_CM':
+  case 'ff-CM':
+    defaultSymbols = exports.DateIntervalSymbols_ff_CM;
+    break;
+  case 'ff_GN':
+  case 'ff-GN':
+    defaultSymbols = exports.DateIntervalSymbols_ff_GN;
+    break;
+  case 'ff_MR':
+  case 'ff-MR':
+    defaultSymbols = exports.DateIntervalSymbols_ff_MR;
+    break;
+  case 'ff_SN':
+  case 'ff-SN':
+    defaultSymbols = exports.DateIntervalSymbols_ff_SN;
+    break;
+  case 'fi_FI':
+  case 'fi-FI':
+    defaultSymbols = exports.DateIntervalSymbols_fi_FI;
+    break;
+  case 'fil_PH':
+  case 'fil-PH':
+    defaultSymbols = exports.DateIntervalSymbols_fil_PH;
+    break;
+  case 'fo':
+    defaultSymbols = exports.DateIntervalSymbols_fo;
+    break;
+  case 'fo_DK':
+  case 'fo-DK':
+    defaultSymbols = exports.DateIntervalSymbols_fo_DK;
+    break;
+  case 'fo_FO':
+  case 'fo-FO':
+    defaultSymbols = exports.DateIntervalSymbols_fo_FO;
+    break;
+  case 'fr_BE':
+  case 'fr-BE':
+    defaultSymbols = exports.DateIntervalSymbols_fr_BE;
+    break;
+  case 'fr_BF':
+  case 'fr-BF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_BF;
+    break;
+  case 'fr_BI':
+  case 'fr-BI':
+    defaultSymbols = exports.DateIntervalSymbols_fr_BI;
+    break;
+  case 'fr_BJ':
+  case 'fr-BJ':
+    defaultSymbols = exports.DateIntervalSymbols_fr_BJ;
+    break;
+  case 'fr_BL':
+  case 'fr-BL':
+    defaultSymbols = exports.DateIntervalSymbols_fr_BL;
+    break;
+  case 'fr_CD':
+  case 'fr-CD':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CD;
+    break;
+  case 'fr_CF':
+  case 'fr-CF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CF;
+    break;
+  case 'fr_CG':
+  case 'fr-CG':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CG;
+    break;
+  case 'fr_CH':
+  case 'fr-CH':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CH;
+    break;
+  case 'fr_CI':
+  case 'fr-CI':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CI;
+    break;
+  case 'fr_CM':
+  case 'fr-CM':
+    defaultSymbols = exports.DateIntervalSymbols_fr_CM;
+    break;
+  case 'fr_DJ':
+  case 'fr-DJ':
+    defaultSymbols = exports.DateIntervalSymbols_fr_DJ;
+    break;
+  case 'fr_DZ':
+  case 'fr-DZ':
+    defaultSymbols = exports.DateIntervalSymbols_fr_DZ;
+    break;
+  case 'fr_FR':
+  case 'fr-FR':
+    defaultSymbols = exports.DateIntervalSymbols_fr_FR;
+    break;
+  case 'fr_GA':
+  case 'fr-GA':
+    defaultSymbols = exports.DateIntervalSymbols_fr_GA;
+    break;
+  case 'fr_GF':
+  case 'fr-GF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_GF;
+    break;
+  case 'fr_GN':
+  case 'fr-GN':
+    defaultSymbols = exports.DateIntervalSymbols_fr_GN;
+    break;
+  case 'fr_GP':
+  case 'fr-GP':
+    defaultSymbols = exports.DateIntervalSymbols_fr_GP;
+    break;
+  case 'fr_GQ':
+  case 'fr-GQ':
+    defaultSymbols = exports.DateIntervalSymbols_fr_GQ;
+    break;
+  case 'fr_HT':
+  case 'fr-HT':
+    defaultSymbols = exports.DateIntervalSymbols_fr_HT;
+    break;
+  case 'fr_KM':
+  case 'fr-KM':
+    defaultSymbols = exports.DateIntervalSymbols_fr_KM;
+    break;
+  case 'fr_LU':
+  case 'fr-LU':
+    defaultSymbols = exports.DateIntervalSymbols_fr_LU;
+    break;
+  case 'fr_MA':
+  case 'fr-MA':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MA;
+    break;
+  case 'fr_MC':
+  case 'fr-MC':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MC;
+    break;
+  case 'fr_MF':
+  case 'fr-MF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MF;
+    break;
+  case 'fr_MG':
+  case 'fr-MG':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MG;
+    break;
+  case 'fr_ML':
+  case 'fr-ML':
+    defaultSymbols = exports.DateIntervalSymbols_fr_ML;
+    break;
+  case 'fr_MQ':
+  case 'fr-MQ':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MQ;
+    break;
+  case 'fr_MR':
+  case 'fr-MR':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MR;
+    break;
+  case 'fr_MU':
+  case 'fr-MU':
+    defaultSymbols = exports.DateIntervalSymbols_fr_MU;
+    break;
+  case 'fr_NC':
+  case 'fr-NC':
+    defaultSymbols = exports.DateIntervalSymbols_fr_NC;
+    break;
+  case 'fr_NE':
+  case 'fr-NE':
+    defaultSymbols = exports.DateIntervalSymbols_fr_NE;
+    break;
+  case 'fr_PF':
+  case 'fr-PF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_PF;
+    break;
+  case 'fr_PM':
+  case 'fr-PM':
+    defaultSymbols = exports.DateIntervalSymbols_fr_PM;
+    break;
+  case 'fr_RE':
+  case 'fr-RE':
+    defaultSymbols = exports.DateIntervalSymbols_fr_RE;
+    break;
+  case 'fr_RW':
+  case 'fr-RW':
+    defaultSymbols = exports.DateIntervalSymbols_fr_RW;
+    break;
+  case 'fr_SC':
+  case 'fr-SC':
+    defaultSymbols = exports.DateIntervalSymbols_fr_SC;
+    break;
+  case 'fr_SN':
+  case 'fr-SN':
+    defaultSymbols = exports.DateIntervalSymbols_fr_SN;
+    break;
+  case 'fr_SY':
+  case 'fr-SY':
+    defaultSymbols = exports.DateIntervalSymbols_fr_SY;
+    break;
+  case 'fr_TD':
+  case 'fr-TD':
+    defaultSymbols = exports.DateIntervalSymbols_fr_TD;
+    break;
+  case 'fr_TG':
+  case 'fr-TG':
+    defaultSymbols = exports.DateIntervalSymbols_fr_TG;
+    break;
+  case 'fr_TN':
+  case 'fr-TN':
+    defaultSymbols = exports.DateIntervalSymbols_fr_TN;
+    break;
+  case 'fr_VU':
+  case 'fr-VU':
+    defaultSymbols = exports.DateIntervalSymbols_fr_VU;
+    break;
+  case 'fr_WF':
+  case 'fr-WF':
+    defaultSymbols = exports.DateIntervalSymbols_fr_WF;
+    break;
+  case 'fr_YT':
+  case 'fr-YT':
+    defaultSymbols = exports.DateIntervalSymbols_fr_YT;
+    break;
+  case 'fur':
+    defaultSymbols = exports.DateIntervalSymbols_fur;
+    break;
+  case 'fur_IT':
+  case 'fur-IT':
+    defaultSymbols = exports.DateIntervalSymbols_fur_IT;
+    break;
+  case 'fy':
+    defaultSymbols = exports.DateIntervalSymbols_fy;
+    break;
+  case 'fy_NL':
+  case 'fy-NL':
+    defaultSymbols = exports.DateIntervalSymbols_fy_NL;
+    break;
+  case 'ga_IE':
+  case 'ga-IE':
+    defaultSymbols = exports.DateIntervalSymbols_ga_IE;
+    break;
+  case 'gd':
+    defaultSymbols = exports.DateIntervalSymbols_gd;
+    break;
+  case 'gd_GB':
+  case 'gd-GB':
+    defaultSymbols = exports.DateIntervalSymbols_gd_GB;
+    break;
+  case 'gl_ES':
+  case 'gl-ES':
+    defaultSymbols = exports.DateIntervalSymbols_gl_ES;
+    break;
+  case 'gsw_CH':
+  case 'gsw-CH':
+    defaultSymbols = exports.DateIntervalSymbols_gsw_CH;
+    break;
+  case 'gsw_FR':
+  case 'gsw-FR':
+    defaultSymbols = exports.DateIntervalSymbols_gsw_FR;
+    break;
+  case 'gsw_LI':
+  case 'gsw-LI':
+    defaultSymbols = exports.DateIntervalSymbols_gsw_LI;
+    break;
+  case 'gu_IN':
+  case 'gu-IN':
+    defaultSymbols = exports.DateIntervalSymbols_gu_IN;
+    break;
+  case 'guz':
+    defaultSymbols = exports.DateIntervalSymbols_guz;
+    break;
+  case 'guz_KE':
+  case 'guz-KE':
+    defaultSymbols = exports.DateIntervalSymbols_guz_KE;
+    break;
+  case 'gv':
+    defaultSymbols = exports.DateIntervalSymbols_gv;
+    break;
+  case 'gv_IM':
+  case 'gv-IM':
+    defaultSymbols = exports.DateIntervalSymbols_gv_IM;
+    break;
+  case 'ha':
+    defaultSymbols = exports.DateIntervalSymbols_ha;
+    break;
+  case 'ha_GH':
+  case 'ha-GH':
+    defaultSymbols = exports.DateIntervalSymbols_ha_GH;
+    break;
+  case 'ha_NE':
+  case 'ha-NE':
+    defaultSymbols = exports.DateIntervalSymbols_ha_NE;
+    break;
+  case 'ha_NG':
+  case 'ha-NG':
+    defaultSymbols = exports.DateIntervalSymbols_ha_NG;
+    break;
+  case 'haw_US':
+  case 'haw-US':
+    defaultSymbols = exports.DateIntervalSymbols_haw_US;
+    break;
+  case 'he_IL':
+  case 'he-IL':
+    defaultSymbols = exports.DateIntervalSymbols_he_IL;
+    break;
+  case 'hi_IN':
+  case 'hi-IN':
+    defaultSymbols = exports.DateIntervalSymbols_hi_IN;
+    break;
+  case 'hr_BA':
+  case 'hr-BA':
+    defaultSymbols = exports.DateIntervalSymbols_hr_BA;
+    break;
+  case 'hr_HR':
+  case 'hr-HR':
+    defaultSymbols = exports.DateIntervalSymbols_hr_HR;
+    break;
+  case 'hsb':
+    defaultSymbols = exports.DateIntervalSymbols_hsb;
+    break;
+  case 'hsb_DE':
+  case 'hsb-DE':
+    defaultSymbols = exports.DateIntervalSymbols_hsb_DE;
+    break;
+  case 'hu_HU':
+  case 'hu-HU':
+    defaultSymbols = exports.DateIntervalSymbols_hu_HU;
+    break;
+  case 'hy_AM':
+  case 'hy-AM':
+    defaultSymbols = exports.DateIntervalSymbols_hy_AM;
+    break;
+  case 'id_ID':
+  case 'id-ID':
+    defaultSymbols = exports.DateIntervalSymbols_id_ID;
+    break;
+  case 'ig':
+    defaultSymbols = exports.DateIntervalSymbols_ig;
+    break;
+  case 'ig_NG':
+  case 'ig-NG':
+    defaultSymbols = exports.DateIntervalSymbols_ig_NG;
+    break;
+  case 'ii':
+    defaultSymbols = exports.DateIntervalSymbols_ii;
+    break;
+  case 'ii_CN':
+  case 'ii-CN':
+    defaultSymbols = exports.DateIntervalSymbols_ii_CN;
+    break;
+  case 'is_IS':
+  case 'is-IS':
+    defaultSymbols = exports.DateIntervalSymbols_is_IS;
+    break;
+  case 'it_CH':
+  case 'it-CH':
+    defaultSymbols = exports.DateIntervalSymbols_it_CH;
+    break;
+  case 'it_IT':
+  case 'it-IT':
+    defaultSymbols = exports.DateIntervalSymbols_it_IT;
+    break;
+  case 'it_SM':
+  case 'it-SM':
+    defaultSymbols = exports.DateIntervalSymbols_it_SM;
+    break;
+  case 'it_VA':
+  case 'it-VA':
+    defaultSymbols = exports.DateIntervalSymbols_it_VA;
+    break;
+  case 'ja_JP':
+  case 'ja-JP':
+    defaultSymbols = exports.DateIntervalSymbols_ja_JP;
+    break;
+  case 'jgo':
+    defaultSymbols = exports.DateIntervalSymbols_jgo;
+    break;
+  case 'jgo_CM':
+  case 'jgo-CM':
+    defaultSymbols = exports.DateIntervalSymbols_jgo_CM;
+    break;
+  case 'jmc':
+    defaultSymbols = exports.DateIntervalSymbols_jmc;
+    break;
+  case 'jmc_TZ':
+  case 'jmc-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_jmc_TZ;
+    break;
+  case 'ka_GE':
+  case 'ka-GE':
+    defaultSymbols = exports.DateIntervalSymbols_ka_GE;
+    break;
+  case 'kab':
+    defaultSymbols = exports.DateIntervalSymbols_kab;
+    break;
+  case 'kab_DZ':
+  case 'kab-DZ':
+    defaultSymbols = exports.DateIntervalSymbols_kab_DZ;
+    break;
+  case 'kam':
+    defaultSymbols = exports.DateIntervalSymbols_kam;
+    break;
+  case 'kam_KE':
+  case 'kam-KE':
+    defaultSymbols = exports.DateIntervalSymbols_kam_KE;
+    break;
+  case 'kde':
+    defaultSymbols = exports.DateIntervalSymbols_kde;
+    break;
+  case 'kde_TZ':
+  case 'kde-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_kde_TZ;
+    break;
+  case 'kea':
+    defaultSymbols = exports.DateIntervalSymbols_kea;
+    break;
+  case 'kea_CV':
+  case 'kea-CV':
+    defaultSymbols = exports.DateIntervalSymbols_kea_CV;
+    break;
+  case 'khq':
+    defaultSymbols = exports.DateIntervalSymbols_khq;
+    break;
+  case 'khq_ML':
+  case 'khq-ML':
+    defaultSymbols = exports.DateIntervalSymbols_khq_ML;
+    break;
+  case 'ki':
+    defaultSymbols = exports.DateIntervalSymbols_ki;
+    break;
+  case 'ki_KE':
+  case 'ki-KE':
+    defaultSymbols = exports.DateIntervalSymbols_ki_KE;
+    break;
+  case 'kk_KZ':
+  case 'kk-KZ':
+    defaultSymbols = exports.DateIntervalSymbols_kk_KZ;
+    break;
+  case 'kkj':
+    defaultSymbols = exports.DateIntervalSymbols_kkj;
+    break;
+  case 'kkj_CM':
+  case 'kkj-CM':
+    defaultSymbols = exports.DateIntervalSymbols_kkj_CM;
+    break;
+  case 'kl':
+    defaultSymbols = exports.DateIntervalSymbols_kl;
+    break;
+  case 'kl_GL':
+  case 'kl-GL':
+    defaultSymbols = exports.DateIntervalSymbols_kl_GL;
+    break;
+  case 'kln':
+    defaultSymbols = exports.DateIntervalSymbols_kln;
+    break;
+  case 'kln_KE':
+  case 'kln-KE':
+    defaultSymbols = exports.DateIntervalSymbols_kln_KE;
+    break;
+  case 'km_KH':
+  case 'km-KH':
+    defaultSymbols = exports.DateIntervalSymbols_km_KH;
+    break;
+  case 'kn_IN':
+  case 'kn-IN':
+    defaultSymbols = exports.DateIntervalSymbols_kn_IN;
+    break;
+  case 'ko_KP':
+  case 'ko-KP':
+    defaultSymbols = exports.DateIntervalSymbols_ko_KP;
+    break;
+  case 'ko_KR':
+  case 'ko-KR':
+    defaultSymbols = exports.DateIntervalSymbols_ko_KR;
+    break;
+  case 'kok':
+    defaultSymbols = exports.DateIntervalSymbols_kok;
+    break;
+  case 'kok_IN':
+  case 'kok-IN':
+    defaultSymbols = exports.DateIntervalSymbols_kok_IN;
+    break;
+  case 'ks':
+    defaultSymbols = exports.DateIntervalSymbols_ks;
+    break;
+  case 'ks_IN':
+  case 'ks-IN':
+    defaultSymbols = exports.DateIntervalSymbols_ks_IN;
+    break;
+  case 'ksb':
+    defaultSymbols = exports.DateIntervalSymbols_ksb;
+    break;
+  case 'ksb_TZ':
+  case 'ksb-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_ksb_TZ;
+    break;
+  case 'ksf':
+    defaultSymbols = exports.DateIntervalSymbols_ksf;
+    break;
+  case 'ksf_CM':
+  case 'ksf-CM':
+    defaultSymbols = exports.DateIntervalSymbols_ksf_CM;
+    break;
+  case 'ksh':
+    defaultSymbols = exports.DateIntervalSymbols_ksh;
+    break;
+  case 'ksh_DE':
+  case 'ksh-DE':
+    defaultSymbols = exports.DateIntervalSymbols_ksh_DE;
+    break;
+  case 'kw':
+    defaultSymbols = exports.DateIntervalSymbols_kw;
+    break;
+  case 'kw_GB':
+  case 'kw-GB':
+    defaultSymbols = exports.DateIntervalSymbols_kw_GB;
+    break;
+  case 'ky_KG':
+  case 'ky-KG':
+    defaultSymbols = exports.DateIntervalSymbols_ky_KG;
+    break;
+  case 'lag':
+    defaultSymbols = exports.DateIntervalSymbols_lag;
+    break;
+  case 'lag_TZ':
+  case 'lag-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_lag_TZ;
+    break;
+  case 'lb':
+    defaultSymbols = exports.DateIntervalSymbols_lb;
+    break;
+  case 'lb_LU':
+  case 'lb-LU':
+    defaultSymbols = exports.DateIntervalSymbols_lb_LU;
+    break;
+  case 'lg':
+    defaultSymbols = exports.DateIntervalSymbols_lg;
+    break;
+  case 'lg_UG':
+  case 'lg-UG':
+    defaultSymbols = exports.DateIntervalSymbols_lg_UG;
+    break;
+  case 'lkt':
+    defaultSymbols = exports.DateIntervalSymbols_lkt;
+    break;
+  case 'lkt_US':
+  case 'lkt-US':
+    defaultSymbols = exports.DateIntervalSymbols_lkt_US;
+    break;
+  case 'ln_AO':
+  case 'ln-AO':
+    defaultSymbols = exports.DateIntervalSymbols_ln_AO;
+    break;
+  case 'ln_CD':
+  case 'ln-CD':
+    defaultSymbols = exports.DateIntervalSymbols_ln_CD;
+    break;
+  case 'ln_CF':
+  case 'ln-CF':
+    defaultSymbols = exports.DateIntervalSymbols_ln_CF;
+    break;
+  case 'ln_CG':
+  case 'ln-CG':
+    defaultSymbols = exports.DateIntervalSymbols_ln_CG;
+    break;
+  case 'lo_LA':
+  case 'lo-LA':
+    defaultSymbols = exports.DateIntervalSymbols_lo_LA;
+    break;
+  case 'lrc':
+    defaultSymbols = exports.DateIntervalSymbols_lrc;
+    break;
+  case 'lrc_IQ':
+  case 'lrc-IQ':
+    defaultSymbols = exports.DateIntervalSymbols_lrc_IQ;
+    break;
+  case 'lrc_IR':
+  case 'lrc-IR':
+    defaultSymbols = exports.DateIntervalSymbols_lrc_IR;
+    break;
+  case 'lt_LT':
+  case 'lt-LT':
+    defaultSymbols = exports.DateIntervalSymbols_lt_LT;
+    break;
+  case 'lu':
+    defaultSymbols = exports.DateIntervalSymbols_lu;
+    break;
+  case 'lu_CD':
+  case 'lu-CD':
+    defaultSymbols = exports.DateIntervalSymbols_lu_CD;
+    break;
+  case 'luo':
+    defaultSymbols = exports.DateIntervalSymbols_luo;
+    break;
+  case 'luo_KE':
+  case 'luo-KE':
+    defaultSymbols = exports.DateIntervalSymbols_luo_KE;
+    break;
+  case 'luy':
+    defaultSymbols = exports.DateIntervalSymbols_luy;
+    break;
+  case 'luy_KE':
+  case 'luy-KE':
+    defaultSymbols = exports.DateIntervalSymbols_luy_KE;
+    break;
+  case 'lv_LV':
+  case 'lv-LV':
+    defaultSymbols = exports.DateIntervalSymbols_lv_LV;
+    break;
+  case 'mas':
+    defaultSymbols = exports.DateIntervalSymbols_mas;
+    break;
+  case 'mas_KE':
+  case 'mas-KE':
+    defaultSymbols = exports.DateIntervalSymbols_mas_KE;
+    break;
+  case 'mas_TZ':
+  case 'mas-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_mas_TZ;
+    break;
+  case 'mer':
+    defaultSymbols = exports.DateIntervalSymbols_mer;
+    break;
+  case 'mer_KE':
+  case 'mer-KE':
+    defaultSymbols = exports.DateIntervalSymbols_mer_KE;
+    break;
+  case 'mfe':
+    defaultSymbols = exports.DateIntervalSymbols_mfe;
+    break;
+  case 'mfe_MU':
+  case 'mfe-MU':
+    defaultSymbols = exports.DateIntervalSymbols_mfe_MU;
+    break;
+  case 'mg':
+    defaultSymbols = exports.DateIntervalSymbols_mg;
+    break;
+  case 'mg_MG':
+  case 'mg-MG':
+    defaultSymbols = exports.DateIntervalSymbols_mg_MG;
+    break;
+  case 'mgh':
+    defaultSymbols = exports.DateIntervalSymbols_mgh;
+    break;
+  case 'mgh_MZ':
+  case 'mgh-MZ':
+    defaultSymbols = exports.DateIntervalSymbols_mgh_MZ;
+    break;
+  case 'mgo':
+    defaultSymbols = exports.DateIntervalSymbols_mgo;
+    break;
+  case 'mgo_CM':
+  case 'mgo-CM':
+    defaultSymbols = exports.DateIntervalSymbols_mgo_CM;
+    break;
+  case 'mk_MK':
+  case 'mk-MK':
+    defaultSymbols = exports.DateIntervalSymbols_mk_MK;
+    break;
+  case 'ml_IN':
+  case 'ml-IN':
+    defaultSymbols = exports.DateIntervalSymbols_ml_IN;
+    break;
+  case 'mn_MN':
+  case 'mn-MN':
+    defaultSymbols = exports.DateIntervalSymbols_mn_MN;
+    break;
+  case 'mr_IN':
+  case 'mr-IN':
+    defaultSymbols = exports.DateIntervalSymbols_mr_IN;
+    break;
+  case 'ms_BN':
+  case 'ms-BN':
+    defaultSymbols = exports.DateIntervalSymbols_ms_BN;
+    break;
+  case 'ms_MY':
+  case 'ms-MY':
+    defaultSymbols = exports.DateIntervalSymbols_ms_MY;
+    break;
+  case 'ms_SG':
+  case 'ms-SG':
+    defaultSymbols = exports.DateIntervalSymbols_ms_SG;
+    break;
+  case 'mt_MT':
+  case 'mt-MT':
+    defaultSymbols = exports.DateIntervalSymbols_mt_MT;
+    break;
+  case 'mua':
+    defaultSymbols = exports.DateIntervalSymbols_mua;
+    break;
+  case 'mua_CM':
+  case 'mua-CM':
+    defaultSymbols = exports.DateIntervalSymbols_mua_CM;
+    break;
+  case 'my_MM':
+  case 'my-MM':
+    defaultSymbols = exports.DateIntervalSymbols_my_MM;
+    break;
+  case 'mzn':
+    defaultSymbols = exports.DateIntervalSymbols_mzn;
+    break;
+  case 'mzn_IR':
+  case 'mzn-IR':
+    defaultSymbols = exports.DateIntervalSymbols_mzn_IR;
+    break;
+  case 'naq':
+    defaultSymbols = exports.DateIntervalSymbols_naq;
+    break;
+  case 'naq_NA':
+  case 'naq-NA':
+    defaultSymbols = exports.DateIntervalSymbols_naq_NA;
+    break;
+  case 'nb_NO':
+  case 'nb-NO':
+    defaultSymbols = exports.DateIntervalSymbols_nb_NO;
+    break;
+  case 'nb_SJ':
+  case 'nb-SJ':
+    defaultSymbols = exports.DateIntervalSymbols_nb_SJ;
+    break;
+  case 'nd':
+    defaultSymbols = exports.DateIntervalSymbols_nd;
+    break;
+  case 'nd_ZW':
+  case 'nd-ZW':
+    defaultSymbols = exports.DateIntervalSymbols_nd_ZW;
+    break;
+  case 'nds':
+    defaultSymbols = exports.DateIntervalSymbols_nds;
+    break;
+  case 'nds_DE':
+  case 'nds-DE':
+    defaultSymbols = exports.DateIntervalSymbols_nds_DE;
+    break;
+  case 'nds_NL':
+  case 'nds-NL':
+    defaultSymbols = exports.DateIntervalSymbols_nds_NL;
+    break;
+  case 'ne_IN':
+  case 'ne-IN':
+    defaultSymbols = exports.DateIntervalSymbols_ne_IN;
+    break;
+  case 'ne_NP':
+  case 'ne-NP':
+    defaultSymbols = exports.DateIntervalSymbols_ne_NP;
+    break;
+  case 'nl_AW':
+  case 'nl-AW':
+    defaultSymbols = exports.DateIntervalSymbols_nl_AW;
+    break;
+  case 'nl_BE':
+  case 'nl-BE':
+    defaultSymbols = exports.DateIntervalSymbols_nl_BE;
+    break;
+  case 'nl_BQ':
+  case 'nl-BQ':
+    defaultSymbols = exports.DateIntervalSymbols_nl_BQ;
+    break;
+  case 'nl_CW':
+  case 'nl-CW':
+    defaultSymbols = exports.DateIntervalSymbols_nl_CW;
+    break;
+  case 'nl_NL':
+  case 'nl-NL':
+    defaultSymbols = exports.DateIntervalSymbols_nl_NL;
+    break;
+  case 'nl_SR':
+  case 'nl-SR':
+    defaultSymbols = exports.DateIntervalSymbols_nl_SR;
+    break;
+  case 'nl_SX':
+  case 'nl-SX':
+    defaultSymbols = exports.DateIntervalSymbols_nl_SX;
+    break;
+  case 'nmg':
+    defaultSymbols = exports.DateIntervalSymbols_nmg;
+    break;
+  case 'nmg_CM':
+  case 'nmg-CM':
+    defaultSymbols = exports.DateIntervalSymbols_nmg_CM;
+    break;
+  case 'nn':
+    defaultSymbols = exports.DateIntervalSymbols_nn;
+    break;
+  case 'nn_NO':
+  case 'nn-NO':
+    defaultSymbols = exports.DateIntervalSymbols_nn_NO;
+    break;
+  case 'nnh':
+    defaultSymbols = exports.DateIntervalSymbols_nnh;
+    break;
+  case 'nnh_CM':
+  case 'nnh-CM':
+    defaultSymbols = exports.DateIntervalSymbols_nnh_CM;
+    break;
+  case 'nus':
+    defaultSymbols = exports.DateIntervalSymbols_nus;
+    break;
+  case 'nus_SS':
+  case 'nus-SS':
+    defaultSymbols = exports.DateIntervalSymbols_nus_SS;
+    break;
+  case 'nyn':
+    defaultSymbols = exports.DateIntervalSymbols_nyn;
+    break;
+  case 'nyn_UG':
+  case 'nyn-UG':
+    defaultSymbols = exports.DateIntervalSymbols_nyn_UG;
+    break;
+  case 'om':
+    defaultSymbols = exports.DateIntervalSymbols_om;
+    break;
+  case 'om_ET':
+  case 'om-ET':
+    defaultSymbols = exports.DateIntervalSymbols_om_ET;
+    break;
+  case 'om_KE':
+  case 'om-KE':
+    defaultSymbols = exports.DateIntervalSymbols_om_KE;
+    break;
+  case 'or_IN':
+  case 'or-IN':
+    defaultSymbols = exports.DateIntervalSymbols_or_IN;
+    break;
+  case 'os':
+    defaultSymbols = exports.DateIntervalSymbols_os;
+    break;
+  case 'os_GE':
+  case 'os-GE':
+    defaultSymbols = exports.DateIntervalSymbols_os_GE;
+    break;
+  case 'os_RU':
+  case 'os-RU':
+    defaultSymbols = exports.DateIntervalSymbols_os_RU;
+    break;
+  case 'pa_Arab':
+  case 'pa-Arab':
+    defaultSymbols = exports.DateIntervalSymbols_pa_Arab;
+    break;
+  case 'pa_Arab_PK':
+  case 'pa-Arab-PK':
+    defaultSymbols = exports.DateIntervalSymbols_pa_Arab_PK;
+    break;
+  case 'pa_Guru':
+  case 'pa-Guru':
+    defaultSymbols = exports.DateIntervalSymbols_pa_Guru;
+    break;
+  case 'pa_Guru_IN':
+  case 'pa-Guru-IN':
+    defaultSymbols = exports.DateIntervalSymbols_pa_Guru_IN;
+    break;
+  case 'pl_PL':
+  case 'pl-PL':
+    defaultSymbols = exports.DateIntervalSymbols_pl_PL;
+    break;
+  case 'ps':
+    defaultSymbols = exports.DateIntervalSymbols_ps;
+    break;
+  case 'ps_AF':
+  case 'ps-AF':
+    defaultSymbols = exports.DateIntervalSymbols_ps_AF;
+    break;
+  case 'pt_AO':
+  case 'pt-AO':
+    defaultSymbols = exports.DateIntervalSymbols_pt_AO;
+    break;
+  case 'pt_CH':
+  case 'pt-CH':
+    defaultSymbols = exports.DateIntervalSymbols_pt_CH;
+    break;
+  case 'pt_CV':
+  case 'pt-CV':
+    defaultSymbols = exports.DateIntervalSymbols_pt_CV;
+    break;
+  case 'pt_GQ':
+  case 'pt-GQ':
+    defaultSymbols = exports.DateIntervalSymbols_pt_GQ;
+    break;
+  case 'pt_GW':
+  case 'pt-GW':
+    defaultSymbols = exports.DateIntervalSymbols_pt_GW;
+    break;
+  case 'pt_LU':
+  case 'pt-LU':
+    defaultSymbols = exports.DateIntervalSymbols_pt_LU;
+    break;
+  case 'pt_MO':
+  case 'pt-MO':
+    defaultSymbols = exports.DateIntervalSymbols_pt_MO;
+    break;
+  case 'pt_MZ':
+  case 'pt-MZ':
+    defaultSymbols = exports.DateIntervalSymbols_pt_MZ;
+    break;
+  case 'pt_ST':
+  case 'pt-ST':
+    defaultSymbols = exports.DateIntervalSymbols_pt_ST;
+    break;
+  case 'pt_TL':
+  case 'pt-TL':
+    defaultSymbols = exports.DateIntervalSymbols_pt_TL;
+    break;
+  case 'qu':
+    defaultSymbols = exports.DateIntervalSymbols_qu;
+    break;
+  case 'qu_BO':
+  case 'qu-BO':
+    defaultSymbols = exports.DateIntervalSymbols_qu_BO;
+    break;
+  case 'qu_EC':
+  case 'qu-EC':
+    defaultSymbols = exports.DateIntervalSymbols_qu_EC;
+    break;
+  case 'qu_PE':
+  case 'qu-PE':
+    defaultSymbols = exports.DateIntervalSymbols_qu_PE;
+    break;
+  case 'rm':
+    defaultSymbols = exports.DateIntervalSymbols_rm;
+    break;
+  case 'rm_CH':
+  case 'rm-CH':
+    defaultSymbols = exports.DateIntervalSymbols_rm_CH;
+    break;
+  case 'rn':
+    defaultSymbols = exports.DateIntervalSymbols_rn;
+    break;
+  case 'rn_BI':
+  case 'rn-BI':
+    defaultSymbols = exports.DateIntervalSymbols_rn_BI;
+    break;
+  case 'ro_MD':
+  case 'ro-MD':
+    defaultSymbols = exports.DateIntervalSymbols_ro_MD;
+    break;
+  case 'ro_RO':
+  case 'ro-RO':
+    defaultSymbols = exports.DateIntervalSymbols_ro_RO;
+    break;
+  case 'rof':
+    defaultSymbols = exports.DateIntervalSymbols_rof;
+    break;
+  case 'rof_TZ':
+  case 'rof-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_rof_TZ;
+    break;
+  case 'ru_BY':
+  case 'ru-BY':
+    defaultSymbols = exports.DateIntervalSymbols_ru_BY;
+    break;
+  case 'ru_KG':
+  case 'ru-KG':
+    defaultSymbols = exports.DateIntervalSymbols_ru_KG;
+    break;
+  case 'ru_KZ':
+  case 'ru-KZ':
+    defaultSymbols = exports.DateIntervalSymbols_ru_KZ;
+    break;
+  case 'ru_MD':
+  case 'ru-MD':
+    defaultSymbols = exports.DateIntervalSymbols_ru_MD;
+    break;
+  case 'ru_RU':
+  case 'ru-RU':
+    defaultSymbols = exports.DateIntervalSymbols_ru_RU;
+    break;
+  case 'ru_UA':
+  case 'ru-UA':
+    defaultSymbols = exports.DateIntervalSymbols_ru_UA;
+    break;
+  case 'rw':
+    defaultSymbols = exports.DateIntervalSymbols_rw;
+    break;
+  case 'rw_RW':
+  case 'rw-RW':
+    defaultSymbols = exports.DateIntervalSymbols_rw_RW;
+    break;
+  case 'rwk':
+    defaultSymbols = exports.DateIntervalSymbols_rwk;
+    break;
+  case 'rwk_TZ':
+  case 'rwk-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_rwk_TZ;
+    break;
+  case 'sah':
+    defaultSymbols = exports.DateIntervalSymbols_sah;
+    break;
+  case 'sah_RU':
+  case 'sah-RU':
+    defaultSymbols = exports.DateIntervalSymbols_sah_RU;
+    break;
+  case 'saq':
+    defaultSymbols = exports.DateIntervalSymbols_saq;
+    break;
+  case 'saq_KE':
+  case 'saq-KE':
+    defaultSymbols = exports.DateIntervalSymbols_saq_KE;
+    break;
+  case 'sbp':
+    defaultSymbols = exports.DateIntervalSymbols_sbp;
+    break;
+  case 'sbp_TZ':
+  case 'sbp-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_sbp_TZ;
+    break;
+  case 'se':
+    defaultSymbols = exports.DateIntervalSymbols_se;
+    break;
+  case 'se_FI':
+  case 'se-FI':
+    defaultSymbols = exports.DateIntervalSymbols_se_FI;
+    break;
+  case 'se_NO':
+  case 'se-NO':
+    defaultSymbols = exports.DateIntervalSymbols_se_NO;
+    break;
+  case 'se_SE':
+  case 'se-SE':
+    defaultSymbols = exports.DateIntervalSymbols_se_SE;
+    break;
+  case 'seh':
+    defaultSymbols = exports.DateIntervalSymbols_seh;
+    break;
+  case 'seh_MZ':
+  case 'seh-MZ':
+    defaultSymbols = exports.DateIntervalSymbols_seh_MZ;
+    break;
+  case 'ses':
+    defaultSymbols = exports.DateIntervalSymbols_ses;
+    break;
+  case 'ses_ML':
+  case 'ses-ML':
+    defaultSymbols = exports.DateIntervalSymbols_ses_ML;
+    break;
+  case 'sg':
+    defaultSymbols = exports.DateIntervalSymbols_sg;
+    break;
+  case 'sg_CF':
+  case 'sg-CF':
+    defaultSymbols = exports.DateIntervalSymbols_sg_CF;
+    break;
+  case 'shi':
+    defaultSymbols = exports.DateIntervalSymbols_shi;
+    break;
+  case 'shi_Latn':
+  case 'shi-Latn':
+    defaultSymbols = exports.DateIntervalSymbols_shi_Latn;
+    break;
+  case 'shi_Latn_MA':
+  case 'shi-Latn-MA':
+    defaultSymbols = exports.DateIntervalSymbols_shi_Latn_MA;
+    break;
+  case 'shi_Tfng':
+  case 'shi-Tfng':
+    defaultSymbols = exports.DateIntervalSymbols_shi_Tfng;
+    break;
+  case 'shi_Tfng_MA':
+  case 'shi-Tfng-MA':
+    defaultSymbols = exports.DateIntervalSymbols_shi_Tfng_MA;
+    break;
+  case 'si_LK':
+  case 'si-LK':
+    defaultSymbols = exports.DateIntervalSymbols_si_LK;
+    break;
+  case 'sk_SK':
+  case 'sk-SK':
+    defaultSymbols = exports.DateIntervalSymbols_sk_SK;
+    break;
+  case 'sl_SI':
+  case 'sl-SI':
+    defaultSymbols = exports.DateIntervalSymbols_sl_SI;
+    break;
+  case 'smn':
+    defaultSymbols = exports.DateIntervalSymbols_smn;
+    break;
+  case 'smn_FI':
+  case 'smn-FI':
+    defaultSymbols = exports.DateIntervalSymbols_smn_FI;
+    break;
+  case 'sn':
+    defaultSymbols = exports.DateIntervalSymbols_sn;
+    break;
+  case 'sn_ZW':
+  case 'sn-ZW':
+    defaultSymbols = exports.DateIntervalSymbols_sn_ZW;
+    break;
+  case 'so':
+    defaultSymbols = exports.DateIntervalSymbols_so;
+    break;
+  case 'so_DJ':
+  case 'so-DJ':
+    defaultSymbols = exports.DateIntervalSymbols_so_DJ;
+    break;
+  case 'so_ET':
+  case 'so-ET':
+    defaultSymbols = exports.DateIntervalSymbols_so_ET;
+    break;
+  case 'so_KE':
+  case 'so-KE':
+    defaultSymbols = exports.DateIntervalSymbols_so_KE;
+    break;
+  case 'so_SO':
+  case 'so-SO':
+    defaultSymbols = exports.DateIntervalSymbols_so_SO;
+    break;
+  case 'sq_AL':
+  case 'sq-AL':
+    defaultSymbols = exports.DateIntervalSymbols_sq_AL;
+    break;
+  case 'sq_MK':
+  case 'sq-MK':
+    defaultSymbols = exports.DateIntervalSymbols_sq_MK;
+    break;
+  case 'sq_XK':
+  case 'sq-XK':
+    defaultSymbols = exports.DateIntervalSymbols_sq_XK;
+    break;
+  case 'sr_Cyrl':
+  case 'sr-Cyrl':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl;
+    break;
+  case 'sr_Cyrl_BA':
+  case 'sr-Cyrl-BA':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_BA;
+    break;
+  case 'sr_Cyrl_ME':
+  case 'sr-Cyrl-ME':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_ME;
+    break;
+  case 'sr_Cyrl_RS':
+  case 'sr-Cyrl-RS':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_RS;
+    break;
+  case 'sr_Cyrl_XK':
+  case 'sr-Cyrl-XK':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Cyrl_XK;
+    break;
+  case 'sr_Latn_BA':
+  case 'sr-Latn-BA':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Latn_BA;
+    break;
+  case 'sr_Latn_ME':
+  case 'sr-Latn-ME':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Latn_ME;
+    break;
+  case 'sr_Latn_RS':
+  case 'sr-Latn-RS':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Latn_RS;
+    break;
+  case 'sr_Latn_XK':
+  case 'sr-Latn-XK':
+    defaultSymbols = exports.DateIntervalSymbols_sr_Latn_XK;
+    break;
+  case 'sv_AX':
+  case 'sv-AX':
+    defaultSymbols = exports.DateIntervalSymbols_sv_AX;
+    break;
+  case 'sv_FI':
+  case 'sv-FI':
+    defaultSymbols = exports.DateIntervalSymbols_sv_FI;
+    break;
+  case 'sv_SE':
+  case 'sv-SE':
+    defaultSymbols = exports.DateIntervalSymbols_sv_SE;
+    break;
+  case 'sw_CD':
+  case 'sw-CD':
+    defaultSymbols = exports.DateIntervalSymbols_sw_CD;
+    break;
+  case 'sw_KE':
+  case 'sw-KE':
+    defaultSymbols = exports.DateIntervalSymbols_sw_KE;
+    break;
+  case 'sw_TZ':
+  case 'sw-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_sw_TZ;
+    break;
+  case 'sw_UG':
+  case 'sw-UG':
+    defaultSymbols = exports.DateIntervalSymbols_sw_UG;
+    break;
+  case 'ta_IN':
+  case 'ta-IN':
+    defaultSymbols = exports.DateIntervalSymbols_ta_IN;
+    break;
+  case 'ta_LK':
+  case 'ta-LK':
+    defaultSymbols = exports.DateIntervalSymbols_ta_LK;
+    break;
+  case 'ta_MY':
+  case 'ta-MY':
+    defaultSymbols = exports.DateIntervalSymbols_ta_MY;
+    break;
+  case 'ta_SG':
+  case 'ta-SG':
+    defaultSymbols = exports.DateIntervalSymbols_ta_SG;
+    break;
+  case 'te_IN':
+  case 'te-IN':
+    defaultSymbols = exports.DateIntervalSymbols_te_IN;
+    break;
+  case 'teo':
+    defaultSymbols = exports.DateIntervalSymbols_teo;
+    break;
+  case 'teo_KE':
+  case 'teo-KE':
+    defaultSymbols = exports.DateIntervalSymbols_teo_KE;
+    break;
+  case 'teo_UG':
+  case 'teo-UG':
+    defaultSymbols = exports.DateIntervalSymbols_teo_UG;
+    break;
+  case 'th_TH':
+  case 'th-TH':
+    defaultSymbols = exports.DateIntervalSymbols_th_TH;
+    break;
+  case 'ti':
+    defaultSymbols = exports.DateIntervalSymbols_ti;
+    break;
+  case 'ti_ER':
+  case 'ti-ER':
+    defaultSymbols = exports.DateIntervalSymbols_ti_ER;
+    break;
+  case 'ti_ET':
+  case 'ti-ET':
+    defaultSymbols = exports.DateIntervalSymbols_ti_ET;
+    break;
+  case 'to':
+    defaultSymbols = exports.DateIntervalSymbols_to;
+    break;
+  case 'to_TO':
+  case 'to-TO':
+    defaultSymbols = exports.DateIntervalSymbols_to_TO;
+    break;
+  case 'tr_CY':
+  case 'tr-CY':
+    defaultSymbols = exports.DateIntervalSymbols_tr_CY;
+    break;
+  case 'tr_TR':
+  case 'tr-TR':
+    defaultSymbols = exports.DateIntervalSymbols_tr_TR;
+    break;
+  case 'twq':
+    defaultSymbols = exports.DateIntervalSymbols_twq;
+    break;
+  case 'twq_NE':
+  case 'twq-NE':
+    defaultSymbols = exports.DateIntervalSymbols_twq_NE;
+    break;
+  case 'tzm':
+    defaultSymbols = exports.DateIntervalSymbols_tzm;
+    break;
+  case 'tzm_MA':
+  case 'tzm-MA':
+    defaultSymbols = exports.DateIntervalSymbols_tzm_MA;
+    break;
+  case 'ug':
+    defaultSymbols = exports.DateIntervalSymbols_ug;
+    break;
+  case 'ug_CN':
+  case 'ug-CN':
+    defaultSymbols = exports.DateIntervalSymbols_ug_CN;
+    break;
+  case 'uk_UA':
+  case 'uk-UA':
+    defaultSymbols = exports.DateIntervalSymbols_uk_UA;
+    break;
+  case 'ur_IN':
+  case 'ur-IN':
+    defaultSymbols = exports.DateIntervalSymbols_ur_IN;
+    break;
+  case 'ur_PK':
+  case 'ur-PK':
+    defaultSymbols = exports.DateIntervalSymbols_ur_PK;
+    break;
+  case 'uz_Arab':
+  case 'uz-Arab':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Arab;
+    break;
+  case 'uz_Arab_AF':
+  case 'uz-Arab-AF':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Arab_AF;
+    break;
+  case 'uz_Cyrl':
+  case 'uz-Cyrl':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Cyrl;
+    break;
+  case 'uz_Cyrl_UZ':
+  case 'uz-Cyrl-UZ':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Cyrl_UZ;
+    break;
+  case 'uz_Latn':
+  case 'uz-Latn':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Latn;
+    break;
+  case 'uz_Latn_UZ':
+  case 'uz-Latn-UZ':
+    defaultSymbols = exports.DateIntervalSymbols_uz_Latn_UZ;
+    break;
+  case 'vai':
+    defaultSymbols = exports.DateIntervalSymbols_vai;
+    break;
+  case 'vai_Latn':
+  case 'vai-Latn':
+    defaultSymbols = exports.DateIntervalSymbols_vai_Latn;
+    break;
+  case 'vai_Latn_LR':
+  case 'vai-Latn-LR':
+    defaultSymbols = exports.DateIntervalSymbols_vai_Latn_LR;
+    break;
+  case 'vai_Vaii':
+  case 'vai-Vaii':
+    defaultSymbols = exports.DateIntervalSymbols_vai_Vaii;
+    break;
+  case 'vai_Vaii_LR':
+  case 'vai-Vaii-LR':
+    defaultSymbols = exports.DateIntervalSymbols_vai_Vaii_LR;
+    break;
+  case 'vi_VN':
+  case 'vi-VN':
+    defaultSymbols = exports.DateIntervalSymbols_vi_VN;
+    break;
+  case 'vun':
+    defaultSymbols = exports.DateIntervalSymbols_vun;
+    break;
+  case 'vun_TZ':
+  case 'vun-TZ':
+    defaultSymbols = exports.DateIntervalSymbols_vun_TZ;
+    break;
+  case 'wae':
+    defaultSymbols = exports.DateIntervalSymbols_wae;
+    break;
+  case 'wae_CH':
+  case 'wae-CH':
+    defaultSymbols = exports.DateIntervalSymbols_wae_CH;
+    break;
+  case 'xog':
+    defaultSymbols = exports.DateIntervalSymbols_xog;
+    break;
+  case 'xog_UG':
+  case 'xog-UG':
+    defaultSymbols = exports.DateIntervalSymbols_xog_UG;
+    break;
+  case 'yav':
+    defaultSymbols = exports.DateIntervalSymbols_yav;
+    break;
+  case 'yav_CM':
+  case 'yav-CM':
+    defaultSymbols = exports.DateIntervalSymbols_yav_CM;
+    break;
+  case 'yi':
+    defaultSymbols = exports.DateIntervalSymbols_yi;
+    break;
+  case 'yi_001':
+  case 'yi-001':
+    defaultSymbols = exports.DateIntervalSymbols_yi_001;
+    break;
+  case 'yo':
+    defaultSymbols = exports.DateIntervalSymbols_yo;
+    break;
+  case 'yo_BJ':
+  case 'yo-BJ':
+    defaultSymbols = exports.DateIntervalSymbols_yo_BJ;
+    break;
+  case 'yo_NG':
+  case 'yo-NG':
+    defaultSymbols = exports.DateIntervalSymbols_yo_NG;
+    break;
+  case 'yue':
+    defaultSymbols = exports.DateIntervalSymbols_yue;
+    break;
+  case 'yue_HK':
+  case 'yue-HK':
+    defaultSymbols = exports.DateIntervalSymbols_yue_HK;
+    break;
+  case 'zgh':
+    defaultSymbols = exports.DateIntervalSymbols_zgh;
+    break;
+  case 'zgh_MA':
+  case 'zgh-MA':
+    defaultSymbols = exports.DateIntervalSymbols_zgh_MA;
+    break;
+  case 'zh_Hans':
+  case 'zh-Hans':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hans;
+    break;
+  case 'zh_Hans_CN':
+  case 'zh-Hans-CN':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hans_CN;
+    break;
+  case 'zh_Hans_HK':
+  case 'zh-Hans-HK':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hans_HK;
+    break;
+  case 'zh_Hans_MO':
+  case 'zh-Hans-MO':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hans_MO;
+    break;
+  case 'zh_Hans_SG':
+  case 'zh-Hans-SG':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hans_SG;
+    break;
+  case 'zh_Hant':
+  case 'zh-Hant':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hant;
+    break;
+  case 'zh_Hant_HK':
+  case 'zh-Hant-HK':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hant_HK;
+    break;
+  case 'zh_Hant_MO':
+  case 'zh-Hant-MO':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hant_MO;
+    break;
+  case 'zh_Hant_TW':
+  case 'zh-Hant-TW':
+    defaultSymbols = exports.DateIntervalSymbols_zh_Hant_TW;
+    break;
+  case 'zu_ZA':
+  case 'zu-ZA':
+    defaultSymbols = exports.DateIntervalSymbols_zu_ZA;
+    break;
 }
 
 if (defaultSymbols != null) {

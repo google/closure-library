@@ -124,5 +124,5 @@ goog.userAgentTestUtil.getUserAgentDetected = function(agent) {
       return goog.userAgent.WEBKIT;
   }
 
-  throw Error('Unrecognized user agent');
+  throw new Error('Unrecognized user agent');
 };

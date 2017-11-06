@@ -54,7 +54,7 @@ goog.structs.Pool = function(opt_minCount, opt_maxCount) {
 
   // Make sure that the max and min constraints are valid.
   if (this.minCount_ > this.maxCount_) {
-    throw Error(goog.structs.Pool.ERROR_MIN_MAX_);
+    throw new Error(goog.structs.Pool.ERROR_MIN_MAX_);
   }
 
   /**
@@ -120,7 +120,7 @@ goog.structs.Pool.ERROR_DISPOSE_UNRELEASED_OBJS_ =
 goog.structs.Pool.prototype.setMinimumCount = function(min) {
   // Check count constraints.
   if (min > this.maxCount_) {
-    throw Error(goog.structs.Pool.ERROR_MIN_MAX_);
+    throw new Error(goog.structs.Pool.ERROR_MIN_MAX_);
   }
   this.minCount_ = min;
 
@@ -137,7 +137,7 @@ goog.structs.Pool.prototype.setMinimumCount = function(min) {
 goog.structs.Pool.prototype.setMaximumCount = function(max) {
   // Check count constraints.
   if (max < this.minCount_) {
-    throw Error(goog.structs.Pool.ERROR_MIN_MAX_);
+    throw new Error(goog.structs.Pool.ERROR_MIN_MAX_);
   }
   this.maxCount_ = max;
 
@@ -358,7 +358,7 @@ goog.structs.Pool.prototype.isEmpty = function() {
 goog.structs.Pool.prototype.disposeInternal = function() {
   goog.structs.Pool.superClass_.disposeInternal.call(this);
   if (this.getInUseCount() > 0) {
-    throw Error(goog.structs.Pool.ERROR_DISPOSE_UNRELEASED_OBJS_);
+    throw new Error(goog.structs.Pool.ERROR_DISPOSE_UNRELEASED_OBJS_);
   }
   delete this.inUseSet_;
 

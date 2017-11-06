@@ -46,7 +46,7 @@ function testBasicRendering() {
   var el = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.DIV, goog.ui.media.Vimeo.CSS_CLASS, parent);
   assertEquals(1, el.length);
-  assertEquals(VIMEO_URL, control.getDataModel().getUrl());
+  assertEquals(VIMEO_URL_SECURE, control.getDataModel().getUrl());
 }
 
 function testParsingUrl() {
@@ -62,13 +62,13 @@ function testParsingUrl() {
 }
 
 function testBuildingUrl() {
-  assertEquals(VIMEO_URL, goog.ui.media.VimeoModel.buildUrl(VIMEO_ID));
+  assertEquals(VIMEO_URL_SECURE, goog.ui.media.VimeoModel.buildUrl(VIMEO_ID));
 }
 
 function testCreatingModel() {
   var model = new goog.ui.media.VimeoModel(VIMEO_ID);
   assertEquals(VIMEO_ID, model.getVideoId());
-  assertEquals(VIMEO_URL, model.getUrl());
+  assertEquals(VIMEO_URL_SECURE, model.getUrl());
   assertUndefined(model.getCaption());
 }
 

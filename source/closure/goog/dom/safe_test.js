@@ -20,6 +20,8 @@ goog.provide('goog.dom.safeTest');
 goog.setTestOnly('goog.dom.safeTest');
 
 goog.require('goog.asserts');
+goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.dom.safe.InsertAdjacentHtmlPosition');
 goog.require('goog.html.SafeHtml');
@@ -196,6 +198,48 @@ function testSetLocationHref() {
   }
 }
 
+function testReplaceLocationSafeString() {
+  // TODO(bangert): the mocks don't work on IE 8
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    /** @type {?} */
+    var mockLoc = new goog.testing.StrictMock(window.location);
+    mockLoc.replace('http://example.com/');
+    mockLoc.$replay();
+    goog.dom.safe.replaceLocation(mockLoc, 'http://example.com/');
+    mockLoc.$verify();
+    mockLoc.$reset();
+  }
+}
+
+function testReplaceLocationEvilString() {
+  // TODO(bangert): the mocks don't work on IE 8
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    /** @type {?} */
+    var mockLoc = new goog.testing.StrictMock(window.location);
+    mockLoc.replace('about:invalid#zClosurez');
+    mockLoc.$replay();
+    withAssertionFailure(function() {
+      goog.dom.safe.replaceLocation(mockLoc, 'javascript:evil();');
+    });
+    mockLoc.$verify();
+    mockLoc.$reset();
+  }
+}
+
+function testReplaceLocationSafeUrl() {
+  // TODO(bangert): the mocks don't work on IE 8
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var safeUrl = goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('javascript:trusted();'));
+    /** @type {?} */
+    var mockLoc = new goog.testing.StrictMock(window.location);
+    mockLoc.replace('javascript:trusted();');
+    mockLoc.$replay();
+    goog.dom.safe.replaceLocation(mockLoc, safeUrl);
+    mockLoc.$verify();
+    mockLoc.$reset();
+  }
+}
 
 function testSetAnchorHref() {
   var anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
@@ -233,6 +277,94 @@ function testSetAnchorHref() {
     assert(goog.string.contains(
         ex.message, 'Argument is not a HTMLAnchorElement'));
   }
+}
+
+function testSetInputFormActionHarmlessString() {
+  var element = goog.dom.createElement(goog.dom.TagName.INPUT);
+  goog.dom.safe.setInputFormAction(element, 'foo.com');
+  assertEquals('foo.com', element.formaction);
+}
+
+function testSetInputFormActionEvilString() {
+  var element = goog.dom.createElement(goog.dom.TagName.INPUT);
+  withAssertionFailure(function() {
+    goog.dom.safe.setInputFormAction(element, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', element.formaction);
+}
+
+function testSetInputFormActionSafeUrl() {
+  var element = goog.dom.createElement(goog.dom.TagName.INPUT);
+  goog.dom.safe.setInputFormAction(
+      element,
+      goog.html.SafeUrl.fromConstant(
+          goog.string.Const.from('javascript:trusted();')));
+  assertEquals('javascript:trusted();', element.formaction);
+}
+
+
+function testSetInputFormActionAssertsType() {
+  /** @type {?} */
+  var element = goog.dom.createElement(goog.dom.TagName.FORM);
+  withAssertionFailure(function() {
+    goog.dom.safe.setInputFormAction(element, 'foo');
+  });
+  assertEquals('foo', element.formaction);
+}
+
+function testSetButtonFormActionHarmlessString() {
+  var element = goog.dom.createElement(goog.dom.TagName.BUTTON);
+  goog.dom.safe.setButtonFormAction(element, 'http://foo.com');
+  assertEquals('http://foo.com', element.formaction);
+}
+
+function testSetButtonFormActionEvilString() {
+  var element = goog.dom.createElement(goog.dom.TagName.BUTTON);
+  withAssertionFailure(function() {
+    goog.dom.safe.setButtonFormAction(element, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', element.formaction);
+}
+
+function testSetButtonFormActionSafeUrl() {
+  var element = goog.dom.createElement(goog.dom.TagName.BUTTON);
+  goog.dom.safe.setButtonFormAction(
+      element,
+      goog.html.SafeUrl.fromConstant(
+          goog.string.Const.from('javascript:trusted();')));
+  assertEquals('javascript:trusted();', element.formaction);
+}
+
+function testSetFormElementActionAssertsType() {
+  /** @type {?} */
+  var element = goog.dom.createElement(goog.dom.TagName.INPUT);
+  withAssertionFailure(function() {
+    goog.dom.safe.setFormElementAction(element, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', element.action);
+}
+
+function testSetFormElementActionHarmlessString() {
+  var element = goog.dom.createElement(goog.dom.TagName.FORM);
+  goog.dom.safe.setFormElementAction(element, 'http://foo.com');
+  assertEquals('http://foo.com/', element.action);  // url is normalized
+}
+
+function testSetFormElementActionEvilString() {
+  var element = goog.dom.createElement(goog.dom.TagName.FORM);
+  withAssertionFailure(function() {
+    goog.dom.safe.setFormElementAction(element, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', element.action);
+}
+
+function testSetFormElementActionSafeUrl() {
+  var element = goog.dom.createElement(goog.dom.TagName.FORM);
+  goog.dom.safe.setFormElementAction(
+      element,
+      goog.html.SafeUrl.fromConstant(
+          goog.string.Const.from('javascript:trusted();')));
+  assertEquals('javascript:trusted();', element.action);
 }
 
 function testSetImageSrc_withSafeUrlObject() {

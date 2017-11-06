@@ -23,7 +23,6 @@ goog.require('goog.array');
 goog.require('goog.dom.xml');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
-goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
@@ -441,7 +440,7 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
 goog.testing.net.XhrIo.prototype.send = function(
     url, opt_method, opt_content, opt_headers) {
   if (this.xhr_) {
-    throw Error('[goog.net.XhrIo] Object is active with another request');
+    throw new Error('[goog.net.XhrIo] Object is active with another request');
   }
 
   this.lastUri_ = url;
@@ -487,7 +486,7 @@ goog.testing.net.XhrIo.prototype.createXhr = function() {
 goog.testing.net.XhrIo.prototype.simulateReadyStateChange = function(
     readyState) {
   if (readyState < this.readyState_) {
-    throw Error('Readystate cannot go backwards');
+    throw new Error('Readystate cannot go backwards');
   }
 
   // INTERACTIVE can be dispatched repeatedly as more data is reported.
@@ -781,7 +780,7 @@ goog.testing.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
     responseText = responseText.substring(opt_xssiPrefix.length);
   }
 
-  return goog.json.parse(responseText);
+  return /** @type {!Object} */ (JSON.parse(responseText));
 };
 
 

@@ -132,19 +132,37 @@ var MockChannelRequest = function(
   // For debugging, keep track of whether this is a back or forward channel.
   this.isBack = !!(opt_requestId == 'rpc');
   this.isForward = !this.isBack;
+
+  this.pendingMessages_ = [];
 };
 
 MockChannelRequest.prototype.postData_ = null;
 
 MockChannelRequest.prototype.requestStartTime_ = null;
 
+/**
+ * @param {Object} extraHeaders The HTTP headers.
+ */
 MockChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {};
 
+/**
+ * @param {number} timeout   The timeout in MS for when we fail the request.
+ */
 MockChannelRequest.prototype.setTimeout = function(timeout) {};
 
+/**
+ * @param {number} throttle The throttle in ms.  A value of zero indicates
+ *   no throttle.
+ */
 MockChannelRequest.prototype.setReadyStateChangeThrottle = function(throttle) {
 };
 
+/**
+ * @param {goog.Uri} uri  The uri of the request.
+ * @param {?string} postData  The data for the post body.
+ * @param {boolean} decodeChunks  Whether to the result is expected to be
+ *     encoded for chunking and thus requires decoding.
+ */
 MockChannelRequest.prototype.xmlHttpPost = function(
     uri, postData, decodeChunks) {
   this.channelDebug_.debug(
@@ -153,51 +171,105 @@ MockChannelRequest.prototype.xmlHttpPost = function(
   this.requestStartTime_ = goog.now();
 };
 
+/**
+ * @param {goog.Uri} uri  The uri of the request.
+ * @param {boolean} decodeChunks  Whether to the result is expected to be
+ *   encoded for chunking and thus requires decoding.
+ * @param {?string} hostPrefix  The host prefix, if we might be using a
+ *   secondary domain.  Note that it should also be in the URL, adding this
+ *   won't cause it to be added to the URL.
+ */
 MockChannelRequest.prototype.xmlHttpGet = function(
-    uri, decodeChunks, opt_noClose) {
+    uri, decodeChunks, hostPrefix) {
   this.channelDebug_.debug(
-      '<--- GET: ' + uri + ', ' + decodeChunks + ', ' + opt_noClose);
+      '<--- GET: ' + uri + ', ' + decodeChunks + ', ' + hostPrefix);
   this.requestStartTime_ = goog.now();
 };
 
+/**
+ * @param {goog.Uri} uri The uri to send a request to.
+ */
 MockChannelRequest.prototype.sendCloseRequest = function(uri) {
   this.requestStartTime_ = goog.now();
 };
 
+/**
+ * Cancel.
+ */
 MockChannelRequest.prototype.cancel = function() {
   this.successful_ = false;
 };
 
+/**
+ * @returns {boolean}
+ */
 MockChannelRequest.prototype.getSuccess = function() {
   return this.successful_;
 };
 
+/**
+ * @return {?ChannelRequest.Error}  The last error.
+ */
 MockChannelRequest.prototype.getLastError = function() {
   return this.lastError_;
 };
 
+/**
+ * @return {number} The status code of the last request.
+ */
 MockChannelRequest.prototype.getLastStatusCode = function() {
   return this.lastStatusCode_;
 };
 
+/**
+ * @return {string|undefined} The session ID.
+ */
 MockChannelRequest.prototype.getSessionId = function() {
   return this.sessionId_;
 };
 
+/**
+ * @return {string|number|undefined} The request ID.
+ */
 MockChannelRequest.prototype.getRequestId = function() {
   return this.requestId_;
 };
 
+/**
+ * @return {?string} The POST data provided by the request initiator.
+ */
 MockChannelRequest.prototype.getPostData = function() {
   return this.postData_;
 };
 
+/**
+ * @return {?number} The time the request started, as returned by goog.now().
+ */
 MockChannelRequest.prototype.getRequestStartTime = function() {
   return this.requestStartTime_;
 };
 
+/**
+ * @return {?goog.net.XhrIo} Any XhrIo request created for this object.
+ */
 MockChannelRequest.prototype.getXhr = function() {
   return null;
+};
+
+/**
+ * @param {!Array<goog.labs.net.webChannel.Wire.QueuedMap>} messages
+ *   The pending messages for this request.
+ */
+MockChannelRequest.prototype.setPendingMessages = function(messages) {
+  this.pendingMessages_ = messages;
+};
+
+/**
+ * @return {!Array<goog.labs.net.webChannel.Wire.QueuedMap>} The pending
+ *   messages for this request.
+ */
+MockChannelRequest.prototype.getPendingMessages = function() {
+  return this.pendingMessages_;
 };
 
 
@@ -250,8 +322,8 @@ function setUp() {
   handler = new goog.labs.net.webChannel.WebChannelBase.Handler();
   handler.channelOpened = function() {};
   handler.channelError = function(channel, error) { gotError = true; };
-  handler.channelSuccess = function(channel, maps) {
-    deliveredMaps = goog.array.clone(maps);
+  handler.channelSuccess = function(channel, request) {
+    deliveredMaps = goog.array.clone(request.getPendingMessages());
   };
 
   /**
@@ -1089,12 +1161,14 @@ function testUndeliveredMaps_clearsPendingMapsAfterNotifying() {
   sendMap('foo2', 'bar2');
   sendMap('foo3', 'bar3');
 
-  assertEquals(1, channel.pendingMaps_.length);
+  assertEquals(
+      1, channel.forwardChannelRequestPool_.getPendingMessages().length);
   assertEquals(2, channel.outgoingMaps_.length);
 
   disconnect();
 
-  assertEquals(0, channel.pendingMaps_.length);
+  assertEquals(
+      0, channel.forwardChannelRequestPool_.getPendingMessages().length);
   assertEquals(0, channel.outgoingMaps_.length);
 }
 

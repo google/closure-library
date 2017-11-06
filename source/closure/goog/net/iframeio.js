@@ -538,7 +538,7 @@ goog.net.IframeIo.prototype.send = function(
     uri, opt_method, opt_noCache, opt_data) {
 
   if (this.active_) {
-    throw Error('[goog.net.IframeIo] Unable to send, already active.');
+    throw new Error('[goog.net.IframeIo] Unable to send, already active.');
   }
 
   var uriObj = new goog.Uri(uri);
@@ -601,7 +601,7 @@ goog.net.IframeIo.prototype.send = function(
 goog.net.IframeIo.prototype.sendFromForm = function(
     form, opt_uri, opt_noCache) {
   if (this.active_) {
-    throw Error('[goog.net.IframeIo] Unable to send, already active.');
+    throw new Error('[goog.net.IframeIo] Unable to send, already active.');
   }
 
   var uri = new goog.Uri(opt_uri || form.action);

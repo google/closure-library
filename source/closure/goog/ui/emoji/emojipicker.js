@@ -461,7 +461,7 @@ goog.ui.emoji.EmojiPicker.prototype.createDom = function() {
   }
 
   if (this.emoji_.length == 0) {
-    throw Error('Must add some emoji to the picker');
+    throw new Error('Must add some emoji to the picker');
   }
 
   // If there is more than one group of emoji, we construct a tabpane
@@ -772,7 +772,7 @@ goog.ui.emoji.EmojiPicker.prototype.onPageChanged_ = function(e) {
  */
 goog.ui.emoji.EmojiPicker.prototype.loadPage_ = function(index) {
   if (index < 0 || index > this.pages_.length) {
-    throw Error('Index out of bounds');
+    throw new Error('Index out of bounds');
   }
 
   if (!this.pageLoadStatus_[index]) {

@@ -559,7 +559,7 @@ function testResolutionOrderWithThrow() {
   p.then(function() { callbacks.push(1); }, shouldNotCall);
   var child = p.then(function() {
     callbacks.push(2);
-    throw Error();
+    throw new Error();
   }, shouldNotCall);
 
   child.then(shouldNotCall, function() {
@@ -618,7 +618,7 @@ function testRejectionOrderWithThrow() {
   p.then(shouldNotCall, function() { callbacks.push(1); });
   p.then(shouldNotCall, function() {
     callbacks.push(2);
-    throw Error();
+    throw new Error();
   });
   p.then(shouldNotCall, function() { callbacks.push(3); });
 
@@ -1380,7 +1380,7 @@ function testThenAlwaysCalledMultipleTimes() {
   p.thenAlways(function() {
     assertEquals(0, arguments.length);
     calls.push(2);
-    throw Error('thenAlways throw');
+    throw new Error('thenAlways throw');
   });
   p.then(function(value) {
     assertEquals(

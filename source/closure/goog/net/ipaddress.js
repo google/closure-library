@@ -187,25 +187,25 @@ goog.net.Ipv4Address = function(address) {
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 || address.lessThan(goog.math.Integer.ZERO) ||
         address.greaterThan(goog.net.Ipv4Address.MAX_ADDRESS_)) {
-      throw Error('The address does not look like an IPv4.');
+      throw new Error('The address does not look like an IPv4.');
     } else {
       ip = goog.object.clone(address);
     }
   } else {
     if (!goog.net.Ipv4Address.REGEX_.test(address)) {
-      throw Error(address + ' does not look like an IPv4 address.');
+      throw new Error(address + ' does not look like an IPv4 address.');
     }
 
     var octets = address.split('.');
     if (octets.length != 4) {
-      throw Error(address + ' does not look like an IPv4 address.');
+      throw new Error(address + ' does not look like an IPv4 address.');
     }
 
     for (var i = 0; i < octets.length; i++) {
       var parsedOctet = goog.string.toNumber(octets[i]);
       if (isNaN(parsedOctet) || parsedOctet < 0 || parsedOctet > 255 ||
           (octets[i].length != 1 && goog.string.startsWith(octets[i], '0'))) {
-        throw Error('In ' + address + ', octet ' + i + ' is not valid');
+        throw new Error('In ' + address + ', octet ' + i + ' is not valid');
       }
       var intOctet = goog.math.Integer.fromNumber(parsedOctet);
       ip = ip.shiftLeft(8).or(intOctet);
@@ -318,13 +318,13 @@ goog.net.Ipv6Address = function(address) {
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 || address.lessThan(goog.math.Integer.ZERO) ||
         address.greaterThan(goog.net.Ipv6Address.MAX_ADDRESS_)) {
-      throw Error('The address does not look like a valid IPv6.');
+      throw new Error('The address does not look like a valid IPv6.');
     } else {
       ip = goog.object.clone(address);
     }
   } else {
     if (!goog.net.Ipv6Address.REGEX_.test(address)) {
-      throw Error(address + ' is not a valid IPv6 address.');
+      throw new Error(address + ' is not a valid IPv6 address.');
     }
 
     var splitColon = address.split(':');
@@ -339,7 +339,7 @@ goog.net.Ipv6Address = function(address) {
     var splitDoubleColon = address.split('::');
     if (splitDoubleColon.length > 2 ||
         (splitDoubleColon.length == 1 && splitColon.length != 8)) {
-      throw Error(address + ' is not a valid IPv6 address.');
+      throw new Error(address + ' is not a valid IPv6 address.');
     }
 
     var ipArr;
@@ -350,14 +350,15 @@ goog.net.Ipv6Address = function(address) {
     }
 
     if (ipArr.length != 8) {
-      throw Error(address + ' is not a valid IPv6 address');
+      throw new Error(address + ' is not a valid IPv6 address');
     }
 
     for (var i = 0; i < ipArr.length; i++) {
       var parsedHextet = goog.math.Integer.fromString(ipArr[i], 16);
       if (parsedHextet.lessThan(goog.math.Integer.ZERO) ||
           parsedHextet.greaterThan(goog.net.Ipv6Address.MAX_HEXTET_VALUE_)) {
-        throw Error(ipArr[i] + ' in ' + address + ' is not a valid hextet.');
+        throw new Error(
+            ipArr[i] + ' in ' + address + ' is not a valid hextet.');
       }
       ip = ip.shiftLeft(16).or(parsedHextet);
     }

@@ -19,6 +19,7 @@ goog.require('goog.dom');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.plugins.LoremIpsum');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.string.Unicode');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -47,7 +48,8 @@ function testQueryUsingLorem() {
   FIELD.makeEditable();
 
   assertTrue(FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  FIELD.setHtml(true, 'fresh content', false, true);
+  FIELD.setSafeHtml(
+      true, goog.html.SafeHtml.htmlEscape('fresh content'), false, true);
   assertFalse(FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
 }
 
@@ -56,9 +58,10 @@ function testUpdateLoremIpsum() {
 
   var loremPlugin = FIELD.getPluginByClassId('LoremIpsum');
   FIELD.makeEditable();
-  var content = '<div>foo</div>';
+  var content = goog.html.SafeHtml.create('div', {}, 'foo');
 
-  FIELD.setHtml(false, '', false, /* Don't update lorem */ false);
+  FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.EMPTY, false, /* Don't update lorem */ false);
   assertFalse(
       'Field started with content, lorem must not be enabled.',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
@@ -68,18 +71,19 @@ function testUpdateLoremIpsum() {
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
 
   FIELD.unregisterPlugin(loremPlugin);
-  FIELD.setHtml(
+  FIELD.setSafeHtml(
       false, content, false,
       /* Update (turn off) lorem */ true);
-  FIELD.setHtml(false, '', false, /* Don't update lorem */ false);
+  FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.EMPTY, false, /* Don't update lorem */ false);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
   assertFalse(
       'Field with no lorem message must not use lorem ipsum',
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   FIELD.registerPlugin(loremPlugin);
 
-  FIELD.setHtml(false, content, false, true);
-  FIELD.setHtml(false, '', false, false);
+  FIELD.setSafeHtml(false, content, false, true);
+  FIELD.setSafeHtml(false, goog.html.SafeHtml.EMPTY, false, false);
   goog.editor.Field.setActiveFieldId(FIELD.id);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
   assertFalse(
@@ -87,8 +91,8 @@ function testUpdateLoremIpsum() {
       FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
   goog.editor.Field.setActiveFieldId(null);
 
-  FIELD.setHtml(false, content, false, true);
-  FIELD.setHtml(false, '', false, false);
+  FIELD.setSafeHtml(false, content, false, true);
+  FIELD.setSafeHtml(false, goog.html.SafeHtml.EMPTY, false, false);
   FIELD.setModalMode(true);
   FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
   assertFalse(
@@ -113,7 +117,9 @@ function testLoremIpsumAndGetCleanContents() {
   assertEquals('field reported wrong contents', 'This is a field', contents);
 
   // set field html, but explicitly forbid converting to lorem ipsum text
-  FIELD.setHtml(false, '&nbsp;', true, false /* no lorem */);
+  FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.htmlEscape(goog.string.Unicode.NBSP), true,
+      false /* no lorem */);
   assertEquals(
       'field contains unexpected contents', getNbsp(),
       FIELD.getElement().innerHTML);
@@ -121,7 +127,9 @@ function testLoremIpsumAndGetCleanContents() {
       'field reported wrong contents', getNbsp(), FIELD.getCleanContents());
 
   // now set field html allowing lorem
-  FIELD.setHtml(false, '&nbsp;', true, true /* lorem */);
+  FIELD.setSafeHtml(
+      false, goog.html.SafeHtml.htmlEscape(goog.string.Unicode.NBSP), true,
+      true /* lorem */);
   assertEquals(
       'field reported wrong contents', goog.string.Unicode.NBSP,
       FIELD.getCleanContents());

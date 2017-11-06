@@ -44,7 +44,7 @@ goog.string.format = function(formatString, var_args) {
   // Try to get the template.
   var template = args.shift();
   if (typeof template == 'undefined') {
-    throw Error('[goog.string.format] Template required');
+    throw new Error('[goog.string.format] Template required');
   }
 
   // This re is used for matching, it also defines what is supported.
@@ -75,7 +75,7 @@ goog.string.format = function(formatString, var_args) {
 
     // If we didn't get any arguments, fail.
     if (typeof value == 'undefined') {
-      throw Error('[goog.string.format] Not enough arguments');
+      throw new Error('[goog.string.format] Not enough arguments');
     }
 
     // Patch the value argument to the beginning of our type specific call.

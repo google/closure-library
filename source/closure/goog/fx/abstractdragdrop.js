@@ -47,7 +47,7 @@ goog.require('goog.style');
  * and drop functionality.
  *
  * This class also allows clients to define their own subtargeting function
- * so that drop areas can have finer granularity then a singe element. This is
+ * so that drop areas can have finer granularity than a single element. This is
  * accomplished by using a client provided function to map from element and
  * coordinates to a subregion id.
  *
@@ -1329,7 +1329,7 @@ goog.fx.DragDropItem = function(element, opt_data) {
   this.startPosition_;
 
   if (!this.element) {
-    throw Error('Invalid argument');
+    throw new Error('Invalid argument');
   }
 };
 goog.inherits(goog.fx.DragDropItem, goog.events.EventTarget);
@@ -1346,7 +1346,7 @@ goog.fx.DragDropItem.prototype.getData = function() {
 
 /**
  * Gets the element that is actually draggable given that the given target was
- * attempted to be dragged. This should be overriden when the element that was
+ * attempted to be dragged. This should be overridden when the element that was
  * given actually contains many items that can be dragged. From the target, you
  * can determine what element should actually be dragged.
  *

@@ -32,7 +32,6 @@ goog.provide('goog.labs.net.xhr.TimeoutError');
 goog.require('goog.Promise');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
-goog.require('goog.json');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
@@ -400,7 +399,7 @@ xhr.parseJson_ = function(responseText, options) {
     prefixStrippedResult =
         xhr.stripXssiPrefix_(options.xssiPrefix, prefixStrippedResult);
   }
-  return goog.json.parse(prefixStrippedResult);
+  return /** @type {!Object} */ (JSON.parse(prefixStrippedResult));
 };
 
 

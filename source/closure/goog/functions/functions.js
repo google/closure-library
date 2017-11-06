@@ -74,7 +74,9 @@ goog.functions.identity = function(opt_returnValue, var_args) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.error = function(message) {
-  return function() { throw Error(message); };
+  return function() {
+    throw new Error(message);
+  };
 };
 
 
@@ -99,7 +101,8 @@ goog.functions.fail = function(err) {
 goog.functions.lock = function(f, opt_numArgs) {
   opt_numArgs = opt_numArgs || 0;
   return function() {
-    return f.apply(this, Array.prototype.slice.call(arguments, 0, opt_numArgs));
+    var self = /** @type {*} */ (this);
+    return f.apply(self, Array.prototype.slice.call(arguments, 0, opt_numArgs));
   };
 };
 
@@ -132,9 +135,10 @@ goog.functions.nth = function(n) {
 goog.functions.partialRight = function(fn, var_args) {
   var rightArgs = Array.prototype.slice.call(arguments, 1);
   return function() {
+    var self = /** @type {*} */ (this);
     var newArgs = Array.prototype.slice.call(arguments);
     newArgs.push.apply(newArgs, rightArgs);
-    return fn.apply(this, newArgs);
+    return fn.apply(self, newArgs);
   };
 };
 
@@ -182,13 +186,14 @@ goog.functions.compose = function(fn, var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     var result;
     if (length) {
-      result = functions[length - 1].apply(this, arguments);
+      result = functions[length - 1].apply(self, arguments);
     }
 
     for (var i = length - 2; i >= 0; i--) {
-      result = functions[i].call(this, result);
+      result = functions[i].call(self, result);
     }
     return result;
   };
@@ -206,9 +211,10 @@ goog.functions.sequence = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     var result;
     for (var i = 0; i < length; i++) {
-      result = functions[i].apply(this, arguments);
+      result = functions[i].apply(self, arguments);
     }
     return result;
   };
@@ -228,8 +234,9 @@ goog.functions.and = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     for (var i = 0; i < length; i++) {
-      if (!functions[i].apply(this, arguments)) {
+      if (!functions[i].apply(self, arguments)) {
         return false;
       }
     }
@@ -251,8 +258,9 @@ goog.functions.or = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     for (var i = 0; i < length; i++) {
-      if (functions[i].apply(this, arguments)) {
+      if (functions[i].apply(self, arguments)) {
         return true;
       }
     }
@@ -269,7 +277,10 @@ goog.functions.or = function(var_args) {
  * opposite.
  */
 goog.functions.not = function(f) {
-  return function() { return !f.apply(this, arguments); };
+  return function() {
+    var self = /** @type {*} */ (this);
+    return !f.apply(self, arguments);
+  };
 };
 
 

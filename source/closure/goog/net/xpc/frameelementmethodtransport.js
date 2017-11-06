@@ -197,7 +197,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.transportServiceHandler =
     // notify the channel we're ready
     this.channel_.notifyConnected();
   } else {
-    throw Error('Got unexpected transport message.');
+    throw new Error('Got unexpected transport message.');
   }
 };
 

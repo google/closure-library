@@ -3422,446 +3422,362 @@ goog.i18n.DateTimeSymbols;
  */
 goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 
-if (goog.LOCALE == 'en_ISO' || goog.LOCALE == 'en-ISO') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ISO;
-}
-
-if (goog.LOCALE == 'af') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_af;
-}
-
-if (goog.LOCALE == 'am') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_am;
-}
-
-if (goog.LOCALE == 'ar') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar;
-}
-
-if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_DZ;
-}
-
-if (goog.LOCALE == 'az') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_az;
-}
-
-if (goog.LOCALE == 'be') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_be;
-}
-
-if (goog.LOCALE == 'bg') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bg;
-}
-
-if (goog.LOCALE == 'bn') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bn;
-}
-
-if (goog.LOCALE == 'br') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_br;
-}
-
-if (goog.LOCALE == 'bs') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bs;
-}
-
-if (goog.LOCALE == 'ca') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ca;
-}
-
-if (goog.LOCALE == 'chr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_chr;
-}
-
-if (goog.LOCALE == 'cs') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cs;
-}
-
-if (goog.LOCALE == 'cy') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cy;
-}
-
-if (goog.LOCALE == 'da') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_da;
-}
-
-if (goog.LOCALE == 'de') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
-}
-
-if (goog.LOCALE == 'de_AT' || goog.LOCALE == 'de-AT') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de_AT;
-}
-
-if (goog.LOCALE == 'de_CH' || goog.LOCALE == 'de-CH') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de_CH;
-}
-
-if (goog.LOCALE == 'el') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_el;
-}
-
-if (goog.LOCALE == 'en') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
-}
-
-if (goog.LOCALE == 'en_AU' || goog.LOCALE == 'en-AU') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_AU;
-}
-
-if (goog.LOCALE == 'en_CA' || goog.LOCALE == 'en-CA') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_CA;
-}
-
-if (goog.LOCALE == 'en_GB' || goog.LOCALE == 'en-GB') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_GB;
-}
-
-if (goog.LOCALE == 'en_IE' || goog.LOCALE == 'en-IE') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IE;
-}
-
-if (goog.LOCALE == 'en_IN' || goog.LOCALE == 'en-IN') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IN;
-}
-
-if (goog.LOCALE == 'en_SG' || goog.LOCALE == 'en-SG') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_SG;
-}
-
-if (goog.LOCALE == 'en_US' || goog.LOCALE == 'en-US') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
-}
-
-if (goog.LOCALE == 'en_ZA' || goog.LOCALE == 'en-ZA') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ZA;
-}
-
-if (goog.LOCALE == 'es') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es;
-}
-
-if (goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_419;
-}
-
-if (goog.LOCALE == 'es_ES' || goog.LOCALE == 'es-ES') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_ES;
-}
-
-if (goog.LOCALE == 'es_MX' || goog.LOCALE == 'es-MX') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_MX;
-}
-
-if (goog.LOCALE == 'es_US' || goog.LOCALE == 'es-US') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_US;
-}
-
-if (goog.LOCALE == 'et') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_et;
-}
-
-if (goog.LOCALE == 'eu') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_eu;
-}
-
-if (goog.LOCALE == 'fa') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
-}
-
-if (goog.LOCALE == 'fi') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fi;
-}
-
-if (goog.LOCALE == 'fil') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fil;
-}
-
-if (goog.LOCALE == 'fr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
-}
-
-if (goog.LOCALE == 'fr_CA' || goog.LOCALE == 'fr-CA') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr_CA;
-}
-
-if (goog.LOCALE == 'ga') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ga;
-}
-
-if (goog.LOCALE == 'gl') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gl;
-}
-
-if (goog.LOCALE == 'gsw') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gsw;
-}
-
-if (goog.LOCALE == 'gu') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gu;
-}
-
-if (goog.LOCALE == 'haw') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_haw;
-}
-
-if (goog.LOCALE == 'he') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_he;
-}
-
-if (goog.LOCALE == 'hi') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hi;
-}
-
-if (goog.LOCALE == 'hr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hr;
-}
-
-if (goog.LOCALE == 'hu') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hu;
-}
-
-if (goog.LOCALE == 'hy') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hy;
-}
-
-if (goog.LOCALE == 'id') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_id;
-}
-
-if (goog.LOCALE == 'in') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_in;
-}
-
-if (goog.LOCALE == 'is') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_is;
-}
-
-if (goog.LOCALE == 'it') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_it;
-}
-
-if (goog.LOCALE == 'iw') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_iw;
-}
-
-if (goog.LOCALE == 'ja') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ja;
-}
-
-if (goog.LOCALE == 'ka') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ka;
-}
-
-if (goog.LOCALE == 'kk') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_kk;
-}
-
-if (goog.LOCALE == 'km') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_km;
-}
-
-if (goog.LOCALE == 'kn') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_kn;
-}
-
-if (goog.LOCALE == 'ko') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ko;
-}
-
-if (goog.LOCALE == 'ky') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ky;
-}
-
-if (goog.LOCALE == 'ln') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ln;
-}
-
-if (goog.LOCALE == 'lo') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lo;
-}
-
-if (goog.LOCALE == 'lt') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lt;
-}
-
-if (goog.LOCALE == 'lv') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lv;
-}
-
-if (goog.LOCALE == 'mk') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mk;
-}
-
-if (goog.LOCALE == 'ml') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ml;
-}
-
-if (goog.LOCALE == 'mn') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mn;
-}
-
-if (goog.LOCALE == 'mo') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mo;
-}
-
-if (goog.LOCALE == 'mr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mr;
-}
-
-if (goog.LOCALE == 'ms') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ms;
-}
-
-if (goog.LOCALE == 'mt') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mt;
-}
-
-if (goog.LOCALE == 'my') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_my;
-}
-
-if (goog.LOCALE == 'nb') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_nb;
-}
-
-if (goog.LOCALE == 'ne') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ne;
-}
-
-if (goog.LOCALE == 'nl') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_nl;
-}
-
-if (goog.LOCALE == 'no') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_no;
-}
-
-if (goog.LOCALE == 'no_NO' || goog.LOCALE == 'no-NO') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_no_NO;
-}
-
-if (goog.LOCALE == 'or') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_or;
-}
-
-if (goog.LOCALE == 'pa') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pa;
-}
-
-if (goog.LOCALE == 'pl') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pl;
-}
-
-if (goog.LOCALE == 'pt') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt;
-}
-
-if (goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt_BR;
-}
-
-if (goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt_PT;
-}
-
-if (goog.LOCALE == 'ro') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ro;
-}
-
-if (goog.LOCALE == 'ru') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ru;
-}
-
-if (goog.LOCALE == 'sh') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sh;
-}
-
-if (goog.LOCALE == 'si') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_si;
-}
-
-if (goog.LOCALE == 'sk') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sk;
-}
-
-if (goog.LOCALE == 'sl') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sl;
-}
-
-if (goog.LOCALE == 'sq') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sq;
-}
-
-if (goog.LOCALE == 'sr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sr;
-}
-
-if (goog.LOCALE == 'sr_Latn' || goog.LOCALE == 'sr-Latn') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sr_Latn;
-}
-
-if (goog.LOCALE == 'sv') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sv;
-}
-
-if (goog.LOCALE == 'sw') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sw;
-}
-
-if (goog.LOCALE == 'ta') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ta;
-}
-
-if (goog.LOCALE == 'te') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_te;
-}
-
-if (goog.LOCALE == 'th') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_th;
-}
-
-if (goog.LOCALE == 'tl') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_tl;
-}
-
-if (goog.LOCALE == 'tr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_tr;
-}
-
-if (goog.LOCALE == 'uk') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_uk;
-}
-
-if (goog.LOCALE == 'ur') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ur;
-}
-
-if (goog.LOCALE == 'uz') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_uz;
-}
-
-if (goog.LOCALE == 'vi') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_vi;
-}
-
-if (goog.LOCALE == 'zh') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh;
-}
-
-if (goog.LOCALE == 'zh_CN' || goog.LOCALE == 'zh-CN') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_CN;
-}
-
-if (goog.LOCALE == 'zh_HK' || goog.LOCALE == 'zh-HK') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_HK;
-}
-
-if (goog.LOCALE == 'zh_TW' || goog.LOCALE == 'zh-TW') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_TW;
-}
-
-if (goog.LOCALE == 'zu') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zu;
+switch (goog.LOCALE) {
+  case 'en_ISO':
+  case 'en-ISO':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ISO;
+    break;
+  case 'af':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_af;
+    break;
+  case 'am':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_am;
+    break;
+  case 'ar':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar;
+    break;
+  case 'ar_DZ':
+  case 'ar-DZ':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_DZ;
+    break;
+  case 'az':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_az;
+    break;
+  case 'be':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_be;
+    break;
+  case 'bg':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bg;
+    break;
+  case 'bn':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bn;
+    break;
+  case 'br':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_br;
+    break;
+  case 'bs':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bs;
+    break;
+  case 'ca':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ca;
+    break;
+  case 'chr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_chr;
+    break;
+  case 'cs':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cs;
+    break;
+  case 'cy':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cy;
+    break;
+  case 'da':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_da;
+    break;
+  case 'de':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+    break;
+  case 'de_AT':
+  case 'de-AT':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de_AT;
+    break;
+  case 'de_CH':
+  case 'de-CH':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de_CH;
+    break;
+  case 'el':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_el;
+    break;
+  case 'en':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+    break;
+  case 'en_AU':
+  case 'en-AU':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_AU;
+    break;
+  case 'en_CA':
+  case 'en-CA':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_CA;
+    break;
+  case 'en_GB':
+  case 'en-GB':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_GB;
+    break;
+  case 'en_IE':
+  case 'en-IE':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IE;
+    break;
+  case 'en_IN':
+  case 'en-IN':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IN;
+    break;
+  case 'en_SG':
+  case 'en-SG':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_SG;
+    break;
+  case 'en_US':
+  case 'en-US':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
+    break;
+  case 'en_ZA':
+  case 'en-ZA':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ZA;
+    break;
+  case 'es':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es;
+    break;
+  case 'es_419':
+  case 'es-419':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_419;
+    break;
+  case 'es_ES':
+  case 'es-ES':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_ES;
+    break;
+  case 'es_MX':
+  case 'es-MX':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_MX;
+    break;
+  case 'es_US':
+  case 'es-US':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_es_US;
+    break;
+  case 'et':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_et;
+    break;
+  case 'eu':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_eu;
+    break;
+  case 'fa':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
+    break;
+  case 'fi':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fi;
+    break;
+  case 'fil':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fil;
+    break;
+  case 'fr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
+    break;
+  case 'fr_CA':
+  case 'fr-CA':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr_CA;
+    break;
+  case 'ga':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ga;
+    break;
+  case 'gl':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gl;
+    break;
+  case 'gsw':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gsw;
+    break;
+  case 'gu':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_gu;
+    break;
+  case 'haw':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_haw;
+    break;
+  case 'he':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_he;
+    break;
+  case 'hi':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hi;
+    break;
+  case 'hr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hr;
+    break;
+  case 'hu':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hu;
+    break;
+  case 'hy':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_hy;
+    break;
+  case 'id':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_id;
+    break;
+  case 'in':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_in;
+    break;
+  case 'is':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_is;
+    break;
+  case 'it':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_it;
+    break;
+  case 'iw':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_iw;
+    break;
+  case 'ja':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ja;
+    break;
+  case 'ka':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ka;
+    break;
+  case 'kk':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_kk;
+    break;
+  case 'km':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_km;
+    break;
+  case 'kn':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_kn;
+    break;
+  case 'ko':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ko;
+    break;
+  case 'ky':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ky;
+    break;
+  case 'ln':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ln;
+    break;
+  case 'lo':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lo;
+    break;
+  case 'lt':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lt;
+    break;
+  case 'lv':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_lv;
+    break;
+  case 'mk':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mk;
+    break;
+  case 'ml':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ml;
+    break;
+  case 'mn':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mn;
+    break;
+  case 'mo':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mo;
+    break;
+  case 'mr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mr;
+    break;
+  case 'ms':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ms;
+    break;
+  case 'mt':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_mt;
+    break;
+  case 'my':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_my;
+    break;
+  case 'nb':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_nb;
+    break;
+  case 'ne':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ne;
+    break;
+  case 'nl':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_nl;
+    break;
+  case 'no':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_no;
+    break;
+  case 'no_NO':
+  case 'no-NO':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_no_NO;
+    break;
+  case 'or':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_or;
+    break;
+  case 'pa':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pa;
+    break;
+  case 'pl':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pl;
+    break;
+  case 'pt':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt;
+    break;
+  case 'pt_BR':
+  case 'pt-BR':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt_BR;
+    break;
+  case 'pt_PT':
+  case 'pt-PT':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pt_PT;
+    break;
+  case 'ro':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ro;
+    break;
+  case 'ru':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ru;
+    break;
+  case 'sh':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sh;
+    break;
+  case 'si':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_si;
+    break;
+  case 'sk':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sk;
+    break;
+  case 'sl':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sl;
+    break;
+  case 'sq':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sq;
+    break;
+  case 'sr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sr;
+    break;
+  case 'sr_Latn':
+  case 'sr-Latn':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sr_Latn;
+    break;
+  case 'sv':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sv;
+    break;
+  case 'sw':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sw;
+    break;
+  case 'ta':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ta;
+    break;
+  case 'te':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_te;
+    break;
+  case 'th':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_th;
+    break;
+  case 'tl':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_tl;
+    break;
+  case 'tr':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_tr;
+    break;
+  case 'uk':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_uk;
+    break;
+  case 'ur':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ur;
+    break;
+  case 'uz':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_uz;
+    break;
+  case 'vi':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_vi;
+    break;
+  case 'zh':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh;
+    break;
+  case 'zh_CN':
+  case 'zh-CN':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_CN;
+    break;
+  case 'zh_HK':
+  case 'zh-HK':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_HK;
+    break;
+  case 'zh_TW':
+  case 'zh-TW':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_TW;
+    break;
+  case 'zu':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zu;
+    break;
 }

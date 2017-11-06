@@ -26,6 +26,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.Error');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -307,11 +308,21 @@ goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
  *     include in the error report.
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e, opt_context) {
-  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
-
+  // goog.debug.catchErrors passes the actual error object (in some browsers) in
+  // the error property. If we have that, use that instead of the incomplete set
+  // of random properties passed to window.onerror.
+  e = e.error || e;
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
   var context = opt_context ? goog.object.clone(opt_context) : {};
+  if (e instanceof Error) {
+    goog.object.extend(
+        context,
+        goog.debug.errorcontext.getErrorContext(/** @type {!Error} */ (e)));
+  }
+
+  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
+
   if (this.contextProvider_) {
     try {
       this.contextProvider_(error, context);

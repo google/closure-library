@@ -50,7 +50,7 @@ goog.ui.emoji.SpriteInfo = function(
     if (opt_url == undefined || opt_width === undefined ||
         opt_height === undefined || opt_xOffset == undefined ||
         opt_yOffset === undefined) {
-      throw Error('Sprite info is not fully specified');
+      throw new Error('Sprite info is not fully specified');
     }
 
     this.url_ = opt_url;

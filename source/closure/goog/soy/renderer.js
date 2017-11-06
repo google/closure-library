@@ -37,11 +37,9 @@ goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
-goog.require('goog.string.Const');
 
 
 
@@ -58,30 +56,17 @@ goog.require('goog.string.Const');
  */
 goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
   /**
-   * @type {goog.dom.DomHelper}
+   * @const {!goog.dom.DomHelper}
    * @private
    */
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 
   /**
-   * @type {goog.soy.InjectedDataSupplier}
+   * @const {?goog.soy.InjectedDataSupplier}
    * @private
    */
   this.supplier_ = opt_injectedDataSupplier || null;
-
-  /**
-   * Map from template name to the data used to render that template.
-   * @type {!goog.soy.Renderer.SavedTemplateRender}
-   * @private
-   */
-  this.savedTemplateRenders_ = [];
 };
-
-
-/**
- * @typedef {Array<{template: string, data: Object, ijData: Object}>}
- */
-goog.soy.Renderer.SavedTemplateRender;
 
 
 /**
@@ -97,7 +82,6 @@ goog.soy.Renderer.SavedTemplateRender;
  */
 goog.soy.Renderer.prototype.renderAsFragment = function(
     template, opt_templateData) {
-  this.saveTemplateRender_(template, opt_templateData);
   var node = goog.soy.renderAsFragment(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(node);
@@ -121,7 +105,6 @@ goog.soy.Renderer.prototype.renderAsFragment = function(
  */
 goog.soy.Renderer.prototype.renderAsElement = function(
     template, opt_templateData) {
-  this.saveTemplateRender_(template, opt_templateData);
   var element = goog.soy.renderAsElement(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(element);
@@ -142,7 +125,6 @@ goog.soy.Renderer.prototype.renderAsElement = function(
  */
 goog.soy.Renderer.prototype.renderElement = function(
     element, template, opt_templateData) {
-  this.saveTemplateRender_(template, opt_templateData);
   goog.soy.renderElement(
       element, template, opt_templateData, this.getInjectedData_());
   this.handleRender(element);
@@ -170,7 +152,6 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
           result.contentKind === goog.soy.data.SanitizedContentKind.HTML,
       'render was called with a strict template of kind other than "html"' +
           ' (consider using renderText or renderStrict)');
-  this.saveTemplateRender_(template, opt_templateData);
   this.handleRender();
   return String(result);
 };
@@ -197,7 +178,6 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
   goog.asserts.assert(
       result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
       'renderText was called with a template of kind other than "text"');
-  this.saveTemplateRender_(template, opt_templateData);
   this.handleRender();
   return String(result);
 };
@@ -263,7 +243,6 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
       result.contentKind ===
           (opt_kind || goog.soy.data.SanitizedContentKind.HTML),
       'renderStrict was called with the wrong kind of template');
-  this.saveTemplateRender_(template, opt_templateData);
   this.handleRender();
   return result;
 };
@@ -309,22 +288,16 @@ goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
   var result = this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
-  // TODO(mlourenco): Call result.toSafeStyleSheet() once that exists.
-  return goog.html.uncheckedconversions
-      .safeStyleSheetFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from(
-              'Soy templates of kind CSS produce ' +
-              'SafeStyleSheet-contract-compliant value.'),
-          result.toString());
+  return result.toSafeStyleSheet();
 };
 
 
 /**
- * @return {!goog.soy.Renderer.SavedTemplateRender} Saved template data for
- *     the renders that have happened so far.
+ * @return {!goog.dom.DomHelper}
+ * @protected
  */
-goog.soy.Renderer.prototype.getSavedTemplateRenders = function() {
-  return this.savedTemplateRenders_;
+goog.soy.Renderer.prototype.getDom = function() {
+  return this.dom_;
 };
 
 
@@ -336,26 +309,6 @@ goog.soy.Renderer.prototype.getSavedTemplateRenders = function() {
  * @protected
  */
 goog.soy.Renderer.prototype.handleRender = goog.nullFunction;
-
-
-/**
- * Saves information about the current template render for debug purposes.
- * @param {Function} template The Soy template defining the element's content.
- * @param {Object=} opt_templateData The data for the template.
- * @private
- * @suppress {missingProperties} SoyJs compiler adds soyTemplateName to the
- *     template.
- */
-goog.soy.Renderer.prototype.saveTemplateRender_ = function(
-    template, opt_templateData) {
-  if (goog.DEBUG) {
-    this.savedTemplateRenders_.push({
-      template: template.soyTemplateName,
-      data: opt_templateData || null,
-      ijData: this.getInjectedData_()
-    });
-  }
-};
 
 
 /**

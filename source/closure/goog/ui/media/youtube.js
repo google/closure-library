@@ -32,7 +32,7 @@
  *
  * <pre>
  *   var video = goog.ui.media.YoutubeModel.newInstance(
- *       'http://www.youtube.com/watch?v=ddl5f44spwQ');
+ *       'https://www.youtube.com/watch?v=ddl5f44spwQ');
  *   goog.ui.media.Youtube.newControl(video).render();
  * </pre>
  *
@@ -56,7 +56,7 @@
  *
  * <pre>
  * var videoId = goog.ui.media.Youtube.parseUrl(
- *     'http://www.youtube.com/watch?v=ddl5f44spwQ');
+ *     'https://www.youtube.com/watch?v=ddl5f44spwQ');
  * </pre>
  *
  * Requires flash to actually work.
@@ -68,8 +68,9 @@ goog.provide('goog.ui.media.Youtube');
 goog.provide('goog.ui.media.YoutubeModel');
 
 goog.require('goog.dom.TagName');
-goog.require('goog.html.uncheckedconversions');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
@@ -159,7 +160,7 @@ goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
   // control.createDom has to be called before any state is set.
   // Use control.setStateInternal if you need to set states
   if (!control.getElement()) {
-    throw Error(goog.ui.Component.Error.STATE_INVALID);
+    throw new Error(goog.ui.Component.Error.STATE_INVALID);
   }
 
   var domHelper = control.getDomHelper();
@@ -230,7 +231,7 @@ goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 
 /**
  * A youtube regular expression matcher. It matches the VIDEOID of URLs like
- * http://www.youtube.com/watch?v=VIDEOID. Based on:
+ * https://www.youtube.com/watch?v=VIDEOID. Based on:
  * googledata/contentonebox/opencob/specs/common/YTPublicExtractorCard.xml
  * @type {RegExp}
  * @private
@@ -246,7 +247,7 @@ goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
         // https://youtu.be/jqxENMKaeCU?cgiparam=value
         '(?:(?:youtu\\.be/([\\w-]+)(?:\\?[\\w=&-]+)?)|' +
         // Watch URL prefix.  This should handle new URLs of the form:
-        // http://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related
+        // https://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related
         // where the parameters appear after "#!" instead of "?".
         '(?:youtube\\.com/watch)' +
         // Get the video id:
@@ -293,7 +294,7 @@ goog.ui.media.YoutubeModel.newInstance = function(
         videoId, opt_caption, opt_description);
   }
 
-  throw Error('failed to parse video id from youtube url: ' + youtubeUrl);
+  throw new Error('failed to parse video id from youtube url: ' + youtubeUrl);
 };
 
 
@@ -305,7 +306,7 @@ goog.ui.media.YoutubeModel.newInstance = function(
  * @return {string} The youtube URL.
  */
 goog.ui.media.YoutubeModel.buildUrl = function(videoId) {
-  return 'http://www.youtube.com/watch?v=' + goog.string.urlEncode(videoId);
+  return 'https://www.youtube.com/watch?v=' + goog.string.urlEncode(videoId);
 };
 
 
@@ -316,14 +317,14 @@ goog.ui.media.YoutubeModel.buildUrl = function(videoId) {
  * NOTE(user): patterned after Gmail's gadgets/youtube,
  *
  * TODO(user): how do I specify the width/height of the resulting image on the
- * url ? is there an official API for http://ytimg.com ?
+ * url ? is there an official API for https://ytimg.com ?
  *
  * @param {string} youtubeId The youtube video ID.
  * @return {string} An URL that contains an image with a preview of the youtube
  *     movie.
  */
 goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
-  return 'http://i.ytimg.com/vi/' + youtubeId + '/default.jpg';
+  return 'https://i.ytimg.com/vi/' + youtubeId + '/default.jpg';
 };
 
 
@@ -338,16 +339,16 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
  *     page.
  */
 goog.ui.media.YoutubeModel.getFlashUrl = function(videoId, opt_autoplay) {
-  var autoplay = opt_autoplay ? '&autoplay=1' : '';
   // YouTube video ids are extracted from youtube URLs, which are user
-  // generated input. the video id is later used to embed a flash object,
-  // which is generated through HTML construction. We goog.string.urlEncode
-  // the video id to make sure the URL is safe to be embedded.
-  return goog.html.uncheckedconversions.
-      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Fixed domain, encoded path.'),
-          'http://www.youtube.com/v/' + goog.string.urlEncode(videoId) +
-              '&hl=en&fs=1' + autoplay);
+  // generated input. The video id is later used to embed a flash object,
+  // which is generated through HTML construction.
+  return goog.html.TrustedResourceUrl.format(
+      goog.string.Const.from(
+          'https://www.youtube.com/v/%{v}&hl=en&fs=1%{autoplay}'),
+      {
+        'v': videoId,
+        'autoplay': opt_autoplay ? goog.string.Const.from('&autoplay=1') : ''
+      });
 };
 
 

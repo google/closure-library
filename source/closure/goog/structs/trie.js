@@ -101,7 +101,7 @@ goog.structs.Trie.prototype.setOrAdd_ = function(key, value, opt_add) {
     node = node.childNodes_[currentCharacter];
   }
   if (opt_add && node.value_ !== undefined) {
-    throw Error('The collection already contains the key "' + key + '"');
+    throw new Error('The collection already contains the key "' + key + '"');
   } else {
     node.value_ = value;
   }
@@ -334,7 +334,7 @@ goog.structs.Trie.prototype.remove = function(key) {
        characterPosition++) {
     var currentCharacter = key.charAt(characterPosition);
     if (!node.childNodes_[currentCharacter]) {
-      throw Error('The collection does not have the key "' + key + '"');
+      throw new Error('The collection does not have the key "' + key + '"');
     }
 
     // Archive the current parent and child name (key in childNodes_) so that

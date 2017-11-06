@@ -186,7 +186,7 @@ goog.messaging.AbstractChannel.prototype.decodePayload = function(
     serviceName, payload, objectPayload) {
   if (objectPayload && goog.isString(payload)) {
     try {
-      return goog.json.parse(payload);
+      return /** @type {!Object} */ (JSON.parse(payload));
     } catch (err) {
       goog.log.warning(
           this.logger, 'Expected JSON payload for ' + serviceName + ', was "' +

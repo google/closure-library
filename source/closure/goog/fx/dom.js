@@ -137,7 +137,7 @@ goog.fx.dom.PredefinedEffect.prototype.onBegin = function() {
  */
 goog.fx.dom.Slide = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
-    throw Error('Start and end points must be 2D');
+    throw new Error('Start and end points must be 2D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 };
@@ -208,7 +208,7 @@ goog.fx.dom.SlideFrom.prototype.onBegin = function() {
  */
 goog.fx.dom.Swipe = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
-    throw Error('Start and end points must be 2D');
+    throw new Error('Start and end points must be 2D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 
@@ -281,7 +281,7 @@ goog.fx.dom.Swipe.prototype.clip_ = function(x, y, w, h) {
  */
 goog.fx.dom.Scroll = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
-    throw Error('Start and end points must be 2D');
+    throw new Error('Start and end points must be 2D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 };
@@ -321,7 +321,7 @@ goog.fx.dom.Scroll.prototype.updateStyle = function() {
  */
 goog.fx.dom.Resize = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
-    throw Error('Start and end points must be 2D');
+    throw new Error('Start and end points must be 2D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 };
@@ -428,7 +428,7 @@ goog.fx.dom.Fade = function(element, start, end, time, opt_acc) {
       this, 'constructor', element, start, end, time, opt_acc);
 
   if (start.length != 1 || end.length != 1) {
-    throw Error('Start and end points must be 1D');
+    throw new Error('Start and end points must be 1D');
   }
 
   /**
@@ -609,7 +609,7 @@ goog.fx.dom.FadeInAndShow.prototype.onBegin = function() {
  */
 goog.fx.dom.BgColorTransform = function(element, start, end, time, opt_acc) {
   if (start.length != 3 || end.length != 3) {
-    throw Error('Start and end points must be 3D');
+    throw new Error('Start and end points must be 3D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 };
@@ -688,7 +688,7 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
  */
 goog.fx.dom.ColorTransform = function(element, start, end, time, opt_acc) {
   if (start.length != 3 || end.length != 3) {
-    throw Error('Start and end points must be 3D');
+    throw new Error('Start and end points must be 3D');
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 };

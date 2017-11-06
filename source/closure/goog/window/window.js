@@ -128,6 +128,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
         sb.push(option + '=' + opt_options[option]);
         break;
       case 'target':
+      case 'noopener':
       case 'noreferrer':
         break;
       default:
@@ -224,6 +225,12 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   } else {
     newWin = parentWin.open(
         goog.html.SafeUrl.unwrap(safeLinkRef), target, optionString);
+    // Passing in 'noopener' into the 'windowFeatures' param of window.open(...)
+    // will yield a feature-deprived browser. This is an known issue, tracked
+    // here: https://github.com/whatwg/html/issues/1902
+    if (newWin && opt_options['noopener']) {
+      newWin.opener = null;
+    }
   }
   // newWin is null if a popup blocker prevented the window open.
   return newWin;

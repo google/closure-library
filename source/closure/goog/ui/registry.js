@@ -73,10 +73,10 @@ goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
   // In this case, explicit validation has negligible overhead (since each
   // renderer is only registered once), and helps catch subtle bugs.
   if (!goog.isFunction(componentCtor)) {
-    throw Error('Invalid component class ' + componentCtor);
+    throw new Error('Invalid component class ' + componentCtor);
   }
   if (!goog.isFunction(rendererCtor)) {
-    throw Error('Invalid renderer class ' + rendererCtor);
+    throw new Error('Invalid renderer class ' + rendererCtor);
   }
 
   // Map the component constructor's unique ID to the renderer constructor.
@@ -112,10 +112,10 @@ goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
   // In this case, explicit validation has negligible overhead (since each
   // decorator  is only registered once), and helps catch subtle bugs.
   if (!className) {
-    throw Error('Invalid class name ' + className);
+    throw new Error('Invalid class name ' + className);
   }
   if (!goog.isFunction(decoratorFn)) {
-    throw Error('Invalid decorator function ' + decoratorFn);
+    throw new Error('Invalid decorator function ' + decoratorFn);
   }
 
   goog.ui.registry.decoratorFunctions_[className] = decoratorFn;

@@ -21,6 +21,7 @@
 goog.provide('goog.debug');
 
 goog.require('goog.array');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.userAgent');
 
 
@@ -89,6 +90,7 @@ goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
       message: message,
       fileName: url,
       line: line,
+      lineNumber: line,
       col: opt_col,
       error: opt_error
     });
@@ -323,6 +325,27 @@ goog.debug.enhanceError = function(err, opt_message) {
       ++x;
     }
     error['message' + x] = String(opt_message);
+  }
+  return error;
+};
+
+
+/**
+ * Converts an object to an Error using the object's toString if it's not
+ * already an Error, adds a stacktrace if there isn't one, and optionally adds
+ * context to the Error, which is reported by the closure error reporter.
+ * @param {*} err The original thrown error, object, or string.
+ * @param {!Object<string, string>=} opt_context Key-value context to add to the
+ *     Error.
+ * @return {!Error} If err is an Error, it is enhanced and returned. Otherwise,
+ *     it is converted to an Error which is enhanced and returned.
+ */
+goog.debug.enhanceErrorWithContext = function(err, opt_context) {
+  var error = goog.debug.enhanceError(err);
+  if (opt_context) {
+    for (var key in opt_context) {
+      goog.debug.errorcontext.addErrorContext(error, key, opt_context[key]);
+    }
   }
   return error;
 };
@@ -608,3 +631,35 @@ goog.debug.fnNameCache_ = {};
  * @private
  */
 goog.debug.fnNameResolver_;
+
+
+/**
+ * Private internal function to support goog.debug.freeze.
+ * @param {T} arg
+ * @return {T}
+ * @template T
+ * @private
+ */
+goog.debug.freezeInternal_ = goog.DEBUG && Object.freeze || function(arg) {
+  return arg;
+};
+
+
+/**
+ * Freezes the given object, but only in debug mode (and in browsers that
+ * support it).  Note that this is a shallow freeze, so for deeply nested
+ * objects it must be called at every level to ensure deep immutability.
+ * @param {T} arg
+ * @return {T}
+ * @template T
+ */
+goog.debug.freeze = function(arg) {
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // freezeInternal_ from the compiler so that the entire call can be
+  // removed if the result is not used.
+  return {
+    valueOf: function() {
+      return goog.debug.freezeInternal_(arg);
+    }
+  }.valueOf();
+};

@@ -479,7 +479,7 @@ goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
  * @override
  */
 goog.ds.EmptyNodeList.prototype.add = function(node) {
-  throw Error('Can\'t add to EmptyNodeList');
+  throw new Error('Can\'t add to EmptyNodeList');
 };
 
 

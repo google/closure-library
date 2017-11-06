@@ -474,5 +474,5 @@ goog.events.EventHandler.prototype.disposeInternal = function() {
  * @param {goog.events.Event} e Event object.
  */
 goog.events.EventHandler.prototype.handleEvent = function(e) {
-  throw Error('EventHandler.handleEvent not implemented');
+  throw new Error('EventHandler.handleEvent not implemented');
 };

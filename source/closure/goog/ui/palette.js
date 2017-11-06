@@ -400,7 +400,7 @@ goog.ui.Palette.prototype.getSize = function() {
  */
 goog.ui.Palette.prototype.setSize = function(size, opt_rows) {
   if (this.getElement()) {
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
 
   this.size_ = goog.isNumber(size) ?

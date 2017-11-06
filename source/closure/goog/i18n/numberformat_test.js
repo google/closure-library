@@ -25,6 +25,7 @@ goog.require('goog.i18n.NumberFormatSymbols_ar');
 goog.require('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.require('goog.i18n.NumberFormatSymbols_de');
 goog.require('goog.i18n.NumberFormatSymbols_en');
+goog.require('goog.i18n.NumberFormatSymbols_fi');
 goog.require('goog.i18n.NumberFormatSymbols_fr');
 goog.require('goog.i18n.NumberFormatSymbols_pl');
 goog.require('goog.i18n.NumberFormatSymbols_ro');
@@ -1030,6 +1031,16 @@ function testSignificantDigitsMoreThanMax() {
   assertEquals('1.23', fmt.format(1.234));
   assertEquals('0.12', fmt.format(0.1234));
   assertEquals('0.13', fmt.format(0.1284));
+}
+
+function testNegativeDecimalFinnish() {
+  // Finnish uses a full-width dash for negative.
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fi;
+
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+
+  var str = fmt.format(-123);
+  assertEquals('−123', str);
 }
 
 function testSimpleCompactFrench() {

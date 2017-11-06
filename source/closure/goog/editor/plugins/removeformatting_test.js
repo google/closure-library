@@ -29,6 +29,11 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
+function shouldRunTests() {
+  // This test has not yet been updated to run on IE8 and up. See b/2997691.
+  return !goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(8);
+}
+
 var SAVED_HTML;
 var FIELDMOCK;
 var FORMATTER;

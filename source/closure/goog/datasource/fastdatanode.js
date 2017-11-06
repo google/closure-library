@@ -66,7 +66,7 @@ goog.require('goog.string');
 // TODO(arv): Use interfaces when available.
 goog.ds.AbstractFastDataNode = function(dataName, opt_parent) {
   if (!dataName) {
-    throw Error('Cannot create a fast data node without a data name');
+    throw new Error('Cannot create a fast data node without a data name');
   }
   this['__dataName'] = dataName;
   this['__parent'] = opt_parent;
@@ -190,7 +190,7 @@ goog.ds.FastDataNode.prototype.getChildNodes = function(opt_selector) {
     return child ? new goog.ds.FastListNode([child], '') :
                    new goog.ds.EmptyNodeList();
   } else {
-    throw Error('Unsupported selector: ' + opt_selector);
+    throw new Error('Unsupported selector: ' + opt_selector);
   }
 };
 
@@ -433,7 +433,7 @@ goog.ds.PrimitiveFastDataNode.prototype.get = function() {
  */
 goog.ds.PrimitiveFastDataNode.prototype.set = function(value) {
   if (goog.isArray(value) || goog.isObject(value)) {
-    throw Error('can only set PrimitiveFastDataNode to primitive values');
+    throw new Error('can only set PrimitiveFastDataNode to primitive values');
   }
   this.value_ = value;
   goog.ds.DataManager.getInstance().fireDataChange(this.getDataPath());
@@ -480,7 +480,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
  * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.setChildNode = function(name, value) {
-  throw Error('Cannot set a child node for a PrimitiveFastDataNode');
+  throw new Error('Cannot set a child node for a PrimitiveFastDataNode');
 };
 
 
@@ -539,7 +539,7 @@ goog.inherits(goog.ds.FastListNode, goog.ds.AbstractFastDataNode);
  * @override
  */
 goog.ds.FastListNode.prototype.set = function(value) {
-  throw Error('Cannot set a FastListNode to a new value');
+  throw new Error('Cannot set a FastListNode to a new value');
 };
 
 
@@ -627,7 +627,7 @@ goog.ds.FastListNode.prototype.setChildNode = function(key, value) {
     var index = this.getKeyAsNumber_(key);
     if (index != null) {
       if (index < 0 || index >= this.values_.length) {
-        throw Error('List index out of bounds: ' + index);
+        throw new Error('List index out of bounds: ' + index);
       }
       // NOTE: This code here appears to want to use "index" rather than
       // "key" here (which would be better for an array. However, changing
@@ -767,7 +767,8 @@ goog.ds.FastListNode.prototype.getCount = function() {
  * @override
  */
 goog.ds.FastListNode.prototype.setNode = function(name, value) {
-  throw Error('Setting child nodes of a FastListNode is not implemented, yet');
+  throw new Error(
+      'Setting child nodes of a FastListNode is not implemented, yet');
 };
 
 
@@ -817,7 +818,7 @@ goog.ds.FastListNode.prototype.indexOf = function(name) {
     index = this.map_[name];
   }
   if (index == null) {
-    throw Error('Cannot determine index for: ' + name);
+    throw new Error('Cannot determine index for: ' + name);
   }
   return /** @type {number} */ (index);
 };

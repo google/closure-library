@@ -210,3 +210,11 @@ function testLerp() {
     assertEquals(i, c.z);
   }
 }
+
+
+function testRescaled() {
+  const a = new goog.math.Vec3(2, 3, 4);
+  const b = goog.math.Vec3.rescaled(a, -2);
+  assertVec3Equals(new goog.math.Vec3(-4, -6, -8), b);
+  assertVec3Equals(new goog.math.Vec3(2, 3, 4), a);
+}

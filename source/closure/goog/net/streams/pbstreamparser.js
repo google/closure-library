@@ -179,7 +179,7 @@ Parser.prototype.error_ = function(inputBytes, pos, errorMsg) {
       '. ' +
       'Error: ' + errorMsg + '. ' +
       'With input:\n' + inputBytes;
-  throw Error(this.errorMessage_);
+  throw new Error(this.errorMessage_);
 };
 
 
@@ -212,7 +212,7 @@ goog.net.streams.PbStreamParser.prototype.parse = function(input) {
         processMessageByte(inputBytes[pos]);
         break;
       }
-      default: { throw Error('unexpected parser state: ' + parser.state_); }
+      default: { throw new Error('unexpected parser state: ' + parser.state_); }
     }
 
     parser.streamPos_++;

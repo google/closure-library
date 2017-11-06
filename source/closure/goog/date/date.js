@@ -484,11 +484,17 @@ goog.date.Interval = function(
   if (goog.isString(opt_years)) {
     var type = opt_years;
     var interval = /** @type {number} */ (opt_months);
+    /** @type {number} */
     this.years = type == goog.date.Interval.YEARS ? interval : 0;
+    /** @type {number} */
     this.months = type == goog.date.Interval.MONTHS ? interval : 0;
+    /** @type {number} */
     this.days = type == goog.date.Interval.DAYS ? interval : 0;
+    /** @type {number} */
     this.hours = type == goog.date.Interval.HOURS ? interval : 0;
+    /** @type {number} */
     this.minutes = type == goog.date.Interval.MINUTES ? interval : 0;
+    /** @type {number} */
     this.seconds = type == goog.date.Interval.SECONDS ? interval : 0;
   } else {
     this.years = /** @type {number} */ (opt_years) || 0;
@@ -1325,6 +1331,7 @@ goog.date.DateTime = function(
     opt_year, opt_month, opt_date, opt_hours, opt_minutes, opt_seconds,
     opt_milliseconds) {
   if (goog.isNumber(opt_year)) {
+    /** @override */
     this.date = new Date(
         opt_year, opt_month || 0, opt_date || 1, opt_hours || 0,
         opt_minutes || 0, opt_seconds || 0, opt_milliseconds || 0);
@@ -1641,7 +1648,7 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
 goog.date.DateTime.prototype.toUTCRfc3339String = function() {
   var date = this.toUTCIsoString(true).replace(' ', 'T');
   var millis = this.getUTCMilliseconds();
-  return (millis ? date + '.' + millis : date) + 'Z';
+  return (millis ? date + '.' + goog.string.padNumber(millis, 3) : date) + 'Z';
 };
 
 

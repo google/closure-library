@@ -417,6 +417,20 @@ function testSetValueInput() {
   assertEquals('', goog.dom.forms.getValue(el));
 }
 
+function testGetValueMeter() {
+  var el = goog.dom.createDom('meter', {'min': 0, 'max': 3, 'value': 2.3});
+  assertEquals(2.3, goog.dom.forms.getValue(el));
+}
+
+function testSetValueMeter() {
+  var el = goog.dom.createDom('meter', {'min': 1, 'max': 5, 'value': 3});
+
+  assertEquals(3, goog.dom.forms.getValue(el));
+
+  goog.dom.forms.setValue(el, 2);
+  assertEquals(2, goog.dom.forms.getValue(el));
+}
+
 function testGetValuePassword() {
   var el = goog.dom.getElement('pass');
   var result = goog.dom.forms.getValue(el);

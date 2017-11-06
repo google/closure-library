@@ -24,7 +24,7 @@ goog.require('goog.ui.media.YoutubeModel');
 var youtube;
 var control;
 var YOUTUBE_VIDEO_ID = 'dMH0bHeiRNg';
-var YOUTUBE_URL = 'http://www.youtube.com/watch?v=' + YOUTUBE_VIDEO_ID;
+var YOUTUBE_URL = 'https://www.youtube.com/watch?v=' + YOUTUBE_VIDEO_ID;
 var parent = goog.dom.createElement(goog.dom.TagName.DIV);
 
 function setUp() {

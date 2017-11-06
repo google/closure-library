@@ -83,6 +83,9 @@ goog.net.WebChannel = function() {};
  * an auth header to the server, which only checks the auth header at the time
  * when the channel is opened.
  *
+ * messageContentType: sent as initMessageHeaders via X-WebChannel-Content-Type,
+ * to inform the server the MIME type of WebChannel messages.
+ *
  * messageUrlParams: custom url query parameters to be added to every message
  * sent to the server. This object is mutable, and custom parameters may be
  * changed, removed or added during the runtime after a channel has been opened.
@@ -125,11 +128,20 @@ goog.net.WebChannel = function() {};
  *
  * fastHandshake: experimental feature to speed up the initial handshake, e.g.
  * leveraging QUIC 0-RTT, in-band version negotiation. This option defaults
- * to false.
+ * to false. To set this option to true, backgroundChannelTest needs be set
+ * to true too. Note it is allowed to send messages before the Open event is
+ * received after a channel has been connected. In order to enable 0-RTT,
+ * messages may be encoded as part of URL and therefore there will be a size
+ * limit for those immediate messages (e.g. 4KB).
+ *
+ * disableRedact: whether to disable logging redact. By default, redact is
+ * enabled to remove any message payload or user-provided info
+ * from closure logs.
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   initMessageHeaders: (!Object<string, string>|undefined),
+ *   messageContentType: (string|undefined),
  *   messageUrlParams: (!Object<string, string>|undefined),
  *   clientProtocolHeaderRequired: (boolean|undefined),
  *   concurrentRequestLimit: (number|undefined),
@@ -139,7 +151,8 @@ goog.net.WebChannel = function() {};
  *   httpSessionIdParam: (string|undefined),
  *   httpHeadersOverwriteParam: (string|undefined),
  *   backgroundChannelTest: (boolean|undefined),
- *   fastHandshake: (boolean|undefined)
+ *   fastHandshake: (boolean|undefined),
+ *   enableRedact: (boolean|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
@@ -154,7 +167,7 @@ goog.net.WebChannel.Options;
  * Unicode strings (sent by the server) may or may not need be escaped, as
  * decided by the server.
  *
- * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
+ * @typedef {(!ArrayBuffer|!Blob|!Object<string, !Object|string>|!Array|string)}
  */
 goog.net.WebChannel.MessageData;
 
@@ -167,13 +180,48 @@ goog.net.WebChannel.prototype.open = goog.abstractMethod;
 
 /**
  * Close the WebChannel.
+ *
+ * This is a full close (shutdown) with no guarantee of FIFO delivery in respect
+ * to any in-flight messages sent to the server.
+ *
+ * If you need such a guarantee, see the Half the halfClose() method.
  */
 goog.net.WebChannel.prototype.close = goog.abstractMethod;
 
 
 /**
+ * Half-close the WebChannel.
+ *
+ * Half-close semantics:
+ * 1. delivered as a regular message in FIFO programming order
+ * 2. the server is expected to return a half-close too (with or without
+ *    application involved), which will trigger a full close (shutdown)
+ *    on the client side
+ * 3. for now, the half-close event defined for server-initiated
+ *    half-close is not exposed to the client application
+ * 4. a client-side half-close may be triggered internally when the client
+ *    receives a half-close from the server; and the client is expected to
+ *    do a full close after the half-close is acked and delivered
+ *    on the server-side.
+ * 5. Full close is always a forced one. See the close() method.
+ *
+ * New messages sent after halfClose() will be dropped.
+ */
+goog.net.WebChannel.prototype.halfClose = goog.abstractMethod;
+
+
+/**
  * Sends a message to the server that maintains the other end point of
  * the WebChannel.
+ *
+ * O-RTT behavior:
+ * 1. messages sent before open() is called will always be delivered as
+ *    part of the handshake, i.e. with 0-RTT
+ * 2. messages sent after open() is called but before the OPEN event
+ *    is received will be delivered as part of the handshake if
+ *    send() is called from the same execution context as open().
+ * 3. otherwise, those messages will be buffered till the handshake
+ *    is completed (which will fire the OPEN event).
  *
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
  */
@@ -225,6 +273,14 @@ goog.inherits(goog.net.WebChannel.MessageEvent, goog.events.Event);
  * @type {!goog.net.WebChannel.MessageData}
  */
 goog.net.WebChannel.MessageEvent.prototype.data;
+
+
+/**
+ * The metadata key when the MESSAGE event represents a metadata message.
+ *
+ * @type {string|undefined}
+ */
+goog.net.WebChannel.MessageEvent.prototype.metadataKey;
 
 
 /**
@@ -341,6 +397,16 @@ goog.net.WebChannel.RuntimeProperties.prototype.getConcurrentRequestLimit =
  * the channel is created.
  */
 goog.net.WebChannel.RuntimeProperties.prototype.isSpdyEnabled =
+    goog.abstractMethod;
+
+
+/**
+ * @return {number} The number of requests (for sending messages to the server)
+ * that are pending. If this number is approaching the value of
+ * getConcurrentRequestLimit(), client-to-server message delivery may experience
+ * a higher latency.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getPendingRequestCount =
     goog.abstractMethod;
 
 
@@ -473,3 +539,13 @@ goog.net.WebChannel.X_CLIENT_WIRE_PROTOCOL = 'X-Client-Wire-Protocol';
  * @type {string}
  */
 goog.net.WebChannel.X_HTTP_SESSION_ID = 'X-HTTP-Session-Id';
+
+
+/**
+ * A request header for specifying the content-type of WebChannel messages,
+ * e.g. application-defined JSON encoding styles. Currently this header
+ * is sent by the client via initMessageHeaders when the channel is opened.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_WEBCHANNEL_CONTENT_TYPE = 'X-WebChannel-Content-Type';

@@ -251,18 +251,18 @@ goog.math.Long.fromBits = function(lowBits, highBits) {
  */
 goog.math.Long.fromString = function(str, opt_radix) {
   if (str.length == 0) {
-    throw Error('number format error: empty string');
+    throw new Error('number format error: empty string');
   }
 
   var radix = opt_radix || 10;
   if (radix < 2 || 36 < radix) {
-    throw Error('radix out of range: ' + radix);
+    throw new Error('radix out of range: ' + radix);
   }
 
   if (str.charAt(0) == '-') {
     return goog.math.Long.fromString(str.substring(1), radix).negate();
   } else if (str.indexOf('-') >= 0) {
-    throw Error('number format error: interior "-" character: ' + str);
+    throw new Error('number format error: interior "-" character: ' + str);
   }
 
   // Do several (8) digits each time through the loop, so as to
@@ -295,7 +295,7 @@ goog.math.Long.fromString = function(str, opt_radix) {
 goog.math.Long.isStringInRange = function(str, opt_radix) {
   var radix = opt_radix || 10;
   if (radix < 2 || 36 < radix) {
-    throw Error('radix out of range: ' + radix);
+    throw new Error('radix out of range: ' + radix);
   }
 
   var extremeValue = (str.charAt(0) == '-') ?
@@ -430,7 +430,7 @@ goog.math.Long.prototype.toNumber = function() {
 goog.math.Long.prototype.toString = function(opt_radix) {
   var radix = opt_radix || 10;
   if (radix < 2 || 36 < radix) {
-    throw Error('radix out of range: ' + radix);
+    throw new Error('radix out of range: ' + radix);
   }
 
   if (this.isZero()) {
@@ -755,7 +755,7 @@ goog.math.Long.prototype.multiply = function(other) {
  */
 goog.math.Long.prototype.div = function(other) {
   if (other.isZero()) {
-    throw Error('division by zero');
+    throw new Error('division by zero');
   } else if (this.isZero()) {
     return goog.math.Long.getZero();
   }

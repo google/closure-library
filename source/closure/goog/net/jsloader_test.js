@@ -65,29 +65,8 @@ function testSafeLoad() {
 }
 
 
-// Sunny day scenario for the unsafe load function.
-function testLoad() {
-  window.test1 = null;
-  var testUrl = 'testdata/jsloader_test1.js';
-  var result = goog.net.jsloader.load(testUrl);
-
-  return result.then(function() {
-    var script = result.defaultScope_.script_;
-
-    assertNotNull('script created', script);
-    assertEquals('encoding is utf-8', 'UTF-8', script.charset);
-
-    // Check that the URI matches ours.
-    assertTrue('server URI', script.src.indexOf(testUrl) >= 0);
-
-    // Check that the script was really loaded.
-    assertEquals('verification object', 'Test #1 loaded', window.test1);
-  });
-}
-
-
-// Sunny day scenario for loadAndVerify function.
-function testLoadAndVerify() {
+// Sunny day scenario for safeLoadAndVerify function.
+function testSafeLoadAndVerify() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'test2');
@@ -100,7 +79,7 @@ function testLoadAndVerify() {
 
 
 // What happens when the verification object is not set by the loaded script?
-function testLoadAndVerifyError() {
+function testSafeLoadAndVerifyError() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'fake');
@@ -115,7 +94,7 @@ function testLoadAndVerifyError() {
 
 
 // Tests that callers can cancel the deferred without error.
-function testLoadAndVerifyCanceled() {
+function testSafeLoadAndVerifyCanceled() {
   var testUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('testdata/jsloader_test2.js'));
   var result = goog.net.jsloader.safeLoadAndVerify(testUrl, 'test2');
@@ -123,8 +102,8 @@ function testLoadAndVerifyCanceled() {
 }
 
 
-// Test the loadMany function.
-function testLoadMany() {
+// Test the safeLoadMany function.
+function testSafeLoadMany() {
   window.test1 = null;
   window.test4 = null;
 

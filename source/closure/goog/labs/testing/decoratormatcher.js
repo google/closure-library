@@ -52,7 +52,7 @@ goog.labs.testing.AnythingMatcher.prototype.matches = function(actualObject) {
  * @override
  */
 goog.labs.testing.AnythingMatcher.prototype.describe = function(actualObject) {
-  throw Error('AnythingMatcher should never fail!');
+  throw new Error('AnythingMatcher should never fail!');
 };
 
 

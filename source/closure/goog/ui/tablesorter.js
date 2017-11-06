@@ -96,7 +96,7 @@ goog.ui.TableSorter.prototype.sortableHeaderRowIndex_ = 0;
  */
 goog.ui.TableSorter.prototype.setSortableHeaderRowIndex = function(index) {
   if (this.isInDocument()) {
-    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
   this.sortableHeaderRowIndex_ = index;
 };

@@ -868,7 +868,7 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
       // prefix (since the new strokes end at an existing node), or an existing
       // shortcut would be triggered by the prefix to this new shortcut (since
       // there is already a terminal node on the path we are trying to create).
-      throw Error('Keyboard shortcut conflicts with existing shortcut');
+      throw new Error('Keyboard shortcut conflicts with existing shortcut');
     }
   });
 
@@ -1019,6 +1019,15 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (!this.isValidShortcut_(event)) {
     return;
   }
+  // For possible printable-key events, we cannot identify whether the events
+  // are used for typing characters until we receive respective keyup events.
+  // Therefore, we handle this event when we receive a succeeding keyup event
+  // to verify this event is not used for typing characters. preventDefault is
+  // not called on the event to avoid disrupting a character input.
+  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
+    this.isPrintableKey_ = false;
+    return;
+  }
 
   var keyCode = goog.events.KeyCodes.normalizeKeyCode(event.keyCode);
   var keyName = event.key;
@@ -1047,15 +1056,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     this.setCurrentTree_(node.next);
   }
 
-  // For possible printable-key events, we cannot identify whether the events
-  // are used for typing characters until we receive respective keyup events.
-  // Therefore, we handle this event when we receive a succeeding keyup event
-  // to verify this event is not used for typing characters. preventDefault is
-  // not called on the event to avoid disrupting a character input.
-  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
-    this.isPrintableKey_ = false;
-    return;
-  } else if (!node) {
+  if (!node) {
     // This stroke does not correspond to a shortcut or continued sequence.
     return;
   } else if (node.next) {

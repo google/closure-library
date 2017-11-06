@@ -118,7 +118,9 @@ goog.structs.CircularBuffer.prototype.clear = function() {
 };
 
 
-/** @return {!Array<T>} The values in the buffer. */
+/**
+ * @return {!Array<T>} The values in the buffer ordered from oldest to newest.
+ */
 goog.structs.CircularBuffer.prototype.getValues = function() {
   // getNewestValues returns all the values if the maxCount parameter is the
   // count
@@ -130,7 +132,8 @@ goog.structs.CircularBuffer.prototype.getValues = function() {
  * Returns the newest values in the buffer up to {@code count}.
  * @param {number} maxCount The maximum number of values to get. Should be a
  *     positive number.
- * @return {!Array<T>} The newest values in the buffer up to {@code count}.
+ * @return {!Array<T>} The newest values in the buffer up to {@code count}. The
+ *     values are ordered from oldest to newest.
  */
 goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
   var l = this.getCount();
@@ -205,7 +208,7 @@ goog.structs.CircularBuffer.prototype.getLast = function() {
  */
 goog.structs.CircularBuffer.prototype.normalizeIndex_ = function(index) {
   if (index >= this.buff_.length) {
-    throw Error('Out of bounds exception');
+    throw new Error('Out of bounds exception');
   }
 
   if (this.buff_.length < this.maxSize_) {

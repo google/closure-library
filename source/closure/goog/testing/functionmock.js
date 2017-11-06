@@ -69,7 +69,7 @@ goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
  */
 goog.testing.MethodMock = function(scope, functionName, opt_strictness) {
   if (!(functionName in scope)) {
-    throw Error(functionName + ' is not a property of the given scope.');
+    throw new Error(functionName + ' is not a property of the given scope.');
   }
 
   var fn = goog.testing.FunctionMock(functionName, opt_strictness);

@@ -158,7 +158,7 @@ goog.module.ModuleInfo.prototype.setModuleConstructor = function(constructor) {
   if (this.moduleConstructor_ === goog.module.BaseModule) {
     this.moduleConstructor_ = constructor;
   } else {
-    throw Error('Cannot set module constructor more than once.');
+    throw new Error('Cannot set module constructor more than once.');
   }
 };
 

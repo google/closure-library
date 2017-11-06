@@ -226,11 +226,11 @@ goog.ui.Prompt.prototype.setRows = function(rows) {
   if (this.isInDocument()) {
     if (this.userInputEl_.tagName == goog.dom.TagName.INPUT) {
       if (rows > 1) {
-        throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+        throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
       }
     } else {
       if (rows <= 1) {
-        throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+        throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
       }
       this.userInputEl_.rows = rows;
     }

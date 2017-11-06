@@ -145,7 +145,7 @@ goog.labs.mock.getFunctionName_ = function(func) {
 
 
 /**
- * Returns a nicely formatted, readble representation of a method call.
+ * Returns a nicely formatted, readable representation of a method call.
  * @private
  * @param {string} methodName The name of the method.
  * @param {Array<?>=} opt_args The method arguments.
@@ -877,7 +877,7 @@ goog.labs.mock.StubBinderImpl_.prototype.thenReturn = function(value) {
  * goog.labs.mock.when(mockObj).getFoo(3)
  *     .thenReturn(4)
  *     .then(function() {
- *         throw Error('exceptional case');
+ *         throw new Error('exceptional case');
  *     });
  *
  * @param {!Object} mockObject The mocked object.

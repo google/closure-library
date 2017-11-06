@@ -277,7 +277,7 @@ goog.messaging.PortChannel.prototype.deliver_ = function(e) {
 
   if (goog.messaging.PortChannel.REQUIRES_SERIALIZATION_) {
     try {
-      data = goog.json.parse(data);
+      data = JSON.parse(data);
     } catch (error) {
       // Ignore any non-JSON messages.
       return;

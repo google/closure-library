@@ -123,7 +123,7 @@ goog.html.SafeStyleSheet.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  */
 goog.html.SafeStyleSheet.createRule = function(selector, style) {
   if (goog.string.contains(selector, '<')) {
-    throw Error('Selector does not allow \'<\', got: ' + selector);
+    throw new Error('Selector does not allow \'<\', got: ' + selector);
   }
 
   // Remove strings.
@@ -132,14 +132,14 @@ goog.html.SafeStyleSheet.createRule = function(selector, style) {
 
   // Check characters allowed in CSS3 selectors.
   if (!/^[-_a-zA-Z0-9#.:* ,>+~[\]()=^$|]+$/.test(selectorToCheck)) {
-    throw Error(
+    throw new Error(
         'Selector allows only [-_a-zA-Z0-9#.:* ,>+~[\\]()=^$|] and ' +
         'strings, got: ' + selector);
   }
 
   // Check balanced () and [].
   if (!goog.html.SafeStyleSheet.hasBalancedBrackets_(selectorToCheck)) {
-    throw Error('() and [] in selector must be balanced, got: ' + selector);
+    throw new Error('() and [] in selector must be balanced, got: ' + selector);
   }
 
   if (!(style instanceof goog.html.SafeStyle)) {

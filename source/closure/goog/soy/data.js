@@ -27,14 +27,17 @@ goog.provide('goog.soy.data.SanitizedCss');
 goog.provide('goog.soy.data.SanitizedHtml');
 goog.provide('goog.soy.data.SanitizedHtmlAttribute');
 goog.provide('goog.soy.data.SanitizedJs');
+goog.provide('goog.soy.data.SanitizedStyle');
 goog.provide('goog.soy.data.SanitizedTrustedResourceUri');
 goog.provide('goog.soy.data.SanitizedUri');
 goog.provide('goog.soy.data.UnsanitizedText');
 
 goog.require('goog.Uri');
+goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.uncheckedconversions');
@@ -87,6 +90,9 @@ goog.soy.data.SanitizedContentKind = {
    * A CSS3 declaration, property, value or group of semicolon separated
    * declarations.
    */
+  STYLE: goog.DEBUG ? {sanitizedContentStyle: true} : {},
+
+  /** A CSS3 style sheet (list of rules). */
   CSS: goog.DEBUG ? {sanitizedContentCss: true} : {},
 
   /**
@@ -114,7 +120,7 @@ goog.soy.data.SanitizedContentKind = {
  * @constructor
  */
 goog.soy.data.SanitizedContent = function() {
-  throw Error('Do not instantiate directly');
+  throw new Error('Do not instantiate directly');
 };
 
 
@@ -166,7 +172,7 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
     return goog.html.SafeHtml.htmlEscape(this.toString());
   }
   if (this.contentKind !== goog.soy.data.SanitizedContentKind.HTML) {
-    throw Error('Sanitized content was not of kind TEXT or HTML.');
+    throw new Error('Sanitized content was not of kind TEXT or HTML.');
   }
   return goog.html.uncheckedconversions
       .safeHtmlFromStringKnownToSatisfyTypeContract(
@@ -184,7 +190,7 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
  */
 goog.soy.data.SanitizedContent.prototype.toSafeUrl = function() {
   if (this.contentKind !== goog.soy.data.SanitizedContentKind.URI) {
-    throw Error('Sanitized content was not of kind URI.');
+    throw new Error('Sanitized content was not of kind URI.');
   }
   return goog.html.uncheckedconversions
       .safeUrlFromStringKnownToSatisfyTypeContract(
@@ -357,6 +363,20 @@ goog.soy.data.SanitizedTrustedResourceUri.prototype.contentDir =
     goog.i18n.bidi.Dir.LTR;
 
 /**
+ * Converts sanitized content into TrustedResourceUrl without modification.
+ * @return {!goog.html.TrustedResourceUrl}
+ */
+goog.soy.data.SanitizedTrustedResourceUri.prototype.toTrustedResourceUrl =
+    function() {
+  return goog.html.uncheckedconversions
+      .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedContent of kind TRUSTED_RESOURCE_URI produces ' +
+              'TrustedResourceUrl-contract-compliant value.'),
+          this.toString());
+};
+
+/**
  * Checks if the value could be used as the Soy type {trusted_resource_uri}.
  * @param {*} value
  * @return {boolean}
@@ -407,9 +427,47 @@ goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
 
 
 /**
- * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
+ * Content of type {@link goog.soy.data.SanitizedContentKind.STYLE}.
  *
  * The content is non-attacker-exploitable CSS, such as {@code color:#c3d9ff}.
+ * The content direction is LTR.
+ *
+ * @extends {goog.soy.data.SanitizedContent}
+ * @constructor
+ */
+goog.soy.data.SanitizedStyle = function() {
+  goog.soy.data.SanitizedStyle.base(this, 'constructor');
+};
+goog.inherits(goog.soy.data.SanitizedStyle, goog.soy.data.SanitizedContent);
+
+
+/** @override */
+goog.soy.data.SanitizedStyle.prototype.contentKind =
+    goog.soy.data.SanitizedContentKind.STYLE;
+
+
+/** @override */
+goog.soy.data.SanitizedStyle.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
+
+/**
+ * Checks if the value could be used as the Soy type {css}.
+ * @param {*} value
+ * @return {boolean}
+ */
+goog.soy.data.SanitizedStyle.isCompatibleWith = function(value) {
+  return goog.isString(value) ||
+      value instanceof goog.soy.data.SanitizedStyle ||
+      value instanceof goog.soy.data.UnsanitizedText ||
+      value instanceof goog.html.SafeStyle;
+};
+
+
+
+/**
+ * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
+ *
+ * The content is non-attacker-exploitable CSS, such as {@code @import url(x)}.
  * The content direction is LTR.
  *
  * @extends {goog.soy.data.SanitizedContent}
@@ -439,5 +497,29 @@ goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
   return goog.isString(value) ||
       value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.soy.data.UnsanitizedText ||
-      value instanceof goog.html.SafeStyle;
+      value instanceof goog.html.SafeStyle ||  // TODO(jakubvrana): Delete.
+      value instanceof goog.html.SafeStyleSheet;
+};
+
+
+/**
+ * Converts SanitizedCss into SafeStyleSheet.
+ * Note: SanitizedCss in Soy represents both SafeStyle and SafeStyleSheet in
+ * Closure. It's about to be split so that SanitizedCss represents only
+ * SafeStyleSheet.
+ * @return {!goog.html.SafeStyleSheet}
+ */
+goog.soy.data.SanitizedCss.prototype.toSafeStyleSheet = function() {
+  var value = this.toString();
+  // TODO(jakubvrana): Remove this check when there's a separate type for style
+  // declaration.
+  goog.asserts.assert(
+      /[@{]|^\s*$/.test(value),
+      'value doesn\'t look like style sheet: ' + value);
+  return goog.html.uncheckedconversions
+      .safeStyleSheetFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedCss produces SafeStyleSheet-contract-compliant ' +
+              'value.'),
+          value);
 };

@@ -95,6 +95,7 @@ function testString() {
       'Assertion failed: ouch 1');
 }
 
+// jslint:ignore start
 function testFunction() {
   function f(){};
   assertEquals(f, goog.asserts.assertFunction(f));
@@ -111,6 +112,7 @@ function testFunction() {
       goog.partial(goog.asserts.assertFunction, null, 'ouch %s', 1),
       'Assertion failed: ouch 1');
 }
+// jslint:ignore end
 
 function testObject() {
   var o = {};
@@ -269,4 +271,22 @@ function testAssertWithCustomErrorHandler() {
   } finally {
     goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
   }
+}
+
+function testAssertFinite() {
+  assertEquals(9, goog.asserts.assertFinite(9));
+  assertEquals(0, goog.asserts.assertFinite(0));
+  assertThrows(goog.partial(goog.asserts.assertFinite, NaN));
+  assertThrows(goog.partial(goog.asserts.assertFinite, Infinity));
+  assertThrows(goog.partial(goog.asserts.assertFinite, -Infinity));
+  assertThrows(goog.partial(goog.asserts.assertFinite, 'foo'));
+  assertThrows(goog.partial(goog.asserts.assertFinite, true));
+
+  // Test error messages.
+  doTestMessage(
+      goog.partial(goog.asserts.assertFinite, NaN),
+      'Assertion failed: Expected NaN to be a finite number but it is not.');
+  doTestMessage(
+      goog.partial(goog.asserts.assertFinite, NaN, 'ouch %s', 1),
+      'Assertion failed: ouch 1');
 }

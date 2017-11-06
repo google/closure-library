@@ -102,6 +102,19 @@ function assertStoreValues(values, db) {
   });
 }
 
+/**
+ * Assert the keys are as expected.
+ * @param {!Array<string>} keys - The expected keys.
+ * @param {!goog.db.IndexedDb} db - The indexed db.
+ */
+function assertStoreKeyValues(keys, db) {
+  var assertStoreTx = db.createTransaction(['store']);
+  assertStoreTx.objectStore('store').getAllKeys().addCallback(function(
+      results) {
+    assertSameElements(keys, results);
+  });
+}
+
 function assertStoreObjectValues(values, db) {
   var assertStoreTx = db.createTransaction(['store']);
   assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
@@ -700,6 +713,23 @@ function testGetAll() {
 
   var addData = goog.partial(populateStore, values, keys);
   var checkStore = goog.partial(assertStoreValues, values);
+
+  return globalDb.branch()
+      .addCallback(addStore)
+      .addCallback(addData)
+      .addCallback(checkStore);
+}
+
+function testGetAllKeys() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3'];
+  var keys = ['a', 'b', 'c'];
+
+  var addData = goog.partial(populateStore, values, keys);
+  var checkStore = goog.partial(assertStoreKeyValues, keys);
 
   return globalDb.branch()
       .addCallback(addStore)

@@ -192,7 +192,7 @@ goog.graphics.Path.prototype.moveTo = function(x, y) {
 goog.graphics.Path.prototype.lineTo = function(var_args) {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with lineTo');
+    throw new Error('Path cannot start with lineTo');
   }
   if (lastSegment != goog.graphics.Path.Segment.LINETO) {
     this.segments_.push(goog.graphics.Path.Segment.LINETO);
@@ -222,7 +222,7 @@ goog.graphics.Path.prototype.lineTo = function(var_args) {
 goog.graphics.Path.prototype.curveTo = function(var_args) {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with curve');
+    throw new Error('Path cannot start with curve');
   }
   if (lastSegment != goog.graphics.Path.Segment.CURVETO) {
     this.segments_.push(goog.graphics.Path.Segment.CURVETO);
@@ -250,7 +250,7 @@ goog.graphics.Path.prototype.curveTo = function(var_args) {
 goog.graphics.Path.prototype.close = function() {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with close');
+    throw new Error('Path cannot start with close');
   }
   if (lastSegment != goog.graphics.Path.Segment.CLOSE) {
     this.segments_.push(goog.graphics.Path.Segment.CLOSE);
@@ -489,7 +489,7 @@ goog.graphics.Path.prototype.createTransformedPath = function(tx) {
  */
 goog.graphics.Path.prototype.transform = function(tx) {
   if (!this.isSimple()) {
-    throw Error('Non-simple path');
+    throw new Error('Non-simple path');
   }
   tx.transform(
       this.arguments_, 0, this.arguments_, 0, this.arguments_.length / 2);

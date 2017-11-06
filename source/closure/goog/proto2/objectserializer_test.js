@@ -333,6 +333,186 @@ function testDeserialization() {
       proto2.TestAllTypes.NestedEnum.FOO, message.getOptionalNestedEnum());
 }
 
+function testDeserializationByName() {
+  var simplified = {
+    'optional_int32': 101,
+    'optional_int64': '102',
+    'optional_uint32': 103,
+    'optional_uint64': '104',
+    'optional_sint32': 105,
+    'optional_sint64': '106',
+    'optional_fixed32': 107,
+    'optional_fixed64': '108',
+    'optional_sfixed32': 109,
+    'optional_sfixed64': '110',
+    'optional_float': 111.5,
+    'optional_double': 112.5,
+    'optional_bool': true,
+    'optional_string': 'test',
+    'optional_bytes': 'abcd',
+    'optionalgroup': {'a': 113},
+    'optional_nested_message': {'b': 114},
+    'optional_nested_enum': proto2.TestAllTypes.NestedEnum.FOO
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer(
+      goog.proto2.ObjectSerializer.KeyOption.NAME);
+
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertTrue(message.hasOptionalInt32());
+  assertTrue(message.hasOptionalInt64());
+  assertTrue(message.hasOptionalUint32());
+  assertTrue(message.hasOptionalUint64());
+  assertTrue(message.hasOptionalSint32());
+  assertTrue(message.hasOptionalSint64());
+  assertTrue(message.hasOptionalFixed32());
+  assertTrue(message.hasOptionalFixed64());
+  assertTrue(message.hasOptionalSfixed32());
+  assertTrue(message.hasOptionalSfixed64());
+  assertTrue(message.hasOptionalFloat());
+  assertTrue(message.hasOptionalDouble());
+  assertTrue(message.hasOptionalBool());
+  assertTrue(message.hasOptionalString());
+  assertTrue(message.hasOptionalBytes());
+  assertTrue(message.hasOptionalgroup());
+  assertTrue(message.hasOptionalNestedMessage());
+  assertTrue(message.hasOptionalNestedEnum());
+
+  assertEquals(1, message.optionalInt32Count());
+  assertEquals(1, message.optionalInt64Count());
+  assertEquals(1, message.optionalUint32Count());
+  assertEquals(1, message.optionalUint64Count());
+  assertEquals(1, message.optionalSint32Count());
+  assertEquals(1, message.optionalSint64Count());
+  assertEquals(1, message.optionalFixed32Count());
+  assertEquals(1, message.optionalFixed64Count());
+  assertEquals(1, message.optionalSfixed32Count());
+  assertEquals(1, message.optionalSfixed64Count());
+  assertEquals(1, message.optionalFloatCount());
+  assertEquals(1, message.optionalDoubleCount());
+  assertEquals(1, message.optionalBoolCount());
+  assertEquals(1, message.optionalStringCount());
+  assertEquals(1, message.optionalBytesCount());
+  assertEquals(1, message.optionalgroupCount());
+  assertEquals(1, message.optionalNestedMessageCount());
+  assertEquals(1, message.optionalNestedEnumCount());
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals('102', message.getOptionalInt64());
+  assertEquals(103, message.getOptionalUint32());
+  assertEquals('104', message.getOptionalUint64());
+  assertEquals(105, message.getOptionalSint32());
+  assertEquals('106', message.getOptionalSint64());
+  assertEquals(107, message.getOptionalFixed32());
+  assertEquals('108', message.getOptionalFixed64());
+  assertEquals(109, message.getOptionalSfixed32());
+  assertEquals('110', message.getOptionalSfixed64());
+  assertEquals(111.5, message.getOptionalFloat());
+  assertEquals(112.5, message.getOptionalDouble());
+  assertEquals(true, message.getOptionalBool());
+  assertEquals('test', message.getOptionalString());
+  assertEquals('abcd', message.getOptionalBytes());
+  assertEquals(113, message.getOptionalgroup().getA());
+  assertEquals(114, message.getOptionalNestedMessage().getB());
+
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO, message.getOptionalNestedEnum());
+}
+
+function testDeserializationByCamelCaseName() {
+  var simplified = {
+    'optionalInt32': 101,
+    'optionalInt64': '102',
+    'optionalUint32': 103,
+    'optionalUint64': '104',
+    'optionalSint32': 105,
+    'optionalSint64': '106',
+    'optionalFixed32': 107,
+    'optionalFixed64': '108',
+    'optionalSfixed32': 109,
+    'optionalSfixed64': '110',
+    'optionalFloat': 111.5,
+    'optionalDouble': 112.5,
+    'optionalBool': true,
+    'optionalString': 'test',
+    'optionalBytes': 'abcd',
+    'optionalgroup': {'a': 113},
+    'optionalNestedMessage': {'b': 114},
+    'optionalNestedEnum': proto2.TestAllTypes.NestedEnum.FOO
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer(
+      goog.proto2.ObjectSerializer.KeyOption.CAMEL_CASE_NAME);
+
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertTrue(message.hasOptionalInt32());
+  assertTrue(message.hasOptionalInt64());
+  assertTrue(message.hasOptionalUint32());
+  assertTrue(message.hasOptionalUint64());
+  assertTrue(message.hasOptionalSint32());
+  assertTrue(message.hasOptionalSint64());
+  assertTrue(message.hasOptionalFixed32());
+  assertTrue(message.hasOptionalFixed64());
+  assertTrue(message.hasOptionalSfixed32());
+  assertTrue(message.hasOptionalSfixed64());
+  assertTrue(message.hasOptionalFloat());
+  assertTrue(message.hasOptionalDouble());
+  assertTrue(message.hasOptionalBool());
+  assertTrue(message.hasOptionalString());
+  assertTrue(message.hasOptionalBytes());
+  assertTrue(message.hasOptionalgroup());
+  assertTrue(message.hasOptionalNestedMessage());
+  assertTrue(message.hasOptionalNestedEnum());
+
+  assertEquals(1, message.optionalInt32Count());
+  assertEquals(1, message.optionalInt64Count());
+  assertEquals(1, message.optionalUint32Count());
+  assertEquals(1, message.optionalUint64Count());
+  assertEquals(1, message.optionalSint32Count());
+  assertEquals(1, message.optionalSint64Count());
+  assertEquals(1, message.optionalFixed32Count());
+  assertEquals(1, message.optionalFixed64Count());
+  assertEquals(1, message.optionalSfixed32Count());
+  assertEquals(1, message.optionalSfixed64Count());
+  assertEquals(1, message.optionalFloatCount());
+  assertEquals(1, message.optionalDoubleCount());
+  assertEquals(1, message.optionalBoolCount());
+  assertEquals(1, message.optionalStringCount());
+  assertEquals(1, message.optionalBytesCount());
+  assertEquals(1, message.optionalgroupCount());
+  assertEquals(1, message.optionalNestedMessageCount());
+  assertEquals(1, message.optionalNestedEnumCount());
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals('102', message.getOptionalInt64());
+  assertEquals(103, message.getOptionalUint32());
+  assertEquals('104', message.getOptionalUint64());
+  assertEquals(105, message.getOptionalSint32());
+  assertEquals('106', message.getOptionalSint64());
+  assertEquals(107, message.getOptionalFixed32());
+  assertEquals('108', message.getOptionalFixed64());
+  assertEquals(109, message.getOptionalSfixed32());
+  assertEquals('110', message.getOptionalSfixed64());
+  assertEquals(111.5, message.getOptionalFloat());
+  assertEquals(112.5, message.getOptionalDouble());
+  assertEquals(true, message.getOptionalBool());
+  assertEquals('test', message.getOptionalString());
+  assertEquals('abcd', message.getOptionalBytes());
+  assertEquals(113, message.getOptionalgroup().getA());
+  assertEquals(114, message.getOptionalNestedMessage().getB());
+
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO, message.getOptionalNestedEnum());
+}
+
 function testDeserializationUnknownEnumValue() {
   var simplified = {21: 1001};
 
@@ -592,4 +772,145 @@ function testDeserializationBooleanAsNumberTrue() {
   assertNotNull(message);
 
   assertTrue(message.getOptionalBool());
+}
+
+function testRoundTripping() {
+  var message = new proto2.TestAllTypes();
+
+  // Set the fields.
+  // Singular.
+  message.setOptionalInt32(101);
+  message.setOptionalInt64('102');
+  message.setOptionalUint32(103);
+  message.setOptionalUint64('104');
+  message.setOptionalSint32(105);
+  message.setOptionalSint64('106');
+  message.setOptionalFixed32(107);
+  message.setOptionalFixed64('108');
+  message.setOptionalSfixed32(109);
+  message.setOptionalSfixed64('110');
+  message.setOptionalFloat(111.5);
+  message.setOptionalDouble(112.5);
+  message.setOptionalBool(true);
+  message.setOptionalString('test');
+  message.setOptionalBytes('abcd');
+
+  var group = new proto2.TestAllTypes.OptionalGroup();
+  group.setA(111);
+
+  message.setOptionalgroup(group);
+
+  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+  nestedMessage.setB(112);
+
+  message.setOptionalNestedMessage(nestedMessage);
+
+  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+
+  // Repeated.
+  message.addRepeatedInt32(201);
+  message.addRepeatedInt32(202);
+
+  var message_serialized_by_tag =
+      new goog.proto2.ObjectSerializer().serialize(message);
+
+  var message_serialized_by_tag_deserialized_by_tag = new proto2.TestAllTypes();
+  new goog.proto2.ObjectSerializer().deserializeTo(
+      message_serialized_by_tag_deserialized_by_tag, message_serialized_by_tag);
+  assertObjectEquals(message, message_serialized_by_tag_deserialized_by_tag);
+
+  var message_serialized_by_tag_deserialized_by_name =
+      new proto2.TestAllTypes();
+  // Deserializing by name still works since the parser will use the tags.
+  new goog.proto2.ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.NAME)
+      .deserializeTo(
+          message_serialized_by_tag_deserialized_by_name,
+          message_serialized_by_tag);
+  assertObjectEquals(message, message_serialized_by_tag_deserialized_by_name);
+
+  var message_serialized_by_tag_deserialized_by_camel_case_name =
+      new proto2.TestAllTypes();
+  // Deserializing by camel case name still works since the parser will use the
+  // tags.
+  new goog.proto2
+      .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.CAMEL_CASE_NAME)
+      .deserializeTo(
+          message_serialized_by_tag_deserialized_by_camel_case_name,
+          message_serialized_by_tag);
+  assertObjectEquals(
+      message, message_serialized_by_tag_deserialized_by_camel_case_name);
+
+  var message_serialized_by_name =
+      new goog.proto2
+          .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.NAME)
+          .serialize(message);
+
+  var message_serialized_by_name_deserialized_by_tag =
+      new proto2.TestAllTypes();
+  assertThrows(function() {
+    // Attempting to deserialize by tag will fail since names were used for
+    // serialization.
+    new goog.proto2.ObjectSerializer().deserializeTo(
+        message_serialized_by_name_deserialized_by_tag,
+        message_serialized_by_name);
+  });
+
+  var message_serialized_by_name_deserialized_by_name =
+      new proto2.TestAllTypes();
+  new goog.proto2.ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.NAME)
+      .deserializeTo(
+          message_serialized_by_name_deserialized_by_name,
+          message_serialized_by_name);
+  assertObjectEquals(message, message_serialized_by_name_deserialized_by_name);
+
+  var message_serialized_by_name_deserialized_by_camel_case_name =
+      new proto2.TestAllTypes();
+  // Deserializing by camel case name works since the transforming
+  // underscore_delimited to underscore_delimited is a no-op.
+  new goog.proto2
+      .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.CAMEL_CASE_NAME)
+      .deserializeTo(
+          message_serialized_by_name_deserialized_by_camel_case_name,
+          message_serialized_by_name);
+  assertObjectEquals(
+      message, message_serialized_by_name_deserialized_by_camel_case_name);
+
+  var message_serialized_by_camel_case_name =
+      new goog.proto2
+          .ObjectSerializer(
+              goog.proto2.ObjectSerializer.KeyOption.CAMEL_CASE_NAME)
+          .serialize(message);
+
+  var message_serialized_by_camel_case_name_deserialized_by_tag =
+      new proto2.TestAllTypes();
+  assertThrows(function() {
+    // Attempting to deserialize by tag will fail since camel case names were
+    // used for serialization.
+    new goog.proto2.ObjectSerializer().deserializeTo(
+        message_serialized_by_camel_case_name_deserialized_by_tag,
+        message_serialized_by_camel_case_name);
+  });
+
+  var message_serialized_by_camel_case_name_deserialized_by_name =
+      new proto2.TestAllTypes();
+  assertThrows(function() {
+    // Attempting to deserialize by original name will fail since camel case
+    // names were used for serialization.
+    new goog.proto2
+        .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.NAME)
+        .deserializeTo(
+            message_serialized_by_camel_case_name_deserialized_by_name,
+            message_serialized_by_camel_case_name);
+  });
+
+  var message_serialized_by_camel_case_name_deserialized_by_camel_case_name =
+      new proto2.TestAllTypes();
+  new goog.proto2
+      .ObjectSerializer(goog.proto2.ObjectSerializer.KeyOption.CAMEL_CASE_NAME)
+      .deserializeTo(
+          message_serialized_by_camel_case_name_deserialized_by_camel_case_name,
+          message_serialized_by_camel_case_name);
+  assertObjectEquals(
+      message,
+      message_serialized_by_camel_case_name_deserialized_by_camel_case_name);
 }

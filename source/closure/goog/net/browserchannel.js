@@ -1196,7 +1196,7 @@ goog.net.BrowserChannel.prototype.setAllowChunkedMode = function(
  */
 goog.net.BrowserChannel.prototype.sendMap = function(map, opt_context) {
   if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
-    throw Error('Invalid operation: sending map when state is closed');
+    throw new Error('Invalid operation: sending map when state is closed');
   }
 
   // We can only send 1000 maps per POST, but typically we should never have
@@ -2176,7 +2176,7 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
  */
 goog.net.BrowserChannel.prototype.ensureInState_ = function(var_args) {
   if (!goog.array.contains(arguments, this.state_)) {
-    throw Error('Unexpected channel state: ' + this.state_);
+    throw new Error('Unexpected channel state: ' + this.state_);
   }
 };
 
@@ -2388,7 +2388,7 @@ goog.net.BrowserChannel.prototype.createDataUri = function(
  */
 goog.net.BrowserChannel.prototype.createXhrIo = function(hostPrefix) {
   if (hostPrefix && !this.supportsCrossDomainXhrs_) {
-    throw Error('Can\'t create secondary domain capable XhrIo object.');
+    throw new Error('Can\'t create secondary domain capable XhrIo object.');
   }
   var xhr = new goog.net.XhrIo();
   xhr.setWithCredentials(this.supportsCrossDomainXhrs_);
@@ -2415,7 +2415,7 @@ goog.net.BrowserChannel.prototype.isActive = function() {
  */
 goog.net.BrowserChannel.setTimeout = function(fn, ms) {
   if (!goog.isFunction(fn)) {
-    throw Error('Fn must not be null and must be a function');
+    throw new Error('Fn must not be null and must be a function');
   }
   return goog.global.setTimeout(function() {
     goog.net.BrowserChannel.onStartExecution();

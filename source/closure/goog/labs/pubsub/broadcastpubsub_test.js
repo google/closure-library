@@ -85,7 +85,7 @@ function remoteStorageEvent(data) {
         goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ + '1234567890';
     var ie8Events = mockHtml5LocalStorage.get(uniqueKey);
     if (goog.isDefAndNotNull(ie8Events)) {
-      ie8Events = goog.json.parse(ie8Events);
+      ie8Events = JSON.parse(ie8Events);
       // Events should never overlap in IE8 mode.
       if (ie8Events.length > 0 &&
           ie8Events[ie8Events.length - 1]['timestamp'] >= data['timestamp']) {

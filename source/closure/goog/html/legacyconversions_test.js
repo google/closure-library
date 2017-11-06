@@ -19,6 +19,7 @@
 goog.provide('goog.html.legacyconversionsTest');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
@@ -35,6 +36,15 @@ function testSafeHtmlFromString() {
   assertEquals(html, goog.html.SafeHtml.unwrap(safeHtml));
 
   assertFunctionReports(goog.html.legacyconversions.safeHtmlFromString);
+}
+
+
+function testSafeScriptFromString() {
+  var script = 'alert(1);';
+  var safeScript = goog.html.legacyconversions.safeScriptFromString(script);
+  assertEquals(script, goog.html.SafeScript.unwrap(safeScript));
+
+  assertFunctionReports(goog.html.legacyconversions.safeScriptFromString);
 }
 
 

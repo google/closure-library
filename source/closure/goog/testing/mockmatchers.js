@@ -95,7 +95,7 @@ goog.testing.mockmatchers.ArgumentMatcher.prototype.matches = function(
     }
     return isamatch;
   } else {
-    throw Error('No match function defined for this mock matcher');
+    throw new Error('No match function defined for this mock matcher');
   }
 };
 

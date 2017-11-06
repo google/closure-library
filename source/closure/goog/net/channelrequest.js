@@ -1124,7 +1124,7 @@ goog.net.ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
 goog.net.ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
   if (this.watchDogTimerId_ != null) {
     // assertion
-    throw Error('WatchDog timer not null');
+    throw new Error('WatchDog timer not null');
   }
   /** @private @suppress {missingRequire} Circular dep. */
   this.watchDogTimerId_ = goog.net.BrowserChannel.setTimeout(

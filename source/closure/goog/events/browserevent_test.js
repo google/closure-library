@@ -24,6 +24,7 @@ goog.require('goog.userAgent');
 
 var stubs = new goog.testing.PropertyReplacer();
 var Button = goog.events.BrowserEvent.MouseButton;
+var PointerType = goog.events.BrowserEvent.PointerType;
 
 function setUp() {
   stubs.reset();
@@ -39,7 +40,7 @@ function testInvalidNodeBug() {
   var event = {};
   event.relatedTarget = {};
   event.relatedTarget.__defineGetter__('nodeName', function() {
-    throw Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
+    throw new Error('https://bugzilla.mozilla.org/show_bug.cgi?id=497780');
   });
   assertThrows(function() { return event.relatedTarget.nodeName; });
 
@@ -120,11 +121,42 @@ function testTouchEventHandling() {
   assertEquals(target, touchCancel.target);
 }
 
+function testPointerEvent() {
+  var event = createPointerEvent('pointerdown', 123, PointerType.MOUSE);
+  assertEquals(123, event.pointerId);
+  assertEquals(PointerType.MOUSE, event.pointerType);
+}
+
+function testMSPointerEvent() {
+  var event = createPointerEvent('MSPointerDown', 123, 4 /* mouse */);
+  assertEquals(123, event.pointerId);
+  assertEquals(PointerType.MOUSE, event.pointerType);
+}
+
+function testUnsupportedPointerEvent() {
+  var event = createMouseEvent('mousedown', 1);
+  assertEquals(0, event.pointerId);
+  assertEquals('', event.pointerType);
+}
+
+/**
+ * @param {string} type
+ * @param {number} button
+ * @param {boolean=} opt_ctrlKey
+ * @return {!goog.events.BrowserEvent}
+ */
 function createMouseEvent(type, button, opt_ctrlKey) {
   return new goog.events.BrowserEvent(
       {type: type, button: button, ctrlKey: !!opt_ctrlKey});
 }
 
+/**
+ * @param {string} type
+ * @param {!Element} target
+ * @param {!goog.math.Coordinate} clientCoords
+ * @param {!goog.math.Coordinate} screenCoords
+ * @return {!goog.events.BrowserEvent}
+ */
 function createTouchEvent(type, target, clientCoords, screenCoords) {
   return new goog.events.BrowserEvent({
     type: type,
@@ -138,6 +170,23 @@ function createTouchEvent(type, target, clientCoords, screenCoords) {
   });
 }
 
+/**
+ * @param {string} type
+ * @param {number} pointerId
+ * @param {string} pointerType
+ * @return {!goog.events.BrowserEvent}
+ */
+function createPointerEvent(type, pointerId, pointerType) {
+  return new goog.events.BrowserEvent(
+      {type: type, pointerId: pointerId, pointerType: pointerType});
+}
+
+/**
+ * @param {!goog.events.BrowserEvent} event
+ * @param {goog.events.BrowserEvent.MouseButton} button
+ * @param {boolean} isActionButton
+ * @return {!goog.events.BrowserEvent}
+ */
 function assertIsButton(event, button, isActionButton) {
   for (var key in Button) {
     assertEquals(

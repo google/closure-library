@@ -27,8 +27,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.storage.FakeMechanism');
 
 function getEncryptedWrapper(storage, key) {
-  return goog.json.parse(
-      storage.mechanism.get(storage.hashKeyWithSecret_(key)));
+  return JSON.parse(storage.mechanism.get(storage.hashKeyWithSecret_(key)));
 }
 
 function getEncryptedData(storage, key) {
@@ -36,15 +35,14 @@ function getEncryptedData(storage, key) {
 }
 
 function decryptWrapper(storage, key, wrapper) {
-  return goog.json.parse(
-      storage.decryptValue_(
-          wrapper[goog.storage.EncryptedStorage.SALT_KEY], key,
-          wrapper[goog.storage.RichStorage.DATA_KEY]));
+  return JSON.parse(storage.decryptValue_(
+      wrapper[goog.storage.EncryptedStorage.SALT_KEY], key,
+      wrapper[goog.storage.RichStorage.DATA_KEY]));
 }
 
 function hammingDistance(a, b) {
   if (a.length != b.length) {
-    throw Error('Lengths must be the same for Hamming distance');
+    throw new Error('Lengths must be the same for Hamming distance');
   }
   var distance = 0;
   for (var i = 0; i < a.length; ++i) {

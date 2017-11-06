@@ -84,6 +84,11 @@ function testRunAsync_withSetUpAndTearDown() {
   runAndAssert(true, true, true);
 }
 
+/**
+ * @param {boolean} useSetUp
+ * @param {boolean} useTearDown
+ * @param {boolean} runAsync
+ */
 function runAndAssert(useSetUp, useTearDown, runAsync) {
   var fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103];
   var count = 0;
@@ -145,6 +150,15 @@ function runAndAssert(useSetUp, useTearDown, runAsync) {
   }
 }
 
+/**
+ * @param {Array} results
+ * @param {boolean} useSetUp
+ * @param {boolean} useTearDown
+ * @param {boolean} setUpCount
+ * @param {boolean} tearDownCount
+ * @param {boolean} fakeExecutionTime
+ * @return {boolean} true
+ */
 function assertResults(
     results, useSetUp, useTearDown, setUpCount, tearDownCount,
     fakeExecutionTime) {
@@ -197,6 +211,7 @@ function testCreateResults() {
   var expectedResults = {
     'average': 52,
     'count': 3,
+    'median': 53,
     'maximum': 103,
     'minimum': 0,
     'standardDeviation': goog.math.standardDeviation.apply(null, samples),

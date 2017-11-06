@@ -33,6 +33,8 @@
  * - altKey         {boolean}   Was alt key depressed
  * - shiftKey       {boolean}   Was shift key depressed
  * - metaKey        {boolean}   Was meta key depressed
+ * - pointerId      {number}    Pointer ID
+ * - pointerType    {string}    Pointer type, e.g. 'mouse', 'pen', or 'touch'
  * - defaultPrevented {boolean} Whether the default action has been prevented
  * - state          {Object}    History state object
  *
@@ -45,7 +47,9 @@
 
 goog.provide('goog.events.BrowserEvent');
 goog.provide('goog.events.BrowserEvent.MouseButton');
+goog.provide('goog.events.BrowserEvent.PointerType');
 
+goog.require('goog.debug');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
@@ -186,6 +190,16 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
   this.platformModifierKey = false;
 
   /**
+   * @type {number}
+   */
+  this.pointerId = 0;
+
+  /**
+   * @type {string}
+   */
+  this.pointerType = '';
+
+  /**
    * The browser event object.
    * @private {Event}
    */
@@ -210,14 +224,44 @@ goog.events.BrowserEvent.MouseButton = {
 
 
 /**
+ * Normalized pointer type constants for pointer events.
+ * @enum {string}
+ */
+goog.events.BrowserEvent.PointerType = {
+  MOUSE: 'mouse',
+  PEN: 'pen',
+  TOUCH: 'touch'
+};
+
+
+/**
  * Static data for mapping mouse buttons.
  * @type {!Array<number>}
+ * @deprecated Use {@code goog.events.BrowserEvent.IE_BUTTON_MAP} instead.
  */
-goog.events.BrowserEvent.IEButtonMap = [
+goog.events.BrowserEvent.IEButtonMap = goog.debug.freeze([
   1,  // LEFT
   4,  // MIDDLE
   2   // RIGHT
-];
+]);
+
+
+/**
+ * Static data for mapping mouse buttons.
+ * @const {!Array<number>}
+ */
+goog.events.BrowserEvent.IE_BUTTON_MAP = goog.events.BrowserEvent.IEButtonMap;
+
+
+/**
+ * Static data for mapping MSPointerEvent types to PointerEvent types.
+ * @const {!Object<number, goog.events.BrowserEvent.PointerType>}
+ */
+goog.events.BrowserEvent.IE_POINTER_TYPE_MAP = goog.debug.freeze({
+  2: goog.events.BrowserEvent.PointerType.TOUCH,
+  3: goog.events.BrowserEvent.PointerType.PEN,
+  4: goog.events.BrowserEvent.PointerType.MOUSE
+});
 
 
 /**
@@ -252,8 +296,6 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
         relatedTarget = null;
       }
     }
-    // TODO(arv): Use goog.events.EventType when it has been refactored into its
-    // own file.
   } else if (type == goog.events.EventType.MOUSEOVER) {
     relatedTarget = e.fromElement;
   } else if (type == goog.events.EventType.MOUSEOUT) {
@@ -294,6 +336,8 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.shiftKey = e.shiftKey;
   this.metaKey = e.metaKey;
   this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
+  this.pointerId = e.pointerId || 0;
+  this.pointerType = goog.events.BrowserEvent.getPointerType_(e);
   this.state = e.state;
   this.event_ = e;
   if (e.defaultPrevented) {
@@ -324,7 +368,7 @@ goog.events.BrowserEvent.prototype.isButton = function(button) {
       return button == goog.events.BrowserEvent.MouseButton.LEFT;
     } else {
       return !!(
-          this.event_.button & goog.events.BrowserEvent.IEButtonMap[button]);
+          this.event_.button & goog.events.BrowserEvent.IE_BUTTON_MAP[button]);
     }
   } else {
     return this.event_.button == button;
@@ -406,4 +450,20 @@ goog.events.BrowserEvent.prototype.preventDefault = function() {
  */
 goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
   return this.event_;
+};
+
+
+/**
+ * Extracts the pointer type from the given event.
+ * @param {!Event} e
+ * @return {string} The pointer type, e.g. 'mouse', 'pen', or 'touch'.
+ * @private
+ */
+goog.events.BrowserEvent.getPointerType_ = function(e) {
+  if (goog.isString(e.pointerType)) {
+    return e.pointerType;
+  }
+  // IE10 uses integer codes for pointer type.
+  // https://msdn.microsoft.com/en-us/library/hh772359(v=vs.85).aspx
+  return goog.events.BrowserEvent.IE_POINTER_TYPE_MAP[e.pointerType] || '';
 };

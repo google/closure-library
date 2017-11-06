@@ -146,7 +146,7 @@ goog.ui.Ratings.prototype.decorateInternal = function(el) {
   var select = goog.dom.getElementsByTagName(
       goog.dom.TagName.SELECT, goog.asserts.assert(el))[0];
   if (!select) {
-    throw Error(
+    throw new Error(
         'Can not decorate ' + el + ', with Ratings. Must ' +
         'contain select box');
   }

@@ -146,7 +146,7 @@ goog.testing.DeferredTestCase.prototype.waitForDeferred = function(a, opt_b) {
       waitMsg = a;
       break;
     default:  // Shouldn't be here in compiled mode
-      throw Error('Invalid number of arguments');
+      throw new Error('Invalid number of arguments');
   }
   deferred.addCallbacks(this.onSuccess, this.onError, this);
   if (!waitMsg) {

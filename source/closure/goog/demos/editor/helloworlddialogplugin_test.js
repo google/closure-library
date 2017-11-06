@@ -33,8 +33,11 @@ var fieldObj;
 
 var CUSTOM_MESSAGE = 'Hello, cruel world...';
 
-var expectedFailures = new goog.testing.ExpectedFailures();
+var expectedFailures;
 
+function setUpPage() {
+  expectedFailures = new goog.testing.ExpectedFailures();
+}
 
 function setUp() {
   mockCtrl = new goog.testing.MockControl();

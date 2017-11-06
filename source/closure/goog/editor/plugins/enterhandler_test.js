@@ -27,6 +27,7 @@ goog.require('goog.editor.plugins.EnterHandler');
 goog.require('goog.editor.range');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.testing');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.dom');
@@ -188,9 +189,11 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorAfterBr() {
   // <blockquote>one<br></blockquote>
   // <div>&nbsp;</div>
   // <blockquote>two<br></blockquote>
-  field1.setHtml(
-      false, '<blockquote id="quote" class="tr_bq">one<br>' +
-          'two<br></blockquote>');
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote id="quote" class="tr_bq">one<br>' +
+          'two<br></blockquote>'));
   var dom = field1.getEditableDomHelper();
   goog.dom.Range.createCaret(dom.getElement('quote'), 2).select();
   goog.testing.events.fireKeySequence(
@@ -201,8 +204,10 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorAfterBr() {
   assertHTMLEquals('two<br>', secondBlockquote.innerHTML);
 
   // Verifies that a blockquote split doesn't happen if it doesn't need to.
-  field1.setHtml(
-      false, '<blockquote class="tr_bq">one<br id="brcursor"></blockquote>');
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote class="tr_bq">one<br id="brcursor"></blockquote>'));
   selectNodeAndHitEnter(field1, 'brcursor');
   assertEquals(
       1,
@@ -226,9 +231,11 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
   // <blockquote>one<br></blockquote>
   // <div>&nbsp;</div>
   // <blockquote>two<br></blockquote>
-  field1.setHtml(
-      false, '<blockquote id="quote" class="tr_bq">one<br>' +
-          'two<br></blockquote>');
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote id="quote" class="tr_bq">one<br>' +
+          'two<br></blockquote>'));
   var dom = field1.getEditableDomHelper();
   var cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
@@ -241,8 +248,10 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
 
   // Ensures that standard text node split works as expected with the new
   // change.
-  field1.setHtml(
-      false, '<blockquote id="quote" class="tr_bq">one<b>two</b><br>');
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote id="quote" class="tr_bq">one<b>two</b><br>'));
   cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
   goog.testing.events.fireKeySequence(
@@ -293,11 +302,13 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   //   <div>two</div>
   // </blockquote>
   //
-  field1.setHtml(
-      false, '<blockquote class="tr_bq">' +
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote class="tr_bq">' +
           '<div><div>a</div><ol><li id="cursor">one</li></div>' +
           '<div>b</div>' +
-          '</blockquote>');
+          '</blockquote>'));
   var dom = field1.getEditableDomHelper();
   goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
   goog.testing.events.fireKeySequence(
@@ -308,11 +319,13 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   assertHTMLEquals('<div>b</div>', secondBlockquote.innerHTML);
 
   // Ensure that we remove only unnecessary subtrees.
-  field1.setHtml(
-      false, '<blockquote class="tr_bq">' +
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote class="tr_bq">' +
           '<div><span>a</span><div id="cursor">one</div><div>two</div></div>' +
           '<div><span>c</span></div>' +
-          '</blockquote>');
+          '</blockquote>'));
   goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
   goog.testing.events.fireKeySequence(
       field1.getElement(), goog.events.KeyCodes.ENTER);
@@ -323,10 +336,12 @@ function testEnterInBlockquoteRemovesExtraNodes() {
   assertHTMLEquals(expectedHTML, secondBlockquote.innerHTML);
 
   // Place the cursor in the middle of a line.
-  field1.setHtml(
-      false, '<blockquote id="quote" class="tr_bq">' +
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<blockquote id="quote" class="tr_bq">' +
           '<div>one</div><div>two</div>' +
-          '</blockquote>');
+          '</blockquote>'));
   goog.dom.Range.createCaret(dom.getElement('quote').firstChild.firstChild, 1)
       .select();
   goog.testing.events.fireKeySequence(
@@ -343,7 +358,10 @@ function testEnterInList() {
 
   // <enter> in a list should *never* be handled by custom code. Lists are
   // just way too complicated to get right.
-  field1.setHtml(false, '<ol><li>hi!<span id="field1cursor"></span></li></ol>');
+  field1.setSafeHtml(
+      false,
+      goog.html.testing.newSafeHtmlForTest(
+          '<ol><li>hi!<span id="field1cursor"></span></li></ol>'));
   if (goog.userAgent.OPERA) {
     // Opera doesn't actually place the selection in the empty span
     // unless we add a text node first.
@@ -358,8 +376,10 @@ function testEnterAtEndOfBlockInWebkit() {
   setUpFields(true);
 
   if (goog.userAgent.WEBKIT) {
-    field1.setHtml(
-        false, '<blockquote>hi!<span id="field1cursor"></span></blockquote>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest(
+            '<blockquote>hi!<span id="field1cursor"></span></blockquote>'));
 
     var cursor = field1.getEditableDomHelper().getElement('field1cursor');
     goog.editor.range.placeCursorNextTo(cursor, false);
@@ -394,7 +414,9 @@ function testDeleteBrBeforeBlock() {
   // and let the browser do the delete, which can only be tested with a robot
   // test (see javascript/apps/editor/tests/delete_br_robot.html).
   if (goog.userAgent.GECKO) {
-    field1.setHtml(false, 'one<br><br><div>two</div>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest('one<br><br><div>two</div>'));
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
     helper.select(field1.getElement(), 2);  // Between the two BR's.
     goog.testing.events.fireKeySequence(
@@ -405,7 +427,9 @@ function testDeleteBrBeforeBlock() {
 
     // We test the case where the BR has a previous sibling which is not
     // a block level element.
-    field1.setHtml(false, 'one<br><ul><li>two</li></ul>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest('one<br><ul><li>two</li></ul>'));
     helper.select(field1.getElement(), 1);  // Between one and BR.
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.DELETE);
@@ -430,7 +454,10 @@ function testDeleteBrBeforeBlock() {
 
     // We test the case where the previous sibling of the BR is a block
     // level element.
-    field1.setHtml(false, '<div>foo</div><br><div><span>bar</span></div>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest(
+            '<div>foo</div><br><div><span>bar</span></div>'));
     helper.select(field1.getElement(), 1);  // Before the BR.
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.DELETE);
@@ -455,7 +482,9 @@ function testDeleteBrBeforeBlock() {
         0, range.getFocusOffset());
 
     // We test the case where the BR does not have a previous sibling.
-    field1.setHtml(false, '<br><ul><li>one</li></ul>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest('<br><ul><li>one</li></ul>'));
     helper.select(field1.getElement(), 0);  // Before the BR.
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.DELETE);
@@ -480,7 +509,9 @@ function testDeleteBrBeforeBlock() {
 
     // Testing deleting a BR followed by a block level element and preceded
     // by a BR.
-    field1.setHtml(false, '<br><br><ul><li>one</li></ul>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest('<br><br><ul><li>one</li></ul>'));
     helper.select(field1.getElement(), 1);  // Between the BR's.
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.DELETE);
@@ -514,8 +545,10 @@ function testDeleteBeforeBlockquote() {
   setUpFields(true);
 
   if (goog.userAgent.GECKO) {
-    field1.setHtml(
-        false, '<br><br><div><br><blockquote>foo</blockquote></div>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest(
+            '<br><br><div><br><blockquote>foo</blockquote></div>'));
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
     helper.select(field1.getElement(), 0);  // Before the first BR.
     // Fire three deletes in quick succession.
@@ -562,7 +595,8 @@ function testDeleteBrNormal() {
   // and let the browser do the delete, which can only be tested with a robot
   // test (see javascript/apps/editor/tests/delete_br_robot.html).
   if (goog.userAgent.GECKO) {
-    field1.setHtml(false, 'one<br><br><br>two');
+    field1.setSafeHtml(
+        false, goog.html.testing.newSafeHtmlForTest('one<br><br><br>two'));
     var helper = new goog.testing.editor.TestHelper(field1.getElement());
     helper.select(
         field1.getElement(), 2);  // Between the first and second BR's.
@@ -586,7 +620,10 @@ function testCollapsedSelectionKeepsBrOpera() {
   setUpFields(true);
 
   if (goog.userAgent.OPERA) {
-    field1.setHtml(false, '<div><br id="pleasedontdeleteme"></div>');
+    field1.setSafeHtml(
+        false,
+        goog.html.testing.newSafeHtmlForTest(
+            '<div><br id="pleasedontdeleteme"></div>'));
     field1.focus();
     goog.testing.events.fireKeySequence(
         field1.getElement(), goog.events.KeyCodes.ENTER);

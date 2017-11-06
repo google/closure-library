@@ -96,8 +96,19 @@ function testSelfRemove() {
     // Test that goog.events.getListener ignores events marked as 'removed'.
     assertNull(goog.events.getListener(et1, 'click', callback));
   };
-  var key = goog.events.listen(et1, 'click', callback);
+  goog.events.listen(et1, 'click', callback);
   goog.events.dispatchEvent(et1, 'click');
+}
+
+function testMediaQueryList() {
+  if (!window.matchMedia) return;
+
+  var mql = window.matchMedia('(max-width: 640px)');
+  var key = goog.events.listen(mql, 'change', goog.nullFunction);
+
+  // I don't know of any way to make it raise an event in a test.
+
+  goog.events.unlistenByKey(key);
 }
 
 function testHasListener() {
@@ -122,7 +133,7 @@ function testHasListener() {
 function testHasListenerWithEventTarget() {
   assertFalse(goog.events.hasListener(et1));
 
-  function callback(){};
+  function callback() {}
   goog.events.listen(et1, 'test', callback, true);
   assertTrue(goog.events.hasListener(et1));
   assertTrue(goog.events.hasListener(et1, 'test'));
@@ -137,7 +148,7 @@ function testHasListenerWithEventTarget() {
 }
 
 function testHasListenerWithMultipleTargets() {
-  function callback(){};
+  function callback() {}
 
   goog.events.listen(et1, 'test1', callback, true);
   goog.events.listen(et2, 'test2', callback, true);

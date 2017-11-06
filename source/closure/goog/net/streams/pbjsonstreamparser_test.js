@@ -53,9 +53,9 @@ testSuite({
 
   testSingleMessage: function() {
     var parser = new PbJsonStreamParser();
-    var result = parser.parse('[  [[,1,2,, "a,b[]]]"]]  ]');
+    var result = parser.parse('[  [[null,1,2,null, "a,b[]]]"]]  ]');
     assertMessages(result, 1);
-    assertEquals('[,1,2,, "a,b[]]]"]', result[0][1]);
+    assertEquals('[null,1,2,null, "a,b[]]]"]', result[0][1]);
   },
 
   testMultipleMessages: function() {
@@ -89,8 +89,8 @@ testSuite({
 
   testOnlyStatus: function() {
     var parser = new PbJsonStreamParser();
-    var status = '[1,,"abced",[true,false]]';
-    var result = parser.parse('[,' + status + ']');
+    var status = '[1,null,"abced",[true,false]]';
+    var result = parser.parse('[null,' + status + ']');
     assertMessagesAndStatus(result, 0);
     assertEquals(status, result[0][2]);
   },

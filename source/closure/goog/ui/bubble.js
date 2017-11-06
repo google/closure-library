@@ -185,7 +185,7 @@ goog.ui.Bubble.prototype.setPosition = function(position) {
   } else if (position instanceof goog.positioning.AnchoredPosition) {
     this.setAnchoredPosition_(position.element, position.corner);
   } else {
-    throw Error('Bubble only supports absolute and anchored positions!');
+    throw new Error('Bubble only supports absolute and anchored positions!');
   }
 };
 
@@ -251,7 +251,7 @@ goog.ui.Bubble.prototype.disposeInternal = function() {
  */
 goog.ui.Bubble.prototype.configureElement_ = function() {
   if (!this.isInDocument()) {
-    throw Error('You must render the bubble before showing it!');
+    throw new Error('You must render the bubble before showing it!');
   }
 
   var element = this.getElement();
@@ -418,7 +418,7 @@ goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
       bubbleBottomClass = this.config_.cssBubbleBottomRightAnchor;
       break;
     default:
-      throw Error('This corner type is not supported by bubble!');
+      throw new Error('This corner type is not supported by bubble!');
   }
   var message = null;
   if (this.message_ instanceof SafeHtml) {

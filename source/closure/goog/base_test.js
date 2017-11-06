@@ -26,7 +26,6 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.test_module');
 goog.require('goog.testing.PropertyReplacer');
@@ -69,13 +68,18 @@ function getFramedVars(name) {
   };
 }
 
-var framedVars = getFramedVars('f1');
-var framedVars2 = getFramedVars('f2');
-// remove iframe
-var iframeElement = document.getElementById('f2');
-iframeElement.parentNode.removeChild(iframeElement);
+var framedVars;
+var framedVars2;
 var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
+
+function setUpPage() {
+  framedVars = getFramedVars('f1');
+  framedVars2 = getFramedVars('f2');
+  // remove iframe
+  var iframeElement = document.getElementById('f2');
+  iframeElement.parentNode.removeChild(iframeElement);
+}
 
 function tearDown() {
   goog.setCssNameMapping(undefined);
@@ -240,7 +244,7 @@ function testExportSymbol() {
 }
 
 goog.exportSymbol('exceptionTest', function() {
-  throw Error('ERROR');
+  throw new Error('ERROR');
 });
 
 function testExportSymbolExceptions() {
@@ -1024,115 +1028,6 @@ function testNow() {
 }
 
 
-//=== test non-html context ===
-
-function testInHtmlDocument() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    assertFalse(goog.inHtmlDocument_());
-    goog.global.document = {};
-    assertFalse(goog.inHtmlDocument_());
-    goog.global.document.write = function() {};
-    assertTrue(goog.inHtmlDocument_());
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadInNonHtmlNotThrows() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {};
-    assertFalse(goog.inHtmlDocument_());
-    // The goog code which is executed at load.
-    goog.findBasePath_();
-    goog.writeScriptTag_(goog.basePath + 'deps.js');
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadBaseWithQueryParamOk() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {
-      write: goog.nullFunction,
-      getElementsByTagName:
-          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
-    };
-    assertTrue(goog.inHtmlDocument_());
-    goog.findBasePath_();
-    assertEquals('/path/to/', goog.basePath);
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadBaseFromGlobalVariableOk() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {
-      write: goog.nullFunction,
-      getElementsByTagName:
-          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
-    };
-    goog.global.CLOSURE_BASE_PATH = '/from/constant/';
-    goog.findBasePath_();
-    assertEquals(goog.global.CLOSURE_BASE_PATH, goog.basePath);
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadBaseFromGlobalVariableDOMClobbered() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {
-      write: goog.nullFunction,
-      getElementsByTagName:
-          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
-    };
-    // Make goog.global.CLOSURE_BASE_PATH an object with a toString, like
-    // it would be if it were a DOM clobbered HTMLElement.
-    goog.global.CLOSURE_BASE_PATH = {};
-    goog.global.CLOSURE_BASE_PATH.toString = function() {
-      return '/from/constant/';
-    };
-    goog.findBasePath_();
-    assertEquals('/path/to/', goog.basePath);
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadBaseFromCurrentScriptIgnoringOthers() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {
-      write: goog.nullFunction,
-      currentScript: {src: '/currentScript/base.js?zx=5'},
-      getElementsByTagName:
-          goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
-    };
-    goog.findBasePath_();
-    assertEquals('/currentScript/', goog.basePath);
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
 //=== tests for getmsg ===
 function testGetMsgWithDollarSigns() {
   var msg = goog.getMsg('{$amount} per minute', {amount: '$0.15'});
@@ -1171,7 +1066,8 @@ function testGetObjectByName() {
     one: 1,
     two: {three: 3, four: {five: 5}},
     'six|seven': '6|7',
-    'eight.nine': 8.9
+    'eight.nine': 8.9,
+    '': {b: 42},
   };
   goog.global.m = m;
 
@@ -1194,6 +1090,8 @@ function testGetObjectByName() {
   assertEquals(goog.getObjectByName('six|seven', m), '6|7');
   assertNull(goog.getObjectByName('eight.nine', m));
   assertNull(goog.getObjectByName('notThere', m));
+  assertNull(goog.getObjectByName('./invalid', m));
+  assertEquals(goog.getObjectByName('.b', m), 42);
 }
 
 
@@ -1237,100 +1135,6 @@ function testGetCssName_nameMapFn() {
   assertEquals('classname!', goog.getCssName('classname'));
 }
 
-function testAddDependency() {
-  stubs.set(goog, 'writeScriptTag_', goog.nullFunction);
-
-  goog.addDependency('foo.js', ['testDep.foo'], ['testDep.bar']);
-
-  // alias to avoid the being picked up by the deps scanner.
-  var provide = goog.provide;
-
-  provide('testDep.bar');
-
-  // To differentiate this call from the real one.
-  var require = goog.require;
-
-  // this used to throw an exception
-  require('testDep.foo');
-
-  assertTrue(goog.isObject(testDep.bar));
-
-  // Unset provided namespace so the test can be re-run.
-  testDep = undefined;
-}
-
-function testAddDependencyModule() {
-  var load = goog.testing.recordFunction();
-  stubs.set(goog, 'writeScriptTag_', load);
-
-  goog.addDependency('mod.js', ['testDep.mod'], [], true);
-  goog.addDependency('empty.js', ['testDep.empty'], [], {});
-  goog.addDependency('mod-goog.js', ['testDep.goog'], [], {'module': 'goog'});
-
-  // To differentiate this call from the real one.
-  var require = goog.require;
-
-  var assertModuleLoad = function(module, args) {
-    assertEquals(2, args.length);
-    assertEquals('', args[0]);
-    assertRegExp(
-        '^goog\\.retrieveAndExec_\\(".*/' + module + '", true, false\\);$',
-        args[1]);
-  };
-
-  require('testDep.mod');
-  assertEquals(1, load.getCallCount());
-  assertModuleLoad('mod.js', load.getCalls()[0].getArguments());
-
-  require('testDep.empty');
-  assertEquals(2, load.getCallCount());
-  assertEquals(2, load.getCalls()[1].getArguments().length);
-  assertRegExp('^.*/empty.js$', load.getCalls()[1].getArguments()[0]);
-  assertUndefined(load.getCalls()[1].getArguments()[1]);
-
-  require('testDep.goog');
-  assertEquals(3, load.getCallCount());
-  assertModuleLoad('mod-goog.js', load.getCalls()[2].getArguments());
-
-  // Unset provided namespace so the test can be re-run.
-  testDep = undefined;
-}
-
-function testAddDependencyEs6() {
-  var script = null;
-  var requireTranspilation = false;
-  stubs.set(goog, 'needsTranspile_', function() {
-    return requireTranspilation;
-  });
-  stubs.set(goog, 'writeScriptTag_', function(src, scriptText) {
-    if (script != null) {
-      throw new Error('Multiple scripts written');
-    }
-    script = scriptText;
-  });
-
-  goog.addDependency(
-      'fancy.js', ['testDep.fancy'], [],
-      {'lang': 'es6-impl', 'module': 'goog'});
-  goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es6'});
-
-  // To differentiate this call from the real one.
-  var require = goog.require;
-
-  requireTranspilation = false;
-  require('testDep.fancy');
-  assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/fancy\.js", true, false\);$/, script);
-  script = null;
-
-  requireTranspilation = true;
-  require('testDep.superFancy');
-  assertRegExp(
-      /^goog\.retrieveAndExec_\(".*\/super\.js", false, true\);$/, script);
-
-  // Unset provided namespace so the test can be re-run.
-  testDep = undefined;
-}
 
 function testBaseMethod() {
   function A() {}
@@ -1581,17 +1385,6 @@ function diables_testCspSafeGoogRequire() {
   return resolver.promise;
 }
 
-function testLateRequireProtection() {
-  if (!document.readyState) return;
-  var e = assertThrows(function() {
-    // To differentiate this call from the real one.
-    var require = goog.require;
-    require('goog.ui.Component');
-  });
-
-  assertContains('after document load', e.message);
-}
-
 function testDefineClass() {
   var Base = goog.defineClass(null, {
     constructor: function(foo) {
@@ -1730,28 +1523,6 @@ function testGoogModuleGet() {
   assertEquals(earlyTestModuleGet, testModuleExports);
 }
 
-
-// Validate the behavior of goog.module when used from traditional files.
-function testGoogLoadModuleByUrl() {
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
-    // IE before 10 don't report an error.
-    return;
-  }
-
-  stubs.set(goog, 'loadFileSync_', function(src) {
-    return 'closure load file sync: ' + src;
-  });
-
-  // "goog.loadModuleByUrl" is not a general purpose code loader, it can
-  // not be used to late load code.
-  var err =
-      assertThrows('loadModuleFromUrl should not hide failures', function() {
-        goog.loadModuleFromUrl('bogus url');
-      });
-  assertContains('Cannot write "bogus url" after document load', err.message);
-}
-
-
 function testModuleExportSealed() {
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
     // IE before 9 don't support sealing objects
@@ -1827,7 +1598,7 @@ function testGoogLoadModuleInSafari10() {
 
 
 function testLoadFileSync() {
-  var fileContents = goog.loadFileSync_('deps.js');
+  var fileContents = goog.loadFileSync_('base.js');
   assertTrue(
       'goog.loadFileSync_ returns string', typeof fileContents === 'string');
   assertTrue('goog.loadFileSync_ string length > 0', fileContents.length > 0);

@@ -333,6 +333,8 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
  * rejected, it throws the rejection as an exception. If the promise is not
  * resolved at all, throws an exception.
  * Also ticks the general clock by the specified amount.
+ * Only works with goog.Thenable, hence goog.Promise. Does NOT work with native
+ * browser promises.
  *
  * @param {!goog.Thenable<T>} promise A promise that should be resolved after
  *     the mockClock is ticked for the given opt_millis.
@@ -525,7 +527,7 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
     funcToCall, opt_millis) {
   var millis = opt_millis || 0;
   if (millis > goog.testing.MockClock.MAX_INT_) {
-    throw Error(
+    throw new Error(
         'Bad timeout value: ' + millis + '.  Timeouts over MAX_INT ' +
         '(24.8 days) cause timeouts to be fired ' +
         'immediately in most browsers, except for IE.');

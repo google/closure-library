@@ -243,7 +243,7 @@ goog.crypt.Sha2.prototype.update = function(message, opt_length) {
     while (n < opt_length) {
       var b = message[n++];
       if (!('number' == typeof b && 0 <= b && 255 >= b && b == (b | 0))) {
-        throw Error('message must be a byte array');
+        throw new Error('message must be a byte array');
       }
       this.chunk_[inChunk++] = b;
       if (inChunk == this.blockSize) {
@@ -252,7 +252,7 @@ goog.crypt.Sha2.prototype.update = function(message, opt_length) {
       }
     }
   } else {
-    throw Error('message must be string or array');
+    throw new Error('message must be string or array');
   }
 
   // Record the current bytes in chunk to support partial update.

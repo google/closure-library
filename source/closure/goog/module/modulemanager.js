@@ -491,9 +491,9 @@ goog.module.ModuleManager.prototype.preloadModule = function(id, opt_timeout) {
 goog.module.ModuleManager.prototype.prefetchModule = function(id) {
   var moduleInfo = this.getModuleInfo(id);
   if (moduleInfo.isLoaded() || this.isModuleLoading(id)) {
-    throw Error('Module load already requested: ' + id);
+    throw new Error('Module load already requested: ' + id);
   } else if (this.batchModeEnabled_) {
-    throw Error('Modules prefetching is not supported in batch mode');
+    throw new Error('Modules prefetching is not supported in batch mode');
   } else {
     var idWithDeps = this.getNotYetLoadedTransitiveDepIds_(id);
     for (var i = 0; i < idWithDeps.length; i++) {
@@ -727,7 +727,7 @@ goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
   for (var i = 0; i < ids.length; i++) {
     var moduleInfo = this.moduleInfoMap_[ids[i]];
     if (moduleInfo.isLoaded()) {
-      throw Error('Module already loaded: ' + ids[i]);
+      throw new Error('Module already loaded: ' + ids[i]);
     }
   }
 

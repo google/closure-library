@@ -32,8 +32,8 @@
  * Example of usage:
  *
  * <pre>
- *   var video = goog.ui.media.VimeoModel.newInstance('http://vimeo.com/30012');
- *   goog.ui.media.Vimeo.newControl(video).render();
+ * var video = goog.ui.media.VimeoModel.newInstance('https://vimeo.com/30012');
+ * goog.ui.media.Vimeo.newControl(video).render();
  * </pre>
  *
  * Vimeo medias currently support the following states:
@@ -57,8 +57,9 @@
 goog.provide('goog.ui.media.Vimeo');
 goog.provide('goog.ui.media.VimeoModel');
 
-goog.require('goog.html.uncheckedconversions');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaModel');
@@ -228,7 +229,7 @@ goog.ui.media.VimeoModel.newInstance = function(
     return new goog.ui.media.VimeoModel(
         data[1], opt_caption, opt_description, opt_autoplay);
   }
-  throw Error('failed to parse vimeo url: ' + vimeoUrl);
+  throw new Error('failed to parse vimeo url: ' + vimeoUrl);
 };
 
 
@@ -240,7 +241,7 @@ goog.ui.media.VimeoModel.newInstance = function(
  * @return {string} The vimeo URL.
  */
 goog.ui.media.VimeoModel.buildUrl = function(videoId) {
-  return 'http://vimeo.com/' + goog.string.urlEncode(videoId);
+  return 'https://vimeo.com/' + goog.string.urlEncode(videoId);
 };
 
 
@@ -253,14 +254,15 @@ goog.ui.media.VimeoModel.buildUrl = function(videoId) {
  * @return {!goog.html.TrustedResourceUrl} The vimeo flash URL.
  */
 goog.ui.media.VimeoModel.buildFlashUrl = function(videoId, opt_autoplay) {
-  var autoplay = opt_autoplay ? '&autoplay=1' : '';
-  return goog.html.uncheckedconversions.
-      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Fixed domain, encoded parameters.'),
-          'http://vimeo.com/moogaloop.swf?clip_id=' +
-              goog.string.urlEncode(videoId) +
-              '&server=vimeo.com&show_title=1&show_byline=1&' +
-              'show_portrait=0color=&fullscreen=1' + autoplay);
+  return goog.html.TrustedResourceUrl.format(
+      goog.string.Const.from(
+          'https://vimeo.com/moogaloop.swf?clip_id=%{clip_id}' +
+          '&server=vimeo.com&show_title=1&show_byline=1&' +
+          'show_portrait=0color=&fullscreen=1%{autoplay}'),
+      {
+        'clip_id': videoId,
+        'autoplay': opt_autoplay ? goog.string.Const.from('&autoplay=1') : ''
+      });
 };
 
 

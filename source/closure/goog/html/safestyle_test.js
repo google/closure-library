@@ -169,6 +169,39 @@ function testCreate_allowsTranslate() {
 }
 
 
+function testCreate_allowsSafeUrl() {
+  assertCreateEquals('background:url("http://example.com");', {
+    'background': goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('http://example.com'))
+  });
+}
+
+
+function testCreate_allowsSafeUrlWithSpecialCharacters() {
+  assertCreateEquals('background:url("http://example.com/\\"");', {
+    'background': goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('http://example.com/"'))
+  });
+  assertCreateEquals('background:url("http://example.com/%3c");', {
+    'background': goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('http://example.com/<'))
+  });
+  assertCreateEquals('background:url("http://example.com/;");', {
+    'background': goog.html.SafeUrl.fromConstant(
+        goog.string.Const.from('http://example.com/;'))
+  });
+}
+
+
+function testCreate_allowsArray() {
+  var url = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('http://example.com'));
+  assertCreateEquals(
+      'background:red url("http://example.com") repeat-y;',
+      {'background': ['red', url, 'repeat-y']});
+}
+
+
 function testCreate_allowsUrl() {
   assertCreateEquals(
       'background:url(http://example.com);',

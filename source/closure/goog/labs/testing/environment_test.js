@@ -32,6 +32,11 @@ var replacer = null;
 // called as part of the test lifecycle or as part of the "mocked" environment.
 var testing = false;
 
+// Bootstrap it because... why not.
+var env = new goog.labs.testing.Environment();
+// The outer test case.
+var realTestCase = goog.labs.testing.EnvironmentTestCase_.getInstance();
+
 function setUp() {
   // These methods end up being called by the test framework for these tests
   // as well as the part of the environment that is being tested as part
@@ -106,6 +111,63 @@ function testLifecycle() {
   testing = false;
 }
 
+function testLifecycle_withObject() {
+  testing = true;
+
+  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+  var envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
+  var testObject = {
+    configureEnvironment:
+        mockControl.createFunctionMock('configureEnvironment1'),
+    setUp: mockControl.createFunctionMock('setUp1'),
+    testSuite: {
+      configureEnvironment:
+          mockControl.createFunctionMock('configureEnvironment2'),
+      setUp: mockControl.createFunctionMock('setUp2'),
+      test: mockControl.createFunctionMock('test'),
+      tearDown: mockControl.createFunctionMock('tearDown2')
+    },
+    tearDown: mockControl.createFunctionMock('tearDown1')
+  };
+
+  testCase.setTestObj(testObject);
+
+  testCase.registerEnvironment_(envOne);
+  testCase.registerEnvironment_(envTwo);
+  testCase.registerEnvironment_(envThree);
+
+  envOne.setUpPage();
+  envTwo.setUpPage();
+  envThree.setUpPage();
+
+  testObject.configureEnvironment();
+  testObject.testSuite.configureEnvironment();
+  envOne.setUp();
+  envTwo.setUp();
+  envThree.setUp();
+
+  testObject.setUp();
+  testObject.testSuite.setUp();
+  testObject.testSuite.test();
+  testObject.testSuite.tearDown();
+  testObject.tearDown();
+
+  envThree.tearDown();
+  envTwo.tearDown();
+  envOne.tearDown();
+
+  envThree.tearDownPage();
+  envTwo.tearDownPage();
+  envOne.tearDownPage();
+
+  mockControl.$replayAll();
+  testCase.runTests();
+  mockControl.$verifyAll();
+
+  testing = false;
+}
+
 function testLifecycle_withPromises() {
   var mockClock = new goog.testing.MockClock(true /* autoinstall */);
   testing = true;
@@ -121,7 +183,14 @@ function testLifecycle_withPromises() {
     'setUp': mockControl.createFunctionMock('setUp'),
     'tearDown': mockControl.createFunctionMock('tearDown'),
     'tearDownPage': mockControl.createFunctionMock('tearDownPage'),
-    'testFoo': mockControl.createFunctionMock('testFoo')
+    'testFoo': mockControl.createFunctionMock('testFoo'),
+    'testBar': {
+      'configureEnvironment':
+          mockControl.createFunctionMock('configureEnvironmentTest'),
+      'setUp': mockControl.createFunctionMock('setUpTest'),
+      'test': mockControl.createFunctionMock('testBar'),
+      'tearDown': mockControl.createFunctionMock('tearDownTest')
+    }
   };
   testCase.setTestObj(testObj);
 
@@ -141,16 +210,17 @@ function testLifecycle_withPromises() {
   };
   var expectCallTo = function(expectedCall) {
     assertNull(nextOp);
-    mockControl.$resetAll();
     nextOp = goog.Promise.withResolver();
     expectedCall().$returns(nextOp.promise);
     mockControl.$replayAll();
     finishPendingOp();
     mockControl.$verifyAll();
+    mockControl.$resetAll();
   };
   // Make sure there are no hanging expecations dropped by the first $resetAll.
   mockControl.$replayAll();
   mockControl.$verifyAll();
+  mockControl.$resetAll();
 
   expectCallTo(envOne.setUpPage);
   expectCallTo(envTwo.setUpPage);
@@ -165,6 +235,20 @@ function testLifecycle_withPromises() {
   testObj.tearDown();
   envTwo.tearDown();
   envOne.tearDown();
+
+  expectCallTo(testObj.configureEnvironment);
+  expectCallTo(testObj.testBar.configureEnvironment);
+  expectCallTo(envOne.setUp);
+  expectCallTo(envTwo.setUp);
+  expectCallTo(testObj.setUp);
+  expectCallTo(testObj.testBar.setUp);
+  expectCallTo(testObj.testBar.test);
+
+  mockControl.$resetAll();
+  testObj.testBar.tearDown();
+  testObj.tearDown();
+  envTwo.tearDown();
+  envOne.tearDown();
   testObj.tearDownPage();
   envTwo.tearDownPage();
   envOne.tearDownPage();
@@ -173,9 +257,9 @@ function testLifecycle_withPromises() {
   var result = mockClock.tickPromise(resultPromise);
   mockControl.$verifyAll();
   assertTrue(result.complete);
-  assertEquals(1, result.totalCount);
-  assertEquals(1, result.runCount);
-  assertEquals(1, result.successCount);
+  assertEquals(2, result.totalCount);
+  assertEquals(2, result.runCount);
+  assertEquals(2, result.successCount);
   assertEquals(0, result.errors.length);
 
   testing = false;
@@ -232,7 +316,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(9, testCase.tests_.length);
+  assertEquals(10, testCase.tests_.length);
 
   testing = false;
 }
@@ -261,7 +345,13 @@ function testTestSuiteTests() {
     setUpPage: function() {},
     tearDownPage: function() {},
     // This test method should be added.
-    testMe: function() {}
+    testMe: function() {},
+    testMeToo: {
+      setUp: function() {},
+      testA: function() {},
+      testB: function() {},
+      tearDown: function() {}
+    }
   });
 
   assertEquals(setUpPageFn, testCase.setUpPage);
@@ -269,9 +359,7 @@ function testTestSuiteTests() {
   assertEquals(tearDownFn, testCase.tearDownFn);
   assertEquals(tearDownPageFn, testCase.tearDownPageFn);
 
-  // Note that this number changes when more tests are added to this file as
-  // the environment reflects on the window global scope for JsUnit.
-  assertEquals(1, testCase.tests_.length);
+  assertEquals(3, testCase.tests_.length);
 
   testing = false;
 }

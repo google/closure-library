@@ -113,7 +113,7 @@ goog.debug.Console.prototype.addLogRecord = function(logRecord) {
         goog.debug.Console.logToConsole_(console, 'warn', record);
         break;
       default:
-        goog.debug.Console.logToConsole_(console, 'debug', record);
+        goog.debug.Console.logToConsole_(console, 'log', record);
         break;
     }
   } else {

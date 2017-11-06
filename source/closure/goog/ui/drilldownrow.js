@@ -249,11 +249,11 @@ goog.ui.DrilldownRow.prototype.removeChild = function(child) {
  */
 goog.ui.DrilldownRow.prototype.render = function() {
   if (arguments.length) {
-    throw Error('A DrilldownRow cannot be placed under a specific parent.');
+    throw new Error('A DrilldownRow cannot be placed under a specific parent.');
   } else {
     var parent = this.getParent();
     if (!parent.isInDocument()) {
-      throw Error('Cannot render child of un-rendered parent');
+      throw new Error('Cannot render child of un-rendered parent');
     }
     // The new child's TR node needs to go just after the last TR
     // of the part of the parent's subtree that is to the left
@@ -290,7 +290,7 @@ goog.ui.DrilldownRow.prototype.render = function() {
 goog.ui.DrilldownRow.prototype.findIndex = function() {
   var parent = this.getParent();
   if (!parent) {
-    throw Error('Component has no parent');
+    throw new Error('Component has no parent');
   }
   return parent.indexOfChild(this);
 };
@@ -375,7 +375,7 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
   var row = selfObj.getElement();
   goog.asserts.assert(row);
   if (!row.cells) {
-    throw Error('No cells');
+    throw new Error('No cells');
   }
   var cell = row.cells[0];
   var dom = selfObj.getDomHelper();

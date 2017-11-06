@@ -65,7 +65,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   },
 
 
-  /** Runs immediately before the setUpPage phase of JsUnit tests. */
+  /**
+   * Runs immediately before the setUpPage phase of JsUnit tests.
+   * @return {!goog.Promise<?>|undefined} An optional Promise which must be
+   *     resolved before the test is executed.
+   */
   setUpPage: function() {
     if (this.mockClock && this.mockClock.isDisposed()) {
       this.mockClock = new goog.testing.MockClock(true);
@@ -81,7 +85,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     }
   },
 
-  /** Runs immediately before the setUp phase of JsUnit tests. */
+  /**
+   * Runs immediately before the setUp phase of JsUnit tests.
+   * @return {!goog.Promise<?>|undefined} An optional Promise which must be
+   *     resolved before the test case is executed.
+   */
   setUp: goog.nullFunction,
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
@@ -250,6 +258,14 @@ goog.labs.testing.EnvironmentTestCase_.prototype.autoDiscoverLifecycle =
   }
 };
 
+/**
+ * @override
+ */
+goog.labs.testing.EnvironmentTestCase_.prototype.createTest = function(
+    name, ref, scope, objChain) {
+  return new goog.labs.testing.EnvironmentTest_(name, ref, scope, objChain);
+};
+
 
 /**
  * Adds an environment to the JsUnit test.
@@ -283,6 +299,10 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   if (this.testobj_['configureEnvironment']) {
     setUpFns.push(
         goog.bind(this.testobj_['configureEnvironment'], this.testobj_));
+  }
+  var test = this.getCurrentTest();
+  if (test instanceof goog.labs.testing.EnvironmentTest_) {
+    goog.array.extend(setUpFns, test.configureEnvironments);
   }
 
   goog.array.forEach(this.environments_, function(env) {
@@ -360,3 +380,38 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDownPage = function() {
   goog.array.forEachRight(
       this.environments_, function(env) { env.tearDownPage(); });
 };
+
+/**
+ * An internal Test used to hook environments into the JsUnit test runner.
+ * @param {string} name The test name.
+ * @param {function()} ref Reference to the test function or test object.
+ * @param {?Object=} scope Optional scope that the test function should be
+ *     called in.
+ * @param {!Array<!Object>=} objChain A chain of objects used to populate setUps
+ *     and tearDowns.
+ * @private
+ * @final
+ * @constructor
+ * @extends {goog.testing.TestCase.Test}
+ */
+goog.labs.testing.EnvironmentTest_ = function(name, ref, scope, objChain) {
+  goog.labs.testing.EnvironmentTest_.base(
+      this, 'constructor', name, ref, scope, objChain);
+
+  /**
+   * @type {!Array<function()>}
+   */
+  this.configureEnvironments = goog.array.map(
+      goog.array.filter(
+          objChain || [],
+          function(obj) {
+            return goog.isFunction(obj.configureEnvironment);
+          }), /**
+               * @param  {{configureEnvironment: function()}} obj
+               * @return {function()}
+               */
+      function(obj) {
+        return goog.bind(obj.configureEnvironment, obj);
+      });
+};
+goog.inherits(goog.labs.testing.EnvironmentTest_, goog.testing.TestCase.Test);

@@ -191,7 +191,7 @@ goog.net.FetchXmlHttp.prototype.open = function(method, url, opt_async) {
   goog.asserts.assert(!!opt_async, 'Only async requests are supported.');
   if (this.readyState != goog.net.FetchXmlHttp.RequestState.UNSENT) {
     this.abort();
-    throw Error('Error reopening a connection');
+    throw new Error('Error reopening a connection');
   }
 
   this.method_ = method;
@@ -206,7 +206,7 @@ goog.net.FetchXmlHttp.prototype.open = function(method, url, opt_async) {
 goog.net.FetchXmlHttp.prototype.send = function(opt_data) {
   if (this.readyState != goog.net.FetchXmlHttp.RequestState.OPENED) {
     this.abort();
-    throw Error('need to call open() first. ');
+    throw new Error('need to call open() first. ');
   }
 
   this.inProgress_ = true;

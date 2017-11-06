@@ -1,4 +1,4 @@
-// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+// Copyright 2017 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,24 +84,16 @@ function testLoggingWithWarningSupported() {
   assertEquals(8, mockConsole.log.getCallCount());
 }
 
-function testLoggingWithDebugSupported() {
-  // Make sure the log function is the default when only 'debug' is available.
-  mockConsole['debug'] = goog.testing.recordFunction();
-  logAtAllLevels('test message');
-  assertEquals(6, mockConsole.debug.getCallCount());
-  assertEquals(3, mockConsole.log.getCallCount());
-}
-
 function testLoggingWithEverythingSupported() {
   mockConsole['info'] = goog.testing.recordFunction();
   mockConsole['error'] = goog.testing.recordFunction();
   mockConsole['warn'] = goog.testing.recordFunction();
-  mockConsole['debug'] = goog.testing.recordFunction();
+  mockConsole['log'] = goog.testing.recordFunction();
   logAtAllLevels('test message');
   assertEquals(1, mockConsole.info.getCallCount());
   assertEquals(1, mockConsole.error.getCallCount());
   assertEquals(1, mockConsole.warn.getCallCount());
-  assertEquals(6, mockConsole.debug.getCallCount());
+  assertEquals(6, mockConsole.log.getCallCount());
 }
 
 function testAddLogRecordWithoutFilters() {

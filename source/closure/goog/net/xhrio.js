@@ -51,7 +51,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.EventTarget');
-goog.require('goog.json');
+goog.require('goog.json.hybrid');
 goog.require('goog.log');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
@@ -273,6 +273,7 @@ goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?$/i;
 /**
  * The methods that typically come along with form data.  We set different
  * headers depending on whether the HTTP action is one of these.
+ * @type {!Array<string>}
  */
 goog.net.XhrIo.METHODS_WITH_FORM_DATA = ['POST', 'PUT'];
 
@@ -508,7 +509,7 @@ goog.net.XhrIo.prototype.getProgressEventsEnabled = function() {
 goog.net.XhrIo.prototype.send = function(
     url, opt_method, opt_content, opt_headers) {
   if (this.xhr_) {
-    throw Error(
+    throw new Error(
         '[goog.net.XhrIo] Object is active with another request=' +
         this.lastUri_ + '; newUri=' + url);
   }
@@ -974,7 +975,7 @@ goog.net.XhrIo.prototype.cleanUpTimeoutTimer_ = function() {
   if (this.xhr_ && this.useXhr2Timeout_) {
     this.xhr_[goog.net.XhrIo.XHR2_ON_TIMEOUT_] = null;
   }
-  if (goog.isNumber(this.timeoutId_)) {
+  if (this.timeoutId_) {
     goog.Timer.clear(this.timeoutId_);
     this.timeoutId_ = null;
   }
@@ -1171,7 +1172,7 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
     responseText = responseText.substring(opt_xssiPrefix.length);
   }
 
-  return goog.json.parse(responseText);
+  return goog.json.hybrid.parse(responseText);
 };
 
 

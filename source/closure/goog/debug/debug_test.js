@@ -16,6 +16,7 @@ goog.provide('goog.debugTest');
 goog.setTestOnly('goog.debugTest');
 
 goog.require('goog.debug');
+goog.require('goog.debug.errorcontext');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
 
@@ -97,4 +98,45 @@ function testDeepExpose() {
   assert(goog.hasUid(a));
   assertFalse(goog.hasUid(b));
   assertFalse(goog.hasUid(c));
+}
+
+
+function testEnhanceErrorWithContext() {
+  var err = 'abc';
+  var context = {firstKey: 'first', secondKey: 'another key'};
+  var errorWithContext = goog.debug.enhanceErrorWithContext(err, context);
+  assertObjectEquals(
+      context, goog.debug.errorcontext.getErrorContext(errorWithContext));
+}
+
+
+function testEnhanceErrorWithContext_combinedContext() {
+  var err = new Error('abc');
+  goog.debug.errorcontext.addErrorContext(err, 'a', '123');
+  var context = {b: '456', c: '789'};
+  var errorWithContext = goog.debug.enhanceErrorWithContext(err, context);
+  assertObjectEquals(
+      {a: '123', b: '456', c: '789'},
+      goog.debug.errorcontext.getErrorContext(errorWithContext));
+}
+
+
+function testFreeze_nonDebug() {
+  if (goog.DEBUG && typeof Object.freeze == 'function') return;
+  var a = {};
+  assertEquals(a, goog.debug.freeze(a));
+  a.foo = 42;
+  assertEquals(42, a.foo);
+}
+
+
+function testFreeze_debug() {
+  if (goog.DEBUG || typeof Object.freeze != 'function') return;
+  var a = {};
+  assertEquals(a, goog.debug.freeze(a));
+  try {
+    a.foo = 42;
+  } catch (expectedInStrictMode) {
+  }
+  assertUndefined(a.foo);
 }

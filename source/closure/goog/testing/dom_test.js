@@ -22,6 +22,13 @@ goog.require('goog.testing.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+
+function shouldRunTests() {
+  // This test has not yet been updated to run on IE8. See b/2997682.
+  return !goog.userAgent.IE || goog.userAgent.isVersionOrHigher(9);
+}
+
+
 var root;
 function setUpPage() {
   // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).

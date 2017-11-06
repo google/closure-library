@@ -247,6 +247,34 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
 
 
 /**
+ * Gets an object from the store. If no object is present with that key
+ * the result is {@code undefined}.
+ *
+ * @return {!goog.async.Deferred} The deferred getAllKeys request.
+ */
+goog.db.ObjectStore.prototype.getAllKeys = function() {
+  var d = new goog.async.Deferred();
+  var request;
+  try {
+    request = this.store_.getAllKeys();
+  } catch (err) {
+    var msg = 'getting all keys from ' + this.getName();
+    d.errback(goog.db.Error.fromException(err, msg));
+    return d;
+  }
+  request.onsuccess = function(ev) {
+    d.callback(ev.target.result);
+  };
+  var self = this;
+  request.onerror = function(ev) {
+    var msg = 'getting all keys from ' + self.getName();
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+  };
+  return d;
+};
+
+
+/**
  * Opens a cursor over the specified key range. Returns a cursor object which is
  * able to iterate over the given range.
  *

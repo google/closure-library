@@ -26,6 +26,11 @@ goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 goog.require('goog.userAgentTestUtil');
 
+function shouldRunTests() {
+  // This test has not yet been updated to run on IE8 and up. See b/2997681.
+  return !goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(8);
+}
+
 var mockAgent;
 var replacer;
 

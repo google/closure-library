@@ -223,7 +223,7 @@ Handler.prototype.isEmpty = function() {
 
 Handler.prototype.dequeue = function() {
   if (this.isEmpty()) {
-    throw Error('Handler is empty');
+    throw new Error('Handler is empty');
   }
   return this.events_.shift();
 };

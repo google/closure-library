@@ -154,7 +154,7 @@ goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
   }
 
   if (obj[key]) {
-    throw Error(
+    throw new Error(
         'Cannot delete non configurable property "' + key + '" in ' + obj);
   }
 };
@@ -195,7 +195,8 @@ goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
   // document.body.style.margin = 0;
   // document.body.style.margin; // returns "0px"
   if (obj[key] != value && (value + 'px') != obj[key]) {
-    throw Error('Cannot overwrite read-only property "' + key + '" in ' + obj);
+    throw new Error(
+        'Cannot overwrite read-only property "' + key + '" in ' + obj);
   }
 };
 
@@ -220,7 +221,7 @@ goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
 goog.testing.PropertyReplacer.prototype.replace = function(
     obj, key, value, opt_allowNullOrUndefined) {
   if (!(key in obj)) {
-    throw Error('Cannot replace missing property "' + key + '" in ' + obj);
+    throw new Error('Cannot replace missing property "' + key + '" in ' + obj);
   }
   // If opt_allowNullOrUndefined is true, then we do not check the types if
   // either the original or new value is null or undefined.
@@ -230,7 +231,7 @@ goog.testing.PropertyReplacer.prototype.replace = function(
     var originalType = goog.typeOf(obj[key]);
     var newType = goog.typeOf(value);
     if (originalType != newType) {
-      throw Error(
+      throw new Error(
           'Cannot replace property "' + key + '" in ' + obj +
           ' with a value of different type (expected ' + originalType +
           ', found ' + newType + ')');
@@ -252,7 +253,8 @@ goog.testing.PropertyReplacer.prototype.setPath = function(path, value) {
   for (var i = 0; i < parts.length - 1; i++) {
     var part = parts[i];
     if (part == 'prototype' && !obj[part]) {
-      throw Error('Cannot set the prototype of ' + parts.slice(0, i).join('.'));
+      throw new Error(
+          'Cannot set the prototype of ' + parts.slice(0, i).join('.'));
     }
     if (!goog.isObject(obj[part]) && !goog.isFunction(obj[part])) {
       this.set(obj, part, {});
@@ -293,7 +295,7 @@ goog.testing.PropertyReplacer.prototype.restore = function(obj, key) {
       return;
     }
   }
-  throw Error('Cannot restore unmodified property "' + key + '" of ' + obj);
+  throw new Error('Cannot restore unmodified property "' + key + '" of ' + obj);
 };
 
 

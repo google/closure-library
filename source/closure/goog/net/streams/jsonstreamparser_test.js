@@ -263,30 +263,3 @@ function testDeliverMessageAsRawString() {
   assertEquals('[]', result[2]);
   assertEquals('{}', result[3]);
 }
-
-
-function testCompactJsonArrayFormat() {
-  var message1 = '{"a" : [1, ,2]}';
-  var message2 = '[,  1,2,,  ,null,  ,,"abc"]';
-  var message3 = '[ , ]';
-  var stream = '[' + message1 + ',' + message2 + ',' + message3 + ']';
-
-  var parser = new goog.net.streams.JsonStreamParser(
-      {'allowCompactJsonArrayFormat': true});
-  result = parser.parse(stream);
-  // clang-format off
-  assertEquals(3, result.length);
-  assertElementsEquals([1, , 2], result[0].a);
-  assertElementsEquals([, 1, 2, , , null, , , 'abc'], result[1]);
-  assertElementsEquals([ , ], result[2]);
-  // clang-format on
-
-  // Raw message strings
-  parser = new goog.net.streams.JsonStreamParser(
-      {'allowCompactJsonArrayFormat': true, 'deliverMessageAsRawString': true});
-  result = parser.parse(stream);
-  assertEquals(3, result.length);
-  assertEquals(message1, result[0]);
-  assertEquals(message2, result[1]);
-  assertEquals(message3, result[2]);
-}

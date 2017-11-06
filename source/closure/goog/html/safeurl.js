@@ -243,21 +243,24 @@ goog.html.SafeUrl.fromConstant = function(url) {
 
 /**
  * A pattern that matches Blob or data types that can have SafeUrls created
- * from URL.createObjectURL(blob) or via a data: URI.  Only matches image and
- * video types, currently.
+ * from URL.createObjectURL(blob) or via a data: URI.
  * @const
  * @private
  */
-goog.html.SAFE_MIME_TYPE_PATTERN_ =
-    /^(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm))$/i;
+goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
+    '^(?:audio/(?:3gpp|3gpp2|aac|midi|mp4|mpeg|ogg|x-m4a|x-wav|webm)|' +
+        'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|' +
+        'text/csv|' +
+        'video/(?:mpeg|mp4|ogg|webm))$',
+    'i');
 
 
 /**
  * Creates a SafeUrl wrapping a blob URL for the given {@code blob}.
  *
  * The blob URL is created with {@code URL.createObjectURL}. If the MIME type
- * for {@code blob} is not of a known safe image or video MIME type, then the
- * SafeUrl will wrap {@link #INNOCUOUS_STRING}.
+ * for {@code blob} is not of a known safe audio, image or video MIME type,
+ * then the SafeUrl will wrap {@link #INNOCUOUS_STRING}.
  *
  * @see http://www.w3.org/TR/FileAPI/#url
  * @param {!Blob} blob
@@ -282,10 +285,10 @@ goog.html.DATA_URL_PATTERN_ = /^data:([^;,]*);base64,[a-z0-9+\/]+=*$/i;
 
 /**
  * Creates a SafeUrl wrapping a data: URL, after validating it matches a
- * known-safe image or video MIME type.
+ * known-safe audio, image or video MIME type.
  *
  * @param {string} dataUrl A valid base64 data URL with one of the whitelisted
- *     image or video MIME types.
+ *     audio, image or video MIME types.
  * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
  *     wrapped as a SafeUrl if it does not pass.
  */
