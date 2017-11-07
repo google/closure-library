@@ -16,6 +16,7 @@ goog.provide('goog.ui.AnimatedZippyTest');
 goog.setTestOnly('goog.ui.AnimatedZippyTest');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -49,6 +50,17 @@ function tearDown() {
 
 function testConstructor() {
   assertNotNull('must not be null', animatedZippy);
+  assertEquals(
+      goog.a11y.aria.getRole(animatedZippyHeaderEl), goog.a11y.aria.Role.TAB);
+}
+
+function testConstructorAriaRoleOverride() {
+  animatedZippy = new goog.ui.AnimatedZippy(
+      animatedZippyHeaderEl, goog.dom.getElement('c1'), null, null,
+      goog.a11y.aria.Role.BUTTON);
+  assertEquals(
+      goog.a11y.aria.getRole(animatedZippyHeaderEl),
+      goog.a11y.aria.Role.BUTTON);
 }
 
 function testExpandCollapse() {
