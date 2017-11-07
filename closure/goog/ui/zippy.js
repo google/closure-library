@@ -56,10 +56,12 @@ goog.require('goog.style');
  * @param {Element|string=} opt_expandedHeader Element to use as the header when
  *     the zippy is expanded.
  * @param {goog.dom.DomHelper=} opt_domHelper An optional DOM helper.
+ * @param {goog.a11y.aria.Role<string>=} opt_role ARIA role, default TAB.
  * @constructor
  */
 goog.ui.Zippy = function(
-    header, opt_content, opt_expanded, opt_expandedHeader, opt_domHelper) {
+    header, opt_content, opt_expanded, opt_expandedHeader, opt_domHelper,
+    opt_role) {
   goog.ui.Zippy.base(this, 'constructor');
 
   /**
@@ -91,6 +93,13 @@ goog.ui.Zippy = function(
    * @private
    */
   this.lazyCreateFunc_ = goog.isFunction(opt_content) ? opt_content : null;
+
+  /**
+   * ARIA role.
+   * @type {goog.a11y.aria.Role<string>}
+   * @private
+   */
+  this.role_ = opt_role || goog.a11y.aria.Role.TAB;
 
   /**
    * Content element.
@@ -206,7 +215,7 @@ goog.ui.Zippy.prototype.disposeInternal = function() {
  * @return {goog.a11y.aria.Role} The ARIA role to be applied to Zippy element.
  */
 goog.ui.Zippy.prototype.getAriaRole = function() {
-  return goog.a11y.aria.Role.TAB;
+  return this.role_;
 };
 
 

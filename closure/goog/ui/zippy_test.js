@@ -26,7 +26,8 @@ goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Zippy');
 
-var zippy, fakeZippy1, fakeZippy2, contentlessZippy, headerlessZippy;
+var zippy, fakeZippy1, fakeZippy2, contentlessZippy, headerlessZippy,
+    buttonZippy;
 var lazyZippy;
 var lazyZippyCallCount;
 var lazyZippyContentEl;
@@ -49,6 +50,9 @@ function setUp() {
       new goog.ui.Zippy(fakeControlEl.cloneNode(true), undefined, true);
   headerlessZippy =
       new goog.ui.Zippy(null, fakeContentEl.cloneNode(true), true);
+  buttonZippy = new goog.ui.Zippy(
+      null, fakeContentEl.cloneNode(true), true, null, null,
+      goog.a11y.aria.Role.BUTTON);
 
   lazyZippyCallCount = 0;
   lazyZippyContentEl = fakeContentEl.cloneNode(true);
@@ -74,6 +78,7 @@ function testIsExpanded() {
   assertEquals('Expanded must be true', true, headerlessZippy.isExpanded());
   assertEquals('Expanded must be false', false, lazyZippy.isExpanded());
   assertEquals('Expanded must be false', false, dualHeaderZippy.isExpanded());
+  assertEquals('Expanded must be true', true, buttonZippy.isExpanded());
 }
 
 function tearDown() {
@@ -84,6 +89,7 @@ function tearDown() {
   headerlessZippy.dispose();
   lazyZippy.dispose();
   dualHeaderZippy.dispose();
+  buttonZippy.dispose();
 }
 
 function testExpandCollapse() {
@@ -168,6 +174,12 @@ function testCssClassesAndAria() {
   assertEquals(
       'header aria-expanded is true', 'true',
       goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
+}
+
+function testAreaRoleOverride() {
+  assertEquals(
+      'Aria role override is goog.a11y.aria.Role.BUTTON',
+      goog.a11y.aria.Role.BUTTON, buttonZippy.getAriaRole());
 }
 
 function testHeaderTabIndex() {
