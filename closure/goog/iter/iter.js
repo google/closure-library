@@ -609,6 +609,7 @@ goog.iter.product = function(var_args) {
   var arrays = arguments;
 
   // The first indices are [0, 0, ...]
+  /** @type {?Array<number>} */
   var indicies = goog.array.repeat(0, arrays.length);
 
   iter.next = function() {

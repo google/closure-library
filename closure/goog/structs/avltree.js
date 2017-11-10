@@ -144,6 +144,7 @@ goog.structs.AvlTree.prototype.add = function(value) {
   }
 
   // This will be set to the new node if a new node is added.
+  /** @type {?goog.structs.AvlTree.Node} */
   var newNode = null;
 
   // Depth traverse the tree and insert the value if we reach a null node
@@ -174,11 +175,12 @@ goog.structs.AvlTree.prototype.add = function(value) {
 
   // If a node was added, increment counts and balance tree.
   if (newNode) {
+    var nonNullNewNode = /** @type {!goog.structs.AvlTree.Node} */ (newNode);
     this.traverse_(function(node) {
       node.count++;
       return node.parent;
-    }, newNode.parent);
-    this.balance_(newNode.parent);  // Maintain the AVL-tree balance
+    }, nonNullNewNode.parent);
+    this.balance_(nonNullNewNode.parent);  // Maintain the AVL-tree balance
   }
 
   // Return true if a node was added, false otherwise
@@ -396,6 +398,7 @@ goog.structs.AvlTree.prototype.inOrderTraverse = function(
   }
 
   // Depth traverse the tree to find node to begin in-order traversal from
+  /** @type {undefined|!goog.structs.AvlTree.Node} */
   var startNode;
   if (opt_startValue !== undefined) {
     this.traverse_(function(node) {
@@ -415,11 +418,12 @@ goog.structs.AvlTree.prototype.inOrderTraverse = function(
       return;
     }
   } else {
-    startNode = this.getMinNode_();
+    startNode = /** @type {!goog.structs.AvlTree.Node} */ (this.getMinNode_());
   }
 
   // Traverse the tree and call func on each traversed node's value
-  var node = startNode, prev = startNode.left ? startNode.left : startNode;
+  var node = /** @type {!goog.structs.AvlTree.Node} */ (startNode);
+  var prev = node.left ? node.left : node;
   while (node != null) {
     if (node.left != null && node.left != prev && node.right != prev) {
       node = node.left;
