@@ -81,8 +81,8 @@ goog.locale.Resource = {
 // e.g. en-Latn-GB
 //
 // NOTICE:
-// No special format checking is performed. If you pass a none valid
-// language code as parameter to the following functions,
+// No special format checking is performed. If you pass an invalid
+// language code as a parameter to the following functions,
 // you might get an unexpected result.
 
 
