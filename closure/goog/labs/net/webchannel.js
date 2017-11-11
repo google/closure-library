@@ -156,7 +156,8 @@ goog.net.WebChannel = function() {};
  *   httpHeadersOverwriteParam: (string|undefined),
  *   backgroundChannelTest: (boolean|undefined),
  *   fastHandshake: (boolean|undefined),
- *   disableRedact: (boolean|undefined)
+ *   disableRedact: (boolean|undefined),
+ *   clientProfile: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
