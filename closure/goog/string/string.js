@@ -338,7 +338,9 @@ goog.string.trim =
       // character class (as required by section 7.2 of the ECMAScript spec),
       // we explicitly include it in the regexp to enforce consistent
       // cross-browser behavior.
-      return str.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+      // NOTE: We don't use String#replace because it might have side effects
+      // causing this function to not compile to 0 bytes.
+      return /^[\s\xa0]*([\s\S]*?)[\s\xa0]*$/.exec(str)[1];
     };
 
 
