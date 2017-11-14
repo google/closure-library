@@ -320,6 +320,16 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.forwardChannelRequestTimeoutMs_ = 20 * 1000;
 
   /**
+   * The timeout in milliseconds for a back channel request. Defaults to using
+   * the timeout configured in ChannelRequest (45s). If server-side
+   * keepaliveInterval is known to the client, set the backchannel request
+   * timeout to 1.5 * keepaliveInterval (ms).
+   *
+   * @private {number|undefined}
+   */
+  this.backChannelRequestTimeoutMs_ = undefined;
+
+  /**
    * A throttle time in ms for readystatechange events for the backchannel.
    * Useful for throttling when ready state is INTERACTIVE (partial data).
    *
@@ -1443,6 +1453,10 @@ WebChannelBase.prototype.startBackChannel_ = function() {
         uri, this.httpHeadersOverwriteParam_, this.extraHeaders_);
   }
 
+  if (this.backChannelRequestTimeoutMs_) {
+    this.backChannelRequest_.setTimeout(this.backChannelRequestTimeoutMs_);
+  }
+
   this.backChannelRequest_.xmlHttpGet(
       uri, true /* decodeChunks */, this.hostPrefix_);
 
@@ -1877,6 +1891,15 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         if (goog.isDefAndNotNull(negotiatedServerVersion)) {
           this.serverVersion_ = negotiatedServerVersion;
           this.channelDebug_.info('SVER=' + this.serverVersion_);
+        }
+
+        // CVER=22
+        var serverKeepaliveMs = nextArray[5];
+        if (goog.isDefAndNotNull(serverKeepaliveMs) &&
+            goog.isNumber(serverKeepaliveMs) && serverKeepaliveMs > 0) {
+          var timeout = 1.5 * serverKeepaliveMs;
+          this.backChannelRequestTimeoutMs_ = timeout;
+          this.channelDebug_.info('backChannelRequestTimeoutMs_=' + timeout);
         }
 
         this.applyControlHeaders_(request);

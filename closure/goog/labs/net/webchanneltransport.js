@@ -57,7 +57,7 @@ goog.net.WebChannelTransport = function() {};
  * @const
  * @type {number}
  */
-goog.net.WebChannelTransport.CLIENT_VERSION = 21;
+goog.net.WebChannelTransport.CLIENT_VERSION = 22;
 
 
 /**
