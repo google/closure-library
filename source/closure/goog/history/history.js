@@ -176,7 +176,7 @@ goog.require('goog.history.Event');
 goog.require('goog.history.EventType');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.legacyconversions');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.labs.userAgent.device');
 goog.require('goog.memoize');
 goog.require('goog.string');
@@ -737,7 +737,11 @@ goog.History.prototype.setHash_ = function(token, opt_replace) {
       loc.replace(url);
     } else {
       goog.dom.safe.setLocationHref(
-          loc, goog.html.legacyconversions.safeUrlFromString(url));
+          loc,
+          goog.html.uncheckedconversions
+              .safeUrlFromStringKnownToSatisfyTypeContract(
+                  goog.string.Const.from('URL taken from location.href.'),
+                  url));
     }
   }
 };

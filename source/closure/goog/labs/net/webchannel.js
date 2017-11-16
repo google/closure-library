@@ -138,6 +138,10 @@ goog.net.WebChannel = function() {};
  * enabled to remove any message payload or user-provided info
  * from closure logs.
  *
+ * clientProfile: inform the server about the client profile to enable
+ * customized configs that are optimized for certain clients or environments.
+ * Currently this information is sent via X-WebChannel-Client-Profile header.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   initMessageHeaders: (!Object<string, string>|undefined),
@@ -152,7 +156,8 @@ goog.net.WebChannel = function() {};
  *   httpHeadersOverwriteParam: (string|undefined),
  *   backgroundChannelTest: (boolean|undefined),
  *   fastHandshake: (boolean|undefined),
- *   enableRedact: (boolean|undefined)
+ *   disableRedact: (boolean|undefined),
+ *   clientProfile: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
@@ -549,3 +554,12 @@ goog.net.WebChannel.X_HTTP_SESSION_ID = 'X-HTTP-Session-Id';
  * @type {string}
  */
 goog.net.WebChannel.X_WEBCHANNEL_CONTENT_TYPE = 'X-WebChannel-Content-Type';
+
+
+/**
+ * A request header for specifying the client profile in order to apply
+ * customized config params on the server side, e.g. timeouts.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_WEBCHANNEL_CLIENT_PROFILE = 'X-WebChannel-Client-Profile';

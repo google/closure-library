@@ -21,6 +21,7 @@
 
 goog.provide('goog.ui.AnimatedZippy');
 
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
@@ -43,10 +44,12 @@ goog.require('goog.ui.ZippyEvent');
  * @param {boolean=} opt_expanded Initial expanded/visibility state. Defaults to
  *     false.
  * @param {goog.dom.DomHelper=} opt_domHelper An optional DOM helper.
+ * @param {goog.a11y.aria.Role<string>=} opt_role ARIA role, default TAB.
  * @constructor
  * @extends {goog.ui.Zippy}
  */
-goog.ui.AnimatedZippy = function(header, content, opt_expanded, opt_domHelper) {
+goog.ui.AnimatedZippy = function(
+    header, content, opt_expanded, opt_domHelper, opt_role) {
   var domHelper = opt_domHelper || goog.dom.getDomHelper();
 
   // Create wrapper element and move content into it.
@@ -72,7 +75,7 @@ goog.ui.AnimatedZippy = function(header, content, opt_expanded, opt_domHelper) {
 
   // Call constructor of super class.
   goog.ui.Zippy.call(
-      this, header, elContent, opt_expanded, undefined, domHelper);
+      this, header, elContent, opt_expanded, undefined, domHelper, opt_role);
 
   // Set initial state.
   // NOTE: Set the class names as well otherwise animated zippys

@@ -171,6 +171,7 @@ goog.structs.Trie.prototype.get = function(key) {
  */
 goog.structs.Trie.prototype.getKeyAndPrefixes = function(
     key, opt_keyStartIndex) {
+  /** @type {!goog.structs.Trie<VALUE>} */
   var node = this;
   var matches = {};
   var characterPosition = opt_keyStartIndex || 0;
@@ -185,7 +186,7 @@ goog.structs.Trie.prototype.getKeyAndPrefixes = function(
       break;
     }
     node = node.childNodes_[currentCharacter];
-    if (node.value_ !== undefined) {
+    if (/** @type {VALUE} */ (node.value_) !== undefined) {
       matches[characterPosition] = node.value_;
     }
   }

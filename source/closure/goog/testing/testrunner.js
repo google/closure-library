@@ -157,16 +157,23 @@ goog.testing.TestRunner.prototype.isInitialized = function() {
 
 
 /**
- * Returns true if the test runner is finished.
+ * Returns false if the test runner has not finished successfully.
  * Used by Selenium Hooks.
- * @return {boolean} Whether the test runner is active.
+ * @return {boolean} Whether the test runner is not active.
  */
 goog.testing.TestRunner.prototype.isFinished = function() {
-  return this.errors.length > 0 ||
-      this.initialized && !!this.testCase && this.testCase.started &&
-      !this.testCase.running;
+  return this.errors.length > 0 || this.isComplete();
 };
 
+
+/**
+ * Returns true if the test runner is finished.
+ * @return {boolean} True if the test runner started and subsequently completed.
+ */
+goog.testing.TestRunner.prototype.isComplete = function() {
+  return this.initialized && !!this.testCase && this.testCase.started &&
+      !this.testCase.running;
+};
 
 /**
  * Returns true if the test case didn't fail.
@@ -194,6 +201,12 @@ goog.testing.TestRunner.prototype.hasErrors = function() {
  * @param {string} msg Error message.
  */
 goog.testing.TestRunner.prototype.logError = function(msg) {
+  if (this.isComplete()) {
+    // Once the user has checked their code, subsequent errors can occur
+    // because of tearDown actions. For now, log these but do not fail the test.
+    this.log('Error after test completed: ' + msg);
+    return;
+  }
   if (!this.errorFilter_ || this.errorFilter_.call(null, msg)) {
     this.errors.push(msg);
   }

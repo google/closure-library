@@ -27,6 +27,7 @@ goog.provide('goog.testing.jsunit');
 goog.require('goog.dom.TagName');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.TestRunner');
+goog.require('goog.userAgent');
 
 
 /**
@@ -38,10 +39,11 @@ goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
 
 /**
  * @define {number} Sets a delay in milliseconds after the window onload event
- * and running the tests. Used to prevent interference with Selenium and give
- * tests with asynchronous operations time to finish loading.
+ * and running the tests. Used as a workaround for IE failing to report load
+ * event if the page has iframes.  The appropriate value is zero;
+ * maximum should be 500.  Do not use this value to support asynchronous tests.
  */
-goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
+goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 0);
 
 
 (function() {
@@ -173,6 +175,13 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
       }
       // Execute the test on the next turn, to allow the WebDriver.get()
       // operation to return to the test runner and begin polling.
+      var executionDelayAfterLoad = goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS;
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('11')) {
+        // Older IE Webdriver will not return onload if the page uses iframes.
+        executionDelayAfterLoad =
+            Math.max(goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS, 500);
+      }
+
       realTimeout(function() {
         if (!tr.initialized) {
           var testCase = new goog.testing.TestCase(document.title);
@@ -180,7 +189,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
           tr.initialize(testCase);
         }
         tr.execute();
-      }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
+      }, executionDelayAfterLoad);
       window.onload = null;
     };
   }

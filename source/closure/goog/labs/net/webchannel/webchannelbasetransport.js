@@ -150,6 +150,18 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
     }
   }
 
+  if (opt_options && opt_options.clientProfile) {
+    if (initHeaders) {
+      goog.object.set(
+          initHeaders, goog.net.WebChannel.X_WEBCHANNEL_CLIENT_PROFILE,
+          opt_options.clientProfile);
+    } else {
+      initHeaders = goog.object.create(
+          goog.net.WebChannel.X_WEBCHANNEL_CLIENT_PROFILE,
+          opt_options.clientProfile);
+    }
+  }
+
   this.channel_.setInitHeaders(initHeaders);
 
   var httpHeadersOverwriteParam =

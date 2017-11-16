@@ -248,8 +248,12 @@ goog.html.SafeUrl.fromConstant = function(url) {
  * @private
  */
 goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
+    // Note: Due to content-sniffing concerns, only add MIME types for
+    // media formats.
     '^(?:audio/(?:3gpp|3gpp2|aac|midi|mp4|mpeg|ogg|x-m4a|x-wav|webm)|' +
         'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|' +
+        // TODO(b/68188949): Due to content-sniffing concerns, text/csv should
+        // be removed from the whitelist.
         'text/csv|' +
         'video/(?:mpeg|mp4|ogg|webm))$',
     'i');

@@ -50,12 +50,12 @@ goog.editor.node.BLOCK_TAG_NAMES_ = goog.object.createSet(
     goog.dom.TagName.H4, goog.dom.TagName.H5, goog.dom.TagName.H6,
     goog.dom.TagName.HEADER, goog.dom.TagName.HGROUP, goog.dom.TagName.HR,
     goog.dom.TagName.ISINDEX, goog.dom.TagName.OL, goog.dom.TagName.LI,
-    goog.dom.TagName.MAP, goog.dom.TagName.MENU, goog.dom.TagName.NAV,
-    goog.dom.TagName.OPTGROUP, goog.dom.TagName.OPTION, goog.dom.TagName.P,
-    goog.dom.TagName.PRE, goog.dom.TagName.SECTION, goog.dom.TagName.SUMMARY,
-    goog.dom.TagName.TABLE, goog.dom.TagName.TBODY, goog.dom.TagName.TD,
-    goog.dom.TagName.TFOOT, goog.dom.TagName.TH, goog.dom.TagName.THEAD,
-    goog.dom.TagName.TR, goog.dom.TagName.UL);
+    goog.dom.TagName.MAIN, goog.dom.TagName.MAP, goog.dom.TagName.MENU,
+    goog.dom.TagName.NAV, goog.dom.TagName.OPTGROUP, goog.dom.TagName.OPTION,
+    goog.dom.TagName.P, goog.dom.TagName.PRE, goog.dom.TagName.SECTION,
+    goog.dom.TagName.SUMMARY, goog.dom.TagName.TABLE, goog.dom.TagName.TBODY,
+    goog.dom.TagName.TD, goog.dom.TagName.TFOOT, goog.dom.TagName.TH,
+    goog.dom.TagName.THEAD, goog.dom.TagName.TR, goog.dom.TagName.UL);
 
 
 /**

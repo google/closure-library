@@ -39,7 +39,6 @@ goog.provide('goog.asserts.AssertionError');
 
 goog.require('goog.debug.Error');
 goog.require('goog.dom.NodeType');
-goog.require('goog.string');
 
 
 /**
@@ -58,11 +57,7 @@ goog.define('goog.asserts.ENABLE_ASSERTS', goog.DEBUG);
  * @final
  */
 goog.asserts.AssertionError = function(messagePattern, messageArgs) {
-  messageArgs.unshift(messagePattern);
-  goog.debug.Error.call(this, goog.string.subs.apply(null, messageArgs));
-  // Remove the messagePattern afterwards to avoid permanently modifying the
-  // passed in array.
-  messageArgs.shift();
+  goog.debug.Error.call(this, goog.asserts.subs_(messagePattern, messageArgs));
 
   /**
    * The message pattern used to format the error message. Error handlers can
@@ -92,6 +87,31 @@ goog.asserts.DEFAULT_ERROR_HANDLER = function(e) {
  * @private {function(!goog.asserts.AssertionError)}
  */
 goog.asserts.errorHandler_ = goog.asserts.DEFAULT_ERROR_HANDLER;
+
+
+/**
+ * Does simple python-style string substitution.
+ * subs("foo%s hot%s", "bar", "dog") becomes "foobar hotdog".
+ * @param {string} pattern The string containing the pattern.
+ * @param {!Array<*>} subs The items to substitute into the pattern.
+ * @return {string} A copy of {@code str} in which each occurrence of
+ *     {@code %s} has been replaced an argument from {@code var_args}.
+ * @private
+ */
+goog.asserts.subs_ = function(pattern, subs) {
+  var splitParts = pattern.split('%s');
+  var returnString = '';
+
+  // Replace up to the last split part. We are inserting in the
+  // positions between split parts.
+  var subLast = splitParts.length - 1;
+  for (var i = 0; i < subLast; i++) {
+    // keep unsupplied as '%s'
+    var sub = (i < subs.length) ? subs[i] : '%s';
+    returnString += splitParts[i] + sub;
+  }
+  return returnString + splitParts[subLast];
+};
 
 
 /**
