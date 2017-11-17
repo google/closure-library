@@ -35,9 +35,7 @@
 
 goog.provide('goog.net.Jsonp');
 
-goog.require('goog.Uri');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.net.jsloader');
 goog.require('goog.object');
 
@@ -60,8 +58,8 @@ goog.require('goog.object');
  * host URL. By default, if no reply arrives within 5s, the channel
  * assumes the call failed to complete successfully.
  *
- * @param {?goog.html.TrustedResourceUrl|?goog.Uri|string} uri The Uri of the
- *     server side code that receives data posted through this channel (e.g.,
+ * @param {!goog.html.TrustedResourceUrl} uri The Uri of the server side code
+ *     that receives data posted through this channel (e.g.,
  *     "http://maps.google.com/maps/geo").
  *
  * @param {string=} opt_callbackParamName The parameter name that is used to
@@ -77,9 +75,7 @@ goog.net.Jsonp = function(uri, opt_callbackParamName) {
    * @type {!goog.html.TrustedResourceUrl}
    * @private
    */
-  this.uri_ = uri instanceof goog.html.TrustedResourceUrl ?
-      uri :
-      goog.html.legacyconversions.trustedResourceUrlFromString(String(uri));
+  this.uri_ = uri;
 
   /**
    * This is the callback parameter name that is added to the uri.

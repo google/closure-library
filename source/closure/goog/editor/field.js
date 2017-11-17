@@ -52,7 +52,6 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.string');
@@ -2154,26 +2153,6 @@ goog.editor.Field.prototype.getFieldCopy = function() {
   }
   fieldCopy.innerHTML = html;
   return fieldCopy;
-};
-
-
-/**
- * Sets the contents of the field.
- * @param {boolean} addParas Boolean to specify whether to add paragraphs
- *    to long fields.
- * @param {?string} html html to insert.  If html=null, then this defaults
- *    to a nbsp for mozilla and an empty string for IE.
- * @param {boolean=} opt_dontFireDelayedChange True to make this content change
- *    not fire a delayed change event.
- * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.
- * @deprecated Use setSafeHtml instead.
- */
-goog.editor.Field.prototype.setHtml = function(
-    addParas, html, opt_dontFireDelayedChange, opt_applyLorem) {
-  var safeHtml =
-      html ? goog.html.legacyconversions.safeHtmlFromString(html) : null;
-  this.setSafeHtml(
-      addParas, safeHtml, opt_dontFireDelayedChange, opt_applyLorem);
 };
 
 
