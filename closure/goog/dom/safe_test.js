@@ -400,6 +400,36 @@ function testSetImageSrc_withHttpsUrl() {
   assertEquals(safeUrl, mockImageElement.src);
 }
 
+function testSetVideoSrc() {
+  var mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
+  var safeUrl = 'https://trusted_url';
+  goog.dom.safe.setVideoSrc(mockVideoElement, safeUrl);
+  assertEquals(safeUrl, mockVideoElement.src);
+
+  mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
+  withAssertionFailure(function() {
+    goog.dom.safe.setVideoSrc(mockVideoElement, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', mockVideoElement.src);
+
+  mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
+  var safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  goog.dom.safe.setVideoSrc(mockVideoElement, safeUrl);
+  assertEquals('javascript:trusted();', mockVideoElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setVideoSrc(
+          /** @type {!HTMLVideoElement} */ (otherElement), safeUrl);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLVideoElement'));
+  }
+}
+
 function testSetEmbedSrc() {
   var url = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));

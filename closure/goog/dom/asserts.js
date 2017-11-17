@@ -172,6 +172,20 @@ goog.dom.asserts.assertIsHTMLImageElement = function(o) {
 };
 
 /**
+ * Asserts that a given object is a HTMLVideoElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLVideoElement}
+ */
+goog.dom.asserts.assertIsHTMLVideoElement = function(o) {
+  return /** @type {!HTMLVideoElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLVideoElement'));
+};
+
+/**
  * Asserts that a given object is a HTMLInputElement.
  *
  * To permit this assertion to pass in the context of tests where elements might
