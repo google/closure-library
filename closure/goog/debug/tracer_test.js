@@ -20,8 +20,83 @@ goog.require('goog.debug.Trace');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-function testTracer() {
+/** @type {!Function} */
+const recorder = goog.testing.recordFunction();
+
+function setUp() {
   goog.debug.Trace.initCurrentTrace();
+  goog.debug.Trace.removeAllListeners();
+  recorder.reset();
+}
+
+function testProperEventReleaseViaResetForComment() {
+  goog.debug.Trace.startTracer('foo');
+  // The Start event and its id are released due to calling the reset method.
+  goog.debug.Trace.reset(0);
+
+  // Recycling the last Start event.
+  goog.debug.Trace.addComment('abc');
+  goog.debug.Trace.startTracer('foo');
+  goog.debug.Trace.reset(0);
+
+  var t1 = goog.debug.Trace.startTracer('f1');
+  var t2 = goog.debug.Trace.startTracer('f2');
+  assertNotEquals('The trace ids cannot repeat.', t1, t2);
+}
+
+function testProperEventReleaseViaThresholdForComment() {
+  var t3 = goog.debug.Trace.startTracer('foo');
+  // The Start event and its id are released due to 1000ms threshold.
+  goog.debug.Trace.stopTracer(t3, 1000);
+
+  // Recycling the last Start event.
+  goog.debug.Trace.addComment('abc');
+  goog.debug.Trace.startTracer('foo');
+  goog.debug.Trace.reset(0);
+
+  var t1 = goog.debug.Trace.startTracer('f1');
+  var t2 = goog.debug.Trace.startTracer('f2');
+  assertNotEquals('The trace ids cannot repeat.', t1, t2);
+}
+
+function testProperEventReleaseViaResetForStop() {
+  goog.debug.Trace.startTracer('foo');
+  goog.debug.Trace.startTracer('foo');
+  // The Start events and their ids are released because of reseting.
+  goog.debug.Trace.reset(0);
+
+  // Recycling the last two Start events.
+  var t0 = goog.debug.Trace.startTracer('foo');
+  goog.debug.Trace.stopTracer(t0);
+  goog.debug.Trace.reset(0);
+
+  var t1 = goog.debug.Trace.startTracer('fa');
+  goog.debug.Trace.startTracer('fb');
+  var t2 = goog.debug.Trace.startTracer('fc');
+  // No id is repeated.
+  assertNotEquals('The trace ids cannot repeat.', t1, t2);
+}
+
+function testProperEventReleaseViaThresholdForStop() {
+  var t1 = goog.debug.Trace.startTracer('f1');
+  var t2 = goog.debug.Trace.startTracer('f2');
+  // The Start events and their ids are released due to 1000ms threshold.
+  goog.debug.Trace.stopTracer(t2, 1000);
+  goog.debug.Trace.stopTracer(t1, 1000);
+
+  // Recycling the last two Start events.
+  var t0 = goog.debug.Trace.startTracer('foo');
+  goog.debug.Trace.stopTracer(t0);
+  goog.debug.Trace.reset(0);
+
+  var t1 = goog.debug.Trace.startTracer('fa');
+  goog.debug.Trace.startTracer('fb');
+  var t2 = goog.debug.Trace.startTracer('fc');
+  // No id is repeated.
+  assertNotEquals('The trace ids cannot repeat.', t1, t2);
+}
+
+function testTracer() {
   var t = goog.debug.Trace.startTracer('foo');
   var sum = 0;
   for (var i = 0; i < 100000; i++) {
@@ -36,7 +111,6 @@ function testTracer() {
 }
 
 function testPerf() {
-  goog.debug.Trace.initCurrentTrace();
   var count = 1000;
   var start = goog.now();
   for (var i = 0; i < count; i++) {
@@ -53,9 +127,6 @@ function testPerf() {
   var end = goog.now();
 }
 
-/** @type {!Function} */
-const recorder = goog.testing.recordFunction();
-
 /**
  * Checks if the actual log of a fake listener matches the expectations.
  * @param {!Array<!Array<*>>} expected The expected log from the fake listener.
@@ -68,12 +139,6 @@ function validateRecordedListener(expected, recorder) {
       expected, goog.array.map(recorder.getCalls(), function(call) {
         return call.getArguments();
       }));
-}
-
-function setUp() {
-  goog.debug.Trace.initCurrentTrace();
-  goog.debug.Trace.removeAllListeners();
-  recorder.reset();
 }
 
 function testListenerStopTracerSilence() {

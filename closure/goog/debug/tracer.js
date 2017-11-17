@@ -487,6 +487,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   /** @const */
   var event =
       /** @type {!goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
+  event.stopTime = undefined;
   event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
   event.id = Number(this.idPool_.getObject());
@@ -554,6 +555,7 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
   } else {
     stopEvent =
         /** @type {goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
+    stopEvent.id = undefined;
     stopEvent.eventType = goog.debug.Trace_.EventType.STOP;
     stopEvent.startTime = startEvent.startTime;
     stopEvent.comment = startEvent.comment;
@@ -626,6 +628,9 @@ goog.debug.Trace_.prototype.addComment = function(
 
   var eventComment =
       /** @type {goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
+  eventComment.startTime = undefined;
+  eventComment.stopTime = undefined;
+  eventComment.id = undefined;
   eventComment.eventType = goog.debug.Trace_.EventType.COMMENT;
   eventComment.eventTime = timeStamp;
   eventComment.type = opt_type;
