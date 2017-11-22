@@ -1665,6 +1665,18 @@ goog.date.DateTime.prototype.equals = function(other) {
 
 
 /**
+ * Tests whether given time part of datetime is exactly equal to time part of this DateTime.
+ *
+ * @param {goog.date.DateTime} other The datetime to compare.
+ * @return {boolean} Whether the given time part of datetime is exactly equal to time part of this one.
+ * @override
+ */
+goog.date.DateTime.prototype.timeEquals = function(other) {
+  return other && this.getHours() == other.getHours() && this.getMinutes() == other.getMinutes() && this.getSeconds() == other.getSeconds() && this.getMilliseconds() == other.getMilliseconds();
+};
+
+
+/**
  * Overloaded toString method for object.
  * @return {string} ISO 8601 string representation of date/time.
  * @override

@@ -970,6 +970,41 @@ function testDateTimeEquals() {
   assertTrue('using goog.date.Date, same time (midnight)', d1.equals(d2));
 }
 
+function testTimeEquals() {
+  var t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  var t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  assertTrue('t1 == t2', t1.timeEquals(t2));
+  assertTrue('t2 == t1', t2.timeEquals(t1));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2005, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  assertTrue('different year', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.JAN, 1, 12, 30, 30, 500);
+  assertTrue('different month', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 2, 12, 30, 30, 500);
+  assertTrue('different date', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 13, 30, 30, 500);
+  assertFalse('different hour', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 40, 30, 500);
+  assertFalse('different minute', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 40, 500);
+  assertFalse('different second', t1.timeEquals(t2));
+
+  t1 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 500);
+  t2 = new goog.date.DateTime(2004, goog.date.month.MAR, 1, 12, 30, 30, 600);
+  assertFalse('different millisecond', t1.timeEquals(t2));
+}
+
 
 function testIntervalIsZero() {
   assertTrue('zero interval', new goog.date.Interval().isZero());
