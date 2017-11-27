@@ -160,23 +160,35 @@ function testFromRotMatrix() {
   var q0 = goog.vec.Quaternion.createFloat32();
   goog.vec.Quaternion.fromRotationMatrix3(m0, q0);
   assertElementsRoughlyEqual(
-      [0.22094256606638, 0.53340203646030,
-       0.64777022739548, 0.497051689967954],
+      [0.22094256606638, 0.53340203646030, 0.64777022739548, 0.497051689967954],
       q0, goog.vec.EPSILON);
 
-  var m1 = goog.vec.Mat4.createFloat32FromValues(
-      -0.408248, 0.8796528, -0.244016935, 0,
-      -0.4082482, 0.06315623, 0.9106836, 0,
-      0.8164965, 0.47140452, 0.3333333, 0,
-      0, 0, 0, 1);
+  var m1 = goog.vec.Mat3.createFloat32FromValues(
+      -0.544310, 0, 0.838884, 0, 1, 0, -0.838884, 0, -0.544310);
   var q1 = goog.vec.Quaternion.createFloat32();
-  goog.vec.Quaternion.fromRotationMatrix4(m1, q1);
+  goog.vec.Quaternion.fromRotationMatrix3(m1, q1);
   assertElementsRoughlyEqual(
-      [0.22094256606638, 0.53340203646030,
-       0.64777022739548, 0.497051689967954],
-      q1, goog.vec.EPSILON);
+      [0, -0.87872350215912, 0, 0.477331042289734], q1, goog.vec.EPSILON);
 
-  assertElementsRoughlyEqual(q0, q1, goog.vec.EPSILON);
+  var m2 = goog.vec.Mat4.createFloat32FromValues(
+      -0.408248, 0.8796528, -0.244016935, 0, -0.4082482, 0.06315623, 0.9106836,
+      0, 0.8164965, 0.47140452, 0.3333333, 0, 0, 0, 0, 1);
+  var q2 = goog.vec.Quaternion.createFloat32();
+  goog.vec.Quaternion.fromRotationMatrix4(m2, q2);
+  assertElementsRoughlyEqual(
+      [0.22094256606638, 0.53340203646030, 0.64777022739548, 0.497051689967954],
+      q2, goog.vec.EPSILON);
+
+  var m3 = goog.vec.Mat4.createFloat32FromValues(
+      -0.544310, 0, 0.838884, 0, 0, 1, 0, 0, -0.838884, 0, -0.544310, 0, 0, 0,
+      0, 1);
+  var q3 = goog.vec.Quaternion.createFloat32();
+  goog.vec.Quaternion.fromRotationMatrix4(m3, q3);
+  assertElementsRoughlyEqual(
+      [0, -0.87872350215912, 0, 0.477331042289734], q3, goog.vec.EPSILON);
+
+  assertElementsRoughlyEqual(q0, q2, goog.vec.EPSILON);
+  assertElementsRoughlyEqual(q1, q3, goog.vec.EPSILON);
 }
 
 function testToRotMatrix() {

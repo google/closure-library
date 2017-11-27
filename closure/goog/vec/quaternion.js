@@ -475,7 +475,7 @@ goog.vec.Quaternion.fromRotationMatrix4 = function(matrix, quat) {
   } else {
     // |w| <= 1/2
     var i = 0;
-    if (matrix[8] > matrix[0]) i = 1;
+    if (matrix[5] > matrix[0]) i = 1;
     if (matrix[10] > matrix[i * 4 + i]) i = 2;
     var j = (i + 1) % 3;
     var k = (i + 2) % 3;
