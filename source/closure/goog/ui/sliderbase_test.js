@@ -1000,6 +1000,89 @@ function testDragEvents() {
 
 
 /**
+ * Tests dragging events updates the value correctly in LTR mode based on the
+ * amount of space remaining to the right of the thumb.
+ */
+function testDragEventsUpdatesValue() {
+  // Get the center of the thumb at minimum value.
+  oneThumbSlider.setMinimum(100);
+  oneThumbSlider.setMaximum(300);
+  oneThumbSlider.setValue(100);
+
+  // Need to set to (0, 0) in IE8 due to a browser bug where the
+  // offsetWidth/height is incorrectly calculated as 0 in test files.
+  var offset = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) ?
+      new goog.math.Coordinate() :
+      goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var offsetXAtZero = offset.x;
+
+  var sliderElement = oneThumbSlider.getElementStrict();
+  var thumbSize = goog.style.getSize(oneThumbSlider.valueThumb);
+  var width = sliderElement.clientWidth - thumbSize.width;
+  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+
+  // Test that dragging the thumb calls all the correct events.
+  goog.testing.events.fireMouseDownEvent(oneThumbSlider.valueThumb);
+
+  // Scroll to 30 in the range of 0-200. Given that this is LTR mode, that means
+  // the value will be 100 + 30 = 130.
+  offset.x = offsetXAtZero + Math.round(30 / range * width);
+  goog.testing.events.fireMouseMoveEvent(oneThumbSlider.valueThumb, offset);
+  assertEquals(130, oneThumbSlider.getValue());
+
+  // Scroll to 70 in the range of 0-200. Given that this is LTR mode, that means
+  // the value will be 100 + 70 = 170.
+  offset.x = offsetXAtZero + Math.round(70 / range * width);
+  goog.testing.events.fireMouseMoveEvent(oneThumbSlider.valueThumb, offset);
+  assertEquals(170, oneThumbSlider.getValue());
+
+
+  goog.testing.events.fireMouseUpEvent(oneThumbSlider.valueThumb);
+}
+
+
+/**
+ * Tests dragging events updates the value correctly in RTL mode based on the
+ * amount of space remaining to the left of the thumb.
+ */
+function testDragEventsInRtlModeUpdatesValue() {
+  // Get the center of the thumb at minimum value.
+  oneThumbSliderRtl.setMinimum(100);
+  oneThumbSliderRtl.setMaximum(300);
+  oneThumbSliderRtl.setValue(100);
+
+  // Need to set to (0, 0) in IE8 due to a browser bug where the
+  // offsetWidth/height is incorrectly calculated as 0 in test files.
+  var offset = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) ?
+      new goog.math.Coordinate() :
+      goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var offsetXAtZero = offset.x;
+
+  var sliderElement = oneThumbSliderRtl.getElementStrict();
+  var thumbSize = goog.style.getSize(oneThumbSliderRtl.valueThumb);
+  var width = sliderElement.clientWidth - thumbSize.width;
+  var range = oneThumbSliderRtl.getMaximum() - oneThumbSliderRtl.getMinimum();
+
+  // Test that dragging the thumb calls all the correct events.
+  goog.testing.events.fireMouseDownEvent(oneThumbSliderRtl.valueThumb);
+
+  // Scroll to 30 in the range of 0-200. Given that this is RTL mode, that means
+  // the value will be 300 - 30 = 270.
+  offset.x = offsetXAtZero + Math.round(30 / range * width);
+  goog.testing.events.fireMouseMoveEvent(oneThumbSliderRtl.valueThumb, offset);
+  assertEquals(270, oneThumbSliderRtl.getValue());
+
+  // Scroll to 70 in the range of 0-200. Given that this is RTL mode, that means
+  // the value will be 300 - 70 = 230.
+  offset.x = offsetXAtZero + Math.round(70 / range * width);
+  goog.testing.events.fireMouseMoveEvent(oneThumbSliderRtl.valueThumb, offset);
+  assertEquals(230, oneThumbSliderRtl.getValue());
+
+  goog.testing.events.fireMouseUpEvent(oneThumbSliderRtl.valueThumb);
+}
+
+
+/**
  * Tests animationend event after click.
  */
 function testAnimationEndEventAfterClick() {

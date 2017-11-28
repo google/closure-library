@@ -24,14 +24,14 @@
  * }
  *
  * function testShuffle() {
- *   stubs.set(Math, 'random', goog.testing.recordFunction(Math.random));
+ *   stubs.replace(Math, 'random', goog.testing.recordFunction(Math.random));
  *   var arr = shuffle([1, 2, 3, 4, 5]);
  *   assertSameElements([1, 2, 3, 4, 5], arr);
  *   assertEquals(4, Math.random.getCallCount());
  * }
  *
  * function testOpenDialog() {
- *   stubs.set(goog.ui, 'Dialog',
+ *   stubs.replace(goog.ui, 'Dialog',
  *       goog.testing.recordConstructor(goog.ui.Dialog));
  *   openConfirmDialog();
  *   var lastDialogInstance = goog.ui.Dialog.getLastCall().getThis();

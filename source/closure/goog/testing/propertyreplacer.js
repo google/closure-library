@@ -39,7 +39,7 @@ goog.require('goog.userAgent');
  *
  *     function setUp() {
  *       // Mock functions used in all test cases.
- *       stubs.set(Math, 'random', function() {
+ *       stubs.replace(Math, 'random', function() {
  *         return 4;  // Chosen by fair dice roll. Guaranteed to be random.
  *       });
  *     }
@@ -60,6 +60,10 @@ goog.require('goog.userAgent');
  *   <li>The value of the objects' constructor property must either be equal to
  *       the real constructor or kept untouched.
  * </ul>
+ *
+ * Code compiled with property renaming may need to use {@code
+ * goog.reflect.objectProperty} instead of simply naming the property to
+ * replace.
  *
  * @constructor
  * @final

@@ -1,5 +1,7 @@
 ---
+title: Get Started with the Closure Library
 section: develop
+layout: article
 ---
 
 
@@ -18,7 +20,7 @@ This guide also provides the steps common to a Closure development workflow.
 Execute the following command from the command line to download the Closure
 Library from the Git repository:
 
-```
+```sh
 git clone https://github.com/google/closure-library
 ```
 
@@ -31,7 +33,7 @@ Closure Library code.
 Create a `hello.js` JavaScript file in `path/to/myapp/` with the
 following contents:
 
-```
+```js
 /**
  * @fileoverview Closure getting started tutorial code example.
  */
@@ -58,7 +60,7 @@ explains how the correct files are loaded to provide access these functions.
 Create a `hello.html` file in `path/to/myapp/` with the
 following contents::
 
-```
+```html
 <html>
   <head>
     <script src="closure/goog/base.js"></script>
@@ -87,7 +89,7 @@ to test your application.
 
 For example, start a simple server in your project directory with:
 
-```
+```sh
 python -m SimpleHTTPServer 8000
 ```
 
@@ -110,14 +112,14 @@ To compile your application:
 
 2. Execute the closure compiler on your JavaScript file:
 
-    ```
+    ```sh
     java -jar compiler.jar --js hello.js --js_output_file hello-compiled_dev.js
     ```
 
     **Note:** You can compile multiple JavaScript files at once using the Closure
     Compiler. For example:
 
-    ```
+    ```sh
     java -jar compiler.jar --js_output_file=out.js in1.js in2.js in3.js ...
     ```
 
@@ -125,7 +127,7 @@ To compile your application:
 `base.js` to load the dependencies individually (`hello_compiled.js` includes
 `hello.js` as well as all of its requirements, in compiled form):
 
-```
+```html
 <html>
   <head>
     <script src="/hello_compiled_dev.js"></script>

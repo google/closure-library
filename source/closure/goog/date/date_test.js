@@ -612,6 +612,43 @@ function testIsoStringToDate() {
 }
 
 
+function testDate_fromIsoString() {
+  // YYYY-MM-DD
+  var iso = '2005-02-22';
+  var date = goog.date.Date.fromIsoString(iso);
+  assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
+  assertEquals('Got February from ' + iso, 1, date.getMonth());
+  assertEquals('Got 22nd from ' + iso, 22, date.getDate());
+
+  // YYYY-MM-DDTHH:MM:SS
+  iso = '2005-02-22T11:22:33';
+  date = goog.date.Date.fromIsoString(iso);
+  assertNull('Got null from ' + iso, date);
+}
+
+function testDateTime_fromIsoString() {
+  // YYYY-MM-DD
+  var iso = '2005-02-22';
+  var date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
+  assertEquals('Got February from ' + iso, 1, date.getMonth());
+  assertEquals('Got 22nd from ' + iso, 22, date.getDate());
+  assertEquals('Got 0 hours from ' + iso, 0, date.getHours());
+  assertEquals('Got 0 minutes from ' + iso, 0, date.getMinutes());
+  assertEquals('Got 0 seconds from ' + iso, 0, date.getSeconds());
+
+  // YYYY-MM-DDTHH:MM:SS
+  iso = '2005-02-22T11:22:33';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
+  assertEquals('Got February from ' + iso, 1, date.getMonth());
+  assertEquals('Got 22nd from ' + iso, 22, date.getDate());
+  assertEquals('Got 11 hours from ' + iso, 11, date.getHours());
+  assertEquals('Got 22 minutes from ' + iso, 22, date.getMinutes());
+  assertEquals('Got 33 seconds from ' + iso, 33, date.getSeconds());
+}
+
+
 // test private function used by goog.date.Date.toIsoString()
 function test_setIso8601TimeOnly_() {
   if (goog.userAgent.product.SAFARI) {

@@ -6,5 +6,5 @@
 
 <!-- URLS -->
 
-[Getting Started]: /closure/goog/g3doc/develop/get-started
+[Getting Started]: /closure-library/develop/get-started
 

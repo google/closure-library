@@ -298,10 +298,11 @@ goog.date.max = function(date1, date2) {
  *
  * @param {string} formatted A date or datetime expressed in ISO 8601 format.
  * @return {goog.date.DateTime} Parsed date or null if parse fails.
+ * @deprecated Use goog.date.Date.fromIsoString() or
+ * goog.date.DateTime.fromIsoString()
  */
 goog.date.fromIsoString = function(formatted) {
-  var ret = new goog.date.DateTime(2000);
-  return goog.date.setIso8601DateTime(ret, formatted) ? ret : null;
+  return goog.date.DateTime.fromIsoString(formatted);
 };
 
 
@@ -325,7 +326,7 @@ goog.date.setIso8601DateTime = function(dateTime, formatted) {
 /**
  * Sets date fields based on an ISO 8601 format string.
  *
- * @param {!goog.date.DateTime} d Object whose fields will be set.
+ * @param {!goog.date.Date} d Object whose fields will be set.
  * @param {string} formatted A date expressed in ISO 8601 format.
  * @return {boolean} Whether the parsing succeeded.
  * @private
@@ -380,7 +381,7 @@ goog.date.setIso8601DateOnly_ = function(d, formatted) {
  * Example: '1997-W01' lasts from 1996-12-30 to 1997-01-05.  January 1, 1997 is
  * a Wednesday. So W01's Monday is Dec.30, 1996, and Sunday is January 5, 1997.
  *
- * @param {goog.date.DateTime} d Object whose fields will be set.
+ * @param {!goog.date.Date} d Object whose fields will be set.
  * @param {number} week ISO week number.
  * @param {number} dayOfWeek ISO day of week.
  * @private
@@ -1306,6 +1307,17 @@ goog.date.Date.compare = function(date1, date2) {
 };
 
 
+/**
+ * Parses an ISO 8601 string as a {@code goog.date.Date}.
+ * @param {string} formatted ISO 8601 string to parse.
+ * @return {?goog.date.Date} Parsed date or null if parse fails.
+ */
+goog.date.Date.fromIsoString = function(formatted) {
+  var ret = new goog.date.Date(2000);
+  return goog.date.setIso8601DateOnly_(ret, formatted) ? ret : null;
+};
+
+
 
 /**
  * Class representing a date and time. Defaults to current date and time if none
@@ -1749,4 +1761,16 @@ goog.date.DateTime.prototype.clone = function() {
   date.setFirstDayOfWeek(this.getFirstDayOfWeek());
   date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
   return date;
+};
+
+
+/**
+ * Parses an ISO 8601 string as a {@code goog.date.DateTime}.
+ * @param {string} formatted ISO 8601 string to parse.
+ * @return {?goog.date.DateTime} Parsed date or null if parse fails.
+ * @override
+ */
+goog.date.DateTime.fromIsoString = function(formatted) {
+  var ret = new goog.date.DateTime(2000);
+  return goog.date.setIso8601DateTime(ret, formatted) ? ret : null;
 };

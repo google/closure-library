@@ -180,6 +180,10 @@ goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimePro
 goog.addDependency('debug/tracer.js', ['goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug.Logger', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
 goog.addDependency('debug/tracer_test.js', ['goog.debug.TraceTest'], ['goog.array', 'goog.debug.Trace', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {'lang': 'es6'});
 goog.addDependency('defineclass_test.js', ['goog.defineClassTest'], ['goog.testing.jsunit'], {});
+goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('delegate/delegateregistry_test.js', ['goog.delegate.DelegateRegistryTest'], ['goog.array', 'goog.delegate.DelegateRegistry', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('delegate/delegates.js', ['goog.delegate.delegates'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('delegate/delegates_test.js', ['goog.delegate.delegatesTest'], ['goog.delegate.delegates', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose', 'goog.disposeAll'], ['goog.disposable.IDisposable'], {});
 goog.addDependency('disposable/disposable_test.js', ['goog.DisposableTest'], ['goog.Disposable', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('disposable/idisposable.js', ['goog.disposable.IDisposable'], [], {});

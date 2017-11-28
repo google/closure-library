@@ -625,7 +625,13 @@ goog.net.XhrIo.prototype.send = function(
     }
     goog.log.fine(this.logger_, this.formatMsg_('Sending request'));
     this.inSend_ = true;
-    this.xhr_.send(content);
+    if (method === 'GET') {
+      // XHR2 spec requires content to be ignored for GET.
+      // send('') may fail on some platforms such as reactive-native
+      this.xhr_.send();
+    } else {
+      this.xhr_.send(content);
+    }
     this.inSend_ = false;
 
   } catch (err) {
