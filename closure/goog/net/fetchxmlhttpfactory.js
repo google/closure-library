@@ -329,8 +329,15 @@ goog.net.FetchXmlHttp.prototype.getResponseHeader = function(header) {
 
 /** @override */
 goog.net.FetchXmlHttp.prototype.getAllResponseHeaders = function() {
-  // TODO(user): Implement once the Headers extern support entries().
-  return '';
+  var lines = [];
+  var iter = this.responseHeaders_.entries();
+  var entry = iter.next();
+  while (!entry.done) {
+    var pair = entry.value;
+    lines.push(pair[0] + ': ' + pair[1]);
+    entry = iter.next();
+  }
+  return lines.join('\r\n');
 };
 
 

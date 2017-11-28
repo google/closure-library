@@ -189,6 +189,9 @@ function verifySendSuccess(sendMethod) {
     assertEquals(0, xhr.status);
     assertEquals('', xhr.responseText);
     assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
+    assertEquals(
+        xhr.getAllResponseHeaders(),
+        'dummyHeader: dummyHeaderValue\r\ndummyHeader2: dummyHeaderValue2');
     xhr.onreadystatechange = function() {
       assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.LOADING);
       assertEquals(0, xhr.status);
@@ -278,6 +281,7 @@ function testSend_failToFetch() {
 function createSuccessResponse() {
   var headers = new Headers();
   headers.set('dummyHeader', 'dummyHeaderValue');
+  headers.set('dummyHeader2', 'dummyHeaderValue2');
   return new Response(
       'responseBody' /* opt_body */, {status: 200, headers: headers});
 }
