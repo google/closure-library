@@ -51,7 +51,7 @@ goog.module.ModuleManager = function() {
 
   /**
    * A mapping from module id to ModuleInfo object.
-   * @private {Object<string, !goog.module.ModuleInfo>}
+   * @private {?Object<string, !goog.module.ModuleInfo>}
    */
   this.moduleInfoMap_ = {};
 
@@ -365,10 +365,24 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
  * Sets the module uris.
  *
  * @param {Object} moduleUriMap The map of id/uris pairs for each module.
+ * @deprecated Use setModuleTrustedUris.
  */
 goog.module.ModuleManager.prototype.setModuleUris = function(moduleUriMap) {
   for (var id in moduleUriMap) {
     this.moduleInfoMap_[id].setUris(moduleUriMap[id]);
+  }
+};
+
+
+/**
+ * Sets the module uris.
+ * @param {!Object<string, !Array<!goog.html.TrustedResourceUrl>>} moduleUriMap
+ *     The map of id/uris pairs for each module.
+ */
+goog.module.ModuleManager.prototype.setModuleTrustedUris = function(
+    moduleUriMap) {
+  for (var id in moduleUriMap) {
+    this.moduleInfoMap_[id].setTrustedUris(moduleUriMap[id]);
   }
 };
 
@@ -698,7 +712,8 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
 
   var loadFn = goog.bind(
       this.loader_.loadModules, this.loader_,
-      goog.array.clone(idsToLoadImmediately), this.moduleInfoMap_, null,
+      goog.array.clone(idsToLoadImmediately),
+      goog.asserts.assert(this.moduleInfoMap_), null,
       goog.bind(
           this.handleLoadError_, this, this.requestedLoadingModuleIds_,
           idsToLoadImmediately),

@@ -20,8 +20,10 @@
 goog.provide('goog.module.ModuleInfo');
 
 goog.require('goog.Disposable');
+goog.require('goog.array');
 goog.require('goog.async.throwException');
 goog.require('goog.functions');
+goog.require('goog.html.legacyconversions');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
 goog.require('goog.module.BaseModule');
@@ -88,7 +90,7 @@ goog.inherits(goog.module.ModuleInfo, goog.Disposable);
 
 /**
  * The uris that can be used to retrieve this module's code.
- * @type {Array<string>?}
+ * @type {?Array<!goog.html.TrustedResourceUrl>}
  * @private
  */
 goog.module.ModuleInfo.prototype.uris_ = null;
@@ -132,18 +134,33 @@ goog.module.ModuleInfo.prototype.getId = function() {
 
 /**
  * Sets the uris of this module.
- * @param {Array<string>} uris Uris for this module's code.
+ * @param {!Array<string>} uris Uris for this module's code.
+ * @deprecated Use setTrustedUris.
  */
 goog.module.ModuleInfo.prototype.setUris = function(uris) {
+  this.setTrustedUris(goog.array.map(
+      uris, goog.html.legacyconversions.trustedResourceUrlFromString));
+};
+
+
+/**
+ * Sets the uris of this module.
+ * @param {!Array<!goog.html.TrustedResourceUrl>} uris Uris for this module's
+ *     code.
+ */
+goog.module.ModuleInfo.prototype.setTrustedUris = function(uris) {
   this.uris_ = uris;
 };
 
 
 /**
  * Gets the uris of this module.
- * @return {Array<string>?} Uris for this module's code.
+ * @return {!Array<!goog.html.TrustedResourceUrl>} Uris for this module's code.
  */
 goog.module.ModuleInfo.prototype.getUris = function() {
+  if (!this.uris_) {
+    this.uris_ = [];
+  }
   return this.uris_;
 };
 
