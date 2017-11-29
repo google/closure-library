@@ -846,7 +846,7 @@ goog.addDependency('net/ipaddress.js', ['goog.net.IpAddress', 'goog.net.Ipv4Addr
 goog.addDependency('net/ipaddress_test.js', ['goog.net.IpAddressTest'], ['goog.array', 'goog.math.Integer', 'goog.net.IpAddress', 'goog.net.Ipv4Address', 'goog.net.Ipv6Address', 'goog.testing.jsunit'], {});
 goog.addDependency('net/jsloader.js', ['goog.net.jsloader', 'goog.net.jsloader.Error', 'goog.net.jsloader.ErrorCode', 'goog.net.jsloader.Options'], ['goog.array', 'goog.async.Deferred', 'goog.debug.Error', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.TrustedResourceUrl', 'goog.object'], {});
 goog.addDependency('net/jsloader_test.js', ['goog.net.jsloaderTest'], ['goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.html.TrustedResourceUrl', 'goog.net.jsloader', 'goog.net.jsloader.ErrorCode', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('net/jsonp.js', ['goog.net.Jsonp'], ['goog.Uri', 'goog.html.TrustedResourceUrl', 'goog.net.jsloader', 'goog.object'], {});
+goog.addDependency('net/jsonp.js', ['goog.net.Jsonp'], ['goog.html.TrustedResourceUrl', 'goog.net.jsloader', 'goog.object'], {});
 goog.addDependency('net/jsonp_test.js', ['goog.net.JsonpTest'], ['goog.html.TrustedResourceUrl', 'goog.net.Jsonp', 'goog.string.Const', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
 goog.addDependency('net/mockiframeio.js', ['goog.net.MockIFrameIo'], ['goog.events.EventTarget', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.IframeIo'], {});
 goog.addDependency('net/multiiframeloadmonitor.js', ['goog.net.MultiIframeLoadMonitor'], ['goog.events', 'goog.net.IframeLoadMonitor'], {});
