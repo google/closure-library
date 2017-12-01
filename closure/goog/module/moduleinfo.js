@@ -20,10 +20,9 @@
 goog.provide('goog.module.ModuleInfo');
 
 goog.require('goog.Disposable');
-goog.require('goog.array');
 goog.require('goog.async.throwException');
 goog.require('goog.functions');
-goog.require('goog.html.legacyconversions');
+goog.require('goog.html.TrustedResourceUrl');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
 goog.require('goog.module.BaseModule');
@@ -129,17 +128,6 @@ goog.module.ModuleInfo.prototype.getDependencies = function() {
  */
 goog.module.ModuleInfo.prototype.getId = function() {
   return this.id_;
-};
-
-
-/**
- * Sets the uris of this module.
- * @param {!Array<string>} uris Uris for this module's code.
- * @deprecated Use setTrustedUris.
- */
-goog.module.ModuleInfo.prototype.setUris = function(uris) {
-  this.setTrustedUris(goog.array.map(
-      uris, goog.html.legacyconversions.trustedResourceUrlFromString));
 };
 
 

@@ -363,19 +363,6 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 
 /**
  * Sets the module uris.
- *
- * @param {Object} moduleUriMap The map of id/uris pairs for each module.
- * @deprecated Use setModuleTrustedUris.
- */
-goog.module.ModuleManager.prototype.setModuleUris = function(moduleUriMap) {
-  for (var id in moduleUriMap) {
-    this.moduleInfoMap_[id].setUris(moduleUriMap[id]);
-  }
-};
-
-
-/**
- * Sets the module uris.
  * @param {!Object<string, !Array<!goog.html.TrustedResourceUrl>>} moduleUriMap
  *     The map of id/uris pairs for each module.
  */
