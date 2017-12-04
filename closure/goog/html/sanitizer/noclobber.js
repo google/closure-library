@@ -33,6 +33,8 @@ var userAgent = goog.require('goog.userAgent');
 var propertyDescriptors = !userAgent.IE || document.documentMode >= 10 ? {
   'attributes':
       Object.getOwnPropertyDescriptor(Element.prototype, 'attributes'),
+  'hasAttribute':
+      Object.getOwnPropertyDescriptor(Element.prototype, 'hasAttribute'),
   'getAttribute':
       Object.getOwnPropertyDescriptor(Element.prototype, 'getAttribute'),
   'setAttribute':
@@ -70,6 +72,25 @@ function getElementAttributes(element) {
   } else {
     return element.attributes instanceof NamedNodeMap ? element.attributes :
                                                         null;
+  }
+}
+
+/**
+ * Returns whether an element has a specific attribute, without falling prey to
+ * things like <form><input name="hasAttribute"></form>.
+ * Equivalent to {@code element.hasAttribute("foo")}.
+ * @param {!Element} element
+ * @param {string} attrName
+ * @return {boolean}
+ */
+function hasElementAttribute(element, attrName) {
+  var descriptor = propertyDescriptors['hasAttribute'];
+  if (descriptor && descriptor.value) {
+    return descriptor.value.call(element, attrName);
+  } else {
+    return typeof element.hasAttribute == 'function' ?
+        element.hasAttribute(attrName) :
+        false;
   }
 }
 
@@ -349,6 +370,7 @@ function setCssProperty(
 
 exports = {
   getElementAttributes: getElementAttributes,
+  hasElementAttribute: hasElementAttribute,
   getElementAttribute: getElementAttribute,
   setElementAttribute: setElementAttribute,
   getElementInnerHTML: getElementInnerHTML,

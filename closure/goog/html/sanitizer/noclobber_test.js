@@ -58,6 +58,10 @@ testSuite({
       assertNull(attributes);
     }
 
+    element = getClobberedElement('hasAttribute');
+    assertTrue(noclobber.hasElementAttribute(element, 'id'));
+    assertFalse(noclobber.hasElementAttribute(element, 'bar'));
+
     element = getClobberedElement('getAttribute');
     assertEquals('foo', noclobber.getElementAttribute(element, 'id'));
 
