@@ -25,6 +25,10 @@ var googAsserts = goog.require('goog.asserts');
 var googDom = goog.require('goog.dom');
 var userAgent = goog.require('goog.userAgent');
 
+// TODO(b/70187054): check if we can stop saving the property descriptors and
+// save the values directly instead. Also see if it's possible to stop using
+// bracket notation to access propertyDescriptors methods.
+
 /**
  * Map of property descriptors we use to avoid looking up the prototypes
  * multiple times.
@@ -39,6 +43,8 @@ var propertyDescriptors = !userAgent.IE || document.documentMode >= 10 ? {
       Object.getOwnPropertyDescriptor(Element.prototype, 'getAttribute'),
   'setAttribute':
       Object.getOwnPropertyDescriptor(Element.prototype, 'setAttribute'),
+  'removeAttribute':
+      Object.getOwnPropertyDescriptor(Element.prototype, 'removeAttribute'),
   'innerHTML': Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML'),
   'getElementsByTagName': Object.getOwnPropertyDescriptor(
       Element.prototype, 'getElementsByTagName'),
@@ -132,6 +138,20 @@ function setElementAttribute(element, name, value) {
         throw e;
       }
     }
+  }
+}
+
+/**
+ * Deletes a specific attribute from an element without falling prey to
+ * things like <form><input name="removeAttribute"></form>.
+ * Equivalent to {@code element.removeAttribute("foo")}.
+ * @param {!Element} element
+ * @param {string} attrName
+ */
+function removeElementAttribute(element, attrName) {
+  var descriptor = propertyDescriptors['removeAttribute'];
+  if (descriptor && descriptor.value) {
+    descriptor.value.call(element, attrName);
   }
 }
 
@@ -373,6 +393,7 @@ exports = {
   hasElementAttribute: hasElementAttribute,
   getElementAttribute: getElementAttribute,
   setElementAttribute: setElementAttribute,
+  removeElementAttribute: removeElementAttribute,
   getElementInnerHTML: getElementInnerHTML,
   getElementStyle: getElementStyle,
   getElementsByTagName: getElementsByTagName,

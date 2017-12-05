@@ -69,6 +69,11 @@ testSuite({
     noclobber.setElementAttribute(element, 'id', 'bar');
     assertEquals('bar', noclobber.getElementAttribute(element, 'id'));
 
+    element = getClobberedElement('removeAttribute');
+    assertTrue(element.hasAttribute('id'));
+    noclobber.removeElementAttribute(element, 'id');
+    assertFalse(element.hasAttribute('id'));
+
     element = getClobberedElement('innerHTML');
     var innerHTML = noclobber.getElementInnerHTML(element);
     if (Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML')) {
