@@ -285,7 +285,11 @@ goog.events.EventType = {
 
   // Print events.
   BEFOREPRINT: 'beforeprint',
-  AFTERPRINT: 'afterprint'
+  AFTERPRINT: 'afterprint',
+
+  // Web app manifest events.
+  BEFOREINSTALLPROMPT: 'beforeinstallprompt',
+  APPINSTALLED: 'appinstalled'
 };
 
 
