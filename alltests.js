@@ -110,6 +110,7 @@ var _allTests = [
   'closure/goog/dom/tagiterator_test.html',
   'closure/goog/dom/tagname_test.html',
   'closure/goog/dom/tags_test.html',
+  'closure/goog/dom/textassert_test.html',
   'closure/goog/dom/textrangeiterator_test.html',
   'closure/goog/dom/textrange_test.html',
   'closure/goog/dom/uri_test.html',

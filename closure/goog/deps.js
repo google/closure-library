@@ -275,6 +275,8 @@ goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], ['goog.dom.HtmlElemen
 goog.addDependency('dom/tagname_test.js', ['goog.dom.TagNameTest'], ['goog.dom.TagName', 'goog.object', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/tags.js', ['goog.dom.tags'], ['goog.object'], {});
 goog.addDependency('dom/tags_test.js', ['goog.dom.tagsTest'], ['goog.dom.tags', 'goog.testing.jsunit'], {});
+goog.addDependency('dom/textassert.js', ['goog.dom.textAssert'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName'], {});
+goog.addDependency('dom/textassert_test.js', ['goog.dom.textasserttest'], ['goog.dom.textAssert', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('dom/textrange.js', ['goog.dom.TextRange'], ['goog.array', 'goog.dom', 'goog.dom.AbstractRange', 'goog.dom.RangeType', 'goog.dom.SavedRange', 'goog.dom.TagName', 'goog.dom.TextRangeIterator', 'goog.dom.browserrange', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('dom/textrange_test.js', ['goog.dom.TextRangeTest'], ['goog.dom', 'goog.dom.ControlRange', 'goog.dom.Range', 'goog.dom.TextRange', 'goog.math.Coordinate', 'goog.style', 'goog.testing.ExpectedFailures', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {});
 goog.addDependency('dom/textrangeiterator.js', ['goog.dom.TextRangeIterator'], ['goog.array', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeIterator', 'goog.dom.TagName', 'goog.iter.StopIteration'], {});
