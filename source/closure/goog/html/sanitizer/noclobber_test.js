@@ -58,12 +58,21 @@ testSuite({
       assertNull(attributes);
     }
 
+    element = getClobberedElement('hasAttribute');
+    assertTrue(noclobber.hasElementAttribute(element, 'id'));
+    assertFalse(noclobber.hasElementAttribute(element, 'bar'));
+
     element = getClobberedElement('getAttribute');
     assertEquals('foo', noclobber.getElementAttribute(element, 'id'));
 
     element = getClobberedElement('setAttribute');
     noclobber.setElementAttribute(element, 'id', 'bar');
     assertEquals('bar', noclobber.getElementAttribute(element, 'id'));
+
+    element = getClobberedElement('removeAttribute');
+    assertTrue(element.hasAttribute('id'));
+    noclobber.removeElementAttribute(element, 'id');
+    assertFalse(element.hasAttribute('id'));
 
     element = getClobberedElement('innerHTML');
     var innerHTML = noclobber.getElementInnerHTML(element);

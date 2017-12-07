@@ -15,7 +15,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 31.0.1
+ * File generated from CLDR ver. 32
  *
  */
 
@@ -61,6 +61,7 @@ goog.locale.defaultLocaleNameConstants = {
     '151': 'Eastern Europe',
     '154': 'Northern Europe',
     '155': 'Western Europe',
+    '202': 'Sub-Saharan Africa',
     '419': 'Latin America',
     'AC': 'Ascension Island',
     'AD': 'Andorra',
@@ -398,6 +399,7 @@ goog.locale.defaultLocaleNameConstants = {
     'car': 'Carib',
     'cay': 'Cayuga',
     'cch': 'Atsam',
+    'ccp': 'Chakma',
     'ce': 'Chechen',
     'ceb': 'Cebuano',
     'cgg': 'Chiga',
@@ -847,6 +849,8 @@ goog.locale.defaultLocaleNameConstants = {
     'yi': 'Yiddish',
     'yo': 'Yoruba',
     'yue': 'Cantonese',
+    'yue_Hans': 'Cantonese (Simplified)',
+    'yue_Hant': 'Cantonese (Traditional)',
     'za': 'Zhuang',
     'zap': 'Zapotec',
     'zbl': 'Blissymbols',

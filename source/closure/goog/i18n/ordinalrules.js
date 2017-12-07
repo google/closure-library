@@ -16,7 +16,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 31.0.1
+ * File generated from CLDR ver. 32
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
@@ -210,6 +210,30 @@ goog.i18n.ordinalRules.itSelect_ = function(n, opt_precision) {
 goog.i18n.ordinalRules.neSelect_ = function(n, opt_precision) {
   if (n >= 1 && n <= 4) {
     return goog.i18n.ordinalRules.Keyword.ONE;
+  }
+  return goog.i18n.ordinalRules.Keyword.OTHER;
+};
+
+/**
+ * Ordinal select rules for or locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
+ * @private
+ */
+goog.i18n.ordinalRules.orSelect_ = function(n, opt_precision) {
+  if (n == 1 || n == 5 || n >= 7 && n <= 9) {
+    return goog.i18n.ordinalRules.Keyword.ONE;
+  }
+  if (n == 2 || n == 3) {
+    return goog.i18n.ordinalRules.Keyword.TWO;
+  }
+  if (n == 4) {
+    return goog.i18n.ordinalRules.Keyword.FEW;
+  }
+  if (n == 6) {
+    return goog.i18n.ordinalRules.Keyword.MANY;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
 };
@@ -432,6 +456,21 @@ goog.i18n.ordinalRules.guSelect_ = function(n, opt_precision) {
   }
   if (n == 6) {
     return goog.i18n.ordinalRules.Keyword.MANY;
+  }
+  return goog.i18n.ordinalRules.Keyword.OTHER;
+};
+
+/**
+ * Ordinal select rules for tk locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
+ * @private
+ */
+goog.i18n.ordinalRules.tkSelect_ = function(n, opt_precision) {
+  if ((n % 10 == 6 || n % 10 == 9) || n == 10) {
+    return goog.i18n.ordinalRules.Keyword.FEW;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
 };
@@ -702,7 +741,7 @@ if (goog.LOCALE == 'no_NO' || goog.LOCALE == 'no-NO') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'or') {
-  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.orSelect_;
 }
 if (goog.LOCALE == 'pa') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;

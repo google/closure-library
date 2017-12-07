@@ -25,6 +25,10 @@ var googAsserts = goog.require('goog.asserts');
 var googDom = goog.require('goog.dom');
 var userAgent = goog.require('goog.userAgent');
 
+// TODO(b/70187054): check if we can stop saving the property descriptors and
+// save the values directly instead. Also see if it's possible to stop using
+// bracket notation to access propertyDescriptors methods.
+
 /**
  * Map of property descriptors we use to avoid looking up the prototypes
  * multiple times.
@@ -33,10 +37,14 @@ var userAgent = goog.require('goog.userAgent');
 var propertyDescriptors = !userAgent.IE || document.documentMode >= 10 ? {
   'attributes':
       Object.getOwnPropertyDescriptor(Element.prototype, 'attributes'),
+  'hasAttribute':
+      Object.getOwnPropertyDescriptor(Element.prototype, 'hasAttribute'),
   'getAttribute':
       Object.getOwnPropertyDescriptor(Element.prototype, 'getAttribute'),
   'setAttribute':
       Object.getOwnPropertyDescriptor(Element.prototype, 'setAttribute'),
+  'removeAttribute':
+      Object.getOwnPropertyDescriptor(Element.prototype, 'removeAttribute'),
   'innerHTML': Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML'),
   'getElementsByTagName': Object.getOwnPropertyDescriptor(
       Element.prototype, 'getElementsByTagName'),
@@ -70,6 +78,25 @@ function getElementAttributes(element) {
   } else {
     return element.attributes instanceof NamedNodeMap ? element.attributes :
                                                         null;
+  }
+}
+
+/**
+ * Returns whether an element has a specific attribute, without falling prey to
+ * things like <form><input name="hasAttribute"></form>.
+ * Equivalent to {@code element.hasAttribute("foo")}.
+ * @param {!Element} element
+ * @param {string} attrName
+ * @return {boolean}
+ */
+function hasElementAttribute(element, attrName) {
+  var descriptor = propertyDescriptors['hasAttribute'];
+  if (descriptor && descriptor.value) {
+    return descriptor.value.call(element, attrName);
+  } else {
+    return typeof element.hasAttribute == 'function' ?
+        element.hasAttribute(attrName) :
+        false;
   }
 }
 
@@ -111,6 +138,20 @@ function setElementAttribute(element, name, value) {
         throw e;
       }
     }
+  }
+}
+
+/**
+ * Deletes a specific attribute from an element without falling prey to
+ * things like <form><input name="removeAttribute"></form>.
+ * Equivalent to {@code element.removeAttribute("foo")}.
+ * @param {!Element} element
+ * @param {string} attrName
+ */
+function removeElementAttribute(element, attrName) {
+  var descriptor = propertyDescriptors['removeAttribute'];
+  if (descriptor && descriptor.value) {
+    descriptor.value.call(element, attrName);
   }
 }
 
@@ -349,8 +390,10 @@ function setCssProperty(
 
 exports = {
   getElementAttributes: getElementAttributes,
+  hasElementAttribute: hasElementAttribute,
   getElementAttribute: getElementAttribute,
   setElementAttribute: setElementAttribute,
+  removeElementAttribute: removeElementAttribute,
   getElementInnerHTML: getElementInnerHTML,
   getElementStyle: getElementStyle,
   getElementsByTagName: getElementsByTagName,

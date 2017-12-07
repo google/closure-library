@@ -609,12 +609,11 @@ function testSanitizeStyleSheetString_stringWithEscapedQuotesInSelector() {
 
   input = 'a[a="a\\\'b"] { color: grey; }';
   doubleQuoted = '#foo a[a="a\'b"]{color: grey;}';
-  var doubleQuotedWithEscape = '#foo a[a="a\\\'b"]{color: grey;}';
   singleQuoted = '#foo a[a=\'a\\\'b\']{color: grey;}';
   assertBrowserSanitizedCssEquals(
       {
         chrome: doubleQuoted,
-        firefox: doubleQuotedWithEscape,
+        firefox: doubleQuoted,
         ie10: '',
         newIE: singleQuoted
       },
@@ -623,11 +622,10 @@ function testSanitizeStyleSheetString_stringWithEscapedQuotesInSelector() {
   input = 'a[a=\'\\\'b\'] {color: red; }';
   doubleQuoted = '#foo a[a="\'b"]{color: red;}';
   singleQuoted = '#foo a[a=\'\\\'b\']{color: red;}';
-  doubleQuotedWithEscape = '#foo a[a="\\\'b"]{color: red;}';
   assertBrowserSanitizedCssEquals(
       {
         chrome: doubleQuoted,
-        firefox: doubleQuotedWithEscape,
+        firefox: doubleQuoted,
         newIE: singleQuoted,
         ie10: ''
       },
@@ -635,12 +633,11 @@ function testSanitizeStyleSheetString_stringWithEscapedQuotesInSelector() {
 
   input = 'a[foo=\'b\\\'a, ,\'] { color: blue; }';
   doubleQuoted = '#foo a[foo="b\'a, ,"]{color: blue;}';
-  doubleQuotedWithEscape = '#foo a[foo="b\\\'a, ,"]{color: blue;}';
   singleQuoted = '#foo a[foo=\'b\\\'a, ,\']{color: blue;}';
   assertBrowserSanitizedCssEquals(
       {
         chrome: doubleQuoted,
-        firefox: doubleQuotedWithEscape,
+        firefox: doubleQuoted,
         newIE: singleQuoted,
         ie10: ''
       },

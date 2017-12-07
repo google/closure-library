@@ -16,7 +16,7 @@
  * @fileoverview Plural rules.
  *
  *
- * File generated from CLDR ver. 31.0.1
+ * File generated from CLDR ver. 32
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
@@ -1059,7 +1059,7 @@ if (goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.ptSelect_;
 }
 if (goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT') {
-  goog.i18n.pluralRules.select = goog.i18n.pluralRules.ptSelect_;
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
 }
 if (goog.LOCALE == 'ro') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.roSelect_;

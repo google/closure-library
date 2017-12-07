@@ -19,6 +19,9 @@
 
 /** @suppress {extraProvide} */
 goog.provide('goog.locale.TimeZoneList');
+goog.provide('goog.locale.getTimeZoneAllLongNames');
+goog.provide('goog.locale.getTimeZoneSelectedLongNames');
+goog.provide('goog.locale.getTimeZoneSelectedShortNames');
 
 goog.require('goog.locale');
 
