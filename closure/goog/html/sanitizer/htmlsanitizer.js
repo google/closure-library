@@ -84,7 +84,7 @@ goog.html.sanitizer.HtmlSanitizerPolicyContext;
  * Type for a policy function.
  * @typedef {function(string, goog.html.sanitizer.HtmlSanitizerPolicyHints=,
  *     goog.html.sanitizer.HtmlSanitizerPolicyContext=,
- *     goog.html.sanitizer.HtmlSanitizerPolicy=):?string}
+ *     (function(string, ?=, ?=, ?=):?string)=):?string}
  */
 goog.html.sanitizer.HtmlSanitizerPolicy;
 

@@ -178,20 +178,19 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
 goog.define = function(name, defaultValue) {
   var value = defaultValue;
   if (!COMPILED) {
-    if (goog.global.CLOSURE_UNCOMPILED_DEFINES &&
+    var uncompiledDefines = goog.global.CLOSURE_UNCOMPILED_DEFINES;
+    var defines = goog.global.CLOSURE_DEFINES;
+    if (uncompiledDefines &&
         // Anti DOM-clobbering runtime check (b/37736576).
-        /** @type {?} */ (goog.global.CLOSURE_UNCOMPILED_DEFINES).nodeType ===
-            undefined &&
-        Object.prototype.hasOwnProperty.call(
-            goog.global.CLOSURE_UNCOMPILED_DEFINES, name)) {
-      value = goog.global.CLOSURE_UNCOMPILED_DEFINES[name];
+        /** @type {?} */ (uncompiledDefines).nodeType === undefined &&
+        Object.prototype.hasOwnProperty.call(uncompiledDefines, name)) {
+      value = uncompiledDefines[name];
     } else if (
-        goog.global.CLOSURE_DEFINES &&
+        defines &&
         // Anti DOM-clobbering runtime check (b/37736576).
-        /** @type {?} */ (goog.global.CLOSURE_DEFINES).nodeType === undefined &&
-        Object.prototype.hasOwnProperty.call(
-            goog.global.CLOSURE_DEFINES, name)) {
-      value = goog.global.CLOSURE_DEFINES[name];
+        /** @type {?} */ (defines).nodeType === undefined &&
+        Object.prototype.hasOwnProperty.call(defines, name)) {
+      value = defines[name];
     }
   }
   goog.exportPath_(name, value);
@@ -929,21 +928,21 @@ goog.loadModule = function(moduleDef) {
     }
 
     var moduleName = goog.moduleLoaderState_.moduleName;
-    if (!goog.isString(moduleName) || !moduleName) {
+    if (goog.isString(moduleName) && moduleName) {
+      // Don't seal legacy namespaces as they may be used as a parent of
+      // another namespace
+      if (goog.moduleLoaderState_.declareLegacyNamespace) {
+        goog.constructNamespace_(moduleName, exports);
+      } else if (
+          goog.SEAL_MODULE_EXPORTS && Object.seal &&
+          typeof exports == 'object' && exports != null) {
+        Object.seal(exports);
+      }
+
+      goog.loadedModules_[moduleName] = exports;
+    } else {
       throw new Error('Invalid module name \"' + moduleName + '\"');
     }
-
-    // Don't seal legacy namespaces as they may be uses as a parent of
-    // another namespace
-    if (goog.moduleLoaderState_.declareLegacyNamespace) {
-      goog.constructNamespace_(moduleName, exports);
-    } else if (
-        goog.SEAL_MODULE_EXPORTS && Object.seal && typeof exports == 'object' &&
-        exports != null) {
-      Object.seal(exports);
-    }
-
-    goog.loadedModules_[moduleName] = exports;
   } finally {
     goog.moduleLoaderState_ = previousState;
   }
