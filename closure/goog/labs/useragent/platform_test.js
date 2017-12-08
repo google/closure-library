@@ -237,6 +237,14 @@ function testChromeOS() {
   assertVersionBetween('3701', '3702');
 }
 
+function testChromecast() {
+  var uaString = goog.labs.userAgent.testAgents.CHROMECAST;
+
+  goog.labs.userAgent.util.setUserAgent(uaString);
+  assertTrue(goog.labs.userAgent.platform.isChromecast());
+  assertVersion('');
+}
+
 function assertVersion(version) {
   assertEquals(version, goog.labs.userAgent.platform.getVersion());
 }
