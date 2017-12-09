@@ -304,9 +304,8 @@ goog.a11y.aria.assertRoleIsSetInternalUtil = function(element, allowedRoles) {
  */
 goog.a11y.aria.getStateBoolean = function(element, stateName) {
   var attr =
-      /** @type {string|boolean} */ (
-          element.getAttribute(
-              goog.a11y.aria.getAriaAttributeName_(stateName)));
+      /** @type {string|boolean|null} */ (element.getAttribute(
+          goog.a11y.aria.getAriaAttributeName_(stateName)));
   goog.asserts.assert(
       goog.isBoolean(attr) || attr == null || attr == 'true' ||
       attr == 'false');

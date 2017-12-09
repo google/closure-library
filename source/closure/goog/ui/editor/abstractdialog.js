@@ -431,14 +431,6 @@ goog.ui.editor.AbstractDialog.prototype.disposeInternal = function() {
 
 
 /**
- * The wrapped dialog widget.
- * @type {goog.ui.Dialog}
- * @private
- */
-goog.ui.editor.AbstractDialog.prototype.dialogInternal_;
-
-
-/**
  * Cleans up after the dialog is hidden and fires the AFTER_HIDE event. Should
  * be a listener for the wrapped dialog's AFTER_HIDE event.
  * @private

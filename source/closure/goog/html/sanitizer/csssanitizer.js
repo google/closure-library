@@ -412,9 +412,11 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
 
       var sanitizedValue = goog.html.sanitizer.CssSanitizer.sanitizeProperty_(
           propName, propValue, opt_uriRewriter);
-      goog.html.sanitizer.noclobber.setCssProperty(
-          cleanCssStyle, propName, sanitizedValue,
-          true /* opt_allowClobbering */);
+      if (sanitizedValue != null) {
+        goog.html.sanitizer.noclobber.setCssProperty(
+            cleanCssStyle, propName, sanitizedValue,
+            true /* opt_allowClobbering */);
+      }
     }
   }
   return goog.html.uncheckedconversions

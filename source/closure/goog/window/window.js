@@ -217,7 +217,12 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
               .safeHtmlFromStringKnownToSatisfyTypeContract(
                   goog.string.Const.from(
                       'b/12014412, meta tag with sanitized URL'),
-                  '<META HTTP-EQUIV="refresh" content="0; url=' +
+                  // The referrer policy meta tag below works around a bug in
+                  // Chrome where the meta-refresh alone fails to clear the
+                  // the referrer under certain circumstances
+                  // (crbug.com/791216).
+                  '<meta name="referrer" content="no-referrer">' +
+                      '<meta http-equiv="refresh" content="0; url=' +
                       goog.string.htmlEscape(sanitizedLinkRef) + '">');
       goog.dom.safe.documentWrite(newWin.document, safeHtml);
       newWin.document.close();

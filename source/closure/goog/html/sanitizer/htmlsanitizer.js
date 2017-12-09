@@ -50,6 +50,7 @@ goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.AttributeSanitizedWhitelist');
 goog.require('goog.html.sanitizer.AttributeWhitelist');
 goog.require('goog.html.sanitizer.CssSanitizer');
+goog.require('goog.html.sanitizer.ElementWeakMap');
 goog.require('goog.html.sanitizer.TagBlacklist');
 goog.require('goog.html.sanitizer.TagWhitelist');
 goog.require('goog.html.sanitizer.noclobber');
@@ -84,7 +85,7 @@ goog.html.sanitizer.HtmlSanitizerPolicyContext;
  * Type for a policy function.
  * @typedef {function(string, goog.html.sanitizer.HtmlSanitizerPolicyHints=,
  *     goog.html.sanitizer.HtmlSanitizerPolicyContext=,
- *     goog.html.sanitizer.HtmlSanitizerPolicy=):?string}
+ *     (function(string, ?=, ?=, ?=):?string)=):?string}
  */
 goog.html.sanitizer.HtmlSanitizerPolicy;
 
@@ -1142,15 +1143,10 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
   }
 
   // Used in order to find the correct parent node in the sanitizedParent.
-  /** @const {!Object<number, !Element>} */
-  var elementMap = {};
-  // Used in order to give a unique identifier to each node for lookups.
-  var elemNum = 0;
+  var elementMap = goog.html.sanitizer.ElementWeakMap.newWeakMap();
   // Used for iteration.
   var dirtyNode;
   while (dirtyNode = treeWalker.nextNode()) {
-    elemNum++;
-
     // Get a clean (sanitized) version of the dirty node.
     var cleanNode = this.sanitizeNode_(dirtyNode, styleContainer);
     if (goog.html.sanitizer.noclobber.isNodeElement(cleanNode)) {
@@ -1159,10 +1155,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
       dirtyNode = goog.html.sanitizer.noclobber.assertNodeIsElement(dirtyNode);
       cleanNode = goog.html.sanitizer.noclobber.assertNodeIsElement(cleanNode);
       this.sanitizeAttrs_(dirtyNode, cleanNode);
-      elementMap[elemNum] = cleanNode;
-      goog.html.sanitizer.noclobber.setElementAttribute(
-          dirtyNode, goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_,
-          String(elemNum));
+      elementMap.set(dirtyNode, cleanNode);
 
       // Template tag contents require special handling as they are not
       // traversed by the treewalker.
@@ -1174,11 +1167,6 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
     // ClosureOptimizePrimitives.java, jakubvrana has created one for
     // goog.dom.Tag. Alternatively, create two actual wrappers that expose
     // clobber-safe functions, getters and setters for Node and Element.
-
-    // TODO(pelizzi): [IMPROVEMENT] consider switching from elementMap[elemNum]
-    // to a WeakMap for browsers that support it (e.g. use a ElementWeakMap that
-    // falls back to using data attributes).
-    // @type {ElementWeakMap<ClobberedNode, Node>}
 
     // TODO(pelizzi): [IMPROVEMENT] add an API to sanitize *from* DOM nodes so
     // that we don't have to use innerHTML on template recursion but instead we
@@ -1216,12 +1204,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
     if (isSanitizedParent || !dirtyParent) {
       target = sanitizedParent;
     } else if (goog.html.sanitizer.noclobber.isNodeElement(dirtyParent)) {
-      var elementNum = parseInt(
-          goog.html.sanitizer.noclobber.getElementAttribute(
-              /** @type {!Element} */ (dirtyParent),
-              goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_ATTR_NAME_),
-          10);
-      target = elementMap[elementNum];
+      target = elementMap.get(/** @type {!Element} */ (dirtyParent));
     }
     if (target.content) {
       target = target.content;
@@ -1232,6 +1215,9 @@ goog.html.sanitizer.HtmlSanitizer.prototype.sanitizeToDomNode_ = function(
             goog.html.sanitizer.HTML_SANITIZER_BLACKLISTED_TAG_)) {
       target.appendChild(cleanNode);
     }
+  }
+  if (elementMap.clear) {
+    elementMap.clear();
   }
   return sanitizedParent;
 };

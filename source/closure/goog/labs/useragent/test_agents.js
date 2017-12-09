@@ -382,6 +382,10 @@ testAgents.CHROME_OS_910 =
     'Mozilla/5.0 (X11; U; CrOS i686 9.10.0; en-US) AppleWebKit/532.5' +
     ' (KHTML, like Gecko) Chrome/4.0.253.0 Safari/532.5';
 
+/** @const {string} */
+testAgents.CHROMECAST =
+    'Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36' +
+    ' (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36';
 
 /** @const {string} */
 testAgents.KINDLE_FIRE =

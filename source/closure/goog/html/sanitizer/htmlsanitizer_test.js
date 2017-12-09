@@ -861,6 +861,17 @@ function testDisallowedDataWhitelistingAttributes() {
 }
 
 
+function testBlacklistedWithChildren() {
+  var input = '<form>foo<a>bar</a></form>';
+  var expected = '';
+  assertSanitizedHtml(input, expected);
+
+  input = '<div><form>foo<a>bar</a></form></div>';
+  expected = '<div></div>';
+  assertSanitizedHtml(input, expected);
+}
+
+
 function testFormBody() {
   var safeHtml = '<form>stuff</form>';
   var formHtml = '<form name="body">stuff</form>';
