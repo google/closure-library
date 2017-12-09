@@ -51,7 +51,7 @@ goog.module.ModuleManager = function() {
 
   /**
    * A mapping from module id to ModuleInfo object.
-   * @private {?Object<string, !goog.module.ModuleInfo>}
+   * @private {!Object<string, !goog.module.ModuleInfo>}
    */
   this.moduleInfoMap_ = {};
 
@@ -59,7 +59,7 @@ goog.module.ModuleManager = function() {
   /**
    * The ids of the currently loading modules. If batch mode is disabled, then
    * this array will never contain more than one element at a time.
-   * @type {Array<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.loadingModuleIds_ = [];
@@ -67,7 +67,7 @@ goog.module.ModuleManager = function() {
   /**
    * The requested ids of the currently loading modules. This does not include
    * module dependencies that may also be loading.
-   * @type {Array<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.requestedLoadingModuleIds_ = [];
@@ -87,7 +87,7 @@ goog.module.ModuleManager = function() {
    * position is the front of the queue. This is a 2-D array to group modules
    * together with other modules that should be batch loaded with them, if
    * batch loading is enabled.
-   * @type {Array<Array<string>>}
+   * @type {!Array<!Array<string>>}
    * @private
    */
   this.requestedModuleIdsQueue_ = [];
@@ -95,7 +95,7 @@ goog.module.ModuleManager = function() {
   /**
    * The ids of the currently loading modules which have been initiated by user
    * actions.
-   * @type {Array<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.userInitiatedLoadingModuleIds_ = [];
@@ -103,7 +103,7 @@ goog.module.ModuleManager = function() {
   /**
    * A map of callback types to the functions to call for the specified
    * callback type.
-   * @type {Object<goog.module.ModuleManager.CallbackType, Array<Function>>}
+   * @type {!Object<!goog.module.ModuleManager.CallbackType, !Array<!Function>>}
    * @private
    */
   this.callbackMap_ = {};
@@ -116,14 +116,14 @@ goog.module.ModuleManager = function() {
    * The base module is considered loaded when #setAllModuleInfo is called or
    * #setModuleContext is called, whichever comes first.
    *
-   * @type {goog.module.ModuleInfo}
+   * @type {!goog.module.ModuleInfo}
    * @private
    */
   this.baseModuleInfo_ = new goog.module.ModuleInfo([], '');
 
   /**
    * The module that is currently loading, or null if not loading anything.
-   * @type {goog.module.ModuleInfo}
+   * @type {?goog.module.ModuleInfo}
    * @private
    */
   this.currentlyLoadingModule_ = this.baseModuleInfo_;
@@ -147,7 +147,7 @@ goog.module.ModuleManager = function() {
 
   /**
    * A logger.
-   * @private {goog.log.Logger}
+   * @private {?goog.log.Logger}
    */
   this.logger_ = goog.log.getLogger('goog.module.ModuleManager');
 
@@ -167,7 +167,7 @@ goog.module.ModuleManager = function() {
   /**
    * A loader for the modules that implements loadModules(ids, moduleInfoMap,
    * opt_successFn, opt_errorFn, opt_timeoutFn, opt_forceReload) method.
-   * @private {goog.module.AbstractModuleLoader}
+   * @private {?goog.module.AbstractModuleLoader}
    */
   this.loader_ = null;
 
@@ -202,7 +202,7 @@ goog.module.ModuleManager = function() {
 
   /**
    * The module context needed for module initialization.
-   * @private {Object}
+   * @private {?Object}
    */
   this.moduleContext_ = null;
 };
@@ -280,7 +280,7 @@ goog.module.ModuleManager.prototype.setConcurrentLoadingEnabled = function(
 /**
  * Sets the module info for all modules. Should only be called once.
  *
- * @param {Object<Array<string>>} infoMap An object that contains a mapping
+ * @param {!Object<!Array<string>>} infoMap An object that contains a mapping
  *    from module id (String) to list of required module ids (Array).
  */
 goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
@@ -301,7 +301,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
  * @param {string=} opt_info A string representation of the module dependency
  *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
  *     Where depX is the base-36 encoded position of the dep in the module list.
- * @param {Array<string>=} opt_loadingModuleIds A list of moduleIds that
+ * @param {!Array<string>=} opt_loadingModuleIds A list of moduleIds that
  *     are currently being loaded.
  */
 goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
@@ -376,7 +376,7 @@ goog.module.ModuleManager.prototype.setModuleTrustedUris = function(
 
 /**
  * Gets the application-specific module loader.
- * @return {goog.module.AbstractModuleLoader} An object that has a
+ * @return {?goog.module.AbstractModuleLoader} An object that has a
  *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
  *         opt_timeoutFn, opt_forceReload) method.
  */
@@ -387,7 +387,7 @@ goog.module.ModuleManager.prototype.getLoader = function() {
 
 /**
  * Sets the application-specific module loader.
- * @param {goog.module.AbstractModuleLoader} loader An object that has a
+ * @param {!goog.module.AbstractModuleLoader} loader An object that has a
  *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
  *         opt_timeoutFn, opt_forceReload) method.
  */
@@ -398,7 +398,7 @@ goog.module.ModuleManager.prototype.setLoader = function(loader) {
 
 /**
  * Gets the module context to use to initialize the module.
- * @return {Object} The context.
+ * @return {?Object} The context.
  */
 goog.module.ModuleManager.prototype.getModuleContext = function() {
   return this.moduleContext_;
@@ -407,7 +407,7 @@ goog.module.ModuleManager.prototype.getModuleContext = function() {
 
 /**
  * Sets the module context to use to initialize the module.
- * @param {Object} context The context.
+ * @param {!Object} context The context.
  */
 goog.module.ModuleManager.prototype.setModuleContext = function(context) {
   this.moduleContext_ = context;
@@ -509,7 +509,7 @@ goog.module.ModuleManager.prototype.prefetchModule = function(id) {
  * Loads a single module for use with a given deferred.
  *
  * @param {string} id The id of the module to load.
- * @param {goog.async.Deferred} d A deferred object.
+ * @param {!goog.async.Deferred} d A deferred object.
  * @private
  */
 goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
@@ -532,7 +532,7 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
  * module that is currently loading and returns a fired deferred for a module
  * that is already loaded.
  *
- * @param {Array<string>} ids The id of the module to load.
+ * @param {!Array<string>} ids The id of the module to load.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
  * @return {!Object<string, !goog.async.Deferred>} A mapping from id (String)
  *     to deferred objects that will callback or errback when the load for that
@@ -580,7 +580,7 @@ goog.module.ModuleManager.prototype.loadModulesOrEnqueueIfNotLoadedOrLoading_ =
  * @param {!goog.module.ModuleInfo} moduleInfo The module identifier for the
  *     given id.
  * @param {boolean} userInitiated If the load was user initiated.
- * @param {goog.async.Deferred} d A deferred object.
+ * @param {!goog.async.Deferred} d A deferred object.
  * @private
  */
 goog.module.ModuleManager.prototype.registerModuleLoadCallbacks_ = function(
@@ -615,7 +615,7 @@ goog.module.ModuleManager.prototype.registerModuleLoadCallbacks_ = function(
  * loading. {@link #loadModulesOrEnqueueIfNotLoadedOrLoading_} is a more lenient
  * alternative to this method.
  *
- * @param {Array<string>} ids The ids of the modules to load.
+ * @param {!Array<string>} ids The ids of the modules to load.
  * @private
  */
 goog.module.ModuleManager.prototype.loadModulesOrEnqueue_ = function(ids) {
@@ -658,7 +658,7 @@ goog.module.ModuleManager.prototype.getBackOff_ = function() {
  * The caller should verify that the requested modules are not already loaded
  * and that no modules are currently loading before calling this method.
  *
- * @param {Array<string>} ids The ids of the modules to load.
+ * @param {!Array<string>} ids The ids of the modules to load.
  * @param {boolean=} opt_isRetry If the load is a retry of a previous load
  *     attempt.
  * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
@@ -698,7 +698,7 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
       this.requestedModuleIds_, idsToLoadImmediately);
 
   var loadFn = goog.bind(
-      this.loader_.loadModules, this.loader_,
+      this.loader_.loadModules, goog.asserts.assert(this.loader_),
       goog.array.clone(idsToLoadImmediately),
       goog.asserts.assert(this.moduleInfoMap_), null,
       goog.bind(
@@ -720,9 +720,9 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
  * already loaded and then gets transitive deps. Queues any necessary modules
  * if batch mode is not enabled. Returns the list of ids that should be loaded.
  *
- * @param {Array<string>} ids The ids that need to be loaded.
+ * @param {!Array<string>} ids The ids that need to be loaded.
  * @return {!Array<string>} The ids to load, including dependencies.
- * @throws {Error} If the module is already loaded.
+ * @throws {!Error} If the module is already loaded.
  * @private
  */
 goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
@@ -886,8 +886,8 @@ goog.module.ModuleManager.prototype.isModuleLoading = function(id) {
  * the module if necessary, unless opt_noLoad is true.
  *
  * @param {string} moduleId A module id.
- * @param {Function} fn Function to execute when the module has loaded.
- * @param {Object=} opt_handler Optional handler under whose scope to execute
+ * @param {!Function} fn Function to execute when the module has loaded.
+ * @param {!Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
  * @param {boolean=} opt_noLoad TRUE iff not to initiate loading of the module.
  * @param {boolean=} opt_userInitiated TRUE iff the loading of the module was
@@ -944,7 +944,7 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
  *
  * @param {string} moduleId A module id.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {goog.async.Deferred} A deferred object.
+ * @return {!goog.async.Deferred} A deferred object.
  */
 goog.module.ModuleManager.prototype.load = function(
     moduleId, opt_userInitiated) {
@@ -957,7 +957,7 @@ goog.module.ModuleManager.prototype.load = function(
  * Loads a list of modules, returning a goog.async.Deferred for keeping track of
  * the result.
  *
- * @param {Array<string>} moduleIds A list of module ids.
+ * @param {!Array<string>} moduleIds A list of module ids.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
  * @return {!Object<string, !goog.async.Deferred>} A mapping from id (String)
  *     to deferred objects that will callback or errback when the load for that
@@ -1033,9 +1033,9 @@ goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
  * the module manager code), the callback is held until #setAllModuleInfo
  * is called, or until #setModuleContext is called, whichever happens first.
  *
- * @param {Function} fn A callback function that takes a single argument
+ * @param {!Function} fn A callback function that takes a single argument
  *    which is the module context.
- * @param {Object=} opt_handler Optional handler under whose scope to execute
+ * @param {!Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
  */
 goog.module.ModuleManager.prototype.registerInitializationCallback = function(
@@ -1054,9 +1054,9 @@ goog.module.ModuleManager.prototype.registerInitializationCallback = function(
  * {@see registerInitializationCallback}, but they are fired after all
  * initialization callbacks are called.
  *
- * @param {Function} fn A callback function that takes a single argument
+ * @param {!Function} fn A callback function that takes a single argument
  *    which is the module context.
- * @param {Object=} opt_handler Optional handler under whose scope to execute
+ * @param {!Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
  */
 goog.module.ModuleManager.prototype.registerLateInitializationCallback =
@@ -1073,7 +1073,7 @@ goog.module.ModuleManager.prototype.registerLateInitializationCallback =
  * Sets the constructor to use for the module object for the currently
  * loading module. The constructor should derive from
  * {@see goog.module.BaseModule}.
- * @param {Function} fn The constructor function.
+ * @param {!Function} fn The constructor function.
  */
 goog.module.ModuleManager.prototype.setModuleConstructor = function(fn) {
   if (!this.currentlyLoadingModule_) {
@@ -1177,7 +1177,7 @@ goog.module.ModuleManager.prototype.handleLoadTimeout_ = function() {
  * (i.e. modules that were not included as dependencies) as separate loads or
  * if there was only one requested module, fails that module with the received
  * cause.
- * @param {goog.module.ModuleManager.FailureType} cause The reason for the
+ * @param {!goog.module.ModuleManager.FailureType} cause The reason for the
  *     failure.
  * @private
  */
@@ -1199,7 +1199,7 @@ goog.module.ModuleManager.prototype.requeueBatchOrDispatchFailure_ = function(
 
 /**
  * Handles when a module load failed.
- * @param {goog.module.ModuleManager.FailureType} cause The reason for the
+ * @param {!goog.module.ModuleManager.FailureType} cause The reason for the
  *     failure.
  * @private
  */
@@ -1294,11 +1294,9 @@ goog.module.ModuleManager.prototype.loadNextModules_ = function() {
 
 /**
  * The function to call if the module manager is in error.
- * @param
- * {goog.module.ModuleManager.CallbackType|Array<goog.module.ModuleManager.CallbackType>}
- * types
- *  The callback type.
- * @param {Function} fn The function to register as a callback.
+ * @param {!goog.module.ModuleManager.CallbackType|!Array<
+ *     !goog.module.ModuleManager.CallbackType>} types The callback type.
+ * @param {!Function} fn The function to register as a callback.
  */
 goog.module.ModuleManager.prototype.registerCallback = function(types, fn) {
   if (!goog.isArray(types)) {
@@ -1313,8 +1311,8 @@ goog.module.ModuleManager.prototype.registerCallback = function(types, fn) {
 
 /**
  * Register a callback for the specified callback type.
- * @param {goog.module.ModuleManager.CallbackType} type The callback type.
- * @param {Function} fn The callback function.
+ * @param {!goog.module.ModuleManager.CallbackType} type The callback type.
+ * @param {!Function} fn The callback function.
  * @private
  */
 goog.module.ModuleManager.prototype.registerCallback_ = function(type, fn) {
@@ -1328,7 +1326,7 @@ goog.module.ModuleManager.prototype.registerCallback_ = function(type, fn) {
 
 /**
  * Call the callback functions of the specified type.
- * @param {goog.module.ModuleManager.CallbackType} type The callback type.
+ * @param {!goog.module.ModuleManager.CallbackType} type The callback type.
  * @private
  */
 goog.module.ModuleManager.prototype.executeCallbacks_ = function(type) {
@@ -1346,10 +1344,10 @@ goog.module.ModuleManager.prototype.disposeInternal = function() {
   // Dispose of each ModuleInfo object.
   goog.disposeAll(
       goog.object.getValues(this.moduleInfoMap_), this.baseModuleInfo_);
-  this.moduleInfoMap_ = null;
-  this.loadingModuleIds_ = null;
-  this.requestedLoadingModuleIds_ = null;
-  this.userInitiatedLoadingModuleIds_ = null;
-  this.requestedModuleIdsQueue_ = null;
-  this.callbackMap_ = null;
+  this.moduleInfoMap_ = {};
+  this.loadingModuleIds_ = [];
+  this.requestedLoadingModuleIds_ = [];
+  this.userInitiatedLoadingModuleIds_ = [];
+  this.requestedModuleIdsQueue_ = [];
+  this.callbackMap_ = {};
 };
