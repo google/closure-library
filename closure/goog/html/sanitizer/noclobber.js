@@ -30,59 +30,72 @@ var hasPrototypes = !userAgent.IE || document.documentMode >= 10;
 
 // Functions we use to avoid looking up the prototypes and the descriptors
 // multiple times.
-/** @const @enum {null|Function|(function(this:*): ?|null|undefined)} */
+/** @const @enum {?Function} */
 var Methods = {
   ATTRIBUTES_GETTER: hasPrototypes ?
-      (Object.getOwnPropertyDescriptor(Element.prototype, 'attributes') ||
-       // Edge and IE define this Element property on Node instead of Element.
-       Object.getOwnPropertyDescriptor(Node.prototype, 'attributes'))
-          .get :
+      googAsserts.assert(
+          (Object.getOwnPropertyDescriptor(Element.prototype, 'attributes') ||
+           // Edge and IE define this Element property on Node instead of
+           // Element.
+           Object.getOwnPropertyDescriptor(Node.prototype, 'attributes'))
+              .get) :
       null,
   HAS_ATTRIBUTE: hasPrototypes ? Element.prototype.hasAttribute : null,
   GET_ATTRIBUTE: hasPrototypes ? Element.prototype.getAttribute : null,
   SET_ATTRIBUTE: hasPrototypes ? Element.prototype.setAttribute : null,
   REMOVE_ATTRIBUTE: hasPrototypes ? Element.prototype.removeAttribute : null,
   INNER_HTML_GETTER: hasPrototypes ?
-      (Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML') ||
-       // IE defines this Element property on HTMLElement.
-       Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'innerHTML'))
-          .get :
+      googAsserts.assert(
+          (Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML') ||
+           // IE defines this Element property on HTMLElement.
+           Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'innerHTML'))
+              .get) :
       null,
-  GET_ELEMENTS_BY_TAG_NAME:
-      hasPrototypes ? Element.prototype.getElementsByTagName : null,
+  GET_ELEMENTS_BY_TAG_NAME: hasPrototypes ?
+      Element.prototype.getElementsByTagName :
+      null,
   MATCHES: hasPrototypes ?
       (Element.prototype.matches || Element.prototype.msMatchesSelector) :
       null,
   NODE_NAME_GETTER: hasPrototypes ?
-      Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName').get :
+      googAsserts.assert(
+          Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName').get) :
       null,
   NODE_TYPE_GETTER: hasPrototypes ?
-      Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType').get :
+      googAsserts.assert(
+          Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType').get) :
       null,
   PARENT_NODE_GETTER: hasPrototypes ?
-      Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode').get :
+      googAsserts.assert(
+          Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode').get) :
       null,
   CHILD_NODES_GETTER: hasPrototypes ?
-      Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes').get :
+      googAsserts.assert(
+          Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes').get) :
       null,
   STYLE_GETTER: hasPrototypes ?
-      (Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style') ||
-       // Safari 10 defines the property on Element instead of HTMLElement.
-       Object.getOwnPropertyDescriptor(Element.prototype, 'style'))
-          .get :
+      googAsserts.assert(
+          (Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style') ||
+           // Safari 10 defines the property on Element instead of
+           // HTMLElement.
+           Object.getOwnPropertyDescriptor(Element.prototype, 'style'))
+              .get) :
       null,
   SHEET_GETTER: hasPrototypes ?
-      Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet').get :
+      googAsserts.assert(
+          Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet')
+              .get) :
       null,
-  GET_PROPERTY_VALUE:
-      hasPrototypes ? CSSStyleDeclaration.prototype.getPropertyValue : null,
+  GET_PROPERTY_VALUE: hasPrototypes ?
+      CSSStyleDeclaration.prototype.getPropertyValue :
+      null,
   SET_PROPERTY: hasPrototypes ? CSSStyleDeclaration.prototype.setProperty : null
 };
 
 /**
  * Calls the provided DOM prototype or property descriptor and returns its
  * result.
- * @param {null|Function|(function(this:*): ?|null|undefined)} fn
+ * @param {?Function} fn
  * @param {*} object
  * @param {...*} var_args
  * @return {?}
