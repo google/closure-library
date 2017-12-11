@@ -22,13 +22,12 @@ goog.module('goog.html.sanitizer.ElementWeakMap');
 goog.module.declareLegacyNamespace();
 
 var noclobber = goog.require('goog.html.sanitizer.noclobber');
-var userAgent = goog.require('goog.userAgent');
 
-// We can't detect if WeakMap is defined by looking for the property on the
-// global scope because a leaky polyfill might have been defined by the
-// compiler, and we want to use this implementation instead of the polyfill.
+// We also need to check if WeakMap has been polyfilled, because we want to use
+// ElementWeakMap instead of the polyfill.
 /** @const {boolean} */
-var WEAKMAP_SUPPORTED = !userAgent.IE || document.documentMode >= 11;
+var NATIVE_WEAKMAP_SUPPORTED = typeof WeakMap != 'undefined' &&
+    WeakMap.toString().indexOf('[native code]') != -1;
 
 /** @const {string} */
 var DATA_ATTRIBUTE_NAME_PREFIX = 'data-elementweakmap-index-';
@@ -104,7 +103,7 @@ ElementWeakMap.prototype.clear = function() {
  * @return {!ElementWeakMap|!WeakMap}
  */
 ElementWeakMap.newWeakMap = function() {
-  return WEAKMAP_SUPPORTED ? new WeakMap() : new ElementWeakMap();
+  return NATIVE_WEAKMAP_SUPPORTED ? new WeakMap() : new ElementWeakMap();
 };
 
 exports = ElementWeakMap;
