@@ -543,7 +543,7 @@ goog.addDependency('html/sanitizer/noclobber_test.js', ['goog.html.sanitizer.noc
 goog.addDependency('html/sanitizer/tagblacklist.js', ['goog.html.sanitizer.TagBlacklist'], [], {});
 goog.addDependency('html/sanitizer/tagwhitelist.js', ['goog.html.sanitizer.TagWhitelist'], [], {});
 goog.addDependency('html/sanitizer/unsafe.js', ['goog.html.sanitizer.unsafe'], ['goog.asserts', 'goog.html.sanitizer.HtmlSanitizer.Builder', 'goog.string', 'goog.string.Const'], {});
-goog.addDependency('html/sanitizer/unsafe_test.js', ['goog.html.UnsafeTest'], ['goog.html.SafeHtml', 'goog.html.sanitizer.HtmlSanitizer', 'goog.html.sanitizer.TagBlacklist', 'goog.html.sanitizer.unsafe', 'goog.string.Const', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('html/sanitizer/unsafe_test.js', ['goog.html.UnsafeTest'], ['goog.html.SafeHtml', 'goog.html.sanitizer.AttributeWhitelist', 'goog.html.sanitizer.HtmlSanitizer', 'goog.html.sanitizer.TagBlacklist', 'goog.html.sanitizer.TagWhitelist', 'goog.html.sanitizer.unsafe', 'goog.string.Const', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('html/silverlight.js', ['goog.html.silverlight'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const'], {});
 goog.addDependency('html/silverlight_test.js', ['goog.html.silverlightTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.silverlight', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/testing.js', ['goog.html.testing'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.testing.mockmatchers.ArgumentMatcher'], {});

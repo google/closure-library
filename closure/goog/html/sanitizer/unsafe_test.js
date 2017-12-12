@@ -20,8 +20,10 @@ goog.provide('goog.html.UnsafeTest');
 goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.sanitizer.AttributeWhitelist');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
 goog.require('goog.html.sanitizer.TagBlacklist');
+goog.require('goog.html.sanitizer.TagWhitelist');
 goog.require('goog.html.sanitizer.unsafe');
 
 goog.require('goog.string.Const');
