@@ -69,7 +69,9 @@ goog.testing.MockClock = function(opt_autoInstall) {
    * right.  For example, the expiration times for each element of the queue
    * might be in the order 300, 200, 200.
    *
-   * @type {Array<Object>}
+   * @type {Array<{
+   *    timeoutKey: number, millis: number,
+   *    runAtMillis: number, funcToCall: Function, recurring: boolean}>}
    * @private
    */
   this.queue_ = [];

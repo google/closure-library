@@ -20,6 +20,7 @@
 goog.setTestOnly('goog.testing.PropertyReplacer');
 goog.provide('goog.testing.PropertyReplacer');
 
+goog.require('goog.asserts');
 /** @suppress {extraRequire} Needed for some tests to compile. */
 goog.require('goog.testing.ObjectPropertyString');
 goog.require('goog.userAgent');
@@ -90,7 +91,7 @@ goog.testing.PropertyReplacer.NO_SUCH_KEY_ = {};
 
 /**
  * Tells if the given key exists in the object. Ignores inherited fields.
- * @param {Object|Function} obj The JavaScript or native object or function
+ * @param {!Object|!Function} obj The JavaScript or native object or function
  *     whose key is to be checked.
  * @param {string} key The key to check.
  * @return {boolean} Whether the object has the key as own key.
@@ -133,7 +134,7 @@ goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
 /**
  * Deletes a key from an object. Sets it to undefined or empty string if the
  * delete failed.
- * @param {Object|Function} obj The object or function to delete a key from.
+ * @param {!Object|!Function} obj The object or function to delete a key from.
  * @param {string} key The key to delete.
  * @throws {Error} In case of trying to set a read-only property
  * @private
@@ -187,6 +188,7 @@ goog.testing.PropertyReplacer.restoreOriginal_ = function(original) {
  * @throws {Error} In case of trying to set a read-only property.
  */
 goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
+  goog.asserts.assert(obj);
   var origValue = goog.testing.PropertyReplacer.hasKey_(obj, key) ?
       obj[key] :
       goog.testing.PropertyReplacer.NO_SUCH_KEY_;
@@ -276,7 +278,7 @@ goog.testing.PropertyReplacer.prototype.setPath = function(path, value) {
  * @param {string} key The key to delete.
  */
 goog.testing.PropertyReplacer.prototype.remove = function(obj, key) {
-  if (goog.testing.PropertyReplacer.hasKey_(obj, key)) {
+  if (obj && goog.testing.PropertyReplacer.hasKey_(obj, key)) {
     this.original_.push({object: obj, key: key, value: obj[key]});
     goog.testing.PropertyReplacer.deleteKey_(obj, key);
   }
