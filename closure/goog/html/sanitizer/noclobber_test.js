@@ -52,7 +52,11 @@ testSuite({
     var element = getClobberedElement('attributes');
     var attributes = noclobber.getElementAttributes(element);
     assertNotEquals(element.attributes, attributes);
-    assertTrue(attributes instanceof NamedNodeMap);
+    if (Object.getOwnPropertyDescriptor(Element.prototype, 'attributes')) {
+      assertTrue(attributes instanceof NamedNodeMap);
+    } else {
+      assertNull(attributes);
+    }
 
     element = getClobberedElement('hasAttribute');
     assertTrue(noclobber.hasElementAttribute(element, 'id'));
@@ -72,11 +76,20 @@ testSuite({
 
     element = getClobberedElement('innerHTML');
     var innerHTML = noclobber.getElementInnerHTML(element);
-    assertEquals('<input name="innerHTML">', innerHTML);
+    if (Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML')) {
+      assertEquals('<input name="innerHTML">', innerHTML);
+    } else {
+      assertEquals('', innerHTML);
+    }
 
     element = getClobberedElement('style');
     var style = noclobber.getElementStyle(element);
-    assertTrue(style instanceof CSSStyleDeclaration);
+    if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style') &&
+        !userAgentProduct.SAFARI) {
+      assertTrue(style instanceof CSSStyleDeclaration);
+    } else {
+      assertNull(style);
+    }
 
     element = getClobberedElement('getElementsByTagName');
     assertArrayEquals(
@@ -120,7 +133,6 @@ testSuite({
     var element = getClobberedElement('getPropertyValue');
     element.style.setProperty('color', 'red');
     assertEquals('red', noclobber.getCssPropertyValue(element.style, 'color'));
-    assertEquals('', noclobber.getCssPropertyValue(element.style, 'foo'));
 
     element = getClobberedElement('setProperty');
     noclobber.setCssProperty(element.style, 'color', 'red');
