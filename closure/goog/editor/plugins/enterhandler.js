@@ -450,7 +450,8 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
   var container = range.getContainer();
   var field = this.getFieldObject().getElement();
 
-  var paragraph;
+  /** @type {!Node|undefined} */
+  var paragraph = undefined;
   while (container && container != field) {
     // We don't need to ensure a block if we are already in the same block, or
     // in another block level node that we don't want to change the format of
