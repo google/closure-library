@@ -296,12 +296,12 @@ goog.testing.MockClassFactory.prototype.classHasMock_ = function(className) {
  * @param {string} className The name of the class.
  * @param {Function} mockFinder A bound function that returns the mock
  *     associated with a class given the constructor's argument list.
- * @return {!Function} A proxy constructor.
+ * @return {function(new:?)} A proxy constructor.
  * @private
  */
 goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
     className, mockFinder) {
-  return function() {
+  return /** @type {function(new:?)} */ (function() {
     this.$mock_ = mockFinder(className, arguments);
     if (!this.$mock_) {
       // The "arguments" variable is not a proper Array so it must be converted.
@@ -310,7 +310,7 @@ goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
           'No mock found for ' + className + ' with arguments ' +
           args.join(', '));
     }
-  };
+  });
 };
 
 
@@ -323,9 +323,9 @@ goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
  * @private
  */
 goog.testing.MockClassFactory.prototype.getProxyFunction_ = function(fnName) {
-  return function() {
+  return /** @type {function(this:?,...?):?} */ (function() {
     return this.$mock_[fnName].apply(this.$mock_, arguments);
-  };
+  });
 };
 
 
