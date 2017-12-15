@@ -328,12 +328,13 @@ goog.ui.editor.DefaultToolbar.makeToolbar = function(
  */
 goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton = function(
     command, opt_domHelper) {
-  var button;
+  var button = null;
   var descriptor = goog.ui.editor.DefaultToolbar.buttons_[command];
   if (descriptor) {
     // Default the factory method to makeToggleButton, since most built-in
     // toolbar buttons are toggle buttons. See also
     // goog.ui.editor.DefaultToolbar.button_list_.
+    /** @type {!Function} */
     var factory =
         descriptor.factory || goog.ui.editor.ToolbarFactory.makeToggleButton;
     var id = descriptor.command;
@@ -441,7 +442,9 @@ goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
   var button = goog.ui.editor.ToolbarFactory.makeButton(
       id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
-  button.updateFromValue = function(value) { button.setEnabled(value); };
+  button.updateFromValue = function(value) {
+    button.setEnabled(value);
+  };
   return button;
 };
 
@@ -484,9 +487,8 @@ goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(
     // TODO (attila): Try to make this more robust.
     var item = null;
     if (value && value.length > 0) {
-      item = /** @type {goog.ui.MenuItem} */ (
-          button.getMenu().getChild(
-              goog.ui.editor.ToolbarFactory.getPrimaryFont(value)));
+      item = /** @type {goog.ui.MenuItem} */ (button.getMenu().getChild(
+          goog.ui.editor.ToolbarFactory.getPrimaryFont(value)));
     }
     var selectedItem = button.getSelectedItem();
     if (item != selectedItem) {
@@ -598,8 +600,9 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(
       id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   // Initialize default foreground color.
   button.setSelectedColor('#000');
-  button.updateFromValue =
-      goog.partial(goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
+  button.updateFromValue = goog.partial(
+      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_,
+      /** @type {!goog.ui.ToolbarColorMenuButton} */ (button));
   return button;
 };
 
@@ -628,8 +631,9 @@ goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(
       id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   // Initialize default background color.
   button.setSelectedColor('#FFF');
-  button.updateFromValue =
-      goog.partial(goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
+  button.updateFromValue = goog.partial(
+      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_,
+      /** @type {!goog.ui.ToolbarColorMenuButton} */ (button));
   return button;
 };
 
@@ -837,17 +841,19 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
  * Note that this object is only used for creating toolbar buttons for
  * built-in editor commands; custom buttons aren't listed here.  Please don't
  * try to hack this!
- * @private {!Object<!goog.ui.editor.ButtonDescriptor>}.
+ * @private {!Object<string, !goog.ui.editor.ButtonDescriptor>}.
  */
 goog.ui.editor.DefaultToolbar.buttons_ = {};
 
 
 /**
- * @typedef {{command: string, tooltip: ?string,
- *   caption: ?goog.ui.ControlContent, classes: ?string,
- *   factory: ?function(string, string, goog.ui.ControlContent, ?string,
- *       goog.ui.ButtonRenderer, goog.dom.DomHelper):goog.ui.Button,
- *   queryable:?boolean}}
+ * @typedef {{
+ *   command: string,
+ *   tooltip: (undefined|string),
+ *   caption: (undefined|goog.ui.ControlContent),
+ *   classes: (undefined|string),
+ *   factory: (undefined|!Function),
+ *   queryable:(undefined|boolean)}}
  */
 goog.ui.editor.ButtonDescriptor;
 
@@ -1054,14 +1060,14 @@ goog.ui.editor.DefaultToolbar.button_list_ = [
 
 
 (function() {
-  // Create the goog.ui.editor.DefaultToolbar.buttons_ map from
-  // goog.ui.editor.DefaultToolbar.button_list_.
-  for (var i = 0, button;
-       button = goog.ui.editor.DefaultToolbar.button_list_[i]; i++) {
-    goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
-  }
+// Create the goog.ui.editor.DefaultToolbar.buttons_ map from
+// goog.ui.editor.DefaultToolbar.button_list_.
+for (var i = 0, button; button = goog.ui.editor.DefaultToolbar.button_list_[i];
+     i++) {
+  goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
+}
 
-  // goog.ui.editor.DefaultToolbar.button_list_ is no longer needed
-  // once the map is ready.
-  goog.ui.editor.DefaultToolbar.button_list_ = null;
+// goog.ui.editor.DefaultToolbar.button_list_ is no longer needed
+// once the map is ready.
+goog.ui.editor.DefaultToolbar.button_list_ = null;
 })();

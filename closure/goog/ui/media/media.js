@@ -209,25 +209,25 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
   var dataModel = control.getDataModel();
 
   // Only creates DOMs if the data is available.
-  if (dataModel.getCaption()) {
+  var dataCaption = dataModel.getCaption();
+  if (dataCaption) {
     var caption = domHelper.createElement(goog.dom.TagName.DIV);
     caption.className = goog.getCssName(this.getCssClass(), 'caption');
-    caption.appendChild(
-        domHelper.createDom(
-            goog.dom.TagName.P,
-            goog.getCssName(this.getCssClass(), 'caption-text'),
-            dataModel.getCaption()));
+
+    caption.appendChild(domHelper.createDom(
+        goog.dom.TagName.P, goog.getCssName(this.getCssClass(), 'caption-text'),
+        dataCaption));
     domHelper.appendChild(div, caption);
   }
 
-  if (dataModel.getDescription()) {
+  var dataDescription = dataModel.getDescription();
+  if (dataDescription) {
     var description = domHelper.createElement(goog.dom.TagName.DIV);
     description.className = goog.getCssName(this.getCssClass(), 'description');
-    description.appendChild(
-        domHelper.createDom(
-            goog.dom.TagName.P,
-            goog.getCssName(this.getCssClass(), 'description-text'),
-            dataModel.getDescription()));
+    description.appendChild(domHelper.createDom(
+        goog.dom.TagName.P,
+        goog.getCssName(this.getCssClass(), 'description-text'),
+        dataDescription));
     domHelper.appendChild(div, description);
   }
 

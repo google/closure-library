@@ -540,6 +540,7 @@ goog.ui.editor.Bubble.Panel_ = function(
 
   /**
    * The element containing this panel.
+   * @type {!Element}
    */
   this.element = dom.createDom(
       goog.dom.TagName.DIV,
