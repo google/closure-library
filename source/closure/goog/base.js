@@ -910,10 +910,7 @@ goog.loadModule = function(moduleDef) {
   // of the module.
   var previousState = goog.moduleLoaderState_;
   try {
-    goog.moduleLoaderState_ = {
-      moduleName: undefined,
-      declareLegacyNamespace: false
-    };
+    goog.moduleLoaderState_ = {moduleName: '', declareLegacyNamespace: false};
     var exports;
     if (goog.isFunction(moduleDef)) {
       exports = moduleDef.call(undefined, {});

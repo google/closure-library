@@ -559,7 +559,7 @@ goog.ui.Component.prototype.getHandler = function() {
   if (!self.googUiComponentHandler_) {
     self.googUiComponentHandler_ = new goog.events.EventHandler(self);
   }
-  return self.googUiComponentHandler_;
+  return goog.asserts.assert(self.googUiComponentHandler_);
 };
 
 

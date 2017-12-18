@@ -797,6 +797,7 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
         this.createComboBoxDom_(entry, label, setValueFunc) :
         this.createTextBoxDom_(entry, label, setValueFunc);
   } else if (entry instanceof goog.tweak.NumericSetting) {
+    /** @this {Element} */
     setValueFunc = function() {
       // Reset the value if it's not a number.
       if (isNaN(this.value)) {

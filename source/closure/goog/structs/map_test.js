@@ -82,6 +82,8 @@ function testAddAll() {
   m2.addAll(m);
   assertTrue('addAll so it should not be empty', !m2.isEmpty());
   assertTrue("addAll so it should contain 'c' key", m2.containsKey('c'));
+
+  m2.addAll(null);  // Ensure that passing a null object does not err.
 }
 
 function testConstructor() {

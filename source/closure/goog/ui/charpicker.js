@@ -575,7 +575,7 @@ goog.ui.CharPicker.prototype.enterDocument = function() {
  */
 goog.ui.CharPicker.prototype.handleFocus_ = function(e) {
   var button = e.target;
-  var element = button.getElement();
+  var element = /** @type {!Element} */ (button.getElement());
   var ch = this.getChar_(element);
 
   // Clear the aria label to avoid speaking the old value in case the button

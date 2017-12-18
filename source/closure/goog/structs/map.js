@@ -28,7 +28,6 @@ goog.provide('goog.structs.Map');
 
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
-goog.require('goog.object');
 
 
 
@@ -86,7 +85,7 @@ goog.structs.Map = function(opt_map, var_args) {
       this.set(arguments[i], arguments[i + 1]);
     }
   } else if (opt_map) {
-    this.addAll(/** @type {Object} */ (opt_map));
+    this.addAll(/** @type {!Object} */ (opt_map));
   }
 };
 
@@ -315,21 +314,18 @@ goog.structs.Map.prototype.set = function(key, value) {
 
 /**
  * Adds multiple key-value pairs from another goog.structs.Map or Object.
- * @param {Object} map  Object containing the data to add.
+ * @param {?Object} map Object containing the data to add.
  */
 goog.structs.Map.prototype.addAll = function(map) {
-  var keys, values;
   if (map instanceof goog.structs.Map) {
-    keys = map.getKeys();
-    values = map.getValues();
+    var keys = map.getKeys();
+    for (var i = 0; i < keys.length; i++) {
+      this.set(keys[i], map.get(keys[i]));
+    }
   } else {
-    keys = goog.object.getKeys(map);
-    values = goog.object.getValues(map);
-  }
-  // we could use goog.array.forEach here but I don't want to introduce that
-  // dependency just for this.
-  for (var i = 0; i < keys.length; i++) {
-    this.set(keys[i], values[i]);
+    for (var key in map) {
+      this.set(key, map[key]);
+    }
   }
 };
 
@@ -448,7 +444,7 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
 /**
  * Safe way to test for hasOwnProperty.  It even allows testing for
  * 'hasOwnProperty'.
- * @param {Object} obj The object to test for presence of the given key.
+ * @param {!Object} obj The object to test for presence of the given key.
  * @param {*} key The key to check for.
  * @return {boolean} Whether the object has the key.
  * @private
