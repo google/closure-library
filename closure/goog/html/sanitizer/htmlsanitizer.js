@@ -234,8 +234,7 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_ = function(urlPolicy) {
   return /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (function(
       url, policyHints) {
-    var trimmed =
-        goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(url, policyHints);
+    var trimmed = goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_(url);
     var safeUrl = urlPolicy(trimmed, policyHints);
     if (safeUrl &&
         goog.html.SafeUrl.unwrap(safeUrl) !=
@@ -899,12 +898,10 @@ goog.html.sanitizer.HtmlSanitizer.sanitizeCssDeclarationList_ = function(
  * Cleans up an attribute value that we don't particularly want to do anything
  * to. At the moment we just trim the whitespace.
  * @param {string} attrValue
- * @param {goog.html.sanitizer.HtmlSanitizerPolicyHints} policyHints
  * @return {string} sanitizedAttrValue
  * @private
  */
-goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_ = function(
-    attrValue, policyHints) {
+goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_ = function(attrValue) {
   return goog.string.trim(attrValue);
 };
 

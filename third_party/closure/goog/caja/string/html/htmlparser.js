@@ -366,7 +366,8 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
   var htmlLower = null;
   var inTag = false;  // True iff we're currently processing a tag.
   var attribs = [];  // Accumulates attribute names and values.
-  var tagName;  // The name of the tag currently being processed.
+  /** @type {string|undefined} */
+  var tagName = undefined;  // The name of the tag currently being processed.
   var eflags;  // The element flags for the current tag.
   var openTag;  // True if the current tag is an open tag.
 
