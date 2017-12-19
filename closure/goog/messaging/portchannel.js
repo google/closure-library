@@ -260,7 +260,9 @@ goog.messaging.PortChannel.prototype.send = function(serviceName, payload) {
     message = goog.json.serialize(message);
   }
 
-  this.port_.postMessage(message, ports);
+  // Avoid a type error by casting to unknown as the type checker doesn't
+  // know which variant we are calling here.
+  this.port_.postMessage(/** @type {?} */ (message), ports);
 };
 
 
@@ -316,14 +318,16 @@ goog.messaging.PortChannel.prototype.deliver_ = function(e) {
 goog.messaging.PortChannel.prototype.validateMessage_ = function(data) {
   if (!('serviceName' in data)) {
     goog.log.warning(
-        this.logger, 'Message object doesn\'t contain service name: ' +
+        this.logger,
+        'Message object doesn\'t contain service name: ' +
             goog.debug.deepExpose(data));
     return false;
   }
 
   if (!('payload' in data)) {
     goog.log.warning(
-        this.logger, 'Message object doesn\'t contain payload: ' +
+        this.logger,
+        'Message object doesn\'t contain payload: ' +
             goog.debug.deepExpose(data));
     return false;
   }
