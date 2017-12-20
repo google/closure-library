@@ -121,6 +121,37 @@ goog.html.SafeScript.fromConstant = function(script) {
 
 
 /**
+ * Creates a SafeScript from a compile-time constant string but with arguments
+ * that can vary at run-time. The code argument should be formatted as an
+ * inline function (see example below). The arguments will be JSON-encoded and
+ * provided as input to the function specified in code.
+ *
+ * Example Usage:
+ *
+ *     let safeScript = SafeScript.fromConstantAndArgs(
+ *         Const.from('function(arg1, arg2) { doSomething(arg1, arg2); }'),
+ *         arg1,
+ *         arg2);
+ *
+ * This produces a SafeScript equivalent to the following:
+ *
+ *     (function(arg1, arg2) { doSomething(arg1, arg2); })("value1", "value2");
+ *
+ * @param {!goog.string.Const} code
+ * @param {...*} var_args
+ * @return {!goog.html.SafeScript}
+ */
+goog.html.SafeScript.fromConstantAndArgs = function(code, var_args) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) {
+    args.push(goog.html.SafeScript.stringify_(arguments[i]));
+  }
+  return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
+      '(' + goog.string.Const.unwrap(code) + ')(' + args.join(', ') + ');');
+};
+
+
+/**
  * Returns this SafeScript's value as a string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
@@ -196,6 +227,20 @@ goog.html.SafeScript.unwrap = function(safeScript) {
   }
 };
 
+
+/**
+ * Converts the given value to a embeddabel JSON string and returns it. The
+ * resulting string can be embedded in HTML because the '<' character is
+ * encoded.
+ *
+ * @param {*} val
+ * @return {!string}
+ * @private
+ */
+goog.html.SafeScript.stringify_ = function(val) {
+  var json = JSON.stringify(val);
+  return json.replace(/</g, '\\x3c');
+};
 
 /**
  * Package-internal utility method to create SafeScript instances.

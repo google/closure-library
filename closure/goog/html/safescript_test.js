@@ -68,3 +68,35 @@ function testFromConstant_allowsEmptyString() {
 function testEmpty() {
   assertEquals('', goog.html.SafeScript.unwrap(goog.html.SafeScript.EMPTY));
 }
+
+
+function testFromConstantAndArgs() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from(
+          'function(str, num, nul, json) { foo(str, num, nul, json); }'),
+      'hello world', 42, null, {'foo': 'bar'});
+  assertEquals(
+      '(function(str, num, nul, json) { foo(str, num, nul, json); })' +
+          '("hello world", 42, null, {"foo":"bar"});',
+      goog.html.SafeScript.unwrap(script));
+}
+
+
+function testFromConstantAndArgs_escaping() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from('function(str) { alert(str); }'),
+      '</script</script');
+  assertEquals(
+      '(function(str) { alert(str); })' +
+          '("\\x3c/script\\x3c/script");',
+      goog.html.SafeScript.unwrap(script));
+}
+
+
+function testFromConstantAndArgs_eval() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from('function(arg1, arg2) { return arg1 * arg2; }'),
+      21, 2);
+  var result = eval(goog.html.SafeScript.unwrap(script));
+  assertEquals(42, result);
+}
