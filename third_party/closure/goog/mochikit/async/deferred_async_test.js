@@ -88,3 +88,35 @@ function testErrorStack_doesNotTouchCustomStack() {
 
   return d.then(fail, function(error) { assertEquals('STACK', error.stack); });
 }
+
+function testFromPromiseWithDeferred() {
+  var result;
+  var p = new goog.async.Deferred();
+  var d = goog.async.Deferred.fromPromise(p);
+  d.addCallback(function(value) {
+    result = value;
+  });
+  assertUndefined(result);
+  p.callback('promise');
+  return d.then(function() {
+    assertEquals('promise', result);
+  });
+}
+
+function testFromPromiseWithNativePromise() {
+  if (!Promise) {
+    return;
+  }
+  var result;
+  var p = new Promise(function(resolve) {
+    resolve('promise');
+  });
+  var d = goog.async.Deferred.fromPromise(p);
+  d.addCallback(function(value) {
+    result = value;
+  });
+  assertUndefined(result);
+  return p.then(function() {
+    assertEquals('promise', result);
+  });
+}

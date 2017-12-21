@@ -1063,7 +1063,7 @@ function testNativePromiseBlocksDeferred() {
   return d;
 }
 
-function testFromPromise() {
+function testFromPromiseWithGoogPromise() {
   var result;
   var p = new goog.Promise(function(resolve) {
     resolve('promise');
@@ -1074,6 +1074,20 @@ function testFromPromise() {
   });
   assertUndefined(result);
   mockClock.tick();
+  assertEquals('promise', result);
+}
+
+function testFromPromiseWithThenable() {
+  var result;
+  var p = {
+    'then': function(callback) {
+      callback('promise');
+    }
+  };
+  var d = Deferred.fromPromise(p);
+  d.addCallback(function(value) {
+    result = value;
+  });
   assertEquals('promise', result);
 }
 
