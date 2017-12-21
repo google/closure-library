@@ -45,7 +45,7 @@ after_success:
 env:
   global:
     - SAUCE_USERNAME=closure-sauce
-    - SAUCE_ACCESS_KEY=dfd98f70a612-e69a-ad34-6149-3ca056f8
+    - secure: "LhIlKzzLU9prwCg+p4Ay3bpyeb2drLqrzHHg+xPzNiTA2UUYPW0fYyBtHIjDUgaNRftnlRXhu678iL2U7PEB2ONk4m70TI8Ch0/yBImAklwszxOYgNTljeKV2poYrSBcUandA9kVavzLqdLg8HUlVurURI/dQy4WwwrKUftHudc="
     - secure: "aEv7CF6ZvD2Fa67yv6yYtgFGjafCkpSP2Y+Dk2AyJCFLF3+L5ZFXpFoCtgYgCWezVDbeGpoojFeCzLu0ycWwnIwJpUQ/C8NBDR/x2Lqz2I6M2PfkEy91UhSE5nXe1RJMnna1715zeBmustiFKjdETWFZrpvxkHixBHbLfY3cJZw="
 
 addons:
