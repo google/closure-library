@@ -484,6 +484,16 @@ function testAssertHtmlContentsMatchWithEmptyTemplate() {
   });
 }
 
+function testAssertHtmlContentsMatchWithHttpCredentials() {
+  var img = '<img src="http://foo:bar@example.com">';
+  root.innerHTML = img;
+  goog.testing.dom.assertHtmlContentsMatch(img, root, true);
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<img src="http://bar:baz@example.com">', root, true);
+  });
+}
+
 function testAssertHtmlMatches() {
   // Since assertHtmlMatches is based on assertHtmlContentsMatch, we leave the
   // majority of edge case testing to the above.  Here we just do a sanity
