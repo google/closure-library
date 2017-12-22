@@ -14,9 +14,14 @@
 
 /**
  * @fileoverview Utility DOM functions resistant to DOM clobbering. Clobbering
- *     resistance is offered as a best-effort feature -- it is not available on
- *     older browsers such as IE <10, Chrome <43, etc. In some cases, we can at
- *     least detect clobbering attempts and abort.
+ * resistance is offered as a best-effort feature -- it is not available on
+ * older browsers such as IE <10, Chrome <43, etc. In some cases, we can at
+ * least detect clobbering attempts and abort. Note that this is not intended to
+ * be a general-purpose library -- it is only used by the HTML sanitizer to
+ * accept and sanitize clobbered input. If your projects needs to protect
+ * against clobbered content, consider using the HTML sanitizer and configuring
+ * it to defuse clobbering by prefixing all element ids and names in the
+ * output.
  * @supported Unless specified in the method documentation, IE 10 and newer.
  */
 
@@ -93,6 +98,7 @@ var Methods = {
   NODE_TYPE_GETTER: getterOrNull('Node', 'nodeType'),
   PARENT_NODE_GETTER: getterOrNull('Node', 'parentNode'),
   CHILD_NODES_GETTER: getterOrNull('Node', 'childNodes'),
+  APPEND_CHILD: prototypeMethodOrNull('Node', 'appendChild'),
   STYLE_GETTER: getterOrNull('HTMLElement', 'style') ||
       // Safari 10 defines the property on Element instead of
       // HTMLElement.
@@ -395,6 +401,18 @@ function getChildNodes(node) {
 }
 
 /**
+ * Appends a child to a node without falling prey to things like
+ * <form><input name="appendChild"></form>.
+ * @param {!Node} parent
+ * @param {!Node} child
+ * @return {!Node}
+ */
+function appendNodeChild(parent, child) {
+  return genericMethodCall(
+      Methods.APPEND_CHILD, parent, 'appendChild', [child]);
+}
+
+/**
  * Provides a way cross-browser way to get a CSS value from a CSS declaration.
  * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
  * @param {string} propName A property name.
@@ -441,6 +459,7 @@ exports = {
   getNodeType: getNodeType,
   getParentNode: getParentNode,
   getChildNodes: getChildNodes,
+  appendNodeChild: appendNodeChild,
   getCssPropertyValue: getCssPropertyValue,
   setCssProperty: setCssProperty,
   /** @package */

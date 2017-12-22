@@ -191,6 +191,11 @@ testSuite({
 
     element = createElement('childNodes');
     assertTrue(noclobber.getChildNodes(element) instanceof NodeList);
+
+    element = createElement('appendChild');
+    noclobber.appendNodeChild(element, document.createElement('div'));
+    assertEquals(
+        'DIV', element.childNodes[element.childNodes.length - 1].nodeName);
   },
 
   testNodeClobbered() {
@@ -222,6 +227,12 @@ testSuite({
     replacer.set(noclobber.Methods, 'CHILD_NODES_GETTER', null);
     assertThrows(function() {
       noclobber.getChildNodes(element);
+    });
+
+    element = createElement('appendChild');
+    replacer.set(noclobber.Methods, 'APPEND_CHILD', null);
+    assertThrows(function() {
+      noclobber.appendNodeChild(element, document.createElement('div'));
     });
 
     replacer.reset();
