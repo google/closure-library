@@ -345,6 +345,16 @@ goog.testing.dom.assertHtmlContentsMatch = function(
         // Text may be collapsed after any non-inline element.
         collapsible = true;
       }
+
+      // Contents of template tags belong to a separate document and are not
+      // iterated on by the current iterator, unless the browser is too old to
+      // treat template tags differently. We recursively assert equality of the
+      // two template document fragments.
+      if (actualElem.tagName.toLowerCase() == 'template' &&
+          actualElem.content) {
+        goog.testing.dom.assertHtmlMatches(
+            expectedElem.innerHTML, actualElem.innerHTML, opt_strictAttributes);
+      }
     } else {
       // Concatenate text nodes until we reach a non text node.
       var actualText = actualNode.nodeValue;

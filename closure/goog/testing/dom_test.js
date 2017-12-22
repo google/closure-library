@@ -438,6 +438,52 @@ function testAssertHtmlMatchesWithWhitespaceAndNesting() {
   goog.testing.dom.assertHtmlContentsMatch('&nbsp;', root);
 }
 
+function testAssertHtmlContentsMatchWithTemplate() {
+  var template = '<template><p>foo</p></template>';
+  root.innerHTML = template;
+  goog.testing.dom.assertHtmlContentsMatch(template, root, true);
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template><p id="bar">foo</p></template>', root, true);
+  });
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template><p>bar</p></template>', root, true);
+  });
+}
+
+function testAssertHtmlContentsMatchWithNestedTemplate() {
+  var nestedTemplate = '<template><br><template><br></template><br></template>';
+  root.innerHTML = nestedTemplate;
+  goog.testing.dom.assertHtmlContentsMatch(nestedTemplate, root, true);
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template><br><template id="foo"><br></template><br></template>', root,
+        true);
+  });
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template><br><template><br>bar</template><br></template>', root,
+        true);
+  });
+}
+
+function testAssertHtmlContentsMatchWithEmptyTemplate() {
+  var template = '<template><p>foo</p></template>';
+  root.innerHTML = template;
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template></template>', root, true);
+  });
+
+  template = '<template></template>';
+  root.innerHTML = template;
+  assertThrowsJsUnitException(function() {
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<template><p>bar</p></template>', root, true);
+  });
+}
+
 function testAssertHtmlMatches() {
   // Since assertHtmlMatches is based on assertHtmlContentsMatch, we leave the
   // majority of edge case testing to the above.  Here we just do a sanity
