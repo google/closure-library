@@ -61,9 +61,6 @@
  * which it is prohibitively expensive to refactor to use goog.html types.
  * Generally, this is code where safety from XSS is either hopeless or
  * unimportant.
- *
- * @visibility {//closure/goog/html:approved_for_legacy_conversion}
- * @visibility {//closure/goog/bin/sizetests:__pkg__}
  */
 
 
