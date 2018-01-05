@@ -674,6 +674,16 @@ goog.net.WebChannel.X_HTTP_SESSION_ID = 'X-HTTP-Session-Id';
 
 
 /**
+ * A response header for the server to send back any initial response data as a
+ * header to avoid any possible buffering by an intermediary, which may
+ * be undesired during the handshake.
+ *
+ * @type {string}
+ */
+goog.net.WebChannel.X_HTTP_INITIAL_RESPONSE = 'X-HTTP-Initial-Response';
+
+
+/**
  * A request header for specifying the content-type of WebChannel messages,
  * e.g. application-defined JSON encoding styles. Currently this header
  * is sent by the client via initMessageHeaders when the channel is opened.
