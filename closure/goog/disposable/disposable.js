@@ -43,6 +43,13 @@ goog.Disposable = function() {
    */
   this.creationStack;
 
+  /**
+   * If monitoring the goog.Disposable instances is enabled, stores true if the
+   * base function Disposable.disposeInternal was called.
+   * @type {boolean|undefined}
+   */
+  this.baseDisposeInternalCalled;
+
   if (goog.Disposable.MONITORING_MODE != goog.Disposable.MonitoringMode.OFF) {
     if (goog.Disposable.INCLUDE_STACK_ON_CREATION) {
       this.creationStack = new Error().stack;
@@ -185,6 +192,14 @@ goog.Disposable.prototype.dispose = function() {
             'constructor or was disposed of after a clearUndisposedObjects ' +
             'call');
       }
+      if (goog.Disposable.MONITORING_MODE !=
+              goog.Disposable.MonitoringMode.OFF &&
+          !this.baseDisposeInternalCalled) {
+        throw new Error(
+            this + ' did not call the goog.Disposable base disposeInternal. ' +
+            'All overrides of disposeInternal should call the superclass\' ' +
+            'disposeInternal()');
+      }
       delete goog.Disposable.instances_[uid];
     }
   }
@@ -251,6 +266,9 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
+  if (goog.Disposable.MONITORING_MODE != goog.Disposable.MonitoringMode.OFF) {
+    this.baseDisposeInternalCalled = true;
+  }
   if (this.onDisposeCallbacks_) {
     while (this.onDisposeCallbacks_.length) {
       this.onDisposeCallbacks_.shift()();
