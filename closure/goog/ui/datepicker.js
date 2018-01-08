@@ -337,7 +337,7 @@ goog.ui.DatePicker.YEAR_MENU_RANGE_ = 5;
 /**
  * Constants for event names
  *
- * @const
+ * @enum {string}
  */
 goog.ui.DatePicker.Events = {
   CHANGE: 'change',
