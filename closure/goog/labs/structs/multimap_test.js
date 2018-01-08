@@ -18,6 +18,7 @@ goog.setTestOnly('goog.labs.structs.MultimapTest');
 goog.require('goog.labs.structs.Map');
 goog.require('goog.labs.structs.Multimap');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 var map;
 
@@ -26,6 +27,12 @@ function setUp() {
   map = new goog.labs.structs.Multimap();
 }
 
+function shouldRunTests() {
+  if (goog.userAgent.IE) {
+    return goog.userAgent.isVersionOrHigher(9);
+  }
+  return true;
+}
 
 function testGetCountWithEmptyMultimap() {
   assertEquals(0, map.getCount());
@@ -41,6 +48,9 @@ function testClone() {
 
   assertSameElements(['v'], map.get('k'));
   assertSameElements(['v', 'v1', 'v2'], map.get('k2'));
+
+  assertSameElements(['v'], map2.get('k'));
+  assertSameElements(['v', 'v1', 'v2'], map2.get('k2'));
 }
 
 
