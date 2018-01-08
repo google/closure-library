@@ -332,7 +332,9 @@ function testSetRenderer() {
   assertThrows(
       'Resetting the renderer after the control has entered ' +
           'the document must throw error',
-      function() { control.setRenderer({}); });
+      function() {
+        control.setRenderer({});
+      });
 }
 
 
@@ -347,9 +349,9 @@ function testGetExtraClassNames() {
 
 
 /**
-  * Tests {@link goog.ui.Control#addExtraClassName} and
-  * {@link goog.ui.Control#removeExtraClassName}.
-  */
+ * Tests {@link goog.ui.Control#addExtraClassName} and
+ * {@link goog.ui.Control#removeExtraClassName}.
+ */
 function testAddRemoveClassName() {
   assertNull(
       'Control must not have any extra class names by default',
@@ -630,6 +632,29 @@ function testEnterDocumentForNonFocusableControl() {
 
 /**
  * Tests {@link goog.ui.Control#enterDocument} for a control that doesn't
+ * support hover.
+ */
+function testEnterDocumentForControlWithoutHover() {
+  control.setSupportedState(goog.ui.Component.State.HOVER, false);
+  control.render(sandbox);
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
+    assertEquals(
+        'Control must have 3 mouse & 3 key event listeners on IE8', 6,
+        getListenerCount(control));
+  } else {
+    assertEquals(
+        'Control must have 2 mouse and 3 key event listeners', 5,
+        getListenerCount(control));
+  }
+  assertEquals(
+      'Control\'s key event handler must be attached to its ' +
+          'key event target',
+      control.getKeyEventTarget(), control.getKeyHandler().element_);
+}
+
+
+/**
+ * Tests {@link goog.ui.Control#enterDocument} for a control that doesn't
  * need to do any event handling.
  */
 function testEnterDocumentForControlWithoutEventHandlers() {
@@ -895,10 +920,11 @@ function testGetCaption() {
       'Caption must have expected value', 'Hello, world!',
       control.getCaption());
 
-  var arrayContent = goog.array.clone(
-      goog.dom.safeHtmlToNode(
-          goog.html.testing.newSafeHtmlForTest(
-              ' <b> foo</b><i>  bar</i> ')).childNodes);
+  var arrayContent =
+      goog.array.clone(goog.dom
+                           .safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
+                               ' <b> foo</b><i>  bar</i> '))
+                           .childNodes);
   control.setContent(arrayContent);
   assertEquals(
       'whitespaces must be normalized in the caption', 'foo bar',
@@ -937,7 +963,9 @@ function testSetRightToLeft() {
   assertThrows(
       'Changing the render direction of a control already in ' +
           'the document is an error',
-      function() { control.setRightToLeft(false); });
+      function() {
+        control.setRightToLeft(false);
+      });
 }
 
 
@@ -1904,7 +1932,7 @@ function testSetSupportedState() {
 
   assertThrows(
       'Must not be able to disable support for the FOCUSED ' +
-          "state for a control that's already in the document and focused",
+          'state for a control that\'s already in the document and focused',
       function() {
         control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
       });
@@ -2101,7 +2129,9 @@ function testIsTransitionAllowed() {
  */
 function testHandleKeyEvent() {
   control.render();
-  control.isVisible = control.isEnabled = function() { return true; };
+  control.isVisible = control.isEnabled = function() {
+    return true;
+  };
 
 
   goog.testing.events.fireKeySequence(
@@ -2212,8 +2242,9 @@ function testHandleMouseOver() {
 
   // Scenario 2:  preventDefault() is called on the ENTER event.
   var key = goog.events.listen(
-      control, goog.ui.Component.EventType.ENTER,
-      function(e) { e.preventDefault(); });
+      control, goog.ui.Component.EventType.ENTER, function(e) {
+        e.preventDefault();
+      });
   goog.testing.events.fireMouseOverEvent(element, sandbox);
   assertEquals(
       'Control must have dispatched 1 ENTER event', 1,
@@ -2321,8 +2352,9 @@ function testHandleMouseOut() {
 
   // Scenario 2:  preventDefault() is called on the LEAVE event.
   var key = goog.events.listen(
-      control, goog.ui.Component.EventType.LEAVE,
-      function(e) { e.preventDefault(); });
+      control, goog.ui.Component.EventType.LEAVE, function(e) {
+        e.preventDefault();
+      });
   goog.testing.events.fireMouseOutEvent(element, sandbox);
   assertEquals(
       'Control must have dispatched 1 LEAVE event', 1,

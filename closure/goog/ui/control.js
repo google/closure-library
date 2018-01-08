@@ -583,10 +583,14 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
   var element = this.getElement();
   if (enable) {
     handler
-        .listen(element, goog.events.EventType.MOUSEOVER, this.handleMouseOver)
         .listen(element, goog.events.EventType.MOUSEDOWN, this.handleMouseDown)
-        .listen(element, goog.events.EventType.MOUSEUP, this.handleMouseUp)
-        .listen(element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+        .listen(element, goog.events.EventType.MOUSEUP, this.handleMouseUp);
+    if (this.isSupportedState(goog.ui.Component.State.HOVER)) {
+      handler
+          .listen(
+              element, goog.events.EventType.MOUSEOVER, this.handleMouseOver)
+          .listen(element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+    }
     if (this.handleContextMenu != goog.nullFunction) {
       handler.listen(
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
@@ -608,11 +612,15 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
   } else {
     handler
         .unlisten(
-            element, goog.events.EventType.MOUSEOVER, this.handleMouseOver)
-        .unlisten(
             element, goog.events.EventType.MOUSEDOWN, this.handleMouseDown)
-        .unlisten(element, goog.events.EventType.MOUSEUP, this.handleMouseUp)
-        .unlisten(element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+        .unlisten(element, goog.events.EventType.MOUSEUP, this.handleMouseUp);
+    if (this.isSupportedState(goog.ui.Component.State.HOVER)) {
+      handler
+          .unlisten(
+              element, goog.events.EventType.MOUSEOVER, this.handleMouseOver)
+          .unlisten(
+              element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+    }
     if (this.handleContextMenu != goog.nullFunction) {
       handler.unlisten(
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
@@ -800,10 +808,11 @@ goog.ui.Control.prototype.isVisible = function() {
  * @return {boolean} Whether the visibility was changed.
  */
 goog.ui.Control.prototype.setVisible = function(visible, opt_force) {
-  if (opt_force || (this.visible_ != visible &&
-                    this.dispatchEvent(
-                        visible ? goog.ui.Component.EventType.SHOW :
-                                  goog.ui.Component.EventType.HIDE))) {
+  if (opt_force ||
+      (this.visible_ != visible &&
+       this.dispatchEvent(
+           visible ? goog.ui.Component.EventType.SHOW :
+                     goog.ui.Component.EventType.HIDE))) {
     var element = this.getElement();
     if (element) {
       this.renderer_.setVisible(element, visible);
@@ -1422,8 +1431,9 @@ goog.ui.registry.setDefaultRenderer(goog.ui.Control, goog.ui.ControlRenderer);
 
 // Register a decorator factory function for goog.ui.Controls.
 goog.ui.registry.setDecoratorByClassName(
-    goog.ui.ControlRenderer.CSS_CLASS,
-    function() { return new goog.ui.Control(null); });
+    goog.ui.ControlRenderer.CSS_CLASS, function() {
+      return new goog.ui.Control(null);
+    });
 
 
 
