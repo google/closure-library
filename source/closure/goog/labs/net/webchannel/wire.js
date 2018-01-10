@@ -15,8 +15,6 @@
 /**
  * @fileoverview Interface and shared data structures for implementing
  * different wire protocol versions.
- * @visibility {//closure/goog:__pkg__}
- * @visibility {//closure/goog/bin/sizetests:__pkg__}
  */
 
 

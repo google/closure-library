@@ -15,9 +15,6 @@
 /**
  * @fileoverview Static utilities for collecting stats associated with
  * ChannelRequest.
- *
- * @visibility {:internal}
- * @visibility {:legacy_users}
  */
 
 

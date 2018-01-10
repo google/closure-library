@@ -24,7 +24,6 @@
  * to support web components).
  *
  * @supported IE 10+, Chrome 26+, Firefox 22+, Safari 7.1+, Opera 15+
- * @visibility {//closure/goog/html/sanitizer:approved_for_unsafe_config}
  */
 
 goog.provide('goog.html.sanitizer.unsafe');

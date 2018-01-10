@@ -22,11 +22,6 @@
  * reviewed.  Avoid use of the methods in this file whenever possible; instead
  * prefer to create instances of goog.html types using inherently safe builders
  * or template systems.
- *
- *
- *
- * @visibility {//closure/goog/html:approved_for_unchecked_conversion}
- * @visibility {//closure/goog/bin/sizetests:__pkg__}
  */
 
 
