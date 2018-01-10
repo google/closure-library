@@ -161,9 +161,11 @@ requirement: {
 
   # Safe wrapper for this property.
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  # HTML sanitizer, which uses it safely in order to have the browser parse an
-  # HTML string.
+
+  # Safe DOM Tree Processor and HTML sanitizer, which use it safely in order to
+  # have the browser parse an HTML string using an inert DOM.
   whitelist_regexp: '.+/closure/goog/html/sanitizer/htmlsanitizer.js'
+  whitelist_regexp: '.+/closure/goog/html/sanitizer/safedomtreeprocessor.js'
   # Safely used in goog.string.unescapeEntitiesUsingDom_; the string assigned to
   # innerHTML is a single HTML entity.
   whitelist_regexp: '.+/closure/goog/string/string.js'

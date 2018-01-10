@@ -27,9 +27,7 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
 goog.require('goog.html.sanitizer.HtmlSanitizer.Builder');
-goog.require('goog.html.sanitizer.TagBlacklist');
 goog.require('goog.html.sanitizer.TagWhitelist');
-goog.require('goog.html.sanitizer.unsafe');
 goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string.Const');
@@ -39,11 +37,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 
-var isIE8 = goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9);
-
-
-var isIE9 =
-    goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10) && !isIE8;
+var isSupported = !goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10);
 
 
 var justification = goog.string.Const.from('test');
@@ -60,22 +54,16 @@ var justification = goog.string.Const.from('test');
 function assertSanitizedHtml(originalHtml, expectedHtml, opt_sanitizer) {
   var sanitizer =
       opt_sanitizer || new goog.html.sanitizer.HtmlSanitizer.Builder().build();
-  try {
-    var sanitized = goog.html.SafeHtml.unwrap(sanitizer.sanitize(originalHtml));
-    if (isIE9) {
-      assertEquals('', sanitized);
-      return;
-    }
-    if (typeof expectedHtml == 'string') {
-      goog.testing.dom.assertHtmlMatches(
-          expectedHtml, sanitized, true /* opt_strictAttributes */);
-    } else {
-      assertRegExp(expectedHtml, sanitized);
-    }
-  } catch (err) {
-    if (!isIE8) {
-      throw err;
-    }
+  var sanitized = goog.html.SafeHtml.unwrap(sanitizer.sanitize(originalHtml));
+  if (!isSupported) {
+    assertEquals('', sanitized);
+    return;
+  }
+  if (typeof expectedHtml == 'string') {
+    goog.testing.dom.assertHtmlMatches(
+        expectedHtml, sanitized, true /* opt_strictAttributes */);
+  } else {
+    assertRegExp(expectedHtml, sanitized);
   }
   if (!opt_sanitizer) {
     // Retry with raw sanitizer created without the builder.
@@ -186,33 +174,21 @@ function testBuilderCanOnlyBeUsedOnce() {
 
 function testAllowedCssSanitizeImage() {
   var testUrl = 'http://www.example.com/image3.jpg';
-  var html = '<div style="background: url(' + testUrl + ');"></div>';
-
+  var html = '<div style="background-image: url(' + testUrl + ');"></div>';
   var sanitizer =
       new goog.html.sanitizer.HtmlSanitizer.Builder()
           .allowCssStyles()
           .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
           .build();
-
-  try {
-    var sanitizedHtml = sanitizer.sanitize(html);
-    if (isIE9) {
-      assertEquals('', goog.html.SafeHtml.unwrap(sanitizedHtml));
-      return;
-    }
-    assertRegExp(
-        /background(?:-image)?:.*url\(.?http:\/\/www.example.com\/image3.jpg.?\)/,
-        getStyle(sanitizedHtml));
-  } catch (err) {
-    if (!isIE8) {
-      throw err;
-    }
-  }
+  assertSanitizedHtml(html, html, sanitizer);
 }
 
 
 function testHtmlSanitizeXSS() {
-  // NOTE(user): xss cheat sheet found on http://ha.ckers.org/xss.html
+  // NOTE: Xss cheat sheet found on http://ha.ckers.org/xss.html
+  // We try all these vectors even though some of them are not exploitable on
+  // any browser supported by the sanitizer.
+
   var safeHtml, xssHtml;
   // Inserting <script> tags is unsafe
   // Browser Support [IE7.0|IE6.0|NS8.1-IE] [NS8.1-G|FF2.0]
@@ -354,7 +330,7 @@ function testHtmlSanitizeXSS() {
   // On IE9, the null character actually causes us to only see <SCR. The
   // sanitizer on IE9 doesn't "recover as well" as other browsers but the
   // result is safe.
-  safeHtml = isIE9 ? '' : '<span>alert("XSS")</span>';
+  safeHtml = '<span>alert("XSS")</span>';
   xssHtml = '<SCR\0IPT>alert(\"XSS\")</SCR\0IPT>';
   assertSanitizedHtml(xssHtml, safeHtml);
 
@@ -450,7 +426,7 @@ function testHtmlSanitizeXSS() {
   // affective against a real world XSS filter I came across using an open
   // ended <IFRAME tag instead of an <IMG tag:
   // Browser support: [IE6.0|NS8.1-IE]
-  safeHtml = isIE9 ? '<img>' : '';
+  safeHtml = '';
   xssHtml = '<IMG SRC="javascript:alert(this)"';
   assertSanitizedHtml(xssHtml, safeHtml);
 
@@ -601,9 +577,8 @@ function testHtmlSanitizeXSS() {
   // TABLE (who would have thought tables were XSS targets... except me, of
   // course):
   // Browser support: [IE6.0|NS8.1-IE] [O9.02]
-  safeHtml = isIE9 ? '<table><div></div></table>' : '<table></table>';
+  safeHtml = '<table></table>';
   xssHtml = '<TABLE BACKGROUND="javascript:alert(window)">';
-  // TODO(danesh): Investigate why this is different for IE9.
   assertSanitizedHtml(xssHtml, safeHtml);
 
   // TD (just like above, TD's are vulnerable to BACKGROUNDs containing
@@ -665,7 +640,7 @@ function testHtmlSanitizeXSS() {
   // vectors, but it really does show how hard STYLE tags can be to parse apart,
   // like above this can send IE into a loop):
   // Browser support: [IE7.0|IE6.0|NS8.1-IE]
-  safeHtml = isIE9 ? 'undefined' : 'exp/*<a></a>';
+  safeHtml = 'exp/*<a></a>';
   xssHtml = 'exp/*<A STYLE="no\\xss:noxss("*//*");xss:&#101;x&#x2F;*XSS*//*' +
       '/*/pression(alert(window))">';
   assertSanitizedHtml(xssHtml, safeHtml);
@@ -678,7 +653,7 @@ function testHtmlSanitizeXSS() {
 
   // STYLE tag using background-image:
   // Browser support: [IE6.0|NS8.1-IE]
-  safeHtml = isIE9 ? 'undefined' : '<a></a>';
+  safeHtml = '<a></a>';
   xssHtml = '<STYLE>.XSS{background-image:url("javascript:alert("XSS")");}' +
       '</STYLE><A CLASS=XSS></A>';
   assertSanitizedHtml(xssHtml, safeHtml);
@@ -743,9 +718,7 @@ function testHtmlSanitizeXSS() {
   // and Netscape 8.1 in IE rendering engine mode) - vector found by Sec Consult
   // while auditing Yahoo:
   // Browser support: [IE6.0|NS8.1-IE]
-  safeHtml = isIE9 ? '<span><span></span></span>' :
-                     '<span><span><span>]]&gt;</span></span></span>' +
-          '<span></span>';
+  safeHtml = '<span><span><span>]]&gt;</span></span></span><span></span>';
   xssHtml = '<XML ID=I><X><C><![CDATA[<IMG SRC="javas]]>' +
       '<![CDATA[cript:xss=true;">]]>' +
       '</C></X></xml><SPAN DATASRC=#I DATAFLD=C DATAFORMATAS=HTML></SPAN>';
@@ -1081,33 +1054,13 @@ function testNRUrlPolicyAffectsCssSanitization() {
           })
           .build();
 
-  var sanitizedHtml;
-  try {
-    sanitizedHtml = sanitizer.sanitize(
-        '<div style="background: url(\'https://www.google.com/i.png\')"></div>');
-    if (isIE9) {
-      assertEquals('', goog.html.SafeHtml.unwrap(sanitizedHtml));
-      return;
-    }
-    assertRegExp(
-        /background(?:-image)?:.*url\(.?https:\/\/www.google.com\/i.png.?\)/,
-        getStyle(sanitizedHtml));
-  } catch (err) {
-    if (!isIE8) {
-      throw err;
-    }
-  }
+  var googleUrl = 'https://www.google.com/i.png';
+  var html = '<div style="background-image: url(\'' + googleUrl + '\')"></div>';
+  assertSanitizedHtml(html, html, sanitizer);
 
-  try {
-    sanitizedHtml = sanitizer.sanitize(
-        '<div style="background: url(\'https://wherever/\')"></div>');
-    assertNotContains(
-        'https://wherever/', goog.html.SafeHtml.unwrap(sanitizedHtml));
-  } catch (err) {
-    if (!isIE8) {
-      throw err;
-    }
-  }
+  var otherUrl = 'https://wherever';
+  html = '<div style="background-image: url(\'' + otherUrl + '\')"></div>';
+  assertSanitizedHtml(html, '<div></div>', sanitizer);
 
   sanitizedHtml = '<img src="https://www.google.com/i.png">';
   assertSanitizedHtml(sanitizedHtml, sanitizedHtml, sanitizer);
@@ -1235,7 +1188,7 @@ function testStyleTag_default() {
 function testStyleTag_random() {
   var input = '<style>a { color: red; }</style>';
   var expected =
-      /^<SPAN id="(sanitizer-\w+)"><style>#\1 a{color: red;}<\/style><\/SPAN>$/;
+      /^<span id="(sanitizer-\w+)"><style>#\1 a{color: red;}<\/style><\/span>$/;
   var sanitizer =
       new goog.html.sanitizer.HtmlSanitizer.Builder().allowStyleTag().build();
   assertSanitizedHtml(input, expected, sanitizer);
@@ -1444,7 +1397,7 @@ function assertAfterInsertionEquals(expected, input) {
 
 
 function testSpanNotCorrectedByBrowsersOuter() {
-  if (isIE8 || isIE9) {
+  if (!isSupported) {
     return;
   }
   goog.array.forEach(
@@ -1479,7 +1432,7 @@ function testSpanNotCorrectedByBrowsersOuter() {
 
 
 function testSpanNotCorrectedByBrowsersInner() {
-  if (isIE8 || isIE9) {
+  if (!isSupported) {
     return;
   }
   goog.array.forEach(
@@ -1517,53 +1470,10 @@ function testSpanNotCorrectedByBrowsersInner() {
 }
 
 
-function testTemplateTagToSpan() {
-  var input = '<template alt="yes"><p>q</p></template>';
-  var expected = '<span alt="yes"><p>q</p></span>';
-  // TODO(pelizzi): use unblockTag once it's available
-  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
-  assertSanitizedHtml(input, expected);
-  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
-}
-
-
-// TODO(b/70575902): re-enable this test once TEMPLATE tags are properly
-// supported.
-/** Disabled Test. */
-function disabled_testTemplateTagWhitelisted() {
-  var input = '<div><template alt="yes"><p>q</p></template></div>';
-  // TODO(pelizzi): use unblockTag once it's available
-  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
-  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
-  goog.html.sanitizer.unsafe.alsoAllowTags(
-      justification, builder, ['TEMPLATE']);
-  assertSanitizedHtml(input, input, builder.build());
-  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
-}
-
-
 function testTemplateTagFake() {
   var input = '<template data-sanitizer-original-tag="template">a</template>';
   var expected = '';
   assertSanitizedHtml(input, expected);
-}
-
-
-// TODO(b/70575902): re-enable this test once TEMPLATE tags are properly
-// supported.
-/** Disabled Test. */
-function disabled_testTemplateNested() {
-  var input = '<template><p>a</p><zzz alt="a"/><script>z</script><template>' +
-      '<p>a</p><zzz alt="a"/><script>z</script></template></template>';
-  var expected = '<template><p>a</p><span alt="a"></span><template>' +
-      '<p>a</p><span alt="a"></span></template></template>';
-  // TODO(pelizzi): use unblockTag once it's available
-  delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
-  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
-  goog.html.sanitizer.unsafe.alsoAllowTags(
-      justification, builder, ['TEMPLATE']);
-  assertSanitizedHtml(input, expected, builder.build());
-  goog.html.sanitizer.TagBlacklist['TEMPLATE'] = true;
 }
 
 
@@ -1701,28 +1611,16 @@ function testOnlyAllowAttributeRefineThrows() {
 
 
 function testUrlWithCredentials() {
-  if (isIE8 || isIE9) {
-    return;
-  }
-  // IE has trouble getting and setting URL attributes with credentials. Both
-  // HTMLSanitizer and assertHtmlMatches are affected by the bug, hence the use
-  // of plain string matching.
-  var url = 'http://foo:bar@example.com';
-  var input = '<div style="background-image: url(\'' + url + '\');">' +
-      '<img src="' + url + '" /></div>';
-  var expectedIE = '<div style="background-image: url(&quot;' + url +
-      '&quot;);"><img src="' + url + '" /></div>';
   var sanitizer =
       new goog.html.sanitizer.HtmlSanitizer.Builder()
           .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
           .allowCssStyles()
           .build();
-  if (goog.userAgent.EDGE_OR_IE) {
-    assertEquals(
-        expectedIE, goog.html.SafeHtml.unwrap(sanitizer.sanitize(input)));
-  } else {
-    assertSanitizedHtml(input, input, sanitizer);
-  }
+
+  var url = 'http://foo:bar@example.com';
+  var input = '<div style="background-image: url(\'' + url + '\');">' +
+      '<img src="' + url + '" /></div>';
+  assertSanitizedHtml(input, input, sanitizer);
 }
 
 
