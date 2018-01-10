@@ -345,6 +345,16 @@ goog.testing.dom.assertHtmlContentsMatch = function(
         // Text may be collapsed after any non-inline element.
         collapsible = true;
       }
+
+      // Contents of template tags belong to a separate document and are not
+      // iterated on by the current iterator, unless the browser is too old to
+      // treat template tags differently. We recursively assert equality of the
+      // two template document fragments.
+      if (actualElem.tagName.toLowerCase() == 'template' &&
+          actualElem.content) {
+        goog.testing.dom.assertHtmlMatches(
+            expectedElem.innerHTML, actualElem.innerHTML, opt_strictAttributes);
+      }
     } else {
       // Concatenate text nodes until we reach a non text node.
       var actualText = actualNode.nodeValue;
@@ -469,17 +479,24 @@ goog.testing.dom.assertRangeEquals = function(
  */
 goog.testing.dom.getAttributeValue_ = function(node, name) {
   // These hacks avoid nondetermistic results in the following cases:
-  // IE7: goog.dom.createElement(goog.dom.TagName.INPUT).height returns
-  //      a random number.
-  // FF3: getAttribute('disabled') returns different value for <div disabled="">
-  //      and <div disabled="disabled">
   // WebKit: Two radio buttons with the same name can't be checked at the same
   //      time, even if only one of them is in the document.
   if (goog.userAgent.WEBKIT && node.tagName == goog.dom.TagName.INPUT &&
       node['type'] == goog.dom.InputType.RADIO && name == 'checked') {
     return false;
   }
-  return goog.isDef(node[name]) &&
+
+  // IE/Edge: cannot use node['src'] when the attribute contains HTTP
+  // credentials. getAttribute works though.
+  if ((goog.userAgent.IE || goog.userAgent.EDGE) && name == 'src') {
+    return node.getAttribute(name);
+  }
+
+  // All browsers: some attributes return different values for getAttribute even
+  // if the values are semantically equivalent. E.g. <div disabled=""> and
+  // <div disabled="disabled"> should register as equal. We use node[name]
+  // if it's available.
+  return node[name] !== undefined &&
           typeof node.getAttribute(name) != typeof node[name] ?
       node[name] :
       node.getAttribute(name);

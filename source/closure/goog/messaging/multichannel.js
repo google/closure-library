@@ -273,7 +273,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.send = function(
  * Wraps a callback with a function that will log a warning and abort if it's
  * called when this channel is disposed.
  *
- * @param {function()} callback The callback to wrap.
+ * @param {!Function} callback The callback to wrap.
  * @param {...*} var_args Other arguments, passed to the callback.
  * @private
  */

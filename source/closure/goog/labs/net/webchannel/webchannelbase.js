@@ -2174,6 +2174,7 @@ WebChannelBase.prototype.shouldUseSecondaryDomains = function() {
 /**
  * A LogSaver that can be used to accumulate all the debug logs so they
  * can be sent to the server when a problem is detected.
+ * @const
  */
 WebChannelBase.LogSaver = {};
 

@@ -192,7 +192,10 @@ function testWhitelistAliasing() {
 }
 
 
-function testTemplateUnsanitized() {
+// TODO(b/70575902): re-enable this test once TEMPLATE tags are properly
+// supported.
+/** Disabled Test. */
+function disabled_testTemplateUnsanitized() {
   if (!goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED) {
     return;
   }

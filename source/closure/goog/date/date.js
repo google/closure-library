@@ -74,6 +74,9 @@ goog.date.month = {
  * @param {string} monthName The month name to use in the result.
  * @param {number} yearNum The numeric year to use in the result.
  * @return {string} A formatted month/year string.
+ * @deprecated Use goog.i18n.DateTimeFormat with
+ *     goog.i18n.DateTimeFormat.Format.YEAR_MONTH_ABBR or
+ *     goog.i18n.DateTimeFormat.Format.YEAR_MONTH_FULL.
  */
 goog.date.formatMonthAndYear = function(monthName, yearNum) {
   /** @desc Month/year format given the month name and the numeric year. */
@@ -1697,6 +1700,11 @@ goog.date.DateTime.prototype.toString = function() {
  * @param {boolean=} opt_omitZeroMinutes E.g., '5:00pm' becomes '5pm',
  *                                      but '5:01pm' remains '5:01pm'.
  * @return {string} The time label.
+ * @deprecated Use goog.i18n.DateTimeFormat with
+ *     goog.i18n.DateTimeFormat.Format.FULL_TIME or
+ *     goog.i18n.DateTimeFormat.Format.LONG_TIME or
+ *     goog.i18n.DateTimeFormat.Format.MEDIUM_TIME or
+ *     goog.i18n.DateTimeFormat.Format.SHORT_TIME.
  */
 goog.date.DateTime.prototype.toUsTimeString = function(
     opt_padHours, opt_showAmPm, opt_omitZeroMinutes) {

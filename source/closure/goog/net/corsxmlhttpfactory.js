@@ -113,7 +113,7 @@ goog.net.IeCorsXhrAdapter = function() {
   this.responseXML = null;
 
   /** @override */
-  this.statusText = null;
+  this.statusText = '';
 
   this.xdr_.onload = goog.bind(this.handleLoad_, this);
   this.xdr_.onerror = goog.bind(this.handleError_, this);

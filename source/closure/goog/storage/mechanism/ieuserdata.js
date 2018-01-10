@@ -46,7 +46,7 @@ goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   /**
    * The key to store the data under.
    *
-   * @private {?string}
+   * @private {string}
    */
   this.storageKey_ = storageKey;
 

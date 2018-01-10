@@ -18,12 +18,15 @@ goog.module('goog.html.sanitizer.noclobberTest');
 goog.setTestOnly();
 
 var NodeType = goog.require('goog.dom.NodeType');
+var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var noclobber = goog.require('goog.html.sanitizer.noclobber');
 var testSuite = goog.require('goog.testing.testSuite');
+var testingDom = goog.require('goog.testing.dom');
+
 var userAgentProduct = goog.require('goog.userAgent.product');
 
-
-const antiClobberingSupported =
+/** Whether we support functions that operate on Node and Element. */
+const elementAndNodeSupported =
     !userAgentProduct.IE || document.documentMode >= 10;
 
 /**
@@ -40,58 +43,45 @@ function htmlToElement(html) {
  * @param {string} name
  * @return {!Element}
  */
-function getClobberedElement(name) {
+function createElement(name) {
   return htmlToElement('<form id="foo"><input name="' + name + '"></form>');
 }
 
 testSuite({
   testElement() {
-    if (!antiClobberingSupported) {
+    if (!elementAndNodeSupported) {
       return;
     }
-    var element = getClobberedElement('attributes');
-    var attributes = noclobber.getElementAttributes(element);
-    assertNotEquals(element.attributes, attributes);
-    if (Object.getOwnPropertyDescriptor(Element.prototype, 'attributes')) {
-      assertTrue(attributes instanceof NamedNodeMap);
-    } else {
-      assertNull(attributes);
-    }
 
-    element = getClobberedElement('hasAttribute');
+    var element = createElement('attributes');
+    var attributes = noclobber.getElementAttributes(element);
+    assertEquals('id', attributes[0].name);
+
+    element = createElement('hasAttribute');
     assertTrue(noclobber.hasElementAttribute(element, 'id'));
     assertFalse(noclobber.hasElementAttribute(element, 'bar'));
 
-    element = getClobberedElement('getAttribute');
+    element = createElement('getAttribute');
     assertEquals('foo', noclobber.getElementAttribute(element, 'id'));
 
-    element = getClobberedElement('setAttribute');
+    element = createElement('setAttribute');
     noclobber.setElementAttribute(element, 'id', 'bar');
     assertEquals('bar', noclobber.getElementAttribute(element, 'id'));
 
-    element = getClobberedElement('removeAttribute');
+    element = createElement('removeAttribute');
     assertTrue(element.hasAttribute('id'));
     noclobber.removeElementAttribute(element, 'id');
     assertFalse(element.hasAttribute('id'));
 
-    element = getClobberedElement('innerHTML');
+    element = createElement('innerHTML');
     var innerHTML = noclobber.getElementInnerHTML(element);
-    if (Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML')) {
-      assertEquals('<input name="innerHTML">', innerHTML);
-    } else {
-      assertEquals('', innerHTML);
-    }
+    testingDom.assertHtmlMatches('<input name="innerHTML">', innerHTML);
 
-    element = getClobberedElement('style');
+    element = createElement('style');
     var style = noclobber.getElementStyle(element);
-    if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style') &&
-        !userAgentProduct.SAFARI) {
-      assertTrue(style instanceof CSSStyleDeclaration);
-    } else {
-      assertNull(style);
-    }
+    assertTrue(style instanceof CSSStyleDeclaration);
 
-    element = getClobberedElement('getElementsByTagName');
+    element = createElement('getElementsByTagName');
     assertArrayEquals(
         Array.from(element.children),
         noclobber.getElementsByTagName(element, 'input'));
@@ -103,59 +93,174 @@ testSuite({
         element.children[1].sheet,
         noclobber.getElementStyleSheet(element.children[1]));
 
-    element = getClobberedElement('matches');
+    element = createElement('matches');
     assertTrue(noclobber.elementMatches(element, '#foo'));
     assertFalse(noclobber.elementMatches(element, '#bar'));
   },
 
-  testNode() {
-    if (!antiClobberingSupported) {
+  testElementClobbered() {
+    if (!elementAndNodeSupported) {
       return;
     }
-    var element = getClobberedElement('nodeName');
+
+    // There's currently no browser in our test suite that throws on clobbering,
+    // so we delete the saved prototypes to simulate such case.
+    var replacer = new PropertyReplacer();
+
+    var element = createElement('attributes');
+    replacer.set(noclobber.Methods, 'ATTRIBUTES_GETTER', null);
+    assertThrows(function() {
+      noclobber.getElementAttributes(element);
+    });
+
+    element = createElement('hasAttribute');
+    replacer.set(noclobber.Methods, 'HAS_ATTRIBUTE', null);
+    assertThrows(function() {
+      noclobber.hasElementAttribute(element, 'id');
+    });
+
+    element = createElement('getAttribute');
+    replacer.set(noclobber.Methods, 'GET_ATTRIBUTE', null);
+    assertThrows(function() {
+      noclobber.getElementAttribute(element, 'id');
+    });
+
+    element = createElement('setAttribute');
+    replacer.set(noclobber.Methods, 'SET_ATTRIBUTE', null);
+    assertThrows(function() {
+      noclobber.setElementAttribute(element, 'id', 'bar');
+    });
+
+    element = createElement('removeAttribute');
+    replacer.set(noclobber.Methods, 'REMOVE_ATTRIBUTE', null);
+    assertThrows(function() {
+      noclobber.removeElementAttribute(element, 'id');
+    });
+
+    element = createElement('innerHTML');
+    replacer.set(noclobber.Methods, 'INNER_HTML_GETTER', null);
+    assertThrows(function() {
+      noclobber.getElementInnerHTML(element);
+    });
+
+    element = createElement('style');
+    replacer.set(noclobber.Methods, 'STYLE_GETTER', null);
+    assertThrows(function() {
+      noclobber.getElementStyle(element);
+    });
+
+    element = createElement('getElementsByTagName');
+    replacer.set(noclobber.Methods, 'GET_ELEMENTS_BY_TAG_NAME', null);
+    assertThrows(function() {
+      noclobber.getElementsByTagName(element, 'input');
+    });
+
+    // Sheet can't be clobbered, we only test that it works on browsers without
+    // prototypes.
+    element = htmlToElement(
+        '<form><input name="foo"><style>color:red</style></form>');
+    document.body.appendChild(element);  // needs to be rooted into the DOM.
+    replacer.set(noclobber.Methods, 'SHEET_GETTER', null);
+    assertEquals(
+        element.children[1].sheet,
+        noclobber.getElementStyleSheet(element.children[1]));
+
+    element = createElement('matches');
+    replacer.set(noclobber.Methods, 'MATCHES', null);
+    assertThrows(function() {
+      noclobber.elementMatches(element, '#foo');
+    });
+
+    replacer.reset();
+  },
+
+  testNode() {
+    if (!elementAndNodeSupported) {
+      return;
+    }
+
+    var element = createElement('nodeName');
     assertEquals('FORM', noclobber.getNodeName(element));
 
-    element = getClobberedElement('nodeType');
+    element = createElement('nodeType');
     noclobber.assertNodeIsElement(element);
     assertEquals(NodeType.ELEMENT, noclobber.getNodeType(element));
 
-    element = getClobberedElement('parentNode');
+    element = createElement('parentNode');
     assertEquals('DIV', noclobber.getParentNode(element).nodeName);
 
-    element = getClobberedElement('childNodes');
+    element = createElement('childNodes');
     assertTrue(noclobber.getChildNodes(element) instanceof NodeList);
+
+    element = createElement('appendChild');
+    noclobber.appendNodeChild(element, document.createElement('div'));
+    assertEquals(
+        'DIV', element.childNodes[element.childNodes.length - 1].nodeName);
+  },
+
+  testNodeClobbered() {
+    if (!elementAndNodeSupported) {
+      return;
+    }
+
+    var replacer = new PropertyReplacer();
+
+    var element = createElement('nodeName');
+    replacer.set(noclobber.Methods, 'NODE_NAME_GETTER', null);
+    assertThrows(function() {
+      noclobber.getNodeName(element);
+    });
+
+    element = createElement('nodeType');
+    replacer.set(noclobber.Methods, 'NODE_TYPE_GETTER', null);
+    assertThrows(function() {
+      noclobber.getNodeType(element);
+    });
+
+    element = createElement('parentNode');
+    replacer.set(noclobber.Methods, 'PARENT_NODE_GETTER', null);
+    assertThrows(function() {
+      noclobber.getParentNode(element);
+    });
+
+    element = createElement('childNodes');
+    replacer.set(noclobber.Methods, 'CHILD_NODES_GETTER', null);
+    assertThrows(function() {
+      noclobber.getChildNodes(element);
+    });
+
+    element = createElement('appendChild');
+    replacer.set(noclobber.Methods, 'APPEND_CHILD', null);
+    assertThrows(function() {
+      noclobber.appendNodeChild(element, document.createElement('div'));
+    });
+
+    replacer.reset();
   },
 
   testCSSStyleDeclaration() {
-    if (!antiClobberingSupported) {
-      return;
-    }
-    var element = getClobberedElement('getPropertyValue');
-    element.style.setProperty('color', 'red');
+    // Properties on the CSSStyleDeclaration object can't be clobbered.
+    var element =
+        htmlToElement('<form style="color:red"><input name="test"></form>');
     assertEquals('red', noclobber.getCssPropertyValue(element.style, 'color'));
-
-    element = getClobberedElement('setProperty');
-    noclobber.setCssProperty(element.style, 'color', 'red');
-    assertEquals('red', element.style.color);
+    noclobber.setCssProperty(element.style, 'color', 'black');
+    assertEquals('black', element.style.color);
   },
 
-  testCSSStyleDeclaration_notClobbered() {
-    // On IE8 and IE9 the CSS functions should still work when the property is
-    // not clobbered (assuming optionalAntiClobbering is true).
-    var element = getClobberedElement('notClobbered');
-    if (element.style.setProperty) {
-      element.style.setProperty('color', 'red');
-    } else {
-      element.style.setAttribute('color', 'red');
-    }
-    assertEquals(
-        'red',
-        noclobber.getCssPropertyValue(
-            element.style, 'color', true /* opt_optionalAntiClobbering */));
+  testCSSStyleDeclarationOldBrowser() {
+    // Properties on the CSSStyleDeclaration object can't be clobbered, we only
+    // test that they work on browsers without prototypes.
+    var replacer = new PropertyReplacer();
 
-    element = getClobberedElement('notClobbered');
-    noclobber.setCssProperty(
-        element.style, 'color', 'red', true /* opt_optionalAntiClobbering */);
-    assertEquals('red', element.style.color);
+    replacer.set(noclobber.Methods, 'GET_PROPERTY_VALUE', null);
+    var element = htmlToElement(
+        '<form style="color:red"><input name="' +
+        (userAgentProduct.IE ? 'getAttribute' : 'getPropertyValue') +
+        '" style="color: green"></form>');
+    assertEquals('red', noclobber.getCssPropertyValue(element.style, 'color'));
+    noclobber.setCssProperty(element.style, 'color', 'black');
+    assertEquals('black', element.style.color);
+
+    replacer.reset();
   }
 });

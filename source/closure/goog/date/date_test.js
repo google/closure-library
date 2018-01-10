@@ -434,7 +434,7 @@ function testRfc822StringToDate() {
 
 function testIsoStringToDate() {
   var iso = '20060210T000000Z';
-  var date = goog.date.fromIsoString(iso);
+  var date = goog.date.DateTime.fromIsoString(iso);
 
   assertEquals('Got 2006 from ' + iso, 2006, date.getFullYear());
   assertEquals('Got February from ' + iso, 1, date.getMonth());
@@ -444,94 +444,94 @@ function testIsoStringToDate() {
 
   // YYYY-MM-DD
   iso = '2005-02-22';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got February from ' + iso, 1, date.getMonth());
   assertEquals('Got 22nd from ' + iso, 22, date.getDate());
 
   // YYYYMMDD
   iso = '20050222';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got February from ' + iso, 1, date.getMonth());
   assertEquals('Got 22nd from ' + iso, 22, date.getDate());
 
   // YYYY-MM
   iso = '2005-08';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got August from ' + iso, 7, date.getMonth());
 
   // YYYYMM
   iso = '200502';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got February from ' + iso, 1, date.getMonth());
 
   // YYYY
   iso = '2005';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
 
   // 1997-W01 or 1997W01
   iso = '2005-W22';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got May from ' + iso, 4, date.getMonth());
   assertEquals('Got 30th from ' + iso, 30, date.getDate());
 
   iso = '2005W22';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got May from ' + iso, 4, date.getMonth());
   assertEquals('Got 30th from ' + iso, 30, date.getDate());
 
   // 1997-W01-2 or 1997W012
   iso = '2005-W22-4';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got June from ' + iso, 5, date.getMonth());
   assertEquals('Got 2nd from ' + iso, 2, date.getDate());
 
   iso = '2005W224';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got June from ' + iso, 5, date.getMonth());
   assertEquals('Got 2nd from ' + iso, 2, date.getDate());
 
   iso = '2004-W53-6';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 1st from ' + iso, 1, date.getDate());
 
   iso = '2004-W53-7';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 2nd from ' + iso, 2, date.getDate());
 
   iso = '2005-W52-6';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 31st from ' + iso, 31, date.getDate());
 
   // both years 2007 start with the same day
   iso = '2007-W01-1';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2007 from ' + iso, 2007, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 1st from ' + iso, 1, date.getDate());
 
   iso = '2007-W52-7';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2007 from ' + iso, 2007, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 30th from ' + iso, 30, date.getDate());
 
   iso = '2008-W01-1';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2007 from ' + iso, 2007, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 31st from ' + iso, 31, date.getDate());
@@ -540,57 +540,57 @@ function testIsoStringToDate() {
   // ISO year 2008 is 2 days shorter:
   // 1 day longer at the start, 3 days shorter at the end
   iso = '2008-W01-2';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2008 from ' + iso, 2008, date.getFullYear());
   assertEquals('Got Jan from ' + iso, 0, date.getMonth());
   assertEquals('Got 1st from ' + iso, 1, date.getDate());
 
   // ISO year is three days into the previous gregorian year
   iso = '2009-W01-1';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2008 from ' + iso, 2008, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 29th from ' + iso, 29, date.getDate());
 
   iso = '2009-W01-3';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2008 from ' + iso, 2008, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 31st from ' + iso, 31, date.getDate());
 
   iso = '2009-W01-4';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2009 from ' + iso, 2009, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 1st from ' + iso, 1, date.getDate());
 
   // ISO year is three days into the next gregorian year
   iso = '2009-W53-4';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2009 from ' + iso, 2009, date.getFullYear());
   assertEquals('Got December from ' + iso, 11, date.getMonth());
   assertEquals('Got 31st from ' + iso, 31, date.getDate());
 
   iso = '2009-W53-5';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2010 from ' + iso, 2010, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 1st from ' + iso, 1, date.getDate());
 
   iso = '2009-W53-6';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2010 from ' + iso, 2010, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 2nd from ' + iso, 2, date.getDate());
 
   iso = '2009-W53-7';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2010 from ' + iso, 2010, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 3rd from ' + iso, 3, date.getDate());
 
   iso = '2010-W01-1';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2010 from ' + iso, 2010, date.getFullYear());
   assertEquals('Got January from ' + iso, 0, date.getMonth());
   assertEquals('Got 4th from ' + iso, 4, date.getDate());
@@ -599,13 +599,13 @@ function testIsoStringToDate() {
 
   // 1995-035 or 1995035
   iso = '2005-146';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got May from ' + iso, 4, date.getMonth());
   assertEquals('Got 26th from ' + iso, 26, date.getDate());
 
   iso = '2005146';
-  date = goog.date.fromIsoString(iso);
+  date = goog.date.DateTime.fromIsoString(iso);
   assertEquals('Got 2005 from ' + iso, 2005, date.getFullYear());
   assertEquals('Got May from ' + iso, 4, date.getMonth());
   assertEquals('Got 26th from ' + iso, 26, date.getDate());
@@ -1212,20 +1212,20 @@ function testIsDateLikeWithGoogDateTime() {
 
 
 function testToUTCRfc3339String() {
-  var date = goog.date.fromIsoString('19850412T232050Z');
+  var date = goog.date.DateTime.fromIsoString('19850412T232050Z');
   date.setUTCMilliseconds(52);
   assertEquals(date.toUTCRfc3339String(), '1985-04-12T23:20:50.052Z');
   assertNotEquals(
       'Diverges from ISO 8601', date.toUTCRfc3339String(),
       date.toUTCIsoString(true, true));
 
-  var date = goog.date.fromIsoString('19901231T235959Z');
+  var date = goog.date.DateTime.fromIsoString('19901231T235959Z');
   assertEquals(date.toUTCRfc3339String(), '1990-12-31T23:59:59Z');
   assertNotEquals(
       'Diverges from ISO 8601', date.toUTCRfc3339String(),
       date.toUTCIsoString(true, true));
 
-  var date = goog.date.fromIsoString('19370101T120027Z');
+  var date = goog.date.DateTime.fromIsoString('19370101T120027Z');
   date.setUTCMilliseconds(87);
   assertEquals(date.toUTCRfc3339String(), '1937-01-01T12:00:27.087Z');
   assertNotEquals(

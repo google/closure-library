@@ -1527,7 +1527,10 @@ function testTemplateTagToSpan() {
 }
 
 
-function testTemplateTagWhitelisted() {
+// TODO(b/70575902): re-enable this test once TEMPLATE tags are properly
+// supported.
+/** Disabled Test. */
+function disabled_testTemplateTagWhitelisted() {
   var input = '<div><template alt="yes"><p>q</p></template></div>';
   // TODO(pelizzi): use unblockTag once it's available
   delete goog.html.sanitizer.TagBlacklist['TEMPLATE'];
@@ -1546,7 +1549,10 @@ function testTemplateTagFake() {
 }
 
 
-function testTemplateNested() {
+// TODO(b/70575902): re-enable this test once TEMPLATE tags are properly
+// supported.
+/** Disabled Test. */
+function disabled_testTemplateNested() {
   var input = '<template><p>a</p><zzz alt="a"/><script>z</script><template>' +
       '<p>a</p><zzz alt="a"/><script>z</script></template></template>';
   var expected = '<template><p>a</p><span alt="a"></span><template>' +

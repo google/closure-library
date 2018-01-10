@@ -559,7 +559,7 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
              0);
   }
 
-  return status;
+  return /** @type {!goog.positioning.OverflowStatus} */ (status);
 };
 
 

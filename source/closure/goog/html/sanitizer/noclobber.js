@@ -13,7 +13,15 @@
 // limitations under the License.
 
 /**
- * @fileoverview Utility DOM functions resistant to DOM clobbering.
+ * @fileoverview Utility DOM functions resistant to DOM clobbering. Clobbering
+ * resistance is offered as a best-effort feature -- it is not available on
+ * older browsers such as IE <10, Chrome <43, etc. In some cases, we can at
+ * least detect clobbering attempts and abort. Note that this is not intended to
+ * be a general-purpose library -- it is only used by the HTML sanitizer to
+ * accept and sanitize clobbered input. If your projects needs to protect
+ * against clobbered content, consider using the HTML sanitizer and configuring
+ * it to defuse clobbering by prefixing all element ids and names in the
+ * output.
  * @supported Unless specified in the method documentation, IE 10 and newer.
  */
 
@@ -22,63 +30,146 @@ goog.module.declareLegacyNamespace();
 
 var NodeType = goog.require('goog.dom.NodeType');
 var googAsserts = goog.require('goog.asserts');
-var googDom = goog.require('goog.dom');
-var userAgent = goog.require('goog.userAgent');
-
-// TODO(b/70187054): check if we can stop saving the property descriptors and
-// save the values directly instead. Also see if it's possible to stop using
-// bracket notation to access propertyDescriptors methods.
+var userAgentProduct = goog.require('goog.userAgent.product');
 
 /**
- * Map of property descriptors we use to avoid looking up the prototypes
- * multiple times.
- * @type {!Object<string, ?ObjectPropertyDescriptor>}
+ * Note about browser support:
+ * - IE 8 and 9 don't have DOM prototypes. There is no simple way of saving
+ *   the methods and accessors for a clobber-safe call.
+ * - Chrome <43 doesn't have attributes on DOM prototypes, so there is no way of
+ *   making clobber-safe calls for attribute descriptors.
+ * - IE 8 and 9 don't even have Node and HTMLElement, so there is no
+ *   straightforward way of checking if the result was clobbered for many of the
+ *   methods.
+ * - IE 8 and 9 have alternate names for getPropertyValue/setProperty in
+ *   CSSStyleDeclaration.
+ * For simplicity, we don't support IE 8 and 9 for anything but the CSS methods
+ * which already had IE8 and IE9 support. Chrome 41 must still be supported.
  */
-var propertyDescriptors = !userAgent.IE || document.documentMode >= 10 ? {
-  'attributes':
-      Object.getOwnPropertyDescriptor(Element.prototype, 'attributes'),
-  'hasAttribute':
-      Object.getOwnPropertyDescriptor(Element.prototype, 'hasAttribute'),
-  'getAttribute':
-      Object.getOwnPropertyDescriptor(Element.prototype, 'getAttribute'),
-  'setAttribute':
-      Object.getOwnPropertyDescriptor(Element.prototype, 'setAttribute'),
-  'removeAttribute':
-      Object.getOwnPropertyDescriptor(Element.prototype, 'removeAttribute'),
-  'innerHTML': Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML'),
-  'getElementsByTagName': Object.getOwnPropertyDescriptor(
-      Element.prototype, 'getElementsByTagName'),
-  'matches': Object.getOwnPropertyDescriptor(Element.prototype, 'matches') ||
-      Object.getOwnPropertyDescriptor(Element.prototype, 'msMatchesSelector'),
-  'nodeName': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName'),
-  'nodeType': Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType'),
-  'parentNode': Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode'),
-  'childNodes': Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes'),
-  'textContent': Object.getOwnPropertyDescriptor(Node.prototype, 'textContent'),
-  'style': Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style'),
-  'sheet': Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet'),
-  'getPropertyValue': Object.getOwnPropertyDescriptor(
-      CSSStyleDeclaration.prototype, 'getPropertyValue'),
-  'setProperty': Object.getOwnPropertyDescriptor(
-      CSSStyleDeclaration.prototype, 'setProperty')
-} :
-                                                                         {};
+
+/**
+ * Shorthand for {@code Object.getOwnPropertyDescriptor(...).get} to improve
+ * readability during initialization of {@code Methods}.
+ * @param {string} className
+ * @param {string} property
+ * @return {?Function}
+ */
+function getterOrNull(className, property) {
+  var ctor = goog.global[className];
+  if (!ctor || !ctor.prototype) {
+    return null;
+  }
+  var descriptor = Object.getOwnPropertyDescriptor(ctor.prototype, property);
+  return (descriptor && descriptor.get) || null;
+}
+
+/**
+ * Shorthand for {@code DOMInterface.prototype.method} to improve readability
+ * during initialization of {@code Methods}.
+ * @param {string} className
+ * @param {string} method
+ * @return {?Function}
+ */
+function prototypeMethodOrNull(className, method) {
+  var ctor = goog.global[className];
+  return (ctor && ctor.prototype && ctor.prototype[method]) || null;
+}
+
+// Functions we use to avoid looking up the prototypes and the descriptors
+// multiple times.
+/** @const @enum {?Function} */
+var Methods = {
+  ATTRIBUTES_GETTER: getterOrNull('Element', 'attributes') ||
+      // Edge and IE10 define this Element property on Node instead of
+      // Element.
+      getterOrNull('Node', 'attributes'),
+  HAS_ATTRIBUTE: prototypeMethodOrNull('Element', 'hasAttribute'),
+  GET_ATTRIBUTE: prototypeMethodOrNull('Element', 'getAttribute'),
+  SET_ATTRIBUTE: prototypeMethodOrNull('Element', 'setAttribute'),
+  REMOVE_ATTRIBUTE: prototypeMethodOrNull('Element', 'removeAttribute'),
+  INNER_HTML_GETTER: getterOrNull('Element', 'innerHTML') ||
+      // IE 10 defines this Element property on HTMLElement.
+      getterOrNull('HTMLElement', 'innerHTML'),
+  GET_ELEMENTS_BY_TAG_NAME:
+      prototypeMethodOrNull('Element', 'getElementsByTagName'),
+  MATCHES: prototypeMethodOrNull('Element', 'matches') ||
+      prototypeMethodOrNull('Element', 'msMatchesSelector'),
+  NODE_NAME_GETTER: getterOrNull('Node', 'nodeName'),
+  NODE_TYPE_GETTER: getterOrNull('Node', 'nodeType'),
+  PARENT_NODE_GETTER: getterOrNull('Node', 'parentNode'),
+  CHILD_NODES_GETTER: getterOrNull('Node', 'childNodes'),
+  APPEND_CHILD: prototypeMethodOrNull('Node', 'appendChild'),
+  STYLE_GETTER: getterOrNull('HTMLElement', 'style') ||
+      // Safari 10 defines the property on Element instead of
+      // HTMLElement.
+      getterOrNull('Element', 'style'),
+  SHEET_GETTER: getterOrNull('HTMLStyleElement', 'sheet'),
+  GET_PROPERTY_VALUE:
+      prototypeMethodOrNull('CSSStyleDeclaration', 'getPropertyValue'),
+  SET_PROPERTY: prototypeMethodOrNull('CSSStyleDeclaration', 'setProperty')
+};
+
+/**
+ * Calls the provided DOM property descriptor and returns its result. If the
+ * descriptor is not available, use fallbackPropertyName to get the property
+ * value in a clobber-vulnerable way, and use fallbackTest to check if the
+ * property was clobbered, throwing an exception if so.
+ * @param {?Function} fn
+ * @param {*} object
+ * @param {string} fallbackPropertyName
+ * @param {function(*):boolean} fallbackTest
+ * @return {?}
+ */
+function genericPropertyGet(fn, object, fallbackPropertyName, fallbackTest) {
+  if (fn) {
+    return fn.apply(object);
+  }
+  var propertyValue = object[fallbackPropertyName];
+  if (!fallbackTest(propertyValue)) {
+    throw new Error('Clobbering detected');
+  }
+  return propertyValue;
+}
+
+/**
+ * Calls the provided DOM prototype method and returns its result. If the
+ * method is not available, use fallbackMethodName to call the method in a
+ * clobber-vulnerable way, and use fallbackTest to check if the
+ * method was clobbered, throwing an exception if so.
+ * @param {?Function} fn
+ * @param {*} object
+ * @param {string} fallbackMethodName
+ * @param {!Array<*>} args
+ * @return {?}
+ */
+function genericMethodCall(fn, object, fallbackMethodName, args) {
+  if (fn) {
+    return fn.apply(object, args);
+  }
+  // IE8 and IE9 will return 'object' for
+  // CSSStyleDeclaration.(get|set)Attribute, so we can't use typeof.
+  if (userAgentProduct.IE && document.documentMode < 10) {
+    if (!object[fallbackMethodName].call) {
+      throw new Error('IE Clobbering detected');
+    }
+  } else if (typeof object[fallbackMethodName] != 'function') {
+    throw new Error('Clobbering detected');
+  }
+  return object[fallbackMethodName].apply(object, args);
+}
 
 /**
  * Returns an element's attributes without falling prey to things like
  * <form><input name="attributes"></form>. Equivalent to {@code
  * node.attributes}.
  * @param {!Element} element
- * @return {?NamedNodeMap}
+ * @return {!NamedNodeMap}
  */
 function getElementAttributes(element) {
-  var attrDescriptor = propertyDescriptors['attributes'];
-  if (attrDescriptor && attrDescriptor.get) {
-    return attrDescriptor.get.apply(element);
-  } else {
-    return element.attributes instanceof NamedNodeMap ? element.attributes :
-                                                        null;
-  }
+  return genericPropertyGet(
+      Methods.ATTRIBUTES_GETTER, element, 'attributes', function(attributes) {
+        return attributes instanceof NamedNodeMap;
+      });
 }
 
 /**
@@ -90,14 +181,8 @@ function getElementAttributes(element) {
  * @return {boolean}
  */
 function hasElementAttribute(element, attrName) {
-  var descriptor = propertyDescriptors['hasAttribute'];
-  if (descriptor && descriptor.value) {
-    return descriptor.value.call(element, attrName);
-  } else {
-    return typeof element.hasAttribute == 'function' ?
-        element.hasAttribute(attrName) :
-        false;
-  }
+  return genericMethodCall(
+      Methods.HAS_ATTRIBUTE, element, 'hasAttribute', [attrName]);
 }
 
 /**
@@ -106,16 +191,14 @@ function hasElementAttribute(element, attrName) {
  * Equivalent to {@code element.getAttribute("foo")}.
  * @param {!Element} element
  * @param {string} attrName
- * @return {string}
+ * @return {?string}
  */
 function getElementAttribute(element, attrName) {
-  var descriptor = propertyDescriptors['getAttribute'];
-  if (descriptor && descriptor.value) {
-    var ret = descriptor.value.call(element, attrName);
-    return ret || '';  // FireFox returns null
-  } else {
-    return '';
-  }
+  // Older browsers might return empty string instead of null to follow the
+  // DOM 3 Core Specification.
+  return genericMethodCall(
+             Methods.GET_ATTRIBUTE, element, 'getAttribute', [attrName]) ||
+      null;
 }
 
 /**
@@ -127,17 +210,16 @@ function getElementAttribute(element, attrName) {
  * @param {string} value
  */
 function setElementAttribute(element, name, value) {
-  var attrDescriptor = propertyDescriptors['setAttribute'];
-  if (attrDescriptor && attrDescriptor.value) {
-    try {
-      attrDescriptor.value.call(element, name, value);
-    } catch (e) {
-      // IE throws an exception if the src attribute contains HTTP credentials.
-      // However the attribute gets set anyway.
-      if (e.message.indexOf('A security problem occurred') == -1) {
-        throw e;
-      }
+  try {
+    genericMethodCall(
+        Methods.SET_ATTRIBUTE, element, 'setAttribute', [name, value]);
+  } catch (e) {
+    // IE throws an exception if the src attribute contains HTTP credentials.
+    // However the attribute gets set anyway.
+    if (e.message.indexOf('A security problem occurred') != -1) {
+      return;
     }
+    throw e;
   }
 }
 
@@ -149,10 +231,8 @@ function setElementAttribute(element, name, value) {
  * @param {string} attrName
  */
 function removeElementAttribute(element, attrName) {
-  var descriptor = propertyDescriptors['removeAttribute'];
-  if (descriptor && descriptor.value) {
-    descriptor.value.call(element, attrName);
-  }
+  genericMethodCall(
+      Methods.REMOVE_ATTRIBUTE, element, 'removeAttribute', [attrName]);
 }
 
 /**
@@ -163,27 +243,33 @@ function removeElementAttribute(element, attrName) {
  * @return {string}
  */
 function getElementInnerHTML(element) {
-  var descriptor = propertyDescriptors['innerHTML'];
-  if (descriptor && descriptor.get) {
-    return descriptor.get.apply(element);
-  } else {
-    return (typeof element.innerHTML == 'string') ? element.innerHTML : '';
-  }
+  return genericPropertyGet(
+      Methods.INNER_HTML_GETTER, element, 'innerHTML', function(html) {
+        return typeof html == 'string';
+      });
 }
 
 /**
  * Returns an element's style without falling prey to things like
  * <form><input name="style"></form>.
  * @param {!Element} element
- * @return {?CSSStyleDeclaration}
+ * @return {!CSSStyleDeclaration}
  */
 function getElementStyle(element) {
-  var styleDescriptor = propertyDescriptors['style'];
-  if (element instanceof HTMLElement && styleDescriptor &&
-      styleDescriptor.get) {
-    return styleDescriptor.get.apply(element);
-  } else {
-    return element.style instanceof CSSStyleDeclaration ? element.style : null;
+  assertHTMLElement(element);
+  return genericPropertyGet(
+      Methods.STYLE_GETTER, element, 'style', function(style) {
+        return style instanceof CSSStyleDeclaration;
+      });
+}
+
+/**
+ * Asserts that the Element is an HTMLElement, or throws an exception.
+ * @param {!Element} element
+ */
+function assertHTMLElement(element) {
+  if (googAsserts.ENABLE_ASSERTS && !(element instanceof HTMLElement)) {
+    throw new Error('Not an HTMLElement');
   }
 }
 
@@ -196,29 +282,23 @@ function getElementStyle(element) {
  * @return {!Array<!Element>}
  */
 function getElementsByTagName(element, name) {
-  var descriptor = propertyDescriptors['getElementsByTagName'];
-  if (descriptor && descriptor.value) {
-    return Array.from(descriptor.value.call(element, name));
-  } else {
-    return (typeof element.getElementsByTagName == 'function') ?
-        Array.from(element.getElementsByTagName(name)) :
-        [];
-  }
+  return Array.from(genericMethodCall(
+      Methods.GET_ELEMENTS_BY_TAG_NAME, element, 'getElementsByTagName',
+      [name]));
 }
 
 /**
  * Returns an element's style without falling prey to things like
  * <form><input name="style"></form>.
  * @param {!Element} element
- * @return {?CSSStyleSheet}
+ * @return {!CSSStyleSheet}
  */
 function getElementStyleSheet(element) {
-  var descriptor = propertyDescriptors['sheet'];
-  if (element instanceof HTMLStyleElement && descriptor && descriptor.get) {
-    return descriptor.get.apply(element);
-  } else {
-    return element.sheet instanceof CSSStyleSheet ? element.sheet : null;
-  }
+  assertHTMLElement(element);
+  return genericPropertyGet(
+      Methods.SHEET_GETTER, element, 'sheet', function(sheet) {
+        return sheet instanceof CSSStyleSheet;
+      });
 }
 
 /**
@@ -230,12 +310,9 @@ function getElementStyleSheet(element) {
  * @return {boolean}
  */
 function elementMatches(element, selector) {
-  var descriptor = propertyDescriptors['matches'];
-  if (descriptor && descriptor.value) {
-    return descriptor.value.call(element, selector);
-  } else {
-    return false;
-  }
+  return genericMethodCall(
+      Methods.MATCHES, element,
+      element.matches ? 'matches' : 'msMatchesSelector', [selector]);
 }
 
 /**
@@ -270,12 +347,10 @@ function isNodeElement(node) {
  * @return {string}
  */
 function getNodeName(node) {
-  var nodeNameDescriptor = propertyDescriptors['nodeName'];
-  if (nodeNameDescriptor && nodeNameDescriptor.get) {
-    return nodeNameDescriptor.get.apply(node);
-  } else {
-    return (typeof node.nodeName == 'string') ? node.nodeName : 'unknown';
-  }
+  return genericPropertyGet(
+      Methods.NODE_NAME_GETTER, node, 'nodeName', function(name) {
+        return typeof name == 'string';
+      });
 }
 
 /**
@@ -285,12 +360,10 @@ function getNodeName(node) {
  * @return {number}
  */
 function getNodeType(node) {
-  var nodeTypeDescriptor = propertyDescriptors['nodeType'];
-  if (nodeTypeDescriptor && nodeTypeDescriptor.get) {
-    return nodeTypeDescriptor.get.apply(node);
-  } else {
-    return (typeof node.nodeType == 'number') ? node.nodeType : 0;
-  }
+  return genericPropertyGet(
+      Methods.NODE_TYPE_GETTER, node, 'nodeType', function(type) {
+        return typeof type == 'number';
+      });
 }
 
 /**
@@ -300,92 +373,73 @@ function getNodeType(node) {
  * @return {?Node}
  */
 function getParentNode(node) {
-  var parentNodeDescriptor = propertyDescriptors['parentNode'];
-  if (parentNodeDescriptor && parentNodeDescriptor.get) {
-    return parentNodeDescriptor.get.apply(node);
-  } else {
-    // We need to ensure that parentNode is returning the actual parent node
-    // and not a child node that happens to have a name of "parentNode".
-    // We check that the node returned by parentNode is itself not named
-    // "parentNode" - this could happen legitimately but on IE we have no better
-    // means of avoiding the pitfall.
-    var parentNode = node.parentNode;
-    if (parentNode && parentNode.name && typeof parentNode.name == 'string' &&
-        parentNode.name.toLowerCase() == 'parentnode') {
-      return null;
-    } else {
-      return parentNode;
-    }
-  }
+  return genericPropertyGet(
+      Methods.PARENT_NODE_GETTER, node, 'parentNode', function(parentNode) {
+        // We need to ensure that parentNode is returning the actual parent node
+        // and not a child node that happens to have a name of "parentNode".
+        // We check that the node returned by parentNode is itself not named
+        // "parentNode" - this could happen legitimately but on IE we have no
+        // better means of avoiding the pitfall.
+        return !(
+            parentNode && parentNode.name &&
+            typeof parentNode.name == 'string' &&
+            parentNode.name.toLowerCase() == 'parentnode');
+      });
 }
 
 /**
  * Returns the value of node.childNodes without falling prey to things like
  * <form><input name="childNodes"></form>.
  * @param {!Node} node
- * @return {?NodeList}
+ * @return {!NodeList<!Node>}
  */
 function getChildNodes(node) {
-  var descriptor = propertyDescriptors['childNodes'];
-  if (googDom.isElement(node) && descriptor && descriptor.get) {
-    return descriptor.get.apply(node);
-  } else {
-    return node.childNodes instanceof NodeList ? node.childNodes : null;
-  }
+  return genericPropertyGet(
+      Methods.CHILD_NODES_GETTER, node, 'childNodes', function(childNodes) {
+        return childNodes instanceof NodeList;
+      });
 }
 
 /**
- * Provides a way to get a CSS value without falling prey to things like
- * <form><input name="propertyValue"></form>.
+ * Appends a child to a node without falling prey to things like
+ * <form><input name="appendChild"></form>.
+ * @param {!Node} parent
+ * @param {!Node} child
+ * @return {!Node}
+ */
+function appendNodeChild(parent, child) {
+  return genericMethodCall(
+      Methods.APPEND_CHILD, parent, 'appendChild', [child]);
+}
+
+/**
+ * Provides a way cross-browser way to get a CSS value from a CSS declaration.
  * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
  * @param {string} propName A property name.
- * @param {boolean=} opt_allowClobbering If true, on IE8 and IE9 the
- *     method just tries to get the value using the clobber-vulnerable method.
- *     If false, it just returns null on those browsers, because there is no
- *     way to perform the operation in a clobber-safe manner.
  * @return {string} Value of the property as parsed by the browser.
- * @supported Works with IE8 and newer, but anti-clobbering functionality is
- *     only available with IE10 and newer.
+ * @supported IE8 and newer.
  */
-function getCssPropertyValue(cssStyle, propName, opt_allowClobbering) {
-  var descriptor = propertyDescriptors['getPropertyValue'];
-  if (descriptor && cssStyle.getPropertyValue) {
-    // getPropertyValue on Safari can return null
-    return descriptor.value.call(cssStyle, propName) || '';
-  } else if (cssStyle.getAttribute && opt_allowClobbering) {
-    // In IE8 and other older browers we make a direct call to getAttribute.
-    return String(cssStyle.getAttribute(propName) || '');
-  } else {
-    // Unsupported, likely quite old, browser.
-    return '';
-  }
+function getCssPropertyValue(cssStyle, propName) {
+  return genericMethodCall(
+             Methods.GET_PROPERTY_VALUE, cssStyle,
+             cssStyle.getPropertyValue ? 'getPropertyValue' : 'getAttribute',
+             [propName]) ||
+      '';
 }
 
 /**
- * Provides a way to set a CSS value without falling prey to things like
- * <form><input name="property"></form>.
+ * Provides a cross-browser way to set a CSS value on a CSS declaration.
  * @param {!CSSStyleDeclaration} cssStyle A CSS style object.
  * @param {string} propName A property name.
- * @param {?string} sanitizedValue Sanitized value of the property to be set
+ * @param {string} sanitizedValue Sanitized value of the property to be set
  *     on the CSS style object.
- * @param {boolean=} opt_allowClobbering If true, on IE8 and IE9 the
- *     method just tries to get the value using the clobber-vulnerable method.
- *     If false, it just returns null on those browsers, because there is no
- *     way to perform the operation in a clobber-safe manner.
- * @supported Works with IE8 and newer, but anti-clobbering functionality is
- *     only available with IE10 and newer.
+ * @supported IE8 and newer.
  */
-function setCssProperty(
-    cssStyle, propName, sanitizedValue, opt_allowClobbering) {
-  if (sanitizedValue) {
-    var descriptor = propertyDescriptors['setProperty'];
-    if (descriptor && cssStyle.setProperty) {
-      descriptor.value.call(cssStyle, propName, sanitizedValue);
-    } else if (cssStyle.setAttribute && opt_allowClobbering) {
-      // In IE8 and other older browers we make a direct call to setAttribute.
-      cssStyle.setAttribute(propName, sanitizedValue);
-    }
-  }
+function setCssProperty(cssStyle, propName, sanitizedValue) {
+  genericMethodCall(
+      Methods.SET_PROPERTY, cssStyle,
+      cssStyle.setProperty ? 'setProperty' : 'setAttribute',
+      [propName, sanitizedValue]);
 }
 
 exports = {
@@ -405,6 +459,9 @@ exports = {
   getNodeType: getNodeType,
   getParentNode: getParentNode,
   getChildNodes: getChildNodes,
+  appendNodeChild: appendNodeChild,
   getCssPropertyValue: getCssPropertyValue,
-  setCssProperty: setCssProperty
+  setCssProperty: setCssProperty,
+  /** @package */
+  Methods: Methods,
 };
