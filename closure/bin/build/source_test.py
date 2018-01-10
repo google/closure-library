@@ -68,7 +68,7 @@ class SourceTestCase(unittest.TestCase):
     self.assertTrue(test_source.is_goog_module)
 
   def testStripComments(self):
-    self.assertEquals(
+    self.assertEqual(
         '\nvar foo = function() {}',
         source.Source._StripComments((
             '/* This is\n'
