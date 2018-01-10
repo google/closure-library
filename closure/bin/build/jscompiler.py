@@ -118,7 +118,7 @@ def _GetFlagFile(source_paths, compiler_flags):
   if compiler_flags:
     args += compiler_flags
 
-  flags_file = tempfile.NamedTemporaryFile(delete=False)
+  flags_file = tempfile.NamedTemporaryFile(mode='w+t', delete=False)
   flags_file.write(' '.join(args))
   flags_file.close()
 
