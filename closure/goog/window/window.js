@@ -141,7 +141,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   if (goog.labs.userAgent.platform.isIos() && parentWin.navigator &&
       parentWin.navigator['standalone'] && target && target != '_self') {
     // iOS in standalone mode disregards "target" in window.open and always
-    // opens new URL in the same window. The workout around is to create an "A"
+    // opens new URL in the same window. The workaround is to create an "A"
     // element and send a click event to it.
     // Notice that the "A" tag does NOT have to be added to the DOM.
 
