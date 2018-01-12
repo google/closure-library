@@ -185,6 +185,14 @@ goog.Disposable.prototype.dispose = function() {
             'constructor or was disposed of after a clearUndisposedObjects ' +
             'call');
       }
+      if (goog.Disposable.MONITORING_MODE !=
+              goog.Disposable.MonitoringMode.OFF &&
+          this.onDisposeCallbacks_ && this.onDisposeCallbacks_.length > 0) {
+        throw new Error(
+            this + ' did not empty its onDisposeCallbacks queue. This ' +
+            'probably means it overrode dispose() or disposeInternal() ' +
+            'without calling the superclass\' method.');
+      }
       delete goog.Disposable.instances_[uid];
     }
   }
