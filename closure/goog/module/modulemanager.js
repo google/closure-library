@@ -27,6 +27,7 @@ goog.require('goog.async.Deferred');
 goog.require('goog.debug.Trace');
 goog.require('goog.disposeAll');
 goog.require('goog.loader.AbstractModuleManager');
+goog.require('goog.loader.activeModuleManager');
 goog.require('goog.log');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
@@ -191,7 +192,6 @@ goog.module.ModuleManager = function() {
   this.userLastActive_ = false;
 };
 goog.inherits(goog.module.ModuleManager, goog.loader.AbstractModuleManager);
-goog.addSingletonGetter(goog.module.ModuleManager);
 
 
 /**
@@ -221,6 +221,14 @@ goog.module.ModuleManager.FailureType =
  */
 goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE =
     goog.loader.AbstractModuleManager.CORRUPT_RESPONSE_STATUS_CODE;
+
+
+/** @return {!goog.loader.AbstractModuleManager} */
+goog.module.ModuleManager.getInstance = function() {
+  return goog.loader.activeModuleManager.get(function() {
+    return new goog.module.ModuleManager();
+  });
+};
 
 
 /** @override */
