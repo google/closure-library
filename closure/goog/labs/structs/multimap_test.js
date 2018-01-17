@@ -15,6 +15,7 @@
 goog.provide('goog.labs.structs.MultimapTest');
 goog.setTestOnly('goog.labs.structs.MultimapTest');
 
+goog.require('goog.labs.structs.Map');
 goog.require('goog.labs.structs.Multimap');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -91,6 +92,21 @@ function testAddAllWithMultimap() {
   assertSameElements(['v'], map.get('k'));
   assertSameElements(['v', 'v1', 'v2', 'v'], map.get('k2'));
   assertSameElements(['a', 'a1', 'a2'], map.get('k3'));
+}
+
+
+function testAddAllWithMap() {
+  map.add('k', 'v');
+  map.addAllValues('k2', ['v', 'v1', 'v2']);
+
+  var map2 = new goog.labs.structs.Map();
+  map2.set('k2', 'v');
+  map2.set('k3', 'a');
+
+  map.addAllFromMultimap(map2);
+  assertSameElements(['v'], map.get('k'));
+  assertSameElements(['v', 'v1', 'v2', 'v'], map.get('k2'));
+  assertSameElements(['a'], map.get('k3'));
 }
 
 

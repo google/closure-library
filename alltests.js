@@ -263,6 +263,7 @@ var _allTests = [
   'closure/goog/labs/net/xhr_test.html',
   'closure/goog/labs/pubsub/broadcastpubsub_test.html',
   'closure/goog/labs/storage/boundedcollectablestorage_test.html',
+  'closure/goog/labs/structs/map_test.html',
   'closure/goog/labs/structs/multimap_test.html',
   'closure/goog/labs/style/pixeldensitymonitor_test.html',
   'closure/goog/labs/testing/assertthat_test.html',
