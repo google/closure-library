@@ -328,6 +328,11 @@ function testClear() {
 }
 
 
+/**
+ * @param {T} entry
+ * @param {!Array<T>} entryList
+ * @template T
+ */
 function assertContainsEntry(entry, entryList) {
   for (var i = 0; i < entryList.length; ++i) {
     if (entry[0] == entryList[i][0] && entry[1] === entryList[i][1]) {
