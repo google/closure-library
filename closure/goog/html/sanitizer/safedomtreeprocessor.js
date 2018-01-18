@@ -91,7 +91,7 @@ var SafeDomTreeProcessor = function() {};
  * representation of the forest.
  * @param {string} html
  * @return {string}
- * @public @final
+ * @protected @final
  */
 SafeDomTreeProcessor.prototype.processToString = function(html) {
   if (!SAFE_PARSING_SUPPORTED) {
@@ -122,7 +122,7 @@ SafeDomTreeProcessor.prototype.processToString = function(html) {
  * wrapped in a common SPAN parent, so that the result is always a tree.
  * @param {string} html
  * @return {!HTMLSpanElement}
- * @public @final
+ * @protected @final
  */
 SafeDomTreeProcessor.prototype.processToTree = function(html) {
   if (!SAFE_PARSING_SUPPORTED) {
