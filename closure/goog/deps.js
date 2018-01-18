@@ -1087,6 +1087,7 @@ goog.addDependency('style/transition.js', ['goog.style.transition', 'goog.style.
 goog.addDependency('style/transition_test.js', ['goog.style.transitionTest'], ['goog.style', 'goog.style.transition', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('test_module.js', ['goog.test_module'], ['goog.test_module_dep'], {'module': 'goog'});
 goog.addDependency('test_module_dep.js', ['goog.test_module_dep'], [], {'module': 'goog'});
+goog.addDependency('testing/assertionfailure.js', ['goog.testing.safe.assertionFailure'], ['goog.asserts', 'goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException'], {});
 goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.array', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {});
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument'], {});
