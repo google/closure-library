@@ -356,7 +356,7 @@ goog.testing.net.XhrIo.prototype.setResponseType = function(type) {
 
 /**
  * Gets the desired type for the response.
- * @return {goog.net.XhrIo.ResponseType} The desired type for the response.
+ * @return {!goog.net.XhrIo.ResponseType} The desired type for the response.
  */
 goog.testing.net.XhrIo.prototype.getResponseType = function() {
   return this.responseType_;
@@ -470,8 +470,7 @@ goog.testing.net.XhrIo.prototype.send = function(
 
 /**
  * Creates a new XHR object.
- * @return {goog.net.XhrLike.OrNative} The newly created XHR
- *     object.
+ * @return {!goog.net.XhrLike.OrNative} The newly created XHR object.
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {
