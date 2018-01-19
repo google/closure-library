@@ -151,7 +151,7 @@ goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.D
 goog.addDependency('debug/devcss/devcss_test.js', ['goog.debug.DevCssTest'], ['goog.debug.DevCss', 'goog.style', 'goog.testing.jsunit'], {});
 goog.addDependency('debug/devcss/devcssrunner.js', ['goog.debug.devCssRunner'], ['goog.debug.DevCss'], {});
 goog.addDependency('debug/divconsole.js', ['goog.debug.DivConsole'], ['goog.debug.HtmlFormatter', 'goog.debug.LogManager', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.string.Const', 'goog.style'], {});
-goog.addDependency('debug/enhanceerror_test.js', ['goog.debugEnhanceErrorTest'], ['goog.debug', 'goog.testing.jsunit'], {});
+goog.addDependency('debug/enhanceerror_test.js', ['goog.debugEnhanceErrorTest'], ['goog.debug', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('debug/entrypointregistry.js', ['goog.debug.EntryPointMonitor', 'goog.debug.entryPointRegistry'], ['goog.asserts'], {});
 goog.addDependency('debug/entrypointregistry_test.js', ['goog.debug.entryPointRegistryTest'], ['goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.testing.jsunit'], {});
 goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {});
@@ -177,7 +177,7 @@ goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], [], {});
 goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.json', 'goog.object'], {});
 goog.addDependency('debug/logrecordserializer_test.js', ['goog.debug.logRecordSerializerTest'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.debug.logRecordSerializer', 'goog.testing.jsunit'], {});
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], [], {});
-goog.addDependency('debug/tracer.js', ['goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug.Logger', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
+goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug.Logger', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
 goog.addDependency('debug/tracer_test.js', ['goog.debug.TraceTest'], ['goog.array', 'goog.debug.Trace', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {'lang': 'es6'});
 goog.addDependency('defineclass_test.js', ['goog.defineClassTest'], ['goog.testing.jsunit'], {});
 goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
@@ -929,7 +929,7 @@ goog.addDependency('positioning/viewportclientposition.js', ['goog.positioning.V
 goog.addDependency('positioning/viewportclientposition_test.js', ['goog.positioning.ViewportClientPositionTest'], ['goog.dom', 'goog.positioning.Corner', 'goog.positioning.Overflow', 'goog.positioning.ViewportClientPosition', 'goog.style', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('positioning/viewportposition.js', ['goog.positioning.ViewportPosition'], ['goog.math.Coordinate', 'goog.positioning', 'goog.positioning.AbstractPosition', 'goog.positioning.Corner', 'goog.style'], {});
 goog.addDependency('promise/promise.js', ['goog.Promise'], ['goog.Thenable', 'goog.asserts', 'goog.async.FreeList', 'goog.async.run', 'goog.async.throwException', 'goog.debug.Error', 'goog.promise.Resolver'], {});
-goog.addDependency('promise/promise_test.js', ['goog.PromiseTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
+goog.addDependency('promise/promise_test.js', ['goog.PromiseTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('promise/resolver.js', ['goog.promise.Resolver'], [], {});
 goog.addDependency('promise/testsuiteadapter.js', ['goog.promise.testSuiteAdapter'], ['goog.Promise'], {});
 goog.addDependency('promise/thenable.js', ['goog.Thenable'], [], {});
@@ -1204,7 +1204,7 @@ goog.addDependency('testing/style/style_test.js', ['goog.testing.styleTest'], ['
 goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts'], {});
 goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.Timer', 'goog.functions', 'goog.string', 'goog.testing.ExpectedFailures', 'goog.testing.JsUnitException', 'goog.testing.MethodMock', 'goog.testing.MockRandom', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/testqueue.js', ['goog.testing.TestQueue'], [], {});
-goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase'], {});
+goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent'], {});
 goog.addDependency('testing/testrunner_test.js', ['goog.testing.TestRunnerTest'], ['goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.testing.asserts', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('testing/testsuite.js', ['goog.testing.testSuite'], ['goog.labs.testing.Environment', 'goog.testing.TestCase'], {});
 goog.addDependency('testing/ui/rendererasserts.js', ['goog.testing.ui.rendererasserts'], ['goog.testing.asserts', 'goog.ui.ControlRenderer'], {});

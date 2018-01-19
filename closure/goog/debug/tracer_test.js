@@ -19,14 +19,16 @@ goog.require('goog.array');
 goog.require('goog.debug.Trace');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
+goog.forwardDeclare('goog.debug.StopTraceDetail');
+
 
 /** @type {!Function} */
 const recorder = goog.testing.recordFunction();
-/** @const {!goog.debug.Trace.StopTraceDetail} */
+/** @const {!goog.debug.StopTraceDetail} */
 const TRACE_CANCELLED = {
   wasCancelled: true
 };
-/** @const {!goog.debug.Trace.StopTraceDetail} */
+/** @const {!goog.debug.StopTraceDetail} */
 const NORMAL_STOP = {};
 
 function setUp() {
