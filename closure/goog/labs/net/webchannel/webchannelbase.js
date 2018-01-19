@@ -202,7 +202,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * Whether to fail forward-channel requests after one try or a few tries.
    * @private {boolean}
    */
-  this.failFast_ = false;
+  this.failFast_ = (opt_options && opt_options.failFast) || false;
 
   /**
    * The handler that receive callbacks for state changes and data.
