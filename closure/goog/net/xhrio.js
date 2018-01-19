@@ -1320,7 +1320,7 @@ goog.net.XhrIo.prototype.getAllStreamingResponseHeaders = function() {
 
 /**
  * Get the last error message
- * @return {goog.net.ErrorCode} Last error code.
+ * @return {!goog.net.ErrorCode} Last error code.
  */
 goog.net.XhrIo.prototype.getLastErrorCode = function() {
   return this.lastErrorCode_;
