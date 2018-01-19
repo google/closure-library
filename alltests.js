@@ -256,6 +256,7 @@ var _allTests = [
   'closure/goog/labs/mock/verificationmode_test.html',
   'closure/goog/labs/net/image_test.html',
   'closure/goog/labs/net/webchannel/channelrequest_test.html',
+  'closure/goog/labs/net/webchannel/environment_test.html',
   'closure/goog/labs/net/webchannel/forwardchannelrequestpool_test.html',
   'closure/goog/labs/net/webchannel/webchannelbase_test.html',
   'closure/goog/labs/net/webchannel/webchannelbasetransport_test.html',
