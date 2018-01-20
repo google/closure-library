@@ -13,11 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview A collection similar to
- * {@code goog.labs.structs.Map}, but also allows associating multiple
- * values with a single key.
- *
- * This implementation ensures that you can use any keys.
+ * @fileoverview A Map that associates multiple values with a single key.
  *
  * @author chrishenry@google.com (Chris Henry)
  */
@@ -25,7 +21,6 @@
 goog.provide('goog.labs.structs.Multimap');
 
 goog.require('goog.array');
-goog.require('goog.labs.structs.Map');
 goog.require('goog.object');
 
 
@@ -106,7 +101,7 @@ goog.labs.structs.Multimap.prototype.addAllValues = function(key, values) {
 
 /**
  * Adds the contents of the given map/multimap to this multimap.
- * @param {(!goog.labs.structs.Map|!goog.labs.structs.Multimap<K, V>)} map The
+ * @param {!goog.labs.structs.Multimap<K, V>} map The
  *     map to add.
  */
 goog.labs.structs.Multimap.prototype.addAllFromMultimap = function(map) {

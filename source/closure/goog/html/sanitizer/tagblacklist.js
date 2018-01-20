@@ -52,6 +52,8 @@ goog.html.sanitizer.TagBlacklist = {
   'SVG': true,
   // Blacklisted by default, can be allowed using allowStyleTag.
   'STYLE': true,
+  // Unsafe in most cases, and sanitizing its contents is not supported by the
+  // underlying SafeDomTreeProcessor.
   'TEMPLATE': true,
   'VIDEO': true
 };
