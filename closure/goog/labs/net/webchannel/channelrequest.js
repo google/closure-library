@@ -29,7 +29,6 @@ goog.require('goog.async.Throttle');
 goog.require('goog.events.EventHandler');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
-goog.require('goog.labs.net.webChannel.environment');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
@@ -103,8 +102,10 @@ goog.labs.net.webChannel.ChannelRequest = function(
    * onreadystatechange during incremental loading of responseText.
    * @private {goog.Timer}
    */
-  this.pollingTimer_ =
-      new goog.Timer(goog.labs.net.webChannel.environment.getPollingInterval());
+  this.pollingTimer_ = new goog.Timer();
+
+  this.pollingTimer_.setInterval(
+      goog.labs.net.webChannel.ChannelRequest.POLLING_INTERVAL_MS_);
 
   /**
    * Extra HTTP headers to add to all the requests sent to the server.
@@ -243,7 +244,6 @@ var Channel = goog.labs.net.webChannel.Channel;
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var requestStats = goog.labs.net.webChannel.requestStats;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
-var environment = goog.labs.net.webChannel.environment;
 
 
 /**
@@ -252,6 +252,14 @@ var environment = goog.labs.net.webChannel.environment;
  * @private {number}
  */
 ChannelRequest.TIMEOUT_MS_ = 45 * 1000;
+
+
+/**
+ * How often to poll (in MS) for changes to responseText in browsers that don't
+ * fire onreadystatechange during incremental loading of responseText.
+ * @private {number}
+ */
+ChannelRequest.POLLING_INTERVAL_MS_ = 250;
 
 
 /**
@@ -577,12 +585,13 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   // we get partial results in browsers that support ready state interactive.
   // We also make sure that getResponseText is not null in interactive mode
-  // before we continue.
+  // before we continue.  However, we don't do it in Opera because it only
+  // fire readyState == INTERACTIVE once.  We need the following code to poll
   if (readyState < goog.net.XmlHttp.ReadyState.INTERACTIVE ||
-      (readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
-       !environment.isPollingRequired() &&  // otherwise, go on to startPolling
-       !this.xmlHttp_.getResponseText())) {
-    return;  // not yet ready
+      readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
+          !goog.userAgent.OPERA && !this.xmlHttp_.getResponseText()) {
+    // not yet ready
+    return;
   }
 
   // Dispatch any appropriate network events.
@@ -641,7 +650,7 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   if (this.decodeChunks_) {
     this.decodeNextChunks_(readyState, responseText);
-    if (environment.isPollingRequired() && this.successful_ &&
+    if (goog.userAgent.OPERA && this.successful_ &&
         readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
       this.startPolling_();
     }
