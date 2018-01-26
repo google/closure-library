@@ -68,7 +68,7 @@ def _GetDepsLine(path, js_source):
 
   provides = _ToJsSrc(sorted(js_source.provides))
   requires = _ToJsSrc(sorted(js_source.requires))
-  module = "{'module': 'goog'}" if js_source.is_goog_module else '{}'
+  module = 'true' if js_source.is_goog_module else 'false'
 
   return 'goog.addDependency(\'%s\', %s, %s, %s);\n' % (
       path, provides, requires, module)

@@ -28,10 +28,10 @@ import depswriter
 class MockSource(object):
   """Mock Source file."""
 
-  def __init__(self, provides, requires, is_goog_module=False):
+  def __init__(self, provides, requires):
     self.provides = set(provides)
     self.requires = set(requires)
-    self.is_goog_module = is_goog_module
+    self.is_goog_module = False
 
   def __repr__(self):
     return 'MockSource %s' % self.provides
@@ -46,7 +46,7 @@ class DepsWriterTestCase(unittest.TestCase):
     deps = depswriter.MakeDepsFile(sources)
 
     self.assertEqual(
-        'goog.addDependency(\'test.js\', [\'A\'], [\'B\', \'C\'], {});\n',
+        'goog.addDependency(\'test.js\', [\'A\'], [\'B\', \'C\'], false);\n',
         deps)
 
   def testMakeDepsFileUnicode(self):
@@ -55,17 +55,7 @@ class DepsWriterTestCase(unittest.TestCase):
     deps = depswriter.MakeDepsFile(sources)
 
     self.assertEqual(
-        'goog.addDependency(\'test.js\', [\'A\'], [\'B\', \'C\'], {});\n',
-        deps)
-
-  def testMakeDepsFileModule(self):
-    sources = {}
-    sources['test.js'] = MockSource(['A'], ['B', 'C'], True)
-    deps = depswriter.MakeDepsFile(sources)
-
-    self.assertEqual(
-        "goog.addDependency('test.js', "
-        "['A'], ['B', 'C'], {'module': 'goog'});\n",
+        'goog.addDependency(\'test.js\', [\'A\'], [\'B\', \'C\'], false);\n',
         deps)
 
 if __name__ == '__main__':
