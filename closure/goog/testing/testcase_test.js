@@ -1011,11 +1011,9 @@ function testInitializeTestCase() {
   };
   var outerTestCase = goog.testing.TestCase.getActiveTestCase();
   goog.global['G_testRunner'].testCase = null;
-  goog.testing.TestCase.activeTestCase_ = null;
   goog.testing.TestCase.initializeTestCase(testCase, storeCallsAndErrors);
   var checkAfterInitialize = goog.testing.TestCase.getActiveTestCase();
   goog.global['G_testRunner'].testCase = outerTestCase;
-  goog.testing.TestCase.activeTestCase_ = outerTestCase;
   // This asserts require G_testRunner to be set.
   assertEquals(checkAfterInitialize, testCase);
   assertEquals(goog.testing.TestCase.getActiveTestCase(), outerTestCase);
@@ -1024,36 +1022,6 @@ function testInitializeTestCase() {
   return testCase.runTestsReturningPromise().then(function() {
     assertStoreCallsAndErrors(['mockTestName'], ['ERROR in mockTestName']);
   });
-}
-
-function testTwoTestCaseThrow() {
-  // Store the testcase_test testcase while we test TestCase.
-  var outerTestCase = goog.testing.TestCase.getActiveTestCase();
-  // Clear the globals that point to ourselves.
-  goog.global['G_testRunner'].testCase = null;
-  goog.testing.TestCase.activeTestCase_ = null;
-
-  // Try the two TestCase test
-  var firstCase = new goog.testing.TestCase('firstCase');
-  firstCase.getAutoDiscoveryPrefix = function() {
-    return 'mockTestName';
-  };
-
-  var thrownMessage = null;
-  goog.testing.TestCase.initializeTestCase(firstCase);
-  var secondCase = new goog.testing.TestCase('secondCase');
-  try {
-    goog.testing.TestCase.initializeTestCase(secondCase);
-  } catch (ex) {
-    thrownMessage = ex.toString();
-  } finally {
-    // Restore the globals.
-    goog.global['G_testRunner'].testCase = outerTestCase;
-    goog.testing.TestCase.activeTestCase_ = outerTestCase;
-  }
-  assert(
-      'The message pinpoints the cause',
-      goog.string.contains(thrownMessage, 'Only one TestCase can be active'));
 }
 
 function testChainSetupTestCase() {

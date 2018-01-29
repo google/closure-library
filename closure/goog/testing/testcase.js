@@ -1850,10 +1850,6 @@ goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
  *     Called when each test completes.
  */
 goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
-  if (!!goog.testing.TestCase.getActiveTestCase()) {
-    throw new Error('Only one TestCase can be active');
-  }
-
   if (opt_testDone) {
     testCase.setTestDoneCallback(opt_testDone);
   }
