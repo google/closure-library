@@ -685,7 +685,7 @@ goog.async.Deferred.prototype.fire_ = function() {
       res.addCallbacks(onCallback, onErrback);
       res.blocking_ = true;
     } else {
-      res.then(onCallback, onErrback);
+      /** @type {!IThenable} */ (res).then(onCallback, onErrback);
     }
   } else if (goog.async.Deferred.STRICT_ERRORS && this.isError(res) &&
       !(res instanceof goog.async.Deferred.CanceledError)) {
