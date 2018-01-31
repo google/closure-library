@@ -18,6 +18,7 @@
  * @see ../demos/tracer.html
  */
 
+goog.provide('goog.debug.StopTraceDetail');
 goog.provide('goog.debug.Trace');
 
 goog.require('goog.array');
@@ -321,7 +322,7 @@ goog.debug.Trace_.TracerCallbacks = function() {
    * {@code startTrace} or {@code clearOutstandingEvents_} with two parameters:
    * a number as the id of the trace being stopped and an object containing
    * extra information about stopping the trace (e.g. if it is cancelled).
-   * @type {function(number, !goog.debug.Trace.StopTraceDetail)|undefined}
+   * @type {function(number, !goog.debug.StopTraceDetail)|undefined}
    */
   this.stop;
   /**
@@ -334,13 +335,13 @@ goog.debug.Trace_.TracerCallbacks = function() {
 };
 
 
-/** @private @const {!goog.debug.Trace.StopTraceDetail} */
+/** @private @const {!goog.debug.StopTraceDetail} */
 goog.debug.Trace_.TRACE_CANCELLED_ = {
   wasCancelled: true
 };
 
 
-/** @private @const {!goog.debug.Trace.StopTraceDetail} */
+/** @private @const {!goog.debug.StopTraceDetail} */
 goog.debug.Trace_.NORMAL_STOP_ = {};
 
 
@@ -845,7 +846,7 @@ goog.debug.Trace = new goog.debug.Trace_();
  * The detail of calling the stop callback for a trace.
  * @record
  */
-goog.debug.Trace.StopTraceDetail = function() {
+goog.debug.StopTraceDetail = function() {
   /**
    * The trace should be stopped since it has been cancelled. Note that this
    * field is optional so, not-specifying it is like setting it to false.

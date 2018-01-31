@@ -297,19 +297,6 @@ goog.date.max = function(date1, date2) {
 
 
 /**
- * Creates a DateTime from a datetime string expressed in ISO 8601 format.
- *
- * @param {string} formatted A date or datetime expressed in ISO 8601 format.
- * @return {goog.date.DateTime} Parsed date or null if parse fails.
- * @deprecated Use goog.date.Date.fromIsoString() or
- * goog.date.DateTime.fromIsoString()
- */
-goog.date.fromIsoString = function(formatted) {
-  return goog.date.DateTime.fromIsoString(formatted);
-};
-
-
-/**
  * Parses a datetime string expressed in ISO 8601 format. Overwrites the date
  * and optionally the time part of the given object with the parsed values.
  *

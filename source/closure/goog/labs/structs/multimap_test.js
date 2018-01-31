@@ -279,7 +279,7 @@ function testGetKeys() {
 }
 
 
-function testGetKeys() {
+function testGetValues() {
   map.add('key', 'v');
   map.add('key', 'v2');
   map.add('key2', 'v2');

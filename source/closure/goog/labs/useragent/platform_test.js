@@ -59,7 +59,7 @@ function testAndroid() {
 }
 
 function testKindleFire() {
-  uaString = goog.labs.userAgent.testAgents.KINDLE_FIRE;
+  var uaString = goog.labs.userAgent.testAgents.KINDLE_FIRE;
   goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isAndroid());
   assertVersion('4.0.3');

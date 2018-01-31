@@ -368,7 +368,6 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString = function(
  * STYLE tag does not have a CSSStyleSheet object attached to it.
  * @param {string} html
  * @return {?Element}
- * @package
  */
 goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement = function(
     html) {
