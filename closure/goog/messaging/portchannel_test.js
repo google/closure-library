@@ -44,8 +44,9 @@ function setUpPage() {
   frameDiv = goog.dom.getElement('frame');
 
   // Use a relatively long timeout because the iframe created by createIframe
-  // can take a couple seconds to load its JS.
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 3 * 1000;
+  // can take a couple seconds to load its JS. It seems to take a particularly
+  // long time in Edge.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10 * 1000;
 
   if (!('Worker' in goog.global)) {
     return;
