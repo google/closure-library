@@ -106,9 +106,10 @@ goog.style.bidi.getOffsetStart = function(element) {
     return offsetLeftForReal;
   }
 
-  if (goog.userAgent.GECKO) {
-    // When calculating an element's offsetLeft, Firefox erroneously subtracts
-    // the border width from the actual distance.  So we need to add it back.
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(58)) {
+    // When calculating an element's offsetLeft, Firefox 57 and below
+    // erroneously subtracts the border width from the actual distance.
+    // So we need to add it back. (Fixed in FireFox 58+)
     var borderWidths = goog.style.getBorderBox(bestParent);
     offsetLeftForReal += borderWidths.left;
   } else if (
