@@ -21,6 +21,14 @@ goog.require('goog.style.bidi');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+
+function shouldRunTests() {
+  // TODO(user): renable on FireFox. 58 seems to have broken
+  // testGetOffsetStart.
+  return !goog.userAgent.product.FIREFOX;
+}
+
+
 // Updates the calculated metrics.
 function updateInfo() {
   var element = document.getElementById('scrolledElementRtl');
