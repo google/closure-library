@@ -21,6 +21,7 @@
  * frames or multiple windows.
  *
  * @author arv@google.com (Erik Arvidsson)
+ * @suppress {strictMissingProperties}
  */
 
 

@@ -238,6 +238,7 @@ goog.debug.exposeArray = function(arr) {
  *    fileName: (?|undefined),
  *    stack: (?|undefined)
  * }} Normalized error object.
+ * @suppress {strictMissingProperties} properties not defined on err
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
