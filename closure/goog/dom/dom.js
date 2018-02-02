@@ -2209,7 +2209,7 @@ goog.dom.isNodeList = function(val) {
     } else if (goog.isFunction(val)) {
       // On Safari, a NodeList is a function with an item property that is also
       // a function.
-      return typeof val.item == 'function';
+      return typeof /** @type {?} */ (val.item) == 'function';
     }
   }
 
