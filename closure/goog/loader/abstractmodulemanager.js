@@ -274,7 +274,6 @@ goog.loader.AbstractModuleManager.prototype.prefetchModule = function(id) {
  * generated and appended to each dynamic module's code at compilation time.
  *
  * @param {string} id A module id.
- * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.setLoaded = function(id) {};
 
@@ -342,9 +341,8 @@ goog.loader.AbstractModuleManager.prototype.loadMultiple = function(
 
 
 /**
- * Method called just before module code is loaded.
+ * Method called just before a module code is loaded.
  * @param {string} id Identifier of the module.
- * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.beforeLoadModuleCode = function(
     id) {};
@@ -353,7 +351,6 @@ goog.loader.AbstractModuleManager.prototype.beforeLoadModuleCode = function(
 /**
  * Method called just after module code is loaded
  * @param {string} id Identifier of the module.
- * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.afterLoadModuleCode = function(
     id) {};
