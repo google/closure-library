@@ -47,6 +47,9 @@ function MockXmlHttp() {
    */
   this.responseHeaders = {};
 
+  /** @type {string} */
+  this.responseHeadersString = null;
+
   /**
    * The upload object associated with this XmlHttpRequest.
    * @type {!Object}
@@ -99,6 +102,11 @@ MockXmlHttp.prototype.getResponseHeader = function(key) {
   return key in this.responseHeaders ? this.responseHeaders[key] : null;
 };
 
+/** @return {?string} */
+MockXmlHttp.prototype.getAllResponseHeaders = function() {
+  return this.responseHeadersString;
+};
+
 var lastMockXmlHttp;
 goog.net.XmlHttp.setGlobalFactory(
     new goog.net.WrapperXmlHttpFactory(
@@ -119,6 +127,7 @@ function setUp() {
 }
 
 function tearDown() {
+  MockXmlHttp.syncSend = false;
   propertyReplacer.reset();
   clock.dispose();
   goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = originalEntryPoint;
@@ -851,16 +860,16 @@ function testGetResponseHeader() {
 }
 
 function testGetResponseHeaders() {
+  MockXmlHttp.syncSend = true;
   var x = new goog.net.XhrIo();
 
   // No XHR yet
   assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
 
-  // Simulate an XHR with 2 headers.
-  var headersRaw = 'test1: foo\r\ntest2: bar';
+  x.send();
 
-  propertyReplacer.set(
-      x, 'getAllResponseHeaders', goog.functions.constant(headersRaw));
+  // Simulate an XHR with 2 headers.
+  lastMockXmlHttp.responseHeadersString = 'test1: foo\r\ntest2: bar';
 
   var headers = x.getResponseHeaders();
   assertEquals(2, goog.object.getCount(headers));
@@ -869,13 +878,13 @@ function testGetResponseHeaders() {
 }
 
 function testGetResponseHeadersWithColonInValue() {
+  MockXmlHttp.syncSend = true;
   var x = new goog.net.XhrIo();
 
-  // Simulate an XHR with a colon in the http header value.
-  var headersRaw = 'test1: f:o:o';
+  x.send();
 
-  propertyReplacer.set(
-      x, 'getAllResponseHeaders', goog.functions.constant(headersRaw));
+  // Simulate an XHR with a colon in the http header value.
+  lastMockXmlHttp.responseHeadersString = 'test1: f:o:o';
 
   var headers = x.getResponseHeaders();
   assertEquals(1, goog.object.getCount(headers));
@@ -883,16 +892,16 @@ function testGetResponseHeadersWithColonInValue() {
 }
 
 function testGetResponseHeadersMultipleValuesForOneKey() {
+  MockXmlHttp.syncSend = true;
   var x = new goog.net.XhrIo();
 
   // No XHR yet
   assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
 
-  // Simulate an XHR with 2 headers.
-  var headersRaw = 'test1: foo\r\ntest1: bar';
+  x.send();
 
-  propertyReplacer.set(
-      x, 'getAllResponseHeaders', goog.functions.constant(headersRaw));
+  // Simulate an XHR with 2 headers.
+  lastMockXmlHttp.responseHeadersString = 'test1: foo\r\ntest1: bar';
 
   var headers = x.getResponseHeaders();
   assertEquals(1, goog.object.getCount(headers));
@@ -900,18 +909,33 @@ function testGetResponseHeadersMultipleValuesForOneKey() {
 }
 
 function testGetResponseHeadersEmptyHeader() {
+  MockXmlHttp.syncSend = true;
   var x = new goog.net.XhrIo();
 
   // No XHR yet
   assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
 
-  // Simulate an XHR with 2 headers, the last of which is empty.
-  var headersRaw = 'test2: bar\r\n';
+  x.send();
 
-  propertyReplacer.set(
-      x, 'getAllResponseHeaders', goog.functions.constant(headersRaw));
+  // Simulate an XHR with 2 headers, the last of which is empty.
+  lastMockXmlHttp.responseHeadersString = 'test2: bar\r\n';
 
   var headers = x.getResponseHeaders();
   assertEquals(1, goog.object.getCount(headers));
   assertEquals('bar', headers['test2']);
+}
+
+
+function testGetResponseHeadersNullHeader() {
+  MockXmlHttp.syncSend = true;
+
+  var x = new goog.net.XhrIo();
+
+  // No XHR yet
+  assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
+
+  x.send();
+
+  var headers = x.getResponseHeaders();
+  assertEquals(0, goog.object.getCount(headers));
 }

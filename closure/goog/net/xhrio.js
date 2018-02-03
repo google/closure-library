@@ -1259,8 +1259,11 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
  * @return {string} The value of the response headers or empty string.
  */
 goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
-  return this.xhr_ && this.isComplete() ? this.xhr_.getAllResponseHeaders() :
-                                          '';
+  // getAllResponseHeaders can return null if no response has been received,
+  // ensure we always return an empty string.
+  return this.xhr_ && this.isComplete() ?
+      (this.xhr_.getAllResponseHeaders() || '') :
+      '';
 };
 
 
