@@ -53,7 +53,7 @@ goog.require('goog.string.TypedString');
  *       interpolation. The SafeStyle string is also guaranteed not to be able
  *       to introduce new properties or elide existing ones.
  *   <li>Interpolated as the content of a {}-wrapped block within an HTML
- *       <style> element. '<' characters in the SafeStyle string
+ *       &lt;style&gt; element. '<' characters in the SafeStyle string
  *       *must be CSS-escaped* before interpolation.
  *   <li>Assigned to the style property of a DOM node. The SafeStyle string
  *       should not be escaped before being assigned to the property.
