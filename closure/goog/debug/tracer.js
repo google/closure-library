@@ -18,6 +18,7 @@
  * @see ../demos/tracer.html
  */
 
+goog.provide('goog.debug.StopTraceDetail');
 goog.provide('goog.debug.Trace');
 
 goog.require('goog.array');
@@ -317,19 +318,32 @@ goog.debug.Trace_.TracerCallbacks = function() {
    */
   this.start;
   /**
-   * A callback function to be called at {@code stopTrace} with one parameter:
-   * a number as the trace id being stopped.
-   * @type {function(number)|undefined}
+   * A callback function to be called when a trace should be stopped either at
+   * {@code startTrace} or {@code clearOutstandingEvents_} with two parameters:
+   * a number as the id of the trace being stopped and an object containing
+   * extra information about stopping the trace (e.g. if it is cancelled).
+   * @type {function(number, !goog.debug.StopTraceDetail)|undefined}
    */
   this.stop;
   /**
    * A callback function to be called at {@code addComment} with two parameters:
    * a string as the comment on the trace and an optional time stamp number (in
    * milliseconds since epoch) when the comment should be added as a trace.
-   * @type {function(string, ?number=)|undefined}
+   * @type {function(string, number=)|undefined}
    */
   this.comment;
 };
+
+
+/** @private @const {!goog.debug.StopTraceDetail} */
+goog.debug.Trace_.TRACE_CANCELLED_ = {
+  wasCancelled: true
+};
+
+
+/** @private @const {!goog.debug.StopTraceDetail} */
+goog.debug.Trace_.NORMAL_STOP_ = {};
+
 
 /**
  * A function that combines two function with the same parameters in a sequence.
@@ -356,8 +370,8 @@ goog.debug.Trace_.prototype.removeAllListeners = function() {
 
 /**
  * Adds up to three callback functions which are called on {@code startTracer},
- * {@code stopTracer} and {@code addComment} in order to bridge from the Closure
- * tracer singleton object to any tracer class.
+ * {@code stopTracer}, {@code clearOutstandingEvents_} and {@code addComment} in
+ * order to bridge from the Closure tracer singleton object to any tracer class.
  * @param {!goog.debug.Trace_.TracerCallbacks} callbacks An object literal
  *   containing the callback functions.
  */
@@ -402,6 +416,21 @@ goog.debug.Trace_.prototype.clearCurrentTrace = function() {
 
 
 /**
+ * Clears the open traces and calls stop callback for them.
+ * @private
+ */
+goog.debug.Trace_.prototype.clearOutstandingEvents_ = function() {
+  if (this.traceCallbacks_.stop) {
+    goog.iter.forEach(this.outstandingEvents_, function(startEvent) {
+      this.traceCallbacks_.stop(
+          startEvent.id, goog.debug.Trace_.TRACE_CANCELLED_);
+    }, this);
+  }
+  this.outstandingEvents_.clear();
+};
+
+
+/**
  * Resets the trace.
  * @param {number} defaultThreshold The default threshold below which the
  * tracer output will be suppressed. Can be overridden on a per-Tracer basis.
@@ -409,8 +438,8 @@ goog.debug.Trace_.prototype.clearCurrentTrace = function() {
 goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
   this.defaultThreshold_ = defaultThreshold;
 
+  this.clearOutstandingEvents_();
   this.releaseEvents_();
-  this.outstandingEvents_.clear();
   this.startTime_ = goog.debug.Trace_.now();
   this.tracerOverheadStart_ = 0;
   this.tracerOverheadEnd_ = 0;
@@ -437,10 +466,16 @@ goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
 goog.debug.Trace_.prototype.releaseEvents_ = function() {
   for (var i = 0; i < this.events_.length; i++) {
     var event = this.events_[i];
-    if (event.id) {
-      this.idPool_.releaseObject(event.id);
+    if (event.id) {  // Only start events have id.
+      // Only release the start event and its id if it is already stopped - this
+      // is to avoid having multiple traces with the same id.
+      if (!this.outstandingEvents_.containsKey(event.id)) {
+        this.idPool_.releaseObject(event.id);
+        this.eventPool_.releaseObject(event);
+      }
+    } else {  // Release stop and comment events.
+      this.eventPool_.releaseObject(event);
     }
-    this.eventPool_.releaseObject(event);
   }
   this.events_.length = 0;
 };
@@ -465,20 +500,21 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   var varAlloc = this.getTotalVarAlloc();
   var outstandingEventCount = this.outstandingEvents_.getCount();
   if (this.events_.length + outstandingEventCount > this.MAX_TRACE_SIZE) {
-    goog.log.warning(
-        this.logger_, 'Giant thread trace. Clearing to avoid memory leak.');
-    // This is the more likely case. This usually means that we
-    // either forgot to clear the trace or else we are performing a
-    // very large number of events
-    if (this.events_.length > this.MAX_TRACE_SIZE / 2) {
-      this.releaseEvents_();
-    }
-
     // This is less likely and probably indicates that a lot of traces
     // aren't being closed. We want to avoid unnecessarily clearing
     // this though in case the events do eventually finish.
     if (outstandingEventCount > this.MAX_TRACE_SIZE / 2) {
-      this.outstandingEvents_.clear();
+      goog.log.warning(
+          this.logger_, 'Giant thread trace. Clearing outstanding events.');
+      this.clearOutstandingEvents_();
+    }
+    // This is the more likely case. This usually means that we
+    // either forgot to clear the trace or else we are performing a
+    // very large number of events
+    if (this.events_.length > this.MAX_TRACE_SIZE / 2) {
+      goog.log.warning(
+          this.logger_, 'Giant thread trace. Clearing to avoid memory leak.');
+      this.releaseEvents_();
     }
   }
 
@@ -534,7 +570,7 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
   }
   goog.asserts.assertNumber(id);
   if (this.traceCallbacks_.stop) {
-    this.traceCallbacks_.stop(Number(id));
+    this.traceCallbacks_.stop(Number(id), goog.debug.Trace_.NORMAL_STOP_);
   }
 
   this.outstandingEvents_.remove(String(id));
@@ -804,3 +840,17 @@ goog.debug.Trace_.now = function() {
  * @type {goog.debug.Trace_}
  */
 goog.debug.Trace = new goog.debug.Trace_();
+
+
+/**
+ * The detail of calling the stop callback for a trace.
+ * @record
+ */
+goog.debug.StopTraceDetail = function() {
+  /**
+   * The trace should be stopped since it has been cancelled. Note that this
+   * field is optional so, not-specifying it is like setting it to false.
+   * @type {boolean|undefined}
+   */
+  this.wasCancelled;
+};

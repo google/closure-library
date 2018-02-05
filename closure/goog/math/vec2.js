@@ -116,6 +116,8 @@ goog.math.Vec2.prototype.squaredMagnitude = function() {
 
 
 /**
+ * @param {number} sx The scale factor to use for the x dimension.
+ * @param {number=} opt_sy The scale factor to use for the y dimension.
  * @return {!goog.math.Vec2} This vector after scaling.
  * @override
  */

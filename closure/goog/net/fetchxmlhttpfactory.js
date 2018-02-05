@@ -323,12 +323,28 @@ goog.net.FetchXmlHttp.prototype.setRequestHeader = function(header, value) {
 
 /** @override */
 goog.net.FetchXmlHttp.prototype.getResponseHeader = function(header) {
+  // TODO(b/70808323): This method should return null when the headers are not
+  // present or the specified header is missing. The externs need to be fixed.
+  if (!this.responseHeaders_) {
+    goog.log.warning(
+        this.logger_,
+        'Attempting to get response header but no headers have been received ' +
+            'for url: ' + this.url_);
+    return '';
+  }
   return this.responseHeaders_.get(header.toLowerCase()) || '';
 };
 
 
 /** @override */
 goog.net.FetchXmlHttp.prototype.getAllResponseHeaders = function() {
+  if (!this.responseHeaders_) {
+    goog.log.warning(
+        this.logger_,
+        'Attempting to get all response headers but no headers have been ' +
+            'received for url: ' + this.url_);
+    return '';
+  }
   var lines = [];
   var iter = this.responseHeaders_.entries();
   var entry = iter.next();

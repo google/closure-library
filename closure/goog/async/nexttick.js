@@ -100,6 +100,7 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
  * @return {boolean} Whether to use the implementation of setImmediate defined
  *     on Window.
  * @private
+ * @suppress {missingProperties} For "Window.prototype.setImmediate"
  */
 goog.async.nextTick.useSetImmediate_ = function() {
   // Not a browser environment.

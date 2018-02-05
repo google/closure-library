@@ -221,7 +221,7 @@ goog.testing.net.XhrIo.prototype.lastHeaders_;
 
 /**
  * Last error code.
- * @type {goog.net.ErrorCode}
+ * @type {!goog.net.ErrorCode}
  * @private
  */
 goog.testing.net.XhrIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
@@ -356,7 +356,7 @@ goog.testing.net.XhrIo.prototype.setResponseType = function(type) {
 
 /**
  * Gets the desired type for the response.
- * @return {goog.net.XhrIo.ResponseType} The desired type for the response.
+ * @return {!goog.net.XhrIo.ResponseType} The desired type for the response.
  */
 goog.testing.net.XhrIo.prototype.getResponseType = function() {
   return this.responseType_;
@@ -410,7 +410,7 @@ goog.testing.net.XhrIo.prototype.getProgressEventsEnabled = function() {
 
 /**
  * Abort the current XMLHttpRequest
- * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
+ * @param {!goog.net.ErrorCode=} opt_failureCode Optional error code to use -
  *     defaults to ABORT.
  */
 goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
@@ -470,8 +470,7 @@ goog.testing.net.XhrIo.prototype.send = function(
 
 /**
  * Creates a new XHR object.
- * @return {goog.net.XhrLike.OrNative} The newly created XHR
- *     object.
+ * @return {!goog.net.XhrLike.OrNative} The newly created XHR object.
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {
@@ -665,7 +664,7 @@ goog.testing.net.XhrIo.prototype.getStatusText = function() {
 
 /**
  * Gets the last error message.
- * @return {goog.net.ErrorCode} Last error code.
+ * @return {!goog.net.ErrorCode} Last error code.
  */
 goog.testing.net.XhrIo.prototype.getLastErrorCode = function() {
   return this.lastErrorCode_;

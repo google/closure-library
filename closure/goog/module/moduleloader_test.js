@@ -26,6 +26,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.loader.activeModuleManager');
 goog.require('goog.module.ModuleLoader');
 goog.require('goog.module.ModuleManager');
 goog.require('goog.net.BulkLoader');
@@ -91,7 +92,7 @@ function tearDown() {
 
   // Ensure that the module manager was created.
   assertNotNull(goog.module.ModuleManager.getInstance());
-  moduleManager = goog.module.ModuleManager.instance_ = null;
+  goog.loader.activeModuleManager.reset();
 
   // tear down the module loaded flag.
   modA1Loaded = false;

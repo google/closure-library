@@ -238,6 +238,7 @@ goog.debug.exposeArray = function(arr) {
  *    fileName: (?|undefined),
  *    stack: (?|undefined)
  * }} Normalized error object.
+ * @suppress {strictMissingProperties} properties not defined on err
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
@@ -609,8 +610,8 @@ goog.debug.runtimeType = function(value) {
   if (value instanceof Function) {
     return value.displayName || value.name || 'unknown type name';
   } else if (value instanceof Object) {
-    return value.constructor.displayName || value.constructor.name ||
-        Object.prototype.toString.call(value);
+    return /** @type {string} */ (value.constructor.displayName) ||
+        value.constructor.name || Object.prototype.toString.call(value);
   } else {
     return value === null ? 'null' : typeof value;
   }

@@ -892,6 +892,7 @@ goog.cssom.iframe.style.getBackgroundXYValues_ = function(styleObject) {
 goog.cssom.iframe.style.getBackgroundContext = function(element) {
   var propertyValues = {'backgroundImage': 'none'};
   var ancestor = element;
+  /** @type {!Window|undefined} */
   var currentIframeWindow;
   // Walk up the DOM tree to find the ancestor nodes whose backgrounds
   // may be visible underneath this element. Background-image and

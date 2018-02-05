@@ -38,6 +38,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.testing.TestCase');
+goog.require('goog.userAgent');
 
 
 
@@ -92,7 +93,19 @@ goog.testing.TestRunner = function() {
    * verify that the page was not reloaded.
    * @private {!string}
    */
-  this.uniqueId_ = Math.random() + '';
+  this.uniqueId_ = Math.random() + '-' +
+      window.location.pathname.replace(/.*\//, '').replace(/\.html.*$/, '');
+
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(11)) {
+    return;
+  }
+
+  var self = this;
+  function onPageHide() {
+    self.clearUniqueId();
+  }
+  window.addEventListener('pagehide', onPageHide);
+
 };
 
 /**
@@ -110,6 +123,13 @@ goog.testing.TestRunner.prototype.getSearchString = function() {
  */
 goog.testing.TestRunner.prototype.getUniqueId = function() {
   return this.uniqueId_;
+};
+
+/**
+ * Clears the unique id for this page. The value will hint the reason.
+ */
+goog.testing.TestRunner.prototype.clearUniqueId = function() {
+  this.uniqueId_ = 'pagehide';
 };
 
 /**

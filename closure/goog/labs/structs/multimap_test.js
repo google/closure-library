@@ -15,9 +15,9 @@
 goog.provide('goog.labs.structs.MultimapTest');
 goog.setTestOnly('goog.labs.structs.MultimapTest');
 
-goog.require('goog.labs.structs.Map');
 goog.require('goog.labs.structs.Multimap');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 var map;
 
@@ -26,6 +26,12 @@ function setUp() {
   map = new goog.labs.structs.Multimap();
 }
 
+function shouldRunTests() {
+  if (goog.userAgent.IE) {
+    return goog.userAgent.isVersionOrHigher(9);
+  }
+  return true;
+}
 
 function testGetCountWithEmptyMultimap() {
   assertEquals(0, map.getCount());
@@ -41,6 +47,9 @@ function testClone() {
 
   assertSameElements(['v'], map.get('k'));
   assertSameElements(['v', 'v1', 'v2'], map.get('k2'));
+
+  assertSameElements(['v'], map2.get('k'));
+  assertSameElements(['v', 'v1', 'v2'], map2.get('k2'));
 }
 
 
@@ -82,21 +91,6 @@ function testAddAllWithMultimap() {
   assertSameElements(['v'], map.get('k'));
   assertSameElements(['v', 'v1', 'v2', 'v'], map.get('k2'));
   assertSameElements(['a', 'a1', 'a2'], map.get('k3'));
-}
-
-
-function testAddAllWithMap() {
-  map.add('k', 'v');
-  map.addAllValues('k2', ['v', 'v1', 'v2']);
-
-  var map2 = new goog.labs.structs.Map();
-  map2.set('k2', 'v');
-  map2.set('k3', 'a');
-
-  map.addAllFromMultimap(map2);
-  assertSameElements(['v'], map.get('k'));
-  assertSameElements(['v', 'v1', 'v2', 'v'], map.get('k2'));
-  assertSameElements(['a'], map.get('k3'));
 }
 
 
@@ -285,7 +279,7 @@ function testGetKeys() {
 }
 
 
-function testGetKeys() {
+function testGetValues() {
   map.add('key', 'v');
   map.add('key', 'v2');
   map.add('key2', 'v2');
@@ -318,6 +312,11 @@ function testClear() {
 }
 
 
+/**
+ * @param {T} entry
+ * @param {!Array<T>} entryList
+ * @template T
+ */
 function assertContainsEntry(entry, entryList) {
   for (var i = 0; i < entryList.length; ++i) {
     if (entry[0] == entryList[i][0] && entry[1] === entryList[i][1]) {

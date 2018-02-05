@@ -22,7 +22,6 @@ goog.provide('goog.loader.AbstractModuleManager.CallbackType');
 goog.provide('goog.loader.AbstractModuleManager.FailureType');
 
 goog.require('goog.Disposable');
-goog.require('goog.async.Deferred');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
@@ -250,7 +249,7 @@ goog.loader.AbstractModuleManager.prototype.isUserActive = function() {
  * @param {number=} opt_timeout The number of ms to wait before adding the
  *     module id to the loading queue (defaults to 0 ms). Note that the module
  *     will be loaded asynchronously regardless of the value of this parameter.
- * @return {!goog.async.Deferred} A deferred object.
+ * @return {!IThenable}
  * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.preloadModule = function(
@@ -275,6 +274,7 @@ goog.loader.AbstractModuleManager.prototype.prefetchModule = function(id) {
  * generated and appended to each dynamic module's code at compilation time.
  *
  * @param {string} id A module id.
+ * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.setLoaded = function(id) {};
 
@@ -315,12 +315,11 @@ goog.loader.AbstractModuleManager.prototype.execOnLoad = function(
 
 
 /**
- * Loads a module, returning a goog.async.Deferred for keeping track of the
- * result.
+ * Loads a module, returning an IThenable for keeping track of the result.
  *
  * @param {string} moduleId A module id.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {!goog.async.Deferred} A deferred object.
+ * @return {!IThenable} A deferred object.
  * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.load = function(
@@ -328,12 +327,12 @@ goog.loader.AbstractModuleManager.prototype.load = function(
 
 
 /**
- * Loads a list of modules, returning a goog.async.Deferred for keeping track of
- * the result.
+ * Loads a list of modules, returning a map of IThenables for keeping track of
+ * the results.
  *
  * @param {!Array<string>} moduleIds A list of module ids.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {!Object<string, !goog.async.Deferred>} A mapping from id (String)
+ * @return {!Object<string, !IThenable>} A mapping from id (String)
  *     to deferred objects that will callback or errback when the load for that
  *     id is finished.
  * @abstract
@@ -343,8 +342,9 @@ goog.loader.AbstractModuleManager.prototype.loadMultiple = function(
 
 
 /**
- * Method called just before a module code is loaded.
+ * Method called just before module code is loaded.
  * @param {string} id Identifier of the module.
+ * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.beforeLoadModuleCode = function(
     id) {};
@@ -353,6 +353,7 @@ goog.loader.AbstractModuleManager.prototype.beforeLoadModuleCode = function(
 /**
  * Method called just after module code is loaded
  * @param {string} id Identifier of the module.
+ * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.afterLoadModuleCode = function(
     id) {};

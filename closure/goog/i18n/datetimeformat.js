@@ -100,6 +100,18 @@ goog.require('goog.string');
  * @param {string|number} pattern pattern specification or pattern type.
  * @param {!Object=} opt_dateTimeSymbols Optional symbols to use for this
  *     instance rather than the global symbols.
+ *     You can use some of the predefined SHORT / MEDIUM / LONG / FULL patterns,
+ *     or the common patterns defined in goog.i18n.DateTimePatterns.
+ *     Examples:
+ *     <code><pre>
+ *       var fmt = new goog.i18n.DateTimeFormat(
+ *           goog.i18n.DateTimeFormat.Format.FULL_DATE);
+ *       var fmt = new goog.i18n.DateTimeFormat(
+ *           goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
+ *     </pre></code>
+ *
+ * {@see goog.i18n.DateTimeFormat.Format}
+ * {@see goog.i18n.DateTimePatterns}
  * @final
  */
 goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {

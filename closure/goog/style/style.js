@@ -1295,6 +1295,7 @@ goog.style.installSafeStyleSheet = function(safeStyleSheet, opt_node) {
   // undefined as of IE 11.
   var doc = dh.getDocument();
   if (goog.userAgent.IE && doc.createStyleSheet) {
+    /** @type {(!HTMLStyleElement|!StyleSheet)} */
     var styleSheet = doc.createStyleSheet();
     goog.style.setSafeStyleSheet(styleSheet, safeStyleSheet);
     return styleSheet;

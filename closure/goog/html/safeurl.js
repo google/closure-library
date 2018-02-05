@@ -255,7 +255,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
         // TODO(b/68188949): Due to content-sniffing concerns, text/csv should
         // be removed from the whitelist.
         'text/csv|' +
-        'video/(?:mpeg|mp4|ogg|webm))$',
+        'video/(?:mpeg|mp4|ogg|webm|quicktime))$',
     'i');
 
 

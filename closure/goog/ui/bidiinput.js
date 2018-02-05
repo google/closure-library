@@ -170,6 +170,6 @@ goog.ui.BidiInput.prototype.disposeInternal = function() {
     goog.events.removeAll(this.inputHandler_);
     this.inputHandler_.dispose();
     this.inputHandler_ = null;
-    goog.ui.BidiInput.superClass_.disposeInternal.call(this);
   }
+  goog.ui.BidiInput.base(this, 'disposeInternal');
 };

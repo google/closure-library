@@ -616,7 +616,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
 
   var enumerableProperties = goog.object.getAllPropertyNames(obj);
   // The non enumerable properties are added due to the fact that IE8 does not
-  // enumerate any of the prototype Object functions even when overriden and
+  // enumerate any of the prototype Object functions even when overridden and
   // mocking these is sometimes needed.
   for (var i = 0; i < goog.labs.mock.PROTOTYPE_FIELDS_.length; i++) {
     var prop = goog.labs.mock.PROTOTYPE_FIELDS_[i];

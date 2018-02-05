@@ -234,7 +234,7 @@ goog.dom.xml.setAttributes = function(element, attributes) {
 
 /**
  * Creates an instance of the MSXML2.DOMDocument.
- * @return {Document} The new document.
+ * @return {!XMLDOMDocument} The new document.
  * @private
  */
 goog.dom.xml.createMsXmlDocument_ = function() {

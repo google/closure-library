@@ -19,9 +19,17 @@ goog.require('goog.array');
 goog.require('goog.debug.Trace');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
+goog.forwardDeclare('goog.debug.StopTraceDetail');
+
 
 /** @type {!Function} */
 const recorder = goog.testing.recordFunction();
+/** @const {!goog.debug.StopTraceDetail} */
+const TRACE_CANCELLED = {
+  wasCancelled: true
+};
+/** @const {!goog.debug.StopTraceDetail} */
+const NORMAL_STOP = {};
 
 function setUp() {
   goog.debug.Trace.initCurrentTrace();
@@ -32,30 +40,30 @@ function setUp() {
 function testProperEventReleaseViaResetForComment() {
   goog.debug.Trace.startTracer('foo');
   // The Start event and its id are released due to calling the reset method.
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
   // Recycling the last Start event.
   goog.debug.Trace.addComment('abc');
   goog.debug.Trace.startTracer('foo');
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
-  var t1 = goog.debug.Trace.startTracer('f1');
-  var t2 = goog.debug.Trace.startTracer('f2');
+  const t1 = goog.debug.Trace.startTracer('f1');
+  const t2 = goog.debug.Trace.startTracer('f2');
   assertNotEquals('The trace ids cannot repeat.', t1, t2);
 }
 
 function testProperEventReleaseViaThresholdForComment() {
-  var t3 = goog.debug.Trace.startTracer('foo');
+  const t3 = goog.debug.Trace.startTracer('foo');
   // The Start event and its id are released due to 1000ms threshold.
   goog.debug.Trace.stopTracer(t3, 1000);
 
   // Recycling the last Start event.
   goog.debug.Trace.addComment('abc');
   goog.debug.Trace.startTracer('foo');
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
-  var t1 = goog.debug.Trace.startTracer('f1');
-  var t2 = goog.debug.Trace.startTracer('f2');
+  const t1 = goog.debug.Trace.startTracer('f1');
+  const t2 = goog.debug.Trace.startTracer('f2');
   assertNotEquals('The trace ids cannot repeat.', t1, t2);
 }
 
@@ -63,68 +71,51 @@ function testProperEventReleaseViaResetForStop() {
   goog.debug.Trace.startTracer('foo');
   goog.debug.Trace.startTracer('foo');
   // The Start events and their ids are released because of reseting.
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
   // Recycling the last two Start events.
-  var t0 = goog.debug.Trace.startTracer('foo');
+  const t0 = goog.debug.Trace.startTracer('foo');
   goog.debug.Trace.stopTracer(t0);
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
-  var t1 = goog.debug.Trace.startTracer('fa');
+  const t1 = goog.debug.Trace.startTracer('fa');
   goog.debug.Trace.startTracer('fb');
-  var t2 = goog.debug.Trace.startTracer('fc');
+  const t2 = goog.debug.Trace.startTracer('fc');
   // No id is repeated.
   assertNotEquals('The trace ids cannot repeat.', t1, t2);
 }
 
 function testProperEventReleaseViaThresholdForStop() {
-  var t1 = goog.debug.Trace.startTracer('f1');
-  var t2 = goog.debug.Trace.startTracer('f2');
+  let t1 = goog.debug.Trace.startTracer('f1');
+  let t2 = goog.debug.Trace.startTracer('f2');
   // The Start events and their ids are released due to 1000ms threshold.
   goog.debug.Trace.stopTracer(t2, 1000);
   goog.debug.Trace.stopTracer(t1, 1000);
 
   // Recycling the last two Start events.
-  var t0 = goog.debug.Trace.startTracer('foo');
+  const t0 = goog.debug.Trace.startTracer('foo');
   goog.debug.Trace.stopTracer(t0);
-  goog.debug.Trace.reset(0);
+  goog.debug.Trace.clearCurrentTrace();
 
-  var t1 = goog.debug.Trace.startTracer('fa');
+  t1 = goog.debug.Trace.startTracer('fa');
   goog.debug.Trace.startTracer('fb');
-  var t2 = goog.debug.Trace.startTracer('fc');
+  t2 = goog.debug.Trace.startTracer('fc');
   // No id is repeated.
   assertNotEquals('The trace ids cannot repeat.', t1, t2);
 }
 
 function testTracer() {
-  var t = goog.debug.Trace.startTracer('foo');
-  var sum = 0;
-  for (var i = 0; i < 100000; i++) {
+  const t = goog.debug.Trace.startTracer('foo');
+  let sum = 0;
+  for (let i = 0; i < 100000; i++) {
     sum += i;
   }
   goog.debug.Trace.stopTracer(t);
-  var trace = goog.debug.Trace.getFormattedTrace();
-  var lines = trace.split('\n');
+  const trace = goog.debug.Trace.getFormattedTrace();
+  const lines = trace.split('\n');
   assertEquals(8, lines.length);
   assertNotNull(lines[0].match(/^\s*\d+\.\d+\s+Start\s+foo$/));
   assertNotNull(lines[1].match(/^\s*\d+\s+\d+\.\d+\s+Done\s+\d+ ms\s+foo$/));
-}
-
-function testPerf() {
-  var count = 1000;
-  var start = goog.now();
-  for (var i = 0; i < count; i++) {
-    var t = goog.debug.Trace.startTracer('foo');
-    var t2 = goog.debug.Trace.startTracer('foo.bar');
-    var t3 = goog.debug.Trace.startTracer('foo.bar.baz');
-    goog.debug.Trace.stopTracer(t3);
-    var t4 = goog.debug.Trace.startTracer('foo.bar.bim');
-    goog.debug.Trace.stopTracer(t4);
-    goog.debug.Trace.stopTracer(t2);
-    goog.debug.Trace.stopTracer(t);
-  }
-  count *= 4;
-  var end = goog.now();
 }
 
 /**
@@ -141,6 +132,79 @@ function validateRecordedListener(expected, recorder) {
       }));
 }
 
+function testListenerTooManyOpenTraces() {
+  goog.debug.Trace.addTraceCallbacks({
+    start: goog.partial(recorder, 'start'),
+    stop: goog.partial(recorder, 'stop'),
+  });
+  const expected = [];
+  const openTraces = [];
+  for (let i = 0; 2 * i <= goog.debug.Trace.MAX_TRACE_SIZE; i++) {
+    const t = goog.debug.Trace.startTracer('trace');
+    expected.push(['start', t, 'trace']);
+    openTraces.push(t);
+  }
+  // Triggering the giant thread warning to clear open traces.
+  const t = goog.debug.Trace.startTracer('last');
+  for (let j = 0; 2 * j <= goog.debug.Trace.MAX_TRACE_SIZE; j++) {
+    expected.push(['stop', openTraces[j], TRACE_CANCELLED]);
+  }
+  expected.push(['start', t, 'last']);
+  validateRecordedListener(expected, recorder);
+}
+
+
+function testListenerGiantThread() {
+  goog.debug.Trace.addTraceCallbacks({
+    start: goog.partial(recorder, 'start'),
+    stop: goog.partial(recorder, 'stop'),
+  });
+  const t1 = goog.debug.Trace.startTracer('first');
+  const expected = [['start', t1, 'first']];
+  let t;
+  for (let i = 0; 2 * i < goog.debug.Trace.MAX_TRACE_SIZE; i++) {
+    t = goog.debug.Trace.startTracer('trace');
+    goog.debug.Trace.stopTracer(t);
+    expected.push(['start', t, 'trace'], ['stop', t, NORMAL_STOP]);
+  }
+  // Triggering the giant thread warning.
+  const t2 = goog.debug.Trace.startTracer('last');
+  expected.push(['start', t2, 'last']);
+  // Make sure that the last id of the giant thread is released after clearing.
+  assertEquals('The last id is not recycled!', t, t2);
+  // Make sure that t1 and t2 are not stopped/cancelled.
+  validateRecordedListener(expected, recorder);
+}
+
+function testListenerReset() {
+  goog.debug.Trace.addTraceCallbacks({
+    start: goog.partial(recorder, 'start'),
+    stop: goog.partial(recorder, 'stop'),
+  });
+  const t1 = goog.debug.Trace.startTracer('1st');
+  const t2 = goog.debug.Trace.startTracer('2nd');
+  goog.debug.Trace.stopTracer(t2);
+  const t3 = goog.debug.Trace.startTracer('3rd');
+  // Forcing t1 and t3 to be cancelled.
+  goog.debug.Trace.clearCurrentTrace();
+
+  const expected = [
+    ['start', t1, '1st'],
+    ['start', t2, '2nd'],
+    ['stop', t2, NORMAL_STOP],
+    ['start', t3, '3rd'],
+    ['stop', t1, TRACE_CANCELLED],
+    ['stop', t3, TRACE_CANCELLED],
+  ];
+  validateRecordedListener(expected, recorder);
+}
+
+function testRecord() {
+  /** @type{number} */
+  var a = 10;
+  goog.debug.Trace.addTraceCallbacks(a);
+}
+
 function testListenerStopTracerSilence() {
   goog.debug.Trace.addTraceCallbacks({
     start: goog.partial(recorder, 'start'),
@@ -150,7 +214,8 @@ function testListenerStopTracerSilence() {
   const t = goog.debug.Trace.startTracer('first');
   // 1000ms should be enough for silencing the tracer.
   goog.debug.Trace.stopTracer(t, 1000);
-  validateRecordedListener([['start', t, 'first'], ['stop', t]], recorder);
+  validateRecordedListener(
+      [['start', t, 'first'], ['stop', t, NORMAL_STOP]], recorder);
 }
 
 function testListenerStartTracerType() {
@@ -162,7 +227,7 @@ function testListenerStartTracerType() {
   const t = goog.debug.Trace.startTracer('first', 'New Type');
   goog.debug.Trace.stopTracer(t);
   validateRecordedListener(
-      [['start', t, '[New Type] first'], ['stop', t]], recorder);
+      [['start', t, '[New Type] first'], ['stop', t, NORMAL_STOP]], recorder);
 }
 
 function testListenerCommentTracerType() {
@@ -210,7 +275,8 @@ function testListenerStartStopTracerOnly() {
   });
   const t = goog.debug.Trace.startTracer('bar');
   goog.debug.Trace.stopTracer(t);
-  validateRecordedListener([['start', t, 'bar'], ['stop', t]], recorder);
+  validateRecordedListener(
+      [['start', t, 'bar'], ['stop', t, NORMAL_STOP]], recorder);
 }
 
 function testTwoListeners() {
@@ -221,7 +287,7 @@ function testTwoListeners() {
   });
   const t0 = goog.debug.Trace.startTracer('first');
   goog.debug.Trace.stopTracer(t0);
-  const expected1 = [['start', t0, 'first'], ['stop', t0]];
+  const expected1 = [['start', t0, 'first'], ['stop', t0, NORMAL_STOP]];
   validateRecordedListener(expected1, r1);
 
   const r2 = goog.testing.recordFunction();
@@ -245,18 +311,18 @@ function testTwoListeners() {
     ['comment', 'NoTime'],
     ['comment', 'WithTime', currentTime],
     ['comment', '[YType] NoTime'],
-    ['stop', t2],
-    ['stop', t1],
+    ['stop', t2, NORMAL_STOP],
+    ['stop', t1, NORMAL_STOP],
   ];
   validateRecordedListener(expected2, r2);
 
   const expectedNoComment = [
     ['start', t0, 'first'],
-    ['stop', t0],
+    ['stop', t0, NORMAL_STOP],
     ['start', t1, '[XType] second'],
     ['start', t2, 'third'],
-    ['stop', t2],
-    ['stop', t1],
+    ['stop', t2, NORMAL_STOP],
+    ['stop', t1, NORMAL_STOP],
   ];
   validateRecordedListener(expectedNoComment, r1);
 }

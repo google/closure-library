@@ -769,6 +769,8 @@ goog.abstractMethod = function() {
  * instance object.
  * @param {!Function} ctor The constructor for the class to add the static
  *     method to.
+ * @suppress {missingProperties} 'instance_' isn't a property on 'Function'
+ *     but we don't have a better type to use here.
  */
 goog.addSingletonGetter = function(ctor) {
   // instance_ is immediately set to prevent issues with sealed constructors
@@ -2369,6 +2371,11 @@ if (goog.DEPENDENCIES_ENABLED) {
     // async functions are the only new features in 'es8'
     addNewerLanguageTranspilationCheck('es8', function() {
       return evalCheck('async () => 1, true');
+    });
+    // Object rest/spread. TODO(tbreisacher): Rename this to 'es9' if
+    // rest/spread end up being finalized in the 2018 spec.
+    addNewerLanguageTranspilationCheck('es_next', function() {
+      return evalCheck('({...rest} = {}), true');
     });
     return requiresTranspilation;
   };

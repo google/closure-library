@@ -59,6 +59,7 @@ function testSafeUrlFromBlob_withSafeType() {
   assertBlobTypeIsSafe('video/mp4', true);
   assertBlobTypeIsSafe('video/ogg', true);
   assertBlobTypeIsSafe('video/webm', true);
+  assertBlobTypeIsSafe('video/quicktime', true);
 }
 
 
