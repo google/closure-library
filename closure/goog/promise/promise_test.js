@@ -141,8 +141,8 @@ function createThenableResolver() {
     next.resolve(resolver.promise.then(onFulfilled, onRejected));
     return next.thenable;
   };
-  // Count accesses of the {@code then} property when possible. Otherwise, just
-  // define the {@code then} method as a regular data property.
+  // Count accesses of the `then` property when possible. Otherwise, just
+  // define the `then` method as a regular data property.
   if (SUPPORTS_ACCESSORS) {
     thenable.thenAccesses = 0;
     window.Object.defineProperty(thenable, 'then', {
@@ -182,7 +182,7 @@ function createThenable(value, delay, fulfill) {
 
 
 /**
- * Creates a malicious thenable that throws when the {@code then} method is
+ * Creates a malicious thenable that throws when the `then` method is
  * accessed to ensure that it is caught and converted to a rejected promise
  * instead of allowed to cause a synchronous exception.
  * @param {*} value The value to throw.
@@ -868,8 +868,8 @@ function testRaceWithThenables() {
   return goog.Promise.race([a, b, c, d])
       .then(function(value) {
         assertEquals('c', value);
-        // Ensure that the {@code then} property was only accessed once by
-        // {@code goog.Promise.race}.
+        // Ensure that the `then` property was only accessed once by
+        // `goog.Promise.race`.
         if (SUPPORTS_ACCESSORS) {
           assertEquals(1, c.thenAccesses);
         }
@@ -1069,8 +1069,8 @@ function testAllWithThenable() {
 
   return goog.Promise.all([a, b, c, d]).then(function(value) {
     assertArrayEquals(['a', 'b', 'c', 'd'], value);
-    // Ensure that the {@code then} property was only accessed once by
-    // {@code goog.Promise.all}.
+    // Ensure that the `then` property was only accessed once by
+    // `goog.Promise.all`.
     if (SUPPORTS_ACCESSORS) {
       assertEquals(1, b.thenAccesses);
     }
@@ -1159,8 +1159,8 @@ function testAllSettledWithFulfillAndReject() {
               {fulfilled: true, value: 0}
             ],
             results);
-        // Ensure that the {@code then} property was only accessed once by
-        // {@code goog.Promise.allSettled}.
+        // Ensure that the `then` property was only accessed once by
+        // `goog.Promise.allSettled`.
         if (SUPPORTS_ACCESSORS) {
           assertEquals(1, e.thenAccesses);
           assertEquals(1, g.thenAccesses);
@@ -1212,8 +1212,8 @@ function testFirstFulfilledWithThenables() {
   return goog.Promise.firstFulfilled([a, b, c, d])
       .then(function(value) {
         assertEquals('d', value);
-        // Ensure that the {@code then} property was only accessed once by
-        // {@code goog.Promise.firstFulfilled}.
+        // Ensure that the `then` property was only accessed once by
+        // `goog.Promise.firstFulfilled`.
         if (SUPPORTS_ACCESSORS) {
           assertEquals(1, d.thenAccesses);
         }
@@ -1329,8 +1329,8 @@ function testFirstFulfilledWithReject() {
       .then(shouldNotCall, function(reason) {
         assertArrayEquals(
             ['rejected-a', 'rejected-b', 'rejected-c', 'rejected-d'], reason);
-        // Ensure that the {@code then} property was only accessed once by
-        // {@code goog.Promise.firstFulfilled}.
+        // Ensure that the `then` property was only accessed once by
+        // `goog.Promise.firstFulfilled`.
         if (SUPPORTS_ACCESSORS) {
           assertEquals(1, b.thenAccesses);
         }

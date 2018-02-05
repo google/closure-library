@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * Tests for {@code goog.positioning.ClientPosition}
+ * Tests for `goog.positioning.ClientPosition`
  * @author chrishenry@google.com (Chris Henry)
  */
 

@@ -48,8 +48,8 @@ goog.ui.editor.DefaultToolbar.MSG_FONT_NORMAL_SERIF =
  * Common font descriptors for all locales.  Each descriptor has the following
  * attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font menu (e.g. 'Tahoma')
- *   <li>{@code value} - Value for the corresponding 'font-family' CSS style
+ *   <li>`caption` - Caption to show in the font menu (e.g. 'Tahoma')
+ *   <li>`value` - Value for the corresponding 'font-family' CSS style
  *       (e.g. 'Tahoma, Arial, sans-serif')
  * </ul>
  * @type {!Array<{caption:string, value:string}>}
@@ -172,8 +172,8 @@ goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_HUGE = goog.getMsg('Huge');
 /**
  * Font size descriptors, each with the following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font size menu (e.g. 'Huge')
- *   <li>{@code value} - Value for the corresponding HTML font size (e.g. 6)
+ *   <li>`caption` - Caption to show in the font size menu (e.g. 'Huge')
+ *   <li>`value` - Value for the corresponding HTML font size (e.g. 6)
  * </ul>
  * @type {!Array<{caption:string, value:number}>}
  * @private
@@ -220,8 +220,8 @@ goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL = goog.getMsg('Normal');
 /**
  * Format option descriptors, each with the following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the menu (e.g. 'Minor heading')
- *   <li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+ *   <li>`caption` - Caption to show in the menu (e.g. 'Minor heading')
+ *   <li>`command` - Corresponding {@link goog.dom.TagName} (e.g.
  *       'H4')
  * </ul>
  * @type {!Array<{caption: string, command: !goog.dom.TagName}>}
@@ -283,7 +283,7 @@ goog.ui.editor.DefaultToolbar.makeDefaultToolbar = function(
 /**
  * Creates a {@link goog.ui.Toolbar} containing the specified set of
  * toolbar buttons, and renders it into the given parent element.  Each
- * item in the {@code items} array must either be a
+ * item in the `items` array must either be a
  * {@link goog.editor.Command} (to create a built-in button) or a subclass
  * of {@link goog.ui.Control} (to create a custom control).
  * @param {!Array<string|goog.ui.Control>} items Toolbar items; each must
@@ -813,24 +813,24 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
 
 
 /**
- * Map of {@code goog.editor.Command}s to toolbar button descriptor objects,
+ * Map of `goog.editor.Command`s to toolbar button descriptor objects,
  * each of which has the following attributes:
  * <ul>
- *   <li>{@code command} - The command corresponding to the
+ *   <li>`command` - The command corresponding to the
  *       button (mandatory)
- *   <li>{@code tooltip} - Tooltip text (optional); if unspecified, the button
+ *   <li>`tooltip` - Tooltip text (optional); if unspecified, the button
  *       has no hover text
- *   <li>{@code caption} - Caption to display on the button (optional); if
+ *   <li>`caption` - Caption to display on the button (optional); if
  *       unspecified, the button has no text caption
- *   <li>{@code classes} - CSS class name(s) to be applied to the button's
+ *   <li>`classes` - CSS class name(s) to be applied to the button's
  *       element when rendered (optional); if unspecified, defaults to
  *       'tr-icon'
  *       plus 'tr-' followed by the command ID, but without any leading '+'
- *       character (e.g. if the command ID is '+undo', then {@code classes}
+ *       character (e.g. if the command ID is '+undo', then `classes`
  *       defaults to 'tr-icon tr-undo')
- *   <li>{@code factory} - factory function used to create the button, which
- *       must accept {@code id}, {@code tooltip}, {@code caption}, and
- *       {@code classes} as arguments, and must return an instance of
+ *   <li>`factory` - factory function used to create the button, which
+ *       must accept `id`, `tooltip`, `caption`, and
+ *       `classes` as arguments, and must return an instance of
  *       {@link goog.ui.Button} or an appropriate subclass (optional); if
  *       unspecified, defaults to
  *       {@link goog.ui.editor.DefaultToolbar.makeToggleButton},

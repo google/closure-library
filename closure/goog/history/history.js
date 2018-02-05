@@ -865,7 +865,7 @@ goog.History.prototype.getIframeToken_ = function() {
 /**
  * Checks the state of the document fragment and the iframe title to detect
  * navigation changes. If {@code goog.HistoryisOnHashChangeSupported()} is
- * {@code false}, then this runs approximately twenty times per second.
+ * `false`, then this runs approximately twenty times per second.
  * @param {boolean} isNavigation True if the event was initiated by a browser
  *     action, false if it was caused by a setToken call. See
  *     {@link goog.history.Event}.

@@ -33,7 +33,7 @@ goog.require('goog.dom.TagName');
 
 
 /**
- * Enumeration of {@code CSSRule} types.
+ * Enumeration of `CSSRule` types.
  * @enum {number}
  */
 goog.cssom.CssRuleType = {

@@ -83,7 +83,7 @@ goog.math.Matrix = function(m, opt_n) {
  * [ 0 0 1 ]
  * </pre>
  * @param {number} n The size of the square identity matrix.
- * @return {!goog.math.Matrix} Identity matrix of width and height {@code n}.
+ * @return {!goog.math.Matrix} Identity matrix of width and height `n`.
  */
 goog.math.Matrix.createIdentityMatrix = function(n) {
   var rv = [];
@@ -105,7 +105,7 @@ goog.math.Matrix.createIdentityMatrix = function(n) {
  *     takes 4 arguments (value, i, j, and the matrix)
  *     and the return value is irrelevant.
  * @param {T=} opt_obj The object to be used as the value of 'this'
- *     within {@code fn}.
+ *     within `fn`.
  * @template T
  */
 goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
@@ -151,8 +151,8 @@ goog.math.Matrix.isValidArray = function(arr) {
  *     takes 4 arguments (value, i, j and the matrix)
  *     and should return a number, which will be inserted into a new matrix.
  * @param {T=} opt_obj The object to be used as the value of 'this'
- *     within {@code fn}.
- * @return {!goog.math.Matrix} A new matrix with the results from {@code fn}.
+ *     within `fn`.
+ * @return {!goog.math.Matrix} A new matrix with the results from `fn`.
  * @template T
  */
 goog.math.Matrix.map = function(matrix, fn, opt_obj) {

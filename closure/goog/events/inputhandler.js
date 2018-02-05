@@ -18,9 +18,9 @@
  * has been changed. The event does not occur if value was changed
  * programmatically.<br>
  * <br>
- * Note: this does not guarantee the correctness of {@code keyCode} or
- * {@code charCode}, or attempt to unify them across browsers. See
- * {@code goog.events.KeyHandler} for that functionality<br>
+ * Note: this does not guarantee the correctness of `keyCode` or
+ * `charCode`, or attempt to unify them across browsers. See
+ * `goog.events.KeyHandler` for that functionality<br>
  * <br>
  * Known issues:
  * <ul>

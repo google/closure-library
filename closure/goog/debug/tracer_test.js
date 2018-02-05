@@ -121,7 +121,7 @@ function testTracer() {
 /**
  * Checks if the actual log of a fake listener matches the expectations.
  * @param {!Array<!Array<*>>} expected The expected log from the fake listener.
- * @param {!Function} recorder The output of {@code goog.testing.recordFunction}
+ * @param {!Function} recorder The output of `goog.testing.recordFunction`
  *     for logging all calls to the fake listener.
  * @return {boolean} True if the recorder's log is expected.
  */

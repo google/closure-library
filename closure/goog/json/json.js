@@ -26,18 +26,18 @@ goog.provide('goog.json.Serializer');
 
 /**
  * @define {boolean} If true, use the native JSON parsing API.
- * NOTE: The default {@code goog.json.parse} implementation is able to handle
+ * NOTE: The default `goog.json.parse` implementation is able to handle
  * invalid JSON. JSPB used to produce invalid JSON which is not the case
  * anymore so this is safe to enable for parsing JSPB. Using native JSON is
- * faster and safer than the default implementation using {@code eval}.
+ * faster and safer than the default implementation using `eval`.
  */
 goog.define('goog.json.USE_NATIVE_JSON', false);
 
 /**
  * @define {boolean} If true, try the native JSON parsing API first. If it
- * fails, log an error and use {@code eval} instead. This is useful when
- * transitioning to {@code goog.json.USE_NATIVE_JSON}. The error logger needs to
- * be set by {@code goog.json.setErrorLogger}. If it is not set then the error
+ * fails, log an error and use `eval` instead. This is useful when
+ * transitioning to `goog.json.USE_NATIVE_JSON`. The error logger needs to
+ * be set by `goog.json.setErrorLogger`. If it is not set then the error
  * is ignored.
  */
 goog.define('goog.json.TRY_NATIVE_JSON', false);
@@ -93,10 +93,10 @@ goog.json.isValid = function(s) {
 };
 
 /**
- * Logs a parsing error in {@code JSON.parse} solvable by using {@code eval}
- * if {@code goog.json.TRY_NATIVE_JSON} is enabled.
+ * Logs a parsing error in `JSON.parse` solvable by using `eval`
+ * if `goog.json.TRY_NATIVE_JSON` is enabled.
  * @private {function(string, !Error)} The first parameter is the error message,
- *     the second is the exception thrown by {@code JSON.parse}.
+ *     the second is the exception thrown by `JSON.parse`.
  */
 goog.json.errorLogger_ = goog.nullFunction;
 
@@ -105,7 +105,7 @@ goog.json.errorLogger_ = goog.nullFunction;
  * Sets an error logger to use if there's a recoverable parsing error and {@code
  * goog.json.TRY_NATIVE_JSON} is enabled.
  * @param {function(string, !Error)} errorLogger The first parameter is the
- *     error message, the second is the exception thrown by {@code JSON.parse}.
+ *     error message, the second is the exception thrown by `JSON.parse`.
  */
 goog.json.setErrorLogger = function(errorLogger) {
   goog.json.errorLogger_ = errorLogger;

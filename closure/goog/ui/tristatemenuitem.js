@@ -127,7 +127,7 @@ goog.ui.TriStateMenuItem.prototype.setCheckedState = function(state) {
 
 /**
  * Sets the checked state and updates the CSS styling. Dispatches a
- * {@code CHECK} or {@code UNCHECK} event prior to changing the component's
+ * `CHECK` or `UNCHECK` event prior to changing the component's
  * state, which may be caught and canceled to prevent the component from
  * changing state.
  * @param {goog.ui.TriStateMenuItem.State} state The checked state.

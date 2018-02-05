@@ -135,7 +135,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
   /**
    * Create a new {@see goog.testing.MockControl} accessible via
-   * {@code env.mockControl} for each test. If your test has more than one
+   * `env.mockControl` for each test. If your test has more than one
    * testing environment, don't call this on more than one of them.
    * @return {!goog.labs.testing.Environment} For chaining.
    */
@@ -151,7 +151,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   /**
    * Create a {@see goog.testing.MockClock} for each test. The clock will be
    * installed (override i.e. setTimeout) by default. It can be accessed
-   * using {@code env.mockClock}. If your test has more than one testing
+   * using `env.mockClock`. If your test has more than one testing
    * environment, don't call this on more than one of them.
    * @return {!goog.labs.testing.Environment} For chaining.
    */
@@ -165,7 +165,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
 
   /**
-   * Creates a basic strict mock of a {@code toMock}. For more advanced mocking,
+   * Creates a basic strict mock of a `toMock`. For more advanced mocking,
    * please use the MockControl directly.
    * @param {Function} toMock
    * @return {!goog.testing.StrictMock}

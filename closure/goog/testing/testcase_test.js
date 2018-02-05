@@ -605,13 +605,13 @@ function testFailOnUnreportedAsserts_EnabledByDefault() {
 /**
  * Verifies that:
  * <ol>
- * <li>when the {@code failOnUnreportedAsserts} flag is disabled, the test
+ * <li>when the `failOnUnreportedAsserts` flag is disabled, the test
  *     function passes;
- * <li>when the {@code failOnUnreportedAsserts} flag is enabled, the test
- *     function passes if {@code shouldPassWithFlagEnabled} is true and fails if
+ * <li>when the `failOnUnreportedAsserts` flag is enabled, the test
+ *     function passes if `shouldPassWithFlagEnabled` is true and fails if
  *     it is false; and that
- * <li>when the {@code failOnUnreportedAsserts} flag is enabled, and in addition
- *     {@code invalidateAssertionException} is stubbed out to do nothing, the
+ * <li>when the `failOnUnreportedAsserts` flag is enabled, and in addition
+ *     `invalidateAssertionException` is stubbed out to do nothing, the
  *     test function fails.
  * </ol>
  * @param {boolean} shouldPassWithFlagEnabled

@@ -29,7 +29,7 @@ goog.require('goog.events.EventTarget');
 
 
 /**
- * Manages undo and redo operations through a series of {@code UndoRedoState}s
+ * Manages undo and redo operations through a series of `UndoRedoState`s
  * maintained on undo and redo stacks.
  *
  * @constructor
@@ -87,14 +87,14 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 
   /**
    * Signifies that a state was just added to the undo stack. Events of this
-   * type will have a {@code state} property whose value is the state that
+   * type will have a `state` property whose value is the state that
    * was just added.
    */
   STATE_ADDED: 'state_added',
 
   /**
    * Signifies that the undo method of a state is about to be called.
-   * Events of this type will have a {@code state} property whose value is the
+   * Events of this type will have a `state` property whose value is the
    * state whose undo action is about to be performed. If the event is cancelled
    * the action does not proceed, but the state will still transition between
    * stacks.
@@ -103,7 +103,7 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 
   /**
    * Signifies that the redo method of a state is about to be called.
-   * Events of this type will have a {@code state} property whose value is the
+   * Events of this type will have a `state` property whose value is the
    * state whose redo action is about to be performed. If the event is cancelled
    * the action does not proceed, but the state will still transition between
    * stacks.

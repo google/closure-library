@@ -47,8 +47,8 @@ goog.inherits(goog.dom.pattern.AllChildren, goog.dom.pattern.AbstractPattern);
  *
  * @param {Node} token Token to match against.
  * @param {goog.dom.TagWalkType} type The type of token.
- * @return {goog.dom.pattern.MatchType} {@code MATCHING} if the token is on the
- *     same level or deeper and {@code BACKTRACK_MATCH} if not.
+ * @return {goog.dom.pattern.MatchType} `MATCHING` if the token is on the
+ *     same level or deeper and `BACKTRACK_MATCH` if not.
  * @override
  */
 goog.dom.pattern.AllChildren.prototype.matchToken = function(token, type) {

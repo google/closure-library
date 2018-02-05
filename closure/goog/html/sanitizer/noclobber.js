@@ -49,7 +49,7 @@ var userAgentProduct = goog.require('goog.userAgent.product');
 
 /**
  * Shorthand for {@code Object.getOwnPropertyDescriptor(...).get} to improve
- * readability during initialization of {@code Methods}.
+ * readability during initialization of `Methods`.
  * @param {string} className
  * @param {string} property
  * @return {?Function}
@@ -64,8 +64,8 @@ function getterOrNull(className, property) {
 }
 
 /**
- * Shorthand for {@code DOMInterface.prototype.method} to improve readability
- * during initialization of {@code Methods}.
+ * Shorthand for `DOMInterface.prototype.method` to improve readability
+ * during initialization of `Methods`.
  * @param {string} className
  * @param {string} method
  * @return {?Function}

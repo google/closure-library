@@ -156,7 +156,7 @@ function getListenerCount(control) {
  * Simulates a mousedown event on the given element, including focusing it.
  * @param {Element} element Element on which to simulate mousedown.
  * @param {goog.events.BrowserEvent.MouseButton=} opt_button Mouse button;
- *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     defaults to `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @return {boolean} Whether the event was allowed to proceed.
  */
 function fireMouseDownAndFocus(element, opt_button) {

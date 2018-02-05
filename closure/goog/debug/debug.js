@@ -104,7 +104,7 @@ goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
  * @param {Object|null|undefined} obj Object to expose.
  * @param {boolean=} opt_showFn Show the functions as well as the properties,
  *     default is false.
- * @return {string} The string representation of {@code obj}.
+ * @return {string} The string representation of `obj`.
  */
 goog.debug.expose = function(obj, opt_showFn) {
   if (typeof obj == 'undefined') {
@@ -140,7 +140,7 @@ goog.debug.expose = function(obj, opt_showFn) {
  * @param {*} obj Object to expose.
  * @param {boolean=} opt_showFn Also show properties that are functions (by
  *     default, functions are omitted).
- * @return {string} A string representation of {@code obj}.
+ * @return {string} A string representation of `obj`.
  */
 goog.debug.deepExpose = function(obj, opt_showFn) {
   var str = [];

@@ -1298,7 +1298,7 @@ goog.date.Date.compare = function(date1, date2) {
 
 
 /**
- * Parses an ISO 8601 string as a {@code goog.date.Date}.
+ * Parses an ISO 8601 string as a `goog.date.Date`.
  * @param {string} formatted ISO 8601 string to parse.
  * @return {?goog.date.Date} Parsed date or null if parse fails.
  */
@@ -1760,7 +1760,7 @@ goog.date.DateTime.prototype.clone = function() {
 
 
 /**
- * Parses an ISO 8601 string as a {@code goog.date.DateTime}.
+ * Parses an ISO 8601 string as a `goog.date.DateTime`.
  * @param {string} formatted ISO 8601 string to parse.
  * @return {?goog.date.DateTime} Parsed date or null if parse fails.
  * @override

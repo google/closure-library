@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 /**
  * Image loader utility class.  Raises a {@link goog.events.EventType.LOAD}
  * event for each image loaded, with an {@link Image} object as the target of
- * the event, normalized to have {@code naturalHeight} and {@code naturalWidth}
+ * the event, normalized to have `naturalHeight` and `naturalWidth`
  * attributes.
  *
  * To use this class, run:
@@ -158,11 +158,11 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
  * Adds an image to the image loader, and associates it with the given ID
  * string.  If an image with that ID already exists, it is silently replaced.
  * When the image in question is loaded, the target of the LOAD event will be
- * an {@code Image} object with {@code id} and {@code src} attributes based on
+ * an `Image` object with `id` and `src` attributes based on
  * these arguments.
  * @param {string} id The ID of the image to load.
  * @param {string|Image} image Either the source URL of the image or the HTML
- *     image element itself (or any object with a {@code src} property, really).
+ *     image element itself (or any object with a `src` property, really).
  * @param {!goog.net.ImageLoader.CorsRequestType=} opt_corsRequestType The type
  *     of CORS request to use, if any.
  */
@@ -227,7 +227,7 @@ goog.net.ImageLoader.prototype.start = function() {
 
 
 /**
- * Creates an {@code Image} object with the specified ID and source URL, and
+ * Creates an `Image` object with the specified ID and source URL, and
  * listens for network events raised as the image is loaded.
  * @param {!goog.net.ImageLoader.ImageRequest_} imageRequest The request data.
  * @param {string} id The unique ID of the image to load.

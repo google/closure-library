@@ -197,7 +197,7 @@ goog.events.Listenable.prototype.removeAllListeners;
  * mechanism.
  *
  * NOTE(chrishenry): The name reflects the original implementation of
- * custom event target ({@code goog.events.EventTarget}). We decided
+ * custom event target (`goog.events.EventTarget`). We decided
  * that changing the name is not worth it.
  *
  * @return {goog.events.Listenable} The parent EventTarget or null if

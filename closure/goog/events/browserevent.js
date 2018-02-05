@@ -237,7 +237,7 @@ goog.events.BrowserEvent.PointerType = {
 /**
  * Static data for mapping mouse buttons.
  * @type {!Array<number>}
- * @deprecated Use {@code goog.events.BrowserEvent.IE_BUTTON_MAP} instead.
+ * @deprecated Use `goog.events.BrowserEvent.IE_BUTTON_MAP` instead.
  */
 goog.events.BrowserEvent.IEButtonMap = goog.debug.freeze([
   1,  // LEFT

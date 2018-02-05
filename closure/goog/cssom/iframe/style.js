@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Provides utility routines for copying modified
- * {@code CSSRule} objects from the parent document into iframes so that any
+ * `CSSRule` objects from the parent document into iframes so that any
  * content in the iframe will be styled as if it was inline in the parent
  * document.
  *
@@ -126,11 +126,11 @@ goog.cssom.iframe.style.CssRuleSet_ = function() {
 
 
 /**
- * Initializes the rule set from a {@code CSSRule}.
+ * Initializes the rule set from a `CSSRule`.
  *
- * @param {CSSRule} cssRule The {@code CSSRule} to initialize from.
+ * @param {CSSRule} cssRule The `CSSRule` to initialize from.
  * @return {boolean} True if initialization succeeded. We only support
- *     {@code CSSStyleRule} and {@code CSSFontFaceRule} objects.
+ *     `CSSStyleRule` and `CSSFontFaceRule` objects.
  */
 goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule = function(
     cssRule) {
@@ -681,7 +681,7 @@ goog.cssom.iframe.style.textProperties_ = [
  * @param {boolean=} opt_forceRuleSetCacheUpdate Flag to force the internal
  *     cache of rulesets to refresh itself before we read the same.
  * @param {boolean=} opt_copyBackgroundContext Flag indicating that if the
- *     {@code element} has a transparent background, background rules
+ *     `element` has a transparent background, background rules
  *     from the nearest ancestor element(s) that have background-color
  *     and/or background-image set should be copied.
  * @return {string} String containing all CSS rules present in the original

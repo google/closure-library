@@ -243,7 +243,7 @@ goog.ui.tree.BaseNode.prototype.exitDocument = function() {
 
 /**
  * The method assumes that the child doesn't have parent node yet.
- * The {@code opt_render} argument is not used. If the parent node is expanded,
+ * The `opt_render` argument is not used. If the parent node is expanded,
  * the child node's state will be the same as the parent's. Otherwise the
  * child's DOM tree won't be created.
  * @override

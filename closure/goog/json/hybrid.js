@@ -31,7 +31,7 @@ goog.require('goog.json');
 
 /**
  * Attempts to serialize the JSON string natively, falling back to
- * {@code goog.json.serialize} if unsuccessful.
+ * `goog.json.serialize` if unsuccessful.
  * @param {!Object} obj JavaScript object to serialize to JSON.
  * @return {string} Resulting JSON string.
  */
@@ -53,7 +53,7 @@ goog.json.hybrid.stringify =
 
 /**
  * Attempts to parse the JSON string natively, falling back to
- * the supplied {@code fallbackParser} if unsuccessful.
+ * the supplied `fallbackParser` if unsuccessful.
  * @param {string} jsonString JSON string to parse.
  * @param {function(string):Object} fallbackParser Fallback JSON parser used
  *     if native
@@ -77,7 +77,7 @@ goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
 
 /**
  * Attempts to parse the JSON string natively, falling back to
- * {@code goog.json.parse} if unsuccessful.
+ * `goog.json.parse` if unsuccessful.
  * @param {string} jsonString JSON string to parse.
  * @return {?Object} Resulting JSON object.
  */

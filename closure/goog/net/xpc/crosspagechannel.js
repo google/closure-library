@@ -685,7 +685,7 @@ goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
 
 /**
  * Delivers messages to the appropriate service-handler. Named xpcDeliver to
- * avoid name conflict with {@code deliver} function in superclass
+ * avoid name conflict with `deliver` function in superclass
  * goog.messaging.AbstractChannel.
  *
  * @param {string} serviceName The name of the port.

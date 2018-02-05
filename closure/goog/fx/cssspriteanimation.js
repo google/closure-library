@@ -30,7 +30,7 @@ goog.require('goog.fx.Animation');
  * This animation class is used to animate a CSS sprite (moving a background
  * image).  This moves through a series of images in a single image sprite. By
  * default, the animation loops when done.  Looping can be disabled by setting
- * {@code opt_disableLoop} and results in the animation stopping on the last
+ * `opt_disableLoop` and results in the animation stopping on the last
  * image in the image sprite.  You should set up the {@code background-image}
  * and size in a CSS rule for the relevant element.
  *

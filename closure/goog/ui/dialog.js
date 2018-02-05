@@ -1286,7 +1286,7 @@ goog.ui.Dialog.ButtonSet.prototype.render = function() {
 
 
 /**
- * Decorates the given element by adding any {@code button} elements found
+ * Decorates the given element by adding any `button` elements found
  * among its descendants to the button set.  The first button found is assumed
  * to be the default and will receive focus when the button set is rendered.
  * If a button with a name of {@link goog.ui.Dialog.DefaultButtonKeys.CANCEL}

@@ -1357,8 +1357,8 @@ goog.editor.Field.prototype.handleKeyUp_ = function(e) {
 
 
 /**
- * Fires {@code BEFORESELECTIONCHANGE} and starts the selection change timer
- * (which will fire {@code SELECTIONCHANGE}) if the given event is a key event
+ * Fires `BEFORESELECTIONCHANGE` and starts the selection change timer
+ * (which will fire `SELECTIONCHANGE`) if the given event is a key event
  * that causes a selection change.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
@@ -1803,11 +1803,11 @@ goog.editor.Field.prototype.isEventStopped = function(eventType) {
  * delayed change events are handled appropriately. Extra delayed change events
  * will cause undesired states to be added to the undo-redo stack. This method
  * will always fire at most one delayed change event, depending on the value of
- * {@code opt_preventDelayedChange}.
+ * `opt_preventDelayedChange`.
  *
  * @param {function()} func The function to call that will manipulate the dom.
  * @param {boolean=} opt_preventDelayedChange Whether delayed change should be
- *      prevented after calling {@code func}. Defaults to always firing
+ *      prevented after calling `func`. Defaults to always firing
  *      delayed change.
  * @param {Object=} opt_handler Object in whose scope to call the listener.
  */

@@ -328,7 +328,7 @@ goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
  * @deprecated Use {@link #addFlashVars} or {@link #setFlashVar} instead.
  * @param {goog.structs.Map|Object|string} flashVar A map of variables (given
  *    as a goog.structs.Map or an Object literal) or a key to the optional
- *    {@code opt_value}.
+ *    `opt_value`.
  * @param {string=} opt_value The optional value for the flashVar key.
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
@@ -446,7 +446,7 @@ goog.ui.media.FlashObject.prototype.hasRequiredVersion = function() {
 
 
 /**
- * Writes the Flash embedding {@code HTMLObjectElement} to this components root
+ * Writes the Flash embedding `HTMLObjectElement` to this components root
  * element and adds listeners for all events to handle them consistently.
  * @override
  */

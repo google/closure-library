@@ -128,7 +128,7 @@ goog.module.ModuleManager = function() {
 
   /**
    * The id of the last requested initial module. When it loaded
-   * the deferred in {@code this.initialModulesLoaded_} resolves.
+   * the deferred in `this.initialModulesLoaded_` resolves.
    * @private {?string}
    */
   this.lastInitialModuleId_ = null;

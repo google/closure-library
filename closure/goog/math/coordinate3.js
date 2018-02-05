@@ -98,7 +98,7 @@ goog.math.Coordinate3.equals = function(a, b) {
  *
  * @param {goog.math.Coordinate3} a A Coordinate3.
  * @param {goog.math.Coordinate3} b A Coordinate3.
- * @return {number} The distance between {@code a} and {@code b}.
+ * @return {number} The distance between `a` and `b`.
  */
 goog.math.Coordinate3.distance = function(a, b) {
   var dx = a.x - b.x;
@@ -118,7 +118,7 @@ goog.math.Coordinate3.distance = function(a, b) {
  *
  * @param {goog.math.Coordinate3} a A Coordinate3.
  * @param {goog.math.Coordinate3} b A Coordinate3.
- * @return {number} The squared distance between {@code a} and {@code b}.
+ * @return {number} The squared distance between `a` and `b`.
  */
 goog.math.Coordinate3.squaredDistance = function(a, b) {
   var dx = a.x - b.x;
@@ -135,7 +135,7 @@ goog.math.Coordinate3.squaredDistance = function(a, b) {
  * @param {goog.math.Coordinate3} a A Coordinate3.
  * @param {goog.math.Coordinate3} b A Coordinate3.
  * @return {!goog.math.Coordinate3} A Coordinate3 representing the difference
- *     between {@code a} and {@code b}.
+ *     between `a` and `b`.
  */
 goog.math.Coordinate3.difference = function(a, b) {
   return new goog.math.Coordinate3(a.x - b.x, a.y - b.y, a.z - b.z);

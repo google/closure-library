@@ -50,7 +50,7 @@ goog.net.streams.Base64StreamDecoder = function() {
 
   /**
    * The current position in the streamed data that has been processed, i.e.
-   * the position right before {@code leftoverInput_}.
+   * the position right before `leftoverInput_`.
    * @private {number}
    */
   this.streamPos_ = 0;

@@ -518,7 +518,7 @@ goog.testing.MockClock.MAX_INT_ = 2147483647;
 
 
 /**
- * Schedules a function to be called after {@code millis} milliseconds.
+ * Schedules a function to be called after `millis` milliseconds.
  * Mock implementation for setTimeout.
  * @param {Function} funcToCall The function to call.
  * @param {number=} opt_millis The number of milliseconds to call it after.
@@ -542,7 +542,7 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
 
 
 /**
- * Schedules a function to be called every {@code millis} milliseconds.
+ * Schedules a function to be called every `millis` milliseconds.
  * Mock implementation for setInterval.
  * @param {Function} funcToCall The function to call.
  * @param {number=} opt_millis The number of milliseconds between calls.

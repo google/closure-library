@@ -209,19 +209,19 @@ goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
 
 /**
  * Changes an existing value in an object to another one of the same type while
- * saving its original state. The advantage of {@code replace} over {@link #set}
- * is that {@code replace} protects against typos and erroneously passing tests
+ * saving its original state. The advantage of `replace` over {@link #set}
+ * is that `replace` protects against typos and erroneously passing tests
  * after some members have been renamed during a refactoring.
  * @param {Object|Function} obj The JavaScript or native object or function to
  *     alter. See the constraints in the class description.
  * @param {string} key The key to change the value for. It has to be present
- *     either in {@code obj} or in its prototype chain.
+ *     either in `obj` or in its prototype chain.
  * @param {*} value The new value to set.
  * @param {boolean=} opt_allowNullOrUndefined By default, this method requires
- *     {@code value} to match the type of the existing value, as determined by
- *     {@link goog.typeOf}. Setting opt_allowNullOrUndefined to {@code true}
- *     allows an existing value to be replaced by {@code null} or
-       {@code undefined}, or vice versa.
+ *     `value` to match the type of the existing value, as determined by
+ *     {@link goog.typeOf}. Setting opt_allowNullOrUndefined to `true`
+ *     allows an existing value to be replaced by `null` or
+       `undefined`, or vice versa.
  * @throws {Error} In case of missing key or type mismatch.
  */
 goog.testing.PropertyReplacer.prototype.replace = function(

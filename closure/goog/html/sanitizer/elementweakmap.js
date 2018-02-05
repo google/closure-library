@@ -54,7 +54,7 @@ var ElementWeakMap = function() {
 };
 
 /**
- * Stores a {@code elementKey} -> {@code value} mapping.
+ * Stores a `elementKey` -> `value` mapping.
  * @param {!Element} elementKey
  * @param {!T} value
  * @return {!ElementWeakMap}
@@ -74,7 +74,7 @@ ElementWeakMap.prototype.set = function(elementKey, value) {
 };
 
 /**
- * Gets the value previously stored for {@code elementKey}, or undefined if no
+ * Gets the value previously stored for `elementKey`, or undefined if no
  * value was stored for such key.
  * @param {!Element} elementKey
  * @return {!Element|undefined}

@@ -15,7 +15,7 @@
 /**
  * @fileoverview A disposable implementation of a custom
  * listenable/event target. See also: documentation for
- * {@code goog.events.Listenable}.
+ * `goog.events.Listenable`.
  *
  * @author arv@google.com (Erik Arvidsson) [Original implementation]
  * @see ../demos/eventtarget.html
@@ -35,7 +35,7 @@ goog.require('goog.object');
 
 
 /**
- * An implementation of {@code goog.events.Listenable} with full W3C
+ * An implementation of `goog.events.Listenable` with full W3C
  * EventTarget-like support (capture/bubble mechanism, stopping event
  * propagation, preventing default actions).
  *
@@ -43,8 +43,8 @@ goog.require('goog.object');
  *
  * Unless propagation is stopped, an event dispatched by an
  * EventTarget will bubble to the parent returned by
- * {@code getParentEventTarget}. To set the parent, call
- * {@code setParentEventTarget}. Subclasses that don't support
+ * `getParentEventTarget`. To set the parent, call
+ * `setParentEventTarget`. Subclasses that don't support
  * changing the parent can override the setter to throw an error.
  *
  * Example usage:
@@ -144,7 +144,7 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
  * @deprecated Use {@code #listen} instead, when possible. Otherwise, use
- *     {@code goog.events.listen} if you are passing Object
+ *     `goog.events.listen` if you are passing Object
  *     (instead of Function) as handler.
  */
 goog.events.EventTarget.prototype.addEventListener = function(
@@ -168,7 +168,7 @@ goog.events.EventTarget.prototype.addEventListener = function(
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
  * @deprecated Use {@code #unlisten} instead, when possible. Otherwise, use
- *     {@code goog.events.unlisten} if you are passing Object
+ *     `goog.events.unlisten` if you are passing Object
  *     (instead of Function) as handler.
  */
 goog.events.EventTarget.prototype.removeEventListener = function(
@@ -312,9 +312,9 @@ goog.events.EventTarget.prototype.hasListener = function(
 
 
 /**
- * Sets the target to be used for {@code event.target} when firing
+ * Sets the target to be used for `event.target` when firing
  * event. Mainly used for testing. For example, see
- * {@code goog.testing.events.mixinListenable}.
+ * `goog.testing.events.mixinListenable`.
  * @param {!Object} target The target.
  */
 goog.events.EventTarget.prototype.setTargetForTesting = function(target) {

@@ -97,7 +97,7 @@ goog.fx.DragListGroup = function() {
   this.currDragItem_;
 
   /**
-   * The drag list that {@code this.currDragItem_} is currently hovering over,
+   * The drag list that `this.currDragItem_` is currently hovering over,
    * or null if it is not hovering over a list.
    * @private {Element}
    */
@@ -124,7 +124,7 @@ goog.fx.DragListGroup = function() {
   /**
    * The current item in the list we are hovering over. We need to remember
    * this in case we do not update the position of the current drag item while
-   * dragging (see {@code updateWhileDragging_}). In this case the current drag
+   * dragging (see `updateWhileDragging_`). In this case the current drag
    * item will be inserted into the list before this element when the drag ends.
    * @private {Element}
    */
@@ -588,7 +588,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
  * Creates copy of node being dragged.
  *
  * @param {Element} sourceEl Element to copy.
- * @return {!Element} The clone of {@code sourceEl}.
+ * @return {!Element} The clone of `sourceEl`.
  * @deprecated Use goog.fx.Dragger.cloneNode().
  * @private
  */
@@ -1095,7 +1095,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
     // LEFT_2D and RIGHT_2D) it is no longer enough to only look at the
     // x-coordinate alone in order to find the {@earliestAfterItem} in the
     // hoverlist. Make sure it is chosen from the row closest to the
-    // {@code draggerElCenter}.
+    // `draggerElCenter`.
     if (pickClosestRow) {
       var distanceToRow = goog.fx.DragListGroup.verticalDistanceFromItem_(
           item, draggerElCenter);

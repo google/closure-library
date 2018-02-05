@@ -179,7 +179,7 @@ goog.db.ObjectStore.prototype.remove = function(keyOrRange) {
 
 /**
  * Gets an object from the store. If no object is present with that key
- * the result is {@code undefined}.
+ * the result is `undefined`.
  *
  * @param {IDBKeyType} key The key to look up.
  * @return {!goog.async.Deferred} The deferred get request.
@@ -248,7 +248,7 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
 
 /**
  * Gets an object from the store. If no object is present with that key
- * the result is {@code undefined}.
+ * the result is `undefined`.
  *
  * @return {!goog.async.Deferred} The deferred getAllKeys request.
  */

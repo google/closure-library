@@ -235,9 +235,9 @@ goog.soy.data.UnsanitizedText.prototype.contentKind =
  *
  * The content is a string of HTML that can safely be embedded in a PCDATA
  * context in your app.  If you would be surprised to find that an HTML
- * sanitizer produced {@code s} (e.g.  it runs code or fetches bad URLs) and
- * you wouldn't write a template that produces {@code s} on security or privacy
- * grounds, then don't pass {@code s} here. The default content direction is
+ * sanitizer produced `s` (e.g.  it runs code or fetches bad URLs) and
+ * you wouldn't write a template that produces `s` on security or privacy
+ * grounds, then don't pass `s` here. The default content direction is
  * unknown, i.e. to be estimated when necessary.
  *
  * @extends {goog.soy.data.SanitizedContent}

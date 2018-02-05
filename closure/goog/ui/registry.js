@@ -28,9 +28,9 @@ goog.require('goog.dom.classlist');
  * default renderer.  If the default renderer is a singleton, returns the
  * singleton instance; otherwise returns a new instance of the renderer class.
  * @param {Function} componentCtor Component constructor function (for example
- *     {@code goog.ui.Button}).
+ *     `goog.ui.Button`).
  * @return {goog.ui.ControlRenderer?} Renderer instance (for example the
- *     singleton instance of {@code goog.ui.ButtonRenderer}), or null if
+ *     singleton instance of `goog.ui.ButtonRenderer`), or null if
  *     no default renderer was found.
  */
 goog.ui.registry.getDefaultRenderer = function(componentCtor) {
@@ -64,9 +64,9 @@ goog.ui.registry.getDefaultRenderer = function(componentCtor) {
  * Sets the default renderer for the given {@link goog.ui.Component}
  * constructor.
  * @param {Function} componentCtor Component constructor function (for example
- *     {@code goog.ui.Button}).
+ *     `goog.ui.Button`).
  * @param {Function} rendererCtor Renderer constructor function (for example
- *     {@code goog.ui.ButtonRenderer}).
+ *     `goog.ui.ButtonRenderer`).
  * @throws {Error} If the arguments aren't functions.
  */
 goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {

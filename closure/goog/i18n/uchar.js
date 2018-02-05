@@ -170,13 +170,13 @@ goog.i18n.uChar.fromCharCode = function(code) {
  * Returns the Unicode code point at the specified index.
  *
  * If the char value specified at the given index is in the leading-surrogate
- * range, and the following index is less than the length of {@code string}, and
+ * range, and the following index is less than the length of `string`, and
  * the char value at the following index is in the trailing-surrogate range,
  * then the supplementary code point corresponding to this surrogate pair is
  * returned.
  *
  * If the char value specified at the given index is in the trailing-surrogate
- * range, and the preceding index is not before the start of {@code string}, and
+ * range, and the preceding index is not before the start of `string`, and
  * the char value at the preceding index is in the leading-surrogate range, then
  * the negated supplementary code point corresponding to this surrogate pair is
  * returned.

@@ -162,7 +162,7 @@ goog.debug.Formatter.getDateTimeStamp_ = function(logRecord) {
  * Returns the number as a two-digit string, meaning it prepends a 0 if the
  * number if less than 10.
  * @param {number} n The number to format.
- * @return {string} A two-digit string representation of {@code n}.
+ * @return {string} A two-digit string representation of `n`.
  * @private
  */
 goog.debug.Formatter.getTwoDigitString_ = function(n) {

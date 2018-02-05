@@ -30,7 +30,7 @@ goog.require('goog.object');
 
 
 /**
- * An implementation of {@code goog.events.Listenable} with full W3C
+ * An implementation of `goog.events.Listenable` with full W3C
  * EventTarget-like support (capture/bubble mechanism, stopping event
  * propagation, preventing default actions).
  *
@@ -44,8 +44,8 @@ goog.require('goog.object');
  *
  * Unless propagation is stopped, an event dispatched by an
  * EventTarget will bubble to the parent returned by
- * {@code getParentEventTarget}. To set the parent, call
- * {@code setParentEventTarget}. Subclasses that don't support
+ * `getParentEventTarget`. To set the parent, call
+ * `setParentEventTarget`. Subclasses that don't support
  * changing the parent can override the setter to throw an error.
  *
  * Example usage:

@@ -33,7 +33,7 @@ goog.require('goog.math.AffineTransform');
  * path. A path must start with a moveTo command.
  *
  * A "simple" path does not contain any arcs and may be transformed using
- * the {@code transform} method.
+ * the `transform` method.
  *
  * @struct
  * @constructor
@@ -353,8 +353,8 @@ goog.math.Path.prototype.close = function() {
 
 /**
  * Adds a path command to draw an arc centered at the point {@code (cx, cy)}
- * with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
- * {@code startAngle} through {@code extent} degrees. Positive rotation is in
+ * with radius `rx` along the x-axis and `ry` along the y-axis from
+ * `startAngle` through `extent` degrees. Positive rotation is in
  * the direction from positive x-axis to positive y-axis.
  *
  * @param {number} cx X coordinate of center of ellipse.
@@ -367,7 +367,7 @@ goog.math.Path.prototype.close = function() {
  * @param {boolean} connect If true, the starting point of the arc is connected
  *     to the current point.
  * @return {!goog.math.Path} The path itself.
- * @deprecated Use {@code arcTo} or {@code arcToAsCurves} instead.
+ * @deprecated Use `arcTo` or `arcToAsCurves` instead.
  */
 goog.math.Path.prototype.arc = function(
     cx, cy, rx, ry, fromAngle, extent, connect) {
@@ -387,8 +387,8 @@ goog.math.Path.prototype.arc = function(
 
 /**
  * Adds a path command to draw an arc starting at the path's current point,
- * with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
- * {@code startAngle} through {@code extent} degrees. Positive rotation is in
+ * with radius `rx` along the x-axis and `ry` along the y-axis from
+ * `startAngle` through `extent` degrees. Positive rotation is in
  * the direction from positive x-axis to positive y-axis.
  *
  * This method makes the path non-simple.
@@ -415,9 +415,9 @@ goog.math.Path.prototype.arcTo = function(rx, ry, fromAngle, extent) {
 
 
 /**
- * Same as {@code arcTo}, but approximates the arc using bezier curves.
+ * Same as `arcTo`, but approximates the arc using bezier curves.
 .* As a result, this method does not affect the simplified status of this path.
- * The algorithm is adapted from {@code java.awt.geom.ArcIterator}.
+ * The algorithm is adapted from `java.awt.geom.ArcIterator`.
  *
  * @param {number} rx Radius of ellipse on x axis.
  * @param {number} ry Radius of ellipse on y axis.
@@ -455,11 +455,11 @@ goog.math.Path.prototype.arcToAsCurves = function(rx, ry, fromAngle, extent) {
  * segment. The arguments to the callback function are the segment type and
  * an array of its arguments.
  *
- * The {@code LINETO} and {@code CURVETO} arrays can contain multiple
+ * The `LINETO` and `CURVETO` arrays can contain multiple
  * segments of the same type. The number of segments is the length of the
  * array divided by the segment length (2 for lines, 6 for  curves).
  *
- * As a convenience the {@code ARCTO} segment also includes the end point as the
+ * As a convenience the `ARCTO` segment also includes the end point as the
  * last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
  *
  * @param {function(!goog.math.Path.Segment, !Array<number>)} callback
@@ -505,7 +505,7 @@ goog.math.Path.prototype.clone = function() {
 
 /**
  * Returns true if this path contains no arcs. Simplified paths can be
- * created using {@code createSimplifiedPath}.
+ * created using `createSimplifiedPath`.
  *
  * @return {boolean} True if the path contains no arcs.
  */
@@ -530,8 +530,8 @@ goog.math.Path.simplifySegmentMap_ = (function() {
 
 
 /**
- * Creates a copy of the given path, replacing {@code arcTo} with
- * {@code arcToAsCurves}. The resulting path is simplified and can
+ * Creates a copy of the given path, replacing `arcTo` with
+ * `arcToAsCurves`. The resulting path is simplified and can
  * be transformed.
  *
  * @param {!goog.math.Path} src The path to simplify.

@@ -57,7 +57,7 @@ goog.require('goog.userAgent');
  * objects.
  *
  * Special handling is done for the IE8 browsers. See the IE8_EVENTS_KEY_
- * constant and the {@code publish} function for more information.
+ * constant and the `publish` function for more information.
  *
  *
  * @constructor @struct @extends {goog.Disposable}
@@ -261,7 +261,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.unsubscribeByKey = function(key) {
 
 /**
  * Subscribes a function to a topic. The function is invoked as a method on the
- * given {@code opt_context} object, or in the global scope if no context is
+ * given `opt_context` object, or in the global scope if no context is
  * specified. Subscribing the same function to the same topic multiple times
  * will result in multiple function invocations while publishing. Returns a
  * subscription key that can be used to unsubscribe the function from the topic
@@ -281,7 +281,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.subscribe = function(
 
 /**
  * Subscribes a single-use function to a topic. The function is invoked as a
- * method on the given {@code opt_context} object, or in the global scope if no
+ * method on the given `opt_context` object, or in the global scope if no
  * context is specified, and is then unsubscribed. Returns a subscription key
  * that can be used to unsubscribe the function from the topic via {@link
  * #unsubscribeByKey}.

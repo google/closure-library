@@ -160,7 +160,7 @@ goog.testing.events.setEventClientXY_ = function(event, opt_coords) {
  * with the left mouse button.
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton=} opt_button Mouse button;
- *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     defaults to `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the
@@ -414,7 +414,7 @@ goog.testing.events.fireMouseOutEvent = function(
  * Simulates a mousedown event on the given target.
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton=} opt_button Mouse button;
- *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     defaults to `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the
@@ -439,7 +439,7 @@ goog.testing.events.fireMouseDownEvent = function(
  * Simulates a mouseup event on the given target.
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton=} opt_button Mouse button;
- *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     defaults to `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the
@@ -464,7 +464,7 @@ goog.testing.events.fireMouseUpEvent = function(
  * the left mouse button.
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton=} opt_button Mouse button;
- *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     defaults to `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the
@@ -508,7 +508,7 @@ goog.testing.events.fireDoubleClickEvent = function(
  * @param {string} type The event type.
  * @param {EventTarget} target The target for the event.
  * @param {number=} opt_button Mouse button; defaults to
- *     {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ *     `goog.events.BrowserEvent.MouseButton.LEFT`.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the

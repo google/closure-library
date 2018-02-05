@@ -43,7 +43,7 @@ function setUpPage() {
 
 /**
  * A subclass of ButtonRenderer that overrides
- * {@code getStructuralCssClass} for testing purposes.
+ * `getStructuralCssClass` for testing purposes.
  * @constructor
  * @extends {goog.ui.ControlRenderer}
  */

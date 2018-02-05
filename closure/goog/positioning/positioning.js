@@ -195,10 +195,10 @@ goog.positioning.OverflowStatus.FAILED_VERTICAL =
  *     movableElement.
  * @param {goog.math.Box=} opt_viewport Box object describing the dimensions of
  *     the viewport. The viewport is specified relative to offsetParent of
- *     {@code movableElement}. In other words, the viewport can be thought of as
+ *     `movableElement`. In other words, the viewport can be thought of as
  *     describing a "position: absolute" element contained in the offsetParent.
  *     It defaults to visible area of nearest scrollable ancestor of
- *     {@code movableElement} (see {@code goog.style.getVisibleRectForElement}).
+ *     `movableElement` (see `goog.style.getVisibleRectForElement`).
  * @return {goog.positioning.OverflowStatus} Status bitmap,
  *     {@see goog.positioning.OverflowStatus}.
  */
@@ -274,7 +274,7 @@ goog.positioning.positionAtAnchor = function(
  * offsetParent. This value can be used to translate any x- and
  * y-offset relative to the page to an offset relative to the
  * offsetParent, which can then be used directly with as position
- * coordinate for {@code positionWithCoordinate}.
+ * coordinate for `positionWithCoordinate`.
  * @param {!Element} movableElement The element to calculate.
  * @return {!goog.math.Coordinate} The page offset, may be (0, 0).
  */

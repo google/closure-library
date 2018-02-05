@@ -85,7 +85,7 @@ goog.inherits(goog.structs.SimplePool, goog.Disposable);
 
 
 /**
- * Sets the {@code createObject} function which is used for creating a new
+ * Sets the `createObject` function which is used for creating a new
  * object in the pool.
  * @param {Function} createObjectFn Create object function which returns the
  *     newly created object.
@@ -96,7 +96,7 @@ goog.structs.SimplePool.prototype.setCreateObjectFn = function(createObjectFn) {
 
 
 /**
- * Sets the {@code disposeObject} function which is used for disposing of an
+ * Sets the `disposeObject` function which is used for disposing of an
  * object in the pool.
  * @param {Function} disposeObjectFn Dispose object function which takes the
  *     object to dispose as a parameter.

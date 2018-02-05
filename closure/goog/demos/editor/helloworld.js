@@ -65,7 +65,7 @@ goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(command) {
 /**
  * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
  * SELECTIONCHANGE events (these are handled by the super class implementation
- * of {@code execCommand}.
+ * of `execCommand`.
  * @param {string} command Command to execute.
  * @override
  * @protected

@@ -44,8 +44,8 @@ function setUpPage() {
 
 
 /**
- * A subclass of ControlRenderer that overrides {@code getAriaRole} and
- * {@code getStructuralCssClass} for testing purposes.
+ * A subclass of ControlRenderer that overrides `getAriaRole` and
+ * `getStructuralCssClass` for testing purposes.
  * @constructor
  * @extends {goog.ui.ControlRenderer}
  */

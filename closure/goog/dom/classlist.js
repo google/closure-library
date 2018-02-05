@@ -39,7 +39,7 @@ goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
 /**
  * Gets an array-like object of class names on an element.
  * @param {Element} element DOM node to get the classes of.
- * @return {!IArrayLike<?>} Class names on {@code element}.
+ * @return {!IArrayLike<?>} Class names on `element`.
  */
 goog.dom.classlist.get = function(element) {
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
@@ -161,7 +161,7 @@ goog.dom.classlist.remove = function(element, className) {
 
 /**
  * Removes a set of classes from an element.  Prefer this call to
- * repeatedly calling {@code goog.dom.classlist.remove} if you want to remove
+ * repeatedly calling `goog.dom.classlist.remove` if you want to remove
  * a large set of class names at once.
  * @param {Element} element The element from which to remove classes.
  * @param {IArrayLike<string>} classesToRemove An array-like object

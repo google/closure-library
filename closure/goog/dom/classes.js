@@ -45,7 +45,7 @@ goog.dom.classes.set = function(element, className) {
 /**
  * Gets an array of class names on an element
  * @param {Node} element DOM node to get class of.
- * @return {!Array<?>} Class names on {@code element}. Some browsers add extra
+ * @return {!Array<?>} Class names on `element`. Some browsers add extra
  *     properties to the array. Do not depend on any of these!
  * @deprecated Use goog.dom.classlist.get instead.
  */
@@ -79,7 +79,7 @@ goog.dom.classes.add = function(element, var_args) {
  * Removes a class or classes from an element.
  * @param {Node} element DOM node to remove class from.
  * @param {...string} var_args Class name(s) to remove.
- * @return {boolean} Whether all classes in {@code var_args} were found and
+ * @return {boolean} Whether all classes in `var_args` were found and
  *     removed.
  * @deprecated Use goog.dom.classlist.remove or goog.dom.classlist.removeAll
  *     instead.
@@ -98,7 +98,7 @@ goog.dom.classes.remove = function(element, var_args) {
  * {@link goog.dom.classes.addRemove}. Adds one or more classes to the supplied
  * classes array.
  * @param {Array<string>} classes All class names for the element, will be
- *     updated to have the classes supplied in {@code args} added.
+ *     updated to have the classes supplied in `args` added.
  * @param {Array<string>} args Class names to add.
  * @private
  */

@@ -89,7 +89,7 @@ goog.testing.MockRandom.prototype.install = function() {
 /**
  * @return {number} The next number in the sequence. If there are no more values
  *     left, this will return a random number, unless
- *     {@code this.strictlyFromSequence_} is true, in which case an error will
+ *     `this.strictlyFromSequence_` is true, in which case an error will
  *     be thrown.
  */
 goog.testing.MockRandom.prototype.random = function() {

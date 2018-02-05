@@ -366,12 +366,12 @@ goog.i18n.DateTimeFormat.removeRlmInPatterns_ = false;
  * formatted date/time even for locales where native digits are indicated.
  * Also sets whether to remove RLM unicode control characters when using
  * standard enumerated patterns (they exist e.g. in standard d/M/y for Arabic).
- * Production code should call this once before any {@code DateTimeFormat}
+ * Production code should call this once before any `DateTimeFormat`
  * object is instantiated.
  * Caveats:
  *    * Enforcing ASCII digits affects all future formatting by new or existing
- * {@code DateTimeFormat} objects.
- *    * Removal of RLM characters only applies to {@code DateTimeFormat} objects
+ * `DateTimeFormat` objects.
+ *    * Removal of RLM characters only applies to `DateTimeFormat` objects
  * instantiated after this call.
  * @param {boolean} enforceAsciiDigits Whether Ascii digits should be enforced.
  */
@@ -380,7 +380,7 @@ goog.i18n.DateTimeFormat.setEnforceAsciiDigits = function(enforceAsciiDigits) {
 
   // Also setting removal of RLM chracters when forcing ASCII digits since it's
   // the right thing to do for Arabic standard patterns. One could add an
-  // optional argument here or to the {@code DateTimeFormat} constructor to
+  // optional argument here or to the `DateTimeFormat` constructor to
   // enable an alternative behavior.
   goog.i18n.DateTimeFormat.removeRlmInPatterns_ = enforceAsciiDigits;
 };

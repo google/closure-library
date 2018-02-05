@@ -129,10 +129,10 @@ goog.structs.CircularBuffer.prototype.getValues = function() {
 
 
 /**
- * Returns the newest values in the buffer up to {@code count}.
+ * Returns the newest values in the buffer up to `count`.
  * @param {number} maxCount The maximum number of values to get. Should be a
  *     positive number.
- * @return {!Array<T>} The newest values in the buffer up to {@code count}. The
+ * @return {!Array<T>} The newest values in the buffer up to `count`. The
  *     values are ordered from oldest to newest.
  */
 goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {

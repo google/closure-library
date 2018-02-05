@@ -51,9 +51,9 @@ goog.global = this;
 /**
  * A hook for overriding the define values in uncompiled mode.
  *
- * In uncompiled mode, {@code CLOSURE_UNCOMPILED_DEFINES} may be defined before
- * loading base.js.  If a key is defined in {@code CLOSURE_UNCOMPILED_DEFINES},
- * {@code goog.define} will use the value instead of the default value.  This
+ * In uncompiled mode, `CLOSURE_UNCOMPILED_DEFINES` may be defined before
+ * loading base.js.  If a key is defined in `CLOSURE_UNCOMPILED_DEFINES`,
+ * `goog.define` will use the value instead of the default value.  This
  * allows flags to be overwritten without compilation (this is normally
  * accomplished with the compiler's "define" flag).
  *
@@ -765,7 +765,7 @@ goog.abstractMethod = function() {
 
 
 /**
- * Adds a {@code getInstance} static method that always returns the same
+ * Adds a `getInstance` static method that always returns the same
  * instance object.
  * @param {!Function} ctor The constructor for the class to add the static
  *     method to.
@@ -792,7 +792,7 @@ goog.addSingletonGetter = function(ctor) {
 
 /**
  * All singleton classes that have been instantiated, for testing. Don't read
- * it directly, use the {@code goog.testing.singleton} module. The compiler
+ * it directly, use the `goog.testing.singleton` module. The compiler
  * removes this variable if unused.
  * @type {!Array<!Function>}
  * @private
@@ -801,10 +801,10 @@ goog.instantiatedSingletons_ = [];
 
 
 /**
- * @define {boolean} Whether to load goog.modules using {@code eval} when using
+ * @define {boolean} Whether to load goog.modules using `eval` when using
  * the debug loader.  This provides a better debugging experience as the
  * source is unmodified and can be edited using Chrome Workspaces or similar.
- * However in some environments the use of {@code eval} is banned
+ * However in some environments the use of `eval` is banned
  * so we provide an alternative.
  */
 goog.define('goog.LOAD_MODULE_USING_EVAL', true);
@@ -908,7 +908,7 @@ goog.loadModule = function(moduleDef) {
   // NOTE: we allow function definitions to be either in the from
   // of a string to eval (which keeps the original source intact) or
   // in a eval forbidden environment (CSP) we allow a function definition
-  // which in its body must call {@code goog.module}, and return the exports
+  // which in its body must call `goog.module`, and return the exports
   // of the module.
   var previousState = goog.moduleLoaderState_;
   try {
@@ -1271,7 +1271,7 @@ goog.isObject = function(val) {
  * Gets a unique ID for an object. This mutates the object so that further calls
  * with the same object as a parameter returns the same value. The unique ID is
  * guaranteed to be unique across the current session amongst objects that are
- * passed into {@code getUid}. There is no guarantee that the ID is unique or
+ * passed into `getUid`. There is no guarantee that the ID is unique or
  * consistent across sessions. It is unsafe to generate unique ID for function
  * prototypes.
  *
@@ -1304,7 +1304,7 @@ goog.hasUid = function(obj) {
 
 /**
  * Removes the unique ID from an object. This is useful if the object was
- * previously mutated using {@code goog.getUid} in which case the mutation is
+ * previously mutated using `goog.getUid` in which case the mutation is
  * undone.
  * @param {Object} obj The object to remove the unique ID field from.
  */
@@ -2820,7 +2820,7 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * Writes a new script pointing to {@code src} directly into the DOM.
+   * Writes a new script pointing to `src` directly into the DOM.
    *
    * NOTE: This method is not CSP-compliant. @see this.appendScriptSrcNode_ for
    * the fallback mechanism.

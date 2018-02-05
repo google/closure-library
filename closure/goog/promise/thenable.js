@@ -34,13 +34,13 @@ goog.Thenable = function() {};
  * Adds callbacks that will operate on the result of the Thenable, returning a
  * new child Promise.
  *
- * If the Thenable is fulfilled, the {@code onFulfilled} callback will be
+ * If the Thenable is fulfilled, the `onFulfilled` callback will be
  * invoked with the fulfillment value as argument, and the child Promise will
  * be fulfilled with the return value of the callback. If the callback throws
  * an exception, the child Promise will be rejected with the thrown value
  * instead.
  *
- * If the Thenable is rejected, the {@code onRejected} callback will be invoked
+ * If the Thenable is rejected, the `onRejected` callback will be invoked
  * with the rejection reason as argument, and the child Promise will be rejected
  * with the return value of the callback or thrown value.
  *
@@ -78,7 +78,7 @@ goog.Thenable.prototype.then = function(
 
 /**
  * An expando property to indicate that an object implements
- * {@code goog.Thenable}.
+ * `goog.Thenable`.
  *
  * {@see addImplementation}.
  *
@@ -113,8 +113,8 @@ goog.Thenable.addImplementation = function(ctor) {
 
 /**
  * @param {?} object
- * @return {boolean} Whether a given instance implements {@code goog.Thenable}.
- *     The class/superclass of the instance must call {@code addImplementation}.
+ * @return {boolean} Whether a given instance implements `goog.Thenable`.
+ *     The class/superclass of the instance must call `addImplementation`.
  */
 goog.Thenable.isImplementedBy = function(object) {
   if (!object) {

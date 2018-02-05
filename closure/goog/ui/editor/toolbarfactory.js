@@ -58,8 +58,8 @@ goog.ui.editor.ToolbarFactory.getPrimaryFont = function(fontSpec) {
  * array of font descriptor objects, each of which must have the following
  * attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font menu (e.g. 'Tahoma')
- *   <li>{@code value} - Value for the corresponding 'font-family' CSS style
+ *   <li>`caption` - Caption to show in the font menu (e.g. 'Tahoma')
+ *   <li>`value` - Value for the corresponding 'font-family' CSS style
  *       (e.g. 'Tahoma, Arial, sans-serif')
  * </ul>
  * @param {!goog.ui.Select} button Font menu button.
@@ -75,7 +75,7 @@ goog.ui.editor.ToolbarFactory.addFonts = function(button, fonts) {
 
 /**
  * Adds a menu item to the given font menu button.  The first font listed in
- * the {@code value} argument is considered the font ID, so adding two items
+ * the `value` argument is considered the font ID, so adding two items
  * whose CSS style starts with the same font may lead to unpredictable results.
  * @param {!goog.ui.Select} button Font menu button.
  * @param {string} caption Caption to show for the font menu.
@@ -101,8 +101,8 @@ goog.ui.editor.ToolbarFactory.addFont = function(button, caption, value) {
  * be an array of font size descriptor objects, each of which must have the
  * following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font size menu (e.g. 'Huge')
- *   <li>{@code value} - Value for the corresponding HTML font size (e.g. 6)
+ *   <li>`caption` - Caption to show in the font size menu (e.g. 'Huge')
+ *   <li>`value` - Value for the corresponding HTML font size (e.g. 6)
  * </ul>
  * @param {!goog.ui.Select} button Font size menu button.
  * @param {!Array<{caption: string, value:number}>} sizes Array of font
@@ -116,7 +116,7 @@ goog.ui.editor.ToolbarFactory.addFontSizes = function(button, sizes) {
 
 
 /**
- * Adds a menu item to the given font size menu button.  The {@code value}
+ * Adds a menu item to the given font size menu button.  The `value`
  * argument must be a legacy HTML font size in the 0-7 range.
  * @param {!goog.ui.Select} button Font size menu button.
  * @param {string} caption Caption to show in the font size menu.
@@ -179,8 +179,8 @@ goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_ =
  * argument must be an array of format option descriptor objects, each of
  * which must have the following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the menu (e.g. 'Minor heading')
- *   <li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+ *   <li>`caption` - Caption to show in the menu (e.g. 'Minor heading')
+ *   <li>`command` - Corresponding {@link goog.dom.TagName} (e.g.
  *       'H4')
  * </ul>
  * @param {!goog.ui.Select} button "Format block" menu button.
@@ -215,7 +215,7 @@ goog.ui.editor.ToolbarFactory.addFormatOption = function(button, caption, tag) {
 /**
  * Creates a {@link goog.ui.Toolbar} containing the specified set of
  * toolbar buttons, and renders it into the given parent element.  Each
- * item in the {@code items} array must a {@link goog.ui.Control}.
+ * item in the `items` array must a {@link goog.ui.Control}.
  * @param {!Array<goog.ui.Control>} items Toolbar items; each must
  *     be a {@link goog.ui.Control}.
  * @param {!Element} elem Toolbar parent element.

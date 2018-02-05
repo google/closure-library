@@ -108,12 +108,12 @@ goog.net.Cookies.prototype.isValidValue = function(value) {
  * Sets a cookie.  The max_age can be -1 to set a session cookie. To remove and
  * expire cookies, use remove() instead.
  *
- * Neither the {@code name} nor the {@code value} are encoded in any way. It is
- * up to the callers of {@code get} and {@code set} (as well as all the other
+ * Neither the `name` nor the `value` are encoded in any way. It is
+ * up to the callers of `get` and `set` (as well as all the other
  * methods) to handle any possible encoding and decoding.
  *
- * @throws {!Error} If the {@code name} fails #goog.net.cookies.isValidName.
- * @throws {!Error} If the {@code value} fails #goog.net.cookies.isValidValue.
+ * @throws {!Error} If the `name` fails #goog.net.cookies.isValidName.
+ * @throws {!Error} If the `value` fails #goog.net.cookies.isValidValue.
  *
  * @param {string} name  The cookie name.
  * @param {string} value  The cookie value.
@@ -310,7 +310,7 @@ goog.net.Cookies.prototype.setCookie_ = function(s) {
 /**
  * Private helper function to allow testing cookies without depending on the
  * browser. IE6 can return null here.
- * @return {string} Returns the {@code document.cookie}.
+ * @return {string} Returns the `document.cookie`.
  * @private
  */
 goog.net.Cookies.prototype.getCookie_ = function() {
