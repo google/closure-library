@@ -50,7 +50,7 @@ goog.dom.classes.set = function(element, className) {
  * @deprecated Use goog.dom.classlist.get instead.
  */
 goog.dom.classes.get = function(element) {
-  var className = element.className;
+  var className = /** @type {!Element} */ (element).className;
   // Some types of elements don't have a className in IE (e.g. iframes).
   // Furthermore, in Firefox, className is not a string when the element is
   // an SVG element.

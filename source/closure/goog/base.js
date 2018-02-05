@@ -769,6 +769,8 @@ goog.abstractMethod = function() {
  * instance object.
  * @param {!Function} ctor The constructor for the class to add the static
  *     method to.
+ * @suppress {missingProperties} 'instance_' isn't a property on 'Function'
+ *     but we don't have a better type to use here.
  */
 goog.addSingletonGetter = function(ctor) {
   // instance_ is immediately set to prevent issues with sealed constructors

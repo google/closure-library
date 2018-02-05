@@ -315,8 +315,13 @@ function testLoad() {
   var error = null;
 
   var d = mm.load('a');
-  d.addCallback(function(ctx) { calledBack = true; });
-  d.addErrback(function(err) { error = err; });
+  d.then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
 
   assertFalse(calledBack);
   assertNull(error);
@@ -410,10 +415,20 @@ function testLoadMultiple() {
   var error2 = null;
 
   var dMap = mm.loadMultiple(['a', 'b']);
-  dMap['a'].addCallback(function(ctx) { calledBack = true; });
-  dMap['a'].addErrback(function(err) { error = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['b'].addErrback(function(err) { error2 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
 
   assertFalse(calledBack);
   assertFalse(calledBack2);
@@ -451,10 +466,20 @@ function testLoadMultipleWithDeps() {
   var error2 = null;
 
   var dMap = mm.loadMultiple(['a', 'b']);
-  dMap['a'].addCallback(function(ctx) { calledBack = true; });
-  dMap['a'].addErrback(function(err) { error = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['b'].addErrback(function(err) { error2 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
 
   assertFalse(calledBack);
   assertFalse(calledBack2);
@@ -501,12 +526,27 @@ function testLoadMultipleWithErrors() {
   var error3 = null;
 
   var dMap = mm.loadMultiple(['a', 'b', 'c']);
-  dMap['a'].addCallback(function(ctx) { calledBack = true; });
-  dMap['a'].addErrback(function(err) { error = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['b'].addErrback(function(err) { error2 = err; });
-  dMap['c'].addCallback(function(ctx) { calledBack3 = true; });
-  dMap['c'].addErrback(function(err) { error3 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
+  dMap['c'].then(
+      function(ctx) {
+        calledBack3 = true;
+      },
+      function(err) {
+        error3 = err;
+      });
 
   assertFalse(calledBack);
   assertFalse(calledBack2);
@@ -571,12 +611,27 @@ function testLoadMultipleWithErrorsFallbackOnSerial() {
   var error3 = null;
 
   var dMap = mm.loadMultiple(['a', 'b', 'c']);
-  dMap['a'].addCallback(function(ctx) { calledBack = true; });
-  dMap['a'].addErrback(function(err) { error = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['b'].addErrback(function(err) { error2 = err; });
-  dMap['c'].addCallback(function(ctx) { calledBack3 = true; });
-  dMap['c'].addErrback(function(err) { error3 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
+  dMap['c'].then(
+      function(ctx) {
+        calledBack3 = true;
+      },
+      function(err) {
+        error3 = err;
+      });
 
   assertFalse(calledBack);
   assertFalse(calledBack2);
@@ -653,8 +708,13 @@ function testLoadForUser() {
   var error = null;
 
   var d = mm.load('a', true);
-  d.addCallback(function(ctx) { calledBack = true; });
-  d.addErrback(function(err) { error = err; });
+  d.then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
 
   assertFalse(calledBack);
   assertNull(error);
@@ -756,8 +816,13 @@ function testLoadWhenPreloading() {
   assertTrue('module "c" should now be loading', mm.isModuleLoading('c'));
 
   var d = mm.load('c');
-  d.addCallback(function(ctx) { calledBack = true; });
-  d.addErrback(function(err) { error = err; });
+  d.then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
 
   assertTrue('module "c" should still be loading', mm.isModuleLoading('c'));
   clock.tick(5);
@@ -806,12 +871,27 @@ function testLoadMultipleWhenPreloading() {
   assertTrue('module "d" should now be loading', mm.isModuleLoading('d'));
 
   var dMap = mm.loadMultiple(['a', 'b', 'c']);
-  dMap['a'].addCallback(function(ctx) { calledBack = true; });
-  dMap['a'].addErrback(function(err) { error = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['b'].addErrback(function(err) { error2 = err; });
-  dMap['c'].addCallback(function(ctx) { calledBack3 = true; });
-  dMap['c'].addErrback(function(err) { error3 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
+  dMap['c'].then(
+      function(ctx) {
+        calledBack3 = true;
+      },
+      function(err) {
+        error3 = err;
+      });
 
   assertTrue('module "a" should be loading', mm.isModuleLoading('a'));
   assertTrue('module "b" should be loading', mm.isModuleLoading('b'));
@@ -899,10 +979,20 @@ function testLoadMultipleWhenPreloadingSameModules() {
   assertTrue('module "d" should now be loading', mm.isModuleLoading('d'));
 
   var dMap = mm.loadMultiple(['c', 'd']);
-  dMap['c'].addCallback(function(ctx) { calledBack = true; });
-  dMap['c'].addErrback(function(err) { error = err; });
-  dMap['d'].addCallback(function(ctx) { calledBack2 = true; });
-  dMap['d'].addErrback(function(err) { error2 = err; });
+  dMap['c'].then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
+  dMap['d'].then(
+      function(ctx) {
+        calledBack2 = true;
+      },
+      function(err) {
+        error2 = err;
+      });
 
   assertTrue('module "c" should still be loading', mm.isModuleLoading('c'));
   clock.tick(4);
@@ -949,9 +1039,15 @@ function testLoadWhenLoaded() {
   assertFalse('module "b" should be done loading', mm.isModuleLoading('b'));
 
   var d = mm.load('b');
-  d.addCallback(function(ctx) { calledBack = true; });
-  d.addErrback(function(err) { error = err; });
+  d.then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
 
+  clock.tick(1);
   assertTrue(calledBack);
   assertNull(error);
 }
@@ -975,8 +1071,13 @@ function testLoadWithFailingModule() {
   var error = null;
 
   var d = mm.load('a');
-  d.addCallback(function(ctx) { calledBack = true; });
-  d.addErrback(function(err) { error = err; });
+  d.then(
+      function(ctx) {
+        calledBack = true;
+      },
+      function(err) {
+        error = err;
+      });
 
   assertFalse(calledBack);
   assertNull(error);
@@ -1019,16 +1120,36 @@ function testLoadMultipleWithFailingModule() {
   var error22 = null;
 
   var dMap = mm.loadMultiple(['a', 'b']);
-  dMap['a'].addCallback(function(ctx) { calledBack11 = true; });
-  dMap['a'].addErrback(function(err) { error11 = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack12 = true; });
-  dMap['b'].addErrback(function(err) { error12 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack11 = true;
+      },
+      function(err) {
+        error11 = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack12 = true;
+      },
+      function(err) {
+        error12 = err;
+      });
 
   var dMap2 = mm.loadMultiple(['b', 'c']);
-  dMap2['b'].addCallback(function(ctx) { calledBack21 = true; });
-  dMap2['b'].addErrback(function(err) { error21 = err; });
-  dMap2['c'].addCallback(function(ctx) { calledBack22 = true; });
-  dMap2['c'].addErrback(function(err) { error22 = err; });
+  dMap2['b'].then(
+      function(ctx) {
+        calledBack21 = true;
+      },
+      function(err) {
+        error21 = err;
+      });
+  dMap2['c'].then(
+      function(ctx) {
+        calledBack22 = true;
+      },
+      function(err) {
+        error22 = err;
+      });
 
   assertFalse(calledBack11);
   assertFalse(calledBack12);
@@ -1102,18 +1223,43 @@ function testLoadMultipleWithFailingModuleDependencies() {
   var error23 = null;
 
   var dMap = mm.loadMultiple(['a', 'b']);
-  dMap['a'].addCallback(function(ctx) { calledBack11 = true; });
-  dMap['a'].addErrback(function(err) { error11 = err; });
-  dMap['b'].addCallback(function(ctx) { calledBack12 = true; });
-  dMap['b'].addErrback(function(err) { error12 = err; });
+  dMap['a'].then(
+      function(ctx) {
+        calledBack11 = true;
+      },
+      function(err) {
+        error11 = err;
+      });
+  dMap['b'].then(
+      function(ctx) {
+        calledBack12 = true;
+      },
+      function(err) {
+        error12 = err;
+      });
 
   var dMap2 = mm.loadMultiple(['c', 'd', 'e']);
-  dMap2['c'].addCallback(function(ctx) { calledBack21 = true; });
-  dMap2['c'].addErrback(function(err) { error21 = err; });
-  dMap2['d'].addCallback(function(ctx) { calledBack22 = true; });
-  dMap2['d'].addErrback(function(err) { error22 = err; });
-  dMap2['e'].addCallback(function(ctx) { calledBack23 = true; });
-  dMap2['e'].addErrback(function(err) { error23 = err; });
+  dMap2['c'].then(
+      function(ctx) {
+        calledBack21 = true;
+      },
+      function(err) {
+        error21 = err;
+      });
+  dMap2['d'].then(
+      function(ctx) {
+        calledBack22 = true;
+      },
+      function(err) {
+        error22 = err;
+      });
+  dMap2['e'].then(
+      function(ctx) {
+        calledBack23 = true;
+      },
+      function(err) {
+        error23 = err;
+      });
 
   assertFalse(calledBack11);
   assertFalse(calledBack12);

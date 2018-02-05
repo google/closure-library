@@ -138,7 +138,9 @@ goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(params) {
   var url = goog.html.TrustedResourceUrl.unwrap(this);
   var separator = /\?/.test(url) ? '&' : '?';
   for (var key in params) {
-    var values = goog.isArray(params[key]) ? params[key] : [params[key]];
+    var values = goog.isArray(params[key]) ?
+        /** @type {!Array<*>} */ (params[key]) :
+        [params[key]];
     for (var i = 0; i < values.length; i++) {
       if (values[i] == null) {
         continue;

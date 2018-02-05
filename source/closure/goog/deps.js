@@ -708,7 +708,7 @@ goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goo
 goog.addDependency('labs/useragent/util_test.js', ['goog.labs.userAgent.utilTest'], ['goog.functions', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {});
 goog.addDependency('labs/useragent/verifier_test.js', ['goog.labs.useragent.verifierTest'], ['goog.labs.userAgent.browser', 'goog.labs.useragent.verifier', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
-goog.addDependency('loader/abstractmodulemanager.js', ['goog.loader.AbstractModuleManager', 'goog.loader.AbstractModuleManager.CallbackType', 'goog.loader.AbstractModuleManager.FailureType'], ['goog.Disposable', 'goog.async.Deferred', 'goog.module.AbstractModuleLoader', 'goog.module.ModuleInfo', 'goog.module.ModuleLoadCallback'], {});
+goog.addDependency('loader/abstractmodulemanager.js', ['goog.loader.AbstractModuleManager', 'goog.loader.AbstractModuleManager.CallbackType', 'goog.loader.AbstractModuleManager.FailureType'], ['goog.Disposable', 'goog.module.AbstractModuleLoader', 'goog.module.ModuleInfo', 'goog.module.ModuleLoadCallback'], {});
 goog.addDependency('loader/activemodulemanager.js', ['goog.loader.activeModuleManager'], ['goog.asserts', 'goog.loader.AbstractModuleManager'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], [], {});
 goog.addDependency('locale/countrylanguagenames_test.js', ['goog.locale.countryLanguageNamesTest'], ['goog.locale', 'goog.testing.jsunit'], {});

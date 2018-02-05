@@ -21,6 +21,7 @@ goog.require('goog.style.bidi');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+
 // Updates the calculated metrics.
 function updateInfo() {
   var element = document.getElementById('scrolledElementRtl');
