@@ -148,13 +148,14 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * conditions) as a background process so the OPEN event will be fired sooner
  * to reduce the initial handshake delay. This option defaults to true.
  *
- * fastHandshake: experimental feature to speed up the initial handshake, e.g.
- * leveraging QUIC 0-RTT, in-band version negotiation. This option defaults
- * to false. To set this option to true, backgroundChannelTest needs be set
- * to true too. Note it is allowed to send messages before the Open event is
- * received after a channel has been connected. In order to enable 0-RTT,
- * messages may be encoded as part of URL and therefore there will be a size
- * limit for those immediate messages (e.g. 4KB).
+ * fastHandshake: experimental feature to enable true 0-RTT message delivery,
+ * e.g. by leveraging QUIC 0-RTT (which requires GET to be used). This option
+ * defaults to false. When this option is enabled, backgroundChannelTest will
+ * be forced to true. Note it is allowed to send messages before Open event is
+ * received, after a channel has been connected. In order to enable 0-RTT,
+ * messages need be encoded as part of URL and therefore there needs be a size
+ * limit (e.g. 16KB) for messages that need be sent immediately
+ * as part of the handshake.
  *
  * disableRedact: whether to disable logging redact. By default, redact is
  * enabled to remove any message payload or user-provided info

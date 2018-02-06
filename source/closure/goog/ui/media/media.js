@@ -26,7 +26,7 @@
  *
  * In MVC terms, {@link goog.ui.media.Media} is the Controller,
  * {@link goog.ui.media.MediaRenderer} + CSS definitions are the View and
- * {@code goog.ui.media.MediaModel} is the data Model. Typically,
+ * `goog.ui.media.MediaModel` is the data Model. Typically,
  * MediaRenderer will be subclassed to provide media specific renderers.
  * MediaRenderer subclasses are also responsible for defining the data model.
  *
@@ -55,7 +55,7 @@
  * It requires a few CSS rules to be defined, which you should use to control
  * how the component is displayed. {@link goog.ui.ControlRenderer}s is very CSS
  * intensive, which separates the UI structure (the HTML DOM elements, which is
- * created by the {@code goog.ui.media.MediaRenderer}) from the UI view (which
+ * created by the `goog.ui.media.MediaRenderer`) from the UI view (which
  * nodes are visible, which aren't, where they are positioned. These are defined
  * on the CSS rules for each state). A few examples of CSS selectors that needs
  * to be defined are:
@@ -192,7 +192,7 @@ goog.inherits(goog.ui.media.MediaRenderer, goog.ui.ControlRenderer);
 
 /**
  * Builds the common DOM structure of medias. Builds an outer div, and appends
- * a child div with the {@code goog.ui.Control.getContent} content. Marks the
+ * a child div with the `goog.ui.Control.getContent` content. Marks the
  * caption with a {@code this.getClassClass()} + '-caption' css flag, so that
  * specific renderers can hide/show the caption as desired.
  *

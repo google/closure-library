@@ -27,7 +27,7 @@ goog.provide('goog.fx.Transition.EventType');
 
 /**
  * An interface for programmatic transition. Must extend
- * {@code goog.events.EventTarget}.
+ * `goog.events.EventTarget`.
  * @interface
  */
 goog.fx.Transition = function() {};

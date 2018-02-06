@@ -327,7 +327,7 @@ goog.proto2.Message.prototype.clear = function(field) {
 /**
  * Compares this message with another one ignoring the unknown fields.
  * @param {?} other The other message.
- * @return {boolean} Whether they are equal. Returns false if the {@code other}
+ * @return {boolean} Whether they are equal. Returns false if the `other`
  *     argument is a different type of message or not a message.
  */
 goog.proto2.Message.prototype.equals = function(other) {

@@ -58,7 +58,7 @@ goog.ui.MenuBarRenderer.prototype.getCssClass = function() {
 
 /**
  * Returns the default orientation of containers rendered or decorated by this
- * renderer.  This implementation returns {@code HORIZONTAL}.
+ * renderer.  This implementation returns `HORIZONTAL`.
  * @return {goog.ui.Container.Orientation} Default orientation for containers
  *     created or decorated by this renderer.
  * @override

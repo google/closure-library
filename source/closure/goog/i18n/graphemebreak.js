@@ -405,7 +405,7 @@ goog.i18n.GraphemeBreak.getCodePoint_ = function(str, index) {
  * Legacy function. Does not cover cases where a sequence of code points is
  * required in order to decide if there is a grapheme cluster boundary, such as
  * emoji modifier sequences and emoji flag sequences. To cover all cases please
- * use {@code hasGraphemeBreakStrings}.
+ * use `hasGraphemeBreakStrings`.
  *
  * There are two kinds of grapheme clusters: 1) Legacy 2) Extended. This method
  * is to check for both using a boolean flag to switch between them. If no flag

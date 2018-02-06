@@ -684,7 +684,7 @@ function testRateLimitArgumentAndScopeBinding() {
 
 
 /**
- * Wraps a {@code goog.testing.recordFunction} with the specified decorator and
+ * Wraps a `goog.testing.recordFunction` with the specified decorator and
  * executes a list of command sequences, asserting that in each case the
  * decorated function is called the expected number of times.
  * @param {function():*} decorator The async decorator to test.

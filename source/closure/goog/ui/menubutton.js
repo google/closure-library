@@ -366,7 +366,7 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
 
 
 /**
- * Handles {@code ACTION} events dispatched by an activated menu item.
+ * Handles `ACTION` events dispatched by an activated menu item.
  * @param {goog.events.Event} e Action event to handle.
  * @protected
  */
@@ -377,7 +377,7 @@ goog.ui.MenuButton.prototype.handleMenuAction = function(e) {
 
 
 /**
- * Handles {@code BLUR} events dispatched by the popup menu by closing it.
+ * Handles `BLUR` events dispatched by the popup menu by closing it.
  * Only registered if the menu is focusable.
  * @param {goog.events.Event} e Blur event dispatched by a focusable menu.
  */
@@ -921,7 +921,7 @@ goog.ui.MenuButton.prototype.attachKeyDownEventListener_ = function(attach) {
 
 
 /**
- * Handles {@code HIGHLIGHT} events dispatched by the attached menu.
+ * Handles `HIGHLIGHT` events dispatched by the attached menu.
  * @param {goog.events.Event} e Highlight event to handle.
  */
 goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
@@ -933,7 +933,7 @@ goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
 
 
 /**
- * Handles {@code KEYDOWN} events dispatched by the button element. When the
+ * Handles `KEYDOWN` events dispatched by the button element. When the
  * button is focusable and the menu is present and visible, prevents the event
  * from propagating since the desired behavior is only to close the menu.
  * @param {goog.events.Event} e KeyDown event to handle.
@@ -962,7 +962,7 @@ goog.ui.MenuButton.prototype.handleUnHighlightItem = function(e) {
 
 
 /**
- * Handles {@code CLOSE} events dispatched by the associated menu.
+ * Handles `CLOSE` events dispatched by the associated menu.
  * @param {goog.events.Event} e Close event to handle.
  */
 goog.ui.MenuButton.prototype.handleCloseItem = function(e) {

@@ -113,7 +113,7 @@ goog.soy.renderElement = function(
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper used to
- *     create DOM nodes; defaults to {@code goog.dom.getDomHelper}.
+ *     create DOM nodes; defaults to `goog.dom.getDomHelper`.
  * @return {!Node} The resulting node or document fragment.
  * @template ARG_TYPES
  */
@@ -145,7 +145,7 @@ goog.soy.renderAsFragment = function(
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper used to
- *     create DOM nodes; defaults to {@code goog.dom.getDomHelper}.
+ *     create DOM nodes; defaults to `goog.dom.getDomHelper`.
  * @return {!Element} Rendered template contents, wrapped in a parent DIV
  *     element if necessary.
  * @template ARG_TYPES
@@ -170,7 +170,7 @@ goog.soy.renderAsElement = function(
  * @param {!goog.soy.data.SanitizedContent} templateResult The processed
  *     template of kind HTML or TEXT (which will be escaped).
  * @param {?goog.dom.DomHelper=} opt_domHelper The DOM helper used to
- *     create DOM nodes; defaults to {@code goog.dom.getDomHelper}.
+ *     create DOM nodes; defaults to `goog.dom.getDomHelper`.
  * @return {!Element} Rendered template contents, wrapped in a parent DIV
  *     element if necessary.
  */
@@ -180,11 +180,11 @@ goog.soy.convertToElement = function(templateResult, opt_domHelper) {
 
 
 /**
- * Non-strict version of {@code goog.soy.convertToElement}.
+ * Non-strict version of `goog.soy.convertToElement`.
  *
  * @param {*} templateResult The processed template.
  * @param {?goog.dom.DomHelper=} opt_domHelper The DOM helper used to
- *     create DOM nodes; defaults to {@code goog.dom.getDomHelper}.
+ *     create DOM nodes; defaults to `goog.dom.getDomHelper`.
  * @return {!Element} Rendered template contents, wrapped in a parent DIV
  *     element if necessary.
  * @private

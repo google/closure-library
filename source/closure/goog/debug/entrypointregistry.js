@@ -60,7 +60,7 @@ goog.debug.EntryPointMonitor.prototype.wrap;
  * order that they were wrapped.
  *
  * @param {!Function} fn A function to unwrap.
- * @return {!Function} The unwrapped function, or {@code fn} if it was not
+ * @return {!Function} The unwrapped function, or `fn` if it was not
  *     a wrapped function created by this monitor.
  */
 goog.debug.EntryPointMonitor.prototype.unwrap;

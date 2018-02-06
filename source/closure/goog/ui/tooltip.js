@@ -690,7 +690,7 @@ goog.ui.Tooltip.prototype.hasActiveChild = function() {
 
 
 /**
- * Saves the current mouse cursor position to {@code this.cursorPosition}.
+ * Saves the current mouse cursor position to `this.cursorPosition`.
  * @param {goog.events.BrowserEvent} event MOUSEOVER or MOUSEMOVE event.
  * @private
  */

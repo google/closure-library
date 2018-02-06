@@ -37,8 +37,8 @@ goog.require('goog.string.TypedString');
  * browser.
  *
  * Instances of this type must be created via the factory methods
- * ({@code goog.html.SafeStyle.create} or
- * {@code goog.html.SafeStyle.fromConstant}) and not by invoking its
+ * (`goog.html.SafeStyle.create` or
+ * `goog.html.SafeStyle.fromConstant`) and not by invoking its
  * constructor. The constructor intentionally takes no parameters and the type
  * is immutable; hence only a default instance corresponding to the empty string
  * can be obtained via constructor invocation.
@@ -72,11 +72,11 @@ goog.require('goog.string.TypedString');
  * would escape from the style attribute).
  *
  * Values of this type must be composable, i.e. for any two values
- * {@code style1} and {@code style2} of this type,
+ * `style1` and `style2` of this type,
  * {@code goog.html.SafeStyle.unwrap(style1) +
  * goog.html.SafeStyle.unwrap(style2)} must itself be a value that satisfies
  * the SafeStyle type constraint. This requirement implies that for any value
- * {@code style} of this type, {@code goog.html.SafeStyle.unwrap(style)} must
+ * `style` of this type, {@code goog.html.SafeStyle.unwrap(style)} must
  * not end in a "property value" or "property name" context. For example,
  * a value of {@code background:url("} or {@code font-} would not satisfy the
  * SafeStyle contract. This is because concatenating such strings with a
@@ -154,21 +154,21 @@ goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 /**
  * Creates a SafeStyle object from a compile-time constant string.
  *
- * {@code style} should be in the format
+ * `style` should be in the format
  * {@code name: value; [name: value; ...]} and must not have any < or >
  * characters in it. This is so that SafeStyle's contract is preserved,
  * allowing the SafeStyle to correctly be interpreted as a sequence of CSS
  * declarations and without affecting the syntactic structure of any
  * surrounding CSS and HTML.
  *
- * This method performs basic sanity checks on the format of {@code style}
- * but does not constrain the format of {@code name} and {@code value}, except
+ * This method performs basic sanity checks on the format of `style`
+ * but does not constrain the format of `name` and `value`, except
  * for disallowing tag characters.
  *
  * @param {!goog.string.Const} style A compile-time-constant string from which
  *     to create a SafeStyle.
  * @return {!goog.html.SafeStyle} A SafeStyle object initialized to
- *     {@code style}.
+ *     `style`.
  */
 goog.html.SafeStyle.fromConstant = function(style) {
   var styleString = goog.string.Const.unwrap(style);
@@ -203,7 +203,7 @@ goog.html.SafeStyle.checkStyle_ = function(style) {
  * Returns this SafeStyle's value as a string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
- * indeed {@code SafeStyle}, use {@code goog.html.SafeStyle.unwrap} instead of
+ * indeed `SafeStyle`, use `goog.html.SafeStyle.unwrap` instead of
  * this method. If in doubt, assume that it's security relevant. In particular,
  * note that goog.html functions which return a goog.html type do not guarantee
  * the returned instance is of the right type. For example:
@@ -230,7 +230,7 @@ if (goog.DEBUG) {
    * Returns a debug string-representation of this value.
    *
    * To obtain the actual string value wrapped in a SafeStyle, use
-   * {@code goog.html.SafeStyle.unwrap}.
+   * `goog.html.SafeStyle.unwrap`.
    *
    * @see goog.html.SafeStyle#unwrap
    * @override
@@ -248,9 +248,9 @@ if (goog.DEBUG) {
  *
  * @param {!goog.html.SafeStyle} safeStyle The object to extract from.
  * @return {string} The safeStyle object's contained string, unless
- *     the run-time type check fails. In that case, {@code unwrap} returns an
+ *     the run-time type check fails. In that case, `unwrap` returns an
  *     innocuous string, or, if assertions are enabled, throws
- *     {@code goog.asserts.AssertionError}.
+ *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeStyle.unwrap = function(safeStyle) {
   // Perform additional Run-time type-checking to ensure that

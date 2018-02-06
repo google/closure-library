@@ -463,7 +463,7 @@ goog.dom.selection.canonicalizePositionIe_ = function(textfield, pos) {
  *
  * @param {Element} el The element to check for.
  * @return {boolean} Whether it's okay to use the selectionStart and
- *     selectionEnd properties on {@code el}.
+ *     selectionEnd properties on `el`.
  * @private
  */
 goog.dom.selection.useSelectionProperties_ = function(el) {

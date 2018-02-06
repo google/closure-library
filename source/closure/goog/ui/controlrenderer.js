@@ -46,14 +46,14 @@ goog.forwardDeclare('goog.ui.Control');  // circular
  * tailored for them by extending this class.  Controls that use renderers
  * delegate one or more of the following API methods to the renderer:
  * <ul>
- *    <li>{@code createDom} - renders the DOM for the component
- *    <li>{@code canDecorate} - determines whether an element can be decorated
+ *    <li>`createDom` - renders the DOM for the component
+ *    <li>`canDecorate` - determines whether an element can be decorated
  *        by the component
- *    <li>{@code decorate} - decorates an existing element with the component
- *    <li>{@code setState} - updates the appearance of the component based on
+ *    <li>`decorate` - decorates an existing element with the component
+ *    <li>`setState` - updates the appearance of the component based on
  *        its state
- *    <li>{@code getContent} - returns the component's content
- *    <li>{@code setContent} - sets the component's content
+ *    <li>`getContent` - returns the component's content
+ *    <li>`setContent` - sets the component's content
  * </ul>
  * Controls are stateful; renderers, on the other hand, should be stateless and
  * reusable.
@@ -277,7 +277,7 @@ goog.ui.ControlRenderer.prototype.canDecorate = function(element) {
 
 
 /**
- * Default implementation of {@code decorate} for {@link goog.ui.Control}s.
+ * Default implementation of `decorate` for {@link goog.ui.Control}s.
  * Initializes the control's ID, content, and state based on the ID of the
  * element, its child nodes, and its CSS classes, respectively.  Returns the
  * element.
@@ -495,7 +495,7 @@ goog.ui.ControlRenderer.prototype.setRightToLeft = function(
 
 /**
  * Returns true if the control's key event target supports keyboard focus
- * (based on its {@code tabIndex} attribute), false otherwise.
+ * (based on its `tabIndex` attribute), false otherwise.
  * @param {goog.ui.Control} control Control whose key event target is to be
  *     checked.
  * @return {boolean} Whether the control's key event target is focusable.
@@ -512,8 +512,8 @@ goog.ui.ControlRenderer.prototype.isFocusable = function(control) {
 
 /**
  * Updates the control's key event target to make it focusable or non-focusable
- * via its {@code tabIndex} attribute.  Does nothing if the control doesn't
- * support the {@code FOCUSED} state, or if it has no key event target.
+ * via its `tabIndex` attribute.  Does nothing if the control doesn't
+ * support the `FOCUSED` state, or if it has no key event target.
  * @param {goog.ui.Control} control Control whose key event target is to be
  *     updated.
  * @param {boolean} focusable Whether to enable keyboard focus support on the
@@ -759,7 +759,7 @@ goog.ui.ControlRenderer.prototype.getStructuralCssClass = function() {
  *       different from the renderer-specific CSS class), followed by
  *   <li>any state-specific classes returned by {@link #getClassNamesForState},
  *       followed by
- *   <li>any extra classes returned by the control's {@code getExtraClassNames}
+ *   <li>any extra classes returned by the control's `getExtraClassNames`
  *       method and
  *   <li>for IE6 and lower, additional combined classes from
  *       {@link getAppliedCombinedClassNames_}.

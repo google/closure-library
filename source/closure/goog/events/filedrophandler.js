@@ -34,13 +34,13 @@ goog.require('goog.log.Level');
 
 
 /**
- * A files drag and drop event detector. Gets an {@code element} as parameter
- * and fires {@code goog.events.FileDropHandler.EventType.DROP} event when files
- * are dropped in the {@code element}.
+ * A files drag and drop event detector. Gets an `element` as parameter
+ * and fires `goog.events.FileDropHandler.EventType.DROP` event when files
+ * are dropped in the `element`.
  *
  * @param {Element|Document} element The element or document to listen on.
  * @param {boolean=} opt_preventDropOutside Whether to prevent a drop on the
- *     area outside the {@code element}. Default false.
+ *     area outside the `element`. Default false.
  * @constructor
  * @extends {goog.events.EventTarget}
  * @final

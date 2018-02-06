@@ -32,10 +32,10 @@ goog.require('goog.testing.mockmatchers');
 /**
  * Mock of goog.editor.Field.
  * @param {Window=} opt_window Window the field would edit.  Defaults to
- *     {@code window}.
+ *     `window`.
  * @param {Window=} opt_appWindow "AppWindow" of the field, which can be
- *     different from {@code opt_window} when mocking a field that uses an
- *     iframe. Defaults to {@code opt_window}.
+ *     different from `opt_window` when mocking a field that uses an
+ *     iframe. Defaults to `opt_window`.
  * @param {goog.dom.AbstractRange=} opt_range An object (mock or real) to be
  *     returned by getRange(). If omitted, a new goog.dom.Range is created
  *     from the window every time getRange() is called.

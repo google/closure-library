@@ -54,7 +54,7 @@ goog.require('goog.ui.Control');
  *    <li>default mouse and keyboard event handling methods.
  *  </ul>
  * @param {?goog.ui.Container.Orientation=} opt_orientation Container
- *     orientation; defaults to {@code VERTICAL}.
+ *     orientation; defaults to `VERTICAL`.
  * @param {goog.ui.ContainerRenderer=} opt_renderer Renderer used to render or
  *     decorate the container; defaults to {@link goog.ui.ContainerRenderer}.
  * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for document
@@ -155,7 +155,7 @@ goog.ui.Container.prototype.enabled_ = true;
 
 /**
  * Whether the container supports keyboard focus.  Defaults to true.  Focusable
- * containers have a {@code tabIndex} and can be navigated to via the keyboard.
+ * containers have a `tabIndex` and can be navigated to via the keyboard.
  * @type {boolean}
  * @private
  */
@@ -731,7 +731,7 @@ goog.ui.Container.prototype.handleKeyEvent = function(e) {
 /**
  * Attempts to handle a keyboard event; returns true if the event was handled,
  * false otherwise.  If the container is enabled, and a child is highlighted,
- * calls the child control's {@code handleKeyEvent} method to give the control
+ * calls the child control's `handleKeyEvent` method to give the control
  * a chance to handle the event first.
  * @param {goog.events.KeyEvent} e Key event to handle.
  * @return {boolean} Whether the event was handled by the container (or one of
@@ -957,7 +957,7 @@ goog.ui.Container.prototype.updateHighlightedIndex_ = function(
  * uses {@link #removeChild} internally, we only need to override this method.
  * @param {string|goog.ui.Component} control The ID of the child to remove, or
  *     the control itself.
- * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
+ * @param {boolean=} opt_unrender Whether to call `exitDocument` on the
  *     removed control, and detach its DOM from the document (defaults to
  *     false).
  * @return {goog.ui.Control} The removed control, if any.
@@ -1084,8 +1084,8 @@ goog.ui.Container.prototype.isEnabled = function() {
 
 
 /**
- * Enables/disables the container based on the {@code enable} argument.
- * Dispatches an {@code ENABLED} or {@code DISABLED} event prior to changing
+ * Enables/disables the container based on the `enable` argument.
+ * Dispatches an `ENABLED` or `DISABLED` event prior to changing
  * the container's state, which may be caught and canceled to prevent the
  * container from changing state.  Also enables/disables child controls.
  * @param {boolean} enable Whether to enable or disable the container.

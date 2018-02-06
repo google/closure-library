@@ -150,7 +150,7 @@ goog.dom.forms.getFormDataString = function(form) {
  * string. This doesn't support file inputs.
  * @param {HTMLFormElement} form The form.
  * @param {Object} result The object form data is being put in.
- * @param {Function} fnAppend Function that takes {@code result}, an element
+ * @param {Function} fnAppend Function that takes `result`, an element
  *     name, and an element value, and adds the name/value pair to the result
  *     object.
  * @private

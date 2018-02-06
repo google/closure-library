@@ -70,7 +70,7 @@ goog.define('goog.userAgent.ASSUME_OPERA', false);
 
 /**
  * @define {boolean} Whether the
- *     {@code goog.userAgent.isVersionOrHigher}
+ *     `goog.userAgent.isVersionOrHigher`
  *     function will return true for any version.
  */
 goog.define('goog.userAgent.ASSUME_ANY_VERSION', false);
@@ -527,7 +527,7 @@ goog.userAgent.isVersionOrHigher = function(version) {
 
 
 /**
- * Deprecated alias to {@code goog.userAgent.isVersionOrHigher}.
+ * Deprecated alias to `goog.userAgent.isVersionOrHigher`.
  * @param {string|number} version The version to check.
  * @return {boolean} Whether the user agent version is higher or the same as
  *     the given version.
@@ -551,7 +551,7 @@ goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
 
 
 /**
- * Deprecated alias to {@code goog.userAgent.isDocumentModeOrHigher}.
+ * Deprecated alias to `goog.userAgent.isDocumentModeOrHigher`.
  * @param {number} version The version to check.
  * @return {boolean} Whether the IE effective document mode is higher or the
  *      same as the given version.

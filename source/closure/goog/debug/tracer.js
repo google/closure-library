@@ -307,26 +307,26 @@ goog.debug.Trace_.Event_.prototype.toString = function() {
 
 /**
  * A class to specify the types of the callback functions used by
- * {@code addTraceCallbacks}.
+ * `addTraceCallbacks`.
  * @record
  */
 goog.debug.Trace_.TracerCallbacks = function() {
   /**
-   * A callback function to be called at {@code startTrace} with two parameters:
+   * A callback function to be called at `startTrace` with two parameters:
    * a number as the started trace id and a string as the comment on the trace.
    * @type {function(number, string)|undefined}
    */
   this.start;
   /**
    * A callback function to be called when a trace should be stopped either at
-   * {@code startTrace} or {@code clearOutstandingEvents_} with two parameters:
+   * `startTrace` or `clearOutstandingEvents_` with two parameters:
    * a number as the id of the trace being stopped and an object containing
    * extra information about stopping the trace (e.g. if it is cancelled).
    * @type {function(number, !goog.debug.StopTraceDetail)|undefined}
    */
   this.stop;
   /**
-   * A callback function to be called at {@code addComment} with two parameters:
+   * A callback function to be called at `addComment` with two parameters:
    * a string as the comment on the trace and an optional time stamp number (in
    * milliseconds since epoch) when the comment should be added as a trace.
    * @type {function(string, number=)|undefined}
@@ -369,8 +369,8 @@ goog.debug.Trace_.prototype.removeAllListeners = function() {
 
 
 /**
- * Adds up to three callback functions which are called on {@code startTracer},
- * {@code stopTracer}, {@code clearOutstandingEvents_} and {@code addComment} in
+ * Adds up to three callback functions which are called on `startTracer`,
+ * `stopTracer`, `clearOutstandingEvents_` and `addComment` in
  * order to bridge from the Closure tracer singleton object to any tracer class.
  * @param {!goog.debug.Trace_.TracerCallbacks} callbacks An object literal
  *   containing the callback functions.

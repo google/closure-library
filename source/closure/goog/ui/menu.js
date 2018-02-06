@@ -79,7 +79,7 @@ goog.ui.Menu = function(opt_domHelper, opt_renderer) {
 
   // Unlike Containers, Menus aren't keyboard-accessible by default.  This line
   // preserves backwards compatibility with code that depends on menus not
-  // receiving focus - e.g. {@code goog.ui.MenuButton}.
+  // receiving focus - e.g. `goog.ui.MenuButton`.
   this.setFocusable(false);
 };
 goog.inherits(goog.ui.Menu, goog.ui.Container);

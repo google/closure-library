@@ -30,9 +30,9 @@ goog.require('goog.iter.StopIteration');
 /**
  * There are three types of token:
  *  <ol>
- *    <li>{@code START_TAG} - The beginning of a tag.
- *    <li>{@code OTHER} - Any non-element node position.
- *    <li>{@code END_TAG} - The end of a tag.
+ *    <li>`START_TAG` - The beginning of a tag.
+ *    <li>`OTHER` - Any non-element node position.
+ *    <li>`END_TAG` - The end of a tag.
  *  </ol>
  * Users of this enumeration can rely on {@code START_TAG + END_TAG = 0} and
  * that {@code OTHER = 0}.

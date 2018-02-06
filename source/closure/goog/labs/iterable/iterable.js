@@ -62,8 +62,8 @@ exports.forEach = function(f, iterable) {
  * Maps the values of one iterable to create another iterable.
  *
  * When next() is called on the returned iterable, it will call the given
- * function {@code f} with the next value of the given iterable
- * {@code iterable} until the given iterable is exhausted.
+ * function `f` with the next value of the given iterable
+ * `iterable` until the given iterable is exhausted.
  *
  * @param {function(this: THIS, VALUE): RESULT} f
  * @param {!Iterable<VALUE>} iterable
@@ -81,7 +81,7 @@ exports.map = function(f, iterable) {
 
 
 /**
- * Helper class for {@code map}.
+ * Helper class for `map`.
  * @param {function(VALUE): RESULT} f
  * @param {!Iterator<VALUE>} iterator
  * @constructor

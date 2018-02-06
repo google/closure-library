@@ -15,7 +15,7 @@
 /**
  * @fileoverview An event manager for both native browser event
  * targets and custom JavaScript event targets
- * ({@code goog.events.Listenable}). This provides an abstraction
+ * (`goog.events.Listenable`). This provides an abstraction
  * over browsers' event systems.
  *
  * It also provides a simulation of W3C event model's capture phase in

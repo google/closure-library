@@ -278,7 +278,7 @@ goog.structs.Map.prototype.cleanupKeysArray_ = function() {
 
 /**
  * Returns the value for the given key.  If the key is not found and the default
- * value is not given this will return {@code undefined}.
+ * value is not given this will return `undefined`.
  * @param {*} key The key to get the value for.
  * @param {DEFAULT=} opt_val The value to return if no item is found for the
  *     given key, defaults to undefined.

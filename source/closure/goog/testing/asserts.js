@@ -295,7 +295,7 @@ var assert = goog.testing.asserts.assert = function(a, opt_b) {
  *
  * @param {!(string|Function)} a The assertion comment or the function to call.
  * @param {!Function=} opt_b The function to call (if the first argument of
- *     {@code assertThrows} was the comment).
+ *     `assertThrows` was the comment).
  * @return {*} The error thrown by the function.
  * @throws {goog.testing.JsUnitException} If the assertion failed.
  */
@@ -340,7 +340,7 @@ var assertThrows = goog.testing.asserts.assertThrows = function(a, opt_b) {
  *
  * @param {!(string|Function)} a The assertion comment or the function to call.
  * @param {!Function=} opt_b The function to call (if the first argument of
- *     {@code assertNotThrows} was the comment).
+ *     `assertNotThrows` was the comment).
  * @return {*} The return value of the function.
  * @throws {goog.testing.JsUnitException} If the assertion failed.
  */
@@ -1091,7 +1091,7 @@ var assertEvaluatesToFalse =
 /**
  * Compares two HTML snippets.
  *
- * Take extra care if attributes are involved. {@code assertHTMLEquals}'s
+ * Take extra care if attributes are involved. `assertHTMLEquals`'s
  * implementation isn't prepared for complex cases. For example, the following
  * comparisons erroneously fail:
  * <pre>
@@ -1100,7 +1100,7 @@ var assertEvaluatesToFalse =
  * assertHTMLEquals('<input disabled>', '<input disabled="disabled">');
  * </pre>
  *
- * When in doubt, use {@code goog.testing.dom.assertHtmlMatches}.
+ * When in doubt, use `goog.testing.dom.assertHtmlMatches`.
  *
  * @param {*} a The expected value (2 args) or the debug message (3 args).
  * @param {*} b The actual value (2 args) or the expected value (3 args).

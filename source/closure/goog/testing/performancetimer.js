@@ -160,7 +160,7 @@ goog.testing.PerformanceTimer.prototype.run = function(testFn) {
 
 /**
  * Executes the test function of the specified task as described in
- * {@code run}. In addition, if specified, the set up and tear down functions of
+ * `run`. In addition, if specified, the set up and tear down functions of
  * the task are invoked before and after each invocation of the test function.
  * @see goog.testing.PerformanceTimer#run
  * @param {goog.testing.PerformanceTimer.Task} task A task describing the test
@@ -193,7 +193,7 @@ goog.testing.PerformanceTimer.prototype.runTask = function(task) {
 
 /**
  * Finishes the run of a task by creating a result object from samples, in the
- * format described in {@code run}.
+ * format described in `run`.
  * @see goog.testing.PerformanceTimer#run
  * @param {!Array<number>} samples The samples to analyze.
  * @return {!Object} Object containing performance stats.

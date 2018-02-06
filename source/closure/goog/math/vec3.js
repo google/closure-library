@@ -178,7 +178,7 @@ goog.math.Vec3.prototype.normalize = function() {
  * Adds another vector to this vector in-place.
  *
  * @param {goog.math.Vec3} b The vector to add.
- * @return {!goog.math.Vec3} This vector with {@code b} added.
+ * @return {!goog.math.Vec3} This vector with `b` added.
  */
 goog.math.Vec3.prototype.add = function(b) {
   this.x += b.x;
@@ -192,7 +192,7 @@ goog.math.Vec3.prototype.add = function(b) {
  * Subtracts another vector from this vector in-place.
  *
  * @param {goog.math.Vec3} b The vector to subtract.
- * @return {!goog.math.Vec3} This vector with {@code b} subtracted.
+ * @return {!goog.math.Vec3} This vector with `b` subtracted.
  */
 goog.math.Vec3.prototype.subtract = function(b) {
   this.x -= b.x;

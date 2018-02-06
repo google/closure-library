@@ -130,7 +130,7 @@ goog.testing.fs.Blob.prototype.toDataUrl = function() {
 
 /**
  * Sets the internal contents of the blob to an Array of bytes. This should
- *     only be called by other functions inside the {@code goog.testing.fs}
+ *     only be called by other functions inside the `goog.testing.fs`
  *     namespace.
  * @param {string|Array<string|number|!Uint8Array>} data The data to write
  *     into the blob.

@@ -280,7 +280,7 @@ goog.net.WebSocket.protectEntryPoints = function(errorHandler) {
 /**
  * Creates and opens the actual WebSocket.  Only call this after attaching the
  * appropriate listeners to this object.  If listeners aren't registered, then
- * the {@code goog.net.WebSocket.EventType.OPENED} event might be missed.
+ * the `goog.net.WebSocket.EventType.OPENED` event might be missed.
  *
  * @param {string} url The URL to which to connect.
  * @param {string=} opt_protocol The subprotocol to use.  The connection will

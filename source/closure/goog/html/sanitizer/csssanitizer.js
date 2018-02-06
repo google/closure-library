@@ -507,8 +507,8 @@ goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
 
 
 /**
- * Merges style properties from {@code styleDeclaration} into
- * {@code element.style}.
+ * Merges style properties from `styleDeclaration` into
+ * `element.style`.
  * @param {!Element} element
  * @param {!CSSStyleDeclaration} styleDeclaration
  * @private

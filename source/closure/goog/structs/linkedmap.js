@@ -210,7 +210,7 @@ goog.structs.LinkedMap.prototype.remove = function(key) {
 
 
 /**
- * Removes a node from the {@code LinkedMap}. It can be overridden to do
+ * Removes a node from the `LinkedMap`. It can be overridden to do
  * further cleanup such as disposing of the node value.
  * @param {!goog.structs.LinkedMap.Node_<string, VALUE>} node The node to
  *     remove.

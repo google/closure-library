@@ -42,7 +42,7 @@ goog.forwardDeclare('goog.dom.AbstractRange');
 
 /**
  * @return {!Node} A DIV node with a unique ID identifying the
- *     {@code END_TAG_MARKER_}.
+ *     `END_TAG_MARKER_`.
  * @private
  */
 goog.testing.dom.createEndTagMarker_ = function() {
@@ -248,7 +248,7 @@ goog.testing.dom.describeNode_ = function(node) {
 
 
 /**
- * Assert that the html in {@code actual} is substantially similar to
+ * Assert that the html in `actual` is substantially similar to
  * htmlPattern.  This method tests for the same set of styles, for the same
  * order of nodes, and the presence of attributes.  Breaking whitespace nodes
  * are ignored.  Elements can be
@@ -398,7 +398,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(
 
 
 /**
- * Assert that the html in {@code actual} is substantially similar to
+ * Assert that the html in `actual` is substantially similar to
  * htmlPattern.  This method tests for the same set of styles, and for the same
  * order of nodes.  Breaking whitespace nodes are ignored.  Elements can be
  * annotated with classnames corresponding to keys in goog.userAgent and will be

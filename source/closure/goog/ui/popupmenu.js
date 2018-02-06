@@ -228,7 +228,7 @@ goog.ui.PopupMenu.prototype.onMenuKeyboardAction_ = function(element, e) {
 /**
  * Creates an object describing how the popup menu should be attached to the
  * anchoring element based on the given parameters. The created object is
- * stored, keyed by {@code element} and is retrievable later by invoking
+ * stored, keyed by `element` and is retrievable later by invoking
  * {@link #getAttachTarget(element)} at a later point.
  *
  * Subclass may add more properties to the returned object, as needed.
@@ -273,14 +273,14 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
 
 /**
  * Returns the object describing how the popup menu should be attach to given
- * element or {@code null}. The object is created and the association is formed
+ * element or `null`. The object is created and the association is formed
  * when {@link #attach} is invoked.
  *
  * @param {?Element} element DOM element.
  * @return {?Object} The object created when {@link attach} is invoked on
- *     {@code element}. Returns {@code null} if the element does not trigger
+ *     `element`. Returns `null` if the element does not trigger
  *     the menu (i.e. {@link attach} has never been invoked on
- *     {@code element}).
+ *     `element`).
  * @protected
  */
 goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {

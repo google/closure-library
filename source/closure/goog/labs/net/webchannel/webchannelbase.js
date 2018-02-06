@@ -390,6 +390,12 @@ goog.labs.net.webChannel.WebChannelBase = function(
    */
   this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
 
+  if (this.fastHandshake_ && !this.backgroundChannelTest_) {
+    this.channelDebug_.warning(
+        'Force backgroundChannelTest when fastHandshake is enabled.');
+    this.backgroundChannelTest_ = true;
+  }
+
   if (opt_options && opt_options.disableRedact) {
     this.channelDebug_.disableRedact();
   }
@@ -1245,6 +1251,11 @@ WebChannelBase.prototype.open_ = function() {
   // Check the option and use GET to enable QUIC 0-RTT
   if (this.fastHandshake_) {
     uri.setParameterValue('$req', requestText);
+
+    // enable handshake upgrade
+    uri.setParameterValue('SID', 'null');
+    request.setDecodeInitialResponse();
+
     request.xmlHttpPost(uri, null, true);  // Send as a GET
   } else {
     request.xmlHttpPost(uri, requestText, true);
@@ -1528,7 +1539,9 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
   }
   this.lastStatusCode_ = request.getLastStatusCode();
 
-  if (this.forwardChannelRequestPool_.hasRequest(request) &&
+  // first to check if request has been upgraded to backchannel
+  if (!request.isInitialResponseDecoded() &&
+      this.forwardChannelRequestPool_.hasRequest(request) &&
       this.state_ == WebChannelBase.State.OPENED) {
     var response;
     try {
@@ -1543,7 +1556,8 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
       this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
     }
   } else {
-    if (this.backChannelRequest_ == request) {
+    if (request.isInitialResponseDecoded() ||
+        this.backChannelRequest_ == request) {
       this.clearDeadBackchannelTimer_();
     }
     if (!goog.string.isEmptyOrWhitespace(responseText)) {
@@ -1908,10 +1922,8 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         if (this.handler_) {
           this.handler_.channelOpened(this);
         }
-        this.backChannelUri_ = this.getBackChannelUri(
-            this.hostPrefix_, /** @type {string} */ (this.path_));
-        // Open connection to receive data
-        this.ensureBackChannel_();
+
+        this.startBackchannelAfterHandshake_(request);
       } else if (nextArray[0] == 'stop' || nextArray[0] == 'close') {
         // treat close also as an abort
         this.signalError_(WebChannelBase.Error.STOP);
@@ -1947,6 +1959,28 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
   }
   if (batch && !goog.array.isEmpty(batch)) {
     this.handler_.channelHandleMultipleArrays(this, batch);
+  }
+};
+
+
+/**
+ * Starts the backchannel after the handshake.
+ *
+ * @param {!ChannelRequest} request The underlying request object
+ * @private
+ */
+WebChannelBase.prototype.startBackchannelAfterHandshake_ = function(request) {
+  this.backChannelUri_ = this.getBackChannelUri(
+      this.hostPrefix_, /** @type {string} */ (this.path_));
+
+  if (request.isInitialResponseDecoded()) {
+    this.channelDebug_.debug('Upgrade the handshake request to a backchannel.');
+    this.forwardChannelRequestPool_.removeRequest(request);
+    request.resetTimeout(this.backChannelRequestTimeoutMs_);
+    this.backChannelRequest_ = request;
+  } else {
+    // Open connection to receive data
+    this.ensureBackChannel_();
   }
 };
 

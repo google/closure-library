@@ -28,7 +28,7 @@ goog.require('goog.json.Serializer');
 /**
  * A class that parses and stringifies JSON using eval (as implemented in
  * goog.json).
- * Adapts {@code goog.json} to the {@code goog.json.Processor} interface.
+ * Adapts `goog.json` to the `goog.json.Processor` interface.
  *
  * @param {?goog.json.Replacer=} opt_replacer An optional replacer to use during
  *     serialization.

@@ -381,10 +381,10 @@ goog.structs.AvlTree.prototype.getValues = function() {
 
 
 /**
- * Performs an in-order traversal of the tree and calls {@code func} with each
+ * Performs an in-order traversal of the tree and calls `func` with each
  * traversed node, optionally starting from the smallest node with a value >= to
  * the specified start value. The traversal ends after traversing the tree's
- * maximum node or when {@code func} returns a value that evaluates to true.
+ * maximum node or when `func` returns a value that evaluates to true.
  *
  * @param {Function} func Function to call on each traversed node.
  * @param {T=} opt_startValue If specified, traversal will begin on the node
@@ -443,7 +443,7 @@ goog.structs.AvlTree.prototype.inOrderTraverse = function(
 
 
 /**
- * Performs a reverse-order traversal of the tree and calls {@code func} with
+ * Performs a reverse-order traversal of the tree and calls `func` with
  * each traversed node, optionally starting from the largest node with a value
  * <= to the specified start value. The traversal ends after traversing the
  * tree's minimum node or when func returns a value that evaluates to true.
@@ -502,10 +502,10 @@ goog.structs.AvlTree.prototype.reverseOrderTraverse = function(
 
 
 /**
- * Performs a traversal defined by the supplied {@code traversalFunc}. The first
- * call to {@code traversalFunc} is passed the root or the optionally specified
- * startNode. After that, calls {@code traversalFunc} with the node returned
- * by the previous call to {@code traversalFunc} until {@code traversalFunc}
+ * Performs a traversal defined by the supplied `traversalFunc`. The first
+ * call to `traversalFunc` is passed the root or the optionally specified
+ * startNode. After that, calls `traversalFunc` with the node returned
+ * by the previous call to `traversalFunc` until `traversalFunc`
  * returns null or the optionally specified endNode. The first call to
  * traversalFunc is passed the root or the optionally specified startNode.
  *
@@ -734,7 +734,7 @@ goog.structs.AvlTree.prototype.removeNode_ = function(node) {
 
 /**
  * Returns the node in the tree that has k nodes before it in an in-order
- * traversal, optionally rooted at {@code opt_rootNode}.
+ * traversal, optionally rooted at `opt_rootNode`.
  *
  * @param {number} k The number of nodes before the node to be returned in an
  *     in-order traversal, where 0 <= k < root.count.
@@ -758,7 +758,7 @@ goog.structs.AvlTree.prototype.getKthNode_ = function(k, opt_rootNode) {
 
 /**
  * Returns the node with the smallest value in tree, optionally rooted at
- * {@code opt_rootNode}.
+ * `opt_rootNode`.
  *
  * @param {goog.structs.AvlTree.Node<T>=} opt_rootNode Optional root node.
  * @return {goog.structs.AvlTree.Node<T>} The node with the smallest value in

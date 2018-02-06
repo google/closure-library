@@ -272,6 +272,17 @@ MockChannelRequest.prototype.getPendingMessages = function() {
   return this.pendingMessages_;
 };
 
+/**
+ * @return {boolean} true if X_HTTP_INITIAL_RESPONSE has been handled.
+ */
+MockChannelRequest.prototype.isInitialResponseDecoded = function() {
+  return false;
+};
+
+/**
+ * Decodes X_HTTP_INITIAL_RESPONSE if present.
+ */
+MockChannelRequest.prototype.setDecodeInitialResponse = function() {};
 
 function shouldRunTests() {
   return goog.labs.net.webChannel.ChannelRequest.supportsXhrStreaming();

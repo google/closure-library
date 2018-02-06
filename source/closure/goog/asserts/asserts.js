@@ -94,8 +94,8 @@ goog.asserts.errorHandler_ = goog.asserts.DEFAULT_ERROR_HANDLER;
  * subs("foo%s hot%s", "bar", "dog") becomes "foobar hotdog".
  * @param {string} pattern The string containing the pattern.
  * @param {!Array<*>} subs The items to substitute into the pattern.
- * @return {string} A copy of {@code str} in which each occurrence of
- *     {@code %s} has been replaced an argument from {@code var_args}.
+ * @return {string} A copy of `str` in which each occurrence of
+ *     {@code %s} has been replaced an argument from `var_args`.
  * @private
  */
 goog.asserts.subs_ = function(pattern, subs) {

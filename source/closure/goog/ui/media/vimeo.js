@@ -19,14 +19,14 @@
  *
  * goog.ui.media.Vimeo is actually a {@link goog.ui.ControlRenderer}, a
  * stateless class - that could/should be used as a Singleton with the static
- * method {@code goog.ui.media.Vimeo.getInstance} -, that knows how to render
+ * method `goog.ui.media.Vimeo.getInstance` -, that knows how to render
  * video videos. It is designed to be used with a {@link goog.ui.Control},
  * which will actually control the media renderer and provide the
  * {@link goog.ui.Component} base. This design guarantees that all different
  * types of medias will behave alike but will look different.
  *
  * goog.ui.media.Vimeo expects vimeo video IDs on
- * {@code goog.ui.Control.getModel} as data models, and renders a flash object
+ * `goog.ui.Control.getModel` as data models, and renders a flash object
  * that will show the contents of that video.
  *
  * Example of usage:
@@ -73,8 +73,8 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * This class knows how to parse Vimeo URLs, and render the DOM structure
  * of vimeo video players. This class is meant to be used as a singleton static
- * stateless class, that takes {@code goog.ui.media.Media} instances and renders
- * it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
+ * stateless class, that takes `goog.ui.media.Media` instances and renders
+ * it. It expects `goog.ui.media.Media.getModel` to return a well formed,
  * previously constructed, vimeoId {@see goog.ui.media.Vimeo.parseUrl}, which is
  * the data model this renderer will use to construct the DOM structure.
  * {@see goog.ui.media.Vimeo.newControl} for a example of constructing a control
@@ -164,8 +164,8 @@ goog.ui.media.Vimeo.prototype.getCssClass = function() {
 
 
 /**
- * The {@code goog.ui.media.Vimeo} media data model. It stores a required
- * {@code videoId} field, sets the vimeo URL, and allows a few optional
+ * The `goog.ui.media.Vimeo` media data model. It stores a required
+ * `videoId` field, sets the vimeo URL, and allows a few optional
  * parameters.
  *
  * @param {string} videoId The vimeo video id.
@@ -212,7 +212,7 @@ goog.ui.media.VimeoModel.MATCHER_ =
 
 
 /**
- * Takes a {@code vimeoUrl} and extracts the video id.
+ * Takes a `vimeoUrl` and extracts the video id.
  *
  * @param {string} vimeoUrl A vimeo video URL.
  * @param {string=} opt_caption An optional caption of the vimeo video.
@@ -234,7 +234,7 @@ goog.ui.media.VimeoModel.newInstance = function(
 
 
 /**
- * The opposite of {@code goog.ui.media.Vimeo.parseUrl}: it takes a videoId
+ * The opposite of `goog.ui.media.Vimeo.parseUrl`: it takes a videoId
  * and returns a vimeo URL.
  *
  * @param {string} videoId The vimeo video ID.
@@ -246,7 +246,7 @@ goog.ui.media.VimeoModel.buildUrl = function(videoId) {
 
 
 /**
- * Builds a flash url from the vimeo {@code videoId}.
+ * Builds a flash url from the vimeo `videoId`.
  *
  * @param {string} videoId The vimeo video ID.
  * @param {boolean=} opt_autoplay Whether the flash movie should start playing

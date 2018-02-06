@@ -54,7 +54,7 @@ goog.dom.pattern.Repeat = function(pattern, opt_minimum, opt_maximum) {
   this.minimum_ = opt_minimum || 0;
 
   /**
-   * Optional maximum number of times to match the pattern. A {@code null} value
+   * Optional maximum number of times to match the pattern. A `null` value
    * will be treated as infinity.
    *
    * @private {?number}

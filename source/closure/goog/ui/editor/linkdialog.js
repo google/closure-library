@@ -383,10 +383,10 @@ goog.ui.editor.LinkDialog.prototype.setAutogenFeatureEnabled = function(
 
 
 /**
- * Checks if {@code str} contains {@code "nofollow"} as a separate word.
- * @param {string} str String to be tested.  This is usually {@code rel}
- *     attribute of an {@code HTMLAnchorElement} object.
- * @return {boolean} {@code true} if {@code str} contains {@code nofollow}.
+ * Checks if `str` contains {@code "nofollow"} as a separate word.
+ * @param {string} str String to be tested.  This is usually `rel`
+ *     attribute of an `HTMLAnchorElement` object.
+ * @return {boolean} `true` if `str` contains `nofollow`.
  */
 goog.ui.editor.LinkDialog.hasNoFollow = function(str) {
   return goog.ui.editor.LinkDialog.NO_FOLLOW_REGEX_.test(str);
@@ -394,11 +394,11 @@ goog.ui.editor.LinkDialog.hasNoFollow = function(str) {
 
 
 /**
- * Removes {@code "nofollow"} from {@code rel} if it's present as a separate
+ * Removes {@code "nofollow"} from `rel` if it's present as a separate
  * word.
- * @param {string} rel Input string.  This is usually {@code rel} attribute of
- *     an {@code HTMLAnchorElement} object.
- * @return {string} {@code rel} with any {@code "nofollow"} removed.
+ * @param {string} rel Input string.  This is usually `rel` attribute of
+ *     an `HTMLAnchorElement` object.
+ * @return {string} `rel` with any {@code "nofollow"} removed.
  */
 goog.ui.editor.LinkDialog.removeNoFollow = function(rel) {
   return rel.replace(goog.ui.editor.LinkDialog.NO_FOLLOW_REGEX_, '');
@@ -440,8 +440,8 @@ goog.ui.editor.LinkDialog.prototype.createOkEvent = function() {
 
 
 /**
- * Regular expression that matches {@code nofollow} value in an
- * {@code * HTMLAnchorElement}'s {@code rel} element.
+ * Regular expression that matches `nofollow` value in an
+ * {@code * HTMLAnchorElement}'s `rel` element.
  * @type {RegExp}
  * @private
  */

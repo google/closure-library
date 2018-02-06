@@ -1201,7 +1201,7 @@ goog.ui.ServerChart.prototype.setLegend = function(legend) {
 /**
  * Sets the data scaling.
  * NOTE: This also changes the encoding type because data scaling will
- *     only work with {@code goog.ui.ServerChart.EncodingType.TEXT}
+ *     only work with `goog.ui.ServerChart.EncodingType.TEXT`
  *     encoding.
  * @param {number} minimum The lowest number to apply to the data.
  * @param {number} maximum The highest number to apply to the data.

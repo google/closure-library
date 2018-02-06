@@ -160,7 +160,7 @@ goog.tagUnsealableClass(goog.ui.KeyboardShortcutHandler);
  * 1. A terminal node with a non-nullable shortcut string which is the
  *    identifier for the shortcut triggered by traversing the tree to that node.
  * 2. An internal node with a null shortcut string and a
- *    {@code goog.ui.KeyboardShortcutHandler.SequenceTree_} representing the
+ *    `goog.ui.KeyboardShortcutHandler.SequenceTree_` representing the
  *    continued stroke sequences from this node.
  * For clarity, the static factory methods for creating internal and terminal
  * nodes below should be used rather than using this constructor directly.

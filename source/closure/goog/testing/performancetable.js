@@ -156,7 +156,7 @@ goog.testing.PerformanceTable.prototype.runTask = function(task, opt_desc) {
 
 /**
  * Record a performance timer results object to the performance table. See
- * {@code goog.testing.PerformanceTimer} for details of the format of this
+ * `goog.testing.PerformanceTimer` for details of the format of this
  * object.
  * @param {Object} results The performance timer results object.
  * @param {string=} opt_desc A description to associate with these results.

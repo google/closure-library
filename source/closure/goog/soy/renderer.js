@@ -71,7 +71,7 @@ goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
 
 /**
  * Renders a Soy template into a single node or a document fragment.
- * Delegates to {@code goog.soy.renderAsFragment}.
+ * Delegates to `goog.soy.renderAsFragment`.
  *
  * @param {?function(ARG_TYPES, Object<string, *>=):*|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
@@ -93,7 +93,7 @@ goog.soy.Renderer.prototype.renderAsFragment = function(
  * Renders a Soy template into a single node. If the rendered HTML
  * string represents a single node, then that node is returned.
  * Otherwise, a DIV element is returned containing the rendered nodes.
- * Delegates to {@code goog.soy.renderAsElement}.
+ * Delegates to `goog.soy.renderAsElement`.
  *
  * @param {?function(ARG_TYPES, Object<string, *>=):*|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
@@ -114,7 +114,7 @@ goog.soy.Renderer.prototype.renderAsElement = function(
 
 /**
  * Renders a Soy template and then set the output string as the
- * innerHTML of the given element. Delegates to {@code goog.soy.renderElement}.
+ * innerHTML of the given element. Delegates to `goog.soy.renderElement`.
  *
  * @param {Element} element The element whose content we are rendering.
  * @param {?function(ARG_TYPES, Object<string, *>=):*|
@@ -134,8 +134,8 @@ goog.soy.Renderer.prototype.renderElement = function(
 /**
  * Renders a Soy template and returns the output string.
  * If the template is strict, it must be of kind HTML. To render strict
- * templates of other kinds, use {@code renderText} (for {@code kind="text"}) or
- * {@code renderStrictOfKind}.
+ * templates of other kinds, use `renderText` (for {@code kind="text"}) or
+ * `renderStrictOfKind`.
  *
  * @param {?function(ARG_TYPES, Object<string, *>=):*|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
@@ -332,7 +332,7 @@ goog.soy.InjectedDataSupplier = function() {};
 
 /**
  * Gets the injected data. Implementation may assume that
- * {@code goog.soy.Renderer} will treat the returned data as
+ * `goog.soy.Renderer` will treat the returned data as
  * immutable.  The renderer will call this every time one of its
  * {@code render*} methods is called.
  * @return {Object} A key-value pair representing the injected data.

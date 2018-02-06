@@ -34,7 +34,7 @@ goog.require('goog.userAgent');
   /**
    * The plugin description string contains the version number as in the form
    * 'iPhoto 700'. This returns just the version number as a dotted string,
-   * e.g., '7.0.0', compatible with {@code goog.string.compareVersions}.
+   * e.g., '7.0.0', compatible with `goog.string.compareVersions`.
    * @param {string} desc The version string.
    * @return {string} The dotted version.
    */

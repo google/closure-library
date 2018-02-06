@@ -55,14 +55,14 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
 
   /**
    * A chunk holding the currently processed message bytes. Once the chunk has
-   * {@code this.blocksize} bytes, we feed it into [@code computeChunk_}.
+   * `this.blocksize` bytes, we feed it into [@code computeChunk_}.
    * @private {!Uint8Array|!Array<number>}
    */
   this.chunk_ = goog.global['Uint8Array'] ? new Uint8Array(this.blockSize) :
                                             new Array(this.blockSize);
 
   /**
-   * Current number of bytes in {@code this.chunk_}.
+   * Current number of bytes in `this.chunk_`.
    * @private {number}
    */
   this.chunkBytes_ = 0;
@@ -75,7 +75,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
 
   /**
    * Holds the previous values of accumulated hash a-h in the
-   * {@code computeChunk_} function.
+   * `computeChunk_` function.
    * @private {!Array<!goog.math.Long>}
    */
   this.hash_ = [];
@@ -98,7 +98,7 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
   this.w_ = [];
 
   /**
-   * The value to which {@code this.hash_} should be reset when this
+   * The value to which `this.hash_` should be reset when this
    * Hasher is reset.
    * @private @const {!Array<!goog.math.Long>}
    */
@@ -125,7 +125,7 @@ goog.crypt.Sha2_64bit.BLOCK_SIZE_ = 1024 / 8;
 
 
 /**
- * Contains data needed to pad messages less than {@code blocksize} bytes.
+ * Contains data needed to pad messages less than `blocksize` bytes.
  * @private {!Array<number>}
  */
 goog.crypt.Sha2_64bit.PADDING_ = goog.array.concat(
@@ -391,8 +391,8 @@ goog.crypt.Sha2_64bit.prototype.Sigma1_ = function(value) {
 /**
  * Calculates the SHA-2 64-bit choose function.
  *
- * This function uses {@code value} as a mask to choose bits from either
- * {@code one} if the bit is set or {@code two} if the bit is not set.
+ * This function uses `value` as a mask to choose bits from either
+ * `one` if the bit is set or `two` if the bit is not set.
  *
  * @private
  * @param {!goog.math.Long} value

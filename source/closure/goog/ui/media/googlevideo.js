@@ -18,14 +18,14 @@
  *
  * goog.ui.media.GoogleVideo is actually a {@link goog.ui.ControlRenderer}, a
  * stateless class - that could/should be used as a Singleton with the static
- * method {@code goog.ui.media.GoogleVideo.getInstance} -, that knows how to
+ * method `goog.ui.media.GoogleVideo.getInstance` -, that knows how to
  * render GoogleVideo videos. It is designed to be used with a
  * {@link goog.ui.Control}, which will actually control the media renderer and
  * provide the {@link goog.ui.Component} base. This design guarantees that all
  * different types of medias will behave alike but will look different.
  *
- * goog.ui.media.GoogleVideo expects {@code goog.ui.media.GoogleVideoModel} on
- * {@code goog.ui.Control.getModel} as data models, and renders a flash object
+ * goog.ui.media.GoogleVideo expects `goog.ui.media.GoogleVideoModel` on
+ * `goog.ui.Control.getModel` as data models, and renders a flash object
  * that will show the contents of that video.
  *
  * Example of usage:
@@ -75,8 +75,8 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * This class knows how to parse GoogleVideo URLs, and render the DOM structure
  * of GoogleVideo video players. This class is meant to be used as a singleton
- * static stateless class, that takes {@code goog.ui.media.Media} instances and
- * renders it. It expects {@code goog.ui.media.Media.getModel} to return a well
+ * static stateless class, that takes `goog.ui.media.Media` instances and
+ * renders it. It expects `goog.ui.media.Media.getModel` to return a well
  * formed, previously constructed, GoogleVideo video id, which is the data model
  * this renderer will use to construct the DOM structure.
  * {@see goog.ui.media.GoogleVideo.newControl} for a example of constructing a
@@ -167,8 +167,8 @@ goog.ui.media.GoogleVideo.prototype.getCssClass = function() {
 
 
 /**
- * The {@code goog.ui.media.GoogleVideo} media data model. It stores a required
- * {@code videoId} field, sets the GoogleVideo URL, and allows a few optional
+ * The `goog.ui.media.GoogleVideo` media data model. It stores a required
+ * `videoId` field, sets the GoogleVideo URL, and allows a few optional
  * parameters.
  *
  * @param {string} videoId The GoogleVideo video id.
@@ -240,7 +240,7 @@ goog.ui.media.GoogleVideoModel.newInstance = function(
 
 
 /**
- * The opposite of {@code goog.ui.media.GoogleVideo.newInstance}: it takes a
+ * The opposite of `goog.ui.media.GoogleVideo.newInstance`: it takes a
  * videoId and returns a GoogleVideo URL.
  *
  * @param {string} videoId The GoogleVideo video ID.

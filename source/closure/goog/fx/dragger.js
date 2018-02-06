@@ -230,7 +230,7 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ = goog.global.document &&
  * cursor itself.
  *
  * @param {Element} sourceEl Element to copy.
- * @return {!Element} The clone of {@code sourceEl}.
+ * @return {!Element} The clone of `sourceEl`.
  */
 goog.fx.Dragger.cloneNode = function(sourceEl) {
   var clonedEl = sourceEl.cloneNode(true),

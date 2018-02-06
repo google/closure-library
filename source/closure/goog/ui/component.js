@@ -110,7 +110,7 @@ goog.ui.Component = function(opt_domHelper) {
 
   /**
    * Array of child components.  Lazily initialized on first use.  Must be kept
-   * in sync with {@code childIndex_}.  This property is strictly private and
+   * in sync with `childIndex_`.  This property is strictly private and
    * must not be accessed directly outside of this class!
    * @private {Array<goog.ui.Component>?}
    */
@@ -119,7 +119,7 @@ goog.ui.Component = function(opt_domHelper) {
   /**
    * Map of child component IDs to child components.  Used for constant-time
    * random access to child components by ID.  Lazily initialized on first use.
-   * Must be kept in sync with {@code children_}.  This property is strictly
+   * Must be kept in sync with `children_`.  This property is strictly
    * private and must not be accessed directly outside of this class!
    *
    * We use a plain Object, not a {@link goog.structs.Map}, for simplicity.
@@ -530,7 +530,7 @@ goog.ui.Component.prototype.getElementByClass = function(className) {
 
 
 /**
- * Similar to {@code getElementByClass} except that it expects the
+ * Similar to `getElementByClass` except that it expects the
  * element to be present in the dom thus returning a required value. Otherwise,
  * will assert.
  * @param {string} className The name of the class to look for.
@@ -566,8 +566,8 @@ goog.ui.Component.prototype.getHandler = function() {
 /**
  * Sets the parent of this component to use for event bubbling.  Throws an error
  * if the component already has a parent or if an attempt is made to add a
- * component to itself as a child.  Callers must use {@code removeChild}
- * or {@code removeChildAt} to remove components from their containers before
+ * component to itself as a child.  Callers must use `removeChild`
+ * or `removeChildAt` to remove components from their containers before
  * calling this method.
  * @see goog.ui.Component#removeChild
  * @see goog.ui.Component#removeChildAt
@@ -647,7 +647,7 @@ goog.ui.Component.prototype.createDom = function() {
  * document body.
  *
  * If this component has a parent component, and the parent component is
- * not in the document already, then this will not call {@code enterDocument}
+ * not in the document already, then this will not call `enterDocument`
  * on this component.
  *
  * Throws an Error if the component is already rendered.
@@ -680,7 +680,7 @@ goog.ui.Component.prototype.renderBefore = function(sibling) {
  * document body.
  *
  * If this component has a parent component, and the parent component is
- * not in the document already, then this will not call {@code enterDocument}
+ * not in the document already, then this will not call `enterDocument`
  * on this component.
  *
  * Throws an Error if the component is already rendered.
@@ -835,7 +835,7 @@ goog.ui.Component.prototype.exitDocument = function() {
 
 
 /**
- * Disposes of the component.  Calls {@code exitDocument}, which is expected to
+ * Disposes of the component.  Calls `exitDocument`, which is expected to
  * remove event handlers and clean up the component.  Propagates the call to
  * the component's children, if any. Removes the component's DOM from the
  * document unless it was decorated.
@@ -965,13 +965,13 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * Adds the specified component as a child of this component at the given
  * 0-based index.
  *
- * Both {@code addChild} and {@code addChildAt} assume the following contract
+ * Both `addChild` and `addChildAt` assume the following contract
  * between parent and child components:
  *  <ul>
  *    <li>the child component's element must be a descendant of the parent
  *        component's element, and
  *    <li>the DOM state of the child component must be consistent with the DOM
- *        state of the parent component (see {@code isInDocument}) in the
+ *        state of the parent component (see `isInDocument`) in the
  *        steady state -- the exception is to addChildAt(child, i, false) and
  *        then immediately decorate/render the child.
  *  </ul>
@@ -979,19 +979,19 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * In particular, {@code parent.addChild(child)} will throw an error if the
  * child component is already in the document, but the parent isn't.
  *
- * Clients of this API may call {@code addChild} and {@code addChildAt} with
- * {@code opt_render} set to true.  If {@code opt_render} is true, calling these
+ * Clients of this API may call `addChild` and `addChildAt` with
+ * `opt_render` set to true.  If `opt_render` is true, calling these
  * methods will automatically render the child component's element into the
  * parent component's element. If the parent does not yet have an element, then
- * {@code createDom} will automatically be invoked on the parent before
+ * `createDom` will automatically be invoked on the parent before
  * rendering the child.
  *
  * Invoking {@code parent.addChild(child, true)} will throw an error if the
  * child component is already in the document, regardless of the parent's DOM
  * state.
  *
- * If {@code opt_render} is true and the parent component is not already
- * in the document, {@code enterDocument} will not be called on this component
+ * If `opt_render` is true and the parent component is not already
+ * in the document, `enterDocument` will not be called on this component
  * at this point.
  *
  * Finally, this method also throws an error if the new child already has a
@@ -1188,7 +1188,7 @@ goog.ui.Component.prototype.getChildAt = function(index) {
 
 /**
  * Calls the given function on each of this component's children in order.  If
- * {@code opt_obj} is provided, it will be used as the 'this' object in the
+ * `opt_obj` is provided, it will be used as the 'this' object in the
  * function when called.  The function should take two arguments:  the child
  * component and its 0-based index.  The return value is ignored.
  * @param {function(this:T,?,number):?} f The function to call for every
@@ -1221,7 +1221,7 @@ goog.ui.Component.prototype.indexOfChild = function(child) {
  * parent component.  The argument can either be a string (interpreted as the
  * ID of the child component to remove) or the child component itself.
  *
- * If {@code opt_unrender} is true, calls {@link goog.ui.component#exitDocument}
+ * If `opt_unrender` is true, calls {@link goog.ui.component#exitDocument}
  * on the removed child, and subsequently detaches the child's DOM from the
  * document.  Otherwise it is the caller's responsibility to clean up the child
  * component's DOM.
@@ -1229,7 +1229,7 @@ goog.ui.Component.prototype.indexOfChild = function(child) {
  * @see goog.ui.Component#removeChildAt
  * @param {string|goog.ui.Component|null} child The ID of the child to remove,
  *    or the child component itself.
- * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
+ * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
  *    removed child component, and detaches its DOM from the document.
  * @return {goog.ui.Component} The removed component, if any.
  */
@@ -1275,7 +1275,7 @@ goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
  *
  * @see goog.ui.Component#removeChild
  * @param {number} index 0-based index of the child to remove.
- * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
+ * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
  *    removed child component, and detaches its DOM from the document.
  * @return {goog.ui.Component} The removed component, if any.
  */

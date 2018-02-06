@@ -68,7 +68,7 @@ goog.define('goog.memoize.ENABLE_MEMOIZE', true);
 
 /**
  * Clears the memoization cache on the given object.
- * @param {Object} cacheOwner The owner of the cache. This is the {@code this}
+ * @param {Object} cacheOwner The owner of the cache. This is the `this`
  *     context of the memoized function.
  */
 goog.memoize.clearCache = function(cacheOwner) {

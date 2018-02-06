@@ -14,12 +14,12 @@
 
 /**
  * @fileoverview This module simplifies testing code which uses stateful
- * singletons. {@code goog.testing.singleton.reset} resets all instances, so
- * next time when {@code getInstance} is called, a new instance is created.
- * It's recommended to reset the singletons in {@code tearDown} to prevent
+ * singletons. `goog.testing.singleton.reset` resets all instances, so
+ * next time when `getInstance` is called, a new instance is created.
+ * It's recommended to reset the singletons in `tearDown` to prevent
  * interference between subsequent tests.
  *
- * The {@code goog.testing.singleton} functions expect that the goog.DEBUG flag
+ * The `goog.testing.singleton` functions expect that the goog.DEBUG flag
  * is enabled, and the tests are either uncompiled or compiled without renaming.
  *
  */
@@ -29,7 +29,7 @@ goog.provide('goog.testing.singleton');
 
 
 /**
- * Deletes all singleton instances, so {@code getInstance} will return a new
+ * Deletes all singleton instances, so `getInstance` will return a new
  * instance on next call.
  */
 goog.testing.singleton.reset = function() {
@@ -42,6 +42,6 @@ goog.testing.singleton.reset = function() {
 
 
 /**
- * @deprecated Please use {@code goog.addSingletonGetter}.
+ * @deprecated Please use `goog.addSingletonGetter`.
  */
 goog.testing.singleton.addSingletonGetter = goog.addSingletonGetter;
