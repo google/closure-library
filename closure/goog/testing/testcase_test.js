@@ -423,15 +423,6 @@ function testTestCaseNeverRun() {
   assertEquals(0, result.errors.length);
 }
 
-function testParseOrder() {
-  assertNull(goog.testing.TestCase.parseOrder_(''));
-  assertNull(goog.testing.TestCase.parseOrder_('?order=invalid'));
-  assertEquals('natural', goog.testing.TestCase.parseOrder_('?order=natural'));
-  assertEquals('sorted', goog.testing.TestCase.parseOrder_('?a&order=sorted'));
-  assertEquals('random', goog.testing.TestCase.parseOrder_('?b&order=random'));
-  assertEquals('random', goog.testing.TestCase.parseOrder_('?ORDER=RANDOM'));
-}
-
 function testParseRunTests() {
   assertNull(goog.testing.TestCase.parseRunTests_(''));
   assertNull(goog.testing.TestCase.parseRunTests_('?runTests='));

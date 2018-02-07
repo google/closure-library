@@ -1858,9 +1858,6 @@ goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
 
   if (goog.global.location) {
     var search = goog.global.location.search;
-    testCase.setOrder(
-        goog.testing.TestCase.parseOrder_(search) ||
-        goog.testing.TestCase.Order.SORTED);
     testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
   }
   goog.testing.TestCase.activeTestCase_ = testCase;
@@ -1884,23 +1881,6 @@ goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
         'G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }
-};
-
-
-/**
- * Parses URL query parameters for the 'order' parameter.
- * @param {string} search The URL query string.
- * @return {?goog.testing.TestCase.Order} The sort order for running tests.
- * @private
- */
-goog.testing.TestCase.parseOrder_ = function(search) {
-  var order = null;
-  var orderMatch = search.match(/(?:\?|&)order=(natural|random|sorted)/i);
-  if (orderMatch) {
-    order = /** @type {goog.testing.TestCase.Order} */ (
-        orderMatch[1].toLowerCase());
-  }
-  return order;
 };
 
 
