@@ -1,0 +1,57 @@
+<!--
+Copyright 2017 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.module.get('test.js.GoogModule'));
+  assertNull(goog.module.get('test.js.GoogModuleRequiresGoogModule'));
+
+  goog.require('test.js.GoogModuleRequiresGoogModule');
+
+//# sourceURL=requiregoogmodulewithdepsrequiresgoogmodulepretest.js
+</script>
+<script>
+  if (goog.DebugLoader.IS_OLD_IE_) {
+    goog.require('test.js.GoogModuleRequiresGoogModule');
+  }
+
+  var GoogModule = goog.module.get('test.js.GoogModule');
+  var GoogModuleRequiresGoogModule = goog.module.get('test.js.GoogModuleRequiresGoogModule');
+  assertNotNull(GoogModule);
+  assertNotNull(GoogModuleRequiresGoogModule);
+  assertEquals('GOOG-MODULE-REQUIRES-GOOG-MODULE', GoogModuleRequiresGoogModule.NAME);
+  assertTrue(new GoogModuleRequiresGoogModule() instanceof GoogModule);
+
+//# sourceURL=requiregoogmodulewithdepsrequiresgoogmoduletest.js
+</script>
+
+<script>
+  assertNull(goog.getObjectByName('test.js.Provide'));
+  assertNull(goog.module.get('test.js.GoogModuleRequiresProvide'));
+
+  goog.require('test.js.GoogModuleRequiresProvide');
+
+//# sourceURL=requiregoogmodulewithdepsrequiresprovidepretest.js
+</script>
+<script>
+  if (goog.DebugLoader.IS_OLD_IE_) {
+    goog.require('test.js.GoogModuleRequiresProvide');
+  }
+
+  assertNotNull(goog.getObjectByName('test.js.Provide'));
+  var GoogModuleRequiresProvide = goog.module.get('test.js.GoogModuleRequiresProvide');
+  assertNotNull(GoogModuleRequiresProvide);
+  assertEquals('GOOG-MODULE-REQUIRES-PROVIDE', GoogModuleRequiresProvide.NAME);
+  assertTrue(new GoogModuleRequiresProvide() instanceof test.js.Provide);
+
+//# sourceURL=requiregoogmodulewithdepsrequiresprovidetest.js
+</script>
+
+<script>
+  done();
+</script>
