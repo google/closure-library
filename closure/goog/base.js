@@ -44,6 +44,7 @@ var goog = goog || {};
 
 /**
  * Reference to the global context.  In most cases this will be 'window'.
+ * @const @suppress {newCheckTypes}
  */
 goog.global = this;
 
