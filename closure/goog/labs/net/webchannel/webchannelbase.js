@@ -202,7 +202,8 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * Whether to fail forward-channel requests after one try or a few tries.
    * @private {boolean}
    */
-  this.failFast_ = (opt_options && opt_options.failFast) || false;
+  this.failFast_ =
+      !!goog.getObjectByName('internalChannelParams.failFast', opt_options);
 
   /**
    * The handler that receive callbacks for state changes and data.
@@ -296,28 +297,41 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * retries.
    * @private {number}
    */
-  this.baseRetryDelayMs_ = 5 * 1000;
+  this.baseRetryDelayMs_ =
+      goog.getObjectByName(
+          'internalChannelParams.baseRetryDelayMs', opt_options) ||
+      5 * 1000;
 
   /**
    * A random time between 0 and this number of MS is added to the
    * {@link baseRetryDelayMs_}. Default is 10 seconds.
    * @private {number}
    */
-  this.retryDelaySeedMs_ = 10 * 1000;
+  this.retryDelaySeedMs_ =
+      goog.getObjectByName(
+          'internalChannelParams.retryDelaySeedMs', opt_options) ||
+      10 * 1000;
 
   /**
    * Maximum number of attempts to connect to the server for forward channel
    * requests. Defaults to 2.
    * @private {number}
    */
-  this.forwardChannelMaxRetries_ = 2;
+  this.forwardChannelMaxRetries_ =
+      goog.getObjectByName(
+          'internalChannelParams.forwardChannelMaxRetries', opt_options) ||
+      2;
 
   /**
    * The timeout in milliseconds for a forward channel request. Defaults to 20
    * seconds. Note that part of this timeout can be randomized.
    * @private {number}
    */
-  this.forwardChannelRequestTimeoutMs_ = 20 * 1000;
+  this.forwardChannelRequestTimeoutMs_ =
+      goog.getObjectByName(
+          'internalChannelParams.forwardChannelRequestTimeoutMs',
+          opt_options) ||
+      20 * 1000;
 
   /**
    * The timeout in milliseconds for a back channel request. Defaults to using
@@ -2337,8 +2351,8 @@ WebChannelBase.Handler.prototype.channelOpened = function(channel) {};
  * @param {WebChannelBase} channel The channel.
  * @param {Array<?>} array The data array.
  */
-WebChannelBase.Handler.prototype.channelHandleArray = function(channel, array) {
-};
+WebChannelBase.Handler.prototype.channelHandleArray = function(
+    channel, array) {};
 
 
 /**

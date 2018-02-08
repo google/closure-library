@@ -165,9 +165,11 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * customized configs that are optimized for certain clients or environments.
  * Currently this information is sent via X-WebChannel-Client-Profile header.
  *
- * failFast: enable the fail-fast behavior which will immediately abort the
- * channel when an HTTP request fails, without attempting any recovery logic.
- * Default is set to false.
+ * internalChannelParams: the internal channel parameter name to allow
+ * experimental channel configurations. Supported options include fastfail,
+ * baseRetryDelayMs, retryDelaySeedMs, forwardChannelMaxRetries and
+ * forwardChannelRequestTimeoutMs. Note that these options are subject to
+ * change.
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
@@ -185,7 +187,7 @@ goog.net.WebChannel.FailureRecovery = function() {};
  *   fastHandshake: (boolean|undefined),
  *   disableRedact: (boolean|undefined),
  *   clientProfile: (string|undefined),
- *   failFast: (boolean|undefined),
+ *   internalChannelParams: (!Object<string, boolean|number>|undefined),
  * }}
  */
 goog.net.WebChannel.Options;
