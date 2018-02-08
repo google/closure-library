@@ -535,16 +535,7 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
         this.getMinimum();
   } else {
     var availWidth = this.getElement().clientWidth - thumbToDrag.offsetWidth;
-
-    // In LTR mode, the space to the left of the thumb makes up the value. In
-    // RTL, we need to flip this given that the space to the right of the thumb
-    // is what makes up the value.
-    var percentageUsed = e.left / availWidth;
-    if (this.flipForRtl_ && this.isRightToLeft()) {
-      percentageUsed = 1 - percentageUsed;
-    }
-
-    value = percentageUsed * (this.getMaximum() - this.getMinimum()) +
+    value = (e.left / availWidth) * (this.getMaximum() - this.getMinimum()) +
         this.getMinimum();
   }
   // Bind the value within valid range before calling setThumbPosition_.
