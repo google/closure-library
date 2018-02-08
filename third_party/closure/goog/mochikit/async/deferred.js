@@ -36,10 +36,10 @@ goog.require('goog.debug.Error');
 /**
  * A Deferred represents the result of an asynchronous operation. A Deferred
  * instance has no result when it is created, and is "fired" (given an initial
- * result) by calling {@code callback} or {@code errback}.
+ * result) by calling `callback` or `errback`.
  *
  * Once fired, the result is passed through a sequence of callback functions
- * registered with {@code addCallback} or {@code addErrback}. The functions may
+ * registered with `addCallback` or `addErrback`. The functions may
  * mutate the result before it is passed to the next function in the sequence.
  *
  * Callbacks and errbacks may be added at any time, including after the Deferred
@@ -50,7 +50,7 @@ goog.require('goog.debug.Error');
  *
  * If a Deferred operation is canceled, an optional user-provided cancellation
  * function is invoked which may perform any special cleanup, followed by firing
- * the Deferred's errback sequence with a {@code CanceledError}. If the
+ * the Deferred's errback sequence with a `CanceledError`. If the
  * Deferred has already fired, cancellation is ignored.
  *
  * Deferreds may be templated to a specific type they produce using generics
@@ -68,7 +68,7 @@ goog.require('goog.debug.Error');
  *
  * @param {Function=} opt_onCancelFunction A function that will be called if the
  *     Deferred is canceled. If provided, this function runs before the
- *     Deferred is fired with a {@code CanceledError}.
+ *     Deferred is fired with a `CanceledError`.
  * @param {Object=} opt_defaultScope The default object context to call
  *     callbacks and errbacks in.
  * @constructor
@@ -484,10 +484,10 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
  * Implements {@see goog.Thenable} for seamless integration with
  * {@see goog.Promise}.
  * Deferred results are mutable and may represent multiple values over
- * their lifetime. Calling {@code then} on a Deferred returns a Promise
+ * their lifetime. Calling `then` on a Deferred returns a Promise
  * with the result of the Deferred at that point in its callback chain.
  * Note that if the Deferred result is never mutated, and only
- * {@code then} calls are made, the Deferred will behave like a Promise.
+ * `then` calls are made, the Deferred will behave like a Promise.
  *
  * @override
  */
@@ -531,9 +531,9 @@ goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
  * Makes this Deferred wait for another Deferred's execution sequence to
  * complete before continuing.
  *
- * This is equivalent to adding a callback that returns {@code otherDeferred},
+ * This is equivalent to adding a callback that returns `otherDeferred`,
  * but doesn't prevent additional callbacks from being added to
- * {@code otherDeferred}.
+ * `otherDeferred`.
  *
  * @param {!goog.async.Deferred|!goog.Thenable} otherDeferred The Deferred
  *     to wait for.
@@ -578,7 +578,7 @@ goog.async.Deferred.prototype.branch = function(opt_propagateCancel) {
 
 /**
  * @return {boolean} Whether the execution sequence has been started on this
- *     Deferred by invoking {@code callback} or {@code errback}.
+ *     Deferred by invoking `callback` or `errback`.
  */
 goog.async.Deferred.prototype.hasFired = function() {
   return this.fired_;
