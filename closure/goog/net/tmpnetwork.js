@@ -52,8 +52,10 @@ goog.define(
  *     for compatibility with existing code, but the search team does not want
  *     people using images served off of google.com for this purpose. The
  *     default will go away when all usages have been changed.
+ * @param {number=} opt_timeout Milliseconds before giving up.
  */
-goog.net.tmpnetwork.testGoogleCom = function(callback, opt_imageUri) {
+goog.net.tmpnetwork.testGoogleCom = function(
+    callback, opt_imageUri, opt_timeout) {
   // We need to add a 'rand' to make sure the response is not fulfilled
   // by browser cache.
   var uri = opt_imageUri;
@@ -62,7 +64,8 @@ goog.net.tmpnetwork.testGoogleCom = function(callback, opt_imageUri) {
     uri.makeUnique();
   }
   goog.net.tmpnetwork.testLoadImage(
-      uri.toString(), goog.net.tmpnetwork.GOOGLECOM_TIMEOUT, callback);
+      uri.toString(), opt_timeout || goog.net.tmpnetwork.GOOGLECOM_TIMEOUT,
+      callback);
 };
 
 
