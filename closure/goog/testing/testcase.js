@@ -1319,7 +1319,6 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
   }
 
   this.orderTests_();
-  this.log(this.getCount() + ' tests auto-discovered');
 };
 
 
