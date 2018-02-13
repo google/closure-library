@@ -957,7 +957,7 @@ goog.ui.Control.prototype.setChecked = function(check) {
 /**
  * Returns true if the component is styled to indicate that it has keyboard
  * focus, false otherwise.  Note that `isFocused()` returning true
- * doesn't guarantee that the component's key event target has keyborad focus,
+ * doesn't guarantee that the component's key event target has keyboard focus,
  * only that it is styled as such.
  * @return {boolean} Whether the component is styled to indicate as having
  *     keyboard focus.
