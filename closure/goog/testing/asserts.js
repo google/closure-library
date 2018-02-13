@@ -1018,7 +1018,8 @@ var assertElementsRoughlyEqual =
 
 
 /**
- * Compares two array-like objects without taking their order into account.
+ * Compares elements of two array-like objects using strict equality without
+ * taking their order into account.
  * @param {string|IArrayLike} a Assertion message or the
  *     expected elements.
  * @param {IArrayLike} b Expected elements or the actual
