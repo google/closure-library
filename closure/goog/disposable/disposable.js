@@ -296,9 +296,9 @@ goog.dispose = function(obj) {
 
 /**
  * Calls `dispose` on each member of the list that supports it. (If the
- * member is an ArrayLike, then {@code goog.disposeAll()} will be called
+ * member is an ArrayLike, then `goog.disposeAll()` will be called
  * recursively on each of its members.) If the member is not an object with a
- * {@code dispose()} method, then it is ignored.
+ * `dispose()` method, then it is ignored.
  * @param {...*} var_args The list.
  */
 goog.disposeAll = function(var_args) {

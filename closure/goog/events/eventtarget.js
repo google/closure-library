@@ -143,7 +143,7 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
- * @deprecated Use {@code #listen} instead, when possible. Otherwise, use
+ * @deprecated Use `#listen` instead, when possible. Otherwise, use
  *     `goog.events.listen` if you are passing Object
  *     (instead of Function) as handler.
  */
@@ -167,7 +167,7 @@ goog.events.EventTarget.prototype.addEventListener = function(
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
- * @deprecated Use {@code #unlisten} instead, when possible. Otherwise, use
+ * @deprecated Use `#unlisten` instead, when possible. Otherwise, use
  *     `goog.events.unlisten` if you are passing Object
  *     (instead of Function) as handler.
  */

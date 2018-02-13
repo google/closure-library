@@ -76,7 +76,7 @@ goog.require('goog.string.TypedString');
  * {@code goog.html.SafeStyle.unwrap(style1) +
  * goog.html.SafeStyle.unwrap(style2)} must itself be a value that satisfies
  * the SafeStyle type constraint. This requirement implies that for any value
- * `style` of this type, {@code goog.html.SafeStyle.unwrap(style)} must
+ * `style` of this type, `goog.html.SafeStyle.unwrap(style)` must
  * not end in a "property value" or "property name" context. For example,
  * a value of {@code background:url("} or {@code font-} would not satisfy the
  * SafeStyle contract. This is because concatenating such strings with a

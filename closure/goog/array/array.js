@@ -44,7 +44,7 @@ goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
 
 /**
  * @define {boolean} If true, JSCompiler will use the native implementation of
- * array functions where appropriate (e.g., {@code Array#filter}) and remove the
+ * array functions where appropriate (e.g., `Array#filter`) and remove the
  * unused pure JS implementation.
  */
 goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);

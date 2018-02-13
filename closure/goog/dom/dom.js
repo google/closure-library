@@ -2733,7 +2733,7 @@ goog.dom.DomHelper.prototype.createTable = function(
  * Converts an HTML into a node or a document fragment. A single Node is used if
  * `html` only generates a single node. If `html` generates multiple
  * nodes then these are put inside a `DocumentFragment`. This is a safe
- * version of {@code goog.dom.DomHelper#htmlToDocumentFragment} which is now
+ * version of `goog.dom.DomHelper#htmlToDocumentFragment` which is now
  * deleted.
  * @param {!goog.html.SafeHtml} html The HTML markup to convert.
  * @return {!Node} The resulting node.
