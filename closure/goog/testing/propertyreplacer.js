@@ -62,8 +62,8 @@ goog.require('goog.userAgent');
  *       the real constructor or kept untouched.
  * </ul>
  *
- * Code compiled with property renaming may need to use {@code
- * goog.reflect.objectProperty} instead of simply naming the property to
+ * Code compiled with property renaming may need to use
+ * `goog.reflect.objectProperty` instead of simply naming the property to
  * replace.
  *
  * @constructor

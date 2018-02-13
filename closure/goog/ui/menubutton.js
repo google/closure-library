@@ -279,8 +279,8 @@ goog.ui.MenuButton.prototype.handleMouseUp = function(e) {
 
 /**
  * Performs the appropriate action when the menu button is activated by the
- * user.  Overrides the superclass implementation by not dispatching an {@code
- * ACTION} event, because menu buttons exist only to reveal menus, not to
+ * user.  Overrides the superclass implementation by not dispatching an
+ * `ACTION` event, because menu buttons exist only to reveal menus, not to
  * perform actions themselves.  Calls {@link #setActive} to deactivate the
  * button.
  * @param {goog.events.Event} e Mouse or key event that triggered the action.

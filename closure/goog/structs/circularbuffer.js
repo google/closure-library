@@ -71,7 +71,7 @@ goog.structs.CircularBuffer.prototype.add = function(item) {
 /**
  * Returns the item at the specified index.
  * @param {number} index The index of the item. The index of an item can change
- *     after calls to {@code add()} if the buffer is at maximum size.
+ *     after calls to `add()` if the buffer is at maximum size.
  * @return {T} The item at the specified index.
  */
 goog.structs.CircularBuffer.prototype.get = function(index) {
@@ -83,7 +83,7 @@ goog.structs.CircularBuffer.prototype.get = function(index) {
 /**
  * Sets the item at the specified index.
  * @param {number} index The index of the item. The index of an item can change
- *     after calls to {@code add()} if the buffer is at maximum size.
+ *     after calls to `add()` if the buffer is at maximum size.
  * @param {T} item The item to add.
  */
 goog.structs.CircularBuffer.prototype.set = function(index, item) {

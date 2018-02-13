@@ -25,7 +25,7 @@
  * </pre>
  *
  * The injected data can then be referred to in any soy templates as
- * part of a magic "ij" parameter. For example, {@code $ij.dataKey}
+ * part of a magic "ij" parameter. For example, `$ij.dataKey`
  * will evaluate to 'value' with the above injected data.
  *
  * @author henrywong@google.com (Henry Wong)
@@ -51,7 +51,7 @@ goog.require('goog.soy.data.SanitizedContentKind');
  * @param {goog.soy.InjectedDataSupplier=} opt_injectedDataSupplier A supplier
  *     that provides an injected data.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper;
- *     defaults to that provided by {@code goog.dom.getDomHelper()}.
+ *     defaults to that provided by `goog.dom.getDomHelper()`.
  * @constructor
  */
 goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {

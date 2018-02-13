@@ -229,8 +229,8 @@ goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_ = function(urlPolicy) {
 
 
 /**
- * The builder for the HTML Sanitizer. All methods except build return {@code
- * this}.
+ * The builder for the HTML Sanitizer. All methods except build return
+ * `this`.
  * @final @constructor @struct
  */
 goog.html.sanitizer.HtmlSanitizer.Builder = function() {

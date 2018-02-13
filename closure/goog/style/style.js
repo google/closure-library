@@ -73,7 +73,7 @@ goog.style.setStyle = function(element, style, opt_value) {
 
 /**
  * Sets a style value on an element, with parameters swapped to work with
- * {@code goog.object.forEach()}. Prepends a vendor-specific prefix when
+ * `goog.object.forEach()`. Prepends a vendor-specific prefix when
  * necessary.
  * @param {Element} element The element to change.
  * @param {string|number|boolean|undefined} value Style value.

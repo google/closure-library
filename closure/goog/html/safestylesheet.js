@@ -51,7 +51,7 @@ goog.require('goog.string.TypedString');
  * goog.html.SafeStyleSheet.unwrap(styleSheet2)} must itself be a value that
  * satisfies the SafeStyleSheet type constraint. This requirement implies that
  * for any value `styleSheet` of this type,
- * {@code goog.html.SafeStyleSheet.unwrap(styleSheet1)} must end in
+ * `goog.html.SafeStyleSheet.unwrap(styleSheet1)` must end in
  * "beginning of rule" context.
 
  * A SafeStyleSheet can be constructed via security-reviewed unchecked

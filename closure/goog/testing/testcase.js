@@ -1397,7 +1397,7 @@ goog.testing.TestCase.prototype.timeout = function(fn, time) {
 
 
 /**
- * Clears a timeout created by {@code this.timeout()}.
+ * Clears a timeout created by `this.timeout()`.
  * @param {number} id A timeout id.
  * @protected
  */
@@ -1559,7 +1559,7 @@ goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
  * Removes the specified exception from being tracked. This only needs to be
  * called for internal functions that intentionally catch an exception, such
  * as
- * {@code #assertThrowsJsUnitException}.
+ * `#assertThrowsJsUnitException`.
  * @param {!goog.testing.JsUnitException} e The exception object to invalidate.
  * @package
  */

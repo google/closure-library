@@ -27,11 +27,11 @@ goog.provide('goog.labs.mock.verification.VerificationMode');
 /**
  * A mode which defines how mock invocations should be verified.
  * When an instance of `VerificationMode` is passed to
- * `goog.labs.mock.verify`, then that instances's {@code #verify}
+ * `goog.labs.mock.verify`, then that instances's `#verify`
  * method will be used to verify the invocation.
  *
- * If {@code #verify} returns false, then the test will fail and the
- * description returned from {@code #describe} will be shown in the
+ * If `#verify` returns false, then the test will fail and the
+ * description returned from `#describe` will be shown in the
  * test failure message.  Sample usage:
  *
  * goog.module('my.package.MyClassTest');
@@ -125,7 +125,7 @@ goog.labs.mock.verification.atMost = function(maxNumberOfInvocations) {
 
 /**
  * Returns a `VerificationMode` which verifies a method was never
- * called. An alias for {@code VerificatonMode.times(0)}.
+ * called. An alias for `VerificatonMode.times(0)`.
  *
  * @return {!goog.labs.mock.verification.VerificationMode}
  */

@@ -592,7 +592,7 @@ goog.ui.tree.BaseNode.prototype.select = function() {
 
 /**
  * Originally it was intended to deselect the node but never worked.
- * @deprecated Use {@code tree.setSelectedItem(null)}.
+ * @deprecated Use `tree.setSelectedItem(null)`.
  */
 goog.ui.tree.BaseNode.prototype.deselect = goog.nullFunction;
 

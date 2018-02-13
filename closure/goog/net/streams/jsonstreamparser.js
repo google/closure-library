@@ -227,7 +227,7 @@ Parser.prototype.done = function() {
 
 /**
  * Get the part of input that is after the end of the stream. Call this only
- * when {@code this.done()} is true.
+ * when `this.done()` is true.
  *
  * @return {string} The extra input
  *

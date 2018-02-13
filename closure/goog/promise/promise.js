@@ -97,21 +97,21 @@ goog.Promise = function(resolver, opt_context) {
   this.result_ = undefined;
 
   /**
-   * For Promises created by calling {@code then()}, the originating parent.
+   * For Promises created by calling `then()`, the originating parent.
    * @private {goog.Promise}
    */
   this.parent_ = null;
 
   /**
    * The linked list of `onFulfilled` and `onRejected` callbacks
-   * added to this Promise by calls to {@code then()}.
+   * added to this Promise by calls to `then()`.
    * @private {?goog.Promise.CallbackEntry_}
    */
   this.callbackEntries_ = null;
 
   /**
    * The tail of the linked list of `onFulfilled` and `onRejected`
-   * callbacks added to this Promise by calls to {@code then()}.
+   * callbacks added to this Promise by calls to `then()`.
    * @private {?goog.Promise.CallbackEntry_}
    */
   this.callbackEntriesTail_ = null;

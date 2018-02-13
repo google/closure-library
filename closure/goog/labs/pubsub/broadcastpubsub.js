@@ -373,8 +373,8 @@ goog.labs.pubsub.BroadcastPubSub.IE8_TIMESTAMP_UNIQUE_OFFSET_MS_ = .01;
  * This key is a static member shared by all instances of BroadcastPubSub in the
  * same Window context. To avoid read-update-write contention, this key is only
  * written in a single context in the cleanupIe8StorageEvents_ function. Since
- * instances in other contexts will read this key there is code in the {@code
- * publish} function to make sure timestamps are unique even within the same
+ * instances in other contexts will read this key there is code in the
+ * `publish` function to make sure timestamps are unique even within the same
  * millisecond.
  *
  * @private @const {string}

@@ -102,8 +102,8 @@ goog.json.errorLogger_ = goog.nullFunction;
 
 
 /**
- * Sets an error logger to use if there's a recoverable parsing error and {@code
- * goog.json.TRY_NATIVE_JSON} is enabled.
+ * Sets an error logger to use if there's a recoverable parsing error and
+ * `goog.json.TRY_NATIVE_JSON` is enabled.
  * @param {function(string, !Error)} errorLogger The first parameter is the
  *     error message, the second is the exception thrown by `JSON.parse`.
  */
