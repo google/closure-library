@@ -50,6 +50,7 @@ goog.provide('goog.net.WebChannel');
 
 goog.require('goog.events');
 goog.require('goog.events.Event');
+goog.require('goog.net.XmlHttpFactory');
 
 
 
@@ -171,6 +172,9 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * forwardChannelRequestTimeoutMs. Note that these options are subject to
  * change.
  *
+ * xmlHttpFactory: allows the caller to override the factory used to create
+ * XMLHttpRequest objects.
+ *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
  *   initMessageHeaders: (!Object<string, string>|undefined),
@@ -188,6 +192,7 @@ goog.net.WebChannel.FailureRecovery = function() {};
  *   disableRedact: (boolean|undefined),
  *   clientProfile: (string|undefined),
  *   internalChannelParams: (!Object<string, boolean|number>|undefined),
+ *   xmlHttpFactory: (!goog.net.XmlHttpFactory|undefined),
  * }}
  */
 goog.net.WebChannel.Options;

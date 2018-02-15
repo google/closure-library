@@ -39,6 +39,7 @@ goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.XhrIo');
+goog.require('goog.net.XmlHttpFactory');
 goog.require('goog.net.rpc.HttpCors');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -332,6 +333,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
           'internalChannelParams.forwardChannelRequestTimeoutMs',
           opt_options) ||
       20 * 1000;
+
+  /**
+   * The custom factory used to create XMLHttpRequest objects.
+   * @private {!goog.net.XmlHttpFactory | undefined}
+   */
+  this.xmlHttpFactory_ =
+      (opt_options && opt_options.xmlHttpFactory) || undefined;
 
   /**
    * The timeout in milliseconds for a back channel request. Defaults to using
@@ -2197,7 +2205,7 @@ WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
   if (hostPrefix && !this.supportsCrossDomainXhrs_) {
     throw new Error('Can\'t create secondary domain capable XhrIo object.');
   }
-  var xhr = new goog.net.XhrIo();
+  var xhr = new goog.net.XhrIo(this.xmlHttpFactory_);
   xhr.setWithCredentials(this.supportsCrossDomainXhrs_);
   return xhr;
 };
