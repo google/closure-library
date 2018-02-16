@@ -253,7 +253,7 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
   var step = opt_step || 1;
   if (arguments.length > 1) {
     start = startOrStop;
-    stop = opt_stop;
+    stop = +opt_stop;
   }
   if (step == 0) {
     throw new Error('Range step argument must not be zero');
