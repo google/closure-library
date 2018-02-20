@@ -21,7 +21,8 @@ install:
 
 before_script:
   - ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
-  - ./scripts/ci/sauce_connect.sh
+  # Unit tests are disabled (below)
+  #- 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./scripts/ci/sauce_connect.sh; fi'
   # Ensure we point to the version of clang-format that we installed in
   # install_closure_deps.sh. Travis has an older version on the $PATH and
   # clang-format-diff.py invokes "clang-format" with no option of specifying
@@ -37,7 +38,7 @@ script:
   - ./scripts/ci/lint_pull_request.sh
   - ./scripts/ci/check_code_format.sh
   # Disable unit tests
-  # - travis_wait 30 ./scripts/ci/run_all_tests.sh
+  # - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then travis_wait 30 ./scripts/ci/run_all_tests.sh; fi'
 
 after_success:
   - ./scripts/ci/push_latest_docs.sh
