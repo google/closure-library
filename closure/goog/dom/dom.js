@@ -1756,7 +1756,7 @@ goog.dom.setTextContent = function(node, text) {
       'goog.dom.setTextContent expects a non-null value for node');
 
   if ('textContent' in node) {
-    node.textContent = text;
+    node.textContent = '' + text;
   } else if (node.nodeType == goog.dom.NodeType.TEXT) {
     /** @type {!Text} */ (node).data = String(text);
   } else if (
