@@ -71,6 +71,7 @@ command=(
 # Explicitly add all the non-blacklisted files.
 while read -r file; do
   if [[ ! "$file" =~ ^closure/goog/demos &&
+        ! "$file" =~ ^debug_loader_integration_tests/testdata &&
         ! "$file" =~ _test\.js$ &&
         ! "$file" =~ _perf\.js$ &&
         "${BLACKLIST[${file#closure/goog/}]}" != true ]]; then
