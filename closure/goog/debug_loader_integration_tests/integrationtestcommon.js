@@ -33,7 +33,7 @@ var MS_BETWEEN_RETRIES = 100;
 
 
 /**
- * @param {!HTMLIframeElement} iframe
+ * @param {!HTMLIFrameElement} iframe
  * @return {!function(): (!function(): !GoogPromise)}
  */
 function checkCompletion(iframe) {
