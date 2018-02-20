@@ -69,7 +69,8 @@ exports.createTestSuite = function() {
 
     var fn;
     try {
-      var iframe = document.getElementById('testFrame');
+      var iframe = /** @type {!HTMLIFrameElement} */ (
+          document.getElementById('testFrame'));
       fn = checkCompletion(iframe);
     } catch (error) {
       fn = function() {
