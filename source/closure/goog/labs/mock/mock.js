@@ -394,7 +394,7 @@ goog.labs.mock.MockManager_ = function() {
 
 
 /**
- * Allows callers of {@code #verify} to override the default verification
+ * Allows callers of `#verify` to override the default verification
  * mode of this MockManager.
  *
  * @param {!goog.labs.mock.verification.VerificationMode} verificationMode

@@ -22,11 +22,13 @@ const PATH = '';
 /**
  * @typedef {{
  *   basePath: string,
+ *   depsFile: string,
  *   output: string,
  *   overwriteExistingFiles: boolean,
  *   paths: !Array<{path: string, directory: boolean}>,
  *   recursive: boolean,
- * }} */
+ * }}
+ */
 let Args;
 
 
@@ -74,6 +76,9 @@ function showHelp(errorMessage = '') {
       Options:
         --base
           Path to base.js file.
+        --dep_file:
+          Path to a deps file to use for all tests. If not specified but a
+          *_test_deps.js file exists it will be automatically included.
         --recursive
           generate _test.html for each _test.js in each directory recursively.
           Defaults to false.
@@ -102,6 +107,9 @@ function processArgs(args) {
     switch (key) {
       case '--base':
         processedArgs.basePath = value;
+        break;
+      case '--dep_file':
+        processedArgs.depsFile = value;
         break;
       case '--help':
         showHelp();
@@ -138,6 +146,11 @@ function processArgs(args) {
     if (!processedArgs.output.endsWith('_test.html')) {
       throw new Error('Output file should end with _test.html.');
     }
+  }
+
+  if (processedArgs.depsFile && !fs.existsSync(processedArgs.depsFile)) {
+    throw new Error(
+        'Specified deps file does not exist: ' + processedArgs.depsFile);
   }
 
   return processedArgs;
@@ -211,7 +224,7 @@ function maybeGenerateHtmlForFile(filename, args) {
       path.basename(testBootstrapFilename) :
       '';
 
-  const testDepsFilename = baseFileName + '_test_deps.js';
+  const testDepsFilename = args.depsFile || baseFileName + '_test_deps.js';
   const pathToDeps =
       fs.existsSync(testDepsFilename) ? path.basename(testDepsFilename) : '';
 

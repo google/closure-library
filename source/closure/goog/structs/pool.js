@@ -275,7 +275,7 @@ goog.structs.Pool.prototype.createObject = function() {
 /**
  * Should be overridden to dispose of an object. Default implementation is to
  * remove all its members, which should render it useless. Calls the object's
- * {@code dispose()} method, if available.
+ * `dispose()` method, if available.
  * @param {T} obj The object to dispose.
  */
 goog.structs.Pool.prototype.disposeObject = function(obj) {
@@ -292,7 +292,7 @@ goog.structs.Pool.prototype.disposeObject = function(obj) {
 /**
  * Should be overridden to determine whether an object has become unusable and
  * should not be returned by getObject(). Calls the object's
- * {@code canBeReused()}  method, if available.
+ * `canBeReused()`  method, if available.
  * @param {T} obj The object to test.
  * @return {boolean} Whether the object can be reused.
  */

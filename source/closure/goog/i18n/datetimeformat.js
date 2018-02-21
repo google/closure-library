@@ -354,7 +354,7 @@ goog.i18n.DateTimeFormat.enforceAsciiDigits_ = false;
 
 /**
  * If RLM unicode characters should be removed from date/time patterns (useful
- * when enforcing ASCII digits for Arabic). See {@code #setEnforceAsciiDigits}.
+ * when enforcing ASCII digits for Arabic). See `#setEnforceAsciiDigits`.
  * @type {boolean}
  * @private
  */
@@ -388,7 +388,7 @@ goog.i18n.DateTimeFormat.setEnforceAsciiDigits = function(enforceAsciiDigits) {
 
 /**
  * @return {boolean} Whether enforcing ASCII digits for all locales. See
- *     {@code #setEnforceAsciiDigits} for more details.
+ *     `#setEnforceAsciiDigits` for more details.
  */
 goog.i18n.DateTimeFormat.isEnforceAsciiDigits = function() {
   return goog.i18n.DateTimeFormat.enforceAsciiDigits_;

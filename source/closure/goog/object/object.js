@@ -708,8 +708,8 @@ goog.object.isImmutableView = function(obj) {
  * Get all properties names on a given Object regardless of enumerability.
  *
  * <p> If the browser does not support `Object.getOwnPropertyNames` nor
- * `Object.getPrototypeOf` then this is equivalent to using {@code
- * goog.object.getKeys}
+ * `Object.getPrototypeOf` then this is equivalent to using
+ * `goog.object.getKeys`
  *
  * @param {?Object} obj The object to get the properties of.
  * @param {boolean=} opt_includeObjectPrototype Whether properties defined on

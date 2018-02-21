@@ -1,0 +1,65 @@
+<!--
+Copyright 2017 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.getObjectByName('test.js.Provide'));
+  assertNull(goog.getObjectByName('test.js.ProvideRequiresProvide'));
+
+  goog.require('test.js.ProvideRequiresProvide');
+//# sourceURL=bootstrapprovidewithdepproviderequiresprovidepretest.js
+</script>
+<script>
+  assertNotNull(goog.getObjectByName('test.js.Provide'));
+  assertNotNull(goog.getObjectByName('test.js.ProvideRequiresProvide'));
+  assertNotNull(test.js.Provide);
+  assertNotNull(test.js.ProvideRequiresProvide);
+  assertEquals('PROVIDE-REQUIRES-PROVIDE', test.js.ProvideRequiresProvide.NAME);
+  assertTrue(new test.js.ProvideRequiresProvide() instanceof test.js.Provide);
+//# sourceURL=bootstrapprovidewithdepproviderequiresprovidetest.js
+</script>
+
+<script>
+  assertNull(goog.getObjectByName('test.js.GoogModuleDLN'));
+  assertNull(goog.getObjectByName('test.js.ProvideRequiresGoogModuleDLN'));
+
+  goog.require('test.js.ProvideRequiresGoogModuleDLN');
+//# sourceURL=bootstrapprovidewithdepprovidequiresgoogmoduledlnpretest.js
+</script>
+<script>
+  assertNotNull(goog.getObjectByName('test.js.GoogModuleDLN'));
+  assertNotNull(goog.getObjectByName('test.js.ProvideRequiresGoogModuleDLN'));
+  assertNotNull(test.js.GoogModuleDLN);
+  assertNotNull(test.js.ProvideRequiresGoogModuleDLN);
+  assertEquals('PROVIDE-REQUIRES-GOOG-MODULE-DLN', test.js.ProvideRequiresGoogModuleDLN.NAME);
+  assertTrue(new test.js.ProvideRequiresGoogModuleDLN() instanceof test.js.GoogModuleDLN);
+//# sourceURL=bootstrapprovidewithdepprovidequiresgoogmoduledlntest.js
+</script>
+
+<script>
+  assertNull(goog.module.get('test.js.GoogModule'));
+  assertNull(goog.getObjectByName('test.js.GoogModule'));
+  assertNull(goog.getObjectByName('test.js.ProvideRequiresGoogModuleGet'));
+
+  goog.require('test.js.ProvideRequiresGoogModuleGet');
+//# sourceURL=bootstrapprovidewithdepprovidequiresgoogmoduledgetpretest.js
+</script>
+<script>
+  var GoogModule = goog.module.get('test.js.GoogModule');
+  assertNotNull(goog.getObjectByName('test.js.ProvideRequiresGoogModuleGet'));
+  assertNotNull(test.js.GoogModule);
+  assertNull(goog.getObjectByName('test.js.GoogModule'));
+  assertNotNull(test.js.ProvideRequiresGoogModuleGet);
+  assertEquals('PROVIDE-REQUIRES-GOOG-MODULE-GET', test.js.ProvideRequiresGoogModuleGet.NAME);
+  assertTrue(new test.js.ProvideRequiresGoogModuleGet() instanceof GoogModule);
+//# sourceURL=bootstrapprovidewithdepprovidequiresgoogmoduledgettest.js
+</script>
+
+<script>
+  done();
+</script>

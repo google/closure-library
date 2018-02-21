@@ -115,7 +115,7 @@ goog.labs.structs.Multimap.prototype.addAllFromMultimap = function(map) {
  * Replaces all the values for the given key with the given values.
  * @param {K} key The key whose values are to be replaced.
  * @param {!Array<V>} values The new values. If empty, this is
- *     equivalent to {@code removeAll(key)}.
+ *     equivalent to `removeAll(key)`.
  */
 goog.labs.structs.Multimap.prototype.replaceValues = function(key, values) {
   this.removeAll(key);

@@ -52,10 +52,14 @@ var mockAnimation;
 
 /**
  * A basic class to implement the abstract goog.ui.SliderBase for testing.
+ * @param {boolean=} testOnlyIsRightToLeft This parameter is necessary to tell
+ *     if the slider is rendered right-to-left when creating thumbs (before
+ *     entering the document). Used only for test purposes.
  * @constructor
  * @extends {goog.ui.SliderBase}
  */
-function OneThumbSlider() {
+function OneThumbSlider(testOnlyIsRightToLeft = false) {
+  this.testOnlyIsRightToLeft_ = testOnlyIsRightToLeft;
   goog.ui.SliderBase.call(this, undefined /* domHelper */, function(value) {
     return value > 5 ? 'A big value.' : 'A small value.';
   });
@@ -65,7 +69,8 @@ goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
 /** @override */
 OneThumbSlider.prototype.createThumbs = function() {
-  this.valueThumb = this.extentThumb = goog.dom.getElement('thumb');
+  var dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+  this.valueThumb = this.extentThumb = goog.dom.getElement('thumb' + dirSuffix);
 };
 
 
@@ -78,10 +83,14 @@ OneThumbSlider.prototype.getCssClass = function(orientation) {
 
 /**
  * A basic class to implement the abstract goog.ui.SliderBase for testing.
+ * @param {boolean=} testOnlyIsRightToLeft This parameter is necessary to tell
+ *     if the slider is rendered right-to-left when creating thumbs (before
+ *     entering the document). Used only for test purposes.
  * @constructor
  * @extends {goog.ui.SliderBase}
  */
-function TwoThumbSlider() {
+function TwoThumbSlider(testOnlyIsRightToLeft = false) {
+  this.testOnlyIsRightToLeft_ = testOnlyIsRightToLeft;
   goog.ui.SliderBase.call(this);
 }
 goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
@@ -89,9 +98,10 @@ goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 
 /** @override */
 TwoThumbSlider.prototype.createThumbs = function() {
-  this.valueThumb = goog.dom.getElement('valueThumb');
-  this.extentThumb = goog.dom.getElement('extentThumb');
-  this.rangeHighlight = goog.dom.getElement('rangeHighlight');
+  var dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+  this.valueThumb = goog.dom.getElement('valueThumb' + dirSuffix);
+  this.extentThumb = goog.dom.getElement('extentThumb' + dirSuffix);
+  this.rangeHighlight = goog.dom.getElement('rangeHighlight' + dirSuffix);
 };
 
 
@@ -156,7 +166,7 @@ function setUp() {
       goog.dom.TagName.DIV, {'id': 'oneThumbSliderRtl'},
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'thumbRtl'}));
   sandBoxRtl.appendChild(oneThumbElemRtl);
-  oneThumbSliderRtl = new OneThumbSlider();
+  oneThumbSliderRtl = new OneThumbSlider(true /* testOnlyIsRightToLeft */);
   oneThumbSliderRtl.enableFlipForRtl(true);
   oneThumbSliderRtl.decorate(oneThumbElemRtl);
   goog.events.listen(
@@ -169,7 +179,7 @@ function setUp() {
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'valueThumbRtl'}),
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'extentThumbRtl'}));
   sandBoxRtl.appendChild(twoThumbElemRtl);
-  twoThumbSliderRtl = new TwoThumbSlider();
+  twoThumbSliderRtl = new TwoThumbSlider(true /* testOnlyIsRightToLeft */);
   twoThumbSliderRtl.enableFlipForRtl(true);
   twoThumbSliderRtl.decorate(twoThumbElemRtl);
   twoChangeEventCount = 0;
@@ -238,7 +248,7 @@ function testGetAndSetValueRtl() {
   var thumbElement = goog.dom.getElement('thumbRtl');
   assertEquals(0, goog.style.bidi.getOffsetStart(thumbElement));
   assertEquals('', thumbElement.style.left);
-  assertTrue(thumbElement.style.right >= 0);
+  assertEquals('0px', thumbElement.style.right);
 
   oneThumbSliderRtl.setValue(30);
   assertEquals(30, oneThumbSliderRtl.getValue());
@@ -247,7 +257,7 @@ function testGetAndSetValueRtl() {
       oneChangeEventCount);
 
   assertEquals('', thumbElement.style.left);
-  assertTrue(thumbElement.style.right >= 0);
+  assertEquals('294px', thumbElement.style.right);
 
   oneThumbSliderRtl.setValue(30);
   assertEquals(30, oneThumbSliderRtl.getValue());
@@ -271,9 +281,9 @@ function testGetAndSetValueRtl() {
   assertEquals(0, goog.style.bidi.getOffsetStart(valueThumbElement));
   assertEquals(0, goog.style.bidi.getOffsetStart(extentThumbElement));
   assertEquals('', valueThumbElement.style.left);
-  assertTrue(valueThumbElement.style.right >= 0);
+  assertEquals('0px', valueThumbElement.style.right);
   assertEquals('', extentThumbElement.style.left);
-  assertTrue(extentThumbElement.style.right >= 0);
+  assertEquals('0px', extentThumbElement.style.right);
 
   twoThumbSliderRtl.setExtent(70);
   twoChangeEventCount = 0;
@@ -290,9 +300,9 @@ function testGetAndSetValueRtl() {
       twoChangeEventCount);
 
   assertEquals('', valueThumbElement.style.left);
-  assertTrue(valueThumbElement.style.right >= 0);
+  assertEquals('600px', valueThumbElement.style.right);
   assertEquals('', extentThumbElement.style.left);
-  assertTrue(extentThumbElement.style.right >= 0);
+  assertEquals('700px', extentThumbElement.style.right);
 
   twoThumbSliderRtl.setValue(-60);
   assertEquals(
@@ -1051,15 +1061,16 @@ function testDragEventsInRtlModeUpdatesValue() {
   oneThumbSliderRtl.setMaximum(300);
   oneThumbSliderRtl.setValue(100);
 
-  // Need to set to (0, 0) in IE8 due to a browser bug where the
-  // offsetWidth/height is incorrectly calculated as 0 in test files.
-  var offset = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) ?
-      new goog.math.Coordinate() :
-      goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var offset = goog.style.getPageOffset(oneThumbSliderRtl.valueThumb);
   var offsetXAtZero = offset.x;
+  // Extra half of the thumb width in IE8 due to a browser bug where the thumb
+  // offsetWidth is incorrectly calculated as 0 in test files.
+  var thumbSize = goog.style.getSize(oneThumbSliderRtl.valueThumb);
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
+    offsetXAtZero += thumbSize.width / 2;
+  }
 
   var sliderElement = oneThumbSliderRtl.getElementStrict();
-  var thumbSize = goog.style.getSize(oneThumbSliderRtl.valueThumb);
   var width = sliderElement.clientWidth - thumbSize.width;
   var range = oneThumbSliderRtl.getMaximum() - oneThumbSliderRtl.getMinimum();
 
@@ -1067,16 +1078,16 @@ function testDragEventsInRtlModeUpdatesValue() {
   goog.testing.events.fireMouseDownEvent(oneThumbSliderRtl.valueThumb);
 
   // Scroll to 30 in the range of 0-200. Given that this is RTL mode, that means
-  // the value will be 300 - 30 = 270.
-  offset.x = offsetXAtZero + Math.round(30 / range * width);
+  // the value will be 100 - (-30) = 130.
+  offset.x = offsetXAtZero - Math.round(30 / range * width);
   goog.testing.events.fireMouseMoveEvent(oneThumbSliderRtl.valueThumb, offset);
-  assertEquals(270, oneThumbSliderRtl.getValue());
+  assertEquals(130, oneThumbSliderRtl.getValue());
 
   // Scroll to 70 in the range of 0-200. Given that this is RTL mode, that means
-  // the value will be 300 - 70 = 230.
-  offset.x = offsetXAtZero + Math.round(70 / range * width);
+  // the value will be 100 - (-70) = 170.
+  offset.x = offsetXAtZero - Math.round(70 / range * width);
   goog.testing.events.fireMouseMoveEvent(oneThumbSliderRtl.valueThumb, offset);
-  assertEquals(230, oneThumbSliderRtl.getValue());
+  assertEquals(170, oneThumbSliderRtl.getValue());
 
   goog.testing.events.fireMouseUpEvent(oneThumbSliderRtl.valueThumb);
 }

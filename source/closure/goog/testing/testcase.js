@@ -1319,7 +1319,6 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
   }
 
   this.orderTests_();
-  this.log(this.getCount() + ' tests auto-discovered');
 };
 
 
@@ -1398,7 +1397,7 @@ goog.testing.TestCase.prototype.timeout = function(fn, time) {
 
 
 /**
- * Clears a timeout created by {@code this.timeout()}.
+ * Clears a timeout created by `this.timeout()`.
  * @param {number} id A timeout id.
  * @protected
  */
@@ -1560,7 +1559,7 @@ goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
  * Removes the specified exception from being tracked. This only needs to be
  * called for internal functions that intentionally catch an exception, such
  * as
- * {@code #assertThrowsJsUnitException}.
+ * `#assertThrowsJsUnitException`.
  * @param {!goog.testing.JsUnitException} e The exception object to invalidate.
  * @package
  */
@@ -1858,9 +1857,6 @@ goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
 
   if (goog.global.location) {
     var search = goog.global.location.search;
-    testCase.setOrder(
-        goog.testing.TestCase.parseOrder_(search) ||
-        goog.testing.TestCase.Order.SORTED);
     testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
   }
   goog.testing.TestCase.activeTestCase_ = testCase;
@@ -1884,23 +1880,6 @@ goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
         'G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }
-};
-
-
-/**
- * Parses URL query parameters for the 'order' parameter.
- * @param {string} search The URL query string.
- * @return {?goog.testing.TestCase.Order} The sort order for running tests.
- * @private
- */
-goog.testing.TestCase.parseOrder_ = function(search) {
-  var order = null;
-  var orderMatch = search.match(/(?:\?|&)order=(natural|random|sorted)/i);
-  if (orderMatch) {
-    order = /** @type {goog.testing.TestCase.Order} */ (
-        orderMatch[1].toLowerCase());
-  }
-  return order;
 };
 
 

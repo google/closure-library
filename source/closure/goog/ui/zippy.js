@@ -178,7 +178,7 @@ goog.tagUnsealableClass(goog.ui.Zippy);
  */
 goog.ui.Zippy.Events = {
   // Zippy will dispatch an ACTION event for user interaction. Mimics
-  // {@code goog.ui.Controls#performActionInternal} by first changing
+  // `goog.ui.Controls#performActionInternal` by first changing
   // the toggle state and then dispatching an ACTION event.
   ACTION: 'action',
   // Zippy state is toggled from collapsed to expanded or vice versa.
@@ -452,7 +452,7 @@ goog.ui.Zippy.prototype.onHeaderClick_ = function(event) {
  * Dispatch an ACTION event whenever there is user interaction with the header.
  * Please note that after the zippy state change is completed a TOGGLE event
  * will be dispatched. However, the TOGGLE event is dispatch on every toggle,
- * including programmatic call to {@code #toggle}.
+ * including programmatic call to `#toggle`.
  * @param {!goog.events.BrowserEvent} triggeringEvent
  * @private
  */

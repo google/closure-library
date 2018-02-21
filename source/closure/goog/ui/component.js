@@ -976,7 +976,7 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  *        then immediately decorate/render the child.
  *  </ul>
  *
- * In particular, {@code parent.addChild(child)} will throw an error if the
+ * In particular, `parent.addChild(child)` will throw an error if the
  * child component is already in the document, but the parent isn't.
  *
  * Clients of this API may call `addChild` and `addChildAt` with

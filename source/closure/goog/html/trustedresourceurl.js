@@ -40,8 +40,8 @@ goog.require('goog.string.TypedString');
  * this type.
  *
  * Instances of this type must be created via the factory method,
- * (`fromConstant`, `fromConstants`, `format` or {@code
- * formatWithParams}), and not by invoking its constructor. The constructor
+ * (`fromConstant`, `fromConstants`, `format` or
+ * `formatWithParams`), and not by invoking its constructor. The constructor
  * intentionally takes no parameters and the type is immutable; hence only a
  * default instance corresponding to the empty string can be obtained via
  * constructor invocation.

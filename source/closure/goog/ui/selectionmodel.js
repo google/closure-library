@@ -42,7 +42,7 @@ goog.ui.SelectionModel = function(opt_items) {
 
   /**
    * Array of items controlled by the selection model.  If the items support
-   * the {@code setSelected(Boolean)} interface, they will be (de)selected
+   * the `setSelected(Boolean)` interface, they will be (de)selected
    * as needed.
    * @type {!Array<Object>}
    * @private
@@ -88,7 +88,7 @@ goog.ui.SelectionModel.prototype.getSelectionHandler = function() {
  * function must take two arguments:  an item and a Boolean to indicate whether
  * the item is to be selected or deselected.  Selection handler functions are
  * only needed if the items in the selection model don't natively support the
- * {@code setSelected(Boolean)} interface.
+ * `setSelected(Boolean)` interface.
  * @param {Function} handler Selection handler function.
  */
 goog.ui.SelectionModel.prototype.setSelectionHandler = function(handler) {
@@ -280,7 +280,7 @@ goog.ui.SelectionModel.prototype.disposeInternal = function() {
  * Private helper; selects or deselects the given item based on the value of
  * the `select` argument.  If a selection handler has been registered
  * (via {@link #setSelectionHandler}, calls it to update the internal selection
- * state of the item.  Otherwise, attempts to call {@code setSelected(Boolean)}
+ * state of the item.  Otherwise, attempts to call `setSelected(Boolean)`
  * on the item itself, provided the object supports that interface.
  * @param {Object} item Item to select or deselect.
  * @param {boolean} select If true, the object will be selected; if false, it

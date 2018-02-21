@@ -429,7 +429,7 @@ goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
 /**
  * Content of type {@link goog.soy.data.SanitizedContentKind.STYLE}.
  *
- * The content is non-attacker-exploitable CSS, such as {@code color:#c3d9ff}.
+ * The content is non-attacker-exploitable CSS, such as `color:#c3d9ff`.
  * The content direction is LTR.
  *
  * @extends {goog.soy.data.SanitizedContent}

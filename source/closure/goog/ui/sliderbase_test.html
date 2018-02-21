@@ -15,7 +15,7 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <style type="text/css">
- #oneThumbSlider {
+ #oneThumbSlider, #oneThumbSliderRtl {
   position: relative;
   width: 1000px;
   background: grey;
@@ -27,18 +27,18 @@ See the COPYING file for details.
   width: 20px;
 }
 
-#twoThumbSlider {
+#twoThumbSlider, #twoThumbSliderRtl {
   position: relative;
   /* Extra 20px is so distance between thumb centers is 1000px */
   width: 1020px;
 }
 
-#valueThumb, #extentThumb {
+#valueThumb, #extentThumb, #valueThumbRtl, #extentThumbRtl {
   position: absolute;
   width: 20px;
 }
 
-#thumb {
+#thumb, #thumbRtl {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -51,9 +51,10 @@ See the COPYING file for details.
   top: auto;
 }
 
-#rangeHighlight {
+#rangeHighlight, #rangeHighlightRtl {
   position: absolute;
 }
 </style>
 </head><body><div id="sandbox">
-</div></body></html>
+</div>
+</body></html>
