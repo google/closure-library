@@ -44,6 +44,8 @@ goog.require('goog.math');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 
+goog.forwardDeclare('goog.graphics.CanvasGraphics');
+
 
 
 /**

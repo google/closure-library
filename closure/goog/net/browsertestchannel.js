@@ -32,6 +32,10 @@ goog.require('goog.net.ChannelRequest.Error');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.string.Parser');
 
+goog.forwardDeclare('goog.net.BrowserChannel');
+goog.forwardDeclare('goog.net.BrowserChannel.ServerReachability');
+goog.forwardDeclare('goog.net.XhrIo');
+
 
 
 /**

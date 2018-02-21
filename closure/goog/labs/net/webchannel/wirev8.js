@@ -28,6 +28,8 @@ goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.structs');
 
+goog.forwardDeclare('goog.structs.Map');
+
 
 
 /**

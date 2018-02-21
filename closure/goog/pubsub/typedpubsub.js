@@ -17,6 +17,8 @@ goog.provide('goog.pubsub.TypedPubSub');
 goog.require('goog.Disposable');
 goog.require('goog.pubsub.PubSub');
 
+goog.forwardDeclare('goog.pubsub.TopicId');
+
 
 
 /**

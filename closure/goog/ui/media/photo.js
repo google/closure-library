@@ -58,6 +58,8 @@ goog.require('goog.dom.TagName');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaRenderer');
 
+goog.forwardDeclare('goog.ui.media.MediaModel');
+
 
 
 /**

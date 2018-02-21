@@ -30,6 +30,8 @@ goog.require('goog.fs');
 goog.require('goog.testing.fs.Blob');
 goog.require('goog.testing.fs.FileSystem');
 
+goog.forwardDeclare('goog.testing.PropertyReplacer');
+
 
 /**
  * Get a filesystem object. Since these are mocks, there's no difference between

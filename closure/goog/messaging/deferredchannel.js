@@ -23,6 +23,8 @@ goog.provide('goog.messaging.DeferredChannel');
 goog.require('goog.Disposable');
 goog.require('goog.messaging.MessageChannel');  // interface
 
+goog.forwardDeclare('goog.async.Deferred');
+
 
 
 /**

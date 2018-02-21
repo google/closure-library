@@ -25,6 +25,8 @@ goog.require('goog.Disposable');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 
+goog.forwardDeclare('goog.messaging.MessageChannel');
+
 
 
 /**

@@ -39,6 +39,9 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.Uri');
+goog.forwardDeclare('goog.net.XhrIo');
+
 
 
 /**

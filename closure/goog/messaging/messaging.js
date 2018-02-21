@@ -19,6 +19,8 @@
 
 goog.provide('goog.messaging');
 
+goog.forwardDeclare('goog.messaging.MessageChannel');
+
 
 /**
  * Creates a bidirectional pipe between two message channels.

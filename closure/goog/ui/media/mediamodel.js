@@ -31,6 +31,8 @@ goog.provide('goog.ui.media.MediaModel.Thumbnail');
 goog.require('goog.array');
 goog.require('goog.html.TrustedResourceUrl');
 
+goog.forwardDeclare('goog.math.Size');
+
 
 
 /**

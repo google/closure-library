@@ -31,6 +31,10 @@ goog.require('goog.style');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.ui.Container');
+goog.forwardDeclare('goog.ui.Container.Orientation');
+goog.forwardDeclare('goog.ui.Control');
+
 
 
 /**

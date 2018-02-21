@@ -21,6 +21,9 @@ goog.provide('goog.proto2.FieldDescriptor');
 goog.require('goog.asserts');
 goog.require('goog.string');
 
+goog.forwardDeclare('goog.proto2.Descriptor');
+goog.forwardDeclare('goog.proto2.Message');
+
 
 
 /**

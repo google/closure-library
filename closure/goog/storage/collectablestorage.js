@@ -26,6 +26,8 @@ goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.ExpiringStorage');
 goog.require('goog.storage.RichStorage');
 
+goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
+
 
 
 /**

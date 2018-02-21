@@ -29,6 +29,8 @@ goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.ui.ControlRenderer');
 
+goog.forwardDeclare('goog.ui.Checkbox.State');
+
 
 
 /**

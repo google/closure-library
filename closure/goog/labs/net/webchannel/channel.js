@@ -19,6 +19,12 @@
 
 goog.provide('goog.labs.net.webChannel.Channel');
 
+goog.forwardDeclare('goog.Uri');
+goog.forwardDeclare('goog.labs.net.webChannel.BaseTestChannel');
+goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest');
+goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest.Error');
+goog.forwardDeclare('goog.labs.net.webChannel.ConnectionState');
+goog.forwardDeclare('goog.net.XhrIo');
 
 
 /**

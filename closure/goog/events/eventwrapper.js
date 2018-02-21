@@ -20,6 +20,9 @@
 
 goog.provide('goog.events.EventWrapper');
 
+goog.forwardDeclare('goog.events.EventHandler');
+goog.forwardDeclare('goog.events.ListenableType');
+
 
 
 /**

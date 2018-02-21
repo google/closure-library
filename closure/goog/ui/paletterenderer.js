@@ -35,6 +35,8 @@ goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.ui.Palette');
+
 
 
 /**

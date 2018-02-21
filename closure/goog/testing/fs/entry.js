@@ -38,6 +38,8 @@ goog.require('goog.string');
 goog.require('goog.testing.fs.File');
 goog.require('goog.testing.fs.FileWriter');
 
+goog.forwardDeclare('goog.testing.fs.FileSystem');
+
 
 
 /**
@@ -286,7 +288,7 @@ goog.testing.fs.DirectoryEntry.prototype.isDirectory = function() {
 goog.testing.fs.DirectoryEntry.prototype.getLastModified = function() {
   var msg = 'reading last modified date for ' + this.getFullPath();
   return this.checkNotDeleted(msg).addCallback(function() {
-    return new Date(this.lastModifiedTimestamp_)
+    return new Date(this.lastModifiedTimestamp_);
   });
 };
 
@@ -295,7 +297,7 @@ goog.testing.fs.DirectoryEntry.prototype.getLastModified = function() {
 goog.testing.fs.DirectoryEntry.prototype.getMetadata = function() {
   var msg = 'reading metadata for ' + this.getFullPath();
   return this.checkNotDeleted(msg).addCallback(function() {
-    return this.getMetadata_()
+    return this.getMetadata_();
   });
 };
 
