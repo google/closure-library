@@ -520,14 +520,14 @@ function testYiqBrightnessDiff() {
   };
 
   var diffs = new Object();
-  for (name1 in colors) {
-    for (name2 in colors) {
+  for (var name1 in colors) {
+    for (var name2 in colors) {
       diffs[name1 + '-' + name2] =
           goog.color.yiqBrightnessDiff_(colors[name1], colors[name2]);
     }
   }
 
-  for (pair in diffs) {
+  for (var pair in diffs) {
     // each brightness diff should be a number
     assertTrue(pair + ' diff is a number.', typeof diffs[pair] == 'number');
     // each brightness diff should be greater than or equal to 0
@@ -561,14 +561,14 @@ function testColorDiff() {
   };
 
   var diffs = new Object();
-  for (name1 in colors) {
-    for (name2 in colors) {
+  for (var name1 in colors) {
+    for (var name2 in colors) {
       diffs[name1 + '-' + name2] =
           goog.color.colorDiff_(colors[name1], colors[name2]);
     }
   }
 
-  for (pair in diffs) {
+  for (var pair in diffs) {
     // each color diff should be a number
     assertTrue(pair + ' diff is a number.', typeof diffs[pair] == 'number');
     // each color diff should be greater than or equal to 0
@@ -595,10 +595,10 @@ function testColorDiff() {
  * This method runs unit tests against goog.color.highContrast().
  */
 function testHighContrast() {
-  white = [255, 255, 255];
-  black = [0, 0, 0];
-  lemonchiffron = [255, 250, 205];
-  sienna = [160, 82, 45];
+  var white = [255, 255, 255];
+  var black = [0, 0, 0];
+  var lemonchiffron = [255, 250, 205];
+  var sienna = [160, 82, 45];
 
   var suggestion =
       goog.color.highContrast(black, [white, black, sienna, lemonchiffron]);

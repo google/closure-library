@@ -169,8 +169,8 @@ function testHashing_optLength() {
  */
 function testFencepostErrors() {
   var hasher = new goog.crypt.Sha512();
-  A64 = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-  A128 = A64 + A64;
+  var A64 = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+  var A128 = A64 + A64;
   for (var i = 110; i <= 113; i++) {
     hasher.update(A128, i);
     var digest = hasher.digest();
