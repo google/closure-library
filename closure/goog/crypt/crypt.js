@@ -77,9 +77,10 @@ goog.crypt.byteArrayToString = function(bytes) {
  * the hex values to which the numbers correspond.
  * @param {Uint8Array|Array<number>} array Array of numbers representing
  *     characters.
+ * @param {string=} opt_separator Optional separator between values
  * @return {string} Hex string.
  */
-goog.crypt.byteArrayToHex = function(array) {
+goog.crypt.byteArrayToHex = function(array, opt_separator) {
   return goog.array
       .map(
           array,
@@ -87,7 +88,7 @@ goog.crypt.byteArrayToHex = function(array) {
             var hexByte = numByte.toString(16);
             return hexByte.length > 1 ? hexByte : '0' + hexByte;
           })
-      .join('');
+      .join(opt_separator || '');
 };
 
 
