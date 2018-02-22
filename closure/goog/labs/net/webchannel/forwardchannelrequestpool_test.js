@@ -42,7 +42,7 @@ testSuite({
 
   stubSpdyCheck: function(spdyEnabled) {
     propertyReplacer.set(
-        ForwardChannelRequestPool, 'isSpdyEnabled_', function() {
+        ForwardChannelRequestPool, 'isSpdyOrHttp2Enabled_', function() {
           return spdyEnabled;
         });
   },
