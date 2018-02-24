@@ -100,9 +100,11 @@ ForwardChannelRequestPool.MAX_POOL_SIZE_ = 10;
  */
 ForwardChannelRequestPool.isSpdyOrHttp2Enabled_ = function() {
   if (goog.global.PerformanceNavigationTiming) {
-    var entry = /** @type {!PerformanceNavigationTiming} */ (
-        goog.global.performance.getEntriesByType('navigation')[0]);
-    return entry.nextHopProtocol == 'hq' || entry.nextHopProtocol == 'h2';
+    var entrys = /** @type {!Array<!PerformanceNavigationTiming>} */ (
+        goog.global.performance.getEntriesByType('navigation'));
+    return entrys.length > 0 &&
+        (entrys[0].nextHopProtocol == 'hq' ||
+         entrys[0].nextHopProtocol == 'h2');
   }
   return !!(
       goog.global.chrome && goog.global.chrome.loadTimes &&
