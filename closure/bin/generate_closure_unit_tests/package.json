@@ -14,6 +14,6 @@
     }
   ],
   "dependencies": {
-    "parse5": "1.4.1"
+    "parse5": "^4.0.0"
   }
 }
