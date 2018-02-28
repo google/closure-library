@@ -99,22 +99,24 @@ goog.iter.toIterator = function(iterable) {
     return iterable;
   }
   if (typeof iterable.__iterator__ == 'function') {
-    return iterable.__iterator__(false);
+    return /** @type {{__iterator__:function(this:?, boolean=)}} */ (iterable)
+        .__iterator__(false);
   }
   if (goog.isArrayLike(iterable)) {
+    var like = /** @type {!IArrayLike<number|string>} */ (iterable);
     var i = 0;
     var newIter = new goog.iter.Iterator;
     newIter.next = function() {
       while (true) {
-        if (i >= iterable.length) {
+        if (i >= like.length) {
           throw goog.iter.StopIteration;
         }
         // Don't include deleted elements.
-        if (!(i in iterable)) {
+        if (!(i in like)) {
           i++;
           continue;
         }
-        return iterable[i++];
+        return like[i++];
       }
     };
     return newIter;

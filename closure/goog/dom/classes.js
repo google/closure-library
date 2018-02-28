@@ -38,7 +38,7 @@ goog.require('goog.array');
  * @deprecated Use goog.dom.classlist.set instead.
  */
 goog.dom.classes.set = function(element, className) {
-  element.className = className;
+  /** @type {!HTMLElement} */ (element).className = className;
 };
 
 

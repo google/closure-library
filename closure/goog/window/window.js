@@ -62,7 +62,7 @@ goog.window.createFakeWindow_ = function() {
 /**
  * Opens a new window.
  *
- * @param {?goog.html.SafeUrl|string|?Object} linkRef If an Object with an 'href'
+ * @param {goog.html.SafeUrl|string|Object|null} linkRef If an Object with an 'href'
  *     attribute (such as HTMLAnchorElement) is passed then the value of 'href'
  *     is used, otherwise its toString method is called. Note that if a
  *     string|Object is used, it will be sanitized with SafeUrl.sanitize().
@@ -110,6 +110,10 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // goog.Uri in all browsers except for Safari, which returns
     // '[object HTMLAnchorElement]'.  We check for the href first, then
     // assume that it's a goog.Uri or String otherwise.
+    /**
+     * @type {string|!goog.string.TypedString}
+     * @suppress {missingProperties}
+     */
     var url =
         typeof linkRef.href != 'undefined' ? linkRef.href : String(linkRef);
     safeLinkRef = goog.html.SafeUrl.sanitize(url);

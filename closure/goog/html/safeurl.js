@@ -382,7 +382,7 @@ goog.html.SafeUrl.sanitize = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
   } else if (url.implementsGoogStringTypedString) {
-    url = url.getTypedStringValue();
+    url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
   }
@@ -413,7 +413,7 @@ goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
   } else if (url.implementsGoogStringTypedString) {
-    url = url.getTypedStringValue();
+    url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
   }
