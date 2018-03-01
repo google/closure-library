@@ -489,6 +489,7 @@ var _allTests = [
   'closure/goog/testing/style/style_test.html',
   'closure/goog/testing/testcase_test.html',
   'closure/goog/testing/testrunner_test.html',
+  'closure/goog/testing/testsuite_test.html',
   'closure/goog/testing/ui/rendererasserts_test.html',
   'closure/goog/testing/ui/style_test.html',
   'closure/goog/timer/timer_test.html',

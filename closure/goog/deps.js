@@ -1209,6 +1209,7 @@ goog.addDependency('testing/testqueue.js', ['goog.testing.TestQueue'], [], {});
 goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent'], {});
 goog.addDependency('testing/testrunner_test.js', ['goog.testing.TestRunnerTest'], ['goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.testing.asserts', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('testing/testsuite.js', ['goog.testing.testSuite'], ['goog.labs.testing.Environment', 'goog.testing.TestCase'], {});
+goog.addDependency('testing/testsuite_test.js', ['goog.testing.testSuiteTest'], ['goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.testing.testSuite'], {});
 goog.addDependency('testing/ui/rendererasserts.js', ['goog.testing.ui.rendererasserts'], ['goog.testing.asserts', 'goog.ui.ControlRenderer'], {});
 goog.addDependency('testing/ui/rendererasserts_test.js', ['goog.testing.ui.rendererassertsTest'], ['goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.testing.ui.rendererasserts', 'goog.ui.ControlRenderer'], {});
 goog.addDependency('testing/ui/rendererharness.js', ['goog.testing.ui.RendererHarness'], ['goog.Disposable', 'goog.dom.NodeType', 'goog.testing.asserts', 'goog.testing.dom'], {});

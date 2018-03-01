@@ -41,6 +41,12 @@ goog.testing.testSuite = function(obj, opt_options) {
         'testSuite should be called with an object. ' +
         'Did you forget to initialize a class?');
   }
+
+  if (goog.testing.testSuite.initialized_) {
+    throw new Error('Only one TestSuite can be active');
+  }
+  goog.testing.testSuite.initialized_ = true;
+
   var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||
       new goog.testing.TestCase(document.title);
   testCase.setTestObj(obj);
@@ -51,3 +57,9 @@ goog.testing.testSuite = function(obj, opt_options) {
   }
   goog.testing.TestCase.initializeTestRunner(testCase);
 };
+
+/**
+ * True iff the testSuite has been created.
+ * @private {boolean}
+ */
+goog.testing.testSuite.initialized_ = false;
