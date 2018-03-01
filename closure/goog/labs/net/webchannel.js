@@ -173,7 +173,15 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * change.
  *
  * xmlHttpFactory: allows the caller to override the factory used to create
- * XMLHttpRequest objects.
+ * XMLHttpRequest objects. This is introduced to disable CORS on firefox OS.
+ *
+ * requestRefreshThresholds: client-side thresholds that decide when to refresh
+ * an underlying HTTP request, to limit memory consumption due to XHR buffering
+ * or compression context. The client-side thresholds should be signficantly
+ * smaller than the server-side thresholds. This allows the client to eliminate
+ * any latency introduced by request refreshing, i.e. an RTT window during which
+ * messages may be buffered on the server-side. Supported params include
+ * totalBytesReceived, totalDurationMs.
  *
  * @typedef {{
  *   messageHeaders: (!Object<string, string>|undefined),
@@ -193,6 +201,7 @@ goog.net.WebChannel.FailureRecovery = function() {};
  *   clientProfile: (string|undefined),
  *   internalChannelParams: (!Object<string, boolean|number>|undefined),
  *   xmlHttpFactory: (!goog.net.XmlHttpFactory|undefined),
+ *   requestRefreshThresholds: (!Object<string, number>|undefined),
  * }}
  */
 goog.net.WebChannel.Options;
