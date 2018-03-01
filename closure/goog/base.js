@@ -1869,6 +1869,8 @@ goog.exportProperty = function(object, publicName, symbol) {
  *
  * @param {!Function} childCtor Child class.
  * @param {!Function} parentCtor Parent class.
+ * @suppress {strictMissingProperties} superClass_ and base is not defined on
+ *    Function.
  */
 goog.inherits = function(childCtor, parentCtor) {
   /** @constructor */
