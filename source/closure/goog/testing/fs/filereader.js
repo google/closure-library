@@ -26,6 +26,8 @@ goog.require('goog.fs.Error');
 goog.require('goog.fs.FileReader');
 goog.require('goog.testing.fs.ProgressEvent');
 
+goog.forwardDeclare('goog.testing.fs.Blob');
+
 
 
 /**

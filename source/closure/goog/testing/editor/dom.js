@@ -27,6 +27,8 @@ goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.testing.asserts');
 
+goog.forwardDeclare('goog.dom.AbstractRange');
+
 
 /**
  * Returns the previous (in document order) node from the given node that is a

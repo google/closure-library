@@ -18,9 +18,14 @@
  */
 
 goog.provide('goog.storage.collectableStorageTester');
+goog.setTestOnly();
 
 goog.require('goog.testing.asserts');
-goog.setTestOnly('collectablestorage_test');
+
+goog.forwardDeclare('goog.storage.CollectableStorage');
+goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
+goog.forwardDeclare('goog.testing.MockClock');
+
 
 
 /**

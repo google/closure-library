@@ -100,15 +100,18 @@ function stubNetUtils() {
 
 
 /**
- * Stubs goog.labs.net.webChannel.ForwardChannelRequestPool.isSpdyEnabled_
- * to manage the max pool size for the forward channel.
+ * Stubs
+ * goog.labs.net.webChannel.ForwardChannelRequestPool.isSpdyOrHttp2Enabled_ to
+ * manage the max pool size for the forward channel.
  *
  * @param {boolean} spdyEnabled Whether SPDY is enabled for the test.
  */
 function stubSpdyCheck(spdyEnabled) {
   stubs.set(
-      goog.labs.net.webChannel.ForwardChannelRequestPool, 'isSpdyEnabled_',
-      function() { return spdyEnabled; });
+      goog.labs.net.webChannel.ForwardChannelRequestPool,
+      'isSpdyOrHttp2Enabled_', function() {
+        return spdyEnabled;
+      });
 }
 
 

@@ -28,7 +28,8 @@ goog.require('goog.Disposable');
 /**
  * Class for unit testing code that uses Math.random.
  *
- * @param {Array<number>} sequence The sequence of numbers to return.
+ * @param {Array<number>} sequence The sequence of numbers to return. This
+ *     object will modify this array.
  * @param {boolean=} opt_install Whether to install the MockRandom at
  *     construction time.
  * @extends {goog.Disposable}

@@ -303,6 +303,8 @@ goog.cssom.iframe.style.makeColorRuleImportant_ = function(cssText) {
  * @private
  */
 goog.cssom.iframe.style.CssSelector_ = function(opt_selectorString) {
+  /** @type {!Array<!goog.cssom.iframe.style.CssSelectorPart_>|undefined} */
+  this.parts;
 
   /**
    * Object to track ancestry matches to speed up repeatedly testing this
@@ -574,7 +576,7 @@ goog.cssom.iframe.style.getRuleSetsFromDocument_ = function(doc) {
  * Static object to cache rulesets read from documents. Inspecting all
  * active css rules is an expensive operation, so its best to only do
  * it once and then cache the results.
- * @type {Object}
+ * @const
  * @private
  */
 goog.cssom.iframe.style.ruleSetCache_ = {};
@@ -582,10 +584,10 @@ goog.cssom.iframe.style.ruleSetCache_ = {};
 
 /**
  * Cache of ruleset objects keyed by document unique ID.
- * @type {Object}
+ * @const {!Object<number,!Array<!goog.cssom.iframe.style.CssRuleSet_>>}
  * @private
  */
-goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_ = {};
+goog.cssom.iframe.style.ruleSetCache_.cache_ = {};
 
 
 /**
@@ -595,7 +597,7 @@ goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_ = {};
  */
 goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
   var docUid = goog.getUid(doc);
-  goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_[docUid] =
+  goog.cssom.iframe.style.ruleSetCache_.cache_[docUid] =
       goog.cssom.iframe.style.getRuleSetsFromDocument_(doc);
 };
 
@@ -609,7 +611,7 @@ goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
  */
 goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
   var docUid = goog.getUid(doc);
-  var cache = goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_;
+  var cache = goog.cssom.iframe.style.ruleSetCache_.cache_;
   if (!cache[docUid]) {
     goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument(doc);
   }
@@ -623,7 +625,6 @@ goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
   }
   return ruleSetsCopy;
 };
-
 
 /**
  * Array of CSS properties that are inherited by child nodes, according to

@@ -26,6 +26,8 @@ goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.net.WebChannel');
 
+goog.forwardDeclare('goog.labs.net.webChannel.WebChannelBase');
+
 
 
 /**

@@ -22,6 +22,9 @@ goog.provide('goog.ui.registry');
 goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
 
+goog.forwardDeclare('goog.ui.Component');
+goog.forwardDeclare('goog.ui.ControlRenderer');
+
 
 /**
  * Given a {@link goog.ui.Component} constructor, returns an instance of its

@@ -717,7 +717,6 @@ goog.structs.AvlTree.prototype.removeNode_ = function(node) {
 
     // If the node is a leaf, remove it and balance starting from its parent
     if (node.isLeftChild()) {
-      this.special = 1;
       node.parent.left = null;
       if (node == this.minNode_) this.minNode_ = node.parent;
       this.balance_(node.parent);

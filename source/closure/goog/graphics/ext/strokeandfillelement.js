@@ -23,6 +23,11 @@ goog.provide('goog.graphics.ext.StrokeAndFillElement');
 
 goog.require('goog.graphics.ext.Element');
 
+goog.forwardDeclare('goog.graphics.Fill');
+goog.forwardDeclare('goog.graphics.Stroke');
+goog.forwardDeclare('goog.graphics.StrokeAndFillElement');
+goog.forwardDeclare('goog.graphics.ext.Group');
+
 
 
 /**

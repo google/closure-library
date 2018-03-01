@@ -22,6 +22,8 @@ goog.provide('goog.testing.messaging.MockMessagePort');
 
 goog.require('goog.events.EventTarget');
 
+goog.forwardDeclare('goog.testing.MockControl');
+
 
 
 /**

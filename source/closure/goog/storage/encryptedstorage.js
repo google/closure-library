@@ -39,6 +39,8 @@ goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
 
+goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
+
 
 
 /**

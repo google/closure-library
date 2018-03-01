@@ -23,6 +23,8 @@ goog.provide('goog.labs.testing.assertThat');
 
 goog.require('goog.debug.Error');
 
+goog.forwardDeclare('goog.labs.testing.Matcher');
+
 
 /**
  * Asserts that the actual value evaluated by the matcher is true.

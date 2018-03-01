@@ -28,6 +28,8 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.object');
 goog.require('goog.ui.ac.RenderOptions');
 
+goog.forwardDeclare('goog.ui.ac.InputHandler');
+
 
 /**
  * This is the central manager class for an AutoComplete instance. The matcher

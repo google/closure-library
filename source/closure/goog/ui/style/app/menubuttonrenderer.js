@@ -30,6 +30,8 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.style.app.ButtonRenderer');
 
+goog.forwardDeclare('goog.ui.MenuButton');
+
 
 
 /**

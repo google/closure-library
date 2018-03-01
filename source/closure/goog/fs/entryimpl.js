@@ -30,6 +30,8 @@ goog.require('goog.fs.FileWriter');
 goog.require('goog.functions');
 goog.require('goog.string');
 
+goog.forwardDeclare('goog.fs.FileSystem');
+
 
 
 /**

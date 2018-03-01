@@ -70,7 +70,10 @@ class ShimIterable {
     } else if (typeof iter[Symbol.iterator] == 'function') {
       return new ShimIterableImpl(() => iter[Symbol.iterator]());
     } else if (typeof iter.__iterator__ == 'function') {
-      return new ShimIterableImpl(() => wrapGoog(iter.__iterator__()));
+      return new ShimIterableImpl(
+          () => wrapGoog(
+              /** @type {{__iterator__:function(this:?, boolean=)}} */ (iter)
+                  .__iterator__()));
     }
     throw new Error('Not an iterator or iterable.');
   }

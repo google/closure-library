@@ -24,6 +24,9 @@ goog.require('goog.asserts');
 goog.require('goog.object');
 goog.require('goog.string');
 
+goog.forwardDeclare('goog.proto2.FieldDescriptor');
+goog.forwardDeclare('goog.proto2.Message');
+
 
 /**
  * @typedef {{name: (string|undefined),

@@ -20,6 +20,10 @@
 
 goog.provide('goog.positioning.AbstractPosition');
 
+goog.forwardDeclare('goog.math.Box');
+goog.forwardDeclare('goog.math.Size');
+goog.forwardDeclare('goog.positioning.Corner');
+
 
 
 /**

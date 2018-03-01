@@ -17,6 +17,8 @@ goog.provide('goog.testing.testSuite');
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.TestCase');
 
+/** @typedef {{order: (!goog.testing.TestCase.Order|undefined)}} */
+var TestSuiteOptions;
 
 /**
  * Runs the lifecycle methods (setUp, tearDown, etc.) and test* methods from
@@ -30,8 +32,10 @@ goog.require('goog.testing.TestCase');
  *     additional tearDown will run before parent tearDowns. The this object
  *     refers to the object that the functions were defined on, not the full
  *     testSuite object.
+ * @param {!TestSuiteOptions=} opt_options Optional options object which can
+ *     be used to set the sort order for running tests.
  */
-goog.testing.testSuite = function(obj) {
+goog.testing.testSuite = function(obj, opt_options) {
   if (goog.isFunction(obj)) {
     throw new Error(
         'testSuite should be called with an object. ' +
@@ -40,5 +44,10 @@ goog.testing.testSuite = function(obj) {
   var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||
       new goog.testing.TestCase(document.title);
   testCase.setTestObj(obj);
+
+  var options = opt_options || {};
+  if (options.order) {
+    testCase.setOrder(options.order);
+  }
   goog.testing.TestCase.initializeTestRunner(testCase);
 };

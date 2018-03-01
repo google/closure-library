@@ -270,7 +270,9 @@ goog.object.getKeys = function(obj) {
  */
 goog.object.getValueByKeys = function(obj, var_args) {
   var isArrayLike = goog.isArrayLike(var_args);
-  var keys = isArrayLike ? var_args : arguments;
+  var keys = isArrayLike ?
+      /** @type {!IArrayLike<number|string>} */ (var_args) :
+      arguments;
 
   // Start with the 2nd parameter for the variable parameters syntax.
   for (var i = isArrayLike ? 0 : 1; i < keys.length; i++) {

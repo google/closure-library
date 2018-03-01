@@ -101,6 +101,8 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
 
+goog.forwardDeclare('goog.ui.media.MediaModel');
+
 
 
 /**

@@ -277,8 +277,8 @@ var byteArrays = {
 };
 
 var testCase;
-if (G_testRunner) {
+if (goog.global.G_testRunner) {
   testCase = new goog.testing.TestCase(document.title);
   testCase.autoDiscoverTests();
-  G_testRunner.initialize(testCase);
+  goog.global.G_testRunner.initialize(testCase);
 }

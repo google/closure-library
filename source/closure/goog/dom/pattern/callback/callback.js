@@ -24,6 +24,8 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagWalkType');
 goog.require('goog.iter');
 
+goog.forwardDeclare('goog.dom.TagIterator');
+
 
 /**
  * Callback function for use in {@link goog.dom.pattern.Matcher.addPattern}

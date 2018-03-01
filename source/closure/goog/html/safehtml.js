@@ -217,11 +217,13 @@ goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
   }
   var dir = null;
   if (textOrHtml.implementsGoogI18nBidiDirectionalString) {
-    dir = textOrHtml.getDirection();
+    dir = /** @type {!goog.i18n.bidi.DirectionalString} */ (textOrHtml)
+              .getDirection();
   }
   var textAsString;
   if (textOrHtml.implementsGoogStringTypedString) {
-    textAsString = textOrHtml.getTypedStringValue();
+    textAsString = /** @type {!goog.string.TypedString} */ (textOrHtml)
+                       .getTypedStringValue();
   } else {
     textAsString = String(textOrHtml);
   }
@@ -703,7 +705,8 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
   if (value.implementsGoogStringTypedString) {
     // Ok to call getTypedStringValue() since there's no reliance on the type
     // contract for security here.
-    value = value.getTypedStringValue();
+    value =
+        /** @type {!goog.string.TypedString} */ (value).getTypedStringValue();
   }
 
   goog.asserts.assert(

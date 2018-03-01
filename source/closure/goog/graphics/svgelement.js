@@ -35,6 +35,8 @@ goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
 
+goog.forwardDeclare('goog.graphics.SvgGraphics');
+
 
 
 /**
