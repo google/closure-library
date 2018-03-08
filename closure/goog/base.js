@@ -150,7 +150,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
   // Internet Explorer exhibits strange behavior when throwing errors from
   // methods externed in this manner.  See the testExportSymbolExceptions in
   // base_test.html for an example.
-  if (!(parts[0] in cur) && cur.execScript) {
+  if (!(parts[0] in cur) && typeof cur.execScript != 'undefined') {
     cur.execScript('var ' + parts[0]);
   }
 
@@ -1380,7 +1380,7 @@ goog.removeHashCode = goog.removeUid;
 goog.cloneObject = function(obj) {
   var type = goog.typeOf(obj);
   if (type == 'object' || type == 'array') {
-    if (obj.clone) {
+    if (typeof obj.clone === 'function') {
       return obj.clone();
     }
     var clone = type == 'array' ? [] : {};
@@ -1950,7 +1950,7 @@ goog.base = function(me, opt_methodName, var_args) {
         'http://www.ecma-international.org/ecma-262/5.1/#sec-C');
   }
 
-  if (caller.superClass_) {
+  if (typeof caller.superClass_ !== 'undefined') {
     // Copying using loop to avoid deop due to passing arguments object to
     // function. This is faster in many JS engines as of late 2014.
     var ctorArgs = new Array(arguments.length - 1);
