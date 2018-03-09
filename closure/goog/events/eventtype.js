@@ -108,6 +108,7 @@ goog.events.EventType = {
   BEFOREUNLOAD: 'beforeunload',
   CONSOLEMESSAGE: 'consolemessage',
   CONTEXTMENU: 'contextmenu',
+  DEVICECHANGE: 'devicechange',
   DEVICEMOTION: 'devicemotion',
   DEVICEORIENTATION: 'deviceorientation',
   DOMCONTENTLOADED: 'DOMContentLoaded',
