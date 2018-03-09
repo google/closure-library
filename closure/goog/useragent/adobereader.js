@@ -19,7 +19,6 @@
  * @see ../demos/useragent.html
  */
 
-/** @suppress {extraProvide} */
 goog.provide('goog.userAgent.adobeReader');
 
 goog.require('goog.string');
