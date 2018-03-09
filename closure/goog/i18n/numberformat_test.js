@@ -25,6 +25,8 @@ goog.require('goog.i18n.NumberFormatSymbols_ar');
 goog.require('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.require('goog.i18n.NumberFormatSymbols_de');
 goog.require('goog.i18n.NumberFormatSymbols_en');
+goog.require('goog.i18n.NumberFormatSymbols_en_AU');
+goog.require('goog.i18n.NumberFormatSymbols_en_US');
 goog.require('goog.i18n.NumberFormatSymbols_fi');
 goog.require('goog.i18n.NumberFormatSymbols_fr');
 goog.require('goog.i18n.NumberFormatSymbols_pl');
@@ -1351,4 +1353,62 @@ function testVerySmallNumberDecimal() {
   assertEquals(expected, f.format(3.42e-90));
   expected = '0.' + goog.string.repeat('0', 8) + '3';
   assertEquals(expected, f.format(3.42e-9));
+}
+
+function testSymbols_percent() {
+  var f = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.PERCENT, undefined, undefined,
+      // Alternate percent symbol.
+      Object.create(
+          goog.i18n.NumberFormatSymbols, {PERCENT: {'value': 'Percent'}}));
+  assertEquals('-25Percent', f.format(-0.25));
+  assertEquals('25Percent', f.format(0.25));
+
+  var f2 = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.PERCENT, undefined, undefined,
+      goog.i18n.NumberFormatSymbols_en);
+  assertEquals('-25%', f2.format(-0.25));
+  assertEquals('25%', f2.format(0.25));
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar;
+  assertEquals('-25Percent', f.format(-0.25));
+  assertEquals('25Percent', f.format(0.25));
+  assertEquals('-25%', f2.format(-0.25));
+  assertEquals('25%', f2.format(0.25));
+}
+
+function testSymbols_permill() {
+  var f = new goog.i18n.NumberFormat(
+      '#,##0\u2030', undefined, undefined,
+      Object.create(
+          goog.i18n.NumberFormatSymbols, {PERMILL: {'value': 'Permill'}}));
+  assertEquals('0Permill', f.format(0));
+
+  assertEquals('0\u2030', new goog.i18n.NumberFormat('#,##0\u2030').format(0));
+}
+
+function testSymbols_expSymbol() {
+  var f = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.SCIENTIFIC, undefined, undefined,
+      goog.i18n.NumberFormatSymbols_en_AU);
+  assertEquals('1e3', f.format(1000));
+
+  var defaultLocale =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
+  assertEquals('1e3', f.format(1000));
+  assertEquals('1E3', defaultLocale.format(1000));
+
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_AU;
+  assertEquals('1e3', f.format(1000));
+  assertEquals('1e3', defaultLocale.format(1000));
+
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en_US;
+  assertEquals('1e3', f.format(1000));
+  assertEquals('1E3', defaultLocale.format(1000));
+}
+
+function testScientific_ar_rtl() {
+  var scientific = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.SCIENTIFIC, undefined, undefined,
+      goog.i18n.NumberFormatSymbols_ar);
+  assertEquals('١اس3', scientific.format(1000));
 }
