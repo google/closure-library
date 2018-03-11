@@ -381,9 +381,8 @@ function getParentNode(node) {
         // "parentNode" - this could happen legitimately but on IE we have no
         // better means of avoiding the pitfall.
         return !(
-            parentNode && parentNode.name &&
-            typeof parentNode.name == 'string' &&
-            parentNode.name.toLowerCase() == 'parentnode');
+            parentNode && typeof parentNode.name == 'string' &&
+            parentNode.name && parentNode.name.toLowerCase() == 'parentnode');
       });
 }
 

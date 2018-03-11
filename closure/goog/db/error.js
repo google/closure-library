@@ -140,6 +140,7 @@ goog.db.Error.DatabaseErrorCode_ = {
  * @see http://www.w3.org/TR/IndexedDB/#idl-def-IDBDatabaseException
  *
  * @enum {number}
+ * @suppress {missingProperties} Obsolete IndexDb exception objects
  */
 goog.db.Error.ErrorCode = {
   UNKNOWN_ERR: (goog.global.IDBDatabaseException ||
