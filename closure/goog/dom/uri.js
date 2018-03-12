@@ -15,7 +15,7 @@
 goog.module('goog.dom.uri');
 
 const Const = goog.require('goog.string.Const');
-const TagName = goog.require('goog.dom.TagName');
+const DomUriTagName = goog.require('goog.dom.TagName');
 const uncheckedconversions = goog.require('goog.html.uncheckedconversions');
 const {createElement} = goog.require('goog.dom');
 const {setAnchorHref} = goog.require('goog.dom.safe');
@@ -28,7 +28,7 @@ const {setAnchorHref} = goog.require('goog.dom.safe');
  * @return {string} Normalized, absolute form of uri.
  */
 function normalizeUri(uri) {
-  const anchor = createElement(TagName.A);
+  const anchor = createElement(DomUriTagName.A);
   // This is safe even though the URL might be untrustworthy.
   // The SafeURL is only used to set the href of an HTMLAnchorElement
   // that is never added to the DOM. Therefore, the user cannot navigate
