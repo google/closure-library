@@ -20,7 +20,7 @@ goog.module('goog.loader.activeModuleManager');
 goog.module.declareLegacyNamespace();
 
 const AbstractModuleManager = goog.require('goog.loader.AbstractModuleManager');
-const asserts = goog.require('goog.asserts');
+const activeModule_manager_asserts = goog.require('goog.asserts');
 
 
 /** @type {?AbstractModuleManager} */
@@ -36,7 +36,7 @@ const get = function(getDefault = undefined) {
   if (!moduleManager && getDefault) {
     moduleManager = getDefault();
   }
-  asserts.assert(
+  activeModule_manager_asserts.assert(
       moduleManager != null, 'The module manager has not yet been set.');
   return moduleManager;
 };
@@ -48,7 +48,7 @@ const get = function(getDefault = undefined) {
  * @param {!AbstractModuleManager} newModuleManager
  */
 const set = function(newModuleManager) {
-  asserts.assert(
+  activeModule_manager_asserts.assert(
       moduleManager == null, 'The module manager cannot be redefined.');
   moduleManager = newModuleManager;
 };
