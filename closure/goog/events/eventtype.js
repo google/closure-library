@@ -257,7 +257,7 @@ goog.events.EventType = {
   BEFOREINPUT: 'beforeinput',
 
   // Webview tag events
-  // See http://developer.chrome.com/dev/apps/webview_tag.html
+  // See https://developer.chrome.com/apps/tags/webview
   EXIT: 'exit',
   LOADABORT: 'loadabort',
   LOADCOMMIT: 'loadcommit',
