@@ -306,6 +306,7 @@ goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
  * @param {Object} e The exception.
  * @param {!Object<string, string>=} opt_context Context values to optionally
  *     include in the error report.
+ * @suppress {strictMissingProperties} error is not defined on Object
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e, opt_context) {
   // goog.debug.catchErrors passes the actual error object (in some browsers) in

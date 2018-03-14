@@ -173,7 +173,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  goog.dom.asserts.assertIsHTMLButtonElement(button).formaction =
+  goog.dom.asserts.assertIsHTMLButtonElement(button).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
 };
 /**
@@ -203,7 +203,7 @@ goog.dom.safe.setInputFormAction = function(input, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  goog.dom.asserts.assertIsHTMLInputElement(input).formaction =
+  goog.dom.asserts.assertIsHTMLInputElement(input).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
 };
 

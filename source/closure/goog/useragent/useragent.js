@@ -98,14 +98,22 @@ goog.userAgent.getUserAgentString = function() {
 
 
 /**
- * TODO(nnaze): Change type to "Navigator" and update compilation targets.
- * @return {?Object} The native navigator object.
+ * @return {?Navigator} The native navigator object.
  */
-goog.userAgent.getNavigator = function() {
+goog.userAgent.getNavigatorTyped = function() {
   // Need a local navigator reference instead of using the global one,
   // to avoid the rare case where they reference different objects.
   // (in a WorkerPool, for example).
   return goog.global['navigator'] || null;
+};
+
+
+/**
+ * TODO(nnaze): Change type to "Navigator" and update compilation targets.
+ * @return {?Object} The native navigator object.
+ */
+goog.userAgent.getNavigator = function() {
+  return goog.userAgent.getNavigatorTyped();
 };
 
 
@@ -207,7 +215,7 @@ goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
  * @private
  */
 goog.userAgent.determinePlatform_ = function() {
-  var navigator = goog.userAgent.getNavigator();
+  var navigator = goog.userAgent.getNavigatorTyped();
   return navigator && navigator.platform || '';
 };
 
@@ -334,7 +342,7 @@ goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
  * @private
  */
 goog.userAgent.isX11_ = function() {
-  var navigator = goog.userAgent.getNavigator();
+  var navigator = goog.userAgent.getNavigatorTyped();
   return !!navigator &&
       goog.string.contains(navigator['appVersion'] || '', 'X11');
 };

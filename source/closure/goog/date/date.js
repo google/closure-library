@@ -1316,9 +1316,9 @@ goog.date.Date.fromIsoString = function(formatted) {
  * Implements most methods of the native js Date object and can be used
  * interchangeably with it just as if goog.date.DateTime was a subclass of Date.
  *
- * @param {number|Object=} opt_year Four digit year or a date-like object. If
- *     not set, the created object will contain the date determined by
- *     goog.now().
+ * @param {(number|{getTime:?}|null)=} opt_year Four digit year or a date-like
+ *     object. If not set, the created object will contain the date determined
+ *     by goog.now().
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @param {number=} opt_hours Hours, 0 - 23.

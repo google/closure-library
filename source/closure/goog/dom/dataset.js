@@ -74,8 +74,9 @@ goog.dom.dataset.isValidProperty_ = function(key) {
  * @param {string} value Value for the custom data attribute.
  */
 goog.dom.dataset.set = function(element, key, value) {
-  if (goog.dom.dataset.ALLOWED_ && element.dataset) {
-    element.dataset[key] = value;
+  var htmlElement = /** @type {HTMLElement} */ (element);
+  if (goog.dom.dataset.ALLOWED_ && htmlElement.dataset) {
+    htmlElement.dataset[key] = value;
   } else if (!goog.dom.dataset.isValidProperty_(key)) {
     throw new Error(
         goog.DEBUG ? '"' + key + '" is not a valid dataset property name.' :
@@ -100,17 +101,18 @@ goog.dom.dataset.get = function(element, key) {
   if (!goog.dom.dataset.isValidProperty_(key)) {
     return null;
   }
-  if (goog.dom.dataset.ALLOWED_ && element.dataset) {
+  var htmlElement = /** @type {HTMLElement} */ (element);
+  if (goog.dom.dataset.ALLOWED_ && htmlElement.dataset) {
     // Android browser (non-chrome) returns the empty string for
     // element.dataset['doesNotExist'].
     if (goog.labs.userAgent.browser.isAndroidBrowser() &&
-        !(key in element.dataset)) {
+        !(key in htmlElement.dataset)) {
       return null;
     }
-    var value = element.dataset[key];
+    var value = htmlElement.dataset[key];
     return value === undefined ? null : value;
   } else {
-    return element.getAttribute(
+    return htmlElement.getAttribute(
         goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key));
   }
 };
@@ -128,11 +130,12 @@ goog.dom.dataset.remove = function(element, key) {
   if (!goog.dom.dataset.isValidProperty_(key)) {
     return;
   }
-  if (goog.dom.dataset.ALLOWED_ && element.dataset) {
+  var htmlElement = /** @type {HTMLElement} */ (element);
+  if (goog.dom.dataset.ALLOWED_ && htmlElement.dataset) {
     // In strict mode Safari will trigger an error when trying to delete a
     // property which does not exist.
     if (goog.dom.dataset.has(element, key)) {
-      delete element.dataset[key];
+      delete htmlElement.dataset[key];
     }
   } else {
     element.removeAttribute(
@@ -155,15 +158,15 @@ goog.dom.dataset.has = function(element, key) {
   if (!goog.dom.dataset.isValidProperty_(key)) {
     return false;
   }
-  if (goog.dom.dataset.ALLOWED_ && element.dataset) {
-    return key in element.dataset;
-  } else if (element.hasAttribute) {
-    return element.hasAttribute(
+  var htmlElement = /** @type {HTMLElement} */ (element);
+  if (goog.dom.dataset.ALLOWED_ && htmlElement.dataset) {
+    return key in htmlElement.dataset;
+  } else if (htmlElement.hasAttribute) {
+    return htmlElement.hasAttribute(
         goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key));
   } else {
-    return !!(
-        element.getAttribute(
-            goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key)));
+    return !!(htmlElement.getAttribute(
+        goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key)));
   }
 };
 
@@ -178,8 +181,9 @@ goog.dom.dataset.has = function(element, key) {
  *     respective values.
  */
 goog.dom.dataset.getAll = function(element) {
-  if (goog.dom.dataset.ALLOWED_ && element.dataset) {
-    return element.dataset;
+  var htmlElement = /** @type {HTMLElement} */ (element);
+  if (goog.dom.dataset.ALLOWED_ && htmlElement.dataset) {
+    return htmlElement.dataset;
   } else {
     var dataset = {};
     var attributes = element.attributes;

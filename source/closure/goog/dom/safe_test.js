@@ -281,8 +281,8 @@ function testSetAnchorHref() {
 
 function testSetInputFormActionHarmlessString() {
   var element = goog.dom.createElement(goog.dom.TagName.INPUT);
-  goog.dom.safe.setInputFormAction(element, 'foo.com');
-  assertEquals('foo.com', element.formaction);
+  goog.dom.safe.setInputFormAction(element, 'http://foo.com/');
+  assertEquals('http://foo.com/', element.formAction);
 }
 
 function testSetInputFormActionEvilString() {
@@ -290,7 +290,7 @@ function testSetInputFormActionEvilString() {
   withAssertionFailure(function() {
     goog.dom.safe.setInputFormAction(element, 'javascript:evil();');
   });
-  assertEquals('about:invalid#zClosurez', element.formaction);
+  assertEquals('about:invalid#zClosurez', element.formAction);
 }
 
 function testSetInputFormActionSafeUrl() {
@@ -299,7 +299,7 @@ function testSetInputFormActionSafeUrl() {
       element,
       goog.html.SafeUrl.fromConstant(
           goog.string.Const.from('javascript:trusted();')));
-  assertEquals('javascript:trusted();', element.formaction);
+  assertEquals('javascript:trusted();', element.formAction);
 }
 
 
@@ -309,13 +309,13 @@ function testSetInputFormActionAssertsType() {
   withAssertionFailure(function() {
     goog.dom.safe.setInputFormAction(element, 'foo');
   });
-  assertEquals('foo', element.formaction);
+  assertEquals('foo', element.formAction);
 }
 
 function testSetButtonFormActionHarmlessString() {
   var element = goog.dom.createElement(goog.dom.TagName.BUTTON);
-  goog.dom.safe.setButtonFormAction(element, 'http://foo.com');
-  assertEquals('http://foo.com', element.formaction);
+  goog.dom.safe.setButtonFormAction(element, 'http://foo.com/');
+  assertEquals('http://foo.com/', element.formAction);
 }
 
 function testSetButtonFormActionEvilString() {
@@ -323,7 +323,7 @@ function testSetButtonFormActionEvilString() {
   withAssertionFailure(function() {
     goog.dom.safe.setButtonFormAction(element, 'javascript:evil();');
   });
-  assertEquals('about:invalid#zClosurez', element.formaction);
+  assertEquals('about:invalid#zClosurez', element.formAction);
 }
 
 function testSetButtonFormActionSafeUrl() {
@@ -332,7 +332,7 @@ function testSetButtonFormActionSafeUrl() {
       element,
       goog.html.SafeUrl.fromConstant(
           goog.string.Const.from('javascript:trusted();')));
-  assertEquals('javascript:trusted();', element.formaction);
+  assertEquals('javascript:trusted();', element.formAction);
 }
 
 function testSetFormElementActionAssertsType() {

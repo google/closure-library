@@ -348,6 +348,7 @@ goog.events.EventTarget.prototype.assertInitialized_ = function() {
  */
 goog.events.EventTarget.dispatchEventInternal_ = function(
     target, e, opt_ancestorsTree) {
+  /** @suppress {missingProperties} */
   var type = e.type || /** @type {string} */ (e);
 
   // If accepting a string or object, create a custom event object so that
