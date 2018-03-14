@@ -229,26 +229,21 @@ goog.addSingletonGetter(goog.labs.testing.EnvironmentTestCase_);
 
 
 /**
- * @param {!Object} obj An object providing the test and life cycle methods.
+ * Override setLifecycleObj to allow incoming test object to provide only
+ * runTests and shouldRunTests. The other lifecycle methods are controlled by
+ * this environment.
  * @override
  */
-goog.labs.testing.EnvironmentTestCase_.prototype.setTestObj = function(obj) {
+goog.labs.testing.EnvironmentTestCase_.prototype.setLifecycleObj = function(
+    obj) {
   goog.asserts.assert(
       this.testobj_ == goog.global,
       'A test method object has already been provided ' +
           'and only one is supported.');
+
+  // Store the test object so we can call lifecyle methods when needed.
   this.testobj_ = obj;
-  goog.labs.testing.EnvironmentTestCase_.base(this, 'setTestObj', obj);
-};
 
-
-/**
- * Override the default global scope discovery of lifecycle functions to prevent
- * overriding the custom environment setUp(Page)/tearDown(Page) logic.
- * @override
- */
-goog.labs.testing.EnvironmentTestCase_.prototype.autoDiscoverLifecycle =
-    function() {
   if (this.testobj_['runTests']) {
     this.runTests = goog.bind(this.testobj_['runTests'], this.testobj_);
   }

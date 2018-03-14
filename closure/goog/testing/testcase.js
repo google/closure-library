@@ -132,6 +132,14 @@ goog.testing.TestCase = function(opt_name) {
   this.name_ = opt_name || 'Untitled Test Case';
 
   /**
+   * If the test should be auto discovered via {@link #autoDiscoverTests} when
+   * test case is initialized.
+   * @type {boolean}
+   * @private
+   */
+  this.shouldAutoDiscoverTests_ = true;
+
+  /**
    * Array of test functions that can be executed.
    * @type {!Array<!goog.testing.TestCase.Test>}
    * @private
@@ -1214,14 +1222,24 @@ goog.testing.TestCase.prototype.createTest = function(
 
 
 /**
- * Adds any functions defined on 'obj' (the global object, by default)
+ * Adds any functions defined on the global object
  * that correspond to lifecycle events for the test case. Overrides
  * setUp, tearDown, setUpPage, tearDownPage, runTests, and shouldRunTests
- * if they are defined on 'obj'.
- * @param {!Object=} opt_obj Defaults to goog.global.
+ * if they are defined on global object.
  */
-goog.testing.TestCase.prototype.autoDiscoverLifecycle = function(opt_obj) {
-  var obj = opt_obj || goog.global;
+goog.testing.TestCase.prototype.autoDiscoverLifecycle = function() {
+  this.setLifecycleObj(goog.global);
+};
+
+
+// TODO(johnlenz): make this package private
+/**
+ * Extracts any functions defined on 'obj' that correspond to page lifecycle
+ * events (setUpPage, tearDownPage, runTests, shouldRunTests) and add them to
+ * on this test case.
+ * @param {!Object} obj
+ */
+goog.testing.TestCase.prototype.setLifecycleObj = function(obj) {
   if (obj['setUp']) {
     this.setUp = goog.bind(obj['setUp'], obj);
   }
@@ -1249,15 +1267,15 @@ goog.testing.TestCase.prototype.autoDiscoverLifecycle = function(opt_obj) {
  * methods.
  */
 goog.testing.TestCase.prototype.setTestObj = function(obj) {
-  // Drop any previously added (likely auto-discovered) tests, only one source
+  // Check any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
   goog.asserts.assert(
       this.tests_.length == 0, 'Test methods have already been configured.');
+  this.shouldAutoDiscoverTests_ = false;
   if (obj['getTestName']) {
     this.name_ = obj['getTestName']();
   }
-
-  this.autoDiscoverLifecycle(obj);
+  this.setLifecycleObj(obj);
   this.addTestObj_(obj, '', [this]);
 };
 
@@ -1841,19 +1859,50 @@ goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
   this.testDone_(test, errMsgs);
 };
 
+/**
+ * A temporary verifier to check if any tests autdo-discovered when a test suite
+ * is used. This exists to make sure we don't silently stop executing tests that
+ * was accidentally discovered and executed earlier. This will be be removed
+ * soon after migration is completed.
+ * @private
+ */
+goog.testing.TestCase.prototype.ensureNoAutoDiscovery_ = function() {
+  var oldTestCount = this.getCount();
+  var prefix = this.getAutoDiscoveryPrefix();
+  var testSources = this.getGlobals(prefix);
+  for (var i = 0; i < testSources.length; i++) {
+    this.addTestObj_(testSources[i], '', [this]);
+  }
+  var autoDiscoverTestCount = this.getCount() - oldTestCount;
+  if (autoDiscoverTestCount > 0) {
+    throw new Error('Discovered tests: ' + autoDiscoverTestCount);
+  }
+};
 
 /**
  * Initializes the TestCase.
  * @param {goog.testing.TestCase} testCase The test case to install.
  * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
  *     Called when each test completes.
+ * @param {boolean=} opt_suppressEnsureNoAutoDiscovery temporary flag to supress
+ *     checks of accidental discovery. Will be removed after migration.
  */
-goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
+goog.testing.TestCase.initializeTestCase = function(
+    testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery) {
   if (opt_testDone) {
     testCase.setTestDoneCallback(opt_testDone);
   }
 
-  testCase.autoDiscoverTests();
+  if (testCase.shouldAutoDiscoverTests_) {
+    testCase.autoDiscoverTests();
+  } else {
+    // TODO(goktug): Remove after google3 migration
+    if (!opt_suppressEnsureNoAutoDiscovery) {
+      testCase.ensureNoAutoDiscovery_();
+    }
+    // Make sure the tests are still ordered based on provided order.
+    testCase.orderTests_();
+  }
 
   if (goog.global.location) {
     var search = goog.global.location.search;
@@ -1868,9 +1917,13 @@ goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
  * @param {goog.testing.TestCase} testCase The test case to install.
  * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
  *     Called when each test completes.
+ * @param {boolean=} opt_suppressEnsureNoAutoDiscovery temporary flag to supress
+ *     checks of accidental discovery. Will be removed after migration.
  */
-goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
-  goog.testing.TestCase.initializeTestCase(testCase, opt_testDone);
+goog.testing.TestCase.initializeTestRunner = function(
+    testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery) {
+  goog.testing.TestCase.initializeTestCase(
+      testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery);
 
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner) {
