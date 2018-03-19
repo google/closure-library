@@ -45,7 +45,12 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     // but while testing this case it is reset.
     goog.labs.testing.Environment.activeTestCase_ = testcase;
 
-    /** @type {goog.testing.MockControl} */
+    /**
+     * Mocks are not type-checkable. To reduce burden on tests that are type
+     * checked, this is typed as "?" to turn off JSCompiler checking.
+     * TODO(b/69851971): Enable a type-checked mocking library.
+     * @type {?}
+     */
     this.mockControl = null;
 
     /** @type {goog.testing.MockClock} */
