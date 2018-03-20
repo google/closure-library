@@ -2323,7 +2323,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   goog.isDocumentLoading_ = function() {
     // attachEvent is available on IE 6 thru 10 only, and thus can be used to
     // detect those browsers.
-    /** @type {!Document} */
+    /** @type {!HTMLDocument} */
     var doc = goog.global.document;
     return doc.attachEvent ? doc.readyState != 'complete' :
                              doc.readyState == 'loading';
@@ -3129,11 +3129,14 @@ if (goog.DEPENDENCIES_ENABLED) {
       return;
     }
 
+    /** @type {!HTMLDocument} */
+    var doc = goog.global.document;
+
     // If the user tries to require a new symbol after document load,
     // something has gone terribly wrong. Doing a document.write would
     // wipe out the page. This does not apply to the CSP-compliant method
     // of writing script tags.
-    if (goog.global.document.readyState == 'complete' &&
+    if (doc.readyState == 'complete' &&
         !goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING) {
       // Certain test frameworks load base.js multiple times, which tries
       // to write deps.js each time. If that happens, just fail silently.
@@ -3160,14 +3163,14 @@ if (goog.DEPENDENCIES_ENABLED) {
       var event =
           goog.DebugLoader_.IS_OLD_IE_ ? 'onreadystatechange' : 'onload';
       var defer = goog.Dependency.defer_ ? 'defer' : '';
-      goog.global.document.write(
+      doc.write(
           '<script src="' + this.path + '" ' + event +
           '="goog.Dependency.callback_(\'' + key +
           '\', this)" type="text/javascript" ' + defer + '><' +
           '/script>');
     } else {
-      var scriptEl = /** @type {!HTMLScriptElement} */ (
-          goog.global.document.createElement('script'));
+      var scriptEl =
+          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
       scriptEl.defer = goog.Dependency.defer_;
       scriptEl.async = false;
       scriptEl.type = 'text/javascript';
@@ -3191,7 +3194,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
 
       scriptEl.src = this.path;
-      goog.global.document.head.appendChild(scriptEl);
+      doc.head.appendChild(scriptEl);
     }
   };
 
@@ -3230,6 +3233,9 @@ if (goog.DEPENDENCIES_ENABLED) {
       return;
     }
 
+    /** @type {!HTMLDocument} */
+    var doc = goog.global.document;
+
     var dep = this;
 
     // TODO(user): Does document.writing really speed up anything? Any
@@ -3237,19 +3243,19 @@ if (goog.DEPENDENCIES_ENABLED) {
     // appending?
     function write(src, contents) {
       if (contents) {
-        goog.global.document.write(
+        doc.write(
             '<script type="module" crossorigin>' + contents + '</' +
             'script>');
       } else {
-        goog.global.document.write(
+        doc.write(
             '<script type="module" crossorigin src="' + src + '"></' +
             'script>');
       }
     }
 
     function append(src, contents) {
-      var scriptEl = /** @type {!HTMLScriptElement} */ (
-          goog.global.document.createElement('script'));
+      var scriptEl =
+          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
       scriptEl.defer = true;
       scriptEl.async = false;
       scriptEl.type = 'module';
@@ -3261,7 +3267,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         scriptEl.src = src;
       }
 
-      goog.global.document.head.appendChild(scriptEl);
+      doc.head.appendChild(scriptEl);
     }
 
     var create;
@@ -3339,6 +3345,8 @@ if (goog.DEPENDENCIES_ENABLED) {
   goog.TransformedDependency.prototype.load = function(controller) {
     if (!goog.global.CLOSURE_IMPORT_SCRIPT && goog.inHtmlDocument_() &&
         goog.isDocumentLoading_()) {
+      /** @type {!HTMLDocument} */
+      var doc = goog.global.document;
       // Required on some older browsers to load the contents in its own script
       // tag. Otherwise the document.write acts like an eval apparently?
       var dep = this;
@@ -3348,7 +3356,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         dep.loadImpl_(controller);
       });
 
-      goog.global.document.write(
+      doc.write(
           '<script type="text/javascript">' +
           goog.protectScriptTag_('goog.Dependency.callback_("' + key + '");') +
           '</' +
@@ -3408,7 +3416,9 @@ if (goog.DEPENDENCIES_ENABLED) {
         if (shouldEval) {
           goog.globalEval(contents);
         } else {
-          goog.global.document.write(
+          /** @type {!HTMLDocument} */
+          var doc = goog.global.document;
+          doc.write(
               '<script type="text/javascript">' +
               goog.protectScriptTag_(contents) + '</' +
               'script>');
@@ -3443,7 +3453,9 @@ if (goog.DEPENDENCIES_ENABLED) {
     }
 
     if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_()) {
-      /** @type {!Document} */
+      // TODO(user): Externs are missing onreadystatechange for
+      // HTMLDocument.
+      /** @type {?} */
       var doc = goog.global.document;
       // Transpiled ES6 modules still need to load like regular ES6 modules,
       // aka only after the document is interactive.
