@@ -30,1975 +30,575 @@ goog.provide('goog.i18n.CharPickerData');
 goog.i18n.CharPickerData = function() {};
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SYMBOL = goog.getMsg('Symbol');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ARROWS = goog.getMsg('Arrows');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BRAILLE = goog.getMsg('Braille');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CONTROL_PICTURES =
     goog.getMsg('Control Pictures');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CURRENCY = goog.getMsg('Currency');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_EMOTICONS = goog.getMsg('Emoticons');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GAME_PIECES = goog.getMsg('Game Pieces');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GENDER_AND_GENEALOGICAL =
     goog.getMsg('Gender and Genealogical');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GEOMETRIC_SHAPES =
     goog.getMsg('Geometric Shapes');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KEYBOARD_AND_UI =
     goog.getMsg('Keyboard and UI');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LATIN_1_SUPPLEMENT =
     goog.getMsg('Latin 1 Supplement');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MATH = goog.getMsg('Math');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MATH_ALPHANUMERIC =
     goog.getMsg('Math Alphanumeric');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MISCELLANEOUS = goog.getMsg('Miscellaneous');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MUSICAL = goog.getMsg('Musical');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_STARS_ASTERISKS =
     goog.getMsg('Stars/Asterisks');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SUBSCRIPT = goog.getMsg('Subscript');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SUPERSCRIPT = goog.getMsg('Superscript');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TECHNICAL = goog.getMsg('Technical');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TRANSPORT_AND_MAP =
     goog.getMsg('Transport And Map');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_WEATHER_AND_ASTROLOGICAL =
     goog.getMsg('Weather and Astrological');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_YIJING_TAI_XUAN_JING =
     goog.getMsg('Yijing / Tai Xuan Jing');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HISTORIC = goog.getMsg('Historic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_COMPATIBILITY = goog.getMsg('Compatibility');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_EMOJI = goog.getMsg('Emoji');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PEOPLE_AND_EMOTIONS =
     goog.getMsg('People and Emotions');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ANIMALS_PLANTS_AND_FOOD =
     goog.getMsg('Animals, Plants and Food');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OBJECTS = goog.getMsg('Objects');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SPORTS_CELEBRATIONS_AND_ACTIVITIES =
     goog.getMsg('Sports, Celebrations and Activities');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TRANSPORT_MAPS_AND_SIGNAGE =
     goog.getMsg('Transport, Maps and Signage');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_WEATHER_SCENES_AND_ZODIAC_SIGNS =
     goog.getMsg('Weather, Scenes and Zodiac signs');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ENCLOSED = goog.getMsg('Enclosed');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MARKS = goog.getMsg('Marks');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SYMBOLS = goog.getMsg('Symbols');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PUNCTUATION = goog.getMsg('Punctuation');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ASCII_BASED = goog.getMsg('ASCII Based');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_DASH_CONNECTOR = goog.getMsg('Dash/Connector');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OTHER = goog.getMsg('Other');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PAIRED = goog.getMsg('Paired');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_NUMBER = goog.getMsg('Number');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_DECIMAL = goog.getMsg('Decimal');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ENCLOSED_DOTTED =
     goog.getMsg('Enclosed/Dotted');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_FRACTIONS_RELATED =
     goog.getMsg('Fractions/Related');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_FORMAT_WHITESPACE =
     goog.getMsg('Format & Whitespace');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_FORMAT = goog.getMsg('Format');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_VARIATION_SELECTOR =
     goog.getMsg('Variation Selector');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_WHITESPACE = goog.getMsg('Whitespace');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MODIFIER = goog.getMsg('Modifier');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ENCLOSING = goog.getMsg('Enclosing');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_NONSPACING = goog.getMsg('Nonspacing');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SPACING = goog.getMsg('Spacing');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LATIN = goog.getMsg('Latin');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_COMMON = goog.getMsg('Common');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_FLIPPED_MIRRORED =
     goog.getMsg('Flipped/Mirrored');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PHONETICS_IPA = goog.getMsg('Phonetics (IPA)');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PHONETICS_X_IPA =
     goog.getMsg('Phonetics (X-IPA)');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OTHER_EUROPEAN_SCRIPTS =
     goog.getMsg('Other European Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ARMENIAN = goog.getMsg('Armenian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CYRILLIC = goog.getMsg('Cyrillic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GEORGIAN = goog.getMsg('Georgian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GREEK = goog.getMsg('Greek');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CYPRIOT = goog.getMsg('Cypriot');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GLAGOLITIC = goog.getMsg('Glagolitic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GOTHIC = goog.getMsg('Gothic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LINEAR_B = goog.getMsg('Linear B');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OGHAM = goog.getMsg('Ogham');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OLD_ITALIC = goog.getMsg('Old Italic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_RUNIC = goog.getMsg('Runic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SHAVIAN = goog.getMsg('Shavian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_AMERICAN_SCRIPTS =
     goog.getMsg('American Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CANADIAN_ABORIGINAL =
     goog.getMsg('Canadian Aboriginal');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CHEROKEE = goog.getMsg('Cherokee');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_DESERET = goog.getMsg('Deseret');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_AFRICAN_SCRIPTS =
     goog.getMsg('African Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_EGYPTIAN_HIEROGLYPHS =
     goog.getMsg('Egyptian Hieroglyphs');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ETHIOPIC = goog.getMsg('Ethiopic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MEROITIC_CURSIVE =
     goog.getMsg('Meroitic Cursive');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MEROITIC_HIEROGLYPHS =
     goog.getMsg('Meroitic Hieroglyphs');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_NKO = goog.getMsg('Nko');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TIFINAGH = goog.getMsg('Tifinagh');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_VAI = goog.getMsg('Vai');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BAMUM = goog.getMsg('Bamum');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_COPTIC = goog.getMsg('Coptic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OSMANYA = goog.getMsg('Osmanya');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MIDDLE_EASTERN_SCRIPTS =
     goog.getMsg('Middle Eastern Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ARABIC = goog.getMsg('Arabic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HEBREW = goog.getMsg('Hebrew');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_IMPERIAL_ARAMAIC =
     goog.getMsg('Imperial Aramaic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_INSCRIPTIONAL_PAHLAVI =
     goog.getMsg('Inscriptional Pahlavi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_INSCRIPTIONAL_PARTHIAN =
     goog.getMsg('Inscriptional Parthian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MANDAIC = goog.getMsg('Mandaic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OLD_SOUTH_ARABIAN =
     goog.getMsg('Old South Arabian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SAMARITAN = goog.getMsg('Samaritan');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SYRIAC = goog.getMsg('Syriac');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_AVESTAN = goog.getMsg('Avestan');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CARIAN = goog.getMsg('Carian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CUNEIFORM = goog.getMsg('Cuneiform');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LYCIAN = goog.getMsg('Lycian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LYDIAN = goog.getMsg('Lydian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OLD_PERSIAN = goog.getMsg('Old Persian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PHOENICIAN = goog.getMsg('Phoenician');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_UGARITIC = goog.getMsg('Ugaritic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SOUTH_ASIAN_SCRIPTS =
     goog.getMsg('South Asian Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BENGALI = goog.getMsg('Bengali');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CHAKMA = goog.getMsg('Chakma');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_DEVANAGARI = goog.getMsg('Devanagari');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GUJARATI = goog.getMsg('Gujarati');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_GURMUKHI = goog.getMsg('Gurmukhi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KANNADA = goog.getMsg('Kannada');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LEPCHA = goog.getMsg('Lepcha');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LIMBU = goog.getMsg('Limbu');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MALAYALAM = goog.getMsg('Malayalam');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MEETEI_MAYEK = goog.getMsg('Meetei Mayek');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OL_CHIKI = goog.getMsg('Ol Chiki');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_ORIYA = goog.getMsg('Oriya');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SAURASHTRA = goog.getMsg('Saurashtra');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SINHALA = goog.getMsg('Sinhala');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SORA_SOMPENG = goog.getMsg('Sora Sompeng');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAMIL = goog.getMsg('Tamil');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TELUGU = goog.getMsg('Telugu');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_THAANA = goog.getMsg('Thaana');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TIBETAN = goog.getMsg('Tibetan');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BRAHMI = goog.getMsg('Brahmi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KAITHI = goog.getMsg('Kaithi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KHAROSHTHI = goog.getMsg('Kharoshthi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SHARADA = goog.getMsg('Sharada');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SYLOTI_NAGRI = goog.getMsg('Syloti Nagri');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAKRI = goog.getMsg('Takri');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SOUTHEAST_ASIAN_SCRIPTS =
     goog.getMsg('Southeast Asian Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BALINESE = goog.getMsg('Balinese');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BATAK = goog.getMsg('Batak');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CHAM = goog.getMsg('Cham');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_JAVANESE = goog.getMsg('Javanese');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KAYAH_LI = goog.getMsg('Kayah Li');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KHMER = goog.getMsg('Khmer');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LAO = goog.getMsg('Lao');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MYANMAR = goog.getMsg('Myanmar');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_NEW_TAI_LUE = goog.getMsg('New Tai Lue');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAI_LE = goog.getMsg('Tai Le');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAI_THAM = goog.getMsg('Tai Tham');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAI_VIET = goog.getMsg('Tai Viet');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_THAI = goog.getMsg('Thai');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BUGINESE = goog.getMsg('Buginese');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BUHID = goog.getMsg('Buhid');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HANUNOO = goog.getMsg('Hanunoo');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_REJANG = goog.getMsg('Rejang');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_SUNDANESE = goog.getMsg('Sundanese');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAGALOG = goog.getMsg('Tagalog');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_TAGBANWA = goog.getMsg('Tagbanwa');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HANGUL = goog.getMsg('Hangul');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OTHER_EAST_ASIAN_SCRIPTS =
     goog.getMsg('Other East Asian Scripts');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_BOPOMOFO = goog.getMsg('Bopomofo');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HIRAGANA = goog.getMsg('Hiragana');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_KATAKANA = goog.getMsg('Katakana');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LISU = goog.getMsg('Lisu');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MIAO = goog.getMsg('Miao');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_MONGOLIAN = goog.getMsg('Mongolian');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_OLD_TURKIC = goog.getMsg('Old Turkic');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_PHAGS_PA = goog.getMsg('Phags Pa');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_YI = goog.getMsg('Yi');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_1_STROKE_RADICALS =
     goog.getMsg('Han 1-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_LESS_COMMON = goog.getMsg('Less Common');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_2_STROKE_RADICALS =
     goog.getMsg('Han 2-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_3_STROKE_RADICALS =
     goog.getMsg('Han 3-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_4_STROKE_RADICALS =
     goog.getMsg('Han 4-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_5_STROKE_RADICALS =
     goog.getMsg('Han 5-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_6_STROKE_RADICALS =
     goog.getMsg('Han 6-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_7_STROKE_RADICALS =
     goog.getMsg('Han 7-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_8_STROKE_RADICALS =
     goog.getMsg('Han 8-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_9_STROKE_RADICALS =
     goog.getMsg('Han 9-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_10_STROKE_RADICALS =
     goog.getMsg('Han 10-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_11_17_STROKE_RADICALS =
     goog.getMsg('Han 11..17-Stroke Radicals');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_HAN_OTHER = goog.getMsg('Han - Other');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_CJK_STROKES = goog.getMsg('CJK Strokes');
 
 
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
 goog.i18n.CharPickerData.MSG_CP_IDEOGRAPHIC_DESCRIPTION =
     goog.getMsg('Ideographic Description');
 
@@ -2082,7 +682,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL = [
   '2>807AnTMm6e6HDk%`O728F1f4V1PNF2WF1G}58?]514M]Ol1%2l2^3X1U:1Un2Mb>$0MD-(068k11I3706:%MwiZ06',
   ';oA0FN',
   '(j90d3',
-  'H3XBMQQ10HB(2106uPM]N:qol202S20#2;.Z0^xM0:91E]J6O6',
+  'H3XBMQQ10HB(2106uPM]N:qol202S20-2(.Z0^xM0:91E]J6O6',
   ';(i1-5W?',
   'Q6A06f5#1H2,]4MeEY[W1@3W}891N1GF1GN18N1P%k',
   '2JA0sOc',
@@ -2233,7 +833,7 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_FORMAT_WHITESPACE = [
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_FORMAT_WHITESPACE = [
-  'vF;Z10c12fHf4gh40;920UX2Uf4U8M2n#0Iej0MQi50sY)W9l8bk0AvME',
+  'vF;Z10c12fHf4Xg2140;920UX2Uf4U8M2n#0Iej0MQi50sY)W9t8jk0AvME',
   ']=oY506%7E^$zA#LDF1AV1',
   'fEIH602920,H3P4wB40;#s0',
   'w-10f4^#206IV10(970ols0',
@@ -2799,7 +1399,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_OTHER_EAST_ASIAN_SCRIPTS = [
   'AzC0M88F2X1mWM%8N8fD6n8V1I2D1L0l065is0U196:8Egqs0946',
   'oph0l3m6pc',
   '2591F611F4f1d1',
-  'gU60?O8,m738t4$t38aEE:4H9',
+  'gU60?O8,m738t4$UG}28aEE:4]5693',
   '2>,0l6',
   'wU6068AU606e,Gs',
   'AzC06e,Gs2qT0-18}}-FO@4DL10',
