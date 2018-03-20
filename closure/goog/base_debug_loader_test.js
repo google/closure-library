@@ -15,6 +15,7 @@
 
 /**
  * @fileoverview Unit tests for Closure's base.js that require debug loading.
+ * @suppress {missingRequire}
  */
 
 goog.provide('goog.baseDebugLoaderTest');
@@ -22,12 +23,78 @@ goog.provide('goog.baseDebugLoaderTest');
 goog.setTestOnly('goog.baseDebugLoaderTest');
 
 goog.require('goog.functions');
+goog.require('goog.object');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
 
 var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
+
+/**
+ * @param {string} path
+ * @param {string} relativePath
+ * @param {!Array<string>} provides
+ * @param {!Array<string>} requires
+ * @param {!Object<string, string>} loadFlags
+ * @param {boolean} needsTranspile
+ * @struct @constructor
+ * @extends {goog.Dependency}
+ */
+function FakeDependency(
+    path, relativePath, provides, requires, loadFlags, needsTranspile) {
+  FakeDependency.base(
+      this, 'constructor', path, relativePath, provides, requires, loadFlags);
+  this.loadCalled = false;
+  this.needsTranspile = needsTranspile;
+}
+goog.inherits(FakeDependency, goog.Dependency);
+
+
+/** @override */
+FakeDependency.prototype.load = function(controller) {
+  this.loadCalled = true;
+  controller.loaded();
+};
+
+
+/**
+ * @struct @constructor
+ * @extends {goog.DependencyFactory}
+ */
+function FakeDependencyFactory() {
+  this.realFactory = new goog.DependencyFactory();
+}
+goog.inherits(FakeDependencyFactory, goog.DependencyFactory);
+
+
+/** @override */
+FakeDependencyFactory.prototype.createDependency = function(
+    path, relativePath, provides, requires, loadFlags, needsTranspile) {
+  var dep = new FakeDependency(
+      path, relativePath, provides, requires, loadFlags, needsTranspile);
+  testDependencies.push(dep);
+  realDependencies.push(this.realFactory.createDependency(
+      path, relativePath, provides, requires, loadFlags, needsTranspile));
+  return dep;
+};
+
+
+var testDependencies = [];
+var realDependencies = [];
+
+
+function setUpPage() {
+  CLOSURE_NO_DEPS = true;
+}
+
+
+function setUp() {
+  testDependencies = [];
+  realDependencies = [];
+  goog.debugLoader_ = new goog.DebugLoader_();
+  goog.setDependencyFactory(new FakeDependencyFactory());
+}
+
 
 function tearDown() {
   goog.setCssNameMapping(undefined);
@@ -59,7 +126,11 @@ function testLoadInNonHtmlNotThrows() {
     assertFalse(goog.inHtmlDocument_());
     // The goog code which is executed at load.
     goog.findBasePath_();
-    goog.debugLoader_.writeScriptTag_(goog.basePath + 'deps.js');
+    goog.setDependencyFactory(new goog.DependencyFactory());
+    goog.addDependency(
+        'loadInNonHtmlNotThrows', ['load.InNonHtmlNotThrows'], []);
+    var require = goog.require;
+    require('load.InNonHtmlNotThrows');
   } finally {
     // Restore context to respect other tests.
     goog.global = savedGoogGlobal;
@@ -145,9 +216,6 @@ function testLoadBaseFromCurrentScriptIgnoringOthers() {
 
 
 function testAddDependency() {
-  /** @suppress {missingRequire} */
-  stubs.set(goog.debugLoader_, 'writeScriptTag_', goog.nullFunction);
-
   goog.addDependency('foo.js', ['testDep.foo'], ['testDep.bar']);
 
   // alias to avoid the being picked up by the deps scanner.
@@ -168,10 +236,35 @@ function testAddDependency() {
 }
 
 
-function testAddDependencyModule() {
-  var load = goog.testing.recordFunction();
-  stubs.set(goog.debugLoader_, 'writeScriptTag_', load);
+/**
+ * Asserts all test deps up to and including the expected index have loaded,
+ * and anything past that has not.
+ *
+ * @param {number} expected
+ */
+function assertLoaded(expected) {
+  for (var i = 0; i < testDependencies.length; i++) {
+    assertEquals(expected >= i, testDependencies[i].loadCalled);
+  }
+}
 
+
+/**
+ * @param {!goog.Dependency} dep
+ * @param {string} relPath
+ * @param {!Array<string>} provides
+ * @param {!Array<string>} requires
+ * @param {!Object<string, string>} loadFlags
+ */
+function assertDepData(dep, relPath, provides, requires, loadFlags) {
+  assertEquals(relPath, dep.relativePath);
+  assertArrayEquals(provides, dep.provides);
+  assertArrayEquals(requires, dep.requires);
+  assertTrue(goog.object.equals(loadFlags, dep.loadFlags));
+}
+
+
+function testAddDependencyModule() {
   goog.addDependency('mod.js', ['testDep.mod'], [], true);
   goog.addDependency('empty.js', ['testDep.empty'], [], {});
   goog.addDependency('mod-goog.js', ['testDep.goog'], [], {'module': 'goog'});
@@ -179,80 +272,54 @@ function testAddDependencyModule() {
   // To differentiate this call from the real one.
   var require = goog.require;
 
-  var assertModuleLoad = function(module, args) {
-    assertEquals(2, args.length);
-    assertEquals('', args[0]);
-    assertRegExp(
-        '^goog\\.debugLoader_\\.retrieveAndExec_\\(".*/' + module +
-            '", true, false\\);$',
-        args[1]);
-  };
-
   require('testDep.mod');
-  assertEquals(1, load.getCallCount());
-  assertModuleLoad('mod.js', load.getCalls()[0].getArguments());
+  assertLoaded(0);
+  assertDepData(
+      realDependencies[0], 'mod.js', ['testDep.mod'], [], {'module': 'goog'});
+  assertTrue(realDependencies[0] instanceof goog.GoogModuleDependency);
 
   require('testDep.empty');
-  assertEquals(2, load.getCallCount());
-  assertEquals(2, load.getCalls()[1].getArguments().length);
-  assertRegExp('^.*/empty.js$', load.getCalls()[1].getArguments()[0]);
-  assertUndefined(load.getCalls()[1].getArguments()[1]);
+  assertLoaded(1);
+  assertDepData(realDependencies[1], 'empty.js', ['testDep.empty'], [], {});
+  assertTrue(realDependencies[0] instanceof goog.Dependency);
 
   require('testDep.goog');
-  assertEquals(3, load.getCallCount());
-  assertModuleLoad('mod-goog.js', load.getCalls()[2].getArguments());
+  assertLoaded(2);
+  assertDepData(
+      realDependencies[2], 'mod-goog.js', ['testDep.goog'], [],
+      {'module': 'goog'});
+  assertTrue(realDependencies[2] instanceof goog.GoogModuleDependency);
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
 }
 
-function testAddDependencyEs6() {
-  var script = null;
+
+function testAddDependencyEs6Module() {
+  try {
+    goog.addDependency('mod-es6.js', ['testDep.es6'], [], {'module': 'es6'});
+    fail('Expected ES6 modules to not be supported');
+  } catch (e) {
+    // expected
+  }
+}
+
+
+function testAddDependencyTranspile() {
   var requireTranspilation = false;
   stubs.set(goog.transpiler_, 'needsTranspile', function() {
     return requireTranspilation;
-  });
-  stubs.set(goog.debugLoader_, 'writeScriptTag_', function(src, scriptText) {
-    if (script != null) {
-      throw new Error('Multiple scripts written');
-    }
-    script = scriptText;
   });
 
   goog.addDependency(
       'fancy.js', ['testDep.fancy'], [],
       {'lang': 'es6-impl', 'module': 'goog'});
+  requireTranspilation = true;
   goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es6'});
 
-  // To differentiate this call from the real one.
-  var require = goog.require;
-
-  requireTranspilation = false;
-  require('testDep.fancy');
-  assertRegExp(
-      '^goog\\.debugLoader_\\.retrieveAndExec_\\(' +
-          '".*\\/fancy\\.js", true, false\\);$',
-      script);
-  script = null;
-
-  requireTranspilation = true;
-  require('testDep.superFancy');
-  assertRegExp(
-      '^goog\\.debugLoader_\\.retrieveAndExec_\\(' +
-          '".*\\/super\\.js", false, true\\);$',
-      script);
+  assertFalse(testDependencies[0].needsTranspile);
+  assertTrue(testDependencies[1].needsTranspile);
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
-}
-
-function testLateRequireProtection() {
-  if (!document.readyState) return;
-  var e = assertThrows(function() {
-    // To differentiate this call from the real one.
-    var require = goog.require;
-    require('goog.ui.Component');
-  });
-
-  assertContains('after document load', e.message);
 }

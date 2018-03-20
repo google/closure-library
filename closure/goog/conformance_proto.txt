@@ -269,6 +269,7 @@ requirement: {
   value: 'HTMLScriptElement.prototype.text'
   value: 'HTMLScriptElement.prototype.textContent'
 
+  whitelist_regexp: '.+/closure/goog/base.js'
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
 }
 
