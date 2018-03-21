@@ -1,0 +1,23 @@
+<!--
+Copyright 2018 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.getObjectByName('test.js.GoogModuleDLN'));
+  var GoogModuleDLN = goog.module.get('test.js.GoogModuleDLN');
+  assertTrue(GoogModuleDLN == null);
+
+  goog.bootstrap(['test.js.GoogModuleDLN'], function() {
+    assertNotNull(goog.getObjectByName('test.js.GoogModuleDLN'));
+    GoogModuleDLN = goog.module.get('test.js.GoogModuleDLN');
+    assertNotNull(GoogModuleDLN);
+    assertEquals('GOOG-MODULE-DLN', GoogModuleDLN.NAME);
+    done();
+  });
+//# sourceURL=bootstrapgoogmoduledlntest.js
+</script>

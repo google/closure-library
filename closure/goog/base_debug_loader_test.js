@@ -29,6 +29,7 @@ goog.require('goog.testing.jsunit');
 
 var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
+var autoLoadDep = true;
 
 /**
  * @param {string} path
@@ -52,8 +53,15 @@ goog.inherits(FakeDependency, goog.Dependency);
 
 /** @override */
 FakeDependency.prototype.load = function(controller) {
+  this.markLoaded = function() {
+    delete this.markLoaded;
+    controller.loaded();
+  };
+
   this.loadCalled = true;
-  controller.loaded();
+  if (autoLoadDep) {
+    this.markLoaded(controller);
+  }
 };
 
 
@@ -89,6 +97,7 @@ function setUpPage() {
 
 
 function setUp() {
+  autoLoadDep = true;
   testDependencies = [];
   realDependencies = [];
   goog.debugLoader_ = new goog.DebugLoader_();
@@ -322,4 +331,62 @@ function testAddDependencyTranspile() {
 
   // Unset provided namespace so the test can be re-run.
   testDep = undefined;
+}
+
+
+async function testBootstrap() {
+  goog.addDependency('a.js', ['a'], [], {});
+  goog.addDependency('b.js', ['b'], ['a'], {});
+  goog.addDependency('c.js', ['c'], [], {});
+
+  assertEquals(3, testDependencies.length);
+
+  await new Promise((resolve, reject) => {
+    goog.bootstrap(['b', 'c'], function() {
+      resolve();
+    });
+  });
+
+  for (var i = 0; i < testDependencies.length; i++) {
+    assertTrue(testDependencies[i].loadCalled);
+  }
+}
+
+
+async function testBootstrapDelayLoadingDep() {
+  autoLoadDep = false;
+
+  goog.addDependency('a.js', ['a'], [], {});
+  goog.addDependency('b.js', ['b'], ['a'], {});
+  goog.addDependency('c.js', ['c'], [], {});
+
+  assertEquals(3, testDependencies.length);
+
+  let bootstrapped = false;
+  goog.bootstrap(['b', 'c'], () => {
+    bootstrapped = true;
+  });
+
+  for (var i = 0; i < testDependencies.length; i++) {
+    assertTrue(testDependencies[i].loadCalled);
+  }
+  assertFalse(bootstrapped);
+
+  // Loading shallow deps should do nothing.
+  testDependencies[0].markLoaded();
+  // Loading one of the two requested deps shouldn't call the function.
+  testDependencies[2].markLoaded();
+
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  assertFalse(bootstrapped);
+  testDependencies[1].markLoaded();
+  assertFalse(bootstrapped);
+
+  // Await setTimeout so we enter the macrotask queue (goog.boostrap uses
+  // setTimeout, which is a macrotask. Native Promises (non-polyfill) are
+  // microtasks and would resolve before macrotasks.
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assertTrue(bootstrapped);
 }

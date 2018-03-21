@@ -2562,6 +2562,46 @@ if (goog.DEPENDENCIES_ENABLED) {
     this.deferredQueue_ = [];
   };
 
+  /**
+   * @param {!Array<string>} namespaces
+   * @param {function(): undefined} callback Function to call once all the
+   *     namespaces have loaded.
+   */
+  goog.DebugLoader_.prototype.bootstrap = function(namespaces, callback) {
+    var cb = callback;
+    function resolve() {
+      if (cb) {
+        goog.global.setTimeout(cb, 0);
+        cb = null;
+      }
+    }
+
+    if (!namespaces.length) {
+      resolve();
+      return;
+    }
+
+    var deps = [];
+    for (var i = 0; i < namespaces.length; i++) {
+      var path = this.getPathFromDeps_(namespaces[i]);
+      if (!path) {
+        throw new Error('Unregonized namespace: ' + namespaces[i]);
+      }
+      deps.push(this.dependencies_[path]);
+    }
+
+    var require = goog.require;
+    var loaded = 0;
+    for (var i = 0; i < namespaces.length; i++) {
+      require(namespaces[i]);
+      deps[i].onLoad(function() {
+        if (++loaded == namespaces.length) {
+          resolve();
+        }
+      });
+    }
+  };
+
 
   /**
    * Loads the Closure Dependency file.
@@ -3692,7 +3732,25 @@ if (goog.DEPENDENCIES_ENABLED) {
     goog.debugLoader_.setDependencyFactory(factory);
   };
 
+
   if (!goog.global.CLOSURE_NO_DEPS) {
     goog.debugLoader_.loadClosureDeps();
   }
+
+
+  /**
+   * Bootstraps the given namespaces and calls the callback once they are
+   * available either via goog.require. This is a replacement for using
+   * `goog.require` to bootstrap Closure Javascript. Previously a `goog.require`
+   * in an HTML file would guarantee that the require'd namespace was available
+   * in the next immediate script tag. With ES6 modules this no longer a
+   * guarantee.
+   *
+   * @param {!Array<string>} namespaces
+   * @param {function(): ?} callback Function to call once all the namespaces
+   *     have loaded. Always called asynchronously.
+   */
+  goog.bootstrap = function(namespaces, callback) {
+    goog.debugLoader_.bootstrap(namespaces, callback);
+  };
 }
