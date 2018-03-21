@@ -662,7 +662,7 @@ goog.ui.MenuButton.prototype.setScrollOnOverflow = function(scrollOnOverflow) {
 
 
 /**
- * @return {boolean} Wether the menu will scroll when it's to big to fit
+ * @return {boolean} Whether the menu will scroll when it's to big to fit
  *     vertically on the screen.
  */
 goog.ui.MenuButton.prototype.isScrollOnOverflow = function() {
