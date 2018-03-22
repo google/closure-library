@@ -18,7 +18,6 @@ goog.setTestOnly('goog.testing.TestCaseTest');
 goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.functions');
-goog.require('goog.string');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MethodMock');
@@ -55,7 +54,7 @@ var okGoogPromise = function() {
 
 // goog.Promise-based equivalent of fail().
 var failGoogPromise = function() {
-  return goog.Promise.reject(null);
+  return goog.Promise.reject(new Error());
 };
 
 // Native Promise-based test that returns promise which never resolves.
@@ -169,6 +168,9 @@ function testTestCase_SyncFailure() {
   assertEquals(0, result.successCount);
   assertEquals(1, result.errors.length);
   assertEquals('foo', result.errors[0].source);
+
+  // Make sure we strip all TestCase stack frames:
+  assertNotContains('testcase.js', result.errors[0].toString());
 }
 
 function testTestCaseReturningPromise_SyncFailure() {
@@ -182,6 +184,9 @@ function testTestCaseReturningPromise_SyncFailure() {
     assertEquals(0, result.successCount);
     assertEquals(1, result.errors.length);
     assertEquals('foo', result.errors[0].source);
+
+    // Make sure we strip all TestCase stack frames:
+    assertNotContains('testcase.js', result.errors[0].toString());
   });
 }
 
@@ -196,6 +201,9 @@ function testTestCaseReturningPromise_GoogPromiseReject() {
     assertEquals(0, result.successCount);
     assertEquals(1, result.errors.length);
     assertEquals('foo', result.errors[0].source);
+
+    // Make sure we strip all TestCase stack frames:
+    assertNotContains('testcase.js', result.errors[0].toString());
   });
 }
 
@@ -216,12 +224,11 @@ function testTestCaseReturningPromise_GoogPromiseTimeout() {
     assertEquals(0, result.successCount);
     assertEquals(1, result.errors.length);
     // Check that error message mentions test name.
-    assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
+    assertContains('foo', result.errors[0].toString());
     // Check that error message mentions how to change timeout.
-    assertTrue(
-        goog.string.contains(
-            result.errors[0].message,
-            'goog.testing.TestCase.getActiveTestCase().promiseTimeout'));
+    assertContains(
+        'goog.testing.TestCase.getActiveTestCase().promiseTimeout',
+        result.errors[0].toString());
     assertTrue(
         elapsedTime >= testCase.promiseTimeout - 100 &&
         elapsedTime <= testCase.promiseTimeout + 100);
@@ -264,12 +271,11 @@ function testTestCaseReturningPromise_PromiseTimeout() {
     assertEquals(0, result.successCount);
     assertEquals(1, result.errors.length);
     // Check that error message mentions test name.
-    assertTrue(goog.string.contains(result.errors[0].message, 'foo'));
+    assertContains('foo', result.errors[0].toString());
     // Check that error message mentions how to change timeout.
-    assertTrue(
-        goog.string.contains(
-            result.errors[0].message,
-            'goog.testing.TestCase.getActiveTestCase().promiseTimeout'));
+    assertContains(
+        'goog.testing.TestCase.getActiveTestCase().promiseTimeout',
+        result.errors[0].toString());
     assertTrue(
         elapsedTime >= testCase.promiseTimeout - 100 &&
         elapsedTime <= testCase.promiseTimeout + 100);
@@ -316,6 +322,9 @@ function testTestCaseReturningPromise_GoogPromiseResolve_GoogPromiseReject() {
     assertEquals(1, result.successCount);
     assertEquals(1, result.errors.length);
     assertEquals('bar', result.errors[0].source);
+
+    // Make sure we strip all TestCase stack frames:
+    assertNotContains('testcase.js', result.errors[0].toString());
   });
 }
 
@@ -559,7 +568,7 @@ function testMaybeFailTestEarly() {
   assertFalse(testCase.isSuccess());
   var errors = testCase.getResult().errors;
   assertEquals(1, errors.length);
-  assertEquals(message, errors[0].message);
+  assertContains(message, errors[0].toString());
 }
 
 function testSetUpReturnsPromiseThatTimesOut() {
@@ -571,7 +580,7 @@ function testSetUpReturnsPromiseThatTimesOut() {
     assertFalse(testCase.isSuccess());
     assertTrue(result.complete);
     assertEquals(1, result.errors.length);
-    assertTrue(goog.string.contains(result.errors[0].message, 'setUp'));
+    assertContains('setUp', result.errors[0].toString());
   });
 }
 
@@ -584,7 +593,7 @@ function testTearDownReturnsPromiseThatTimesOut() {
     assertFalse(testCase.isSuccess());
     assertTrue(result.complete);
     assertEquals(1, result.errors.length);
-    assertTrue(goog.string.contains(result.errors[0].message, 'tearDown'));
+    assertContains('tearDown', result.errors[0].toString());
   });
 }
 

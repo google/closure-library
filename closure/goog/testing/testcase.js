@@ -39,6 +39,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.json');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.asserts');
 
@@ -490,7 +491,7 @@ goog.testing.TestCase.prototype.setOrder = function(order) {
 
 /**
  * @param {Object<string, boolean>} testsToRun Set of tests to run. Entries in
- *     the set may be test names, like "testFoo", or numeric indicies. Only
+ *     the set may be test names, like "testFoo", or numeric indices. Only
  *     tests identified by name or by index will be executed.
  */
 goog.testing.TestCase.prototype.setTestsToRun = function(testsToRun) {
@@ -1608,10 +1609,14 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
   } else {
     errMsg = 'An unknown error occurred';
   }
+
   if (stack) {
+    // The Error class includes the message in the stack. Don't duplicate it.
+    if (goog.string.contains(stack, errMsg)) errMsg = '';
+
     // Remove extra goog.testing.TestCase frames from the end.
     stack = stack.replace(
-        /\n.*goog\.testing\.TestCase\.(prototype\.)?invokeTestFunction[^\0]*/m,
+        /\n\s*(\bat\b)?\s*(goog\.labs\.testing\.EnvironmentTestCase_\.)?goog\.testing\.(Continuation_\.(prototype\.)?run|TestCase\.(prototype\.)?(execute|cycleTests|startNextBatch_|safeRunTest_|invokeFunction_?))[^\0]*/m,
         '');
   }
   var err = new goog.testing.TestCase.Error(name, errMsg, stack);
@@ -1966,7 +1971,7 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
  * @param {string} errorMsg Error message to use if the promise times out.
  * @return {!goog.Promise<T>} A promise that will settle with the original
        promise unless the timeout is exceeded.
- *     errror.
+ *     error.
  * @template T
  * @private
  */

@@ -69,7 +69,7 @@ goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.jso
 goog.addDependency('testing/stacktrace.js', ['goog.testing.stacktrace', 'goog.testing.stacktrace.Frame'], []);
 goog.addDependency('testing/jsunitexception.js', ['goog.testing.JsUnitException'], ['goog.testing.stacktrace']);
 goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException']);
-goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts']);
+goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.string', 'goog.testing.JsUnitException', 'goog.testing.asserts']);
 goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent']);
 goog.addDependency('testing/jsunit.js', ['goog.testing.jsunit'], ['goog.dom.TagName', 'goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.userAgent']);
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], []);
