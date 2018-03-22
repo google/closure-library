@@ -39,7 +39,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.json');
 goog.require('goog.object');
-goog.require('goog.string');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.asserts');
 
@@ -1612,7 +1611,7 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
 
   if (stack) {
     // The Error class includes the message in the stack. Don't duplicate it.
-    if (goog.string.contains(stack, errMsg)) errMsg = '';
+    stack = stack.replace('Error: ' + errMsg + '\n', '');
 
     // Remove extra goog.testing.TestCase frames from the end.
     stack = stack.replace(
