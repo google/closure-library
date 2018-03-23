@@ -665,7 +665,7 @@ goog.globalize = function(obj, opt_global) {
  *     and values include {'module': 'goog'} and {'lang': 'es6'}.
  */
 goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
-  if (goog.DEPENDENCIES_ENABLED) {
+  if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     goog.debugLoader_.addDependency(relPath, provides, requires, opt_loadFlags);
   }
 };
@@ -899,7 +899,7 @@ goog.loadedModules_ = {};
 
 
 /**
- * True if goog.dependencies_ is available.
+ * True if the debug loader enabled and used.
  * @const {boolean}
  */
 goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
@@ -2299,7 +2299,10 @@ goog.tagUnsealableClass = function(ctr) {
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
 
 
-if (goog.DEPENDENCIES_ENABLED) {
+// There's a bug in the compiler where without collapse properties the
+// Closure namespace defines do not guard code correctly. To help reduce code
+// size also check for !COMPILED even though it redundant until this is fixed.
+if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
   /**
    * Tries to detect whether is in the context of an HTML document.
