@@ -197,14 +197,14 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
 
 /**
  * @define {boolean} Whether unhandled errors should always get rethrown to the
- * global scope. Defaults to the value of goog.DEBUG.
+ * global scope. Defaults to false.
  */
 goog.define('goog.async.Deferred.STRICT_ERRORS', false);
 
 
 /**
  * @define {boolean} Whether to attempt to make stack traces long.  Defaults to
- * the value of goog.DEBUG.
+ * false.
  */
 goog.define('goog.async.Deferred.LONG_STACK_TRACES', false);
 
