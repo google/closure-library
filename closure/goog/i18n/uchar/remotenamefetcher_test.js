@@ -36,7 +36,7 @@ function tearDown() {
 function testGetName_remote() {
   var callback = goog.testing.recordFunction(function(name) {
     assertEquals('Latin Capital Letter P', name);
-    assertTrue(nameFetcher.charNames_.containsKey('50'));
+    assertTrue(nameFetcher.charNames_.has('50'));
   });
   nameFetcher.getName('P', callback);
   var responseJsonText = '{"50":{"name":"Latin Capital Letter P"}}';
@@ -91,7 +91,7 @@ function testPrefetch() {
       '"name":"LATIN CAPITAL LETTER I"}, "1049d":{"name":"OSMYANA OO"}}';
   nameFetcher.prefetchXhrIo_.simulateResponse(200, responseJsonText);
 
-  assertEquals(3, nameFetcher.charNames_.getCount());
+  assertEquals(3, nameFetcher.charNames_.size);
   assertEquals('LATIN SMALL LETTER Y', nameFetcher.charNames_.get('ff'));
   assertEquals('LATIN CAPITAL LETTER I', nameFetcher.charNames_.get('49'));
   assertEquals('OSMYANA OO', nameFetcher.charNames_.get('1049d'));
