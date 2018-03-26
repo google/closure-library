@@ -203,8 +203,8 @@ goog.soy.Renderer.prototype.renderStrict = function(
 /**
  * Renders a strict Soy template and returns the output SanitizedUri object.
  *
- * @param {!function(ARG_TYPES, ?Object<string, *>=):!goog.soy.data.SanitizedUri|
- *     !function(ARG_TYPES, null=, ?Object<string, *>=):
+ * @param {function(ARG_TYPES, ?Object<string, *>=):!goog.soy.data.SanitizedUri|
+ *     function(ARG_TYPES, null=, ?Object<string, *>=):
  *     !goog.soy.data.SanitizedUri} template The Soy template to render.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {!goog.soy.data.SanitizedUri}

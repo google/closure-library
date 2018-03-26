@@ -233,7 +233,7 @@ goog.debug.exposeArray = function(arr) {
 /**
  * Normalizes the error/exception object between browsers.
  * @param {*} err Raw error object.
- * @return {!{
+ * @return {{
  *    message: (?|undefined),
  *    name: (?|undefined),
  *    lineNumber: (?|undefined),

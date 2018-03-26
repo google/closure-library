@@ -99,7 +99,7 @@ goog.i18n.NumberFormat = function(
 
   /**
    * True if the percent/permill sign of the negative pattern is expected.
-   * @private {!boolean}
+   * @private {boolean}
    */
   this.negativePercentSignExpected_ = false;
 

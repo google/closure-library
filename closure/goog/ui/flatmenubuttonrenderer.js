@@ -84,7 +84,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
         this.createCaption(button.getContent(), button.getDomHelper()),
         this.createDropdown(button.getDomHelper())
       ]);
-  this.setTooltip(element, /** @type {!string}*/ (button.getTooltip()));
+  this.setTooltip(element, /** @type {string}*/ (button.getTooltip()));
   return element;
 };
 
