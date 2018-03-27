@@ -243,7 +243,8 @@ goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
     // Lead in.
     'https?://(?:[a-zA-Z]{1,3}\\.)?' +
-        // Watch short URL prefix and /embed/ URLs. This should handle URLs like:
+        // Watch short URL prefix and /embed/ URLs. This should handle URLs
+        // like:
         // https://youtu.be/jqxENMKaeCU?cgiparam=value
         // https://youtube.com/embed/jqxENMKaeCU?cgiparam=value
         // https://youtube-nocookie.com/jqxENMKaeCU?cgiparam=value

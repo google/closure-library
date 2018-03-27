@@ -63,7 +63,8 @@ function testParsingUrl() {
       'uddeBVmKTqE', 'http://www.youtube.com/embed/uddeBVmKTqE?controls=0');
   // a -nocookie /embed/ link
   assertExtractsCorrectly(
-      'uddeBVmKTqE', 'http://www.youtube-nocookie.com/embed/uddeBVmKTqE?controls=0');
+      'uddeBVmKTqE',
+      'http://www.youtube-nocookie.com/embed/uddeBVmKTqE?controls=0');
   // a simple short link
   assertExtractsCorrectly('uddeBVmKTqE', 'http://youtu.be/uddeBVmKTqE');
   // a secure short link
