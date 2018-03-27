@@ -17,7 +17,10 @@ goog.provide('goog.testing.testSuite');
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.TestCase');
 
-/** @typedef {{order: (!goog.testing.TestCase.Order|undefined)}} */
+// TODO(goktug): Remove suppressEnsureNoAutoDiscovery after google3 migration
+/**
+ * @typedef {{order: (!goog.testing.TestCase.Order|undefined), suppressEnsureNoAutoDiscovery: (!boolean|undefined)}}
+ */
 var TestSuiteOptions;
 
 /**
@@ -55,7 +58,8 @@ goog.testing.testSuite = function(obj, opt_options) {
   if (options.order) {
     testCase.setOrder(options.order);
   }
-  goog.testing.TestCase.initializeTestRunner(testCase);
+  goog.testing.TestCase.initializeTestRunner(
+      testCase, undefined, options.suppressEnsureNoAutoDiscovery);
 };
 
 /**
