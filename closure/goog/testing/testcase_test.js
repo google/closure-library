@@ -156,6 +156,30 @@ function testTestCaseReturningPromise_PromiseResolve() {
   });
 }
 
+function testTestCase_DoubleFailure() {
+  var doneCount = 0;
+  var testCase = new goog.testing.TestCase();
+
+  testCase.setTestDoneCallback(function() {
+    doneCount++;
+  });
+
+  testCase.addNewTest('foo', fail, null, [{tearDown: fail}]);
+  testCase.runTests();
+  assertFalse(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertTrue(result.complete);
+  assertEquals(1, result.totalCount);
+  assertEquals(1, result.runCount);
+  assertEquals(0, result.successCount);
+  assertEquals(2, result.errors.length);
+
+  assertEquals('testDone must be called exactly once.', 1, doneCount);
+
+  // Make sure we strip all TestCase stack frames:
+  assertNotContains('testcase.js', result.errors[0].toString());
+}
+
 function testTestCase_SyncFailure() {
   var testCase = new goog.testing.TestCase();
   testCase.addNewTest('foo', fail);
@@ -794,7 +818,7 @@ function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
   var e1 = new goog.testing.JsUnitException('foo123');
   var e2 = new goog.testing.JsUnitException('bar456');
 
-  var mockRecordError = goog.testing.MethodMock(testCase, 'recordError_');
+  var mockRecordError = goog.testing.MethodMock(testCase, 'recordError');
   mockRecordError('test', e1);
   mockRecordError('test', e2);
   mockRecordError.$replay();
