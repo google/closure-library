@@ -2473,8 +2473,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     addNewerLanguageTranspilationCheck('es8', function() {
       return evalCheck('async () => 1, true');
     });
-    // Object rest/spread. TODO(tbreisacher): Rename this to 'es9' if
-    // rest/spread end up being finalized in the 2018 spec.
+    addNewerLanguageTranspilationCheck('es9', function() {
+      return evalCheck('({...rest} = {}), true');
+    });
     addNewerLanguageTranspilationCheck('es_next', function() {
       return evalCheck('({...rest} = {}), true');
     });
