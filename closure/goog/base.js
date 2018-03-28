@@ -2037,6 +2037,11 @@ goog.base = function(me, opt_methodName, var_args) {
     return caller.superClass_.constructor.apply(me, ctorArgs);
   }
 
+  if (typeof opt_methodName != 'string' && typeof opt_methodName != 'symbol') {
+    throw new Error(
+        'method names provided to goog.base must be a string or a symbol');
+  }
+
   // Copying using loop to avoid deop due to passing arguments object to
   // function. This is faster in many JS engines as of late 2014.
   var args = new Array(arguments.length - 2);
