@@ -345,7 +345,6 @@ var _allTests = [
   'closure/goog/net/crossdomainrpc_test.html',
   'closure/goog/net/fetchxmlhttpfactory_test.html',
   'closure/goog/net/filedownloader_test.html',
-  'closure/goog/net/iframeio_different_base_test.html',
   'closure/goog/net/iframeio_test.html',
   'closure/goog/net/iframeloadmonitor_test.html',
   'closure/goog/net/imageloader_test.html',
