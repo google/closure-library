@@ -604,7 +604,7 @@ goog.addDependency('i18n/uchar.js', ['goog.i18n.uChar'], [], {});
 goog.addDependency('i18n/uchar/localnamefetcher.js', ['goog.i18n.uChar.LocalNameFetcher'], ['goog.i18n.uChar.NameFetcher', 'goog.i18n.uCharNames', 'goog.log'], {});
 goog.addDependency('i18n/uchar/localnamefetcher_test.js', ['goog.i18n.uChar.LocalNameFetcherTest'], ['goog.i18n.uChar.LocalNameFetcher', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('i18n/uchar/namefetcher.js', ['goog.i18n.uChar.NameFetcher'], [], {});
-goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNameFetcher'], ['goog.Disposable', 'goog.Uri', 'goog.events', 'goog.i18n.uChar', 'goog.i18n.uChar.NameFetcher', 'goog.log', 'goog.net.EventType', 'goog.net.XhrIo', 'goog.structs.Map'], {});
+goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNameFetcher'], ['goog.Disposable', 'goog.Uri', 'goog.events', 'goog.i18n.uChar', 'goog.i18n.uChar.NameFetcher', 'goog.log', 'goog.net.EventType', 'goog.net.XhrIo'], {});
 goog.addDependency('i18n/uchar/remotenamefetcher_test.js', ['goog.i18n.uChar.RemoteNameFetcherTest'], ['goog.i18n.uChar.RemoteNameFetcher', 'goog.net.XhrIo', 'goog.testing.jsunit', 'goog.testing.net.XhrIo', 'goog.testing.recordFunction'], {});
 goog.addDependency('i18n/uchar_test.js', ['goog.i18n.uCharTest'], ['goog.i18n.uChar', 'goog.testing.jsunit'], {});
 goog.addDependency('i18n/ucharnames.js', ['goog.i18n.uCharNames'], ['goog.i18n.uChar'], {});
@@ -686,7 +686,7 @@ goog.addDependency('labs/testing/environment_test.js', ['goog.labs.testing.envir
 goog.addDependency('labs/testing/environment_usage_test.js', ['goog.labs.testing.environmentUsageTest'], ['goog.labs.testing.Environment'], {});
 goog.addDependency('labs/testing/json_fuzzing.js', ['goog.labs.testing.JsonFuzzing'], ['goog.string', 'goog.testing.PseudoRandom'], {});
 goog.addDependency('labs/testing/json_fuzzing_test.js', ['goog.labs.testing.JsonFuzzingTest'], ['goog.json', 'goog.labs.testing.JsonFuzzing', 'goog.testing.asserts', 'goog.testing.jsunit'], {});
-goog.addDependency('labs/testing/logicmatcher.js', ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.AnyOfMatcher', 'goog.labs.testing.IsNotMatcher'], ['goog.array', 'goog.labs.testing.Matcher'], {});
+goog.addDependency('labs/testing/logicmatcher.js', ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.AnyOfMatcher', 'goog.labs.testing.IsNotMatcher', 'goog.labs.testing.logicMatchers'], ['goog.array', 'goog.labs.testing.Matcher'], {});
 goog.addDependency('labs/testing/logicmatcher_test.js', ['goog.labs.testing.logicMatcherTest'], ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/testing/matcher.js', ['goog.labs.testing.Matcher'], [], {});
 goog.addDependency('labs/testing/numbermatcher.js', ['goog.labs.testing.AnyNumberMatcher', 'goog.labs.testing.CloseToMatcher', 'goog.labs.testing.EqualToMatcher', 'goog.labs.testing.GreaterThanEqualToMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.labs.testing.LessThanEqualToMatcher', 'goog.labs.testing.LessThanMatcher'], ['goog.asserts', 'goog.labs.testing.Matcher'], {});
