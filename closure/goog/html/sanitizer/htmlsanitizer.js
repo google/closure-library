@@ -1040,7 +1040,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.preProcessHtml = function(
   // stylesheet information on STYLE tags.
   var inertUnsanitizedDom =
       goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
-          '<span>' + unsanitizedHtml + '</span>');
+          '<div>' + unsanitizedHtml + '</div>');
   goog.asserts.assert(
       inertUnsanitizedDom,
       'Older browsers that don\'t support inert ' +
