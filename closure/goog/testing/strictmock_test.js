@@ -410,13 +410,9 @@ function testErrorMessageForBadArgs() {
 
   mock.$replay();
 
-  var message;
-  try {
+  var e = assertThrowsJsUnitException(function() {
     mock.a('a');
-  } catch (e) {
-    message = e.message;
-  }
+  });
 
-  assertTrue('No exception thrown on verify', goog.isDef(message));
-  assertContains('Bad arguments to a()', message);
+  assertContains('Bad arguments to a()', e.message);
 }
