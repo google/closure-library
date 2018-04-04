@@ -613,7 +613,6 @@ goog.addDependency('iter/es6.js', ['goog.iter.es6'], ['goog.iter.Iterable', 'goo
 goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.math'], {});
 goog.addDependency('iter/iter_test.js', ['goog.iterTest'], ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.testing.jsunit'], {});
-goog.addDependency('json/evaljsonprocessor.js', ['goog.json.EvalJsonProcessor'], ['goog.json', 'goog.json.Processor', 'goog.json.Serializer'], {});
 goog.addDependency('json/hybrid.js', ['goog.json.hybrid'], ['goog.asserts', 'goog.json'], {});
 goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json', 'goog.json.hybrid', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], [], {});
@@ -621,7 +620,7 @@ goog.addDependency('json/json_perf.js', ['goog.jsonPerf'], ['goog.dom', 'goog.js
 goog.addDependency('json/json_test.js', ['goog.jsonTest'], ['goog.functions', 'goog.json', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json.Processor'], {});
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier'], {});
-goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.EvalJsonProcessor', 'goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('labs/dom/pagevisibilitymonitor.js', ['goog.labs.dom.PageVisibilityEvent', 'goog.labs.dom.PageVisibilityMonitor', 'goog.labs.dom.PageVisibilityState'], ['goog.dom', 'goog.dom.vendor', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.memoize'], {});
 goog.addDependency('labs/dom/pagevisibilitymonitor_test.js', ['goog.labs.dom.PageVisibilityMonitorTest'], ['goog.events', 'goog.functions', 'goog.labs.dom.PageVisibilityMonitor', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('labs/events/nondisposableeventtarget.js', ['goog.labs.events.NonDisposableEventTarget'], ['goog.array', 'goog.asserts', 'goog.events.Event', 'goog.events.Listenable', 'goog.events.ListenerMap', 'goog.object'], {});
@@ -1203,7 +1202,7 @@ goog.addDependency('testing/style/layoutasserts_test.js', ['goog.testing.style.l
 goog.addDependency('testing/style/style.js', ['goog.testing.style'], ['goog.dom', 'goog.math.Rect', 'goog.style'], {});
 goog.addDependency('testing/style/style_test.js', ['goog.testing.styleTest'], ['goog.dom', 'goog.dom.TagName', 'goog.style', 'goog.testing.jsunit', 'goog.testing.style'], {});
 goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts'], {});
-goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.Timer', 'goog.functions', 'goog.testing.ExpectedFailures', 'goog.testing.FunctionMock', 'goog.testing.JsUnitException', 'goog.testing.MethodMock', 'goog.testing.MockRandom', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit'], {'lang': 'es5'});
+goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.Timer', 'goog.functions', 'goog.testing.ExpectedFailures', 'goog.testing.JsUnitException', 'goog.testing.MethodMock', 'goog.testing.MockRandom', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/testqueue.js', ['goog.testing.TestQueue'], [], {});
 goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent'], {});
 goog.addDependency('testing/testrunner_test.js', ['goog.testing.TestRunnerTest'], ['goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.testing.asserts', 'goog.testing.jsunit'], {'lang': 'es6'});
