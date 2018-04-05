@@ -41,7 +41,6 @@ var COMPILED = false;
  */
 var goog = goog || {};
 
-
 /**
  * Reference to the global context.  In most cases this will be 'window'.
  * @const
@@ -297,7 +296,7 @@ goog.define('goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', false);
  */
 goog.provide = function(name) {
   if (goog.isInModuleLoader_()) {
-    throw new Error('goog.provide can not be used within a goog.module.');
+    throw new Error('goog.provide can not be used within a module.');
   }
   if (!COMPILED) {
     // Ensure that the same namespace isn't provided twice.
@@ -381,7 +380,7 @@ goog.module = function(name) {
       name.search(goog.VALID_MODULE_RE_) == -1) {
     throw new Error('Invalid module identifier');
   }
-  if (!goog.isInModuleLoader_()) {
+  if (!goog.isInGoogModuleLoader_()) {
     throw new Error(
         'Module ' + name + ' has been loaded incorrectly. Note, ' +
         'modules cannot be loaded as normal scripts. They require some kind of ' +
@@ -418,6 +417,15 @@ goog.module = function(name) {
  * @suppress {missingProvide}
  */
 goog.module.get = function(name) {
+  if (!COMPILED && name in goog.loadedModules_) {
+    if (goog.loadedModules_[name].type != goog.ModuleType.GOOG) {
+      throw new Error('Can only goog.module.get for goog.modules.');
+    }
+    if (goog.loadedModules_[name].moduleId != name) {
+      throw new Error('Cannot goog.module.get by path.');
+    }
+  }
+
   return goog.module.getInternal_(name);
 };
 
@@ -430,7 +438,7 @@ goog.module.get = function(name) {
 goog.module.getInternal_ = function(name) {
   if (!COMPILED) {
     if (name in goog.loadedModules_) {
-      return goog.loadedModules_[name];
+      return goog.loadedModules_[name].exports;
     } else if (!goog.implicitNamespaces_[name]) {
       var ns = goog.getObjectByName(name);
       return ns != null ? ns : null;
@@ -441,17 +449,61 @@ goog.module.getInternal_ = function(name) {
 
 
 /**
- * @private {?{moduleName: (string|undefined), declareLegacyNamespace:boolean}}
+ * Types of modules the debug loader can load.
+ * @enum {string}
+ */
+goog.ModuleType = {
+  ES6: 'es6',
+  GOOG: 'goog'
+};
+
+
+/**
+ * @private {?{
+ *   moduleName: (string|undefined),
+ *   declareLegacyNamespace:boolean,
+ *   path:(string|undefined),
+ *   type: goog.ModuleType
+ * }}
  */
 goog.moduleLoaderState_ = null;
 
 
 /**
  * @private
- * @return {boolean} Whether a goog.module is currently being initialized.
+ * @return {boolean} Whether a is currently being initialized.
  */
 goog.isInModuleLoader_ = function() {
-  return goog.moduleLoaderState_ != null;
+  return goog.isInGoogModuleLoader_() || goog.isInEs6ModuleLoader_();
+};
+
+
+/**
+ * @private
+ * @return {boolean} Whether a goog.module is currently being initialized.
+ */
+goog.isInGoogModuleLoader_ = function() {
+  return !!goog.moduleLoaderState_ &&
+      goog.moduleLoaderState_.type == goog.ModuleType.GOOG;
+};
+
+
+/**
+ * @private
+ * @return {boolean} Whether an es6 module is currently being initialized.
+ */
+goog.isInEs6ModuleLoader_ = function() {
+  return !!goog.moduleLoaderState_ &&
+      goog.moduleLoaderState_.type == goog.ModuleType.ES6;
+};
+
+
+/**
+ * @private
+ * @return {?string|undefined} Path of the current module being initialized.
+ */
+goog.getModulePath_ = function() {
+  return goog.moduleLoaderState_ && goog.moduleLoaderState_.path;
 };
 
 
@@ -462,7 +514,7 @@ goog.isInModuleLoader_ = function() {
  * @suppress {missingProvide}
  */
 goog.module.declareLegacyNamespace = function() {
-  if (!COMPILED && !goog.isInModuleLoader_()) {
+  if (!COMPILED && !goog.isInGoogModuleLoader_()) {
     throw new Error(
         'goog.module.declareLegacyNamespace must be called from ' +
         'within a goog.module');
@@ -613,11 +665,8 @@ goog.globalize = function(obj, opt_global) {
  *     and values include {'module': 'goog'} and {'lang': 'es6'}.
  */
 goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
-  if (goog.DEPENDENCIES_ENABLED) {
-    var loader = goog.getLoader_();
-    if (loader) {
-      loader.addDependency(relPath, provides, requires, opt_loadFlags);
-    }
+  if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
+    goog.debugLoader_.addDependency(relPath, provides, requires, opt_loadFlags);
   }
 };
 
@@ -668,6 +717,17 @@ goog.logToConsole_ = function(msg) {
 
 
 /**
+ * @param {string} requireOrPath
+ * @return {boolean}
+ * @private
+ */
+goog.isPath_ = function(requireOrPath) {
+  // Paths must be relative.
+  return requireOrPath.indexOf('./') == 0 || requireOrPath.indexOf('../') == 0;
+};
+
+
+/**
  * Implements a system for the dynamic resolution of dependencies that works in
  * parallel with the BUILD system. Note that all calls to goog.require will be
  * stripped by the compiler.
@@ -678,12 +738,27 @@ goog.logToConsole_ = function(msg) {
  *     module otherwise null.
  */
 goog.require = function(name) {
-  if (goog.ENABLE_DEBUG_LOADER && goog.debugLoader_) {
-    goog.getLoader_().earlyProcessLoad(name);
+  if (goog.isPath_(name)) {
+    if (goog.isInGoogModuleLoader_()) {
+      if (!goog.getModulePath_()) {
+        throw new Error(
+            'Current module has no path information. Was it loaded via ' +
+            'goog.loadModule without a path argument?');
+      }
+
+      name = goog.normalizePath_(goog.getModulePath_() + '/../' + name);
+    } else {
+      throw new Error('Cannot require by path outside of goog.modules.');
+    }
   }
 
-  // If the object already exists we do not need to do anything.
   if (!COMPILED) {
+    // Might need to lazy load on old IE.
+    if (goog.ENABLE_DEBUG_LOADER) {
+      goog.debugLoader_.requested(name);
+    }
+
+    // If the object already exists we do not need to do anything.
     if (goog.isProvided_(name)) {
       if (goog.isInModuleLoader_()) {
         return goog.module.getInternal_(name);
@@ -692,13 +767,7 @@ goog.require = function(name) {
       var moduleLoaderState = goog.moduleLoaderState_;
       goog.moduleLoaderState_ = null;
       try {
-        var loader = goog.getLoader_();
-        if (loader) {
-          loader.load(name);
-        } else {
-          goog.logToConsole_(
-              'Could not load ' + name + ' because there is no debug loader.');
-        }
+        goog.debugLoader_.load_(name);
       } finally {
         goog.moduleLoaderState_ = moduleLoaderState;
       }
@@ -737,9 +806,11 @@ goog.global.CLOSURE_NO_DEPS;
  * in the global scope so that it can be set before base.js is loaded, which
  * allows deps.js to be imported properly.
  *
- * The function is passed the script source, which is a relative URI. It should
- * return true if the script was imported, false otherwise.
- * @type {(function(string): boolean)|undefined}
+ * The first parameter the script source, which is a relative URI. The second,
+ * optional parameter is the script contents, in the event the script needed
+ * transformation. It should return true if the script was imported, false
+ * otherwise.
+ * @type {(function(string, string=): boolean)|undefined}
  */
 goog.global.CLOSURE_IMPORT_SCRIPT;
 
@@ -821,14 +892,14 @@ goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
 
 /**
  * The registry of initialized modules:
- * the module identifier to module exports map.
- * @private @const {!Object<string, ?>}
+ * The module identifier or path to module exports map.
+ * @private @const {!Object<string, {exports:?,type:string,moduleId:string}>}
  */
 goog.loadedModules_ = {};
 
 
 /**
- * True if goog.dependencies_ is available.
+ * True if the debug loader enabled and used.
  * @const {boolean}
  */
 goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
@@ -851,14 +922,6 @@ goog.define('goog.TRANSPILE', 'detect');
  * path (relative to base.js) should define a function $jscomp.transpile.
  */
 goog.define('goog.TRANSPILER', 'transpile.js');
-
-
-/**
- * @define {string} Debug loader file to load. This file should define an
- * implementation of a `goog.DebugLoader` and register it via
- * `goog.registerDebugLoader`.
- */
-goog.define('goog.DEBUG_LOADER', '');
 
 
 /**
@@ -905,8 +968,10 @@ goog.workaroundSafari10EvalBug = function(moduleDef) {
 
 /**
  * @param {function(?):?|string} moduleDef The module definition.
+ * @param {string=} opt_path Path of this module. Required to goog.require ES6
+ *     modules by path.
  */
-goog.loadModule = function(moduleDef) {
+goog.loadModule = function(moduleDef, opt_path) {
   // NOTE: we allow function definitions to be either in the from
   // of a string to eval (which keeps the original source intact) or
   // in a eval forbidden environment (CSP) we allow a function definition
@@ -914,7 +979,12 @@ goog.loadModule = function(moduleDef) {
   // of the module.
   var previousState = goog.moduleLoaderState_;
   try {
-    goog.moduleLoaderState_ = {moduleName: '', declareLegacyNamespace: false};
+    goog.moduleLoaderState_ = {
+      moduleName: '',
+      declareLegacyNamespace: false,
+      type: goog.ModuleType.GOOG,
+      path: opt_path
+    };
     var exports;
     if (goog.isFunction(moduleDef)) {
       exports = moduleDef.call(undefined, {});
@@ -940,7 +1010,13 @@ goog.loadModule = function(moduleDef) {
         Object.seal(exports);
       }
 
-      goog.loadedModules_[moduleName] = exports;
+      var data = {
+        exports: exports,
+        type: goog.ModuleType.GOOG,
+        moduleId: goog.moduleLoaderState_.moduleName
+      };
+      goog.loadedModules_[moduleName] = data;
+      opt_path && (goog.loadedModules_[opt_path] = data);
     } else {
       throw new Error('Invalid module name \"' + moduleName + '\"');
     }
@@ -1961,6 +2037,11 @@ goog.base = function(me, opt_methodName, var_args) {
     return caller.superClass_.constructor.apply(me, ctorArgs);
   }
 
+  if (typeof opt_methodName != 'string' && typeof opt_methodName != 'symbol') {
+    throw new Error(
+        'method names provided to goog.base must be a string or a symbol');
+  }
+
   // Copying using loop to avoid deop due to passing arguments object to
   // function. This is faster in many JS engines as of late 2014.
   var args = new Array(arguments.length - 2);
@@ -2004,7 +2085,7 @@ goog.base = function(me, opt_methodName, var_args) {
  */
 goog.scope = function(fn) {
   if (goog.isInModuleLoader_()) {
-    throw new Error('goog.scope is not supported within a goog.module.');
+    throw new Error('goog.scope is not supported within a module.');
   }
   fn.call(goog.global);
 };
@@ -2223,8 +2304,11 @@ goog.tagUnsealableClass = function(ctr) {
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
 
 
+// There's a bug in the compiler where without collapse properties the
+// Closure namespace defines do not guard code correctly. To help reduce code
+// size also check for !COMPILED even though it redundant until this is fixed.
+if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
-if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Tries to detect whether is in the context of an HTML document.
    * @return {boolean} True if it looks like HTML document.
@@ -2234,6 +2318,23 @@ if (goog.DEPENDENCIES_ENABLED) {
     /** @type {!Document} */
     var doc = goog.global.document;
     return doc != null && 'write' in doc;  // XULDocument misses write.
+  };
+
+
+  /**
+   * We'd like to check for if the document readyState is 'loading'; however
+   * there are bugs on IE 10 and below where the readyState being anything other
+   * than 'complete' is not reliable.
+   * @return {boolean}
+   * @private
+   */
+  goog.isDocumentLoading_ = function() {
+    // attachEvent is available on IE 6 thru 10 only, and thus can be used to
+    // detect those browsers.
+    /** @type {!HTMLDocument} */
+    var doc = goog.global.document;
+    return doc.attachEvent ? doc.readyState != 'complete' :
+                             doc.readyState == 'loading';
   };
 
 
@@ -2377,8 +2478,9 @@ if (goog.DEPENDENCIES_ENABLED) {
     addNewerLanguageTranspilationCheck('es8', function() {
       return evalCheck('async () => 1, true');
     });
-    // Object rest/spread. TODO(tbreisacher): Rename this to 'es9' if
-    // rest/spread end up being finalized in the 2018 spec.
+    addNewerLanguageTranspilationCheck('es9', function() {
+      return evalCheck('({...rest} = {}), true');
+    });
     addNewerLanguageTranspilationCheck('es_next', function() {
       return evalCheck('({...rest} = {}), true');
     });
@@ -2389,9 +2491,11 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Determines whether the given language needs to be transpiled.
    * @param {string} lang
+   * @param {string|undefined} module
    * @return {boolean}
    */
-  goog.Transpiler.prototype.needsTranspile = function(lang) {
+  goog.Transpiler.prototype.needsTranspile = function(lang, module) {
+    // TODO(user): ES6 module support detection.
     if (goog.TRANSPILE == 'always') {
       return true;
     } else if (goog.TRANSPILE == 'never') {
@@ -2424,514 +2528,6 @@ if (goog.DEPENDENCIES_ENABLED) {
   /** @private @final {!goog.Transpiler} */
   goog.transpiler_ = new goog.Transpiler();
 
-
-  /**
-   * A debug loader is responsible for downloading and executing javascript
-   * files in an unbundled, uncompiled environment.
-   *
-   * @struct @constructor
-   */
-  goog.DebugLoader = function() {
-    /**
-     * This object is used to keep track of dependencies and other data that is
-     * used for loading scripts.
-     * @private
-     * @type {{
-     *   loadFlags: !Object<string, !Object<string, string>>,
-     *   nameToPath: !Object<string, string>,
-     *   requires: !Object<string, !Object<string, boolean>>,
-     *   visited: !Object<string, boolean>,
-     *   written: !Object<string, boolean>,
-     *   deferred: !Object<string, string>
-     * }}
-     */
-    this.dependencies_ = {
-      loadFlags: {},  // 1 to 1
-
-      nameToPath: {},  // 1 to 1
-
-      requires: {},  // 1 to many
-
-      // Used when resolving dependencies to prevent us from visiting file
-      // twice.
-      visited: {},
-
-      written: {},  // Used to keep track of script files we have written.
-
-      deferred: {}  // Used to track deferred module evaluations in old IEs
-    };
-
-    /**
-     * Whether IE9 or earlier is waiting on a dependency.  This ensures that
-     * deferred modules that have no non-deferred dependencies actually get
-     * loaded, since if we defer them and then never pull in a non-deferred
-     * script, then `this.loadQueuedModules_` will never be called.  Instead,
-     * if not waiting on anything we simply don't defer in the first place.
-     * @private {boolean}
-     */
-    this.oldIeWaiting_ = false;
-
-    /** @private {!Array<string>} */
-    this.queuedModules_ = [];
-
-    /** @private {number} */
-    this.lastNonModuleScriptIndex_ = 0;
-  };
-
-
-  /**
-   * Whether the browser is IE9 or earlier, which needs special handling
-   * for deferred modules.
-   * @const @private {boolean}
-   */
-  goog.DebugLoader.IS_OLD_IE_ =
-      !!(!goog.global.atob && goog.global.document && goog.global.document.all);
-
-
-  /**
-   * Performs any needed preprocessing of a goog.require call.
-   *
-   * @param {string} name
-   */
-  goog.DebugLoader.prototype.earlyProcessLoad = function(name) {
-    if (goog.DebugLoader.IS_OLD_IE_) {
-      this.maybeProcessDeferredDep_(name);
-    }
-  };
-
-
-  /**
-   * Loads the given symbol along with any dependencies.
-   *
-   * @param {string} name
-   */
-  goog.DebugLoader.prototype.load = function(name) {
-    var pathToLoad = this.getPathFromDeps_(name);
-    if (!pathToLoad) {
-      var errorMessage = 'goog.require could not find: ' + name;
-      this.logToConsole(errorMessage);
-
-      throw Error(errorMessage);
-    } else {
-      /** @type {!Array<string>} The scripts we need to write this time. */
-      var scripts = [];
-      var seenScript = {};
-      var deps = this.dependencies_;
-      var loader = this;
-
-      /** @param {string} path */
-      var visitNode = function(path) {
-        if (path in deps.written) {
-          return;
-        }
-
-        // We have already visited this one. We can get here if we have cyclic
-        // dependencies.
-        if (path in deps.visited) {
-          return;
-        }
-
-        deps.visited[path] = true;
-
-        if (path in deps.requires) {
-          for (var requireName in deps.requires[path]) {
-            // If the required name is defined, we assume that it was already
-            // bootstrapped by other means.
-            if (!loader.isProvided(requireName)) {
-              if (requireName in deps.nameToPath) {
-                visitNode(deps.nameToPath[requireName]);
-              } else {
-                throw Error('Undefined nameToPath for ' + requireName);
-              }
-            }
-          }
-        }
-
-        if (!(path in seenScript)) {
-          seenScript[path] = true;
-          scripts.push(path);
-        }
-      };
-
-      visitNode(pathToLoad);
-
-      // record that we are going to load all these scripts.
-      for (var i = 0; i < scripts.length; i++) {
-        var path = scripts[i];
-        this.dependencies_.written[path] = true;
-      }
-
-      for (var i = 0; i < scripts.length; i++) {
-        var path = scripts[i];
-        if (path) {
-          var loadFlags = deps.loadFlags[path] || {};
-          var languageLevel = loadFlags['lang'] || 'es3';
-          var needsTranspile =
-              this.getTranspiler().needsTranspile(languageLevel);
-          if (loadFlags['module'] == 'goog' || needsTranspile) {
-            this.importProcessedScript_(
-                goog.basePath + path, loadFlags['module'] == 'goog',
-                needsTranspile);
-          } else {
-            this.importScript_(goog.basePath + path);
-          }
-        } else {
-          throw Error('Undefined script input');
-        }
-      }
-    }
-  };
-
-
-  /**
-   * @param {string} relPath
-   * @param {!Array<string>} provides
-   * @param {!Array<string>} requires
-   * @param {boolean|!Object<string>=} opt_loadFlags
-   * @see goog.addDependency
-   */
-  goog.DebugLoader.prototype.addDependency = function(
-      relPath, provides, requires, opt_loadFlags) {
-    var provide, require;
-    var path = relPath.replace(/\\/g, '/');
-    var deps = this.dependencies_;
-    if (!opt_loadFlags || typeof opt_loadFlags === 'boolean') {
-      opt_loadFlags = opt_loadFlags ? {'module': 'goog'} : {};
-    }
-    for (var i = 0; provide = provides[i]; i++) {
-      deps.nameToPath[provide] = path;
-      deps.loadFlags[path] = opt_loadFlags;
-    }
-    for (var j = 0; require = requires[j]; j++) {
-      if (!(path in deps.requires)) {
-        deps.requires[path] = {};
-      }
-      deps.requires[path][require] = true;
-    }
-  };
-
-  /**
-   * Imports a script if, and only if, that script hasn't already been imported.
-   * (Must be called at execution time)
-   * @param {string} src Script source.
-   * @param {string=} opt_sourceText The optionally source text to evaluate
-   * @private
-   */
-  goog.DebugLoader.prototype.importScript_ = function(src, opt_sourceText) {
-    var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
-        goog.bind(this.writeScriptTag_, this);
-    if (importScript(src, opt_sourceText)) {
-      this.dependencies_.written[src] = true;
-    }
-  };
-
-
-  /**
-   * Given a URL initiate retrieval and execution of a script that needs
-   * pre-processing.
-   * @param {string} src Script source URL.
-   * @param {boolean} isModule Whether this is a goog.module.
-   * @param {boolean} needsTranspile Whether this source needs transpilation.
-   * @private
-   */
-  goog.DebugLoader.prototype.importProcessedScript_ = function(
-      src, isModule, needsTranspile) {
-    // In an attempt to keep browsers from timing out loading scripts using
-    // synchronous XHRs, put each load in its own script block.
-    var bootstrap = 'goog.debugLoader_.retrieveAndExec_("' + src + '", ' +
-        isModule + ', ' + needsTranspile + ');';
-
-    this.importScript_('', bootstrap);
-  };
-
-  /**
-   * Retrieve and execute a script that needs some sort of wrapping.
-   * @param {string} src Script source URL.
-   * @param {boolean} isModule Whether to load as a module.
-   * @param {boolean} needsTranspile Whether to transpile down to ES3.
-   * @private
-   * @suppress {unusedPrivateMembers}
-   */
-  goog.DebugLoader.prototype.retrieveAndExec_ = function(
-      src, isModule, needsTranspile) {
-    if (!COMPILED) {
-      // The full but non-canonicalized URL for later use.
-      var originalPath = src;
-      // Canonicalize the path, removing any /./ or /../ since Chrome's
-      // debugging console doesn't auto-canonicalize XHR loads as it does
-      // <script> srcs.
-      src = this.normalizePath(src);
-
-      var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
-          goog.bind(this.writeScriptTag_, this);
-
-      var scriptText = this.loadFileSync(src);
-      if (scriptText == null) {
-        throw new Error('Load of "' + src + '" failed');
-      }
-
-      if (needsTranspile) {
-        scriptText = this.getTranspiler().transpile(scriptText, src);
-      }
-
-      if (isModule) {
-        scriptText = this.wrapModule_(src, scriptText);
-      } else {
-        scriptText += '\n//# sourceURL=' + src;
-      }
-      var isOldIE = goog.DebugLoader.IS_OLD_IE_;
-      if (isOldIE && this.oldIeWaiting_) {
-        this.dependencies_.deferred[originalPath] = scriptText;
-        this.queuedModules_.push(originalPath);
-      } else {
-        importScript(src, scriptText);
-      }
-    }
-  };
-
-
-  /**
-   * Return an appropriate module text. Suitable to insert into
-   * a script tag (that is unescaped).
-   * @param {string} srcUrl
-   * @param {string} scriptText
-   * @return {string}
-   * @private
-   */
-  goog.DebugLoader.prototype.wrapModule_ = function(srcUrl, scriptText) {
-    if (!goog.LOAD_MODULE_USING_EVAL || !goog.isDef(goog.global.JSON)) {
-      return '' +
-          'goog.loadModule(function(exports) {' +
-          '"use strict";' + scriptText +
-          '\n' +  // terminate any trailing single line comment.
-          ';return exports' +
-          '});' +
-          '\n//# sourceURL=' + srcUrl + '\n';
-    } else {
-      return '' +
-          'goog.loadModule(' +
-          goog.global.JSON.stringify(
-              scriptText + '\n//# sourceURL=' + srcUrl + '\n') +
-          ');';
-    }
-  };
-
-  // On IE9 and earlier, it is necessary to handle
-  // deferred module loads. In later browsers, the
-  // code to be evaluated is simply inserted as a script
-  // block in the correct order. To eval deferred
-  // code at the right time, we piggy back on goog.require to call
-  // this.maybeProcessDeferredDep_.
-  //
-  // The goog.requires are used both to bootstrap
-  // the loading process (when no deps are available) and
-  // declare that they should be available.
-  //
-  // Here we eval the sources, if all the deps are available
-  // either already eval'd or goog.require'd.  This will
-  // be the case when all the dependencies have already
-  // been loaded, and the dependent module is loaded.
-  //
-  // But this alone isn't sufficient because it is also
-  // necessary to handle the case where there is no root
-  // that is not deferred.  For that there we register for an event
-  // and trigger this.loadQueuedModules_ handle any remaining deferred
-  // evaluations.
-
-  /**
-   * Handle any remaining deferred goog.module evals.
-   * @private
-   */
-  goog.DebugLoader.prototype.loadQueuedModules_ = function() {
-    var count = this.queuedModules_.length;
-    if (count > 0) {
-      var queue = this.queuedModules_;
-      this.queuedModules_ = [];
-      for (var i = 0; i < count; i++) {
-        var path = queue[i];
-        this.maybeProcessDeferredPath_(path);
-      }
-    }
-    this.oldIeWaiting_ = false;
-  };
-
-
-  /**
-   * Eval the named module if its dependencies are
-   * available.
-   * @param {string} name The module to load.
-   * @private
-   */
-  goog.DebugLoader.prototype.maybeProcessDeferredDep_ = function(name) {
-    if (this.isDeferredModule_(name) && this.allDepsAreAvailable_(name)) {
-      var path = this.getPathFromDeps_(name);
-      this.maybeProcessDeferredPath_(goog.basePath + path);
-    }
-  };
-
-
-  /**
-   * @param {string} name The module to check.
-   * @return {boolean} Whether the name represents a
-   *     module whose evaluation has been deferred.
-   * @private
-   */
-  goog.DebugLoader.prototype.isDeferredModule_ = function(name) {
-    var path = this.getPathFromDeps_(name);
-    var loadFlags = path && this.dependencies_.loadFlags[path] || {};
-    var languageLevel = loadFlags['lang'] || 'es3';
-    if (path &&
-        (loadFlags['module'] == 'goog' ||
-         this.getTranspiler().needsTranspile(languageLevel))) {
-      var abspath = goog.basePath + path;
-      return (abspath) in this.dependencies_.deferred;
-    }
-    return false;
-  };
-
-
-  /**
-   * @param {string} name The module to check.
-   * @return {boolean} Whether the name represents a
-   *     module whose declared dependencies have all been loaded
-   *     (eval'd or a deferred module load)
-   * @private
-   */
-  goog.DebugLoader.prototype.allDepsAreAvailable_ = function(name) {
-    var path = this.getPathFromDeps_(name);
-    if (path && (path in this.dependencies_.requires)) {
-      for (var requireName in this.dependencies_.requires[path]) {
-        if (!this.isProvided(requireName) &&
-            !this.isDeferredModule_(requireName)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-
-
-  /**
-   * @param {string} abspath
-   * @private
-   */
-  goog.DebugLoader.prototype.maybeProcessDeferredPath_ = function(abspath) {
-    if (abspath in this.dependencies_.deferred) {
-      var src = this.dependencies_.deferred[abspath];
-      delete this.dependencies_.deferred[abspath];
-      goog.globalEval(src);
-    }
-  };
-
-
-  /**
-   * Writes a new script pointing to `src` directly into the DOM.
-   *
-   * NOTE: This method is not CSP-compliant. @see this.appendScriptSrcNode_ for
-   * the fallback mechanism.
-   *
-   * @param {string} src The script URL.
-   * @private
-   */
-  goog.DebugLoader.prototype.writeScriptSrcNode_ = function(src) {
-    goog.global.document.write(
-        '<script type="text/javascript" src="' + src + '"></' +
-        'script>');
-  };
-
-
-  /**
-   * Appends a new script node to the DOM using a CSP-compliant mechanism. This
-   * method exists as a fallback for document.write (which is not allowed in a
-   * strict CSP context, e.g., Chrome apps).
-   *
-   * NOTE: This method is not analogous to using document.write to insert a
-   * <script> tag; specifically, the user agent will execute a script added by
-   * document.write immediately after the current script block finishes
-   * executing, whereas the DOM-appended script node will not be executed until
-   * the entire document is parsed and executed. That is to say, this script is
-   * added to the end of the script execution queue.
-   *
-   * The page must not attempt to call goog.required entities until after the
-   * document has loaded, e.g., in or after the window.onload callback.
-   *
-   * @param {string} src The script URL.
-   * @private
-   */
-  goog.DebugLoader.prototype.appendScriptSrcNode_ = function(src) {
-    /** @type {!Document} */
-    var doc = goog.global.document;
-    var scriptEl =
-        /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
-    scriptEl.type = 'text/javascript';
-    scriptEl.src = src;
-    scriptEl.defer = false;
-    scriptEl.async = false;
-    doc.head.appendChild(scriptEl);
-  };
-
-
-  /**
-   * The default implementation of the import function. Writes a script tag to
-   * import the script.
-   *
-   * @param {string} src The script url.
-   * @param {string=} opt_sourceText The optionally source text to evaluate
-   * @return {boolean} True if the script was imported, false otherwise.
-   * @private
-   */
-  goog.DebugLoader.prototype.writeScriptTag_ = function(src, opt_sourceText) {
-    if (this.inHtmlDocument()) {
-      /** @type {!HTMLDocument} */
-      var doc = goog.global.document;
-
-      // If the user tries to require a new symbol after document load,
-      // something has gone terribly wrong. Doing a document.write would
-      // wipe out the page. This does not apply to the CSP-compliant method
-      // of writing script tags.
-      if (!goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING &&
-          doc.readyState == 'complete') {
-        // Certain test frameworks load base.js multiple times, which tries
-        // to write deps.js each time. If that happens, just fail silently.
-        // These frameworks wipe the page between each load of base.js, so this
-        // is OK.
-        var isDeps = /\bdeps.js$/.test(src);
-        if (isDeps) {
-          return false;
-        } else {
-          throw Error('Cannot write "' + src + '" after document load');
-        }
-      }
-
-      if (opt_sourceText === undefined) {
-        if (!goog.DebugLoader.IS_OLD_IE_) {
-          if (goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING) {
-            this.appendScriptSrcNode_(src);
-          } else {
-            this.writeScriptSrcNode_(src);
-          }
-        } else {
-          this.oldIeWaiting_ = true;
-          var state = ' onreadystatechange=\'goog.debugLoader_' +
-              '.onScriptLoad_(this, ' + ++this.lastNonModuleScriptIndex_ +
-              ')\' ';
-          doc.write(
-              '<script type="text/javascript" src="' + src + '"' + state +
-              '></' +
-              'script>');
-        }
-      } else {
-        doc.write(
-            '<script type="text/javascript">' +
-            this.protectScriptTag_(opt_sourceText) + '</' +
-            'script>');
-      }
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   /**
    * Rewrites closing script tags in input to avoid ending an enclosing script
    * tag.
@@ -2940,40 +2536,384 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @return {string}
    * @private
    */
-  goog.DebugLoader.prototype.protectScriptTag_ = function(str) {
+  goog.protectScriptTag_ = function(str) {
     return str.replace(/<\/(SCRIPT)/ig, '\\x3c/$1');
   };
 
 
   /**
-   * A readystatechange handler for legacy IE
-   * @param {?} script
-   * @param {number} scriptIndex
+   * A debug loader is responsible for downloading and executing javascript
+   * files in an unbundled, uncompiled environment.
+   *
+   * This can be custimized via the setDependencyFactory method, or by
+   * CLOSURE_IMPORT_SCRIPT/CLOSURE_LOAD_FILE_SYNC.
+   *
+   * @struct @constructor @final @private
+   */
+  goog.DebugLoader_ = function() {
+    /** @private @const {!Object<string, !goog.Dependency>} */
+    this.dependencies_ = {};
+    /** @private @const {!Object<string, string>} */
+    this.idToPath_ = {};
+    /** @private @const {!Object<string, boolean>} */
+    this.written_ = {};
+    /** @private @const {!Array<!goog.Dependency>} */
+    this.loadingDeps_ = [];
+    /** @private {!Array<!goog.Dependency>} */
+    this.depsToLoad_ = [];
+    /** @private {boolean} */
+    this.paused_ = false;
+    /** @private {!goog.DependencyFactory} */
+    this.factory_ = new goog.DependencyFactory(goog.transpiler_);
+    /** @private @const {!Object<string, !Function>} */
+    this.deferredCallbacks_ = {};
+    /** @private @const {!Array<string>} */
+    this.deferredQueue_ = [];
+  };
+
+  /**
+   * @param {!Array<string>} namespaces
+   * @param {function(): undefined} callback Function to call once all the
+   *     namespaces have loaded.
+   */
+  goog.DebugLoader_.prototype.bootstrap = function(namespaces, callback) {
+    var cb = callback;
+    function resolve() {
+      if (cb) {
+        goog.global.setTimeout(cb, 0);
+        cb = null;
+      }
+    }
+
+    if (!namespaces.length) {
+      resolve();
+      return;
+    }
+
+    var deps = [];
+    for (var i = 0; i < namespaces.length; i++) {
+      var path = this.getPathFromDeps_(namespaces[i]);
+      if (!path) {
+        throw new Error('Unregonized namespace: ' + namespaces[i]);
+      }
+      deps.push(this.dependencies_[path]);
+    }
+
+    var require = goog.require;
+    var loaded = 0;
+    for (var i = 0; i < namespaces.length; i++) {
+      require(namespaces[i]);
+      deps[i].onLoad(function() {
+        if (++loaded == namespaces.length) {
+          resolve();
+        }
+      });
+    }
+  };
+
+
+  /**
+   * Loads the Closure Dependency file.
+   *
+   * Exposed a public function so CLOSURE_NO_DEPS can be set to false, base
+   * loaded, setDependencyFactory called, and then this called. i.e. allows
+   * custom loading of the deps file.
+   */
+  goog.DebugLoader_.prototype.loadClosureDeps = function() {
+    // Circumvent addDependency, which would try to transpile deps.js if
+    // transpile is set to always.
+    var relPath = 'deps.js';
+    this.depsToLoad_.push(this.factory_.createDependency(
+        goog.normalizePath_(goog.basePath + relPath), relPath, [], [], {},
+        false));
+    this.loadDeps_();
+  };
+
+
+  /**
+   * Notifies the debug loader when a dependency has been requested.
+   *
+   * @param {string} absPathOrId Path of the dependency or goog id.
+   * @param {boolean=} opt_force
+   */
+  goog.DebugLoader_.prototype.requested = function(absPathOrId, opt_force) {
+    var path = this.getPathFromDeps_(absPathOrId);
+    if (path &&
+        (opt_force || this.areDepsLoaded_(this.dependencies_[path].requires))) {
+      var callback = this.deferredCallbacks_[path];
+      if (callback) {
+        delete this.deferredCallbacks_[path];
+        callback();
+      }
+    }
+  };
+
+
+  /**
+   * Sets the dependency factory, which can be used to create custom
+   * goog.Dependency implementations to control how dependencies are loaded.
+   *
+   * @param {!goog.DependencyFactory} factory
+   */
+  goog.DebugLoader_.prototype.setDependencyFactory = function(factory) {
+    this.factory_ = factory;
+  };
+
+
+  /**
+   * Travserses the dependency graph and queues the given dependency, and all of
+   * its transitive dependencies, for loading and then starts loading if not
+   * paused.
+   *
+   * @param {string} absPathOrId
+   * @private
+   */
+  goog.DebugLoader_.prototype.load_ = function(absPathOrId) {
+    if (!this.getPathFromDeps_(absPathOrId)) {
+      var errorMessage = 'goog.require could not find: ' + absPathOrId;
+
+      goog.logToConsole_(errorMessage);
+      throw Error(errorMessage);
+    } else {
+      var loader = this;
+
+      var deps = [];
+
+      /** @param {string} absPathOrId */
+      var visit = function(absPathOrId) {
+        var path = loader.getPathFromDeps_(absPathOrId);
+
+        if (!path) {
+          throw new Error('Bad dependency path or symbol: ' + absPathOrId);
+        }
+
+        if (loader.written_[path]) {
+          return;
+        }
+
+        loader.written_[path] = true;
+
+        var dep = loader.dependencies_[path];
+        for (var i = 0; i < dep.requires.length; i++) {
+          if (!goog.isProvided_(dep.requires[i])) {
+            visit(dep.requires[i]);
+          }
+        }
+
+        deps.push(dep);
+      };
+
+      visit(absPathOrId);
+
+      var wasLoading = !!this.depsToLoad_.length;
+      this.depsToLoad_ = this.depsToLoad_.concat(deps);
+
+      if (!this.paused_ && !wasLoading) {
+        this.loadDeps_();
+      }
+    }
+  };
+
+
+  /**
+   * Loads any queued dependencies until they are all loaded or paused.
+   *
+   * @private
+   */
+  goog.DebugLoader_.prototype.loadDeps_ = function() {
+    var loader = this;
+    var paused = this.paused_;
+
+    while (this.depsToLoad_.length && !paused) {
+      (function() {
+        var loadCallDone = false;
+        var dep = loader.depsToLoad_.shift();
+
+        var loaded = false;
+        loader.loading_(dep);
+
+        var controller = {
+          pause: function() {
+            if (loadCallDone) {
+              throw new Error('Cannot call pause after the call to load.');
+            } else {
+              paused = true;
+            }
+          },
+          resume: function() {
+            if (loadCallDone) {
+              loader.resume_();
+            } else {
+              // Some dep called pause and then resume in the same load call.
+              // Just keep running this same loop.
+              paused = false;
+            }
+          },
+          loaded: function() {
+            if (loaded) {
+              throw new Error('Double call to loaded.');
+            }
+
+            loaded = true;
+            loader.loaded_(dep);
+          },
+          pending: function() {
+            // Defensive copy.
+            var pending = [];
+            for (var i = 0; i < loader.loadingDeps_.length; i++) {
+              pending.push(loader.loadingDeps_[i]);
+            }
+            return pending;
+          },
+          /**
+           * @param {string} path
+           * @param {goog.ModuleType} type
+           */
+          setModuleState: function(path, type) {
+            goog.moduleLoaderState_ = {
+              path: path,
+              type: type,
+              moduleName: '',
+              declareLegacyNamespace: false
+            };
+          },
+          registerEs6ModuleExports: function(path, exports) {
+            goog.loadedModules_[path] = {
+              exports: exports,
+              type: goog.ModuleType.ES6,
+              moduleId: ''
+            };
+          },
+          registerGoogModuleExports: function(moduleId, exports) {
+            goog.loadedModules_[moduleId] = {
+              exports: exports,
+              type: goog.ModuleType.GOOG,
+              moduleId: moduleId
+            };
+          },
+          clearModuleState: function() {
+            goog.moduleLoaderState_ = null;
+          },
+          defer: function(callback) {
+            if (loadCallDone) {
+              throw new Error(
+                  'Cannot register with defer after the call to load.');
+            }
+            loader.defer_(dep, callback);
+          },
+          areDepsLoaded: function() {
+            return loader.areDepsLoaded_(dep.requires);
+          }
+        };
+
+        try {
+          dep.load(controller);
+        } finally {
+          loadCallDone = true;
+        }
+      })();
+    }
+
+    if (paused) {
+      this.pause_();
+    }
+  };
+
+
+  /** @private */
+  goog.DebugLoader_.prototype.pause_ = function() {
+    this.paused_ = true;
+  };
+
+
+  /** @private */
+  goog.DebugLoader_.prototype.resume_ = function() {
+    if (this.paused_) {
+      this.paused_ = false;
+      this.loadDeps_();
+    }
+  };
+
+
+  /**
+   * Marks the given dependency as loading (load has been called but it has not
+   * yet marked itself as finished). Useful for dependencies that want to know
+   * what else is loading. Example: goog.modules cannot eval if there are
+   * loading dependencies.
+   *
+   * @param {!goog.Dependency} dep
+   * @private
+   */
+  goog.DebugLoader_.prototype.loading_ = function(dep) {
+    this.loadingDeps_.push(dep);
+  };
+
+
+  /**
+   * Marks the given dependency as having finished loading and being available
+   * for require.
+   *
+   * @param {!goog.Dependency} dep
+   * @private
+   */
+  goog.DebugLoader_.prototype.loaded_ = function(dep) {
+    for (var i = 0; i < this.loadingDeps_.length; i++) {
+      if (this.loadingDeps_[i] == dep) {
+        this.loadingDeps_.splice(i, 1);
+        break;
+      }
+    }
+
+    for (var i = 0; i < this.deferredQueue_.length; i++) {
+      if (this.deferredQueue_[i] == dep.path) {
+        this.deferredQueue_.splice(i, 1);
+        break;
+      }
+    }
+
+    if (this.loadingDeps_.length == this.deferredQueue_.length &&
+        !this.depsToLoad_.length) {
+      // Something has asked to load these, but they may not be directly
+      // required again later, so load them now that we know we're done loading
+      // everything else. e.g. a goog module entry point.
+      while (this.deferredQueue_.length) {
+        this.requested(this.deferredQueue_.shift(), true);
+      }
+    }
+
+    dep.loaded();
+  };
+
+
+  /**
+   * @param {!Array<string>} pathsOrIds
    * @return {boolean}
    * @private
-   * @suppress {unusedPrivateMembers}
    */
-  goog.DebugLoader.prototype.onScriptLoad_ = function(script, scriptIndex) {
-    // for now load the modules when we reach the last script,
-    // later allow more inter-mingling.
-    if (script.readyState == 'complete' &&
-        this.lastNonModuleScriptIndex_ == scriptIndex) {
-      this.loadQueuedModules_();
+  goog.DebugLoader_.prototype.areDepsLoaded_ = function(pathsOrIds) {
+    for (var i = 0; i < pathsOrIds.length; i++) {
+      var path = this.getPathFromDeps_(pathsOrIds[i]);
+      if (!path ||
+          (!(path in this.deferredCallbacks_) &&
+           !goog.isProvided_(pathsOrIds[i]))) {
+        return false;
+      }
     }
+
     return true;
   };
 
 
   /**
-   * Looks at the dependency rules and tries to determine the script file that
-   * fulfills a particular rule.
-   * @param {string} rule In the form goog.namespace.Class or project.script.
-   * @return {?string} Url corresponding to the rule, or null.
+   * @param {string} absPathOrId
+   * @return {?string}
    * @private
    */
-  goog.DebugLoader.prototype.getPathFromDeps_ = function(rule) {
-    if (rule in this.dependencies_.nameToPath) {
-      return this.dependencies_.nameToPath[rule];
+  goog.DebugLoader_.prototype.getPathFromDeps_ = function(absPathOrId) {
+    if (absPathOrId in this.idToPath_) {
+      return this.idToPath_[absPathOrId];
+    } else if (absPathOrId in this.dependencies_) {
+      return absPathOrId;
     } else {
       return null;
     }
@@ -2981,105 +2921,845 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * @return {!goog.Transpiler}
-   * @protected @final
+   * @param {!goog.Dependency} dependency
+   * @param {!Function} callback
+   * @private
    */
-  goog.DebugLoader.prototype.getTranspiler = function() {
-    return goog.transpiler_;
+  goog.DebugLoader_.prototype.defer_ = function(dependency, callback) {
+    this.deferredCallbacks_[dependency.path] = callback;
+    this.deferredQueue_.push(dependency.path);
   };
 
 
   /**
-   * @param {string} namespaceOrPath
+   * Interface for goog.Dependency implementations to have some control over
+   * loading of dependencies.
+   *
+   * @record
+   */
+  goog.LoadController = function() {};
+
+
+  /**
+   * Tells the controller to halt loading of more dependencies.
+   */
+  goog.LoadController.prototype.pause = function() {};
+
+
+  /**
+   * Tells the controller to resume loading of more dependencies if paused.
+   */
+  goog.LoadController.prototype.resume = function() {};
+
+
+  /**
+   * Tells the controller that this dependency has finished loading.
+   *
+   * This causes this to be removed from pending() and any load callbacks to
+   * fire.
+   */
+  goog.LoadController.prototype.loaded = function() {};
+
+
+  /**
+   * List of dependencies on which load has been called but which have not
+   * called loaded on their controller. This includes the current dependency.
+   *
+   * @return {!Array<!goog.Dependency>}
+   */
+  goog.LoadController.prototype.pending = function() {};
+
+
+  /**
+   * Registers an object as an ES6 module's exports so that goog.modules may
+   * require it by path.
+   *
+   * @param {string} path Full path of the module.
+   * @param {?} exports
+   */
+  goog.LoadController.prototype.registerEs6ModuleExports = function(
+      path, exports) {};
+
+
+  /**
+   * Sets the current module state. Allows goog.modules to require by path
+   * and lets goog.require return values.
+   *
+   * @param {string} path Full path of the current module.
+   * @param {goog.ModuleType} type Type of module.
+   */
+  goog.LoadController.prototype.setModuleState = function(path, type) {};
+
+
+  /**
+   * Clears the current module state.
+   */
+  goog.LoadController.prototype.clearModuleState = function() {};
+
+
+  /**
+   * Registers a callback to call once the dependency is actually requested
+   * via goog.require + all of the immediate dependencies have been loaded or
+   * all other files have been loaded. Allows for lazy loading until
+   * require'd without pausing dependency loading, which is needed on old IE.
+   *
+   * @param {!Function} callback
+   */
+  goog.LoadController.prototype.defer = function(callback) {};
+
+
+  /**
    * @return {boolean}
-   * @protected @final
    */
-  goog.DebugLoader.prototype.isProvided = function(namespaceOrPath) {
-    return goog.isProvided_(namespaceOrPath);
+  goog.LoadController.prototype.areDepsLoaded = function() {};
+
+
+  /**
+   * Basic super class for all dependencies Closure Library can load.
+   *
+   * This default implementation is designed to load untranspiled, non-module
+   * scripts in a web broswer.
+   *
+   * For transpiled non-goog.module files {@see goog.TranspiledDependency}.
+   * For goog.modules see {@see goog.GoogModuleDependency}.
+   * For untranspiled ES6 modules {@see goog.Es6ModuleDependency}.
+   *
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} provides goog.provided or goog.module symbols
+   *     in this file.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @struct @constructor
+   */
+  goog.Dependency = function(
+      path, relativePath, provides, requires, loadFlags) {
+    /** @const */
+    this.path = path;
+    /** @const */
+    this.relativePath = relativePath;
+    /** @const */
+    this.provides = provides;
+    /** @const */
+    this.requires = requires;
+    /** @const */
+    this.loadFlags = loadFlags;
+    /** @private {boolean} */
+    this.loaded_ = false;
+    /** @private {!Array<function()>} */
+    this.loadCallbacks_ = [];
   };
 
 
   /**
-   * @return {boolean}
-   * @protected @final
+   * @param {function()} callback Callback to fire as soon as this has loaded.
+   * @final
    */
-  goog.DebugLoader.prototype.inHtmlDocument = function() {
-    return goog.inHtmlDocument_();
+  goog.Dependency.prototype.onLoad = function(callback) {
+    if (this.loaded_) {
+      callback();
+    } else {
+      this.loadCallbacks_.push(callback);
+    }
   };
 
 
   /**
-   * @param {string} message
-   * @protected @final
+   * Marks this dependency as loaded and fires any callbacks registered with
+   * onLoad.
+   * @final
    */
-  goog.DebugLoader.prototype.logToConsole = function(message) {
-    goog.logToConsole_(message);
+  goog.Dependency.prototype.loaded = function() {
+    this.loaded_ = true;
+    var callbacks = this.loadCallbacks_;
+    this.loadCallbacks_ = [];
+    for (var i = 0; i < callbacks.length; i++) {
+      callbacks[i]();
+    }
   };
 
 
   /**
-   * @param {string} srcUrl
-   * @return {?string}
-   * @protected @final
+   * Whether or not document.written / appended script tags should be deferred.
+   *
+   * @private {boolean}
    */
-  goog.DebugLoader.prototype.loadFileSync = function(srcUrl) {
-    return goog.loadFileSync_(srcUrl);
-  };
+  goog.Dependency.defer_ = false;
 
 
   /**
-   * @param {string} path
+   * Map of script ready / state change callbacks. Old IE cannot handle putting
+   * these properties on goog.global.
+   *
+   * @private @const {!Object<string, function(?):undefined>}
+   */
+  goog.Dependency.callbackMap_ = {};
+
+
+  /**
+   * @param {function(...?):?} callback
    * @return {string}
-   * @protected @final
+   * @private
    */
-  goog.DebugLoader.prototype.normalizePath = function(path) {
-    return goog.normalizePath_(path);
+  goog.Dependency.registerCallback_ = function(callback) {
+    var key = Math.random().toString(32);
+    goog.Dependency.callbackMap_[key] = callback;
+    return key;
   };
 
 
-  /** @private {?goog.DebugLoader} */
-  goog.debugLoader_ = null;
-
-
-  /** @param {!goog.DebugLoader} loader */
-  goog.registerDebugLoader = function(loader) {
-    if (goog.debugLoader_) {
-      throw new Error('Debug loader already registered!');
-    }
-    if (!(loader instanceof goog.DebugLoader)) {
-      throw new Error('Not a goog.DebugLoader.');
-    }
-    goog.debugLoader_ = loader;
+  /**
+   * @param {string} key
+   * @private
+   */
+  goog.Dependency.unregisterCallback_ = function(key) {
+    delete goog.Dependency.callbackMap_[key];
   };
 
-  /** @private @return {!goog.DebugLoader} */
-  goog.getLoader_ = function() {
-    if (!goog.debugLoader_ && goog.DEBUG_LOADER) {
-      // Tried to load earlier but failed.
-      throw new Error('Loaded debug loader file but no loader was registered!');
-    } else if (!goog.debugLoader_) {
-      // No custom loader and no closure deps. Was not made earlier; make it
-      // now.
-      goog.debugLoader_ = new goog.DebugLoader();
-    }
-    return goog.debugLoader_;
-  };
 
-  (function() {
-    var tempLoader;
-    if (goog.DEBUG_LOADER) {
-      tempLoader = new goog.DebugLoader();
-      tempLoader.importScript_(goog.basePath + goog.DEBUG_LOADER);
-    }
-
-    // Allow projects to manage the deps files themselves.
-    if (!goog.global.CLOSURE_NO_DEPS) {
-      tempLoader = tempLoader || new goog.DebugLoader();
-      if (!goog.DEBUG_LOADER) {
-        // Can reuse the same debug loader in the rest of the application.
-        goog.registerDebugLoader(tempLoader);
+  /**
+   * @param {string} key
+   * @param {...?} var_args
+   * @private
+   * @suppress {unusedPrivateMembers}
+   */
+  goog.Dependency.callback_ = function(key, var_args) {
+    if (key in goog.Dependency.callbackMap_) {
+      var callback = goog.Dependency.callbackMap_[key];
+      var args = [];
+      for (var i = 1; i < arguments.length; i++) {
+        args.push(arguments[i]);
       }
-      tempLoader.importScript_(goog.basePath + 'deps.js');
+      callback.apply(undefined, args);
+    } else {
+      var errorMessage = 'Callback key ' + key +
+          ' does not exist (was base.js loaded more than once?).';
+      throw Error(errorMessage);
     }
-  })();
+  };
+
+
+  /**
+   * Starts loading this dependency. This dependency can pause loading if it
+   * needs to and resume it later via the controller interface.
+   *
+   * When this is loaded it should call controller.loaded(). Note that this will
+   * end up calling the loaded method of this dependency; there is no need to
+   * call it explicitly.
+   *
+   * @param {!goog.LoadController} controller
+   */
+  goog.Dependency.prototype.load = function(controller) {
+    if (goog.global.CLOSURE_IMPORT_SCRIPT) {
+      if (goog.global.CLOSURE_IMPORT_SCRIPT(this.path)) {
+        controller.loaded();
+      } else {
+        controller.pause();
+      }
+      return;
+    }
+
+    if (!goog.inHtmlDocument_()) {
+      goog.logToConsole_(
+          'Cannot use default debug loader outside of HTML documents.');
+      if (this.relativePath == 'deps.js') {
+        // Some old code is relying on base.js auto loading deps.js failing with
+        // no error before later setting CLOSURE_IMPORT_SCRIPT.
+        // CLOSURE_IMPORT_SCRIPT should be set *before* base.js is loaded, or
+        // CLOSURE_NO_DEPS set to true.
+        goog.logToConsole_(
+            'Consider setting CLOSURE_IMPORT_SCRIPT before loading base.js, ' +
+            'or seting CLOSURE_NO_DEPS to true.');
+        controller.loaded();
+      } else {
+        controller.pause();
+      }
+      return;
+    }
+
+    /** @type {!HTMLDocument} */
+    var doc = goog.global.document;
+
+    // If the user tries to require a new symbol after document load,
+    // something has gone terribly wrong. Doing a document.write would
+    // wipe out the page. This does not apply to the CSP-compliant method
+    // of writing script tags.
+    if (doc.readyState == 'complete' &&
+        !goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING) {
+      // Certain test frameworks load base.js multiple times, which tries
+      // to write deps.js each time. If that happens, just fail silently.
+      // These frameworks wipe the page between each load of base.js, so this
+      // is OK.
+      var isDeps = /\bdeps.js$/.test(this.path);
+      if (isDeps) {
+        controller.loaded();
+        return;
+      } else {
+        throw Error('Cannot write "' + this.path + '" after document load');
+      }
+    }
+
+    if (!goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING &&
+        goog.isDocumentLoading_()) {
+      var key = goog.Dependency.registerCallback_(function(script) {
+        if (!goog.DebugLoader_.IS_OLD_IE_ || script.readyState == 'complete') {
+          goog.Dependency.unregisterCallback_(key);
+          controller.loaded();
+        }
+      });
+
+      var event =
+          goog.DebugLoader_.IS_OLD_IE_ ? 'onreadystatechange' : 'onload';
+      var defer = goog.Dependency.defer_ ? 'defer' : '';
+      doc.write(
+          '<script src="' + this.path + '" ' + event +
+          '="goog.Dependency.callback_(\'' + key +
+          '\', this)" type="text/javascript" ' + defer + '><' +
+          '/script>');
+    } else {
+      var scriptEl =
+          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
+      scriptEl.defer = goog.Dependency.defer_;
+      scriptEl.async = false;
+      scriptEl.type = 'text/javascript';
+
+      if (goog.DebugLoader_.IS_OLD_IE_) {
+        // Execution order is not guaranteed on old IE, halt loading and write
+        // these scripts one at a time, after each loads.
+        controller.pause();
+        scriptEl.onreadystatechange = function() {
+          if (scriptEl.readyState == 'loaded' ||
+              scriptEl.readyState == 'complete') {
+            controller.loaded();
+            controller.resume();
+          }
+        };
+      } else {
+        scriptEl.onload = function() {
+          scriptEl.onload = null;
+          controller.loaded();
+        };
+      }
+
+      scriptEl.src = this.path;
+      doc.head.appendChild(scriptEl);
+    }
+  };
+
+
+  /**
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @struct @constructor
+   * @extends {goog.Dependency}
+   */
+  goog.Es6ModuleDependency = function(path, relativePath, requires, loadFlags) {
+    goog.Es6ModuleDependency.base(
+        this, 'constructor', path, relativePath, [], requires, loadFlags);
+  };
+  goog.inherits(goog.Es6ModuleDependency, goog.Dependency);
+
+
+  /** @override */
+  goog.Es6ModuleDependency.prototype.load = function(controller) {
+    if (goog.global.CLOSURE_IMPORT_SCRIPT) {
+      if (goog.global.CLOSURE_IMPORT_SCRIPT(this.path)) {
+        controller.loaded();
+      } else {
+        controller.pause();
+      }
+      return;
+    }
+
+    if (!goog.inHtmlDocument_()) {
+      goog.logToConsole_(
+          'Cannot use default debug loader outside of HTML documents.');
+      controller.pause();
+      return;
+    }
+
+    /** @type {!HTMLDocument} */
+    var doc = goog.global.document;
+
+    var dep = this;
+
+    // TODO(user): Does document.writing really speed up anything? Any
+    // difference between this and just waiting for interactive mode and then
+    // appending?
+    function write(src, contents) {
+      if (contents) {
+        doc.write(
+            '<script type="module" crossorigin>' + contents + '</' +
+            'script>');
+      } else {
+        doc.write(
+            '<script type="module" crossorigin src="' + src + '"></' +
+            'script>');
+      }
+    }
+
+    function append(src, contents) {
+      var scriptEl =
+          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
+      scriptEl.defer = true;
+      scriptEl.async = false;
+      scriptEl.type = 'module';
+      scriptEl.setAttribute('crossorigin', true);
+
+      if (contents) {
+        scriptEl.textContent = contents;
+      } else {
+        scriptEl.src = src;
+      }
+
+      doc.head.appendChild(scriptEl);
+    }
+
+    var create;
+
+    if (goog.isDocumentLoading_()) {
+      create = write;
+      // We can ONLY call document.write if we are guaranteed that any
+      // non-module script tags document.written after this are deferred.
+      // Small optimization, in theory document.writing is faster.
+      goog.Dependency.defer_ = true;
+    } else {
+      create = append;
+    }
+
+    // Write 4 separate tags here:
+    // 1) Sets the module state at the correct time (just before execution).
+    // 2) A src node for this, which just hopefully lets the browser load it a
+    //    little early (no need to parse #3).
+    // 3) Import the module and register it.
+    // 4) Clear the module state at the correct time. Guarnteed to run even
+    //    if there is an error in the module (#3 will not run if there is an
+    //    error in the module).
+    var beforeKey = goog.Dependency.registerCallback_(function() {
+      goog.Dependency.unregisterCallback_(beforeKey);
+      controller.setModuleState(dep.path, goog.ModuleType.ES6);
+    });
+    create(undefined, 'goog.Dependency.callback_("' + beforeKey + '")');
+
+    // TODO(user): Does this really speed up anything?
+    create(this.path, undefined);
+
+    var registerKey = goog.Dependency.registerCallback_(function(exports) {
+      goog.Dependency.unregisterCallback_(registerKey);
+      controller.registerEs6ModuleExports(dep.path, exports);
+    });
+    create(
+        undefined,
+        'import * as m from "' + this.path + '"; goog.Dependency.callback_("' +
+            registerKey + '", m)');
+
+    var afterKey = goog.Dependency.registerCallback_(function() {
+      goog.Dependency.unregisterCallback_(afterKey);
+      controller.clearModuleState();
+      controller.loaded();
+    });
+    create(undefined, 'goog.Dependency.callback_("' + afterKey + '")');
+  };
+
+
+  /**
+   * Superclass of any dependency that needs to be loaded into memory,
+   * transformed, and then eval'd (goog.modules and transpiled files).
+   *
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} provides goog.provided or goog.module symbols
+   *     in this file.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @struct @constructor @abstract
+   * @extends {goog.Dependency}
+   */
+  goog.TransformedDependency = function(
+      path, relativePath, provides, requires, loadFlags) {
+    goog.TransformedDependency.base(
+        this, 'constructor', path, relativePath, provides, requires, loadFlags);
+    /** @private {?string} */
+    this.contents_ = null;
+  };
+  goog.inherits(goog.TransformedDependency, goog.Dependency);
+
+
+  /** @override */
+  goog.TransformedDependency.prototype.load = function(controller) {
+    if (!goog.global.CLOSURE_IMPORT_SCRIPT && goog.inHtmlDocument_() &&
+        goog.isDocumentLoading_()) {
+      /** @type {!HTMLDocument} */
+      var doc = goog.global.document;
+      // Required on some older browsers to load the contents in its own script
+      // tag. Otherwise the document.write acts like an eval apparently?
+      var dep = this;
+
+      var key = goog.Dependency.registerCallback_(function() {
+        goog.Dependency.unregisterCallback_(key);
+        dep.loadImpl_(controller);
+      });
+
+      doc.write(
+          '<script type="text/javascript">' +
+          goog.protectScriptTag_('goog.Dependency.callback_("' + key + '");') +
+          '</' +
+          'script>');
+    } else {
+      this.loadImpl_(controller);
+    }
+  };
+
+
+  /**
+   * @param {!goog.LoadController} controller
+   * @private
+   */
+  goog.TransformedDependency.prototype.loadImpl_ = function(controller) {
+    this.contents_ = goog.loadFileSync_(this.path);
+
+    if (this.contents_) {
+      this.contents_ = this.transform(this.contents_);
+      if (this.contents_) {
+        this.contents_ += '\n//# sourceURL=' + this.path;
+      }
+    }
+
+    if (!this.contents_) {
+      // loadFileSync_ or transform are responsible. Assume they logged an
+      // error.
+      controller.pause();
+      return;
+    }
+
+    if (goog.global.CLOSURE_IMPORT_SCRIPT) {
+      if (goog.global.CLOSURE_IMPORT_SCRIPT('', this.contents_)) {
+        this.contents_ = null;
+        controller.loaded();
+      } else {
+        controller.pause();
+      }
+      return;
+    }
+
+    var dep = this;
+    var isEs6 = this.loadFlags['module'] == goog.ModuleType.ES6;
+
+    function load(shouldEval) {
+      if (!dep.contents_) {
+        return;
+      }
+
+      if (isEs6) {
+        controller.setModuleState(dep.path, goog.ModuleType.ES6);
+      }
+
+      try {
+        var contents = dep.contents_;
+        dep.contents_ = null;
+        if (shouldEval) {
+          goog.globalEval(contents);
+        } else {
+          /** @type {!HTMLDocument} */
+          var doc = goog.global.document;
+          doc.write(
+              '<script type="text/javascript">' +
+              goog.protectScriptTag_(contents) + '</' +
+              'script>');
+        }
+      } finally {
+        if (isEs6) {
+          controller.clearModuleState();
+        }
+      }
+
+      if (isEs6) {
+        // Due to circular dependencies this may not be available for require
+        // right now.
+        goog.global['$jscomp']['require']['ensure']([dep.path], function() {
+          controller.registerEs6ModuleExports(
+              dep.path, goog.global['$jscomp']['require'](dep.path));
+        });
+      }
+
+      controller.loaded();
+    }
+
+    var pending = controller.pending();
+    // If one thing is pending it is this.
+    if (pending.length > 1 && goog.DebugLoader_.IS_OLD_IE_) {
+      // If anything else is loading we need to lazy load due to bugs in old IE.
+      // Do not pause here; it breaks old IE as well.
+      controller.defer(function() {
+        load(true);
+      });
+      return;
+    }
+
+    if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_()) {
+      // TODO(user): Externs are missing onreadystatechange for
+      // HTMLDocument.
+      /** @type {?} */
+      var doc = goog.global.document;
+      // Transpiled ES6 modules still need to load like regular ES6 modules,
+      // aka only after the document is interactive.
+      controller.pause();
+      var oldCallback = doc.onreadystatechange;
+      doc.onreadystatechange = function() {
+        if (doc.attachEvent ? doc.readyState == 'complete' :
+                              doc.readyState == 'interactive') {
+          doc.onreadystatechange = oldCallback;
+          load(true);
+          controller.resume();
+        }
+        if (goog.isFunction(oldCallback)) {
+          oldCallback.apply(undefined, arguments);
+        }
+      };
+    } else {
+      // Always eval on old IE.
+      load(
+          goog.DebugLoader_.IS_OLD_IE_ || !goog.inHtmlDocument_() ||
+          !goog.isDocumentLoading_());
+    }
+  };
+
+
+  /**
+   * @param {string} contents
+   * @return {string}
+   * @abstract
+   */
+  goog.TransformedDependency.prototype.transform = function(contents) {};
+
+
+  /**
+   * Any non-goog.module dependency which needs to be transpiled before eval.
+   *
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} provides goog.provided or goog.module symbols
+   *     in this file.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @param {!goog.Transpiler} transpiler
+   * @struct @constructor
+   * @extends {goog.TransformedDependency}
+   */
+  goog.TranspiledDependency = function(
+      path, relativePath, provides, requires, loadFlags, transpiler) {
+    goog.TranspiledDependency.base(
+        this, 'constructor', path, relativePath, provides, requires, loadFlags);
+    /** @protected @const*/
+    this.transpiler = transpiler;
+  };
+  goog.inherits(goog.TranspiledDependency, goog.TransformedDependency);
+
+
+  /** @override */
+  goog.TranspiledDependency.prototype.transform = function(contents) {
+    return this.transpiler.transpile(contents, this.path);
+  };
+
+
+  /**
+   * A goog.module, transpiled or not. Will always perform some minimal
+   * transformation even when not transpiled to wrap in a goog.loadModule
+   * statement.
+   *
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} provides goog.provided or goog.module symbols
+   *     in this file.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @param {boolean} needsTranspile
+   * @param {!goog.Transpiler} transpiler
+   * @struct @constructor
+   * @extends {goog.TransformedDependency}
+   */
+  goog.GoogModuleDependency = function(
+      path, relativePath, provides, requires, loadFlags, needsTranspile,
+      transpiler) {
+    goog.GoogModuleDependency.base(
+        this, 'constructor', path, relativePath, provides, requires, loadFlags);
+    /** @private @const */
+    this.needsTranspile_ = needsTranspile;
+    /** @private @const */
+    this.transpiler_ = transpiler;
+  };
+  goog.inherits(goog.GoogModuleDependency, goog.TransformedDependency);
+
+
+  /** @override */
+  goog.GoogModuleDependency.prototype.transform = function(contents) {
+    if (this.needsTranspile_) {
+      contents = this.transpiler_.transpile(contents, this.path);
+    }
+
+    if (!goog.LOAD_MODULE_USING_EVAL || !goog.isDef(goog.global.JSON)) {
+      return '' +
+          'goog.loadModule(function(exports) {' +
+          '"use strict";' + contents +
+          '\n' +  // terminate any trailing single line comment.
+          ';return exports' +
+          '}, "' + this.path + '");' +
+          '\n//# sourceURL=' + this.path + '\n';
+    } else {
+      return '' +
+          'goog.loadModule(' +
+          goog.global.JSON.stringify(
+              contents + '\n//# sourceURL=' + this.path + '\n') +
+          ', "' + this.path + '");';
+    }
+  };
+
+
+  /**
+   * Whether the browser is IE9 or earlier, which needs special handling
+   * for deferred modules.
+   * @const @private {boolean}
+   */
+  goog.DebugLoader_.IS_OLD_IE_ =
+      !!(!goog.global.atob && goog.global.document && goog.global.document.all);
+
+
+  /**
+   * @param {string} relPath
+   * @param {!Array<string>|undefined} provides
+   * @param {!Array<string>} requires
+   * @param {boolean|!Object<string>=} opt_loadFlags
+   * @see goog.addDependency
+   */
+  goog.DebugLoader_.prototype.addDependency = function(
+      relPath, provides, requires, opt_loadFlags) {
+    provides = provides || [];
+    relPath = relPath.replace(/\\/g, '/');
+    var path = goog.normalizePath_(goog.basePath + relPath);
+    if (!opt_loadFlags || typeof opt_loadFlags === 'boolean') {
+      opt_loadFlags = opt_loadFlags ? {'module': goog.ModuleType.GOOG} : {};
+    }
+    var dep = this.factory_.createDependency(
+        path, relPath, provides, requires, opt_loadFlags,
+        goog.transpiler_.needsTranspile(
+            opt_loadFlags['lang'] || 'es3', opt_loadFlags['module']));
+    this.dependencies_[path] = dep;
+    for (var i = 0; i < provides.length; i++) {
+      this.idToPath_[provides[i]] = path;
+    }
+    this.idToPath_[relPath] = path;
+  };
+
+  /**
+   * Creates goog.Dependency instances for the debug loader to load.
+   *
+   * Should be overridden to have the debug loader use custom subclasses of
+   * goog.Dependency.
+   *
+   * @param {!goog.Transpiler} transpiler
+   * @struct @constructor
+   */
+  goog.DependencyFactory = function(transpiler) {
+    /** @protected @const */
+    this.transpiler = transpiler;
+  };
+
+
+  /**
+   * @param {string} path Absolute path of the file.
+   * @param {string} relativePath Path relative to closure’s base.js.
+   * @param {!Array<string>} provides Array of provided goog.provide/module ids.
+   * @param {!Array<string>} requires Array of required goog.provide/module /
+   *     relative ES6 module paths.
+   * @param {!Object<string, string>} loadFlags
+   * @param {boolean} needsTranspile True if the file needs to be transpiled
+   *     per the goog.Transpiler.
+   * @return {!goog.Dependency}
+   */
+  goog.DependencyFactory.prototype.createDependency = function(
+      path, relativePath, provides, requires, loadFlags, needsTranspile) {
+    if (loadFlags['module'] == goog.ModuleType.ES6) {
+      throw new Error(
+          'ES6 modules are not currently supported by the debug loader.');
+    }
+
+    if (loadFlags['module'] == goog.ModuleType.GOOG) {
+      return new goog.GoogModuleDependency(
+          path, relativePath, provides, requires, loadFlags, needsTranspile,
+          this.transpiler);
+    } else if (needsTranspile) {
+      return new goog.TranspiledDependency(
+          path, relativePath, provides, requires, loadFlags, this.transpiler);
+    } else {
+      if (loadFlags['module'] == goog.ModuleType.ES6) {
+        return new goog.Es6ModuleDependency(
+            path, relativePath, requires, loadFlags);
+      } else {
+        return new goog.Dependency(
+            path, relativePath, provides, requires, loadFlags);
+      }
+    }
+  };
+
+
+  /** @private @const */
+  goog.debugLoader_ = new goog.DebugLoader_();
+
+
+  /**
+   * Loads the Closure Dependency file.
+   *
+   * Exposed a public function so CLOSURE_NO_DEPS can be set to false, base
+   * loaded, setDependencyFactory called, and then this called. i.e. allows
+   * custom loading of the deps file.
+   */
+  goog.loadClosureDeps = function() {
+    goog.debugLoader_.loadClosureDeps();
+  };
+
+
+  /**
+   * Sets the dependency factory, which can be used to create custom
+   * goog.Dependency implementations to control how dependencies are loaded.
+   *
+   * Note: if you wish to call this function and provide your own implemnetation
+   * it is a wise idea to set CLOSURE_NO_DEPS to true, otherwise the dependency
+   * file and all of its goog.addDependency calls will use the default factory.
+   * You can call goog.loadClosureDeps to load the Closure dependency file
+   * later, after your factory is injected.
+   *
+   * @param {!goog.DependencyFactory} factory
+   */
+  goog.setDependencyFactory = function(factory) {
+    goog.debugLoader_.setDependencyFactory(factory);
+  };
+
+
+  if (!goog.global.CLOSURE_NO_DEPS) {
+    goog.debugLoader_.loadClosureDeps();
+  }
+
+
+  /**
+   * Bootstraps the given namespaces and calls the callback once they are
+   * available either via goog.require. This is a replacement for using
+   * `goog.require` to bootstrap Closure Javascript. Previously a `goog.require`
+   * in an HTML file would guarantee that the require'd namespace was available
+   * in the next immediate script tag. With ES6 modules this no longer a
+   * guarantee.
+   *
+   * @param {!Array<string>} namespaces
+   * @param {function(): ?} callback Function to call once all the namespaces
+   *     have loaded. Always called asynchronously.
+   */
+  goog.bootstrap = function(namespaces, callback) {
+    goog.debugLoader_.bootstrap(namespaces, callback);
+  };
 }

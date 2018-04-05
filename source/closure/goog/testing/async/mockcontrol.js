@@ -138,7 +138,7 @@ goog.testing.async.MockControl.prototype.assertDeferredError = function(
     deferred, fn) {
   deferred.addErrback(
       this.createCallbackMock('assertDeferredError', function() {}));
-  goog.testing.asserts.callWithoutLogging(fn);
+  fn();
 };
 
 

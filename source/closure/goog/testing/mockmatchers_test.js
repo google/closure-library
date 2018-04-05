@@ -353,8 +353,7 @@ function testFlexibleArrayMatcher() {
   assertFalse(matchers.flexibleArrayMatcher(a2, a3, mockExpect));
   assertEquals(1, mockExpect.errorMessages.length);
   assertEquals(
-      'Expected <anything> (String) but was <12345> (Number)\n' +
-          '    Expected <anything> (String) but was <12345> (Number)',
+      'Expected <anything> (String) but was <12345> (Number)',
       mockExpect.errorMessages[0]);
 
   // And test we report errors found via the matcher
@@ -366,8 +365,7 @@ function testFlexibleArrayMatcher() {
   // Old error is still there
   assertEquals(2, mockExpect.errorMessages.length);
   assertEquals(
-      'Expected <anything> (String) but was <12345> (Number)\n' +
-          '    Expected <anything> (String) but was <12345> (Number)',
+      'Expected <anything> (String) but was <12345> (Number)',
       mockExpect.errorMessages[0]);
   // plus the new error...
   assertEquals(

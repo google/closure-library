@@ -490,7 +490,7 @@ goog.testing.TestCase.prototype.setOrder = function(order) {
 
 /**
  * @param {Object<string, boolean>} testsToRun Set of tests to run. Entries in
- *     the set may be test names, like "testFoo", or numeric indicies. Only
+ *     the set may be test names, like "testFoo", or numeric indices. Only
  *     tests identified by name or by index will be executed.
  */
 goog.testing.TestCase.prototype.setTestsToRun = function(testsToRun) {
@@ -861,8 +861,9 @@ goog.testing.TestCase.prototype.safeRunTest_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
+  // If the test itself failed, report that before running any tearDown()s.
   if (arguments.length == 1) {
-    this.doError(this.curTest_, opt_error);
+    this.recordError(this.curTest_.name, opt_error);
   }
   var tearDowns = this.curTest_.tearDowns.length ?
       this.curTest_.tearDowns.slice() :
@@ -973,7 +974,7 @@ goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
   var numExceptions = this.thrownAssertionExceptions_.length;
 
   for (var i = 0; i < numExceptions; i++) {
-    this.recordError_(testName, this.thrownAssertionExceptions_[i]);
+    this.recordError(testName, this.thrownAssertionExceptions_[i]);
   }
 
   return new goog.testing.JsUnitException(
@@ -1002,13 +1003,15 @@ goog.testing.TestCase.prototype.resetBatchTimeAfterPromise_ = function() {
  */
 goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
   if (arguments.length == 1) {
-    this.doError(this.curTest_, opt_error);
+    this.recordError(this.curTest_.name, opt_error);
   }
 
   // If no errors have been recorded for the test, it is a success.
   if (!(this.curTest_.name in this.result_.resultsByName) ||
       !this.result_.resultsByName[this.curTest_.name].length) {
     this.doSuccess(this.curTest_);
+  } else {
+    this.doError(this.curTest_);
   }
 
   goog.testing.TestCase.currentTestName = null;
@@ -1354,7 +1357,7 @@ goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
   if (this.exceptionBeforeTest) {
     // We just use the first error to report an error on a failed test.
     testCase.name = 'setUpPage for ' + testCase.name;
-    this.doError(testCase, this.exceptionBeforeTest);
+    this.recordError(testCase.name, this.exceptionBeforeTest);
     return true;
   }
   return false;
@@ -1514,17 +1517,14 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
 
 
 /**
- * Records and logs a test failure.
+ * Records and logs an error from or related to a test.
  * @param {string} testName The name of the test that failed.
- * @param {*=} opt_e The exception object associated with the
+ * @param {*} error The exception object associated with the
  *     failure or a string.
- * @private
+ * @protected
  */
-goog.testing.TestCase.prototype.recordError_ = function(testName, opt_e) {
-  var message = testName + ' : FAILED';
-  this.log(message);
-  this.saveMessage(message);
-  var err = this.logError(testName, opt_e);
+goog.testing.TestCase.prototype.recordError = function(testName, error) {
+  var err = this.logError(testName, error);
   this.result_.errors.push(err);
   if (testName in this.result_.resultsByName) {
     this.result_.resultsByName[testName].push(err);
@@ -1537,15 +1537,13 @@ goog.testing.TestCase.prototype.recordError_ = function(testName, opt_e) {
 /**
  * Handles a test that failed.
  * @param {goog.testing.TestCase.Test} test The test that failed.
- * @param {*=} opt_e The exception object associated with the
- *     failure or a string.
  * @protected
  */
-goog.testing.TestCase.prototype.doError = function(test, opt_e) {
-  if (!test || !test.name) {
-    console.error('no name!' + opt_e);
-  }
-  this.recordError_(test.name, opt_e);
+goog.testing.TestCase.prototype.doError = function(test) {
+  var message = test.name + ' : FAILED';
+  this.log(message);
+  this.saveMessage(message);
+
   if (this.testDone_) {
     var results = this.result_.resultsByName[test.name];
     var errMsgs = [];
@@ -1590,39 +1588,43 @@ goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
 
 /**
  * @param {string} name Failed test name.
- * @param {*=} opt_e The exception object associated with the
+ * @param {*} error The exception object associated with the
  *     failure or a string.
  * @return {!goog.testing.TestCase.Error} Error object.
  */
-goog.testing.TestCase.prototype.logError = function(name, opt_e) {
+goog.testing.TestCase.prototype.logError = function(name, error) {
   var errMsg = null;
   var stack = null;
-  if (opt_e) {
-    this.log(opt_e);
-    if (goog.isString(opt_e)) {
-      errMsg = opt_e;
+  if (error) {
+    this.log(error);
+    if (goog.isString(error)) {
+      errMsg = error;
     } else {
-      errMsg = opt_e.message || opt_e.description || opt_e.toString();
-      stack = opt_e.stack ? opt_e.stack : opt_e['stackTrace'];
+      errMsg = error.message || error.description || error.toString();
+      stack = error.stack ? error.stack : error['stackTrace'];
     }
   } else {
     errMsg = 'An unknown error occurred';
   }
+
   if (stack) {
+    // The Error class includes the message in the stack. Don't duplicate it.
+    stack = stack.replace('Error: ' + errMsg + '\n', '');
+
     // Remove extra goog.testing.TestCase frames from the end.
     stack = stack.replace(
-        /\n.*goog\.testing\.TestCase\.(prototype\.)?invokeTestFunction[^\0]*/m,
+        /\n\s*(\bat\b)?\s*(goog\.labs\.testing\.EnvironmentTestCase_\.)?goog\.testing\.(Continuation_\.(prototype\.)?run|TestCase\.(prototype\.)?(execute|cycleTests|startNextBatch_|safeRunTest_|invokeFunction_?))[^\0]*/m,
         '');
   }
   var err = new goog.testing.TestCase.Error(name, errMsg, stack);
 
   // Avoid double logging.
-  if (!opt_e || !opt_e['isJsUnitException'] ||
-      !opt_e['loggedJsUnitException']) {
+  if (!error || !error['isJsUnitException'] ||
+      !error['loggedJsUnitException']) {
     this.saveMessage(err.toString());
   }
-  if (opt_e && opt_e['isJsUnitException']) {
-    opt_e['loggedJsUnitException'] = true;
+  if (error && error['isJsUnitException']) {
+    error['loggedJsUnitException'] = true;
   }
 
   return err;
@@ -1966,7 +1968,7 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
  * @param {string} errorMsg Error message to use if the promise times out.
  * @return {!goog.Promise<T>} A promise that will settle with the original
        promise unless the timeout is exceeded.
- *     errror.
+ *     error.
  * @template T
  * @private
  */
@@ -2059,7 +2061,7 @@ goog.testing.TestCase.Error.prototype.toObject_ = function() {
 
 /**
  * @constructor
- * @param {!function(): (?goog.testing.Continuation_|undefined)} fn
+ * @param {function(): (?goog.testing.Continuation_|undefined)} fn
  * @private
  */
 goog.testing.Continuation_ = function(fn) {

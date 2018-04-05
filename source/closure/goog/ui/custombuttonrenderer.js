@@ -78,7 +78,7 @@ goog.ui.CustomButtonRenderer.prototype.createDom = function(control) {
       goog.dom.TagName.DIV,
       goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
       this.createButton(button.getContent(), button.getDomHelper()));
-  this.setTooltip(buttonElement, /** @type {!string}*/ (button.getTooltip()));
+  this.setTooltip(buttonElement, /** @type {string}*/ (button.getTooltip()));
 
   return buttonElement;
 };

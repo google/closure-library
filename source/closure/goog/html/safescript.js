@@ -234,7 +234,7 @@ goog.html.SafeScript.unwrap = function(safeScript) {
  * encoded.
  *
  * @param {*} val
- * @return {!string}
+ * @return {string}
  * @private
  */
 goog.html.SafeScript.stringify_ = function(val) {

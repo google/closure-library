@@ -383,7 +383,7 @@ var assertThrowsJsUnitException = goog.testing.asserts
                                       .assertThrowsJsUnitException = function(
     callback, opt_expectedMessage) {
   try {
-    goog.testing.asserts.callWithoutLogging(callback);
+    callback();
   } catch (e) {
     var testCase = _getCurrentTestCase();
     if (testCase) {
@@ -582,25 +582,6 @@ var assertNotNaN = goog.testing.asserts.assertNotNaN = function(a, opt_b) {
 
 
 /**
- * Runs a function in an environment where test failures are not logged. This is
- * useful for testing test code, where failures can be a normal part of a test.
- * @param {function() : void} fn Function to run without logging failures.
- */
-var callWithoutLogging =
-    goog.testing.asserts.callWithoutLogging = function(fn) {
-      var testRunner = goog.global['G_testRunner'];
-      var oldLogTestFailure = testRunner['logTestFailure'];
-      try {
-        // Any failures in the callback shouldn't be recorded.
-        testRunner['logTestFailure'] = undefined;
-        fn();
-      } finally {
-        testRunner['logTestFailure'] = oldLogTestFailure;
-      }
-    };
-
-
-/**
  * The return value of the equality predicate passed to findDifferences below,
  * in cases where the predicate can't test the input variables for equality.
  * @type {?string}
@@ -635,6 +616,10 @@ goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL = '';
 goog.testing.asserts.findDifferences = function(
     expected, actual, opt_equalityPredicate) {
   var failures = [];
+  // True if there a generic error at the root (with no path).  If so, we should
+  // fail, but not add to the failures array (because it will be included at the
+  // top anyway).
+  var rootFailed = false;
   var seen1 = [];
   var seen2 = [];
 
@@ -703,17 +688,27 @@ goog.testing.asserts.findDifferences = function(
           goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS) {
         if (errorMessage !=
             goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL) {
-          failures.push(path + ': ' + errorMessage);
+          if (path) {
+            failures.push(path + ': ' + errorMessage);
+          } else {
+            rootFailed = true;
+          }
         }
       } else if (isArray && var1.length != var2.length) {
         failures.push(
-            path + ': Expected ' + var1.length + '-element array ' +
+            (path ? path + ': ' : '') + 'Expected ' + var1.length +
+            '-element array ' +
             'but got a ' + var2.length + '-element array');
       } else if (typeOfVar1 == 'String') {
+        // If the comparer cannot process strings (eg, roughlyEquals).
         if (var1 != var2) {
-          failures.push(
-              path + ': Expected String "' + var1 + '" ' +
-              'but got "' + var2 + '"');
+          if (path) {
+            failures.push(
+                path + ': ' +
+                goog.testing.asserts.getDefaultErrorMsg_(var1, var2));
+          } else {
+            rootFailed = true;
+          }
         }
       } else {
         var childPath = path + (isArray ? '[%s]' : (path ? '.%s' : '%s'));
@@ -821,13 +816,19 @@ goog.testing.asserts.findDifferences = function(
           }
         }
       }
-    } else {
+    } else if (path) {
       failures.push(
-          path + ' ' + goog.testing.asserts.getDefaultErrorMsg_(var1, var2));
+          path + ': ' + goog.testing.asserts.getDefaultErrorMsg_(var1, var2));
+    } else {
+      rootFailed = true;
     }
   }
 
   innerAssertWithCycleCheck(expected, actual, '');
+
+  if (rootFailed) {
+    return goog.testing.asserts.getDefaultErrorMsg_(expected, actual);
+  }
   return failures.length == 0 ? null : goog.testing.asserts.getDefaultErrorMsg_(
                                            expected, actual) +
           '\n   ' + failures.join('\n   ');

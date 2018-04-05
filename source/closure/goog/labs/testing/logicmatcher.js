@@ -21,6 +21,7 @@
 goog.provide('goog.labs.testing.AllOfMatcher');
 goog.provide('goog.labs.testing.AnyOfMatcher');
 goog.provide('goog.labs.testing.IsNotMatcher');
+goog.provide('goog.labs.testing.logicMatchers');
 
 
 goog.require('goog.array');
@@ -207,3 +208,8 @@ function anyOf(var_args) {
 function isNot(matcher) {
   return new goog.labs.testing.IsNotMatcher(matcher);
 }
+
+// Export functions via namespace for use by tests written with goog.module.
+goog.labs.testing.logicMatchers.allOf = allOf;
+goog.labs.testing.logicMatchers.anyOf = anyOf;
+goog.labs.testing.logicMatchers.isNot = isNot;

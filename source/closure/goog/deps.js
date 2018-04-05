@@ -604,7 +604,7 @@ goog.addDependency('i18n/uchar.js', ['goog.i18n.uChar'], [], {});
 goog.addDependency('i18n/uchar/localnamefetcher.js', ['goog.i18n.uChar.LocalNameFetcher'], ['goog.i18n.uChar.NameFetcher', 'goog.i18n.uCharNames', 'goog.log'], {});
 goog.addDependency('i18n/uchar/localnamefetcher_test.js', ['goog.i18n.uChar.LocalNameFetcherTest'], ['goog.i18n.uChar.LocalNameFetcher', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('i18n/uchar/namefetcher.js', ['goog.i18n.uChar.NameFetcher'], [], {});
-goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNameFetcher'], ['goog.Disposable', 'goog.Uri', 'goog.events', 'goog.i18n.uChar', 'goog.i18n.uChar.NameFetcher', 'goog.log', 'goog.net.EventType', 'goog.net.XhrIo', 'goog.structs.Map'], {});
+goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNameFetcher'], ['goog.Disposable', 'goog.Uri', 'goog.events', 'goog.i18n.uChar', 'goog.i18n.uChar.NameFetcher', 'goog.log', 'goog.net.EventType', 'goog.net.XhrIo'], {});
 goog.addDependency('i18n/uchar/remotenamefetcher_test.js', ['goog.i18n.uChar.RemoteNameFetcherTest'], ['goog.i18n.uChar.RemoteNameFetcher', 'goog.net.XhrIo', 'goog.testing.jsunit', 'goog.testing.net.XhrIo', 'goog.testing.recordFunction'], {});
 goog.addDependency('i18n/uchar_test.js', ['goog.i18n.uCharTest'], ['goog.i18n.uChar', 'goog.testing.jsunit'], {});
 goog.addDependency('i18n/ucharnames.js', ['goog.i18n.uCharNames'], ['goog.i18n.uChar'], {});
@@ -613,7 +613,6 @@ goog.addDependency('iter/es6.js', ['goog.iter.es6'], ['goog.iter.Iterable', 'goo
 goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.math'], {});
 goog.addDependency('iter/iter_test.js', ['goog.iterTest'], ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.testing.jsunit'], {});
-goog.addDependency('json/evaljsonprocessor.js', ['goog.json.EvalJsonProcessor'], ['goog.json', 'goog.json.Processor', 'goog.json.Serializer'], {});
 goog.addDependency('json/hybrid.js', ['goog.json.hybrid'], ['goog.asserts', 'goog.json'], {});
 goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json', 'goog.json.hybrid', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {});
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], [], {});
@@ -621,7 +620,7 @@ goog.addDependency('json/json_perf.js', ['goog.jsonPerf'], ['goog.dom', 'goog.js
 goog.addDependency('json/json_test.js', ['goog.jsonTest'], ['goog.functions', 'goog.json', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json.Processor'], {});
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier'], {});
-goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.EvalJsonProcessor', 'goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('labs/dom/pagevisibilitymonitor.js', ['goog.labs.dom.PageVisibilityEvent', 'goog.labs.dom.PageVisibilityMonitor', 'goog.labs.dom.PageVisibilityState'], ['goog.dom', 'goog.dom.vendor', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.memoize'], {});
 goog.addDependency('labs/dom/pagevisibilitymonitor_test.js', ['goog.labs.dom.PageVisibilityMonitorTest'], ['goog.events', 'goog.functions', 'goog.labs.dom.PageVisibilityMonitor', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('labs/events/nondisposableeventtarget.js', ['goog.labs.events.NonDisposableEventTarget'], ['goog.array', 'goog.asserts', 'goog.events.Event', 'goog.events.Listenable', 'goog.events.ListenerMap', 'goog.object'], {});
@@ -686,7 +685,7 @@ goog.addDependency('labs/testing/environment_test.js', ['goog.labs.testing.envir
 goog.addDependency('labs/testing/environment_usage_test.js', ['goog.labs.testing.environmentUsageTest'], ['goog.labs.testing.Environment'], {});
 goog.addDependency('labs/testing/json_fuzzing.js', ['goog.labs.testing.JsonFuzzing'], ['goog.string', 'goog.testing.PseudoRandom'], {});
 goog.addDependency('labs/testing/json_fuzzing_test.js', ['goog.labs.testing.JsonFuzzingTest'], ['goog.json', 'goog.labs.testing.JsonFuzzing', 'goog.testing.asserts', 'goog.testing.jsunit'], {});
-goog.addDependency('labs/testing/logicmatcher.js', ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.AnyOfMatcher', 'goog.labs.testing.IsNotMatcher'], ['goog.array', 'goog.labs.testing.Matcher'], {});
+goog.addDependency('labs/testing/logicmatcher.js', ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.AnyOfMatcher', 'goog.labs.testing.IsNotMatcher', 'goog.labs.testing.logicMatchers'], ['goog.array', 'goog.labs.testing.Matcher'], {});
 goog.addDependency('labs/testing/logicmatcher_test.js', ['goog.labs.testing.logicMatcherTest'], ['goog.labs.testing.AllOfMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/testing/matcher.js', ['goog.labs.testing.Matcher'], [], {});
 goog.addDependency('labs/testing/numbermatcher.js', ['goog.labs.testing.AnyNumberMatcher', 'goog.labs.testing.CloseToMatcher', 'goog.labs.testing.EqualToMatcher', 'goog.labs.testing.GreaterThanEqualToMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.labs.testing.LessThanEqualToMatcher', 'goog.labs.testing.LessThanMatcher'], ['goog.asserts', 'goog.labs.testing.Matcher'], {});
@@ -843,7 +842,6 @@ goog.addDependency('net/filedownloader_test.js', ['goog.net.FileDownloaderTest']
 goog.addDependency('net/httpstatus.js', ['goog.net.HttpStatus'], [], {});
 goog.addDependency('net/httpstatusname.js', ['goog.net.HttpStatusName'], [], {});
 goog.addDependency('net/iframeio.js', ['goog.net.IframeIo', 'goog.net.IframeIo.IncrementalDataEvent'], ['goog.Timer', 'goog.Uri', 'goog.array', 'goog.asserts', 'goog.debug.HtmlFormatter', 'goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.uncheckedconversions', 'goog.json', 'goog.log', 'goog.log.Level', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.reflect', 'goog.string', 'goog.string.Const', 'goog.structs', 'goog.userAgent'], {});
-goog.addDependency('net/iframeio_different_base_test.js', ['goog.net.iframeIoDifferentBaseTest'], ['goog.Promise', 'goog.events', 'goog.net.EventType', 'goog.net.IframeIo', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
 goog.addDependency('net/iframeio_test.js', ['goog.net.IframeIoTest'], ['goog.debug', 'goog.debug.DivConsole', 'goog.debug.LogManager', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventType', 'goog.log', 'goog.log.Level', 'goog.net.IframeIo', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('net/iframeloadmonitor.js', ['goog.net.IframeLoadMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent'], {});
 goog.addDependency('net/iframeloadmonitor_test.js', ['goog.net.IframeLoadMonitorTest'], ['goog.Promise', 'goog.Timer', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.net.IframeLoadMonitor', 'goog.testing.testSuite'], {'module': 'goog'});
@@ -1091,7 +1089,7 @@ goog.addDependency('test_module.js', ['goog.test_module'], ['goog.test_module_de
 goog.addDependency('test_module_dep.js', ['goog.test_module_dep'], [], {'module': 'goog'});
 goog.addDependency('testing/assertionfailure.js', ['goog.testing.safe.assertionFailure'], ['goog.asserts', 'goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException'], {});
-goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.array', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {});
+goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.array', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6'});
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument'], {});
 goog.addDependency('testing/async/mockcontrol_test.js', ['goog.testing.async.MockControlTest'], ['goog.async.Deferred', 'goog.testing.MockControl', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.async.MockControl', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/asynctestcase.js', ['goog.testing.AsyncTestCase', 'goog.testing.AsyncTestCase.ControlBreakingException'], ['goog.testing.TestCase', 'goog.testing.asserts'], {});
@@ -1146,7 +1144,7 @@ goog.addDependency('testing/jstdtestcaseadapter.js', ['goog.testing.JsTdTestCase
 goog.addDependency('testing/jsunit.js', ['goog.testing.jsunit'], ['goog.dom.TagName', 'goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.userAgent'], {});
 goog.addDependency('testing/jsunitexception.js', ['goog.testing.JsUnitException'], ['goog.testing.stacktrace'], {});
 goog.addDependency('testing/loosemock.js', ['goog.testing.LooseExpectationCollection', 'goog.testing.LooseMock'], ['goog.array', 'goog.structs.Map', 'goog.testing.Mock'], {});
-goog.addDependency('testing/loosemock_test.js', ['goog.testing.LooseMockTest'], ['goog.testing.LooseMock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], {});
+goog.addDependency('testing/loosemock_test.js', ['goog.testing.LooseMockTest'], ['goog.testing.LooseMock', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], {});
 goog.addDependency('testing/messaging/mockmessagechannel.js', ['goog.testing.messaging.MockMessageChannel'], ['goog.messaging.AbstractChannel', 'goog.testing.asserts'], {});
 goog.addDependency('testing/messaging/mockmessageevent.js', ['goog.testing.messaging.MockMessageEvent'], ['goog.events.BrowserEvent', 'goog.events.EventType', 'goog.testing.events.Event'], {});
 goog.addDependency('testing/messaging/mockmessageport.js', ['goog.testing.messaging.MockMessagePort'], ['goog.events.EventTarget'], {});
@@ -1204,7 +1202,7 @@ goog.addDependency('testing/style/layoutasserts_test.js', ['goog.testing.style.l
 goog.addDependency('testing/style/style.js', ['goog.testing.style'], ['goog.dom', 'goog.math.Rect', 'goog.style'], {});
 goog.addDependency('testing/style/style_test.js', ['goog.testing.styleTest'], ['goog.dom', 'goog.dom.TagName', 'goog.style', 'goog.testing.jsunit', 'goog.testing.style'], {});
 goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts'], {});
-goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.Timer', 'goog.functions', 'goog.string', 'goog.testing.ExpectedFailures', 'goog.testing.JsUnitException', 'goog.testing.MethodMock', 'goog.testing.MockRandom', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
+goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.Timer', 'goog.functions', 'goog.testing.ExpectedFailures', 'goog.testing.JsUnitException', 'goog.testing.MethodMock', 'goog.testing.MockRandom', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/testqueue.js', ['goog.testing.TestQueue'], [], {});
 goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent'], {});
 goog.addDependency('testing/testrunner_test.js', ['goog.testing.TestRunnerTest'], ['goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.testing.asserts', 'goog.testing.jsunit'], {'lang': 'es6'});

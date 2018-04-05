@@ -220,7 +220,8 @@ goog.testing.ContinuationTestCase.prototype.createNextTest_ = function() {
 goog.testing.ContinuationTestCase.prototype.finishTest_ = function() {
   var err = this.currentTest_.getError();
   if (err) {
-    this.doError(this.currentTest_, err);
+    this.recordError(this.currentTest_.name, err);
+    this.doError(this.currentTest_);
   } else {
     this.doSuccess(this.currentTest_);
   }

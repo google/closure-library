@@ -377,7 +377,7 @@ goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
 
 /**
  * Formats select block. Only one option is selected.
- * @param {!{argumentIndex:?}} parsedPattern JSON object containing select
+ * @param {{argumentIndex:?}} parsedPattern JSON object containing select
  *     block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
@@ -410,7 +410,7 @@ goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
 /**
  * Formats plural or selectordinal block. Only one option is selected and all #
  * are replaced.
- * @param {!{argumentIndex, argumentOffset}} parsedPattern JSON object
+ * @param {{argumentIndex, argumentOffset}} parsedPattern JSON object
  *     containing plural block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.

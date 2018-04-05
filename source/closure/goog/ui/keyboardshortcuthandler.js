@@ -641,7 +641,7 @@ goog.ui.KeyboardShortcutHandler.prototype.getEventType = function(identifier) {
 /**
  * Builds stroke array from string representation of shortcut.
  * @param {string} s String representation of shortcut.
- * @return {!Array<!{key: ?string, keyCode: ?number, modifiers: number}>} The
+ * @return {!Array<{key: ?string, keyCode: ?number, modifiers: number}>} The
  *     stroke array.  A null keyCode means no non-modifier key was part of the
  *     stroke.
  */
