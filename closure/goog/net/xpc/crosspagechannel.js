@@ -39,7 +39,6 @@ goog.require('goog.net.xpc.ChannelStates');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.DirectTransport');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
-goog.require('goog.net.xpc.IframePollingTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.net.xpc.NixTransport');
@@ -305,8 +304,6 @@ goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
     transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
   } else if (goog.userAgent.IE && goog.net.xpc.NixTransport.isNixSupported()) {
     transportType = goog.net.xpc.TransportTypes.NIX;
-  } else {
-    transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING;
   }
   return transportType;
 };
@@ -330,42 +327,46 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
     this.cfg_[CfgFields.TRANSPORT] = this.determineTransportType_();
   }
 
-  switch (this.cfg_[CfgFields.TRANSPORT]) {
-    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
-      var protocolVersion =
-          this.cfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
-      this.transport_ = new goog.net.xpc.NativeMessagingTransport(
-          this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
-          !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE], protocolVersion);
-      break;
-    case goog.net.xpc.TransportTypes.NIX:
-      this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
-      this.transport_ =
-          new goog.net.xpc.FrameElementMethodTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.IFRAME_RELAY:
-      this.transport_ =
-          new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.IFRAME_POLLING:
-      this.transport_ =
-          new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.DIRECT:
-      if (this.peerWindowObject_ &&
-          goog.net.xpc.DirectTransport.isSupported(
-              /** @type {!Window} */ (this.peerWindowObject_))) {
+  // If TRANSPORT cfg is a function, we assume it's a constructor to a
+  // Transport implementation. Allows fine-grained dependency control over
+  // what Transport impls are brought in.
+  if (goog.isFunction(this.cfg_[CfgFields.TRANSPORT])) {
+    this.transport_ = /** @type {!goog.net.xpc.Transport} */ (
+        new this.cfg_[CfgFields.TRANSPORT](this, this.domHelper_));
+  } else {
+    switch (this.cfg_[CfgFields.TRANSPORT]) {
+      case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
+        var protocolVersion =
+            this.cfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
+        this.transport_ = new goog.net.xpc.NativeMessagingTransport(
+            this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
+            !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE], protocolVersion);
+        break;
+      case goog.net.xpc.TransportTypes.NIX:
+        this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
+        break;
+      case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
         this.transport_ =
-            new goog.net.xpc.DirectTransport(this, this.domHelper_);
-      } else {
-        goog.log.info(
-            goog.net.xpc.logger,
-            'DirectTransport not supported for this window, peer window in' +
-                ' different security context or not set yet.');
-      }
-      break;
+            new goog.net.xpc.FrameElementMethodTransport(this, this.domHelper_);
+        break;
+      case goog.net.xpc.TransportTypes.IFRAME_RELAY:
+        this.transport_ =
+            new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
+        break;
+      case goog.net.xpc.TransportTypes.DIRECT:
+        if (this.peerWindowObject_ &&
+            goog.net.xpc.DirectTransport.isSupported(
+                /** @type {!Window} */ (this.peerWindowObject_))) {
+          this.transport_ =
+              new goog.net.xpc.DirectTransport(this, this.domHelper_);
+        } else {
+          goog.log.info(
+              goog.net.xpc.logger,
+              'DirectTransport not supported for this window, peer window in' +
+                  ' different security context or not set yet.');
+        }
+        break;
+    }
   }
 
   if (this.transport_) {
