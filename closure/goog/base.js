@@ -334,6 +334,50 @@ goog.constructNamespace_ = function(name, opt_obj) {
 
 
 /**
+ * Returns CSP nonce, if set for any script tag.
+ * @return {string} CSP nonce or empty string if no nonce is present.
+ */
+goog.getScriptNonce = function() {
+  if (goog.cspNonce_ === null) {
+    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document) || '';
+  }
+  return goog.cspNonce_;
+};
+
+
+/**
+ * According to the CSP3 spec a nonce must be a valid base64 string.
+ * @see https://www.w3.org/TR/CSP3/#grammardef-base64-value
+ * @private @const
+ */
+goog.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
+
+
+/**
+ * @private {?string}
+ */
+goog.cspNonce_ = null;
+
+
+/**
+ * Returns CSP nonce, if set for any script tag.
+ * @param {!Document} doc
+ * @return {?string} CSP nonce or null if no nonce is present.
+ * @private
+ */
+goog.getScriptNonce_ = function(doc) {
+  var script = doc.querySelector('script[nonce]');
+  if (script) {
+    var nonce = script['nonce'] || script.getAttribute('nonce');
+    if (nonce && goog.NONCE_PATTERN_.test(nonce)) {
+      return nonce;
+    }
+  }
+  return null;
+};
+
+
+/**
  * Module identifier validation regexp.
  * Note: This is a conservative check, it is very possible to be more lenient,
  *   the primary exclusion here is "/" and "\" and a leading ".", these
@@ -3224,6 +3268,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       scriptEl.async = false;
       scriptEl.type = 'text/javascript';
 
+      // If CSP nonces are used, propagate them to dynamically created scripts.
+      // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
+      var nonce = goog.getScriptNonce();
+      if (nonce) {
+        scriptEl.nonce = nonce;
+      }
+
       if (goog.DebugLoader_.IS_OLD_IE_) {
         // Execution order is not guaranteed on old IE, halt loading and write
         // these scripts one at a time, after each loads.
@@ -3309,6 +3360,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       scriptEl.async = false;
       scriptEl.type = 'module';
       scriptEl.setAttribute('crossorigin', true);
+
+      // If CSP nonces are used, propagate them to dynamically created scripts.
+      // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
+      var nonce = goog.getScriptNonce();
+      if (nonce) {
+        scriptEl.nonce = nonce;
+      }
 
       if (contents) {
         scriptEl.textContent = contents;

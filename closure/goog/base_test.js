@@ -1676,3 +1676,23 @@ function testGoogModuleNames() {
   assertValidId('_$');
   assertValidId('$_');
 }
+
+
+function testGetScriptNonce() {
+  // clear nonce cache for test.
+  goog.cspNonce_ = null;
+  var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+  var script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
+  script.setAttribute('nonce', 'invalid nonce');
+  document.body.appendChild(script);
+
+  try {
+    assertEquals('', goog.getScriptNonce());
+    // clear nonce cache for test.
+    goog.cspNonce_ = null;
+    script.nonce = nonce;
+    assertEquals(nonce, goog.getScriptNonce());
+  } finally {
+    goog.dom.removeNode(script);
+  }
+}
