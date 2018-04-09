@@ -24,6 +24,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.PointerFallbackEventType');
 goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -575,11 +576,11 @@ function testEnterDocument() {
   assertTrue('Control must be in the document', control.isInDocument());
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
+        'Control must have 6 mouse & 3 key event listeners on IE8', 9,
         getListenerCount(control));
   } else {
     assertEquals(
-        'Control must have 4 mouse and 3 key event listeners', 7,
+        'Control must have 5 mouse and 3 key event listeners', 8,
         getListenerCount(control));
   }
   assertEquals(
@@ -616,11 +617,11 @@ function testEnterDocumentForNonFocusableControl() {
   assertTrue('Control must be in the document', control.isInDocument());
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse event listeners on IE8', 5,
+        'Control must have 6 mouse event listeners on IE8', 6,
         getListenerCount(control));
   } else {
     assertEquals(
-        'Control must have 4 mouse event listeners', 4,
+        'Control must have 5 mouse event listeners', 5,
         getListenerCount(control));
   }
   assertUndefined(
@@ -655,11 +656,11 @@ function testExitDocument() {
   assertTrue('Control must be in the document', control.isInDocument());
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     assertEquals(
-        'Control must have 5 mouse & 3 key event listeners on IE8', 8,
+        'Control must have 6 mouse & 3 key event listeners on IE8', 9,
         getListenerCount(control));
   } else {
     assertEquals(
-        'Control must have 4 mouse and 3 key event listeners', 7,
+        'Control must have 5 mouse and 3 key event listeners', 8,
         getListenerCount(control));
   }
   assertEquals(
@@ -2774,4 +2775,31 @@ function testIeMouseEventSequenceSimulatorStrictMode() {
         'No ACTION event expected after an isolated click', actionCount,
         getEventCount(control, goog.ui.Component.EventType.ACTION));
   }
+}
+
+function testSetPointerEventsEnabled() {
+  control.setPointerEventsEnabled(true);
+  control.render(sandbox);
+
+  assertFalse(
+      'Control should not be active before pointerdown event.',
+      control.isActive());
+
+  var pointerdown = new goog.testing.events.Event(
+      goog.events.PointerFallbackEventType.POINTERDOWN, control.getElement());
+  pointerdown.button = goog.events.BrowserEvent.MouseButton.LEFT;
+  goog.testing.events.fireBrowserEvent(pointerdown);
+
+  assertTrue(
+      'Control should be active after pointerdown event.',
+      control.isActive());
+
+  var pointerup = new goog.testing.events.Event(
+      goog.events.PointerFallbackEventType.POINTERUP, control.getElement());
+  pointerup.button = goog.events.BrowserEvent.MouseButton.LEFT;
+  goog.testing.events.fireBrowserEvent(pointerup);
+
+  assertFalse(
+      'Control should not be active after pointerup event.',
+      control.isActive());
 }

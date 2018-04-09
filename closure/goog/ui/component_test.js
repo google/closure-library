@@ -20,6 +20,8 @@ goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
+goog.require('goog.events.PointerAsMouseEventType');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
@@ -904,7 +906,7 @@ function testRemoveChildren_Unrender() {
   component.addChild(b);
 
   assertArrayEquals(
-      'Prent must remove and return children.', [a, b],
+      'Parent must remove and return children.', [a, b],
       component.removeChildren(true));
   assertNull(
       'Parent must no longer contain this child', component.getChild('a'));
@@ -912,4 +914,32 @@ function testRemoveChildren_Unrender() {
   assertNull(
       'Parent must no longer contain this child', component.getChild('b'));
   assertFalse('Child must no longer be in the document.', b.isInDocument());
+}
+
+function testSetPointerEventsEnabled() {
+  assertTrue(
+      'Component must default to mouse events.',
+      component.getMouseEventType() == goog.events.EventType);
+
+  component.setPointerEventsEnabled(true);
+  assertTrue(
+      'Component must use pointer events when specified.',
+      component.getMouseEventType() == goog.events.PointerAsMouseEventType);
+
+  component.setPointerEventsEnabled(false);
+  assertTrue(
+      'Component must use mouse events when specified.',
+      component.getMouseEventType() == goog.events.EventType);
+}
+
+function testSetPointerEventsEnabledAfterEnterDocument() {
+  component.render(sandbox);
+
+  assertThrows(
+      'setPointerEventsEnabled(true) after enterDocument must throw error.',
+      function() { component.setPointerEventsEnabled(true); });
+
+  assertThrows(
+      'setPointerEventsEnabled(false) after enterDocument must throw error.',
+      function() { component.setPointerEventsEnabled(false); });
 }

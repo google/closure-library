@@ -20,10 +20,13 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyEvent');
+goog.require('goog.events.PointerFallbackEventType');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Container');
@@ -639,6 +642,37 @@ function testUpdateHighlightedIndex_indexStaysInBoundsWhenMovedToMaxIndex() {
   assertEquals('Child should be moved to index 1', a, container.getChildAt(1));
   assertEquals('Child count should not change', 2, container.getChildCount());
   assertHighlightedIndex('Highlighted index must point to new index', 1);
+
+  container.dispose();
+}
+
+function testSetPointerEventsEnabled() {
+  container.setPointerEventsEnabled(true);
+  container.decorate(containerElement);
+
+  var child = container.getChildAt(0);
+
+  assertFalse(
+      'Child should not be active before pointerdown event.',
+      child.isActive());
+
+  var pointerdown = new goog.testing.events.Event(
+      goog.events.PointerFallbackEventType.POINTERDOWN, child.getElement());
+  pointerdown.button = goog.events.BrowserEvent.MouseButton.LEFT;
+  goog.testing.events.fireBrowserEvent(pointerdown);
+
+  assertTrue(
+      'Child should be active after pointerdown event.',
+      child.isActive());
+
+  var pointerup = new goog.testing.events.Event(
+      goog.events.PointerFallbackEventType.POINTERUP, child.getElement());
+  pointerup.button = goog.events.BrowserEvent.MouseButton.LEFT;
+  goog.testing.events.fireBrowserEvent(pointerup);
+
+  assertFalse(
+      'Child should not be active after pointerup event.',
+      child.isActive());
 
   container.dispose();
 }

@@ -85,7 +85,7 @@ goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose
 goog.addDependency('events/browserfeature.js', ['goog.events.BrowserFeature'], ['goog.userAgent']);
 goog.addDependency('events/eventid.js', ['goog.events.EventId'], []);
 goog.addDependency('events/event.js', ['goog.events.Event', 'goog.events.EventLike'], ['goog.Disposable', 'goog.events.EventId']);
-goog.addDependency('events/eventtype.js', ['goog.events.EventType', 'goog.events.PointerFallbackEventType'], ['goog.events.BrowserFeature', 'goog.userAgent']);
+goog.addDependency('events/eventtype.js', ['goog.events.EventType', 'goog.events.PointerAsMouseEventType', 'goog.events.PointerFallbackEventType'], ['goog.events.BrowserFeature', 'goog.userAgent']);
 goog.addDependency('events/browserevent.js', ['goog.events.BrowserEvent', 'goog.events.BrowserEvent.MouseButton', 'goog.events.BrowserEvent.PointerType'], ['goog.debug', 'goog.events.BrowserFeature', 'goog.events.Event', 'goog.events.EventType', 'goog.reflect', 'goog.userAgent']);
 goog.addDependency('events/listenable.js', ['goog.events.Listenable', 'goog.events.ListenableKey'], ['goog.events.EventId']);
 goog.addDependency('events/listener.js', ['goog.events.Listener'], ['goog.events.ListenableKey']);

@@ -33,6 +33,8 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
+goog.require('goog.events.PointerAsMouseEventType');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
@@ -143,6 +145,13 @@ goog.ui.Component = function(opt_domHelper) {
    * @private {boolean}
    */
   this.wasDecorated_ = false;
+
+  /**
+   * If true, listen for PointerEvent types rather than MouseEvent types. This
+   * allows supporting drag gestures for touch/stylus input.
+   * @private {boolean}
+   */
+  this.pointerEventsEnabled_ = false;
 };
 goog.inherits(goog.ui.Component, goog.events.EventTarget);
 
@@ -1299,4 +1308,41 @@ goog.ui.Component.prototype.removeChildren = function(opt_unrender) {
     removedChildren.push(this.removeChildAt(0, opt_unrender));
   }
   return removedChildren;
+};
+
+
+/**
+ * Returns whether this component should listen for PointerEvent types rather
+ * than MouseEvent types. This allows supporting drag gestures for touch/stylus
+ * input.
+ * @return {boolean}
+ */
+goog.ui.Component.prototype.pointerEventsEnabled = function() {
+  return this.pointerEventsEnabled_;
+};
+
+
+/**
+ * Indicates whether this component should listen for PointerEvent types rather
+ * than MouseEvent types. This allows supporting drag gestures for touch/stylus
+ * input. Must be called before enterDocument to listen for the correct event
+ * types.
+ * @param {boolean} enable
+ */
+goog.ui.Component.prototype.setPointerEventsEnabled = function(enable) {
+  if (this.inDocument_) {
+    throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
+  }
+  this.pointerEventsEnabled_ = enable;
+};
+
+
+/**
+ * @return {!Object}
+ * @protected
+ */
+goog.ui.Component.prototype.getMouseEventType = function() {
+  return this.pointerEventsEnabled_ ?
+      goog.events.PointerAsMouseEventType :
+      goog.events.EventType;
 };
