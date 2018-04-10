@@ -257,7 +257,7 @@ WebChannelBaseTransport.Channel.prototype.close = function() {
  */
 WebChannelBaseTransport.Channel.prototype.halfClose = function() {
   // to be implemented
-  this.close();
+  throw new Error('Not implemented');
 };
 
 
