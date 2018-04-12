@@ -809,3 +809,17 @@ function testParseStringShortcut_resetKeyCode() {
   var strokes = goog.ui.KeyboardShortcutHandler.parseStringShortcut('A Shift');
   assertNull('The second stroke only has a modifier key.', strokes[1].keyCode);
 }
+
+function testOsxGeckoCopyShortcuts() {
+  // Ensures that Meta+C still fires a shortcut. In legacy versions of Closure,
+  // we had to listen for Meta+C/X/V on keyup instead of keydown due to a bug in
+  // Gecko 1.8 on OS X. This is a sanity check to ensure that behavior has not
+  // regressed.
+  listener.shortcutFired('copy');
+  listener.$replay();
+
+  handler.registerShortcut('copy', [KeyCodes.C, Modifiers.META]);
+  fire(KeyCodes.C, {metaKey: true});
+
+  listener.$verify();
+}

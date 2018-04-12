@@ -375,19 +375,12 @@ function testKeySequenceWithEscapeKey() {
   }
 }
 
-function testKeySequenceForMacActionKeysNegative() {
-  stubs.set(goog.userAgent, 'GECKO', false);
-  goog.testing.events.fireKeySequence(
-      root, goog.events.KeyCodes.C, {'metaKey': true});
-  assertEventTypes(['keydown', 'keypress', 'keyup']);
-}
-
-function testKeySequenceForMacActionKeysPositive() {
+function testKeySequenceForMacActionKeys() {
   stubs.set(goog.userAgent, 'GECKO', true);
   stubs.set(goog.userAgent, 'MAC', true);
   goog.testing.events.fireKeySequence(
       root, goog.events.KeyCodes.C, {'metaKey': true});
-  assertEventTypes(['keypress', 'keyup']);
+  assertEventTypes(['keydown', 'keypress', 'keyup']);
 }
 
 function testKeySequenceForOptionKeysOnMac() {
