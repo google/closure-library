@@ -38,6 +38,7 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ComponentUtil');
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Control');
 
@@ -379,7 +380,7 @@ goog.ui.Container.prototype.enterDocument = function() {
   // Initialize visibility (opt_force = true, so we don't dispatch events).
   this.setVisible(this.visible_, true);
 
-  var MouseEventType = this.getMouseEventType();
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
 
   // Handle events dispatched by child controls.
   this.getHandler()
@@ -656,7 +657,7 @@ goog.ui.Container.prototype.handleDocumentMouseUp = function(e) {
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
  */
 goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
-  var MouseEventType = this.getMouseEventType();
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
 
   var control = this.getOwnerControl(/** @type {Node} */ (e.target));
   if (control) {

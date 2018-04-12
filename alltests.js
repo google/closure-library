@@ -520,6 +520,7 @@ var _allTests = [
   'closure/goog/ui/colorpalette_test.html',
   'closure/goog/ui/combobox_test.html',
   'closure/goog/ui/component_test.html',
+  'closure/goog/ui/componentutil_test.html',
   'closure/goog/ui/containerrenderer_test.html',
   'closure/goog/ui/containerscroller_test.html',
   'closure/goog/ui/container_test.html',

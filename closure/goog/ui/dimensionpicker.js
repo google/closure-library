@@ -28,6 +28,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ComponentUtil');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.DimensionPickerRenderer');
 goog.require('goog.ui.registry');
@@ -117,7 +118,7 @@ goog.ui.DimensionPicker.prototype.highlightedColumns_ = 1;
 goog.ui.DimensionPicker.prototype.enterDocument = function() {
   goog.ui.DimensionPicker.superClass_.enterDocument.call(this);
 
-  var MouseEventType = this.getMouseEventType();
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
 
   var handler = this.getHandler();
   handler
@@ -139,7 +140,7 @@ goog.ui.DimensionPicker.prototype.enterDocument = function() {
 goog.ui.DimensionPicker.prototype.exitDocument = function() {
   goog.ui.DimensionPicker.superClass_.exitDocument.call(this);
 
-  var MouseEventType = this.getMouseEventType();
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
 
   var handler = this.getHandler();
   handler

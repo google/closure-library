@@ -20,8 +20,6 @@ goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventTarget');
-goog.require('goog.events.EventType');
-goog.require('goog.events.PointerAsMouseEventType');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
@@ -917,19 +915,19 @@ function testRemoveChildren_Unrender() {
 }
 
 function testSetPointerEventsEnabled() {
-  assertTrue(
+  assertFalse(
       'Component must default to mouse events.',
-      component.getMouseEventType() == goog.events.EventType);
+      component.pointerEventsEnabled());
 
   component.setPointerEventsEnabled(true);
   assertTrue(
       'Component must use pointer events when specified.',
-      component.getMouseEventType() == goog.events.PointerAsMouseEventType);
+      component.pointerEventsEnabled());
 
   component.setPointerEventsEnabled(false);
-  assertTrue(
+  assertFalse(
       'Component must use mouse events when specified.',
-      component.getMouseEventType() == goog.events.EventType);
+      component.pointerEventsEnabled());
 }
 
 function testSetPointerEventsEnabledAfterEnterDocument() {

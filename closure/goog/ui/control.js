@@ -36,6 +36,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ComponentUtil');
 /** @suppress {extraRequire} */
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
@@ -579,7 +580,7 @@ goog.ui.Control.prototype.enterDocument = function() {
  * @private
  */
 goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
-  var MouseEventType = this.getMouseEventType();
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
 
   var handler = this.getHandler();
   var element = this.getElement();

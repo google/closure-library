@@ -33,8 +33,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
-goog.require('goog.events.EventType');
-goog.require('goog.events.PointerAsMouseEventType');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
@@ -1334,15 +1332,4 @@ goog.ui.Component.prototype.setPointerEventsEnabled = function(enable) {
     throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
   this.pointerEventsEnabled_ = enable;
-};
-
-
-/**
- * @return {!Object}
- * @protected
- */
-goog.ui.Component.prototype.getMouseEventType = function() {
-  return this.pointerEventsEnabled_ ?
-      goog.events.PointerAsMouseEventType :
-      goog.events.EventType;
 };
