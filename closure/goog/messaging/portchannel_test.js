@@ -426,7 +426,7 @@ function assertPortsEntangled(port1, port2) {
 /**
  * @param {string=} opt_url A URL to use for the iframe src (defaults to
  *     "testdata/portchannel_inner.html").
- * @return {!goog.Promise<HTMLIframeElement>} A promise that resolves with the
+ * @return {!goog.Promise<HTMLIFrameElement>} A promise that resolves with the
  *     loaded iframe.
  */
 function createIframe(opt_url) {
