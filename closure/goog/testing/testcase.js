@@ -37,7 +37,6 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.json');
 goog.require('goog.object');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.asserts');
@@ -716,15 +715,6 @@ goog.testing.TestCase.prototype.getTestResults = function() {
     }
   }, this);
   return map;
-};
-
-/**
- * Returns the test results as json.
- * This is called by the testing infrastructure through G_testrunner.
- * @return {string} Tests results object.
- */
-goog.testing.TestCase.prototype.getTestResultsAsJson = function() {
-  return goog.json.serialize(this.getTestResults());
 };
 
 /**

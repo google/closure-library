@@ -37,6 +37,7 @@ goog.provide('goog.testing.TestRunner');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
+goog.require('goog.json');
 goog.require('goog.testing.TestCase');
 goog.require('goog.userAgent');
 
@@ -509,7 +510,7 @@ goog.testing.TestRunner.prototype.getTestResults = function() {
  */
 goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
   if (this.testCase) {
-    return this.testCase.getTestResultsAsJson();
+    return goog.json.serialize(this.testCase.getTestResults());
   }
   return null;
 };

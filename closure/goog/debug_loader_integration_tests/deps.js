@@ -65,12 +65,12 @@ goog.addDependency('dom/browserfeature.js', ['goog.dom.BrowserFeature'], ['goog.
 goog.addDependency('dom/asserts.js', ['goog.dom.asserts'], ['goog.asserts']);
 goog.addDependency('dom/safe.js', ['goog.dom.safe', 'goog.dom.safe.InsertAdjacentHtmlPosition'], ['goog.asserts', 'goog.dom.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string', 'goog.string.Const']);
 goog.addDependency('dom/dom.js', ['goog.dom', 'goog.dom.Appendable', 'goog.dom.DomHelper'], ['goog.array', 'goog.asserts', 'goog.dom.BrowserFeature', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.uncheckedconversions', 'goog.math.Coordinate', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.userAgent']);
-goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], []);
 goog.addDependency('testing/stacktrace.js', ['goog.testing.stacktrace', 'goog.testing.stacktrace.Frame'], []);
 goog.addDependency('testing/jsunitexception.js', ['goog.testing.JsUnitException'], ['goog.testing.stacktrace']);
 goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException']);
-goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.json', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts']);
-goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.testing.TestCase', 'goog.userAgent']);
+goog.addDependency('testing/testcase.js', ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.JsUnitException', 'goog.testing.asserts']);
+goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], []);
+goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.json', 'goog.testing.TestCase', 'goog.userAgent']);
 goog.addDependency('testing/jsunit.js', ['goog.testing.jsunit'], ['goog.dom.TagName', 'goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.userAgent']);
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], []);
 goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext', 'goog.userAgent']);
