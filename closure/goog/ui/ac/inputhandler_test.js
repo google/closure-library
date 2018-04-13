@@ -623,6 +623,43 @@ function testSetTokenTextLeftHandSideOfToken() {
   assertEquals('foo bar ', mockElement.value);
 }
 
+function testSetTokenTextAppendSeparator() {
+  var ih = new MockInputHandler();
+  ih.setSeparators('\n');
+  ih.setWhitespaceWrapEntries(false);
+
+  // Set up our input handler with the necessary mocks
+  var mockAutoCompleter = new MockAutoCompleter();
+  ih.ac_ = mockAutoCompleter;
+  ih.activeElement_ = mockElement;
+  mockElement.value = 'foo bar';
+  ih.setCursorPosition(0);
+
+  // The token is 'foo bar', we replace it with 'baz'.
+  ih.setTokenText('baz', true /* multi-row */);
+
+  assertEquals('baz\n', mockElement.value);
+}
+
+function testSetTokenTextDontAppendSeparator() {
+  var ih = new MockInputHandler();
+  ih.setSeparators('\n');
+  ih.setWhitespaceWrapEntries(false);
+  ih.setEndsWithSeparatorRegExp(null);
+
+  // Set up our input handler with the necessary mocks
+  var mockAutoCompleter = new MockAutoCompleter();
+  ih.ac_ = mockAutoCompleter;
+  ih.activeElement_ = mockElement;
+  mockElement.value = 'foo bar';
+  ih.setCursorPosition(0);
+
+  // The token is 'foo bar', we replace it with 'baz'.
+  ih.setTokenText('baz', true /* multi-row */);
+
+  assertEquals('baz', mockElement.value);
+}
+
 function testEmptyTokenWithSeparator() {
   var ih = new goog.ui.ac.InputHandler();
   var mockAutoCompleter = new MockAutoCompleter();
