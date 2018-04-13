@@ -1514,12 +1514,23 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
  * @protected
  */
 goog.testing.TestCase.prototype.recordError = function(testName, error) {
+  if (error && error['isJsUnitException'] && error['loggedJsUnitException']) {
+    // We already logged this error; don't record it again. This is particularly
+    // important for errors from mocks, which are rethrown by $verify, called by
+    // tearDown().
+    return;
+  }
+
   var err = this.logError(testName, error);
   this.result_.errors.push(err);
   if (testName in this.result_.resultsByName) {
     this.result_.resultsByName[testName].push(err);
   } else {
     this.result_.resultsByName[testName] = [err];
+  }
+
+  if (error && error['isJsUnitException']) {
+    error['loggedJsUnitException'] = true;
   }
 };
 
@@ -1608,14 +1619,7 @@ goog.testing.TestCase.prototype.logError = function(name, error) {
   }
   var err = new goog.testing.TestCase.Error(name, errMsg, stack);
 
-  // Avoid double logging.
-  if (!error || !error['isJsUnitException'] ||
-      !error['loggedJsUnitException']) {
-    this.saveMessage(err.toString());
-  }
-  if (error && error['isJsUnitException']) {
-    error['loggedJsUnitException'] = true;
-  }
+  this.saveMessage(err.toString());
 
   return err;
 };
