@@ -39,6 +39,7 @@ goog.require('goog.net.xpc.ChannelStates');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.DirectTransport');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
+goog.require('goog.net.xpc.IframePollingTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.net.xpc.NixTransport');
@@ -286,7 +287,7 @@ goog.net.xpc.CrossPageChannel.prototype.isPeerAvailable = function() {
 
 /**
  * Determine which transport type to use for this channel / useragent.
- * @return {goog.net.xpc.TransportTypes|undefined} The best transport type.
+ * @return {!goog.net.xpc.TransportTypes} The best transport type.
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
@@ -304,6 +305,8 @@ goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
     transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
   } else if (goog.userAgent.IE && goog.net.xpc.NixTransport.isNixSupported()) {
     transportType = goog.net.xpc.TransportTypes.NIX;
+  } else {
+    transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING;
   }
   return transportType;
 };
@@ -352,6 +355,12 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
       case goog.net.xpc.TransportTypes.IFRAME_RELAY:
         this.transport_ =
             new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
+        break;
+      case goog.net.xpc.TransportTypes.IFRAME_POLLING:
+        // TODO(user): Remove the IFRAME_POLLING option, have users
+        // inject IframePollingTransport to save on code size.
+        this.transport_ =
+            new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
         break;
       case goog.net.xpc.TransportTypes.DIRECT:
         if (this.peerWindowObject_ &&
