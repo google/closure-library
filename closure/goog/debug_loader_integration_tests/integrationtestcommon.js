@@ -62,10 +62,16 @@ function checkCompletion(iframe) {
  * Creates the test sutie for this integration test.
  */
 exports.createTestSuite = function() {
-  var oldOnload = window.onload || function() {};
-  window.onload = function() {
-    oldOnload();
-    oldOnload = null;
+  var oldOnload = window.onload;
+  /**
+   * @param {?Event} event
+   * @return {?}
+   */
+  window.onload = function(event) {
+    if (oldOnload) {
+      oldOnload(event);
+      oldOnload = null;
+    }
 
     var fn;
     try {
