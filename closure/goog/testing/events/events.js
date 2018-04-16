@@ -286,7 +286,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
   } else {
     if (goog.events.KeyCodes.firesKeyPressEvent(
             /** @type {number} */ (keyOrKeyCode), undefined, keydown.shiftKey,
-            keydown.ctrlKey, keydown.altKey) &&
+            keydown.ctrlKey, keydown.altKey, keydown.metaKey) &&
         result) {
       result &= goog.testing.events.fireBrowserEvent(keypress);
     }
