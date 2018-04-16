@@ -14,8 +14,8 @@
 
 // AUTO GENERATED FILE PLEASE DO NOT EDIT.
 
-goog.module('goog.debug_loader_integration_test.legacy_require_tests_googmodulewithdeps_test');
-goog.setTestOnly('goog.debug_loader_integration_test.legacy_require_tests_googmodulewithdeps_test');
+goog.module('goog.debug_loader_integration_test.goog_bootstrap_tests_googmodulerequiresgoogmodule_test');
+goog.setTestOnly('goog.debug_loader_integration_test.goog_bootstrap_tests_googmodulerequiresgoogmodule_test');
 
 var integrationTestCommon = goog.require('goog.debug.loader.integrationTestCommon');
 

@@ -1,0 +1,28 @@
+<!--
+Copyright 2018 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.getObjectByName('test.js.ForwardEs6ModuleImportsEs6Module'));
+  assertNull(goog.module.get('test.js.ForwardEs6ModuleImportsEs6Module'));
+
+  goog.bootstrap(['test.js.ForwardEs6ModuleImportsEs6Module', 'test.js.ForwardEs6'], function() {
+    assertNull(goog.getObjectByName('test.js.ForwardEs6ModuleImportsEs6Module'));
+    var Es6ModuleImportsEs6Module = goog.module.get('test.js.ForwardEs6ModuleImportsEs6Module');
+    assertNotNull(Es6ModuleImportsEs6Module);
+    // The goog module forwards the ES6 module.
+    assertEquals('ES6-MODULE-IMPORTS-ES6-MODULE', Es6ModuleImportsEs6Module.NAME);
+
+    var Es6Module = goog.module.get('test.js.ForwardEs6');
+    assertNotNull(Es6Module);
+    assertTrue(new Es6ModuleImportsEs6Module.ChildClass() instanceof Es6Module.Class);
+
+    done();
+  });
+//# sourceURL=bootstrapes6moduleimportses6moduletest.js
+</script>

@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// AUTO GENERATED FILE PLEASE DO NOT EDIT.
+goog.module('test.js.ForwardEs6ModuleRequiresProvide');
 
-goog.module('goog.debug_loader_integration_test.goog_bootstrap_tests_googmodulewithdeps_test');
-goog.setTestOnly('goog.debug_loader_integration_test.goog_bootstrap_tests_googmodulewithdeps_test');
+const es6 = goog.require('./es6modulerequiresprovide.js');
 
-var integrationTestCommon = goog.require('goog.debug.loader.integrationTestCommon');
-
-integrationTestCommon.createTestSuite();
+exports = es6;

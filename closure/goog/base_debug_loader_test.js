@@ -305,12 +305,21 @@ function testAddDependencyModule() {
 
 
 function testAddDependencyEs6Module() {
-  try {
-    goog.addDependency('mod-es6.js', ['testDep.es6'], [], {'module': 'es6'});
-    fail('Expected ES6 modules to not be supported');
-  } catch (e) {
-    // expected
-  }
+  goog.addDependency('mod-es6.js', ['testDep.es6'], [], {'module': 'es6'});
+
+  // To differentiate this call from the real one.
+  var require = goog.require;
+
+  require('testDep.es6');
+  assertLoaded(0);
+  assertDepData(
+      realDependencies[0], 'mod-es6.js', ['testDep.es6'], [],
+      {'module': 'es6'});
+  assertTrue(
+      realDependencies[0] instanceof
+      ('noModule' in document.createElement('script') ?
+           goog.Es6ModuleDependency :
+           goog.TranspiledDependency));
 }
 
 

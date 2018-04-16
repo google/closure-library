@@ -1,0 +1,23 @@
+a<!--
+Copyright 2018 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.getObjectByName('test.js.Provide'));
+  assertNull(goog.module.get('test.js.GoogModuleRequiresProvide'));
+
+  goog.bootstrap(['test.js.GoogModuleRequiresProvide'], function() {
+    assertNotNull(goog.getObjectByName('test.js.Provide'));
+    var GoogModuleRequiresProvide = goog.module.get('test.js.GoogModuleRequiresProvide');
+    assertNotNull(GoogModuleRequiresProvide);
+    assertEquals('GOOG-MODULE-REQUIRES-PROVIDE', GoogModuleRequiresProvide.NAME);
+    assertTrue(new GoogModuleRequiresProvide() instanceof test.js.Provide);
+    done();
+  });
+//# sourceURL=bootstrapgoogmodulewithdepstest.js
+</script>
