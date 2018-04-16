@@ -1739,6 +1739,21 @@ function testDependencyOrderingWithSimpleDeps() {
   assertArrayEquals(['d', 'e', 'f', 'b', 'c', 'a'], ids);
 }
 
+function testDependencyOrderingWithRequestedDep() {
+  var mm = getModuleManager({
+    'a': ['b', 'c'],
+    'b': ['d'],
+    'c': ['e', 'f'],
+    'd': [],
+    'e': [],
+    'f': []
+  });
+  mm.requestedModuleIds_ = ['a', 'b'];
+  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  assertDependencyOrder(ids, mm);
+  assertArrayEquals(['e', 'f', 'c'], ids);
+}
+
 function testDependencyOrderingWithCommonDepsInDeps() {
   // Tests to make sure that if dependencies of the root are loaded before
   // their common dependencies.
