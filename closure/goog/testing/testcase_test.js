@@ -94,6 +94,28 @@ function testEmptyTestCase() {
   assertEquals(0, result.errors.length);
 }
 
+function testCompletedCallbacks() {
+  var callback = goog.testing.FunctionMock('completed');
+  var testCase = new goog.testing.TestCase();
+
+  testCase.addCompletedCallback(callback);
+  testCase.addCompletedCallback(callback);
+
+  callback().$times(2);
+
+  callback.$replay();
+  testCase.runTests();
+  callback.$verify();
+  callback.$reset();
+
+  assertTrue(testCase.isSuccess());
+
+  // Executing a second time should not remember the callback.
+  callback.$replay();
+  testCase.runTests();
+  callback.$verify();
+}
+
 function testEmptyTestCaseReturningPromise() {
   return new goog.testing.TestCase().runTestsReturningPromise().then(
       function(result) {
@@ -710,7 +732,7 @@ function verifyWithFlagDisabled(testFunction) {
 
   var promise = new goog
                     .Promise(function(resolve, reject) {
-                      testCase.setCompletedCallback(resolve);
+                      testCase.addCompletedCallback(resolve);
                     })
                     .then(function() {
                       assertTrue(testCase.isSuccess());
@@ -718,7 +740,9 @@ function verifyWithFlagDisabled(testFunction) {
                       assertTrue(result.complete);
                       assertEquals(0, result.errors.length);
                     })
-                    .thenAlways(function() { stubs.reset(); });
+                    .thenAlways(function() {
+                      stubs.reset();
+                    });
 
   testCase.runTests();
   return promise;
@@ -739,7 +763,7 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
   var promise =
       new goog
           .Promise(function(resolve, reject) {
-            testCase.setCompletedCallback(resolve);
+            testCase.addCompletedCallback(resolve);
           })
           .then(function() {
             assertEquals(shouldPassWithFlagEnabled, testCase.isSuccess());
@@ -750,7 +774,9 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
             assertEquals(
                 shouldPassWithFlagEnabled ? 0 : 2, result.errors.length);
           })
-          .thenAlways(function() { stubs.reset(); });
+          .thenAlways(function() {
+            stubs.reset();
+          });
 
   testCase.runTests();
   return promise;
@@ -773,7 +799,7 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
 
   var promise = new goog
                     .Promise(function(resolve, reject) {
-                      testCase.setCompletedCallback(resolve);
+                      testCase.addCompletedCallback(resolve);
                     })
                     .then(function() {
                       assertFalse(testCase.isSuccess());
@@ -783,7 +809,9 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
                       // failOnUnreportedAsserts error.
                       assertEquals(2, result.errors.length);
                     })
-                    .thenAlways(function() { stubs.reset(); });
+                    .thenAlways(function() {
+                      stubs.reset();
+                    });
 
   testCase.runTests();
   return promise;

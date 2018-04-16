@@ -92,7 +92,7 @@ goog.testing.TestRunner = function() {
   /**
    * An id unique to this runner. Checked by the server during polling to
    * verify that the page was not reloaded.
-   * @private {!string}
+   * @private {string}
    */
   this.uniqueId_ = Math.random() + '-' +
       window.location.pathname.replace(/.*\//, '').replace(/\.html.*$/, '');
@@ -120,7 +120,7 @@ goog.testing.TestRunner.prototype.getSearchString = function() {
 
 /**
  * Returns the unique id for this test page.
- * @return {!string}
+ * @return {string}
  */
 goog.testing.TestRunner.prototype.getUniqueId = function() {
   return this.uniqueId_;
@@ -318,7 +318,7 @@ goog.testing.TestRunner.prototype.execute = function() {
         'setStrict() method, or G_testRunner.setStrict()');
   }
 
-  this.testCase.setCompletedCallback(goog.bind(this.onComplete_, this));
+  this.testCase.addCompletedCallback(goog.bind(this.onComplete_, this));
   if (goog.testing.TestRunner.shouldUsePromises_(this.testCase)) {
     this.testCase.runTestsReturningPromise();
   } else {

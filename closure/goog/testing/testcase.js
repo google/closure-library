@@ -215,6 +215,12 @@ goog.testing.TestCase = function(opt_name) {
    * @type {number}
    */
   this.promiseTimeout = 1000;  // 1s
+
+  /**
+   * Callbacks that will be executed when the test has finalized.
+   * @private {!Array<function()>}
+   */
+  this.onCompletedCallbacks_ = [];
 };
 
 
@@ -364,14 +370,6 @@ goog.testing.TestCase.prototype.currentTestPointer_ = 0;
 
 
 /**
- * Optional callback that will be executed when the test has finalized.
- * @type {Function}
- * @private
- */
-goog.testing.TestCase.prototype.onCompleteCallback_ = null;
-
-
-/**
  * Adds a new test to the test case.
  * @param {!goog.testing.TestCase.Test} test The test to add.
  */
@@ -470,12 +468,12 @@ goog.testing.TestCase.prototype.reset = function() {
 
 
 /**
- * Sets the callback function that should be executed when the tests have
+ * Adds a callback function that should be executed when the tests have
  * completed.
- * @param {Function} fn The callback function.
+ * @param {function()} fn The callback function.
  */
-goog.testing.TestCase.prototype.setCompletedCallback = function(fn) {
-  this.onCompleteCallback_ = fn;
+goog.testing.TestCase.prototype.addCompletedCallback = function(fn) {
+  this.onCompletedCallbacks_.push(fn);
 };
 
 
@@ -513,7 +511,7 @@ goog.testing.TestCase.prototype.shouldRunTests = function() {
  * Executes the tests, yielding asynchronously if execution time exceeds
  * {@link maxRunTime}. There is no guarantee that the test case has finished
  * once this method has returned. To be notified when the test case
- * has finished, use {@link #setCompletedCallback} or
+ * has finished, use {@link #addCompletedCallback} or
  * {@link #runTestsReturningPromise}.
  */
 goog.testing.TestCase.prototype.execute = function() {
@@ -567,12 +565,10 @@ goog.testing.TestCase.prototype.finalize = function() {
   } else {
     this.log('Tests Failed');
   }
-  if (this.onCompleteCallback_) {
-    var fn = this.onCompleteCallback_;
-    // Execute's the completed callback in the context of the global object.
-    fn();
-    this.onCompleteCallback_ = null;
-  }
+  goog.array.forEach(this.onCompletedCallbacks_, function(cb) {
+    cb();
+  });
+  this.onCompletedCallbacks_ = [];
 };
 
 
@@ -722,7 +718,7 @@ goog.testing.TestCase.prototype.getTestResults = function() {
  * exceeds {@link #maxRunTime}. There is no guarantee that the test case
  * has finished execution once this method has returned.
  * To be notified when the test case has finished execution, use
- * {@link #setCompletedCallback} or {@link #runTestsReturningPromise}.
+ * {@link #addCompletedCallback} or {@link #runTestsReturningPromise}.
  *
  * Overridable by the individual test case.  This allows test cases to defer
  * when the test is actually started.  If overridden, finalize must be
@@ -1359,7 +1355,7 @@ goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
  * exceeds {@link #maxRunTime}. In particular, there is no guarantee that
  * the test case has finished execution once this method has returned.
  * To be notified when the test case has finished execution, use
- * {@link #setCompletedCallback} or {@link #runTestsReturningPromise}.
+ * {@link #addCompletedCallback} or {@link #runTestsReturningPromise}.
  */
 goog.testing.TestCase.prototype.cycleTests = function() {
   this.saveMessage('Start');
