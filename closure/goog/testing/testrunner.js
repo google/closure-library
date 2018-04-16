@@ -510,7 +510,19 @@ goog.testing.TestRunner.prototype.getTestResults = function() {
  */
 goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
   if (this.testCase) {
-    return goog.json.serialize(this.testCase.getTestResults());
+    var testCaseResults
+        /** {Object<string, !Array<!goog.testing.TestCase.IResult>>} */
+        = this.testCase.getTestResults();
+    if (this.hasErrors()) {
+      var globalErrors = [];
+      for (var i = 0; i < this.errors.length; i++) {
+        globalErrors.push(
+            {source: '', message: this.errors[i], stacktrace: ''});
+      }
+      // We are writing on our testCase results, but the test is over.
+      testCaseResults['globalErrors'] = globalErrors;
+    }
+    return goog.json.serialize(testCaseResults);
   }
   return null;
 };
