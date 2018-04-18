@@ -16,7 +16,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
