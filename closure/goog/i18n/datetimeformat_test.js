@@ -840,7 +840,7 @@ function weekInYearFor7Days() {
 // These cover all combinations of FIRSTDAYOFWEEK / FIRSTWEEKCUTOFFDAY in use.
 function testWeekInYearI18n() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bn_BD;
-  assertEquals('bn_BD', '১১১২২২২', weekInYearFor7Days());
+  assertEquals('bn_BD', '১১১১১২২', weekInYearFor7Days());
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IE;
   assertEquals('en_IE', '1111122', weekInYearFor7Days());
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr_DJ;

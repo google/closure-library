@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -409,9 +409,9 @@ goog.i18n.DateTimeSymbols_bn = {
   DATEFORMATS: ['EEEE, d MMMM, y', 'd MMMM, y', 'd MMM, y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
-  FIRSTDAYOFWEEK: 4,
+  FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
-  FIRSTWEEKCUTOFFDAY: 3
+  FIRSTWEEKCUTOFFDAY: 5
 };
 
 
@@ -426,7 +426,7 @@ goog.i18n.DateTimeSymbols_br = {
   MONTHS: ['Genver', 'Cʼhwevrer', 'Meurzh', 'Ebrel', 'Mae', 'Mezheven', 'Gouere', 'Eost', 'Gwengolo', 'Here', 'Du', 'Kerzu'],
   STANDALONEMONTHS: ['Genver', 'Cʼhwevrer', 'Meurzh', 'Ebrel', 'Mae', 'Mezheven', 'Gouere', 'Eost', 'Gwengolo', 'Here', 'Du', 'Kerzu'],
   SHORTMONTHS: ['Gen.', 'Cʼhwe.', 'Meur.', 'Ebr.', 'Mae', 'Mezh.', 'Goue.', 'Eost', 'Gwen.', 'Here', 'Du', 'Kzu.'],
-  STANDALONESHORTMONTHS: ['Gen.', 'Cʼhwe.', 'Meur.', 'Ebr.', 'Mae', 'Mezh.', 'Goue.', 'Eost', 'Gwen.', 'Here', 'Du', 'Ker.'],
+  STANDALONESHORTMONTHS: ['Gen.', 'Cʼhwe.', 'Meur.', 'Ebr.', 'Mae', 'Mezh.', 'Goue.', 'Eost', 'Gwen.', 'Here', 'Du', 'Kzu.'],
   WEEKDAYS: ['Sul', 'Lun', 'Meurzh', 'Mercʼher', 'Yaou', 'Gwener', 'Sadorn'],
   STANDALONEWEEKDAYS: ['Sul', 'Lun', 'Meurzh', 'Mercʼher', 'Yaou', 'Gwener', 'Sadorn'],
   SHORTWEEKDAYS: ['Sul', 'Lun', 'Meu.', 'Mer.', 'Yaou', 'Gwe.', 'Sad.'],
@@ -436,9 +436,9 @@ goog.i18n.DateTimeSymbols_br = {
   SHORTQUARTERS: ['1añ trim.', '2l trim.', '3e trim.', '4e trim.'],
   QUARTERS: ['1añ trimiziad', '2l trimiziad', '3e trimiziad', '4e trimiziad'],
   AMPMS: ['A.M.', 'G.M.'],
-  DATEFORMATS: ['y MMMM d, EEEE', 'y MMMM d', 'y MMM d', 'y-MM-dd'],
+  DATEFORMATS: ['EEEE d MMMM y', 'd MMMM y', 'd MMM y', 'dd/MM/y'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'da\' {0}', '{1} \'da\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} \'da\' {0}', '{1} \'da\' {0}', '{1}, {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
@@ -2165,7 +2165,7 @@ goog.i18n.DateTimeSymbols_mn = {
   SHORTQUARTERS: ['I улирал', 'II улирал', 'III улирал', 'IV улирал'],
   QUARTERS: ['1-р улирал', '2-р улирал', '3-р улирал', '4-р улирал'],
   AMPMS: ['ү.ө', 'ү.х'],
-  DATEFORMATS: ['y \'оны\' MMM\'ын\' d. EEEE \'гараг\'.', 'y \'оны\' MMM\'ын\' d', 'y.MM.dd', 'y.MM.dd'],
+  DATEFORMATS: ['y.MM.dd, EEEE', 'y.MM.dd', 'y.MM.dd', 'y.MM.dd'],
   TIMEFORMATS: ['HH:mm:ss (zzzz)', 'HH:mm:ss (z)', 'HH:mm:ss', 'HH:mm'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
@@ -3140,7 +3140,7 @@ goog.i18n.DateTimeSymbols_ur = {
   SHORTQUARTERS: ['پہلی سہ ماہی', 'دوسری سہ ماہی', 'تیسری سہ ماہی', 'چوتهی سہ ماہی'],
   QUARTERS: ['پہلی سہ ماہی', 'دوسری سہ ماہی', 'تیسری سہ ماہی', 'چوتهی سہ ماہی'],
   AMPMS: ['AM', 'PM'],
-  DATEFORMATS: ['EEEE, MMMM d, y', 'MMMM d, y', 'MMM d, y', 'd/M/yy'],
+  DATEFORMATS: ['EEEE، d MMMM، y', 'd MMMM، y', 'd MMM، y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,

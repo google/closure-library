@@ -15,7 +15,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  */
 
 // clang-format off
@@ -321,7 +321,7 @@ goog.locale.nativeNameConstants = {
     'ar_TN': 'تونس',
     'ar_XB': '[XB]',
     'ar_YE': 'اليمن',
-    'as_IN': 'ভারত',
+    'as_IN': 'ভাৰত',
     'asa_TZ': 'Tadhania',
     'ast_ES': 'España',
     'az_Cyrl_AZ': 'Азәрбајҹан',

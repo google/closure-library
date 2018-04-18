@@ -15,7 +15,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * This file covers those locales that are not covered in
  * "datetimepatterns.js".
