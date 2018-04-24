@@ -410,8 +410,6 @@ requirement: {
 
   whitelist_regexp: '.+/closure/goog/tweak/tweakui.js' # False positive - missing type on containerNodeName.
   # TODO(jakubvrana): Ban this.
-  whitelist_regexp: '.+/closure/goog/datasource/jsondatasource.js'
-  whitelist_regexp: '.+/closure/goog/module/loader.js'
   whitelist_regexp: '.+/closure/goog/ui/abstractspellchecker.js'
 }
 
@@ -496,6 +494,9 @@ requirement: {
   value: 'goog.html.legacyconversions'
 
   whitelist_regexp: '.+/closure/goog/html/legacyconversions.js'
+
+  whitelist_regexp: '.+/closure/goog/datasource/jsondatasource.js'
+  whitelist_regexp: '.+/closure/goog/module/loader.js'
   whitelist_regexp: '.+/closure/goog/soy/soy.js'
 }
 
