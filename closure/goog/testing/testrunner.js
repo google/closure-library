@@ -90,6 +90,12 @@ goog.testing.TestRunner = function() {
   this.strict_ = true;
 
   /**
+   * Store the serializer to avoid it being overwritten by a mock.
+   * @private {function(!Object): string}
+   */
+  this.jsonStringify_ = goog.json.serialize;
+
+  /**
    * An id unique to this runner. Checked by the server during polling to
    * verify that the page was not reloaded.
    * @private {string}
@@ -522,7 +528,7 @@ goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
       // We are writing on our testCase results, but the test is over.
       testCaseResults['globalErrors'] = globalErrors;
     }
-    return goog.json.serialize(testCaseResults);
+    return this.jsonStringify_(testCaseResults);
   }
   return null;
 };
