@@ -278,10 +278,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
 
   // Fire keydown, keypress, and keyup. Note that if the keydown is
   // prevent-defaulted, then the keypress will not fire.
-  var result = true;
-  if (!goog.testing.events.isBrokenGeckoMacActionKey_(keydown)) {
-    result = goog.testing.events.fireBrowserEvent(keydown);
-  }
+  var result = goog.testing.events.fireBrowserEvent(keydown);
   if (goog.isString(keyOrKeyCode)) {
     if (/** @type {string} */ (keyPressKeyOrKeyCode) != '' && result) {
       result &= goog.testing.events.fireBrowserEvent(keypress);
@@ -289,27 +286,12 @@ goog.testing.events.fireNonAsciiKeySequence = function(
   } else {
     if (goog.events.KeyCodes.firesKeyPressEvent(
             /** @type {number} */ (keyOrKeyCode), undefined, keydown.shiftKey,
-            keydown.ctrlKey, keydown.altKey) &&
+            keydown.ctrlKey, keydown.altKey, keydown.metaKey) &&
         result) {
       result &= goog.testing.events.fireBrowserEvent(keypress);
     }
   }
   return !!(result & goog.testing.events.fireBrowserEvent(keyup));
-};
-
-
-/**
- * @param {goog.testing.events.Event} e The event.
- * @return {boolean} Whether this is the Gecko/Mac's Meta-C/V/X, which
- *     is broken and requires special handling.
- * @private
- */
-goog.testing.events.isBrokenGeckoMacActionKey_ = function(e) {
-  return goog.userAgent.MAC && goog.userAgent.GECKO &&
-      (e.keyCode == goog.events.KeyCodes.C ||
-       e.keyCode == goog.events.KeyCodes.X ||
-       e.keyCode == goog.events.KeyCodes.V) &&
-      e.metaKey;
 };
 
 

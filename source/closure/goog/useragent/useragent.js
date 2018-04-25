@@ -435,7 +435,8 @@ goog.userAgent.determineVersion_ = function() {
 
 
 /**
- * @return {?Array|undefined} The version regex matches from parsing the user
+ * @return {?IArrayLike<string>|undefined} The version regex matches from
+ *     parsing the user
  *     agent string. These regex statements must be executed inline so they can
  *     be compiled out by the closure compiler with the rest of the useragent
  *     detection logic when ASSUME_* is specified.

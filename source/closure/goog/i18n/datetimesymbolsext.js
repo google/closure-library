@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * This file covers those locales that are not covered in
  * "datetimesymbols.js".
@@ -1461,10 +1461,10 @@ goog.i18n.DateTimeSymbols_ar_YE = {
  */
 goog.i18n.DateTimeSymbols_as = {
   ZERODIGIT: 0x09E6,
-  ERAS: ['খ্ৰী.পূ.', 'খ্ৰী.দ.'],
+  ERAS: ['খ্ৰীঃ পূঃ', 'খ্ৰীঃ'],
   ERANAMES: ['খ্ৰীষ্টপূৰ্ব', 'খ্ৰীষ্টাব্দ'],
   NARROWMONTHS: ['জ', 'ফ', 'ম', 'এ', 'ম', 'জ', 'জ', 'আ', 'ছ', 'অ', 'ন', 'ড'],
-  STANDALONENARROWMONTHS: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+  STANDALONENARROWMONTHS: ['জ', 'ফ', 'ম', 'এ', 'ম', 'জ', 'জ', 'আ', 'ছ', 'অ', 'ন', 'ড'],
   MONTHS: ['জানুৱাৰী', 'ফেব্ৰুৱাৰী', 'মাৰ্চ', 'এপ্ৰিল', 'মে’', 'জুন', 'জুলাই', 'আগষ্ট', 'ছেপ্তেম্বৰ', 'অক্টোবৰ', 'নৱেম্বৰ', 'ডিচেম্বৰ'],
   STANDALONEMONTHS: ['জানুৱাৰী', 'ফেব্ৰুৱাৰী', 'মাৰ্চ', 'এপ্ৰিল', 'মে’', 'জুন', 'জুলাই', 'আগষ্ট', 'ছেপ্তেম্বৰ', 'অক্টোবৰ', 'নৱেম্বৰ', 'ডিচেম্বৰ'],
   SHORTMONTHS: ['জানু', 'ফেব্ৰু', 'মাৰ্চ', 'এপ্ৰিল', 'মে’', 'জুন', 'জুলাই', 'আগ', 'ছেপ্তে', 'অক্টো', 'নৱে', 'ডিচে'],
@@ -1475,11 +1475,11 @@ goog.i18n.DateTimeSymbols_as = {
   STANDALONESHORTWEEKDAYS: ['দেও', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্ৰ', 'শনি'],
   NARROWWEEKDAYS: ['দ', 'স', 'ম', 'ব', 'ব', 'শ', 'শ'],
   STANDALONENARROWWEEKDAYS: ['দ', 'স', 'ম', 'ব', 'ব', 'শ', 'শ'],
-  SHORTQUARTERS: ['তি1', 'তি2', 'তি3', 'তি4'],
-  QUARTERS: ['প্ৰথম প্ৰহৰ', 'দ্বিতীয় প্ৰহৰ', 'তৃতীয় প্ৰহৰ', 'চতুৰ্থ প্ৰহৰ'],
-  AMPMS: ['পূৰ্বাহ্ণ', 'অপৰাহ্ণ'],
+  SHORTQUARTERS: ['১মঃ তিঃ', '২য়ঃ তিঃ', '৩য়ঃ তিঃ', '৪ৰ্থঃ তিঃ'],
+  QUARTERS: ['প্ৰথম তিনিমাহ', 'দ্বিতীয় তিনিমাহ', 'তৃতীয় তিনিমাহ', 'চতুৰ্থ তিনিমাহ'],
+  AMPMS: ['পূৰ্বাহ্ন', 'অপৰাহ্ন'],
   DATEFORMATS: ['EEEE, d MMMM, y', 'd MMMM, y', 'dd-MM-y', 'd-M-y'],
-  TIMEFORMATS: ['h.mm.ss a zzzz', 'h.mm.ss a z', 'h.mm.ss a', 'h.mm. a'],
+  TIMEFORMATS: ['a h.mm.ss zzzz', 'a h.mm.ss z', 'a h.mm.ss', 'a h.mm'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [6, 6],
@@ -2058,9 +2058,9 @@ goog.i18n.DateTimeSymbols_ccp = {
   DATEFORMATS: ['EEEE, d MMMM, y', 'd MMMM, y', 'd MMM, y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
-  FIRSTDAYOFWEEK: 4,
+  FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
-  FIRSTWEEKCUTOFFDAY: 3
+  FIRSTWEEKCUTOFFDAY: 5
 };
 
 
@@ -12646,7 +12646,7 @@ goog.i18n.DateTimeSymbols_ur_IN = {
   SHORTQUARTERS: ['پہلی سہ ماہی', 'دوسری سہ ماہی', 'تیسری سہ ماہی', 'چوتهی سہ ماہی'],
   QUARTERS: ['پہلی سہ ماہی', 'دوسری سہ ماہی', 'تیسری سہ ماہی', 'چوتهی سہ ماہی'],
   AMPMS: ['AM', 'PM'],
-  DATEFORMATS: ['EEEE, MMMM d, y', 'MMMM d, y', 'MMM d, y', 'd/M/yy'],
+  DATEFORMATS: ['EEEE، d MMMM، y', 'd MMMM، y', 'd MMM، y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
   DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
@@ -12803,10 +12803,10 @@ goog.i18n.DateTimeSymbols_vai = {
   ERANAMES: ['BCE', 'CE'],
   NARROWMONTHS: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   STANDALONENARROWMONTHS: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-  MONTHS: ['ꖨꕪꖃ ꔞꕮ', 'ꕒꕡꖝꖕ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞꔤ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋꕔꕿ ꕸꖃꗏ', 'ꖨꕪꕱ ꗏꕮ'],
-  STANDALONEMONTHS: ['ꖨꕪꖃ ꔞꕮ', 'ꕒꕡꖝꖕ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞꔤ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋꕔꕿ ꕸꖃꗏ', 'ꖨꕪꕱ ꗏꕮ'],
-  SHORTMONTHS: ['ꖨꕪꖃ', 'ꕒꕡ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋ', 'ꖨꕪꕱ'],
-  STANDALONESHORTMONTHS: ['ꖨꕪꖃ', 'ꕒꕡ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋ', 'ꖨꕪꕱ'],
+  MONTHS: ['ꖨꖕ ꕪꕴ ꔞꔀꕮꕊ', 'ꕒꕡꖝꖕ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞꔤ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋꕔꕿ ꕸꖃꗏ', 'ꖨꖕ ꕪꕴ ꗏꖺꕮꕊ'],
+  STANDALONEMONTHS: ['ꖨꖕ ꕪꕴ ꔞꔀꕮꕊ', 'ꕒꕡꖝꖕ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞꔤ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋꕔꕿ ꕸꖃꗏ', 'ꖨꖕ ꕪꕴ ꗏꖺꕮꕊ'],
+  SHORTMONTHS: ['ꖨꖕꔞ', 'ꕒꕡ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋ', 'ꖨꖕꗏ'],
+  STANDALONESHORTMONTHS: ['ꖨꖕꔞ', 'ꕒꕡ', 'ꕾꖺ', 'ꖢꖕ', 'ꖑꕱ', 'ꖱꘋ', 'ꖱꕞ', 'ꗛꔕ', 'ꕢꕌ', 'ꕭꖃ', 'ꔞꘋ', 'ꖨꖕꗏ'],
   WEEKDAYS: ['ꕞꕌꔵ', 'ꗳꗡꘉ', 'ꕚꕞꕚ', 'ꕉꕞꕒ', 'ꕉꔤꕆꕢ', 'ꕉꔤꕀꕮ', 'ꔻꔬꔳ'],
   STANDALONEWEEKDAYS: ['ꕞꕌꔵ', 'ꗳꗡꘉ', 'ꕚꕞꕚ', 'ꕉꕞꕒ', 'ꕉꔤꕆꕢ', 'ꕉꔤꕀꕮ', 'ꔻꔬꔳ'],
   SHORTWEEKDAYS: ['ꕞꕌꔵ', 'ꗳꗡꘉ', 'ꕚꕞꕚ', 'ꕉꕞꕒ', 'ꕉꔤꕆꕢ', 'ꕉꔤꕀꕮ', 'ꔻꔬꔳ'],

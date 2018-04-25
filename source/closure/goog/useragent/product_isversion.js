@@ -118,7 +118,7 @@ goog.userAgent.product.getFirstRegExpGroup_ = function(re) {
 /**
  * Run regexp's exec() on the userAgent string.
  * @param {!RegExp} re Regular expression.
- * @return {?Array<?>} A result array, or null for no match.
+ * @return {?IArrayLike<string>} A result array, or null for no match.
  * @private
  */
 goog.userAgent.product.execRegExp_ = function(re) {

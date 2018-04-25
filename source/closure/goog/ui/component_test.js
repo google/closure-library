@@ -904,7 +904,7 @@ function testRemoveChildren_Unrender() {
   component.addChild(b);
 
   assertArrayEquals(
-      'Prent must remove and return children.', [a, b],
+      'Parent must remove and return children.', [a, b],
       component.removeChildren(true));
   assertNull(
       'Parent must no longer contain this child', component.getChild('a'));
@@ -912,4 +912,32 @@ function testRemoveChildren_Unrender() {
   assertNull(
       'Parent must no longer contain this child', component.getChild('b'));
   assertFalse('Child must no longer be in the document.', b.isInDocument());
+}
+
+function testSetPointerEventsEnabled() {
+  assertFalse(
+      'Component must default to mouse events.',
+      component.pointerEventsEnabled());
+
+  component.setPointerEventsEnabled(true);
+  assertTrue(
+      'Component must use pointer events when specified.',
+      component.pointerEventsEnabled());
+
+  component.setPointerEventsEnabled(false);
+  assertFalse(
+      'Component must use mouse events when specified.',
+      component.pointerEventsEnabled());
+}
+
+function testSetPointerEventsEnabledAfterEnterDocument() {
+  component.render(sandbox);
+
+  assertThrows(
+      'setPointerEventsEnabled(true) after enterDocument must throw error.',
+      function() { component.setPointerEventsEnabled(true); });
+
+  assertThrows(
+      'setPointerEventsEnabled(false) after enterDocument must throw error.',
+      function() { component.setPointerEventsEnabled(false); });
 }

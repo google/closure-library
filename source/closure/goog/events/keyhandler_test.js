@@ -599,7 +599,10 @@ function testMacGeckoSlash() {
       keyHandler, goog.events.KeyHandler.EventType.KEY,
       function(e) { keyEvent = e; });
 
-  fireKeyDown(keyHandler, 0, 63, null, false, false, true);
+  // On OS X Gecko, the following events are fired when pressing Shift+/
+  // 1. keydown with keyCode=191 (/), charCode=0, shiftKey
+  // 2. keypress with keyCode=0, charCode=63 (?), shiftKey
+  fireKeyDown(keyHandler, 191, 0, null, false, false, true);
   fireKeyPress(keyHandler, 0, 63, null, false, false, true);
   assertEquals(
       '/ should fire a key event with the keyCode 191',

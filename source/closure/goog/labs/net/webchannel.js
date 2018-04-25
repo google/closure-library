@@ -255,6 +255,8 @@ goog.net.WebChannel.prototype.close = goog.abstractMethod;
  * 5. Full close is always a forced one. See the close() method.
  *
  * New messages sent after halfClose() will be dropped.
+ *
+ * NOTE: This is not yet implemented, and will throw an exception if called.
  */
 goog.net.WebChannel.prototype.halfClose = goog.abstractMethod;
 

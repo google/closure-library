@@ -187,7 +187,9 @@ goog.ui.DimensionPickerRenderer.prototype.addElementContents_ = function(
       goog.dom.TagName.DIV, goog.getCssName(this.getCssClass(), 'highlighted'));
   element.appendChild(
       palette.getDomHelper().createDom(
-          goog.dom.TagName.DIV, {'style': 'width:100%;height:100%'},
+          goog.dom.TagName.DIV, {
+            'style': 'width:100%;height:100%;touch-action:none;'
+          },
           mouseCatcherDiv, unhighlightedDiv, highlightedDiv));
 
   // Lastly we add a div to store the text version of the current state.

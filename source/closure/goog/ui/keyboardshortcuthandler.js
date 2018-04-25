@@ -24,7 +24,6 @@ goog.provide('goog.ui.KeyboardShortcutHandler');
 goog.provide('goog.ui.KeyboardShortcutHandler.EventType');
 goog.provide('goog.ui.KeyboardShortcutHandler.Modifiers');
 
-goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
@@ -280,20 +279,6 @@ goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_;
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.keyTarget_;
-
-
-/**
- * Due to a bug in the way that Gecko on Mac handles cut/copy/paste key events
- * using the meta key, it is necessary to fake the keyDown for the action key
- * (C,V,X) by capturing it on keyUp.
- * Because users will often release the meta key a slight moment before they
- * release the action key, we need this variable that will store whether the
- * meta key has been released recently.
- * It will be cleared after a short delay in the key handling logic.
- * @type {boolean}
- * @private
- */
-goog.ui.KeyboardShortcutHandler.prototype.metaKeyRecentlyReleased_;
 
 
 /**
@@ -746,33 +731,6 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyUp_ = function(e) {
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleGeckoKeyUp_ = function(e) {
-  // Due to a bug in the way that Gecko on Mac handles cut/copy/paste key events
-  // using the meta key, it is necessary to fake the keyDown for the action keys
-  // (C,V,X) by capturing it on keyUp.
-  // This is because the keyDown events themselves are not fired by the browser
-  // in this case.
-  // Because users will often release the meta key a slight moment before they
-  // release the action key, we need to store whether the meta key has been
-  // released recently to avoid "flaky" cutting/pasting behavior.
-  if (goog.userAgent.MAC) {
-    if (e.keyCode == goog.events.KeyCodes.MAC_FF_META) {
-      this.metaKeyRecentlyReleased_ = true;
-      goog.Timer.callOnce(function() {
-        this.metaKeyRecentlyReleased_ = false;
-      }, 400, this);
-      return;
-    }
-
-    var metaKey = e.metaKey || this.metaKeyRecentlyReleased_;
-    if ((e.keyCode == goog.events.KeyCodes.C ||
-         e.keyCode == goog.events.KeyCodes.X ||
-         e.keyCode == goog.events.KeyCodes.V) &&
-        metaKey) {
-      e.metaKey = metaKey;
-      this.handleKeyDown_(e);
-    }
-  }
-
   // Firefox triggers buttons on space keyUp instead of keyDown.  So if space
   // keyDown activated a shortcut, do NOT also trigger the focused button.
   if (goog.events.KeyCodes.SPACE == this.activeShortcutKeyForGecko_ &&

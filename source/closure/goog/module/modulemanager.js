@@ -671,24 +671,31 @@ goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
  */
 goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ = function(
     id) {
+  var requestedModuleSet = goog.object.createSet(this.requestedModuleIds_);
   // NOTE(user): We want the earliest occurrence of a module, not the first
   // dependency we find. Therefore we strip duplicates at the end rather than
   // during.  See the tests for concrete examples.
   var ids = [];
-  if (!goog.array.contains(this.requestedModuleIds_, id)) {
+  if (!requestedModuleSet[id]) {
     ids.push(id);
   }
-  var depIds = goog.array.clone(this.getModuleInfo(id).getDependencies());
-  while (depIds.length) {
-    var depId = depIds.pop();
-    if (!this.getModuleInfo(depId).isLoaded() &&
-        !goog.array.contains(this.requestedModuleIds_, depId)) {
-      ids.unshift(depId);
-      // We need to process direct dependencies first.
-      Array.prototype.unshift.apply(
-          depIds, this.getModuleInfo(depId).getDependencies());
+  var depIdLookupList = [id];
+  // BFS by iterating through dependencies and enqueuing their respective
+  // dependencies into the lookup list.
+  for (var i = 0; i < depIdLookupList.length; i++) {
+    var depIds = this.getModuleInfo(depIdLookupList[i]).getDependencies();
+    for (var j = depIds.length - 1; j >= 0; j--) {
+      var depId = depIds[j];
+      if (!this.getModuleInfo(depId).isLoaded() && !requestedModuleSet[depId]) {
+        ids.push(depId);
+        depIdLookupList.push(depId);
+      }
     }
   }
+
+  // Leaf dependencies should come before others. Please refer to test cases for
+  // exact order.
+  ids.reverse();
   goog.array.removeDuplicates(ids);
   return ids;
 };

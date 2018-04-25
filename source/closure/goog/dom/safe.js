@@ -469,6 +469,13 @@ goog.dom.safe.setObjectData = function(object, url) {
 goog.dom.safe.setScriptSrc = function(script, url) {
   goog.dom.asserts.assertIsHTMLScriptElement(script);
   script.src = goog.html.TrustedResourceUrl.unwrap(url);
+
+  // If CSP nonces are used, propagate them to dynamically created scripts.
+  // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
+  var nonce = goog.getScriptNonce();
+  if (nonce) {
+    script.nonce = nonce;
+  }
 };
 
 
@@ -489,6 +496,13 @@ goog.dom.safe.setScriptSrc = function(script, url) {
 goog.dom.safe.setScriptContent = function(script, content) {
   goog.dom.asserts.assertIsHTMLScriptElement(script);
   script.text = goog.html.SafeScript.unwrap(content);
+
+  // If CSP nonces are used, propagate them to dynamically created scripts.
+  // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
+  var nonce = goog.getScriptNonce();
+  if (nonce) {
+    script.nonce = nonce;
+  }
 };
 
 

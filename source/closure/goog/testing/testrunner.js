@@ -37,6 +37,7 @@ goog.provide('goog.testing.TestRunner');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
+goog.require('goog.json');
 goog.require('goog.testing.TestCase');
 goog.require('goog.userAgent');
 
@@ -89,9 +90,15 @@ goog.testing.TestRunner = function() {
   this.strict_ = true;
 
   /**
+   * Store the serializer to avoid it being overwritten by a mock.
+   * @private {function(!Object): string}
+   */
+  this.jsonStringify_ = goog.json.serialize;
+
+  /**
    * An id unique to this runner. Checked by the server during polling to
    * verify that the page was not reloaded.
-   * @private {!string}
+   * @private {string}
    */
   this.uniqueId_ = Math.random() + '-' +
       window.location.pathname.replace(/.*\//, '').replace(/\.html.*$/, '');
@@ -119,7 +126,7 @@ goog.testing.TestRunner.prototype.getSearchString = function() {
 
 /**
  * Returns the unique id for this test page.
- * @return {!string}
+ * @return {string}
  */
 goog.testing.TestRunner.prototype.getUniqueId = function() {
   return this.uniqueId_;
@@ -317,7 +324,7 @@ goog.testing.TestRunner.prototype.execute = function() {
         'setStrict() method, or G_testRunner.setStrict()');
   }
 
-  this.testCase.setCompletedCallback(goog.bind(this.onComplete_, this));
+  this.testCase.addCompletedCallback(goog.bind(this.onComplete_, this));
   if (goog.testing.TestRunner.shouldUsePromises_(this.testCase)) {
     this.testCase.runTestsReturningPromise();
   } else {
@@ -509,7 +516,19 @@ goog.testing.TestRunner.prototype.getTestResults = function() {
  */
 goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
   if (this.testCase) {
-    return this.testCase.getTestResultsAsJson();
+    var testCaseResults
+        /** {Object<string, !Array<!goog.testing.TestCase.IResult>>} */
+        = this.testCase.getTestResults();
+    if (this.hasErrors()) {
+      var globalErrors = [];
+      for (var i = 0; i < this.errors.length; i++) {
+        globalErrors.push(
+            {source: '', message: this.errors[i], stacktrace: ''});
+      }
+      // We are writing on our testCase results, but the test is over.
+      testCaseResults['globalErrors'] = globalErrors;
+    }
+    return this.jsonStringify_(testCaseResults);
   }
   return null;
 };

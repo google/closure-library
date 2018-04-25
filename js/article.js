@@ -7,7 +7,7 @@ var closure = window.closure || {};
 closure.docs = closure.docs || {};
 
 
-/** @define {string} */
+/** @const {string} */
 closure.docs.LOCATION = String(window.location);
 
 

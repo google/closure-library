@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date interval formatting patterns for all locales.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -576,7 +576,7 @@ exports.DateIntervalPatterns_br = {
     '_': 'y'
   },
   YEAR_FULL_WITH_ERA: {
-    '_': 'G y'
+    '_': 'y G'
   },
   YEAR_MONTH_ABBR: {
     'M': 'MMM – MMM y',
@@ -584,8 +584,7 @@ exports.DateIntervalPatterns_br = {
   },
   YEAR_MONTH_FULL: {
     'M': 'MMMM – MMMM y',
-    'y': 'MMMM y – MMMM y',
-    '_': 'y MMMM'
+    '_': 'MMMM y'
   },
   MONTH_DAY_ABBR: {
     'd': 'd–d MMM',
@@ -596,17 +595,16 @@ exports.DateIntervalPatterns_br = {
     'M': 'd MMMM – d MMMM',
     'd': 'd–d MMMM',
     'y': 'd MMMM y – d MMMM y',
-    '_': 'MMMM dd'
+    '_': 'dd MMMM'
   },
   MONTH_DAY_SHORT: {
     'y': 'dd/MM/y – dd/MM/y',
     '_': 'dd/MM'
   },
   MONTH_DAY_MEDIUM: {
-    'M': 'd MMMM – d MMMM',
     'd': 'd–d MMMM',
     'y': 'd MMMM y – d MMMM y',
-    '_': 'MMMM d'
+    '_': 'd MMMM'
   },
   MONTH_DAY_YEAR_MEDIUM: {
     'M': 'd MMM – d MMM y',
@@ -6486,21 +6484,20 @@ exports.DateIntervalPatterns_ur = {
     'M': 'd MMMM – d MMMM',
     'd': 'd–d MMMM',
     'y': 'd MMMM، y – d MMMM، y',
-    '_': 'MMMM dd'
+    '_': 'dd MMMM'
   },
   MONTH_DAY_SHORT: {
     'y': 'd/M/y – d/M/y',
     '_': 'd/M'
   },
   MONTH_DAY_MEDIUM: {
-    'M': 'd MMMM – d MMMM',
     'd': 'd–d MMMM',
     'y': 'd MMMM، y – d MMMM، y',
-    '_': 'MMMM d'
+    '_': 'd MMMM'
   },
   MONTH_DAY_YEAR_MEDIUM: {
     'M': 'd MMM – d MMM، y',
-    'd': 'y MMM d–d',
+    'd': 'd–d MMM y',
     '_': 'd MMM، y'
   },
   WEEKDAY_MONTH_DAY_MEDIUM: {

@@ -19,6 +19,7 @@ goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.functions');
 goog.require('goog.testing.ExpectedFailures');
+goog.require('goog.testing.FunctionMock');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MethodMock');
 goog.require('goog.testing.MockRandom');
@@ -91,6 +92,28 @@ function testEmptyTestCase() {
   assertEquals(0, result.runCount);
   assertEquals(0, result.successCount);
   assertEquals(0, result.errors.length);
+}
+
+function testCompletedCallbacks() {
+  var callback = goog.testing.FunctionMock('completed');
+  var testCase = new goog.testing.TestCase();
+
+  testCase.addCompletedCallback(callback);
+  testCase.addCompletedCallback(callback);
+
+  callback().$times(2);
+
+  callback.$replay();
+  testCase.runTests();
+  callback.$verify();
+  callback.$reset();
+
+  assertTrue(testCase.isSuccess());
+
+  // Executing a second time should not remember the callback.
+  callback.$replay();
+  testCase.runTests();
+  callback.$verify();
 }
 
 function testEmptyTestCaseReturningPromise() {
@@ -173,6 +196,50 @@ function testTestCase_DoubleFailure() {
   assertEquals(1, result.runCount);
   assertEquals(0, result.successCount);
   assertEquals(2, result.errors.length);
+
+  assertEquals('testDone must be called exactly once.', 1, doneCount);
+
+  // Make sure we strip all TestCase stack frames:
+  assertNotContains('testcase.js', result.errors[0].toString());
+}
+
+function testTestCase_RepeatedFailure() {
+  var stubs = new goog.testing.PropertyReplacer();
+  // Prevent the mock from the inner test from forcibly failing the outer test.
+  stubs.replace(
+      goog.global, 'G_testRunner', null, true /* opt_allowNullOrUndefined */);
+
+  try {
+    var doneCount = 0;
+    var testCase = new goog.testing.TestCase();
+
+    testCase.setTestDoneCallback(function() {
+      doneCount++;
+    });
+
+    var mock = goog.testing.FunctionMock();
+    testCase.addNewTest(
+        'foo', function() {
+          mock(1).$once();
+          mock.$replay();
+          // This throws a bad-parameter exception immediately.
+          mock(2);
+        }, null, [{
+          // This throws the recorded exception again.
+          // Calling this in tearDown is a common pattern (eg, in Environment).
+          tearDown: goog.bind(mock.$verify, mock),
+        }]);
+    testCase.runTests();
+  } finally {
+    stubs.reset();
+  }
+  assertFalse(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertTrue(result.complete);
+  assertEquals(1, result.totalCount);
+  assertEquals(1, result.runCount);
+  assertEquals(0, result.successCount);
+  assertEquals(1, result.errors.length);
 
   assertEquals('testDone must be called exactly once.', 1, doneCount);
 
@@ -665,7 +732,7 @@ function verifyWithFlagDisabled(testFunction) {
 
   var promise = new goog
                     .Promise(function(resolve, reject) {
-                      testCase.setCompletedCallback(resolve);
+                      testCase.addCompletedCallback(resolve);
                     })
                     .then(function() {
                       assertTrue(testCase.isSuccess());
@@ -673,7 +740,9 @@ function verifyWithFlagDisabled(testFunction) {
                       assertTrue(result.complete);
                       assertEquals(0, result.errors.length);
                     })
-                    .thenAlways(function() { stubs.reset(); });
+                    .thenAlways(function() {
+                      stubs.reset();
+                    });
 
   testCase.runTests();
   return promise;
@@ -694,7 +763,7 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
   var promise =
       new goog
           .Promise(function(resolve, reject) {
-            testCase.setCompletedCallback(resolve);
+            testCase.addCompletedCallback(resolve);
           })
           .then(function() {
             assertEquals(shouldPassWithFlagEnabled, testCase.isSuccess());
@@ -705,7 +774,9 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
             assertEquals(
                 shouldPassWithFlagEnabled ? 0 : 2, result.errors.length);
           })
-          .thenAlways(function() { stubs.reset(); });
+          .thenAlways(function() {
+            stubs.reset();
+          });
 
   testCase.runTests();
   return promise;
@@ -728,7 +799,7 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
 
   var promise = new goog
                     .Promise(function(resolve, reject) {
-                      testCase.setCompletedCallback(resolve);
+                      testCase.addCompletedCallback(resolve);
                     })
                     .then(function() {
                       assertFalse(testCase.isSuccess());
@@ -738,7 +809,9 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
                       // failOnUnreportedAsserts error.
                       assertEquals(2, result.errors.length);
                     })
-                    .thenAlways(function() { stubs.reset(); });
+                    .thenAlways(function() {
+                      stubs.reset();
+                    });
 
   testCase.runTests();
   return promise;

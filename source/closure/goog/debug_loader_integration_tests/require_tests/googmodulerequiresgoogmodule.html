@@ -1,0 +1,35 @@
+<!--
+Copyright 2017 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<script src="../testdata/testutils.js"></script>
+<script src="../../base.js"></script>
+<script src="../testdata/deps.js"></script>
+<script>
+  assertNull(goog.module.get('test.js.GoogModule'));
+  assertNull(goog.module.get('test.js.GoogModuleRequiresGoogModule'));
+
+  goog.require('test.js.GoogModuleRequiresGoogModule');
+
+//# sourceURL=requiregoogmodulewithdepsrequiresgoogmodulepretest.js
+</script>
+<script>
+  if (goog.DebugLoader_.IS_OLD_IE_) {
+    goog.require('test.js.GoogModuleRequiresGoogModule');
+  }
+
+  var GoogModule = goog.module.get('test.js.GoogModule');
+  var GoogModuleRequiresGoogModule = goog.module.get('test.js.GoogModuleRequiresGoogModule');
+  assertNotNull(GoogModule);
+  assertNotNull(GoogModuleRequiresGoogModule);
+  assertEquals('GOOG-MODULE-REQUIRES-GOOG-MODULE', GoogModuleRequiresGoogModule.NAME);
+  assertTrue(new GoogModuleRequiresGoogModule() instanceof GoogModule);
+
+//# sourceURL=requiregoogmodulewithdepsrequiresgoogmoduletest.js
+</script>
+
+<script>
+  done();
+</script>

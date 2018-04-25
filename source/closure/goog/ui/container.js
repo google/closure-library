@@ -38,6 +38,7 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.ComponentUtil');
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Control');
 
@@ -379,6 +380,8 @@ goog.ui.Container.prototype.enterDocument = function() {
   // Initialize visibility (opt_force = true, so we don't dispatch events).
   this.setVisible(this.visible_, true);
 
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
+
   // Handle events dispatched by child controls.
   this.getHandler()
       .listen(this, goog.ui.Component.EventType.ENTER, this.handleEnterItem)
@@ -389,28 +392,50 @@ goog.ui.Container.prototype.enterDocument = function() {
           this.handleUnHighlightItem)
       .listen(this, goog.ui.Component.EventType.OPEN, this.handleOpenItem)
       .listen(this, goog.ui.Component.EventType.CLOSE, this.handleCloseItem)
-      .
 
       // Handle mouse events.
-      listen(elem, goog.events.EventType.MOUSEDOWN, this.handleMouseDown)
+      .listen(elem, MouseEventType.MOUSEDOWN, this.handleMouseDown)
       .listen(
-          goog.dom.getOwnerDocument(elem), goog.events.EventType.MOUSEUP,
+          goog.dom.getOwnerDocument(elem),
+          [MouseEventType.MOUSEUP, MouseEventType.MOUSECANCEL],
           this.handleDocumentMouseUp)
-      .
 
       // Handle mouse events on behalf of controls in the container.
-      listen(
+      .listen(
           elem,
           [
-            goog.events.EventType.MOUSEDOWN, goog.events.EventType.MOUSEUP,
-            goog.events.EventType.MOUSEOVER, goog.events.EventType.MOUSEOUT,
+            MouseEventType.MOUSEDOWN,
+            MouseEventType.MOUSEUP,
+            MouseEventType.MOUSECANCEL,
+            MouseEventType.MOUSEOVER,
+            MouseEventType.MOUSEOUT,
             goog.events.EventType.CONTEXTMENU
           ],
           this.handleChildMouseEvents);
 
+  if (this.pointerEventsEnabled()) {
+    // Prevent pointer events from capturing the target element so they behave
+    // more like mouse events.
+    this.getHandler().listen(
+        elem, goog.events.EventType.GOTPOINTERCAPTURE,
+        this.preventPointerCapture_);
+  }
+
   // If the container is focusable, set up keyboard event handling.
   if (this.isFocusable()) {
     this.enableFocusHandling_(true);
+  }
+};
+
+
+/**
+ * @param {!goog.events.BrowserEvent} e Event to handle.
+ * @private
+ */
+goog.ui.Container.prototype.preventPointerCapture_ = function(e) {
+  var elem = /** @type {!Element} */ (e.target);
+  if (!!elem.releasePointerCapture) {
+    elem.releasePointerCapture(e.pointerId);
   }
 };
 
@@ -632,20 +657,23 @@ goog.ui.Container.prototype.handleDocumentMouseUp = function(e) {
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
  */
 goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
+  var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
+
   var control = this.getOwnerControl(/** @type {Node} */ (e.target));
   if (control) {
     // Child control identified; forward the event.
     switch (e.type) {
-      case goog.events.EventType.MOUSEDOWN:
+      case MouseEventType.MOUSEDOWN:
         control.handleMouseDown(e);
         break;
-      case goog.events.EventType.MOUSEUP:
+      case MouseEventType.MOUSEUP:
+      case MouseEventType.MOUSECANCEL:
         control.handleMouseUp(e);
         break;
-      case goog.events.EventType.MOUSEOVER:
+      case MouseEventType.MOUSEOVER:
         control.handleMouseOver(e);
         break;
-      case goog.events.EventType.MOUSEOUT:
+      case MouseEventType.MOUSEOUT:
         control.handleMouseOut(e);
         break;
       case goog.events.EventType.CONTEXTMENU:

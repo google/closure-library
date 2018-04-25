@@ -290,9 +290,9 @@ goog.ui.Dialog.prototype.setSafeHtmlContent = function(html) {
  * Gets the content HTML of the content element as a plain string.
  *
  * Note that this method returns the HTML markup that was previously set via
- * setContent(). In particular, the HTML returned by this method does not
- * reflect any changes to the content element's DOM that were made my means
- * other than setContent().
+ * setSafeHtmlContent() or setTextContent(). In particular, the HTML returned by
+ * this method does not reflect any changes to the content element's DOM that
+ * were made by other means.
  *
  * @return {string} Content HTML.
  */
