@@ -1127,3 +1127,32 @@ function testAnimationEndEventAfterClick() {
   assertTrue(isAnimationEndType(event_types[0]));
   goog.events.removeAll(oneThumbSlider);
 }
+
+/**
+ * Tests that focus will be on the top level element when clicking the slider if
+ * `focusElementOnSliderDrag` is true.
+ */
+function testFocusOnSliderAfterClickIfFocusElementOnSliderDragTrue() {
+  var sliderElement = oneThumbSlider.getElement();
+  var coords = goog.style.getClientPosition(sliderElement);
+  goog.testing.events.fireClickSequence(
+      sliderElement, /* opt_button */ undefined, coords);
+
+  var activeElement = oneThumbSlider.getDomHelper().getActiveElement();
+  assertEquals(sliderElement, activeElement);
+}
+
+/**
+ * Tests that focus will not be on the top level element when clicking the
+ * slider if `focusElementOnSliderDrag` is false.
+ */
+function testFocusNotOnSliderAfterClickIfFocusElementOnSliderDragFalse() {
+  oneThumbSlider.setFocusElementOnSliderDrag(false);
+  var sliderElement = oneThumbSlider.getElement();
+  var coords = goog.style.getClientPosition(sliderElement);
+  goog.testing.events.fireClickSequence(
+      sliderElement, /* opt_button */ undefined, coords);
+
+  var activeElement = oneThumbSlider.getDomHelper().getActiveElement();
+  assertNotEquals(sliderElement, activeElement);
+}
