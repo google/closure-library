@@ -346,6 +346,13 @@ goog.editor.Field.prototype.inModalMode_ = false;
 goog.editor.Field.prototype.appWindow_;
 
 
+/** @private {?goog.async.Delay} */
+goog.editor.Field.prototype.selectionChangeTimer_ = null;
+
+/** @private {boolean} */
+goog.editor.Field.prototype.isSelectionEditable_ = false;
+
+
 /**
  * Target node to be used when dispatching SELECTIONCHANGE asynchronously on
  * mouseup (to avoid IE quirk). Should be set just before starting the timer and
@@ -357,7 +364,7 @@ goog.editor.Field.prototype.selectionChangeTarget_;
 
 
 /**
- * Flag controlling wether to capture mouse up events on the window or not.
+ * Flag controlling whether to capture mouse up events on the window or not.
  * @type {boolean}
  * @private
  */

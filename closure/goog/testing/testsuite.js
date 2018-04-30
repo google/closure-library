@@ -19,7 +19,7 @@ goog.require('goog.testing.TestCase');
 
 // TODO(goktug): Remove suppressEnsureNoAutoDiscovery after google3 migration
 /**
- * @typedef {{order: (!goog.testing.TestCase.Order|undefined), suppressEnsureNoAutoDiscovery: (!boolean|undefined)}}
+ * @typedef {{order: (!goog.testing.TestCase.Order|undefined), suppressEnsureNoAutoDiscovery: (boolean|undefined)}}
  */
 var TestSuiteOptions;
 
