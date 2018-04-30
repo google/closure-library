@@ -43,8 +43,6 @@ goog.provide('goog.i18n.NumberFormatSymbols_ar_BH');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_BH_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DJ');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DJ_u_nu_latn');
-goog.provide('goog.i18n.NumberFormatSymbols_ar_EG');
-goog.provide('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_EH');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_ER');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_ER_u_nu_latn');
@@ -974,20 +972,6 @@ goog.i18n.NumberFormatSymbols_ar_DJ_u_nu_latn = {
   CURRENCY_PATTERN: '¤ #,##0',
   DEF_CURRENCY_CODE: 'DJF'
 };
-
-
-/**
- * Number formatting symbols for locale ar_EG.
- * @enum {string}
- */
-goog.i18n.NumberFormatSymbols_ar_EG = goog.i18n.NumberFormatSymbols_ar;
-
-
-/**
- * Number formatting symbols for locale ar_EG_u_nu_latn.
- * @enum {string}
- */
-goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
 
 
 /**
@@ -13200,11 +13184,6 @@ switch (goog.LOCALE) {
   case 'ar-DJ':
     goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_DJ;
     goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_DJ_u_nu_latn;
-    break;
-  case 'ar_EG':
-  case 'ar-EG':
-    goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_EG;
-    goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn;
     break;
   case 'ar_EH':
   case 'ar-EH':

@@ -644,61 +644,6 @@ exports.DateIntervalSymbols_ar_DJ = {
 };
 
 /** @const {!dateIntervalSymbols.DateIntervalSymbols} */
-exports.DateIntervalSymbols_ar_EG = {
-  FULL_DATE: {
-    'M': 'EEEE، d MMMM – EEEE، d MMMM، y',
-    'd': 'EEEE، d – EEEE، d MMMM، y',
-    'y': 'EEEE، d MMMM، y – EEEE، d MMMM، y',
-    '_': 'EEEE، d MMMM y'
-  },
-  LONG_DATE: {
-    'M': 'd MMMM – d MMMM، y',
-    'd': 'd–d MMMM، y',
-    'y': 'd MMMM، y – d MMMM، y',
-    '_': 'd MMMM y'
-  },
-  MEDIUM_DATE: {
-    'Mdy': 'd‏/M‏/y – d‏/M‏/y',
-    '_': 'dd‏/MM‏/y'
-  },
-  SHORT_DATE: {
-    '_': 'd‏/M‏/y'
-  },
-  FULL_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a zzzz',
-    '_': 'h:mm:ss a zzzz'
-  },
-  LONG_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a z',
-    '_': 'h:mm:ss a z'
-  },
-  MEDIUM_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a',
-    '_': 'h:mm:ss a'
-  },
-  SHORT_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm a',
-    'hm': 'h:mm–h:mm a',
-    '_': 'h:mm a'
-  },
-  FULL_DATETIME: {
-    '_': 'EEEE، d MMMM y h:mm:ss a zzzz'
-  },
-  LONG_DATETIME: {
-    '_': 'd MMMM y h:mm:ss a z'
-  },
-  MEDIUM_DATETIME: {
-    '_': 'dd‏/MM‏/y h:mm:ss a'
-  },
-  SHORT_DATETIME: {
-    'a': 'd‏/M‏/y h:mm a – h:mm a',
-    'hm': 'd‏/M‏/y h:mm–h:mm a',
-    '_': 'd‏/M‏/y h:mm a'
-  },
-  FALLBACK: '{0} – {1}'
-};
-
-/** @const {!dateIntervalSymbols.DateIntervalSymbols} */
 exports.DateIntervalSymbols_ar_EH = {
   FULL_DATE: {
     'M': 'EEEE، d MMMM – EEEE، d MMMM، y',
@@ -33988,10 +33933,6 @@ switch (goog.LOCALE) {
   case 'ar_DJ':
   case 'ar-DJ':
     defaultSymbols = exports.DateIntervalSymbols_ar_DJ;
-    break;
-  case 'ar_EG':
-  case 'ar-EG':
-    defaultSymbols = exports.DateIntervalSymbols_ar_EG;
     break;
   case 'ar_EH':
   case 'ar-EH':

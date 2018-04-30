@@ -47,6 +47,7 @@ goog.provide('goog.i18n.DateTimePatterns_af');
 goog.provide('goog.i18n.DateTimePatterns_am');
 goog.provide('goog.i18n.DateTimePatterns_ar');
 goog.provide('goog.i18n.DateTimePatterns_ar_DZ');
+goog.provide('goog.i18n.DateTimePatterns_ar_EG');
 goog.provide('goog.i18n.DateTimePatterns_az');
 goog.provide('goog.i18n.DateTimePatterns_be');
 goog.provide('goog.i18n.DateTimePatterns_bg');
@@ -220,6 +221,13 @@ goog.i18n.DateTimePatterns_ar = {
  * @type {!goog.i18n.DateTimePatternsType}
  */
 goog.i18n.DateTimePatterns_ar_DZ = goog.i18n.DateTimePatterns_ar;
+
+
+/**
+ * Extended set of localized date/time patterns for locale ar_EG.
+ * @type {!goog.i18n.DateTimePatternsType}
+ */
+goog.i18n.DateTimePatterns_ar_EG = goog.i18n.DateTimePatterns_ar;
 
 
 /**
@@ -2300,6 +2308,10 @@ switch (goog.LOCALE) {
   case 'ar_DZ':
   case 'ar-DZ':
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_DZ;
+    break;
+  case 'ar_EG':
+  case 'ar-EG':
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_EG;
     break;
   case 'az':
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_az;

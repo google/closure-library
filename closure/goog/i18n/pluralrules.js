@@ -818,6 +818,9 @@ if (goog.LOCALE == 'ar') {
 if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.arSelect_;
 }
+if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.arSelect_;
+}
 if (goog.LOCALE == 'az') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }

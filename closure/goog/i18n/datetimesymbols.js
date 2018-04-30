@@ -37,6 +37,7 @@ goog.provide('goog.i18n.DateTimeSymbols_af');
 goog.provide('goog.i18n.DateTimeSymbols_am');
 goog.provide('goog.i18n.DateTimeSymbols_ar');
 goog.provide('goog.i18n.DateTimeSymbols_ar_DZ');
+goog.provide('goog.i18n.DateTimeSymbols_ar_EG');
 goog.provide('goog.i18n.DateTimeSymbols_az');
 goog.provide('goog.i18n.DateTimeSymbols_be');
 goog.provide('goog.i18n.DateTimeSymbols_bg');
@@ -292,6 +293,12 @@ goog.i18n.DateTimeSymbols_ar_DZ = {
   WEEKENDRANGE: [4, 5],
   FIRSTWEEKCUTOFFDAY: 4
 };
+
+
+/**
+ * Date/time formatting symbols for locale ar_EG.
+ */
+goog.i18n.DateTimeSymbols_ar_EG = goog.i18n.DateTimeSymbols_ar;
 
 
 /**
@@ -3439,6 +3446,10 @@ switch (goog.LOCALE) {
   case 'ar_DZ':
   case 'ar-DZ':
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_DZ;
+    break;
+  case 'ar_EG':
+  case 'ar-EG':
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_EG;
     break;
   case 'az':
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_az;
