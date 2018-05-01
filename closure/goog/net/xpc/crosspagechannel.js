@@ -357,7 +357,7 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
             new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
         break;
       case goog.net.xpc.TransportTypes.IFRAME_POLLING:
-        // TODO(user): Remove the IFRAME_POLLING option, have users
+        // TODO(johnplaisted): Remove the IFRAME_POLLING option, have users
         // inject IframePollingTransport to save on code size.
         this.transport_ =
             new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
