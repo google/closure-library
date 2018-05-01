@@ -582,7 +582,7 @@ goog.testing.Mock.prototype.$recordAndThrow = function(ex, rethrow) {
     var getTestCase =
         goog.getObjectByName('goog.testing.TestCase.getActiveTestCase');
     var testCase = getTestCase && getTestCase();
-    if (testCase && rethrow) {
+    if (testCase && !rethrow) {
       testCase.raiseAssertionException(ex);
     }
   }

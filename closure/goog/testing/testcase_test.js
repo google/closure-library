@@ -18,6 +18,7 @@ goog.setTestOnly('goog.testing.TestCaseTest');
 goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.functions');
+goog.require('goog.string');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.FunctionMock');
 goog.require('goog.testing.JsUnitException');
@@ -904,6 +905,69 @@ function testFailOnUnreportedAsserts_ReportUnpropagatedAssertionExceptions() {
 
   mockRecordError.$verify();
   mockRecordError.$tearDown();
+}
+
+function testUnreportedAsserts_failedTest() {
+  var testCase = new goog.testing.TestCase();
+  testCase.addNewTest('testFailSync', function() {
+    try {
+      assertEquals('Obi-wan', 'Qui-gon');
+    } catch (e) {
+    }
+    assertEquals('Sidious', 'Palpatine');
+  });
+  testCase.addNewTest('testFailAsync', function() {
+    return goog.Promise.resolve().then(function() {
+      try {
+        assertEquals('Kirk', 'Spock');
+      } catch (e) {
+      }
+      assertEquals('Uhura', 'Scotty');
+    });
+  });
+  testCase.addNewTest('testJustOneFailure', function() {
+    return goog.Promise.resolve().then(function() {
+      assertEquals('R2D2', 'C3PO');
+    });
+  });
+
+  var stubs = new goog.testing.PropertyReplacer();
+  var getTestCase = goog.functions.constant(testCase);
+  stubs.replace(window, '_getCurrentTestCase', getTestCase);
+
+  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
+  return testCase.runTestsReturningPromise()
+      .then(function() {
+        var errors = testCase.getResult().errors.map(function(e) {
+          return e.message;
+        });
+
+        assertArrayEquals(
+            [
+              // Sync:
+              'Expected <Obi-wan> (String) but was <Qui-gon> (String)',
+              'Expected <Sidious> (String) but was <Palpatine> (String)',
+              // Async:
+              'Expected <Kirk> (String) but was <Spock> (String)',
+              'Expected <Uhura> (String) but was <Scotty> (String)',
+              // JustOneFailure:
+              'Expected <R2D2> (String) but was <C3PO> (String)',
+            ],
+            errors);
+
+        var extraLogMessages =
+            testCase.getResult().messages.filter(function(m) {
+              return goog.string.contains(
+                  m, '1 additional exceptions were swallowed by the test');
+            });
+        assertEquals(
+            'Expect an additional-exception warning only for the two tests ' +
+                'that swallowed an exception.',
+            2, extraLogMessages.length);
+      })
+      .thenAlways(function() {
+        stubs.reset();
+      });
 }
 
 
