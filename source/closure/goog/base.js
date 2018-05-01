@@ -547,6 +547,14 @@ goog.isInEs6ModuleLoader_ = function() {
   var jscomp = goog.global['$jscomp'];
 
   if (jscomp) {
+    // jscomp may not have getCurrentModulePath if this is a compiled bundle
+    // that has some of the runtime, but not all of it. This can happen if
+    // optimizations are turned on so the unused runtime is removed but renaming
+    // and Closure pass are off (so $jscomp is still named $jscomp and the
+    // goog.provide/require calls still exist).
+    if (typeof jscomp.getCurrentModulePath != 'function') {
+      return false;
+    }
 
     // Bundled ES6 module.
     return !!jscomp.getCurrentModulePath();

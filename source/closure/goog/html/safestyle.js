@@ -412,8 +412,8 @@ goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
  */
 goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
   var valueWithoutFunctions =
-      value.replace(goog.html.SafeUrl.FUNCTIONS_RE_, '$1')
-          .replace(goog.html.SafeUrl.URL_RE_, 'url');
+      value.replace(goog.html.SafeStyle.FUNCTIONS_RE_, '$1')
+          .replace(goog.html.SafeStyle.URL_RE_, 'url');
   if (!goog.html.SafeStyle.VALUE_RE_.test(valueWithoutFunctions)) {
     goog.asserts.fail(
         'String value allows only ' + goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ +
@@ -484,7 +484,7 @@ goog.html.SafeStyle.VALUE_RE_ =
  * backslash.
  * @private @const {!RegExp}
  */
-goog.html.SafeUrl.URL_RE_ = new RegExp(
+goog.html.SafeStyle.URL_RE_ = new RegExp(
     '\\b(url\\([ \t\n]*)(' +
         '\'[ -&(-\\[\\]-~]*\'' +  // Printable characters except ' and \.
         '|"[ !#-\\[\\]-~]*"' +    // Printable characters except " and \.
@@ -497,8 +497,8 @@ goog.html.SafeUrl.URL_RE_ = new RegExp(
  * Regular expression for simple functions.
  * @private @const {!RegExp}
  */
-goog.html.SafeUrl.FUNCTIONS_RE_ = new RegExp(
-    '\\b(hsl|hsla|rgb|rgba|(rotate|scale|translate)(X|Y|Z|3d)?)' +
+goog.html.SafeStyle.FUNCTIONS_RE_ = new RegExp(
+    '\\b(hsl|hsla|rgb|rgba|matrix|(rotate|scale|translate)(X|Y|Z|3d)?)' +
         '\\([-0-9a-z.%, ]+\\)',
     'g');
 
@@ -519,7 +519,7 @@ goog.html.SafeUrl.FUNCTIONS_RE_ = new RegExp(
  */
 goog.html.SafeStyle.sanitizeUrl_ = function(value) {
   return value.replace(
-      goog.html.SafeUrl.URL_RE_, function(match, before, url, after) {
+      goog.html.SafeStyle.URL_RE_, function(match, before, url, after) {
         var quote = '';
         url = url.replace(/^(['"])(.*)\1$/, function(match, start, inside) {
           quote = start;

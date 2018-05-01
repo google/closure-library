@@ -37,6 +37,8 @@ goog.provide('goog.i18n.NumberFormatSymbols_am');
 goog.provide('goog.i18n.NumberFormatSymbols_ar');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DZ');
+goog.provide('goog.i18n.NumberFormatSymbols_ar_EG');
+goog.provide('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_az');
 goog.provide('goog.i18n.NumberFormatSymbols_be');
 goog.provide('goog.i18n.NumberFormatSymbols_bg');
@@ -263,6 +265,20 @@ goog.i18n.NumberFormatSymbols_ar_DZ = {
   CURRENCY_PATTERN: '¤ #,##0.00',
   DEF_CURRENCY_CODE: 'DZD'
 };
+
+
+/**
+ * Number formatting symbols for locale ar_EG.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ar_EG = goog.i18n.NumberFormatSymbols_ar;
+
+
+/**
+ * Number formatting symbols for locale ar_EG_u_nu_latn.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
 
 
 /**
@@ -2745,6 +2761,11 @@ switch (goog.LOCALE) {
   case 'ar-DZ':
     goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_DZ;
     goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_DZ;
+    break;
+  case 'ar_EG':
+  case 'ar-EG':
+    goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_EG;
+    goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn;
     break;
   case 'az':
     goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_az;

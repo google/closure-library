@@ -928,6 +928,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
             }
           },
           function(e) {
+            self.reportUnpropagatedAssertionExceptions_(fnName, e);
             self.resetBatchTimeAfterPromise_();
             goog.testing.Continuation_.run(onFailure.call(self, e));
           });
@@ -942,6 +943,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
       }
     }
   } catch (e) {
+    this.reportUnpropagatedAssertionExceptions_(fnName, e);
     return new goog.testing.Continuation_(goog.bind(onFailure, this, e));
   }
 };
@@ -951,18 +953,37 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
  * Logs all of the exceptions generated from failing assertions, and returns a
  * generic exception informing the user that one or more exceptions were not
  * propagated, causing the test to erroneously pass.
+ *
+ * This is also called when a test fails so that the user sees swallowed errors.
+ * (This can make it much easier to debug failures in callbacks in catch blocks)
+ * If the actually-thrown error (that made the test fail) is also a JSUnit error
+ * (which will therefore be in this array), it will be silently deduped when the
+ * regular failure handler tries to record it again.
  * @param {string} testName The test function's name.
+ * @param {*=} actualError The thrown error the made the test fail, if any
  * @return {!goog.testing.JsUnitException}
  * @private
  */
 goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
-    function(testName) {
-  var numExceptions = this.thrownAssertionExceptions_.length;
+    function(testName, actualError) {
+  var extraExceptions = this.thrownAssertionExceptions_.slice();
+  // If the actual error isn't a JSUnit exception, it won't be in this array.
+  goog.array.remove(extraExceptions, actualError);
+  var numExceptions = extraExceptions.length;
+  if (numExceptions && actualError) {
+    // Don't log this message if the only exception is the actual failure.
+    var message =
+        numExceptions + ' additional exceptions were swallowed by the test:';
+    this.log(message);
+    this.saveMessage(message);
+  }
+
 
   for (var i = 0; i < numExceptions; i++) {
     this.recordError(testName, this.thrownAssertionExceptions_[i]);
   }
 
+  // Mark the test as failed.
   return new goog.testing.JsUnitException(
       'One or more assertions were raised but not caught by the testing ' +
       'framework. These assertions may have been unintentionally captured ' +

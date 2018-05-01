@@ -39,7 +39,6 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_001');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_AE');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_BH');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_DJ');
-goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_EG');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_EH');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_ER');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_ar_IL');
@@ -797,12 +796,6 @@ goog.i18n.CompactNumberFormatSymbols_ar_BH = goog.i18n.CompactNumberFormatSymbol
  * Compact number formatting symbols for locale ar_DJ.
  */
 goog.i18n.CompactNumberFormatSymbols_ar_DJ = goog.i18n.CompactNumberFormatSymbols_ar;
-
-
-/**
- * Compact number formatting symbols for locale ar_EG.
- */
-goog.i18n.CompactNumberFormatSymbols_ar_EG = goog.i18n.CompactNumberFormatSymbols_ar;
 
 
 /**
@@ -12494,10 +12487,6 @@ switch (goog.LOCALE) {
   case 'ar_DJ':
   case 'ar-DJ':
     goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ar_DJ;
-    break;
-  case 'ar_EG':
-  case 'ar-EG':
-    goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ar_EG;
     break;
   case 'ar_EH':
   case 'ar-EH':
