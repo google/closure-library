@@ -4,13 +4,13 @@
 goog.provide('goog.result.SimpleResultTest');
 goog.setTestOnly('goog.result.SimpleResultTest');
 
-goog.require('goog.Timer');
 goog.require('goog.Promise');
 goog.require('goog.Thenable');
+goog.require('goog.Timer');
 goog.require('goog.result');
 goog.require('goog.testing.MockClock');
-goog.require('goog.testing.recordFunction');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 
 var result, mockClock, resultCallback;
 var resultCallback1;

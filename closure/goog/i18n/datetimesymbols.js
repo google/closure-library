@@ -32,7 +32,6 @@
 
 goog.provide('goog.i18n.DateTimeSymbols');
 goog.provide('goog.i18n.DateTimeSymbolsType');
-goog.provide('goog.i18n.DateTimeSymbols_en_ISO');
 goog.provide('goog.i18n.DateTimeSymbols_af');
 goog.provide('goog.i18n.DateTimeSymbols_am');
 goog.provide('goog.i18n.DateTimeSymbols_ar');
@@ -59,6 +58,7 @@ goog.provide('goog.i18n.DateTimeSymbols_en_CA');
 goog.provide('goog.i18n.DateTimeSymbols_en_GB');
 goog.provide('goog.i18n.DateTimeSymbols_en_IE');
 goog.provide('goog.i18n.DateTimeSymbols_en_IN');
+goog.provide('goog.i18n.DateTimeSymbols_en_ISO');
 goog.provide('goog.i18n.DateTimeSymbols_en_SG');
 goog.provide('goog.i18n.DateTimeSymbols_en_US');
 goog.provide('goog.i18n.DateTimeSymbols_en_ZA');

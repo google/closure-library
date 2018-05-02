@@ -5,8 +5,8 @@ goog.provide('goog.result.transformTest');
 goog.setTestOnly('goog.result.transformTest');
 
 goog.require('goog.Timer');
-goog.require('goog.result.SimpleResult');
 goog.require('goog.result');
+goog.require('goog.result.SimpleResult');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');

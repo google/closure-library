@@ -29,7 +29,9 @@ function testIncompletelySpecifiedSpriteInfoFails() {
   assertThrows(
       'CSS class can\'t be null if the rest of the metadata ' +
           'isn\'t specified',
-      function() { new goog.ui.emoji.SpriteInfo(null) });
+      function() {
+        new goog.ui.emoji.SpriteInfo(null);
+      });
 
   assertThrows(
       'Can\'t create an incompletely specified sprite info',

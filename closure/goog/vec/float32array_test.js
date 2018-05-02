@@ -4,8 +4,8 @@
 goog.provide('goog.vec.Float32ArrayTest');
 goog.setTestOnly('goog.vec.Float32ArrayTest');
 
-goog.require('goog.vec.Float32Array');
 goog.require('goog.testing.jsunit');
+goog.require('goog.vec.Float32Array');
 
 function testConstructorInitializesElementsToZero() {
   var f = new goog.vec.Float32Array(3);

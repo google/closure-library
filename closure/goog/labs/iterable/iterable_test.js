@@ -19,11 +19,10 @@
 goog.module('goog.labs.iterableTest');
 goog.setTestOnly('goog.labs.iterableTest');
 
-goog.require('goog.testing.jsunit');
-
 var iterable = goog.require('goog.labs.iterable');
 var recordFunction = goog.require('goog.testing.recordFunction');
 var testSuite = goog.require('goog.testing.testSuite');
+goog.require('goog.testing.jsunit');
 
 
 /**

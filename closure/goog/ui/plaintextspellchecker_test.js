@@ -21,6 +21,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.spell.SpellCheck');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
+goog.require('goog.ui.AbstractSpellChecker');
 goog.require('goog.ui.PlainTextSpellChecker');
 
 var missspelling = 'missspelling';

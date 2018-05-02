@@ -161,7 +161,7 @@ function testCancelParentResults() {
 
   goog.result.cancelParentResults(combinedResult);
 
-  assertArgumentContainsGivenResults(combinedResult.getValue())
+  assertArgumentContainsGivenResults(combinedResult.getValue());
   goog.array.forEach([result1, result2, result3, result4],
       function(result) {
         assertTrue(result.isCanceled());

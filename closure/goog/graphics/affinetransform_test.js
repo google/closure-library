@@ -4,8 +4,10 @@
 goog.provide('goog.graphics.AffineTransformTest');
 goog.setTestOnly('goog.graphics.AffineTransformTest');
 
+goog.require('goog.array');
 goog.require('goog.graphics');
 goog.require('goog.graphics.AffineTransform');
+goog.require('goog.math');
 goog.require('goog.testing.jsunit');
 
 function testGetTranslateInstance() {
@@ -228,7 +230,7 @@ function testAssociativeConcatenate() {
   assertEquals(x.getScaleY(), y.getScaleY());
   assertEquals(x.getTranslateX(), y.getTranslateX());
   assertEquals(x.getTranslateY(), y.getTranslateY());
-};
+}
 
 function testTransform() {
   var srcPts = [0, 0, 1, 0, 1, 1, 0, 1];

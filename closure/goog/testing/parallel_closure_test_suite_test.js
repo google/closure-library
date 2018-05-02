@@ -21,7 +21,6 @@ var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var TestCase = goog.require('goog.testing.TestCase');
 var dom = goog.require('goog.dom');
-var jsunit = goog.require('goog.testing.jsunit');
 var mockmatchers = goog.require('goog.testing.mockmatchers');
 var parallelClosureTestSuite = goog.require('goog.testing.parallelClosureTestSuite');
 var testSuite = goog.require('goog.testing.testSuite');

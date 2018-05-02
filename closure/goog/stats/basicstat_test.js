@@ -149,16 +149,27 @@ PerfectlySlowStat.prototype.incBy = function(amt, now) {
 PerfectlySlowStat.prototype.getStats = function(now) {
   var end = Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
   var start = end - this.interval_;
-  var events =
-      goog.array.filter(this.events_, function(e) { return e.time >= start });
+  var events = goog.array.filter(this.events_, function(e) {
+    return e.time >= start;
+  });
   return {
-    'count':
-        goog.array.reduce(events, function(sum, e) { return sum + e.count }, 0),
+    'count': goog.array.reduce(
+        events,
+        function(sum, e) {
+          return sum + e.count;
+        },
+        0),
     'min': goog.array.reduce(
-        events, function(min, e) { return Math.min(min, e.count); },
+        events,
+        function(min, e) {
+          return Math.min(min, e.count);
+        },
         Number.MAX_VALUE),
     'max': goog.array.reduce(
-        events, function(max, e) { return Math.max(max, e.count); },
+        events,
+        function(max, e) {
+          return Math.max(max, e.count);
+        },
         Number.MIN_VALUE)
   };
 };

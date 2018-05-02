@@ -11,9 +11,8 @@
 goog.provide('goog.vec.vec4fTest');
 goog.setTestOnly('goog.vec.vec4fTest');
 
-goog.require('goog.vec.Float32Array');
-goog.require('goog.vec.vec4f');
 goog.require('goog.testing.jsunit');
+goog.require('goog.vec.vec4f');
 
 function testCreate() {
   var v = goog.vec.vec4f.create();

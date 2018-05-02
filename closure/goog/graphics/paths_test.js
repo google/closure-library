@@ -7,6 +7,7 @@ goog.setTestOnly('goog.graphics.pathsTest');
 goog.require('goog.dom');
 goog.require('goog.graphics');
 goog.require('goog.graphics.paths');
+goog.require('goog.math.Coordinate');
 goog.require('goog.testing.jsunit');
 
 // The purpose of this test is less about the actual unit test, and

@@ -24,6 +24,7 @@ goog.setTestOnly('goog.baseTest');
 goog.require('goog.Promise');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
+goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');

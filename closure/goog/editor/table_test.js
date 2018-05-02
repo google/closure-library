@@ -390,7 +390,7 @@ function testRemoveColumnAtStartingColSpan() {
   testObjects.torture.removeColumn(0);
   tableSanityCheck(testObjects.torture, 9, 2);
   var tr = goog.dom.getElementsByTagName(
-      goog.dom.TagName.TR, testElements.torture)[5]
+      goog.dom.TagName.TR, testElements.torture)[5];
   assertEquals(
       'Colspan was decremented correctly', 1,
       goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[0].colSpan);
@@ -410,7 +410,7 @@ function testRemoveColumnAtSpanningColSpan() {
   testObjects.torture.removeColumn(2);
   tableSanityCheck(testObjects.torture, 9, 2);
   var tr = goog.dom.getElementsByTagName(
-      goog.dom.TagName.TR, testElements.torture)[4]
+      goog.dom.TagName.TR, testElements.torture)[4];
   assertEquals(
       'Colspan was decremented correctly', 2,
       goog.dom.getElementsByTagName(goog.dom.TagName.TH, tr)[0].colSpan);

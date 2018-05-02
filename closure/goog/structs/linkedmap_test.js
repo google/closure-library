@@ -181,7 +181,9 @@ function testSome() {
   }, someObj);
 
   assertTrue(result);
-  assertFalse(m.some(function(val) { return val > 3 }));
+  assertFalse(m.some(function(val) {
+    return val > 3;
+  }));
 
   assertTrue(m.some(function(val, key) { return key == 'c'; }));
   assertFalse(m.some(function(val, key) { return key == 'e'; }));
@@ -198,7 +200,9 @@ function testEvery() {
   }, someObj);
 
   assertTrue(result);
-  assertFalse(m.every(function(val) { return val < 2 }));
+  assertFalse(m.every(function(val) {
+    return val < 2;
+  }));
 
   assertTrue(m.every(function(val, key) { return key.length == 1; }));
   assertFalse(m.every(function(val, key) { return key == 'b'; }));
