@@ -2550,7 +2550,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       return evalCheck('({...rest} = {}), true');
     });
     addNewerLanguageTranspilationCheck('es_next', function() {
-      return evalCheck('({...rest} = {}), true');
+      return false;  // assume it always need to transpile
     });
     return requiresTranspilation;
   };
