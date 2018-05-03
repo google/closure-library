@@ -105,12 +105,12 @@ function testBeforeShowEvent() {
         popup.getAttachedElement());
     beforeShowPopupCalled = true;
     return showPopup;
-  };
+  }
   function onShowPopup(e) {
     assertEquals(
         'The attached anchor element is incorrect', target.element_,
         popup.getAttachedElement());
-  };
+  }
 
   handler.listen(popup, goog.ui.Menu.EventType.BEFORE_SHOW, beforeShowPopup);
   handler.listen(popup, goog.ui.Menu.EventType.SHOW, onShowPopup);
@@ -384,7 +384,7 @@ function testMenuItemKeyboardActivation() {
         event.keyCode == goog.events.KeyCodes.ENTER) {
       menuitemListenerFired = true;
     }
-  };
+  }
   handler.listen(menuitem1, goog.events.EventType.KEYDOWN, onMenuitemAction);
   // Simulate opening a menu using the DOWN key, and pressing the SPACE/ENTER
   // key in order to activate the first menuitem.

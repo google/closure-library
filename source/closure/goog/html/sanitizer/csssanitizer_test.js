@@ -124,7 +124,7 @@ function assertSanitizedCssEquals(
  * text after sanitization using {@link CssSanitizer.sanitizeStyleSheetString}.
  * Automatically verifies that on older browsers the sanitizer returns an empty
  * string.
- * @param {!{
+ * @param {{
  *     chrome: string,
  *     firefox: (string|undefined),
  *     safari: (string|undefined),

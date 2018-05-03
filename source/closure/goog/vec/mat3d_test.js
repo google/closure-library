@@ -11,8 +11,8 @@
 goog.provide('goog.vec.mat3dTest');
 goog.setTestOnly('goog.vec.mat3dTest');
 
-goog.require('goog.vec.mat3d');
 goog.require('goog.testing.jsunit');
+goog.require('goog.vec.mat3d');
 
 var randommat3d = goog.vec.mat3d.setFromValues(goog.vec.mat3d.create(),
     0.8025078773498535,
@@ -299,7 +299,7 @@ function testMakeRotate() {
 
 function testMakeRotateX() {
   var m0 = goog.vec.mat3d.create();
-  var m1 = goog.vec.mat3d.create()
+  var m1 = goog.vec.mat3d.create();
 
   goog.vec.mat3d.makeRotateX(m0, Math.PI / 7);
   goog.vec.mat3d.makeRotate(m1, Math.PI / 7, 1, 0, 0);
@@ -308,7 +308,7 @@ function testMakeRotateX() {
 
 function testMakeRotateY() {
   var m0 = goog.vec.mat3d.create();
-  var m1 = goog.vec.mat3d.create()
+  var m1 = goog.vec.mat3d.create();
 
   goog.vec.mat3d.makeRotateY(m0, Math.PI / 7);
   goog.vec.mat3d.makeRotate(m1, Math.PI / 7, 0, 1, 0);
@@ -317,7 +317,7 @@ function testMakeRotateY() {
 
 function testMakeRotateZ() {
   var m0 = goog.vec.mat3d.create();
-  var m1 = goog.vec.mat3d.create()
+  var m1 = goog.vec.mat3d.create();
 
   goog.vec.mat3d.makeRotateZ(m0, Math.PI / 7);
   goog.vec.mat3d.makeRotate(m1, Math.PI / 7, 0, 0, 1);

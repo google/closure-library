@@ -19,15 +19,14 @@ goog.setTestOnly('goog.testing.MultiTestRunnerTest');
 // behavior that interacts with page load detection.
 goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
-var Promise = goog.require('goog.Promise');
-var events = goog.require('goog.events');
-var testingEvents = goog.require('goog.testing.events');
 var MockControl = goog.require('goog.testing.MockControl');
 var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
+var Promise = goog.require('goog.Promise');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var TestCase = goog.require('goog.testing.TestCase');
-var jsunit = goog.require('goog.testing.jsunit');
+var events = goog.require('goog.events');
 var testSuite = goog.require('goog.testing.testSuite');
+var testingEvents = goog.require('goog.testing.events');
 
 var ALL_TESTS = [
   'testdata/fake_passing_test.html', 'testdata/fake_failing_test.html',
@@ -74,7 +73,7 @@ function assertArrayContainsMatcher(matcher, array) {
 
 /**
  * Returns promise that resolves when eventType is dispatched from target.
- * @param {!EventTarget|!goog.events.Listenable} target Target to listen for
+ * @param {!EventTarget|!events.Listenable} target Target to listen for
  *     event on.
  * @param {string} eventType Type of event.
  * @return {!Promise} Promise that resolves with triggered event.

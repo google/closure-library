@@ -25,6 +25,7 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.testing.MockClock');
@@ -59,7 +60,9 @@ function MockAutoCompleter() {
   this.setTokenWasCalled = false;
   this.selectHilitedWasCalled = false;
   this.dismissWasCalled = false;
-  this.getTarget = function() { return mockElement };
+  this.getTarget = function() {
+    return mockElement;
+  };
   this.setTarget = function() {};
   this.setToken = function(token) {
     this.setTokenWasCalled = true;

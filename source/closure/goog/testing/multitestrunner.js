@@ -82,7 +82,7 @@ goog.testing.MultiTestRunner = function(opt_domHelper) {
 
   /**
    * Array to hold individual test reports for tests that failed.
-   * @type {!Array<!string>}
+   * @type {!Array<string>}
    * @private
    */
   this.failureReports_ = [];

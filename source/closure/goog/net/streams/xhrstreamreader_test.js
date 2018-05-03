@@ -16,6 +16,8 @@ goog.provide('goog.net.streams.XhrStreamReaderTest');
 goog.setTestOnly('goog.net.streams.XhrStreamReaderTest');
 
 goog.require('goog.net.ErrorCode');
+goog.require('goog.net.HttpStatus');
+goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.net.streams.Base64PbStreamParser');
 goog.require('goog.net.streams.JsonStreamParser');

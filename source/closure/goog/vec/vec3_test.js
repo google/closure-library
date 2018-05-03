@@ -4,9 +4,8 @@
 goog.provide('goog.vec.Vec3Test');
 goog.setTestOnly('goog.vec.Vec3Test');
 
-goog.require('goog.vec.Float32Array');
-goog.require('goog.vec.Vec3');
 goog.require('goog.testing.jsunit');
+goog.require('goog.vec.Vec3');
 
 function testDeprecatedConstructor() {
   var v = goog.vec.Vec3.create();

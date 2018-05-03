@@ -107,7 +107,7 @@ goog.editor.BrowserFeature = {
 
   // Whether hitting the tab key will fire a keypress event.
   // see http://www.quirksmode.org/js/keys.html
-  // TODO(user): This is fixed in IE8 and higher.
+  // TODO(sdh): This is fixed in IE8 and higher.
   TAB_FIRES_KEYPRESS: !goog.userAgent.IE,
 
   // Has a standards mode quirk where width=100% doesn't do the right thing,

@@ -257,4 +257,4 @@ var testData =
 ['Y', [['Yemen']]],
 ['Z', [['Zambia'],
 ['Zimbabwe']]],
-['\u00c5', [['\u00c5land Islands']]]]]
+['\u00c5', [['\u00c5land Islands']]]]];

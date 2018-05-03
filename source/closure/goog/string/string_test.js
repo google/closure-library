@@ -1037,7 +1037,9 @@ function testAsString() {
   assertEquals('false', goog.string.makeSafe(false));
 
   var funky = function() {};
-  funky.toString = function() { return 'funky-thing' };
+  funky.toString = function() {
+    return 'funky-thing';
+  };
   assertEquals('funky-thing', goog.string.makeSafe(funky));
 }
 

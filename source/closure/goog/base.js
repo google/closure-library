@@ -979,7 +979,7 @@ goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
  * use feature detection to determine which language levels need
  * transpilation.
  */
-// NOTE(user): we could expand this to accept a language level to bypass
+// NOTE(sdh): we could expand this to accept a language level to bypass
 // detection: e.g. goog.TRANSPILE == 'es5' would transpile ES6 files but
 // would leave ES3 and ES5 files alone.
 goog.define('goog.TRANSPILE', 'detect');
@@ -1216,7 +1216,7 @@ goog.transpile_ = function(code, path) {
     // replace it with a pass-through function that simply logs.
     var suffix = ' requires transpilation but no transpiler was found.';
     transpile = jscomp.transpile = function(code, path) {
-      // TODO(user): figure out some way to get this error to show up
+      // TODO(sdh): figure out some way to get this error to show up
       // in test results, noting that the failure may occur in many
       // different ways, including in loadModule() before the test
       // runner even comes up.
@@ -2550,7 +2550,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       return evalCheck('({...rest} = {}), true');
     });
     addNewerLanguageTranspilationCheck('es_next', function() {
-      return evalCheck('({...rest} = {}), true');
+      return false;  // assume it always need to transpile
     });
     return requiresTranspilation;
   };
@@ -2593,7 +2593,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @return {string} The transpiled code.
    */
   goog.Transpiler.prototype.transpile = function(code, path) {
-    // TODO(user): We should delete goog.transpile_ and just have this
+    // TODO(johnplaisted): We should delete goog.transpile_ and just have this
     // function. But there's some compile error atm where goog.global is being
     // stripped incorrectly without this.
     return goog.transpile_(code, path);
@@ -3334,7 +3334,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @param {string} path Absolute path of this script.
    * @param {string} relativePath Path of this script relative to goog.basePath.
    * @param {!Array<string>} provides Should be an empty array.
-   *     TODO(user) add support for adding closure namespaces to ES6
+   *     TODO(johnplaisted) add support for adding closure namespaces to ES6
    *     modules for interop purposes.
    * @param {!Array<string>} requires goog symbols or relative paths to Closure
    *     this depends on.
@@ -3373,7 +3373,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
     var dep = this;
 
-    // TODO(user): Does document.writing really speed up anything? Any
+    // TODO(johnplaisted): Does document.writing really speed up anything? Any
     // difference between this and just waiting for interactive mode and then
     // appending?
     function write(src, contents) {
@@ -3438,7 +3438,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     });
     create(undefined, 'goog.Dependency.callback_("' + beforeKey + '")');
 
-    // TODO(user): Does this really speed up anything?
+    // TODO(johnplaisted): Does this really speed up anything?
     create(this.path, undefined);
 
     var registerKey = goog.Dependency.registerCallback_(function(exports) {
@@ -3591,7 +3591,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
     if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_()) {
       goog.Dependency.defer_ = true;
-      // TODO(user): Externs are missing onreadystatechange for
+      // TODO(johnplaisted): Externs are missing onreadystatechange for
       // HTMLDocument.
       /** @type {?} */
       var doc = goog.global.document;

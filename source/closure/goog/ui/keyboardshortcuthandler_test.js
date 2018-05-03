@@ -230,7 +230,9 @@ function testPreventsDefaultOnReturnFalse() {
   handler.registerShortcut('x', 'x');
   var key = goog.events.listen(
       handler, goog.ui.KeyboardShortcutHandler.EventType.SHORTCUT_TRIGGERED,
-      function(event) { return false });
+      function(event) {
+        return false;
+      });
 
   assertFalse(
       'return false in listener must prevent default', fire(KeyCodes.X));

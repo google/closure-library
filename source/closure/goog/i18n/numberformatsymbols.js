@@ -31,14 +31,13 @@
 // clang-format off
 
 goog.provide('goog.i18n.NumberFormatSymbols');
-goog.provide('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_af');
 goog.provide('goog.i18n.NumberFormatSymbols_am');
 goog.provide('goog.i18n.NumberFormatSymbols_ar');
-goog.provide('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DZ');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_EG');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
+goog.provide('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_az');
 goog.provide('goog.i18n.NumberFormatSymbols_be');
 goog.provide('goog.i18n.NumberFormatSymbols_bg');
@@ -141,6 +140,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_te');
 goog.provide('goog.i18n.NumberFormatSymbols_th');
 goog.provide('goog.i18n.NumberFormatSymbols_tl');
 goog.provide('goog.i18n.NumberFormatSymbols_tr');
+goog.provide('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_uk');
 goog.provide('goog.i18n.NumberFormatSymbols_ur');
 goog.provide('goog.i18n.NumberFormatSymbols_uz');
