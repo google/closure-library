@@ -55,6 +55,16 @@ function testParsingUrl() {
   // a secure mobile link
   assertExtractsCorrectly(
       'uddeBVmKTqE', 'https://m.youtube.com/watch?v=uddeBVmKTqE');
+  // a simple youtube-nocookie link
+  assertExtractsCorrectly(
+      'uddeBVmKTqE', 'http://www.youtube-nocookie.com/watch?v=uddeBVmKTqE');
+  // a simple /embed/ link
+  assertExtractsCorrectly(
+      'uddeBVmKTqE', 'http://www.youtube.com/embed/uddeBVmKTqE?controls=0');
+  // a -nocookie /embed/ link
+  assertExtractsCorrectly(
+      'uddeBVmKTqE',
+      'http://www.youtube-nocookie.com/embed/uddeBVmKTqE?controls=0');
   // a simple short link
   assertExtractsCorrectly('uddeBVmKTqE', 'http://youtu.be/uddeBVmKTqE');
   // a secure short link
