@@ -462,12 +462,6 @@ goog.module = function(name) {
  */
 goog.module.get = function(name) {
   if (!COMPILED && name in goog.loadedModules_) {
-    if (goog.loadedModules_[name].type != goog.ModuleType.GOOG) {
-      throw new Error('Can only goog.module.get for goog.modules.');
-    }
-    if (goog.loadedModules_[name].moduleId != name) {
-      throw new Error('Cannot goog.module.get by path.');
-    }
   }
 
   return goog.module.getInternal_(name);
@@ -591,6 +585,53 @@ goog.module.declareLegacyNamespace = function() {
         'goog.module.declareLegacyNamespace.');
   }
   goog.moduleLoaderState_.declareLegacyNamespace = true;
+};
+
+
+/**
+ * Associate an ES6 module with a Closure namespace so that is available via
+ * goog.require. This associates a namespace that acts like a goog.module - it
+ * does not create any global names, it is merely available via goog.require.
+ * goog.require will return the entire module as if it was import *'d. This
+ * allows Closure files to reference ES6 modules.
+ *
+ * @param {string} namespace
+ * @suppress {missingProvide}
+ */
+goog.module.declareNamespace = function(namespace) {
+  if (!COMPILED) {
+    if (!goog.isInEs6ModuleLoader_()) {
+      throw new Error(
+          'goog.module.declareNamespace may only be called from ' +
+          'within an ES6 module');
+    }
+    if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
+      throw new Error(
+          'goog.module.declareNamespace may only be called once per module.');
+    }
+    if (namespace in goog.loadedModules_) {
+      throw new Error(
+          'Module with namespace "' + namespace + '" already exists.');
+    }
+  }
+  if (goog.moduleLoaderState_) {
+    // Not bundled - debug loading.
+    goog.moduleLoaderState_.moduleName = namespace;
+  } else {
+    // Bundled - not debug loading, no module loader state.
+    var jscomp = goog.global['$jscomp'];
+    if (!jscomp || typeof jscomp.getCurrentModulePath != 'function') {
+      throw new Error(
+          'Module with namespace "' + namespace +
+          '" has been loaded incorrectly.');
+    }
+    var exports = jscomp.require(jscomp.getCurrentModulePath());
+    goog.loadedModules_[namespace] = {
+      exports: exports,
+      type: goog.ModuleType.ES6,
+      moduleId: namespace
+    };
+  }
 };
 
 
@@ -783,59 +824,33 @@ goog.logToConsole_ = function(msg) {
 
 
 /**
- * @param {string} requireOrPath
- * @return {boolean}
- * @private
- */
-goog.isPath_ = function(requireOrPath) {
-  // Paths must be relative.
-  return requireOrPath.indexOf('./') == 0 || requireOrPath.indexOf('../') == 0;
-};
-
-
-/**
  * Implements a system for the dynamic resolution of dependencies that works in
  * parallel with the BUILD system. Note that all calls to goog.require will be
  * stripped by the compiler.
  * @see goog.provide
- * @param {string} nameOrPath Namespace (as was given in goog.provide or
- *     goog.module) in the form "goog.package.part", or relative path to an ES6
- *     module.
+ * @param {string} namespace Namespace (as was given in goog.provide,
+ *     goog.module, or goog.module.declareNamespace) in the form
+ * "goog.package.part".
  * @return {?} If called within a goog.module or ES6 module file, the associated
  *     namespace or module otherwise null.
  */
-goog.require = function(nameOrPath) {
-  if (goog.isPath_(nameOrPath)) {
-    if (goog.isInGoogModuleLoader_()) {
-      if (!goog.getModulePath_()) {
-        throw new Error(
-            'Current module has no path information. Was it loaded via ' +
-            'goog.loadModule without a path argument?');
-      }
-
-      nameOrPath =
-          goog.normalizePath_(goog.getModulePath_() + '/../' + nameOrPath);
-    } else {
-      throw new Error('Cannot require by path outside of goog.modules.');
-    }
-  }
-
+goog.require = function(namespace) {
   if (!COMPILED) {
     // Might need to lazy load on old IE.
     if (goog.ENABLE_DEBUG_LOADER) {
-      goog.debugLoader_.requested(nameOrPath);
+      goog.debugLoader_.requested(namespace);
     }
 
     // If the object already exists we do not need to do anything.
-    if (goog.isProvided_(nameOrPath)) {
+    if (goog.isProvided_(namespace)) {
       if (goog.isInModuleLoader_()) {
-        return goog.module.getInternal_(nameOrPath);
+        return goog.module.getInternal_(namespace);
       }
     } else if (goog.ENABLE_DEBUG_LOADER) {
       var moduleLoaderState = goog.moduleLoaderState_;
       goog.moduleLoaderState_ = null;
       try {
-        goog.debugLoader_.load_(nameOrPath);
+        goog.debugLoader_.load_(namespace);
       } finally {
         goog.moduleLoaderState_ = moduleLoaderState;
       }
@@ -2740,12 +2755,12 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * its transitive dependencies, for loading and then starts loading if not
    * paused.
    *
-   * @param {string} absPathOrId
+   * @param {string} namespace
    * @private
    */
-  goog.DebugLoader_.prototype.load_ = function(absPathOrId) {
-    if (!this.getPathFromDeps_(absPathOrId)) {
-      var errorMessage = 'goog.require could not find: ' + absPathOrId;
+  goog.DebugLoader_.prototype.load_ = function(namespace) {
+    if (!this.getPathFromDeps_(namespace)) {
+      var errorMessage = 'goog.require could not find: ' + namespace;
 
       goog.logToConsole_(errorMessage);
       throw Error(errorMessage);
@@ -2754,12 +2769,12 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
       var deps = [];
 
-      /** @param {string} absPathOrId */
-      var visit = function(absPathOrId) {
-        var path = loader.getPathFromDeps_(absPathOrId);
+      /** @param {string} namespace */
+      var visit = function(namespace) {
+        var path = loader.getPathFromDeps_(namespace);
 
         if (!path) {
-          throw new Error('Bad dependency path or symbol: ' + absPathOrId);
+          throw new Error('Bad dependency path or symbol: ' + namespace);
         }
 
         if (loader.written_[path]) {
@@ -2778,7 +2793,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         deps.push(dep);
       };
 
-      visit(absPathOrId);
+      visit(namespace);
 
       var wasLoading = !!this.depsToLoad_.length;
       this.depsToLoad_ = this.depsToLoad_.concat(deps);
@@ -2852,13 +2867,18 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
               declareLegacyNamespace: false
             };
           },
-          registerEs6ModuleExports: function(path, exports) {
-            goog.loadedModules_[path] = {
-              exports: exports,
-              type: goog.ModuleType.ES6,
-              moduleId: ''
-            };
+          /** @type {function(string, string, string=)} */
+          registerEs6ModuleExports: function(
+              path, exports, opt_closureNamespace) {
+            if (opt_closureNamespace) {
+              goog.loadedModules_[opt_closureNamespace] = {
+                exports: exports,
+                type: goog.ModuleType.ES6,
+                moduleId: opt_closureNamespace || ''
+              };
+            }
           },
+          /** @type {function(string, ?)} */
           registerGoogModuleExports: function(moduleId, exports) {
             goog.loadedModules_[moduleId] = {
               exports: exports,
@@ -3051,9 +3071,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    *
    * @param {string} path Full path of the module.
    * @param {?} exports
+   * @param {string=} opt_closureNamespace Closure namespace to associate with
+   *     this module.
    */
   goog.LoadController.prototype.registerEs6ModuleExports = function(
-      path, exports) {};
+      path, exports, opt_closureNamespace) {};
 
 
   /**
@@ -3443,7 +3465,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
     var registerKey = goog.Dependency.registerCallback_(function(exports) {
       goog.Dependency.unregisterCallback_(registerKey);
-      controller.registerEs6ModuleExports(dep.path, exports);
+      controller.registerEs6ModuleExports(
+          dep.path, exports, goog.moduleLoaderState_.moduleName);
     });
     create(
         undefined,
@@ -3525,10 +3548,15 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         controller.setModuleState(dep.path, goog.ModuleType.ES6);
       }
 
+      var namespace;
+
       try {
         var contents = dep.contents_;
         dep.contents_ = null;
         goog.globalEval(contents);
+        if (isEs6) {
+          namespace = goog.moduleLoaderState_.moduleName;
+        }
       } finally {
         if (isEs6) {
           controller.clearModuleState();
@@ -3540,7 +3568,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         // right now.
         goog.global['$jscomp']['require']['ensure']([dep.path], function() {
           controller.registerEs6ModuleExports(
-              dep.path, goog.global['$jscomp']['require'](dep.path));
+              dep.path, goog.global['$jscomp']['require'](dep.path), namespace);
         });
       }
 
