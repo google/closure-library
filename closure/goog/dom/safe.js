@@ -474,7 +474,7 @@ goog.dom.safe.setScriptSrc = function(script, url) {
   // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
   var nonce = goog.getScriptNonce();
   if (nonce) {
-    script.nonce = nonce;
+    script.setAttribute('nonce', nonce);
   }
 };
 
@@ -501,7 +501,7 @@ goog.dom.safe.setScriptContent = function(script, content) {
   // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
   var nonce = goog.getScriptNonce();
   if (nonce) {
-    script.nonce = nonce;
+    script.setAttribute('nonce', nonce);
   }
 };
 

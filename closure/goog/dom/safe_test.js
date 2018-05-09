@@ -527,7 +527,13 @@ function testSetObjectData() {
 function testSetScriptSrc() {
   var url = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
-  var mockElement = /** @type {!HTMLScriptElement} */ ({'src': 'blarg'});
+  var mockElement = /** @type {!HTMLScriptElement} */ ({
+    'src': 'blarg',
+    /** @suppress {globalThis} */
+    'setAttribute': function(attr, value) {
+      this[attr] = value;
+    }
+  });
   // clear nonce cache for test.
   goog.cspNonce_ = null;
 
@@ -557,7 +563,12 @@ function testSetScriptSrc() {
 }
 
 function testSetScriptContent() {
-  var mockScriptElement = /** @type {!HTMLScriptElement} */ ({});
+  var mockScriptElement = /** @type {!HTMLScriptElement} */ ({
+    /** @suppress {globalThis} */
+    'setAttribute': function(attr, value) {
+      this[attr] = value;
+    }
+  });
   // clear nonce cache for test.
   goog.cspNonce_ = null;
 
