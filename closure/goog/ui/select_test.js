@@ -339,7 +339,7 @@ function testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
 
     // goog.ui.Select's disposeInternal trigger's goog.ui.Component's
     // disposeInternal, which triggers goog.ui.MenuButton's exitDocument,
-    // which closes the associated menu and updates the activeDescendent.
+    // which closes the associated menu and updates the activeDescendant.
     // In the case of a CustomMenuButton the contentElement is referenced by
     // element.firstChild.firstChild, an invalid relation in IE 10.
     customSelect.dispose();
