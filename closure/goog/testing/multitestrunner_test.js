@@ -24,6 +24,8 @@ var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
 var Promise = goog.require('goog.Promise');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var TestCase = goog.require('goog.testing.TestCase');
+var array = goog.require('goog.array');
+var asserts = goog.require('goog.testing.asserts');
 var events = goog.require('goog.events');
 var testSuite = goog.require('goog.testing.testSuite');
 var testingEvents = goog.require('goog.testing.events');
@@ -43,31 +45,17 @@ var stubs = new PropertyReplacer();
 /**
  * Asserts string matches exactly one item in the given array. Useful for
  * matching elements in an array without guaranteed ordering.
+ *
  * @param {string} string String to match in the array.
- * @param {!Array<string>} array Array of strings find match.
+ * @param {!Array<string>} strings Array of strings find match.
  */
-function assertArrayContainsString(string, array) {
-  var matcher = function(item) { return string == item; };
-  assertArrayContainsMatcher(matcher, array);
-}
-
-
-/**
- * Asserts at least one item in array causes matcher to return true. Used by
- * more specific assertion methods and not meant to be used directly.
- * @param {function(string):boolean} matcher Function called for each item in
- *     array. Should return true when match is found.
- * @param {!Array<string>} array Array of strings find match.
- */
-function assertArrayContainsMatcher(matcher, array) {
-  var matching = 0;
-  for (var i = 0; i < array.length; i++) {
-    if (matcher(array[i])) {
-      matching++;
-    }
-  }
-  assertEquals(
-      'Matched ' + matching + ' items in array, but should be 1', 1, matching);
+function assertArrayContainsString(string, strings) {
+  asserts.assertEquals(
+      'Expected the string "' + string +
+          '" to appear exactly once in the array <' + strings.join(', ') + '>.',
+      1, array.count(strings, function(str) {
+        return str == string;
+      }));
 }
 
 
