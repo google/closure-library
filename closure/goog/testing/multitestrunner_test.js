@@ -278,6 +278,10 @@ testSuite({
   },
 
   testTimeoutFailsAfterTimeout: function() {
+    testRunner = new MultiTestRunner().setPoolSize(3).addTests([
+      'testdata/fake_long_running_failing_test',
+      'testdata/fake_long_running_passing_test'
+    ]);
     var promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
@@ -289,21 +293,21 @@ testSuite({
       var testResults = processTestResults(results['allTestResults']);
       var testNames = testResults.testNames;
       // Only the filename should be the test name for timeouts.
-      assertArrayContainsString('testdata/fake_failing_test2', testNames);
-      assertArrayContainsString('testdata/fake_failing_test', testNames);
-      assertArrayContainsString('testdata/fake_passing_test', testNames);
-      assertEquals(3, testNames.length);
+      assertArrayContainsString(
+          'testdata/fake_long_running_failing_test', testNames);
+      assertArrayContainsString(
+          'testdata/fake_long_running_passing_test', testNames);
+      assertEquals(2, testNames.length);
       var failureReports = testResults.failureReports;
       assertContains('timed out', failureReports[0]['message']);
       assertContains('timed out', failureReports[1]['message']);
-      assertContains('timed out', failureReports[2]['message']);
-      assertEquals(3, failureReports.length);
+      assertEquals(2, failureReports.length);
       var failedTests = testRunner.getTestsThatFailed();
-      assertArrayContainsString('testdata/fake_passing_test.html', failedTests);
-      assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
       assertArrayContainsString(
-          'testdata/fake_failing_test2.html', failedTests);
-      assertEquals(3, failedTests.length);
+          'testdata/fake_long_running_failing_test', failedTests);
+      assertArrayContainsString(
+          'testdata/fake_long_running_passing_test', failedTests);
+      assertEquals(2, failedTests.length);
     });
   },
 
