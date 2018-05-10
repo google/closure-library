@@ -201,8 +201,8 @@ goog.editor.BrowserFeature = {
 
   // Whether to use keydown for key listening (uses keypress otherwise). Taken
   // from goog.events.KeyHandler.
-  USES_KEYDOWN: goog.userAgent.IE || goog.userAgent.EDGE ||
-      goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('525'),
+  USES_KEYDOWN:
+      !goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('525'),
 
   // Whether this browser converts spaces to non-breaking spaces when calling
   // execCommand's RemoveFormat.
