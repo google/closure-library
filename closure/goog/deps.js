@@ -1036,8 +1036,8 @@ goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.stri
 goog.addDependency('string/stringformat_test.js', ['goog.string.formatTest'], ['goog.string.format', 'goog.testing.jsunit'], {});
 goog.addDependency('string/stringifier.js', ['goog.string.Stringifier'], [], {});
 goog.addDependency('string/typedstring.js', ['goog.string.TypedString'], [], {});
-goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs.Collection'], {});
-goog.addDependency('structs/avltree_test.js', ['goog.structs.AvlTreeTest'], ['goog.array', 'goog.structs.AvlTree', 'goog.testing.jsunit'], {});
+goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree'], ['goog.asserts', 'goog.structs.Collection'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('structs/avltree_test.js', ['goog.structs.AvlTreeTest'], ['goog.array', 'goog.structs.AvlTree', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], [], {});
 goog.addDependency('structs/circularbuffer_test.js', ['goog.structs.CircularBufferTest'], ['goog.structs.CircularBuffer', 'goog.testing.jsunit'], {});
 goog.addDependency('structs/collection.js', ['goog.structs.Collection'], [], {});

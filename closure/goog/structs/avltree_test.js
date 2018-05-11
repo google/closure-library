@@ -349,3 +349,339 @@ function testGetKthOrder() {
     assertEquals(NUM_TO_REMOVE + k, tree.getKthValue(k));
   }
 }
+
+
+// See https://github.com/google/closure-library/issues/896
+function testTreeHeightAfterRightRotate() {
+  const tree = new goog.structs.AvlTree();
+  tree.add(0);
+  tree.add(8);
+  tree.add(5);
+  assertEquals(2, tree.getHeight());
+  assertEquals(5, tree.root_.value);
+  assertEquals(0, tree.root_.left.value);
+  assertEquals(8, tree.root_.right.value);
+
+  assertEquals(2, tree.root_.height);
+  assertEquals(1, tree.root_.left.height);
+  assertEquals(1, tree.root_.right.height);
+
+  assertEquals(0, tree.getMinimum());
+  assertEquals(8, tree.getMaximum());
+  assertEquals(3, tree.getCount());
+}
+
+
+function testAddLeftLeftCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(25);
+  tree.add(75);
+  tree.add(0);
+
+  //        100                             50
+  //       /   \                           /  \
+  //      50   150   Rotate Right (100)   25   100
+  //     /  \        ----------------->  /     /  \
+  //    25   75                         0     75  150
+  //   /
+  //  0
+  assertEquals(3, tree.getHeight());
+  assertEquals(50, tree.root_.value);
+  assertEquals(25, tree.root_.left.value);
+  assertEquals(0, tree.root_.left.left.value);
+  assertEquals(100, tree.root_.right.value);
+  assertEquals(75, tree.root_.right.left.value);
+  assertEquals(150, tree.root_.right.right.value);
+
+  assertEquals(0, tree.getMinimum());
+  assertEquals(150, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testRemoveLeftLeftCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(25);
+  tree.add(75);
+  tree.add(200);
+  tree.add(0);
+
+  tree.remove(200);
+
+  //        100                             50
+  //       /   \                           /  \
+  //      50   150   Rotate Right (100)   25   100
+  //     /  \        ----------------->  /     /  \
+  //    25   75                         0     75  150
+  //   /
+  //  0
+  assertEquals(3, tree.getHeight());
+  assertEquals(50, tree.root_.value);
+  assertEquals(25, tree.root_.left.value);
+  assertEquals(0, tree.root_.left.left.value);
+  assertEquals(100, tree.root_.right.value);
+  assertEquals(75, tree.root_.right.left.value);
+  assertEquals(150, tree.root_.right.right.value);
+
+  assertEquals(0, tree.getMinimum());
+  assertEquals(150, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testAddLeftRightCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(50);
+  tree.add(150);
+  tree.add(25);
+  tree.add(75);
+  tree.add(60);
+
+  //     100                             100                           75
+  //     / \                            /   \                         /  \
+  //    50   150  Left Rotate (50)     75    150  Right Rotate(100)  50  100
+  //   / \        - - - - - - - ->    /           - - - - - - - ->  / \     \
+  //  25  75                         50                            25 60    150
+  //     /                          / \
+  //   60                          25  60
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(75, tree.root_.value);
+  assertEquals(50, tree.root_.left.value);
+  assertEquals(25, tree.root_.left.left.value);
+  assertEquals(60, tree.root_.left.right.value);
+  assertEquals(100, tree.root_.right.value);
+  assertEquals(150, tree.root_.right.right.value);
+
+  assertEquals(25, tree.getMinimum());
+  assertEquals(150, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testRemoveLeftRightCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(50);
+  tree.add(150);
+  tree.add(25);
+  tree.add(75);
+  tree.add(200);
+  tree.add(60);
+
+  tree.remove(200);
+
+  //     100                             100                           75
+  //     / \                            /   \                         /  \
+  //    50   150  Left Rotate (50)     75    150  Right Rotate(100)  50  100
+  //   / \        - - - - - - - ->    /           - - - - - - - ->  / \     \
+  //  25  75                         50                            25 60    150
+  //     /                          / \
+  //   60                          25  60
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(75, tree.root_.value);
+  assertEquals(50, tree.root_.left.value);
+  assertEquals(25, tree.root_.left.left.value);
+  assertEquals(60, tree.root_.left.right.value);
+  assertEquals(100, tree.root_.right.value);
+  assertEquals(150, tree.root_.right.right.value);
+
+  assertEquals(25, tree.getMinimum());
+  assertEquals(150, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testAddRightRightCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(50);
+  tree.add(150);
+  tree.add(125);
+  tree.add(200);
+  tree.add(250);
+
+  //   100                             150
+  //  /  \                            /   \
+  // 50   150     Left Rotate(100)   100   200
+  //      / \   - - - - - - - ->    /  \      \
+  //     125 200                   50  125    250
+  //          \
+  //          250
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(150, tree.root_.value);
+  assertEquals(100, tree.root_.left.value);
+  assertEquals(50, tree.root_.left.left.value);
+  assertEquals(125, tree.root_.left.right.value);
+  assertEquals(200, tree.root_.right.value);
+  assertEquals(250, tree.root_.right.right.value);
+
+  assertEquals(50, tree.getMinimum());
+  assertEquals(250, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testRemoveRightRightCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(50);
+  tree.add(150);
+  tree.add(0);
+  tree.add(125);
+  tree.add(200);
+  tree.add(250);
+
+  tree.remove(0);
+
+  //   100                             150
+  //  /  \                            /   \
+  // 50   150     Left Rotate(100)   100   200
+  //      / \   - - - - - - - ->    /  \      \
+  //     125 200                   50  125    250
+  //          \
+  //          250
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(150, tree.root_.value);
+  assertEquals(100, tree.root_.left.value);
+  assertEquals(50, tree.root_.left.left.value);
+  assertEquals(125, tree.root_.left.right.value);
+  assertEquals(200, tree.root_.right.value);
+  assertEquals(250, tree.root_.right.right.value);
+
+  assertEquals(50, tree.getMinimum());
+  assertEquals(250, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testAddRightLeftCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(112);
+  tree.add(200);
+  tree.add(125);
+
+  //   100                            100                             112
+  //   / \                            / \                            /  \
+  // 50   150   Right Rotate (150)   50  112      Left Rotate(100)  100  150
+  //     /   \   - - - - - - - ->           \     - - - - - - - ->  /   /   \
+  //    112  200                            150                    50   125  200
+  //     \                                  /  \
+  //     125                               125 200
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(112, tree.root_.value);
+  assertEquals(100, tree.root_.left.value);
+  assertEquals(50, tree.root_.left.left.value);
+  assertEquals(150, tree.root_.right.value);
+  assertEquals(125, tree.root_.right.left.value);
+  assertEquals(200, tree.root_.right.right.value);
+
+  assertEquals(50, tree.getMinimum());
+  assertEquals(200, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testRemoveRightLeftCase() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(0);
+  tree.add(112);
+  tree.add(200);
+  tree.add(125);
+
+  tree.remove(0);
+
+  //   100                            100                             112
+  //   / \                            / \                            /  \
+  // 50   150   Right Rotate (150)   50  112      Left Rotate(100)  100  150
+  //     /   \   - - - - - - - ->           \     - - - - - - - ->  /   /   \
+  //    112  200                            150                    50   125  200
+  //     \                                  /  \
+  //     125                               125 200
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(112, tree.root_.value);
+  assertEquals(100, tree.root_.left.value);
+  assertEquals(50, tree.root_.left.left.value);
+  assertEquals(150, tree.root_.right.value);
+  assertEquals(125, tree.root_.right.left.value);
+  assertEquals(200, tree.root_.right.right.value);
+
+  assertEquals(50, tree.getMinimum());
+  assertEquals(200, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+/**
+ * Asserts expected properties of an AVL tree.
+ *
+ * @param {function(?, ?): number} comparator
+ * @param {?} node
+ */
+function assertAvlTree(comparator, node) {
+  if (node) {
+    assertTrue(node.height < 1.4405 * Math.log2(node.count + 2) - 0.3277);
+    assertTrue(node.height >= Math.log2(node.count + 1));
+    let expectedCount = 1;
+    let balanceFactor = 0;
+    if (node.left) {
+      balanceFactor -= node.left.height;
+      expectedCount += node.left.count;
+      assertTrue(comparator(node.value, node.left.value) > 0);
+      assertAvlTree(node.left);
+    }
+    if (node.right) {
+      balanceFactor += node.right.height;
+      expectedCount += node.right.count;
+      assertTrue(comparator(node.value, node.right.value) < 0);
+      assertAvlTree(node.right);
+    }
+    assertTrue(Math.abs(balanceFactor) < 2);
+    assertEquals(expectedCount, node.count);
+  }
+}
+
+
+function testLargeDatasetIsAvlTree() {
+  let arr = [];
+  for (let i = 0; i < 1000; i++) {
+    arr.push(i);
+  }
+  const comparator = (a, b) => a - b;
+  const tree = new goog.structs.AvlTree(comparator);
+
+  while (arr.length) {
+    tree.add(arr.splice(Math.floor(Math.random() * arr.length), 1)[0]);
+    assertAvlTree(comparator, tree.root_);
+  }
+
+  arr = tree.getValues();
+  for (let i = 0; i < 1000; i++) {
+    assertEquals(i, arr[i]);
+    assertEquals(i, tree.indexOf(i));
+    assertEquals(i, tree.getKthValue(i));
+  }
+
+  while (arr.length) {
+    tree.remove(arr.splice(Math.floor(Math.random() * arr.length), 1)[0]);
+    assertAvlTree(comparator, tree.root_);
+  }
+}
