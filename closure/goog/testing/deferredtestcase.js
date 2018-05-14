@@ -154,6 +154,6 @@ goog.testing.DeferredTestCase.prototype.waitForDeferred = function(a, opt_b) {
   if (!waitMsg) {
     waitMsg = 'Waiting for deferred in ' + this.getCurrentStepName();
   }
-  this.waitForAsync(/** @type {!string} */ (waitMsg));
+  this.waitForAsync(/** @type {string} */ (waitMsg));
   deferred.callback(true);
 };

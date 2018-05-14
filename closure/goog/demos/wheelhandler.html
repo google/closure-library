@@ -73,7 +73,8 @@ goog.require('goog.events.WheelHandler');
 <script>
 
 var WheelHandler = goog.events.WheelHandler;
-var WHEEL = WheelHandler.EventType.WHEEL;
+var WheelEvent = goog.events.WheelEvent;
+var WHEEL = WheelEvent.EventType.WHEEL;
 
 function $(id) {
   return document.getElementById(id)
@@ -97,7 +98,7 @@ function handleWheel(e) {
   updateLines();
   e.preventDefault();
   var deltaModeString = 'unknown';
-  var DeltaMode = goog.events.WheelHandler.DeltaMode;
+  var DeltaMode = WheelEvent.DeltaMode;
   switch (e.deltaMode) {
     case DeltaMode.PIXEL:
       deltaModeString = 'DeltaMode.PIXEL';

@@ -589,7 +589,7 @@ function testPutIllegalRecords() {
     var badKeyFail = function(keyKind) {
       return function() {
         return fail('putting with ' + keyKind + ' key should have failed');
-      }
+      };
     };
     var assertExpectedError = function(err) {
       assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
@@ -627,7 +627,7 @@ function testPutIllegalRecordsWithIndex() {
         var badKeyFail = function(keyKind) {
           return function() {
             fail('putting with ' + keyKind + ' key should have failed');
-          }
+          };
         };
         var assertExpectedError = function(err) {
           // expected
@@ -1373,7 +1373,7 @@ function testIndexCursorGet() {
     });
 
     return goog.Promise.all([cursorFinished, cursorTx.wait()]).then(function() {
-      return db
+      return db;
     });
   };
 

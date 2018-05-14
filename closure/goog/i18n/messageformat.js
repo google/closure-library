@@ -440,15 +440,7 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
   var option = parsedPattern[namedParameters[argumentIndex]];
   if (!goog.isDef(option)) {
     goog.asserts.assert(diff >= 0, 'Argument index smaller than offset.');
-    var item;
-    if (this.numberFormatter_.getMinimumFractionDigits) {  // number formatter?
-      // If we know the number of fractional digits we can make better decisions
-      // We can decide (for instance) between "1 dollar" and "1.00 dollars".
-      item = pluralSelector(
-          diff, this.numberFormatter_.getMinimumFractionDigits());
-    } else {
-      item = pluralSelector(diff);
-    }
+    var item = pluralSelector(diff);
     goog.asserts.assertString(item, 'Invalid plural key.');
 
     option = parsedPattern[item];

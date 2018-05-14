@@ -1558,7 +1558,7 @@ function createTestDivMod(i, count) {
         assertTrue(vi.equals(combinedResult));
       }
     }
-  }
+  };
 }
 
 var countPerDivModCall = 0;
@@ -1593,7 +1593,7 @@ function createTestToFromString(i) {
           TEST_BITS[i + 1],
           goog.math.Long.fromString(result, radix).getLowBits());
     }
-  }
+  };
 }
 
 for (var i = 0; i < TEST_BITS.length; i += 2) {

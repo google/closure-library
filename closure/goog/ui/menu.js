@@ -460,7 +460,7 @@ goog.ui.Menu.prototype.setHighlightedIndex = function(index) {
 
 
 /**
- * Decorate menu items located in any descendent node which as been explicitly
+ * Decorate menu items located in any descendant node which as been explicitly
  * marked as a 'content' node.
  * @param {Element} element Element to decorate.
  * @protected

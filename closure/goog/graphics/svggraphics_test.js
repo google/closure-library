@@ -5,8 +5,9 @@ goog.provide('goog.graphics.SvgGraphicsTest');
 goog.setTestOnly('goog.graphics.SvgGraphicsTest');
 
 goog.require('goog.dom');
+goog.require('goog.graphics.AffineTransform');
+goog.require('goog.graphics.SolidFill');
 goog.require('goog.graphics.SvgGraphics');
-goog.require('goog.testing.graphics');
 goog.require('goog.testing.jsunit');
 
 var graphics;

@@ -28,6 +28,8 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
+goog.require('goog.html.legacyconversions');
 /** @suppress {extraRequire} */
 goog.require('goog.module');
 goog.require('goog.object');
@@ -338,7 +340,9 @@ goog.module.Loader.prototype.load_ = function(module) {
     }
 
     var s = goog.dom.createDom(
-        goog.dom.TagName.SCRIPT, {'type': 'text/javascript', 'src': url});
+        goog.dom.TagName.SCRIPT, {'type': 'text/javascript'});
+    goog.dom.safe.setScriptSrc(
+        s, goog.html.legacyconversions.trustedResourceUrlFromString(url));
     document.body.appendChild(s);
   }, 0, this);
 };

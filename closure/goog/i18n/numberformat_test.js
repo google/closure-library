@@ -21,8 +21,8 @@ goog.require('goog.i18n.CompactNumberFormatSymbols_en');
 goog.require('goog.i18n.CompactNumberFormatSymbols_fr');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.i18n.NumberFormatSymbols');
-goog.require('goog.i18n.NumberFormatSymbols_ar');
-goog.require('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
+goog.require('goog.i18n.NumberFormatSymbols_ar_EG');
+goog.require('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
 goog.require('goog.i18n.NumberFormatSymbols_de');
 goog.require('goog.i18n.NumberFormatSymbols_en');
 goog.require('goog.i18n.NumberFormatSymbols_en_AU');
@@ -939,9 +939,9 @@ function isFirefox363Linux() {
 
 
 function testEnforceAscii() {
-  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar;
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_EG;
   goog.i18n.NumberFormatSymbols_u_nu_latn =
-      goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
+      goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn;
 
   var fmt = new goog.i18n.NumberFormat('0.0000%');
   var str = fmt.format(123.45789179565757);
@@ -1071,7 +1071,7 @@ function testSimpleCompactGerman() {
   // supposed to be interpreted as 'leave the number as-is'.
   // (The number itself will still be formatted with the '.', but no rounding)
   var str = fmt.format(1234);
-  assertEquals('1,2 Tsd.', str);
+  assertEquals('1.234', str);
 }
 
 function testSimpleCompact1() {
@@ -1369,7 +1369,7 @@ function testSymbols_percent() {
       goog.i18n.NumberFormatSymbols_en);
   assertEquals('-25%', f2.format(-0.25));
   assertEquals('25%', f2.format(0.25));
-  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar;
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar_EG;
   assertEquals('-25Percent', f.format(-0.25));
   assertEquals('25Percent', f.format(0.25));
   assertEquals('-25%', f2.format(-0.25));
@@ -1409,6 +1409,6 @@ function testSymbols_expSymbol() {
 function testScientific_ar_rtl() {
   var scientific = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.SCIENTIFIC, undefined, undefined,
-      goog.i18n.NumberFormatSymbols_ar);
+      goog.i18n.NumberFormatSymbols_ar_EG);
   assertEquals('١اس3', scientific.format(1000));
 }

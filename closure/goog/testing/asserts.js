@@ -383,7 +383,7 @@ var assertThrowsJsUnitException = goog.testing.asserts
                                       .assertThrowsJsUnitException = function(
     callback, opt_expectedMessage) {
   try {
-    goog.testing.asserts.callWithoutLogging(callback);
+    callback();
   } catch (e) {
     var testCase = _getCurrentTestCase();
     if (testCase) {
@@ -531,6 +531,20 @@ var assertNotUndefined = goog.testing.asserts.assertNotUndefined = function(
       'Expected not to be ' + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
 };
 
+/**
+ * @param {*} a The value to assert (1 arg) or debug message (2 args).
+ * @param {*=} opt_b The value to assert (2 args only).
+ */
+var assertNullOrUndefined =
+    goog.testing.asserts.assertNullOrUndefined = function(a, opt_b) {
+      _validateArguments(1, arguments);
+      var aVar = nonCommentArg(1, 1, arguments);
+      _assert(
+          commentArg(1, arguments), aVar == null,
+          'Expected ' + _displayStringForValue(null) + ' or ' +
+              _displayStringForValue(JSUNIT_UNDEFINED_VALUE) + ' but was ' +
+              _displayStringForValue(aVar));
+    };
 
 /**
  * @param {*} a The value to assert (1 arg) or debug message (2 args).
@@ -579,25 +593,6 @@ var assertNotNaN = goog.testing.asserts.assertNotNaN = function(a, opt_b) {
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), !isNaN(aVar), 'Expected not NaN');
 };
-
-
-/**
- * Runs a function in an environment where test failures are not logged. This is
- * useful for testing test code, where failures can be a normal part of a test.
- * @param {function() : void} fn Function to run without logging failures.
- */
-var callWithoutLogging =
-    goog.testing.asserts.callWithoutLogging = function(fn) {
-      var testRunner = goog.global['G_testRunner'];
-      var oldLogTestFailure = testRunner['logTestFailure'];
-      try {
-        // Any failures in the callback shouldn't be recorded.
-        testRunner['logTestFailure'] = undefined;
-        fn();
-      } finally {
-        testRunner['logTestFailure'] = oldLogTestFailure;
-      }
-    };
 
 
 /**
@@ -1415,6 +1410,7 @@ if (goog.EXPORT_ASSERTIONS) {
   goog.exportSymbol('assertNotNull', assertNotNull);
   goog.exportSymbol('assertUndefined', assertUndefined);
   goog.exportSymbol('assertNotUndefined', assertNotUndefined);
+  goog.exportSymbol('assertNullOrUndefined', assertNullOrUndefined);
   goog.exportSymbol('assertNotNullNorUndefined', assertNotNullNorUndefined);
   goog.exportSymbol('assertNonEmptyString', assertNonEmptyString);
   goog.exportSymbol('assertNaN', assertNaN);

@@ -132,7 +132,9 @@ function testStepSetTimeout() {
   var step = getSampleStep();
 
   var timeoutReached = false;
-  step.setTimeout(function() { timeoutReached = true }, 100);
+  step.setTimeout(function() {
+    timeoutReached = true;
+  }, 100);
 
   clock.tick(50);
   assertFalse(timeoutReached);
@@ -145,7 +147,9 @@ function testStepClearTimeout() {
   var step = new goog.testing.ContinuationTestCase.Step('test', function() {});
 
   var timeoutReached = false;
-  step.setTimeout(function() { timeoutReached = true }, 100);
+  step.setTimeout(function() {
+    timeoutReached = true;
+  }, 100);
 
   clock.tick(50);
   assertFalse(timeoutReached);

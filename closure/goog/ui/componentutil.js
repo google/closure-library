@@ -1,4 +1,4 @@
-// Copyright 2017 The Closure Library Authors. All Rights Reserved.
+// Copyright 2018 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('test.js.ProvideRequiresGoogModuleDLN');
+/**
+ * @fileoverview Static utility methods for UI components.
+ */
 
-goog.require('test.js.GoogModuleDLN');
+goog.provide('goog.ui.ComponentUtil');
+
+goog.require('goog.events.EventType');
+goog.require('goog.events.PointerAsMouseEventType');
+
+
 
 /**
- * @extends {test.js.GoogModuleDLN}
- * @struct @constructor
+ * @param {!goog.ui.Component} component
+ * @return {!Object} The mouse event type the given component should listen for.
  */
-test.js.ProvideRequiresGoogModuleDLN = function() {
-  test.js.ProvideRequiresGoogModuleDLN.base(this, 'constructor');
+goog.ui.ComponentUtil.getMouseEventType = function(component) {
+  return component.pointerEventsEnabled() ?
+      goog.events.PointerAsMouseEventType :
+      goog.events.EventType;
 };
-goog.inherits(test.js.ProvideRequiresGoogModuleDLN, test.js.GoogModuleDLN);
-
-/** @const {string} */
-test.js.ProvideRequiresGoogModuleDLN.NAME = 'PROVIDE-REQUIRES-GOOG-MODULE-DLN';

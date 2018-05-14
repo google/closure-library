@@ -269,7 +269,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
 
 
 /** @override */
-goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
+goog.editor.plugins.EnterHandler.prototype.handleKeyDown = function(e) {
   // If a dialog doesn't have selectable field, Gecko grabs the event and
   // performs actions in editor window. This solves that problem and allows
   // the event to be passed on to proper handlers.
@@ -281,8 +281,19 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
   // on a backspace.  Disallow it if the node is empty.
   if (e.keyCode == goog.events.KeyCodes.BACKSPACE) {
     this.handleBackspaceInternal(e, this.getFieldObject().getRange());
+  } else if (goog.userAgent.GECKO && e.keyCode == goog.events.KeyCodes.DELETE) {
+    this.handleDeleteGecko(e);
+  }
 
-  } else if (e.keyCode == goog.events.KeyCodes.ENTER) {
+  return false;
+};
+
+
+/** @override */
+goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
+  // ENTER must be handled in keyPress as it requires a beforechange event,
+  // which is fired in between keydown and keyup.
+  if (e.keyCode == goog.events.KeyCodes.ENTER) {
     if (goog.userAgent.GECKO) {
       if (!e.shiftKey) {
         // Behave similarly to IE's content editable return carriage:
@@ -313,9 +324,6 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
       this.processParagraphTagsInternal(e, split);
       this.getFieldObject().dispatchChange();
     }
-
-  } else if (goog.userAgent.GECKO && e.keyCode == goog.events.KeyCodes.DELETE) {
-    this.handleDeleteGecko(e);
   }
 
   return false;

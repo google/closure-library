@@ -4,9 +4,8 @@
 goog.provide('goog.vec.RayTest');
 goog.setTestOnly('goog.vec.RayTest');
 
-goog.require('goog.vec.Float32Array');
-goog.require('goog.vec.Ray');
 goog.require('goog.testing.jsunit');
+goog.require('goog.vec.Ray');
 
 function testConstructor() {
   var new_ray = new goog.vec.Ray();

@@ -4,6 +4,7 @@
 goog.provide('goog.result.DeferredAdaptorTest');
 goog.setTestOnly('goog.result.DeferredAdaptorTest');
 
+goog.require('goog.async.Deferred');
 goog.require('goog.result');
 goog.require('goog.result.DeferredAdaptor');
 goog.require('goog.result.SimpleResult');

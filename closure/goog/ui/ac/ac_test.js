@@ -15,7 +15,6 @@
 goog.provide('goog.ui.acTest');
 goog.setTestOnly('goog.ui.acTest');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -28,6 +27,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ac');
 goog.require('goog.userAgent');
@@ -75,16 +75,7 @@ function simulateEvent(event) {
  * @param {number} keyCode The key code.
  */
 function simulateAllKeyEventsOnInput(keyCode) {
-  var eventTypes = [
-    goog.events.EventType.KEYDOWN, goog.events.EventType.KEYPRESS,
-    goog.events.EventType.KEYUP
-  ];
-
-  goog.array.forEach(eventTypes, function(type) {
-    var event = new goog.events.Event(type, input);
-    event.keyCode = keyCode;
-    simulateEvent(new goog.events.BrowserEvent(event, input));
-  });
+  goog.testing.events.fireKeySequence(input, keyCode);
 }
 
 

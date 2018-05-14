@@ -221,6 +221,55 @@ goog.testing.events.fireDoubleClickSequence = function(
 
 
 /**
+ * A non-exhaustive mapping of keys to keyCode. These are not localized and are
+ * specific to QWERTY keyboards, but are used to augment our testing key events
+ * as much as possible in order to simulate real browser events. This will be
+ * used to fill out the `keyCode` field for key events when the `key` value is
+ * present in this map.
+ * @private {!Object<number>}
+ * @final
+ */
+goog.testing.events.KEY_TO_KEYCODE_MAPPING_ = {
+  '0': goog.events.KeyCodes.ZERO,
+  '1': goog.events.KeyCodes.ONE,
+  '2': goog.events.KeyCodes.TWO,
+  '3': goog.events.KeyCodes.THREE,
+  '4': goog.events.KeyCodes.FOUR,
+  '5': goog.events.KeyCodes.FIVE,
+  '6': goog.events.KeyCodes.SIX,
+  '7': goog.events.KeyCodes.SEVEN,
+  '8': goog.events.KeyCodes.EIGHT,
+  '9': goog.events.KeyCodes.NINE,
+  'a': goog.events.KeyCodes.A,
+  'b': goog.events.KeyCodes.B,
+  'c': goog.events.KeyCodes.C,
+  'd': goog.events.KeyCodes.D,
+  'e': goog.events.KeyCodes.E,
+  'f': goog.events.KeyCodes.F,
+  'g': goog.events.KeyCodes.G,
+  'h': goog.events.KeyCodes.H,
+  'i': goog.events.KeyCodes.I,
+  'j': goog.events.KeyCodes.J,
+  'k': goog.events.KeyCodes.K,
+  'l': goog.events.KeyCodes.L,
+  'm': goog.events.KeyCodes.M,
+  'n': goog.events.KeyCodes.N,
+  'o': goog.events.KeyCodes.O,
+  'p': goog.events.KeyCodes.P,
+  'q': goog.events.KeyCodes.Q,
+  'r': goog.events.KeyCodes.R,
+  's': goog.events.KeyCodes.S,
+  't': goog.events.KeyCodes.T,
+  'u': goog.events.KeyCodes.U,
+  'v': goog.events.KeyCodes.V,
+  'w': goog.events.KeyCodes.W,
+  'x': goog.events.KeyCodes.X,
+  'y': goog.events.KeyCodes.Y,
+  'z': goog.events.KeyCodes.Z
+};
+
+
+/**
  * Simulates a complete keystroke (keydown, keypress, and keyup). Note that
  * if preventDefault is called on the keydown, the keypress will not fire.
  *
@@ -265,6 +314,25 @@ goog.testing.events.fireNonAsciiKeySequence = function(
   if (goog.isString(keyOrKeyCode)) {
     keydown.key = keyup.key = /** @type {string} */ (keyOrKeyCode);
     keypress.key = /** @type {string} */ (keyPressKeyOrKeyCode);
+
+    // Try to fill the keyCode field for the key events if we have a known key.
+    // This is to try and make these mock simulated event as close to real
+    // browser events as possible.
+    var mappedKeyCode =
+        goog.testing.events
+            .KEY_TO_KEYCODE_MAPPING_[/** @type {string} */ (keyOrKeyCode)
+                                         .toLowerCase()];
+    if (mappedKeyCode) {
+      keydown.keyCode = keyup.keyCode = mappedKeyCode;
+    }
+
+    var mappedKeyPressKeyCode =
+        goog.testing.events.KEY_TO_KEYCODE_MAPPING_[/** @type {string} */ (
+                                                        keyPressKeyOrKeyCode)
+                                                        .toLowerCase()];
+    if (mappedKeyPressKeyCode) {
+      keypress.keyCode = mappedKeyPressKeyCode;
+    }
   } else {
     keydown.keyCode = keyup.keyCode = /** @type {number} */ (keyOrKeyCode);
     keypress.keyCode = /** @type {number} */ (keyPressKeyOrKeyCode);
@@ -278,10 +346,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
 
   // Fire keydown, keypress, and keyup. Note that if the keydown is
   // prevent-defaulted, then the keypress will not fire.
-  var result = true;
-  if (!goog.testing.events.isBrokenGeckoMacActionKey_(keydown)) {
-    result = goog.testing.events.fireBrowserEvent(keydown);
-  }
+  var result = goog.testing.events.fireBrowserEvent(keydown);
   if (goog.isString(keyOrKeyCode)) {
     if (/** @type {string} */ (keyPressKeyOrKeyCode) != '' && result) {
       result &= goog.testing.events.fireBrowserEvent(keypress);
@@ -289,27 +354,12 @@ goog.testing.events.fireNonAsciiKeySequence = function(
   } else {
     if (goog.events.KeyCodes.firesKeyPressEvent(
             /** @type {number} */ (keyOrKeyCode), undefined, keydown.shiftKey,
-            keydown.ctrlKey, keydown.altKey) &&
+            keydown.ctrlKey, keydown.altKey, keydown.metaKey) &&
         result) {
       result &= goog.testing.events.fireBrowserEvent(keypress);
     }
   }
   return !!(result & goog.testing.events.fireBrowserEvent(keyup));
-};
-
-
-/**
- * @param {goog.testing.events.Event} e The event.
- * @return {boolean} Whether this is the Gecko/Mac's Meta-C/V/X, which
- *     is broken and requires special handling.
- * @private
- */
-goog.testing.events.isBrokenGeckoMacActionKey_ = function(e) {
-  return goog.userAgent.MAC && goog.userAgent.GECKO &&
-      (e.keyCode == goog.events.KeyCodes.C ||
-       e.keyCode == goog.events.KeyCodes.X ||
-       e.keyCode == goog.events.KeyCodes.V) &&
-      e.metaKey;
 };
 
 

@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.DimensionPickerTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Size');
 goog.require('goog.testing.jsunit');
@@ -254,4 +255,52 @@ function testSetAriaLabel() {
   assertEquals(
       'Picker element must have updated aria-label', 'My new picker',
       element.getAttribute('aria-label'));
+}
+
+function testHandleTouchTapInsideGrid() {
+  picker.setPointerEventsEnabled(true);
+  picker.render(render);
+
+  var renderer = picker.getRenderer();
+  var mouseMoveElem = renderer.getMouseMoveElement(picker);
+
+  var e = new goog.events.BrowserEvent({
+    target: mouseMoveElem,
+    offsetX: 18,  // Each grid square currently a magic 18px.
+    offsetY: 36,
+    clientX: 8 + 18,
+    clientY: 8 + 36,
+    pointerType: goog.events.BrowserEvent.PointerType.TOUCH
+  });
+
+  picker.handleMouseDown(e);
+  picker.handleMouseUp(e);
+
+  var size = picker.getValue();
+  assertEquals('Should have 1 column highlighted', 1, size.width);
+  assertEquals('Should have 2 rows highlighted', 2, size.height);
+}
+
+function testHandleTouchTapOutsideGrid() {
+  picker.setPointerEventsEnabled(true);
+  picker.render(render);
+
+  var renderer = picker.getRenderer();
+  var mouseMoveElem = renderer.getMouseMoveElement(picker);
+
+  var e = new goog.events.BrowserEvent({
+    target: mouseMoveElem,
+    offsetX: 18,  // Each grid square currently a magic 18px.
+    offsetY: 108, // 6th column is at 108px (6 * 18px)
+    clientX: 8 + 18,
+    clientY: 8 + 108,
+    pointerType: goog.events.BrowserEvent.PointerType.TOUCH
+  });
+
+  picker.handleMouseDown(e);
+  picker.handleMouseUp(e);
+
+  var size = picker.getValue();
+  assertEquals('Should have 1 column highlighted', 1, size.width);
+  assertEquals('Should have 1 rows highlighted', 1, size.height);
 }

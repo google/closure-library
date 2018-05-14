@@ -157,7 +157,7 @@ class ShimGoogIterator extends GoogIterator {
 
   /** @override */
   __iterator__() {
-    // TODO(user): this seems ridiculous, but the compiler complains
+    // TODO(sdh): this seems ridiculous, but the compiler complains
     // that it's not implemented if we don't have it.
     return super.__iterator__();
   }

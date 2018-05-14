@@ -179,7 +179,7 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
  *
  * For IE this simply turns off the "unselectable" property.
  *
- * Under FF no descendent of an unselectable node can be selectable:
+ * Under FF no descendant of an unselectable node can be selectable:
  *
  * https://bugzilla.mozilla.org/show_bug.cgi?id=203291
  *

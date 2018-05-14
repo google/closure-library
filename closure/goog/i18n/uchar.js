@@ -213,8 +213,9 @@ goog.i18n.uChar.getCodePointAround = function(string, index) {
     var lead = string.charCodeAt(index - 1);
     if (goog.i18n.uChar.isLeadSurrogateCodePoint(lead)) {
       // Part of a surrogate pair.
-      return /** @type {number} */ (
-          -goog.i18n.uChar.buildSupplementaryCodePoint(lead, charCode));
+      var codepoint = /** @type {number} */ (
+          goog.i18n.uChar.buildSupplementaryCodePoint(lead, charCode));
+      return -codepoint;
     }
   }
   return charCode;

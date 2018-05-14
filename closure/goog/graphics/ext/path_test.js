@@ -6,6 +6,7 @@ goog.setTestOnly('goog.graphics.ext.PathTest');
 
 goog.require('goog.graphics');
 goog.require('goog.graphics.ext.Path');
+goog.require('goog.math.Rect');
 goog.require('goog.testing.graphics');
 goog.require('goog.testing.jsunit');
 

@@ -421,7 +421,9 @@ function testEqualsWithCustomEqualityFn() {
   map2.set('a', '0');
   map2.set('b', '1');
 
-  var equalsFn = function(a, b) { return a == b };
+  var equalsFn = function(a, b) {
+    return a == b;
+  };
 
   assertTrue('maps are equal with ==', map1.equals(map2, equalsFn));
 }

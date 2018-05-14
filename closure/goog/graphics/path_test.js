@@ -5,9 +5,8 @@ goog.provide('goog.graphics.PathTest');
 goog.setTestOnly('goog.graphics.PathTest');
 
 goog.require('goog.array');
-goog.require('goog.math');
-goog.require('goog.graphics.Path');
 goog.require('goog.graphics.AffineTransform');
+goog.require('goog.graphics.Path');
 goog.require('goog.testing.graphics');
 goog.require('goog.testing.jsunit');
 
@@ -194,7 +193,7 @@ function testClose() {
   }
   path.moveTo(0, 0);
   path.lineTo(10, 20, 30, 40, 50, 60);
-  path.close()
+  path.close();
   assertTrue(path.isSimple());
   assertObjectEquals([0, 0], path.getCurrentPoint());
   goog.testing.graphics.assertPathEquals(

@@ -138,7 +138,7 @@ goog.editor.Link.prototype.removeLink = function() {
 /**
  * Change the link.
  * @param {string} newText New text for the link. If the link contains all its
- *     text in one descendent, newText will only replace the text in that
+ *     text in one descendant, newText will only replace the text in that
  *     one node. Otherwise, we'll change the innerHTML of the whole
  *     link to newText.
  * @param {string} newUrl A new URL.

@@ -4,11 +4,11 @@
 goog.provide('goog.demos.editor.HelloWorldTest');
 goog.setTestOnly('goog.demos.editor.HelloWorldTest');
 
-goog.require('goog.dom');
-goog.require('goog.testing.jsunit');
 goog.require('goog.demos.editor.HelloWorld');
-goog.require('goog.testing.editor.TestHelper');
+goog.require('goog.dom');
 goog.require('goog.testing.editor.FieldMock');
+goog.require('goog.testing.editor.TestHelper');
+goog.require('goog.testing.jsunit');
 
 var FIELD = goog.dom.getElement('field');
 var plugin;

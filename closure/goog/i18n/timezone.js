@@ -92,10 +92,12 @@ goog.i18n.TimeZone = function() {
    * <li>DST_LONG_NAME_GMT: long GMT for daylight saving time</li>
    * <li>DST_GENERIC_LOCATION: generic location for daylight saving time</li>
    * </ul>
-   * @type { { STD_LONG_NAME_GMT:string, STD_GENERIC_LOCATION:string } |
-   *         { STD_LONG_NAME_GMT:string, STD_GENERIC_LOCATION:string,
-   *           DST_LONG_NAME_GMT:string, DST_GENERIC_LOCATION:string }
-   *       }
+   * @type {{
+   *   STD_LONG_NAME_GMT: string,
+   *   STD_GENERIC_LOCATION: string,
+   *   DST_LONG_NAME_GMT: (string|undefined),
+   *   DST_GENERIC_LOCATION: (string|undefined)
+   * }}
    * @private
    */
   this.tzNamesExt_;

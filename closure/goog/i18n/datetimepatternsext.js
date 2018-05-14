@@ -15,7 +15,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * This file covers those locales that are not covered in
  * "datetimepatterns.js".
@@ -51,7 +51,6 @@ goog.provide('goog.i18n.DateTimePatterns_ar_001');
 goog.provide('goog.i18n.DateTimePatterns_ar_AE');
 goog.provide('goog.i18n.DateTimePatterns_ar_BH');
 goog.provide('goog.i18n.DateTimePatterns_ar_DJ');
-goog.provide('goog.i18n.DateTimePatterns_ar_EG');
 goog.provide('goog.i18n.DateTimePatterns_ar_EH');
 goog.provide('goog.i18n.DateTimePatterns_ar_ER');
 goog.provide('goog.i18n.DateTimePatterns_ar_IL');
@@ -757,12 +756,6 @@ goog.i18n.DateTimePatterns_ar_BH = goog.i18n.DateTimePatterns_ar;
  * Extended set of localized date/time patterns for locale ar_DJ.
  */
 goog.i18n.DateTimePatterns_ar_DJ = goog.i18n.DateTimePatterns_ar;
-
-
-/**
- * Extended set of localized date/time patterns for locale ar_EG.
- */
-goog.i18n.DateTimePatterns_ar_EG = goog.i18n.DateTimePatterns_ar;
 
 
 /**
@@ -7824,10 +7817,6 @@ switch (goog.LOCALE) {
   case 'ar-DJ':
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_DJ;
     break;
-  case 'ar_EG':
-  case 'ar-EG':
-    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_EG;
-    break;
   case 'ar_EH':
   case 'ar-EH':
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ar_EH;
@@ -10164,4 +10153,3 @@ switch (goog.LOCALE) {
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_zu_ZA;
     break;
 }
-

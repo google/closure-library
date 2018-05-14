@@ -126,7 +126,8 @@ goog.testing.net.XhrIo.cleanup = function() {
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string=} opt_content Post data.
+ * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
+ *     opt_content Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
@@ -205,7 +206,7 @@ goog.testing.net.XhrIo.prototype.lastMethod_;
 
 /**
  * Last POST content that was requested.
- * @type {string|undefined}
+ * @type {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string|undefined}
  * @private
  */
 goog.testing.net.XhrIo.prototype.lastContent_;
@@ -433,7 +434,8 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
  * Simulates the XhrIo send.
  * @param {string} url Uri to make request too.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string=} opt_content Post data.
+ * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
+ *     opt_content Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
@@ -700,8 +702,8 @@ goog.testing.net.XhrIo.prototype.getLastMethod = function() {
 
 /**
  * Gets the last POST content that was requested.
- * @return {string|undefined} Last POST content or undefined if last request was
- *      a GET.
+ * @return {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string|undefined}
+ *     Last POST content or undefined if last request was a GET.
  */
 goog.testing.net.XhrIo.prototype.getLastContent = function() {
   return this.lastContent_;

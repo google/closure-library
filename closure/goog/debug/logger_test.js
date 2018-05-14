@@ -120,7 +120,9 @@ function testMessageCallbacks() {
   });
   assertNull(handler.logRecord);
 
-  l3.log(goog.debug.Logger.Level.WARNING, function() { return 'heya' });
+  l3.log(goog.debug.Logger.Level.WARNING, function() {
+    return 'heya';
+  });
   assertNotNull(handler.logRecord);
   assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
   assertEquals('heya', handler.logRecord.getMessage());

@@ -19,7 +19,7 @@ goog.require('goog.testing.jsunit');
 
 function testSuper() {
   /** @constructor */
-  function SomeSuper(){};
+  function SomeSuper() {}
 
   var SomeClass = goog.defineClass(SomeSuper, {
     /** @constructor */

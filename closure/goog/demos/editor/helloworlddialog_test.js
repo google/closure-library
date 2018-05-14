@@ -5,7 +5,6 @@ goog.provide('goog.demos.editor.HelloWorldDialogTest');
 goog.setTestOnly('goog.demos.editor.HelloWorldDialogTest');
 
 goog.require('goog.demos.editor.HelloWorldDialog');
-goog.require('goog.demos.editor.HelloWorldDialog.OkEvent');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.events.EventHandler');
 goog.require('goog.testing.LooseMock');

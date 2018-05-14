@@ -16,7 +16,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 32
+ * File generated from CLDR ver. 33
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
@@ -513,6 +513,9 @@ if (goog.LOCALE == 'ar') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'ar_DZ' || goog.LOCALE == 'ar-DZ') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
+if (goog.LOCALE == 'ar_EG' || goog.LOCALE == 'ar-EG') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'az') {

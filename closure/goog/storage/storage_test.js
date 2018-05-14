@@ -23,7 +23,6 @@ goog.setTestOnly('goog.storage.storage_test');
 goog.require('goog.functions');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.Storage');
-goog.require('goog.storage.mechanism.mechanismfactory');
 goog.require('goog.storage.storageTester');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');

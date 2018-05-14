@@ -216,7 +216,7 @@ function testGeckoStyleKeyHandling() {
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
@@ -567,7 +567,7 @@ function testGeckoEqualSign() {
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
@@ -592,14 +592,17 @@ function testMacGeckoSlash() {
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
       keyHandler, goog.events.KeyHandler.EventType.KEY,
       function(e) { keyEvent = e; });
 
-  fireKeyDown(keyHandler, 0, 63, null, false, false, true);
+  // On OS X Gecko, the following events are fired when pressing Shift+/
+  // 1. keydown with keyCode=191 (/), charCode=0, shiftKey
+  // 2. keypress with keyCode=0, charCode=63 (?), shiftKey
+  fireKeyDown(keyHandler, 191, 0, null, false, false, true);
   fireKeyPress(keyHandler, 0, 63, null, false, false, true);
   assertEquals(
       '/ should fire a key event with the keyCode 191',

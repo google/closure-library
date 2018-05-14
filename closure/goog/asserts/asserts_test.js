@@ -97,7 +97,7 @@ function testString() {
 
 // jslint:ignore start
 function testFunction() {
-  function f(){};
+  function f() {}
   assertEquals(f, goog.asserts.assertFunction(f));
   assertThrows(
       'assertFunction(null)', goog.partial(goog.asserts.assertFunction, null));

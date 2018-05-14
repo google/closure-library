@@ -22,7 +22,7 @@ goog.require('goog.functions');
 goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannel');
 goog.require('goog.net.xpc.CrossPageChannelRole');
-goog.require('goog.net.xpc.TransportTypes');
+goog.require('goog.net.xpc.IframePollingTransport');
 goog.require('goog.object');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -208,11 +208,11 @@ function createChannel(
       toHostName, goog.net.xpc.CfgFields.CHANNEL_NAME, channelName,
       goog.net.xpc.CfgFields.LOCAL_POLL_URI, fromHostName + '/robots.txt',
       goog.net.xpc.CfgFields.PEER_POLL_URI, toHostName + '/robots.txt',
-      goog.net.xpc.CfgFields.TRANSPORT,
-      goog.net.xpc.TransportTypes.IFRAME_POLLING);
+      goog.net.xpc.CfgFields.TRANSPORT, goog.net.xpc.IframePollingTransport);
 
   // Build the channel.
   var channel = new goog.net.xpc.CrossPageChannel(channelConfig);
+
   channel.setPeerWindowObject(toWindow);
 
   // Update the transport's getWindow, to return the correct host window.

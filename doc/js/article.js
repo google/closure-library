@@ -1,13 +1,13 @@
 // Documentation licensed under CC BY 4.0
 // License available at https://creativecommons.org/licenses/by/4.0/
 
-// TODO(user): Bring in Closure library and compiler.
+// TODO(sdh): Bring in Closure library and compiler.
 
 var closure = window.closure || {};
 closure.docs = closure.docs || {};
 
 
-/** @define {string} */
+/** @const {string} */
 closure.docs.LOCATION = String(window.location);
 
 
@@ -181,7 +181,7 @@ closure.docs.fixLinkText = function() {
     if (!/^#/.test(href) || !/^\?\?+$/.test(link.textContent)) return;
     var heading = document.getElementById(href.substring(1));
     if (heading) link.textContent = heading.textContent;
-    // TODO(user): allow including/excluding the number?
+    // TODO(sdh): allow including/excluding the number?
   });
 };
 
@@ -194,7 +194,7 @@ closure.docs.buildToc = function() {
   // Read a few page-level parameters to customize.
   var min = Number(closure.docs.get('page.toc.min') || 2);
   var max = Number(closure.docs.get('page.toc.max') || 3);
-  // TODO(user): allow further customization of numbering?
+  // TODO(sdh): allow further customization of numbering?
   var stack = [];
   closure.docs.forEachHeading(function(heading, level) {
     if (level < min || level > max) return;

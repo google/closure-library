@@ -237,7 +237,7 @@ function testFollowCallChain() {
   };
 
   // Created a fake type with a toString method.
-  function LocalType(){};
+  function LocalType() {}
   LocalType.prototype.toString = function() { return 'sg'; };
 
   // Create a mock with no expectations.

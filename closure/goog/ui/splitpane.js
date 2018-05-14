@@ -363,7 +363,7 @@ goog.ui.SplitPane.prototype.getElementToDecorate_ = function(
     }
   }
 
-  // Default to the first descendent element with the correct class.
+  // Default to the first descendant element with the correct class.
   return goog.dom.getElementsByTagNameAndClass(null, className, rootElement)[0];
 };
 

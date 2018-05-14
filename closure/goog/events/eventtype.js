@@ -20,6 +20,7 @@
 
 
 goog.provide('goog.events.EventType');
+goog.provide('goog.events.PointerAsMouseEventType');
 goog.provide('goog.events.PointerFallbackEventType');
 
 goog.require('goog.events.BrowserFeature');
@@ -57,6 +58,10 @@ goog.events.EventType = {
   MOUSEMOVE: 'mousemove',
   MOUSEENTER: 'mouseenter',
   MOUSELEAVE: 'mouseleave',
+
+  // Non-existent event; will never fire. This exists as a mouse counterpart to
+  // POINTERCANCEL.
+  MOUSECANCEL: 'mousecancel',
 
   // Selection events.
   // https://www.w3.org/TR/selection-api/
@@ -337,7 +342,7 @@ goog.events.PointerFallbackEventType = {
       // of POINTERCANCEL. In this case POINTERUP already falls back to MOUSEUP
       // which represents both UP and CANCEL. POINTERCANCEL does not fall back
       // to MOUSEUP to prevent listening twice on the same event.
-      'mousecancel'),  // non-existent event; will never fire
+      goog.events.EventType.MOUSECANCEL),
   POINTERMOVE: goog.events.getPointerFallbackEventName_(
       goog.events.EventType.POINTERMOVE, goog.events.EventType.MSPOINTERMOVE,
       goog.events.EventType.MOUSEMOVE),
@@ -353,4 +358,21 @@ goog.events.PointerFallbackEventType = {
   POINTERLEAVE: goog.events.getPointerFallbackEventName_(
       goog.events.EventType.POINTERLEAVE, goog.events.EventType.MSPOINTERLEAVE,
       goog.events.EventType.MOUSELEAVE)
+};
+
+
+/**
+ * An alias for `goog.events.EventType.MOUSE*` event types that is overridden by
+ * corresponding `POINTER*` event types.
+ * @enum {string}
+ */
+goog.events.PointerAsMouseEventType = {
+  MOUSEDOWN: goog.events.PointerFallbackEventType.POINTERDOWN,
+  MOUSEUP: goog.events.PointerFallbackEventType.POINTERUP,
+  MOUSECANCEL: goog.events.PointerFallbackEventType.POINTERCANCEL,
+  MOUSEMOVE: goog.events.PointerFallbackEventType.POINTERMOVE,
+  MOUSEOVER: goog.events.PointerFallbackEventType.POINTEROVER,
+  MOUSEOUT: goog.events.PointerFallbackEventType.POINTEROUT,
+  MOUSEENTER: goog.events.PointerFallbackEventType.POINTERENTER,
+  MOUSELEAVE: goog.events.PointerFallbackEventType.POINTERLEAVE
 };

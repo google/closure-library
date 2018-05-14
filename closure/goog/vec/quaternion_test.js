@@ -4,14 +4,12 @@
 goog.provide('goog.vec.QuaternionTest');
 goog.setTestOnly('goog.vec.QuaternionTest');
 
-goog.require('goog.vec.Float32Array');
+goog.require('goog.testing.jsunit');
 goog.require('goog.vec.Mat3');
 goog.require('goog.vec.Mat4');
 goog.require('goog.vec.Quaternion');
 goog.require('goog.vec.Vec3');
 goog.require('goog.vec.vec3f');
-goog.require('goog.vec.Vec4');
-goog.require('goog.testing.jsunit');
 
 function testCreateIdentityFloat32() {
   var q = goog.vec.Quaternion.createIdentityFloat32();

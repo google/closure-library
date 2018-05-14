@@ -255,6 +255,8 @@ goog.net.WebChannel.prototype.close = goog.abstractMethod;
  * 5. Full close is always a forced one. See the close() method.
  *
  * New messages sent after halfClose() will be dropped.
+ *
+ * NOTE: This is not yet implemented, and will throw an exception if called.
  */
 goog.net.WebChannel.prototype.halfClose = goog.abstractMethod;
 
@@ -516,7 +518,7 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
  *
  * @param {number} count The low water-mark count. It is an error to pass
  * a non-positive value.
- * @param {!function()} callback The call back to notify the application
+ * @param {function()} callback The call back to notify the application
  * when NonAckedMessageCount is below the specified low water-mark count.
  * Any previously registered callback is cleared. This new callback will
  * be cleared once it has been fired, or when the channel is closed or aborted.

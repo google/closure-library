@@ -1637,3 +1637,18 @@ function testClobberedForm() {
           .withCustomNamePolicy(goog.functions.identity)
           .build());
 }
+
+function testHorizontalRuleWithInlineStyles() {
+  var input = '<meta charset="utf-8"><b><p><span>foo</span></p>' +
+      '<p><span><hr /></span></p><p><span>bar</span></p></b><br />';
+  // Note that adding </span></p> before </hr> is WAI, this is the browser
+  // correcting malformed HTML.
+  var expected = '<b><p><span>foo</span></p>' +
+      '<p><span></span></p><hr /><p></p><p><span>bar</span></p></b><br />';
+  assertSanitizedHtml(
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .build());
+}

@@ -930,7 +930,7 @@ function testBinaryInsertRemove() {
       var result = fn(array, value, opt_compareFn);
       assertEquals(expectResult, result);
       assertArrayEquals(expectArray, array);
-    }
+    };
   };
 
   var a = [];
@@ -971,7 +971,9 @@ function testBinaryInsertRemove() {
 }
 
 function testBinarySearch() {
-  var insertionPoint = function(position) { return -(position + 1) };
+  var insertionPoint = function(position) {
+    return -(position + 1);
+  };
   var pos;
 
   // test default comparison on array of String(s)
@@ -1157,7 +1159,9 @@ function testBinarySearchPerformance() {
 
 
 function testBinarySelect() {
-  var insertionPoint = function(position) { return -(position + 1) };
+  var insertionPoint = function(position) {
+    return -(position + 1);
+  };
   var numbers = [
     -897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0, 0.31255, 5,
     142.88888708, 334, 342, 453, 54254
@@ -1274,7 +1278,9 @@ function testArrayCompare3Basic() {
 
 
 function testArrayCompare3ComparatorFn() {
-  function cmp(a, b) { return a - b; };
+  function cmp(a, b) {
+    return a - b;
+  }
   assertEquals(0, goog.array.compare3([], [], cmp));
   assertEquals(0, goog.array.compare3([8, 4], [8, 4], cmp));
   assertEquals(-1, goog.array.compare3([4, 3], [5, 0]));
@@ -1359,7 +1365,9 @@ function testSort() {
 
   // Test sorting array of custom Object(s) of length > 1 that have
   // an overriden toString
-  function ComparedObject(value) { this.value = value; };
+  function ComparedObject(value) {
+    this.value = value;
+  }
 
   ComparedObject.prototype.toString = function() { return this.value; };
 
@@ -1613,7 +1621,9 @@ function testSortObjectsByKeyWithCompareFunction() {
   var descSortedArray =
       [sortedArray[3], sortedArray[2], sortedArray[1], sortedArray[0]];
 
-  function descCompare(a, b) { return a < b ? 1 : a > b ? -1 : 0; };
+  function descCompare(a, b) {
+    return a < b ? 1 : a > b ? -1 : 0;
+  }
 
   goog.array.sortObjectsByKey(objects, 'name', descCompare);
   validateObjectArray(descSortedArray, objects);

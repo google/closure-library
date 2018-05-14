@@ -359,7 +359,7 @@ function testIsValid() {
 }
 
 function testDoNotSerializeProto() {
-  function F(){};
+  function F() {}
   F.prototype = {c: 3};
 
   var obj = new F;

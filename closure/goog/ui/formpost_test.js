@@ -50,7 +50,9 @@ function setUp() {
   goog.ui.FormPost.prototype.createDom = function() {
     originalCreateDom.apply(this, arguments);
 
-    this.getElement().submit = function() { submits++ };
+    this.getElement().submit = function() {
+      submits++;
+    };
   };
   parameters = {'foo': 'bar', 'baz': 1, 'array': [0, 'yes']};
 }

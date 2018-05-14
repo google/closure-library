@@ -242,8 +242,8 @@ goog.html.testing.matchTrustedResourceUrl = function(expected) {
  *     goog.string.TypedString, true if typed strings equal, false if not.
  */
 goog.html.testing.checkTypedStringEquality = function(actual, expected) {
-  if (actual.implementsGoogStringTypedString) {
-    if (expected.implementsGoogStringTypedString) {
+  if (actual && actual.implementsGoogStringTypedString) {
+    if (expected != null && expected.implementsGoogStringTypedString) {
       if (!(actual instanceof expected.constructor)) {
         return false;
       }

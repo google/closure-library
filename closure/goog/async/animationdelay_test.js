@@ -19,7 +19,6 @@ var AnimationDelay = goog.require('goog.async.AnimationDelay');
 var Promise = goog.require('goog.Promise');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 var Timer = goog.require('goog.Timer');
-var jsunit = goog.require('goog.testing.jsunit');
 var testSuite = goog.require('goog.testing.testSuite');
 
 var TEST_DELAY = 50;

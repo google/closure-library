@@ -15,7 +15,6 @@
 goog.module('goog.net.MultiIframeLoadMonitorTest');
 goog.setTestOnly('goog.net.MultiIframeLoadMonitorTest');
 
-var IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
 var MultiIframeLoadMonitor = goog.require('goog.net.MultiIframeLoadMonitor');
 var Promise = goog.require('goog.Promise');
 var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');

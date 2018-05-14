@@ -24,6 +24,7 @@ goog.setTestOnly('goog.baseTest');
 goog.require('goog.Promise');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
+goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
@@ -1675,4 +1676,24 @@ function testGoogModuleNames() {
   assertValidId('$');
   assertValidId('_$');
   assertValidId('$_');
+}
+
+
+function testGetScriptNonce() {
+  // clear nonce cache for test.
+  goog.cspNonce_ = null;
+  var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+  var script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
+  script.setAttribute('nonce', 'invalid nonce');
+  document.body.appendChild(script);
+
+  try {
+    assertEquals('', goog.getScriptNonce());
+    // clear nonce cache for test.
+    goog.cspNonce_ = null;
+    script.nonce = nonce;
+    assertEquals(nonce, goog.getScriptNonce());
+  } finally {
+    goog.dom.removeNode(script);
+  }
 }

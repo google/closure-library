@@ -35,7 +35,8 @@ var someElement;
 var target;
 var viewport;
 var viewportTarget;
-var widthProvder;
+let widthProvider;
+let maxWidthProvider;
 var propertyReplacer;
 
 function setUpPage() {
@@ -43,7 +44,8 @@ function setUpPage() {
   target = goog.dom.getElement('target');
   viewport = goog.dom.getElement('viewport');
   viewportTarget = goog.dom.getElement('viewportTarget');
-  widthProvder = goog.dom.getElement('widthProvider');
+  widthProvider = goog.dom.getElement('widthProvider');
+  maxWidthProvider = goog.dom.getElement('maxWidthProvider');
   propertyReplacer = new goog.testing.PropertyReplacer();
 }
 
@@ -614,30 +616,47 @@ function testReposition() {
 }
 
 function testSetWidthProvider() {
-  renderer.setWidthProvider(widthProvder);
+  renderer.setWidthProvider(widthProvider);
   renderer.renderRows(rendRows, '');
   var el = renderer.getElement();
+  // Set a width that's smaller than widthProvider.
   el.style.width = '1px';
 
   renderer.redraw();
 
   var rendererSize = goog.style.getSize(el);
-  var widthProviderSize = goog.style.getSize(widthProvder);
+  var widthProviderSize = goog.style.getSize(widthProvider);
   assertEquals(rendererSize.width, widthProviderSize.width);
 }
 
 function testSetWidthProviderWithBorderWidth() {
   var borderWidth = 5;
-  renderer.setWidthProvider(widthProvder, borderWidth);
+  renderer.setWidthProvider(widthProvider, borderWidth);
   renderer.renderRows(rendRows, '');
   var el = renderer.getElement();
+  // Set a width that's smaller than widthProvider.
   el.style.width = '1px';
 
   renderer.redraw();
 
   var rendererSize = goog.style.getSize(el);
-  var widthProviderSize = goog.style.getSize(widthProvder);
+  var widthProviderSize = goog.style.getSize(widthProvider);
   assertEquals(rendererSize.width, widthProviderSize.width - borderWidth);
+}
+
+function testSetWidthProviderWithBorderWidthAndMaxWidthProvider() {
+  const borderWidth = 5;
+  renderer.setWidthProvider(widthProvider, borderWidth, maxWidthProvider);
+  renderer.renderRows(rendRows, '');
+  const el = renderer.getElement();
+  // Set a width that's larger than maxWidthProvider.
+  el.style.width = '250px';
+
+  renderer.redraw();
+
+  const rendererSize = goog.style.getSize(el);
+  const maxWidthProviderSize = goog.style.getSize(maxWidthProvider);
+  assertEquals(rendererSize.width, maxWidthProviderSize.width - borderWidth);
 }
 
 

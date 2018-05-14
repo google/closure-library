@@ -158,7 +158,7 @@ function testStaticDisposeOnNonDisposableType() {
 }
 
 function testMonitoringFailure() {
-  function BadDisposable(){};
+  function BadDisposable() {}
   goog.inherits(BadDisposable, goog.Disposable);
 
   goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.PERMANENT;
