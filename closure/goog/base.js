@@ -465,8 +465,6 @@ goog.module = function(name) {
  * @suppress {missingProvide}
  */
 goog.module.get = function(name) {
-  if (!COMPILED && name in goog.loadedModules_) {
-  }
 
   return goog.module.getInternal_(name);
 };
