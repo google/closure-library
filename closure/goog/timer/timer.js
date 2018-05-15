@@ -183,9 +183,10 @@ goog.Timer.prototype.tick_ = function() {
     this.dispatchTick();
     // The timer could be stopped in the timer event handler.
     if (this.enabled) {
-      this.timer_ =
-          this.timerObject_.setTimeout(this.boundTick_, this.interval_);
-      this.last_ = goog.now();
+      // Stop and start to ensure there is always only one timeout even if
+      // start is called in the timer event handler.
+      this.stop();
+      this.start();
     }
   }
 };
