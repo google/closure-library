@@ -655,6 +655,7 @@ goog.require('goog.i18n.DateTimeSymbols');
 
 /**
  * Date/time formatting symbols for locale af_NA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_af_NA = {
   ERAS: ['v.C.', 'n.C.'],
@@ -685,12 +686,14 @@ goog.i18n.DateTimeSymbols_af_NA = {
 
 /**
  * Date/time formatting symbols for locale af_ZA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_af_ZA = goog.i18n.DateTimeSymbols_af;
 
 
 /**
  * Date/time formatting symbols for locale agq.
+ * @const
  */
 goog.i18n.DateTimeSymbols_agq = {
   ERAS: ['SK', 'BK'],
@@ -721,12 +724,14 @@ goog.i18n.DateTimeSymbols_agq = {
 
 /**
  * Date/time formatting symbols for locale agq_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_agq_CM = goog.i18n.DateTimeSymbols_agq;
 
 
 /**
  * Date/time formatting symbols for locale ak.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ak = {
   ERAS: ['AK', 'KE'],
@@ -757,21 +762,23 @@ goog.i18n.DateTimeSymbols_ak = {
 
 /**
  * Date/time formatting symbols for locale ak_GH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ak_GH = goog.i18n.DateTimeSymbols_ak;
 
 
 /**
  * Date/time formatting symbols for locale am_ET.
+ * @const
  */
 goog.i18n.DateTimeSymbols_am_ET = goog.i18n.DateTimeSymbols_am;
 
 
 /**
  * Date/time formatting symbols for locale ar_001.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_001 = {
-  ZERODIGIT: 0x0660,
   ERAS: ['ق.م', 'م'],
   ERANAMES: ['قبل الميلاد', 'ميلادي'],
   NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
@@ -800,18 +807,71 @@ goog.i18n.DateTimeSymbols_ar_001 = {
 
 /**
  * Date/time formatting symbols for locale ar_AE.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_AE = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_AE = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_BH.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_BH = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_BH = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_DJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_DJ = {
   ZERODIGIT: 0x0660,
@@ -843,6 +903,7 @@ goog.i18n.DateTimeSymbols_ar_DJ = {
 
 /**
  * Date/time formatting symbols for locale ar_EH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_EH = {
   ERAS: ['ق.م', 'م'],
@@ -873,6 +934,7 @@ goog.i18n.DateTimeSymbols_ar_EH = {
 
 /**
  * Date/time formatting symbols for locale ar_ER.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_ER = {
   ZERODIGIT: 0x0660,
@@ -904,6 +966,7 @@ goog.i18n.DateTimeSymbols_ar_ER = {
 
 /**
  * Date/time formatting symbols for locale ar_IL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_IL = {
   ZERODIGIT: 0x0660,
@@ -935,6 +998,7 @@ goog.i18n.DateTimeSymbols_ar_IL = {
 
 /**
  * Date/time formatting symbols for locale ar_IQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_IQ = {
   ZERODIGIT: 0x0660,
@@ -966,6 +1030,7 @@ goog.i18n.DateTimeSymbols_ar_IQ = {
 
 /**
  * Date/time formatting symbols for locale ar_JO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_JO = {
   ZERODIGIT: 0x0660,
@@ -997,6 +1062,7 @@ goog.i18n.DateTimeSymbols_ar_JO = {
 
 /**
  * Date/time formatting symbols for locale ar_KM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_KM = {
   ZERODIGIT: 0x0660,
@@ -1028,12 +1094,39 @@ goog.i18n.DateTimeSymbols_ar_KM = {
 
 /**
  * Date/time formatting symbols for locale ar_KW.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_KW = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_KW = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_LB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_LB = {
   ZERODIGIT: 0x0660,
@@ -1065,36 +1158,14 @@ goog.i18n.DateTimeSymbols_ar_LB = {
 
 /**
  * Date/time formatting symbols for locale ar_LY.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_LY = {
-  ERAS: ['ق.م', 'م'],
-  ERANAMES: ['قبل الميلاد', 'ميلادي'],
-  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
-  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
-  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
-  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
-  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
-  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
-  AMPMS: ['ص', 'م'],
-  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
-  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
-  FIRSTDAYOFWEEK: 5,
-  WEEKENDRANGE: [4, 5],
-  FIRSTWEEKCUTOFFDAY: 4
-};
+goog.i18n.DateTimeSymbols_ar_LY = goog.i18n.DateTimeSymbols_ar;
 
 
 /**
  * Date/time formatting symbols for locale ar_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_MA = {
   ERAS: ['ق.م', 'م'],
@@ -1125,6 +1196,7 @@ goog.i18n.DateTimeSymbols_ar_MA = {
 
 /**
  * Date/time formatting symbols for locale ar_MR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_MR = {
   ZERODIGIT: 0x0660,
@@ -1156,12 +1228,39 @@ goog.i18n.DateTimeSymbols_ar_MR = {
 
 /**
  * Date/time formatting symbols for locale ar_OM.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_OM = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_OM = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_PS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_PS = {
   ZERODIGIT: 0x0660,
@@ -1193,12 +1292,39 @@ goog.i18n.DateTimeSymbols_ar_PS = {
 
 /**
  * Date/time formatting symbols for locale ar_QA.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_QA = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_QA = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_SA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_SA = {
   ZERODIGIT: 0x0660,
@@ -1230,12 +1356,39 @@ goog.i18n.DateTimeSymbols_ar_SA = {
 
 /**
  * Date/time formatting symbols for locale ar_SD.
+ * @const
  */
-goog.i18n.DateTimeSymbols_ar_SD = goog.i18n.DateTimeSymbols_ar;
+goog.i18n.DateTimeSymbols_ar_SD = {
+  ZERODIGIT: 0x0660,
+  ERAS: ['ق.م', 'م'],
+  ERANAMES: ['قبل الميلاد', 'ميلادي'],
+  NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  STANDALONENARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك', 'ب', 'د'],
+  MONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONEMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  SHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  STANDALONESHORTMONTHS: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  WEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONEWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  SHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  STANDALONESHORTWEEKDAYS: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+  NARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  STANDALONENARROWWEEKDAYS: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+  SHORTQUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  QUARTERS: ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع'],
+  AMPMS: ['ص', 'م'],
+  DATEFORMATS: ['EEEE، d MMMM y', 'd MMMM y', 'dd‏/MM‏/y', 'd‏/M‏/y'],
+  TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
+  FIRSTDAYOFWEEK: 5,
+  WEEKENDRANGE: [4, 5],
+  FIRSTWEEKCUTOFFDAY: 4
+};
 
 
 /**
  * Date/time formatting symbols for locale ar_SO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_SO = {
   ZERODIGIT: 0x0660,
@@ -1267,6 +1420,7 @@ goog.i18n.DateTimeSymbols_ar_SO = {
 
 /**
  * Date/time formatting symbols for locale ar_SS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_SS = {
   ZERODIGIT: 0x0660,
@@ -1298,6 +1452,7 @@ goog.i18n.DateTimeSymbols_ar_SS = {
 
 /**
  * Date/time formatting symbols for locale ar_SY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_SY = {
   ZERODIGIT: 0x0660,
@@ -1329,6 +1484,7 @@ goog.i18n.DateTimeSymbols_ar_SY = {
 
 /**
  * Date/time formatting symbols for locale ar_TD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_TD = {
   ZERODIGIT: 0x0660,
@@ -1360,6 +1516,7 @@ goog.i18n.DateTimeSymbols_ar_TD = {
 
 /**
  * Date/time formatting symbols for locale ar_TN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_TN = {
   ERAS: ['ق.م', 'م'],
@@ -1390,6 +1547,7 @@ goog.i18n.DateTimeSymbols_ar_TN = {
 
 /**
  * Date/time formatting symbols for locale ar_XB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_XB = {
   ERAS: ['؜‮BC‬؜', '؜‮AD‬؜'],
@@ -1420,6 +1578,7 @@ goog.i18n.DateTimeSymbols_ar_XB = {
 
 /**
  * Date/time formatting symbols for locale ar_YE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ar_YE = {
   ZERODIGIT: 0x0660,
@@ -1451,6 +1610,7 @@ goog.i18n.DateTimeSymbols_ar_YE = {
 
 /**
  * Date/time formatting symbols for locale as.
+ * @const
  */
 goog.i18n.DateTimeSymbols_as = {
   ZERODIGIT: 0x09E6,
@@ -1482,12 +1642,14 @@ goog.i18n.DateTimeSymbols_as = {
 
 /**
  * Date/time formatting symbols for locale as_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_as_IN = goog.i18n.DateTimeSymbols_as;
 
 
 /**
  * Date/time formatting symbols for locale asa.
+ * @const
  */
 goog.i18n.DateTimeSymbols_asa = {
   ERAS: ['KM', 'BM'],
@@ -1518,12 +1680,14 @@ goog.i18n.DateTimeSymbols_asa = {
 
 /**
  * Date/time formatting symbols for locale asa_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_asa_TZ = goog.i18n.DateTimeSymbols_asa;
 
 
 /**
  * Date/time formatting symbols for locale ast.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ast = {
   ERAS: ['e.C.', 'd.C.'],
@@ -1554,12 +1718,14 @@ goog.i18n.DateTimeSymbols_ast = {
 
 /**
  * Date/time formatting symbols for locale ast_ES.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ast_ES = goog.i18n.DateTimeSymbols_ast;
 
 
 /**
  * Date/time formatting symbols for locale az_Cyrl.
+ * @const
  */
 goog.i18n.DateTimeSymbols_az_Cyrl = {
   ERAS: ['е.ә.', 'ј.е.'],
@@ -1590,6 +1756,7 @@ goog.i18n.DateTimeSymbols_az_Cyrl = {
 
 /**
  * Date/time formatting symbols for locale az_Cyrl_AZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_az_Cyrl_AZ = {
   ERAS: ['е.ә.', 'ј.е.'],
@@ -1620,18 +1787,21 @@ goog.i18n.DateTimeSymbols_az_Cyrl_AZ = {
 
 /**
  * Date/time formatting symbols for locale az_Latn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_az_Latn = goog.i18n.DateTimeSymbols_az;
 
 
 /**
  * Date/time formatting symbols for locale az_Latn_AZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_az_Latn_AZ = goog.i18n.DateTimeSymbols_az;
 
 
 /**
  * Date/time formatting symbols for locale bas.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bas = {
   ERAS: ['b.Y.K', 'm.Y.K'],
@@ -1662,18 +1832,21 @@ goog.i18n.DateTimeSymbols_bas = {
 
 /**
  * Date/time formatting symbols for locale bas_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bas_CM = goog.i18n.DateTimeSymbols_bas;
 
 
 /**
  * Date/time formatting symbols for locale be_BY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_be_BY = goog.i18n.DateTimeSymbols_be;
 
 
 /**
  * Date/time formatting symbols for locale bem.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bem = {
   ERAS: ['BC', 'AD'],
@@ -1704,12 +1877,14 @@ goog.i18n.DateTimeSymbols_bem = {
 
 /**
  * Date/time formatting symbols for locale bem_ZM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bem_ZM = goog.i18n.DateTimeSymbols_bem;
 
 
 /**
  * Date/time formatting symbols for locale bez.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bez = {
   ERAS: ['KM', 'BM'],
@@ -1740,18 +1915,21 @@ goog.i18n.DateTimeSymbols_bez = {
 
 /**
  * Date/time formatting symbols for locale bez_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bez_TZ = goog.i18n.DateTimeSymbols_bez;
 
 
 /**
  * Date/time formatting symbols for locale bg_BG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bg_BG = goog.i18n.DateTimeSymbols_bg;
 
 
 /**
  * Date/time formatting symbols for locale bm.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bm = {
   ERAS: ['J.-C. ɲɛ', 'ni J.-C.'],
@@ -1782,18 +1960,21 @@ goog.i18n.DateTimeSymbols_bm = {
 
 /**
  * Date/time formatting symbols for locale bm_ML.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bm_ML = goog.i18n.DateTimeSymbols_bm;
 
 
 /**
  * Date/time formatting symbols for locale bn_BD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bn_BD = goog.i18n.DateTimeSymbols_bn;
 
 
 /**
  * Date/time formatting symbols for locale bn_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bn_IN = {
   ZERODIGIT: 0x09E6,
@@ -1825,6 +2006,7 @@ goog.i18n.DateTimeSymbols_bn_IN = {
 
 /**
  * Date/time formatting symbols for locale bo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bo = {
   ERAS: ['སྤྱི་ལོ་སྔོན་', 'སྤྱི་ལོ་'],
@@ -1855,12 +2037,14 @@ goog.i18n.DateTimeSymbols_bo = {
 
 /**
  * Date/time formatting symbols for locale bo_CN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bo_CN = goog.i18n.DateTimeSymbols_bo;
 
 
 /**
  * Date/time formatting symbols for locale bo_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bo_IN = {
   ERAS: ['སྤྱི་ལོ་སྔོན་', 'སྤྱི་ལོ་'],
@@ -1891,12 +2075,14 @@ goog.i18n.DateTimeSymbols_bo_IN = {
 
 /**
  * Date/time formatting symbols for locale br_FR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_br_FR = goog.i18n.DateTimeSymbols_br;
 
 
 /**
  * Date/time formatting symbols for locale brx.
+ * @const
  */
 goog.i18n.DateTimeSymbols_brx = {
   ERAS: ['ईसा.पूर्व', 'सन'],
@@ -1927,12 +2113,14 @@ goog.i18n.DateTimeSymbols_brx = {
 
 /**
  * Date/time formatting symbols for locale brx_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_brx_IN = goog.i18n.DateTimeSymbols_brx;
 
 
 /**
  * Date/time formatting symbols for locale bs_Cyrl.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bs_Cyrl = {
   ERAS: ['п. н. е.', 'н. е.'],
@@ -1963,6 +2151,7 @@ goog.i18n.DateTimeSymbols_bs_Cyrl = {
 
 /**
  * Date/time formatting symbols for locale bs_Cyrl_BA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bs_Cyrl_BA = {
   ERAS: ['п. н. е.', 'н. е.'],
@@ -1993,42 +2182,49 @@ goog.i18n.DateTimeSymbols_bs_Cyrl_BA = {
 
 /**
  * Date/time formatting symbols for locale bs_Latn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bs_Latn = goog.i18n.DateTimeSymbols_bs;
 
 
 /**
  * Date/time formatting symbols for locale bs_Latn_BA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_bs_Latn_BA = goog.i18n.DateTimeSymbols_bs;
 
 
 /**
  * Date/time formatting symbols for locale ca_AD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ca_AD = goog.i18n.DateTimeSymbols_ca;
 
 
 /**
  * Date/time formatting symbols for locale ca_ES.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ca_ES = goog.i18n.DateTimeSymbols_ca;
 
 
 /**
  * Date/time formatting symbols for locale ca_FR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ca_FR = goog.i18n.DateTimeSymbols_ca;
 
 
 /**
  * Date/time formatting symbols for locale ca_IT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ca_IT = goog.i18n.DateTimeSymbols_ca;
 
 
 /**
  * Date/time formatting symbols for locale ccp.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ccp = {
   ERAS: ['𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄴𑄛𑄫𑄢𑄴𑄝𑄧', '𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄛𑄴𑄘𑄧'],
@@ -2059,12 +2255,14 @@ goog.i18n.DateTimeSymbols_ccp = {
 
 /**
  * Date/time formatting symbols for locale ccp_BD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ccp_BD = goog.i18n.DateTimeSymbols_ccp;
 
 
 /**
  * Date/time formatting symbols for locale ccp_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ccp_IN = {
   ERAS: ['𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄴𑄛𑄫𑄢𑄴𑄝𑄧', '𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄛𑄴𑄘𑄧'],
@@ -2095,6 +2293,7 @@ goog.i18n.DateTimeSymbols_ccp_IN = {
 
 /**
  * Date/time formatting symbols for locale ce.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ce = {
   ERAS: ['в. э. тӀ. я', 'в. э'],
@@ -2125,12 +2324,14 @@ goog.i18n.DateTimeSymbols_ce = {
 
 /**
  * Date/time formatting symbols for locale ce_RU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ce_RU = goog.i18n.DateTimeSymbols_ce;
 
 
 /**
  * Date/time formatting symbols for locale cgg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_cgg = {
   ERAS: ['BC', 'AD'],
@@ -2161,18 +2362,21 @@ goog.i18n.DateTimeSymbols_cgg = {
 
 /**
  * Date/time formatting symbols for locale cgg_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_cgg_UG = goog.i18n.DateTimeSymbols_cgg;
 
 
 /**
  * Date/time formatting symbols for locale chr_US.
+ * @const
  */
 goog.i18n.DateTimeSymbols_chr_US = goog.i18n.DateTimeSymbols_chr;
 
 
 /**
  * Date/time formatting symbols for locale ckb.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ckb = {
   ZERODIGIT: 0x0660,
@@ -2204,12 +2408,14 @@ goog.i18n.DateTimeSymbols_ckb = {
 
 /**
  * Date/time formatting symbols for locale ckb_IQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ckb_IQ = goog.i18n.DateTimeSymbols_ckb;
 
 
 /**
  * Date/time formatting symbols for locale ckb_IR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ckb_IR = {
   ZERODIGIT: 0x0660,
@@ -2241,24 +2447,28 @@ goog.i18n.DateTimeSymbols_ckb_IR = {
 
 /**
  * Date/time formatting symbols for locale cs_CZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_cs_CZ = goog.i18n.DateTimeSymbols_cs;
 
 
 /**
  * Date/time formatting symbols for locale cy_GB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_cy_GB = goog.i18n.DateTimeSymbols_cy;
 
 
 /**
  * Date/time formatting symbols for locale da_DK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_da_DK = goog.i18n.DateTimeSymbols_da;
 
 
 /**
  * Date/time formatting symbols for locale da_GL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_da_GL = {
   ERAS: ['f.Kr.', 'e.Kr.'],
@@ -2289,6 +2499,7 @@ goog.i18n.DateTimeSymbols_da_GL = {
 
 /**
  * Date/time formatting symbols for locale dav.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dav = {
   ERAS: ['KK', 'BK'],
@@ -2319,24 +2530,28 @@ goog.i18n.DateTimeSymbols_dav = {
 
 /**
  * Date/time formatting symbols for locale dav_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dav_KE = goog.i18n.DateTimeSymbols_dav;
 
 
 /**
  * Date/time formatting symbols for locale de_BE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_de_BE = goog.i18n.DateTimeSymbols_de;
 
 
 /**
  * Date/time formatting symbols for locale de_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_de_DE = goog.i18n.DateTimeSymbols_de;
 
 
 /**
  * Date/time formatting symbols for locale de_IT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_de_IT = {
   ERAS: ['v. Chr.', 'n. Chr.'],
@@ -2367,18 +2582,21 @@ goog.i18n.DateTimeSymbols_de_IT = {
 
 /**
  * Date/time formatting symbols for locale de_LI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_de_LI = goog.i18n.DateTimeSymbols_de;
 
 
 /**
  * Date/time formatting symbols for locale de_LU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_de_LU = goog.i18n.DateTimeSymbols_de;
 
 
 /**
  * Date/time formatting symbols for locale dje.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dje = {
   ERAS: ['IJ', 'IZ'],
@@ -2409,12 +2627,14 @@ goog.i18n.DateTimeSymbols_dje = {
 
 /**
  * Date/time formatting symbols for locale dje_NE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dje_NE = goog.i18n.DateTimeSymbols_dje;
 
 
 /**
  * Date/time formatting symbols for locale dsb.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dsb = {
   ERAS: ['pś.Chr.n.', 'pó Chr.n.'],
@@ -2445,12 +2665,14 @@ goog.i18n.DateTimeSymbols_dsb = {
 
 /**
  * Date/time formatting symbols for locale dsb_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dsb_DE = goog.i18n.DateTimeSymbols_dsb;
 
 
 /**
  * Date/time formatting symbols for locale dua.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dua = {
   ERAS: ['ɓ.Ys', 'mb.Ys'],
@@ -2481,12 +2703,14 @@ goog.i18n.DateTimeSymbols_dua = {
 
 /**
  * Date/time formatting symbols for locale dua_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dua_CM = goog.i18n.DateTimeSymbols_dua;
 
 
 /**
  * Date/time formatting symbols for locale dyo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dyo = {
   ERAS: ['ArY', 'AtY'],
@@ -2517,12 +2741,14 @@ goog.i18n.DateTimeSymbols_dyo = {
 
 /**
  * Date/time formatting symbols for locale dyo_SN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dyo_SN = goog.i18n.DateTimeSymbols_dyo;
 
 
 /**
  * Date/time formatting symbols for locale dz.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dz = {
   ZERODIGIT: 0x0F20,
@@ -2554,12 +2780,14 @@ goog.i18n.DateTimeSymbols_dz = {
 
 /**
  * Date/time formatting symbols for locale dz_BT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_dz_BT = goog.i18n.DateTimeSymbols_dz;
 
 
 /**
  * Date/time formatting symbols for locale ebu.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ebu = {
   ERAS: ['MK', 'TK'],
@@ -2590,12 +2818,14 @@ goog.i18n.DateTimeSymbols_ebu = {
 
 /**
  * Date/time formatting symbols for locale ebu_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ebu_KE = goog.i18n.DateTimeSymbols_ebu;
 
 
 /**
  * Date/time formatting symbols for locale ee.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ee = {
   ERAS: ['HYV', 'Yŋ'],
@@ -2626,12 +2856,14 @@ goog.i18n.DateTimeSymbols_ee = {
 
 /**
  * Date/time formatting symbols for locale ee_GH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ee_GH = goog.i18n.DateTimeSymbols_ee;
 
 
 /**
  * Date/time formatting symbols for locale ee_TG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ee_TG = {
   ERAS: ['HYV', 'Yŋ'],
@@ -2662,6 +2894,7 @@ goog.i18n.DateTimeSymbols_ee_TG = {
 
 /**
  * Date/time formatting symbols for locale el_CY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_el_CY = {
   ERAS: ['π.Χ.', 'μ.Χ.'],
@@ -2692,12 +2925,14 @@ goog.i18n.DateTimeSymbols_el_CY = {
 
 /**
  * Date/time formatting symbols for locale el_GR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_el_GR = goog.i18n.DateTimeSymbols_el;
 
 
 /**
  * Date/time formatting symbols for locale en_001.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_001 = {
   ERAS: ['BC', 'AD'],
@@ -2728,6 +2963,7 @@ goog.i18n.DateTimeSymbols_en_001 = {
 
 /**
  * Date/time formatting symbols for locale en_150.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_150 = {
   ERAS: ['BC', 'AD'],
@@ -2758,6 +2994,7 @@ goog.i18n.DateTimeSymbols_en_150 = {
 
 /**
  * Date/time formatting symbols for locale en_AG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_AG = {
   ERAS: ['BC', 'AD'],
@@ -2788,6 +3025,7 @@ goog.i18n.DateTimeSymbols_en_AG = {
 
 /**
  * Date/time formatting symbols for locale en_AI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_AI = {
   ERAS: ['BC', 'AD'],
@@ -2818,12 +3056,14 @@ goog.i18n.DateTimeSymbols_en_AI = {
 
 /**
  * Date/time formatting symbols for locale en_AS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_AS = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_AT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_AT = {
   ERAS: ['BC', 'AD'],
@@ -2854,6 +3094,7 @@ goog.i18n.DateTimeSymbols_en_AT = {
 
 /**
  * Date/time formatting symbols for locale en_BB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BB = {
   ERAS: ['BC', 'AD'],
@@ -2884,6 +3125,7 @@ goog.i18n.DateTimeSymbols_en_BB = {
 
 /**
  * Date/time formatting symbols for locale en_BE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BE = {
   ERAS: ['BC', 'AD'],
@@ -2914,6 +3156,7 @@ goog.i18n.DateTimeSymbols_en_BE = {
 
 /**
  * Date/time formatting symbols for locale en_BI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BI = {
   ERAS: ['BC', 'AD'],
@@ -2944,6 +3187,7 @@ goog.i18n.DateTimeSymbols_en_BI = {
 
 /**
  * Date/time formatting symbols for locale en_BM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BM = {
   ERAS: ['BC', 'AD'],
@@ -2974,6 +3218,7 @@ goog.i18n.DateTimeSymbols_en_BM = {
 
 /**
  * Date/time formatting symbols for locale en_BS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BS = {
   ERAS: ['BC', 'AD'],
@@ -3004,6 +3249,7 @@ goog.i18n.DateTimeSymbols_en_BS = {
 
 /**
  * Date/time formatting symbols for locale en_BW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BW = {
   ERAS: ['BC', 'AD'],
@@ -3034,6 +3280,7 @@ goog.i18n.DateTimeSymbols_en_BW = {
 
 /**
  * Date/time formatting symbols for locale en_BZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_BZ = {
   ERAS: ['BC', 'AD'],
@@ -3064,6 +3311,7 @@ goog.i18n.DateTimeSymbols_en_BZ = {
 
 /**
  * Date/time formatting symbols for locale en_CC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CC = {
   ERAS: ['BC', 'AD'],
@@ -3094,6 +3342,7 @@ goog.i18n.DateTimeSymbols_en_CC = {
 
 /**
  * Date/time formatting symbols for locale en_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CH = {
   ERAS: ['BC', 'AD'],
@@ -3124,6 +3373,7 @@ goog.i18n.DateTimeSymbols_en_CH = {
 
 /**
  * Date/time formatting symbols for locale en_CK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CK = {
   ERAS: ['BC', 'AD'],
@@ -3154,6 +3404,7 @@ goog.i18n.DateTimeSymbols_en_CK = {
 
 /**
  * Date/time formatting symbols for locale en_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CM = {
   ERAS: ['BC', 'AD'],
@@ -3184,6 +3435,7 @@ goog.i18n.DateTimeSymbols_en_CM = {
 
 /**
  * Date/time formatting symbols for locale en_CX.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CX = {
   ERAS: ['BC', 'AD'],
@@ -3214,6 +3466,7 @@ goog.i18n.DateTimeSymbols_en_CX = {
 
 /**
  * Date/time formatting symbols for locale en_CY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_CY = {
   ERAS: ['BC', 'AD'],
@@ -3244,6 +3497,7 @@ goog.i18n.DateTimeSymbols_en_CY = {
 
 /**
  * Date/time formatting symbols for locale en_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_DE = {
   ERAS: ['BC', 'AD'],
@@ -3274,6 +3528,7 @@ goog.i18n.DateTimeSymbols_en_DE = {
 
 /**
  * Date/time formatting symbols for locale en_DG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_DG = {
   ERAS: ['BC', 'AD'],
@@ -3304,6 +3559,7 @@ goog.i18n.DateTimeSymbols_en_DG = {
 
 /**
  * Date/time formatting symbols for locale en_DK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_DK = {
   ERAS: ['BC', 'AD'],
@@ -3334,6 +3590,7 @@ goog.i18n.DateTimeSymbols_en_DK = {
 
 /**
  * Date/time formatting symbols for locale en_DM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_DM = {
   ERAS: ['BC', 'AD'],
@@ -3364,6 +3621,7 @@ goog.i18n.DateTimeSymbols_en_DM = {
 
 /**
  * Date/time formatting symbols for locale en_ER.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_ER = {
   ERAS: ['BC', 'AD'],
@@ -3394,6 +3652,7 @@ goog.i18n.DateTimeSymbols_en_ER = {
 
 /**
  * Date/time formatting symbols for locale en_FI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_FI = {
   ERAS: ['BC', 'AD'],
@@ -3424,6 +3683,7 @@ goog.i18n.DateTimeSymbols_en_FI = {
 
 /**
  * Date/time formatting symbols for locale en_FJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_FJ = {
   ERAS: ['BC', 'AD'],
@@ -3454,6 +3714,7 @@ goog.i18n.DateTimeSymbols_en_FJ = {
 
 /**
  * Date/time formatting symbols for locale en_FK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_FK = {
   ERAS: ['BC', 'AD'],
@@ -3484,6 +3745,7 @@ goog.i18n.DateTimeSymbols_en_FK = {
 
 /**
  * Date/time formatting symbols for locale en_FM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_FM = {
   ERAS: ['BC', 'AD'],
@@ -3514,6 +3776,7 @@ goog.i18n.DateTimeSymbols_en_FM = {
 
 /**
  * Date/time formatting symbols for locale en_GD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GD = {
   ERAS: ['BC', 'AD'],
@@ -3544,6 +3807,7 @@ goog.i18n.DateTimeSymbols_en_GD = {
 
 /**
  * Date/time formatting symbols for locale en_GG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GG = {
   ERAS: ['BC', 'AD'],
@@ -3574,6 +3838,7 @@ goog.i18n.DateTimeSymbols_en_GG = {
 
 /**
  * Date/time formatting symbols for locale en_GH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GH = {
   ERAS: ['BC', 'AD'],
@@ -3604,6 +3869,7 @@ goog.i18n.DateTimeSymbols_en_GH = {
 
 /**
  * Date/time formatting symbols for locale en_GI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GI = {
   ERAS: ['BC', 'AD'],
@@ -3634,6 +3900,7 @@ goog.i18n.DateTimeSymbols_en_GI = {
 
 /**
  * Date/time formatting symbols for locale en_GM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GM = {
   ERAS: ['BC', 'AD'],
@@ -3664,12 +3931,14 @@ goog.i18n.DateTimeSymbols_en_GM = {
 
 /**
  * Date/time formatting symbols for locale en_GU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GU = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_GY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_GY = {
   ERAS: ['BC', 'AD'],
@@ -3700,6 +3969,7 @@ goog.i18n.DateTimeSymbols_en_GY = {
 
 /**
  * Date/time formatting symbols for locale en_HK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_HK = {
   ERAS: ['BC', 'AD'],
@@ -3730,6 +4000,7 @@ goog.i18n.DateTimeSymbols_en_HK = {
 
 /**
  * Date/time formatting symbols for locale en_IL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_IL = {
   ERAS: ['BC', 'AD'],
@@ -3760,6 +4031,7 @@ goog.i18n.DateTimeSymbols_en_IL = {
 
 /**
  * Date/time formatting symbols for locale en_IM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_IM = {
   ERAS: ['BC', 'AD'],
@@ -3790,6 +4062,7 @@ goog.i18n.DateTimeSymbols_en_IM = {
 
 /**
  * Date/time formatting symbols for locale en_IO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_IO = {
   ERAS: ['BC', 'AD'],
@@ -3820,6 +4093,7 @@ goog.i18n.DateTimeSymbols_en_IO = {
 
 /**
  * Date/time formatting symbols for locale en_JE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_JE = {
   ERAS: ['BC', 'AD'],
@@ -3850,6 +4124,7 @@ goog.i18n.DateTimeSymbols_en_JE = {
 
 /**
  * Date/time formatting symbols for locale en_JM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_JM = {
   ERAS: ['BC', 'AD'],
@@ -3880,6 +4155,7 @@ goog.i18n.DateTimeSymbols_en_JM = {
 
 /**
  * Date/time formatting symbols for locale en_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_KE = {
   ERAS: ['BC', 'AD'],
@@ -3910,6 +4186,7 @@ goog.i18n.DateTimeSymbols_en_KE = {
 
 /**
  * Date/time formatting symbols for locale en_KI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_KI = {
   ERAS: ['BC', 'AD'],
@@ -3940,6 +4217,7 @@ goog.i18n.DateTimeSymbols_en_KI = {
 
 /**
  * Date/time formatting symbols for locale en_KN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_KN = {
   ERAS: ['BC', 'AD'],
@@ -3970,6 +4248,7 @@ goog.i18n.DateTimeSymbols_en_KN = {
 
 /**
  * Date/time formatting symbols for locale en_KY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_KY = {
   ERAS: ['BC', 'AD'],
@@ -4000,6 +4279,7 @@ goog.i18n.DateTimeSymbols_en_KY = {
 
 /**
  * Date/time formatting symbols for locale en_LC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_LC = {
   ERAS: ['BC', 'AD'],
@@ -4030,6 +4310,7 @@ goog.i18n.DateTimeSymbols_en_LC = {
 
 /**
  * Date/time formatting symbols for locale en_LR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_LR = {
   ERAS: ['BC', 'AD'],
@@ -4060,6 +4341,7 @@ goog.i18n.DateTimeSymbols_en_LR = {
 
 /**
  * Date/time formatting symbols for locale en_LS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_LS = {
   ERAS: ['BC', 'AD'],
@@ -4090,6 +4372,7 @@ goog.i18n.DateTimeSymbols_en_LS = {
 
 /**
  * Date/time formatting symbols for locale en_MG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MG = {
   ERAS: ['BC', 'AD'],
@@ -4120,12 +4403,14 @@ goog.i18n.DateTimeSymbols_en_MG = {
 
 /**
  * Date/time formatting symbols for locale en_MH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MH = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_MO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MO = {
   ERAS: ['BC', 'AD'],
@@ -4156,6 +4441,7 @@ goog.i18n.DateTimeSymbols_en_MO = {
 
 /**
  * Date/time formatting symbols for locale en_MP.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MP = {
   ERAS: ['BC', 'AD'],
@@ -4186,6 +4472,7 @@ goog.i18n.DateTimeSymbols_en_MP = {
 
 /**
  * Date/time formatting symbols for locale en_MS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MS = {
   ERAS: ['BC', 'AD'],
@@ -4216,6 +4503,7 @@ goog.i18n.DateTimeSymbols_en_MS = {
 
 /**
  * Date/time formatting symbols for locale en_MT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MT = {
   ERAS: ['BC', 'AD'],
@@ -4246,6 +4534,7 @@ goog.i18n.DateTimeSymbols_en_MT = {
 
 /**
  * Date/time formatting symbols for locale en_MU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MU = {
   ERAS: ['BC', 'AD'],
@@ -4276,6 +4565,7 @@ goog.i18n.DateTimeSymbols_en_MU = {
 
 /**
  * Date/time formatting symbols for locale en_MW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MW = {
   ERAS: ['BC', 'AD'],
@@ -4306,6 +4596,7 @@ goog.i18n.DateTimeSymbols_en_MW = {
 
 /**
  * Date/time formatting symbols for locale en_MY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_MY = {
   ERAS: ['BC', 'AD'],
@@ -4336,6 +4627,7 @@ goog.i18n.DateTimeSymbols_en_MY = {
 
 /**
  * Date/time formatting symbols for locale en_NA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NA = {
   ERAS: ['BC', 'AD'],
@@ -4366,6 +4658,7 @@ goog.i18n.DateTimeSymbols_en_NA = {
 
 /**
  * Date/time formatting symbols for locale en_NF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NF = {
   ERAS: ['BC', 'AD'],
@@ -4396,6 +4689,7 @@ goog.i18n.DateTimeSymbols_en_NF = {
 
 /**
  * Date/time formatting symbols for locale en_NG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NG = {
   ERAS: ['BC', 'AD'],
@@ -4426,6 +4720,7 @@ goog.i18n.DateTimeSymbols_en_NG = {
 
 /**
  * Date/time formatting symbols for locale en_NL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NL = {
   ERAS: ['BC', 'AD'],
@@ -4456,6 +4751,7 @@ goog.i18n.DateTimeSymbols_en_NL = {
 
 /**
  * Date/time formatting symbols for locale en_NR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NR = {
   ERAS: ['BC', 'AD'],
@@ -4486,6 +4782,7 @@ goog.i18n.DateTimeSymbols_en_NR = {
 
 /**
  * Date/time formatting symbols for locale en_NU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NU = {
   ERAS: ['BC', 'AD'],
@@ -4516,6 +4813,7 @@ goog.i18n.DateTimeSymbols_en_NU = {
 
 /**
  * Date/time formatting symbols for locale en_NZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_NZ = {
   ERAS: ['BC', 'AD'],
@@ -4546,6 +4844,7 @@ goog.i18n.DateTimeSymbols_en_NZ = {
 
 /**
  * Date/time formatting symbols for locale en_PG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PG = {
   ERAS: ['BC', 'AD'],
@@ -4576,6 +4875,7 @@ goog.i18n.DateTimeSymbols_en_PG = {
 
 /**
  * Date/time formatting symbols for locale en_PH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PH = {
   ERAS: ['BC', 'AD'],
@@ -4606,6 +4906,7 @@ goog.i18n.DateTimeSymbols_en_PH = {
 
 /**
  * Date/time formatting symbols for locale en_PK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PK = {
   ERAS: ['BC', 'AD'],
@@ -4636,6 +4937,7 @@ goog.i18n.DateTimeSymbols_en_PK = {
 
 /**
  * Date/time formatting symbols for locale en_PN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PN = {
   ERAS: ['BC', 'AD'],
@@ -4666,12 +4968,14 @@ goog.i18n.DateTimeSymbols_en_PN = {
 
 /**
  * Date/time formatting symbols for locale en_PR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PR = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_PW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_PW = {
   ERAS: ['BC', 'AD'],
@@ -4702,6 +5006,7 @@ goog.i18n.DateTimeSymbols_en_PW = {
 
 /**
  * Date/time formatting symbols for locale en_RW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_RW = {
   ERAS: ['BC', 'AD'],
@@ -4732,6 +5037,7 @@ goog.i18n.DateTimeSymbols_en_RW = {
 
 /**
  * Date/time formatting symbols for locale en_SB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SB = {
   ERAS: ['BC', 'AD'],
@@ -4762,6 +5068,7 @@ goog.i18n.DateTimeSymbols_en_SB = {
 
 /**
  * Date/time formatting symbols for locale en_SC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SC = {
   ERAS: ['BC', 'AD'],
@@ -4792,6 +5099,7 @@ goog.i18n.DateTimeSymbols_en_SC = {
 
 /**
  * Date/time formatting symbols for locale en_SD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SD = {
   ERAS: ['BC', 'AD'],
@@ -4822,6 +5130,7 @@ goog.i18n.DateTimeSymbols_en_SD = {
 
 /**
  * Date/time formatting symbols for locale en_SE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SE = {
   ERAS: ['BC', 'AD'],
@@ -4852,6 +5161,7 @@ goog.i18n.DateTimeSymbols_en_SE = {
 
 /**
  * Date/time formatting symbols for locale en_SH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SH = {
   ERAS: ['BC', 'AD'],
@@ -4882,6 +5192,7 @@ goog.i18n.DateTimeSymbols_en_SH = {
 
 /**
  * Date/time formatting symbols for locale en_SI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SI = {
   ERAS: ['BC', 'AD'],
@@ -4912,6 +5223,7 @@ goog.i18n.DateTimeSymbols_en_SI = {
 
 /**
  * Date/time formatting symbols for locale en_SL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SL = {
   ERAS: ['BC', 'AD'],
@@ -4942,6 +5254,7 @@ goog.i18n.DateTimeSymbols_en_SL = {
 
 /**
  * Date/time formatting symbols for locale en_SS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SS = {
   ERAS: ['BC', 'AD'],
@@ -4972,6 +5285,7 @@ goog.i18n.DateTimeSymbols_en_SS = {
 
 /**
  * Date/time formatting symbols for locale en_SX.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SX = {
   ERAS: ['BC', 'AD'],
@@ -5002,6 +5316,7 @@ goog.i18n.DateTimeSymbols_en_SX = {
 
 /**
  * Date/time formatting symbols for locale en_SZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_SZ = {
   ERAS: ['BC', 'AD'],
@@ -5032,6 +5347,7 @@ goog.i18n.DateTimeSymbols_en_SZ = {
 
 /**
  * Date/time formatting symbols for locale en_TC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TC = {
   ERAS: ['BC', 'AD'],
@@ -5062,6 +5378,7 @@ goog.i18n.DateTimeSymbols_en_TC = {
 
 /**
  * Date/time formatting symbols for locale en_TK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TK = {
   ERAS: ['BC', 'AD'],
@@ -5092,6 +5409,7 @@ goog.i18n.DateTimeSymbols_en_TK = {
 
 /**
  * Date/time formatting symbols for locale en_TO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TO = {
   ERAS: ['BC', 'AD'],
@@ -5122,6 +5440,7 @@ goog.i18n.DateTimeSymbols_en_TO = {
 
 /**
  * Date/time formatting symbols for locale en_TT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TT = {
   ERAS: ['BC', 'AD'],
@@ -5152,6 +5471,7 @@ goog.i18n.DateTimeSymbols_en_TT = {
 
 /**
  * Date/time formatting symbols for locale en_TV.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TV = {
   ERAS: ['BC', 'AD'],
@@ -5182,6 +5502,7 @@ goog.i18n.DateTimeSymbols_en_TV = {
 
 /**
  * Date/time formatting symbols for locale en_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_TZ = {
   ERAS: ['BC', 'AD'],
@@ -5212,6 +5533,7 @@ goog.i18n.DateTimeSymbols_en_TZ = {
 
 /**
  * Date/time formatting symbols for locale en_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_UG = {
   ERAS: ['BC', 'AD'],
@@ -5242,18 +5564,21 @@ goog.i18n.DateTimeSymbols_en_UG = {
 
 /**
  * Date/time formatting symbols for locale en_UM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_UM = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_US_POSIX.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_US_POSIX = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_VC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_VC = {
   ERAS: ['BC', 'AD'],
@@ -5284,6 +5609,7 @@ goog.i18n.DateTimeSymbols_en_VC = {
 
 /**
  * Date/time formatting symbols for locale en_VG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_VG = {
   ERAS: ['BC', 'AD'],
@@ -5314,12 +5640,14 @@ goog.i18n.DateTimeSymbols_en_VG = {
 
 /**
  * Date/time formatting symbols for locale en_VI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_VI = goog.i18n.DateTimeSymbols_en;
 
 
 /**
  * Date/time formatting symbols for locale en_VU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_VU = {
   ERAS: ['BC', 'AD'],
@@ -5350,6 +5678,7 @@ goog.i18n.DateTimeSymbols_en_VU = {
 
 /**
  * Date/time formatting symbols for locale en_WS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_WS = {
   ERAS: ['BC', 'AD'],
@@ -5380,6 +5709,7 @@ goog.i18n.DateTimeSymbols_en_WS = {
 
 /**
  * Date/time formatting symbols for locale en_XA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_XA = {
   ERAS: ['[ƁÇ one]', '[ÅÐ one]'],
@@ -5410,6 +5740,7 @@ goog.i18n.DateTimeSymbols_en_XA = {
 
 /**
  * Date/time formatting symbols for locale en_ZM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_ZM = {
   ERAS: ['BC', 'AD'],
@@ -5440,6 +5771,7 @@ goog.i18n.DateTimeSymbols_en_ZM = {
 
 /**
  * Date/time formatting symbols for locale en_ZW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_en_ZW = {
   ERAS: ['BC', 'AD'],
@@ -5470,6 +5802,7 @@ goog.i18n.DateTimeSymbols_en_ZW = {
 
 /**
  * Date/time formatting symbols for locale eo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_eo = {
   ERAS: ['aK', 'pK'],
@@ -5500,6 +5833,7 @@ goog.i18n.DateTimeSymbols_eo = {
 
 /**
  * Date/time formatting symbols for locale es_AR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_AR = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5530,6 +5864,7 @@ goog.i18n.DateTimeSymbols_es_AR = {
 
 /**
  * Date/time formatting symbols for locale es_BO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_BO = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5560,6 +5895,7 @@ goog.i18n.DateTimeSymbols_es_BO = {
 
 /**
  * Date/time formatting symbols for locale es_BR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_BR = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5590,6 +5926,7 @@ goog.i18n.DateTimeSymbols_es_BR = {
 
 /**
  * Date/time formatting symbols for locale es_BZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_BZ = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5620,6 +5957,7 @@ goog.i18n.DateTimeSymbols_es_BZ = {
 
 /**
  * Date/time formatting symbols for locale es_CL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_CL = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5650,6 +5988,7 @@ goog.i18n.DateTimeSymbols_es_CL = {
 
 /**
  * Date/time formatting symbols for locale es_CO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_CO = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5680,6 +6019,7 @@ goog.i18n.DateTimeSymbols_es_CO = {
 
 /**
  * Date/time formatting symbols for locale es_CR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_CR = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5710,6 +6050,7 @@ goog.i18n.DateTimeSymbols_es_CR = {
 
 /**
  * Date/time formatting symbols for locale es_CU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_CU = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5740,6 +6081,7 @@ goog.i18n.DateTimeSymbols_es_CU = {
 
 /**
  * Date/time formatting symbols for locale es_DO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_DO = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5770,6 +6112,7 @@ goog.i18n.DateTimeSymbols_es_DO = {
 
 /**
  * Date/time formatting symbols for locale es_EA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_EA = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5800,6 +6143,7 @@ goog.i18n.DateTimeSymbols_es_EA = {
 
 /**
  * Date/time formatting symbols for locale es_EC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_EC = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5830,6 +6174,7 @@ goog.i18n.DateTimeSymbols_es_EC = {
 
 /**
  * Date/time formatting symbols for locale es_GQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_GQ = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5860,6 +6205,7 @@ goog.i18n.DateTimeSymbols_es_GQ = {
 
 /**
  * Date/time formatting symbols for locale es_GT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_GT = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5890,6 +6236,7 @@ goog.i18n.DateTimeSymbols_es_GT = {
 
 /**
  * Date/time formatting symbols for locale es_HN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_HN = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5920,6 +6267,7 @@ goog.i18n.DateTimeSymbols_es_HN = {
 
 /**
  * Date/time formatting symbols for locale es_IC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_IC = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5950,6 +6298,7 @@ goog.i18n.DateTimeSymbols_es_IC = {
 
 /**
  * Date/time formatting symbols for locale es_NI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_NI = {
   ERAS: ['a. C.', 'd. C.'],
@@ -5980,6 +6329,7 @@ goog.i18n.DateTimeSymbols_es_NI = {
 
 /**
  * Date/time formatting symbols for locale es_PA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_PA = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6010,6 +6360,7 @@ goog.i18n.DateTimeSymbols_es_PA = {
 
 /**
  * Date/time formatting symbols for locale es_PE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_PE = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6040,6 +6391,7 @@ goog.i18n.DateTimeSymbols_es_PE = {
 
 /**
  * Date/time formatting symbols for locale es_PH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_PH = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6070,6 +6422,7 @@ goog.i18n.DateTimeSymbols_es_PH = {
 
 /**
  * Date/time formatting symbols for locale es_PR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_PR = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6100,6 +6453,7 @@ goog.i18n.DateTimeSymbols_es_PR = {
 
 /**
  * Date/time formatting symbols for locale es_PY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_PY = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6130,6 +6484,7 @@ goog.i18n.DateTimeSymbols_es_PY = {
 
 /**
  * Date/time formatting symbols for locale es_SV.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_SV = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6160,6 +6515,7 @@ goog.i18n.DateTimeSymbols_es_SV = {
 
 /**
  * Date/time formatting symbols for locale es_UY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_UY = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6190,6 +6546,7 @@ goog.i18n.DateTimeSymbols_es_UY = {
 
 /**
  * Date/time formatting symbols for locale es_VE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_es_VE = {
   ERAS: ['a. C.', 'd. C.'],
@@ -6220,18 +6577,21 @@ goog.i18n.DateTimeSymbols_es_VE = {
 
 /**
  * Date/time formatting symbols for locale et_EE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_et_EE = goog.i18n.DateTimeSymbols_et;
 
 
 /**
  * Date/time formatting symbols for locale eu_ES.
+ * @const
  */
 goog.i18n.DateTimeSymbols_eu_ES = goog.i18n.DateTimeSymbols_eu;
 
 
 /**
  * Date/time formatting symbols for locale ewo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ewo = {
   ERAS: ['oyk', 'ayk'],
@@ -6262,12 +6622,14 @@ goog.i18n.DateTimeSymbols_ewo = {
 
 /**
  * Date/time formatting symbols for locale ewo_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ewo_CM = goog.i18n.DateTimeSymbols_ewo;
 
 
 /**
  * Date/time formatting symbols for locale fa_AF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fa_AF = {
   ZERODIGIT: 0x06F0,
@@ -6299,12 +6661,14 @@ goog.i18n.DateTimeSymbols_fa_AF = {
 
 /**
  * Date/time formatting symbols for locale fa_IR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fa_IR = goog.i18n.DateTimeSymbols_fa;
 
 
 /**
  * Date/time formatting symbols for locale ff.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ff = {
   ERAS: ['H-I', 'C-I'],
@@ -6335,18 +6699,21 @@ goog.i18n.DateTimeSymbols_ff = {
 
 /**
  * Date/time formatting symbols for locale ff_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ff_CM = goog.i18n.DateTimeSymbols_ff;
 
 
 /**
  * Date/time formatting symbols for locale ff_GN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ff_GN = goog.i18n.DateTimeSymbols_ff;
 
 
 /**
  * Date/time formatting symbols for locale ff_MR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ff_MR = {
   ERAS: ['H-I', 'C-I'],
@@ -6377,24 +6744,28 @@ goog.i18n.DateTimeSymbols_ff_MR = {
 
 /**
  * Date/time formatting symbols for locale ff_SN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ff_SN = goog.i18n.DateTimeSymbols_ff;
 
 
 /**
  * Date/time formatting symbols for locale fi_FI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fi_FI = goog.i18n.DateTimeSymbols_fi;
 
 
 /**
  * Date/time formatting symbols for locale fil_PH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fil_PH = goog.i18n.DateTimeSymbols_fil;
 
 
 /**
  * Date/time formatting symbols for locale fo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fo = {
   ERAS: ['f.Kr.', 'e.Kr.'],
@@ -6425,18 +6796,21 @@ goog.i18n.DateTimeSymbols_fo = {
 
 /**
  * Date/time formatting symbols for locale fo_DK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fo_DK = goog.i18n.DateTimeSymbols_fo;
 
 
 /**
  * Date/time formatting symbols for locale fo_FO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fo_FO = goog.i18n.DateTimeSymbols_fo;
 
 
 /**
  * Date/time formatting symbols for locale fr_BE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_BE = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6467,6 +6841,7 @@ goog.i18n.DateTimeSymbols_fr_BE = {
 
 /**
  * Date/time formatting symbols for locale fr_BF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_BF = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6497,6 +6872,7 @@ goog.i18n.DateTimeSymbols_fr_BF = {
 
 /**
  * Date/time formatting symbols for locale fr_BI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_BI = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6527,6 +6903,7 @@ goog.i18n.DateTimeSymbols_fr_BI = {
 
 /**
  * Date/time formatting symbols for locale fr_BJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_BJ = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6557,6 +6934,7 @@ goog.i18n.DateTimeSymbols_fr_BJ = {
 
 /**
  * Date/time formatting symbols for locale fr_BL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_BL = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6587,6 +6965,7 @@ goog.i18n.DateTimeSymbols_fr_BL = {
 
 /**
  * Date/time formatting symbols for locale fr_CD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CD = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6617,6 +6996,7 @@ goog.i18n.DateTimeSymbols_fr_CD = {
 
 /**
  * Date/time formatting symbols for locale fr_CF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CF = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6647,6 +7027,7 @@ goog.i18n.DateTimeSymbols_fr_CF = {
 
 /**
  * Date/time formatting symbols for locale fr_CG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CG = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6677,6 +7058,7 @@ goog.i18n.DateTimeSymbols_fr_CG = {
 
 /**
  * Date/time formatting symbols for locale fr_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CH = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6707,6 +7089,7 @@ goog.i18n.DateTimeSymbols_fr_CH = {
 
 /**
  * Date/time formatting symbols for locale fr_CI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CI = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6737,6 +7120,7 @@ goog.i18n.DateTimeSymbols_fr_CI = {
 
 /**
  * Date/time formatting symbols for locale fr_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_CM = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6767,6 +7151,7 @@ goog.i18n.DateTimeSymbols_fr_CM = {
 
 /**
  * Date/time formatting symbols for locale fr_DJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_DJ = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6797,6 +7182,7 @@ goog.i18n.DateTimeSymbols_fr_DJ = {
 
 /**
  * Date/time formatting symbols for locale fr_DZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_DZ = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6827,12 +7213,14 @@ goog.i18n.DateTimeSymbols_fr_DZ = {
 
 /**
  * Date/time formatting symbols for locale fr_FR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_FR = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_GA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_GA = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6863,12 +7251,14 @@ goog.i18n.DateTimeSymbols_fr_GA = {
 
 /**
  * Date/time formatting symbols for locale fr_GF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_GF = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_GN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_GN = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6899,12 +7289,14 @@ goog.i18n.DateTimeSymbols_fr_GN = {
 
 /**
  * Date/time formatting symbols for locale fr_GP.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_GP = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_GQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_GQ = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6935,6 +7327,7 @@ goog.i18n.DateTimeSymbols_fr_GQ = {
 
 /**
  * Date/time formatting symbols for locale fr_HT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_HT = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6965,6 +7358,7 @@ goog.i18n.DateTimeSymbols_fr_HT = {
 
 /**
  * Date/time formatting symbols for locale fr_KM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_KM = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -6995,12 +7389,14 @@ goog.i18n.DateTimeSymbols_fr_KM = {
 
 /**
  * Date/time formatting symbols for locale fr_LU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_LU = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MA = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7031,12 +7427,14 @@ goog.i18n.DateTimeSymbols_fr_MA = {
 
 /**
  * Date/time formatting symbols for locale fr_MC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MC = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_MF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MF = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7067,6 +7465,7 @@ goog.i18n.DateTimeSymbols_fr_MF = {
 
 /**
  * Date/time formatting symbols for locale fr_MG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MG = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7097,6 +7496,7 @@ goog.i18n.DateTimeSymbols_fr_MG = {
 
 /**
  * Date/time formatting symbols for locale fr_ML.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_ML = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7127,12 +7527,14 @@ goog.i18n.DateTimeSymbols_fr_ML = {
 
 /**
  * Date/time formatting symbols for locale fr_MQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MQ = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_MR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MR = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7163,6 +7565,7 @@ goog.i18n.DateTimeSymbols_fr_MR = {
 
 /**
  * Date/time formatting symbols for locale fr_MU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_MU = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7193,6 +7596,7 @@ goog.i18n.DateTimeSymbols_fr_MU = {
 
 /**
  * Date/time formatting symbols for locale fr_NC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_NC = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7223,6 +7627,7 @@ goog.i18n.DateTimeSymbols_fr_NC = {
 
 /**
  * Date/time formatting symbols for locale fr_NE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_NE = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7253,6 +7658,7 @@ goog.i18n.DateTimeSymbols_fr_NE = {
 
 /**
  * Date/time formatting symbols for locale fr_PF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_PF = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7283,6 +7689,7 @@ goog.i18n.DateTimeSymbols_fr_PF = {
 
 /**
  * Date/time formatting symbols for locale fr_PM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_PM = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7313,12 +7720,14 @@ goog.i18n.DateTimeSymbols_fr_PM = {
 
 /**
  * Date/time formatting symbols for locale fr_RE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_RE = goog.i18n.DateTimeSymbols_fr;
 
 
 /**
  * Date/time formatting symbols for locale fr_RW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_RW = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7349,6 +7758,7 @@ goog.i18n.DateTimeSymbols_fr_RW = {
 
 /**
  * Date/time formatting symbols for locale fr_SC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_SC = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7379,6 +7789,7 @@ goog.i18n.DateTimeSymbols_fr_SC = {
 
 /**
  * Date/time formatting symbols for locale fr_SN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_SN = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7409,6 +7820,7 @@ goog.i18n.DateTimeSymbols_fr_SN = {
 
 /**
  * Date/time formatting symbols for locale fr_SY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_SY = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7439,6 +7851,7 @@ goog.i18n.DateTimeSymbols_fr_SY = {
 
 /**
  * Date/time formatting symbols for locale fr_TD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_TD = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7469,6 +7882,7 @@ goog.i18n.DateTimeSymbols_fr_TD = {
 
 /**
  * Date/time formatting symbols for locale fr_TG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_TG = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7499,6 +7913,7 @@ goog.i18n.DateTimeSymbols_fr_TG = {
 
 /**
  * Date/time formatting symbols for locale fr_TN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_TN = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7529,6 +7944,7 @@ goog.i18n.DateTimeSymbols_fr_TN = {
 
 /**
  * Date/time formatting symbols for locale fr_VU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_VU = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7559,6 +7975,7 @@ goog.i18n.DateTimeSymbols_fr_VU = {
 
 /**
  * Date/time formatting symbols for locale fr_WF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_WF = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7589,6 +8006,7 @@ goog.i18n.DateTimeSymbols_fr_WF = {
 
 /**
  * Date/time formatting symbols for locale fr_YT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fr_YT = {
   ERAS: ['av. J.-C.', 'ap. J.-C.'],
@@ -7619,6 +8037,7 @@ goog.i18n.DateTimeSymbols_fr_YT = {
 
 /**
  * Date/time formatting symbols for locale fur.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fur = {
   ERAS: ['pdC', 'ddC'],
@@ -7649,12 +8068,14 @@ goog.i18n.DateTimeSymbols_fur = {
 
 /**
  * Date/time formatting symbols for locale fur_IT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fur_IT = goog.i18n.DateTimeSymbols_fur;
 
 
 /**
  * Date/time formatting symbols for locale fy.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fy = {
   ERAS: ['f.Kr.', 'n.Kr.'],
@@ -7685,18 +8106,21 @@ goog.i18n.DateTimeSymbols_fy = {
 
 /**
  * Date/time formatting symbols for locale fy_NL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_fy_NL = goog.i18n.DateTimeSymbols_fy;
 
 
 /**
  * Date/time formatting symbols for locale ga_IE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ga_IE = goog.i18n.DateTimeSymbols_ga;
 
 
 /**
  * Date/time formatting symbols for locale gd.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gd = {
   ERAS: ['RC', 'AD'],
@@ -7727,42 +8151,49 @@ goog.i18n.DateTimeSymbols_gd = {
 
 /**
  * Date/time formatting symbols for locale gd_GB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gd_GB = goog.i18n.DateTimeSymbols_gd;
 
 
 /**
  * Date/time formatting symbols for locale gl_ES.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gl_ES = goog.i18n.DateTimeSymbols_gl;
 
 
 /**
  * Date/time formatting symbols for locale gsw_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gsw_CH = goog.i18n.DateTimeSymbols_gsw;
 
 
 /**
  * Date/time formatting symbols for locale gsw_FR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gsw_FR = goog.i18n.DateTimeSymbols_gsw;
 
 
 /**
  * Date/time formatting symbols for locale gsw_LI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gsw_LI = goog.i18n.DateTimeSymbols_gsw;
 
 
 /**
  * Date/time formatting symbols for locale gu_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gu_IN = goog.i18n.DateTimeSymbols_gu;
 
 
 /**
  * Date/time formatting symbols for locale guz.
+ * @const
  */
 goog.i18n.DateTimeSymbols_guz = {
   ERAS: ['YA', 'YK'],
@@ -7793,12 +8224,14 @@ goog.i18n.DateTimeSymbols_guz = {
 
 /**
  * Date/time formatting symbols for locale guz_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_guz_KE = goog.i18n.DateTimeSymbols_guz;
 
 
 /**
  * Date/time formatting symbols for locale gv.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gv = {
   ERAS: ['RC', 'AD'],
@@ -7829,12 +8262,14 @@ goog.i18n.DateTimeSymbols_gv = {
 
 /**
  * Date/time formatting symbols for locale gv_IM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_gv_IM = goog.i18n.DateTimeSymbols_gv;
 
 
 /**
  * Date/time formatting symbols for locale ha.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ha = {
   ERAS: ['KHAI', 'BHAI'],
@@ -7865,42 +8300,49 @@ goog.i18n.DateTimeSymbols_ha = {
 
 /**
  * Date/time formatting symbols for locale ha_GH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ha_GH = goog.i18n.DateTimeSymbols_ha;
 
 
 /**
  * Date/time formatting symbols for locale ha_NE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ha_NE = goog.i18n.DateTimeSymbols_ha;
 
 
 /**
  * Date/time formatting symbols for locale ha_NG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ha_NG = goog.i18n.DateTimeSymbols_ha;
 
 
 /**
  * Date/time formatting symbols for locale haw_US.
+ * @const
  */
 goog.i18n.DateTimeSymbols_haw_US = goog.i18n.DateTimeSymbols_haw;
 
 
 /**
  * Date/time formatting symbols for locale he_IL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_he_IL = goog.i18n.DateTimeSymbols_he;
 
 
 /**
  * Date/time formatting symbols for locale hi_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hi_IN = goog.i18n.DateTimeSymbols_hi;
 
 
 /**
  * Date/time formatting symbols for locale hr_BA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hr_BA = {
   ERAS: ['pr. Kr.', 'po. Kr.'],
@@ -7931,12 +8373,14 @@ goog.i18n.DateTimeSymbols_hr_BA = {
 
 /**
  * Date/time formatting symbols for locale hr_HR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hr_HR = goog.i18n.DateTimeSymbols_hr;
 
 
 /**
  * Date/time formatting symbols for locale hsb.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hsb = {
   ERAS: ['př.Chr.n.', 'po Chr.n.'],
@@ -7967,30 +8411,35 @@ goog.i18n.DateTimeSymbols_hsb = {
 
 /**
  * Date/time formatting symbols for locale hsb_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hsb_DE = goog.i18n.DateTimeSymbols_hsb;
 
 
 /**
  * Date/time formatting symbols for locale hu_HU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hu_HU = goog.i18n.DateTimeSymbols_hu;
 
 
 /**
  * Date/time formatting symbols for locale hy_AM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_hy_AM = goog.i18n.DateTimeSymbols_hy;
 
 
 /**
  * Date/time formatting symbols for locale id_ID.
+ * @const
  */
 goog.i18n.DateTimeSymbols_id_ID = goog.i18n.DateTimeSymbols_id;
 
 
 /**
  * Date/time formatting symbols for locale ig.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ig = {
   ERAS: ['T.K.', 'A.K.'],
@@ -8021,12 +8470,14 @@ goog.i18n.DateTimeSymbols_ig = {
 
 /**
  * Date/time formatting symbols for locale ig_NG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ig_NG = goog.i18n.DateTimeSymbols_ig;
 
 
 /**
  * Date/time formatting symbols for locale ii.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ii = {
   ERAS: ['ꃅꋊꂿ', 'ꃅꋊꊂ'],
@@ -8057,18 +8508,21 @@ goog.i18n.DateTimeSymbols_ii = {
 
 /**
  * Date/time formatting symbols for locale ii_CN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ii_CN = goog.i18n.DateTimeSymbols_ii;
 
 
 /**
  * Date/time formatting symbols for locale is_IS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_is_IS = goog.i18n.DateTimeSymbols_is;
 
 
 /**
  * Date/time formatting symbols for locale it_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_it_CH = {
   ERAS: ['a.C.', 'd.C.'],
@@ -8099,30 +8553,35 @@ goog.i18n.DateTimeSymbols_it_CH = {
 
 /**
  * Date/time formatting symbols for locale it_IT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_it_IT = goog.i18n.DateTimeSymbols_it;
 
 
 /**
  * Date/time formatting symbols for locale it_SM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_it_SM = goog.i18n.DateTimeSymbols_it;
 
 
 /**
  * Date/time formatting symbols for locale it_VA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_it_VA = goog.i18n.DateTimeSymbols_it;
 
 
 /**
  * Date/time formatting symbols for locale ja_JP.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ja_JP = goog.i18n.DateTimeSymbols_ja;
 
 
 /**
  * Date/time formatting symbols for locale jgo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_jgo = {
   ERAS: ['BCE', 'CE'],
@@ -8153,12 +8612,14 @@ goog.i18n.DateTimeSymbols_jgo = {
 
 /**
  * Date/time formatting symbols for locale jgo_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_jgo_CM = goog.i18n.DateTimeSymbols_jgo;
 
 
 /**
  * Date/time formatting symbols for locale jmc.
+ * @const
  */
 goog.i18n.DateTimeSymbols_jmc = {
   ERAS: ['KK', 'BK'],
@@ -8189,18 +8650,21 @@ goog.i18n.DateTimeSymbols_jmc = {
 
 /**
  * Date/time formatting symbols for locale jmc_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_jmc_TZ = goog.i18n.DateTimeSymbols_jmc;
 
 
 /**
  * Date/time formatting symbols for locale ka_GE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ka_GE = goog.i18n.DateTimeSymbols_ka;
 
 
 /**
  * Date/time formatting symbols for locale kab.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kab = {
   ERAS: ['snd. T.Ɛ', 'sld. T.Ɛ'],
@@ -8231,12 +8695,14 @@ goog.i18n.DateTimeSymbols_kab = {
 
 /**
  * Date/time formatting symbols for locale kab_DZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kab_DZ = goog.i18n.DateTimeSymbols_kab;
 
 
 /**
  * Date/time formatting symbols for locale kam.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kam = {
   ERAS: ['MY', 'IY'],
@@ -8267,12 +8733,14 @@ goog.i18n.DateTimeSymbols_kam = {
 
 /**
  * Date/time formatting symbols for locale kam_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kam_KE = goog.i18n.DateTimeSymbols_kam;
 
 
 /**
  * Date/time formatting symbols for locale kde.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kde = {
   ERAS: ['AY', 'NY'],
@@ -8303,12 +8771,14 @@ goog.i18n.DateTimeSymbols_kde = {
 
 /**
  * Date/time formatting symbols for locale kde_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kde_TZ = goog.i18n.DateTimeSymbols_kde;
 
 
 /**
  * Date/time formatting symbols for locale kea.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kea = {
   ERAS: ['AK', 'DK'],
@@ -8339,12 +8809,14 @@ goog.i18n.DateTimeSymbols_kea = {
 
 /**
  * Date/time formatting symbols for locale kea_CV.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kea_CV = goog.i18n.DateTimeSymbols_kea;
 
 
 /**
  * Date/time formatting symbols for locale khq.
+ * @const
  */
 goog.i18n.DateTimeSymbols_khq = {
   ERAS: ['IJ', 'IZ'],
@@ -8375,12 +8847,14 @@ goog.i18n.DateTimeSymbols_khq = {
 
 /**
  * Date/time formatting symbols for locale khq_ML.
+ * @const
  */
 goog.i18n.DateTimeSymbols_khq_ML = goog.i18n.DateTimeSymbols_khq;
 
 
 /**
  * Date/time formatting symbols for locale ki.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ki = {
   ERAS: ['MK', 'TK'],
@@ -8411,18 +8885,21 @@ goog.i18n.DateTimeSymbols_ki = {
 
 /**
  * Date/time formatting symbols for locale ki_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ki_KE = goog.i18n.DateTimeSymbols_ki;
 
 
 /**
  * Date/time formatting symbols for locale kk_KZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kk_KZ = goog.i18n.DateTimeSymbols_kk;
 
 
 /**
  * Date/time formatting symbols for locale kkj.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kkj = {
   ERAS: ['BCE', 'CE'],
@@ -8453,12 +8930,14 @@ goog.i18n.DateTimeSymbols_kkj = {
 
 /**
  * Date/time formatting symbols for locale kkj_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kkj_CM = goog.i18n.DateTimeSymbols_kkj;
 
 
 /**
  * Date/time formatting symbols for locale kl.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kl = {
   ERAS: ['BCE', 'CE'],
@@ -8489,12 +8968,14 @@ goog.i18n.DateTimeSymbols_kl = {
 
 /**
  * Date/time formatting symbols for locale kl_GL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kl_GL = goog.i18n.DateTimeSymbols_kl;
 
 
 /**
  * Date/time formatting symbols for locale kln.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kln = {
   ERAS: ['AM', 'KO'],
@@ -8525,24 +9006,28 @@ goog.i18n.DateTimeSymbols_kln = {
 
 /**
  * Date/time formatting symbols for locale kln_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kln_KE = goog.i18n.DateTimeSymbols_kln;
 
 
 /**
  * Date/time formatting symbols for locale km_KH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_km_KH = goog.i18n.DateTimeSymbols_km;
 
 
 /**
  * Date/time formatting symbols for locale kn_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kn_IN = goog.i18n.DateTimeSymbols_kn;
 
 
 /**
  * Date/time formatting symbols for locale ko_KP.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ko_KP = {
   ERAS: ['BC', 'AD'],
@@ -8573,12 +9058,14 @@ goog.i18n.DateTimeSymbols_ko_KP = {
 
 /**
  * Date/time formatting symbols for locale ko_KR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ko_KR = goog.i18n.DateTimeSymbols_ko;
 
 
 /**
  * Date/time formatting symbols for locale kok.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kok = {
   ERAS: ['क्रिस्तपूर्व', 'क्रिस्तशखा'],
@@ -8609,12 +9096,14 @@ goog.i18n.DateTimeSymbols_kok = {
 
 /**
  * Date/time formatting symbols for locale kok_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kok_IN = goog.i18n.DateTimeSymbols_kok;
 
 
 /**
  * Date/time formatting symbols for locale ks.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ks = {
   ZERODIGIT: 0x06F0,
@@ -8646,12 +9135,14 @@ goog.i18n.DateTimeSymbols_ks = {
 
 /**
  * Date/time formatting symbols for locale ks_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ks_IN = goog.i18n.DateTimeSymbols_ks;
 
 
 /**
  * Date/time formatting symbols for locale ksb.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksb = {
   ERAS: ['KK', 'BK'],
@@ -8682,12 +9173,14 @@ goog.i18n.DateTimeSymbols_ksb = {
 
 /**
  * Date/time formatting symbols for locale ksb_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksb_TZ = goog.i18n.DateTimeSymbols_ksb;
 
 
 /**
  * Date/time formatting symbols for locale ksf.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksf = {
   ERAS: ['d.Y.', 'k.Y.'],
@@ -8718,12 +9211,14 @@ goog.i18n.DateTimeSymbols_ksf = {
 
 /**
  * Date/time formatting symbols for locale ksf_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksf_CM = goog.i18n.DateTimeSymbols_ksf;
 
 
 /**
  * Date/time formatting symbols for locale ksh.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksh = {
   ERAS: ['v. Chr.', 'n. Chr.'],
@@ -8754,12 +9249,14 @@ goog.i18n.DateTimeSymbols_ksh = {
 
 /**
  * Date/time formatting symbols for locale ksh_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ksh_DE = goog.i18n.DateTimeSymbols_ksh;
 
 
 /**
  * Date/time formatting symbols for locale kw.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kw = {
   ERAS: ['RC', 'AD'],
@@ -8790,18 +9287,21 @@ goog.i18n.DateTimeSymbols_kw = {
 
 /**
  * Date/time formatting symbols for locale kw_GB.
+ * @const
  */
 goog.i18n.DateTimeSymbols_kw_GB = goog.i18n.DateTimeSymbols_kw;
 
 
 /**
  * Date/time formatting symbols for locale ky_KG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ky_KG = goog.i18n.DateTimeSymbols_ky;
 
 
 /**
  * Date/time formatting symbols for locale lag.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lag = {
   ERAS: ['KSA', 'KA'],
@@ -8832,12 +9332,14 @@ goog.i18n.DateTimeSymbols_lag = {
 
 /**
  * Date/time formatting symbols for locale lag_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lag_TZ = goog.i18n.DateTimeSymbols_lag;
 
 
 /**
  * Date/time formatting symbols for locale lb.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lb = {
   ERAS: ['v. Chr.', 'n. Chr.'],
@@ -8868,12 +9370,14 @@ goog.i18n.DateTimeSymbols_lb = {
 
 /**
  * Date/time formatting symbols for locale lb_LU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lb_LU = goog.i18n.DateTimeSymbols_lb;
 
 
 /**
  * Date/time formatting symbols for locale lg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lg = {
   ERAS: ['BC', 'AD'],
@@ -8904,12 +9408,14 @@ goog.i18n.DateTimeSymbols_lg = {
 
 /**
  * Date/time formatting symbols for locale lg_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lg_UG = goog.i18n.DateTimeSymbols_lg;
 
 
 /**
  * Date/time formatting symbols for locale lkt.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lkt = {
   ERAS: ['BCE', 'CE'],
@@ -8940,42 +9446,49 @@ goog.i18n.DateTimeSymbols_lkt = {
 
 /**
  * Date/time formatting symbols for locale lkt_US.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lkt_US = goog.i18n.DateTimeSymbols_lkt;
 
 
 /**
  * Date/time formatting symbols for locale ln_AO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ln_AO = goog.i18n.DateTimeSymbols_ln;
 
 
 /**
  * Date/time formatting symbols for locale ln_CD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ln_CD = goog.i18n.DateTimeSymbols_ln;
 
 
 /**
  * Date/time formatting symbols for locale ln_CF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ln_CF = goog.i18n.DateTimeSymbols_ln;
 
 
 /**
  * Date/time formatting symbols for locale ln_CG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ln_CG = goog.i18n.DateTimeSymbols_ln;
 
 
 /**
  * Date/time formatting symbols for locale lo_LA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lo_LA = goog.i18n.DateTimeSymbols_lo;
 
 
 /**
  * Date/time formatting symbols for locale lrc.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lrc = {
   ZERODIGIT: 0x06F0,
@@ -9007,6 +9520,7 @@ goog.i18n.DateTimeSymbols_lrc = {
 
 /**
  * Date/time formatting symbols for locale lrc_IQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lrc_IQ = {
   ZERODIGIT: 0x06F0,
@@ -9038,18 +9552,21 @@ goog.i18n.DateTimeSymbols_lrc_IQ = {
 
 /**
  * Date/time formatting symbols for locale lrc_IR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lrc_IR = goog.i18n.DateTimeSymbols_lrc;
 
 
 /**
  * Date/time formatting symbols for locale lt_LT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lt_LT = goog.i18n.DateTimeSymbols_lt;
 
 
 /**
  * Date/time formatting symbols for locale lu.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lu = {
   ERAS: ['kmp. Y.K.', 'kny. Y. K.'],
@@ -9080,12 +9597,14 @@ goog.i18n.DateTimeSymbols_lu = {
 
 /**
  * Date/time formatting symbols for locale lu_CD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lu_CD = goog.i18n.DateTimeSymbols_lu;
 
 
 /**
  * Date/time formatting symbols for locale luo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_luo = {
   ERAS: ['BC', 'AD'],
@@ -9116,12 +9635,14 @@ goog.i18n.DateTimeSymbols_luo = {
 
 /**
  * Date/time formatting symbols for locale luo_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_luo_KE = goog.i18n.DateTimeSymbols_luo;
 
 
 /**
  * Date/time formatting symbols for locale luy.
+ * @const
  */
 goog.i18n.DateTimeSymbols_luy = {
   ERAS: ['BC', 'AD'],
@@ -9152,18 +9673,21 @@ goog.i18n.DateTimeSymbols_luy = {
 
 /**
  * Date/time formatting symbols for locale luy_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_luy_KE = goog.i18n.DateTimeSymbols_luy;
 
 
 /**
  * Date/time formatting symbols for locale lv_LV.
+ * @const
  */
 goog.i18n.DateTimeSymbols_lv_LV = goog.i18n.DateTimeSymbols_lv;
 
 
 /**
  * Date/time formatting symbols for locale mas.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mas = {
   ERAS: ['MY', 'EY'],
@@ -9194,12 +9718,14 @@ goog.i18n.DateTimeSymbols_mas = {
 
 /**
  * Date/time formatting symbols for locale mas_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mas_KE = goog.i18n.DateTimeSymbols_mas;
 
 
 /**
  * Date/time formatting symbols for locale mas_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mas_TZ = {
   ERAS: ['MY', 'EY'],
@@ -9230,6 +9756,7 @@ goog.i18n.DateTimeSymbols_mas_TZ = {
 
 /**
  * Date/time formatting symbols for locale mer.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mer = {
   ERAS: ['MK', 'NK'],
@@ -9260,12 +9787,14 @@ goog.i18n.DateTimeSymbols_mer = {
 
 /**
  * Date/time formatting symbols for locale mer_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mer_KE = goog.i18n.DateTimeSymbols_mer;
 
 
 /**
  * Date/time formatting symbols for locale mfe.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mfe = {
   ERAS: ['av. Z-K', 'ap. Z-K'],
@@ -9296,12 +9825,14 @@ goog.i18n.DateTimeSymbols_mfe = {
 
 /**
  * Date/time formatting symbols for locale mfe_MU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mfe_MU = goog.i18n.DateTimeSymbols_mfe;
 
 
 /**
  * Date/time formatting symbols for locale mg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mg = {
   ERAS: ['BC', 'AD'],
@@ -9332,12 +9863,14 @@ goog.i18n.DateTimeSymbols_mg = {
 
 /**
  * Date/time formatting symbols for locale mg_MG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mg_MG = goog.i18n.DateTimeSymbols_mg;
 
 
 /**
  * Date/time formatting symbols for locale mgh.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mgh = {
   ERAS: ['HY', 'YY'],
@@ -9368,12 +9901,14 @@ goog.i18n.DateTimeSymbols_mgh = {
 
 /**
  * Date/time formatting symbols for locale mgh_MZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mgh_MZ = goog.i18n.DateTimeSymbols_mgh;
 
 
 /**
  * Date/time formatting symbols for locale mgo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mgo = {
   ERAS: ['BCE', 'CE'],
@@ -9404,36 +9939,42 @@ goog.i18n.DateTimeSymbols_mgo = {
 
 /**
  * Date/time formatting symbols for locale mgo_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mgo_CM = goog.i18n.DateTimeSymbols_mgo;
 
 
 /**
  * Date/time formatting symbols for locale mk_MK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mk_MK = goog.i18n.DateTimeSymbols_mk;
 
 
 /**
  * Date/time formatting symbols for locale ml_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ml_IN = goog.i18n.DateTimeSymbols_ml;
 
 
 /**
  * Date/time formatting symbols for locale mn_MN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mn_MN = goog.i18n.DateTimeSymbols_mn;
 
 
 /**
  * Date/time formatting symbols for locale mr_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mr_IN = goog.i18n.DateTimeSymbols_mr;
 
 
 /**
  * Date/time formatting symbols for locale ms_BN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ms_BN = {
   ERAS: ['S.M.', 'TM'],
@@ -9464,12 +10005,14 @@ goog.i18n.DateTimeSymbols_ms_BN = {
 
 /**
  * Date/time formatting symbols for locale ms_MY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ms_MY = goog.i18n.DateTimeSymbols_ms;
 
 
 /**
  * Date/time formatting symbols for locale ms_SG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ms_SG = {
   ERAS: ['S.M.', 'TM'],
@@ -9500,12 +10043,14 @@ goog.i18n.DateTimeSymbols_ms_SG = {
 
 /**
  * Date/time formatting symbols for locale mt_MT.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mt_MT = goog.i18n.DateTimeSymbols_mt;
 
 
 /**
  * Date/time formatting symbols for locale mua.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mua = {
   ERAS: ['KK', 'PK'],
@@ -9536,18 +10081,21 @@ goog.i18n.DateTimeSymbols_mua = {
 
 /**
  * Date/time formatting symbols for locale mua_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mua_CM = goog.i18n.DateTimeSymbols_mua;
 
 
 /**
  * Date/time formatting symbols for locale my_MM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_my_MM = goog.i18n.DateTimeSymbols_my;
 
 
 /**
  * Date/time formatting symbols for locale mzn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mzn = {
   ZERODIGIT: 0x06F0,
@@ -9579,12 +10127,14 @@ goog.i18n.DateTimeSymbols_mzn = {
 
 /**
  * Date/time formatting symbols for locale mzn_IR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_mzn_IR = goog.i18n.DateTimeSymbols_mzn;
 
 
 /**
  * Date/time formatting symbols for locale naq.
+ * @const
  */
 goog.i18n.DateTimeSymbols_naq = {
   ERAS: ['BC', 'AD'],
@@ -9615,24 +10165,28 @@ goog.i18n.DateTimeSymbols_naq = {
 
 /**
  * Date/time formatting symbols for locale naq_NA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_naq_NA = goog.i18n.DateTimeSymbols_naq;
 
 
 /**
  * Date/time formatting symbols for locale nb_NO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nb_NO = goog.i18n.DateTimeSymbols_nb;
 
 
 /**
  * Date/time formatting symbols for locale nb_SJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nb_SJ = goog.i18n.DateTimeSymbols_nb;
 
 
 /**
  * Date/time formatting symbols for locale nd.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nd = {
   ERAS: ['BC', 'AD'],
@@ -9663,12 +10217,14 @@ goog.i18n.DateTimeSymbols_nd = {
 
 /**
  * Date/time formatting symbols for locale nd_ZW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nd_ZW = goog.i18n.DateTimeSymbols_nd;
 
 
 /**
  * Date/time formatting symbols for locale nds.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nds = {
   ERAS: ['BCE', 'CE'],
@@ -9699,18 +10255,21 @@ goog.i18n.DateTimeSymbols_nds = {
 
 /**
  * Date/time formatting symbols for locale nds_DE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nds_DE = goog.i18n.DateTimeSymbols_nds;
 
 
 /**
  * Date/time formatting symbols for locale nds_NL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nds_NL = goog.i18n.DateTimeSymbols_nds;
 
 
 /**
  * Date/time formatting symbols for locale ne_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ne_IN = {
   ZERODIGIT: 0x0966,
@@ -9742,12 +10301,14 @@ goog.i18n.DateTimeSymbols_ne_IN = {
 
 /**
  * Date/time formatting symbols for locale ne_NP.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ne_NP = goog.i18n.DateTimeSymbols_ne;
 
 
 /**
  * Date/time formatting symbols for locale nl_AW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_AW = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9778,6 +10339,7 @@ goog.i18n.DateTimeSymbols_nl_AW = {
 
 /**
  * Date/time formatting symbols for locale nl_BE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_BE = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9808,6 +10370,7 @@ goog.i18n.DateTimeSymbols_nl_BE = {
 
 /**
  * Date/time formatting symbols for locale nl_BQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_BQ = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9838,6 +10401,7 @@ goog.i18n.DateTimeSymbols_nl_BQ = {
 
 /**
  * Date/time formatting symbols for locale nl_CW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_CW = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9868,12 +10432,14 @@ goog.i18n.DateTimeSymbols_nl_CW = {
 
 /**
  * Date/time formatting symbols for locale nl_NL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_NL = goog.i18n.DateTimeSymbols_nl;
 
 
 /**
  * Date/time formatting symbols for locale nl_SR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_SR = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9904,6 +10470,7 @@ goog.i18n.DateTimeSymbols_nl_SR = {
 
 /**
  * Date/time formatting symbols for locale nl_SX.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nl_SX = {
   ERAS: ['v.Chr.', 'n.Chr.'],
@@ -9934,6 +10501,7 @@ goog.i18n.DateTimeSymbols_nl_SX = {
 
 /**
  * Date/time formatting symbols for locale nmg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nmg = {
   ERAS: ['BL', 'PB'],
@@ -9964,12 +10532,14 @@ goog.i18n.DateTimeSymbols_nmg = {
 
 /**
  * Date/time formatting symbols for locale nmg_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nmg_CM = goog.i18n.DateTimeSymbols_nmg;
 
 
 /**
  * Date/time formatting symbols for locale nn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nn = {
   ERAS: ['f.Kr.', 'e.Kr.'],
@@ -10000,12 +10570,14 @@ goog.i18n.DateTimeSymbols_nn = {
 
 /**
  * Date/time formatting symbols for locale nn_NO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nn_NO = goog.i18n.DateTimeSymbols_nn;
 
 
 /**
  * Date/time formatting symbols for locale nnh.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nnh = {
   ERAS: ['m.z.Y.', 'm.g.n.Y.'],
@@ -10036,12 +10608,14 @@ goog.i18n.DateTimeSymbols_nnh = {
 
 /**
  * Date/time formatting symbols for locale nnh_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nnh_CM = goog.i18n.DateTimeSymbols_nnh;
 
 
 /**
  * Date/time formatting symbols for locale nus.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nus = {
   ERAS: ['AY', 'ƐY'],
@@ -10072,12 +10646,14 @@ goog.i18n.DateTimeSymbols_nus = {
 
 /**
  * Date/time formatting symbols for locale nus_SS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nus_SS = goog.i18n.DateTimeSymbols_nus;
 
 
 /**
  * Date/time formatting symbols for locale nyn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nyn = {
   ERAS: ['BC', 'AD'],
@@ -10108,12 +10684,14 @@ goog.i18n.DateTimeSymbols_nyn = {
 
 /**
  * Date/time formatting symbols for locale nyn_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_nyn_UG = goog.i18n.DateTimeSymbols_nyn;
 
 
 /**
  * Date/time formatting symbols for locale om.
+ * @const
  */
 goog.i18n.DateTimeSymbols_om = {
   ERAS: ['BCE', 'CE'],
@@ -10144,12 +10722,14 @@ goog.i18n.DateTimeSymbols_om = {
 
 /**
  * Date/time formatting symbols for locale om_ET.
+ * @const
  */
 goog.i18n.DateTimeSymbols_om_ET = goog.i18n.DateTimeSymbols_om;
 
 
 /**
  * Date/time formatting symbols for locale om_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_om_KE = {
   ERAS: ['KD', 'CE'],
@@ -10180,12 +10760,14 @@ goog.i18n.DateTimeSymbols_om_KE = {
 
 /**
  * Date/time formatting symbols for locale or_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_or_IN = goog.i18n.DateTimeSymbols_or;
 
 
 /**
  * Date/time formatting symbols for locale os.
+ * @const
  */
 goog.i18n.DateTimeSymbols_os = {
   ERAS: ['н.д.а.', 'н.д.'],
@@ -10216,12 +10798,14 @@ goog.i18n.DateTimeSymbols_os = {
 
 /**
  * Date/time formatting symbols for locale os_GE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_os_GE = goog.i18n.DateTimeSymbols_os;
 
 
 /**
  * Date/time formatting symbols for locale os_RU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_os_RU = {
   ERAS: ['н.д.а.', 'н.д.'],
@@ -10252,6 +10836,7 @@ goog.i18n.DateTimeSymbols_os_RU = {
 
 /**
  * Date/time formatting symbols for locale pa_Arab.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pa_Arab = {
   ZERODIGIT: 0x06F0,
@@ -10283,6 +10868,7 @@ goog.i18n.DateTimeSymbols_pa_Arab = {
 
 /**
  * Date/time formatting symbols for locale pa_Arab_PK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pa_Arab_PK = {
   ZERODIGIT: 0x06F0,
@@ -10314,24 +10900,28 @@ goog.i18n.DateTimeSymbols_pa_Arab_PK = {
 
 /**
  * Date/time formatting symbols for locale pa_Guru.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pa_Guru = goog.i18n.DateTimeSymbols_pa;
 
 
 /**
  * Date/time formatting symbols for locale pa_Guru_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pa_Guru_IN = goog.i18n.DateTimeSymbols_pa;
 
 
 /**
  * Date/time formatting symbols for locale pl_PL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pl_PL = goog.i18n.DateTimeSymbols_pl;
 
 
 /**
  * Date/time formatting symbols for locale ps.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ps = {
   ZERODIGIT: 0x06F0,
@@ -10363,12 +10953,14 @@ goog.i18n.DateTimeSymbols_ps = {
 
 /**
  * Date/time formatting symbols for locale ps_AF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ps_AF = goog.i18n.DateTimeSymbols_ps;
 
 
 /**
  * Date/time formatting symbols for locale pt_AO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_AO = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10399,6 +10991,7 @@ goog.i18n.DateTimeSymbols_pt_AO = {
 
 /**
  * Date/time formatting symbols for locale pt_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_CH = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10429,6 +11022,7 @@ goog.i18n.DateTimeSymbols_pt_CH = {
 
 /**
  * Date/time formatting symbols for locale pt_CV.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_CV = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10459,6 +11053,7 @@ goog.i18n.DateTimeSymbols_pt_CV = {
 
 /**
  * Date/time formatting symbols for locale pt_GQ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_GQ = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10489,6 +11084,7 @@ goog.i18n.DateTimeSymbols_pt_GQ = {
 
 /**
  * Date/time formatting symbols for locale pt_GW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_GW = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10519,6 +11115,7 @@ goog.i18n.DateTimeSymbols_pt_GW = {
 
 /**
  * Date/time formatting symbols for locale pt_LU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_LU = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10549,6 +11146,7 @@ goog.i18n.DateTimeSymbols_pt_LU = {
 
 /**
  * Date/time formatting symbols for locale pt_MO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_MO = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10579,6 +11177,7 @@ goog.i18n.DateTimeSymbols_pt_MO = {
 
 /**
  * Date/time formatting symbols for locale pt_MZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_MZ = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10609,6 +11208,7 @@ goog.i18n.DateTimeSymbols_pt_MZ = {
 
 /**
  * Date/time formatting symbols for locale pt_ST.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_ST = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10639,6 +11239,7 @@ goog.i18n.DateTimeSymbols_pt_ST = {
 
 /**
  * Date/time formatting symbols for locale pt_TL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_pt_TL = {
   ERAS: ['a.C.', 'd.C.'],
@@ -10669,6 +11270,7 @@ goog.i18n.DateTimeSymbols_pt_TL = {
 
 /**
  * Date/time formatting symbols for locale qu.
+ * @const
  */
 goog.i18n.DateTimeSymbols_qu = {
   ERAS: ['BCE', 'd.C.'],
@@ -10699,6 +11301,7 @@ goog.i18n.DateTimeSymbols_qu = {
 
 /**
  * Date/time formatting symbols for locale qu_BO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_qu_BO = {
   ERAS: ['BCE', 'd.C.'],
@@ -10729,6 +11332,7 @@ goog.i18n.DateTimeSymbols_qu_BO = {
 
 /**
  * Date/time formatting symbols for locale qu_EC.
+ * @const
  */
 goog.i18n.DateTimeSymbols_qu_EC = {
   ERAS: ['BCE', 'd.C.'],
@@ -10759,12 +11363,14 @@ goog.i18n.DateTimeSymbols_qu_EC = {
 
 /**
  * Date/time formatting symbols for locale qu_PE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_qu_PE = goog.i18n.DateTimeSymbols_qu;
 
 
 /**
  * Date/time formatting symbols for locale rm.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rm = {
   ERAS: ['av. Cr.', 's. Cr.'],
@@ -10795,12 +11401,14 @@ goog.i18n.DateTimeSymbols_rm = {
 
 /**
  * Date/time formatting symbols for locale rm_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rm_CH = goog.i18n.DateTimeSymbols_rm;
 
 
 /**
  * Date/time formatting symbols for locale rn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rn = {
   ERAS: ['Mb.Y.', 'Ny.Y'],
@@ -10831,12 +11439,14 @@ goog.i18n.DateTimeSymbols_rn = {
 
 /**
  * Date/time formatting symbols for locale rn_BI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rn_BI = goog.i18n.DateTimeSymbols_rn;
 
 
 /**
  * Date/time formatting symbols for locale ro_MD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ro_MD = {
   ERAS: ['î.Hr.', 'd.Hr.'],
@@ -10867,12 +11477,14 @@ goog.i18n.DateTimeSymbols_ro_MD = {
 
 /**
  * Date/time formatting symbols for locale ro_RO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ro_RO = goog.i18n.DateTimeSymbols_ro;
 
 
 /**
  * Date/time formatting symbols for locale rof.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rof = {
   ERAS: ['KM', 'BM'],
@@ -10903,12 +11515,14 @@ goog.i18n.DateTimeSymbols_rof = {
 
 /**
  * Date/time formatting symbols for locale rof_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rof_TZ = goog.i18n.DateTimeSymbols_rof;
 
 
 /**
  * Date/time formatting symbols for locale ru_BY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_BY = {
   ERAS: ['до н. э.', 'н. э.'],
@@ -10939,6 +11553,7 @@ goog.i18n.DateTimeSymbols_ru_BY = {
 
 /**
  * Date/time formatting symbols for locale ru_KG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_KG = {
   ERAS: ['до н. э.', 'н. э.'],
@@ -10969,6 +11584,7 @@ goog.i18n.DateTimeSymbols_ru_KG = {
 
 /**
  * Date/time formatting symbols for locale ru_KZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_KZ = {
   ERAS: ['до н. э.', 'н. э.'],
@@ -10999,6 +11615,7 @@ goog.i18n.DateTimeSymbols_ru_KZ = {
 
 /**
  * Date/time formatting symbols for locale ru_MD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_MD = {
   ERAS: ['до н. э.', 'н. э.'],
@@ -11029,12 +11646,14 @@ goog.i18n.DateTimeSymbols_ru_MD = {
 
 /**
  * Date/time formatting symbols for locale ru_RU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_RU = goog.i18n.DateTimeSymbols_ru;
 
 
 /**
  * Date/time formatting symbols for locale ru_UA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ru_UA = {
   ERAS: ['до н. э.', 'н. э.'],
@@ -11065,6 +11684,7 @@ goog.i18n.DateTimeSymbols_ru_UA = {
 
 /**
  * Date/time formatting symbols for locale rw.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rw = {
   ERAS: ['BCE', 'CE'],
@@ -11095,12 +11715,14 @@ goog.i18n.DateTimeSymbols_rw = {
 
 /**
  * Date/time formatting symbols for locale rw_RW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rw_RW = goog.i18n.DateTimeSymbols_rw;
 
 
 /**
  * Date/time formatting symbols for locale rwk.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rwk = {
   ERAS: ['KK', 'BK'],
@@ -11131,12 +11753,14 @@ goog.i18n.DateTimeSymbols_rwk = {
 
 /**
  * Date/time formatting symbols for locale rwk_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_rwk_TZ = goog.i18n.DateTimeSymbols_rwk;
 
 
 /**
  * Date/time formatting symbols for locale sah.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sah = {
   ERAS: ['б. э. и.', 'б. э'],
@@ -11167,12 +11791,14 @@ goog.i18n.DateTimeSymbols_sah = {
 
 /**
  * Date/time formatting symbols for locale sah_RU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sah_RU = goog.i18n.DateTimeSymbols_sah;
 
 
 /**
  * Date/time formatting symbols for locale saq.
+ * @const
  */
 goog.i18n.DateTimeSymbols_saq = {
   ERAS: ['KK', 'BK'],
@@ -11203,12 +11829,14 @@ goog.i18n.DateTimeSymbols_saq = {
 
 /**
  * Date/time formatting symbols for locale saq_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_saq_KE = goog.i18n.DateTimeSymbols_saq;
 
 
 /**
  * Date/time formatting symbols for locale sbp.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sbp = {
   ERAS: ['AK', 'PK'],
@@ -11239,12 +11867,14 @@ goog.i18n.DateTimeSymbols_sbp = {
 
 /**
  * Date/time formatting symbols for locale sbp_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sbp_TZ = goog.i18n.DateTimeSymbols_sbp;
 
 
 /**
  * Date/time formatting symbols for locale se.
+ * @const
  */
 goog.i18n.DateTimeSymbols_se = {
   ERAS: ['o.Kr.', 'm.Kr.'],
@@ -11275,6 +11905,7 @@ goog.i18n.DateTimeSymbols_se = {
 
 /**
  * Date/time formatting symbols for locale se_FI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_se_FI = {
   ERAS: ['oKr.', 'mKr.'],
@@ -11305,18 +11936,21 @@ goog.i18n.DateTimeSymbols_se_FI = {
 
 /**
  * Date/time formatting symbols for locale se_NO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_se_NO = goog.i18n.DateTimeSymbols_se;
 
 
 /**
  * Date/time formatting symbols for locale se_SE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_se_SE = goog.i18n.DateTimeSymbols_se;
 
 
 /**
  * Date/time formatting symbols for locale seh.
+ * @const
  */
 goog.i18n.DateTimeSymbols_seh = {
   ERAS: ['AC', 'AD'],
@@ -11347,12 +11981,14 @@ goog.i18n.DateTimeSymbols_seh = {
 
 /**
  * Date/time formatting symbols for locale seh_MZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_seh_MZ = goog.i18n.DateTimeSymbols_seh;
 
 
 /**
  * Date/time formatting symbols for locale ses.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ses = {
   ERAS: ['IJ', 'IZ'],
@@ -11383,12 +12019,14 @@ goog.i18n.DateTimeSymbols_ses = {
 
 /**
  * Date/time formatting symbols for locale ses_ML.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ses_ML = goog.i18n.DateTimeSymbols_ses;
 
 
 /**
  * Date/time formatting symbols for locale sg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sg = {
   ERAS: ['KnK', 'NpK'],
@@ -11419,12 +12057,14 @@ goog.i18n.DateTimeSymbols_sg = {
 
 /**
  * Date/time formatting symbols for locale sg_CF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sg_CF = goog.i18n.DateTimeSymbols_sg;
 
 
 /**
  * Date/time formatting symbols for locale shi.
+ * @const
  */
 goog.i18n.DateTimeSymbols_shi = {
   ERAS: ['ⴷⴰⵄ', 'ⴷⴼⵄ'],
@@ -11455,6 +12095,7 @@ goog.i18n.DateTimeSymbols_shi = {
 
 /**
  * Date/time formatting symbols for locale shi_Latn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_shi_Latn = {
   ERAS: ['daɛ', 'dfɛ'],
@@ -11485,6 +12126,7 @@ goog.i18n.DateTimeSymbols_shi_Latn = {
 
 /**
  * Date/time formatting symbols for locale shi_Latn_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_shi_Latn_MA = {
   ERAS: ['daɛ', 'dfɛ'],
@@ -11515,36 +12157,42 @@ goog.i18n.DateTimeSymbols_shi_Latn_MA = {
 
 /**
  * Date/time formatting symbols for locale shi_Tfng.
+ * @const
  */
 goog.i18n.DateTimeSymbols_shi_Tfng = goog.i18n.DateTimeSymbols_shi;
 
 
 /**
  * Date/time formatting symbols for locale shi_Tfng_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_shi_Tfng_MA = goog.i18n.DateTimeSymbols_shi;
 
 
 /**
  * Date/time formatting symbols for locale si_LK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_si_LK = goog.i18n.DateTimeSymbols_si;
 
 
 /**
  * Date/time formatting symbols for locale sk_SK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sk_SK = goog.i18n.DateTimeSymbols_sk;
 
 
 /**
  * Date/time formatting symbols for locale sl_SI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sl_SI = goog.i18n.DateTimeSymbols_sl;
 
 
 /**
  * Date/time formatting symbols for locale smn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_smn = {
   ERAS: ['oKr.', 'mKr.'],
@@ -11575,12 +12223,14 @@ goog.i18n.DateTimeSymbols_smn = {
 
 /**
  * Date/time formatting symbols for locale smn_FI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_smn_FI = goog.i18n.DateTimeSymbols_smn;
 
 
 /**
  * Date/time formatting symbols for locale sn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sn = {
   ERAS: ['BC', 'AD'],
@@ -11611,12 +12261,14 @@ goog.i18n.DateTimeSymbols_sn = {
 
 /**
  * Date/time formatting symbols for locale sn_ZW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sn_ZW = goog.i18n.DateTimeSymbols_sn;
 
 
 /**
  * Date/time formatting symbols for locale so.
+ * @const
  */
 goog.i18n.DateTimeSymbols_so = {
   ERAS: ['CK', 'CD'],
@@ -11647,6 +12299,7 @@ goog.i18n.DateTimeSymbols_so = {
 
 /**
  * Date/time formatting symbols for locale so_DJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_so_DJ = {
   ERAS: ['CK', 'CD'],
@@ -11677,6 +12330,7 @@ goog.i18n.DateTimeSymbols_so_DJ = {
 
 /**
  * Date/time formatting symbols for locale so_ET.
+ * @const
  */
 goog.i18n.DateTimeSymbols_so_ET = {
   ERAS: ['CK', 'CD'],
@@ -11707,6 +12361,7 @@ goog.i18n.DateTimeSymbols_so_ET = {
 
 /**
  * Date/time formatting symbols for locale so_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_so_KE = {
   ERAS: ['CK', 'CD'],
@@ -11737,18 +12392,21 @@ goog.i18n.DateTimeSymbols_so_KE = {
 
 /**
  * Date/time formatting symbols for locale so_SO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_so_SO = goog.i18n.DateTimeSymbols_so;
 
 
 /**
  * Date/time formatting symbols for locale sq_AL.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sq_AL = goog.i18n.DateTimeSymbols_sq;
 
 
 /**
  * Date/time formatting symbols for locale sq_MK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sq_MK = {
   ERAS: ['p.K.', 'mb.K.'],
@@ -11779,6 +12437,7 @@ goog.i18n.DateTimeSymbols_sq_MK = {
 
 /**
  * Date/time formatting symbols for locale sq_XK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sq_XK = {
   ERAS: ['p.K.', 'mb.K.'],
@@ -11809,12 +12468,14 @@ goog.i18n.DateTimeSymbols_sq_XK = {
 
 /**
  * Date/time formatting symbols for locale sr_Cyrl.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Cyrl = goog.i18n.DateTimeSymbols_sr;
 
 
 /**
  * Date/time formatting symbols for locale sr_Cyrl_BA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Cyrl_BA = {
   ERAS: ['п. н. е.', 'н. е.'],
@@ -11845,6 +12506,7 @@ goog.i18n.DateTimeSymbols_sr_Cyrl_BA = {
 
 /**
  * Date/time formatting symbols for locale sr_Cyrl_ME.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Cyrl_ME = {
   ERAS: ['п. н. е.', 'н. е.'],
@@ -11875,12 +12537,14 @@ goog.i18n.DateTimeSymbols_sr_Cyrl_ME = {
 
 /**
  * Date/time formatting symbols for locale sr_Cyrl_RS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Cyrl_RS = goog.i18n.DateTimeSymbols_sr;
 
 
 /**
  * Date/time formatting symbols for locale sr_Cyrl_XK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Cyrl_XK = {
   ERAS: ['п. н. е.', 'н. е.'],
@@ -11911,6 +12575,7 @@ goog.i18n.DateTimeSymbols_sr_Cyrl_XK = {
 
 /**
  * Date/time formatting symbols for locale sr_Latn_BA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Latn_BA = {
   ERAS: ['p. n. e.', 'n. e.'],
@@ -11941,6 +12606,7 @@ goog.i18n.DateTimeSymbols_sr_Latn_BA = {
 
 /**
  * Date/time formatting symbols for locale sr_Latn_ME.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Latn_ME = {
   ERAS: ['p. n. e.', 'n. e.'],
@@ -11971,6 +12637,7 @@ goog.i18n.DateTimeSymbols_sr_Latn_ME = {
 
 /**
  * Date/time formatting symbols for locale sr_Latn_RS.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Latn_RS = {
   ERAS: ['p. n. e.', 'n. e.'],
@@ -12001,6 +12668,7 @@ goog.i18n.DateTimeSymbols_sr_Latn_RS = {
 
 /**
  * Date/time formatting symbols for locale sr_Latn_XK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sr_Latn_XK = {
   ERAS: ['p. n. e.', 'n. e.'],
@@ -12031,12 +12699,14 @@ goog.i18n.DateTimeSymbols_sr_Latn_XK = {
 
 /**
  * Date/time formatting symbols for locale sv_AX.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sv_AX = goog.i18n.DateTimeSymbols_sv;
 
 
 /**
  * Date/time formatting symbols for locale sv_FI.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sv_FI = {
   ERAS: ['f.Kr.', 'e.Kr.'],
@@ -12067,18 +12737,21 @@ goog.i18n.DateTimeSymbols_sv_FI = {
 
 /**
  * Date/time formatting symbols for locale sv_SE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sv_SE = goog.i18n.DateTimeSymbols_sv;
 
 
 /**
  * Date/time formatting symbols for locale sw_CD.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sw_CD = goog.i18n.DateTimeSymbols_sw;
 
 
 /**
  * Date/time formatting symbols for locale sw_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sw_KE = {
   ERAS: ['KK', 'BK'],
@@ -12109,24 +12782,28 @@ goog.i18n.DateTimeSymbols_sw_KE = {
 
 /**
  * Date/time formatting symbols for locale sw_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sw_TZ = goog.i18n.DateTimeSymbols_sw;
 
 
 /**
  * Date/time formatting symbols for locale sw_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_sw_UG = goog.i18n.DateTimeSymbols_sw;
 
 
 /**
  * Date/time formatting symbols for locale ta_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ta_IN = goog.i18n.DateTimeSymbols_ta;
 
 
 /**
  * Date/time formatting symbols for locale ta_LK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ta_LK = {
   ERAS: ['கி.மு.', 'கி.பி.'],
@@ -12157,6 +12834,7 @@ goog.i18n.DateTimeSymbols_ta_LK = {
 
 /**
  * Date/time formatting symbols for locale ta_MY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ta_MY = {
   ERAS: ['கி.மு.', 'கி.பி.'],
@@ -12187,6 +12865,7 @@ goog.i18n.DateTimeSymbols_ta_MY = {
 
 /**
  * Date/time formatting symbols for locale ta_SG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ta_SG = {
   ERAS: ['கி.மு.', 'கி.பி.'],
@@ -12217,12 +12896,14 @@ goog.i18n.DateTimeSymbols_ta_SG = {
 
 /**
  * Date/time formatting symbols for locale te_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_te_IN = goog.i18n.DateTimeSymbols_te;
 
 
 /**
  * Date/time formatting symbols for locale teo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_teo = {
   ERAS: ['KK', 'BK'],
@@ -12253,6 +12934,7 @@ goog.i18n.DateTimeSymbols_teo = {
 
 /**
  * Date/time formatting symbols for locale teo_KE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_teo_KE = {
   ERAS: ['KK', 'BK'],
@@ -12283,12 +12965,14 @@ goog.i18n.DateTimeSymbols_teo_KE = {
 
 /**
  * Date/time formatting symbols for locale teo_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_teo_UG = goog.i18n.DateTimeSymbols_teo;
 
 
 /**
  * Date/time formatting symbols for locale tg.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tg = {
   ERAS: ['ПеМ', 'ПаМ'],
@@ -12319,18 +13003,21 @@ goog.i18n.DateTimeSymbols_tg = {
 
 /**
  * Date/time formatting symbols for locale tg_TJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tg_TJ = goog.i18n.DateTimeSymbols_tg;
 
 
 /**
  * Date/time formatting symbols for locale th_TH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_th_TH = goog.i18n.DateTimeSymbols_th;
 
 
 /**
  * Date/time formatting symbols for locale ti.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ti = {
   ERAS: ['ዓ/ዓ', 'ዓ/ም'],
@@ -12361,6 +13048,7 @@ goog.i18n.DateTimeSymbols_ti = {
 
 /**
  * Date/time formatting symbols for locale ti_ER.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ti_ER = {
   ERAS: ['ዓ/ዓ', 'ዓ/ም'],
@@ -12391,12 +13079,14 @@ goog.i18n.DateTimeSymbols_ti_ER = {
 
 /**
  * Date/time formatting symbols for locale ti_ET.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ti_ET = goog.i18n.DateTimeSymbols_ti;
 
 
 /**
  * Date/time formatting symbols for locale to.
+ * @const
  */
 goog.i18n.DateTimeSymbols_to = {
   ERAS: ['KM', 'TS'],
@@ -12427,12 +13117,14 @@ goog.i18n.DateTimeSymbols_to = {
 
 /**
  * Date/time formatting symbols for locale to_TO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_to_TO = goog.i18n.DateTimeSymbols_to;
 
 
 /**
  * Date/time formatting symbols for locale tr_CY.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tr_CY = {
   ERAS: ['MÖ', 'MS'],
@@ -12463,12 +13155,14 @@ goog.i18n.DateTimeSymbols_tr_CY = {
 
 /**
  * Date/time formatting symbols for locale tr_TR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tr_TR = goog.i18n.DateTimeSymbols_tr;
 
 
 /**
  * Date/time formatting symbols for locale tt.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tt = {
   ERAS: ['б.э.к.', 'б.э.'],
@@ -12499,12 +13193,14 @@ goog.i18n.DateTimeSymbols_tt = {
 
 /**
  * Date/time formatting symbols for locale tt_RU.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tt_RU = goog.i18n.DateTimeSymbols_tt;
 
 
 /**
  * Date/time formatting symbols for locale twq.
+ * @const
  */
 goog.i18n.DateTimeSymbols_twq = {
   ERAS: ['IJ', 'IZ'],
@@ -12535,12 +13231,14 @@ goog.i18n.DateTimeSymbols_twq = {
 
 /**
  * Date/time formatting symbols for locale twq_NE.
+ * @const
  */
 goog.i18n.DateTimeSymbols_twq_NE = goog.i18n.DateTimeSymbols_twq;
 
 
 /**
  * Date/time formatting symbols for locale tzm.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tzm = {
   ERAS: ['ZƐ', 'ḌƐ'],
@@ -12571,12 +13269,14 @@ goog.i18n.DateTimeSymbols_tzm = {
 
 /**
  * Date/time formatting symbols for locale tzm_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_tzm_MA = goog.i18n.DateTimeSymbols_tzm;
 
 
 /**
  * Date/time formatting symbols for locale ug.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ug = {
   ERAS: ['BCE', 'مىلادىيە'],
@@ -12607,18 +13307,21 @@ goog.i18n.DateTimeSymbols_ug = {
 
 /**
  * Date/time formatting symbols for locale ug_CN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ug_CN = goog.i18n.DateTimeSymbols_ug;
 
 
 /**
  * Date/time formatting symbols for locale uk_UA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uk_UA = goog.i18n.DateTimeSymbols_uk;
 
 
 /**
  * Date/time formatting symbols for locale ur_IN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ur_IN = {
   ZERODIGIT: 0x06F0,
@@ -12650,12 +13353,14 @@ goog.i18n.DateTimeSymbols_ur_IN = {
 
 /**
  * Date/time formatting symbols for locale ur_PK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_ur_PK = goog.i18n.DateTimeSymbols_ur;
 
 
 /**
  * Date/time formatting symbols for locale uz_Arab.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Arab = {
   ZERODIGIT: 0x06F0,
@@ -12687,6 +13392,7 @@ goog.i18n.DateTimeSymbols_uz_Arab = {
 
 /**
  * Date/time formatting symbols for locale uz_Arab_AF.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Arab_AF = {
   ZERODIGIT: 0x06F0,
@@ -12718,6 +13424,7 @@ goog.i18n.DateTimeSymbols_uz_Arab_AF = {
 
 /**
  * Date/time formatting symbols for locale uz_Cyrl.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Cyrl = {
   ERAS: ['м.а.', 'милодий'],
@@ -12748,6 +13455,7 @@ goog.i18n.DateTimeSymbols_uz_Cyrl = {
 
 /**
  * Date/time formatting symbols for locale uz_Cyrl_UZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Cyrl_UZ = {
   ERAS: ['м.а.', 'милодий'],
@@ -12778,18 +13486,21 @@ goog.i18n.DateTimeSymbols_uz_Cyrl_UZ = {
 
 /**
  * Date/time formatting symbols for locale uz_Latn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Latn = goog.i18n.DateTimeSymbols_uz;
 
 
 /**
  * Date/time formatting symbols for locale uz_Latn_UZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_uz_Latn_UZ = goog.i18n.DateTimeSymbols_uz;
 
 
 /**
  * Date/time formatting symbols for locale vai.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vai = {
   ERAS: ['BCE', 'CE'],
@@ -12820,6 +13531,7 @@ goog.i18n.DateTimeSymbols_vai = {
 
 /**
  * Date/time formatting symbols for locale vai_Latn.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vai_Latn = {
   ERAS: ['BCE', 'CE'],
@@ -12850,6 +13562,7 @@ goog.i18n.DateTimeSymbols_vai_Latn = {
 
 /**
  * Date/time formatting symbols for locale vai_Latn_LR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vai_Latn_LR = {
   ERAS: ['BCE', 'CE'],
@@ -12880,24 +13593,28 @@ goog.i18n.DateTimeSymbols_vai_Latn_LR = {
 
 /**
  * Date/time formatting symbols for locale vai_Vaii.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vai_Vaii = goog.i18n.DateTimeSymbols_vai;
 
 
 /**
  * Date/time formatting symbols for locale vai_Vaii_LR.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vai_Vaii_LR = goog.i18n.DateTimeSymbols_vai;
 
 
 /**
  * Date/time formatting symbols for locale vi_VN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vi_VN = goog.i18n.DateTimeSymbols_vi;
 
 
 /**
  * Date/time formatting symbols for locale vun.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vun = {
   ERAS: ['KK', 'BK'],
@@ -12928,12 +13645,14 @@ goog.i18n.DateTimeSymbols_vun = {
 
 /**
  * Date/time formatting symbols for locale vun_TZ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_vun_TZ = goog.i18n.DateTimeSymbols_vun;
 
 
 /**
  * Date/time formatting symbols for locale wae.
+ * @const
  */
 goog.i18n.DateTimeSymbols_wae = {
   ERAS: ['v. Chr.', 'n. Chr'],
@@ -12964,12 +13683,14 @@ goog.i18n.DateTimeSymbols_wae = {
 
 /**
  * Date/time formatting symbols for locale wae_CH.
+ * @const
  */
 goog.i18n.DateTimeSymbols_wae_CH = goog.i18n.DateTimeSymbols_wae;
 
 
 /**
  * Date/time formatting symbols for locale wo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_wo = {
   ERAS: ['JC', 'AD'],
@@ -13000,12 +13721,14 @@ goog.i18n.DateTimeSymbols_wo = {
 
 /**
  * Date/time formatting symbols for locale wo_SN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_wo_SN = goog.i18n.DateTimeSymbols_wo;
 
 
 /**
  * Date/time formatting symbols for locale xog.
+ * @const
  */
 goog.i18n.DateTimeSymbols_xog = {
   ERAS: ['AZ', 'AF'],
@@ -13036,12 +13759,14 @@ goog.i18n.DateTimeSymbols_xog = {
 
 /**
  * Date/time formatting symbols for locale xog_UG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_xog_UG = goog.i18n.DateTimeSymbols_xog;
 
 
 /**
  * Date/time formatting symbols for locale yav.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yav = {
   ERAS: ['k.Y.', '+J.C.'],
@@ -13072,12 +13797,14 @@ goog.i18n.DateTimeSymbols_yav = {
 
 /**
  * Date/time formatting symbols for locale yav_CM.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yav_CM = goog.i18n.DateTimeSymbols_yav;
 
 
 /**
  * Date/time formatting symbols for locale yi.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yi = {
   ERAS: ['BCE', 'CE'],
@@ -13108,12 +13835,14 @@ goog.i18n.DateTimeSymbols_yi = {
 
 /**
  * Date/time formatting symbols for locale yi_001.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yi_001 = goog.i18n.DateTimeSymbols_yi;
 
 
 /**
  * Date/time formatting symbols for locale yo.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yo = {
   ERAS: ['BCE', 'LK'],
@@ -13144,6 +13873,7 @@ goog.i18n.DateTimeSymbols_yo = {
 
 /**
  * Date/time formatting symbols for locale yo_BJ.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yo_BJ = {
   ERAS: ['BCE', 'LK'],
@@ -13174,12 +13904,14 @@ goog.i18n.DateTimeSymbols_yo_BJ = {
 
 /**
  * Date/time formatting symbols for locale yo_NG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yo_NG = goog.i18n.DateTimeSymbols_yo;
 
 
 /**
  * Date/time formatting symbols for locale yue.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yue = {
   ERAS: ['西元前', '西元'],
@@ -13210,6 +13942,7 @@ goog.i18n.DateTimeSymbols_yue = {
 
 /**
  * Date/time formatting symbols for locale yue_Hans.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yue_Hans = {
   ERAS: ['西元前', '西元'],
@@ -13240,6 +13973,7 @@ goog.i18n.DateTimeSymbols_yue_Hans = {
 
 /**
  * Date/time formatting symbols for locale yue_Hans_CN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yue_Hans_CN = {
   ERAS: ['西元前', '西元'],
@@ -13270,18 +14004,21 @@ goog.i18n.DateTimeSymbols_yue_Hans_CN = {
 
 /**
  * Date/time formatting symbols for locale yue_Hant.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yue_Hant = goog.i18n.DateTimeSymbols_yue;
 
 
 /**
  * Date/time formatting symbols for locale yue_Hant_HK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_yue_Hant_HK = goog.i18n.DateTimeSymbols_yue;
 
 
 /**
  * Date/time formatting symbols for locale zgh.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zgh = {
   ERAS: ['ⴷⴰⵄ', 'ⴷⴼⵄ'],
@@ -13312,24 +14049,28 @@ goog.i18n.DateTimeSymbols_zgh = {
 
 /**
  * Date/time formatting symbols for locale zgh_MA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zgh_MA = goog.i18n.DateTimeSymbols_zgh;
 
 
 /**
  * Date/time formatting symbols for locale zh_Hans.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hans = goog.i18n.DateTimeSymbols_zh;
 
 
 /**
  * Date/time formatting symbols for locale zh_Hans_CN.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hans_CN = goog.i18n.DateTimeSymbols_zh;
 
 
 /**
  * Date/time formatting symbols for locale zh_Hans_HK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hans_HK = {
   ERAS: ['公元前', '公元'],
@@ -13360,6 +14101,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_HK = {
 
 /**
  * Date/time formatting symbols for locale zh_Hans_MO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hans_MO = {
   ERAS: ['公元前', '公元'],
@@ -13390,6 +14132,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_MO = {
 
 /**
  * Date/time formatting symbols for locale zh_Hans_SG.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hans_SG = {
   ERAS: ['公元前', '公元'],
@@ -13420,6 +14163,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_SG = {
 
 /**
  * Date/time formatting symbols for locale zh_Hant.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hant = {
   ERAS: ['西元前', '西元'],
@@ -13450,6 +14194,7 @@ goog.i18n.DateTimeSymbols_zh_Hant = {
 
 /**
  * Date/time formatting symbols for locale zh_Hant_HK.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hant_HK = {
   ERAS: ['公元前', '公元'],
@@ -13480,6 +14225,7 @@ goog.i18n.DateTimeSymbols_zh_Hant_HK = {
 
 /**
  * Date/time formatting symbols for locale zh_Hant_MO.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hant_MO = {
   ERAS: ['公元前', '公元'],
@@ -13510,6 +14256,7 @@ goog.i18n.DateTimeSymbols_zh_Hant_MO = {
 
 /**
  * Date/time formatting symbols for locale zh_Hant_TW.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zh_Hant_TW = {
   ERAS: ['西元前', '西元'],
@@ -13540,6 +14287,7 @@ goog.i18n.DateTimeSymbols_zh_Hant_TW = {
 
 /**
  * Date/time formatting symbols for locale zu_ZA.
+ * @const
  */
 goog.i18n.DateTimeSymbols_zu_ZA = goog.i18n.DateTimeSymbols_zu;
 

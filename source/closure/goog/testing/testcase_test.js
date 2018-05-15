@@ -27,6 +27,7 @@ goog.require('goog.testing.MockRandom');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 
 // Dual of fail().
@@ -321,9 +322,11 @@ function testTestCaseReturningPromise_GoogPromiseTimeout() {
     assertContains(
         'goog.testing.TestCase.getActiveTestCase().promiseTimeout',
         result.errors[0].toString());
-    assertTrue(
-        elapsedTime >= testCase.promiseTimeout - 100 &&
-        elapsedTime <= testCase.promiseTimeout + 100);
+    if (!goog.userAgent.EDGE_OR_IE) {
+      assertTrue(
+          `Expected ${elapsedTime} to be >= ${testCase.promiseTimeout}.`,
+          elapsedTime >= testCase.promiseTimeout);
+    }
   });
 }
 
@@ -368,9 +371,11 @@ function testTestCaseReturningPromise_PromiseTimeout() {
     assertContains(
         'goog.testing.TestCase.getActiveTestCase().promiseTimeout',
         result.errors[0].toString());
-    assertTrue(
-        elapsedTime >= testCase.promiseTimeout - 100 &&
-        elapsedTime <= testCase.promiseTimeout + 100);
+    if (!goog.userAgent.EDGE_OR_IE) {
+      assertTrue(
+          `Expected ${elapsedTime} to be >= ${testCase.promiseTimeout}.`,
+          elapsedTime >= testCase.promiseTimeout);
+    }
   });
 }
 

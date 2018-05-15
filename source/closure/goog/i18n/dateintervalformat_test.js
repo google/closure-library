@@ -19,7 +19,7 @@ var DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
 var DateRange = goog.require('goog.date.DateRange');
 var DateTime = goog.require('goog.date.DateTime');
 var DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
-var DateTimeSymbols_ar = goog.require('goog.i18n.DateTimeSymbols_ar');
+var DateTimeSymbols_ar_EG = goog.require('goog.i18n.DateTimeSymbols_ar_EG');
 var DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
 var DateTimeSymbols_fr_CA = goog.require('goog.i18n.DateTimeSymbols_fr_CA');
 var DateTimeSymbols_gl = goog.require('goog.i18n.DateTimeSymbols_gl');
@@ -35,9 +35,9 @@ var testSuite = goog.require('goog.testing.testSuite');
 
 /** @const {!Object<string, !Object>} */
 var localeSymbols = {
-  'ar': {
-    DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_ar,
-    DateTimeSymbols: DateTimeSymbols_ar
+  'ar_EG': {
+    DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_ar_EG,
+    DateTimeSymbols: DateTimeSymbols_ar_EG
   },
   'en': {
     DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_en,
@@ -129,12 +129,12 @@ var formatTestData = [
   new Data('en', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], DateTimeFormat.Format.SHORT_DATETIME, '10/10/07, 10:10 AM – 11/10/07, 10:10 AM'),
   new Data('en', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  DateTimeFormat.Format.SHORT_DATETIME, '10/10/07, 10:10 AM – 10/10/08, 10:10 AM'),
 
-  new Data('ar', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠ يناير'),
-  new Data('ar', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠ يناير'),
-  new Data('ar', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠ يناير'),
-  new Data('ar', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠–٢٠ نوفمبر'),
-  new Data('ar', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠ أكتوبر – ١٠ نوفمبر'),
-  new Data('ar', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_ar.MONTH_DAY_ABBR, '١٠ أكتوبر، ٢٠٠٧ – ١٠ أكتوبر، ٢٠٠٨'),
+  new Data('ar_EG', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ يناير'),
+  new Data('ar_EG', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ يناير'),
+  new Data('ar_EG', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ يناير'),
+  new Data('ar_EG', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠–٢٠ نوفمبر'),
+  new Data('ar_EG', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ أكتوبر – ١٠ نوفمبر'),
+  new Data('ar_EG', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ أكتوبر، ٢٠٠٧ – ١٠ أكتوبر، ٢٠٠٨'),
 
   new Data('fr_CA', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janvier'),
   new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janvier'),

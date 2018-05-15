@@ -37,7 +37,6 @@ goog.provide('goog.i18n.NumberFormatSymbols_ar');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_DZ');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_EG');
 goog.provide('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
-goog.provide('goog.i18n.NumberFormatSymbols_ar_u_nu_latn');
 goog.provide('goog.i18n.NumberFormatSymbols_az');
 goog.provide('goog.i18n.NumberFormatSymbols_be');
 goog.provide('goog.i18n.NumberFormatSymbols_bg');
@@ -203,29 +202,6 @@ goog.i18n.NumberFormatSymbols_am = {
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_ar = {
-  DECIMAL_SEP: '٫',
-  GROUP_SEP: '٬',
-  PERCENT: '٪؜',
-  ZERO_DIGIT: '٠',
-  PLUS_SIGN: '؜+',
-  MINUS_SIGN: '؜-',
-  EXP_SYMBOL: 'اس',
-  PERMILL: '؉',
-  INFINITY: '∞',
-  NAN: 'ليس رقم',
-  DECIMAL_PATTERN: '#,##0.###',
-  SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '#,##0.00 ¤',
-  DEF_CURRENCY_CODE: 'EGP'
-};
-
-
-/**
- * Number formatting symbols for locale ar_u_nu_latn.
- * @enum {string}
- */
-goog.i18n.NumberFormatSymbols_ar_u_nu_latn = {
   DECIMAL_SEP: '.',
   GROUP_SEP: ',',
   PERCENT: '‎%‎',
@@ -271,14 +247,46 @@ goog.i18n.NumberFormatSymbols_ar_DZ = {
  * Number formatting symbols for locale ar_EG.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_ar_EG = goog.i18n.NumberFormatSymbols_ar;
+goog.i18n.NumberFormatSymbols_ar_EG = {
+  DECIMAL_SEP: '٫',
+  GROUP_SEP: '٬',
+  PERCENT: '٪؜',
+  ZERO_DIGIT: '٠',
+  PLUS_SIGN: '؜+',
+  MINUS_SIGN: '؜-',
+  EXP_SYMBOL: 'اس',
+  PERMILL: '؉',
+  INFINITY: '∞',
+  NAN: 'ليس رقم',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
+  DEF_CURRENCY_CODE: 'EGP'
+};
 
 
 /**
  * Number formatting symbols for locale ar_EG_u_nu_latn.
  * @enum {string}
  */
-goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
+goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '‎%‎',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '‎+',
+  MINUS_SIGN: '‎-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'ليس رقمًا',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤ #,##0.00',
+  DEF_CURRENCY_CODE: 'EGP'
+};
 
 
 /**
@@ -2755,7 +2763,7 @@ switch (goog.LOCALE) {
     break;
   case 'ar':
     goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ar;
-    goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar_u_nu_latn;
+    goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ar;
     break;
   case 'ar_DZ':
   case 'ar-DZ':

@@ -57,6 +57,7 @@ goog.forwardDeclare('goog.net.xpc.CrossPageChannel');  // circular
  * @enum {number}
  */
 goog.net.xpc.TransportTypes = {
+  UNDEFINED: 0,
   NATIVE_MESSAGING: 1,
   FRAME_ELEMENT_METHOD: 2,
   IFRAME_RELAY: 3,

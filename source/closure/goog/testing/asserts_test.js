@@ -118,6 +118,25 @@ function testAssertNull() {
   }, 'Expected <null> but was <1> (Number)');
 }
 
+function testAssertNullOrUndefined() {
+  assertNullOrUndefined(null);
+  assertNullOrUndefined(undefined);
+  assertNullOrUndefined('Good assertion', null);
+  assertNullOrUndefined('Good assertion', undefined);
+  assertThrowsJsUnitException(function() {
+    assertNullOrUndefined(true);
+  }, 'Expected <null> or <undefined> but was <true> (Boolean)');
+  assertThrowsJsUnitException(
+      function() {
+        assertNullOrUndefined('Should be null', false);
+      },
+      'Should be null\n' +
+          'Expected <null> or <undefined> but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNullOrUndefined(0);
+  }, 'Expected <null> or <undefined> but was <0> (Number)');
+}
+
 function testAssertNotNull() {
   assertNotNull(true);
   assertNotNull('Good assertion', true);

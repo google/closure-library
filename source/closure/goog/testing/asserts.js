@@ -531,6 +531,20 @@ var assertNotUndefined = goog.testing.asserts.assertNotUndefined = function(
       'Expected not to be ' + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
 };
 
+/**
+ * @param {*} a The value to assert (1 arg) or debug message (2 args).
+ * @param {*=} opt_b The value to assert (2 args only).
+ */
+var assertNullOrUndefined =
+    goog.testing.asserts.assertNullOrUndefined = function(a, opt_b) {
+      _validateArguments(1, arguments);
+      var aVar = nonCommentArg(1, 1, arguments);
+      _assert(
+          commentArg(1, arguments), aVar == null,
+          'Expected ' + _displayStringForValue(null) + ' or ' +
+              _displayStringForValue(JSUNIT_UNDEFINED_VALUE) + ' but was ' +
+              _displayStringForValue(aVar));
+    };
 
 /**
  * @param {*} a The value to assert (1 arg) or debug message (2 args).
@@ -1396,6 +1410,7 @@ if (goog.EXPORT_ASSERTIONS) {
   goog.exportSymbol('assertNotNull', assertNotNull);
   goog.exportSymbol('assertUndefined', assertUndefined);
   goog.exportSymbol('assertNotUndefined', assertNotUndefined);
+  goog.exportSymbol('assertNullOrUndefined', assertNullOrUndefined);
   goog.exportSymbol('assertNotNullNorUndefined', assertNotNullNorUndefined);
   goog.exportSymbol('assertNonEmptyString', assertNonEmptyString);
   goog.exportSymbol('assertNaN', assertNaN);

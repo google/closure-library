@@ -1263,7 +1263,7 @@ goog.ui.Control.prototype.handleContextMenu = goog.nullFunction;
  *     mouseout).
  * @param {Element} elem The ancestor element.
  * @return {boolean} Whether the event has a relatedTarget (the element the
- *     mouse is coming from) and it's a descendent of elem.
+ *     mouse is coming from) and it's a descendant of elem.
  * @private
  */
 goog.ui.Control.isMouseEventWithinElement_ = function(e, elem) {
