@@ -243,13 +243,17 @@ goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
     // Lead in.
     'https?://(?:[a-zA-Z]{1,3}\\.)?' +
-        // Watch short URL prefix. This should handle URLs of the form:
+        // Watch short URL prefix and /embed/ URLs. This should handle URLs
+        // like:
         // https://youtu.be/jqxENMKaeCU?cgiparam=value
-        '(?:(?:youtu\\.be/([\\w-]+)(?:\\?[\\w=&-]+)?)|' +
+        // https://youtube.com/embed/jqxENMKaeCU?cgiparam=value
+        // https://youtube-nocookie.com/jqxENMKaeCU?cgiparam=value
+        '(?:(?:(?:youtu\\.be|youtube(?:-nocookie)?\\.com/embed)/([\\w-]+)(?:\\?[\\w=&-]+)?)|' +
         // Watch URL prefix.  This should handle new URLs of the form:
         // https://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related
+        // https://www.youtube-nocookie.com/watch#!v=jqxENMKaeCU&feature=related
         // where the parameters appear after "#!" instead of "?".
-        '(?:youtube\\.com/watch)' +
+        '(?:youtube(?:-nocookie)?\\.com/watch)' +
         // Get the video id:
         // The video ID is a parameter v=[videoid] either right after the "?"
         // or after some other parameters.
