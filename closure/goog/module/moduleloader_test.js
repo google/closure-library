@@ -506,8 +506,8 @@ function testLoadErrorCallbackExecutedWhenPrefetchFails() {
   moduleManager.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
-  moduleLoader.prefetchModule('modA', moduleManager.moduleInfoMap_['modA']);
-  moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap_, function() {
+  moduleLoader.prefetchModule('modA', moduleManager.moduleInfoMap['modA']);
+  moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap, function() {
     fail('modA should not load successfully');
   }, errorHandler);
 
