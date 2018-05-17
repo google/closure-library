@@ -3597,18 +3597,25 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           'script>');
     }
 
-    var pending = controller.pending();
     // If one thing is pending it is this.
-    if ((pending.length > 1 && goog.DebugLoader_.IS_OLD_IE_) ||
-        (goog.Dependency.defer_ && goog.isDocumentLoading_())) {
-      // If anything else is loading we need to lazy load due to bugs in old IE.
-      // Specifically script tags with src and script tags with contents could
-      // execute out of order if document.write is used, so we cannot use
-      // document.write. Do not pause here; it breaks old IE as well.
+    var anythingElsePending = controller.pending().length > 1;
 
-      // Additionally if we are meant to defer scripts but the page is still
-      // loading (e.g. an ES6 module is loading) then also defer.
+    // If anything else is loading we need to lazy load due to bugs in old IE.
+    // Specifically script tags with src and script tags with contents could
+    // execute out of order if document.write is used, so we cannot use
+    // document.write. Do not pause here; it breaks old IE as well.
+    var useOldIeWorkAround =
+        anythingElsePending && goog.DebugLoader_.IS_OLD_IE_;
 
+    // Additionally if we are meant to defer scripts but the page is still
+    // loading (e.g. an ES6 module is loading) then also defer. Or if we are
+    // meant to defer and anything else is pending then defer (those may be
+    // scripts that did not need transformation and are just script tags with
+    // defer set to true, and we need to evaluate after that deferred script).
+    var needsAsyncLoading = goog.Dependency.defer_ &&
+        (anythingElsePending || goog.isDocumentLoading_());
+
+    if (useOldIeWorkAround || needsAsyncLoading) {
       // Note that we only defer when we have to rather than 100% of the time.
       // Always defering would work, but then in theory the order of
       // goog.require calls would then matter. We want to enforce that most of
