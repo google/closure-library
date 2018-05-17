@@ -48,9 +48,9 @@ goog.module.ModuleManager = function() {
 
   /**
    * A mapping from module id to ModuleInfo object.
-   * @private {!Object<string, !goog.module.ModuleInfo>}
+   * @protected {!Object<string, !goog.module.ModuleInfo>}
    */
-  this.moduleInfoMap_ = {};
+  this.moduleInfoMap = {};
 
   // TODO (malteubl): Switch this to a reentrant design.
   /**
@@ -247,7 +247,7 @@ goog.module.ModuleManager.prototype.setConcurrentLoadingEnabled = function(
 /** @override */
 goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
   for (var id in infoMap) {
-    this.moduleInfoMap_[id] = new goog.module.ModuleInfo(infoMap[id], id);
+    this.moduleInfoMap[id] = new goog.module.ModuleInfo(infoMap[id], id);
   }
   if (!this.initialModulesLoaded_.hasFired()) {
     this.initialModulesLoaded_.callback();
@@ -292,7 +292,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
       deps = [];
     }
     moduleIds.push(id);
-    this.moduleInfoMap_[id] = new goog.module.ModuleInfo(deps, id);
+    this.moduleInfoMap[id] = new goog.module.ModuleInfo(deps, id);
   }
   if (opt_loadingModuleIds && opt_loadingModuleIds.length) {
     goog.array.extend(this.loadingModuleIds_, opt_loadingModuleIds);
@@ -311,7 +311,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
 
 /** @override */
 goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
-  return this.moduleInfoMap_[id];
+  return this.moduleInfoMap[id];
 };
 
 
@@ -319,7 +319,7 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 goog.module.ModuleManager.prototype.setModuleTrustedUris = function(
     moduleUriMap) {
   for (var id in moduleUriMap) {
-    this.moduleInfoMap_[id].setTrustedUris(moduleUriMap[id]);
+    this.moduleInfoMap[id].setTrustedUris(moduleUriMap[id]);
   }
 };
 
@@ -396,7 +396,7 @@ goog.module.ModuleManager.prototype.prefetchModule = function(id) {
     var idWithDeps = this.getNotYetLoadedTransitiveDepIds_(id);
     for (var i = 0; i < idWithDeps.length; i++) {
       this.getLoader().prefetchModule(
-          idWithDeps[i], this.moduleInfoMap_[idWithDeps[i]]);
+          idWithDeps[i], this.moduleInfoMap[idWithDeps[i]]);
     }
   }
 };
@@ -599,7 +599,7 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
   var loadFn = goog.bind(
       this.getLoader().loadModules, goog.asserts.assert(this.getLoader()),
       goog.array.clone(idsToLoadImmediately),
-      goog.asserts.assert(this.moduleInfoMap_), null,
+      goog.asserts.assert(this.moduleInfoMap), null,
       goog.bind(
           this.handleLoadError_, this, this.requestedLoadingModuleIds_,
           idsToLoadImmediately),
@@ -626,7 +626,7 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
  */
 goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
   for (var i = 0; i < ids.length; i++) {
-    var moduleInfo = this.moduleInfoMap_[ids[i]];
+    var moduleInfo = this.moduleInfoMap[ids[i]];
     if (moduleInfo.isLoaded()) {
       throw new Error('Module already loaded: ' + ids[i]);
     }
@@ -731,7 +731,7 @@ goog.module.ModuleManager.prototype.setLoaded = function(id) {
   goog.log.info(this.logger_, 'Module loaded: ' + id);
 
   var error =
-      this.moduleInfoMap_[id].onLoad(goog.bind(this.getModuleContext, this));
+      this.moduleInfoMap[id].onLoad(goog.bind(this.getModuleContext, this));
   if (error) {
     this.dispatchModuleLoadFailed_(
         goog.loader.AbstractModuleManager.FailureType.INIT_ERROR);
@@ -778,7 +778,7 @@ goog.module.ModuleManager.prototype.isModuleLoading = function(id) {
 goog.module.ModuleManager.prototype.execOnLoad = function(
     moduleId, fn, opt_handler, opt_noLoad, opt_userInitiated,
     opt_preferSynchronous) {
-  var moduleInfo = this.moduleInfoMap_[moduleId];
+  var moduleInfo = this.moduleInfoMap[moduleId];
   var callbackWrapper;
 
   if (moduleInfo.isLoaded()) {
@@ -1065,8 +1065,8 @@ goog.module.ModuleManager.prototype.dispatchModuleLoadFailed_ = function(
 
   // Call the errbacks on the module info.
   for (var i = 0; i < failedIds.length; i++) {
-    if (this.moduleInfoMap_[failedIds[i]]) {
-      this.moduleInfoMap_[failedIds[i]].onError(cause);
+    if (this.moduleInfoMap[failedIds[i]]) {
+      this.moduleInfoMap[failedIds[i]].onError(cause);
     }
   }
 
@@ -1147,8 +1147,8 @@ goog.module.ModuleManager.prototype.disposeInternal = function() {
 
   // Dispose of each ModuleInfo object.
   goog.disposeAll(
-      goog.object.getValues(this.moduleInfoMap_), this.baseModuleInfo_);
-  this.moduleInfoMap_ = {};
+      goog.object.getValues(this.moduleInfoMap), this.baseModuleInfo_);
+  this.moduleInfoMap = {};
   this.loadingModuleIds_ = [];
   this.requestedLoadingModuleIds_ = [];
   this.userInitiatedLoadingModuleIds_ = [];
