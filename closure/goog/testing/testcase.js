@@ -1627,7 +1627,7 @@ goog.testing.TestCase.prototype.logError = function(name, error) {
 
   if (stack) {
     // The Error class includes the message in the stack. Don't duplicate it.
-    stack = stack.replace('Error: ' + errMsg + '\n', '');
+    stack = stack.replace('Error: ' + errMsg + '\n', 'Error\n');
 
     // Remove extra goog.testing.TestCase frames from the end.
     stack = stack.replace(
