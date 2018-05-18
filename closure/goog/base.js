@@ -3307,14 +3307,16 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           controller.loaded();
         }
       });
-
+      var nonceAttr = !goog.DebugLoader_.IS_OLD_IE_ && goog.getScriptNonce() ?
+          ' nonce="' + goog.getScriptNonce() + '"' :
+          '';
       var event =
           goog.DebugLoader_.IS_OLD_IE_ ? 'onreadystatechange' : 'onload';
       var defer = goog.Dependency.defer_ ? 'defer' : '';
       doc.write(
           '<script src="' + this.path + '" ' + event +
           '="goog.Dependency.callback_(\'' + key +
-          '\', this)" type="text/javascript" ' + defer + '><' +
+          '\', this)" type="text/javascript" ' + defer + nonceAttr + '><' +
           '/script>');
     } else {
       var scriptEl =
