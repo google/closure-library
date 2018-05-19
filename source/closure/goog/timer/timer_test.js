@@ -152,3 +152,40 @@ function testPromise_timeoutTooLarge() {
   mockClock.tick(10);
   assertEquals('promise must be rejected once and only once', 1, c);
 }
+
+function testStartInTickIsNoOp() {
+  const pendingTimeouts = new Set();
+  const obj = {
+    setTimeout: function(callback) {
+      const id = setTimeout(() => {
+        pendingTimeouts.delete(id);
+        callback();
+      }, 1);
+      pendingTimeouts.add(id);
+      return id;
+    },
+    clearTimeout: function(id) {
+      pendingTimeouts.delete(id);
+      clearTimeout(id);
+    },
+  };
+  const t = new goog.Timer(0, obj);
+  let ticks = 0;
+  goog.events.listen(t, 'tick', () => ticks++);
+  t.start();
+  assertEquals(1, pendingTimeouts.size);
+  assertEquals(0, ticks);
+  mockClock.tick();
+  assertEquals(1, pendingTimeouts.size);
+  assertEquals(1, ticks);
+  goog.events.listen(t, 'tick', () => t.start());
+  mockClock.tick();
+  assertEquals(1, pendingTimeouts.size);
+  assertEquals(2, ticks);
+  t.dispose();
+  assertEquals(0, pendingTimeouts.size);
+  assertEquals(2, ticks);
+  mockClock.tick();
+  assertEquals(0, pendingTimeouts.size);
+  assertEquals(2, ticks);
+}

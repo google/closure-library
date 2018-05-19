@@ -168,7 +168,9 @@ goog.labs.i18n.GenderInfo = function() {
    * Stores the language-aware mode of determining the gender of a list.
    * @private {goog.labs.i18n.GenderInfo.ListGenderStyle_}
    */
-  this.listGenderStyle_ = goog.labs.i18n.ListFormatSymbols.GENDER_STYLE;
+  this.listGenderStyle_ =
+      /** @type {goog.labs.i18n.GenderInfo.ListGenderStyle_} */ (
+          goog.labs.i18n.ListFormatSymbols.GENDER_STYLE);
 };
 
 

@@ -1036,8 +1036,8 @@ goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.stri
 goog.addDependency('string/stringformat_test.js', ['goog.string.formatTest'], ['goog.string.format', 'goog.testing.jsunit'], {});
 goog.addDependency('string/stringifier.js', ['goog.string.Stringifier'], [], {});
 goog.addDependency('string/typedstring.js', ['goog.string.TypedString'], [], {});
-goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs.Collection'], {});
-goog.addDependency('structs/avltree_test.js', ['goog.structs.AvlTreeTest'], ['goog.array', 'goog.structs.AvlTree', 'goog.testing.jsunit'], {});
+goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree'], ['goog.asserts', 'goog.structs.Collection'], {'module': 'goog'});
+goog.addDependency('structs/avltree_test.js', ['goog.structs.AvlTreeTest'], ['goog.array', 'goog.structs.AvlTree', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], [], {});
 goog.addDependency('structs/circularbuffer_test.js', ['goog.structs.CircularBufferTest'], ['goog.structs.CircularBuffer', 'goog.testing.jsunit'], {});
 goog.addDependency('structs/collection.js', ['goog.structs.Collection'], [], {});
@@ -1214,7 +1214,7 @@ goog.addDependency('testing/ui/rendererharness.js', ['goog.testing.ui.RendererHa
 goog.addDependency('testing/ui/style.js', ['goog.testing.ui.style'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.classlist', 'goog.testing.asserts'], {});
 goog.addDependency('testing/ui/style_test.js', ['goog.testing.ui.styleTest'], ['goog.dom', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.ui.style'], {});
 goog.addDependency('timer/timer.js', ['goog.Timer'], ['goog.Promise', 'goog.events.EventTarget'], {});
-goog.addDependency('timer/timer_test.js', ['goog.TimerTest'], ['goog.Promise', 'goog.Timer', 'goog.events', 'goog.testing.MockClock', 'goog.testing.jsunit'], {});
+goog.addDependency('timer/timer_test.js', ['goog.TimerTest'], ['goog.Promise', 'goog.Timer', 'goog.events', 'goog.testing.MockClock', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('tweak/entries.js', ['goog.tweak.BaseEntry', 'goog.tweak.BasePrimitiveSetting', 'goog.tweak.BaseSetting', 'goog.tweak.BooleanGroup', 'goog.tweak.BooleanInGroupSetting', 'goog.tweak.BooleanSetting', 'goog.tweak.ButtonAction', 'goog.tweak.NumericSetting', 'goog.tweak.StringSetting'], ['goog.array', 'goog.asserts', 'goog.log', 'goog.object'], {});
 goog.addDependency('tweak/entries_test.js', ['goog.tweak.BaseEntryTest'], ['goog.testing.MockControl', 'goog.testing.jsunit', 'goog.tweak.testhelpers'], {});
 goog.addDependency('tweak/registry.js', ['goog.tweak.Registry'], ['goog.array', 'goog.asserts', 'goog.log', 'goog.string', 'goog.tweak.BasePrimitiveSetting', 'goog.tweak.BaseSetting', 'goog.tweak.BooleanSetting', 'goog.tweak.NumericSetting', 'goog.tweak.StringSetting', 'goog.uri.utils'], {});
