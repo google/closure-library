@@ -100,7 +100,7 @@ goog.testing.TestRunner = function() {
    * verify that the page was not reloaded.
    * @private {string}
    */
-  this.uniqueId_ = Math.random() + '-' +
+  this.uniqueId_ = ((Math.random() * 1e9) >>> 0) + '-' +
       window.location.pathname.replace(/.*\//, '').replace(/\.html.*$/, '');
 
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(11)) {
