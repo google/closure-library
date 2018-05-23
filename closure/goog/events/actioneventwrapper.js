@@ -28,6 +28,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventWrapper');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.userAgent');
 
 
 
@@ -68,7 +69,9 @@ goog.events.actionEventWrapper = new goog.events.ActionEventWrapper_();
  * @private
  */
 goog.events.ActionEventWrapper_.EVENT_TYPES_ = [
-  goog.events.EventType.CLICK, goog.events.EventType.KEYDOWN,
+  goog.events.EventType.CLICK,
+  goog.userAgent.GECKO ? goog.events.EventType.KEYPRESS :
+                         goog.events.EventType.KEYDOWN,
   goog.events.EventType.KEYUP
 ];
 
