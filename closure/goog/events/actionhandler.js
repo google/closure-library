@@ -63,8 +63,7 @@ goog.events.ActionHandler = function(element) {
   this.element_ = element;
 
   goog.events.listen(
-      element, goog.events.ActionHandler.KEY_EVENT_TYPE_, this.handleKeyDown_,
-      false, this);
+      element, goog.events.EventType.KEYDOWN, this.handleKeyDown_, false, this);
   goog.events.listen(
       element, goog.events.EventType.CLICK, this.handleClick_, false, this);
 };
@@ -79,16 +78,6 @@ goog.events.ActionHandler.EventType = {
   ACTION: 'action',
   BEFOREACTION: 'beforeaction'
 };
-
-
-/**
- * Key event type to listen for.
- * @type {string}
- * @private
- */
-goog.events.ActionHandler.KEY_EVENT_TYPE_ = goog.userAgent.GECKO ?
-    goog.events.EventType.KEYPRESS :
-    goog.events.EventType.KEYDOWN;
 
 
 /**
@@ -146,8 +135,8 @@ goog.events.ActionHandler.prototype.dispatchEvents_ = function(e) {
 goog.events.ActionHandler.prototype.disposeInternal = function() {
   goog.events.ActionHandler.superClass_.disposeInternal.call(this);
   goog.events.unlisten(
-      this.element_, goog.events.ActionHandler.KEY_EVENT_TYPE_,
-      this.handleKeyDown_, false, this);
+      this.element_, goog.events.EventType.KEYDOWN, this.handleKeyDown_, false,
+      this);
   goog.events.unlisten(
       this.element_, goog.events.EventType.CLICK, this.handleClick_, false,
       this);
