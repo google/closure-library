@@ -320,7 +320,7 @@ goog.editor.Plugin.prototype.handleSelectionChange;
  * in conjunction with ctrl/meta keys OR when a small subset of keys (defined
  * in goog.editor.Field.POTENTIAL_SHORTCUT_KEYCODES_) are pressed without
  * ctrl/meta keys. We specifically don't invoke it when altKey is pressed since
- * alt key is used in many i8n UIs to enter certain characters.
+ * alt key is used in many i18n UIs to enter certain characters.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @param {string} key The key pressed.
  * @param {boolean} isModifierPressed Whether the ctrl/meta key was pressed or

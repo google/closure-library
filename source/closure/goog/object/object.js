@@ -600,7 +600,8 @@ goog.object.PROTOTYPE_FIELDS_ = [
  * @param {Object} target The object to modify. Existing properties will be
  *     overwritten if they are also present in one of the objects in
  *     `var_args`.
- * @param {...Object} var_args The objects from which values will be copied.
+ * @param {...(Object|null|undefined)} var_args The objects from which values
+ *     will be copied.
  */
 goog.object.extend = function(target, var_args) {
   var key, source;

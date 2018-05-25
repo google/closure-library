@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview A default implementation for managing Javascript code modules.
+ * @enhanceable
  *
  */
 

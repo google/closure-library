@@ -270,19 +270,21 @@ goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
 
 /** @override */
 goog.editor.plugins.EnterHandler.prototype.handleKeyDown = function(e) {
-  // If a dialog doesn't have selectable field, Gecko grabs the event and
-  // performs actions in editor window. This solves that problem and allows
-  // the event to be passed on to proper handlers.
-  if (goog.userAgent.GECKO && this.getFieldObject().inModalMode()) {
-    return false;
-  }
+  if (goog.userAgent.GECKO) {
+    // If a dialog doesn't have selectable field, Gecko grabs the event and
+    // performs actions in editor window. This solves that problem and allows
+    // the event to be passed on to proper handlers.
+    if (this.getFieldObject().inModalMode()) {
+      return false;
+    }
 
-  // Firefox will allow the first node in an iframe to be deleted
-  // on a backspace.  Disallow it if the node is empty.
-  if (e.keyCode == goog.events.KeyCodes.BACKSPACE) {
-    this.handleBackspaceInternal(e, this.getFieldObject().getRange());
-  } else if (goog.userAgent.GECKO && e.keyCode == goog.events.KeyCodes.DELETE) {
-    this.handleDeleteGecko(e);
+    // Firefox will allow the first node in an iframe to be deleted
+    // on a backspace.  Disallow it if the node is empty.
+    if (e.keyCode == goog.events.KeyCodes.BACKSPACE) {
+      this.handleBackspaceInternal(e, this.getFieldObject().getRange());
+    } else if (e.keyCode == goog.events.KeyCodes.DELETE) {
+      this.handleDeleteGecko(e);
+    }
   }
 
   return false;
