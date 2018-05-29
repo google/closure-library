@@ -453,7 +453,7 @@ goog.dom.$$ = goog.dom.getElementsByTagNameAndClass;
  */
 goog.dom.setProperties = function(element, properties) {
   goog.object.forEach(properties, function(val, key) {
-    if (val && val.implementsGoogStringTypedString) {
+    if (val && typeof val == 'object' && val.implementsGoogStringTypedString) {
       val = val.getTypedStringValue();
     }
     if (key == 'style') {

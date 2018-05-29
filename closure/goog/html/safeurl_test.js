@@ -175,6 +175,18 @@ function testSafeUrlSanitize_sanitizeProgramConstants() {
   });
 }
 
+function testSafeUrlSanitize_sanitizePlainStringWithTypedStringProperty() {
+  // .sanitize() works on plain strings with property that wrongly indicates
+  // that the text is of a type that implements `goog.string.TypedString`. This
+  // simulates a property renaming collision with a String property set
+  // externally (b/80124112).
+  var plainString = 'http://example.com/';
+  plainString.implementsGoogStringTypedString = true;
+  var output = goog.html.SafeUrl.sanitize(plainString);
+  assertEquals('http://example.com/', goog.html.SafeUrl.unwrap(output));
+  var asserted = goog.html.SafeUrl.sanitizeAssertUnchanged(plainString);
+  assertEquals('http://example.com/', goog.html.SafeUrl.unwrap(asserted));
+}
 
 function testSafeUrlSanitize_idempotentForSafeUrlArgument() {
   // This matches the safe prefix.

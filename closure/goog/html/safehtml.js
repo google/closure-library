@@ -215,13 +215,14 @@ goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
   if (textOrHtml instanceof goog.html.SafeHtml) {
     return textOrHtml;
   }
+  var textIsObject = typeof textOrHtml == 'object';
   var dir = null;
-  if (textOrHtml.implementsGoogI18nBidiDirectionalString) {
+  if (textIsObject && textOrHtml.implementsGoogI18nBidiDirectionalString) {
     dir = /** @type {!goog.i18n.bidi.DirectionalString} */ (textOrHtml)
               .getDirection();
   }
   var textAsString;
-  if (textOrHtml.implementsGoogStringTypedString) {
+  if (textIsObject && textOrHtml.implementsGoogStringTypedString) {
     textAsString = /** @type {!goog.string.TypedString} */ (textOrHtml)
                        .getTypedStringValue();
   } else {
