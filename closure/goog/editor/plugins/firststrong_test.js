@@ -425,7 +425,7 @@ function testFirstStrongCharacterFromIME_RTL() {
   var attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'אבג';
   goog.testing.events.fireNonAsciiKeySequence(fieldElement, 0, 0, attributes);
-  if (goog.userAgent.IE || goog.userAgent.GECKO) {
+  if (goog.userAgent.IE) {
     // goog.testing.events.fireNonAsciiKeySequence doesn't send KEYPRESS event
     // so no command is expected.
     assertNoCommand();
@@ -443,7 +443,7 @@ function testFirstCharacterFromIME_LTR() {
   var attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'ABC';
   goog.testing.events.fireNonAsciiKeySequence(fieldElement, 0, 0, attributes);
-  if (goog.userAgent.IE || goog.userAgent.GECKO) {
+  if (goog.userAgent.IE) {
     // goog.testing.events.fireNonAsciiKeySequence doesn't send KEYPRESS event
     // so no command is expected.
     assertNoCommand();
