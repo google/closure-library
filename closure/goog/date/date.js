@@ -228,7 +228,8 @@ goog.date.isSameYear = function(date, opt_now) {
 
 
 /**
- * Static function for week number calculation. ISO 8601 implementation.
+ * Static function for the day of the same week that determines the week number
+ * and year of week.
  *
  * @param {number} year Year part of date.
  * @param {number} month Month part of date (0-11).
@@ -237,9 +238,10 @@ goog.date.isSameYear = function(date, opt_now) {
  * @param {number=} opt_firstDayOfWeek First day of the week, defaults to
  *     Monday.
  *     Monday=0, Sunday=6.
- * @return {number} The week number (1-53).
+ * @return {number} the cutoff day of the same week in millis since epoch.
+ * @private
  */
-goog.date.getWeekNumber = function(
+goog.date.getCutOffSameWeek_ = function(
     year, month, date, opt_weekDay, opt_firstDayOfWeek) {
   var d = new Date(year, month, date);
 
@@ -261,16 +263,55 @@ goog.date.getWeekNumber = function(
   // Unix timestamp of the midnight of the cutoff day in the week of 'd'.
   // There might be +-1 hour shift in the result due to the daylight saving,
   // but it doesn't affect the year.
-  var cutoffSameWeek =
-      d.valueOf() + (cutoffpos - daypos) * goog.date.MS_PER_DAY;
+  return d.valueOf() + (cutoffpos - daypos) * goog.date.MS_PER_DAY;
+};
 
-  // Unix timestamp of January 1 in the year of 'cutoffSameWeek'.
+
+/**
+ * Static function for week number calculation. ISO 8601 implementation.
+ *
+ * @param {number} year Year part of date.
+ * @param {number} month Month part of date (0-11).
+ * @param {number} date Day part of date (1-31).
+ * @param {number=} opt_weekDay Cut off weekday, defaults to Thursday.
+ * @param {number=} opt_firstDayOfWeek First day of the week, defaults to
+ *     Monday.
+ *     Monday=0, Sunday=6.
+ * @return {number} The week number (1-53).
+ */
+goog.date.getWeekNumber = function(
+    year, month, date, opt_weekDay, opt_firstDayOfWeek) {
+  var cutoffSameWeek = goog.date.getCutOffSameWeek_(
+      year, month, date, opt_weekDay, opt_firstDayOfWeek);
+
+  // Unix timestamp of January 1 in the year of the week.
   var jan1 = new Date(new Date(cutoffSameWeek).getFullYear(), 0, 1).valueOf();
 
   // Number of week. The round() eliminates the effect of daylight saving.
   return Math.floor(
              Math.round((cutoffSameWeek - jan1) / goog.date.MS_PER_DAY) / 7) +
       1;
+};
+
+
+/**
+ * Static function for year of the week. ISO 8601 implementation.
+ *
+ * @param {number} year Year part of date.
+ * @param {number} month Month part of date (0-11).
+ * @param {number} date Day part of date (1-31).
+ * @param {number=} opt_weekDay Cut off weekday, defaults to Thursday.
+ * @param {number=} opt_firstDayOfWeek First day of the week, defaults to
+ *     Monday.
+ *     Monday=0, Sunday=6.
+ * @return {number} The four digit year of date.
+ */
+goog.date.getYearOfWeek = function(
+    year, month, date, opt_weekDay, opt_firstDayOfWeek) {
+  var cutoffSameWeek = goog.date.getCutOffSameWeek_(
+      year, month, date, opt_weekDay, opt_firstDayOfWeek);
+
+  return new Date(cutoffSameWeek).getFullYear();
 };
 
 
@@ -980,6 +1021,18 @@ goog.date.Date.prototype.getNumberOfDaysInMonth = function() {
  */
 goog.date.Date.prototype.getWeekNumber = function() {
   return goog.date.getWeekNumber(
+      this.getFullYear(), this.getMonth(), this.getDate(),
+      this.firstWeekCutOffDay_, this.firstDayOfWeek_);
+};
+
+
+/**
+ * Returns year in “Week of Year” based calendars in which the year transition
+ * occurs on a week boundary.
+ * @return {number} The four digit year in "Week of Year"
+ */
+goog.date.Date.prototype.getYearOfWeek = function() {
+  return goog.date.getYearOfWeek(
       this.getFullYear(), this.getMonth(), this.getDate(),
       this.firstWeekCutOffDay_, this.firstDayOfWeek_);
 };
