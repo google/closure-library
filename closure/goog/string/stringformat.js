@@ -27,13 +27,15 @@ goog.provide('goog.string.format');
 goog.require('goog.string');
 
 
+// TODO(johnlenz): goog.string.format should not accept undefined as a parameter
 /**
  * Performs sprintf-like conversion, i.e. puts the values in a template.
  * DO NOT use it instead of built-in conversions in simple cases such as
  * 'Cost: %.2f' as it would introduce unnecessary latency opposed to
  * 'Cost: ' + cost.toFixed(2).
  * @param {string} formatString Template string containing % specifiers.
- * @param {...string|number} var_args Values formatString is to be filled with.
+ * @param {...(string|number|undefined)} var_args Values formatString is to
+ *     be filled with.
  * @return {string} Formatted string.
  */
 goog.string.format = function(formatString, var_args) {
