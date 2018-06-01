@@ -3609,20 +3609,29 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       });
       return;
     }
+    // TODO(johnplaisted): Externs are missing onreadystatechange for
+    // HTMLDocument.
+    /** @type {?} */
+    var doc = goog.global.document;
 
-    if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_()) {
+    var isInternetExplorer =
+        goog.inHtmlDocument_() && 'ActiveXObject' in goog.global;
+
+    // Don't delay in any version of IE. There's bug around this that will
+    // cause out of order script execution. This means that on older IE ES6
+    // modules will load too early (while the document is still loading + the
+    // dom is not available). The other option is to load too late (when the
+    // document is complete and the onload even will never fire). This seems
+    // to be the lesser of two evils as scripts already act like the former.
+    if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_() &&
+        !isInternetExplorer) {
       goog.Dependency.defer_ = true;
-      // TODO(johnplaisted): Externs are missing onreadystatechange for
-      // HTMLDocument.
-      /** @type {?} */
-      var doc = goog.global.document;
       // Transpiled ES6 modules still need to load like regular ES6 modules,
       // aka only after the document is interactive.
       controller.pause();
       var oldCallback = doc.onreadystatechange;
       doc.onreadystatechange = function() {
-        if (doc.attachEvent ? doc.readyState == 'complete' :
-                              doc.readyState == 'interactive') {
+        if (doc.readyState == 'interactive') {
           doc.onreadystatechange = oldCallback;
           load();
           controller.resume();
