@@ -133,9 +133,14 @@ goog.html.TrustedResourceUrl.prototype.getDirection = function() {
  *     the order of values in an object which might result in non-deterministic
  *     order of the parameters. However, browsers currently preserve the order.
  * @return {!goog.html.TrustedResourceUrl} New TrustedResourceUrl with params.
+ * @throws {!Error} If the url contains #.
  */
 goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(params) {
   var url = goog.html.TrustedResourceUrl.unwrap(this);
+  if (/#/.test(url)) {
+    throw new Error(
+        'Found a hash in url (' + url + '), appending not supported.');
+  }
   var separator = /\?/.test(url) ? '&' : '?';
   for (var key in params) {
     var values = goog.isArray(params[key]) ?
