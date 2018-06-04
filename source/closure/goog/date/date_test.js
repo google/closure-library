@@ -287,6 +287,86 @@ function testGetWeekNumber() {
   }
 }
 
+function testGetYearOfWeek() {
+  var f = goog.date.getYearOfWeek;
+
+  // Test cases from http://en.wikipedia.org/wiki/ISO_week_date#Examples
+  assertEquals(
+      '2005-01-01 is the week 53 of the previous year', 2004,
+      f(2005, goog.date.month.JAN, 1));
+  assertEquals(
+      '2005-01-02 is the week 53 of the previous year', 2004,
+      f(2005, goog.date.month.JAN, 2));
+  assertEquals(
+      '2005-12-31 is the week 52 of current year', 2005,
+      f(2005, goog.date.month.DEC, 31));
+  assertEquals(
+      '2007-01-01 is the week 1 of 2007', 2007,
+      f(2007, goog.date.month.JAN, 1));
+  assertEquals(
+      '2007-12-30 is the week 52 of 2007', 2007,
+      f(2007, goog.date.month.DEC, 30));
+  assertEquals(
+      '2007-12-31 is the week 1 of the following year', 2008,
+      f(2007, goog.date.month.DEC, 31));
+  assertEquals(
+      '2008-01-01 is the week 1 of 2008', 2008,
+      f(2008, goog.date.month.JAN, 1));
+  assertEquals(
+      '2008-12-28 is the week 52 of 2008', 2008,
+      f(2008, goog.date.month.DEC, 28));
+  assertEquals(
+      '2008-12-29 is the week 1 of the following year', 2009,
+      f(2008, goog.date.month.DEC, 29));
+  assertEquals(
+      '2008-12-31 is the week 1 of the following year', 2009,
+      f(2008, goog.date.month.DEC, 31));
+  assertEquals(
+      '2009-01-01 is the week 1 of 2009', 2009,
+      f(2009, goog.date.month.JAN, 1));
+  assertEquals(
+      '2009-12-31 is the week 53 of the previous year', 2009,
+      f(2009, goog.date.month.DEC, 31));
+  assertEquals(
+      '2010-01-01 is the week 53 of the previous year', 2009,
+      f(2010, goog.date.month.JAN, 1));
+  assertEquals(
+      '2010-01-03 is the week 53 of the previous year', 2009,
+      f(2010, goog.date.month.JAN, 3));
+  assertEquals(
+      '2010-01-04 is the week 1 of 2010', 2010,
+      f(2010, goog.date.month.JAN, 4));
+
+  assertEquals(
+      '2006-01-01 is in week 52 of the perv. year', 2005,
+      f(2006, goog.date.month.JAN, 1));
+  assertEquals(
+      '2006-01-02 is in week 1 of 2006', 2006, f(2006, goog.date.month.JAN, 2));
+
+  // Tests for different cutoff days.
+  assertEquals(
+      '2006-01-01 is in week 52 of the prev. year (cutoff=Monday)', 2005,
+      f(2006, goog.date.month.JAN, 1, goog.date.weekDay.MON));
+  assertEquals(
+      '2006-01-01 is in week 1 (cutoff=Sunday)', 2006,
+      f(2006, goog.date.month.JAN, 1, goog.date.weekDay.SUN));
+  assertEquals(
+      '2006-12-31 is in 2006 year of week (cutoff=Monday)', 2006,
+      f(2006, goog.date.month.DEC, 31, goog.date.weekDay.MON));
+  assertEquals(
+      '2006-12-31 is in 2006 year of week (cutoff=Sunday)', 2006,
+      f(2006, goog.date.month.DEC, 31, goog.date.weekDay.SUN));
+  assertEquals(
+      '2007-01-01 is in 2007 year of week (cutoff=Monday)', 2007,
+      f(2007, goog.date.month.JAN, 1, goog.date.weekDay.MON));
+  assertEquals(
+      '2007-01-01 is in 2007 year of week (cutoff=Sunday)', 2007,
+      f(2007, goog.date.month.JAN, 1, goog.date.weekDay.SUN));
+  assertEquals(
+      '2015-01-01 is in the previous year of week (cutoff=Monday)', 2014,
+      f(2015, goog.date.month.JAN, 1, goog.date.weekDay.MON));
+}
+
 
 function testFormatMonthAndYear() {
   var f = goog.date.formatMonthAndYear;

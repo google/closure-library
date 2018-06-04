@@ -404,12 +404,9 @@ goog.ui.Container.prototype.enterDocument = function() {
       .listen(
           elem,
           [
-            MouseEventType.MOUSEDOWN,
-            MouseEventType.MOUSEUP,
-            MouseEventType.MOUSECANCEL,
-            MouseEventType.MOUSEOVER,
-            MouseEventType.MOUSEOUT,
-            goog.events.EventType.CONTEXTMENU
+            MouseEventType.MOUSEDOWN, MouseEventType.MOUSEUP,
+            MouseEventType.MOUSECANCEL, goog.events.EventType.MOUSEOVER,
+            goog.events.EventType.MOUSEOUT, goog.events.EventType.CONTEXTMENU
           ],
           this.handleChildMouseEvents);
 
@@ -670,10 +667,10 @@ goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
       case MouseEventType.MOUSECANCEL:
         control.handleMouseUp(e);
         break;
-      case MouseEventType.MOUSEOVER:
+      case goog.events.EventType.MOUSEOVER:
         control.handleMouseOver(e);
         break;
-      case MouseEventType.MOUSEOUT:
+      case goog.events.EventType.MOUSEOUT:
         control.handleMouseOut(e);
         break;
       case goog.events.EventType.CONTEXTMENU:

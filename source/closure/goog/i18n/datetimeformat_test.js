@@ -773,6 +773,17 @@ function testSupportForWeekInYear() {
   assertEquals('week ۰۹', fmt.format(date));
 }
 
+function testSupportYearOfWeek() {
+  var date = new Date(2005, 0, 2);
+
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
+  var fmt = new goog.i18n.DateTimeFormat('YYYY');
+  assertEquals('2004', fmt.format(date));
+  var fmt = new goog.i18n.DateTimeFormat('YY');
+  assertEquals('04', fmt.format(date));
+}
+
 function testSupportForYearAndEra() {
   var date = new Date(2013, 1, 25);
   var fmt = new goog.i18n.DateTimeFormat(

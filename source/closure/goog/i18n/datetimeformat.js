@@ -40,7 +40,7 @@ goog.require('goog.string');
  * ------   -------                    ------------       -------
  * G#       era designator             (Text)             AD
  * y#       year                       (Number)           1996
- * Y*       year (week of year)        (Number)           1997
+ * Y        year (week of year)        (Number)           1997
  * u*       extended year              (Number)           4601
  * Q#       quarter                    (Text)             Q3 & 3rd quarter
  * M        month in year              (Text & Number)    July & 07
@@ -166,9 +166,9 @@ goog.i18n.DateTimeFormat.TOKENS_ = [
   // quote string
   /^\'(?:[^\']|\'\')*(\'|$)/,
   // pattern chars
-  /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
+  /^(?:G+|y+|Y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
   // and all the other chars
-  /^[^\'GyMkSEahKHcLQdmsvVwzZ]+/  // and all the other chars
+  /^[^\'GyYMkSEahKHcLQdmsvVwzZ]+/  // and all the other chars
 ];
 
 
@@ -455,6 +455,39 @@ goog.i18n.DateTimeFormat.prototype.formatEra_ = function(count, date) {
  */
 goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
   var value = date.getFullYear();
+  if (value < 0) {
+    value = -value;
+  }
+  if (count == 2) {
+    // See comment about special casing 'yy' at the start of the file, this
+    // matches ICU and CLDR behaviour. See also:
+    // http://icu-project.org/apiref/icu4j/com/ibm/icu/text/SimpleDateFormat.html
+    // http://www.unicode.org/reports/tr35/tr35-dates.html
+    value = value % 100;
+  }
+  return this.localizeNumbers_(goog.string.padNumber(value, count));
+};
+
+
+/**
+ * Formats Year (Week of Year) field according to pattern specified
+ *   Javascript Date object seems incapable handling 1BC and
+ *   year before. It can show you year 0 which does not exists.
+ *   following we just keep consistent with javascript's
+ *   toString method. But keep in mind those things should be
+ *   unsupported.
+ * @param {number} count Number of time pattern char repeats, it controls
+ *     how a field should be formatted.
+ * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+ * @return {string} Formatted string that represent this field.
+ * @private
+ */
+goog.i18n.DateTimeFormat.prototype.formatYearOfWeek_ = function(count, date) {
+  var value = goog.date.getYearOfWeek(
+      date.getFullYear(), date.getMonth(), date.getDate(),
+      this.dateTimeSymbols_.FIRSTWEEKCUTOFFDAY,
+      this.dateTimeSymbols_.FIRSTDAYOFWEEK);
+
   if (value < 0) {
     value = -value;
   }
@@ -857,6 +890,8 @@ goog.i18n.DateTimeFormat.prototype.formatField_ = function(
       return this.formatEra_(count, dateForDate);
     case 'y':
       return this.formatYear_(count, dateForDate);
+    case 'Y':
+      return this.formatYearOfWeek_(count, dateForDate);
     case 'M':
       return this.formatMonth_(count, dateForDate);
     case 'k':
