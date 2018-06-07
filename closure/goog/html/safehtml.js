@@ -64,7 +64,7 @@ goog.require('goog.string.TypedString');
  * goog.html.SafeHtml.concat(
  *     goog.html.SafeHtml.fromConstant(goog.string.Const.from('<script>')),
  *     goog.html.SafeHtml.htmlEscape(userInput),
- *     goog.html.SafeHtml.fromConstant(goog.string.Const.from('</script>')));
+ *     goog.html.SafeHtml.fromConstant(goog.string.Const.from('<\/script>')));
  *
  * There's goog.dom.constHtmlToNode to create a node from constant strings only.
  *
