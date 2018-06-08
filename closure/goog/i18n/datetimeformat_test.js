@@ -358,6 +358,18 @@ function testFractionalSeconds() {
   assertEquals('10:2560', fmt.format(date));
   var fmt = new goog.i18n.DateTimeFormat('s:SSSSS');
   assertEquals('10:25600', fmt.format(date));
+
+  date = new Date(1960, 6, 27, 13, 10, 10, 256);
+  var fmt = new goog.i18n.DateTimeFormat('s:S');
+  assertEquals('10:3', fmt.format(date));
+  var fmt = new goog.i18n.DateTimeFormat('s:SS');
+  assertEquals('10:26', fmt.format(date));
+  var fmt = new goog.i18n.DateTimeFormat('s:SSS');
+  assertEquals('10:256', fmt.format(date));
+  var fmt = new goog.i18n.DateTimeFormat('s:SSSS');
+  assertEquals('10:2560', fmt.format(date));
+  var fmt = new goog.i18n.DateTimeFormat('s:SSSSS');
+  assertEquals('10:25600', fmt.format(date));
 }
 
 function testPredefinedFormatter() {
