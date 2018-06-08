@@ -488,20 +488,6 @@ requirement: {
 # functions and to progressively move away from them by using the whitelist.
 
 requirement: {
-  rule_id: 'closure:legacyHtml'
-  type: BANNED_NAME
-  error_message: 'goog.html.legacyconversions are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#legacyApis for details.'
-
-  value: 'goog.html.legacyconversions'
-
-  whitelist_regexp: '.+/closure/goog/html/legacyconversions.js'
-
-  whitelist_regexp: '.+/closure/goog/datasource/jsondatasource.js'
-  whitelist_regexp: '.+/closure/goog/module/loader.js'
-  whitelist_regexp: '.+/closure/goog/soy/soy.js'
-}
-
-requirement: {
   rule_id: 'closure:soyDeprecatedAutoescaping'
   type: RESTRICTED_NAME_CALL
   # This allows only call sites passing strict templates (which return SanitizedContent) and not non-strict templates (which return string).
