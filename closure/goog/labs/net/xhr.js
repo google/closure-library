@@ -374,7 +374,7 @@ xhr.send = function(method, url, data, opt_options) {
 
 /**
  * @param {string} url The URL to test.
- * @return {boolean} Whether the effective scheme is HTTP or HTTPs.
+ * @return {boolean} Whether the effective scheme is HTTP or HTTPS.
  * @private
  */
 xhr.isEffectiveSchemeHttp_ = function(url) {
