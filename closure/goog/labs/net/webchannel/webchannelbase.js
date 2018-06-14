@@ -2171,7 +2171,7 @@ WebChannelBase.prototype.createDataUri = function(
       hostName = locationPage.hostname;
     }
 
-    var port = opt_overridePort || locationPage.port;
+    var port = opt_overridePort || +locationPage.port;
 
     uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
   }
