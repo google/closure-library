@@ -365,6 +365,7 @@ var _allTests = [
   'closure/goog/positioning/menuanchoredposition_test.html',
   'closure/goog/positioning/positioning_test.html',
   'closure/goog/positioning/viewportclientposition_test.html',
+  'closure/goog/promise/nativeresolver_test.html',
   'closure/goog/promise/promise_test.html',
   'closure/goog/proto2/descriptor_test.html',
   'closure/goog/proto2/fielddescriptor_test.html',
