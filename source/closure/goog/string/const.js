@@ -134,7 +134,7 @@ goog.string.Const.unwrap = function(stringConst) {
  * Creates a Const object from a compile-time constant string.
  *
  * It is illegal to invoke this function on an expression whose
- * compile-time-contant value cannot be determined by the Closure compiler.
+ * compile-time-constant value cannot be determined by the Closure compiler.
  *
  * Correct invocations include,
  * <pre>

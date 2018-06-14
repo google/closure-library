@@ -3251,7 +3251,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         // CLOSURE_NO_DEPS set to true.
         goog.logToConsole_(
             'Consider setting CLOSURE_IMPORT_SCRIPT before loading base.js, ' +
-            'or seting CLOSURE_NO_DEPS to true.');
+            'or setting CLOSURE_NO_DEPS to true.');
         controller.loaded();
       } else {
         controller.pause();

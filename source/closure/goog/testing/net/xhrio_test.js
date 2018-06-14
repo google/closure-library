@@ -115,7 +115,7 @@ function testGetLastUri() {
 
 function testGetLastMethod() {
   var xhr = new goog.testing.net.XhrIo();
-  assertUndefined('nothing sent yet, empty method', xhr.getLastMethod());
+  assertEquals('nothing sent yet, empty method', xhr.getLastMethod(), '');
 
   var method = 'POKE';
   xhr.send('http://www.example.com/', method);

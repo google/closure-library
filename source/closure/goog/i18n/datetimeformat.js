@@ -575,7 +575,7 @@ goog.i18n.DateTimeFormat.prototype.format24Hours_ = function(count, date) {
 goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ = function(
     count, date) {
   // Fractional seconds left-justify, append 0 for precision beyond 3
-  var value = date.getTime() % 1000 / 1000;
+  var value = date.getMilliseconds() / 1000;
   return this.localizeNumbers_(
       value.toFixed(Math.min(3, count)).substr(2) +
       (count > 3 ? goog.string.padNumber(0, count - 3) : ''));

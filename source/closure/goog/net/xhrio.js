@@ -65,7 +65,7 @@ goog.require('goog.userAgent');
 
 goog.forwardDeclare('goog.Uri');
 
-
+goog.scope(function() {
 
 /**
  * Basic class for handling XMLHttpRequests.
@@ -75,7 +75,7 @@ goog.forwardDeclare('goog.Uri');
  * @extends {goog.events.EventTarget}
  */
 goog.net.XhrIo = function(opt_xmlHttpFactory) {
-  goog.net.XhrIo.base(this, 'constructor');
+  XhrIo.base(this, 'constructor');
 
   /**
    * Map of default headers to add to every request, use:
@@ -182,7 +182,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
    * XHR behavior.
    * @private {goog.net.XhrIo.ResponseType}
    */
-  this.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
+  this.responseType_ = ResponseType.DEFAULT;
 
   /**
    * Whether a "credentialed" request is to be sent (one that is aware of
@@ -225,6 +225,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
+var XhrIo = goog.net.XhrIo;
 
 /**
  * Response types that may be requested for XMLHttpRequests.
@@ -239,6 +240,8 @@ goog.net.XhrIo.ResponseType = {
   BLOB: 'blob',
   ARRAY_BUFFER: 'arraybuffer'
 };
+
+var ResponseType = goog.net.XhrIo.ResponseType;
 
 
 /**
@@ -776,7 +779,7 @@ goog.net.XhrIo.prototype.disposeInternal = function() {
     this.cleanUpXhr_(true);
   }
 
-  goog.net.XhrIo.base(this, 'disposeInternal');
+  XhrIo.base(this, 'disposeInternal');
 };
 
 
@@ -1113,7 +1116,7 @@ goog.net.XhrIo.prototype.getResponseText = function() {
  *
  * One option is to construct a VBArray from the returned object and convert
  * it to a JavaScript array using the toArray method:
- * {@code (new window['VBArray'](xhrIo.getResponseBody())).toArray()}
+ * `(new window['VBArray'](xhrIo.getResponseBody())).toArray()`
  * This will result in an array of numbers in the range of [0..255]
  *
  * Another option is to use the VBScript CStr method to convert it into a
@@ -1122,7 +1125,6 @@ goog.net.XhrIo.prototype.getResponseText = function() {
  * @return {Object} Binary result from the server or null if not available.
  */
 goog.net.XhrIo.prototype.getResponseBody = function() {
-
   try {
     if (this.xhr_ && 'responseBody' in this.xhr_) {
       return this.xhr_['responseBody'];
@@ -1143,7 +1145,6 @@ goog.net.XhrIo.prototype.getResponseBody = function() {
  * if no result available.
  */
 goog.net.XhrIo.prototype.getResponseXml = function() {
-
   try {
     return this.xhr_ ? this.xhr_.responseXML : null;
   } catch (e) {
@@ -1201,7 +1202,6 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
  * @return {*} The response.
  */
 goog.net.XhrIo.prototype.getResponse = function() {
-
   try {
     if (!this.xhr_) {
       return null;
@@ -1210,15 +1210,15 @@ goog.net.XhrIo.prototype.getResponse = function() {
       return this.xhr_.response;
     }
     switch (this.responseType_) {
-      case goog.net.XhrIo.ResponseType.DEFAULT:
-      case goog.net.XhrIo.ResponseType.TEXT:
+      case ResponseType.DEFAULT:
+      case ResponseType.TEXT:
         return this.xhr_.responseText;
       // DOCUMENT and BLOB don't need to be handled here because they are
       // introduced in the same spec that adds the .response field, and would
       // have been caught above.
       // ARRAY_BUFFER needs an implementation for Firefox 4, where it was
       // implemented using a draft spec rather than the final spec.
-      case goog.net.XhrIo.ResponseType.ARRAY_BUFFER:
+      case ResponseType.ARRAY_BUFFER:
         if ('mozResponseArrayBuffer' in this.xhr_) {
           return this.xhr_.mozResponseArrayBuffer;
         }
@@ -1364,3 +1364,4 @@ goog.debug.entryPointRegistry.register(
       goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ =
           transformer(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
     });
+});  // goog.scope
