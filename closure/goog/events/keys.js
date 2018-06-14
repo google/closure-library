@@ -27,8 +27,15 @@ goog.provide('goog.events.Keys');
  * @enum {string}
  */
 goog.events.Keys = {
-  CTRL: 'Control',
-  SHIFT: 'Shift',
   ALT: 'Meta',
-  ALTGRAPH: 'AltGraph'
+  ALTGRAPH: 'AltGraph',
+  CTRL: 'Control',
+  DOWN: 'ArrowDown',
+  END: 'End',
+  ENTER: 'Enter',
+  HOME: 'Home',
+  LEFT: 'ArrowLeft',
+  RIGHT: 'ArrowRight',
+  SHIFT: 'Shift',
+  UP: 'ArrowUp',
 };
