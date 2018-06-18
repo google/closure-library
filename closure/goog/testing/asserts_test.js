@@ -984,11 +984,13 @@ async function testAssertRejects() {
           reject('string error test');
         }));
     assertEquals('string error', 'string error test', e);
-    assertRejects(
+    e = await assertRejects(
         'assertRejects should fail with a resolved thenable', (async () => {
           await assertRejects(thenable((resolve) => resolve()));
           fail('should always throw.');
         })());
+    assertEquals(
+        'IThenable passed into assertRejects did not reject', e.message);
   }
 }
 
