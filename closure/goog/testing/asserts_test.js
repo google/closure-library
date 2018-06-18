@@ -15,7 +15,9 @@
 goog.provide('goog.testing.assertsTest');
 goog.setTestOnly('goog.testing.assertsTest');
 
+goog.require('goog.Promise');
 goog.require('goog.array');
+goog.require('goog.async.Deferred');
 goog.require('goog.dom');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
@@ -900,6 +902,94 @@ function testAssertNotThrows() {
     }
   }
   assertFalse('assertNotThrows did not fail on a thrown exception', failed);
+}
+
+async function testAssertRejects() {
+  assertThrows(() => {
+    assertRejects('assertRejects should not pass with null param', null);
+    fail('Should always throw');
+  });
+
+  assertThrows(() => {
+    assertRejects(
+        'assertRejects should not pass with undefined param', undefined);
+    fail('Should always throw');
+  });
+
+  assertThrows(() => {
+    assertRejects('assertRejects should not pass with number param', 1);
+    fail('Should always throw');
+  });
+
+  assertThrows(() => {
+    assertRejects('assertRejects should not pass with string param', 'string');
+    fail('Should always throw');
+  });
+
+  assertThrows(() => {
+    assertRejects(
+        'assertRejects should not pass with object param with no then property',
+        {});
+    fail('Should always throw');
+  });
+
+  const thenables = [
+    // Test goog.async.Deferred.
+    (fn) => {
+      const d = new goog.async.Deferred();
+      try {
+        fn((val) => d.callback(), (err) => d.errback(err));
+      } catch (e) {
+        d.errback(e);
+      }
+      return d;
+    },
+    // Test goog.Promise.
+    (fn) => new goog.Promise(fn),
+    /// Test Promise.
+    (fn) => new Promise(fn),
+    // Test async function that awaits on a goog.Promise.
+    async (fn) => {
+      await new goog.Promise(fn);
+    },
+    // Test async function that awaits on a Promise.
+    async (fn) => {
+      await new Promise(fn);
+    },
+    // Test async function that throws.
+    async (fn) => {
+      fn(() => {}, (err) => {
+        throw err;
+      });
+    },
+  ];
+  for (const thenable of thenables) {
+    let e = await assertRejects(
+        'valid IThenable constructor throws Error', thenable(() => {
+          throw new Error('test');
+        }));
+    assertEquals('error message', 'test', e.message);
+    e = await assertRejects(
+        'valid IThenable constructor throws string error', thenable(() => {
+          throw 'string error test';
+        }));
+    assertEquals('string error', 'string error test', e);
+    e = await assertRejects(
+        'valid IThenable rejects Error', thenable((_, reject) => {
+          reject(new Error('test'));
+        }));
+    assertEquals('error message', 'test', e.message);
+    e = await assertRejects(
+        'valid IThenable rejects string error', thenable((_, reject) => {
+          reject('string error test');
+        }));
+    assertEquals('string error', 'string error test', e);
+    assertRejects(
+        'assertRejects should fail with a resolved thenable', (async () => {
+          await assertRejects(thenable((resolve) => resolve()));
+          fail('should always throw.');
+        })());
+  }
 }
 
 function testAssertArrayEquals() {

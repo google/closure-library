@@ -393,7 +393,7 @@ goog.addDependency('events/keycodes_test.js', ['goog.events.KeyCodesTest'], ['go
 goog.addDependency('events/keyhandler.js', ['goog.events.KeyEvent', 'goog.events.KeyHandler', 'goog.events.KeyHandler.EventType'], ['goog.events', 'goog.events.BrowserEvent', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.userAgent'], {});
 goog.addDependency('events/keyhandler_test.js', ['goog.events.KeyEventTest'], ['goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.BrowserEvent', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.events.KeyHandler', 'goog.testing.events', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('events/keynames.js', ['goog.events.KeyNames'], [], {});
-goog.addDependency('events/keys.js', ['goog.events.Keys'], [], {});
+goog.addDependency('events/keys.js', ['goog.events.Keys'], [], {'lang': 'es5'});
 goog.addDependency('events/listenable.js', ['goog.events.Listenable', 'goog.events.ListenableKey'], ['goog.events.EventId'], {});
 goog.addDependency('events/listenable_test.js', ['goog.events.ListenableTest'], ['goog.events.Listenable', 'goog.testing.jsunit'], {});
 goog.addDependency('events/listener.js', ['goog.events.Listener'], ['goog.events.ListenableKey'], {});
@@ -1091,7 +1091,7 @@ goog.addDependency('test_module.js', ['goog.test_module'], ['goog.test_module_de
 goog.addDependency('test_module_dep.js', ['goog.test_module_dep'], [], {'module': 'goog'});
 goog.addDependency('testing/assertionfailure.js', ['goog.testing.safe.assertionFailure'], ['goog.asserts', 'goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException'], {});
-goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.array', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6'});
+goog.addDependency('testing/asserts_test.js', ['goog.testing.assertsTest'], ['goog.Promise', 'goog.array', 'goog.async.Deferred', 'goog.dom', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.labs.userAgent.browser', 'goog.string', 'goog.structs.Map', 'goog.structs.Set', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es8'});
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument'], {});
 goog.addDependency('testing/async/mockcontrol_test.js', ['goog.testing.async.MockControlTest'], ['goog.async.Deferred', 'goog.testing.MockControl', 'goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.async.MockControl', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/asynctestcase.js', ['goog.testing.AsyncTestCase', 'goog.testing.AsyncTestCase.ControlBreakingException'], ['goog.testing.TestCase', 'goog.testing.asserts'], {});
