@@ -366,7 +366,7 @@ goog.cspNonce_ = null;
  * @private
  */
 goog.getScriptNonce_ = function(doc) {
-  var script = doc.querySelector('script[nonce]');
+  var script = doc.querySelector && doc.querySelector('script[nonce]');
   if (script) {
     // Try to get the nonce from the IDL property first, because browsers that
     // implement additional nonce protection features (currently only Chrome) to
