@@ -216,7 +216,7 @@ function testGeckoStyleKeyHandling() {
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
@@ -567,7 +567,7 @@ function testGeckoEqualSign() {
   goog.userAgent.MAC = false;
   goog.userAgent.WINDOWS = true;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
@@ -592,7 +592,7 @@ function testMacGeckoSlash() {
   goog.userAgent.MAC = true;
   goog.userAgent.WINDOWS = false;
   goog.userAgent.LINUX = false;
-  goog.events.KeyHandler.USES_KEYDOWN_ = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
   var keyEvent, keyHandler = new goog.events.KeyHandler();
   goog.events.listen(
