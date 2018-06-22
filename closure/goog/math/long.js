@@ -423,6 +423,19 @@ goog.math.Long.prototype.toNumber = function() {
 
 
 /**
+ * @return {boolean} if can be exactly represented using number.
+ * @private
+ */
+goog.math.Long.prototype.isSafeInteger_ = function() {
+  // Unsafe bits are the top 12 bits
+  var unsafeBits = this.high_ & 0xfff00000;
+  // If unsafe bits are all 0s or all 1s then that means the number
+  // representation doesn't need those values and fits into remaining 52 bit
+  // mantissa hence no precision is lost.
+  return unsafeBits == 0 || unsafeBits == 0xfff00000;
+};
+
+/**
  * @param {number=} opt_radix The radix in which the text should be written.
  * @return {string} The textual representation of this value.
  * @override
@@ -435,6 +448,14 @@ goog.math.Long.prototype.toString = function(opt_radix) {
 
   if (this.isZero()) {
     return '0';
+  }
+
+  // We can avoid very expensive division based code path for some common cases.
+  if (this.isSafeInteger_()) {
+    var asNumber = this.toNumber();
+    // Shortcutting for radix 10 (common case) to avoid boxing via toString:
+    // https://jsperf.com/tostring-vs-vs-if
+    return radix == 10 ? ('' + asNumber) : asNumber.toString(radix);
   }
 
   if (this.isNegative()) {
