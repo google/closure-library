@@ -310,13 +310,7 @@ var assertThrows = goog.testing.asserts.assertThrows = function(a, opt_b) {
   try {
     func();
   } catch (e) {
-    if (e && goog.isString(e['stacktrace']) && goog.isString(e['message'])) {
-      // Remove the stack trace appended to the error message by Opera 10.0
-      var startIndex = e['message'].length - e['stacktrace'].length;
-      if (e['message'].indexOf(e['stacktrace'], startIndex) == startIndex) {
-        e['message'] = e['message'].substr(0, startIndex - 14);
-      }
-    }
+    goog.testing.asserts.removeOperaStacktrace_(e);
 
     var testCase = _getCurrentTestCase();
     if (e && e['isJsUnitException'] && testCase &&
@@ -332,6 +326,22 @@ var assertThrows = goog.testing.asserts.assertThrows = function(a, opt_b) {
   }
   goog.testing.asserts.raiseException(
       comment, 'No exception thrown from function passed to assertThrows');
+};
+
+
+/**
+ * Removes a stacktrace from an Error object for Opera 10.0.
+ * @param {*} e
+ * @private
+ */
+goog.testing.asserts.removeOperaStacktrace_ = function(e) {
+  if (goog.isObject(e) && goog.isString(e['stacktrace']) &&
+      goog.isString(e['message'])) {
+    var startIndex = e['message'].length - e['stacktrace'].length;
+    if (e['message'].indexOf(e['stacktrace'], startIndex) == startIndex) {
+      e['message'] = e['message'].substr(0, startIndex - 14);
+    }
+  }
 };
 
 
@@ -412,6 +422,47 @@ var assertThrowsJsUnitException = goog.testing.asserts
     msg += ': ' + opt_expectedMessage;
   }
   throw new goog.testing.JsUnitException(msg);
+};
+
+
+/**
+ * Asserts that the IThenable rejects.
+ *
+ * This is useful for asserting that async functions throw, like an asynchronous
+ * assertThrows. Example:
+ *
+ * ```
+ *   async function shouldThrow() { throw new Error('error!'); }
+ *   async function testShouldThrow() {
+ *     const error = await assertRejects(shouldThrow());
+ *     assertEquals('error!', error.message);
+ *   }
+ * ```
+ *
+ * @param {!(string|IThenable)} a The assertion comment or the IThenable.
+ * @param {!IThenable=} opt_b The IThenable (if the first argument of
+ *     `assertRejects` was the comment).
+ * @return {!IThenable<*>} A child IThenable which resolves with the error that
+ *     the passed in IThenable rejects with. This IThenable will reject if the
+ *     passed in IThenable does not reject.
+ */
+var assertRejects = goog.testing.asserts.assertRejects = function(a, opt_b) {
+  _validateArguments(1, arguments);
+  var thenable = nonCommentArg(1, 1, arguments);
+  var comment = commentArg(1, arguments);
+  _assert(
+      comment, goog.isObject(thenable) && goog.isFunction(thenable.then),
+      'Argument passed to assertRejects is not an IThenable');
+
+  return thenable.then(
+      function() {
+        goog.testing.asserts.raiseException(
+            comment, 'IThenable passed into assertRejects did not reject');
+      },
+      function(e) {
+        goog.testing.asserts.removeOperaStacktrace_(e);
+        return e;
+      });
 };
 
 
@@ -1402,6 +1453,7 @@ if (goog.EXPORT_ASSERTIONS) {
   goog.exportSymbol('assertThrows', assertThrows);
   goog.exportSymbol('assertNotThrows', assertNotThrows);
   goog.exportSymbol('assertThrowsJsUnitException', assertThrowsJsUnitException);
+  goog.exportSymbol('assertRejects', assertRejects);
   goog.exportSymbol('assertTrue', assertTrue);
   goog.exportSymbol('assertFalse', assertFalse);
   goog.exportSymbol('assertEquals', assertEquals);

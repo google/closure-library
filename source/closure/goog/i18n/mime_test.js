@@ -28,6 +28,7 @@ function testEncodeAllAscii() {
 }
 
 function testEncodeSpecials() {
+  assertEquals('=?UTF-8?Q?=f0=9f=92=a9?=', goog.i18n.mime.encode('💩'));
   assertEquals('=?UTF-8?Q?=3f=5f=3d_?=', goog.i18n.mime.encode('?_= '));
   assertEquals(
       '=?UTF-8?Q?=3f=5f=3d_=22=22?=', goog.i18n.mime.encode('?_= ""', true));

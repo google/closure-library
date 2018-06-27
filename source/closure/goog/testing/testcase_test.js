@@ -982,10 +982,7 @@ function testSetObj() {
   testCase.setTestObj({testOk: ok, somethingElse: fail});
   assertEquals(1, testCase.getCount());
   // Make sure test count doesn't change after initializeTestCase
-  // TODO(goktug): Remove suppression when the verification is removed.
-  var suppressEnsureNoAutoDiscovery = true;
-  goog.testing.TestCase.initializeTestCase(
-      testCase, undefined, suppressEnsureNoAutoDiscovery);
+  goog.testing.TestCase.initializeTestCase(testCase, undefined);
   assertEquals(1, testCase.getCount());
 }
 

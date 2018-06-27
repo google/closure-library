@@ -17,9 +17,8 @@ goog.provide('goog.testing.testSuite');
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.TestCase');
 
-// TODO(goktug): Remove suppressEnsureNoAutoDiscovery after google3 migration
 /**
- * @typedef {{order: (!goog.testing.TestCase.Order|undefined), suppressEnsureNoAutoDiscovery: (boolean|undefined)}}
+ * @typedef {{order: (!goog.testing.TestCase.Order|undefined)}}
  */
 var TestSuiteOptions;
 
@@ -58,8 +57,7 @@ goog.testing.testSuite = function(obj, opt_options) {
   if (options.order) {
     testCase.setOrder(options.order);
   }
-  goog.testing.TestCase.initializeTestRunner(
-      testCase, undefined, options.suppressEnsureNoAutoDiscovery);
+  goog.testing.TestCase.initializeTestRunner(testCase);
 };
 
 /**

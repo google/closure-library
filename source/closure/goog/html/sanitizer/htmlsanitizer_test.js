@@ -1144,6 +1144,11 @@ function testTemplateRemoved() {
   assertSanitizedHtml(input, expected);
 }
 
+function testCustomElementSanitized() {
+  var input = '<div><dom-bind><h1>boo</h1></dom-bind>boo</div>';
+  var expected = '<div><span><h1>boo</h1></span>boo</div>';
+  assertSanitizedHtml(input, expected);
+}
 
 function testOriginalTag() {
   var input = '<p>Line1<magic></magic></p>';

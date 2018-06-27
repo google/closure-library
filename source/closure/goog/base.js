@@ -366,7 +366,7 @@ goog.cspNonce_ = null;
  * @private
  */
 goog.getScriptNonce_ = function(doc) {
-  var script = doc.querySelector('script[nonce]');
+  var script = doc.querySelector && doc.querySelector('script[nonce]');
   if (script) {
     // Try to get the nonce from the IDL property first, because browsers that
     // implement additional nonce protection features (currently only Chrome) to
@@ -993,6 +993,25 @@ goog.define('goog.TRANSPILE', 'detect');
 
 
 /**
+ * @define {string} If a file needs to be transpiled what the output language
+ * should be. By default this is the highest language level this file detects
+ * the current environment supports. Generally this flag should not be set, but
+ * it could be useful to override. Example: If the current environment supports
+ * ES6 then by default ES7+ files will be transpiled to ES6, unless this is
+ * overridden.
+ *
+ * Valid values include: es3, es5, es6, es7, and es8. Anything not recognized
+ * is treated as es3.
+ *
+ * Note that setting this value does not force transpilation. Just if
+ * transpilation occurs this will be the output. So this is most useful when
+ * goog.TRANSPILE is set to 'always' and then forcing the language level to be
+ * something lower than what the environment detects.
+ */
+goog.define('goog.TRANSPILE_TO_LANGUAGE', '');
+
+
+/**
  * @define {string} Path to the transpiler.  Executing the script at this
  * path (relative to base.js) should define a function $jscomp.transpile.
  */
@@ -1176,10 +1195,11 @@ goog.loadFileSync_ = function(src) {
  * Lazily retrieves the transpiler and applies it to the source.
  * @param {string} code JS code.
  * @param {string} path Path to the code.
+ * @param {string} target Language level output.
  * @return {string} The transpiled code.
  * @private
  */
-goog.transpile_ = function(code, path) {
+goog.transpile_ = function(code, path, target) {
   var jscomp = goog.global['$jscomp'];
   if (!jscomp) {
     goog.global['$jscomp'] = jscomp = {};
@@ -1228,7 +1248,7 @@ goog.transpile_ = function(code, path) {
     };
   }
   // Note: any transpilation errors/warnings will be logged to the console.
-  return transpile(code, path);
+  return transpile(code, path, target);
 };
 
 //==============================================================================
@@ -2451,12 +2471,15 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.Transpiler = function() {
     /** @private {?Object<string, boolean>} */
     this.requiresTranspilation_ = null;
+    /** @private {string} */
+    this.transpilationTarget_ = goog.TRANSPILE_TO_LANGUAGE;
   };
 
 
   /**
    * Returns a newly created map from language mode string to a boolean
-   * indicating whether transpilation should be done for that mode.
+   * indicating whether transpilation should be done for that mode as well as
+   * the highest level language that this environment supports.
    *
    * Guaranteed invariant:
    * For any two modes, l1 and l2 where l2 is a newer mode than l1,
@@ -2467,9 +2490,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * standalone, top level function).
    *
    * @private
-   * @return {!Object<string, boolean>}
+   * @return {{
+   *   target: string,
+   *   map: !Object<string, boolean>
+   * }}
    */
   goog.Transpiler.prototype.createRequiresTranspilation_ = function() {
+    var transpilationTarget = 'es3';
     var /** !Object<string, boolean> */ requiresTranspilation = {'es3': false};
     var transpilationRequiredForAllLaterModes = false;
 
@@ -2486,6 +2513,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       if (transpilationRequiredForAllLaterModes) {
         requiresTranspilation[modeName] = true;
       } else if (isSupported()) {
+        transpilationTarget = modeName;
         requiresTranspilation[modeName] = false;
       } else {
         requiresTranspilation[modeName] = true;
@@ -2555,7 +2583,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     addNewerLanguageTranspilationCheck('es_next', function() {
       return false;  // assume it always need to transpile
     });
-    return requiresTranspilation;
+    return {target: transpilationTarget, map: requiresTranspilation};
   };
 
 
@@ -2571,7 +2599,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     } else if (goog.TRANSPILE == 'never') {
       return false;
     } else if (!this.requiresTranspilation_) {
-      this.requiresTranspilation_ = this.createRequiresTranspilation_();
+      var obj = this.createRequiresTranspilation_();
+      this.requiresTranspilation_ = obj.map;
+      this.transpilationTarget_ = this.transpilationTarget_ || obj.target;
     }
     if (lang in this.requiresTranspilation_) {
       if (this.requiresTranspilation_[lang]) {
@@ -2599,7 +2629,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // TODO(johnplaisted): We should delete goog.transpile_ and just have this
     // function. But there's some compile error atm where goog.global is being
     // stripped incorrectly without this.
-    return goog.transpile_(code, path);
+    return goog.transpile_(code, path, this.transpilationTarget_);
   };
 
 

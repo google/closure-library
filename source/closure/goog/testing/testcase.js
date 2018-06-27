@@ -1873,35 +1873,12 @@ goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
 };
 
 /**
- * A temporary verifier to check if any tests autdo-discovered when a test suite
- * is used. This exists to make sure we don't silently stop executing tests that
- * was accidentally discovered and executed earlier. This will be be removed
- * soon after migration is completed.
- * @private
- */
-goog.testing.TestCase.prototype.ensureNoAutoDiscovery_ = function() {
-  var oldTestCount = this.getCount();
-  var prefix = this.getAutoDiscoveryPrefix();
-  var testSources = this.getGlobals(prefix);
-  for (var i = 0; i < testSources.length; i++) {
-    this.addTestObj_(testSources[i], '', [this]);
-  }
-  var autoDiscoverTestCount = this.getCount() - oldTestCount;
-  if (autoDiscoverTestCount > 0) {
-    throw new Error('Discovered tests: ' + autoDiscoverTestCount);
-  }
-};
-
-/**
  * Initializes the TestCase.
  * @param {goog.testing.TestCase} testCase The test case to install.
  * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
  *     Called when each test completes.
- * @param {boolean=} opt_suppressEnsureNoAutoDiscovery temporary flag to supress
- *     checks of accidental discovery. Will be removed after migration.
  */
-goog.testing.TestCase.initializeTestCase = function(
-    testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery) {
+goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
   if (opt_testDone) {
     testCase.setTestDoneCallback(opt_testDone);
   }
@@ -1909,10 +1886,6 @@ goog.testing.TestCase.initializeTestCase = function(
   if (testCase.shouldAutoDiscoverTests_) {
     testCase.autoDiscoverTests();
   } else {
-    // TODO(goktug): Remove after google3 migration
-    if (!opt_suppressEnsureNoAutoDiscovery) {
-      testCase.ensureNoAutoDiscovery_();
-    }
     // Make sure the tests are still ordered based on provided order.
     testCase.orderTests_();
   }
@@ -1930,13 +1903,9 @@ goog.testing.TestCase.initializeTestCase = function(
  * @param {goog.testing.TestCase} testCase The test case to install.
  * @param {function(goog.testing.TestCase.Test, Array<string>)=} opt_testDone
  *     Called when each test completes.
- * @param {boolean=} opt_suppressEnsureNoAutoDiscovery temporary flag to supress
- *     checks of accidental discovery. Will be removed after migration.
  */
-goog.testing.TestCase.initializeTestRunner = function(
-    testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery) {
-  goog.testing.TestCase.initializeTestCase(
-      testCase, opt_testDone, opt_suppressEnsureNoAutoDiscovery);
+goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
+  goog.testing.TestCase.initializeTestCase(testCase, opt_testDone);
 
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner) {
