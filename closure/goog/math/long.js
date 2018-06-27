@@ -643,11 +643,10 @@ goog.math.Long.prototype.compare = function(other) {
 
 /** @return {!goog.math.Long} The negation of this value. */
 goog.math.Long.prototype.negate = function() {
-  if (this.equals(goog.math.Long.getMinValue())) {
-    return goog.math.Long.getMinValue();
-  } else {
-    return this.not().add(goog.math.Long.getOne());
-  }
+  var negLow = (~this.low_ + 1) | 0;
+  var overflowFromLow = !negLow;
+  var negHigh = (~this.high_ + overflowFromLow) | 0;
+  return goog.math.Long.fromBits(negLow, negHigh);
 };
 
 
