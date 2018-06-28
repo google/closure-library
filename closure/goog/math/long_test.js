@@ -1621,3 +1621,7 @@ testIsStringInRange();
 function testBase36ToString() {
   assertEquals('zzzzzz', goog.math.Long.fromString('zzzzzz', 36).toString(36));
 }
+
+function testBaseDefaultFromString() {
+  assertEquals('0', goog.math.Long.fromString('0xfoobar').toString());
+}
