@@ -170,7 +170,7 @@ function testhhmmssa() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
   var fmt = new goog.i18n.DateTimeFormat('h:mm:ss a');
-  assertEquals('1:10:10 nachm.', fmt.format(date));
+  assertEquals('1:10:10 PM', fmt.format(date));
 }
 
 function testEEEMMMddyy() {
@@ -205,7 +205,7 @@ function testyyyyyMMMMM() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
   var fmt = new goog.i18n.DateTimeFormat('yyyyy.MMMMM.dd GGG hh:mm aaa');
-  assertEquals('02006.J.27 n. Chr. 01:10 nachm.', fmt.format(date));
+  assertEquals('02006.J.27 n. Chr. 01:10 PM', fmt.format(date));
 
   date = new Date(972, 11, 25, 13, 10, 10, 250);
   var fmt = new goog.i18n.DateTimeFormat('yyyyy.MMMMM.dd');

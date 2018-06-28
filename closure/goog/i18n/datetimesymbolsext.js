@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 33
+ * File generated from CLDR ver. 33.1
  *
  * This file covers those locales that are not covered in
  * "datetimesymbols.js".
@@ -2570,7 +2570,7 @@ goog.i18n.DateTimeSymbols_de_IT = {
   STANDALONENARROWWEEKDAYS: ['S', 'M', 'D', 'M', 'D', 'F', 'S'],
   SHORTQUARTERS: ['Q1', 'Q2', 'Q3', 'Q4'],
   QUARTERS: ['1. Quartal', '2. Quartal', '3. Quartal', '4. Quartal'],
-  AMPMS: ['vorm.', 'nachm.'],
+  AMPMS: ['AM', 'PM'],
   DATEFORMATS: ['EEEE, d. MMMM y', 'd. MMMM y', 'dd.MM.y', 'dd.MM.yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
   DATETIMEFORMATS: ['{1} \'um\' {0}', '{1} \'um\' {0}', '{1}, {0}', '{1}, {0}'],
