@@ -694,6 +694,42 @@ function testTearDownReturnsPromiseThatTimesOut() {
   });
 }
 
+function testTearDown_complexJsUnitExceptionIssue() {  // http://b/110796519
+  var testCase = new goog.testing.TestCase();
+
+  var getTestCase = goog.functions.constant(testCase);
+  var stubs = new goog.testing.PropertyReplacer();
+  stubs.replace(window, '_getCurrentTestCase', getTestCase);
+  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
+
+  testCase.tearDown = function() {
+    try {
+      fail('First error');
+    } catch (e1) {
+      try {
+        fail('Second error');
+      } catch (e2) {
+      }
+      throw e1;
+    }
+  };
+  testCase.addNewTest('test', ok);
+  return testCase.runTestsReturningPromise().then(function(result) {
+    assertFalse(testCase.isSuccess());
+    assertTrue(result.complete);
+
+    assertNotEquals(
+        'Expect the failure to be associated with the test.', 0,
+        result.resultsByName['test'].length);
+
+    assertEquals(2, result.errors.length);
+    assertContains('tearDown', result.errors[0].toString());
+
+    assertContains('First error', result.errors[1].toString());
+    assertContains('Second error', result.errors[0].toString());
+  });
+}
+
 function testFailOnUnreportedAsserts_EnabledByDefault() {
   assertTrue(new goog.testing.TestCase().failOnUnreportedAsserts);
 }
