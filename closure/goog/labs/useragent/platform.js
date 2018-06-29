@@ -112,6 +112,13 @@ goog.labs.userAgent.platform.isChromecast = function() {
 };
 
 /**
+ * @return {boolean} Whether the platform is KaiOS.
+ */
+goog.labs.userAgent.platform.isKaiOS = function() {
+  return goog.labs.userAgent.util.matchUserAgentIgnoreCase('KaiOS');
+};
+
+/**
  * The version of the platform. We only determine the version for Windows,
  * Mac, and Chrome OS. It doesn't make much sense on Linux. For Windows, we only
  * look at the NT version. Non-NT-based versions (e.g. 95, 98, etc.) are given

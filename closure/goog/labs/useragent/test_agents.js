@@ -398,4 +398,9 @@ testAgents.KINDLE_FIRE =
 testAgents.FIREFOX_ANDROID_TABLET =
     'Mozilla/5.0 (Android; Tablet; rv:28.0) Gecko/28.0 Firefox/28.0';
 
+/** @const {string} */
+testAgents.KAIOS =
+    'Mozilla/5.0 (Mobile; LYF/LF-2403N/LYF-LF2403N-000-01-18-270717; rv:48.0)' +
+    ' Gecko/48.0 Firefox/48.0 KaiOS/2.0';
+
 });  // goog.scope
