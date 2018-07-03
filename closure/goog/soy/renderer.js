@@ -314,7 +314,7 @@ goog.soy.Renderer.prototype.handleRender = goog.nullFunction;
 /**
  * Creates the injectedParams map if necessary and calls the configuration
  * service to prepopulate it.
- * @return {Object} The injected params.
+ * @return {?} The injected params.
  * @private
  */
 goog.soy.Renderer.prototype.getInjectedData_ = function() {
@@ -335,6 +335,6 @@ goog.soy.InjectedDataSupplier = function() {};
  * `goog.soy.Renderer` will treat the returned data as
  * immutable.  The renderer will call this every time one of its
  * {@code render*} methods is called.
- * @return {Object} A key-value pair representing the injected data.
+ * @return {?} A key-value pair representing the injected data.
  */
 goog.soy.InjectedDataSupplier.prototype.getData = function() {};
