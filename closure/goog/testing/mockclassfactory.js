@@ -94,7 +94,7 @@ goog.testing.MockClassRecord = function(
   /**
    * A mocks that will be constructed by their argument list.  The entries are
    * objects with the format {'args': args, 'mock': mock}.
-   * @type {Array<Object>}
+   * @type {!Array<{'args', 'mock'}>}
    * @private
    */
   this.instancesByArgs_ = [];
@@ -302,8 +302,9 @@ goog.testing.MockClassFactory.prototype.classHasMock_ = function(className) {
 goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
     className, mockFinder) {
   return /** @type {function(new:?)} */ (function() {
-    this.$mock_ = mockFinder(className, arguments);
-    if (!this.$mock_) {
+    var self = /** @type {?} */ (this);  // unknown this is expected.
+    self.$mock_ = mockFinder(className, arguments);
+    if (!self.$mock_) {
       // The "arguments" variable is not a proper Array so it must be converted.
       var args = Array.prototype.slice.call(arguments, 0);
       throw new Error(
@@ -324,7 +325,8 @@ goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(
  */
 goog.testing.MockClassFactory.prototype.getProxyFunction_ = function(fnName) {
   return /** @type {function(this:?,...?):?} */ (function() {
-    return this.$mock_[fnName].apply(this.$mock_, arguments);
+    var self = /** @type {?} */ (this);  // unknown this is expected.
+    return self.$mock_[fnName].apply(self.$mock_, arguments);
   });
 };
 
@@ -353,6 +355,7 @@ goog.testing.MockClassFactory.prototype.findMockInstance_ = function(
  * @param {string} className The name of the class.
  * @return {!Function} The proxy for provided class.
  * @private
+ * @suppress {missingProperties} Function does not defined base.
  */
 goog.testing.MockClassFactory.prototype.createProxy_ = function(
     namespace, classToMock, className) {

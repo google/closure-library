@@ -61,10 +61,9 @@
 goog.setTestOnly('goog.testing.DeferredTestCase');
 goog.provide('goog.testing.DeferredTestCase');
 
+goog.require('goog.async.Deferred');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.TestCase');
-
-goog.forwardDeclare('goog.async.Deferred');
 
 
 

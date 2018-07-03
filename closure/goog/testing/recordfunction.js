@@ -64,13 +64,14 @@ goog.testing.recordFunction = function(opt_f) {
   var calls = [];
 
   function recordedFunction() {
+    var owner = /** @type {?} */ (this);
     try {
-      var ret = f.apply(this, arguments);
-      calls.push(new goog.testing.FunctionCall(f, this, arguments, ret, null));
+      var ret = f.apply(owner, arguments);
+      calls.push(new goog.testing.FunctionCall(f, owner, arguments, ret, null));
       return ret;
     } catch (err) {
       calls.push(
-          new goog.testing.FunctionCall(f, this, arguments, undefined, err));
+          new goog.testing.FunctionCall(f, owner, arguments, undefined, err));
       throw err;
     }
   }

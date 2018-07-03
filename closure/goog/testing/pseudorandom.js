@@ -157,7 +157,7 @@ goog.testing.PseudoRandom.prototype.uninstall = function() {
  * @param {number=} opt_seed The seed to use.
  */
 goog.testing.PseudoRandom.prototype.seed = function(opt_seed) {
-  this.seed_ = opt_seed % (goog.testing.PseudoRandom.M - 1);
+  this.seed_ = (opt_seed || 0) % (goog.testing.PseudoRandom.M - 1);
   if (this.seed_ <= 0) {
     this.seed_ += goog.testing.PseudoRandom.M - 1;
   }

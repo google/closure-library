@@ -23,9 +23,8 @@ goog.setTestOnly('goog.testing.messaging.MockMessageChannel');
 goog.provide('goog.testing.messaging.MockMessageChannel');
 
 goog.require('goog.messaging.AbstractChannel');
+goog.require('goog.testing.MockControl');
 goog.require('goog.testing.asserts');
-
-goog.forwardDeclare('goog.testing.MockControl');
 
 
 

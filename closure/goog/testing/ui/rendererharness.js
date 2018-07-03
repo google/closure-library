@@ -26,9 +26,8 @@ goog.require('goog.Disposable');
 goog.require('goog.dom.NodeType');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.dom');
-
-goog.forwardDeclare('goog.ui.Control');
-goog.forwardDeclare('goog.ui.ControlRenderer');
+goog.require('goog.ui.Control');
+goog.require('goog.ui.ControlRenderer');
 
 
 

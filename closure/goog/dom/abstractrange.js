@@ -30,6 +30,8 @@ goog.require('goog.dom.SavedCaretRange');
 goog.require('goog.dom.TagIterator');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.dom.TextRange');
+
 
 /**
  * Types of ranges.

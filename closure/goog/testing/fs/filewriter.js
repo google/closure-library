@@ -25,10 +25,9 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileSaver');
 goog.require('goog.string');
+goog.require('goog.testing.fs.Blob');
+goog.require('goog.testing.fs.File');
 goog.require('goog.testing.fs.ProgressEvent');
-
-goog.forwardDeclare('goog.testing.fs.Blob');
-goog.forwardDeclare('goog.testing.fs.File');
 goog.forwardDeclare('goog.testing.fs.FileEntry');
 
 

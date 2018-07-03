@@ -413,7 +413,7 @@ function testSetVideoSrc() {
   assertEquals('about:invalid#zClosurez', mockVideoElement.src);
 
   mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
-  var safeUrl = goog.html.SafeUrl.fromConstant(
+  safeUrl = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setVideoSrc(mockVideoElement, safeUrl);
   assertEquals('javascript:trusted();', mockVideoElement.src);
@@ -535,7 +535,7 @@ function testSetScriptSrc() {
     }
   });
   // clear nonce cache for test.
-  goog.cspNonce_ = null;
+  /** @type {?} */ (goog).cspNonce_ = null;
 
   // Place a nonced script in the page.
   var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
@@ -570,7 +570,7 @@ function testSetScriptContent() {
     }
   });
   // clear nonce cache for test.
-  goog.cspNonce_ = null;
+  /** @type {?} */ (goog).cspNonce_ = null;
 
   // Place a nonced script in the page.
   var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
