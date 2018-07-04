@@ -980,7 +980,7 @@ goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
 
 
   for (var i = 0; i < numExceptions; i++) {
-    this.recordError(testName, this.thrownAssertionExceptions_[i]);
+    this.recordError(testName, extraExceptions[i]);
   }
 
   // Mark the test as failed.

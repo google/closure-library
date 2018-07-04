@@ -1161,6 +1161,8 @@ goog.ui.Dialog.EventType = {
  *    goog.ui.Component} for semantics.
  * @constructor
  * @extends {goog.structs.Map}
+ * @suppress {deprecated} Underlying extended goog.structs.Map is deprecated but
+ *    this class is not. Suppress warnings until refactored.
  */
 goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
   // TODO(attila):  Refactor ButtonSet to extend goog.ui.Component?

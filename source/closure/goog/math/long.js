@@ -243,6 +243,15 @@ goog.math.Long.fromBits = function(lowBits, highBits) {
 
 
 /**
+ * TODO(goktug): Replace with Number.MAX_SAFE_INTEGER when polyfil is guaranteed
+ * to be removed.
+ * @type {number}
+ * @private
+ */
+goog.math.Long.MAX_SAFE_INTEGER_ = 0x1fffffffffffff;
+
+
+/**
  * Returns a Long representation of the given string, written using the given
  * radix.
  * @param {string} str The textual representation of the Long.
@@ -250,8 +259,23 @@ goog.math.Long.fromBits = function(lowBits, highBits) {
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromString = function(str, opt_radix) {
+  if (str.charAt(0) == '-') {
+    return goog.math.Long.fromString(str.substring(1), opt_radix).negate();
+  }
+
+  // We can avoid very expensive multiply based code path for some common cases.
+  var numberValue = parseInt(str, opt_radix || 10);
+  if (numberValue <= goog.math.Long.MAX_SAFE_INTEGER_) {
+    return new goog.math.Long(
+        (numberValue % goog.math.Long.TWO_PWR_32_DBL_) | 0,
+        (numberValue / goog.math.Long.TWO_PWR_32_DBL_) | 0);
+  }
+
   if (str.length == 0) {
     throw new Error('number format error: empty string');
+  }
+  if (str.indexOf('-') >= 0) {
+    throw new Error('number format error: interior "-" character: ' + str);
   }
 
   var radix = opt_radix || 10;
@@ -259,14 +283,8 @@ goog.math.Long.fromString = function(str, opt_radix) {
     throw new Error('radix out of range: ' + radix);
   }
 
-  if (str.charAt(0) == '-') {
-    return goog.math.Long.fromString(str.substring(1), radix).negate();
-  } else if (str.indexOf('-') >= 0) {
-    throw new Error('number format error: interior "-" character: ' + str);
-  }
-
   // Do several (8) digits each time through the loop, so as to
-  // minimize the calls to the very expensive emulated div.
+  // minimize the calls to the very expensive emulated multiply.
   var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 8));
 
   var result = goog.math.Long.getZero();
@@ -643,11 +661,10 @@ goog.math.Long.prototype.compare = function(other) {
 
 /** @return {!goog.math.Long} The negation of this value. */
 goog.math.Long.prototype.negate = function() {
-  if (this.equals(goog.math.Long.getMinValue())) {
-    return goog.math.Long.getMinValue();
-  } else {
-    return this.not().add(goog.math.Long.getOne());
-  }
+  var negLow = (~this.low_ + 1) | 0;
+  var overflowFromLow = !negLow;
+  var negHigh = (~this.high_ + overflowFromLow) | 0;
+  return goog.math.Long.fromBits(negLow, negHigh);
 };
 
 

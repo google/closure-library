@@ -15,7 +15,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 33
+ * File generated from CLDR ver. 33.1
  */
 
 // clang-format off

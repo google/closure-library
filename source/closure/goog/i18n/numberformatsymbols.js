@@ -15,7 +15,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 33
+ * File generated from CLDR ver. 33.1
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales

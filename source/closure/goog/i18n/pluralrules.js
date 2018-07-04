@@ -16,7 +16,7 @@
  * @fileoverview Plural rules.
  *
  *
- * File generated from CLDR ver. 33
+ * File generated from CLDR ver. 33.1
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be

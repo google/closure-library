@@ -245,6 +245,14 @@ function testChromecast() {
   assertVersion('');
 }
 
+function testKaiOS() {
+  var uaString = goog.labs.userAgent.testAgents.KAIOS;
+
+  goog.labs.userAgent.util.setUserAgent(uaString);
+  assertTrue(goog.labs.userAgent.platform.isKaiOS());
+  assertVersion('');
+}
+
 function assertVersion(version) {
   assertEquals(version, goog.labs.userAgent.platform.getVersion());
 }
