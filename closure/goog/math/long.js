@@ -560,7 +560,8 @@ goog.math.Long.prototype.getNumBitsAbs = function() {
 
 /** @return {boolean} Whether this value is zero. */
 goog.math.Long.prototype.isZero = function() {
-  return this.high_ == 0 && this.low_ == 0;
+  // Check low part first as there is high chance it's not 0.
+  return this.low_ == 0 && this.high_ == 0;
 };
 
 
@@ -581,7 +582,8 @@ goog.math.Long.prototype.isOdd = function() {
  * @return {boolean} Whether this Long equals the other.
  */
 goog.math.Long.prototype.equals = function(other) {
-  return (this.high_ == other.high_) && (this.low_ == other.low_);
+  // Compare low parts first as there is higher chance they are different.
+  return (this.low_ == other.low_) && (this.high_ == other.high_);
 };
 
 
@@ -590,7 +592,7 @@ goog.math.Long.prototype.equals = function(other) {
  * @return {boolean} Whether this Long does not equal the other.
  */
 goog.math.Long.prototype.notEquals = function(other) {
-  return (this.high_ != other.high_) || (this.low_ != other.low_);
+  return !this.equals(other);
 };
 
 
@@ -637,25 +639,16 @@ goog.math.Long.prototype.greaterThanOrEqual = function(other) {
  *     if the given one is greater.
  */
 goog.math.Long.prototype.compare = function(other) {
-  if (this.equals(other)) {
-    return 0;
+  if (this.high_ == other.high_) {
+    if (this.low_ == other.low_) {
+      return 0;
+    }
+    // Invert a sign bit to compare as unsigned.
+    return (this.low_ ^ (0x80000000 | 0)) > (other.low_ ^ (0x80000000 | 0)) ?
+        1 :
+        -1;
   }
-
-  var thisNeg = this.isNegative();
-  var otherNeg = other.isNegative();
-  if (thisNeg && !otherNeg) {
-    return -1;
-  }
-  if (!thisNeg && otherNeg) {
-    return 1;
-  }
-
-  // at this point, the signs are the same, so subtraction will not overflow
-  if (this.subtract(other).isNegative()) {
-    return -1;
-  } else {
-    return 1;
-  }
+  return this.high_ > other.high_ ? 1 : -1;
 };
 
 
