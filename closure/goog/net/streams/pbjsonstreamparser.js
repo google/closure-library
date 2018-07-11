@@ -248,10 +248,8 @@ PbJsonStreamParser.prototype.parse = function(input) {
   }
 
   function resetJsonStreamParser() {
-    parser.jsonStreamParser_ = new JsonStreamParser({
-      'allowCompactJsonArrayFormat': true,
-      'deliverMessageAsRawString': true
-    });
+    parser.jsonStreamParser_ = new JsonStreamParser(
+        {allowCompactJsonArrayFormat: true, deliverMessageAsRawString: true});
   }
 
   /** @param {?Array<string>} messages Parsed messages */
