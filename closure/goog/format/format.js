@@ -477,9 +477,9 @@ goog.format.IS_IE8_OR_ABOVE_ =
 
 /**
  * Constant for the WBR replacement used by insertWordBreaks.  Safari requires
- * <wbr></wbr>, Opera needs the &shy; entity, though this will give a visible
- * hyphen at breaks.  IE8 uses a zero width space.
- * Other browsers just use <wbr>.
+ * &lt;wbr&gt;&lt;/wbr&gt;, Opera needs the &shy; entity, though this will give
+ * a visible hyphen at breaks.  IE8 uses a zero width space. Other browsers just
+ * use &lt;wbr&gt;.
  * @type {string}
  */
 goog.format.WORD_BREAK_HTML =
