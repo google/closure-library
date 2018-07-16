@@ -18,6 +18,7 @@ goog.setTestOnly('goog.events.EventTypeTest');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventType');
 goog.require('goog.events.PointerFallbackEventType');
+goog.require('goog.events.PointerTouchFallbackEventType');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
@@ -41,5 +42,28 @@ function testPointerFallbackEventType() {
     assertEquals(
         goog.events.EventType.MOUSEDOWN,
         goog.events.PointerFallbackEventType.POINTERDOWN);
+  }
+}
+
+function testPointerTouchFallbackEventType() {
+  if (goog.events.BrowserFeature.POINTER_EVENTS) {
+    // Pointer events are supported; use W3C PointerEvent
+    assertEquals(
+        goog.events.EventType.POINTERDOWN,
+        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
+  } else if (goog.events.BrowserFeature.MSPOINTER_EVENTS) {
+    // Only IE10 should support MSPointerEvent
+    assertTrue(
+        goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
+        !goog.userAgent.isVersionOrHigher('11'));
+    // W3C PointerEvent not supported; fall back to MSPointerEvent
+    assertEquals(
+        goog.events.EventType.MSPOINTERDOWN,
+        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
+  } else {
+    // Pointer events not supported; fall back to TouchEvent
+    assertEquals(
+        goog.events.EventType.TOUCHSTART,
+        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
   }
 }
