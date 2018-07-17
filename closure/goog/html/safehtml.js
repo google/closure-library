@@ -58,15 +58,18 @@ goog.require('goog.string.TypedString');
  * takes no parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
  *
- * Note that there is no goog.html.SafeHtml.fromConstant. The reason is that the
- * following code would create an unsafe HTML:
+ * Note that there is no `goog.html.SafeHtml.fromConstant`. The reason is that
+ * the following code would create an unsafe HTML:
  *
+ * ```
  * goog.html.SafeHtml.concat(
  *     goog.html.SafeHtml.fromConstant(goog.string.Const.from('<script>')),
  *     goog.html.SafeHtml.htmlEscape(userInput),
  *     goog.html.SafeHtml.fromConstant(goog.string.Const.from('<\/script>')));
+ * ```
  *
- * There's goog.dom.constHtmlToNode to create a node from constant strings only.
+ * There's `goog.dom.constHtmlToNode` to create a node from constant strings
+ * only.
  *
  * @see goog.html.SafeHtml.create
  * @see goog.html.SafeHtml.htmlEscape
