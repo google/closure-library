@@ -47,8 +47,8 @@ var canAccessSameDomainIframe = true;
 var accessCheckPromise = null;
 
 function setUpPage() {
-  // This test is insanely slow on IE8 for some reason.
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 20 * 1000;
+  // This test is insanely slow on IE8 and Safari for some reason.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 40 * 1000;
 
   // Show debug log
   var debugDiv = goog.dom.getElement('debugDiv');
