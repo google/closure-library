@@ -241,15 +241,29 @@ function testSetProperties() {
     'title': 'A title',
     'random': 'woop',
     'other-random': null,
-    'href': goog.html.SafeUrl.sanitize('https://google.com')
+    'href': goog.html.SafeUrl.sanitize('https://google.com'),
+    'stringWithTypedStringProp': 'http://example.com/',
+    'numberWithTypedStringProp': 123,
+    'booleanWithTypedStringProp': true
   };
-  var el = $('testEl');
+  // Primitives with properties that wrongly indicate that the text is of a type
+  // that implements `goog.string.TypedString`. This simulates a property
+  // renaming collision with a String, Number or Boolean property set
+  // externally. renaming collision with a String property set externally
+  // (b/80124112).
+  attrs['stringWithTypedStringProp'].implementsGoogStringTypedString = true;
+  attrs['numberWithTypedStringProp'].implementsGoogStringTypedString = true;
+  attrs['booleanWithTypedStringProp'].implementsGoogStringTypedString = true;
 
+  var el = $('testEl');
   goog.dom.setProperties(el, attrs);
-  assertEquals(el.name, 'test3');
-  assertEquals(el.title, 'A title');
-  assertEquals(el.random, 'woop');
-  assertEquals(el.href, 'https://google.com');
+  assertEquals('test3', el.name);
+  assertEquals('A title', el.title);
+  assertEquals('woop', el.random);
+  assertEquals('https://google.com', el.href);
+  assertEquals('http://example.com/', el.stringWithTypedStringProp);
+  assertEquals(123, el.numberWithTypedStringProp);
+  assertEquals(true, el.booleanWithTypedStringProp);
 }
 
 function testSetPropertiesDirectAttributeMap() {

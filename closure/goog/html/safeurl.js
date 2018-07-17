@@ -381,7 +381,7 @@ goog.html.SAFE_URL_PATTERN_ =
 goog.html.SafeUrl.sanitize = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
-  } else if (url.implementsGoogStringTypedString) {
+  } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
     url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
@@ -412,7 +412,7 @@ goog.html.SafeUrl.sanitize = function(url) {
 goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
-  } else if (url.implementsGoogStringTypedString) {
+  } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
     url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
