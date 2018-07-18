@@ -203,6 +203,19 @@ function createThrowingThenable(value) {
 }
 
 
+/**
+ * Runs the test, passing it a function to call when its promise chain is
+ * complete, and all test assertions are complete.
+ *
+ * @param {function(function():undefined):undefined} testBody
+ * @return {!Promise}
+ */
+function validatePromiseChain(testBody) {
+  return new Promise(function(promiseChainComplete) {
+    testBody(promiseChainComplete);
+  });
+}
+
 function testThenIsFulfilled() {
   var timesCalled = 0;
 
@@ -820,16 +833,55 @@ function testNestingThenablesRejected() {
 
 
 function testThenCatch() {
-  var catchCalled = false;
-  return goog.Promise.reject()
-      .thenCatch(function(reason) {
-        catchCalled = true;
-        return sentinel;
-      })
-      .then(function(value) {
-        assertTrue(catchCalled);
-        assertEquals(sentinel, value);
-      });
+  return validatePromiseChain(function(promiseChainComplete) {
+    var catchCalled = false;
+    goog.Promise.reject()
+        .thenCatch(function(reason) {
+          catchCalled = true;
+          return sentinel;
+        })
+        .then(function(value) {
+          assertTrue(catchCalled);
+          assertEquals(sentinel, value);
+          promiseChainComplete();
+        });
+  });
+}
+
+
+function testThenCatchWithSuccess() {
+  return validatePromiseChain(function(promiseChainComplete) {
+    var catchCalled = false;
+    goog.Promise.resolve(sentinel)
+        .thenCatch(function(reason) {
+          catchCalled = true;
+          return dummy;
+        })
+        .then(function(value) {
+          assertFalse(catchCalled);
+          assertEquals(sentinel, value);
+          promiseChainComplete();
+        });
+  });
+}
+
+
+function testThenCatchThrows() {
+  return validatePromiseChain(function(promiseChainComplete) {
+    goog.Promise.reject(dummy)
+        .thenCatch(function(reason) {
+          assertEquals(dummy, reason);
+          throw sentinel;
+        })
+        .then(
+            function() {
+              fail('Should have rejected.');
+            },
+            function(value) {
+              assertEquals(sentinel, value);
+              promiseChainComplete();
+            });
+  });
 }
 
 
