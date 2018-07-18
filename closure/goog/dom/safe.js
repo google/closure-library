@@ -42,6 +42,7 @@ goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
 goog.require('goog.dom.asserts');
+goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
@@ -86,6 +87,59 @@ goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_ = {
 
 
 /**
+ * Whether assigning to innerHTML results in a non-spec-compliant clean-up. Used
+ * to define goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse.
+ *
+ * <p>As mentioned in https://stackoverflow.com/questions/28741528, re-rendering
+ * an element in IE by setting innerHTML causes IE to recursively disconnect all
+ * parent/children connections that were in the previous contents of the
+ * element. Unfortunately, this can unexpectedly result in confusing cases where
+ * a function is run (typically asynchronously) on element that has since
+ * disconnected from the DOM but assumes the presence of its children. A simple
+ * workaround is to remove all children first. Testing on IE11 via
+ * https://jsperf.com/innerhtml-vs-removechild/239, removeChild seems to be
+ * ~10x faster than innerHTML='' for a large number of children (perhaps due
+ * to the latter's recursive behavior), implying that this workaround would
+ * not hurt performance and might actually improve it.
+ * @return {boolean}
+ * @private
+ */
+goog.dom.safe.isInnerHtmlCleanupRecursive_ =
+    goog.functions.cacheReturnValue(function() {
+      // `document` missing in some test frameworks.
+      if (goog.DEBUG && typeof document === 'undefined') {
+        return false;
+      }
+      var div = document.createElement('div');
+      div.innerHTML = '<div><div></div></div>';
+      // `firstChild` is null in Google Js Test.
+      if (goog.DEBUG && !div.firstChild) {
+        return false;
+      }
+      var innerChild = div.firstChild.firstChild;
+      div.innerHTML = '';
+      return !innerChild.parentElement;
+    });
+
+
+/**
+ * Assigns HTML to an element's innerHTML property. Helper to use only here and
+ * in soy.js.
+ * @param {?Element} elem The element whose innerHTML is to be assigned to.
+ * @param {string} html
+ */
+goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
+  // See comment above goog.dom.safe.isInnerHtmlCleanupRecursive_.
+  if (goog.dom.safe.isInnerHtmlCleanupRecursive_()) {
+    while (elem.lastChild) {
+      elem.removeChild(elem.lastChild);
+    }
+  }
+  elem.innerHTML = html;
+};
+
+
+/**
  * Assigns known-safe HTML to an element's innerHTML property.
  * @param {!Element} elem The element whose innerHTML is to be assigned to.
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
@@ -101,7 +155,9 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
           elem.tagName + '.');
     }
   }
-  elem.innerHTML = goog.html.SafeHtml.unwrap(html);
+
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
+      elem, goog.html.SafeHtml.unwrap(html));
 };
 
 

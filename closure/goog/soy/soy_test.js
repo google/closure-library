@@ -143,7 +143,7 @@ function testConvertToElement() {
 
 /**
  * Asserts that the function throws an error for unsafe templates.
- * @param {Function} function Callback to test.
+ * @param {Function} func Callback to test.
  */
 function assertUnsafeTemplateOutputErrorThrown(func) {
   stubs.set(goog.asserts, 'ENABLE_ASSERTS', true);
@@ -242,4 +242,43 @@ function testDebugAssertionWithBadFirstTag() {
     // Make sure to let the developer know which tag caused the problem.
     assertContains('<COLGROUP>', e.message);
   }
+}
+
+/**
+ * When innerHTML is assigned on an element in IE, IE recursively severs all
+ * parent-children links in the removed content. This test ensures that that
+ * doesn't happen when re-rendering an element with soy.
+ */
+function testRerenderLeavesChildrenInIE() {
+  // Given a div with existing content.
+  var grandchildDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+  var childDiv =
+      goog.dom.createDom(goog.dom.TagName.DIV, null, [grandchildDiv]);
+  var testDiv = goog.dom.createDom(goog.dom.TagName.DIV, null, [childDiv]);
+  // Expect parent/children links.
+  assertArrayEquals(
+      'Expect testDiv to contain childDiv.', [childDiv],
+      Array.from(testDiv.children));
+  assertEquals(
+      'Expect childDiv to be contained in testDiv.', testDiv,
+      childDiv.parentElement);
+  assertArrayEquals(
+      'Expect childDiv to contain grandchildDiv.', [grandchildDiv],
+      Array.from(childDiv.children));
+  assertEquals(
+      'Expect grandchildDiv to be contained in childDiv.', childDiv,
+      grandchildDiv.parentElement);
+
+  // When the div's content is re-rendered.
+  goog.soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
+  assertEquals(
+      `Expect testDiv's contents to complete change`, 'hello <b>world</b>',
+      testDiv.innerHTML.toLowerCase());
+  // Expect the previous childDiv tree to retain its parent-child connections.
+  assertArrayEquals(
+      'Expect childDiv to still contain grandchildDiv.', [grandchildDiv],
+      Array.from(childDiv.children));
+  assertEquals(
+      'Expect grandchildDiv to still be contained in childDiv.', childDiv,
+      grandchildDiv.parentElement);
 }

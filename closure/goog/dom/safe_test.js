@@ -89,6 +89,46 @@ function testSetInnerHtml_doesntAllowStyle() {
   assertThrows(function() { goog.dom.safe.setInnerHtml(style, safeHtml); });
 }
 
+/**
+ * When innerHTML is assigned on an element in IE, IE recursively severs all
+ * parent-children links in the removed content. This test ensures that that
+ * doesn't happen when re-rendering an element with soy.
+ */
+function testSetInnerHtml_leavesChildrenInIE() {
+  // Given a div with existing content.
+  var grandchildDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+  var childDiv =
+      goog.dom.createDom(goog.dom.TagName.DIV, null, [grandchildDiv]);
+  var testDiv = goog.dom.createDom(goog.dom.TagName.DIV, null, [childDiv]);
+  // Expect parent/children links.
+  assertArrayEquals(
+      'Expect testDiv to contain childDiv.', [childDiv],
+      Array.from(testDiv.children));
+  assertEquals(
+      'Expect childDiv to be contained in testDiv.', testDiv,
+      childDiv.parentElement);
+  assertArrayEquals(
+      'Expect childDiv to contain grandchildDiv.', [grandchildDiv],
+      Array.from(childDiv.children));
+  assertEquals(
+      'Expect grandchildDiv to be contained in childDiv.', childDiv,
+      grandchildDiv.parentElement);
+
+  // When the div's content is re-rendered.
+  var safeHtml = goog.html.testing.newSafeHtmlForTest('<a></a>');
+  goog.dom.safe.setInnerHtml(testDiv, safeHtml);
+  assertEquals(
+      `Expect testDiv's contents to complete change`, '<a></a>',
+      testDiv.innerHTML.toLowerCase());
+  // Expect the previous childDiv tree to retain its parent-child connections.
+  assertArrayEquals(
+      'Expect childDiv to still contain grandchildDiv.', [grandchildDiv],
+      Array.from(childDiv.children));
+  assertEquals(
+      'Expect grandchildDiv to still be contained in childDiv.', childDiv,
+      grandchildDiv.parentElement);
+}
+
 function testSetStyle() {
   var style =
       goog.html.SafeStyle.fromConstant(goog.string.Const.from('color: red;'));
