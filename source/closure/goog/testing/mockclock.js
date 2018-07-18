@@ -69,9 +69,7 @@ goog.testing.MockClock = function(opt_autoInstall) {
    * right.  For example, the expiration times for each element of the queue
    * might be in the order 300, 200, 200.
    *
-   * @type {Array<{
-   *    timeoutKey: number, millis: number,
-   *    runAtMillis: number, funcToCall: Function, recurring: boolean}>}
+   * @type {?Array<!goog.testing.MockClock.QueueObjType_>}
    * @private
    */
   this.queue_ = [];
@@ -94,6 +92,13 @@ goog.testing.MockClock = function(opt_autoInstall) {
 };
 goog.inherits(goog.testing.MockClock, goog.Disposable);
 
+
+/**
+ * @typedef {{
+ *    timeoutKey: number, millis: number,
+ *    runAtMillis: number, funcToCall: Function, recurring: boolean}}
+ */
+goog.testing.MockClock.QueueObjType_;
 
 /**
  * Default wait timeout for mocking requestAnimationFrame (in milliseconds).
@@ -164,6 +169,9 @@ goog.testing.MockClock.prototype.timeoutDelay_ = 0;
  */
 goog.testing.MockClock.REAL_SETTIMEOUT_ = goog.global.setTimeout;
 
+
+/** @type {function():number} */
+goog.testing.MockClock.prototype.oldGoogNow_;
 
 /**
  * Installs the MockClock by overriding the global object's implementation of
@@ -459,7 +467,7 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
         'The provided callback must be a function, not a ' + typeof funcToCall);
   }
 
-  var timeout = {
+  var /** !goog.testing.MockClock.QueueObjType_ */ timeout = {
     runAtMillis: this.nowMillis_ + millis,
     funcToCall: funcToCall,
     recurring: recurring,
@@ -477,10 +485,10 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
  * Later-inserted duplicates appear at lower indices.  For example, the
  * asterisk in (5,4,*,3,2,1) would be the insertion point for 3.
  *
- * @param {Object} timeout The timeout to insert, with numerical runAtMillis
- *     property.
- * @param {Array<Object>} queue The queue to insert into, with each element
- *     having a numerical runAtMillis property.
+ * @param {goog.testing.MockClock.QueueObjType_} timeout The timeout to insert,
+ *     with numerical runAtMillis property.
+ * @param {Array<!goog.testing.MockClock.QueueObjType_>} queue The queue to
+ *     insert into, with each element having a numerical runAtMillis property.
  * @private
  */
 goog.testing.MockClock.insert_ = function(timeout, queue) {

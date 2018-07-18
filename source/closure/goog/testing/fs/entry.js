@@ -146,6 +146,7 @@ goog.testing.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
       (opt_newName ? ', renaming to ' + opt_newName : '');
   var self = this;
   return this.checkNotDeleted(msg).addCallback(function() {
+    goog.asserts.assert(parent instanceof goog.testing.fs.DirectoryEntry);
     var name = opt_newName || self.getName();
     var entry = self.clone();
     /** @type {!goog.testing.fs.DirectoryEntry} */ (parent).children[name] =

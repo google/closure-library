@@ -88,6 +88,26 @@ function testHtmlEscape() {
       'SafeHtml{Hello &lt;em&gt;&quot;&#39;&amp;World&lt;/em&gt;}',
       String(safeHtml));
 
+  // Primitives with properties that wrongly indicate that the text is of a type
+  // that implements `goog.i18n.bidi.DirectionalString` and
+  // `goog.string.TypedString` are escaped. This simulates a property renaming
+  // collision with a String, Number or Boolean property set externally.
+  var stringWithProperties = 'Hello <em>"\'&World</em>';
+  stringWithProperties.implementsGoogI18nBidiDirectionalString = true;
+  stringWithProperties.implementsGoogStringTypedString = true;
+  safeHtml = goog.html.SafeHtml.htmlEscape(stringWithProperties);
+  assertSameHtml('Hello &lt;em&gt;&quot;&#39;&amp;World&lt;/em&gt;', safeHtml);
+  var numberWithProperties = 123;
+  numberWithProperties.implementsGoogI18nBidiDirectionalString = true;
+  numberWithProperties.implementsGoogStringTypedString = true;
+  safeHtml = goog.html.SafeHtml.htmlEscape(numberWithProperties);
+  assertSameHtml('123', safeHtml);
+  var booleanWithProperties = true;
+  booleanWithProperties.implementsGoogI18nBidiDirectionalString = true;
+  booleanWithProperties.implementsGoogStringTypedString = true;
+  safeHtml = goog.html.SafeHtml.htmlEscape(booleanWithProperties);
+  assertSameHtml('true', safeHtml);
+
   // Creating from a SafeUrl escapes and retains the known direction (which is
   // fixed to RTL for URLs).
   var safeUrl = goog.html.SafeUrl.fromConstant(

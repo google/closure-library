@@ -119,7 +119,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     safeLinkRef = goog.html.SafeUrl.sanitize(url);
   }
 
-
+  /** @suppress {missingProperties} loose references to 'target' */
   /** @suppress {strictMissingProperties} */
   var target = opt_options.target || linkRef.target;
 
@@ -158,7 +158,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     if (opt_options['noreferrer']) {
       a.setAttribute('rel', 'noreferrer');
     }
-    var click = document.createEvent('MouseEvent');
+
+    var click = /** @type {!MouseEvent} */ (document.createEvent('MouseEvent'));
     click.initMouseEvent(
         'click',
         true,  // canBubble

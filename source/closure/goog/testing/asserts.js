@@ -1278,8 +1278,7 @@ var assertRoughlyEquals = goog.testing.asserts.assertRoughlyEquals = function(
  *     (2 arguments).
  * @param {*=} opt_c The container.
  */
-var assertContains = goog.testing.asserts.assertContains = function(
-    a, b, opt_c) {
+goog.testing.asserts.assertContains = function(a, b, opt_c) {
   _validateArguments(2, arguments);
   var contained = nonCommentArg(1, 2, arguments);
   var container = nonCommentArg(2, 2, arguments);
@@ -1288,7 +1287,8 @@ var assertContains = goog.testing.asserts.assertContains = function(
       goog.testing.asserts.contains_(container, contained),
       'Expected \'' + container + '\' to contain \'' + contained + '\'');
 };
-
+/** @const */
+var assertContains = goog.testing.asserts.assertContains;
 
 /**
  * Checks if the given element is not the member of the given container.
@@ -1348,14 +1348,14 @@ goog.testing.asserts.toArray_ = function(arrayLike) {
 
 /**
  * Finds the position of the first occurrence of an element in a container.
- * @param {IArrayLike} container
+ * @param {IArrayLike<?>} container
  *     The array to find the element in.
  * @param {*} contained Element to find.
  * @return {number} Index of the first occurrence or -1 if not found.
  * @private
  */
 goog.testing.asserts.indexOf_ = function(container, contained) {
-  if (container.indexOf) {
+  if (typeof container.indexOf == 'function') {
     return container.indexOf(contained);
   } else {
     // IE6/7 do not have indexOf so do a search.
@@ -1436,7 +1436,7 @@ goog.testing.asserts.raiseException = function(comment, opt_message) {
  * @private
  */
 goog.testing.asserts.isArrayIndexProp_ = function(prop) {
-  return (prop | 0) == prop;
+  return (Number(prop) | 0) == prop;
 };
 
 /** @define {boolean} */

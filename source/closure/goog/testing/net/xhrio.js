@@ -20,6 +20,7 @@
 goog.setTestOnly('goog.testing.net.XhrIo');
 goog.provide('goog.testing.net.XhrIo');
 
+goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.dom.xml');
 goog.require('goog.events');
@@ -589,14 +590,25 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
  */
 goog.testing.net.XhrIo.prototype.simulateProgress = function(
     lengthComputable, loaded, total, opt_isDownload) {
-  var progressEvent = {
+  /**
+   * @typedef {{
+   *   type: goog.net.EventType,
+   *   lengthComputable: boolean,
+   *   loaded: number,
+   *   total: number
+   * }}
+   */
+  var ProgressEventType;
+
+  var /** ProgressEventType */ progressEvent = {
     type: goog.net.EventType.PROGRESS,
     lengthComputable: lengthComputable,
     loaded: loaded,
     total: total
   };
   this.dispatchEvent(progressEvent);
-  var specificProgress = goog.object.clone(progressEvent);
+  var specificProgress =
+      /** @type {ProgressEventType} */ (goog.object.clone(progressEvent));
   specificProgress.type = opt_isDownload ?
       goog.net.EventType.DOWNLOAD_PROGRESS :
       goog.net.EventType.UPLOAD_PROGRESS;

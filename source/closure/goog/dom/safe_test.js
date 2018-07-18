@@ -400,6 +400,36 @@ function testSetImageSrc_withHttpsUrl() {
   assertEquals(safeUrl, mockImageElement.src);
 }
 
+function testSetAudioSrc() {
+  var mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
+  var safeUrl = 'https://trusted_url';
+  goog.dom.safe.setAudioSrc(mockAudioElement, safeUrl);
+  assertEquals(safeUrl, mockAudioElement.src);
+
+  mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
+  withAssertionFailure(function() {
+    goog.dom.safe.setAudioSrc(mockAudioElement, 'javascript:evil();');
+  });
+  assertEquals('about:invalid#zClosurez', mockAudioElement.src);
+
+  mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
+  safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  goog.dom.safe.setAudioSrc(mockAudioElement, safeUrl);
+  assertEquals('javascript:trusted();', mockAudioElement.src);
+
+  // Asserts correct runtime type.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
+    var otherElement = document.createElement('SCRIPT');
+    var ex = assertThrows(function() {
+      goog.dom.safe.setAudioSrc(
+          /** @type {!HTMLAudioElement} */ (otherElement), safeUrl);
+    });
+    assert(
+        goog.string.contains(ex.message, 'Argument is not a HTMLAudioElement'));
+  }
+}
+
 function testSetVideoSrc() {
   var mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
   var safeUrl = 'https://trusted_url';
@@ -413,7 +443,7 @@ function testSetVideoSrc() {
   assertEquals('about:invalid#zClosurez', mockVideoElement.src);
 
   mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
-  var safeUrl = goog.html.SafeUrl.fromConstant(
+  safeUrl = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setVideoSrc(mockVideoElement, safeUrl);
   assertEquals('javascript:trusted();', mockVideoElement.src);
@@ -535,7 +565,7 @@ function testSetScriptSrc() {
     }
   });
   // clear nonce cache for test.
-  goog.cspNonce_ = null;
+  /** @type {?} */ (goog).cspNonce_ = null;
 
   // Place a nonced script in the page.
   var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
@@ -570,7 +600,7 @@ function testSetScriptContent() {
     }
   });
   // clear nonce cache for test.
-  goog.cspNonce_ = null;
+  /** @type {?} */ (goog).cspNonce_ = null;
 
   // Place a nonced script in the page.
   var nonce = 'ThisIsANonceThisIsANonceThisIsANonce';

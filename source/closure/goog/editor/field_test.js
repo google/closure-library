@@ -182,7 +182,7 @@ function testGetPluginByClassId() {
   var editableField = new FieldConstructor('testField');
   var plugin = new TestPlugin();
 
-  assertUndefined(
+  assertNull(
       'Must not be able to get unregistered plugins by class id.',
       editableField.getPluginByClassId(plugin.getTrogClassId()));
 

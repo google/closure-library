@@ -16,6 +16,7 @@
  * @fileoverview Definition of the Tracer class and associated classes.
  *
  * @see ../demos/tracer.html
+ * @suppress {strictMissingProperties}
  */
 
 goog.provide('goog.debug.StopTraceDetail');
@@ -127,13 +128,11 @@ goog.debug.Trace_ = function() {
 
   var self = this;
 
-  /** @private {!goog.structs.SimplePool} */
+  /** @private {!goog.structs.SimplePool<number>} */
   this.idPool_ = new goog.structs.SimplePool(0, 2000);
-
-  // TODO(nicksantos): SimplePool is supposed to only return objects.
-  // Reconcile this so that we don't have to cast to number below.
-  this.idPool_.createObject = function() { return String(self.nextId_++); };
-  this.idPool_.disposeObject = function(obj) {};
+  this.idPool_.setCreateObjectFn(function() {
+    return self.nextId_++;
+  });
 
   /**
    * Default threshold below which a tracer shouldn't be reported
@@ -255,6 +254,24 @@ goog.debug.Trace_.Event_.prototype.type;
 
 
 /**
+ * @type {goog.debug.Trace_.EventType|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.eventType;
+
+
+/**
+ * @type {number|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.id;
+
+
+/**
+ * @type {string|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.comment;
+
+
+/**
  * Returns a formatted string for the event.
  * @param {number} startTime The start time of the trace to generate relative
  * times.
@@ -298,7 +315,7 @@ goog.debug.Trace_.Event_.prototype.toTraceString = function(
  */
 goog.debug.Trace_.Event_.prototype.toString = function() {
   if (this.type == null) {
-    return this.comment;
+    return goog.asserts.assert(this.comment);
   } else {
     return '[' + this.type + '] ' + this.comment;
   }
@@ -526,7 +543,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   event.stopTime = undefined;
   event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
-  event.id = Number(this.idPool_.getObject());
+  event.id = this.idPool_.getObject();
   event.comment = comment;
   event.type = opt_type;
   this.events_.push(event);

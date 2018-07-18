@@ -682,7 +682,7 @@ goog.labs.mock.MockSpyManager_.prototype.getNextBinding = function(
       this, 'getNextBinding', methodName, args);
 
   if (!stub) {
-    stub = goog.bind(this.mockee[methodName], this.mockee);
+    stub = goog.bind(this.mockee[methodName], this.mockedItem);
   }
 
   return stub;

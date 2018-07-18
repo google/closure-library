@@ -221,6 +221,10 @@ goog.testing.TestCase = function(opt_name) {
    * @private {!Array<function()>}
    */
   this.onCompletedCallbacks_ = [];
+
+
+  /** @type {number|undefined} */
+  this.endTime_;
 };
 
 
@@ -893,15 +897,15 @@ goog.testing.TestCase.prototype.safeTearDownHelper_ = function(tearDowns) {
  * the TestCase instance as the method receiver.
  *
  * @param {function()} fn The function to call.
- * @param {function(): (?goog.testing.Continuation_|undefined)} onSuccess
- * @param {function(*): (?goog.testing.Continuation_|undefined)} onFailure
+ * @param {function(this:goog.testing.TestCase): (?goog.testing.Continuation_|undefined)} onSuccess
+ * @param {function(this:goog.testing.TestCase, *): (?goog.testing.Continuation_|undefined)} onFailure
  * @param {string} fnName Name of the function being invoked e.g. 'setUp'.
  * @return {?goog.testing.Continuation_}
  * @private
  */
 goog.testing.TestCase.prototype.invokeFunction_ = function(
     fn, onSuccess, onFailure, fnName) {
-  var testCase = this;
+  var self = this;
   this.thrownAssertionExceptions_ = [];
   try {
     var retval = fn.call(this);
@@ -910,7 +914,6 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
       // Resolve Thenable into a proper Promise to avoid hard to debug
       // problems.
       var promise = goog.Promise.resolve(retval);
-      var self = this;
       promise = this.rejectIfPromiseTimesOut_(
           promise, self.promiseTimeout,
           'Timed out while waiting for a promise returned from ' + fnName +
@@ -919,12 +922,11 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
       promise.then(
           function() {
             self.resetBatchTimeAfterPromise_();
-            if (testCase.thrownAssertionExceptions_.length == 0) {
+            if (self.thrownAssertionExceptions_.length == 0) {
               goog.testing.Continuation_.run(onSuccess.call(self));
             } else {
               goog.testing.Continuation_.run(onFailure.call(
-                  self,
-                  testCase.reportUnpropagatedAssertionExceptions_(fnName)));
+                  self, self.reportUnpropagatedAssertionExceptions_(fnName)));
             }
           },
           function(e) {
@@ -1609,6 +1611,7 @@ goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
  * @param {*} error The exception object associated with the
  *     failure or a string.
  * @return {!goog.testing.TestCase.Error} Error object.
+ * @suppress {missingProperties} message and stack properties
  */
 goog.testing.TestCase.prototype.logError = function(name, error) {
   var errMsg = null;
@@ -1647,7 +1650,7 @@ goog.testing.TestCase.prototype.logError = function(name, error) {
  * @param {?function()} ref Reference to the test function or test object.
  * @param {?Object=} scope Optional scope that the test function should be
  *     called in.
- * @param {!Array<!Object>=} objChain A chain of objects used to populate setUps
+ * @param {!Array<?>=} objChain A chain of objects used to populate setUps
  *     and tearDowns.
  * @constructor
  */
@@ -1706,6 +1709,9 @@ goog.testing.TestCase.Test = function(name, ref, scope, objChain) {
    * @private
    */
   this.stoppedTime_;
+
+  /** @package {boolean|undefined} */
+  this.waiting;
 };
 
 /**

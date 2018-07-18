@@ -93,6 +93,11 @@ goog.testing.MockControl.prototype.$verifyAll = function() {
  */
 goog.testing.MockControl.prototype.$tearDown = function() {
   goog.array.forEach(this.mocks_, function(m) {
+    if (!m) {
+      return;
+    }
+
+    m = /** @type {?} */ (m);
     // $tearDown if defined.
     if (m.$tearDown) {
       m.$tearDown();

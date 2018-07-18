@@ -24,9 +24,8 @@ goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileReader');
+goog.require('goog.testing.fs.Blob');
 goog.require('goog.testing.fs.ProgressEvent');
-
-goog.forwardDeclare('goog.testing.fs.Blob');
 
 
 
@@ -106,7 +105,7 @@ goog.testing.fs.FileReader.ReturnType = {
  * @type {goog.testing.fs.FileReader.ReturnType}
  * @private
  */
-goog.testing.fs.FileReader.returnType_;
+goog.testing.fs.FileReader.prototype.returnType_;
 
 
 /**

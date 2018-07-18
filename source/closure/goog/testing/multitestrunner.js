@@ -228,8 +228,21 @@ goog.testing.MultiTestRunner.prototype.timeoutMs_ =
 
 
 /**
+ * @typedef {{
+ *   testFile: string,
+ *   success: ?boolean,
+ *   runTime: number,
+ *   totalTime: number,
+ *   numFilesLoaded: number
+ * }}
+ * @private
+ */
+goog.testing.MultiTestRunner.StatsType_;
+
+
+/**
  * An array of objects containing stats about the tests.
- * @type {Array<Object>?}
+ * @type {?Array<!goog.testing.MultiTestRunner.StatsType_>}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.stats_ = null;
@@ -237,7 +250,7 @@ goog.testing.MultiTestRunner.prototype.stats_ = null;
 
 /**
  * Reference to the start button element.
- * @type {Element}
+ * @type {HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
@@ -245,7 +258,7 @@ goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
 
 /**
  * Reference to the stop button element.
- * @type {Element}
+ * @type {HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
@@ -285,7 +298,7 @@ goog.testing.MultiTestRunner.prototype.progressEl_ = null;
 
 /**
  * Reference to the progress bar's inner row element.
- * @type {Element}
+ * @type {HTMLTableRowElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.progressRow_ = null;
@@ -758,7 +771,7 @@ goog.testing.MultiTestRunner.prototype.processResult = function(frame) {
   }
 
   this.allTestResults_.push(frame.getTestResults());
-  this.stats_.push(stats);
+  this.stats_.push(/** @type {?} */ (stats));
   this.finished_[test] = true;
 
   var prefix = success ? '' : '*** FAILURE *** ';
@@ -1045,7 +1058,7 @@ goog.testing.MultiTestRunner.prototype.writeCurrentSummary_ = function() {
   var text = executed + ' of ' + total + ' tests executed.<br>' + passes +
       ' passed, ' + (executed - passes) + ' failed.<br>' +
       'Duration: ' + duration + 's.';
-  this.reportEl_.firstChild.innerHTML = text;
+  goog.dom.getFirstElementChild(this.reportEl_).innerHTML = text;
 };
 
 
@@ -1402,7 +1415,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getTestFile = function() {
 
 
 /**
- * @return {!Object} Stats about the test run.
+ * @return {!goog.testing.MultiTestRunner.StatsType_} Stats about the test run.
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.getStats = function() {
   return {
@@ -1458,9 +1471,9 @@ goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess = function() {
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.finish_ = function() {
   this.totalTime_ = goog.now() - this.startTime_;
-  // TODO(user): Fire an event instead?
-  if (this.getParent() && this.getParent().processResult) {
-    this.getParent().processResult(this);
+  var parent = this.getParent();
+  if (parent instanceof goog.testing.MultiTestRunner) {
+    parent.processResult(this);
   }
 };
 

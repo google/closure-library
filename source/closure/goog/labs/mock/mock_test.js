@@ -248,6 +248,19 @@ function testSpying() {
   goog.labs.mock.verify(spyObj).method2(4);
 }
 
+function testSpyingSelfInteraction() {
+  class A {
+    method1() {
+      this.method2();
+    }
+    method2() {}
+  }
+  const spyObj = goog.labs.mock.spy(new A());
+
+  spyObj.method1();
+  goog.labs.mock.verify(spyObj).method2();
+}
+
 function testSpyParentClassInstance() {
   var parent = new ParentClass();
   var parentMock = goog.labs.mock.spy(parent);

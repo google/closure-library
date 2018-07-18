@@ -20,6 +20,7 @@
 
 goog.provide('goog.dom.pattern.AbstractPattern');
 
+goog.require('goog.dom.TagWalkType');
 goog.require('goog.dom.pattern.MatchType');
 
 

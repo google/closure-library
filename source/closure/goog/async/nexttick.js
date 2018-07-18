@@ -224,7 +224,8 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       'onreadystatechange' in
           document.createElement(String(goog.dom.TagName.SCRIPT))) {
     return function(cb) {
-      var script = document.createElement(String(goog.dom.TagName.SCRIPT));
+      var script = /** @type {!HTMLScriptElement} */ (
+          document.createElement(String(goog.dom.TagName.SCRIPT)));
       script.onreadystatechange = function() {
         // Clean up and call the callback.
         script.onreadystatechange = null;

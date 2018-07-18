@@ -74,7 +74,7 @@ goog.testing.mockmatchers.ArgumentMatcher = function(
  * which (if provided) will get error information and returns whether or
  * not it matches.
  * @param {*} toVerify The argument that should be verified.
- * @param {goog.testing.MockExpectation?=} opt_expectation The expectation
+ * @param {?goog.testing.MockExpectation=} opt_expectation The expectation
  *     for this match.
  * @return {boolean} Whether or not a given argument passes verification.
  */

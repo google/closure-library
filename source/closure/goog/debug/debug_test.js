@@ -62,6 +62,16 @@ function testGetFunctionName() {
 }
 
 
+function testGetFunctionNameOfMultilineFunction() {
+  // DO NOT FORMAT THIS - it is expected that "oddlyFormatted" be on a separate
+  // line from the function keyword.
+  // clang-format off
+  function
+      oddlyFormatted() {}
+  // clang-format on
+  assertEquals('oddlyFormatted', goog.debug.getFunctionName(oddlyFormatted));
+}
+
 /**
  * Asserts that a substring can be found in a specified text string.
  *

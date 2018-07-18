@@ -83,6 +83,7 @@ goog.cssom.getAllCssStyleRules = function(opt_styleSheet) {
  *     can  happen if a stylesheet object's rules are accessed before the rules
  *     have been downloaded and parsed and are "ready".
  * @return {CSSRuleList} An array of CSSRules or null.
+ * @suppress {strictMissingProperties} StyleSheet does not define cssRules
  */
 goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
   var cssRuleList = null;
@@ -118,6 +119,7 @@ goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
  * @param {boolean=} opt_includeDisabled If true, includes disabled stylesheets,
  *    defaults to false.
  * @return {!Array<StyleSheet>} A list of StyleSheet objects.
+ * @suppress {strictMissingProperties} StyleSheet does not define cssRules
  */
 goog.cssom.getAllCssStyleSheets = function(
     opt_styleSheet, opt_includeDisabled) {

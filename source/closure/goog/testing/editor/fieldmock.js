@@ -49,34 +49,39 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
   opt_window = opt_window || window;
   opt_appWindow = opt_appWindow || opt_window;
 
-  this.getAppWindow();
+  // We want to pretend this is a Field even though it can't actaully be a
+  // subclass.
+  var thisField = /** @type {!goog.editor.Field} */ (/** @type {*} */ (this));
+
+  thisField.getAppWindow();
   this.$anyTimes();
   this.$returns(opt_appWindow);
 
-  this.getRange();
+  thisField.getRange();
   this.$anyTimes();
   this.$does(function() {
     return opt_range || goog.dom.Range.createFromWindow(opt_window);
   });
 
-  this.getEditableDomHelper();
+  thisField.getEditableDomHelper();
   this.$anyTimes();
   this.$returns(goog.dom.getDomHelper(opt_window.document));
 
-  this.usesIframe();
+  thisField.usesIframe();
   this.$anyTimes();
 
-  this.getBaseZindex();
+  thisField.getBaseZindex();
   this.$anyTimes();
   this.$returns(0);
 
-  this.restoreSavedRange(goog.testing.mockmatchers.ignoreArgument);
+  thisField.restoreSavedRange(
+      /** @type {?} */ (goog.testing.mockmatchers.ignoreArgument));
   this.$anyTimes();
   this.$does(function(range) {
     if (range) {
       range.restore();
     }
-    this.focus();
+    thisField.focus();
   });
 
   // These methods cannot be set on the prototype, because the prototype
