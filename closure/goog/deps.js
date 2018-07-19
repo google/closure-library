@@ -638,7 +638,7 @@ goog.addDependency('labs/i18n/listsymbolsext.js', ['goog.labs.i18n.ListFormatSym
 goog.addDependency('labs/iterable/iterable.js', ['goog.labs.iterable'], [], {'module': 'goog'});
 goog.addDependency('labs/iterable/iterable_test.js', ['goog.labs.iterableTest'], ['goog.labs.iterable', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'module': 'goog'});
 goog.addDependency('labs/mock/mock.js', ['goog.labs.mock', 'goog.labs.mock.VerificationError'], ['goog.array', 'goog.asserts', 'goog.debug', 'goog.debug.Error', 'goog.functions', 'goog.labs.mock.verification', 'goog.labs.mock.verification.VerificationMode', 'goog.object'], {});
-goog.addDependency('labs/mock/mock_test.js', ['goog.labs.mockTest'], ['goog.array', 'goog.labs.mock', 'goog.labs.mock.VerificationError', 'goog.labs.testing.AnythingMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.string', 'goog.testing.jsunit'], {});
+goog.addDependency('labs/mock/mock_test.js', ['goog.labs.mockTest'], ['goog.array', 'goog.labs.mock', 'goog.labs.mock.VerificationError', 'goog.labs.testing.AnythingMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.string', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('labs/mock/verificationmode.js', ['goog.labs.mock.verification', 'goog.labs.mock.verification.VerificationMode'], [], {});
 goog.addDependency('labs/mock/verificationmode_test.js', ['goog.labs.mock.VerificationModeTest'], ['goog.labs.mock.verification', 'goog.testing.testSuite'], {'module': 'goog'});
 goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.Promise', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.net.EventType', 'goog.userAgent'], {});
