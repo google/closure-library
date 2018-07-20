@@ -20,7 +20,6 @@
 
 goog.provide('goog.html.SafeUrl');
 
-goog.require('goog.Uri');
 goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
@@ -326,50 +325,6 @@ goog.html.SafeUrl.fromTelUrl = function(telUrl) {
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       telUrl);
-};
-
-
-/**
- * Creates a SafeUrl wrapping a sms: URL.
- *
- * @param {string} smsUrl A sms URL.
- * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
- *     wrapped as a SafeUrl if it does not pass.
- */
-goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
-  if (!goog.string.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
-      !goog.html.SafeUrl.isSmsUrlBodyValid_(smsUrl)) {
-    smsUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
-  }
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
-      smsUrl);
-};
-
-
-/**
- * Validates SMS URL `body` parameter, which is optional and should be
- * percentage-encoded if present.
- *
- * @param {string} smsUrl A sms URL.
- * @return {boolean} Whether SMS URL has a valid `body` parameter if it exists.
- * @private
- */
-goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
-  var uri = new goog.Uri(smsUrl);
-  // "body" MUST only appear once
-  if (uri.getParameterValues('body').length > 1) {
-    return false;
-  }
-  var bodyValue = uri.getParameterValue('body');
-  if (!bodyValue) {
-    return true;
-  }
-  try {
-    return goog.string.urlEncode(bodyValue) === bodyValue ||
-        goog.string.urlDecode(bodyValue) !== bodyValue;
-  } catch (error) {
-    return false;
-  }
 };
 
 
