@@ -21,6 +21,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.style');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPicker');
@@ -202,6 +203,12 @@ function testStructure() {
       checkPathsEndWithSameFile(inner.src, emojiInfo[0]);
     }
   }
+}
+
+
+function setUpPage() {
+  // This test is insanely slow on Safari for some reason.
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10 * 1000;
 }
 
 

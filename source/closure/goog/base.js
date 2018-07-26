@@ -3164,6 +3164,24 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
 
   /**
+   * @return {string} The pathname part of this dependency's path if it is a
+   *     URI.
+   */
+  goog.Dependency.prototype.getPathName = function() {
+    var pathName = this.path;
+    var protocolIndex = pathName.indexOf('://');
+    if (protocolIndex >= 0) {
+      pathName = pathName.substring(protocolIndex + 3);
+      var slashIndex = pathName.indexOf('/');
+      if (slashIndex >= 0) {
+        pathName = pathName.substring(slashIndex + 1);
+      }
+    }
+    return pathName;
+  };
+
+
+  /**
    * @param {function()} callback Callback to fire as soon as this has loaded.
    * @final
    */
@@ -3582,10 +3600,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       if (isEs6) {
         // Due to circular dependencies this may not be available for require
         // right now.
-        goog.global['$jscomp']['require']['ensure']([dep.path], function() {
-          controller.registerEs6ModuleExports(
-              dep.path, goog.global['$jscomp']['require'](dep.path), namespace);
-        });
+        goog.global['$jscomp']['require']['ensure'](
+            [dep.getPathName()], function() {
+              controller.registerEs6ModuleExports(
+                  dep.path,
+                  goog.global['$jscomp']['require'](dep.getPathName()),
+                  namespace);
+            });
       }
 
       controller.loaded();
@@ -3716,7 +3737,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
   /** @override */
   goog.TranspiledDependency.prototype.transform = function(contents) {
-    return this.transpiler.transpile(contents, this.path);
+    // Transpile with the pathname so that ES6 modules are domain agnostic.
+    return this.transpiler.transpile(contents, this.getPathName());
   };
 
 
@@ -3753,7 +3775,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   /** @override */
   goog.GoogModuleDependency.prototype.transform = function(contents) {
     if (this.needsTranspile_) {
-      contents = this.transpiler_.transpile(contents, this.path);
+      contents = this.transpiler_.transpile(contents, this.getPathName());
     }
 
     if (!goog.LOAD_MODULE_USING_EVAL || !goog.isDef(goog.global.JSON)) {

@@ -171,8 +171,9 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
     var stackTrace = goog.debug.getStacktraceSimple(15);
   }
   var googDebugErrorHandlerProtectedFunction = function() {
+    var self = /** @type {?} */ (this);
     if (that.isDisposed()) {
-      return fn.apply(this, arguments);
+      return fn.apply(self, arguments);
     }
 
     if (tracers) {
@@ -180,7 +181,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
           'protectedEntryPoint: ' + that.getStackTraceHolder_(stackTrace));
     }
     try {
-      return fn.apply(this, arguments);
+      return fn.apply(self, arguments);
     } catch (e) {
       // Don't re-report errors that have already been handled by this code.
       var MESSAGE_PREFIX =
@@ -289,12 +290,14 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
     // also doesn't care what "this" is, so we can just call the
     // original function directly
     if (originalFn.apply) {
-      return originalFn.apply(this, arguments);
+      return originalFn.apply(/** @type {?} */ (this), arguments);
     } else {
       var callback = fn;
       if (arguments.length > 2) {
         var args = Array.prototype.slice.call(arguments, 2);
-        callback = function() { fn.apply(this, args); };
+        callback = function() {
+          fn.apply(/** @type {?} */ (this), args);
+        };
       }
       return originalFn(callback, time);
     }
@@ -346,6 +349,7 @@ goog.debug.ErrorHandler.prototype.disposeInternal = function() {
  * @final
  */
 goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
+  /** @suppress {missingProperties} message may not be defined. */
   var message = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
       (cause && cause.message ? String(cause.message) : String(cause));
   goog.debug.ErrorHandler.ProtectedFunctionError.base(
@@ -357,6 +361,7 @@ goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
    */
   this.cause = cause;
 
+  /** @suppress {missingProperties} stack may not be defined. */
   var stack = cause && cause.stack;
   if (stack && goog.isString(stack)) {
     this.stack = /** @type {string} */ (stack);

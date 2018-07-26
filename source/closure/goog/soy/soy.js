@@ -23,6 +23,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
@@ -71,7 +72,8 @@ goog.soy.StrictHtmlTemplate;
  * @template ARG_TYPES
  */
 goog.soy.renderHtml = function(element, templateResult) {
-  element.innerHTML = goog.soy.ensureTemplateOutputHtml_(templateResult);
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
+      element, goog.soy.ensureTemplateOutputHtml_(templateResult));
 };
 
 
@@ -93,10 +95,11 @@ goog.soy.renderElement = function(
     element, template, opt_templateData, opt_injectedData) {
   // Soy template parameter is only nullable for historical reasons.
   goog.asserts.assert(template, 'Soy template may not be null.');
-  element.innerHTML = goog.soy.ensureTemplateOutputHtml_(
-      template(
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
+      element,
+      goog.soy.ensureTemplateOutputHtml_(template(
           opt_templateData || goog.soy.defaultTemplateData_, undefined,
-          opt_injectedData));
+          opt_injectedData)));
 };
 
 
@@ -194,7 +197,7 @@ goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
   var wrapper = dom.createElement(goog.dom.TagName.DIV);
   var html = goog.soy.ensureTemplateOutputHtml_(templateResult);
   goog.soy.assertFirstTagValid_(html);
-  wrapper.innerHTML = html;
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(wrapper, html);
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {

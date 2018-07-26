@@ -96,3 +96,10 @@ goog.html.safeUrlTestVectors.TEL_VECTORS = [
     {input: 'javascript:evil()', expected: 'about:invalid#zClosurez', safe: false},
     {input: 'tel:+1234567890', expected: 'tel:+1234567890', safe: true}
 ];
+
+goog.html.safeUrlTestVectors.SMS_VECTORS = [
+    {input: 'sms:+1234567890', expected: 'sms:+1234567890', safe: true},
+    {input: 'sms:?body=message', expected: 'sms:?body=message', safe: true},
+    {input: 'sms:?body=Hello, World!', expected: 'about:invalid#zClosurez', safe: false},
+    {input: 'sms:?body=a&body=b', expected: 'about:invalid#zClosurez', safe: false}
+];

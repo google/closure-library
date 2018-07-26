@@ -344,12 +344,12 @@ goog.html.SafeStyle.PropertyMap;
  * @param {goog.html.SafeStyle.PropertyMap} map Mapping of property names to
  *     their values, for example {'margin': '1px'}. Names must consist of
  *     [-_a-zA-Z0-9]. Values might be strings consisting of
- *     [-,.'"%_!# a-zA-Z0-9], where " and ' must be properly balanced. We also
- *     allow simple functions like rgb() and url() which sanitizes its contents.
- *     Other values must be wrapped in goog.string.Const. URLs might be passed
- *     as goog.html.SafeUrl which will be wrapped into url(""). We also support
- *     array whose elements are joined with ' '. Null value causes skipping the
- *     property.
+ *     [-,.'"%_!# a-zA-Z0-9[\]], where ", ', and [] must be properly balanced.
+ *     We also allow simple functions like rgb() and url() which sanitizes its
+ *     contents. Other values must be wrapped in goog.string.Const. URLs might
+ *     be passed as goog.html.SafeUrl which will be wrapped into url(""). We
+ *     also support array whose elements are joined with ' '. Null value causes
+ *     skipping the property.
  * @return {!goog.html.SafeStyle}
  * @throws {Error} If invalid name is provided.
  * @throws {goog.asserts.AssertionError} If invalid value is provided. With
@@ -411,16 +411,27 @@ goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
  * @private
  */
 goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
+  // Some CSS property values permit nested functions. We allow one level of
+  // nesting, and all nested functions must also be in the FUNCTIONS_RE_ list.
   var valueWithoutFunctions =
       value.replace(goog.html.SafeStyle.FUNCTIONS_RE_, '$1')
+          .replace(goog.html.SafeStyle.FUNCTIONS_RE_, '$1')
           .replace(goog.html.SafeStyle.URL_RE_, 'url');
   if (!goog.html.SafeStyle.VALUE_RE_.test(valueWithoutFunctions)) {
     goog.asserts.fail(
         'String value allows only ' + goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ +
         ' and simple functions, got: ' + value);
     return goog.html.SafeStyle.INNOCUOUS_STRING;
+  } else if (goog.html.SafeStyle.COMMENT_RE_.test(value)) {
+    goog.asserts.fail('String value disallows comments, got: ' + value);
+    return goog.html.SafeStyle.INNOCUOUS_STRING;
   } else if (!goog.html.SafeStyle.hasBalancedQuotes_(value)) {
     goog.asserts.fail('String value requires balanced quotes, got: ' + value);
+    return goog.html.SafeStyle.INNOCUOUS_STRING;
+  } else if (!goog.html.SafeStyle.hasBalancedSquareBrackets_(value)) {
+    goog.asserts.fail(
+        'String value requires balanced square brackets and one' +
+        ' identifier per pair of brackets, got: ' + value);
     return goog.html.SafeStyle.INNOCUOUS_STRING;
   }
   return goog.html.SafeStyle.sanitizeUrl_(value);
@@ -453,10 +464,41 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
 
 
 /**
+ * Checks that square brackets ([ and ]) are properly balanced inside a string,
+ * and that the content in the square brackets is one ident-token;
+ * see https://www.w3.org/TR/css-syntax-3/#ident-token-diagram.
+ * For practicality, and in line with other restrictions posed on SafeStyle
+ * strings, we restrict the character set allowable in the ident-token to
+ * [-_a-zA-Z0-9].
+ * @param {string} value Untrusted CSS property value.
+ * @return {boolean} True if property value is safe with respect to square
+ *     bracket balancedness.
+ * @private
+ */
+goog.html.SafeStyle.hasBalancedSquareBrackets_ = function(value) {
+  var outside = true;
+  var tokenRe = /^[-_a-zA-Z0-9]$/;
+  for (var i = 0; i < value.length; i++) {
+    var c = value.charAt(i);
+    if (c == ']') {
+      if (outside) return false;  // Unbalanced ].
+      outside = true;
+    } else if (c == '[') {
+      if (!outside) return false;  // No nesting.
+      outside = false;
+    } else if (!outside && !tokenRe.test(c)) {
+      return false;
+    }
+  }
+  return outside;
+};
+
+
+/**
  * Characters allowed in goog.html.SafeStyle.VALUE_RE_.
  * @private {string}
  */
-goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ = '[-,."\'%_!# a-zA-Z0-9]';
+goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ = '[-,."\'%_!# a-zA-Z0-9\\[\\]]';
 
 
 /**
@@ -464,6 +506,10 @@ goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ = '[-,."\'%_!# a-zA-Z0-9]';
  *
  * Quotes (" and ') are allowed, but a check must be done elsewhere to ensure
  * they're balanced.
+ *
+ * Square brackets ([ and ]) are allowed, but a check must be done elsewhere
+ * to ensure they're balanced. The content inside a pair of square brackets must
+ * be one alphanumeric identifier.
  *
  * ',' allows multiple values to be assigned to the same property
  * (e.g. background-attachment or font-family) and hence could allow
@@ -498,9 +544,17 @@ goog.html.SafeStyle.URL_RE_ = new RegExp(
  * @private @const {!RegExp}
  */
 goog.html.SafeStyle.FUNCTIONS_RE_ = new RegExp(
-    '\\b(hsl|hsla|rgb|rgba|matrix|(rotate|scale|translate)(X|Y|Z|3d)?)' +
-        '\\([-0-9a-z.%, ]+\\)',
+    '\\b(hsl|hsla|rgb|rgba|matrix|calc|minmax|fit-content|repeat|' +
+        '(rotate|scale|translate)(X|Y|Z|3d)?)' +
+        '\\([-+*/0-9a-z.%\\[\\], ]+\\)',
     'g');
+
+
+/**
+ * Regular expression for comments. These are disallowed in CSS property values.
+ * @private @const {!RegExp}
+ */
+goog.html.SafeStyle.COMMENT_RE_ = /\/\*/;
 
 
 /**

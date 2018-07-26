@@ -50,6 +50,7 @@ goog.provide('goog.net.WebChannel');
 
 goog.require('goog.events');
 goog.require('goog.events.Event');
+goog.require('goog.events.Listenable');
 goog.require('goog.net.XmlHttpFactory');
 
 
@@ -64,6 +65,7 @@ goog.require('goog.net.XmlHttpFactory');
  *
  * @interface
  * @extends {EventTarget}
+ * @extends {goog.events.Listenable}
  */
 goog.net.WebChannel = function() {};
 
