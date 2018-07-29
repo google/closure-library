@@ -1,0 +1,10 @@
+*.html
+*_test.*
+.*
+/*.js
+/*.json
+/closure/bin/generate_closure_unit_tests
+/closure/goog/demos/
+/doc
+/scripts
+testdata
