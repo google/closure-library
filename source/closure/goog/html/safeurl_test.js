@@ -110,6 +110,64 @@ function testSafeUrlSanitize_sanitizeTelUrl() {
 }
 
 
+function testSafeUrlSanitize_sipUrlEmail() {
+  var expected = 'sip:username@example.com';
+  var observed = goog.html.SafeUrl.fromSipUrl('sip:username@example.com');
+  assertEquals(expected, goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipsUrlEmail() {
+  var expected = 'sips:username@example.com';
+  var observed = goog.html.SafeUrl.fromSipUrl('sips:username@example.com');
+  assertEquals(expected, goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipProtocolCase() {
+  var expected = 'Sip:username@example.com';
+  var observed = goog.html.SafeUrl.fromSipUrl('Sip:username@example.com');
+  assertEquals(expected, goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlWithPort() {
+  var observed = goog.html.SafeUrl.fromSipUrl('sip:username@example.com:5000');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlFragment() {
+  var observed = goog.html.SafeUrl.fromSipUrl('sip:user#name@example.com');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlWithPassword() {
+  var observed =
+      goog.html.SafeUrl.fromSipUrl('sips:username:password@example.com');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlWithOptions() {
+  var observed = goog.html.SafeUrl.fromSipUrl('sips:user;na=me@example.com');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlWithPercent() {
+  var observed = goog.html.SafeUrl.fromSipUrl('sip:user%40name@example.com');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sipUrlWithAmbiguousQuery() {
+  var observed = goog.html.SafeUrl.fromSipUrl('sip:user?name@example.com');
+  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+}
+
+
 function testFromTrustedResourceUrl() {
   var url = goog.string.Const.from('test');
   var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(url);

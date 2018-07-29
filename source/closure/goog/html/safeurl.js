@@ -329,6 +329,36 @@ goog.html.SafeUrl.fromTelUrl = function(telUrl) {
 
 
 /**
+ * Matches a sip/sips URL. We only allow urls that consist of an email address.
+ * The characters '?' and '#' are not allowed in the local part of the email
+ * address.
+ * @const
+ * @private
+ */
+goog.html.SIP_URL_PATTERN_ = new RegExp(
+    '^sip[s]?:[+a-z0-9_.!$%&\'*\\/=^`{|}~-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,63}$',
+    'i');
+
+
+/**
+ * Creates a SafeUrl wrapping a sip: URL. We only allow urls that consist of an
+ * email address. The characters '?' and '#' are not allowed in the local part
+ * of the email address.
+ *
+ * @param {string} sipUrl A sip URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
+  if (!goog.html.SIP_URL_PATTERN_.test(decodeURIComponent(sipUrl))) {
+    sipUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      sipUrl);
+};
+
+
+/**
  * Creates a SafeUrl from TrustedResourceUrl. This is safe because
  * TrustedResourceUrl is more tightly restricted than SafeUrl.
  *
