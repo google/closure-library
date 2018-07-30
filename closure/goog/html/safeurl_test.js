@@ -168,6 +168,16 @@ function testSafeUrlSanitize_sipUrlWithAmbiguousQuery() {
 }
 
 
+function testSafeUrlSanitize_sanitizeSmsUrl() {
+  var vectors = goog.html.safeUrlTestVectors.SMS_VECTORS;
+  for (var i = 0; i < vectors.length; ++i) {
+    var v = vectors[i];
+    var observed = goog.html.SafeUrl.fromSmsUrl(v.input);
+    assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
+  }
+}
+
+
 function testFromTrustedResourceUrl() {
   var url = goog.string.Const.from('test');
   var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(url);
