@@ -36,22 +36,29 @@ goog.require('goog.string.TypedString');
  * `goog.string.Const.from` and not by invoking its constructor.  The
  * constructor intentionally takes no parameters and the type is immutable;
  * hence only a default instance corresponding to the empty string can be
- * obtained via constructor invocation.
+ * obtained via constructor invocation.  Use goog.string.Const.EMPTY
+ * instead of using this constructor to get an empty Const string.
  *
  * @see goog.string.Const#from
  * @constructor
  * @final
  * @struct
  * @implements {goog.string.TypedString}
+ * @param {Object=} opt_token package-internal implementation detail.
+ * @param {string=} opt_content package-internal implementation detail.
  */
-goog.string.Const = function() {
+goog.string.Const = function(opt_token, opt_content) {
   /**
    * The wrapped value of this Const object.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
    * field stand out.
    * @private {string}
    */
-  this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ = '';
+  this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ =
+      ((opt_token ===
+        goog.string.Const.GOOG_STRING_CONSTRUCTOR_TOKEN_PRIVATE_) &&
+       opt_content) ||
+      '';
 
   /**
    * A type marker used to implement additional run-time type checking.
@@ -152,9 +159,9 @@ goog.string.Const.unwrap = function(stringConst) {
  * @return {!goog.string.Const} A Const object initialized to stringConst.
  */
 goog.string.Const.from = function(s) {
-  return goog.string.Const.create__googStringSecurityPrivate_(s);
+  return new goog.string.Const(
+      goog.string.Const.GOOG_STRING_CONSTRUCTOR_TOKEN_PRIVATE_, s);
 };
-
 
 /**
  * Type marker for the Const type, used to implement additional run-time
@@ -164,20 +171,12 @@ goog.string.Const.from = function(s) {
  */
 goog.string.Const.TYPE_MARKER_ = {};
 
-
 /**
- * Utility method to create Const instances.
- * @param {string} s The string to initialize the Const object with.
- * @return {!goog.string.Const} The initialized Const object.
+ * @type {!Object}
  * @private
+ * @const
  */
-goog.string.Const.create__googStringSecurityPrivate_ = function(s) {
-  var stringConst = new goog.string.Const();
-  stringConst.stringConstValueWithSecurityContract__googStringSecurityPrivate_ =
-      s;
-  return stringConst;
-};
-
+goog.string.Const.GOOG_STRING_CONSTRUCTOR_TOKEN_PRIVATE_ = {};
 
 /**
  * A Const instance wrapping the empty string.
