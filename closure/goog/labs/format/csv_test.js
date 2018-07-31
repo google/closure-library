@@ -90,6 +90,10 @@ function testQuotes() {
   assertObjectEquals(
       [['a', 'b, as in boy', 'c'], ['d', 'e', 'f']],
       goog.labs.format.csv.parse('a,"b, as in boy",c\n"d","e","f"\n'));
+  // Make sure empty elements after quoted elements are parsed.
+  assertObjectEquals(
+      [['a', 'b, as in boy', ''], ['d', 'e', 'f']],
+      goog.labs.format.csv.parse('a,"b, as in boy",\nd,e,f\n'));
 }
 
 function testEmbeddedCrlfs() {
