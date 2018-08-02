@@ -36,3 +36,6 @@ sha1.update("foobar");
 var hash = sha1.digest();
 ```
 
+##Contributing
+Please read the [CONTRIBUTING](https://github.com/xamuel/closure-library/blob/master/CONTRIBUTING) for details on how to contribute to this project.
+
