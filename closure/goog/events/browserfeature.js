@@ -117,8 +117,11 @@ goog.events.BrowserFeature = {
         passive = true;
       }
     });
-    goog.global.addEventListener('test', goog.nullFunction, options);
-    goog.global.removeEventListener('test', goog.nullFunction, options);
+    try {
+      goog.global.addEventListener('test', goog.nullFunction, options);
+      goog.global.removeEventListener('test', goog.nullFunction, options);
+    } catch (e) {
+    }
 
     return passive;
   })
