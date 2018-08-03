@@ -236,7 +236,7 @@ Instead of directly assigning to Location.prototype.href or
 Window.prototype.location, use the safe wrapper function
 [`goog.dom.safe.setLocationHref`]. When passed
 a string, this wrapper sanitizes the URL before passing it to the underlying DOM
-property. If passed a value of type`goog.html.SafeUrl`, the value is assigned
+property. If passed a value of type `goog.html.SafeUrl`, the value is assigned
 without further sanitization.
 
 Note: Reads of this property are permitted.
@@ -253,7 +253,7 @@ via "javascript:evil()" URLs.
 Instead of directly assigning to the href property, use safe wrapper functions
 such as [`goog.dom.safe.setAnchorHref`]. When passed a
 string, this wrapper sanitizes the URL before passing it to the underlying DOM
-property. If passed a value of type goog.html.SafeUrl, the value is assigned
+property. If passed a value of type `goog.html.SafeUrl`, the value is assigned
 without further sanitization.
 
 Note: Reads of this property are permitted.
