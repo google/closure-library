@@ -1,0 +1,43 @@
+{
+  "name": "google-closure-deps",
+  "version": "20180716.0.0",
+  "description": "Library to parse dependencies for Closure Library. Also includes a CLI to generate deps.js files for Closure Library's debug loader.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google/closure-library.git"
+  },
+  "main": "index.js",
+  "keywords": [
+    "javascript",
+    "library",
+    "goog",
+    "closure",
+    "dependencies"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "bin": {
+    "closure-make-deps": "node ./bin/closuremakedeps.js",
+    "get-js-version": "node ./bin/getjsversion.js"
+  },
+  "scripts": {
+    "test": "./node_modules/jasmine/bin/jasmine.js",
+    "closure-make-deps": "node ./bin/closuremakedeps.js"
+  },
+  "author": "The Closure Library Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/google/closure-library/issues"
+  },
+  "homepage": "https://developers.google.com/closure/library/",
+  "devDependencies": {
+    "google-closure-library": "^20180716.0.0",
+    "jasmine": "^2.9.0"
+  },
+  "dependencies": {
+    "argparse": "^1.0.9",
+    "google-closure-compiler": "^20180716.0.1"
+  }
+}
