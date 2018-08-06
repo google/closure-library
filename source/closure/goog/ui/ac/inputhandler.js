@@ -526,7 +526,7 @@ goog.ui.ac.InputHandler.prototype.detachInputs = function(var_args) {
 
 /**
  * Selects the given row.  Implements the SelectionHandler interface.
- * @param {Object} row The row to select.
+ * @param {?} row The row to select.
  * @param {boolean=} opt_multi Should this be treated as a single or multi-token
  *     auto-complete?  Overrides previous setting of opt_multi on constructor.
  * @return {boolean} Whether to suppress the update event.

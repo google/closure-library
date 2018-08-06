@@ -47,3 +47,13 @@ function testUnwrap() {
   var exception = assertThrows(function() { goog.string.Const.unwrap(evil); });
   assertTrue(exception.message.indexOf('expected object of type Const') > 0);
 }
+
+
+function testExplicitConstructorInvocation() {
+  assertEquals('', goog.string.Const.unwrap(new goog.string.Const({}, 'foo')));
+}
+
+
+function testBackwardsCompatibility() {
+  assertEquals('', goog.string.Const.unwrap(new goog.string.Const()));
+}

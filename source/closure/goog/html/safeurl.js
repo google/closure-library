@@ -359,6 +359,55 @@ goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
 
 
 /**
+ * Creates a SafeUrl wrapping a sms: URL.
+ *
+ * @param {string} smsUrl A sms URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
+  if (!goog.string.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
+      !goog.html.SafeUrl.isSmsUrlBodyValid_(smsUrl)) {
+    smsUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      smsUrl);
+};
+
+
+/**
+ * Validates SMS URL `body` parameter, which is optional and should appear at
+ * most once and should be percentage-encoded if present.
+ *
+ * @param {string} smsUrl A sms URL.
+ * @return {boolean} Whether SMS URL has a valid `body` parameter if it exists.
+ * @private
+ */
+goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
+  var bodyParams = smsUrl.match(/[?&]body=/gi);
+  // "body" param is optional
+  if (!bodyParams) {
+    return true;
+  }
+  // "body" MUST only appear once
+  if (bodyParams.length > 1) {
+    return false;
+  }
+  // Get the encoded `body` parameter value.
+  var bodyValue = smsUrl.match(/[?&]body=([^&]+)/)[1];
+  if (!bodyValue) {
+    return true;
+  }
+  try {
+    return goog.string.urlEncode(bodyValue) === bodyValue ||
+        goog.string.urlDecode(bodyValue) !== bodyValue;
+  } catch (error) {
+    return false;
+  }
+};
+
+
+/**
  * Creates a SafeUrl from TrustedResourceUrl. This is safe because
  * TrustedResourceUrl is more tightly restricted than SafeUrl.
  *

@@ -243,6 +243,9 @@ goog.labs.format.csv.parse = function(text, opt_ignoreErrors, opt_delimiter) {
           if (token == NEWLINE) {
             pushBack(token);
           }
+          if (token == delimiter) {
+            sawComma = true;
+          }
           break;
         }
 
