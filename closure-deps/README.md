@@ -1,3 +1,6 @@
+This is a work in progress and should be available for install soon, after the
+August Closure Compiler release.
+
 # Closure Dependencies [![Build Status](https://travis-ci.org/google/closure-library.svg?branch=master)](https://travis-ci.org/google/closure-library)
 
 This is a separate utility node package for Closure Library related to
@@ -18,13 +21,13 @@ will not be updated and should be considered deprecated.
 Install via npm:
 
 ```
-npm install closure-deps
+npm install google-closure-deps
 ```
 
 To use the CLI below from any directory install the package globally:
 
 ```
-npm install -g closure-deps
+npm install -g google-closure-deps
 ```
 
 ## Command Line Interface
@@ -62,7 +65,7 @@ This is an in-code example for clarity, but there are also functions to parse
 files rather than strings.
 
 ```javascript
-const {parser, depgraph} = require('closure-deps');
+const {parser, depgraph} = require('google-closure-deps');
 
 // A file that provides "goog" is required for any file that references Closure.
 // Usually this is Closure's base.js file.
@@ -84,7 +87,7 @@ This also supports parsing ES6 modules now that Closure Library has support for
 them!
 
 ```javascript
-const {parser, depgraph} = require('closure-deps');
+const {parser, depgraph} = require('google-closure-deps');
 
 // A file that provides "goog" is required for any file that references Closure.
 // Usually this is Closure's base.js file.
