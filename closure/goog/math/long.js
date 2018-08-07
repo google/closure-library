@@ -412,7 +412,9 @@ goog.math.Long.getMaxValue = function() {
 goog.math.Long.getMinValue = function() {
   return goog.reflect.cache(
       goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MIN_VALUE,
-      function() { return goog.math.Long.fromBits(0, 0x80000000 | 0); });
+      function() {
+        return goog.math.Long.fromBits(0, 0x80000000 | 0);
+      });
 };
 
 
@@ -423,7 +425,9 @@ goog.math.Long.getMinValue = function() {
 goog.math.Long.getTwoPwr24 = function() {
   return goog.reflect.cache(
       goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.TWO_PWR_24,
-      function() { return goog.math.Long.fromInt(1 << 24); });
+      function() {
+        return goog.math.Long.fromInt(1 << 24);
+      });
 };
 
 

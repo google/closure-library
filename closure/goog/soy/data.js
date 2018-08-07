@@ -258,8 +258,7 @@ goog.soy.data.SanitizedHtml.prototype.contentKind =
  * @return {boolean}
  */
 goog.soy.data.SanitizedHtml.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
-      value instanceof goog.soy.data.SanitizedHtml ||
+  return goog.isString(value) || value instanceof goog.soy.data.SanitizedHtml ||
       value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeHtml;
 };
@@ -293,8 +292,7 @@ goog.soy.data.SanitizedJs.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedJs.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
-      value instanceof goog.soy.data.SanitizedJs ||
+  return goog.isString(value) || value instanceof goog.soy.data.SanitizedJs ||
       value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeScript;
 };
@@ -328,8 +326,7 @@ goog.soy.data.SanitizedUri.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedUri.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
-      value instanceof goog.soy.data.SanitizedUri ||
+  return goog.isString(value) || value instanceof goog.soy.data.SanitizedUri ||
       value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeUrl ||
       value instanceof goog.html.TrustedResourceUrl ||
@@ -494,8 +491,7 @@ goog.soy.data.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
-      value instanceof goog.soy.data.SanitizedCss ||
+  return goog.isString(value) || value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeStyle ||  // TODO(jakubvrana): Delete.
       value instanceof goog.html.SafeStyleSheet;

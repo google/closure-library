@@ -70,10 +70,9 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
       (opt_el ? goog.dom.getDomHelper(goog.dom.getElement(opt_el)) :
                 goog.dom.getDomHelper());
 
-  goog.ui.Popup.call(
-      this,
-      this.dom_.createDom(
-          goog.dom.TagName.DIV, {'style': 'position:absolute;display:none;'}));
+  goog.ui.Popup.call(this, this.dom_.createDom(goog.dom.TagName.DIV, {
+    'style': 'position:absolute;display:none;'
+  }));
 
   /**
    * Cursor position relative to the page.
@@ -985,20 +984,21 @@ goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
     element, popupCorner, opt_margin) {
   var viewportElt = goog.style.getClientViewportElement(element);
   var viewport = goog.style.getVisibleRectForElement(viewportElt);
-  var margin = opt_margin ?
-      new goog.math.Box(
-          opt_margin.top + 10, opt_margin.right, opt_margin.bottom,
-          opt_margin.left + 10) :
-      new goog.math.Box(10, 0, 0, 10);
+  var margin = opt_margin ? new goog.math.Box(
+                                opt_margin.top + 10, opt_margin.right,
+                                opt_margin.bottom, opt_margin.left + 10) :
+                            new goog.math.Box(10, 0, 0, 10);
 
   if (goog.positioning.positionAtCoordinate(
           this.coordinate, element, goog.positioning.Corner.TOP_START, margin,
-          viewport, goog.positioning.Overflow.ADJUST_X |
+          viewport,
+          goog.positioning.Overflow.ADJUST_X |
               goog.positioning.Overflow.FAIL_Y) &
       goog.positioning.OverflowStatus.FAILED) {
     goog.positioning.positionAtCoordinate(
         this.coordinate, element, goog.positioning.Corner.TOP_START, margin,
-        viewport, goog.positioning.Overflow.ADJUST_X |
+        viewport,
+        goog.positioning.Overflow.ADJUST_X |
             goog.positioning.Overflow.ADJUST_Y);
   }
 };

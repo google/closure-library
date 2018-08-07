@@ -466,7 +466,7 @@ goog.net.xpc.NixTransport.prototype.handleMessage_ = function(
  */
 goog.net.xpc.NixTransport.prototype.send = function(service, payload) {
   // Verify that the NIX channel we have is valid.
-  if (typeof(this.nixChannel_) !== 'unknown') {
+  if (typeof (this.nixChannel_) !== 'unknown') {
     goog.log.error(goog.net.xpc.logger, 'NIX channel not connected');
   }
 

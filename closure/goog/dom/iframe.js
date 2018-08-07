@@ -186,9 +186,10 @@ goog.dom.iframe.createWithContent = function(
   var domHelper = goog.dom.getDomHelper(parentElement);
 
   var content = goog.html.SafeHtml.create(
-      'html', {}, goog.html.SafeHtml.concat(
-                      goog.html.SafeHtml.create('head', {}, opt_headContents),
-                      goog.html.SafeHtml.create('body', {}, opt_bodyContents)));
+      'html', {},
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('head', {}, opt_headContents),
+          goog.html.SafeHtml.create('body', {}, opt_bodyContents)));
   if (!opt_quirks) {
     content =
         goog.html.SafeHtml.concat(goog.html.SafeHtml.DOCTYPE_HTML, content);
