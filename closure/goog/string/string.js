@@ -1225,7 +1225,7 @@ goog.string.buildString = function(var_args) {
 /**
  * Returns a string with at least 64-bits of randomness.
  *
- * Doesn't trust Javascript's random function entirely. Uses a combination of
+ * Doesn't trust JavaScript's random function entirely. Uses a combination of
  * random and current timestamp, and then encodes the string in base-36 to
  * make it shorter.
  *
@@ -1361,7 +1361,7 @@ goog.string.createUniqueString = function() {
  * This function strips whitespace: (toNumber(' 123') === 123)
  * This function accepts scientific notation: (toNumber('1e1') === 10)
  *
- * This is better than Javascript's built-in conversions because, sadly:
+ * This is better than JavaScript's built-in conversions because, sadly:
  *     (Number(' ') === 0) and (parseFloat('123a') === 123)
  *
  * @param {string} str The string to convert.

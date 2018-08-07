@@ -62,10 +62,10 @@ goog.soy.data.SanitizedContentKind = {
   HTML: goog.DEBUG ? {sanitizedContentKindHtml: true} : {},
 
   /**
-   * Executable Javascript code or expression, safe for insertion in a
+   * Executable JavaScript code or expression, safe for insertion in a
    * script-tag or event handler context, known to be free of any
    * attacker-controlled scripts. This can either be side-effect-free
-   * Javascript (such as JSON) or Javascript that's entirely under Google's
+   * JavaScript (such as JSON) or JavaScript that's entirely under Google's
    * control.
    */
   JS: goog.DEBUG ? {sanitizedContentJsChars: true} : {},

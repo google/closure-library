@@ -182,7 +182,7 @@ goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
   // Inject the VBScript code needed.
   var vbscript =
       // We create a class to act as a wrapper for
-      // a Javascript call, to prevent a break in of
+      // a JavaScript call, to prevent a break in of
       // the context.
       'Class ' + goog.net.xpc.NixTransport.NIX_WRAPPER + '\n ' +
 

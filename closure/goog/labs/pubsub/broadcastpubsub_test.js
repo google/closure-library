@@ -445,7 +445,7 @@ function testHandleRemoteEventNestedPublish() {
 
 /**
  * Local publish that originated from another instance of BroadcastChannel
- * in the same Javascript context.
+ * in the same JavaScript context.
  */
 function testSecondInstancePublish() {
   mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage).$times(2);

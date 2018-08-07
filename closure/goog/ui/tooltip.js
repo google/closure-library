@@ -730,7 +730,7 @@ goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
 goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
   // FireFox has a bug where mouse events relating to <input> elements are
   // sometimes duplicated (often in FF2, rarely in FF3): once for the
-  // <input> element and once for a magic hidden <div> element.  Javascript
+  // <input> element and once for a magic hidden <div> element.  JavaScript
   // code does not have sufficient permissions to read properties on that
   // magic element and thus will throw an error in this call to
   // getAnchorFromElement_().  In that case we swallow the error.

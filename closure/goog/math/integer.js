@@ -36,9 +36,9 @@ goog.provide('goog.math.Integer');
  * The internal representation of an integer is an array of 32-bit signed
  * pieces, along with a sign (0 or -1) that indicates the contents of all the
  * other 32-bit pieces out to infinity.  We use 32-bit pieces because these are
- * the size of integers on which Javascript performs bit-operations.  For
+ * the size of integers on which JavaScript performs bit-operations.  For
  * operations like addition and multiplication, we split each number into 16-bit
- * pieces, which can easily be multiplied within Javascript's floating-point
+ * pieces, which can easily be multiplied within JavaScript's floating-point
  * representation without overflow or change in sign.
  *
  * @struct

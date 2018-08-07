@@ -325,7 +325,7 @@ function testSetMinHeight() {
 
 
 /**
- * @bug 1649967 This code used to throw a Javascript error.
+ * @bug 1649967 This code used to throw a JavaScript error.
  */
 function testSetMinHeightWithNoIframe() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {

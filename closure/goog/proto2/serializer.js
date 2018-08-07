@@ -133,7 +133,7 @@ goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
     // NB: In order this feature to work, property renaming should be turned off
     // for the respective enums.
     if (goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS && goog.isString(value)) {
-      // enumType is a regular Javascript enum as defined in field's metadata.
+      // enumType is a regular JavaScript enum as defined in field's metadata.
       var enumType = field.getNativeType();
       if (enumType.hasOwnProperty(value)) {
         return enumType[value];

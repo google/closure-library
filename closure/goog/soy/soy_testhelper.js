@@ -290,8 +290,8 @@ example.templateSpoofingSanitizedContentString = function(
     data, opt_sb, opt_injectedData) {
   return makeSanitizedContent(
       'Hello World',
-      // This is to ensure we're using triple-equals against a unique Javascript
-      // object.  For example, in Javascript, consider ({}) == '[Object object]'
+      // This is to ensure we're using triple-equals against a unique JavaScript
+      // object.  For example, in JavaScript, consider ({}) == '[Object object]'
       // is true.
       goog.soy.data.SanitizedContentKind.HTML.toString());
 };

@@ -280,7 +280,7 @@ goog.ds.FastDataNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {!Object} Javascript object representation of this data node.
+ * @return {!Object} JavaScript object representation of this data node.
  */
 goog.ds.FastDataNode.prototype.getJsObject = function() {
   var result = {};
@@ -498,7 +498,7 @@ goog.ds.PrimitiveFastDataNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {*} Javascript object representation of this data node.
+ * @return {*} JavaScript object representation of this data node.
  */
 goog.ds.PrimitiveFastDataNode.prototype.getJsObject = function() {
   return this.value_;
@@ -685,7 +685,7 @@ goog.ds.FastListNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {!Object} Javascript object representation of this data node.
+ * @return {!Object} JavaScript object representation of this data node.
  */
 goog.ds.FastListNode.prototype.getJsObject = function() {
   var result = [];

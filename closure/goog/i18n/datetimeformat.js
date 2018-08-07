@@ -441,7 +441,7 @@ goog.i18n.DateTimeFormat.prototype.formatEra_ = function(count, date) {
 
 /**
  * Formats Year field according to pattern specified
- *   Javascript Date object seems incapable handling 1BC and
+ *   JavaScript Date object seems incapable handling 1BC and
  *   year before. It can show you year 0 which does not exists.
  *   following we just keep consistent with javascript's
  *   toString method. But keep in mind those things should be
@@ -470,7 +470,7 @@ goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
 
 /**
  * Formats Year (Week of Year) field according to pattern specified
- *   Javascript Date object seems incapable handling 1BC and
+ *   JavaScript Date object seems incapable handling 1BC and
  *   year before. It can show you year 0 which does not exists.
  *   following we just keep consistent with javascript's
  *   toString method. But keep in mind those things should be

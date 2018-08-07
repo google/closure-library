@@ -486,7 +486,7 @@ function testHtmlSanitizeXSS() {
   xssHtml = '<BGSOUND SRC="javascript:alert(window);">';
   assertSanitizedHtml(xssHtml, safeHtml);
 
-  // & Javascript includes
+  // & JavaScript includes
   // Browser support: netscape 4
   safeHtml = '<br size="&amp;{alert(window)}" />';
   xssHtml = '<BR SIZE="&{alert(window)}">';

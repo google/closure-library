@@ -238,7 +238,7 @@ function testJsInjection() {
 
 function testJsInjectionDotIsBlind() {
   assertLinkify(
-      'Javascript injection using regex . blindness to newline chars',
+      'JavaScript injection using regex . blindness to newline chars',
       '<script>malicious_code()<\/script>\nVery nice url: www.google.com',
       '&lt;script&gt;malicious_code()&lt;/script&gt;\nVery nice url: ' +
           '<a href="http://www.google.com">www.google.com<\/a>');
@@ -246,7 +246,7 @@ function testJsInjectionDotIsBlind() {
 
 function testJsInjectionWithUnicodeLineReturn() {
   assertLinkify(
-      'Javascript injection using regex . blindness to newline chars with a ' +
+      'JavaScript injection using regex . blindness to newline chars with a ' +
           'unicode newline character.',
       '<script>malicious_code()<\/script>\u2029Vanilla text',
       '&lt;script&gt;malicious_code()&lt;/script&gt;\u2029Vanilla text');
