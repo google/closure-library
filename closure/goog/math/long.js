@@ -53,13 +53,13 @@ goog.require('goog.reflect');
  */
 goog.math.Long = function(low, high) {
   /**
-   * @type {number}
+   * @const {number}
    * @private
    */
   this.low_ = low | 0;  // force into 32 signed bits.
 
   /**
-   * @type {number}
+   * @const {number}
    * @private
    */
   this.high_ = high | 0;  // force into 32 signed bits.
@@ -335,35 +335,18 @@ goog.math.Long.isStringInRange = function(str, opt_radix) {
 
 /**
  * Number used repeated below in calculations.  This must appear before the
- * first call to any from* function below.
- * @type {number}
+ * first call to any from* function above.
+ * @const {number}
  * @private
  */
-goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
+goog.math.Long.TWO_PWR_32_DBL_ = 0x100000000;
 
 
 /**
- * @type {number}
+ * @const {number}
  * @private
  */
-goog.math.Long.TWO_PWR_32_DBL_ =
-    goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_64_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_32_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_63_DBL_ = goog.math.Long.TWO_PWR_64_DBL_ / 2;
-
+goog.math.Long.TWO_PWR_63_DBL_ = 0x8000000000000000;
 
 /**
  * @return {!goog.math.Long}
