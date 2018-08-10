@@ -486,7 +486,7 @@ function testHtmlSanitizeXSS() {
   xssHtml = '<BGSOUND SRC="javascript:alert(window);">';
   assertSanitizedHtml(xssHtml, safeHtml);
 
-  // & Javascript includes
+  // & JavaScript includes
   // Browser support: netscape 4
   safeHtml = '<br size="&amp;{alert(window)}" />';
   xssHtml = '<BR SIZE="&{alert(window)}">';
@@ -811,10 +811,11 @@ function testDataAttributes() {
   html = '<div data-goomoji="test" data-other="xyz">Testing</div>';
   var expectedHtml = '<div data-goomoji="test">Testing</div>';
   assertSanitizedHtml(
-      html, expectedHtml, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                              .allowCssStyles()
-                              .allowDataAttributes(['data-goomoji'])
-                              .build());
+      html, expectedHtml,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .allowDataAttributes(['data-goomoji'])
+          .build());
 }
 
 
@@ -872,9 +873,10 @@ function testOnlyAllowTags() {
           'src="http://wherever.com">' +
           '<a href=" http://www.google.com">hi</a>' +
           '<br>Test.<hr><div align="right">Test</div></div>',
-      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                  .onlyAllowTags(['bR', 'a', 'DIV'])
-                  .build());
+      result,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowTags(['bR', 'a', 'DIV'])
+          .build());
 }
 
 
@@ -905,11 +907,12 @@ function testCustomNamePolicyIsApplied() {
       '<img id="bar" name=foo class="c d" ' +
           'src="http://wherever.com"><a href=" http://www.google.com">hi</a>' +
           '<a href=ftp://whatever.com>another</a>',
-      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                  .withCustomNamePolicy(function(name) {
-                    return 'myOwnPrefix-' + name;
-                  })
-                  .build());
+      result,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNamePolicy(function(name) {
+            return 'myOwnPrefix-' + name;
+          })
+          .build());
 }
 
 
@@ -922,11 +925,12 @@ function testCustomTokenPolicyIsApplied() {
       '<img id="bar" name=foo class="c d" ' +
           'src="http://wherever.com"><a href=" http://www.google.com">hi</a>' +
           '<a href=ftp://whatever.com>another</a>',
-      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                  .withCustomTokenPolicy(function(name) {
-                    return 'myOwnPrefix-' + name;
-                  })
-                  .build());
+      result,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomTokenPolicy(function(name) {
+            return 'myOwnPrefix-' + name;
+          })
+          .build());
 }
 
 
@@ -944,7 +948,9 @@ function testMultipleCustomPoliciesAreApplied() {
           .withCustomTokenPolicy(function(token) {
             return 'plarpalarp-' + token;
           })
-          .withCustomNamePolicy(function(name) { return 'larlarlar-' + name; })
+          .withCustomNamePolicy(function(name) {
+            return 'larlarlar-' + name;
+          })
           .build());
 }
 
@@ -959,7 +965,9 @@ function testNonTrivialCustomPolicy() {
       result,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
           .withCustomNamePolicy(function testNamesMustBeginWithTheLetterA(
-              name) { return name.charAt(0) != 'A' ? null : name; })
+              name) {
+            return name.charAt(0) != 'A' ? null : name;
+          })
           .build());
 }
 
@@ -976,9 +984,10 @@ function testNetworkRequestUrlsAllowed() {
           '<img alt="test" src="//wherever.com">' +
           '<a href=" http://www.google.com">hi</a>' +
           '<a href=ftp://whatever.com>another</a>',
-      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                  .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
-                  .build());
+      result,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNetworkRequestUrlPolicy(goog.html.SafeUrl.sanitize)
+          .build());
 }
 
 
@@ -987,12 +996,13 @@ function testCustomNRUrlPolicyMustNotContainParameters() {
   assertSanitizedHtml(
       '<img id="bar" class="c d" src="http://wherever.com">' +
           '<img src="https://www.bank.com/withdraw?amount=onebeeeelion">',
-      result, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                  .withCustomNetworkRequestUrlPolicy(function(url) {
-                    return url.match(/\?/) ? null :
-                        goog.html.testing.newSafeUrlForTest(url);
-                  })
-                  .build());
+      result,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomNetworkRequestUrlPolicy(function(url) {
+            return url.match(/\?/) ? null :
+                                     goog.html.testing.newSafeUrlForTest(url);
+          })
+          .build());
 }
 
 
@@ -1109,9 +1119,10 @@ function testUriSchemesOnNonNetworkRequestUrls() {
       '<a href="nope">something</a>' +
       '<a>lol</a>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .withCustomUrlPolicy(goog.html.SafeUrl.sanitize)
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .withCustomUrlPolicy(goog.html.SafeUrl.sanitize)
+          .build());
 }
 
 
@@ -1133,7 +1144,9 @@ function testOverridingBookkeepingAttribute() {
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
-          .withCustomTokenPolicy(function(token) { return token; })
+          .withCustomTokenPolicy(function(token) {
+            return token;
+          })
           .build());
 }
 
@@ -1154,9 +1167,10 @@ function testOriginalTag() {
   var input = '<p>Line1<magic></magic></p>';
   var expected = '<p>Line1<span ' + otag('magic') + '></span></p>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .addOriginalTagNames()
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .addOriginalTagNames()
+          .build());
 }
 
 
@@ -1166,18 +1180,19 @@ function testOriginalTagOverwrite() {
   var expected = '<div>hello<span ' + otag('a:b') + ' id="HI" class="hnn a">' +
       'qqq</span></div>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .addOriginalTagNames()
-                           .withCustomTokenPolicy(function(token, hints) {
-                             var an = hints.attributeName;
-                             if (an === 'id' && token === 'hi') {
-                               return 'HI';
-                             } else if (an === 'class') {
-                               return token;
-                             }
-                             return null;
-                           })
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .addOriginalTagNames()
+          .withCustomTokenPolicy(function(token, hints) {
+            var an = hints.attributeName;
+            if (an === 'id' && token === 'hi') {
+              return 'HI';
+            } else if (an === 'class') {
+              return token;
+            }
+            return null;
+          })
+          .build());
 }
 
 
@@ -1285,8 +1300,7 @@ function testInlineStyleRules_specificity() {
 
 function testInlineStyleRules_required() {
   assertThrows(function() {
-    new goog.html.sanitizer.HtmlSanitizer.Builder()
-        .inlineStyleRules();
+    new goog.html.sanitizer.HtmlSanitizer.Builder().inlineStyleRules();
   });
 }
 
@@ -1370,9 +1384,10 @@ function testOriginalTagClobber() {
   var input = '<a:b data-sanitizer-original-tag="xss"></a:b>';
   var expected = '<span ' + otag('a:b') + '></span>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .addOriginalTagNames()
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .addOriginalTagNames()
+          .build());
 }
 
 
@@ -1487,9 +1502,10 @@ function testOnlyAllowEmptyAttrList() {
       '<a target="_blank">c</a>';
   var expected = '<p>b</p><a>c</a>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .onlyAllowAttributes([])
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([])
+          .build());
 }
 
 
@@ -1517,18 +1533,19 @@ function testOnlyAllowAttributeLabelForA() {
   var input = '<a label="3" aria-checked="4">fff</a><img label="3" />';
   var expected = '<a label="3">fff</a><img />';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .onlyAllowAttributes([{
-                             tagName: '*',
-                             attributeName: 'label',
-                             policy: function(value, hints) {
-                               if (hints.tagName !== 'a') {
-                                 return null;
-                               }
-                               return value;
-                             }
-                           }])
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([{
+            tagName: '*',
+            attributeName: 'label',
+            policy: function(value, hints) {
+              if (hints.tagName !== 'a') {
+                return null;
+              }
+              return value;
+            }
+          }])
+          .build());
 }
 
 
@@ -1536,16 +1553,17 @@ function testOnlyAllowAttributePolicy() {
   var input = '<img alt="yes" /><img alt="no" />';
   var expected = '<img alt="yes" /><img />';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .onlyAllowAttributes([{
-                             tagName: '*',
-                             attributeName: 'alt',
-                             policy: function(value, hints) {
-                               assertEquals(hints.attributeName, 'alt');
-                               return value === 'yes' ? value : null;
-                             }
-                           }])
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([{
+            tagName: '*',
+            attributeName: 'alt',
+            policy: function(value, hints) {
+              assertEquals(hints.attributeName, 'alt');
+              return value === 'yes' ? value : null;
+            }
+          }])
+          .build());
 }
 
 
@@ -1553,16 +1571,17 @@ function testOnlyAllowAttributePolicyPipe1() {
   var input = '<a target="hello">b</a>';
   var expected = '<a target="_blank">b</a>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .onlyAllowAttributes([{
-                             tagName: 'a',
-                             attributeName: 'target',
-                             policy: function(value, hints) {
-                               assertEquals(hints.attributeName, 'target');
-                               return '_blank';
-                             }
-                           }])
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([{
+            tagName: 'a',
+            attributeName: 'target',
+            policy: function(value, hints) {
+              assertEquals(hints.attributeName, 'target');
+              return '_blank';
+            }
+          }])
+          .build());
 }
 
 
@@ -1570,16 +1589,17 @@ function testOnlyAllowAttributePolicyPipe2() {
   var input = '<a target="hello">b</a>';
   var expected = '<a>b</a>';
   assertSanitizedHtml(
-      input, expected, new goog.html.sanitizer.HtmlSanitizer.Builder()
-                           .onlyAllowAttributes([{
-                             tagName: 'a',
-                             attributeName: 'target',
-                             policy: function(value, hints) {
-                               assertEquals(hints.attributeName, 'target');
-                               return 'nope';
-                             }
-                           }])
-                           .build());
+      input, expected,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .onlyAllowAttributes([{
+            tagName: 'a',
+            attributeName: 'target',
+            policy: function(value, hints) {
+              assertEquals(hints.attributeName, 'target');
+              return 'nope';
+            }
+          }])
+          .build());
 }
 
 
@@ -1594,11 +1614,9 @@ function testOnlyAllowAttributeSpecificPolicyThrows() {
 
 function testOnlyAllowAttributeGenericPolicyThrows() {
   assertThrows(function() {
-    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([{
-      tagName: '*',
-      attributeName: 'target',
-      policy: goog.functions.identity
-    }]);
+    new goog.html.sanitizer.HtmlSanitizer.Builder().onlyAllowAttributes([
+      {tagName: '*', attributeName: 'target', policy: goog.functions.identity}
+    ]);
   });
 }
 

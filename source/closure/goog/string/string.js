@@ -583,7 +583,6 @@ goog.string.newLineToBr = function(str, opt_xml) {
  * @return {string} An escaped copy of `str`.
  */
 goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
-
   if (opt_isLikelyToContainHtmlChars) {
     str = str.replace(goog.string.AMP_RE_, '&amp;')
               .replace(goog.string.LT_RE_, '&lt;')
@@ -1226,7 +1225,7 @@ goog.string.buildString = function(var_args) {
 /**
  * Returns a string with at least 64-bits of randomness.
  *
- * Doesn't trust Javascript's random function entirely. Uses a combination of
+ * Doesn't trust JavaScript's random function entirely. Uses a combination of
  * random and current timestamp, and then encodes the string in base-36 to
  * make it shorter.
  *
@@ -1362,7 +1361,7 @@ goog.string.createUniqueString = function() {
  * This function strips whitespace: (toNumber(' 123') === 123)
  * This function accepts scientific notation: (toNumber('1e1') === 10)
  *
- * This is better than Javascript's built-in conversions because, sadly:
+ * This is better than JavaScript's built-in conversions because, sadly:
  *     (Number(' ') === 0) and (parseFloat('123a') === 123)
  *
  * @param {string} str The string to convert.
@@ -1413,8 +1412,9 @@ goog.string.isUpperCamelCase = function(str) {
  * @return {string} The string in camelCase form.
  */
 goog.string.toCamelCase = function(str) {
-  return String(str).replace(
-      /\-([a-z])/g, function(all, match) { return match.toUpperCase(); });
+  return String(str).replace(/\-([a-z])/g, function(all, match) {
+    return match.toUpperCase();
+  });
 };
 
 
@@ -1471,8 +1471,9 @@ goog.string.toTitleCase = function(str, opt_delimiters) {
   delimiters = delimiters ? '|[' + delimiters + ']+' : '';
 
   var regexp = new RegExp('(^' + delimiters + ')([a-z])', 'g');
-  return str.replace(
-      regexp, function(all, p1, p2) { return p1 + p2.toUpperCase(); });
+  return str.replace(regexp, function(all, p1, p2) {
+    return p1 + p2.toUpperCase();
+  });
 };
 
 

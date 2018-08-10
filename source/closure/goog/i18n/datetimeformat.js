@@ -213,8 +213,8 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
         var part = m[0];
         pattern = pattern.substring(part.length);
         if (i == goog.i18n.DateTimeFormat.PartTypes_.QUOTED_STRING) {
-          if (part == "''") {
-            part = "'";  // '' -> '
+          if (part == '\'\'') {
+            part = '\'';  // '' -> '
           } else {
             part = part.substring(
                 1,
@@ -294,9 +294,8 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
     var text = this.patternParts_[i].text;
     if (goog.i18n.DateTimeFormat.PartTypes_.FIELD ==
         this.patternParts_[i].type) {
-      out.push(
-          this.formatField_(
-              text, date, dateForDate, dateForTime, opt_timeZone));
+      out.push(this.formatField_(
+          text, date, dateForDate, dateForTime, opt_timeZone));
     } else {
       out.push(text);
     }
@@ -442,7 +441,7 @@ goog.i18n.DateTimeFormat.prototype.formatEra_ = function(count, date) {
 
 /**
  * Formats Year field according to pattern specified
- *   Javascript Date object seems incapable handling 1BC and
+ *   JavaScript Date object seems incapable handling 1BC and
  *   year before. It can show you year 0 which does not exists.
  *   following we just keep consistent with javascript's
  *   toString method. But keep in mind those things should be
@@ -471,7 +470,7 @@ goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
 
 /**
  * Formats Year (Week of Year) field according to pattern specified
- *   Javascript Date object seems incapable handling 1BC and
+ *   JavaScript Date object seems incapable handling 1BC and
  *   year before. It can show you year 0 which does not exists.
  *   following we just keep consistent with javascript's
  *   toString method. But keep in mind those things should be
@@ -753,9 +752,8 @@ goog.i18n.DateTimeFormat.prototype.formatDate_ = function(count, date) {
  */
 goog.i18n.DateTimeFormat.prototype.formatMinutes_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(
-      goog.string.padNumber(
-          /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
+  return this.localizeNumbers_(goog.string.padNumber(
+      /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
 };
 
 
@@ -770,9 +768,8 @@ goog.i18n.DateTimeFormat.prototype.formatMinutes_ = function(count, date) {
  */
 goog.i18n.DateTimeFormat.prototype.formatSeconds_ = function(count, date) {
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(
-      goog.string.padNumber(
-          /** @type {!goog.date.DateTime} */ (date).getSeconds(), count));
+  return this.localizeNumbers_(goog.string.padNumber(
+      /** @type {!goog.date.DateTime} */ (date).getSeconds(), count));
 };
 
 
@@ -786,8 +783,6 @@ goog.i18n.DateTimeFormat.prototype.formatSeconds_ = function(count, date) {
  * @private
  */
 goog.i18n.DateTimeFormat.prototype.formatWeekOfYear_ = function(count, date) {
-
-
   var weekNum = goog.date.getWeekNumber(
       date.getFullYear(), date.getMonth(), date.getDate(),
       this.dateTimeSymbols_.FIRSTWEEKCUTOFFDAY,

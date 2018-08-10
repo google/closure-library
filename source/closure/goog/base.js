@@ -3921,7 +3921,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   /**
    * Bootstraps the given namespaces and calls the callback once they are
    * available either via goog.require. This is a replacement for using
-   * `goog.require` to bootstrap Closure Javascript. Previously a `goog.require`
+   * `goog.require` to bootstrap Closure JavaScript. Previously a `goog.require`
    * in an HTML file would guarantee that the require'd namespace was available
    * in the next immediate script tag. With ES6 modules this no longer a
    * guarantee.

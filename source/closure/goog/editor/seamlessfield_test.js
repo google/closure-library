@@ -145,8 +145,8 @@ function testIframeHeightGrowsOnWrap() {
       var wrappedIframeHeight = blendedField.getEditableIframe().offsetHeight;
       assertTrue(
           'Wrapped text should cause iframe to grow - initial height: ' +
-              unwrappedIframeHeight + ', wrapped height: ' +
-              wrappedIframeHeight,
+              unwrappedIframeHeight +
+              ', wrapped height: ' + wrappedIframeHeight,
           wrappedIframeHeight > unwrappedIframeHeight);
     } finally {
       blendedField.dispose();
@@ -164,8 +164,9 @@ function testDispatchIframeResizedForWrapperHeight() {
 
     var resizeCalled = false;
     goog.events.listenOnce(
-        blendedField, goog.editor.Field.EventType.IFRAME_RESIZED,
-        function() { resizeCalled = true; });
+        blendedField, goog.editor.Field.EventType.IFRAME_RESIZED, function() {
+          resizeCalled = true;
+        });
 
     try {
       blendedField.makeEditable();
@@ -199,8 +200,9 @@ function testDispatchIframeResizedForBodyHeight() {
 
     var resizeCalled = false;
     goog.events.listenOnce(
-        blendedField, goog.editor.Field.EventType.IFRAME_RESIZED,
-        function() { resizeCalled = true; });
+        blendedField, goog.editor.Field.EventType.IFRAME_RESIZED, function() {
+          resizeCalled = true;
+        });
 
     try {
       blendedField.makeEditable();
@@ -237,8 +239,9 @@ function testDispatchBlur() {
 
     var blurCalled = false;
     goog.events.listenOnce(
-        blendedField, goog.editor.Field.EventType.BLUR,
-        function() { blurCalled = true; });
+        blendedField, goog.editor.Field.EventType.BLUR, function() {
+          blurCalled = true;
+        });
 
     var clearSelection = goog.dom.Range.clearSelection;
     var cleared = false;
@@ -247,7 +250,9 @@ function testDispatchBlur() {
     blendedField.editableDomHelper.getWindow =
         goog.functions.constant(iframe.contentWindow);
     var mockRange = new goog.testing.MockRange();
-    blendedField.getRange = function() { return mockRange; };
+    blendedField.getRange = function() {
+      return mockRange;
+    };
     goog.dom.Range.clearSelection = function(opt_window) {
       clearSelection(opt_window);
       cleared = true;
@@ -290,8 +295,9 @@ function testSetMinHeight() {
 
       var delayedChangeCalled = false;
       goog.events.listen(
-          field, goog.editor.Field.EventType.DELAYEDCHANGE,
-          function() { delayedChangeCalled = true; });
+          field, goog.editor.Field.EventType.DELAYEDCHANGE, function() {
+            delayedChangeCalled = true;
+          });
 
       // Test that min height is obeyed.
       field.setMinHeight(30);
@@ -319,7 +325,7 @@ function testSetMinHeight() {
 
 
 /**
- * @bug 1649967 This code used to throw a Javascript error.
+ * @bug 1649967 This code used to throw a JavaScript error.
  */
 function testSetMinHeightWithNoIframe() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
@@ -343,13 +349,15 @@ function testStartChangeEvents() {
 
       var changeCalled = false;
       goog.events.listenOnce(
-          field, goog.editor.Field.EventType.CHANGE,
-          function() { changeCalled = true; });
+          field, goog.editor.Field.EventType.CHANGE, function() {
+            changeCalled = true;
+          });
 
       var delayedChangeCalled = false;
       goog.events.listenOnce(
-          field, goog.editor.Field.EventType.CHANGE,
-          function() { delayedChangeCalled = true; });
+          field, goog.editor.Field.EventType.CHANGE, function() {
+            delayedChangeCalled = true;
+          });
 
       field.stopChangeEvents(true, true);
       if (field.changeTimerGecko_) {
@@ -375,8 +383,9 @@ function testManipulateDom() {
 
   var delayedChangeCalled = 0;
   goog.events.listen(
-      editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
-      function() { delayedChangeCalled++; });
+      editableField, goog.editor.Field.EventType.DELAYEDCHANGE, function() {
+        delayedChangeCalled++;
+      });
 
   assertFalse(editableField.isLoaded());
   editableField.manipulateDom(goog.nullFunction);

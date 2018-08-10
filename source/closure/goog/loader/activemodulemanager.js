@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview A singleton interface for managing Javascript code modules.
+ * @fileoverview A singleton interface for managing JavaScript code modules.
  */
 
 goog.module('goog.loader.activeModuleManager');

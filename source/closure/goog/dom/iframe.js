@@ -164,7 +164,7 @@ goog.dom.iframe.writeSafeContent = function(iframe, content) {
  * Creates a same-domain iframe containing preloaded content.
  *
  * This is primarily useful for DOM sandboxing.  One use case is to embed
- * a trusted Javascript app with potentially conflicting CSS styles.  The
+ * a trusted JavaScript app with potentially conflicting CSS styles.  The
  * second case is to reduce the cost of layout passes by the browser -- for
  * example, you can perform sandbox sizing of characters in an iframe while
  * manipulating a heavy DOM in the main window.  The iframe and parent frame
@@ -186,9 +186,10 @@ goog.dom.iframe.createWithContent = function(
   var domHelper = goog.dom.getDomHelper(parentElement);
 
   var content = goog.html.SafeHtml.create(
-      'html', {}, goog.html.SafeHtml.concat(
-                      goog.html.SafeHtml.create('head', {}, opt_headContents),
-                      goog.html.SafeHtml.create('body', {}, opt_bodyContents)));
+      'html', {},
+      goog.html.SafeHtml.concat(
+          goog.html.SafeHtml.create('head', {}, opt_headContents),
+          goog.html.SafeHtml.create('body', {}, opt_bodyContents)));
   if (!opt_quirks) {
     content =
         goog.html.SafeHtml.concat(goog.html.SafeHtml.DOCTYPE_HTML, content);

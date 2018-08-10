@@ -49,7 +49,7 @@ goog.require('goog.userAgent.product');
 
 
 /**
- * A class that loads Javascript modules.
+ * A class that loads JavaScript modules.
  * @constructor
  * @extends {goog.events.EventTarget}
  * @implements {goog.module.AbstractModuleLoader}

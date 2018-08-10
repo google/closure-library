@@ -1625,3 +1625,15 @@ function testBase36ToString() {
 function testBaseDefaultFromString() {
   assertEquals('0', goog.math.Long.fromString('0xfoobar').toString());
 }
+
+function testSafeInteger() {
+  assertTrue(goog.math.Long.fromNumber(1).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(0).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(-1).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(Math.pow(2, 32)).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(-Math.pow(2, 32)).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(Math.pow(2, 53) - 1).isSafeInteger());
+  assertTrue(goog.math.Long.fromNumber(-Math.pow(2, 53) + 1).isSafeInteger());
+  assertFalse(goog.math.Long.fromNumber(Math.pow(2, 53)).isSafeInteger());
+  assertFalse(goog.math.Long.fromNumber(-Math.pow(2, 53)).isSafeInteger());
+}

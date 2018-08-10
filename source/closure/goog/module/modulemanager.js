@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview A default implementation for managing Javascript code modules.
+ * @fileoverview A default implementation for managing JavaScript code modules.
  * @enhanceable
  *
  */

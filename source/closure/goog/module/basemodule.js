@@ -28,7 +28,7 @@ goog.require('goog.module');
 
 
 /**
- * A basic module object that represents a module of Javascript code that can
+ * A basic module object that represents a module of JavaScript code that can
  * be dynamically loaded.
  *
  * @constructor

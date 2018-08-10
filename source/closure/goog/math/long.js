@@ -33,9 +33,9 @@ goog.require('goog.reflect');
  *
  * The internal representation of a long is the two given signed, 32-bit values.
  * We use 32-bit pieces because these are the size of integers on which
- * Javascript performs bit-operations.  For operations like addition and
+ * JavaScript performs bit-operations.  For operations like addition and
  * multiplication, we split each number into 16-bit pieces, which can easily be
- * multiplied within Javascript's floating-point representation without overflow
+ * multiplied within JavaScript's floating-point representation without overflow
  * or change in sign.
  *
  * In the algorithms below, we frequently reduce the negative case to the
@@ -53,13 +53,13 @@ goog.require('goog.reflect');
  */
 goog.math.Long = function(low, high) {
   /**
-   * @type {number}
+   * @const {number}
    * @private
    */
   this.low_ = low | 0;  // force into 32 signed bits.
 
   /**
-   * @type {number}
+   * @const {number}
    * @private
    */
   this.high_ = high | 0;  // force into 32 signed bits.
@@ -335,35 +335,18 @@ goog.math.Long.isStringInRange = function(str, opt_radix) {
 
 /**
  * Number used repeated below in calculations.  This must appear before the
- * first call to any from* function below.
- * @type {number}
+ * first call to any from* function above.
+ * @const {number}
  * @private
  */
-goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
+goog.math.Long.TWO_PWR_32_DBL_ = 0x100000000;
 
 
 /**
- * @type {number}
+ * @const {number}
  * @private
  */
-goog.math.Long.TWO_PWR_32_DBL_ =
-    goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_64_DBL_ =
-    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_32_DBL_;
-
-
-/**
- * @type {number}
- * @private
- */
-goog.math.Long.TWO_PWR_63_DBL_ = goog.math.Long.TWO_PWR_64_DBL_ / 2;
-
+goog.math.Long.TWO_PWR_63_DBL_ = 0x8000000000000000;
 
 /**
  * @return {!goog.math.Long}
@@ -412,7 +395,9 @@ goog.math.Long.getMaxValue = function() {
 goog.math.Long.getMinValue = function() {
   return goog.reflect.cache(
       goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MIN_VALUE,
-      function() { return goog.math.Long.fromBits(0, 0x80000000 | 0); });
+      function() {
+        return goog.math.Long.fromBits(0, 0x80000000 | 0);
+      });
 };
 
 
@@ -423,7 +408,9 @@ goog.math.Long.getMinValue = function() {
 goog.math.Long.getTwoPwr24 = function() {
   return goog.reflect.cache(
       goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.TWO_PWR_24,
-      function() { return goog.math.Long.fromInt(1 << 24); });
+      function() {
+        return goog.math.Long.fromInt(1 << 24);
+      });
 };
 
 
@@ -441,16 +428,17 @@ goog.math.Long.prototype.toNumber = function() {
 
 
 /**
- * @return {boolean} if can be exactly represented using number.
- * @private
+ * @return {boolean} if can be exactly represented using number (i.e. abs(value)
+ *     < 2^53).
  */
-goog.math.Long.prototype.isSafeInteger_ = function() {
-  // Unsafe bits are the top 12 bits
-  var unsafeBits = this.high_ & 0xfff00000;
-  // If unsafe bits are all 0s or all 1s then that means the number
-  // representation doesn't need those values and fits into remaining 52 bit
-  // mantissa hence no precision is lost.
-  return unsafeBits == 0 || unsafeBits == 0xfff00000;
+goog.math.Long.prototype.isSafeInteger = function() {
+  var topBits = this.high_ & 0xffe00000;
+  // If topBits are all 0s, then the number is between [0, 2^53-1]
+  return topBits == 0
+      // If topBits are all 1s, then the number is between [-1, -2^53]
+      || (topBits == (0xffe00000 | 0)
+          // and exclude -2^53
+          && !(this.low_ == 0 && this.high_ == (0xffe00000 | 0)));
 };
 
 /**
@@ -469,7 +457,7 @@ goog.math.Long.prototype.toString = function(opt_radix) {
   }
 
   // We can avoid very expensive division based code path for some common cases.
-  if (this.isSafeInteger_()) {
+  if (this.isSafeInteger()) {
     var asNumber = this.toNumber();
     // Shortcutting for radix 10 (common case) to avoid boxing via toString:
     // https://jsperf.com/tostring-vs-vs-if
