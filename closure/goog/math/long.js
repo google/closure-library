@@ -428,15 +428,17 @@ goog.math.Long.prototype.toNumber = function() {
 
 
 /**
- * @return {boolean} if can be exactly represented using number.
+ * @return {boolean} if can be exactly represented using number (i.e. abs(value)
+ *     < 2^53).
  */
 goog.math.Long.prototype.isSafeInteger = function() {
-  // Unsafe bits are the top 11 bits
-  var unsafeBits = this.high_ & 0xffe00000;
-  // If unsafe bits are all 0s or all 1s then that means the number
-  // representation doesn't need those values and fits into remaining 52 bit
-  // mantissa plus the sign bit hence no precision is lost.
-  return unsafeBits == 0 || unsafeBits == (0xffe00000 | 0);
+  var topBits = this.high_ & 0xffe00000;
+  // If topBits are all 0s, then the number is between [0, 2^53-1]
+  return topBits == 0
+      // If topBits are all 1s, then the number is between [-1, -2^53]
+      || (topBits == (0xffe00000 | 0)
+          // and exclude -2^53
+          && !(this.low_ == 0 && this.high_ == (0xffe00000 | 0)));
 };
 
 /**
