@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @license
  * Copyright 2018 The Closure Library Authors. All Rights Reserved.

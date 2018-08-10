@@ -19,8 +19,8 @@
     "test": "test"
   },
   "bin": {
-    "closure-make-deps": "node ./bin/closuremakedeps.js",
-    "get-js-version": "node ./bin/getjsversion.js"
+    "closure-make-deps": "bin/closuremakedeps.js",
+    "get-js-version": "bin/getjsversion.js"
   },
   "scripts": {
     "test": "./node_modules/jasmine/bin/jasmine.js",
