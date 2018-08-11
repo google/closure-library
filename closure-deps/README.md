@@ -1,6 +1,3 @@
-This is a work in progress and should be available for install soon, after the
-August Closure Compiler release.
-
 # Closure Dependencies [![Build Status](https://travis-ci.org/google/closure-library.svg?branch=master)](https://travis-ci.org/google/closure-library)
 
 This is a separate utility node package for Closure Library related to
