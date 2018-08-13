@@ -449,6 +449,17 @@ goog.html.SafeUrl.fromTrustedResourceUrl = function(trustedResourceUrl) {
 goog.html.SAFE_URL_PATTERN_ =
     /^(?:(?:https?|mailto|ftp):|[^:/?#]*(?:[/?#]|$))/i;
 
+/**
+ * Public version of goog.html.SAFE_URL_PATTERN_. Updating
+ * goog.html.SAFE_URL_PATTERN_ doesn't seem to be backward compatible.
+ * Namespace is also changed to goog.html.SafeUrl so it can be imported using
+ * goog.require('goog.dom.SafeUrl').
+ *
+ * TODO(bangert): Remove SAFE_URL_PATTERN_
+ * @const {!RegExp}
+ */
+goog.html.SafeUrl.SAFE_URL_PATTERN = goog.html.SAFE_URL_PATTERN_;
+
 
 /**
  * Creates a SafeUrl object from `url`. If `url` is a
