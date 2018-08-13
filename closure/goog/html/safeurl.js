@@ -377,13 +377,19 @@ goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
 
 /**
  * Validates SMS URL `body` parameter, which is optional and should appear at
- * most once and should be percentage-encoded if present.
+ * most once and should be percent-encoded if present. Rejects many malformed
+ * bodies, but may spuriously reject some URLs and does not reject all malformed
+ * sms: URLs.
  *
  * @param {string} smsUrl A sms URL.
  * @return {boolean} Whether SMS URL has a valid `body` parameter if it exists.
  * @private
  */
 goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
+  var hash = smsUrl.indexOf('#');
+  if (hash > 0) {
+    smsUrl = smsUrl.substring(0, hash);
+  }
   var bodyParams = smsUrl.match(/[?&]body=/gi);
   // "body" param is optional
   if (!bodyParams) {
@@ -394,16 +400,16 @@ goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
     return false;
   }
   // Get the encoded `body` parameter value.
-  var bodyValue = smsUrl.match(/[?&]body=([^&]+)/)[1];
+  var bodyValue = smsUrl.match(/[?&]body=([^&]*)/)[1];
   if (!bodyValue) {
     return true;
   }
   try {
-    return goog.string.urlEncode(bodyValue) === bodyValue ||
-        goog.string.urlDecode(bodyValue) !== bodyValue;
+    decodeURIComponent(bodyValue);
   } catch (error) {
     return false;
   }
+  return /^(?:[a-z0-9\-_.~]|%[0-9a-f]{2})+$/i.test(bodyValue);
 };
 
 
