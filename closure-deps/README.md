@@ -65,7 +65,7 @@ This is an in-code example for clarity, but there are also functions to parse
 files rather than strings.
 
 ```javascript
-const {parser, depgraph} = require('google-closure-deps');
+const {parser, depGraph} = require('google-closure-deps');
 
 // A file that provides "goog" is required for any file that references Closure.
 // Usually this is Closure's base.js file.
@@ -77,7 +77,7 @@ const secondFile = parser.parseText(`
 goog.module('second.module');
 const firstModule = goog.require('first.module');
 `, '/second.js').dependency;
-const graph = new depgraph.Graph([goog, firstFile, secondFile]);
+const graph = new depGraph.Graph([goog, firstFile, secondFile]);
 graph.order(secondFile); // [goog, firstFile, secondFile]
 graph.depsBySymbol.get('first.module'); // firstFile
 graph.depsByPath.get('/second.js'); // secondFile
@@ -87,7 +87,7 @@ This also supports parsing ES6 modules now that Closure Library has support for
 them!
 
 ```javascript
-const {parser, depgraph} = require('google-closure-deps');
+const {parser, depGraph} = require('google-closure-deps');
 
 // A file that provides "goog" is required for any file that references Closure.
 // Usually this is Closure's base.js file.
@@ -109,7 +109,7 @@ goog.module("third.module");
 const firstModule = goog.require("first.module");
 `, '/third.js').dependency;
 
-const graph = new depgraph.Graph([goog, firstFile, secondFile, thirdFile]);
+const graph = new depGraph.Graph([goog, firstFile, secondFile, thirdFile]);
 graph.order(secondFile, thirdFile); // [goog, firstFile, secondFile, thirdFile]
 ```
 
