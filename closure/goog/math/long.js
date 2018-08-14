@@ -216,17 +216,19 @@ goog.math.Long.fromInt = function(value) {
 goog.math.Long.fromNumber = function(value) {
   if (isNaN(value)) {
     return goog.math.Long.getZero();
-  } else if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
-    return goog.math.Long.getMinValue();
-  } else if (value + 1 >= goog.math.Long.TWO_PWR_63_DBL_) {
-    return goog.math.Long.getMaxValue();
-  } else if (value < 0) {
-    return goog.math.Long.fromNumber(-value).negate();
-  } else {
-    return new goog.math.Long(
-        (value % goog.math.Long.TWO_PWR_32_DBL_) | 0,
-        (value / goog.math.Long.TWO_PWR_32_DBL_) | 0);
   }
+  if (value < 0) {
+    if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
+      return goog.math.Long.getMinValue();
+    }
+    return goog.math.Long.fromNumber(-value).negate();
+  }
+  // Max possible non-overflown value: 0x7ffffffffffffc00
+  if (value >= goog.math.Long.TWO_PWR_63_DBL_) {
+    return goog.math.Long.getMaxValue();
+  }
+  // Only lower 32 bits will be kept by constructor.
+  return new goog.math.Long(value, value / goog.math.Long.TWO_PWR_32_DBL_);
 };
 
 
@@ -775,40 +777,39 @@ goog.math.Long.prototype.multiply = function(other) {
 goog.math.Long.prototype.div = function(other) {
   if (other.isZero()) {
     throw new Error('division by zero');
-  } else if (this.isZero()) {
-    return goog.math.Long.getZero();
   }
-
-  if (this.equals(goog.math.Long.getMinValue())) {
-    if (other.equals(goog.math.Long.getOne()) ||
-        other.equals(goog.math.Long.getNegOne())) {
-      return goog.math.Long.getMinValue();  // recall -MIN_VALUE == MIN_VALUE
-    } else if (other.equals(goog.math.Long.getMinValue())) {
-      return goog.math.Long.getOne();
-    } else {
+  if (this.isNegative()) {
+    if (this.equals(goog.math.Long.getMinValue())) {
+      if (other.equals(goog.math.Long.getOne()) ||
+          other.equals(goog.math.Long.getNegOne())) {
+        return goog.math.Long.getMinValue();  // recall -MIN_VALUE == MIN_VALUE
+      }
+      if (other.equals(goog.math.Long.getMinValue())) {
+        return goog.math.Long.getOne();
+      }
       // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
       var halfThis = this.shiftRight(1);
       var approx = halfThis.div(other).shiftLeft(1);
       if (approx.equals(goog.math.Long.getZero())) {
         return other.isNegative() ? goog.math.Long.getOne() :
                                     goog.math.Long.getNegOne();
-      } else {
-        var rem = this.subtract(other.multiply(approx));
-        var result = approx.add(rem.div(other));
-        return result;
       }
+      var rem = this.subtract(other.multiply(approx));
+      var result = approx.add(rem.div(other));
+      return result;
     }
-  } else if (other.equals(goog.math.Long.getMinValue())) {
-    return goog.math.Long.getZero();
-  }
-
-  if (this.isNegative()) {
     if (other.isNegative()) {
       return this.negate().div(other.negate());
-    } else {
-      return this.negate().div(other).negate();
     }
-  } else if (other.isNegative()) {
+    return this.negate().div(other).negate();
+  }
+  if (this.isZero()) {
+    return goog.math.Long.getZero();
+  }
+  if (other.isNegative()) {
+    if (other.equals(goog.math.Long.getMinValue())) {
+      return goog.math.Long.getZero();
+    }
     return this.div(other.negate()).negate();
   }
 
