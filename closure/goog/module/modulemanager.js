@@ -575,7 +575,12 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
   var idsToLoadImmediately = this.processModulesForLoad_(ids);
 
   goog.log.info(this.logger_, 'Loading module(s): ' + idsToLoadImmediately);
-  this.loadingModuleIds_ = idsToLoadImmediately;
+
+  if (this.concurrentLoadingEnabled_) {
+    goog.array.extend(this.loadingModuleIds_, idsToLoadImmediately);
+  } else {
+    this.loadingModuleIds_ = idsToLoadImmediately;
+  }
 
   if (this.batchModeEnabled_) {
     this.requestedLoadingModuleIds_ = ids;
@@ -626,12 +631,15 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
  * @private
  */
 goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
-  for (var i = 0; i < ids.length; i++) {
-    var moduleInfo = this.moduleInfoMap[ids[i]];
+  ids = goog.array.filter(ids, (id) => {
+    let moduleInfo = this.moduleInfoMap[id];
     if (moduleInfo.isLoaded()) {
-      throw new Error('Module already loaded: ' + ids[i]);
+      goog.global.setTimeout(
+          () => new Error('Module already loaded: ' + id), 0);
+      return false;
     }
-  }
+    return true;
+  });
 
   // Build a list of the ids of this module and any of its not-yet-loaded
   // prerequisite modules in dependency order.
