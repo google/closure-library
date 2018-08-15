@@ -434,11 +434,11 @@ goog.math.Long.prototype.toNumber = function() {
  *     < 2^53).
  */
 goog.math.Long.prototype.isSafeInteger = function() {
-  var topBits = this.high_ & 0xffe00000;
-  // If topBits are all 0s, then the number is between [0, 2^53-1]
-  return topBits == 0
-      // If topBits are all 1s, then the number is between [-1, -2^53]
-      || (topBits == (0xffe00000 | 0)
+  var top11Bits = this.high_ >> 21;
+  // If top11Bits are all 0s, then the number is between [0, 2^53-1]
+  return top11Bits == 0
+      // If top11Bits are all 1s, then the number is between [-1, -2^53]
+      || (top11Bits == -1
           // and exclude -2^53
           && !(this.low_ == 0 && this.high_ == (0xffe00000 | 0)));
 };
