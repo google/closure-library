@@ -520,8 +520,10 @@ goog.math.Long.prototype.getLowBits = function() {
 
 /** @return {number} The low 32-bits as an unsigned value. */
 goog.math.Long.prototype.getLowBitsUnsigned = function() {
-  return (this.low_ >= 0) ? this.low_ :
-                            goog.math.Long.TWO_PWR_32_DBL_ + this.low_;
+  // The right shifting fixes negative values in the case when
+  // intval >= 2^31; for more details see
+  // https://github.com/google/closure-library/pull/498
+  return this.low_ >>> 0;
 };
 
 
@@ -633,10 +635,7 @@ goog.math.Long.prototype.compare = function(other) {
     if (this.low_ == other.low_) {
       return 0;
     }
-    // Invert a sign bit to compare as unsigned.
-    return (this.low_ ^ (0x80000000 | 0)) > (other.low_ ^ (0x80000000 | 0)) ?
-        1 :
-        -1;
+    return this.getLowBitsUnsigned() > other.getLowBitsUnsigned() ? 1 : -1;
   }
   return this.high_ > other.high_ ? 1 : -1;
 };
