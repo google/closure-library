@@ -193,7 +193,7 @@ class ModuleResolver {
 class PathModuleResolver {
   /** @override */
   resolve(fromPath, importSpec) {
-    return path.resolve(path.dirname(fromPath), importSpec);
+    return path.join(path.dirname(fromPath), importSpec);
   }
 }
 
@@ -231,7 +231,8 @@ class Graph {
       if (this.depsByPath.has(dep.path)) {
         throw new Error('File registered twice? ' + dep.path);
       }
-      this.depsByPath.set(dep.path, dep);
+      this.depsByPath.set(
+          path.join(path.dirname(dep.path), path.basename(dep.path)), dep);
       for (const sym of dep.closureSymbols) {
         const previous = this.depsBySymbol.get(sym);
         if (previous) {
@@ -333,7 +334,8 @@ class Graph {
   resolve_(i) {
     return i instanceof GoogRequire ?
         this.depsBySymbol.get(i.symOrPath) :
-        this.depsByPath.get(i.from.path);
+        this.depsByPath.get(
+            this.moduleResolver.resolve(i.from.path, i.symOrPath));
   }
 
   /**
