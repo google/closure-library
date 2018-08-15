@@ -333,8 +333,7 @@ class Graph {
   resolve_(i) {
     return i instanceof GoogRequire ?
         this.depsBySymbol.get(i.symOrPath) :
-        this.depsByPath.get(
-            this.moduleResolver.resolve(i.from.path, i.symOrPath));
+        this.depsByPath.get(i.from.path);
   }
 
   /**
