@@ -243,6 +243,15 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
 
 
 /**
+ * Gets minimum number of fraction digits.
+ * @return {number} The number of minimum fraction digits.
+ */
+goog.i18n.NumberFormat.prototype.getMinimumFractionDigits = function() {
+  return this.minimumFractionDigits_;
+};
+
+
+/**
  * Sets maximum number of fraction digits.
  * @param {number} max the maximum.
  * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
@@ -256,6 +265,14 @@ goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
   return this;
 };
 
+
+/**
+ * Gets maximum number of fraction digits.
+ * @return {number} The number of maximum fraction digits.
+ */
+goog.i18n.NumberFormat.prototype.getMaximumFractionDigits = function() {
+  return this.maximumFractionDigits_;
+};
 
 /**
  * Sets number of significant digits to show. Only fractions will be rounded.
