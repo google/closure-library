@@ -193,7 +193,7 @@ class ModuleResolver {
 class PathModuleResolver {
   /** @override */
   resolve(fromPath, importSpec) {
-    return path.join(path.dirname(fromPath), importSpec);
+    return path.resolve(path.dirname(fromPath), importSpec);
   }
 }
 
@@ -232,7 +232,7 @@ class Graph {
         throw new Error('File registered twice? ' + dep.path);
       }
       this.depsByPath.set(
-          path.join(path.dirname(dep.path), path.basename(dep.path)), dep);
+          path.join(dep.path, dep);
       for (const sym of dep.closureSymbols) {
         const previous = this.depsBySymbol.get(sym);
         if (previous) {
