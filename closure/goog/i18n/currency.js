@@ -398,6 +398,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'BYN': [50, '\u0440.', 'BYN'],
   'BYR': [48, '\u0440.', 'BYR'],
   'BZD': [2, '$', 'BZ$'],
+  'CLF': [4, 'UF', 'CLF'],
   'CNH': [2, '¥', 'RMB¥'],
   'CUC': [1, '$', 'CUC$'],
   'CUP': [2, '$', 'CU$'],
