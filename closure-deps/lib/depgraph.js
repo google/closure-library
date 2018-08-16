@@ -231,8 +231,7 @@ class Graph {
       if (this.depsByPath.has(dep.path)) {
         throw new Error('File registered twice? ' + dep.path);
       }
-      this.depsByPath.set(
-          path.join(dep.path, dep);
+      this.depsByPath.set(dep.path, dep);
       for (const sym of dep.closureSymbols) {
         const previous = this.depsBySymbol.get(sym);
         if (previous) {
