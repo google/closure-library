@@ -463,6 +463,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'SYP': [0, '£', 'SY£'],
   'SZL': [2, 'SZL', 'SZL'],
   'TJS': [2, 'Som', 'TJS'],
+  'TMT': [2, 'm', 'TMT'],
   'TND': [3, 'din', 'DT'],
   'TOP': [2, 'T$', 'T$'],
   'TTD': [2, '$', 'TT$'],
@@ -476,5 +477,6 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'XOF': [0, 'CFA', 'CFA'],
   'XPF': [48, 'FCFP', 'FCFP'],
   'ZMW': [0, 'ZMW', 'ZMW'],
-  'ZWD': [0, '$', 'Z$']
+  'ZWD': [0, '$', 'Z$'],
+  'ZWL': [2, '$', 'ZW$']
 };
