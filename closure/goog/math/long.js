@@ -214,21 +214,21 @@ goog.math.Long.fromInt = function(value) {
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromNumber = function(value) {
-  if (isNaN(value)) {
-    return goog.math.Long.getZero();
-  }
-  if (value < 0) {
+  if (value > 0) {
+    if (value >= goog.math.Long.TWO_PWR_63_DBL_) {
+      return goog.math.Long.getMaxValue();
+    }
+    return new goog.math.Long(value, value / goog.math.Long.TWO_PWR_32_DBL_);
+  } else if (value < 0) {
     if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
       return goog.math.Long.getMinValue();
     }
-    return goog.math.Long.fromNumber(-value).negate();
+    return new goog.math.Long(-value, -value / goog.math.Long.TWO_PWR_32_DBL_)
+        .negate();
+  } else {
+    // NaN or 0.
+    return goog.math.Long.getZero();
   }
-  // Max possible non-overflown value: 0x7ffffffffffffc00
-  if (value >= goog.math.Long.TWO_PWR_63_DBL_) {
-    return goog.math.Long.getMaxValue();
-  }
-  // Only lower 32 bits will be kept by constructor.
-  return new goog.math.Long(value, value / goog.math.Long.TWO_PWR_32_DBL_);
 };
 
 
