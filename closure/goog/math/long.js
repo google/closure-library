@@ -454,10 +454,6 @@ goog.math.Long.prototype.toString = function(opt_radix) {
     throw new Error('radix out of range: ' + radix);
   }
 
-  if (this.isZero()) {
-    return '0';
-  }
-
   // We can avoid very expensive division based code path for some common cases.
   if (this.isSafeInteger()) {
     var asNumber = this.toNumber();
@@ -466,45 +462,33 @@ goog.math.Long.prototype.toString = function(opt_radix) {
     return radix == 10 ? ('' + asNumber) : asNumber.toString(radix);
   }
 
-  if (this.isNegative()) {
-    if (this.equals(goog.math.Long.getMinValue())) {
-      // We need to change the Long value before it can be negated, so we remove
-      // the bottom-most digit in this base and then recurse to do the rest.
-      var radixLong = goog.math.Long.fromNumber(radix);
-      var div = this.div(radixLong);
-      var rem = div.multiply(radixLong).subtract(this);
-      return div.toString(radix) + rem.toInt().toString(radix);
-    } else {
-      return '-' + this.negate().toString(radix);
-    }
+  // We need to split 64bit integer into: `a * radix**safeDigits + b` where
+  // neither `a` nor `b` exceeds 53 bits, meaning that safeDigits can be any
+  // number in a range: [(63 - 53) / log2(radix); 53 / log2(radix)].
+
+  // Other options that need to be benchmarked:
+  //   11..16 - (radix >> 2);
+  //   10..13 - (radix >> 3);
+  //   10..11 - (radix >> 4);
+  var safeDigits = 14 - (radix >> 2);
+
+  var radixPowSafeDigits = Math.pow(radix, safeDigits);
+  var radixToPower = goog.math.Long.fromBits(
+      radixPowSafeDigits, radixPowSafeDigits / goog.math.Long.TWO_PWR_32_DBL_);
+
+  var remDiv = this.div(radixToPower);
+  var val = Math.abs(this.subtract(remDiv.multiply(radixToPower)).toNumber());
+  var digits = radix == 10 ? ('' + val) : val.toString(radix);
+
+  if (digits.length < safeDigits) {
+    // Up to 13 leading 0s we might need to insert as the greatest safeDigits
+    // value is 14 (for radix 2).
+    digits = '0000000000000'.substr(digits.length - safeDigits) + digits;
   }
 
-  // Do several (6) digits each time through the loop, so as to
-  // minimize the calls to the very expensive emulated div.
-  var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 6));
-
-  var rem = this;
-  var result = '';
-  while (true) {
-    var remDiv = rem.div(radixToPower);
-    // The right shifting fixes negative values in the case when
-    // intval >= 2^31; for more details see
-    // https://github.com/google/closure-library/pull/498
-    var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt() >>> 0;
-    var digits = intval.toString(radix);
-
-    rem = remDiv;
-    if (rem.isZero()) {
-      return digits + result;
-    } else {
-      while (digits.length < 6) {
-        digits = '0' + digits;
-      }
-      result = '' + digits + result;
-    }
-  }
+  val = remDiv.toNumber();
+  return (radix == 10 ? val : val.toString(radix)) + digits;
 };
-
 
 /** @return {number} The high 32-bits as a signed value. */
 goog.math.Long.prototype.getHighBits = function() {

@@ -1624,6 +1624,9 @@ function testBase36ToString() {
 
 function testBaseDefaultFromString() {
   assertEquals('0', goog.math.Long.fromString('0xfoobar').toString());
+  assertEquals(
+      '100000000000000000000000000000000000000000000000000000000000001',
+      goog.math.Long.fromBits(1, 0x40000000).toString(2));
 }
 
 function testSafeInteger() {
