@@ -39,12 +39,12 @@ const DependencyType = {
 class Dependency {
   /**
    * @param {!DependencyType} type
-   * @param {string} path
+   * @param {string} filepath
    * @param {!Array<string>} closureSymbols
    * @param {!Array<!Import>} imports
    * @param {string=} language
    */
-  constructor(type, path, closureSymbols, imports, language = "es3") {
+  constructor(type, filepath, closureSymbols, imports, language = 'es3') {
     /** @const */
     this.type = type;
 
@@ -52,7 +52,7 @@ class Dependency {
      * Full path of this file on disc.
      * @const
      */
-    this.path = path;
+    this.path = path.resolve(filepath);
 
     /**
      * Array of Closure symbols this file provides.

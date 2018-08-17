@@ -228,6 +228,26 @@ describe('depgraph', function() {
         expect(new depGraph.Graph([d, r], resolver).order(d)).toEqual([r, d]);
         expect(new depGraph.Graph([r, d], resolver).order(d)).toEqual([r, d]);
       });
+
+      it('ambiguous input path', function() {
+        const d = new depGraph.Dependency(
+            depGraph.DependencyType.ES6_MODULE, 'foo/bar/example.js', [],
+            [new depGraph.Es6Import('../baz/required.js')]);
+        const r = new depGraph.Dependency(
+            depGraph.DependencyType.ES6_MODULE, 'foo/baz/required.js', [], []);
+        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
+        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      });
+
+      it('relative input path', function() {
+        const d = new depGraph.Dependency(
+            depGraph.DependencyType.ES6_MODULE, './foo/bar/example.js', [],
+            [new depGraph.Es6Import('../baz/required.js')]);
+        const r = new depGraph.Dependency(
+            depGraph.DependencyType.ES6_MODULE, './foo/baz/required.js', [], []);
+        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
+        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      });
     });
   });
 
