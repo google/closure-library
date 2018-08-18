@@ -685,33 +685,10 @@ goog.math.Long.prototype.subtract = function(other) {
  */
 goog.math.Long.prototype.multiply = function(other) {
   if (this.isZero()) {
-    return goog.math.Long.getZero();
-  } else if (other.isZero()) {
-    return goog.math.Long.getZero();
+    return this;
   }
-
-  if (this.equals(goog.math.Long.getMinValue())) {
-    return other.isOdd() ? goog.math.Long.getMinValue() :
-                           goog.math.Long.getZero();
-  } else if (other.equals(goog.math.Long.getMinValue())) {
-    return this.isOdd() ? goog.math.Long.getMinValue() :
-                          goog.math.Long.getZero();
-  }
-
-  if (this.isNegative()) {
-    if (other.isNegative()) {
-      return this.negate().multiply(other.negate());
-    } else {
-      return this.negate().multiply(other).negate();
-    }
-  } else if (other.isNegative()) {
-    return this.multiply(other.negate()).negate();
-  }
-
-  // If both longs are small, use float multiplication
-  if (this.lessThan(goog.math.Long.getTwoPwr24()) &&
-      other.lessThan(goog.math.Long.getTwoPwr24())) {
-    return goog.math.Long.fromNumber(this.toNumber() * other.toNumber());
+  if (other.isZero()) {
+    return other;
   }
 
   // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
