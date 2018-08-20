@@ -657,7 +657,7 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
  * @private
  */
 goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
-  var power = Math.pow(10, this.maximumFractionDigits_);
+  var power = parseFloat('1e+' + this.maximumFractionDigits_);
   var shiftedNumber = this.significantDigits_ <= 0 ?
       Math.round(number * power) :
       Math.round(
@@ -667,13 +667,36 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
 
   var intValue, fracValue;
   if (isFinite(shiftedNumber)) {
-    intValue = Math.floor(shiftedNumber / power);
-    fracValue = Math.floor(shiftedNumber - intValue * power);
+    var numberStr = this.removeExp_(shiftedNumber);
+    intValue = Number(this.maximumFractionDigits_ == 0 ?
+                          shiftedNumber :
+                          numberStr.slice(0, -this.maximumFractionDigits_));
+    fracValue = Number(this.maximumFractionDigits_ == 0 ?
+                           0 :
+                           numberStr.slice(-this.maximumFractionDigits_));
   } else {
     intValue = number;
     fracValue = 0;
   }
   return {intValue: intValue, fracValue: fracValue};
+};
+
+
+/**
+ * Formatting large numbers without exponential notation
+ *
+ * @param {number} number The number to format.
+ * @return {string} value without exponential notification
+ *
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.removeExp_ = function(number) {
+  var str = number.toFixed(0);
+  if (str.indexOf('e+') < 0) return str;
+  // if number is in scientific notation, pick (b)ase and (p)ower
+  return str.replace('.', '').split('e+').reduce(function(p, b) {
+    return p + Array(b - p.length + 2).join(0);
+  });
 };
 
 
@@ -1545,9 +1568,8 @@ goog.i18n.NumberFormat.prototype.roundToSignificantDigits_ = function(
     return Math.round(number / point) * point;
   }
 
-  var power = Math.pow(10, magnitude);
-  var shifted = Math.round(number * power);
-  return shifted / power;
+  var shifted = Math.round(number * parseFloat('1e' + magnitude));
+  return parseFloat(shifted + 'e' + (-magnitude));
 };
 
 

@@ -85,7 +85,7 @@ function testVeryBigNumber() {
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   str = fmt.format(1.3456E20);
-  assertTrue(veryBigNumberCompare('134,559,999,999,999,980,000', str));
+  assertTrue(veryBigNumberCompare('134,560,000,000,000,000,000', str));
 
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.PERCENT);
