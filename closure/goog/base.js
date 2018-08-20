@@ -3536,6 +3536,22 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         this, 'constructor', path, relativePath, provides, requires, loadFlags);
     /** @private {?string} */
     this.contents_ = null;
+
+    /**
+     * Whether to lazily make the synchronous XHR (when goog.require'd) or make
+     * the synchronous XHR when initially loading. On FireFox 61 there is a bug
+     * where an ES6 module cannot make a synchronous XHR (rather, it can, but if
+     * it does then no other ES6 modules will load after).
+     *
+     * tl;dr we lazy load due to bugs on older browsers and eager load due to
+     * bugs on newer ones.
+     *
+     * https://bugzilla.mozilla.org/show_bug.cgi?id=1477090
+     *
+     * @private @const {boolean}
+     */
+    this.lazyFetch_ = !goog.inHtmlDocument_() ||
+        !('noModule' in goog.global.document.createElement('script'));
   };
   goog.inherits(goog.TransformedDependency, goog.Dependency);
 
@@ -3567,10 +3583,17 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       return;
     }
 
+
     var isEs6 = this.loadFlags['module'] == goog.ModuleType.ES6;
 
-    function load() {
+    if (!this.lazyFetch_) {
       fetch();
+    }
+
+    function load() {
+      if (dep.lazyFetch_) {
+        fetch();
+      }
 
       if (!dep.contents_) {
         // loadFileSync_ or transform are responsible. Assume they logged an
