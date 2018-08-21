@@ -343,30 +343,46 @@ goog.math.Long.TWO_PWR_32_DBL_ = 0x100000000;
  */
 goog.math.Long.TWO_PWR_63_DBL_ = 0x8000000000000000;
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.ZERO_ = goog.math.Long.fromBits(0, 0);
+
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getZero = function() {
-  return goog.math.Long.getCachedIntValue_(0);
+  return goog.math.Long.ZERO_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.ONE_ = goog.math.Long.fromBits(1, 0);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getOne = function() {
-  return goog.math.Long.getCachedIntValue_(1);
+  return goog.math.Long.ONE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.NEG_ONE_ = goog.math.Long.fromBits(-1, -1);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getNegOne = function() {
-  return goog.math.Long.getCachedIntValue_(-1);
+  return goog.math.Long.NEG_ONE_;
 };
 
 
