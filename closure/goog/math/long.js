@@ -79,13 +79,6 @@ goog.math.Long.IntCache_ = {};
 
 
 /**
- * A cache of the Long representations of common values.
- * @type {!Object<goog.math.Long.ValueCacheId_, !goog.math.Long>}
- * @private
- */
-goog.math.Long.valueCache_ = {};
-
-/**
  * Returns a cached long number representing the given (32-bit) integer value.
  * @param {number} value The 32-bit integer in question.
  * @return {!goog.math.Long} The corresponding Long value.
@@ -378,41 +371,44 @@ goog.math.Long.getNegOne = function() {
 
 
 /**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.MAX_VALUE_ = goog.math.Long.fromBits(0xFFFFFFFF, 0x7FFFFFFF);
+
+/**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getMaxValue = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MAX_VALUE,
-      function() {
-        return goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
-      });
+  return goog.math.Long.MAX_VALUE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.MIN_VALUE_ = goog.math.Long.fromBits(0, 0x80000000);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getMinValue = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MIN_VALUE,
-      function() {
-        return goog.math.Long.fromBits(0, 0x80000000 | 0);
-      });
+  return goog.math.Long.MIN_VALUE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromBits(1 << 24, 0);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getTwoPwr24 = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.TWO_PWR_24,
-      function() {
-        return goog.math.Long.fromInt(1 << 24);
-      });
+  return goog.math.Long.TWO_PWR_24_;
 };
 
 
@@ -933,13 +929,3 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
   }
 };
 
-
-/**
- * @enum {number} Ids of commonly requested Long instances.
- * @private
- */
-goog.math.Long.ValueCacheId_ = {
-  MAX_VALUE: 1,
-  MIN_VALUE: 2,
-  TWO_PWR_24: 6
-};
