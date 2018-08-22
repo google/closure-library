@@ -70,10 +70,25 @@ function testIsRtlLang() {
   assert(goog.i18n.bidi.isRtlLanguage('he'));
   assert(goog.i18n.bidi.isRtlLanguage('fa'));
   assert(goog.i18n.bidi.isRtlLanguage('ckb'));
+  assert(goog.i18n.bidi.isRtlLanguage('ckb-IQ'));
   assert(goog.i18n.bidi.isRtlLanguage('ar-EG'));
   assert(goog.i18n.bidi.isRtlLanguage('az-Arab'));
   assert(goog.i18n.bidi.isRtlLanguage('az-ARAB-IR'));
   assert(goog.i18n.bidi.isRtlLanguage('az_arab_IR'));
+  // New for additions 2018-08-20
+  assert(!goog.i18n.bidi.isRtlLanguage('ff'));
+  assert(!goog.i18n.bidi.isRtlLanguage('ff_Latn'));
+  assert(!goog.i18n.bidi.isRtlLanguage('ff-GN'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff-arab'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff_arab'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff-Arab'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff_Arab'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff-adlm'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff_adlm'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff-Adlm'));
+  assert(goog.i18n.bidi.isRtlLanguage('ff_Adlm'));
+  // Anything written in Adlam script is RTL
+  assert(goog.i18n.bidi.isRtlLanguage('ha_Adlm'));
 }
 
 function testIsLtrChar() {
@@ -83,6 +98,8 @@ function testIsLtrChar() {
   assert(goog.i18n.bidi.isLtrChar(str.charAt(0)));
   assert(!goog.i18n.bidi.isLtrChar(str.charAt(1)));
   assert(goog.i18n.bidi.isLtrChar(str.charAt(2)));
+  assert(!goog.i18n.bidi.isLtrChar(
+      '7'));  // Closure treats ASCII digits as neutral.
 }
 
 function testIsRtlChar() {
@@ -92,11 +109,61 @@ function testIsRtlChar() {
   assert(!goog.i18n.bidi.isRtlChar(str.charAt(0)));
   assert(goog.i18n.bidi.isRtlChar(str.charAt(1)));
   assert(!goog.i18n.bidi.isRtlChar(str.charAt(2)));
+
+  // New for additions 2018-08-20
+  assert(goog.i18n.bidi.isRtlChar('\u0840'));  // Mandaic
+  assert(goog.i18n.bidi.isRtlChar('\u085f'));  // Mandaic
+  assert(goog.i18n.bidi.isRtlChar('\u0800'));  // Samaritan
+  assert(goog.i18n.bidi.isRtlChar('\u083e'));  // Samaritan
+
+  assert(goog.i18n.bidi.isRtlChar('\u0860'));  // Syriac Ext
+  assert(goog.i18n.bidi.isRtlChar('\u086f'));  // Syriac Ext
+
+  // RTL beyond the BMP
+  assert(goog.i18n.bidi.isRtlChar(
+      '\uD83A\uDD03'));                      // Adlam as 2 supplementary points.
+  assert(goog.i18n.bidi.isRtlChar('𞤃'));  // Adlam
+  assert(goog.i18n.bidi.isRtlChar('𞥟'));  // Adlam
+  assert(goog.i18n.bidi.isRtlChar('𞠀'));  // Mende Kikakui
+
+  // Now the additional scripts
+  assert(goog.i18n.bidi.isRtlChar('𐠀'));     // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('𐠿'));     // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('𐠗'));     // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('𐤀'));     // Phoenician
+  assert(goog.i18n.bidi.isRtlChar('𐡀'));     // Imperial Aramaic
+  assert(goog.i18n.bidi.isRtlChar('𐡟'));     // Imperial Aramaic
+  assert(goog.i18n.bidi.isRtlChar('𐩠'));     // Old South Arabian
+  assert(goog.i18n.bidi.isRtlChar('𐩿'));     // Old South Arabian
+  assert(goog.i18n.bidi.isRtlChar('𐪟'));  // Old North Arabian
+  assert(goog.i18n.bidi.isRtlChar('𐪟'));  // Old North Arabian
+  assert(goog.i18n.bidi.isRtlChar('𐭠'));     // Inscriptional Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('𐭿'));     // Inscriptional Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('𐮀'));  // Psalter Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('𐮯'));  // Psalter Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('𐬀'));     // Avestan
+  assert(goog.i18n.bidi.isRtlChar('𐢀'));  // Nabataean
+  assert(goog.i18n.bidi.isRtlChar('𐢯'));  // Nabataean
+  assert(goog.i18n.bidi.isRtlChar('𐨀'));     // Kharoshthi
+  assert(goog.i18n.bidi.isRtlChar('𐩟'));  // Kharoshthi
+  assert(goog.i18n.bidi.isRtlChar('𐰀'));     // Old Turkic
+  assert(goog.i18n.bidi.isRtlChar('𐱏'));  // Old Turkic
+  assert(goog.i18n.bidi.isRtlChar('𐤠'));     // Lydian
+  assert(goog.i18n.bidi.isRtlChar('𐤿'));     // Lydian
+
+  // TODO(b/77920598): Include test for new RTL, LTR, and neutral
+  // writing systems added in Unicode 11 and beyond.
+  // LTR beyond the BMP
+  assert(goog.i18n.bidi.isLtrChar('𑄐'));     // Chakma block
+  assert(goog.i18n.bidi.isLtrChar('𑜀'));  // Ahom block
+  assert(goog.i18n.bidi.isLtrChar('𐒺'));  // Osage block
 }
 
 function testIsNeutralChar() {
   assert(goog.i18n.bidi.isNeutralChar('\u0000'));
   assert(goog.i18n.bidi.isNeutralChar('\u0020'));
+  assert(goog.i18n.bidi.isNeutralChar(
+      '7'));  // Closure treats ASCII digits as neutral.
   assert(!goog.i18n.bidi.isNeutralChar('a'));
   assert(goog.i18n.bidi.isNeutralChar('!'));
   assert(goog.i18n.bidi.isNeutralChar('@'));
@@ -115,6 +182,10 @@ function testIsNeutralText() {
   assert(!goog.i18n.bidi.isNeutralText('123\u05e0456'));
   assert(!goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', false));
   assert(goog.i18n.bidi.isNeutralText('<input value=\u05e0>123&lt;', true));
+  assert(goog.i18n.bidi.isNeutralText('(123)-4567!'));
+  assert(!goog.i18n.bidi.isNeutralText('(123)-X4567!'));
+  // A few neutral characters from SMP. This is an approximation!
+  assert(!goog.i18n.bidi.isNeutralText('𐄁𐆚𝍕'));
 }
 
 function testHasAnyLtr() {
@@ -124,6 +195,8 @@ function testHasAnyLtr() {
   assert(!goog.i18n.bidi.hasAnyLtr('123\t...  \n'));
   assert(goog.i18n.bidi.hasAnyLtr('<br>123&lt;', false));
   assert(!goog.i18n.bidi.hasAnyLtr('<br>123&lt;', true));
+  assert(!goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞', true));
+  assert(goog.i18n.bidi.hasAnyRtl('\u05e0\u05e1a\u05e2\u05e3'));
 }
 
 function testHasAnyRtl() {
@@ -133,6 +206,8 @@ function testHasAnyRtl() {
   assert(!goog.i18n.bidi.hasAnyRtl('123\t...  \n'));
   assert(goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', false));
   assert(!goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', true));
+  assert(goog.i18n.bidi.hasAnyRtl('𞤢𞤄𞤕'));
+  assert(goog.i18n.bidi.hasAnyRtl('\u05e0\u05e1\u05e2\u05e3'));
 }
 
 function testEndsWithLtr() {
@@ -154,6 +229,8 @@ function testEndsWithLtr() {
   assert(!goog.i18n.bidi.endsWithLtr('\u200f\u202eArtielish\u202c\u200f'));
   assert(!goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', true));
   assert(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', false));
+  assert(!goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞', false));
+  assert(goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞W', false));
 }
 
 function testEndsWithRtl() {
@@ -175,6 +252,40 @@ function testEndsWithRtl() {
   assert(!goog.i18n.bidi.endsWithRtl('\u05e0 \u05e0\u05e1ab\u05e2 a (!)'));
   assert(goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', true));
   assert(!goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', false));
+  assert(!goog.i18n.bidi.endsWithRtl(
+      '𞤀𞤧𞤱𞤣 𞤬𞤺\ud801\udc00', true));
+  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
+  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
+  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
+}
+
+function testStartsWithLtr() {
+  // Note that "startsWithLtr" actually means the first non-neutral character is
+  // LTR
+  assert(goog.i18n.bidi.startsWithLtr('X(123)-4567!'));
+  assert(!goog.i18n.bidi.startsWithLtr('\u05e0(123)-4567!'));
+  assert(!goog.i18n.bidi.startsWithLtr('(123)-4567!'));
+}
+
+function testStartsWithRtl() {
+  // Note that "startsWithRtl" actually means the first non-neutral character is
+  // RTL
+  assert(!goog.i18n.bidi.startsWithRtl('X(123)-4567!'));
+  assert(goog.i18n.bidi.startsWithRtl('\u05e0(123)-4567!'));
+  assert(!goog.i18n.bidi.startsWithRtl('(123)-4567!'));
+}
+
+function testStartsWithNeutral() {
+  // Checking that these first characters are not detected as LTR or RTL.
+  assert(!goog.i18n.bidi.startsWithRtl('(123)-4567!'));
+  assert(!goog.i18n.bidi.startsWithLtr('(123)-4567!'));
+
+  assert(!goog.i18n.bidi.startsWithRtl('@*&~'));
+  assert(!goog.i18n.bidi.startsWithLtr('@*&~'));
+
+  assert(!goog.i18n.bidi.startsWithRtl('𐄁𐆚𝍕'));
+  // These are actually labeld as LTR.
+  assert(goog.i18n.bidi.startsWithLtr('𐄁𐆚𝍕'));
 }
 
 function testGuardBracketInText() {
@@ -300,6 +411,9 @@ function testEstimateDirection() {
   assertEquals(
       'Native arabic numbers should count as RTL', goog.i18n.bidi.Dir.RTL,
       goog.i18n.bidi.estimateDirection('\u0660', false));
+  assertEquals(
+      'Native adlam numbers should count as RTL', goog.i18n.bidi.Dir.RTL,
+      goog.i18n.bidi.estimateDirection('𞥕', false));
   assertEquals(
       'Both Farsi letters and digits should count as RTL',
       goog.i18n.bidi.Dir.RTL,
@@ -434,12 +548,23 @@ function testSetElementDirByTextDirectionality() {
       'Expected dir="rtl" value for RTL text:"' + text + '"', 'rtl', el.dir);
 }
 
+/**
+ * Creates simple object with text and also direction and HTML flags
+ * return {Object<string, boolean, boolean>}
+ * @private
+ */
 function SampleItem() {
   this.text = '';
   this.isRtl = false;
   this.isHtml = false;
 }
 
+/**
+ * Creates an array of BiDi text objects for testing,
+ * setting the direction and HTML flags appropriately.
+ * @return {Array<Object<string, boolean, boolean>>}
+ * @private
+ */
 function getBidiTextSamples() {
   var bidiText = [];
   var item = new SampleItem;
