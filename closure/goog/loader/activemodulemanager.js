@@ -26,21 +26,20 @@ const asserts = goog.require('goog.asserts');
 /** @type {?AbstractModuleManager} */
 let moduleManager = null;
 
-/** @type {?function(): !AbstractModuleManager} */
-let getDefault = null;
-
 /**
  * Gets the active module manager, instantiating one if necessary.
+ *
+ * @param {(function():!AbstractModuleManager)=} getDefault
  * @return {!AbstractModuleManager}
  */
-function get() {
+const get = function(getDefault = undefined) {
   if (!moduleManager && getDefault) {
     moduleManager = getDefault();
   }
   asserts.assert(
       moduleManager != null, 'The module manager has not yet been set.');
   return moduleManager;
-}
+};
 
 /**
  * Sets the active module manager. This should never be used to override an
@@ -48,29 +47,20 @@ function get() {
  *
  * @param {!AbstractModuleManager} newModuleManager
  */
-function set(newModuleManager) {
+const set = function(newModuleManager) {
   asserts.assert(
       moduleManager == null, 'The module manager cannot be redefined.');
   moduleManager = newModuleManager;
-}
-
-/**
- * Stores a callback that will be used  to get an AbstractModuleManager instance
- * if set() is not called before the first get() call.
- * @param {function(): !AbstractModuleManager} fn
- */
-function setDefault(fn) {
-  getDefault = fn;
-}
+};
 
 /** Test-only method for removing the active module manager. */
 const reset = function() {
   moduleManager = null;
 };
 
+
 exports = {
   get,
   set,
-  setDefault,
   reset,
 };
