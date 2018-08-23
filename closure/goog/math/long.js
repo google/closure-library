@@ -752,20 +752,23 @@ goog.math.Long.prototype.div = function(other) {
   }
   if (this.isNegative()) {
     if (this.equals(goog.math.Long.getMinValue())) {
-      // this == MIN_VALUE (recall -MIN_VALUE == MIN_VALUE)
-      // to address this we subtract `other` from `this` and add `1` to the
-      // result:  a / b == (a - b) / b + 1
-      if (other.isNegative()) {
-        return this.subtract(other)
-            .negate()
-            .div(other.negate())
-            .add(goog.math.Long.getOne());
+      if (other.equals(goog.math.Long.getOne()) ||
+          other.equals(goog.math.Long.getNegOne())) {
+        return goog.math.Long.getMinValue();  // recall -MIN_VALUE == MIN_VALUE
       }
-      return this.add(other)
-          .negate()
-          .div(other)
-          .add(goog.math.Long.getOne())
-          .negate();
+      if (other.equals(goog.math.Long.getMinValue())) {
+        return goog.math.Long.getOne();
+      }
+      // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
+      var halfThis = this.shiftRight(1);
+      var approx = halfThis.div(other).shiftLeft(1);
+      if (approx.equals(goog.math.Long.getZero())) {
+        return other.isNegative() ? goog.math.Long.getOne() :
+                                    goog.math.Long.getNegOne();
+      }
+      var rem = this.subtract(other.multiply(approx));
+      var result = approx.add(rem.div(other));
+      return result;
     }
     if (other.isNegative()) {
       return this.negate().div(other.negate());
@@ -773,7 +776,7 @@ goog.math.Long.prototype.div = function(other) {
     return this.negate().div(other).negate();
   }
   if (this.isZero()) {
-    return this;
+    return goog.math.Long.getZero();
   }
   if (other.isNegative()) {
     if (other.equals(goog.math.Long.getMinValue())) {
@@ -782,44 +785,43 @@ goog.math.Long.prototype.div = function(other) {
     return this.div(other.negate()).negate();
   }
 
-  var compare = this.compare(other);
-  if (compare <= 0) {
-    // this <  other => return 0;
-    // this == other => return 1;
-    return goog.math.Long.fromBits(compare + 1, 0);
-  }
+  // Repeat the following until the remainder is less than other:  find a
+  // floating-point that approximates remainder / other *from below*, add this
+  // into the result, and subtract it from the remainder.  It is critical that
+  // the approximate value is less than or equal to the real value so that the
+  // remainder never becomes negative.
+  var res = goog.math.Long.getZero();
+  var rem = this;
+  while (rem.greaterThanOrEqual(other)) {
+    // Approximate the result of division. This may be a little greater or
+    // smaller than the actual value.
+    var approx = Math.max(1, Math.floor(rem.toNumber() / other.toNumber()));
 
-  var otherNumber = other.toNumber();
-  // If divisor is less than 53 bits, use integer arithmetic.
-  if (other.high_ >> 20 == 0) {  // 52-bit divisor
-    // Take the fast path if dividend is a 32-bit integer.
-    if (this.high_ == 0) {
-      var res = this.getLowBitsUnsigned() / otherNumber;
-      return goog.math.Long.fromBits(res, 0);
+    // We will tweak the approximate result by changing it in the 48-th digit or
+    // the smallest non-fractional digit, whichever is larger.
+    var log2 = Math.ceil(Math.log(approx) / Math.LN2);
+    var delta = (log2 <= 48) ? 1 : Math.pow(2, log2 - 48);
+
+    // Decrease the approximation until it is smaller than the remainder.  Note
+    // that if it is too large, the product overflows and is negative.
+    var approxRes = goog.math.Long.fromNumber(approx);
+    var approxRem = approxRes.multiply(other);
+    while (approxRem.isNegative() || approxRem.greaterThan(rem)) {
+      approx -= delta;
+      approxRes = goog.math.Long.fromNumber(approx);
+      approxRem = approxRes.multiply(other);
     }
-    // Otherwise, divide high_ and low_ piecewise.
-    var resHigh = this.high_ / otherNumber;
-    var rem = (this.high_ % otherNumber) * goog.math.Long.TWO_PWR_32_DBL_;
-    // Following expression may utilize one extra bit of precision.
-    var resLow = Math.floor(rem / otherNumber) +
-        Math.floor(
-            ((rem % otherNumber) + this.getLowBitsUnsigned()) / otherNumber);
-    return goog.math.Long.fromBits(resLow, resHigh);
-  }
 
-  // Approximate the result of division. The result cannot exceed 11 bits
-  // (worst case 63-bit dividend and 53-bit divisor) but can be greater by 1 due
-  // to loses in precision (there is not enough error to make an approximate
-  // result lower than the answer).
-  var approx = this.toNumber() / otherNumber;
-  var approxRes = goog.math.Long.fromBits(approx, 0);
-  var approxDividend = approxRes.multiply(other);
-  // Decrease the approximation by one if it is smaller than the dividend.  Note
-  // that if it is too large, the product overflows and is negative.
-  if (approxDividend.isNegative() || approxDividend.greaterThan(this)) {
-    return goog.math.Long.fromBits(approx - 1, 0);
+    // We know the answer can't be zero... and actually, zero would cause
+    // infinite recursion since we would make no progress.
+    if (approxRes.isZero()) {
+      approxRes = goog.math.Long.getOne();
+    }
+
+    res = res.add(approxRes);
+    rem = rem.subtract(approxRem);
   }
-  return approxRes;
+  return res;
 };
 
 

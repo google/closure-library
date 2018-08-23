@@ -1543,16 +1543,6 @@ function testMultiply() {
   }
 }
 
-function testDiv() {
-  // 0x40000000000001f / 0x20000000000001 = 0x1f
-  // Approximate floating-point division returns 0x20.
-  var a = goog.math.Long.fromBits(0x1f, 0x4000000);
-  var b = goog.math.Long.fromBits(1, 0x200000);
-  var c = goog.math.Long.fromBits(0x1f, 0);
-  assertEquals(c.getHighBits(), a.div(b).getHighBits());
-  assertEquals(c.getLowBits(), a.div(b).getLowBits());
-}
-
 function createTestDivMod(i, count) {
   return function() {
     var vi = goog.math.Long.fromBits(TEST_BITS[i + 1], TEST_BITS[i]);
