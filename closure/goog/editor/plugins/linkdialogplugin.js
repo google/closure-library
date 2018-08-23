@@ -88,6 +88,15 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow_ = false;
 
 
 /**
+ * Whether to focus the text to display input instead of the url input if the
+ * text to display input is empty when the dialog opens.
+ * @type {boolean}
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype
+    .focusTextToDisplayOnOpenIfEmpty_ = false;
+
+/**
  * Whether the "open link in new window" checkbox should be checked when the
  * dialog is shown, and also whether it was checked last time the dialog was
  * closed.
@@ -169,6 +178,16 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
     function(startChecked) {
   this.showOpenLinkInNewWindow_ = true;
   this.isOpenLinkInNewWindowChecked_ = startChecked;
+};
+
+
+/**
+ * Tells the dialog to focus the text to display input instead of the url field
+ * if the text to display input is empty when the dialog is opened.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.focusTextToDisplayOnOpenIfEmpty =
+    function() {
+  this.focusTextToDisplayOnOpenIfEmpty_ = true;
 };
 
 
@@ -288,6 +307,9 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
   }
   if (this.showOpenLinkInNewWindow_) {
     dialog.showOpenLinkInNewWindow(this.isOpenLinkInNewWindowChecked_);
+  }
+  if (this.focusTextToDisplayOnOpenIfEmpty_) {
+    dialog.focusTextToDisplayOnOpenIfEmpty();
   }
   if (this.showRelNoFollow_) {
     dialog.showRelNoFollow();

@@ -114,8 +114,12 @@ function setUpAnchor(href, text, opt_isNew, opt_target, opt_rel) {
  *     checkbox should be shown.
  * @param {boolean=} opt_noFollow Whether rel=nofollow checkbox should be
  *     shown.
+ * @param {boolean=} opt_focusTextToDisplayOnOpenIfEmpty If passed, will call
+ *     focusTextToDisplayOnOpenIfEmpty on the dialog.
  */
-function createAndShow(opt_document, opt_openInNewWindow, opt_noFollow) {
+function createAndShow(
+    opt_document, opt_openInNewWindow, opt_noFollow,
+    opt_focusTextToDisplayOnOpenIfEmpty) {
   dialog = new goog.ui.editor.LinkDialog(
       new goog.dom.DomHelper(opt_document), mockLink);
   if (opt_openInNewWindow) {
@@ -123,6 +127,9 @@ function createAndShow(opt_document, opt_openInNewWindow, opt_noFollow) {
   }
   if (opt_noFollow) {
     dialog.showRelNoFollow();
+  }
+  if (opt_focusTextToDisplayOnOpenIfEmpty) {
+    dialog.focusTextToDisplayOnOpenIfEmpty();
   }
   dialog.addEventListener(
       goog.ui.editor.AbstractDialog.EventType.OK, mockOkHandler);
@@ -275,6 +282,100 @@ function testShowForMailtoLink() {
       'Email input field should be filled in',
       ANCHOR_EMAIL,  // The 'mailto:' is not in the input!
       getEmailInputText());
+  assertEquals(
+      'Email tab should be selected',
+      goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS, dialog.curTabId_);
+  if (useActiveElement()) {
+    assertEquals(
+        'Focus should be on email input', getEmailInput(),
+        dialog.dom.getActiveElement());
+  }
+
+  mockCtrl.$verifyAll();
+}
+
+
+/**
+ * Tests that when you show the dialog for a new link, if the text to display is
+ * empty and focusTextToDisplayOnOpenIfEmpty is set, the input fields are empty,
+ * the web tab is selected and focus is in the text to display input field.
+ * @param {Document=} opt_document Document to render the dialog into. Defaults
+ *     to the main window's document.
+ */
+function testShowForNewLink_focusTextToDisplayOnOpenIfEmpty(opt_document) {
+  mockCtrl.$replayAll();
+  setUpAnchor('', '', true);  // Must be done before creating the dialog.
+  createAndShow(
+      opt_document, undefined /* opt_openInNewWindow */,
+      undefined /*  opt_noFollow */,
+      true /* opt_focusTextToDisplayOnOpenIfEmpty */);
+
+  assertEquals(
+      'Display text input field should be empty', '', getDisplayInputText());
+  assertEquals('Url input field should be empty', '', getUrlInputText());
+  assertEquals(
+      'On the web tab should be selected', goog.ui.editor.LinkDialog.Id_.ON_WEB,
+      dialog.curTabId_);
+  if (useActiveElement()) {
+    assertEquals(
+        'Focus should be on text to display input', getDisplayInput(),
+        dialog.dom.getActiveElement());
+  }
+
+  mockCtrl.$verifyAll();
+}
+
+
+/**
+ * Tests that when focusTextToDisplayOnOpenIfEmpty is set, if the display text
+ * is not empty when you show the dialog for a url link, the display text input
+ * is filled in, the web tab is selected and focus is in the url input field.
+ * @param {Document=} opt_document Document to render the dialog into. Defaults
+ *     to the main window's document.
+ */
+function testShowForUrlLink_focusTextToDisplayOnOpenIfEmpty(opt_document) {
+  mockCtrl.$replayAll();
+  setUpAnchor('', ANCHOR_TEXT);
+  createAndShow(
+      opt_document /* opt_document */, undefined /* opt_openInNewWindow */,
+      undefined /*  opt_noFollow */,
+      true /* opt_focusTextToDisplayOnOpenIfEmpty */);
+
+  assertEquals(
+      'Display text input field should be filled in', ANCHOR_TEXT,
+      getDisplayInputText());
+  assertEquals(
+      'On the web tab should be selected', goog.ui.editor.LinkDialog.Id_.ON_WEB,
+      dialog.curTabId_);
+  if (useActiveElement()) {
+    assertEquals(
+        'Focus should be on url input', getUrlInput(),
+        dialog.dom.getActiveElement());
+  }
+
+  mockCtrl.$verifyAll();
+}
+
+
+/**
+ * Tests that when focusTextToDisplayOnOpenIfEmpty is set, if the display text
+ * is not empty when you show the dialog for a mailto link, the display text
+ * input is filled in, the email tab is selected and focus is in the email input
+ * field.
+ * @param {Document=} opt_document Document to render the dialog into. Defaults
+ *     to the main window's document.
+ */
+function testShowForMailtoLink_focusTextToDisplayOnOpenIfEmpty(opt_document) {
+  mockCtrl.$replayAll();
+  setUpAnchor(ANCHOR_MAILTO, ANCHOR_TEXT);
+  createAndShow(
+      opt_document /* opt_document */, undefined /* opt_openInNewWindow */,
+      undefined /*  opt_noFollow */,
+      true /* opt_focusTextToDisplayOnOpenIfEmpty */);
+
+  assertEquals(
+      'Display text input field should be filled in', ANCHOR_TEXT,
+      getDisplayInputText());
   assertEquals(
       'Email tab should be selected',
       goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS, dialog.curTabId_);
