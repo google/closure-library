@@ -200,6 +200,13 @@ function testFormatWithParams() {
   url = goog.html.TrustedResourceUrl.formatWithParams(
       goog.string.Const.from('https://example.com/'), {}, {'a': ['x', 'y']});
   assertEquals('https://example.com/?a=x&a=y', url.getTypedStringValue());
+
+  url = goog.html.TrustedResourceUrl.formatWithParams(
+      goog.string.Const.from('https://example.com/%{prestoId}'),
+      {'prestoId': 1}, {'origin': 'https://example.com/'});
+  assertEquals(
+      'https://example.com/1?origin=https%3A%2F%2Fexample.com%2F',
+      url.getTypedStringValue());
 }
 
 

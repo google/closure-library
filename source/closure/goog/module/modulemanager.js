@@ -26,6 +26,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug.Trace');
+goog.require('goog.disposable.IDisposable');
 goog.require('goog.disposeAll');
 goog.require('goog.loader.AbstractModuleManager');
 goog.require('goog.loader.activeModuleManager');
@@ -42,6 +43,7 @@ goog.require('goog.object');
  * Since modules may not have their code loaded, we must keep track of them.
  * @constructor
  * @extends {goog.loader.AbstractModuleManager}
+ * @implements {goog.disposable.IDisposable}
  * @struct
  */
 goog.module.ModuleManager = function() {
@@ -191,6 +193,11 @@ goog.module.ModuleManager = function() {
    * @private {boolean}
    */
   this.userLastActive_ = false;
+
+  /**
+   * @private {boolean}
+   */
+  this.isDisposed_ = false;
 };
 goog.inherits(goog.module.ModuleManager, goog.loader.AbstractModuleManager);
 
@@ -1151,9 +1158,7 @@ goog.module.ModuleManager.prototype.executeCallbacks_ = function(type) {
 
 
 /** @override */
-goog.module.ModuleManager.prototype.disposeInternal = function() {
-  goog.module.ModuleManager.base(this, 'disposeInternal');
-
+goog.module.ModuleManager.prototype.dispose = function() {
   // Dispose of each ModuleInfo object.
   goog.disposeAll(
       goog.object.getValues(this.moduleInfoMap), this.baseModuleInfo_);
@@ -1163,4 +1168,10 @@ goog.module.ModuleManager.prototype.disposeInternal = function() {
   this.userInitiatedLoadingModuleIds_ = [];
   this.requestedModuleIdsQueue_ = [];
   this.callbackMap_ = {};
+  this.isDisposed_ = true;
+};
+
+/** @override */
+goog.module.ModuleManager.prototype.isDisposed = function() {
+  return this.isDisposed_;
 };

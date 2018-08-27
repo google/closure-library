@@ -21,7 +21,6 @@ goog.provide('goog.loader.AbstractModuleManager');
 goog.provide('goog.loader.AbstractModuleManager.CallbackType');
 goog.provide('goog.loader.AbstractModuleManager.FailureType');
 
-goog.require('goog.Disposable');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
@@ -34,11 +33,8 @@ goog.require('goog.module.ModuleLoadCallback');
  * @abstract
  * @constructor
  * @struct
- * @extends {goog.Disposable}
  */
 goog.loader.AbstractModuleManager = function() {
-  goog.loader.AbstractModuleManager.base(this, 'constructor');
-
   /**
    * The module context needed for module initialization.
    * @private {?Object}
@@ -52,7 +48,6 @@ goog.loader.AbstractModuleManager = function() {
    */
   this.loader_ = null;
 };
-goog.inherits(goog.loader.AbstractModuleManager, goog.Disposable);
 
 
 /**

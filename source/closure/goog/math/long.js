@@ -79,13 +79,6 @@ goog.math.Long.IntCache_ = {};
 
 
 /**
- * A cache of the Long representations of common values.
- * @type {!Object<goog.math.Long.ValueCacheId_, !goog.math.Long>}
- * @private
- */
-goog.math.Long.valueCache_ = {};
-
-/**
  * Returns a cached long number representing the given (32-bit) integer value.
  * @param {number} value The 32-bit integer in question.
  * @return {!goog.math.Long} The corresponding Long value.
@@ -214,21 +207,21 @@ goog.math.Long.fromInt = function(value) {
  * @return {!goog.math.Long} The corresponding Long value.
  */
 goog.math.Long.fromNumber = function(value) {
-  if (isNaN(value)) {
-    return goog.math.Long.getZero();
-  }
-  if (value < 0) {
+  if (value > 0) {
+    if (value >= goog.math.Long.TWO_PWR_63_DBL_) {
+      return goog.math.Long.getMaxValue();
+    }
+    return new goog.math.Long(value, value / goog.math.Long.TWO_PWR_32_DBL_);
+  } else if (value < 0) {
     if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
       return goog.math.Long.getMinValue();
     }
-    return goog.math.Long.fromNumber(-value).negate();
+    return new goog.math.Long(-value, -value / goog.math.Long.TWO_PWR_32_DBL_)
+        .negate();
+  } else {
+    // NaN or 0.
+    return goog.math.Long.getZero();
   }
-  // Max possible non-overflown value: 0x7ffffffffffffc00
-  if (value >= goog.math.Long.TWO_PWR_63_DBL_) {
-    return goog.math.Long.getMaxValue();
-  }
-  // Only lower 32 bits will be kept by constructor.
-  return new goog.math.Long(value, value / goog.math.Long.TWO_PWR_32_DBL_);
 };
 
 
@@ -350,69 +343,88 @@ goog.math.Long.TWO_PWR_32_DBL_ = 0x100000000;
  */
 goog.math.Long.TWO_PWR_63_DBL_ = 0x8000000000000000;
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.ZERO_ = goog.math.Long.fromBits(0, 0);
+
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getZero = function() {
-  return goog.math.Long.getCachedIntValue_(0);
+  return goog.math.Long.ZERO_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.ONE_ = goog.math.Long.fromBits(1, 0);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getOne = function() {
-  return goog.math.Long.getCachedIntValue_(1);
+  return goog.math.Long.ONE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.NEG_ONE_ = goog.math.Long.fromBits(-1, -1);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getNegOne = function() {
-  return goog.math.Long.getCachedIntValue_(-1);
+  return goog.math.Long.NEG_ONE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.MAX_VALUE_ = goog.math.Long.fromBits(0xFFFFFFFF, 0x7FFFFFFF);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getMaxValue = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MAX_VALUE,
-      function() {
-        return goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
-      });
+  return goog.math.Long.MAX_VALUE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.MIN_VALUE_ = goog.math.Long.fromBits(0, 0x80000000);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getMinValue = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.MIN_VALUE,
-      function() {
-        return goog.math.Long.fromBits(0, 0x80000000 | 0);
-      });
+  return goog.math.Long.MIN_VALUE_;
 };
 
+
+/**
+ * @private @const {!goog.math.Long}
+ */
+goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromBits(1 << 24, 0);
 
 /**
  * @return {!goog.math.Long}
  * @public
  */
 goog.math.Long.getTwoPwr24 = function() {
-  return goog.reflect.cache(
-      goog.math.Long.valueCache_, goog.math.Long.ValueCacheId_.TWO_PWR_24,
-      function() {
-        return goog.math.Long.fromInt(1 << 24);
-      });
+  return goog.math.Long.TWO_PWR_24_;
 };
 
 
@@ -454,10 +466,6 @@ goog.math.Long.prototype.toString = function(opt_radix) {
     throw new Error('radix out of range: ' + radix);
   }
 
-  if (this.isZero()) {
-    return '0';
-  }
-
   // We can avoid very expensive division based code path for some common cases.
   if (this.isSafeInteger()) {
     var asNumber = this.toNumber();
@@ -466,45 +474,33 @@ goog.math.Long.prototype.toString = function(opt_radix) {
     return radix == 10 ? ('' + asNumber) : asNumber.toString(radix);
   }
 
-  if (this.isNegative()) {
-    if (this.equals(goog.math.Long.getMinValue())) {
-      // We need to change the Long value before it can be negated, so we remove
-      // the bottom-most digit in this base and then recurse to do the rest.
-      var radixLong = goog.math.Long.fromNumber(radix);
-      var div = this.div(radixLong);
-      var rem = div.multiply(radixLong).subtract(this);
-      return div.toString(radix) + rem.toInt().toString(radix);
-    } else {
-      return '-' + this.negate().toString(radix);
-    }
+  // We need to split 64bit integer into: `a * radix**safeDigits + b` where
+  // neither `a` nor `b` exceeds 53 bits, meaning that safeDigits can be any
+  // number in a range: [(63 - 53) / log2(radix); 53 / log2(radix)].
+
+  // Other options that need to be benchmarked:
+  //   11..16 - (radix >> 2);
+  //   10..13 - (radix >> 3);
+  //   10..11 - (radix >> 4);
+  var safeDigits = 14 - (radix >> 2);
+
+  var radixPowSafeDigits = Math.pow(radix, safeDigits);
+  var radixToPower = goog.math.Long.fromBits(
+      radixPowSafeDigits, radixPowSafeDigits / goog.math.Long.TWO_PWR_32_DBL_);
+
+  var remDiv = this.div(radixToPower);
+  var val = Math.abs(this.subtract(remDiv.multiply(radixToPower)).toNumber());
+  var digits = radix == 10 ? ('' + val) : val.toString(radix);
+
+  if (digits.length < safeDigits) {
+    // Up to 13 leading 0s we might need to insert as the greatest safeDigits
+    // value is 14 (for radix 2).
+    digits = '0000000000000'.substr(digits.length - safeDigits) + digits;
   }
 
-  // Do several (6) digits each time through the loop, so as to
-  // minimize the calls to the very expensive emulated div.
-  var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 6));
-
-  var rem = this;
-  var result = '';
-  while (true) {
-    var remDiv = rem.div(radixToPower);
-    // The right shifting fixes negative values in the case when
-    // intval >= 2^31; for more details see
-    // https://github.com/google/closure-library/pull/498
-    var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt() >>> 0;
-    var digits = intval.toString(radix);
-
-    rem = remDiv;
-    if (rem.isZero()) {
-      return digits + result;
-    } else {
-      while (digits.length < 6) {
-        digits = '0' + digits;
-      }
-      result = '' + digits + result;
-    }
-  }
+  val = remDiv.toNumber();
+  return (radix == 10 ? val : val.toString(radix)) + digits;
 };
-
 
 /** @return {number} The high 32-bits as a signed value. */
 goog.math.Long.prototype.getHighBits = function() {
@@ -701,33 +697,10 @@ goog.math.Long.prototype.subtract = function(other) {
  */
 goog.math.Long.prototype.multiply = function(other) {
   if (this.isZero()) {
-    return goog.math.Long.getZero();
-  } else if (other.isZero()) {
-    return goog.math.Long.getZero();
+    return this;
   }
-
-  if (this.equals(goog.math.Long.getMinValue())) {
-    return other.isOdd() ? goog.math.Long.getMinValue() :
-                           goog.math.Long.getZero();
-  } else if (other.equals(goog.math.Long.getMinValue())) {
-    return this.isOdd() ? goog.math.Long.getMinValue() :
-                          goog.math.Long.getZero();
-  }
-
-  if (this.isNegative()) {
-    if (other.isNegative()) {
-      return this.negate().multiply(other.negate());
-    } else {
-      return this.negate().multiply(other).negate();
-    }
-  } else if (other.isNegative()) {
-    return this.multiply(other.negate()).negate();
-  }
-
-  // If both longs are small, use float multiplication
-  if (this.lessThan(goog.math.Long.getTwoPwr24()) &&
-      other.lessThan(goog.math.Long.getTwoPwr24())) {
-    return goog.math.Long.fromNumber(this.toNumber() * other.toNumber());
+  if (other.isZero()) {
+    return other;
   }
 
   // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
@@ -972,13 +945,3 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
   }
 };
 
-
-/**
- * @enum {number} Ids of commonly requested Long instances.
- * @private
- */
-goog.math.Long.ValueCacheId_ = {
-  MAX_VALUE: 1,
-  MIN_VALUE: 2,
-  TWO_PWR_24: 6
-};

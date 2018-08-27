@@ -116,6 +116,7 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
   whitelist_regexp: '.+/closure/goog/module/loader.js'
   whitelist_regexp: '.+/closure/goog/module/moduleloader.js'
+  whitelist: 'javascript/security/safe_eval.js'
 
 }
 

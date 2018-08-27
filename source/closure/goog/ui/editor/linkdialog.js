@@ -95,6 +95,14 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
   this.showOpenLinkInNewWindow_ = false;
 
   /**
+   * Whether to focus the text to display input instead of the url input if the
+   * text to display input is empty when the dialog opens.
+   * @type {boolean}
+   * @private
+   */
+  this.focusTextToDisplayOnOpenIfEmpty_ = false;
+
+  /**
    * Whether the "open link in new window" checkbox should be checked when the
    * dialog is shown, and also whether it was checked last time the dialog was
    * closed.
@@ -306,6 +314,16 @@ goog.ui.editor.LinkDialog.prototype.showOpenLinkInNewWindow = function(
 
 
 /**
+ * Tells the dialog to focus the text to display input instead of the url field
+ * if the text to display input is empty when the dialog is opened.
+ */
+goog.ui.editor.LinkDialog.prototype.focusTextToDisplayOnOpenIfEmpty =
+    function() {
+  this.focusTextToDisplayOnOpenIfEmpty_ = true;
+};
+
+
+/**
  * Tells the dialog to show a checkbox where the user can choose to add
  * 'rel=nofollow' attribute to the link.
  */
@@ -321,6 +339,12 @@ goog.ui.editor.LinkDialog.prototype.show = function() {
 
   this.selectAppropriateTab_(
       this.textToDisplayInput_.value, this.getTargetUrl_());
+
+  if (this.focusTextToDisplayOnOpenIfEmpty_ &&
+      !this.targetLink_.getCurrentText()) {
+    goog.editor.focus.focusInputField(this.textToDisplayInput_);
+  }
+
   this.syncOkButton_();
 
   if (this.showOpenLinkInNewWindow_) {
