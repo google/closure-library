@@ -233,9 +233,7 @@ goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE =
 
 /** @return {!goog.loader.AbstractModuleManager} */
 goog.module.ModuleManager.getInstance = function() {
-  return goog.loader.activeModuleManager.get(function() {
-    return new goog.module.ModuleManager();
-  });
+  return goog.loader.activeModuleManager.get();
 };
 
 
@@ -1175,3 +1173,7 @@ goog.module.ModuleManager.prototype.dispose = function() {
 goog.module.ModuleManager.prototype.isDisposed = function() {
   return this.isDisposed_;
 };
+
+goog.loader.activeModuleManager.setDefault(function() {
+  return new goog.module.ModuleManager();
+});
