@@ -1200,7 +1200,7 @@ goog.Promise.prototype.addStackTrace_ = function(err) {
  * trace information is recorded in {@see #addStackTrace_}, and appended to
  * rethrown errors when `LONG_STACK_TRACES` is enabled.
  *
- * @param {*} err An unhandled exception captured during callback execution.
+ * @param {?} err An unhandled exception captured during callback execution.
  * @private
  */
 goog.Promise.prototype.appendLongStack_ = function(err) {
