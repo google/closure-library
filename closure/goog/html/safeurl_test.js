@@ -270,3 +270,17 @@ function testSafeUrlSanitize_idempotentForSafeUrlArgument() {
   assertEquals(
       goog.html.SafeUrl.unwrap(safeUrl), goog.html.SafeUrl.unwrap(safeUrl2));
 }
+
+function testSafeUrlSanitize_base64ImageSrc() {
+  var dataUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAA';
+  var safeUrl = goog.html.SafeUrl.fromDataUrl(dataUrl);
+  assertEquals(goog.html.SafeUrl.unwrap(safeUrl), dataUrl);
+}
+
+function testSafeUrlSanitize_base64ImageSrcWithCRLF() {
+  var dataUrl = 'data:image/png;base64,iVBORw0KGgoA%0AAAANSUhEUgA%0DAAT4AAA%0A';
+  var safeUrl = goog.html.SafeUrl.fromDataUrl(dataUrl);
+  assertEquals(
+      goog.html.SafeUrl.unwrap(safeUrl),
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAA');
+}

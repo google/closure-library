@@ -297,15 +297,19 @@ goog.html.DATA_URL_PATTERN_ = /^data:([^;,]*);base64,[a-z0-9+\/]+=*$/i;
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
+  // RFC4648 suggest to ignore CRLF in base64 encoding.
+  // See https://tools.ietf.org/html/rfc4648.
+  // Remove the CR (%0D) and LF (%0A) from the dataUrl.
+  var filteredDataUrl = dataUrl.replace(/(%0A|%0D)/g, '');
   // There's a slight risk here that a browser sniffs the content type if it
   // doesn't know the MIME type and executes HTML within the data: URL. For this
   // to cause XSS it would also have to execute the HTML in the same origin
   // of the page with the link. It seems unlikely that both of these will
   // happen, particularly in not really old IEs.
-  var match = dataUrl.match(goog.html.DATA_URL_PATTERN_);
+  var match = filteredDataUrl.match(goog.html.DATA_URL_PATTERN_);
   var valid = match && goog.html.SAFE_MIME_TYPE_PATTERN_.test(match[1]);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
-      valid ? dataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
+      valid ? filteredDataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
 };
 
 
