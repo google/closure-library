@@ -771,6 +771,9 @@ goog.module.ModuleManager.prototype.setLoaded = function(id) {
 
   // Dispatch an active/idle change if needed.
   this.dispatchActiveIdleChangeIfNeeded_();
+
+  this.currentlyLoadingModule_ = null;
+  goog.debug.Trace.stopTracer(this.loadTracer_);
 };
 
 
@@ -876,20 +879,7 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
 
 
 /** @override */
-goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
-  if (!this.currentlyLoadingModule_ ||
-      id != this.currentlyLoadingModule_.getId()) {
-    goog.log.error(
-        this.logger_,
-        'afterLoadModuleCode called with module "' + id +
-            '" while loading module "' +
-            (this.currentlyLoadingModule_ &&
-             this.currentlyLoadingModule_.getId()) +
-            '"');
-  }
-  this.currentlyLoadingModule_ = null;
-  goog.debug.Trace.stopTracer(this.loadTracer_);
-};
+goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {};
 
 
 /** @override */
