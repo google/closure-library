@@ -21,7 +21,9 @@ goog.provide('goog.testing.LooseExpectationCollection');
 goog.provide('goog.testing.LooseMock');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.structs.Map');
+goog.require('goog.structs.Set');
 goog.require('goog.testing.Mock');
 
 
@@ -93,6 +95,9 @@ goog.testing.LooseMock = function(
    */
   this.$expectations_ = new goog.structs.Map();
 
+  /** @private {!goog.structs.Set<!goog.testing.MockExpectation>} */
+  this.awaitingExpectations_ = new goog.structs.Set();
+
   /**
    * The calls that have been made; we cache them to verify at the end. Each
    * element is an array where the first element is the name, and the second
@@ -134,6 +139,9 @@ goog.testing.LooseMock.prototype.$recordExpectation = function() {
 
   var collection = this.$expectations_.get(this.$pendingExpectation.name);
   collection.addExpectation(this.$pendingExpectation);
+  if (this.$pendingExpectation) {
+    this.awaitingExpectations_.add(this.$pendingExpectation);
+  }
 };
 
 
@@ -172,6 +180,10 @@ goog.testing.LooseMock.prototype.$recordCall = function(name, args) {
         matchingExpectation.maxCalls + ' but was: ' +
         matchingExpectation.actualCalls);
   }
+  if (matchingExpectation.actualCalls >= matchingExpectation.minCalls) {
+    this.awaitingExpectations_.remove(matchingExpectation);
+    this.maybeFinishedWithExpectations_();
+  }
 
   this.$calls_.push([name, args]);
   return this.$do(matchingExpectation, args);
@@ -183,6 +195,7 @@ goog.testing.LooseMock.prototype.$reset = function() {
   goog.testing.LooseMock.superClass_.$reset.call(this);
 
   this.$expectations_ = new goog.structs.Map();
+  this.awaitingExpectations_ = new goog.structs.Set();
   this.$calls_ = [];
 };
 
@@ -222,6 +235,34 @@ goog.testing.LooseMock.prototype.$replay = function() {
   }
 };
 
+
+/** @override */
+goog.testing.LooseMock.prototype.$waitAndVerify = function() {
+  var keys = this.$expectations_.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var expectations = this.$expectations_.get(keys[i]).getExpectations();
+    for (var j = 0; j < expectations.length; j++) {
+      var expectation = expectations[j];
+      goog.asserts.assert(
+          !isFinite(expectation.maxCalls) ||
+              expectation.minCalls == expectation.maxCalls,
+          'Mock expectations cannot have a loose number of expected calls to ' +
+              'use $waitAndVerify.');
+    }
+  }
+  var promise = goog.testing.LooseMock.base(this, '$waitAndVerify');
+  this.maybeFinishedWithExpectations_();
+  return promise;
+};
+
+/**
+ * @private
+ */
+goog.testing.LooseMock.prototype.maybeFinishedWithExpectations_ = function() {
+  if (this.awaitingExpectations_.isEmpty() && this.waitingForExpectations) {
+    this.waitingForExpectations.resolve();
+  }
+};
 
 /** @override */
 goog.testing.LooseMock.prototype.$verify = function() {
