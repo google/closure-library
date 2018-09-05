@@ -707,3 +707,17 @@ function testInlineStyleRules_media() {
   var expected = '<a id="foo" style="color: red;">foo</a>';
   assertInlinedStyles(expected, input);
 }
+
+
+function testInlineStyleRules_background() {
+  var input = '<style>a{background: none;}</style><a id="foo">foo</a>';
+  var expected = goog.userAgent.product.SAFARI ?
+      // Safari will expand multi-value properties such as background, border,
+      // etc into multiple properties. The result is more verbose but it should
+      // not affect the effective style.
+      ('<a id="foo" style="background-image: none; ' +
+       'background-position: initial initial; ' +
+       'background-repeat: initial initial;">foo</a>') :
+      '<a id="foo" style="background: none;">foo</a>';
+  assertInlinedStyles(expected, input);
+}
