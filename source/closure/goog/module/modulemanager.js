@@ -233,9 +233,7 @@ goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE =
 
 /** @return {!goog.loader.AbstractModuleManager} */
 goog.module.ModuleManager.getInstance = function() {
-  return goog.loader.activeModuleManager.get(function() {
-    return new goog.module.ModuleManager();
-  });
+  return goog.loader.activeModuleManager.get();
 };
 
 
@@ -773,6 +771,9 @@ goog.module.ModuleManager.prototype.setLoaded = function(id) {
 
   // Dispatch an active/idle change if needed.
   this.dispatchActiveIdleChangeIfNeeded_();
+
+  this.currentlyLoadingModule_ = null;
+  goog.debug.Trace.stopTracer(this.loadTracer_);
 };
 
 
@@ -878,20 +879,7 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
 
 
 /** @override */
-goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
-  if (!this.currentlyLoadingModule_ ||
-      id != this.currentlyLoadingModule_.getId()) {
-    goog.log.error(
-        this.logger_,
-        'afterLoadModuleCode called with module "' + id +
-            '" while loading module "' +
-            (this.currentlyLoadingModule_ &&
-             this.currentlyLoadingModule_.getId()) +
-            '"');
-  }
-  this.currentlyLoadingModule_ = null;
-  goog.debug.Trace.stopTracer(this.loadTracer_);
-};
+goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {};
 
 
 /** @override */
@@ -1175,3 +1163,7 @@ goog.module.ModuleManager.prototype.dispose = function() {
 goog.module.ModuleManager.prototype.isDisposed = function() {
   return this.isDisposed_;
 };
+
+goog.loader.activeModuleManager.setDefault(function() {
+  return new goog.module.ModuleManager();
+});

@@ -437,7 +437,7 @@ goog.math.Rect.prototype.round = function() {
 /**
  * Translates this rectangle by the given offsets. If a
  * `goog.math.Coordinate` is given, then the left and top values are
- * translated by the coordinate's x and y values. Otherwise, top and left are
+ * translated by the coordinate's x and y values. Otherwise, left and top are
  * translated by `tx` and `opt_ty` respectively.
  * @param {number|goog.math.Coordinate} tx The value to translate left by or the
  *     the coordinate to translate this rect by.

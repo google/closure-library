@@ -59,7 +59,6 @@ function createSuccessfulBatchLoader(moduleMgr) {
     onLoad: function(ids, idxLoaded) {
       moduleMgr.beforeLoadModuleCode(ids[idxLoaded]);
       moduleMgr.setLoaded(ids[idxLoaded]);
-      moduleMgr.afterLoadModuleCode(ids[idxLoaded]);
       var idx = idxLoaded + 1;
       if (idx < ids.length) {
         setTimeout(goog.bind(this.onLoad, this, ids, idx), 2);
@@ -76,7 +75,6 @@ function createSuccessfulNonBatchLoader(moduleMgr) {
       setTimeout(function() {
         moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.setLoaded(ids[0]);
-        moduleMgr.afterLoadModuleCode(ids[0]);
         if (opt_successFn) {
           opt_successFn();
         }
@@ -242,13 +240,12 @@ function execOnLoadWhilePreloadingAndViceVersa_(mm) {
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   var origSetLoaded = mm.setLoaded;
-  var calls = [0, 0, 0];
+  var calls = [0, 0];
   mm.beforeLoadModuleCode = function(id) { calls[0]++; };
   mm.setLoaded = function(id) {
     calls[1]++;
     origSetLoaded.call(mm, id);
   };
-  mm.afterLoadModuleCode = function(id) { calls[2]++; };
 
   mm.preloadModule('c', 2);
   assertFalse('module "c" should not be loading yet', mm.isModuleLoading('c'));
@@ -260,7 +257,6 @@ function execOnLoadWhilePreloadingAndViceVersa_(mm) {
   assertFalse('module "c" should be done loading', mm.isModuleLoading('c'));
   assertEquals('beforeLoad should only be called once for "c"', 1, calls[0]);
   assertEquals('setLoaded should only be called once for "c"', 1, calls[1]);
-  assertEquals('afterLoad should only be called once for "c"', 1, calls[2]);
 
   mm.execOnLoad('d', function() {});
   assertTrue('module "d" should now be loading', mm.isModuleLoading('d'));
@@ -270,7 +266,6 @@ function execOnLoadWhilePreloadingAndViceVersa_(mm) {
   assertTrue('module "d" should now be loaded', mm.isModuleLoaded('d'));
   assertEquals('beforeLoad should only be called once for "d"', 2, calls[0]);
   assertEquals('setLoaded should only be called once for "d"', 2, calls[1]);
-  assertEquals('afterLoad should only be called once for "d"', 2, calls[2]);
 }
 
 
@@ -799,13 +794,12 @@ function testLoadWhenPreloading() {
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   var origSetLoaded = mm.setLoaded;
-  var calls = [0, 0, 0];
+  var calls = [0, 0];
   mm.beforeLoadModuleCode = function(id) { calls[0]++; };
   mm.setLoaded = function(id) {
     calls[1]++;
     origSetLoaded.call(mm, id);
   };
-  mm.afterLoadModuleCode = function(id) { calls[2]++; };
 
   var calledBack = false;
   var error = null;
@@ -829,7 +823,6 @@ function testLoadWhenPreloading() {
   assertFalse('module "c" should be done loading', mm.isModuleLoading('c'));
   assertEquals('beforeLoad should only be called once for "c"', 1, calls[0]);
   assertEquals('setLoaded should only be called once for "c"', 1, calls[1]);
-  assertEquals('afterLoad should only be called once for "c"', 1, calls[2]);
 
   assertTrue(calledBack);
   assertNull(error);
@@ -846,13 +839,12 @@ function testLoadMultipleWhenPreloading() {
   mm.setBatchModeEnabled(true);
 
   var origSetLoaded = mm.setLoaded;
-  var calls = {'a': [0, 0, 0], 'b': [0, 0, 0], 'c': [0, 0, 0], 'd': [0, 0, 0]};
+  var calls = {'a': [0, 0], 'b': [0, 0], 'c': [0, 0], 'd': [0, 0]};
   mm.beforeLoadModuleCode = function(id) { calls[id][0]++; };
   mm.setLoaded = function(id) {
     calls[id][1]++;
     origSetLoaded.call(mm, id);
   };
-  mm.afterLoadModuleCode = function(id) { calls[id][2]++; };
 
   var calledBack = false;
   var error = null;
@@ -920,25 +912,17 @@ function testLoadMultipleWhenPreloading() {
   assertEquals(
       'setLoaded should only be called once for "a"', 1, calls['a'][1]);
   assertEquals(
-      'afterLoad should only be called once for "a"', 1, calls['a'][2]);
-  assertEquals(
       'beforeLoad should only be called once for "b"', 1, calls['b'][0]);
   assertEquals(
       'setLoaded should only be called once for "b"', 1, calls['b'][1]);
-  assertEquals(
-      'afterLoad should only be called once for "b"', 1, calls['b'][2]);
   assertEquals(
       'beforeLoad should only be called once for "c"', 1, calls['c'][0]);
   assertEquals(
       'setLoaded should only be called once for "c"', 1, calls['c'][1]);
   assertEquals(
-      'afterLoad should only be called once for "c"', 1, calls['c'][2]);
-  assertEquals(
       'beforeLoad should only be called once for "d"', 1, calls['d'][0]);
   assertEquals(
       'setLoaded should only be called once for "d"', 1, calls['d'][1]);
-  assertEquals(
-      'afterLoad should only be called once for "d"', 1, calls['d'][2]);
 
   assertNull(error);
   assertNull(error2);
@@ -956,13 +940,12 @@ function testLoadMultipleWhenPreloadingSameModules() {
   mm.setBatchModeEnabled(true);
 
   var origSetLoaded = mm.setLoaded;
-  var calls = {'c': [0, 0, 0], 'd': [0, 0, 0]};
+  var calls = {'c': [0, 0], 'd': [0, 0]};
   mm.beforeLoadModuleCode = function(id) { calls[id][0]++; };
   mm.setLoaded = function(id) {
     calls[id][1]++;
     origSetLoaded.call(mm, id);
   };
-  mm.afterLoadModuleCode = function(id) { calls[id][2]++; };
 
   var calledBack = false;
   var error = null;
@@ -1009,13 +992,9 @@ function testLoadMultipleWhenPreloadingSameModules() {
   assertEquals(
       'setLoaded should only be called once for "c"', 1, calls['c'][1]);
   assertEquals(
-      'afterLoad should only be called once for "c"', 1, calls['c'][2]);
-  assertEquals(
       'beforeLoad should only be called once for "d"', 1, calls['d'][0]);
   assertEquals(
       'setLoaded should only be called once for "d"', 1, calls['d'][1]);
-  assertEquals(
-      'afterLoad should only be called once for "d"', 1, calls['d'][2]);
 
   assertNull(error);
   assertNull(error2);
@@ -1843,7 +1822,6 @@ function createSuccessfulNonBatchLoaderWithRegisterInitCallback(moduleMgr, fn) {
       moduleMgr.registerInitializationCallback(fn);
       setTimeout(function() {
         moduleMgr.setLoaded(ids[0]);
-        moduleMgr.afterLoadModuleCode(ids[0]);
         if (opt_successFn) {
           opt_successFn();
         }
@@ -1991,7 +1969,6 @@ function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
         moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.setModuleConstructor(info[ids[0]].ctor);
         moduleMgr.setLoaded(ids[0]);
-        moduleMgr.afterLoadModuleCode(ids[0]);
         if (opt_successFn) {
           opt_successFn();
         }
@@ -2085,7 +2062,6 @@ function testIdleCallbackWithInitialModules() {
   assertEquals(0, callback.getCallCount());
 
   mm.setLoaded('a');
-  mm.afterLoadModuleCode('a');
 
   assertFalse(mm.isActive());
 

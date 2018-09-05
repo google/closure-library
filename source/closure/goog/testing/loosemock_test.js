@@ -290,3 +290,51 @@ function testErrorMessageForBadArgs() {
 
   assertContains('Bad arguments to a()', e.message);
 }
+
+async function testWaitAndVerify() {
+  mock.a();
+  mock.$replay();
+
+  setTimeout(() => {
+    mock.a();
+  }, 0);
+  await mock.$waitAndVerify();
+}
+
+async function testWaitAndVerify_Synchronous() {
+  mock.a();
+  mock.$replay();
+
+  mock.a();
+  await mock.$waitAndVerify();
+}
+
+async function testWaitAndVerify_Exception() {
+  mock.a();
+  mock.$replay();
+
+  setTimeout(() => {
+    assertThrowsJsUnitException(() => {
+      mock.a(false);
+    });
+  }, 0);
+  await assertRejects(mock.$waitAndVerify());
+}
+
+async function testWaitAndVerify_Reset() {
+  mock.a();
+  mock.$replay();
+
+  setTimeout(() => {
+    mock.a();
+  }, 0);
+  await mock.$waitAndVerify();
+  mock.$reset();
+  mock.a();
+  mock.$replay();
+
+  setTimeout(() => {
+    mock.a();
+  }, 0);
+  await mock.$waitAndVerify();
+}

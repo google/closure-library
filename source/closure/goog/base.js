@@ -510,7 +510,8 @@ goog.moduleLoaderState_ = null;
 
 /**
  * @private
- * @return {boolean} Whether a is currently being initialized.
+ * @return {boolean} Whether a goog.module or an es6 module is currently being
+ *     initialized.
  */
 goog.isInModuleLoader_ = function() {
   return goog.isInGoogModuleLoader_() || goog.isInEs6ModuleLoader_();

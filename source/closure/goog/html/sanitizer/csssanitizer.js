@@ -156,41 +156,15 @@ goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_ = ')';
 
 /**
  * Allowed CSS functions
- * @const @private {!Array<string>}
+ * @private @const {!Object<string,boolean>}
  */
-goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ = [
-  'rgb',
-  'rgba',
-  'alpha',
-  'rect',
-  'image',
-  'linear-gradient',
-  'radial-gradient',
-  'repeating-linear-gradient',
-  'repeating-radial-gradient',
-  'cubic-bezier',
-  'matrix',
-  'perspective',
-  'rotate',
-  'rotate3d',
-  'rotatex',
-  'rotatey',
-  'steps',
-  'rotatez',
-  'scale',
-  'scale3d',
-  'scalex',
-  'scaley',
-  'scalez',
-  'skew',
-  'skewx',
-  'skewy',
-  'translate',
-  'translate3d',
-  'translatex',
-  'translatey',
-  'translatez'
-];
+goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ = goog.object.createSet(
+    'rgb', 'rgba', 'alpha', 'rect', 'image', 'linear-gradient',
+    'radial-gradient', 'repeating-linear-gradient', 'repeating-radial-gradient',
+    'cubic-bezier', 'matrix', 'perspective', 'rotate', 'rotate3d', 'rotatex',
+    'rotatey', 'steps', 'rotatez', 'scale', 'scale3d', 'scalex', 'scaley',
+    'scalez', 'skew', 'skewx', 'skewy', 'translate', 'translate3d',
+    'translatex', 'translatey', 'translatez');
 
 
 /**
@@ -246,14 +220,13 @@ goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
     if (goog.string.countOf(
             outputPropValue,
             goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_BEGIN_) > 1 ||
-        !(goog.array.contains(
-              goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_,
-              outputPropValue
+        !(outputPropValue
                   .substring(
                       0,
                       outputPropValue.indexOf(goog.html.sanitizer.CssSanitizer
                                                   .FUNCTION_ARGUMENTS_BEGIN_))
-                  .toLowerCase()) &&
+                  .toLowerCase() in
+              goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ &&
           goog.string.endsWith(
               outputPropValue,
               goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_))) {

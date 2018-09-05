@@ -30,8 +30,6 @@ goog.require('goog.structs');
 goog.require('goog.structs.Collection');
 goog.require('goog.structs.Map');
 
-
-
 /**
  * A set that can contain both primitives and objects.  Adding and removing
  * elements is O(1).  Primitives are treated as identical if they have the same
@@ -56,6 +54,12 @@ goog.structs.Set = function(opt_values) {
   }
 };
 
+/**
+ * A function that returns a unique id.
+ * @private @const {function(?Object): number}
+ */
+goog.structs.Set.getUid_ = goog.getUid;
+
 
 /**
  * Obtains a unique key for an element of the set.  Primitives will yield the
@@ -68,7 +72,7 @@ goog.structs.Set = function(opt_values) {
 goog.structs.Set.getKey_ = function(val) {
   var type = typeof val;
   if (type == 'object' && val || type == 'function') {
-    return 'o' + goog.getUid(/** @type {Object} */ (val));
+    return 'o' + goog.structs.Set.getUid_(/** @type {Object} */ (val));
   } else {
     return type.substr(0, 1) + val;
   }

@@ -39,8 +39,11 @@ goog.setTestOnly('goog.testing.Mock');
 goog.provide('goog.testing.Mock');
 goog.provide('goog.testing.MockExpectation');
 
+goog.require('goog.Promise');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.object');
+goog.require('goog.promise.Resolver');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.mockmatchers');
@@ -193,6 +196,9 @@ goog.testing.Mock = function(
     this.$initializeFunctions_(objectToMock);
   }
   this.$argumentListVerifiers_ = {};
+
+  /** @protected {?goog.promise.Resolver<undefined>} */
+  this.waitingForExpectations = null;
 };
 
 
@@ -543,6 +549,9 @@ goog.testing.Mock.prototype.$reset = function() {
   this.$recording_ = true;
   this.$threwException_ = null;
   delete this.$pendingExpectation;
+  if (this.waitingForExpectations) {
+    this.waitingForExpectations = null;
+  }
 };
 
 
@@ -569,6 +578,9 @@ goog.testing.Mock.prototype.$throwException = function(comment, opt_message) {
  * @protected
  */
 goog.testing.Mock.prototype.$recordAndThrow = function(ex, rethrow) {
+  if (this.waitingForExpectations) {
+    this.waitingForExpectations.resolve();
+  }
   // If it's an assert exception, record it.
   if (ex['isJsUnitException']) {
     if (!this.$threwException_) {
@@ -587,6 +599,28 @@ goog.testing.Mock.prototype.$recordAndThrow = function(ex, rethrow) {
     }
   }
   throw ex;
+};
+
+
+/** @override */
+goog.testing.Mock.prototype.$waitAndVerify = function() {
+  goog.asserts.assert(
+      !this.$recording_,
+      '$waitAndVerify should be called after recording calls.');
+  this.waitingForExpectations = goog.Promise.withResolver();
+  var verify = goog.bind(this.$verify, this);
+  return this.waitingForExpectations.promise.then(function() {
+    return new goog.Promise(function(resolve, reject) {
+      setTimeout(function() {
+        try {
+          verify();
+        } catch (e) {
+          reject(e);
+        }
+        resolve();
+      }, 0);
+    });
+  });
 };
 
 
