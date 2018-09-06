@@ -180,3 +180,52 @@ function testAssertCallCount() {
   var error2 = assertThrows(function() { f.assertCallCount(comment, 12); });
   assertEquals(error2.comment, 'Expected 12 call(s), but was 1. ' + comment);
 }
+
+async function testWaitForCalls() {
+  const f = goog.testing.recordFunction(goog.functions.identity);
+
+  setTimeout(() => {
+    f('Poodles');
+  }, 0);
+  f.assertCallCount(0);
+  await f.waitForCalls(1);
+  f.assertCallCount(1);
+
+  setTimeout(() => {
+    f('Hopscotch');
+    setTimeout(() => {
+      f('Bedazzler');
+    }, 0);
+  }, 0);
+  await f.waitForCalls(3);
+  f.assertCallCount(3);
+  await f.waitForCalls(1);
+  f.assertCallCount(3);
+  f.reset();
+  let resolved = false;
+  const finished = new Promise((resolve) => {
+    setTimeout(() => {
+      assertFalse(resolved);
+      resolve();
+      f('Poodles');
+    }, 0);
+  });
+  await f.waitForCalls(1);
+  resolved = true;
+  await finished;
+  f.assertCallCount(1);
+}
+
+async function testWaitCalls_Reset() {
+  const f = goog.testing.recordFunction(goog.functions.identity);
+
+  f.waitForCalls(1).then(() => {
+    fail('resolved a waitForCalls promise that was reset.');
+  });
+
+  f.reset();
+  f('Poodles');
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+}
