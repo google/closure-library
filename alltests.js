@@ -211,6 +211,7 @@ var _allTests = [
   'closure/goog/html/safestylesheet_test.html',
   'closure/goog/html/safestyle_test.html',
   'closure/goog/html/safeurl_test.html',
+  'closure/goog/html/sanitizer/csspropertysanitizer_test.html',
   'closure/goog/html/sanitizer/csssanitizer_test.html',
   'closure/goog/html/sanitizer/elementweakmap_test.html',
   'closure/goog/html/sanitizer/htmlsanitizer_test.html',

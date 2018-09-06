@@ -370,67 +370,115 @@ function testMultipleInlineStyles() {
 }
 
 
-function testSanitizeInlineStyleString() {
-  var tests = [
-    {
-      // empty string
-      inputCss: '',
-      sanitizedCss: ''
-    },
-    {
-      // one rule
-      inputCss: 'color: red',
-      sanitizedCss: 'color: red;'
-    },
-    {
-      // two rules
-      inputCss: 'color: green; padding: 10px',
-      sanitizedCss: 'color: green; padding: 10px;'
-    },
-    {
-      // malicious rule
-      inputCss: 'color: expression("pwned")',
-      sanitizedCss: ''
-    },
-    {
-      // disallowed URL
-      inputCss: 'background-image: url("http://example.com")',
-      sanitizedCss: ''
-    },
-    {
-      // disallowed URL
-      inputCss: 'background-image: url("http://example.com")',
-      sanitizedCss: '',
-      uriRewriter: function(uri) {
+function testSanitizeInlineStyleString_basic() {
+  assertInlineStyleStringEquals('', '');
+  assertInlineStyleStringEquals('color: red;', 'color: red');
+  assertInlineStyleStringEquals(
+      'color: green; padding: 10px;', 'color: green; padding: 10px');
+}
+
+
+function testSanitizeInlineStyleString_malicious() {
+  assertInlineStyleStringEquals('', 'color: expression("pwned")');
+}
+
+
+function testSanitizeInlineStyleString_url() {
+  assertInlineStyleStringEquals(
+      '', 'background-image: url("http://example.com")');
+
+  assertInlineStyleStringEquals(
+      '', 'background-image: url("http://example.com")', function(uri) {
         return null;
-      }
-    },
-    {
-      // allowed URL
-      inputCss: 'background-image: url("http://example.com")',
-      sanitizedCss: 'background-image: url("http://example.com");',
-      uriRewriter: goog.html.SafeUrl.sanitize
-    },
-    {
-      // preserves case
-      inputCss: 'font-family: Roboto, sans-serif',
-      sanitizedCss: 'font-family: Roboto, sans-serif'
-    }
-  ];
+      });
+  assertInlineStyleStringEquals(
+      'background-image: url("http://example.com");',
+      'background-image: url("http://example.com")',
+      goog.html.SafeUrl.sanitize);
+}
 
-  for (var i = 0; i < tests.length; i++) {
-    var test = tests[i];
 
-    var expectedOutput = test.sanitizedCss;
-    if (goog.userAgent.IE && document.documentMode < 10) {
-      expectedOutput = '';
-    }
+function testSanitizeInlineStyleString_unbalancedParenthesesInUnquotedUrl() {
+  assertEquals(
+      '',
+      goog.html.SafeStyle.unwrap(
+          goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString(
+              'background-image: url(http://example.com/aaa(a)',
+              goog.html.SafeUrl.sanitize)));
+  assertEquals(
+      '',
+      goog.html.SafeStyle.unwrap(
+          goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString(
+              'background-image: url(http://example.com/aaa)a)',
+              goog.html.SafeUrl.sanitize)));
+}
 
-    var safeStyle = goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString(
-        test.inputCss, test.uriRewriter);
-    var output = goog.html.SafeStyle.unwrap(safeStyle);
-    assertCSSTextEquals(expectedOutput, output);
+
+function testSanitizeInlineStyleString_preservesCase() {
+  assertInlineStyleStringEquals(
+      'font-family: Roboto, sans-serif', 'font-family: Roboto, sans-serif');
+}
+
+
+function testSanitizeInlineStyleString_simpleFunctions() {
+  var expectedCss = 'color: rgb(1,2,3);';
+  assertInlineStyleStringEquals(expectedCss, expectedCss);
+  expectedCss = 'background-image: linear-gradient(red, blue);';
+  assertInlineStyleStringEquals(expectedCss, expectedCss);
+}
+
+
+function testSanitizeInlineStyleString_nestedFunction() {
+  var expectedCss =
+      'background-image: linear-gradient(217deg, rgba(255,0,0,.8), blue);';
+  assertInlineStyleStringEquals(expectedCss, expectedCss);
+}
+
+
+function testSanitizeInlineStyleString_repeatingLinearGradient() {
+  var expectedCss = 'background-image: repeating-linear-gradient(' +
+      '-45deg, rgb(66, 133, 244), rgb(66, 133, 244) 4px, ' +
+      'rgb(255, 255, 255) 4px, rgb(255, 255, 255) 5px, ' +
+      'rgb(66, 133, 244) 5px, rgb(66, 133, 244) 8px);';
+  assertInlineStyleStringEquals(expectedCss, expectedCss);
+}
+
+
+function testSanitizeInlineStyleString_noUrlPropertyValueFanOut() {
+  if (goog.userAgent.IE && document.documentMode < 10) {
+    return;
   }
+  // Property fanout is ok, but value fanout isn't, because it would lead to
+  // CssPropertySanitizer dropping the value. Check that no browser does
+  // value fanout.
+  var safeStyle = goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString(
+      'background: url("http://foo.com/a")', goog.html.SafeUrl.sanitize);
+  var output = goog.html.SafeStyle.unwrap(safeStyle);
+  // We can't use assertInlineStyleStringEquals, the browser is inconsistent
+  // about fanout of properties. We'll use plain substring matching instead.
+  assertContains(
+      goog.userAgent.product.SAFARI ? 'url(http://foo.com/a)' :
+                                      'url("http://foo.com/a")',
+      output);
+}
+
+
+/**
+ * @param {string} expectedCssText
+ * @param {string} inputCssText
+ * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
+ *     rewriter that returns a goog.html.SafeUrl.
+ */
+function assertInlineStyleStringEquals(
+    expectedCssText, inputCssText, opt_uriRewriter) {
+  if (goog.userAgent.IE && document.documentMode < 10) {
+    expectedCssText = '';
+  }
+
+  var safeStyle = goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString(
+      inputCssText, opt_uriRewriter);
+  var output = goog.html.SafeStyle.unwrap(safeStyle);
+  assertCSSTextEquals(expectedCssText, output);
 }
 
 

@@ -29,6 +29,7 @@ goog.require('goog.html.CssSpecificity');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.sanitizer.CssPropertySanitizer');
 goog.require('goog.html.sanitizer.noclobber');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
@@ -36,35 +37,6 @@ goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
-
-/**
- * The set of characters that need to be normalized inside url("...").
- * We normalize newlines because they are not allowed inside quoted strings,
- * normalize quote characters, angle-brackets, and asterisks because they
- * could be used to break out of the URL or introduce targets for CSS
- * error recovery.  We normalize parentheses since they delimit unquoted
- * URLs and calls and could be a target for error recovery.
- * @const @private {!RegExp}
- */
-goog.html.sanitizer.CssSanitizer.NORM_URL_REGEXP_ = /[\n\f\r\"\'()*<>]/g;
-
-
-/**
- * The replacements for NORM_URL_REGEXP.
- * @private @const {!Object<string, string>}
- */
-goog.html.sanitizer.CssSanitizer.NORM_URL_REPLACEMENTS_ = {
-  '\n': '%0a',
-  '\f': '%0c',
-  '\r': '%0d',
-  '"': '%22',
-  '\'': '%27',
-  '(': '%28',
-  ')': '%29',
-  '*': '%2a',
-  '<': '%3c',
-  '>': '%3e'
-};
 
 
 /**
@@ -97,74 +69,6 @@ goog.html.sanitizer.CssSanitizer.SELECTOR_REGEX_ =
             ')',          // End of the match.
         'g') :
     null;
-
-
-/**
- * Normalizes a character for use in a url() directive.
- * @param {string} ch Character to be normalized.
- * @return {?string} Normalized character.
- * @private
- */
-goog.html.sanitizer.CssSanitizer.normalizeUrlChar_ = function(ch) {
-  return goog.html.sanitizer.CssSanitizer.NORM_URL_REPLACEMENTS_[ch] || null;
-};
-
-
-/**
- * Constructs a safe URI from a given URI and prop using a given uriRewriter
- * function.
- * @param {string} uri URI to be sanitized.
- * @param {string} propName Property name which contained the URI.
- * @param {?function(string, string):?goog.html.SafeUrl} uriRewriter A URI
- *    rewriter that returns a goog.html.SafeUrl.
- * @return {?string} Safe URI for use in CSS.
- * @private
- */
-goog.html.sanitizer.CssSanitizer.getSafeUri_ = function(
-    uri, propName, uriRewriter) {
-  if (!uriRewriter) {
-    return null;
-  }
-  var safeUri = uriRewriter(uri, propName);
-  if (safeUri &&
-      goog.html.SafeUrl.unwrap(safeUri) != goog.html.SafeUrl.INNOCUOUS_STRING) {
-    return 'url("' +
-        goog.html.SafeUrl.unwrap(safeUri).replace(
-            goog.html.sanitizer.CssSanitizer.NORM_URL_REGEXP_,
-            goog.html.sanitizer.CssSanitizer.normalizeUrlChar_) +
-        '")';
-  }
-  return null;
-};
-
-
-/**
- * Used to detect the beginning of the argument list of a CSS property value
- * containing a CSS function call.
- * @private @const {string}
- */
-goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_BEGIN_ = '(';
-
-
-/**
- * Used to detect the end of the argument list of a CSS property value
- * containing a CSS function call.
- * @private @const {string}
- */
-goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_ = ')';
-
-
-/**
- * Allowed CSS functions
- * @private @const {!Object<string,boolean>}
- */
-goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ = goog.object.createSet(
-    'rgb', 'rgba', 'alpha', 'rect', 'linear-gradient', 'radial-gradient',
-    'repeating-linear-gradient', 'repeating-radial-gradient', 'cubic-bezier',
-    'matrix', 'perspective', 'rotate', 'rotate3d', 'rotatex', 'rotatey',
-    'steps', 'rotatez', 'scale', 'scale3d', 'scalex', 'scaley', 'scalez',
-    'skew', 'skewx', 'skewy', 'translate', 'translate3d', 'translatex',
-    'translatey', 'translatez');
 
 
 /**
@@ -201,64 +105,6 @@ goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
   // cross-implementation, and lists other prefixes.
   return propName.replace(
       /^-(?:apple|css|epub|khtml|moz|mso?|o|rim|wap|webkit|xv)-(?=[a-z])/i, '');
-};
-
-
-/**
- * Sanitizes the value for a given a browser-parsed CSS value.
- * @param {string} propName A property name.
- * @param {string} propValue Value of the property as parsed by the browser.
- * @param {function(string, string):?goog.html.SafeUrl=} opt_uriRewriter A URI
- *     rewriter that returns an unwrapped goog.html.SafeUrl.
- * @return {?string} Sanitized property value or null.
- * @private
- */
-goog.html.sanitizer.CssSanitizer.sanitizeProperty_ = function(
-    propName, propValue, opt_uriRewriter) {
-  var outputPropValue = goog.string.trim(propValue);
-  if (outputPropValue == '') {
-    return null;
-  }
-
-  if (goog.string.caseInsensitiveStartsWith(outputPropValue, 'url(')) {
-    // Urls are rewritten according to the policy implemented in
-    // opt_uriRewriter.
-    // TODO(pelizzi): use HtmlSanitizerUrlPolicy for opt_uriRewriter.
-    if (!opt_uriRewriter) {
-      return null;
-    }
-    // TODO(danesh): Check if we need to resolve this URI.
-    var uri = goog.string.stripQuotes(
-        outputPropValue.substring(4, outputPropValue.length - 1), '"\'');
-
-    return goog.html.sanitizer.CssSanitizer.getSafeUri_(
-        uri, propName, opt_uriRewriter);
-  } else if (outputPropValue.indexOf('(') > 0) {
-    // Functions are filtered through a whitelist. Nesting whitelisted functions
-    // is not supported.
-    if (goog.string.countOf(
-            outputPropValue,
-            goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_BEGIN_) > 1 ||
-        !(outputPropValue
-                  .substring(
-                      0,
-                      outputPropValue.indexOf(goog.html.sanitizer.CssSanitizer
-                                                  .FUNCTION_ARGUMENTS_BEGIN_))
-                  .toLowerCase() in
-              goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ &&
-          goog.string.endsWith(
-              outputPropValue,
-              goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_))) {
-      // TODO(b/34222379): Handle functions that may need recursing or that may
-      // appear in the middle of a string. For now, just allow functions which
-      // aren't nested.
-      return null;
-    }
-    return outputPropValue;
-  } else {
-    // Everything else is allowed.
-    return outputPropValue;
-  }
 };
 
 
@@ -402,8 +248,9 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
       var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
           /** @type {!CSSStyleDeclaration} */ (cssStyle), propName);
 
-      var sanitizedValue = goog.html.sanitizer.CssSanitizer.sanitizeProperty_(
-          propNameWithoutPrefix, propValue, opt_uriRewriter);
+      var sanitizedValue =
+          goog.html.sanitizer.CssPropertySanitizer.sanitizeProperty(
+              propNameWithoutPrefix, propValue, opt_uriRewriter);
       if (sanitizedValue != null) {
         goog.html.sanitizer.noclobber.setCssProperty(
             cleanCssStyle, propNameWithoutPrefix, sanitizedValue);
