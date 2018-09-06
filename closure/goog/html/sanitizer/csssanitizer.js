@@ -159,12 +159,12 @@ goog.html.sanitizer.CssSanitizer.FUNCTION_ARGUMENTS_END_ = ')';
  * @private @const {!Object<string,boolean>}
  */
 goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ = goog.object.createSet(
-    'rgb', 'rgba', 'alpha', 'rect', 'image', 'linear-gradient',
-    'radial-gradient', 'repeating-linear-gradient', 'repeating-radial-gradient',
-    'cubic-bezier', 'matrix', 'perspective', 'rotate', 'rotate3d', 'rotatex',
-    'rotatey', 'steps', 'rotatez', 'scale', 'scale3d', 'scalex', 'scaley',
-    'scalez', 'skew', 'skewx', 'skewy', 'translate', 'translate3d',
-    'translatex', 'translatey', 'translatez');
+    'rgb', 'rgba', 'alpha', 'rect', 'linear-gradient', 'radial-gradient',
+    'repeating-linear-gradient', 'repeating-radial-gradient', 'cubic-bezier',
+    'matrix', 'perspective', 'rotate', 'rotate3d', 'rotatex', 'rotatey',
+    'steps', 'rotatez', 'scale', 'scale3d', 'scalex', 'scaley', 'scalez',
+    'skew', 'skewx', 'skewy', 'translate', 'translate3d', 'translatex',
+    'translatey', 'translatez');
 
 
 /**
