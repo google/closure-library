@@ -168,14 +168,33 @@ goog.html.sanitizer.CssSanitizer.ALLOWED_FUNCTIONS_ = goog.object.createSet(
 
 
 /**
+ * A whitelist of properties that can retain the prefix in Chrome.
+ * @private @const {!Object<string,boolean>}
+ */
+goog.html.sanitizer.CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_ =
+    goog.object.createSet(
+        '-webkit-border-horizontal-spacing', '-webkit-border-vertical-spacing');
+
+
+/**
  * Removes a vendor prefix from a property name.
  * @param {string} propName A property name.
  * @return {string} A property name without vendor prefixes.
  * @private
  */
 goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
+  // A few property names are only valid with the prefix on specific browsers.
+  // The recommendation is of course to avoid them, but in specific cases a
+  // non-prefixed property gets transformed into one or more prefixed
+  // properties by the browser. In this case, the best option to avoid having
+  // the non-prefixed property be dropped silently is to allow the prefixed
+  // property in the output.
+  if (goog.userAgent.WEBKIT &&
+      propName in goog.html.sanitizer.CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_) {
+    return propName;
+  }
   // http://stackoverflow.com/a/5411098/20394 has a fairly extensive list
-  // of vendor prefices. Blink has not declared a vendor prefix distinct from
+  // of vendor prefixes. Blink has not declared a vendor prefix distinct from
   // -webkit- and http://css-tricks.com/tldr-on-vendor-prefix-drama/ discusses
   // how Mozilla recognizes some -webkit- prefixes.
   // http://wiki.csswg.org/spec/vendor-prefixes talks more about
@@ -375,21 +394,22 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
   var cssPropNames =
       goog.html.sanitizer.CssSanitizer.getCssPropNames_(cssStyle);
 
-  for (var i = 0; i < cssPropNames.length; i++) {
-    var propName =
-        goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_(cssPropNames[i]);
-    if (!goog.html.sanitizer.CssSanitizer.isDisallowedPropertyName_(propName)) {
-      var propValue =
-          goog.html.sanitizer.noclobber.getCssPropertyValue(cssStyle, propName);
+  goog.array.forEach(cssPropNames, function(propName) {
+    var propNameWithoutPrefix =
+        goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_(propName);
+    if (!goog.html.sanitizer.CssSanitizer.isDisallowedPropertyName_(
+            propNameWithoutPrefix)) {
+      var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
+          /** @type {!CSSStyleDeclaration} */ (cssStyle), propName);
 
       var sanitizedValue = goog.html.sanitizer.CssSanitizer.sanitizeProperty_(
-          propName, propValue, opt_uriRewriter);
+          propNameWithoutPrefix, propValue, opt_uriRewriter);
       if (sanitizedValue != null) {
         goog.html.sanitizer.noclobber.setCssProperty(
-            cleanCssStyle, propName, sanitizedValue);
+            cleanCssStyle, propNameWithoutPrefix, sanitizedValue);
       }
     }
-  }
+  });
   return goog.html.uncheckedconversions
       .safeStyleFromStringKnownToSatisfyTypeContract(
           goog.string.Const.from('Output of CSS sanitizer'),

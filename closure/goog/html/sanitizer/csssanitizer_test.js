@@ -507,6 +507,13 @@ function testSanitizeStyleSheetString_atRule() {
 }
 
 
+function testSanitizeStyleSheetString_borderSpacing() {
+  var input = 'table { border-spacing: 0px; }';
+  var expected = '#foo table{border-spacing: 0px;}';
+  assertSanitizedCssEquals(expected, input);
+}
+
+
 function testSanitizeStyleSheetString_urlRewrite() {
   var urlRewriter = function(url) {
     if (input.indexOf('bar') > -1) {
