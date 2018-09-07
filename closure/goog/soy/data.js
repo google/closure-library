@@ -87,12 +87,11 @@ goog.soy.data.SanitizedContentKind = {
   // separate types, but for simplicity, we'll treat explicitly blessed
   // SanitizedContent as allowed in all of these contexts.
   /**
-   * A CSS3 declaration, property, value, group of semicolon separated
-   * declarations or style sheet (list of rules).
+   * A CSS3 declaration, property, value or group of semicolon separated
+   * declarations.
    */
   STYLE: goog.DEBUG ? {sanitizedContentStyle: true} : {},
 
-  // TODO(b/114317172): Delete.
   /** A CSS3 style sheet (list of rules). */
   CSS: goog.DEBUG ? {sanitizedContentCss: true} : {},
 
@@ -430,13 +429,13 @@ goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
  * The content is non-attacker-exploitable CSS, such as `color:#c3d9ff`.
  * The content direction is LTR.
  *
- * @extends {goog.soy.data.SanitizedCss}
+ * @extends {goog.soy.data.SanitizedContent}
  * @constructor
  */
 goog.soy.data.SanitizedStyle = function() {
   goog.soy.data.SanitizedStyle.base(this, 'constructor');
 };
-goog.inherits(goog.soy.data.SanitizedCss, goog.soy.data.SanitizedContent);
+goog.inherits(goog.soy.data.SanitizedStyle, goog.soy.data.SanitizedContent);
 
 
 /** @override */
@@ -448,8 +447,20 @@ goog.soy.data.SanitizedStyle.prototype.contentKind =
 goog.soy.data.SanitizedStyle.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
 
 
+/**
+ * Checks if the value could be used as the Soy type {css}.
+ * @param {*} value
+ * @return {boolean}
+ */
+goog.soy.data.SanitizedStyle.isCompatibleWith = function(value) {
+  return goog.isString(value) ||
+      value instanceof goog.soy.data.SanitizedStyle ||
+      value instanceof goog.soy.data.UnsanitizedText ||
+      value instanceof goog.html.SafeStyle;
+};
 
-// TODO(b/114317172): Delete.
+
+
 /**
  * Content of type {@link goog.soy.data.SanitizedContentKind.CSS}.
  *
@@ -482,7 +493,7 @@ goog.soy.data.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
 goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
   return goog.isString(value) || value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.soy.data.UnsanitizedText ||
-      value instanceof goog.html.SafeStyle ||
+      value instanceof goog.html.SafeStyle ||  // TODO(jakubvrana): Delete.
       value instanceof goog.html.SafeStyleSheet;
 };
 
