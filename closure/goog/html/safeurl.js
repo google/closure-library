@@ -363,6 +363,23 @@ goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
 
 
 /**
+ * Creates a SafeUrl wrapping a fb-messenger://share URL.
+ *
+ * @param {string} facebookMessengerUrl A facebook messenger URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
+  if (!goog.string.caseInsensitiveStartsWith(
+          facebookMessengerUrl, 'fb-messenger://share')) {
+    facebookMessengerUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      facebookMessengerUrl);
+};
+
+
+/**
  * Creates a SafeUrl wrapping a sms: URL.
  *
  * @param {string} smsUrl A sms URL.
