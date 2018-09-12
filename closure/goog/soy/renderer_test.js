@@ -143,7 +143,7 @@ function testRenderStrictValidatesOutput() {
       'Assertion failed: ' +
           'renderStrict cannot be called on a non-strict soy template',
       assertThrows(function() {
-        renderer.renderStrict(example.noDataTemplate, {});
+        renderer.renderStrict(example.stringTemplate, {});
       }).message);
   assertUndefined(handleRender.getLastCall().getArguments()[0]);
   // Passes.
@@ -199,7 +199,7 @@ function testRenderText() {
       'Assertion failed: ' +
           'renderText cannot be called on a non-strict soy template',
       assertThrows(function() {
-        renderer.renderText(example.noDataTemplate, {});
+        renderer.renderText(example.stringTemplate, {});
       }).message);
   // RenderText on non-text template fails.
   assertEquals(
