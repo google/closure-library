@@ -418,6 +418,96 @@ goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
 
 
 /**
+ * Sanitizes a Chrome extension URL to SafeUrl, given a compile-time-constant
+ * extension identifier. Can also be restricted to chrome extensions.
+ *
+ * @param {string} url The url to sanitize. Should start with the extension
+ *     scheme and the extension identifier.
+ * @param {!goog.string.Const|!Array<!goog.string.Const>} extensionId The
+ *     extension id to accept, as a compile-time constant or an array of those.
+ *
+ * @return {!goog.html.SafeUrl} Either `url` if it's deemed safe, or
+ *     `INNOCUOUS_STRING` if it's not.
+ */
+goog.html.SafeUrl.sanitizeChromeExtensionUrl = function(url, extensionId) {
+  return goog.html.SafeUrl.sanitizeExtensionUrl_(
+      /^chrome-extension:\/\/([^\/]+)\//, url, extensionId);
+};
+
+/**
+ * Sanitizes a Firefox extension URL to SafeUrl, given a compile-time-constant
+ * extension identifier. Can also be restricted to chrome extensions.
+ *
+ * @param {string} url The url to sanitize. Should start with the extension
+ *     scheme and the extension identifier.
+ * @param {!goog.string.Const|!Array<!goog.string.Const>} extensionId The
+ *     extension id to accept, as a compile-time constant or an array of those.
+ *
+ * @return {!goog.html.SafeUrl} Either `url` if it's deemed safe, or
+ *     `INNOCUOUS_STRING` if it's not.
+ */
+goog.html.SafeUrl.sanitizeFirefoxExtensionUrl = function(url, extensionId) {
+  return goog.html.SafeUrl.sanitizeExtensionUrl_(
+      /^moz-extension:\/\/([^\/]+)\//, url, extensionId);
+};
+
+/**
+ * Sanitizes a Edge extension URL to SafeUrl, given a compile-time-constant
+ * extension identifier. Can also be restricted to chrome extensions.
+ *
+ * @param {string} url The url to sanitize. Should start with the extension
+ *     scheme and the extension identifier.
+ * @param {!goog.string.Const|!Array<!goog.string.Const>} extensionId The
+ *     extension id to accept, as a compile-time constant or an array of those.
+ *
+ * @return {!goog.html.SafeUrl} Either `url` if it's deemed safe, or
+ *     `INNOCUOUS_STRING` if it's not.
+ */
+goog.html.SafeUrl.sanitizeEdgeExtensionUrl = function(url, extensionId) {
+  return goog.html.SafeUrl.sanitizeExtensionUrl_(
+      /^ms-browser-extension:\/\/([^\/]+)\//, url, extensionId);
+};
+
+/**
+ * Private helper for converting extension URLs to SafeUrl, given the scheme for
+ * that particular extension type. Use the sanitizeFirefoxExtensionUrl,
+ * sanitizeChromeExtensionUrl or sanitizeEdgeExtensionUrl unless you're building
+ * new helpers.
+ *
+ * @private
+ * @param {!RegExp} scheme The scheme to accept as a RegExp extracting the
+ *     extension identifier.
+ * @param {string} url The url to sanitize. Should start with the extension
+ *     scheme and the extension identifier.
+ * @param {!goog.string.Const|!Array<!goog.string.Const>} extensionId The
+ *     extension id to accept, as a compile-time constant or an array of those.
+ *
+ * @return {!goog.html.SafeUrl} Either `url` if it's deemed safe, or
+ *     `INNOCUOUS_STRING` if it's not.
+ */
+goog.html.SafeUrl.sanitizeExtensionUrl_ = function(scheme, url, extensionId) {
+  var matches = scheme.exec(url);
+  if (!matches) {
+    url = goog.html.SafeUrl.INNOCUOUS_STRING;
+  } else {
+    var extractedExtensionId = matches[1];
+    var acceptedExtensionIds;
+    if (extensionId instanceof goog.string.Const) {
+      acceptedExtensionIds = [goog.string.Const.unwrap(extensionId)];
+    } else {
+      acceptedExtensionIds = extensionId.map(function unwrap(x) {
+        return goog.string.Const.unwrap(x);
+      });
+    }
+    if (acceptedExtensionIds.indexOf(extractedExtensionId) == -1) {
+      url = goog.html.SafeUrl.INNOCUOUS_STRING;
+    }
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
+/**
  * Creates a SafeUrl from TrustedResourceUrl. This is safe because
  * TrustedResourceUrl is more tightly restricted than SafeUrl.
  *

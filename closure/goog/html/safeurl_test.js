@@ -133,38 +133,44 @@ function testSafeUrlSanitize_sipProtocolCase() {
 
 function testSafeUrlSanitize_sipUrlWithPort() {
   var observed = goog.html.SafeUrl.fromSipUrl('sip:username@example.com:5000');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
 function testSafeUrlSanitize_sipUrlFragment() {
   var observed = goog.html.SafeUrl.fromSipUrl('sip:user#name@example.com');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
 function testSafeUrlSanitize_sipUrlWithPassword() {
   var observed =
       goog.html.SafeUrl.fromSipUrl('sips:username:password@example.com');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
 function testSafeUrlSanitize_sipUrlWithOptions() {
   var observed = goog.html.SafeUrl.fromSipUrl('sips:user;na=me@example.com');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
 function testSafeUrlSanitize_sipUrlWithPercent() {
   var observed = goog.html.SafeUrl.fromSipUrl('sip:user%40name@example.com');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
 function testSafeUrlSanitize_sipUrlWithAmbiguousQuery() {
   var observed = goog.html.SafeUrl.fromSipUrl('sip:user?name@example.com');
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(observed));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
@@ -175,6 +181,63 @@ function testSafeUrlSanitize_sanitizeSmsUrl() {
     var observed = goog.html.SafeUrl.fromSmsUrl(v.input);
     assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
   }
+}
+
+
+function testSafeUrlSanitize_sanitizeChromeExtension() {
+  var extensionId = goog.string.Const.from('1234567890abcdef');
+  var observed = goog.html.SafeUrl.sanitizeChromeExtensionUrl(
+      'chrome-extension://1234567890abcdef/foo/bar', extensionId);
+  assertEquals(
+      'chrome-extension://1234567890abcdef/foo/bar',
+      goog.html.SafeUrl.unwrap(observed));
+
+  observed = goog.html.SafeUrl.sanitizeChromeExtensionUrl(
+      'chrome-extension://1234567890abcdef/foo/bar', [extensionId]);
+  assertEquals(
+      'chrome-extension://1234567890abcdef/foo/bar',
+      goog.html.SafeUrl.unwrap(observed));
+
+  observed = goog.html.SafeUrl.sanitizeChromeExtensionUrl(
+      'not-a-chrome-extension://1234567890abcdef/foo/bar', extensionId);
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
+
+  observed = goog.html.SafeUrl.sanitizeChromeExtensionUrl(
+      'chrome-extension://fedcba0987654321/foo/bar', extensionId);
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sanitizeFirefoxExtension() {
+  var extensionId = goog.string.Const.from('1234-5678-90ab-cdef');
+  var observed = goog.html.SafeUrl.sanitizeFirefoxExtensionUrl(
+      'moz-extension://1234-5678-90ab-cdef/foo/bar', extensionId);
+  assertEquals(
+      'moz-extension://1234-5678-90ab-cdef/foo/bar',
+      goog.html.SafeUrl.unwrap(observed));
+
+  observed = goog.html.SafeUrl.sanitizeFirefoxExtensionUrl(
+      'moz-extension://ms-browser-extension://1234-5678-90ab-cdef/foo/bar',
+      extensionId);
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
+}
+
+
+function testSafeUrlSanitize_sanitizeEdgeExtension() {
+  var extensionId = goog.string.Const.from('1234-5678-90ab-cdef');
+  var observed = goog.html.SafeUrl.sanitizeEdgeExtensionUrl(
+      'ms-browser-extension://1234-5678-90ab-cdef/foo/bar', extensionId);
+  assertEquals(
+      'ms-browser-extension://1234-5678-90ab-cdef/foo/bar',
+      goog.html.SafeUrl.unwrap(observed));
+
+  observed = goog.html.SafeUrl.sanitizeEdgeExtensionUrl(
+      'chrome-extension://1234-5678-90ab-cdef/foo/bar', extensionId);
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(observed));
 }
 
 
@@ -237,7 +300,8 @@ function testSafeUrlSanitize_sanitizeProgramConstants() {
   // .sanitize() does not exempt values known to be program constants.
   var bad = goog.string.Const.from('data:blah');
   var badOutput = goog.html.SafeUrl.sanitize(bad);
-  assertEquals('about:invalid#zClosurez', goog.html.SafeUrl.unwrap(badOutput));
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING, goog.html.SafeUrl.unwrap(badOutput));
   assertThrows(function() {
     goog.html.SafeUrl.sanitizeAssertUnchanged(bad);
   });
