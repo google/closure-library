@@ -1545,9 +1545,15 @@ goog.i18n.NumberFormat.prototype.roundToSignificantDigits_ = function(
     return Math.round(number / point) * point;
   }
 
-  var power = Math.pow(10, magnitude);
-  var shifted = Math.round(number * power);
-  return shifted / power;
+  if (magnitude < 0) {
+    var power = Math.pow(10, -magnitude);
+    var shifted = Math.round(number / power);
+    return shifted * power;
+  } else {
+    var power = Math.pow(10, magnitude);
+    var shifted = Math.round(number * power);
+    return shifted / power;
+  }
 };
 
 
