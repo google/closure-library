@@ -24,7 +24,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.string');
@@ -110,9 +109,11 @@ goog.soy.renderElement = function(
  * the method). Otherwise a document fragment is returned containing the
  * rendered nodes.
  *
- * @param {?function(ARG_TYPES, Object<string, *>=):*|
- *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
- *     The Soy template defining the element's content.
+ * @param {
+ *     ?function(ARG_TYPES, Object<string, *>=):goog.soy.data.SanitizedContent|
+ *     ?function(ARG_TYPES, null=, Object<string, *>=):
+ *     goog.soy.data.SanitizedContent} template The Soy template defining the
+ *     element's content. The kind of the template must be "html" or "text".
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper used to
@@ -130,9 +131,7 @@ goog.soy.renderAsFragment = function(
       opt_injectedData);
   var html = goog.soy.ensureTemplateOutputHtml_(output);
   goog.soy.assertFirstTagValid_(html);
-  var safeHtml = output instanceof goog.soy.data.SanitizedContent ?
-      output.toSafeHtml() :
-      goog.html.legacyconversions.safeHtmlFromString(html);
+  var safeHtml = output.toSafeHtml();
   return dom.safeHtmlToNode(safeHtml);
 };
 

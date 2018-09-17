@@ -541,7 +541,7 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
   this.result_.totalCount = this.getCount();
   if (!this.shouldRunTests()) {
     this.log('shouldRunTests() returned false, skipping these tests.');
-    this.result_.testSuppressed = true;
+    this.result_.allTestSuppressed = true;
     this.finalize();
     return false;
   }
@@ -795,6 +795,21 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
     return new goog.testing.Continuation_(
         goog.bind(this.runNextTestCallback_, this, this.result_));
   }
+
+  var shouldRunTest = true;
+  try {
+    shouldRunTest = this.shouldRunTestsHelper_();
+  } catch (error) {
+    this.curTest_.name = 'shouldRunTests for ' + this.curTest_.name;
+    return new goog.testing.Continuation_(
+        goog.bind(this.finishTestInvocation_, this, error));
+  }
+
+  if (!shouldRunTest) {
+    return new goog.testing.Continuation_(
+        goog.bind(this.finishTestInvocation_, this));
+  }
+
   this.curTest_.started();
   this.result_.runCount++;
   this.log('Running test: ' + this.curTest_.name);
@@ -804,6 +819,56 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
   }
   goog.testing.TestCase.currentTestName = this.curTest_.name;
   return this.safeSetUp_();
+};
+
+
+/**
+ * @return {boolean}
+ * @private
+ */
+goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
+  var objChain =
+      this.curTest_.objChain.length ? this.curTest_.objChain : [this];
+
+  for (var i = 0; i < objChain.length; i++) {
+    var obj = objChain[i];
+
+    if (!goog.isFunction(obj.shouldRunTests)) {
+      return true;
+    }
+
+    if (goog.isFunction(obj.shouldRunTests['$cachedResult'])) {
+      if (!obj.shouldRunTests['$cachedResult']()) {
+        return false;
+      }
+    }
+
+    var result;
+    (function() {
+      // Cache the result by storing a function. This way we only call
+      // shouldRunTests once per object in the chain. This enforces that people
+      // do not attempt to suppress some tests and not others with the same
+      // shouldRunTests function.
+      try {
+        var cached = result = obj.shouldRunTests.call(obj);
+        obj.shouldRunTests['$cachedResult'] = function() {
+          return cached;
+        };
+      } catch (error) {
+        obj.shouldRunTests['$cachedResult'] = function() {
+          throw error;
+        };
+        throw error;
+      }
+    })();
+
+    if (!result) {
+      this.result_.suppressedTests.push(this.curTest_.name);
+      return false;
+    }
+  }
+
+  return true;
 };
 
 /**
@@ -1018,7 +1083,12 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
   // If no errors have been recorded for the test, it is a success.
   if (!(this.curTest_.name in this.result_.resultsByName) ||
       !this.result_.resultsByName[this.curTest_.name].length) {
-    this.doSuccess(this.curTest_);
+    if (goog.array.indexOf(this.result_.suppressedTests, this.curTest_.name) >=
+        0) {
+      this.doSkipped(this.curTest_);
+    } else {
+      this.doSuccess(this.curTest_);
+    }
   } else {
     this.doError(this.curTest_);
   }
@@ -1526,6 +1596,28 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
 
 
 /**
+ * Handles a test that was skipped.
+ * @param {!goog.testing.TestCase.Test} test The test that was skipped.
+ * @protected
+ */
+goog.testing.TestCase.prototype.doSkipped = function(test) {
+  this.result_.skipCount++;
+  // An empty list of error messages indicates that the test passed.
+  // If we already have a failure for this test, do not set to empty list.
+  if (!(test.name in this.result_.resultsByName)) {
+    this.result_.resultsByName[test.name] = [];
+  }
+  var message = test.name + ' : SKIPPED';
+  this.saveMessage(message);
+  this.log(message);
+  if (this.testDone_) {
+    this.doTestDone_(test, []);
+  }
+};
+
+
+
+/**
  * Records and logs an error from or related to a test.
  * @param {string} testName The name of the test that failed.
  * @param {*} error The exception object associated with the
@@ -1684,6 +1776,11 @@ goog.testing.TestCase.Test = function(name, ref, scope, objChain) {
    */
   this.tearDowns = [];
 
+  /**
+   * @type {!Array<?>}
+   */
+  this.objChain = objChain || [];
+
   if (objChain) {
     for (var i = 0; i < objChain.length; i++) {
       if (goog.isFunction(objChain[i].setUp)) {
@@ -1777,6 +1874,12 @@ goog.testing.TestCase.Result = function(testCase) {
   this.successCount = 0;
 
   /**
+   * Number of tests skipped due to nested shouldRunTests.
+   * @type {number}
+   */
+  this.skipCount = 0;
+
+  /**
    * The amount of time the tests took to run.
    * @type {number}
    */
@@ -1789,11 +1892,16 @@ goog.testing.TestCase.Result = function(testCase) {
   this.numFilesLoaded = 0;
 
   /**
-   * Whether this test case was suppressed by shouldRunTests() returning
-   * false.
+   * Whether all tests were suppressed from a top-level shouldRunTests().
    * @type {boolean}
    */
-  this.testSuppressed = false;
+  this.allTestSuppressed = false;
+
+  /**
+   * Which tests were suppressed by shouldRunTests() returning false.
+   * @type {!Array<string>}
+   */
+  this.suppressedTests = [];
 
   /**
    * Test results for each test that was run. The test name is always added
@@ -1839,16 +1947,21 @@ goog.testing.TestCase.Result.prototype.isSuccess = function() {
 goog.testing.TestCase.Result.prototype.getSummary = function() {
   var summary = this.runCount + ' of ' + this.totalCount + ' tests run in ' +
       this.runTime + 'ms.\n';
-  if (this.testSuppressed) {
+  if (this.allTestSuppressed) {
     summary += 'Tests not run because shouldRunTests() returned false.';
   } else {
-    var failures = this.totalCount - this.successCount;
+    var failures = this.totalCount - this.successCount - this.skipCount;
     var suppressionMessage = '';
+
+    if (this.skipCount) {
+      suppressionMessage +=
+          ', ' + this.skipCount + ' skipped by shouldRunTests()';
+    }
 
     var countOfRunTests = this.testCase_.getActuallyRunCount();
     if (countOfRunTests) {
-      failures = countOfRunTests - this.successCount;
-      suppressionMessage = ', ' + (this.totalCount - countOfRunTests) +
+      failures = countOfRunTests - this.successCount - this.skipCount;
+      suppressionMessage += ', ' + (this.totalCount - countOfRunTests) +
           ' suppressed by querystring';
     }
     summary += this.successCount + ' passed, ' + failures + ' failed' +

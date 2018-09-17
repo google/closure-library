@@ -91,6 +91,8 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/net/xpc/nativemessagingtransport.js'
   # TODO(user): make sure this gets security reviewed (b/29333525).
   whitelist_regexp: '.+/closure/goog/messaging/portchannel.js'
+  # Internal-only code: go/g3doc-widgets#screenshots-widget-html.
+  whitelist: 'java/com/google/frameworks/testing/infrastructure/screenshot/ui/carousel/carouselcontroller.js'
 }
 
 ### Security: forbid DOM properties and functions which can cause XSS ###

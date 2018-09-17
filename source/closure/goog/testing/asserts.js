@@ -1269,9 +1269,11 @@ var assertRoughlyEquals = goog.testing.asserts.assertRoughlyEquals = function(
 
 
 /**
- * Checks if the test value is a member of the given container.  Uses
- * container.indexOf as the underlying function, so this works for strings
- * and arrays.
+ * Checks if the test value is included in the given container. The container
+ * can be a string (where "included" means a substring), an array or any
+ *  `IArrayLike` (where "included" means a member), or any type implementing
+ * `indexOf` with similar semantics (returning -1 for not included).
+ *
  * @param {*} a Failure message (3 arguments) or the test value
  *     (2 arguments).
  * @param {*} b The test value (3 arguments) or the container
@@ -1291,7 +1293,10 @@ goog.testing.asserts.assertContains = function(a, b, opt_c) {
 var assertContains = goog.testing.asserts.assertContains;
 
 /**
- * Checks if the given element is not the member of the given container.
+ * Checks if the test value is not included in the given container. The
+ * container can be a string (where "included" means a substring), an array or
+ * any `IArrayLike` (where "included" means a member), or any type implementing
+ * `indexOf` with similar semantics (returning -1 for not included).
  * @param {*} a Failure message (3 arguments) or the contained element
  *     (2 arguments).
  * @param {*} b The contained element (3 arguments) or the container
@@ -1348,7 +1353,7 @@ goog.testing.asserts.toArray_ = function(arrayLike) {
 
 /**
  * Finds the position of the first occurrence of an element in a container.
- * @param {IArrayLike<?>} container
+ * @param {IArrayLike<?>|{indexOf: function(*): number}} container
  *     The array to find the element in.
  * @param {*} contained Element to find.
  * @return {number} Index of the first occurrence or -1 if not found.
@@ -1371,7 +1376,7 @@ goog.testing.asserts.indexOf_ = function(container, contained) {
 
 /**
  * Tells whether the array contains the given element.
- * @param {IArrayLike} container The array to
+ * @param {IArrayLike<?>|{indexOf: function(*): number}} container The array to
  *     find the element in.
  * @param {*} contained Element to find.
  * @return {boolean} Whether the element is in the array.

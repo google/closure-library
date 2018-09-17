@@ -395,10 +395,13 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
     var line = lines[i];
     var color;
     var isPassed = /PASSED/.test(line);
+    var isSkipped = /SKIPPED/.test(line);
     var isFailOrError =
         /FAILED/.test(line) || /ERROR/.test(line) || /NO TESTS RUN/.test(line);
     if (isPassed) {
       color = 'darkgreen';
+    } else if (isSkipped) {
+      color = 'slategray';
     } else if (isFailOrError) {
       color = 'darkred';
     } else {

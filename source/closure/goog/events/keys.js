@@ -35,7 +35,11 @@ goog.events.Keys = {
   ENTER: 'Enter',
   HOME: 'Home',
   LEFT: 'ArrowLeft',
+  PAGE_DOWN: 'PageDown',
+  PAGE_UP: 'PageUp',
   RIGHT: 'ArrowRight',
   SHIFT: 'Shift',
+  SPACE: ' ',
+  TAB: 'Tab',
   UP: 'ArrowUp',
 };

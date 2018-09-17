@@ -46,6 +46,8 @@ goog.provide('goog.testing.FunctionCall');
 goog.provide('goog.testing.recordConstructor');
 goog.provide('goog.testing.recordFunction');
 
+goog.require('goog.Promise');
+goog.require('goog.promise.Resolver');
 goog.require('goog.testing.asserts');
 
 
@@ -62,16 +64,30 @@ goog.require('goog.testing.asserts');
 goog.testing.recordFunction = function(opt_f) {
   var f = opt_f || goog.nullFunction;
   var calls = [];
+  /** @type {?goog.promise.Resolver} */
+  var waitForCallsResolver = null;
+  /** @type {number} */
+  var waitForCallsCount = 0;
+
+  function maybeResolveWaitForCalls() {
+    if (waitForCallsResolver && calls.length >= waitForCallsCount) {
+      waitForCallsResolver.resolve();
+      waitForCallsResolver = null;
+      waitForCallsCount = 0;
+    }
+  }
 
   function recordedFunction() {
     var owner = /** @type {?} */ (this);
     try {
       var ret = f.apply(owner, arguments);
       calls.push(new goog.testing.FunctionCall(f, owner, arguments, ret, null));
+      maybeResolveWaitForCalls();
       return ret;
     } catch (err) {
       calls.push(
           new goog.testing.FunctionCall(f, owner, arguments, undefined, err));
+      maybeResolveWaitForCalls();
       throw err;
     }
   }
@@ -119,9 +135,27 @@ goog.testing.recordFunction = function(opt_f) {
   recordedFunction.popLastCall = function() { return calls.pop() || null; };
 
   /**
+   * Returns a goog.Promise that resolves when the recorded function has equal
+   * to or greater than the number of calls.
+   * @param {number} num
+   * @return {!goog.Promise<undefined>}
+   */
+  recordedFunction.waitForCalls = function(num) {
+    waitForCallsCount = num;
+    waitForCallsResolver = goog.Promise.withResolver();
+    var promise = waitForCallsResolver.promise;
+    maybeResolveWaitForCalls();
+    return promise;
+  };
+
+  /**
    * Resets the recorded function and removes all calls.
    */
-  recordedFunction.reset = function() { calls.length = 0; };
+  recordedFunction.reset = function() {
+    calls.length = 0;
+    waitForCallsResolver = null;
+    waitForCallsCount = 0;
+  };
 
   return recordedFunction;
 };

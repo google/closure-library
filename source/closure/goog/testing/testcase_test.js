@@ -1022,8 +1022,8 @@ function testSetObj() {
   assertEquals(1, testCase.getCount());
 }
 
-function testSetObj_Nested() {
-  var testCase = new goog.testing.TestCase();
+async function testSetObj_Nested() {
+  const testCase = new goog.testing.TestCase();
   assertEquals(0, testCase.getCount());
   testCase.setTestObj({
     setUp: event('setUp1'),
@@ -1033,6 +1033,34 @@ function testSetObj_Nested() {
       setUp: event('setUp2'),
       test: event('testNested'),
       tearDown: event('tearDown2')
+    },
+    testNestedIgnoreTests: {
+      shouldRunTests() {
+        event('shouldRunTests')();
+        return false;
+      },
+
+      // 3 tests - 1 of which is nested. shouldRunTests should only be called
+      // once.
+      testShouldNotRun: event('SHOULD NEVER HAPPEN'),
+      testAlsoShouldNotRun: event('ALSO SHOULD NEVER HAPPEN'),
+
+      testSuperNestedIgnore: {
+        testShouldNotRun: event('SHOULD NEVER HAPPEN NESTED'),
+      },
+    },
+    testThrowShouldRunTests: {
+      shouldRunTests() {
+        event('throw shouldRunTests')();
+        throw new Error('bar');
+      },
+
+      testShouldNotRun: event('SHOULD NEVER HAPPEN THROW'),
+      testAlsoShouldNotRun: event('ALSO SHOULD NEVER HAPPEN THROW'),
+
+      testSuperNestedIgnore: {
+        testShouldNotRun: event('SHOULD NEVER HAPPEN NESTED THROW'),
+      },
     },
     testNestedSuite: {
       setUp: event('setUp3'),
@@ -1047,19 +1075,28 @@ function testSetObj_Nested() {
     },
     tearDown: event('tearDown1')
   });
-  assertEquals(5, testCase.getCount());
-  var tests = testCase.getTests();
-  var names = [];
-  for (var i = 0; i < tests.length; i++) {
+  assertEquals(11, testCase.getCount());
+  const tests = testCase.getTests();
+  const names = [];
+  for (let i = 0; i < tests.length; i++) {
     names.push(tests[i].name);
   }
   assertArrayEquals(
       [
-        'testOk', 'testNested', 'testNestedSuite_A', 'testNestedSuite_B',
-        'testNestedSuite_SuperNestedSuite_C'
+        'testOk',
+        'testNested',
+        'testNestedIgnoreTests_ShouldNotRun',
+        'testNestedIgnoreTests_AlsoShouldNotRun',
+        'testNestedIgnoreTests_SuperNestedIgnore_ShouldNotRun',
+        'testThrowShouldRunTests_ShouldNotRun',
+        'testThrowShouldRunTests_AlsoShouldNotRun',
+        'testThrowShouldRunTests_SuperNestedIgnore_ShouldNotRun',
+        'testNestedSuite_A',
+        'testNestedSuite_B',
+        'testNestedSuite_SuperNestedSuite_C',
       ],
       names);
-  testCase.runTests();
+  await testCase.runTestsReturningPromise();
   assertArrayEquals(
       [
         'setUp1',
@@ -1070,6 +1107,8 @@ function testSetObj_Nested() {
         'testNested',
         'tearDown2',
         'tearDown1',
+        'shouldRunTests',
+        'throw shouldRunTests',
         'setUp1',
         'setUp3',
         'testNestedSuite_A',
@@ -1086,7 +1125,7 @@ function testSetObj_Nested() {
         'testNestedSuite_SuperNestedSuite_C',
         'tearDown4',
         'tearDown3',
-        'tearDown1'
+        'tearDown1',
       ],
       events);
 }

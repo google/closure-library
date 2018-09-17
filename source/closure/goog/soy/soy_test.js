@@ -182,7 +182,13 @@ function testRejectSanitizedCss() {
 function testRejectStringTemplatesWhenModeIsSet() {
   stubs.set(goog.soy, 'REQUIRE_STRICT_AUTOESCAPE', true);
   assertUnsafeTemplateOutputErrorThrown(function() {
-    return goog.soy.renderAsElement(example.noDataTemplate).innerHTML;
+    return goog.soy.renderAsElement(example.stringTemplate).innerHTML;
+  });
+}
+
+function testRejectStringTemplatesInRenderAsFragment() {
+  assertThrows(function() {
+    goog.soy.renderAsFragment(example.stringTemplate);
   });
 }
 

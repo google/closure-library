@@ -676,7 +676,7 @@ function testAssertRoughlyEquals() {
   }, 'Close enough\nExpected 1, but got 1.1 which was more than 0.05 away');
 }
 
-function testAssertContains() {
+function testAssertContainsForArrays() {
   assertContains(1, [1, 2, 3]);
   assertContains('Should contain', 1, [1, 2, 3]);
   assertThrowsJsUnitException(function() {
@@ -693,7 +693,7 @@ function testAssertContains() {
   }, 'Expected \'1,2,3\' to contain \'[object Object]\'');
 }
 
-function testAssertNotContains() {
+function testAssertNotContainsForArrays() {
   assertNotContains(4, [1, 2, 3]);
   assertNotContains('Should not contain', 4, [1, 2, 3]);
   assertThrowsJsUnitException(function() {
@@ -708,6 +708,54 @@ function testAssertNotContains() {
   assertThrowsJsUnitException(function() {
     assertNotContains(o, [o, 2, 3]);
   }, 'Expected \'[object Object],2,3\' not to contain \'[object Object]\'');
+}
+
+function testAssertContainsForStrings() {
+  assertContains('ignored msg', 'abc', 'zabcd');
+  assertContains('abc', 'abc');
+  assertContains('', 'abc');
+  assertContains('', '');
+  assertThrowsJsUnitException(function() {
+    assertContains('msg', 'abc', 'bcd');
+  }, 'msg\nExpected \'bcd\' to contain \'abc\'');
+  assertThrowsJsUnitException(function() {
+    assertContains('a', '');
+  }, 'Expected \'\' to contain \'a\'');
+}
+
+function testAssertNotContainsForStrings() {
+  assertNotContains('ignored msg', 'abc', 'bcd');
+  assertNotContains('a', '');
+  assertThrowsJsUnitException(function() {
+    assertNotContains('msg', 'abc', 'zabcd');
+  }, 'msg\nExpected \'zabcd\' not to contain \'abc\'');
+  assertThrowsJsUnitException(function() {
+    assertNotContains('abc', 'abc');
+  }, 'Expected \'abc\' not to contain \'abc\'');
+  assertThrowsJsUnitException(function() {
+    assertNotContains('', 'abc');
+  }, 'Expected \'abc\' not to contain \'\'');
+}
+
+/**
+ * Tests `assertContains` and 'assertNotContains` with an arbitrary type that
+ * has a custom `indexOf`.
+ */
+function testAssertContainsAndAssertNotContainsOnCustomObjectWithIndexof() {
+  const valueContained = {toString: () => 'I am in'};
+  const valueNotContained = {toString: () => 'I am out'};
+  const container = {
+    indexOf: (value) => value === valueContained ? 1234 : -1,
+    toString: () => 'I am a container',
+  };
+  assertContains('ignored message', valueContained, container);
+  assertNotContains('ignored message', valueNotContained, container);
+  assertThrowsJsUnitException(function() {
+    assertContains('msg', valueNotContained, container);
+  }, 'msg\nExpected \'I am a container\' to contain \'I am out\'');
+  assertThrowsJsUnitException(function() {
+    assertNotContains('msg', valueContained, container);
+  }, 'msg\nExpected \'I am a container\' not to contain \'I am in\'');
 }
 
 function testAssertRegExp() {

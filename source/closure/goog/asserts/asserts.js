@@ -16,9 +16,12 @@
  * @fileoverview Utilities to check the preconditions, postconditions and
  * invariants runtime.
  *
- * Methods in this package should be given special treatment by the compiler
+ * Methods in this package are given special treatment by the compiler
  * for type-inference. For example, <code>goog.asserts.assert(foo)</code>
- * will restrict <code>foo</code> to a truthy value.
+ * will make the compiler treat <code>foo</code> as non-nullable. Similarly,
+ * <code>goog.asserts.assertNumber(foo)</code> informs the compiler about the
+ * type of <code>foo</code>. Where applicable, such assertions are preferable to
+ * casts by jsdoc with <code>@type</code>.
  *
  * The compiler has an option to disable asserts. So code like:
  * <code>
