@@ -372,17 +372,17 @@ function testCanRemoveOneHandler() {
 
   // register 2 handlers, then remove quitvi
   handler.registerShortcut(
-      'quitvi', KeyCodes.COLON, Modifiers.NONE, KeyCodes.Q, Modifiers.NONE,
-      KeyCodes.EXCLAMATION, Modifiers.NONE);
+      'quitvi', KeyCodes.SEMICOLON, Modifiers.SHIFT, KeyCodes.Q, Modifiers.NONE,
+      KeyCodes.ONE, Modifiers.SHIFT);
   handler.registerShortcut('letterex', 'x');
   handler.unregisterShortcut(
-      KeyCodes.COLON, Modifiers.NONE, KeyCodes.Q, Modifiers.NONE,
-      KeyCodes.EXCLAMATION, Modifiers.NONE);
+      KeyCodes.SEMICOLON, Modifiers.SHIFT, KeyCodes.Q, Modifiers.NONE,
+      KeyCodes.ONE, Modifiers.SHIFT);
 
   // call the "quit VI" keycodes, even though it is removed
-  fire(KeyCodes.COLON);
+  fire(KeyCodes.SEMICOLON, Modifiers.SHIFT);
   fire(KeyCodes.Q);
-  fire(KeyCodes.EXCLAMATION);
+  fire(KeyCodes.ONE, Modifiers.SHIFT);
 
   // press the letter x
   fire(KeyCodes.X);
