@@ -20,7 +20,6 @@
 
 goog.provide('goog.ds.JsonDataSource');
 
-goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
@@ -28,7 +27,6 @@ goog.require('goog.ds.DataManager');
 goog.require('goog.ds.JsDataSource');
 goog.require('goog.ds.LoadState');
 goog.require('goog.ds.logger');
-goog.require('goog.html.legacyconversions');
 goog.require('goog.log');
 
 
@@ -51,8 +49,7 @@ goog.require('goog.log');
  * A URI of an empty string will mean that no request is made
  * and the data source will be a data source with no child nodes
  *
- * @param {string|?goog.Uri|?goog.html.TrustedResourceUrl} uri URI for the
- *     request.
+ * @param {?goog.html.TrustedResourceUrl} uri URI for the request.
  * @param {string} name Name of the datasource.
  * @param {string=} opt_callbackParamName The parameter name that is used to
  *     specify the callback. Defaults to 'callback'.
@@ -63,14 +60,7 @@ goog.require('goog.log');
  */
 goog.ds.JsonDataSource = function(uri, name, opt_callbackParamName) {
   goog.ds.JsDataSource.call(this, null, name, null);
-  if (goog.isString(uri) || uri instanceof goog.Uri) {
-    this.uri_ = goog.html.legacyconversions.trustedResourceUrlFromString(
-        uri.toString());
-  } else if (uri) {
-    this.uri_ = uri;
-  } else {
-    this.uri_ = null;
-  }
+  this.uri_ = uri;
 
   /**
    * This is the callback parameter name that is added to the uri.
