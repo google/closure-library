@@ -541,7 +541,7 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
   this.result_.totalCount = this.getCount();
   if (!this.shouldRunTests()) {
     this.log('shouldRunTests() returned false, skipping these tests.');
-    this.result_.allTestSuppressed = true;
+    this.result_.testSuppressed = true;
     this.finalize();
     return false;
   }
@@ -1895,7 +1895,7 @@ goog.testing.TestCase.Result = function(testCase) {
    * Whether all tests were suppressed from a top-level shouldRunTests().
    * @type {boolean}
    */
-  this.allTestSuppressed = false;
+  this.testSuppressed = false;
 
   /**
    * Which tests were suppressed by shouldRunTests() returning false.
@@ -1947,7 +1947,7 @@ goog.testing.TestCase.Result.prototype.isSuccess = function() {
 goog.testing.TestCase.Result.prototype.getSummary = function() {
   var summary = this.runCount + ' of ' + this.totalCount + ' tests run in ' +
       this.runTime + 'ms.\n';
-  if (this.allTestSuppressed) {
+  if (this.testSuppressed) {
     summary += 'Tests not run because shouldRunTests() returned false.';
   } else {
     var failures = this.totalCount - this.successCount - this.skipCount;
