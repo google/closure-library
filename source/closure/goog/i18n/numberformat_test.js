@@ -73,13 +73,11 @@ function testVeryBigNumber() {
   str = fmt.format(1785599999999999888888888888888);
   // when comparing big number, various platform have small different in
   // precision. We have to tolerate that using veryBigNumberCompare.
-  assertTrue(
-      veryBigNumberCompare(
-          '$1,785,599,999,999,999,400,000,000,000,000.00', str));
+  assertTrue(veryBigNumberCompare(
+      '$1,785,599,999,999,999,400,000,000,000,000.00', str));
   str = fmt.format(1.7856E30);
-  assertTrue(
-      veryBigNumberCompare(
-          '$1,785,599,999,999,999,400,000,000,000,000.00', str));
+  assertTrue(veryBigNumberCompare(
+      '$1,785,599,999,999,999,400,000,000,000,000.00', str));
   str = fmt.format(1.3456E20);
   assertTrue(veryBigNumberCompare('$134,560,000,000,000,000,000.00', str));
 
@@ -231,18 +229,18 @@ function testPercentAndPerMillAdvance() {
 
 function testPercentAndPerMillParsing() {
   var implicitFmt = new goog.i18n.NumberFormat('0;(0)');
-  assertEquals(123 / 100, implicitFmt.parse("123%"));
-  assertEquals(-123 / 100, implicitFmt.parse("(123%)"));
-  assertEquals(123 / 1000, implicitFmt.parse("123‰"));
-  assertEquals(-123 / 1000, implicitFmt.parse("(123‰)"));
+  assertEquals(123 / 100, implicitFmt.parse('123%'));
+  assertEquals(-123 / 100, implicitFmt.parse('(123%)'));
+  assertEquals(123 / 1000, implicitFmt.parse('123‰'));
+  assertEquals(-123 / 1000, implicitFmt.parse('(123‰)'));
 
   var explicitFmtPercent = new goog.i18n.NumberFormat('0%;(0%)');
-  assertEquals(123 / 100, explicitFmtPercent.parse("123%"));
-  assertEquals(-123 / 100, explicitFmtPercent.parse("(123%)"));
+  assertEquals(123 / 100, explicitFmtPercent.parse('123%'));
+  assertEquals(-123 / 100, explicitFmtPercent.parse('(123%)'));
 
   var explicitFmtPermill = new goog.i18n.NumberFormat('0‰;(0‰)');
-  assertEquals(123 / 1000, explicitFmtPermill.parse("123‰"));
-  assertEquals(-123 / 1000, explicitFmtPermill.parse("(123‰)"));
+  assertEquals(123 / 1000, explicitFmtPermill.parse('123‰'));
+  assertEquals(-123 / 1000, explicitFmtPermill.parse('(123‰)'));
 }
 
 function testInfinityParse() {
@@ -1006,6 +1004,12 @@ function testSignificantDigitsEqualToMax() {
   assertEquals('1.2', fmt.format(1.234));
   assertEquals('0.12', fmt.format(0.1234));
   assertEquals('0.13', fmt.format(0.1284));
+
+  // When number of significant digits plus max fraction digits is greater
+  // than the precision of numbers, rounding errors can occur.
+  fmt.setSignificantDigits(12);
+  fmt.setMaximumFractionDigits(12);
+  assertEquals('60,000', fmt.format(60000));
 }
 
 function testSignificantDigitsLessThanMax() {
