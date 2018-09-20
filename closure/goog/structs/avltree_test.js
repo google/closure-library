@@ -647,14 +647,6 @@ function testCopy() {
 
   tree = tree.copy();
 
-  //   100                            100                             112
-  //   / \                            / \                            /  \
-  // 50   150   Right Rotate (150)   50  112      Left Rotate(100)  100  150
-  //     /   \   - - - - - - - ->           \     - - - - - - - ->  /   /   \
-  //    112  200                            150                    50   125  200
-  //     \                                  /  \
-  //     125                               125 200
-
   assertEquals(3, tree.getHeight());
   assertEquals(112, tree.root_.value);
   assertEquals(100, tree.root_.left.value);

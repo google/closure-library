@@ -899,16 +899,11 @@ Node.prototype.fixHeight = function() {
       1;
 };
 
-/**
- * Returns a deep copy of the tree in O(n * k),
- * where k is the time complexity to copy a node.
- * @return {AvlTree}
- */
-AvlTree.prototype.copy = function() {
+AvlTree.prototype.copy = function(copyFun) {
   const tree = new AvlTree();
 
   // Copy instance properties
-  const {copy, leftMost, rightMost} = this.root_.copy();
+  const {copy, leftMost, rightMost} = this.root_.copy(null, copyFun);
   tree.root_       = copy;
   tree.comparator_ = this.comparator_;
   tree.minNode_    = leftMost;
@@ -917,8 +912,16 @@ AvlTree.prototype.copy = function() {
   return tree;
 };
 
-Node.prototype.copy = function(parent) {
-  const val  = JSON.parse(JSON.stringify(this.value)); // deep copy
+/**
+ * Deep copies a node.
+ * @param {Node} parent - The parent of this node.
+ * @return {Object} treeInfo - Information about the subtree.
+ * @return {Node} treeInfo.copy - Copy of the root node of this subtree.
+ * @return {Node} treeInfo.leftMost - Copy of the node with the smallest value in this subtree.
+ * @return {Node} treeInfo.rightMost - Copy of the node with the largest value in this subtree.
+ */
+Node.prototype.copy = function(parent, copy) {
+  const val  = copy(this.value);
   const node = new Node(val, parent);
 
   // Copy all properties
@@ -928,15 +931,15 @@ Node.prototype.copy = function(parent) {
   var minNode = node, maxNode = node;
 
   if (this.left) {
-      const {copy, leftMost, rightMost} = this.left.copy(node);
-      node.left = copy;
-      minNode = leftMost;
+    const {copy, leftMost, rightMost} = this.left.copy(node, copy);
+    node.left = copy;
+    minNode = leftMost;
   }
 
   if (this.right) {
-      const {copy, leftMost, rightMost} = this.right.copy(node);
-      node.right = copy;
-      maxNode = rightMost;
+    const {copy, leftMost, rightMost} = this.right.copy(node, copy);
+    node.right = copy;
+    maxNode = rightMost;
   }
 
   return {copy: node, leftMost: minNode, rightMost: maxNode};
