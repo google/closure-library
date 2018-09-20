@@ -1,5 +1,7 @@
 const Buffer = require('buffer').Buffer;
-const {parser, depGraph, depFile} = require('google-closure-deps');
+const depGraph = require('../depGraph.js');
+const depFile = require('../depFile.js');
+const parser = require('../parser.js');
 const path = require('path');
 const PluginError = require('plugin-error');
 const through = require('through2');
