@@ -905,7 +905,7 @@ Node.prototype.fixHeight = function() {
  * @return {AvlTree}
  */
 AvlTree.prototype.copy = function() {
-  const tree = new goog.structs.AvlTree();
+  const tree = new AvlTree();
 
   // Copy instance properties
   const {copy, leftMost, rightMost} = this.root_.copy();
