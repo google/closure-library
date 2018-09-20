@@ -920,8 +920,8 @@ AvlTree.prototype.copy = function(copyFun) {
  * @return {Node} treeInfo.leftMost - Copy of the node with the smallest value in this subtree.
  * @return {Node} treeInfo.rightMost - Copy of the node with the largest value in this subtree.
  */
-Node.prototype.copy = function(parent, copy) {
-  const val  = copy(this.value);
+Node.prototype.copy = function(parent, copyFun) {
+  const val  = typeof copyFun === "function" ? copyFun(this.value) : JSON.parse(JSON.stringify(this.value));
   const node = new Node(val, parent);
 
   // Copy all properties
@@ -931,13 +931,13 @@ Node.prototype.copy = function(parent, copy) {
   var minNode = node, maxNode = node;
 
   if (this.left) {
-    const {copy, leftMost, rightMost} = this.left.copy(node, copy);
+    const {copy, leftMost, rightMost} = this.left.copy(node, copyFun);
     node.left = copy;
     minNode = leftMost;
   }
 
   if (this.right) {
-    const {copy, leftMost, rightMost} = this.right.copy(node, copy);
+    const {copy, leftMost, rightMost} = this.right.copy(node, copyFun);
     node.right = copy;
     maxNode = rightMost;
   }

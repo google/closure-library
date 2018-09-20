@@ -645,7 +645,7 @@ function testCopy() {
 
   tree.remove(0);
 
-  tree = tree.copy();
+  tree = tree.copy(v => v);
 
   assertEquals(3, tree.getHeight());
   assertEquals(112, tree.root_.value);
