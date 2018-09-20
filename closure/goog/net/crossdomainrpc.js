@@ -605,6 +605,7 @@ goog.net.CrossDomainRpc.isResponseInfoFrame_ = function(frame) {
  * @param {Object} frame Frame.
  * @return {string} Payload of that frame.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.CrossDomainRpc.getFramePayload_ = function(frame) {
   var href = frame.location.href;

@@ -57,6 +57,7 @@ goog.style.transition.Css3Property;
  * @param {goog.style.transition.Css3Property|
  *     Array<goog.style.transition.Css3Property>} properties A single CSS3
  *     transition property or array of properties.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.style.transition.set = function(element, properties) {
   if (!goog.isArray(properties)) {

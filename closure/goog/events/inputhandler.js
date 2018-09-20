@@ -119,6 +119,7 @@ goog.events.InputHandler.EventType = {
 /**
  * This handles the underlying events and dispatches a new event as needed.
  * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.InputHandler.prototype.handleEvent = function(e) {
   if (e.type == 'input') {
@@ -167,7 +168,8 @@ goog.events.InputHandler.prototype.handleEvent = function(e) {
     // of the element has changed, we need to postpone dispatching input event
     // until value is updated.
     this.cancelTimerIfSet_();
-    this.timer_ = goog.Timer.callOnce(function() {
+    this.timer_ = goog.Timer.callOnce(/** @suppress {strictMissingProperties} Part of the go/strict_warnings_migration */
+                                      function() {
       this.timer_ = null;
       if (this.element_.value != valueBeforeKey) {
         this.dispatchEvent(inputEvent);

@@ -25,6 +25,7 @@ goog.require('goog.dom.selection');
 /**
  * Change focus to the given input field and set cursor to end of current text.
  * @param {Element} inputElem Input DOM element.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.focus.focusInputField = function(inputElem) {
   inputElem.focus();

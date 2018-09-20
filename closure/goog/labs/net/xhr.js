@@ -270,7 +270,8 @@ xhr.send = function(method, url, data, opt_options) {
       options.xmlHttpFactory.createInstance() :
       goog.net.XmlHttp();
 
-  var result = new goog.Promise(function(resolve, reject) {
+  var result = new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
+                                function(resolve, reject) {
     var timer;
 
     try {

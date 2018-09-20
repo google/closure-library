@@ -114,11 +114,11 @@ goog.labs.mock.spy = function(obj) {
 /**
  * Returns an object that can be used to verify calls to specific methods of a
  * given mock.
- *
  * @param {!Object} obj The mocked object.
  * @param {!goog.labs.mock.verification.VerificationMode=} opt_verificationMode The mode
  *     under which to verify invocations.
  * @return {?} The verifier. Return type {?} to avoid compilation errors.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.labs.mock.verify = function(obj, opt_verificationMode) {
   var mode = opt_verificationMode || goog.labs.mock.verification.atLeast(1);
@@ -560,14 +560,13 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation = function(
  * Sets up mock for the given object (or class), stubbing out all the defined
  * methods. By default, all stubs return `undefined`, though stubs can be
  * later defined using `goog.labs.mock.when`.
- *
+ * @struct
+ * @constructor
+ * @extends {goog.labs.mock.MockManager_}
  * @param {!Object|!Function} objOrClass The object or class to set up the mock
  *     for. A class is a constructor function.
- *
- * @constructor
- * @struct
- * @extends {goog.labs.mock.MockManager_}
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   goog.labs.mock.MockObjectManager_.base(this, 'constructor');
@@ -694,13 +693,12 @@ goog.labs.mock.MockSpyManager_.prototype.getNextBinding = function(
  * Sets up mock for the given function, stubbing out. By default, all stubs
  * return `undefined`, though stubs can be later defined using
  * `goog.labs.mock.when`.
- *
- * @param {!Function} func The function to set up the mock for.
- *
- * @constructor
  * @struct
+ * @constructor
  * @extends {goog.labs.mock.MockManager_}
+ * @param {!Function} func The function to set up the mock for.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.labs.mock.MockFunctionManager_ = function(func) {
   goog.labs.mock.MockFunctionManager_.base(this, 'constructor');
@@ -880,9 +878,9 @@ goog.labs.mock.StubBinderImpl_.prototype.thenReturn = function(value) {
  *     .then(function() {
  *         throw new Error('exceptional case');
  *     });
- *
  * @param {!Object} mockObject The mocked object.
  * @return {?} The property binder. Return type {?} to avoid compilation errors.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.labs.mock.when = function(mockObject) {
   goog.asserts.assert(mockObject.$stubBinder, 'Stub binder cannot be null!');

@@ -972,6 +972,7 @@ goog.ui.KeyboardShortcutHandler.makeStroke_ = function(
  * Keypress handler.
  * @param {!goog.events.BrowserEvent} event Keypress event.
  * @private
+ * @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (!this.isValidShortcut_(event)) {
@@ -1072,6 +1073,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
  * @param {!goog.events.BrowserEvent} event Keypress event.
  * @return {boolean} Whether to attempt to process the event as a shortcut.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
   // Ignore Ctrl, Shift and ALT

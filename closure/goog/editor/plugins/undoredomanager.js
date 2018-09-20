@@ -269,6 +269,7 @@ goog.editor.plugins.UndoRedoManager.prototype.addAction_ = function(action) {
  * Executes the action at the front of the pending actions queue. If an action
  * is already in progress or the queue is empty, does nothing.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.plugins.UndoRedoManager.prototype.doAction_ = function() {
   if (this.inProgressActionKey_ || this.pendingActions_.length == 0) {

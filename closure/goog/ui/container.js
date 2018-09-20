@@ -362,6 +362,7 @@ goog.ui.Container.prototype.decorateInternal = function(element) {
  * Configures the container after its DOM has been rendered, and sets up event
  * handling.  Overrides {@link goog.ui.Component#enterDocument}.
  * @override
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Container.prototype.enterDocument = function() {
   goog.ui.Container.superClass_.enterDocument.call(this);
@@ -516,6 +517,7 @@ goog.ui.Container.prototype.handleEnterItem = function(e) {
  * Handles HIGHLIGHT events dispatched by items in the container when
  * they are highlighted.
  * @param {goog.events.Event} e Highlight event to handle.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Container.prototype.handleHighlightItem = function(e) {
   var index = this.indexOfChild(/** @type {goog.ui.Control} */ (e.target));
@@ -597,6 +599,7 @@ goog.ui.Container.prototype.handleOpenItem = function(e) {
  * Handles CLOSE events dispatched by items in the container when they are
  * closed.
  * @param {goog.events.Event} e Close event to handle.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Container.prototype.handleCloseItem = function(e) {
   if (e.target == this.openItem_) {
@@ -652,6 +655,7 @@ goog.ui.Container.prototype.handleDocumentMouseUp = function(e) {
  * in the container.  Locates the child control based on the DOM node that
  * dispatched the event, and forwards the event to the control for handling.
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
   var MouseEventType = goog.ui.ComponentUtil.getMouseEventType(this);
@@ -688,6 +692,7 @@ goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
  * @return {goog.ui.Control?} Control hosted in the container to which the node
  *     belongs (if found).
  * @protected
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Container.prototype.getOwnerControl = function(node) {
   // Ensure that this container actually has child controls before

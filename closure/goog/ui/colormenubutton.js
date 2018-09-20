@@ -167,6 +167,7 @@ goog.ui.ColorMenuButton.prototype.setValue = function(value) {
  * {@link goog.ui.MenuButton#handleMenuAction}.
  * @param {goog.events.Event} e Action event to handle.
  * @override
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ColorMenuButton.prototype.handleMenuAction = function(e) {
   if (typeof e.target.getSelectedColor == 'function') {

@@ -424,9 +424,9 @@ goog.ui.TabPane.prototype.getElement = function() {
 
 /**
  * Click event handler for header element, handles clicks on tabs.
- *
  * @param {goog.events.BrowserEvent} event Click event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.TabPane.prototype.onHeaderClick_ = function(event) {
   var el = event.target;
@@ -450,9 +450,9 @@ goog.ui.TabPane.prototype.onHeaderClick_ = function(event) {
 /**
  * KeyDown event handler for header element. Arrow keys moves between pages.
  * Home and end selects the first/last page.
- *
  * @param {goog.events.BrowserEvent} event KeyDown event.
  * @private
+ * @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration
  */
 goog.ui.TabPane.prototype.onHeaderKeyDown_ = function(event) {
   if (event.altKey || event.metaKey || event.ctrlKey) {

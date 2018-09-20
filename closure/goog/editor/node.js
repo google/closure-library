@@ -241,6 +241,7 @@ goog.editor.node.isAllNonNbspWhiteSpace = function(textNode) {
  * @param {boolean=} opt_prohibitSingleNbsp By default, this function treats a
  *     single nbsp as empty.  Set this to true to treat this case as non-empty.
  * @return {boolean} Whether the node contains only whitespace.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.node.isEmpty = function(node, opt_prohibitSingleNbsp) {
   var nodeData = goog.dom.getRawTextContent(node);
@@ -264,6 +265,7 @@ goog.editor.node.isEmpty = function(node, opt_prohibitSingleNbsp) {
  * code where you need to know the offset for the right side of the node.
  * @param {Node} node The node to get the length of.
  * @return {number} The length of the node.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.node.getLength = function(node) {
   return node.length || node.childNodes.length;
@@ -340,6 +342,7 @@ goog.editor.node.skipEmptyTextNodes = function(node) {
  * it itself is not editable, but all its child nodes are editable).
  * @param {Node} element The element to test.
  * @return {boolean} Whether the element is a top-level editable container.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.node.isEditableContainer = function(element) {
   return element.getAttribute && element.getAttribute('g_editable') == 'true';
@@ -445,9 +448,9 @@ goog.editor.node.transferChildren = function(newNode, oldNode) {
  * Removing the nodes first prevents IE from tearing them up. This is not
  * strictly necessary in nodes that do not have the selection. You should always
  * use this function when setting innerHTML inside of a field.
- *
  * @param {Node} node A node.
  * @param {string} html The innerHTML to set on the node.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.node.replaceInnerHtml = function(node, html) {
   // Only do this IE. On gecko, we use element change events, and don't

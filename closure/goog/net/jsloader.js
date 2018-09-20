@@ -330,11 +330,11 @@ goog.net.jsloader.cancel_ = function() {
 
 /**
  * Removes the script node and the timeout.
- *
  * @param {Node} scriptNode The node to be cleaned up.
  * @param {boolean} removeScriptNode If true completely remove the script node.
  * @param {?number=} opt_timeout The timeout handler to cleanup.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.jsloader.cleanup_ = function(
     scriptNode, removeScriptNode, opt_timeout) {

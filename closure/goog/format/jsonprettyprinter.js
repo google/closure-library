@@ -135,6 +135,7 @@ goog.format.JsonPrettyPrinter.prototype.format_ = function(json) {
  * @param {number} indent The number of spaces to indent each line of the
  *     output.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.format.JsonPrettyPrinter.prototype.printObject_ = function(
     val, outputBuffer, indent) {

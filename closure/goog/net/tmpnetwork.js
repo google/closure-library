@@ -109,6 +109,7 @@ goog.net.tmpnetwork.testLoadImageWithRetries = function(
  * @param {string} url URL to the iamge.
  * @param {number} timeout Milliseconds before giving up.
  * @param {Function} callback Function to call with results.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.tmpnetwork.testLoadImage = function(url, timeout, callback) {
   var channelDebug = new goog.net.ChannelDebug();
@@ -164,6 +165,7 @@ goog.net.tmpnetwork.testLoadImage = function(url, timeout, callback) {
  * Clear handlers to avoid memory leaks.
  * @param {Image} img The image to clear handlers from.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.tmpnetwork.clearImageCallbacks_ = function(img) {
   // NOTE(user): Nullified individually to avoid compiler warnings

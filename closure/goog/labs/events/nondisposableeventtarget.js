@@ -247,7 +247,6 @@ goog.labs.events.NonDisposableEventTarget.prototype.assertInitialized_ =
  *
  * TODO(chrishenry): Look for a way to reuse this logic in
  * goog.events, if possible.
- *
  * @param {!Object} target The target to dispatch on.
  * @param {goog.events.Event|Object|string} e The event object.
  * @param {Array<goog.events.Listenable>=} opt_ancestorsTree The ancestors
@@ -256,6 +255,7 @@ goog.labs.events.NonDisposableEventTarget.prototype.assertInitialized_ =
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the listeners returns false) this will also return false.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.labs.events.NonDisposableEventTarget.dispatchEventInternal_ = function(
     target, e, opt_ancestorsTree) {

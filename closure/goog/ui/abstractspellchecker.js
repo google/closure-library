@@ -405,6 +405,7 @@ goog.ui.AbstractSpellChecker.prototype.check = function() {
 /**
  * Hides correction UI.
  * Should be overridden by implementation.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.AbstractSpellChecker.prototype.resume = function() {
   this.isVisible_ = false;
@@ -552,11 +553,11 @@ goog.ui.AbstractSpellChecker.prototype.getSuggestions_ = function() {
 
 /**
  * Displays suggestions menu.
- *
  * @param {Element} el Element to display menu for.
  * @param {goog.events.BrowserEvent|goog.math.Coordinate=} opt_pos Position to
  *     display menu at relative to the viewport (in client coordinates), or a
  *     mouse event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.AbstractSpellChecker.prototype.showSuggestionsMenu = function(
     el, opt_pos) {
@@ -661,9 +662,9 @@ goog.ui.AbstractSpellChecker.prototype.initSuggestionsMenu = function() {
 
 /**
  * Handles correction menu actions.
- *
  * @param {goog.events.Event} event Action event.
  * @protected
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.AbstractSpellChecker.prototype.onCorrectionAction = function(event) {
   var word = /** @type {string} */ (this.activeWord_);

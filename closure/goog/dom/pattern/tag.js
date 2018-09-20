@@ -87,12 +87,12 @@ goog.inherits(goog.dom.pattern.Tag, goog.dom.pattern.AbstractPattern);
 /**
  * Test whether the given token is a tag token which matches the tag name,
  * style, and attributes provided in the constructor.
- *
  * @param {Node} token Token to match against.
  * @param {goog.dom.TagWalkType} type The type of token.
  * @return {goog.dom.pattern.MatchType} <code>MATCH</code> if the pattern
  *     matches, <code>NO_MATCH</code> otherwise.
  * @override
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.dom.pattern.Tag.prototype.matchToken = function(token, type) {
   // Check the direction and tag name.
