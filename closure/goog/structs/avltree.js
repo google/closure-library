@@ -37,6 +37,7 @@
  * - getValues              O(n)
  * - inOrderTraverse        O(logn + k), where k is number of traversed nodes
  * - reverseOrderTraverse   O(logn + k), where k is number of traversed nodes
+ * - copy                   O(n * k), where k is the time complexity to copy a node
  * </pre>
  */
 
@@ -896,6 +897,49 @@ Node.prototype.fixHeight = function() {
                     this.left ? this.left.height : 0,
                     this.right ? this.right.height : 0) +
       1;
+};
+
+/**
+ * Returns a deep copy of the tree in O(n * k),
+ * where k is the time complexity to copy a node.
+ * @return {AvlTree}
+ */
+AvlTree.prototype.copy = function() {
+  const tree = new goog.structs.AvlTree();
+
+  // Copy instance properties
+  const {copy, leftMost, rightMost} = this.root_.copy();
+  tree.root_       = copy;
+  tree.comparator_ = this.comparator_;
+  tree.minNode_    = leftMost;
+  tree.maxNode_    = rightMost;
+
+  return tree;
+};
+
+Node.prototype.copy = function(parent) {
+  const val  = JSON.parse(JSON.stringify(this.value)); // deep copy
+  const node = new Node(val, parent);
+
+  // Copy all properties
+  node.count  = this.count;
+  node.height = this.height;
+
+  var minNode = node, maxNode = node;
+
+  if (this.left) {
+      const {copy, leftMost, rightMost} = this.left.copy(node);
+      node.left = copy;
+      minNode = leftMost;
+  }
+
+  if (this.right) {
+      const {copy, leftMost, rightMost} = this.right.copy(node);
+      node.right = copy;
+      maxNode = rightMost;
+  }
+
+  return {copy: node, leftMost: minNode, rightMost: maxNode};
 };
 
 exports = AvlTree;
