@@ -1697,3 +1697,18 @@ function testGetScriptNonce() {
     goog.dom.removeNode(script);
   }
 }
+
+function testGoogRequireTypeDestructuring() {
+  try {
+    eval('const {es6} = {es6: 1}');
+  } catch (e) {
+    // If ES6 destructuring syntax isn't supported, skip the test.
+    return;
+  }
+
+  assertNotThrows(function() {
+    goog.loadModule(
+        'goog.module(\'requiretype.destructuring\');' +
+        'const {type} = goog.requireType(\'module.with.types\');');
+  });
+}
