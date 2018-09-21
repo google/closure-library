@@ -900,8 +900,9 @@ Node.prototype.fixHeight = function() {
 };
 
 /**
- * @callback copyCb
- * @param {T}
+ * @name copyCb
+ * @function
+ * @param {T} value - A value contained by the tree.
  * @return {T}
  */
 
