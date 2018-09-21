@@ -899,7 +899,18 @@ Node.prototype.fixHeight = function() {
       1;
 };
 
-AvlTree.prototype.copy = function(copyFun) {
+/**
+ * @callback copyCb
+ * @param {T}
+ * @return {T}
+ */
+
+/**
+ * Copies the AVL tree.
+ * @param {copyCb=} copy - Function used to copy the values contained by the tree.
+ * @return {AvlTree<T>}
+ */
+AvlTree.prototype.copy = function(copy) {
   const tree = new AvlTree();
   tree.comparator_ = this.comparator_;
 
@@ -909,8 +920,8 @@ AvlTree.prototype.copy = function(copyFun) {
   }
 
   // Copy instance properties
-  const {copy, leftMost, rightMost} = this.root_.copy(null, copyFun);
-  tree.root_ = copy;
+  const {root, leftMost, rightMost} = this.root_.copy(null, copy);
+  tree.root_ = root;
   tree.minNode_ = leftMost;
   tree.maxNode_ = rightMost;
 
@@ -918,15 +929,16 @@ AvlTree.prototype.copy = function(copyFun) {
 };
 
 /**
- * Deep copies a node.
- * @param {Node} parent - The parent of this node.
+ * Copies a node.
+ * @param {Node<T>} parent - The parent of this node.
+ * @param {copyCb=} copy - Function used to copy the values contained by the tree.
  * @return {Object} treeInfo - Information about the subtree.
- * @return {Node} treeInfo.copy - Copy of the root node of this subtree.
- * @return {Node} treeInfo.leftMost - Copy of the node with the smallest value in this subtree.
- * @return {Node} treeInfo.rightMost - Copy of the node with the largest value in this subtree.
+ * @return {Node<T>} treeInfo.copy - Copy of the root node of this subtree.
+ * @return {Node<T>} treeInfo.leftMost - Copy of the node with the smallest value in this subtree.
+ * @return {Node<T>} treeInfo.rightMost - Copy of the node with the largest value in this subtree.
  */
-Node.prototype.copy = function(parent, copyFun) {
-  const val = typeof copyFun === "function" ? copyFun(this.value) : JSON.parse(JSON.stringify(this.value));
+Node.prototype.copy = function(parent, copy) {
+  const val = typeof copy === "function" ? copy(this.value) : JSON.parse(JSON.stringify(this.value));
   const node = new Node(val, parent);
 
   // Copy all properties
@@ -936,18 +948,18 @@ Node.prototype.copy = function(parent, copyFun) {
   let minNode = node, maxNode = node;
 
   if (this.left) {
-    const {copy, leftMost, rightMost} = this.left.copy(node, copyFun);
-    node.left = copy;
+    const {root, leftMost, rightMost} = this.left.copy(node, copy);
+    node.left = root;
     minNode = leftMost;
   }
 
   if (this.right) {
-    const {copy, leftMost, rightMost} = this.right.copy(node, copyFun);
-    node.right = copy;
+    const {root, leftMost, rightMost} = this.right.copy(node, copy);
+    node.right = root;
     maxNode = rightMost;
   }
 
-  return {copy: node, leftMost: minNode, rightMost: maxNode};
+  return {root: node, leftMost: minNode, rightMost: maxNode};
 };
 
 exports = AvlTree;
