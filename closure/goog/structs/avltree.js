@@ -901,13 +901,18 @@ Node.prototype.fixHeight = function() {
 
 AvlTree.prototype.copy = function(copyFun) {
   const tree = new AvlTree();
+  tree.comparator_ = this.comparator_;
+
+  // Empty tree
+  if (!this.root_) {
+    return tree;
+  }
 
   // Copy instance properties
   const {copy, leftMost, rightMost} = this.root_.copy(null, copyFun);
-  tree.root_       = copy;
-  tree.comparator_ = this.comparator_;
-  tree.minNode_    = leftMost;
-  tree.maxNode_    = rightMost;
+  tree.root_ = copy;
+  tree.minNode_ = leftMost;
+  tree.maxNode_ = rightMost;
 
   return tree;
 };
@@ -921,14 +926,14 @@ AvlTree.prototype.copy = function(copyFun) {
  * @return {Node} treeInfo.rightMost - Copy of the node with the largest value in this subtree.
  */
 Node.prototype.copy = function(parent, copyFun) {
-  const val  = typeof copyFun === "function" ? copyFun(this.value) : JSON.parse(JSON.stringify(this.value));
+  const val = typeof copyFun === "function" ? copyFun(this.value) : JSON.parse(JSON.stringify(this.value));
   const node = new Node(val, parent);
 
   // Copy all properties
   node.count  = this.count;
   node.height = this.height;
 
-  var minNode = node, maxNode = node;
+  let minNode = node, maxNode = node;
 
   if (this.left) {
     const {copy, leftMost, rightMost} = this.left.copy(node, copyFun);

@@ -634,7 +634,7 @@ function testRemoveRightLeftCase() {
  * This test verifies that the copy functionality works correctly.
  */
 function testCopy() {
-  var tree = new goog.structs.AvlTree((a, b) => a - b);
+  let tree = new goog.structs.AvlTree((a, b) => a - b);
   tree.add(100);
   tree.add(150);
   tree.add(50);
@@ -658,6 +658,15 @@ function testCopy() {
   assertEquals(50, tree.getMinimum());
   assertEquals(200, tree.getMaximum());
   assertEquals(6, tree.getCount());
+}
+
+
+function testCopyEmptyTree() {
+  let tree = new goog.structs.AvlTree();
+  tree = tree.copy();
+
+  assertEquals(0, tree.getCount());
+  assertEquals(0, tree.getHeight());
 }
 
 
