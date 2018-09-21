@@ -33,6 +33,7 @@ goog.events.Keys = {
   DOWN: 'ArrowDown',
   END: 'End',
   ENTER: 'Enter',
+  ESCAPE: 'Escape',
   HOME: 'Home',
   LEFT: 'ArrowLeft',
   PAGE_DOWN: 'PageDown',
