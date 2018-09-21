@@ -735,15 +735,7 @@ goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
 
 
 /** @override */
-goog.module.ModuleManager.prototype.setLoaded = function() {
-  if (!this.currentlyLoadingModule_) {
-    goog.log.error(
-        this.logger_, 'setLoaded called while no module is actively loading');
-    return;
-  }
-
-  var id = this.currentlyLoadingModule_.getId();
-
+goog.module.ModuleManager.prototype.setLoaded = function(id) {
   if (this.isDisposed()) {
     goog.log.warning(
         this.logger_, 'Module loaded after module manager was disposed: ' + id);
@@ -884,6 +876,10 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
   }
   this.currentlyLoadingModule_ = this.getModuleInfo(id);
 };
+
+
+/** @override */
+goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {};
 
 
 /** @override */
