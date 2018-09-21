@@ -170,6 +170,7 @@ goog.ui.HoverCard.prototype.maxSearchSteps_;
  * @param {Node} node Node to test.
  * @return {boolean} Whether or not hovercard should be shown.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.HoverCard.prototype.isAnchor_ = function(node) {
   return node.tagName in this.anchors_ &&

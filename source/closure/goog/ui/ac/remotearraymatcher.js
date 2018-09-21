@@ -210,6 +210,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
  * @param {string} token The XHR autocomplete token.
  * @param {Function} matchHandler The AutoComplete match handler.
  * @param {goog.events.Event} event The XHR success event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.RemoteArrayMatcher.prototype.xhrCallback = function(
     token, matchHandler, event) {

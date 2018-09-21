@@ -122,41 +122,41 @@ function testIsRtlChar() {
   // RTL beyond the BMP
   assert(goog.i18n.bidi.isRtlChar(
       '\uD83A\uDD03'));                      // Adlam as 2 supplementary points.
-  assert(goog.i18n.bidi.isRtlChar('𞤃'));  // Adlam
-  assert(goog.i18n.bidi.isRtlChar('𞥟'));  // Adlam
-  assert(goog.i18n.bidi.isRtlChar('𞠀'));  // Mende Kikakui
+  assert(goog.i18n.bidi.isRtlChar('\uD83A\uDD03'));  // Adlam
+  assert(goog.i18n.bidi.isRtlChar('\uD83A\uDD5F'));  // Adlam
+  assert(goog.i18n.bidi.isRtlChar('\uD83A\uDC00'));  // Mende Kikakui
 
   // Now the additional scripts
-  assert(goog.i18n.bidi.isRtlChar('𐠀'));     // Cypriot Syllabary
-  assert(goog.i18n.bidi.isRtlChar('𐠿'));     // Cypriot Syllabary
-  assert(goog.i18n.bidi.isRtlChar('𐠗'));     // Cypriot Syllabary
-  assert(goog.i18n.bidi.isRtlChar('𐤀'));     // Phoenician
-  assert(goog.i18n.bidi.isRtlChar('𐡀'));     // Imperial Aramaic
-  assert(goog.i18n.bidi.isRtlChar('𐡟'));     // Imperial Aramaic
-  assert(goog.i18n.bidi.isRtlChar('𐩠'));     // Old South Arabian
-  assert(goog.i18n.bidi.isRtlChar('𐩿'));     // Old South Arabian
-  assert(goog.i18n.bidi.isRtlChar('𐪟'));  // Old North Arabian
-  assert(goog.i18n.bidi.isRtlChar('𐪟'));  // Old North Arabian
-  assert(goog.i18n.bidi.isRtlChar('𐭠'));     // Inscriptional Pahlavi
-  assert(goog.i18n.bidi.isRtlChar('𐭿'));     // Inscriptional Pahlavi
-  assert(goog.i18n.bidi.isRtlChar('𐮀'));  // Psalter Pahlavi
-  assert(goog.i18n.bidi.isRtlChar('𐮯'));  // Psalter Pahlavi
-  assert(goog.i18n.bidi.isRtlChar('𐬀'));     // Avestan
-  assert(goog.i18n.bidi.isRtlChar('𐢀'));  // Nabataean
-  assert(goog.i18n.bidi.isRtlChar('𐢯'));  // Nabataean
-  assert(goog.i18n.bidi.isRtlChar('𐨀'));     // Kharoshthi
-  assert(goog.i18n.bidi.isRtlChar('𐩟'));  // Kharoshthi
-  assert(goog.i18n.bidi.isRtlChar('𐰀'));     // Old Turkic
-  assert(goog.i18n.bidi.isRtlChar('𐱏'));  // Old Turkic
-  assert(goog.i18n.bidi.isRtlChar('𐤠'));     // Lydian
-  assert(goog.i18n.bidi.isRtlChar('𐤿'));     // Lydian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC00'));  // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC3F'));  // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC17'));  // Cypriot Syllabary
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDD00'));  // Phoenician
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC40'));  // Imperial Aramaic
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC5F'));  // Imperial Aramaic
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE60'));  // Old South Arabian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE7F'));  // Old South Arabian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE9F'));  // Old North Arabian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE91'));  // Old North Arabian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDF60'));  // Inscriptional Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDF7F'));  // Inscriptional Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDF80'));  // Psalter Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDFAF'));  // Psalter Pahlavi
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDF00'));  // Avestan
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDC80'));  // Nabataean
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDCAF'));  // Nabataean
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE00'));  // Kharoshthi
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDE5F'));  // Kharoshthi
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDC00'));  // Old Turkic
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDC4F'));  // Old Turkic
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDD20'));  // Lydian
+  assert(goog.i18n.bidi.isRtlChar('\uD802\uDD3F'));  // Lydian
 
   // TODO(b/77920598): Include test for new RTL, LTR, and neutral
   // writing systems added in Unicode 11 and beyond.
   // LTR beyond the BMP
-  assert(goog.i18n.bidi.isLtrChar('𑄐'));     // Chakma block
-  assert(goog.i18n.bidi.isLtrChar('𑜀'));  // Ahom block
-  assert(goog.i18n.bidi.isLtrChar('𐒺'));  // Osage block
+  assert(goog.i18n.bidi.isLtrChar('\uD804\uDD10'));  // Chakma block
+  assert(goog.i18n.bidi.isLtrChar('\uD805\uDF00'));  // Ahom block
+  assert(goog.i18n.bidi.isLtrChar('\uD801\uDCBA'));  // Osage block
 }
 
 function testIsNeutralChar() {
@@ -185,7 +185,7 @@ function testIsNeutralText() {
   assert(goog.i18n.bidi.isNeutralText('(123)-4567!'));
   assert(!goog.i18n.bidi.isNeutralText('(123)-X4567!'));
   // A few neutral characters from SMP. This is an approximation!
-  assert(!goog.i18n.bidi.isNeutralText('𐄁𐆚𝍕'));
+  assert(!goog.i18n.bidi.isNeutralText('\uD800\uDD01\uD800\uDD9A\uD834\uDF55'));
 }
 
 function testHasAnyLtr() {
@@ -195,8 +195,8 @@ function testHasAnyLtr() {
   assert(!goog.i18n.bidi.hasAnyLtr('123\t...  \n'));
   assert(goog.i18n.bidi.hasAnyLtr('<br>123&lt;', false));
   assert(!goog.i18n.bidi.hasAnyLtr('<br>123&lt;', true));
-  assert(!goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞', true));
-  assert(goog.i18n.bidi.hasAnyRtl('\u05e0\u05e1a\u05e2\u05e3'));
+  assert(!goog.i18n.bidi.hasAnyLtr('\uD83A\uDD22\uD83A\uDD5E', true));
+  assert(goog.i18n.bidi.hasAnyLtr('\u05e0\u05e1Q\u05e2\u05e3'));
 }
 
 function testHasAnyRtl() {
@@ -206,8 +206,8 @@ function testHasAnyRtl() {
   assert(!goog.i18n.bidi.hasAnyRtl('123\t...  \n'));
   assert(goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', false));
   assert(!goog.i18n.bidi.hasAnyRtl('<input value=\u05e0>123', true));
-  assert(goog.i18n.bidi.hasAnyRtl('𞤢𞤄𞤕'));
-  assert(goog.i18n.bidi.hasAnyRtl('\u05e0\u05e1\u05e2\u05e3'));
+  assert(goog.i18n.bidi.hasAnyRtl('A\uD83A\uDD22\uD83A\uDD15B', false));
+  assert(goog.i18n.bidi.hasAnyRtl('\u05e0\u05e1a\u05e2Q\u05e3'));
 }
 
 function testEndsWithLtr() {
@@ -229,8 +229,8 @@ function testEndsWithLtr() {
   assert(!goog.i18n.bidi.endsWithLtr('\u200f\u202eArtielish\u202c\u200f'));
   assert(!goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', true));
   assert(goog.i18n.bidi.endsWithLtr(' \u05e0\u05e1a\u05e2 &lt;', false));
-  assert(!goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞', false));
-  assert(goog.i18n.bidi.hasAnyLtr('𞤢𞤄𞤕𞥞W', false));
+  assert(!goog.i18n.bidi.endsWithLtr('a\uD83A\uDD22\uD83A\uDD5E', false));
+  assert(goog.i18n.bidi.endsWithLtr('\u05e0\ud804\udf7f', false));
 }
 
 function testEndsWithRtl() {
@@ -252,11 +252,8 @@ function testEndsWithRtl() {
   assert(!goog.i18n.bidi.endsWithRtl('\u05e0 \u05e0\u05e1ab\u05e2 a (!)'));
   assert(goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', true));
   assert(!goog.i18n.bidi.endsWithRtl(' \u05e0\u05e1a\u05e2 &lt;', false));
-  assert(!goog.i18n.bidi.endsWithRtl(
-      '𞤀𞤧𞤱𞤣 𞤬𞤺\ud801\udc00', true));
-  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
-  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
-  assert(goog.i18n.bidi.endsWithRtl('𞤀𞤧𞤱𞤣 𞤬𞤺', true));
+  assert(!goog.i18n.bidi.endsWithRtl('\uD83A\uDD2C\ud801\udc00', false));
+  assert(goog.i18n.bidi.endsWithRtl('a\uD83A\uDD3A', false));
 }
 
 function testStartsWithLtr() {
@@ -283,9 +280,9 @@ function testStartsWithNeutral() {
   assert(!goog.i18n.bidi.startsWithRtl('@*&~'));
   assert(!goog.i18n.bidi.startsWithLtr('@*&~'));
 
-  assert(!goog.i18n.bidi.startsWithRtl('𐄁𐆚𝍕'));
-  // These are actually labeld as LTR.
-  assert(goog.i18n.bidi.startsWithLtr('𐄁𐆚𝍕'));
+  assert(!goog.i18n.bidi.startsWithRtl('\uD800\uDD01\uD800\uDD9A'));
+  // These are actually labeled as LTR.
+  assert(goog.i18n.bidi.startsWithLtr('\uD800\uDD01\uD800\uDD9A'));
 }
 
 function testGuardBracketInText() {
@@ -413,7 +410,7 @@ function testEstimateDirection() {
       goog.i18n.bidi.estimateDirection('\u0660', false));
   assertEquals(
       'Native adlam numbers should count as RTL', goog.i18n.bidi.Dir.RTL,
-      goog.i18n.bidi.estimateDirection('𞥕', false));
+      goog.i18n.bidi.estimateDirection('\uD83A\uDD55', false));
   assertEquals(
       'Both Farsi letters and digits should count as RTL',
       goog.i18n.bidi.Dir.RTL,

@@ -401,6 +401,7 @@ goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS_RTL = [
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -437,6 +438,7 @@ goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -465,6 +467,7 @@ goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -515,6 +518,7 @@ goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -593,6 +597,7 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -624,6 +629,7 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
@@ -655,6 +661,7 @@ goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(
     id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {

@@ -110,6 +110,7 @@ goog.events.WheelHandler.getDomEventType = function() {
 /**
  * Handles the events on the element.
  * @param {!goog.events.BrowserEvent} e The underlying browser event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.WheelHandler.prototype.handleEvent = function(e) {
   var deltaMode = goog.events.WheelEvent.DeltaMode.PIXEL;

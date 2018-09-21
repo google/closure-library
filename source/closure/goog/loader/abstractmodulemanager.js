@@ -348,7 +348,6 @@ goog.loader.AbstractModuleManager.prototype.beforeLoadModuleCode = function(
 /**
  * Method called just after module code is loaded
  * @param {string} id Identifier of the module.
- * @abstract
  */
 goog.loader.AbstractModuleManager.prototype.afterLoadModuleCode = function(
     id) {};

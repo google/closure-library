@@ -113,6 +113,7 @@ goog.editor.plugins.LoremIpsum.prototype.isSupportedCommand = function(
 /**
  * Set the lorem ipsum text in a goog.editor.Field if needed.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
   // Try to apply lorem ipsum if:
@@ -158,6 +159,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
  * @param {boolean=} opt_placeCursor Whether to place the cursor in the field
  *     after clearing lorem.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
     opt_placeCursor) {

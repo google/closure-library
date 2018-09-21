@@ -40,7 +40,8 @@ goog.require('goog.userAgent');
  *     given image if the image successfully loads.
  */
 goog.labs.net.image.load = function(uri, opt_image) {
-  return new goog.Promise(function(resolve, reject) {
+  return new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
+                          function(resolve, reject) {
     var image;
     if (!goog.isDef(opt_image)) {
       image = new Image();

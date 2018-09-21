@@ -822,6 +822,7 @@ goog.net.IframeIo.prototype.setIgnoreResponse = function(ignore) {
 /**
  * Submits the internal form to the iframe.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.IframeIo.prototype.sendFormInternal_ = function() {
   this.active_ = true;
@@ -1251,6 +1252,7 @@ goog.net.IframeIo.prototype.appendIframe_ = function() {
  * will not detect that the response has correctly finished and the loading bar
  * will stay active forever.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.IframeIo.prototype.scheduleIframeDisposal_ = function() {
   var iframe = this.iframe_;

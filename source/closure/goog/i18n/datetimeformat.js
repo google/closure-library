@@ -401,6 +401,7 @@ goog.i18n.DateTimeFormat.isEnforceAsciiDigits = function() {
  * @param {!Object=} opt_dateTimeSymbols Optional symbols to use rather than
  *     the global symbols.
  * @return {string} localized string, potentially using native digits.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.i18n.DateTimeFormat.localizeNumbers = function(
     input, opt_dateTimeSymbols) {

@@ -829,6 +829,7 @@ goog.ui.DatePicker.prototype.setDate_ = function(date, fireSelection) {
  * Updates the navigation row (navigating months and maybe years) in the navRow_
  * element of a created picker.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DatePicker.prototype.updateNavigationRow_ = function() {
   if (!this.elNavRow_) {
@@ -957,7 +958,10 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ */
 goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.ui.DatePicker.superClass_.decorateInternal.call(this, el);
   goog.asserts.assert(el);
@@ -1083,9 +1087,9 @@ goog.ui.DatePicker.prototype.disposeInternal = function() {
 
 /**
  * Click handler for date grid.
- *
  * @param {goog.events.BrowserEvent} event Click event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DatePicker.prototype.handleGridClick_ = function(event) {
   if (event.target.tagName == goog.dom.TagName.TD) {
@@ -1249,12 +1253,12 @@ goog.ui.DatePicker.prototype.handleYearMenuClick_ = function(target) {
 
 /**
  * Support function for menu creation.
- *
  * @param {Element} srcEl Button to create menu for.
  * @param {Array<string>} items List of items to populate menu with.
  * @param {function(Element)} method Call back method.
  * @param {string} selected Item to mark as selected in menu.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DatePicker.prototype.createMenu_ = function(
     srcEl, items, method, selected) {
@@ -1319,9 +1323,9 @@ goog.ui.DatePicker.prototype.handleMenuClick_ = function(event) {
 
 /**
  * Keypress handler for menu.
- *
  * @param {goog.events.BrowserEvent} event Keypress event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DatePicker.prototype.handleMenuKeyPress_ = function(event) {
   // Prevent the grid keypress handler from catching the keypress event.

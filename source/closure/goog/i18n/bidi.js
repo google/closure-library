@@ -194,7 +194,11 @@ goog.i18n.bidi.toDir = function(givenDir, opt_noNeutral) {
  * A practical pattern to identify strong LTR character in the BMP.
  * This pattern is not theoretically correct according to the Unicode
  * standard. It is simplified for performance and small code size.
- * It includes high surrogates in LTR, but not low surrogates or private use.
+ * It also partially supports LTR scripts beyond U+FFFF by including
+ * UTF-16 high surrogate values corresponding to mostly L-class code
+ * point ranges.
+ * However, low surrogate values and private-use regions are not included
+ * in this RegEx.
  * @type {string}
  * @private
  */
@@ -207,23 +211,17 @@ goog.i18n.bidi.ltrChars_ =
  * A practical pattern to identify strong RTL character. This pattern is not
  * theoretically correct according to the Unicode standard. It is simplified
  * for performance and small code size.
- * It includes high surrogates for RTL, but not low surrogates or private use.
+ * It also partially supports RTL scripts beyond U+FFFF by including
+ * UTF-16 high surrogate values corresponding to mostly R- or AL-class
+ * code point ranges.
+ * However, low surrogate values and private-use regions are not included
+ * in this RegEx.
  * @type {string}
  * @private
  */
 goog.i18n.bidi.rtlChars_ =
     '\u0591-\u06EF\u06FA-\u08FF\u200F\uD802-\uD803\uD83A-\uD83B' +
     '\uFB1D-\uFDFF\uFE70-\uFEFC';
-/**
- * A practical pattern to identify the high (leading) surrogate for
- * strong RTL character in the Supplementary Multilingual Planes (SMP.)
- * This set of first 16-bit values covers the RTL range for Unicode 11.
- * It is simplified for performance and small code size.
- * Note that this may need to be recomputed with updates to Unicode standard.
- * @type {string}
- * @private
- */
-goog.i18n.bidi.lowSurrogate_ = '\uDC00-\uDFFF';
 
 /**
  * Simplified regular expression for an HTML tag (opening or closing) or an HTML
@@ -458,7 +456,6 @@ goog.i18n.bidi.isNeutralText = function(str, opt_isHtml) {
  */
 goog.i18n.bidi.ltrExitDirCheckRe_ = new RegExp(
     '[' + goog.i18n.bidi.ltrChars_ + ']' +
-    '(' + goog.i18n.bidi.lowSurrogate_ + ')?' +
     '[^' + goog.i18n.bidi.rtlChars_ + ']*$');
 
 
@@ -470,7 +467,6 @@ goog.i18n.bidi.ltrExitDirCheckRe_ = new RegExp(
  */
 goog.i18n.bidi.rtlExitDirCheckRe_ = new RegExp(
     '[' + goog.i18n.bidi.rtlChars_ + ']' +
-    '(' + goog.i18n.bidi.lowSurrogate_ + ')?' +
     '[^' + goog.i18n.bidi.ltrChars_ + ']*$');
 
 

@@ -102,6 +102,7 @@ netUtils.testLoadImageWithRetries = function(
  * @param {string} url URL to the image.
  * @param {number} timeout Milliseconds before giving up.
  * @param {function(boolean)} callback Function to call with results.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 netUtils.testLoadImage = function(url, timeout, callback) {
   var channelDebug = new WebChannelDebug();
@@ -154,6 +155,7 @@ netUtils.imageCallback_ = function(
  * Clears handlers to avoid memory leaks.
  * @param {Image} img The image to clear handlers from.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 netUtils.clearImageCallbacks_ = function(img) {
   img.onload = null;

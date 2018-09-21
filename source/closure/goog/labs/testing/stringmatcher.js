@@ -314,8 +314,8 @@ goog.labs.testing.StringContainsInOrderMatcher = function(values) {
 
 /**
  * Determines if input string contains, in order, the expected array of strings.
- *
  * @override
+ * @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration
  */
 goog.labs.testing.StringContainsInOrderMatcher.prototype.matches = function(
     actualValue) {

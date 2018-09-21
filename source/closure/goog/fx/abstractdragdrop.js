@@ -1171,7 +1171,10 @@ goog.fx.AbstractDragDrop.prototype.getEventPosition = function(event) {
 };
 
 
-/** @override */
+/**
+ * @override
+ * @protected
+ */
 goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
   goog.fx.AbstractDragDrop.base(this, 'disposeInternal');
   this.removeItems();

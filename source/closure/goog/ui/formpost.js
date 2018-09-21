@@ -61,6 +61,7 @@ goog.ui.FormPost.prototype.createDom = function() {
  * @param {string=} opt_target An optional name of a window in which to open the
  *     URL. If not specified, uses the window for the DOM specified in the
  *     constructor.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.FormPost.prototype.post = function(parameters, opt_url, opt_target) {
   var form = this.getElement();

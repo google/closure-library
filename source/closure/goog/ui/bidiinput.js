@@ -126,6 +126,7 @@ goog.ui.BidiInput.prototype.setDirection_ = function() {
  *     enough to determine directionality (e.g. an empty value), and the
  *     direction is inherited from a parent element (typically the body
  *     element).
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.getDirection = function() {
   var dir = this.getElement().dir;
@@ -140,6 +141,7 @@ goog.ui.BidiInput.prototype.getDirection = function() {
  * Sets the value of the underlying input field, and sets the direction
  * according to the given value.
  * @param {string} value  The Value to set in the underlying input field.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.setValue = function(value) {
   var element = this.getElement();
@@ -155,6 +157,7 @@ goog.ui.BidiInput.prototype.setValue = function(value) {
 /**
  * Returns the value of the underlying input field.
  * @return {string} Value of the underlying input field.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.getValue = function() {
   var element = this.getElement();

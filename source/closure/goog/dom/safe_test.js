@@ -281,6 +281,43 @@ function testReplaceLocationSafeUrl() {
   }
 }
 
+function testAssignLocationSafeString() {
+  var location;
+  var fakeLoc = /** @type {!Location} */ ({
+    assign: function(value) {
+      location = value;
+    }
+  });
+  goog.dom.safe.assignLocation(fakeLoc, 'http://example.com/');
+  assertEquals(location, 'http://example.com/');
+}
+
+function testAssignLocationEvilString() {
+  var location;
+  var fakeLoc = /** @type {!Location} */ ({
+    assign: function(value) {
+      location = value;
+    }
+  });
+  withAssertionFailure(function() {
+    goog.dom.safe.assignLocation(fakeLoc, 'javascript:evil();');
+  });
+  assertEquals(location, 'about:invalid#zClosurez');
+}
+
+function testAssignLocationSafeUrl() {
+  var location;
+  var fakeLoc = /** @type {!Location} */ ({
+    assign: function(value) {
+      location = value;
+    }
+  });
+  var safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  goog.dom.safe.assignLocation(fakeLoc, safeUrl);
+  assertEquals(location, 'javascript:trusted();');
+}
+
 function testSetAnchorHref() {
   var anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
   withAssertionFailure(function() {

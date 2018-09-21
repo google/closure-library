@@ -367,8 +367,8 @@ goog.ui.DrilldownRow.prototype.getDepth = function() {
  * }
  *
  * These background images show whether the DrilldownRow is expanded.
- *
  * @param {goog.ui.DrilldownRow} selfObj DrilldownRow to be decorated.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DrilldownRow.decorate = function(selfObj) {
   var depth = selfObj.getDepth();
@@ -454,11 +454,11 @@ goog.ui.DrilldownRow.prototype.isVisible_ = function() {
 /**
  * Create and return a TR element from HTML that looks like
  * "<tr> ... </tr>".
- *
  * @param {!goog.html.SafeHtml} html for one row.
  * @param {!goog.dom.DomHelper} dom DOM to hold the Element.
  * @return {Element} table row node created from the HTML.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.DrilldownRow.createRowNode_ = function(html, dom) {
   // Note: this may be slow.

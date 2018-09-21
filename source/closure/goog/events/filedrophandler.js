@@ -138,6 +138,7 @@ goog.events.FileDropHandler.prototype.dispatch_ = function(e) {
  * Handles dragenter on the document.
  * @param {goog.events.BrowserEvent} e The dragenter event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onDocDragEnter_ = function(e) {
   goog.log.log(
@@ -164,6 +165,7 @@ goog.events.FileDropHandler.prototype.onDocDragEnter_ = function(e) {
  * Handles dragging something over the document.
  * @param {goog.events.BrowserEvent} e The dragover event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onDocDragOver_ = function(e) {
   goog.log.log(
@@ -183,6 +185,7 @@ goog.events.FileDropHandler.prototype.onDocDragOver_ = function(e) {
  * Handles dragging something over the element (drop zone).
  * @param {goog.events.BrowserEvent} e The dragover event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
   goog.log.log(
@@ -212,6 +215,7 @@ goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
  * Handles dropping something onto the element (drop zone).
  * @param {goog.events.BrowserEvent} e The drop event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onElemDrop_ = function(e) {
   goog.log.log(

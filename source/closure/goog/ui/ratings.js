@@ -167,6 +167,7 @@ goog.ui.Ratings.prototype.decorateInternal = function(el) {
  * Render the rating widget inside the provided element. This will override the
  * current content of the element.
  * @override
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.enterDocument = function() {
   var el = this.getElement();
@@ -361,6 +362,7 @@ goog.ui.Ratings.prototype.isEnabled = function() {
  * Handle the mouse moving over a star.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
   if (!this.isEnabled()) {
@@ -382,6 +384,7 @@ goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
  * Handle the mouse moving over a star.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
   // Only remove the highlight if the mouse is not moving to another star
@@ -395,6 +398,7 @@ goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
  * Handle the mouse moving over a star.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onClick_ = function(e) {
   if (!this.isEnabled()) {

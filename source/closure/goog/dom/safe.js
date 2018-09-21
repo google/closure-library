@@ -617,6 +617,39 @@ goog.dom.safe.setLocationHref = function(loc, url) {
   loc.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
+/**
+ * Safely assigns the URL of a Location object.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and
+ * passed to Location#assign. If url is of type string however, it is
+ * first sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.assignHref(document.location, newUrl);
+ * which is a safe alternative to
+ *   document.location.assign(newUrl);
+ * The latter can result in XSS vulnerabilities if newUrl is a
+ * user-/attacker-controlled value.
+ *
+ * This has the same behaviour as setLocationHref, however some test
+ * mock Location.assign instead of a property assignment.
+ *
+ * @param {!Location} loc The Location object which is to be assigned.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.assignLocation = function(loc, url) {
+  goog.dom.asserts.assertIsLocation(loc);
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+  }
+  loc.assign(goog.html.SafeUrl.unwrap(safeUrl));
+};
+
 
 /**
  * Safely replaces the URL of a Location object.
