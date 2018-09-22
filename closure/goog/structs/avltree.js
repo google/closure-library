@@ -923,18 +923,13 @@ AvlTree.prototype.copy = function(copy) {
 };
 
 /**
- * @typedef SubTree
- * @type {object}
- * @property {Node<T>} root - Root node of the subtree.
- * @property {Node<T>} leftMost - Node with the smallest value in the subtree.
- * @property {Node<T>} rightMost - Node with the largest value in the subtree.
- */
-
-/**
  * Copies a node.
  * @param {?Node<T>} parent - The parent of this node.
  * @param {function(T):T} [copy] - Function used to copy the values contained by the subtree.
- * @return {SubTree} subtree - Information about the copied subtree.
+ * @return {Object} subtree - Information about the copied subtree.
+ * @return {Node<T>} subTree.root - Root node of the subtree.
+ * @return {Node<T>} subTree.leftMost - Node with the smallest value in the subtree.
+ * @return {Node<T>} subTree.rightMost - Node with the largest value in the subtree.
  */
 Node.prototype.copy = function(parent, copy) {
   const val = typeof copy === "function" ? copy(this.value) : JSON.parse(JSON.stringify(this.value));
