@@ -900,15 +900,8 @@ Node.prototype.fixHeight = function() {
 };
 
 /**
- * @name copyCb
- * @function
- * @param {T} value - A value contained by the tree.
- * @return {T}
- */
-
-/**
  * Copies the AVL tree.
- * @param {copyCb=} copy - Function used to copy the values contained by the tree.
+ * @param {function(T):T} [copy] - Function used to copy the values contained by the tree.
  * @return {AvlTree<T>}
  */
 AvlTree.prototype.copy = function(copy) {
@@ -939,8 +932,8 @@ AvlTree.prototype.copy = function(copy) {
 
 /**
  * Copies a node.
- * @param {Node<T>} parent - The parent of this node.
- * @param {copyCb=} copy - Function used to copy the values contained by the subtree.
+ * @param {?Node<T>} parent - The parent of this node.
+ * @param {function(T):T} [copy] - Function used to copy the values contained by the subtree.
  * @return {SubTree} subtree - Information about the copied subtree.
  */
 Node.prototype.copy = function(parent, copy) {
