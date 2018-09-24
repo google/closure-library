@@ -1055,7 +1055,7 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
   if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
     goog.dom.safe.setInnerHtml(
         tempDiv, goog.html.SafeHtml.concat(goog.html.SafeHtml.BR, html));
-    tempDiv.removeChild(goog.asserts.assert(tempDiv.firstChild));
+    tempDiv.removeChild(tempDiv.firstChild);
   } else {
     goog.dom.safe.setInnerHtml(tempDiv, html);
   }
@@ -1072,7 +1072,7 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  */
 goog.dom.childrenToNode_ = function(doc, tempDiv) {
   if (tempDiv.childNodes.length == 1) {
-    return tempDiv.removeChild(goog.asserts.assert(tempDiv.firstChild));
+    return tempDiv.removeChild(tempDiv.firstChild);
   } else {
     var fragment = doc.createDocumentFragment();
     while (tempDiv.firstChild) {
@@ -1178,9 +1178,6 @@ goog.dom.canHaveChildren = function(node) {
  * @param {Node} child Child.
  */
 goog.dom.appendChild = function(parent, child) {
-  goog.asserts.assert(
-      parent != null && child != null,
-      'goog.dom.appendChild expects non-null arguments');
   parent.appendChild(child);
 };
 
@@ -1220,9 +1217,6 @@ goog.dom.removeChildren = function(node) {
  * @param {Node} refNode Reference node to insert before.
  */
 goog.dom.insertSiblingBefore = function(newNode, refNode) {
-  goog.asserts.assert(
-      newNode != null && refNode != null,
-      'goog.dom.insertSiblingBefore expects non-null arguments');
   if (refNode.parentNode) {
     refNode.parentNode.insertBefore(newNode, refNode);
   }
@@ -1236,9 +1230,6 @@ goog.dom.insertSiblingBefore = function(newNode, refNode) {
  * @param {Node} refNode Reference node to insert after.
  */
 goog.dom.insertSiblingAfter = function(newNode, refNode) {
-  goog.asserts.assert(
-      newNode != null && refNode != null,
-      'goog.dom.insertSiblingAfter expects non-null arguments');
   if (refNode.parentNode) {
     refNode.parentNode.insertBefore(newNode, refNode.nextSibling);
   }
@@ -1257,8 +1248,6 @@ goog.dom.insertSiblingAfter = function(newNode, refNode) {
 goog.dom.insertChildAt = function(parent, child, index) {
   // Note that if the second argument is null, insertBefore
   // will append the child at the end of the list of children.
-  goog.asserts.assert(
-      parent != null, 'goog.dom.insertChildAt expects a non-null parent');
   parent.insertBefore(child, parent.childNodes[index] || null);
 };
 
@@ -1280,9 +1269,6 @@ goog.dom.removeNode = function(node) {
  * @param {Node} oldNode Node to replace.
  */
 goog.dom.replaceNode = function(newNode, oldNode) {
-  goog.asserts.assert(
-      newNode != null && oldNode != null,
-      'goog.dom.replaceNode expects non-null arguments');
   var parent = oldNode.parentNode;
   if (parent) {
     parent.replaceChild(newNode, oldNode);
@@ -1778,7 +1764,7 @@ goog.dom.setTextContent = function(node, text) {
     // If the first child is a text node we just change its data and remove the
     // rest of the children.
     while (node.lastChild != node.firstChild) {
-      node.removeChild(goog.asserts.assert(node.lastChild));
+      node.removeChild(node.lastChild);
     }
     /** @type {!Text} */ (node.firstChild).data = String(text);
   } else {
