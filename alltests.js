@@ -23,6 +23,7 @@ var _allTests = [
   'closure/goog/async/delay_test.html',
   'closure/goog/async/freelist_test.html',
   'closure/goog/async/nexttick_test.html',
+  'closure/goog/async/run_next_tick_test.html',
   'closure/goog/async/run_test.html',
   'closure/goog/async/throttle_test.html',
   'closure/goog/async/workqueue_test.html',
