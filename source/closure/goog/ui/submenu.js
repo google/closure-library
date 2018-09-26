@@ -361,7 +361,6 @@ goog.ui.SubMenu.prototype.onParentHidden_ = function(e) {
  * Sets a timer to show the submenu and then dispatches an ENTER event to the
  * parent menu.
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
- * @protected
  */
 goog.ui.SubMenu.prototype.handleMouseOver = function(e) {
   if (this.isEnabled()) {

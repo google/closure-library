@@ -582,25 +582,26 @@ goog.module.declareLegacyNamespace = function() {
 
 
 /**
- * Associate an ES6 module with a Closure namespace so that is available via
- * goog.require. This associates a namespace that acts like a goog.module - it
- * does not create any global names, it is merely available via goog.require.
- * goog.require will return the entire module as if it was import *'d. This
- * allows Closure files to reference ES6 modules.
+ * Associates an ES6 module with a Closure module ID so that is available via
+ * goog.require. The associated ID  acts like a goog.module ID - it does not
+ * create any global names, it is merely available via goog.require /
+ * goog.module.get / goog.forwardDeclare / goog.requireType. goog.require and
+ * goog.module.get will return the entire module as if it was import *'d. This
+ * allows Closure files to reference ES6 modules for the sake of migration.
  *
  * @param {string} namespace
  * @suppress {missingProvide}
  */
-goog.module.declareNamespace = function(namespace) {
+goog.declareModuleId = function(namespace) {
   if (!COMPILED) {
     if (!goog.isInEs6ModuleLoader_()) {
       throw new Error(
-          'goog.module.declareNamespace may only be called from ' +
+          'goog.declareModuleId may only be called from ' +
           'within an ES6 module');
     }
     if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
       throw new Error(
-          'goog.module.declareNamespace may only be called once per module.');
+          'goog.declareModuleId may only be called once per module.');
     }
     if (namespace in goog.loadedModules_) {
       throw new Error(
@@ -626,6 +627,16 @@ goog.module.declareNamespace = function(namespace) {
     };
   }
 };
+
+
+/**
+ * Deprecated old name for goog.declareModuleId. This function is being renamed
+ * to help disambiguate with goog.module.declareLegacyNamespace.
+ *
+ * @type {function(string): undefined}
+ * @suppress {missingProvide}
+ */
+goog.module.declareNamespace = goog.declareModuleId;
 
 
 /**
@@ -824,7 +835,7 @@ goog.logToConsole_ = function(msg) {
  *
  * @see goog.provide
  * @param {string} namespace Namespace (as was given in goog.provide,
- *     goog.module, or goog.module.declareNamespace) in the form
+ *     goog.module, or goog.declareModuleId) in the form
  *     "goog.package.part".
  * @return {?} If called within a goog.module or ES6 module file, the associated
  *     namespace or module otherwise null.
@@ -868,7 +879,7 @@ goog.require = function(namespace) {
  * Note that all calls to goog.requireType will be stripped by the compiler.
  *
  * @param {string} namespace Namespace (as was given in goog.provide,
- *     goog.module, or goog.module.declareNamespace) in the form
+ *     goog.module, or goog.declareModuleId) in the form
  *     "goog.package.part".
  * @return {?}
  */

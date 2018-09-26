@@ -167,23 +167,84 @@ function testCloneWithParams() {
       goog.string.Const.from('https://example.com/'));
 
   assertEquals(
-      'https://example.com/?a=%26',
-      url.cloneWithParams({'a': '&'}).getTypedStringValue());
+      'https://example.com/',
+      url.cloneWithParams(undefined).getTypedStringValue());
 
   assertEquals(
-      'https://example.com/?b=1',
-      url.cloneWithParams({'b': 1, 'c': null, 'd': undefined})
+      'https://example.com/', url.cloneWithParams(null).getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?search%25',
+      url.cloneWithParams('search%').getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=%3F%23%26&b=1&e=x&e=y',
+      url.cloneWithParams(
+             {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']})
           .getTypedStringValue());
 
   assertEquals(
-      'https://example.com/?a=x&a=y',
-      url.cloneWithParams({'a': ['x', 'y']}).getTypedStringValue());
+      'https://example.com/',
+      url.cloneWithParams(undefined, null).getTypedStringValue());
 
-  url = goog.html.TrustedResourceUrl.fromConstant(
-      goog.string.Const.from('https://example.com/?a=x'));
   assertEquals(
-      'https://example.com/?a=x&b=y',
-      url.cloneWithParams({'b': 'y'}).getTypedStringValue());
+      'https://example.com/#hash%25',
+      url.cloneWithParams(undefined, 'hash%').getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/#a=%3F%23%26&b=1&e=x&e=y',
+      url.cloneWithParams(
+             undefined,
+             {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']})
+          .getTypedStringValue());
+
+  var hashAndSearchUrl = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/?a=x#top'));
+
+  assertEquals(
+      'https://example.com/?a=x#top',
+      hashAndSearchUrl.cloneWithParams(undefined).getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x#top',
+      hashAndSearchUrl.cloneWithParams(null).getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?search%25#top',
+      hashAndSearchUrl.cloneWithParams('search%').getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x&a=%3F%23%26&b=1&e=x&e=y#top',
+      hashAndSearchUrl
+          .cloneWithParams(
+              {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']})
+          .getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x#top',
+      hashAndSearchUrl.cloneWithParams(undefined, null).getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x#hash%25',
+      hashAndSearchUrl.cloneWithParams(undefined, 'hash%')
+          .getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x#top&a=%3F%23%26&b=2&e=z&e=z',
+      hashAndSearchUrl
+          .cloneWithParams(
+              undefined,
+              {'a': '?#&', 'b': 2, 'c': null, 'd': undefined, 'e': ['z', 'z']})
+          .getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/' +
+          '?a=x&a=%3F%23%26&b=1&e=x&e=y#top&a=%3F%23%26&b=2&e=z&e=z',
+      hashAndSearchUrl
+          .cloneWithParams(
+              {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']},
+              {'a': '?#&', 'b': 2, 'c': null, 'd': undefined, 'e': ['z', 'z']})
+          .getTypedStringValue());
 }
 
 

@@ -70,9 +70,12 @@ goog.events.KeyCodes = {
   SEVEN: 55,
   EIGHT: 56,
   NINE: 57,
-  FF_SEMICOLON: 59,   // Firefox (Gecko) fires this for semicolon instead of 186
-  FF_EQUALS: 61,      // Firefox (Gecko) fires this for equals instead of 187
-  FF_DASH: 173,       // Firefox (Gecko) fires this for dash instead of 189
+  FF_SEMICOLON: 59,  // Firefox (Gecko) fires this for semicolon instead of 186
+  FF_EQUALS: 61,     // Firefox (Gecko) fires this for equals instead of 187
+  FF_DASH: 173,      // Firefox (Gecko) fires this for dash instead of 189
+  // Firefox (Gecko) fires this for # on UK keyboards, rather than
+  // Shift+SINGLE_QUOTE.
+  FF_HASH: 163,
   QUESTION_MARK: 63,  // needs localization
   AT_SIGN: 64,
   A: 65,
@@ -398,6 +401,7 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
     case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
     case goog.events.KeyCodes.BACKSLASH:
     case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
+    case goog.events.KeyCodes.FF_HASH:
       return true;
     default:
       return false;

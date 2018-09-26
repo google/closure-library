@@ -30,6 +30,7 @@ goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
+goog.require('goog.dom.dataset');
 goog.require('goog.iter');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
@@ -85,6 +86,13 @@ goog.ui.PaletteRenderer.CSS_CLASS = goog.getCssName('goog-palette');
 
 
 /**
+ * Data attribute to store grid width from palette control.
+ * @const {string}
+ */
+goog.ui.PaletteRenderer.GRID_WIDTH_ATTRIBUTE = 'gridWidth';
+
+
+/**
  * Returns the palette items arranged in a table wrapped in a DIV, with the
  * renderer's own CSS class and additional state-specific classes applied to
  * it.
@@ -100,6 +108,11 @@ goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
           /** @type {Array<Node>} */ (palette.getContent()), palette.getSize(),
           palette.getDomHelper()));
   goog.a11y.aria.setRole(element, goog.a11y.aria.Role.GRID);
+  // It's safe to store grid width here since `goog.ui.Palette#setSize` cannot
+  // be called after createDom.
+  goog.dom.dataset.set(
+      element, goog.ui.PaletteRenderer.GRID_WIDTH_ATTRIBUTE,
+      palette.getSize().width);
   return element;
 };
 
@@ -274,7 +287,8 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
       if (index < items.length) {
         var cells = [];
         var dom = goog.dom.getDomHelper(element);
-        var width = tbody.rows[0].cells.length;
+        var width = goog.dom.dataset.get(
+            element, goog.ui.PaletteRenderer.GRID_WIDTH_ATTRIBUTE);
         while (index < items.length) {
           var item = items[index++];
           cells.push(this.createCell(item, dom));
