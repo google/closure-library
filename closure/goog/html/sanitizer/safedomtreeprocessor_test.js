@@ -73,6 +73,17 @@ testSuite({
         input, new NoopProcessor().processToString(input));
   },
 
+  testEmptyTag() {
+    var input = '<div></div>';
+    var actual = new NoopProcessor().processToString(input);
+
+    if (SafeDomTreeProcessor.SAFE_PARSING_SUPPORTED) {
+      assertEquals(input, actual);
+    } else {
+      assertEquals('', actual);
+    }
+  },
+
   testTagChanged() {
     var processor = new NoopProcessor();
     processor.createElementWithoutAttributes = anchorToFoo;

@@ -1648,11 +1648,11 @@ function testUrlWithCredentials() {
 
 
 function testClobberedForm() {
-  var input = '<form><input name="nodeType" /></form>';
+  var input = '<form><input name="nodeType"></form>';
   // Passing a string in assertSanitizedHtml uses assertHtmlMatches, which is
   // also vulnerable to clobbering. We use a regexp to fall back to simple
   // string matching.
-  var expected = new RegExp('<form><input name="nodeType" /></form>');
+  var expected = new RegExp('<form><input name="nodeType"></form>');
   assertSanitizedHtml(
       input, expected,
       new goog.html.sanitizer.HtmlSanitizer.Builder()
