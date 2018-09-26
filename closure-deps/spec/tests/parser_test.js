@@ -252,19 +252,18 @@ describe('parse', function() {
       });
     });
 
-    describe('declareNamespace', function() {
+    describe('declareModuleId', function() {
       it('first then export', function() {
-        const dep = parseNoErrors(
-            'goog.module.declareNamespace("my.es6");', 'export {};');
+        const dep =
+            parseNoErrors('goog.declareModuleId("my.es6");', 'export {};');
 
-        expect(dep.type).toEqual(
-            depGraph.DependencyType.ES6_MODULE);
+        expect(dep.type).toEqual(depGraph.DependencyType.ES6_MODULE);
         expect(dep.closureSymbols).toEqual(['my.es6']);
       });
 
       it('after export', function() {
-        const dep = parseNoErrors(
-            'export {};', 'goog.module.declareNamespace("my.es6");');
+        const dep =
+            parseNoErrors('export {};', 'goog.declareModuleId("my.es6");');
 
         expect(dep.type).toEqual(
             depGraph.DependencyType.ES6_MODULE);
@@ -273,10 +272,9 @@ describe('parse', function() {
 
       it('twice is error', function() {
         hasFatalParseError(
-            'goog.module.declareNamespace can only be called once per ES6 ' +
-                'module.',
-            'export {};', 'goog.module.declareNamespace("my.es6");',
-            'goog.module.declareNamespace("my.es6_0");');
+            'goog.declareModuleId can only be called once per ES6 module.',
+            'export {};', 'goog.declareModuleId("my.es6");',
+            'goog.declareModuleId("my.es6_0");');
       });
     });
   });
@@ -291,17 +289,17 @@ describe('parse', function() {
     expect(dep.type).toEqual(depGraph.DependencyType.SCRIPT);
   });
 
-  describe('declareNamespace is error in', function() {
+  describe('declareModuleId is error in', function() {
     it('goog.provide', function() {
       hasFatalParseError(
-          'goog.module.declareNamespace can only be called within ES6 modules.',
-          'goog.provide("a.b");', 'goog.module.declareNamespace("ex");');
+          'goog.declareModuleId can only be called within ES6 modules.',
+          'goog.provide("a.b");', 'goog.declareModuleId("ex");');
     });
 
     it('goog.module', function() {
       hasFatalParseError(
-          'goog.module.declareNamespace can only be called within ES6 modules.',
-          'goog.module("a.b");', 'goog.module.declareNamespace("ex");');
+          'goog.declareModuleId can only be called within ES6 modules.',
+          'goog.module("a.b");', 'goog.declareModuleId("ex");');
     });
   });
 

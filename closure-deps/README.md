@@ -92,7 +92,7 @@ const goog = parser.parseText('/** @provideGoog */', '/base.js').dependency;
 
 const firstFile = parser.parseText(
 `
-goog.module.declareNamespace('first.module');
+goog.declareModuleId('first.module');
 export const FOO = 'foo';
 `, "/first.js").dependency;
 

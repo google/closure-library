@@ -99,7 +99,7 @@ describe('depfile', function() {
               `{'lang': 'es6', 'module': 'es6'});\n`);
     });
 
-    it('declareNamespace', function() {
+    it('declareModuleId', function() {
       const d = new depGraph.Dependency(
           depGraph.DependencyType.ES6_MODULE, PATH_TO_CLOSURE + 'example.js',
           ['my.es6'], []);

@@ -43,11 +43,13 @@ describe('examples in README', function() {
   });
 
   it('es6 modules', function() {
-    const firstFile = parser.parseText(
-        lines(
-            'goog.module.declareNamespace(\'first.module\');',
-            'export const FOO = \'foo\';'),
-        '/first.js').dependency;
+    const firstFile = parser
+                          .parseText(
+                              lines(
+                                  'goog.declareModuleId(\'first.module\');',
+                                  'export const FOO = \'foo\';'),
+                              '/first.js')
+                          .dependency;
 
     const secondFile =
         parser.parseText('import {FOO} from "./first.js";', '/second.js')
