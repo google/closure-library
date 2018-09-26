@@ -211,8 +211,11 @@ class InvalidCycleError extends Error {
 }
 
 /**
- * Auto validating dependency graph that also provides a topological sorting
+ * Dependency graph that provides validation along with a topological sorting
  * of dependencies given an entrypoint.
+ *
+ * A dependency graph is not validated by default, you must call validate() if
+ * you wish to perform validation.
  */
 class Graph {
   /**
@@ -243,19 +246,16 @@ class Graph {
         this.depsBySymbol.set(sym, dep);
       }
     }
-
-    this.validate_();
   }
 
   /**
-   * Validates the dependency graph.
+   * Validates the dependency graph. Throws an error if the graph is invalid.
    *
    * This method uses Tarjan's algorithm to ensure Closure files are not part
    * of any cycle. Check it out:
    * https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
-   * @private
    */
-  validate_() {
+  validate() {
     let index = 0;
 
     // Map that assigns each dependency an index in visit-order.

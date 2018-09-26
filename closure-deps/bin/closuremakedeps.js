@@ -30,7 +30,7 @@ const path = require('path');
 const process = require('process');
 
 const argparser = new ArgumentParser({
-  version: '0.0.1',
+  version: '20180910.1.0',
   addHelp: true,
   description: 'Utility for Closure Library dependency calculation.'
 });
@@ -68,6 +68,20 @@ argparser.addArgument('--closure-path', {
       'being included among the input files.'
 });
 
+argparser.addArgument('--validate', {
+  dest: 'validate',
+  defaultValue: true,
+  action: 'storeTrue',
+  help: 'Enables validation the dependency graph before generating the ' +
+      'dependency file.'
+});
+
+argparser.addArgument('--no-validate', {
+  dest: 'validate',
+  defaultValue: true,
+  action: 'storeFalse',
+});
+
 /**
  * Resolves the given path against the working directory.
  * @param {string} p
@@ -80,7 +94,7 @@ function resolve(p) {
 /**
  * @param {function(...?)} fn
  * @param {...?} args
- * @return {Promise<?>}
+ * @return {!Promise<?>}
  */
 function promisify(fn, ...args) {
   return new Promise((resolve, reject) => {
@@ -156,17 +170,31 @@ async function main(opt_args) {
   }
 
   const deps = results.map(r => r.dependency);
-  // Make a graph to perform validation and potentially get the path to Closure.
-  const graph = new depGraph.Graph(deps);
+  const closureDep = deps.find(d => d.closureSymbols.indexOf('goog') >= 0);
 
-  if (!args.closurePath && !graph.depsBySymbol.has('goog')) {
+  if (!args.closurePath && !closureDep) {
     throw new Error(
         'Could not find path to Closure. Closure\'s base.js either needs to ' +
         'be included or --closure-path provided.');
   }
 
-  const closurePath =
-      args.closurePath || path.dirname(graph.depsBySymbol.get('goog').path);
+  if (args.closurePath && closureDep) {
+    throw new Error(
+        'Both --closure-path and Closure\'s base.js file should not be ' +
+        'inputs.');
+  }
+
+  if (!closureDep) {
+    deps.push(new depGraph.Dependency(
+        depGraph.DependencyType.SCRIPT, path.join(args.closurePath, 'base.js'),
+        ['goog'], []));
+  }
+
+  if (args.validate) {
+    new depGraph.Graph(deps).validate();
+  }
+
+  const closurePath = args.closurePath || path.dirname(closureDep.path);
 
   const text = depFile.getDepFileText(closurePath, deps);
   return {errors, text};

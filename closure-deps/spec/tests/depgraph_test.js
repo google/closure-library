@@ -18,7 +18,7 @@
 const depGraph = require('../../lib/depgraph');
 
 /**
- * @param {...!Dependency} deps
+ * @param {...!depGraph.Dependency} deps
  * @return {?}
  */
 function invalidCycleWith(...deps) {
@@ -44,26 +44,37 @@ function invalidCycleWith(...deps) {
   };
 }
 
+/**
+ * @param {!Array<!depGraph.Dependency>} dependencies
+ * @param {!depGraph.ModuleResolver=} moduleResolver
+ * @return {!depGraph.Graph}
+ */
+function makeValidatedGraph(dependencies, resolver = undefined) {
+  const g = new depGraph.Graph(dependencies, resolver);
+  g.validate();
+  return g;
+}
+
 describe('depgraph', function() {
   describe('single', function() {
     it('should accept closure provided file', function() {
       const d = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_PROVIDE, 'path', ['my.example'], []);
-      const g = new depGraph.Graph([d]);
+      const g = makeValidatedGraph([d]);
       expect(g.order(d)).toEqual([d]);
     });
 
     it('should accept closure module file', function() {
       const d = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, 'path', ['my.example'], []);
-      const g = new depGraph.Graph([d]);
+      const g = makeValidatedGraph([d]);
       expect(g.order(d)).toEqual([d]);
     });
 
     it('should accept es6 module file', function() {
       const d = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, 'path', [], []);
-      const g = new depGraph.Graph([d]);
+      const g = makeValidatedGraph([d]);
       expect(g.order(d)).toEqual([d]);
     });
   });
@@ -76,8 +87,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_PROVIDE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('closure module file', function() {
@@ -87,8 +98,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('es6 module file', function() {
@@ -97,8 +108,8 @@ describe('depgraph', function() {
           [new depGraph.GoogRequire('my.required')]);
       const r = new depGraph.Dependency(
           depGraph.DependencyType.ES6_MODULE, 'required', ['my.required'], []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
   });
 
@@ -110,8 +121,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_PROVIDE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('closure module file', function() {
@@ -121,8 +132,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('es6 module file', function() {
@@ -131,8 +142,8 @@ describe('depgraph', function() {
           [new depGraph.GoogRequire('my.required')]);
       const r = new depGraph.Dependency(
           depGraph.DependencyType.ES6_MODULE, 'required', ['my.required'], []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
   });
 
@@ -144,8 +155,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_PROVIDE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('closure module file', function() {
@@ -155,8 +166,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, 'required', ['my.required'],
           []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
 
     it('es6 module file', function() {
@@ -165,8 +176,8 @@ describe('depgraph', function() {
           [new depGraph.GoogRequire('my.required')]);
       const r = new depGraph.Dependency(
           depGraph.DependencyType.ES6_MODULE, 'required', ['my.required'], []);
-      expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-      expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+      expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
     });
   });
 
@@ -178,7 +189,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_PROVIDE, '/required.js',
           ['my.required'], []);
-      expect(() => new depGraph.Graph([d, r]).order(d)).toThrow();
+      const g = new depGraph.Graph([d, r]);
+      expect(() => g.validate()).toThrow();
     });
 
     it('closure module file is error', function() {
@@ -188,7 +200,8 @@ describe('depgraph', function() {
       const r = new depGraph.Dependency(
           depGraph.DependencyType.CLOSURE_MODULE, '/required.js',
           ['my.required'], []);
-      expect(() => new depGraph.Graph([d, r]).order(d)).toThrow();
+      const g = new depGraph.Graph([d, r]);
+      expect(() => g.validate()).toThrow();
     });
 
     describe('es6 module', function() {
@@ -198,8 +211,8 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('/required.js')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, '/required.js', [], []);
-        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
       });
 
       it('relative path', function() {
@@ -208,8 +221,8 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('../baz/required.js')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, '/foo/baz/required.js', [], []);
-        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
       });
 
       it('custom id', function() {
@@ -225,8 +238,9 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('@wacky+id')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, '/required.js', [], []);
-        expect(new depGraph.Graph([d, r], resolver).order(d)).toEqual([r, d]);
-        expect(new depGraph.Graph([r, d], resolver).order(d)).toEqual([r, d]);
+        debugger;
+        expect(makeValidatedGraph([d, r], resolver).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([r, d], resolver).order(d)).toEqual([r, d]);
       });
 
       it('ambiguous input path', function() {
@@ -235,8 +249,8 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('../baz/required.js')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, 'foo/baz/required.js', [], []);
-        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
       });
 
       it('relative input path', function() {
@@ -245,8 +259,8 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('../baz/required.js')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, './foo/baz/required.js', [], []);
-        expect(new depGraph.Graph([d, r]).order(d)).toEqual([r, d]);
-        expect(new depGraph.Graph([r, d]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([d, r]).order(d)).toEqual([r, d]);
+        expect(makeValidatedGraph([r, d]).order(d)).toEqual([r, d]);
       });
     });
   });
@@ -260,8 +274,8 @@ describe('depgraph', function() {
           depGraph.DependencyType.ES6_MODULE, '/b.js', [],
           [new depGraph.Es6Import('/a.js')]);
 
-      const g1 = new depGraph.Graph([a, b]);
-      const g2 = new depGraph.Graph([b, a]);
+      const g1 = makeValidatedGraph([a, b]);
+      const g2 = makeValidatedGraph([b, a]);
 
       expect(g1.order(a)).toEqual([b, a]);
       expect(g1.order(a)).toEqual([b, a]);
@@ -277,7 +291,8 @@ describe('depgraph', function() {
           depGraph.DependencyType.CLOSURE_PROVIDE, '/b.js', ['b'],
           [new depGraph.GoogRequire('a')]);
 
-      expect(() => new depGraph.Graph([a, b])).toThrow();
+      const g = new depGraph.Graph([a, b]);
+      expect(() => g.validate()).toThrow();
     });
 
     it('two closure modules is error', function() {
@@ -288,7 +303,8 @@ describe('depgraph', function() {
           depGraph.DependencyType.CLOSURE_MODULE, '/b.js', ['b'],
           [new depGraph.GoogRequire('a')]);
 
-      expect(() => new depGraph.Graph([a, b])).toThrow();
+      const g = new depGraph.Graph([a, b]);
+      expect(() => g.validate()).toThrow();
     });
 
     it('closure provide and module is error', function() {
@@ -299,8 +315,12 @@ describe('depgraph', function() {
           depGraph.DependencyType.CLOSURE_MODULE, '/b.js', ['b'],
           [new depGraph.GoogRequire('a')]);
 
-      expect(() => new depGraph.Graph([a, b])).toThrow();
-      expect(() => new depGraph.Graph([b, a])).toThrow();
+
+      let g = new depGraph.Graph([a, b]);
+      expect(() => g.validate()).toThrow();
+
+      g = new depGraph.Graph([b, a]);
+      expect(() => g.validate()).toThrow();
     });
 
     it('closure and es6 cycle is error', function() {
@@ -311,8 +331,11 @@ describe('depgraph', function() {
           depGraph.DependencyType.CLOSURE_MODULE, '/b.js', ['b'],
           [new depGraph.GoogRequire('a')]);
 
-      expect(() => new depGraph.Graph([a, b])).toThrow(invalidCycleWith(a, b));
-      expect(() => new depGraph.Graph([b, a])).toThrow(invalidCycleWith(a, b));
+      let g = new depGraph.Graph([a, b]);
+      expect(() => g.validate()).toThrow(invalidCycleWith(a, b));
+
+      g = new depGraph.Graph([b, a]);
+      expect(() => g.validate()).toThrow(invalidCycleWith(a, b));
     });
 
     it('closure between es6 cycle is error', function() {
@@ -326,9 +349,8 @@ describe('depgraph', function() {
           depGraph.DependencyType.ES6_MODULE, '/c.js', ['c'],
           [new depGraph.Es6Import('/a.js')]);
 
-      expect(() => new depGraph.Graph([
-        a, b, c
-      ])).toThrow(invalidCycleWith(a, b, c));
+      const g = new depGraph.Graph([a, b, c]);
+      expect(() => g.validate()).toThrow(invalidCycleWith(a, b, c));
     });
   });
 
@@ -354,11 +376,9 @@ describe('depgraph', function() {
         depGraph.DependencyType.CLOSURE_MODULE, '/d.js', ['d'],
         [new depGraph.GoogRequire('b')]);
 
-    expect(() => new depGraph.Graph([
-      a, b, c
-    ])).toThrow(invalidCycleWith(a, b, c));
-    expect(() => new depGraph.Graph([
-      a, b, c, d
-    ])).toThrow(invalidCycleWith(a, b, c));
+    let g = new depGraph.Graph([a, b, c]);
+    expect(() => g.validate()).toThrow(invalidCycleWith(a, b, c));
+    g = new depGraph.Graph([a, b, c, d]);
+    expect(() => g.validate()).toThrow(invalidCycleWith(a, b, c));
   });
 });
