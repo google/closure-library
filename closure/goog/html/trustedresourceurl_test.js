@@ -268,6 +268,17 @@ function testFormatWithParams() {
   assertEquals(
       'https://example.com/1?origin=https%3A%2F%2Fexample.com%2F',
       url.getTypedStringValue());
+
+  url = goog.html.TrustedResourceUrl.formatWithParams(
+      goog.string.Const.from('https://example.com/%{file}?a=x#top'),
+      {'file': 'abc'},
+      {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']},
+      {'a': '?#&', 'b': 2, 'c': null, 'd': undefined, 'e': ['z', 'z']});
+
+  assertEquals(
+      'https://example.com/abc' +
+          '?a=x&a=%3F%23%26&b=1&e=x&e=y#top&a=%3F%23%26&b=2&e=z&e=z',
+      url.getTypedStringValue());
 }
 
 

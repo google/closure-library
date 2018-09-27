@@ -342,16 +342,20 @@ goog.html.TrustedResourceUrl.URL_PARAM_PARSER_ =
  * @param {!Object<string, (string|number|!goog.string.Const)>} args Mapping
  *     of labels to values to be interpolated into the format string.
  *     goog.string.Const values are interpolated without encoding.
- * @param {!Object<string, *>} params Parameters to add to URL. See
- *     goog.html.TrustedResourceUrl.stringifyParams_ for exact format
- *     definition.
+ * @param {string|?Object<string, *>|undefined} searchParams Parameters to add
+ *     to URL. See goog.html.TrustedResourceUrl.stringifyParams_ for exact
+ *     format definition.
+ * @param {(string|?Object<string, *>)=} opt_hashParams Hash parameters to add
+ *     to URL. See goog.html.TrustedResourceUrl.stringifyParams_ for exact
+ *     format definition.
  * @return {!goog.html.TrustedResourceUrl}
  * @throws {!Error} On an invalid format string or if a label used in the
  *     the format string is not present in args.
  */
-goog.html.TrustedResourceUrl.formatWithParams = function(format, args, params) {
+goog.html.TrustedResourceUrl.formatWithParams = function(
+    format, args, searchParams, opt_hashParams) {
   var url = goog.html.TrustedResourceUrl.format(format, args);
-  return url.cloneWithParams(params);
+  return url.cloneWithParams(searchParams, opt_hashParams);
 };
 
 
