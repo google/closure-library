@@ -38,21 +38,27 @@ goog.functions.constant = function(retValue) {
  * Always returns false.
  * @type {function(...): boolean}
  */
-goog.functions.FALSE = goog.functions.constant(false);
+goog.functions.FALSE = function() {
+  return false;
+};
 
 
 /**
  * Always returns true.
  * @type {function(...): boolean}
  */
-goog.functions.TRUE = goog.functions.constant(true);
+goog.functions.TRUE = function() {
+  return true;
+};
 
 
 /**
  * Always returns NULL.
  * @type {function(...): null}
  */
-goog.functions.NULL = goog.functions.constant(null);
+goog.functions.NULL = function() {
+  return null;
+};
 
 
 /**
