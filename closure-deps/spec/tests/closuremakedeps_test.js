@@ -18,6 +18,7 @@
 const {execute} = require('../../bin/closuremakedeps');
 const path = require('path');
 const fs = require('fs');
+const jasmineDiff = require('jasmine-diff');
 
 // This test isn't that slow unless you're debugging.
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
@@ -49,7 +50,14 @@ function exclude(p) {
 }
 
 describe('closure-make-deps', function() {
-  it('producues closure library deps file', async function() {
+  beforeEach(function() {
+    jasmine.addMatchers(jasmineDiff(jasmine, {
+      colors: false,
+      inline: false,
+    }));
+  });
+
+  it('produces closure library deps file', async function() {
     const expectedContents =
         fs.readFileSync(path.resolve(CLOSURE_PATH, 'deps.js'), {
             encoding: 'utf8'
@@ -71,6 +79,6 @@ describe('closure-make-deps', function() {
     const result = await execute(flags);
     expect(result.errors.filter(e => e.fatal).map(e => e.toString()))
         .toEqual([]);
-    expect(result.text).toEqual(expectedContents);
+    expect(result.text.split('\n')).toEqual(expectedContents.split('\n'));
   });
 });
