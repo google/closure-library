@@ -172,8 +172,8 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   /**
    * Creates a basic strict mock of a `toMock`. For more advanced mocking,
    * please use the MockControl directly.
-   * @param {Function} toMock
-   * @return {!goog.testing.StrictMock}
+   * @param {?Function} toMock
+   * @return {?}
    */
   mock: function(toMock) {
     if (!this.shouldMakeMockControl_) {
@@ -182,7 +182,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
           'Call withMockControl if this environment is expected ' +
           'to contain a MockControl.');
     }
-    return this.mockControl.createStrictMock(toMock);
+    var mock = this.mockControl.createStrictMock(toMock);
+    // Mocks are not type-checkable. To reduce burden on tests that are type
+    // checked, this is typed as "?" to turn off JSCompiler checking.
+    // TODO(b/69851971): Enable a type-checked mocking library.
+    return /** @type {?} */ (mock);
   }
 });
 
