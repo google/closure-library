@@ -186,12 +186,14 @@ function testGeneratedData() {
   assertTrue(usPacific.isDaylightTime(dt));
   assertEquals(420, usPacific.getOffset(dt));
   assertEquals('GMT-07:00', usPacific.getGMTString(dt));
+  assertEquals('UTC-7', usPacific.getUTCString(dt));
   assertEquals('-0700', usPacific.getRFCTimeZoneString(dt));
 
   dt = new Date(2007, 12 - 1, 1);
   assertTrue(!usPacific.isDaylightTime(dt));
   assertEquals(480, usPacific.getOffset(dt));
   assertEquals('GMT-08:00', usPacific.getGMTString(dt));
+  assertEquals('UTC-8', usPacific.getUTCString(dt));
   assertEquals('-0800', usPacific.getRFCTimeZoneString(dt));
 }
 
@@ -200,6 +202,7 @@ function testSimpleTimeZonePositive() {
   var simpleTimeZone = goog.i18n.TimeZone.createTimeZone(480);
   assertEquals(480, simpleTimeZone.getOffset(date));
   assertEquals('GMT-08:00', simpleTimeZone.getGMTString(date));
+  assertEquals('UTC-8', simpleTimeZone.getUTCString(date));
   assertEquals('Etc/GMT+8', simpleTimeZone.getTimeZoneId());
   assertEquals('UTC-8', simpleTimeZone.getLongName(date));
   assertEquals('UTC-8', simpleTimeZone.getShortName(date));
@@ -211,6 +214,7 @@ function testSimpleTimeZonePositive() {
   simpleTimeZone = goog.i18n.TimeZone.createTimeZone(630);
   assertEquals(630, simpleTimeZone.getOffset(date));
   assertEquals('GMT-10:30', simpleTimeZone.getGMTString(date));
+  assertEquals('UTC-10:30', simpleTimeZone.getUTCString(date));
   assertEquals('Etc/GMT+10:30', simpleTimeZone.getTimeZoneId());
   assertEquals('UTC-10:30', simpleTimeZone.getLongName(date));
   assertEquals('UTC-10:30', simpleTimeZone.getShortName(date));
@@ -225,6 +229,7 @@ function testSimpleTimeZoneNegative() {
   var simpleTimeZone = goog.i18n.TimeZone.createTimeZone(-480);
   assertEquals(-480, simpleTimeZone.getOffset(date));
   assertEquals('GMT+08:00', simpleTimeZone.getGMTString(date));
+  assertEquals('UTC+8', simpleTimeZone.getUTCString(date));
   assertEquals('Etc/GMT-8', simpleTimeZone.getTimeZoneId());
   assertEquals('UTC+8', simpleTimeZone.getLongName(date));
   assertEquals('UTC+8', simpleTimeZone.getShortName(date));
@@ -239,6 +244,7 @@ function testSimpleTimeZoneZero() {
   var simpleTimeZone = goog.i18n.TimeZone.createTimeZone(0);
   assertEquals(0, simpleTimeZone.getOffset(date));
   assertEquals('GMT+00:00', simpleTimeZone.getGMTString(date));
+  assertEquals('UTC', simpleTimeZone.getUTCString(date));
   assertEquals('Etc/GMT', simpleTimeZone.getTimeZoneId());
   assertEquals('UTC', simpleTimeZone.getLongName(date));
   assertEquals('UTC', simpleTimeZone.getShortName(date));
