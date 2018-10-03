@@ -469,6 +469,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     .alsoAllowTagsPrivateDoNotAccessOrElse = function(tags) {
   goog.array.forEach(tags, function(tag) {
     this.tagWhitelist_[tag.toUpperCase()] = true;
+    delete this.tagBlacklist_[tag.toUpperCase()];
   }, this);
   return this;
 };

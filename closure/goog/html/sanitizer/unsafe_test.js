@@ -76,8 +76,7 @@ function testAllowEmptyTagList() {
 
 function testAllowBlacklistedTag() {
   var input = '<div><script>aaa</script></div>';
-  var expected = '<div></div>';
-  assertSanitizedHtml(input, expected, ['SCriPT']);
+  assertSanitizedHtml(input, input, ['SCriPT']);
 }
 
 
@@ -196,5 +195,18 @@ function testAllowRelaxExistingAttributePolicySpecific() {
   // overwrite the tag-specific one, this one should take precedence
   assertSanitizedHtml(input, input, null, [
     {tagName: 'a', attributeName: 'target', policy: goog.functions.identity}
+  ]);
+}
+
+
+function testAlsoAllowTagsInBlacklist() {
+  // Simplified use case taken from KaTex output HTML. The real configuration
+  // would allow more attributes and apply a stricter policy on their values to
+  // reduce the attack surface.
+  var input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
+  assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
+    {tagName: 'svg', attributeName: 'width', policy: goog.functions.identity},
+    {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
+    {tagName: 'path', attributeName: 'd', policy: goog.functions.identity},
   ]);
 }

@@ -35,7 +35,8 @@ goog.require('goog.string.Const');
 
 
 /**
- * Extends the tag whitelist with the list of tags provided.
+ * Extends the tag whitelist with the list of tags provided. If the tag is
+ * blacklisted, this method also removes it from the blacklist.
  *
  * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
  * that the new tags do not introduce untrusted code execution or unsanctioned
@@ -47,9 +48,7 @@ goog.require('goog.string.Const');
  * @param {!goog.html.sanitizer.HtmlSanitizer.Builder} builder The builder
  *     whose tag whitelist should be extended.
  * @param {!Array<string>} tags A list of additional tags to allow through the
- *     sanitizer. Note that if the tag is also present in the blacklist,
- *     its addition to the whitelist has no effect. The tag names are
- *     case-insensitive.
+ *     sanitizer. The tag names are case-insensitive.
  * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
  */
 goog.html.sanitizer.unsafe.alsoAllowTags = function(
