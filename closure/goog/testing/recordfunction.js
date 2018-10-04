@@ -113,7 +113,7 @@ goog.testing.recordedFunction_.reset = function() {};
  *
  * @param {!Function=} opt_f The function to wrap and record. Defaults to
  *     {@link goog.nullFunction}.
- * @return {typeof goog.testing.recordedFunction_} The wrapped function.
+ * @return {!goog.testing.recordFunction.Type} The wrapped function.
  */
 goog.testing.recordFunction = function(opt_f) {
   var f = opt_f || goog.nullFunction;
@@ -131,7 +131,7 @@ goog.testing.recordFunction = function(opt_f) {
     }
   }
 
-  /** @type {typeof goog.testing.recordedFunction_} */
+  /** @type {!goog.testing.recordFunction.Type} */
   function recordedFunction() {
     var owner = /** @type {?} */ (this);
     try {
@@ -214,6 +214,9 @@ goog.testing.recordFunction = function(opt_f) {
 
   return recordedFunction;
 };
+
+/** @typedef {typeof goog.testing.recordedFunction_} */
+goog.testing.recordFunction.Type;
 
 
 /**
