@@ -496,17 +496,17 @@ goog.module.ModuleManager.prototype.registerModuleLoadCallbacks_ = function(
   // if it was user initiated
   if (this.isModuleLoading(id)) {
     if (userInitiated) {
-      goog.log.info(
+      goog.log.fine(
           this.logger_, 'User initiated module already loading: ' + id);
       this.addUserInitiatedLoadingModule_(id);
       this.dispatchActiveIdleChangeIfNeeded_();
     }
   } else {
     if (userInitiated) {
-      goog.log.info(this.logger_, 'User initiated module load: ' + id);
+      goog.log.fine(this.logger_, 'User initiated module load: ' + id);
       this.addUserInitiatedLoadingModule_(id);
     } else {
-      goog.log.info(this.logger_, 'Initiating module load: ' + id);
+      goog.log.fine(this.logger_, 'Initiating module load: ' + id);
     }
   }
 };
@@ -579,7 +579,7 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
   // Not all modules may be loaded immediately if batch mode is not enabled.
   var idsToLoadImmediately = this.processModulesForLoad_(ids);
 
-  goog.log.info(this.logger_, 'Loading module(s): ' + idsToLoadImmediately);
+  goog.log.fine(this.logger_, 'Loading module(s): ' + idsToLoadImmediately);
 
   if (this.concurrentLoadingEnabled_) {
     goog.array.extend(this.loadingModuleIds_, idsToLoadImmediately);
@@ -657,7 +657,7 @@ goog.module.ModuleManager.prototype.processModulesForLoad_ = function(ids) {
 
   if (!this.batchModeEnabled_ && idsWithDeps.length > 1) {
     var idToLoad = idsWithDeps.shift();
-    goog.log.info(
+    goog.log.fine(
         this.logger_, 'Must load ' + idToLoad + ' module before ' + ids);
 
     // Insert the requested module id and any other not-yet-loaded prereqs
@@ -750,7 +750,7 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
     return;
   }
 
-  goog.log.info(this.logger_, 'Module loaded: ' + id);
+  goog.log.fine(this.logger_, 'Module loaded: ' + id);
 
   var error =
       this.moduleInfoMap[id].onLoad(goog.bind(this.getModuleContext, this));
@@ -807,7 +807,7 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
   var callbackWrapper;
 
   if (moduleInfo.isLoaded()) {
-    goog.log.info(this.logger_, moduleId + ' module already loaded');
+    goog.log.fine(this.logger_, moduleId + ' module already loaded');
     // Call async so that code paths don't change between loaded and unloaded
     // cases.
     callbackWrapper = new goog.module.ModuleLoadCallback(fn, opt_handler);
@@ -817,23 +817,23 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
       window.setTimeout(goog.bind(callbackWrapper.execute, callbackWrapper), 0);
     }
   } else if (this.isModuleLoading(moduleId)) {
-    goog.log.info(this.logger_, moduleId + ' module already loading');
+    goog.log.fine(this.logger_, moduleId + ' module already loading');
     callbackWrapper = moduleInfo.registerCallback(fn, opt_handler);
     if (opt_userInitiated) {
-      goog.log.info(
+      goog.log.fine(
           this.logger_, 'User initiated module already loading: ' + moduleId);
       this.addUserInitiatedLoadingModule_(moduleId);
       this.dispatchActiveIdleChangeIfNeeded_();
     }
   } else {
-    goog.log.info(this.logger_, 'Registering callback for module: ' + moduleId);
+    goog.log.fine(this.logger_, 'Registering callback for module: ' + moduleId);
     callbackWrapper = moduleInfo.registerCallback(fn, opt_handler);
     if (!opt_noLoad) {
       if (opt_userInitiated) {
-        goog.log.info(this.logger_, 'User initiated module load: ' + moduleId);
+        goog.log.fine(this.logger_, 'User initiated module load: ' + moduleId);
         this.addUserInitiatedLoadingModule_(moduleId);
       }
-      goog.log.info(this.logger_, 'Initiating module load: ' + moduleId);
+      goog.log.fine(this.logger_, 'Initiating module load: ' + moduleId);
       this.loadModulesOrEnqueue_([moduleId]);
     }
   }
