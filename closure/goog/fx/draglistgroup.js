@@ -24,6 +24,7 @@ goog.provide('goog.fx.DragListDirection');
 goog.provide('goog.fx.DragListGroup');
 goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
+goog.provide('goog.fx.DragListPermission');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -217,6 +218,20 @@ goog.fx.DragListDirection = {
 
 
 /**
+ * Enum to indicate the drag and drop permissions for a drag list. Default is
+ * DRAG_OUT_AND_DROP.
+ * @enum {number}
+ */
+goog.fx.DragListPermission = {
+  DRAG_OUT_AND_DROP: 0,  // default
+  ONLY_DRAG_OUT: 1,      // Prevents an item from being dropped into this drag
+                         // list.
+  ONLY_DROP: 2           // Prevents an item from being removed from this drag
+                         // list, but items can be dropped here.
+};
+
+
+/**
  * Events dispatched by this class.
  * @enum {!goog.events.EventId<!goog.fx.DragListGroupEvent>}
  */
@@ -307,13 +322,19 @@ goog.fx.DragListGroup.prototype.isDragging = function() {
  * @param {string=} opt_dragHoverClass CSS class to apply to this drag list when
  *     the draggerEl hovers over it during a drag action.  If present, must be a
  *     single, valid classname (not a string of space-separated classnames).
+ * @param {!goog.fx.DragListPermission=} opt_dragListPermission Defaults
+ *     to DRAG_OUT_AND_DROP but can be passed in to modify to prevent users from
+ *     dragging an item out of a list or dropping an item into a list.
  */
 goog.fx.DragListGroup.prototype.addDragList = function(
-    dragListElement, growthDirection, opt_unused, opt_dragHoverClass) {
+    dragListElement, growthDirection, opt_unused, opt_dragHoverClass,
+    opt_dragListPermission) {
   goog.asserts.assert(!this.isInitialized_);
 
   dragListElement.dlgGrowthDirection_ = growthDirection;
   dragListElement.dlgDragHoverClass_ = opt_dragHoverClass;
+  dragListElement.dlgDragPermission =
+      opt_dragListPermission || goog.fx.DragListPermission.DRAG_OUT_AND_DROP;
   this.dragLists_.push(dragListElement);
 };
 
@@ -519,6 +540,7 @@ goog.fx.DragListGroup.prototype.listenForDragEvents = function(dragItem) {
   }
 
   this.dragItems_.push(dragItem);
+
   this.eventHandler_.listen(
       dragItemHandle,
       [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
@@ -533,7 +555,15 @@ goog.fx.DragListGroup.prototype.listenForDragEvents = function(dragItem) {
  */
 goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
-  this.currDragItem_ = /** @type {Element} */ (this.dragItemForHandle_[uid]);
+  var potentialDragItem =
+      /** @type {!Element} */ (this.dragItemForHandle_[uid]);
+
+  if (potentialDragItem.parentElement.dlgDragPermission ==
+      goog.fx.DragListPermission.ONLY_DROP) {
+    return;
+  }
+
+  this.currDragItem_ = potentialDragItem;
 
   this.draggerEl_ = /** @type {!HTMLElement} */ (
       this.createDragElementInternal(this.currDragItem_));
@@ -706,7 +736,8 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     return false;
   }
 
-  if (hoverList) {
+  if (hoverList &&
+      hoverList.dlgDragPermission != goog.fx.DragListPermission.ONLY_DRAG_OUT) {
     if (this.updateWhileDragging_) {
       this.insertCurrDragItem_(hoverList, hoverNextItem);
     } else {
