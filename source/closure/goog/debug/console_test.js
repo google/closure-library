@@ -23,6 +23,8 @@ goog.require('goog.testing.recordFunction');
 
 var debugConsole;
 var mockConsole;
+var loggerName0;
+var logRecord0;
 var loggerName1;
 var logRecord1;
 var loggerName2;
@@ -36,6 +38,10 @@ function setUp() {
   // Set up a recorder for mockConsole.log
   mockConsole = {log: goog.testing.recordFunction()};
   goog.debug.Console.console_ = mockConsole;
+
+  loggerName0 = 'debug.logger';
+  logRecord0 = new goog.debug.LogRecord(
+      goog.debug.Logger.Level.FINE, 'blah blah blah no one cares', loggerName0);
 
   // Test logger 1.
   loggerName1 = 'this.is.a.logger';
@@ -60,20 +66,20 @@ function testLoggingWithSimpleConsole() {
   assertEquals(9, mockConsole.log.getCallCount());
 }
 
-function testLoggingWithInfoSupported() {
-  // Make sure the log function is the default when only 'info' is available.
-  mockConsole['info'] = goog.testing.recordFunction();
+function testLoggingWithDebugSupported() {
+  // Make sure the log function is the default when only 'debug' is available.
+  mockConsole['debug'] = goog.testing.recordFunction();
   logAtAllLevels('test message');
-  assertEquals(1, mockConsole.info.getCallCount());
-  assertEquals(8, mockConsole.log.getCallCount());
+  assertEquals(5, mockConsole.log.getCallCount());
+  assertEquals(4, mockConsole.debug.getCallCount());
 }
 
 function testLoggingWithErrorSupported() {
   // Make sure the log function is the default when only 'error' is available.
   mockConsole['error'] = goog.testing.recordFunction();
   logAtAllLevels('test message');
-  assertEquals(1, mockConsole.error.getCallCount());
-  assertEquals(8, mockConsole.log.getCallCount());
+  assertEquals(2, mockConsole.error.getCallCount());
+  assertEquals(7, mockConsole.log.getCallCount());
 }
 
 function testLoggingWithWarningSupported() {
@@ -85,15 +91,15 @@ function testLoggingWithWarningSupported() {
 }
 
 function testLoggingWithEverythingSupported() {
-  mockConsole['info'] = goog.testing.recordFunction();
+  mockConsole['debug'] = goog.testing.recordFunction();
   mockConsole['error'] = goog.testing.recordFunction();
   mockConsole['warn'] = goog.testing.recordFunction();
   mockConsole['log'] = goog.testing.recordFunction();
   logAtAllLevels('test message');
-  assertEquals(1, mockConsole.info.getCallCount());
-  assertEquals(1, mockConsole.error.getCallCount());
+  assertEquals(4, mockConsole.debug.getCallCount());
+  assertEquals(2, mockConsole.error.getCallCount());
   assertEquals(1, mockConsole.warn.getCallCount());
-  assertEquals(6, mockConsole.log.getCallCount());
+  assertEquals(2, mockConsole.log.getCallCount());
 }
 
 function testAddLogRecordWithoutFilters() {

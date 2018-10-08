@@ -62,9 +62,30 @@ function tearDown() {
   stubs.reset();
 }
 
-function veryBigNumberCompare(str1, str2) {
-  return str1.length == str2.length &&
-      str1.substring(0, 8) == str2.substring(0, 8);
+/**
+ * Assert that a pair of very large numbers represented as formatted strings are
+ * approximately equal.
+ *
+ * @param {string} str1
+ * @param {string} str2
+ */
+function assertVeryBigNumberEquals(str1, str2) {
+  var digitsAnonymized = function(s) {
+    return s.replace(/[0-9]/g, '#');
+  };
+  var valueOf = function(s) {
+    return parseFloat(s.replace(/[^0-9.e+-]/g, ''));
+  };
+
+  assertEquals(digitsAnonymized(str1), digitsAnonymized(str2));
+
+  var val1 = valueOf(str1);
+  var val2 = valueOf(str2);
+  assertTrue(val1 > 1);
+  assertTrue(val2 > 1);
+
+  // Equal within the limits of JavaScript number precision.
+  assertRoughlyEquals(val1, val2, 1);
 }
 
 function testVeryBigNumber() {
@@ -72,23 +93,23 @@ function testVeryBigNumber() {
   var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   str = fmt.format(1785599999999999888888888888888);
   // when comparing big number, various platform have small different in
-  // precision. We have to tolerate that using veryBigNumberCompare.
-  assertTrue(veryBigNumberCompare(
-      '$1,785,599,999,999,999,400,000,000,000,000.00', str));
+  // precision. We have to tolerate that using assertVeryBigNumberEquals.
+  assertVeryBigNumberEquals(
+      '$1,785,599,999,999,999,888,888,888,888,888.00', str);
   str = fmt.format(1.7856E30);
-  assertTrue(veryBigNumberCompare(
-      '$1,785,599,999,999,999,400,000,000,000,000.00', str));
+  assertVeryBigNumberEquals(
+      '$1,785,600,000,000,000,000,000,000,000,000.00', str);
   str = fmt.format(1.3456E20);
-  assertTrue(veryBigNumberCompare('$134,560,000,000,000,000,000.00', str));
+  assertVeryBigNumberEquals('$134,560,000,000,000,000,000.00', str);
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   str = fmt.format(1.3456E20);
-  assertTrue(veryBigNumberCompare('134,559,999,999,999,980,000', str));
+  assertVeryBigNumberEquals('134,560,000,000,000,000,000', str);
 
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.PERCENT);
   str = fmt.format(1.3456E20);
-  assertTrue(veryBigNumberCompare('13,456,000,000,000,000,000,000%', str));
+  assertVeryBigNumberEquals('13,456,000,000,000,000,000,000%', str);
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
   str = fmt.format(1.3456E20);
@@ -958,6 +979,26 @@ function testFractionDigits() {
   assertEquals('0.1230', fmt.format(0.123));
   assertEquals('0.123456', fmt.format(0.123456));
   assertEquals('0.123457', fmt.format(0.12345678));
+}
+
+function testFractionDigits_possibleLossOfPrecision() {
+  // See: https://github.com/google/closure-library/issues/916
+
+  // Given
+  var fracDigits = 12;
+  var mantissa = 1.1;
+  var magnitude = 15;
+  var value = parseFloat(mantissa + 'e' + magnitude);
+  var shiftedValue = parseFloat(mantissa + 'e' + (fracDigits + magnitude));
+
+  // Confirm that this case risks loss of precision.
+  assertNotEquals(shiftedValue / Math.pow(10, fracDigits), value);
+
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  fmt.setMaximumFractionDigits(fracDigits);
+
+  // When & Then
+  assertEquals('1,100,000,000,000,000', fmt.format(value));
 }
 
 function testFractionDigitsSetOutOfOrder() {

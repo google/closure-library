@@ -92,29 +92,42 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
  * @param {goog.debug.LogRecord} logRecord The log entry.
  */
 goog.debug.Console.prototype.addLogRecord = function(logRecord) {
-
   // Check to see if the log record is filtered or not.
   if (this.filteredLoggers_[logRecord.getLoggerName()]) {
     return;
   }
 
+  /**
+   * @param {?goog.debug.Logger.Level} level
+   * @return {string}
+   */
+  function getConsoleMethodName_(level) {
+    if (level) {
+      if (level.value >= goog.debug.Logger.Level.SEVERE.value) {
+        // SEVERE == 1000, SHOUT == 1200
+        return 'error';
+      }
+      if (level.value >= goog.debug.Logger.Level.WARNING.value) {
+        return 'warn';
+      }
+      // NOTE(martone): there's a goog.debug.Logger.Level.INFO - that we should
+      // presumably map to console.info. However, the current mapping is INFO ->
+      // console.log. Let's keep the status quo for now, but we should
+      // reevaluate if we tweak the goog.log API.
+      if (level.value >= goog.debug.Logger.Level.CONFIG.value) {
+        return 'log';
+      }
+    }
+    return 'debug';
+  }
+
   var record = this.formatter_.formatRecord(logRecord);
   var console = goog.debug.Console.console_;
   if (console) {
-    switch (logRecord.getLevel()) {
-      case goog.debug.Logger.Level.SHOUT:
-        goog.debug.Console.logToConsole_(console, 'info', record);
-        break;
-      case goog.debug.Logger.Level.SEVERE:
-        goog.debug.Console.logToConsole_(console, 'error', record);
-        break;
-      case goog.debug.Logger.Level.WARNING:
-        goog.debug.Console.logToConsole_(console, 'warn', record);
-        break;
-      default:
-        goog.debug.Console.logToConsole_(console, 'log', record);
-        break;
-    }
+    // TODO(b/117415985): Make getLevel() non-null and update
+    // getConsoleMethodName_ parameters.
+    var logMethod = getConsoleMethodName_(logRecord.getLevel());
+    goog.debug.Console.logToConsole_(console, logMethod, record);
   } else {
     this.logBuffer_ += record;
   }
@@ -141,7 +154,7 @@ goog.debug.Console.prototype.removeFilter = function(loggerName) {
 
 /**
  * Global console logger instance
- * @type {goog.debug.Console}
+ * @type {?goog.debug.Console}
  */
 goog.debug.Console.instance = null;
 
