@@ -21,4 +21,5 @@ module.exports = {
   parser: require('./lib/parser'),
   sourceError: require('./lib/sourceerror'),
   closureMakeDeps: require('./bin/closuremakedeps'),
+  gulp: require('./lib/gulp'),
 };
