@@ -631,6 +631,46 @@ function testRemoveRightLeftCase() {
 
 
 /**
+ * This test verifies that the copy functionality works correctly.
+ */
+function testCopy() {
+  let tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(0);
+  tree.add(112);
+  tree.add(200);
+  tree.add(125);
+
+  tree.remove(0);
+
+  tree = tree.copy(v => v);
+
+  assertEquals(3, tree.getHeight());
+  assertEquals(112, tree.root_.value);
+  assertEquals(100, tree.root_.left.value);
+  assertEquals(50, tree.root_.left.left.value);
+  assertEquals(150, tree.root_.right.value);
+  assertEquals(125, tree.root_.right.left.value);
+  assertEquals(200, tree.root_.right.right.value);
+
+  assertEquals(50, tree.getMinimum());
+  assertEquals(200, tree.getMaximum());
+  assertEquals(6, tree.getCount());
+}
+
+
+function testCopyEmptyTree() {
+  let tree = new goog.structs.AvlTree();
+  tree = tree.copy();
+
+  assertEquals(0, tree.getCount());
+  assertEquals(0, tree.getHeight());
+}
+
+
+/**
  * Asserts expected properties of an AVL tree.
  *
  * @param {function(?, ?): number} comparator

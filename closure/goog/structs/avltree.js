@@ -37,6 +37,7 @@
  * - getValues              O(n)
  * - inOrderTraverse        O(logn + k), where k is number of traversed nodes
  * - reverseOrderTraverse   O(logn + k), where k is number of traversed nodes
+ * - copy                   O(n * k), where k is the time complexity to copy a node
  * </pre>
  */
 
@@ -896,6 +897,63 @@ Node.prototype.fixHeight = function() {
                     this.left ? this.left.height : 0,
                     this.right ? this.right.height : 0) +
       1;
+};
+
+/**
+ * Copies the AVL tree.
+ * @param {function(T):T} [copy] - Function used to copy the values contained by the tree.
+ * @return {AvlTree<T>}
+ */
+AvlTree.prototype.copy = function(copy) {
+  const tree = new AvlTree();
+  tree.comparator_ = this.comparator_;
+
+  // Empty tree
+  if (!this.root_) {
+    return tree;
+  }
+
+  // Copy instance properties
+  const {root, leftMost, rightMost} = this.root_.copy(null, copy);
+  tree.root_ = root;
+  tree.minNode_ = leftMost;
+  tree.maxNode_ = rightMost;
+
+  return tree;
+};
+
+/**
+ * Copies a node.
+ * @param {?Node<T>} parent - The parent of this node.
+ * @param {function(T):T} [copy] - Function used to copy the values contained by the subtree.
+ * @return {Object} subtree - Information about the copied subtree.
+ * @return {Node<T>} subTree.root - Root node of the subtree.
+ * @return {Node<T>} subTree.leftMost - Node with the smallest value in the subtree.
+ * @return {Node<T>} subTree.rightMost - Node with the largest value in the subtree.
+ */
+Node.prototype.copy = function(parent, copy) {
+  const val = typeof copy === "function" ? copy(this.value) : JSON.parse(JSON.stringify(this.value));
+  const node = new Node(val, parent);
+
+  // Copy all properties
+  node.count  = this.count;
+  node.height = this.height;
+
+  let minNode = node, maxNode = node;
+
+  if (this.left) {
+    const {root, leftMost, rightMost} = this.left.copy(node, copy);
+    node.left = root;
+    minNode = leftMost;
+  }
+
+  if (this.right) {
+    const {root, leftMost, rightMost} = this.right.copy(node, copy);
+    node.right = root;
+    maxNode = rightMost;
+  }
+
+  return {root: node, leftMost: minNode, rightMost: maxNode};
 };
 
 exports = AvlTree;
