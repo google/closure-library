@@ -237,7 +237,7 @@ goog.Uri.prototype.toString = function() {
  *
  * There are several kinds of relative URIs:<br>
  * 1. foo - replaces the last part of the path, the whole query and fragment<br>
- * 2. /foo - replaces the the path, the query and fragment<br>
+ * 2. /foo - replaces the path, the query and fragment<br>
  * 3. //foo - replaces everything from the domain on.  foo is a domain name<br>
  * 4. ?foo - replace the query and fragment<br>
  * 5. #foo - replace the fragment only
