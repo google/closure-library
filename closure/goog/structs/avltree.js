@@ -37,6 +37,8 @@
  * - getValues              O(n)
  * - inOrderTraverse        O(logn + k), where k is number of traversed nodes
  * - reverseOrderTraverse   O(logn + k), where k is number of traversed nodes
+ * - copy                   O(n * p), where p is the time complexity to copy a
+ *                          node
  * </pre>
  */
 
@@ -54,14 +56,47 @@ var asserts = goog.require('goog.asserts');
  * values. The values can be accessed efficiently in their sorted order since
  * the tree enforces a O(logn) maximum height.
  *
- * @param {Function=} opt_comparator Function used to order the tree's nodes.
+ * @param {?Function=} opt_comparator Function used to order the tree's nodes.
  * @constructor
  * @implements {Collection<T>}
  * @final
  * @template T
  */
 var AvlTree = function(opt_comparator) {
+  /**
+   * Comparison function used to compare values in the tree. This function
+   * should take two values, a and b, and return x where:
+   *
+   * <pre>
+   *  x < 0 if a < b,
+   *  x > 0 if a > b,
+   *  x = 0 otherwise
+   * </pre>
+   *
+   * @private @const {!Function}
+   */
   this.comparator_ = opt_comparator || DEFAULT_COMPARATOR;
+
+  /**
+   * Pointer to the root node of the tree.
+   *
+   * @private {?Node<T>}
+   */
+  this.root_ = null;
+
+  /**
+   * Pointer to the node with the smallest value in the tree.
+   *
+   * @private {?Node<T>}
+   */
+  this.minNode_ = null;
+
+  /**
+   * Pointer to the node with the largest value in the tree.
+   *
+   * @private {?Node<T>}
+   */
+  this.maxNode_ = null;
 };
 
 
@@ -83,47 +118,6 @@ var DEFAULT_COMPARATOR = function(a, b) {
   }
   return 0;
 };
-
-
-/**
- * Pointer to the root node of the tree.
- *
- * @private {Node<T>}
- */
-AvlTree.prototype.root_ = null;
-
-
-/**
- * Comparison function used to compare values in the tree. This function should
- * take two values, a and b, and return x where:
- * <pre>
- *  x < 0 if a < b,
- *  x > 0 if a > b,
- *  x = 0 otherwise
- * </pre>
- *
- * @type {Function}
- * @private
- */
-AvlTree.prototype.comparator_ = null;
-
-
-/**
- * Pointer to the node with the smallest value in the tree.
- *
- * @type {Node<T>}
- * @private
- */
-AvlTree.prototype.minNode_ = null;
-
-
-/**
- * Pointer to the node with the largest value in the tree.
- *
- * @type {Node<T>}
- * @private
- */
-AvlTree.prototype.maxNode_ = null;
 
 
 /**
@@ -806,6 +800,34 @@ AvlTree.prototype.getMaxNode_ = function(opt_rootNode) {
 };
 
 
+/**
+ * Copies the AVL tree.
+ * @param {(function(T): T)=} opt_copy - Function used to copy the elements
+ *     contained in the tree. The identity function is used by default, which
+ *     results in a shallow copy of the tree. Copied elements will be compared
+ *     against their originals using the tree's comparator to ensure the
+ *     integrity of the copied tree.
+ * @return {!AvlTree<T>}
+ */
+AvlTree.prototype.copy = function(opt_copy) {
+  var tree = new AvlTree(this.comparator_);
+
+  // Empty tree
+  if (!this.root_) {
+    return tree;
+  }
+
+  // Copy instance properties
+  var copyInfo =
+      this.root_.copy(/* parent= */ null, this.comparator_, opt_copy);
+  tree.root_ = copyInfo.root;
+  tree.minNode_ = copyInfo.leftMost;
+  tree.maxNode_ = copyInfo.rightMost;
+
+  return tree;
+};
+
+
 
 /**
  * Constructs an AVL-Tree node with the specified value. If no parent is
@@ -896,6 +918,57 @@ Node.prototype.fixHeight = function() {
                     this.left ? this.left.height : 0,
                     this.right ? this.right.height : 0) +
       1;
+};
+
+
+/**
+ * Copies a node.
+ * @param {?Node<T>} parent - The parent of this node.
+ * @param {!Function} comparator Comparison function for values, used to assert
+ *     that the nodes are equivalent after copying.
+ * @param {(function(T): T)=} opt_copy - Function used to copy the elements
+ *     contained in the tree. The identity function is used by default, which
+ *     results in a shallow copy of the tree. Copied elements will be compared
+ *     against their originals using the tree's comparator to ensure the
+ *     integrity of the copied tree.
+ * @return {{
+ *   root: !Node<T>,
+ *   leftMost: ?Node<T>,
+ *   rightMost: ?Node<T>,
+ * }} subtree - Information about the copied subtree
+ */
+Node.prototype.copy = function(parent, comparator, opt_copy) {
+  var val;
+
+  if (opt_copy) {
+    val = opt_copy(this.value);
+    asserts.assert(comparator(this.value, val) === 0);
+  } else {
+    val = this.value;
+  }
+
+  var node = new Node(val, parent);
+
+  // Copy all properties
+  node.count = this.count;
+  node.height = this.height;
+
+  var minNode = node;
+  var maxNode = node;
+
+  if (this.left) {
+    var leftInfo = this.left.copy(node, comparator, opt_copy);
+    node.left = leftInfo.root;
+    minNode = leftInfo.leftMost;
+  }
+
+  if (this.right) {
+    var rightInfo = this.right.copy(node, comparator, opt_copy);
+    node.right = rightInfo.root;
+    maxNode = rightInfo.rightMost;
+  }
+
+  return {root: node, leftMost: minNode, rightMost: maxNode};
 };
 
 exports = AvlTree;
