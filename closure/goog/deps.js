@@ -464,6 +464,7 @@ goog.addDependency('fx/fx.js', ['goog.fx'], ['goog.asserts', 'goog.fx.Animation'
 goog.addDependency('fx/fx_test.js', ['goog.fxTest'], ['goog.fx.Animation', 'goog.object', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('fx/transition.js', ['goog.fx.Transition', 'goog.fx.Transition.EventType'], [], {});
 goog.addDependency('fx/transitionbase.js', ['goog.fx.TransitionBase', 'goog.fx.TransitionBase.State'], ['goog.events.EventTarget', 'goog.fx.Transition'], {});
+goog.addDependency('goog.js', [], [], {'lang': 'es6', 'module': 'es6'});
 goog.addDependency('graphics/abstractgraphics.js', ['goog.graphics.AbstractGraphics'], ['goog.dom', 'goog.graphics.AffineTransform', 'goog.graphics.Element', 'goog.graphics.EllipseElement', 'goog.graphics.Fill', 'goog.graphics.Font', 'goog.graphics.GroupElement', 'goog.graphics.Path', 'goog.graphics.PathElement', 'goog.graphics.RectElement', 'goog.graphics.Stroke', 'goog.graphics.StrokeAndFillElement', 'goog.graphics.TextElement', 'goog.math.Coordinate', 'goog.math.Size', 'goog.style', 'goog.ui.Component'], {});
 goog.addDependency('graphics/affinetransform.js', ['goog.graphics.AffineTransform'], [], {});
 goog.addDependency('graphics/affinetransform_test.js', ['goog.graphics.AffineTransformTest'], ['goog.array', 'goog.graphics', 'goog.graphics.AffineTransform', 'goog.math', 'goog.testing.jsunit'], {});
