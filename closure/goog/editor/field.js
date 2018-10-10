@@ -1404,24 +1404,23 @@ goog.editor.Field.prototype.maybeStartSelectionChangeTimer_ = function(e) {
 goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
   // Alt key is used for i18n languages to enter certain characters. like
   // control + alt + z (used for IMEs) and control + alt + s for Polish.
-  // So we don't invoke handleKeyboardShortcut at all for alt keys.
-  if (e.altKey) {
+  // So we only invoke handleKeyboardShortcut for alt + shift only.
+  if (e.altKey && !e.shiftKey) {
     return;
   }
-
-  var isModifierPressed = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
-  if (isModifierPressed ||
+  // TODO(user): goog.events.KeyHandler uses much more complicated logic
+  // to determine key.  Consider changing to what they do.
+  var key = e.charCode || e.keyCode;
+  var stringKey = String.fromCharCode(key).toLowerCase();
+  var isPrimaryModifierPressed = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
+  var isAltShiftPressed = e.altKey && e.shiftKey;
+  if (isPrimaryModifierPressed || isAltShiftPressed ||
       goog.editor.Field.POTENTIAL_SHORTCUT_KEYCODES_[e.keyCode]) {
-    // TODO(user): goog.events.KeyHandler uses much more complicated logic
-    // to determine key.  Consider changing to what they do.
-    var key = e.charCode || e.keyCode;
-
     if (key == 17) {  // Ctrl key
       // In IE and Webkit pressing Ctrl key itself results in this event.
       return;
     }
 
-    var stringKey = String.fromCharCode(key).toLowerCase();
     // Ctrl+Cmd+Space generates a charCode for a backtick on Mac Firefox, but
     // has the correct string key in the browser event.
     if (goog.userAgent.MAC && goog.userAgent.GECKO && stringKey == '`' &&
@@ -1436,7 +1435,7 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
 
     if (this.invokeShortCircuitingOp_(
             goog.editor.PluginImpl.Op.SHORTCUT, e, stringKey,
-            isModifierPressed)) {
+            isPrimaryModifierPressed)) {
       e.preventDefault();
       // We don't call stopPropagation as some other handler outside of
       // trogedit might need it.
