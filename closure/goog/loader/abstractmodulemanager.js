@@ -264,15 +264,14 @@ goog.loader.AbstractModuleManager.prototype.prefetchModule = function(id) {
 
 
 /**
- * Records that a module was loaded. Also initiates loading the next module if
- * any module requests are queued. This method is called by code that is
- * generated and appended to each dynamic module's code at compilation time.
+ * Records that the currently loading module was loaded. Also initiates loading
+ * the next module if any module requests are queued. This method is called by
+ * code that is generated and appended to each dynamic module's code at
+ * compilation time.
  *
- * @param {string=} opt_deprecatedId
  * @abstract
  */
-goog.loader.AbstractModuleManager.prototype.setLoaded = function(
-    opt_deprecatedId) {};
+goog.loader.AbstractModuleManager.prototype.setLoaded = function() {};
 
 
 /**

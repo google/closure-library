@@ -32,4 +32,4 @@ function throwErrorInModuleB() {
 if (window.modB1Loaded) throw new Error('modB_1 loaded twice');
 window.modB1Loaded = true;
 
-goog.module.ModuleManager.getInstance().setLoaded('');
+goog.module.ModuleManager.getInstance().setLoaded();
