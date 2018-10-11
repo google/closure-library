@@ -30,6 +30,9 @@ mkdir -p "$GIT_DIR"
 BLACKLIST_FILES=(
   date/relativecommontests.js
   events/eventtargettester.js
+  # Causes an invalid use of goog.base error - disable temporarily. Dossier
+  # probably just needs a release...
+  goog.js
   i18n/compactnumberformatsymbolsext.js
   i18n/datetimepatternsext.js
   i18n/listsymbolsext.js
