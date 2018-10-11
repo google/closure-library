@@ -114,6 +114,7 @@ requirement: {
   value: 'goog.globalEval'
 
   whitelist_regexp: '.+/closure/goog/base.js' # goog.module loading in uncompiled code.
+  whitelist_regexp: '.+/closure/goog/goog.js' # Forwards goog.globalEval
   whitelist_regexp: '.+/closure/goog/debug/errorhandler.js' # wraps setTimeout and similar functions
   whitelist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
   whitelist_regexp: '.+/closure/goog/module/loader.js'

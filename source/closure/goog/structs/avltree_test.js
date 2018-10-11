@@ -630,6 +630,78 @@ function testRemoveRightLeftCase() {
 }
 
 
+function testCopyEmptyTree() {
+  const tree = new goog.structs.AvlTree().copy();
+  assertEquals(0, tree.getCount());
+  assertEquals(0, tree.getHeight());
+}
+
+
+function testCopy() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(100);
+  tree.add(150);
+  tree.add(50);
+  tree.add(0);
+  tree.add(112);
+  tree.add(200);
+  tree.add(125);
+
+  const copy = tree.copy();
+
+  assertEquals(4, copy.getHeight());
+  assertEquals(100, copy.root_.value);
+  assertEquals(50, copy.root_.left.value);
+  assertEquals(0, copy.root_.left.left.value);
+  assertEquals(150, copy.root_.right.value);
+  assertEquals(112, copy.root_.right.left.value);
+  assertEquals(125, copy.root_.right.left.right.value);
+  assertEquals(200, copy.root_.right.right.value);
+
+  assertEquals(0, tree.getMinimum());
+  assertEquals(200, tree.getMaximum());
+  assertEquals(7, tree.getCount());
+
+  assertAvlTree(tree);
+}
+
+
+function testCopyCustomCopyFunction() {
+  const tree = new goog.structs.AvlTree((a, b) => a.i - b.i);
+  tree.add({i: 100});
+  tree.add({i: 150});
+  tree.add({i: 50});
+  tree.add({i: 0});
+  tree.add({i: 112});
+  tree.add({i: 200});
+  tree.add({i: 125});
+
+  const copy = tree.copy(v => ({i: v.i}));
+
+  assertEquals(4, copy.getHeight());
+  assertEquals(100, copy.root_.value.i);
+  assertEquals(50, copy.root_.left.value.i);
+  assertEquals(0, copy.root_.left.left.value.i);
+  assertEquals(150, copy.root_.right.value.i);
+  assertEquals(112, copy.root_.right.left.value.i);
+  assertEquals(125, copy.root_.right.left.right.value.i);
+  assertEquals(200, copy.root_.right.right.value.i);
+
+  assertEquals(0, tree.getMinimum().i);
+  assertEquals(200, tree.getMaximum().i);
+  assertEquals(7, tree.getCount());
+
+  assertAvlTree(tree);
+}
+
+
+function testBadCopyFunction() {
+  const tree = new goog.structs.AvlTree((a, b) => a - b);
+  tree.add(1);
+  assertThrows(() => tree.copy(n => n * -1));
+}
+
+
 /**
  * Asserts expected properties of an AVL tree.
  *

@@ -100,3 +100,9 @@ function testFromConstantAndArgs_eval() {
   var result = eval(goog.html.SafeScript.unwrap(script));
   assertEquals(42, result);
 }
+
+
+function testFromJson() {
+  var json = goog.html.SafeScript.fromJson({'a': 1, 'b': testFromJson});
+  assertEquals('{"a":1}', goog.html.SafeScript.unwrap(json));
+}

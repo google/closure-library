@@ -152,6 +152,18 @@ goog.html.SafeScript.fromConstantAndArgs = function(code, var_args) {
 
 
 /**
+ * Creates a SafeScript JSON representation from anything that could be passed
+ * to JSON.stringify.
+ * @param {*} val
+ * @return {!goog.html.SafeScript}
+ */
+goog.html.SafeScript.fromJson = function(val) {
+  return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
+      goog.html.SafeScript.stringify_(val));
+};
+
+
+/**
  * Returns this SafeScript's value as a string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
