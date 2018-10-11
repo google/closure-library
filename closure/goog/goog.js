@@ -90,12 +90,12 @@ export const declareModuleId = goog.declareModuleId;
 
 // Export select properties of module. Do not export the function itself or
 // goog.module.declareLegacyNamespace.
-export const module = Object.seal({
+export const module = {
   get: goog.module.get,
   // TODO(johnplaisted): Delete this once people have migrated to
   // declareModuleId.
   declareNamespace: goog.module.declareNamespace,
-});
+};
 
 // Omissions include:
 // goog.ENABLE_DEBUG_LOADER - define only used in base.
