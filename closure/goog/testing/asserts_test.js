@@ -1459,3 +1459,9 @@ function testDisplayStringForValue_cycle() {
       'Computing string should terminate and result in a reasonable length',
       _displayStringForValue(cycle).length < 1000);
 }
+
+function testToArrayForIterable() {
+  const s = new Set([3]);
+  const arr = goog.testing.asserts.toArray_(s);
+  assertEquals(3, arr[0]);
+}
