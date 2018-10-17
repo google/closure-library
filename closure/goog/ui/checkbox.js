@@ -229,22 +229,6 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
 
 
 /**
- * Fix for tabindex not being updated so that disabled checkbox is not
- * focusable. In particular this fails in Chrome.
- * Note: in general tabIndex=-1 will prevent from keyboard focus but enables
- * mouse focus, however in this case the control class prevents mouse focus.
- * @override
- */
-goog.ui.Checkbox.prototype.setEnabled = function(enabled) {
-  goog.ui.Checkbox.base(this, 'setEnabled', enabled);
-  var el = this.getElement();
-  if (el) {
-    el.tabIndex = this.isEnabled() ? 0 : -1;
-  }
-};
-
-
-/**
  * Handles the click event.
  * @param {!goog.events.BrowserEvent} e The event.
  * @private
