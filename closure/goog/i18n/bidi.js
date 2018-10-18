@@ -59,6 +59,7 @@ goog.define('goog.i18n.bidi.FORCE_RTL', false);
  *
  * TODO(user): write a test that checks that this is a compile-time constant.
  */
+// LINT.IfChange
 goog.i18n.bidi.IS_RTL =
     goog.i18n.bidi.FORCE_RTL ||
     ((goog.LOCALE.substring(0, 2).toLowerCase() == 'ar' ||
@@ -78,6 +79,7 @@ goog.i18n.bidi.IS_RTL =
         (goog.LOCALE.length == 3 || goog.LOCALE.substring(3, 4) == '-' ||
          goog.LOCALE.substring(3, 4) == '_')) ||
     (  // 2 letter language codes with RTL scripts
+        goog.LOCALE.length >= 7 &&
         ((goog.LOCALE.substring(2, 3) == '-' ||
           goog.LOCALE.substring(2, 3) == '_') &&
          (goog.LOCALE.substring(3, 7).toLowerCase() == 'adlm' ||
@@ -87,6 +89,7 @@ goog.i18n.bidi.IS_RTL =
           goog.LOCALE.substring(3, 7).toLowerCase() == 'rohg' ||
           goog.LOCALE.substring(3, 7).toLowerCase() == 'thaa'))) ||
     (  // 3 letter languages codes with RTL scripts
+        goog.LOCALE.length >= 8 &&
         ((goog.LOCALE.substring(3, 4) == '-' ||
           goog.LOCALE.substring(3, 4) == '_') &&
          (goog.LOCALE.substring(4, 8).toLowerCase() == 'adlm' ||
@@ -95,6 +98,8 @@ goog.i18n.bidi.IS_RTL =
           goog.LOCALE.substring(4, 8).toLowerCase() == 'nkoo' ||
           goog.LOCALE.substring(4, 8).toLowerCase() == 'rohg' ||
           goog.LOCALE.substring(4, 8).toLowerCase() == 'thaa')));
+//    closure/RtlLocalesTest.java)
+
 // TODO(b/77919903): Add additional scripts and languages that are RTL,
 // e.g., mende, samaritan, etc.
 

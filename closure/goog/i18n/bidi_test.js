@@ -95,6 +95,16 @@ function testIsRtlLang() {
   assert(goog.i18n.bidi.isRtlLanguage('rhg_Rohg'));
   // Anything written in Rohingya script.
   assert(goog.i18n.bidi.isRtlLanguage('bn_Rohg'));
+
+  // Any writing in Thaana
+  assert(goog.i18n.bidi.isRtlLanguage('dv-thaa'));
+  assert(goog.i18n.bidi.isRtlLanguage('dv-Thaa'));
+  assert(goog.i18n.bidi.isRtlLanguage('chr-thaa'));
+
+  // Test for incomplete script references
+  assert(!goog.i18n.bidi.isRtlLanguage('ff-adl'));
+  assert(!goog.i18n.bidi.isRtlLanguage('ff-Lat'));
+  assert(!goog.i18n.bidi.isRtlLanguage('chr-tha'));
 }
 
 function testIsLtrChar() {
