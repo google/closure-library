@@ -353,6 +353,9 @@ goog.testing.dom.assertHtmlContentsMatch = function(
       assertEquals(
           'Tag names should match' + errorSuffix, expectedElem.tagName,
           actualElem.tagName);
+      assertEquals(
+          'Namespaces should match' + errorSuffix, expectedElem.namespaceURI,
+          actualElem.namespaceURI);
       assertObjectEquals(
           'Should have same styles' + errorSuffix,
           goog.style.parseStyleAttribute(expectedElem.style.cssText),
@@ -650,7 +653,7 @@ goog.testing.dom.BAD_IE_ATTRIBUTES_ = goog.object.createSet(
  * @private
  */
 goog.testing.dom.ignoreAttribute_ = function(name) {
-  if (name == 'style' || name == 'class') {
+  if (name == 'style' || name == 'class' || name == 'xmlns') {
     return true;
   }
   return goog.userAgent.IE && goog.testing.dom.BAD_IE_ATTRIBUTES_[name];

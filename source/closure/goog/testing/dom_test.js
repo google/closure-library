@@ -519,3 +519,9 @@ function testAssertHtmlMatchesWithScriptWithNewLines() {
   goog.testing.dom.assertHtmlMatches(
       '<script>var a;\nvar b;</script>', '<script>var a;\nvar b;</script>');
 }
+
+function testAssertHtmlMatches_namespace() {
+  goog.testing.dom.assertHtmlMatches(
+      '<svg width="1px"></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" width="1px"></svg>');
+}

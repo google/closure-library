@@ -1337,15 +1337,32 @@ var assertRegExp = goog.testing.asserts.assertRegExp = function(a, b, opt_c) {
 
 
 /**
- * Converts an array like object to array or clones it if it's already array.
- * @param {IArrayLike} arrayLike The collection.
+ * Converts an array-like or iterable object to an array (clones it if it's
+ * already an array).
+ * @param {?Iterable|?IArrayLike} obj The collection object.
  * @return {!Array<?>} Copy of the collection as array.
  * @private
  */
-goog.testing.asserts.toArray_ = function(arrayLike) {
+// TODO(nnaze): obj should be non-null.
+goog.testing.asserts.toArray_ = function(obj) {
   var ret = [];
-  for (var i = 0; i < arrayLike.length; i++) {
-    ret[i] = arrayLike[i];
+  if (typeof Symbol !== 'undefined' && Symbol.iterator &&
+      !!obj[Symbol.iterator]) {
+    var iterable = obj[Symbol.iterator]();
+
+    // Cannot use for..of syntax here as ES6 syntax is not available in Closure.
+    // See b/117231092
+    while (true) {
+      var result = iterable.next();
+      if (result.done) {
+        return ret;
+      }
+      ret.push(result.value);
+    }
+  }
+
+  for (var i = 0; i < obj.length; i++) {
+    ret[i] = obj[i];
   }
   return ret;
 };

@@ -89,6 +89,22 @@ function testIsRtlLang() {
   assert(goog.i18n.bidi.isRtlLanguage('ff_Adlm'));
   // Anything written in Adlam script is RTL
   assert(goog.i18n.bidi.isRtlLanguage('ha_Adlm'));
+
+  // Rohnigya script.
+  assert(goog.i18n.bidi.isRtlLanguage('rhg-Rohg'));
+  assert(goog.i18n.bidi.isRtlLanguage('rhg_Rohg'));
+  // Anything written in Rohingya script.
+  assert(goog.i18n.bidi.isRtlLanguage('bn_Rohg'));
+
+  // Any writing in Thaana
+  assert(goog.i18n.bidi.isRtlLanguage('dv-thaa'));
+  assert(goog.i18n.bidi.isRtlLanguage('dv-Thaa'));
+  assert(goog.i18n.bidi.isRtlLanguage('chr-thaa'));
+
+  // Test for incomplete script references
+  assert(!goog.i18n.bidi.isRtlLanguage('ff-adl'));
+  assert(!goog.i18n.bidi.isRtlLanguage('ff-Lat'));
+  assert(!goog.i18n.bidi.isRtlLanguage('chr-tha'));
 }
 
 function testIsLtrChar() {
@@ -100,6 +116,17 @@ function testIsLtrChar() {
   assert(goog.i18n.bidi.isLtrChar(str.charAt(2)));
   assert(!goog.i18n.bidi.isLtrChar(
       '7'));  // Closure treats ASCII digits as neutral.
+
+  // LTR beyond the BMP
+  assert(goog.i18n.bidi.isLtrChar('\uD804\uDD10'));  // Chakma block
+  assert(goog.i18n.bidi.isLtrChar('\uD805\uDF00'));  // Ahom block
+  assert(goog.i18n.bidi.isLtrChar('\uD801\uDCBA'));  // Osage block
+
+  // Unicode 11 additions of LTR scripts
+  assert(goog.i18n.bidi.isLtrChar('\uD806\uDC00'));  // Dogra block
+  assert(goog.i18n.bidi.isLtrChar('\uD807\uDC64'));  // Gunjala Gondi
+  assert(goog.i18n.bidi.isLtrChar('\uD807\uDEE2'));  // Makasar
+  assert(goog.i18n.bidi.isLtrChar('\uD81B\uDE45'));  // Medefaidrin
 }
 
 function testIsRtlChar() {
@@ -151,12 +178,15 @@ function testIsRtlChar() {
   assert(goog.i18n.bidi.isRtlChar('\uD802\uDD20'));  // Lydian
   assert(goog.i18n.bidi.isRtlChar('\uD802\uDD3F'));  // Lydian
 
-  // TODO(b/77920598): Include test for new RTL, LTR, and neutral
-  // writing systems added in Unicode 11 and beyond.
-  // LTR beyond the BMP
-  assert(goog.i18n.bidi.isLtrChar('\uD804\uDD10'));  // Chakma block
-  assert(goog.i18n.bidi.isLtrChar('\uD805\uDF00'));  // Ahom block
-  assert(goog.i18n.bidi.isLtrChar('\uD801\uDCBA'));  // Osage block
+  // Tests for scripts added in Unicode 11 and beyond
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDD00'));  // Rohingya
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDD2F'));
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDD30'));
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDD39'));
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDF30'));  // Sogdian
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDF51'));  // Sogdian numeral
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDF00'));  // Old Sogdian
+  assert(goog.i18n.bidi.isRtlChar('\uD803\uDF17'));  // Old Sogdian
 }
 
 function testIsNeutralChar() {
