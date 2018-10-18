@@ -283,7 +283,7 @@ goog.addDependency('dom/textrange_test.js', ['goog.dom.TextRangeTest'], ['goog.d
 goog.addDependency('dom/textrangeiterator.js', ['goog.dom.TextRangeIterator'], ['goog.array', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeIterator', 'goog.dom.TagName', 'goog.iter.StopIteration'], {});
 goog.addDependency('dom/textrangeiterator_test.js', ['goog.dom.TextRangeIteratorTest'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.TextRangeIterator', 'goog.iter.StopIteration', 'goog.testing.dom', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/uri.js', ['goog.dom.uri'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.uncheckedconversions', 'goog.string.Const'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('dom/uri_test.js', ['goog.dom.uriTest'], ['goog.dom.uri', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('dom/uri_test.js', ['goog.dom.uriTest'], ['goog.dom.uri', 'goog.testing.testSuite', 'goog.userAgent.product'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/vendor.js', ['goog.dom.vendor'], ['goog.string', 'goog.userAgent'], {});
 goog.addDependency('dom/vendor_test.js', ['goog.dom.vendorTest'], ['goog.array', 'goog.dom.vendor', 'goog.labs.userAgent.util', 'goog.testing.MockUserAgent', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgentTestUtil'], {});
 goog.addDependency('dom/viewportsizemonitor.js', ['goog.dom.ViewportSizeMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.math.Size'], {});

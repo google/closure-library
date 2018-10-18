@@ -40,3 +40,22 @@ function normalizeUri(uri) {
   return anchor.href;
 }
 exports.normalizeUri = normalizeUri;
+
+/**
+ * Gets the href property of an anchor element, suppressing exceptions coming
+ * from certain URLs in IE.
+ * @param {!HTMLAnchorElement} element
+ * @return {?string}
+ * @deprecated This format is deprecated in RFC 3986. Use this function only for
+ * legacy behavior, and avoid accepting such URLs in new code.
+ */
+function getHref(element) {
+  try {
+    return element.href || null;
+  } catch (x) {
+    // IE throws a security exception for urls including username/password:
+    // http://user:password@example.com/
+    return null;
+  }
+}
+exports.getHref = getHref;
