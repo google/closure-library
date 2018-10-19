@@ -385,13 +385,23 @@ xhr.isEffectiveSchemeHttp_ = function(url) {
   return scheme == 'http' || scheme == 'https' || scheme == '';
 };
 
+/**
+ * @param {string} responseText
+ * @param {string=} opt_xssiPrefix Prefix used for protecting against XSSI
+ *     attacks, which should be removed before parsing the response as JSON.
+ * @return {!Object} JSON-parsed value of the original responseText.
+ */
+xhr.parseJson = function(responseText, opt_xssiPrefix) {
+  return xhr.parseJson_(responseText, {xssiPrefix: opt_xssiPrefix});
+};
+
 
 /**
  * JSON-parses the given response text, returning an Object.
  *
  * @param {string} responseText Response text.
  * @param {xhr.Options|undefined} options The options object.
- * @return {Object} The JSON-parsed value of the original responseText.
+ * @return {!Object} The JSON-parsed value of the original responseText.
  * @private
  */
 xhr.parseJson_ = function(responseText, options) {
