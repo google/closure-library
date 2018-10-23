@@ -457,7 +457,7 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
   }
   if (goog.isString(params)) {
     // Set field to the passed string.
-    return prefix + encodeURIComponent(params);
+    return params ? prefix + encodeURIComponent(params) : '';
   }
   // Add on parameters to field from key-value object.
   for (var key in params) {
@@ -466,7 +466,10 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
     for (var i = 0; i < outputValues.length; i++) {
       var outputValue = outputValues[i];
       if (outputValue != null) {
-        currentString += (currentString ? '&' : prefix) +
+        if (!currentString) {
+          currentString = prefix;
+        }
+        currentString += (currentString.length > prefix.length ? '&' : '') +
             encodeURIComponent(key) + '=' +
             encodeURIComponent(String(outputValue));
       }
