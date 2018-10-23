@@ -481,7 +481,7 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
           if (pos) {
             pos++;
           }
-          this.boldContent_(child, pos, str.length);
+          this.boldContent(child, pos, str.length);
         } else {
           child.setVisible(false);
         }
@@ -502,9 +502,9 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
  * @param {!goog.ui.Control} child The control to bold content on.
  * @param {number} start The index at which to start bolding.
  * @param {number} len How many characters to bold.
- * @private
+ * @protected
  */
-goog.ui.FilteredMenu.prototype.boldContent_ = function(child, start, len) {
+goog.ui.FilteredMenu.prototype.boldContent = function(child, start, len) {
   var caption = child.getCaption();
   var boldedCaption;
   if (len == 0) {
