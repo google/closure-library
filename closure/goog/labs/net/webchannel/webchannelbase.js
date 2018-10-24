@@ -421,6 +421,10 @@ goog.labs.net.webChannel.WebChannelBase = function(
   if (opt_options && opt_options.disableRedact) {
     this.channelDebug_.disableRedact();
   }
+
+  if (opt_options && opt_options.forceLongPolling) {
+    this.allowChunkedMode_ = false;
+  }
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
