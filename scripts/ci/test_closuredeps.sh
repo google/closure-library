@@ -14,8 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Script to determine if .js files in Pull Request are properly formatted.
-# Exits with non 0 exit code if formatting is needed.
+# Script to test google-closure-deps package
 
 set -e
 cd closure-deps
