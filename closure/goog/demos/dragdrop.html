@@ -249,7 +249,7 @@ List 2 (source only, can be dropped on list 1 or button 2)
       event.dragSourceItem.data,
       ' dragged from list 1'
     ];
-    alert(str.join(''));
+    window.console && console.log(str.join(''));
   }
 
   function dragStart(event) {
