@@ -572,11 +572,29 @@ function testAssertSameElementsOnArrayLike() {
 }
 
 function testAssertSameElementsWithBadArguments() {
+  var ex = assertThrowsJsUnitException(function() {
+    assertSameElements([], new goog.structs.Set());
+  });
+  assertContains('actual', ex.toString());
+  assertContains('array-like or iterable', ex.toString());
+}
+
+function testAssertSameElementsWithIterables() {
+  const s = new Set([1, 2, 3]);
+  assertSameElements({0: 3, 1: 2, 2: 1, length: 3}, s);
+  assertSameElements(s, {0: 3, 1: 2, 2: 1, length: 3});
+  assertSameElements([], new Set());
+  assertSameElements(new Set(), []);
+
   assertThrowsJsUnitException(
-      function() { assertSameElements([], new goog.structs.Set()); },
-      'Bad arguments to assertSameElements(opt_message, expected: ' +
-          'ArrayLike, actual: ArrayLike)\n' +
-          'Call to assertTrue(boolean) with false');
+      () => assertSameElements([1, 1], new Set([1, 1])));
+  assertThrowsJsUnitException(
+      () => assertSameElements(new Set([1, 1]), [1, 1]));
+
+  assertThrowsJsUnitException(
+      () => assertSameElements([1, 3], new Set([1, 2])));
+  assertThrowsJsUnitException(
+      () => assertSameElements(new Set([1, 2]), [1, 3]));
 }
 
 var implicitlyTrue = [true, 1, -1, ' ', 'string', Infinity, new Object()];
