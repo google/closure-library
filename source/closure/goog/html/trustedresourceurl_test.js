@@ -245,6 +245,21 @@ function testCloneWithParams() {
               {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']},
               {'a': '?#&', 'b': 2, 'c': null, 'd': undefined, 'e': ['z', 'z']})
           .getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/#top',
+      hashAndSearchUrl.cloneWithParams('').getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=x',
+      hashAndSearchUrl.cloneWithParams(undefined, '').getTypedStringValue());
+
+  assertEquals(
+      'https://example.com/?a=y',
+      goog.html.TrustedResourceUrl
+          .fromConstant(goog.string.Const.from('https://example.com/?'))
+          .cloneWithParams({'a': 'y'})
+          .getTypedStringValue());
 }
 
 

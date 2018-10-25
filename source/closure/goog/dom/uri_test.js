@@ -15,18 +15,31 @@
 goog.module('goog.dom.uriTest');
 goog.setTestOnly();
 
-var testSuite = goog.require('goog.testing.testSuite');
-var uri = goog.require('goog.dom.uri');
+const product = goog.require('goog.userAgent.product');
+const testSuite = goog.require('goog.testing.testSuite');
+const uri = goog.require('goog.dom.uri');
 
 testSuite({
-   testMethod: function() {
-             var baseUri = uri.normalizeUri('/');
-             assertEquals(baseUri + 'foo', uri.normalizeUri('/foo'));
-             assertEquals(baseUri + 'foo', uri.normalizeUri('/bar/../foo'));
-             assertEquals(
-                 'javascript:test', uri.normalizeUri('javascript:test'));
-             assertEquals(
-                 'https://google.com/test',
-                 uri.normalizeUri('https://google.com/test'));
-           },
+  testNormalizeUri() {
+    const baseUri = uri.normalizeUri('/');
+    assertEquals(baseUri + 'foo', uri.normalizeUri('/foo'));
+    assertEquals(baseUri + 'foo', uri.normalizeUri('/bar/../foo'));
+    assertEquals('javascript:test', uri.normalizeUri('javascript:test'));
+    assertEquals(
+        'https://google.com/test', uri.normalizeUri('https://google.com/test'));
+  },
+
+  testGetHref_withoutCredentials() {
+    const div = document.createElement('div');
+    div.innerHTML = '<a href="http://domain.com/">foo</a>';
+    assertEquals(uri.getHref(div.children[0]), 'http://domain.com/');
+  },
+
+  testGetHref_withCredentials() {
+    const div = document.createElement('div');
+    div.innerHTML = '<a href="http://user:pass@domain.com/">foo</a>';
+    assertEquals(
+        uri.getHref(div.children[0]),
+        (product.EDGE || product.IE) ? null : 'http://user:pass@domain.com/');
+  }
 });
