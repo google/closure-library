@@ -581,6 +581,11 @@ goog.testing.Mock.prototype.$recordAndThrow = function(ex, rethrow) {
   if (this.waitingForExpectations) {
     this.waitingForExpectations.resolve();
   }
+  if (this.$recording_) {
+    ex = new goog.testing.JsUnitException(
+        'Threw an exception while in record mode, did you $replay?',
+        ex.toString());
+  }
   // If it's an assert exception, record it.
   if (ex['isJsUnitException']) {
     if (!this.$threwException_) {
