@@ -54,11 +54,36 @@ goog.net.Cookies.MAX_COOKIE_LENGTH = 3950;
 
 
 /**
+ * Test cookie, for better detection on whether third party cookies are
+ * disabled for certain browsers.
+ * @private @const {string}
+ */
+goog.net.Cookies.TEST_COOKIE_ = 'TESTCOOKIESENABLED';
+
+
+/**
+ * How long the test cookie should live, if for some reason removal fails.
+ * @private @const {number}
+ */
+goog.net.Cookies.TEST_COOKIE_LIFETIME_SECONDS_ = 60;
+
+
+/**
  * Returns true if cookies are enabled.
  * @return {boolean} True if cookies are enabled.
  */
 goog.net.Cookies.prototype.isEnabled = function() {
-  return navigator.cookieEnabled;
+  // Trust when the navigator says false.
+  if (!navigator.cookieEnabled) {
+    return false;
+  }
+
+  // But double check if it says true via writing/reading a test cookie.
+  this.set(
+      goog.net.Cookies.TEST_COOKIE_, goog.net.Cookies.TEST_COOKIE_,
+      goog.net.Cookies.TEST_COOKIE_LIFETIME_SECONDS_);
+
+  return this.remove(goog.net.Cookies.TEST_COOKIE_);
 };
 
 
