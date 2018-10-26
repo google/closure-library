@@ -49,6 +49,18 @@ function exclude(p) {
   return flag('--exclude', path.resolve(CLOSURE_PATH, p));
 }
 
+/**
+ * Skips lines for test files, as those are not present in the npm package for
+ * the library.
+ *
+ *
+ * @param {string} line
+ * @return {boolean}
+ */
+function skipTests(line) {
+  return !/goog\.addDependency\('[^']*_test\.js/.test(line);
+}
+
 describe('closure-make-deps', function() {
   beforeEach(function() {
     jasmine.addMatchers(jasmineDiff(jasmine, {
@@ -79,6 +91,12 @@ describe('closure-make-deps', function() {
     const result = await execute(flags);
     expect(result.errors.filter(e => e.fatal).map(e => e.toString()))
         .toEqual([]);
-    expect(result.text.split('\n')).toEqual(expectedContents.split('\n'));
+
+    const resultLines = result.text.split('\n');
+    resultLines = resultLines.filter(skipTests);
+
+    const expectedLines = expectedContents.split('\n');
+
+    expect(resultLines).toEqual(expectedLines);
   });
 });
