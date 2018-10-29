@@ -56,7 +56,13 @@ goog.require('goog.events.EventType');
 goog.require('goog.reflect');
 goog.require('goog.userAgent');
 
-
+/**
+ * @define {boolean} If true, use the layerX and layerY properties of a native
+ * browser event over the offsetX and offsetY properties, which cause expensive
+ * reflow. If layerX or layerY is not defined, offsetX and offsetY will be used
+ * as usual.
+ */
+goog.define('goog.events.USE_LAYER_XY_AS_OFFSET_XY', false);
 
 /**
  * Accepts a browser event object and creates a patched, cross browser event
@@ -312,14 +318,19 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
     this.screenX = relevantTouch.screenX || 0;
     this.screenY = relevantTouch.screenY || 0;
   } else {
-    // Webkit emits a lame warning whenever layerX/layerY is accessed.
-    // http://code.google.com/p/chromium/issues/detail?id=101733
-    this.offsetX = (goog.userAgent.WEBKIT || e.offsetX !== undefined) ?
-        e.offsetX :
-        e.layerX;
-    this.offsetY = (goog.userAgent.WEBKIT || e.offsetY !== undefined) ?
-        e.offsetY :
-        e.layerY;
+    if (goog.events.USE_LAYER_XY_AS_OFFSET_XY) {
+      this.offsetX = (e.layerX !== undefined) ? e.layerX : e.offsetX;
+      this.offsetY = (e.layerY !== undefined) ? e.layerY : e.offsetY;
+    } else {
+      // Webkit emits a lame warning whenever layerX/layerY is accessed.
+      // http://code.google.com/p/chromium/issues/detail?id=101733
+      this.offsetX = (goog.userAgent.WEBKIT || e.offsetX !== undefined) ?
+          e.offsetX :
+          e.layerX;
+      this.offsetY = (goog.userAgent.WEBKIT || e.offsetY !== undefined) ?
+          e.offsetY :
+          e.layerY;
+    }
     this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
     this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
     this.screenX = e.screenX || 0;
