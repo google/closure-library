@@ -83,6 +83,26 @@ function testEndsWithAnEmail() {
           '<a href="mailto:bolinfest@google.com">bolinfest@google.com<\/a>.');
 }
 
+function testSingleQuotedUrl() {
+  assertLinkify(
+      'URLs surrounded by \'...\' exclude quotes from link',
+      'Foo \'http://google.com\' bar',
+      'Foo &#39;<a href="http://google.com">http://google.com</a>&#39; bar');
+}
+
+function testSingleQuoteInUrl() {
+  assertLinkify(
+      'URLs containing \' include quote in link', 'http://google.com/yo\'yo',
+      '<a href="http://google.com/yo&#39;yo">http://google.com/yo&#39;yo</a>');
+}
+
+function testDoubleQuotedUrl() {
+  assertLinkify(
+      'URLs surrounded by "..." exclude quotes from link',
+      'Foo "http://google.com" bar',
+      'Foo &quot;<a href="http://google.com">http://google.com</a>&quot; bar');
+}
+
 function testUrlWithPortNumber() {
   assertLinkify(
       'URL with a port number', 'http://www.google.com:80/',

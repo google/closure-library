@@ -364,3 +364,28 @@ async function testLooseMockAsynchronousVerify() {
   }, 0);
   await mockControl.$waitAndVerifyAll();
 }
+
+function testVerifyWhileInRecord() {
+  const mockControl = new goog.testing.MockControl();
+  const looseMock = mockControl.createLooseMock(RealObject);
+  looseMock.a();
+
+  try {
+    mockControl.$verifyAll();
+  } catch (ex) {
+    assertEquals(
+        'Threw an exception while in record mode, did you $replay?\n' +
+            'Not enough calls to a\n' +
+            'Expected: 1 but was: 0',
+        ex.toString());
+    const getTestCase =
+        goog.getObjectByName('goog.testing.TestCase.getActiveTestCase');
+    const testCase = getTestCase && getTestCase();
+    if (testCase) {
+      testCase.invalidateAssertionException(ex);
+    }
+    return;
+  }
+
+  fail('Expected exception');
+}

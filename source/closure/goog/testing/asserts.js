@@ -1084,13 +1084,13 @@ var assertElementsRoughlyEqual =
 
 
 /**
- * Compares elements of two array-like objects using strict equality without
- * taking their order into account.
- * @param {string|IArrayLike} a Assertion message or the
+ * Compares elements of two array-like or iterable objects using strict equality
+ * without taking their order into account.
+ * @param {string|?IArrayLike|?Iterable} a Assertion message or the
  *     expected elements.
- * @param {IArrayLike} b Expected elements or the actual
+ * @param {?IArrayLike|?Iterable} b Expected elements or the actual
  *     elements.
- * @param {IArrayLike=} opt_c Actual elements.
+ * @param {?IArrayLike|?Iterable=} opt_c Actual elements.
  */
 var assertSameElements = goog.testing.asserts.assertSameElements = function(
     a, b, opt_c) {
@@ -1100,9 +1100,12 @@ var assertSameElements = goog.testing.asserts.assertSameElements = function(
   var message = commentArg(2, arguments);
 
   goog.testing.asserts.assertTrue(
-      'Bad arguments to assertSameElements(opt_message, expected: ' +
-          'ArrayLike, actual: ArrayLike)',
-      goog.isArrayLike(expected) && goog.isArrayLike(actual));
+      'Value of \'expected\' should be array-like or iterable',
+      goog.testing.asserts.isArrayLikeOrIterable_(expected));
+
+  goog.testing.asserts.assertTrue(
+      'Value of \'actual\' should be array-like or iterable',
+      goog.testing.asserts.isArrayLikeOrIterable_(actual));
 
   // Clones expected and actual and converts them to real arrays.
   expected = goog.testing.asserts.toArray_(expected);
@@ -1124,6 +1127,14 @@ var assertSameElements = goog.testing.asserts.assertSameElements = function(
   }
 };
 
+/**
+ * @param {*} obj Object to test.
+ * @return {boolean} Whether given object is array-like or iterable.
+ * @private
+ */
+goog.testing.asserts.isArrayLikeOrIterable_ = function(obj) {
+  return goog.isArrayLike(obj) || goog.testing.asserts.isIterable_(obj);
+};
 
 /**
  * @param {*} a The value to assert (1 arg) or debug message (2 args).
@@ -1346,14 +1357,14 @@ var assertRegExp = goog.testing.asserts.assertRegExp = function(a, b, opt_c) {
 // TODO(nnaze): obj should be non-null.
 goog.testing.asserts.toArray_ = function(obj) {
   var ret = [];
-  if (typeof Symbol !== 'undefined' && Symbol.iterator &&
-      !!obj[Symbol.iterator]) {
-    var iterable = obj[Symbol.iterator]();
+  if (goog.testing.asserts.isIterable_(obj)) {
+    var iterator =
+        goog.testing.asserts.getIterator_(/** @type {!Iterable} */ (obj));
 
     // Cannot use for..of syntax here as ES6 syntax is not available in Closure.
     // See b/117231092
     while (true) {
-      var result = iterable.next();
+      var result = iterator.next();
       if (result.done) {
         return ret;
       }
@@ -1365,6 +1376,33 @@ goog.testing.asserts.toArray_ = function(obj) {
     ret[i] = obj[i];
   }
   return ret;
+};
+
+// TODO(nnaze): Consider moving isIterable_ and getIterator_ functionality
+// into goog.iter.es6. See discussion in cl/217356297.
+
+/**
+ * @param {*} obj
+ * @return {boolean} Whether the object is iterable (JS iterator protocol).
+ * @private
+ */
+goog.testing.asserts.isIterable_ = function(obj) {
+  return !!(
+      typeof Symbol !== 'undefined' && Symbol.iterator && obj[Symbol.iterator]);
+};
+
+/**
+ * @param {!Iterable} iterable
+ * @return {!Iterator} An iterator for obj.
+ * @throws {!goog.testing.JsUnitException} If the given object is not iterable.
+ * @private
+ */
+goog.testing.asserts.getIterator_ = function(iterable) {
+  if (!goog.testing.asserts.isIterable_(iterable)) {
+    goog.testing.asserts.raiseException('parameter iterable is not iterable');
+  }
+
+  return iterable[Symbol.iterator]();
 };
 
 
