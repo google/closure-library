@@ -95,7 +95,8 @@ describe('closure-make-deps', function() {
     let resultLines = result.text.split('\n');
     resultLines = resultLines.filter(skipTests);
 
-    const expectedLines = expectedContents.split('\n');
+    let expectedLines = expectedContents.split('\n');
+    expectedLines = expectedLines.filter(skipTests);
 
     expect(resultLines).toEqual(expectedLines);
   });
