@@ -242,6 +242,17 @@ goog.module.ModuleInfo.prototype.isLoaded = function() {
 
 
 /**
+ * Marks the current module as loaded. This is useful for subtractive module
+ * loading, where occasionally we need to fallback to normal module loading,
+ * and re-fetch the module graph. In this case, we need a way to tell the module
+ * manager to mark all modules that are already loaded.
+ */
+goog.module.ModuleInfo.prototype.setLoaded = function() {
+  this.module_ = new goog.module.BaseModule();
+};
+
+
+/**
  * Gets the module.
  * @return {goog.module.BaseModule?} The module if it has been loaded.
  *     Otherwise, null.
