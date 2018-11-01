@@ -13,8 +13,16 @@
 // limitations under the License.
 
 /**
- * @fileoverview Utilities for creating functions. Loosely inspired by the
- * java classes: http://goo.gl/GM0Hmu and http://goo.gl/6k7nI8.
+ * @fileoverview Utilities for creating functions. Loosely inspired by these
+ * java classes from the Guava library:
+ * com.google.common.base.Functions
+ * https://google.github.io/guava/releases/snapshot-jre/api/docs/index.html?com/google/common/base/Functions.html
+ *
+ * com.google.common.base.Predicates
+ * https://google.github.io/guava/releases/snapshot-jre/api/docs/index.html?com/google/common/base/Predicates.html
+ *
+ * More about these can be found at
+ * https://github.com/google/guava/wiki/FunctionalExplained
  *
  * @author nicksantos@google.com (Nick Santos)
  */
