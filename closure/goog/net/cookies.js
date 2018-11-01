@@ -48,7 +48,7 @@ goog.net.Cookies = function(context) {
  * to the size of a cookie. To make sure users can't break this limit, we
  * should truncate long cookies at 3950 bytes, to be extra careful with dumb
  * browsers/proxies that interpret 4K as 4000 rather than 4096.
- * @type {number}
+ * @const {number}
  */
 goog.net.Cookies.MAX_COOKIE_LENGTH = 3950;
 
@@ -369,12 +369,3 @@ goog.net.cookies =
 goog.net.Cookies.getInstance = function() {
   return goog.net.cookies;
 };
-
-
-/**
- * Define the constant on the instance in order not to break many references to
- * it.
- * @type {number}
- * @deprecated Use goog.net.Cookies.MAX_COOKIE_LENGTH instead.
- */
-goog.net.cookies.MAX_COOKIE_LENGTH = goog.net.Cookies.MAX_COOKIE_LENGTH;
