@@ -335,11 +335,16 @@ goog.constructNamespace_ = function(name, opt_obj) {
 
 /**
  * Returns CSP nonce, if set for any script tag.
+ * @param {?Window=} opt_window The window context used to retrieve the nonce.
+ *     Defaults to global context.
  * @return {string} CSP nonce or empty string if no nonce is present.
  */
-goog.getScriptNonce = function() {
+goog.getScriptNonce = function(opt_window) {
+  if (opt_window && opt_window != goog.global) {
+    return goog.getScriptNonce_(opt_window.document);
+  }
   if (goog.cspNonce_ === null) {
-    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document) || '';
+    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document);
   }
   return goog.cspNonce_;
 };
@@ -362,7 +367,7 @@ goog.cspNonce_ = null;
 /**
  * Returns CSP nonce, if set for any script tag.
  * @param {!Document} doc
- * @return {?string} CSP nonce or null if no nonce is present.
+ * @return {string} CSP nonce or empty string if no nonce is present.
  * @private
  */
 goog.getScriptNonce_ = function(doc) {
@@ -377,7 +382,7 @@ goog.getScriptNonce_ = function(doc) {
       return nonce;
     }
   }
-  return null;
+  return '';
 };
 
 
