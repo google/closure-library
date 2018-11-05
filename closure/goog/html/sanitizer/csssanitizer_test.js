@@ -456,10 +456,7 @@ function testSanitizeInlineStyleString_noUrlPropertyValueFanOut() {
   var output = goog.html.SafeStyle.unwrap(safeStyle);
   // We can't use assertInlineStyleStringEquals, the browser is inconsistent
   // about fanout of properties. We'll use plain substring matching instead.
-  assertContains(
-      goog.userAgent.product.SAFARI ? 'url(http://foo.com/a)' :
-                                      'url("http://foo.com/a")',
-      output);
+  assertContains('url("http://foo.com/a")', output);
 }
 
 
@@ -573,11 +570,11 @@ function testSanitizeStyleSheetString_urlRewrite() {
 
   var input = 'a {background-image: url("http://bar.com")}';
   var quoted = '#foo a{background-image: url("http://bar.com");}';
-  // Safari will strip quotes if they are not needed and add a slash.
-  var unquoted = '#foo a{background-image: url(http://bar.com/);}';
+  // Safari will add a slash.
+  var slash = '#foo a{background-image: url("http://bar.com/");}';
   assertBrowserSanitizedCssEquals(
-      {safari: unquoted, chrome: quoted}, input,
-      undefined /* opt_containerId */, urlRewriter);
+      {safari: slash, chrome: quoted}, input, undefined /* opt_containerId */,
+      urlRewriter);
 
   input = 'a {background-image: url("http://nope.com")}';
   var expected = '#foo a{}';

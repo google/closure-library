@@ -1259,7 +1259,7 @@ function testStyleTag_networkUrlPolicy() {
   var input = '<style>a{background-image: url("http://foo.com");}</style>';
   // Safari will strip quotes if they are not needed and add a slash.
   var expected = goog.userAgent.product.SAFARI ?
-      '<style>a{background-image: url(http://foo.com/);}</style>' :
+      '<style>a{background-image: url("http://foo.com/");}</style>' :
       '<style>a{background-image: url("http://foo.com");}</style>';
   assertSanitizedHtml(
       input, expected,
