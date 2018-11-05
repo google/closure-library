@@ -3871,8 +3871,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * for deferred modules.
    * @const @private {boolean}
    */
-  goog.DebugLoader_.IS_OLD_IE_ =
-      !!(!goog.global.atob && goog.global.document && goog.global.document.all);
+  goog.DebugLoader_.IS_OLD_IE_ = !!(
+      !goog.global.atob && goog.global.document && goog.global.document['all']);
 
 
   /**
