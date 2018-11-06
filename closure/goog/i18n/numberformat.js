@@ -454,8 +454,9 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
 
   var ret = NaN;
 
-  // we don't want to handle 2 kind of space in parsing, normalize it to nbsp
-  text = text.replace(/ /g, '\u00a0');
+  // We don't want to handle multiple kinds of space in parsing, normalize the
+  // regular and narrow nbsp to nbsp.
+  text = text.replace(/ |\u202f/g, '\u00a0');
 
   var gotPositive = text.indexOf(this.positivePrefix_, pos[0]) == pos[0];
   var gotNegative = text.indexOf(this.negativePrefix_, pos[0]) == pos[0];
@@ -523,6 +524,10 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
   if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
     throw new Error('Parsing of compact style numbers is not implemented');
   }
+
+  // We don't want to handle multiple kinds of space in parsing, normalize the
+  // narrow nbsp to nbsp.
+  grouping = grouping.replace(/\u202f/g, '\u00a0');
 
   var normalizedText = '';
   for (; pos[0] < text.length; pos[0]++) {

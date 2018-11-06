@@ -15,7 +15,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 33.1
+ * File generated from CLDR ver. 34
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -171,7 +171,7 @@ goog.i18n.DateTimePatterns_af = {
   MONTH_DAY_MEDIUM: 'd MMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -441,7 +441,7 @@ goog.i18n.DateTimePatterns_da = {
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
   MONTH_DAY_FULL: 'dd. MMMM',
-  MONTH_DAY_SHORT: 'd/M',
+  MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
@@ -578,7 +578,7 @@ goog.i18n.DateTimePatterns_en_GB = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
   DAY_ABBR: 'd'
 };
@@ -1264,7 +1264,7 @@ goog.i18n.DateTimePatterns_kk = {
  */
 goog.i18n.DateTimePatterns_km = {
   YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'y នៃ G',
+  YEAR_FULL_WITH_ERA: 'y G',
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
@@ -1468,12 +1468,12 @@ goog.i18n.DateTimePatterns_mn = {
   YEAR_MONTH_ABBR: 'y \'оны\' MMM',
   YEAR_MONTH_FULL: 'y \'оны\' MMM',
   MONTH_DAY_ABBR: 'MMM\'ын\' d',
-  MONTH_DAY_FULL: 'MMM\'ын\' dd',
-  MONTH_DAY_SHORT: 'MM/dd',
-  MONTH_DAY_MEDIUM: 'MMM\'ын\' d',
-  MONTH_DAY_YEAR_MEDIUM: 'y.MM.dd',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'MMM\'ын\' d, EEE',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y.MM.dd, EEE',
+  MONTH_DAY_FULL: 'MMMM\'ын\' dd',
+  MONTH_DAY_SHORT: 'MMMMM/dd',
+  MONTH_DAY_MEDIUM: 'MMMM\'ын\' d',
+  MONTH_DAY_YEAR_MEDIUM: 'y \'оны\' MMM\'ын\' d',
+  WEEKDAY_MONTH_DAY_MEDIUM: 'MMM\'ын\' d. EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y \'оны\' MMM\'ын\' d. EEE',
   DAY_ABBR: 'd'
 };
 

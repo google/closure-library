@@ -15,7 +15,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 33.1
+ * File generated from CLDR ver. 34
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -307,7 +307,7 @@ goog.i18n.NumberFormatSymbols_az = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤ #,##0.00',
+  CURRENCY_PATTERN: '#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'AZN'
 };
 
@@ -1091,7 +1091,7 @@ goog.i18n.NumberFormatSymbols_fil = {
  */
 goog.i18n.NumberFormatSymbols_fr = {
   DECIMAL_SEP: ',',
-  GROUP_SEP: ' ',
+  GROUP_SEP: ' ',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
@@ -1309,7 +1309,7 @@ goog.i18n.NumberFormatSymbols_hr = {
   NAN: 'NaN',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##0%',
+  PERCENT_PATTERN: '#,##0 %',
   CURRENCY_PATTERN: '#,##0.00 ¤',
   DEF_CURRENCY_CODE: 'HRK'
 };
@@ -2098,8 +2098,8 @@ goog.i18n.NumberFormatSymbols_or = {
   NAN: 'NaN',
   DECIMAL_PATTERN: '#,##,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##,##0%',
-  CURRENCY_PATTERN: '¤ #,##,##0.00',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤#,##0.00',
   DEF_CURRENCY_CODE: 'INR'
 };
 
@@ -2435,7 +2435,7 @@ goog.i18n.NumberFormatSymbols_sw = {
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
-  CURRENCY_PATTERN: '¤#,##0.00',
+  CURRENCY_PATTERN: '¤ #,##0.00',
   DEF_CURRENCY_CODE: 'TZS'
 };
 
