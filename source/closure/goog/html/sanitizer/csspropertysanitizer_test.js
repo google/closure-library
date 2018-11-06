@@ -50,7 +50,7 @@ testSuite({
   testBrowserBehavior_mixedCase() {
     assertEquals('red', getProcessedPropertyValue('coLOr', 'rEd'));
     assertEquals(
-        product.SAFARI ? 'url(http://foo.com/a)' : 'url("http://foo.com/a")',
+        'url("http://foo.com/a")',
         getProcessedPropertyValue(
             'background-iMAge', 'uRL("http://foo.com/a")'));
   },
@@ -72,9 +72,8 @@ testSuite({
     // values that need to be sanitized.
     assertEquals(
         'red', getProcessedPropertyValue('color', ' /* a */ red /* b */'));
-    // Safari strips quotes when not necessary.
     assertEquals(
-        product.SAFARI ? 'url(http://foo.com/u)' : 'url("http://foo.com/u")',
+        'url("http://foo.com/u")',
         getProcessedPropertyValue(
             'background-image', ' /* a */ url("http://foo.com/u")'));
   },

@@ -624,7 +624,9 @@ goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
   } else {
     url = String(url);
   }
-  if (!goog.asserts.assert(goog.html.SAFE_URL_PATTERN_.test(url))) {
+  if (!goog.asserts.assert(
+          goog.html.SAFE_URL_PATTERN_.test(url),
+          '%s does not match the safe URL pattern', url)) {
     url = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);

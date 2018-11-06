@@ -335,11 +335,16 @@ goog.constructNamespace_ = function(name, opt_obj) {
 
 /**
  * Returns CSP nonce, if set for any script tag.
+ * @param {?Window=} opt_window The window context used to retrieve the nonce.
+ *     Defaults to global context.
  * @return {string} CSP nonce or empty string if no nonce is present.
  */
-goog.getScriptNonce = function() {
+goog.getScriptNonce = function(opt_window) {
+  if (opt_window && opt_window != goog.global) {
+    return goog.getScriptNonce_(opt_window.document);
+  }
   if (goog.cspNonce_ === null) {
-    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document) || '';
+    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document);
   }
   return goog.cspNonce_;
 };
@@ -362,7 +367,7 @@ goog.cspNonce_ = null;
 /**
  * Returns CSP nonce, if set for any script tag.
  * @param {!Document} doc
- * @return {?string} CSP nonce or null if no nonce is present.
+ * @return {string} CSP nonce or empty string if no nonce is present.
  * @private
  */
 goog.getScriptNonce_ = function(doc) {
@@ -377,7 +382,7 @@ goog.getScriptNonce_ = function(doc) {
       return nonce;
     }
   }
-  return null;
+  return '';
 };
 
 
@@ -962,6 +967,8 @@ goog.addSingletonGetter = function(ctor) {
   // instance_ is immediately set to prevent issues with sealed constructors
   // such as are encountered when a constructor is returned as the export object
   // of a goog.module in unoptimized code.
+  // Delcare type to avoid conformance violations that ctor.instance_ is unknown
+  /** @type {undefined|!Object} @suppress {underscore} */
   ctor.instance_ = undefined;
   ctor.getInstance = function() {
     if (ctor.instance_) {
@@ -971,7 +978,8 @@ goog.addSingletonGetter = function(ctor) {
       // NOTE: JSCompiler can't optimize away Array#push.
       goog.instantiatedSingletons_[goog.instantiatedSingletons_.length] = ctor;
     }
-    return ctor.instance_ = new ctor;
+    // Cast to avoid conformance violations that ctor.instance_ is unknown
+    return /** @type {!Object|undefined} */ (ctor.instance_) = new ctor;
   };
 };
 
@@ -1712,7 +1720,7 @@ goog.partial = function(fn, var_args) {
     // to the existing arguments.
     var newArgs = args.slice();
     newArgs.push.apply(newArgs, arguments);
-    return fn.apply(this, newArgs);
+    return fn.apply(/** @type {?} */ (this), newArgs);
   };
 };
 
@@ -2163,7 +2171,8 @@ goog.base = function(me, opt_methodName, var_args) {
       ctorArgs[i - 1] = arguments[i];
     }
     // This is a constructor. Call the superclass constructor.
-    return caller.superClass_.constructor.apply(me, ctorArgs);
+    return /** @type {!Function} */ (caller.superClass_)
+        .constructor.apply(me, ctorArgs);
   }
 
   if (typeof opt_methodName != 'string' && typeof opt_methodName != 'symbol') {
@@ -3862,8 +3871,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * for deferred modules.
    * @const @private {boolean}
    */
-  goog.DebugLoader_.IS_OLD_IE_ =
-      !!(!goog.global.atob && goog.global.document && goog.global.document.all);
+  goog.DebugLoader_.IS_OLD_IE_ = !!(
+      !goog.global.atob && goog.global.document && goog.global.document['all']);
 
 
   /**

@@ -121,6 +121,41 @@ function testTouchEventHandling() {
   assertEquals(target, touchCancel.target);
 }
 
+function testGuardAgainstUndefinedTouchCoordinates() {
+  const noChangedTouches = new goog.events.BrowserEvent({
+    type: 'touchstart',
+    target: document.body,
+    changedTouches: [],
+  });
+
+  const emptyTouchObject = new goog.events.BrowserEvent({
+    type: 'touchstart',
+    target: document.body,
+    changedTouches: [{}],
+  });
+
+  const onlyPageCoords = new goog.events.BrowserEvent({
+    type: 'touchstart',
+    target: document.body,
+    changedTouches: [{pageX: 6, pageY: 7}],
+  });
+
+  assertEquals(undefined, noChangedTouches.clientX);
+  assertEquals(undefined, noChangedTouches.clientY);
+  assertEquals(0, noChangedTouches.screenX);
+  assertEquals(0, noChangedTouches.screenY);
+
+  assertEquals(undefined, emptyTouchObject.clientX);
+  assertEquals(undefined, emptyTouchObject.clientY);
+  assertEquals(0, emptyTouchObject.screenX);
+  assertEquals(0, emptyTouchObject.screenY);
+
+  assertEquals(6, onlyPageCoords.clientX);
+  assertEquals(7, onlyPageCoords.clientY);
+  assertEquals(0, onlyPageCoords.screenX);
+  assertEquals(0, onlyPageCoords.screenY);
+}
+
 function testPointerEvent() {
   var event = createPointerEvent('pointerdown', 123, PointerType.MOUSE);
   assertEquals(123, event.pointerId);

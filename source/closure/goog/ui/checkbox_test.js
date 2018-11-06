@@ -33,6 +33,27 @@ goog.require('goog.ui.decorate');
 
 var checkbox;
 
+/**
+ * A subclass of `CheckboxRenderer` that overrides `getKeyEventTarget` for
+ * testing purposes.
+ *
+ * @param {!Element} keyEventTarget
+ * @constructor
+ * @extends {goog.ui.CheckboxRenderer}
+ */
+function TestCheckboxRenderer(keyEventTarget) {
+  TestCheckboxRenderer.base(this, 'constructor');
+
+  /** @private @const {!Element} */
+  this.keyEventTarget_ = keyEventTarget;
+}
+goog.inherits(TestCheckboxRenderer, goog.ui.CheckboxRenderer);
+
+/** @override */
+TestCheckboxRenderer.prototype.getKeyEventTarget = function() {
+  return this.keyEventTarget_;
+};
+
 function setUp() {
   checkbox = new goog.ui.Checkbox();
 }
@@ -73,6 +94,37 @@ function testIsEnabled() {
   assertTrue('enabled by default', checkbox.isEnabled());
   checkbox.setEnabled(false);
   assertFalse('has been disabled', checkbox.isEnabled());
+}
+
+function testSetEnabled_setsTabIndexOnKeyEventTargetOnly() {
+  var keyEventTarget = goog.dom.createElement(goog.dom.TagName.DIV);
+  document.body.appendChild(keyEventTarget);
+
+  try {
+    checkbox = new goog.ui.Checkbox(
+        /* opt_checked= */ undefined, /* opt_domHelper= */ undefined,
+        new TestCheckboxRenderer(keyEventTarget));
+    checkbox.createDom();
+
+    checkbox.setEnabled(false);
+    assertNull(
+        'Checkbox element must not have a tabIndex',
+        checkbox.getElement().getAttribute('tabIndex'));
+    assertFalse(
+        'Checkbox\'s key event target element must not support keyboard focus',
+        goog.dom.isFocusableTabIndex(keyEventTarget));
+
+    checkbox.setEnabled(true);
+    assertNull(
+        'Checkbox element must not have a tabIndex',
+        checkbox.getElement().getAttribute('tabIndex'));
+    assertTrue(
+        'Checkbox\'s key event target element must support keyboard focus',
+        goog.dom.isFocusableTabIndex(keyEventTarget));
+
+  } finally {
+    document.body.removeChild(keyEventTarget);
+  }
 }
 
 function testCheckedState() {

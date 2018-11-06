@@ -281,9 +281,10 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
 
   /**
    * On touch devices use the first "changed touch" as the relevant touch.
-   * @type {Touch}
+   * @type {?Touch}
    */
-  var relevantTouch = e.changedTouches ? e.changedTouches[0] : null;
+  var relevantTouch =
+      e.changedTouches && e.changedTouches.length ? e.changedTouches[0] : null;
 
   // TODO(nicksantos): Change this.target to type EventTarget.
   this.target = /** @type {Node} */ (e.target) || e.srcElement;
@@ -310,7 +311,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
 
   this.relatedTarget = relatedTarget;
 
-  if (!goog.isNull(relevantTouch)) {
+  if (relevantTouch) {
     this.clientX = relevantTouch.clientX !== undefined ? relevantTouch.clientX :
                                                          relevantTouch.pageX;
     this.clientY = relevantTouch.clientY !== undefined ? relevantTouch.clientY :
