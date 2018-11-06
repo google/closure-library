@@ -352,6 +352,12 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
  *     If not specified, clock ticks 1 millisecond.
  * @return {T}
  * @template T
+ *
+ * @deprecated Treating Promises as synchronous values is incompatible with
+ *     native promises and async functions. More generally, this code relies on
+ *     promises "pumped" by setTimeout which is not done in production code,
+ *     even for goog.Promise and results unnatural timing between resolved
+ *     promises callback and setTimeout/setInterval callbacks in tests.
  */
 goog.testing.MockClock.prototype.tickPromise = function(promise, opt_millis) {
   var value;
