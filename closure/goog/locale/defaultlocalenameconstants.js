@@ -15,7 +15,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 33.1
+ * File generated from CLDR ver. 34
  *
  */
 
