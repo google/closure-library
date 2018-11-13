@@ -43,6 +43,7 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.Keys');
 goog.require('goog.fx.Dragger');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Rect');
@@ -1086,7 +1087,9 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
           new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
     }
   } else if (
-      target == this.titleCloseEl_ && e.keyCode == goog.events.KeyCodes.SPACE) {
+      target == this.titleCloseEl_ &&
+      (e.keyCode == goog.events.KeyCodes.SPACE ||
+       e.key == goog.events.Keys.SPACE)) {
     // if the title 'close' button is in focus on 'SPACE,' close the dialog
     this.handleTitleClose_();
   }
