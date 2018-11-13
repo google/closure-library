@@ -672,9 +672,9 @@ goog.color.blend = function(rgb1, rgb2, factor) {
   factor = goog.math.clamp(factor, 0, 1);
 
   return [
-    Math.round(factor * rgb1[0] + (1.0 - factor) * rgb2[0]),
-    Math.round(factor * rgb1[1] + (1.0 - factor) * rgb2[1]),
-    Math.round(factor * rgb1[2] + (1.0 - factor) * rgb2[2])
+    Math.round(rgb2[0] + factor * (rgb1[0] - rgb2[0])),
+    Math.round(rgb2[1] + factor * (rgb1[1] - rgb2[1])),
+    Math.round(rgb2[2] + factor * (rgb1[2] - rgb2[2]))
   ];
 };
 
