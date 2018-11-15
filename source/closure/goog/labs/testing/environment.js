@@ -222,7 +222,8 @@ goog.labs.testing.Environment.console_.setCapturing(true);
  * @extends {goog.testing.TestCase}
  */
 goog.labs.testing.EnvironmentTestCase_ = function() {
-  goog.labs.testing.EnvironmentTestCase_.base(this, 'constructor');
+  goog.labs.testing.EnvironmentTestCase_.base(
+      this, 'constructor', document.title);
 
   /** @private {!Array<!goog.labs.testing.Environment>}> */
   this.environments_ = [];

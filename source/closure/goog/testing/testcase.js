@@ -599,13 +599,20 @@ goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
   return top && typeof top['_allTests'] != 'undefined';
 };
 
+/**
+ * @return {boolean} Whether the test-progress should be logged to the console.
+ */
+goog.testing.TestCase.prototype.shouldLogTestProgress = function() {
+  return !goog.global['skipClosureTestProgress'] &&
+      !this.isInsideMultiTestRunner();
+};
 
 /**
  * Logs an object to the console, if available.
  * @param {*} val The value to log. Will be ToString'd.
  */
 goog.testing.TestCase.prototype.log = function(val) {
-  if (!this.isInsideMultiTestRunner() && goog.global.console) {
+  if (this.shouldLogTestProgress() && goog.global.console) {
     if (typeof val == 'string') {
       val = this.getTimeStamp_() + ' : ' + val;
     }

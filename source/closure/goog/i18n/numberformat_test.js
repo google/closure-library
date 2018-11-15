@@ -882,21 +882,21 @@ function testLocaleSwitch() {
 
   var fmt = new goog.i18n.NumberFormat('#,###');
   var str = fmt.format(1234567890);
-  assertEquals('1\u00a0234\u00a0567\u00a0890', str);
+  assertEquals('1\u202F234\u202F567\u202F890', str);
 
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
   str = fmt.format(1234.56);
-  assertEquals('\u20AC1\u00a0234,56', str);
+  assertEquals('\u20AC1\u202F234,56', str);
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;(\u00a4#,##0.00)');
   str = fmt.format(-1234.56);
-  assertEquals('(\u20AC1\u00a0234,56)', str);
+  assertEquals('(\u20AC1\u202F234,56)', str);
 
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00', 'SEK');
   str = fmt.format(1234.56);
-  assertEquals('kr1\u00a0234,56', str);
+  assertEquals('kr1\u202F234,56', str);
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;(\u00a4#,##0.00)', 'SEK');
   str = fmt.format(-1234.56);
-  assertEquals('(kr1\u00a0234,56)', str);
+  assertEquals('(kr1\u202F234,56)', str);
 }
 
 function testFrenchParse() {
@@ -1335,7 +1335,7 @@ function testCompactWithBaseFormattingFrench() {
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   assertEquals('123\u00A0M', fmt.format(123400000));
   fmt.setBaseFormatting(1000);
-  assertEquals('123\u00A0400\u00A0k', fmt.format(123400000));
+  assertEquals('123\u202F400\u00A0k', fmt.format(123400000));
 }
 
 function testGetBaseFormattingNumber() {

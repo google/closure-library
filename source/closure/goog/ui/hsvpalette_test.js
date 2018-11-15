@@ -29,11 +29,12 @@ goog.require('goog.ui.HsvPalette');
 goog.require('goog.userAgent');
 
 var samplePalette;
-var eventWasFired = false;
+var eventWasFired;
 var stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   samplePalette = new goog.ui.HsvPalette();
+  eventWasFired = false;
 }
 
 function tearDown() {
@@ -81,13 +82,31 @@ function testSetColor() {
   assertEquals('#' + color, goog.color.parse(samplePalette.getColor()).hex);
 }
 
-function testChangeEvent() {
+function testChangeEventWithDisableDispatchEventOmitted() {
   // TODO(user): Add functionality to goog.testing.events to assert
   // an event was fired.
   goog.events.listen(
       samplePalette, goog.ui.Component.EventType.ACTION,
       function() { eventWasFired = true; });
   samplePalette.setColor('#123456');
+  assertTrue(eventWasFired);
+}
+
+function testChangeEventWithDisableDispatchEventTrue() {
+  goog.events.listen(
+      samplePalette, goog.ui.Component.EventType.ACTION, function() {
+        eventWasFired = true;
+      });
+  samplePalette.setColor('#123456', true);
+  assertFalse(eventWasFired);
+}
+
+function testChangeEventWithDisableDispatchEventFalse() {
+  goog.events.listen(
+      samplePalette, goog.ui.Component.EventType.ACTION, function() {
+        eventWasFired = true;
+      });
+  samplePalette.setColor('#123456', false);
   assertTrue(eventWasFired);
 }
 
