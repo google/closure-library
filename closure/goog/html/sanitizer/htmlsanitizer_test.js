@@ -1675,3 +1675,13 @@ function testHorizontalRuleWithInlineStyles() {
           .inlineStyleRules()
           .build());
 }
+
+function testDetailOpen() {
+  var input = '<details open><summary>foo</summary>This is a test</details>';
+  assertSanitizedHtml(
+      input, input,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .build());
+}
