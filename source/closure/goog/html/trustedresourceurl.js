@@ -290,7 +290,7 @@ goog.html.TrustedResourceUrl.FORMAT_MARKER_ = /%{(\w+)}/g;
  * start with:
  * - https:// followed by allowed origin characters.
  * - // followed by allowed origin characters.
- * - / not followed by / or \. There will only be an absolute path.
+ * - Any absolute or relative path.
  *
  * Based on
  * https://url.spec.whatwg.org/commit-snapshots/56b74ce7cca8883eab62e9a12666e2fac665d03d/#url-parsing
@@ -312,8 +312,14 @@ goog.html.TrustedResourceUrl.FORMAT_MARKER_ = /%{(\w+)}/g;
  *   code.
  * @private @const {!RegExp}
  */
-goog.html.TrustedResourceUrl.BASE_URL_ =
-    /^(?:https:)?\/\/[0-9a-z.:[\]-]+\/|^\/[^\/\\]|^about:blank#/i;
+goog.html.TrustedResourceUrl.BASE_URL_ = new RegExp(
+    '^((https:)?//[0-9a-z.:[\\]-]+/'  // Origin.
+        + '|/[^/\\\\]'                // Absolute path.
+        + '|[^:/\\\\]+/'              // Relative path.
+        + '|[^:/\\\\]*[?#]'           // Query string or fragment.
+        + '|about:blank#'             // about:blank with fragment.
+        + ')',
+    'i');
 
 /**
  * RegExp for splitting a URL into the base, search field, and hash field.

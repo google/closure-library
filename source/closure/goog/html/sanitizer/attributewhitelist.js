@@ -78,6 +78,7 @@ goog.html.sanitizer.AttributeWhitelist = {
   '* NOHREF': true,
   '* NOSHADE': true,
   '* NOWRAP': true,
+  '* OPEN': true,
   '* READONLY': true,
   '* REL': true,
   '* REV': true,
