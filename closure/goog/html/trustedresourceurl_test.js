@@ -64,6 +64,17 @@ function testFormat_validFormatString() {
   assertValidFormat(goog.string.Const.from('httpS://www.google.cOm/pAth'));
   assertValidFormat(goog.string.Const.from('about:blank#'));
   assertValidFormat(goog.string.Const.from('about:blank#x'));
+  // Relative path.
+  assertValidFormat(goog.string.Const.from('path/'));
+  assertValidFormat(goog.string.Const.from('path/a'));
+  assertValidFormat(goog.string.Const.from('../'));
+  assertValidFormat(goog.string.Const.from('../a'));
+  assertValidFormat(goog.string.Const.from('?a'));
+  assertValidFormat(goog.string.Const.from('path?a'));
+  assertValidFormat(goog.string.Const.from('path/?a'));
+  assertValidFormat(goog.string.Const.from('#a'));
+  assertValidFormat(goog.string.Const.from('path#a'));
+  assertValidFormat(goog.string.Const.from('path/#a'));
 }
 
 
@@ -113,6 +124,7 @@ function testFormat_invalidFormatString() {
   // Invalid scheme.
   assertInvalidFormat(goog.string.Const.from('ftp://'));
   // Missing origin.
+  assertInvalidFormat(goog.string.Const.from('https:'));
   assertInvalidFormat(goog.string.Const.from('https://'));
   assertInvalidFormat(goog.string.Const.from('https:///'));
   assertInvalidFormat(goog.string.Const.from('//'));
@@ -128,10 +140,11 @@ function testFormat_invalidFormatString() {
   assertInvalidFormat(goog.string.Const.from('//'));
   // Two slashes. IE allowed (allows?) '\' instead of '/'.
   assertInvalidFormat(goog.string.Const.from('/\\'));
-  // Relative path.
-  assertInvalidFormat(goog.string.Const.from('abc'));
-  assertInvalidFormat(goog.string.Const.from('about:blank'));
-  assertInvalidFormat(goog.string.Const.from('about:blankX'));
+  // Path.
+  assertInvalidFormat(
+      goog.string.Const.from(''));  // Allows appending anything.
+  assertInvalidFormat(goog.string.Const.from('/'));     // Allows appending '/'.
+  assertInvalidFormat(goog.string.Const.from('path'));  // Allows appending ':'.
 }
 
 
