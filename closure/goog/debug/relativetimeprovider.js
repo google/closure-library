@@ -44,7 +44,7 @@ goog.debug.RelativeTimeProvider = function() {
 
 /**
  * Default instance.
- * @type {goog.debug.RelativeTimeProvider}
+ * @type {?goog.debug.RelativeTimeProvider}
  * @private
  */
 goog.debug.RelativeTimeProvider.defaultInstance_ = null;

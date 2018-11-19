@@ -138,7 +138,7 @@ goog.debug.DebugWindow.prototype.enableOnSevere_ = false;
 
 /**
  * Reference to debug window
- * @type {Window}
+ * @type {?Window}
  * @protected
  */
 goog.debug.DebugWindow.prototype.win = null;

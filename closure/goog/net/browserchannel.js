@@ -184,7 +184,7 @@ goog.net.BrowserChannel.QueuedMap = function(mapId, map, opt_context) {
 
 /**
  * Extra HTTP headers to add to all the requests sent to the server.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.BrowserChannel.prototype.extraHeaders_ = null;
@@ -192,7 +192,7 @@ goog.net.BrowserChannel.prototype.extraHeaders_ = null;
 
 /**
  * Extra parameters to add to all the requests sent to the server.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.BrowserChannel.prototype.extraParams_ = null;
@@ -225,7 +225,7 @@ goog.net.BrowserChannel.prototype.path_ = null;
 
 /**
  * The absolute URI for the forwardchannel request.
- * @type {goog.Uri}
+ * @type {?goog.Uri}
  * @private
  */
 goog.net.BrowserChannel.prototype.forwardChannelUri_ = null;
@@ -233,7 +233,7 @@ goog.net.BrowserChannel.prototype.forwardChannelUri_ = null;
 
 /**
  * The absolute URI for the backchannel request.
- * @type {goog.Uri}
+ * @type {?goog.Uri}
  * @private
  */
 goog.net.BrowserChannel.prototype.backChannelUri_ = null;
@@ -283,7 +283,7 @@ goog.net.BrowserChannel.prototype.failFast_ = false;
 
 /**
  * The handler that receive callbacks for state changes and data.
- * @type {goog.net.BrowserChannel.Handler}
+ * @type {?goog.net.BrowserChannel.Handler}
  * @private
  */
 goog.net.BrowserChannel.prototype.handler_ = null;

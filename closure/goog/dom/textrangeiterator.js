@@ -50,13 +50,13 @@ goog.dom.TextRangeIterator = function(
     startNode, startOffset, endNode, endOffset, opt_reverse) {
   /**
    * The first node in the selection.
-   * @private {Node}
+   * @private {?Node}
    */
   this.startNode_ = null;
 
   /**
    * The last node in the selection.
-   * @private {Node}
+   * @private {?Node}
    */
   this.endNode_ = null;
 

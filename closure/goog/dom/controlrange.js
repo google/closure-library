@@ -47,19 +47,19 @@ goog.require('goog.userAgent');
 goog.dom.ControlRange = function() {
   /**
    * The IE control range obejct.
-   * @private {Object}
+   * @private {?Object}
    */
   this.range_ = null;
 
   /**
    * Cached list of elements.
-   * @private {Array<Element>}
+   * @private {?Array<?Element>}
    */
   this.elements_ = null;
 
   /**
    * Cached sorted list of elements.
-   * @private {Array<Element>}
+   * @private {?Array<?Element>}
    */
   this.sortedElements_ = null;
 };
@@ -393,19 +393,19 @@ goog.dom.DomSavedControlRange_.prototype.disposeInternal = function() {
 goog.dom.ControlRangeIterator = function(range) {
   /**
    * The first node in the selection.
-   * @private {Node}
+   * @private {?Node}
    */
   this.startNode_ = null;
 
   /**
    * The last node in the selection.
-   * @private {Node}
+   * @private {?Node}
    */
   this.endNode_ = null;
 
   /**
    * The list of elements left to traverse.
-   * @private {Array<Element>?}
+   * @private {Array<?Element>?}
    */
   this.elements_ = null;
 

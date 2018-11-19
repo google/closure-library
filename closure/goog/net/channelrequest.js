@@ -134,7 +134,7 @@ goog.net.ChannelRequest = function(
 
 /**
  * Extra HTTP headers to add to all the requests sent to the server.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.ChannelRequest.prototype.extraHeaders_ = null;
@@ -208,7 +208,7 @@ goog.net.ChannelRequest.prototype.postData_ = null;
 
 /**
  * The XhrLte request if the request is using XMLHTTP
- * @type {goog.net.XhrIo}
+ * @type {?goog.net.XhrIo}
  * @private
  */
 goog.net.ChannelRequest.prototype.xmlHttp_ = null;
@@ -225,7 +225,7 @@ goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
 
 /**
  * The Trident instance if the request is using Trident.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.ChannelRequest.prototype.trident_ = null;
@@ -287,7 +287,7 @@ goog.net.ChannelRequest.prototype.readyStateChangeThrottleMs_ = 0;
 /**
  * The throttle for readystatechange events for the current request, or null
  * if there is none.
- * @type {goog.async.Throttle}
+ * @type {?goog.async.Throttle}
  * @private
  */
 goog.net.ChannelRequest.prototype.readyStateChangeThrottle_ = null;

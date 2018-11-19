@@ -57,7 +57,7 @@ goog.require('goog.userAgent');
 goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
   this.readOptionsFromLocalStorage_();
   goog.debug.FancyWindow.base(this, 'constructor', opt_identifier, opt_prefix);
-  /** @private {goog.dom.DomHelper} */
+  /** @private {?goog.dom.DomHelper} */
   this.dh_ = null;
 };
 goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
