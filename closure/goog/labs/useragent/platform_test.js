@@ -104,6 +104,14 @@ function testIphone() {
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('6.0');
   assertVersionBetween('5', '7');
+
+  uaString = goog.labs.userAgent.testAgents.FIREFOX_IPHONE;
+  goog.labs.userAgent.util.setUserAgent(uaString);
+  assertTrue(goog.labs.userAgent.platform.isIphone());
+  assertFalse(goog.labs.userAgent.platform.isIpad());
+  assertTrue(goog.labs.userAgent.platform.isIos());
+  assertVersion('5.1.1');
+  assertVersionBetween('4', '6');
 }
 
 function testIpad() {
