@@ -85,7 +85,7 @@ goog.inherits(goog.ui.ContainerScroller, goog.Disposable);
  * The last target the user hovered over.
  *
  * @see #onEnter_
- * @type {goog.ui.Component}
+ * @type {?goog.ui.Component}
  * @private
  */
 goog.ui.ContainerScroller.prototype.lastEnterTarget_ = null;

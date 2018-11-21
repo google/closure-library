@@ -134,7 +134,7 @@ goog.ui.Control.prototype.renderer_;
 
 /**
  * Text caption or DOM structure displayed in the component.
- * @type {goog.ui.ControlContent}
+ * @type {?goog.ui.ControlContent}
  * @private
  */
 goog.ui.Control.prototype.content_ = null;

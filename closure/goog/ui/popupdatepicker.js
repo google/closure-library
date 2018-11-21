@@ -70,7 +70,7 @@ goog.ui.PopupDatePicker.prototype.popup_ = null;
 
 /**
  * Reference to the element that triggered the last popup.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.PopupDatePicker.prototype.lastTarget_ = null;

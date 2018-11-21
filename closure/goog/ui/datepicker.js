@@ -269,7 +269,7 @@ goog.ui.DatePicker.prototype.simpleNavigation_ = false;
 /**
  * Custom decorator function. Takes a goog.date.Date object, returns a String
  * representing a CSS class or null if no special styling applies
- * @type {Function}
+ * @type {?Function}
  * @private
  */
 goog.ui.DatePicker.prototype.decoratorFunction_ = null;
@@ -285,7 +285,7 @@ goog.ui.DatePicker.prototype.longDateFormat_ = false;
 
 /**
  * Element for navigation row on a datepicker.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.DatePicker.prototype.elNavRow_ = null;
@@ -293,7 +293,7 @@ goog.ui.DatePicker.prototype.elNavRow_ = null;
 
 /**
  * Element for the month/year in the navigation row.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.DatePicker.prototype.elMonthYear_ = null;
@@ -301,7 +301,7 @@ goog.ui.DatePicker.prototype.elMonthYear_ = null;
 
 /**
  * Element for footer row on a datepicker.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.DatePicker.prototype.elFootRow_ = null;

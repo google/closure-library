@@ -87,7 +87,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
   /**
    * The factory to use to generate additional animations when animating to a
    * new value.
-   * @type {goog.ui.SliderBase.AnimationFactory}
+   * @type {?goog.ui.SliderBase.AnimationFactory}
    * @private
    */
   this.additionalAnimations_ = null;
