@@ -299,6 +299,18 @@ goog.dom.getRequiredElementByClass = function(className, opt_root) {
 
 
 /**
+ * Returns a static, array-like list of the elements with the provided name.
+ * This function does not accept an optional parameter `opt_parent`.
+ * @see {goog.dom.query}
+ * @param {string} name the name to look for.
+ * @return {!NodeList<!Element>} The items found with the name provided.
+ */
+goog.dom.getElementsByName = function(name) {
+  return document.getElementsByName(String(name));
+};
+
+
+/**
  * Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
  * fast W3C Selectors API.
  * @param {!(Element|Document)} parent The parent document object.

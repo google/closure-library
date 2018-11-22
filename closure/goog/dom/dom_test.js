@@ -235,6 +235,14 @@ function testGetElementByTagNameAndClass() {
   assertNotNull(goog.dom.getElementByTagNameAndClass('*', 'test1', container));
 }
 
+function testGetElementsByName() {
+  assertEquals(1, goog.dom.getElementsByName('testName1').length);
+  assertEquals(1, goog.dom.getElementsByName('testName2').length);
+  assertEquals(1, goog.dom.getElementsByName('testName3').length);
+  assertEquals(2, goog.dom.getElementsByName('testName4').length);
+  assertEquals(0, goog.dom.getElementsByName('testNotExistingName').length);
+}
+
 function testSetProperties() {
   var attrs = {
     'name': 'test3',
