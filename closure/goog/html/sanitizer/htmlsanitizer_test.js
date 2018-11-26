@@ -1685,3 +1685,13 @@ function testDetailOpen() {
           .inlineStyleRules()
           .build());
 }
+
+function testInputRequired() {
+  var input = '<input required/>';
+  assertSanitizedHtml(
+      input, input,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .build());
+}

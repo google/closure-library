@@ -80,6 +80,7 @@ goog.html.sanitizer.AttributeWhitelist = {
   '* NOWRAP': true,
   '* OPEN': true,
   '* READONLY': true,
+  '* REQUIRED': true,
   '* REL': true,
   '* REV': true,
   '* ROLE': true,
