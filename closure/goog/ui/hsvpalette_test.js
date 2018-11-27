@@ -148,6 +148,14 @@ function testRender() {
   }
 }
 
+function testRenderWithEnableBrowserSpellcheckOnInputFalse() {
+  samplePalette.render(document.getElementById('sandbox'));
+
+  var inputElement =
+      samplePalette.getRequiredElementByClass('goog-hsv-palette-input');
+  assertFalse(inputElement.spellcheck);
+}
+
 function testSwatchTextIsReadable() {
   samplePalette.render(document.getElementById('sandbox'));
 
