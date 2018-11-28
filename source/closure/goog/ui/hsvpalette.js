@@ -323,6 +323,8 @@ goog.ui.HsvPalette.prototype.createDom = function() {
     'type': goog.dom.InputType.TEXT,
     'dir': 'ltr'
   });
+  // Spellcheck is not necessary, so setting it to false on the inputElement.
+  this.inputElement.spellcheck = false;
 
   var labelElement =
       dom.createDom(goog.dom.TagName.LABEL, null, this.inputElement);

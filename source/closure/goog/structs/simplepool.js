@@ -55,14 +55,14 @@ goog.structs.SimplePool = function(initialCount, maxCount) {
   /**
    * Function for overriding createObject. The avoids a common case requiring
    * subclassing this class.
-   * @private {Function}
+   * @private {?Function}
    */
   this.createObjectFn_ = null;
 
   /**
    * Function for overriding disposeObject. The avoids a common case requiring
    * subclassing this class.
-   * @private {Function}
+   * @private {?Function}
    */
   this.disposeObjectFn_ = null;
 

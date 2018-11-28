@@ -92,7 +92,7 @@ goog.ui.ac.Renderer = function(
 
   /**
    * Reference to the main element that controls the rendered autocomplete
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.element_ = null;

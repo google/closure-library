@@ -106,7 +106,7 @@ goog.editor.Field = function(id, opt_doc) {
 
   /**
    * Dom helper for the editable node.
-   * @type {goog.dom.DomHelper}
+   * @type {?goog.dom.DomHelper}
    * @protected
    */
   this.editableDomHelper = null;
@@ -210,7 +210,7 @@ goog.inherits(goog.editor.Field, goog.events.EventTarget);
 
 /**
  * The editable dom node.
- * @type {Element}
+ * @type {?Element}
  * TODO(user): Make this private!
  */
 goog.editor.Field.prototype.field = null;

@@ -106,7 +106,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 
   /**
    * The options to use with the current XMLHttpRequest object.
-   * @private {Object}
+   * @private {?Object}
    */
   this.xhrOptions_ = null;
 

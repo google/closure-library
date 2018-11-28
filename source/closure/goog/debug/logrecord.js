@@ -84,7 +84,7 @@ goog.debug.LogRecord.prototype.sequenceNumber_ = 0;
 
 /**
  * Exception associated with the record
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.debug.LogRecord.prototype.exception_ = null;

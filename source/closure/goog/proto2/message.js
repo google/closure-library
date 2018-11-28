@@ -50,7 +50,7 @@ goog.proto2.Message = function() {
 
   /**
    * The lazy deserializer for this message instance, if any.
-   * @type {goog.proto2.LazyDeserializer}
+   * @type {?goog.proto2.LazyDeserializer}
    * @private
    */
   this.lazyDeserializer_ = null;
@@ -58,7 +58,7 @@ goog.proto2.Message = function() {
   /**
    * A map of those fields deserialized, from tag number to their deserialized
    * value.
-   * @type {Object}
+   * @type {?Object}
    * @private
    */
   this.deserializedFields_ = null;

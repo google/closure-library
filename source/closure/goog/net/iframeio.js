@@ -916,7 +916,7 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     }
 
     // Append a cloned form to the iframe
-    var clone = doc.importNode(this.form_, true);
+    var clone = doc.importNode(goog.asserts.assert(this.form_), true);
     clone.target = innerFrameName;
     // Work around crbug.com/66987
     clone.action = this.form_.action;

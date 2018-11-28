@@ -33,7 +33,7 @@ goog.require('goog.userAgent.product');
 
 /**
  * Maps bytes to characters.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.crypt.base64.byteToCharMap_ = null;
@@ -41,7 +41,7 @@ goog.crypt.base64.byteToCharMap_ = null;
 
 /**
  * Maps characters to bytes. Used for normal and websafe characters.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.crypt.base64.charToByteMap_ = null;
@@ -49,7 +49,7 @@ goog.crypt.base64.charToByteMap_ = null;
 
 /**
  * Maps bytes to websafe characters.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.crypt.base64.byteToCharMapWebSafe_ = null;

@@ -149,7 +149,7 @@ goog.ui.Prompt.prototype.cols_ = 0;
 
 /**
  * The input decorator function.
- * @type {function(Element)?}
+ * @type {?function(?Element)}
  * @private
  */
 goog.ui.Prompt.prototype.inputDecoratorFn_ = null;

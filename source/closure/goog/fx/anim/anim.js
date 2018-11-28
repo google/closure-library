@@ -64,7 +64,7 @@ goog.fx.anim.activeAnimations_ = {};
 
 /**
  * An optional animation window.
- * @type {Window}
+ * @type {?Window}
  * @private
  */
 goog.fx.anim.animationWindow_ = null;
@@ -72,7 +72,7 @@ goog.fx.anim.animationWindow_ = null;
 
 /**
  * An interval ID for the global timer or event handler uid.
- * @type {goog.async.Delay|goog.async.AnimationDelay}
+ * @type {?goog.async.Delay|?goog.async.AnimationDelay}
  * @private
  */
 goog.fx.anim.animationDelay_ = null;

@@ -292,7 +292,7 @@ goog.net.xpc.NixTransport.prototype.localSetupCompleted_ = false;
  * (see above) and as such, is in fact a COM wrapper.
  * When using this object, make sure to not access methods
  * without calling them, otherwise a COM error will be thrown.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.xpc.NixTransport.prototype.nixChannel_ = null;

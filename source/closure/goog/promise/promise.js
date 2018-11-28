@@ -98,7 +98,7 @@ goog.Promise = function(resolver, opt_context) {
 
   /**
    * For Promises created by calling `then()`, the originating parent.
-   * @private {goog.Promise}
+   * @private {?goog.Promise}
    */
   this.parent_ = null;
 
@@ -250,9 +250,9 @@ goog.Promise.State_ = {
 goog.Promise.CallbackEntry_ = function() {
   /** @type {?goog.Promise} */
   this.child = null;
-  /** @type {Function} */
+  /** @type {?Function} */
   this.onFulfilled = null;
-  /** @type {Function} */
+  /** @type {?Function} */
   this.onRejected = null;
   /** @type {?} */
   this.context = null;

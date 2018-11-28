@@ -138,7 +138,7 @@ goog.inherits(goog.events.KeyHandler, goog.events.EventTarget);
 
 /**
  * This is the element that we will listen to the real keyboard events on.
- * @type {Element|Document|null}
+ * @type {?Element|?Document|null}
  * @private
  */
 goog.events.KeyHandler.prototype.element_ = null;
@@ -146,7 +146,7 @@ goog.events.KeyHandler.prototype.element_ = null;
 
 /**
  * The key for the key press listener.
- * @type {goog.events.Key}
+ * @type {?goog.events.Key}
  * @private
  */
 goog.events.KeyHandler.prototype.keyPressKey_ = null;
@@ -154,7 +154,7 @@ goog.events.KeyHandler.prototype.keyPressKey_ = null;
 
 /**
  * The key for the key down listener.
- * @type {goog.events.Key}
+ * @type {?goog.events.Key}
  * @private
  */
 goog.events.KeyHandler.prototype.keyDownKey_ = null;
@@ -162,7 +162,7 @@ goog.events.KeyHandler.prototype.keyDownKey_ = null;
 
 /**
  * The key for the key up listener.
- * @type {goog.events.Key}
+ * @type {?goog.events.Key}
  * @private
  */
 goog.events.KeyHandler.prototype.keyUpKey_ = null;

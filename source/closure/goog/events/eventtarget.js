@@ -89,7 +89,7 @@ goog.events.EventTarget = function() {
    * currently breaks people who expect getParentEventTarget to return
    * goog.events.EventTarget.
    *
-   * @private {goog.events.EventTarget}
+   * @private {?goog.events.EventTarget}
    */
   this.parentEventTarget_ = null;
 };

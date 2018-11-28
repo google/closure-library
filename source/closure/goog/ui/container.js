@@ -107,7 +107,7 @@ goog.ui.Container.Orientation = {
 /**
  * Allows an alternative element to be set to receive key events, otherwise
  * defers to the renderer's element choice.
- * @type {Element|undefined}
+ * @type {?Element|undefined}
  * @private
  */
 goog.ui.Container.prototype.keyEventTarget_ = null;
@@ -212,7 +212,7 @@ goog.ui.Container.prototype.openFollowsHighlight_ = true;
  * control's root element; each value is a reference to the child control
  * itself.  Used for looking up the child control corresponding to a DOM
  * node in O(1) time.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.ui.Container.prototype.childElementIdMap_ = null;

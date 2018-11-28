@@ -157,7 +157,7 @@ goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ =
 /**
  * A delay between the transport reporting as connected and the calling of the
  * connection callback.  Sometimes used to paper over timing vulnerabilities.
- * @type {goog.async.Delay}
+ * @type {?goog.async.Delay}
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.connectionDelay_ = null;
@@ -167,7 +167,7 @@ goog.net.xpc.CrossPageChannel.prototype.connectionDelay_ = null;
  * A deferred which is set to non-null while a peer iframe is being created
  * but has not yet thrown its load event, and which fires when that load event
  * arrives.
- * @type {goog.async.Deferred}
+ * @type {?goog.async.Deferred}
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.peerWindowDeferred_ = null;
@@ -201,7 +201,7 @@ goog.net.xpc.CrossPageChannel.prototype.isConnected = function() {
 
 /**
  * Reference to the window-object of the peer page.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.peerWindowObject_ = null;

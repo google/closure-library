@@ -74,7 +74,7 @@ goog.net.BrowserTestChannel = function(channel, channelDebug) {
 
 /**
  * Extra HTTP headers to add to all the requests sent to the server.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.BrowserTestChannel.prototype.extraHeaders_ = null;
@@ -82,7 +82,7 @@ goog.net.BrowserTestChannel.prototype.extraHeaders_ = null;
 
 /**
  * The test request.
- * @type {goog.net.ChannelRequest}
+ * @type {?goog.net.ChannelRequest}
  * @private
  */
 goog.net.BrowserTestChannel.prototype.request_ = null;

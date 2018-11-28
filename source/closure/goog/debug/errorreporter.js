@@ -105,7 +105,7 @@ goog.debug.ErrorReporter = function(
       /**
        * The internal error handler used to catch all errors.
        *
-       * @private {goog.debug.ErrorHandler}
+       * @private {?goog.debug.ErrorHandler}
        */
       this.errorHandler_ = null;
 

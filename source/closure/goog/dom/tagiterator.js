@@ -107,7 +107,7 @@ goog.dom.TagIterator = function(
 
   /**
    * The node this position is located on.
-   * @type {Node}
+   * @type {?Node}
    */
   this.node = null;
 

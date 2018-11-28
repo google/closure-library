@@ -188,6 +188,11 @@ testAgents.FIREFOX_WINDOWS =
     'Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507' +
     ' Firefox/14.0.1';
 
+/** @const {string} */
+testAgents.FIREFOX_IPHONE =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X; en-us) ' +
+    'AppleWebKit/600.1.4 (KHTML, like Gecko)' +
+    'FxiOS/1.0 Mobile/12F69 Safari/600.1.4';
 
 /** @const {string} */
 testAgents.SAFARI_6 = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) ' +

@@ -90,7 +90,7 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
 
   /**
    * Keyboard focus event handler for elements inside the tooltip.
-   * @private {goog.events.FocusHandler}
+   * @private {?goog.events.FocusHandler}
    */
   this.tooltipFocusHandler_ = null;
 
@@ -121,7 +121,7 @@ goog.ui.Tooltip.activeInstances_ = [];
 /**
  * Active element reference. Used by the delayed show functionality to keep
  * track of the element the mouse is over or the element with focus.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.Tooltip.prototype.activeEl_ = null;

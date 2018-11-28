@@ -231,6 +231,15 @@ function testFirefoxLinux() {
   assertVersion('15.0.1');
 }
 
+function testFirefoxiOS() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.FIREFOX_IPHONE);
+  assertBrowser(Browser.FIREFOX);
+  assertTrue(goog.labs.userAgent.browser.isFirefox());
+  assertFalse(goog.labs.userAgent.browser.isSafari());
+  assertVersion('1.0');
+}
+
 function testChromeAndroid() {
   goog.labs.userAgent.util.setUserAgent(
       goog.labs.userAgent.testAgents.CHROME_ANDROID);

@@ -77,7 +77,7 @@ goog.ui.PopupBase.Type = {
 
 /**
  * The popup dom element that this Popup wraps.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.PopupBase.prototype.element_ = null;
@@ -94,7 +94,7 @@ goog.ui.PopupBase.prototype.autoHide_ = true;
 
 /**
  * Mouse events without auto hide partner elements will not dismiss the popup.
- * @type {Array<Element>}
+ * @type {?Array<?Element>}
  * @private
  */
 goog.ui.PopupBase.prototype.autoHidePartners_ = null;
@@ -105,7 +105,7 @@ goog.ui.PopupBase.prototype.autoHidePartners_ = null;
  * hide if autoHide_ is true. If this is null, then the entire document is used.
  * For example, you can use a body-size div so that clicks on the browser
  * scrollbar do not dismiss the popup.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.PopupBase.prototype.autoHideRegion_ = null;

@@ -337,7 +337,7 @@ goog.ui.ac.InputHandler.prototype.activeTimeoutId_ = null;
 
 /**
  * The element that is currently active.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.ac.InputHandler.prototype.activeElement_ = null;
