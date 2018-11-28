@@ -161,7 +161,7 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
   /**
    * If this Deferred was created by branch(), this will be the "parent"
    * Deferred.
-   * @type {goog.async.Deferred}
+   * @type {?goog.async.Deferred}
    * @private
    */
   this.parent_ = null;

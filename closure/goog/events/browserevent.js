@@ -80,20 +80,20 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
   /**
    * Target that fired the event.
    * @override
-   * @type {Node}
+   * @type {?Node}
    */
   this.target = null;
 
   /**
    * Node that had the listener attached.
    * @override
-   * @type {Node|undefined}
+   * @type {?Node|undefined}
    */
   this.currentTarget = null;
 
   /**
    * For mouseover and mouseout events, the related object for the event.
-   * @type {Node}
+   * @type {?Node}
    */
   this.relatedTarget = null;
 
@@ -184,7 +184,7 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
   /**
    * History state object, only set for PopState events where it's a copy of the
    * state object provided to pushState or replaceState.
-   * @type {Object}
+   * @type {?Object}
    */
   this.state = null;
 
@@ -207,7 +207,7 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
 
   /**
    * The browser event object.
-   * @private {Event}
+   * @private {?Event}
    */
   this.event_ = null;
 

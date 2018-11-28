@@ -50,7 +50,7 @@ goog.editor.PluginImpl = function() {
 
   /**
    * The field object this plugin is attached to.
-   * @type {goog.editor.Field}
+   * @type {?goog.editor.Field}
    * @protected
    * @deprecated Use goog.editor.PluginImpl.getFieldObject and
    *     goog.editor.PluginImpl.setFieldObject.

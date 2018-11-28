@@ -37,7 +37,7 @@ goog.require('goog.asserts');
  */
 goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
   /**
-   * @protected {Array<number>}
+   * @protected {?Array<number>}
    */
   this.rangeArray = null;
 

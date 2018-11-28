@@ -507,7 +507,7 @@ goog.ModuleType = {
  * @private {?{
  *   moduleName: (string|undefined),
  *   declareLegacyNamespace:boolean,
- *   type: goog.ModuleType
+ *   type: ?goog.ModuleType
  * }}
  */
 goog.moduleLoaderState_ = null;

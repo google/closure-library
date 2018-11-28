@@ -53,7 +53,7 @@ goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   /**
    * The document element used for storing data.
    *
-   * @private {Element}
+   * @private {?Element}
    */
   this.storageNode_ = null;
 
@@ -117,7 +117,7 @@ goog.storage.mechanism.IEUserData.ENCODE_MAP = {
 /**
  * Global storageKey to storageNode map, so we save on reloading the storage.
  *
- * @type {goog.structs.Map}
+ * @type {?goog.structs.Map}
  * @private
  */
 goog.storage.mechanism.IEUserData.storageMap_ = null;

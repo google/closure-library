@@ -139,7 +139,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * The target HTML node for displaying.
-   * @type {Element}
+   * @type {?Element}
    * @protected
    * @suppress {underscore|visibility}
    */

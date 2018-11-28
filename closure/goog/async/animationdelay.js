@@ -64,7 +64,7 @@ goog.async.AnimationDelay = function(listener, opt_window, opt_handler) {
   /**
    * Identifier of the active delay timeout, or event listener,
    * or null when inactive.
-   * @private {goog.events.Key|number}
+   * @private {?goog.events.Key|number}
    */
   this.id_ = null;
 

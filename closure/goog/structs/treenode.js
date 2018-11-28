@@ -43,13 +43,13 @@ goog.structs.TreeNode = function(key, value) {
 
   /**
    * Reference to the parent node or null if it has no parent.
-   * @private {goog.structs.TreeNode<KEY, VALUE>}
+   * @private {?goog.structs.TreeNode<KEY, VALUE>}
    */
   this.parent_ = null;
 
   /**
    * Child nodes or null in case of leaf node.
-   * @private {Array<!goog.structs.TreeNode<KEY, VALUE>>}
+   * @private {?Array<!goog.structs.TreeNode<KEY, VALUE>>}
    */
   this.children_ = null;
 };

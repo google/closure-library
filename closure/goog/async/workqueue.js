@@ -112,7 +112,7 @@ goog.async.WorkQueue.prototype.getUnusedItem_ = function() {
 goog.async.WorkItem = function() {
   /** @type {?function()} */
   this.fn = null;
-  /** @type {Object|null|undefined} */
+  /** @type {?Object|null|undefined} */
   this.scope = null;
   /** @type {?goog.async.WorkItem} */
   this.next = null;
