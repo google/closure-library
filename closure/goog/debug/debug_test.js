@@ -150,3 +150,87 @@ function testFreeze_debug() {
   }
   assertUndefined(a.foo);
 }
+
+
+function testNormalizeErrorObject_actualErrorObject() {
+  var err = goog.debug.normalizeErrorObject(new Error('abc'));
+
+  assertEquals('Error', err.name);
+  assertEquals('abc', err.message);
+}
+
+
+function testNormalizeErrorObject_actualErrorObject_withNoMessage() {
+  var err = goog.debug.normalizeErrorObject(new Error());
+
+  assertEquals('Error', err.name);
+  assertEquals('', err.message);
+}
+
+
+function testNormalizeErrorObject_null() {
+  var err = goog.debug.normalizeErrorObject(null);
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('Unknown Error of type "null/undefined"', err.message);
+}
+
+
+function testNormalizeErrorObject_undefined() {
+  var err = goog.debug.normalizeErrorObject(undefined);
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('Unknown Error of type "null/undefined"', err.message);
+}
+
+
+function testNormalizeErrorObject_string() {
+  var err = goog.debug.normalizeErrorObject('abc');
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('abc', err.message);
+}
+
+
+function testNormalizeErrorObject_number() {
+  var err = goog.debug.normalizeErrorObject(10);
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of type "Number"', err.message);
+}
+
+
+function testNormalizeErrorObject_nonErrorObject() {
+  var err = goog.debug.normalizeErrorObject({foo: 'abc'});
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of type "Object"', err.message);
+}
+
+
+function testNormalizeErrorObject_objectCreateNull() {
+  var err = goog.debug.normalizeErrorObject(Object.create(null));
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of unknown type', err.message);
+}
+
+
+function testNormalizeErrorObject_instanceOfClass() {
+  var TestClass = function(text) {
+    this.text = text;
+  };
+  var instance = new TestClass('abc');
+  var err = goog.debug.normalizeErrorObject(instance);
+
+  assertEquals('UnknownError', err.name);
+  // https://www.ecma-international.org/ecma-262/6.0/#sec-assignment-operators-runtime-semantics-evaluation
+  // says `instance.contstructor.name` should be "TestClass", but IE & Edge
+  // don't match that spec, so get "[Anonymous]" from
+  // `goog.debug.getFunctionName`.
+  if (TestClass.name) {
+    assertEquals('Unknown Error of type "TestClass"', err.message);
+  } else {
+    assertEquals('Unknown Error of type "[Anonymous]"', err.message);
+  }
+}

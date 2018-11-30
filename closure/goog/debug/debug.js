@@ -244,6 +244,9 @@ goog.debug.exposeArray = function(arr) {
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
+  if (err == null) {
+    err = 'Unknown Error of type "null/undefined"';
+  }
   if (goog.isString(err)) {
     return {
       'message': err,
@@ -281,8 +284,19 @@ goog.debug.normalizeErrorObject = function(err) {
   // The Safari Error object uses the line and sourceURL fields.
   if (threwError || !err.lineNumber || !err.fileName || !err.stack ||
       !err.message || !err.name) {
+    var message = err.message;
+    if (message == null) {
+      if (err.constructor && err.constructor instanceof Function) {
+        var ctorName = err.constructor.name ?
+            err.constructor.name :
+            goog.debug.getFunctionName(err.constructor);
+        message = 'Unknown Error of type "' + ctorName + '"';
+      } else {
+        message = 'Unknown Error of unknown type';
+      }
+    }
     return {
-      'message': err.message || 'Not available',
+      'message': message,
       'name': err.name || 'UnknownError',
       'lineNumber': lineNumber,
       'fileName': fileName,
