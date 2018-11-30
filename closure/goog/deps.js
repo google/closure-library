@@ -145,7 +145,7 @@ goog.addDependency('db/transaction.js', ['goog.db.Transaction', 'goog.db.Transac
 goog.addDependency('debug/console.js', ['goog.debug.Console'], ['goog.debug.LogManager', 'goog.debug.Logger', 'goog.debug.TextFormatter'], {});
 goog.addDependency('debug/console_test.js', ['goog.debug.ConsoleTest'], ['goog.debug.Console', 'goog.debug.LogRecord', 'goog.debug.Logger', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext', 'goog.userAgent'], {});
-goog.addDependency('debug/debug_test.js', ['goog.debugTest'], ['goog.debug', 'goog.debug.errorcontext', 'goog.structs.Set', 'goog.testing.jsunit'], {});
+goog.addDependency('debug/debug_test.js', ['goog.debugTest'], ['goog.debug', 'goog.debug.errorcontext', 'goog.testing.jsunit'], {});
 goog.addDependency('debug/debugwindow.js', ['goog.debug.DebugWindow'], ['goog.debug.HtmlFormatter', 'goog.debug.LogManager', 'goog.debug.Logger', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.string.Const', 'goog.structs.CircularBuffer', 'goog.userAgent'], {});
 goog.addDependency('debug/debugwindow_test.js', ['goog.debug.DebugWindowTest'], ['goog.debug.DebugWindow', 'goog.testing.jsunit'], {});
 goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.DevCss.UserAgent'], ['goog.asserts', 'goog.cssom', 'goog.dom.classlist', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.userAgent'], {});

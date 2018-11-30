@@ -555,16 +555,6 @@ goog.debug.getStacktraceHelper_ = function(fn, visited) {
 
 
 /**
- * Set a custom function name resolver.
- * @param {function(Function): string} resolver Resolves functions to their
- *     names.
- */
-goog.debug.setFunctionResolver = function(resolver) {
-  goog.debug.fnNameResolver_ = resolver;
-};
-
-
-/**
  * Gets a function name
  * @param {Function} fn Function to get name of.
  * @return {string} Function's name.
@@ -572,13 +562,6 @@ goog.debug.setFunctionResolver = function(resolver) {
 goog.debug.getFunctionName = function(fn) {
   if (goog.debug.fnNameCache_[fn]) {
     return goog.debug.fnNameCache_[fn];
-  }
-  if (goog.debug.fnNameResolver_) {
-    var name = goog.debug.fnNameResolver_(fn);
-    if (name) {
-      goog.debug.fnNameCache_[fn] = name;
-      return name;
-    }
   }
 
   // Heuristically determine function name based on code.
@@ -640,14 +623,6 @@ goog.debug.runtimeType = function(value) {
  * @private
  */
 goog.debug.fnNameCache_ = {};
-
-
-/**
- * Resolves functions to their names.  Resolved function names will be cached.
- * @type {function(Function):string}
- * @private
- */
-goog.debug.fnNameResolver_;
 
 
 /**

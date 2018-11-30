@@ -17,7 +17,6 @@ goog.setTestOnly('goog.debugTest');
 
 goog.require('goog.debug');
 goog.require('goog.debug.errorcontext');
-goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
 
 function testMakeWhitespaceVisible() {
@@ -28,39 +27,6 @@ function testMakeWhitespaceVisible() {
       goog.debug.makeWhitespaceVisible(
           'Hello  World!\r\n\r\n\f\fI am\t\there!\r\n'));
 }
-
-function testGetFunctionName() {
-  // Trivial resolver that matches just a few names: a static function, a
-  // constructor, and a member function.
-  var resolver = function(f) {
-    if (f === goog.debug.getFunctionName) {
-      return 'goog.debug.getFunctionName';
-    } else if (f === goog.structs.Set) {
-      return 'goog.structs.Set';
-    } else if (f === goog.structs.Set.prototype.getCount) {
-      return 'goog.structs.Set.getCount';
-    } else {
-      return null;
-    }
-  };
-  goog.debug.setFunctionResolver(resolver);
-
-  assertEquals(
-      'goog.debug.getFunctionName',
-      goog.debug.getFunctionName(goog.debug.getFunctionName));
-  assertEquals(
-      'goog.structs.Set', goog.debug.getFunctionName(goog.structs.Set));
-  var set = new goog.structs.Set();
-  assertEquals(
-      'goog.structs.Set.getCount', goog.debug.getFunctionName(set.getCount));
-
-  // This function is matched by the fallback heuristic.
-  assertEquals(
-      'testGetFunctionName', goog.debug.getFunctionName(testGetFunctionName));
-
-  goog.debug.setFunctionResolver(null);
-}
-
 
 function testGetFunctionNameOfMultilineFunction() {
   // DO NOT FORMAT THIS - it is expected that "oddlyFormatted" be on a separate
