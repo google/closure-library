@@ -742,6 +742,7 @@ goog.string.unescapeEntitiesWithDocument = function(str, document) {
 goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
   /** @type {!Object<string, string>} */
   var seen = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
+  /** @type {!Element} */
   var div;
   if (opt_document) {
     div = opt_document.createElement('div');
