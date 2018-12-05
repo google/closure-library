@@ -689,25 +689,37 @@ function testReplaceNode() {
   assertNull('badNode should not be in the DOM tree', $('badReplaceNode'));
 }
 
-function testAppendChildAt() {
+function testInsertChildAt() {
   var parent = $('p2');
   var origNumChildren = parent.childNodes.length;
 
+  // Append, with last index.
   var child1 = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(parent, child1, origNumChildren);
   assertEquals(origNumChildren + 1, parent.childNodes.length);
+  assertEquals(child1, parent.childNodes[parent.childNodes.length - 1]);
 
+  // Append, with value larger than last index.
   var child2 = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(parent, child2, origNumChildren + 42);
   assertEquals(origNumChildren + 2, parent.childNodes.length);
+  assertEquals(child2, parent.childNodes[parent.childNodes.length - 1]);
 
+  // Prepend.
   var child3 = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.dom.insertChildAt(parent, child3, 0);
   assertEquals(origNumChildren + 3, parent.childNodes.length);
+  assertEquals(child3, parent.childNodes[0]);
 
-  var child4 = goog.dom.createElement(goog.dom.TagName.DIV);
+  // Self move (no-op).
+  goog.dom.insertChildAt(parent, child3, 0);
+  assertEquals(origNumChildren + 3, parent.childNodes.length);
+  assertEquals(child3, parent.childNodes[0]);
+
+  // Move.
   goog.dom.insertChildAt(parent, child3, 2);
   assertEquals(origNumChildren + 3, parent.childNodes.length);
+  assertEquals(child3, parent.childNodes[1]);
 
   parent.removeChild(child1);
   parent.removeChild(child2);

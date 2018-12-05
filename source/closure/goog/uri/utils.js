@@ -300,7 +300,7 @@ goog.uri.utils.getEffectiveScheme = function(uri) {
     var protocol = goog.global.self.location.protocol;
     scheme = protocol.substr(0, protocol.length - 1);
   }
-  // NOTE: When called from a web worker in Firefox 3.5, location maybe null.
+  // NOTE: When called from a web worker in Firefox 3.5, location may be null.
   // All other browsers with web workers support self.location from the worker.
   return scheme ? scheme.toLowerCase() : '';
 };

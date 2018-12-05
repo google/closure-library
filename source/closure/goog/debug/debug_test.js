@@ -17,7 +17,6 @@ goog.setTestOnly('goog.debugTest');
 
 goog.require('goog.debug');
 goog.require('goog.debug.errorcontext');
-goog.require('goog.structs.Set');
 goog.require('goog.testing.jsunit');
 
 function testMakeWhitespaceVisible() {
@@ -28,39 +27,6 @@ function testMakeWhitespaceVisible() {
       goog.debug.makeWhitespaceVisible(
           'Hello  World!\r\n\r\n\f\fI am\t\there!\r\n'));
 }
-
-function testGetFunctionName() {
-  // Trivial resolver that matches just a few names: a static function, a
-  // constructor, and a member function.
-  var resolver = function(f) {
-    if (f === goog.debug.getFunctionName) {
-      return 'goog.debug.getFunctionName';
-    } else if (f === goog.structs.Set) {
-      return 'goog.structs.Set';
-    } else if (f === goog.structs.Set.prototype.getCount) {
-      return 'goog.structs.Set.getCount';
-    } else {
-      return null;
-    }
-  };
-  goog.debug.setFunctionResolver(resolver);
-
-  assertEquals(
-      'goog.debug.getFunctionName',
-      goog.debug.getFunctionName(goog.debug.getFunctionName));
-  assertEquals(
-      'goog.structs.Set', goog.debug.getFunctionName(goog.structs.Set));
-  var set = new goog.structs.Set();
-  assertEquals(
-      'goog.structs.Set.getCount', goog.debug.getFunctionName(set.getCount));
-
-  // This function is matched by the fallback heuristic.
-  assertEquals(
-      'testGetFunctionName', goog.debug.getFunctionName(testGetFunctionName));
-
-  goog.debug.setFunctionResolver(null);
-}
-
 
 function testGetFunctionNameOfMultilineFunction() {
   // DO NOT FORMAT THIS - it is expected that "oddlyFormatted" be on a separate
@@ -149,4 +115,88 @@ function testFreeze_debug() {
   } catch (expectedInStrictMode) {
   }
   assertUndefined(a.foo);
+}
+
+
+function testNormalizeErrorObject_actualErrorObject() {
+  var err = goog.debug.normalizeErrorObject(new Error('abc'));
+
+  assertEquals('Error', err.name);
+  assertEquals('abc', err.message);
+}
+
+
+function testNormalizeErrorObject_actualErrorObject_withNoMessage() {
+  var err = goog.debug.normalizeErrorObject(new Error());
+
+  assertEquals('Error', err.name);
+  assertEquals('', err.message);
+}
+
+
+function testNormalizeErrorObject_null() {
+  var err = goog.debug.normalizeErrorObject(null);
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('Unknown Error of type "null/undefined"', err.message);
+}
+
+
+function testNormalizeErrorObject_undefined() {
+  var err = goog.debug.normalizeErrorObject(undefined);
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('Unknown Error of type "null/undefined"', err.message);
+}
+
+
+function testNormalizeErrorObject_string() {
+  var err = goog.debug.normalizeErrorObject('abc');
+
+  assertEquals('Unknown error', err.name);
+  assertEquals('abc', err.message);
+}
+
+
+function testNormalizeErrorObject_number() {
+  var err = goog.debug.normalizeErrorObject(10);
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of type "Number"', err.message);
+}
+
+
+function testNormalizeErrorObject_nonErrorObject() {
+  var err = goog.debug.normalizeErrorObject({foo: 'abc'});
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of type "Object"', err.message);
+}
+
+
+function testNormalizeErrorObject_objectCreateNull() {
+  var err = goog.debug.normalizeErrorObject(Object.create(null));
+
+  assertEquals('UnknownError', err.name);
+  assertEquals('Unknown Error of unknown type', err.message);
+}
+
+
+function testNormalizeErrorObject_instanceOfClass() {
+  var TestClass = function(text) {
+    this.text = text;
+  };
+  var instance = new TestClass('abc');
+  var err = goog.debug.normalizeErrorObject(instance);
+
+  assertEquals('UnknownError', err.name);
+  // https://www.ecma-international.org/ecma-262/6.0/#sec-assignment-operators-runtime-semantics-evaluation
+  // says `instance.contstructor.name` should be "TestClass", but IE & Edge
+  // don't match that spec, so get "[Anonymous]" from
+  // `goog.debug.getFunctionName`.
+  if (TestClass.name) {
+    assertEquals('Unknown Error of type "TestClass"', err.message);
+  } else {
+    assertEquals('Unknown Error of type "[Anonymous]"', err.message);
+  }
 }

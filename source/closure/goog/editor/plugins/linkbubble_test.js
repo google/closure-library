@@ -65,6 +65,7 @@ function setUp() {
 }
 
 function tearDown() {
+  link.removeAttribute('data-dlb');
   linkBubble.closeBubble();
   testHelper.tearDownEditableElement();
   stubs.reset();
@@ -82,6 +83,18 @@ function testLinkSelected() {
 function testLinkClicked() {
   FIELDMOCK.$replay();
   linkBubble.enable(FIELDMOCK);
+  linkBubble.handleSelectionChange(createMouseEvent(link));
+  assertBubble();
+  FIELDMOCK.$verify();
+}
+
+function testDisabledLinkClicked() {
+  FIELDMOCK.$replay();
+  linkBubble.enable(FIELDMOCK);
+  link.setAttribute('data-dlb', '');
+  linkBubble.handleSelectionChange(createMouseEvent(link));
+  assertNoBubble();
+  link.removeAttribute('data-dlb');
   linkBubble.handleSelectionChange(createMouseEvent(link));
   assertBubble();
   FIELDMOCK.$verify();

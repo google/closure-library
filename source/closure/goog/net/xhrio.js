@@ -57,6 +57,7 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -1280,20 +1281,37 @@ goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
  *     and header values as values.
  */
 goog.net.XhrIo.prototype.getResponseHeaders = function() {
+  // TODO(b/120371595): Make this function parse headers as per the spec
+  // (https://tools.ietf.org/html/rfc2616#section-4.2).
+
   var headersObject = {};
   var headersArray = this.getAllResponseHeaders().split('\r\n');
   for (var i = 0; i < headersArray.length; i++) {
     if (goog.string.isEmptyOrWhitespace(headersArray[i])) {
       continue;
     }
-    var keyValue = goog.string.splitLimit(headersArray[i], ': ', 2);
-    if (headersObject[keyValue[0]]) {
-      headersObject[keyValue[0]] += ', ' + keyValue[1];
-    } else {
-      headersObject[keyValue[0]] = keyValue[1];
+    var keyValue =
+        goog.string.splitLimit(headersArray[i], ':', /* maxSplitCount= */ 1);
+    var key = keyValue[0];
+    var value = keyValue[1];
+
+    if (!goog.isString(value)) {
+      // There must be a value but it can be the empty string.
+      continue;
     }
+
+    // Whitespace at the start and end of the value is meaningless.
+    value = value.trim();
+    // The key should not contain whitespace but we currently ignore that.
+
+    var values = headersObject[key] || [];
+    headersObject[key] = values;
+    values.push(value);
   }
-  return headersObject;
+
+  return goog.object.map(headersObject, function(values) {
+    return values.join(', ');
+  });
 };
 
 

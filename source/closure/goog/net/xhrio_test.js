@@ -884,11 +884,11 @@ function testGetResponseHeadersWithColonInValue() {
   x.send();
 
   // Simulate an XHR with a colon in the http header value.
-  lastMockXmlHttp.responseHeadersString = 'test1: f:o:o';
+  lastMockXmlHttp.responseHeadersString = 'test1: f:o : o';
 
   var headers = x.getResponseHeaders();
   assertEquals(1, goog.object.getCount(headers));
-  assertEquals('f:o:o', headers['test1']);
+  assertEquals('f:o : o', headers['test1']);
 }
 
 function testGetResponseHeadersMultipleValuesForOneKey() {
@@ -906,6 +906,23 @@ function testGetResponseHeadersMultipleValuesForOneKey() {
   var headers = x.getResponseHeaders();
   assertEquals(1, goog.object.getCount(headers));
   assertEquals('foo, bar', headers['test1']);
+}
+
+function testGetResponseHeadersWhitespaceValue() {
+  MockXmlHttp.syncSend = true;
+  var x = new goog.net.XhrIo();
+
+  // No XHR yet
+  assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
+
+  x.send();
+
+  // Simulate an XHR with whitespace as its value..
+  lastMockXmlHttp.responseHeadersString = 'test2:   ';
+
+  var headers = x.getResponseHeaders();
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals('', headers['test2']);
 }
 
 function testGetResponseHeadersEmptyHeader() {
