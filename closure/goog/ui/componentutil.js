@@ -18,17 +18,19 @@
 
 goog.provide('goog.ui.ComponentUtil');
 
-goog.require('goog.events.EventType');
+goog.require('goog.events.MouseAsMouseEventType');
+goog.require('goog.events.MouseEvents');
 goog.require('goog.events.PointerAsMouseEventType');
 
 
 
 /**
  * @param {!goog.ui.Component} component
- * @return {!Object} The mouse event type the given component should listen for.
+ * @return {!goog.events.MouseEvents} The browser events that should be listened
+ *     to for the given mouse events.
  */
 goog.ui.ComponentUtil.getMouseEventType = function(component) {
   return component.pointerEventsEnabled() ?
       goog.events.PointerAsMouseEventType :
-      goog.events.EventType;
+      goog.events.MouseAsMouseEventType;
 };
