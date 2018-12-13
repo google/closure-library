@@ -189,6 +189,12 @@ function testYearParsing() {
 
   var parser2 = new goog.i18n.DateTimeParse('yyyyMMdd');
   assertParsedDateEquals(2005, 12 - 1, 2, parser2, '20051202', date);
+
+  var parser3 = new goog.i18n.DateTimeParse('MM/y');
+  assertParsedDateEquals(1999, 12 - 1, 2, parser3, '12/1999', date);
+
+  var parser4 = new goog.i18n.DateTimeParse('MM-y');
+  assertParsedDateEquals(1999, 12 - 1, 2, parser4, '12-1999', date);
 }
 
 function testGoogDateParsing() {

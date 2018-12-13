@@ -150,6 +150,13 @@ var formatTestData = [
   new Data('gl', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_gl.YEAR_MONTH_FULL, 'outubro–novembro de 2007'),
   new Data('gl', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_gl.YEAR_MONTH_FULL, 'outubro de 2007 – outubro de 2008'),
 
+  new Data('fr_CA', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-01'),
+  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-01'),
+  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-01'),
+  new Data('fr_CA', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-11'),
+  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-10 – 2007-11'),
+  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-10 – 2008-10'),
+
   new Data('hi', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),
   new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),
   new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),

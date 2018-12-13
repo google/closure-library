@@ -298,6 +298,15 @@ function testPatternMonthDayMedium() {
   assertEquals('27. Juli', fmt.format(date));
 }
 
+function testPatternYearMonthNarrow() {
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+  date = new Date(2006, 6, 27, 13, 10, 10, 250);
+  var fmt =
+      new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_MONTH_SHORT);
+  assertEquals('07.2006', fmt.format(date));
+}
+
 function testPatternDayOfWeekMonthDayMedium() {
   date = new Date(2006, 6, 27, 13, 10, 10, 250);
 
