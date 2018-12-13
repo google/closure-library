@@ -18,7 +18,7 @@
 const {SourceError} = require('./sourceerror');
 const path = require('path');
 
-/** @enum {stromg} */
+/** @enum {string} */
 const DependencyType = {
   /** A file containing goog.provide statements. */
   CLOSURE_PROVIDE: 'closure provide',
