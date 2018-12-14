@@ -166,9 +166,9 @@ testSuite({
     // Safari is the only browser that resolves relative URLs.
     assertTrue(
         getProcessedPropertyValue('background-image', 'url(/foo.com/a.jpg)')
-            .startsWith(product.SAFARI ? 'url(http://' : 'url("/foo.com'));
+            .startsWith(product.SAFARI ? 'url("http://' : 'url("/foo.com'));
     assertTrue(getProcessedPropertyValue('background-image', 'url(a.jpg)')
-                   .startsWith(product.SAFARI ? 'url(http://' : 'url("a.jpg'));
+                   .startsWith(product.SAFARI ? 'url("http://' : 'url("a.jpg'));
   },
 
   testSanitizeProperty_basic() {
