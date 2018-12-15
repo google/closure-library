@@ -131,13 +131,14 @@ goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
   } else {  // undefined.
     styles = '';
   }
-  return domHelper.createDom(goog.dom.TagName.IFRAME, {
+  var iframe = domHelper.createDom(goog.dom.TagName.IFRAME, {
     'frameborder': 0,
     // Since iframes are inline elements, we must align to bottom to
     // compensate for the line descent.
-    'style': goog.dom.iframe.STYLES_ + styles,
-    'src': goog.dom.iframe.BLANK_SOURCE
+    'style': goog.dom.iframe.STYLES_ + styles
   });
+  goog.dom.safe.setIframeSrc(iframe, goog.dom.iframe.BLANK_SOURCE_URL);
+  return iframe;
 };
 
 
