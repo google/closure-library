@@ -259,7 +259,11 @@ goog.testing.LooseMock.prototype.$waitAndVerify = function() {
  * @private
  */
 goog.testing.LooseMock.prototype.maybeFinishedWithExpectations_ = function() {
-  if (this.awaitingExpectations_.isEmpty() && this.waitingForExpectations) {
+  var unresolvedExpectations =
+      goog.array.count(this.$expectations_.getValues(), function(expectation) {
+        return expectation.actualCalls < expectation.minCalls;
+      });
+  if (this.waitingForExpectations && !unresolvedExpectations) {
     this.waitingForExpectations.resolve();
   }
 };
