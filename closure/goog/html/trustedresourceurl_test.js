@@ -75,6 +75,11 @@ function testFormat_validFormatString() {
   assertValidFormat(goog.string.Const.from('#a'));
   assertValidFormat(goog.string.Const.from('path#a'));
   assertValidFormat(goog.string.Const.from('path/#a'));
+
+  // TODO(jakubvrana): Disallow, allows crafting '//' prefix.
+  var url = goog.html.TrustedResourceUrl.format(
+      goog.string.Const.from('/%{path}/'), {'path': ''});
+  assertEquals('//', goog.html.TrustedResourceUrl.unwrap(url));
 }
 
 
@@ -145,16 +150,20 @@ function testFormat_invalidFormatString() {
       goog.string.Const.from(''));  // Allows appending anything.
   assertInvalidFormat(goog.string.Const.from('/'));     // Allows appending '/'.
   assertInvalidFormat(goog.string.Const.from('path'));  // Allows appending ':'.
+  assertInvalidFormat(goog.string.Const.from('%{path}'), {'path': ''});
+  assertInvalidFormat(goog.string.Const.from('%{path}/'), {'path': ''});
+  assertInvalidFormat(goog.string.Const.from('//%{domain}'), {'domain': ''});
 }
 
 
 /**
  * Asserts that format with no arguments throws.
  * @param {!goog.string.Const} format
+ * @param {!Object<string|number|!goog.string.Const>=} opt_args
  */
-function assertInvalidFormat(format) {
+function assertInvalidFormat(format, opt_args) {
   var exception = assertThrows(goog.string.Const.unwrap(format), function() {
-    goog.html.TrustedResourceUrl.format(format, {});
+    goog.html.TrustedResourceUrl.format(format, opt_args || {});
   });
   assertContains('Invalid TrustedResourceUrl format', exception.message);
 }
