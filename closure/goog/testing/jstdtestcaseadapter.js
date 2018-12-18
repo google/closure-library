@@ -38,6 +38,7 @@ goog.require('goog.testing.jsunit');
  *     JSTD testing queue.
  * @return {!Function}
  * @private
+ * @suppress {checkPrototypalTypes}
  */
 goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
     testCaseName, condition, opt_proto, opt_isAsync) {
