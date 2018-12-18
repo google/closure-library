@@ -301,6 +301,19 @@ async function testWaitAndVerify() {
   await mock.$waitAndVerify();
 }
 
+async function testWaitAndVerify_Multiple() {
+  mock.a().$times(2);
+  mock.$replay();
+
+  setTimeout(() => {
+    mock.a();
+  }, 0);
+  setTimeout(() => {
+    mock.a();
+  }, 50);
+  await mock.$waitAndVerify();
+}
+
 async function testWaitAndVerify_Never() {
   mock.a().$never();
   mock.$replay();
