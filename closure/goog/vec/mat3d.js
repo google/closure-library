@@ -40,7 +40,7 @@ goog.require('goog.vec');
 goog.require('goog.vec.vec3d.Type');
 
 
-/** @typedef {goog.vec.Float64} */ goog.vec.mat3d.Type;
+/** @typedef {!goog.vec.Float64} */ goog.vec.mat3d.Type;
 
 
 /**

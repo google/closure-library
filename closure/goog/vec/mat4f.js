@@ -43,7 +43,7 @@ goog.require('goog.vec.vec3f');
 goog.require('goog.vec.vec4f');
 
 
-/** @typedef {goog.vec.Float32} */ goog.vec.mat4f.Type;
+/** @typedef {!goog.vec.Float32} */ goog.vec.mat4f.Type;
 
 
 /**
