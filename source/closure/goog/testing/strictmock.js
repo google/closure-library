@@ -49,7 +49,7 @@ goog.testing.StrictMock = function(
 
   /**
    * An array of MockExpectations.
-   * @type {Array<goog.testing.MockExpectation>}
+   * @type {!Array<!goog.testing.MockExpectation>}
    * @private
    */
   this.$expectations_ = [];
@@ -62,8 +62,8 @@ goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 
 /** @override */
 goog.testing.StrictMock.prototype.$recordExpectation = function() {
-  this.$expectations_.push(this.$pendingExpectation);
   if (this.$pendingExpectation) {
+    this.$expectations_.push(this.$pendingExpectation);
     this.awaitingExpectations_.add(this.$pendingExpectation);
   }
 };
@@ -143,7 +143,11 @@ goog.testing.StrictMock.prototype.$waitAndVerify = function() {
  * @private
  */
 goog.testing.StrictMock.prototype.maybeFinishedWithExpectations_ = function() {
-  if (this.awaitingExpectations_.isEmpty() && this.waitingForExpectations) {
+  var unresolvedExpectations =
+      goog.array.count(this.$expectations_, function(expectation) {
+        return expectation.actualCalls < expectation.minCalls;
+      });
+  if (this.waitingForExpectations && !unresolvedExpectations) {
     this.waitingForExpectations.resolve();
   }
 };

@@ -315,8 +315,8 @@ goog.html.TrustedResourceUrl.FORMAT_MARKER_ = /%{(\w+)}/g;
 goog.html.TrustedResourceUrl.BASE_URL_ = new RegExp(
     '^((https:)?//[0-9a-z.:[\\]-]+/'  // Origin.
         + '|/[^/\\\\]'                // Absolute path.
-        + '|[^:/\\\\]+/'              // Relative path.
-        + '|[^:/\\\\]*[?#]'           // Query string or fragment.
+        + '|[^:/\\\\%]+/'             // Relative path.
+        + '|[^:/\\\\%]*[?#]'          // Query string or fragment.
         + '|about:blank#'             // about:blank with fragment.
         + ')',
     'i');

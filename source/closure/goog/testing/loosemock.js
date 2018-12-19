@@ -39,7 +39,7 @@ goog.require('goog.testing.Mock');
 goog.testing.LooseExpectationCollection = function() {
   /**
    * The list of expectations. All of these should have the same name.
-   * @type {Array<goog.testing.MockExpectation>}
+   * @type {!Array<!goog.testing.MockExpectation>}
    * @private
    */
   this.expectations_ = [];
@@ -48,7 +48,7 @@ goog.testing.LooseExpectationCollection = function() {
 
 /**
  * Adds an expectation to this collection.
- * @param {goog.testing.MockExpectation} expectation The expectation to add.
+ * @param {!goog.testing.MockExpectation} expectation The expectation to add.
  */
 goog.testing.LooseExpectationCollection.prototype.addExpectation = function(
     expectation) {
@@ -58,7 +58,7 @@ goog.testing.LooseExpectationCollection.prototype.addExpectation = function(
 
 /**
  * Gets the list of expectations in this collection.
- * @return {Array<goog.testing.MockExpectation>} The array of expectations.
+ * @return {!Array<!goog.testing.MockExpectation>} The array of expectations.
  */
 goog.testing.LooseExpectationCollection.prototype.getExpectations = function() {
   return this.expectations_;
@@ -90,7 +90,7 @@ goog.testing.LooseMock = function(
 
   /**
    * A map of method names to a LooseExpectationCollection for that method.
-   * @type {goog.structs.Map}
+   * @type {!goog.structs.Map<string, !goog.testing.LooseExpectationCollection>}
    * @private
    */
   this.$expectations_ = new goog.structs.Map();
@@ -259,7 +259,14 @@ goog.testing.LooseMock.prototype.$waitAndVerify = function() {
  * @private
  */
 goog.testing.LooseMock.prototype.maybeFinishedWithExpectations_ = function() {
-  if (this.awaitingExpectations_.isEmpty() && this.waitingForExpectations) {
+  var unresolvedExpectations = goog.array.some(
+      this.$expectations_.getValues(), function(expectationCollection) {
+        return goog.array.some(
+            expectationCollection.getExpectations(), function(expectation) {
+              return expectation.actualCalls < expectation.minCalls;
+            });
+      });
+  if (this.waitingForExpectations && !unresolvedExpectations) {
     this.waitingForExpectations.resolve();
   }
 };
