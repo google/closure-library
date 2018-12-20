@@ -237,6 +237,7 @@ var _allTests = [
   'closure/goog/i18n/mime_test.html',
   'closure/goog/i18n/numberformat_test.html',
   'closure/goog/i18n/pluralrules_test.html',
+  'closure/goog/i18n/relativedatetimeformat_test.html',
   'closure/goog/i18n/timezone_test.html',
   'closure/goog/i18n/uchar/localnamefetcher_test.html',
   'closure/goog/i18n/ucharnames_test.html',
