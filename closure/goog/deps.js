@@ -623,6 +623,7 @@ goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json'
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], [], {});
 goog.addDependency('json/json_perf.js', ['goog.jsonPerf'], ['goog.dom', 'goog.json', 'goog.math', 'goog.string', 'goog.testing.PerformanceTable', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('json/json_test.js', ['goog.jsonTest'], ['goog.functions', 'goog.json', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('json/jsonable.js', ['goog.json.Jsonable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json.Processor'], {});
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier'], {});
 goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
