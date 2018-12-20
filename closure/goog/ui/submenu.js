@@ -186,8 +186,8 @@ goog.ui.SubMenu.prototype.setHighlighted = function(highlight, opt_btnPressed) {
     if (this.dismissTimer_) {
       goog.Timer.clear(this.dismissTimer_);
     }
-    this.dismissTimer_ = goog.Timer.callOnce(
-        this.dismissSubMenu, goog.ui.SubMenu.MENU_DELAY_MS, this);
+    this.dismissTimer_ =
+        goog.Timer.callOnce(this.dismissSubMenu, this.getMenuDelay(), this);
   }
 };
 
@@ -365,10 +365,20 @@ goog.ui.SubMenu.prototype.onParentHidden_ = function(e) {
 goog.ui.SubMenu.prototype.handleMouseOver = function(e) {
   if (this.isEnabled()) {
     this.clearTimers();
-    this.showTimer_ = goog.Timer.callOnce(
-        this.showSubMenu, goog.ui.SubMenu.MENU_DELAY_MS, this);
+    this.showTimer_ =
+        goog.Timer.callOnce(this.showSubMenu, this.getMenuDelay(), this);
   }
   goog.ui.SubMenu.superClass_.handleMouseOver.call(this, e);
+};
+
+
+/**
+ * Returns the delay before opening or closing the menu in milliseconds.
+ * @return {number}
+ * @protected
+ */
+goog.ui.SubMenu.prototype.getMenuDelay = function() {
+  return goog.ui.SubMenu.MENU_DELAY_MS;
 };
 
 
