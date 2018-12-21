@@ -72,6 +72,7 @@ goog.html.sanitizer.AttributeWhitelist = {
   '* ISMAP': true,
   '* LABEL': true,
   '* LANG': true,
+  '* MAX': true,
   '* MAXLENGTH': true,
   '* METHOD': true,
   '* MULTIPLE': true,
