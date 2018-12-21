@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Emoji Palette renderer implementation.
+ * @suppress {checkPrototypalTypes}
  *
  */
 
