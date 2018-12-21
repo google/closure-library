@@ -1192,7 +1192,7 @@ goog.addDependency('testing/parallel_closure_test_suite_test.js', ['goog.testing
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTimer'], {});
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer', 'goog.testing.PerformanceTimer.Task'], ['goog.array', 'goog.async.Deferred', 'goog.math'], {'lang': 'es6'});
 goog.addDependency('testing/performancetimer_test.js', ['goog.testing.PerformanceTimerTest'], ['goog.async.Deferred', 'goog.dom', 'goog.math', 'goog.testing.MockClock', 'goog.testing.PerformanceTimer', 'goog.testing.jsunit'], {});
-goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.asserts', 'goog.testing.ObjectPropertyString', 'goog.userAgent'], {});
+goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.asserts', 'goog.userAgent'], {});
 goog.addDependency('testing/propertyreplacer_test.js', ['goog.testing.PropertyReplacerTest'], ['goog.dom', 'goog.dom.TagName', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
 goog.addDependency('testing/proto2/proto2.js', ['goog.testing.proto2'], ['goog.proto2.Message', 'goog.proto2.ObjectSerializer', 'goog.testing.asserts'], {});
 goog.addDependency('testing/proto2/proto2_test.js', ['goog.testing.proto2Test'], ['goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.proto2', 'proto2.TestAllTypes'], {});

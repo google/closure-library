@@ -21,8 +21,6 @@ goog.setTestOnly('goog.testing.PropertyReplacer');
 goog.provide('goog.testing.PropertyReplacer');
 
 goog.require('goog.asserts');
-/** @suppress {extraRequire} Needed for some tests to compile. */
-goog.require('goog.testing.ObjectPropertyString');
 goog.require('goog.userAgent');
 
 
