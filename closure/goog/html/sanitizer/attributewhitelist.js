@@ -14,7 +14,7 @@
 
 
 /**
- * @fileoverview Contains the attribute whitelists for use in the Html
+ * @fileoverview Contains the attribute whitelists for use in the HTML
  * sanitizer.
  */
 
@@ -23,7 +23,7 @@ goog.provide('goog.html.sanitizer.AttributeWhitelist');
 
 
 /**
- * A whitelist for attributes that are always safe and allowed by default.
+ * A whitelist for HTML attributes that are always safe and allowed by default.
  * The sanitizer only applies whitespace trimming to these.
  * @const @dict {boolean}
  */
@@ -105,8 +105,8 @@ goog.html.sanitizer.AttributeWhitelist = {
 };
 
 /**
- * A whitelist for attributes that are not safe to allow unrestricted, but are
- * made safe by default policies installed by the sanitizer in
+ * A whitelist for HTML attributes that are not safe to allow unrestricted, but
+ * are made safe by default policies installed by the sanitizer in
  * goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build, and thus allowed
  * by default under these policies.
  * @const @dict {boolean}

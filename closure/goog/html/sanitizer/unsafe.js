@@ -29,6 +29,7 @@
 goog.provide('goog.html.sanitizer.unsafe');
 
 goog.require('goog.asserts');
+goog.require('goog.html.sanitizer');
 goog.require('goog.html.sanitizer.HtmlSanitizer.Builder');
 goog.require('goog.string');
 goog.require('goog.string.Const');
@@ -53,13 +54,40 @@ goog.require('goog.string.Const');
  */
 goog.html.sanitizer.unsafe.alsoAllowTags = function(
     justification, builder, tags) {
+  return goog.html.sanitizer.unsafe.alsoAllowTagsNS(
+      justification, builder, goog.html.sanitizer.HTML_NAMESPACE, tags);
+};
+
+
+/**
+ * Extends the tag whitelist for a custom namespace with the list of tags
+ * provided. If the tag is blacklisted, this method also removes it from the
+ * blacklist.
+ *
+ * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
+ * that the new tags do not introduce untrusted code execution or unsanctioned
+ * network activity.
+ *
+ * @param {!goog.string.Const} justification A constant string explaining why
+ *     the addition of these tags to the whitelist is safe. May include a
+ *     security review ticket number.
+ * @param {!goog.html.sanitizer.HtmlSanitizer.Builder} builder The builder
+ *     whose tag whitelist should be extended.
+ * @param {string} namespace An XML namespace.
+ * @param {!Array<string>} tags A list of additional tags to allow through the
+ *     sanitizer. The tag names are case-insensitive.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.unsafe.alsoAllowTagsNS = function(
+    justification, builder, namespace, tags) {
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
       !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
-  return builder.alsoAllowTagsPrivateDoNotAccessOrElse(tags);
+  return builder.alsoAllowTagsNSPrivateDoNotAccessOrElse(namespace, tags);
 };
+
 
 /**
  * Installs custom attribute policies for the attributes provided in the list.
@@ -90,10 +118,46 @@ goog.html.sanitizer.unsafe.alsoAllowTags = function(
  */
 goog.html.sanitizer.unsafe.alsoAllowAttributes = function(
     justification, builder, attrs) {
+  return goog.html.sanitizer.unsafe.alsoAllowAttributesNS(
+      justification, builder, goog.html.sanitizer.HTML_NAMESPACE, attrs);
+};
+
+
+/**
+ * Installs custom attribute policies for a custom namespace for the attributes
+ * provided in the list. This can be used either on non-whitelisted attributes,
+ * effectively extending the attribute whitelist, or on attributes that are
+ * whitelisted and already have a policy, to override their policies.
+ *
+ * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
+ * that the new tags do not introduce untrusted code execution or unsanctioned
+ * network activity.
+ *
+ * @param {!goog.string.Const} justification A constant string explaining why
+ *     the addition of these attributes to the whitelist is safe. May include a
+ *     security review ticket number.
+ * @param {!goog.html.sanitizer.HtmlSanitizer.Builder} builder The builder
+ *     whose attribute whitelist should be extended.
+ * @param {string} namespace An XML namespace.
+ * @param {!Array<(string|!goog.html.sanitizer.HtmlSanitizerAttributePolicy)>}
+ *     attrs A list of attributes whose policy should be overridden. Attributes
+ *     can come in of two forms:
+ *     - string: allow all values and just trim whitespaces for this attribute
+ *         on all tags.
+ *     - HtmlSanitizerAttributePolicy: allows specifying a policy for a
+ *         particular tag. The tagName can be '*', which means all tags. If no
+ *         policy is passed, the default is allow all values and just trim
+ *         whitespaces.
+ *     The tag and attribute names are case-insensitive.
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.unsafe.alsoAllowAttributesNS = function(
+    justification, builder, namespace, attrs) {
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
       !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
-  return builder.alsoAllowAttributesPrivateDoNotAccessOrElse(attrs);
+  return builder.alsoAllowAttributesNSPrivateDoNotAccessOrElse(
+      namespace, attrs);
 };

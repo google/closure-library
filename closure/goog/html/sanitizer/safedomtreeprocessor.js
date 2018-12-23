@@ -300,7 +300,14 @@ SafeDomTreeProcessor.prototype.processElementAttributes_ = function(
     if (attribute.specified) {
       var newValue = this.processElementAttribute(originalElement, attribute);
       if (!goog.isNull(newValue)) {
-        noclobber.setElementAttribute(newElement, attribute.name, newValue);
+        if (attribute.nameSpaceURI) {
+          // TODO(pelizzi): is this ever non-null? MDN says so, but that has not
+          // been my experience on Chrome.
+          noclobber.setElementAttributeNS(
+              newElement, attribute.namespaceURI, attribute.name, newValue);
+        } else {
+          noclobber.setElementAttribute(newElement, attribute.name, newValue);
+        }
       }
     }
   }

@@ -1012,9 +1012,13 @@ function testPolicyHints() {
           .allowFormTag()
           .withCustomNetworkRequestUrlPolicy(function(url, policyHints) {
             if ((policyHints.tagName == 'img' &&
-                 policyHints.attributeName == 'src') ||
+                 policyHints.attributeName == 'src' &&
+                 policyHints.elementNamespace ==
+                     goog.html.sanitizer.HTML_NAMESPACE) ||
                 (policyHints.tagName == 'input' &&
-                 policyHints.attributeName == 'src')) {
+                 policyHints.attributeName == 'src') &&
+                    policyHints.elementNamespace ==
+                        goog.html.sanitizer.HTML_NAMESPACE) {
               return goog.html.testing.newSafeUrlForTest(
                   'https://imageproxy/?' + url);
             } else {

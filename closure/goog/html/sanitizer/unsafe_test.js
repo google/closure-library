@@ -199,14 +199,74 @@ function testAllowRelaxExistingAttributePolicySpecific() {
 }
 
 
-function testAlsoAllowTagsInBlacklist() {
+function testAlsoAllowSvgTags() {
+  var svgNamespace = 'http://www.w3.org/2000/svg';
   // Simplified use case taken from KaTex output HTML. The real configuration
   // would allow more attributes and apply a stricter policy on their values to
   // reduce the attack surface.
   var input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
-  assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
-    {tagName: 'svg', attributeName: 'width', policy: goog.functions.identity},
-    {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
-    {tagName: 'path', attributeName: 'd', policy: goog.functions.identity},
-  ]);
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  builder = goog.html.sanitizer.unsafe.alsoAllowTagsNS(
+      just, builder, svgNamespace, ['svg', 'line', 'path']);
+  builder = goog.html.sanitizer.unsafe.alsoAllowAttributesNS(
+      just, builder, svgNamespace, [
+        {
+          tagName: 'svg',
+          attributeName: 'width',
+          policy: goog.functions.identity
+        },
+        {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
+        {tagName: 'path', attributeName: 'd', policy: goog.functions.identity}
+      ]);
+  var sanitizer = builder.build();
+  var sanitized = sanitizer.sanitize(input);
+  if (!isSupported) {
+    assertEquals('', goog.html.SafeHtml.unwrap(sanitized));
+    return;
+  }
+  goog.testing.dom.assertHtmlMatches(
+      input, goog.html.SafeHtml.unwrap(sanitized),
+      true /* opt_strictAttributes */);
+  // Also test that the svg element is in the right namespace.
+  var sanitizedSpan = sanitizer.sanitizeToDomNode(input);
+  assertTrue(sanitizedSpan.children[0] instanceof SVGSVGElement);
+}
+
+function testAlsoAllowSvgTagsWrongNamespace() {
+  var wrongNamespace = 'http://www.w3.org/1999/xhtml';
+  var input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
+  var expected = '<span><span></span><span></span></span>';
+  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
+  builder = goog.html.sanitizer.unsafe.alsoAllowTagsNS(
+      just, builder, wrongNamespace, ['svg', 'line', 'path']);
+  builder = goog.html.sanitizer.unsafe.alsoAllowAttributesNS(
+      just, builder, wrongNamespace, [
+        {
+          tagName: 'svg',
+          attributeName: 'width',
+          policy: goog.functions.identity
+        },
+        {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
+        {tagName: 'path', attributeName: 'd', policy: goog.functions.identity}
+      ]);
+  assertSanitizedHtml(input, expected, null, null, builder);
+}
+
+function testAlsoAllowSvgDataAttribute() {
+  var svgNamespace = 'http://www.w3.org/2000/svg';
+  var input = '<svg width="1px" data-foo="bar"></svg><p data-foo="baz"></p>';
+  var builder =
+      new goog.html.sanitizer.HtmlSanitizer.Builder().allowDataAttributes(
+          ['data-foo']);
+  builder = goog.html.sanitizer.unsafe.alsoAllowTagsNS(
+      just, builder, svgNamespace, ['svg']);
+  builder = goog.html.sanitizer.unsafe.alsoAllowAttributesNS(
+      just, builder, svgNamespace, [
+        {
+          tagName: 'svg',
+          attributeName: 'width',
+          policy: goog.functions.identity
+        },
+      ]);
+  assertSanitizedHtml(input, input, null, null, builder);
 }

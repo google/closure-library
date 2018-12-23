@@ -64,9 +64,17 @@ testSuite({
     element = createElement('getAttribute');
     assertEquals('foo', noclobber.getElementAttribute(element, 'id'));
 
+    element = createElement('getAttributeNS');
+    noclobber.setElementAttributeNS(element, 'bar', 'id', 'foo2');
+    assertEquals('foo2', noclobber.getElementAttributeNS(element, 'bar', 'id'));
+
     element = createElement('setAttribute');
     noclobber.setElementAttribute(element, 'id', 'bar');
     assertEquals('bar', noclobber.getElementAttribute(element, 'id'));
+
+    element = createElement('setAttributeNS');
+    noclobber.setElementAttributeNS(element, 'foo', 'id', 'bar');
+    assertEquals('bar', noclobber.getElementAttributeNS(element, 'foo', 'id'));
 
     element = createElement('removeAttribute');
     assertTrue(element.hasAttribute('id'));
@@ -112,48 +120,77 @@ testSuite({
     assertThrows(function() {
       noclobber.getElementAttributes(element);
     });
+    replacer.restore(noclobber.Methods, 'ATTRIBUTES_GETTER');
 
     element = createElement('hasAttribute');
     replacer.set(noclobber.Methods, 'HAS_ATTRIBUTE', null);
     assertThrows(function() {
       noclobber.hasElementAttribute(element, 'id');
     });
+    replacer.restore(noclobber.Methods, 'HAS_ATTRIBUTE');
 
     element = createElement('getAttribute');
     replacer.set(noclobber.Methods, 'GET_ATTRIBUTE', null);
     assertThrows(function() {
       noclobber.getElementAttribute(element, 'id');
     });
+    replacer.restore(noclobber.Methods, 'GET_ATTRIBUTE');
+
+    element = createElement('getAttributeNS');
+    replacer.set(noclobber.Methods, 'GET_ATTRIBUTE_NS', null);
+    assertThrows(function() {
+      noclobber.getElementAttributeNS(element, 'foo', 'id');
+    });
+    replacer.restore(noclobber.Methods, 'GET_ATTRIBUTE_NS');
 
     element = createElement('setAttribute');
     replacer.set(noclobber.Methods, 'SET_ATTRIBUTE', null);
     assertThrows(function() {
       noclobber.setElementAttribute(element, 'id', 'bar');
     });
+    replacer.restore(noclobber.Methods, 'SET_ATTRIBUTE');
+
+    element = createElement('setAttributeNS');
+    replacer.set(noclobber.Methods, 'SET_ATTRIBUTE_NS', null);
+    assertThrows(function() {
+      noclobber.setElementAttributeNS(element, 'foo', 'id', 'bar');
+    });
+    replacer.restore(noclobber.Methods, 'SET_ATTRIBUTE_NS');
 
     element = createElement('removeAttribute');
     replacer.set(noclobber.Methods, 'REMOVE_ATTRIBUTE', null);
     assertThrows(function() {
       noclobber.removeElementAttribute(element, 'id');
     });
+    replacer.restore(noclobber.Methods, 'REMOVE_ATTRIBUTE');
 
     element = createElement('innerHTML');
     replacer.set(noclobber.Methods, 'INNER_HTML_GETTER', null);
     assertThrows(function() {
       noclobber.getElementInnerHTML(element);
     });
+    replacer.restore(noclobber.Methods, 'INNER_HTML_GETTER');
+
+    element = createElement('namespaceURI');
+    replacer.set(noclobber.Methods, 'NAMESPACE_URI_GETTER', null);
+    assertThrows(function() {
+      noclobber.getElementNamespaceURI(element);
+    });
+    replacer.restore(noclobber.Methods, 'NAMESPACE_URI_GETTER');
 
     element = createElement('style');
     replacer.set(noclobber.Methods, 'STYLE_GETTER', null);
     assertThrows(function() {
       noclobber.getElementStyle(element);
     });
+    replacer.restore(noclobber.Methods, 'STYLE_GETTER');
 
     element = createElement('getElementsByTagName');
     replacer.set(noclobber.Methods, 'GET_ELEMENTS_BY_TAG_NAME', null);
     assertThrows(function() {
       noclobber.getElementsByTagName(element, 'input');
     });
+    replacer.restore(noclobber.Methods, 'GET_ELEMENTS_BY_TAG_NAME');
 
     // Sheet can't be clobbered, we only test that it works on browsers without
     // prototypes.
@@ -164,6 +201,7 @@ testSuite({
     assertEquals(
         element.children[1].sheet,
         noclobber.getElementStyleSheet(element.children[1]));
+    replacer.restore(noclobber.Methods, 'SHEET_GETTER');
 
     element = createElement('matches');
     replacer.set(noclobber.Methods, 'MATCHES', null);
