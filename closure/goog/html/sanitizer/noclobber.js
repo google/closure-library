@@ -85,9 +85,7 @@ var Methods = {
       getterOrNull('Node', 'attributes'),
   HAS_ATTRIBUTE: prototypeMethodOrNull('Element', 'hasAttribute'),
   GET_ATTRIBUTE: prototypeMethodOrNull('Element', 'getAttribute'),
-  GET_ATTRIBUTE_NS: prototypeMethodOrNull('Element', 'getAttributeNS'),
   SET_ATTRIBUTE: prototypeMethodOrNull('Element', 'setAttribute'),
-  SET_ATTRIBUTE_NS: prototypeMethodOrNull('Element', 'setAttributeNS'),
   REMOVE_ATTRIBUTE: prototypeMethodOrNull('Element', 'removeAttribute'),
   INNER_HTML_GETTER: getterOrNull('Element', 'innerHTML') ||
       // IE 10 defines this Element property on HTMLElement.
@@ -105,9 +103,6 @@ var Methods = {
       // Safari 10 defines the property on Element instead of
       // HTMLElement.
       getterOrNull('Element', 'style'),
-  NAMESPACE_URI_GETTER: getterOrNull('Element', 'namespaceURI') ||
-      // Before DOM4 this was defined on the node interface.
-      getterOrNull('Node', 'namespaceURI'),
   SHEET_GETTER: getterOrNull('HTMLStyleElement', 'sheet'),
   GET_PROPERTY_VALUE:
       prototypeMethodOrNull('CSSStyleDeclaration', 'getPropertyValue'),
@@ -180,7 +175,7 @@ function getElementAttributes(element) {
 /**
  * Returns whether an element has a specific attribute, without falling prey to
  * things like <form><input name="hasAttribute"></form>.
- * Equivalent to `element.hasAttribute("foo")`.
+ * Equivalent to {@code element.hasAttribute("foo")}.
  * @param {!Element} element
  * @param {string} attrName
  * @return {boolean}
@@ -193,7 +188,7 @@ function hasElementAttribute(element, attrName) {
 /**
  * Returns a specific attribute from an element without falling prey to
  * things like <form><input name="getAttribute"></form>.
- * Equivalent to `element.getAttribute("foo")`.
+ * Equivalent to {@code element.getAttribute("foo")}.
  * @param {!Element} element
  * @param {string} attrName
  * @return {?string}
@@ -207,27 +202,9 @@ function getElementAttribute(element, attrName) {
 }
 
 /**
- * Returns a specific attribute from an element without falling prey to
- * things like <form><input name="getAttribute"></form>.
- * Equivalent to `element.getAttributeNS("..., "foo")`.
- * @param {!Element} element
- * @param {string} namespace
- * @param {string} attrName
- * @return {?string}
- */
-function getElementAttributeNS(element, namespace, attrName) {
-  // Older browsers might return empty string instead of null to follow the
-  // DOM 3 Core Specification.
-  return genericMethodCall(
-             Methods.GET_ATTRIBUTE_NS, element, 'getAttributeNS',
-             [namespace, attrName]) ||
-      null;
-}
-
-/**
  * Sets an element's attributes without falling prey to things like
- * <form><input name="setAttribute"></form>. Equivalent to
- * `element.setAttribute("foo", "bar")`.
+ * <form><input name="setAttribute"></form>. Equivalent to {@code
+ * element.setAttribute("foo", "bar")}.
  * @param {!Element} element
  * @param {string} name
  * @param {string} value
@@ -247,33 +224,9 @@ function setElementAttribute(element, name, value) {
 }
 
 /**
- * Sets an element's attributes without falling prey to things like
- * <form><input name="setAttribute"></form>. Equivalent to
- * `element.setAttributeNS("...", "foo", "bar")`.
- * @param {!Element} element
- * @param {string} namespace
- * @param {string} name
- * @param {string} value
- */
-function setElementAttributeNS(element, namespace, name, value) {
-  try {
-    genericMethodCall(
-        Methods.SET_ATTRIBUTE_NS, element, 'setAttributeNS',
-        [namespace, name, value]);
-  } catch (e) {
-    // IE throws an exception if the src attribute contains HTTP credentials.
-    // However the attribute gets set anyway.
-    if (e.message.indexOf('A security problem occurred') != -1) {
-      return;
-    }
-    throw e;
-  }
-}
-
-/**
  * Deletes a specific attribute from an element without falling prey to
  * things like <form><input name="removeAttribute"></form>.
- * Equivalent to `element.removeAttribute("foo")`.
+ * Equivalent to {@code element.removeAttribute("foo")}.
  * @param {!Element} element
  * @param {string} attrName
  */
@@ -293,19 +246,6 @@ function getElementInnerHTML(element) {
   return genericPropertyGet(
       Methods.INNER_HTML_GETTER, element, 'innerHTML', function(html) {
         return typeof html == 'string';
-      });
-}
-
-/**
- * Returns an element's namespace URI without falling prey to things like
- * <form><input name="style"></form>.
- * @param {!Element} element
- * @return {string}
- */
-function getElementNamespaceURI(element) {
-  return genericPropertyGet(
-      Methods.NAMESPACE_URI_GETTER, element, 'namespaceURI', function(uri) {
-        return typeof uri == 'string';
       });
 }
 
@@ -336,7 +276,7 @@ function assertHTMLElement(element) {
 /**
  * Get the children of a specific tag matching the provided tag name without
  * falling prey to things like <form><input name="getElementsByTagName"></form>.
- * Equivalent to `element.getElementsByTagName("foo")`.
+ * Equivalent to {@code element.getElementsByTagName("foo")}.
  * @param {!Element} element
  * @param {string} name
  * @return {!Array<!Element>}
@@ -364,7 +304,7 @@ function getElementStyleSheet(element) {
 /**
  * Returns true if the element would be selected by the provided selector,
  * without falling prey to things like <form><input name="setAttribute"></form>.
- * Equivalent to `element.matches("foo")`.
+ * Equivalent to {@code element.matches("foo")}.
  * @param {!Element} element
  * @param {string} selector
  * @return {boolean}
@@ -505,12 +445,9 @@ exports = {
   getElementAttributes: getElementAttributes,
   hasElementAttribute: hasElementAttribute,
   getElementAttribute: getElementAttribute,
-  getElementAttributeNS: getElementAttributeNS,
   setElementAttribute: setElementAttribute,
-  setElementAttributeNS: setElementAttributeNS,
   removeElementAttribute: removeElementAttribute,
   getElementInnerHTML: getElementInnerHTML,
-  getElementNamespaceURI: getElementNamespaceURI,
   getElementStyle: getElementStyle,
   getElementsByTagName: getElementsByTagName,
   getElementStyleSheet: getElementStyleSheet,

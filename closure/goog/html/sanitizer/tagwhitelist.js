@@ -21,7 +21,7 @@ goog.provide('goog.html.sanitizer.TagWhitelist');
 
 
 /**
- * A tag whitelist for allowed HTML tags. Tag names must be in all caps.
+ * A tag whitelist for allowed tags. Tag names must be in all caps.
  * @const @dict {boolean}
  */
 goog.html.sanitizer.TagWhitelist = {
