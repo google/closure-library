@@ -163,6 +163,7 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
 /**
  * Format with forced numeric value and relative unit.
  * @param {number} quantity  The number of units.
+ *     Negative zero will use PAST, while unsiged or positive indicates FUTURE.
  * @param {!relativeDateTimeSymbols.StyleElement} unitStylePattern  Has PAST and
  *     FUTURE fields.
  * @return {string}  The formatted result.
@@ -179,10 +180,12 @@ RelativeDateTimeFormat.prototype.formatNumericInternal_ = function(
   var relTimeString;
   var absQuantity = Math.abs(quantity);
 
-  // Apply MessageFormat to the unit with FUTURE or PAST quantity,
-  if (quantity >= 0) {
+  // Apply MessageFormat to the unit with FUTURE or PAST quantity, with test for
+  // signed zero value.
+  if (quantity > 0 || (quantity == 0 && (1 / quantity) == Infinity)) {
     relTimeString = unitStylePattern.FUTURE;
   } else {
+    // Negative zero is interpreted as the past.
     relTimeString = unitStylePattern.PAST;
   }
 

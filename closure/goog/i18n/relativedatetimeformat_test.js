@@ -151,6 +151,10 @@ var formatNumericTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.WEEK, '2 weeks ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.WEEK, '1 week ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.WEEK, 'in 0 weeks'),
+
+  // Test with negative zero
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.WEEK, '0 weeks ago'),
+
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'in 1 wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 6, RelativeDateTimeFormat.Unit.WEEK, 'in 6 wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.WEEK, 'in 2 wk.'),
@@ -159,6 +163,18 @@ var formatNumericTestData = [
   new DirectionData('fr', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.SECOND, '+2 s'),
   new DirectionData('fr', RelativeDateTimeFormat.Style.LONG, 2, RelativeDateTimeFormat.Unit.SECOND, 'dans 2 secondes'),
   new DirectionData('fr', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.SECOND, 'dans 2 s'),
+
+  // Test signed zero
+  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 0, RelativeDateTimeFormat.Unit.WEEK, 'in 0 wk.'),
+  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, -0, RelativeDateTimeFormat.Unit.WEEK, '0 wk. ago'),
+
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.DAY, '0 days ago'),
+
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.MONTH, '0 months ago'),
+
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.QUARTER, '0 quarters ago'),
+
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.YEAR, '0 years ago'),
 
   // Other locales, too!
 ];
