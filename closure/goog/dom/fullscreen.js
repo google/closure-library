@@ -23,10 +23,6 @@ goog.provide('goog.dom.fullscreen.EventType');
 goog.require('goog.dom');
 goog.require('goog.userAgent');
 
-// TODO(user): Remove after externs in cl/226019598 roll out in the next
-// open-source Closure compiler release.
-goog.forwardDeclare('FullscreenOptions');
-
 
 /**
  * Event types for full screen.
@@ -52,29 +48,6 @@ goog.dom.fullscreen.EventType = {
 
 
 /**
- * Options for fullscreen navigation UI:
- * https://fullscreen.spec.whatwg.org/#dictdef-fullscreenoptions
- * @enum {string}
- */
-goog.dom.fullscreen.FullscreenNavigationUI = {
-  AUTO: 'auto',
-  HIDE: 'hide',
-  SHOW: 'show'
-};
-
-/**
- * @record
- * @extends {FullscreenOptions}
- * @suppress {checkTypes} TODO(user): Enable type-checking after externs in
- *     cl/226019598 roll out in the next open-source Closure compiler release.
- */
-goog.dom.fullscreen.FullscreenOptions = function() {};
-
-/** @type {!goog.dom.fullscreen.FullscreenNavigationUI} */
-goog.dom.fullscreen.FullscreenOptions.prototype.navigationUI;
-
-
-/**
  * Determines if full screen is supported.
  * @param {!goog.dom.DomHelper=} opt_domHelper The DomHelper for the DOM being
  *     queried. If not provided, use the current DOM.
@@ -94,20 +67,16 @@ goog.dom.fullscreen.isSupported = function(opt_domHelper) {
 /**
  * Requests putting the element in full screen.
  * @param {!Element} element The element to put full screen.
- * @param {!goog.dom.fullscreen.FullscreenOptions=} opt_options Options for full
- *     screen. This field will be ignored on older browsers.
- * @suppress {checkTypes} TODO(user): Enable type-checking after externs in
- *     cl/226019598 roll out in the next open-source Closure compiler release.
  */
-goog.dom.fullscreen.requestFullScreen = function(element, opt_options) {
-  if (element.requestFullscreen) {
-    element.requestFullscreen(opt_options);
-  } else if (element.webkitRequestFullscreen) {
+goog.dom.fullscreen.requestFullScreen = function(element) {
+  if (element.webkitRequestFullscreen) {
     element.webkitRequestFullscreen();
   } else if (element.mozRequestFullScreen) {
     element.mozRequestFullScreen();
   } else if (element.msRequestFullscreen) {
     element.msRequestFullscreen();
+  } else if (element.requestFullscreen) {
+    element.requestFullscreen();
   }
 };
 
