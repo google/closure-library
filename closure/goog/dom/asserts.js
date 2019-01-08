@@ -214,6 +214,34 @@ goog.dom.asserts.assertIsHTMLInputElement = function(o) {
 };
 
 /**
+ * Asserts that a given object is a HTMLTextAreaElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLTextAreaElement}
+ */
+goog.dom.asserts.assertIsHTMLTextAreaElement = function(o) {
+  return /** @type {!HTMLTextAreaElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLTextAreaElement'));
+};
+
+/**
+ * Asserts that a given object is a HTMLCanvasElement.
+ *
+ * To permit this assertion to pass in the context of tests where elements might
+ * be mocked, also accepts objects that are not a subtype of Element.
+ *
+ * @param {?Object} o The object whose type to assert.
+ * @return {!HTMLCanvasElement}
+ */
+goog.dom.asserts.assertIsHTMLCanvasElement = function(o) {
+  return /** @type {!HTMLCanvasElement} */ (
+      goog.dom.asserts.assertIsElementType_(o, 'HTMLCanvasElement'));
+};
+
+/**
  * Asserts that a given object is a HTMLEmbedElement.
  *
  * To permit this assertion to pass in the context of tests where elements might
