@@ -53,14 +53,14 @@ goog.labs.testing.Environment = goog.defineClass(null, {
      */
     this.mockControl = null;
 
-    /** @type {goog.testing.MockClock} */
+    /** @type {?goog.testing.MockClock} */
     this.mockClock = null;
 
     /** @private {boolean} */
     this.shouldMakeMockControl_ = false;
 
-    /** @private {boolean} */
-    this.shouldMakeMockClock_ = false;
+    /** @protected {boolean} */
+    this.mockClockOn = false;
 
     /** @const {!goog.debug.Console} */
     this.console = goog.labs.testing.Environment.console_;
@@ -76,7 +76,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    *     resolved before the test is executed.
    */
   setUpPage: function() {
-    if (this.mockClock && this.mockClock.isDisposed()) {
+    if (this.mockClockOn && !this.hasMockClock()) {
       this.mockClock = new goog.testing.MockClock(true);
     }
   },
@@ -85,7 +85,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
   tearDownPage: function() {
     // If we created the mockClock, we'll also dispose it.
-    if (this.shouldMakeMockClock_) {
+    if (this.hasMockClock()) {
       this.mockClock.dispose();
     }
   },
@@ -106,7 +106,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockClock.tick(1000);
       }
       // If we created the mockClock, we'll also reset it.
-      if (this.shouldMakeMockClock_) {
+      if (this.hasMockClock()) {
         this.mockClock.reset();
       }
     }
@@ -161,13 +161,20 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {!goog.labs.testing.Environment} For chaining.
    */
   withMockClock: function() {
-    if (!this.shouldMakeMockClock_) {
-      this.shouldMakeMockClock_ = true;
+    if (!this.hasMockClock()) {
+      this.mockClockOn = true;
       this.mockClock = new goog.testing.MockClock(true);
     }
     return this;
   },
 
+  /**
+   * @return {boolean}
+   * @protected
+   */
+  hasMockClock: function() {
+    return this.mockClockOn && !!this.mockClock && !this.mockClock.isDisposed();
+  },
 
   /**
    * Creates a basic strict mock of a `toMock`. For more advanced mocking,
