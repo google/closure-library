@@ -1037,6 +1037,15 @@ goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
 // would leave ES3 and ES5 files alone.
 goog.define('goog.TRANSPILE', 'detect');
 
+/**
+ * @define {boolean} If true assume that ES modules have already been
+ * transpiled by the jscompiler (in the same way that transpile.js would
+ * transpile them - to jscomp modules). Useful only for servers that wish to use
+ * the debug loader and transpile server side. Thus this is only respected if
+ * goog.TRANSPILE is "never".
+ */
+goog.define('goog.ASSUME_ES_MODULES_TRANSPILED', false);
+
 
 /**
  * @define {string} If a file needs to be transpiled what the output language
@@ -3813,6 +3822,36 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
 
   /**
+   * An ES6 module dependency that was transpiled to a jscomp module outside
+   * of the debug loader, e.g. server side.
+   *
+   * @param {string} path Absolute path of this script.
+   * @param {string} relativePath Path of this script relative to goog.basePath.
+   * @param {!Array<string>} provides goog.provided or goog.module symbols
+   *     in this file.
+   * @param {!Array<string>} requires goog symbols or relative paths to Closure
+   *     this depends on.
+   * @param {!Object<string, string>} loadFlags
+   * @struct @constructor
+   * @extends {goog.TransformedDependency}
+   */
+  goog.PreTranspiledEs6ModuleDependency = function(
+      path, relativePath, provides, requires, loadFlags) {
+    goog.PreTranspiledEs6ModuleDependency.base(
+        this, 'constructor', path, relativePath, provides, requires, loadFlags);
+  };
+  goog.inherits(
+      goog.PreTranspiledEs6ModuleDependency, goog.TransformedDependency);
+
+
+  /** @override */
+  goog.PreTranspiledEs6ModuleDependency.prototype.transform = function(
+      contents) {
+    return contents;
+  };
+
+
+  /**
    * A goog.module, transpiled or not. Will always perform some minimal
    * transformation even when not transpiled to wrap in a goog.loadModule
    * statement.
@@ -3940,8 +3979,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           path, relativePath, provides, requires, loadFlags, this.transpiler);
     } else {
       if (loadFlags['module'] == goog.ModuleType.ES6) {
-        return new goog.Es6ModuleDependency(
-            path, relativePath, provides, requires, loadFlags);
+        if (goog.TRANSPILE == 'never' && goog.ASSUME_ES_MODULES_TRANSPILED) {
+          return new goog.PreTranspiledEs6ModuleDependency(
+              path, relativePath, provides, requires, loadFlags);
+        } else {
+          return new goog.Es6ModuleDependency(
+              path, relativePath, provides, requires, loadFlags);
+        }
       } else {
         return new goog.Dependency(
             path, relativePath, provides, requires, loadFlags);

@@ -24,10 +24,10 @@ goog.provide('goog.vec.Vec2');
 goog.require('goog.vec');
 
 
-/** @typedef {goog.vec.Float32} */ goog.vec.Vec2.Float32;
-/** @typedef {goog.vec.Float64} */ goog.vec.Vec2.Float64;
-/** @typedef {goog.vec.Number} */ goog.vec.Vec2.Number;
-/** @typedef {goog.vec.AnyType} */ goog.vec.Vec2.AnyType;
+/** @typedef {!goog.vec.Float32} */ goog.vec.Vec2.Float32;
+/** @typedef {!goog.vec.Float64} */ goog.vec.Vec2.Float64;
+/** @typedef {!goog.vec.Number} */ goog.vec.Vec2.Number;
+/** @typedef {!goog.vec.AnyType} */ goog.vec.Vec2.AnyType;
 
 
 /**

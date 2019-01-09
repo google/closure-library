@@ -27,14 +27,14 @@ goog.provide('goog.vec.Vec3');
 /** @suppress {extraRequire} */
 goog.require('goog.vec');
 
-/** @typedef {goog.vec.Float32} */ goog.vec.Vec3.Float32;
-/** @typedef {goog.vec.Float64} */ goog.vec.Vec3.Float64;
-/** @typedef {goog.vec.Number} */ goog.vec.Vec3.Number;
-/** @typedef {goog.vec.AnyType} */ goog.vec.Vec3.AnyType;
+/** @typedef {!goog.vec.Float32} */ goog.vec.Vec3.Float32;
+/** @typedef {!goog.vec.Float64} */ goog.vec.Vec3.Float64;
+/** @typedef {!goog.vec.Number} */ goog.vec.Vec3.Number;
+/** @typedef {!goog.vec.AnyType} */ goog.vec.Vec3.AnyType;
 
 // The following two types are deprecated - use the above types instead.
-/** @typedef {Float32Array} */ goog.vec.Vec3.Type;
-/** @typedef {goog.vec.ArrayType} */ goog.vec.Vec3.Vec3Like;
+/** @typedef {!Float32Array} */ goog.vec.Vec3.Type;
+/** @typedef {!goog.vec.ArrayType} */ goog.vec.Vec3.Vec3Like;
 
 
 /**

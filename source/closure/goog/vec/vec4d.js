@@ -39,7 +39,7 @@ goog.provide('goog.vec.vec4d.Type');
 /** @suppress {extraRequire} */
 goog.require('goog.vec');
 
-/** @typedef {goog.vec.Float64} */ goog.vec.vec4d.Type;
+/** @typedef {!goog.vec.Float64} */ goog.vec.vec4d.Type;
 
 
 /**

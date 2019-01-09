@@ -603,6 +603,10 @@ goog.addDependency('i18n/numberformatsymbolsext.js', ['goog.i18n.NumberFormatSym
 goog.addDependency('i18n/ordinalrules.js', ['goog.i18n.ordinalRules'], [], {});
 goog.addDependency('i18n/pluralrules.js', ['goog.i18n.pluralRules'], [], {});
 goog.addDependency('i18n/pluralrules_test.js', ['goog.i18n.pluralRulesTest'], ['goog.i18n.pluralRules', 'goog.testing.jsunit'], {});
+goog.addDependency('i18n/relativedatetimeformat.js', ['goog.i18n.RelativeDateTimeFormat'], ['goog.asserts', 'goog.i18n.MessageFormat', 'goog.i18n.relativeDateTimeSymbols'], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('i18n/relativedatetimeformat_test.js', ['goog.i18n.RelativeDateTimeFormatTest'], ['goog.i18n.RelativeDateTimeFormat', 'goog.i18n.relativeDateTimeSymbols', 'goog.i18n.relativeDateTimeSymbolsExt', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('i18n/relativedatetimesymbols.js', ['goog.i18n.relativeDateTimeSymbols'], [], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('i18n/relativedatetimesymbolsext.js', ['goog.i18n.relativeDateTimeSymbolsExt'], ['goog.i18n.relativeDateTimeSymbols'], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('i18n/timezone.js', ['goog.i18n.TimeZone'], ['goog.array', 'goog.date.DateLike', 'goog.object', 'goog.string'], {});
 goog.addDependency('i18n/timezone_test.js', ['goog.i18n.TimeZoneTest'], ['goog.i18n.TimeZone', 'goog.testing.jsunit'], {});
 goog.addDependency('i18n/uchar.js', ['goog.i18n.uChar'], [], {});
@@ -623,6 +627,7 @@ goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json'
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], [], {});
 goog.addDependency('json/json_perf.js', ['goog.jsonPerf'], ['goog.dom', 'goog.json', 'goog.math', 'goog.string', 'goog.testing.PerformanceTable', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('json/json_test.js', ['goog.jsonTest'], ['goog.functions', 'goog.json', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('json/jsonable.js', ['goog.json.Jsonable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json.Processor'], {});
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier'], {});
 goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.NativeJsonProcessor', 'goog.testing.jsunit', 'goog.userAgent'], {});
@@ -1142,7 +1147,7 @@ goog.addDependency('testing/fs/fs_test.js', ['goog.testing.fsTest'], ['goog.test
 goog.addDependency('testing/fs/integration_test.js', ['goog.testing.fs.integrationTest'], ['goog.Promise', 'goog.events', 'goog.fs', 'goog.fs.DirectoryEntry', 'goog.fs.Error', 'goog.fs.FileSaver', 'goog.testing.PropertyReplacer', 'goog.testing.fs', 'goog.testing.jsunit'], {});
 goog.addDependency('testing/fs/progressevent.js', ['goog.testing.fs.ProgressEvent'], ['goog.events.Event'], {});
 goog.addDependency('testing/functionmock.js', ['goog.testing', 'goog.testing.FunctionMock', 'goog.testing.GlobalFunctionMock', 'goog.testing.MethodMock'], ['goog.object', 'goog.testing.LooseMock', 'goog.testing.Mock', 'goog.testing.PropertyReplacer', 'goog.testing.StrictMock'], {});
-goog.addDependency('testing/functionmock_test.js', ['goog.testing.FunctionMockTest'], ['goog.array', 'goog.string', 'goog.testing', 'goog.testing.FunctionMock', 'goog.testing.Mock', 'goog.testing.ObjectPropertyString', 'goog.testing.StrictMock', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], {});
+goog.addDependency('testing/functionmock_test.js', ['goog.testing.FunctionMockTest'], ['goog.array', 'goog.string', 'goog.testing', 'goog.testing.FunctionMock', 'goog.testing.Mock', 'goog.testing.StrictMock', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], {});
 goog.addDependency('testing/graphics.js', ['goog.testing.graphics'], ['goog.graphics.Path', 'goog.testing.asserts'], {});
 goog.addDependency('testing/i18n/asserts.js', ['goog.testing.i18n.asserts'], ['goog.testing.jsunit'], {});
 goog.addDependency('testing/i18n/asserts_test.js', ['goog.testing.i18n.assertsTest'], ['goog.testing.ExpectedFailures', 'goog.testing.i18n.asserts'], {});
@@ -1187,7 +1192,7 @@ goog.addDependency('testing/parallel_closure_test_suite_test.js', ['goog.testing
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTimer'], {});
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer', 'goog.testing.PerformanceTimer.Task'], ['goog.array', 'goog.async.Deferred', 'goog.math'], {'lang': 'es6'});
 goog.addDependency('testing/performancetimer_test.js', ['goog.testing.PerformanceTimerTest'], ['goog.async.Deferred', 'goog.dom', 'goog.math', 'goog.testing.MockClock', 'goog.testing.PerformanceTimer', 'goog.testing.jsunit'], {});
-goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.asserts', 'goog.testing.ObjectPropertyString', 'goog.userAgent'], {});
+goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.asserts', 'goog.userAgent'], {});
 goog.addDependency('testing/propertyreplacer_test.js', ['goog.testing.PropertyReplacerTest'], ['goog.dom', 'goog.dom.TagName', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
 goog.addDependency('testing/proto2/proto2.js', ['goog.testing.proto2'], ['goog.proto2.Message', 'goog.proto2.ObjectSerializer', 'goog.testing.asserts'], {});
 goog.addDependency('testing/proto2/proto2_test.js', ['goog.testing.proto2Test'], ['goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.proto2', 'proto2.TestAllTypes'], {});

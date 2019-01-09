@@ -252,7 +252,7 @@ function testFromTrustedResourceUrl() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
-  var privateFieldName = 'privateDoNotAccessOrElseSafeHtmlWrappedValue_';
+  var privateFieldName = 'privateDoNotAccessOrElseSafeUrlWrappedValue_';
   var markerFieldName = 'SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
   var propNames = goog.object.getKeys(goog.html.SafeUrl.sanitize(''));
   assertContains(privateFieldName, propNames);

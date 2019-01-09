@@ -76,7 +76,7 @@ goog.html.SafeUrl = function() {
    * field stand out.
    * @private {string}
    */
-  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = '';
+  this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = '';
 
   /**
    * A type marker used to implement additional run-time type checking.
@@ -126,16 +126,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  * indeed `SafeUrl`, use `goog.html.SafeUrl.unwrap` instead of this
  * method. If in doubt, assume that it's security relevant. In particular, note
  * that goog.html functions which return a goog.html type do not guarantee that
- * the returned instance is of the right type. For example:
- *
- * <pre>
- * var fakeSafeHtml = new String('fake');
- * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
- * var newSafeHtml = goog.html.SafeHtml.htmlEscape(fakeSafeHtml);
- * // newSafeHtml is just an alias for fakeSafeHtml, it's passed through by
- * // goog.html.SafeHtml.htmlEscape() as fakeSafeHtml instanceof
- * // goog.html.SafeHtml.
- * </pre>
+ * the returned instance is of the right type.
  *
  * IMPORTANT: The guarantees of the SafeUrl type contract only extend to the
  * behavior of browsers when interpreting URLs. Values of SafeUrl objects MUST
@@ -148,7 +139,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.html.SafeUrl.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_;
 };
 
 
@@ -179,8 +170,7 @@ if (goog.DEBUG) {
    * @override
    */
   goog.html.SafeUrl.prototype.toString = function() {
-    return 'SafeUrl{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ +
-        '}';
+    return 'SafeUrl{' + this.privateDoNotAccessOrElseSafeUrlWrappedValue_ + '}';
   };
 }
 
@@ -216,7 +206,7 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
       safeUrl.constructor === goog.html.SafeUrl &&
       safeUrl.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
           goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
-    return safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
+    return safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_;
   } else {
     goog.asserts.fail('expected object of type SafeUrl, got \'' +
         safeUrl + '\' of type ' + goog.typeOf(safeUrl));
@@ -653,7 +643,7 @@ goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
   var safeUrl = new goog.html.SafeUrl();
-  safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = url;
+  safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_ = url;
   return safeUrl;
 };
 

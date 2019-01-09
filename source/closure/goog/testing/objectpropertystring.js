@@ -32,6 +32,7 @@ goog.provide('goog.testing.ObjectPropertyString');
  * @param {Object|string} propertyString Property name as a string literal.
  * @constructor
  * @final
+ * @deprecated Use goog.reflect.objectProperty instead.
  */
 goog.testing.ObjectPropertyString = function(object, propertyString) {
   this.object_ = object;

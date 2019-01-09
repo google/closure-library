@@ -1695,3 +1695,13 @@ function testInputRequired() {
           .inlineStyleRules()
           .build());
 }
+
+function testProgressMax() {
+  var input = '<progress max="100" />';
+  assertSanitizedHtml(
+      input, input,
+      new goog.html.sanitizer.HtmlSanitizer.Builder()
+          .allowCssStyles()
+          .inlineStyleRules()
+          .build());
+}
