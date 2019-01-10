@@ -29,6 +29,7 @@ var _allTests = [
   'closure/goog/async/workqueue_test.html',
   'closure/goog/base_module_test.html',
   'closure/goog/base_test.html',
+  'closure/goog/collections/set_test.html',
   'closure/goog/color/alpha_test.html',
   'closure/goog/color/color_test.html',
   'closure/goog/crypt/aes_test.html',
