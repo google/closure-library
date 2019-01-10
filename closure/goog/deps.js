@@ -225,7 +225,7 @@ goog.addDependency('dom/fontsizemonitor.js', ['goog.dom.FontSizeMonitor', 'goog.
 goog.addDependency('dom/fontsizemonitor_test.js', ['goog.dom.FontSizeMonitorTest'], ['goog.dom', 'goog.dom.FontSizeMonitor', 'goog.dom.TagName', 'goog.events', 'goog.events.Event', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('dom/forms.js', ['goog.dom.forms'], ['goog.dom.InputType', 'goog.dom.TagName', 'goog.structs.Map', 'goog.window'], {});
 goog.addDependency('dom/forms_test.js', ['goog.dom.formsTest'], ['goog.dom', 'goog.dom.forms', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
-goog.addDependency('dom/fullscreen.js', ['goog.dom.fullscreen', 'goog.dom.fullscreen.EventType'], ['goog.dom', 'goog.userAgent'], {});
+goog.addDependency('dom/fullscreen.js', ['goog.dom.fullscreen', 'goog.dom.fullscreen.EventType'], ['goog.dom'], {});
 goog.addDependency('dom/fullscreen_test.js', ['goog.dom.fullscreen_test'], ['goog.dom.DomHelper', 'goog.dom.fullscreen', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/htmlelement.js', ['goog.dom.HtmlElement'], [], {});
 goog.addDependency('dom/iframe.js', ['goog.dom.iframe'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyle', 'goog.html.TrustedResourceUrl', 'goog.string.Const', 'goog.userAgent'], {});
