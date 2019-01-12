@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Utilities for working with ES6 iterables.
- * Note that this file is written ES5-only.
  *
  * The goal is that this should be a replacement for goog.iter which uses
  * a now non-standard approach to iterables.
@@ -47,9 +46,9 @@ exports.getIterator = function(iterable) {
  * @template VALUE
  */
 exports.forEach = function(f, iterable) {
-  var iterator = exports.getIterator(iterable);
+  const iterator = exports.getIterator(iterable);
   while (true) {
-    var next = iterator.next();
+    const next = iterator.next();
     if (next.done) {
       return;
     }
@@ -73,7 +72,7 @@ exports.forEach = function(f, iterable) {
  */
 exports.map = function(f, iterable) {
   return new FactoryIterable(function() {
-    var iterator = exports.getIterator(iterable);
+    const iterator = exports.getIterator(iterable);
     return new MapIterator(f, iterator);
   });
 };
@@ -82,49 +81,52 @@ exports.map = function(f, iterable) {
 
 /**
  * Helper class for `map`.
- * @param {function(VALUE): RESULT} f
- * @param {!Iterator<VALUE>} iterator
- * @constructor
  * @implements {Iterator<RESULT>}
  * @template VALUE, RESULT
  */
-var MapIterator = function(f, iterator) {
-  /** @private */
-  this.func_ = f;
-  /** @private */
-  this.iterator_ = iterator;
-};
-
-
-/**
- * @override
- */
-MapIterator.prototype.next = function() {
-  var nextObj = this.iterator_.next();
-
-  if (nextObj.done) {
-    return {done: true, value: undefined};
+class MapIterator {
+  /**
+   * @param {function(VALUE): RESULT} f
+   * @param {!Iterator<VALUE>} iterator
+   */
+  constructor(f, iterator) {
+    /** @private @const */
+    this.func_ = f;
+    /** @private @const */
+    this.iterator_ = iterator;
   }
 
-  var mappedValue = this.func_(nextObj.value);
-  return {done: false, value: mappedValue};
-};
+  /**
+   * @override
+   */
+  next() {
+    const nextObj = this.iterator_.next();
 
+    if (nextObj.done) {
+      return {done: true, value: undefined};
+    }
 
+    const mappedValue = this.func_(nextObj.value);
+    return {done: false, value: mappedValue};
+  }
+}
 
 /**
  * Helper class to create an iterable with a given iterator factory.
- * @param {function():!Iterator<VALUE>} iteratorFactory
- * @constructor
  * @implements {Iterable<VALUE>}
  * @template VALUE
  */
-var FactoryIterable = function(iteratorFactory) {
+class FactoryIterable {
   /**
-   * @private
+   * @param {function():!Iterator<VALUE>} iteratorFactory
    */
-  this.iteratorFactory_ = iteratorFactory;
-};
+  constructor(iteratorFactory) {
+    /**
+     * @private @const
+     */
+    this.iteratorFactory_ = iteratorFactory;
+  }
+}
 
 
 // TODO(nnaze): For now, this section is not run if Symbol is not defined,
