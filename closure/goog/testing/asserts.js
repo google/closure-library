@@ -1350,11 +1350,10 @@ var assertRegExp = goog.testing.asserts.assertRegExp = function(a, b, opt_c) {
 /**
  * Converts an array-like or iterable object to an array (clones it if it's
  * already an array).
- * @param {?Iterable|?IArrayLike} obj The collection object.
+ * @param {!Iterable|!IArrayLike} obj The collection object.
  * @return {!Array<?>} Copy of the collection as array.
  * @private
  */
-// TODO(nnaze): obj should be non-null.
 goog.testing.asserts.toArray_ = function(obj) {
   var ret = [];
   if (goog.testing.asserts.isIterable_(obj)) {
