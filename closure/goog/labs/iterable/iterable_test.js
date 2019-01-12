@@ -126,4 +126,33 @@ testSuite({
       assertTrue(nextObj.done);
     }
   },
+
+  testFilter: function() {
+    function isEven(val) {
+      return val % 2 == 0;
+    }
+
+    const range = createRangeIterable(0, 6);
+    const newIterable = iterable.filter(isEven, range);
+    const newIterator = iterable.getIterator(newIterable);
+
+    let nextObj = newIterator.next();
+    assertEquals(0, nextObj.value);
+    assertFalse(nextObj.done);
+
+    nextObj = newIterator.next();
+    assertEquals(2, nextObj.value);
+    assertFalse(nextObj.done);
+
+    nextObj = newIterator.next();
+    assertEquals(4, nextObj.value);
+    assertFalse(nextObj.done);
+
+    // Check that the iterator repeatedly signals done.
+    for (let i = 0; i < 3; i++) {
+      nextObj = newIterator.next();
+      assertUndefined(nextObj.value);
+      assertTrue(nextObj.done);
+    }
+  }
 });

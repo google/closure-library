@@ -78,6 +78,26 @@ exports.map = function(f, iterable) {
 };
 
 
+/**
+ * Filter elements from one iterator to create another iterable.
+ *
+ * When next() is called on the returned iterator, it will call next() on the
+ * given iterator and call the given function `f` with that value until `true`
+ * is returned or the given iterator is exhausted.
+ *
+ * @param {function(VALUE): boolean} f
+ * @param {!Iterable<VALUE>} iterable
+ * @return {!Iterable<VALUE>} The created iterable that gives the mapped
+ *     values.
+ * @template VALUE
+ */
+exports.filter = function(f, iterable) {
+  return new FactoryIterable(function() {
+    const iterator = exports.getIterator(iterable);
+    return new FilterIterator(f, iterator);
+  });
+};
+
 
 /**
  * Helper class for `map`.
@@ -108,6 +128,39 @@ class MapIterator {
 
     const mappedValue = this.func_(nextObj.value);
     return {done: false, value: mappedValue};
+  }
+}
+
+/**
+ * Helper class for `filter`.
+ * @implements {Iterator<VALUE>}
+ * @template VALUE
+ */
+class FilterIterator {
+  constructor(f, iterator) {
+    /** @private @const */
+    this.func_ = f;
+    /** @private @const */
+    this.iterator_ = iterator;
+  }
+
+  /**
+   * @override
+   */
+  next() {
+    while (true) {
+      const next = this.iterator_.next();
+      if (next.done) {
+        return {done: true, value: undefined};
+      }
+
+      const value = next.value;
+      if (this.func_(value)) {
+        return {done: false, value};
+      }
+
+      // if false, we keep going for the next value.
+    }
   }
 }
 
