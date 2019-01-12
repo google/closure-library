@@ -18,7 +18,7 @@
  * See design doc at go/closure-es6-set
  */
 
-goog.module('goog.collections.set');
+goog.module('goog.collections.sets');
 
 // Note: Set operations are being proposed for EcmaScript. See proposal here:
 // https://github.com/tc39/proposal-set-methods

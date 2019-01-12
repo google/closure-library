@@ -16,18 +16,18 @@
  * @fileoverview Unit tests for goog.collections.set.
  */
 
-goog.module('goog.collections.setTest');
-goog.setTestOnly('goog.collections.setTest');
+goog.module('goog.collections.setsTest');
+goog.setTestOnly('goog.collections.setsTest');
 
-const set = goog.require('goog.collections.set');
+const sets = goog.require('goog.collections.sets');
 const testSuite = goog.require('goog.testing.testSuite');
 
 goog.require('goog.testing.jsunit');
 
 testSuite({
   testIntersection() {
-    assertSameElements([2], set.intersection([1, 2], [2, 3]));
-    assertSameElements([], set.intersection([], []));
-    assertSameElements([1], set.intersection([1, 1, 1], [1, 1]));
+    assertSameElements([2], sets.intersection([1, 2], [2, 3]));
+    assertSameElements([], sets.intersection([], []));
+    assertSameElements([1], sets.intersection([1, 1, 1], [1, 1]));
   }
 });
