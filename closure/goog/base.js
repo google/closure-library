@@ -2602,7 +2602,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       // https://github.com/Microsoft/ChakraCore/issues/1496.
       var re = /Edge\/(\d+)(\.\d)*/i;
       var edgeUserAgent = userAgent.match(re);
-      if (edgeUserAgent && Number(edgeUserAgent[1]) < 15) {
+      if (edgeUserAgent) {
+        // The Reflect.construct test below is flaky on Edge. It can sometimes
+        // pass or fail on 40 15.15063, so just exist early for Edge and treat
+        // it as ES5. Until we're on a more up to date vesrion just always use
+        // ES5. See https://github.com/Microsoft/ChakraCore/issues/3217.
         return false;
       }
       // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
