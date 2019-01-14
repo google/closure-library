@@ -38,6 +38,16 @@ goog.inherits(ChildClass, ParentClass);
 ChildClass.prototype.method2 = function() {};
 ChildClass.prototype.y = 2;
 
+class ParentClassEs6 {
+  /** Parent method */
+  parent() {}
+}
+
+class ChildClassEs6 extends ParentClassEs6 {
+  /** Child method */
+  child() {}
+}
+
 function testParentClass() {
   var parentMock = goog.labs.mock.mock(ParentClass);
 
@@ -49,6 +59,16 @@ function testParentClass() {
   assertTrue(
       'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
+}
+
+function testParentClassEs6() {
+  const parentMock = goog.labs.mock.mock(ParentClassEs6);
+
+  assertNotUndefined(parentMock.parent);
+  assertUndefined(parentMock.parent());
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
+      parentMock instanceof ParentClassEs6);
 }
 
 function testChildClass() {
@@ -65,8 +85,20 @@ function testChildClass() {
       childMock instanceof ChildClass);
 }
 
+function testChildClassEs6() {
+  const childMock = goog.labs.mock.mock(ChildClassEs6);
+
+  assertNotUndefined(childMock.parent);
+  assertUndefined(childMock.parent());
+  assertNotUndefined(childMock.child);
+  assertUndefined(childMock.child());
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
+      childMock instanceof ChildClassEs6);
+}
+
 function testParentClassInstance() {
-  var parentMock = goog.labs.mock.mock(new ParentClass());
+  const parentMock = goog.labs.mock.mock(new ParentClass());
 
   assertNotUndefined(parentMock.method1);
   assertUndefined(parentMock.method1());
@@ -76,6 +108,16 @@ function testParentClassInstance() {
   assertTrue(
       'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
+}
+
+function testParentClassEs6Instance() {
+  const parentMock = goog.labs.mock.mock(new ParentClassEs6());
+
+  assertNotUndefined(parentMock.parent);
+  assertUndefined(parentMock.parent());
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
+      parentMock instanceof ParentClassEs6);
 }
 
 function testChildClassInstance() {
@@ -89,7 +131,19 @@ function testChildClassInstance() {
   assertNotUndefined(childMock.y);
   assertTrue(
       'Mock should be an instance of the mocked class.',
-      childMock instanceof ParentClass);
+      childMock instanceof ChildClass);
+}
+
+function testChildClassEs6Instance() {
+  const childMock = goog.labs.mock.mock(new ChildClassEs6());
+
+  assertNotUndefined(childMock.parent);
+  assertUndefined(childMock.parent());
+  assertNotUndefined(childMock.child);
+  assertUndefined(childMock.child());
+  assertTrue(
+      'Mock should be an instance of the mocked class.',
+      childMock instanceof ChildClassEs6);
 }
 
 function testNonEnumerableProperties() {

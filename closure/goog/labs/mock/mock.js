@@ -593,9 +593,9 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
     // Create a temporary subclass with a no-op constructor so that we can
     // create an instance and determine what methods it has.
     /**
- * @constructor
- * @final
- */
+     * @constructor
+     * @final
+     */
     var tempCtor = function() {};
     goog.inherits(tempCtor, objOrClass);
     obj = new tempCtor();
@@ -606,14 +606,15 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   // Put the object being mocked in the prototype chain of the mock so that
   // it has all the correct properties and instanceof works.
   /**
- * @constructor
- * @final
- */
+   * @constructor
+   * @final
+   */
   var mockedItemCtor = function() {};
   mockedItemCtor.prototype = obj;
   this.mockedItem = new mockedItemCtor();
 
-  var enumerableProperties = goog.object.getAllPropertyNames(obj);
+  var propObj = goog.isFunction(objOrClass) ? objOrClass.prototype : objOrClass;
+  var enumerableProperties = goog.object.getAllPropertyNames(propObj);
   // The non enumerable properties are added due to the fact that IE8 does not
   // enumerate any of the prototype Object functions even when overridden and
   // mocking these is sometimes needed.
@@ -628,7 +629,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   // the instance.
   for (var i = 0; i < enumerableProperties.length; i++) {
     var prop = enumerableProperties[i];
-    if (goog.isFunction(obj[prop])) {
+    if (goog.isFunction(propObj[prop])) {
       this.mockedItem[prop] = goog.bind(this.executeStub, this, prop);
       // The stub binder used to create bindings.
       this.objectStubBinder_[prop] =
