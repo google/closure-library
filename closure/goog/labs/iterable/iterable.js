@@ -46,7 +46,8 @@ exports.getIterator = function(iterable) {
  * @template VALUE
  */
 exports.forEach = function(f, iterable) {
-  const iterator = exports.getIterator(iterable);
+  const iterator =
+      /** @type {!Iterator<VALUE>} */ (exports.getIterator(iterable));
   while (true) {
     const next = iterator.next();
     if (next.done) {
@@ -137,6 +138,10 @@ class MapIterator {
  * @template VALUE
  */
 class FilterIterator {
+  /**
+   * @param {function(VALUE): boolean} f
+   * @param {!Iterator<VALUE>} iterator
+   */
   constructor(f, iterator) {
     /** @private @const */
     this.func_ = f;
