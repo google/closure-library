@@ -2604,8 +2604,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       var edgeUserAgent = userAgent.match(re);
       if (edgeUserAgent) {
         // The Reflect.construct test below is flaky on Edge. It can sometimes
-        // pass or fail on 40 15.15063, so just exist early for Edge and treat
-        // it as ES5. Until we're on a more up to date vesrion just always use
+        // pass or fail on 40 15.15063, so just exit early for Edge and treat
+        // it as ES5. Until we're on a more up to date version just always use
         // ES5. See https://github.com/Microsoft/ChakraCore/issues/3217.
         return false;
       }
