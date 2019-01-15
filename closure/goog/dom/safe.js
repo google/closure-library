@@ -732,6 +732,17 @@ goog.dom.safe.openInWindow = function(
 
 
 /**
+ * Parses the HTML as 'text/html'.
+ * @param {!DOMParser} parser
+ * @param {!goog.html.SafeHtml} html The HTML to be parsed.
+ * @return {?Document}
+ */
+goog.dom.safe.parseFromStringHtml = function(parser, html) {
+  return parser.parseFromString(goog.html.SafeHtml.unwrap(html), 'text/html');
+};
+
+
+/**
  * Safely creates an HTMLImageElement from a Blob.
  *
  * Example usage:

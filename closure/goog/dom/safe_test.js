@@ -728,6 +728,18 @@ function testOpenInWindow() {
       'openInWindow should return the created window', fakeWindow, retVal);
 }
 
+function testParseFromStringHtml() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    return;
+  }
+  var html = goog.html.SafeHtml.create('A', {'class': 'b'}, 'c');
+  var node =
+      goog.dom.safe.parseFromStringHtml(new DOMParser(), html).body.firstChild;
+  assertEquals('A', node.tagName);
+  assertEquals('b', node.className);
+  assertEquals('c', node.textContent);
+}
+
 function testCreateImageFromBlob() {
   // Skip unsupported test if IE9 or lower.
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
