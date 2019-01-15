@@ -20,31 +20,27 @@
 
 goog.module('goog.collections.sets');
 
+const iterable = goog.require('goog.labs.iterable');
+
 // Note: Set operations are being proposed for EcmaScript. See proposal here:
 // https://github.com/tc39/proposal-set-methods
 
 // When these methods become available in JS engines, they should be used in
 // place of these utility methods and these methods will be deprecated.
+// Call sites can be automatically migrated. For example,
+// "iterable.filter(a, b)" becomes "a.filter(b)".
 
 /**
  * Creates a new set containing the elements that appear in both given
  * collections.
  *
- * @param {!Iterable<T>} a
+ * @param {!Set<T>} a
  * @param {!Iterable<T>} b
  * @returns {!Set<T>}
  * @template T
  */
 exports.intersection = function(a, b) {
-  const setB = new Set(b);
-  const returnSet = new Set();
-
-  for (const elem of a) {
-    if (setB.has(elem)) {
-      returnSet.add(elem);
-    }
-  }
-  return returnSet;
+  return new Set(iterable.filter(elem => a.has(elem), b));
 };
 
 // TODO(b/117771144): Implement union, difference, and symmetricDifference.

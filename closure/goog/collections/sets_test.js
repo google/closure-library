@@ -26,8 +26,8 @@ goog.require('goog.testing.jsunit');
 
 testSuite({
   testIntersection() {
-    assertSameElements([2], sets.intersection([1, 2], [2, 3]));
-    assertSameElements([], sets.intersection([], []));
-    assertSameElements([1], sets.intersection([1, 1, 1], [1, 1]));
+    assertSameElements([2], sets.intersection(new Set([1, 2]), [2, 3]));
+    assertSameElements([], sets.intersection(new Set([]), []));
+    assertSameElements([1], sets.intersection(new Set([1, 1, 1]), [1, 1]));
   }
 });
