@@ -55,7 +55,7 @@ function isSymbolDefined() {
 }
 
 testSuite({
-  testCreateRangeIterable: function() {
+  testCreateRangeIterable() {
     // Do not run if Symbol does not exist in this browser.
     if (!isSymbolDefined()) {
       return;
@@ -72,7 +72,7 @@ testSuite({
     }
   },
 
-  testForEach: function() {
+  testForEach() {
     // Do not run if Symbol does not exist in this browser.
     if (!isSymbolDefined()) {
       return;
@@ -92,7 +92,7 @@ testSuite({
     }
   },
 
-  testMap: function() {
+  testMap() {
     // Do not run if Symbol does not exist in this browser.
     if (!isSymbolDefined()) {
       return;
@@ -127,7 +127,7 @@ testSuite({
     }
   },
 
-  testFilter: function() {
+  testFilter() {
     function isEven(val) {
       return val % 2 == 0;
     }
