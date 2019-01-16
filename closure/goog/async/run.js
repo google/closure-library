@@ -14,6 +14,7 @@
 
 goog.provide('goog.async.run');
 
+goog.require('goog.async.WorkQueue');
 goog.require('goog.async.nextTick');
 goog.require('goog.async.throwException');
 
@@ -42,8 +43,7 @@ goog.async.run = function(callback, opt_context) {
     goog.async.run.workQueueScheduled_ = true;
   }
 
-  goog.async.run.workQueue_.push(
-      new goog.async.run.WorkItem_(callback, opt_context));
+  goog.async.run.workQueue_.add(callback, opt_context);
 };
 
 
@@ -104,8 +104,8 @@ goog.async.run.schedule_;
 goog.async.run.workQueueScheduled_ = false;
 
 
-/** @private {!Array<!goog.async.run.WorkItem_>} */
-goog.async.run.workQueue_ = [];
+/** @private {!goog.async.WorkQueue} */
+goog.async.run.workQueue_ = new goog.async.WorkQueue();
 
 
 if (goog.DEBUG) {
@@ -114,7 +114,7 @@ if (goog.DEBUG) {
    */
   goog.async.run.resetQueue = function() {
     goog.async.run.workQueueScheduled_ = false;
-    goog.async.run.workQueue_ = [];
+    goog.async.run.workQueue_ = new goog.async.WorkQueue();
   };
 }
 
@@ -125,36 +125,17 @@ if (goog.DEBUG) {
  * goog.async.nextTick.
  */
 goog.async.run.processWorkQueue = function() {
-  // NOTE: additional work queue items may be pushed while processing.
-  while (goog.async.run.workQueue_.length) {
-    // Don't let the work queue grow indefinitely.
-    var workItems = goog.async.run.workQueue_;
-    goog.async.run.workQueue_ = [];
-    for (var i = 0; i < workItems.length; i++) {
-      var workItem = workItems[i];
-      try {
-        workItem.fn.call(workItem.scope);
-      } catch (e) {
-        goog.async.throwException(e);
-      }
+  // NOTE: additional work queue items may be added while processing.
+  var item = null;
+  while (item = goog.async.run.workQueue_.remove()) {
+    try {
+      item.fn.call(item.scope);
+    } catch (e) {
+      goog.async.throwException(e);
     }
+    goog.async.run.workQueue_.returnUnused(item);
   }
 
   // There are no more work items, allow processing to be scheduled again.
   goog.async.run.workQueueScheduled_ = false;
-};
-
-
-/**
- * @constructor
- * @final
- * @struct
- * @private
- *
- * @param {function()} fn
- * @param {!Object|null|undefined} scope
- */
-goog.async.run.WorkItem_ = function(fn, scope) {
-  /** @const */ this.fn = fn;
-  /** @const */ this.scope = scope;
 };
