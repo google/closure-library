@@ -1086,11 +1086,11 @@ var assertElementsRoughlyEqual =
 /**
  * Compares elements of two array-like or iterable objects using strict equality
  * without taking their order into account.
- * @param {string|?IArrayLike|?Iterable} a Assertion message or the
+ * @param {string|!IArrayLike|!Iterable} a Assertion message or the
  *     expected elements.
- * @param {?IArrayLike|?Iterable} b Expected elements or the actual
+ * @param {!IArrayLike|!Iterable} b Expected elements or the actual
  *     elements.
- * @param {?IArrayLike|?Iterable=} opt_c Actual elements.
+ * @param {!IArrayLike|!Iterable=} opt_c Actual elements.
  */
 var assertSameElements = goog.testing.asserts.assertSameElements = function(
     a, b, opt_c) {
