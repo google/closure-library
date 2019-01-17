@@ -90,18 +90,16 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
    * @type {Object}
    * @private
    */
-  // TODO(b/120531468): Use createSet directly when the compiler bug is fixed.
-  this.globalKeys_ = goog.object.createSet.apply(
-      null, goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_);
+  this.globalKeys_ = goog.object.createSet(
+      goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_);
 
   /**
    * List of input types that should only accept ENTER as a shortcut.
    * @type {Object}
    * @private
    */
-  // TODO(b/120531468): Use createSet directly when the compiler bug is fixed.
-  this.textInputs_ = goog.object.createSet.apply(
-      null, goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_);
+  this.textInputs_ = goog.object.createSet(
+      goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_);
 
   /**
    * Whether to always prevent the default action if a shortcut event is fired.
