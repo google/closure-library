@@ -150,9 +150,9 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
   var dirString = quantity.toString();
 
   // Check for force numeric and having relative value with the given quantity.
-  if (!this.alwaysNumeric_ && rdtfUnitPattern && rdtfUnitPattern.RELATIVE &&
-      rdtfUnitPattern.RELATIVE[dirString]) {
-    return rdtfUnitPattern.RELATIVE[dirString];
+  if (!this.alwaysNumeric_ && rdtfUnitPattern && rdtfUnitPattern.R &&
+      rdtfUnitPattern.R[dirString]) {
+    return rdtfUnitPattern.R[dirString];
   } else {
     // Direction data doesn't exist. Fallback to format numeric.
     return this.formatNumericInternal_(quantity, rdtfUnitPattern);
@@ -164,8 +164,8 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
  * Format with forced numeric value and relative unit.
  * @param {number} quantity  The number of units.
  *     Negative zero will use PAST, while unsiged or positive indicates FUTURE.
- * @param {!relativeDateTimeSymbols.StyleElement} unitStylePattern  Has PAST and
- *     FUTURE fields.
+ * @param {!relativeDateTimeSymbols.StyleElement|undefined} unitStylePattern Has
+ *     PAST and FUTURE fields.
  * @return {string}  The formatted result.
  * @private
  */
@@ -183,17 +183,18 @@ RelativeDateTimeFormat.prototype.formatNumericInternal_ = function(
   // Apply MessageFormat to the unit with FUTURE or PAST quantity, with test for
   // signed zero value.
   if (quantity > 0 || (quantity == 0 && (1 / quantity) == Infinity)) {
-    relTimeString = unitStylePattern.FUTURE;
+    relTimeString = unitStylePattern.F;
   } else {
     // Negative zero is interpreted as the past.
-    relTimeString = unitStylePattern.PAST;
+    relTimeString = unitStylePattern.P;
   }
 
   /**
    * Formatter for the messages requiring units. Plural formatting needed.
    * @type {?MessageFormat}
    */
-  var msgFormatter = new MessageFormat(relTimeString);
+  // Take basic message and wrap with plural message type.
+  var msgFormatter = new MessageFormat('{N,plural,' + relTimeString + '}');
   return msgFormatter.format({'N': absQuantity});
 };
 
@@ -201,17 +202,15 @@ RelativeDateTimeFormat.prototype.formatNumericInternal_ = function(
 /**
  * From the data, return the information for the given unit and style.
  * @param {number} relativeUnit
- * @return {!relativeDateTimeSymbols.StyleElement}  RelativeUnitStyle
+ * @return {!relativeDateTimeSymbols.StyleElement|undefined}  RelativeUnitStyle
  * @private
  */
 RelativeDateTimeFormat.prototype.getUnitStylePattern_ = function(relativeUnit) {
   var unitInfo = this.getUnitPattern_(relativeUnit);
   asserts.assertObject(unitInfo);
 
-  var styleInfo = this.getStylePattern_(unitInfo);
-  asserts.assertObject(unitInfo);
-
-  return styleInfo;
+  /** @typedef {!relativeDateTimeSymbols.StyleELement|undefined} */
+  return this.getStylePattern_(unitInfo);
 };
 
 /**
@@ -245,18 +244,23 @@ RelativeDateTimeFormat.prototype.getUnitPattern_ = function(unit) {
 /**
  * Use public unit symbol to retrieve data for that unit, given the style.
  * @param{!relativeDateTimeSymbols.RelativeDateTimeFormatStyles} unit
- * @return {!relativeDateTimeSymbols.StyleElement}
+ * @return {!relativeDateTimeSymbols.StyleElement|undefined}
  * @private
  */
 RelativeDateTimeFormat.prototype.getStylePattern_ = function(unit) {
+  // Fall back from NARROW to SHORT to LONG as needed.
   switch (this.style_) {
-    default:
-    case RelativeDateTimeFormat.Style.LONG:
-      return unit.LONG;
-    case RelativeDateTimeFormat.Style.SHORT:
-      return unit.SHORT;
     case RelativeDateTimeFormat.Style.NARROW:
-      return unit.NARROW;
+      if (unit.NARROW != undefined) {
+        return unit.NARROW;
+      }
+    case RelativeDateTimeFormat.Style.SHORT:
+      if (unit.SHORT != undefined) {
+        return unit.SHORT;
+      }
+    case RelativeDateTimeFormat.Style.LONG:
+    default:
+      return unit.LONG;
   }
 };
 
