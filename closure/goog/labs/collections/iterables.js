@@ -91,77 +91,10 @@ exports.map = function*(f, iterable) {
  *     values.
  * @template VALUE
  */
-exports.filter = function(f, iterable) {
-  return new FactoryIterable(function() {
-    const iterator = exports.getIterator(iterable);
-    return new FilterIterator(f, iterator);
-  });
-};
-
-
-/**
- * Helper class for `filter`.
- * @implements {Iterator<VALUE>}
- * @template VALUE
- */
-class FilterIterator {
-  /**
-   * @param {function(VALUE): boolean} f
-   * @param {!Iterator<VALUE>} iterator
-   */
-  constructor(f, iterator) {
-    /** @private @const */
-    this.func_ = f;
-    /** @private @const */
-    this.iterator_ = iterator;
-  }
-
-  /**
-   * @override
-   */
-  next() {
-    while (true) {
-      const next = this.iterator_.next();
-      if (next.done) {
-        return {done: true, value: undefined};
-      }
-
-      const value = next.value;
-      if (this.func_(value)) {
-        return {done: false, value};
-      }
-
-      // if false, we keep going for the next value.
+exports.filter = function*(f, iterable) {
+  for (const elem of iterable) {
+    if (f(elem)) {
+      yield elem;
     }
   }
-}
-
-/**
- * Helper class to create an iterable with a given iterator factory.
- * @implements {Iterable<VALUE>}
- * @template VALUE
- */
-class FactoryIterable {
-  /**
-   * @param {function():!Iterator<VALUE>} iteratorFactory
-   */
-  constructor(iteratorFactory) {
-    /**
-     * @private @const
-     */
-    this.iteratorFactory_ = iteratorFactory;
-  }
-}
-
-
-// TODO(nnaze): For now, this section is not run if Symbol is not defined,
-// since goog.global.Symbol.iterator will not be defined below.
-// Determine best course of action if "Symbol" is not available.
-if (goog.global.Symbol) {
-  /**
-   * @return {!Iterator<VALUE>}
-   */
-  FactoryIterable.prototype[goog.global.Symbol.iterator] = function() {
-    return this.iteratorFactory_();
-  };
-}
+};
