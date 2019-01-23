@@ -41,7 +41,7 @@ exports.getIterator = function(iterable) {
  * Warning: this function will never halt if given an iterable that
  * is never exhausted.
  *
- * @param {function(VALUE): void} f
+ * @param {function(VALUE) : *} f
  * @param {!Iterable<VALUE>} iterable
  * @template VALUE
  */
