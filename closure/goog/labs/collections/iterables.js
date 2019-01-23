@@ -71,11 +71,10 @@ exports.forEach = function(f, iterable) {
  *     values.
  * @template THIS, VALUE, RESULT
  */
-exports.map = function(f, iterable) {
-  return new FactoryIterable(function() {
-    const iterator = exports.getIterator(iterable);
-    return new MapIterator(f, iterator);
-  });
+exports.map = function*(f, iterable) {
+  for (const elem of iterable) {
+    yield f(elem);
+  }
 };
 
 
@@ -99,38 +98,6 @@ exports.filter = function(f, iterable) {
   });
 };
 
-
-/**
- * Helper class for `map`.
- * @implements {Iterator<RESULT>}
- * @template VALUE, RESULT
- */
-class MapIterator {
-  /**
-   * @param {function(VALUE): RESULT} f
-   * @param {!Iterator<VALUE>} iterator
-   */
-  constructor(f, iterator) {
-    /** @private @const */
-    this.func_ = f;
-    /** @private @const */
-    this.iterator_ = iterator;
-  }
-
-  /**
-   * @override
-   */
-  next() {
-    const nextObj = this.iterator_.next();
-
-    if (nextObj.done) {
-      return {done: true, value: undefined};
-    }
-
-    const mappedValue = this.func_(nextObj.value);
-    return {done: false, value: mappedValue};
-  }
-}
 
 /**
  * Helper class for `filter`.
