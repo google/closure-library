@@ -320,4 +320,28 @@ testSuite({
         'bad style returned', RelativeDateTimeFormat.Style.NARROW, style);
   },
 
+  // Test that retrieving relative unit is returned when defined only.
+  testGetRelativeStringDefined: function() {
+    var fmt = new RelativeDateTimeFormat();
+
+    var result =
+        fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -7);
+    assertUndefined(result);  // Expect undefined for Day -7
+
+    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -2);
+    assertUndefined(result);  // Expect undefined for Day -2 English
+
+    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.YEAR, -1);
+    assertEquals('last year', result);
+
+    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 0);
+    assertEquals('today', result);
+
+    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.QUARTER, 1);
+    assertEquals('next quarter', result);
+
+    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 2);
+    assertUndefined(result);  // No special term for in 2 days in English
+  },
+
 });

@@ -284,4 +284,27 @@ RelativeDateTimeFormat.prototype.getNumericMode = function() {
   }
 };
 
+/**
+ * Returns relative field for an offset of a  given value unit
+ * if it is defined for the current style.
+ * If the value does not exist, return undefined.
+ * For example, is there a -2 offset for DAY in the current locale and style.
+ * @param{!RelativeDateTimeFormat.Unit} unit
+ * @param{string|number} offset
+ * @return{string|undefined}
+ */
+RelativeDateTimeFormat.prototype.isOffsetDefinedForUnit = function(
+    unit, offset) {
+  var rdtfUnitPattern = this.getUnitStylePattern_(unit);
+
+  if (typeof (offset) == 'number') {
+    offset = offset.toString();
+  }
+  // Check for force numeric and having relative value with the given quantity.
+  if (rdtfUnitPattern && rdtfUnitPattern.R && rdtfUnitPattern.R[offset]) {
+    return rdtfUnitPattern.R[offset];
+  }
+  return undefined;
+};
+
 exports = RelativeDateTimeFormat;
