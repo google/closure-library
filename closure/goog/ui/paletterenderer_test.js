@@ -138,3 +138,28 @@ function testSetContentIncremental() {
   assertEquals(4, goog.dom.getElementsByClass('item', rows[0]).length);
   assertEquals(2, goog.dom.getElementsByClass('item', rows[1]).length);
 }
+
+function testA11yLabelsSetContentIncremental() {
+  var itemEls = goog.array.map(items, function(item, index, a) {
+    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
+  });
+
+  createPalette([]);
+  palette.render();
+  var paletteEl = palette.getElementStrict();
+
+  palette.setContent(itemEls.slice(0, 1));
+  var cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
+  assertEquals(4, cells.length);
+  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
+  assertEquals('', goog.a11y.aria.getLabel(cells[1]));
+  assertEquals('', goog.a11y.aria.getLabel(cells[2]));
+  assertEquals('', goog.a11y.aria.getLabel(cells[3]));
+
+  palette.setContent(itemEls);
+  cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
+  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
+  assertEquals('title-1', goog.a11y.aria.getLabel(cells[1]));
+  assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
+  assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
+}
