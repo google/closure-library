@@ -46,14 +46,8 @@ exports.getIterator = function(iterable) {
  * @template VALUE
  */
 exports.forEach = function(f, iterable) {
-  const iterator =
-      /** @type {!Iterator<VALUE>} */ (exports.getIterator(iterable));
-  while (true) {
-    const next = iterator.next();
-    if (next.done) {
-      return;
-    }
-    f(next.value);
+  for (const elem of iterable) {
+    f(elem);
   }
 };
 
