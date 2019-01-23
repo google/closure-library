@@ -19,7 +19,7 @@
 goog.module('goog.labs.iterableTest');
 goog.setTestOnly('goog.labs.iterableTest');
 
-const iterable = goog.require('goog.labs.iterable');
+const iterables = goog.require('goog.labs.collections.iterables');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -81,7 +81,7 @@ testSuite({
     const range = createRangeIterable(0, 3);
 
     const callback = recordFunction();
-    iterable.forEach(callback, range, self);
+    iterables.forEach(callback, range, self);
 
     callback.assertCallCount(3);
 
@@ -104,8 +104,8 @@ testSuite({
       return i + 2;
     }
 
-    const newIterable = iterable.map(addTwo, range);
-    const newIterator = iterable.getIterator(newIterable);
+    const newIterable = iterables.map(addTwo, range);
+    const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();
     assertEquals(2, nextObj.value);
@@ -133,8 +133,8 @@ testSuite({
     }
 
     const range = createRangeIterable(0, 6);
-    const newIterable = iterable.filter(isEven, range);
-    const newIterator = iterable.getIterator(newIterable);
+    const newIterable = iterables.filter(isEven, range);
+    const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();
     assertEquals(0, nextObj.value);
