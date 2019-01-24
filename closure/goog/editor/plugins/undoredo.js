@@ -729,6 +729,15 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.getUndoContent = function() {
 
 
 /**
+ * Get the content to restore on redo.
+ * @return {string|undefined}
+ */
+goog.editor.plugins.UndoRedo.UndoState_.prototype.getRedoContent = function() {
+  return this.redoContent_;
+};
+
+
+/**
  * Performs the undo operation represented by this state.
  * @override
  */
