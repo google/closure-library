@@ -408,4 +408,10 @@ testAgents.KAIOS =
     'Mozilla/5.0 (Mobile; LYF/LF-2403N/LYF-LF2403N-000-01-18-270717; rv:48.0)' +
     ' Gecko/48.0 Firefox/48.0 KaiOS/2.0';
 
+/** @const {string} */
+testAgents.GO2PHONE =
+    'Mozilla/5.0 (Linux; Android 8.1.0; GAFP sp9820e_1h10_go_native)' +
+    ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3605.0 Mobile' +
+    ' Safari/537.36';
+
 });  // goog.scope
