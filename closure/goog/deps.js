@@ -606,7 +606,7 @@ goog.addDependency('i18n/ordinalrules.js', ['goog.i18n.ordinalRules'], [], {});
 goog.addDependency('i18n/pluralrules.js', ['goog.i18n.pluralRules'], [], {});
 goog.addDependency('i18n/pluralrules_test.js', ['goog.i18n.pluralRulesTest'], ['goog.i18n.pluralRules', 'goog.testing.jsunit'], {});
 goog.addDependency('i18n/relativedatetimeformat.js', ['goog.i18n.RelativeDateTimeFormat'], ['goog.asserts', 'goog.i18n.MessageFormat', 'goog.i18n.relativeDateTimeSymbols'], {'lang': 'es5', 'module': 'goog'});
-goog.addDependency('i18n/relativedatetimeformat_test.js', ['goog.i18n.RelativeDateTimeFormatTest'], ['goog.i18n.RelativeDateTimeFormat', 'goog.i18n.relativeDateTimeSymbols', 'goog.i18n.relativeDateTimeSymbolsExt', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('i18n/relativedatetimeformat_test.js', ['goog.i18n.RelativeDateTimeFormatTest'], ['goog.i18n.NumberFormatSymbols_ar_EG', 'goog.i18n.NumberFormatSymbols_en', 'goog.i18n.NumberFormatSymbols_es', 'goog.i18n.NumberFormatSymbols_fa', 'goog.i18n.RelativeDateTimeFormat', 'goog.i18n.relativeDateTimeSymbols', 'goog.i18n.relativeDateTimeSymbolsExt', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('i18n/relativedatetimesymbols.js', ['goog.i18n.relativeDateTimeSymbols'], [], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('i18n/relativedatetimesymbolsext.js', ['goog.i18n.relativeDateTimeSymbolsExt'], ['goog.i18n.relativeDateTimeSymbols'], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('i18n/timezone.js', ['goog.i18n.TimeZone'], ['goog.array', 'goog.date.DateLike', 'goog.object', 'goog.string'], {});

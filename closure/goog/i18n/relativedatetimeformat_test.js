@@ -15,6 +15,11 @@
 goog.module('goog.i18n.RelativeDateTimeFormatTest');
 goog.setTestOnly('goog.i18n.RelativeDateTimeFormatTest');
 
+var NumberFormatSymbols_ar_EG = goog.require('goog.i18n.NumberFormatSymbols_ar_EG');
+var NumberFormatSymbols_en = goog.require('goog.i18n.NumberFormatSymbols_en');
+var NumberFormatSymbols_es = goog.require('goog.i18n.NumberFormatSymbols_es');
+var NumberFormatSymbols_fa = goog.require('goog.i18n.NumberFormatSymbols_fa');
+
 var RelativeDateTimeFormat = goog.require('goog.i18n.RelativeDateTimeFormat');
 
 var relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
@@ -54,9 +59,17 @@ var localeSymbols = {
     RelativeDateTimeFormatSymbols:
         relativeDateTimeSymbols.RelativeDateTimeSymbols_fr,
   },
+  'ar': {
+    RelativeDateTimeFormatSymbols:
+        relativeDateTimeSymbols.RelativeDateTimeSymbols_ar,
+  },
   'ar_EG': {
     RelativeDateTimeFormatSymbols:
         relativeDateTimeSymbols.RelativeDateTimeSymbols_ar_EG,
+  },
+  'ar_LY': {
+    RelativeDateTimeFormatSymbols:
+        relativeDateTimeSymbolsExt.RelativeDateTimeSymbols_ar_LY,
   },
   'agq': {
     RelativeDateTimeFormatSymbols:
@@ -69,6 +82,14 @@ var localeSymbols = {
   'as': {
     RelativeDateTimeFormatSymbols:
         relativeDateTimeSymbolsExt.RelativeDateTimeSymbols_as,
+  },
+  'fa': {
+    RelativeDateTimeFormatSymbols:
+        relativeDateTimeSymbols.RelativeDateTimeSymbols_fa,
+  },
+  'he': {
+    RelativeDateTimeFormatSymbols:
+        relativeDateTimeSymbols.RelativeDateTimeSymbols_he,
   },
 };
 
@@ -117,7 +138,6 @@ var formatDirectionTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'next wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 1, RelativeDateTimeFormat.Unit.WEEK, 'next wk.'),
 
-  // TODO: test other STYLES and LOCALES
   new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'الأسبوع القادم'),
 
   /* Trying with locale "es" */
@@ -175,8 +195,27 @@ var formatNumericTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.QUARTER, '0 quarters ago'),
 
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.YEAR, '0 years ago'),
+];
 
+var formatFarsiData = [
   // Other locales, too!
+  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '۳ روز بعد'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, -3, RelativeDateTimeFormat.Unit.MONTH, '۳ ماه پیش'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, -17, RelativeDateTimeFormat.Unit.HOUR, '۱۷ ساعت پیش'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, 9, RelativeDateTimeFormat.Unit.SECOND, '۹ ثانیه بعد'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, -11, RelativeDateTimeFormat.Unit.WEEK, '۱۱ هفته پیش'),
+];
+
+var formatArEgData = [
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.MONTH, 'خلال شهر واحد'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, -1, RelativeDateTimeFormat.Unit.DAY, 'قبل يوم واحد'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, 'خلال ٢ يوم'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.HOUR, 'خلال ٣ ساعة'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 28, RelativeDateTimeFormat.Unit.SECOND, 'خلال ٢٨ ثانية'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 101, RelativeDateTimeFormat.Unit.WEEK, 'خلال ١٠١ أسبوع'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1.5, RelativeDateTimeFormat.Unit.YEAR, 'خلال ١٫٥ سنة'),
 ];
 
 var formatNumericSpanishData = [
@@ -188,12 +227,17 @@ var formatNumericSpanishData = [
 
 
 var formatNumericExtendedData = [
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل 2 يوم'),
-  new DirectionData('agq', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, '-1 d'),
-  new DirectionData('agq', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, '+2 d'),
-  new DirectionData('ar_AE', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل 2 يوم'),
-  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.DAY, '1 দিনত'),
-  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '3 দিনত'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل ٢ يوم'),
+  new DirectionData('agq', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, '-١ d'),
+  new DirectionData('agq', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, '+٢ d'),
+  new DirectionData('ar_AE', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل ٢ يوم'),
+  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.DAY, '١ দিনত'),
+  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '٣ দিনত'),
+];
+
+var formatNumericRtlData = [
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'לפני 2 ימים'),
+  new DirectionData('ar_LY', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل 2 يوم'),
 ];
 
 // clang-format on
@@ -221,6 +265,7 @@ testSuite({
   },
 
   testFormatNumericStyle: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
     for (var i = 0; i < formatNumericTestData.length; i++) {
       var data = formatNumericTestData[i];
       var symbols = localeSymbols[data.locale];
@@ -240,6 +285,7 @@ testSuite({
   },
 
   testNumericMode: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
     var data = new DirectionData(
         'es', RelativeDateTimeFormat.Style.LONG, -1,
         RelativeDateTimeFormat.Unit.DAY, 'ayer');
@@ -269,6 +315,7 @@ testSuite({
   },
 
   testFormatNumericSpanishStyle: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
     for (var i = 0; i < formatNumericSpanishData.length; i++) {
       var data = formatNumericSpanishData[i];
       var symbols = localeSymbols[data.locale];
@@ -281,9 +328,53 @@ testSuite({
     }
   },
 
+  testFormatNumericFarsiStyle: function() {
+    for (var i = 0; i < formatFarsiData.length; i++) {
+      var data = formatFarsiData[i];
+      var symbols = localeSymbols[data.locale];
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fa;
+
+      var fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
+
+      var result = fmt.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), data.expected, result);
+    }
+  },
+
+  testFormatNumericArEgStyle: function() {
+    for (var i = 0; i < formatArEgData.length; i++) {
+      var data = formatArEgData[i];
+      var symbols = localeSymbols[data.locale];
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ar_EG;
+
+      var fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
+
+      var result = fmt.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), data.expected, result);
+    }
+  },
+
   testFormatNumericExtendedStyle: function() {
     for (var i = 0; i < formatNumericExtendedData.length; i++) {
       var data = formatNumericExtendedData[i];
+      var symbols = localeSymbols[data.locale];
+      var fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
+
+      var result = fmt.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), data.expected, result);
+    }
+  },
+
+  testFormatNumericRtl: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    for (var i = 0; i < formatNumericRtlData.length; i++) {
+      var data = formatNumericRtlData[i];
       var symbols = localeSymbols[data.locale];
       var fmt = new RelativeDateTimeFormat(
           RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
