@@ -371,7 +371,7 @@ function testChangeActiveMonth() {
   // Set date.
   picker.setDate(new Date(2010, 1, 26));
   assertEquals(
-      'no change active month event dispatched', 1, changeActiveMonthEvents);
+      'change active month events dispatched', 1, changeActiveMonthEvents);
   assertTrue(
       'date is set', new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
 
@@ -397,6 +397,65 @@ function testChangeActiveMonth() {
   picker.previousYear();
   assertEquals(
       '4 change active month events dispatched', 5, changeActiveMonthEvents);
+}
+
+function testChangeActiveMonth_whenGridGrows_dispatchesGridIncreaseEvent() {
+  picker = new goog.ui.DatePicker();
+  picker.setShowFixedNumWeeks(false);
+  picker.render();
+  var gridSizeIncreaseEvents = 0;
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.GRID_SIZE_INCREASE,
+      () => void gridSizeIncreaseEvents++);
+
+  // Feb 2015 has only four rows of dates.
+  picker.setDate(new Date(2015, 1, 1));
+  assertEquals('No grid size changes yet', 0, gridSizeIncreaseEvents);
+
+  // Mar 2015 has 5 rows.
+  picker.nextMonth();
+  assertEquals(
+      '1 grid size increase events dispatched', 1, gridSizeIncreaseEvents);
+
+  // Going back to Feb is a size decrease, so no dispatch.
+  picker.previousMonth();
+  assertEquals(
+      '1 grid size increase events dispatched', 1, gridSizeIncreaseEvents);
+
+  // Going forward to Mar again should dispatch again.
+  picker.nextMonth();
+  assertEquals(
+      '2 grid size increase events dispatched', 2, gridSizeIncreaseEvents);
+
+  // Apr 2015 has 5 rows also.
+  picker.nextMonth();
+  assertEquals(
+      '2 grid size increase events dispatched', 2, gridSizeIncreaseEvents);
+
+  // May 2015 has 6 rows.
+  picker.nextMonth();
+  assertEquals(
+      '3 grid size increase events dispatched', 3, gridSizeIncreaseEvents);
+}
+
+function
+testChangeActiveMonth_withFixedNumWeeks_dispatchesNoGridIncreaseEvent() {
+  picker = new goog.ui.DatePicker();
+  picker.setShowFixedNumWeeks(true);
+  picker.render();
+  var gridSizeIncreaseEvents = 0;
+  goog.events.listen(
+      picker, goog.ui.DatePicker.Events.GRID_SIZE_INCREASE,
+      () => void gridSizeIncreaseEvents++);
+
+  // Feb 2015 has only four rows of dates.
+  picker.setDate(new Date(2015, 1, 1));
+  assertEquals('No grid size changes yet', 0, gridSizeIncreaseEvents);
+
+  for (var i = 0; i < 100; i++) {
+    picker.nextMonth();
+  }
+  assertEquals('No grid size changes', 0, gridSizeIncreaseEvents);
 }
 
 function testUserSelectableDates() {

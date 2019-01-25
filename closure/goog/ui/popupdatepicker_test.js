@@ -17,19 +17,24 @@ goog.setTestOnly('goog.ui.PopupDatePickerTest');
 
 goog.require('goog.date.Date');
 goog.require('goog.events');
+goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
+goog.require('goog.ui.DatePicker');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.PopupDatePicker');
 
+var mockControl;
 var popupDatePicker;
 
 function setUp() {
+  mockControl = new goog.testing.MockControl();
   popupDatePicker = new goog.ui.PopupDatePicker();
 }
 
 function tearDown() {
   popupDatePicker.dispose();
+  mockControl.$tearDown();
 }
 
 function testIsVisible() {
@@ -87,4 +92,58 @@ function testShow() {
   datePicker.setDate(date);
   popupDatePicker.showPopup(document.body, true /* opt_keepDate */);
   assertTrue(date.equals(datePicker.getDate()));
+}
+
+/**
+ * Tests that repositioning based on DatePicker growth happens if the flag is
+ * enabled.
+ */
+function testRepositioning_whenDatePickerGrows_withFlagEnabled() {
+  // Given a PopupDatePicker showing with KeepAllWeeksInViewport = true.
+  popupDatePicker.setKeepAllWeeksInViewport(true);
+  popupDatePicker.createDom();
+  popupDatePicker.render();
+  var datePicker = popupDatePicker.getDatePicker();
+  var date = new goog.date.Date();
+
+  datePicker.setDate(date);
+  popupDatePicker.showPopup(document.body, undefined /* opt_keepDate */);
+
+  mockControl.createMethodMock(popupDatePicker.popup_, 'reposition');
+
+  // Expect the PopupDatePicker to reposition.
+  popupDatePicker.popup_.reposition().$once();
+
+  mockControl.$replayAll();
+
+  // When the DatePicker reports a size increase.
+  datePicker.dispatchEvent(goog.ui.DatePicker.Events.GRID_SIZE_INCREASE);
+  mockControl.$verifyAll();
+}
+
+/**
+ * Tests that repositioning based on DatePicker growth does not happen if the
+ * flag is disabled.
+ */
+function testRepositioning_whenDatePickerGrows_withFlagDisabled() {
+  // Given a PopupDatePicker showing with KeepAllWeeksInViewport = false,
+  // default state.
+  popupDatePicker.createDom();
+  popupDatePicker.render();
+  var datePicker = popupDatePicker.getDatePicker();
+  var date = new goog.date.Date();
+
+  datePicker.setDate(date);
+  popupDatePicker.showPopup(document.body, undefined /* opt_keepDate */);
+
+  mockControl.createMethodMock(popupDatePicker.popup_, 'reposition');
+
+  // Expect the PopupDatePicker not to reposition.
+  popupDatePicker.popup_.reposition().$never();
+
+  mockControl.$replayAll();
+
+  // When the DatePicker reports a size increase.
+  datePicker.dispatchEvent(goog.ui.DatePicker.Events.GRID_SIZE_INCREASE);
+  mockControl.$verifyAll();
 }

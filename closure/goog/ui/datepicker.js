@@ -173,7 +173,6 @@ goog.ui.DatePicker = function(
 
   /** @private {Element} */
   this.menu_;
-
   /** @private {Element} */
   this.menuSelected_;
 
@@ -182,6 +181,12 @@ goog.ui.DatePicker = function(
 
   /** @private {function(Element)} */
   this.menuCallback_;
+
+  /**
+   * Number of rows in the picker table. Used for detecting size changes.
+   * @private {number}
+   */
+  this.lastNumberOfRowsInGrid_ = 0;
 };
 goog.inherits(goog.ui.DatePicker, goog.ui.Component);
 goog.tagUnsealableClass(goog.ui.DatePicker);
@@ -335,6 +340,14 @@ goog.ui.DatePicker.YEAR_MENU_RANGE_ = 5;
 
 
 /**
+ * The maximum number of rendered weeks a month can have.
+ * @const {number}
+ * @private
+ */
+goog.ui.DatePicker.MAX_NUM_WEEKS_ = 6;
+
+
+/**
  * Constants for event names
  *
  * @enum {string}
@@ -342,6 +355,7 @@ goog.ui.DatePicker.YEAR_MENU_RANGE_ = 5;
 goog.ui.DatePicker.Events = {
   CHANGE: 'change',
   CHANGE_ACTIVE_MONTH: 'changeActiveMonth',
+  GRID_SIZE_INCREASE: 'gridSizeIncrease',
   SELECT: 'select'
 };
 
@@ -1465,9 +1479,12 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
   var todayYear = today.getFullYear();
   var todayMonth = today.getMonth();
   var todayDate = today.getDate();
+  // The maximum number of weeks a month can have is 6. This is decreased below
+  // if weeks are hidden.
+  var numberOfWeeksInThisMonth = goog.ui.DatePicker.MAX_NUM_WEEKS_;
 
   // Draw calendar week by week, a worst case month has six weeks.
-  for (var y = 0; y < 6; y++) {
+  for (var y = 0; y < goog.ui.DatePicker.MAX_NUM_WEEKS_; y++) {
     // Draw week number, if enabled
     if (this.showWeekNum_) {
       goog.dom.setTextContent(
@@ -1550,17 +1567,33 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       goog.dom.classlist.set(el, classes.join(' '));
     }
 
-    // Hide the either the last one or last two weeks if they contain no days
-    // from the active month and the showFixedNumWeeks is false. The first four
-    // weeks are always shown as no month has less than 28 days).
+    // Hide either the last one or last two weeks if they contain no days from
+    // the active month and the showFixedNumWeeks is false. The first four weeks
+    // are always shown as no month has less than 28 days).
     if (y >= 4) {
       var parentEl = /** @type {Element} */ (
           this.elTable_[y + 1][0].parentElement ||
           this.elTable_[y + 1][0].parentNode);
+      var doesMonthHaveThisWeek = this.grid_[y][0].getMonth() == month;
       goog.style.setElementShown(
-          parentEl,
-          this.grid_[y][0].getMonth() == month || this.showFixedNumWeeks_);
+          parentEl, doesMonthHaveThisWeek || this.showFixedNumWeeks_);
+
+      if (!doesMonthHaveThisWeek) {
+        numberOfWeeksInThisMonth = Math.min(numberOfWeeksInThisMonth, y);
+      }
     }
+  }
+
+  var numberOfRowsInGrid =
+      (this.showFixedNumWeeks_ ? goog.ui.DatePicker.MAX_NUM_WEEKS_ :
+                                 numberOfWeeksInThisMonth) +
+      (this.showWeekdays_ ? 1 : 0);
+
+  if (this.lastNumberOfRowsInGrid_ != numberOfRowsInGrid) {
+    if (this.lastNumberOfRowsInGrid_ < numberOfRowsInGrid) {
+      this.dispatchEvent(goog.ui.DatePicker.Events.GRID_SIZE_INCREASE);
+    }
+    this.lastNumberOfRowsInGrid_ = numberOfRowsInGrid;
   }
 };
 
