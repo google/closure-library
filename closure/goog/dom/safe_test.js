@@ -740,6 +740,19 @@ function testParseFromStringHtml() {
   assertEquals('c', node.textContent);
 }
 
+function testParseFromString() {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
+    return;
+  }
+  var html = goog.html.SafeHtml.create('a', {'class': 'b'}, 'c');
+  var node =
+      goog.dom.safe.parseFromString(new DOMParser(), html, 'application/xml')
+          .firstChild;
+  assertEquals('a', node.tagName);
+  assertEquals('b', node.getAttribute('class'));
+  assertEquals('c', node.textContent);
+}
+
 function testCreateImageFromBlob() {
   // Skip unsupported test if IE9 or lower.
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
