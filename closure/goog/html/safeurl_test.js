@@ -109,6 +109,16 @@ function testSafeUrlSanitize_sanitizeTelUrl() {
   }
 }
 
+function testSafeUrlSanitize_sanitizeSshUrl() {
+  var vectors = goog.html.safeUrlTestVectors.SSH_VECTORS;
+  for (var i = 0; i < vectors.length; ++i) {
+    var v = vectors[i];
+    var observed = goog.html.SafeUrl.fromSshUrl(v.input);
+    assertEquals(
+        'SSH Url: ' + v.input, v.expected, goog.html.SafeUrl.unwrap(observed));
+  }
+}
+
 
 function testSafeUrlSanitize_sipUrlEmail() {
   var expected = 'sip:username@example.com';

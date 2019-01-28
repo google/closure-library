@@ -425,6 +425,21 @@ goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
 
 
 /**
+ * Creates a SafeUrl wrapping a ssh: URL.
+ *
+ * @param {string} sshUrl A ssh URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromSshUrl = function(sshUrl) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(sshUrl, 'ssh://')) {
+    sshUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      sshUrl);
+};
+
+/**
  * Sanitizes a Chrome extension URL to SafeUrl, given a compile-time-constant
  * extension identifier. Can also be restricted to chrome extensions.
  *
