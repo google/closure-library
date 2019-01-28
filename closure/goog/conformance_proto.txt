@@ -212,6 +212,8 @@ requirement: {
   # TODO(jakubvrana): These need to be refactored.
   whitelist_regexp: '.+/closure/goog/editor/icontent.js'
   whitelist_regexp: '.+/closure/goog/testing/'
+  # TODO(jakubvrana): Elemental internals.
+  whitelist: 'third_party/java_src/elemental2/java/elemental2/dom/dom-j2cl.js.zip'
 }
 
 requirement: {
