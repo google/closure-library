@@ -264,7 +264,7 @@ goog.addDependency('dom/pattern/text.js', ['goog.dom.pattern.Text'], ['goog.dom.
 goog.addDependency('dom/range.js', ['goog.dom.Range'], ['goog.dom', 'goog.dom.AbstractRange', 'goog.dom.BrowserFeature', 'goog.dom.ControlRange', 'goog.dom.MultiRange', 'goog.dom.NodeType', 'goog.dom.TextRange'], {});
 goog.addDependency('dom/range_test.js', ['goog.dom.RangeTest'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.Range', 'goog.dom.RangeType', 'goog.dom.TagName', 'goog.dom.TextRange', 'goog.dom.browserrange', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('dom/rangeendpoint.js', ['goog.dom.RangeEndpoint'], [], {});
-goog.addDependency('dom/safe.js', ['goog.dom.safe', 'goog.dom.safe.InsertAdjacentHtmlPosition'], ['goog.asserts', 'goog.dom.asserts', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string', 'goog.string.Const'], {});
+goog.addDependency('dom/safe.js', ['goog.dom.safe', 'goog.dom.safe.InsertAdjacentHtmlPosition'], ['goog.asserts', 'goog.dom.asserts', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string.Const', 'goog.string.internal'], {});
 goog.addDependency('dom/safe_test.js', ['goog.dom.safeTest'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.dom.safe.InsertAdjacentHtmlPosition', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.testing', 'goog.string', 'goog.string.Const', 'goog.testing', 'goog.testing.jsunit', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('dom/savedcaretrange.js', ['goog.dom.SavedCaretRange'], ['goog.array', 'goog.dom', 'goog.dom.SavedRange', 'goog.dom.TagName', 'goog.string'], {});
 goog.addDependency('dom/savedcaretrange_test.js', ['goog.dom.SavedCaretRangeTest'], ['goog.dom', 'goog.dom.Range', 'goog.dom.SavedCaretRange', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent'], {});
@@ -523,17 +523,17 @@ goog.addDependency('html/flash.js', ['goog.html.flash'], ['goog.asserts', 'goog.
 goog.addDependency('html/flash_test.js', ['goog.html.flashTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/legacyconversions.js', ['goog.html.legacyconversions'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl'], {});
 goog.addDependency('html/legacyconversions_test.js', ['goog.html.legacyconversionsTest'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.legacyconversions', 'goog.testing.jsunit'], {});
-goog.addDependency('html/safehtml.js', ['goog.html.SafeHtml'], ['goog.array', 'goog.asserts', 'goog.dom.TagName', 'goog.dom.tags', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.labs.userAgent.browser', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
+goog.addDependency('html/safehtml.js', ['goog.html.SafeHtml'], ['goog.array', 'goog.asserts', 'goog.dom.TagName', 'goog.dom.tags', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.labs.userAgent.browser', 'goog.object', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {});
 goog.addDependency('html/safehtml_test.js', ['goog.html.safeHtmlTest'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.testing', 'goog.i18n.bidi.Dir', 'goog.labs.userAgent.browser', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/safehtmlformatter.js', ['goog.html.SafeHtmlFormatter'], ['goog.asserts', 'goog.dom.tags', 'goog.html.SafeHtml', 'goog.string'], {});
 goog.addDependency('html/safehtmlformatter_test.js', ['goog.html.safeHtmlFormatterTest'], ['goog.html.SafeHtml', 'goog.html.SafeHtmlFormatter', 'goog.html.SafeUrl', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {'lang': 'es5'});
 goog.addDependency('html/safescript.js', ['goog.html.SafeScript'], ['goog.asserts', 'goog.string.Const', 'goog.string.TypedString'], {});
 goog.addDependency('html/safescript_test.js', ['goog.html.safeScriptTest'], ['goog.html.SafeScript', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 'goog.asserts', 'goog.html.SafeUrl', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
+goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 'goog.asserts', 'goog.html.SafeUrl', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {});
 goog.addDependency('html/safestyle_test.js', ['goog.html.safeStyleTest'], ['goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('html/safestylesheet.js', ['goog.html.SafeStyleSheet'], ['goog.array', 'goog.asserts', 'goog.html.SafeStyle', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
+goog.addDependency('html/safestylesheet.js', ['goog.html.SafeStyleSheet'], ['goog.array', 'goog.asserts', 'goog.html.SafeStyle', 'goog.object', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {});
 goog.addDependency('html/safestylesheet_test.js', ['goog.html.safeStyleSheetTest'], ['goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], {});
+goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {});
 goog.addDependency('html/safeurl_test.js', ['goog.html.safeUrlTest'], ['goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.safeUrlTestVectors', 'goog.i18n.bidi.Dir', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('html/safeurl_test_vectors.js', ['goog.html.safeUrlTestVectors'], [], {});
 goog.addDependency('html/sanitizer/attributewhitelist.js', ['goog.html.sanitizer.AttributeSanitizedWhitelist', 'goog.html.sanitizer.AttributeWhitelist'], [], {});
@@ -560,7 +560,7 @@ goog.addDependency('html/textextractor.js', ['goog.html.textExtractor'], ['goog.
 goog.addDependency('html/textextractor_test.js', ['goog.html.textExtractorTest'], ['goog.html.textExtractor', 'goog.testing.testSuite'], {'module': 'goog'});
 goog.addDependency('html/trustedresourceurl.js', ['goog.html.TrustedResourceUrl'], ['goog.asserts', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString'], {});
 goog.addDependency('html/trustedresourceurl_test.js', ['goog.html.trustedResourceUrlTest'], ['goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.object', 'goog.string.Const', 'goog.testing.jsunit'], {});
-goog.addDependency('html/uncheckedconversions.js', ['goog.html.uncheckedconversions'], ['goog.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string', 'goog.string.Const'], {});
+goog.addDependency('html/uncheckedconversions.js', ['goog.html.uncheckedconversions'], ['goog.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string.Const', 'goog.string.internal'], {});
 goog.addDependency('html/uncheckedconversions_test.js', ['goog.html.uncheckedconversionsTest'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.uncheckedconversions', 'goog.i18n.bidi.Dir', 'goog.string.Const', 'goog.testing.jsunit'], {});
 goog.addDependency('html/utils.js', ['goog.html.utils'], ['goog.string'], {});
 goog.addDependency('html/utils_test.js', ['goog.html.UtilsTest'], ['goog.array', 'goog.dom.TagName', 'goog.html.utils', 'goog.object', 'goog.testing.jsunit'], {});
@@ -707,7 +707,7 @@ goog.addDependency('labs/testing/objectmatcher.js', ['goog.labs.testing.AnyObjec
 goog.addDependency('labs/testing/objectmatcher_test.js', ['goog.labs.testing.objectMatcherTest'], ['goog.labs.testing.MatcherError', 'goog.labs.testing.ObjectEqualsMatcher', 'goog.labs.testing.assertThat', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/testing/stringmatcher.js', ['goog.labs.testing.AnyStringMatcher', 'goog.labs.testing.ContainsStringMatcher', 'goog.labs.testing.EndsWithMatcher', 'goog.labs.testing.EqualToIgnoringWhitespaceMatcher', 'goog.labs.testing.EqualsMatcher', 'goog.labs.testing.RegexMatcher', 'goog.labs.testing.StartsWithMatcher', 'goog.labs.testing.StringContainsInOrderMatcher'], ['goog.asserts', 'goog.labs.testing.Matcher', 'goog.string'], {});
 goog.addDependency('labs/testing/stringmatcher_test.js', ['goog.labs.testing.stringMatcherTest'], ['goog.labs.testing.MatcherError', 'goog.labs.testing.StringContainsInOrderMatcher', 'goog.labs.testing.assertThat', 'goog.testing.jsunit'], {});
-goog.addDependency('labs/useragent/browser.js', ['goog.labs.userAgent.browser'], ['goog.array', 'goog.labs.userAgent.util', 'goog.object', 'goog.string'], {});
+goog.addDependency('labs/useragent/browser.js', ['goog.labs.userAgent.browser'], ['goog.array', 'goog.labs.userAgent.util', 'goog.object', 'goog.string.internal'], {});
 goog.addDependency('labs/useragent/browser_test.js', ['goog.labs.userAgent.browserTest'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.object', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/useragent/device.js', ['goog.labs.userAgent.device'], ['goog.labs.userAgent.util'], {});
 goog.addDependency('labs/useragent/device_test.js', ['goog.labs.userAgent.deviceTest'], ['goog.labs.userAgent.device', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.jsunit'], {});
@@ -716,7 +716,7 @@ goog.addDependency('labs/useragent/engine_test.js', ['goog.labs.userAgent.engine
 goog.addDependency('labs/useragent/platform.js', ['goog.labs.userAgent.platform'], ['goog.labs.userAgent.util', 'goog.string'], {});
 goog.addDependency('labs/useragent/platform_test.js', ['goog.labs.userAgent.platformTest'], ['goog.labs.userAgent.platform', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], {});
-goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string'], {});
+goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal'], {});
 goog.addDependency('labs/useragent/util_test.js', ['goog.labs.userAgent.utilTest'], ['goog.functions', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {});
 goog.addDependency('labs/useragent/verifier_test.js', ['goog.labs.useragent.verifierTest'], ['goog.labs.userAgent.browser', 'goog.labs.useragent.verifier', 'goog.testing.testSuite'], {'lang': 'es5', 'module': 'goog'});
@@ -1036,6 +1036,7 @@ goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['g
 goog.addDependency('storage/storagetester.js', ['goog.storage.storageTester'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts'], {});
 goog.addDependency('string/const.js', ['goog.string.Const'], ['goog.asserts', 'goog.string.TypedString'], {});
 goog.addDependency('string/const_test.js', ['goog.string.constTest'], ['goog.string.Const', 'goog.testing.jsunit'], {});
+goog.addDependency('string/internal.js', ['goog.string.internal'], [], {});
 goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.html.SafeHtml', 'goog.string'], {});
 goog.addDependency('string/linkify_test.js', ['goog.string.linkifyTest'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.string', 'goog.string.linkify', 'goog.testing.dom', 'goog.testing.jsunit'], {});
 goog.addDependency('string/newlines.js', ['goog.string.newlines', 'goog.string.newlines.Line'], ['goog.array'], {});
@@ -1043,7 +1044,7 @@ goog.addDependency('string/newlines_test.js', ['goog.string.newlinesTest'], ['go
 goog.addDependency('string/parser.js', ['goog.string.Parser'], [], {});
 goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string'], {});
 goog.addDependency('string/path_test.js', ['goog.string.pathTest'], ['goog.string.path', 'goog.testing.jsunit'], {});
-goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], [], {});
+goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], ['goog.string.internal'], {});
 goog.addDependency('string/string_test.js', ['goog.stringTest'], ['goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.testing.MockControl', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {});
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], [], {});
 goog.addDependency('string/stringbuffer_test.js', ['goog.string.StringBufferTest'], ['goog.string.StringBuffer', 'goog.testing.jsunit'], {});

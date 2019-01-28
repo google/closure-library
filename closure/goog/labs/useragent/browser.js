@@ -27,7 +27,7 @@ goog.provide('goog.labs.userAgent.browser');
 goog.require('goog.array');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.object');
-goog.require('goog.string');
+goog.require('goog.string.internal');
 
 
 // TODO(nnaze): Refactor to remove excessive exclusion logic in matching
@@ -280,7 +280,7 @@ goog.labs.userAgent.browser.getVersion = function() {
  *     given version.
  */
 goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
-  return goog.string.compareVersions(
+  return goog.string.internal.compareVersions(
              goog.labs.userAgent.browser.getVersion(), version) >= 0;
 };
 

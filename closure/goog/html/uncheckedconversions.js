@@ -36,8 +36,8 @@ goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.string');
 goog.require('goog.string.Const');
+goog.require('goog.string.internal');
 
 
 /**
@@ -67,7 +67,8 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       html, opt_dir || null);
@@ -97,7 +98,8 @@ goog.html.uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract =
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
       script);
@@ -127,7 +129,8 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
@@ -158,7 +161,8 @@ goog.html.uncheckedconversions
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeStyleSheet
       .createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet);
@@ -188,7 +192,8 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
@@ -218,7 +223,8 @@ goog.html.uncheckedconversions
   goog.asserts.assertString(
       goog.string.Const.unwrap(justification), 'must provide justification');
   goog.asserts.assert(
-      !goog.string.isEmptyOrWhitespace(goog.string.Const.unwrap(justification)),
+      !goog.string.internal.isEmptyOrWhitespace(
+          goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.TrustedResourceUrl
       .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);

@@ -25,9 +25,9 @@ goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
-goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
+goog.require('goog.string.internal');
 
 
 
@@ -314,7 +314,7 @@ goog.html.SafeUrl.fromTelUrl = function(telUrl) {
   // There's a risk that a tel: URL could immediately place a call once
   // clicked, without requiring user confirmation. For that reason it is
   // handled in this separate function.
-  if (!goog.string.caseInsensitiveStartsWith(telUrl, 'tel:')) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(telUrl, 'tel:')) {
     telUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
@@ -360,7 +360,7 @@ goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
-  if (!goog.string.caseInsensitiveStartsWith(
+  if (!goog.string.internal.caseInsensitiveStartsWith(
           facebookMessengerUrl, 'fb-messenger://share')) {
     facebookMessengerUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
@@ -377,7 +377,7 @@ goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
-  if (!goog.string.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
+  if (!goog.string.internal.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
       !goog.html.SafeUrl.isSmsUrlBodyValid_(smsUrl)) {
     smsUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }

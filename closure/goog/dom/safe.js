@@ -48,8 +48,8 @@ goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.string');
 goog.require('goog.string.Const');
+goog.require('goog.string.internal');
 
 
 /** @enum {string} */
@@ -495,7 +495,7 @@ goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
   goog.dom.asserts.assertIsHTMLLinkElement(link);
   link.rel = rel;
-  if (goog.string.caseInsensitiveContains(rel, 'stylesheet')) {
+  if (goog.string.internal.caseInsensitiveContains(rel, 'stylesheet')) {
     goog.asserts.assert(
         url instanceof goog.html.TrustedResourceUrl,
         'URL must be TrustedResourceUrl because "rel" contains "stylesheet"');
