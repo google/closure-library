@@ -181,7 +181,10 @@ function testThrowCallExceptionUnexpected() {
   mock.$throwException = function(m) { msg = m; };
 
   mock.$throwCallException('fn1', ['b']);
-  assertEquals('Unexpected call to fn1(string).', msg);
+  assertEquals(
+      'Unexpected call to fn1(string).\n' +
+          'Did you forget to $replay?',
+      msg);
 }
 
 function testThrowCallExceptionUnexpectedWithNext() {
@@ -195,6 +198,7 @@ function testThrowCallExceptionUnexpectedWithNext() {
   });
   assertEquals(
       'Unexpected call to fn1(string).\n' +
+          'Did you forget to $replay?\n' +
           'Next expected call was to fn2(number)',
       msg);
 }
