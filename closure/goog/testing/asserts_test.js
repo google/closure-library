@@ -419,6 +419,28 @@ function testAssertObjectEqualsSet() {
   });
 }
 
+function testAssertObjectEqualsMap() {
+  class FooClass {}
+
+  const map1 = new Map([
+    ['foo', 'bar'],
+    [1, 2],
+    [FooClass, 'bar'],
+  ]);
+  const map2 = new Map([
+    ['foo', 'bar'],
+    [1, 2],
+    [FooClass, 'bar'],
+  ]);
+
+  assertObjectEquals('maps should be equal', map1, map2);
+
+  map1.set('hi', 'hey');
+  assertThrows('sets should not be equal', function() {
+    assertObjectEquals(map1, map2);
+  });
+}
+
 function testAssertObjectEqualsIterNoEquals() {
   // an object with an iterator but no equals() and no map_ cannot
   // be compared

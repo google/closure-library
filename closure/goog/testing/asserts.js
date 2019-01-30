@@ -789,7 +789,8 @@ goog.testing.asserts.findDifferences = function(
               // sufficient.
               if (var2.get) {
                 innerAssertWithCycleCheck(
-                    value, var2.get(key), childPath.replace('%s', key));
+                    // NOTE: replace will call functions, so stringify eagerly.
+                    value, var2.get(key), childPath.replace('%s', String(key)));
               }
             } else {
               failures.push(
