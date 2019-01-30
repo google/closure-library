@@ -55,6 +55,7 @@ goog.events.EventType = {
   CLICK: 'click',
   RIGHTCLICK: 'rightclick',
   DBLCLICK: 'dblclick',
+  AUXCLICK: 'auxclick',
   MOUSEDOWN: 'mousedown',
   MOUSEUP: 'mouseup',
   MOUSEOVER: 'mouseover',
