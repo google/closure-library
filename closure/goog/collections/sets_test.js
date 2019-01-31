@@ -74,4 +74,24 @@ testSuite({
     assertSameElements([], sets.union(new Set([]), new Set()));
     assertSameElements([1], sets.union(new Set([1, 1, 1]), new Set([1, 1])));
   },
+
+  testDifference() {
+    // arrays
+    assertSameElements([1], sets.difference(new Set([1, 2]), [2, 3]));
+    assertSameElements([], sets.difference(new Set([]), []));
+    assertSameElements([], sets.difference(new Set([1, 1, 1]), [1, 1]));
+
+    // generators
+    assertSameElements(
+        [1], sets.difference(new Set([1, 2]), yieldArguments(2, 3)));
+    assertSameElements([], sets.difference(new Set([]), emptyGenerator()));
+    assertSameElements(
+        [], sets.difference(new Set([1, 1, 1]), yieldArguments(1, 1)));
+
+    // sets
+    assertSameElements([1], sets.difference(new Set([1, 2]), new Set([2, 3])));
+    assertSameElements([], sets.difference(new Set([]), new Set()));
+    assertSameElements(
+        [], sets.difference(new Set([1, 1, 1]), new Set([1, 1])));
+  },
 });

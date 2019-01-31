@@ -58,4 +58,20 @@ exports.union = function(a, b) {
   return set;
 };
 
-// TODO(b/117771144): Implement difference and symmetricDifference.
+
+/**
+ * Creates a new set containing the elements that appear in the first collection
+ * but not in the second.
+ *
+ * @param {!Set<T>} a
+ * @param {!Iterable<T>} b
+ * @return {!Set<T>}
+ * @template T
+ */
+exports.difference = function(a, b) {
+  const set = new Set(a);
+  iterable.forEach(elem => set.delete(elem), b);
+  return set;
+};
+
+// TODO(b/117771144): Implement symmetricDifference.
