@@ -43,4 +43,19 @@ exports.intersection = function(a, b) {
   return new Set(iterable.filter(elem => a.has(elem), b));
 };
 
-// TODO(b/117771144): Implement union, difference, and symmetricDifference.
+/**
+ * Creates a new set containing the elements that appear in both given
+ * collections.
+ *
+ * @param {!Set<T>} a
+ * @param {!Iterable<T>} b
+ * @return {!Set<T>}
+ * @template T
+ */
+exports.union = function(a, b) {
+  const set = new Set(a);
+  iterable.forEach(elem => set.add(elem), b);
+  return set;
+};
+
+// TODO(b/117771144): Implement difference and symmetricDifference.

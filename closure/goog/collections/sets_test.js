@@ -54,5 +54,24 @@ testSuite({
     assertSameElements([], sets.intersection(new Set([]), new Set()));
     assertSameElements(
         [1], sets.intersection(new Set([1, 1, 1]), new Set([1, 1])));
-  }
+  },
+
+  testUnion() {
+    // arrays
+    assertSameElements([1, 2, 3], sets.union(new Set([1, 2]), [2, 3]));
+    assertSameElements([], sets.union(new Set([]), []));
+    assertSameElements([1], sets.union(new Set([1, 1, 1]), [1, 1]));
+
+    // generators
+    assertSameElements(
+        [1, 2, 3], sets.union(new Set([1, 2]), yieldArguments(2, 3)));
+    assertSameElements([], sets.union(new Set([]), emptyGenerator()));
+    assertSameElements(
+        [1], sets.union(new Set([1, 1, 1]), yieldArguments(1, 1)));
+
+    // sets
+    assertSameElements([1, 2, 3], sets.union(new Set([1, 2]), new Set([2, 3])));
+    assertSameElements([], sets.union(new Set([]), new Set()));
+    assertSameElements([1], sets.union(new Set([1, 1, 1]), new Set([1, 1])));
+  },
 });
