@@ -163,3 +163,30 @@ function testA11yLabelsSetContentIncremental() {
   assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
   assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
 }
+
+function testA11yLabelsSetContentIncremental_ariaLabelUpdated() {
+  createPalette(items);
+  palette.render();
+  var paletteEl = palette.getElementStrict();
+  cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
+  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
+  assertEquals('title-1', goog.a11y.aria.getLabel(cells[1]));
+  assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
+  assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
+
+  var newItems = [
+    '<div aria-label="newlabel-0"></div>', '<div title="newtitle-1"></div>',
+    '<div aria-label="newlabel-2" title="title-2"></div>',
+    '<div><span></span></div>'
+  ];
+  var newItemEls = goog.array.map(newItems, function(item, index, a) {
+    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
+  });
+
+  palette.setContent(newItemEls);
+
+  assertEquals('newlabel-0', goog.a11y.aria.getLabel(cells[0]));
+  assertEquals('newtitle-1', goog.a11y.aria.getLabel(cells[1]));
+  assertEquals('newlabel-2', goog.a11y.aria.getLabel(cells[2]));
+  assertEquals('', goog.a11y.aria.getLabel(cells[3]));
+}

@@ -276,6 +276,7 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
       goog.array.forEach(tbody.rows, function(row) {
         goog.array.forEach(row.cells, function(cell) {
           goog.dom.removeChildren(cell);
+          goog.a11y.aria.removeState(cell, goog.a11y.aria.State.LABEL);
           if (items) {
             var item = items[index++];
             if (item) {
