@@ -2176,7 +2176,7 @@ goog.editor.Field.prototype.getFieldCopy = function() {
  * @param {boolean} addParas Boolean to specify whether to add paragraphs
  *    to long fields.
  * @param {?goog.html.SafeHtml} html html to insert.  If html=null, then this
- *    defaults to a nsbp for mozilla and an empty string for IE.
+ *    defaults to a nbsp for mozilla and an empty string for IE.
  * @param {boolean=} opt_dontFireDelayedChange True to make this content change
  *    not fire a delayed change event.
  * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.

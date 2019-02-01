@@ -60,7 +60,7 @@ goog.iter.Iterator = function() {};
 
 /**
  * Returns the next value of the iteration.  This will throw the object
- * {@see goog.iter#StopIteration} when the iteration passes the end.
+ * {@see goog.iter.StopIteration} when the iteration passes the end.
  * @return {VALUE} Any object or value.
  */
 goog.iter.Iterator.prototype.next = function() {
@@ -139,7 +139,7 @@ goog.iter.toIterator = function(iterable) {
  *     The function to call for every element.  This function takes 3 arguments
  *     (the element, undefined, and the iterator) and the return value is
  *     irrelevant.  The reason for passing undefined as the second argument is
- *     so that the same function can be used in {@see goog.array#forEach} as
+ *     so that the same function can be used in {@see goog.array.forEach} as
  *     well as others.  The third parameter is of type "number" for
  *     arraylike objects, undefined, otherwise.
  * @param {THIS=} opt_obj  The object to be used as the value of 'this' within
@@ -992,7 +992,7 @@ goog.iter.groupBy = function(iterable, opt_keyFunc) {
  * <code>f</code> with the arguments taken from the next element from
  * <code>iterable</code> (the elements are expected to also be iterables).
  *
- * Similar to {@see goog.iter#map} but allows the function to accept multiple
+ * Similar to {@see goog.iter.map} but allows the function to accept multiple
  * arguments from the iterable.
  *
  * @param {!goog.iter.Iterable} iterable The iterable of
@@ -1140,7 +1140,7 @@ goog.iter.consume = function(iterable, count) {
 
 /**
  * Creates an iterator that returns a range of elements from an iterable.
- * Similar to {@see goog.array#slice} but does not support negative indexes.
+ * Similar to {@see goog.array.slice} but does not support negative indexes.
  * @param {!goog.iter.Iterator<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable to slice.
  * @param {number} start  The index of the first element to return.
@@ -1213,7 +1213,7 @@ goog.iter.permutations = function(iterable, opt_length) {
  * Creates an iterator that returns combinations of elements from
  * `iterable`.
  *
- * Combinations are obtained by taking the {@see goog.iter#permutations} of
+ * Combinations are obtained by taking the {@see goog.iter.permutations} of
  * `iterable` and filtering those whose elements appear in the order they
  * are encountered in `iterable`. For example, the 3-length combinations
  * of {@code [0,1,2,3]} are {@code [[0,1,2], [0,1,3], [0,2,3], [1,2,3]]}.
