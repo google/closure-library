@@ -464,7 +464,8 @@ goog.object.setIfUndefined = function(obj, key, value) {
  * object will not be changed and the function will not be called (the function
  * will be lazily evaluated -- only called if necessary).
  *
- * This function is particularly useful for use with a map used a as a cache.
+ * This function is particularly useful when used with an `Object` which is
+ * acting as a cache.
  *
  * @param {!Object<K,V>} obj The object to which to add the key-value pair.
  * @param {string} key The key to add.
