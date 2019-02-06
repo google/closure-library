@@ -2008,11 +2008,12 @@ goog.dom.isTabIndexFocusable_ = function(element) {
  * @private
  */
 goog.dom.nativelySupportsFocus_ = function(element) {
-  return element.tagName == goog.dom.TagName.A ||
+  return (
+      element.tagName == goog.dom.TagName.A && element.hasAttribute('href') ||
       element.tagName == goog.dom.TagName.INPUT ||
       element.tagName == goog.dom.TagName.TEXTAREA ||
       element.tagName == goog.dom.TagName.SELECT ||
-      element.tagName == goog.dom.TagName.BUTTON;
+      element.tagName == goog.dom.TagName.BUTTON);
 };
 
 
