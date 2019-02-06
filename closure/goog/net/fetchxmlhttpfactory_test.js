@@ -117,6 +117,7 @@ function testOpen_notAsync() {
 
 /**
  * Verifies the send method.
+ * @return {!Promise<void>}
  */
 function testSend() {
   fetchMock(new Request('https://www.google.com', {
@@ -125,12 +126,13 @@ function testSend() {
   })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
-  verifySendSuccess('GET');
+  return verifySend('GET');
 }
 
 
 /**
  * Verifies the send method with POST mode.
+ * @return {!Promise<void>}
  */
 function testSendPost() {
   fetchMock(new Request('https://www.google.com', {
@@ -139,12 +141,13 @@ function testSendPost() {
   })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
-  verifySendSuccess('POST');
+  return verifySend('POST');
 }
 
 
 /**
  * Verifies the send method including credentials.
+ * @return {!Promise<void>}
  */
 function testSend_includeCredentials() {
   factory = new goog.net.FetchXmlHttpFactory(worker);
@@ -156,12 +159,13 @@ function testSend_includeCredentials() {
   })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
-  verifySendSuccess('POST');
+  return verifySend('POST');
 }
 
 
 /**
  * Verifies the send method setting cache mode.
+ * @return {!Promise<void>}
  */
 function testSend_setCacheMode() {
   factory = new goog.net.FetchXmlHttpFactory(worker);
@@ -173,45 +177,72 @@ function testSend_setCacheMode() {
   })).$returns(Promise.resolve(createSuccessResponse()));
 
   mockControl.$replayAll();
-  verifySendSuccess('POST');
+  return verifySend('POST');
 }
 
 
 /**
- * Util function to verify send method is successful.
+ * Util function to verify send method.
+ * @param {string} sendMethod
+ * @param {number=} expectedStatusCode
+ * @param {boolean=} isStream
+ * @return {!Promise<void>}
  */
-function verifySendSuccess(sendMethod) {
-  var xhr = factory.createInstance();
-  xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
-  xhr.onreadystatechange = function() {
-    assertEquals(
-        xhr.readyState, goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
-    assertEquals(0, xhr.status);
-    assertEquals('', xhr.responseText);
-    assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
-    assertEquals(
-        xhr.getAllResponseHeaders(),
-        'dummyHeader: dummyHeaderValue\r\ndummyHeader2: dummyHeaderValue2');
+function verifySend(sendMethod, expectedStatusCode = 200, isStream = false) {
+  return new Promise((resolve, reject) => {
+    var xhr = factory.createInstance();
+    var expectedBody = 'responseBody';
+    xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
+    var lastState;
+    var lastBufferSize = 0;
+    var numberOfUpdates = 0;
     xhr.onreadystatechange = function() {
-      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.LOADING);
-      assertEquals(0, xhr.status);
-      assertEquals('', xhr.responseText);
-      xhr.onreadystatechange = function() {
-        assertEquals(200, xhr.status);
-        assertEquals('responseBody', xhr.responseText);
-        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
-      };
+      if (xhr.readyState ===
+          goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED) {
+        lastState = xhr.readyState;
+        var expectedHeaders =
+            'dummyheader: dummyHeaderValue\r\ndummyheader2: dummyHeaderValue2';
+        if (!isStream) {
+          expectedHeaders =
+              'content-type: text/plain;charset=UTF-8\r\n' + expectedHeaders;
+        }
+        assertEquals(0, xhr.status);
+        assertEquals('', xhr.responseText);
+        assertEquals('dummyHeaderValue', xhr.getResponseHeader('dummyHeader'));
+        assertEquals(expectedHeaders, xhr.getAllResponseHeaders());
+      } else if (
+          xhr.readyState === goog.net.FetchXmlHttp.RequestState.LOADING) {
+        lastState = xhr.readyState;
+        assertEquals(0, xhr.status);
+        assertEquals(0, expectedBody.indexOf(xhr.responseText));
+        if (isStream && xhr.responseText) {
+          assertTrue(xhr.responseText.length > lastBufferSize);
+          lastBufferSize = xhr.responseText.length;
+          numberOfUpdates++;
+        }
+      } else if (xhr.readyState === goog.net.FetchXmlHttp.RequestState.DONE) {
+        assertEquals(goog.net.FetchXmlHttp.RequestState.LOADING, lastState);
+        assertEquals(expectedStatusCode, xhr.status);
+        assertEquals(expectedBody, xhr.responseText);
+        if (isStream) {
+          assertEquals(expectedBody.length, numberOfUpdates);
+        }
+        resolve();
+      } else {
+        reject(new Error('Unexpected request state ' + xhr.readyState));
+      }
     };
-  };
-  xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
+    xhr.send();
+    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
 
-  mockControl.$verifyAll();
+    mockControl.$verifyAll();
+  });
 }
 
 
 /**
  * Verifies the send method in case of error response.
+ * @return {!Promise<void>}
  */
 function testSend_error() {
   fetchMock(new Request('https://www.google.com', {
@@ -221,33 +252,28 @@ function testSend_error() {
 
   mockControl.$replayAll();
 
-  var xhr = factory.createInstance();
-  xhr.open('GET', 'https://www.google.com', true /* opt_async */);
-  xhr.onreadystatechange = function() {
-    assertEquals(
-        xhr.readyState, goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED);
-    assertEquals(0, xhr.status);
-    assertEquals('', xhr.responseText);
-    assertEquals(xhr.getResponseHeader('dummyHeader'), 'dummyHeaderValue');
-    xhr.onreadystatechange = function() {
-      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.LOADING);
-      assertEquals(0, xhr.status);
-      assertEquals('', xhr.responseText);
-      xhr.onreadystatechange = function() {
-        assertEquals(500, xhr.status);
-        assertEquals('responseBody', xhr.responseText);
-        assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
-      };
-    };
-  };
-  xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
-  mockControl.$verifyAll();
+  return verifySend('GET', 500 /* expectedStatusCode */);
+}
+
+
+/**
+ * Tests that streaming responses are properly handled.
+ * @return {!Promise<void>}
+ */
+function testSend_streaming() {
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'POST'
+  })).$returns(Promise.resolve(createSuccessStreamingResponse()));
+
+  mockControl.$replayAll();
+  return verifySend('POST', 200 /* expectedStatusCode */, true /* isStream */);
 }
 
 
 /**
  * Verifies the send method in case of failure to fetch the url.
+ * @return {!Promise<void>}
  */
 function testSend_failToFetch() {
   var failedPromise = new Promise(function() {
@@ -259,18 +285,20 @@ function testSend_failToFetch() {
   })).$returns(failedPromise);
 
   mockControl.$replayAll();
+  return new Promise((resolve) => {
+    var xhr = factory.createInstance();
+    xhr.open('GET', 'https://www.google.com', true /* opt_async */);
+    xhr.onreadystatechange = function() {
+      assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
+      assertEquals(0, xhr.status);
+      assertEquals('', xhr.responseText);
+      resolve();
+    };
+    xhr.send();
+    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
 
-  var xhr = factory.createInstance();
-  xhr.open('GET', 'https://www.google.com', true /* opt_async */);
-  xhr.onreadystatechange = function() {
-    assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
-    assertEquals(0, xhr.status);
-    assertEquals('', xhr.responseText);
-  };
-  xhr.send();
-  assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
-
-  mockControl.$verifyAll();
+    mockControl.$verifyAll();
+  });
 }
 
 
@@ -288,12 +316,35 @@ function createSuccessResponse() {
 
 
 /**
+ * Creates a successful streaming response which returns each letter a separate
+ * chunk with a 10ms delay between them.
+ * @return {!Response}
+ */
+function createSuccessStreamingResponse() {
+  const headers = new Headers();
+  headers.set('dummyHeader', 'dummyHeaderValue');
+  headers.set('dummyHeader2', 'dummyHeaderValue2');
+  const bytes = new TextEncoder().encode('responseBody');
+  const body = new ReadableStream({
+    pull(controller) {
+      for (let i = 0; i < bytes.length; i++) {
+        controller.enqueue(bytes.slice(i, i + 1));
+      }
+      controller.close();
+    }
+  });
+  return new Response(body, {status: 200, statusText: 'OK', headers: headers});
+}
+
+
+/**
  * Creates a successful response.
  * @return {!Response}
  */
 function createFailedResponse() {
   var headers = new Headers();
   headers.set('dummyHeader', 'dummyHeaderValue');
+  headers.set('dummyHeader2', 'dummyHeaderValue2');
   return new Response(
       'responseBody' /* opt_body */, {status: 500, headers: headers});
 }
