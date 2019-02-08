@@ -477,6 +477,19 @@ function testSetImageSrc_withHttpsUrl() {
   assertEquals(safeUrl, mockImageElement.src);
 }
 
+function testSetImageSrc_withDataUrl() {
+  var mockImageElement = /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
+  var safeUrl = 'data:image/gif;base64,a';
+  goog.dom.safe.setImageSrc(mockImageElement, safeUrl);
+  assertEquals(safeUrl, mockImageElement.src);
+  assertThrows(function() {
+    goog.dom.safe.setImageSrc(mockImageElement, 'data:text/plain;base64,a');
+  });
+  assertThrows(function() {
+    goog.dom.safe.setImageSrc(mockImageElement, 'data:image/gif;bad');
+  });
+}
+
 function testSetAudioSrc() {
   var mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
   var safeUrl = 'https://trusted_url';
@@ -507,6 +520,16 @@ function testSetAudioSrc() {
   }
 }
 
+function testSetAudioSrc_withDataUrl() {
+  var mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
+  var safeUrl = 'data:audio/mp3;base64,a';
+  goog.dom.safe.setAudioSrc(mockAudioElement, safeUrl);
+  assertEquals(safeUrl, mockAudioElement.src);
+  assertThrows(function() {
+    goog.dom.safe.setAudioSrc(mockAudioElement, 'data:image/gif;base64,a');
+  });
+}
+
 function testSetVideoSrc() {
   var mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
   var safeUrl = 'https://trusted_url';
@@ -535,6 +558,16 @@ function testSetVideoSrc() {
     assert(
         goog.string.contains(ex.message, 'Argument is not a HTMLVideoElement'));
   }
+}
+
+function testSetVideoSrc_withDataUrl() {
+  var mockVideoElement = /** @type {!HTMLVideoElement} */ ({'src': 'blarg'});
+  var safeUrl = 'data:video/mp4;base64,a';
+  goog.dom.safe.setVideoSrc(mockVideoElement, safeUrl);
+  assertEquals(safeUrl, mockVideoElement.src);
+  assertThrows(function() {
+    goog.dom.safe.setVideoSrc(mockVideoElement, 'data:image/gif;base64,a');
+  });
 }
 
 function testSetEmbedSrc() {

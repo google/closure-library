@@ -619,15 +619,22 @@ goog.html.SafeUrl.sanitize = function(url) {
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
  * @param {string|!goog.string.TypedString} url The URL to validate.
+ * @param {boolean=} opt_allowDataUrl Whether to allow valid data: URLs.
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
-goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
+goog.html.SafeUrl.sanitizeAssertUnchanged = function(url, opt_allowDataUrl) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
   } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
     url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
+  }
+  if (opt_allowDataUrl && /^data:/i.test(url)) {
+    var safeUrl = goog.html.SafeUrl.fromDataUrl(url);
+    if (safeUrl.getTypedStringValue() == url) {
+      return safeUrl;
+    }
   }
   if (!goog.asserts.assert(
           goog.html.SAFE_URL_PATTERN_.test(url),
