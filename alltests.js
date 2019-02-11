@@ -58,6 +58,7 @@ var _allTests = [
   'closure/goog/date/date_test.html',
   'closure/goog/date/duration_test.html',
   'closure/goog/date/relative_test.html',
+  'closure/goog/date/relativewithplurals_test.html',
   'closure/goog/date/utcdatetime_test.html',
   'closure/goog/debug/console_test.html',
   'closure/goog/debug/debug_test.html',
