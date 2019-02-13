@@ -102,7 +102,7 @@ BUILD=${TRAVIS_BUILD_NUMBER+ after successful travis build $TRAVIS_BUILD_NUMBER}
 
 # Make a commit.
 git add -A
-git commit --allow-empty -m "Latest documentation auto-pushed to gh-pages
+git commit -q --allow-empty -m "Latest documentation auto-pushed to gh-pages
 
 Built from commit $COMMIT$BUILD."
 
