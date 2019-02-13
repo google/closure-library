@@ -701,7 +701,9 @@ goog.testing.Mock.prototype.$throwCallException = function(
         'Expected: ', expectedArgsString, '\n',
         opt_expectation.getErrorMessage());
   } else {
-    errorStringBuffer.push('Unexpected call to ', name, actualArgsString, '.');
+    errorStringBuffer.push(
+        'Unexpected call to ', name, actualArgsString, '.',
+        '\nDid you forget to $replay?');
     if (opt_expectation) {
       errorStringBuffer.push(
           '\nNext expected call was to ', opt_expectation.name,

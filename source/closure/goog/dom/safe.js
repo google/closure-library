@@ -48,8 +48,8 @@ goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.string');
 goog.require('goog.string.Const');
+goog.require('goog.string.internal');
 
 
 /** @enum {string} */
@@ -335,7 +335,8 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    var allowDataUrl = /^data:image\//i.test(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
   imageElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -359,7 +360,8 @@ goog.dom.safe.setAudioSrc = function(audioElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    var allowDataUrl = /^data:audio\//i.test(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
   audioElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -383,7 +385,8 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    var allowDataUrl = /^data:video\//i.test(url);
+    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
   videoElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -495,7 +498,7 @@ goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
   goog.dom.asserts.assertIsHTMLLinkElement(link);
   link.rel = rel;
-  if (goog.string.caseInsensitiveContains(rel, 'stylesheet')) {
+  if (goog.string.internal.caseInsensitiveContains(rel, 'stylesheet')) {
     goog.asserts.assert(
         url instanceof goog.html.TrustedResourceUrl,
         'URL must be TrustedResourceUrl because "rel" contains "stylesheet"');
@@ -728,6 +731,30 @@ goog.dom.safe.openInWindow = function(
       // https://html.spec.whatwg.org/multipage/browsers.html#dom-open .
       opt_name ? goog.string.Const.unwrap(opt_name) : '', opt_specs,
       opt_replace);
+};
+
+
+/**
+ * Parses the HTML as 'text/html'.
+ * @param {!DOMParser} parser
+ * @param {!goog.html.SafeHtml} html The HTML to be parsed.
+ * @return {?Document}
+ */
+goog.dom.safe.parseFromStringHtml = function(parser, html) {
+  return goog.dom.safe.parseFromString(parser, html, 'text/html');
+};
+
+
+/**
+ * Parses the string.
+ * @param {!DOMParser} parser
+ * @param {!goog.html.SafeHtml} content Note: We don't have a special type for
+ *     XML od SVG supported by this function so we use SafeHtml.
+ * @param {string} type
+ * @return {?Document}
+ */
+goog.dom.safe.parseFromString = function(parser, content, type) {
+  return parser.parseFromString(goog.html.SafeHtml.unwrap(content), type);
 };
 
 

@@ -170,11 +170,13 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
  * Defines a named value. In uncompiled mode, the value is retrieved from
  * CLOSURE_DEFINES or CLOSURE_UNCOMPILED_DEFINES if the object is defined and
  * has the property specified, and otherwise used the defined defaultValue.
- * When compiled the default can be overridden using the compiler
- * options or the value set in the CLOSURE_DEFINES object.
+ * When compiled the default can be overridden using the compiler options or the
+ * value set in the CLOSURE_DEFINES object. Returns the defined value so that it
+ * can be used safely in modules.
  *
  * @param {string} name The distinguished name to provide.
  * @param {string|number|boolean} defaultValue
+ * @return {string|number|boolean} The defined value.
  */
 goog.define = function(name, defaultValue) {
   var value = defaultValue;
@@ -195,6 +197,7 @@ goog.define = function(name, defaultValue) {
     }
   }
   goog.exportPath_(name, value);
+  return value;
 };
 
 
@@ -2602,7 +2605,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       // https://github.com/Microsoft/ChakraCore/issues/1496.
       var re = /Edge\/(\d+)(\.\d)*/i;
       var edgeUserAgent = userAgent.match(re);
-      if (edgeUserAgent && Number(edgeUserAgent[1]) < 15) {
+      if (edgeUserAgent) {
+        // The Reflect.construct test below is flaky on Edge. It can sometimes
+        // pass or fail on 40 15.15063, so just exit early for Edge and treat
+        // it as ES5. Until we're on a more up to date version just always use
+        // ES5. See https://github.com/Microsoft/ChakraCore/issues/3217.
         return false;
       }
       // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]

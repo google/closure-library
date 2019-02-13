@@ -789,7 +789,8 @@ goog.testing.asserts.findDifferences = function(
               // sufficient.
               if (var2.get) {
                 innerAssertWithCycleCheck(
-                    value, var2.get(key), childPath.replace('%s', key));
+                    // NOTE: replace will call functions, so stringify eagerly.
+                    value, var2.get(key), childPath.replace('%s', String(key)));
               }
             } else {
               failures.push(
@@ -1086,11 +1087,11 @@ var assertElementsRoughlyEqual =
 /**
  * Compares elements of two array-like or iterable objects using strict equality
  * without taking their order into account.
- * @param {string|?IArrayLike|?Iterable} a Assertion message or the
+ * @param {string|!IArrayLike|!Iterable} a Assertion message or the
  *     expected elements.
- * @param {?IArrayLike|?Iterable} b Expected elements or the actual
+ * @param {!IArrayLike|!Iterable} b Expected elements or the actual
  *     elements.
- * @param {?IArrayLike|?Iterable=} opt_c Actual elements.
+ * @param {!IArrayLike|!Iterable=} opt_c Actual elements.
  */
 var assertSameElements = goog.testing.asserts.assertSameElements = function(
     a, b, opt_c) {
@@ -1350,11 +1351,10 @@ var assertRegExp = goog.testing.asserts.assertRegExp = function(a, b, opt_c) {
 /**
  * Converts an array-like or iterable object to an array (clones it if it's
  * already an array).
- * @param {?Iterable|?IArrayLike} obj The collection object.
+ * @param {!Iterable|!IArrayLike} obj The collection object.
  * @return {!Array<?>} Copy of the collection as array.
  * @private
  */
-// TODO(nnaze): obj should be non-null.
 goog.testing.asserts.toArray_ = function(obj) {
   var ret = [];
   if (goog.testing.asserts.isIterable_(obj)) {

@@ -23,9 +23,9 @@ goog.provide('goog.html.SafeStyle');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.html.SafeUrl');
-goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
+goog.require('goog.string.internal');
 
 
 
@@ -177,10 +177,10 @@ goog.html.SafeStyle.fromConstant = function(style) {
   }
   goog.html.SafeStyle.checkStyle_(styleString);
   goog.asserts.assert(
-      goog.string.endsWith(styleString, ';'),
+      goog.string.internal.endsWith(styleString, ';'),
       'Last character of style string is not \';\': ' + styleString);
   goog.asserts.assert(
-      goog.string.contains(styleString, ':'),
+      goog.string.internal.contains(styleString, ':'),
       'Style string must contain at least one \':\', to ' +
           'specify a "name: value" pair: ' + styleString);
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(

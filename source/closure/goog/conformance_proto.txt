@@ -93,7 +93,7 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/messaging/portchannel.js'
   # Internal-only code: go/g3doc-widgets#screenshots-widget-html.
   whitelist: 'java/com/google/frameworks/testing/infrastructure/screenshot/ui/carousel/carouselcontroller.js'
-  # TODO(user): make sure this gets security reviewed (b/118451926)
+  # security reviewed (b/118451926)
   whitelist: 'java/com/google/gaia/frontend/closure/common/service/nativebridge/kaios/kaiosbridgeservice.js'
 }
 
@@ -212,6 +212,8 @@ requirement: {
   # TODO(jakubvrana): These need to be refactored.
   whitelist_regexp: '.+/closure/goog/editor/icontent.js'
   whitelist_regexp: '.+/closure/goog/testing/'
+  # TODO(jakubvrana): Elemental internals.
+  whitelist: 'third_party/java_src/elemental2/java/elemental2/dom/dom-j2cl.js.zip'
 }
 
 requirement: {

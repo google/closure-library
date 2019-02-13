@@ -107,26 +107,31 @@ netUtils.testLoadImageWithRetries = function(
 netUtils.testLoadImage = function(url, timeout, callback) {
   var channelDebug = new WebChannelDebug();
   channelDebug.debug('TestLoadImage: loading ' + url);
-  var img = new Image();
-  img.onload = goog.partial(
-      netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: loaded', true,
-      callback);
-  img.onerror = goog.partial(
-      netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: error', false,
-      callback);
-  img.onabort = goog.partial(
-      netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: abort', false,
-      callback);
-  img.ontimeout = goog.partial(
-      netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: timeout',
-      false, callback);
+  if (goog.global.Image) {
+    var img = new Image();
+    img.onload = goog.partial(
+        netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: loaded',
+        true, callback);
+    img.onerror = goog.partial(
+        netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: error',
+        false, callback);
+    img.onabort = goog.partial(
+        netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: abort',
+        false, callback);
+    img.ontimeout = goog.partial(
+        netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: timeout',
+        false, callback);
 
-  goog.global.setTimeout(function() {
-    if (img.ontimeout) {
-      img.ontimeout();
-    }
-  }, timeout);
-  img.src = url;
+    goog.global.setTimeout(function() {
+      if (img.ontimeout) {
+        img.ontimeout();
+      }
+    }, timeout);
+    img.src = url;
+  } else {
+    // log ERROR_OTHER from environements where Image is not supported
+    callback(false);
+  }
 };
 
 

@@ -24,9 +24,9 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.object');
-goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
+goog.require('goog.string.internal');
 
 
 
@@ -122,7 +122,7 @@ goog.html.SafeStyleSheet.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  * @throws {Error} If invalid selector is provided.
  */
 goog.html.SafeStyleSheet.createRule = function(selector, style) {
-  if (goog.string.contains(selector, '<')) {
+  if (goog.string.internal.contains(selector, '<')) {
     throw new Error('Selector does not allow \'<\', got: ' + selector);
   }
 
@@ -220,8 +220,8 @@ goog.html.SafeStyleSheet.fromConstant = function(styleSheet) {
   // > is a valid character in CSS selectors and there's no strict need to
   // block it if we already block <.
   goog.asserts.assert(
-      !goog.string.contains(styleSheetString, '<'),
-      "Forbidden '<' character in style sheet string: " + styleSheetString);
+      !goog.string.internal.contains(styleSheetString, '<'),
+      'Forbidden \'<\' character in style sheet string: ' + styleSheetString);
   return goog.html.SafeStyleSheet
       .createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheetString);
 };

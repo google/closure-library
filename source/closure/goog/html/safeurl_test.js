@@ -109,6 +109,16 @@ function testSafeUrlSanitize_sanitizeTelUrl() {
   }
 }
 
+function testSafeUrlSanitize_sanitizeSshUrl() {
+  var vectors = goog.html.safeUrlTestVectors.SSH_VECTORS;
+  for (var i = 0; i < vectors.length; ++i) {
+    var v = vectors[i];
+    var observed = goog.html.SafeUrl.fromSshUrl(v.input);
+    assertEquals(
+        'SSH Url: ' + v.input, v.expected, goog.html.SafeUrl.unwrap(observed));
+  }
+}
+
 
 function testSafeUrlSanitize_sipUrlEmail() {
   var expected = 'sip:username@example.com';
@@ -270,20 +280,18 @@ function testSafeUrlSanitize_sanitizeUrl() {
   var vectors = goog.html.safeUrlTestVectors.BASE_VECTORS;
   for (var i = 0; i < vectors.length; ++i) {
     var v = vectors[i];
-    if (v.input.match(/^data:/i)) {
-      var observed = goog.html.SafeUrl.fromDataUrl(v.input);
-      assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
+    var isDataUrl = v.input.match(/^data:/i);
+    var observed = isDataUrl ? goog.html.SafeUrl.fromDataUrl(v.input) :
+                               goog.html.SafeUrl.sanitize(v.input);
+    assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
+    if (v.safe) {
+      var asserted =
+          goog.html.SafeUrl.sanitizeAssertUnchanged(v.input, isDataUrl);
+      assertEquals(v.expected, goog.html.SafeUrl.unwrap(asserted));
     } else {
-      var observed = goog.html.SafeUrl.sanitize(v.input);
-      assertEquals(v.expected, goog.html.SafeUrl.unwrap(observed));
-      if (v.safe) {
-        var asserted = goog.html.SafeUrl.sanitizeAssertUnchanged(v.input);
-        assertEquals(v.expected, goog.html.SafeUrl.unwrap(asserted));
-      } else {
-        assertThrows(function() {
-          goog.html.SafeUrl.sanitizeAssertUnchanged(v.input);
-        });
-      }
+      assertThrows(function() {
+        goog.html.SafeUrl.sanitizeAssertUnchanged(v.input, isDataUrl);
+      });
     }
   }
 }

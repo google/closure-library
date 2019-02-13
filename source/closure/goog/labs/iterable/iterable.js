@@ -13,128 +13,13 @@
 // limitations under the License.
 
 /**
- * @fileoverview Utilities for working with ES6 iterables.
- * Note that this file is written ES5-only.
- *
- * The goal is that this should be a replacement for goog.iter which uses
- * a now non-standard approach to iterables.
- *
- * @see https://goo.gl/Rok5YQ
+ * @fileoverview Legacy alias to goog.labs.collections.iterables.
  */
+
+// TODO(b/122751175): Remove this alias when usages have been migrated.
 
 goog.module('goog.labs.iterable');
 
+const iterables = goog.require('goog.labs.collections.iterables');
 
-/**
- * Get the iterator for an iterable.
- * @param {!Iterable<VALUE>} iterable
- * @return {!Iterator<VALUE>}
- * @template VALUE
- */
-exports.getIterator = function(iterable) {
-  return iterable[goog.global.Symbol.iterator]();
-};
-
-
-/**
- * Call a function with every value of an iterable.
- *
- * Warning: this function will never halt if given an iterable that
- * is never exhausted.
- *
- * @param {function(VALUE): void} f
- * @param {!Iterable<VALUE>} iterable
- * @template VALUE
- */
-exports.forEach = function(f, iterable) {
-  var iterator = exports.getIterator(iterable);
-  while (true) {
-    var next = iterator.next();
-    if (next.done) {
-      return;
-    }
-    f(next.value);
-  }
-};
-
-
-/**
- * Maps the values of one iterable to create another iterable.
- *
- * When next() is called on the returned iterable, it will call the given
- * function `f` with the next value of the given iterable
- * `iterable` until the given iterable is exhausted.
- *
- * @param {function(this: THIS, VALUE): RESULT} f
- * @param {!Iterable<VALUE>} iterable
- * @return {!Iterable<RESULT>} The created iterable that gives the mapped
- *     values.
- * @template THIS, VALUE, RESULT
- */
-exports.map = function(f, iterable) {
-  return new FactoryIterable(function() {
-    var iterator = exports.getIterator(iterable);
-    return new MapIterator(f, iterator);
-  });
-};
-
-
-
-/**
- * Helper class for `map`.
- * @param {function(VALUE): RESULT} f
- * @param {!Iterator<VALUE>} iterator
- * @constructor
- * @implements {Iterator<RESULT>}
- * @template VALUE, RESULT
- */
-var MapIterator = function(f, iterator) {
-  /** @private */
-  this.func_ = f;
-  /** @private */
-  this.iterator_ = iterator;
-};
-
-
-/**
- * @override
- */
-MapIterator.prototype.next = function() {
-  var nextObj = this.iterator_.next();
-
-  if (nextObj.done) {
-    return {done: true, value: undefined};
-  }
-
-  var mappedValue = this.func_(nextObj.value);
-  return {done: false, value: mappedValue};
-};
-
-
-
-/**
- * Helper class to create an iterable with a given iterator factory.
- * @param {function():!Iterator<VALUE>} iteratorFactory
- * @constructor
- * @implements {Iterable<VALUE>}
- * @template VALUE
- */
-var FactoryIterable = function(iteratorFactory) {
-  /**
-   * @private
-   */
-  this.iteratorFactory_ = iteratorFactory;
-};
-
-
-// TODO(nnaze): For now, this section is not run if Symbol is not defined,
-// since goog.global.Symbol.iterator will not be defined below.
-// Determine best course of action if "Symbol" is not available.
-if (goog.global.Symbol) {
-  /**
-   * @return {!Iterator<VALUE>}
-   */
-  FactoryIterable.prototype[goog.global.Symbol.iterator] = function() {
-    return this.iteratorFactory_();
-  };
-}
+exports = iterables;

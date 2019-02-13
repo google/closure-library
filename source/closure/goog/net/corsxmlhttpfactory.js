@@ -93,7 +93,7 @@ goog.net.IeCorsXhrAdapter = function() {
 
   /**
    * The simulated ready state change callback function.
-   * @type {Function}
+   * @type {?function()|undefined}
    */
   this.onreadystatechange = null;
 

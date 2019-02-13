@@ -194,25 +194,23 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
   goog.a11y.aria.setRole(cell, goog.a11y.aria.Role.GRIDCELL);
   // Initialize to an unselected state.
   goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, false);
+  this.maybeUpdateAriaLabel_(cell);
 
-  if (!goog.dom.getTextContent(cell) && !goog.a11y.aria.getLabel(cell)) {
-    var ariaLabelForCell = this.findAriaLabelForCell_(cell);
-    if (ariaLabelForCell) {
-      goog.a11y.aria.setLabel(cell, ariaLabelForCell);
-    }
-  }
   return cell;
 };
 
 
 /**
- * Descends the DOM and tries to find an aria label for a grid cell
- * from the first child with a label or title.
+ * Updates the aria label of the cell if it doesn't have one. Descends the DOM
+ * and tries to find an aria label for a grid cell from the first child with a
+ * label or title.
  * @param {!Element} cell The cell.
- * @return {string} The label to use.
  * @private
  */
-goog.ui.PaletteRenderer.prototype.findAriaLabelForCell_ = function(cell) {
+goog.ui.PaletteRenderer.prototype.maybeUpdateAriaLabel_ = function(cell) {
+  if (goog.dom.getTextContent(cell) || goog.a11y.aria.getLabel(cell)) {
+    return;
+  }
   var iter = new goog.dom.NodeIterator(cell);
   var label = '';
   var node;
@@ -222,7 +220,11 @@ goog.ui.PaletteRenderer.prototype.findAriaLabelForCell_ = function(cell) {
           goog.a11y.aria.getLabel(/** @type {!Element} */ (node)) || node.title;
     }
   }
-  return label;
+  if (label) {
+    goog.a11y.aria.setLabel(cell, label);
+  }
+
+  return;
 };
 
 
@@ -274,14 +276,16 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
       goog.array.forEach(tbody.rows, function(row) {
         goog.array.forEach(row.cells, function(cell) {
           goog.dom.removeChildren(cell);
+          goog.a11y.aria.removeState(cell, goog.a11y.aria.State.LABEL);
           if (items) {
             var item = items[index++];
             if (item) {
               goog.dom.appendChild(cell, item);
+              this.maybeUpdateAriaLabel_(cell);
             }
           }
-        });
-      });
+        }, this);
+      }, this);
 
       // Make space for any additional items.
       if (index < items.length) {

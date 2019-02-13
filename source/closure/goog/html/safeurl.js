@@ -25,9 +25,9 @@ goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
-goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
+goog.require('goog.string.internal');
 
 
 
@@ -241,7 +241,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
     // Note: Due to content-sniffing concerns, only add MIME types for
     // media formats.
     '^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-wav|wav|webm)|' +
-        'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|' +
+        'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|' +
         // TODO(b/68188949): Due to content-sniffing concerns, text/csv should
         // be removed from the whitelist.
         'text/csv|' +
@@ -314,7 +314,7 @@ goog.html.SafeUrl.fromTelUrl = function(telUrl) {
   // There's a risk that a tel: URL could immediately place a call once
   // clicked, without requiring user confirmation. For that reason it is
   // handled in this separate function.
-  if (!goog.string.caseInsensitiveStartsWith(telUrl, 'tel:')) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(telUrl, 'tel:')) {
     telUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
@@ -360,7 +360,7 @@ goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
-  if (!goog.string.caseInsensitiveStartsWith(
+  if (!goog.string.internal.caseInsensitiveStartsWith(
           facebookMessengerUrl, 'fb-messenger://share')) {
     facebookMessengerUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
@@ -377,7 +377,7 @@ goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
-  if (!goog.string.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
+  if (!goog.string.internal.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
       !goog.html.SafeUrl.isSmsUrlBodyValid_(smsUrl)) {
     smsUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
@@ -423,6 +423,21 @@ goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
   return /^(?:[a-z0-9\-_.~]|%[0-9a-f]{2})+$/i.test(bodyValue);
 };
 
+
+/**
+ * Creates a SafeUrl wrapping a ssh: URL.
+ *
+ * @param {string} sshUrl A ssh URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromSshUrl = function(sshUrl) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(sshUrl, 'ssh://')) {
+    sshUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      sshUrl);
+};
 
 /**
  * Sanitizes a Chrome extension URL to SafeUrl, given a compile-time-constant
@@ -604,15 +619,22 @@ goog.html.SafeUrl.sanitize = function(url) {
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
  * @param {string|!goog.string.TypedString} url The URL to validate.
+ * @param {boolean=} opt_allowDataUrl Whether to allow valid data: URLs.
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
-goog.html.SafeUrl.sanitizeAssertUnchanged = function(url) {
+goog.html.SafeUrl.sanitizeAssertUnchanged = function(url, opt_allowDataUrl) {
   if (url instanceof goog.html.SafeUrl) {
     return url;
   } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
     url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
   } else {
     url = String(url);
+  }
+  if (opt_allowDataUrl && /^data:/i.test(url)) {
+    var safeUrl = goog.html.SafeUrl.fromDataUrl(url);
+    if (safeUrl.getTypedStringValue() == url) {
+      return safeUrl;
+    }
   }
   if (!goog.asserts.assert(
           goog.html.SAFE_URL_PATTERN_.test(url),
