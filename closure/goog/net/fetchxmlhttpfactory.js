@@ -249,7 +249,6 @@ goog.net.FetchXmlHttp.prototype.abort = function() {
       (this.readyState != goog.net.FetchXmlHttp.RequestState.DONE)) {
     this.inProgress_ = false;
     this.requestDone_(false);
-    this.dispatchCallback_();
   }
 
   this.readyState = goog.net.FetchXmlHttp.RequestState.UNSENT;
@@ -320,6 +319,11 @@ goog.net.FetchXmlHttp.prototype.readInputFromFetch_ = function() {
  * @private
  */
 goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
+  if (!this.inProgress_) {
+    // The request was aborted, ignore.
+    return;
+  }
+
   var dataPacket = result.value ? /** @type {!Uint8Array} */ (result.value) :
                                   new Uint8Array(0);
   var newText = this.textDecoder_.decode(dataPacket, {stream: !result.done});
