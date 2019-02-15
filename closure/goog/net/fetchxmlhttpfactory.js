@@ -125,9 +125,22 @@ goog.net.FetchXmlHttp = function(worker) {
 
   /**
    * Content of the response.
+   * @type {string|!ArrayBuffer}
+   */
+  this.response = '';
+
+  /**
+   * Content of the response.
    * @type {string}
    */
   this.responseText = '';
+
+  /**
+   * The type of the response.  If this is set to 'arraybuffer' the request will
+   * be discrete, streaming is only supported for text encoded requests.
+   * @type {string}
+   */
+  this.responseType = '';
 
   /**
    * Document response entity body.
@@ -236,7 +249,7 @@ goog.net.FetchXmlHttp.prototype.send = function(opt_data) {
 
 /** @override */
 goog.net.FetchXmlHttp.prototype.abort = function() {
-  this.responseText = '';
+  this.response = this.responseText = '';
   this.requestHeaders_ = new Headers();
   this.status = 0;
 
@@ -287,9 +300,14 @@ goog.net.FetchXmlHttp.prototype.handleResponse_ = function(response) {
     return;
   }
 
-  if (typeof (goog.global.ReadableStream) !== 'undefined' &&
+  if (this.responseType === 'arraybuffer') {
+    response.arrayBuffer().then(
+        this.handleResponseArrayBuffer_.bind(this),
+        this.handleSendFailure_.bind(this));
+  } else if (
+      typeof (goog.global.ReadableStream) !== 'undefined' &&
       'body' in response) {
-    this.responseText = '';
+    this.response = this.responseText = '';
     this.currentReader_ =
         /** @type {!ReadableStreamDefaultReader} */ (response.body.getReader());
     this.textDecoder_ = new TextDecoder();
@@ -329,6 +347,7 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
   var newText = this.textDecoder_.decode(dataPacket, {stream: !result.done});
   if (newText) {
     this.responseText += newText;
+    this.response = this.responseText;
   }
 
   if (result.done) {
@@ -353,7 +372,23 @@ goog.net.FetchXmlHttp.prototype.handleResponseText_ = function(responseText) {
     // The request was aborted, ignore.
     return;
   }
-  this.responseText = responseText;
+  this.response = this.responseText = responseText;
+  this.requestDone_(true);
+};
+
+
+/**
+ * Handles the response text.
+ * @param {!ArrayBuffer} responseArrayBuffer
+ * @private
+ */
+goog.net.FetchXmlHttp.prototype.handleResponseArrayBuffer_ = function(
+    responseArrayBuffer) {
+  if (!this.inProgress_) {
+    // The request was aborted, ignore.
+    return;
+  }
+  this.response = responseArrayBuffer;
   this.requestDone_(true);
 };
 

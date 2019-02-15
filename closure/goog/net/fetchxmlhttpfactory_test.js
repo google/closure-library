@@ -186,12 +186,18 @@ function testSend_setCacheMode() {
  * @param {string} sendMethod
  * @param {number=} expectedStatusCode
  * @param {boolean=} isStream
+ * @param {boolean=} isArrayBuffer
  * @return {!Promise<void>}
  */
-function verifySend(sendMethod, expectedStatusCode = 200, isStream = false) {
+function verifySend(
+    sendMethod, expectedStatusCode = 200, isStream = false,
+    isArrayBuffer = false) {
   return new Promise((resolve, reject) => {
     var xhr = factory.createInstance();
     var expectedBody = 'responseBody';
+    if (isArrayBuffer) {
+      xhr.responseType = 'arraybuffer';
+    }
     xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
     var lastState;
     var lastBufferSize = 0;
@@ -202,7 +208,7 @@ function verifySend(sendMethod, expectedStatusCode = 200, isStream = false) {
         lastState = xhr.readyState;
         var expectedHeaders =
             'dummyheader: dummyHeaderValue\r\ndummyheader2: dummyHeaderValue2';
-        if (!isStream) {
+        if (!isStream && !isArrayBuffer) {
           expectedHeaders =
               'content-type: text/plain;charset=UTF-8\r\n' + expectedHeaders;
         }
@@ -223,7 +229,12 @@ function verifySend(sendMethod, expectedStatusCode = 200, isStream = false) {
       } else if (xhr.readyState === goog.net.FetchXmlHttp.RequestState.DONE) {
         assertEquals(goog.net.FetchXmlHttp.RequestState.LOADING, lastState);
         assertEquals(expectedStatusCode, xhr.status);
-        assertEquals(expectedBody, xhr.responseText);
+        if (isArrayBuffer) {
+          assertTrue(xhr.response instanceof ArrayBuffer);
+          assertEquals(8, xhr.response.byteLength);
+        } else {
+          assertEquals(expectedBody, xhr.responseText);
+        }
         if (isStream) {
           assertEquals(expectedBody.length, numberOfUpdates);
         }
@@ -268,6 +279,22 @@ function testSend_streaming() {
 
   mockControl.$replayAll();
   return verifySend('POST', 200 /* expectedStatusCode */, true /* isStream */);
+}
+
+
+/**
+ * Verifies the send method in case of getting an ArrayBuffer response.
+ * @return {!Promise<void>}
+ */
+function testSend_arrayBuffer() {
+  fetchMock(new Request('https://www.google.com', {
+    headers: new Headers(),
+    method: 'POST'
+  })).$returns(Promise.resolve(createArrayBufferResponse()));
+  mockControl.$replayAll();
+  return verifySend(
+      'POST', 200 /* expectedStatusCode */, false /* isStream */,
+      true /* isArrayBuffer */);
 }
 
 
@@ -334,6 +361,19 @@ function createSuccessStreamingResponse() {
     }
   });
   return new Response(body, {status: 200, statusText: 'OK', headers: headers});
+}
+
+
+/**
+ * Creates a successful response with an ArrayBuffer payload.
+ * @return {!Response}
+ */
+function createArrayBufferResponse() {
+  const headers = new Headers();
+  headers.set('dummyHeader', 'dummyHeaderValue');
+  headers.set('dummyHeader2', 'dummyHeaderValue2');
+  return new Response(
+      new ArrayBuffer(8), {status: 200, statusText: 'OK', headers: headers});
 }
 
 
