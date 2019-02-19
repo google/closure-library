@@ -15,7 +15,7 @@
 /**
  * @fileoverview PseudoRandom provides a mechanism for generating deterministic
  * pseudo random numbers based on a seed. Based on the Park-Miller algorithm.
- * See http://dx.doi.org/10.1145%2F63039.63042 for details.
+ * See https://doi.org/10.1145%2F63039.63042 for details.
  *
  */
 
