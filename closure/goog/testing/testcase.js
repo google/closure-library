@@ -306,8 +306,10 @@ goog.testing.TestCase.protectedDate_ = Date;
  * @type {?Performance}
  * @private
  */
-goog.testing.TestCase.protectedPerformance_ =
-    window.performance && window.performance.now ? performance : null;
+goog.testing.TestCase.protectedPerformance_ = typeof window !== 'undefined' &&
+        window.performance && window.performance.now ?
+    performance :
+    null;
 
 
 /**
