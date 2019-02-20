@@ -1652,6 +1652,26 @@ goog.testing.TestCase.prototype.doSkipped = function(test) {
 };
 
 
+/**
+ * Records an error that fails the current test, without throwing it.
+ *
+ * Use this function to implement expect()-style assertion libraries that fail a
+ * test without breaking execution (so you can see further failures). Do not use
+ * this from normal test code.
+ *
+ * Please contact js-core-libraries-team@ before using this method.  If it grows
+ * popular, we may add an expect() API to Closure.
+ *
+ * NOTE: If there is no active TestCase, you must throw an error.
+ * @param {!Error} error The error to log.  If it is a JsUnitException which has
+ *     already been logged, nothing will happen.
+ */
+goog.testing.TestCase.prototype.recordTestError = function(error) {
+  this.recordError(
+      this.curTest_ ? this.curTest_.name : '<No active test>', error);
+};
+
+
 
 /**
  * Records and logs an error from or related to a test.
