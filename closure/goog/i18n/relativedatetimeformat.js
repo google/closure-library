@@ -208,8 +208,6 @@ RelativeDateTimeFormat.prototype.formatNumericInternal_ = function(
 RelativeDateTimeFormat.prototype.getUnitStylePattern_ = function(relativeUnit) {
   var unitInfo = this.getUnitPattern_(relativeUnit);
   asserts.assertObject(unitInfo);
-
-  /** @typedef {!relativeDateTimeSymbols.StyleELement|undefined} */
   return this.getStylePattern_(unitInfo);
 };
 
