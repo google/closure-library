@@ -108,9 +108,12 @@ SafeDomTreeProcessor.prototype.processToString = function(html) {
     newRoot.appendChild(newTree);
     newTree = newRoot;
   }
-
-  // Serialized string of the sanitized DOM without root span tag
-  return newTree.innerHTML;
+  // The XMLSerializer will add a spurious xmlns attribute to the root node.
+  var serializedNewTree = new XMLSerializer().serializeToString(newTree);
+  // Remove the outer span before returning the string representation of the
+  // processed copy.
+  return serializedNewTree.slice(
+      serializedNewTree.indexOf('>') + 1, serializedNewTree.lastIndexOf('</'));
 };
 
 /**
