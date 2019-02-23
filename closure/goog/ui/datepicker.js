@@ -1157,6 +1157,7 @@ goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
     case 36:  // Home
       event.preventDefault();
       this.selectToday();
+      break;
     case 46:  // Delete
       event.preventDefault();
       this.selectNone();
