@@ -97,11 +97,21 @@ goog.net.IeCorsXhrAdapter = function() {
    */
   this.onreadystatechange = null;
 
+  /** @override */
+  this.response = '';
+
   /**
    * The simulated response text parameter.
    * @type {string}
    */
   this.responseText = '';
+
+  /**
+   * This implementation only supports text response.
+   * @type {string}
+   * @override
+   */
+  this.responseType = '';
 
   /**
    * The simulated status code
@@ -208,7 +218,7 @@ goog.net.IeCorsXhrAdapter.prototype.getResponseHeader = function(key) {
 goog.net.IeCorsXhrAdapter.prototype.handleLoad_ = function() {
   // IE only calls onload if the status is 200, so the status code must be OK.
   this.status = goog.net.HttpStatus.OK;
-  this.responseText = this.xdr_.responseText;
+  this.response = this.responseText = this.xdr_.responseText;
   this.setReadyState_(goog.net.XmlHttp.ReadyState.COMPLETE);
 };
 
@@ -221,7 +231,7 @@ goog.net.IeCorsXhrAdapter.prototype.handleError_ = function() {
   // IE doesn't tell us what the status code actually is (other than the fact
   // that it is not 200), so simulate an INTERNAL_SERVER_ERROR.
   this.status = goog.net.HttpStatus.INTERNAL_SERVER_ERROR;
-  this.responseText = '';
+  this.response = this.responseText = '';
   this.setReadyState_(goog.net.XmlHttp.ReadyState.COMPLETE);
 };
 

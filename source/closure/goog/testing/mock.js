@@ -223,6 +223,33 @@ goog.testing.Mock.STRICT = 0;
 
 
 /**
+ * Asserts that a mock object is in record mode.  This avoids type system errors
+ * from mock expectations.
+ *
+ * Usage:
+ *
+ * ```
+ * const record = goog.require('goog.testing.Mock.record');
+ *
+ * record(mockObject).someMethod(ignoreArgument).$returns(42);
+ * record(mockFunction)(ignoreArgument).$returns(42);
+ * ```
+ *
+ * @param {?} obj A mock in record mode.
+ * @return {?} The same object.
+ */
+goog.testing.Mock.record = function(obj) {
+  goog.asserts.assert(
+      obj.$recording_ !== undefined,
+      obj + ' is not a mock.  Did you pass a real object to record()?');
+  goog.asserts.assert(
+      obj.$recording_,
+      'Your mock is in replay mode.  You can only call record(mock) before mock.$replay()');
+  return obj;
+};
+
+
+/**
  * This array contains the name of the functions that are part of the base
  * Object prototype.
  * Basically a copy of goog.object.PROTOTYPE_FIELDS_.
@@ -250,7 +277,7 @@ goog.testing.Mock.FUNCTION_PROTOTYPE_FIELDS_ = ['apply', 'bind', 'call'];
 /**
  * A proxy for the mock.  This can be used for dependency injection in lieu of
  * the mock if the test requires a strict instanceof check.
- * @type {Object}
+ * @type {?Object}
  */
 goog.testing.Mock.prototype.$proxy = null;
 
@@ -282,7 +309,7 @@ goog.testing.Mock.prototype.$pendingExpectation;
 
 /**
  * First exception thrown by this mock; used in $verify.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.testing.Mock.prototype.$threwException_ = null;

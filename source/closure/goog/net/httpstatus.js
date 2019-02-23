@@ -20,10 +20,11 @@ goog.provide('goog.net.HttpStatus');
 
 
 /**
- * HTTP Status Codes defined in RFC 2616, RFC 6585, and RFC 4918.
+ * HTTP Status Codes defined in RFC 2616, RFC 6585, RFC 4918 and RFC 7538.
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  * @see http://tools.ietf.org/html/rfc6585
  * @see https://tools.ietf.org/html/rfc4918
+ * @see https://tools.ietf.org/html/rfc7538
  * @enum {number}
  */
 goog.net.HttpStatus = {
@@ -49,6 +50,7 @@ goog.net.HttpStatus = {
   NOT_MODIFIED: 304,
   USE_PROXY: 305,
   TEMPORARY_REDIRECT: 307,
+  PERMANENT_REDIRECT: 308,
 
   // Client Error 4xx
   BAD_REQUEST: 400,

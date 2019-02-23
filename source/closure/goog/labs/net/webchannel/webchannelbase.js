@@ -214,7 +214,9 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * Timer identifier for asynchronously making a forward channel request.
-   * @private {?number}
+   * This is set to true if the func is scheduled with async.run, which
+   * is equivalent to setTimeout(0).
+   * @private {?number|?boolean}
    */
   this.forwardChannelTimerId_ = null;
 
@@ -740,9 +742,21 @@ WebChannelBase.prototype.cancelRequests_ = function() {
   this.forwardChannelRequestPool_.cancel();
 
   if (this.forwardChannelTimerId_) {
-    goog.global.clearTimeout(this.forwardChannelTimerId_);
-    this.forwardChannelTimerId_ = null;
+    this.clearForwardChannelTimer_();
   }
+};
+
+
+/**
+ * Clears the forward channel timer.
+ * @private
+ */
+WebChannelBase.prototype.clearForwardChannelTimer_ = function() {
+  if (goog.isNumber(this.forwardChannelTimerId_)) {
+    goog.global.clearTimeout(this.forwardChannelTimerId_);
+  }
+
+  this.forwardChannelTimerId_ = null;
 };
 
 
@@ -999,8 +1013,7 @@ WebChannelBase.prototype.setFailFast = function(failFast) {
     if (!this.forwardChannelRequestPool_.forceComplete(
             goog.bind(this.onRequestComplete, this))) {
       // i.e., this.forwardChannelTimerId_
-      goog.global.clearTimeout(this.forwardChannelTimerId_);
-      this.forwardChannelTimerId_ = null;
+      this.clearForwardChannelTimer_();
       // The error code from the last failed request is gone, so just use a
       // generic one.
       this.signalError_(WebChannelBase.Error.REQUEST_FAILED);
@@ -1119,8 +1132,11 @@ WebChannelBase.prototype.ensureForwardChannel_ = function() {
     return;
   }
 
-  this.forwardChannelTimerId_ = requestStats.setTimeout(
-      goog.bind(this.onStartForwardChannelTimer_, this), 0);
+  // Use async.run instead of setTimeout(0) to avoid the 1s message delay
+  // from chrome/firefox background tabs
+  this.forwardChannelTimerId_ = true;
+  goog.async.run(this.onStartForwardChannelTimer_, this);
+
   this.forwardChannelRetryCount_ = 0;
 };
 
@@ -1174,8 +1190,11 @@ WebChannelBase.prototype.maybeRetryForwardChannel_ = function(request) {
  */
 WebChannelBase.prototype.onStartForwardChannelTimer_ = function(
     opt_retryRequest) {
-  this.forwardChannelTimerId_ = null;
-  this.startForwardChannel_(opt_retryRequest);
+  // null is possible if scheduled with async.run
+  if (this.forwardChannelTimerId_) {
+    this.forwardChannelTimerId_ = null;
+    this.startForwardChannel_(opt_retryRequest);
+  }
 };
 
 

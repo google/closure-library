@@ -241,7 +241,7 @@ goog.dom.xml.createMsXmlDocument_ = function() {
   var doc = new ActiveXObject('MSXML2.DOMDocument');
   if (doc) {
     // Prevent potential vulnerabilities exposed by MSXML2, see
-    // http://b/1707300 and http://wiki/Main/ISETeamXMLAttacks for details.
+    // http://b/1707300 and http://go/xxe-attacks for details.
     doc.resolveExternals = false;
     doc.validateOnParse = false;
     // Add a try catch block because accessing these properties will throw an

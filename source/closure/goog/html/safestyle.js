@@ -399,7 +399,10 @@ goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
       goog.html.SafeStyle.sanitizePropertyValueString_(String(value));
   // These characters can be used to change context and we don't want that even
   // with const values.
-  goog.asserts.assert(!/[{;}]/.test(result), 'Value does not allow [{;}].');
+  if (/[{;}]/.test(result)) {
+    throw new goog.asserts.AssertionError(
+        'Value does not allow [{;}], got: %s.', [result]);
+  }
   return result;
 };
 

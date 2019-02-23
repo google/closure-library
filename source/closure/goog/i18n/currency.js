@@ -283,21 +283,26 @@ goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
 /**
  * Tier 1 currency information.
  *
- * The first number in the array is a combination of the precision mask and
- * other flags. The precision mask indicates how many decimal places to show for
- * the currency. Valid values are [0..7]. The position flag indicates whether
- * the currency sign should be positioned after the number. Valid values are 0
- * (before the number) or 16 (after the number). The space flag indicates
- * whether a space should be inserted between the currency sign and number.
- * Valid values are 0 (no space) and 32 (space).
+ * Format of the info array:
+ *     0. {number} the sum of "decimal precision", the "space" bit, and the
+ *        "currency sign last" bit.
+ *     1. {string} The global currency sign. See `getGlobalCurrencySign`.
+ *     2. {string} The portable currency sign. See `getPortableCurrencySign`.
  *
- * The number in the array is calculated by adding together the mask and flag
- * values. For example:
+ * "Decimal precision" is an integer [0..7]; the count of digits to display past
+ * the decimal point.
  *
- * 0: no precision (0), currency sign first (0), no space (0)
- * 2: two decimals precision (2), currency sign first (0), no space (0)
- * 18: two decimals precision (2), currency sign last (16), no space (0)
- * 50: two decimals precision (2), currency sign last (16), space (32)
+ * "Space" bit mask = 32; whether a space should be inserted between the
+ * currency sign and number.
+ *
+ * "Currency sign last" bit mask = 16; whether the currency sign should be
+ * positioned after the number.
+ *
+ * Examples for info[0]:
+ *     0: no precision (0), currency sign first (0), no space (0)
+ *     2: two decimals precision (2), currency sign first (0), no space (0)
+ *     18: two decimals precision (2), currency sign last (16), no space (0)
+ *     50: two decimals precision (2), currency sign last (16), space (32)
  *
  * It's not recommended to read this data directly. Format numbers using
  * {@link goog.i18n.NumberFormat} with
@@ -306,7 +311,7 @@ goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
  * @const {!Object<!Array<?>>}
  */
 goog.i18n.currency.CurrencyInfo = {
-  'AED': [2, 'dh', '\u062f.\u0625.', 'DH'],
+  'AED': [2, 'dh', '\u062f.\u0625.'],
   'ALL': [0, 'Lek', 'Lek'],
   'AUD': [2, '$', 'AU$'],
   'BDT': [2, '\u09F3', 'Tk'],
@@ -463,6 +468,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'SYP': [0, '£', 'SY£'],
   'SZL': [2, 'SZL', 'SZL'],
   'TJS': [2, 'Som', 'TJS'],
+  'TMT': [50, 'm', 'TMT'],
   'TND': [3, 'din', 'DT'],
   'TOP': [2, 'T$', 'T$'],
   'TTD': [2, '$', 'TT$'],
