@@ -60,7 +60,8 @@ goog.forwardDeclare('goog.events.EventHandler');
  * @struct
  */
 goog.fx.dom.PredefinedEffect = function(element, start, end, time, opt_acc) {
-  goog.fx.Animation.call(this, start, end, time, opt_acc);
+  goog.fx.dom.PredefinedEffect.base(
+      this, 'constructor', start, end, time, opt_acc);
 
   /**
    * DOM Node that will be used in the animation
@@ -139,7 +140,8 @@ goog.fx.dom.Slide = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.Slide.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.Slide, goog.fx.dom.PredefinedEffect);
 
@@ -167,14 +169,14 @@ goog.fx.dom.Slide.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.SlideFrom = function(element, end, time, opt_acc) {
-  /** @type {?Array<number>} */
-  this.startPoint;
-
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
       goog.style.bidi.getOffsetStart(element) :
       /** @type {!HTMLElement} */ (element).offsetLeft;
   var start = [offsetLeft, /** @type {!HTMLElement} */ (element).offsetTop];
-  goog.fx.dom.Slide.call(this, element, start, end, time, opt_acc);
+  goog.fx.dom.SlideFrom.base(
+      this, 'constructor', element, start, end, time, opt_acc);
+  /** @type {?Array<number>} */
+  this.startPoint;
 };
 goog.inherits(goog.fx.dom.SlideFrom, goog.fx.dom.Slide);
 
@@ -183,7 +185,7 @@ goog.inherits(goog.fx.dom.SlideFrom, goog.fx.dom.Slide);
 goog.fx.dom.SlideFrom.prototype.onBegin = function() {
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
       goog.style.bidi.getOffsetStart(this.element) :
-      this.element.offsetLeft;
+      /** @type {!HTMLElement} */ (this.element).offsetLeft;
   this.startPoint = [
     offsetLeft,
     /** @type {!HTMLElement} */ (this.element).offsetTop
@@ -210,7 +212,8 @@ goog.fx.dom.Swipe = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.Swipe.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 
   /**
    * Maximum width for element.
@@ -283,7 +286,8 @@ goog.fx.dom.Scroll = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.Scroll.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.Scroll, goog.fx.dom.PredefinedEffect);
 
@@ -323,7 +327,8 @@ goog.fx.dom.Resize = function(element, start, end, time, opt_acc) {
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.Resize.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.Resize, goog.fx.dom.PredefinedEffect);
 
@@ -356,8 +361,8 @@ goog.fx.dom.Resize.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.ResizeWidth = function(element, start, end, time, opt_acc) {
-  goog.fx.dom.PredefinedEffect.call(
-      this, element, [start], [end], time, opt_acc);
+  goog.fx.dom.ResizeWidth.base(
+      this, 'constructor', element, [start], [end], time, opt_acc);
 };
 goog.inherits(goog.fx.dom.ResizeWidth, goog.fx.dom.PredefinedEffect);
 
@@ -388,8 +393,8 @@ goog.fx.dom.ResizeWidth.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.ResizeHeight = function(element, start, end, time, opt_acc) {
-  goog.fx.dom.PredefinedEffect.call(
-      this, element, [start], [end], time, opt_acc);
+  goog.fx.dom.ResizeHeight.base(
+      this, 'constructor', element, [start], [end], time, opt_acc);
 };
 goog.inherits(goog.fx.dom.ResizeHeight, goog.fx.dom.PredefinedEffect);
 
@@ -513,7 +518,7 @@ goog.fx.dom.Fade.prototype.hide = function() {
  * @struct
  */
 goog.fx.dom.FadeOut = function(element, time, opt_acc) {
-  goog.fx.dom.Fade.call(this, element, 1, 0, time, opt_acc);
+  goog.fx.dom.FadeOut.base(this, 'constructor', element, 1, 0, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeOut, goog.fx.dom.Fade);
 
@@ -530,7 +535,7 @@ goog.inherits(goog.fx.dom.FadeOut, goog.fx.dom.Fade);
  * @struct
  */
 goog.fx.dom.FadeIn = function(element, time, opt_acc) {
-  goog.fx.dom.Fade.call(this, element, 0, 1, time, opt_acc);
+  goog.fx.dom.FadeIn.base(this, 'constructor', element, 0, 1, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
 
@@ -548,7 +553,8 @@ goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
  * @struct
  */
 goog.fx.dom.FadeOutAndHide = function(element, time, opt_acc) {
-  goog.fx.dom.Fade.call(this, element, 1, 0, time, opt_acc);
+  goog.fx.dom.FadeOutAndHide.base(
+      this, 'constructor', element, 1, 0, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeOutAndHide, goog.fx.dom.Fade);
 
@@ -580,7 +586,8 @@ goog.fx.dom.FadeOutAndHide.prototype.onEnd = function() {
  * @struct
  */
 goog.fx.dom.FadeInAndShow = function(element, time, opt_acc) {
-  goog.fx.dom.Fade.call(this, element, 0, 1, time, opt_acc);
+  goog.fx.dom.FadeInAndShow.base(
+      this, 'constructor', element, 0, 1, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeInAndShow, goog.fx.dom.Fade);
 
@@ -611,7 +618,8 @@ goog.fx.dom.BgColorTransform = function(element, start, end, time, opt_acc) {
   if (start.length != 3 || end.length != 3) {
     throw new Error('Start and end points must be 3D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.BgColorTransform.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.BgColorTransform, goog.fx.dom.PredefinedEffect);
 
@@ -690,7 +698,8 @@ goog.fx.dom.ColorTransform = function(element, start, end, time, opt_acc) {
   if (start.length != 3 || end.length != 3) {
     throw new Error('Start and end points must be 3D');
   }
-  goog.fx.dom.PredefinedEffect.apply(this, arguments);
+  goog.fx.dom.ColorTransform.base(
+      this, 'constructor', element, start, end, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.ColorTransform, goog.fx.dom.PredefinedEffect);
 
