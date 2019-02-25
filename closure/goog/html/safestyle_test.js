@@ -65,16 +65,6 @@ function testFromConstant_allowsEmptyString() {
       goog.html.SafeStyle.fromConstant(goog.string.Const.from('')));
 }
 
-function testFromConstant_throwsOnForbiddenCharacters() {
-  assertThrows(function() {
-    goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: x<;'));
-  });
-  assertThrows(function() {
-    goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: x>;'));
-  });
-}
-
-
 function testFromConstant_throwsIfNoFinalSemicolon() {
   assertThrows(function() {
     goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: 1em'));
@@ -266,9 +256,6 @@ function testCreate_allowsUrl() {
 
 function testCreate_throwsOnForbiddenCharacters() {
   assertThrows(function() { goog.html.SafeStyle.create({'<': '0'}); });
-  assertThrows(function() {
-    goog.html.SafeStyle.create({'color': goog.string.Const.from('<')});
-  });
 }
 
 

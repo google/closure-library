@@ -145,7 +145,8 @@ goog.html.SafeStyleSheet.createRule = function(selector, style) {
   if (!(style instanceof goog.html.SafeStyle)) {
     style = goog.html.SafeStyle.create(style);
   }
-  var styleSheet = selector + '{' + goog.html.SafeStyle.unwrap(style) + '}';
+  var styleSheet = selector + '{' +
+      goog.html.SafeStyle.unwrap(style).replace(/</g, '\\3C ') + '}';
   return goog.html.SafeStyleSheet
       .createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet);
 };
