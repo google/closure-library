@@ -39,6 +39,11 @@ var sandbox;
 
 function setUpPage() {
   sandbox = goog.dom.getElement('sandbox');
+
+  // Set the current date to a constant.
+  goog.now = function() {
+    return +new Date(2017, 9, 17);
+  };
 }
 
 function tearDown() {
@@ -521,7 +526,7 @@ function testDecoratePreservesClasses() {
 }
 
 
-function testKeyboardNavigation() {
+function testKeyboardNavigation_arrowKey() {
   // This is a Sunday, so it's the first cell in the grid.
   picker = new goog.ui.DatePicker(new Date(2017, 9, 1));
   // Make the first column be Sunday, not week numbers
@@ -539,8 +544,8 @@ function testKeyboardNavigation() {
   selectEvents.assertCallCount(0);
 
   // Make sure the new selection is focused, for a11y.  elTable_[0] has the week
-  // day headers, so elTable_[2] means the second row.
-  assertEquals(picker.elTable_[2][1], document.activeElement);
+  // day headers, so +1 starts at the first row of days.
+  assertEquals(picker.elTable_[1 + 1][1], document.activeElement);
 
   goog.testing.events.fireNonAsciiKeySequence(
       picker.getElement(), goog.events.KeyCodes.ENTER,
@@ -549,6 +554,27 @@ function testKeyboardNavigation() {
   selectEvents.assertCallCount(1);
 }
 
+function testKeyboardNavigation_homeKey() {
+  // This is a Sunday, so it's the first cell in the grid.
+  picker = new goog.ui.DatePicker(new Date(2017, 9, 1));
+  // Make the first column be Sunday, not week numbers
+  picker.setShowWeekNum(false);
+  picker.render(goog.dom.getElement('sandbox'));
+  var selectEvents = goog.testing.recordFunction();
+  var changeEvents = goog.testing.recordFunction();
+  goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT, selectEvents);
+  goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE, changeEvents);
+
+  goog.testing.events.fireNonAsciiKeySequence(
+      picker.getElement(), goog.events.KeyCodes.HOME,
+      goog.events.KeyCodes.HOME);
+  changeEvents.assertCallCount(1);
+  selectEvents.assertCallCount(1);
+
+  // Make sure the new selection is focused, for a11y.  elTable_[0] has the week
+  // day headers, so +1 starts at the first row of days.
+  assertEquals(picker.elTable_[2 + 1][3], document.activeElement);
+}
 
 function testDayGridHasNonEmptyAriaLabels() {
   picker = new goog.ui.DatePicker(new Date(2017, 8, 9));

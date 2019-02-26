@@ -22,11 +22,6 @@ goog.provide('goog.dom.fullscreen.EventType');
 
 goog.require('goog.dom');
 
-// TODO(user): Remove after externs in cl/226019598 roll out in the next
-// open-source Closure compiler release.
-goog.forwardDeclare('FullscreenOptions');
-
-
 /**
  * Event types for full screen.
  * @enum {string}
@@ -68,8 +63,6 @@ goog.dom.fullscreen.FullscreenNavigationUI = {
 /**
  * @record
  * @extends {FullscreenOptions}
- * @suppress {checkTypes} TODO(user): Enable type-checking after externs in
- *     cl/226019598 roll out in the next open-source Closure compiler release.
  */
 goog.dom.fullscreen.FullscreenOptions = function() {};
 
@@ -99,8 +92,6 @@ goog.dom.fullscreen.isSupported = function(opt_domHelper) {
  * @param {!Element} element The element to put full screen.
  * @param {!goog.dom.fullscreen.FullscreenOptions=} opt_options Options for full
  *     screen. This field will be ignored on older browsers.
- * @suppress {checkTypes} TODO(user): Enable type-checking after externs in
- *     cl/226019598 roll out in the next open-source Closure compiler release.
  */
 goog.dom.fullscreen.requestFullScreen = function(element, opt_options) {
   if (element.requestFullscreen) {

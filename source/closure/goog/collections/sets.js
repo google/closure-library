@@ -74,4 +74,28 @@ exports.difference = function(a, b) {
   return set;
 };
 
-// TODO(b/117771144): Implement symmetricDifference.
+/**
+ * Creates a new set containing the elements that appear in a or b but not
+ * both.
+ *
+ * @param {!Set<T>} a
+ * @param {!Set<T>} b
+ * @return {!Set<T>}
+ * @template T
+ */
+// TODO(nnaze): Consider widening the type of b per discussion in
+// https://github.com/tc39/proposal-set-methods/issues/56
+exports.symmetricDifference = function(a, b) {
+  const newSet = new Set(a);
+  for (const elem of b) {
+    if (a.has(elem)) {
+      newSet.delete(elem);
+    } else {
+      newSet.add(elem);
+    }
+  }
+  return newSet;
+};
+
+// TODO(nnaze): Add additional methods from
+// https://github.com/tc39/proposal-set-methods as needed.

@@ -94,4 +94,13 @@ testSuite({
     assertSameElements(
         [], sets.difference(new Set([1, 1, 1]), new Set([1, 1])));
   },
+
+  testSymmetricDifference() {
+    // sets (only sets are accepted for symmetricDifference)
+    assertSameElements(
+        [1, 3], sets.symmetricDifference(new Set([1, 2]), new Set([2, 3])));
+    assertSameElements([], sets.symmetricDifference(new Set([]), new Set()));
+    assertSameElements(
+        [], sets.symmetricDifference(new Set([1, 1, 1]), new Set([1, 1])));
+  },
 });

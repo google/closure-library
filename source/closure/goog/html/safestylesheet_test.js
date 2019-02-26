@@ -83,6 +83,9 @@ function testCreateRule() {
   assertCreateRuleEquals('[title=\'son\\\'s\']{}', '[title=\'son\\\'s\']', {});
   assertCreateRuleEquals('[title="{"]{}', '[title="{"]', {});
   assertCreateRuleEquals(':nth-child(1){}', ':nth-child(1)', {});
+  assertCreateRuleEquals(
+      'a::before{content:"\\3C ";}', 'a::before',
+      {'content': goog.string.Const.from('"<"')});
 
   assertThrows(function() {
     goog.html.SafeStyleSheet.createRule('tag{color:black;}', {});
