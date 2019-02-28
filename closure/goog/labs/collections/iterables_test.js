@@ -81,7 +81,7 @@ testSuite({
     const range = createRangeIterable(0, 3);
 
     const callback = recordFunction();
-    iterables.forEach(callback, range, self);
+    iterables.forEach(range, callback);
 
     callback.assertCallCount(3);
 

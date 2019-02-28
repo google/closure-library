@@ -54,7 +54,7 @@ exports.intersection = function(a, b) {
  */
 exports.union = function(a, b) {
   const set = new Set(a);
-  iterables.forEach(elem => set.add(elem), b);
+  iterables.forEach(b, elem => set.add(elem));
   return set;
 };
 
@@ -70,7 +70,7 @@ exports.union = function(a, b) {
  */
 exports.difference = function(a, b) {
   const set = new Set(a);
-  iterables.forEach(elem => set.delete(elem), b);
+  iterables.forEach(b, elem => set.delete(elem));
   return set;
 };
 
