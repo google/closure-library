@@ -79,13 +79,13 @@ exports.map = function*(iterable, f) {
  * given iterator and call the given function `f` with that value until `true`
  * is returned or the given iterator is exhausted.
  *
- * @param {function(VALUE): boolean} f
  * @param {!Iterable<VALUE>} iterable
+ * @param {function(VALUE): boolean} f
  * @return {!Iterable<VALUE>} The created iterable that gives the mapped
  *     values.
  * @template VALUE
  */
-exports.filter = function*(f, iterable) {
+exports.filter = function*(iterable, f) {
   for (const elem of iterable) {
     if (f(elem)) {
       yield elem;

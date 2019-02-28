@@ -133,7 +133,7 @@ testSuite({
     }
 
     const range = createRangeIterable(0, 6);
-    const newIterable = iterables.filter(isEven, range);
+    const newIterable = iterables.filter(range, isEven);
     const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();

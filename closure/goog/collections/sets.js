@@ -40,7 +40,7 @@ const iterables = goog.require('goog.labs.collections.iterables');
  * @template T
  */
 exports.intersection = function(a, b) {
-  return new Set(iterables.filter(elem => a.has(elem), b));
+  return new Set(iterables.filter(b, elem => a.has(elem)));
 };
 
 /**
