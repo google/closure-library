@@ -104,7 +104,7 @@ testSuite({
       return i + 2;
     }
 
-    const newIterable = iterables.map(addTwo, range);
+    const newIterable = iterables.map(range, addTwo);
     const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();

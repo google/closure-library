@@ -59,13 +59,13 @@ exports.forEach = function(iterable, f) {
  * function `f` with the next value of the given iterable
  * `iterable` until the given iterable is exhausted.
  *
- * @param {function(this: THIS, VALUE): RESULT} f
  * @param {!Iterable<VALUE>} iterable
+ * @param {function(this: THIS, VALUE): RESULT} f
  * @return {!Iterable<RESULT>} The created iterable that gives the mapped
  *     values.
  * @template THIS, VALUE, RESULT
  */
-exports.map = function*(f, iterable) {
+exports.map = function*(iterable, f) {
   for (const elem of iterable) {
     yield f(elem);
   }
