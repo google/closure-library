@@ -41,11 +41,11 @@ exports.getIterator = function(iterable) {
  * Warning: this function will never halt if given an iterable that
  * is never exhausted.
  *
- * @param {function(VALUE) : *} f
  * @param {!Iterable<VALUE>} iterable
+ * @param {function(VALUE) : *} f
  * @template VALUE
  */
-exports.forEach = function(f, iterable) {
+exports.forEach = function(iterable, f) {
   for (const elem of iterable) {
     f(elem);
   }
@@ -59,13 +59,13 @@ exports.forEach = function(f, iterable) {
  * function `f` with the next value of the given iterable
  * `iterable` until the given iterable is exhausted.
  *
- * @param {function(this: THIS, VALUE): RESULT} f
  * @param {!Iterable<VALUE>} iterable
+ * @param {function(this: THIS, VALUE): RESULT} f
  * @return {!Iterable<RESULT>} The created iterable that gives the mapped
  *     values.
  * @template THIS, VALUE, RESULT
  */
-exports.map = function*(f, iterable) {
+exports.map = function*(iterable, f) {
   for (const elem of iterable) {
     yield f(elem);
   }
@@ -79,13 +79,13 @@ exports.map = function*(f, iterable) {
  * given iterator and call the given function `f` with that value until `true`
  * is returned or the given iterator is exhausted.
  *
- * @param {function(VALUE): boolean} f
  * @param {!Iterable<VALUE>} iterable
+ * @param {function(VALUE): boolean} f
  * @return {!Iterable<VALUE>} The created iterable that gives the mapped
  *     values.
  * @template VALUE
  */
-exports.filter = function*(f, iterable) {
+exports.filter = function*(iterable, f) {
   for (const elem of iterable) {
     if (f(elem)) {
       yield elem;

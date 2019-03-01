@@ -81,7 +81,7 @@ testSuite({
     const range = createRangeIterable(0, 3);
 
     const callback = recordFunction();
-    iterables.forEach(callback, range, self);
+    iterables.forEach(range, callback);
 
     callback.assertCallCount(3);
 
@@ -104,7 +104,7 @@ testSuite({
       return i + 2;
     }
 
-    const newIterable = iterables.map(addTwo, range);
+    const newIterable = iterables.map(range, addTwo);
     const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();
@@ -133,7 +133,7 @@ testSuite({
     }
 
     const range = createRangeIterable(0, 6);
-    const newIterable = iterables.filter(isEven, range);
+    const newIterable = iterables.filter(range, isEven);
     const newIterator = iterables.getIterator(newIterable);
 
     let nextObj = newIterator.next();
