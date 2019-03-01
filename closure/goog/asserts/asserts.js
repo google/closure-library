@@ -35,6 +35,14 @@
  * The compiler will leave in foo() (because its return value is used),
  * but it will remove bar() because it assumes it does not have side-effects.
  *
+ * Additionally, note the compiler will consider the type to be "tightened" for
+ * all statements <em>after</em> the assertion. For example:
+ * <code>
+ * const /** ?Object &#ast;/ value = foo();
+ * goog.asserts.assert(value);
+ * // "value" is of type {!Object} at this point.
+ * </code>
+ *
  * @author agrieve@google.com (Andrew Grieve)
  */
 
