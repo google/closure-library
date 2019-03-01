@@ -25,7 +25,8 @@
  *
  * The compiler has an option to disable asserts. So code like:
  * <code>
- * var x = goog.asserts.assert(foo()); goog.asserts.assert(bar());
+ * var x = goog.asserts.assert(foo());
+ * goog.asserts.assert(bar());
  * </code>
  * will be transformed into:
  * <code>
